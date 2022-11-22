@@ -1,0 +1,18 @@
+package co.jinear.core.model.enumtype.localestring;
+
+import lombok.Getter;
+
+@Getter
+public enum LocaleStringType {
+    LOGIN_SMS_TEXT,
+    LOGIN_MAIL_TITLE,
+    LOGIN_MAIL_TEXT,
+    MAIL_CONFIRMATION_TITLE,
+    MAIL_CONFIRMATION_TEXT,
+    MAIL_CONFIRMATION_CTA_LABEL,
+    PASSWORD_RESET_TITLE,
+    PASSWORD_RESET_TEXT,
+    PASSWORD_RESET_CTA_LABEL,
+    NEW_PASSWORD_TITLE,
+    NEW_PASSWORD_TEXT
+}

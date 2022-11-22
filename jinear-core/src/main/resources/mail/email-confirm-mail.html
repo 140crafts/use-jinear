@@ -1,0 +1,107 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html charset=UTF-8"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+          rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Yesteryear&display=swap" rel="stylesheet">
+
+    <style type="text/css">
+        .logo {
+            font-family: Yesteryear !important;
+            background-color: #FBEA4E !important;
+            color: black !important;
+            font-size: xxx-large;
+            width: 80px;
+            height: 80px;
+            text-align: center;
+            border-radius: 16px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            /*.logo {*/
+            /*    background-color: #FBEA4E !important;*/
+            /*    color:#393E41 !important;*/
+            /*}*/
+        }
+    </style>
+
+</head>
+
+<body align="center"
+      style="
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            text-align: center;
+            background-color: white;
+            font-family: Montserrat,Helvetica,-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif">
+
+<div align="center" style="
+        /* position: absolute;
+        left: 50%; */
+        display: inline-block;
+        /*background: linear-gradient(-45deg, #D854AD, #FE7238);*/
+        background: #FDFFFC;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 10px;
+        padding:25px;
+        box-shadow: #767675 0px 1px 2px;">
+    <div class="logo">
+        <img src="https://whatieat.co/logo-mail.png" height="80px" width="80px"/>
+    </div>
+    <div style="height:50px;"></div>
+
+    <div style="
+            font-size: x-large;
+            font-weight: 400;
+            color:#16171A;
+            margin:20px;
+            margin-top: 0px;
+            margin-bottom: 10px;">
+        ${title}
+    </div>
+    <div style="
+            font-size: large;
+            font-weight: 400;
+            color:#16171A;
+            margin:10px;">
+        ${text}
+    </div>
+
+    <div style="
+            margin-top: 30px;
+            padding:10px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 150px;
+            background-color: #16171A;
+            box-shadow: #767675 0px 1px 2px;">
+        <a href="${href}" target="_blank" style="    display: inline;
+                            font-size: x-large;
+                            font-weight: 400;
+                            font-style: italic;
+                            font-variant: tabular-nums;
+                            letter-spacing: 5px;
+                            color:#FDFFFC;
+                            margin:10px;">
+            ${confirm}
+        </a>
+    </div>
+    <div style="height:75px;"></div>
+    <div style="
+            font-size: x-small;
+            font-weight: 400;
+            font-style: italic;
+            color:#F2F2F2;
+           ">
+        <a href="https://whatieat.co" style="color: #16171A;">whatieat.co</a>
+    </div>
+
+</div>
+</body>
+
+</html>

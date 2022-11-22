@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-tables">
+        <createTable tableName="account">
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="email_confirmed" type="tinyint" defaultValue="false"/>
+        </createTable>
+
+        <createIndex indexName="ix_account_id" tableName="account">
+            <column name="account_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_email" tableName="account">
+            <column name="email"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-account_role">
+
+        <createTable tableName="account_role">
+            <column name="account_role_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="ix_account_id" tableName="account_role">
+            <column name="account_id"/>
+        </createIndex>
+
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-account_password">
+        <createTable tableName="account_password">
+            <column name="account_password_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(255)"/>
+            <column name="auto_generated" type="tinyint"/>
+        </createTable>
+
+        <createIndex indexName="ix_account_id" tableName="account_password">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-passive">
+        <createTable tableName="passive">
+            <column name="passive_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="responsible_account_id" type="varchar(255)"/>
+            <column name="related_object_id" type="varchar(255)"/>
+            <column name="reason" type="text"/>
+            <column name="reason_type" type="varchar(255)"/>
+            <column name="reason_subtype" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="ix_related_object_id" tableName="passive">
+            <column name="related_object_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-token">
+        <createTable tableName="token">
+            <column name="token_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="related_object" type="varchar(255)"/>
+            <column name="token_type" type="varchar(255)"/>
+            <column name="unique_token" type="varchar(255)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="common_token" type="varchar(255)"/>
+            <column name="additional_data" type="text"/>
+            <column name="expires_at" type="bigint"/>
+        </createTable>
+
+        <createIndex indexName="ix_related_object" tableName="token">
+            <column name="related_object"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-locale_string">
+        <createTable tableName="locale_string">
+            <column name="locale_string_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="string_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="locale" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="value" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-session_info">
+        <createTable tableName="session_info">
+            <column name="session_info_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="provider" type="varchar(255)"/>
+            <column name="token" type="text"/>
+            <column name="session_id" type="varchar(255)"/>
+            <column name="remote_addr" type="varchar(255)"/>
+        </createTable>
+
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-username">
+
+        <createTable tableName="username">
+            <column name="username_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="related_object_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_object_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints unique="true"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_related_object_id" tableName="username">
+            <column name="related_object_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_username" tableName="username">
+            <column name="username"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-reserved_username">
+        <createTable tableName="reserved_username">
+            <column name="reserved_username_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="username" type="varchar(255)">
+                <constraints unique="true"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_username" tableName="reserved_username">
+            <column name="username"/>
+        </createIndex>
+
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team">
+        <createTable tableName="team">
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team_activity">
+        <createTable tableName="team_activity">
+            <column name="team_activity_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_object_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="activity_type" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="ix_team_id" tableName="team_activity">
+            <column name="team_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_account_id" tableName="team_activity">
+            <column name="account_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_related_object_id" tableName="team_activity">
+            <column name="related_object_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team_member">
+        <createTable tableName="team_member">
+            <column name="team_member_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="ix_team_id" tableName="team_member">
+            <column name="team_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_account_id" tableName="team_member">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team_setting">
+        <createTable tableName="team_setting">
+            <column name="team_setting_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="visibility" type="varchar(255)"/>
+            <column name="content_visibility" type="varchar(255)" defaultValue="VISIBLE"/>
+            <column name="join_type" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="ix_team_id" tableName="team_setting">
+            <column name="team_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-init-media-table">
+        <createTable tableName="media">
+            <column name="media_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_object_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="media_owner_type" type="varchar(255)"/>
+            <column name="file_type" type="varchar(255)"/>
+            <column name="bucket_name" type="varchar(255)"/>
+            <column name="storage_path" type="varchar(255)"/>
+            <column name="original_name" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="ix_owner_id" tableName="media">
+            <column name="owner_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_related_object_id" tableName="media">
+            <column name="related_object_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-init-costumer_balance_activity">
+        <createTable tableName="costumer_balance_activity">
+            <column name="costumer_balance_activity_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="customer_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="balance_activity_type" type="varchar(255)"/>
+            <column name="source" type="varchar(255)"/>
+            <column name="amount" type="decimal(30,8)" defaultValueNumeric="0"/>
+        </createTable>
+
+        <createIndex indexName="ix_customer_id" tableName="costumer_balance_activity">
+            <column name="customer_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

@@ -1,0 +1,13 @@
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
+
+<!--    <appender name="ASYNC-SLACK" class="ch.qos.logback.classic.AsyncAppender">-->
+<!--        <appender name="SLACK" class="co.whatieat.core.config.logback.appender.SlackAppender"/>-->
+<!--    </appender>-->
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+<!--        <appender-ref ref="ASYNC-SLACK"/>-->
+    </root>
+</configuration>

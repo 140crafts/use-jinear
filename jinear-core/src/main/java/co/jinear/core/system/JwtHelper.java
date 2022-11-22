@@ -1,0 +1,75 @@
+package co.jinear.core.system;
+
+import co.jinear.core.model.vo.auth.AuthResponseVo;
+import co.jinear.core.system.util.DateHelper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.stereotype.Component;
+
+import java.util.*;
+import java.util.function.Function;
+
+@Component
+public class JwtHelper {
+
+    public static final int JWT_TOKEN_VALIDITY = 180;
+    public static final String AUTHORITIES = "authorities";
+    public static final String SESSION_INFO_ID = "session_info_id";
+
+    @Value("${jwt.secret}")
+    private String secret;
+
+    public String getAccountIdFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    public Date getExpirationDateFromToken(String token) {
+        return getClaimFromToken(token, Claims::getExpiration);
+    }
+
+    public List<SimpleGrantedAuthority> getGrantedAuthorities(String token) {
+        ArrayList<String> auths = getClaimFromToken(token, claims -> claims.get(AUTHORITIES, (new ArrayList<String>()).getClass()));
+        return auths.stream().map(SimpleGrantedAuthority::new).toList();
+    }
+
+    public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = getAllClaimsFromToken(token);
+        return claimsResolver.apply(claims);
+    }
+
+    public String generateToken(AuthResponseVo authResponseVo, String sessionInfoId) {
+        Map<String, Object> claims = new HashMap<>();
+        List<String> authorities = authResponseVo.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
+        claims.put(AUTHORITIES, authorities);
+        claims.put(SESSION_INFO_ID, sessionInfoId);
+        return doGenerateToken(claims, authResponseVo.getAccountId());
+    }
+
+    public Boolean validateToken(String token, String accountId) {
+        final String accountIdFromToken = getAccountIdFromToken(token);
+        return (accountIdFromToken.equals(accountId) && !isTokenExpired(token));
+    }
+
+    public Claims getAllClaimsFromToken(String token) {
+        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    }
+
+    private Boolean isTokenExpired(String token) {
+        final Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+
+    private String doGenerateToken(Map<String, Object> claims, String subject) {
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .setIssuedAt(DateHelper.now())
+                .setExpiration(DateHelper.addDays(DateHelper.now(), JWT_TOKEN_VALIDITY))
+                .signWith(SignatureAlgorithm.HS512, secret)
+                .compact();
+    }
+}
