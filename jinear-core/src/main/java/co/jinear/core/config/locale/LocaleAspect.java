@@ -1,5 +1,6 @@
 package co.jinear.core.config.locale;
 
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.request.BaseRequest;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.JoinPoint;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -29,16 +31,16 @@ public class LocaleAspect {
 
     @Before(value = "allRestControllers() && mappingAnnotations()")
     public void setLanguage(JoinPoint jp) {
-        Optional<String> localeOpt = retrieveLocaleFromRequest(jp);
-        localeOpt.ifPresent(locale -> LocaleContextHolder.setLocale(new Locale(locale)));
+        Optional<LocaleType> localeOpt = retrieveLocaleFromRequest(jp);
+        localeOpt.ifPresent(locale -> LocaleContextHolder.setLocale(new Locale(locale.name())));
     }
 
-    private Optional<String> retrieveLocaleFromRequest(JoinPoint jp) {
+    private Optional<LocaleType> retrieveLocaleFromRequest(JoinPoint jp) {
         return Arrays.stream(jp.getArgs())
                 .filter(BaseRequest.class::isInstance)
                 .map(BaseRequest.class::cast)
                 .map(BaseRequest::getLocale)
-                .filter(StringUtils::isNotBlank)
+                .filter(Objects::nonNull)
                 .findFirst();
     }
 }

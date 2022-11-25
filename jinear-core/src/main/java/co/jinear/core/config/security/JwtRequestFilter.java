@@ -21,11 +21,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import static co.jinear.core.system.JwtHelper.JWT_COOKIE;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
-    private static final String JWT = "jwt";
     private final JwtHelper jwtHelper;
 
     @Override
@@ -34,7 +35,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             String token = Optional.of(request)
                     .map(HttpServletRequest::getCookies)
                     .map(Arrays::stream)
-                    .map(cookieStream -> cookieStream.filter(cookie -> JWT.equals(cookie.getName()))
+                    .map(cookieStream -> cookieStream.filter(cookie -> JWT_COOKIE.equals(cookie.getName()))
                             .findFirst()
                             .map(Cookie::getValue)
                             .orElse(null))

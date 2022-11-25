@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-topic">
+        <createTable tableName="topic">
+            <column name="topic_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="owner_id" type="char(26)"/>
+            <column name="color" type="char(6)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="tag" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="ix_owner_id" tableName="topic">
+            <column name="owner_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_tag" tableName="topic">
+            <column name="tag"/>
+        </createIndex>
+
+        <createIndex indexName="ix_workspace_id" tableName="topic">
+            <column name="ix_workspace_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task">
+        <createTable tableName="task">
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="topic_id" type="char(26)"/>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assigned_date" type="datetime"/>
+            <column name="due_date" type="datetime"/>
+            <column name="tag_no" type="int"/>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+        </createTable>
+
+        <createIndex indexName="ix_workspace_id" tableName="topic">
+            <column name="ix_workspace_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_topic_id" tableName="task">
+            <column name="topic_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_owner_id" tableName="task">
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

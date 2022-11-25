@@ -40,7 +40,7 @@ public class AccountPasswordResetService {
                 .orElseThrow(NotFoundException::new);
         TokenDto tokenDto = tokenService.retrieveValidTokenWithRelatedObject(accountDto.getEmail(), CONFIRM_EMAIL)
                 .orElseGet(() -> generateResetPasswordToken(accountDto));
-        sendPasswordResetMail(initializeResetPasswordVo.getPreferredLocale(), accountDto, tokenDto);
+        sendPasswordResetMail(initializeResetPasswordVo.getLocale(), accountDto, tokenDto);
         log.info("Send reset password mail has finished for accountId: {}", accountDto.getAccountId());
     }
 
@@ -68,7 +68,6 @@ public class AccountPasswordResetService {
         } catch (Exception e) {
             log.error("Send new password mail has failed.", e);
         }
-
     }
 
     private void sendPasswordResetMail(LocaleType preferredLocale, AccountDto accountDto, TokenDto tokenDto) {

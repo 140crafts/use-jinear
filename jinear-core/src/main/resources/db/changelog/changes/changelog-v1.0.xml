@@ -208,9 +208,9 @@
 
     </changeSet>
 
-    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team">
-        <createTable tableName="team">
-            <column name="team_id" type="char(26)">
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace">
+        <createTable tableName="workspace">
+            <column name="workspace_id" type="char(26)">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -222,12 +222,13 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="varchar(255)"/>
+            <column name="is_personal" type="tinyint" defaultValue="true"/>
         </createTable>
     </changeSet>
 
-    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team_activity">
-        <createTable tableName="team_activity">
-            <column name="team_activity_id" type="char(26)">
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace_activity">
+        <createTable tableName="workspace_activity">
+            <column name="workspace_activity_id" type="char(26)">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -235,7 +236,7 @@
             </column>
             <column name="udate" type="datetime"/>
             <column name="passive_id" type="char(26)"/>
-            <column name="team_id" type="char(26)">
+            <column name="workspace_id" type="char(26)">
                 <constraints nullable="false"/>
             </column>
             <column name="account_id" type="char(26)">
@@ -247,22 +248,22 @@
             <column name="activity_type" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_team_id" tableName="team_activity">
-            <column name="team_id"/>
+        <createIndex indexName="ix_workspace_id" tableName="workspace_activity">
+            <column name="workspace_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_account_id" tableName="team_activity">
+        <createIndex indexName="ix_account_id" tableName="workspace_activity">
             <column name="account_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_related_object_id" tableName="team_activity">
+        <createIndex indexName="ix_related_object_id" tableName="workspace_activity">
             <column name="related_object_id"/>
         </createIndex>
     </changeSet>
 
-    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team_member">
-        <createTable tableName="team_member">
-            <column name="team_member_id" type="char(26)">
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace_member">
+        <createTable tableName="workspace_member">
+            <column name="workspace_member_id" type="char(26)">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -270,7 +271,7 @@
             </column>
             <column name="udate" type="datetime"/>
             <column name="passive_id" type="char(26)"/>
-            <column name="team_id" type="char(26)">
+            <column name="workspace_id" type="char(26)">
                 <constraints nullable="false"/>
             </column>
             <column name="account_id" type="char(26)">
@@ -279,18 +280,18 @@
             <column name="role" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_team_id" tableName="team_member">
-            <column name="team_id"/>
+        <createIndex indexName="ix_workspace_id" tableName="workspace_member">
+            <column name="workspace_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_account_id" tableName="team_member">
+        <createIndex indexName="ix_account_id" tableName="workspace_member">
             <column name="account_id"/>
         </createIndex>
     </changeSet>
 
-    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team_setting">
-        <createTable tableName="team_setting">
-            <column name="team_setting_id" type="char(26)">
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace_setting">
+        <createTable tableName="workspace_setting">
+            <column name="workspace_setting_id" type="char(26)">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -298,7 +299,7 @@
             </column>
             <column name="udate" type="datetime"/>
             <column name="passive_id" type="char(26)"/>
-            <column name="team_id" type="char(26)">
+            <column name="workspace_id" type="char(26)">
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="visibility" type="varchar(255)"/>
@@ -306,8 +307,8 @@
             <column name="join_type" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_team_id" tableName="team_setting">
-            <column name="team_id"/>
+        <createIndex indexName="ix_workspace_id" tableName="workspace_setting">
+            <column name="workspace_id"/>
         </createIndex>
     </changeSet>
 
@@ -340,29 +341,6 @@
 
         <createIndex indexName="ix_related_object_id" tableName="media">
             <column name="related_object_id"/>
-        </createIndex>
-    </changeSet>
-
-    <changeSet author="cagdas.tunca" id="jinear-1-init-costumer_balance_activity">
-        <createTable tableName="costumer_balance_activity">
-            <column name="costumer_balance_activity_id" type="char(26)">
-                <constraints nullable="false" primaryKey="true" unique="true"/>
-            </column>
-            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="udate" type="datetime"/>
-            <column name="passive_id" type="char(26)"/>
-            <column name="customer_id" type="char(26)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="balance_activity_type" type="varchar(255)"/>
-            <column name="source" type="varchar(255)"/>
-            <column name="amount" type="decimal(30,8)" defaultValueNumeric="0"/>
-        </createTable>
-
-        <createIndex indexName="ix_customer_id" tableName="costumer_balance_activity">
-            <column name="customer_id"/>
         </createIndex>
     </changeSet>
 

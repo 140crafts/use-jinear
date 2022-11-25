@@ -62,8 +62,8 @@ public class AccountLoginInitializeService {
 
     private void sendTokenMail(AuthVo authVo, String emailCode) {
         try {
-            log.info("Sending login email to:{} with preferredLocale:{} ", authVo.getEmail(), authVo.getPreferredLocale());
-            mailService.sendLoginMail(new LoginMailVo(authVo.getEmail(), authVo.getPreferredLocale(), emailCode));
+            log.info("Sending login email to:{} with preferredLocale:{} ", authVo.getEmail(), authVo.getLocale());
+            mailService.sendLoginMail(new LoginMailVo(authVo.getEmail(), authVo.getLocale(), emailCode));
         } catch (Exception e) {
             log.error("Failed to send login email.", e);
         }

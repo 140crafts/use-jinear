@@ -1,5 +1,6 @@
 package co.jinear.core.manager.auth;
 
+import co.jinear.core.system.JwtHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
 
+import static co.jinear.core.system.JwtHelper.JWT_COOKIE;
 import static co.jinear.core.system.JwtHelper.JWT_TOKEN_VALIDITY;
 
 @Slf4j
@@ -15,12 +17,12 @@ import static co.jinear.core.system.JwtHelper.JWT_TOKEN_VALIDITY;
 @RequiredArgsConstructor
 public class AuthCookieManager {
 
-    private static final String JWT = "jwt";
+    private final JwtHelper jwtHelper;
 
     public void addAuthCookie(String token, HttpServletResponse response) {
         ResponseCookie responseCookie = ResponseCookie
-                .from(JWT,  token)
-//                .secure(true)
+                .from(JWT_COOKIE, token)
+                .secure(jwtHelper.isSecure())
                 .httpOnly(true)
                 .path("/")
                 .maxAge(JWT_TOKEN_VALIDITY * 24 * 60 * 60)
@@ -29,10 +31,10 @@ public class AuthCookieManager {
         response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
     }
 
-    public void invalidateAuthCookie(HttpServletResponse response){
+    public void invalidateAuthCookie(HttpServletResponse response) {
         ResponseCookie responseCookie = ResponseCookie
-                .from(JWT,  null)
-//                .secure(true)
+                .from(JWT_COOKIE, null)
+                .secure(jwtHelper.isSecure())
                 .httpOnly(true)
                 .path("/")
                 .maxAge(0)

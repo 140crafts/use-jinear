@@ -14,5 +14,5 @@ import javax.validation.constraints.NotBlank;
 public class CompleteResetPasswordRequest extends BaseRequest {
     @NotBlank
     private String uniqueToken;
-    private LocaleType localeType = LocaleType.EN;
+    private LocaleType locale = LocaleType.EN;
 }

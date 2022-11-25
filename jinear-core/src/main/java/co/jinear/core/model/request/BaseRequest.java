@@ -1,5 +1,6 @@
 package co.jinear.core.model.request;
 
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import lombok.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -10,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @ToString
 public class BaseRequest {
     @Nullable
-    private String locale;
+    private LocaleType locale;
     @Nullable
     private String conversationId;
 }

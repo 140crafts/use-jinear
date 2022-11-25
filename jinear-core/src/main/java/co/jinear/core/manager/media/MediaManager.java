@@ -6,7 +6,7 @@ import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.vo.media.InitializeMediaVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.media.MediaOperationService;
-import co.jinear.core.service.team.member.TeamMemberService;
+import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,8 +14,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-import static co.jinear.core.model.enumtype.team.TeamAccountRoleType.ADMIN;
-import static co.jinear.core.model.enumtype.team.TeamAccountRoleType.OWNER;
+import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.ADMIN;
+import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.OWNER;
 
 @Slf4j
 @Service
@@ -23,7 +23,7 @@ import static co.jinear.core.model.enumtype.team.TeamAccountRoleType.OWNER;
 public class MediaManager {
 
     private final MediaOperationService mediaOperationService;
-    private final TeamMemberService teamMemberService;
+    private final WorkspaceMemberService workspaceMemberService;
     private final SessionInfoService sessionInfoService;
 
     public BaseResponse changeAccountProfilePicture(MultipartFile file) {
@@ -35,13 +35,13 @@ public class MediaManager {
         return new BaseResponse();
     }
 
-    public BaseResponse changeTeamProfilePicture(MultipartFile file, String teamId) {
+    public BaseResponse changeWorkspaceProfilePicture(MultipartFile file, String workspaceId) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        log.info("Change team picture has started. accountId: {}, teamId: {}", currentAccountId, teamId);
-        InitializeMediaVo initializeMediaVo = mapInitializeVo(file, currentAccountId, teamId, MediaOwnerType.USER);
-        teamMemberService.validateAccountHasRoleInTeam(currentAccountId, teamId, List.of(OWNER, ADMIN));
+        log.info("Change workspace picture has started. accountId: {}, workspaceId: {}", currentAccountId, workspaceId);
+        InitializeMediaVo initializeMediaVo = mapInitializeVo(file, currentAccountId, workspaceId, MediaOwnerType.USER);
+        workspaceMemberService.validateAccountHasRoleInWorkspace(currentAccountId, workspaceId, List.of(OWNER, ADMIN));
         mediaOperationService.changeProfilePicture(initializeMediaVo);
-        log.info("Change team picture has finished. accountId: {}, teamId: {}", currentAccountId, teamId);
+        log.info("Change workspace picture has finished. accountId: {}, workspaceId: {}", currentAccountId, workspaceId);
         return new BaseResponse();
     }
 

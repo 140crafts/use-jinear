@@ -14,5 +14,5 @@ public class AccountInitializeVo {
     private Boolean emailConfirmed = Boolean.FALSE;
     private String password;
     @Nullable
-    private LocaleType preferredLocale;
+    private LocaleType locale;
 }

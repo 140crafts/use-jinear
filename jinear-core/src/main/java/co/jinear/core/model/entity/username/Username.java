@@ -2,7 +2,7 @@ package co.jinear.core.model.entity.username;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
-import co.jinear.core.model.entity.team.Team;
+import co.jinear.core.model.entity.workspace.Workspace;
 import co.jinear.core.model.enumtype.username.UsernameRelatedObjectType;
 import lombok.Getter;
 import lombok.Setter;
@@ -47,5 +47,5 @@ public class Username extends BaseEntity {
     @OneToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "related_object_id", insertable = false, updatable = false)
-    private Team team;
+    private Workspace workspace;
 }

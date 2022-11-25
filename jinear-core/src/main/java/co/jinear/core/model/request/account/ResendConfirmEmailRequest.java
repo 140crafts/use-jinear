@@ -14,5 +14,5 @@ import javax.validation.constraints.Email;
 public class ResendConfirmEmailRequest extends BaseRequest {
     @Email
     private String email;
-    private LocaleType preferredLocaleType = LocaleType.EN;
+    private LocaleType locale = LocaleType.EN;
 }

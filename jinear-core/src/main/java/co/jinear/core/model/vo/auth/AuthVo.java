@@ -11,6 +11,6 @@ import lombok.ToString;
 public class AuthVo {
     private String email;
     private String csrf;
-    private LocaleType preferredLocale;
+    private LocaleType locale;
     private String code;
 }

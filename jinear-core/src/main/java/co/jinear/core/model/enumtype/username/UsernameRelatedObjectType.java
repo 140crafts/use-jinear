@@ -6,5 +6,5 @@ import lombok.Getter;
 public enum UsernameRelatedObjectType {
     ACCOUNT,
     COMMUNITY,
-    TEAMS;
+    WORKSPACE;
 }

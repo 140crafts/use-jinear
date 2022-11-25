@@ -16,5 +16,5 @@ public class InitializeResetPasswordRequest extends BaseRequest {
     @Email
     private String email;
     @NotNull
-    private LocaleType preferredLocale;
+    private LocaleType locale;
 }

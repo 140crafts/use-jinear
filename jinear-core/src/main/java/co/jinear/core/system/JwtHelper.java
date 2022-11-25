@@ -16,12 +16,16 @@ import java.util.function.Function;
 @Component
 public class JwtHelper {
 
+    public static final String JWT_COOKIE = "JWT";
     public static final int JWT_TOKEN_VALIDITY = 180;
     public static final String AUTHORITIES = "authorities";
     public static final String SESSION_INFO_ID = "session_info_id";
 
     @Value("${jwt.secret}")
     private String secret;
+
+    @Value("${jwt.is-secure}")
+    private Boolean isSecure;
 
     public String getAccountIdFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -56,6 +60,10 @@ public class JwtHelper {
 
     public Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    }
+
+    public Boolean isSecure() {
+        return isSecure;
     }
 
     private Boolean isTokenExpired(String token) {

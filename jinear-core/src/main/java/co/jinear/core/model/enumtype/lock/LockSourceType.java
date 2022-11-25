@@ -8,7 +8,8 @@ import java.util.concurrent.TimeUnit;
 @Getter
 @AllArgsConstructor
 public enum LockSourceType {
-    BALANCE("balance", 1, TimeUnit.HOURS);
+    BALANCE("balance", 1, TimeUnit.HOURS),
+    TOPIC_TASK_INIT("topic-task-init", 10, TimeUnit.SECONDS);
 
     private String key;
     private int ttl;

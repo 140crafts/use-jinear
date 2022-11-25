@@ -20,10 +20,10 @@ public class MediaController {
         return mediaManager.changeAccountProfilePicture(file);
     }
 
-    @PostMapping(value = "/team/{teamId}/profile-picture", consumes = "multipart/form-data")
+    @PostMapping(value = "/workspace/{workspaceId}/profile-picture", consumes = "multipart/form-data")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse updateTeamProfilePicture(@PathVariable("teamId") String teamId,
-                                                 @RequestParam("file") MultipartFile file) {
-        return mediaManager.changeTeamProfilePicture(file, teamId);
+    public BaseResponse updateWorkspaceProfilePicture(@PathVariable("workspaceId") String workspaceId,
+                                                      @RequestParam("file") MultipartFile file) {
+        return mediaManager.changeWorkspaceProfilePicture(file, workspaceId);
     }
 }

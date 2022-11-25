@@ -2,7 +2,7 @@ package co.jinear.core.model.dto.account;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.media.MediaDto;
-import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,5 +23,5 @@ public class AccountDto extends BaseDto {
     private Set<AccountRoleDto> roles;
     @Nullable
     private MediaDto profilePicture;
-    private List<TeamDto> teams;
+    private List<WorkspaceDto> workspaces;
 }

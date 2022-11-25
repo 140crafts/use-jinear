@@ -1,0 +1,17 @@
+package co.jinear.core.repository;
+
+import co.jinear.core.model.entity.topic.Topic;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.Optional;
+
+public interface TopicRepository extends JpaRepository<Topic, String> {
+
+    Long countAllByWorkspaceIdAndTagAndPassiveIdIsNull(String workspaceId, String tag);
+
+    Optional<Topic> findByTopicIdAndPassiveIdIsNull(String topicId);
+
+    Page<Topic> findAllByNameContainingAndOwnerIdAndPassiveIdIsNullOrderByCreatedDateAsc(String name, String ownerId, Pageable pageable);
+}

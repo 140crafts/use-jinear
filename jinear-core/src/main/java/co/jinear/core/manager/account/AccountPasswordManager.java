@@ -42,7 +42,7 @@ public class AccountPasswordManager {
 
     public BaseResponse validateAndResetPassword(CompleteResetPasswordRequest completeResetPasswordRequest) {
         log.info("Validate and reset password has started. completeResetPasswordRequest: {}", completeResetPasswordRequest);
-        accountPasswordResetService.validateAndResetAccountPassword(completeResetPasswordRequest.getUniqueToken(), completeResetPasswordRequest.getLocaleType());
+        accountPasswordResetService.validateAndResetAccountPassword(completeResetPasswordRequest.getUniqueToken(), completeResetPasswordRequest.getLocale());
         return new BaseResponse();
     }
 

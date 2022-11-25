@@ -5,15 +5,15 @@ import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.entity.account.Account;
 import co.jinear.core.model.enumtype.account.RoleType;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
-import co.jinear.core.model.enumtype.team.TeamJoinType;
-import co.jinear.core.model.enumtype.team.TeamVisibilityType;
+import co.jinear.core.model.enumtype.workspace.WorkspaceJoinType;
+import co.jinear.core.model.enumtype.workspace.WorkspaceVisibilityType;
 import co.jinear.core.model.enumtype.username.UsernameRelatedObjectType;
 import co.jinear.core.model.vo.account.AccountInitializeVo;
 import co.jinear.core.model.vo.account.password.AccountPasswordVo;
-import co.jinear.core.model.vo.team.TeamInitializeVo;
+import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.model.vo.username.InitializeUsernameVo;
 import co.jinear.core.repository.AccountRepository;
-import co.jinear.core.service.team.TeamInitializeService;
+import co.jinear.core.service.workspace.WorkspaceInitializeService;
 import co.jinear.core.service.username.UsernameService;
 import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.system.RandomHelper;
@@ -30,7 +30,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AccountInitializeService {
-    private static final String TEAM_HANDLE_PREFIX = "team-";
+    private static final String PERSONAL_WORKSPACE_HANDLE_PREFIX = "pws-";
 
     private final AccountRetrieveService accountRetrieveService;
     private final AccountRoleService accountRoleService;
@@ -38,7 +38,7 @@ public class AccountInitializeService {
     private final AccountPasswordService accountPasswordService;
     private final AccountRepository accountRepository;
     private final AccountMailConfirmationService accountMailConfirmationService;
-    private final TeamInitializeService teamInitializeService;
+    private final WorkspaceInitializeService workspaceInitializeService;
     private final ModelMapper modelMapper;
 
     @Transactional
@@ -49,7 +49,7 @@ public class AccountInitializeService {
         assignUserRole(account);
         initializeUsername(account);
         initializeAccountPassword(account, accountInitializeVo);
-        initializeTeam(account);
+        initializePersonalWorkspace(account);
         sendMailConfirmationMail(account, accountInitializeVo);
         log.info("Account initialize has ended.");
         return modelMapper.map(account, AccountDto.class);
@@ -105,16 +105,17 @@ public class AccountInitializeService {
         usernameService.assignUsername(initializeUsernameVo);
     }
 
-    private void initializeTeam(Account account) {
+    private void initializePersonalWorkspace(Account account) {
         String username = getUsernameFromEmail(account);
-        TeamInitializeVo teamInitializeVo = new TeamInitializeVo();
-        teamInitializeVo.setOwnerId(account.getAccountId());
-        teamInitializeVo.setTitle(username);
-        teamInitializeVo.setHandle(TEAM_HANDLE_PREFIX + username);
-        teamInitializeVo.setVisibility(TeamVisibilityType.HIDDEN_LISTED);
-        teamInitializeVo.setJoinType(TeamJoinType.WITH_REQUEST);
-        teamInitializeVo.setAppendRandomStrOnCollision(Boolean.TRUE);
-        teamInitializeService.initializeTeam(teamInitializeVo);
+        WorkspaceInitializeVo workspaceInitializeVo = new WorkspaceInitializeVo();
+        workspaceInitializeVo.setOwnerId(account.getAccountId());
+        workspaceInitializeVo.setTitle(username);
+        workspaceInitializeVo.setHandle(PERSONAL_WORKSPACE_HANDLE_PREFIX + username);
+        workspaceInitializeVo.setVisibility(WorkspaceVisibilityType.HIDDEN_LISTED);
+        workspaceInitializeVo.setJoinType(WorkspaceJoinType.NEVER);
+        workspaceInitializeVo.setAppendRandomStrOnCollision(Boolean.TRUE);
+        workspaceInitializeVo.setIsPersonal(Boolean.TRUE);
+        workspaceInitializeService.initializeWorkspace(workspaceInitializeVo);
     }
 
     private void sendMailConfirmationMail(Account account, AccountInitializeVo accountInitializeVo) {
@@ -123,7 +124,7 @@ public class AccountInitializeService {
                 .filter(Boolean.FALSE::equals)
                 .ifPresent(bool -> {
                     LocaleType localeType = Optional.of(accountInitializeVo)
-                            .map(AccountInitializeVo::getPreferredLocale)
+                            .map(AccountInitializeVo::getLocale)
                             .orElse(LocaleType.EN);
                     accountMailConfirmationService.sendConfirmEmailMail(account.getAccountId(), localeType);
                 });

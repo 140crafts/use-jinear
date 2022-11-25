@@ -11,5 +11,5 @@ import lombok.ToString;
 public class InitializeResetPasswordVo {
 
     private String email;
-    private LocaleType preferredLocale;
+    private LocaleType locale;
 }

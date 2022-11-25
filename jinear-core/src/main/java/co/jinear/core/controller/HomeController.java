@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/")
 public class HomeController {
 
+    private static final String greetings = "Hi! ( ˘ ³˘)♥";
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public String root() {
-        String greetings = "Hi! ( ˘ ³˘)♥";
-        log.info(greetings);
         return greetings;
     }
 }
