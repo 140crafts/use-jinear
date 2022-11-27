@@ -13,8 +13,20 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/hooks/*": ["hooks/*"],
+      "@/store/*": ["store/*"],
+      "@/api/*": ["store/api/*"],
+      "@/slice/*": ["store/slice/*"],
+      "@/utils/*": ["utils/*"],
+      "@/model/*": ["model/*"],
+      "@/be/*": ["model/be/*"],
+      "@/pages/*": ["pages/*"]
+    }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/debounce.js"],
   "exclude": ["node_modules"]
 }

@@ -1,0 +1,30 @@
+.orDividerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.orLabel {
+  margin: 0 0.85rem;
+}
+
+.orLineLeft {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--c-primary) 0%,
+    var(--c-primary-shade-1) 100%
+  );
+}
+
+.orLineRight {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--c-primary-shade-1) 0%,
+    var(--c-primary) 100%
+  );
+}

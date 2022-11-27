@@ -1,0 +1,8 @@
+.codeInput {
+  text-align: center;
+  letter-spacing: 0.5rem;
+}
+
+.codeInput::placeholder {
+  letter-spacing: 0;
+}

@@ -1,0 +1,9 @@
+.container {
+  display: none;
+}
+
+.active {
+  display: flex !important;
+  flex: 1;
+  flex-direction: column;
+}

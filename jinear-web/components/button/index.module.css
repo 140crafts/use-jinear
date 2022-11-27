@@ -1,0 +1,92 @@
+.button {
+  cursor: pointer;
+  background: transparent;
+  color: var(--c-text-color);
+  transition: background-color var(--fade) linear;
+  text-decoration: none;
+  border-style: solid;
+  border-color: transparent;
+  border-width: 1px;
+  border-radius: var(--border-radius);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  padding: 0.55rem 0.75rem;
+}
+
+.button:disabled {
+  opacity: 0.85;
+  cursor: not-allowed;
+  background-color: unset !important;
+}
+
+.button:hover {
+  color: var(--c-secondary-shade-0);
+  background-color: var(--c-primary-shade-0);
+}
+
+.button:focus {
+  outline: none;
+}
+
+.filled {
+  background-color: var(--c-primary-shade-0);
+}
+
+.filled:disabled {
+  background-color: unset !important;
+}
+
+.filled:hover {
+  background-color: var(--c-primary-shade-1);
+}
+
+.filled2 {
+  background-color: var(--c-primary-shade-1);
+}
+
+.filled2 :disabled {
+  background-color: unset !important;
+}
+
+.filled2:hover {
+  color: var(--c-secondary-shade-1);
+  background-color: var(--c-primary-shade-1);
+}
+
+.contrast {
+  color: var(--c-primary);
+  background-color: var(--c-secondary);
+}
+
+.contrast:disabled {
+  color: var(--c-primary);
+  background-color: var(--c-secondary) !important;
+}
+
+.contrast:hover {
+  color: var(--c-primary-shade-1);
+  background-color: var(--c-secondary-shade-1);
+}
+
+.indicator {
+  color: var(--c-secondary);
+}
+
+.indicatorContrast {
+  color: var(--c-primary);
+}
+
+.outline {
+  border-color: var(--c-primary-shade-1);
+  border-width: thin;
+}
+
+.progess {
+  color: var(--c-secondary-shade-1);
+}
+
+.progessContrast > svg {
+  color: var(--c-primary-shade-1);
+}

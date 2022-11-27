@@ -1,0 +1,293 @@
+@import url("https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import "variables.css";
+
+* {
+  /* margin: 0;
+  padding: 0;
+  border: 0; */
+  font: inherit;
+  transition: background-color var(--fade) linear;
+}
+
+/* html {
+  font-size: 15px;
+} */
+
+body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 0.85rem;
+  font-family: "Inter", sans-serif;
+  background-color: var(--c-background);
+  color: var(--c-text-color);
+  overscroll-behavior: none;
+}
+
+div::-webkit-scrollbar {
+  display: none;
+  /* IE and Edge */
+  -ms-overflow-style: none;
+  /* Firefox */
+  scrollbar-width: none;
+}
+
+a {
+  color: var(--c-link-color);
+  text-decoration: none;
+}
+
+.title {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.subtitle {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+h2 {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.subtitle2 {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+h3 {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+b {
+  font-weight: 600;
+}
+
+.MuiLinearProgress-root {
+  background-color: var(--c-primary-shade-1) !important;
+  height: 2px;
+}
+
+.MuiLinearProgress-bar {
+  background-color: var(--c-secondary-shade-1);
+}
+
+.debug {
+  border-style: solid;
+  border-width: 1px;
+  border-color: red;
+}
+
+.MuiLinearProgress-root {
+  background-color: var(--c-primary-shade-1) !important;
+  height: 2px !important;
+}
+
+.MuiLinearProgress-bar {
+  background-color: var(--c-secondary-shade-1) !important;
+}
+
+.MuiLinearProgress-barColorPrimary {
+  background-color: var(--c-secondary-shade-1) !important;
+}
+
+.MuiCircularProgress-svg {
+  color: var(--c-secondary-shade-1);
+}
+
+select {
+  /* Reset Select */
+  appearance: none;
+  outline: 0;
+  border: 0;
+  box-shadow: none;
+  /* Personalize */
+  flex: 1;
+  padding: 0 1em;
+  color: var(--c-text-color);
+  background-color: unset;
+  background-image: none;
+  cursor: pointer;
+}
+
+select:hover {
+  background-color: var(--c-primary-shade-1);
+}
+
+/* Remove IE arrow */
+select::-ms-expand {
+  display: none;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--c-primary-shade-1);
+}
+
+input[type="date"] {
+  color-scheme: var(--current);
+}
+
+input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  display: none;
+}
+
+input,
+textarea {
+  background: var(--c-primary-shade-0) !important;
+  color: var(--c-text-color) !important;
+  caret-color: var(--c-text-color) !important;
+  border-color: transparent;
+  border-width: 1px;
+  border-radius: var(--border-radius);
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--fade);
+  text-decoration: none;
+  padding: 7.5px;
+  min-height: 1rem;
+}
+
+input:hover,
+textarea:hover {
+  color: var(--c-secondary-shade-0) !important;
+  background-color: var(--c-primary-shade-1) !important;
+}
+
+input:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: var(--c-primary-shade-1);
+}
+
+input:disabled,
+textarea:disabled {
+  opacity: 0.65;
+}
+
+input:disabled:hover,
+textarea:disabled:hover {
+  background: var(--c-primary-shade-0) !important;
+  color: var(--c-text-color) !important;
+  cursor: not-allowed;
+}
+textarea:not([resize="true"]) {
+  resize: none !important;
+}
+
+select {
+  background: var(--c-primary-shade-0) !important;
+  color: var(--c-text-color) !important;
+  caret-color: var(--c-text-color) !important;
+  border-color: transparent;
+  border-width: 1px;
+  border-radius: var(--border-radius);
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--fade);
+  text-decoration: none;
+  padding: 7.5px;
+  min-height: 1rem;
+}
+
+.single-line {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.MuiSlider-root {
+  color: var(--c-secondary) !important;
+}
+
+.spacer-h-1 {
+  height: 0.5rem;
+}
+
+.spacer-h-2 {
+  height: 1rem;
+}
+
+.spacer-h-3 {
+  height: 1.5rem;
+}
+
+.spacer-h-4 {
+  height: 2rem;
+}
+
+.spacer-w-1 {
+  width: 0.5rem;
+}
+
+.spacer-w-2 {
+  width: 1rem;
+}
+
+.spacer-w-3 {
+  width: 1.5rem;
+}
+
+.spacer-w-4 {
+  width: 2rem;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.toast {
+  background-color: var(--c-text-color) !important;
+  color: var(--c-background) !important;
+}
+
+.toast-container {
+  bottom: 4rem;
+  /* var(--tab-bar-height) */
+}
+
+/*region tooltip */
+*[data-tooltip] {
+  position: relative;
+}
+*[data-tooltip]:hover:after {
+  content: attr(data-tooltip);
+  background-color: var(--c-secondary);
+  color: var(--c-primary);
+  bottom: -2.5em;
+  left: 0;
+  padding: 0.5em;
+  border-radius: var(--border-radius);
+  position: absolute;
+  white-space: nowrap;
+  z-index: 99;
+}
+/* endregion */
