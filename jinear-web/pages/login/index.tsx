@@ -2,6 +2,7 @@ import LoginWithMailForm from "@/components/form/loginWithMailForm/LoginWithMail
 import FormLogo from "@/components/formLogo/FormLogo";
 import { selectIsLoggedIn } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
+import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -19,7 +20,7 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.replace("/");
+      router.replace(ROUTE_IF_LOGGED_IN);
     }
   }, [isLoggedIn]);
 

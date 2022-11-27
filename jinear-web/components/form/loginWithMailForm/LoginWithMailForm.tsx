@@ -2,6 +2,7 @@ import Button, { ButtonVariants } from "@/components/button";
 import OrLine from "@/components/orLine/OrLine";
 import { useLoginWithPasswordMutation } from "@/store/api/authApi";
 import { changeLoginWith2FaMailModalVisibility } from "@/store/slice/modalSlice";
+import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
@@ -41,7 +42,7 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({
     if (isSuccess && !isError) {
       logger.log("Login with password success");
       toast(t("loginSuccessToast"));
-      router.replace("/");
+      router.replace(ROUTE_IF_LOGGED_IN);
     }
   }, [isSuccess, isError]);
 

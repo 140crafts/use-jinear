@@ -2,6 +2,7 @@ import ForgotPasswordForm from "@/components/form/forgotPasswordForm/ForgotPassw
 import FormLogo from "@/components/formLogo/FormLogo";
 import { selectIsLoggedIn } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
+import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import styles from "./index.module.scss";
@@ -14,7 +15,7 @@ const ForgotPasswordPage: React.FC<ForgotPasswordPageProps> = ({}) => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      router.replace("/");
+      router.replace(ROUTE_IF_LOGGED_IN);
     }
   }, [isLoggedIn]);
 

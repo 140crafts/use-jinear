@@ -3,3 +3,5 @@ export const __DEV__ =
 export const HOST = __DEV__
   ? "http://localhost:3000"
   : "http://teknik-servis.140crafts.com";
+
+export const ROUTE_IF_LOGGED_IN = "/home";
