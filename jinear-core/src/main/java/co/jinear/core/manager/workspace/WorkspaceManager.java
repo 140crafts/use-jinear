@@ -3,11 +3,13 @@ package co.jinear.core.manager.workspace;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
 import co.jinear.core.model.request.workspace.WorkspaceInitializeRequest;
+import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
 import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
 import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.workspace.WorkspaceActivityService;
+import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
 import co.jinear.core.service.workspace.WorkspaceInitializeService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.service.media.MediaRetrieveService;
@@ -31,6 +33,7 @@ public class WorkspaceManager {
     private final WorkspaceRetrieveService workspaceRetrieveService;
     private final SessionInfoService sessionInfoService;
     private final MediaRetrieveService mediaRetrieveService;
+    private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
     private final ModelMapper modelMapper;
 
     public WorkspaceBaseResponse retrieveWorkspaceWithUsername(String workspaceUsername) {
@@ -59,10 +62,19 @@ public class WorkspaceManager {
         return mapValues(workspaceDto);
     }
 
+    public BaseResponse updatePreferredWorkspace(String workspaceId) {
+        String accountId = sessionInfoService.currentAccountId();
+        workspaceValidator.validateHasAccess(accountId, workspaceId);
+        log.info("Update preferred workspace has started. workspaceId: {}, accountId: {}", workspaceId, accountId);
+        workspaceDisplayPreferenceService.setAccountPreferredWorkspace(accountId, workspaceId);
+        return new BaseResponse();
+    }
+
     private WorkspaceDto initializeWorkspace(WorkspaceInitializeRequest workspaceInitializeRequest, String accountId) {
         WorkspaceInitializeVo workspaceInitializeVo = modelMapper.map(workspaceInitializeRequest, WorkspaceInitializeVo.class);
         workspaceInitializeVo.setOwnerId(accountId);
         workspaceInitializeVo.setAppendRandomStrOnCollision(Boolean.TRUE);
+        workspaceInitializeVo.setIsPersonal(Boolean.FALSE);
         setHandleIfNotProvided(workspaceInitializeVo);
         return workspaceInitializeService.initializeWorkspace(workspaceInitializeVo);
     }
@@ -82,7 +94,6 @@ public class WorkspaceManager {
         workspaceActivityCreateVo.setType(WorkspaceActivityType.JOIN);
         workspaceActivityService.createWorkspaceActivity(workspaceActivityCreateVo);
     }
-
 
     private WorkspaceBaseResponse mapValues(WorkspaceDto workspaceDto) {
         WorkspaceBaseResponse workspaceResponse = new WorkspaceBaseResponse();

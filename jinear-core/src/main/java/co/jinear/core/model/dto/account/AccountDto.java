@@ -24,4 +24,5 @@ public class AccountDto extends BaseDto {
     @Nullable
     private MediaDto profilePicture;
     private List<WorkspaceDto> workspaces;
+    private String preferredWorkspaceId;
 }

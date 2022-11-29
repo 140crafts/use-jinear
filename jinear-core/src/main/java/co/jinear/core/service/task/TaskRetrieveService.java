@@ -35,5 +35,10 @@ public class TaskRetrieveService {
         return count;
     }
 
-
+    public Long countAllByTeamId(String teamId) {
+        log.info("Count all by team id has started for teamId: {}", teamId);
+        Long count = taskRepository.countAllByTeamId(teamId);
+        log.info("Found [{}] tasks with teamId: {}", count, teamId);
+        return count;
+    }
 }

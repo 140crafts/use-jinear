@@ -4,6 +4,60 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team">
+        <createTable tableName="team">
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="tag" type="varchar(255)"/>
+            <column name="visibility" type="varchar(255)"/>
+            <column name="join_method" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="ix_workspace_id" tableName="team">
+            <column name="workspace_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_tag" tableName="team">
+            <column name="tag"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team_member">
+        <createTable tableName="team_member">
+            <column name="team_member_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="team_id" type="char(26)"/>
+        </createTable>
+
+        <createIndex indexName="ix_account_id" tableName="team_member">
+            <column name="account_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_workspace_id" tableName="team_member">
+            <column name="workspace_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_team_id" tableName="team_member">
+            <column name="team_id"/>
+        </createIndex>
+    </changeSet>
+
     <changeSet author="cagdas.tunca" id="jinear-1-initialize-topic">
         <createTable tableName="topic">
             <column name="topic_id" type="char(26)">
@@ -15,6 +69,7 @@
             <column name="udate" type="datetime"/>
             <column name="passive_id" type="char(26)"/>
             <column name="workspace_id" type="char(26)"/>
+            <column name="team_id" type="char(26)"/>
             <column name="owner_id" type="char(26)"/>
             <column name="color" type="char(6)"/>
             <column name="name" type="varchar(255)"/>
@@ -30,7 +85,11 @@
         </createIndex>
 
         <createIndex indexName="ix_workspace_id" tableName="topic">
-            <column name="ix_workspace_id"/>
+            <column name="workspace_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_team_id" tableName="topic">
+            <column name="team_id"/>
         </createIndex>
     </changeSet>
 
@@ -45,21 +104,23 @@
             <column name="udate" type="datetime"/>
             <column name="passive_id" type="char(26)"/>
             <column name="workspace_id" type="char(26)"/>
+            <column name="team_id" type="char(26)"/>
             <column name="topic_id" type="char(26)"/>
             <column name="owner_id" type="char(26)">
                 <constraints nullable="false"/>
             </column>
             <column name="assigned_date" type="datetime"/>
             <column name="due_date" type="datetime"/>
-            <column name="tag_no" type="int"/>
+            <column name="topic_tag_no" type="int"/>
+            <column name="team_tag_no" type="int"/>
             <column name="title" type="varchar(255)">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="text"/>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="topic">
-            <column name="ix_workspace_id"/>
+        <createIndex indexName="ix_workspace_id" tableName="task">
+            <column name="workspace_id"/>
         </createIndex>
 
         <createIndex indexName="ix_topic_id" tableName="task">
@@ -68,6 +129,51 @@
 
         <createIndex indexName="ix_owner_id" tableName="task">
             <column name="owner_id"/>
+        </createIndex>
+        <createIndex indexName="ix_team_id" tableName="task">
+            <column name="team_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-topic_seq">
+        <createTable tableName="topic_seq">
+            <column name="topic_seq_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="topic_id" type="char(26)"/>
+            <column name="seq" type="int"/>
+        </createTable>
+
+        <createIndex indexName="ix_topic_id" tableName="topic_seq">
+            <column name="topic_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace_display_preference">
+        <createTable tableName="workspace_display_preference">
+            <column name="workspace_display_preference_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)"/>
+            <column name="preferred_workspace_id" type="char(26)"/>
+        </createTable>
+
+        <createIndex indexName="ix_account_id" tableName="workspace_display_preference">
+            <column name="account_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_preferred_workspace_id" tableName="workspace_display_preference">
+            <column name="preferred_workspace_id"/>
         </createIndex>
     </changeSet>
 </databaseChangeLog>

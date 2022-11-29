@@ -2,8 +2,10 @@ package co.jinear.core.service.account;
 
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.account.AccountDto;
+import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.repository.AccountRepository;
 import co.jinear.core.service.media.MediaRetrieveService;
+import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -18,6 +20,7 @@ public class AccountRetrieveService {
 
     private final AccountRepository accountRepository;
     private final MediaRetrieveService mediaRetrieveService;
+    private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
     private final ModelMapper modelMapper;
 
     public AccountDto retrieve(String accountId) {
@@ -52,6 +55,7 @@ public class AccountRetrieveService {
         log.info("Retrieve account with basic info has started. accountId: {}", accountId);
         AccountDto accountDto = retrieve(accountId);
         setProfilePicture(accountId, accountDto);
+        setPreferredWorkspaceId(accountId, accountDto);
         return accountDto;
     }
 
@@ -62,5 +66,11 @@ public class AccountRetrieveService {
     private void setProfilePicture(String accountId, AccountDto accountDto) {
         mediaRetrieveService.retrieveProfilePictureOptional(accountId)
                 .ifPresent(accountDto::setProfilePicture);
+    }
+
+    private void setPreferredWorkspaceId(String accountId, AccountDto accountDto) {
+        workspaceDisplayPreferenceService.retrieveAccountPreferredWorkspace(accountId)
+                .map(WorkspaceDisplayPreferenceDto::getPreferredWorkspaceId)
+                .ifPresent(accountDto::setPreferredWorkspaceId);
     }
 }

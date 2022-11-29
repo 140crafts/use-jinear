@@ -13,6 +13,7 @@ public class TaskInitializeVo {
 
     private String topicId;
     private String workspaceId;
+    private String teamId;
     private String ownerId;
     private ZonedDateTime assignedDate;
     private ZonedDateTime dueDate;

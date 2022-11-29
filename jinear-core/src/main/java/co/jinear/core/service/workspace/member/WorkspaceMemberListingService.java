@@ -34,22 +34,29 @@ public class WorkspaceMemberListingService {
 
     public Page<WorkspaceMemberDto> retrieveWorkspaceMembers(String workspaceId, PageRequest pageRequest) {
         log.info("Retrieve workspace members has started. workspaceId: {}, pageRequest: {}", workspaceId, pageRequest);
-        return workspaceMemberRepository.findAllByWorkspaceIdAndPassiveIdIsNull(workspaceId, pageRequest)
+        return workspaceMemberRepository.findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateAsc(workspaceId, pageRequest)
                 .map(workspaceMember -> modelMapper.map(workspaceMember, WorkspaceMemberDto.class));
+    }
+
+    public List<WorkspaceMemberDto> listAllWorkspaceMembers(String workspaceId) {
+        log.info("List all workspace members has started. workspaceId: {}", workspaceId);
+        return workspaceMemberRepository.findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateAsc(workspaceId).stream()
+                .map(workspaceMember -> modelMapper.map(workspaceMember, WorkspaceMemberDto.class))
+                .toList();
     }
 
     public Page<WorkspaceMemberDto> retrieveWorkspaceMembersDetailed(String workspaceId, PageRequest pageRequest) {
         log.info("Retrieve workspace members has started. workspaceId: {}, pageRequest: {}", workspaceId, pageRequest);
-        return workspaceMemberRepository.findAllByWorkspaceIdAndPassiveIdIsNull(workspaceId, pageRequest)
+        return workspaceMemberRepository.findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateAsc(workspaceId, pageRequest)
                 .map(workspaceMember -> modelMapper.map(workspaceMember, WorkspaceMemberDto.class))
-                .map(workspaceMemberDto -> fillAccountDtoIfPresent(workspaceMemberDto));
+                .map(this::fillAccountDtoIfPresent);
     }
 
     private WorkspaceMemberDto fillAccountDtoIfPresent(WorkspaceMemberDto workspaceMemberDto) {
         log.info("Fill accountDto if present has started for workspaceMemberDto: {}", workspaceMemberDto);
         accountRetrieveService.retrieveOptional(workspaceMemberDto.getAccountId())
-                .map(accountDto -> fillProfilePictureIfPresent(accountDto))
-                .ifPresent(workspaceMemberDto::setAccountDto);
+                .map(this::fillProfilePictureIfPresent)
+                .ifPresent(workspaceMemberDto::setAccount);
         return workspaceMemberDto;
     }
 

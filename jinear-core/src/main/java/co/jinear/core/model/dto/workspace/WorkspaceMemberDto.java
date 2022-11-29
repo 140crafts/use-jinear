@@ -15,5 +15,5 @@ public class WorkspaceMemberDto extends BaseDto {
     private String workspaceId;
     private String accountId;
     private WorkspaceAccountRoleType role;
-    private AccountDto accountDto;
+    private AccountDto account;
 }

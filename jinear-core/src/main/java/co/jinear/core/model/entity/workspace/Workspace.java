@@ -1,12 +1,15 @@
 package co.jinear.core.model.entity.workspace;
 
 import co.jinear.core.model.entity.BaseEntity;
+import co.jinear.core.model.entity.account.AccountRole;
+import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.entity.username.Username;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -36,4 +39,7 @@ public class Workspace extends BaseEntity {
 
     @OneToOne(mappedBy = "workspace")
     private WorkspaceSetting settings;
+
+    @OneToMany(mappedBy = "workspace")
+    private Set<Team> teams;
 }

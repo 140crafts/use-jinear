@@ -15,6 +15,7 @@ public class TaskInitializeRequest extends BaseRequest {
 
     @NotBlank
     private String workspaceId;
+    private String teamId;
     private String topicId;
     private ZonedDateTime assignedDate;
     private ZonedDateTime dueDate;

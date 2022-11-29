@@ -4,11 +4,15 @@ import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.vo.task.TaskInitializeVo;
 import co.jinear.core.repository.TaskRepository;
+import co.jinear.core.service.team.TeamLockService;
+import co.jinear.core.service.topic.TopicSequenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -19,20 +23,62 @@ public class TaskInitializeService {
     private final TaskRetrieveService taskRetrieveService;
     private final TaskRepository taskRepository;
     private final TaskLockService taskLockService;
+    private final TeamLockService teamLockService;
+    private final TopicSequenceService incrementTopicSequence;
     private final ModelMapper modelMapper;
 
+    @Transactional
     public TaskDto initializeTask(TaskInitializeVo taskInitializeVo) {
         log.info("Initialize task has started. taskInitializeVo: {}", taskInitializeVo);
-        taskLockService.lockTopicForTaskInitialization(taskInitializeVo.getTopicId());
-        Task task = modelMapper.map(taskInitializeVo, Task.class);
-        assignTaskNo(task);
-        Task saved = taskRepository.save(task);
-        taskLockService.unlockTopicForTaskInitialization(taskInitializeVo.getTopicId());
-        return modelMapper.map(saved, TaskDto.class);
+        assignLocks(taskInitializeVo);
+        try {
+            Task task = mapVoToEntity(taskInitializeVo);
+            assignTeamTaskNo(task);
+            assignTopicTaskNo(task);
+            Task saved = taskRepository.save(task);
+            return modelMapper.map(saved, TaskDto.class);
+        } finally {
+            releaseLocks(taskInitializeVo);
+        }
     }
 
-    private void assignTaskNo(Task task) {
-        Long count = taskRetrieveService.countAllByTopicId(task.getTopicId());
-        task.setTagNo(count.intValue() + 1);
+    private void assignLocks(TaskInitializeVo taskInitializeVo) {
+        teamLockService.lockTeamForTaskInitialization(taskInitializeVo.getTeamId());
+        Optional.of(taskInitializeVo)
+                .map(TaskInitializeVo::getTopicId)
+                .ifPresent(taskLockService::lockTopicForTaskInitialization);
+    }
+
+    private void releaseLocks(TaskInitializeVo taskInitializeVo) {
+        teamLockService.unlockTeamForTaskInitialization(taskInitializeVo.getTeamId());
+        Optional.of(taskInitializeVo)
+                .map(TaskInitializeVo::getTopicId)
+                .ifPresent(taskLockService::unlockTopicForTaskInitialization);
+    }
+
+    private void assignTopicTaskNo(Task task) {
+        String topicId = task.getTopicId();
+        if (Objects.nonNull(topicId)) {
+            Integer nextSeq = incrementTopicSequence.incrementTopicSequence(topicId);
+            task.setTopicTagNo(nextSeq);
+        }
+    }
+
+    private void assignTeamTaskNo(Task task) {
+        Long count = taskRetrieveService.countAllByTeamId(task.getTeamId());
+        task.setTeamTagNo(count.intValue() + 1);
+    }
+
+    private Task mapVoToEntity(TaskInitializeVo taskInitializeVo) {
+        Task task = new Task();
+        task.setTopicId(taskInitializeVo.getTopicId());
+        task.setWorkspaceId(taskInitializeVo.getWorkspaceId());
+        task.setTeamId(taskInitializeVo.getTeamId());
+        task.setOwnerId(taskInitializeVo.getOwnerId());
+        task.setAssignedDate(taskInitializeVo.getAssignedDate());
+        task.setDueDate(taskInitializeVo.getDueDate());
+        task.setTitle(taskInitializeVo.getTitle());
+        task.setDescription(taskInitializeVo.getDescription());
+        return task;
     }
 }

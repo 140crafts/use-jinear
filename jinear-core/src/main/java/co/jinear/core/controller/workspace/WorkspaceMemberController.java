@@ -14,11 +14,11 @@ public class WorkspaceMemberController {
 
     private final WorkspaceMemberManager workspaceMemberManager;
 
-    @GetMapping("/{workspaceUsername}/list")
+    @GetMapping("/{workspaceId}/list")
     @ResponseStatus(HttpStatus.OK)
-    public WorkspaceMemberListingBaseResponse retrieveWorkspace(@PathVariable String workspaceUsername,
-                                                                @RequestParam(required = false, defaultValue = "0") Integer page) {
-        return workspaceMemberManager.retrieveWorkspaceMembers(workspaceUsername, page);
+    public WorkspaceMemberListingBaseResponse retrieveWorkspaceMembers(@PathVariable String workspaceId,
+                                                                       @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return workspaceMemberManager.retrieveWorkspaceMembers(workspaceId, page);
     }
 
     @PostMapping("/{workspaceUsername}/join")

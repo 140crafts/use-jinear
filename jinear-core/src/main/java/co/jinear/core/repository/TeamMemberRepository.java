@@ -1,0 +1,17 @@
+package co.jinear.core.repository;
+
+import co.jinear.core.model.entity.team.TeamMember;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
+
+public interface TeamMemberRepository extends JpaRepository<TeamMember, String> {
+
+    Page<TeamMember> findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(String teamId, Pageable pageable);
+
+    List<TeamMember> findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNull(String accountId, String workspaceId);
+
+    Long countAllByAccountIdAndTeamIdAndPassiveIdIsNull(String accountId, String teamId);
+}

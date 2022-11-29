@@ -2,6 +2,8 @@ package co.jinear.core.model.dto.task;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountDto;
+import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.entity.topic.Topic;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,13 +19,16 @@ public class TaskDto extends BaseDto {
     private String taskId;
     private String topicId;
     private String workspaceId;
+    private String teamId;
     private String ownerId;
     private ZonedDateTime assignedDate;
     private ZonedDateTime dueDate;
-    private Integer tagNo;
+    private Integer teamTagNo;
+    private Integer topicTagNo;
     private String title;
     private String description;
-    private TaskDto mainTask;
     private Topic topic;
     private PlainAccountDto account;
+    private WorkspaceDto workspace;
+    private TeamDto team;
 }

@@ -32,10 +32,10 @@ public class WorkspaceMemberManager {
     private final WorkspaceMemberListingService workspaceMemberListingService;
     private final WorkspaceValidator workspaceValidator;
 
-    public WorkspaceMemberListingBaseResponse retrieveWorkspaceMembers(String workspaceUsername, Integer page) {
+    public WorkspaceMemberListingBaseResponse retrieveWorkspaceMembers(String workspaceId, Integer page) {
         String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
-        log.info("Retrieve workspace members has started. workspaceUsername: {}, page: {}, currentAccountId: {}", workspaceUsername, page, currentAccountId);
-        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithUsername(workspaceUsername);
+        log.info("Retrieve workspace members has started. workspaceId: {}, page: {}, currentAccountId: {}", workspaceId, page, currentAccountId);
+        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
         workspaceValidator.validateHasAccess(currentAccountId, workspaceDto);
         Page<WorkspaceMemberDto> workspaceMemberDtoPage = decideAndRetrievePage(page, currentAccountId, workspaceDto);
         return mapValues(workspaceMemberDtoPage);

@@ -2,7 +2,9 @@ package co.jinear.core.model.entity.task;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
+import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.entity.topic.Topic;
+import co.jinear.core.model.entity.workspace.Workspace;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -29,6 +31,9 @@ public class Task extends BaseEntity {
     @Column(name = "workspace_id")
     private String workspaceId;
 
+    @Column(name = "team_id")
+    private String teamId;
+
     @Column(name = "topic_id")
     private String topicId;
 
@@ -41,8 +46,11 @@ public class Task extends BaseEntity {
     @Column(name = "due_date")
     private ZonedDateTime dueDate;
 
-    @Column(name = "tag_no")
-    private Integer tagNo;
+    @Column(name = "topic_tag_no")
+    private Integer topicTagNo;
+
+    @Column(name = "team_tag_no")
+    private Integer teamTagNo;
 
     @Column(name = "title")
     private String title;
@@ -52,13 +60,18 @@ public class Task extends BaseEntity {
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(name = "main_task_id", insertable = false, updatable = false)
-    private Task mainTask;
+    @JoinColumn(name = "topic_id", insertable = false, updatable = false)
+    private Topic topic;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(name = "topic_id", insertable = false, updatable = false)
-    private Topic topic;
+    @JoinColumn(name = "team_id", insertable = false, updatable = false)
+    private Team team;
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "workspace_id", insertable = false, updatable = false)
+    private Workspace workspace;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)

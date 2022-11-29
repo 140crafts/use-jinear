@@ -2,6 +2,7 @@ package co.jinear.core.controller.workspace;
 
 import co.jinear.core.manager.workspace.WorkspaceManager;
 import co.jinear.core.model.request.workspace.WorkspaceInitializeRequest;
+import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,5 +33,11 @@ public class WorkspaceController {
     @ResponseStatus(HttpStatus.CREATED)
     public WorkspaceBaseResponse initializeWorkspace(@Valid @RequestBody WorkspaceInitializeRequest workspaceInitializeRequest) {
         return workspaceManager.initializeWorkspace(workspaceInitializeRequest);
+    }
+
+    @PutMapping("/display-preferences/{workspaceId}/set-preferred")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BaseResponse initializeWorkspace(@PathVariable String workspaceId) {
+        return workspaceManager.updatePreferredWorkspace(workspaceId);
     }
 }

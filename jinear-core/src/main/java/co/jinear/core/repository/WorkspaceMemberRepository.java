@@ -17,7 +17,9 @@ public interface WorkspaceMemberRepository extends JpaRepository<WorkspaceMember
 
     Long countAllByAccountIdAndWorkspaceIdAndRoleIsInAndPassiveIdIsNull(String accountId, String workspaceId, List<WorkspaceAccountRoleType> roleTypes);
 
-    Page<WorkspaceMember> findAllByWorkspaceIdAndPassiveIdIsNull(String workspaceId, Pageable pageable);
+    Page<WorkspaceMember> findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateAsc(String workspaceId, Pageable pageable);
+
+    List<WorkspaceMember> findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateAsc(String workspaceId);
 
     List<WorkspaceMember> findAllByAccountIdAndPassiveIdIsNull(String accountId);
 

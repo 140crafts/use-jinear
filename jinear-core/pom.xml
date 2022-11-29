@@ -308,7 +308,10 @@
                     <outputKind>module</outputKind>
                     <outputFile>jinear-core.ts</outputFile>
                     <classPatterns>
-                        <pattern>co.jinear.core.model.**</pattern>
+                        <pattern>co.jinear.core.model.dto.**</pattern>
+                        <pattern>co.jinear.core.model.enumtype.**</pattern>
+                        <pattern>co.jinear.core.model.request.**</pattern>
+                        <pattern>co.jinear.core.model.response.**</pattern>
                     </classPatterns>
                     <nullableAnnotations>
                         <nullableAnnotation>org.checkerframework.checker.nullness.qual.Nullable</nullableAnnotation>

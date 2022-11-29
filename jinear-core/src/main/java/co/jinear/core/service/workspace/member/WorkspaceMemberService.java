@@ -78,7 +78,7 @@ public class WorkspaceMemberService {
         workspaceMember.setWorkspaceId(initializeWorkspaceMemberVo.getWorkspaceId());
         workspaceMember.setAccountId(initializeWorkspaceMemberVo.getAccountId());
         workspaceMember.setRole(initializeWorkspaceMemberVo.getRole());
-        workspaceMemberRepository.save(workspaceMember);
+        workspaceMemberRepository.saveAndFlush(workspaceMember);
     }
 
     private void deleteMember(DeleteWorkspaceMemberVo deleteWorkspaceMemberVo, WorkspaceMember workspaceMember) {
