@@ -1,0 +1,22 @@
+.contentContainer {
+  min-height: 2.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.memberProfilePicList {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.profilePic {
+  height: 25px;
+  width: 25px;
+}
+
+.moreButton {
+  color: var(--c-secondary-shade-0-op05);
+}

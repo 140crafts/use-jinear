@@ -303,4 +303,52 @@ export default {
     en: "(Total {total} records)",
     tr: "(Toplam {total} kayıt)",
   },
+  sideMenuPersonalWorkspace: {
+    en: "Your Personal Workspace",
+    tr: "Kişisel Çalışma Alanın",
+  },
+  sideMenuWorkspaceMembers: {
+    en: "Members",
+    tr: "Üyeler",
+  },
+  sideMenuWorkspaceTeams: {
+    en: "Teams",
+    tr: "Takımlar",
+  },
+  sideMenuActionsTeams: {
+    en: "Actions",
+    tr: "Aksiyonlar",
+  },
+  sideMenuWorkspaceMembersMore: {
+    en: "${number} more",
+    tr: "${number} daha",
+  },
+  sideMenuTeamTopicsMore: {
+    en: "${number} more",
+    tr: "${number} daha",
+  },
+  sideMenuNewTask: {
+    en: "New Task",
+    tr: "Yeni Görev",
+  },
+  sideMenuInbox: {
+    en: "Inbox",
+    tr: "Gelen Kutusu",
+  },
+  sideMenuActivities: {
+    en: "Latest Activities",
+    tr: "Son Aktiviteler",
+  },
+  sideMenuMyAssignments: {
+    en: "My Assignments",
+    tr: "Bana Atananlar",
+  },
+  sideMenuTeamListNoTeam: {
+    en: "Create a team to track your tasks",
+    tr: "Görevlerini takip etmek için bir takım oluştur",
+  },
+  sideMenuTeamNoTopics: {
+    en: "Create a topic to label your tasks",
+    tr: "Bir konu oluştur ve görevlerini etiketle",
+  },
 };

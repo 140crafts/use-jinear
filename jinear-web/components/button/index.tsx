@@ -10,7 +10,16 @@ export const ButtonVariants = {
   filled2: "filled2",
   contrast: "contrast",
   outline: "outline",
+  hoverFilled: "hover-filled",
+  hoverFilled2: "hover-filled2",
 };
+
+export const ButtonHeight = {
+  default: "height-default",
+  mid: "height-mid",
+  short: "height-short",
+};
+
 interface LinkButtonProps {
   disabled?: boolean;
   children?: React.ReactNode;
@@ -43,6 +52,7 @@ const BaseButton: FC<BaseButtonProps> = ({ children, ...props }) => {
 interface ButtonProps {
   children?: React.ReactNode;
   variant?: string;
+  heightVariant?: string;
   loading?: boolean;
   disabled?: boolean;
   withShadow?: boolean;
@@ -59,6 +69,7 @@ interface ButtonProps {
 
 const Button: React.FC<ButtonProps> = ({
   variant = ButtonVariants.default,
+  heightVariant = ButtonHeight.default,
   loading = false,
   disabled = false,
   href,
@@ -77,7 +88,12 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       href={href as string}
       target={target as string}
-      className={cn(styles.button, styles?.[variant], className)}
+      className={cn(
+        styles.button,
+        styles?.[heightVariant],
+        styles?.[variant],
+        className
+      )}
     >
       {loading ? (
         <CircularProgress

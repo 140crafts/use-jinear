@@ -1,0 +1,34 @@
+/* .container {
+} */
+
+.teamsTitleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.teamsTitle {
+  color: var(--c-secondary-shade-0-op05);
+  font-weight: 500;
+}
+
+.teamsList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.loading {
+  margin-top: 1rem;
+  align-self: center;
+  justify-self: center;
+}
+
+.noTeamLabel {
+  color: var(--c-secondary-shade-0-op05);
+  text-align: center;
+  font-size: 0.8rem;
+  margin: 1.25rem 1rem;
+}

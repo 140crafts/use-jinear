@@ -7,6 +7,7 @@
   --c-primary-shade-0: #f5f5f5;
   --c-primary-shade-1: #e5e5e5;
   --c-secondary: #16171a;
+  --c-secondary-shade-0-op05: #1f212480;
   --c-secondary-shade-0: #1f2124;
   --c-secondary-shade-1: #393e41;
   --c-link-color: #122cc2;
@@ -64,6 +65,7 @@
   --border-radius-m: 0.5rem;
   --border-radius-l: 0.75rem;
   --border-radius-xl: 0.9rem;
+  --menu-workplace-title-color: #fe0934;
 }
 
 .dark:root {
@@ -76,6 +78,7 @@
   --c-primary-shade-1: #393e41;
   --c-secondary: #fdfffc;
   --c-secondary-shade-0: #f5f5f5;
+  --c-secondary-shade-0-op05: #f5f5f580;
   --c-secondary-shade-1: #e5e5e5;
   --c-link-color: #5fc9f8;
   --c-nav-logo-color: #ffffff;
@@ -89,4 +92,5 @@
   --box-shadow-soft: 0px 2px 1px -1px rgba(253, 255, 252, 0.02),
     0px 1px 1px 0px rgba(253, 255, 252, 0.014),
     0px 1px 3px 0px rgba(253, 255, 252, 0.012);
+  --menu-workplace-title-color: #ff5270;
 }

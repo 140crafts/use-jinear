@@ -16,7 +16,13 @@ const baseQuery = fetchBaseQuery({
   credentials: "include",
 });
 
-export const tagTypes = ["Account-Current"];
+export const tagTypes = [
+  "Account-Current",
+  "workplace-member-list",
+  "workplace-team-list",
+  "team-member-list",
+  "team-topic-list",
+];
 
 export const api = createApi({
   baseQuery: baseQuery,

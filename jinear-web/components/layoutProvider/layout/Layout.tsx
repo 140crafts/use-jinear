@@ -1,3 +1,6 @@
+import SideMenu from "@/components/sideMenu/SideMenu";
+import { selectIsLoggedIn } from "@/store/slice/accountSlice";
+import { useTypedSelector } from "@/store/store";
 import React from "react";
 import styles from "./Layout.module.css";
 
@@ -7,17 +10,17 @@ interface LayoutProps {
   children?: React.ReactNode;
 }
 
-const Layout: React.FC<LayoutProps> = ({
-  children,
-  navbar = true,
-  tabbar = true,
-}) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  const isLoggedIn = useTypedSelector(selectIsLoggedIn);
   return (
-    <>
-      {/* {navbar ? <Navbar /> : null} */}
-      <div className={styles.layoutMain}>{children}</div>
-      {/* {tabbar && <FloatingTabBar />} */}
-    </>
+    <div className={styles.layoutMain}>
+      {isLoggedIn && (
+        <div className={styles.sideMenuContainer}>
+          <SideMenu />
+        </div>
+      )}
+      <div className={styles.content}>{children}</div>
+    </div>
   );
 };
 

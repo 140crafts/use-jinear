@@ -90,3 +90,22 @@
 .progessContrast > svg {
   color: var(--c-primary-shade-1);
 }
+
+.hover-filled:hover {
+  background-color: var(--c-primary-shade-1);
+}
+
+.hover-filled2:hover {
+  color: var(--c-secondary-shade-1);
+  background-color: var(--c-primary-shade-1);
+}
+
+.height-default {
+  padding: 0.55rem 0.75rem;
+}
+.height-mid {
+  padding: 0.42rem 0.75rem;
+}
+.height-short {
+  padding: 0.25rem 0.75rem;
+}

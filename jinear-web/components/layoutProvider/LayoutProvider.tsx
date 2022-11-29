@@ -36,11 +36,8 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
       ? PureClientOnly
       : Layout;
   logger.log({ currPath, Wrapper });
-  return (
-    <Wrapper navbar={true} tabbar={true}>
-      {children}
-    </Wrapper>
-  );
+
+  return <Wrapper>{children}</Wrapper>;
 };
 
 export default LayoutProvider;

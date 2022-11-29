@@ -53,5 +53,15 @@ export const selectIsAccountIdIsCurrentAccountId =
   (accountId: string) => (state: RootState) =>
     accountId == state.account.current?.accountId;
 
-export const selectCurrentAccountsFirstWorkspace = (state: RootState) =>
-  state.account.current?.workspaces?.[0];
+export const selectCurrentAccountsPersonalWorkspace = (state: RootState) =>
+  state.account.current?.workspaces?.find((w) => w.personal);
+
+export const selectCurrentAccountsCollectiveWorkspaces = (state: RootState) =>
+  state.account.current?.workspaces?.filter((w) => !w.personal);
+
+export const selectCurrentAccountsPreferredWorkspace = (state: RootState) => {
+  const preferred = state.account.current?.workspaces?.find(
+    (w) => w.workspaceId == state.account.current?.preferredWorkspaceId
+  );
+  return preferred ? preferred : selectCurrentAccountsPersonalWorkspace(state);
+};
