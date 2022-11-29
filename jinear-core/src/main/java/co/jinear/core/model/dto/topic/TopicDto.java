@@ -12,6 +12,7 @@ import lombok.ToString;
 public class TopicDto extends BaseDto {
     private String topicId;
     private String workspaceId;
+    private String teamId;
     private String ownerId;
     private String color;
     private String name;

@@ -12,6 +12,7 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.topic.TopicInitializeService;
 import co.jinear.core.service.topic.TopicRetrieveService;
 import co.jinear.core.service.topic.TopicUpdateService;
+import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,11 +30,12 @@ public class TopicManager {
     private final ModelMapper modelMapper;
     private final SessionInfoService sessionInfoService;
     private final WorkspaceValidator workspaceValidator;
+    private final TeamAccessValidator teamAccessValidator;
 
 
     public TopicResponse initializeTopic(TopicInitializeRequest topicInitializeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        validateWorkspaceAccess(topicInitializeRequest, currentAccountId);
+        validateAccess(topicInitializeRequest, currentAccountId);
         log.info("Initialize topic has started. currentAccountId: {}", currentAccountId);
         TopicInitializeVo topicInitializeVo = modelMapper.map(topicInitializeRequest, TopicInitializeVo.class);
         topicInitializeVo.setOwnerId(currentAccountId);
@@ -43,7 +45,7 @@ public class TopicManager {
 
     public TopicResponse updateTopic(TopicUpdateRequest topicUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        validateWorkspaceAccessWithTopicId(topicUpdateRequest.getTopicId(), currentAccountId);
+        validateAccess(topicUpdateRequest.getTopicId(), currentAccountId);
         log.info("Update topic has started. currentAccountId: {}, topicUpdateRequest: {}", currentAccountId, topicUpdateRequest);
         TopicUpdateVo topicUpdateVo = modelMapper.map(topicUpdateRequest, TopicUpdateVo.class);
         TopicDto topicDto = topicUpdateService.updateTopic(topicUpdateVo);
@@ -52,7 +54,7 @@ public class TopicManager {
 
     public BaseResponse deleteTopic(String topicId) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        validateWorkspaceAccessWithTopicId(topicId, currentAccountId);
+        validateAccess(topicId, currentAccountId);
         log.info("Delete topic has started. currentAccountId: {}, topicId: {}", currentAccountId, topicId);
         topicUpdateService.deleteTopic(
                 TopicDeleteVo.builder()
@@ -68,12 +70,14 @@ public class TopicManager {
         return topicResponse;
     }
 
-    private void validateWorkspaceAccess(TopicInitializeRequest topicInitializeRequest, String currentAccountId) {
+    private void validateAccess(TopicInitializeRequest topicInitializeRequest, String currentAccountId) {
         workspaceValidator.validateHasAccess(currentAccountId, topicInitializeRequest.getWorkspaceId());
+        teamAccessValidator.validateTeamAccess(currentAccountId, topicInitializeRequest.getTeamId());
     }
 
-    private void validateWorkspaceAccessWithTopicId(String topicId, String currentAccountId) {
+    private void validateAccess(String topicId, String currentAccountId) {
         TopicDto topicDto = topicRetrieveService.retrieve(topicId);
         workspaceValidator.validateHasAccess(currentAccountId, topicDto.getWorkspaceId());
+        teamAccessValidator.validateTeamAccess(currentAccountId, topicId);
     }
 }

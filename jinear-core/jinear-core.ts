@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2022-11-29 08:46:38.
+// Generated using typescript-generator version 3.0.1157 on 2022-11-29 22:33:46.
 
 export interface BaseDto {
     createdDate: Date;
@@ -102,6 +102,7 @@ export interface TokenDto extends BaseDto {
 export interface TopicDto extends BaseDto {
     topicId: string;
     workspaceId: string;
+    teamId: string;
     ownerId: string;
     color: string;
     name: string;
@@ -230,6 +231,7 @@ export interface TeamInitializeRequest extends BaseRequest {
 
 export interface TopicInitializeRequest extends BaseRequest {
     workspaceId: string;
+    teamId: string;
     name: string;
     tag: string;
     color: string;
@@ -299,6 +301,10 @@ export interface TeamResponse extends BaseResponse {
     data: TeamDto;
 }
 
+export interface TopicListingResponse extends BaseResponse {
+    data: PageDto<TopicDto>;
+}
+
 export interface TopicResponse extends BaseResponse {
     data: TopicDto;
 }
@@ -314,6 +320,7 @@ export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
 export interface Topic extends BaseEntity {
     topicId: string;
     workspaceId: string;
+    teamId: string;
     ownerId: string;
     color: string;
     name: string;

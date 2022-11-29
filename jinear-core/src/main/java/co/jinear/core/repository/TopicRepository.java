@@ -14,4 +14,8 @@ public interface TopicRepository extends JpaRepository<Topic, String> {
     Optional<Topic> findByTopicIdAndPassiveIdIsNull(String topicId);
 
     Page<Topic> findAllByNameContainingAndOwnerIdAndPassiveIdIsNullOrderByCreatedDateAsc(String name, String ownerId, Pageable pageable);
+
+    Page<Topic> findAllByNameContainingAndTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(String name, String teamId, Pageable pageable);
+
+    Page<Topic> findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(String teamId, Pageable pageable);
 }

@@ -35,5 +35,4 @@ public class TopicController {
     public BaseResponse deleteTopic(@PathVariable String topicId) {
         return topicManager.deleteTopic(topicId);
     }
-
 }

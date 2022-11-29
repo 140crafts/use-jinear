@@ -14,6 +14,8 @@ public class TopicInitializeRequest extends BaseRequest {
     @NotBlank
     private String workspaceId;
     @NotBlank
+    private String teamId;
+    @NotBlank
     private String name;
     @NotBlank
     private String tag;

@@ -34,9 +34,9 @@ public class TopicRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Page<TopicDto> retrieve(String name, String ownerId, int page) {
-        log.info("Retrieve topic page has started. name contains: {}, ownerId: {}, page: {}", name, ownerId, page);
-        return topicRepository.findAllByNameContainingAndOwnerIdAndPassiveIdIsNullOrderByCreatedDateAsc(name, ownerId, PageRequest.of(page, PAGE_SIZE))
+    public Page<TopicDto> retrieveTeamTopics(String teamId, int page) {
+        log.info("Retrieve team topic page has started. teamId: {}, page: {}", teamId, page);
+        return topicRepository.findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(teamId, PageRequest.of(page, PAGE_SIZE))
                 .map(topic -> modelMapper.map(topic, TopicDto.class));
     }
 

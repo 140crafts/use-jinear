@@ -10,6 +10,7 @@ import lombok.ToString;
 public class TopicInitializeVo {
     private String ownerId;
     private String workspaceId;
+    private String teamId;
     private String color;
     private String name;
     private String tag;

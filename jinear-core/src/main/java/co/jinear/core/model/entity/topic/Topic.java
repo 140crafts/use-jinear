@@ -24,6 +24,9 @@ public class Topic extends BaseEntity {
     @Column(name = "workspace_id")
     private String workspaceId;
 
+    @Column(name = "team_id")
+    private String teamId;
+
     @Column(name = "owner_id")
     private String ownerId;
 

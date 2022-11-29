@@ -31,6 +31,7 @@ public class TopicInitializeService {
         Topic topic = new Topic();
         topic.setOwnerId(topicInitializeVo.getOwnerId());
         topic.setWorkspaceId(topicInitializeVo.getWorkspaceId());
+        topic.setTeamId(topicInitializeVo.getTeamId());
         topic.setColor(topicInitializeVo.getColor());
         topic.setName(topicInitializeVo.getName());
         topic.setTag(topicInitializeVo.getTag());
