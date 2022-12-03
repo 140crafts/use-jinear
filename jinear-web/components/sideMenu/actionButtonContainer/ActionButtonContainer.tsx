@@ -1,4 +1,7 @@
 import Button, { ButtonVariants } from "@/components/button";
+import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { popNewTaskModal } from "@/store/slice/modalSlice";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -15,15 +18,27 @@ interface ActionButtonContainerProps {}
 
 const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const preferredWorkspace = useTypedSelector(
+    selectCurrentAccountsPreferredWorkspace
+  );
+
+  const _popNewTaskModal = () => {
+    if (preferredWorkspace) {
+      dispatch(
+        popNewTaskModal({ workspaceId: preferredWorkspace.workspaceId })
+      );
+    }
+  };
+
   return (
     <div className={styles.container}>
       <MenuGroupTitle label={t("sideMenuActionsTeams")} />
       <Button
         variant={ButtonVariants.hoverFilled2}
-        // heightVariant={ButtonHeight.mid}
         className={cn(styles.button, styles.newTaskButton)}
+        onClick={_popNewTaskModal}
       >
-        {/* <IoAdd /> */}
         <TiPlus />
         <div>{t("sideMenuNewTask")}</div>
       </Button>

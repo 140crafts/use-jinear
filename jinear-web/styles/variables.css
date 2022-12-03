@@ -23,6 +23,8 @@
   --c-placeholder-color: "rgba(57,62,65,0.35)";
   /*  */
   --fade: 120ms;
+  --fade-2: 250ms;
+  --side-menu-footer-height: 45px;
   --tab-bar-height: 56px;
   --tab-bar-inner-height: 28px;
   --nav-bar-height: 56px;
@@ -43,6 +45,15 @@
   --feature: minmax(0, 5rem);
   --service-record-grid-template-columns: 0.25fr 1fr 0.25fr 0.35fr 0.25fr;
   --customer-list-grid-template-columns: 0.25fr 1fr 0.25fr;
+  /*  */
+  --indent-1: 0.5ch;
+  --indent-2: 1ch;
+  --indent-3: 1.5ch;
+  --indent-4: 2ch;
+  --indent-5: 2.5ch;
+  --indent-6: 3ch;
+  --indent-7: 3.5ch;
+  --indent-8: 4ch;
   /* palette  */
   --c-WEPRESENT_DARK: #16171a;
   --c-DARKBISI: #393e41;

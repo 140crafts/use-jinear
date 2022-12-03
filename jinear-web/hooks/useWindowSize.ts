@@ -24,7 +24,7 @@ function useWindowSize(): IWindowSizeState {
         setWindowSize({
           width: window.innerWidth,
           height: window.innerHeight,
-          isMobile: window.innerWidth < 526,
+          isMobile: window.innerWidth < 425, //same as breakpoints.scss
         });
       };
 

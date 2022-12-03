@@ -3,7 +3,7 @@ import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSl
 import { useTypedSelector } from "@/store/store";
 import cn from "classnames";
 import React from "react";
-import { IoEllipsisHorizontal } from "react-icons/io5";
+import { IoChevronDownSharp } from "react-icons/io5";
 import TitlePicture from "../titlePicture/TitlePicture";
 import styles from "./CurrentWorkspaceHeader.module.scss";
 
@@ -28,7 +28,8 @@ const CurrentWorkspaceHeader: React.FC<CurrentWorkspaceHeaderProps> = ({}) => {
         variant={ButtonVariants.hoverFilled2}
         heightVariant={ButtonHeight.short}
       >
-        <IoEllipsisHorizontal />
+        {/* <IoEllipsisHorizontal /> */}
+        <IoChevronDownSharp size={17} />
       </Button>
     </div>
   );

@@ -264,22 +264,6 @@ select {
   flex: 1;
 }
 
-.indent1 {
-  margin-left: 0.5ch;
-}
-
-.indent2 {
-  margin-left: 1ch;
-}
-
-.indent3 {
-  margin-left: 1.5ch;
-}
-
-.indent4 {
-  margin-left: 2ch;
-}
-
 .toast {
   background-color: var(--c-text-color) !important;
   color: var(--c-background) !important;

@@ -10,6 +10,10 @@ export const teamApi = api.injectEndpoints({
           type: "workplace-team-list",
           id: workspaceId,
         },
+        {
+          type: "workplace-team-list",
+          id: "ALL",
+        },
       ],
     }),
   }),

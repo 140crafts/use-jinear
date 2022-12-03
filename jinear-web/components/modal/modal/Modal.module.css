@@ -8,18 +8,30 @@
   width: 100%;
   min-height: 100%;
   align-self: center;
-  overflow: visible !important;
 }
 
 .titleBar {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   width: 100%;
   height: 42px;
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
+}
+
+.titleBarIconButtonContainer {
+  width: 3rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  text-align: center;
+  flex: 1;
 }
 
 .imgBlur {
@@ -70,6 +82,11 @@
   flex-direction: column;
   max-height: min(880px, 60vh);
   overflow-y: scroll;
+  z-index: 999;
+}
+
+.fullHeightBody {
+  max-height: 100vh;
 }
 
 .object-contain {

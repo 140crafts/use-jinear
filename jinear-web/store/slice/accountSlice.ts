@@ -65,3 +65,7 @@ export const selectCurrentAccountsPreferredWorkspace = (state: RootState) => {
   );
   return preferred ? preferred : selectCurrentAccountsPersonalWorkspace(state);
 };
+
+export const selectCurrentAccountsPreferredTeamId = (state: RootState) => {
+  return state.account.current?.preferredTeamId;
+};

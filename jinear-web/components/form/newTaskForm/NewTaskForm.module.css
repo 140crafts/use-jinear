@@ -1,0 +1,64 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  z-index: 999;
+  position: relative;
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow: visible;
+  z-index: 1;
+  position: relative;
+  padding: 1.15rem;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 3.4rem;
+}
+
+.select {
+  font-weight: 600;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dateInputContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.textAreaInput {
+  height: 7rem;
+}
+
+.footerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  position: sticky;
+  bottom: 0;
+  background-color: var(--c-primary);
+  border-top-color: var(--c-primary-shade-1);
+  border-top-width: 1px;
+  border-top-style: solid;
+  padding: 1rem 1.15rem;
+  z-index: 1;
+}
+
+.footerButton {
+  min-width: 6rem;
+}

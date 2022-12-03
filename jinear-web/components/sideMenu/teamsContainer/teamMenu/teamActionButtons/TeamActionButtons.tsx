@@ -17,22 +17,22 @@ const TeamActionButtons: React.FC<TeamActionButtonsProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      <MenuGroupTitle label="Tasks" />
+      <MenuGroupTitle label={t("sideMenuTeamTasks")} />
       <Button variant={ButtonVariants.hoverFilled2} className={styles.button}>
         <IoTodayOutline />
-        <div>This Week</div>
+        <div>{t("sideMenuTeamThisWeek")}</div>
       </Button>
       <Button variant={ButtonVariants.hoverFilled2} className={styles.button}>
         <IoCalendarOutline />
-        <div>This Month</div>
+        <div>{t("sideMenuTeamThisMonth")}</div>
       </Button>
       <Button variant={ButtonVariants.hoverFilled2} className={styles.button}>
         <IoList />
-        <div>Backlog</div>
+        <div>{t("sideMenuTeamBacklog")}</div>
       </Button>
       <Button variant={ButtonVariants.hoverFilled2} className={styles.button}>
         <IoArchiveOutline />
-        <div>Archive</div>
+        <div>{t("sideMenuTeamArchive")}</div>
       </Button>
     </div>
   );

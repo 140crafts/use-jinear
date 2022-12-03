@@ -2,7 +2,9 @@ import AuthCheck from "@/components/authCheck/AuthCheck";
 import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
 import LoginWith2FaMailModal from "@/components/modal/loginWith2FaMailModal/LoginWith2FaMailModal";
+import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
 import NotFoundModal from "@/components/modal/notFoundModal/NotFoundModal";
+import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
 import ThemeContext, { getTheme } from "@/store/context/themeContext";
@@ -26,6 +28,8 @@ export function useThemeToggle() {
 
 const globalModals: any = (
   <>
+    <TeamOptionsModal />
+    <NewTaskModal />
     <LoginWith2FaMailModal />
     <NotFoundModal />
     <LoadingModal />

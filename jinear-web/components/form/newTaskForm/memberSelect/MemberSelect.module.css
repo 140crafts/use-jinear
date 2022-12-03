@@ -1,0 +1,9 @@
+.assignSelfButton {
+  align-self: flex-start;
+}
+.assignSelfButton {
+  color: var(--c-link-color);
+}
+.assignSelfButton:hover {
+  color: var(--c-link-color);
+}

@@ -315,9 +315,9 @@ export default {
     en: "Teams",
     tr: "Takımlar",
   },
-  sideMenuActionsTeams: {
-    en: "Actions",
-    tr: "Aksiyonlar",
+  sideMenuWorkspaceCurrentTeam: {
+    en: "Current Team",
+    tr: "Takım",
   },
   sideMenuWorkspaceMembersMore: {
     en: "${number} more",
@@ -326,6 +326,10 @@ export default {
   sideMenuTeamTopicsMore: {
     en: "${number} more",
     tr: "${number} daha",
+  },
+  sideMenuActionsTeams: {
+    en: "Actions",
+    tr: "Aksiyonlar",
   },
   sideMenuNewTask: {
     en: "New Task",
@@ -350,5 +354,99 @@ export default {
   sideMenuTeamNoTopics: {
     en: "Create a topic to label your tasks",
     tr: "Bir konu oluştur ve görevlerini etiketle",
+  },
+  sideMenuTeamTasks: {
+    en: "Task",
+    tr: "Görevler",
+  },
+  sideMenuTeamThisWeek: {
+    en: "This Week",
+    tr: "Bu Hafta",
+  },
+  sideMenuTeamThisMonth: {
+    en: "This Month",
+    tr: "Bu Ay",
+  },
+  sideMenuTeamBacklog: {
+    en: "Backlog",
+    // tr: "Belirsizler",
+    // tr: "Birikenler",
+    tr: "Bekleyenler",
+  },
+  sideMenuTeamArchive: {
+    en: "Archive",
+    tr: "Arşiv",
+  },
+  tabBarMenu: {
+    en: "Menu",
+    tr: "Menü",
+  },
+  formRequiredField: {
+    en: "Required Field",
+    tr: "Zorunlu Alan",
+  },
+  newTaskModalTitle: {
+    en: "New Task",
+    tr: "Yeni Görev",
+  },
+  newTaskModalTeamSelectLabel: {
+    en: "Team",
+    tr: "Takım",
+  },
+  newTaskModalTaskTitle: {
+    en: "Task title",
+    tr: "Görev başlığı",
+  },
+  newTaskModalTaskDescription: {
+    en: "Task description",
+    tr: "Görev açıklama",
+  },
+  newTaskModalTaskAssignedDate: {
+    en: "Assigned date",
+    tr: "Planlanan gün",
+  },
+  newTaskModalTaskDueDate: {
+    en: "Due date",
+    tr: "Son tarih",
+  },
+  newTaskModalTaskTopicLabel: {
+    en: "Topic",
+    tr: "Konu",
+  },
+  newTaskModalTaskAssignedToLabel: {
+    en: "Assigned to",
+    tr: "Atanan kişi",
+  },
+  newTaskModalTaskTopicNoContentValue: {
+    en: "None",
+    tr: "Seçilmedi",
+  },
+  newTaskModalTaskTopicNoContentTooltip: {
+    en: "We couldn't find any topics for this team",
+    tr: "Bu takım için oluşturulmuş bir konu bulamadık",
+  },
+  newTaskModalAssignToYourself: {
+    en: "Assign to me",
+    tr: "Bana Ata",
+  },
+  newTaskModalCreate: {
+    en: "Create Task",
+    tr: "Görev Oluştur",
+  },
+  newTaskModalCancel: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  teamOptionsMenu: {
+    en: "Team Options",
+    tr: "Takım Seçenekleri",
+  },
+  teamOptionsCurrentTeam: {
+    en: "(Current)",
+    tr: "(Şuanki)",
+  },
+  teamOptionsSelectActiveTeamTitle: {
+    en: "Change team",
+    tr: "Görüntülenen takımı değiştir",
   },
 };

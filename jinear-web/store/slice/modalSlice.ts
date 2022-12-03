@@ -1,8 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ModalState, {
   LoginWith2FaMailModalState,
+  NewTaskModalState,
   NotFoundModalState,
 } from "model/app/store/modal/modalState";
+import { accountApi } from "../api/accountApi";
 import { RootState } from "../store";
 
 const initialState = {
@@ -20,10 +22,18 @@ const initialState = {
     title: undefined,
     label: undefined,
   },
+  newTaskModal: {
+    visible: false,
+  },
+  teamOptionsModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
   notFoundModal: null | NotFoundModalState;
+  newTaskModal: null | NewTaskModalState;
+  teamOptionsModal: null | ModalState;
 };
 
 const slice = createSlice({
@@ -52,7 +62,38 @@ const slice = createSlice({
     closeNotFoundModal: (state, action: PayloadAction<void>) => {
       state.notFoundModal = initialState.notFoundModal;
     },
+    popNewTaskModal: (
+      state,
+      action: PayloadAction<{ workspaceId: string }>
+    ) => {
+      state.newTaskModal = { ...action.payload, visible: true };
+    },
+    closeNewTaskModal: (state, action: PayloadAction<void>) => {
+      state.newTaskModal = initialState.newTaskModal;
+    },
+    popTeamOptionsModal: (state, action: PayloadAction<void>) => {
+      state.teamOptionsModal = { visible: true };
+    },
+    closeTeamOptionsModal: (state, action: PayloadAction<void>) => {
+      state.teamOptionsModal = { visible: false };
+    },
+
     resetModals: () => initialState,
+  },
+  extraReducers: (builder) => {
+    builder
+      .addMatcher(accountApi.endpoints.me.matchPending, (state, action) => {
+        console.log("matchPending1");
+        state.loadingModal = { visible: true };
+      })
+      .addMatcher(accountApi.endpoints.me.matchFulfilled, (state, action) => {
+        console.log("matchFulfilled2");
+        state.loadingModal = { visible: false };
+      })
+      .addMatcher(accountApi.endpoints.me.matchRejected, (state, action) => {
+        console.log("matchRejected3");
+        state.loadingModal = { visible: false };
+      });
   },
 });
 
@@ -61,6 +102,10 @@ export const {
   changeLoadingModalVisibility,
   popNotFoundModal,
   closeNotFoundModal,
+  popNewTaskModal,
+  closeNewTaskModal,
+  popTeamOptionsModal,
+  closeTeamOptionsModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -80,3 +125,11 @@ export const selectNotFoundModalImgSrc = (state: RootState) =>
   state.modal.notFoundModal?.imgSrc;
 export const selectNotFoundModalImgAlt = (state: RootState) =>
   state.modal.notFoundModal?.imgAlt;
+
+export const selectNewTaskModalVisible = (state: RootState) =>
+  state.modal.newTaskModal?.visible;
+export const selectNewTaskModalWorkspaceId = (state: RootState) =>
+  state.modal.newTaskModal?.workspaceId;
+
+export const selectTeamOptionsModalVisible = (state: RootState) =>
+  state.modal.teamOptionsModal?.visible;

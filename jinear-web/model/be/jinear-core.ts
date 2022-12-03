@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2022-11-29 22:33:46.
+// Generated using typescript-generator version 3.0.1157 on 2022-12-03 11:39:13.
 
 export interface BaseDto {
   createdDate: Date;
@@ -31,6 +31,7 @@ export interface AccountDto extends BaseDto {
   profilePicture?: MediaDto | null;
   workspaces: WorkspaceDto[];
   preferredWorkspaceId: string;
+  preferredTeamId: string;
 }
 
 export interface AccountRoleDto {
@@ -119,6 +120,7 @@ export interface UsernameDto {
 export interface WorkspaceDisplayPreferenceDto {
   account_id: string;
   preferredWorkspaceId: string;
+  preferredTeamId: string;
 }
 
 export interface WorkspaceDto extends BaseDto {
@@ -199,11 +201,12 @@ export interface LoginWithPasswordRequest extends BaseRequest {
 export interface TaskInitializeRequest extends BaseRequest {
   workspaceId: string;
   teamId: string;
-  topicId: string;
-  assignedDate: Date;
-  dueDate: Date;
+  topicId?: string | null;
+  assignedTo?: string | null;
+  assignedDate?: Date | null;
+  dueDate?: Date | null;
   title: string;
-  description: string;
+  description?: string | null;
 }
 
 export interface TaskRetrieveAllRequest extends BaseRequest {
@@ -215,10 +218,11 @@ export interface TaskRetrieveAllRequest extends BaseRequest {
 export interface TaskUpdateRequest {
   taskId: string;
   topicId: string;
-  assignedDate: Date;
-  dueDate: Date;
+  assignedTo?: string | null;
+  assignedDate?: Date | null;
+  dueDate?: Date | null;
   title: string;
-  description: string;
+  description?: string | null;
 }
 
 export interface TeamInitializeRequest extends BaseRequest {

@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  align-items: center;
+  height: var(--side-menu-footer-height);
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: var(--c-primary-shade-1);
+  background-color: var(--c-primary-shade-0);
+}
+
+.accountButton {
+  flex: 1;
+  text-align: left;
+  justify-content: flex-start;
+  font-weight: 500;
+}

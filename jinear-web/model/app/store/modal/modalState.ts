@@ -12,3 +12,7 @@ export interface NotFoundModalState extends ModalState {
   title?: string;
   label?: string;
 }
+
+export interface NewTaskModalState extends ModalState {
+  workspaceId?: string;
+}

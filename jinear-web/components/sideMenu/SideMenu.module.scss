@@ -1,6 +1,7 @@
 .content {
   display: flex;
   flex-direction: column;
-  padding: 2rem 1ch;
+  padding: 1rem 1ch;
   gap: 0.75rem;
+  padding-bottom: var(--side-menu-footer-height);
 }

@@ -6,6 +6,7 @@ import styles from "./TeamMenu.module.css";
 import TeamThreads from "./teamThreads/TeamThreads";
 import TeamTitle from "./teamTitle/TeamTitle";
 import TeamTopics from "./teamTopics/TeamTopics";
+// import TeamTopics from "./teamTopics/TeamTopics";
 
 interface TeamMenuProps {
   teamId: string;
