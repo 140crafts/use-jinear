@@ -75,6 +75,7 @@ public class TaskInitializeService {
         task.setWorkspaceId(taskInitializeVo.getWorkspaceId());
         task.setTeamId(taskInitializeVo.getTeamId());
         task.setOwnerId(taskInitializeVo.getOwnerId());
+        task.setAssignedTo(taskInitializeVo.getAssignedTo());
         task.setAssignedDate(taskInitializeVo.getAssignedDate());
         task.setDueDate(taskInitializeVo.getDueDate());
         task.setTitle(taskInitializeVo.getTitle());

@@ -25,4 +25,5 @@ public class AccountDto extends BaseDto {
     private MediaDto profilePicture;
     private List<WorkspaceDto> workspaces;
     private String preferredWorkspaceId;
+    private String preferredTeamId;
 }

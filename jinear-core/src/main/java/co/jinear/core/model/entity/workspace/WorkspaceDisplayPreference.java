@@ -26,4 +26,7 @@ public class WorkspaceDisplayPreference extends BaseEntity {
 
     @Column(name = "preferred_workspace_id")
     private String preferredWorkspaceId;
+
+    @Column(name = "preferred_team_id")
+    private String preferredTeamId;
 }

@@ -1,8 +1,11 @@
 package co.jinear.core.service.workspace;
 
+import co.jinear.core.exception.NotFoundException;
+import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.model.entity.workspace.WorkspaceDisplayPreference;
 import co.jinear.core.repository.WorkspaceDisplayPreferenceRepository;
+import co.jinear.core.service.team.TeamRetrieveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -16,10 +19,11 @@ import java.util.Optional;
 public class WorkspaceDisplayPreferenceService {
 
     private final WorkspaceDisplayPreferenceRepository workspaceDisplayPreferenceRepository;
+    private final TeamRetrieveService teamRetrieveService;
     private final ModelMapper modelMapper;
 
     public Optional<WorkspaceDisplayPreferenceDto> retrieveAccountPreferredWorkspace(String accountId) {
-        log.info("Retrieve account prefered workspace has started. accountId: {}", accountId);
+        log.info("Retrieve account preferred workspace has started. accountId: {}", accountId);
         return retrieveEntityByAccountId(accountId)
                 .map(workspaceDisplayPreference -> modelMapper.map(workspaceDisplayPreference, WorkspaceDisplayPreferenceDto.class));
     }
@@ -28,10 +32,23 @@ public class WorkspaceDisplayPreferenceService {
         log.info("Set account preferred workspace has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
         WorkspaceDisplayPreference workspaceDisplayPreference = retrieveEntityByAccountId(accountId)
                 .orElseGet(() -> initializeDefault(accountId, workspaceId));
+        changeTeamIdIfWorkspaceHasChanged(workspaceDisplayPreference, workspaceId);
         workspaceDisplayPreference.setAccountId(accountId);
         workspaceDisplayPreference.setPreferredWorkspaceId(workspaceId);
         WorkspaceDisplayPreference saved = workspaceDisplayPreferenceRepository.save(workspaceDisplayPreference);
         log.info("Account preferred workspace has been set.");
+        return modelMapper.map(saved, WorkspaceDisplayPreferenceDto.class);
+    }
+
+    public WorkspaceDisplayPreferenceDto setAccountPreferredTeamId(String accountId, String teamId) {
+        log.info("Set account preferred teamId has started. accountId: {}, teamId: {}", accountId, teamId);
+        WorkspaceDisplayPreference workspaceDisplayPreference = retrieveEntityByAccountId(accountId)
+                .orElseThrow(NotFoundException::new);
+        TeamDto teamDto = teamRetrieveService.retrieveTeam(teamId);
+        workspaceDisplayPreference.setPreferredWorkspaceId(teamDto.getWorkspaceId());
+        workspaceDisplayPreference.setPreferredTeamId(teamId);
+        WorkspaceDisplayPreference saved = workspaceDisplayPreferenceRepository.save(workspaceDisplayPreference);
+        log.info("Account preferred team and workspace has been set.");
         return modelMapper.map(saved, WorkspaceDisplayPreferenceDto.class);
     }
 
@@ -44,5 +61,16 @@ public class WorkspaceDisplayPreferenceService {
         workspaceDisplayPreference.setAccountId(accountId);
         workspaceDisplayPreference.setPreferredWorkspaceId(workspaceId);
         return workspaceDisplayPreference;
+    }
+
+    private void changeTeamIdIfWorkspaceHasChanged(WorkspaceDisplayPreference workspaceDisplayPreference, String workspaceId) {
+        if (!workspaceDisplayPreference.getPreferredWorkspaceId().equals(workspaceId)) {
+            log.info("Preferred workspace is different from current one. Retrieve and set first team as preferred team if present.");
+            teamRetrieveService.retrieveWorkspaceTeams(workspaceId)
+                    .stream()
+                    .findFirst()
+                    .map(TeamDto::getTeamId)
+                    .ifPresent(workspaceDisplayPreference::setPreferredTeamId);
+        }
     }
 }

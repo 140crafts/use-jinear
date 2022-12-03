@@ -13,6 +13,7 @@ import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
 import co.jinear.core.service.workspace.WorkspaceInitializeService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.service.media.MediaRetrieveService;
+import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class WorkspaceManager {
     private final WorkspaceInitializeService workspaceInitializeService;
     private final WorkspaceActivityService workspaceActivityService;
     private final WorkspaceValidator workspaceValidator;
+    private final TeamAccessValidator teamAccessValidator;
     private final WorkspaceRetrieveService workspaceRetrieveService;
     private final SessionInfoService sessionInfoService;
     private final MediaRetrieveService mediaRetrieveService;
@@ -67,6 +69,14 @@ public class WorkspaceManager {
         workspaceValidator.validateHasAccess(accountId, workspaceId);
         log.info("Update preferred workspace has started. workspaceId: {}, accountId: {}", workspaceId, accountId);
         workspaceDisplayPreferenceService.setAccountPreferredWorkspace(accountId, workspaceId);
+        return new BaseResponse();
+    }
+
+    public BaseResponse updatePreferredTeam(String teamId) {
+        String accountId = sessionInfoService.currentAccountId();
+        teamAccessValidator.validateTeamAccess(accountId, teamId);
+        log.info("Update preferred team has started. teamId: {}, accountId: {}", teamId, accountId);
+        workspaceDisplayPreferenceService.setAccountPreferredTeamId(accountId, teamId);
         return new BaseResponse();
     }
 

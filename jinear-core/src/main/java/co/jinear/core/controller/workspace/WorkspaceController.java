@@ -35,9 +35,4 @@ public class WorkspaceController {
         return workspaceManager.initializeWorkspace(workspaceInitializeRequest);
     }
 
-    @PutMapping("/display-preferences/{workspaceId}/set-preferred")
-    @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse initializeWorkspace(@PathVariable String workspaceId) {
-        return workspaceManager.updatePreferredWorkspace(workspaceId);
-    }
 }

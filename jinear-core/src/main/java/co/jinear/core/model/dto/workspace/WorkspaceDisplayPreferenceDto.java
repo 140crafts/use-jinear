@@ -9,4 +9,5 @@ public class WorkspaceDisplayPreferenceDto {
 
     private String account_id;
     private String preferredWorkspaceId;
+    private String preferredTeamId;
 }

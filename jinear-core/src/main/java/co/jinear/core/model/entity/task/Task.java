@@ -40,6 +40,9 @@ public class Task extends BaseEntity {
     @Column(name = "owner_id")
     private String ownerId;
 
+    @Column(name = "assigned_to")
+    private String assignedTo;
+
     @Column(name = "assigned_date")
     private ZonedDateTime assignedDate;
 
