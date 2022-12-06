@@ -1,3 +1,6 @@
+import enUsLocale from "date-fns/locale/en-US";
+import trTrLocale from "date-fns/locale/tr";
+
 export default {
   hi: {
     en: "hi",
@@ -10,6 +13,10 @@ export default {
   localeType: {
     en: "EN",
     tr: "TR",
+  },
+  dateFnsLocale: {
+    en: enUsLocale,
+    tr: trTrLocale,
   },
   dateFormat: {
     en: "MM.dd.yyyy",
@@ -30,6 +37,10 @@ export default {
   genericError: {
     en: "An error has occurred please try again later",
     tr: "Bir hata oluştu. Lütfen daha sonra tekrar deneyin",
+  },
+  genericSuccess: {
+    en: "Success",
+    tr: "İşlem Başarılı",
   },
   loginScreenTitle: {
     en: "Login",
@@ -394,12 +405,12 @@ export default {
     tr: "Takım",
   },
   newTaskModalTaskTitle: {
-    en: "Task title",
-    tr: "Görev başlığı",
+    en: "Title",
+    tr: "Başlık",
   },
   newTaskModalTaskDescription: {
-    en: "Task description",
-    tr: "Görev açıklama",
+    en: "Description",
+    tr: "Açıklama",
   },
   newTaskModalTaskAssignedDate: {
     en: "Assigned date",
@@ -448,5 +459,53 @@ export default {
   teamOptionsSelectActiveTeamTitle: {
     en: "Change team",
     tr: "Görüntülenen takımı değiştir",
+  },
+  newTastCreatedToastText: {
+    en: 'Task created. "${taskNo}"',
+    tr: 'Görev oluşturuldu. "${taskNo}"',
+  },
+  newTastCreatedToastGoToTask: {
+    en: "View",
+    tr: "Görüntüle",
+  },
+  newTastCreatedToastCopyUrl: {
+    en: "Copy link",
+    tr: "Linki Kopyala",
+  },
+  newTaskCreatedToastCopiedToClipboard: {
+    en: "Link copied to clipboard",
+    tr: "Link panoya kopyalandı",
+  },
+  taskDetailPageDescription: {
+    en: "Description",
+    tr: "Açıklama",
+  },
+  taskDetailPagePeope: {
+    en: "Related People",
+    tr: "İlgili Kişiler",
+  },
+  taskDetailPageCreatedBy: {
+    en: "Created By: ",
+    tr: "Oluşturan: ",
+  },
+  taskDetailPageAssignedTo: {
+    en: "Assignee: ",
+    tr: "Atanan: ",
+  },
+  taskDetailPageCreatedAt: {
+    en: "Created at",
+    tr: "Oluşturma zamanı",
+  },
+  teamWeeklyScreenBreadcrumbLabel: {
+    en: "Weekly Tasks",
+    tr: "Haftalık Görevler",
+  },
+  teamWeeklyScreenWeekNoTitle: {
+    en: "Week {weekNo}",
+    tr: "{weekNo}. Hafta",
+  },
+  teamWeeklyScreenWeekStartEndTo: {
+    en: "to",
+    tr: "-",
   },
 };

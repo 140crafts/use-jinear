@@ -7,10 +7,12 @@
 
 .sideMenuContainer {
   z-index: 1;
-  width: 290px;
+  width: var(--side-menu-width);
   height: 100vh;
   overflow-y: scroll;
   background-color: var(--c-primary-shade-0);
+  position: sticky;
+  top: 0;
 }
 
 .content {
@@ -45,6 +47,7 @@
   .sideMenuContainer {
     position: fixed;
     bottom: 0;
+    top: unset;
     width: 100vw;
     height: 90vh;
     margin-bottom: -100vh;

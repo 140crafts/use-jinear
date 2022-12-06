@@ -89,7 +89,12 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
             {t("sideMenuTeamListNoTeam")}
           </div>
         )}
-        {isSuccess && selectedTeam && <TeamMenu {...selectedTeam} />}
+        {isSuccess && selectedTeam && (
+          <TeamMenu
+            {...selectedTeam}
+            workspaceUsername={preferredWorkspace?.username || ""}
+          />
+        )}
       </div>
     </div>
   );

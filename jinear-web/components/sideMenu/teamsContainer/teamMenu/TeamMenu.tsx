@@ -15,6 +15,7 @@ interface TeamMenuProps {
   tag: string;
   visibility: TeamVisibilityType;
   joinMethod: TeamJoinMethodType;
+  workspaceUsername: string;
 }
 
 const TeamMenu: React.FC<TeamMenuProps> = ({
@@ -24,12 +25,13 @@ const TeamMenu: React.FC<TeamMenuProps> = ({
   tag,
   visibility,
   joinMethod,
+  workspaceUsername,
 }) => {
   return (
     <div className={styles.container}>
       <TeamTitle name={name} />
       <TeamMemberList teamId={teamId} />
-      <TeamActionButtons />
+      <TeamActionButtons name={name} workspaceUsername={workspaceUsername} />
       <TeamTopics teamId={teamId} />
       <TeamThreads />
     </div>

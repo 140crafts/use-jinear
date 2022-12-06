@@ -12,3 +12,7 @@
   text-align: left;
   padding-left: var(--indent-8);
 }
+
+.activeButton {
+  font-weight: 600;
+}

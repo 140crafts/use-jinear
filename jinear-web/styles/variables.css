@@ -11,6 +11,7 @@
   --c-secondary-shade-0: #1f2124;
   --c-secondary-shade-1: #393e41;
   --c-link-color: #122cc2;
+  --c-link-color-inverted: #5fc9f8;
   /*  */
   --c-nav-logo-color: #16171a;
   --c-nav-logo-shadow: #e5e5e5;
@@ -32,7 +33,7 @@
     0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
   --box-shadow-soft: 0px 2px 1px -1px rgba(0, 0, 0, 0.02),
     0px 1px 1px 0px rgba(0, 0, 0, 0.014), 0px 1px 3px 0px rgba(0, 0, 0, 0.012);
-  --menu-width: 200px;
+  --side-menu-width: 290px;
   /*  */
   --user-profile-card-height: 200px;
   --user-profile-card-height-medium: 150px;
@@ -43,8 +44,9 @@
   --content: min(50ch, 100% - var(--gap) * 2);
   --popout: minmax(0, 2rem);
   --feature: minmax(0, 5rem);
-  --service-record-grid-template-columns: 0.25fr 1fr 0.25fr 0.35fr 0.25fr;
   --customer-list-grid-template-columns: 0.25fr 1fr 0.25fr;
+  --task-card-width: 175px;
+  --team-week-template-columns: 175px 175px 175px 175px 175px 175px 175px;
   /*  */
   --indent-1: 0.5ch;
   --indent-2: 1ch;
@@ -77,6 +79,8 @@
   --border-radius-l: 0.75rem;
   --border-radius-xl: 0.9rem;
   --menu-workplace-title-color: #fe0934;
+  /*  */
+  --line-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg width='480' height='42' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-opacity='.1' stroke='%23000' d='M0 41.5h480'/%3E%3C/svg%3E");
 }
 
 .dark:root {
@@ -92,6 +96,7 @@
   --c-secondary-shade-0-op05: #f5f5f580;
   --c-secondary-shade-1: #e5e5e5;
   --c-link-color: #5fc9f8;
+  --c-link-color-inverted: #122cc2;
   --c-nav-logo-color: #ffffff;
   --c-nav-logo-shadow: #676869;
   --c-captcha-bg: #222323;
@@ -104,4 +109,5 @@
     0px 1px 1px 0px rgba(253, 255, 252, 0.014),
     0px 1px 3px 0px rgba(253, 255, 252, 0.012);
   --menu-workplace-title-color: #ff5270;
+  --line-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg width='480' height='42' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-opacity='.1' stroke='%23FFF' d='M0 41.5h480'/%3E%3C/svg%3E");
 }

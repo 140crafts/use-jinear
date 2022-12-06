@@ -27,6 +27,12 @@
       "@/pages/*": ["pages/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/debounce.js"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "utils/debounce.js",
+    "utils/clipboard.js"
+  ],
   "exclude": ["node_modules"]
 }

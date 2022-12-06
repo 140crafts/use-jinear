@@ -1,7 +1,6 @@
-import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { popMenu } from "@/store/slice/displayPreferenceSlice";
 import { popNewTaskModal } from "@/store/slice/modalSlice";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoAdd, IoMenu } from "react-icons/io5";
@@ -13,20 +12,13 @@ interface TabBarProps {}
 const TabBar: React.FC<TabBarProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const preferredWorkspace = useTypedSelector(
-    selectCurrentAccountsPreferredWorkspace
-  );
 
   const _popMenu = () => {
     dispatch(popMenu());
   };
 
   const newTask = () => {
-    if (preferredWorkspace) {
-      dispatch(
-        popNewTaskModal({ workspaceId: preferredWorkspace.workspaceId })
-      );
-    }
+    dispatch(popNewTaskModal());
   };
 
   return (

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2022-12-03 11:39:13.
+// Generated using typescript-generator version 3.0.1157 on 2022-12-06 21:57:51.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  first: boolean;
   last: boolean;
+  first: boolean;
 }
 
 export interface AccountDto extends BaseDto {
@@ -41,6 +41,13 @@ export interface AccountRoleDto {
 export interface PlainAccountDto extends BaseDto {
   accountId: string;
   username: string;
+}
+
+export interface PlainAccountProfileDto extends BaseDto {
+  accountId: string;
+  email: string;
+  username: string;
+  profilePicture?: MediaDto | null;
 }
 
 export interface MediaDto extends BaseDto {
@@ -66,10 +73,11 @@ export interface TaskDto extends BaseDto {
   topicTagNo: number;
   title: string;
   description: string;
-  topic: Topic;
-  account: PlainAccountDto;
-  workspace: WorkspaceDto;
-  team: TeamDto;
+  topic?: Topic | null;
+  owner?: PlainAccountProfileDto | null;
+  assignedToAccount?: PlainAccountProfileDto | null;
+  workspace?: WorkspaceDto | null;
+  team?: TeamDto | null;
 }
 
 export interface TeamDto extends BaseDto {
@@ -215,6 +223,13 @@ export interface TaskRetrieveAllRequest extends BaseRequest {
   page: number;
 }
 
+export interface TaskRetrieveIntersectingRequest extends BaseRequest {
+  workspaceId: string;
+  teamId: string;
+  timespanStart: Date;
+  timespanEnd: Date;
+}
+
 export interface TaskUpdateRequest {
   taskId: string;
   topicId: string;
@@ -284,8 +299,12 @@ export interface AuthResponse extends BaseResponse {
   token: string;
 }
 
-export interface TaskListingResponse extends BaseResponse {
+export interface TaskListingPaginatedResponse extends BaseResponse {
   data: PageDto<TaskDto>;
+}
+
+export interface TaskListingResponse extends BaseResponse {
+  data: TaskDto[];
 }
 
 export interface TaskResponse extends BaseResponse {

@@ -1,0 +1,22 @@
+.dayTitle {
+  flex: 1;
+  position: sticky;
+  top: 0;
+}
+
+.today {
+  color: var(--menu-workplace-title-color);
+}
+
+.titleContiner {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.taskCount {
+  margin-left: 5px;
+  font-weight: 500;
+  opacity: 0.5;
+  font-size: 0.9rem;
+}

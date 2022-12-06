@@ -1,11 +1,14 @@
 import Button, { ButtonVariants } from "@/components/button";
+import TaskCreatedToast from "@/components/taskCreatedToast/TaskCreatedToast";
 import { TaskInitializeRequest } from "@/model/be/jinear-core";
+import { useInitializeTaskMutation } from "@/store/api/taskApi";
 import { closeNewTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import AssignedDateInput from "./assignedDateInput/AssignedDateInput";
 import DescriptionInput from "./descriptionInput/DescriptionInput";
 import DueDateInput from "./dueDateInput/DueDateInput";
@@ -34,6 +37,15 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId }) => {
     formState: { errors },
   } = useForm<TaskInitializeRequest>();
 
+  const [
+    initializeTask,
+    {
+      data: initializeTaskResponse,
+      isLoading: isInitializeTaskLoading,
+      isSuccess: isInitializeTaskSuccess,
+    },
+  ] = useInitializeTaskMutation();
+
   useEffect(() => {
     setTimeout(() => {
       setFocus("title");
@@ -42,19 +54,49 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId }) => {
     }, 250);
   }, []);
 
+  useEffect(() => {
+    if (isInitializeTaskSuccess && initializeTaskResponse) {
+      console.log({ NewTaskForm: initializeTaskResponse });
+      if (
+        initializeTaskResponse.data.workspace &&
+        initializeTaskResponse.data.team
+      ) {
+        const teamTag = initializeTaskResponse.data.team?.tag;
+        const teamTagNo = initializeTaskResponse.data.teamTagNo;
+        const tag = `${teamTag}-${teamTagNo}`;
+        const workspaceUsername =
+          initializeTaskResponse.data.workspace?.username;
+        const taskLink = `${workspaceUsername}/${tag}`;
+        toast((t) => <TaskCreatedToast teamTaskNo={tag} taskLink={taskLink} />);
+      } else {
+        toast(t("genericSuccess"));
+      }
+      close();
+    }
+  }, [isInitializeTaskSuccess, initializeTaskResponse]);
+
   const close = () => {
     dispatch(closeNewTaskModal());
   };
 
   const submit: SubmitHandler<TaskInitializeRequest> = (data) => {
-    // if (isLoading) {
-    //   return;
-    // }
-    // if (data.newPassword != data.newPasswordControl) {
-    //   toast(t("changePasswordFormPasswordsNotMatch"));
-    //   return;
-    // }
-    // updatePassword(data);
+    if (data.assignedTo == "no-assignee") {
+      data.assignedTo = undefined;
+    }
+    if (data.topicId == "no-topic") {
+      data.topicId = undefined;
+    }
+    if (data.assignedDate) {
+      data.assignedDate = new Date(data.assignedDate);
+    }
+    if (data.dueDate) {
+      data.dueDate = new Date(data.dueDate);
+    }
+    console.log({ NewTaskForm: data });
+    if (isInitializeTaskLoading) {
+      return;
+    }
+    initializeTask(data);
   };
 
   return (
@@ -102,10 +144,17 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId }) => {
       </div>
 
       <div className={styles.footerContainer}>
-        <Button onClick={close} className={styles.footerButton}>
+        <Button
+          disabled={isInitializeTaskLoading}
+          onClick={close}
+          className={styles.footerButton}
+        >
           {t("newTaskModalCancel")}
         </Button>
         <Button
+          type="submit"
+          disabled={isInitializeTaskLoading}
+          loading={isInitializeTaskLoading}
           className={styles.footerButton}
           variant={ButtonVariants.contrast}
         >

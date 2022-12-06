@@ -1,0 +1,57 @@
+import { TaskInitializeRequest, TaskResponse } from "@/model/be/jinear-core";
+import { api } from "./api";
+
+export const taskApi = api.injectEndpoints({
+  endpoints: (build) => ({
+    initializeTask: build.mutation<TaskResponse, TaskInitializeRequest>({
+      query: (body: TaskInitializeRequest) => ({
+        url: `v1/task`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [
+        //TODO
+      ],
+    }),
+    updateTask: build.mutation<TaskResponse, TaskInitializeRequest>({
+      query: (body: TaskInitializeRequest) => ({
+        url: `v1/task`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: [
+        //TODO
+      ],
+    }),
+    retrieveWithWorkspaceNameAndTeamTagNo: build.query<
+      TaskResponse,
+      {
+        workspaceName: string;
+        taskTag: string;
+      }
+    >({
+      query: (req: { workspaceName: string; taskTag: string }) =>
+        `v1/task/from-workspace/${req.workspaceName}/${req.taskTag}`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: "workplace-task-with-name-and-tag",
+          id: `${req.workspaceName}/${req.taskTag}`,
+        },
+      ],
+    }),
+  }),
+});
+///from-workspace/{workspaceName}/{teamTag}-{tagNo}
+export const {
+  useInitializeTaskMutation,
+  useUpdateTaskMutation,
+  useRetrieveWithWorkspaceNameAndTeamTagNoQuery,
+} = taskApi;
+
+export const {
+  endpoints: {
+    initializeTask,
+    updateTask,
+    retrieveWithWorkspaceNameAndTeamTagNo,
+  },
+} = taskApi;

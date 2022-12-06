@@ -1,0 +1,21 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: var(--full);
+  max-width: var(--full);
+  gap: 1rem;
+}
+
+.weekViewContainer {
+  max-width: calc(100vw - var(--side-menu-width));
+  overflow-x: scroll;
+}
+
+@media (max-width: $mobile-l) {
+  .weekViewContainer {
+    max-width: 100vw;
+    overflow-x: scroll;
+  }
+}

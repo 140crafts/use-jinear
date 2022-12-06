@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ModalState, {
   LoginWith2FaMailModalState,
-  NewTaskModalState,
   NotFoundModalState,
 } from "model/app/store/modal/modalState";
 import { accountApi } from "../api/accountApi";
@@ -32,7 +31,7 @@ const initialState = {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
   notFoundModal: null | NotFoundModalState;
-  newTaskModal: null | NewTaskModalState;
+  newTaskModal: null | ModalState;
   teamOptionsModal: null | ModalState;
 };
 
@@ -62,11 +61,8 @@ const slice = createSlice({
     closeNotFoundModal: (state, action: PayloadAction<void>) => {
       state.notFoundModal = initialState.notFoundModal;
     },
-    popNewTaskModal: (
-      state,
-      action: PayloadAction<{ workspaceId: string }>
-    ) => {
-      state.newTaskModal = { ...action.payload, visible: true };
+    popNewTaskModal: (state, action: PayloadAction<void>) => {
+      state.newTaskModal = { visible: true };
     },
     closeNewTaskModal: (state, action: PayloadAction<void>) => {
       state.newTaskModal = initialState.newTaskModal;
@@ -128,8 +124,6 @@ export const selectNotFoundModalImgAlt = (state: RootState) =>
 
 export const selectNewTaskModalVisible = (state: RootState) =>
   state.modal.newTaskModal?.visible;
-export const selectNewTaskModalWorkspaceId = (state: RootState) =>
-  state.modal.newTaskModal?.workspaceId;
 
 export const selectTeamOptionsModalVisible = (state: RootState) =>
   state.modal.teamOptionsModal?.visible;

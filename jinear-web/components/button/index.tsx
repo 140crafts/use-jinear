@@ -30,7 +30,7 @@ interface LinkButtonProps {
 
 const LinkButton: FC<LinkButtonProps> = ({ href, children, ...props }) => {
   return (
-    <Link href={href} passHref>
+    <Link href={href} passHref {...props}>
       {children}
     </Link>
   );

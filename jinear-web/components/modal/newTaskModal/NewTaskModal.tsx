@@ -1,10 +1,10 @@
 import NewTaskForm from "@/components/form/newTaskForm/NewTaskForm";
 import useWindowSize from "@/hooks/useWindowSize";
-import { selectCurrentAccountsPreferredTeamId } from "@/store/slice/accountSlice";
 import {
-  selectNewTaskModalVisible,
-  selectNewTaskModalWorkspaceId,
-} from "@/store/slice/modalSlice";
+  selectCurrentAccountsPreferredTeamId,
+  selectCurrentAccountsPreferredWorkspace,
+} from "@/store/slice/accountSlice";
+import { selectNewTaskModalVisible } from "@/store/slice/modalSlice";
 import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -16,7 +16,10 @@ interface NewTaskModalProps {}
 const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const { t } = useTranslation();
   const visible = useTypedSelector(selectNewTaskModalVisible);
-  const workspaceId = useTypedSelector(selectNewTaskModalWorkspaceId);
+  const preferredWorkspace = useTypedSelector(
+    selectCurrentAccountsPreferredWorkspace
+  );
+  const workspaceId = preferredWorkspace?.workspaceId;
   const teamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
 
   const { isMobile } = useWindowSize();
