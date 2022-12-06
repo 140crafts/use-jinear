@@ -28,6 +28,12 @@ public class TaskRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    public TaskDto retrieve(String workspaceId, String teamId, Integer teamTagNo) {
+        return taskRepository.findByWorkspaceIdAndTeamIdAndTeamTagNoAndPassiveIdIsNull(workspaceId, teamId, teamTagNo)
+                .map(task -> modelMapper.map(task, TaskDto.class))
+                .orElseThrow(NotFoundException::new);
+    }
+
     public Long countAllByTopicId(String topicId) {
         log.info("Count all by topic id has started for topicId: {}", topicId);
         Long count = taskRepository.countAllByTopicId(topicId);

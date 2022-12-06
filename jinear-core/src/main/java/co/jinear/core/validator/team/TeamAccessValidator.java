@@ -25,9 +25,9 @@ public class TeamAccessValidator {
     private final TeamRetrieveService teamRetrieveService;
 
     public void validateTeamAccess(String accountId, String teamId) {
-        TeamDto  teamDto = teamRetrieveService.retrieveTeam(teamId);
-        String workspaceId=teamDto.getWorkspaceId();
-        validateTeamAccess(accountId,workspaceId,teamId);
+        TeamDto teamDto = teamRetrieveService.retrieveTeam(teamId);
+        String workspaceId = teamDto.getWorkspaceId();
+        validateTeamAccess(accountId, workspaceId, teamId);
     }
 
     public void validateTeamAccess(String accountId, String workspaceId, String teamId) {

@@ -15,7 +15,7 @@ public class TeamValidator {
 
     public void validateTeamNameIsNotUsedInWorkspace(String teamName, String workspaceId) {
         log.info("Validating team name is not used in workspace before. teamName: {}, workspaceId: {}", teamName, workspaceId);
-        teamRetrieveService.retrieveTeamByNameOptional(teamName, workspaceId)
+        teamRetrieveService.retrieveTeamIncludingPassivesByNameOptional(teamName, workspaceId)
                 .ifPresent(teamDto -> {
                     throw new BusinessException("workspace.team.team-name-is-taken");
                 });

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
@@ -17,8 +18,10 @@ public class TaskUpdateRequest {
     @Nullable
     private String assignedTo;
     @Nullable
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime assignedDate;
     @Nullable
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime dueDate;
     @NotBlank
     private String title;

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2022-12-03 11:39:13.
+// Generated using typescript-generator version 3.0.1157 on 2022-12-05 12:29:40.
 
 export interface BaseDto {
     createdDate: Date;
@@ -43,6 +43,13 @@ export interface PlainAccountDto extends BaseDto {
     username: string;
 }
 
+export interface PlainAccountProfileDto extends BaseDto {
+    accountId: string;
+    email: string;
+    username: string;
+    profilePicture?: MediaDto | null;
+}
+
 export interface MediaDto extends BaseDto {
     mediaId: string;
     ownerId: string;
@@ -66,10 +73,11 @@ export interface TaskDto extends BaseDto {
     topicTagNo: number;
     title: string;
     description: string;
-    topic: Topic;
-    account: PlainAccountDto;
-    workspace: WorkspaceDto;
-    team: TeamDto;
+    topic?: Topic | null;
+    owner?: PlainAccountProfileDto | null;
+    assignedToAccount?: PlainAccountProfileDto | null;
+    workspace?: WorkspaceDto | null;
+    team?: TeamDto | null;
 }
 
 export interface TeamDto extends BaseDto {

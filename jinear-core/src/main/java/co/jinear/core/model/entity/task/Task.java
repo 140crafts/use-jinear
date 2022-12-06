@@ -79,5 +79,10 @@ public class Task extends BaseEntity {
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "owner_id", insertable = false, updatable = false)
-    private Account account;
+    private Account owner;
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "assigned_to", insertable = false, updatable = false)
+    private Account assignedToAccount;
 }

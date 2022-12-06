@@ -14,5 +14,7 @@ public interface TeamRepository extends JpaRepository<Team, String> {
 
     Optional<Team> findByNameAndWorkspaceIdAndPassiveIdIsNull(String name, String workspaceId);
 
+    Optional<Team> findByNameAndWorkspaceId(String name, String workspaceId);
+
     Optional<Team> findByTagAndWorkspaceIdAndPassiveIdIsNull(String tag, String workspaceId);
 }

@@ -35,7 +35,7 @@ public class TaskInitializeService {
             Task task = mapVoToEntity(taskInitializeVo);
             assignTeamTaskNo(task);
             assignTopicTaskNo(task);
-            Task saved = taskRepository.save(task);
+            Task saved = taskRepository.saveAndFlush(task);
             return modelMapper.map(saved, TaskDto.class);
         } finally {
             releaseLocks(taskInitializeVo);

@@ -1,6 +1,7 @@
 package co.jinear.core.controller.task;
 
 import co.jinear.core.manager.task.TaskInitializeManager;
+import co.jinear.core.manager.task.TaskRetrieveManager;
 import co.jinear.core.manager.task.TaskUpdateManager;
 import co.jinear.core.model.request.task.TaskInitializeRequest;
 import co.jinear.core.model.request.task.TaskUpdateRequest;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 public class TaskController {
 
     private final TaskInitializeManager taskInitializeManager;
+    private final TaskRetrieveManager taskRetrieveManager;
     private final TaskUpdateManager taskUpdateManager;
 
     @PostMapping
@@ -29,5 +31,13 @@ public class TaskController {
     @ResponseStatus(HttpStatus.OK)
     public TaskResponse updateTask(@Valid @RequestBody TaskUpdateRequest taskUpdateRequest) {
         return taskUpdateManager.updateTask(taskUpdateRequest);
+    }
+
+    @GetMapping("/from-workspace/{workspaceName}/{teamTag}-{tagNo}")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskResponse retrieveWithWorkspaceNameAndTeamTagNo(@PathVariable String workspaceName,
+                                                              @PathVariable String teamTag,
+                                                              @PathVariable Integer tagNo) {
+        return taskRetrieveManager.retrieveWithWorkspaceNameAndTeamTagNo(workspaceName, teamTag, tagNo);
     }
 }

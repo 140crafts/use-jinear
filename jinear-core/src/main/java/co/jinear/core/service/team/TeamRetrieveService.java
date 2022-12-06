@@ -62,10 +62,22 @@ public class TeamRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Optional<TeamDto> retrieveTeamByNameOptional(String teamName, String workspaceId) {
-        log.info("Retrieve team by name has started. teamName: {}, workspaceId: {}", teamName, workspaceId);
+    public Optional<TeamDto> retrieveActiveTeamByNameOptional(String teamName, String workspaceId) {
+        log.info("Retrieve active team by name has started. teamName: {}, workspaceId: {}", teamName, workspaceId);
         return teamRepository.findByNameAndWorkspaceIdAndPassiveIdIsNull(teamName, workspaceId)
                 .map(team -> modelMapper.map(team, TeamDto.class));
+    }
+
+    public Optional<TeamDto> retrieveTeamIncludingPassivesByNameOptional(String teamName, String workspaceId) {
+        log.info("Retrieve team including passives by name has started. teamName: {}, workspaceId: {}", teamName, workspaceId);
+        return teamRepository.findByNameAndWorkspaceId(teamName, workspaceId)
+                .map(team -> modelMapper.map(team, TeamDto.class));
+    }
+
+    public TeamDto retrieveTeamByTag(String tag, String workspaceId) {
+        log.info("Retrieve team by tag has started. tag: {}, workspaceId: {}", tag, workspaceId);
+        return retrieveTeamByTagOptional(tag, workspaceId)
+                .orElseThrow(NotFoundException::new);
     }
 
     public Optional<TeamDto> retrieveTeamByTagOptional(String tag, String workspaceId) {

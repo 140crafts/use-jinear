@@ -9,6 +9,7 @@ import co.jinear.core.model.vo.team.TeamInitializeVo;
 import co.jinear.core.repository.TeamRepository;
 import co.jinear.core.service.team.member.TeamMemberService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
+import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.validator.team.TeamValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ public class TeamInitializeService {
     private final ModelMapper modelMapper;
 
     public TeamDto initializeTeam(TeamInitializeVo teamInitializeVo) {
+        sanitizeTag(teamInitializeVo);
         log.info("Initialize team has started. teamInitializeVo: {}", teamInitializeVo);
         validatePersonalWorkspaceTeamLimit(teamInitializeVo.getWorkspaceId());
         validateTeamNameIsNotUsedInWorkspace(teamInitializeVo);
@@ -40,6 +42,14 @@ public class TeamInitializeService {
         checkAndSyncMembersWithWorkspace(saved);
         log.info("Initialize team has finished. teamId: {}", saved.getTeamId());
         return modelMapper.map(saved, TeamDto.class);
+    }
+
+    private void sanitizeTag(TeamInitializeVo teamInitializeVo) {
+        log.info("Sanitize tag has started teamInitializeVo: {}", teamInitializeVo);
+        Optional.of(teamInitializeVo)
+                .map(TeamInitializeVo::getTag)
+                .map(NormalizeHelper::normalizeStrictly)
+                .ifPresent(teamInitializeVo::setTag);
     }
 
     private void validatePersonalWorkspaceTeamLimit(String workspaceId) {

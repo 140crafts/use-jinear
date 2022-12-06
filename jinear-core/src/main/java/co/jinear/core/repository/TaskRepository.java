@@ -16,4 +16,6 @@ public interface TaskRepository extends JpaRepository<Task, String> {
     Long countAllByTeamId(String teamId);
 
     Page<Task> findAllByWorkspaceIdAndTeamIdAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, String teamId, Pageable pageable);
+
+    Optional<Task> findByWorkspaceIdAndTeamIdAndTeamTagNoAndPassiveIdIsNull(String workspaceId,String teamId, Integer teamTagNo);
 }
