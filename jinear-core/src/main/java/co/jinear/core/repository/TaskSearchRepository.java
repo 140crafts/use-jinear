@@ -28,7 +28,7 @@ public class TaskSearchRepository {
         List<Predicate> predicateList = retrievePredicateListForIntersectingTasks(searchIntersectingTasksVo, criteriaBuilder, taskRoot);
         taskCriteriaQuery
                 .where(predicateList.toArray(Predicate[]::new))
-                .orderBy(criteriaBuilder.desc(taskRoot.get("assignedDate")));
+                .orderBy(criteriaBuilder.asc(taskRoot.get("assignedDate")));
         return entityManager.createQuery(taskCriteriaQuery)
                 .getResultList();
     }

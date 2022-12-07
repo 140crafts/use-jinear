@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2022-12-05 12:29:40.
+// Generated using typescript-generator version 3.0.1157 on 2022-12-06 23:44:54.
 
 export interface BaseDto {
     createdDate: Date;
@@ -223,6 +223,13 @@ export interface TaskRetrieveAllRequest extends BaseRequest {
     page: number;
 }
 
+export interface TaskRetrieveIntersectingRequest extends BaseRequest {
+    workspaceId: string;
+    teamId: string;
+    timespanStart: Date;
+    timespanEnd: Date;
+}
+
 export interface TaskUpdateRequest {
     taskId: string;
     topicId: string;
@@ -293,8 +300,12 @@ export interface AuthResponse extends BaseResponse {
     token: string;
 }
 
-export interface TaskListingResponse extends BaseResponse {
+export interface TaskListingPaginatedResponse extends BaseResponse {
     data: PageDto<TaskDto>;
+}
+
+export interface TaskListingResponse extends BaseResponse {
+    data: TaskDto[];
 }
 
 export interface TaskResponse extends BaseResponse {
