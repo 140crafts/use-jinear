@@ -179,7 +179,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-task-assigned_to">
         <addColumn tableName="task">
-            <column name="assigned_to" type="char(26)" afterColumn="owner_id" />
+            <column name="assigned_to" type="char(26)" afterColumn="owner_id"/>
         </addColumn>
 
         <createIndex indexName="ix_assigned_to" tableName="task">
@@ -189,7 +189,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-workspace_display_preference-preferred_team_id">
         <addColumn tableName="workspace_display_preference">
-            <column name="preferred_team_id" type="char(26)" afterColumn="preferred_workspace_id" />
+            <column name="preferred_team_id" type="char(26)" afterColumn="preferred_workspace_id"/>
         </addColumn>
 
         <createIndex indexName="ix_preferred_team_id" tableName="workspace_display_preference">
@@ -197,4 +197,29 @@
         </createIndex>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team_workflow_status">
+        <createTable tableName="team_workflow_status">
+            <column name="team_workflow_status_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="team_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="workflow_state_group" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="order" type="int"/>
+        </createTable>
+
+        <createIndex indexName="ix_team_id" tableName="team_workflow_status">
+            <column name="team_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_workspace_id" tableName="team_workflow_status">
+            <column name="workspace_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

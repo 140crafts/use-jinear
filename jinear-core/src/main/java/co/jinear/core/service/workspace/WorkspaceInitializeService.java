@@ -4,6 +4,7 @@ import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceSettingDto;
 import co.jinear.core.model.dto.username.UsernameDto;
 import co.jinear.core.model.entity.workspace.Workspace;
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
@@ -46,7 +47,7 @@ public class WorkspaceInitializeService {
         assignOwner(workspaceInitializeVo, workspace);
         setAsDefaultWorkspace(workspaceInitializeVo.getOwnerId(), workspace.getWorkspaceId());
 // on boarding business decision
-//        createInitialTeam(workspace);
+//        createInitialTeam(workspace,workspaceInitializeVo.getLocale());
         return mapValues(workspace, usernameDto, workspaceSettingDto);
     }
 
@@ -54,7 +55,7 @@ public class WorkspaceInitializeService {
         workspaceDisplayPreferenceService.setAccountPreferredWorkspace(ownerId, workspaceId);
     }
 
-    private void createInitialTeam(Workspace workspace) {
+    private void createInitialTeam(Workspace workspace, LocaleType locale) {
         log.info("Create initial team has started for workspaceId: {}", workspace.getWorkspaceId());
         String teamTag = NormalizeHelper.normalizeStrictly(workspace.getTitle());
         teamTag = teamTag.substring(0, Math.min(teamTag.length(), 3));
@@ -64,6 +65,7 @@ public class WorkspaceInitializeService {
         teamInitializeVo.setTag(teamTag);
         teamInitializeVo.setVisibility(TeamVisibilityType.VISIBLE);
         teamInitializeVo.setJoinMethod(TeamJoinMethodType.SYNC_MEMBERS_WITH_WORKSPACE);
+        teamInitializeVo.setLocale(locale);
         teamInitializeService.initializeTeam(teamInitializeVo);
     }
 

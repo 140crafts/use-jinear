@@ -11,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @ToString
 public class BaseRequest {
     @Nullable
-    private LocaleType locale;
+    private LocaleType locale = LocaleType.EN;
     @Nullable
     private String conversationId;
 }

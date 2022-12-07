@@ -1,7 +1,6 @@
 package co.jinear.core.controller.team;
 
 import co.jinear.core.manager.team.TeamMemberManager;
-import co.jinear.core.model.response.team.TeamListingResponse;
 import co.jinear.core.model.response.team.TeamMemberListingResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

@@ -1,7 +1,6 @@
 package co.jinear.core.model.entity.team;
 
 import co.jinear.core.model.entity.BaseEntity;
-import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.entity.workspace.Workspace;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;

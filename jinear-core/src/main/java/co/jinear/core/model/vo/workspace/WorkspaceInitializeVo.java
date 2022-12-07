@@ -1,5 +1,6 @@
 package co.jinear.core.model.vo.workspace;
 
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceJoinType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceVisibilityType;
 import lombok.Getter;
@@ -18,4 +19,5 @@ public class WorkspaceInitializeVo {
     private WorkspaceJoinType joinType;
     private Boolean appendRandomStrOnCollision;
     private Boolean isPersonal;
+    private LocaleType locale;
 }

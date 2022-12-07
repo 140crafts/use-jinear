@@ -30,7 +30,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AccountInitializeService {
-    private static final String PERSONAL_WORKSPACE_HANDLE_PREFIX = "pws-";
+    private static final String PERSONAL_WORKSPACE_HANDLE_PREFIX = "wsp-";
 
     private final AccountRetrieveService accountRetrieveService;
     private final AccountRoleService accountRoleService;
@@ -49,7 +49,7 @@ public class AccountInitializeService {
         assignUserRole(account);
         initializeUsername(account);
         initializeAccountPassword(account, accountInitializeVo);
-        initializePersonalWorkspace(account);
+        initializePersonalWorkspace(account, accountInitializeVo.getLocale());
         sendMailConfirmationMail(account, accountInitializeVo);
         log.info("Account initialize has ended.");
         return modelMapper.map(account, AccountDto.class);
@@ -105,7 +105,7 @@ public class AccountInitializeService {
         usernameService.assignUsername(initializeUsernameVo);
     }
 
-    private void initializePersonalWorkspace(Account account) {
+    private void initializePersonalWorkspace(Account account, LocaleType locale) {
         String username = getUsernameFromEmail(account);
         WorkspaceInitializeVo workspaceInitializeVo = new WorkspaceInitializeVo();
         workspaceInitializeVo.setOwnerId(account.getAccountId());
@@ -115,6 +115,7 @@ public class AccountInitializeService {
         workspaceInitializeVo.setJoinType(WorkspaceJoinType.NEVER);
         workspaceInitializeVo.setAppendRandomStrOnCollision(Boolean.TRUE);
         workspaceInitializeVo.setIsPersonal(Boolean.TRUE);
+        workspaceInitializeVo.setLocale(locale);
         workspaceInitializeService.initializeWorkspace(workspaceInitializeVo);
     }
 

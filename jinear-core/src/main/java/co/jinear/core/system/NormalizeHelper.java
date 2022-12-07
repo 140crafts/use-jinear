@@ -51,8 +51,9 @@ public class NormalizeHelper {
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-        String zort = "012345";
+        String zort = "@012345";
         System.out.println(maskBetweenChars(zort, 2, 4));
         System.out.println(maskBetweenChars(zort, 0, zort.length()));
+        System.out.println(normalizeStrictly(zort));
     }
 }
