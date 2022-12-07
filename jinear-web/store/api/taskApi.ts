@@ -9,9 +9,7 @@ export const taskApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: [
-        //TODO
-      ],
+      invalidatesTags: ["team-task-list"],
     }),
     updateTask: build.mutation<TaskResponse, TaskInitializeRequest>({
       query: (body: TaskInitializeRequest) => ({

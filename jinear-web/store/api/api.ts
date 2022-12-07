@@ -23,6 +23,7 @@ export const tagTypes = [
   "team-member-list",
   "team-topic-list",
   "workplace-task-with-name-and-tag",
+  "team-task-list",
 ];
 
 export const api = createApi({

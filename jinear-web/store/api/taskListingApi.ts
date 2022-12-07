@@ -1,27 +1,25 @@
 import {
+  TaskListingResponse,
   TaskRetrieveIntersectingRequest,
-  TopicListingResponse,
 } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const taskListingApi = api.injectEndpoints({
   endpoints: (build) => ({
     retrieveAllIntersectingTasks: build.query<
-      TopicListingResponse,
+      TaskListingResponse,
       TaskRetrieveIntersectingRequest
     >({
       query: (req) => {
         const { workspaceId, teamId } = req;
-        const start = req.timespanStart.toISOString();
-        const end = req.timespanEnd.toISOString();
+        const start = new Date(req.timespanStart).toISOString();
+        const end = new Date(req.timespanEnd).toISOString();
         return `v1/task/list/${workspaceId}/${teamId}/intersecting/${start}/${end}`;
       },
       providesTags: (_result, _err, req) => [
         {
           type: "team-task-list",
-          id: `${req.teamId}-${
-            req.workspaceId
-          }-${req.timespanStart.getTime()}-${req.timespanEnd.getTime()}`,
+          id: `${JSON.stringify(req)}`,
         },
       ],
     }),

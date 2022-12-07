@@ -18,7 +18,11 @@ export const createStore = (
       displayPreference,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware).concat(rtkQueryErrorLogger),
+      getDefaultMiddleware({
+        serializableCheck: false,
+      })
+        .concat(api.middleware)
+        .concat(rtkQueryErrorLogger),
     ...options,
   });
 

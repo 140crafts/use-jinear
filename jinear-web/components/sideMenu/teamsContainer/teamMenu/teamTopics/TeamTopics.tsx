@@ -27,11 +27,16 @@ const TeamTopics: React.FC<TeamTopicsProps> = ({ teamId }) => {
     `${remainingCount}`
   );
 
+  const popNewTopicModal = () => {
+    alert(1);
+  };
+
   return (
     <div className={styles.container}>
       <MenuGroupTitle
         label="Topics"
         hasAddButton={true}
+        onAddButtonClick={popNewTopicModal}
         buttonVariant={
           isSuccess && totalElements == 0
             ? ButtonVariants.filled2

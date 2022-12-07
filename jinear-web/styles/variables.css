@@ -46,7 +46,7 @@
   --feature: minmax(0, 5rem);
   --customer-list-grid-template-columns: 0.25fr 1fr 0.25fr;
   --task-card-width: 175px;
-  --team-week-template-columns: 175px 175px 175px 175px 175px 175px 175px;
+  --team-week-view-day-gap: 1rem;
   /*  */
   --indent-1: 0.5ch;
   --indent-2: 1ch;

@@ -290,4 +290,19 @@ select {
   white-space: nowrap;
   z-index: 99;
 }
+*[data-tooltip-right] {
+  position: relative;
+}
+*[data-tooltip-right]:hover:after {
+  content: attr(data-tooltip-right);
+  background-color: var(--c-secondary);
+  color: var(--c-primary);
+  bottom: -2.5em;
+  right: 0;
+  padding: 0.5em;
+  border-radius: var(--border-radius);
+  position: absolute;
+  white-space: nowrap;
+  z-index: 99;
+}
 /* endregion */

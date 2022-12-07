@@ -508,4 +508,16 @@ export default {
     en: "to",
     tr: "-",
   },
+  taskWeekCardTaskStartedBeforeThisWeekTooltip: {
+    en: "Started back at ${date}",
+    tr: "${date} tarihinde başladı",
+  },
+  taskWeekCardTaskDueThisWeekTooltip: {
+    en: "Due ${date}",
+    tr: "Son tarih ${date}",
+  },
+  taskWeekCardTaskAssignedToTooltip: {
+    en: "Assigned to ${to}",
+    tr: "Atanan kişi: ${to}",
+  },
 };
