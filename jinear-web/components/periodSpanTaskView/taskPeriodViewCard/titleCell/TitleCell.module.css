@@ -1,0 +1,20 @@
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5ch;
+  flex: 1;
+  min-width: 0;
+}
+
+.title {
+  font-weight: 400;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 25px;
+  height: 20px;
+}

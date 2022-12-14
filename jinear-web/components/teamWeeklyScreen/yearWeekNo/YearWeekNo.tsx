@@ -9,6 +9,7 @@ import {
 } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
+import DateControl from "./dateControl/DateControl";
 import styles from "./YearWeekNo.module.css";
 
 interface YearWeekNoProps {}
@@ -37,7 +38,10 @@ const YearWeekNo: React.FC<YearWeekNoProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.title}>{title}</div>
+      <div className={styles.titleContainer}>
+        <div className={styles.title}>{title}</div>
+        <DateControl />
+      </div>
 
       <div className={styles.weekInfo}>
         {`${format(weekStart, t("dateFormat"))} 

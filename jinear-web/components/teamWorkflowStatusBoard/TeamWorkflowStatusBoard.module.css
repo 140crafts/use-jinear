@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: var(--team-task-status-view-title-gap);
+  position: relative;
+  /* background-image: var(--line-svg); */
+}
+
+.loading {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  /* background-color: rgba(0, 0, 0, 0.001); */
+  backdrop-filter: var(--backdrop-filter-blur);
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  min-height: 55px;
+  z-index: 1;
+}

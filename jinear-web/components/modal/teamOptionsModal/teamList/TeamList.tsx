@@ -2,12 +2,16 @@ import Button, { ButtonVariants } from "@/components/button";
 import { WorkspaceDto } from "@/model/be/jinear-core";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { useUpdatePreferredTeamMutation } from "@/store/api/workspaceDisplayPreferenceApi";
-import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
+import {
+  changeLoadingModalVisibility,
+  closeTeamOptionsModal,
+} from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect } from "react";
 import styles from "./TeamList.module.css";
 
 interface TeamListProps {
@@ -19,6 +23,7 @@ const TeamList: React.FC<TeamListProps> = ({
   preferredWorkspace,
   preferredTeamId,
 }) => {
+  const router = useRouter();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -44,10 +49,21 @@ const TeamList: React.FC<TeamListProps> = ({
   );
   const selectedTeam = preferredTeam || teamsResponse?.data?.[0];
 
-  const _changePreferredTeam = (workspaceId: string, teamId: string) => {
+  const _changePreferredTeam = (
+    workspaceId: string,
+    teamId: string,
+    teamName: string
+  ) => {
     dispatch(changeLoadingModalVisibility({ visible: true }));
     updatePreferredTeamMutation({ workspaceId, teamId });
   };
+
+  useEffect(() => {
+    if (isUpdatePreferredTeamSuccess) {
+      router.push(`/`);
+      dispatch(closeTeamOptionsModal());
+    }
+  }, [isUpdatePreferredTeamSuccess]);
 
   return (
     <div className={styles.container}>
@@ -77,7 +93,7 @@ const TeamList: React.FC<TeamListProps> = ({
                   : ButtonVariants.filled
               }
               onClick={() => {
-                _changePreferredTeam(team.workspaceId, team.teamId);
+                _changePreferredTeam(team.workspaceId, team.teamId, team.name);
               }}
             >
               {team.name}

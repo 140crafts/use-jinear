@@ -8,12 +8,16 @@ interface TransitionProps {
   initial?: boolean;
   className?: string;
   children: React.ReactNode;
+  outDuration?: number;
+  inDuration?: number;
 }
 
 const Transition: React.FC<TransitionProps> = ({
   initial = false,
   className,
   children,
+  outDuration = 0,
+  inDuration = 0.25,
 }) => {
   const router = useRouter();
   const currPath = router?.asPath?.split("#")[0]?.split("?")?.[0];
@@ -22,13 +26,13 @@ const Transition: React.FC<TransitionProps> = ({
     out: {
       opacity: 0,
       transition: {
-        duration: 0,
+        duration: outDuration,
       },
     },
     in: {
       opacity: 1,
       transition: {
-        duration: 0.25,
+        duration: inDuration,
       },
     },
   };

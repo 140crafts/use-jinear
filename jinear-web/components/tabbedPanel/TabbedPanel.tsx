@@ -1,14 +1,15 @@
 import Logger from "@/utils/logger";
+import cn from "classnames";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import TabContext from "./context/TabContext";
 import styles from "./TabbedPanel.module.css";
 import TabNavigator from "./tabNavigator/TabNavigator";
 import { TabViewProps } from "./tabView/TabView";
-
 interface TabbedPanelProps {
   initialTabName?: string;
   children: React.ReactNode;
+  containerClassName?: string;
 }
 
 const logger = Logger("TabbedPanel");
@@ -25,6 +26,7 @@ const retrieveNames = (children: React.ReactNode) => {
 const TabbedPanel: React.FC<TabbedPanelProps> = ({
   initialTabName,
   children,
+  containerClassName,
 }) => {
   const tabs: TabViewProps[] = retrieveNames(children) as TabViewProps[];
   const [activeTab, setActiveTab] = useState<TabViewProps>(tabs?.[0]);
@@ -43,7 +45,7 @@ const TabbedPanel: React.FC<TabbedPanelProps> = ({
   };
 
   return (
-    <div className={styles.container}>
+    <div className={cn(styles.container, containerClassName)}>
       <TabContext.Provider
         value={{
           activeTab,

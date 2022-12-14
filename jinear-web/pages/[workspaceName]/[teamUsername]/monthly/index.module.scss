@@ -1,0 +1,45 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: var(--full);
+  max-width: var(--full);
+  gap: 1rem;
+}
+
+.sectionTitleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.monthViewContainer {
+  max-width: calc(100vw - var(--side-menu-width));
+  overflow-x: scroll;
+  min-height: 4rem;
+}
+
+.statusBoardContainer {
+  max-width: calc(100vw - var(--side-menu-width));
+  overflow-x: scroll;
+  min-height: 8rem;
+  padding-bottom: 2rem;
+}
+
+@media (max-width: $mobile-l) {
+  .monthViewContainer {
+    max-width: 100vw;
+    overflow-x: scroll;
+  }
+  .statusBoardContainer {
+    max-width: 100vw;
+    overflow-x: scroll;
+  }
+}

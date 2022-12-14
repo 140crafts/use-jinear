@@ -382,6 +382,7 @@ export default {
     en: "Backlog",
     // tr: "Belirsizler",
     // tr: "Birikenler",
+    // tr: "Yığın",
     tr: "Bekleyenler",
   },
   sideMenuTeamArchive: {
@@ -508,6 +509,14 @@ export default {
     en: "to",
     tr: "-",
   },
+  teamWeeklyScreenWeeklyPlanSectionTitle: {
+    en: "Weekly Plan",
+    tr: "Haftalık Plan",
+  },
+  teamWeeklyScreenTaskWorkflowStatusSectionTitle: {
+    en: "Task Statuses",
+    tr: "Görev Durumları",
+  },
   taskWeekCardTaskStartedBeforeThisWeekTooltip: {
     en: "Started back at ${date}",
     tr: "${date} tarihinde başladı",
@@ -519,5 +528,73 @@ export default {
   taskWeekCardTaskAssignedToTooltip: {
     en: "Assigned to ${to}",
     tr: "Atanan kişi: ${to}",
+  },
+  teamSettingsScreenBreadcrumbLabel: {
+    en: "Settings",
+    tr: "Ayarlar",
+  },
+  teamSettingsScreenWorkflowSectionTitle: {
+    en: "Workflow",
+    tr: "İş Akışı",
+  },
+  teamSettingsScreenWorkflowSectionDescription: {
+    en: "Workflows define the type and order of statuses that tasks go through from start to completion Here you can customize and re-order the workflow statuses.",
+    tr: "İş akışları görevlerin başlangıçtan bitişe dek geçeceği durumları belirtir. Buradan iş akış durumlarını kişiselleştirebilirsiniz.",
+  },
+  workflowGroupTitle_BACKLOG: {
+    en: "Backlog",
+    tr: "Bekleyen",
+  },
+  workflowGroupTitle_NOT_STARTED: {
+    en: "Not Started",
+    tr: "Henüz Başlamamış",
+  },
+  workflowGroupTitle_STARTED: {
+    en: "Started",
+    tr: "Başlamış",
+  },
+  workflowGroupTitle_COMPLETED: {
+    en: "Completed",
+    tr: "Tamamlanan",
+  },
+  workflowGroupTitle_CANCELLED: {
+    en: "Cancelled",
+    tr: "Vazgeçildi",
+  },
+  workflowStatusOrderDownTooltip: {
+    en: "Move Down",
+    tr: "Aşağı Taşı",
+  },
+  workflowStatusOrderUpTooltip: {
+    en: "Move Up",
+    tr: "Yukarı Taşı",
+  },
+  workflowStatusEditTooltip: {
+    en: "Edit",
+    tr: "Düzenle",
+  },
+  workflowStatusDeleteTooltip: {
+    en: "Delete",
+    tr: "Sil",
+  },
+  workflowStatusNameEditSave: {
+    en: "Save",
+    tr: "Kaydet",
+  },
+  workflowStatusNameEditCancel: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  teamMonthlyScreenBreadcrumbLabel: {
+    en: "Monthly Tasks",
+    tr: "Aylık Görevler",
+  },
+  teamMonthlyScreenPeriodStartEndTo: {
+    en: "to",
+    tr: "-",
+  },
+  teamMonthlyScreenPeriodPlanSectionTitle: {
+    en: "Monthly Plan",
+    tr: "Aylık Plan",
   },
 };

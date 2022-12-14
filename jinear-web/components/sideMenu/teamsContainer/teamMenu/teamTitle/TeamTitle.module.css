@@ -2,14 +2,13 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.75rem;
-  /* position: sticky;
-  top: 0;
-  padding-top: 0.5rem;
-  background-color: var(--c-primary-shade-0);
-  z-index: 1; */
+  gap: 0.1rem;
 }
 
 .teamName {
   font-weight: 600;
+}
+
+.teamSelectButton {
+  flex: 1;
 }

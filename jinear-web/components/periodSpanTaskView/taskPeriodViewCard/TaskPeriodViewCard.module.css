@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--border-radius);
+  background-color: var(--c-primary-shade-0);
+  gap: 1ch;
+  row-gap: 0.25rem;
+  color: var(--c-text-color);
+}
+
+.container:hover {
+  cursor: pointer;
+  background-color: var(--c-primary-shade-1);
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  padding: 0.85ch 1ch;
+  gap: 1ch;
+}

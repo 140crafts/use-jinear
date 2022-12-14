@@ -8,12 +8,39 @@
   gap: 1rem;
 }
 
-.weekViewContainer {
+.sectionTitleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sectionTitle {
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.tabbedPanel {
   max-width: calc(100vw - var(--side-menu-width));
+  overflow-x: scroll;
+  min-height: 4rem;
+}
+
+.tabViewContainer {
   overflow-x: scroll;
 }
 
-@media (max-width: $mobile-l) {
+.weekViewContainer {
+  max-width: calc(100vw - var(--side-menu-width));
+  overflow-x: scroll;
+  min-height: 4rem;
+}
+
+@media (max-width: $tablet) {
+  .tabbedPanel {
+    max-width: 100vw;
+    overflow-x: scroll;
+  }
   .weekViewContainer {
     max-width: 100vw;
     overflow-x: scroll;

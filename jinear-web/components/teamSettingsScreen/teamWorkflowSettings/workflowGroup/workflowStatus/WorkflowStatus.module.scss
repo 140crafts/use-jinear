@@ -1,0 +1,60 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-width: 0;
+  min-height: 2rem;
+  // max-width: calc(80vw - var(--side-menu-width));
+  gap: 1rem;
+  background-color: var(--c-primary-shade-0-op05);
+  padding: 0.55rem 0.75rem;
+
+  border-radius: var(--border-radius);
+}
+
+.container:hover {
+  background-color: var(--c-primary-shade-0);
+}
+
+.container:hover .actionContainer {
+  display: flex;
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-secondary);
+  width: 25px;
+  height: 25px;
+}
+
+.name {
+  flex: 1;
+  max-width: 26ch;
+}
+
+.nameInput {
+  flex: 1;
+  background-color: var(--c-primary-shade-1) !important;
+}
+
+.actionContainer {
+  display: none;
+  flex-direction: row;
+  gap: 0.5ch;
+}
+
+.editingActionContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5ch;
+}
+
+@media (max-width: $mobile-l) {
+  // .container {
+  //   max-width: 80vw;
+  // }
+}

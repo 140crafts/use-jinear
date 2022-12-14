@@ -7,8 +7,15 @@
 .title {
   font-size: 1.25rem;
   font-weight: 600;
+  flex: 1;
 }
 
 .weekInfo {
   font-size: 0.8rem;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }

@@ -60,12 +60,13 @@ export const selectCurrentAccountsCollectiveWorkspaces = (state: RootState) =>
   state.account.current?.workspaces?.filter((w) => !w.personal);
 
 export const selectCurrentAccountsPreferredWorkspace = (state: RootState) => {
-  const preferred = state.account.current?.workspaces?.find(
-    (w) => w.workspaceId == state.account.current?.preferredWorkspaceId
-  );
-  return preferred ? preferred : selectCurrentAccountsPersonalWorkspace(state);
+  return state.account.current?.workspaceDisplayPreference?.workspace;
+};
+
+export const selectCurrentAccountsPreferredTeam = (state: RootState) => {
+  return state.account.current?.workspaceDisplayPreference?.team;
 };
 
 export const selectCurrentAccountsPreferredTeamId = (state: RootState) => {
-  return state.account.current?.preferredTeamId;
+  return state.account.current?.workspaceDisplayPreference?.team?.teamId;
 };

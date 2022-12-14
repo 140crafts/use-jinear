@@ -8,9 +8,15 @@ export interface TabViewProps {
   name: string;
   label: string;
   children: React.ReactNode;
+  containerClassName?: string;
 }
 
-const TabView: React.FC<TabViewProps> = ({ name, label, children }) => {
+const TabView: React.FC<TabViewProps> = ({
+  name,
+  label,
+  children,
+  containerClassName,
+}) => {
   const activeTab = useActiveTab();
   const isActive = name == activeTab?.name;
 
@@ -37,7 +43,11 @@ const TabView: React.FC<TabViewProps> = ({ name, label, children }) => {
   return !isActive ? null : (
     <motion.div
       {...animations}
-      className={cn(styles.container, isActive && styles.active)}
+      className={cn(
+        styles.container,
+        isActive && styles.active,
+        containerClassName
+      )}
     >
       {children}
     </motion.div>
