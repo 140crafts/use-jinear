@@ -37,4 +37,8 @@ public class TeamWorkflowStatus extends BaseEntity {
 
     @Column(name = "order", nullable = false)
     private Integer order;
+
+    @ManyToOne
+    @JoinColumn(name = "team_id", insertable = false, updatable = false)
+    private Team team;
 }

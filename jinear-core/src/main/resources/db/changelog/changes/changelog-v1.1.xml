@@ -222,4 +222,17 @@
             <column name="workspace_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-task-workflow_status_id">
+        <addColumn tableName="task">
+            <column name="workflow_status_id" type="char(26)" afterColumn="owner_id">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="ix_workflow_status_id" tableName="task">
+            <column name="workflow_status_id"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

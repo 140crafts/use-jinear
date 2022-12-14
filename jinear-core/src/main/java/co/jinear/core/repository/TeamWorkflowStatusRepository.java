@@ -15,7 +15,7 @@ public interface TeamWorkflowStatusRepository extends JpaRepository<TeamWorkflow
 
     List<TeamWorkflowStatus> findAllByWorkspaceIdAndTeamIdAndWorkflowStateGroupAndPassiveIdIsNullOrderByOrderAsc(String workspaceId, String teamId, TeamWorkflowStateGroup workflowStateGroup);
 
-    Optional<TeamWorkflowStatus> findFirstByWorkspaceIdAndTeamIdAndWorkflowStateGroupAndPassiveIdIsNullOrderByOrderDesc(String workspaceId, String teamId, TeamWorkflowStateGroup workflowStateGroup);
+    Optional<TeamWorkflowStatus> findFirstByTeamIdAndWorkflowStateGroupAndPassiveIdIsNullOrderByOrderDesc(String teamId, TeamWorkflowStateGroup workflowStateGroup);
 
     Long countAllByWorkspaceIdAndTeamIdAndWorkflowStateGroupAndPassiveIdIsNull(String workspaceId, String teamId, TeamWorkflowStateGroup workflowStateGroup);
 }

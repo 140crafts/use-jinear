@@ -1,10 +1,13 @@
 package co.jinear.core.service.task;
 
 import co.jinear.core.model.dto.task.TaskDto;
+import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.entity.task.Task;
+import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.vo.task.TaskInitializeVo;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.team.TeamLockService;
+import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
 import co.jinear.core.service.topic.TopicSequenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +27,7 @@ public class TaskInitializeService {
     private final TaskRepository taskRepository;
     private final TaskLockService taskLockService;
     private final TeamLockService teamLockService;
+    private final TeamWorkflowStatusRetrieveService teamWorkflowStatusRetrieveService;
     private final TopicSequenceService incrementTopicSequence;
     private final ModelMapper modelMapper;
 
@@ -35,6 +39,7 @@ public class TaskInitializeService {
             Task task = mapVoToEntity(taskInitializeVo);
             assignTeamTaskNo(task);
             assignTopicTaskNo(task);
+            assignInitialWorkflowStatus(task);
             Task saved = taskRepository.saveAndFlush(task);
             return modelMapper.map(saved, TaskDto.class);
         } finally {
@@ -67,6 +72,11 @@ public class TaskInitializeService {
     private void assignTeamTaskNo(Task task) {
         Long count = taskRetrieveService.countAllByTeamId(task.getTeamId());
         task.setTeamTagNo(count.intValue() + 1);
+    }
+
+    private void assignInitialWorkflowStatus(Task task) {
+        TeamWorkflowStatusDto teamWorkflowStatusDto = teamWorkflowStatusRetrieveService.retrieveFirstFromGroup(task.getTeamId(), TeamWorkflowStateGroup.BACKLOG);
+        task.setWorkflowStatusId(teamWorkflowStatusDto.getTeamWorkflowStatusId());
     }
 
     private Task mapVoToEntity(TaskInitializeVo taskInitializeVo) {

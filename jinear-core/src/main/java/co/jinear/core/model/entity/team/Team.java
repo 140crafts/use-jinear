@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -50,6 +51,12 @@ public class Team extends BaseEntity {
     private Workspace workspace;
 
     @OneToMany(mappedBy = "team")
+    @Where(clause = "passive_id is null")
+    @OrderBy("createdDate ASC")
     private Set<TeamMember> teamMembers;
 
+    @OneToMany(mappedBy = "team")
+    @Where(clause = "passive_id is null")
+    @OrderBy("createdDate ASC")
+    private Set<TeamWorkflowStatus> workflowStatuses;
 }

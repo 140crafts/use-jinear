@@ -97,30 +97,27 @@ public class TeamInitializeService {
                 teamId,
                 workspaceId,
                 TeamWorkflowStateGroup.BACKLOG,
-                localeStringService.retrieveLocalString(LocaleStringType.TEAM_WORKFLOW_STATUS_BACKLOG, locale),
-                Boolean.FALSE,
-                Boolean.FALSE));
+                localeStringService.retrieveLocalString(LocaleStringType.TEAM_WORKFLOW_STATUS_BACKLOG, locale)));
         teamWorkflowStatusService.initializeTeamWorkflowStatus(new InitializeTeamWorkflowStatusVo(
                 teamId,
                 workspaceId,
                 TeamWorkflowStateGroup.NOT_STARTED,
-                localeStringService.retrieveLocalString(LocaleStringType.TEAM_WORKFLOW_STATUS_NOT_STARTED, locale),
-                Boolean.FALSE,
-                Boolean.FALSE));
+                localeStringService.retrieveLocalString(LocaleStringType.TEAM_WORKFLOW_STATUS_NOT_STARTED, locale)));
         teamWorkflowStatusService.initializeTeamWorkflowStatus(new InitializeTeamWorkflowStatusVo(
                 teamId,
                 workspaceId,
                 TeamWorkflowStateGroup.STARTED,
-                localeStringService.retrieveLocalString(LocaleStringType.TEAM_WORKFLOW_STATUS_STARTED, locale),
-                Boolean.FALSE,
-                Boolean.FALSE));
+                localeStringService.retrieveLocalString(LocaleStringType.TEAM_WORKFLOW_STATUS_STARTED, locale)));
         teamWorkflowStatusService.initializeTeamWorkflowStatus(new InitializeTeamWorkflowStatusVo(
                 teamId,
                 workspaceId,
                 TeamWorkflowStateGroup.COMPLETED,
-                localeStringService.retrieveLocalString(LocaleStringType.TEAM_WORKFLOW_STATUS_COMPLETED, locale),
-                Boolean.FALSE,
-                Boolean.FALSE));
+                localeStringService.retrieveLocalString(LocaleStringType.TEAM_WORKFLOW_STATUS_COMPLETED, locale)));
+        teamWorkflowStatusService.initializeTeamWorkflowStatus(new InitializeTeamWorkflowStatusVo(
+                teamId,
+                workspaceId,
+                TeamWorkflowStateGroup.CANCELLED,
+                localeStringService.retrieveLocalString(LocaleStringType.TEAM_WORKFLOW_STATUS_CANCELLED, locale)));
         log.info("Initialize default team workflow statuses has finished for teamId: {}, locale: {}", teamId, locale);
     }
 }

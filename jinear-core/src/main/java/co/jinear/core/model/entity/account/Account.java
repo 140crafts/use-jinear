@@ -5,6 +5,7 @@ import co.jinear.core.model.entity.username.Username;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Set;
@@ -30,6 +31,8 @@ public class Account extends BaseEntity {
     private Boolean emailConfirmed;
 
     @OneToMany(mappedBy = "account")
+    @Where(clause = "passive_id is null")
+    @OrderBy("createdDate ASC")
     private Set<AccountRole> roles;
 
     @OneToOne(mappedBy = "account")

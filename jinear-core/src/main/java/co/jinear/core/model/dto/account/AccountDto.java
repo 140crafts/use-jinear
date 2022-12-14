@@ -2,6 +2,7 @@ package co.jinear.core.model.dto.account;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.media.MediaDto;
+import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +25,6 @@ public class AccountDto extends BaseDto {
     @Nullable
     private MediaDto profilePicture;
     private List<WorkspaceDto> workspaces;
-    private String preferredWorkspaceId;
-    private String preferredTeamId;
+    @Nullable
+    private WorkspaceDisplayPreferenceDto workspaceDisplayPreference;
 }

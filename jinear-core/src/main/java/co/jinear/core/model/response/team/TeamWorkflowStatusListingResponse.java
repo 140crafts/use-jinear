@@ -1,16 +1,14 @@
 package co.jinear.core.model.response.team;
 
-import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
+import co.jinear.core.model.dto.team.workflow.GroupedTeamWorkflowStatusListDto;
 import co.jinear.core.model.response.BaseResponse;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 public class TeamWorkflowStatusListingResponse extends BaseResponse {
     @JsonProperty("data")
-    private List<TeamWorkflowStatusDto> teamWorkflowStatusDtoList;
+    private GroupedTeamWorkflowStatusListDto groupedTeamWorkflowStatusListDto;
 }

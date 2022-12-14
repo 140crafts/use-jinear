@@ -9,6 +9,7 @@ public enum TeamWorkflowStateGroup {
     BACKLOG(1),
     NOT_STARTED(2),
     STARTED(3),
-    COMPLETED(4);
+    COMPLETED(4),
+    CANCELLED(5);
     private int value;
 }

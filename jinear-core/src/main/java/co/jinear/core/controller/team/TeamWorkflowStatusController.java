@@ -2,6 +2,7 @@ package co.jinear.core.controller.team;
 
 import co.jinear.core.manager.team.TeamWorkflowStatusManager;
 import co.jinear.core.model.request.team.InitializeTeamWorkflowStatusRequest;
+import co.jinear.core.model.request.team.TeamWorkflowStatusNameChangeRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.team.TeamWorkflowStatusListingResponse;
 import lombok.RequiredArgsConstructor;
@@ -25,8 +26,8 @@ public class TeamWorkflowStatusController {
 
     @PostMapping("/{teamId}")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse retrieveAllFromTeam(@PathVariable String teamId,
-                                            @Valid @RequestBody InitializeTeamWorkflowStatusRequest initializeTeamWorkflowStatusRequest) {
+    public BaseResponse initializeTeamWorkflowStatus(@PathVariable String teamId,
+                                                     @Valid @RequestBody InitializeTeamWorkflowStatusRequest initializeTeamWorkflowStatusRequest) {
         return teamWorkflowStatusManager.initializeTeamWorkflowStatus(teamId, initializeTeamWorkflowStatusRequest);
     }
 
@@ -35,6 +36,14 @@ public class TeamWorkflowStatusController {
     public BaseResponse removeTeamWorkflowStatus(@PathVariable String teamId,
                                                  @PathVariable String teamWorkflowStatusId) {
         return teamWorkflowStatusManager.removeTeamWorkflowStatus(teamId, teamWorkflowStatusId);
+    }
+
+    @PutMapping("/{teamId}/{teamWorkflowStatusId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse changeTeamWorkflowStatusName(@PathVariable String teamId,
+                                                     @PathVariable String teamWorkflowStatusId,
+                                                     @RequestBody TeamWorkflowStatusNameChangeRequest teamWorkflowStatusNameChangeRequest) {
+        return teamWorkflowStatusManager.changeTeamWorkflowStatusName(teamId, teamWorkflowStatusId, teamWorkflowStatusNameChangeRequest);
     }
 
     @PutMapping("/{teamId}/change-order/{teamWorkflowStatusId}/with/{replaceWithTeamWorkflowStatusId}")

@@ -36,7 +36,7 @@ public class TeamWorkflowStatusService {
             int nextAvailableOrderNo = getNextAvailableOrderNo(initializeTeamWorkflowStatusVo);
             TeamWorkflowStatus teamWorkflowStatus = modelMapper.map(initializeTeamWorkflowStatusVo, TeamWorkflowStatus.class);
             teamWorkflowStatus.setOrder(nextAvailableOrderNo);
-            TeamWorkflowStatus saved = teamWorkflowStatusRepository.save(teamWorkflowStatus);
+            TeamWorkflowStatus saved = teamWorkflowStatusRepository.saveAndFlush(teamWorkflowStatus);
             return modelMapper.map(saved, TeamWorkflowStatusDto.class);
         } catch (Exception e) {
             log.error("An error occurred while adding team workflow status.", e);
@@ -78,8 +78,16 @@ public class TeamWorkflowStatusService {
         log.info("Orders replaced.");
     }
 
+    public void changeTeamWorkflowStatusName(String teamWorkflowStatusId, String newName) {
+        log.info("Change team workflow status name has started. teamWorkflowStatusId: {}, newName: {}", teamWorkflowStatusId, newName);
+        TeamWorkflowStatus teamWorkflowStatus = teamWorkflowStatusRetrieveService.retrieveEntity(teamWorkflowStatusId);
+        teamWorkflowStatus.setName(newName);
+        teamWorkflowStatusRepository.save(teamWorkflowStatus);
+        log.info("Change team workflow status name has ended");
+    }
+
     private int getNextAvailableOrderNo(InitializeTeamWorkflowStatusVo initializeTeamWorkflowStatusVo) {
-        return teamWorkflowStatusRetrieveService.retrieveNextAvailableOrderNo(initializeTeamWorkflowStatusVo.getWorkspaceId(), initializeTeamWorkflowStatusVo.getTeamId(), initializeTeamWorkflowStatusVo.getWorkflowStateGroup());
+        return teamWorkflowStatusRetrieveService.retrieveNextAvailableOrderNo(initializeTeamWorkflowStatusVo.getTeamId(), initializeTeamWorkflowStatusVo.getWorkflowStateGroup());
     }
 
     private void rearrangeOrder(String workspaceId, String teamId, TeamWorkflowStateGroup workflowStateGroup) {

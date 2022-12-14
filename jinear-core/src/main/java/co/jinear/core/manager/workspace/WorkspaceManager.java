@@ -1,5 +1,6 @@
 package co.jinear.core.manager.workspace;
 
+import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
 import co.jinear.core.model.request.workspace.WorkspaceInitializeRequest;
@@ -8,6 +9,7 @@ import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
 import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
 import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceActivityService;
 import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
 import co.jinear.core.service.workspace.WorkspaceInitializeService;
@@ -36,6 +38,7 @@ public class WorkspaceManager {
     private final SessionInfoService sessionInfoService;
     private final MediaRetrieveService mediaRetrieveService;
     private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
+    private final TeamRetrieveService teamRetrieveService;
     private final ModelMapper modelMapper;
 
     public WorkspaceBaseResponse retrieveWorkspaceWithUsername(String workspaceUsername) {
@@ -78,6 +81,19 @@ public class WorkspaceManager {
         log.info("Update preferred team has started. teamId: {}, accountId: {}", teamId, accountId);
         workspaceDisplayPreferenceService.setAccountPreferredTeamId(accountId, teamId);
         return new BaseResponse();
+    }
+
+    public BaseResponse updatePreferredWorkspaceWithUsername(String workspaceUsername) {
+        log.info("Update preferred workspace with username has started. workspaceUsername: {}", workspaceUsername);
+        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithUsername(workspaceUsername);
+        return updatePreferredWorkspace(workspaceDto.getWorkspaceId());
+    }
+
+    public BaseResponse updatePreferredTeamWithUsername(String workspaceUsername, String teamName) {
+        log.info("Update preferred team with username has started. workspaceUsername: {}, teamName: {}", workspaceUsername, teamName);
+        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithUsername(workspaceUsername);
+        TeamDto teamDto = teamRetrieveService.retrieveActiveTeamByName(teamName, workspaceDto.getWorkspaceId());
+        return updatePreferredTeam(teamDto.getTeamId());
     }
 
     private WorkspaceDto initializeWorkspace(WorkspaceInitializeRequest workspaceInitializeRequest, String accountId) {

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2022-12-06 23:44:54.
+// Generated using typescript-generator version 3.0.1157 on 2022-12-12 08:56:30.
 
 export interface BaseDto {
     createdDate: Date;
@@ -30,8 +30,7 @@ export interface AccountDto extends BaseDto {
     roles: AccountRoleDto[];
     profilePicture?: MediaDto | null;
     workspaces: WorkspaceDto[];
-    preferredWorkspaceId: string;
-    preferredTeamId: string;
+    workspaceDisplayPreference?: WorkspaceDisplayPreferenceDto | null;
 }
 
 export interface AccountRoleDto {
@@ -67,6 +66,7 @@ export interface TaskDto extends BaseDto {
     workspaceId: string;
     teamId: string;
     ownerId: string;
+    workflowStatusId: string;
     assignedDate: Date;
     dueDate: Date;
     teamTagNo: number;
@@ -78,15 +78,18 @@ export interface TaskDto extends BaseDto {
     assignedToAccount?: PlainAccountProfileDto | null;
     workspace?: WorkspaceDto | null;
     team?: TeamDto | null;
+    workflowStatus: TeamWorkflowStatusDto;
 }
 
 export interface TeamDto extends BaseDto {
     teamId: string;
     workspaceId: string;
+    workspaceUsername: string;
     name: string;
     tag: string;
     visibility: TeamVisibilityType;
     joinMethod: TeamJoinMethodType;
+    workflowStatuses: TeamWorkflowStatusDto[];
 }
 
 export interface TeamMemberDto extends BaseDto {
@@ -96,6 +99,21 @@ export interface TeamMemberDto extends BaseDto {
     teamId: string;
     team: TeamDto;
     account: AccountDto;
+}
+
+export interface GroupedTeamWorkflowStatusListDto {
+    groupedTeamWorkflowStatuses: { [P in TeamWorkflowStateGroup]?: TeamWorkflowStatusDto[] };
+}
+
+export interface TeamWorkflowStatusDto {
+    teamWorkflowStatusId: string;
+    teamId: string;
+    workspaceId: string;
+    workflowStateGroup: TeamWorkflowStateGroup;
+    name: string;
+    order: number;
+    editable: boolean;
+    removable: boolean;
 }
 
 export interface TokenDto extends BaseDto {
@@ -127,8 +145,10 @@ export interface UsernameDto {
 
 export interface WorkspaceDisplayPreferenceDto {
     account_id: string;
-    preferredWorkspaceId: string;
-    preferredTeamId: string;
+    preferredWorkspaceId?: string | null;
+    preferredTeamId?: string | null;
+    workspace?: WorkspaceDto | null;
+    team?: TeamDto | null;
 }
 
 export interface WorkspaceDto extends BaseDto {
@@ -240,12 +260,21 @@ export interface TaskUpdateRequest {
     description?: string | null;
 }
 
+export interface InitializeTeamWorkflowStatusRequest extends BaseRequest {
+    workflowStateGroup: TeamWorkflowStateGroup;
+    name: string;
+}
+
 export interface TeamInitializeRequest extends BaseRequest {
     workspaceId: string;
     name: string;
     tag: string;
     visibility: TeamVisibilityType;
     joinMethod: TeamJoinMethodType;
+}
+
+export interface TeamWorkflowStatusNameChangeRequest extends BaseRequest {
+    name: string;
 }
 
 export interface TopicInitializeRequest extends BaseRequest {
@@ -324,6 +353,10 @@ export interface TeamResponse extends BaseResponse {
     data: TeamDto;
 }
 
+export interface TeamWorkflowStatusListingResponse extends BaseResponse {
+    data: GroupedTeamWorkflowStatusListDto;
+}
+
 export interface TopicListingResponse extends BaseResponse {
     data: PageDto<TopicDto>;
 }
@@ -368,11 +401,11 @@ export type RoleType = "ADMIN" | "USER";
 
 export type ProviderType = "OTP_MAIL" | "PASSWORD_MAIL";
 
-export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MAIL_TEXT" | "MAIL_CONFIRMATION_TITLE" | "MAIL_CONFIRMATION_TEXT" | "MAIL_CONFIRMATION_CTA_LABEL" | "PASSWORD_RESET_TITLE" | "PASSWORD_RESET_TEXT" | "PASSWORD_RESET_CTA_LABEL" | "NEW_PASSWORD_TITLE" | "NEW_PASSWORD_TEXT";
+export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MAIL_TEXT" | "MAIL_CONFIRMATION_TITLE" | "MAIL_CONFIRMATION_TEXT" | "MAIL_CONFIRMATION_CTA_LABEL" | "PASSWORD_RESET_TITLE" | "PASSWORD_RESET_TEXT" | "PASSWORD_RESET_CTA_LABEL" | "NEW_PASSWORD_TITLE" | "NEW_PASSWORD_TEXT" | "TEAM_WORKFLOW_STATUS_BACKLOG" | "TEAM_WORKFLOW_STATUS_NOT_STARTED" | "TEAM_WORKFLOW_STATUS_STARTED" | "TEAM_WORKFLOW_STATUS_COMPLETED" | "TEAM_WORKFLOW_STATUS_CANCELLED";
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS";
 
 export type FileType = "PROFILE_PIC";
 
@@ -383,6 +416,8 @@ export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELET
 export type TeamJoinMethodType = "SYNC_MEMBERS_WITH_WORKSPACE" | "ON_DEMAND" | "FROM_TEAM_ADMIN";
 
 export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
+
+export type TeamWorkflowStateGroup = "BACKLOG" | "NOT_STARTED" | "STARTED" | "COMPLETED" | "CANCELLED";
 
 export type TokenType = "SMS_LOGIN" | "EMAIL_LOGIN" | "WEB_USERNAME_LOGIN" | "BOOKING_EMAIL_VALIDATION" | "CONTINUE_AS_LOGIN_TOKEN" | "CONFIRM_EMAIL" | "RESET_PASSWORD";
 

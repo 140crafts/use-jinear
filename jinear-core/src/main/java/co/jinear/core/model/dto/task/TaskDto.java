@@ -3,6 +3,7 @@ package co.jinear.core.model.dto.task;
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.entity.topic.Topic;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class TaskDto extends BaseDto {
     private String workspaceId;
     private String teamId;
     private String ownerId;
+    private String workflowStatusId;
     private ZonedDateTime assignedDate;
     private ZonedDateTime dueDate;
     private Integer teamTagNo;
@@ -38,4 +40,5 @@ public class TaskDto extends BaseDto {
     private WorkspaceDto workspace;
     @Nullable
     private TeamDto team;
+    private TeamWorkflowStatusDto workflowStatus;
 }

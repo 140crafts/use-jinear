@@ -3,6 +3,7 @@ package co.jinear.core.model.entity.task;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
 import co.jinear.core.model.entity.team.Team;
+import co.jinear.core.model.entity.team.TeamWorkflowStatus;
 import co.jinear.core.model.entity.topic.Topic;
 import co.jinear.core.model.entity.workspace.Workspace;
 import lombok.Getter;
@@ -40,6 +41,9 @@ public class Task extends BaseEntity {
     @Column(name = "owner_id")
     private String ownerId;
 
+    @Column(name = "workflow_status_id")
+    private String workflowStatusId;
+
     @Column(name = "assigned_to")
     private String assignedTo;
 
@@ -60,6 +64,11 @@ public class Task extends BaseEntity {
 
     @Column(name = "description")
     private String description;
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "workflow_status_id", insertable = false, updatable = false)
+    private TeamWorkflowStatus workflowStatus;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)

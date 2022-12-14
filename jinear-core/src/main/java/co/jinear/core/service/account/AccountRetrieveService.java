@@ -70,9 +70,6 @@ public class AccountRetrieveService {
 
     private void setPreferredWorkspaceId(String accountId, AccountDto accountDto) {
         workspaceDisplayPreferenceService.retrieveAccountPreferredWorkspace(accountId)
-                .ifPresent(workspaceDisplayPreferenceDto -> {
-                    accountDto.setPreferredWorkspaceId(workspaceDisplayPreferenceDto.getPreferredWorkspaceId());
-                    accountDto.setPreferredTeamId(workspaceDisplayPreferenceDto.getPreferredTeamId());
-                });
+                .ifPresent(accountDto::setWorkspaceDisplayPreference);
     }
 }
