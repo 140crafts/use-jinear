@@ -7,6 +7,7 @@ import co.jinear.core.model.vo.task.TaskUpdateVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.TaskUpdateService;
+import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,21 +22,35 @@ public class TaskUpdateManager {
     private final ModelMapper modelMapper;
     private final SessionInfoService sessionInfoService;
     private final WorkspaceValidator workspaceValidator;
+    private final TeamAccessValidator teamAccessValidator;
     private final TaskRetrieveService taskRetrieveService;
     private final TaskUpdateService taskUpdateService;
 
     public TaskResponse updateTask(TaskUpdateRequest taskUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        validateHasWorkspaceAccess(taskUpdateRequest, currentAccountId);
+        validateAccess(taskUpdateRequest, currentAccountId);
         log.info("Update task has started. accountId: {}, taskUpdateRequest: {}", currentAccountId, taskUpdateRequest);
         TaskUpdateVo taskUpdateVo = modelMapper.map(taskUpdateRequest, TaskUpdateVo.class);
         TaskDto taskDto = taskUpdateService.updateTask(taskUpdateVo);
         return mapResponse(taskDto);
     }
 
-    private void validateHasWorkspaceAccess(TaskUpdateRequest taskUpdateRequest, String currentAccountId) {
-        TaskDto taskDto = taskRetrieveService.retrieve(taskUpdateRequest.getTaskId());
+    public TaskResponse updateTaskWorkflowStatus(String taskId, String workflowStatusId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        validateAccess(taskId, currentAccountId);
+        log.info("Update task workflow status has started. accountId: {}, taskId: {}, newWorkflowStatusId:", currentAccountId, taskId, workflowStatusId);
+        TaskDto taskDto = taskUpdateService.updateTaskWorkflow(taskId, workflowStatusId);
+        return mapResponse(taskDto);
+    }
+
+    private void validateAccess(TaskUpdateRequest taskUpdateRequest, String currentAccountId) {
+        validateAccess(taskUpdateRequest.getTaskId(), currentAccountId);
+    }
+
+    private void validateAccess(String taskId, String currentAccountId) {
+        TaskDto taskDto = taskRetrieveService.retrieve(taskId);
         workspaceValidator.validateHasAccess(currentAccountId, taskDto.getWorkspaceId());
+        teamAccessValidator.validateTeamAccess(currentAccountId, taskDto.getTeamId());
     }
 
     private TaskResponse mapResponse(TaskDto taskDto) {

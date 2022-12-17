@@ -27,7 +27,7 @@ public class TopicUpdateService {
     public TopicDto updateTopic(TopicUpdateVo topicUpdateVo) {
         log.info("Update topic has started. topicUpdateVo: {}", topicUpdateVo);
         Topic topic = topicRetrieveService.retrieveEntity(topicUpdateVo.getTopicId());
-        validateNewTagNotExists(topic.getWorkspaceId(), topicUpdateVo);
+        validateNewTagNotExists(topic, topicUpdateVo);
         updateValues(topic, topicUpdateVo);
         Topic saved = topicRepository.save(topic);
         log.info("Update topic has ended. topicId: {}", saved.getTopicId());
@@ -42,9 +42,10 @@ public class TopicUpdateService {
         topicRepository.save(topic);
     }
 
-    private void validateNewTagNotExists(String workspaceId, TopicUpdateVo topicUpdateVo) {
-        if (Objects.nonNull(topicUpdateVo.getTag())) {
-            topicRetrieveService.validateTagNotExists(workspaceId, topicUpdateVo.getTag());
+    private void validateNewTagNotExists(Topic topic, TopicUpdateVo topicUpdateVo) {
+        boolean tagChanged = !topic.getTag().equalsIgnoreCase(topicUpdateVo.getTag());
+        if (Objects.nonNull(topicUpdateVo.getTag()) && tagChanged) {
+            topicRetrieveService.validateTagNotExists(topic.getWorkspaceId(), topicUpdateVo.getTag());
         }
     }
 

@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class TopicInitializeService {
 
     public TopicDto initializeTopic(TopicInitializeVo topicInitializeVo) {
         log.info("Initialize topic has started. topicInitializeVo: {}", topicInitializeVo);
-        topicRetrieveService.validateTagNotExists(topicInitializeVo.getWorkspaceId(), topicInitializeVo.getTag());
+        topicRetrieveService.validateTagNotExists(topicInitializeVo.getWorkspaceId(), topicInitializeVo.getTag().toUpperCase(Locale.ROOT));
         Topic topic = mapInitializeVoToEntity(topicInitializeVo);
         Topic saved = topicRepository.save(topic);
         log.info("Initialize topic has ended. topicId: {}", saved.getTopicId());

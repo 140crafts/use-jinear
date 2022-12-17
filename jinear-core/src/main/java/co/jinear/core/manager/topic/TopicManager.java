@@ -32,6 +32,13 @@ public class TopicManager {
     private final WorkspaceValidator workspaceValidator;
     private final TeamAccessValidator teamAccessValidator;
 
+    public TopicResponse retrieveTopic(String topicId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        validateAccess(topicId, currentAccountId);
+        log.info("Retrieve topic has started. currentAccountId: {}", currentAccountId);
+        TopicDto topicDto =topicRetrieveService.retrieve(topicId);
+        return mapResponse(topicDto);
+    }
 
     public TopicResponse initializeTopic(TopicInitializeRequest topicInitializeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -78,6 +85,6 @@ public class TopicManager {
     private void validateAccess(String topicId, String currentAccountId) {
         TopicDto topicDto = topicRetrieveService.retrieve(topicId);
         workspaceValidator.validateHasAccess(currentAccountId, topicDto.getWorkspaceId());
-        teamAccessValidator.validateTeamAccess(currentAccountId, topicId);
+        teamAccessValidator.validateTeamAccess(currentAccountId, topicDto.getTeamId());
     }
 }

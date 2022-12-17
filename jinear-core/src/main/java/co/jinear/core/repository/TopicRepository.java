@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface TopicRepository extends JpaRepository<Topic, String> {
 
-    Long countAllByWorkspaceIdAndTagAndPassiveIdIsNull(String workspaceId, String tag);
+    Long countAllByWorkspaceIdAndTagIgnoreCaseAndPassiveIdIsNull(String workspaceId, String tag);
 
     Optional<Topic> findByTopicIdAndPassiveIdIsNull(String topicId);
 
@@ -17,5 +17,5 @@ public interface TopicRepository extends JpaRepository<Topic, String> {
 
     Page<Topic> findAllByNameContainingAndTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(String name, String teamId, Pageable pageable);
 
-    Page<Topic> findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(String teamId, Pageable pageable);
+    Page<Topic> findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateDesc(String teamId, Pageable pageable);
 }

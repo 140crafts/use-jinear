@@ -18,6 +18,12 @@ public class TopicController {
 
     private final TopicManager topicManager;
 
+    @GetMapping("/{topicId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TopicResponse retrieveTopic(@PathVariable String topicId) {
+        return topicManager.retrieveTopic(topicId);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TopicResponse initializeTopic(@Valid @RequestBody TopicInitializeRequest topicInitializeRequest) {

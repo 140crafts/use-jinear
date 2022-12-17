@@ -36,12 +36,12 @@ public class TopicRetrieveService {
 
     public Page<TopicDto> retrieveTeamTopics(String teamId, int page) {
         log.info("Retrieve team topic page has started. teamId: {}, page: {}", teamId, page);
-        return topicRepository.findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(teamId, PageRequest.of(page, PAGE_SIZE))
+        return topicRepository.findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateDesc(teamId, PageRequest.of(page, PAGE_SIZE))
                 .map(topic -> modelMapper.map(topic, TopicDto.class));
     }
 
     public void validateTagNotExists(String workspaceId, String tag) {
-        boolean exists = topicRepository.countAllByWorkspaceIdAndTagAndPassiveIdIsNull(
+        boolean exists = topicRepository.countAllByWorkspaceIdAndTagIgnoreCaseAndPassiveIdIsNull(
                 workspaceId, tag) > 0L;
         if (exists) {
             throw new BusinessException("topic.init.tag-exists");
