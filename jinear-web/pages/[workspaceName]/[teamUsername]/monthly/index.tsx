@@ -1,13 +1,16 @@
-import PeriodSpanTaskView from "@/components/periodSpanTaskView/PeriodSpanTaskView";
+import TabbedPanel from "@/components/tabbedPanel/TabbedPanel";
+import TabView from "@/components/tabbedPanel/tabView/TabView";
+import MonthlyPlanTab from "@/components/teamMonthlyScreen/monthlyPlanTab/MonthlyPlanTab";
 import MonthYearNo from "@/components/teamMonthlyScreen/monthYearNo/MonthYearNo";
 import TeamMonthlyScreenBreadcrumb from "@/components/teamMonthlyScreen/teamMonthlyScreenBreadcrumb/TeamMonthlyScreenBreadcrumb";
-import TeamWorkflowStatusBoard from "@/components/teamWorkflowStatusBoard/TeamWorkflowStatusBoard";
+import WorkflowStatusTab from "@/components/workflowStatusTab/WorkflowStatusTab";
 import TeamMonthlyScreenContext from "@/store/context/screen/team/monthly/teamMonthlyScreenContext";
 import {
   selectCurrentAccountsPreferredTeamId,
   selectCurrentAccountsPreferredWorkspace,
 } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
+import Logger from "@/utils/logger";
 import {
   endOfMonth,
   endOfWeek,
@@ -17,15 +20,17 @@ import {
 } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
-import { IoCalendarOutline, IoCheckmark } from "react-icons/io5";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
 
 interface TeamMonthlyScreenProps {}
 
+const logger = Logger("TeamMonthlyScreen");
+
 const TeamMonthlyScreen: React.FC<TeamMonthlyScreenProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
+  const monthlyPlanTabContainerRef = useRef<HTMLDivElement>(null);
   const workspaceName: string = router.query?.workspaceName as string;
   const teamUsername: string = router.query?.teamUsername as string;
 
@@ -73,70 +78,39 @@ const TeamMonthlyScreen: React.FC<TeamMonthlyScreenProps> = ({}) => {
         <MonthYearNo />
 
         <div className="spacer-h-2" />
-        <div className={styles.sectionTitleContainer}>
-          <IoCheckmark size={21} />
-          <div className={styles.sectionTitle}>
-            {t("teamWeeklyScreenTaskWorkflowStatusSectionTitle")}
-          </div>
-        </div>
 
-        <span className={styles.statusBoardContainer}>
-          {preferredTeamId && currentWorkspace && (
-            <TeamWorkflowStatusBoard
+        <TabbedPanel
+          initialTabName="workflow"
+          containerClassName={styles.weekViewContainer}
+        >
+          <TabView
+            name="workflow"
+            label={t("teamWeeklyScreenTaskWorkflowStatusSectionTitle")}
+            containerClassName={styles.tabViewContainer}
+          >
+            <WorkflowStatusTab
               teamId={preferredTeamId}
               workspaceId={currentWorkspace?.workspaceId}
               startDate={viewingPeriodStart}
-              endDate={viewingPeriodEnd}
+              endDate={endOfWeek(viewingPeriodEnd, { weekStartsOn: 1 })}
             />
-          )}
-        </span>
+          </TabView>
 
-        <div className="spacer-h-2" />
-        <div className={styles.sectionTitleContainer}>
-          <IoCalendarOutline size={21} />
-          <div className={styles.sectionTitle}>
-            {t("teamMonthlyScreenPeriodPlanSectionTitle")}
-          </div>
-        </div>
-
-        <span className={styles.monthViewContainer}>
-          {preferredTeamId && currentWorkspace && (
-            // <>
-            //   <TeamWeekView
-            //     teamId={preferredTeamId}
-            //     workspaceId={currentWorkspace?.workspaceId}
-            //     viewingWeekStart={viewingPeriodStart}
-            //     showDayOfWeek={true}
-            //   />
-            //   <TeamWeekView
-            //     teamId={preferredTeamId}
-            //     workspaceId={currentWorkspace?.workspaceId}
-            //     viewingWeekStart={addWeeks(viewingPeriodStart, 1)}
-            //     showDayOfWeek={false}
-            //   />
-            //   <TeamWeekView
-            //     teamId={preferredTeamId}
-            //     workspaceId={currentWorkspace?.workspaceId}
-            //     viewingWeekStart={addWeeks(viewingPeriodStart, 2)}
-            //     showDayOfWeek={false}
-            //   />
-            //   <TeamWeekView
-            //     teamId={preferredTeamId}
-            //     workspaceId={currentWorkspace?.workspaceId}
-            //     viewingWeekStart={addWeeks(viewingPeriodStart, 3)}
-            //     showDayOfWeek={false}
-            //   />
-            // </>
-
-            <PeriodSpanTaskView
+          <TabView
+            name="plan"
+            label={t("teamMonthlyScreenPeriodPlanSectionTitle")}
+            containerClassName={styles.tabViewContainer}
+            containerRef={monthlyPlanTabContainerRef}
+          >
+            <MonthlyPlanTab
+              containerRef={monthlyPlanTabContainerRef}
               teamId={preferredTeamId}
               workspaceId={currentWorkspace?.workspaceId}
               viewingPeriodStart={viewingPeriodStart}
               viewingPeriodEnd={viewingPeriodEnd}
-              showDayOfWeek={true}
             />
-          )}
-        </span>
+          </TabView>
+        </TabbedPanel>
       </div>
     </TeamMonthlyScreenContext.Provider>
   );

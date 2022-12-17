@@ -20,25 +20,28 @@
   font-size: 1rem;
 }
 
-.monthViewContainer {
+.tabbedPanel {
   max-width: calc(100vw - var(--side-menu-width));
   overflow-x: scroll;
   min-height: 4rem;
 }
 
-.statusBoardContainer {
-  max-width: calc(100vw - var(--side-menu-width));
+.tabViewContainer {
   overflow-x: scroll;
-  min-height: 8rem;
-  padding-bottom: 2rem;
 }
 
-@media (max-width: $mobile-l) {
-  .monthViewContainer {
+.weekViewContainer {
+  max-width: calc(100vw - var(--side-menu-width));
+  overflow-x: scroll;
+  min-height: 4rem;
+}
+
+@media (max-width: $tablet) {
+  .tabbedPanel {
     max-width: 100vw;
     overflow-x: scroll;
   }
-  .statusBoardContainer {
+  .weekViewContainer {
     max-width: 100vw;
     overflow-x: scroll;
   }

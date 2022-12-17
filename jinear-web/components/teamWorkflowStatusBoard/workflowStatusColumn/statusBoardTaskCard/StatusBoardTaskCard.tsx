@@ -4,31 +4,50 @@ import { TaskDto } from "@/model/be/jinear-core";
 import cn from "classnames";
 import Link from "next/link";
 import React from "react";
+import {
+  Draggable,
+  DraggableProvided,
+  DraggableStateSnapshot,
+} from "react-beautiful-dnd";
 import styles from "./StatusBoardTaskCard.module.css";
 
 interface StatusBoardTaskCardProps {
   task: TaskDto;
+  index?: number;
 }
 
-const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({ task }) => {
+const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({
+  task,
+  index = 0,
+}) => {
   return (
-    <Link
-      href={`/${task.workspace?.username}/task/${task.team?.tag}-${task.teamTagNo}`}
-      className={styles.container}
-    >
-      <div className={cn(styles.title)}>{task.title}</div>
-      <div className={styles.infoContainer}>
-        <AssigneeCell
-          task={task}
-          tooltipPosition={
-            task.workflowStatus.workflowStateGroup == "BACKLOG"
-              ? "left"
-              : "right"
-          }
-        />
-        <TeamTagCell task={task} />
-      </div>
-    </Link>
+    <Draggable key={task.taskId} draggableId={task.taskId} index={index}>
+      {(
+        providedDraggable: DraggableProvided,
+        snapshotDraggable: DraggableStateSnapshot
+      ) => (
+        <Link
+          href={`/${task.workspace?.username}/task/${task.team?.tag}-${task.teamTagNo}`}
+          className={styles.container}
+          ref={providedDraggable.innerRef}
+          {...providedDraggable.draggableProps}
+          {...providedDraggable.dragHandleProps}
+        >
+          <div className={cn(styles.title)}>{task.title}</div>
+          <div className={styles.infoContainer}>
+            <AssigneeCell
+              task={task}
+              tooltipPosition={
+                task.workflowStatus.workflowStateGroup == "BACKLOG"
+                  ? "left"
+                  : "right"
+              }
+            />
+            <TeamTagCell task={task} />
+          </div>
+        </Link>
+      )}
+    </Draggable>
   );
 };
 

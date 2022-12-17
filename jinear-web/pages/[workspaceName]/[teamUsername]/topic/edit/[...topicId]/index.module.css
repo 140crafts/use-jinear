@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: var(--full);
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: var(--content);
+  margin-top: 2rem;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

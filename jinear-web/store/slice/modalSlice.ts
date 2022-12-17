@@ -27,12 +27,16 @@ const initialState = {
   teamOptionsModal: {
     visible: false,
   },
+  newTopicModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
   notFoundModal: null | NotFoundModalState;
   newTaskModal: null | ModalState;
   teamOptionsModal: null | ModalState;
+  newTopicModal: null | ModalState;
 };
 
 const slice = createSlice({

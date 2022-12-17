@@ -366,6 +366,10 @@ export default {
     en: "Create a topic to label your tasks",
     tr: "Bir konu oluştur ve görevlerini etiketle",
   },
+  sideMenuTeamTopics: {
+    en: "Topics",
+    tr: "Konular",
+  },
   sideMenuTeamTasks: {
     en: "Task",
     tr: "Görevler",
@@ -384,6 +388,13 @@ export default {
     // tr: "Birikenler",
     // tr: "Yığın",
     tr: "Bekleyenler",
+  },
+  sideMenuTeamTaskList: {
+    en: "Tasks",
+    // tr: "Belirsizler",
+    // tr: "Birikenler",
+    // tr: "Yığın",
+    tr: "Görevler",
   },
   sideMenuTeamArchive: {
     en: "Archive",
@@ -596,5 +607,45 @@ export default {
   teamMonthlyScreenPeriodPlanSectionTitle: {
     en: "Monthly Plan",
     tr: "Aylık Plan",
+  },
+  newTopicScreenTitle: {
+    en: "New Topic",
+    tr: "Yeni Konu",
+  },
+  topicFormName: {
+    en: "Name",
+    tr: "Ad",
+  },
+  topicFormTag: {
+    en: "Tag",
+    tr: "Etiket",
+  },
+  topicFormTagExplaination: {
+    en: "The topic tag serves to identify the subject of the task without entering task details page.",
+    tr: "Konu etiketi, görev detay sayfasına girmeden görevin hangi konuda olduğunu belirtmeye yarar.",
+  },
+  topicFormColor: {
+    en: "Color",
+    tr: "Renk",
+  },
+  topicFormSave: {
+    en: "Save",
+    tr: "Kaydet",
+  },
+  topicListScreenTitle: {
+    en: "Topics",
+    tr: "Konular",
+  },
+  sideMenuTeamThreads: {
+    en: "Threads",
+    tr: "Tartışmalar",
+  },
+  topicCardEditTooltip: {
+    en: "Edit Topic",
+    tr: "Konuyu Düzenle",
+  },
+  topcEditScreenTitle: {
+    en: "Edit Topic",
+    tr: "Konuyu Düzenle",
   },
 };

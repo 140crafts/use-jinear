@@ -24,7 +24,7 @@ const TeamActionButtons: React.FC<TeamActionButtonsProps> = ({
   const currentPath = router.asPath;
   const weeklyPath = `/${workspaceUsername}/${name}/weekly`;
   const monthlyPath = `/${workspaceUsername}/${name}/monthly`;
-  const backlogPath = `/${workspaceUsername}/${name}/backlog`;
+  const taskListPath = `/${workspaceUsername}/${name}/task-list`;
   const archivePath = `/${workspaceUsername}/${name}/archive`;
 
   return (
@@ -67,9 +67,9 @@ const TeamActionButtons: React.FC<TeamActionButtonsProps> = ({
         </div>
       </Button>
       <Button
-        href={backlogPath}
+        href={taskListPath}
         variant={
-          currentPath == backlogPath
+          currentPath == taskListPath
             ? ButtonVariants.filled2
             : ButtonVariants.hoverFilled2
         }
@@ -78,10 +78,10 @@ const TeamActionButtons: React.FC<TeamActionButtonsProps> = ({
         <IoList />
         <div
           className={
-            currentPath == backlogPath ? styles.activeButton : undefined
+            currentPath == taskListPath ? styles.activeButton : undefined
           }
         >
-          {t("sideMenuTeamBacklog")}
+          {t("sideMenuTeamTaskList")}
         </div>
       </Button>
       <Button

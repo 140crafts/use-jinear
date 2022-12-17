@@ -10,6 +10,9 @@ interface WeekdayTitleProps {
   showDayOfWeek?: boolean;
 }
 
+export const PERIOD_SPAN_TASK_VIEW_TODAY_MARK =
+  "period-span-task-view-today-mark";
+
 const WeekdayTitle: React.FC<WeekdayTitleProps> = ({
   day,
   taskCount,
@@ -17,7 +20,10 @@ const WeekdayTitle: React.FC<WeekdayTitleProps> = ({
 }) => {
   const { t } = useTranslation();
   return (
-    <div className={styles.titleContiner}>
+    <div
+      id={isToday(day) ? PERIOD_SPAN_TASK_VIEW_TODAY_MARK : undefined}
+      className={styles.titleContiner}
+    >
       <h2
         className={cn(styles.dayTitle, isToday(day) ? styles.today : undefined)}
       >
@@ -25,7 +31,6 @@ const WeekdayTitle: React.FC<WeekdayTitleProps> = ({
           locale: t("dateFnsLocale") as any,
         })}
       </h2>
-      {/* <div className={styles.taskCount}>{taskCount}</div> */}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import React from "react";
-import { IoAdd, IoChevronDownSharp } from "react-icons/io5";
+import { IoAdd, IoEllipsisHorizontal } from "react-icons/io5";
 import styles from "./MenuGroupTitle.module.css";
 
 interface MenuGroupTitleProps {
@@ -9,6 +9,7 @@ interface MenuGroupTitleProps {
   hasDetailButton?: boolean;
   buttonVariant?: string;
   onAddButtonClick?: () => void;
+  onDetailButtonClick?: () => void;
 }
 
 const MenuGroupTitle: React.FC<MenuGroupTitleProps> = ({
@@ -17,7 +18,12 @@ const MenuGroupTitle: React.FC<MenuGroupTitleProps> = ({
   hasDetailButton = false,
   buttonVariant = ButtonVariants.hoverFilled2,
   onAddButtonClick,
+  onDetailButtonClick,
 }) => {
+  const _detailClick = () => {
+    onDetailButtonClick?.();
+  };
+
   const _addClick = () => {
     onAddButtonClick?.();
   };
@@ -25,25 +31,24 @@ const MenuGroupTitle: React.FC<MenuGroupTitleProps> = ({
   return (
     <div className={styles.titleContainer}>
       <div className={styles.title}>{label}</div>
-      {hasAddButton && (
-        <>
-          <div className="flex-1" />
-          <Button
-            onClick={_addClick}
-            variant={buttonVariant}
-            heightVariant={ButtonHeight.short}
-          >
-            <IoAdd />
-          </Button>
-        </>
-      )}
+      <div className="flex-1" />
       {hasDetailButton && (
-        <>
-          <div className="flex-1" />
-          <Button variant={buttonVariant} heightVariant={ButtonHeight.short}>
-            <IoChevronDownSharp />
-          </Button>
-        </>
+        <Button
+          onClick={_detailClick}
+          variant={buttonVariant}
+          heightVariant={ButtonHeight.short}
+        >
+          <IoEllipsisHorizontal />
+        </Button>
+      )}
+      {hasAddButton && (
+        <Button
+          onClick={_addClick}
+          variant={buttonVariant}
+          heightVariant={ButtonHeight.short}
+        >
+          <IoAdd />
+        </Button>
       )}
     </div>
   );

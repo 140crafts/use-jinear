@@ -2,8 +2,8 @@ import TabbedPanel from "@/components/tabbedPanel/TabbedPanel";
 import TabView from "@/components/tabbedPanel/tabView/TabView";
 import TeamWeeklyScreenBreadcrumb from "@/components/teamWeeklyScreen/teamWeeklyScreenBreadcrumb/TeamWeeklyScreenBreadcrumb";
 import WeeklyPlanTab from "@/components/teamWeeklyScreen/weeklyPlanTab/WeeklyPlanTab";
-import WorkflowStatusTab from "@/components/teamWeeklyScreen/workflowStatusTab/WorkflowStatusTab";
 import YearWeekNo from "@/components/teamWeeklyScreen/yearWeekNo/YearWeekNo";
+import WorkflowStatusTab from "@/components/workflowStatusTab/WorkflowStatusTab";
 import TeamWeeklyScreenContext from "@/store/context/screen/team/weekly/teamWeeklyScreenContext";
 import {
   selectCurrentAccountsPreferredTeamId,
@@ -13,7 +13,7 @@ import { useTypedSelector } from "@/store/store";
 import { endOfWeek, startOfToday, startOfWeek } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styles from "./index.module.scss";
 
 interface TeamWeeklyScreenProps {}
@@ -21,6 +21,7 @@ interface TeamWeeklyScreenProps {}
 const TeamWeeklyScreen: React.FC<TeamWeeklyScreenProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
+  const weeklyPlanTabContainerRef = useRef<HTMLDivElement>(null);
   const workspaceName: string = router.query?.workspaceName as string;
   const teamUsername: string = router.query?.teamUsername as string;
   const currentWorkspace = useTypedSelector(
@@ -70,11 +71,13 @@ const TeamWeeklyScreen: React.FC<TeamWeeklyScreenProps> = ({}) => {
             name="plan"
             label={t("teamWeeklyScreenWeeklyPlanSectionTitle")}
             containerClassName={styles.tabViewContainer}
+            containerRef={weeklyPlanTabContainerRef}
           >
             <WeeklyPlanTab
               teamId={preferredTeamId}
               workspaceId={currentWorkspace?.workspaceId}
               viewingWeekStart={viewingWeekStart}
+              containerRef={weeklyPlanTabContainerRef}
             />
           </TabView>
         </TabbedPanel>

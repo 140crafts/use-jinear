@@ -1,9 +1,11 @@
+import { useDebouncedEffect } from "@/hooks/useDebouncedEffect";
 import { useRetrieveAllIntersectingTasksQuery } from "@/store/api/taskListingApi";
 import { CircularProgress } from "@mui/material";
 import { eachDayOfInterval } from "date-fns";
 import React from "react";
 import styles from "./PeriodSpanTaskView.module.css";
 import TaskPeriodViewRow from "./taskWeekViewRow/TaskPeriodViewRow";
+import { PERIOD_SPAN_TASK_VIEW_TODAY_MARK } from "./weekday/title/WeekdayTitle";
 import Weekday from "./weekday/Weekday";
 
 interface PeriodSpanTaskViewProps {
@@ -12,6 +14,7 @@ interface PeriodSpanTaskViewProps {
   viewingPeriodStart: Date;
   viewingPeriodEnd: Date;
   showDayOfWeek?: boolean;
+  containerRef?: React.RefObject<HTMLDivElement>;
 }
 
 const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
@@ -20,6 +23,7 @@ const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
   viewingPeriodStart,
   viewingPeriodEnd,
   showDayOfWeek,
+  containerRef,
 }) => {
   const {
     data: taskListingResponse,
@@ -40,6 +44,21 @@ const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
     end: viewingPeriodEnd,
   });
 
+  useDebouncedEffect(
+    () => {
+      const todayTitle = document.getElementById(
+        PERIOD_SPAN_TASK_VIEW_TODAY_MARK
+      );
+      if (!isFetching && containerRef && containerRef.current && todayTitle) {
+        containerRef.current.scrollTo?.({
+          behavior: "smooth",
+          left: todayTitle.offsetLeft - todayTitle.offsetWidth * 2,
+        });
+      }
+    },
+    [isFetching],
+    250
+  );
   return (
     <div className={styles.container}>
       {isFetching && (

@@ -1,0 +1,50 @@
+import {
+  TopicInitializeRequest,
+  TopicResponse,
+  TopicUpdateRequest,
+} from "@/model/be/jinear-core";
+import { api } from "./api";
+
+export const topicApi = api.injectEndpoints({
+  endpoints: (build) => ({
+    retrieveTopic: build.query<TopicResponse, string>({
+      query: (topicId: string) => `v1/topic/${topicId}`,
+      providesTags: (_result, _err, topicId) => [
+        {
+          type: "retrieve-topic",
+          id: topicId,
+        },
+      ],
+    }),
+    //
+    initializeTopic: build.mutation<TopicResponse, TopicInitializeRequest>({
+      query: (request: TopicInitializeRequest) => ({
+        url: `v1/topic`,
+        method: "POST",
+        body: request,
+      }),
+      invalidatesTags: (_result, _err, req) => [
+        { type: "team-topic-list", id: req.teamId },
+      ],
+    }),
+    //
+    updateTopic: build.mutation<TopicResponse, TopicUpdateRequest>({
+      query: (request: TopicUpdateRequest) => ({
+        url: `v1/topic`,
+        method: "PUT",
+        body: request,
+      }),
+      invalidatesTags: ["team-topic-list", "retrieve-topic"],
+    }),
+  }),
+});
+
+export const {
+  useRetrieveTopicQuery,
+  useInitializeTopicMutation,
+  useUpdateTopicMutation,
+} = topicApi;
+
+export const {
+  endpoints: { retrieveTopic, initializeTopic, updateTopic },
+} = topicApi;

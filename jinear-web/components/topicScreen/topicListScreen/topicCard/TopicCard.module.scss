@@ -1,0 +1,50 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 1ch;
+  border-radius: var(--border-radius);
+  padding: 0.55rem 0.75rem;
+  min-height: 2.25rem;
+}
+
+.container:hover {
+  cursor: pointer;
+  background-color: var(--c-primary-shade-0);
+}
+
+.container:hover .actionContainer {
+  display: flex;
+}
+
+.nameContainer {
+  flex: 1;
+}
+
+.colorBox {
+  width: 15px;
+  height: 5px;
+  border-radius: var(--border-radius);
+}
+
+.topicTag {
+  display: flex;
+  min-width: 4ch;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  background-color: var(--c-primary-shade-0);
+  border-radius: var(--border-radius);
+  border-width: 1px;
+  border-color: var(--c-primary);
+  border-style: solid;
+  font-size: smaller;
+  font-weight: 600;
+  height: 3ch;
+}
+
+.actionContainer {
+  display: none;
+  flex-direction: row;
+  gap: 0.5ch;
+  height: 3ch;
+}

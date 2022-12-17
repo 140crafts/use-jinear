@@ -156,6 +156,10 @@ input[type="radio"] {
   display: none;
 }
 
+input[type="color"] {
+  padding: 0.5px 1ch;
+}
+
 input,
 textarea {
   background: var(--c-primary-shade-0) !important;
@@ -303,6 +307,23 @@ select {
   border-radius: var(--border-radius);
   position: absolute;
   white-space: nowrap;
+  z-index: 99;
+}
+
+*[data-tooltip-multiline] {
+  position: relative;
+  height: auto;
+}
+*[data-tooltip-multiline]:hover:after {
+  content: attr(data-tooltip-multiline);
+  background-color: var(--c-secondary);
+  color: var(--c-primary);
+  right: 0;
+  top: 2.25rem;
+  padding: 0.5em;
+  border-radius: var(--border-radius);
+  position: absolute;
+  white-space: inherit;
   z-index: 99;
 }
 /* endregion */

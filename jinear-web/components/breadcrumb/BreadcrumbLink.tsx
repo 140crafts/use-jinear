@@ -7,10 +7,23 @@ interface BreadcrumbLinkProps {
   url: string;
 }
 
+const MAX_WIDTH = 59;
+const PART_SIZE = (MAX_WIDTH - 3) / 2;
+
 const BreadcrumbLink: React.FC<BreadcrumbLinkProps> = ({ label, url }) => {
+  const isTooLong = label?.length > MAX_WIDTH;
   return (
-    <Link href={url} className={styles.link}>
-      {label}
+    <Link
+      href={url}
+      className={styles.link}
+      data-tooltip-multiline={isTooLong ? label : undefined}
+    >
+      {isTooLong
+        ? `${label.substring(0, PART_SIZE)}...${label.substring(
+            label.length - PART_SIZE,
+            label.length
+          )}`
+        : label}
     </Link>
   );
 };
