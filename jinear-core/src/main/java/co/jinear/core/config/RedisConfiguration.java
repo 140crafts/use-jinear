@@ -17,19 +17,19 @@ import java.time.Duration;
 @PropertySource("classpath:application.properties")
 public class RedisConfiguration {
 
-    @Value("${spring.redis.host}")
+    @Value("${spring.data.redis.host}")
     private String redisHost;
 
-    @Value("${spring.redis.password}")
+    @Value("${spring.data.redis.password}")
     private String redisPassword;
 
-    @Value("${spring.redis.port}")
+    @Value("${spring.data.redis.port}")
     private Integer redisPort;
 
-    @Value("${spring.redis.timeout}")
+    @Value("${spring.data.redis.timeout}")
     private Long redisTimeout;
 
-    @Value("${spring.redis.ssl}")
+    @Value("${spring.data.redis.ssl}")
     private Boolean redisUseSsl;
 
     @Bean

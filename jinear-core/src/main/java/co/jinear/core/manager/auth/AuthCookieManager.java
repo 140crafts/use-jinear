@@ -7,7 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletResponse;
 
 import static co.jinear.core.system.JwtHelper.JWT_COOKIE;
 import static co.jinear.core.system.JwtHelper.JWT_TOKEN_VALIDITY;

@@ -2,12 +2,10 @@ package co.jinear.core.service.topic;
 
 import co.jinear.core.model.entity.task.TopicSequence;
 import co.jinear.core.repository.TopicSequenceRepository;
-import lombok.NonNull;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 @Slf4j
 @Service
