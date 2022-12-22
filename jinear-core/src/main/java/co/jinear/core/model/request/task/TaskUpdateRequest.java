@@ -1,5 +1,6 @@
 package co.jinear.core.model.request.task;
 
+import co.jinear.core.model.request.BaseRequest;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -12,7 +13,7 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 @ToString(callSuper = true)
-public class TaskUpdateRequest {
+public class TaskUpdateRequest extends BaseRequest {
     private String taskId;
     private String topicId;
     @Nullable

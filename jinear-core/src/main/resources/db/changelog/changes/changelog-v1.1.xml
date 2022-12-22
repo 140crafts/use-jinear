@@ -235,4 +235,25 @@
         </createIndex>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-rich_text">
+        <createTable tableName="rich_text">
+            <column name="rich_text_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="related_object_id" type="char(26)"/>
+            <column name="value" type="mediumblob"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="source_stack" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="ix_related_object_id" tableName="rich_text">
+            <column name="related_object_id"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

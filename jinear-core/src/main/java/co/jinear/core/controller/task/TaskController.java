@@ -4,7 +4,10 @@ import co.jinear.core.manager.task.TaskInitializeManager;
 import co.jinear.core.manager.task.TaskRetrieveManager;
 import co.jinear.core.manager.task.TaskUpdateManager;
 import co.jinear.core.model.request.task.TaskInitializeRequest;
+import co.jinear.core.model.request.task.TaskUpdateDescriptionRequest;
 import co.jinear.core.model.request.task.TaskUpdateRequest;
+import co.jinear.core.model.request.task.TaskUpdateTitleRequest;
+import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.TaskResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,6 +34,20 @@ public class TaskController {
     @ResponseStatus(HttpStatus.OK)
     public TaskResponse updateTask(@Valid @RequestBody TaskUpdateRequest taskUpdateRequest) {
         return taskUpdateManager.updateTask(taskUpdateRequest);
+    }
+
+    @PutMapping("/{taskId}/description")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateTaskDescription(@PathVariable("taskId") String taskId,
+                                              @Valid @RequestBody TaskUpdateDescriptionRequest taskUpdateDescriptionRequest) {
+        return taskUpdateManager.updateTaskDescription(taskId, taskUpdateDescriptionRequest);
+    }
+
+    @PutMapping("/{taskId}/title")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateTaskTitle(@PathVariable("taskId") String taskId,
+                                        @Valid @RequestBody TaskUpdateTitleRequest taskUpdateTitleRequest) {
+        return taskUpdateManager.updateTaskTitle(taskId, taskUpdateTitleRequest);
     }
 
     @GetMapping("/from-workspace/{workspaceName}/{teamTag}-{tagNo}")

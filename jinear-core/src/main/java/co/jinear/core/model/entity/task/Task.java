@@ -2,6 +2,7 @@ package co.jinear.core.model.entity.task;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
+import co.jinear.core.model.entity.richtext.RichText;
 import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.entity.team.TeamWorkflowStatus;
 import co.jinear.core.model.entity.topic.Topic;
@@ -62,8 +63,8 @@ public class Task extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "description")
-    private String description;
+    @OneToOne(mappedBy = "task")
+    private RichText description;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)

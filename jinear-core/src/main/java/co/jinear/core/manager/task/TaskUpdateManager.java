@@ -1,8 +1,13 @@
 package co.jinear.core.manager.task;
 
 import co.jinear.core.model.dto.task.TaskDto;
+import co.jinear.core.model.request.task.TaskUpdateDescriptionRequest;
 import co.jinear.core.model.request.task.TaskUpdateRequest;
+import co.jinear.core.model.request.task.TaskUpdateTitleRequest;
+import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.TaskResponse;
+import co.jinear.core.model.vo.task.TaskDescriptionUpdateVo;
+import co.jinear.core.model.vo.task.TaskTitleUpdateVo;
 import co.jinear.core.model.vo.task.TaskUpdateVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskRetrieveService;
@@ -33,6 +38,28 @@ public class TaskUpdateManager {
         TaskUpdateVo taskUpdateVo = modelMapper.map(taskUpdateRequest, TaskUpdateVo.class);
         TaskDto taskDto = taskUpdateService.updateTask(taskUpdateVo);
         return mapResponse(taskDto);
+    }
+
+    public BaseResponse updateTaskDescription(String taskId, TaskUpdateDescriptionRequest taskUpdateDescriptionRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        validateAccess(taskId, currentAccountId);
+        log.info("Update task description has started. accountId: {}", currentAccountId);
+        TaskDescriptionUpdateVo taskDescriptionUpdateVo = new TaskDescriptionUpdateVo();
+        taskDescriptionUpdateVo.setTaskId(taskId);
+        taskDescriptionUpdateVo.setDescription(taskUpdateDescriptionRequest.getDescription());
+        taskUpdateService.updateTaskDescription(taskDescriptionUpdateVo);
+        return new BaseResponse();
+    }
+
+    public BaseResponse updateTaskTitle(String taskId, TaskUpdateTitleRequest taskUpdateTitleRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        validateAccess(taskId, currentAccountId);
+        log.info("Update task description has started. accountId: {}", currentAccountId);
+        TaskTitleUpdateVo taskTitleUpdateVo = new TaskTitleUpdateVo();
+        taskTitleUpdateVo.setTaskId(taskId);
+        taskTitleUpdateVo.setTitle(taskUpdateTitleRequest.getTitle());
+        taskUpdateService.updateTaskTitle(taskTitleUpdateVo);
+        return new BaseResponse();
     }
 
     public TaskResponse updateTaskWorkflowStatus(String taskId, String workflowStatusId) {

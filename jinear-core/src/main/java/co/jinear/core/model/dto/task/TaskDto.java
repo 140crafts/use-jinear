@@ -2,6 +2,7 @@ package co.jinear.core.model.dto.task;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
@@ -29,7 +30,8 @@ public class TaskDto extends BaseDto {
     private Integer teamTagNo;
     private Integer topicTagNo;
     private String title;
-    private String description;
+    @Nullable
+    private RichTextDto description;
     @Nullable
     private Topic topic;
     @Nullable

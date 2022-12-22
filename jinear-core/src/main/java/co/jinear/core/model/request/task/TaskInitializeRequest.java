@@ -17,21 +17,28 @@ public class TaskInitializeRequest extends BaseRequest {
 
     @NotBlank
     private String workspaceId;
+
     @NotBlank
     private String teamId;
+
     @Nullable
     private String topicId;
+
     @Nullable
     private String assignedTo;
+
     @Nullable
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime assignedDate;
-    @Nullable
+
 //    @FutureOrPresent
+    @Nullable
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime dueDate;
+
     @NotBlank
     private String title;
+
     @Nullable
     private String description;
 }

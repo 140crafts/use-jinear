@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2022-12-12 08:56:30.
+// Generated using typescript-generator version 3.0.1157 on 2022-12-22 22:13:21.
 
 export interface BaseDto {
     createdDate: Date;
@@ -60,6 +60,14 @@ export interface MediaDto extends BaseDto {
     originalName: string;
 }
 
+export interface RichTextDto {
+    richTextId: string;
+    relatedObjectId: string;
+    value: string;
+    type: RichTextType;
+    sourceStack: RichTextSourceStack;
+}
+
 export interface TaskDto extends BaseDto {
     taskId: string;
     topicId: string;
@@ -72,7 +80,7 @@ export interface TaskDto extends BaseDto {
     teamTagNo: number;
     topicTagNo: number;
     title: string;
-    description: string;
+    description?: RichTextDto | null;
     topic?: Topic | null;
     owner?: PlainAccountProfileDto | null;
     assignedToAccount?: PlainAccountProfileDto | null;
@@ -250,7 +258,11 @@ export interface TaskRetrieveIntersectingRequest extends BaseRequest {
     timespanEnd: Date;
 }
 
-export interface TaskUpdateRequest {
+export interface TaskUpdateDescriptionRequest extends BaseRequest {
+    description?: string | null;
+}
+
+export interface TaskUpdateRequest extends BaseRequest {
     taskId: string;
     topicId: string;
     assignedTo?: string | null;
@@ -258,6 +270,10 @@ export interface TaskUpdateRequest {
     dueDate?: Date | null;
     title: string;
     description?: string | null;
+}
+
+export interface TaskUpdateTitleRequest extends BaseRequest {
+    title: string;
 }
 
 export interface InitializeTeamWorkflowStatusRequest extends BaseRequest {
@@ -412,6 +428,10 @@ export type FileType = "PROFILE_PIC";
 export type MediaOwnerType = "USER" | "COMMUNITY" | "WORKSPACE";
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
+
+export type RichTextSourceStack = "WYSIWYG";
+
+export type RichTextType = "TASK_DETAIL";
 
 export type TeamJoinMethodType = "SYNC_MEMBERS_WITH_WORKSPACE" | "ON_DEMAND" | "FROM_TEAM_ADMIN";
 
