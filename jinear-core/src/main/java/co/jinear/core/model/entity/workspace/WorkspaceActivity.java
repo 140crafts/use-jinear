@@ -25,13 +25,25 @@ public class WorkspaceActivity extends BaseEntity {
     @Column(name = "workspace_id")
     private String workspaceId;
 
-    @Column(name = "account_id")
-    private String accountId;
+    @Column(name = "team_id")
+    private String teamId;
 
-    @Column(name = "related_object_id")
-    private String relatedObjectId;
+    @Column(name = "task_id")
+    private String taskId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "activity_type")
     private WorkspaceActivityType type;
+
+    @Column(name = "performed_by")
+    private String performedBy;
+
+    @Column(name = "related_object_id")
+    private String relatedObjectId;
+
+    @Column(name = "old_state")
+    private String oldState;
+
+    @Column(name = "newState")
+    private String newState;
 }

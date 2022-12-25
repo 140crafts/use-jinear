@@ -7,13 +7,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-
 @Getter
 @Setter
 @ToString
 public class TeamInitializeVo {
 
+    private String initializedBy;
     private String workspaceId;
     private String name;
     private String tag;

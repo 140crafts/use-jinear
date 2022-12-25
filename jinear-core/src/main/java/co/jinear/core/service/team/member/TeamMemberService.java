@@ -5,14 +5,18 @@ import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
 import co.jinear.core.model.entity.team.TeamMember;
 import co.jinear.core.model.vo.team.member.TeamMemberAddVo;
+import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
 import co.jinear.core.repository.TeamMemberRepository;
 import co.jinear.core.service.team.TeamRetrieveService;
+import co.jinear.core.service.workspace.WorkspaceActivityService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberListingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Slf4j
@@ -33,7 +37,7 @@ public class TeamMemberService {
         return modelMapper.map(saved, TeamMemberDto.class);
     }
 
-    public void addAllFromWorkspace(String teamId) {
+    public List<TeamMemberDto> addAllFromWorkspace(String teamId) {
         log.info("Add all members from workspace has started for teamId: {}", teamId);
         String workspaceId = retrieveWorkspaceIdFromTeamId(teamId);
         List<WorkspaceMemberDto> workspaceMembers = workspaceMemberListingService.listAllWorkspaceMembers(workspaceId);
@@ -41,8 +45,12 @@ public class TeamMemberService {
                 .stream()
                 .map(workspaceMemberDto -> convertToTeamMember(teamId, workspaceMemberDto))
                 .toList();
-        List<TeamMember> saved = teamMemberRepository.saveAll(teamMembers);
+        List<TeamMemberDto> saved = teamMemberRepository.saveAll(teamMembers)
+                .stream()
+                .map(tm -> modelMapper.map(tm, TeamMemberDto.class))
+                .toList();
         log.info("Add all members from workspace has ended. [{}] members added to teamId: {}", saved.size(), teamId);
+        return saved;
     }
 
     private void assignWorkspaceId(TeamMemberAddVo teamMemberAddVo, TeamMember teamMember) {

@@ -256,4 +256,67 @@
         </createIndex>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace_activity">
+        <createTable tableName="workspace_activity">
+            <column name="workspace_activity_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_id" type="char(26)"/>
+            <column name="activity_type" type="varchar(255)"/>
+            <column name="performed_by" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_object_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="old_state" type="text"/>
+            <column name="new_state" type="text"/>
+        </createTable>
+
+        <createIndex indexName="ix_workspace_id" tableName="workspace_activity">
+            <column name="workspace_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_team_id" tableName="workspace_activity">
+            <column name="team_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_task_id" tableName="workspace_activity">
+            <column name="task_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_performed_by" tableName="workspace_activity">
+            <column name="performed_by"/>
+        </createIndex>
+
+        <createIndex indexName="ix_related_object_id" tableName="workspace_activity">
+            <column name="related_object_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-team-initialized_by">
+        <addColumn tableName="team">
+            <column name="initialized_by" type="char(26)" afterColumn="workspace_id" defaultValue="-">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-drop-default-value-from-team-initialized_by">
+        <dropDefaultValue columnDataType="char(26)"
+                          columnName="initialized_by"
+                          tableName="team"/>
+    </changeSet>
+
 </databaseChangeLog>

@@ -1,5 +1,6 @@
 package co.jinear.core.service.task;
 
+import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
@@ -7,7 +8,6 @@ import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.model.vo.richtext.UpdateRichTextVo;
 import co.jinear.core.model.vo.task.TaskDescriptionUpdateVo;
 import co.jinear.core.model.vo.task.TaskTitleUpdateVo;
-import co.jinear.core.model.vo.task.TaskUpdateVo;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.richtext.RichTextInitializeService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
@@ -29,15 +29,6 @@ public class TaskUpdateService {
     private final RichTextInitializeService richTextInitializeService;
     private final ModelMapper modelMapper;
 
-    public TaskDto updateTask(TaskUpdateVo taskUpdateVo) {
-        log.info("Update task has started. taskUpdateVo: {}", taskUpdateVo);
-        Task task = taskRetrieveService.retrieveEntity(taskUpdateVo.getTaskId());
-        updateValues(task, taskUpdateVo);
-        Task saved = taskRepository.save(task);
-        log.info("Update task has finished. taskId: {}", saved.getTaskId());
-        return modelMapper.map(saved, TaskDto.class);
-    }
-
     public TaskDto updateTaskTitle(TaskTitleUpdateVo taskTitleUpdateVo) {
         log.info("Update task title has started. taskTitleUpdateVo: {}", taskTitleUpdateVo);
         Task task = taskRetrieveService.retrieveEntity(taskTitleUpdateVo.getTaskId());
@@ -47,24 +38,27 @@ public class TaskUpdateService {
         return modelMapper.map(saved, TaskDto.class);
     }
 
-    public void updateTaskDescription(TaskDescriptionUpdateVo taskDescriptionUpdateVo) {
+    public TaskDto updateTaskDescription(TaskDescriptionUpdateVo taskDescriptionUpdateVo) {
         log.info("Update task description has started. taskDescriptionUpdateVo: {}", taskDescriptionUpdateVo);
-        Task task = taskRetrieveService.retrieveEntity(taskDescriptionUpdateVo.getTaskId());
-        Optional.of(task)
-                .map(Task::getDescription)
-                .ifPresentOrElse(richText -> {
+        TaskDto taskDto = taskRetrieveService.retrieve(taskDescriptionUpdateVo.getTaskId());
+        RichTextDto richTextDto = Optional.of(taskDto)
+                .map(TaskDto::getDescription)
+                .map(richText -> {
                     UpdateRichTextVo updateRichTextVo = new UpdateRichTextVo();
                     updateRichTextVo.setRichTextId(richText.getRichTextId());
                     updateRichTextVo.setValue(taskDescriptionUpdateVo.getDescription());
                     updateRichTextVo.setType(RichTextType.TASK_DETAIL);
-                    richTextInitializeService.updateRichTextBody(updateRichTextVo);
-                }, () -> {
+                    return richTextInitializeService.historicallyUpdateRichTextBody(updateRichTextVo);
+                })
+                .orElseGet(() -> {
                     InitializeRichTextVo initializeRichTextVo = new InitializeRichTextVo();
-                    initializeRichTextVo.setRelatedObjectId(task.getTaskId());
+                    initializeRichTextVo.setRelatedObjectId(taskDto.getTaskId());
                     initializeRichTextVo.setValue(taskDescriptionUpdateVo.getDescription());
                     initializeRichTextVo.setType(RichTextType.TASK_DETAIL);
-                    richTextInitializeService.initializeRichText(initializeRichTextVo);
+                    return richTextInitializeService.initializeRichText(initializeRichTextVo);
                 });
+        taskDto.setDescription(richTextDto);
+        return taskDto;
     }
 
     public TaskDto updateTaskWorkflow(String taskId, String workflowStatusId) {
@@ -75,13 +69,6 @@ public class TaskUpdateService {
         Task saved = taskRepository.save(task);
         log.info("Update task workflow status has finished. taskId: {}", saved.getTaskId());
         return modelMapper.map(saved, TaskDto.class);
-    }
-
-    private void updateValues(Task task, TaskUpdateVo taskUpdateVo) {
-        task.setTopicId(taskUpdateVo.getTopicId());
-        task.setAssignedDate(taskUpdateVo.getAssignedDate());
-        task.setDueDate(taskUpdateVo.getDueDate());
-        task.setTitle(taskUpdateVo.getTitle());
     }
 
     private void validateWorkflowExists(String workflowStatusId) {

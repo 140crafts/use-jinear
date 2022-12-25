@@ -2,6 +2,7 @@ package co.jinear.core.service.team;
 
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.enumtype.localestring.LocaleStringType;
@@ -12,7 +13,9 @@ import co.jinear.core.model.vo.team.TeamInitializeVo;
 import co.jinear.core.model.vo.team.workflow.InitializeTeamWorkflowStatusVo;
 import co.jinear.core.repository.TeamRepository;
 import co.jinear.core.service.mail.LocaleStringService;
+import co.jinear.core.service.team.member.AsyncTeamActivityService;
 import co.jinear.core.service.team.member.TeamMemberService;
+import co.jinear.core.service.team.member.TeamMemberSyncService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.system.NormalizeHelper;
@@ -38,6 +41,8 @@ public class TeamInitializeService {
     private final TeamRetrieveService teamRetrieveService;
     private final TeamWorkflowStatusService teamWorkflowStatusService;
     private final LocaleStringService localeStringService;
+    private final AsyncTeamActivityService asyncTeamActivityService;
+    private final TeamMemberSyncService teamMemberSyncService;
     private final ModelMapper modelMapper;
 
     @Transactional
@@ -76,8 +81,7 @@ public class TeamInitializeService {
 
     private void checkAndSyncMembersWithWorkspace(Team team) {
         if (TeamJoinMethodType.SYNC_MEMBERS_WITH_WORKSPACE.equals(team.getJoinMethod())) {
-            log.info("Sync members with workspace has started.");
-            teamMemberService.addAllFromWorkspace(team.getTeamId());
+            teamMemberSyncService.syncTeamMembersWithWorkspace(team.getTeamId(), team.getInitializedBy());
         }
     }
 
@@ -120,4 +124,6 @@ public class TeamInitializeService {
                 localeStringService.retrieveLocalString(LocaleStringType.TEAM_WORKFLOW_STATUS_CANCELLED, locale)));
         log.info("Initialize default team workflow statuses has finished for teamId: {}, locale: {}", teamId, locale);
     }
+
+
 }

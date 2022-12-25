@@ -27,6 +27,7 @@ public class TeamInitializeManager {
         workspaceValidator.validateHasAccess(currentAccountId, teamInitializeRequest.getWorkspaceId());
         log.info("Initialize team has started. currentAccountId: {}", currentAccountId);
         TeamInitializeVo teamInitializeVo = modelMapper.map(teamInitializeRequest, TeamInitializeVo.class);
+        teamInitializeVo.setInitializedBy(currentAccountId);
         TeamDto teamDto = teamInitializeService.initializeTeam(teamInitializeVo);
         log.info("Initialize team has finished.");
         return mapResponse(teamDto);

@@ -18,9 +18,14 @@ public class WorkspaceActivityService {
         log.info("Create workspace activity has started. workspaceActivityCreateVo: {}", workspaceActivityCreateVo);
         WorkspaceActivity workspaceActivity = new WorkspaceActivity();
         workspaceActivity.setWorkspaceId(workspaceActivityCreateVo.getWorkspaceId());
-        workspaceActivity.setAccountId(workspaceActivityCreateVo.getAccountId());
-        workspaceActivity.setRelatedObjectId(workspaceActivityCreateVo.getRelatedObjectId());
+        workspaceActivity.setTeamId(workspaceActivityCreateVo.getTeamId());
+        workspaceActivity.setTaskId(workspaceActivityCreateVo.getTaskId());
         workspaceActivity.setType(workspaceActivityCreateVo.getType());
+        workspaceActivity.setPerformedBy(workspaceActivityCreateVo.getPerformedBy());
+        workspaceActivity.setRelatedObjectId(workspaceActivityCreateVo.getRelatedObjectId());
+        workspaceActivity.setOldState(workspaceActivityCreateVo.getOldState());
+        workspaceActivity.setNewState(workspaceActivityCreateVo.getNewState());
         workspaceActivityRepository.save(workspaceActivity);
+        log.info("Create workspace activity has ended.");
     }
 }
