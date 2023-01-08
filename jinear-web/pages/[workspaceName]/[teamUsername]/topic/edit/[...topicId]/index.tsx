@@ -38,7 +38,7 @@ const EditTopicScreen: React.FC<EditTopicScreenProps> = ({}) => {
         />
       )}
       <div className="spacer-h-4" />
-      <h1>{t("topcEditScreenTitle")}</h1>
+      <h1>{t("topicEditScreenTitle")}</h1>
       {isTopicResponseLoading && (
         <div className={styles.loadingContainer}>
           <CircularProgress size={21} />

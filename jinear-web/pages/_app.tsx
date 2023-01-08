@@ -4,6 +4,10 @@ import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
 import LoginWith2FaMailModal from "@/components/modal/loginWith2FaMailModal/LoginWith2FaMailModal";
 import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
 import NotFoundModal from "@/components/modal/notFoundModal/NotFoundModal";
+import TaskAssigneeChangeModal from "@/components/modal/taskDetailModals/taskAssigneeChangeModal/TaskAssigneeChangeModal";
+import TaskDateChangeModal from "@/components/modal/taskDetailModals/taskDateChangeModal/TaskDateChangeModal";
+import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicChangeModal/TaskTopicChangeModal";
+import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal";
 import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
@@ -29,6 +33,10 @@ export function useThemeToggle() {
 
 const globalModals: any = (
   <>
+    <TaskAssigneeChangeModal />
+    <TaskDateChangeModal />
+    <TaskTopicChangeModal />
+    <WorkflowChangeStatusModal />
     <TeamOptionsModal />
     <NewTaskModal />
     <LoginWith2FaMailModal />

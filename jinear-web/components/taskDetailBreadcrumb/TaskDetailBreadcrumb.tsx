@@ -22,7 +22,7 @@ const TaskDetailBreadcrumb: React.FC<TaskDetailBreadcrumbProps> = ({
       />
       <BreadcrumbLink
         label={`${task.team?.tag}-${task.teamTagNo}` || ""}
-        url={`/${task.workspace?.username}/${task.team?.tag}-${task.teamTagNo}`}
+        url={`/${task.workspace?.username}/task/${task.team?.tag}-${task.teamTagNo}`}
       />
     </Breadcrumb>
   );

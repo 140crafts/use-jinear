@@ -32,7 +32,8 @@
     "**/*.ts",
     "**/*.tsx",
     "utils/debounce.js",
-    "utils/clipboard.js"
+    "utils/clipboard.js",
+    "utils/colorHelper.js"
   ],
   "exclude": ["node_modules"]
 }

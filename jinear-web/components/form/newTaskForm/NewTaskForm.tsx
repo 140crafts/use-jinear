@@ -66,7 +66,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId }) => {
         const tag = `${teamTag}-${teamTagNo}`;
         const workspaceUsername =
           initializeTaskResponse.data.workspace?.username;
-        const taskLink = `${workspaceUsername}/${tag}`;
+        const taskLink = `${workspaceUsername}/task/${tag}`;
         toast((t) => <TaskCreatedToast teamTaskNo={tag} taskLink={taskLink} />);
       } else {
         toast(t("genericSuccess"));
@@ -117,6 +117,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId }) => {
           labelClass={styles.label}
           inputClass={styles.textAreaInput}
           register={register}
+          setValue={setValue}
         />
 
         <div className={styles.dateInputContainer}>

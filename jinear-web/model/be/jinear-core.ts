@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2022-12-12 08:56:30.
+// Generated using typescript-generator version 3.0.1157 on 2023-01-05 17:47:29.
 
 export interface BaseDto {
   createdDate: Date;
@@ -60,6 +60,14 @@ export interface MediaDto extends BaseDto {
   originalName: string;
 }
 
+export interface RichTextDto {
+  richTextId: string;
+  relatedObjectId: string;
+  value: string;
+  type: RichTextType;
+  sourceStack: RichTextSourceStack;
+}
+
 export interface TaskDto extends BaseDto {
   taskId: string;
   topicId: string;
@@ -67,12 +75,13 @@ export interface TaskDto extends BaseDto {
   teamId: string;
   ownerId: string;
   workflowStatusId: string;
+  assignedTo: string;
   assignedDate: Date;
   dueDate: Date;
   teamTagNo: number;
   topicTagNo: number;
   title: string;
-  description: string;
+  description?: RichTextDto | null;
   topic?: Topic | null;
   owner?: PlainAccountProfileDto | null;
   assignedToAccount?: PlainAccountProfileDto | null;
@@ -143,6 +152,28 @@ export interface UsernameDto {
   username: string;
   relatedObjectId: string;
   relatedObjectType: UsernameRelatedObjectType;
+}
+
+export interface WorkspaceActivityDto extends BaseDto {
+  workspaceActivityId: string;
+  workspaceId: string;
+  teamId: string;
+  taskId: string;
+  type: WorkspaceActivityType;
+  performedBy: string;
+  relatedObjectId: string;
+  oldState?: string | null;
+  newState?: string | null;
+  performedByAccount: PlainAccountProfileDto;
+  relatedAccount?: PlainAccountProfileDto | null;
+  oldDescription?: RichTextDto | null;
+  newDescription?: RichTextDto | null;
+  oldWorkflowStatusDto?: TeamWorkflowStatusDto | null;
+  newWorkflowStatusDto?: TeamWorkflowStatusDto | null;
+  oldTopicDto?: TopicDto | null;
+  newTopicDto?: TopicDto | null;
+  oldAssignedToAccount?: PlainAccountProfileDto | null;
+  newAssignedToAccount?: PlainAccountProfileDto | null;
 }
 
 export interface WorkspaceDisplayPreferenceDto {
@@ -228,6 +259,14 @@ export interface LoginWithPasswordRequest extends BaseRequest {
   password: string;
 }
 
+export interface TaskAssigneeUpdateRequest {
+  assigneeId?: string | null;
+}
+
+export interface TaskDateUpdateRequest {
+  date?: Date | null;
+}
+
 export interface TaskInitializeRequest extends BaseRequest {
   workspaceId: string;
   teamId: string;
@@ -252,7 +291,11 @@ export interface TaskRetrieveIntersectingRequest extends BaseRequest {
   timespanEnd: Date;
 }
 
-export interface TaskUpdateRequest {
+export interface TaskUpdateDescriptionRequest extends BaseRequest {
+  description?: string | null;
+}
+
+export interface TaskUpdateRequest extends BaseRequest {
   taskId: string;
   topicId: string;
   assignedTo?: string | null;
@@ -260,6 +303,10 @@ export interface TaskUpdateRequest {
   dueDate?: Date | null;
   title: string;
   description?: string | null;
+}
+
+export interface TaskUpdateTitleRequest extends BaseRequest {
+  title: string;
 }
 
 export interface InitializeTeamWorkflowStatusRequest extends BaseRequest {
@@ -328,6 +375,10 @@ export interface AuthInitializeResponse extends BaseResponse {
 
 export interface AuthResponse extends BaseResponse {
   token: string;
+}
+
+export interface TaskActivityRetrieveResponse extends BaseResponse {
+  data: WorkspaceActivityDto[];
 }
 
 export interface TaskListingPaginatedResponse extends BaseResponse {
@@ -466,6 +517,10 @@ export type PassiveReason =
   | "UNFOLLOW"
   | "PAYMENT_ISSUE";
 
+export type RichTextSourceStack = "WYSIWYG";
+
+export type RichTextType = "TASK_DETAIL";
+
 export type TeamJoinMethodType =
   | "SYNC_MEMBERS_WITH_WORKSPACE"
   | "ON_DEMAND"
@@ -496,11 +551,19 @@ export type UsernameRelatedObjectType = "ACCOUNT" | "COMMUNITY" | "WORKSPACE";
 export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER";
 
 export type WorkspaceActivityType =
-  | "JOIN"
-  | "LEAVE"
-  | "KICKED_OUT"
-  | "REQUESTED_ACCESS"
-  | "PLACED_BET";
+  | "MEMBER_JOIN"
+  | "MEMBER_LEFT"
+  | "MEMBER_REMOVED"
+  | "MEMBER_REQUESTED_ACCESS"
+  | "TASK_INITIALIZED"
+  | "TASK_CLOSED"
+  | "EDIT_TASK_TITLE"
+  | "EDIT_TASK_DESC"
+  | "TASK_UPDATE_TOPIC"
+  | "TASK_UPDATE_WORKFLOW_STATUS"
+  | "TASK_CHANGE_ASSIGNEE"
+  | "TASK_CHANGE_ASSIGNED_DATE"
+  | "TASK_CHANGE_DUE_DATE";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 

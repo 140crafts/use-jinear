@@ -9,18 +9,9 @@ export const taskApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["team-task-list"],
+      invalidatesTags: ["team-task-list", "workplace-task-with-name-and-tag"],
     }),
-    updateTask: build.mutation<TaskResponse, TaskInitializeRequest>({
-      query: (body: TaskInitializeRequest) => ({
-        url: `v1/task`,
-        method: "PUT",
-        body,
-      }),
-      invalidatesTags: [
-        //TODO
-      ],
-    }),
+    //
     retrieveWithWorkspaceNameAndTeamTagNo: build.query<
       TaskResponse,
       {
@@ -42,14 +33,9 @@ export const taskApi = api.injectEndpoints({
 ///from-workspace/{workspaceName}/{teamTag}-{tagNo}
 export const {
   useInitializeTaskMutation,
-  useUpdateTaskMutation,
   useRetrieveWithWorkspaceNameAndTeamTagNoQuery,
 } = taskApi;
 
 export const {
-  endpoints: {
-    initializeTask,
-    updateTask,
-    retrieveWithWorkspaceNameAndTeamTagNo,
-  },
+  endpoints: { initializeTask, retrieveWithWorkspaceNameAndTeamTagNo },
 } = taskApi;

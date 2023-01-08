@@ -1,0 +1,6 @@
+.button {
+  display: flex;
+  flex-direction: row;
+  gap: 2ch;
+  justify-content: flex-start;
+}

@@ -39,6 +39,7 @@ const LinkButton: FC<LinkButtonProps> = ({ href, children, ...props }) => {
 interface BaseButtonProps {
   children?: React.ReactNode;
   className?: string;
+  tooltip?: string | null;
 }
 
 const BaseButton: FC<BaseButtonProps> = ({ children, ...props }) => {
@@ -65,6 +66,7 @@ interface ButtonProps {
   type?: string;
   form?: string;
   style?: any;
+  toolTip?: string | null;
 }
 
 const Button: React.FC<ButtonProps> = ({

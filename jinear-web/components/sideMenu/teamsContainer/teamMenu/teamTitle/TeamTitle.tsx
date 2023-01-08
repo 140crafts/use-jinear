@@ -5,7 +5,11 @@ import { popTeamOptionsModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { useRouter } from "next/router";
 import React from "react";
-import { IoChevronDownSharp, IoEllipsisHorizontal } from "react-icons/io5";
+import {
+  IoChevronDownSharp,
+  IoEllipsisHorizontal,
+  IoHome,
+} from "react-icons/io5";
 import styles from "./TeamTitle.module.css";
 interface TeamTitleProps {
   name: string;
@@ -26,8 +30,15 @@ const TeamTitle: React.FC<TeamTitleProps> = ({ name }) => {
     router.push(`/${preferredWorkspace?.username}/${name}/settings`);
   };
 
+  const routeTeamHome = () => {
+    router.push(`/${preferredWorkspace?.username}/${name}`);
+  };
+
   return (
     <div className={styles.teamNameContainer}>
+      <Button variant={ButtonVariants.hoverFilled2} onClick={routeTeamHome}>
+        <IoHome />
+      </Button>
       <Button
         variant={ButtonVariants.filled2}
         onClick={_popTeamOptionsModal}

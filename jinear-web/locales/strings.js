@@ -421,8 +421,8 @@ export default {
     tr: "Başlık",
   },
   newTaskModalTaskDescription: {
-    en: "Description",
-    tr: "Açıklama",
+    en: "Detail",
+    tr: "Detay",
   },
   newTaskModalTaskAssignedDate: {
     en: "Assigned date",
@@ -644,8 +644,216 @@ export default {
     en: "Edit Topic",
     tr: "Konuyu Düzenle",
   },
-  topcEditScreenTitle: {
+  topicEditScreenTitle: {
     en: "Edit Topic",
     tr: "Konuyu Düzenle",
+  },
+  taskDetalPageTaskDescription: {
+    en: "No description",
+    tr: "Açıklama girilmedi",
+  },
+  taskDescriptionEdit: {
+    en: "Edit",
+    tr: "Düzenle",
+  },
+  taskDescriptionSave: {
+    en: "Save",
+    tr: "Kaydet",
+  },
+  taskDescriptionSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor",
+  },
+  taskDescriptionCancel: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  taskTitleTooShort: {
+    en: "Please type more",
+    tr: "Daha uzun bir başlık girin",
+  },
+  taskDetailInfoActionBarAssignTopic: {
+    en: "Assign a topic",
+    tr: "Bir konu ata",
+  },
+  taskDetailAssignedDate: {
+    en: "Assigned date",
+    tr: "Planlanan tarih",
+  },
+  taskDetailAddAssignedDate: {
+    en: "Add Assigned date",
+    tr: "Planlanan Tarih Ata",
+  },
+  taskDetailDueDate: {
+    en: "Due date",
+    tr: "Son tarih",
+  },
+  taskDetailAddDueDate: {
+    en: "Add Due date",
+    tr: "Son Tarih Ata",
+  },
+  taskDetailCopyLinkTooltip: {
+    en: "Copy Link",
+    tr: "Linki Kopyala",
+  },
+  taskDetailAssignToAccount: {
+    en: "Unassigned",
+    tr: "Kimseye Atanmadı",
+  },
+  taskDetailAssignedTo: {
+    en: "Assigned to",
+    tr: "Atandı",
+  },
+  taskDetailChangeWorkflowStatusTooltip: {
+    en: "Change workflow status",
+    tr: "İş akış durumunu değiştir",
+  },
+  changeTaskWorkflowStatusModalTitle: {
+    en: "Change Workflow Status",
+    tr: "İş Akış Durumunu Değiştir",
+  },
+  taskDetailChangeTopicTooltip: {
+    en: "Change task topic",
+    tr: "İşin konusunu değiştir",
+  },
+  changeTaskTopicModalTitle: {
+    en: "Change Task Topic",
+    tr: "İşin Konusunu Değiştir",
+  },
+  changeTaskTopicModalFilterLabel: {
+    en: "Filter by topic name and assign new topic",
+    tr: "Konu adına göre filtrele ve yeni bir konu ata",
+  },
+  changeTaskTopicModalFilteredListEmpty: {
+    en: "No topic found",
+    tr: "Hiçbir konu bulunamadı",
+  },
+  changeTaskTopicModalRemoveTopic: {
+    en: "Remove Task Topic",
+    tr: "Görevin Konusunu Kaldır",
+  },
+  changeTaskDateTitle_assigned: {
+    en: "Change Assigned Date",
+    tr: "Planlanan Günü Değiştir",
+  },
+  changeTaskDateTitle_due: {
+    en: "Change Due Date",
+    tr: "Son Tarihi Değiştir",
+  },
+  changeTaskDateDateLabel_assigned: {
+    en: "Please select new assigned date",
+    tr: "Yeni bir planlanan gün seçin",
+  },
+  changeTaskDateDateLabel_due: {
+    en: "Please select new due date",
+    tr: "Yeni bir son gün seçin",
+  },
+  changeTaskDateDateLabelRemove: {
+    en: "Remove Date",
+    tr: "Seçimi Kaldır",
+  },
+  changeTaskDateDateLabelSave: {
+    en: "Save",
+    tr: "Kaydet",
+  },
+  changeTaskAssigneeModalTitle: {
+    en: "Change Assignee",
+    tr: "Atanan Kişiyi Değiştir",
+  },
+  changeTaskAssigneeModalFilterLabel: {
+    en: "Filter team members by name",
+    tr: "Takım üyelerini isme göre filtrele",
+  },
+  changeTaskAssigneeModalFilteredListEmpty: {
+    en: "No one found",
+    tr: "Hiç kimse bulunamadı",
+  },
+  changeTaskTopicModalRemoveTopic: {
+    en: "Remove Assignee",
+    tr: "Atamayı Kaldır",
+  },
+  taskWorkflowActivityInfoLabel_MEMBER_JOIN: {
+    en: "",
+    tr: "",
+  },
+  taskWorkflowActivityInfoLabel_MEMBER_LEFT: {
+    en: "",
+    tr: "",
+  },
+  taskWorkflowActivityInfoLabel_MEMBER_REMOVED: {
+    en: "",
+    tr: "",
+  },
+  taskWorkflowActivityInfoLabel_MEMBER_REQUESTED_ACCESS: {
+    en: "",
+    tr: "",
+  },
+  taskWorkflowActivityInfoLabel_TASK_INITIALIZED: {
+    en: "has created the task.",
+    tr: "görev oluşturdu.",
+  },
+  taskWorkflowActivityInfoLabel_TASK_CLOSED: {
+    en: "has closed the task.",
+    tr: "görevi sonlandırdı.",
+  },
+  taskWorkflowActivityInfoLabel_EDIT_TASK_TITLE: {
+    en: "has changed task title.",
+    tr: "başlığı değiştirdi.",
+  },
+  taskWorkflowActivityInfoLabel_EDIT_TASK_DESC: {
+    en: "has changed task decription.",
+    tr: "açıklamayı değiştirdi.",
+  },
+  taskWorkflowActivityInfoLabel_TASK_UPDATE_TOPIC: {
+    en: "has changed task topic.",
+    tr: "görev konusunu değiştirdi.",
+  },
+  taskWorkflowActivityInfoLabel_TASK_UPDATE_WORKFLOW_STATUS: {
+    en: "has changed workflow status.",
+    tr: "görev durumunu değiştirdi.",
+  },
+  taskWorkflowActivityInfoLabel_TASK_CHANGE_ASSIGNEE: {
+    en: "has changed assignee.",
+    tr: "atanan kişiyi değiştirdi.",
+  },
+  taskWorkflowActivityInfoLabel_TASK_CHANGE_ASSIGNED_DATE: {
+    en: "has changed assigned date.",
+    tr: "planlanan tarihi değiştirdi.",
+  },
+  taskWorkflowActivityInfoLabel_TASK_CHANGE_DUE_DATE: {
+    en: "has changed due date.",
+    tr: "son tarihi değiştirdi.",
+  },
+  taskWorkflowActivityInfoLabelDateInDays: {
+    en: "${num} days ago.",
+    tr: "${num} gün önce",
+  },
+  taskWorkflowActivityInfoLabelDateInHours: {
+    en: "${num} hours ago.",
+    tr: "${num} saat önce",
+  },
+  taskWorkflowActivityInfoLabelDateInMinutes: {
+    en: "${num} minutes ago.",
+    tr: "${num} dakika önce",
+  },
+  taskWorkflowActivityInfoLabelDateJustNow: {
+    en: "Just now",
+    tr: "Biraz önce",
+  },
+  taskWorkflowActivityInfoDescriptionShowMore: {
+    en: "Show Diff",
+    tr: "Farkı Göster",
+  },
+  taskWorkflowActivityInfoDescriptionShowLess: {
+    en: "Show Less",
+    tr: "Gizle",
+  },
+  taskWorkflowActivityInfoAssigneeNoone: {
+    en: "No one",
+    tr: "Hiç Kimse",
+  },
+  taskWorkflowActivityInfoAssigneeNoDate: {
+    en: "No Date",
+    tr: "Tarih Seçilmedi",
   },
 };

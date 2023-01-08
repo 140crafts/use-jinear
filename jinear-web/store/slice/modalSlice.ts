@@ -1,5 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ModalState, {
+  ChangeTaskAssigneeModalState,
+  ChangeTaskDateModalState,
+  ChangeTaskTopicModalState,
+  ChangeTaskWorkflowStatusModalState,
   LoginWith2FaMailModalState,
   NotFoundModalState,
 } from "model/app/store/modal/modalState";
@@ -30,6 +34,19 @@ const initialState = {
   newTopicModal: {
     visible: false,
   },
+  changeTaskWorkflowStatusModal: {
+    visible: false,
+  },
+  changeTaskTopicModal: {
+    visible: false,
+  },
+  changeTaskDateModal: {
+    visible: false,
+    dateType: "assigned",
+  },
+  changeTaskAssigneeModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -37,6 +54,10 @@ const initialState = {
   newTaskModal: null | ModalState;
   teamOptionsModal: null | ModalState;
   newTopicModal: null | ModalState;
+  changeTaskWorkflowStatusModal: null | ChangeTaskWorkflowStatusModalState;
+  changeTaskTopicModal: null | ChangeTaskTopicModalState;
+  changeTaskDateModal: null | ChangeTaskDateModalState;
+  changeTaskAssigneeModal: null | ChangeTaskAssigneeModalState;
 };
 
 const slice = createSlice({
@@ -77,21 +98,63 @@ const slice = createSlice({
     closeTeamOptionsModal: (state, action: PayloadAction<void>) => {
       state.teamOptionsModal = { visible: false };
     },
+    popChangeTaskWorkflowStatusModal: (
+      state,
+      action: PayloadAction<ChangeTaskWorkflowStatusModalState>
+    ) => {
+      state.changeTaskWorkflowStatusModal = {
+        visible: true,
+        task: action.payload.task,
+      };
+    },
+    closeChangeTaskWorkflowStatusModal: (
+      state,
+      action: PayloadAction<void>
+    ) => {
+      state.changeTaskWorkflowStatusModal = { visible: false };
+    },
+
+    popChangeTaskTopicModal: (
+      state,
+      action: PayloadAction<ChangeTaskTopicModalState>
+    ) => {
+      state.changeTaskTopicModal = { visible: true, task: action.payload.task };
+    },
+    closeChangeTaskTopicModal: (state, action: PayloadAction<void>) => {
+      state.changeTaskTopicModal = { visible: false };
+    },
+
+    popChangeTaskDateModal: (
+      state,
+      action: PayloadAction<ChangeTaskDateModalState>
+    ) => {
+      state.changeTaskDateModal = { ...action.payload, visible: true };
+    },
+    closeChangeTaskDateModal: (state, action: PayloadAction<void>) => {
+      state.changeTaskDateModal = initialState.changeTaskDateModal;
+    },
+
+    popChangeTaskAssigneeModal: (
+      state,
+      action: PayloadAction<ChangeTaskAssigneeModalState>
+    ) => {
+      state.changeTaskAssigneeModal = { ...action.payload, visible: true };
+    },
+    closeChangeTaskAssigneeModal: (state, action: PayloadAction<void>) => {
+      state.changeTaskAssigneeModal = initialState.changeTaskAssigneeModal;
+    },
 
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
     builder
       .addMatcher(accountApi.endpoints.me.matchPending, (state, action) => {
-        console.log("matchPending1");
         state.loadingModal = { visible: true };
       })
       .addMatcher(accountApi.endpoints.me.matchFulfilled, (state, action) => {
-        console.log("matchFulfilled2");
         state.loadingModal = { visible: false };
       })
       .addMatcher(accountApi.endpoints.me.matchRejected, (state, action) => {
-        console.log("matchRejected3");
         state.loadingModal = { visible: false };
       });
   },
@@ -106,6 +169,14 @@ export const {
   closeNewTaskModal,
   popTeamOptionsModal,
   closeTeamOptionsModal,
+  popChangeTaskWorkflowStatusModal,
+  closeChangeTaskWorkflowStatusModal,
+  popChangeTaskTopicModal,
+  closeChangeTaskTopicModal,
+  popChangeTaskDateModal,
+  closeChangeTaskDateModal,
+  popChangeTaskAssigneeModal,
+  closeChangeTaskAssigneeModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -131,3 +202,41 @@ export const selectNewTaskModalVisible = (state: RootState) =>
 
 export const selectTeamOptionsModalVisible = (state: RootState) =>
   state.modal.teamOptionsModal?.visible;
+
+export const selectChangeTaskWorkflowStatusModalVisible = (state: RootState) =>
+  state.modal.changeTaskWorkflowStatusModal?.visible;
+export const selectChangeTaskWorkflowStatusModalTask = (state: RootState) =>
+  state.modal.changeTaskWorkflowStatusModal?.task;
+
+export const selectChangeTaskTopicModalVisible = (state: RootState) =>
+  state.modal.changeTaskTopicModal?.visible;
+export const selectChangeTaskTopicModalTaskId = (state: RootState) =>
+  state.modal.changeTaskTopicModal?.task?.taskId;
+export const selectChangeTaskTopicModalTaskCurrentTopicId = (
+  state: RootState
+) => state.modal.changeTaskTopicModal?.task?.topicId;
+
+export const selectChangeTaskDateModalVisible = (state: RootState) =>
+  state.modal.changeTaskDateModal?.visible;
+export const selectChangeTaskDateModalTaskId = (state: RootState) =>
+  state.modal.changeTaskDateModal?.task?.taskId;
+export const selectChangeTaskDateModalDateType = (state: RootState) =>
+  state.modal.changeTaskDateModal?.dateType ||
+  initialState.changeTaskDateModal?.dateType ||
+  "assigned";
+export const selectChangeTaskDateModalTaskCurrentAssignedDate = (
+  state: RootState
+) => state.modal.changeTaskDateModal?.task?.assignedDate;
+export const selectChangeTaskDateModalTaskCurrentDueDate = (state: RootState) =>
+  state.modal.changeTaskDateModal?.task?.dueDate;
+
+export const selectChangeTaskAssigneeModalVisible = (state: RootState) =>
+  state.modal.changeTaskAssigneeModal?.visible;
+export const selectChangeTaskAssigneeModalTaskId = (state: RootState) =>
+  state.modal.changeTaskAssigneeModal?.task?.taskId;
+export const selectChangeTaskAssigneeModalTaskCurrentAssigneeId = (
+  state: RootState
+) => state.modal.changeTaskAssigneeModal?.task?.assignedTo;
+export const selectChangeTaskAssigneeModalTaskCurrentTeamId = (
+  state: RootState
+) => state.modal.changeTaskAssigneeModal?.task?.teamId;
