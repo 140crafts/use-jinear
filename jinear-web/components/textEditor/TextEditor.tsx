@@ -1,8 +1,9 @@
 import cn from "classnames";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import dynamic from "next/dynamic";
 import React, { useEffect, useState } from "react";
-import { Editor } from "react-draft-wysiwyg";
+import { EditorProps } from "react-draft-wysiwyg";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import "../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import styles from "./TextEditor.module.scss";
@@ -15,6 +16,11 @@ interface TextEditorProps {
   readOnly?: boolean;
   initialValue?: string;
 }
+
+const Editor = dynamic<EditorProps>(
+  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
+  { ssr: false }
+);
 
 const TextEditor: React.FC<TextEditorProps> = ({
   variant = "simple",
