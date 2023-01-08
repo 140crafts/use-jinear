@@ -1,4 +1,5 @@
 import { TeamWorkflowStatusDto } from "@/model/be/jinear-core";
+import cn from "classnames";
 import React from "react";
 import {
   IoCheckmarkCircle,
@@ -27,7 +28,9 @@ const ColumnTitle: React.FC<ColumnTitleProps> = ({ workflowStatusDto }) => {
         <div className={styles.iconContainer}>
           {groupIconMap?.[workflowStatusDto.workflowStateGroup]}
         </div>
-        <h2 className={styles.title}>{workflowStatusDto.name}</h2>
+        <h2 className={cn(styles.title, "single-line")}>
+          {workflowStatusDto.name}
+        </h2>
       </div>
       {/* <Line /> */}
     </div>

@@ -4,7 +4,7 @@ import { useTypedSelector } from "@/store/store";
 import cn from "classnames";
 import React from "react";
 import { IoChevronDownSharp } from "react-icons/io5";
-import TitlePicture from "../titlePicture/TitlePicture";
+// import TitlePicture from "../titlePicture/TitlePicture";
 import styles from "./CurrentWorkspaceHeader.module.scss";
 
 interface CurrentWorkspaceHeaderProps {}
@@ -15,11 +15,11 @@ const CurrentWorkspaceHeader: React.FC<CurrentWorkspaceHeaderProps> = ({}) => {
   );
   return (
     <div className={styles.container}>
-      <TitlePicture
+      {/* <TitlePicture
         initials={
           preferredWorkspace?.title?.substring(0, 2).toLocaleUpperCase() || ""
         }
-      />
+      /> */}
       <div className={cn(styles.title, "single-line")}>
         {preferredWorkspace?.title}
       </div>

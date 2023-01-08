@@ -250,6 +250,10 @@ export default {
     en: "Your confirmation mail might be timed out. Please request another confirmation mail.",
     tr: "Doğrulama mailiniz zaman aşımına uğramış olabilir. Lütfen yeni bir doğrumala maili isteyin",
   },
+  engageConfirmEmailContinueHomeButton: {
+    en: "Continue",
+    tr: "Devam Et",
+  },
   engageConfirmEmailRequestNewMail: {
     en: "Send New Confirmation Mail",
     tr: "Yeni Doğrulama Maili Gönder",
