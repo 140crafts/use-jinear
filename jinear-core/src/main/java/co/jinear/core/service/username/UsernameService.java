@@ -28,7 +28,7 @@ public class UsernameService {
         log.info("Initialize username has started. initializeUsernameVo: {}", initializeUsernameVo);
         validateRelatedObjectHasNoUsername(initializeUsernameVo);
         validateUsernameIsNotReserved(initializeUsernameVo);
-        String requestedHandle = NormalizeHelper.normalizeStrictly(initializeUsernameVo.getUsername());
+        String requestedHandle = NormalizeHelper.normalizeUsername(initializeUsernameVo.getUsername());
         Optional<Username> existing = usernameRepository.findByUsername(requestedHandle);
         if (existing.isPresent()) {
             return handleUsernameExists(initializeUsernameVo);
@@ -61,7 +61,7 @@ public class UsernameService {
     }
 
     private Username saveUsername(InitializeUsernameVo initializeUsernameVo) {
-        String requestedHandle = NormalizeHelper.normalizeStrictly(initializeUsernameVo.getUsername());
+        String requestedHandle = NormalizeHelper.normalizeUsername(initializeUsernameVo.getUsername());
         Username username = new Username();
         username.setRelatedObjectId(initializeUsernameVo.getRelatedObjectId());
         username.setRelatedObjectType(initializeUsernameVo.getRelatedObjectType());

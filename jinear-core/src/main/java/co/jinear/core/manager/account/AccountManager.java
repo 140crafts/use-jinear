@@ -2,6 +2,7 @@ package co.jinear.core.manager.account;
 
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
+import co.jinear.core.model.request.BaseRequest;
 import co.jinear.core.model.request.account.ConfirmEmailRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.account.AccountRetrieveResponse;
@@ -35,6 +36,13 @@ public class AccountManager {
 
     public BaseResponse confirmEmail(ConfirmEmailRequest confirmEmailRequest) {
         accountMailConfirmationService.confirmEmail(confirmEmailRequest.getUniqueToken());
+        return BaseResponse.builder().build();
+    }
+
+    public BaseResponse resendConfirmEmail(BaseRequest baseRequest) {
+        String accountId = sessionInfoService.currentAccountId();
+        log.info("Resend confirm email has started from accountId: {}", accountId);
+        accountMailConfirmationService.sendConfirmEmailMail(accountId, baseRequest.getLocale());
         return BaseResponse.builder().build();
     }
 

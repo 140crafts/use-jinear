@@ -30,7 +30,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AccountInitializeService {
-    private static final String PERSONAL_WORKSPACE_HANDLE_PREFIX = "wsp-";
+    private static final String PERSONAL_WORKSPACE_HANDLE_POSTFIX = "-personal";
 
     private final AccountRetrieveService accountRetrieveService;
     private final AccountRoleService accountRoleService;
@@ -110,7 +110,7 @@ public class AccountInitializeService {
         WorkspaceInitializeVo workspaceInitializeVo = new WorkspaceInitializeVo();
         workspaceInitializeVo.setOwnerId(account.getAccountId());
         workspaceInitializeVo.setTitle(username);
-        workspaceInitializeVo.setHandle(PERSONAL_WORKSPACE_HANDLE_PREFIX + username);
+        workspaceInitializeVo.setHandle(username + PERSONAL_WORKSPACE_HANDLE_POSTFIX);
         workspaceInitializeVo.setVisibility(WorkspaceVisibilityType.HIDDEN_LISTED);
         workspaceInitializeVo.setJoinType(WorkspaceJoinType.NEVER);
         workspaceInitializeVo.setAppendRandomStrOnCollision(Boolean.TRUE);

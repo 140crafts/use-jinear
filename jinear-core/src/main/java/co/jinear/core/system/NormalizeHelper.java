@@ -14,6 +14,7 @@ public class NormalizeHelper {
     public static final String MASK_CHAR = "*";
     private static final String ACCENT_REGEX = "\\p{M}";
     private static final String ALPHANUMERIC_REGEX = "[^A-Za-z0-9]";
+    private static final String USERNAME_REGEX = "[^A-Za-z0-9_-[.]]";
     private static final String ASCII_REGEX = "[^\\x00-\\x7F]";
 
     public static String removeAccent(String str) {
@@ -34,8 +35,18 @@ public class NormalizeHelper {
                 .toLowerCase(new Locale(LOCALE_EN));
     }
 
+    public static String removeUsernameNotAllowed(String str) {
+        return Normalizer.normalize(str.toLowerCase(), Normalizer.Form.NFD)
+                .replaceAll(USERNAME_REGEX, EMPTY_STRING)
+                .toLowerCase(new Locale(LOCALE_EN));
+    }
+
     public static String normalizeStrictly(String str) {
         return removeNonAlphaNumeric(removeNonAscii(removeAccent(str)));
+    }
+
+    public static String normalizeUsername(String str) {
+        return removeUsernameNotAllowed(removeNonAscii(removeAccent(str)));
     }
 
     public static String maskString(String str) {
@@ -51,9 +62,9 @@ public class NormalizeHelper {
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException {
-        String zort = "@012345";
+        String zort = "cagdas_123-qwe+@#/çağ]das.tunca";
         System.out.println(maskBetweenChars(zort, 2, 4));
         System.out.println(maskBetweenChars(zort, 0, zort.length()));
-        System.out.println(normalizeStrictly(zort));
+        System.out.println(normalizeUsername(zort));
     }
 }
