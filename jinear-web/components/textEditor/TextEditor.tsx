@@ -1,7 +1,6 @@
 import cn from "classnames";
 import { ContentState, convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import htmlToDraft from "html-to-draftjs";
 import React, { useEffect, useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
@@ -27,6 +26,10 @@ const TextEditor: React.FC<TextEditorProps> = ({
   initialValue,
 }) => {
   const [editorState, setEditorState] = useState<EditorState>();
+  let htmlToDraft: any = null;
+  if (typeof window === "object") {
+    htmlToDraft = require("html-to-draftjs").default;
+  }
 
   useEffect(() => {
     if (initialValue) {
