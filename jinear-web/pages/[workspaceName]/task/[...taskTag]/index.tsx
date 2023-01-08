@@ -1,7 +1,8 @@
-import TaskDescription from "@/components/taskDetail/taskDescription/TaskDescription";
-import TaskOwnerInfo from "@/components/taskDetail/taskOwnerInfo/TaskOwnerInfo";
+import Line from "@/components/line/Line";
+import TaskActivityList from "@/components/taskDetail/taskActivityList/TaskActivityList";
+import TaskBody from "@/components/taskDetail/taskBody/TaskBody";
+import TaskInfo from "@/components/taskDetail/taskInfo/TaskInfo";
 import TaskPageHeader from "@/components/taskDetail/taskPageHeader/TaskPageHeader";
-import TaskTitle from "@/components/taskDetail/taskTitle/TaskTitle";
 import TaskDetailBreadcrumb from "@/components/taskDetailBreadcrumb/TaskDetailBreadcrumb";
 import { useRetrieveWithWorkspaceNameAndTeamTagNoQuery } from "@/store/api/taskApi";
 import {
@@ -16,7 +17,7 @@ import { useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
-import styles from "./index.module.css";
+import styles from "./index.module.scss";
 
 interface TaskDetailPageProps {}
 
@@ -72,16 +73,21 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
         </div>
       )}
       {isTaskResponseSuccess && (
-        <div className={styles.contentContainer}>
+        <>
           <TaskPageHeader taskTag={taskTag} title={taskResponse.data.title} />
-          <TaskDetailBreadcrumb task={taskResponse.data} />
-          <TaskTitle title={taskResponse.data.title} />
-          <TaskDescription description={taskResponse.data.description} />
-          <TaskOwnerInfo
-            owner={taskResponse.data.owner}
-            createdDate={taskResponse.data.createdDate}
-          />
-        </div>
+          <div className={styles.contentContainer}>
+            <TaskDetailBreadcrumb task={taskResponse.data} />
+            <div className={styles.taskLayout}>
+              <TaskBody className={styles.taskBody} task={taskResponse.data} />
+              <Line />
+              <TaskInfo className={styles.taskInfo} task={taskResponse.data} />
+              <Line />
+              {taskResponse.data.taskId && (
+                <TaskActivityList taskId={taskResponse.data.taskId} />
+              )}
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

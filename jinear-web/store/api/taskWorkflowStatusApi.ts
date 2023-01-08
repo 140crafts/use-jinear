@@ -11,7 +11,11 @@ export const taskWorkflowStatusApi = api.injectEndpoints({
         url: `v1/task/workflow-status/${body.taskId}/${body.workflowStatusId}`,
         method: "PUT",
       }),
-      invalidatesTags: ["team-task-list"],
+      invalidatesTags: (_result, _err, req) => [
+        { type: "team-task-list" },
+        { type: "workplace-task-with-name-and-tag" },
+        { type: "retrieve-task-activity", id: req.taskId },
+      ],
     }),
     //
   }),

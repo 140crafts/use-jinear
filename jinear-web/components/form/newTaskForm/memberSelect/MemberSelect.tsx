@@ -67,7 +67,7 @@ const MemberSelect: React.FC<MemberSelectProps> = ({
       <Button
         className={styles.assignSelfButton}
         heightVariant={ButtonHeight.mid}
-        variant={ButtonVariants.default}
+        variant={ButtonVariants.filled}
         onClick={assignTaskToCurrentAccount}
       >
         {t("newTaskModalAssignToYourself")}

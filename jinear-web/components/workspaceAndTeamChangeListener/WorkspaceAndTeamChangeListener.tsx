@@ -27,10 +27,26 @@ const WorkspaceAndTeamChangeListener: React.FC<
   );
   const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
-  const [updatePreferredWorkspaceWithUsername] =
-    useUpdatePreferredWorkspaceWithUsernameMutation();
-  const [updatePreferredTeamWithUsername] =
-    useUpdatePreferredTeamWithUsernameMutation();
+  const [
+    updatePreferredWorkspaceWithUsername,
+    { isError: isTeamUpdateError, status: teamUpdateStatus },
+  ] = useUpdatePreferredWorkspaceWithUsernameMutation();
+  const [
+    updatePreferredTeamWithUsername,
+    { isError: isWorkspaceUpdateError, status: workspaceUpdateStatus },
+  ] = useUpdatePreferredTeamWithUsernameMutation();
+
+  useEffect(() => {
+    if (isWorkspaceUpdateError || isTeamUpdateError) {
+      logger.log({ teamUpdateStatus, workspaceUpdateStatus });
+      router.replace("/");
+    }
+  }, [
+    isTeamUpdateError,
+    isWorkspaceUpdateError,
+    teamUpdateStatus,
+    workspaceUpdateStatus,
+  ]);
 
   useEffect(() => {
     if (

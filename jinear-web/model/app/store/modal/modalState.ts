@@ -1,3 +1,5 @@
+import { TaskDto } from "@/model/be/jinear-core";
+
 export default interface ModalState {
   visible: boolean;
 }
@@ -11,4 +13,18 @@ export interface NotFoundModalState extends ModalState {
   imgAlt?: string;
   title?: string;
   label?: string;
+}
+
+export interface ChangeTaskWorkflowStatusModalState extends ModalState {
+  task?: TaskDto;
+}
+export interface ChangeTaskTopicModalState extends ModalState {
+  task?: TaskDto;
+}
+export interface ChangeTaskDateModalState extends ModalState {
+  task?: TaskDto;
+  dateType: "assigned" | "due";
+}
+export interface ChangeTaskAssigneeModalState extends ModalState {
+  task?: TaskDto;
 }

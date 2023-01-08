@@ -1,28 +1,37 @@
+import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 import { TaskInitializeRequest } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
+import dynamic from "next/dynamic";
 import React from "react";
-import { UseFormRegister } from "react-hook-form";
+import { UseFormRegister, UseFormSetValue } from "react-hook-form";
+
+const TextEditor = dynamic(import("@/components/textEditor/TextEditor"), {
+  ssr: false,
+});
 
 interface DescriptionInputProps {
   register: UseFormRegister<TaskInitializeRequest>;
+  setValue: UseFormSetValue<TaskInitializeRequest>;
   labelClass: string;
   inputClass: string;
 }
 
 const DescriptionInput: React.FC<DescriptionInputProps> = ({
   register,
+  setValue,
   labelClass,
-  inputClass,
 }) => {
   const { t } = useTranslation();
   return (
     <label className={labelClass} htmlFor={"new-task-description"}>
       {t("newTaskModalTaskDescription")}
-      <textarea
-        id={"new-task-description"}
-        className={inputClass}
-        {...register("description")}
-      />
+      <PureClientOnly>
+        <TextEditor
+          htmlInputId={"description"}
+          register={register}
+          formSetValue={setValue}
+        />
+      </PureClientOnly>
     </label>
   );
 };

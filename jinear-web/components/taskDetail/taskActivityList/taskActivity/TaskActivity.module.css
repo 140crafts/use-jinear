@@ -1,0 +1,54 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.75ch;
+  width: 100%;
+
+  /* border-bottom-style: solid;
+  border-bottom-width: "thin";
+  border-bottom-color: var(--c-primary-shade-0-op05); */
+  /* padding-bottom: 0.5rem; */
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1ch;
+  max-height: 2.2rem;
+}
+
+.icon {
+  color: var(--c-secondary-shade-1);
+  /* background-color: red; */
+  margin-top: 3px;
+}
+
+.labelContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75ch;
+  font-size: 0.8rem;
+}
+
+.label {
+  color: var(--c-secondary-shade-0-op05);
+}
+
+.dateDiff {
+  color: var(--c-secondary-shade-0-op05);
+  cursor: default;
+}
+
+.diffContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 1ch;
+  margin-left: 1.7rem;
+}

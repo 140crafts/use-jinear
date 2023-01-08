@@ -11,7 +11,7 @@
   flex-direction: column;
   gap: 1.25rem;
   overflow: visible;
-  z-index: 1;
+  z-index: 3;
   position: relative;
   padding: 1.15rem;
   padding-top: 0;
@@ -57,7 +57,7 @@
   border-top-width: 1px;
   border-top-style: solid;
   padding: 1rem 1.15rem;
-  z-index: 1;
+  z-index: 3;
 }
 
 .footerButton {

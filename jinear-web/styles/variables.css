@@ -86,6 +86,8 @@
   --backdrop-filter-blur: saturate(80%) blur(2.5px);
   /*  */
   --line-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg width='480' height='42' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-opacity='.1' stroke='%23000' d='M0 41.5h480'/%3E%3C/svg%3E");
+  /* text-editor */
+  --toolbar-icon-filter: unset;
 }
 
 .dark:root {
@@ -115,4 +117,6 @@
     0px 1px 3px 0px rgba(253, 255, 252, 0.012);
   --menu-workplace-title-color: #ff5270;
   --line-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg width='480' height='42' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-opacity='.1' stroke='%23FFF' d='M0 41.5h480'/%3E%3C/svg%3E");
+  /* text-editor */
+  --toolbar-icon-filter: invert(100%);
 }

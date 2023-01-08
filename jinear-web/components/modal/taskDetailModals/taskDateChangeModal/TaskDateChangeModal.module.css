@@ -1,0 +1,26 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.removeContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0.25rem 0 1rem 0;
+}
+
+.unassignButton {
+  color: var(--c-link-color);
+}
+.unassignButton:hover {
+  color: var(--c-link-color);
+  background-color: unset;
+}
