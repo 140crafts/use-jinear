@@ -391,7 +391,7 @@ export default {
     // tr: "Belirsizler",
     // tr: "Birikenler",
     // tr: "Yığın",
-    tr: "Bekleyenler",
+    tr: "Geri Planda",
   },
   sideMenuTeamTaskList: {
     en: "Tasks",
