@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2022-12-22 22:13:21.
+// Generated using typescript-generator version 3.0.1157 on 2023-01-05 17:47:29.
 
 export interface BaseDto {
     createdDate: Date;
@@ -75,6 +75,7 @@ export interface TaskDto extends BaseDto {
     teamId: string;
     ownerId: string;
     workflowStatusId: string;
+    assignedTo: string;
     assignedDate: Date;
     dueDate: Date;
     teamTagNo: number;
@@ -149,6 +150,28 @@ export interface UsernameDto {
     username: string;
     relatedObjectId: string;
     relatedObjectType: UsernameRelatedObjectType;
+}
+
+export interface WorkspaceActivityDto extends BaseDto {
+    workspaceActivityId: string;
+    workspaceId: string;
+    teamId: string;
+    taskId: string;
+    type: WorkspaceActivityType;
+    performedBy: string;
+    relatedObjectId: string;
+    oldState?: string | null;
+    newState?: string | null;
+    performedByAccount: PlainAccountProfileDto;
+    relatedAccount?: PlainAccountProfileDto | null;
+    oldDescription?: RichTextDto | null;
+    newDescription?: RichTextDto | null;
+    oldWorkflowStatusDto?: TeamWorkflowStatusDto | null;
+    newWorkflowStatusDto?: TeamWorkflowStatusDto | null;
+    oldTopicDto?: TopicDto | null;
+    newTopicDto?: TopicDto | null;
+    oldAssignedToAccount?: PlainAccountProfileDto | null;
+    newAssignedToAccount?: PlainAccountProfileDto | null;
 }
 
 export interface WorkspaceDisplayPreferenceDto {
@@ -232,6 +255,14 @@ export interface AuthInitializeRequest extends BaseRequest {
 export interface LoginWithPasswordRequest extends BaseRequest {
     email: string;
     password: string;
+}
+
+export interface TaskAssigneeUpdateRequest {
+    assigneeId?: string | null;
+}
+
+export interface TaskDateUpdateRequest {
+    date?: Date | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -345,6 +376,10 @@ export interface AuthResponse extends BaseResponse {
     token: string;
 }
 
+export interface TaskActivityRetrieveResponse extends BaseResponse {
+    data: WorkspaceActivityDto[];
+}
+
 export interface TaskListingPaginatedResponse extends BaseResponse {
     data: PageDto<TaskDto>;
 }
@@ -447,7 +482,7 @@ export type UsernameRelatedObjectType = "ACCOUNT" | "COMMUNITY" | "WORKSPACE";
 
 export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER";
 
-export type WorkspaceActivityType = "JOIN" | "LEAVE" | "KICKED_OUT" | "REQUESTED_ACCESS" | "PLACED_BET";
+export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 

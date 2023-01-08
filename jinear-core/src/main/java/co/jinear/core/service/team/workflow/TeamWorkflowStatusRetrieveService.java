@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -31,9 +32,14 @@ public class TeamWorkflowStatusRetrieveService {
 
     public TeamWorkflowStatusDto retrieve(String teamWorkflowStatusId) {
         log.info("Retrieve team workflow status has started. teamWorkflowStatusId: {}", teamWorkflowStatusId);
-        return teamWorkflowStatusRepository.findByTeamWorkflowStatusIdAndPassiveIdIsNull(teamWorkflowStatusId)
-                .map(teamWorkflowStatus -> modelMapper.map(teamWorkflowStatus, TeamWorkflowStatusDto.class))
+        return retrieveOptional(teamWorkflowStatusId)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public Optional<TeamWorkflowStatusDto> retrieveOptional(String teamWorkflowStatusId) {
+        log.info("Retrieve team workflow status has started. teamWorkflowStatusId: {}", teamWorkflowStatusId);
+        return teamWorkflowStatusRepository.findByTeamWorkflowStatusIdAndPassiveIdIsNull(teamWorkflowStatusId)
+                .map(teamWorkflowStatus -> modelMapper.map(teamWorkflowStatus, TeamWorkflowStatusDto.class));
     }
 
     public List<TeamWorkflowStatusDto> retrieveAll(String teamId) {

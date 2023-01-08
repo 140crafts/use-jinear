@@ -1,4 +1,4 @@
-package co.jinear.core.service.workspace;
+package co.jinear.core.service.workspace.activity;
 
 import co.jinear.core.model.entity.workspace.WorkspaceActivity;
 import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;

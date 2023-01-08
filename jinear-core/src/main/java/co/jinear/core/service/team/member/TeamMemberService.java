@@ -5,18 +5,14 @@ import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
 import co.jinear.core.model.entity.team.TeamMember;
 import co.jinear.core.model.vo.team.member.TeamMemberAddVo;
-import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
 import co.jinear.core.repository.TeamMemberRepository;
 import co.jinear.core.service.team.TeamRetrieveService;
-import co.jinear.core.service.workspace.WorkspaceActivityService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberListingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Slf4j

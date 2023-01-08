@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.time.ZonedDateTime;
@@ -62,9 +63,6 @@ public class Task extends BaseEntity {
 
     @Column(name = "title")
     private String title;
-
-    @OneToOne(mappedBy = "task")
-    private RichText description;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)

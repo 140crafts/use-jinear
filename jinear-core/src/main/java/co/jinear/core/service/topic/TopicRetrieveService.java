@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,10 +30,13 @@ public class TopicRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public TopicDto retrieve(String topicId) {
+    public Optional<TopicDto> retrieveOptional(String topicId) {
         return topicRepository.findByTopicIdAndPassiveIdIsNull(topicId)
-                .map(topic -> modelMapper.map(topic, TopicDto.class))
-                .orElseThrow(NotFoundException::new);
+                .map(topic -> modelMapper.map(topic, TopicDto.class));
+    }
+
+    public TopicDto retrieve(String topicId) {
+        return retrieveOptional(topicId).orElseThrow(NotFoundException::new);
     }
 
     public Page<TopicDto> retrieveTeamTopics(String teamId, int page) {

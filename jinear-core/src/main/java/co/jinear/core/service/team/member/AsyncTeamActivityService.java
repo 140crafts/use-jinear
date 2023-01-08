@@ -2,7 +2,7 @@ package co.jinear.core.service.team.member;
 
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
-import co.jinear.core.service.workspace.WorkspaceActivityService;
+import co.jinear.core.service.workspace.activity.WorkspaceActivityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;

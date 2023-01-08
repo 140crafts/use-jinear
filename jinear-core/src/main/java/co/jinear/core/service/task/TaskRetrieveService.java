@@ -3,7 +3,9 @@ package co.jinear.core.service.task;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.entity.task.Task;
+import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.repository.TaskRepository;
+import co.jinear.core.service.richtext.RichTextRetrieveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class TaskRetrieveService {
 
     private final TaskRepository taskRepository;
+    private final RichTextRetrieveService richTextRetrieveService;
     private final ModelMapper modelMapper;
 
     public Task retrieveEntity(String taskId) {
@@ -25,12 +28,14 @@ public class TaskRetrieveService {
     public TaskDto retrieve(String taskId) {
         return taskRepository.findByTaskIdAndPassiveIdIsNull(taskId)
                 .map(task -> modelMapper.map(task, TaskDto.class))
+                .map(this::fillRichTextDto)
                 .orElseThrow(NotFoundException::new);
     }
 
     public TaskDto retrieve(String workspaceId, String teamId, Integer teamTagNo) {
         return taskRepository.findByWorkspaceIdAndTeamIdAndTeamTagNoAndPassiveIdIsNull(workspaceId, teamId, teamTagNo)
                 .map(task -> modelMapper.map(task, TaskDto.class))
+                .map(this::fillRichTextDto)
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -46,5 +51,12 @@ public class TaskRetrieveService {
         Long count = taskRepository.countAllByTeamId(teamId);
         log.info("Found [{}] tasks with teamId: {}", count, teamId);
         return count;
+    }
+
+    private TaskDto fillRichTextDto(TaskDto taskDto) {
+        log.info("Retrieve rich text dto has started.");
+        richTextRetrieveService.retrieveByRelatedObject(taskDto.getTaskId(), RichTextType.TASK_DETAIL)
+                .ifPresent(taskDto::setDescription);
+        return taskDto;
     }
 }

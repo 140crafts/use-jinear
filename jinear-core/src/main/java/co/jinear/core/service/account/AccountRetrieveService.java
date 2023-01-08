@@ -2,6 +2,7 @@ package co.jinear.core.service.account;
 
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.account.AccountDto;
+import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.repository.AccountRepository;
 import co.jinear.core.service.media.MediaRetrieveService;
@@ -57,6 +58,17 @@ public class AccountRetrieveService {
         setProfilePicture(accountId, accountDto);
         setPreferredWorkspaceId(accountId, accountDto);
         return accountDto;
+    }
+
+    public PlainAccountProfileDto retrievePlainAccountProfile(String accountId) {
+        log.info("Retrieve account with plain profile has started. accountId: {}", accountId);
+        Optional<AccountDto> accountDtoOptional = retrieveOptional(accountId);
+        if (accountDtoOptional.isPresent()) {
+            AccountDto accountDto = accountDtoOptional.get();
+            setProfilePicture(accountId, accountDto);
+            return modelMapper.map(accountDto, PlainAccountProfileDto.class);
+        }
+        return null;
     }
 
     public Boolean exist(String accountId) {

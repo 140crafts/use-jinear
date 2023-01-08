@@ -1,7 +1,6 @@
 package co.jinear.core.service.task;
 
 import co.jinear.core.model.dto.task.TaskDto;
-import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
@@ -14,7 +13,7 @@ import co.jinear.core.service.richtext.RichTextInitializeService;
 import co.jinear.core.service.team.TeamLockService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
 import co.jinear.core.service.topic.TopicSequenceService;
-import co.jinear.core.service.workspace.WorkspaceActivityService;
+import co.jinear.core.service.workspace.activity.WorkspaceActivityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -24,7 +23,6 @@ import javax.transaction.Transactional;
 import java.util.Objects;
 import java.util.Optional;
 
-import static co.jinear.core.model.enumtype.workspace.WorkspaceActivityType.MEMBER_JOIN;
 import static co.jinear.core.model.enumtype.workspace.WorkspaceActivityType.TASK_INITIALIZED;
 
 @Slf4j

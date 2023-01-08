@@ -4,18 +4,21 @@ import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
+import co.jinear.core.model.request.task.TaskDateUpdateRequest;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.model.vo.richtext.UpdateRichTextVo;
-import co.jinear.core.model.vo.task.TaskDescriptionUpdateVo;
-import co.jinear.core.model.vo.task.TaskTitleUpdateVo;
+import co.jinear.core.model.vo.task.*;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.richtext.RichTextInitializeService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
+import co.jinear.core.service.topic.TopicSequenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -27,6 +30,8 @@ public class TaskUpdateService {
     private final TaskRepository taskRepository;
     private final TeamWorkflowStatusRetrieveService workflowStatusRetrieveService;
     private final RichTextInitializeService richTextInitializeService;
+    private final TaskLockService taskLockService;
+    private final TopicSequenceService incrementTopicSequence;
     private final ModelMapper modelMapper;
 
     public TaskDto updateTaskTitle(TaskTitleUpdateVo taskTitleUpdateVo) {
@@ -41,22 +46,19 @@ public class TaskUpdateService {
     public TaskDto updateTaskDescription(TaskDescriptionUpdateVo taskDescriptionUpdateVo) {
         log.info("Update task description has started. taskDescriptionUpdateVo: {}", taskDescriptionUpdateVo);
         TaskDto taskDto = taskRetrieveService.retrieve(taskDescriptionUpdateVo.getTaskId());
-        RichTextDto richTextDto = Optional.of(taskDto)
-                .map(TaskDto::getDescription)
-                .map(richText -> {
-                    UpdateRichTextVo updateRichTextVo = new UpdateRichTextVo();
-                    updateRichTextVo.setRichTextId(richText.getRichTextId());
-                    updateRichTextVo.setValue(taskDescriptionUpdateVo.getDescription());
-                    updateRichTextVo.setType(RichTextType.TASK_DETAIL);
-                    return richTextInitializeService.historicallyUpdateRichTextBody(updateRichTextVo);
-                })
-                .orElseGet(() -> {
-                    InitializeRichTextVo initializeRichTextVo = new InitializeRichTextVo();
-                    initializeRichTextVo.setRelatedObjectId(taskDto.getTaskId());
-                    initializeRichTextVo.setValue(taskDescriptionUpdateVo.getDescription());
-                    initializeRichTextVo.setType(RichTextType.TASK_DETAIL);
-                    return richTextInitializeService.initializeRichText(initializeRichTextVo);
-                });
+        RichTextDto richTextDto = Optional.of(taskDto).map(TaskDto::getDescription).map(richText -> {
+            UpdateRichTextVo updateRichTextVo = new UpdateRichTextVo();
+            updateRichTextVo.setRichTextId(richText.getRichTextId());
+            updateRichTextVo.setValue(taskDescriptionUpdateVo.getDescription());
+            updateRichTextVo.setType(RichTextType.TASK_DETAIL);
+            return richTextInitializeService.historicallyUpdateRichTextBody(updateRichTextVo);
+        }).orElseGet(() -> {
+            InitializeRichTextVo initializeRichTextVo = new InitializeRichTextVo();
+            initializeRichTextVo.setRelatedObjectId(taskDto.getTaskId());
+            initializeRichTextVo.setValue(taskDescriptionUpdateVo.getDescription());
+            initializeRichTextVo.setType(RichTextType.TASK_DETAIL);
+            return richTextInitializeService.initializeRichText(initializeRichTextVo);
+        });
         taskDto.setDescription(richTextDto);
         return taskDto;
     }
@@ -71,7 +73,65 @@ public class TaskUpdateService {
         return modelMapper.map(saved, TaskDto.class);
     }
 
+    @Transactional
+    public TaskDto updateTaskTopic(String taskId, String topicId) {
+        log.info("Update task topic has started for taskId: {}, topicId: {}", taskId, topicId);
+        Task task = taskRetrieveService.retrieveEntity(taskId);
+        lockTaskTopicForUpdate(topicId);
+        try {
+            task.setTopicId(topicId);
+            assignTopicTaskNo(task);
+            Task saved = taskRepository.saveAndFlush(task);
+            return modelMapper.map(saved, TaskDto.class);
+        } finally {
+            unlockTaskTopicForUpdate(topicId);
+        }
+    }
+
+    public TaskDto updateTaskAssignedDate(TaskDatesUpdateVo taskDatesUpdateVo) {
+        log.info("Update task assigned date has started. taskDatesUpdateVo: {}", taskDatesUpdateVo);
+        Task task = taskRetrieveService.retrieveEntity(taskDatesUpdateVo.getTaskId());
+        task.setAssignedDate(taskDatesUpdateVo.getDate());
+        Task saved = taskRepository.save(task);
+        log.info("Update task assigned date has finished");
+        return modelMapper.map(saved, TaskDto.class);
+    }
+
+    public TaskDto updateTaskDueDate(TaskDatesUpdateVo taskDatesUpdateVo) {
+        log.info("Update task due date has started. taskDatesUpdateVo: {}", taskDatesUpdateVo);
+        Task task = taskRetrieveService.retrieveEntity(taskDatesUpdateVo.getTaskId());
+        task.setDueDate(taskDatesUpdateVo.getDate());
+        Task saved = taskRepository.save(task);
+        log.info("Update task due date has finished");
+        return modelMapper.map(saved, TaskDto.class);
+    }
+
+    public TaskDto updateTaskAssignee(TaskAssigneeUpdateVo taskAssigneeUpdateVo) {
+        log.info("Update task assignee has started. taskDatesUpdateVo: {}", taskAssigneeUpdateVo);
+        Task task = taskRetrieveService.retrieveEntity(taskAssigneeUpdateVo.getTaskId());
+        task.setAssignedTo(taskAssigneeUpdateVo.getAssigneeId());
+        Task saved = taskRepository.save(task);
+        log.info("Update task assignee has finished");
+        return modelMapper.map(saved, TaskDto.class);
+    }
+
     private void validateWorkflowExists(String workflowStatusId) {
         workflowStatusRetrieveService.retrieve(workflowStatusId);
+    }
+
+    private void lockTaskTopicForUpdate(String topicId) {
+        Optional.ofNullable(topicId).ifPresent(taskLockService::lockTopicForTaskInitialization);
+    }
+
+    private void unlockTaskTopicForUpdate(String topicId) {
+        Optional.ofNullable(topicId).ifPresent(taskLockService::unlockTopicForTaskInitialization);
+    }
+
+    private void assignTopicTaskNo(Task task) {
+        String topicId = task.getTopicId();
+        Integer nextSeq = Optional.ofNullable(topicId)
+                .map(incrementTopicSequence::incrementTopicSequence)
+                .orElse(null);
+        task.setTopicTagNo(nextSeq);
     }
 }

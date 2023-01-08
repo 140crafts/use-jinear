@@ -24,6 +24,7 @@ public class DateHelper {
     private static final Logger logger = LoggerFactory.getLogger(DateHelper.class);
     public static final String MYSQL_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
     public static final String FILE_DATE_PATTERN = "yyyy_MM_dd_HH_mm_ss";
+    public static final String ISO_DATE_TIME = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String DAY_OF_MONTH_PATTERN = "dd";
     static final int MONDAY = 2;
     static final int SUNDAY = 1;
@@ -318,5 +319,12 @@ public class DateHelper {
         ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
         log.info("Converting date: {} to zonedDateTime: {}", date, zonedDateTime);
         return zonedDateTime;
+    }
+
+    public static String formatIsoDatePattern(ZonedDateTime dateTime) {
+        return Optional.ofNullable(dateTime)
+                .map(ZonedDateTime::toOffsetDateTime)
+                .map(OffsetDateTime::toString)
+                .orElse(null);
     }
 }

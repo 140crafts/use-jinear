@@ -25,6 +25,7 @@ public class TaskDto extends BaseDto {
     private String teamId;
     private String ownerId;
     private String workflowStatusId;
+    private String assignedTo;
     private ZonedDateTime assignedDate;
     private ZonedDateTime dueDate;
     private Integer teamTagNo;
