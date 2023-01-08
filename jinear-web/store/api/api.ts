@@ -4,8 +4,8 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const server = __DEV__ ? "staging.jinear" : "api.jinear";
 export const root = __DEV__
   ? "http://localhost:8085/"
-  : "http://localhost:8085/";
-// : `https://${server}.140crafts.com/`;
+  : // : "http://localhost:8085/";
+    `https://${server}.140crafts.com/`;
 
 export const s3Base = "https://storage.googleapis.com/jienar-b0/";
 
