@@ -17,7 +17,7 @@ build:
   rules:
     - if: '$CI_COMMIT_BRANCH == "staging"'
       when: always
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
     - when: manual
   script:
@@ -28,7 +28,7 @@ deploy-staging:
   needs:
     - job: build
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
     - when: manual
   script:
@@ -40,7 +40,7 @@ deploy-prod:
   needs:
     - job: build
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
     - when: never
   script:
