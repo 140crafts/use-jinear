@@ -49,6 +49,15 @@ public class TaskListingManager {
         return mapResponse(result);
     }
 
+    public TaskListingPaginatedResponse retrieveFromWorkflowStatus(String workspaceId, String teamId, String workflowStatusId, Integer page) {
+        String currentAccount = sessionInfoService.currentAccountId();
+        validateWorkspaceAccess(currentAccount, workspaceId);
+        validateTeamAccess(currentAccount, workspaceId, teamId);
+        log.info("Retrieve tasks from workflow status has started. currentAccount: {}", currentAccount);
+        Page<TaskDto> taskDtoPage = taskListingService.retrieveAllTasksFromWorkspaceAndTeamWithWorkflowStatus(workspaceId,teamId,workflowStatusId,page);
+        return mapResponse(taskDtoPage);
+    }
+
     private void validateWorkspaceAccess(String accountId, String workspaceId) {
         workspaceValidator.validateHasAccess(accountId, workspaceId);
     }
