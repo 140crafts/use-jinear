@@ -1,6 +1,8 @@
 .container {
   display: inline;
   align-items: center;
+  justify-content: center;
+  text-align: center;
   padding: 0.1ch 1ch;
   background-color: var(--c-primary-shade-1);
   border-radius: var(--border-radius);
@@ -8,4 +10,6 @@
   border-width: 1px;
   border-color: var(--c-primary-shade-0-op05);
   font-weight: 600;
+  font-size: 0.75rem;
+  min-width: 8ch;
 }

@@ -2,20 +2,22 @@ import TaskListGroupedByWorkflowStatus from "@/components/taskListScreen/breadcr
 import TaskListScreenBreadcrumb from "@/components/taskListScreen/breadcrumb/TaskListScreenBreadcrumb";
 import { selectCurrentAccountsPreferredTeam } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
+import { useRouter } from "next/router";
 import React from "react";
 import styles from "./index.module.css";
 
-interface TeamArchiveScreenProps {}
+interface ActiveTaskListScreenProps {}
 
-const TeamArchiveScreen: React.FC<TeamArchiveScreenProps> = ({}) => {
+const ActiveTaskListScreen: React.FC<ActiveTaskListScreenProps> = ({}) => {
+  const router = useRouter();
   const team = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
   return (
     <div className={styles.container}>
-      <TaskListScreenBreadcrumb type="archive" />
+      <TaskListScreenBreadcrumb type="active" />
       {team && (
         <TaskListGroupedByWorkflowStatus
-          type="archive"
+          type="active"
           teamId={team.teamId}
           workspaceId={team.workspaceId}
         />
@@ -24,4 +26,4 @@ const TeamArchiveScreen: React.FC<TeamArchiveScreenProps> = ({}) => {
   );
 };
 
-export default TeamArchiveScreen;
+export default ActiveTaskListScreen;

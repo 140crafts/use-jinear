@@ -6,6 +6,7 @@ import React from "react";
 import {
   IoArchiveOutline,
   IoCalendarOutline,
+  IoFolderOutline,
   IoList,
   IoTodayOutline,
 } from "react-icons/io5";
@@ -24,7 +25,8 @@ const TeamActionButtons: React.FC<TeamActionButtonsProps> = ({
   const currentPath = router.asPath;
   const weeklyPath = `/${workspaceUsername}/${name}/weekly`;
   const monthlyPath = `/${workspaceUsername}/${name}/monthly`;
-  const taskListPath = `/${workspaceUsername}/${name}/task-list`;
+  const taskListPath = `/${workspaceUsername}/${name}/active`;
+  const backlogPath = `/${workspaceUsername}/${name}/backlog`;
   const archivePath = `/${workspaceUsername}/${name}/archive`;
 
   return (
@@ -81,7 +83,25 @@ const TeamActionButtons: React.FC<TeamActionButtonsProps> = ({
             currentPath == taskListPath ? styles.activeButton : undefined
           }
         >
-          {t("sideMenuTeamTaskList")}
+          {t("sideMenuTeamActiveTaskList")}
+        </div>
+      </Button>
+      <Button
+        href={backlogPath}
+        variant={
+          currentPath == backlogPath
+            ? ButtonVariants.filled2
+            : ButtonVariants.hoverFilled2
+        }
+        className={styles.button}
+      >
+        <IoFolderOutline />
+        <div
+          className={
+            currentPath == backlogPath ? styles.activeButton : undefined
+          }
+        >
+          {t("sideMenuTeamBacklog")}
         </div>
       </Button>
       <Button

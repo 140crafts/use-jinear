@@ -5,17 +5,17 @@ import { useTypedSelector } from "@/store/store";
 import React from "react";
 import styles from "./index.module.css";
 
-interface TeamArchiveScreenProps {}
+interface BacklogTaskListScreenProps {}
 
-const TeamArchiveScreen: React.FC<TeamArchiveScreenProps> = ({}) => {
+const BacklogTaskListScreen: React.FC<BacklogTaskListScreenProps> = ({}) => {
   const team = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
   return (
     <div className={styles.container}>
-      <TaskListScreenBreadcrumb type="archive" />
+      <TaskListScreenBreadcrumb type="backlog" />
       {team && (
         <TaskListGroupedByWorkflowStatus
-          type="archive"
+          type="backlog"
           teamId={team.teamId}
           workspaceId={team.workspaceId}
         />
@@ -24,4 +24,4 @@ const TeamArchiveScreen: React.FC<TeamArchiveScreenProps> = ({}) => {
   );
 };
 
-export default TeamArchiveScreen;
+export default BacklogTaskListScreen;

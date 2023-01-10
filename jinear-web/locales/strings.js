@@ -388,17 +388,11 @@ export default {
   },
   sideMenuTeamBacklog: {
     en: "Backlog",
-    // tr: "Belirsizler",
-    // tr: "Birikenler",
-    // tr: "Yığın",
-    tr: "Geri Planda",
+    tr: "Geri Plan",
   },
-  sideMenuTeamTaskList: {
-    en: "Tasks",
-    // tr: "Belirsizler",
-    // tr: "Birikenler",
-    // tr: "Yığın",
-    tr: "Görevler",
+  sideMenuTeamActiveTaskList: {
+    en: "Active",
+    tr: "Aktif",
   },
   sideMenuTeamArchive: {
     en: "Archive",
@@ -859,5 +853,17 @@ export default {
   taskWorkflowActivityInfoAssigneeNoDate: {
     en: "No Date",
     tr: "Tarih Seçilmedi",
+  },
+  taskListScreenBreadcrumb_active: {
+    en: "Active",
+    tr: "Aktif",
+  },
+  taskListScreenBreadcrumb_backlog: {
+    en: "Backlog",
+    tr: "Geri Plan",
+  },
+  taskListScreenBreadcrumb_archive: {
+    en: "Archive",
+    tr: "Arşiv",
   },
 };

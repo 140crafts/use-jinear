@@ -28,6 +28,7 @@ export const tagTypes = [
   "workflow-status-from-team",
   "retrieve-topic",
   "retrieve-task-activity",
+  "team-workflow-task-list",
 ];
 
 export const api = createApi({

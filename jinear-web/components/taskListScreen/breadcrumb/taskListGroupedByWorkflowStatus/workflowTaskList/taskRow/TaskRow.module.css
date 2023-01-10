@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 0.5rem;
+}
+
+.line {
+  opacity: 0.25;
+}
+
+.leftInfoContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  min-width: 5rem;
+}
+
+.title {
+  flex: 1;
+  overflow: hidden;
+}
