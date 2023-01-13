@@ -24,7 +24,7 @@ const Pagination: React.FC<PaginationProps> = ({
   className,
   pageNumber,
   pageSize,
-  totalPages,
+  totalPages = 0,
   totalElements,
   hasPrevious,
   hasNext,
@@ -47,7 +47,6 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className={styles.buttonContainer}>
         <Button
           disabled={isLoading || !hasPrevious}
-          //   variant={ButtonVariants.filled}
           onClick={() => {
             setPage(page - 1);
           }}
@@ -55,13 +54,12 @@ const Pagination: React.FC<PaginationProps> = ({
           <IoCaretBack />
         </Button>
         <select onChange={onSelectChange} value={pageNumber + 1}>
-          {Array.from(Array(totalPages).keys()).map((i) => (
-            <option key={`${id}-pagination-option-${i}`}>{i + 1}</option>
+          {Array.from(Array(totalPages + 1).keys()).map((i) => (
+            <option key={`${id}-pagination-option-${i}`}>{i}</option>
           ))}
         </select>
         <Button
           disabled={isLoading || !hasNext}
-          //   variant={ButtonVariants.filled}
           onClick={() => {
             setPage(page + 1);
           }}

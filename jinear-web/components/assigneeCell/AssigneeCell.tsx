@@ -1,8 +1,12 @@
-import ProfilePhoto from "@/components/profilePhoto";
 import { TaskDto } from "@/model/be/jinear-core";
+import { popChangeTaskAssigneeModal } from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
+import { IoPersonCircle } from "react-icons/io5";
+import Button, { ButtonVariants } from "../button";
 import styles from "./AssigneeCell.module.css";
+import CurrentAccountInfo from "./currentAccountInfo/CurrentAccountInfo";
 
 interface AssigneeCellProps {
   task: TaskDto;
@@ -14,31 +18,33 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
   tooltipPosition = "right",
 }) => {
   const { t } = useTranslation();
-  const tooltip = t("taskWeekCardTaskAssignedToTooltip")?.replace(
-    "${to}",
-    task?.assignedToAccount?.username || ""
-  );
+  const dispatch = useAppDispatch();
 
-  return task && task.assignedToAccount ? (
-    <div
+  const tooltip = task.assignedToAccount
+    ? t("taskWeekCardTaskAssignedToTooltip")?.replace(
+        "${to}",
+        task?.assignedToAccount?.username || ""
+      )
+    : t("taskWeekCardTaskHasNoAssignedToTooltip");
+
+  const popChangeAssigneeModal = () => {
+    dispatch(popChangeTaskAssigneeModal({ visible: true, task }));
+  };
+
+  return task ? (
+    <Button
+      variant={ButtonVariants.filled}
       className={styles.container}
       data-tooltip-right={tooltipPosition == "right" ? tooltip : undefined}
       data-tooltip={tooltipPosition == "left" ? tooltip : undefined}
+      onClick={popChangeAssigneeModal}
     >
-      {task.assignedToAccount.profilePicture ? (
-        <ProfilePhoto
-          boringAvatarKey={task.assignedToAccount.accountId}
-          storagePath={task.assignedToAccount.profilePicture?.storagePath}
-          wrapperClassName={styles.profilePic}
-        />
+      {task.assignedToAccount ? (
+        <CurrentAccountInfo assignedToAccount={task.assignedToAccount} />
       ) : (
-        <div className={styles.noPicChar}>
-          {task.assignedToAccount.username
-            .substring(0, 1)
-            ?.toLocaleUpperCase?.()}
-        </div>
+        <IoPersonCircle className={styles.noAssigneeIcon} />
       )}
-    </div>
+    </Button>
   ) : null;
 };
 

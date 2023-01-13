@@ -538,6 +538,10 @@ export default {
     en: "Assigned to ${to}",
     tr: "Atanan kişi: ${to}",
   },
+  taskWeekCardTaskHasNoAssignedToTooltip: {
+    en: "Assign to somebody",
+    tr: "Birine ata",
+  },
   teamSettingsScreenBreadcrumbLabel: {
     en: "Settings",
     tr: "Ayarlar",

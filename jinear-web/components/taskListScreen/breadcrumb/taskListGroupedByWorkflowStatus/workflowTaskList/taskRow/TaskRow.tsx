@@ -1,9 +1,11 @@
+import AssigneeCell from "@/components/assigneeCell/AssigneeCell";
 import Button from "@/components/button";
 import Line from "@/components/line/Line";
 import TeamTagCell from "@/components/teamTagCell/TeamTagCell";
 import { TaskDto } from "@/model/be/jinear-core";
 import React from "react";
-import styles from "./TaskRow.module.css";
+import styles from "./TaskRow.module.scss";
+import TopicInfo from "./topicInfo/TopicInfo";
 
 interface TaskRowProps {
   task: TaskDto;
@@ -13,31 +15,22 @@ const TaskRow: React.FC<TaskRowProps> = ({ task }) => {
   const tag = `${task.team?.tag}-${task.teamTagNo}`;
   return task.workspace && task.team ? (
     <>
-      <Button
-        href={`/${task.workspace?.username}/task/${tag}`}
-        className={styles.container}
-      >
-        <div className={styles.leftInfoContainer}>
-          <TeamTagCell task={task} />
+      <div className={styles.container}>
+        <Button
+          href={`/${task.workspace?.username}/task/${tag}`}
+          className={styles.button}
+        >
+          <div className={styles.leftInfoContainer}>
+            <TeamTagCell task={task} />
+          </div>
+          <div className={styles.title}>{task.title}</div>
+        </Button>
+
+        <div className={styles.rightInfoContainer}>
+          {task.topic && <TopicInfo topic={task.topic} />}
+          <AssigneeCell task={task} />
         </div>
-        <div className={"line-clamp"}>
-          {task.title +
-            " " +
-            task.title +
-            " " +
-            task.title +
-            " " +
-            task.title +
-            " " +
-            task.title +
-            " " +
-            task.title +
-            " " +
-            task.title}
-        </div>
-        <div className="flex-1" />
-        <div>zort</div>
-      </Button>
+      </div>
       <Line className={styles.line} />
     </>
   ) : null;

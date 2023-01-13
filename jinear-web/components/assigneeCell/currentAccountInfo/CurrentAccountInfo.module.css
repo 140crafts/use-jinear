@@ -1,0 +1,16 @@
+.profilePic {
+  height: 20px;
+  width: 20px;
+}
+
+.noPicChar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--c-WHATIEAT_YELLOW);
+  color: var(--c-WEPRESENT_DARK);
+  height: 20px;
+  width: 20px;
+  border-radius: 10px;
+  font-weight: 600;
+}

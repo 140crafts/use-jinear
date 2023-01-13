@@ -1,0 +1,54 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 0.5rem;
+}
+
+.button {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 0.5rem;
+}
+
+.line {
+  opacity: 0.25;
+}
+
+.leftInfoContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  min-width: 5rem;
+}
+
+.rightInfoContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.title {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+@media (max-width: $tablet) {
+  .container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .title {
+    -webkit-line-clamp: 3;
+  }
+}
