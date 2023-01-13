@@ -1,5 +1,6 @@
 import Pagination from "@/components/pagination/Pagination";
 import { useRetrieveFromWorkflowStatusQuery } from "@/store/api/taskListingApi";
+import cn from "classnames";
 import React, { useState } from "react";
 import TaskRow from "./taskRow/TaskRow";
 import styles from "./WorkflowTaskList.module.scss";
@@ -18,16 +19,24 @@ const WorkflowTaskList: React.FC<WorkflowTaskListProps> = ({
   name,
 }) => {
   const [page, setPage] = useState<number>(0);
-  const { data: workflowTaskListResponse, isLoading } =
-    useRetrieveFromWorkflowStatusQuery({
-      workspaceId,
-      teamId,
-      workflowStatusId,
-      page,
-    });
+  const {
+    data: workflowTaskListResponse,
+    isLoading,
+    isFetching,
+  } = useRetrieveFromWorkflowStatusQuery({
+    workspaceId,
+    teamId,
+    workflowStatusId,
+    page,
+  });
 
   return (
-    <div className={styles.container}>
+    <div
+      className={cn(
+        styles.container,
+        isFetching ? styles["container-disabled"] : undefined
+      )}
+    >
       <div className={styles.header}>
         <h2>{name}</h2>
         {workflowTaskListResponse && (
@@ -47,7 +56,7 @@ const WorkflowTaskList: React.FC<WorkflowTaskListProps> = ({
         )}
       </div>
 
-      <div className={styles.content}>
+      <div className={cn(styles.content, styles.gradientBg)}>
         {workflowTaskListResponse?.data.content.map((taskDto) => (
           <TaskRow key={`task-list-${taskDto.taskId}`} task={taskDto} />
         ))}

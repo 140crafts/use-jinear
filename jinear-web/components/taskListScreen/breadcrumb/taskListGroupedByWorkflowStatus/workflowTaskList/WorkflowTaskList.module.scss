@@ -16,11 +16,26 @@
 .content {
   display: flex;
   flex-direction: column;
-  border-style: solid;
-  border-width: 1px;
-  border-color: var(--c-primary-shade-1);
-  border-radius: var(--border-radius);
+  // border-style: solid;
+  // border-width: 1px;
+  // border-color: var(--c-primary-shade-0);
+  // border-radius: var(--border-radius);
+
   min-height: 12rem;
+}
+
+.gradientBg {
+  background: linear-gradient(
+    0,
+    var(--c-primary),
+    var(--c-primary-shade-0-op05)
+  );
+  border-radius: var(--border-radius);
+}
+
+.container-disabled {
+  opacity: 0.25;
+  pointer-events: none;
 }
 
 @media (max-width: $tablet) {

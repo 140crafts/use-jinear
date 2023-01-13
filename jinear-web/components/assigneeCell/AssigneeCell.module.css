@@ -6,7 +6,10 @@
   padding: 0.1ch 1ch;
 }
 
-.noAssigneeIcon {
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   width: 20px;
   height: 20px;
 }

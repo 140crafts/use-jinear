@@ -53,9 +53,9 @@ const Pagination: React.FC<PaginationProps> = ({
         >
           <IoCaretBack />
         </Button>
-        <select onChange={onSelectChange} value={pageNumber + 1}>
-          {Array.from(Array(totalPages + 1).keys()).map((i) => (
-            <option key={`${id}-pagination-option-${i}`}>{i}</option>
+        <select onChange={onSelectChange} value={pageNumber}>
+          {Array.from(Array(totalPages).keys()).map((i) => (
+            <option key={`${id}-pagination-option-${i}`}>{i + 1}</option>
           ))}
         </select>
         <Button

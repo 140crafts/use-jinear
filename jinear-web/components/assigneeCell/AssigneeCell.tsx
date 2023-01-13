@@ -3,7 +3,7 @@ import { popChangeTaskAssigneeModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoPersonCircle } from "react-icons/io5";
+import { IoPerson } from "react-icons/io5";
 import Button, { ButtonVariants } from "../button";
 import styles from "./AssigneeCell.module.css";
 import CurrentAccountInfo from "./currentAccountInfo/CurrentAccountInfo";
@@ -42,7 +42,9 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
       {task.assignedToAccount ? (
         <CurrentAccountInfo assignedToAccount={task.assignedToAccount} />
       ) : (
-        <IoPersonCircle className={styles.noAssigneeIcon} />
+        <div className={styles.iconContainer}>
+          <IoPerson size={12} className={styles.noAssigneeIcon} />
+        </div>
       )}
     </Button>
   ) : null;

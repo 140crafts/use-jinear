@@ -51,4 +51,8 @@
   .title {
     -webkit-line-clamp: 3;
   }
+  .rightInfoContainer {
+    align-self: flex-end;
+    margin-bottom: 0.5rem;
+  }
 }
