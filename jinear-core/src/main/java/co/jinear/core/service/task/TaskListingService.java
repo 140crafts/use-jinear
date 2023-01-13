@@ -18,8 +18,8 @@ import java.util.List;
 @Service
 public class TaskListingService {
 
-//    private static final int PAGE_SIZE = 50;
-    private static final int PAGE_SIZE = 2;
+    private static final int PAGE_SIZE = 50;
+//    private static final int PAGE_SIZE = 2;
 
     private final TaskRepository taskRepository;
     private final TaskSearchRepository taskSearchRepository;
