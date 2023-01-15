@@ -1,6 +1,7 @@
 import Pagination from "@/components/pagination/Pagination";
 import { useRetrieveFromWorkflowStatusQuery } from "@/store/api/taskListingApi";
 import cn from "classnames";
+import useTranslation from "locales/useTranslation";
 import React, { useState } from "react";
 import TaskRow from "./taskRow/TaskRow";
 import styles from "./WorkflowTaskList.module.scss";
@@ -18,6 +19,7 @@ const WorkflowTaskList: React.FC<WorkflowTaskListProps> = ({
   workflowStatusId,
   name,
 }) => {
+  const { t } = useTranslation();
   const [page, setPage] = useState<number>(0);
   const {
     data: workflowTaskListResponse,
@@ -60,6 +62,14 @@ const WorkflowTaskList: React.FC<WorkflowTaskListProps> = ({
         {workflowTaskListResponse?.data.content.map((taskDto) => (
           <TaskRow key={`task-list-${taskDto.taskId}`} task={taskDto} />
         ))}
+
+        {!workflowTaskListResponse?.data.hasContent && (
+          <div className={styles.emptyStateContainer}>
+            <div className={styles.emptyLabel}>
+              {t("workflowTaskListEmpty")}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

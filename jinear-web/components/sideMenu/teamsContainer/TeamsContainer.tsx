@@ -1,4 +1,4 @@
-import { ButtonVariants } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { useUpdatePreferredTeamMutation } from "@/store/api/workspaceDisplayPreferenceApi";
 import {
@@ -10,7 +10,9 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
+import { IoAdd, IoEllipsisHorizontal, IoScan } from "react-icons/io5";
 import MenuGroupTitle from "../menuGroupTitle/MenuGroupTitle";
 import TeamMenu from "./teamMenu/TeamMenu";
 import styles from "./TeamsContainer.module.css";
@@ -22,6 +24,7 @@ const logger = Logger("TeamsContainer");
 const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const preferredWorkspace = useTypedSelector(
     selectCurrentAccountsPreferredWorkspace
@@ -69,18 +72,52 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
     );
   }, [isUpdatePreferredTeamLoading]);
 
+  const routeTeamSettings = () => {
+    if (selectedTeam) {
+      router.push(
+        `/${preferredWorkspace?.username}/${selectedTeam.name}/settings`
+      );
+    }
+  };
+
+  const routeTeamHome = () => {
+    if (selectedTeam) {
+      router.push(`/${preferredWorkspace?.username}/${selectedTeam.name}`);
+    }
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.teamsTitleContainer}>
         <MenuGroupTitle
           label={t("sideMenuWorkspaceCurrentTeam")}
-          hasAddButton={false}
           buttonVariant={
             teamsResponse?.data.length == 0
               ? ButtonVariants.filled2
               : ButtonVariants.hoverFilled2
           }
         />
+        <Button
+          variant={ButtonVariants.hoverFilled2}
+          onClick={routeTeamHome}
+          heightVariant={ButtonHeight.short}
+        >
+          <IoScan />
+        </Button>
+        <Button
+          variant={ButtonVariants.hoverFilled2}
+          onClick={routeTeamSettings}
+          heightVariant={ButtonHeight.short}
+        >
+          <IoEllipsisHorizontal />
+        </Button>
+        <Button
+          variant={ButtonVariants.hoverFilled2}
+          onClick={routeTeamSettings}
+          heightVariant={ButtonHeight.short}
+        >
+          <IoAdd />
+        </Button>
       </div>
       <div className={styles.teamsList}>
         {isLoading && <CircularProgress size={15} className={styles.loading} />}

@@ -3,6 +3,7 @@ import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
 import LoginWith2FaMailModal from "@/components/modal/loginWith2FaMailModal/LoginWith2FaMailModal";
 import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
+import NewWorkspaceModal from "@/components/modal/newWorkspaceModal/NewWorkspaceModal";
 import NotFoundModal from "@/components/modal/notFoundModal/NotFoundModal";
 import TaskAssigneeChangeModal from "@/components/modal/taskDetailModals/taskAssigneeChangeModal/TaskAssigneeChangeModal";
 import TaskDateChangeModal from "@/components/modal/taskDetailModals/taskDateChangeModal/TaskDateChangeModal";
@@ -11,7 +12,6 @@ import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workf
 import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
-import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
 import ThemeContext, { getTheme } from "@/store/context/themeContext";
 import { store } from "@/store/store";
 import { AppProps } from "next/app";
@@ -33,6 +33,7 @@ export function useThemeToggle() {
 
 const globalModals: any = (
   <>
+    <NewWorkspaceModal />
     <TaskAssigneeChangeModal />
     <TaskDateChangeModal />
     <TaskTopicChangeModal />
@@ -79,7 +80,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <LayoutProvider>
             <TitleHandler />
             <AuthCheck />
-            <WorkspaceAndTeamChangeListener />
+            {/* <WorkspaceAndTeamChangeListener /> */}
             <Transition>
               <Component {...pageProps} />
             </Transition>

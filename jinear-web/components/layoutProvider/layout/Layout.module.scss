@@ -2,10 +2,11 @@
 
 .layoutMain {
   display: flex;
-  flex-direction: "row";
 }
 
 .sideMenuContainer {
+  display: flex;
+  flex-direction: column;
   z-index: 5;
   width: var(--side-menu-width);
   min-width: var(--side-menu-width);
@@ -15,6 +16,25 @@
   position: sticky;
   top: 0;
   left: 0;
+}
+
+.workspaceMenu {
+  width: var(--side-menu-workspace-menu-width);
+  min-width: var(--side-menu-workspace-menu-width);
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: var(--c-primary-shade-1);
+}
+.mainMenu {
+  display: flex;
+  flex: 1;
+  width: var(--side-menu-main-menu-width);
+  min-width: var(--side-menu-main-menu-width);
+}
+
+.menuContent {
+  display: flex;
+  flex-direction: row;
 }
 
 .content {
@@ -44,7 +64,11 @@
 
 @media (max-width: $tablet) {
   .sideMenuFooter {
-    position: unset;
+    width: 100%;
+  }
+
+  .sideMenuFooterMenuOpen {
+    display: none;
   }
 
   .sideMenuContainer {
@@ -52,7 +76,8 @@
     bottom: 0;
     top: unset;
     width: 100vw;
-    height: 90vh;
+    // height: 90vh;
+    height: 100vh;
     margin-bottom: -100vh;
     transition: all var(--fade-2);
     transition-property: margin, opacity;

@@ -2,12 +2,14 @@ import Button from "@/components/button";
 import SideMenu from "@/components/sideMenu/SideMenu";
 import SideMenuFooter from "@/components/sideMenu/sideMenuFooter/SideMenuFooter";
 import TabBar from "@/components/tabBar/TabBar";
+import WorkspaceMenu from "@/components/workspaceMenu/WorkspaceMenu";
 import { selectAuthState } from "@/store/slice/accountSlice";
 import {
   closeMenu,
   selectAppMenuVisible,
 } from "@/store/slice/displayPreferenceSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import cn from "classnames";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { IoChevronDownSharp } from "react-icons/io5";
@@ -32,6 +34,10 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [authState]);
 
+  useEffect(() => {
+    _closeMenu();
+  }, [router.asPath]);
+
   const _closeMenu = () => {
     dispatch(closeMenu());
   };
@@ -48,8 +54,20 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Button className={styles.closeMenuContainer} onClick={_closeMenu}>
             <IoChevronDownSharp size={17} />
           </Button>
-          <SideMenu />
-          <SideMenuFooter className={styles.sideMenuFooter} />
+          <div className={styles.menuContent}>
+            <div className={styles.workspaceMenu}>
+              <WorkspaceMenu />
+            </div>
+            <div className={styles.mainMenu}>
+              <SideMenu />
+            </div>
+          </div>
+          <SideMenuFooter
+            className={cn(
+              styles.sideMenuFooter,
+              !isMenuVisible && styles.sideMenuFooterMenuOpen
+            )}
+          />
         </div>
       )}
       <div className={styles.content}>{children}</div>

@@ -870,4 +870,40 @@ export default {
     en: "Archive",
     tr: "Arşiv",
   },
+  workflowTaskListEmpty: {
+    en: "Task List is Empty",
+    tr: "Görev Listesi Boş",
+  },
+  newWorkspaceButtonTooltip: {
+    en: "New Workspace",
+    tr: "Yeni Çalışma Alanı",
+  },
+  newWorkspaceModalTitle: {
+    en: "New Workspace",
+    tr: "Yeni Çalışma Alanı",
+  },
+  newWorkspaceFormWorkspaceTitle: {
+    en: "Workspace name",
+    tr: "Çalışma alanı adı",
+  },
+  newWorkspaceFormWorkspaceHandleShort: {
+    en: "Short Code",
+    tr: "Kısa kodu",
+  },
+  newWorkspaceFormWorkspaceHandle: {
+    en: "Workspace handle (short code for easy access. For example Acme Co -> ACM)",
+    tr: "Çalışma alanı kısa kodu (Kolay erişim için. Örneğin Jinear -> JIN)",
+  },
+  newWorkspaceFormWorkspaceDescription: {
+    en: "Description (Optional)",
+    tr: "Açıklama (Zorunlu Değil)",
+  },
+  newWorkspaceFormCreate: {
+    en: "Create",
+    tr: "Oluştur",
+  },
+  newWorkspaceFormCancel: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
 };

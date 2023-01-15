@@ -15,7 +15,7 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
         variant={ButtonVariants.hoverFilled}
         className={styles.accountButton}
       >
-        Cagdas Tunca
+        Cagdas (TODO)
       </Button>
       <ThemeToggle />
     </div>

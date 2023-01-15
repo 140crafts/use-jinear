@@ -10,4 +10,13 @@
 
 .teamSelectButton {
   flex: 1;
+  max-width: calc(var(--side-menu-main-menu-width) - 1rem);
+}
+
+.spacer {
+  flex: 1;
+  min-width: 1ch;
+}
+.icon {
+  min-width: 0.9rem;
 }

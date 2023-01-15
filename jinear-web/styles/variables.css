@@ -34,6 +34,8 @@
   --box-shadow-soft: 0px 2px 1px -1px rgba(0, 0, 0, 0.02),
     0px 1px 1px 0px rgba(0, 0, 0, 0.014), 0px 1px 3px 0px rgba(0, 0, 0, 0.012);
   --side-menu-width: 290px;
+  --side-menu-main-menu-width: 230px;
+  --side-menu-workspace-menu-width: 60px;
   /*  */
   --user-profile-card-height: 200px;
   --user-profile-card-height-medium: 150px;

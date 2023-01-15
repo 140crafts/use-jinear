@@ -1,0 +1,64 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  z-index: 999;
+  position: relative;
+  gap: 1rem;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 3.4rem;
+  overflow: visible;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.label[data-tooltip-new-workspace-handle] {
+  position: relative;
+  height: auto;
+}
+.label[data-tooltip-new-workspace-handle]:hover:after {
+  content: attr(data-tooltip-new-workspace-handle);
+  background-color: var(--c-secondary);
+  color: var(--c-primary);
+  right: 0;
+  bottom: -6.5rem;
+  padding: 0.5em;
+  border-radius: var(--border-radius);
+  position: absolute;
+  white-space: inherit;
+  z-index: 99;
+}
+
+.handleInput {
+  text-transform: uppercase;
+  width: 6rem;
+}
+
+.footerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  position: sticky;
+  bottom: 0;
+  /* background-color: var(--c-primary);
+  border-top-color: var(--c-primary-shade-1);
+  border-top-width: 1px;
+  border-top-style: solid; */
+  padding: 1rem 0;
+  z-index: 3;
+}
+
+.footerButton {
+  min-width: 6rem;
+}

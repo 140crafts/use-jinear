@@ -1,3 +1,4 @@
+import cn from "classnames";
 import Link from "next/link";
 import React from "react";
 import styles from "./BreadcrumbLink.module.css";
@@ -15,7 +16,7 @@ const BreadcrumbLink: React.FC<BreadcrumbLinkProps> = ({ label, url }) => {
   return (
     <Link
       href={url}
-      className={styles.link}
+      className={cn(styles.link, "line-clamp")}
       data-tooltip-multiline={isTooLong ? label : undefined}
     >
       {isTooLong

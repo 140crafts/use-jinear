@@ -47,6 +47,9 @@ const initialState = {
   changeTaskAssigneeModal: {
     visible: false,
   },
+  newWorkspaceModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -58,6 +61,7 @@ const initialState = {
   changeTaskTopicModal: null | ChangeTaskTopicModalState;
   changeTaskDateModal: null | ChangeTaskDateModalState;
   changeTaskAssigneeModal: null | ChangeTaskAssigneeModalState;
+  newWorkspaceModal: null | ModalState;
 };
 
 const slice = createSlice({
@@ -144,6 +148,13 @@ const slice = createSlice({
       state.changeTaskAssigneeModal = initialState.changeTaskAssigneeModal;
     },
 
+    popNewWorkspaceModal: (state, action: PayloadAction<void>) => {
+      state.newWorkspaceModal = { visible: true };
+    },
+    closeNewWorkspaceModal: (state, action: PayloadAction<void>) => {
+      state.newWorkspaceModal = initialState.newWorkspaceModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -177,6 +188,8 @@ export const {
   closeChangeTaskDateModal,
   popChangeTaskAssigneeModal,
   closeChangeTaskAssigneeModal,
+  popNewWorkspaceModal,
+  closeNewWorkspaceModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -240,3 +253,6 @@ export const selectChangeTaskAssigneeModalTaskCurrentAssigneeId = (
 export const selectChangeTaskAssigneeModalTaskCurrentTeamId = (
   state: RootState
 ) => state.modal.changeTaskAssigneeModal?.task?.teamId;
+
+export const selectNewWorkspaceModalVisible = (state: RootState) =>
+  state.modal.newWorkspaceModal?.visible;
