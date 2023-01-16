@@ -14,12 +14,14 @@ import {
   selectCurrentAccountsPreferredWorkspace,
 } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
+import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import styles from "./index.module.scss";
 
 interface TaskDetailPageProps {}
+const logger = Logger("TaskDetailPage");
 
 const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
   const router = useRouter();
@@ -52,11 +54,19 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
       preferredTeamId
     ) {
       if (taskResponse.data.workspaceId != currentWorkspace.workspaceId) {
+        logger.log({
+          taskResponseWorkspaceId: taskResponse.data.workspaceId,
+          currentWorkspaceWorkspaceId: currentWorkspace.workspaceId,
+        });
         updatePreferredWorkspace({
           workspaceId: taskResponse.data.workspaceId,
         });
       }
       if (preferredTeamId != taskResponse.data.teamId) {
+        logger.log({
+          preferredTeamId,
+          taskResponseTeamId: taskResponse.data.teamId,
+        });
         updatePreferredTeam({
           teamId: taskResponse.data.teamId,
           workspaceId: taskResponse.data.workspaceId,

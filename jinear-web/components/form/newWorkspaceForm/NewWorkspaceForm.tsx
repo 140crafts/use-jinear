@@ -2,6 +2,7 @@ import Button, { ButtonVariants } from "@/components/button";
 import { WorkspaceInitializeRequest } from "@/model/be/jinear-core";
 import { useInitializeWorkspaceMutation } from "@/store/api/workspaceApi";
 import { useAppDispatch } from "@/store/store";
+import { HOST } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
@@ -14,6 +15,7 @@ interface NewWorkspaceFormProps {
 }
 
 const logger = Logger("NewWorkspaceForm");
+const USERNAME_REGEX = /[^A-Za-z0-9-_]/;
 
 const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
   const { t } = useTranslation();
@@ -21,6 +23,7 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
   const { register, handleSubmit, setFocus, setValue, watch } =
     useForm<WorkspaceInitializeRequest>();
   const currTitle = watch("title");
+  const currHandle = watch("handle");
 
   const [initializeWorkspace, { isLoading, isSuccess }] =
     useInitializeWorkspaceMutation();
@@ -38,7 +41,14 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
 
   useEffect(() => {
     if (currTitle && currTitle.length > 0) {
-      setValue("handle", currTitle.substring(0, 3)?.toLocaleUpperCase("en-US"));
+      setValue(
+        "handle",
+        currTitle
+          .toLocaleLowerCase("en-US")
+          ?.split(USERNAME_REGEX)
+          ?.join("")
+          ?.substring(0, 255)
+      );
     }
   }, [currTitle]);
 
@@ -56,36 +66,39 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
       onSubmit={handleSubmit(submit)}
       action="#"
     >
-      <div className={styles.titleContainer}>
-        <label
-          className={cn(styles.label, "flex-1")}
-          htmlFor={"new-workspace-title"}
-        >
-          {`${t("newWorkspaceFormWorkspaceTitle")} *`}
-          <input
-            id={"new-workspace-title"}
-            type={"text"}
-            {...register("title", { required: t("formRequiredField") })}
-          />
-        </label>
-        <label
-          className={styles.label}
-          htmlFor={"new-workspace-handle"}
-          data-tooltip-new-workspace-handle={t(
-            "newWorkspaceFormWorkspaceHandle"
-          )}
-        >
-          {`${t("newWorkspaceFormWorkspaceHandleShort")} *`}
-          <input
-            id={"new-workspace-handle"}
-            type={"text"}
-            className={styles.handleInput}
-            minLength={1}
-            maxLength={255}
-            {...register("handle", { required: t("formRequiredField") })}
-          />
-        </label>
-      </div>
+      <label
+        className={cn(styles.label, "flex-1")}
+        htmlFor={"new-workspace-title"}
+      >
+        {`${t("newWorkspaceFormWorkspaceTitle")} *`}
+        <input
+          id={"new-workspace-title"}
+          type={"text"}
+          {...register("title", { required: t("formRequiredField") })}
+        />
+      </label>
+
+      <label
+        className={styles.label}
+        htmlFor={"new-workspace-handle"}
+        //   data-tooltip-new-workspace-handle={t(
+        //     "newWorkspaceFormWorkspaceHandle"
+        //   )}
+      >
+        {`${t("newWorkspaceFormWorkspaceHandleShort")} *`}
+        <input
+          id={"new-workspace-handle"}
+          type={"text"}
+          minLength={1}
+          maxLength={255}
+          {...register("handle", { required: t("formRequiredField") })}
+        />
+        <span className={cn(styles.link, "single-line")}>
+          {t("newWorkspaceFormWorkspaceHandleInfo")
+            ?.replace("${host}", HOST)
+            ?.replace("${username}", currHandle ? currHandle : "example")}
+        </span>
+      </label>
       <label className={styles.label} htmlFor={"new-workspace-description"}>
         {`${t("newWorkspaceFormWorkspaceDescription")}`}
         <textarea

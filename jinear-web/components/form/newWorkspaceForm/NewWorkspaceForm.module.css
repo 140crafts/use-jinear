@@ -62,3 +62,9 @@
 .footerButton {
   min-width: 6rem;
 }
+
+.link {
+  opacity: 0.8;
+  font-size: 0.7rem;
+  color: var(--c-link-color);
+}

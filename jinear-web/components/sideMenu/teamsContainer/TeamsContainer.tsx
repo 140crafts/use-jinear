@@ -57,8 +57,10 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
 
   useEffect(() => {
     const isChanged = selectedTeam?.teamId != preferredTeam?.teamId;
+    const isInSameWorkspace =
+      selectedTeam?.workspaceId == preferredTeam?.workspaceId;
     logger.log({ isSelectedTeamChanged: isChanged });
-    if (isChanged && selectedTeam) {
+    if (isChanged && selectedTeam && isInSameWorkspace) {
       updatePreferredTeamMutation({
         workspaceId: selectedTeam.workspaceId,
         teamId: selectedTeam.teamId,

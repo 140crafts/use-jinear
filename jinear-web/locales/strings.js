@@ -887,12 +887,12 @@ export default {
     tr: "Çalışma alanı adı",
   },
   newWorkspaceFormWorkspaceHandleShort: {
-    en: "Short Code",
-    tr: "Kısa kodu",
+    en: "Web username",
+    tr: "Kullanıcı adı",
   },
-  newWorkspaceFormWorkspaceHandle: {
-    en: "Workspace handle (short code for easy access. For example Acme Co -> ACM)",
-    tr: "Çalışma alanı kısa kodu (Kolay erişim için. Örneğin Jinear -> JIN)",
+  newWorkspaceFormWorkspaceHandleInfo: {
+    en: "${host}/${username}",
+    tr: "${host}/${username}",
   },
   newWorkspaceFormWorkspaceDescription: {
     en: "Description (Optional)",

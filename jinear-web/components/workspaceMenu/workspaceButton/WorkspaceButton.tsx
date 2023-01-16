@@ -6,6 +6,7 @@ import { selectCurrentAccountsPreferredWorkspaceId } from "@/store/slice/account
 import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import cn from "classnames";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import styles from "./WorkspaceButton.module.css";
 
@@ -15,6 +16,7 @@ interface WorkspaceButtonProps {
 
 const WorkspaceButton: React.FC<WorkspaceButtonProps> = ({ workspace }) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const prefferedWorkspaceId = useTypedSelector(
     selectCurrentAccountsPreferredWorkspaceId
   );
@@ -24,6 +26,9 @@ const WorkspaceButton: React.FC<WorkspaceButtonProps> = ({ workspace }) => {
 
   useEffect(() => {
     dispatch(changeLoadingModalVisibility({ visible: isLoading }));
+    if (isLoading) {
+      router.replace("/");
+    }
   }, [isLoading]);
 
   const changePrefferedWorkspace = () => {
