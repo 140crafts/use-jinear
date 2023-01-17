@@ -1,5 +1,6 @@
 import AuthCheck from "@/components/authCheck/AuthCheck";
 import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
+import MainHeader from "@/components/mainHeader/MainHeader";
 import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
 import LoginWith2FaMailModal from "@/components/modal/loginWith2FaMailModal/LoginWith2FaMailModal";
 import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
@@ -64,6 +65,7 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
+      <MainHeader />
       <Provider store={store}>
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
           <LayoutProvider>
