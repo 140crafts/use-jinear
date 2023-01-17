@@ -16,7 +16,6 @@ import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeL
 import ThemeContext, { getTheme } from "@/store/context/themeContext";
 import { store } from "@/store/store";
 import { AppProps } from "next/app";
-import Head from "next/head";
 import { useContext, useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
@@ -65,17 +64,6 @@ function MyApp({ Component, pageProps }: AppProps) {
 
   return (
     <>
-      <Head>
-        <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"
-        />
-        <link
-          rel="icon"
-          href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌊</text></svg>"
-        />
-      </Head>
       <Provider store={store}>
         <ThemeContext.Provider value={{ theme, toggleTheme }}>
           <LayoutProvider>
