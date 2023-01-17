@@ -42,9 +42,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 
   useEffect(() => {
     if (document && window) {
-      // document.body.className = isAnyModalVisible ? styles.modalVisible : "";
-      if (isAnyModalVisible) {
+      if (isAnyModalVisible || isMenuVisible) {
         document.body.style.top = `-${window.scrollY}px`;
+        document.body.style.width = `100%`;
         document.body.style.position = "fixed";
       } else {
         const scrollY = document.body.style.top;
@@ -53,7 +53,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         window.scrollTo(0, parseInt(scrollY || "0") * -1);
       }
     }
-  }, [isAnyModalVisible]);
+  }, [isAnyModalVisible, isMenuVisible]);
 
   const _closeMenu = () => {
     dispatch(closeMenu());
