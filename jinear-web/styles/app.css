@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap");
 @import "variables.css";
+@import "reset.css";
 
 * {
   /* margin: 0;
@@ -17,7 +18,7 @@ body {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-family: "Inter", sans-serif;
   background-color: var(--c-background);
   color: var(--c-text-color);
