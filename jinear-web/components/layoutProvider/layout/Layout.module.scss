@@ -10,7 +10,10 @@
   z-index: 5;
   width: var(--side-menu-width);
   min-width: var(--side-menu-width);
+  // height: 100vh;
   height: 100vh;
+  height: -webkit-fill-available;
+
   overflow-y: scroll;
   background-color: var(--c-primary-shade-0);
   position: sticky;
@@ -40,7 +43,7 @@
 .content {
   display: flex;
   flex: 1;
-  flex-direction: "row";
+  flex-direction: row;
   justify-content: center;
   margin-top: 85px;
   padding-bottom: var(--tab-bar-height);
@@ -62,6 +65,10 @@
   max-width: inherit;
 }
 
+.modalVisible {
+  position: fixed;
+}
+
 @media (max-width: $tablet) {
   .sideMenuFooter {
     width: 100%;
@@ -77,7 +84,9 @@
     top: unset;
     width: 100vw;
     // height: 90vh;
+    height: -webkit-fill-available;
     height: 100vh;
+
     margin-bottom: -100vh;
     transition: all var(--fade-2);
     transition-property: margin, opacity;

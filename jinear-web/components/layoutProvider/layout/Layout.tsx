@@ -8,6 +8,7 @@ import {
   closeMenu,
   selectAppMenuVisible,
 } from "@/store/slice/displayPreferenceSlice";
+import { selectAnyModalVisible } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import cn from "classnames";
 import { useRouter } from "next/router";
@@ -23,6 +24,7 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
+  const isAnyModalVisible = useTypedSelector(selectAnyModalVisible);
   const authState = useTypedSelector(selectAuthState);
   const dispatch = useAppDispatch();
   //only in desktop
@@ -37,6 +39,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   useEffect(() => {
     _closeMenu();
   }, [router.asPath]);
+
+  useEffect(() => {
+    if (document && window) {
+      // document.body.className = isAnyModalVisible ? styles.modalVisible : "";
+      if (isAnyModalVisible) {
+        document.body.style.top = `-${window.scrollY}px`;
+        document.body.style.position = "fixed";
+      } else {
+        const scrollY = document.body.style.top;
+        document.body.style.position = "";
+        document.body.style.top = "";
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
+    }
+  }, [isAnyModalVisible]);
 
   const _closeMenu = () => {
     dispatch(closeMenu());

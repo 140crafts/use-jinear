@@ -12,6 +12,7 @@ import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workf
 import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
+import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
 import ThemeContext, { getTheme } from "@/store/context/themeContext";
 import { store } from "@/store/store";
 import { AppProps } from "next/app";
@@ -80,7 +81,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <LayoutProvider>
             <TitleHandler />
             <AuthCheck />
-            {/* <WorkspaceAndTeamChangeListener /> */}
+            <WorkspaceAndTeamChangeListener />
             <Transition>
               <Component {...pageProps} />
             </Transition>

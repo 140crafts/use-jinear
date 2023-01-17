@@ -194,6 +194,13 @@ export const {
 } = slice.actions;
 export default slice.reducer;
 
+export const selectAnyModalVisible = (state: RootState) => {
+  const modalState = state.modal || {};
+  return Object.values(modalState)
+    ?.map((modalState) => modalState?.visible || false)
+    ?.reduce((prev, curr) => prev || curr);
+};
+
 export const selectLoginWith2FaMailModalVisible = (state: RootState) =>
   state.modal.loginWith2FaMailModal?.visible;
 export const selectLoadingModalVisible = (state: RootState) =>
