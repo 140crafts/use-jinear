@@ -14,6 +14,7 @@ export const taskWorkflowStatusApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         { type: "team-task-list" },
         { type: "workplace-task-with-name-and-tag" },
+        { type: "team-workflow-task-list" },
         { type: "retrieve-task-activity", id: req.taskId },
       ],
     }),
