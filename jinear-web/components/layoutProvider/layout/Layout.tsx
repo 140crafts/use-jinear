@@ -10,6 +10,7 @@ import {
 } from "@/store/slice/displayPreferenceSlice";
 import { selectAnyModalVisible } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import isPwa from "@/utils/pwaHelper";
 import cn from "classnames";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -29,6 +30,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const dispatch = useAppDispatch();
   //only in desktop
   const isMenuVisible = useTypedSelector(selectAppMenuVisible);
+  const pwa = isPwa();
 
   useEffect(() => {
     if (authState == "NOT_LOGGED_IN") {
@@ -82,7 +84,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <SideMenuFooter
             className={cn(
               styles.sideMenuFooter,
-              !isMenuVisible && styles.sideMenuFooterMenuOpen
+              !isMenuVisible && styles.sideMenuFooterMenuOpen,
+              pwa && styles.pwaPadding
             )}
           />
         </div>
@@ -90,7 +93,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       <div className={styles.content}>{children}</div>
 
       {authState == "LOGGED_IN" && (
-        <div className={styles.tabBarContainer}>
+        <div className={cn(styles.tabBarContainer, pwa && styles.pwaPadding)}>
           <TabBar />
         </div>
       )}
