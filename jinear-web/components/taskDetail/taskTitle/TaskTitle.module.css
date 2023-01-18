@@ -5,6 +5,8 @@
   gap: 1rem;
   position: relative;
   border-radius: var(--border-radius);
+  padding: 0.25rem;
+  padding-left: 0.75rem;
 }
 .contaier-readonly {
   cursor: text;
