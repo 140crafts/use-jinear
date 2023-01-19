@@ -462,6 +462,10 @@ export default {
     en: "Team Options",
     tr: "Takım Seçenekleri",
   },
+  teamSelectMenu: {
+    en: "Teams",
+    tr: "Takımlar",
+  },
   teamOptionsCurrentTeam: {
     en: "(Current)",
     tr: "(Şuanki)",

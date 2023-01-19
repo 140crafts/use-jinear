@@ -1,4 +1,4 @@
-import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import Button, { ButtonVariants } from "@/components/button";
 import { TaskDto } from "@/model/be/jinear-core";
 import { popChangeTaskWorkflowStatusModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
@@ -18,11 +18,11 @@ interface WorkflowStatusProps {
 }
 
 const groupIconMap = {
-  BACKLOG: <IoPauseCircleOutline size={20} />,
-  NOT_STARTED: <IoEllipseOutline size={20} />,
-  STARTED: <IoContrast size={20} />,
-  COMPLETED: <IoCheckmarkCircle size={20} />,
-  CANCELLED: <IoCloseCircle size={20} />,
+  BACKLOG: <IoPauseCircleOutline size={17} />,
+  NOT_STARTED: <IoEllipseOutline size={17} />,
+  STARTED: <IoContrast size={17} />,
+  COMPLETED: <IoCheckmarkCircle size={17} />,
+  CANCELLED: <IoCloseCircle size={17} />,
 };
 
 const WorkflowStatus: React.FC<WorkflowStatusProps> = ({ task }) => {
@@ -37,11 +37,12 @@ const WorkflowStatus: React.FC<WorkflowStatusProps> = ({ task }) => {
     <Button
       onClick={popChangeWorkflowStatusModal}
       variant={ButtonVariants.filled}
-      heightVariant={ButtonHeight.short}
       className={styles.container}
       data-tooltip-right={t("taskDetailChangeWorkflowStatusTooltip")}
     >
-      {groupIconMap?.[task.workflowStatus.workflowStateGroup]}
+      <div className={styles.iconContainer}>
+        {groupIconMap?.[task.workflowStatus.workflowStateGroup]}
+      </div>
     </Button>
   );
 };

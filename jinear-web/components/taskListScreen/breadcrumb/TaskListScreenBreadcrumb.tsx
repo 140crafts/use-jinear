@@ -22,7 +22,7 @@ const TaskListScreenBreadcrumb: React.FC<TaskListScreenBreadcrumbProps> = ({
   return (
     <Breadcrumb>
       <BreadcrumbLink
-        label={workspace?.title || ""}
+        label={workspace?.username || ""}
         url={`/${workspace?.username}`}
       />
       <BreadcrumbLink

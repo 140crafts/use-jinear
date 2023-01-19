@@ -36,7 +36,7 @@ const TeamOptionsModal: React.FC<TeamOptionsModalProps> = ({}) => {
   return (
     <Modal
       visible={visible}
-      title={t("teamOptionsMenu")}
+      title={t("teamSelectMenu")}
       bodyClass={styles.container}
       width={isMobile ? "fullscreen" : "large"}
       hasTitleCloseButton={true}

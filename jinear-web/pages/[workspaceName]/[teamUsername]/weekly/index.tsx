@@ -43,7 +43,7 @@ const TeamWeeklyScreen: React.FC<TeamWeeklyScreenProps> = ({}) => {
     >
       <div className={styles.container}>
         <TeamWeeklyScreenBreadcrumb
-          workspaceName={workspaceName}
+          workspaceName={currentWorkspace?.username || ""}
           teamUsername={teamUsername}
         />
         <YearWeekNo />

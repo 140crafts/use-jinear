@@ -12,7 +12,7 @@ export const taskApi = api.injectEndpoints({
       invalidatesTags: [
         "team-task-list",
         "workplace-task-with-name-and-tag",
-        "team-task-list",
+        "team-workflow-task-list",
       ],
     }),
     //
