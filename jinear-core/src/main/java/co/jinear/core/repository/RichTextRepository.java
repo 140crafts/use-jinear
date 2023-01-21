@@ -8,6 +8,8 @@ import java.util.Optional;
 
 public interface RichTextRepository extends JpaRepository<RichText, String> {
 
+    Optional<RichText> findByRichTextId(String richTextId);
+
     Optional<RichText> findByRichTextIdAndPassiveIdIsNull(String richTextId);
 
     Optional<RichText> findByRelatedObjectIdAndTypeAndPassiveIdIsNull(String relatedObjectId, RichTextType type);

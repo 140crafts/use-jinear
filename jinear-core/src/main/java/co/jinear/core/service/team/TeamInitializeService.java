@@ -59,7 +59,7 @@ public class TeamInitializeService {
         log.info("Sanitize tag has started teamInitializeVo: {}", teamInitializeVo);
         Optional.of(teamInitializeVo)
                 .map(TeamInitializeVo::getTag)
-                .map(NormalizeHelper::normalizeStrictly)
+                .map(NormalizeHelper::normalizeUsernameReplaceSpaces)
                 .ifPresent(teamInitializeVo::setTag);
     }
 

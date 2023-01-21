@@ -46,8 +46,8 @@ public class WorkspaceActivityRetrieveService {
         if (EDIT_TASK_DESC.equals(workspaceActivityDto.getType())) {
             String oldRichTextId = workspaceActivityDto.getOldState();
             String newRichTextId = workspaceActivityDto.getNewState();
-            richTextRetrieveService.retrieveOptional(oldRichTextId).ifPresent(workspaceActivityDto::setOldDescription);
-            richTextRetrieveService.retrieveOptional(newRichTextId).ifPresent(workspaceActivityDto::setNewDescription);
+            richTextRetrieveService.retrieveIncludingPassivesOptional(oldRichTextId).ifPresent(workspaceActivityDto::setOldDescription);
+            richTextRetrieveService.retrieveIncludingPassivesOptional(newRichTextId).ifPresent(workspaceActivityDto::setNewDescription);
         }
         return workspaceActivityDto;
     }

@@ -11,6 +11,8 @@ public class NormalizeHelper {
 
     private static final String LOCALE_EN = "en-EN";
     public static final String EMPTY_STRING = "";
+    public static final String SPACE_STRING = " ";
+    public static final String HYPHEN = "-";
     public static final String MASK_CHAR = "*";
     private static final String ACCENT_REGEX = "\\p{M}";
     private static final String ALPHANUMERIC_REGEX = "[^A-Za-z0-9]";
@@ -47,6 +49,11 @@ public class NormalizeHelper {
 
     public static String normalizeUsername(String str) {
         return removeUsernameNotAllowed(removeNonAscii(removeAccent(str)));
+    }
+
+    public static String normalizeUsernameReplaceSpaces(String str) {
+        String replacedWithHyphen = str.replaceAll(SPACE_STRING, "-");
+        return normalizeUsername(replacedWithHyphen);
     }
 
     public static String maskString(String str) {

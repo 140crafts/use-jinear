@@ -26,6 +26,11 @@ public class RichTextRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    public Optional<RichTextDto> retrieveIncludingPassivesOptional(String richTextId) {
+        log.info("Retrieve optional rich text has started. richTextId: {}", richTextId);
+        return richTextRepository.findByRichTextId(richTextId)
+                .map(richText -> modelMapper.map(richText, RichTextDto.class));
+    }
 
     public Optional<RichTextDto> retrieveOptional(String richTextId) {
         log.info("Retrieve optional rich text has started. richTextId: {}", richTextId);
