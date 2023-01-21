@@ -6,7 +6,6 @@ import styles from "./TeamMenu.module.css";
 import TeamThreads from "./teamThreads/TeamThreads";
 import TeamTitle from "./teamTitle/TeamTitle";
 import TeamTopics from "./teamTopics/TeamTopics";
-// import TeamTopics from "./teamTopics/TeamTopics";
 
 interface TeamMenuProps {
   teamId: string;
@@ -16,6 +15,7 @@ interface TeamMenuProps {
   visibility: TeamVisibilityType;
   joinMethod: TeamJoinMethodType;
   workspaceUsername: string;
+  isPersonalWorkspace?: boolean;
 }
 
 const TeamMenu: React.FC<TeamMenuProps> = ({
@@ -26,11 +26,12 @@ const TeamMenu: React.FC<TeamMenuProps> = ({
   visibility,
   joinMethod,
   workspaceUsername,
+  isPersonalWorkspace = false,
 }) => {
   return (
     <div className={styles.container}>
-      <TeamTitle name={name} />
-      <TeamMemberList teamId={teamId} />
+      {!isPersonalWorkspace && <TeamTitle name={name} />}
+      {!isPersonalWorkspace && <TeamMemberList teamId={teamId} />}
       <TeamActionButtons name={name} workspaceUsername={workspaceUsername} />
       <TeamTopics teamId={teamId} />
       <TeamThreads />

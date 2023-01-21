@@ -91,13 +91,6 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({
           </div>
         )}
 
-        {isUpdateLoading && (
-          <div className={styles.loadingContainer}>
-            <CircularProgress size={14} />
-            <div>{t("taskDescriptionSaving")}</div>
-          </div>
-        )}
-
         {!readOnly && (
           <Button
             disabled={isUpdateLoading}

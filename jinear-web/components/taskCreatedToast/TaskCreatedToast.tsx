@@ -42,7 +42,7 @@ const TaskCreatedToast: React.FC<TaskCreatedToastProps> = ({
         </Button>
 
         <Button className={styles.button} heightVariant={ButtonHeight.short}>
-          <Link className={styles.button} href={`/${taskLink}`} target="_blank">
+          <Link className={styles.button} href={`/${taskLink}`}>
             {t("newTastCreatedToastGoToTask")}
           </Link>
         </Button>

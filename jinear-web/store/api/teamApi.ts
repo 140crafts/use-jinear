@@ -1,8 +1,20 @@
-import { TeamListingResponse } from "@/model/be/jinear-core";
+import {
+  TeamInitializeRequest,
+  TeamListingResponse,
+  TeamResponse,
+} from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const teamApi = api.injectEndpoints({
   endpoints: (build) => ({
+    initializeTeam: build.mutation<TeamResponse, TeamInitializeRequest>({
+      query: (body: TeamInitializeRequest) => ({
+        url: `v1/team`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["workplace-team-list"],
+    }),
     retrieveWorkspaceTeams: build.query<TeamListingResponse, string>({
       query: (workspaceId: string) => `v1/team/from-workspace/${workspaceId}`,
       providesTags: (_result, _err, workspaceId) => [
@@ -19,8 +31,9 @@ export const teamApi = api.injectEndpoints({
   }),
 });
 
-export const { useRetrieveWorkspaceTeamsQuery } = teamApi;
+export const { useInitializeTeamMutation, useRetrieveWorkspaceTeamsQuery } =
+  teamApi;
 
 export const {
-  endpoints: { retrieveWorkspaceTeams },
+  endpoints: { initializeTeam, retrieveWorkspaceTeams },
 } = teamApi;

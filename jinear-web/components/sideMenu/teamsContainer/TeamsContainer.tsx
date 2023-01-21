@@ -5,7 +5,10 @@ import {
   selectCurrentAccountsPreferredTeamId,
   selectCurrentAccountsPreferredWorkspace,
 } from "@/store/slice/accountSlice";
-import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
+import {
+  changeLoadingModalVisibility,
+  popNewTeamModal,
+} from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
@@ -88,39 +91,45 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
     }
   };
 
+  const _popNewTeamModal = () => {
+    dispatch(popNewTeamModal());
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.teamsTitleContainer}>
-        <MenuGroupTitle
-          label={t("sideMenuWorkspaceCurrentTeam")}
-          buttonVariant={
-            teamsResponse?.data.length == 0
-              ? ButtonVariants.filled2
-              : ButtonVariants.hoverFilled2
-          }
-        />
-        <Button
-          variant={ButtonVariants.hoverFilled2}
-          onClick={routeTeamHome}
-          heightVariant={ButtonHeight.short}
-        >
-          <IoScan />
-        </Button>
-        <Button
-          variant={ButtonVariants.hoverFilled2}
-          onClick={routeTeamSettings}
-          heightVariant={ButtonHeight.short}
-        >
-          <IoEllipsisHorizontal />
-        </Button>
-        <Button
-          variant={ButtonVariants.hoverFilled2}
-          onClick={routeTeamSettings}
-          heightVariant={ButtonHeight.short}
-        >
-          <IoAdd />
-        </Button>
-      </div>
+      {!preferredWorkspace?.personal && (
+        <div className={styles.teamsTitleContainer}>
+          <MenuGroupTitle
+            label={t("sideMenuWorkspaceCurrentTeam")}
+            buttonVariant={
+              teamsResponse?.data.length == 0
+                ? ButtonVariants.filled2
+                : ButtonVariants.hoverFilled2
+            }
+          />
+          <Button
+            variant={ButtonVariants.hoverFilled2}
+            onClick={routeTeamHome}
+            heightVariant={ButtonHeight.short}
+          >
+            <IoScan />
+          </Button>
+          <Button
+            variant={ButtonVariants.hoverFilled2}
+            onClick={routeTeamSettings}
+            heightVariant={ButtonHeight.short}
+          >
+            <IoEllipsisHorizontal />
+          </Button>
+          <Button
+            variant={ButtonVariants.hoverFilled2}
+            onClick={_popNewTeamModal}
+            heightVariant={ButtonHeight.short}
+          >
+            <IoAdd />
+          </Button>
+        </div>
+      )}
       <div className={styles.teamsList}>
         {isLoading && <CircularProgress size={15} className={styles.loading} />}
         {isSuccess && teamsResponse.data.length == 0 && (
@@ -131,6 +140,7 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
         {isSuccess && selectedTeam && (
           <TeamMenu
             {...selectedTeam}
+            isPersonalWorkspace={preferredWorkspace?.personal}
             workspaceUsername={preferredWorkspace?.username || ""}
           />
         )}

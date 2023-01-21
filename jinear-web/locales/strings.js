@@ -910,4 +910,20 @@ export default {
     en: "Cancel",
     tr: "Vazgeç",
   },
+  newTeamModalTitle: {
+    en: "New Team",
+    tr: "Yeni Takım",
+  },
+  newTeamFormName: {
+    en: "Team name",
+    tr: "Takım adı",
+  },
+  newTeamFormTag: {
+    en: "Tag (short code for easy access. For example Engineering -> ENG)",
+    tr: "Takım kısa kodu (Kolay erişim için. Örneğin Mühendislik -> MUH)",
+  },
+  currentWorkspaceHeaderWorkspaceDetail: {
+    en: "Workspace detail",
+    tr: "Çalışma Alanı detayları",
+  },
 };

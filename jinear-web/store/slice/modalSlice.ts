@@ -50,6 +50,9 @@ const initialState = {
   newWorkspaceModal: {
     visible: false,
   },
+  newTeamModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -62,6 +65,7 @@ const initialState = {
   changeTaskDateModal: null | ChangeTaskDateModalState;
   changeTaskAssigneeModal: null | ChangeTaskAssigneeModalState;
   newWorkspaceModal: null | ModalState;
+  newTeamModal: null | ModalState;
 };
 
 const slice = createSlice({
@@ -155,6 +159,13 @@ const slice = createSlice({
       state.newWorkspaceModal = initialState.newWorkspaceModal;
     },
 
+    popNewTeamModal: (state, action: PayloadAction<void>) => {
+      state.newTeamModal = { visible: true };
+    },
+    closeNewTeamModal: (state, action: PayloadAction<void>) => {
+      state.newTeamModal = initialState.newTeamModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -190,6 +201,8 @@ export const {
   closeChangeTaskAssigneeModal,
   popNewWorkspaceModal,
   closeNewWorkspaceModal,
+  popNewTeamModal,
+  closeNewTeamModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -263,3 +276,6 @@ export const selectChangeTaskAssigneeModalTaskCurrentTeamId = (
 
 export const selectNewWorkspaceModalVisible = (state: RootState) =>
   state.modal.newWorkspaceModal?.visible;
+
+export const selectNewTeamModalVisible = (state: RootState) =>
+  state.modal.newTeamModal?.visible;
