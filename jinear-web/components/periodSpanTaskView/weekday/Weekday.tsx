@@ -1,4 +1,5 @@
 import cn from "classnames";
+import { isToday } from "date-fns";
 import React from "react";
 import { useVariant } from "../context/PeriodSpanTaskViewContext";
 import WeekdayTitle from "./title/WeekdayTitle";
@@ -13,6 +14,9 @@ const Weekday: React.FC<WeekdayProps> = ({ day }) => {
   return (
     <div className={cn(styles.container, styles[`width-${variant}`])}>
       <WeekdayTitle day={day} />
+      {isToday(day) && (
+        <div className={cn(styles.todayLine, styles[`width-${variant}`])} />
+      )}
     </div>
   );
 };

@@ -11,13 +11,7 @@ import {
 } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
-import {
-  endOfMonth,
-  endOfWeek,
-  startOfMonth,
-  startOfToday,
-  startOfWeek,
-} from "date-fns";
+import { endOfMonth, endOfWeek, startOfMonth, startOfToday } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
@@ -44,20 +38,16 @@ const TeamMonthlyScreen: React.FC<TeamMonthlyScreenProps> = ({}) => {
   const today = startOfToday();
   const [viewingPeriodOf, setViewingPeriodOf] = useState<Date>(today);
   const [viewingPeriodStart, setViewingPeriodStart] = useState<Date>(
-    startOfWeek(startOfMonth(viewingPeriodOf), { weekStartsOn: 1 })
+    startOfMonth(viewingPeriodOf)
   );
   const [viewingPeriodEnd, setViewingPeriodEnd] = useState<Date>(
-    endOfWeek(endOfMonth(viewingPeriodOf), { weekStartsOn: 1 })
+    endOfMonth(viewingPeriodOf)
   );
 
   useEffect(() => {
     if (viewingPeriodOf) {
-      setViewingPeriodStart(
-        startOfWeek(startOfMonth(viewingPeriodOf), { weekStartsOn: 1 })
-      );
-      setViewingPeriodEnd(
-        endOfWeek(endOfMonth(viewingPeriodOf), { weekStartsOn: 1 })
-      );
+      setViewingPeriodStart(startOfMonth(viewingPeriodOf));
+      setViewingPeriodEnd(endOfMonth(viewingPeriodOf));
     }
   }, [viewingPeriodOf]);
 
