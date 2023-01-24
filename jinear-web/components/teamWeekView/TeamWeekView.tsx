@@ -26,6 +26,7 @@ const TeamWeekView: React.FC<TeamWeekViewProps> = ({
       viewingPeriodStart={viewingWeekStart}
       viewingPeriodEnd={viewingWeekEnd}
       showDayOfWeek={showDayOfWeek}
+      variant={"week"}
     />
   );
 };

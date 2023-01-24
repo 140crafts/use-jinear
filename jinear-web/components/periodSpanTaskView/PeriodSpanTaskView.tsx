@@ -3,6 +3,7 @@ import { useRetrieveAllIntersectingTasksQuery } from "@/store/api/taskListingApi
 import { CircularProgress } from "@mui/material";
 import { eachDayOfInterval } from "date-fns";
 import React from "react";
+import PeriodSpanTaskViewContext from "./context/PeriodSpanTaskViewContext";
 import styles from "./PeriodSpanTaskView.module.css";
 import TaskPeriodViewRow from "./taskWeekViewRow/TaskPeriodViewRow";
 import { PERIOD_SPAN_TASK_VIEW_TODAY_MARK } from "./weekday/title/WeekdayTitle";
@@ -15,6 +16,7 @@ interface PeriodSpanTaskViewProps {
   viewingPeriodEnd: Date;
   showDayOfWeek?: boolean;
   containerRef?: React.RefObject<HTMLDivElement>;
+  variant: "month" | "week";
 }
 
 const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
@@ -24,6 +26,7 @@ const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
   viewingPeriodEnd,
   showDayOfWeek,
   containerRef,
+  variant = "week",
 }) => {
   const {
     data: taskListingResponse,
@@ -59,34 +62,39 @@ const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
     [isFetching],
     250
   );
+
   return (
-    <div className={styles.container}>
-      {isFetching && (
-        <div className={styles.loading}>
-          <CircularProgress size={24} />
-        </div>
-      )}
-      <div className={styles.titleContainer}>
-        {days.map((day) => (
-          <Weekday
-            key={day.toISOString()}
-            day={day}
-            showDayOfWeek={showDayOfWeek}
-          />
-        ))}
-      </div>
-      <div className={styles.contentContainer}>
-        {!isFetching &&
-          taskListingResponse?.data.map((taskDto) => (
-            <TaskPeriodViewRow
-              key={`${taskDto.taskId}-${viewingPeriodStart.toISOString()}`}
-              task={taskDto}
-              viewingPeriodStart={viewingPeriodStart}
-              viewingPeriodEnd={viewingPeriodEnd}
-            />
+    <PeriodSpanTaskViewContext.Provider
+      value={{
+        viewingPeriodStart: viewingPeriodStart,
+        viewingPeriodEnd: viewingPeriodEnd,
+        variant,
+        showDayOfWeek,
+      }}
+    >
+      <div className={styles.container}>
+        {isFetching && (
+          <div className={styles.loading}>
+            <CircularProgress size={24} />
+          </div>
+        )}
+        <div className={styles.titleContainer}>
+          {days.map((day) => (
+            <Weekday key={day.toISOString()} day={day} />
           ))}
+        </div>
+        <div className={styles.contentContainer}>
+          {/* <div className={styles.leftBar}>123</div> */}
+          {!isFetching &&
+            taskListingResponse?.data.map((taskDto) => (
+              <TaskPeriodViewRow
+                key={`${taskDto.taskId}-${viewingPeriodStart.toISOString()}`}
+                task={taskDto}
+              />
+            ))}
+        </div>
       </div>
-    </div>
+    </PeriodSpanTaskViewContext.Provider>
   );
 };
 

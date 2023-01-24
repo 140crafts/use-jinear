@@ -17,39 +17,14 @@ const MonthlyPlanTab: React.FC<MonthlyPlanTabProps> = ({
   containerRef,
 }) => {
   return teamId && workspaceId ? (
-    // <>
-    //   <TeamWeekView
-    //     teamId={teamId}
-    //     workspaceId={workspaceId}
-    //     viewingWeekStart={viewingPeriodStart}
-    //     showDayOfWeek={true}
-    //   />
-    //   <TeamWeekView
-    //     teamId={teamId}
-    //     workspaceId={workspaceId}
-    //     viewingWeekStart={addWeeks(viewingPeriodStart, 1)}
-    //     showDayOfWeek={false}
-    //   />
-    //   <TeamWeekView
-    //     teamId={teamId}
-    //     workspaceId={workspaceId}
-    //     viewingWeekStart={addWeeks(viewingPeriodStart, 2)}
-    //     showDayOfWeek={false}
-    //   />
-    //   <TeamWeekView
-    //     teamId={teamId}
-    //     workspaceId={workspaceId}
-    //     viewingWeekStart={addWeeks(viewingPeriodStart, 3)}
-    //     showDayOfWeek={false}
-    //   />
-    // </>
     <PeriodSpanTaskView
       containerRef={containerRef}
       teamId={teamId}
       workspaceId={workspaceId}
       viewingPeriodStart={viewingPeriodStart}
       viewingPeriodEnd={viewingPeriodEnd}
-      showDayOfWeek={true}
+      showDayOfWeek={false}
+      variant={"month"}
     />
   ) : null;
 };

@@ -12,6 +12,7 @@ import {
 import styles from "./TitleCell.module.css";
 interface TitleCellProps {
   task: TaskDto;
+  duration?: number;
 }
 
 const groupIconMap = {
@@ -22,15 +23,17 @@ const groupIconMap = {
   CANCELLED: <IoCloseCircle size={20} />,
 };
 
-const TitleCell: React.FC<TitleCellProps> = ({ task }) => {
+const TitleCell: React.FC<TitleCellProps> = ({ task, duration = 1 }) => {
   const { t } = useTranslation();
   return (
     <div className={styles.titleContainer}>
       <div
         className={styles.iconContainer}
-        data-tooltip={t(
-          `workflowGroupTitle_${task.workflowStatus.workflowStateGroup}`
-        )}
+        data-tooltip={
+          duration != 1
+            ? t(`workflowGroupTitle_${task.workflowStatus.workflowStateGroup}`)
+            : undefined
+        }
       >
         {groupIconMap?.[task.workflowStatus.workflowStateGroup]}
       </div>

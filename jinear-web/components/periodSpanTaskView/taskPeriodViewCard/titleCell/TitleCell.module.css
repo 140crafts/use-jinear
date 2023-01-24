@@ -15,6 +15,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 25px;
+  width: 15px;
+  min-width: 15px;
   height: 20px;
 }

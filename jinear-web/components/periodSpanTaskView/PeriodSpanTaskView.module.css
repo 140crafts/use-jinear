@@ -36,3 +36,11 @@
   min-height: 55px;
   z-index: 1;
 }
+
+.leftBar {
+  position: fixed;
+  left: calc(3rem + var(--side-menu-width));
+  background-color: red;
+  height: 100%;
+  z-index: 1;
+}

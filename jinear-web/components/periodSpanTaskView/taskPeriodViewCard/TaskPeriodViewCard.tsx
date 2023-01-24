@@ -14,7 +14,9 @@ interface TaskPeriodViewCardProps {
   isStartDateBefore: boolean;
   isDueDateAfter: boolean;
   style: React.CSSProperties;
-  className: string;
+  className?: string;
+  showAdditionalInfo?: boolean;
+  duration?: number;
 }
 
 const TaskPeriodViewCard: React.FC<TaskPeriodViewCardProps> = ({
@@ -23,6 +25,8 @@ const TaskPeriodViewCard: React.FC<TaskPeriodViewCardProps> = ({
   isDueDateAfter,
   style,
   className,
+  showAdditionalInfo = true,
+  duration = 1,
 }) => {
   return (
     <Link
@@ -30,22 +34,27 @@ const TaskPeriodViewCard: React.FC<TaskPeriodViewCardProps> = ({
       className={cn(styles.container, className)}
       style={style}
     >
-      <div className={styles.content}>
-        <TitleCell task={task} />
-        <div className={styles.infoContainer}>
-          <StartDateBeforeIcon
-            assignedDate={task.assignedDate}
-            isStartDateBefore={isStartDateBefore}
-          />
-          <TeamTagCell task={task} />
+      <div
+        className={styles.content}
+        data-tooltip-multiline={duration == 1 ? task.title : undefined}
+      >
+        <TitleCell task={task} duration={duration} />
+        {showAdditionalInfo && (
+          <div className={styles.infoContainer}>
+            <StartDateBeforeIcon
+              assignedDate={task.assignedDate}
+              isStartDateBefore={isStartDateBefore}
+            />
+            <TeamTagCell task={task} />
 
-          <AssigneeCell task={task} />
-          <div className="flex-1" />
-          <DueDateAfterIcon
-            dueDate={task.dueDate}
-            isDueDateAfter={isDueDateAfter}
-          />
-        </div>
+            <AssigneeCell task={task} />
+            <div className="flex-1" />
+            <DueDateAfterIcon
+              dueDate={task.dueDate}
+              isDueDateAfter={isDueDateAfter}
+            />
+          </div>
+        )}
       </div>
     </Link>
   );
