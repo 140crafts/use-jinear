@@ -1,6 +1,8 @@
 .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 1;
-  min-width: var(--task-card-width);
   text-align: center;
   border-radius: 0;
   border-left-style: solid;
@@ -9,4 +11,12 @@
   border-right-style: solid;
   border-left-color: var(--c-primary-shade-0-op05);
   border-right-color: var(--c-primary-shade-0-op05);
+}
+
+.width-month {
+  min-width: var(--task-card-width-month);
+}
+
+.width-week {
+  min-width: var(--task-card-width-week);
 }

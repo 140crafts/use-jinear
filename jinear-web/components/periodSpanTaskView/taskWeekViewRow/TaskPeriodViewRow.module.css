@@ -11,5 +11,5 @@
 
 .taskCard {
   display: flex;
-  min-width: var(--task-card-width);
+  /* min-width: var(--task-card-width); */
 }

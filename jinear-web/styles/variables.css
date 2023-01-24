@@ -48,6 +48,8 @@
   --feature: minmax(0, 5rem);
   --customer-list-grid-template-columns: 0.25fr 1fr 0.25fr;
   --task-card-width: 175px;
+  --task-card-width-week: 175px;
+  --task-card-width-month: 65px;
   --team-week-view-day-gap: 1rem;
   --team-task-status-view-title-gap: 1rem;
   --status-board-task-card-width: 185px;

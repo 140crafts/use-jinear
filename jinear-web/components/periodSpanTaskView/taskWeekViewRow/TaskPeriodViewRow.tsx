@@ -8,12 +8,15 @@ import {
   isBefore,
 } from "date-fns";
 import React from "react";
+import {
+  usePeriodEnd,
+  usePeriodStart,
+  useVariant,
+} from "../context/PeriodSpanTaskViewContext";
 import TaskPeriodViewCard from "../taskPeriodViewCard/TaskPeriodViewCard";
 import styles from "./TaskPeriodViewRow.module.css";
 
 interface TaskPeriodViewRowProps {
-  viewingPeriodStart: Date;
-  viewingPeriodEnd: Date;
   task: TaskDto;
 }
 const logger = Logger("TaskPeriodViewRow");
@@ -56,18 +59,18 @@ const calcFlexes = (vo: {
   return { leftSpacerFlex, taskFlex, rightSpacerFlex };
 };
 
-const TaskPeriodViewRow: React.FC<TaskPeriodViewRowProps> = ({
-  viewingPeriodStart,
-  viewingPeriodEnd,
-  task,
-}) => {
+const TaskPeriodViewRow: React.FC<TaskPeriodViewRowProps> = ({ task }) => {
+  const viewingPeriodStart = usePeriodStart() || new Date();
+  const viewingPeriodEnd = usePeriodEnd() || new Date();
+  const variant = useVariant() || "week";
   const { leftSpacerFlex, taskFlex, rightSpacerFlex } = calcFlexes({
     viewingPeriodStart,
     viewingPeriodEnd,
     task,
   });
+
   const taskCardWidth = parseInt(
-    getCssVariable("--task-card-width")?.replace("px", "")
+    getCssVariable(`--task-card-width-${variant}`)?.replace("px", "")
   );
 
   return (
@@ -80,12 +83,11 @@ const TaskPeriodViewRow: React.FC<TaskPeriodViewRowProps> = ({
           minWidth: taskCardWidth * leftSpacerFlex,
         }}
       />
-
       <TaskPeriodViewCard
         key={`twvc-${task.taskId}-${viewingPeriodStart.toISOString()}`}
-        className={styles.taskCard}
         style={{ flex: taskFlex, minWidth: taskCardWidth * taskFlex }}
         task={task}
+        duration={taskFlex}
         isStartDateBefore={isBefore(
           new Date(task.assignedDate),
           viewingPeriodStart
@@ -93,6 +95,7 @@ const TaskPeriodViewRow: React.FC<TaskPeriodViewRowProps> = ({
         isDueDateAfter={
           task.dueDate && isAfter(new Date(task.dueDate), viewingPeriodEnd)
         }
+        showAdditionalInfo={variant == "week"}
       />
       <div
         className={styles.spacer}

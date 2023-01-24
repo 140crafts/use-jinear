@@ -1,26 +1,18 @@
+import cn from "classnames";
 import React from "react";
+import { useVariant } from "../context/PeriodSpanTaskViewContext";
 import WeekdayTitle from "./title/WeekdayTitle";
 import styles from "./Weekday.module.css";
 
 interface WeekdayProps {
   day: Date;
-  taskCount?: number;
-  showDayOfWeek?: boolean;
 }
 
-const Weekday: React.FC<WeekdayProps> = ({
-  day,
-  taskCount = 0,
-  showDayOfWeek,
-}) => {
+const Weekday: React.FC<WeekdayProps> = ({ day }) => {
+  const variant = useVariant() || "week";
   return (
-    <div className={styles.container}>
-      <WeekdayTitle
-        day={day}
-        taskCount={taskCount}
-        showDayOfWeek={showDayOfWeek}
-      />
-      {/* <Line /> */}
+    <div className={cn(styles.container, styles[`width-${variant}`])}>
+      <WeekdayTitle day={day} />
     </div>
   );
 };
