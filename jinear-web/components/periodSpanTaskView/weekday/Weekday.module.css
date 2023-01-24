@@ -20,3 +20,15 @@
 .width-week {
   min-width: var(--task-card-width-week);
 }
+
+.todayLine {
+  position: absolute;
+  background: linear-gradient(
+    0,
+    var(--c-primary),
+    var(--c-primary-shade-0-op05)
+  );
+  height: 100%;
+  z-index: -1;
+  top: 0;
+}

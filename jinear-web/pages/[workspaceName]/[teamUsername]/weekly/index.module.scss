@@ -23,11 +23,12 @@
 .tabbedPanel {
   max-width: calc(100vw - var(--side-menu-width));
   overflow-x: scroll;
-  min-height: 4rem;
+  min-height: 60vh;
 }
 
 .tabViewContainer {
   overflow-x: scroll;
+  min-height: 60vh;
 }
 
 .weekViewContainer {

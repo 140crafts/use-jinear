@@ -1,5 +1,6 @@
 import { useDebouncedEffect } from "@/hooks/useDebouncedEffect";
 import { useRetrieveAllIntersectingTasksQuery } from "@/store/api/taskListingApi";
+import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
 import { eachDayOfInterval } from "date-fns";
 import React from "react";
@@ -18,6 +19,8 @@ interface PeriodSpanTaskViewProps {
   containerRef?: React.RefObject<HTMLDivElement>;
   variant: "month" | "week";
 }
+
+const logger = Logger("PeriodSpanTaskView");
 
 const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
   teamId,
@@ -53,6 +56,9 @@ const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
         PERIOD_SPAN_TASK_VIEW_TODAY_MARK
       );
       if (!isFetching && containerRef && containerRef.current && todayTitle) {
+        logger.log({
+          left: todayTitle.offsetLeft - todayTitle.offsetWidth * 2,
+        });
         containerRef.current.scrollTo?.({
           behavior: "smooth",
           left: todayTitle.offsetLeft - todayTitle.offsetWidth * 2,
@@ -84,7 +90,6 @@ const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
           ))}
         </div>
         <div className={styles.contentContainer}>
-          {/* <div className={styles.leftBar}>123</div> */}
           {!isFetching &&
             taskListingResponse?.data.map((taskDto) => (
               <TaskPeriodViewRow

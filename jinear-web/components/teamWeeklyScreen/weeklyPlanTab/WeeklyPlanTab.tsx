@@ -20,6 +20,7 @@ const WeeklyPlanTab: React.FC<WeeklyPlanTabProps> = ({
       workspaceId={workspaceId}
       viewingWeekStart={viewingWeekStart}
       containerRef={containerRef}
+      showDayOfWeek={true}
     />
   ) : null;
 };
