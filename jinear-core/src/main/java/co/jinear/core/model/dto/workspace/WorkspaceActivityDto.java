@@ -3,6 +3,7 @@ package co.jinear.core.model.dto.workspace;
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
+import co.jinear.core.model.dto.task.TaskRelationDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
@@ -44,4 +45,6 @@ public class WorkspaceActivityDto extends BaseDto {
     private PlainAccountProfileDto oldAssignedToAccount;
     @Nullable
     private PlainAccountProfileDto newAssignedToAccount;
+    @Nullable
+    private TaskRelationDto newTaskRelationDto;
 }

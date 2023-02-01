@@ -1,5 +1,6 @@
 package co.jinear.core.manager.task;
 
+import co.jinear.core.converter.task.TaskDatesUpdateVoConverter;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.topic.TopicDto;
@@ -22,7 +23,6 @@ import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -40,7 +40,7 @@ public class TaskUpdateManager {
     private final TaskUpdateService taskUpdateService;
     private final TaskActivityService taskActivityService;
     private final TopicRetrieveService topicRetrieveService;
-    private final ModelMapper modelMapper;
+    private final TaskDatesUpdateVoConverter taskDatesUpdateVoConverter;
 
     public BaseResponse updateTaskTitle(String taskId, TaskUpdateTitleRequest taskUpdateTitleRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -89,8 +89,7 @@ public class TaskUpdateManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
         log.info("Update task assigned date has started. accountId: {}, taskId: {}", currentAccountId, taskId);
-        TaskDatesUpdateVo taskDatesUpdateVo = modelMapper.map(taskDateUpdateRequest, TaskDatesUpdateVo.class);
-        taskDatesUpdateVo.setTaskId(taskId);
+        TaskDatesUpdateVo taskDatesUpdateVo = taskDatesUpdateVoConverter.map(taskDateUpdateRequest, taskId);
         TaskDto taskDto = taskUpdateService.updateTaskAssignedDate(taskDatesUpdateVo);
         taskActivityService.initializeAssignedDateUpdateActivity(currentAccountId, taskDtoBeforeUpdate, taskDto);
         return mapResponse(taskDto);
@@ -100,8 +99,7 @@ public class TaskUpdateManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
         log.info("Update task due date has started. accountId: {}, taskId: {}", currentAccountId, taskId);
-        TaskDatesUpdateVo taskDatesUpdateVo = modelMapper.map(taskDateUpdateRequest, TaskDatesUpdateVo.class);
-        taskDatesUpdateVo.setTaskId(taskId);
+        TaskDatesUpdateVo taskDatesUpdateVo = taskDatesUpdateVoConverter.map(taskDateUpdateRequest, taskId);
         TaskDto taskDto = taskUpdateService.updateTaskDueDate(taskDatesUpdateVo);
         taskActivityService.initializeDueDateUpdateActivity(currentAccountId, taskDtoBeforeUpdate, taskDto);
         return mapResponse(taskDto);
@@ -112,8 +110,7 @@ public class TaskUpdateManager {
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
         validateNewAssigneeHasTaskAccess(taskId, taskAssigneeUpdateRequest);
         log.info("Update task assignee has started. accountId: {}, taskId: {}, taskAssigneeUpdateRequest: {}", currentAccountId, taskId, taskAssigneeUpdateRequest);
-        TaskAssigneeUpdateVo taskAssigneeUpdateVo = modelMapper.map(taskAssigneeUpdateRequest, TaskAssigneeUpdateVo.class);
-        taskAssigneeUpdateVo.setTaskId(taskId);
+        TaskAssigneeUpdateVo taskAssigneeUpdateVo = taskDatesUpdateVoConverter.map(taskAssigneeUpdateRequest, taskId);
         TaskDto taskDto = taskUpdateService.updateTaskAssignee(taskAssigneeUpdateVo);
         taskActivityService.initializeAssigneeUpdateActivity(currentAccountId, taskDtoBeforeUpdate, taskDto);
         return mapResponse(taskDto);

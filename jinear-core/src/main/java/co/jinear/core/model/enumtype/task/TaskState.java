@@ -1,4 +1,4 @@
-package co.jinear.core.model.enumtype;
+package co.jinear.core.model.enumtype.task;
 
 import lombok.Getter;
 

@@ -1,5 +1,6 @@
 package co.jinear.core.service.token;
 
+import co.jinear.core.converter.token.TokenConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.token.TokenDto;
 import co.jinear.core.model.entity.token.Token;
@@ -12,7 +13,6 @@ import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.system.util.DateHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,12 +24,12 @@ public class TokenService {
 
     private final TokenRepository tokenRepository;
     private final PassiveService passiveService;
-    private final ModelMapper modelMapper;
+    private final TokenConverter tokenConverter;
 
     public TokenDto generateToken(GenerateTokenVo generateTokenVo) {
-        Token token = modelMapper.map(generateTokenVo, Token.class);
+        Token token = tokenConverter.map(generateTokenVo);
         token = saveToken(generateTokenVo, token);
-        return modelMapper.map(token, TokenDto.class);
+        return tokenConverter.map(token);
     }
 
     public TokenDto retrieveValidToken(String uniqueToken, TokenType tokenType) {
@@ -38,13 +38,13 @@ public class TokenService {
         Token token = tokenRepository.findByUniqueTokenAndTokenTypeAndExpiresAtGreaterThanAndPassiveIdIsNull(uniqueToken, tokenType, expiresAtGreaterThan)
                 .orElseThrow(NotFoundException::new);
         log.info("Token found. tokenId: {}", token.getTokenId());
-        return modelMapper.map(token, TokenDto.class);
+        return tokenConverter.map(token);
     }
 
     public Optional<TokenDto> retrieveValidTokenWithRelatedObject(String relatedObject, TokenType tokenType) {
         Long expiresAtGreaterThan = DateHelper.now().getTime();
         return tokenRepository.findFirstByRelatedObjectAndTokenTypeAndExpiresAtGreaterThanAndPassiveIdIsNullOrderByCreatedDateDesc(relatedObject, tokenType, expiresAtGreaterThan)
-                .map(token -> modelMapper.map(token, TokenDto.class));
+                .map(tokenConverter::map);
     }
 
     public void passivizeToken(String tokenId, String accountId, PassiveReason passiveReason) {

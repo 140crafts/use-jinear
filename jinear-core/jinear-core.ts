@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-01-05 17:47:29.
+// Generated using typescript-generator version 3.0.1157 on 2023-01-29 22:49:33.
 
 export interface BaseDto {
     createdDate: Date;
@@ -88,6 +88,15 @@ export interface TaskDto extends BaseDto {
     workspace?: WorkspaceDto | null;
     team?: TeamDto | null;
     workflowStatus: TeamWorkflowStatusDto;
+    relations?: TaskRelationDto[] | null;
+    relatedIn?: TaskRelationDto[] | null;
+}
+
+export interface TaskRelationDto {
+    taskRelationId: string;
+    taskId: string;
+    relatedTaskId: string;
+    relationType: TaskRelationType;
 }
 
 export interface TeamDto extends BaseDto {
@@ -274,6 +283,13 @@ export interface TaskInitializeRequest extends BaseRequest {
     dueDate?: Date | null;
     title: string;
     description?: string | null;
+    subTaskOf?: string | null;
+}
+
+export interface TaskRelationInitializeRequest extends BaseRequest {
+    taskId: string;
+    relatedTaskId: string;
+    relation: TaskRelationType;
 }
 
 export interface TaskRetrieveAllRequest extends BaseRequest {
@@ -444,8 +460,6 @@ export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY"
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
 
-export type TaskState = "TO_DO" | "IN_PROGRESS" | "IN_TEST" | "WONT_DO" | "DONE";
-
 export type PermissionType = "ACCOUNT_ROLE_EDIT";
 
 export type RoleType = "ADMIN" | "USER";
@@ -468,6 +482,10 @@ export type RichTextSourceStack = "WYSIWYG";
 
 export type RichTextType = "TASK_DETAIL";
 
+export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
+
+export type TaskState = "TO_DO" | "IN_PROGRESS" | "IN_TEST" | "WONT_DO" | "DONE";
+
 export type TeamJoinMethodType = "SYNC_MEMBERS_WITH_WORKSPACE" | "ON_DEMAND" | "FROM_TEAM_ADMIN";
 
 export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
@@ -482,7 +500,7 @@ export type UsernameRelatedObjectType = "ACCOUNT" | "COMMUNITY" | "WORKSPACE";
 
 export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER";
 
-export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE";
+export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 

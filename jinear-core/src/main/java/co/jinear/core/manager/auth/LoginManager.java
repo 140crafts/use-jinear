@@ -1,5 +1,6 @@
 package co.jinear.core.manager.auth;
 
+import co.jinear.core.converter.auth.AuthVoConverter;
 import co.jinear.core.model.enumtype.auth.ProviderType;
 import co.jinear.core.model.request.auth.AuthCompleteRequest;
 import co.jinear.core.model.request.auth.AuthInitializeRequest;
@@ -15,7 +16,6 @@ import co.jinear.core.service.auth.AuthenticationStrategyFactory;
 import co.jinear.core.system.JwtHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
@@ -28,26 +28,26 @@ import static co.jinear.core.model.enumtype.auth.ProviderType.PASSWORD_MAIL;
 @RequiredArgsConstructor
 public class LoginManager {
 
-    private final ModelMapper modelMapper;
     private final AccountLoginInitializeService accountLoginInitializeService;
     private final AuthenticationStrategyFactory authenticationStrategyFactory;
     private final SessionInfoService sessionInfoService;
     private final AuthCookieManager authCookieManager;
     private final JwtHelper jwtHelper;
+    private final AuthVoConverter authVoConverter;
 
     public AuthInitializeResponse loginWithEmailOtpInitialize(AuthInitializeRequest authInitializeRequest) {
         log.info("Login with email has started.");
-        AuthVo authVo = modelMapper.map(authInitializeRequest, AuthVo.class);
+        AuthVo authVo = authVoConverter.map(authInitializeRequest);
         AuthVo initializedAuthVo = accountLoginInitializeService.emailLoginTokenRequest(authVo);
         log.info("Login with email has finished. initializedAuthVo: {}", initializedAuthVo);
-        return modelMapper.map(initializedAuthVo, AuthInitializeResponse.class);
+        return authVoConverter.map(initializedAuthVo);
     }
 
     @Transactional
     public AuthResponse emailOtpLoginComplete(AuthCompleteRequest authCompleteRequest, HttpServletResponse response) {
         log.info("Email otp login complete has started. authCompleteRequest: {}", authCompleteRequest);
         ProviderType providerType = authCompleteRequest.getProvider();
-        AuthVo authVo = modelMapper.map(authCompleteRequest, AuthVo.class);
+        AuthVo authVo = authVoConverter.map(authCompleteRequest);
         AuthResponseVo authResponseVo = retrieveStrategyAndAuth(providerType, authVo);
         String token = initializeSessionInfoAndGenerateJwtToken(authResponseVo);
         AuthResponse authResponse = mapResponse(token);

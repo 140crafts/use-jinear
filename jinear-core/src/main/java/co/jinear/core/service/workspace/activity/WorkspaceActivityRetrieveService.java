@@ -1,16 +1,18 @@
 package co.jinear.core.service.workspace.activity;
 
+import co.jinear.core.converter.workspace.WorkspaceActivityConverter;
+import co.jinear.core.model.dto.task.TaskRelationDto;
 import co.jinear.core.model.dto.workspace.WorkspaceActivityDto;
 import co.jinear.core.model.entity.workspace.WorkspaceActivity;
 import co.jinear.core.model.vo.workspace.RetrieveTaskActivityVo;
 import co.jinear.core.repository.WorkspaceActivityRepository;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.richtext.RichTextRetrieveService;
+import co.jinear.core.service.task.TaskRelationRetrieveService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
 import co.jinear.core.service.topic.TopicRetrieveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,13 +30,14 @@ public class WorkspaceActivityRetrieveService {
     private final TeamWorkflowStatusRetrieveService teamWorkflowStatusRetrieveService;
     private final TopicRetrieveService topicRetrieveService;
     private final AccountRetrieveService accountRetrieveService;
-    private final ModelMapper modelMapper;
+    private final TaskRelationRetrieveService taskRelationRetrieveService;
+    private final WorkspaceActivityConverter workspaceActivityConverter;
 
     public List<WorkspaceActivityDto> retrieveTaskActivity(RetrieveTaskActivityVo retrieveTaskActivityVo) {
         log.info("Retrieve task activity has started. retrieveTaskActivityVo: {}", retrieveTaskActivityVo);
         List<WorkspaceActivity> workspaceActivities = workspaceActivityRepository.findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateAsc(retrieveTaskActivityVo.getTaskId());
         return workspaceActivities.stream()
-                .map(workspaceActivity -> modelMapper.map(workspaceActivity, WorkspaceActivityDto.class))
+                .map(workspaceActivityConverter::map)
                 .map(this::retrieveTaskDescriptionChanges)
                 .map(this::retrieveWorkflowStatusChanges)
                 .map(this::retrieveTopicChanges)
@@ -78,6 +81,15 @@ public class WorkspaceActivityRetrieveService {
             String newAssigneeId = workspaceActivityDto.getNewState();
             Optional.ofNullable(oldAssigneeId).map(accountRetrieveService::retrievePlainAccountProfile).ifPresent(workspaceActivityDto::setOldAssignedToAccount);
             Optional.ofNullable(newAssigneeId).map(accountRetrieveService::retrievePlainAccountProfile).ifPresent(workspaceActivityDto::setNewAssignedToAccount);
+        }
+        return workspaceActivityDto;
+    }
+
+    private WorkspaceActivityDto retrieveRelationInitialized(WorkspaceActivityDto workspaceActivityDto) {
+        if (RELATION_INITIALIZED.equals(workspaceActivityDto.getType())) {
+            String relatedObjectId = workspaceActivityDto.getRelatedObjectId();
+            TaskRelationDto taskRelationDto = taskRelationRetrieveService.retrieveTaskRelation(relatedObjectId);
+            workspaceActivityDto.setNewTaskRelationDto(taskRelationDto);
         }
         return workspaceActivityDto;
     }

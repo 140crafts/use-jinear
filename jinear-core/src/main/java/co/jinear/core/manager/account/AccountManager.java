@@ -36,14 +36,14 @@ public class AccountManager {
 
     public BaseResponse confirmEmail(ConfirmEmailRequest confirmEmailRequest) {
         accountMailConfirmationService.confirmEmail(confirmEmailRequest.getUniqueToken());
-        return BaseResponse.builder().build();
+        return new BaseResponse();
     }
 
     public BaseResponse resendConfirmEmail(BaseRequest baseRequest) {
         String accountId = sessionInfoService.currentAccountId();
         log.info("Resend confirm email has started from accountId: {}", accountId);
         accountMailConfirmationService.sendConfirmEmailMail(accountId, baseRequest.getLocale());
-        return BaseResponse.builder().build();
+        return new BaseResponse();
     }
 
     private AccountRetrieveResponse mapAccountRetrieveResponse(AccountDto accountDto) {

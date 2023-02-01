@@ -8,7 +8,6 @@ import co.jinear.core.service.topic.TopicRetrieveService;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +19,6 @@ public class TopicListingManager {
     private final TopicRetrieveService topicRetrieveService;
     private final SessionInfoService sessionInfoService;
     private final TeamAccessValidator teamAccessValidator;
-    private final ModelMapper modelMapper;
 
     public TopicListingResponse retrieveTeamTopics(String teamId, Integer page) {
         String currentAccountId = sessionInfoService.currentAccountId();
