@@ -1,0 +1,26 @@
+package co.jinear.core.converter.task;
+
+import co.jinear.core.model.dto.task.TaskDto;
+import co.jinear.core.model.dto.task.TaskRelationDto;
+import co.jinear.core.model.entity.task.Task;
+import co.jinear.core.model.entity.task.TaskRelation;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+@Mapper(componentModel = "spring")
+public interface TaskDtoConverter {
+
+    @Mapping(source = "owner.username.username", target = "owner.username")
+    @Mapping(source = "assignedToAccount.username.username", target = "assignedToAccount.username")
+    @Mapping(source = "workspace.username.username", target = "workspace.username")
+    @Mapping(source = "team.workspace.username.username", target = "team.workspaceUsername")
+    TaskDto map(Task task);
+
+    @Mapping(source = "task.owner.username.username", target = "task.owner.username")
+    @Mapping(source = "task.assignedToAccount.username.username", target = "task.assignedToAccount.username")
+    @Mapping(source = "task.workspace.username.username", target = "task.workspace.username")
+    @Mapping(source = "relatedTask.owner.username.username", target = "relatedTask.owner.username")
+    @Mapping(source = "relatedTask.assignedToAccount.username.username", target = "relatedTask.assignedToAccount.username")
+    @Mapping(source = "relatedTask.workspace.username.username", target = "relatedTask.workspace.username")
+    TaskRelationDto map(TaskRelation taskRelation);
+}

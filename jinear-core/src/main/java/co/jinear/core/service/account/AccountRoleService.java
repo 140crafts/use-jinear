@@ -1,5 +1,6 @@
 package co.jinear.core.service.account;
 
+import co.jinear.core.converter.account.AccountRoleDtoConverter;
 import co.jinear.core.model.dto.account.AccountRoleDto;
 import co.jinear.core.model.entity.account.AccountRole;
 import co.jinear.core.model.enumtype.account.RoleType;
@@ -7,7 +8,6 @@ import co.jinear.core.repository.AccountRoleRepository;
 import co.jinear.core.service.passive.PassiveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +23,12 @@ public class AccountRoleService {
 
     private final AccountRoleRepository accountRoleRepository;
     private final PassiveService passiveService;
-    private final ModelMapper modelMapper;
+    private final AccountRoleDtoConverter accountRoleDtoConverter;
 
     public AccountRoleDto assignRoleToAccount(String accountId, RoleType roleType) {
         Optional<AccountRole> existingRole = findByAccountIdAndRole(accountId, roleType);
         return existingRole
-                .map(accountRole -> modelMapper.map(accountRole, AccountRoleDto.class))
+                .map(accountRoleDtoConverter::map)
                 .orElseGet(() -> assignRole(accountId, roleType));
     }
 
@@ -55,7 +55,7 @@ public class AccountRoleService {
         accountRole.setAccountId(accountId);
         AccountRole saved = accountRoleRepository.save(accountRole);
         log.info("Assigned roleType: {} to accountId: {} with accountRoleId: {}", roleType, accountId, saved.getAccountRoleId());
-        return modelMapper.map(accountRole, AccountRoleDto.class);
+        return accountRoleDtoConverter.map(accountRole);
     }
 
     private void retainRole(AccountRole accountRole) {

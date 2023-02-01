@@ -1,5 +1,6 @@
 package co.jinear.core.manager.task;
 
+import co.jinear.core.converter.task.TaskInitializeVoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.TeamDto;
@@ -15,7 +16,6 @@ import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -32,7 +32,7 @@ public class TaskInitializeManager {
     private final SessionInfoService sessionInfoService;
     private final WorkspaceValidator workspaceValidator;
     private final TeamAccessValidator teamAccessValidator;
-    private final ModelMapper modelMapper;
+    private final TaskInitializeVoConverter taskInitializeVoConverter;
 
     public TaskResponse initializeTask(TaskInitializeRequest taskInitializeRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -40,7 +40,7 @@ public class TaskInitializeManager {
         validateTeamAccess(currentAccount, taskInitializeRequest);
         validateDueDateIsAfterAssignedDate(taskInitializeRequest.getAssignedDate(), taskInitializeRequest.getDueDate());
         log.info("Initialize task has started. currentAccount: {}", currentAccount);
-        TaskInitializeVo taskInitializeVo = modelMapper.map(taskInitializeRequest, TaskInitializeVo.class);
+        TaskInitializeVo taskInitializeVo = taskInitializeVoConverter.map(taskInitializeRequest);
         taskInitializeVo.setOwnerId(currentAccount);
         TaskDto initializedTask = taskInitializeService.initializeTask(taskInitializeVo);
         retrieveAndSetTeamDto(initializedTask);

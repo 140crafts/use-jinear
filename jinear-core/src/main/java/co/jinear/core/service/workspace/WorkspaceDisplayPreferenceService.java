@@ -1,5 +1,6 @@
 package co.jinear.core.service.workspace;
 
+import co.jinear.core.converter.workspace.WorkspaceDisplayPreferenceConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
@@ -8,7 +9,6 @@ import co.jinear.core.repository.WorkspaceDisplayPreferenceRepository;
 import co.jinear.core.service.team.TeamRetrieveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -20,12 +20,12 @@ public class WorkspaceDisplayPreferenceService {
 
     private final WorkspaceDisplayPreferenceRepository workspaceDisplayPreferenceRepository;
     private final TeamRetrieveService teamRetrieveService;
-    private final ModelMapper modelMapper;
+    private final WorkspaceDisplayPreferenceConverter workspaceDisplayPreferenceConverter;
 
     public Optional<WorkspaceDisplayPreferenceDto> retrieveAccountPreferredWorkspace(String accountId) {
         log.info("Retrieve account preferred workspace has started. accountId: {}", accountId);
         return retrieveEntityByAccountId(accountId)
-                .map(workspaceDisplayPreference -> modelMapper.map(workspaceDisplayPreference, WorkspaceDisplayPreferenceDto.class));
+                .map(workspaceDisplayPreferenceConverter::map);
     }
 
     public WorkspaceDisplayPreferenceDto setAccountPreferredWorkspace(String accountId, String workspaceId) {
@@ -37,7 +37,7 @@ public class WorkspaceDisplayPreferenceService {
         workspaceDisplayPreference.setPreferredWorkspaceId(workspaceId);
         WorkspaceDisplayPreference saved = workspaceDisplayPreferenceRepository.save(workspaceDisplayPreference);
         log.info("Account preferred workspace has been set.");
-        return modelMapper.map(saved, WorkspaceDisplayPreferenceDto.class);
+        return workspaceDisplayPreferenceConverter.map(saved);
     }
 
     public WorkspaceDisplayPreferenceDto setAccountPreferredTeamId(String accountId, String teamId) {
@@ -49,7 +49,7 @@ public class WorkspaceDisplayPreferenceService {
         workspaceDisplayPreference.setPreferredTeamId(teamId);
         WorkspaceDisplayPreference saved = workspaceDisplayPreferenceRepository.save(workspaceDisplayPreference);
         log.info("Account preferred team and workspace has been set.");
-        return modelMapper.map(saved, WorkspaceDisplayPreferenceDto.class);
+        return workspaceDisplayPreferenceConverter.map(saved);
     }
 
     private Optional<WorkspaceDisplayPreference> retrieveEntityByAccountId(String accountId) {

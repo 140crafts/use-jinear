@@ -1,14 +1,13 @@
 package co.jinear.core.service.topic;
 
+import co.jinear.core.converter.topic.TopicDtoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.entity.topic.Topic;
-import co.jinear.core.model.vo.topic.TopicInitializeVo;
 import co.jinear.core.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,7 +22,7 @@ public class TopicRetrieveService {
     private final int PAGE_SIZE = 250;
 
     private final TopicRepository topicRepository;
-    private final ModelMapper modelMapper;
+    private final TopicDtoConverter topicDtoConverter;
 
     public Topic retrieveEntity(String topicId) {
         return topicRepository.findByTopicIdAndPassiveIdIsNull(topicId)
@@ -32,7 +31,7 @@ public class TopicRetrieveService {
 
     public Optional<TopicDto> retrieveOptional(String topicId) {
         return topicRepository.findByTopicIdAndPassiveIdIsNull(topicId)
-                .map(topic -> modelMapper.map(topic, TopicDto.class));
+                .map(topicDtoConverter::map);
     }
 
     public TopicDto retrieve(String topicId) {
@@ -42,7 +41,7 @@ public class TopicRetrieveService {
     public Page<TopicDto> retrieveTeamTopics(String teamId, int page) {
         log.info("Retrieve team topic page has started. teamId: {}, page: {}", teamId, page);
         return topicRepository.findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateDesc(teamId, PageRequest.of(page, PAGE_SIZE))
-                .map(topic -> modelMapper.map(topic, TopicDto.class));
+                .map(topicDtoConverter::map);
     }
 
     public void validateTagNotExists(String workspaceId, String tag) {

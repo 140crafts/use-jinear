@@ -2,7 +2,6 @@ package co.jinear.core.system;
 
 import lombok.experimental.UtilityClass;
 
-import java.io.UnsupportedEncodingException;
 import java.text.Normalizer;
 import java.util.Locale;
 
@@ -16,7 +15,7 @@ public class NormalizeHelper {
     public static final String MASK_CHAR = "*";
     private static final String ACCENT_REGEX = "\\p{M}";
     private static final String ALPHANUMERIC_REGEX = "[^A-Za-z0-9]";
-    private static final String USERNAME_REGEX = "[^A-Za-z0-9_-[.]]";
+    private static final String USERNAME_REGEX = "[^A-Za-z0-9-_[.]]";
     private static final String ASCII_REGEX = "[^\\x00-\\x7F]";
 
     public static String removeAccent(String str) {
@@ -66,12 +65,5 @@ public class NormalizeHelper {
         String postMaskedPart = str.substring(maskEnd);
         return preMaskedPart + maskedPart + postMaskedPart;
 
-    }
-
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        String zort = "cagdas_123-qwe+@#/çağ]das.tunca";
-        System.out.println(maskBetweenChars(zort, 2, 4));
-        System.out.println(maskBetweenChars(zort, 0, zort.length()));
-        System.out.println(normalizeUsername(zort));
     }
 }

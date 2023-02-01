@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-01-05 17:47:29.
+// Generated using typescript-generator version 3.0.1157 on 2023-02-01 09:52:15.
 
 export interface BaseDto {
     createdDate: Date;
@@ -68,6 +68,27 @@ export interface RichTextDto {
     sourceStack: RichTextSourceStack;
 }
 
+export interface RelatedTaskDto extends BaseDto {
+    taskId: string;
+    topicId: string;
+    workspaceId: string;
+    teamId: string;
+    ownerId: string;
+    workflowStatusId: string;
+    assignedTo: string;
+    assignedDate: Date;
+    dueDate: Date;
+    teamTagNo: number;
+    topicTagNo: number;
+    title: string;
+    topic?: TopicDto | null;
+    owner?: PlainAccountProfileDto | null;
+    assignedToAccount?: PlainAccountProfileDto | null;
+    workspace?: WorkspaceDto | null;
+    team?: TeamDto | null;
+    workflowStatus: TeamWorkflowStatusDto;
+}
+
 export interface TaskDto extends BaseDto {
     taskId: string;
     topicId: string;
@@ -82,12 +103,23 @@ export interface TaskDto extends BaseDto {
     topicTagNo: number;
     title: string;
     description?: RichTextDto | null;
-    topic?: Topic | null;
+    topic?: TopicDto | null;
     owner?: PlainAccountProfileDto | null;
     assignedToAccount?: PlainAccountProfileDto | null;
     workspace?: WorkspaceDto | null;
     team?: TeamDto | null;
     workflowStatus: TeamWorkflowStatusDto;
+    relations?: TaskRelationDto[] | null;
+    relatedIn?: TaskRelationDto[] | null;
+}
+
+export interface TaskRelationDto {
+    taskRelationId: string;
+    taskId: string;
+    relatedTaskId: string;
+    relationType: TaskRelationType;
+    task: RelatedTaskDto;
+    relatedTask: RelatedTaskDto;
 }
 
 export interface TeamDto extends BaseDto {
@@ -172,6 +204,7 @@ export interface WorkspaceActivityDto extends BaseDto {
     newTopicDto?: TopicDto | null;
     oldAssignedToAccount?: PlainAccountProfileDto | null;
     newAssignedToAccount?: PlainAccountProfileDto | null;
+    newTaskRelationDto?: TaskRelationDto | null;
 }
 
 export interface WorkspaceDisplayPreferenceDto {
@@ -274,6 +307,13 @@ export interface TaskInitializeRequest extends BaseRequest {
     dueDate?: Date | null;
     title: string;
     description?: string | null;
+    subTaskOf?: string | null;
+}
+
+export interface TaskRelationInitializeRequest extends BaseRequest {
+    taskId: string;
+    relatedTaskId: string;
+    relation: TaskRelationType;
 }
 
 export interface TaskRetrieveAllRequest extends BaseRequest {
@@ -358,9 +398,6 @@ export interface BaseResponse {
     conversationId: string;
 }
 
-export interface BaseResponseBuilder {
-}
-
 export interface AccountRetrieveResponse extends BaseResponse {
     data: AccountDto;
 }
@@ -424,27 +461,9 @@ export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
     data: PageDto<WorkspaceMemberDto>;
 }
 
-export interface Topic extends BaseEntity {
-    topicId: string;
-    workspaceId: string;
-    teamId: string;
-    ownerId: string;
-    color: string;
-    name: string;
-    tag: string;
-}
-
-export interface BaseEntity {
-    createdDate: Date;
-    lastUpdatedDate: Date;
-    passiveId: string;
-}
-
 export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
-
-export type TaskState = "TO_DO" | "IN_PROGRESS" | "IN_TEST" | "WONT_DO" | "DONE";
 
 export type PermissionType = "ACCOUNT_ROLE_EDIT";
 
@@ -468,6 +487,10 @@ export type RichTextSourceStack = "WYSIWYG";
 
 export type RichTextType = "TASK_DETAIL";
 
+export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
+
+export type TaskState = "TO_DO" | "IN_PROGRESS" | "IN_TEST" | "WONT_DO" | "DONE";
+
 export type TeamJoinMethodType = "SYNC_MEMBERS_WITH_WORKSPACE" | "ON_DEMAND" | "FROM_TEAM_ADMIN";
 
 export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
@@ -482,7 +505,7 @@ export type UsernameRelatedObjectType = "ACCOUNT" | "COMMUNITY" | "WORKSPACE";
 
 export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER";
 
-export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE";
+export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 

@@ -7,7 +7,6 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @ToString
 public class BaseResponse {
     private ResponseStatusType responseStatusType = ResponseStatusType.SUCCESS;
