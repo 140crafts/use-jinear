@@ -27,6 +27,7 @@ const workspaceIconMap = {
   TASK_CHANGE_ASSIGNEE: IoPlayForward,
   TASK_CHANGE_ASSIGNED_DATE: IoCalendar,
   TASK_CHANGE_DUE_DATE: IoCalendar,
+  RELATION_INITIALIZED: IoSparkles,
 };
 
 const decideWorkspaceActivityIcon = (type: WorkspaceActivityType) => {

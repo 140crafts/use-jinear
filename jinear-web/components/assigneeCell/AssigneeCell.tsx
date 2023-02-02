@@ -27,7 +27,10 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
       )
     : t("taskWeekCardTaskHasNoAssignedToTooltip");
 
-  const popChangeAssigneeModal = () => {
+  const popChangeAssigneeModal = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event?.preventDefault?.();
     dispatch(popChangeTaskAssigneeModal({ visible: true, task }));
   };
 

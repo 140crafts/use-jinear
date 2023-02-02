@@ -4,8 +4,11 @@ import {
   selectCurrentAccountsPreferredTeamId,
   selectCurrentAccountsPreferredWorkspace,
 } from "@/store/slice/accountSlice";
-import { selectNewTaskModalVisible } from "@/store/slice/modalSlice";
-import { useTypedSelector } from "@/store/store";
+import {
+  closeNewTaskModal,
+  selectNewTaskModalVisible,
+} from "@/store/slice/modalSlice";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import Modal from "../modal/Modal";
@@ -15,6 +18,7 @@ interface NewTaskModalProps {}
 
 const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectNewTaskModalVisible);
   const preferredWorkspace = useTypedSelector(
     selectCurrentAccountsPreferredWorkspace
@@ -23,6 +27,11 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const teamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
 
   const { isMobile } = useWindowSize();
+
+  const close = () => {
+    dispatch(closeNewTaskModal());
+  };
+
   return (
     <Modal
       visible={visible}
@@ -31,7 +40,11 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
       width={isMobile ? "fullscreen" : "large"}
     >
       {workspaceId && teamId && (
-        <NewTaskForm workspaceId={workspaceId} teamId={teamId} />
+        <NewTaskForm
+          workspaceId={workspaceId}
+          teamId={teamId}
+          onClose={close}
+        />
       )}
     </Modal>
   );

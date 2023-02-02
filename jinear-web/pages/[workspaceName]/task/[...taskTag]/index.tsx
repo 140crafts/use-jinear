@@ -1,7 +1,4 @@
-import Line from "@/components/line/Line";
-import TaskActivityList from "@/components/taskDetail/taskActivityList/TaskActivityList";
-import TaskBody from "@/components/taskDetail/taskBody/TaskBody";
-import TaskInfo from "@/components/taskDetail/taskInfo/TaskInfo";
+import TaskDetail from "@/components/taskDetail/TaskDetail";
 import TaskPageHeader from "@/components/taskDetail/taskPageHeader/TaskPageHeader";
 import TaskDetailBreadcrumb from "@/components/taskDetailBreadcrumb/TaskDetailBreadcrumb";
 import { useRetrieveWithWorkspaceNameAndTeamTagNoQuery } from "@/store/api/taskApi";
@@ -87,15 +84,7 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
           <TaskPageHeader taskTag={taskTag} title={taskResponse.data.title} />
           <div className={styles.contentContainer}>
             <TaskDetailBreadcrumb task={taskResponse.data} />
-            <div className={styles.taskLayout}>
-              <TaskBody className={styles.taskBody} task={taskResponse.data} />
-              <Line />
-              <TaskInfo className={styles.taskInfo} task={taskResponse.data} />
-              <Line />
-              {taskResponse.data.taskId && (
-                <TaskActivityList taskId={taskResponse.data.taskId} />
-              )}
-            </div>
+            <TaskDetail task={taskResponse.data} />
           </div>
         </>
       )}

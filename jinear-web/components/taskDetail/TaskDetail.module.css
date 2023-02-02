@@ -1,0 +1,13 @@
+.taskLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.taskBody {
+  flex: 1;
+}
+
+.taskInfo {
+  background-color: unset;
+}

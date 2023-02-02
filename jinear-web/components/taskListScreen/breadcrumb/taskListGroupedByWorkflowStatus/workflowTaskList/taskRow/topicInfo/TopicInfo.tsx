@@ -1,11 +1,11 @@
-import { Topic } from "@/model/be/jinear-core";
+import { TopicDto } from "@/model/be/jinear-core";
 import { getTextColor } from "@/utils/colorHelper";
 import cn from "classnames";
 import React from "react";
 import styles from "./TopicInfo.module.css";
 
 interface TopicInfoProps {
-  topic: Topic;
+  topic: TopicDto;
 }
 
 const TopicInfo: React.FC<TopicInfoProps> = ({ topic }) => {

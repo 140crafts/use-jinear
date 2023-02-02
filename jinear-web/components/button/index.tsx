@@ -61,7 +61,7 @@ interface ButtonProps {
   progessClassname?: string;
   progessSize?: number;
   className?: string;
-  onClick?: () => void;
+  onClick?: (event?: any) => void;
   type?: string;
   form?: string;
   style?: any;

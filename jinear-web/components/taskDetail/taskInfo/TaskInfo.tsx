@@ -1,5 +1,4 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { TaskDto } from "@/model/be/jinear-core";
 import { copyTextToClipboard } from "@/utils/clipboard";
 import { getTextColor } from "@/utils/colorHelper";
 import { HOST } from "@/utils/constants";
@@ -24,10 +23,13 @@ import {
   IoEllipseOutline,
   IoPauseCircleOutline,
 } from "react-icons/io5";
+import {
+  useTask,
+  useToggleShowSubTaskListEvenIfNoSubtasks,
+} from "../context/TaskDetailContext";
 
 interface TaskInfoProps {
   className?: string;
-  task: TaskDto;
 }
 
 const groupIconMap = {
@@ -38,9 +40,16 @@ const groupIconMap = {
   CANCELLED: <IoCloseCircle size={20} />,
 };
 
-const TaskInfo: React.FC<TaskInfoProps> = ({ className, task }) => {
+const TaskInfo: React.FC<TaskInfoProps> = ({ className }) => {
+  const task = useTask();
   const { t } = useTranslation();
+  const toggleShowSubTaskListEvenIfNoSubtasks =
+    useToggleShowSubTaskListEvenIfNoSubtasks();
   const dispatch = useAppDispatch();
+
+  const taskHasNoActiveSubtasks =
+    task?.relatedIn?.filter((relation) => relation.relationType == "SUBTASK")
+      ?.length == 0;
 
   const copyToClipboard = () => {
     const teamTag = task.team?.tag;
@@ -172,6 +181,18 @@ const TaskInfo: React.FC<TaskInfoProps> = ({ className, task }) => {
           <>{t("taskDetailAssignToAccount")}</>
         )}
       </Button>
+
+      {taskHasNoActiveSubtasks && (
+        <Button
+          onClick={toggleShowSubTaskListEvenIfNoSubtasks}
+          variant={ButtonVariants.filled}
+          heightVariant={ButtonHeight.mid}
+          className={styles.button}
+          data-tooltip-multiline={t("taskDetailCreateChecklistTooltip")}
+        >
+          {t("taskDetailCreateChecklist")}
+        </Button>
+      )}
     </div>
   );
 };

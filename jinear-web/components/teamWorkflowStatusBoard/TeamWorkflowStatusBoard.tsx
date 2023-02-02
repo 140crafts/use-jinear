@@ -83,12 +83,6 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({
         _isLoading ? styles["container-disabled"] : undefined
       )}
     >
-      {/* {_isLoading && (
-        <div className={styles.loading}>
-          <CircularProgress size={24} />
-        </div>
-      )} */}
-
       <DragDropContext onDragEnd={onDragEnd}>
         {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.BACKLOG?.map(
           (workflowDto) => (
