@@ -830,6 +830,10 @@ export default {
     en: "has changed due date.",
     tr: "son tarihi değiştirdi.",
   },
+  taskWorkflowActivityInfoLabel_RELATION_INITIALIZED: {
+    en: "has initialized new task relation.",
+    tr: "görev ilişkisi oluşturdu.",
+  },
   taskWorkflowActivityInfoLabelDateInDays: {
     en: "${num} days ago.",
     tr: "${num} gün önce",
@@ -925,5 +929,25 @@ export default {
   currentWorkspaceHeaderWorkspaceDetail: {
     en: "Workspace detail",
     tr: "Çalışma Alanı detayları",
+  },
+  taskDetailCreateChecklist: {
+    en: "Create To-Do list",
+    tr: "Yapılacak Listesi oluştur",
+  },
+  taskDetailCreateChecklistTooltip: {
+    en: "Add sub-tasks to follow the to-do list",
+    tr: "Yapılacak listesini takip etmek için alt görevler ekle",
+  },
+  taskSubtaskList: {
+    en: "Sub Tasks",
+    tr: "Alt Görevler",
+  },
+  taskSubtaskListAddNewTaskButton: {
+    en: "Create a new subtask",
+    tr: "Alt Görev Oluştur",
+  },
+  taskSubtaskListAddExistingTaskButton: {
+    en: "Add existing task as a new subtask",
+    tr: "Var olan görevi bağla",
   },
 };

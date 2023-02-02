@@ -2,9 +2,8 @@ import Button, { ButtonVariants } from "@/components/button";
 import TaskCreatedToast from "@/components/taskCreatedToast/TaskCreatedToast";
 import { TaskInitializeRequest } from "@/model/be/jinear-core";
 import { useInitializeTaskMutation } from "@/store/api/taskApi";
-import { closeNewTaskModal } from "@/store/slice/modalSlice";
-import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
+import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -20,17 +19,23 @@ import TopicSelect from "./topicSelect/TopicSelect";
 interface NewTaskFormProps {
   workspaceId: string;
   teamId: string;
+  subTaskOf?: string;
+  onClose: () => void;
+  className?: string;
 }
 
 const logger = Logger("NewTaskForm");
 
-const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId }) => {
+const NewTaskForm: React.FC<NewTaskFormProps> = ({
+  workspaceId,
+  teamId,
+  subTaskOf,
+  onClose,
+  className,
+}) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const {
     register,
-    reset,
-    watch,
     handleSubmit,
     setFocus,
     setValue,
@@ -71,13 +76,9 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId }) => {
       } else {
         toast(t("genericSuccess"));
       }
-      close();
+      onClose?.();
     }
   }, [isInitializeTaskSuccess, initializeTaskResponse]);
-
-  const close = () => {
-    dispatch(closeNewTaskModal());
-  };
 
   const submit: SubmitHandler<TaskInitializeRequest> = (data) => {
     if (data.assignedTo == "no-assignee") {
@@ -103,13 +104,16 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId }) => {
     <form
       autoComplete="off"
       id={"new-task-form"}
-      className={styles.form}
+      className={cn(styles.form, className)}
       onSubmit={handleSubmit(submit)}
       action="#"
     >
       <div className={styles.formContent}>
         <input type="hidden" value={workspaceId} {...register("workspaceId")} />
         <input type="hidden" value={teamId} {...register("teamId")} />
+        {subTaskOf && (
+          <input type="hidden" value={subTaskOf} {...register("subTaskOf")} />
+        )}
 
         <TitleInput labelClass={styles.label} register={register} />
 
@@ -147,7 +151,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId }) => {
       <div className={styles.footerContainer}>
         <Button
           disabled={isInitializeTaskLoading}
-          onClick={close}
+          onClick={onClose}
           className={styles.footerButton}
         >
           {t("newTaskModalCancel")}

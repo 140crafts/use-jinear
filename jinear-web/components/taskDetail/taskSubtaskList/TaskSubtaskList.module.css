@@ -1,0 +1,41 @@
+.content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 1rem;
+}
+
+.newTaskFormContainer {
+  display: flex;
+  flex-direction: row;
+  /* gap: 1rem; */
+}
+
+.newTaskForm {
+  flex: 1;
+  border-style: solid;
+  border-width: thin;
+  border-color: var(--c-primary-shade-0);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+}
+
+.newTaskInputButton {
+  display: flex;
+  align-self: flex-start;
+}
+
+.newTaskInputButton:hover {
+  background-color: unset;
+  cursor: default;
+}
+
+.newInputContent {
+  margin-top: 1rem;
+}
+
+.newTaskInputButtonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
