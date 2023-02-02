@@ -1,5 +1,6 @@
 package co.jinear.core.manager.account;
 
+import co.jinear.core.converter.account.InitializeResetPasswordVoConverter;
 import co.jinear.core.model.request.account.CompleteResetPasswordRequest;
 import co.jinear.core.model.request.account.InitializeResetPasswordRequest;
 import co.jinear.core.model.request.account.UpdatePasswordRequest;
@@ -12,7 +13,6 @@ import co.jinear.core.service.account.AccountPasswordResetService;
 import co.jinear.core.service.account.AccountPasswordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -22,7 +22,7 @@ public class AccountPasswordManager {
 
     private final AccountPasswordService accountPasswordService;
     private final AccountPasswordResetService accountPasswordResetService;
-    private final ModelMapper modelMapper;
+    private final InitializeResetPasswordVoConverter initializeResetPasswordVoConverter;
     private final SessionInfoService sessionInfoService;
 
     public BaseResponse updateAccountPassword(UpdatePasswordRequest updatePasswordRequest) {
@@ -35,7 +35,7 @@ public class AccountPasswordManager {
 
     public BaseResponse initializeResetAccountPassword(InitializeResetPasswordRequest initializeResetPasswordRequest) {
         log.info("Reset account password has started. initializeResetPasswordRequest: {}", initializeResetPasswordRequest);
-        InitializeResetPasswordVo initializeResetPasswordVo = modelMapper.map(initializeResetPasswordRequest, InitializeResetPasswordVo.class);
+        InitializeResetPasswordVo initializeResetPasswordVo = initializeResetPasswordVoConverter.map(initializeResetPasswordRequest);
         accountPasswordResetService.sendResetPasswordMail(initializeResetPasswordVo);
         return new BaseResponse();
     }

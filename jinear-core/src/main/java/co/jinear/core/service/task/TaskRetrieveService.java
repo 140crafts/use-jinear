@@ -1,5 +1,6 @@
 package co.jinear.core.service.task;
 
+import co.jinear.core.converter.task.TaskDtoConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.entity.task.Task;
@@ -8,7 +9,6 @@ import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.richtext.RichTextRetrieveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -18,23 +18,29 @@ public class TaskRetrieveService {
 
     private final TaskRepository taskRepository;
     private final RichTextRetrieveService richTextRetrieveService;
-    private final ModelMapper modelMapper;
+    private final TaskDtoConverter taskDtoConverter;
 
     public Task retrieveEntity(String taskId) {
         return taskRepository.findByTaskIdAndPassiveIdIsNull(taskId)
                 .orElseThrow(NotFoundException::new);
     }
 
+    public TaskDto retrievePlain(String taskId) {
+        return taskRepository.findByTaskIdAndPassiveIdIsNull(taskId)
+                .map(taskDtoConverter::map)
+                .orElseThrow(NotFoundException::new);
+    }
+
     public TaskDto retrieve(String taskId) {
         return taskRepository.findByTaskIdAndPassiveIdIsNull(taskId)
-                .map(task -> modelMapper.map(task, TaskDto.class))
+                .map(taskDtoConverter::map)
                 .map(this::fillRichTextDto)
                 .orElseThrow(NotFoundException::new);
     }
 
     public TaskDto retrieve(String workspaceId, String teamId, Integer teamTagNo) {
         return taskRepository.findByWorkspaceIdAndTeamIdAndTeamTagNoAndPassiveIdIsNull(workspaceId, teamId, teamTagNo)
-                .map(task -> modelMapper.map(task, TaskDto.class))
+                .map(taskDtoConverter::map)
                 .map(this::fillRichTextDto)
                 .orElseThrow(NotFoundException::new);
     }

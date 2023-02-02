@@ -1,5 +1,7 @@
 package co.jinear.core.manager.topic;
 
+import co.jinear.core.converter.topic.TopicInitializeVoConverter;
+import co.jinear.core.converter.topic.TopicUpdateVoConverter;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.request.topic.TopicInitializeRequest;
 import co.jinear.core.model.request.topic.TopicUpdateRequest;
@@ -16,7 +18,6 @@ import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -27,16 +28,17 @@ public class TopicManager {
     private final TopicInitializeService topicInitializeService;
     private final TopicRetrieveService topicRetrieveService;
     private final TopicUpdateService topicUpdateService;
-    private final ModelMapper modelMapper;
     private final SessionInfoService sessionInfoService;
     private final WorkspaceValidator workspaceValidator;
     private final TeamAccessValidator teamAccessValidator;
+    private final TopicInitializeVoConverter topicInitializeVoConverter;
+    private final TopicUpdateVoConverter topicUpdateVoConverter;
 
     public TopicResponse retrieveTopic(String topicId) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateAccess(topicId, currentAccountId);
         log.info("Retrieve topic has started. currentAccountId: {}", currentAccountId);
-        TopicDto topicDto =topicRetrieveService.retrieve(topicId);
+        TopicDto topicDto = topicRetrieveService.retrieve(topicId);
         return mapResponse(topicDto);
     }
 
@@ -44,8 +46,7 @@ public class TopicManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateAccess(topicInitializeRequest, currentAccountId);
         log.info("Initialize topic has started. currentAccountId: {}", currentAccountId);
-        TopicInitializeVo topicInitializeVo = modelMapper.map(topicInitializeRequest, TopicInitializeVo.class);
-        topicInitializeVo.setOwnerId(currentAccountId);
+        TopicInitializeVo topicInitializeVo = topicInitializeVoConverter.map(topicInitializeRequest, currentAccountId);
         TopicDto topicDto = topicInitializeService.initializeTopic(topicInitializeVo);
         return mapResponse(topicDto);
     }
@@ -54,7 +55,7 @@ public class TopicManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateAccess(topicUpdateRequest.getTopicId(), currentAccountId);
         log.info("Update topic has started. currentAccountId: {}, topicUpdateRequest: {}", currentAccountId, topicUpdateRequest);
-        TopicUpdateVo topicUpdateVo = modelMapper.map(topicUpdateRequest, TopicUpdateVo.class);
+        TopicUpdateVo topicUpdateVo = topicUpdateVoConverter.map(topicUpdateRequest);
         TopicDto topicDto = topicUpdateService.updateTopic(topicUpdateVo);
         return mapResponse(topicDto);
     }

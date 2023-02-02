@@ -1,5 +1,6 @@
 package co.jinear.core.service.topic;
 
+import co.jinear.core.converter.topic.TopicDtoConverter;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.entity.topic.Topic;
 import co.jinear.core.model.vo.topic.TopicDeleteVo;
@@ -8,7 +9,6 @@ import co.jinear.core.repository.TopicRepository;
 import co.jinear.core.service.passive.PassiveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -22,7 +22,7 @@ public class TopicUpdateService {
     private final TopicRetrieveService topicRetrieveService;
     private final PassiveService passiveService;
     private final TopicRepository topicRepository;
-    private final ModelMapper modelMapper;
+    private final TopicDtoConverter topicDtoConverter;
 
     public TopicDto updateTopic(TopicUpdateVo topicUpdateVo) {
         log.info("Update topic has started. topicUpdateVo: {}", topicUpdateVo);
@@ -31,7 +31,7 @@ public class TopicUpdateService {
         updateValues(topic, topicUpdateVo);
         Topic saved = topicRepository.save(topic);
         log.info("Update topic has ended. topicId: {}", saved.getTopicId());
-        return modelMapper.map(saved, TopicDto.class);
+        return topicDtoConverter.map(saved);
     }
 
     public void deleteTopic(TopicDeleteVo topicDeleteVo) {

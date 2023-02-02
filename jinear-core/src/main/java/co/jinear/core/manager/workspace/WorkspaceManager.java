@@ -1,5 +1,6 @@
 package co.jinear.core.manager.workspace;
 
+import co.jinear.core.converter.workspace.WorkspaceInitializeVoConverter;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.request.workspace.WorkspaceInitializeRequest;
@@ -16,7 +17,6 @@ import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -34,7 +34,7 @@ public class WorkspaceManager {
     private final MediaRetrieveService mediaRetrieveService;
     private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
     private final TeamRetrieveService teamRetrieveService;
-    private final ModelMapper modelMapper;
+    private final WorkspaceInitializeVoConverter workspaceInitializeVoConverter;
 
     public WorkspaceBaseResponse retrieveWorkspaceWithUsername(String workspaceUsername) {
         String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
@@ -91,8 +91,7 @@ public class WorkspaceManager {
     }
 
     private WorkspaceDto initializeWorkspace(WorkspaceInitializeRequest workspaceInitializeRequest, String accountId) {
-        WorkspaceInitializeVo workspaceInitializeVo = modelMapper.map(workspaceInitializeRequest, WorkspaceInitializeVo.class);
-        workspaceInitializeVo.setOwnerId(accountId);
+        WorkspaceInitializeVo workspaceInitializeVo = workspaceInitializeVoConverter.map(workspaceInitializeRequest, accountId);
         workspaceInitializeVo.setAppendRandomStrOnCollision(Boolean.TRUE);
         workspaceInitializeVo.setIsPersonal(Boolean.FALSE);
         setHandleIfNotProvided(workspaceInitializeVo);

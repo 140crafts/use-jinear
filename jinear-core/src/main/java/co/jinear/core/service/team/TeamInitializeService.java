@@ -1,5 +1,6 @@
 package co.jinear.core.service.team;
 
+import co.jinear.core.converter.team.TeamConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
@@ -19,7 +20,6 @@ import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.validator.team.TeamValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,7 +38,7 @@ public class TeamInitializeService {
     private final TeamWorkflowStatusService teamWorkflowStatusService;
     private final LocaleStringService localeStringService;
     private final TeamMemberSyncService teamMemberSyncService;
-    private final ModelMapper modelMapper;
+    private final TeamConverter teamConverter;
 
     @Transactional
     public TeamDto initializeTeam(TeamInitializeVo teamInitializeVo) {
@@ -47,12 +47,12 @@ public class TeamInitializeService {
         validatePersonalWorkspaceTeamLimit(teamInitializeVo.getWorkspaceId());
         validateTeamNameIsNotUsedInWorkspace(teamInitializeVo);
         validateTeamTagIsNotUsedInWorkspace(teamInitializeVo);
-        Team team = modelMapper.map(teamInitializeVo, Team.class);
+        Team team = teamConverter.map(teamInitializeVo);
         Team saved = teamRepository.saveAndFlush(team);
         checkAndSyncMembersWithWorkspace(saved);
         initializeDefaultWorkflow(saved.getTeamId(), saved.getWorkspaceId(), teamInitializeVo.getLocale());
         log.info("Initialize team has finished. teamId: {}", saved.getTeamId());
-        return modelMapper.map(saved, TeamDto.class);
+        return teamConverter.map(saved);
     }
 
     private void sanitizeTag(TeamInitializeVo teamInitializeVo) {

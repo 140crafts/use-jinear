@@ -1,15 +1,15 @@
 package co.jinear.core.service.account;
 
+import co.jinear.core.converter.account.AccountDtoConverter;
+import co.jinear.core.converter.account.PlainAccountProfileDtoConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
-import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.repository.AccountRepository;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,7 +22,8 @@ public class AccountRetrieveService {
     private final AccountRepository accountRepository;
     private final MediaRetrieveService mediaRetrieveService;
     private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
-    private final ModelMapper modelMapper;
+    private final AccountDtoConverter accountDtoConverter;
+    private final PlainAccountProfileDtoConverter plainAccountProfileDtoConverter;
 
     public AccountDto retrieve(String accountId) {
         log.info("Retrieving account with accountId: {}", accountId);
@@ -30,7 +31,7 @@ public class AccountRetrieveService {
                 .map(accountRepository::findByAccountIdAndPassiveIdIsNull)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(account -> modelMapper.map(account, AccountDto.class))
+                .map(accountDtoConverter::map)
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -40,7 +41,7 @@ public class AccountRetrieveService {
                 .map(accountRepository::findByAccountIdAndPassiveIdIsNull)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(account -> modelMapper.map(account, AccountDto.class));
+                .map(accountDtoConverter::map);
     }
 
     public Optional<AccountDto> retrieveByEmail(String email) {
@@ -49,7 +50,7 @@ public class AccountRetrieveService {
                 .map(accountRepository::findByEmailAndPassiveIdIsNull)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
-                .map(account -> modelMapper.map(account, AccountDto.class));
+                .map(accountDtoConverter::map);
     }
 
     public AccountDto retrieveWithBasicInfo(String accountId) {
@@ -66,7 +67,7 @@ public class AccountRetrieveService {
         if (accountDtoOptional.isPresent()) {
             AccountDto accountDto = accountDtoOptional.get();
             setProfilePicture(accountId, accountDto);
-            return modelMapper.map(accountDto, PlainAccountProfileDto.class);
+            return plainAccountProfileDtoConverter.map(accountDto);
         }
         return null;
     }
