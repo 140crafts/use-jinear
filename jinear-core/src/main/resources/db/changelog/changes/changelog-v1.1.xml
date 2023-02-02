@@ -339,4 +339,11 @@
         </createTable>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-add-fts-index">
+        <sql>
+            alter table task
+                add fulltext(title)
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

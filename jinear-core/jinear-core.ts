@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-02-01 09:52:15.
+// Generated using typescript-generator version 3.0.1157 on 2023-02-02 08:31:51.
 
 export interface BaseDto {
     createdDate: Date;
@@ -427,6 +427,10 @@ export interface TaskListingResponse extends BaseResponse {
 
 export interface TaskResponse extends BaseResponse {
     data: TaskDto;
+}
+
+export interface TaskSearchResponse extends BaseResponse {
+    data: PageDto<TaskDto>;
 }
 
 export interface TeamListingResponse extends BaseResponse {
