@@ -97,7 +97,7 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {!preferredWorkspace?.personal && (
+      {!preferredWorkspace?.isPersonal && (
         <div className={styles.teamsTitleContainer}>
           <MenuGroupTitle
             label={t("sideMenuWorkspaceCurrentTeam")}
@@ -140,7 +140,7 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
         {isSuccess && selectedTeam && (
           <TeamMenu
             {...selectedTeam}
-            isPersonalWorkspace={preferredWorkspace?.personal}
+            isPersonalWorkspace={preferredWorkspace?.isPersonal}
             workspaceUsername={preferredWorkspace?.username || ""}
           />
         )}

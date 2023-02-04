@@ -16,6 +16,7 @@ import AssigneeChangeDiffInfo from "./assigneeChangeDiffInfo/AssigneeChangeDiffI
 import DescDiffInfo from "./descDiffInfo/DescDiffInfo";
 import DueDateChangeDiffInfo from "./dueDateChangeDiffInfo/DueDateChangeDiffInfo";
 import styles from "./TaskActivity.module.css";
+import TaskRelationChangedDiffInfo from "./taskRelationChangedDiffInfo/TaskRelationChangedDiffInfo";
 import TitleDiffInfo from "./titleDiffInfo/TitleDiffInfo";
 import TopicDiffInfo from "./topicDiffInfo/TopicDiffInfo";
 import WorkflowStatusDiffInfo from "./workflowStatusDiffInfo/WorkflowStatusDiffInfo";
@@ -32,6 +33,8 @@ const TASK_RELATED_ACTIONS_WITH_DIFF = [
   "TASK_CHANGE_ASSIGNEE",
   "TASK_CHANGE_ASSIGNED_DATE",
   "TASK_CHANGE_DUE_DATE",
+  "RELATION_INITIALIZED",
+  "RELATION_REMOVED",
 ];
 
 const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
@@ -128,6 +131,10 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
             )}
             {activity.type == "TASK_CHANGE_DUE_DATE" && (
               <DueDateChangeDiffInfo activity={activity} />
+            )}
+            {(activity.type == "RELATION_INITIALIZED" ||
+              activity.type == "RELATION_REMOVED") && (
+              <TaskRelationChangedDiffInfo activity={activity} />
             )}
           </>
         )}

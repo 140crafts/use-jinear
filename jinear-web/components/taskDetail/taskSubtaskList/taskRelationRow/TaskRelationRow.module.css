@@ -2,6 +2,11 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  border-radius: var(--border-radius);
+}
+
+.container:hover {
+  background-color: var(--c-primary-shade-0);
 }
 
 .linkButton {
@@ -9,4 +14,19 @@
   justify-content: flex-start;
   text-align: left;
   color: var(--c-text-color);
+}
+
+.workflowStatusButton {
+  width: 32px;
+  height: 32px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+.deleteButton {
+  display: none;
+}
+
+.container:hover .deleteButton {
+  display: flex;
 }

@@ -28,3 +28,18 @@ export interface ChangeTaskDateModalState extends ModalState {
 export interface ChangeTaskAssigneeModalState extends ModalState {
   task?: TaskDto;
 }
+export interface SearchTaskModalState extends ModalState {
+  workspaceId?: string;
+  teamId?: string;
+  onSelect?: (task: TaskDto) => void;
+}
+
+export interface DialogModalState extends ModalState {
+  title?: string;
+  content?: string;
+  htmlContent?: string;
+  closeButtonLabel?: string;
+  confirmButtonLabel?: string;
+  onConfirm?: () => void;
+  onClose?: () => void;
+}

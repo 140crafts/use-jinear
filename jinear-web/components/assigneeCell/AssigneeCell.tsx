@@ -1,6 +1,7 @@
 import { TaskDto } from "@/model/be/jinear-core";
 import { popChangeTaskAssigneeModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
+import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoPerson } from "react-icons/io5";
@@ -11,11 +12,13 @@ import CurrentAccountInfo from "./currentAccountInfo/CurrentAccountInfo";
 interface AssigneeCellProps {
   task: TaskDto;
   tooltipPosition?: "left" | "right";
+  className?: string;
 }
 
 const AssigneeCell: React.FC<AssigneeCellProps> = ({
   task,
   tooltipPosition = "right",
+  className,
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -37,7 +40,7 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
   return task ? (
     <Button
       variant={ButtonVariants.filled}
-      className={styles.container}
+      className={cn(styles.container, className)}
       data-tooltip-right={tooltipPosition == "right" ? tooltip : undefined}
       data-tooltip={tooltipPosition == "left" ? tooltip : undefined}
       onClick={popChangeAssigneeModal}

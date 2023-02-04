@@ -57,10 +57,10 @@ export const selectCurrentAccountsWorkspaces = (state: RootState) =>
   state.account.current?.workspaces;
 
 export const selectCurrentAccountsPersonalWorkspace = (state: RootState) =>
-  state.account.current?.workspaces?.find((w) => w.personal);
+  state.account.current?.workspaces?.find((w) => w.isPersonal);
 
 export const selectCurrentAccountsCollectiveWorkspaces = (state: RootState) =>
-  state.account.current?.workspaces?.filter((w) => !w.personal);
+  state.account.current?.workspaces?.filter((w) => !w.isPersonal);
 
 export const selectCurrentAccountsPreferredWorkspace = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.workspace;

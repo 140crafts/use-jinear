@@ -1,11 +1,14 @@
+import { TaskDto } from "@/model/be/jinear-core";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ModalState, {
   ChangeTaskAssigneeModalState,
   ChangeTaskDateModalState,
   ChangeTaskTopicModalState,
   ChangeTaskWorkflowStatusModalState,
+  DialogModalState,
   LoginWith2FaMailModalState,
   NotFoundModalState,
+  SearchTaskModalState,
 } from "model/app/store/modal/modalState";
 import { accountApi } from "../api/accountApi";
 import { RootState } from "../store";
@@ -53,6 +56,12 @@ const initialState = {
   newTeamModal: {
     visible: false,
   },
+  searchTaskModal: {
+    visible: false,
+  },
+  dialogModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -66,6 +75,8 @@ const initialState = {
   changeTaskAssigneeModal: null | ChangeTaskAssigneeModalState;
   newWorkspaceModal: null | ModalState;
   newTeamModal: null | ModalState;
+  searchTaskModal: null | SearchTaskModalState;
+  dialogModal: null | DialogModalState;
 };
 
 const slice = createSlice({
@@ -166,6 +177,27 @@ const slice = createSlice({
       state.newTeamModal = initialState.newTeamModal;
     },
 
+    popDialogModal: (state, action: PayloadAction<DialogModalState>) => {
+      state.dialogModal = { ...action.payload, visible: true };
+    },
+    closeDialogModal: (state, action: PayloadAction<void>) => {
+      state.dialogModal = initialState.dialogModal;
+    },
+
+    popSearchTaskModal: (
+      state,
+      action: PayloadAction<{
+        workspaceId: string;
+        teamId: string;
+        onSelect: (task: TaskDto) => void;
+      }>
+    ) => {
+      state.searchTaskModal = { visible: true, ...action.payload };
+    },
+    closeSearchTaskModal: (state, action: PayloadAction<void>) => {
+      state.searchTaskModal = initialState.searchTaskModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -203,6 +235,10 @@ export const {
   closeNewWorkspaceModal,
   popNewTeamModal,
   closeNewTeamModal,
+  popSearchTaskModal,
+  closeSearchTaskModal,
+  popDialogModal,
+  closeDialogModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -279,3 +315,29 @@ export const selectNewWorkspaceModalVisible = (state: RootState) =>
 
 export const selectNewTeamModalVisible = (state: RootState) =>
   state.modal.newTeamModal?.visible;
+
+export const selectSearchTaskModalVisible = (state: RootState) =>
+  state.modal.searchTaskModal?.visible;
+export const selectSearchTaskModalWorkspaceId = (state: RootState) =>
+  state.modal.searchTaskModal?.workspaceId;
+export const selectSearchTaskModalTeamId = (state: RootState) =>
+  state.modal.searchTaskModal?.teamId;
+export const selectSearchTaskModalOnSelect = (state: RootState) =>
+  state.modal.searchTaskModal?.onSelect;
+
+export const selectDialogModalVisible = (state: RootState) =>
+  state.modal.dialogModal?.visible;
+export const selectDialogModalTitle = (state: RootState) =>
+  state.modal.dialogModal?.title;
+export const selectDialogModalContent = (state: RootState) =>
+  state.modal.dialogModal?.content;
+export const selectDialogModalHtmlContent = (state: RootState) =>
+  state.modal.dialogModal?.htmlContent;
+export const selectDialogModalCloseButtonLabel = (state: RootState) =>
+  state.modal.dialogModal?.closeButtonLabel;
+export const selectDialogModalConfirmButtonLabel = (state: RootState) =>
+  state.modal.dialogModal?.confirmButtonLabel;
+export const selectDialogModalOnConfirm = (state: RootState) =>
+  state.modal.dialogModal?.onConfirm;
+export const selectDialogModalOnClose = (state: RootState) =>
+  state.modal.dialogModal?.onClose;

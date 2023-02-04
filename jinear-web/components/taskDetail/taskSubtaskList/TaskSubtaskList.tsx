@@ -2,8 +2,16 @@ import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import NewTaskForm from "@/components/form/newTaskForm/NewTaskForm";
 import Line from "@/components/line/Line";
 import { useToggle } from "@/hooks/useToggle";
+import { TaskDto } from "@/model/be/jinear-core";
+import { useInitializeTaskRelationMutation } from "@/store/api/taskRelationApi";
+import {
+  changeLoadingModalVisibility,
+  closeSearchTaskModal,
+  popSearchTaskModal,
+} from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
-import React from "react";
+import React, { useEffect } from "react";
 import { IoPauseCircleOutline } from "react-icons/io5";
 import {
   useShowSubTaskListEvenIfNoSubtasks,
@@ -15,16 +23,51 @@ import styles from "./TaskSubtaskList.module.css";
 interface TaskSubtaskListProps {}
 
 const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const showSubTaskListEvenIfNoSubtasks = useShowSubTaskListEvenIfNoSubtasks();
 
   const { current: newTaskInputVisible, toggle: toggleNewTaskInputVisible } =
     useToggle(showSubTaskListEvenIfNoSubtasks);
 
+  const [
+    initializeTaskRelation,
+    {
+      isSuccess: isInitializeRelationSuccess,
+      isError: isInitializeRelationError,
+    },
+  ] = useInitializeTaskRelationMutation();
+
   const task = useTask();
   const hasSubTasks =
     task.relatedIn?.filter((relation) => relation.relationType == "SUBTASK")
       ?.length != 0;
+
+  useEffect(() => {
+    dispatch(changeLoadingModalVisibility({ visible: false }));
+    if (isInitializeRelationSuccess) {
+      dispatch(closeSearchTaskModal());
+    }
+  }, [isInitializeRelationSuccess, isInitializeRelationError]);
+
+  const onExistingTaskSelect = (selectedTask: TaskDto) => {
+    dispatch(changeLoadingModalVisibility({ visible: true }));
+    initializeTaskRelation({
+      taskId: selectedTask.taskId,
+      relatedTaskId: task.taskId,
+      relation: "SUBTASK",
+    });
+  };
+
+  const openSearchTaskModal = () => {
+    dispatch(
+      popSearchTaskModal({
+        workspaceId: task.workspaceId,
+        teamId: task.teamId,
+        onSelect: onExistingTaskSelect,
+      })
+    );
+  };
 
   return showSubTaskListEvenIfNoSubtasks || hasSubTasks ? (
     <>
@@ -50,7 +93,7 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
                   {t("taskSubtaskListAddNewTaskButton")}
                 </Button>
                 <Button
-                  onClick={toggleNewTaskInputVisible}
+                  onClick={openSearchTaskModal}
                   variant={ButtonVariants.filled2}
                   heightVariant={ButtonHeight.short}
                 >
