@@ -1,12 +1,14 @@
 import AuthCheck from "@/components/authCheck/AuthCheck";
 import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import MainHeader from "@/components/mainHeader/MainHeader";
+import DialogModal from "@/components/modal/dialogModal/DialogModal";
 import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
 import LoginWith2FaMailModal from "@/components/modal/loginWith2FaMailModal/LoginWith2FaMailModal";
 import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
 import NewTeamModal from "@/components/modal/newTeamModal/NewTeamModal";
 import NewWorkspaceModal from "@/components/modal/newWorkspaceModal/NewWorkspaceModal";
 import NotFoundModal from "@/components/modal/notFoundModal/NotFoundModal";
+import SearchTaskModal from "@/components/modal/searchTaskModal/SearchTaskModal";
 import TaskAssigneeChangeModal from "@/components/modal/taskDetailModals/taskAssigneeChangeModal/TaskAssigneeChangeModal";
 import TaskDateChangeModal from "@/components/modal/taskDetailModals/taskDateChangeModal/TaskDateChangeModal";
 import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicChangeModal/TaskTopicChangeModal";
@@ -35,6 +37,7 @@ export function useThemeToggle() {
 
 const globalModals: any = (
   <>
+    <SearchTaskModal />
     <NewTeamModal />
     <NewWorkspaceModal />
     <TaskAssigneeChangeModal />
@@ -44,6 +47,7 @@ const globalModals: any = (
     <TeamOptionsModal />
     <NewTaskModal />
     <LoginWith2FaMailModal />
+    <DialogModal />
     <NotFoundModal />
     <LoadingModal />
   </>

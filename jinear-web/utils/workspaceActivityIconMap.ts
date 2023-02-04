@@ -3,6 +3,7 @@ import {
   IoCalendar,
   IoCaretForward,
   IoCheckmark,
+  IoClose,
   IoCog,
   IoPencil,
   IoPersonAdd,
@@ -28,6 +29,7 @@ const workspaceIconMap = {
   TASK_CHANGE_ASSIGNED_DATE: IoCalendar,
   TASK_CHANGE_DUE_DATE: IoCalendar,
   RELATION_INITIALIZED: IoSparkles,
+  RELATION_REMOVED: IoClose,
 };
 
 const decideWorkspaceActivityIcon = (type: WorkspaceActivityType) => {

@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem;
+  position: relative;
+}
+
+.searchInput {
+  flex: 1;
+}
+
+.searchList {
+  display: flex;
+  flex-direction: column;
+  height: min(100%, 16rem);
+  min-height: 6rem;
+  padding: 0.5rem;
+  overflow-y: scroll;
+}
+
+.messageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4rem;
+}
+
+.searchResultItem {
+  text-align: left;
+  justify-content: left;
+}
+
+.titleContainer {
+  flex: 1;
+  padding-left: 0.5rem;
+}

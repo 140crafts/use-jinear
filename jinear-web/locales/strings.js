@@ -834,6 +834,10 @@ export default {
     en: "has initialized new task relation.",
     tr: "görev ilişkisi oluşturdu.",
   },
+  taskWorkflowActivityInfoLabel_RELATION_REMOVED: {
+    en: "has removed task relation.",
+    tr: "görev ilişkisini kaldırdı.",
+  },
   taskWorkflowActivityInfoLabelDateInDays: {
     en: "${num} days ago.",
     tr: "${num} gün önce",
@@ -949,5 +953,37 @@ export default {
   taskSubtaskListAddExistingTaskButton: {
     en: "Add existing task as a new subtask",
     tr: "Var olan görevi bağla",
+  },
+  searchTaskModalTitle: {
+    en: "Search Task",
+    tr: "Görev Ara",
+  },
+  searchTaskModalPlaceholder: {
+    en: "Search task by title",
+    tr: "Görev başlığına göre ara",
+  },
+  searchTaskModalInitialState: {
+    en: "To list tasks search with title",
+    tr: "Görevleri listelemek için bir görev başlığı ara",
+  },
+  searchTaskModalEmptyState: {
+    en: "No task found",
+    tr: "Görev bulunamadı",
+  },
+  taskRelationUnlink_dialogModalTitle: {
+    en: "Remove Relation",
+    tr: "İlişiği Kes",
+  },
+  taskRelationUnlink_dialogModalContent: {
+    en: "Are you sure to remove this task relation?",
+    tr: "Bu görev ile ilişiği kesmekten emin misiniz?",
+  },
+  taskRelationUnlink_dialogModalConfirmLabel: {
+    en: "Remove",
+    tr: "İlişiği Kes",
+  },
+  dialogModalGenericCloseLabel: {
+    en: "Dismiss",
+    tr: "Vazgeç",
   },
 };
