@@ -1,5 +1,6 @@
 package co.jinear.core.service.workspace;
 
+import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.username.UsernameDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceSettingDto;
@@ -44,16 +45,17 @@ public class WorkspaceInitializeService {
         UsernameDto usernameDto = assignUsername(workspaceInitializeVo, workspace);
         WorkspaceSettingDto workspaceSettingDto = initializeSettings(workspaceInitializeVo, workspace);
         assignOwner(workspaceInitializeVo, workspace);
-        setAsDefaultWorkspace(workspaceInitializeVo.getOwnerId(), workspace.getWorkspaceId());
-        createInitialTeam(workspace, workspaceInitializeVo);
+        TeamDto initialTeamDto = createInitialTeam(workspace, workspaceInitializeVo);
+        setAsDefaultWorkspace(workspaceInitializeVo.getOwnerId(), initialTeamDto);
         return mapValues(workspace, usernameDto, workspaceSettingDto);
     }
 
-    private void setAsDefaultWorkspace(String ownerId, String workspaceId) {
-        workspaceDisplayPreferenceService.setAccountPreferredWorkspace(ownerId, workspaceId);
+    private void setAsDefaultWorkspace(String ownerId, TeamDto initialTeamDto) {
+        workspaceDisplayPreferenceService.setAccountPreferredWorkspace(ownerId, initialTeamDto.getWorkspaceId());
+        workspaceDisplayPreferenceService.setAccountPreferredTeamId(ownerId, initialTeamDto.getTeamId());
     }
 
-    private void createInitialTeam(Workspace workspace, WorkspaceInitializeVo workspaceInitializeVo) {
+    private TeamDto createInitialTeam(Workspace workspace, WorkspaceInitializeVo workspaceInitializeVo) {
         log.info("Create initial team has started for workspaceId: {}", workspace.getWorkspaceId());
         String teamTag = NormalizeHelper.normalizeStrictly(workspace.getTitle());
         teamTag = teamTag.substring(0, Math.min(teamTag.length(), 3));
@@ -65,7 +67,7 @@ public class WorkspaceInitializeService {
         teamInitializeVo.setJoinMethod(TeamJoinMethodType.SYNC_MEMBERS_WITH_WORKSPACE);
         teamInitializeVo.setLocale(workspaceInitializeVo.getLocale());
         teamInitializeVo.setInitializedBy(workspaceInitializeVo.getOwnerId());
-        teamInitializeService.initializeTeam(teamInitializeVo);
+        return teamInitializeService.initializeTeam(teamInitializeVo);
     }
 
     private void assignOwner(WorkspaceInitializeVo workspaceInitializeVo, Workspace workspace) {
