@@ -1,6 +1,7 @@
 package co.jinear.core.manager.task;
 
 import co.jinear.core.converter.task.TaskDatesUpdateVoConverter;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.topic.TopicDto;
@@ -25,6 +26,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -88,6 +90,7 @@ public class TaskUpdateManager {
     public TaskResponse updateTaskAssignedDate(String taskId, TaskDateUpdateRequest taskDateUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
+        validateDueDateIsAfterAssignedDate(taskDateUpdateRequest.getDate(), taskDtoBeforeUpdate.getDueDate());
         log.info("Update task assigned date has started. accountId: {}, taskId: {}", currentAccountId, taskId);
         TaskDatesUpdateVo taskDatesUpdateVo = taskDatesUpdateVoConverter.map(taskDateUpdateRequest, taskId);
         TaskDto taskDto = taskUpdateService.updateTaskAssignedDate(taskDatesUpdateVo);
@@ -98,6 +101,7 @@ public class TaskUpdateManager {
     public TaskResponse updateTaskDueDate(String taskId, TaskDateUpdateRequest taskDateUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
+        validateDueDateIsAfterAssignedDate(taskDtoBeforeUpdate.getAssignedDate(), taskDateUpdateRequest.getDate());
         log.info("Update task due date has started. accountId: {}, taskId: {}", currentAccountId, taskId);
         TaskDatesUpdateVo taskDatesUpdateVo = taskDatesUpdateVoConverter.map(taskDateUpdateRequest, taskId);
         TaskDto taskDto = taskUpdateService.updateTaskDueDate(taskDatesUpdateVo);
@@ -157,5 +161,11 @@ public class TaskUpdateManager {
         Optional.of(taskAssigneeUpdateRequest)
                 .map(TaskAssigneeUpdateRequest::getAssigneeId)
                 .ifPresent(newAssignee -> validateAccess(taskId, newAssignee));
+    }
+
+    private void validateDueDateIsAfterAssignedDate(ZonedDateTime assignedDate, ZonedDateTime dueDate) {
+        if (Objects.nonNull(assignedDate) && Objects.nonNull(dueDate) && assignedDate.isAfter(dueDate)) {
+            throw new BusinessException();
+        }
     }
 }
