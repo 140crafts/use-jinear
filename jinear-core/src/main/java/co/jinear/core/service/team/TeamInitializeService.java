@@ -66,7 +66,7 @@ public class TeamInitializeService {
     private void validatePersonalWorkspaceTeamLimit(String workspaceId) {
         log.info("Validate personal workspace limit has started.");
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
-        if (workspaceDto.isPersonal()) {
+        if (workspaceDto.getIsPersonal()) {
             List<TeamDto> teamDtoList = teamRetrieveService.retrieveWorkspaceTeams(workspaceId);
             if (!teamDtoList.isEmpty()) {
                 throw new BusinessException();

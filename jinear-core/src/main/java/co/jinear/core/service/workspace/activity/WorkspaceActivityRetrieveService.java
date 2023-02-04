@@ -42,6 +42,8 @@ public class WorkspaceActivityRetrieveService {
                 .map(this::retrieveWorkflowStatusChanges)
                 .map(this::retrieveTopicChanges)
                 .map(this::retrieveAssigneeChanges)
+                .map(this::retrieveRelationInitialized)
+                .map(this::retrieveRelationRemoved)
                 .toList();
     }
 
@@ -88,8 +90,17 @@ public class WorkspaceActivityRetrieveService {
     private WorkspaceActivityDto retrieveRelationInitialized(WorkspaceActivityDto workspaceActivityDto) {
         if (RELATION_INITIALIZED.equals(workspaceActivityDto.getType())) {
             String relatedObjectId = workspaceActivityDto.getRelatedObjectId();
-            TaskRelationDto taskRelationDto = taskRelationRetrieveService.retrieveTaskRelation(relatedObjectId);
+            TaskRelationDto taskRelationDto = taskRelationRetrieveService.retrieveTaskRelationInclPassive(relatedObjectId);
             workspaceActivityDto.setNewTaskRelationDto(taskRelationDto);
+        }
+        return workspaceActivityDto;
+    }
+
+    private WorkspaceActivityDto retrieveRelationRemoved(WorkspaceActivityDto workspaceActivityDto) {
+        if (RELATION_REMOVED.equals(workspaceActivityDto.getType())) {
+            String relatedObjectId = workspaceActivityDto.getRelatedObjectId();
+            TaskRelationDto taskRelationDto = taskRelationRetrieveService.retrieveTaskRelationInclPassive(relatedObjectId);
+            workspaceActivityDto.setOldTaskRelationDto(taskRelationDto);
         }
         return workspaceActivityDto;
     }

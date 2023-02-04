@@ -46,5 +46,7 @@ public class WorkspaceActivityDto extends BaseDto {
     @Nullable
     private PlainAccountProfileDto newAssignedToAccount;
     @Nullable
+    private TaskRelationDto oldTaskRelationDto;
+    @Nullable
     private TaskRelationDto newTaskRelationDto;
 }

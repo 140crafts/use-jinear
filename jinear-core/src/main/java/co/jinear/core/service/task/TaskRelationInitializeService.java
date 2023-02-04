@@ -1,6 +1,7 @@
 package co.jinear.core.service.task;
 
 import co.jinear.core.converter.task.TaskRelationConverter;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.task.TaskRelationDto;
 import co.jinear.core.model.entity.task.TaskRelation;
 import co.jinear.core.model.vo.task.TaskRelationInitializeVo;
@@ -21,12 +22,14 @@ import static co.jinear.core.model.enumtype.workspace.WorkspaceActivityType.RELA
 public class TaskRelationInitializeService {
 
     private final TaskRelationRepository taskRelationRepository;
+    private final TaskRelationRetrieveService taskRelationRetrieveService;
     private final TaskRelationConverter taskRelationConverter;
     private final WorkspaceActivityService workspaceActivityService;
 
     @Transactional
     public TaskRelationDto initializeTaskRelation(TaskRelationInitializeVo taskRelationInitializeVo) {
         log.info("Initialize task relation has started. taskRelationInitializeVo: {}", taskRelationInitializeVo);
+        validateRelationNotExists(taskRelationInitializeVo);
         TaskRelation relation = taskRelationConverter.map(taskRelationInitializeVo);
         TaskRelation saved = taskRelationRepository.save(relation);
         log.info("New relation initialized. taskRelationId: {}", saved.getTaskRelationId());
@@ -44,6 +47,22 @@ public class TaskRelationInitializeService {
                 .relatedObjectId(relation.getTaskRelationId())
                 .type(RELATION_INITIALIZED)
                 .build();
+        WorkspaceActivityCreateVo vo2 = WorkspaceActivityCreateVo
+                .builder()
+                .workspaceId(taskRelationInitializeVo.getWorkspaceId())
+                .teamId(taskRelationInitializeVo.getTeamId())
+                .taskId(taskRelationInitializeVo.getRelatedTaskId())
+                .performedBy(taskRelationInitializeVo.getPerformedBy())
+                .relatedObjectId(relation.getTaskRelationId())
+                .type(RELATION_INITIALIZED)
+                .build();
         workspaceActivityService.createWorkspaceActivity(vo);
+        workspaceActivityService.createWorkspaceActivity(vo2);
+    }
+
+    private void validateRelationNotExists(TaskRelationInitializeVo taskRelationInitializeVo) {
+        if (taskRelationRetrieveService.isRelationExists(taskRelationInitializeVo.getTaskId(), taskRelationInitializeVo.getRelatedTaskId(), taskRelationInitializeVo.getRelation())) {
+            throw new BusinessException("task.init-relation.already-exists");
+        }
     }
 }

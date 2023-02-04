@@ -21,4 +21,10 @@ public class TaskRelationController {
     public BaseResponse initializeTaskRelation(@Valid @RequestBody TaskRelationInitializeRequest taskRelationInitializeRequest) {
         return taskRelationManager.initializeTaskRelation(taskRelationInitializeRequest);
     }
+
+    @DeleteMapping("/{relationId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse deleteTaskRelation(@PathVariable String relationId) {
+        return taskRelationManager.deleteTaskRelation(relationId);
+    }
 }

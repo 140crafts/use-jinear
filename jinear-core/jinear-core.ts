@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-02-02 08:31:51.
+// Generated using typescript-generator version 3.0.1157 on 2023-02-04 12:35:02.
 
 export interface BaseDto {
     createdDate: Date;
@@ -204,6 +204,7 @@ export interface WorkspaceActivityDto extends BaseDto {
     newTopicDto?: TopicDto | null;
     oldAssignedToAccount?: PlainAccountProfileDto | null;
     newAssignedToAccount?: PlainAccountProfileDto | null;
+    oldTaskRelationDto?: TaskRelationDto | null;
     newTaskRelationDto?: TaskRelationDto | null;
 }
 
@@ -219,10 +220,10 @@ export interface WorkspaceDto extends BaseDto {
     workspaceId: string;
     title: string;
     description: string;
+    isPersonal: boolean;
     username: string;
     settings: WorkspaceSettingDto;
     profilePicture: MediaDto;
-    personal: boolean;
 }
 
 export interface WorkspaceMemberDto extends BaseDto {
@@ -509,7 +510,7 @@ export type UsernameRelatedObjectType = "ACCOUNT" | "COMMUNITY" | "WORKSPACE";
 
 export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER";
 
-export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED";
+export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED" | "RELATION_REMOVED";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 

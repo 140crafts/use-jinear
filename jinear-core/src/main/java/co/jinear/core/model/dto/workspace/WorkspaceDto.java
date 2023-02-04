@@ -13,7 +13,7 @@ public class WorkspaceDto extends BaseDto {
     private String workspaceId;
     private String title;
     private String description;
-    private boolean isPersonal;
+    private Boolean isPersonal;
     private String username;
     private WorkspaceSettingDto settings;
     private MediaDto profilePicture;

@@ -21,8 +21,8 @@ public class TaskActivityRetrieveManager {
     public TaskActivityRetrieveResponse retrieveTaskActivity(String taskId) {
         RetrieveTaskActivityVo retrieveTaskActivityVo = new RetrieveTaskActivityVo();
         retrieveTaskActivityVo.setTaskId(taskId);
-        List<WorkspaceActivityDto> workspaceActivityDtos = workspaceActivityRetrieveService.retrieveTaskActivity(retrieveTaskActivityVo);
-        return mapResponse(workspaceActivityDtos);
+        List<WorkspaceActivityDto> workspaceActivityDTOs = workspaceActivityRetrieveService.retrieveTaskActivity(retrieveTaskActivityVo);
+        return mapResponse(workspaceActivityDTOs);
     }
 
     @NonNull
