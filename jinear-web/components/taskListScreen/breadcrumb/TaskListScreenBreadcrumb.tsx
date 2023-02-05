@@ -19,19 +19,24 @@ const TaskListScreenBreadcrumb: React.FC<TaskListScreenBreadcrumbProps> = ({
   const workspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const team = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
+  const workspaceUsername = workspace?.username || "";
+  const teamName = team?.name || "";
+  const workspaceUsernameEncoded = encodeURI(workspaceUsername);
+  const teamNameEncoded = encodeURI(teamName);
+
   return (
     <Breadcrumb>
       <BreadcrumbLink
-        label={workspace?.username || ""}
-        url={`/${workspace?.username}`}
+        label={workspaceUsername}
+        url={`/${workspaceUsernameEncoded}`}
       />
       <BreadcrumbLink
-        label={team?.name || ""}
-        url={`/${workspace?.username}/${team?.name}`}
+        label={teamName}
+        url={`/${workspaceUsernameEncoded}/${teamNameEncoded}`}
       />
       <BreadcrumbLink
         label={t(`taskListScreenBreadcrumb_${type}`)}
-        url={`/${workspace?.username}/${team?.name}/task-list`}
+        url={`/${workspaceUsernameEncoded}/${teamNameEncoded}/task-list`}
       />
     </Breadcrumb>
   );

@@ -33,12 +33,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const pwa = isPwa();
 
   useEffect(() => {
-    if (authState == "NOT_LOGGED_IN") {
-      router.replace("/");
-    }
-  }, [authState]);
-
-  useEffect(() => {
     _closeMenu();
   }, [router.asPath]);
 

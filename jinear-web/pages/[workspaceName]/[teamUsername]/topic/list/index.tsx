@@ -1,3 +1,4 @@
+import Button, { ButtonVariants } from "@/components/button";
 import TopicCard from "@/components/topicScreen/topicListScreen/topicCard/TopicCard";
 import TopicListScreenBreadcrumb from "@/components/topicScreen/topicListScreen/topicListScreenBreadcrumb/TopicListScreenBreadcrumb";
 import Transition from "@/components/transition/Transition";
@@ -53,6 +54,19 @@ const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
               teamName={preferredTeam.name}
             />
           ))}
+          {!teamTopicListingResponse?.data.hasContent && (
+            <div className={styles.emptyStateContainer}>
+              <div>{t("topicListScreenNoContentLabel")}</div>
+              <Button
+                variant={ButtonVariants.filled}
+                href={`/${preferredWorkspace.username}/${encodeURI(
+                  preferredTeam.name
+                )}/topic/new`}
+              >
+                {t("topicListScreenNoContentNewTopicLabel")}
+              </Button>
+            </div>
+          )}
         </Transition>
       )}
     </div>

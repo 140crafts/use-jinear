@@ -33,7 +33,7 @@
 
 .weekViewContainer {
   max-width: calc(100vw - var(--side-menu-width));
-  overflow-x: scroll;
+  // overflow-x: scroll;
   min-height: 4rem;
 }
 
@@ -44,6 +44,6 @@
   }
   .weekViewContainer {
     max-width: 100vw;
-    overflow-x: scroll;
+    // overflow-x: scroll;
   }
 }

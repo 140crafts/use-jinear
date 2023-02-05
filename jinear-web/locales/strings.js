@@ -638,9 +638,21 @@ export default {
     en: "Save",
     tr: "Kaydet",
   },
+  topicFormDelete: {
+    en: "Delete",
+    tr: "Sil",
+  },
   topicListScreenTitle: {
     en: "Topics",
     tr: "Konular",
+  },
+  topicListScreenNoContentLabel: {
+    en: "No topic found. Create a topic and label your tasks.",
+    tr: "Hiçbir konu bulunamadı. Bir konu oluştur ve görevleri konular ile etiketle.",
+  },
+  topicListScreenNoContentNewTopicLabel: {
+    en: "Create New Topic",
+    tr: "Yeni Konu Oluştur",
   },
   sideMenuTeamThreads: {
     en: "Threads",

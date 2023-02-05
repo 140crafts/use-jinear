@@ -12,7 +12,8 @@
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  padding: 0.55rem 0.75rem;
+  /* padding: 0.55rem 0.75rem; */
+  padding: 0.42rem 0.75rem;
 }
 
 .button:disabled {
@@ -27,7 +28,12 @@
 }
 
 .button:focus {
-  outline: none;
+  outline-style: solid;
+  outline-color: var(--c-link-color);
+  outline-offset: 2px;
+  outline-width: 2px;
+  z-index: 99;
+  /* outline-width: 2px; */
 }
 
 .filled {
@@ -101,7 +107,8 @@
 }
 
 .height-default {
-  padding: 0.55rem 0.75rem;
+  /* padding: 0.55rem 0.75rem; */
+  padding: 0.42rem 0.75rem;
 }
 .height-mid {
   padding: 0.42rem 0.75rem;

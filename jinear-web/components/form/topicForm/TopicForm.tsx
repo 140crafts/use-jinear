@@ -4,6 +4,7 @@ import {
   TopicUpdateRequest,
 } from "@/model/be/jinear-core";
 import {
+  useDeleteTopicMutation,
   useInitializeTopicMutation,
   useUpdateTopicMutation,
 } from "@/store/api/topicApi";
@@ -77,6 +78,11 @@ const TopicForm: React.FC<TopicFormProps> = ({
     { isLoading: isUpdateTopicLoading, isSuccess: isUpdateTopicSuccess },
   ] = useUpdateTopicMutation();
 
+  const [
+    deleteTopicCall,
+    { isLoading: isDeleteLoading, isSuccess: isDeleteSuccess },
+  ] = useDeleteTopicMutation();
+
   useEffect(() => {
     if (name) {
       const tag = name?.toUpperCase?.()?.split(" ")?.join("-")?.substring(0, 3);
@@ -104,12 +110,12 @@ const TopicForm: React.FC<TopicFormProps> = ({
   }, [color, taskName, taskTag]);
 
   useEffect(() => {
-    if (isInitializeTopicSuccess || isUpdateTopicSuccess) {
+    if (isInitializeTopicSuccess || isUpdateTopicSuccess || isDeleteSuccess) {
       router.replace(
         `/${preferredWorkspace?.username}/${preferredTeam?.name}/topic/list`
       );
     }
-  }, [isInitializeTopicSuccess, isUpdateTopicSuccess]);
+  }, [isInitializeTopicSuccess, isUpdateTopicSuccess, isDeleteSuccess]);
 
   const submit: SubmitHandler<ITopicForm> = (data) => {
     logger.log({ data });
@@ -118,6 +124,12 @@ const TopicForm: React.FC<TopicFormProps> = ({
       updateTopic({ ...data, color } as TopicUpdateRequest);
     } else {
       initializeTopic({ ...data, color } as TopicInitializeRequest);
+    }
+  };
+
+  const deleteTopic = () => {
+    if (topicId) {
+      deleteTopicCall(topicId);
     }
   };
 
@@ -154,9 +166,23 @@ const TopicForm: React.FC<TopicFormProps> = ({
       </div>
 
       <div className={styles.footerContainer}>
+        {topicId && (
+          <Button
+            type="button"
+            disabled={isDeleteLoading}
+            loading={isDeleteLoading}
+            className={styles.footerButtonDelete}
+            variant={ButtonVariants.contrast}
+            onClick={deleteTopic}
+          >
+            {t("topicFormDelete")}
+          </Button>
+        )}
         <Button
           type="submit"
-          disabled={isInitializeTopicLoading || isUpdateTopicLoading}
+          disabled={
+            isInitializeTopicLoading || isUpdateTopicLoading || isDeleteLoading
+          }
           loading={isInitializeTopicLoading || isUpdateTopicLoading}
           className={styles.footerButton}
           variant={ButtonVariants.contrast}

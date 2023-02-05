@@ -1,11 +1,8 @@
 import LoginWithMailForm from "@/components/form/loginWithMailForm/LoginWithMailForm";
 import FormLogo from "@/components/formLogo/FormLogo";
-import { selectIsLoggedIn } from "@/store/slice/accountSlice";
-import { useTypedSelector } from "@/store/store";
-import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "./index.module.scss";
 
 interface LoginPageProps {}
@@ -15,14 +12,7 @@ const logger = Logger("LoginPage");
 const LoginPage: React.FC<LoginPageProps> = ({}) => {
   logger.log("LoginPage");
   const router = useRouter();
-  const isLoggedIn = useTypedSelector(selectIsLoggedIn);
   const { email } = router.query;
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      router.replace(ROUTE_IF_LOGGED_IN);
-    }
-  }, [isLoggedIn]);
 
   return (
     <div className={styles.container}>

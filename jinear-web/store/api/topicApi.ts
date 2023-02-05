@@ -1,4 +1,5 @@
 import {
+  BaseResponse,
   TopicInitializeRequest,
   TopicResponse,
   TopicUpdateRequest,
@@ -36,6 +37,15 @@ export const topicApi = api.injectEndpoints({
       }),
       invalidatesTags: ["team-topic-list", "retrieve-topic"],
     }),
+    //
+    deleteTopic: build.mutation<BaseResponse, string>({
+      query: (topicId: string) => ({
+        url: `v1/topic/${topicId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["team-topic-list", "retrieve-topic"],
+    }),
+    //
   }),
 });
 
@@ -43,8 +53,9 @@ export const {
   useRetrieveTopicQuery,
   useInitializeTopicMutation,
   useUpdateTopicMutation,
+  useDeleteTopicMutation,
 } = topicApi;
 
 export const {
-  endpoints: { retrieveTopic, initializeTopic, updateTopic },
+  endpoints: { retrieveTopic, initializeTopic, updateTopic, deleteTopic },
 } = topicApi;
