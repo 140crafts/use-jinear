@@ -33,6 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "/v1/auth/otp/email/complete",
             "/v1/auth/password/email",
             "/v1/account/confirm-email",
+            "/v1/account/resend-confirm-email",
             "/v1/account/register/email",
             "/v1/account/password/reset/initialize",
             "/v1/account/password/reset/complete",

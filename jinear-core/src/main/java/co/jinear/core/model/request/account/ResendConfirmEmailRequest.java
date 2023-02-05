@@ -6,13 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.validation.constraints.Email;
-
 @Getter
 @Setter
 @ToString(callSuper = true)
 public class ResendConfirmEmailRequest extends BaseRequest {
-    @Email
-    private String email;
+    private String token;
     private LocaleType locale = LocaleType.EN;
 }

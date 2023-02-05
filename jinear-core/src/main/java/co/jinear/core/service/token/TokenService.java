@@ -47,6 +47,14 @@ public class TokenService {
                 .map(tokenConverter::map);
     }
 
+    public TokenDto retrieveToken(String uniqueToken, TokenType tokenType) {
+        log.info("Retrieve token has started. uniqueToken: {}, tokenType: {}", uniqueToken, tokenType);
+        return tokenRepository.findByUniqueTokenAndTokenType(uniqueToken, tokenType)
+                .map(tokenConverter::map)
+                .orElseThrow(NotFoundException::new);
+
+    }
+
     public void passivizeToken(String tokenId, String accountId, PassiveReason passiveReason) {
         log.info("Passive token has started for tokenId: {}, accountId: {}, passiveReason: {}", tokenId, accountId, passiveReason);
         Token token = tokenRepository.findById(tokenId).orElseThrow(NotFoundException::new);
