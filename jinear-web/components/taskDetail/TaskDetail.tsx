@@ -31,7 +31,6 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
         <Line />
         <TaskInfo className={styles.taskInfo} />
         <TaskSubtaskList />
-
         <Line />
         <TaskActivityList taskId={task.taskId} />
       </div>

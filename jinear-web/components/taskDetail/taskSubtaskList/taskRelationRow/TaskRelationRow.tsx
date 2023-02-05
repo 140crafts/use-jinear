@@ -40,7 +40,7 @@ const groupIconMap = {
 const TaskRelationRow: React.FC<TaskRelationRowProps> = ({ relation }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-
+  const tag = `${relation.task.team?.tag}-${relation.task.teamTagNo}`;
   const [
     deleteTaskRelation,
     { isSuccess: isDeleteSuccess, isError: isDeleteError },
@@ -87,9 +87,11 @@ const TaskRelationRow: React.FC<TaskRelationRowProps> = ({ relation }) => {
       <div className="spacer-w-1" />
       <Link
         className={cn(styles.linkButton)}
-        href={`/${relation.task.workspace?.username}/task/${relation.task.team?.tag}-${relation.task.teamTagNo}`}
+        href={`/${relation.task.workspace?.username}/task/${tag}`}
       >
-        <div className="line-clamp">{relation.task.title}</div>
+        <div className="line-clamp">
+          {tag} {relation.task.title}
+        </div>
       </Link>
 
       <Button

@@ -998,4 +998,12 @@ export default {
     en: "Dismiss",
     tr: "Vazgeç",
   },
+  taskActivityListTitle: {
+    en: "Activities",
+    tr: "Aktivite",
+  },
+  taskRelationListTitle: {
+    en: "Relations",
+    tr: "İlişkili",
+  },
 };

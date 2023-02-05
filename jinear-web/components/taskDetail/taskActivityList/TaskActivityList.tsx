@@ -1,5 +1,6 @@
 import { useRetrieveTaskActivityQuery } from "@/store/api/taskActivityApi";
 import { CircularProgress } from "@mui/material";
+import useTranslation from "locales/useTranslation";
 import React from "react";
 import TaskActivity from "./taskActivity/TaskActivity";
 import styles from "./TaskActivityList.module.css";
@@ -9,6 +10,7 @@ interface TaskActivityListProps {
 }
 
 const TaskActivityList: React.FC<TaskActivityListProps> = ({ taskId }) => {
+  const { t } = useTranslation();
   const {
     data: retrieveTaskActivityResponse,
     isSuccess,
@@ -18,6 +20,8 @@ const TaskActivityList: React.FC<TaskActivityListProps> = ({ taskId }) => {
 
   return (
     <div className={styles.container}>
+      <h3>{t("taskActivityListTitle")}</h3>
+      <div className="spacer-h-2" />
       {isSuccess &&
         retrieveTaskActivityResponse.data.map((activity) => (
           <TaskActivity
