@@ -39,3 +39,16 @@
 .footerButton {
   min-width: 6rem;
 }
+
+.footerButtonDelete {
+  min-width: 6rem;
+  background-color: var(--c-ERROR_RED);
+  color: var(--c-BABYPOWDER);
+}
+
+.footerButtonDelete:hover {
+  min-width: 6rem;
+  background-color: var(--c-ERROR_RED);
+  color: var(--c-BABYPOWDER);
+  opacity: 0.9;
+}

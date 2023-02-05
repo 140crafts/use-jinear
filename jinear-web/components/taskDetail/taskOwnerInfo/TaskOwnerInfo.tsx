@@ -1,6 +1,5 @@
 import AccountProfileInfo from "@/components/accountProfileInfo/AccountProfileInfo";
 import { PlainAccountProfileDto } from "@/model/be/jinear-core";
-import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import styles from "./TaskOwnerInfo.module.css";
@@ -18,12 +17,12 @@ const TaskOwnerAndAssigneeInfo: React.FC<TaskOwnerAndAssigneeInfoProps> = ({
 
   return (
     <div className={styles.container}>
-      <div>
+      {/* <div>
         {`${t("taskDetailPageCreatedAt")} ${format(
           new Date(createdDate),
           t("dateTimeFormat")
         )}`}
-      </div>
+      </div> */}
       {owner && <AccountProfileInfo {...owner} />}
     </div>
   );

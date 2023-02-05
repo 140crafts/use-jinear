@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-02-04 12:35:02.
+// Generated using typescript-generator version 3.0.1157 on 2023-02-05 11:54:05.
 
 export interface BaseDto {
   createdDate: Date;
@@ -263,7 +263,7 @@ export interface InitializeResetPasswordRequest extends BaseRequest {
 
 export interface ResendConfirmEmailRequest extends BaseRequest {
   locale: LocaleType;
-  email: string;
+  token: string;
 }
 
 export interface UpdatePasswordRequest extends BaseRequest {

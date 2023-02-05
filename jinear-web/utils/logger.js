@@ -1,10 +1,18 @@
 import { __DEV__ } from "./constants";
 const enabled = true;
-const Logger = (tag = "NoTag") => {
-  let runOnProd = false;
-  if (typeof window !== "undefined") {
-    runOnProd = window.debug;
+
+export const getLoggerEnabledOnProd = () => {
+  if (typeof window === "object") {
+    return (
+      localStorage.getItem("DEBUG") != null ||
+      localStorage.getItem("debug") != null
+    );
   }
+  return "dark";
+};
+
+const Logger = (tag = "NoTag") => {
+  let runOnProd = getLoggerEnabledOnProd();
   runOnProd = __DEV__ || runOnProd;
   return {
     runOnProd,

@@ -3,6 +3,7 @@
   flex-direction: column;
   flex: 1;
   gap: 1rem;
+  overflow: visible;
 }
 
 .tabViewContainer {

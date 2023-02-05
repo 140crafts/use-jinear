@@ -18,15 +18,15 @@ const AccountProfileInfo: React.FC<AccountProfileInfoProps> = ({
 }) => {
   return (
     <div className={styles.container}>
+      <div className={styles.infoContainer}>
+        <div className={styles.username}>{username}</div>
+        <div className={styles.email}>{email}</div>
+      </div>
       <ProfilePhoto
         boringAvatarKey={accountId}
         storagePath={profilePicture?.storagePath}
         wrapperClassName={styles.profilePic}
       />
-      <div className={styles.infoContainer}>
-        <div className={styles.username}>{username}</div>
-        <div className={styles.email}>{email}</div>
-      </div>
     </div>
   );
 };

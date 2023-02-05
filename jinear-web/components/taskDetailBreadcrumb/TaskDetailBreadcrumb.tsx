@@ -10,19 +10,24 @@ interface TaskDetailBreadcrumbProps {
 const TaskDetailBreadcrumb: React.FC<TaskDetailBreadcrumbProps> = ({
   task,
 }) => {
+  const workspaceUsername = task.workspace?.username || "";
+  const workspaceUsernameEncoded = encodeURI(workspaceUsername);
+  const teamName = task.team?.name || "";
+  const teamNameEncoded = encodeURI(teamName);
+
   return (
     <Breadcrumb>
       <BreadcrumbLink
-        label={task.workspace?.title || ""}
-        url={`/${task.workspace?.username}`}
+        label={workspaceUsername}
+        url={`/${workspaceUsernameEncoded}`}
       />
       <BreadcrumbLink
-        label={task.team?.name || ""}
-        url={`/${task.workspace?.username}/${task.team?.name}/weekly`}
+        label={teamName}
+        url={`/${workspaceUsernameEncoded}/${teamNameEncoded}/weekly`}
       />
       <BreadcrumbLink
         label={`${task.team?.tag}-${task.teamTagNo}` || ""}
-        url={`/${task.workspace?.username}/task/${task.team?.tag}-${task.teamTagNo}`}
+        url={`/${workspaceUsernameEncoded}/task/${task.team?.tag}-${task.teamTagNo}`}
       />
     </Breadcrumb>
   );
