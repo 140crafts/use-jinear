@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface TaskRelationConverter {
 
+    @Mapping(source = "relation",target = "relationType")
     TaskRelation map(TaskRelationInitializeVo taskRelationInitializeVo);
 
     @Mapping(source = "task.owner.username.username",target = "task.owner.username")
