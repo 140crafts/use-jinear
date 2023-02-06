@@ -24,6 +24,7 @@ const CurrentWorkspaceHeader: React.FC<CurrentWorkspaceHeaderProps> = ({}) => {
         variant={ButtonVariants.hoverFilled2}
         heightVariant={ButtonHeight.short}
         data-tooltip-right={t("currentWorkspaceHeaderWorkspaceDetail")}
+        className={styles.button}
       >
         <IoEllipsisHorizontal size={17} />
       </Button>

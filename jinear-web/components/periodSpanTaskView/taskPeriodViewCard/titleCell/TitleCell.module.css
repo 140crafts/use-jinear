@@ -19,3 +19,20 @@
   min-width: 15px;
   height: 20px;
 }
+
+.titleContainer[data-tooltip-multiline] {
+  position: relative;
+  height: auto;
+}
+.titleContainer[data-tooltip-multiline]:hover:after {
+  content: attr(data-tooltip-multiline);
+  background-color: var(--c-secondary);
+  color: var(--c-primary);
+  left: 0;
+  top: 1.25rem;
+  padding: 0.5em;
+  border-radius: var(--border-radius);
+  position: absolute;
+  white-space: inherit;
+  z-index: 99;
+}
