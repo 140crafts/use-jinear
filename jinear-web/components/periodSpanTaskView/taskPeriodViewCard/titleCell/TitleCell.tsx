@@ -23,10 +23,14 @@ const groupIconMap = {
   CANCELLED: <IoCloseCircle size={20} />,
 };
 
-const TitleCell: React.FC<TitleCellProps> = ({ task, duration = 1 }) => {
+const TitleCell: React.FC<TitleCellProps> = ({
+  task,
+  duration = 1,
+  ...props
+}) => {
   const { t } = useTranslation();
   return (
-    <div className={styles.titleContainer}>
+    <div className={styles.titleContainer} {...props}>
       <div
         className={styles.iconContainer}
         data-tooltip={

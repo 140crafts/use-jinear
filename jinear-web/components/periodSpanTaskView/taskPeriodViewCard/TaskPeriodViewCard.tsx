@@ -1,9 +1,9 @@
+import TeamTagCell from "@/components/teamTagCell/TeamTagCell";
 import { TaskDto } from "@/model/be/jinear-core";
 import cn from "classnames";
 import Link from "next/link";
 import React from "react";
 import AssigneeCell from "../../assigneeCell/AssigneeCell";
-import TeamTagCell from "../../teamTagCell/TeamTagCell";
 import DueDateAfterIcon from "./dueDateAfterIcon/DueDateAfterIcon";
 import StartDateBeforeIcon from "./startDateBeforeIcon/StartDateBeforeIcon";
 import styles from "./TaskPeriodViewCard.module.css";
@@ -34,20 +34,22 @@ const TaskPeriodViewCard: React.FC<TaskPeriodViewCardProps> = ({
       className={cn(styles.container, className)}
       style={style}
     >
-      <div
-        className={styles.content}
-        data-tooltip-multiline={duration == 1 ? task.title : undefined}
-      >
-        <TitleCell task={task} duration={duration} />
+      <div className={styles.content}>
+        <TitleCell
+          task={task}
+          duration={duration}
+          data-tooltip-multiline={duration == 1 ? task.title : undefined}
+        />
         {showAdditionalInfo && (
           <div className={styles.infoContainer}>
             <StartDateBeforeIcon
               assignedDate={task.assignedDate}
               isStartDateBefore={isStartDateBefore}
             />
-            <TeamTagCell task={task} />
 
-            <AssigneeCell task={task} />
+            <TeamTagCell task={task} className={styles.taskTagCell} />
+
+            <AssigneeCell task={task} className={styles.taskTagCell} />
             <div className="flex-1" />
             <DueDateAfterIcon
               dueDate={task.dueDate}

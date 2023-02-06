@@ -42,8 +42,9 @@ const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({
                   ? "left"
                   : "right"
               }
+              className={styles.taskTagCell}
             />
-            <TeamTagCell task={task} />
+            <TeamTagCell task={task} className={styles.taskTagCell} />
           </div>
         </Link>
       )}

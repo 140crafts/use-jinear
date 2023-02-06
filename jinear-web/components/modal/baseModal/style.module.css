@@ -8,7 +8,7 @@
   flex: 1;
   align-items: center;
   justify-content: center;
-  z-index: 5;
+  z-index: 1005;
 }
 
 .fullscreen-container {
