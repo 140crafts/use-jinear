@@ -7,8 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.time.DateUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.sql.Time;
 import java.text.DateFormat;
@@ -21,9 +19,9 @@ import java.util.*;
 @Slf4j
 public class DateHelper {
 
-    private static final Logger logger = LoggerFactory.getLogger(DateHelper.class);
     public static final String MYSQL_DATE_PATTERN = "yyyy-MM-dd HH:mm:ss";
     public static final String FILE_DATE_PATTERN = "yyyy_MM_dd_HH_mm_ss";
+    public static final String ISO_DATE_TIME = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     public static final String DAY_OF_MONTH_PATTERN = "dd";
     static final int MONDAY = 2;
     static final int SUNDAY = 1;
@@ -82,7 +80,7 @@ public class DateHelper {
         try {
             return (new SimpleDateFormat(pattern)).parse(dateStr);
         } catch (ParseException var3) {
-            logger.error("Caught exception while parsing date", var3);
+            log.error("Caught exception while parsing date", var3);
             return null;
         }
     }
@@ -318,5 +316,12 @@ public class DateHelper {
         ZonedDateTime zonedDateTime = ZonedDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
         log.info("Converting date: {} to zonedDateTime: {}", date, zonedDateTime);
         return zonedDateTime;
+    }
+
+    public static String formatIsoDatePattern(ZonedDateTime dateTime) {
+        return Optional.ofNullable(dateTime)
+                .map(ZonedDateTime::toOffsetDateTime)
+                .map(OffsetDateTime::toString)
+                .orElse(null);
     }
 }

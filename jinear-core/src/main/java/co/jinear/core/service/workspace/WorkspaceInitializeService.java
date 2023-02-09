@@ -1,23 +1,23 @@
 package co.jinear.core.service.workspace;
 
+import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.dto.username.UsernameDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceSettingDto;
-import co.jinear.core.model.dto.username.UsernameDto;
 import co.jinear.core.model.entity.workspace.Workspace;
-import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
-import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.model.enumtype.username.UsernameRelatedObjectType;
+import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.model.vo.team.TeamInitializeVo;
+import co.jinear.core.model.vo.username.InitializeUsernameVo;
+import co.jinear.core.model.vo.workspace.InitializeWorkspaceMemberVo;
 import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.model.vo.workspace.WorkspaceSettingsInitializeVo;
-import co.jinear.core.model.vo.workspace.InitializeWorkspaceMemberVo;
-import co.jinear.core.model.vo.username.InitializeUsernameVo;
 import co.jinear.core.repository.WorkspaceRepository;
 import co.jinear.core.service.team.TeamInitializeService;
-import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.service.username.UsernameService;
+import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.system.NormalizeHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,17 +45,17 @@ public class WorkspaceInitializeService {
         UsernameDto usernameDto = assignUsername(workspaceInitializeVo, workspace);
         WorkspaceSettingDto workspaceSettingDto = initializeSettings(workspaceInitializeVo, workspace);
         assignOwner(workspaceInitializeVo, workspace);
-        setAsDefaultWorkspace(workspaceInitializeVo.getOwnerId(), workspace.getWorkspaceId());
-// on boarding business decision
-//        createInitialTeam(workspace,workspaceInitializeVo.getLocale());
+        TeamDto initialTeamDto = createInitialTeam(workspace, workspaceInitializeVo);
+        setAsDefaultWorkspace(workspaceInitializeVo.getOwnerId(), initialTeamDto);
         return mapValues(workspace, usernameDto, workspaceSettingDto);
     }
 
-    private void setAsDefaultWorkspace(String ownerId, String workspaceId) {
-        workspaceDisplayPreferenceService.setAccountPreferredWorkspace(ownerId, workspaceId);
+    private void setAsDefaultWorkspace(String ownerId, TeamDto initialTeamDto) {
+        workspaceDisplayPreferenceService.setAccountPreferredWorkspace(ownerId, initialTeamDto.getWorkspaceId());
+        workspaceDisplayPreferenceService.setAccountPreferredTeamId(ownerId, initialTeamDto.getTeamId());
     }
 
-    private void createInitialTeam(Workspace workspace, LocaleType locale) {
+    private TeamDto createInitialTeam(Workspace workspace, WorkspaceInitializeVo workspaceInitializeVo) {
         log.info("Create initial team has started for workspaceId: {}", workspace.getWorkspaceId());
         String teamTag = NormalizeHelper.normalizeStrictly(workspace.getTitle());
         teamTag = teamTag.substring(0, Math.min(teamTag.length(), 3));
@@ -65,8 +65,9 @@ public class WorkspaceInitializeService {
         teamInitializeVo.setTag(teamTag);
         teamInitializeVo.setVisibility(TeamVisibilityType.VISIBLE);
         teamInitializeVo.setJoinMethod(TeamJoinMethodType.SYNC_MEMBERS_WITH_WORKSPACE);
-        teamInitializeVo.setLocale(locale);
-        teamInitializeService.initializeTeam(teamInitializeVo);
+        teamInitializeVo.setLocale(workspaceInitializeVo.getLocale());
+        teamInitializeVo.setInitializedBy(workspaceInitializeVo.getOwnerId());
+        return teamInitializeService.initializeTeam(teamInitializeVo);
     }
 
     private void assignOwner(WorkspaceInitializeVo workspaceInitializeVo, Workspace workspace) {

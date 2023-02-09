@@ -1,16 +1,12 @@
 package co.jinear.core.model.entity.richtext;
 
 import co.jinear.core.model.entity.BaseEntity;
-import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.enumtype.richtext.RichTextSourceStack;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
 
 @Getter
 @Setter
@@ -39,10 +35,4 @@ public class RichText extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "source_stack")
     private RichTextSourceStack sourceStack;
-
-    @ToString.Exclude
-    @OneToOne
-    @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(name = "related_object_id", insertable = false, updatable = false)
-    private Task task;
 }

@@ -1,5 +1,6 @@
 package co.jinear.core.service.username;
 
+import co.jinear.core.converter.username.UsernameConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.username.UsernameDto;
 import co.jinear.core.model.entity.username.Username;
@@ -10,7 +11,6 @@ import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.system.RandomHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,19 +22,19 @@ public class UsernameService {
 
     private final UsernameRepository usernameRepository;
     private final ReservedUsernameRepository reservedUsernameRepository;
-    private final ModelMapper modelMapper;
+    private final UsernameConverter usernameConverter;
 
     public UsernameDto assignUsername(InitializeUsernameVo initializeUsernameVo) {
         log.info("Initialize username has started. initializeUsernameVo: {}", initializeUsernameVo);
         validateRelatedObjectHasNoUsername(initializeUsernameVo);
         validateUsernameIsNotReserved(initializeUsernameVo);
-        String requestedHandle = NormalizeHelper.normalizeStrictly(initializeUsernameVo.getUsername());
+        String requestedHandle = NormalizeHelper.normalizeUsername(initializeUsernameVo.getUsername());
         Optional<Username> existing = usernameRepository.findByUsername(requestedHandle);
         if (existing.isPresent()) {
             return handleUsernameExists(initializeUsernameVo);
         }
         Username username = saveUsername(initializeUsernameVo);
-        return modelMapper.map(username, UsernameDto.class);
+        return usernameConverter.map(username);
     }
 
     private UsernameDto handleUsernameExists(InitializeUsernameVo initializeUsernameVo) {
@@ -61,7 +61,7 @@ public class UsernameService {
     }
 
     private Username saveUsername(InitializeUsernameVo initializeUsernameVo) {
-        String requestedHandle = NormalizeHelper.normalizeStrictly(initializeUsernameVo.getUsername());
+        String requestedHandle = NormalizeHelper.normalizeUsername(initializeUsernameVo.getUsername());
         Username username = new Username();
         username.setRelatedObjectId(initializeUsernameVo.getRelatedObjectId());
         username.setRelatedObjectType(initializeUsernameVo.getRelatedObjectType());

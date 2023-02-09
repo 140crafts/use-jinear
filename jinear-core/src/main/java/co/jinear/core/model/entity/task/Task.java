@@ -2,7 +2,6 @@ package co.jinear.core.model.entity.task;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
-import co.jinear.core.model.entity.richtext.RichText;
 import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.entity.team.TeamWorkflowStatus;
 import co.jinear.core.model.entity.topic.Topic;
@@ -12,9 +11,11 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.Where;
 
 import jakarta.persistence.*;
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -24,9 +25,7 @@ public class Task extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "ULID")
-    @GenericGenerator(
-            name = "ULID",
-            strategy = "co.jinear.core.config.idgenerator.ULIDIdGenerator")
+    @GenericGenerator(name = "ULID", strategy = "co.jinear.core.config.idgenerator.ULIDIdGenerator")
     @Column(name = "task_id")
     private String taskId;
 
@@ -63,9 +62,6 @@ public class Task extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @OneToOne(mappedBy = "task")
-    private RichText description;
-
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "workflow_status_id", insertable = false, updatable = false)
@@ -95,4 +91,15 @@ public class Task extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "assigned_to", insertable = false, updatable = false)
     private Account assignedToAccount;
+
+    @OneToMany(mappedBy = "task")
+    @Where(clause = "passive_id is null")
+    @OrderBy("createdDate ASC")
+    private Set<TaskRelation> relations;
+
+    @OneToMany(mappedBy = "relatedTask")
+    @Where(clause = "passive_id is null")
+    @OrderBy("createdDate ASC")
+    private Set<TaskRelation> relatedIn;
+
 }

@@ -3,6 +3,7 @@ package co.jinear.core.service.task;
 import co.jinear.core.exception.lock.LockedException;
 import co.jinear.core.model.enumtype.lock.LockSourceType;
 import co.jinear.core.service.lock.LockService;
+import co.jinear.core.service.topic.TopicSequenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.retry.annotation.Backoff;

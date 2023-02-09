@@ -12,6 +12,7 @@ import lombok.ToString;
 @ToString
 public class TeamInitializeVo {
 
+    private String initializedBy;
     private String workspaceId;
     private String name;
     private String tag;

@@ -1,5 +1,6 @@
 package co.jinear.core.service.team;
 
+import co.jinear.core.converter.team.TeamConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
@@ -12,14 +13,13 @@ import co.jinear.core.model.vo.team.TeamInitializeVo;
 import co.jinear.core.model.vo.team.workflow.InitializeTeamWorkflowStatusVo;
 import co.jinear.core.repository.TeamRepository;
 import co.jinear.core.service.mail.LocaleStringService;
-import co.jinear.core.service.team.member.TeamMemberService;
+import co.jinear.core.service.team.member.TeamMemberSyncService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.validator.team.TeamValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -33,12 +33,12 @@ public class TeamInitializeService {
 
     private final TeamRepository teamRepository;
     private final TeamValidator teamValidator;
-    private final TeamMemberService teamMemberService;
     private final WorkspaceRetrieveService workspaceRetrieveService;
     private final TeamRetrieveService teamRetrieveService;
     private final TeamWorkflowStatusService teamWorkflowStatusService;
     private final LocaleStringService localeStringService;
-    private final ModelMapper modelMapper;
+    private final TeamMemberSyncService teamMemberSyncService;
+    private final TeamConverter teamConverter;
 
     @Transactional
     public TeamDto initializeTeam(TeamInitializeVo teamInitializeVo) {
@@ -47,26 +47,26 @@ public class TeamInitializeService {
         validatePersonalWorkspaceTeamLimit(teamInitializeVo.getWorkspaceId());
         validateTeamNameIsNotUsedInWorkspace(teamInitializeVo);
         validateTeamTagIsNotUsedInWorkspace(teamInitializeVo);
-        Team team = modelMapper.map(teamInitializeVo, Team.class);
+        Team team = teamConverter.map(teamInitializeVo);
         Team saved = teamRepository.saveAndFlush(team);
         checkAndSyncMembersWithWorkspace(saved);
         initializeDefaultWorkflow(saved.getTeamId(), saved.getWorkspaceId(), teamInitializeVo.getLocale());
         log.info("Initialize team has finished. teamId: {}", saved.getTeamId());
-        return modelMapper.map(saved, TeamDto.class);
+        return teamConverter.map(saved);
     }
 
     private void sanitizeTag(TeamInitializeVo teamInitializeVo) {
         log.info("Sanitize tag has started teamInitializeVo: {}", teamInitializeVo);
         Optional.of(teamInitializeVo)
                 .map(TeamInitializeVo::getTag)
-                .map(NormalizeHelper::normalizeStrictly)
+                .map(NormalizeHelper::normalizeUsernameReplaceSpaces)
                 .ifPresent(teamInitializeVo::setTag);
     }
 
     private void validatePersonalWorkspaceTeamLimit(String workspaceId) {
         log.info("Validate personal workspace limit has started.");
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
-        if (workspaceDto.isPersonal()) {
+        if (workspaceDto.getIsPersonal()) {
             List<TeamDto> teamDtoList = teamRetrieveService.retrieveWorkspaceTeams(workspaceId);
             if (!teamDtoList.isEmpty()) {
                 throw new BusinessException();
@@ -76,8 +76,7 @@ public class TeamInitializeService {
 
     private void checkAndSyncMembersWithWorkspace(Team team) {
         if (TeamJoinMethodType.SYNC_MEMBERS_WITH_WORKSPACE.equals(team.getJoinMethod())) {
-            log.info("Sync members with workspace has started.");
-            teamMemberService.addAllFromWorkspace(team.getTeamId());
+            teamMemberSyncService.syncTeamMembersWithWorkspace(team.getTeamId(), team.getInitializedBy());
         }
     }
 
@@ -120,4 +119,6 @@ public class TeamInitializeService {
                 localeStringService.retrieveLocalString(LocaleStringType.TEAM_WORKFLOW_STATUS_CANCELLED, locale)));
         log.info("Initialize default team workflow statuses has finished for teamId: {}, locale: {}", teamId, locale);
     }
+
+
 }

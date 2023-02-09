@@ -1,5 +1,6 @@
 package co.jinear.core.service.team.member;
 
+import co.jinear.core.converter.team.TeamMemberConverter;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.repository.TeamMemberRepository;
@@ -7,7 +8,6 @@ import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,12 +22,12 @@ public class TeamMemberListingService {
     private final TeamMemberRepository teamMemberRepository;
     private final AccountRetrieveService accountRetrieveService;
     private final MediaRetrieveService mediaRetrieveService;
-    private final ModelMapper modelMapper;
+    private final TeamMemberConverter teamMemberConverter;
 
     public Page<TeamMemberDto> retrieveTeamMembers(String teamId, int page) {
         log.info("Retrieve team members has started. teamId: {}, page: {}", teamId, page);
-        return teamMemberRepository.findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(teamId, PageRequest.of(page,PAGE_SIZE))
-                .map(teamMember -> modelMapper.map(teamMember, TeamMemberDto.class))
+        return teamMemberRepository.findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(teamId, PageRequest.of(page, PAGE_SIZE))
+                .map(teamMemberConverter::map)
                 .map(this::fillAccountDtoIfPresent);
     }
 

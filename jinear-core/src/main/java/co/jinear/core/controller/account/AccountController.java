@@ -3,6 +3,7 @@ package co.jinear.core.controller.account;
 import co.jinear.core.manager.account.AccountManager;
 import co.jinear.core.manager.role.AccountRoleManager;
 import co.jinear.core.model.request.account.ConfirmEmailRequest;
+import co.jinear.core.model.request.account.ResendConfirmEmailRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.account.AccountRetrieveResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,5 +29,11 @@ public class AccountController {
     @ResponseStatus(HttpStatus.OK)
     public BaseResponse confirmEmail(@RequestBody ConfirmEmailRequest confirmEmailRequest) {
         return accountManager.confirmEmail(confirmEmailRequest);
+    }
+
+    @PostMapping("/resend-confirm-email")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse resendConfirmEmail(@RequestBody ResendConfirmEmailRequest resendConfirmEmailRequest) {
+        return accountManager.resendConfirmEmail(resendConfirmEmailRequest);
     }
 }

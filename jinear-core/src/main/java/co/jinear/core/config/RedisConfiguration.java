@@ -48,6 +48,7 @@ public class RedisConfiguration {
         }
         JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
         jedisClientConfiguration.connectTimeout(Duration.ofMillis(redisTimeout));
+//        jedisClientConfiguration.readTimeout(Duration.ofMillis(redisTimeout));
         jedisClientConfiguration.usePooling();
         if (Boolean.TRUE.equals(redisUseSsl)) {
             jedisClientConfiguration.useSsl();

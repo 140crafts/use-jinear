@@ -1,5 +1,6 @@
 package co.jinear.core.service.team.workflow;
 
+import co.jinear.core.converter.team.TeamWorkflowStatusConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.team.workflow.GroupedTeamWorkflowStatusListDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
@@ -8,12 +9,12 @@ import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.repository.TeamWorkflowStatusRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -21,7 +22,7 @@ import java.util.List;
 public class TeamWorkflowStatusRetrieveService {
 
     private final TeamWorkflowStatusRepository teamWorkflowStatusRepository;
-    private final ModelMapper modelMapper;
+    private final TeamWorkflowStatusConverter teamWorkflowStatusConverter;
 
     public TeamWorkflowStatus retrieveEntity(String teamWorkflowStatusId) {
         log.info("Retrieve team workflow status entity has started. teamWorkflowStatusId: {}", teamWorkflowStatusId);
@@ -31,15 +32,20 @@ public class TeamWorkflowStatusRetrieveService {
 
     public TeamWorkflowStatusDto retrieve(String teamWorkflowStatusId) {
         log.info("Retrieve team workflow status has started. teamWorkflowStatusId: {}", teamWorkflowStatusId);
-        return teamWorkflowStatusRepository.findByTeamWorkflowStatusIdAndPassiveIdIsNull(teamWorkflowStatusId)
-                .map(teamWorkflowStatus -> modelMapper.map(teamWorkflowStatus, TeamWorkflowStatusDto.class))
+        return retrieveOptional(teamWorkflowStatusId)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public Optional<TeamWorkflowStatusDto> retrieveOptional(String teamWorkflowStatusId) {
+        log.info("Retrieve team workflow status has started. teamWorkflowStatusId: {}", teamWorkflowStatusId);
+        return teamWorkflowStatusRepository.findByTeamWorkflowStatusIdAndPassiveIdIsNull(teamWorkflowStatusId)
+                .map(teamWorkflowStatusConverter::map);
     }
 
     public List<TeamWorkflowStatusDto> retrieveAll(String teamId) {
         log.info("Retrieve all team workflow statuses has started. teamId: {}", teamId);
         return teamWorkflowStatusRepository.findAllByTeamIdAndPassiveIdIsNullOrderByOrderAsc(teamId).stream()
-                .map(teamWorkflowStatus -> modelMapper.map(teamWorkflowStatus, TeamWorkflowStatusDto.class))
+                .map(teamWorkflowStatusConverter::map)
                 .toList();
     }
 
@@ -65,7 +71,7 @@ public class TeamWorkflowStatusRetrieveService {
     public TeamWorkflowStatusDto retrieveFirstFromGroup(String teamId, TeamWorkflowStateGroup workflowStateGroup) {
         log.info("Retrieve first from group has started. teamId: {}, workflowStateGroup: {}", teamId, workflowStateGroup);
         return teamWorkflowStatusRepository.findFirstByTeamIdAndWorkflowStateGroupAndPassiveIdIsNullOrderByOrderDesc(teamId, workflowStateGroup)
-                .map(teamWorkflowStatus -> modelMapper.map(teamWorkflowStatus, TeamWorkflowStatusDto.class))
+                .map(teamWorkflowStatusConverter::map)
                 .orElseThrow(NotFoundException::new);
     }
 

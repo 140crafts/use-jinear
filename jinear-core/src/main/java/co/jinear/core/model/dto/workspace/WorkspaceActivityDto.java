@@ -1,0 +1,52 @@
+package co.jinear.core.model.dto.workspace;
+
+import co.jinear.core.model.dto.BaseDto;
+import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.dto.richtext.RichTextDto;
+import co.jinear.core.model.dto.task.TaskRelationDto;
+import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
+import co.jinear.core.model.dto.topic.TopicDto;
+import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
+import lombok.Getter;
+import lombok.Setter;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+@Getter
+@Setter
+public class WorkspaceActivityDto extends BaseDto {
+
+    private String workspaceActivityId;
+    private String workspaceId;
+    private String teamId;
+    private String taskId;
+    private WorkspaceActivityType type;
+    private String performedBy;
+    private String relatedObjectId;
+    @Nullable
+    private String oldState;
+    @Nullable
+    private String newState;
+    private PlainAccountProfileDto performedByAccount;
+    @Nullable
+    private PlainAccountProfileDto relatedAccount;
+    @Nullable
+    private RichTextDto oldDescription;
+    @Nullable
+    private RichTextDto newDescription;
+    @Nullable
+    private TeamWorkflowStatusDto oldWorkflowStatusDto;
+    @Nullable
+    private TeamWorkflowStatusDto newWorkflowStatusDto;
+    @Nullable
+    private TopicDto oldTopicDto;
+    @Nullable
+    private TopicDto newTopicDto;
+    @Nullable
+    private PlainAccountProfileDto oldAssignedToAccount;
+    @Nullable
+    private PlainAccountProfileDto newAssignedToAccount;
+    @Nullable
+    private TaskRelationDto oldTaskRelationDto;
+    @Nullable
+    private TaskRelationDto newTaskRelationDto;
+}

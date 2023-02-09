@@ -1,29 +1,25 @@
 package co.jinear.core.manager.workspace;
 
+import co.jinear.core.converter.workspace.WorkspaceInitializeVoConverter;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
-import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
 import co.jinear.core.model.request.workspace.WorkspaceInitializeRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
-import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
 import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.team.TeamRetrieveService;
-import co.jinear.core.service.workspace.WorkspaceActivityService;
 import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
 import co.jinear.core.service.workspace.WorkspaceInitializeService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
-import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -31,7 +27,6 @@ import java.util.Optional;
 public class WorkspaceManager {
 
     private final WorkspaceInitializeService workspaceInitializeService;
-    private final WorkspaceActivityService workspaceActivityService;
     private final WorkspaceValidator workspaceValidator;
     private final TeamAccessValidator teamAccessValidator;
     private final WorkspaceRetrieveService workspaceRetrieveService;
@@ -39,7 +34,7 @@ public class WorkspaceManager {
     private final MediaRetrieveService mediaRetrieveService;
     private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
     private final TeamRetrieveService teamRetrieveService;
-    private final ModelMapper modelMapper;
+    private final WorkspaceInitializeVoConverter workspaceInitializeVoConverter;
 
     public WorkspaceBaseResponse retrieveWorkspaceWithUsername(String workspaceUsername) {
         String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
@@ -63,7 +58,6 @@ public class WorkspaceManager {
         log.info("Initialize workspace has started with request: {}", workspaceInitializeRequest);
         String accountId = sessionInfoService.currentAccountId();
         WorkspaceDto workspaceDto = initializeWorkspace(workspaceInitializeRequest, accountId);
-        createWorkspaceActivity(accountId, workspaceDto);
         return mapValues(workspaceDto);
     }
 
@@ -97,8 +91,7 @@ public class WorkspaceManager {
     }
 
     private WorkspaceDto initializeWorkspace(WorkspaceInitializeRequest workspaceInitializeRequest, String accountId) {
-        WorkspaceInitializeVo workspaceInitializeVo = modelMapper.map(workspaceInitializeRequest, WorkspaceInitializeVo.class);
-        workspaceInitializeVo.setOwnerId(accountId);
+        WorkspaceInitializeVo workspaceInitializeVo = workspaceInitializeVoConverter.map(workspaceInitializeRequest, accountId);
         workspaceInitializeVo.setAppendRandomStrOnCollision(Boolean.TRUE);
         workspaceInitializeVo.setIsPersonal(Boolean.FALSE);
         setHandleIfNotProvided(workspaceInitializeVo);
@@ -110,15 +103,6 @@ public class WorkspaceManager {
                 workspaceInitializeVo.getTitle().substring(0, Math.min(3, workspaceInitializeVo.getTitle().length())) :
                 workspaceInitializeVo.getHandle();
         workspaceInitializeVo.setHandle(handle);
-    }
-
-    private void createWorkspaceActivity(String accountId, WorkspaceDto workspaceDto) {
-        WorkspaceActivityCreateVo workspaceActivityCreateVo = new WorkspaceActivityCreateVo();
-        workspaceActivityCreateVo.setWorkspaceId(workspaceDto.getWorkspaceId());
-        workspaceActivityCreateVo.setAccountId(accountId);
-        workspaceActivityCreateVo.setRelatedObjectId(accountId);
-        workspaceActivityCreateVo.setType(WorkspaceActivityType.JOIN);
-        workspaceActivityService.createWorkspaceActivity(workspaceActivityCreateVo);
     }
 
     private WorkspaceBaseResponse mapValues(WorkspaceDto workspaceDto) {

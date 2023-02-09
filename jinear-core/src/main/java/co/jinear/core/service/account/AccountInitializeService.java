@@ -1,25 +1,25 @@
 package co.jinear.core.service.account;
 
+import co.jinear.core.converter.account.AccountDtoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.entity.account.Account;
 import co.jinear.core.model.enumtype.account.RoleType;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
+import co.jinear.core.model.enumtype.username.UsernameRelatedObjectType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceJoinType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceVisibilityType;
-import co.jinear.core.model.enumtype.username.UsernameRelatedObjectType;
 import co.jinear.core.model.vo.account.AccountInitializeVo;
 import co.jinear.core.model.vo.account.password.AccountPasswordVo;
-import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.model.vo.username.InitializeUsernameVo;
+import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.repository.AccountRepository;
-import co.jinear.core.service.workspace.WorkspaceInitializeService;
 import co.jinear.core.service.username.UsernameService;
+import co.jinear.core.service.workspace.WorkspaceInitializeService;
 import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.system.RandomHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -30,7 +30,7 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AccountInitializeService {
-    private static final String PERSONAL_WORKSPACE_HANDLE_PREFIX = "wsp-";
+    private static final String PERSONAL_WORKSPACE_HANDLE_POSTFIX = "-personal";
 
     private final AccountRetrieveService accountRetrieveService;
     private final AccountRoleService accountRoleService;
@@ -39,7 +39,7 @@ public class AccountInitializeService {
     private final AccountRepository accountRepository;
     private final AccountMailConfirmationService accountMailConfirmationService;
     private final WorkspaceInitializeService workspaceInitializeService;
-    private final ModelMapper modelMapper;
+    private final AccountDtoConverter accountDtoConverter;
 
     @Transactional
     public AccountDto initializeAccount(AccountInitializeVo accountInitializeVo) {
@@ -52,7 +52,7 @@ public class AccountInitializeService {
         initializePersonalWorkspace(account, accountInitializeVo.getLocale());
         sendMailConfirmationMail(account, accountInitializeVo);
         log.info("Account initialize has ended.");
-        return modelMapper.map(account, AccountDto.class);
+        return accountDtoConverter.map(account);
     }
 
     private Account createAccount(AccountInitializeVo accountInitializeVo) {
@@ -110,7 +110,7 @@ public class AccountInitializeService {
         WorkspaceInitializeVo workspaceInitializeVo = new WorkspaceInitializeVo();
         workspaceInitializeVo.setOwnerId(account.getAccountId());
         workspaceInitializeVo.setTitle(username);
-        workspaceInitializeVo.setHandle(PERSONAL_WORKSPACE_HANDLE_PREFIX + username);
+        workspaceInitializeVo.setHandle(username + PERSONAL_WORKSPACE_HANDLE_POSTFIX);
         workspaceInitializeVo.setVisibility(WorkspaceVisibilityType.HIDDEN_LISTED);
         workspaceInitializeVo.setJoinType(WorkspaceJoinType.NEVER);
         workspaceInitializeVo.setAppendRandomStrOnCollision(Boolean.TRUE);

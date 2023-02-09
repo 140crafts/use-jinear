@@ -5,14 +5,15 @@ import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
+import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
-import co.jinear.core.model.entity.topic.Topic;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,6 +26,7 @@ public class TaskDto extends BaseDto {
     private String teamId;
     private String ownerId;
     private String workflowStatusId;
+    private String assignedTo;
     private ZonedDateTime assignedDate;
     private ZonedDateTime dueDate;
     private Integer teamTagNo;
@@ -33,7 +35,7 @@ public class TaskDto extends BaseDto {
     @Nullable
     private RichTextDto description;
     @Nullable
-    private Topic topic;
+    private TopicDto topic;
     @Nullable
     private PlainAccountProfileDto owner;
     @Nullable
@@ -43,4 +45,8 @@ public class TaskDto extends BaseDto {
     @Nullable
     private TeamDto team;
     private TeamWorkflowStatusDto workflowStatus;
+    @Nullable
+    private Set<TaskRelationDto> relations;
+    @Nullable
+    private Set<TaskRelationDto> relatedIn;
 }

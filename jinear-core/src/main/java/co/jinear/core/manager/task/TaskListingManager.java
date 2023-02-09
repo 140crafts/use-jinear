@@ -1,5 +1,6 @@
 package co.jinear.core.manager.task;
 
+import co.jinear.core.converter.task.SearchIntersectingTasksVoConverter;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.request.task.TaskRetrieveIntersectingRequest;
@@ -10,10 +11,8 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskListingService;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +27,7 @@ public class TaskListingManager {
     private final WorkspaceValidator workspaceValidator;
     private final TeamAccessValidator teamAccessValidator;
     private final TaskListingService taskListingService;
-    private final ModelMapper modelMapper;
+    private final SearchIntersectingTasksVoConverter searchIntersectingTasksVoConverter;
 
     public TaskListingPaginatedResponse retrieveAllTasks(String workspaceId, String teamId, int page) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -44,9 +43,18 @@ public class TaskListingManager {
         validateWorkspaceAccess(currentAccount, taskRetrieveIntersectingRequest.getWorkspaceId());
         validateTeamAccess(currentAccount, taskRetrieveIntersectingRequest.getWorkspaceId(), taskRetrieveIntersectingRequest.getTeamId());
         log.info("Retrieve all tasks intersecting has started. currentAccount: {}", currentAccount);
-        SearchIntersectingTasksVo searchIntersectingTasksVo = modelMapper.map(taskRetrieveIntersectingRequest, SearchIntersectingTasksVo.class);
+        SearchIntersectingTasksVo searchIntersectingTasksVo = searchIntersectingTasksVoConverter.map(taskRetrieveIntersectingRequest);
         List<TaskDto> result = taskListingService.retrieveAllIntersectingTasks(searchIntersectingTasksVo);
         return mapResponse(result);
+    }
+
+    public TaskListingPaginatedResponse retrieveFromWorkflowStatus(String workspaceId, String teamId, String workflowStatusId, Integer page) {
+        String currentAccount = sessionInfoService.currentAccountId();
+        validateWorkspaceAccess(currentAccount, workspaceId);
+        validateTeamAccess(currentAccount, workspaceId, teamId);
+        log.info("Retrieve tasks from workflow status has started. currentAccount: {}", currentAccount);
+        Page<TaskDto> taskDtoPage = taskListingService.retrieveAllTasksFromWorkspaceAndTeamWithWorkflowStatus(workspaceId, teamId, workflowStatusId, page);
+        return mapResponse(taskDtoPage);
     }
 
     private void validateWorkspaceAccess(String accountId, String workspaceId) {

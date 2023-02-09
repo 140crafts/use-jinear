@@ -37,6 +37,13 @@ public class PassiveService {
                 .build());
     }
 
+    public String createSystemActionPassive() {
+        return createPassive(CreatePassiveVo.builder()
+                .reason(PassiveReason.SYSTEM.name())
+                .reasonType(PassiveReason.SYSTEM)
+                .build());
+    }
+
     private Passive mapPassive(CreatePassiveVo createPassiveVo) {
         Passive passive = new Passive();
         passive.setResponsibleAccountId(createPassiveVo.getResponsibleAccountId());

@@ -1,25 +1,31 @@
 package co.jinear.core.service.task;
 
+import co.jinear.core.converter.task.TaskDtoConverter;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
+import co.jinear.core.model.enumtype.task.TaskRelationType;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.model.vo.task.TaskInitializeVo;
+import co.jinear.core.model.vo.task.TaskRelationInitializeVo;
+import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.richtext.RichTextInitializeService;
 import co.jinear.core.service.team.TeamLockService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
 import co.jinear.core.service.topic.TopicSequenceService;
+import co.jinear.core.service.workspace.activity.WorkspaceActivityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import java.util.Objects;
 import java.util.Optional;
+
+import static co.jinear.core.model.enumtype.workspace.WorkspaceActivityType.TASK_INITIALIZED;
 
 @Slf4j
 @Service
@@ -33,7 +39,9 @@ public class TaskInitializeService {
     private final TeamWorkflowStatusRetrieveService teamWorkflowStatusRetrieveService;
     private final TopicSequenceService incrementTopicSequence;
     private final RichTextInitializeService richTextInitializeService;
-    private final ModelMapper modelMapper;
+    private final WorkspaceActivityService workspaceActivityService;
+    private final TaskDtoConverter taskDtoConverter;
+    private final TaskRelationInitializeService taskRelationInitializeService;
 
     @Transactional
     public TaskDto initializeTask(TaskInitializeVo taskInitializeVo) {
@@ -45,8 +53,10 @@ public class TaskInitializeService {
             assignTopicTaskNo(task);
             assignInitialWorkflowStatus(task);
             Task saved = taskRepository.saveAndFlush(task);
-            TaskDto taskDto = modelMapper.map(saved, TaskDto.class);
+            TaskDto taskDto = taskDtoConverter.map(saved);
             initializeAndAssignRichText(taskInitializeVo, taskDto);
+            initializeTaskCreatedActivity(task);
+            initializeSubtaskRelation(taskInitializeVo, saved);
             return taskDto;
         } finally {
             releaseLocks(taskInitializeVo);
@@ -109,5 +119,32 @@ public class TaskInitializeService {
         task.setDueDate(taskInitializeVo.getDueDate());
         task.setTitle(taskInitializeVo.getTitle());
         return task;
+    }
+
+    private void initializeTaskCreatedActivity(Task task) {
+        WorkspaceActivityCreateVo vo = WorkspaceActivityCreateVo
+                .builder()
+                .workspaceId(task.getWorkspaceId())
+                .teamId(task.getTeamId())
+                .taskId(task.getTaskId())
+                .performedBy(task.getOwnerId())
+                .relatedObjectId(task.getTaskId())
+                .type(TASK_INITIALIZED)
+                .build();
+        workspaceActivityService.createWorkspaceActivity(vo);
+    }
+
+    private void initializeSubtaskRelation(TaskInitializeVo taskInitializeVo, Task saved) {
+        String subTaskOf = taskInitializeVo.getSubTaskOf();
+        if (Objects.nonNull(subTaskOf)) {
+            TaskRelationInitializeVo taskRelationInitializeVo = new TaskRelationInitializeVo();
+            taskRelationInitializeVo.setTaskId(saved.getTaskId());
+            taskRelationInitializeVo.setRelatedTaskId(subTaskOf);
+            taskRelationInitializeVo.setRelation(TaskRelationType.SUBTASK);
+            taskRelationInitializeVo.setWorkspaceId(saved.getWorkspaceId());
+            taskRelationInitializeVo.setTeamId(saved.getTeamId());
+            taskRelationInitializeVo.setPerformedBy(taskInitializeVo.getOwnerId());
+            taskRelationInitializeService.initializeTaskRelation(taskRelationInitializeVo);
+        }
     }
 }

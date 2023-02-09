@@ -1,6 +1,7 @@
 package co.jinear.core.service.account;
 
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.token.TokenDto;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
@@ -32,6 +33,13 @@ public class AccountMailConfirmationService {
     private final AccountUpdateService accountUpdateService;
     private final TokenService tokenService;
     private final MailService mailService;
+
+    public void resendConfirmEmailMail(String email, LocaleType preferredLocale) {
+        log.info("Resend confirm email mail. email: {}, preferredLocale: {}", email, preferredLocale);
+        AccountDto accountDto = accountRetrieveService.retrieveByEmail(email).orElseThrow(NotFoundException::new);
+        validateAccountMailNotConfirmed(accountDto);
+        sendConfirmEmailMail(accountDto.getAccountId(), preferredLocale);
+    }
 
     public void sendConfirmEmailMail(String accountId, LocaleType preferredLocale) {
         log.info("Send confirm email mail has started for accountId: {}, preferredLocale: {}", accountId, preferredLocale);
@@ -75,7 +83,7 @@ public class AccountMailConfirmationService {
 
     private void validateAccountMailNotConfirmed(AccountDto accountDto) {
         Optional.of(accountDto).map(AccountDto::getEmailConfirmed).filter(Boolean.TRUE::equals).ifPresent(confirmed -> {
-            throw new BusinessException();
+            throw new BusinessException("account.email-already-confirmed");
         });
     }
 }

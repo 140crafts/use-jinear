@@ -34,4 +34,13 @@ public class TaskListingController {
                                                             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end) {
         return taskListingManager.retrieveAllIntersectingTasks(new TaskRetrieveIntersectingRequest(workspaceId, teamId, start, end));
     }
+
+    @GetMapping("/{workspaceId}/{teamId}/with-workflow/{workflowStatusId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskListingPaginatedResponse retrieveFromWorkflowStatus(@PathVariable String workspaceId,
+                                                                   @PathVariable String teamId,
+                                                                   @PathVariable String workflowStatusId,
+                                                                   @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return taskListingManager.retrieveFromWorkflowStatus(workspaceId, teamId, workflowStatusId, page);
+    }
 }

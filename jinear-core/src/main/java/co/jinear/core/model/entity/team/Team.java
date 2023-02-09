@@ -31,6 +31,9 @@ public class Team extends BaseEntity {
     @Column(name = "workspace_id")
     private String workspaceId;
 
+    @Column(name = "initialized_by")
+    private String initializedBy;
+
     @Column(name = "name")
     private String name;
 

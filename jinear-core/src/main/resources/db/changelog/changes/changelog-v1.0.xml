@@ -226,41 +226,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace_activity">
-        <createTable tableName="workspace_activity">
-            <column name="workspace_activity_id" type="char(26)">
-                <constraints nullable="false" primaryKey="true" unique="true"/>
-            </column>
-            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="udate" type="datetime"/>
-            <column name="passive_id" type="char(26)"/>
-            <column name="workspace_id" type="char(26)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="account_id" type="char(26)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="related_object_id" type="char(26)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="activity_type" type="varchar(255)"/>
-        </createTable>
-
-        <createIndex indexName="ix_workspace_id" tableName="workspace_activity">
-            <column name="workspace_id"/>
-        </createIndex>
-
-        <createIndex indexName="ix_account_id" tableName="workspace_activity">
-            <column name="account_id"/>
-        </createIndex>
-
-        <createIndex indexName="ix_related_object_id" tableName="workspace_activity">
-            <column name="related_object_id"/>
-        </createIndex>
-    </changeSet>
-
     <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace_member">
         <createTable tableName="workspace_member">
             <column name="workspace_member_id" type="char(26)">

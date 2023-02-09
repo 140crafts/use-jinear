@@ -1,5 +1,6 @@
 package co.jinear.core.service.team.member;
 
+import co.jinear.core.converter.team.TeamMemberConverter;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
@@ -10,7 +11,6 @@ import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberListingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,17 +23,17 @@ public class TeamMemberService {
     private final TeamMemberRepository teamMemberRepository;
     private final TeamRetrieveService teamRetrieveService;
     private final WorkspaceMemberListingService workspaceMemberListingService;
-    private final ModelMapper modelMapper;
+    private final TeamMemberConverter teamMemberConverter;
 
     public TeamMemberDto addTeamMember(TeamMemberAddVo teamMemberAddVo) {
         log.info("Add team member has started. teamMemberAddVo: {}", teamMemberAddVo);
-        TeamMember teamMember = modelMapper.map(teamMemberAddVo, TeamMember.class);
+        TeamMember teamMember = teamMemberConverter.map(teamMemberAddVo);
         assignWorkspaceId(teamMemberAddVo, teamMember);
         TeamMember saved = teamMemberRepository.save(teamMember);
-        return modelMapper.map(saved, TeamMemberDto.class);
+        return teamMemberConverter.map(saved);
     }
 
-    public void addAllFromWorkspace(String teamId) {
+    public List<TeamMemberDto> addAllFromWorkspace(String teamId) {
         log.info("Add all members from workspace has started for teamId: {}", teamId);
         String workspaceId = retrieveWorkspaceIdFromTeamId(teamId);
         List<WorkspaceMemberDto> workspaceMembers = workspaceMemberListingService.listAllWorkspaceMembers(workspaceId);
@@ -41,8 +41,12 @@ public class TeamMemberService {
                 .stream()
                 .map(workspaceMemberDto -> convertToTeamMember(teamId, workspaceMemberDto))
                 .toList();
-        List<TeamMember> saved = teamMemberRepository.saveAll(teamMembers);
+        List<TeamMemberDto> saved = teamMemberRepository.saveAll(teamMembers)
+                .stream()
+                .map(teamMemberConverter::map)
+                .toList();
         log.info("Add all members from workspace has ended. [{}] members added to teamId: {}", saved.size(), teamId);
+        return saved;
     }
 
     private void assignWorkspaceId(TeamMemberAddVo teamMemberAddVo, TeamMember teamMember) {

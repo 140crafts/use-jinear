@@ -20,4 +20,5 @@ public class TaskInitializeVo {
     private ZonedDateTime dueDate;
     private String title;
     private String description;
+    private String subTaskOf;
 }

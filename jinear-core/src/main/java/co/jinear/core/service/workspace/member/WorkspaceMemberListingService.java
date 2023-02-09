@@ -1,5 +1,6 @@
 package co.jinear.core.service.workspace.member;
 
+import co.jinear.core.converter.workspace.WorkspaceMemberDtoConverter;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
 import co.jinear.core.repository.WorkspaceMemberRepository;
@@ -7,7 +8,6 @@ import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -22,33 +22,33 @@ public class WorkspaceMemberListingService {
     private final WorkspaceMemberRepository workspaceMemberRepository;
     private final AccountRetrieveService accountRetrieveService;
     private final MediaRetrieveService mediaRetrieveService;
-    private final ModelMapper modelMapper;
+    private final WorkspaceMemberDtoConverter workspaceMemberDtoConverter;
 
-    public List<WorkspaceMemberDto> retrieveWorkspaceMembersByAccountId(String accountId) {
+    public List<WorkspaceMemberDto> retrieveAccountsWorkspaceMemberships(String accountId) {
         log.info("Retrieve account workspace members has started. accountId: {}", accountId);
         return workspaceMemberRepository.findAllByAccountIdAndPassiveIdIsNull(accountId)
                 .stream()
-                .map(workspaceMember -> modelMapper.map(workspaceMember, WorkspaceMemberDto.class))
+                .map(workspaceMemberDtoConverter::map)
                 .toList();
     }
 
     public Page<WorkspaceMemberDto> retrieveWorkspaceMembers(String workspaceId, PageRequest pageRequest) {
         log.info("Retrieve workspace members has started. workspaceId: {}, pageRequest: {}", workspaceId, pageRequest);
         return workspaceMemberRepository.findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateAsc(workspaceId, pageRequest)
-                .map(workspaceMember -> modelMapper.map(workspaceMember, WorkspaceMemberDto.class));
+                .map(workspaceMemberDtoConverter::map);
     }
 
     public List<WorkspaceMemberDto> listAllWorkspaceMembers(String workspaceId) {
         log.info("List all workspace members has started. workspaceId: {}", workspaceId);
         return workspaceMemberRepository.findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateAsc(workspaceId).stream()
-                .map(workspaceMember -> modelMapper.map(workspaceMember, WorkspaceMemberDto.class))
+                .map(workspaceMemberDtoConverter::map)
                 .toList();
     }
 
     public Page<WorkspaceMemberDto> retrieveWorkspaceMembersDetailed(String workspaceId, PageRequest pageRequest) {
         log.info("Retrieve workspace members has started. workspaceId: {}, pageRequest: {}", workspaceId, pageRequest);
         return workspaceMemberRepository.findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateAsc(workspaceId, pageRequest)
-                .map(workspaceMember -> modelMapper.map(workspaceMember, WorkspaceMemberDto.class))
+                .map(workspaceMemberDtoConverter::map)
                 .map(this::fillAccountDtoIfPresent);
     }
 

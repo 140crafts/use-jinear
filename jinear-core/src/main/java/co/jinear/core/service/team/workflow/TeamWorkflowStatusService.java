@@ -1,5 +1,6 @@
 package co.jinear.core.service.team.workflow;
 
+import co.jinear.core.converter.team.TeamWorkflowStatusConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.entity.team.TeamWorkflowStatus;
@@ -9,7 +10,6 @@ import co.jinear.core.repository.TeamWorkflowStatusRepository;
 import co.jinear.core.service.passive.PassiveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -26,7 +26,7 @@ public class TeamWorkflowStatusService {
     private final TeamWorkflowStatusRetrieveService teamWorkflowStatusRetrieveService;
     private final TeamWorkflowStatusLockService teamWorkflowStatusLockService;
     private final PassiveService passiveService;
-    private final ModelMapper modelMapper;
+    private final TeamWorkflowStatusConverter teamWorkflowStatusConverter;
 
     public TeamWorkflowStatusDto initializeTeamWorkflowStatus(InitializeTeamWorkflowStatusVo initializeTeamWorkflowStatusVo) {
         log.info("Initialize team workflow status has started. initializeTeamWorkflowStatusVo: {}", initializeTeamWorkflowStatusVo);
@@ -34,10 +34,10 @@ public class TeamWorkflowStatusService {
         teamWorkflowStatusLockService.lockTeamWorkflow(initializeTeamWorkflowStatusVo.getTeamId());
         try {
             int nextAvailableOrderNo = getNextAvailableOrderNo(initializeTeamWorkflowStatusVo);
-            TeamWorkflowStatus teamWorkflowStatus = modelMapper.map(initializeTeamWorkflowStatusVo, TeamWorkflowStatus.class);
+            TeamWorkflowStatus teamWorkflowStatus = teamWorkflowStatusConverter.map(initializeTeamWorkflowStatusVo);
             teamWorkflowStatus.setOrder(nextAvailableOrderNo);
             TeamWorkflowStatus saved = teamWorkflowStatusRepository.saveAndFlush(teamWorkflowStatus);
-            return modelMapper.map(saved, TeamWorkflowStatusDto.class);
+            return teamWorkflowStatusConverter.map(saved);
         } catch (Exception e) {
             log.error("An error occurred while adding team workflow status.", e);
             throw e;
