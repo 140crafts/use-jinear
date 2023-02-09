@@ -45,7 +45,7 @@ public class WorkspaceRetrieveService {
     }
 
     public List<WorkspaceDto> retrieveAccountWorkspace(String accountId) {
-        List<String> accountWorkspaceIds = workspaceMemberListingService.retrieveWorkspaceMembersByAccountId(accountId)
+        List<String> accountWorkspaceIds = workspaceMemberListingService.retrieveAccountsWorkspaceMemberships(accountId)
                 .stream()
                 .map(WorkspaceMemberDto::getWorkspaceId)
                 .toList();

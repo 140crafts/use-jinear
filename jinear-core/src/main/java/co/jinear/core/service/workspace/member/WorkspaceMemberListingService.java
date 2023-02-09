@@ -24,7 +24,7 @@ public class WorkspaceMemberListingService {
     private final MediaRetrieveService mediaRetrieveService;
     private final WorkspaceMemberDtoConverter workspaceMemberDtoConverter;
 
-    public List<WorkspaceMemberDto> retrieveWorkspaceMembersByAccountId(String accountId) {
+    public List<WorkspaceMemberDto> retrieveAccountsWorkspaceMemberships(String accountId) {
         log.info("Retrieve account workspace members has started. accountId: {}", accountId);
         return workspaceMemberRepository.findAllByAccountIdAndPassiveIdIsNull(accountId)
                 .stream()

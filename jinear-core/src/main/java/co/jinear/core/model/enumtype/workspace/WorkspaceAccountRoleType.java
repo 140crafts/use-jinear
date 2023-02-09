@@ -6,5 +6,6 @@ import lombok.Getter;
 public enum WorkspaceAccountRoleType {
     OWNER,
     ADMIN,
-    MEMBER;
+    MEMBER,
+    GUEST;
 }
