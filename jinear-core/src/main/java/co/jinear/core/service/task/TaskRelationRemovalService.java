@@ -6,11 +6,10 @@ import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
 import co.jinear.core.repository.TaskRelationRepository;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.workspace.activity.WorkspaceActivityService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
 
 import static co.jinear.core.model.enumtype.workspace.WorkspaceActivityType.RELATION_REMOVED;
 
