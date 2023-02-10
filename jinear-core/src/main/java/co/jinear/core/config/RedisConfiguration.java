@@ -9,7 +9,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.session.data.redis.config.ConfigureRedisAction;
 
 import java.time.Duration;
 
@@ -33,11 +32,6 @@ public class RedisConfiguration {
     private Boolean redisUseSsl;
 
     @Bean
-    public ConfigureRedisAction configureRedisAction() {
-        return ConfigureRedisAction.NO_OP;
-    }
-
-    @Bean
     JedisConnectionFactory jedisConnectionFactory() {
         RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
         redisStandaloneConfiguration.setHostName(redisHost);
@@ -48,7 +42,7 @@ public class RedisConfiguration {
         }
         JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
         jedisClientConfiguration.connectTimeout(Duration.ofMillis(redisTimeout));
-//        jedisClientConfiguration.readTimeout(Duration.ofMillis(redisTimeout));
+        jedisClientConfiguration.readTimeout(Duration.ofMillis(redisTimeout));
         jedisClientConfiguration.usePooling();
         if (Boolean.TRUE.equals(redisUseSsl)) {
             jedisClientConfiguration.useSsl();

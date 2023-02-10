@@ -7,8 +7,8 @@ WORKDIR /build/
 
 #-Dactive.profile=dev
 #RUN mvn package -B -DskipTests
-#RUN mvn package -B
-RUN mvn clean package -Pnative
+RUN mvn package -B
+RUN #mvn clean package -Pnative
 
 #FROM openjdk:8-jre-alpine
 #alpine de gcloud vision ile ilgili native bir seyler yok patliyor

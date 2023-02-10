@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-02-09 11:09:20.
+// Generated using typescript-generator version 3.0.1157 on 2023-02-10 08:55:13.
 
 export interface BaseDto {
     createdDate: Date;
