@@ -4,8 +4,6 @@ import co.jinear.core.config.interceptor.AcceptLanguageHeaderInterceptor;
 import co.jinear.core.config.interceptor.LogExecutionInterceptor;
 import co.jinear.core.system.gcloud.security.SecretManager;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.util.http.LegacyCookieProcessor;
-import org.apache.tomcat.util.http.SameSiteCookies;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
@@ -39,15 +37,15 @@ public class WebConfig implements WebMvcConfigurer {
         return encryptor;
     }
 
-    @Bean
-    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer() {
-        return factory -> {
-            TomcatServletWebServerFactory tomcat = factory;
-            LegacyCookieProcessor legacyCookieProcessor = new LegacyCookieProcessor();
-            legacyCookieProcessor.setSameSiteCookies(SameSiteCookies.NONE.getValue());
-            tomcat.addContextCustomizers(context -> context.setCookieProcessor(legacyCookieProcessor));
-        };
-    }
+//    @Bean
+//    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer() {
+//        return factory -> {
+//            TomcatServletWebServerFactory tomcat = factory;
+//            LegacyCookieProcessor legacyCookieProcessor = new LegacyCookieProcessor();
+//            legacyCookieProcessor.setSameSiteCookies(SameSiteCookies.NONE.getValue());
+//            tomcat.addContextCustomizers(context -> context.setCookieProcessor(legacyCookieProcessor));
+//        };
+//    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

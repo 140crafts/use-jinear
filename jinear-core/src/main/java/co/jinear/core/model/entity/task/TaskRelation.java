@@ -2,13 +2,13 @@ package co.jinear.core.model.entity.task;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.enumtype.task.TaskRelationType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
-import javax.persistence.*;
 
 @Getter
 @Setter

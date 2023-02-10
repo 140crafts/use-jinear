@@ -3,14 +3,16 @@ package co.jinear.core.config.security;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -21,8 +23,8 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+@EnableMethodSecurity
+public class SecurityConfiguration {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtRequestFilter jwtRequestFilter;
@@ -48,20 +50,35 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             "*"
     );
 
-    @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        return httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
-                .csrf().disable()
-                .authorizeRequests().antMatchers(PUBLIC_ENDPOINTS).permitAll()
-                .anyRequest().authenticated()
-                .and()
+                .authorizeHttpRequests( auth -> auth
+                        .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .build();
+    }
+
+    @Bean
+    public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .authorizeHttpRequests((requests) -> requests
+                        .requestMatchers( new AntPathRequestMatcher("swagger-ui/**")).permitAll()
+                        .requestMatchers( new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                        .requestMatchers( new AntPathRequestMatcher("v3/api-docs/**")).permitAll()
+                        .requestMatchers( new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                        .anyRequest().authenticated())
+                .httpBasic();
+        return httpSecurity.build();
     }
 
     @Bean

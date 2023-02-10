@@ -1,12 +1,12 @@
 package co.jinear.core.repository.criteriabuilder;
 
 import co.jinear.core.model.entity.task.Task;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;

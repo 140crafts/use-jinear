@@ -1,15 +1,14 @@
 package co.jinear.core.model.entity.workspace;
 
 import co.jinear.core.model.entity.BaseEntity;
-import co.jinear.core.model.entity.account.AccountRole;
 import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.entity.username.Username;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
 import java.util.Set;
 
 @Getter

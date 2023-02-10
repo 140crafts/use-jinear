@@ -9,7 +9,6 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.session.data.redis.config.ConfigureRedisAction;
 
 import java.time.Duration;
 
@@ -17,25 +16,20 @@ import java.time.Duration;
 @PropertySource("classpath:application.properties")
 public class RedisConfiguration {
 
-    @Value("${spring.redis.host}")
+    @Value("${spring.data.redis.host}")
     private String redisHost;
 
-    @Value("${spring.redis.password}")
+    @Value("${spring.data.redis.password}")
     private String redisPassword;
 
-    @Value("${spring.redis.port}")
+    @Value("${spring.data.redis.port}")
     private Integer redisPort;
 
-    @Value("${spring.redis.timeout}")
+    @Value("${spring.data.redis.timeout}")
     private Long redisTimeout;
 
-    @Value("${spring.redis.ssl}")
+    @Value("${spring.data.redis.ssl}")
     private Boolean redisUseSsl;
-
-    @Bean
-    public ConfigureRedisAction configureRedisAction() {
-        return ConfigureRedisAction.NO_OP;
-    }
 
     @Bean
     JedisConnectionFactory jedisConnectionFactory() {
@@ -48,7 +42,7 @@ public class RedisConfiguration {
         }
         JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
         jedisClientConfiguration.connectTimeout(Duration.ofMillis(redisTimeout));
-//        jedisClientConfiguration.readTimeout(Duration.ofMillis(redisTimeout));
+        jedisClientConfiguration.readTimeout(Duration.ofMillis(redisTimeout));
         jedisClientConfiguration.usePooling();
         if (Boolean.TRUE.equals(redisUseSsl)) {
             jedisClientConfiguration.useSsl();

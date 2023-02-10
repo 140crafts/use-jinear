@@ -4,7 +4,7 @@ import co.jinear.core.model.entity.username.Username;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 
-import javax.persistence.LockModeType;
+import jakarta.persistence.*;
 import java.util.Optional;
 
 public interface UsernameRepository extends JpaRepository<Username,String> {

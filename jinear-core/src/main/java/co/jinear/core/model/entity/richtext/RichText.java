@@ -1,18 +1,12 @@
 package co.jinear.core.model.entity.richtext;
 
 import co.jinear.core.model.entity.BaseEntity;
-import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.enumtype.richtext.RichTextSourceStack;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.NotFound;
-import org.hibernate.annotations.NotFoundAction;
-import org.hibernate.annotations.Where;
-
-import javax.persistence.*;
 
 @Getter
 @Setter

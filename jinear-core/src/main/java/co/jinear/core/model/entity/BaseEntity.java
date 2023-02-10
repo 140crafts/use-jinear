@@ -1,11 +1,11 @@
 package co.jinear.core.model.entity;
 
 import co.jinear.core.system.util.DateHelper;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.*;
 import java.util.Date;
 
 @Getter

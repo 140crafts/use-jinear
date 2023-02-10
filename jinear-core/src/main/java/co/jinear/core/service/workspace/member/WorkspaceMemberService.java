@@ -8,11 +8,11 @@ import co.jinear.core.model.vo.workspace.InitializeWorkspaceMemberVo;
 import co.jinear.core.repository.WorkspaceMemberRepository;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.system.NumberCompareHelper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Slf4j
