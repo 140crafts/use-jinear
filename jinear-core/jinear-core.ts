@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-02-10 08:55:13.
+// Generated using typescript-generator version 3.0.1157 on 2023-02-11 11:59:50.
 
 export interface BaseDto {
     createdDate: Date;
@@ -296,7 +296,8 @@ export interface TaskAssigneeUpdateRequest {
 }
 
 export interface TaskDateUpdateRequest {
-    date?: Date | null;
+    assignedDate?: Date | null;
+    dueDate?: Date | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {

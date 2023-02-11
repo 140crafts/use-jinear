@@ -11,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -59,21 +58,9 @@ public class TaskActivityService {
     }
 
     @Async
-    public void initializeAssignedDateUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
-        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
-        Optional.of(before).map(TaskDto::getAssignedDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setOldState);
-        Optional.of(after).map(TaskDto::getAssignedDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setNewState);
-        vo.setType(WorkspaceActivityType.TASK_CHANGE_ASSIGNED_DATE);
-        workspaceActivityService.createWorkspaceActivity(vo);
-    }
-
-    @Async
-    public void initializeDueDateUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
-        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
-        Optional.of(before).map(TaskDto::getDueDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setOldState);
-        Optional.of(after).map(TaskDto::getDueDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setNewState);
-        vo.setType(WorkspaceActivityType.TASK_CHANGE_DUE_DATE);
-        workspaceActivityService.createWorkspaceActivity(vo);
+    public void initializeDatesUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
+        initializeAssignedDateUpdateActivity(performedBy, before, after);
+        initializeDueDateUpdateActivity(performedBy, before, after);
     }
 
     @Async
@@ -96,13 +83,23 @@ public class TaskActivityService {
                 .build();
     }
 
-    private boolean datesChanged(ZonedDateTime beforeAssignedDate, ZonedDateTime afterAssignedDate) {
-        boolean nullStateChanged = (Objects.isNull(beforeAssignedDate) && Objects.nonNull(afterAssignedDate)) ||
-                (Objects.nonNull(beforeAssignedDate) && Objects.isNull(afterAssignedDate));
-        return nullStateChanged || Optional.ofNullable(beforeAssignedDate)
-                .map(before -> before.isEqual(afterAssignedDate))
-                .map(isEq -> !isEq)
-                .orElse(Boolean.FALSE);
+    private void initializeAssignedDateUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
+        Optional.of(before).map(TaskDto::getAssignedDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setOldState);
+        Optional.of(after).map(TaskDto::getAssignedDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setNewState);
+        vo.setType(WorkspaceActivityType.TASK_CHANGE_ASSIGNED_DATE);
+        if (!Objects.equals(vo.getOldState(), vo.getNewState())) {
+            workspaceActivityService.createWorkspaceActivity(vo);
+        }
+    }
 
+    private void initializeDueDateUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
+        Optional.of(before).map(TaskDto::getDueDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setOldState);
+        Optional.of(after).map(TaskDto::getDueDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setNewState);
+        vo.setType(WorkspaceActivityType.TASK_CHANGE_DUE_DATE);
+        if (!Objects.equals(vo.getOldState(), vo.getNewState())) {
+            workspaceActivityService.createWorkspaceActivity(vo);
+        }
     }
 }

@@ -12,5 +12,8 @@ import java.time.ZonedDateTime;
 public class TaskDateUpdateRequest {
     @Nullable
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-    private ZonedDateTime date;
+    private ZonedDateTime assignedDate;
+    @Nullable
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private ZonedDateTime dueDate;
 }
