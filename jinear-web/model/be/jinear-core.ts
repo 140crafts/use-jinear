@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-02-05 11:54:05.
+// Generated using typescript-generator version 3.0.1157 on 2023-02-11 11:59:50.
 
 export interface BaseDto {
   createdDate: Date;
@@ -298,7 +298,8 @@ export interface TaskAssigneeUpdateRequest {
 }
 
 export interface TaskDateUpdateRequest {
-  date?: Date | null;
+  assignedDate?: Date | null;
+  dueDate?: Date | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -577,7 +578,7 @@ export type TopicVisibility = "SHARED" | "PRIVATE";
 
 export type UsernameRelatedObjectType = "ACCOUNT" | "COMMUNITY" | "WORKSPACE";
 
-export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER";
+export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER" | "GUEST";
 
 export type WorkspaceActivityType =
   | "MEMBER_JOIN"

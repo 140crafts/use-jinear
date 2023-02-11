@@ -86,6 +86,7 @@ const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
       bodyClass={styles.container}
       requestClose={close}
       width={isMobile ? "fullscreen" : "large"}
+      hasTitleCloseButton={true}
     >
       <div className={styles.content}>
         <input
