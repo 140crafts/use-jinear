@@ -1,11 +1,7 @@
 import Button, { ButtonVariants } from "@/components/button";
-import {
-  useUpdateTaskAssignedDateMutation,
-  useUpdateTaskDueDateMutation,
-} from "@/store/api/taskUpdateApi";
+import { useUpdateTaskDatesMutation } from "@/store/api/taskUpdateApi";
 import {
   closeChangeTaskDateModal,
-  selectChangeTaskDateModalDateType,
   selectChangeTaskDateModalTaskCurrentAssignedDate,
   selectChangeTaskDateModalTaskCurrentDueDate,
   selectChangeTaskDateModalTaskId,
@@ -25,9 +21,12 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectChangeTaskDateModalVisible);
   const taskId = useTypedSelector(selectChangeTaskDateModalTaskId);
-  const dateType = useTypedSelector(selectChangeTaskDateModalDateType);
-  const [dateVal, setDateVal] = useState<Date | null>(new Date());
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [assignedDateVal, setAssignedDateVal] = useState<Date | null>(
+    new Date()
+  );
+  const [dueDateVal, setDueDateVal] = useState<Date | null>(new Date());
+  const assignedInputRef = useRef<HTMLInputElement>(null);
+  const dueInputRef = useRef<HTMLInputElement>(null);
 
   const currentAssigned = useTypedSelector(
     selectChangeTaskDateModalTaskCurrentAssignedDate
@@ -35,49 +34,66 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
   const currentDue = useTypedSelector(
     selectChangeTaskDateModalTaskCurrentDueDate
   );
+
   const [
-    updateTaskAssignedDate,
-    { isSuccess: isUpdateAssignedSuccess, isLoading: isUpdateAssignedLoading },
-  ] = useUpdateTaskAssignedDateMutation();
-  const [
-    updateTaskDueDate,
-    { isSuccess: isUpdateDueSuccess, isLoading: isUpdateDueLoading },
-  ] = useUpdateTaskDueDateMutation();
+    updateTaskDates,
+    { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading },
+  ] = useUpdateTaskDatesMutation();
 
   useEffect(() => {
-    if (visible && dateType && dateType == "assigned" && currentAssigned) {
-      setDateVal(new Date(currentAssigned));
-    } else if (visible && dateType && dateType == "due" && currentDue) {
-      setDateVal(new Date(currentDue));
-    } else if (!visible) {
-      setDateVal(null);
-      if (inputRef && inputRef.current && inputRef.current.value) {
-        inputRef.current.value = "";
-      }
+    if (visible && currentAssigned) {
+      setAssignedDateVal(new Date(currentAssigned));
     }
-  }, [visible, dateType, currentAssigned, currentDue]);
+    if (visible && currentDue) {
+      setDueDateVal(new Date(currentDue));
+    }
+    if (!visible) {
+      unsetAssignedDate();
+      unsetDueDate();
+    }
+  }, [visible, currentAssigned, currentDue]);
 
   useEffect(() => {
-    if (isUpdateAssignedSuccess || isUpdateDueSuccess) {
+    if (isUpdateSuccess) {
       close();
     }
-  }, [isUpdateAssignedSuccess, isUpdateDueSuccess]);
+  }, [isUpdateSuccess]);
 
-  const onDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onAssignedDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     try {
       const parsed = parse(value, "yyyy-MM-dd", new Date());
-      console.log({ parsed });
-      setDateVal(parsed);
+      setAssignedDateVal(parsed);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const unsetDate = () => {
-    setDateVal(null);
-    if (inputRef && inputRef.current && inputRef.current.value) {
-      inputRef.current.value = "";
+  const onDueDateChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    try {
+      const parsed = parse(value, "yyyy-MM-dd", new Date());
+      setDueDateVal(parsed);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const unsetAssignedDate = () => {
+    setAssignedDateVal(null);
+    if (
+      assignedInputRef &&
+      assignedInputRef.current &&
+      assignedInputRef.current.value
+    ) {
+      assignedInputRef.current.value = "";
+    }
+  };
+
+  const unsetDueDate = () => {
+    setDueDateVal(null);
+    if (dueInputRef && dueInputRef.current && dueInputRef.current.value) {
+      dueInputRef.current.value = "";
     }
   };
 
@@ -87,38 +103,58 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
 
   const save = () => {
     if (!taskId) return;
-    const method =
-      dateType == "assigned" ? updateTaskAssignedDate : updateTaskDueDate;
-    method?.({ taskId, body: { date: dateVal } });
+    updateTaskDates?.({
+      taskId,
+      body: {
+        assignedDate: assignedDateVal,
+        dueDate: dueDateVal,
+      },
+    });
   };
 
   return (
     <Modal
       visible={visible}
-      title={t(`changeTaskDateTitle_${dateType}`)}
+      title={t("changeTaskDateTitle")}
       bodyClass={styles.container}
       hasTitleCloseButton={true}
       requestClose={close}
     >
-      <label className={styles.label} htmlFor={"new-task-assigned-date"}>
-        {t(`changeTaskDateDateLabel_${dateType}`)}
+      <label className={styles.label} htmlFor={"task-update-assigned-date"}>
+        {t("changeTaskDateDateLabel_assigned")}
         <input
-          ref={inputRef}
+          ref={assignedInputRef}
           type={"date"}
-          id={"new-task-assigned-date"}
-          value={dateVal ? format(dateVal, "yyyy-MM-dd") : ""}
-          onChange={onDateChange}
+          id={"task-update-assigned-date"}
+          value={assignedDateVal ? format(assignedDateVal, "yyyy-MM-dd") : ""}
+          onChange={onAssignedDateChange}
         />
       </label>
       <div className={styles.removeContainer}>
-        <Button className={styles.unassignButton} onClick={unsetDate}>
+        <Button className={styles.unassignButton} onClick={unsetAssignedDate}>
+          {t("changeTaskDateDateLabelRemove")}
+        </Button>
+      </div>
+
+      <label className={styles.label} htmlFor={"task-update-due-date"}>
+        {t("changeTaskDateDateLabel_due")}
+        <input
+          ref={dueInputRef}
+          type={"date"}
+          id={"task-update-due-date"}
+          value={dueDateVal ? format(dueDateVal, "yyyy-MM-dd") : ""}
+          onChange={onDueDateChange}
+        />
+      </label>
+      <div className={styles.removeContainer}>
+        <Button className={styles.unassignButton} onClick={unsetDueDate}>
           {t("changeTaskDateDateLabelRemove")}
         </Button>
       </div>
 
       <Button
-        loading={isUpdateAssignedLoading || isUpdateDueLoading}
-        disabled={isUpdateAssignedLoading || isUpdateDueLoading}
+        loading={isUpdateLoading}
+        disabled={isUpdateLoading}
         variant={ButtonVariants.contrast}
         onClick={save}
       >

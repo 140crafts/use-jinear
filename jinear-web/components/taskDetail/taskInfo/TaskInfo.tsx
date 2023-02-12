@@ -69,13 +69,11 @@ const TaskInfo: React.FC<TaskInfoProps> = ({ className }) => {
   };
 
   const popChangeAssignedDateModal = () => {
-    dispatch(
-      popChangeTaskDateModal({ visible: true, task, dateType: "assigned" })
-    );
+    dispatch(popChangeTaskDateModal({ visible: true, task }));
   };
 
   const popChangeDueDateModal = () => {
-    dispatch(popChangeTaskDateModal({ visible: true, task, dateType: "due" }));
+    dispatch(popChangeTaskDateModal({ visible: true, task }));
   };
 
   const popChangeAssigneeModal = () => {

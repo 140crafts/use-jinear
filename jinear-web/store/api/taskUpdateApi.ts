@@ -43,12 +43,12 @@ export const taskUpdateApi = api.injectEndpoints({
       ],
     }),
     //
-    updateTaskAssignedDate: build.mutation<
+    updateTaskDates: build.mutation<
       TaskResponse,
       { taskId: string; body: TaskDateUpdateRequest }
     >({
       query: (req: { taskId: string; body: TaskDateUpdateRequest }) => ({
-        url: `v1/task/update/${req.taskId}/dates/assigned`,
+        url: `v1/task/update/${req.taskId}/dates`,
         method: "PUT",
         body: req.body,
       }),
@@ -60,22 +60,6 @@ export const taskUpdateApi = api.injectEndpoints({
       ],
     }),
     //
-    updateTaskDueDate: build.mutation<
-      TaskResponse,
-      { taskId: string; body: TaskDateUpdateRequest }
-    >({
-      query: (req: { taskId: string; body: TaskDateUpdateRequest }) => ({
-        url: `v1/task/update/${req.taskId}/dates/due`,
-        method: "PUT",
-        body: req.body,
-      }),
-      invalidatesTags: (_result, _err, req) => [
-        { type: "team-task-list" },
-        { type: "workplace-task-with-name-and-tag" },
-        { type: "retrieve-task-activity", id: req.taskId },
-        { type: "team-task-list" },
-      ],
-    }),
     //
     updateTaskAssignee: build.mutation<
       TaskResponse,
@@ -100,8 +84,7 @@ export const taskUpdateApi = api.injectEndpoints({
 export const {
   useUpdateTaskDescriptionMutation,
   useUpdateTaskTitleMutation,
-  useUpdateTaskAssignedDateMutation,
-  useUpdateTaskDueDateMutation,
+  useUpdateTaskDatesMutation,
   useUpdateTaskAssigneeMutation,
 } = taskUpdateApi;
 
@@ -109,8 +92,7 @@ export const {
   endpoints: {
     updateTaskDescription,
     updateTaskTitle,
-    updateTaskAssignedDate,
-    updateTaskDueDate,
+    updateTaskDates,
     updateTaskAssignee,
   },
 } = taskUpdateApi;

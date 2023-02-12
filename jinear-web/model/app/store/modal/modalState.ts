@@ -23,7 +23,6 @@ export interface ChangeTaskTopicModalState extends ModalState {
 }
 export interface ChangeTaskDateModalState extends ModalState {
   task?: TaskDto;
-  dateType: "assigned" | "due";
 }
 export interface ChangeTaskAssigneeModalState extends ModalState {
   task?: TaskDto;

@@ -750,6 +750,10 @@ export default {
     en: "Remove Task Topic",
     tr: "Görevin Konusunu Kaldır",
   },
+  changeTaskDateTitle: {
+    en: "Change Task Dates",
+    tr: "Görev Tarihlerini Değiştir",
+  },
   changeTaskDateTitle_assigned: {
     en: "Change Assigned Date",
     tr: "Planlanan Günü Değiştir",
