@@ -1,8 +1,12 @@
+import Button from "@/components/button";
 import TeamTagCell from "@/components/teamTagCell/TeamTagCell";
 import { TaskDto } from "@/model/be/jinear-core";
+import { popChangeTaskDateModal } from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import Link from "next/link";
 import React from "react";
+import { IoTime } from "react-icons/io5";
 import AssigneeCell from "../../assigneeCell/AssigneeCell";
 import DueDateAfterIcon from "./dueDateAfterIcon/DueDateAfterIcon";
 import StartDateBeforeIcon from "./startDateBeforeIcon/StartDateBeforeIcon";
@@ -28,6 +32,15 @@ const TaskPeriodViewCard: React.FC<TaskPeriodViewCardProps> = ({
   showAdditionalInfo = true,
   duration = 1,
 }) => {
+  const dispatch = useAppDispatch();
+
+  const popChangeDatesModal = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    event?.preventDefault?.();
+    dispatch(popChangeTaskDateModal({ visible: true, task }));
+  };
+
   return (
     <Link
       href={`/${task.workspace?.username}/task/${task.team?.tag}-${task.teamTagNo}`}
@@ -48,6 +61,13 @@ const TaskPeriodViewCard: React.FC<TaskPeriodViewCardProps> = ({
             />
 
             <TeamTagCell task={task} className={styles.taskTagCell} />
+
+            <Button
+              className={styles.taskTagCell}
+              onClick={popChangeDatesModal}
+            >
+              <IoTime size={12} />
+            </Button>
 
             <AssigneeCell task={task} className={styles.taskTagCell} />
             <div className="flex-1" />

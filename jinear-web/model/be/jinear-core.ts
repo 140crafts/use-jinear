@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-02-11 11:59:50.
+// Generated using typescript-generator version 3.0.1157 on 2023-02-12 09:10:37.
 
 export interface BaseDto {
   createdDate: Date;
@@ -211,7 +211,7 @@ export interface WorkspaceActivityDto extends BaseDto {
 }
 
 export interface WorkspaceDisplayPreferenceDto {
-  account_id: string;
+  accountId: string;
   preferredWorkspaceId?: string | null;
   preferredTeamId?: string | null;
   workspace?: WorkspaceDto | null;
