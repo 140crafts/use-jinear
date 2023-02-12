@@ -87,25 +87,14 @@ public class TaskUpdateManager {
         return updateTaskTopic(taskId, null);
     }
 
-    public TaskResponse updateTaskAssignedDate(String taskId, TaskDateUpdateRequest taskDateUpdateRequest) {
+    public TaskResponse updateTaskDates(String taskId, TaskDateUpdateRequest taskDateUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
-        validateDueDateIsAfterAssignedDate(taskDateUpdateRequest.getDate(), taskDtoBeforeUpdate.getDueDate());
-        log.info("Update task assigned date has started. accountId: {}, taskId: {}", currentAccountId, taskId);
+        validateDueDateIsAfterAssignedDate(taskDateUpdateRequest.getAssignedDate(), taskDateUpdateRequest.getDueDate());
+        log.info("Update task dates has started. accountId: {}, taskId: {}", currentAccountId, taskId);
         TaskDatesUpdateVo taskDatesUpdateVo = taskDatesUpdateVoConverter.map(taskDateUpdateRequest, taskId);
-        TaskDto taskDto = taskUpdateService.updateTaskAssignedDate(taskDatesUpdateVo);
-        taskActivityService.initializeAssignedDateUpdateActivity(currentAccountId, taskDtoBeforeUpdate, taskDto);
-        return mapResponse(taskDto);
-    }
-
-    public TaskResponse updateTaskDueDate(String taskId, TaskDateUpdateRequest taskDateUpdateRequest) {
-        String currentAccountId = sessionInfoService.currentAccountId();
-        TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
-        validateDueDateIsAfterAssignedDate(taskDtoBeforeUpdate.getAssignedDate(), taskDateUpdateRequest.getDate());
-        log.info("Update task due date has started. accountId: {}, taskId: {}", currentAccountId, taskId);
-        TaskDatesUpdateVo taskDatesUpdateVo = taskDatesUpdateVoConverter.map(taskDateUpdateRequest, taskId);
-        TaskDto taskDto = taskUpdateService.updateTaskDueDate(taskDatesUpdateVo);
-        taskActivityService.initializeDueDateUpdateActivity(currentAccountId, taskDtoBeforeUpdate, taskDto);
+        TaskDto taskDto = taskUpdateService.updateTaskDates(taskDatesUpdateVo);
+        taskActivityService.initializeDatesUpdateActivity(currentAccountId, taskDtoBeforeUpdate, taskDto);
         return mapResponse(taskDto);
     }
 

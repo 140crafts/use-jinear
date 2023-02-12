@@ -12,5 +12,6 @@ import java.time.ZonedDateTime;
 public class TaskDatesUpdateVo {
 
     private String taskId;
-    private ZonedDateTime date;
+    private ZonedDateTime assignedDate;
+    private ZonedDateTime dueDate;
 }

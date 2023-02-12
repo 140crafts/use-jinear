@@ -9,7 +9,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @Setter
 public class WorkspaceDisplayPreferenceDto {
 
-    private String account_id;
+    private String accountId;
     @Nullable
     private String preferredWorkspaceId;
     @Nullable

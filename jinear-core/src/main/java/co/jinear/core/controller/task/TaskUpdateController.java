@@ -34,18 +34,11 @@ public class TaskUpdateController {
         return taskUpdateManager.updateTaskDescription(taskId, taskUpdateDescriptionRequest);
     }
 
-    @PutMapping("/{taskId}/dates/assigned")
+    @PutMapping("/{taskId}/dates")
     @ResponseStatus(HttpStatus.OK)
-    public TaskResponse updateTaskAssignedDate(@PathVariable("taskId") String taskId,
-                                               @Valid @RequestBody TaskDateUpdateRequest taskDateUpdateRequest) {
-        return taskUpdateManager.updateTaskAssignedDate(taskId, taskDateUpdateRequest);
-    }
-
-    @PutMapping("/{taskId}/dates/due")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskResponse updateTaskDueDate(@PathVariable("taskId") String taskId,
-                                          @Valid @RequestBody TaskDateUpdateRequest taskDateUpdateRequest) {
-        return taskUpdateManager.updateTaskDueDate(taskId, taskDateUpdateRequest);
+    public TaskResponse updateTaskDates(@PathVariable("taskId") String taskId,
+                                        @Valid @RequestBody TaskDateUpdateRequest taskDateUpdateRequest) {
+        return taskUpdateManager.updateTaskDates(taskId, taskDateUpdateRequest);
     }
 
     @PutMapping("/{taskId}/assignee")

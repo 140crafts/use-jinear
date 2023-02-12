@@ -90,21 +90,13 @@ public class TaskUpdateService {
         }
     }
 
-    public TaskDto updateTaskAssignedDate(TaskDatesUpdateVo taskDatesUpdateVo) {
-        log.info("Update task assigned date has started. taskDatesUpdateVo: {}", taskDatesUpdateVo);
+    public TaskDto updateTaskDates(TaskDatesUpdateVo taskDatesUpdateVo) {
+        log.info("Update task assigned and due date has started. taskDatesUpdateVo: {}", taskDatesUpdateVo);
         Task task = taskRetrieveService.retrieveEntity(taskDatesUpdateVo.getTaskId());
-        task.setAssignedDate(taskDatesUpdateVo.getDate());
+        task.setAssignedDate(taskDatesUpdateVo.getAssignedDate());
+        task.setDueDate(taskDatesUpdateVo.getDueDate());
         Task saved = taskRepository.save(task);
-        log.info("Update task assigned date has finished");
-        return taskDtoConverter.map(saved);
-    }
-
-    public TaskDto updateTaskDueDate(TaskDatesUpdateVo taskDatesUpdateVo) {
-        log.info("Update task due date has started. taskDatesUpdateVo: {}", taskDatesUpdateVo);
-        Task task = taskRetrieveService.retrieveEntity(taskDatesUpdateVo.getTaskId());
-        task.setDueDate(taskDatesUpdateVo.getDate());
-        Task saved = taskRepository.save(task);
-        log.info("Update task due date has finished");
+        log.info("Update task assigned and due date has finished");
         return taskDtoConverter.map(saved);
     }
 
