@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
 import org.jasypt.encryption.pbe.config.SimpleStringPBEConfig;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.server.WebServerFactoryCustomizer;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -37,15 +37,16 @@ public class WebConfig implements WebMvcConfigurer {
         return encryptor;
     }
 
-//    @Bean
-//    public WebServerFactoryCustomizer<TomcatServletWebServerFactory> webServerFactoryCustomizer() {
-//        return factory -> {
-//            TomcatServletWebServerFactory tomcat = factory;
-//            LegacyCookieProcessor legacyCookieProcessor = new LegacyCookieProcessor();
-//            legacyCookieProcessor.setSameSiteCookies(SameSiteCookies.NONE.getValue());
-//            tomcat.addContextCustomizers(context -> context.setCookieProcessor(legacyCookieProcessor));
-//        };
-//    }
+
+    @Bean(name = "htmlSanitizerPolicy")
+    PolicyFactory htmlSanitizerPolicy() {
+        return new HtmlPolicyBuilder()
+                .allowElements("h1","p","b","i","em","strong","a","br","li","ul","ol","blockquote","br")
+                .allowUrlProtocols("https")
+                .allowAttributes("href").onElements("a")
+                .requireRelNofollowOnLinks()
+                .toFactory();
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {

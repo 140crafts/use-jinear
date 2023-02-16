@@ -12,23 +12,25 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static co.jinear.core.model.enumtype.richtext.RichTextSourceStack.WYSIWYG;
+import static co.jinear.core.model.enumtype.richtext.RichTextSourceStack.RC;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class RichTextInitializeService {
 
-    private static final RichTextSourceStack ACTIVE_STACK = WYSIWYG;
+    private static final RichTextSourceStack ACTIVE_STACK = RC;
 
     private final RichTextRepository richTextRepository;
     private final RichTextRetrieveService richTextRetrieveService;
     private final PassiveService passiveService;
     private final RichTextConverter richTextConverter;
+    private final HtmlSanitizeService htmlSanitizeService;
 
     public RichTextDto initializeRichText(InitializeRichTextVo initializeRichTextVo) {
         log.info("Initialize rich text has started. initializeRichTextVo: {}", initializeRichTextVo);
         RichText richText = richTextConverter.map(initializeRichTextVo);
+        sanitizeValue(richText);
         richText.setSourceStack(ACTIVE_STACK);
         RichText saved = richTextRepository.save(richText);
         return richTextConverter.map(saved);
@@ -57,5 +59,9 @@ public class RichTextInitializeService {
         initializeRichTextVo.setType(richText.getType());
         initializeRichTextVo.setValue(updateRichTextVo.getValue());
         return initializeRichTextVo;
+    }
+
+    private void sanitizeValue(RichText richText) {
+        richText.setValue(htmlSanitizeService.sanitizeHTML(richText.getValue()));
     }
 }
