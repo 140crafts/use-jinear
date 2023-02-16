@@ -7,6 +7,7 @@
 .contentEditable {
   color: var(--c-text-color);
   padding: 1.5ch;
+  min-height: 4rem;
 }
 
 .toolbar {
