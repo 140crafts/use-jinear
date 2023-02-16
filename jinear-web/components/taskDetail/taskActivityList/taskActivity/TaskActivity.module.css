@@ -52,3 +52,7 @@
   gap: 1ch;
   margin-left: 1.7rem;
 }
+
+.diffContainer-fullWidth {
+  width: 100%;
+}

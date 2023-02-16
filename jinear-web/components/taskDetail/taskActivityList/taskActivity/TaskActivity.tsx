@@ -3,6 +3,7 @@ import Transition from "@/components/transition/Transition";
 import { useToggle } from "@/hooks/useToggle";
 import { WorkspaceActivityDto } from "@/model/be/jinear-core";
 import decideWorkspaceActivityIcon from "@/utils/workspaceActivityIconMap";
+import cn from "classnames";
 import {
   differenceInDays,
   differenceInHours,
@@ -20,7 +21,6 @@ import TaskRelationChangedDiffInfo from "./taskRelationChangedDiffInfo/TaskRelat
 import TitleDiffInfo from "./titleDiffInfo/TitleDiffInfo";
 import TopicDiffInfo from "./topicDiffInfo/TopicDiffInfo";
 import WorkflowStatusDiffInfo from "./workflowStatusDiffInfo/WorkflowStatusDiffInfo";
-
 interface TaskActivityProps {
   activity: WorkspaceActivityDto;
 }
@@ -108,7 +108,13 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
         </div>
       </Button>
 
-      <Transition initial={true} className={styles.diffContainer}>
+      <Transition
+        initial={true}
+        className={cn(
+          styles.diffContainer,
+          activity.type == "EDIT_TASK_DESC" && styles["diffContainer-fullWidth"]
+        )}
+      >
         {diffVisible && (
           <>
             {activity.type == "EDIT_TASK_TITLE" && (
