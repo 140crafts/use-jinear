@@ -1,4 +1,5 @@
 import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
+import TextEditorBasic from "@/components/TextEditorBasic/TextEditorBasic";
 import { TaskInitializeRequest } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
 import dynamic from "next/dynamic";
@@ -26,7 +27,7 @@ const DescriptionInput: React.FC<DescriptionInputProps> = ({
     <label className={labelClass} htmlFor={"new-task-description"}>
       {t("newTaskModalTaskDescription")}
       <PureClientOnly>
-        <TextEditor
+        <TextEditorBasic
           htmlInputId={"description"}
           register={register}
           formSetValue={setValue}

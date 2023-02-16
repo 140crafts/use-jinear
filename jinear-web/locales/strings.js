@@ -1010,4 +1010,28 @@ export default {
     en: "Relations",
     tr: "İlişkili",
   },
+  textEditorBold: {
+    en: "Bold",
+    tr: "Bold",
+  },
+  textEditorItalic: {
+    en: "Italic",
+    tr: "Italic",
+  },
+  textEditorHeading: {
+    en: "Heading",
+    tr: "Başlık",
+  },
+  textEditorQuote: {
+    en: "Quote",
+    tr: "Alıntı",
+  },
+  textEditorUl: {
+    en: "List",
+    tr: "Liste",
+  },
+  textEditorOl: {
+    en: "Ordered List",
+    tr: "Sıralı Liste",
+  },
 };

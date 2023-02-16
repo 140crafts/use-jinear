@@ -1,4 +1,5 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import TextEditorBasic from "@/components/TextEditorBasic/TextEditorBasic";
 import { useToggle } from "@/hooks/useToggle";
 import { RichTextDto } from "@/model/be/jinear-core";
 import { useUpdateTaskDescriptionMutation } from "@/store/api/taskUpdateApi";
@@ -74,7 +75,16 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({
       className={cn(styles.container, readOnly && styles["contaier-readonly"])}
       onClick={readOnly ? toggle : undefined}
     >
-      <TextEditor
+      {/* <TextEditor
+        htmlInputId={`${description?.richTextId}`}
+        readOnly={readOnly}
+        variant={"full"}
+        initialValue={initialValue}
+        placeholder={
+          initialValue ? undefined : t("taskDetalPageTaskDescription")
+        }
+      /> */}
+      <TextEditorBasic
         htmlInputId={`${description?.richTextId}`}
         readOnly={readOnly}
         variant={"full"}
@@ -83,6 +93,7 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({
           initialValue ? undefined : t("taskDetalPageTaskDescription")
         }
       />
+
       <div className={styles.actionContainer}>
         {isUpdateLoading && (
           <div className={styles.loadingContainer}>

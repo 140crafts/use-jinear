@@ -3,16 +3,17 @@
   flex-direction: column;
   gap: 1rem;
   position: relative;
-  border-radius: var(--border-radius);
-  background-color: var(--c-primary-shade-0);
+  /* border-radius: var(--border-radius); */
+  /* background-color: var(--c-primary-shade-0); */
 }
 
 .contaier-readonly {
   cursor: text;
 }
-.contaier-readonly:hover {
+
+/* .contaier-readonly:hover {
   background-color: var(--c-primary-shade-0);
-}
+} */
 
 .actionContainer {
   display: flex;
