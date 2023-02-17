@@ -9,18 +9,28 @@
   gap: 0.5rem;
 }
 
-.removeContainer {
+.dateActionContainer {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-end;
-  margin: 0.25rem 0 1rem 0;
+  /* justify-content: flex-end; */
+  margin: 0.25rem 0;
+  gap: 0.5rem;
 }
 
-.unassignButton {
+.actionButton {
   color: var(--c-link-color);
 }
-.unassignButton:hover {
+.actionButton:hover {
   color: var(--c-link-color);
   background-color: unset;
+}
+
+.quickDatesContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
 }

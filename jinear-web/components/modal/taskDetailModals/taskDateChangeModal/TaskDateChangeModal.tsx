@@ -1,4 +1,4 @@
-import Button, { ButtonVariants } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { useUpdateTaskDatesMutation } from "@/store/api/taskUpdateApi";
 import {
   closeChangeTaskDateModal,
@@ -8,13 +8,29 @@ import {
   selectChangeTaskDateModalVisible,
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
-import { format, parse } from "date-fns";
+import Logger from "@/utils/logger";
+import {
+  addDays,
+  endOfWeek,
+  format,
+  isBefore,
+  parse,
+  startOfDay,
+  startOfToday,
+  startOfTomorrow,
+  startOfWeek,
+} from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import Modal from "../../modal/Modal";
 import styles from "./TaskDateChangeModal.module.css";
 
 interface TaskDateChangeModalProps {}
+
+const logger = Logger("TaskDateChangeModal");
+
+const options = { weekStartsOn: 1 } as any;
 
 const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
   const { t } = useTranslation();
@@ -59,6 +75,22 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
     }
   }, [isUpdateSuccess]);
 
+  useEffect(() => {
+    if (
+      assignedDateVal &&
+      dueDateVal &&
+      isBefore(dueDateVal, assignedDateVal)
+    ) {
+      logger.log({
+        assignedDateVal,
+        dueDateVal,
+        isBefore: isBefore(dueDateVal, assignedDateVal),
+      });
+      toast(t("changeTaskDateDueDateIsBeforeAssignedDate"));
+      setDueDateDayAfterAssignedDate();
+    }
+  }, [assignedDateVal, dueDateVal]);
+
   const onAssignedDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     try {
@@ -97,6 +129,40 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
     }
   };
 
+  const setAssignedDateToday = () => {
+    const today = startOfToday();
+    setAssignedDateVal(today);
+  };
+
+  const setAssignedDateTomorrow = () => {
+    const tomorrow = startOfTomorrow();
+    setAssignedDateVal(tomorrow);
+  };
+
+  const setDueDateDayAfterAssignedDate = () => {
+    if (!assignedDateVal) {
+      return;
+    }
+    setDueDateVal(addDays(assignedDateVal, 1));
+  };
+
+  const setDatesThisWeek = () => {
+    const today = startOfToday();
+    const weekStart = startOfWeek(today, options);
+    const weekEnd = endOfWeek(today, options);
+    setAssignedDateVal(weekStart);
+    setDueDateVal(weekEnd);
+  };
+
+  const setDatesNextWeek = () => {
+    const today = startOfToday();
+    const date = addDays(today, 7);
+    const weekStart = startOfWeek(date, options);
+    const weekEnd = startOfDay(endOfWeek(date, options));
+    setAssignedDateVal(weekStart);
+    setDueDateVal(weekEnd);
+  };
+
   const close = () => {
     dispatch(closeChangeTaskDateModal());
   };
@@ -130,8 +196,18 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
           onChange={onAssignedDateChange}
         />
       </label>
-      <div className={styles.removeContainer}>
-        <Button className={styles.unassignButton} onClick={unsetAssignedDate}>
+      <div className={styles.dateActionContainer}>
+        <Button className={styles.actionButton} onClick={setAssignedDateToday}>
+          {t("changeTaskDateToday")}
+        </Button>
+        <Button
+          className={styles.actionButton}
+          onClick={setAssignedDateTomorrow}
+        >
+          {t("changeTaskDateTomorrow")}
+        </Button>
+        <div className="flex-1" />
+        <Button className={styles.actionButton} onClick={unsetAssignedDate}>
           {t("changeTaskDateDateLabelRemove")}
         </Button>
       </div>
@@ -146,9 +222,34 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
           onChange={onDueDateChange}
         />
       </label>
-      <div className={styles.removeContainer}>
-        <Button className={styles.unassignButton} onClick={unsetDueDate}>
+
+      <div className={styles.dateActionContainer}>
+        <Button
+          className={styles.actionButton}
+          onClick={setDueDateDayAfterAssignedDate}
+        >
+          {t("changeTaskDateDayAfter")}
+        </Button>
+        <div className="flex-1" />
+        <Button className={styles.actionButton} onClick={unsetDueDate}>
           {t("changeTaskDateDateLabelRemove")}
+        </Button>
+      </div>
+
+      <div className={styles.quickDatesContainer}>
+        <Button
+          variant={ButtonVariants.filled}
+          heightVariant={ButtonHeight.short}
+          onClick={setDatesThisWeek}
+        >
+          {t("changeTaskDateThisWeek")}
+        </Button>
+        <Button
+          variant={ButtonVariants.filled}
+          heightVariant={ButtonHeight.short}
+          onClick={setDatesNextWeek}
+        >
+          {t("changeTaskDateNextWeek")}
         </Button>
       </div>
 

@@ -774,6 +774,30 @@ export default {
     en: "Remove Date",
     tr: "Seçimi Kaldır",
   },
+  changeTaskDateThisWeek: {
+    en: "This Week",
+    tr: "Bu Hafta",
+  },
+  changeTaskDateNextWeek: {
+    en: "Next Week",
+    tr: "Sonraki Hafta",
+  },
+  changeTaskDateToday: {
+    en: "Today",
+    tr: "Bugün",
+  },
+  changeTaskDateDayAfter: {
+    en: "Day After",
+    tr: "Sonraki Gün",
+  },
+  changeTaskDateTomorrow: {
+    en: "Tomorrow",
+    tr: "Yarın",
+  },
+  changeTaskDateDueDateIsBeforeAssignedDate: {
+    en: "Due date can not be before assigned date",
+    tr: "Son Tarih, Planlanan Günden önce olamaz ",
+  },
   changeTaskDateDateLabelSave: {
     en: "Save",
     tr: "Kaydet",
