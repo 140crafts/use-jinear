@@ -43,7 +43,7 @@ public class WebConfig implements WebMvcConfigurer {
         return new HtmlPolicyBuilder()
                 .allowElements("h1","p","b","i","em","strong","a","br","li","ul","ol","blockquote","br")
                 .allowUrlProtocols("https")
-                .allowAttributes("href").onElements("a")
+                .allowAttributes("href","target").onElements("a")
                 .requireRelNofollowOnLinks()
                 .toFactory();
     }
