@@ -5,6 +5,7 @@ import TeamTagCell from "@/components/teamTagCell/TeamTagCell";
 import { TaskDto } from "@/model/be/jinear-core";
 import { popChangeTaskDateModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
+import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoTime } from "react-icons/io5";
 import styles from "./TaskRow.module.scss";
@@ -16,6 +17,7 @@ interface TaskRowProps {
 }
 
 const TaskRow: React.FC<TaskRowProps> = ({ task }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const tag = `${task.team?.tag}-${task.teamTagNo}`;
 
@@ -47,6 +49,7 @@ const TaskRow: React.FC<TaskRowProps> = ({ task }) => {
             variant={ButtonVariants.filled}
             className={styles.datesButton}
             onClick={popChangeDatesModal}
+            data-tooltip-right={t("taskRowChangeTaskDates")}
           >
             <div className={styles.iconContainer}>
               <IoTime size={14} />

@@ -1,3 +1,4 @@
+import { urlify } from "@/utils/isUrl";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useRef, useState } from "react";
@@ -18,6 +19,9 @@ interface TextEditorBasicProps {
 
 const logger = Logger("TextEditorBasic");
 
+const URL_REGEX =
+  /^(?:(?:ht|f)tp(?:s?)\:\/\/|~\/|\/)?(?:\w+:\w+@)?((?:(?:[-\w\d{1-3}]+\.)+(?:com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|edu|co\.uk|ac\.uk|it|fr|tv|museum|asia|local|travel|[a-z]{2}))|((\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)(\.(\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)){3}))(?::[\d]{1,5})?(?:(?:(?:\/(?:[-\w~!$+|.,=]|%[a-f\d]{2})+)+|\/)+|\?|#)?(?:(?:\?(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)(?:&(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)*)*(?:#(?:[-\w~!$ |\/.,*:;=]|%[a-f\d]{2})*)?$/i;
+
 const ALLOWED_TAGS = [
   "h1",
   "p",
@@ -37,7 +41,7 @@ const ALLOWED_TAGS = [
 const SANITIZE_CONFIG = {
   allowedTags: ALLOWED_TAGS,
   allowedAttributes: {
-    "*": ["href"],
+    a: ["href", "target"],
   },
 };
 
@@ -69,14 +73,14 @@ const TextEditorBasic: React.FC<TextEditorBasicProps> = ({
   }, [initialValue, formSetValue, htmlInputId]);
 
   const handleChange = (event: ContentEditableEvent) => {
-    const data = event.target.value;
+    let data = event.target.value;
     text.current = data;
   };
 
   const sanitizeData = () => {
     const value = text.current;
-    logger.log({ sanitizeData: value });
-    const sanitizedData = sanitizeHtml(value, SANITIZE_CONFIG);
+    const sanitizedData = sanitizeHtml(urlify(value), SANITIZE_CONFIG);
+    logger.log({ sanitizeData: value, sanitizedData });
     setValue(sanitizedData);
     text.current = sanitizedData;
     if (htmlInputId && formSetValue) {

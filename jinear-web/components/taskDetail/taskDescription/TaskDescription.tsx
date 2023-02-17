@@ -71,19 +71,7 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({
   };
 
   return (
-    <div
-      className={cn(styles.container, readOnly && styles["contaier-readonly"])}
-      onClick={readOnly ? toggle : undefined}
-    >
-      {/* <TextEditor
-        htmlInputId={`${description?.richTextId}`}
-        readOnly={readOnly}
-        variant={"full"}
-        initialValue={initialValue}
-        placeholder={
-          initialValue ? undefined : t("taskDetalPageTaskDescription")
-        }
-      /> */}
+    <div className={cn(styles.container)}>
       <TextEditorBasic
         htmlInputId={`${description?.richTextId}`}
         readOnly={readOnly}
@@ -93,6 +81,15 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({
           initialValue ? undefined : t("taskDetalPageTaskDescription")
         }
       />
+      {readOnly && (
+        <Button
+          onClick={toggle}
+          className={styles.editButton}
+          variant={ButtonVariants.filled2}
+        >
+          {t("taskDescriptionEdit")}
+        </Button>
+      )}
 
       <div className={styles.actionContainer}>
         {isUpdateLoading && (

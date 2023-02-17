@@ -1,5 +1,6 @@
 import AssigneeCell from "@/components/assigneeCell/AssigneeCell";
 import Button from "@/components/button";
+import TopicInfo from "@/components/taskListScreen/breadcrumb/taskListGroupedByWorkflowStatus/workflowTaskList/taskRow/topicInfo/TopicInfo";
 import TeamTagCell from "@/components/teamTagCell/TeamTagCell";
 import { TaskDto } from "@/model/be/jinear-core";
 import { popChangeTaskDateModal } from "@/store/slice/modalSlice";
@@ -48,12 +49,16 @@ const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({
         >
           <div className={cn(styles.title)}>{task.title}</div>
           <div className={styles.infoContainer}>
+            {task.topic && <TopicInfo topic={task.topic} />}
+          </div>
+          <div className={styles.infoContainer}>
             <Button
-              className={styles.taskTagCell}
+              className={styles.taskIconButton}
               onClick={popChangeDatesModal}
             >
               <IoTime size={12} />
             </Button>
+
             <AssigneeCell
               task={task}
               tooltipPosition={
@@ -61,8 +66,9 @@ const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({
                   ? "left"
                   : "right"
               }
-              className={styles.taskTagCell}
+              className={styles.taskIconButton}
             />
+
             <TeamTagCell task={task} className={styles.taskTagCell} />
           </div>
         </Link>

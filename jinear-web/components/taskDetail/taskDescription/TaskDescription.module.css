@@ -7,13 +7,18 @@
   /* background-color: var(--c-primary-shade-0); */
 }
 
-.contaier-readonly {
-  cursor: text;
+.container:hover .editButton {
+  display: flex;
 }
 
-/* .contaier-readonly:hover {
-  background-color: var(--c-primary-shade-0);
-} */
+.editButton {
+  display: none;
+  flex-direction: row;
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 5;
+}
 
 .actionContainer {
   display: flex;
