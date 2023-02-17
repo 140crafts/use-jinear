@@ -50,3 +50,23 @@
 .taskTagCell:hover {
   background-color: var(--c-primary-shade-0) !important;
 }
+
+.taskIconButton {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  padding: 0.1ch 0.75ch !important;
+  border-radius: var(--border-radius) !important;
+  border-style: solid !important;
+  border-width: 1px !important;
+  border-color: var(--c-primary-shade-0-op05) !important;
+  font-weight: 600 !important;
+  font-size: 0.75rem !important;
+  min-width: unset !important;
+  background-color: unset !important;
+}
+
+.taskIconButton:hover {
+  background-color: var(--c-primary-shade-0) !important;
+}

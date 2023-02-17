@@ -1034,4 +1034,8 @@ export default {
     en: "Ordered List",
     tr: "Sıralı Liste",
   },
+  taskRowChangeTaskDates: {
+    en: "Change Dates",
+    tr: "Tarihleri Değiştir",
+  },
 };
