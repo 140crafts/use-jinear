@@ -50,8 +50,7 @@ const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({
           <div className={cn(styles.title)}>{task.title}</div>
           <div className={styles.infoContainer}>
             {task.topic && <TopicInfo topic={task.topic} />}
-          </div>
-          <div className={styles.infoContainer}>
+            {/* <div className="flex-1" /> */}
             <Button
               className={styles.taskIconButton}
               onClick={popChangeDatesModal}
