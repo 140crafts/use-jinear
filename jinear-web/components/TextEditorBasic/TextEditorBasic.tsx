@@ -66,7 +66,7 @@ const TextEditorBasic: React.FC<TextEditorBasicProps> = ({
   }, [readOnly]);
 
   useEffect(() => {
-    if (initialValue) {
+    if (initialValue != null) {
       text.current = initialValue;
       sanitizeData();
     }
@@ -115,8 +115,12 @@ const TextEditorBasic: React.FC<TextEditorBasicProps> = ({
         disabled={readOnly}
         onChange={handleChange}
         onBlur={sanitizeData}
-        placeholder={placeholder}
       />
+
+      {(!value || value == "") && readOnly && (
+        <div className={styles.placeholder}>{placeholder}</div>
+      )}
+
       {htmlInputId && (
         <input
           id={htmlInputId}

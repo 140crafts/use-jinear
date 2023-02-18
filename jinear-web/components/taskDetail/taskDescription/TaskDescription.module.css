@@ -3,8 +3,6 @@
   flex-direction: column;
   gap: 1rem;
   position: relative;
-  /* border-radius: var(--border-radius); */
-  /* background-color: var(--c-primary-shade-0); */
 }
 
 .container:hover .editButton {

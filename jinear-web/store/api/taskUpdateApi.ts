@@ -50,7 +50,7 @@ export const taskUpdateApi = api.injectEndpoints({
       query: (req: { taskId: string; body: TaskDateUpdateRequest }) => ({
         url: `v1/task/update/${req.taskId}/dates`,
         method: "PUT",
-        body: JSON.stringify(req.body),
+        body: req.body,
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "team-task-list" },
