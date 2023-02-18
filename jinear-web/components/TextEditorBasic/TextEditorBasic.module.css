@@ -10,6 +10,13 @@
   min-height: 4rem;
 }
 
+.placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1.5ch;
+}
+
 .toolbar {
   border-bottom-width: thin;
   border-bottom-color: var(--c-primary);
