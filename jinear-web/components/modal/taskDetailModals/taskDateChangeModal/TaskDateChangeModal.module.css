@@ -9,6 +9,16 @@
   gap: 0.5rem;
 }
 
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.dateInput {
+  flex: 1;
+}
+
 .dateActionContainer {
   display: flex;
   flex-direction: row;
@@ -24,13 +34,4 @@
 .actionButton:hover {
   color: var(--c-link-color);
   background-color: unset;
-}
-
-.quickDatesContainer {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
-  margin-bottom: 1.5rem;
 }

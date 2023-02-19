@@ -2,7 +2,6 @@ import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { copyTextToClipboard } from "@/utils/clipboard";
 import { getTextColor } from "@/utils/colorHelper";
 import { HOST } from "@/utils/constants";
-import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import toast from "react-hot-toast";
@@ -27,6 +26,8 @@ import {
   useTask,
   useToggleShowSubTaskListEvenIfNoSubtasks,
 } from "../context/TaskDetailContext";
+import TaskAssignedDateButton from "./taskAssignedDateButton/TaskAssignedDateButton";
+import TaskDueDateButton from "./taskDueDateButton/TaskDueDateButton";
 
 interface TaskInfoProps {
   className?: string;
@@ -69,10 +70,6 @@ const TaskInfo: React.FC<TaskInfoProps> = ({ className }) => {
   };
 
   const popChangeAssignedDateModal = () => {
-    dispatch(popChangeTaskDateModal({ visible: true, task }));
-  };
-
-  const popChangeDueDateModal = () => {
     dispatch(popChangeTaskDateModal({ visible: true, task }));
   };
 
@@ -127,37 +124,8 @@ const TaskInfo: React.FC<TaskInfoProps> = ({ className }) => {
         )}
       </Button>
 
-      <Button
-        variant={ButtonVariants.filled}
-        heightVariant={ButtonHeight.mid}
-        className={styles.button}
-        onClick={popChangeAssignedDateModal}
-      >
-        {task.assignedDate ? (
-          <>
-            {t("taskDetailAssignedDate")}
-            <b>{format(new Date(task.assignedDate), t("dateFormat"))}</b>
-          </>
-        ) : (
-          <>{t("taskDetailAddAssignedDate")}</>
-        )}
-      </Button>
-
-      <Button
-        variant={ButtonVariants.filled}
-        heightVariant={ButtonHeight.mid}
-        className={styles.button}
-        onClick={popChangeDueDateModal}
-      >
-        {task.dueDate ? (
-          <>
-            {t("taskDetailDueDate")}
-            <b>{format(new Date(task.dueDate), t("dateFormat"))}</b>
-          </>
-        ) : (
-          <>{t("taskDetailAddDueDate")}</>
-        )}
-      </Button>
+      <TaskAssignedDateButton />
+      <TaskDueDateButton />
 
       <Button
         variant={ButtonVariants.filled}
