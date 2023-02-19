@@ -299,7 +299,7 @@ select {
   border-radius: var(--border-radius);
   position: absolute;
   white-space: nowrap;
-  z-index: 99;
+  z-index: 99999;
 }
 *[data-tooltip-right] {
   position: relative;
@@ -331,7 +331,7 @@ select {
   border-radius: var(--border-radius);
   position: absolute;
   white-space: inherit;
-  z-index: 99;
+  z-index: 99999;
 }
 /* endregion */
 
