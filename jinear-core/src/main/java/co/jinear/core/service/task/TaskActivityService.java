@@ -8,7 +8,6 @@ import co.jinear.core.service.workspace.activity.WorkspaceActivityService;
 import co.jinear.core.system.util.DateHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -21,7 +20,6 @@ public class TaskActivityService {
 
     private final WorkspaceActivityService workspaceActivityService;
 
-    @Async
     public void initializeEditTitleActivity(String performedBy, TaskDto before, TaskDto after) {
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         vo.setOldState(before.getTitle());
@@ -30,7 +28,6 @@ public class TaskActivityService {
         workspaceActivityService.createWorkspaceActivity(vo);
     }
 
-    @Async
     public void initializeEditDescriptionActivity(String performedBy, TaskDto before, TaskDto after) {
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before).map(TaskDto::getDescription).map(RichTextDto::getRichTextId).ifPresent(vo::setOldState);
@@ -39,7 +36,6 @@ public class TaskActivityService {
         workspaceActivityService.createWorkspaceActivity(vo);
     }
 
-    @Async
     public void initializeStatusUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before).map(TaskDto::getWorkflowStatusId).ifPresent(vo::setOldState);
@@ -48,7 +44,6 @@ public class TaskActivityService {
         workspaceActivityService.createWorkspaceActivity(vo);
     }
 
-    @Async
     public void initializeTopicUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before).map(TaskDto::getTopicId).ifPresent(vo::setOldState);
@@ -57,13 +52,11 @@ public class TaskActivityService {
         workspaceActivityService.createWorkspaceActivity(vo);
     }
 
-    @Async
     public void initializeDatesUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
         initializeAssignedDateUpdateActivity(performedBy, before, after);
         initializeDueDateUpdateActivity(performedBy, before, after);
     }
 
-    @Async
     public void initializeAssigneeUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before).map(TaskDto::getAssignedTo).ifPresent(vo::setOldState);
