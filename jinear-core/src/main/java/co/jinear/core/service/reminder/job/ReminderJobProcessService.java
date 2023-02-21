@@ -2,6 +2,7 @@ package co.jinear.core.service.reminder.job;
 
 import co.jinear.core.model.dto.reminder.ReminderJobDto;
 import co.jinear.core.model.enumtype.reminder.ReminderJobStatus;
+import co.jinear.core.service.reminder.process.strategy.ReminderJobProcessStrategyFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.time.ZonedDateTime;
 public class ReminderJobProcessService {
 
     private final ReminderJobListingService reminderJobListingService;
+    private final ReminderJobProcessStrategyFactory reminderJobProcessStrategyFactory;
 
     public void processAllUpcomingJobs(ZonedDateTime beforeDate) {
         log.info("Process all upcoming jobs before date has started. beforeDate: {}", beforeDate);
@@ -24,6 +26,6 @@ public class ReminderJobProcessService {
 
     private void process(ReminderJobDto reminderJobDto) {
         log.info("Process reminder job has started. reminderJobDto: {}", reminderJobDto);
-
+        reminderJobProcessStrategyFactory.getStrategy(reminderJobDto.getReminder().getType()).process(reminderJobDto);
     }
 }

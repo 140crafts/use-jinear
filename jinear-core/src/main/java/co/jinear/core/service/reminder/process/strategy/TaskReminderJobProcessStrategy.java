@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 import static co.jinear.core.model.enumtype.reminder.ReminderJobStatus.COMPLETED;
@@ -36,14 +38,7 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
         TaskDto taskDto = retrieveTask(reminderJobDto);
         log.info("[TODO] SEND MAIL taskDto: {}", taskDto);
         reminderJobOperationService.updateReminderJobStatus(reminderJobDto.getReminderJobId(), COMPLETED);
-        initializeNextReminderJob(reminderJobDto);
-    }
-
-    private void initializeNextReminderJob(ReminderJobDto reminderJobDto) {
-        reminderJobDateCalculatorService.calculateNextDate(reminderJobDto).ifPresent(nextDate -> {
-            InitializeReminderJobVo nextInitializeReminderJobVo = reminderJobConverter.map(nextDate, reminderJobDto.getReminderId());
-            reminderJobOperationService.initializeReminderJob(nextInitializeReminderJobVo);
-        });
+        calculateNextDateAndInitializeNextReminderJob(reminderJobDto);
     }
 
     @Override
@@ -57,5 +52,20 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
                 .map(ReminderDto::getRelatedObjectId)
                 .map(taskRetrieveService::retrieve)
                 .orElseThrow(BusinessException::new);
+    }
+
+    private void calculateNextDateAndInitializeNextReminderJob(ReminderJobDto reminderJobDto) {
+        reminderJobDateCalculatorService.calculateNextDate(reminderJobDto)
+                .ifPresent(nextDate -> initializeNextReminderJob(nextDate, reminderJobDto));
+    }
+
+    private void initializeNextReminderJob(ZonedDateTime nextDate, ReminderJobDto reminderJobDto) {
+        ZonedDateTime repeatEnd = reminderJobDto.getReminder().getRepeatEnd();
+        if (Objects.nonNull(repeatEnd) && nextDate.isAfter(repeatEnd)) {
+            log.info("Next date is after repeat end. Won't initialize next reminder job.");
+            return;
+        }
+        InitializeReminderJobVo nextInitializeReminderJobVo = reminderJobConverter.map(nextDate, reminderJobDto.getReminderId());
+        reminderJobOperationService.initializeReminderJob(nextInitializeReminderJobVo);
     }
 }
