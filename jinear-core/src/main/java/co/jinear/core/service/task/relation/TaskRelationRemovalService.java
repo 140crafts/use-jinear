@@ -1,10 +1,11 @@
-package co.jinear.core.service.task;
+package co.jinear.core.service.task.relation;
 
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.entity.task.TaskRelation;
 import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
 import co.jinear.core.repository.TaskRelationRepository;
 import co.jinear.core.service.passive.PassiveService;
+import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.workspace.activity.WorkspaceActivityService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;

@@ -1,18 +1,17 @@
 package co.jinear.core.service.task;
 
 import co.jinear.core.converter.task.TaskDtoConverter;
+import co.jinear.core.converter.task.TaskSubscriptionConverter;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.model.vo.richtext.UpdateRichTextVo;
-import co.jinear.core.model.vo.task.TaskAssigneeUpdateVo;
-import co.jinear.core.model.vo.task.TaskDatesUpdateVo;
-import co.jinear.core.model.vo.task.TaskDescriptionUpdateVo;
-import co.jinear.core.model.vo.task.TaskTitleUpdateVo;
+import co.jinear.core.model.vo.task.*;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.richtext.RichTextInitializeService;
+import co.jinear.core.service.task.subscription.TaskSubscriptionOperationService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
 import co.jinear.core.service.topic.TopicSequenceService;
 import jakarta.transaction.Transactional;
@@ -20,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -33,6 +33,8 @@ public class TaskUpdateService {
     private final RichTextInitializeService richTextInitializeService;
     private final TaskLockService taskLockService;
     private final TopicSequenceService incrementTopicSequence;
+    private final TaskSubscriptionConverter taskSubscriptionConverter;
+    private final TaskSubscriptionOperationService taskSubscriptionOperationService;
 
     private final TaskDtoConverter taskDtoConverter;
 
@@ -105,6 +107,7 @@ public class TaskUpdateService {
         Task task = taskRetrieveService.retrieveEntity(taskAssigneeUpdateVo.getTaskId());
         task.setAssignedTo(taskAssigneeUpdateVo.getAssigneeId());
         Task saved = taskRepository.save(task);
+        initializeSubscription(saved);
         log.info("Update task assignee has finished");
         return taskDtoConverter.map(saved);
     }
@@ -127,5 +130,12 @@ public class TaskUpdateService {
                 .map(incrementTopicSequence::incrementTopicSequence)
                 .orElse(null);
         task.setTopicTagNo(nextSeq);
+    }
+
+    private void initializeSubscription(Task saved) {
+        if (Objects.nonNull(saved.getAssignedTo())) {
+            TaskSubscriptionInitializeVo assigneeSubscriptionInitializeVo = taskSubscriptionConverter.map(saved.getAssignedTo(), saved.getTaskId());
+            taskSubscriptionOperationService.initializeTaskSubscription(assigneeSubscriptionInitializeVo);
+        }
     }
 }

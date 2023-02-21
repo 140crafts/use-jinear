@@ -8,7 +8,7 @@ import co.jinear.core.model.vo.workspace.RetrieveTaskActivityVo;
 import co.jinear.core.repository.WorkspaceActivityRepository;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.richtext.RichTextRetrieveService;
-import co.jinear.core.service.task.TaskRelationRetrieveService;
+import co.jinear.core.service.task.relation.TaskRelationRetrieveService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
 import co.jinear.core.service.topic.TopicRetrieveService;
 import lombok.RequiredArgsConstructor;

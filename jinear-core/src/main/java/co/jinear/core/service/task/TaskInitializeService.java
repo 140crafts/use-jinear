@@ -1,6 +1,7 @@
 package co.jinear.core.service.task;
 
 import co.jinear.core.converter.task.TaskDtoConverter;
+import co.jinear.core.converter.task.TaskSubscriptionConverter;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.entity.task.Task;
@@ -10,18 +11,21 @@ import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.model.vo.task.TaskInitializeVo;
 import co.jinear.core.model.vo.task.TaskRelationInitializeVo;
+import co.jinear.core.model.vo.task.TaskSubscriptionInitializeVo;
 import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.richtext.RichTextInitializeService;
+import co.jinear.core.service.task.relation.TaskRelationInitializeService;
+import co.jinear.core.service.task.subscription.TaskSubscriptionOperationService;
 import co.jinear.core.service.team.TeamLockService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
 import co.jinear.core.service.topic.TopicSequenceService;
 import co.jinear.core.service.workspace.activity.WorkspaceActivityService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -42,6 +46,8 @@ public class TaskInitializeService {
     private final WorkspaceActivityService workspaceActivityService;
     private final TaskDtoConverter taskDtoConverter;
     private final TaskRelationInitializeService taskRelationInitializeService;
+    private final TaskSubscriptionConverter taskSubscriptionConverter;
+    private final TaskSubscriptionOperationService taskSubscriptionOperationService;
 
     @Transactional
     public TaskDto initializeTask(TaskInitializeVo taskInitializeVo) {
@@ -57,6 +63,7 @@ public class TaskInitializeService {
             initializeAndAssignRichText(taskInitializeVo, taskDto);
             initializeTaskCreatedActivity(task);
             initializeSubtaskRelation(taskInitializeVo, saved);
+            initializeTaskSubscription(taskInitializeVo, saved);
             return taskDto;
         } finally {
             releaseLocks(taskInitializeVo);
@@ -145,6 +152,16 @@ public class TaskInitializeService {
             taskRelationInitializeVo.setTeamId(saved.getTeamId());
             taskRelationInitializeVo.setPerformedBy(taskInitializeVo.getOwnerId());
             taskRelationInitializeService.initializeTaskRelation(taskRelationInitializeVo);
+        }
+    }
+
+    private void initializeTaskSubscription(TaskInitializeVo taskInitializeVo, Task saved) {
+        TaskSubscriptionInitializeVo ownerSubscriptionInitializeVo = taskSubscriptionConverter.map(taskInitializeVo.getOwnerId(), saved.getTaskId());
+        taskSubscriptionOperationService.initializeTaskSubscription(ownerSubscriptionInitializeVo);
+        if (Objects.nonNull(taskInitializeVo.getAssignedTo()) && !Objects.equals(taskInitializeVo.getOwnerId(), taskInitializeVo.getAssignedTo())) {
+            log.info("Assignee is different from owner. Adding assignee to subscriptions.");
+            TaskSubscriptionInitializeVo assigneeSubscriptionInitializeVo = taskSubscriptionConverter.map(taskInitializeVo.getAssignedTo(), saved.getTaskId());
+            taskSubscriptionOperationService.initializeTaskSubscription(assigneeSubscriptionInitializeVo);
         }
     }
 }

@@ -1,4 +1,4 @@
-package co.jinear.core.model.entity.task;
+package co.jinear.core.model.vo.task;
 
 import lombok.Getter;
 import lombok.Setter;
