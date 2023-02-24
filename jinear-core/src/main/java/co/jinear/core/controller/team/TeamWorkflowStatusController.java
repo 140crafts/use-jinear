@@ -5,11 +5,10 @@ import co.jinear.core.model.request.team.InitializeTeamWorkflowStatusRequest;
 import co.jinear.core.model.request.team.TeamWorkflowStatusNameChangeRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.team.TeamWorkflowStatusListingResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor

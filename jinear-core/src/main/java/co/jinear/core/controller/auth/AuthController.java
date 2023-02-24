@@ -7,12 +7,11 @@ import co.jinear.core.model.request.auth.AuthInitializeRequest;
 import co.jinear.core.model.request.auth.LoginWithPasswordRequest;
 import co.jinear.core.model.response.auth.AuthInitializeResponse;
 import co.jinear.core.model.response.auth.AuthResponse;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import jakarta.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor

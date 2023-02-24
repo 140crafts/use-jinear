@@ -5,11 +5,10 @@ import co.jinear.core.model.request.topic.TopicInitializeRequest;
 import co.jinear.core.model.request.topic.TopicUpdateRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.topic.TopicResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor

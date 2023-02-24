@@ -5,11 +5,10 @@ import co.jinear.core.model.request.account.CompleteResetPasswordRequest;
 import co.jinear.core.model.request.account.InitializeResetPasswordRequest;
 import co.jinear.core.model.request.account.UpdatePasswordRequest;
 import co.jinear.core.model.response.BaseResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor

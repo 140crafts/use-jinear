@@ -2,8 +2,8 @@ package co.jinear.core.manager.task;
 
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.task.TaskDto;
-import co.jinear.core.model.entity.task.TaskSearchVo;
 import co.jinear.core.model.response.task.TaskSearchResponse;
+import co.jinear.core.model.vo.task.TaskSearchVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskSearchService;
 import co.jinear.core.validator.team.TeamAccessValidator;

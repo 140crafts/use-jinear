@@ -1,4 +1,4 @@
-package co.jinear.core.service.task;
+package co.jinear.core.service.task.relation;
 
 import co.jinear.core.converter.task.TaskRelationConverter;
 import co.jinear.core.exception.NotFoundException;

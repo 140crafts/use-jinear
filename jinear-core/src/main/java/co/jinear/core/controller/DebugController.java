@@ -1,7 +1,6 @@
 package co.jinear.core.controller;
 
-import co.jinear.core.service.mail.LocaleStringService;
-import co.jinear.core.service.team.workflow.TeamWorkflowStatusService;
+import co.jinear.core.service.account.AccountRoleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -17,13 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DebugController {
 
-    private final TeamWorkflowStatusService teamWorkflowStatusService;
-    private final LocaleStringService localeStringService;
+    private final AccountRoleService accountRoleService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public void debug(HttpEntity<String> httpEntity) {
-
+//        accountRoleService.assignRoleToAccount("01gt2dqc3b3f9rycxmhyb338zs", SERVICE);
         System.out.println(httpEntity.getBody());
     }
 }

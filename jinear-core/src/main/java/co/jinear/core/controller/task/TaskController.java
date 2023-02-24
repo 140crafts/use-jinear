@@ -4,11 +4,10 @@ import co.jinear.core.manager.task.TaskInitializeManager;
 import co.jinear.core.manager.task.TaskRetrieveManager;
 import co.jinear.core.model.request.task.TaskInitializeRequest;
 import co.jinear.core.model.response.task.TaskResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor

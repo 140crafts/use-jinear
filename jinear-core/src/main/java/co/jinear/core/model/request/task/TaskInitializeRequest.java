@@ -1,13 +1,13 @@
 package co.jinear.core.model.request.task;
 
 import co.jinear.core.model.request.BaseRequest;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotBlank;
 import java.time.ZonedDateTime;
 
 @Getter
@@ -31,7 +31,6 @@ public class TaskInitializeRequest extends BaseRequest {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime assignedDate;
 
-//    @FutureOrPresent
     @Nullable
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime dueDate;

@@ -2,7 +2,7 @@ package co.jinear.core.service.task;
 
 import co.jinear.core.converter.task.TaskDtoConverter;
 import co.jinear.core.model.dto.task.TaskDto;
-import co.jinear.core.model.entity.task.TaskSearchVo;
+import co.jinear.core.model.vo.task.TaskSearchVo;
 import co.jinear.core.repository.TaskFtsSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

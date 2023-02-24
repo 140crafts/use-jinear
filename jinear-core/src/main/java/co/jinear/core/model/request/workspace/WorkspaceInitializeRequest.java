@@ -3,12 +3,11 @@ package co.jinear.core.model.request.workspace;
 import co.jinear.core.model.enumtype.workspace.WorkspaceJoinType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceVisibilityType;
 import co.jinear.core.model.request.BaseRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 
 @Getter
 @Setter

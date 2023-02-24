@@ -346,4 +346,113 @@
         </sql>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task-subscription">
+        <createTable tableName="task_subscription">
+            <column name="task_subscription_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-reminder">
+        <createTable tableName="reminder">
+            <column name="reminder_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_object_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="int" remarks="TASK(0);">
+                <constraints nullable="false"/>
+            </column>
+            <column name="repeat_type" type="int" defaultValueNumeric="0" remarks="NONE(0),HOURLY(1),DAILY(2),WEEKLY(3),BIWEEKLY(4),MONTHLY(5),EVERY_3_MONTHS(6),EVERY_6_MONTHS(7),YEARLY(8);">
+                <constraints nullable="false"/>
+            </column>
+            <column name="repeat_start" type="datetime"/>
+            <column name="repeat_end" type="datetime"/>
+        </createTable>
+
+        <createIndex indexName="ix_owner_id" tableName="reminder">
+            <column name="owner_id"/>
+        </createIndex>
+
+        <createIndex indexName="ix_related_object_id" tableName="reminder">
+            <column name="related_object_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-reminder-job">
+        <createTable tableName="reminder_job">
+            <column name="reminder_job_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="reminder_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="int" remarks="PENDING(0),COMPLETED(1),CANCELLED(-1);">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_reminder_id" tableName="reminder_job">
+            <column name="reminder_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task-reminder">
+        <createTable tableName="task_reminder">
+            <column name="task_reminder_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reminder_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_reminder_type" type="int" remarks="ASSIGNED_DATE(0),DUE_DATE(1),SPECIFIC_DATE(2);">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_task_id" tableName="task_reminder">
+            <column name="task_id"/>
+        </createIndex>
+        <createIndex indexName="ix_reminder_id" tableName="task_reminder">
+            <column name="reminder_id"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>
