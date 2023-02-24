@@ -2,12 +2,11 @@ package co.jinear.core.model.request.account;
 
 import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.request.BaseRequest;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter

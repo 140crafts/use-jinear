@@ -2,13 +2,11 @@ package co.jinear.core.controller.workspace;
 
 import co.jinear.core.manager.workspace.WorkspaceManager;
 import co.jinear.core.model.request.workspace.WorkspaceInitializeRequest;
-import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor

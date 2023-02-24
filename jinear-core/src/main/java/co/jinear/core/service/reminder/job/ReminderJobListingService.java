@@ -21,9 +21,11 @@ public class ReminderJobListingService {
 
     public List<ReminderJobDto> retrieveAllByReminderJobStatusAndBeforeDate(ReminderJobStatus reminderJobStatus, ZonedDateTime date) {
         log.info("Retrieve all reminder jobs by reminder job status and before date has started. reminderJobStatus: {}, date: {}", reminderJobStatus, date);
-        return reminderJobRepository.findAllByReminderJobStatusAndDateLessThanAndPassiveIdIsNull(reminderJobStatus, date)
+        List<ReminderJobDto> jobDtos = reminderJobRepository.findAllByReminderJobStatusAndDateLessThanAndPassiveIdIsNull(reminderJobStatus, date)
                 .stream()
                 .map(reminderJobConverter::map)
                 .toList();
+        log.info("Found {} pending jobs.", jobDtos.size());
+        return jobDtos;
     }
 }

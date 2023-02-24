@@ -3,10 +3,9 @@ package co.jinear.core.model.request.team;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
 import co.jinear.core.model.request.BaseRequest;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.validation.constraints.NotBlank;
 
 @Getter
 @Setter

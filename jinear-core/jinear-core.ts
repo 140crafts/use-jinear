@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-02-22 00:04:33.
+// Generated using typescript-generator version 3.0.1157 on 2023-02-23 10:30:26.
 
 export interface BaseDto {
     createdDate: Date;
@@ -315,6 +315,15 @@ export interface LoginWithPasswordRequest extends BaseRequest {
     password: string;
 }
 
+export interface TaskReminderInitializeRequest extends BaseRequest {
+    beforeAssignedDate?: boolean | null;
+    beforeDueDate?: boolean | null;
+    specificRemindDate?: Date | null;
+    specificRemindRepeatStart?: Date | null;
+    specificRemindRepeatEnd?: Date | null;
+    specificRemindDateRepeatType?: RepeatType | null;
+}
+
 export interface TaskAssigneeUpdateRequest {
     assigneeId?: string | null;
 }
@@ -439,6 +448,10 @@ export interface AuthResponse extends BaseResponse {
     token: string;
 }
 
+export interface ReminderResponse extends BaseResponse {
+    data: ReminderDto[];
+}
+
 export interface TaskActivityRetrieveResponse extends BaseResponse {
     data: WorkspaceActivityDto[];
 }
@@ -528,6 +541,8 @@ export type RichTextSourceStack = "WYSIWYG" | "RC";
 export type RichTextType = "TASK_DETAIL";
 
 export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
+
+export type TaskReminderType = "ASSIGNED_DATE" | "DUE_DATE" | "SPECIFIC_DATE";
 
 export type TaskState = "TO_DO" | "IN_PROGRESS" | "IN_TEST" | "WONT_DO" | "DONE";
 

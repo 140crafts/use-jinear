@@ -2,11 +2,10 @@ package co.jinear.core.model.request.task;
 
 import co.jinear.core.model.enumtype.task.TaskRelationType;
 import co.jinear.core.model.request.BaseRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter

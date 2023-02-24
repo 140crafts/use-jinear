@@ -7,13 +7,14 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum RepeatType {
     NONE(0),
-    DAILY(1),
-    WEEKLY(2),
-    BIWEEKLY(3),
-    MONTHLY(4),
-    EVERY_3_MONTHS(5),
-    EVERY_6_MONTHS(6),
-    YEARLY(7);
+    HOURLY(1),
+    DAILY(2),
+    WEEKLY(3),
+    BIWEEKLY(4),
+    MONTHLY(5),
+    EVERY_3_MONTHS(6),
+    EVERY_6_MONTHS(7),
+    YEARLY(8);
 
     private int value;
 }

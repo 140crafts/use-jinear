@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import static co.jinear.core.model.enumtype.reminder.ReminderJobStatus.COMPLETED;
+import static co.jinear.core.model.enumtype.reminder.ReminderJobStatus.PENDING;
 
 @Slf4j
 @Service
@@ -65,7 +66,8 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
             log.info("Next date is after repeat end. Won't initialize next reminder job.");
             return;
         }
-        InitializeReminderJobVo nextInitializeReminderJobVo = reminderJobConverter.map(nextDate, reminderJobDto.getReminderId());
+        InitializeReminderJobVo nextInitializeReminderJobVo = reminderJobConverter.map(nextDate, reminderJobDto.getReminderId(), PENDING);
         reminderJobOperationService.initializeReminderJob(nextInitializeReminderJobVo);
+        log.info("Next reminder job has initialized. nextDate: {}", nextDate);
     }
 }

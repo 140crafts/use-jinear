@@ -17,7 +17,7 @@ public interface ReminderJobConverter {
 
     ReminderJobDto map(ReminderJob reminderJob);
 
-    InitializeReminderJobVo map(ZonedDateTime date,String reminderId);
+    InitializeReminderJobVo map(ZonedDateTime date,String reminderId,ReminderJobStatus reminderJobStatus);
 
     @Mapping(source = "reminder.reminderId", target = "reminderId")
     @Mapping(source = "reminderInitializeVo.initialRemindDate", target = "date")

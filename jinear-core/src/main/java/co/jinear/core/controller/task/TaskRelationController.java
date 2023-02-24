@@ -3,11 +3,10 @@ package co.jinear.core.controller.task;
 import co.jinear.core.manager.task.TaskRelationManager;
 import co.jinear.core.model.request.task.TaskRelationInitializeRequest;
 import co.jinear.core.model.response.BaseResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
