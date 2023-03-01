@@ -12,6 +12,7 @@ import {
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { validateEmail } from "@/utils/validator";
+import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -110,6 +111,7 @@ const LoginWith2FaMailModal: React.FC<LoginWith2FaMailModalProps> = ({}) => {
       code,
       provider: "OTP_MAIL",
       locale: t("localeType") as LocaleType,
+      timeZone: format(new Date(), "OOOO"),
     });
   };
 

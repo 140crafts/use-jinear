@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-02-27 21:02:33.
+// Generated using typescript-generator version 3.0.1157 on 2023-03-01 17:35:46.
 
 export interface BaseDto {
   createdDate: Date;
@@ -26,6 +26,7 @@ export interface AccountDto extends BaseDto {
   accountId: string;
   email: string;
   emailConfirmed: boolean;
+  localeType: LocaleType;
   username?: string | null;
   roles: AccountRoleDto[];
   profilePicture?: MediaDto | null;
@@ -46,6 +47,7 @@ export interface PlainAccountProfileDto extends BaseDto {
   accountId: string;
   email: string;
   username: string;
+  localeType: LocaleType;
   profilePicture?: MediaDto | null;
 }
 
@@ -153,6 +155,7 @@ export interface TaskSubscriptionDto extends BaseDto {
   taskSubscriptionId: string;
   taskId: string;
   accountId: string;
+  plainAccountProfileDto: PlainAccountProfileDto;
 }
 
 export interface TeamDto extends BaseDto {
@@ -315,6 +318,7 @@ export interface AuthCompleteRequest extends BaseRequest {
   provider: ProviderType;
   csrf: string;
   code: string;
+  timeZone: string;
 }
 
 export interface AuthInitializeRequest extends BaseRequest {
@@ -324,6 +328,7 @@ export interface AuthInitializeRequest extends BaseRequest {
 export interface LoginWithPasswordRequest extends BaseRequest {
   email: string;
   password: string;
+  timeZone?: string | null;
 }
 
 export interface TaskReminderInitializeRequest extends BaseRequest {
@@ -557,7 +562,13 @@ export type LocaleStringType =
   | "TEAM_WORKFLOW_STATUS_NOT_STARTED"
   | "TEAM_WORKFLOW_STATUS_STARTED"
   | "TEAM_WORKFLOW_STATUS_COMPLETED"
-  | "TEAM_WORKFLOW_STATUS_CANCELLED";
+  | "TEAM_WORKFLOW_STATUS_CANCELLED"
+  | "TASK_REMINDER_TITLE"
+  | "TASK_REMINDER_TEXT"
+  | "TASK_REMINDER_TYPE_ASSIGNED_DATE"
+  | "TASK_REMINDER_TYPE_DUE_DATE"
+  | "TASK_REMINDER_TYPE_SPECIFIC_DATE"
+  | "TASK_REMINDER_GO_TO_TASK";
 
 export type LocaleType = "TR" | "EN";
 
