@@ -1,0 +1,25 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: default;
+  padding: 0.25rem;
+  border-radius: var(--border-radius);
+  flex-wrap: wrap;
+}
+
+.container:hover {
+  background-color: var(--c-primary-shade-0);
+}
+
+.nextJobDate {
+  font-size: 0.6rem;
+  opacity: 0.8;
+  min-width: 14ch;
+  text-align: right;
+}
+
+.repeatInfo {
+  font-size: 0.6rem;
+  opacity: 0.8;
+}

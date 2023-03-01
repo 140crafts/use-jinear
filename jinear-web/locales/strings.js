@@ -1062,4 +1062,112 @@ export default {
     en: "Change Dates",
     tr: "Tarihleri Değiştir",
   },
+  taskDetailRemindersButtonLabel: {
+    en: "Reminders",
+    tr: "Anımsatıcılar",
+  },
+  taskReminderListModalTitle: {
+    en: "Reminders",
+    tr: "Anımsatıcılar",
+  },
+  taskReminderListModalNoRemindersExist: {
+    en: "There isn't any reminders related to this task.",
+    tr: "Bu görev ile ilişkili herhangi bir anımsatıcı bulunamadı.",
+  },
+  taskReminderListModalNewReminder: {
+    en: "New Reminder",
+    tr: "Yeni Anımsatıcı",
+  },
+  taskNewReminderModalTitle: {
+    en: "New Reminder",
+    tr: "Yeni Anımsatıcı",
+  },
+  taskNewReminderModalSpecificDateLabel: {
+    en: "Specific date and time",
+    tr: "Belirli bir tarih ve saatte",
+  },
+  taskNewReminderModalRepeat: {
+    en: "Repeat",
+    tr: "Yenile",
+  },
+  taskNewReminderModalRepeatEndLabel: {
+    en: "Repeat reminder until specific date",
+    tr: "Belirli bir tarihe dek yenile",
+  },
+  taskNewReminderModalRepeatEndDateLabel: {
+    en: "End date",
+    tr: "Sonlandırma tarihi",
+  },
+  taskNewReminderModalOnAssignedDateLabel: {
+    en: "On assigned date and time",
+    tr: "Planlanan gün ve zamanda",
+  },
+  taskNewReminderModalOnDueDateLabel: {
+    en: "On due date and time",
+    tr: "Son tarihte",
+  },
+  taskNewReminderModalReminderRepeatType_NONE: {
+    en: "None",
+    tr: "Hiçbir Zaman",
+  },
+  taskNewReminderModalReminderRepeatType_HOURLY: {
+    en: "Hourly",
+    tr: "Saatlik",
+  },
+  taskNewReminderModalReminderRepeatType_DAILY: {
+    en: "Daily",
+    tr: "Günlük",
+  },
+  taskNewReminderModalReminderRepeatType_WEEKLY: {
+    en: "Weekly",
+    tr: "Haftalık",
+  },
+  taskNewReminderModalReminderRepeatType_BIWEEKLY: {
+    en: "Biweekly",
+    tr: "2 Haftada Bir",
+  },
+  taskNewReminderModalReminderRepeatType_MONTHLY: {
+    en: "Monthly",
+    tr: "Aylık",
+  },
+  taskNewReminderModalReminderRepeatType_EVERY_3_MONTHS: {
+    en: "Every 3 Months",
+    tr: "Her 3 Ayda Bir",
+  },
+  taskNewReminderModalReminderRepeatType_EVERY_6_MONTHS: {
+    en: "Every 6 Months",
+    tr: "Her 6 Ayda Bir",
+  },
+  taskNewReminderModalReminderRepeatType_YEARLY: {
+    en: "Yearly",
+    tr: "Yılda Bir",
+  },
+  taskNewReminderCreateButton: {
+    en: "Initialize Reminder",
+    tr: "Anımsatıcı Oluştur",
+  },
+  taskNewReminderCloseButton: {
+    en: "Dismiss",
+    tr: "Vazgeç",
+  },
+  taskNewReminderProvideSpecificDate: {
+    en: "Please provide a date",
+    tr: "Lütfen tarih girin",
+  },
+  taskReminderType_ASSIGNED_DATE: {
+    en: "Assigned Date",
+    tr: "Planlanan Tarih",
+  },
+  taskReminderType_DUE_DATE: {
+    en: "Due Date",
+    tr: "Son Tarih",
+  },
+  taskReminderType_SPECIFIC_DATE: {
+    en: "Specific Date",
+    tr: "Belirli Tarih",
+  },
+  reminderListItemRepatInfoLabel: {
+    en: "Repats ",
+    tr: "Yineleme ",
+  },
 };

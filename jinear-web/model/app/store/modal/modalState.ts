@@ -42,3 +42,11 @@ export interface DialogModalState extends ModalState {
   onConfirm?: () => void;
   onClose?: () => void;
 }
+
+export interface ReminderListModalState extends ModalState {
+  task?: TaskDto;
+}
+
+export interface NewReminderModalState extends ModalState {
+  task?: TaskDto;
+}

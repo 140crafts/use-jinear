@@ -153,6 +153,10 @@ input[type="date"] {
   color-scheme: var(--current);
 }
 
+input[type="datetime-local"] {
+  color-scheme: var(--current);
+}
+
 input[type="radio"] {
   -webkit-appearance: none;
   -moz-appearance: none;

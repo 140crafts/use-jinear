@@ -12,16 +12,3 @@
   gap: 0.75ch;
   align-items: center;
 }
-
-.notAbutton {
-  cursor: default;
-}
-.notAbutton:hover {
-  background-color: var(--c-primary-shade-0);
-}
-
-.profilePic {
-  height: 20px;
-  width: 20px;
-  margin-top: -5px;
-}

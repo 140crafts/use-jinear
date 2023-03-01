@@ -109,6 +109,7 @@ const LoginWith2FaMailModal: React.FC<LoginWith2FaMailModalProps> = ({}) => {
       csrf: requestTokenResponse?.csrf,
       code,
       provider: "OTP_MAIL",
+      locale: t("localeType") as LocaleType,
     });
   };
 

@@ -57,6 +57,7 @@ export const taskUpdateApi = api.injectEndpoints({
         { type: "workplace-task-with-name-and-tag" },
         { type: "retrieve-task-activity", id: req.taskId },
         { type: "team-task-list" },
+        { type: "reminder-next-job" },
       ],
     }),
     //

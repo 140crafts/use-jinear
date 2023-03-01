@@ -8,6 +8,8 @@ import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
 import NewTeamModal from "@/components/modal/newTeamModal/NewTeamModal";
 import NewWorkspaceModal from "@/components/modal/newWorkspaceModal/NewWorkspaceModal";
 import NotFoundModal from "@/components/modal/notFoundModal/NotFoundModal";
+import NewReminderModal from "@/components/modal/reminder/NewReminderModal/NewReminderModal";
+import ReminderListModal from "@/components/modal/reminder/reminderListModal/ReminderListModal";
 import SearchTaskModal from "@/components/modal/searchTaskModal/SearchTaskModal";
 import TaskAssigneeChangeModal from "@/components/modal/taskDetailModals/taskAssigneeChangeModal/TaskAssigneeChangeModal";
 import TaskDateChangeModal from "@/components/modal/taskDetailModals/taskDateChangeModal/TaskDateChangeModal";
@@ -37,6 +39,8 @@ export function useThemeToggle() {
 
 const globalModals: any = (
   <>
+    <ReminderListModal />
+    <NewReminderModal />
     <SearchTaskModal />
     <NewTeamModal />
     <NewWorkspaceModal />

@@ -29,6 +29,7 @@ export const tagTypes = [
   "retrieve-topic",
   "retrieve-task-activity",
   "team-workflow-task-list",
+  "reminder-next-job",
 ];
 
 export const api = createApi({
