@@ -11,16 +11,17 @@ import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.account.AccountLoginInitializeService;
+import co.jinear.core.service.account.AccountUpdateService;
 import co.jinear.core.service.auth.AuthenticationStrategy;
 import co.jinear.core.service.auth.AuthenticationStrategyFactory;
 import co.jinear.core.system.JwtHelper;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
-
+import static co.jinear.core.model.enumtype.auth.ProviderType.OTP_MAIL;
 import static co.jinear.core.model.enumtype.auth.ProviderType.PASSWORD_MAIL;
 
 @Slf4j
@@ -34,6 +35,7 @@ public class LoginManager {
     private final AuthCookieManager authCookieManager;
     private final JwtHelper jwtHelper;
     private final AuthVoConverter authVoConverter;
+    private final AccountUpdateService accountUpdateService;
 
     public AuthInitializeResponse loginWithEmailOtpInitialize(AuthInitializeRequest authInitializeRequest) {
         log.info("Login with email has started.");
@@ -49,9 +51,10 @@ public class LoginManager {
         ProviderType providerType = authCompleteRequest.getProvider();
         AuthVo authVo = authVoConverter.map(authCompleteRequest);
         AuthResponseVo authResponseVo = retrieveStrategyAndAuth(providerType, authVo);
-        String token = initializeSessionInfoAndGenerateJwtToken(authResponseVo);
+        String token = initializeSessionInfoAndGenerateJwtToken(OTP_MAIL, authResponseVo);
         AuthResponse authResponse = mapResponse(token);
         authCookieManager.addAuthCookie(token, response);
+        accountUpdateService.updateAccountLocale(authResponseVo.getAccountId(), authCompleteRequest.getLocale());
         return authResponse;
     }
 
@@ -59,9 +62,10 @@ public class LoginManager {
         log.info("Login with password has started. email: {}", loginWithPasswordRequest.getEmail());
         AuthVo authVo = mapRequest(loginWithPasswordRequest);
         AuthResponseVo authResponseVo = retrieveStrategyAndAuth(PASSWORD_MAIL, authVo);
-        String token = initializeSessionInfoAndGenerateJwtToken(authResponseVo);
+        String token = initializeSessionInfoAndGenerateJwtToken(PASSWORD_MAIL, authResponseVo);
         AuthResponse authResponse = mapResponse(token);
         authCookieManager.addAuthCookie(token, response);
+        accountUpdateService.updateAccountLocale(authResponseVo.getAccountId(), loginWithPasswordRequest.getLocale());
         return authResponse;
     }
 
@@ -71,8 +75,8 @@ public class LoginManager {
         return authenticationStrategy.auth(authVo);
     }
 
-    private String initializeSessionInfoAndGenerateJwtToken(AuthResponseVo authResponseVo) {
-        String sessionInfoId = initializeSessionInfo(PASSWORD_MAIL, authResponseVo);
+    private String initializeSessionInfoAndGenerateJwtToken(ProviderType providerType, AuthResponseVo authResponseVo) {
+        String sessionInfoId = initializeSessionInfo(providerType, authResponseVo);
         return jwtHelper.generateToken(authResponseVo, sessionInfoId);
     }
 
@@ -90,6 +94,7 @@ public class LoginManager {
         AuthVo authVo = new AuthVo();
         authVo.setEmail(loginWithPasswordRequest.getEmail());
         authVo.setCode(loginWithPasswordRequest.getPassword());
+        authVo.setLocale(loginWithPasswordRequest.getLocale());
         return authVo;
     }
 }

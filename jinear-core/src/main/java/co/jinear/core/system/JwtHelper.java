@@ -1,10 +1,12 @@
 package co.jinear.core.system;
 
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.system.util.DateHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,6 +22,7 @@ public class JwtHelper {
     public static final int JWT_TOKEN_VALIDITY = 180;
     public static final String AUTHORITIES = "authorities";
     public static final String SESSION_INFO_ID = "session_info_id";
+    public static final String LOCALE = "locale";
 
     @Value("${jwt.secret}")
     private String secret;
@@ -40,6 +43,11 @@ public class JwtHelper {
         return auths.stream().map(SimpleGrantedAuthority::new).toList();
     }
 
+    public LocaleType getLocaleFromToken(String token) {
+        String locale = getClaimFromToken(token, claims -> claims.get(LOCALE, String.class));
+        return EnumUtils.getEnum(LocaleType.class, locale);
+    }
+
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
@@ -50,6 +58,7 @@ public class JwtHelper {
         List<String> authorities = authResponseVo.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
         claims.put(AUTHORITIES, authorities);
         claims.put(SESSION_INFO_ID, sessionInfoId);
+        claims.put(LOCALE, authResponseVo.getLocale());
         return doGenerateToken(claims, authResponseVo.getAccountId());
     }
 

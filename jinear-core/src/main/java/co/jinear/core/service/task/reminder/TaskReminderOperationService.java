@@ -10,6 +10,7 @@ import co.jinear.core.model.enumtype.task.TaskReminderType;
 import co.jinear.core.model.vo.reminder.ReminderInitializeVo;
 import co.jinear.core.model.vo.task.InitializeTaskRemindersVo;
 import co.jinear.core.repository.task.TaskReminderRepository;
+import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.reminder.ReminderOperationService;
 import co.jinear.core.service.task.TaskRetrieveService;
 import jakarta.transaction.Transactional;
@@ -25,11 +26,13 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class TaskReminderInitializeService {
+public class TaskReminderOperationService {
 
     private final TaskRetrieveService taskRetrieveService;
     private final ReminderOperationService reminderOperationService;
     private final TaskReminderRepository taskReminderRepository;
+    private final TaskReminderRetrieveService taskReminderRetrieveService;
+    private final PassiveService passiveService;
 
     @Transactional
     public List<ReminderDto> initializeTaskReminders(InitializeTaskRemindersVo initializeTaskRemindersVo) {
@@ -43,22 +46,44 @@ public class TaskReminderInitializeService {
         return reminders;
     }
 
+    @Transactional
+    public void passivizeTaskReminder(String taskReminderId) {
+        log.info("Passivize task reminder has started. taskReminderId: {}", taskReminderId);
+        TaskReminder taskReminder = taskReminderRetrieveService.retrieveEntity(taskReminderId);
+        String passiveId = passivizeTaskReminder(taskReminder);
+        reminderOperationService.passivizeReminderAndAllActiveJobsWithExistingPassiveId(taskReminder.getReminderId(), passiveId);
+        log.info("Passivize task reminder has finished. passiveId: {}", passiveId);
+    }
+
+    private String passivizeTaskReminder(TaskReminder taskReminder) {
+        String passiveId = passiveService.createUserActionPassive();
+        taskReminder.setPassiveId(passiveId);
+        taskReminderRepository.save(taskReminder);
+        return passiveId;
+    }
+
     private void initializeAssignedDateReminder(InitializeTaskRemindersVo initializeTaskRemindersVo, TaskDto taskDto, List<ReminderDto> reminders) {
-        if (Boolean.TRUE.equals(initializeTaskRemindersVo.getBeforeAssignedDate()) && Objects.nonNull(taskDto.getAssignedDate())) {
+        if (Boolean.TRUE.equals(initializeTaskRemindersVo.getBeforeAssignedDate()) &&
+                Objects.nonNull(taskDto.getAssignedDate()) &&
+                !hasAnyRelatedTaskReminderExists(taskDto, TaskReminderType.ASSIGNED_DATE)
+        ) {
             log.info("Initializing reminder for assigned date. assignedDate: {}", taskDto.getAssignedDate());
             ReminderInitializeVo reminderInitializeVo = mapForAssignedDate(initializeTaskRemindersVo, taskDto);
             ReminderDto reminderDto = initializeReminder(reminderInitializeVo);
-            initializeTaskReminder(reminderDto,TaskReminderType.ASSIGNED_DATE);
+            initializeTaskReminder(reminderDto, TaskReminderType.ASSIGNED_DATE);
             reminders.add(reminderDto);
         }
     }
 
     private void initializeDueDateReminder(InitializeTaskRemindersVo initializeTaskRemindersVo, TaskDto taskDto, List<ReminderDto> reminders) {
-        if (Boolean.TRUE.equals(initializeTaskRemindersVo.getBeforeDueDate()) && Objects.nonNull(taskDto.getDueDate())) {
+        if (Boolean.TRUE.equals(initializeTaskRemindersVo.getBeforeDueDate()) &&
+                Objects.nonNull(taskDto.getDueDate()) &&
+                !hasAnyRelatedTaskReminderExists(taskDto, TaskReminderType.DUE_DATE)
+        ) {
             log.info("Initializing reminder for due date. dueDate: {}", taskDto.getDueDate());
             ReminderInitializeVo reminderInitializeVo = mapForDueDate(initializeTaskRemindersVo, taskDto);
             ReminderDto reminderDto = initializeReminder(reminderInitializeVo);
-            initializeTaskReminder(reminderDto,TaskReminderType.DUE_DATE);
+            initializeTaskReminder(reminderDto, TaskReminderType.DUE_DATE);
             reminders.add(reminderDto);
         }
     }
@@ -68,7 +93,7 @@ public class TaskReminderInitializeService {
             log.info("Initializing reminder for specific date. date: {}", initializeTaskRemindersVo.getSpecificRemindDate());
             ReminderInitializeVo reminderInitializeVo = mapForSpecificDate(initializeTaskRemindersVo, taskDto);
             ReminderDto reminderDto = initializeReminder(reminderInitializeVo);
-            initializeTaskReminder(reminderDto,TaskReminderType.SPECIFIC_DATE);
+            initializeTaskReminder(reminderDto, TaskReminderType.SPECIFIC_DATE);
             reminders.add(reminderDto);
         }
     }
@@ -126,5 +151,9 @@ public class TaskReminderInitializeService {
         if (reminders.isEmpty()) {
             throw new BusinessException();
         }
+    }
+
+    private boolean hasAnyRelatedTaskReminderExists(TaskDto taskDto, TaskReminderType taskReminderType) {
+        return taskReminderRetrieveService.hasAnyRelated(taskDto.getTaskId(), taskReminderType);
     }
 }

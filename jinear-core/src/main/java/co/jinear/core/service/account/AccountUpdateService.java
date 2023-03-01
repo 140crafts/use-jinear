@@ -1,5 +1,6 @@
 package co.jinear.core.service.account;
 
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.repository.AccountRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,5 +18,11 @@ public class AccountUpdateService {
     public void updateEmailConfirmed(String accountId, boolean emailConfirmed) {
         log.info("Update email confirmed has started accountId: {}, emailConfirmed: {}", accountId, emailConfirmed);
         accountRepository.updateEmailConfirmed(accountId, emailConfirmed);
+    }
+
+    @Transactional
+    public void updateAccountLocale(String accountId, LocaleType localeType) {
+        log.info("Update account locale has started. accountId: {}, localeType: {}", accountId, localeType);
+        accountRepository.updateLocaleType(accountId, localeType);
     }
 }

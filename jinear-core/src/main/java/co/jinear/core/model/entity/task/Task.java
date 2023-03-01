@@ -6,6 +6,7 @@ import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.entity.team.TeamWorkflowStatus;
 import co.jinear.core.model.entity.topic.Topic;
 import co.jinear.core.model.entity.workspace.Workspace;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -13,7 +14,6 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
-import jakarta.persistence.*;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
@@ -102,4 +102,8 @@ public class Task extends BaseEntity {
     @OrderBy("createdDate ASC")
     private Set<TaskRelation> relatedIn;
 
+    @OneToMany(mappedBy = "task")
+    @Where(clause = "passive_id is null")
+    @OrderBy("createdDate ASC")
+    private Set<TaskReminder> taskReminders;
 }

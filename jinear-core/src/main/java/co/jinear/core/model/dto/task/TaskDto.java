@@ -49,4 +49,6 @@ public class TaskDto extends BaseDto {
     private Set<TaskRelationDto> relations;
     @Nullable
     private Set<TaskRelationDto> relatedIn;
+    @Nullable
+    private Set<TaskReminderDto> taskReminders;
 }

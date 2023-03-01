@@ -5,7 +5,9 @@ import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.entity.SessionInfo;
 import co.jinear.core.model.enumtype.account.RoleType;
 import co.jinear.core.model.enumtype.auth.ProviderType;
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.repository.SessionInfoRepository;
+import co.jinear.core.system.JwtHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -30,6 +32,7 @@ public class SessionInfoService {
     private static final String ROLE_PREFIX = "ROLE_";
     private static final String ANONYMOUS_USER = "anonymousUser";
     private final SessionInfoRepository sessionInfoRepository;
+    private final JwtHelper jwtHelper;
 
     public String currentAccountId() {
         AbstractAuthenticationToken auth = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
@@ -90,6 +93,16 @@ public class SessionInfoService {
 
     public boolean accountHasRole(RoleType roleType) {
         return retrieveCurrentAccountRoles().stream().anyMatch(role -> roleType.name().equalsIgnoreCase(role));
+    }
+
+    public LocaleType currentAccountLocale() {
+        AbstractAuthenticationToken auth = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        return Optional.of(auth)
+                .map(Authentication::getCredentials)
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .map(jwtHelper::getLocaleFromToken)
+                .orElseThrow(BusinessException::new);
     }
 
     private String saveSessionInfo(ProviderType provider, String accountId) {
