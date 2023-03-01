@@ -6,6 +6,7 @@ import { changeLoginWith2FaMailModalVisibility } from "@/store/slice/modalSlice"
 import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import cn from "classnames";
+import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -57,7 +58,11 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({
     if (isLoading) {
       return;
     }
-    loginWithpassword({ ...data, locale: t("localeType") as LocaleType });
+    loginWithpassword({
+      ...data,
+      locale: t("localeType") as LocaleType,
+      timeZone: format(new Date(), "OOOO"),
+    });
   };
 
   const pop2FaMailModal = () => {
