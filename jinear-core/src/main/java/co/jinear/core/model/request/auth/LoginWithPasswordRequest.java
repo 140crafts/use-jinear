@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 @Getter
 @Setter
@@ -15,4 +16,6 @@ public class LoginWithPasswordRequest extends BaseRequest {
     @NotBlank
     @ToString.Exclude
     private String password;
+    @Nullable
+    private String timeZone;
 }

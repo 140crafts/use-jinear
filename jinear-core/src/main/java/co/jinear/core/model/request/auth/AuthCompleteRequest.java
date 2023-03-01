@@ -14,4 +14,5 @@ public class AuthCompleteRequest extends BaseRequest {
     private ProviderType provider;
     private String csrf;
     private String code;
+    private String timeZone;
 }

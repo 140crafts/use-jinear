@@ -35,5 +35,15 @@ public interface AccountRepository extends JpaRepository<Account, String> {
                         account.accountId = :accountId and 
                         account.passiveId is null
                 """)
-    void updateLocaleType(@Param("accountId") String accountId, @Param("localeType")LocaleType localeType);
+    void updateLocaleType(@Param("accountId") String accountId, @Param("localeType") LocaleType localeType);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("""
+            update Account account
+                set account.timeZone=:timeZone
+                    where 
+                        account.accountId = :accountId and 
+                        account.passiveId is null
+                """)
+    void updateTimeZone(@Param("accountId") String accountId, @Param("timeZone") String timeZone);
 }

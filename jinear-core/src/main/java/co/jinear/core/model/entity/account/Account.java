@@ -35,6 +35,9 @@ public class Account extends BaseEntity {
     @Column(name = "locale_type")
     private LocaleType localeType;
 
+    @Column(name = "time_zone")
+    private String timeZone;
+
     @OneToMany(mappedBy = "account")
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")

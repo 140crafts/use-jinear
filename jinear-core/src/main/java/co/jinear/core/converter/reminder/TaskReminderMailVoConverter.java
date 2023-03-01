@@ -1,6 +1,7 @@
 package co.jinear.core.converter.reminder;
 
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.dto.reminder.ReminderJobDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskReminderDto;
@@ -12,6 +13,8 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Mapper(componentModel = "spring")
@@ -23,10 +26,19 @@ public interface TaskReminderMailVoConverter {
     @Mapping(source = "taskDto.description.value", target = "taskDetail")
     @Mapping(source = "taskReminderDto.taskReminderType", target = "taskReminderType")
     @Mapping(source = "taskDto.workspace.username", target = "workspaceName")
-    TaskReminderMailVo map(PlainAccountProfileDto plainAccountProfileDto, TaskDto taskDto, TaskReminderDto taskReminderDto);
+    TaskReminderMailVo map(PlainAccountProfileDto plainAccountProfileDto, TaskDto taskDto, TaskReminderDto taskReminderDto, ReminderJobDto reminderJobDto);
 
     @AfterMapping
-    default void afterMap(@MappingTarget TaskReminderMailVo taskReminderMailVo, TaskDto task) {
+    default void afterMap(@MappingTarget TaskReminderMailVo taskReminderMailVo, TaskDto task, PlainAccountProfileDto plainAccountProfileDto, ReminderJobDto reminderJobDto) {
+        //TODO cgds-73
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("(HH:mm dd.MM.yyyy)");
+        Optional.of(plainAccountProfileDto)
+                .map(PlainAccountProfileDto::getTimeZone)
+                .map(ZoneId::of)
+                .map(userZoneId -> reminderJobDto.getDate().withZoneSameInstant(userZoneId))
+                .map(dateInUserZone -> dateInUserZone.format(formatter))
+                .ifPresent(taskReminderMailVo::setAccountLocaleDate);
+
         String taskDetail = Optional.of(task)
                 .map(TaskDto::getDescription)
                 .map(RichTextDto::getValue)

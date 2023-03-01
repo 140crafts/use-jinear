@@ -462,4 +462,10 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-add-time_zone-column-to-account">
+        <addColumn tableName="account">
+            <column name="time_zone" type="varchar(10)" afterColumn="locale_type"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

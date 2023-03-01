@@ -8,6 +8,7 @@ import co.jinear.core.model.vo.mail.AccountEngageMailVo;
 import co.jinear.core.model.vo.mail.LoginMailVo;
 import co.jinear.core.model.vo.mail.SendMailVo;
 import co.jinear.core.model.vo.mail.TaskReminderMailVo;
+import co.jinear.core.system.NormalizeHelper;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.util.ByteArrayDataSource;
@@ -147,7 +148,16 @@ public class MailService {
                 .replaceAll(Pattern.quote("${href}"), taskCtaHref)
                 .replaceAll(Pattern.quote("${ctaLabel}"), ctaLabel);
 
-        sendMail(new SendMailVo(taskReminderMailVo.getEmail(), title, mailBody));
+        StringBuilder titleStringBuilder = new StringBuilder(title);
+        Optional.of(taskReminderMailVo)
+                .map(TaskReminderMailVo::getAccountLocaleDate)
+                .ifPresent(date -> titleStringBuilder
+                        .append(NormalizeHelper.SPACE_STRING)
+                        .append(NormalizeHelper.HYPHEN)
+                        .append(NormalizeHelper.SPACE_STRING)
+                        .append(date));
+
+        sendMail(new SendMailVo(taskReminderMailVo.getEmail(), titleStringBuilder.toString(), mailBody));
     }
 
     private String retrieveLoginMailTitle(LoginMailVo loginMailVo, LocaleType preferredLocale) {
