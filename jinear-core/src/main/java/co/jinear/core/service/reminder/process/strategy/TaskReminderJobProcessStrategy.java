@@ -52,28 +52,28 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
         log.info("Task reminder job process has started. reminderJobDto: {}", reminderJobDto);
         TaskDto taskDto = retrieveTask(reminderJobDto);
         TaskReminderDto taskReminderDto = taskReminderRetrieveService.retrieveByTaskIdAndReminderId(taskDto.getTaskId(), reminderJobDto.getReminderId());
-        retrieveSubscribersAndRelatedAccountsAndSendNotification(taskDto, taskReminderDto);
+        retrieveSubscribersAndRelatedAccountsAndSendNotification(taskDto, taskReminderDto,reminderJobDto);
         reminderJobOperationService.updateReminderJobStatus(reminderJobDto.getReminderJobId(), COMPLETED);
         calculateNextDateAndInitializeNextReminderJob(reminderJobDto, taskReminderDto);
     }
 
-    private void retrieveSubscribersAndRelatedAccountsAndSendNotification(TaskDto taskDto, TaskReminderDto taskReminderDto) {
+    private void retrieveSubscribersAndRelatedAccountsAndSendNotification(TaskDto taskDto, TaskReminderDto taskReminderDto,ReminderJobDto reminderJobDto) {
         Set<TaskReminderMailVo> receiverSet = new HashSet<>();
         List<TaskSubscriptionDto> taskSubscribers = taskSubscriptionListingService.listTaskSubscribers(taskDto.getTaskId());
         taskSubscribers
                 .stream()
                 .map(TaskSubscriptionDto::getPlainAccountProfileDto)
-                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto))
+                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto,reminderJobDto))
                 .forEach(receiverSet::add);
         Optional.of(taskDto)
                 .map(TaskDto::getOwner)
-                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto))
+                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto,reminderJobDto))
                 .ifPresent(receiverSet::add);
         Optional.of(taskDto)
                 .map(TaskDto::getAssignedToAccount)
-                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto))
+                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto,reminderJobDto))
                 .ifPresent(receiverSet::add);
-        receiverSet.stream().forEach(this::notifyAccount);
+        receiverSet.forEach(this::notifyAccount);
     }
 
     private void notifyAccount(TaskReminderMailVo taskReminderMailVo) {

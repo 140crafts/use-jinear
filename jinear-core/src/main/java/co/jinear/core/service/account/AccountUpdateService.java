@@ -25,4 +25,10 @@ public class AccountUpdateService {
         log.info("Update account locale has started. accountId: {}, localeType: {}", accountId, localeType);
         accountRepository.updateLocaleType(accountId, localeType);
     }
+
+    @Transactional
+    public void updateAccountTimeZone(String accountId, String timeZone) {
+        log.info("Update account time zone has started. accountId: {}, timeZone: {}", accountId, timeZone);
+        accountRepository.updateTimeZone(accountId, timeZone);
+    }
 }

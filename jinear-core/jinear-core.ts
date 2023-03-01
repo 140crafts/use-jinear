@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-03-01 10:51:02.
+// Generated using typescript-generator version 3.0.1157 on 2023-03-01 17:41:21.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountDto extends BaseDto {
@@ -27,6 +27,7 @@ export interface AccountDto extends BaseDto {
     email: string;
     emailConfirmed: boolean;
     localeType: LocaleType;
+    timeZone: string;
     username?: string | null;
     roles: AccountRoleDto[];
     profilePicture?: MediaDto | null;
@@ -48,6 +49,7 @@ export interface PlainAccountProfileDto extends BaseDto {
     email: string;
     username: string;
     localeType: LocaleType;
+    timeZone: string;
     profilePicture?: MediaDto | null;
 }
 
@@ -316,6 +318,7 @@ export interface AuthCompleteRequest extends BaseRequest {
     provider: ProviderType;
     csrf: string;
     code: string;
+    timeZone: string;
 }
 
 export interface AuthInitializeRequest extends BaseRequest {
@@ -325,6 +328,7 @@ export interface AuthInitializeRequest extends BaseRequest {
 export interface LoginWithPasswordRequest extends BaseRequest {
     email: string;
     password: string;
+    timeZone?: string | null;
 }
 
 export interface TaskReminderInitializeRequest extends BaseRequest {

@@ -22,4 +22,5 @@ public class TaskReminderMailVo {
     private String taskDetail;
     private TaskReminderType taskReminderType;
     private String workspaceName;
+    private String accountLocaleDate;
 }

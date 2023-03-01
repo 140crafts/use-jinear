@@ -16,6 +16,7 @@ public class PlainAccountProfileDto extends BaseDto {
     private String email;
     private String username;
     private LocaleType localeType;
+    private String timeZone;
     @Nullable
     private MediaDto profilePicture;
 }

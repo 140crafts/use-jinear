@@ -2,6 +2,7 @@ package co.jinear.core.manager.auth;
 
 import co.jinear.core.converter.auth.AuthVoConverter;
 import co.jinear.core.model.enumtype.auth.ProviderType;
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.request.auth.AuthCompleteRequest;
 import co.jinear.core.model.request.auth.AuthInitializeRequest;
 import co.jinear.core.model.request.auth.LoginWithPasswordRequest;
@@ -20,6 +21,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 import static co.jinear.core.model.enumtype.auth.ProviderType.OTP_MAIL;
 import static co.jinear.core.model.enumtype.auth.ProviderType.PASSWORD_MAIL;
@@ -54,7 +57,7 @@ public class LoginManager {
         String token = initializeSessionInfoAndGenerateJwtToken(OTP_MAIL, authResponseVo);
         AuthResponse authResponse = mapResponse(token);
         authCookieManager.addAuthCookie(token, response);
-        accountUpdateService.updateAccountLocale(authResponseVo.getAccountId(), authCompleteRequest.getLocale());
+        updateAccountLocaleAndTimeZone(authResponseVo.getAccountId(), authCompleteRequest.getLocale(), authCompleteRequest.getTimeZone());
         return authResponse;
     }
 
@@ -65,7 +68,7 @@ public class LoginManager {
         String token = initializeSessionInfoAndGenerateJwtToken(PASSWORD_MAIL, authResponseVo);
         AuthResponse authResponse = mapResponse(token);
         authCookieManager.addAuthCookie(token, response);
-        accountUpdateService.updateAccountLocale(authResponseVo.getAccountId(), loginWithPasswordRequest.getLocale());
+        updateAccountLocaleAndTimeZone(authResponseVo.getAccountId(), loginWithPasswordRequest.getLocale(), loginWithPasswordRequest.getTimeZone());
         return authResponse;
     }
 
@@ -82,6 +85,11 @@ public class LoginManager {
 
     private String initializeSessionInfo(ProviderType providerType, AuthResponseVo auth) {
         return sessionInfoService.initialize(providerType, auth.getAccountId());
+    }
+
+    private void updateAccountLocaleAndTimeZone(String accountId, LocaleType locale, String timeZone) {
+        Optional.ofNullable(locale).ifPresent(localeType -> accountUpdateService.updateAccountLocale(accountId, locale));
+        Optional.ofNullable(timeZone).ifPresent(localeType -> accountUpdateService.updateAccountTimeZone(accountId, timeZone));
     }
 
     private AuthResponse mapResponse(String token) {
