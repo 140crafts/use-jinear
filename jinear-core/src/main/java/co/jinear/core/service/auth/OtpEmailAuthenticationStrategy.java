@@ -38,18 +38,18 @@ public class OtpEmailAuthenticationStrategy implements AuthenticationStrategy {
     public AuthResponseVo auth(AuthVo authVo) {
         TokenDto token = retrieveToken(authVo);
         validateTokensMatch(token, authVo);
-        return Optional.of(token)
+        String accountId = Optional.of(token)
                 .map(TokenDto::getRelatedObject)
                 .map(this::retrieveAccountId)
-                .map(accountId -> invalidateToken(token.getTokenId(), accountId))
-                .map(this::updateEmailAsConfirmed)
-                .map(this::retrieveAuthorities)
                 .orElseThrow(BusinessException::new);
+        invalidateToken(token.getTokenId(), accountId);
+        updateEmailAsConfirmed(accountId);
+        Collection<GrantedAuthority> grantedAuthorities = retrieveAuthorities(accountId);
+        return new AuthResponseVo(accountId, authVo.getLocale(), grantedAuthorities);
     }
 
-    private AuthResponseVo retrieveAuthorities(String accountId) {
-        Collection<GrantedAuthority> grantedAuthorities = accountRoleService.retrieveAccountAuthorities(accountId);
-        return new AuthResponseVo(accountId, grantedAuthorities);
+    private Collection<GrantedAuthority> retrieveAuthorities(String accountId) {
+        return accountRoleService.retrieveAccountAuthorities(accountId);
     }
 
     private TokenDto retrieveToken(AuthVo emailLoginRequest) {
@@ -89,13 +89,11 @@ public class OtpEmailAuthenticationStrategy implements AuthenticationStrategy {
         return newAccount.getAccountId();
     }
 
-    private String invalidateToken(String tokenId, String accountId) {
+    private void invalidateToken(String tokenId, String accountId) {
         tokenService.passivizeToken(tokenId, accountId, PassiveReason.EMAIL_LOGIN_TOKEN_USED);
-        return accountId;
     }
 
-    private String updateEmailAsConfirmed(String accountId){
-        accountUpdateService.updateEmailConfirmed(accountId,Boolean.TRUE);
-        return accountId;
+    private void updateEmailAsConfirmed(String accountId) {
+        accountUpdateService.updateEmailConfirmed(accountId, Boolean.TRUE);
     }
 }

@@ -21,6 +21,13 @@ public class PassiveService {
         return saved.getPassiveId();
     }
 
+    public String createUserActionPassive() {
+        return createPassive(CreatePassiveVo.builder()
+                .reason(PassiveReason.USER_ACTION.name())
+                .reasonType(PassiveReason.USER_ACTION)
+                .build());
+    }
+
     public String createUserActionPassive(String accountId) {
         return createPassive(CreatePassiveVo.builder()
                 .responsibleAccountId(accountId)

@@ -18,11 +18,11 @@ import co.jinear.core.service.username.UsernameService;
 import co.jinear.core.service.workspace.WorkspaceInitializeService;
 import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.system.RandomHelper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -60,6 +60,7 @@ public class AccountInitializeService {
         Account account = new Account();
         account.setEmail(accountInitializeVo.getEmail());
         account.setEmailConfirmed(accountInitializeVo.getEmailConfirmed());
+        account.setLocaleType(accountInitializeVo.getLocale());
         Account saved = accountRepository.save(account);
         log.info("Account create has finished. accountId: {}", saved.getAccountId());
         return saved;

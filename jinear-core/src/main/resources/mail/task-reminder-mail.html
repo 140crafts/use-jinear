@@ -8,6 +8,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Yesteryear&display=swap" rel="stylesheet">
 
     <style type="text/css">
+        h1{
+            font-size: medium;
+        }
         .logo {
             font-family: Yesteryear!important;
             background-color: #FBEA4E !important;
@@ -55,19 +58,23 @@
 
     <div style="
             font-size: x-large;
+            text-align: left;
             font-weight: 400;
             color:#16171A;
             margin:20px;
             margin-top: 0px;
             margin-bottom: 10px;">
-        ${title}
+        <b>${reminderTypeText}</b>
+        <p>${reminderText}</p>
+        [${taskTag}] ${taskTitle}
     </div>
     <div style="
-            font-size: large;
+            font-size: small;
+            text-align: left;
             font-weight: 400;
             color:#16171A;
-            margin:10px;">
-        ${text}
+            margin:20px;">
+        ${taskDescription}
     </div>
 
     <div style="
@@ -78,15 +85,15 @@
             max-width: 150px;
             background-color: #16171A;
             box-shadow: #767675 0px 1px 2px;">
-        <div style="    display: inline;
-                            font-size: x-large;
+        <a href="${href}" target="_blank" style="
+                            display: inline;
+                            font-size: small;
                             font-weight: 400;
                             font-style: italic;
                             font-variant: tabular-nums;
-                            letter-spacing: 5px;
                             color:#FDFFFC;
                             margin:10px;">
-            ${token}
+            ${ctaLabel}
         </div>
     </div>
     <div style="height:75px;"></div>

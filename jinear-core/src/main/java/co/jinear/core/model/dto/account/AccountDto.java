@@ -4,6 +4,7 @@ import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -19,6 +20,7 @@ public class AccountDto extends BaseDto {
     private String accountId;
     private String email;
     private Boolean emailConfirmed;
+    private LocaleType localeType;
     @Nullable
     private String username;
     private Set<AccountRoleDto> roles;

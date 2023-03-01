@@ -29,7 +29,8 @@ public class EmailPasswordAuthenticationStrategy implements AuthenticationStrate
     public AuthResponseVo auth(AuthVo authVo) {
         AccountDto accountDto = retrieveAccount(authVo);
         validatePassword(authVo, accountDto);
-        return retrieveAuthorities(accountDto.getAccountId());
+        Collection<GrantedAuthority> grantedAuthorities = retrieveAuthorities(accountDto.getAccountId());
+        return new AuthResponseVo(accountDto.getAccountId(), authVo.getLocale(), grantedAuthorities);
     }
 
     @Override
@@ -49,9 +50,8 @@ public class EmailPasswordAuthenticationStrategy implements AuthenticationStrate
         accountPasswordService.validatePassword(validatePasswordVo);
     }
 
-    private AuthResponseVo retrieveAuthorities(String accountId) {
-        Collection<GrantedAuthority> grantedAuthorities = accountRoleService.retrieveAccountAuthorities(accountId);
-        return new AuthResponseVo(accountId, grantedAuthorities);
+    private Collection<GrantedAuthority> retrieveAuthorities(String accountId) {
+        return accountRoleService.retrieveAccountAuthorities(accountId);
     }
 
 }

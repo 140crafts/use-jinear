@@ -2,12 +2,13 @@ package co.jinear.core.model.entity.account;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.username.Username;
+import co.jinear.core.model.enumtype.localestring.LocaleType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
-import jakarta.persistence.*;
 import java.util.Set;
 
 @Getter
@@ -29,6 +30,10 @@ public class Account extends BaseEntity {
 
     @Column(name = "email_confirmed")
     private Boolean emailConfirmed;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "locale_type")
+    private LocaleType localeType;
 
     @OneToMany(mappedBy = "account")
     @Where(clause = "passive_id is null")

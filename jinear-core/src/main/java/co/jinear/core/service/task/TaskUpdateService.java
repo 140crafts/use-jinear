@@ -6,11 +6,13 @@ import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
+import co.jinear.core.model.enumtype.task.TaskReminderType;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.model.vo.richtext.UpdateRichTextVo;
 import co.jinear.core.model.vo.task.*;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.richtext.RichTextInitializeService;
+import co.jinear.core.service.task.reminder.TaskReminderDateUpdateService;
 import co.jinear.core.service.task.subscription.TaskSubscriptionOperationService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
 import co.jinear.core.service.topic.TopicSequenceService;
@@ -35,6 +37,7 @@ public class TaskUpdateService {
     private final TopicSequenceService incrementTopicSequence;
     private final TaskSubscriptionConverter taskSubscriptionConverter;
     private final TaskSubscriptionOperationService taskSubscriptionOperationService;
+    private final TaskReminderDateUpdateService taskReminderDateUpdateService;
 
     private final TaskDtoConverter taskDtoConverter;
 
@@ -98,6 +101,7 @@ public class TaskUpdateService {
         task.setAssignedDate(taskDatesUpdateVo.getAssignedDate());
         task.setDueDate(taskDatesUpdateVo.getDueDate());
         Task saved = taskRepository.save(task);
+        updateRelatedReminderDates(saved);
         log.info("Update task assigned and due date has finished");
         return taskDtoConverter.map(saved);
     }
@@ -132,10 +136,15 @@ public class TaskUpdateService {
         task.setTopicTagNo(nextSeq);
     }
 
-    private void initializeSubscription(Task saved) {
-        if (Objects.nonNull(saved.getAssignedTo())) {
-            TaskSubscriptionInitializeVo assigneeSubscriptionInitializeVo = taskSubscriptionConverter.map(saved.getAssignedTo(), saved.getTaskId());
+    private void initializeSubscription(Task task) {
+        if (Objects.nonNull(task.getAssignedTo())) {
+            TaskSubscriptionInitializeVo assigneeSubscriptionInitializeVo = taskSubscriptionConverter.map(task.getAssignedTo(), task.getTaskId());
             taskSubscriptionOperationService.initializeTaskSubscription(assigneeSubscriptionInitializeVo);
         }
+    }
+
+    private void updateRelatedReminderDates(Task task) {
+        taskReminderDateUpdateService.updateTaskReminderWithTypeIfExists(task.getTaskId(), TaskReminderType.ASSIGNED_DATE, task.getAssignedDate());
+        taskReminderDateUpdateService.updateTaskReminderWithTypeIfExists(task.getTaskId(), TaskReminderType.DUE_DATE, task.getDueDate());
     }
 }

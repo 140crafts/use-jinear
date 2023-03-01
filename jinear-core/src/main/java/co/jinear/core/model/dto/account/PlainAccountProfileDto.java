@@ -2,6 +2,7 @@ package co.jinear.core.model.dto.account;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.media.MediaDto;
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,6 +15,7 @@ public class PlainAccountProfileDto extends BaseDto {
     private String accountId;
     private String email;
     private String username;
+    private LocaleType localeType;
     @Nullable
     private MediaDto profilePicture;
 }

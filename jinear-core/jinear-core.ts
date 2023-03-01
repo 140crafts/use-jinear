@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-02-23 10:30:26.
+// Generated using typescript-generator version 3.0.1157 on 2023-03-01 10:51:02.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,14 +18,15 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountDto extends BaseDto {
     accountId: string;
     email: string;
     emailConfirmed: boolean;
+    localeType: LocaleType;
     username?: string | null;
     roles: AccountRoleDto[];
     profilePicture?: MediaDto | null;
@@ -46,6 +47,7 @@ export interface PlainAccountProfileDto extends BaseDto {
     accountId: string;
     email: string;
     username: string;
+    localeType: LocaleType;
     profilePicture?: MediaDto | null;
 }
 
@@ -129,6 +131,7 @@ export interface TaskDto extends BaseDto {
     workflowStatus: TeamWorkflowStatusDto;
     relations?: TaskRelationDto[] | null;
     relatedIn?: TaskRelationDto[] | null;
+    taskReminders?: TaskReminderDto[] | null;
 }
 
 export interface TaskRelationDto {
@@ -140,10 +143,19 @@ export interface TaskRelationDto {
     relatedTask: RelatedTaskDto;
 }
 
+export interface TaskReminderDto extends BaseDto {
+    taskReminderId: string;
+    taskId: string;
+    reminderId: string;
+    taskReminderType: TaskReminderType;
+    reminder: ReminderDto;
+}
+
 export interface TaskSubscriptionDto extends BaseDto {
     taskSubscriptionId: string;
     taskId: string;
     accountId: string;
+    plainAccountProfileDto: PlainAccountProfileDto;
 }
 
 export interface TeamDto extends BaseDto {
@@ -316,6 +328,7 @@ export interface LoginWithPasswordRequest extends BaseRequest {
 }
 
 export interface TaskReminderInitializeRequest extends BaseRequest {
+    taskId: string;
     beforeAssignedDate?: boolean | null;
     beforeDueDate?: boolean | null;
     specificRemindDate?: Date | null;
@@ -448,6 +461,10 @@ export interface AuthResponse extends BaseResponse {
     token: string;
 }
 
+export interface ReminderJobResponse extends BaseResponse {
+    data: ReminderJobDto;
+}
+
 export interface ReminderResponse extends BaseResponse {
     data: ReminderDto[];
 }
@@ -512,13 +529,13 @@ export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY"
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
 
-export type PermissionType = "ACCOUNT_ROLE_EDIT";
+export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB";
 
-export type RoleType = "ADMIN" | "USER";
+export type RoleType = "ADMIN" | "SERVICE" | "USER";
 
 export type ProviderType = "OTP_MAIL" | "PASSWORD_MAIL";
 
-export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MAIL_TEXT" | "MAIL_CONFIRMATION_TITLE" | "MAIL_CONFIRMATION_TEXT" | "MAIL_CONFIRMATION_CTA_LABEL" | "PASSWORD_RESET_TITLE" | "PASSWORD_RESET_TEXT" | "PASSWORD_RESET_CTA_LABEL" | "NEW_PASSWORD_TITLE" | "NEW_PASSWORD_TEXT" | "TEAM_WORKFLOW_STATUS_BACKLOG" | "TEAM_WORKFLOW_STATUS_NOT_STARTED" | "TEAM_WORKFLOW_STATUS_STARTED" | "TEAM_WORKFLOW_STATUS_COMPLETED" | "TEAM_WORKFLOW_STATUS_CANCELLED";
+export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MAIL_TEXT" | "MAIL_CONFIRMATION_TITLE" | "MAIL_CONFIRMATION_TEXT" | "MAIL_CONFIRMATION_CTA_LABEL" | "PASSWORD_RESET_TITLE" | "PASSWORD_RESET_TEXT" | "PASSWORD_RESET_CTA_LABEL" | "NEW_PASSWORD_TITLE" | "NEW_PASSWORD_TEXT" | "TEAM_WORKFLOW_STATUS_BACKLOG" | "TEAM_WORKFLOW_STATUS_NOT_STARTED" | "TEAM_WORKFLOW_STATUS_STARTED" | "TEAM_WORKFLOW_STATUS_COMPLETED" | "TEAM_WORKFLOW_STATUS_CANCELLED" | "TASK_REMINDER_TITLE" | "TASK_REMINDER_TEXT" | "TASK_REMINDER_TYPE_ASSIGNED_DATE" | "TASK_REMINDER_TYPE_DUE_DATE" | "TASK_REMINDER_TYPE_SPECIFIC_DATE" | "TASK_REMINDER_GO_TO_TASK";
 
 export type LocaleType = "TR" | "EN";
 
@@ -534,7 +551,7 @@ export type ReminderJobStatus = "PENDING" | "COMPLETED" | "CANCELLED";
 
 export type ReminderType = "TASK";
 
-export type RepeatType = "NONE" | "DAILY" | "WEEKLY" | "BIWEEKLY" | "MONTHLY" | "EVERY_3_MONTHS" | "EVERY_6_MONTHS" | "YEARLY";
+export type RepeatType = "NONE" | "HOURLY" | "DAILY" | "WEEKLY" | "BIWEEKLY" | "MONTHLY" | "EVERY_3_MONTHS" | "EVERY_6_MONTHS" | "YEARLY";
 
 export type RichTextSourceStack = "WYSIWYG" | "RC";
 
