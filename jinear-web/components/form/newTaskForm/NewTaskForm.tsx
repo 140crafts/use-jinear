@@ -4,6 +4,7 @@ import { TaskInitializeRequest } from "@/model/be/jinear-core";
 import { useInitializeTaskMutation } from "@/store/api/taskApi";
 import Logger from "@/utils/logger";
 import cn from "classnames";
+import { parse } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -88,10 +89,12 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
       data.topicId = undefined;
     }
     if (data.assignedDate) {
-      data.assignedDate = new Date(data.assignedDate);
+      //@ts-ignore
+      data.assignedDate = parse(data.assignedDate, "yyyy-MM-dd", new Date());
     }
     if (data.dueDate) {
-      data.dueDate = new Date(data.dueDate);
+      //@ts-ignore
+      data.dueDate = parse(data.dueDate, "yyyy-MM-dd", new Date());
     }
     console.log({ NewTaskForm: data });
     if (isInitializeTaskLoading) {

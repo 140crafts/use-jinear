@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-02-12 09:10:37.
+// Generated using typescript-generator version 3.0.1157 on 2023-02-27 21:02:33.
 
 export interface BaseDto {
   createdDate: Date;
@@ -60,6 +60,24 @@ export interface MediaDto extends BaseDto {
   originalName: string;
 }
 
+export interface ReminderDto extends BaseDto {
+  reminderId: string;
+  ownerId: string;
+  relatedObjectId: string;
+  type: ReminderType;
+  repeatType: RepeatType;
+  repeatStart: Date;
+  repeatEnd: Date;
+}
+
+export interface ReminderJobDto extends BaseDto {
+  reminderJobId: string;
+  reminderId: string;
+  date: Date;
+  reminderJobStatus: ReminderJobStatus;
+  reminder: ReminderDto;
+}
+
 export interface RichTextDto {
   richTextId: string;
   relatedObjectId: string;
@@ -111,6 +129,7 @@ export interface TaskDto extends BaseDto {
   workflowStatus: TeamWorkflowStatusDto;
   relations?: TaskRelationDto[] | null;
   relatedIn?: TaskRelationDto[] | null;
+  taskReminders?: TaskReminderDto[] | null;
 }
 
 export interface TaskRelationDto {
@@ -120,6 +139,20 @@ export interface TaskRelationDto {
   relationType: TaskRelationType;
   task: RelatedTaskDto;
   relatedTask: RelatedTaskDto;
+}
+
+export interface TaskReminderDto extends BaseDto {
+  taskReminderId: string;
+  taskId: string;
+  reminderId: string;
+  taskReminderType: TaskReminderType;
+  reminder: ReminderDto;
+}
+
+export interface TaskSubscriptionDto extends BaseDto {
+  taskSubscriptionId: string;
+  taskId: string;
+  accountId: string;
 }
 
 export interface TeamDto extends BaseDto {
@@ -293,6 +326,16 @@ export interface LoginWithPasswordRequest extends BaseRequest {
   password: string;
 }
 
+export interface TaskReminderInitializeRequest extends BaseRequest {
+  taskId: string;
+  beforeAssignedDate?: boolean | null;
+  beforeDueDate?: boolean | null;
+  specificRemindDate?: Date | null;
+  specificRemindRepeatStart?: Date | null;
+  specificRemindRepeatEnd?: Date | null;
+  specificRemindDateRepeatType?: RepeatType | null;
+}
+
 export interface TaskAssigneeUpdateRequest {
   assigneeId?: string | null;
 }
@@ -417,6 +460,14 @@ export interface AuthResponse extends BaseResponse {
   token: string;
 }
 
+export interface ReminderJobResponse extends BaseResponse {
+  data: ReminderJobDto;
+}
+
+export interface ReminderResponse extends BaseResponse {
+  data: ReminderDto[];
+}
+
 export interface TaskActivityRetrieveResponse extends BaseResponse {
   data: WorkspaceActivityDto[];
 }
@@ -453,6 +504,10 @@ export interface TeamWorkflowStatusListingResponse extends BaseResponse {
   data: GroupedTeamWorkflowStatusListDto;
 }
 
+export interface TaskSubscriptionResponse extends BaseResponse {
+  data: TaskSubscriptionDto;
+}
+
 export interface TopicListingResponse extends BaseResponse {
   data: PageDto<TopicDto>;
 }
@@ -480,9 +535,9 @@ export type DayType =
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
 
-export type PermissionType = "ACCOUNT_ROLE_EDIT";
+export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB";
 
-export type RoleType = "ADMIN" | "USER";
+export type RoleType = "ADMIN" | "SERVICE" | "USER";
 
 export type ProviderType = "OTP_MAIL" | "PASSWORD_MAIL";
 
@@ -538,11 +593,28 @@ export type PassiveReason =
   | "UNFOLLOW"
   | "PAYMENT_ISSUE";
 
-export type RichTextSourceStack = "WYSIWYG";
+export type ReminderJobStatus = "PENDING" | "COMPLETED" | "CANCELLED";
+
+export type ReminderType = "TASK";
+
+export type RepeatType =
+  | "NONE"
+  | "HOURLY"
+  | "DAILY"
+  | "WEEKLY"
+  | "BIWEEKLY"
+  | "MONTHLY"
+  | "EVERY_3_MONTHS"
+  | "EVERY_6_MONTHS"
+  | "YEARLY";
+
+export type RichTextSourceStack = "WYSIWYG" | "RC";
 
 export type RichTextType = "TASK_DETAIL";
 
 export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
+
+export type TaskReminderType = "ASSIGNED_DATE" | "DUE_DATE" | "SPECIFIC_DATE";
 
 export type TaskState =
   | "TO_DO"

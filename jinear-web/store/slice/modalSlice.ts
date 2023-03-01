@@ -7,7 +7,9 @@ import ModalState, {
   ChangeTaskWorkflowStatusModalState,
   DialogModalState,
   LoginWith2FaMailModalState,
+  NewReminderModalState,
   NotFoundModalState,
+  ReminderListModalState,
   SearchTaskModalState,
 } from "model/app/store/modal/modalState";
 import { accountApi } from "../api/accountApi";
@@ -62,6 +64,12 @@ const initialState = {
   dialogModal: {
     visible: false,
   },
+  reminderListModal: {
+    visible: false,
+  },
+  newReminderModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -77,6 +85,8 @@ const initialState = {
   newTeamModal: null | ModalState;
   searchTaskModal: null | SearchTaskModalState;
   dialogModal: null | DialogModalState;
+  reminderListModal: null | ReminderListModalState;
+  newReminderModal: null | NewReminderModalState;
 };
 
 const slice = createSlice({
@@ -198,6 +208,26 @@ const slice = createSlice({
       state.searchTaskModal = initialState.searchTaskModal;
     },
 
+    popReminderListModal: (
+      state,
+      action: PayloadAction<ReminderListModalState>
+    ) => {
+      state.reminderListModal = { ...action.payload, visible: true };
+    },
+    closeReminderListModal: (state, action: PayloadAction<void>) => {
+      state.reminderListModal = initialState.reminderListModal;
+    },
+
+    popNewReminderModal: (
+      state,
+      action: PayloadAction<NewReminderModalState>
+    ) => {
+      state.newReminderModal = { ...action.payload, visible: true };
+    },
+    closeNewReminderModal: (state, action: PayloadAction<void>) => {
+      state.newReminderModal = initialState.newReminderModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -239,6 +269,10 @@ export const {
   closeSearchTaskModal,
   popDialogModal,
   closeDialogModal,
+  popReminderListModal,
+  closeReminderListModal,
+  popNewReminderModal,
+  closeNewReminderModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -337,3 +371,13 @@ export const selectDialogModalOnConfirm = (state: RootState) =>
   state.modal.dialogModal?.onConfirm;
 export const selectDialogModalOnClose = (state: RootState) =>
   state.modal.dialogModal?.onClose;
+
+export const selectReminderListModalVisible = (state: RootState) =>
+  state.modal.reminderListModal?.visible;
+export const selectReminderListModalTask = (state: RootState) =>
+  state.modal.reminderListModal?.task;
+
+export const selectNewReminderModalVisible = (state: RootState) =>
+  state.modal.newReminderModal?.visible;
+export const selectNewReminderModalTask = (state: RootState) =>
+  state.modal.newReminderModal?.task;

@@ -1,5 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
 import OrLine from "@/components/orLine/OrLine";
+import { LocaleType } from "@/model/be/jinear-core";
 import { useLoginWithPasswordMutation } from "@/store/api/authApi";
 import { changeLoginWith2FaMailModalVisibility } from "@/store/slice/modalSlice";
 import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
@@ -56,7 +57,7 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({
     if (isLoading) {
       return;
     }
-    loginWithpassword(data);
+    loginWithpassword({ ...data, locale: t("localeType") as LocaleType });
   };
 
   const pop2FaMailModal = () => {
