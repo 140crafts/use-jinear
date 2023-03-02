@@ -16,4 +16,8 @@ public class TaskDateUpdateRequest {
     @Nullable
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime dueDate;
+    @Nullable
+    private Boolean hasPreciseAssignedDate;
+    @Nullable
+    private Boolean hasPreciseDueDate;
 }

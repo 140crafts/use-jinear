@@ -5,7 +5,7 @@ import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
 import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
 import co.jinear.core.service.workspace.activity.WorkspaceActivityService;
-import co.jinear.core.system.util.DateHelper;
+import co.jinear.core.system.util.ZonedDateHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -78,8 +78,14 @@ public class TaskActivityService {
 
     private void initializeAssignedDateUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
-        Optional.of(before).map(TaskDto::getAssignedDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setOldState);
-        Optional.of(after).map(TaskDto::getAssignedDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setNewState);
+        Optional.of(before)
+                .map(TaskDto::getAssignedDate)
+                .map(assignedDate -> Boolean.TRUE.equals(before.getHasPreciseAssignedDate()) ? ZonedDateHelper.formatWithDateTimeFormat3(assignedDate) : ZonedDateHelper.formatWithDateTimeFormat2(assignedDate))
+                .ifPresent(vo::setOldState);
+        Optional.of(after)
+                .map(TaskDto::getAssignedDate)
+                .map(assignedDate -> Boolean.TRUE.equals(after.getHasPreciseAssignedDate()) ? ZonedDateHelper.formatWithDateTimeFormat3(assignedDate) : ZonedDateHelper.formatWithDateTimeFormat2(assignedDate))
+                .ifPresent(vo::setNewState);
         vo.setType(WorkspaceActivityType.TASK_CHANGE_ASSIGNED_DATE);
         if (!Objects.equals(vo.getOldState(), vo.getNewState())) {
             workspaceActivityService.createWorkspaceActivity(vo);
@@ -88,8 +94,14 @@ public class TaskActivityService {
 
     private void initializeDueDateUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
-        Optional.of(before).map(TaskDto::getDueDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setOldState);
-        Optional.of(after).map(TaskDto::getDueDate).map(DateHelper::formatIsoDatePattern).ifPresent(vo::setNewState);
+        Optional.of(before)
+                .map(TaskDto::getDueDate)
+                .map(dueDate -> Boolean.TRUE.equals(before.getHasPreciseDueDate()) ? ZonedDateHelper.formatWithDateTimeFormat3(dueDate) : ZonedDateHelper.formatWithDateTimeFormat2(dueDate))
+                .ifPresent(vo::setOldState);
+        Optional.of(after)
+                .map(TaskDto::getDueDate)
+                .map(dueDate -> Boolean.TRUE.equals(after.getHasPreciseDueDate()) ? ZonedDateHelper.formatWithDateTimeFormat3(dueDate) : ZonedDateHelper.formatWithDateTimeFormat2(dueDate))
+                .ifPresent(vo::setNewState);
         vo.setType(WorkspaceActivityType.TASK_CHANGE_DUE_DATE);
         if (!Objects.equals(vo.getOldState(), vo.getNewState())) {
             workspaceActivityService.createWorkspaceActivity(vo);

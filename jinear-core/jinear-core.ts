@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-03-01 17:41:21.
+// Generated using typescript-generator version 3.0.1157 on 2023-03-02 08:46:47.
 
 export interface BaseDto {
     createdDate: Date;
@@ -121,6 +121,8 @@ export interface TaskDto extends BaseDto {
     assignedTo: string;
     assignedDate: Date;
     dueDate: Date;
+    hasPreciseAssignedDate: boolean;
+    hasPreciseDueDate: boolean;
     teamTagNo: number;
     topicTagNo: number;
     title: string;
@@ -348,6 +350,8 @@ export interface TaskAssigneeUpdateRequest {
 export interface TaskDateUpdateRequest {
     assignedDate?: Date | null;
     dueDate?: Date | null;
+    hasPreciseAssignedDate?: boolean | null;
+    hasPreciseDueDate?: boolean | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -357,6 +361,8 @@ export interface TaskInitializeRequest extends BaseRequest {
     assignedTo?: string | null;
     assignedDate?: Date | null;
     dueDate?: Date | null;
+    hasPreciseAssignedDate?: boolean | null;
+    hasPreciseDueDate?: boolean | null;
     title: string;
     description?: string | null;
     subTaskOf?: string | null;

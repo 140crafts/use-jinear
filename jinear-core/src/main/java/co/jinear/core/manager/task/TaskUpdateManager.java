@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -90,7 +91,7 @@ public class TaskUpdateManager {
     public TaskResponse updateTaskDates(String taskId, TaskDateUpdateRequest taskDateUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
-        validateDueDateIsAfterAssignedDate(taskDateUpdateRequest.getAssignedDate(), taskDateUpdateRequest.getDueDate());
+        validateDueDateIsAfterAssignedDate(taskDateUpdateRequest);
         log.info("Update task dates has started. accountId: {}, taskId: {}", currentAccountId, taskId);
         TaskDatesUpdateVo taskDatesUpdateVo = taskDatesUpdateVoConverter.map(taskDateUpdateRequest, taskId);
         TaskDto taskDto = taskUpdateService.updateTaskDates(taskDatesUpdateVo);
@@ -152,9 +153,25 @@ public class TaskUpdateManager {
                 .ifPresent(newAssignee -> validateAccess(taskId, newAssignee));
     }
 
-    private void validateDueDateIsAfterAssignedDate(ZonedDateTime assignedDate, ZonedDateTime dueDate) {
-        if (Objects.nonNull(assignedDate) && Objects.nonNull(dueDate) && assignedDate.isAfter(dueDate)) {
+    private void validateDueDateIsAfterAssignedDate(TaskDateUpdateRequest taskDateUpdateRequest) {
+        ZonedDateTime assignedDate = taskDateUpdateRequest.getAssignedDate();
+        ZonedDateTime dueDate = taskDateUpdateRequest.getDueDate();
+        if (Objects.isNull(assignedDate) || Objects.isNull(dueDate)) {
+            return;
+        }
+        boolean isSameDay = checkIfDueDateAndAssignedDateIsSameDay(assignedDate, dueDate);
+        boolean isDueDatePrecise = Boolean.TRUE.equals(taskDateUpdateRequest.getHasPreciseDueDate());
+        boolean isDueDatePreciseAndBothDatesAreSameDay = isSameDay && isDueDatePrecise;
+        boolean isDueDateAfter = assignedDate.isAfter(dueDate);
+        if (isDueDateAfter && !isDueDatePreciseAndBothDatesAreSameDay) {
             throw new BusinessException();
         }
+    }
+
+    private boolean checkIfDueDateAndAssignedDateIsSameDay(ZonedDateTime assignedDate, ZonedDateTime dueDate) {
+        if (Objects.nonNull(assignedDate) && Objects.nonNull(dueDate)) {
+            return dueDate.truncatedTo(ChronoUnit.DAYS).equals(assignedDate.truncatedTo(ChronoUnit.DAYS));
+        }
+        return false;
     }
 }
