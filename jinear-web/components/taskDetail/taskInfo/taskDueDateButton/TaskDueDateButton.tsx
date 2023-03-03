@@ -1,7 +1,7 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { popChangeTaskDateModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
-import { format, getHours, getMinutes } from "date-fns";
+import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { useTask } from "../../context/TaskDetailContext";
@@ -13,7 +13,6 @@ const TaskDueDateButton: React.FC<TaskDueDateButtonProps> = ({}) => {
   const { t } = useTranslation();
   const task = useTask();
   const dueDate = new Date(task.dueDate);
-  const hasTime = getHours(dueDate) != 0 || getMinutes(dueDate);
   const dispatch = useAppDispatch();
 
   const popChangeDueDateModal = () => {
@@ -31,7 +30,10 @@ const TaskDueDateButton: React.FC<TaskDueDateButtonProps> = ({}) => {
         <>
           {t("taskDetailDueDate")}
           <b>
-            {format(dueDate, hasTime ? t("dateTimeFormat") : t("dateFormat"))}
+            {format(
+              dueDate,
+              task.hasPreciseDueDate ? t("dateTimeFormat") : t("dateFormat")
+            )}
           </b>
         </>
       ) : (

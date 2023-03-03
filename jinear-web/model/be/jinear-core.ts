@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-03-02 08:46:47.
+// Generated using typescript-generator version 3.0.1157 on 2023-03-04 00:33:58.
 
 export interface BaseDto {
   createdDate: Date;
@@ -100,6 +100,8 @@ export interface RelatedTaskDto extends BaseDto {
   assignedTo: string;
   assignedDate: Date;
   dueDate: Date;
+  hasPreciseAssignedDate: boolean;
+  hasPreciseDueDate: boolean;
   teamTagNo: number;
   topicTagNo: number;
   title: string;
