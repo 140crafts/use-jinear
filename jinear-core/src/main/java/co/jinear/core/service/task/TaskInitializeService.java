@@ -123,6 +123,8 @@ public class TaskInitializeService {
         task.setOwnerId(taskInitializeVo.getOwnerId());
         task.setAssignedTo(taskInitializeVo.getAssignedTo());
         task.setAssignedDate(taskInitializeVo.getAssignedDate());
+        task.setHasPreciseAssignedDate(taskInitializeVo.getHasPreciseAssignedDate());
+        task.setHasPreciseDueDate(taskInitializeVo.getHasPreciseDueDate());
         task.setDueDate(taskInitializeVo.getDueDate());
         task.setTitle(taskInitializeVo.getTitle());
         return task;

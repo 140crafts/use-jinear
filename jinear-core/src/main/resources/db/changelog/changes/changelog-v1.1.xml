@@ -468,4 +468,14 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-add-precise-date-columns-to-task">
+        <addColumn tableName="task">
+            <column name="has_precise_assigned_date" type="tinyint" afterColumn="due_date" defaultValueBoolean="false"/>
+        </addColumn>
+        <addColumn tableName="task">
+            <column name="has_precise_due_date" type="tinyint" afterColumn="has_precise_assigned_date"
+                    defaultValueBoolean="false"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

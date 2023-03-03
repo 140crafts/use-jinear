@@ -3,6 +3,7 @@ package co.jinear.core.manager.task;
 import co.jinear.core.converter.task.TaskDatesUpdateVoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
+import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.request.task.TaskAssigneeUpdateRequest;
@@ -16,10 +17,12 @@ import co.jinear.core.model.vo.task.TaskDatesUpdateVo;
 import co.jinear.core.model.vo.task.TaskDescriptionUpdateVo;
 import co.jinear.core.model.vo.task.TaskTitleUpdateVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.task.TaskActivityService;
 import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.TaskUpdateService;
 import co.jinear.core.service.topic.TopicRetrieveService;
+import co.jinear.core.system.util.ZonedDateHelper;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -43,6 +47,7 @@ public class TaskUpdateManager {
     private final TaskActivityService taskActivityService;
     private final TopicRetrieveService topicRetrieveService;
     private final TaskDatesUpdateVoConverter taskDatesUpdateVoConverter;
+    private final AccountRetrieveService accountRetrieveService;
 
     public BaseResponse updateTaskTitle(String taskId, TaskUpdateTitleRequest taskUpdateTitleRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -90,7 +95,8 @@ public class TaskUpdateManager {
     public TaskResponse updateTaskDates(String taskId, TaskDateUpdateRequest taskDateUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
-        validateDueDateIsAfterAssignedDate(taskDateUpdateRequest.getAssignedDate(), taskDateUpdateRequest.getDueDate());
+        PlainAccountProfileDto accountDto = accountRetrieveService.retrievePlainAccountProfile(currentAccountId);
+        validateDueDateIsAfterAssignedDate(taskDateUpdateRequest, accountDto.getTimeZone());
         log.info("Update task dates has started. accountId: {}, taskId: {}", currentAccountId, taskId);
         TaskDatesUpdateVo taskDatesUpdateVo = taskDatesUpdateVoConverter.map(taskDateUpdateRequest, taskId);
         TaskDto taskDto = taskUpdateService.updateTaskDates(taskDatesUpdateVo);
@@ -152,9 +158,32 @@ public class TaskUpdateManager {
                 .ifPresent(newAssignee -> validateAccess(taskId, newAssignee));
     }
 
-    private void validateDueDateIsAfterAssignedDate(ZonedDateTime assignedDate, ZonedDateTime dueDate) {
-        if (Objects.nonNull(assignedDate) && Objects.nonNull(dueDate) && assignedDate.isAfter(dueDate)) {
-            throw new BusinessException();
+    private void validateDueDateIsAfterAssignedDate(TaskDateUpdateRequest taskDateUpdateRequest, String timeZone) {
+        ZonedDateTime assignedDate = Optional.of(taskDateUpdateRequest)
+                .map(TaskDateUpdateRequest::getAssignedDate)
+                .map(date -> ZonedDateHelper.atTimeZone(date, timeZone))
+                .orElse(null);
+        ZonedDateTime dueDate = Optional.of(taskDateUpdateRequest)
+                .map(TaskDateUpdateRequest::getDueDate)
+                .map(date -> ZonedDateHelper.atTimeZone(date, timeZone))
+                .orElse(null);
+        if (Objects.isNull(assignedDate) || Objects.isNull(dueDate)) {
+            return;
         }
+
+        boolean isSameDay = checkIfDueDateAndAssignedDateIsSameDay(assignedDate, dueDate);
+        boolean isDueDatePrecise = Boolean.TRUE.equals(taskDateUpdateRequest.getHasPreciseDueDate());
+        boolean isDueDateNotPreciseAndBothDatesAreSameDay = isSameDay && !isDueDatePrecise;
+        boolean isAssignedDateAfter = assignedDate.isAfter(dueDate);
+        if (isAssignedDateAfter && !isDueDateNotPreciseAndBothDatesAreSameDay) {
+            throw new BusinessException("task.reminder.due-date-not-future");
+        }
+    }
+
+    private boolean checkIfDueDateAndAssignedDateIsSameDay(ZonedDateTime assignedDate, ZonedDateTime dueDate) {
+        if (Objects.nonNull(assignedDate) && Objects.nonNull(dueDate)) {
+            return dueDate.truncatedTo(ChronoUnit.DAYS).equals(assignedDate.truncatedTo(ChronoUnit.DAYS));
+        }
+        return false;
     }
 }
