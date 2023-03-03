@@ -1,7 +1,7 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { popChangeTaskDateModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
-import { format, getHours, getMinutes } from "date-fns";
+import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { useTask } from "../../context/TaskDetailContext";
@@ -13,7 +13,6 @@ const TaskAssignedDateButton: React.FC<TaskAssignedDateButtonProps> = ({}) => {
   const { t } = useTranslation();
   const task = useTask();
   const assignedDate = new Date(task.assignedDate);
-  const hasTime = getHours(assignedDate) != 0 || getMinutes(assignedDate);
   const dispatch = useAppDispatch();
 
   const popChangeAssignedDateModal = () => {
@@ -33,7 +32,9 @@ const TaskAssignedDateButton: React.FC<TaskAssignedDateButtonProps> = ({}) => {
           <b>
             {format(
               assignedDate,
-              hasTime ? t("dateTimeFormat") : t("dateFormat")
+              task.hasPreciseAssignedDate
+                ? t("dateTimeFormat")
+                : t("dateFormat")
             )}
           </b>
         </>

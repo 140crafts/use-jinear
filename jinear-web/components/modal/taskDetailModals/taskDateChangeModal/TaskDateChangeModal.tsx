@@ -3,6 +3,8 @@ import TimePicker from "@/components/timePicker/TimePicker";
 import { useUpdateTaskDatesMutation } from "@/store/api/taskUpdateApi";
 import {
   closeChangeTaskDateModal,
+  selectChangeTaskDateModalHasPreciseAssignedDate,
+  selectChangeTaskDateModalHasPreciseDueDate,
   selectChangeTaskDateModalTaskCurrentAssignedDate,
   selectChangeTaskDateModalTaskCurrentDueDate,
   selectChangeTaskDateModalTaskId,
@@ -47,14 +49,22 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectChangeTaskDateModalVisible);
   const taskId = useTypedSelector(selectChangeTaskDateModalTaskId);
+
+  const hasPreciseAssignedDate =
+    useTypedSelector(selectChangeTaskDateModalHasPreciseAssignedDate) || false;
+  const hasPreciseDueDate =
+    useTypedSelector(selectChangeTaskDateModalHasPreciseDueDate) || false;
+
   const [assignedDateVal, setAssignedDateVal] = useState<Date | null>(
     new Date()
   );
   const [dueDateVal, setDueDateVal] = useState<Date | null>(new Date());
+
   const [assignedDateTimePickerVisible, setAssignedDateTimePickerVisible] =
-    useState<boolean>(false);
+    useState<boolean>(hasPreciseAssignedDate);
   const [dueDateTimePickerVisible, setDueDateTimePickerVisible] =
-    useState<boolean>(false);
+    useState<boolean>(hasPreciseDueDate);
+
   const assignedInputRef = useRef<HTMLInputElement>(null);
   const dueInputRef = useRef<HTMLInputElement>(null);
 
@@ -81,6 +91,7 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
       unsetAssignedDate();
       unsetDueDate();
       setAssignedDateTimePickerVisible(false);
+      setDueDateTimePickerVisible(false);
     }
   }, [visible, currentAssigned, currentDue]);
 
@@ -95,35 +106,34 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
       assignedDateVal,
       dueDateVal,
     });
-    if (
-      visible &&
-      assignedDateVal &&
-      dueDateVal &&
-      (isBefore(dueDateVal, assignedDateVal) ||
-        isEqual(dueDateVal, assignedDateVal))
-    ) {
-      toast(t("changeTaskDateDueDateIsBeforeAssignedDate"));
-      isSameDay(assignedDateVal, dueDateVal)
-        ? setDueDateOneHourAfterAssignedDate()
-        : setDueDateDayAfterAssignedDate();
-    }
-    if (assignedDateVal) {
-      const assignedDateHours = getHours(assignedDateVal);
-      const assignedDateMinutes = getMinutes(assignedDateVal);
-      logger.log({ assignedDateHours, assignedDateMinutes });
-      if (assignedDateHours != 0 || assignedDateMinutes != 0) {
-        setAssignedDateTimePickerVisible(true);
+    if (visible && assignedDateVal && dueDateVal) {
+      const dueDateIsBeforeAssignedDate =
+        isBefore(dueDateVal, assignedDateVal) ||
+        isEqual(dueDateVal, assignedDateVal);
+      const datesAreSameDay = isSameDay(assignedDateVal, dueDateVal);
+      const isDueDatePrecise = dueDateTimePickerVisible;
+      const isDueDatePreciseAndBothDatesAreSameDay =
+        datesAreSameDay && !isDueDatePrecise;
+      if (
+        dueDateIsBeforeAssignedDate &&
+        !isDueDatePreciseAndBothDatesAreSameDay
+      ) {
+        toast(t("changeTaskDateDueDateIsBeforeAssignedDate"));
+        isSameDay(assignedDateVal, dueDateVal)
+          ? setDueDateOneHourAfterAssignedDate()
+          : setDueDateDayAfterAssignedDate();
       }
     }
-    if (dueDateVal) {
-      const dueDateHours = getHours(dueDateVal);
-      const dueDateMinutes = getMinutes(dueDateVal);
-      logger.log({ dueDateHours, dueDateMinutes });
-      if (dueDateHours != 0 || dueDateMinutes != 0) {
-        setDueDateTimePickerVisible(true);
-      }
+  }, [visible, assignedDateVal, dueDateVal, dueDateTimePickerVisible]);
+
+  useEffect(() => {
+    if (hasPreciseAssignedDate) {
+      setAssignedDateTimePickerVisible(hasPreciseAssignedDate);
     }
-  }, [visible, assignedDateVal, dueDateVal]);
+    if (hasPreciseDueDate) {
+      setDueDateTimePickerVisible(hasPreciseDueDate);
+    }
+  }, [hasPreciseAssignedDate, hasPreciseDueDate]);
 
   const onAssignedDateChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -264,12 +274,16 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
 
   const save = () => {
     if (!taskId) return;
+    const req = {
+      assignedDate: assignedDateVal,
+      dueDate: dueDateVal,
+      hasPreciseAssignedDate: assignedDateTimePickerVisible,
+      hasPreciseDueDate: dueDateTimePickerVisible,
+    };
+    logger.log(req);
     updateTaskDates?.({
       taskId,
-      body: {
-        assignedDate: assignedDateVal,
-        dueDate: dueDateVal,
-      },
+      body: req,
     });
   };
 

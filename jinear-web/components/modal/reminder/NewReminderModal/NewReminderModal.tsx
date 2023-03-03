@@ -58,18 +58,25 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
     (taskReminder) => taskReminder.taskReminderType == "ASSIGNED_DATE"
   );
   const taskHasAssignedDate = task?.assignedDate;
-  //TODO cgds-73
+
   const formattedAssignedDate =
     taskHasAssignedDate &&
-    format(new Date(task.assignedDate), t("dateTimeFormat"));
+    format(
+      new Date(task.assignedDate),
+      task.hasPreciseAssignedDate ? t("dateTimeFormat") : t("dateFormat")
+    );
 
   const hasAnyDueDateReminder = task?.taskReminders?.find(
     (taskReminder) => taskReminder.taskReminderType == "DUE_DATE"
   );
   const taskHasDueDate = task?.dueDate;
-  //TODO cgds-73
+
   const formattedDueDate =
-    taskHasDueDate && format(new Date(task.dueDate), t("dateTimeFormat"));
+    taskHasDueDate &&
+    format(
+      new Date(task.dueDate),
+      task.hasPreciseDueDate ? t("dateTimeFormat") : t("dateFormat")
+    );
 
   const [initializeTaskReminder, { isSuccess, isLoading, isError }] =
     useInitializeTaskReminderMutation();
@@ -137,7 +144,7 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
       visible={visible}
       title={t("taskNewReminderModalTitle")}
       bodyClass={styles.container}
-      hasTitleCloseButton={false}
+      hasTitleCloseButton={true}
     >
       <form
         autoComplete="off"

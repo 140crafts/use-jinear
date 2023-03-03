@@ -328,6 +328,11 @@ export const selectChangeTaskDateModalTaskCurrentAssignedDate = (
 ) => state.modal.changeTaskDateModal?.task?.assignedDate;
 export const selectChangeTaskDateModalTaskCurrentDueDate = (state: RootState) =>
   state.modal.changeTaskDateModal?.task?.dueDate;
+export const selectChangeTaskDateModalHasPreciseAssignedDate = (
+  state: RootState
+) => state.modal.changeTaskDateModal?.task?.hasPreciseAssignedDate;
+export const selectChangeTaskDateModalHasPreciseDueDate = (state: RootState) =>
+  state.modal.changeTaskDateModal?.task?.hasPreciseDueDate;
 
 export const selectChangeTaskAssigneeModalVisible = (state: RootState) =>
   state.modal.changeTaskAssigneeModal?.visible;

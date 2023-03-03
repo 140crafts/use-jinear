@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-03-01 17:35:46.
+// Generated using typescript-generator version 3.0.1157 on 2023-03-04 00:33:58.
 
 export interface BaseDto {
   createdDate: Date;
@@ -27,6 +27,7 @@ export interface AccountDto extends BaseDto {
   email: string;
   emailConfirmed: boolean;
   localeType: LocaleType;
+  timeZone: string;
   username?: string | null;
   roles: AccountRoleDto[];
   profilePicture?: MediaDto | null;
@@ -48,6 +49,7 @@ export interface PlainAccountProfileDto extends BaseDto {
   email: string;
   username: string;
   localeType: LocaleType;
+  timeZone: string;
   profilePicture?: MediaDto | null;
 }
 
@@ -98,6 +100,8 @@ export interface RelatedTaskDto extends BaseDto {
   assignedTo: string;
   assignedDate: Date;
   dueDate: Date;
+  hasPreciseAssignedDate: boolean;
+  hasPreciseDueDate: boolean;
   teamTagNo: number;
   topicTagNo: number;
   title: string;
@@ -119,6 +123,8 @@ export interface TaskDto extends BaseDto {
   assignedTo: string;
   assignedDate: Date;
   dueDate: Date;
+  hasPreciseAssignedDate: boolean;
+  hasPreciseDueDate: boolean;
   teamTagNo: number;
   topicTagNo: number;
   title: string;
@@ -348,6 +354,8 @@ export interface TaskAssigneeUpdateRequest {
 export interface TaskDateUpdateRequest {
   assignedDate?: Date | null;
   dueDate?: Date | null;
+  hasPreciseAssignedDate?: boolean | null;
+  hasPreciseDueDate?: boolean | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -357,6 +365,8 @@ export interface TaskInitializeRequest extends BaseRequest {
   assignedTo?: string | null;
   assignedDate?: Date | null;
   dueDate?: Date | null;
+  hasPreciseAssignedDate?: boolean | null;
+  hasPreciseDueDate?: boolean | null;
   title: string;
   description?: string | null;
   subTaskOf?: string | null;
