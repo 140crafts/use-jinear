@@ -95,15 +95,18 @@ public class Task extends BaseEntity {
     @OneToMany(mappedBy = "task")
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Set<TaskRelation> relations;
 
     @OneToMany(mappedBy = "relatedTask")
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Set<TaskRelation> relatedIn;
 
     @OneToMany(mappedBy = "task")
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
+    @NotFound(action = NotFoundAction.IGNORE)
     private Set<TaskReminder> taskReminders;
 }

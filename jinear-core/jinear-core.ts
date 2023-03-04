@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-03-01 17:41:21.
+// Generated using typescript-generator version 3.0.1157 on 2023-03-04 13:57:58.
 
 export interface BaseDto {
     createdDate: Date;
@@ -100,6 +100,8 @@ export interface RelatedTaskDto extends BaseDto {
     assignedTo: string;
     assignedDate: Date;
     dueDate: Date;
+    hasPreciseAssignedDate: boolean;
+    hasPreciseDueDate: boolean;
     teamTagNo: number;
     topicTagNo: number;
     title: string;
@@ -121,6 +123,8 @@ export interface TaskDto extends BaseDto {
     assignedTo: string;
     assignedDate: Date;
     dueDate: Date;
+    hasPreciseAssignedDate: boolean;
+    hasPreciseDueDate: boolean;
     teamTagNo: number;
     topicTagNo: number;
     title: string;
@@ -151,6 +155,29 @@ export interface TaskReminderDto extends BaseDto {
     reminderId: string;
     taskReminderType: TaskReminderType;
     reminder: ReminderDto;
+}
+
+export interface TaskSearchResultDto extends BaseDto {
+    taskId: string;
+    topicId: string;
+    workspaceId: string;
+    teamId: string;
+    ownerId: string;
+    workflowStatusId: string;
+    assignedTo: string;
+    assignedDate: Date;
+    dueDate: Date;
+    hasPreciseAssignedDate: boolean;
+    hasPreciseDueDate: boolean;
+    teamTagNo: number;
+    topicTagNo: number;
+    title: string;
+    teamTag: string;
+    workflowStateName: string;
+    workflowStateGroup: TeamWorkflowStateGroup;
+}
+
+export interface TaskSearchResultDtoBuilder {
 }
 
 export interface TaskSubscriptionDto extends BaseDto {
@@ -348,6 +375,8 @@ export interface TaskAssigneeUpdateRequest {
 export interface TaskDateUpdateRequest {
     assignedDate?: Date | null;
     dueDate?: Date | null;
+    hasPreciseAssignedDate?: boolean | null;
+    hasPreciseDueDate?: boolean | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -357,6 +386,8 @@ export interface TaskInitializeRequest extends BaseRequest {
     assignedTo?: string | null;
     assignedDate?: Date | null;
     dueDate?: Date | null;
+    hasPreciseAssignedDate?: boolean | null;
+    hasPreciseDueDate?: boolean | null;
     title: string;
     description?: string | null;
     subTaskOf?: string | null;
@@ -490,7 +521,7 @@ export interface TaskResponse extends BaseResponse {
 }
 
 export interface TaskSearchResponse extends BaseResponse {
-    data: PageDto<TaskDto>;
+    data: PageDto<TaskSearchResultDto>;
 }
 
 export interface TeamListingResponse extends BaseResponse {
