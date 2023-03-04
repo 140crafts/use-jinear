@@ -53,6 +53,12 @@ public class Task extends BaseEntity {
     @Column(name = "due_date")
     private ZonedDateTime dueDate;
 
+    @Column(name = "has_precise_assigned_date")
+    private Boolean hasPreciseAssignedDate;
+
+    @Column(name = "has_precise_due_date")
+    private Boolean hasPreciseDueDate;
+
     @Column(name = "topic_tag_no")
     private Integer topicTagNo;
 

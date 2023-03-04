@@ -100,6 +100,8 @@ public class TaskUpdateService {
         Task task = taskRetrieveService.retrieveEntity(taskDatesUpdateVo.getTaskId());
         task.setAssignedDate(taskDatesUpdateVo.getAssignedDate());
         task.setDueDate(taskDatesUpdateVo.getDueDate());
+        task.setHasPreciseAssignedDate(taskDatesUpdateVo.getHasPreciseAssignedDate());
+        task.setHasPreciseDueDate(taskDatesUpdateVo.getHasPreciseDueDate());
         Task saved = taskRepository.save(task);
         updateRelatedReminderDates(saved);
         log.info("Update task assigned and due date has finished");

@@ -25,6 +25,8 @@ public class RelatedTaskDto extends BaseDto {
     private String assignedTo;
     private ZonedDateTime assignedDate;
     private ZonedDateTime dueDate;
+    private Boolean hasPreciseAssignedDate;
+    private Boolean hasPreciseDueDate;
     private Integer teamTagNo;
     private Integer topicTagNo;
     private String title;

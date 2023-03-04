@@ -33,4 +33,13 @@ public class BaseEntity {
             lastUpdatedDate = DateHelper.now();
         }
     }
+
+    @PreUpdate
+    void preUpdate() {
+        if (createdDate == null) {
+            createdDate = DateHelper.now();
+        }else{
+            lastUpdatedDate = DateHelper.now();
+        }
+    }
 }

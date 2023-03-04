@@ -35,6 +35,12 @@ public class TaskInitializeRequest extends BaseRequest {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime dueDate;
 
+    @Nullable
+    private Boolean hasPreciseAssignedDate;
+
+    @Nullable
+    private Boolean hasPreciseDueDate;
+
     @NotBlank
     private String title;
 

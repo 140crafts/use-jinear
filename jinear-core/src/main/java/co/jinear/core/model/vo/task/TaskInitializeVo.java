@@ -18,6 +18,8 @@ public class TaskInitializeVo {
     private String assignedTo;
     private ZonedDateTime assignedDate;
     private ZonedDateTime dueDate;
+    private Boolean hasPreciseAssignedDate;
+    private Boolean hasPreciseDueDate;
     private String title;
     private String description;
     private String subTaskOf;

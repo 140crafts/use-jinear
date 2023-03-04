@@ -8,13 +8,13 @@ import co.jinear.core.model.dto.task.TaskReminderDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.vo.mail.TaskReminderMailVo;
 import co.jinear.core.system.NormalizeHelper;
+import co.jinear.core.system.util.ZonedDateHelper;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 @Mapper(componentModel = "spring")
@@ -31,12 +31,11 @@ public interface TaskReminderMailVoConverter {
     @AfterMapping
     default void afterMap(@MappingTarget TaskReminderMailVo taskReminderMailVo, TaskDto task, PlainAccountProfileDto plainAccountProfileDto, ReminderJobDto reminderJobDto) {
         //TODO cgds-73
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("(HH:mm dd.MM.yyyy)");
         Optional.of(plainAccountProfileDto)
                 .map(PlainAccountProfileDto::getTimeZone)
                 .map(ZoneId::of)
                 .map(userZoneId -> reminderJobDto.getDate().withZoneSameInstant(userZoneId))
-                .map(dateInUserZone -> dateInUserZone.format(formatter))
+                .map(ZonedDateHelper::formatWithDateTimeFormat1)
                 .ifPresent(taskReminderMailVo::setAccountLocaleDate);
 
         String taskDetail = Optional.of(task)
