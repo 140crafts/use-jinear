@@ -2,7 +2,7 @@ import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import NewTaskForm from "@/components/form/newTaskForm/NewTaskForm";
 import Line from "@/components/line/Line";
 import { useToggle } from "@/hooks/useToggle";
-import { TaskDto } from "@/model/be/jinear-core";
+import { TaskSearchResultDto } from "@/model/be/jinear-core";
 import { useInitializeTaskRelationMutation } from "@/store/api/taskRelationApi";
 import {
   changeLoadingModalVisibility,
@@ -28,7 +28,8 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
   const showSubTaskListEvenIfNoSubtasks = useShowSubTaskListEvenIfNoSubtasks();
 
   const { current: newTaskInputVisible, toggle: toggleNewTaskInputVisible } =
-    useToggle(showSubTaskListEvenIfNoSubtasks);
+    useToggle(false);
+  // useToggle(showSubTaskListEvenIfNoSubtasks);
 
   const [
     initializeTaskRelation,
@@ -50,7 +51,7 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
     }
   }, [isInitializeRelationSuccess, isInitializeRelationError]);
 
-  const onExistingTaskSelect = (selectedTask: TaskDto) => {
+  const onExistingTaskSelect = (selectedTask: TaskSearchResultDto) => {
     dispatch(changeLoadingModalVisibility({ visible: true }));
     initializeTaskRelation({
       taskId: selectedTask.taskId,
@@ -82,19 +83,21 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
             />
           ))}
 
+          {!hasSubTasks && <div>{t("taskSubtaskListEmpty")}</div>}
+
           <div className={styles.newInputContent}>
             {!newTaskInputVisible && (
               <div className={styles.newTaskInputButtonContainer}>
                 <Button
                   onClick={toggleNewTaskInputVisible}
-                  variant={ButtonVariants.filled2}
+                  variant={ButtonVariants.filled}
                   heightVariant={ButtonHeight.short}
                 >
                   {t("taskSubtaskListAddNewTaskButton")}
                 </Button>
                 <Button
                   onClick={openSearchTaskModal}
-                  variant={ButtonVariants.filled2}
+                  variant={ButtonVariants.contrast}
                   heightVariant={ButtonHeight.short}
                 >
                   {t("taskSubtaskListAddExistingTaskButton")}
