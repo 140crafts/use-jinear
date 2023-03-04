@@ -10,12 +10,7 @@ interface CodeStageProps {
   inputRef: RefObject<HTMLInputElement>;
 }
 
-const CodeStage: React.FC<CodeStageProps> = ({
-  onPrimaryButtonClick,
-  className,
-  infoClassName,
-  inputRef,
-}) => {
+const CodeStage: React.FC<CodeStageProps> = ({ onPrimaryButtonClick, className, infoClassName, inputRef }) => {
   const { t } = useTranslation();
   useEffect(() => {
     setTimeout(() => {
@@ -32,10 +27,7 @@ const CodeStage: React.FC<CodeStageProps> = ({
         onEnterCallback={onPrimaryButtonClick}
         placeholder={t("loginScreenCodePlaceholder")}
       />
-      <span
-        className={infoClassName}
-        dangerouslySetInnerHTML={{ __html: t("loginScreenCodeSubText") }}
-      />
+      <span className={infoClassName} dangerouslySetInnerHTML={{ __html: t("loginScreenCodeSubText") }} />
     </div>
   );
 };

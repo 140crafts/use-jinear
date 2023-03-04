@@ -34,9 +34,7 @@ const TaskPeriodViewCard: React.FC<TaskPeriodViewCardProps> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const popChangeDatesModal = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const popChangeDatesModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event?.preventDefault?.();
     dispatch(popChangeTaskDateModal({ visible: true, task }));
   };
@@ -48,33 +46,20 @@ const TaskPeriodViewCard: React.FC<TaskPeriodViewCardProps> = ({
       style={style}
     >
       <div className={styles.content}>
-        <TitleCell
-          task={task}
-          duration={duration}
-          data-tooltip-multiline={duration == 1 ? task.title : undefined}
-        />
+        <TitleCell task={task} duration={duration} data-tooltip-multiline={duration == 1 ? task.title : undefined} />
         {showAdditionalInfo && (
           <div className={styles.infoContainer}>
-            <StartDateBeforeIcon
-              assignedDate={task.assignedDate}
-              isStartDateBefore={isStartDateBefore}
-            />
+            <StartDateBeforeIcon assignedDate={task.assignedDate} isStartDateBefore={isStartDateBefore} />
 
             <TeamTagCell task={task} className={styles.taskTagCell} />
 
-            <Button
-              className={styles.taskTagCell}
-              onClick={popChangeDatesModal}
-            >
+            <Button className={styles.taskTagCell} onClick={popChangeDatesModal}>
               <IoTime size={12} />
             </Button>
 
             <AssigneeCell task={task} className={styles.taskTagCell} />
             <div className="flex-1" />
-            <DueDateAfterIcon
-              dueDate={task.dueDate}
-              isDueDateAfter={isDueDateAfter}
-            />
+            <DueDateAfterIcon dueDate={task.dueDate} isDueDateAfter={isDueDateAfter} />
           </div>
         )}
       </div>

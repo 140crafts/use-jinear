@@ -3,16 +3,11 @@ import { api } from "./api";
 
 export const taskSearchApi = api.injectEndpoints({
   endpoints: (build) => ({
-    searchTask: build.query<
-      TaskSearchResponse,
-      { workspaceId: string; teamId: string; title: string; page?: number }
-    >({
+    searchTask: build.query<TaskSearchResponse, { workspaceId: string; teamId: string; title: string; page?: number }>({
       query: (req) => {
         const { workspaceId, teamId, title } = req;
         const page = req.page ? req.page : 0;
-        return `v1/task/search/${workspaceId}/${teamId}/${encodeURI(
-          title
-        )}?page=${page}`;
+        return `v1/task/search/${workspaceId}/${teamId}/${encodeURI(title)}?page=${page}`;
       },
       providesTags: (_result, _err, req) => [
         {

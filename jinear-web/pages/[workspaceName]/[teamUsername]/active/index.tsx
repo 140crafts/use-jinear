@@ -15,13 +15,7 @@ const ActiveTaskListScreen: React.FC<ActiveTaskListScreenProps> = ({}) => {
   return (
     <div className={styles.container}>
       <TaskListScreenBreadcrumb type="active" />
-      {team && (
-        <TaskListGroupedByWorkflowStatus
-          type="active"
-          teamId={team.teamId}
-          workspaceId={team.workspaceId}
-        />
-      )}
+      {team && <TaskListGroupedByWorkflowStatus type="active" teamId={team.teamId} workspaceId={team.workspaceId} />}
     </div>
   );
 };

@@ -3,13 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import styles from "./style.module.css";
 
-export type ModalWidth =
-  | "medium-fixed"
-  | "default"
-  | "large"
-  | "xlarge"
-  | "xxlarge"
-  | "fullscreen";
+export type ModalWidth = "medium-fixed" | "default" | "large" | "xlarge" | "xxlarge" | "fullscreen";
 
 export interface BaseModalProps {
   visible?: boolean;
@@ -36,14 +30,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
     <AnimatePresence initial={false} exitBeforeEnter={true}>
       {visible && (
         <div className={cn(styles.container, styles[`${width}-container`])}>
-          <div
-            className={cn([
-              styles.content,
-              styles[`${width}-content`],
-              contentClassName,
-            ])}
-            onClick={avoid}
-          >
+          <div className={cn([styles.content, styles[`${width}-content`], contentClassName])} onClick={avoid}>
             <motion.div
               className={cn(styles.children, contentContainerClass)}
               initial={{ opacity: 0 }}

@@ -9,10 +9,7 @@ interface AutoCompleteViewProps {
   forElement: string;
 }
 
-const AutoCompleteView: React.FC<AutoCompleteViewProps> = ({
-  children,
-  forElement,
-}) => {
+const AutoCompleteView: React.FC<AutoCompleteViewProps> = ({ children, forElement }) => {
   const { activeElement, listenersReady } = useActiveElement();
   const [activeEl, setActiveEl] = useState(activeElement);
   const isPresent = activeEl?.id == forElement;

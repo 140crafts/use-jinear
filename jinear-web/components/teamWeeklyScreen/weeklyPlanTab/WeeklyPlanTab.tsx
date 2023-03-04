@@ -8,12 +8,7 @@ interface WeeklyPlanTabProps {
   containerRef?: React.RefObject<HTMLDivElement>;
 }
 
-const WeeklyPlanTab: React.FC<WeeklyPlanTabProps> = ({
-  teamId,
-  workspaceId,
-  viewingWeekStart,
-  containerRef,
-}) => {
+const WeeklyPlanTab: React.FC<WeeklyPlanTabProps> = ({ teamId, workspaceId, viewingWeekStart, containerRef }) => {
   return teamId && workspaceId ? (
     <TeamWeekView
       teamId={teamId}

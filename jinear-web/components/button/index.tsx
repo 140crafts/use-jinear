@@ -62,9 +62,7 @@ interface ButtonProps {
   progessSize?: number;
   className?: string;
   onClick?: (event?: any) => void;
-  onMouseDown?: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => void;
+  onMouseDown?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   type?: string;
   form?: string;
   style?: any;
@@ -91,19 +89,11 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       href={href as string}
       target={target as string}
-      className={cn(
-        styles.button,
-        styles?.[heightVariant],
-        styles?.[variant],
-        className
-      )}
+      className={cn(styles.button, styles?.[heightVariant], styles?.[variant], className)}
     >
       {loading ? (
         <CircularProgress
-          className={cn([
-            variant == "contrast" ? styles.progessContrast : styles.progess,
-            progessClassname,
-          ])}
+          className={cn([variant == "contrast" ? styles.progessContrast : styles.progess, progessClassname])}
           size={progessSize}
         />
       ) : (

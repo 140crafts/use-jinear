@@ -27,5 +27,4 @@ const slice = createSlice({
 export const { popMenu, closeMenu } = slice.actions;
 export default slice.reducer;
 
-export const selectAppMenuVisible = (state: RootState) =>
-  state.displayPreference.appMenu.mobileVisible;
+export const selectAppMenuVisible = (state: RootState) => state.displayPreference.appMenu.mobileVisible;

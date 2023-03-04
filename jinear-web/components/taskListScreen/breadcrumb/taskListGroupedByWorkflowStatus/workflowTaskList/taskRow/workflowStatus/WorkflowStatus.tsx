@@ -4,13 +4,7 @@ import { popChangeTaskWorkflowStatusModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import {
-  IoCheckmarkCircle,
-  IoCloseCircle,
-  IoContrast,
-  IoEllipseOutline,
-  IoPauseCircleOutline,
-} from "react-icons/io5";
+import { IoCheckmarkCircle, IoCloseCircle, IoContrast, IoEllipseOutline, IoPauseCircleOutline } from "react-icons/io5";
 import styles from "./WorkflowStatus.module.css";
 
 interface WorkflowStatusProps {
@@ -40,9 +34,7 @@ const WorkflowStatus: React.FC<WorkflowStatusProps> = ({ task }) => {
       className={styles.container}
       data-tooltip-right={t("taskDetailChangeWorkflowStatusTooltip")}
     >
-      <div className={styles.iconContainer}>
-        {groupIconMap?.[task.workflowStatus.workflowStateGroup]}
-      </div>
+      <div className={styles.iconContainer}>{groupIconMap?.[task.workflowStatus.workflowStateGroup]}</div>
     </Button>
   );
 };

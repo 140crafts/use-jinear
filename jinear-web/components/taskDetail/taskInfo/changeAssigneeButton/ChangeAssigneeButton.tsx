@@ -11,9 +11,7 @@ interface ChangeAssigneeButtonProps {
   className?: string;
 }
 
-const ChangeAssigneeButton: React.FC<ChangeAssigneeButtonProps> = ({
-  className,
-}) => {
+const ChangeAssigneeButton: React.FC<ChangeAssigneeButtonProps> = ({ className }) => {
   const task = useTask();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();

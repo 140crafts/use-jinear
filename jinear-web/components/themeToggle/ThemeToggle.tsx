@@ -12,25 +12,13 @@ interface ThemeToggleProps {
   buttonStyle?: string;
 }
 
-const ThemeToggle: React.FC<ThemeToggleProps> = ({
-  variant = ButtonVariants.default,
-  buttonStyle,
-  iconSize = 13,
-}) => {
+const ThemeToggle: React.FC<ThemeToggleProps> = ({ variant = ButtonVariants.default, buttonStyle, iconSize = 13 }) => {
   const theme = useTheme();
   const toggleTheme = useThemeToggle();
   return (
     <ClientOnly>
-      <Button
-        variant={variant}
-        onClick={toggleTheme}
-        className={cn(styles.iconButton, buttonStyle)}
-      >
-        {theme == "dark" ? (
-          <IoMoonOutline size={iconSize} />
-        ) : (
-          <IoMoon size={iconSize} />
-        )}
+      <Button variant={variant} onClick={toggleTheme} className={cn(styles.iconButton, buttonStyle)}>
+        {theme == "dark" ? <IoMoonOutline size={iconSize} /> : <IoMoon size={iconSize} />}
       </Button>
     </ClientOnly>
   );

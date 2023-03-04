@@ -9,13 +9,10 @@ import styles from "./index.module.css";
 
 interface ResetPasswordCompletePageProps {}
 
-const ResetPasswordCompletePage: React.FC<
-  ResetPasswordCompletePageProps
-> = ({}) => {
+const ResetPasswordCompletePage: React.FC<ResetPasswordCompletePageProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const [completeResetPassword, { isSuccess, isError, isLoading }] =
-    useCompleteResetPasswordMutation();
+  const [completeResetPassword, { isSuccess, isError, isLoading }] = useCompleteResetPasswordMutation();
 
   const token: string = router.query?.token as string;
 
@@ -34,29 +31,21 @@ const ResetPasswordCompletePage: React.FC<
       <div className={styles.infoContainer}>
         {isSuccess && !isError && (
           <>
-            <div className={styles.title}>
-              {t("engageCompletePasswordResetSuccessTitle")}
-            </div>
+            <div className={styles.title}>{t("engageCompletePasswordResetSuccessTitle")}</div>
             <div>{t("engageCompletePasswordResetSuccessText")}</div>
             <div className="spacer-h-4" />
             <div className={styles.actionButtonContainer}>
-              <Button href={"/login"}>
-                {t("engageCompletePasswordResetLoginPage")}
-              </Button>
+              <Button href={"/login"}>{t("engageCompletePasswordResetLoginPage")}</Button>
             </div>
           </>
         )}
         {!isSuccess && isError && (
           <>
-            <div className={styles.title}>
-              {t("engageCompletePasswordResetErrorTitle")}
-            </div>
+            <div className={styles.title}>{t("engageCompletePasswordResetErrorTitle")}</div>
             <div>{t("engageCompletePasswordResetErrorText")}</div>
             <div className="spacer-h-2" />
             <div className={styles.actionButtonContainer}>
-              <Button href={"/forgot-password"}>
-                {t("engageCompletePasswordResetForgotPasswordPage")}
-              </Button>
+              <Button href={"/forgot-password"}>{t("engageCompletePasswordResetForgotPasswordPage")}</Button>
             </div>
           </>
         )}

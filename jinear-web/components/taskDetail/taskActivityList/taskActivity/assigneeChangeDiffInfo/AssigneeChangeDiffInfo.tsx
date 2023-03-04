@@ -7,16 +7,10 @@ interface AssigneeChangeDiffInfoProps {
   activity: WorkspaceActivityDto;
 }
 
-const AssigneeChangeDiffInfo: React.FC<AssigneeChangeDiffInfoProps> = ({
-  activity,
-}) => {
+const AssigneeChangeDiffInfo: React.FC<AssigneeChangeDiffInfoProps> = ({ activity }) => {
   const { t } = useTranslation();
-  const oldUsername =
-    activity.oldAssignedToAccount?.username ||
-    t("taskWorkflowActivityInfoAssigneeNoone");
-  const newUsername =
-    activity.newAssignedToAccount?.username ||
-    t("taskWorkflowActivityInfoAssigneeNoone");
+  const oldUsername = activity.oldAssignedToAccount?.username || t("taskWorkflowActivityInfoAssigneeNoone");
+  const newUsername = activity.newAssignedToAccount?.username || t("taskWorkflowActivityInfoAssigneeNoone");
 
   return (
     <div className={styles.container}>

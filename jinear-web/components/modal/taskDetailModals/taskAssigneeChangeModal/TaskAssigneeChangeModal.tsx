@@ -13,15 +13,11 @@ import TeamMemberList from "./teamMemberList/TeamMemberList";
 
 interface TaskAssigneeChangeModalProps {}
 
-const TaskAssigneeChangeModal: React.FC<
-  TaskAssigneeChangeModalProps
-> = ({}) => {
+const TaskAssigneeChangeModal: React.FC<TaskAssigneeChangeModalProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectChangeTaskAssigneeModalVisible);
-  const teamId = useTypedSelector(
-    selectChangeTaskAssigneeModalTaskCurrentTeamId
-  );
+  const teamId = useTypedSelector(selectChangeTaskAssigneeModalTaskCurrentTeamId);
   const filterInputRef = useRef<HTMLInputElement>(null);
   const [filterValue, setFilterValue] = useState<string>("");
 
@@ -52,17 +48,10 @@ const TaskAssigneeChangeModal: React.FC<
     >
       <label className={styles.label} htmlFor={"assignee-filter"}>
         {t("changeTaskAssigneeModalFilterLabel")}
-        <input
-          ref={filterInputRef}
-          id={"assignee-filter"}
-          type={"text"}
-          onChange={onFilterValue}
-        />
+        <input ref={filterInputRef} id={"assignee-filter"} type={"text"} onChange={onFilterValue} />
       </label>
 
-      {teamId && (
-        <TeamMemberList teamId={teamId} filter={filterValue} close={close} />
-      )}
+      {teamId && <TeamMemberList teamId={teamId} filter={filterValue} close={close} />}
       <RemoveCurrentAssignee close={close} />
     </Modal>
   );

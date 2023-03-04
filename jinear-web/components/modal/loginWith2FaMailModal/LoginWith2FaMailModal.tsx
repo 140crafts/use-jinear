@@ -1,14 +1,8 @@
 import Button, { ButtonVariants } from "@/components/button";
 import { LocaleType } from "@/model/be/jinear-core";
-import {
-  useEmailLoginTokenRequestMutation,
-  useEmailOtpLoginCompleteMutation,
-} from "@/store/api/authApi";
+import { useEmailLoginTokenRequestMutation, useEmailOtpLoginCompleteMutation } from "@/store/api/authApi";
 
-import {
-  changeLoginWith2FaMailModalVisibility,
-  selectLoginWith2FaMailModalVisible,
-} from "@/store/slice/modalSlice";
+import { changeLoginWith2FaMailModalVisibility, selectLoginWith2FaMailModalVisible } from "@/store/slice/modalSlice";
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { validateEmail } from "@/utils/validator";
@@ -31,27 +25,14 @@ const logger = Logger("LoginWith2FaMailModal");
 const LoginWith2FaMailModal: React.FC<LoginWith2FaMailModalProps> = ({}) => {
   const [
     requestToken,
-    {
-      data: requestTokenResponse,
-      error: requestTokenError,
-      isLoading: isRequestTokenLoading,
-      reset: resetTokenCache,
-    },
+    { data: requestTokenResponse, error: requestTokenError, isLoading: isRequestTokenLoading, reset: resetTokenCache },
   ] = useEmailLoginTokenRequestMutation();
-  const [
-    login,
-    {
-      isSuccess: isLoginRequestSuccess,
-      isLoading: isLoginRequestLoading,
-      reset: resetLoginCache,
-    },
-  ] = useEmailOtpLoginCompleteMutation();
+  const [login, { isSuccess: isLoginRequestSuccess, isLoading: isLoginRequestLoading, reset: resetLoginCache }] =
+    useEmailOtpLoginCompleteMutation();
 
   const dispatch = useDispatch();
   const { t } = useTranslation();
-  const loginModalVisible = useTypedSelector(
-    selectLoginWith2FaMailModalVisible
-  );
+  const loginModalVisible = useTypedSelector(selectLoginWith2FaMailModalVisible);
   const step = requestTokenResponse?.csrf == null ? 0 : 1;
 
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -137,11 +118,7 @@ const LoginWith2FaMailModal: React.FC<LoginWith2FaMailModalProps> = ({}) => {
   };
 
   return (
-    <Modal
-      visible={loginModalVisible}
-      requestClose={close}
-      title={t("loginScreenTitle")}
-    >
+    <Modal visible={loginModalVisible} requestClose={close} title={t("loginScreenTitle")}>
       {step === 0 && (
         <EmailStage
           onPrimaryButtonClick={onPrimaryButtonClick}
@@ -171,9 +148,7 @@ const LoginWith2FaMailModal: React.FC<LoginWith2FaMailModalProps> = ({}) => {
       </Button>
       <div className="spacer-h-2" />
       <Button variant={ButtonVariants.default} onClick={onSecondaryButtonClick}>
-        {step === 0
-          ? t("cancel")
-          : t("loginScreenCodeCancel") + `        ${counter}`}
+        {step === 0 ? t("cancel") : t("loginScreenCodeCancel") + `        ${counter}`}
       </Button>
     </Modal>
   );

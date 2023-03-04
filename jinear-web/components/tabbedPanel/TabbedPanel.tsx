@@ -23,11 +23,7 @@ const retrieveNames = (children: React.ReactNode) => {
   return props;
 };
 
-const TabbedPanel: React.FC<TabbedPanelProps> = ({
-  initialTabName,
-  children,
-  containerClassName,
-}) => {
+const TabbedPanel: React.FC<TabbedPanelProps> = ({ initialTabName, children, containerClassName }) => {
   const tabs: TabViewProps[] = retrieveNames(children) as TabViewProps[];
   const [activeTab, setActiveTab] = useState<TabViewProps>(tabs?.[0]);
 

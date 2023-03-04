@@ -6,17 +6,10 @@ interface TaskRelationChangedDiffInfoProps {
   activity: WorkspaceActivityDto;
 }
 
-const TaskRelationChangedDiffInfo: React.FC<
-  TaskRelationChangedDiffInfoProps
-> = ({ activity }) => {
-  const field =
-    activity.type == "RELATION_INITIALIZED"
-      ? "newTaskRelationDto"
-      : "oldTaskRelationDto";
+const TaskRelationChangedDiffInfo: React.FC<TaskRelationChangedDiffInfoProps> = ({ activity }) => {
+  const field = activity.type == "RELATION_INITIALIZED" ? "newTaskRelationDto" : "oldTaskRelationDto";
   const relation = activity[field];
-  const taskTag = relation?.task.team?.tag
-    ? relation?.task.team?.tag + relation?.task.teamTagNo
-    : undefined;
+  const taskTag = relation?.task.team?.tag ? relation?.task.team?.tag + relation?.task.teamTagNo : undefined;
   const relatedTaskTag = relation?.relatedTask.team?.tag
     ? relation?.relatedTask.team?.tag + relation?.relatedTask.teamTagNo
     : undefined;

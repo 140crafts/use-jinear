@@ -11,11 +11,7 @@ interface TopicCardProps {
   teamName: string;
 }
 
-const TopicCard: React.FC<TopicCardProps> = ({
-  topic,
-  workspaceName,
-  teamName,
-}) => {
+const TopicCard: React.FC<TopicCardProps> = ({ topic, workspaceName, teamName }) => {
   const { t } = useTranslation();
   return (
     <div className={styles.container}>

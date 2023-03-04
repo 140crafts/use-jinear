@@ -7,9 +7,7 @@ interface CurrentAccountInfoProps {
   assignedToAccount: PlainAccountProfileDto;
 }
 
-const CurrentAccountInfo: React.FC<CurrentAccountInfoProps> = ({
-  assignedToAccount,
-}) => {
+const CurrentAccountInfo: React.FC<CurrentAccountInfoProps> = ({ assignedToAccount }) => {
   return assignedToAccount.profilePicture ? (
     <ProfilePhoto
       boringAvatarKey={assignedToAccount.accountId}
@@ -17,9 +15,7 @@ const CurrentAccountInfo: React.FC<CurrentAccountInfoProps> = ({
       wrapperClassName={styles.profilePic}
     />
   ) : (
-    <div className={styles.noPicChar}>
-      {assignedToAccount.username.substring(0, 1)?.toLocaleUpperCase?.()}
-    </div>
+    <div className={styles.noPicChar}>{assignedToAccount.username.substring(0, 1)?.toLocaleUpperCase?.()}</div>
   );
 };
 

@@ -13,9 +13,7 @@ import styles from "./WorkflowChangeStatusModal.module.css";
 
 interface WorkflowChangeStatusModalProps {}
 
-const WorkflowChangeStatusModal: React.FC<
-  WorkflowChangeStatusModalProps
-> = ({}) => {
+const WorkflowChangeStatusModal: React.FC<WorkflowChangeStatusModalProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectChangeTaskWorkflowStatusModalVisible);

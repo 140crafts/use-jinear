@@ -9,13 +9,7 @@ import {
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import React, { useEffect } from "react";
-import {
-  IoCheckmarkCircle,
-  IoCloseCircle,
-  IoContrast,
-  IoEllipseOutline,
-  IoPauseCircleOutline,
-} from "react-icons/io5";
+import { IoCheckmarkCircle, IoCloseCircle, IoContrast, IoEllipseOutline, IoPauseCircleOutline } from "react-icons/io5";
 import styles from "./StatusListButton.module.css";
 interface StatusListButtonProps {
   wfs: TeamWorkflowStatusDto;
@@ -34,8 +28,7 @@ const StatusListButton: React.FC<StatusListButtonProps> = ({ wfs }) => {
   const task = useTypedSelector(selectChangeTaskWorkflowStatusModalTask);
   const currentWorkflowStatusId = task?.workflowStatus.teamWorkflowStatusId;
 
-  const [updateTaskWorkflowStatus, { isLoading, isSuccess }] =
-    useUpdateTaskWorkflowStatusMutation();
+  const [updateTaskWorkflowStatus, { isLoading, isSuccess }] = useUpdateTaskWorkflowStatusMutation();
 
   const close = () => {
     dispatch(closeChangeTaskWorkflowStatusModal());
@@ -64,11 +57,7 @@ const StatusListButton: React.FC<StatusListButtonProps> = ({ wfs }) => {
       disabled={isLoading}
       className={styles.button}
       onClick={change}
-      variant={
-        wfs.teamWorkflowStatusId == currentWorkflowStatusId
-          ? ButtonVariants.filled2
-          : ButtonVariants.default
-      }
+      variant={wfs.teamWorkflowStatusId == currentWorkflowStatusId ? ButtonVariants.filled2 : ButtonVariants.default}
     >
       {groupIconMap?.[wfs.workflowStateGroup]}
       {wfs.name}

@@ -3,13 +3,7 @@ import { popChangeTaskWorkflowStatusModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import {
-  IoCheckmarkCircle,
-  IoCloseCircle,
-  IoContrast,
-  IoEllipseOutline,
-  IoPauseCircleOutline,
-} from "react-icons/io5";
+import { IoCheckmarkCircle, IoCloseCircle, IoContrast, IoEllipseOutline, IoPauseCircleOutline } from "react-icons/io5";
 import { useTask } from "../../context/TaskDetailContext";
 
 interface ChangeWorkflowStatusButtonProps {
@@ -24,9 +18,7 @@ const groupIconMap = {
   CANCELLED: <IoCloseCircle size={20} />,
 };
 
-const ChangeWorkflowStatusButton: React.FC<ChangeWorkflowStatusButtonProps> = ({
-  className,
-}) => {
+const ChangeWorkflowStatusButton: React.FC<ChangeWorkflowStatusButtonProps> = ({ className }) => {
   const task = useTask();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();

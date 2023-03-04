@@ -1,18 +1,9 @@
 import { TaskDto } from "@/model/be/jinear-core";
 import getCssVariable from "@/utils/cssHelper";
 import Logger from "@/utils/logger";
-import {
-  differenceInDays,
-  differenceInHours,
-  isAfter,
-  isBefore,
-} from "date-fns";
+import { differenceInDays, differenceInHours, isAfter, isBefore } from "date-fns";
 import React from "react";
-import {
-  usePeriodEnd,
-  usePeriodStart,
-  useVariant,
-} from "../context/PeriodSpanTaskViewContext";
+import { usePeriodEnd, usePeriodStart, useVariant } from "../context/PeriodSpanTaskViewContext";
 import TaskPeriodViewCard from "../taskPeriodViewCard/TaskPeriodViewCard";
 import styles from "./TaskPeriodViewRow.module.css";
 
@@ -21,21 +12,12 @@ interface TaskPeriodViewRowProps {
 }
 const logger = Logger("TaskPeriodViewRow");
 
-const calcFlexes = (vo: {
-  viewingPeriodStart: Date;
-  viewingPeriodEnd: Date;
-  task: TaskDto;
-}) => {
+const calcFlexes = (vo: { viewingPeriodStart: Date; viewingPeriodEnd: Date; task: TaskDto }) => {
   const { viewingPeriodStart, viewingPeriodEnd, task } = vo;
-  const DIFF = Math.ceil(
-    differenceInHours(viewingPeriodEnd, viewingPeriodStart) / 24
-  );
+  const DIFF = Math.ceil(differenceInHours(viewingPeriodEnd, viewingPeriodStart) / 24);
   logger.log({ DIFF });
 
-  const leftSpacerFlex = isBefore(
-    new Date(task.assignedDate),
-    viewingPeriodStart
-  )
+  const leftSpacerFlex = isBefore(new Date(task.assignedDate), viewingPeriodStart)
     ? 0
     : differenceInDays(new Date(task.assignedDate), viewingPeriodStart);
 
@@ -50,9 +32,7 @@ const calcFlexes = (vo: {
       taskFlex = DIFF - leftSpacerFlex;
       rightSpacerFlex = 0;
     } else {
-      rightSpacerFlex = Math.abs(
-        differenceInDays(viewingPeriodEnd, new Date(task.dueDate))
-      );
+      rightSpacerFlex = Math.abs(differenceInDays(viewingPeriodEnd, new Date(task.dueDate)));
       taskFlex = DIFF - leftSpacerFlex - rightSpacerFlex;
     }
   }
@@ -69,9 +49,7 @@ const TaskPeriodViewRow: React.FC<TaskPeriodViewRowProps> = ({ task }) => {
     task,
   });
 
-  const taskCardWidth = parseInt(
-    getCssVariable(`--task-card-width-${variant}`)?.replace("px", "")
-  );
+  const taskCardWidth = parseInt(getCssVariable(`--task-card-width-${variant}`)?.replace("px", ""));
 
   return (
     <div className={styles.container}>
@@ -88,13 +66,8 @@ const TaskPeriodViewRow: React.FC<TaskPeriodViewRowProps> = ({ task }) => {
         style={{ flex: taskFlex, minWidth: taskCardWidth * taskFlex }}
         task={task}
         duration={taskFlex}
-        isStartDateBefore={isBefore(
-          new Date(task.assignedDate),
-          viewingPeriodStart
-        )}
-        isDueDateAfter={
-          task.dueDate && isAfter(new Date(task.dueDate), viewingPeriodEnd)
-        }
+        isStartDateBefore={isBefore(new Date(task.assignedDate), viewingPeriodStart)}
+        isDueDateAfter={task.dueDate && isAfter(new Date(task.dueDate), viewingPeriodEnd)}
         showAdditionalInfo={variant == "week"}
       />
       <div

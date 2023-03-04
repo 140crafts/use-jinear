@@ -12,13 +12,7 @@ interface TransitionProps {
   inDuration?: number;
 }
 
-const Transition: React.FC<TransitionProps> = ({
-  initial = false,
-  className,
-  children,
-  outDuration = 0,
-  inDuration = 0.25,
-}) => {
+const Transition: React.FC<TransitionProps> = ({ initial = false, className, children, outDuration = 0, inDuration = 0.25 }) => {
   const router = useRouter();
   const currPath = router?.asPath?.split("#")[0]?.split("?")?.[0];
 

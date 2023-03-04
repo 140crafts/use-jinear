@@ -3,10 +3,7 @@ import TopicCard from "@/components/topicScreen/topicListScreen/topicCard/TopicC
 import TopicListScreenBreadcrumb from "@/components/topicScreen/topicListScreen/topicListScreenBreadcrumb/TopicListScreenBreadcrumb";
 import Transition from "@/components/transition/Transition";
 import { useRetrieveTeamTopicsQuery } from "@/store/api/topicListingApi";
-import {
-  selectCurrentAccountsPreferredTeam,
-  selectCurrentAccountsPreferredWorkspace,
-} from "@/store/slice/accountSlice";
+import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
@@ -17,9 +14,7 @@ interface TeamTopicListScreenProps {}
 
 const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
   const { t } = useTranslation();
-  const preferredWorkspace = useTypedSelector(
-    selectCurrentAccountsPreferredWorkspace
-  );
+  const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
   const {
@@ -59,9 +54,7 @@ const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
               <div>{t("topicListScreenNoContentLabel")}</div>
               <Button
                 variant={ButtonVariants.filled}
-                href={`/${preferredWorkspace.username}/${encodeURI(
-                  preferredTeam.name
-                )}/topic/new`}
+                href={`/${preferredWorkspace.username}/${encodeURI(preferredTeam.name)}/topic/new`}
               >
                 {t("topicListScreenNoContentNewTopicLabel")}
               </Button>

@@ -17,10 +17,9 @@ interface TextEditorProps {
   initialValue?: string;
 }
 
-const Editor = dynamic<EditorProps>(
-  () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
-  { ssr: false }
-);
+const Editor = dynamic<EditorProps>(() => import("react-draft-wysiwyg").then((mod) => mod.Editor), {
+  ssr: false,
+});
 
 const TextEditor: React.FC<TextEditorProps> = ({
   variant = "simple",
@@ -41,10 +40,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
     if (initialValue) {
       const blocksFromHtml = htmlToDraft(initialValue);
       const { contentBlocks, entityMap } = blocksFromHtml;
-      const contentState = ContentState.createFromBlockArray(
-        contentBlocks,
-        entityMap
-      );
+      const contentState = ContentState.createFromBlockArray(contentBlocks, entityMap);
       const editorState = EditorState.createWithContent(contentState);
       setEditorState(editorState);
     }
@@ -52,10 +48,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
 
   useEffect(() => {
     if (htmlInputId && editorState) {
-      formSetValue?.(
-        htmlInputId,
-        draftToHtml(convertToRaw(editorState.getCurrentContent()))
-      );
+      formSetValue?.(htmlInputId, draftToHtml(convertToRaw(editorState.getCurrentContent())));
     }
   }, [htmlInputId, editorState]);
 
@@ -66,10 +59,7 @@ const TextEditor: React.FC<TextEditorProps> = ({
         toolbarHidden={readOnly}
         editorState={editorState}
         onEditorStateChange={setEditorState}
-        wrapperClassName={cn(
-          styles.wrapper,
-          readOnly ? styles["wrapper-read-only"] : undefined
-        )}
+        wrapperClassName={cn(styles.wrapper, readOnly ? styles["wrapper-read-only"] : undefined)}
         editorClassName={styles.editor}
         toolbarClassName={styles.toolbar}
         toolbar={toolbar}
@@ -118,10 +108,7 @@ const toolbarConfig = (variant: "simple" | "full") => {
     "history",
     "textAlign",
   ];
-  const options =
-    variant == "simple"
-      ? [...baseOptions]
-      : [...baseOptions, ...additionalOptions];
+  const options = variant == "simple" ? [...baseOptions] : [...baseOptions, ...additionalOptions];
   return {
     options,
     inline: {

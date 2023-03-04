@@ -30,9 +30,7 @@ const ChangeTopicButton: React.FC<ChangeTopicButtonProps> = ({}) => {
       {task.topic ? (
         <b
           style={{
-            color: task.topic
-              ? getTextColor(`#${task.topic.color}`)
-              : undefined,
+            color: task.topic ? getTextColor(`#${task.topic.color}`) : undefined,
           }}
         >
           {task.topic.name}

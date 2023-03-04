@@ -13,11 +13,7 @@ const TitleInput: React.FC<TitleInputProps> = ({ register, labelClass }) => {
   return (
     <label className={labelClass} htmlFor={"new-task-title"}>
       {`${t("newTaskModalTaskTitle")} *`}
-      <input
-        id={"new-task-title"}
-        type={"text"}
-        {...register("title", { required: t("formRequiredField") })}
-      />
+      <input id={"new-task-title"} type={"text"} {...register("title", { required: t("formRequiredField") })} />
     </label>
   );
 };

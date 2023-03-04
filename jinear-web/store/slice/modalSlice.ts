@@ -93,16 +93,10 @@ const slice = createSlice({
   name: "modal",
   initialState,
   reducers: {
-    changeLoginWith2FaMailModalVisibility: (
-      state,
-      action: PayloadAction<LoginWith2FaMailModalState>
-    ) => {
+    changeLoginWith2FaMailModalVisibility: (state, action: PayloadAction<LoginWith2FaMailModalState>) => {
       state.loginWith2FaMailModal = action.payload;
     },
-    changeLoadingModalVisibility: (
-      state,
-      action: PayloadAction<ModalState>
-    ) => {
+    changeLoadingModalVisibility: (state, action: PayloadAction<ModalState>) => {
       state.loadingModal = action.payload;
     },
     popNotFoundModal: (state, action: PayloadAction<NotFoundModalState>) => {
@@ -127,46 +121,31 @@ const slice = createSlice({
     closeTeamOptionsModal: (state, action: PayloadAction<void>) => {
       state.teamOptionsModal = { visible: false };
     },
-    popChangeTaskWorkflowStatusModal: (
-      state,
-      action: PayloadAction<ChangeTaskWorkflowStatusModalState>
-    ) => {
+    popChangeTaskWorkflowStatusModal: (state, action: PayloadAction<ChangeTaskWorkflowStatusModalState>) => {
       state.changeTaskWorkflowStatusModal = {
         visible: true,
         task: action.payload.task,
       };
     },
-    closeChangeTaskWorkflowStatusModal: (
-      state,
-      action: PayloadAction<void>
-    ) => {
+    closeChangeTaskWorkflowStatusModal: (state, action: PayloadAction<void>) => {
       state.changeTaskWorkflowStatusModal = { visible: false };
     },
 
-    popChangeTaskTopicModal: (
-      state,
-      action: PayloadAction<ChangeTaskTopicModalState>
-    ) => {
+    popChangeTaskTopicModal: (state, action: PayloadAction<ChangeTaskTopicModalState>) => {
       state.changeTaskTopicModal = { visible: true, task: action.payload.task };
     },
     closeChangeTaskTopicModal: (state, action: PayloadAction<void>) => {
       state.changeTaskTopicModal = { visible: false };
     },
 
-    popChangeTaskDateModal: (
-      state,
-      action: PayloadAction<ChangeTaskDateModalState>
-    ) => {
+    popChangeTaskDateModal: (state, action: PayloadAction<ChangeTaskDateModalState>) => {
       state.changeTaskDateModal = { ...action.payload, visible: true };
     },
     closeChangeTaskDateModal: (state, action: PayloadAction<void>) => {
       state.changeTaskDateModal = initialState.changeTaskDateModal;
     },
 
-    popChangeTaskAssigneeModal: (
-      state,
-      action: PayloadAction<ChangeTaskAssigneeModalState>
-    ) => {
+    popChangeTaskAssigneeModal: (state, action: PayloadAction<ChangeTaskAssigneeModalState>) => {
       state.changeTaskAssigneeModal = { ...action.payload, visible: true };
     },
     closeChangeTaskAssigneeModal: (state, action: PayloadAction<void>) => {
@@ -208,20 +187,14 @@ const slice = createSlice({
       state.searchTaskModal = initialState.searchTaskModal;
     },
 
-    popReminderListModal: (
-      state,
-      action: PayloadAction<ReminderListModalState>
-    ) => {
+    popReminderListModal: (state, action: PayloadAction<ReminderListModalState>) => {
       state.reminderListModal = { ...action.payload, visible: true };
     },
     closeReminderListModal: (state, action: PayloadAction<void>) => {
       state.reminderListModal = initialState.reminderListModal;
     },
 
-    popNewReminderModal: (
-      state,
-      action: PayloadAction<NewReminderModalState>
-    ) => {
+    popNewReminderModal: (state, action: PayloadAction<NewReminderModalState>) => {
       state.newReminderModal = { ...action.payload, visible: true };
     },
     closeNewReminderModal: (state, action: PayloadAction<void>) => {
@@ -284,105 +257,64 @@ export const selectAnyModalVisible = (state: RootState) => {
     ?.reduce((prev, curr) => prev || curr);
 };
 
-export const selectLoginWith2FaMailModalVisible = (state: RootState) =>
-  state.modal.loginWith2FaMailModal?.visible;
-export const selectLoadingModalVisible = (state: RootState) =>
-  state.modal.loadingModal?.visible;
+export const selectLoginWith2FaMailModalVisible = (state: RootState) => state.modal.loginWith2FaMailModal?.visible;
+export const selectLoadingModalVisible = (state: RootState) => state.modal.loadingModal?.visible;
 
-export const selectNotFoundModalVisible = (state: RootState) =>
-  state.modal.notFoundModal?.visible;
-export const selectNotFoundModalTitle = (state: RootState) =>
-  state.modal.notFoundModal?.title;
-export const selectNotFoundModalLabel = (state: RootState) =>
-  state.modal.notFoundModal?.label;
-export const selectNotFoundModalImgSrc = (state: RootState) =>
-  state.modal.notFoundModal?.imgSrc;
-export const selectNotFoundModalImgAlt = (state: RootState) =>
-  state.modal.notFoundModal?.imgAlt;
+export const selectNotFoundModalVisible = (state: RootState) => state.modal.notFoundModal?.visible;
+export const selectNotFoundModalTitle = (state: RootState) => state.modal.notFoundModal?.title;
+export const selectNotFoundModalLabel = (state: RootState) => state.modal.notFoundModal?.label;
+export const selectNotFoundModalImgSrc = (state: RootState) => state.modal.notFoundModal?.imgSrc;
+export const selectNotFoundModalImgAlt = (state: RootState) => state.modal.notFoundModal?.imgAlt;
 
-export const selectNewTaskModalVisible = (state: RootState) =>
-  state.modal.newTaskModal?.visible;
+export const selectNewTaskModalVisible = (state: RootState) => state.modal.newTaskModal?.visible;
 
-export const selectTeamOptionsModalVisible = (state: RootState) =>
-  state.modal.teamOptionsModal?.visible;
+export const selectTeamOptionsModalVisible = (state: RootState) => state.modal.teamOptionsModal?.visible;
 
 export const selectChangeTaskWorkflowStatusModalVisible = (state: RootState) =>
   state.modal.changeTaskWorkflowStatusModal?.visible;
-export const selectChangeTaskWorkflowStatusModalTask = (state: RootState) =>
-  state.modal.changeTaskWorkflowStatusModal?.task;
+export const selectChangeTaskWorkflowStatusModalTask = (state: RootState) => state.modal.changeTaskWorkflowStatusModal?.task;
 
-export const selectChangeTaskTopicModalVisible = (state: RootState) =>
-  state.modal.changeTaskTopicModal?.visible;
-export const selectChangeTaskTopicModalTaskId = (state: RootState) =>
-  state.modal.changeTaskTopicModal?.task?.taskId;
-export const selectChangeTaskTopicModalTaskCurrentTopicId = (
-  state: RootState
-) => state.modal.changeTaskTopicModal?.task?.topicId;
+export const selectChangeTaskTopicModalVisible = (state: RootState) => state.modal.changeTaskTopicModal?.visible;
+export const selectChangeTaskTopicModalTaskId = (state: RootState) => state.modal.changeTaskTopicModal?.task?.taskId;
+export const selectChangeTaskTopicModalTaskCurrentTopicId = (state: RootState) => state.modal.changeTaskTopicModal?.task?.topicId;
 
-export const selectChangeTaskDateModalVisible = (state: RootState) =>
-  state.modal.changeTaskDateModal?.visible;
-export const selectChangeTaskDateModalTaskId = (state: RootState) =>
-  state.modal.changeTaskDateModal?.task?.taskId;
-export const selectChangeTaskDateModalTaskCurrentAssignedDate = (
-  state: RootState
-) => state.modal.changeTaskDateModal?.task?.assignedDate;
-export const selectChangeTaskDateModalTaskCurrentDueDate = (state: RootState) =>
-  state.modal.changeTaskDateModal?.task?.dueDate;
-export const selectChangeTaskDateModalHasPreciseAssignedDate = (
-  state: RootState
-) => state.modal.changeTaskDateModal?.task?.hasPreciseAssignedDate;
+export const selectChangeTaskDateModalVisible = (state: RootState) => state.modal.changeTaskDateModal?.visible;
+export const selectChangeTaskDateModalTaskId = (state: RootState) => state.modal.changeTaskDateModal?.task?.taskId;
+export const selectChangeTaskDateModalTaskCurrentAssignedDate = (state: RootState) =>
+  state.modal.changeTaskDateModal?.task?.assignedDate;
+export const selectChangeTaskDateModalTaskCurrentDueDate = (state: RootState) => state.modal.changeTaskDateModal?.task?.dueDate;
+export const selectChangeTaskDateModalHasPreciseAssignedDate = (state: RootState) =>
+  state.modal.changeTaskDateModal?.task?.hasPreciseAssignedDate;
 export const selectChangeTaskDateModalHasPreciseDueDate = (state: RootState) =>
   state.modal.changeTaskDateModal?.task?.hasPreciseDueDate;
 
-export const selectChangeTaskAssigneeModalVisible = (state: RootState) =>
-  state.modal.changeTaskAssigneeModal?.visible;
-export const selectChangeTaskAssigneeModalTaskId = (state: RootState) =>
-  state.modal.changeTaskAssigneeModal?.task?.taskId;
-export const selectChangeTaskAssigneeModalTaskCurrentAssigneeId = (
-  state: RootState
-) => state.modal.changeTaskAssigneeModal?.task?.assignedTo;
-export const selectChangeTaskAssigneeModalTaskCurrentTeamId = (
-  state: RootState
-) => state.modal.changeTaskAssigneeModal?.task?.teamId;
+export const selectChangeTaskAssigneeModalVisible = (state: RootState) => state.modal.changeTaskAssigneeModal?.visible;
+export const selectChangeTaskAssigneeModalTaskId = (state: RootState) => state.modal.changeTaskAssigneeModal?.task?.taskId;
+export const selectChangeTaskAssigneeModalTaskCurrentAssigneeId = (state: RootState) =>
+  state.modal.changeTaskAssigneeModal?.task?.assignedTo;
+export const selectChangeTaskAssigneeModalTaskCurrentTeamId = (state: RootState) =>
+  state.modal.changeTaskAssigneeModal?.task?.teamId;
 
-export const selectNewWorkspaceModalVisible = (state: RootState) =>
-  state.modal.newWorkspaceModal?.visible;
+export const selectNewWorkspaceModalVisible = (state: RootState) => state.modal.newWorkspaceModal?.visible;
 
-export const selectNewTeamModalVisible = (state: RootState) =>
-  state.modal.newTeamModal?.visible;
+export const selectNewTeamModalVisible = (state: RootState) => state.modal.newTeamModal?.visible;
 
-export const selectSearchTaskModalVisible = (state: RootState) =>
-  state.modal.searchTaskModal?.visible;
-export const selectSearchTaskModalWorkspaceId = (state: RootState) =>
-  state.modal.searchTaskModal?.workspaceId;
-export const selectSearchTaskModalTeamId = (state: RootState) =>
-  state.modal.searchTaskModal?.teamId;
-export const selectSearchTaskModalOnSelect = (state: RootState) =>
-  state.modal.searchTaskModal?.onSelect;
+export const selectSearchTaskModalVisible = (state: RootState) => state.modal.searchTaskModal?.visible;
+export const selectSearchTaskModalWorkspaceId = (state: RootState) => state.modal.searchTaskModal?.workspaceId;
+export const selectSearchTaskModalTeamId = (state: RootState) => state.modal.searchTaskModal?.teamId;
+export const selectSearchTaskModalOnSelect = (state: RootState) => state.modal.searchTaskModal?.onSelect;
 
-export const selectDialogModalVisible = (state: RootState) =>
-  state.modal.dialogModal?.visible;
-export const selectDialogModalTitle = (state: RootState) =>
-  state.modal.dialogModal?.title;
-export const selectDialogModalContent = (state: RootState) =>
-  state.modal.dialogModal?.content;
-export const selectDialogModalHtmlContent = (state: RootState) =>
-  state.modal.dialogModal?.htmlContent;
-export const selectDialogModalCloseButtonLabel = (state: RootState) =>
-  state.modal.dialogModal?.closeButtonLabel;
-export const selectDialogModalConfirmButtonLabel = (state: RootState) =>
-  state.modal.dialogModal?.confirmButtonLabel;
-export const selectDialogModalOnConfirm = (state: RootState) =>
-  state.modal.dialogModal?.onConfirm;
-export const selectDialogModalOnClose = (state: RootState) =>
-  state.modal.dialogModal?.onClose;
+export const selectDialogModalVisible = (state: RootState) => state.modal.dialogModal?.visible;
+export const selectDialogModalTitle = (state: RootState) => state.modal.dialogModal?.title;
+export const selectDialogModalContent = (state: RootState) => state.modal.dialogModal?.content;
+export const selectDialogModalHtmlContent = (state: RootState) => state.modal.dialogModal?.htmlContent;
+export const selectDialogModalCloseButtonLabel = (state: RootState) => state.modal.dialogModal?.closeButtonLabel;
+export const selectDialogModalConfirmButtonLabel = (state: RootState) => state.modal.dialogModal?.confirmButtonLabel;
+export const selectDialogModalOnConfirm = (state: RootState) => state.modal.dialogModal?.onConfirm;
+export const selectDialogModalOnClose = (state: RootState) => state.modal.dialogModal?.onClose;
 
-export const selectReminderListModalVisible = (state: RootState) =>
-  state.modal.reminderListModal?.visible;
-export const selectReminderListModalTask = (state: RootState) =>
-  state.modal.reminderListModal?.task;
+export const selectReminderListModalVisible = (state: RootState) => state.modal.reminderListModal?.visible;
+export const selectReminderListModalTask = (state: RootState) => state.modal.reminderListModal?.task;
 
-export const selectNewReminderModalVisible = (state: RootState) =>
-  state.modal.newReminderModal?.visible;
-export const selectNewReminderModalTask = (state: RootState) =>
-  state.modal.newReminderModal?.task;
+export const selectNewReminderModalVisible = (state: RootState) => state.modal.newReminderModal?.visible;
+export const selectNewReminderModalTask = (state: RootState) => state.modal.newReminderModal?.task;

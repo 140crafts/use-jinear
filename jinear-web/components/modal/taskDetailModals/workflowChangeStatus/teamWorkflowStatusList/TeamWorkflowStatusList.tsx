@@ -11,13 +11,10 @@ interface TeamWorkflowStatusListProps {
 
 const logger = Logger("TeamWorkflowStatusList");
 
-const TeamWorkflowStatusList: React.FC<TeamWorkflowStatusListProps> = ({
-  teamId,
-}) => {
-  const {
-    data: teamWorkflowStatusResponse,
-    isFetching: isTeamWorkflowStatusListFetching,
-  } = useRetrieveAllFromTeamQuery({ teamId });
+const TeamWorkflowStatusList: React.FC<TeamWorkflowStatusListProps> = ({ teamId }) => {
+  const { data: teamWorkflowStatusResponse, isFetching: isTeamWorkflowStatusListFetching } = useRetrieveAllFromTeamQuery({
+    teamId,
+  });
 
   return (
     <div className={styles.container}>
@@ -27,31 +24,21 @@ const TeamWorkflowStatusList: React.FC<TeamWorkflowStatusListProps> = ({
         </div>
       ) : (
         <>
-          {teamWorkflowStatusResponse?.data.groupedTeamWorkflowStatuses.BACKLOG?.map(
-            (wfs) => (
-              <StatusListButton key={wfs.workflowStateGroup} wfs={wfs} />
-            )
-          )}
-          {teamWorkflowStatusResponse?.data.groupedTeamWorkflowStatuses.NOT_STARTED?.map(
-            (wfs) => (
-              <StatusListButton key={wfs.workflowStateGroup} wfs={wfs} />
-            )
-          )}
-          {teamWorkflowStatusResponse?.data.groupedTeamWorkflowStatuses.STARTED?.map(
-            (wfs) => (
-              <StatusListButton key={wfs.workflowStateGroup} wfs={wfs} />
-            )
-          )}
-          {teamWorkflowStatusResponse?.data.groupedTeamWorkflowStatuses.COMPLETED?.map(
-            (wfs) => (
-              <StatusListButton key={wfs.workflowStateGroup} wfs={wfs} />
-            )
-          )}
-          {teamWorkflowStatusResponse?.data.groupedTeamWorkflowStatuses.CANCELLED?.map(
-            (wfs) => (
-              <StatusListButton key={wfs.workflowStateGroup} wfs={wfs} />
-            )
-          )}
+          {teamWorkflowStatusResponse?.data.groupedTeamWorkflowStatuses.BACKLOG?.map((wfs) => (
+            <StatusListButton key={wfs.workflowStateGroup} wfs={wfs} />
+          ))}
+          {teamWorkflowStatusResponse?.data.groupedTeamWorkflowStatuses.NOT_STARTED?.map((wfs) => (
+            <StatusListButton key={wfs.workflowStateGroup} wfs={wfs} />
+          ))}
+          {teamWorkflowStatusResponse?.data.groupedTeamWorkflowStatuses.STARTED?.map((wfs) => (
+            <StatusListButton key={wfs.workflowStateGroup} wfs={wfs} />
+          ))}
+          {teamWorkflowStatusResponse?.data.groupedTeamWorkflowStatuses.COMPLETED?.map((wfs) => (
+            <StatusListButton key={wfs.workflowStateGroup} wfs={wfs} />
+          ))}
+          {teamWorkflowStatusResponse?.data.groupedTeamWorkflowStatuses.CANCELLED?.map((wfs) => (
+            <StatusListButton key={wfs.workflowStateGroup} wfs={wfs} />
+          ))}
         </>
       )}
     </div>

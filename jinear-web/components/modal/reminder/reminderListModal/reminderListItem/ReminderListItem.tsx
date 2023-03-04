@@ -1,9 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
 import { TaskReminderDto } from "@/model/be/jinear-core";
-import {
-  usePassivizeTaskReminderMutation,
-  useRetrieveNextJobQuery,
-} from "@/store/api/taskReminderApi";
+import { usePassivizeTaskReminderMutation, useRetrieveNextJobQuery } from "@/store/api/taskReminderApi";
 import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import { CircularProgress } from "@mui/material";
@@ -19,10 +16,7 @@ interface ReminderListItemProps {
   close: () => void;
 }
 
-const ReminderListItem: React.FC<ReminderListItemProps> = ({
-  taskReminder,
-  close,
-}) => {
+const ReminderListItem: React.FC<ReminderListItemProps> = ({ taskReminder, close }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -34,14 +28,8 @@ const ReminderListItem: React.FC<ReminderListItemProps> = ({
     taskReminderId: taskReminder.taskReminderId,
   });
 
-  const [
-    passivizeTaskReminder,
-    {
-      isLoading: isPassivizeLoading,
-      isError: isPassivizeError,
-      isSuccess: isPassivizeSuccess,
-    },
-  ] = usePassivizeTaskReminderMutation();
+  const [passivizeTaskReminder, { isLoading: isPassivizeLoading, isError: isPassivizeError, isSuccess: isPassivizeSuccess }] =
+    usePassivizeTaskReminderMutation();
 
   const deleteTaskReminder = () => {
     if (isPassivizeLoading) {
@@ -68,16 +56,15 @@ const ReminderListItem: React.FC<ReminderListItemProps> = ({
       <div className="flex-1" />
       <div className={styles.repeatInfo}>
         {taskReminder?.reminder?.repeatType != "NONE" &&
-          `${t(
-            `taskNewReminderModalReminderRepeatType_${taskReminder.reminder.repeatType}`
-          )} ${t("reminderListItemRepatInfoLabel")}`}
+          `${t(`taskNewReminderModalReminderRepeatType_${taskReminder.reminder.repeatType}`)} ${t(
+            "reminderListItemRepatInfoLabel"
+          )}`}
       </div>
       <div className="spacer-w-1" />
       <div className={styles.nextJobDate}>
         {isLoading && <CircularProgress size={7} />}
         {/* TODO cgds-73 */}
-        {nextJobData?.data.date &&
-          format(new Date(nextJobData?.data.date), t("dateTimeFormat"))}
+        {nextJobData?.data.date && format(new Date(nextJobData?.data.date), t("dateTimeFormat"))}
       </div>
       <div className="spacer-w-1" />
       <Button

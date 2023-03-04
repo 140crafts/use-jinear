@@ -27,13 +27,6 @@
       "@/pages/*": ["pages/*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "utils/debounce.js",
-    "utils/clipboard.js",
-    "utils/colorHelper.js"
-  ],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "utils/debounce.js", "utils/clipboard.js", "utils/colorHelper.js"],
   "exclude": ["node_modules"]
 }

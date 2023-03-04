@@ -1,17 +1,7 @@
 import Button, { ButtonVariants } from "@/components/button";
-import {
-  TopicInitializeRequest,
-  TopicUpdateRequest,
-} from "@/model/be/jinear-core";
-import {
-  useDeleteTopicMutation,
-  useInitializeTopicMutation,
-  useUpdateTopicMutation,
-} from "@/store/api/topicApi";
-import {
-  selectCurrentAccountsPreferredTeam,
-  selectCurrentAccountsPreferredWorkspace,
-} from "@/store/slice/accountSlice";
+import { TopicInitializeRequest, TopicUpdateRequest } from "@/model/be/jinear-core";
+import { useDeleteTopicMutation, useInitializeTopicMutation, useUpdateTopicMutation } from "@/store/api/topicApi";
+import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
@@ -43,45 +33,24 @@ interface TopicFormProps {
 
 const logger = Logger("TopicForm");
 
-const TopicForm: React.FC<TopicFormProps> = ({
-  workspaceId,
-  teamId,
-  topicId,
-  color,
-  taskName,
-  taskTag,
-}) => {
+const TopicForm: React.FC<TopicFormProps> = ({ workspaceId, teamId, topicId, color, taskName, taskTag }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const preferredWorkspace = useTypedSelector(
-    selectCurrentAccountsPreferredWorkspace
-  );
+  const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
-  const { register, handleSubmit, control, setFocus, setValue, watch } =
-    useForm<ITopicForm>();
+  const { register, handleSubmit, control, setFocus, setValue, watch } = useForm<ITopicForm>();
 
   const name = watch("name");
   const tag = watch("tag");
 
-  const [
-    initializeTopic,
-    {
-      isLoading: isInitializeTopicLoading,
-      isSuccess: isInitializeTopicSuccess,
-    },
-  ] = useInitializeTopicMutation();
+  const [initializeTopic, { isLoading: isInitializeTopicLoading, isSuccess: isInitializeTopicSuccess }] =
+    useInitializeTopicMutation();
 
-  const [
-    updateTopic,
-    { isLoading: isUpdateTopicLoading, isSuccess: isUpdateTopicSuccess },
-  ] = useUpdateTopicMutation();
+  const [updateTopic, { isLoading: isUpdateTopicLoading, isSuccess: isUpdateTopicSuccess }] = useUpdateTopicMutation();
 
-  const [
-    deleteTopicCall,
-    { isLoading: isDeleteLoading, isSuccess: isDeleteSuccess },
-  ] = useDeleteTopicMutation();
+  const [deleteTopicCall, { isLoading: isDeleteLoading, isSuccess: isDeleteSuccess }] = useDeleteTopicMutation();
 
   useEffect(() => {
     if (name) {
@@ -111,9 +80,7 @@ const TopicForm: React.FC<TopicFormProps> = ({
 
   useEffect(() => {
     if (isInitializeTopicSuccess || isUpdateTopicSuccess || isDeleteSuccess) {
-      router.replace(
-        `/${preferredWorkspace?.username}/${preferredTeam?.name}/topic/list`
-      );
+      router.replace(`/${preferredWorkspace?.username}/${preferredTeam?.name}/topic/list`);
     }
   }, [isInitializeTopicSuccess, isUpdateTopicSuccess, isDeleteSuccess]);
 
@@ -134,35 +101,15 @@ const TopicForm: React.FC<TopicFormProps> = ({
   };
 
   return (
-    <form
-      autoComplete="off"
-      id={"topic-form"}
-      className={styles.form}
-      onSubmit={handleSubmit(submit)}
-      action="#"
-    >
+    <form autoComplete="off" id={"topic-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
       <div className={styles.formContent}>
-        {workspaceId && (
-          <input
-            type="hidden"
-            value={workspaceId}
-            {...register("workspaceId")}
-          />
-        )}
-        {teamId && (
-          <input type="hidden" value={teamId} {...register("teamId")} />
-        )}
-        {topicId && (
-          <input type="hidden" value={topicId} {...register("topicId")} />
-        )}
+        {workspaceId && <input type="hidden" value={workspaceId} {...register("workspaceId")} />}
+        {teamId && <input type="hidden" value={teamId} {...register("teamId")} />}
+        {topicId && <input type="hidden" value={topicId} {...register("topicId")} />}
 
         <NameInput register={register} labelClass={styles.label} />
         <TagInput register={register} labelClass={styles.label} />
-        <ColorInput
-          register={register}
-          watch={watch}
-          labelClass={styles.label}
-        />
+        <ColorInput register={register} watch={watch} labelClass={styles.label} />
       </div>
 
       <div className={styles.footerContainer}>
@@ -180,9 +127,7 @@ const TopicForm: React.FC<TopicFormProps> = ({
         )}
         <Button
           type="submit"
-          disabled={
-            isInitializeTopicLoading || isUpdateTopicLoading || isDeleteLoading
-          }
+          disabled={isInitializeTopicLoading || isUpdateTopicLoading || isDeleteLoading}
           loading={isInitializeTopicLoading || isUpdateTopicLoading}
           className={styles.footerButton}
           variant={ButtonVariants.contrast}

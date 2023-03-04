@@ -29,15 +29,11 @@ export interface ILoginWithMailForm {
 
 const logger = Logger("LoginWithMailForm");
 
-const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({
-  className,
-  initialEmail,
-}) => {
+const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initialEmail }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useDispatch();
-  const [loginWithpassword, { isSuccess, isError, isLoading }] =
-    useLoginWithPasswordMutation();
+  const [loginWithpassword, { isSuccess, isError, isLoading }] = useLoginWithPasswordMutation();
   const { register, setValue, handleSubmit } = useForm<ILoginWithMailForm>();
 
   useEffect(() => {
@@ -77,29 +73,15 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({
         linkLabel={t("loginWithEmailFormTitleLink")}
         link={"/register"}
       />
-      <form
-        autoComplete="off"
-        id={"login-with-email-form"}
-        className={styles.form}
-        onSubmit={handleSubmit(submit)}
-        action="#"
-      >
+      <form autoComplete="off" id={"login-with-email-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
         <label className={styles.label} htmlFor={"login-with-email-email"}>
           {t("loginWithEmailEmailLabel")}
-          <input
-            id={"login-with-email-email"}
-            type={"email"}
-            {...register("email")}
-          />
+          <input id={"login-with-email-email"} type={"email"} {...register("email")} />
         </label>
 
         <label className={styles.label} htmlFor={"login-with-email-password"}>
           {t("loginWithEmailPasswordLabel")}
-          <input
-            id={"login-with-email-password"}
-            type={"password"}
-            {...register("password")}
-          />
+          <input id={"login-with-email-password"} type={"password"} {...register("password")} />
         </label>
 
         <Link className={styles.forgotPasswordLink} href={"/forgot-password"}>

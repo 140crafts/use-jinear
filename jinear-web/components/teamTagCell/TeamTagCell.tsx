@@ -9,9 +9,7 @@ interface TeamTagCellProps {
 
 const TeamTagCell: React.FC<TeamTagCellProps> = ({ task, className }) => {
   return task && task.team ? (
-    <div className={cn(styles.container, className)}>
-      {`${task.team?.tag}-${task.teamTagNo}`}
-    </div>
+    <div className={cn(styles.container, className)}>{`${task.team?.tag}-${task.teamTagNo}`}</div>
   ) : null;
 };
 

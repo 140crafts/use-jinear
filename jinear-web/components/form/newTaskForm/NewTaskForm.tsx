@@ -27,13 +27,7 @@ interface NewTaskFormProps {
 
 const logger = Logger("NewTaskForm");
 
-const NewTaskForm: React.FC<NewTaskFormProps> = ({
-  workspaceId,
-  teamId,
-  subTaskOf,
-  onClose,
-  className,
-}) => {
+const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskOf, onClose, className }) => {
   const { t } = useTranslation();
   const {
     register,
@@ -45,11 +39,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
 
   const [
     initializeTask,
-    {
-      data: initializeTaskResponse,
-      isLoading: isInitializeTaskLoading,
-      isSuccess: isInitializeTaskSuccess,
-    },
+    { data: initializeTaskResponse, isLoading: isInitializeTaskLoading, isSuccess: isInitializeTaskSuccess },
   ] = useInitializeTaskMutation();
 
   useEffect(() => {
@@ -63,15 +53,11 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
   useEffect(() => {
     if (isInitializeTaskSuccess && initializeTaskResponse) {
       console.log({ NewTaskForm: initializeTaskResponse });
-      if (
-        initializeTaskResponse.data.workspace &&
-        initializeTaskResponse.data.team
-      ) {
+      if (initializeTaskResponse.data.workspace && initializeTaskResponse.data.team) {
         const teamTag = initializeTaskResponse.data.team?.tag;
         const teamTagNo = initializeTaskResponse.data.teamTagNo;
         const tag = `${teamTag}-${teamTagNo}`;
-        const workspaceUsername =
-          initializeTaskResponse.data.workspace?.username;
+        const workspaceUsername = initializeTaskResponse.data.workspace?.username;
         const taskLink = `${workspaceUsername}/task/${tag}`;
         toast((t) => <TaskCreatedToast teamTaskNo={tag} taskLink={taskLink} />);
       } else {
@@ -114,18 +100,11 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
       <div className={styles.formContent}>
         <input type="hidden" value={workspaceId} {...register("workspaceId")} />
         <input type="hidden" value={teamId} {...register("teamId")} />
-        {subTaskOf && (
-          <input type="hidden" value={subTaskOf} {...register("subTaskOf")} />
-        )}
+        {subTaskOf && <input type="hidden" value={subTaskOf} {...register("subTaskOf")} />}
 
         <TitleInput labelClass={styles.label} register={register} />
 
-        <DescriptionInput
-          labelClass={styles.label}
-          inputClass={styles.textAreaInput}
-          register={register}
-          setValue={setValue}
-        />
+        <DescriptionInput labelClass={styles.label} inputClass={styles.textAreaInput} register={register} setValue={setValue} />
 
         <div className={styles.dateInputContainer}>
           <AssignedDateInput labelClass={styles.label} register={register} />
@@ -152,11 +131,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
       </div>
 
       <div className={styles.footerContainer}>
-        <Button
-          disabled={isInitializeTaskLoading}
-          onClick={onClose}
-          className={styles.footerButton}
-        >
+        <Button disabled={isInitializeTaskLoading} onClick={onClose} className={styles.footerButton}>
           {t("newTaskModalCancel")}
         </Button>
         <Button

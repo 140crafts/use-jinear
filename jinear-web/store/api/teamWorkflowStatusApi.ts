@@ -1,8 +1,4 @@
-import {
-  BaseResponse,
-  InitializeTeamWorkflowStatusRequest,
-  TeamWorkflowStatusListingResponse,
-} from "@/model/be/jinear-core";
+import { BaseResponse, InitializeTeamWorkflowStatusRequest, TeamWorkflowStatusListingResponse } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const teamWorkflowStatusApi = api.injectEndpoints({
@@ -13,8 +9,7 @@ export const teamWorkflowStatusApi = api.injectEndpoints({
         teamId: string;
       }
     >({
-      query: (req: { teamId: string }) =>
-        `v1/team/workflow-status/${req.teamId}/list`,
+      query: (req: { teamId: string }) => `v1/team/workflow-status/${req.teamId}/list`,
       providesTags: (_result, _err, req) => [
         {
           type: "workflow-status-from-team",
@@ -30,17 +25,12 @@ export const teamWorkflowStatusApi = api.injectEndpoints({
         initializeTeamWorkflowStatusRequest: InitializeTeamWorkflowStatusRequest;
       }
     >({
-      query: (request: {
-        teamId: string;
-        initializeTeamWorkflowStatusRequest: InitializeTeamWorkflowStatusRequest;
-      }) => ({
+      query: (request: { teamId: string; initializeTeamWorkflowStatusRequest: InitializeTeamWorkflowStatusRequest }) => ({
         url: `v1/team/workflow-status/${request.teamId}`,
         method: "POST",
         body: request.initializeTeamWorkflowStatusRequest,
       }),
-      invalidatesTags: (_result, _err, req) => [
-        { type: "workflow-status-from-team", id: req.teamId },
-      ],
+      invalidatesTags: (_result, _err, req) => [{ type: "workflow-status-from-team", id: req.teamId }],
     }),
 
     removeTeamWorkflowStatus: build.mutation<
@@ -54,9 +44,7 @@ export const teamWorkflowStatusApi = api.injectEndpoints({
         url: `v1/team/workflow-status/${request.teamId}/${request.teamWorkflowStatusId}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _err, req) => [
-        { type: "workflow-status-from-team", id: req.teamId },
-      ],
+      invalidatesTags: (_result, _err, req) => [{ type: "workflow-status-from-team", id: req.teamId }],
     }),
 
     changeTeamWorkflowStatusName: build.mutation<
@@ -67,18 +55,12 @@ export const teamWorkflowStatusApi = api.injectEndpoints({
         name: string;
       }
     >({
-      query: (request: {
-        teamId: string;
-        teamWorkflowStatusId: string;
-        name: string;
-      }) => ({
+      query: (request: { teamId: string; teamWorkflowStatusId: string; name: string }) => ({
         url: `v1/team/workflow-status/${request.teamId}/${request.teamWorkflowStatusId}`,
         method: "PUT",
         body: request,
       }),
-      invalidatesTags: (_result, _err, req) => [
-        { type: "workflow-status-from-team", id: req.teamId },
-      ],
+      invalidatesTags: (_result, _err, req) => [{ type: "workflow-status-from-team", id: req.teamId }],
     }),
 
     changeOrder: build.mutation<
@@ -89,17 +71,11 @@ export const teamWorkflowStatusApi = api.injectEndpoints({
         replaceWithTeamWorkflowStatusId: string;
       }
     >({
-      query: (request: {
-        teamId: string;
-        teamWorkflowStatusId: string;
-        replaceWithTeamWorkflowStatusId: string;
-      }) => ({
+      query: (request: { teamId: string; teamWorkflowStatusId: string; replaceWithTeamWorkflowStatusId: string }) => ({
         url: `v1/team/workflow-status/${request.teamId}/change-order/${request.teamWorkflowStatusId}/with/${request.replaceWithTeamWorkflowStatusId}`,
         method: "PUT",
       }),
-      invalidatesTags: (_result, _err, req) => [
-        { type: "workflow-status-from-team", id: req.teamId },
-      ],
+      invalidatesTags: (_result, _err, req) => [{ type: "workflow-status-from-team", id: req.teamId }],
     }),
   }),
 });

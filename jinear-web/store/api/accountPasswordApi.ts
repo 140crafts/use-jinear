@@ -8,10 +8,7 @@ import { api, tagTypes } from "./api";
 
 export const accountPasswordApi = api.injectEndpoints({
   endpoints: (build) => ({
-    initializeResetPassword: build.mutation<
-      BaseResponse,
-      InitializeResetPasswordRequest
-    >({
+    initializeResetPassword: build.mutation<BaseResponse, InitializeResetPasswordRequest>({
       query: (body: InitializeResetPasswordRequest) => ({
         url: "v1/account/password/reset/initialize",
         method: "POST",
@@ -19,10 +16,7 @@ export const accountPasswordApi = api.injectEndpoints({
       }),
       invalidatesTags: tagTypes,
     }),
-    completeResetPassword: build.mutation<
-      BaseResponse,
-      CompleteResetPasswordRequest
-    >({
+    completeResetPassword: build.mutation<BaseResponse, CompleteResetPasswordRequest>({
       query: (body: CompleteResetPasswordRequest) => ({
         url: "v1/account/password/reset/complete",
         method: "POST",
@@ -41,11 +35,8 @@ export const accountPasswordApi = api.injectEndpoints({
   }),
 });
 
-export const {
-  useInitializeResetPasswordMutation,
-  useCompleteResetPasswordMutation,
-  useUpdatePasswordMutation,
-} = accountPasswordApi;
+export const { useInitializeResetPasswordMutation, useCompleteResetPasswordMutation, useUpdatePasswordMutation } =
+  accountPasswordApi;
 
 export const {
   endpoints: { initializeResetPassword, completeResetPassword, updatePassword },

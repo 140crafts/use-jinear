@@ -21,9 +21,7 @@ const TaskRow: React.FC<TaskRowProps> = ({ task }) => {
   const dispatch = useAppDispatch();
   const tag = `${task.team?.tag}-${task.teamTagNo}`;
 
-  const popChangeDatesModal = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const popChangeDatesModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event?.preventDefault?.();
     dispatch(popChangeTaskDateModal({ visible: true, task }));
   };
@@ -31,10 +29,7 @@ const TaskRow: React.FC<TaskRowProps> = ({ task }) => {
   return task.workspace && task.team ? (
     <>
       <div className={styles.container}>
-        <Button
-          href={`/${task.workspace?.username}/task/${tag}`}
-          className={styles.button}
-        >
+        <Button href={`/${task.workspace?.username}/task/${tag}`} className={styles.button}>
           <div className={styles.leftInfoContainer}>
             <TeamTagCell task={task} />
           </div>

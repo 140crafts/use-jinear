@@ -26,13 +26,10 @@ export interface IRegisterWithMailForm {
 
 const logger = Logger("RegisterWithMailForm");
 
-const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({
-  className,
-}) => {
+const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({ className }) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const [registerViaMail, { isSuccess, isError, isLoading }] =
-    useRegisterViaMailMutation();
+  const [registerViaMail, { isSuccess, isError, isLoading }] = useRegisterViaMailMutation();
 
   const {
     register,
@@ -77,42 +74,18 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({
         linkLabel={t("registerWithMailFormSubTitleLinkLabel")}
         link={"/login"}
       />
-      <form
-        autoComplete="off"
-        id={"register-with-email-form"}
-        className={styles.form}
-        onSubmit={handleSubmit(submit)}
-        action="#"
-      >
+      <form autoComplete="off" id={"register-with-email-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
         <label className={styles.label} htmlFor={"register-with-email-email"}>
           {t("registerWithEmailEmailLabel")}
-          <input
-            id={"register-with-email-email"}
-            type={"email"}
-            autoFocus
-            autoComplete="on"
-            required
-            {...register("email")}
-          />
+          <input id={"register-with-email-email"} type={"email"} autoFocus autoComplete="on" required {...register("email")} />
         </label>
 
-        <label
-          className={styles.label}
-          htmlFor={"register-with-email-password"}
-        >
+        <label className={styles.label} htmlFor={"register-with-email-password"}>
           {t("registerWithEmailPasswordLabel")}
-          <input
-            id={"register-with-email-password"}
-            type={"password"}
-            required
-            {...register("password")}
-          />
+          <input id={"register-with-email-password"} type={"password"} required {...register("password")} />
         </label>
 
-        <label
-          className={styles.label}
-          htmlFor={"register-with-email-password-control"}
-        >
+        <label className={styles.label} htmlFor={"register-with-email-password-control"}>
           {t("registerWithEmailPasswordConfirmLabel")}
           <input
             id={"register-with-email-password-control"}
@@ -122,10 +95,7 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({
           />
         </label>
 
-        <label
-          className={styles.checkboxLabel}
-          htmlFor={"register-with-email-agree-terms"}
-        >
+        <label className={styles.checkboxLabel} htmlFor={"register-with-email-agree-terms"}>
           <input
             id={"register-with-email-agree-terms"}
             type={"checkbox"}
@@ -153,11 +123,7 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({
 
         <div className={styles.privacyPolicyContainer}>
           {t("registerPrivacyPolicyText")}
-          <Link
-            className={styles.forgotPasswordLink}
-            href={"/legal/privacy"}
-            target="_blank"
-          >
+          <Link className={styles.forgotPasswordLink} href={"/legal/privacy"} target="_blank">
             {` ${t("privacyPolicy")}`}
           </Link>
         </div>

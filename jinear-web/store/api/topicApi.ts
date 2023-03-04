@@ -1,9 +1,4 @@
-import {
-  BaseResponse,
-  TopicInitializeRequest,
-  TopicResponse,
-  TopicUpdateRequest,
-} from "@/model/be/jinear-core";
+import { BaseResponse, TopicInitializeRequest, TopicResponse, TopicUpdateRequest } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const topicApi = api.injectEndpoints({
@@ -24,9 +19,7 @@ export const topicApi = api.injectEndpoints({
         method: "POST",
         body: request,
       }),
-      invalidatesTags: (_result, _err, req) => [
-        { type: "team-topic-list", id: req.teamId },
-      ],
+      invalidatesTags: (_result, _err, req) => [{ type: "team-topic-list", id: req.teamId }],
     }),
     //
     updateTopic: build.mutation<TopicResponse, TopicUpdateRequest>({
@@ -49,12 +42,7 @@ export const topicApi = api.injectEndpoints({
   }),
 });
 
-export const {
-  useRetrieveTopicQuery,
-  useInitializeTopicMutation,
-  useUpdateTopicMutation,
-  useDeleteTopicMutation,
-} = topicApi;
+export const { useRetrieveTopicQuery, useInitializeTopicMutation, useUpdateTopicMutation, useDeleteTopicMutation } = topicApi;
 
 export const {
   endpoints: { retrieveTopic, initializeTopic, updateTopic, deleteTopic },

@@ -9,10 +9,7 @@ interface TaskOwnerAndAssigneeInfoProps {
   owner?: PlainAccountProfileDto | null;
 }
 
-const TaskOwnerAndAssigneeInfo: React.FC<TaskOwnerAndAssigneeInfoProps> = ({
-  createdDate,
-  owner,
-}) => {
+const TaskOwnerAndAssigneeInfo: React.FC<TaskOwnerAndAssigneeInfoProps> = ({ createdDate, owner }) => {
   const { t } = useTranslation();
 
   return (

@@ -19,22 +19,16 @@ interface TeamMemberListProps {
   close: () => void;
 }
 
-const TeamMemberList: React.FC<TeamMemberListProps> = ({
-  teamId,
-  filter,
-  close,
-}) => {
+const TeamMemberList: React.FC<TeamMemberListProps> = ({ teamId, filter, close }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { data: teamMemberListResponse, isFetching } =
-    useRetrieveTeamMembersQuery(teamId, { skip: teamId == null });
+  const { data: teamMemberListResponse, isFetching } = useRetrieveTeamMembersQuery(teamId, {
+    skip: teamId == null,
+  });
   const taskId = useTypedSelector(selectChangeTaskAssigneeModalTaskId);
-  const taskCurrentAssignee = useTypedSelector(
-    selectChangeTaskAssigneeModalTaskCurrentAssigneeId
-  );
+  const taskCurrentAssignee = useTypedSelector(selectChangeTaskAssigneeModalTaskCurrentAssigneeId);
 
-  const [updateTaskAssignee, { isSuccess, isError }] =
-    useUpdateTaskAssigneeMutation();
+  const [updateTaskAssignee, { isSuccess, isError }] = useUpdateTaskAssigneeMutation();
 
   useEffect(() => {
     if (isSuccess || isError) {
@@ -47,10 +41,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({
 
   const filteredList =
     teamMemberListResponse?.data.content.filter(
-      (member) =>
-        filter == "" ||
-        member.account.username?.toLowerCase().indexOf(filter?.toLowerCase()) !=
-          -1
+      (member) => filter == "" || member.account.username?.toLowerCase().indexOf(filter?.toLowerCase()) != -1
     ) || [];
 
   const changeTaskAssignee = (accountId: string) => {
@@ -75,11 +66,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({
         <Button
           key={`task-assignee-modal-${member.accountId}`}
           className={styles.button}
-          variant={
-            taskCurrentAssignee == member.accountId
-              ? ButtonVariants.filled2
-              : ButtonVariants.filled
-          }
+          variant={taskCurrentAssignee == member.accountId ? ButtonVariants.filled2 : ButtonVariants.filled}
           onClick={() => changeTaskAssignee(member.accountId)}
         >
           {member.account.username}

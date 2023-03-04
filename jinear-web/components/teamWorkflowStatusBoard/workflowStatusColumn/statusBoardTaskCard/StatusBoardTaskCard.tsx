@@ -8,11 +8,7 @@ import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import Link from "next/link";
 import React from "react";
-import {
-  Draggable,
-  DraggableProvided,
-  DraggableStateSnapshot,
-} from "react-beautiful-dnd";
+import { Draggable, DraggableProvided, DraggableStateSnapshot } from "react-beautiful-dnd";
 import { IoTime } from "react-icons/io5";
 import styles from "./StatusBoardTaskCard.module.css";
 
@@ -21,25 +17,17 @@ interface StatusBoardTaskCardProps {
   index?: number;
 }
 
-const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({
-  task,
-  index = 0,
-}) => {
+const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({ task, index = 0 }) => {
   const dispatch = useAppDispatch();
 
-  const popChangeDatesModal = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const popChangeDatesModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event?.preventDefault?.();
     dispatch(popChangeTaskDateModal({ visible: true, task }));
   };
 
   return (
     <Draggable key={task.taskId} draggableId={task.taskId} index={index}>
-      {(
-        providedDraggable: DraggableProvided,
-        snapshotDraggable: DraggableStateSnapshot
-      ) => (
+      {(providedDraggable: DraggableProvided, snapshotDraggable: DraggableStateSnapshot) => (
         <Link
           href={`/${task.workspace?.username}/task/${task.team?.tag}-${task.teamTagNo}`}
           className={styles.container}
@@ -51,20 +39,13 @@ const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({
           <div className={styles.infoContainer}>
             {task.topic && <TopicInfo topic={task.topic} />}
             {/* <div className="flex-1" /> */}
-            <Button
-              className={styles.taskIconButton}
-              onClick={popChangeDatesModal}
-            >
+            <Button className={styles.taskIconButton} onClick={popChangeDatesModal}>
               <IoTime size={12} />
             </Button>
 
             <AssigneeCell
               task={task}
-              tooltipPosition={
-                task.workflowStatus.workflowStateGroup == "BACKLOG"
-                  ? "left"
-                  : "right"
-              }
+              tooltipPosition={task.workflowStatus.workflowStateGroup == "BACKLOG" ? "left" : "right"}
               className={styles.taskIconButton}
             />
 

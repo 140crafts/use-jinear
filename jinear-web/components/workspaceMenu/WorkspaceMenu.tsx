@@ -22,10 +22,7 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({}) => {
   return (
     <div className={styles.container}>
       {workspaces?.map((workspace) => (
-        <WorkspaceButton
-          key={`workspace-menu-${workspace.workspaceId}`}
-          workspace={workspace}
-        />
+        <WorkspaceButton key={`workspace-menu-${workspace.workspaceId}`} workspace={workspace} />
       ))}
       <Button
         className={styles.button}

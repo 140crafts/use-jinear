@@ -4,12 +4,7 @@ import { useToggle } from "@/hooks/useToggle";
 import { WorkspaceActivityDto } from "@/model/be/jinear-core";
 import decideWorkspaceActivityIcon from "@/utils/workspaceActivityIconMap";
 import cn from "classnames";
-import {
-  differenceInDays,
-  differenceInHours,
-  differenceInMinutes,
-  format,
-} from "date-fns";
+import { differenceInDays, differenceInHours, differenceInMinutes, format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { useMemo } from "react";
 import AssignedDateChangeDiffInfo from "./assignedDateChangeDiffInfo/AssignedDateChangeDiffInfo";
@@ -41,67 +36,37 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
   const { t } = useTranslation();
   const { current: diffVisible, toggle: toggleDiff } = useToggle();
 
-  const Icon = useMemo(
-    () => decideWorkspaceActivityIcon(activity.type),
-    [activity.workspaceActivityId]
-  );
+  const Icon = useMemo(() => decideWorkspaceActivityIcon(activity.type), [activity.workspaceActivityId]);
 
   const dateDiff = useMemo(() => {
-    const diffInDays = differenceInDays(
-      new Date(),
-      new Date(activity.createdDate)
-    );
+    const diffInDays = differenceInDays(new Date(), new Date(activity.createdDate));
     if (diffInDays != 0) {
-      return t("taskWorkflowActivityInfoLabelDateInDays")?.replace(
-        "${num}",
-        `${diffInDays}`
-      );
+      return t("taskWorkflowActivityInfoLabelDateInDays")?.replace("${num}", `${diffInDays}`);
     }
-    const diffInHours = differenceInHours(
-      new Date(),
-      new Date(activity.createdDate)
-    );
+    const diffInHours = differenceInHours(new Date(), new Date(activity.createdDate));
     if (diffInHours != 0) {
-      return t("taskWorkflowActivityInfoLabelDateInHours")?.replace(
-        "${num}",
-        `${diffInHours}`
-      );
+      return t("taskWorkflowActivityInfoLabelDateInHours")?.replace("${num}", `${diffInHours}`);
     }
-    const diffInMinutes = differenceInMinutes(
-      new Date(),
-      new Date(activity.createdDate)
-    );
+    const diffInMinutes = differenceInMinutes(new Date(), new Date(activity.createdDate));
     if (diffInMinutes != 0) {
-      return t("taskWorkflowActivityInfoLabelDateInMinutes")?.replace(
-        "${num}",
-        `${diffInMinutes}`
-      );
+      return t("taskWorkflowActivityInfoLabelDateInMinutes")?.replace("${num}", `${diffInMinutes}`);
     }
     return t("taskWorkflowActivityInfoLabelDateJustNow");
   }, [activity.createdDate]);
 
-  const createdDate = format(
-    new Date(activity.createdDate),
-    t("dateTimeFormat")
-  );
+  const createdDate = format(new Date(activity.createdDate), t("dateTimeFormat"));
 
   return (
     <div className={styles.container}>
       <Button
-        onClick={
-          TASK_RELATED_ACTIONS_WITH_DIFF.indexOf(activity.type) != -1
-            ? toggleDiff
-            : undefined
-        }
+        onClick={TASK_RELATED_ACTIONS_WITH_DIFF.indexOf(activity.type) != -1 ? toggleDiff : undefined}
         // variant={ButtonVariants.filled}
         className={styles.contentContainer}
       >
         <div>{<Icon size={15} className={styles.icon} />}</div>
         <div className={styles.labelContainer}>
           <b>{activity?.performedByAccount?.username}</b>
-          <div className={styles.label}>
-            {t(`taskWorkflowActivityInfoLabel_${activity.type}`)}
-          </div>
+          <div className={styles.label}>{t(`taskWorkflowActivityInfoLabel_${activity.type}`)}</div>
           <div className={styles.dateDiff} data-tooltip={createdDate}>
             {dateDiff}
           </div>
@@ -110,36 +75,18 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
 
       <Transition
         initial={true}
-        className={cn(
-          styles.diffContainer,
-          activity.type == "EDIT_TASK_DESC" && styles["diffContainer-fullWidth"]
-        )}
+        className={cn(styles.diffContainer, activity.type == "EDIT_TASK_DESC" && styles["diffContainer-fullWidth"])}
       >
         {diffVisible && (
           <>
-            {activity.type == "EDIT_TASK_TITLE" && (
-              <TitleDiffInfo activity={activity} />
-            )}
-            {activity.type == "EDIT_TASK_DESC" && (
-              <DescDiffInfo activity={activity} />
-            )}
-            {activity.type == "TASK_UPDATE_TOPIC" && (
-              <TopicDiffInfo activity={activity} />
-            )}
-            {activity.type == "TASK_UPDATE_WORKFLOW_STATUS" && (
-              <WorkflowStatusDiffInfo activity={activity} />
-            )}
-            {activity.type == "TASK_CHANGE_ASSIGNEE" && (
-              <AssigneeChangeDiffInfo activity={activity} />
-            )}
-            {activity.type == "TASK_CHANGE_ASSIGNED_DATE" && (
-              <AssignedDateChangeDiffInfo activity={activity} />
-            )}
-            {activity.type == "TASK_CHANGE_DUE_DATE" && (
-              <DueDateChangeDiffInfo activity={activity} />
-            )}
-            {(activity.type == "RELATION_INITIALIZED" ||
-              activity.type == "RELATION_REMOVED") && (
+            {activity.type == "EDIT_TASK_TITLE" && <TitleDiffInfo activity={activity} />}
+            {activity.type == "EDIT_TASK_DESC" && <DescDiffInfo activity={activity} />}
+            {activity.type == "TASK_UPDATE_TOPIC" && <TopicDiffInfo activity={activity} />}
+            {activity.type == "TASK_UPDATE_WORKFLOW_STATUS" && <WorkflowStatusDiffInfo activity={activity} />}
+            {activity.type == "TASK_CHANGE_ASSIGNEE" && <AssigneeChangeDiffInfo activity={activity} />}
+            {activity.type == "TASK_CHANGE_ASSIGNED_DATE" && <AssignedDateChangeDiffInfo activity={activity} />}
+            {activity.type == "TASK_CHANGE_DUE_DATE" && <DueDateChangeDiffInfo activity={activity} />}
+            {(activity.type == "RELATION_INITIALIZED" || activity.type == "RELATION_REMOVED") && (
               <TaskRelationChangedDiffInfo activity={activity} />
             )}
           </>

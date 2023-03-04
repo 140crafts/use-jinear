@@ -11,20 +11,12 @@ interface ColorInputProps {
   labelClass: string;
 }
 
-const ColorInput: React.FC<ColorInputProps> = ({
-  register,
-  watch,
-  labelClass,
-}) => {
+const ColorInput: React.FC<ColorInputProps> = ({ register, watch, labelClass }) => {
   const { t } = useTranslation();
   return (
     <label className={cn(labelClass, styles.container)} htmlFor={"topic-color"}>
       {`${t("topicFormColor")}`}
-      <input
-        id={"topic-color"}
-        type={"color"}
-        {...register("color", { required: t("formRequiredField") })}
-      />
+      <input id={"topic-color"} type={"color"} {...register("color", { required: t("formRequiredField") })} />
     </label>
   );
 };

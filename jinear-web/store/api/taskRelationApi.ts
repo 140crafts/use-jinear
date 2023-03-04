@@ -1,15 +1,9 @@
-import {
-  BaseResponse,
-  TaskRelationInitializeRequest,
-} from "@/model/be/jinear-core";
+import { BaseResponse, TaskRelationInitializeRequest } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const taskRelationApi = api.injectEndpoints({
   endpoints: (build) => ({
-    initializeTaskRelation: build.mutation<
-      BaseResponse,
-      TaskRelationInitializeRequest
-    >({
+    initializeTaskRelation: build.mutation<BaseResponse, TaskRelationInitializeRequest>({
       query: (req: TaskRelationInitializeRequest) => ({
         url: `v1/task/relation`,
         method: "POST",
@@ -39,10 +33,7 @@ export const taskRelationApi = api.injectEndpoints({
   }),
 });
 
-export const {
-  useInitializeTaskRelationMutation,
-  useDeleteTaskRelationMutation,
-} = taskRelationApi;
+export const { useInitializeTaskRelationMutation, useDeleteTaskRelationMutation } = taskRelationApi;
 
 export const {
   endpoints: { initializeTaskRelation, deleteTaskRelation },

@@ -21,15 +21,12 @@ export interface IForgotPasswordForm {
   email: string;
 }
 
-const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
-  className,
-}) => {
+const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const { register, setValue, handleSubmit } = useForm<IForgotPasswordForm>();
   const dispatch = useDispatch();
-  const [initializeResetPassword, { isSuccess, isError, isLoading }] =
-    useInitializeResetPasswordMutation();
+  const [initializeResetPassword, { isSuccess, isError, isLoading }] = useInitializeResetPasswordMutation();
 
   useEffect(() => {
     if (isSuccess && !isError) {
@@ -57,13 +54,7 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({
   return (
     <div className={cn(styles.container, className)}>
       <FormTitle title={t("forgotPasswordFormTitle")} />
-      <form
-        autoComplete="off"
-        id={"forgot-password-form"}
-        className={styles.form}
-        onSubmit={handleSubmit(submit)}
-        action="#"
-      >
+      <form autoComplete="off" id={"forgot-password-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
         <label className={styles.label} htmlFor={"reset-password-email"}>
           {t("forgotPasswordEmailLabel")}
           <input id={"reset-password"} type={"email"} {...register("email")} />

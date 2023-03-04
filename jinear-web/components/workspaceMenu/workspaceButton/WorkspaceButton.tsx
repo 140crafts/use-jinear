@@ -17,12 +17,9 @@ interface WorkspaceButtonProps {
 const WorkspaceButton: React.FC<WorkspaceButtonProps> = ({ workspace }) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const prefferedWorkspaceId = useTypedSelector(
-    selectCurrentAccountsPreferredWorkspaceId
-  );
+  const prefferedWorkspaceId = useTypedSelector(selectCurrentAccountsPreferredWorkspaceId);
   const isPreffered = workspace.workspaceId == prefferedWorkspaceId;
-  const [updatePreferredWorkspace, { isLoading }] =
-    useUpdatePreferredWorkspaceMutation();
+  const [updatePreferredWorkspace, { isLoading }] = useUpdatePreferredWorkspaceMutation();
 
   useEffect(() => {
     dispatch(changeLoadingModalVisibility({ visible: isLoading }));
@@ -39,11 +36,7 @@ const WorkspaceButton: React.FC<WorkspaceButtonProps> = ({ workspace }) => {
 
   return (
     <div className={cn(styles.wrapper, isPreffered && styles.preffered)}>
-      <Button
-        onClick={changePrefferedWorkspace}
-        className={cn(styles.container)}
-        data-tooltip={workspace.username}
-      >
+      <Button onClick={changePrefferedWorkspace} className={cn(styles.container)} data-tooltip={workspace.username}>
         {workspace?.profilePicture?.storagePath ? (
           <ProfilePhoto
             boringAvatarKey={workspace.workspaceId}
@@ -52,9 +45,7 @@ const WorkspaceButton: React.FC<WorkspaceButtonProps> = ({ workspace }) => {
             imgClassName={styles.profilePicImg}
           />
         ) : (
-          <div className={styles.firstLetter}>
-            {workspace.username.substring(0, 1)?.toLocaleUpperCase()}
-          </div>
+          <div className={styles.firstLetter}>{workspace.username.substring(0, 1)?.toLocaleUpperCase()}</div>
         )}
       </Button>
     </div>

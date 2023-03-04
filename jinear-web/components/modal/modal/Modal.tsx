@@ -43,20 +43,10 @@ const Modal: React.FC<ModalProps> = ({
             </div>
           )}
           <h3 className={styles.title}>{title}</h3>
-          {hasTitleCloseButton && (
-            <div className={styles.titleBarIconButtonContainer} />
-          )}
+          {hasTitleCloseButton && <div className={styles.titleBarIconButtonContainer} />}
         </div>
       )}
-      <div
-        className={cn(
-          styles.body,
-          width == "fullscreen" && styles.fullHeightBody,
-          bodyClass
-        )}
-      >
-        {children}
-      </div>
+      <div className={cn(styles.body, width == "fullscreen" && styles.fullHeightBody, bodyClass)}>{children}</div>
     </BaseModal>
   );
 };

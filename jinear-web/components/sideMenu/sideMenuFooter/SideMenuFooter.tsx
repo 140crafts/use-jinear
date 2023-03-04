@@ -11,10 +11,7 @@ interface SideMenuFooterProps {
 const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
   return (
     <div className={cn(styles.container, className)}>
-      <Button
-        variant={ButtonVariants.hoverFilled}
-        className={styles.accountButton}
-      >
+      <Button variant={ButtonVariants.hoverFilled} className={styles.accountButton}>
         Cagdas (TODO)
       </Button>
       <ThemeToggle />

@@ -16,14 +16,7 @@ interface TopicSelectProps {
   selectClass: string;
 }
 
-const TopicSelect: React.FC<TopicSelectProps> = ({
-  teamId,
-  setValue,
-  register,
-  labelClass,
-  loadingClass,
-  selectClass,
-}) => {
+const TopicSelect: React.FC<TopicSelectProps> = ({ teamId, setValue, register, labelClass, loadingClass, selectClass }) => {
   const { t } = useTranslation();
   const {
     data: teamTopicListingResponse,
@@ -48,11 +41,7 @@ const TopicSelect: React.FC<TopicSelectProps> = ({
     <label
       className={labelClass}
       htmlFor="task-topic-id"
-      data-tooltip={
-        !teamTopicListingResponse?.data?.hasContent
-          ? t("newTaskModalTaskTopicNoContentTooltip")
-          : undefined
-      }
+      data-tooltip={!teamTopicListingResponse?.data?.hasContent ? t("newTaskModalTaskTopicNoContentTooltip") : undefined}
     >
       {t("newTaskModalTaskTopicLabel")}
       <select
@@ -61,9 +50,7 @@ const TopicSelect: React.FC<TopicSelectProps> = ({
         className={selectClass}
         {...register("topicId")}
       >
-        <option value={"no-topic"}>
-          {t("newTaskModalTaskTopicNoContentValue")}
-        </option>
+        <option value={"no-topic"}>{t("newTaskModalTaskTopicNoContentValue")}</option>
 
         {teamTopicListingResponse?.data?.content.map((topic) => (
           <option key={topic.topicId} value={topic.topicId}>

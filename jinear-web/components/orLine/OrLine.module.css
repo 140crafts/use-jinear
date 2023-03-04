@@ -12,19 +12,11 @@
 .orLineLeft {
   height: 1px;
   width: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--c-primary) 0%,
-    var(--c-primary-shade-1) 100%
-  );
+  background: linear-gradient(90deg, var(--c-primary) 0%, var(--c-primary-shade-1) 100%);
 }
 
 .orLineRight {
   height: 1px;
   width: 100%;
-  background: linear-gradient(
-    90deg,
-    var(--c-primary-shade-1) 0%,
-    var(--c-primary) 100%
-  );
+  background: linear-gradient(90deg, var(--c-primary-shade-1) 0%, var(--c-primary) 100%);
 }

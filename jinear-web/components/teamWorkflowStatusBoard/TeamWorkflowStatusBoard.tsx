@@ -21,12 +21,7 @@ interface TeamWorkflowStatusBoardProps {
 }
 const logger = Logger("TeamWorkflowStatusBoard");
 
-const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({
-  teamId,
-  workspaceId,
-  startDate,
-  endDate,
-}) => {
+const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamId, workspaceId, startDate, endDate }) => {
   const {
     data: taskListingResponse,
     isFetching: isTaskListingFetching,
@@ -41,14 +36,14 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({
     { skip: teamId == null || workspaceId == null }
   );
 
-  const { data: teamWorkflowListData, isFetching: isTeamWorkflowListFetching } =
-    useRetrieveAllFromTeamQuery({ teamId }, { skip: teamId == null });
+  const { data: teamWorkflowListData, isFetching: isTeamWorkflowListFetching } = useRetrieveAllFromTeamQuery(
+    { teamId },
+    { skip: teamId == null }
+  );
 
-  const [updateTaskWorkflowStatus, { isLoading }] =
-    useUpdateTaskWorkflowStatusMutation();
+  const [updateTaskWorkflowStatus, { isLoading }] = useUpdateTaskWorkflowStatusMutation();
 
-  const [workflowStatusUpdatePendingTask, setWorkflowStatusUpdatePendingTask] =
-    useState<IWorkflowStatusUpdatePendingTask>();
+  const [workflowStatusUpdatePendingTask, setWorkflowStatusUpdatePendingTask] = useState<IWorkflowStatusUpdatePendingTask>();
 
   useEffect(() => {
     if (!isTaskListingFetching) {
@@ -71,69 +66,51 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({
     updateTaskWorkflowStatus({ taskId, workflowStatusId });
   };
 
-  const _isLoading =
-    isTaskListingFetching ||
-    isTeamWorkflowListFetching ||
-    workflowStatusUpdatePendingTask;
+  const _isLoading = isTaskListingFetching || isTeamWorkflowListFetching || workflowStatusUpdatePendingTask;
 
   return (
-    <div
-      className={cn(
-        styles.container,
-        _isLoading ? styles["container-disabled"] : undefined
-      )}
-    >
+    <div className={cn(styles.container, _isLoading ? styles["container-disabled"] : undefined)}>
       <DragDropContext onDragEnd={onDragEnd}>
-        {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.BACKLOG?.map(
-          (workflowDto) => (
-            <WorkflowStatusColumn
-              key={workflowDto.teamWorkflowStatusId}
-              workflowStatusDto={workflowDto}
-              tasks={taskListingResponse?.data}
-              workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
-            />
-          )
-        )}
-        {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.NOT_STARTED?.map(
-          (workflowDto) => (
-            <WorkflowStatusColumn
-              key={workflowDto.teamWorkflowStatusId}
-              workflowStatusDto={workflowDto}
-              tasks={taskListingResponse?.data}
-              workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
-            />
-          )
-        )}
-        {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.STARTED?.map(
-          (workflowDto) => (
-            <WorkflowStatusColumn
-              key={workflowDto.teamWorkflowStatusId}
-              workflowStatusDto={workflowDto}
-              tasks={taskListingResponse?.data}
-              workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
-            />
-          )
-        )}
-        {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.COMPLETED?.map(
-          (workflowDto) => (
-            <WorkflowStatusColumn
-              key={workflowDto.teamWorkflowStatusId}
-              workflowStatusDto={workflowDto}
-              tasks={taskListingResponse?.data}
-              workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
-            />
-          )
-        )}
-        {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.CANCELLED?.map(
-          (workflowDto) => (
-            <WorkflowStatusColumn
-              key={workflowDto.teamWorkflowStatusId}
-              workflowStatusDto={workflowDto}
-              tasks={taskListingResponse?.data}
-              workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
-            />
-          )
-        )}
+        {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.BACKLOG?.map((workflowDto) => (
+          <WorkflowStatusColumn
+            key={workflowDto.teamWorkflowStatusId}
+            workflowStatusDto={workflowDto}
+            tasks={taskListingResponse?.data}
+            workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
+          />
+        ))}
+        {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.NOT_STARTED?.map((workflowDto) => (
+          <WorkflowStatusColumn
+            key={workflowDto.teamWorkflowStatusId}
+            workflowStatusDto={workflowDto}
+            tasks={taskListingResponse?.data}
+            workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
+          />
+        ))}
+        {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.STARTED?.map((workflowDto) => (
+          <WorkflowStatusColumn
+            key={workflowDto.teamWorkflowStatusId}
+            workflowStatusDto={workflowDto}
+            tasks={taskListingResponse?.data}
+            workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
+          />
+        ))}
+        {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.COMPLETED?.map((workflowDto) => (
+          <WorkflowStatusColumn
+            key={workflowDto.teamWorkflowStatusId}
+            workflowStatusDto={workflowDto}
+            tasks={taskListingResponse?.data}
+            workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
+          />
+        ))}
+        {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.CANCELLED?.map((workflowDto) => (
+          <WorkflowStatusColumn
+            key={workflowDto.teamWorkflowStatusId}
+            workflowStatusDto={workflowDto}
+            tasks={taskListingResponse?.data}
+            workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
+          />
+        ))}
       </DragDropContext>
     </div>
   );

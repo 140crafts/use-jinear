@@ -16,10 +16,7 @@ export const authApi = api.injectEndpoints({
       }),
       invalidatesTags: tagTypes,
     }),
-    emailLoginTokenRequest: build.mutation<
-      AuthInitializeResponse,
-      AuthInitializeRequest
-    >({
+    emailLoginTokenRequest: build.mutation<AuthInitializeResponse, AuthInitializeRequest>({
       query: (body: AuthInitializeRequest) => ({
         url: "v1/auth/otp/email/initialize",
         method: "POST",
@@ -54,10 +51,5 @@ export const {
 } = authApi;
 
 export const {
-  endpoints: {
-    logout,
-    emailLoginTokenRequest,
-    emailOtpLoginComplete,
-    loginWithPassword,
-  },
+  endpoints: { logout, emailLoginTokenRequest, emailOtpLoginComplete, loginWithPassword },
 } = authApi;

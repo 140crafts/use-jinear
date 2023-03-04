@@ -22,21 +22,7 @@ const logger = Logger("TextEditorBasic");
 const URL_REGEX =
   /^(?:(?:ht|f)tp(?:s?)\:\/\/|~\/|\/)?(?:\w+:\w+@)?((?:(?:[-\w\d{1-3}]+\.)+(?:com|org|net|gov|mil|biz|info|mobi|name|aero|jobs|edu|co\.uk|ac\.uk|it|fr|tv|museum|asia|local|travel|[a-z]{2}))|((\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)(\.(\b25[0-5]\b|\b[2][0-4][0-9]\b|\b[0-1]?[0-9]?[0-9]\b)){3}))(?::[\d]{1,5})?(?:(?:(?:\/(?:[-\w~!$+|.,=]|%[a-f\d]{2})+)+|\/)+|\?|#)?(?:(?:\?(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)(?:&(?:[-\w~!$+|.,*:]|%[a-f\d{2}])+=?(?:[-\w~!$+|.,*:=]|%[a-f\d]{2})*)*)*(?:#(?:[-\w~!$ |\/.,*:;=]|%[a-f\d]{2})*)?$/i;
 
-const ALLOWED_TAGS = [
-  "h1",
-  "p",
-  "b",
-  "i",
-  "em",
-  "strong",
-  "a",
-  "br",
-  "li",
-  "ul",
-  "ol",
-  "blockquote",
-  "br",
-];
+const ALLOWED_TAGS = ["h1", "p", "b", "i", "em", "strong", "a", "br", "li", "ul", "ol", "blockquote", "br"];
 
 const SANITIZE_CONFIG = {
   allowedTags: ALLOWED_TAGS,
@@ -94,16 +80,8 @@ const TextEditorBasic: React.FC<TextEditorBasicProps> = ({
         <div className={styles.toolbar}>
           <EditorButton cmd={"italic"} label={t("textEditorItalic")} />
           <EditorButton cmd={"bold"} label={t("textEditorBold")} />
-          <EditorButton
-            cmd={"formatBlock"}
-            arg={"h1"}
-            label={t("textEditorHeading")}
-          />
-          <EditorButton
-            cmd={"formatBlock"}
-            arg={"blockquote"}
-            label={t("textEditorQuote")}
-          />
+          <EditorButton cmd={"formatBlock"} arg={"h1"} label={t("textEditorHeading")} />
+          <EditorButton cmd={"formatBlock"} arg={"blockquote"} label={t("textEditorQuote")} />
           <EditorButton cmd={"insertOrderedList"} label={t("textEditorOl")} />
           <EditorButton cmd={"insertUnorderedList"} label={t("textEditorUl")} />
         </div>
@@ -117,18 +95,9 @@ const TextEditorBasic: React.FC<TextEditorBasicProps> = ({
         onBlur={sanitizeData}
       />
 
-      {(!value || value == "") && readOnly && (
-        <div className={styles.placeholder}>{placeholder}</div>
-      )}
+      {(!value || value == "") && readOnly && <div className={styles.placeholder}>{placeholder}</div>}
 
-      {htmlInputId && (
-        <input
-          id={htmlInputId}
-          type="hidden"
-          {...register?.(htmlInputId)}
-          value={value}
-        />
-      )}
+      {htmlInputId && <input id={htmlInputId} type="hidden" {...register?.(htmlInputId)} value={value} />}
     </div>
   );
 };

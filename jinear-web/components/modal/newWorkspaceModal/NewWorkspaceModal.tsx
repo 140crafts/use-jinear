@@ -1,9 +1,6 @@
 import NewWorkspaceForm from "@/components/form/newWorkspaceForm/NewWorkspaceForm";
 import useWindowSize from "@/hooks/useWindowSize";
-import {
-  closeNewWorkspaceModal,
-  selectNewWorkspaceModalVisible,
-} from "@/store/slice/modalSlice";
+import { closeNewWorkspaceModal, selectNewWorkspaceModalVisible } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";

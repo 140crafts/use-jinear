@@ -24,10 +24,7 @@ const TaskActivityList: React.FC<TaskActivityListProps> = ({ taskId }) => {
       <div className="spacer-h-2" />
       {isSuccess &&
         retrieveTaskActivityResponse.data.map((activity) => (
-          <TaskActivity
-            key={activity.workspaceActivityId}
-            activity={activity}
-          />
+          <TaskActivity key={activity.workspaceActivityId} activity={activity} />
         ))}
 
       {(isFetching || isLoading) && (

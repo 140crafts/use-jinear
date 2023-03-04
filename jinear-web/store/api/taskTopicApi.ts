@@ -3,10 +3,7 @@ import { api } from "./api";
 
 export const taskTopicApi = api.injectEndpoints({
   endpoints: (build) => ({
-    updateTaskTopic: build.mutation<
-      TaskResponse,
-      { taskId: string; topicId: string }
-    >({
+    updateTaskTopic: build.mutation<TaskResponse, { taskId: string; topicId: string }>({
       query: (body: { taskId: string; topicId: string }) => ({
         url: `v1/task/topic/${body.taskId}/${body.topicId}`,
         method: "PUT",
@@ -32,8 +29,7 @@ export const taskTopicApi = api.injectEndpoints({
   }),
 });
 
-export const { useUpdateTaskTopicMutation, useRemoveTaskTopicMutation } =
-  taskTopicApi;
+export const { useUpdateTaskTopicMutation, useRemoveTaskTopicMutation } = taskTopicApi;
 
 export const {
   endpoints: { updateTaskTopic, removeTaskTopic },

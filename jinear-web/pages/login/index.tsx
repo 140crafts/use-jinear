@@ -16,10 +16,7 @@ const LoginPage: React.FC<LoginPageProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      <LoginWithMailForm
-        className={styles.form}
-        initialEmail={email as string | undefined}
-      />
+      <LoginWithMailForm className={styles.form} initialEmail={email as string | undefined} />
       <FormLogo />
     </div>
   );

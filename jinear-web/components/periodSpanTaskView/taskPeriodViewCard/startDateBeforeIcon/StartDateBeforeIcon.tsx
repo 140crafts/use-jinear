@@ -9,17 +9,11 @@ interface StartDateBeforeIconProps {
   isStartDateBefore: boolean;
 }
 
-const StartDateBeforeIcon: React.FC<StartDateBeforeIconProps> = ({
-  assignedDate,
-  isStartDateBefore,
-}) => {
+const StartDateBeforeIcon: React.FC<StartDateBeforeIconProps> = ({ assignedDate, isStartDateBefore }) => {
   const { t } = useTranslation();
   const tooltip = !assignedDate
     ? null
-    : t("taskWeekCardTaskStartedBeforeThisWeekTooltip")?.replace(
-        "${date}",
-        format(new Date(assignedDate), t("dateFormat"))
-      );
+    : t("taskWeekCardTaskStartedBeforeThisWeekTooltip")?.replace("${date}", format(new Date(assignedDate), t("dateFormat")));
 
   return isStartDateBefore ? (
     <div className={styles.iconWrapper} data-tooltip={tooltip}>

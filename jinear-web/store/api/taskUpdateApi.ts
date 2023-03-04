@@ -9,10 +9,7 @@ import { api } from "./api";
 
 export const taskUpdateApi = api.injectEndpoints({
   endpoints: (build) => ({
-    updateTaskDescription: build.mutation<
-      TaskResponse,
-      { taskId: string; body: TaskUpdateDescriptionRequest }
-    >({
+    updateTaskDescription: build.mutation<TaskResponse, { taskId: string; body: TaskUpdateDescriptionRequest }>({
       query: (req: { taskId: string; body: TaskUpdateDescriptionRequest }) => ({
         url: `v1/task/update/${req.taskId}/description`,
         method: "PUT",
@@ -26,10 +23,7 @@ export const taskUpdateApi = api.injectEndpoints({
       ],
     }),
     //
-    updateTaskTitle: build.mutation<
-      TaskResponse,
-      { taskId: string; body: TaskUpdateTitleRequest }
-    >({
+    updateTaskTitle: build.mutation<TaskResponse, { taskId: string; body: TaskUpdateTitleRequest }>({
       query: (req: { taskId: string; body: TaskUpdateTitleRequest }) => ({
         url: `v1/task/update/${req.taskId}/title`,
         method: "PUT",
@@ -43,10 +37,7 @@ export const taskUpdateApi = api.injectEndpoints({
       ],
     }),
     //
-    updateTaskDates: build.mutation<
-      TaskResponse,
-      { taskId: string; body: TaskDateUpdateRequest }
-    >({
+    updateTaskDates: build.mutation<TaskResponse, { taskId: string; body: TaskDateUpdateRequest }>({
       query: (req: { taskId: string; body: TaskDateUpdateRequest }) => ({
         url: `v1/task/update/${req.taskId}/dates`,
         method: "PUT",
@@ -62,10 +53,7 @@ export const taskUpdateApi = api.injectEndpoints({
     }),
     //
     //
-    updateTaskAssignee: build.mutation<
-      TaskResponse,
-      { taskId: string; body: TaskAssigneeUpdateRequest }
-    >({
+    updateTaskAssignee: build.mutation<TaskResponse, { taskId: string; body: TaskAssigneeUpdateRequest }>({
       query: (req: { taskId: string; body: TaskAssigneeUpdateRequest }) => ({
         url: `v1/task/update/${req.taskId}/assignee`,
         method: "PUT",
@@ -90,10 +78,5 @@ export const {
 } = taskUpdateApi;
 
 export const {
-  endpoints: {
-    updateTaskDescription,
-    updateTaskTitle,
-    updateTaskDates,
-    updateTaskAssignee,
-  },
+  endpoints: { updateTaskDescription, updateTaskTitle, updateTaskDates, updateTaskAssignee },
 } = taskUpdateApi;

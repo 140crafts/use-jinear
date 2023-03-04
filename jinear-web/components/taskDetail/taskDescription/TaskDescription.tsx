@@ -21,17 +21,11 @@ interface TaskDescriptionProps {
 
 const logger = Logger("TaskDescription");
 
-const TaskDescription: React.FC<TaskDescriptionProps> = ({
-  taskId,
-  description,
-}) => {
+const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }) => {
   const { t } = useTranslation();
   const { current: readOnly, toggle: toggleReadOnly } = useToggle(true);
   const [initialValue, setInitialValue] = useState(description?.value);
-  const [
-    updateTaskDescription,
-    { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading },
-  ] = useUpdateTaskDescriptionMutation();
+  const [updateTaskDescription, { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading }] = useUpdateTaskDescriptionMutation();
 
   useEffect(() => {
     if (description?.value) {
@@ -40,9 +34,7 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({
   }, [description?.value]);
 
   const save = () => {
-    const input: HTMLInputElement | null = document.getElementById(
-      `${description?.richTextId}`
-    ) as HTMLInputElement;
+    const input: HTMLInputElement | null = document.getElementById(`${description?.richTextId}`) as HTMLInputElement;
     if (input) {
       const value = input?.value || "";
       const req = {
@@ -77,16 +69,10 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({
         readOnly={readOnly}
         variant={"full"}
         initialValue={initialValue}
-        placeholder={
-          initialValue ? undefined : t("taskDetalPageTaskDescription")
-        }
+        placeholder={initialValue ? undefined : t("taskDetalPageTaskDescription")}
       />
       {readOnly && (
-        <Button
-          onClick={toggle}
-          className={styles.editButton}
-          variant={ButtonVariants.filled2}
-        >
+        <Button onClick={toggle} className={styles.editButton} variant={ButtonVariants.filled2}>
           {t("taskDescriptionEdit")}
         </Button>
       )}
@@ -104,21 +90,14 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({
             disabled={isUpdateLoading}
             loading={isUpdateLoading}
             heightVariant={ButtonHeight.mid}
-            variant={
-              readOnly ? ButtonVariants.filled2 : ButtonVariants.contrast
-            }
+            variant={readOnly ? ButtonVariants.filled2 : ButtonVariants.contrast}
             onClick={toggle}
           >
             {t("taskDescriptionSave")}
           </Button>
         )}
         {!readOnly && (
-          <Button
-            disabled={isUpdateLoading}
-            heightVariant={ButtonHeight.mid}
-            variant={ButtonVariants.filled2}
-            onClick={cancel}
-          >
+          <Button disabled={isUpdateLoading} heightVariant={ButtonHeight.mid} variant={ButtonVariants.filled2} onClick={cancel}>
             {t("taskDescriptionCancel")}
           </Button>
         )}

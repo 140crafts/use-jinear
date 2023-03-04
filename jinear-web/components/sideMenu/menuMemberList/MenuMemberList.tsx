@@ -1,10 +1,6 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import ProfilePhoto from "@/components/profilePhoto";
-import {
-  PageDto,
-  TeamMemberDto,
-  WorkspaceMemberDto,
-} from "@/model/be/jinear-core";
+import { PageDto, TeamMemberDto, WorkspaceMemberDto } from "@/model/be/jinear-core";
 import { motion, usePresence } from "framer-motion";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -45,10 +41,7 @@ const MenuMemberList: React.FC<MenuMemberListProps> = ({ page, type }) => {
 
   const totalElements = page?.totalElements || 0;
   const remainingCount = totalElements - SLICE_SIZE;
-  const moreButtonLabel = t("sideMenuWorkspaceMembersMore").replace(
-    "${number}",
-    `${remainingCount}`
-  );
+  const moreButtonLabel = t("sideMenuWorkspaceMembersMore").replace("${number}", `${remainingCount}`);
 
   return (
     <div className={styles.contentContainer}>
@@ -73,19 +66,12 @@ const MenuMemberList: React.FC<MenuMemberListProps> = ({ page, type }) => {
         ))}
 
         {remainingCount > 0 && (
-          <Button
-            variant={ButtonVariants.hoverFilled2}
-            className={styles.moreButton}
-            heightVariant={ButtonHeight.short}
-          >
+          <Button variant={ButtonVariants.hoverFilled2} className={styles.moreButton} heightVariant={ButtonHeight.short}>
             {moreButtonLabel}
           </Button>
         )}
       </motion.div>
-      <Button
-        variant={ButtonVariants.hoverFilled2}
-        heightVariant={ButtonHeight.short}
-      >
+      <Button variant={ButtonVariants.hoverFilled2} heightVariant={ButtonHeight.short}>
         <IoAdd />
       </Button>
     </div>

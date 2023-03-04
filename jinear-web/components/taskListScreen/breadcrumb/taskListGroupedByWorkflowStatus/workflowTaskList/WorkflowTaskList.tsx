@@ -13,12 +13,7 @@ interface WorkflowTaskListProps {
   name: string;
 }
 
-const WorkflowTaskList: React.FC<WorkflowTaskListProps> = ({
-  workspaceId,
-  teamId,
-  workflowStatusId,
-  name,
-}) => {
+const WorkflowTaskList: React.FC<WorkflowTaskListProps> = ({ workspaceId, teamId, workflowStatusId, name }) => {
   const { t } = useTranslation();
   const [page, setPage] = useState<number>(0);
   const {
@@ -33,12 +28,7 @@ const WorkflowTaskList: React.FC<WorkflowTaskListProps> = ({
   });
 
   return (
-    <div
-      className={cn(
-        styles.container,
-        isFetching ? styles["container-disabled"] : undefined
-      )}
-    >
+    <div className={cn(styles.container, isFetching ? styles["container-disabled"] : undefined)}>
       <div className={styles.header}>
         <h2>{name}</h2>
         {workflowTaskListResponse && (
@@ -65,9 +55,7 @@ const WorkflowTaskList: React.FC<WorkflowTaskListProps> = ({
 
         {!workflowTaskListResponse?.data.hasContent && (
           <div className={styles.emptyStateContainer}>
-            <div className={styles.emptyLabel}>
-              {t("workflowTaskListEmpty")}
-            </div>
+            <div className={styles.emptyLabel}>{t("workflowTaskListEmpty")}</div>
           </div>
         )}
       </div>

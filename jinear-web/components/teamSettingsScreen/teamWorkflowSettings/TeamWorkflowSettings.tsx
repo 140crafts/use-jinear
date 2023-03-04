@@ -11,12 +11,12 @@ interface TeamWorkflowSettingsProps {
   teamId: string;
 }
 
-const TeamWorkflowSettings: React.FC<TeamWorkflowSettingsProps> = ({
-  teamId,
-}) => {
+const TeamWorkflowSettings: React.FC<TeamWorkflowSettingsProps> = ({ teamId }) => {
   const { t } = useTranslation();
-  const { data: teamWorkflowListData, isLoading: isTeamWorkflowListLoading } =
-    useRetrieveAllFromTeamQuery({ teamId }, { skip: teamId == null });
+  const { data: teamWorkflowListData, isLoading: isTeamWorkflowListLoading } = useRetrieveAllFromTeamQuery(
+    { teamId },
+    { skip: teamId == null }
+  );
   return (
     <div className={styles.container}>
       <SectionTitle
@@ -31,41 +31,19 @@ const TeamWorkflowSettings: React.FC<TeamWorkflowSettingsProps> = ({
 
       {!isTeamWorkflowListLoading && teamWorkflowListData && (
         <Transition initial={true} className={styles.content}>
-          <WorkflowGroup
-            groupType={"BACKLOG"}
-            statuses={
-              teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["BACKLOG"]
-            }
-          />
+          <WorkflowGroup groupType={"BACKLOG"} statuses={teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["BACKLOG"]} />
           <WorkflowGroup
             groupType={"NOT_STARTED"}
-            statuses={
-              teamWorkflowListData.data.groupedTeamWorkflowStatuses?.[
-                "NOT_STARTED"
-              ]
-            }
+            statuses={teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["NOT_STARTED"]}
           />
-          <WorkflowGroup
-            groupType={"STARTED"}
-            statuses={
-              teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["STARTED"]
-            }
-          />
+          <WorkflowGroup groupType={"STARTED"} statuses={teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["STARTED"]} />
           <WorkflowGroup
             groupType={"COMPLETED"}
-            statuses={
-              teamWorkflowListData.data.groupedTeamWorkflowStatuses?.[
-                "COMPLETED"
-              ]
-            }
+            statuses={teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["COMPLETED"]}
           />
           <WorkflowGroup
             groupType={"CANCELLED"}
-            statuses={
-              teamWorkflowListData.data.groupedTeamWorkflowStatuses?.[
-                "CANCELLED"
-              ]
-            }
+            statuses={teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["CANCELLED"]}
           />
         </Transition>
       )}

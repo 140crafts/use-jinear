@@ -19,14 +19,7 @@ interface MemberSelectProps {
   selectClass: string;
 }
 
-const MemberSelect: React.FC<MemberSelectProps> = ({
-  teamId,
-  setValue,
-  register,
-  labelClass,
-  loadingClass,
-  selectClass,
-}) => {
+const MemberSelect: React.FC<MemberSelectProps> = ({ teamId, setValue, register, labelClass, loadingClass, selectClass }) => {
   const { t } = useTranslation();
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
 
@@ -54,9 +47,7 @@ const MemberSelect: React.FC<MemberSelectProps> = ({
         className={selectClass}
         {...register("assignedTo")}
       >
-        <option value={"no-assignee"}>
-          {t("newTaskModalTaskTopicNoContentValue")}
-        </option>
+        <option value={"no-assignee"}>{t("newTaskModalTaskTopicNoContentValue")}</option>
 
         {teamMembersResponse?.data?.content.map((teamMember) => (
           <option key={teamMember.teamMemberId} value={teamMember.accountId}>

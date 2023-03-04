@@ -6,9 +6,7 @@ interface WorkflowStatusDiffInfoProps {
   activity: WorkspaceActivityDto;
 }
 
-const WorkflowStatusDiffInfo: React.FC<WorkflowStatusDiffInfoProps> = ({
-  activity,
-}) => {
+const WorkflowStatusDiffInfo: React.FC<WorkflowStatusDiffInfoProps> = ({ activity }) => {
   const oldWorkflowStatusName = activity.oldWorkflowStatusDto?.name || "";
   const newWorkflowStatusName = activity.newWorkflowStatusDto?.name || "";
 
