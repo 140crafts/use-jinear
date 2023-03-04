@@ -1,7 +1,7 @@
 package co.jinear.core.manager.task;
 
 import co.jinear.core.model.dto.PageDto;
-import co.jinear.core.model.dto.task.TaskDto;
+import co.jinear.core.model.dto.task.TaskSearchResultDto;
 import co.jinear.core.model.response.task.TaskSearchResponse;
 import co.jinear.core.model.vo.task.TaskSearchVo;
 import co.jinear.core.service.SessionInfoService;
@@ -28,7 +28,7 @@ public class TaskSearchManager {
         validateAccess(currentAccountId, workspaceId, teamId);
         log.info("Search task has begun. accountId: {}", currentAccountId);
         TaskSearchVo taskSearchVo = mapVo(title, workspaceId, teamId, page);
-        Page<TaskDto> taskDtoPage = taskSearchService.searchTasks(taskSearchVo);
+        Page<TaskSearchResultDto> taskDtoPage = taskSearchService.searchTasks(taskSearchVo);
         return mapResponse(taskDtoPage);
     }
 
@@ -46,10 +46,10 @@ public class TaskSearchManager {
         return taskSearchVo;
     }
 
-    private TaskSearchResponse mapResponse(Page<TaskDto> taskDtoPage) {
-        PageDto<TaskDto> data = new PageDto<>(taskDtoPage);
+    private TaskSearchResponse mapResponse(Page<TaskSearchResultDto> taskDtoPage) {
+        PageDto<TaskSearchResultDto> data = new PageDto<>(taskDtoPage);
         TaskSearchResponse response = new TaskSearchResponse();
-        response.setTaskDtoPage(data);
+        response.setResult(data);
         return response;
     }
 }
