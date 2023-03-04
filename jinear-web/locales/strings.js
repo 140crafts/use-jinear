@@ -986,13 +986,17 @@ export default {
     en: "Sub Tasks",
     tr: "Alt Görevler",
   },
+  taskSubtaskListEmpty: {
+    en: "No sub tasks found for current task",
+    tr: "Bu görev için iliştirilmiş herhangi bir alt görev bulunamadı",
+  },
   taskSubtaskListAddNewTaskButton: {
     en: "Create a new subtask",
-    tr: "Alt Görev Oluştur",
+    tr: "Alt görev oluştur",
   },
   taskSubtaskListAddExistingTaskButton: {
     en: "Add existing task as a new subtask",
-    tr: "Var olan görevi bağla",
+    tr: "Var olan görevi ilişkilendir",
   },
   searchTaskModalTitle: {
     en: "Search Task",
