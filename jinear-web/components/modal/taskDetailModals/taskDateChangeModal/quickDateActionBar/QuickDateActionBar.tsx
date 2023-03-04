@@ -8,25 +8,14 @@ interface QuickDateActionBarProps {
   setDatesNextWeek: () => void;
 }
 
-const QuickDateActionBar: React.FC<QuickDateActionBarProps> = ({
-  setDatesThisWeek,
-  setDatesNextWeek,
-}) => {
+const QuickDateActionBar: React.FC<QuickDateActionBarProps> = ({ setDatesThisWeek, setDatesNextWeek }) => {
   const { t } = useTranslation();
   return (
     <div className={styles.quickDatesContainer}>
-      <Button
-        variant={ButtonVariants.filled}
-        heightVariant={ButtonHeight.short}
-        onClick={setDatesThisWeek}
-      >
+      <Button variant={ButtonVariants.filled} heightVariant={ButtonHeight.short} onClick={setDatesThisWeek}>
         {t("changeTaskDateThisWeek")}
       </Button>
-      <Button
-        variant={ButtonVariants.filled}
-        heightVariant={ButtonHeight.short}
-        onClick={setDatesNextWeek}
-      >
+      <Button variant={ButtonVariants.filled} heightVariant={ButtonHeight.short} onClick={setDatesNextWeek}>
         {t("changeTaskDateNextWeek")}
       </Button>
     </div>

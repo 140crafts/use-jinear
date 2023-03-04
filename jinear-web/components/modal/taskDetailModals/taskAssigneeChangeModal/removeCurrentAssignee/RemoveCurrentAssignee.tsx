@@ -15,17 +15,12 @@ interface RemoveCurrentAssigneeProps {
   close: () => void;
 }
 
-const RemoveCurrentAssignee: React.FC<RemoveCurrentAssigneeProps> = ({
-  close,
-}) => {
+const RemoveCurrentAssignee: React.FC<RemoveCurrentAssigneeProps> = ({ close }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const taskId = useTypedSelector(selectChangeTaskAssigneeModalTaskId);
-  const taskCurrentAssigneeId = useTypedSelector(
-    selectChangeTaskAssigneeModalTaskCurrentAssigneeId
-  );
-  const [updateTaskAssignee, { isSuccess, isError }] =
-    useUpdateTaskAssigneeMutation();
+  const taskCurrentAssigneeId = useTypedSelector(selectChangeTaskAssigneeModalTaskCurrentAssigneeId);
+  const [updateTaskAssignee, { isSuccess, isError }] = useUpdateTaskAssigneeMutation();
 
   useEffect(() => {
     if (isSuccess || isError) {

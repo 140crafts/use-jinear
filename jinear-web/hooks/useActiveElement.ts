@@ -1,10 +1,8 @@
 import React from "react";
 
 const useActiveElement = () => {
-  const [listenersReady, setListenersReady] =
-    React.useState(false); /** Useful when working with autoFocus */
-  const [activeElement, setActiveElement] =
-    React.useState<HTMLElement | null>(); // document.activeElement as HTMLElement | null
+  const [listenersReady, setListenersReady] = React.useState(false); /** Useful when working with autoFocus */
+  const [activeElement, setActiveElement] = React.useState<HTMLElement | null>(); // document.activeElement as HTMLElement | null
 
   React.useEffect(() => {
     const onFocus = (event: any) => setActiveElement(event.target);

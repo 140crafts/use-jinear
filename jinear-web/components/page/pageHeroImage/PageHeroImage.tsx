@@ -10,26 +10,14 @@ interface PageHeroImageProps {
   fitWithBgBlur?: boolean;
 }
 
-const PageHeroImage: React.FC<PageHeroImageProps> = ({
-  alt,
-  src,
-  objectFit,
-  layout,
-  fitWithBgBlur = false,
-}) => {
+const PageHeroImage: React.FC<PageHeroImageProps> = ({ alt, src, objectFit, layout, fitWithBgBlur = false }) => {
   const _objectFit = objectFit || (fitWithBgBlur ? "scale-down" : "cover");
   const _layout = layout || (fitWithBgBlur ? "fill" : "fill");
   return (
     <div className={styles.container}>
       {fitWithBgBlur && (
         <>
-          <Image
-            alt={alt || ""}
-            src={src}
-            className={styles.blurredImg}
-            objectFit={"fill"}
-            layout="fill"
-          />
+          <Image alt={alt || ""} src={src} className={styles.blurredImg} objectFit={"fill"} layout="fill" />
           <div className={styles.imgBlur} />
         </>
       )}

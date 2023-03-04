@@ -13,11 +13,7 @@ const NameInput: React.FC<NameInputProps> = ({ register, labelClass }) => {
   return (
     <label className={labelClass} htmlFor={"topic-name"}>
       {`${t("topicFormName")} *`}
-      <input
-        id={"topic-name"}
-        type={"text"}
-        {...register("name", { required: t("formRequiredField") })}
-      />
+      <input id={"topic-name"} type={"text"} {...register("name", { required: t("formRequiredField") })} />
     </label>
   );
 };

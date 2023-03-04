@@ -24,32 +24,22 @@ const MAX_TAG_LENGTH = 10;
 const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [initializeTeam, { data: initializeResponse, isLoading }] =
-    useInitializeTeamMutation();
-  const [updatePreferredTeam, { isLoading: isPrefferedTeamUpdateLoading }] =
-    useUpdatePreferredTeamMutation();
-  const currentWorkspace = useTypedSelector(
-    selectCurrentAccountsPreferredWorkspace
-  );
-  const { register, handleSubmit, setFocus, setValue, watch } =
-    useForm<TeamInitializeRequest>();
-  const [candidateUsername, setCandidateUsername] =
-    useState<string>("example-team");
+  const [initializeTeam, { data: initializeResponse, isLoading }] = useInitializeTeamMutation();
+  const [updatePreferredTeam, { isLoading: isPrefferedTeamUpdateLoading }] = useUpdatePreferredTeamMutation();
+  const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
+  const { register, handleSubmit, setFocus, setValue, watch } = useForm<TeamInitializeRequest>();
+  const [candidateUsername, setCandidateUsername] = useState<string>("example-team");
   const currName = watch("name");
   const currTag = watch("tag");
 
   useEffect(() => {
-    const normalized = normalizeUsernameReplaceSpaces(currName)
-      ?.substring(0, MAX_TAG_LENGTH)
-      ?.toLocaleUpperCase();
+    const normalized = normalizeUsernameReplaceSpaces(currName)?.substring(0, MAX_TAG_LENGTH)?.toLocaleUpperCase();
     setCandidateUsername(normalized);
     setValue("tag", normalized);
   }, [currName]);
 
   useEffect(() => {
-    const normalized = normalizeUsernameReplaceSpaces(currTag)
-      ?.substring(0, MAX_TAG_LENGTH)
-      ?.toLocaleUpperCase();
+    const normalized = normalizeUsernameReplaceSpaces(currTag)?.substring(0, MAX_TAG_LENGTH)?.toLocaleUpperCase();
     setCandidateUsername(normalized);
     setValue("tag", normalized);
   }, [currTag]);
@@ -64,9 +54,7 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
   }, [initializeResponse]);
 
   useEffect(() => {
-    dispatch(
-      changeLoadingModalVisibility({ visible: isPrefferedTeamUpdateLoading })
-    );
+    dispatch(changeLoadingModalVisibility({ visible: isPrefferedTeamUpdateLoading }));
     isPrefferedTeamUpdateLoading && close?.();
   }, [isPrefferedTeamUpdateLoading]);
 
@@ -76,27 +64,11 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
   };
 
   return (
-    <form
-      autoComplete="off"
-      id={"new-team-form"}
-      className={styles.form}
-      onSubmit={handleSubmit(submit)}
-      action="#"
-    >
-      {currentWorkspace && (
-        <input
-          type="hidden"
-          value={currentWorkspace.workspaceId}
-          {...register("workspaceId")}
-        />
-      )}
+    <form autoComplete="off" id={"new-team-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
+      {currentWorkspace && <input type="hidden" value={currentWorkspace.workspaceId} {...register("workspaceId")} />}
       <label className={cn(styles.label, "flex-1")} htmlFor={"new-team-name"}>
         {`${t("newTeamFormName")} *`}
-        <input
-          id={"new-team-name"}
-          type={"text"}
-          {...register("name", { required: t("formRequiredField") })}
-        />
+        <input id={"new-team-name"} type={"text"} {...register("name", { required: t("formRequiredField") })} />
       </label>
       <label className={cn(styles.label, "flex-1")} htmlFor={"new-team-tag"}>
         {`${t("newTeamFormTag")} * ${currTag?.length}/${MAX_TAG_LENGTH}`}
@@ -107,17 +79,11 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
           maxLength={10}
           {...register("tag", { required: t("formRequiredField") })}
         />
-        <div className={styles.link}>{`${HOST}/${
-          currentWorkspace?.username
-        }/${candidateUsername?.toLocaleLowerCase()}`}</div>
+        <div className={styles.link}>{`${HOST}/${currentWorkspace?.username}/${candidateUsername?.toLocaleLowerCase()}`}</div>
       </label>
 
       <div className={styles.footerContainer}>
-        <Button
-          disabled={isLoading}
-          onClick={close}
-          className={styles.footerButton}
-        >
+        <Button disabled={isLoading} onClick={close} className={styles.footerButton}>
           {t("newWorkspaceFormCancel")}
         </Button>
         <Button

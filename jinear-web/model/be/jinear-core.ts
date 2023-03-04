@@ -561,14 +561,7 @@ export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
   data: PageDto<WorkspaceMemberDto>;
 }
 
-export type DayType =
-  | "MONDAY"
-  | "TUESDAY"
-  | "WEDNESDAY"
-  | "THURSDAY"
-  | "FRIDAY"
-  | "SATURDAY"
-  | "SUNDAY";
+export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
 
@@ -604,11 +597,7 @@ export type LocaleStringType =
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType =
-  | "BALANCE"
-  | "TOPIC_TASK_INIT"
-  | "TEAM_TASK_INIT"
-  | "TEAM_WORKFLOW_STATUS";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS";
 
 export type FileType = "PROFILE_PIC";
 
@@ -659,26 +648,13 @@ export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
 
 export type TaskReminderType = "ASSIGNED_DATE" | "DUE_DATE" | "SPECIFIC_DATE";
 
-export type TaskState =
-  | "TO_DO"
-  | "IN_PROGRESS"
-  | "IN_TEST"
-  | "WONT_DO"
-  | "DONE";
+export type TaskState = "TO_DO" | "IN_PROGRESS" | "IN_TEST" | "WONT_DO" | "DONE";
 
-export type TeamJoinMethodType =
-  | "SYNC_MEMBERS_WITH_WORKSPACE"
-  | "ON_DEMAND"
-  | "FROM_TEAM_ADMIN";
+export type TeamJoinMethodType = "SYNC_MEMBERS_WITH_WORKSPACE" | "ON_DEMAND" | "FROM_TEAM_ADMIN";
 
 export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
 
-export type TeamWorkflowStateGroup =
-  | "BACKLOG"
-  | "NOT_STARTED"
-  | "STARTED"
-  | "COMPLETED"
-  | "CANCELLED";
+export type TeamWorkflowStateGroup = "BACKLOG" | "NOT_STARTED" | "STARTED" | "COMPLETED" | "CANCELLED";
 
 export type TokenType =
   | "SMS_LOGIN"
@@ -714,13 +690,6 @@ export type WorkspaceActivityType =
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 
-export type WorkspaceJoinType =
-  | "NEVER"
-  | "PUBLIC"
-  | "WITH_REQUEST"
-  | "WITH_PASSWORD";
+export type WorkspaceJoinType = "NEVER" | "PUBLIC" | "WITH_REQUEST" | "WITH_PASSWORD";
 
-export type WorkspaceVisibilityType =
-  | "VISIBLE"
-  | "HIDDEN_LISTED"
-  | "HIDDEN_UNLISTED";
+export type WorkspaceVisibilityType = "VISIBLE" | "HIDDEN_LISTED" | "HIDDEN_UNLISTED";

@@ -20,11 +20,7 @@ const TeamTitle: React.FC<TeamTitleProps> = ({ name }) => {
 
   return (
     <div className={styles.teamNameContainer}>
-      <Button
-        variant={ButtonVariants.filled2}
-        onClick={_popTeamOptionsModal}
-        className={styles.teamSelectButton}
-      >
+      <Button variant={ButtonVariants.filled2} onClick={_popTeamOptionsModal} className={styles.teamSelectButton}>
         <div className={cn(styles.teamName, "single-line")}>{name}</div>
         <div className={styles.spacer} />
         <IoChevronDownSharp className={styles.icon} size={17} />

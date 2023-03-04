@@ -12,13 +12,7 @@ export interface TabViewProps {
   containerRef?: React.Ref<HTMLDivElement>;
 }
 
-const TabView: React.FC<TabViewProps> = ({
-  name,
-  label,
-  children,
-  containerClassName,
-  containerRef,
-}) => {
+const TabView: React.FC<TabViewProps> = ({ name, label, children, containerClassName, containerRef }) => {
   const activeTab = useActiveTab();
   const isActive = name == activeTab?.name;
 
@@ -47,11 +41,7 @@ const TabView: React.FC<TabViewProps> = ({
     <motion.div
       ref={containerRef}
       {...animations}
-      className={cn(
-        styles.container,
-        isActive && styles.active,
-        containerClassName
-      )}
+      className={cn(styles.container, isActive && styles.active, containerClassName)}
     >
       {children}
     </motion.div>

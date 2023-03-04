@@ -11,14 +11,10 @@ interface CurrentWorkspaceHeaderProps {}
 
 const CurrentWorkspaceHeader: React.FC<CurrentWorkspaceHeaderProps> = ({}) => {
   const { t } = useTranslation();
-  const preferredWorkspace = useTypedSelector(
-    selectCurrentAccountsPreferredWorkspace
-  );
+  const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   return (
     <div className={styles.container}>
-      <div className={cn(styles.title, "single-line")}>
-        {preferredWorkspace?.title}
-      </div>
+      <div className={cn(styles.title, "single-line")}>{preferredWorkspace?.title}</div>
       <div className="flex-1" />
       <Button
         variant={ButtonVariants.hoverFilled2}

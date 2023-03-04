@@ -29,10 +29,9 @@
   --tab-bar-height: 56px;
   --tab-bar-inner-height: 28px;
   --nav-bar-height: 56px;
-  --box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
-  --box-shadow-soft: 0px 2px 1px -1px rgba(0, 0, 0, 0.02),
-    0px 1px 1px 0px rgba(0, 0, 0, 0.014), 0px 1px 3px 0px rgba(0, 0, 0, 0.012);
+  --box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+  --box-shadow-soft: 0px 2px 1px -1px rgba(0, 0, 0, 0.02), 0px 1px 1px 0px rgba(0, 0, 0, 0.014),
+    0px 1px 3px 0px rgba(0, 0, 0, 0.012);
   --side-menu-width: 290px;
   --side-menu-main-menu-width: 230px;
   --side-menu-workspace-menu-width: 60px;
@@ -113,11 +112,9 @@
   --c-captcha-bg: #222323;
   --c-placeholder-color: "rgba(221,211,217,0.35)";
   /* --c-navbar-active-route: #5fc9f8; */
-  --box-shadow: 0px 2px 1px -1px rgba(253, 255, 252, 0.2),
-    0px 1px 1px 0px rgba(253, 255, 252, 0.14),
+  --box-shadow: 0px 2px 1px -1px rgba(253, 255, 252, 0.2), 0px 1px 1px 0px rgba(253, 255, 252, 0.14),
     0px 1px 3px 0px rgba(253, 255, 252, 0.12);
-  --box-shadow-soft: 0px 2px 1px -1px rgba(253, 255, 252, 0.02),
-    0px 1px 1px 0px rgba(253, 255, 252, 0.014),
+  --box-shadow-soft: 0px 2px 1px -1px rgba(253, 255, 252, 0.02), 0px 1px 1px 0px rgba(253, 255, 252, 0.014),
     0px 1px 3px 0px rgba(253, 255, 252, 0.012);
   --menu-workplace-title-color: #ff5270;
   --line-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg width='480' height='42' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-opacity='.1' stroke='%23FFF' d='M0 41.5h480'/%3E%3C/svg%3E");

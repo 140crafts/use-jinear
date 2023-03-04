@@ -2,14 +2,8 @@ import TaskDetail from "@/components/taskDetail/TaskDetail";
 import TaskPageHeader from "@/components/taskDetail/taskPageHeader/TaskPageHeader";
 import TaskDetailBreadcrumb from "@/components/taskDetailBreadcrumb/TaskDetailBreadcrumb";
 import { useRetrieveWithWorkspaceNameAndTeamTagNoQuery } from "@/store/api/taskApi";
-import {
-  useUpdatePreferredTeamMutation,
-  useUpdatePreferredWorkspaceMutation,
-} from "@/store/api/workspaceDisplayPreferenceApi";
-import {
-  selectCurrentAccountsPreferredTeamId,
-  selectCurrentAccountsPreferredWorkspace,
-} from "@/store/slice/accountSlice";
+import { useUpdatePreferredTeamMutation, useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDisplayPreferenceApi";
+import { selectCurrentAccountsPreferredTeamId, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
@@ -22,12 +16,8 @@ const logger = Logger("TaskDetailPage");
 
 const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
   const router = useRouter();
-  const currentWorkspace = useTypedSelector(
-    selectCurrentAccountsPreferredWorkspace
-  );
-  const preferredTeamId = useTypedSelector(
-    selectCurrentAccountsPreferredTeamId
-  );
+  const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
+  const preferredTeamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
   const workspaceName: string = router.query?.workspaceName as string;
   const taskTag: string = router.query?.taskTag as string;
 
@@ -44,12 +34,7 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
   const [updatePreferredTeam] = useUpdatePreferredTeamMutation();
 
   useEffect(() => {
-    if (
-      currentWorkspace &&
-      isTaskResponseSuccess &&
-      taskResponse &&
-      preferredTeamId
-    ) {
+    if (currentWorkspace && isTaskResponseSuccess && taskResponse && preferredTeamId) {
       if (taskResponse.data.workspaceId != currentWorkspace.workspaceId) {
         logger.log({
           taskResponseWorkspaceId: taskResponse.data.workspaceId,

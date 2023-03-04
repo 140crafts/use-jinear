@@ -10,10 +10,7 @@ interface LayoutProviderProps {
   tabbar?: boolean;
 }
 
-const PAGES_WITHOUT_LAYOUT = [
-  "/meeting/[bookingId]",
-  "/meeting/quick/[bookingId]",
-];
+const PAGES_WITHOUT_LAYOUT = ["/meeting/[bookingId]", "/meeting/quick/[bookingId]"];
 
 const IGNORE_LAYOUT_IF_PARAM_EXISTS = ["forPrint=true"];
 
@@ -24,17 +21,10 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
 
   const anyHideParamsExists = () => {
     const path = router?.asPath;
-    return (
-      IGNORE_LAYOUT_IF_PARAM_EXISTS.find(
-        (qParam) => path.indexOf(qParam) != -1
-      ) != null
-    );
+    return IGNORE_LAYOUT_IF_PARAM_EXISTS.find((qParam) => path.indexOf(qParam) != -1) != null;
   };
 
-  const Wrapper =
-    PAGES_WITHOUT_LAYOUT.indexOf(currPath) != -1 || anyHideParamsExists()
-      ? PureClientOnly
-      : Layout;
+  const Wrapper = PAGES_WITHOUT_LAYOUT.indexOf(currPath) != -1 || anyHideParamsExists() ? PureClientOnly : Layout;
   logger.log({ currPath, Wrapper });
 
   return <Wrapper>{children}</Wrapper>;

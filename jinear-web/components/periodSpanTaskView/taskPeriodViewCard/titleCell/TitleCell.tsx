@@ -2,13 +2,7 @@ import { TaskDto } from "@/model/be/jinear-core";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import {
-  IoCheckmarkCircle,
-  IoCloseCircle,
-  IoContrast,
-  IoEllipseOutline,
-  IoPauseCircleOutline,
-} from "react-icons/io5";
+import { IoCheckmarkCircle, IoCloseCircle, IoContrast, IoEllipseOutline, IoPauseCircleOutline } from "react-icons/io5";
 import styles from "./TitleCell.module.css";
 interface TitleCellProps {
   task: TaskDto;
@@ -23,21 +17,13 @@ const groupIconMap = {
   CANCELLED: <IoCloseCircle size={20} />,
 };
 
-const TitleCell: React.FC<TitleCellProps> = ({
-  task,
-  duration = 1,
-  ...props
-}) => {
+const TitleCell: React.FC<TitleCellProps> = ({ task, duration = 1, ...props }) => {
   const { t } = useTranslation();
   return (
     <div className={styles.titleContainer} {...props}>
       <div
         className={styles.iconContainer}
-        data-tooltip={
-          duration != 1
-            ? t(`workflowGroupTitle_${task.workflowStatus.workflowStateGroup}`)
-            : undefined
-        }
+        data-tooltip={duration != 1 ? t(`workflowGroupTitle_${task.workflowStatus.workflowStateGroup}`) : undefined}
       >
         {groupIconMap?.[task.workflowStatus.workflowStateGroup]}
       </div>

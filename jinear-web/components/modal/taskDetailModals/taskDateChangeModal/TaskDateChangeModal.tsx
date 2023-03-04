@@ -50,35 +50,22 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
   const visible = useTypedSelector(selectChangeTaskDateModalVisible);
   const taskId = useTypedSelector(selectChangeTaskDateModalTaskId);
 
-  const hasPreciseAssignedDate =
-    useTypedSelector(selectChangeTaskDateModalHasPreciseAssignedDate) || false;
-  const hasPreciseDueDate =
-    useTypedSelector(selectChangeTaskDateModalHasPreciseDueDate) || false;
+  const hasPreciseAssignedDate = useTypedSelector(selectChangeTaskDateModalHasPreciseAssignedDate) || false;
+  const hasPreciseDueDate = useTypedSelector(selectChangeTaskDateModalHasPreciseDueDate) || false;
 
-  const [assignedDateVal, setAssignedDateVal] = useState<Date | null>(
-    new Date()
-  );
+  const [assignedDateVal, setAssignedDateVal] = useState<Date | null>(new Date());
   const [dueDateVal, setDueDateVal] = useState<Date | null>(new Date());
 
-  const [assignedDateTimePickerVisible, setAssignedDateTimePickerVisible] =
-    useState<boolean>(hasPreciseAssignedDate);
-  const [dueDateTimePickerVisible, setDueDateTimePickerVisible] =
-    useState<boolean>(hasPreciseDueDate);
+  const [assignedDateTimePickerVisible, setAssignedDateTimePickerVisible] = useState<boolean>(hasPreciseAssignedDate);
+  const [dueDateTimePickerVisible, setDueDateTimePickerVisible] = useState<boolean>(hasPreciseDueDate);
 
   const assignedInputRef = useRef<HTMLInputElement>(null);
   const dueInputRef = useRef<HTMLInputElement>(null);
 
-  const currentAssigned = useTypedSelector(
-    selectChangeTaskDateModalTaskCurrentAssignedDate
-  );
-  const currentDue = useTypedSelector(
-    selectChangeTaskDateModalTaskCurrentDueDate
-  );
+  const currentAssigned = useTypedSelector(selectChangeTaskDateModalTaskCurrentAssignedDate);
+  const currentDue = useTypedSelector(selectChangeTaskDateModalTaskCurrentDueDate);
 
-  const [
-    updateTaskDates,
-    { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading },
-  ] = useUpdateTaskDatesMutation();
+  const [updateTaskDates, { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading }] = useUpdateTaskDatesMutation();
 
   useEffect(() => {
     if (visible && currentAssigned) {
@@ -107,21 +94,13 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
       dueDateVal,
     });
     if (visible && assignedDateVal && dueDateVal) {
-      const dueDateIsBeforeAssignedDate =
-        isBefore(dueDateVal, assignedDateVal) ||
-        isEqual(dueDateVal, assignedDateVal);
+      const dueDateIsBeforeAssignedDate = isBefore(dueDateVal, assignedDateVal) || isEqual(dueDateVal, assignedDateVal);
       const datesAreSameDay = isSameDay(assignedDateVal, dueDateVal);
       const isDueDatePrecise = dueDateTimePickerVisible;
-      const isDueDatePreciseAndBothDatesAreSameDay =
-        datesAreSameDay && !isDueDatePrecise;
-      if (
-        dueDateIsBeforeAssignedDate &&
-        !isDueDatePreciseAndBothDatesAreSameDay
-      ) {
+      const isDueDatePreciseAndBothDatesAreSameDay = datesAreSameDay && !isDueDatePrecise;
+      if (dueDateIsBeforeAssignedDate && !isDueDatePreciseAndBothDatesAreSameDay) {
         toast(t("changeTaskDateDueDateIsBeforeAssignedDate"));
-        isSameDay(assignedDateVal, dueDateVal)
-          ? setDueDateOneHourAfterAssignedDate()
-          : setDueDateDayAfterAssignedDate();
+        isSameDay(assignedDateVal, dueDateVal) ? setDueDateOneHourAfterAssignedDate() : setDueDateDayAfterAssignedDate();
       }
     }
   }, [visible, assignedDateVal, dueDateVal, dueDateTimePickerVisible]);
@@ -183,11 +162,7 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
 
   const unsetAssignedDate = () => {
     setAssignedDateVal(null);
-    if (
-      assignedInputRef &&
-      assignedInputRef.current &&
-      assignedInputRef.current.value
-    ) {
+    if (assignedInputRef && assignedInputRef.current && assignedInputRef.current.value) {
       assignedInputRef.current.value = "";
     }
   };
@@ -318,11 +293,7 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
           )}
           {assignedDateVal && (
             <Button onClick={toggleAssignedDateTimePicker}>
-              {assignedDateTimePickerVisible ? (
-                <IoClose size={11} />
-              ) : (
-                <IoAdd size={11} />
-              )}
+              {assignedDateTimePickerVisible ? <IoClose size={11} /> : <IoAdd size={11} />}
               {!assignedDateTimePickerVisible && <IoTimeOutline size={14} />}
             </Button>
           )}
@@ -333,10 +304,7 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
         <Button className={styles.actionButton} onClick={setAssignedDateToday}>
           {t("changeTaskDateToday")}
         </Button>
-        <Button
-          className={styles.actionButton}
-          onClick={setAssignedDateTomorrow}
-        >
+        <Button className={styles.actionButton} onClick={setAssignedDateTomorrow}>
           {t("changeTaskDateTomorrow")}
         </Button>
         <div className="flex-1" />
@@ -368,11 +336,7 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
           )}
           {dueDateVal && (
             <Button onClick={toggleDueDateTimePicker}>
-              {dueDateTimePickerVisible ? (
-                <IoClose size={11} />
-              ) : (
-                <IoAdd size={11} />
-              )}
+              {dueDateTimePickerVisible ? <IoClose size={11} /> : <IoAdd size={11} />}
               {!dueDateTimePickerVisible && <IoTimeOutline size={14} />}
             </Button>
           )}
@@ -380,10 +344,7 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
       </label>
 
       <div className={styles.dateActionContainer}>
-        <Button
-          className={styles.actionButton}
-          onClick={setDueDateDayAfterAssignedDate}
-        >
+        <Button className={styles.actionButton} onClick={setDueDateDayAfterAssignedDate}>
           {t("changeTaskDateDayAfter")}
         </Button>
         <div className="flex-1" />
@@ -392,17 +353,9 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
         </Button>
       </div>
 
-      <QuickDateActionBar
-        setDatesThisWeek={setDatesThisWeek}
-        setDatesNextWeek={setDatesNextWeek}
-      />
+      <QuickDateActionBar setDatesThisWeek={setDatesThisWeek} setDatesNextWeek={setDatesNextWeek} />
 
-      <Button
-        loading={isUpdateLoading}
-        disabled={isUpdateLoading}
-        variant={ButtonVariants.contrast}
-        onClick={save}
-      >
+      <Button loading={isUpdateLoading} disabled={isUpdateLoading} variant={ButtonVariants.contrast} onClick={save}>
         {t("changeTaskDateDateLabelSave")}
       </Button>
     </Modal>

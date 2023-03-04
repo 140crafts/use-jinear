@@ -10,9 +10,7 @@ interface WorkspaceMembersProps {}
 
 const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({}) => {
   const { t } = useTranslation();
-  const preferredWorkspace = useTypedSelector(
-    selectCurrentAccountsPreferredWorkspace
-  );
+  const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const {
     data: workplaceMembersResponse,
     isSuccess,
@@ -26,9 +24,7 @@ const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({}) => {
     <div className={styles.container}>
       {/* <MenuGroupTitle label={t("sideMenuWorkspaceMembers")} /> */}
       {/* <div className="spacer-h-1" /> */}
-      {isSuccess && workplaceMembersResponse && (
-        <MenuMemberList page={workplaceMembersResponse.data} type="workspace" />
-      )}
+      {isSuccess && workplaceMembersResponse && <MenuMemberList page={workplaceMembersResponse.data} type="workspace" />}
     </div>
   );
 };

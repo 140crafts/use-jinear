@@ -13,13 +13,7 @@ const BacklogTaskListScreen: React.FC<BacklogTaskListScreenProps> = ({}) => {
   return (
     <div className={styles.container}>
       <TaskListScreenBreadcrumb type="backlog" />
-      {team && (
-        <TaskListGroupedByWorkflowStatus
-          type="backlog"
-          teamId={team.teamId}
-          workspaceId={team.workspaceId}
-        />
-      )}
+      {team && <TaskListGroupedByWorkflowStatus type="backlog" teamId={team.teamId} workspaceId={team.workspaceId} />}
     </div>
   );
 };

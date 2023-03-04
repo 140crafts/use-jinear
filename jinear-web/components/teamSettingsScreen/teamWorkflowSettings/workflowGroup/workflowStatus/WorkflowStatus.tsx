@@ -31,21 +31,15 @@ const groupIconMap = {
   CANCELLED: <IoCloseCircle size={20} />,
 };
 
-const WorkflowStatus: React.FC<WorkflowStatusProps> = ({
-  workflowDto,
-  deletable,
-  orderChangable,
-}) => {
+const WorkflowStatus: React.FC<WorkflowStatusProps> = ({ workflowDto, deletable, orderChangable }) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const [name, setName] = useState<string>(workflowDto.name);
   const nameInputRef = useRef<HTMLInputElement>(null);
 
-  const [
-    changeTeamWorkflowStatusName,
-    { isLoading: isNameChangeLoading, isSuccess: isNameChangeSuccess },
-  ] = useChangeTeamWorkflowStatusNameMutation();
+  const [changeTeamWorkflowStatusName, { isLoading: isNameChangeLoading, isSuccess: isNameChangeSuccess }] =
+    useChangeTeamWorkflowStatusNameMutation();
 
   useEffect(() => {
     if (isEditing) {
@@ -73,28 +67,11 @@ const WorkflowStatus: React.FC<WorkflowStatusProps> = ({
   };
 
   return (
-    <div
-      className={styles.container}
-      data-tooltip={
-        workflowDto.name?.length > 36 ? workflowDto.name : undefined
-      }
-    >
-      <div className={styles.icon}>
-        {groupIconMap[workflowDto.workflowStateGroup]}
-      </div>
+    <div className={styles.container} data-tooltip={workflowDto.name?.length > 36 ? workflowDto.name : undefined}>
+      <div className={styles.icon}>{groupIconMap[workflowDto.workflowStateGroup]}</div>
 
-      {!isEditing && (
-        <div className={cn(styles.name, "single-line")}>{workflowDto.name}</div>
-      )}
-      {isEditing && (
-        <input
-          ref={nameInputRef}
-          type="text"
-          value={name}
-          onChange={onNameChange}
-          className={styles.nameInput}
-        />
-      )}
+      {!isEditing && <div className={cn(styles.name, "single-line")}>{workflowDto.name}</div>}
+      {isEditing && <input ref={nameInputRef} type="text" value={name} onChange={onNameChange} className={styles.nameInput} />}
 
       {!isEditing && <div className="flex-1" />}
       {!isEditing && (

@@ -5,10 +5,7 @@ import MonthYearNo from "@/components/teamMonthlyScreen/monthYearNo/MonthYearNo"
 import TeamMonthlyScreenBreadcrumb from "@/components/teamMonthlyScreen/teamMonthlyScreenBreadcrumb/TeamMonthlyScreenBreadcrumb";
 import WorkflowStatusTab from "@/components/workflowStatusTab/WorkflowStatusTab";
 import TeamMonthlyScreenContext from "@/store/context/screen/team/monthly/teamMonthlyScreenContext";
-import {
-  selectCurrentAccountsPreferredTeamId,
-  selectCurrentAccountsPreferredWorkspace,
-} from "@/store/slice/accountSlice";
+import { selectCurrentAccountsPreferredTeamId, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { endOfMonth, endOfWeek, startOfMonth, startOfToday } from "date-fns";
@@ -28,21 +25,13 @@ const TeamMonthlyScreen: React.FC<TeamMonthlyScreenProps> = ({}) => {
   const workspaceName: string = router.query?.workspaceName as string;
   const teamUsername: string = router.query?.teamUsername as string;
 
-  const currentWorkspace = useTypedSelector(
-    selectCurrentAccountsPreferredWorkspace
-  );
-  const preferredTeamId = useTypedSelector(
-    selectCurrentAccountsPreferredTeamId
-  );
+  const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
+  const preferredTeamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
 
   const today = startOfToday();
   const [viewingPeriodOf, setViewingPeriodOf] = useState<Date>(today);
-  const [viewingPeriodStart, setViewingPeriodStart] = useState<Date>(
-    startOfMonth(viewingPeriodOf)
-  );
-  const [viewingPeriodEnd, setViewingPeriodEnd] = useState<Date>(
-    endOfMonth(viewingPeriodOf)
-  );
+  const [viewingPeriodStart, setViewingPeriodStart] = useState<Date>(startOfMonth(viewingPeriodOf));
+  const [viewingPeriodEnd, setViewingPeriodEnd] = useState<Date>(endOfMonth(viewingPeriodOf));
 
   useEffect(() => {
     if (viewingPeriodOf) {
@@ -61,18 +50,12 @@ const TeamMonthlyScreen: React.FC<TeamMonthlyScreenProps> = ({}) => {
       }}
     >
       <div className={styles.container}>
-        <TeamMonthlyScreenBreadcrumb
-          workspaceName={workspaceName}
-          teamUsername={teamUsername}
-        />
+        <TeamMonthlyScreenBreadcrumb workspaceName={workspaceName} teamUsername={teamUsername} />
         <MonthYearNo />
 
         <div className="spacer-h-2" />
 
-        <TabbedPanel
-          initialTabName="workflow"
-          containerClassName={styles.weekViewContainer}
-        >
+        <TabbedPanel initialTabName="workflow" containerClassName={styles.weekViewContainer}>
           <TabView
             name="workflow"
             label={t("teamWeeklyScreenTaskWorkflowStatusSectionTitle")}

@@ -1,8 +1,5 @@
 import Button from "@/components/button";
-import {
-  useSetViewingPeriodOf,
-  useViewingPeriodOf,
-} from "@/store/context/screen/team/monthly/teamMonthlyScreenContext";
+import { useSetViewingPeriodOf, useViewingPeriodOf } from "@/store/context/screen/team/monthly/teamMonthlyScreenContext";
 import { addMonths, startOfToday } from "date-fns";
 import React from "react";
 import { IoCaretBack, IoCaretForward, IoEllipse } from "react-icons/io5";

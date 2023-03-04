@@ -26,17 +26,9 @@ const Weekday: React.FC<WeekdayProps> = ({ day }) => {
   }, [windowSize.width]);
 
   return (
-    <div
-      ref={parentRef}
-      className={cn(styles.container, styles[`width-${variant}`])}
-    >
+    <div ref={parentRef} className={cn(styles.container, styles[`width-${variant}`])}>
       <WeekdayTitle day={day} />
-      {isToday(day) && (
-        <div
-          style={{ width }}
-          className={cn(styles.todayLine, styles[`width-${variant}`])}
-        />
-      )}
+      {isToday(day) && <div style={{ width }} className={cn(styles.todayLine, styles[`width-${variant}`])} />}
     </div>
   );
 };

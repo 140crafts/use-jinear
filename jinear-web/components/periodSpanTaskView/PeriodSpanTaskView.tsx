@@ -52,9 +52,7 @@ const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
 
   useDebouncedEffect(
     () => {
-      const todayTitle = document.getElementById(
-        PERIOD_SPAN_TASK_VIEW_TODAY_MARK
-      );
+      const todayTitle = document.getElementById(PERIOD_SPAN_TASK_VIEW_TODAY_MARK);
       if (!isFetching && containerRef && containerRef.current && todayTitle) {
         logger.log({
           left: todayTitle.offsetLeft - todayTitle.offsetWidth * 2,
@@ -92,10 +90,7 @@ const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
         <div className={styles.contentContainer}>
           {!isFetching &&
             taskListingResponse?.data.map((taskDto) => (
-              <TaskPeriodViewRow
-                key={`${taskDto.taskId}-${viewingPeriodStart.toISOString()}`}
-                task={taskDto}
-              />
+              <TaskPeriodViewRow key={`${taskDto.taskId}-${viewingPeriodStart.toISOString()}`} task={taskDto} />
             ))}
         </div>
       </div>

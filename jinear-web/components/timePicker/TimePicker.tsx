@@ -37,10 +37,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
     }
   }, [defaultHours, defaultMinutes]);
 
-  const registerProps = useMemo(
-    () => (register ? register(id) : {}),
-    [register, id]
-  );
+  const registerProps = useMemo(() => (register ? register(id) : {}), [register, id]);
 
   const _onHourChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const hours = e.target.value;
@@ -56,14 +53,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
 
   return (
     <div className={styles.container}>
-      <select
-        disabled={disabled}
-        id={id}
-        className={styles.select}
-        value={hours}
-        onChange={_onHourChange}
-        {...registerProps}
-      >
+      <select disabled={disabled} id={id} className={styles.select} value={hours} onChange={_onHourChange} {...registerProps}>
         {Array.from(Array(24).keys())
           .map((hour) => `${hour}`.padStart(2, "0"))
           .map((hour) => (
@@ -73,14 +63,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
           ))}
       </select>
       <div>:</div>
-      <select
-        disabled={disabled}
-        id={id}
-        className={styles.select}
-        value={minutes}
-        onChange={_onMinuteChange}
-        {...registerProps}
-      >
+      <select disabled={disabled} id={id} className={styles.select} value={minutes} onChange={_onMinuteChange} {...registerProps}>
         {Array.from(Array(60).keys())
           .filter((minute) => minute % minuteResolution == 0)
           .map((minute) => `${minute}`.padStart(2, "0"))

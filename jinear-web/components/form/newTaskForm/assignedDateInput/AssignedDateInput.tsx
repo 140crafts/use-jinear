@@ -8,19 +8,12 @@ interface AssignedDateInputProps {
   labelClass: string;
 }
 
-const AssignedDateInput: React.FC<AssignedDateInputProps> = ({
-  register,
-  labelClass,
-}) => {
+const AssignedDateInput: React.FC<AssignedDateInputProps> = ({ register, labelClass }) => {
   const { t } = useTranslation();
   return (
     <label className={labelClass} htmlFor={"new-task-assigned-date"}>
       {t("newTaskModalTaskAssignedDate")}
-      <input
-        type={"date"}
-        id={"new-task-assigned-date"}
-        {...register("assignedDate")}
-      />
+      <input type={"date"} id={"new-task-assigned-date"} {...register("assignedDate")} />
     </label>
   );
 };

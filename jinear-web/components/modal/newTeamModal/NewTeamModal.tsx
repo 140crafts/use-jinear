@@ -1,9 +1,6 @@
 import NewTeamForm from "@/components/form/newTeamForm/NewTeamForm";
 import useWindowSize from "@/hooks/useWindowSize";
-import {
-  closeNewTeamModal,
-  selectNewTeamModalVisible,
-} from "@/store/slice/modalSlice";
+import { closeNewTeamModal, selectNewTeamModalVisible } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";

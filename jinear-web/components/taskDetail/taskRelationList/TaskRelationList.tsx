@@ -19,10 +19,7 @@ const TaskRelationList: React.FC<TaskRelationListProps> = ({}) => {
         <div className="spacer-h-1" />
         <div className={styles.relationList}>
           {task.relations?.map((relation) => (
-            <TaskRelationCell
-              key={`task-relation-cell-${relation.taskRelationId}`}
-              relation={relation}
-            />
+            <TaskRelationCell key={`task-relation-cell-${relation.taskRelationId}`} relation={relation} />
           ))}
         </div>
       </div>

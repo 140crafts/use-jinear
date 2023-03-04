@@ -14,20 +14,14 @@ const RemindersButton: React.FC<RemindersButtonProps> = ({ className }) => {
   const dispatch = useAppDispatch();
   const task = useTask();
   const reminders = task.taskReminders || [];
-  const additionalLabel =
-    (reminders?.length || 0) > 0 ? ` (${reminders?.length})` : "";
+  const additionalLabel = (reminders?.length || 0) > 0 ? ` (${reminders?.length})` : "";
 
   const popRemindersModal = () => {
     dispatch(popReminderListModal({ visible: true, task }));
   };
 
   return (
-    <Button
-      className={className}
-      variant={ButtonVariants.filled}
-      heightVariant={ButtonHeight.mid}
-      onClick={popRemindersModal}
-    >
+    <Button className={className} variant={ButtonVariants.filled} heightVariant={ButtonHeight.mid} onClick={popRemindersModal}>
       {t("taskDetailRemindersButtonLabel") + additionalLabel}
     </Button>
   );

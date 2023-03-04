@@ -56,10 +56,7 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
                 item?.inputProps?.onChange?.(e);
               }}
             />
-            <label
-              htmlFor={item.segmentId ? item.segmentId : item.label}
-              className={cn(styles.label, segmentLabelClassName)}
-            >
+            <label htmlFor={item.segmentId ? item.segmentId : item.label} className={cn(styles.label, segmentLabelClassName)}>
               {item?.icon}
               {item.label}
             </label>
@@ -68,11 +65,7 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
       </div>
       {segments?.[activeIndex]?.longLabel && (
         <div className={styles.longLabelContainer}>
-          <textarea
-            className={styles.longLabel}
-            value={segments?.[activeIndex]?.longLabel}
-            disabled
-          />
+          <textarea className={styles.longLabel} value={segments?.[activeIndex]?.longLabel} disabled />
         </div>
       )}
     </div>

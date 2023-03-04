@@ -1,9 +1,4 @@
-import {
-  AccountRetrieveResponse,
-  BaseResponse,
-  ConfirmEmailRequest,
-  ResendConfirmEmailRequest,
-} from "@/model/be/jinear-core";
+import { AccountRetrieveResponse, BaseResponse, ConfirmEmailRequest, ResendConfirmEmailRequest } from "@/model/be/jinear-core";
 import { api, tagTypes } from "./api";
 
 export const accountApi = api.injectEndpoints({
@@ -21,24 +16,18 @@ export const accountApi = api.injectEndpoints({
       invalidatesTags: tagTypes,
     }),
     //
-    resendConfirmEmail: build.mutation<BaseResponse, ResendConfirmEmailRequest>(
-      {
-        query: (body: ResendConfirmEmailRequest) => ({
-          url: "v1/account/resend-confirm-email",
-          method: "POST",
-          body,
-        }),
-        invalidatesTags: tagTypes,
-      }
-    ),
+    resendConfirmEmail: build.mutation<BaseResponse, ResendConfirmEmailRequest>({
+      query: (body: ResendConfirmEmailRequest) => ({
+        url: "v1/account/resend-confirm-email",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: tagTypes,
+    }),
   }),
 });
 
-export const {
-  useMeQuery,
-  useConfirmEmailMutation,
-  useResendConfirmEmailMutation,
-} = accountApi;
+export const { useMeQuery, useConfirmEmailMutation, useResendConfirmEmailMutation } = accountApi;
 
 export const {
   endpoints: { me, confirmEmail, resendConfirmEmail },

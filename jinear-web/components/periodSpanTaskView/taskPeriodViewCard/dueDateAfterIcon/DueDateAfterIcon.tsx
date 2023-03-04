@@ -9,17 +9,11 @@ interface DueDateAfterIconProps {
   isDueDateAfter: boolean;
 }
 
-const DueDateAfterIcon: React.FC<DueDateAfterIconProps> = ({
-  dueDate,
-  isDueDateAfter,
-}) => {
+const DueDateAfterIcon: React.FC<DueDateAfterIconProps> = ({ dueDate, isDueDateAfter }) => {
   const { t } = useTranslation();
   const tooltip = !dueDate
     ? null
-    : t("taskWeekCardTaskDueThisWeekTooltip")?.replace(
-        "${date}",
-        format(new Date(dueDate), t("dateFormat"))
-      );
+    : t("taskWeekCardTaskDueThisWeekTooltip")?.replace("${date}", format(new Date(dueDate), t("dateFormat")));
 
   return dueDate && isDueDateAfter ? (
     <div className={styles.iconWrapper} data-tooltip-right={tooltip}>

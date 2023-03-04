@@ -4,11 +4,7 @@
 }
 
 .gradientBg {
-  background: linear-gradient(
-    0,
-    var(--c-primary),
-    var(--c-primary-shade-0-op05)
-  );
+  background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-0-op05));
   border-radius: var(--border-radius);
 }
 

@@ -2,10 +2,7 @@ import TopicForm from "@/components/form/topicForm/TopicForm";
 import EditTopicBreadCrumb from "@/components/topicScreen/topicEditScreen/editTopicBreadCrumb/EditTopicBreadCrumb";
 import Transition from "@/components/transition/Transition";
 import { useRetrieveTopicQuery } from "@/store/api/topicApi";
-import {
-  selectCurrentAccountsPreferredTeam,
-  selectCurrentAccountsPreferredWorkspace,
-} from "@/store/slice/accountSlice";
+import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
@@ -31,12 +28,7 @@ const EditTopicScreen: React.FC<EditTopicScreenProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {topicResponse && (
-        <EditTopicBreadCrumb
-          topicName={topicResponse.data.name}
-          topicId={topicId}
-        />
-      )}
+      {topicResponse && <EditTopicBreadCrumb topicName={topicResponse.data.name} topicId={topicId} />}
       <div className="spacer-h-4" />
       <h1>{t("topicEditScreenTitle")}</h1>
       {isTopicResponseLoading && (

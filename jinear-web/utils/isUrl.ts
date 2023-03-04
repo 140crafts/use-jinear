@@ -41,11 +41,7 @@ export const urlify = (text: string) => {
   return new XMLSerializer().serializeToString(htmlDoc);
 };
 
-export const createAnchorElement = (vo: {
-  document: Document;
-  href: string;
-  text: string;
-}) => {
+export const createAnchorElement = (vo: { document: Document; href: string; text: string }) => {
   const containerDiv = createDivElement({ document });
   const anchorElement = document.createElement("a");
   anchorElement.href = vo.href;

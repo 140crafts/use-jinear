@@ -29,12 +29,7 @@ const TaskDueDateButton: React.FC<TaskDueDateButtonProps> = ({}) => {
       {task.dueDate ? (
         <>
           {t("taskDetailDueDate")}
-          <b>
-            {format(
-              dueDate,
-              task.hasPreciseDueDate ? t("dateTimeFormat") : t("dateFormat")
-            )}
-          </b>
+          <b>{format(dueDate, task.hasPreciseDueDate ? t("dateTimeFormat") : t("dateFormat"))}</b>
         </>
       ) : (
         <>{t("taskDetailAddDueDate")}</>

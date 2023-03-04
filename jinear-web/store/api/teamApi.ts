@@ -1,8 +1,4 @@
-import {
-  TeamInitializeRequest,
-  TeamListingResponse,
-  TeamResponse,
-} from "@/model/be/jinear-core";
+import { TeamInitializeRequest, TeamListingResponse, TeamResponse } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const teamApi = api.injectEndpoints({
@@ -31,8 +27,7 @@ export const teamApi = api.injectEndpoints({
   }),
 });
 
-export const { useInitializeTeamMutation, useRetrieveWorkspaceTeamsQuery } =
-  teamApi;
+export const { useInitializeTeamMutation, useRetrieveWorkspaceTeamsQuery } = teamApi;
 
 export const {
   endpoints: { initializeTeam, retrieveWorkspaceTeams },

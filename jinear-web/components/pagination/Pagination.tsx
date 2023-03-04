@@ -39,11 +39,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <div id={id} className={cn(styles.paginationContainer, className)}>
-      <PageInfo
-        number={pageNumber}
-        size={pageSize}
-        totalElements={totalElements}
-      />
+      <PageInfo number={pageNumber} size={pageSize} totalElements={totalElements} />
       <div className={styles.buttonContainer}>
         <Button
           disabled={isLoading || !hasPrevious}

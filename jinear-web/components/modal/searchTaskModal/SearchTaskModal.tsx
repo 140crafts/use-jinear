@@ -13,13 +13,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import {
-  IoCheckmarkCircle,
-  IoCloseCircle,
-  IoContrast,
-  IoEllipseOutline,
-  IoPauseCircleOutline,
-} from "react-icons/io5";
+import { IoCheckmarkCircle, IoCloseCircle, IoContrast, IoEllipseOutline, IoPauseCircleOutline } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./SearchTaskModal.module.css";
 
@@ -109,20 +103,16 @@ const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
           >
             {groupIconMap?.[taskDto.workflowStateGroup]}
             <div className={styles.titleContainer}>
-              {taskDto.teamTag
-                ? taskDto.teamTag + "-" + taskDto.teamTagNo + " "
-                : ""}
+              {taskDto.teamTag ? taskDto.teamTag + "-" + taskDto.teamTagNo + " " : ""}
               {taskDto.title}
             </div>
           </Button>
         ))}
         <div className={styles.messageContainer}>
-          {!searchResponse?.data.hasContent &&
-            searchValue?.length != 0 &&
-            !isLoading && <div>{t("searchTaskModalEmptyState")}</div>}
-          {searchValue?.length == 0 && !isLoading && (
-            <div>{t("searchTaskModalInitialState")}</div>
+          {!searchResponse?.data.hasContent && searchValue?.length != 0 && !isLoading && (
+            <div>{t("searchTaskModalEmptyState")}</div>
           )}
+          {searchValue?.length == 0 && !isLoading && <div>{t("searchTaskModalInitialState")}</div>}
 
           {isLoading && <CircularProgress size={17} />}
         </div>

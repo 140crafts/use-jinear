@@ -1,16 +1,9 @@
-import {
-  TaskListingPaginatedResponse,
-  TaskListingResponse,
-  TaskRetrieveIntersectingRequest,
-} from "@/model/be/jinear-core";
+import { TaskListingPaginatedResponse, TaskListingResponse, TaskRetrieveIntersectingRequest } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const taskListingApi = api.injectEndpoints({
   endpoints: (build) => ({
-    retrieveAllIntersectingTasks: build.query<
-      TaskListingResponse,
-      TaskRetrieveIntersectingRequest
-    >({
+    retrieveAllIntersectingTasks: build.query<TaskListingResponse, TaskRetrieveIntersectingRequest>({
       query: (req) => {
         const { workspaceId, teamId } = req;
         const start = new Date(req.timespanStart).toISOString();
@@ -34,12 +27,7 @@ export const taskListingApi = api.injectEndpoints({
         page: number;
       }
     >({
-      query: (req: {
-        workspaceId: string;
-        teamId: string;
-        workflowStatusId: string;
-        page: number;
-      }) => {
+      query: (req: { workspaceId: string; teamId: string; workflowStatusId: string; page: number }) => {
         const page = req.page ? req.page : 0;
         return `v1/task/list/${req.workspaceId}/${req.teamId}/with-workflow/${req.workflowStatusId}?page=${page}`;
       },
@@ -53,10 +41,7 @@ export const taskListingApi = api.injectEndpoints({
   }),
 });
 
-export const {
-  useRetrieveAllIntersectingTasksQuery,
-  useRetrieveFromWorkflowStatusQuery,
-} = taskListingApi;
+export const { useRetrieveAllIntersectingTasksQuery, useRetrieveFromWorkflowStatusQuery } = taskListingApi;
 
 export const {
   endpoints: { retrieveAllIntersectingTasks, retrieveFromWorkflowStatus },

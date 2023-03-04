@@ -29,14 +29,7 @@ const TaskAssignedDateButton: React.FC<TaskAssignedDateButtonProps> = ({}) => {
       {task.assignedDate ? (
         <>
           {t("taskDetailAssignedDate")}
-          <b>
-            {format(
-              assignedDate,
-              task.hasPreciseAssignedDate
-                ? t("dateTimeFormat")
-                : t("dateFormat")
-            )}
-          </b>
+          <b>{format(assignedDate, task.hasPreciseAssignedDate ? t("dateTimeFormat") : t("dateFormat"))}</b>
         </>
       ) : (
         <>{t("taskDetailAddAssignedDate")}</>

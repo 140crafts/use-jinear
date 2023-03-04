@@ -85,11 +85,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <Transition>
               <Component {...pageProps} />
             </Transition>
-            <Toaster
-              position="bottom-center"
-              containerStyle={{ bottom: 68 }}
-              toastOptions={{ className: "toast" }}
-            />
+            <Toaster position="bottom-center" containerStyle={{ bottom: 68 }} toastOptions={{ className: "toast" }} />
             {globalModals}
           </LayoutProvider>
         </ThemeContext.Provider>

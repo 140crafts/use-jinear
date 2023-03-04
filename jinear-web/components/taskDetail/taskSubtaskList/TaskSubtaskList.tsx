@@ -4,19 +4,12 @@ import Line from "@/components/line/Line";
 import { useToggle } from "@/hooks/useToggle";
 import { TaskSearchResultDto } from "@/model/be/jinear-core";
 import { useInitializeTaskRelationMutation } from "@/store/api/taskRelationApi";
-import {
-  changeLoadingModalVisibility,
-  closeSearchTaskModal,
-  popSearchTaskModal,
-} from "@/store/slice/modalSlice";
+import { changeLoadingModalVisibility, closeSearchTaskModal, popSearchTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { IoPauseCircleOutline } from "react-icons/io5";
-import {
-  useShowSubTaskListEvenIfNoSubtasks,
-  useTask,
-} from "../context/TaskDetailContext";
+import { useShowSubTaskListEvenIfNoSubtasks, useTask } from "../context/TaskDetailContext";
 import TaskRelationRow from "./taskRelationRow/TaskRelationRow";
 import styles from "./TaskSubtaskList.module.css";
 
@@ -27,22 +20,14 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
   const { t } = useTranslation();
   const showSubTaskListEvenIfNoSubtasks = useShowSubTaskListEvenIfNoSubtasks();
 
-  const { current: newTaskInputVisible, toggle: toggleNewTaskInputVisible } =
-    useToggle(false);
+  const { current: newTaskInputVisible, toggle: toggleNewTaskInputVisible } = useToggle(false);
   // useToggle(showSubTaskListEvenIfNoSubtasks);
 
-  const [
-    initializeTaskRelation,
-    {
-      isSuccess: isInitializeRelationSuccess,
-      isError: isInitializeRelationError,
-    },
-  ] = useInitializeTaskRelationMutation();
+  const [initializeTaskRelation, { isSuccess: isInitializeRelationSuccess, isError: isInitializeRelationError }] =
+    useInitializeTaskRelationMutation();
 
   const task = useTask();
-  const hasSubTasks =
-    task.relatedIn?.filter((relation) => relation.relationType == "SUBTASK")
-      ?.length != 0;
+  const hasSubTasks = task.relatedIn?.filter((relation) => relation.relationType == "SUBTASK")?.length != 0;
 
   useEffect(() => {
     dispatch(changeLoadingModalVisibility({ visible: false }));
@@ -77,10 +62,7 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
         <h2>{t("taskSubtaskList")}</h2>
         <div className={styles.content}>
           {task.relatedIn?.map((relation) => (
-            <TaskRelationRow
-              key={relation.taskRelationId}
-              relation={relation}
-            />
+            <TaskRelationRow key={relation.taskRelationId} relation={relation} />
           ))}
 
           {!hasSubTasks && <div>{t("taskSubtaskListEmpty")}</div>}
@@ -88,18 +70,10 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
           <div className={styles.newInputContent}>
             {!newTaskInputVisible && (
               <div className={styles.newTaskInputButtonContainer}>
-                <Button
-                  onClick={toggleNewTaskInputVisible}
-                  variant={ButtonVariants.filled}
-                  heightVariant={ButtonHeight.short}
-                >
+                <Button onClick={toggleNewTaskInputVisible} variant={ButtonVariants.filled} heightVariant={ButtonHeight.short}>
                   {t("taskSubtaskListAddNewTaskButton")}
                 </Button>
-                <Button
-                  onClick={openSearchTaskModal}
-                  variant={ButtonVariants.contrast}
-                  heightVariant={ButtonHeight.short}
-                >
+                <Button onClick={openSearchTaskModal} variant={ButtonVariants.contrast} heightVariant={ButtonHeight.short}>
                   {t("taskSubtaskListAddExistingTaskButton")}
                 </Button>
               </div>

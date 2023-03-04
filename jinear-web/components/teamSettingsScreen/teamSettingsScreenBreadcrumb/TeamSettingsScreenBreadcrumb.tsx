@@ -8,21 +8,13 @@ interface TeamSettingsScreenBreadcrumbProps {
   teamUsername: string;
 }
 
-const TeamSettingsScreenBreadcrumb: React.FC<
-  TeamSettingsScreenBreadcrumbProps
-> = ({ workspaceName, teamUsername }) => {
+const TeamSettingsScreenBreadcrumb: React.FC<TeamSettingsScreenBreadcrumbProps> = ({ workspaceName, teamUsername }) => {
   const { t } = useTranslation();
   return (
     <Breadcrumb>
       <BreadcrumbLink label={workspaceName} url={`/${workspaceName}`} />
-      <BreadcrumbLink
-        label={teamUsername}
-        url={`/${workspaceName}/${teamUsername}`}
-      />
-      <BreadcrumbLink
-        label={t("teamSettingsScreenBreadcrumbLabel")}
-        url={`/${workspaceName}/${teamUsername}/settings`}
-      />
+      <BreadcrumbLink label={teamUsername} url={`/${workspaceName}/${teamUsername}`} />
+      <BreadcrumbLink label={t("teamSettingsScreenBreadcrumbLabel")} url={`/${workspaceName}/${teamUsername}/settings`} />
     </Breadcrumb>
   );
 };

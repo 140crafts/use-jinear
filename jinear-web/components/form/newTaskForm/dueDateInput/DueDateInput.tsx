@@ -8,10 +8,7 @@ interface DueDateInputProps {
   labelClass: string;
 }
 
-const DueDateInput: React.FC<DueDateInputProps> = ({
-  register,
-  labelClass,
-}) => {
+const DueDateInput: React.FC<DueDateInputProps> = ({ register, labelClass }) => {
   const { t } = useTranslation();
 
   return (

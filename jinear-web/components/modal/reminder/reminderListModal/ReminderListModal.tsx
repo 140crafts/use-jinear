@@ -39,17 +39,11 @@ const ReminderListModal: React.FC<ReminderListModalProps> = ({}) => {
       hasTitleCloseButton={true}
       requestClose={close}
     >
-      {!anyRemindersExists && (
-        <div>{t("taskReminderListModalNoRemindersExist")}</div>
-      )}
+      {!anyRemindersExists && <div>{t("taskReminderListModalNoRemindersExist")}</div>}
 
       <div className={styles.reminderList}>
         {task?.taskReminders?.map?.((taskReminder) => (
-          <ReminderListItem
-            key={taskReminder.taskReminderId}
-            taskReminder={taskReminder}
-            close={close}
-          />
+          <ReminderListItem key={taskReminder.taskReminderId} taskReminder={taskReminder} close={close} />
         ))}
       </div>
 

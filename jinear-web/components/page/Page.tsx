@@ -8,16 +8,7 @@ interface PageProps {
 }
 
 const Page: React.FC<PageProps> = ({ marginVertically = false, children }) => {
-  return (
-    <div
-      className={cn(
-        styles.container,
-        marginVertically && styles.marginVertically
-      )}
-    >
-      {children}
-    </div>
-  );
+  return <div className={cn(styles.container, marginVertically && styles.marginVertically)}>{children}</div>;
 };
 
 export default Page;

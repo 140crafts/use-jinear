@@ -15,24 +15,15 @@ interface AssigneeCellProps {
   className?: string;
 }
 
-const AssigneeCell: React.FC<AssigneeCellProps> = ({
-  task,
-  tooltipPosition = "right",
-  className,
-}) => {
+const AssigneeCell: React.FC<AssigneeCellProps> = ({ task, tooltipPosition = "right", className }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const tooltip = task.assignedToAccount
-    ? t("taskWeekCardTaskAssignedToTooltip")?.replace(
-        "${to}",
-        task?.assignedToAccount?.username || ""
-      )
+    ? t("taskWeekCardTaskAssignedToTooltip")?.replace("${to}", task?.assignedToAccount?.username || "")
     : t("taskWeekCardTaskHasNoAssignedToTooltip");
 
-  const popChangeAssigneeModal = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
+  const popChangeAssigneeModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event?.preventDefault?.();
     dispatch(popChangeTaskAssigneeModal({ visible: true, task }));
   };

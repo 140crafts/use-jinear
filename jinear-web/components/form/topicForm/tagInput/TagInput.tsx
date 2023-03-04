@@ -15,12 +15,7 @@ const TagInput: React.FC<TagInputProps> = ({ register, labelClass }) => {
   return (
     <label className={labelClass} htmlFor={"topic-tag"}>
       {`${t("topicFormTag")} *`}
-      <input
-        id={"topic-tag"}
-        type={"text"}
-        maxLength={16}
-        {...register("tag", { required: t("formRequiredField") })}
-      />
+      <input id={"topic-tag"} type={"text"} maxLength={16} {...register("tag", { required: t("formRequiredField") })} />
       <span className={styles.info}>{t("topicFormTagExplaination")}</span>
     </label>
   );

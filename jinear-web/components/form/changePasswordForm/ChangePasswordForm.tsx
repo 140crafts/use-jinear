@@ -25,8 +25,7 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({}) => {
     handleSubmit,
     formState: { errors },
   } = useForm<IChangePasswordForm>();
-  const [updatePassword, { isSuccess, isError, isLoading }] =
-    useUpdatePasswordMutation();
+  const [updatePassword, { isSuccess, isError, isLoading }] = useUpdatePasswordMutation();
 
   useEffect(() => {
     if (isSuccess && !isError) {
@@ -47,48 +46,21 @@ const ChangePasswordForm: React.FC<ChangePasswordFormProps> = ({}) => {
   };
 
   return (
-    <form
-      autoComplete="off"
-      id={"change-password-form"}
-      className={styles.form}
-      onSubmit={handleSubmit(submit)}
-      action="#"
-    >
+    <form autoComplete="off" id={"change-password-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
       <label className={styles.label} htmlFor={"current-password"}>
         {t("changePasswordFormCurrentPassword")}
-        <input
-          id={"current-password"}
-          type={"password"}
-          required
-          {...register("currentPassword")}
-        />
+        <input id={"current-password"} type={"password"} required {...register("currentPassword")} />
       </label>
 
       <label className={styles.label} htmlFor={"new-password"}>
         {t("changePasswordFormNewPassword")}
-        <input
-          id={"new-password"}
-          type={"password"}
-          required
-          {...register("newPassword")}
-        />
+        <input id={"new-password"} type={"password"} required {...register("newPassword")} />
       </label>
       <label className={styles.label} htmlFor={"new-password-confirm"}>
         {t("changePasswordFormNewPasswordConfirm")}
-        <input
-          id={"new-password-confirm"}
-          type={"password"}
-          required
-          {...register("newPasswordControl")}
-        />
+        <input id={"new-password-confirm"} type={"password"} required {...register("newPasswordControl")} />
       </label>
-      <Button
-        disabled={isLoading}
-        loading={isLoading}
-        type="submit"
-        className={styles.button}
-        variant={ButtonVariants.filled}
-      >
+      <Button disabled={isLoading} loading={isLoading} type="submit" className={styles.button} variant={ButtonVariants.filled}>
         <div>{t("changePasswordFormChangeButton")}</div>
       </Button>
     </form>

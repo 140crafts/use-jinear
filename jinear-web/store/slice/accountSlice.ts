@@ -42,19 +42,15 @@ export const { logout } = slice.actions;
 export default slice.reducer;
 
 export const selectAuthState = (state: RootState) => state.account.authState;
-export const selectIsLoggedIn = (state: RootState) =>
-  state.account.authState == "LOGGED_IN";
+export const selectIsLoggedIn = (state: RootState) => state.account.authState == "LOGGED_IN";
 
 export const selectCurrentAccount = (state: RootState) => state.account.current;
-export const selectCurrentAccountId = (state: RootState) =>
-  state.account.current?.accountId;
+export const selectCurrentAccountId = (state: RootState) => state.account.current?.accountId;
 
-export const selectIsAccountIdIsCurrentAccountId =
-  (accountId: string) => (state: RootState) =>
-    accountId == state.account.current?.accountId;
+export const selectIsAccountIdIsCurrentAccountId = (accountId: string) => (state: RootState) =>
+  accountId == state.account.current?.accountId;
 
-export const selectCurrentAccountsWorkspaces = (state: RootState) =>
-  state.account.current?.workspaces;
+export const selectCurrentAccountsWorkspaces = (state: RootState) => state.account.current?.workspaces;
 
 export const selectCurrentAccountsPersonalWorkspace = (state: RootState) =>
   state.account.current?.workspaces?.find((w) => w.isPersonal);
@@ -67,8 +63,7 @@ export const selectCurrentAccountsPreferredWorkspace = (state: RootState) => {
 };
 
 export const selectCurrentAccountsPreferredWorkspaceId = (state: RootState) => {
-  return state.account.current?.workspaceDisplayPreference?.workspace
-    ?.workspaceId;
+  return state.account.current?.workspaceDisplayPreference?.workspace?.workspaceId;
 };
 
 export const selectCurrentAccountsPreferredTeam = (state: RootState) => {

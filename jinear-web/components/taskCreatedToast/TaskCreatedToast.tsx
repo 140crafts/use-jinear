@@ -13,10 +13,7 @@ interface TaskCreatedToastProps {
   teamTaskNo: string;
 }
 
-const TaskCreatedToast: React.FC<TaskCreatedToastProps> = ({
-  taskLink,
-  teamTaskNo,
-}) => {
+const TaskCreatedToast: React.FC<TaskCreatedToastProps> = ({ taskLink, teamTaskNo }) => {
   const { t } = useTranslation();
 
   const copyToClipboard = () => {
@@ -28,16 +25,10 @@ const TaskCreatedToast: React.FC<TaskCreatedToastProps> = ({
     <div className={styles.container}>
       <div className={styles.titleContainer}>
         <FaCheck />
-        <div className={styles.title}>
-          {t("newTastCreatedToastText").replace("${taskNo}", teamTaskNo)}
-        </div>
+        <div className={styles.title}>{t("newTastCreatedToastText").replace("${taskNo}", teamTaskNo)}</div>
       </div>
       <div className={styles.actionButtonContainer}>
-        <Button
-          onClick={copyToClipboard}
-          className={styles.button}
-          heightVariant={ButtonHeight.short}
-        >
+        <Button onClick={copyToClipboard} className={styles.button} heightVariant={ButtonHeight.short}>
           {t("newTastCreatedToastCopyUrl")}
         </Button>
 

@@ -25,12 +25,8 @@ const DialogModal: React.FC<DialogModalProps> = ({}) => {
   const title = useTypedSelector(selectDialogModalTitle);
   const content = useTypedSelector(selectDialogModalContent);
   const htmlContent = useTypedSelector(selectDialogModalHtmlContent);
-  const closeButtonLabel =
-    useTypedSelector(selectDialogModalCloseButtonLabel) ||
-    t("dialogModalGenericCloseLabel");
-  const confirmButtonLabel = useTypedSelector(
-    selectDialogModalConfirmButtonLabel
-  );
+  const closeButtonLabel = useTypedSelector(selectDialogModalCloseButtonLabel) || t("dialogModalGenericCloseLabel");
+  const confirmButtonLabel = useTypedSelector(selectDialogModalConfirmButtonLabel);
   const onConfirm = useTypedSelector(selectDialogModalOnConfirm);
   const onClose = useTypedSelector(selectDialogModalOnClose);
 
@@ -46,27 +42,15 @@ const DialogModal: React.FC<DialogModalProps> = ({}) => {
       requestClose={onClose ? onClose : close}
       width={"default"}
     >
-      {htmlContent ? (
-        <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div>
-      ) : (
-        <div>{content}</div>
-      )}
+      {htmlContent ? <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div> : <div>{content}</div>}
 
       <div className={styles.actionBar}>
         {onConfirm && (
-          <Button
-            heightVariant={ButtonHeight.mid}
-            variant={ButtonVariants.filled}
-            onClick={onConfirm}
-          >
+          <Button heightVariant={ButtonHeight.mid} variant={ButtonVariants.filled} onClick={onConfirm}>
             {confirmButtonLabel}
           </Button>
         )}
-        <Button
-          heightVariant={ButtonHeight.mid}
-          variant={ButtonVariants.contrast}
-          onClick={onClose ? onClose : close}
-        >
+        <Button heightVariant={ButtonHeight.mid} variant={ButtonVariants.contrast} onClick={onClose ? onClose : close}>
           {closeButtonLabel}
         </Button>
       </div>

@@ -7,9 +7,7 @@ import modal from "@/slice/modalSlice";
 import { api } from "./api/api";
 import { rtkQueryErrorLogger } from "./api/errorMiddleware";
 
-export const createStore = (
-  options?: ConfigureStoreOptions["preloadedState"] | undefined
-) =>
+export const createStore = (options?: ConfigureStoreOptions["preloadedState"] | undefined) =>
   configureStore({
     reducer: {
       [api.reducerPath]: api.reducer,

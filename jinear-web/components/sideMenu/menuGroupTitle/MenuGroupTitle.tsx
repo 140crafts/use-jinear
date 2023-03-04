@@ -33,20 +33,12 @@ const MenuGroupTitle: React.FC<MenuGroupTitleProps> = ({
       <div className={styles.title}>{label}</div>
       <div className="flex-1" />
       {hasDetailButton && (
-        <Button
-          onClick={_detailClick}
-          variant={buttonVariant}
-          heightVariant={ButtonHeight.short}
-        >
+        <Button onClick={_detailClick} variant={buttonVariant} heightVariant={ButtonHeight.short}>
           <IoEllipsisHorizontal />
         </Button>
       )}
       {hasAddButton && (
-        <Button
-          onClick={_addClick}
-          variant={buttonVariant}
-          heightVariant={ButtonHeight.short}
-        >
+        <Button onClick={_addClick} variant={buttonVariant} heightVariant={ButtonHeight.short}>
           <IoAdd />
         </Button>
       )}

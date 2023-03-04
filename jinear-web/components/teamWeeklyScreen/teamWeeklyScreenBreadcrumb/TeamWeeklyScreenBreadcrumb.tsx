@@ -8,22 +8,13 @@ interface TeamWeeklyScreenBreadcrumbProps {
   teamUsername: string;
 }
 
-const TeamWeeklyScreenBreadcrumb: React.FC<TeamWeeklyScreenBreadcrumbProps> = ({
-  workspaceName,
-  teamUsername,
-}) => {
+const TeamWeeklyScreenBreadcrumb: React.FC<TeamWeeklyScreenBreadcrumbProps> = ({ workspaceName, teamUsername }) => {
   const { t } = useTranslation();
   return (
     <Breadcrumb>
       <BreadcrumbLink label={workspaceName} url={`/${workspaceName}`} />
-      <BreadcrumbLink
-        label={teamUsername}
-        url={`/${workspaceName}/${teamUsername}`}
-      />
-      <BreadcrumbLink
-        label={t("teamWeeklyScreenBreadcrumbLabel")}
-        url={`/${workspaceName}/${teamUsername}/weekly`}
-      />
+      <BreadcrumbLink label={teamUsername} url={`/${workspaceName}/${teamUsername}`} />
+      <BreadcrumbLink label={t("teamWeeklyScreenBreadcrumbLabel")} url={`/${workspaceName}/${teamUsername}/weekly`} />
     </Breadcrumb>
   );
 };

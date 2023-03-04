@@ -8,9 +8,7 @@ interface AssignedDateChangeDiffInfoProps {
   activity: WorkspaceActivityDto;
 }
 
-const AssignedDateChangeDiffInfo: React.FC<AssignedDateChangeDiffInfoProps> = ({
-  activity,
-}) => {
+const AssignedDateChangeDiffInfo: React.FC<AssignedDateChangeDiffInfoProps> = ({ activity }) => {
   const { t } = useTranslation();
   const oldVal = activity.oldState
     ? format(new Date(activity.oldState), t("dateFormat"))

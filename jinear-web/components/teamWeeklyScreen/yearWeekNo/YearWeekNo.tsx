@@ -1,12 +1,5 @@
 import { useViewingWeekStart } from "@/store/context/screen/team/weekly/teamWeeklyScreenContext";
-import {
-  endOfWeek,
-  format,
-  getISOWeek,
-  getWeek,
-  isSameYear,
-  startOfWeek,
-} from "date-fns";
+import { endOfWeek, format, getISOWeek, getWeek, isSameYear, startOfWeek } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import DateControl from "./dateControl/DateControl";
@@ -28,13 +21,9 @@ const YearWeekNo: React.FC<YearWeekNoProps> = ({}) => {
   const week = getWeek(date, options);
   const isoWeek = getISOWeek(date);
 
-  const humanlyWeekNo =
-    isLastMonth && isLastWeekOrFirstWeekOfTheYear ? isoWeek : week;
+  const humanlyWeekNo = isLastMonth && isLastWeekOrFirstWeekOfTheYear ? isoWeek : week;
 
-  const title = t("teamWeeklyScreenWeekNoTitle").replace(
-    "{weekNo}",
-    isoWeek.toString()
-  );
+  const title = t("teamWeeklyScreenWeekNoTitle").replace("{weekNo}", isoWeek.toString());
 
   return (
     <div className={styles.container}>

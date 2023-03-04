@@ -17,9 +17,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ teamId }) => {
 
   return (
     <div className={styles.container}>
-      {isSuccess && teamMembersResponse && (
-        <MenuMemberList page={teamMembersResponse.data} type="team" />
-      )}
+      {isSuccess && teamMembersResponse && <MenuMemberList page={teamMembersResponse.data} type="team" />}
     </div>
   );
 };

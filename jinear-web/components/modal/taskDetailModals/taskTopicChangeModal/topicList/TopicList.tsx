@@ -22,18 +22,12 @@ const TopicList: React.FC<TopicListProps> = ({ teamId, filter, close }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const taskId = useTypedSelector(selectChangeTaskTopicModalTaskId);
-  const taskCurrentTopicId = useTypedSelector(
-    selectChangeTaskTopicModalTaskCurrentTopicId
-  );
-  const { data: retrieveTeamTopicListResponse, isFetching } =
-    useRetrieveTeamTopicsQuery(teamId, {
-      skip: teamId == null,
-    });
+  const taskCurrentTopicId = useTypedSelector(selectChangeTaskTopicModalTaskCurrentTopicId);
+  const { data: retrieveTeamTopicListResponse, isFetching } = useRetrieveTeamTopicsQuery(teamId, {
+    skip: teamId == null,
+  });
 
-  const [
-    updateTaskTopic,
-    { isSuccess: isUpdateSuccess, isError: isUpdateError },
-  ] = useUpdateTaskTopicMutation();
+  const [updateTaskTopic, { isSuccess: isUpdateSuccess, isError: isUpdateError }] = useUpdateTaskTopicMutation();
 
   useEffect(() => {
     if (isUpdateSuccess || isUpdateError) {
@@ -55,9 +49,7 @@ const TopicList: React.FC<TopicListProps> = ({ teamId, filter, close }) => {
 
   const filteredList =
     retrieveTeamTopicListResponse?.data.content.filter(
-      (topic) =>
-        filter == "" ||
-        topic.name?.toLowerCase().indexOf(filter?.toLowerCase()) != -1
+      (topic) => filter == "" || topic.name?.toLowerCase().indexOf(filter?.toLowerCase()) != -1
     ) || [];
 
   return (
@@ -72,11 +64,7 @@ const TopicList: React.FC<TopicListProps> = ({ teamId, filter, close }) => {
         <Button
           key={`task-topic-modal-${topic.topicId}`}
           className={styles.button}
-          variant={
-            taskCurrentTopicId == topic.topicId
-              ? ButtonVariants.filled2
-              : ButtonVariants.filled
-          }
+          variant={taskCurrentTopicId == topic.topicId ? ButtonVariants.filled2 : ButtonVariants.filled}
           onClick={() => changeTaskTopic(topic.topicId)}
         >
           {topic.name}
@@ -84,9 +72,7 @@ const TopicList: React.FC<TopicListProps> = ({ teamId, filter, close }) => {
       ))}
 
       {filteredList.length == 0 && !isFetching && (
-        <div className={styles.centeredInfo}>
-          {t("changeTaskTopicModalFilteredListEmpty")}
-        </div>
+        <div className={styles.centeredInfo}>{t("changeTaskTopicModalFilteredListEmpty")}</div>
       )}
     </div>
   );

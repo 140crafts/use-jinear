@@ -14,14 +14,7 @@ import useTranslation from "locales/useTranslation";
 import Link from "next/link";
 import React, { useEffect } from "react";
 
-import {
-  IoCheckmarkCircle,
-  IoClose,
-  IoCloseCircle,
-  IoContrast,
-  IoEllipseOutline,
-  IoPauseCircleOutline,
-} from "react-icons/io5";
+import { IoCheckmarkCircle, IoClose, IoCloseCircle, IoContrast, IoEllipseOutline, IoPauseCircleOutline } from "react-icons/io5";
 import styles from "./TaskRelationRow.module.css";
 
 interface TaskRelationRowProps {
@@ -41,15 +34,10 @@ const TaskRelationRow: React.FC<TaskRelationRowProps> = ({ relation }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const tag = `${relation.task.team?.tag}-${relation.task.teamTagNo}`;
-  const [
-    deleteTaskRelation,
-    { isSuccess: isDeleteSuccess, isError: isDeleteError },
-  ] = useDeleteTaskRelationMutation();
+  const [deleteTaskRelation, { isSuccess: isDeleteSuccess, isError: isDeleteError }] = useDeleteTaskRelationMutation();
 
   const popChangeWorkflowStatusModal = () => {
-    dispatch(
-      popChangeTaskWorkflowStatusModal({ visible: true, task: relation.task })
-    );
+    dispatch(popChangeTaskWorkflowStatusModal({ visible: true, task: relation.task }));
   };
 
   useEffect(() => {
@@ -85,10 +73,7 @@ const TaskRelationRow: React.FC<TaskRelationRowProps> = ({ relation }) => {
         {groupIconMap?.[relation.task.workflowStatus.workflowStateGroup]}
       </Button>
       <div className="spacer-w-1" />
-      <Link
-        className={cn(styles.linkButton)}
-        href={`/${relation.task.workspace?.username}/task/${tag}`}
-      >
+      <Link className={cn(styles.linkButton)} href={`/${relation.task.workspace?.username}/task/${tag}`}>
         <div className="line-clamp">
           {tag} {relation.task.title}
         </div>
@@ -103,11 +88,7 @@ const TaskRelationRow: React.FC<TaskRelationRowProps> = ({ relation }) => {
       </Button>
 
       <div className="spacer-w-1" />
-      <AssigneeCell
-        task={relation.task}
-        tooltipPosition={"right"}
-        className={styles.workflowStatusButton}
-      />
+      <AssigneeCell task={relation.task} tooltipPosition={"right"} className={styles.workflowStatusButton} />
     </div>
   );
 };

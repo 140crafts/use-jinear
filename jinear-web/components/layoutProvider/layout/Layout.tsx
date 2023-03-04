@@ -4,10 +4,7 @@ import SideMenuFooter from "@/components/sideMenu/sideMenuFooter/SideMenuFooter"
 import TabBar from "@/components/tabBar/TabBar";
 import WorkspaceMenu from "@/components/workspaceMenu/WorkspaceMenu";
 import { selectAuthState } from "@/store/slice/accountSlice";
-import {
-  closeMenu,
-  selectAppMenuVisible,
-} from "@/store/slice/displayPreferenceSlice";
+import { closeMenu, selectAppMenuVisible } from "@/store/slice/displayPreferenceSlice";
 import { selectAnyModalVisible } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import isPwa from "@/utils/pwaHelper";
@@ -76,11 +73,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             </div>
           </div>
           <SideMenuFooter
-            className={cn(
-              styles.sideMenuFooter,
-              !isMenuVisible && styles.sideMenuFooterMenuOpen,
-              pwa && styles.pwaPadding
-            )}
+            className={cn(styles.sideMenuFooter, !isMenuVisible && styles.sideMenuFooterMenuOpen, pwa && styles.pwaPadding)}
           />
         </div>
       )}

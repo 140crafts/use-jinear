@@ -9,11 +9,7 @@ export const taskApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: [
-        "team-task-list",
-        "workplace-task-with-name-and-tag",
-        "team-workflow-task-list",
-      ],
+      invalidatesTags: ["team-task-list", "workplace-task-with-name-and-tag", "team-workflow-task-list"],
     }),
     //
     retrieveWithWorkspaceNameAndTeamTagNo: build.query<
@@ -23,8 +19,7 @@ export const taskApi = api.injectEndpoints({
         taskTag: string;
       }
     >({
-      query: (req: { workspaceName: string; taskTag: string }) =>
-        `v1/task/from-workspace/${req.workspaceName}/${req.taskTag}`,
+      query: (req: { workspaceName: string; taskTag: string }) => `v1/task/from-workspace/${req.workspaceName}/${req.taskTag}`,
       providesTags: (_result, _err, req) => [
         {
           type: "workplace-task-with-name-and-tag",
@@ -35,10 +30,7 @@ export const taskApi = api.injectEndpoints({
   }),
 });
 ///from-workspace/{workspaceName}/{teamTag}-{tagNo}
-export const {
-  useInitializeTaskMutation,
-  useRetrieveWithWorkspaceNameAndTeamTagNoQuery,
-} = taskApi;
+export const { useInitializeTaskMutation, useRetrieveWithWorkspaceNameAndTeamTagNoQuery } = taskApi;
 
 export const {
   endpoints: { initializeTask, retrieveWithWorkspaceNameAndTeamTagNo },

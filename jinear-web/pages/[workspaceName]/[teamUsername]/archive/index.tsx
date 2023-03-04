@@ -13,13 +13,7 @@ const TeamArchiveScreen: React.FC<TeamArchiveScreenProps> = ({}) => {
   return (
     <div className={styles.container}>
       <TaskListScreenBreadcrumb type="archive" />
-      {team && (
-        <TaskListGroupedByWorkflowStatus
-          type="archive"
-          teamId={team.teamId}
-          workspaceId={team.workspaceId}
-        />
-      )}
+      {team && <TaskListGroupedByWorkflowStatus type="archive" teamId={team.teamId} workspaceId={team.workspaceId} />}
     </div>
   );
 };

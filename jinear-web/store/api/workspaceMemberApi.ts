@@ -3,10 +3,7 @@ import { api } from "./api";
 
 export const workplaceMemberApi = api.injectEndpoints({
   endpoints: (build) => ({
-    retrieveWorkspaceMembers: build.query<
-      WorkspaceMemberListingBaseResponse,
-      string
-    >({
+    retrieveWorkspaceMembers: build.query<WorkspaceMemberListingBaseResponse, string>({
       query: (workspaceId: string) => `v1/workspace/member/${workspaceId}/list`,
       providesTags: (_result, _err, workspaceId) => [
         {

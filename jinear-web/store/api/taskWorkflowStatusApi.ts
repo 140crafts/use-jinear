@@ -3,10 +3,7 @@ import { api } from "./api";
 
 export const taskWorkflowStatusApi = api.injectEndpoints({
   endpoints: (build) => ({
-    updateTaskWorkflowStatus: build.mutation<
-      TaskResponse,
-      { taskId: string; workflowStatusId: string }
-    >({
+    updateTaskWorkflowStatus: build.mutation<TaskResponse, { taskId: string; workflowStatusId: string }>({
       query: (body: { taskId: string; workflowStatusId: string }) => ({
         url: `v1/task/workflow-status/${body.taskId}/${body.workflowStatusId}`,
         method: "PUT",

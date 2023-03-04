@@ -12,15 +12,9 @@ const DescDiffInfo: React.FC<DescDiffInfoProps> = ({ activity }) => {
 
   return (
     <div className={styles.contentContainer}>
-      <div
-        className={styles.cell}
-        dangerouslySetInnerHTML={{ __html: oldDesc }}
-      />
+      <div className={styles.cell} dangerouslySetInnerHTML={{ __html: oldDesc }} />
       <div className={styles.arrow}>{"->"}</div>
-      <div
-        className={styles.cell}
-        dangerouslySetInnerHTML={{ __html: newDesc }}
-      />
+      <div className={styles.cell} dangerouslySetInnerHTML={{ __html: newDesc }} />
     </div>
   );
 };

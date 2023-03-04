@@ -1,8 +1,5 @@
 import Button from "@/components/button";
-import {
-  useSetViewingWeekStart,
-  useViewingWeekStart,
-} from "@/store/context/screen/team/weekly/teamWeeklyScreenContext";
+import { useSetViewingWeekStart, useViewingWeekStart } from "@/store/context/screen/team/weekly/teamWeeklyScreenContext";
 import { addWeeks, startOfToday, startOfWeek } from "date-fns";
 import React from "react";
 import { IoCaretBack, IoCaretForward, IoEllipse } from "react-icons/io5";

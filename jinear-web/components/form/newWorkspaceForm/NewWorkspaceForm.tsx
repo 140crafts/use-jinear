@@ -20,13 +20,11 @@ const USERNAME_REGEX = /[^A-Za-z0-9-_]/;
 const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { register, handleSubmit, setFocus, setValue, watch } =
-    useForm<WorkspaceInitializeRequest>();
+  const { register, handleSubmit, setFocus, setValue, watch } = useForm<WorkspaceInitializeRequest>();
   const currTitle = watch("title");
   const currHandle = watch("handle");
 
-  const [initializeWorkspace, { isLoading, isSuccess }] =
-    useInitializeWorkspaceMutation();
+  const [initializeWorkspace, { isLoading, isSuccess }] = useInitializeWorkspaceMutation();
 
   const submit: SubmitHandler<WorkspaceInitializeRequest> = (data) => {
     logger.log({ data });
@@ -41,14 +39,7 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
 
   useEffect(() => {
     if (currTitle && currTitle.length > 0) {
-      setValue(
-        "handle",
-        currTitle
-          .toLocaleLowerCase("en-US")
-          ?.split(USERNAME_REGEX)
-          ?.join("")
-          ?.substring(0, 255)
-      );
+      setValue("handle", currTitle.toLocaleLowerCase("en-US")?.split(USERNAME_REGEX)?.join("")?.substring(0, 255));
     }
   }, [currTitle]);
 
@@ -59,23 +50,10 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
   }, [isSuccess]);
 
   return (
-    <form
-      autoComplete="off"
-      id={"new-workspace-form"}
-      className={styles.form}
-      onSubmit={handleSubmit(submit)}
-      action="#"
-    >
-      <label
-        className={cn(styles.label, "flex-1")}
-        htmlFor={"new-workspace-title"}
-      >
+    <form autoComplete="off" id={"new-workspace-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
+      <label className={cn(styles.label, "flex-1")} htmlFor={"new-workspace-title"}>
         {`${t("newWorkspaceFormWorkspaceTitle")} *`}
-        <input
-          id={"new-workspace-title"}
-          type={"text"}
-          {...register("title", { required: t("formRequiredField") })}
-        />
+        <input id={"new-workspace-title"} type={"text"} {...register("title", { required: t("formRequiredField") })} />
       </label>
 
       <label
@@ -101,19 +79,11 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
       </label>
       <label className={styles.label} htmlFor={"new-workspace-description"}>
         {`${t("newWorkspaceFormWorkspaceDescription")}`}
-        <textarea
-          id={"new-workspace-description"}
-          rows={4}
-          {...register("description")}
-        />
+        <textarea id={"new-workspace-description"} rows={4} {...register("description")} />
       </label>
 
       <div className={styles.footerContainer}>
-        <Button
-          disabled={isLoading}
-          onClick={close}
-          className={styles.footerButton}
-        >
+        <Button disabled={isLoading} onClick={close} className={styles.footerButton}>
           {t("newWorkspaceFormCancel")}
         </Button>
         <Button

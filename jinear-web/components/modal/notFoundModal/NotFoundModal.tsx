@@ -29,11 +29,7 @@ const NotFoundModal: React.FC<NotFoundModalProps> = ({}) => {
   };
 
   return (
-    <Modal
-      visible={visibile}
-      title={title}
-      contentContainerClass={styles.container}
-    >
+    <Modal visible={visibile} title={title} contentContainerClass={styles.container}>
       {label && <span>{label}</span>}
       <div className="spacer-h-4" />
       <Button onClick={close} href={"/"} variant={ButtonVariants.contrast}>

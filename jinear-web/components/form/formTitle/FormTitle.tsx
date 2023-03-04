@@ -9,24 +9,14 @@ interface FormTitleProps {
   link?: string;
 }
 
-const FormTitle: React.FC<FormTitleProps> = ({
-  title,
-  subTitle,
-  linkLabel,
-  link,
-}) => {
+const FormTitle: React.FC<FormTitleProps> = ({ title, subTitle, linkLabel, link }) => {
   return (
     <div className={styles.container}>
       <div className={styles.title}>{title}</div>
       <div className={styles.subtitleContainer}>
         <div className={styles.subTitle}>
           {subTitle}
-          {link && linkLabel && (
-            <Link
-              style={{ paddingLeft: 3.5 }}
-              href={link}
-            >{` ${linkLabel}`}</Link>
-          )}
+          {link && linkLabel && <Link style={{ paddingLeft: 3.5 }} href={link}>{` ${linkLabel}`}</Link>}
         </div>
       </div>
     </div>

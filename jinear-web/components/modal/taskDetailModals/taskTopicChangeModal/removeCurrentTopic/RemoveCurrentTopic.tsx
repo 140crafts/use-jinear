@@ -19,11 +19,8 @@ const RemoveCurrentTopic: React.FC<RemoveCurrentTopicProps> = ({ close }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const taskId = useTypedSelector(selectChangeTaskTopicModalTaskId);
-  const taskCurrentTopicId = useTypedSelector(
-    selectChangeTaskTopicModalTaskCurrentTopicId
-  );
-  const [removeTaskTopic, { isSuccess, isError }] =
-    useRemoveTaskTopicMutation();
+  const taskCurrentTopicId = useTypedSelector(selectChangeTaskTopicModalTaskCurrentTopicId);
+  const [removeTaskTopic, { isSuccess, isError }] = useRemoveTaskTopicMutation();
 
   useEffect(() => {
     if (isSuccess || isError) {

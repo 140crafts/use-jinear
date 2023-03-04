@@ -1,8 +1,5 @@
 import { selectCurrentAccountsPreferredTeamId } from "@/store/slice/accountSlice";
-import {
-  closeChangeTaskTopicModal,
-  selectChangeTaskTopicModalVisible,
-} from "@/store/slice/modalSlice";
+import { closeChangeTaskTopicModal, selectChangeTaskTopicModalVisible } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
@@ -48,16 +45,9 @@ const TaskTopicChangeModal: React.FC<TaskTopicChangeModalProps> = ({}) => {
     >
       <label className={styles.label} htmlFor={"topic-filter"}>
         {t("changeTaskTopicModalFilterLabel")}
-        <input
-          ref={filterInputRef}
-          id={"topic-filter"}
-          type={"text"}
-          onChange={onFilterValue}
-        />
+        <input ref={filterInputRef} id={"topic-filter"} type={"text"} onChange={onFilterValue} />
       </label>
-      {teamId && (
-        <TopicList teamId={teamId} filter={filterValue} close={close} />
-      )}
+      {teamId && <TopicList teamId={teamId} filter={filterValue} close={close} />}
       <RemoveCurrentTopic close={close} />
     </Modal>
   );

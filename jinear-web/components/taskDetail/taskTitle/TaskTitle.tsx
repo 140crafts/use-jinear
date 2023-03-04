@@ -19,13 +19,8 @@ const TaskTitle: React.FC<TaskTitleProps> = ({ taskId, title }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const titleInputRef = useRef<HTMLDivElement>(null);
   const { current: readOnly, toggle: toggleReadOnly } = useToggle(true);
-  const [
-    updateTaskTitle,
-    {
-      isLoading: isUpdateTaskTitleLoading,
-      isSuccess: isUpdateTaskTitleSuccess,
-    },
-  ] = useUpdateTaskTitleMutation();
+  const [updateTaskTitle, { isLoading: isUpdateTaskTitleLoading, isSuccess: isUpdateTaskTitleSuccess }] =
+    useUpdateTaskTitleMutation();
 
   useEffect(() => {
     if (titleInputRef.current) {
@@ -81,16 +76,12 @@ const TaskTitle: React.FC<TaskTitleProps> = ({ taskId, title }) => {
   };
 
   return (
-    <div
-      className={cn(styles.container, readOnly && styles["contaier-readonly"])}
-      onClick={readOnly ? toggle : undefined}
-    >
+    <div className={cn(styles.container, readOnly && styles["contaier-readonly"])} onClick={readOnly ? toggle : undefined}>
       <div
         className={cn(
           styles.actionContainer,
           !readOnly && styles.marginTop,
-          (!readOnly || isUpdateTaskTitleLoading) &&
-            styles.actionContainerVisible
+          (!readOnly || isUpdateTaskTitleLoading) && styles.actionContainerVisible
         )}
       >
         {isUpdateTaskTitleLoading && (
@@ -103,9 +94,7 @@ const TaskTitle: React.FC<TaskTitleProps> = ({ taskId, title }) => {
           <Button
             disabled={isUpdateTaskTitleLoading}
             loading={isUpdateTaskTitleLoading}
-            variant={
-              readOnly ? ButtonVariants.filled2 : ButtonVariants.contrast
-            }
+            variant={readOnly ? ButtonVariants.filled2 : ButtonVariants.contrast}
             heightVariant={ButtonHeight.mid}
             onClick={toggle}
           >
@@ -130,11 +119,7 @@ const TaskTitle: React.FC<TaskTitleProps> = ({ taskId, title }) => {
         value={taskTitle}
         onChange={onTitleChange}
       /> */}
-      <div
-        ref={titleInputRef}
-        contentEditable={!readOnly}
-        className={cn(styles.titleBase, readOnly && styles.title)}
-      >
+      <div ref={titleInputRef} contentEditable={!readOnly} className={cn(styles.titleBase, readOnly && styles.title)}>
         {taskTitle}
       </div>
     </div>

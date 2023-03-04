@@ -10,13 +10,7 @@ interface TeamWeekViewProps {
   containerRef?: React.RefObject<HTMLDivElement>;
 }
 
-const TeamWeekView: React.FC<TeamWeekViewProps> = ({
-  teamId,
-  workspaceId,
-  viewingWeekStart,
-  showDayOfWeek,
-  containerRef,
-}) => {
+const TeamWeekView: React.FC<TeamWeekViewProps> = ({ teamId, workspaceId, viewingWeekStart, showDayOfWeek, containerRef }) => {
   const viewingWeekEnd = endOfWeek(viewingWeekStart, { weekStartsOn: 1 });
   return (
     <PeriodSpanTaskView

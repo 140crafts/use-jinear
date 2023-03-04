@@ -12,12 +12,7 @@ interface EmailStageProps {
 
 const logger = Logger("LoginModal");
 
-const EmailStage: React.FC<EmailStageProps> = ({
-  onPrimaryButtonClick,
-  className,
-  infoClassName,
-  inputRef,
-}) => {
+const EmailStage: React.FC<EmailStageProps> = ({ onPrimaryButtonClick, className, infoClassName, inputRef }) => {
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -33,16 +28,8 @@ const EmailStage: React.FC<EmailStageProps> = ({
   return (
     <div className={className}>
       <h3>{t("loginScreenText")}</h3>
-      <TextInput
-        ref={inputRef}
-        type={"email"}
-        onEnterCallback={onEnterCallBack}
-        placeholder={t("loginScreenEmailPlaceholder")}
-      />
-      <span
-        className={infoClassName}
-        dangerouslySetInnerHTML={{ __html: t("loginScreenEmailSubText") }}
-      />
+      <TextInput ref={inputRef} type={"email"} onEnterCallback={onEnterCallBack} placeholder={t("loginScreenEmailPlaceholder")} />
+      <span className={infoClassName} dangerouslySetInnerHTML={{ __html: t("loginScreenEmailSubText") }} />
     </div>
   );
 };
