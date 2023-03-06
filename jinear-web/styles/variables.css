@@ -40,6 +40,8 @@
   --user-profile-card-height-medium: 150px;
   --user-profile-card-height-small: 115px;
   /*  */
+  --calendar-event-height: 25px;
+  /*  */
   --gap: clamp(1rem, 6vw, 3rem);
   --full: calc(100% - (var(--gap)));
   --content: min(50ch, 100% - var(--gap) * 2);

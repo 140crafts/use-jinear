@@ -17,6 +17,7 @@ export const taskUpdateApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "team-task-list" },
+        { type: "workspace-task-list" },
         { type: "workplace-task-with-name-and-tag" },
         { type: "retrieve-task-activity", id: req.taskId },
         { type: "team-task-list" },
@@ -31,9 +32,9 @@ export const taskUpdateApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "team-task-list" },
+        { type: "workspace-task-list" },
         { type: "workplace-task-with-name-and-tag" },
         { type: "retrieve-task-activity", id: req.taskId },
-        { type: "team-task-list" },
       ],
     }),
     //
@@ -45,9 +46,9 @@ export const taskUpdateApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "team-task-list" },
+        { type: "workspace-task-list" },
         { type: "workplace-task-with-name-and-tag" },
         { type: "retrieve-task-activity", id: req.taskId },
-        { type: "team-task-list" },
         { type: "reminder-next-job" },
       ],
     }),
@@ -61,9 +62,9 @@ export const taskUpdateApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "team-task-list" },
+        { type: "workspace-task-list" },
         { type: "workplace-task-with-name-and-tag" },
         { type: "retrieve-task-activity", id: req.taskId },
-        { type: "team-task-list" },
       ],
     }),
     //

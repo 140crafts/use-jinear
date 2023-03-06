@@ -1,5 +1,5 @@
 import { useDebouncedEffect } from "@/hooks/useDebouncedEffect";
-import { useRetrieveAllIntersectingTasksQuery } from "@/store/api/taskListingApi";
+import { useRetrieveAllIntersectingTasksFromTeamQuery } from "@/store/api/taskListingApi";
 import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
 import { eachDayOfInterval } from "date-fns";
@@ -35,7 +35,7 @@ const PeriodSpanTaskView: React.FC<PeriodSpanTaskViewProps> = ({
     data: taskListingResponse,
     isFetching,
     isSuccess,
-  } = useRetrieveAllIntersectingTasksQuery(
+  } = useRetrieveAllIntersectingTasksFromTeamQuery(
     {
       teamId,
       workspaceId,

@@ -10,6 +10,7 @@ export const taskTopicApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "team-task-list" },
+        { type: "workspace-task-list" },
         { type: "workplace-task-with-name-and-tag" },
         { type: "retrieve-task-activity", id: req.taskId },
       ],
@@ -22,6 +23,7 @@ export const taskTopicApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "team-task-list" },
+        { type: "workspace-task-list" },
         { type: "workplace-task-with-name-and-tag" },
         { type: "retrieve-task-activity", id: req.taskId },
       ],
