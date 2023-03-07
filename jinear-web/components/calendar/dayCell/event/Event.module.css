@@ -3,10 +3,15 @@
   align-items: center;
   padding-left: 1rem;
   height: var(--calendar-event-height);
+  color: var(--c-text-color);
+  cursor: default;
+  pointer-events: none;
 }
 
 .fill {
   background-color: var(--calendar-event-background);
+  cursor: pointer;
+  pointer-events: all;
 }
 
 .startDay {
@@ -23,6 +28,8 @@
 
 .highlight {
   background-color: var(--calendar-event-background-highlighted);
+  color: black;
+  font-weight: 500;
 }
 
 .title {

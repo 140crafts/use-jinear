@@ -1,6 +1,7 @@
 import { TaskDto } from "@/model/be/jinear-core";
 import cn from "classnames";
 import { isSameDay } from "date-fns";
+import Link from "next/link";
 import React from "react";
 import {
   isDateBetweenViewingPeriod,
@@ -38,7 +39,8 @@ const Event: React.FC<EventProps> = ({ task, day }) => {
   };
 
   return (
-    <div
+    <Link
+      href={`/${task?.workspace?.username}/task/${task?.team?.tag}-${task?.teamTagNo}`}
       className={cn(
         styles.container,
         task && styles.fill,
@@ -54,7 +56,7 @@ const Event: React.FC<EventProps> = ({ task, day }) => {
           {task?.title}
         </div>
       )}
-    </div>
+    </Link>
   );
 };
 
