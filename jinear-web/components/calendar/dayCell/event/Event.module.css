@@ -9,9 +9,11 @@
 }
 
 .fill {
-  background-color: var(--calendar-event-background);
+  /* background-color: var(--calendar-event-background); */
+  background-color: var(--c-primary-shade-0);
   cursor: pointer;
   pointer-events: all;
+  box-shadow: var(--box-shadow-soft);
 }
 
 .startDay {
@@ -27,11 +29,12 @@
 }
 
 .highlight {
-  background-color: var(--calendar-event-background-highlighted);
-  color: black;
+  /* background-color: var(--calendar-event-background-highlighted); */
+  background-color: var(--c-primary-shade-1);
+  /* color: black; */
   font-weight: 500;
 }
 
 .title {
-  cursor: default;
+  cursor: pointer;
 }

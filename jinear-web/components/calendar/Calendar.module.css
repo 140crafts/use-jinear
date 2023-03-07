@@ -24,3 +24,15 @@
   display: flex;
   flex-direction: column;
 }
+
+.weekdayHeaderContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.75rem;
+}
+
+.weekdayHeader {
+  flex: 1;
+  padding: 0.25rem 0.5rem;
+  font-weight: 700;
+}

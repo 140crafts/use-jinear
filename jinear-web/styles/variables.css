@@ -41,6 +41,7 @@
   --user-profile-card-height-small: 115px;
   /* CALENDAR */
   --calendar-event-height: 25px;
+  --calendar-event-gap: 5px;
   --calendar-event-background: #fdf5da;
   --calendar-event-background-highlighted: #f7ce46;
   /*  */
@@ -125,6 +126,6 @@
   /* text-editor */
   --toolbar-icon-filter: invert(100%);
   /* CALENDAR */
-  --calendar-event-background: #605425;
+  --calendar-event-background: #e3d1ac;
   --calendar-event-background-highlighted: #f7d149;
 }
