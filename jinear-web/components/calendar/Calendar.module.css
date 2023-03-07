@@ -19,3 +19,8 @@
   top: 0;
   z-index: 1;
 }
+
+.weeks {
+  display: flex;
+  flex-direction: column;
+}

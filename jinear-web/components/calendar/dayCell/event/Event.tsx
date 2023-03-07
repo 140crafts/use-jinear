@@ -3,20 +3,23 @@ import cn from "classnames";
 import { isSameDay } from "date-fns";
 import React from "react";
 import {
-  countAllTasksAtDateBeforeTaskDate,
   isDateBetweenViewingPeriod,
   isDateFirstDayOfViewingPeriod,
+  useHighligtedTaskId,
+  useSetHighlightedTaskId,
 } from "../../context/CalendarContext";
 import styles from "./Event.module.css";
 
 interface EventProps {
-  task: TaskDto;
+  task?: TaskDto | null;
   day: Date;
 }
 
 const Event: React.FC<EventProps> = ({ task, day }) => {
-  const _assignedDate = task.assignedDate && new Date(task.assignedDate);
-  const _dueDate = task.dueDate && new Date(task.dueDate);
+  const highlightedTaskId = useHighligtedTaskId();
+  const setHighlightedTaskId = useSetHighlightedTaskId();
+  const _assignedDate = task?.assignedDate && new Date(task.assignedDate);
+  const _dueDate = task?.dueDate && new Date(task.dueDate);
   const isTodayAssignedDate = _assignedDate && isSameDay(_assignedDate, day);
   const isTodayDueDate = _dueDate && isSameDay(_dueDate, day);
   const isOneOfDatesNotSet = !_assignedDate || !_dueDate;
@@ -24,21 +27,33 @@ const Event: React.FC<EventProps> = ({ task, day }) => {
   const isStartDateNotInViewingPeriod =
     _assignedDate && !isDateBetweenViewingPeriod(_assignedDate) && isDateFirstDayOfViewingPeriod(day);
 
-  const taskDate = _assignedDate ? _assignedDate : _dueDate;
-  const taskCountBeforeThisTask = countAllTasksAtDateBeforeTaskDate(day, taskDate);
+  const _hoverStart = () => {
+    if (task) {
+      setHighlightedTaskId?.(task.taskId);
+    }
+  };
+
+  const _hoverEnd = () => {
+    setHighlightedTaskId?.("");
+  };
 
   return (
     <div
       className={cn(
         styles.container,
+        task && styles.fill,
         (isTodayAssignedDate || isOneOfDatesNotSet) && styles.startDay,
-        (isTodayDueDate || isOneOfDatesNotSet) && styles.endDay
+        (isTodayDueDate || isOneOfDatesNotSet) && styles.endDay,
+        task && highlightedTaskId == task.taskId && styles.highlight
       )}
+      onMouseEnter={_hoverStart}
+      onMouseOut={_hoverEnd}
     >
       {(isTodayAssignedDate || isOneOfDatesNotSet || isStartDateNotInViewingPeriod) && (
-        <div className="line-clamp">{task.title}</div>
+        <div onMouseEnter={_hoverStart} onMouseOut={_hoverEnd} className={cn(styles.title, "line-clamp")}>
+          {task?.title}
+        </div>
       )}
-      <div className="line-clamp">{taskCountBeforeThisTask}</div>
     </div>
   );
 };

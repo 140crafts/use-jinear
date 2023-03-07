@@ -1,13 +1,13 @@
 .container {
   flex: 1;
-  /* border-style: solid;
-  border-width: thin;
-  border-color: var(--c-primary-shade-0); */
   min-height: 140px;
+  overflow: hidden;
 }
 
-.container:hover {
-  background-color: var(--c-primary-shade-0);
+.container:hover .titleContainer {
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+  border-bottom-color: var(--c-secondary-shade-0);
 }
 
 .titleContainer {

@@ -2,8 +2,11 @@
   display: flex;
   align-items: center;
   padding-left: 1rem;
-  background-color: var(--c-primary-shade-1);
   height: var(--calendar-event-height);
+}
+
+.fill {
+  background-color: var(--calendar-event-background);
 }
 
 .startDay {
@@ -16,4 +19,12 @@
   border-top-right-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
   margin-right: 0.35rem;
+}
+
+.highlight {
+  background-color: var(--calendar-event-background-highlighted);
+}
+
+.title {
+  cursor: default;
 }
