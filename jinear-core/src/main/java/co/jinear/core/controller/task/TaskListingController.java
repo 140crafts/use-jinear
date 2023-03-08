@@ -1,7 +1,8 @@
 package co.jinear.core.controller.task;
 
 import co.jinear.core.manager.task.TaskListingManager;
-import co.jinear.core.model.request.task.TaskRetrieveIntersectingRequest;
+import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromTeamRequest;
+import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromWorkspaceRequest;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
 import co.jinear.core.model.response.task.TaskListingResponse;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,15 @@ public class TaskListingController {
 
     private final TaskListingManager taskListingManager;
 
-    @GetMapping("/{workspaceId}/{teamId}")
+    @GetMapping("/{workspaceId}/intersecting/{start}/{end}")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskListingResponse retrieveAllIntersectingTasks(@PathVariable String workspaceId,
+                                                            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
+                                                            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end) {
+        return taskListingManager.retrieveAllIntersectingTasks(new RetrieveIntersectingTasksFromWorkspaceRequest(workspaceId, start, end));
+    }
+
+    @GetMapping("/{workspaceId}/team/{teamId}")
     @ResponseStatus(HttpStatus.OK)
     public TaskListingPaginatedResponse retrieveAllTasks(@PathVariable String workspaceId,
                                                          @PathVariable String teamId,
@@ -26,16 +35,16 @@ public class TaskListingController {
         return taskListingManager.retrieveAllTasks(workspaceId, teamId, page);
     }
 
-    @GetMapping("/{workspaceId}/{teamId}/intersecting/{start}/{end}")
+    @GetMapping("/{workspaceId}/team/{teamId}/intersecting/{start}/{end}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskListingResponse retrieveAllIntersectingTasks(@PathVariable String workspaceId,
-                                                            @PathVariable String teamId,
-                                                            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
-                                                            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end) {
-        return taskListingManager.retrieveAllIntersectingTasks(new TaskRetrieveIntersectingRequest(workspaceId, teamId, start, end));
+    public TaskListingResponse retrieveAllIntersectingTasksFromTeam(@PathVariable String workspaceId,
+                                                                    @PathVariable String teamId,
+                                                                    @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
+                                                                    @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end) {
+        return taskListingManager.retrieveAllIntersectingTasksFromTeam(new RetrieveIntersectingTasksFromTeamRequest(workspaceId, teamId, start, end));
     }
 
-    @GetMapping("/{workspaceId}/{teamId}/with-workflow/{workflowStatusId}")
+    @GetMapping("/{workspaceId}/team/{teamId}/with-workflow/{workflowStatusId}")
     @ResponseStatus(HttpStatus.OK)
     public TaskListingPaginatedResponse retrieveFromWorkflowStatus(@PathVariable String workspaceId,
                                                                    @PathVariable String teamId,

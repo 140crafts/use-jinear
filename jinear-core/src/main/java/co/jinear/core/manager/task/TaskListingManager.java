@@ -3,12 +3,16 @@ package co.jinear.core.manager.task;
 import co.jinear.core.converter.task.SearchIntersectingTasksVoConverter;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.task.TaskDto;
-import co.jinear.core.model.request.task.TaskRetrieveIntersectingRequest;
+import co.jinear.core.model.dto.team.member.TeamMemberDto;
+import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromTeamRequest;
+import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromWorkspaceRequest;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
 import co.jinear.core.model.response.task.TaskListingResponse;
-import co.jinear.core.model.vo.task.SearchIntersectingTasksVo;
+import co.jinear.core.model.vo.task.SearchIntersectingTasksFromTeamVo;
+import co.jinear.core.model.vo.task.SearchIntersectingTasksFromWorkspaceVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskListingService;
+import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +32,7 @@ public class TaskListingManager {
     private final TeamAccessValidator teamAccessValidator;
     private final TaskListingService taskListingService;
     private final SearchIntersectingTasksVoConverter searchIntersectingTasksVoConverter;
+    private final TeamMemberRetrieveService teamMemberRetrieveService;
 
     public TaskListingPaginatedResponse retrieveAllTasks(String workspaceId, String teamId, int page) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -38,13 +43,26 @@ public class TaskListingManager {
         return mapResponse(taskDtoPage);
     }
 
-    public TaskListingResponse retrieveAllIntersectingTasks(TaskRetrieveIntersectingRequest taskRetrieveIntersectingRequest) {
+    public TaskListingResponse retrieveAllIntersectingTasks(RetrieveIntersectingTasksFromWorkspaceRequest retrieveIntersectingTasksFromWorkspaceRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
-        validateWorkspaceAccess(currentAccount, taskRetrieveIntersectingRequest.getWorkspaceId());
-        validateTeamAccess(currentAccount, taskRetrieveIntersectingRequest.getWorkspaceId(), taskRetrieveIntersectingRequest.getTeamId());
+        validateWorkspaceAccess(currentAccount, retrieveIntersectingTasksFromWorkspaceRequest.getWorkspaceId());
         log.info("Retrieve all tasks intersecting has started. currentAccount: {}", currentAccount);
-        SearchIntersectingTasksVo searchIntersectingTasksVo = searchIntersectingTasksVoConverter.map(taskRetrieveIntersectingRequest);
-        List<TaskDto> result = taskListingService.retrieveAllIntersectingTasks(searchIntersectingTasksVo);
+        List<String> accountTeamIds = teamMemberRetrieveService.retrieveAllTeamMembershipsOfAnAccount(currentAccount, retrieveIntersectingTasksFromWorkspaceRequest.getWorkspaceId())
+                .stream()
+                .map(TeamMemberDto::getTeamId)
+                .toList();
+        SearchIntersectingTasksFromWorkspaceVo searchIntersectingTasksFromWorkspaceVo = searchIntersectingTasksVoConverter.map(retrieveIntersectingTasksFromWorkspaceRequest, accountTeamIds);
+        List<TaskDto> result = taskListingService.retrieveAllIntersectingTasksFromTeamList(searchIntersectingTasksFromWorkspaceVo);
+        return mapResponse(result);
+    }
+
+    public TaskListingResponse retrieveAllIntersectingTasksFromTeam(RetrieveIntersectingTasksFromTeamRequest retrieveIntersectingTasksFromTeamRequest) {
+        String currentAccount = sessionInfoService.currentAccountId();
+        validateWorkspaceAccess(currentAccount, retrieveIntersectingTasksFromTeamRequest.getWorkspaceId());
+        validateTeamAccess(currentAccount, retrieveIntersectingTasksFromTeamRequest.getWorkspaceId(), retrieveIntersectingTasksFromTeamRequest.getTeamId());
+        log.info("Retrieve all tasks from team intersecting has started. currentAccount: {}", currentAccount);
+        SearchIntersectingTasksFromTeamVo searchIntersectingTasksFromTeamVo = searchIntersectingTasksVoConverter.map(retrieveIntersectingTasksFromTeamRequest);
+        List<TaskDto> result = taskListingService.retrieveAllIntersectingTasksFromTeam(searchIntersectingTasksFromTeamVo);
         return mapResponse(result);
     }
 

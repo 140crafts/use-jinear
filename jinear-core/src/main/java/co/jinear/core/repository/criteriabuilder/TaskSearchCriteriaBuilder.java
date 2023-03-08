@@ -29,6 +29,14 @@ public class TaskSearchCriteriaBuilder {
         }
     }
 
+    public void addTeamIdList(List<String> teamIdList, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
+        if (Objects.nonNull(teamIdList)) {
+            CriteriaBuilder.In<String> in = criteriaBuilder.in(root.get("teamId"));
+            teamIdList.forEach(in::value);
+            predicateList.add(in);
+        }
+    }
+
     public void addTopicId(String topicId, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
         if (Objects.nonNull(topicId)) {
             Predicate predicate = criteriaBuilder.equal(root.<String>get("topicId"), topicId);
@@ -48,9 +56,7 @@ public class TaskSearchCriteriaBuilder {
             Predicate assignedDateBetweenPredicate = getAssignedDateBetweenPredicate(start, end, criteriaBuilder, root);
             Predicate dueDateBetweenPredicate = getDueDateBetweenPredicate(start, end, criteriaBuilder, root);
             Predicate tasksStartedBeforeAndEndedAfterPredicate = getTasksStartedBeforeAndEndedAfterPredicates(start, end, criteriaBuilder, root);
-
             Predicate predicate = criteriaBuilder.or(assignedDateBetweenPredicate, dueDateBetweenPredicate, tasksStartedBeforeAndEndedAfterPredicate);
-
             predicateList.add(predicate);
         }
     }
