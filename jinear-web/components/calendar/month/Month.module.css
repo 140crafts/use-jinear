@@ -1,0 +1,4 @@
+.weeksContainer {
+  display: flex;
+  flex-direction: column;
+}

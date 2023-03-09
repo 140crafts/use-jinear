@@ -1,13 +1,33 @@
 .container {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   min-height: 140px;
+  /* max-height: 200px; */
   /* overflow: hidden; */
+  position: relative;
 }
 
 .container:hover .titleContainer {
   border-top-style: solid;
   border-top-width: thin;
   border-top-color: var(--c-secondary-shade-0);
+}
+
+.unvisibleEvent {
+  visibility: hidden !important;
+}
+
+.hasUnvisibleTasks {
+  height: var(--calendar-event-height);
+  position: absolute;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  opacity: 0.8;
+  cursor: pointer;
 }
 
 .titleContainer {
@@ -32,8 +52,10 @@
 }
 
 .taskListContainer {
+  flex: 1;
   display: flex;
   flex-direction: column;
   margin-top: var(--calendar-event-gap);
+  padding-bottom: 2rem;
   gap: var(--calendar-event-gap);
 }

@@ -4,6 +4,11 @@ import { endOfDay, isSameDay, startOfDay } from "date-fns";
 
 const logger = Logger("calendar-utils");
 
+export interface ICalendarWeekRowCell {
+  weight: number;
+  task: TaskDto | null;
+}
+
 function splitChunks<T>(sourceArray: T[], chunkSize: number) {
   if (chunkSize <= 0) throw "chunkSize must be greater than 0";
   let result = [];
@@ -103,25 +108,55 @@ export const taskForDateFilter = (task: TaskDto, day: Date) => {
   return onAssignedDate || onDueDate || isBetween;
 };
 
+const flattenWeekRow = (week: (TaskDto | null)[]) => {
+  const compressed: ICalendarWeekRowCell[] = [];
+  for (let i = 0; i < week.length; i++) {
+    const task = week[i];
+    if (task?.taskId == "01gtyh9jy71rw0ktwccn3ryv8d") {
+      console.log(1);
+    }
+    let weight = 0;
+    for (let j = i; j < week.length; j++) {
+      const nextTask = week[j];
+      if (task?.taskId == nextTask?.taskId) {
+        weight++;
+        if (j + 1 == week.length) {
+          i = j + 1;
+        }
+      } else {
+        i = j - 1;
+        break;
+      }
+    }
+    compressed.push({ weight, task });
+  }
+  logger.log({ flattenWeekRow: week, compressed });
+  return compressed;
+};
+
+const flattenAllWeeks = (weeks: (TaskDto | null)[][]) => weeks.map(flattenWeekRow);
+
 export const calculateHitMissTable = (tasks: TaskDto[], days: Date[]) => {
   const allTasksAllMonthHitMissTable: Array<TaskDto | null>[][] = [];
   tasks.map((task) => {
     const taskHitMissTable: Array<TaskDto | null> = [];
-    days.map((day) => {
-      if (taskForDateFilter(task, day)) {
-        taskHitMissTable.push(task);
-      } else {
-        taskHitMissTable.push(null);
-      }
-    });
+    days.forEach((day) => (taskForDateFilter(task, day) ? taskHitMissTable.push(task) : taskHitMissTable.push(null)));
     const taskWeeklyHitMissTable: (TaskDto | null)[][] = splitChunks(taskHitMissTable, 7);
-    taskWeeklyHitMissTable.map((data, index) => {
+    taskWeeklyHitMissTable.forEach((data, index) => {
       allTasksAllMonthHitMissTable[index] = allTasksAllMonthHitMissTable[index] ? allTasksAllMonthHitMissTable[index] : [];
       allTasksAllMonthHitMissTable[index].push(data);
     });
   });
 
-  const result = allTasksAllMonthHitMissTable.map(mergeWeek).map(rotateWeek).flat(1);
+  const result = allTasksAllMonthHitMissTable.map(mergeWeek).map(flattenAllWeeks);
+  //   .map(rotateWeek).flat(1);
   logger.log({ allTasksAllHitMissTable: result });
   return result;
+};
+
+export const isDateBetween = (periodStart: Date, dayToLook: Date, periodEnd: Date) => {
+  const _periodStart = periodStart.getTime();
+  const _periodEnd = periodEnd.getTime();
+  const milis = dayToLook.getTime();
+  return _periodStart <= milis && milis <= _periodEnd;
 };

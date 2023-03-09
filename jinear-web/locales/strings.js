@@ -1174,4 +1174,8 @@ export default {
     en: "Repats ",
     tr: "Yineleme ",
   },
+  calendarDayMore: {
+    en: "more...",
+    tr: "daha...",
+  },
 };

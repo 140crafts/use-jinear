@@ -1,0 +1,9 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--calendar-event-gap);
+  padding-bottom: var(--calendar-event-gap);
+  min-height: 140px;
+  /* max-height: 140px;
+  overflow: scroll; */
+}

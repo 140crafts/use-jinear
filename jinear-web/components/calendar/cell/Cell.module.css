@@ -5,15 +5,7 @@
   color: var(--c-text-color);
   cursor: default;
   pointer-events: none;
-  /* z-index: 1; */
-}
-
-.container:focus {
-  outline-style: solid;
-  outline-color: var(--c-link-color);
-  /* outline-color: red; */
-  outline-offset: 2px;
-  outline-width: 2px;
+  transition: all var(--fade);
 }
 
 .fill {
@@ -22,26 +14,26 @@
   pointer-events: all;
 }
 
+.title {
+  cursor: pointer;
+  padding-left: 0.5rem;
+}
+
 .startDay {
   border-top-left-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
-  margin-left: 0.35rem;
+  margin-left: var(--calendar-event-gap);
 }
 
 .endDay {
   border-top-right-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
-  margin-right: 0.35rem;
+  margin-left: var(--calendar-event-gap);
 }
 
 .highlight {
   background-color: var(--c-primary-shade-1);
   font-weight: 500;
-}
-
-.title {
-  cursor: pointer;
-  padding-left: 0.5rem;
 }
 
 .arrow-right {

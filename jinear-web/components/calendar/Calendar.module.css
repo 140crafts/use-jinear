@@ -5,7 +5,12 @@
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  grid-row-gap: 0.25rem;
   height: 90vh;
+}
+
+.fullSizeDays {
+  height: unset !important;
 }
 
 .loadingContainer {
@@ -23,16 +28,4 @@
 .weeks {
   display: flex;
   flex-direction: column;
-}
-
-.weekdayHeaderContainer {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 0.75rem;
-}
-
-.weekdayHeader {
-  flex: 1;
-  padding: 0.25rem 0.5rem;
-  font-weight: 700;
 }
