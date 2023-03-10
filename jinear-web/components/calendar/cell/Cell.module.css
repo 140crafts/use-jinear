@@ -6,6 +6,7 @@
   cursor: default;
   pointer-events: none;
   transition: all var(--fade);
+  z-index: 1;
 }
 
 .fill {

@@ -19,7 +19,6 @@ const Week: React.FC<WeekProps> = ({ id, week, weekIndex, weekTasks }) => {
   return (
     <div id={id} className={styles.container}>
       <WeekDayNumbers week={week} />
-      <Tile id={`${id}-tile-container`} />
       {weekTasks.map((rowTasks, rowIndex) => (
         <WeekRow
           id={`${id}-row-${rowIndex}`}
@@ -29,6 +28,9 @@ const Week: React.FC<WeekProps> = ({ id, week, weekIndex, weekTasks }) => {
           weekEnd={week[week.length - 1]}
         />
       ))}
+      {/* todo */}
+      {/* <div>SHOW 3 MORE</div> */}
+      <Tile id={`${id}-tile-container`} />
     </div>
   );
 };

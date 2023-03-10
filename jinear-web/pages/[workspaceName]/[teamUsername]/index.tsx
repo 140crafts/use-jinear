@@ -1,4 +1,3 @@
-import Calendar from "@/components/calendar/Calendar";
 import { selectCurrentAccountsPreferredWorkspaceId } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { useRouter } from "next/router";
@@ -13,7 +12,7 @@ const TeamPage: React.FC<TeamPageProps> = ({}) => {
   const teamUsername: string = router.query?.teamUsername as string;
   const currentWorkspaceId = useTypedSelector(selectCurrentAccountsPreferredWorkspaceId);
 
-  return <div className={styles.container}>{currentWorkspaceId && <Calendar workspaceId={currentWorkspaceId} />}</div>;
+  return <div className={styles.container}>team page</div>;
 };
 
 export default TeamPage;

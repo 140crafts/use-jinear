@@ -4,10 +4,10 @@ import Link from "next/link";
 import React from "react";
 import { isDateBetween } from "../calendarUtils";
 import {
-  isDateBetweenViewingPeriod,
-  isDateFirstDayOfViewingPeriod,
-  isDateLastDayOfViewingPeriod,
   useHighligtedTaskId,
+  useIsDateBetweenViewingPeriod,
+  useIsDateFirstDayOfViewingPeriod,
+  useIsDateLastDayOfViewingPeriod,
   useSetHighlightedTaskId,
 } from "../context/CalendarContext";
 import styles from "./Cell.module.css";
@@ -31,10 +31,15 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
   const isDueDateWithinThisWeek = _dueDate && isDateBetween(weekStart, _dueDate, weekEnd);
   const isOneOfDatesNotSet = !_assignedDate || !_dueDate;
 
+  const isDateFirstDayOfViewingPeriod = useIsDateFirstDayOfViewingPeriod(weekStart);
+  const isDateLastDayOfViewingPeriod = useIsDateLastDayOfViewingPeriod(weekEnd);
+  const isAssignedDateWithinPeriod = useIsDateBetweenViewingPeriod(_assignedDate);
+  const isDueDateWithinPeriod = useIsDateBetweenViewingPeriod(_dueDate);
+
   const isStartDateNotInViewingPeriodAndTodayIsFirstDayOfViewingPeriod =
-    _assignedDate && !isDateBetweenViewingPeriod(_assignedDate) && isDateFirstDayOfViewingPeriod(weekStart);
+    _assignedDate && !isAssignedDateWithinPeriod && isDateFirstDayOfViewingPeriod;
   const isEndDateNotInViewingPeriodAndTodayIsLastDayOfViewingPeriod =
-    _dueDate && !isDateBetweenViewingPeriod(_dueDate) && isDateLastDayOfViewingPeriod(weekEnd);
+    _dueDate && !isDueDateWithinPeriod && isDateLastDayOfViewingPeriod;
 
   const _hoverStart = () => {
     if (task) {

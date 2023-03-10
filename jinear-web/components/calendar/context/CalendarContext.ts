@@ -45,22 +45,25 @@ export function useSetHighlightedTaskId() {
   return ctx.setHighlightedTaskId;
 }
 
-export function isDateFirstDayOfViewingPeriod(day: Date) {
+export function useIsDateFirstDayOfViewingPeriod(day: Date) {
   const ctx = useContext(CalendarContext);
   const periodStart = ctx.periodStart;
   return isSameDay(day, periodStart);
 }
 
-export function isDateLastDayOfViewingPeriod(day: Date) {
+export function useIsDateLastDayOfViewingPeriod(day: Date) {
   const ctx = useContext(CalendarContext);
   const periodEnd = ctx.periodEnd;
   return isSameDay(day, periodEnd);
 }
 
-export function isDateBetweenViewingPeriod(day: Date) {
+export function useIsDateBetweenViewingPeriod(day?: Date) {
   const ctx = useContext(CalendarContext);
   const periodStart = ctx.periodStart.getTime();
   const periodEnd = ctx.periodEnd.getTime();
+  if (!day) {
+    return false;
+  }
   const milis = day.getTime();
   return periodStart <= milis && milis <= periodEnd;
 }
