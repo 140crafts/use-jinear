@@ -19,8 +19,6 @@ const logger = Logger("Calendar");
 const Calendar: React.FC<CalendarProps> = ({ workspaceId, initialDate = startOfDay(new Date()) }) => {
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
   const [viewingDate, setViewingDate] = useState(initialDate);
-  const [selectedDate, setSelectedDate] = useState(initialDate);
-  const [fullSizeDays, setFullSizeDays] = useState<boolean>(false);
   const currentMonth = format(viewingDate, "MMM-yyyy");
   const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const periodStart = startOfWeek(firstDayCurrentMonth, { weekStartsOn: 1 });
@@ -57,9 +55,6 @@ const Calendar: React.FC<CalendarProps> = ({ workspaceId, initialDate = startOfD
         setViewingDate,
         periodStart,
         periodEnd,
-        selectedDate,
-        fullSizeDays,
-        setFullSizeDays,
         tasks: taskListingResponse?.data,
       }}
     >

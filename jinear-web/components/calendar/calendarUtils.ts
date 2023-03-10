@@ -15,6 +15,7 @@ function splitChunks<T>(sourceArray: T[], chunkSize: number) {
   for (var i = 0; i < sourceArray.length; i += chunkSize) {
     result[i / chunkSize] = sourceArray.slice(i, i + chunkSize);
   }
+  logger.log({ splitChunks: sourceArray, result });
   return result;
 }
 
@@ -136,9 +137,37 @@ const flattenWeekRow = (week: (TaskDto | null)[]) => {
 
 const flattenAllWeeks = (weeks: (TaskDto | null)[][]) => weeks.map(flattenWeekRow);
 
+/**
+ *
+ * @param tasks Viewing period tasks
+ * @param days Viewing period days
+ * @returns returns 3 dimensional array. First dimension is weeks, second is that weeks rows and third is tasks in that row with day size starts from monday.
+ *
+ * This method used for generating task-date data to rendering tasks as horizontal sticks without overlapping empty spaces.
+ *
+ * Example:
+ *  If we render each task as a row we might end up with a week look like this.
+ *  [_,_,_,X,X,_,_]
+ *  [_,_,_,_,_,Z,_]
+ *  [_,Y,Y,_,_,_,_]
+ *  [_,_,_,T,T,T,T]
+ *
+ *  Lets call them week lines. So we firstly turn our data to look like above than we try to merge as many lines as possible.
+ *
+ *  [_,Y,Y,X,X,Z,_]
+ *  [_,_,_,T,T,T,T]
+ *
+ *  then we turn this data to this
+ *  WeekRows =>
+ *              [{weight:1,task:null},{weight:2,task:Y},{weight:2,task:X},{weight:1,task:Z},{weight:1,task:null}] =>rowTasks
+ *              [{weight:3,task:null},{weight:4,task:T}]
+ *
+ *  and our return data looks like this => [weeks][weekRows][rowTasks]
+ *
+ */
 export const calculateHitMissTable = (tasks: TaskDto[], days: Date[]) => {
   const allTasksAllMonthHitMissTable: Array<TaskDto | null>[][] = [];
-  tasks.map((task) => {
+  tasks.forEach((task) => {
     const taskHitMissTable: Array<TaskDto | null> = [];
     days.forEach((day) => (taskForDateFilter(task, day) ? taskHitMissTable.push(task) : taskHitMissTable.push(null)));
     const taskWeeklyHitMissTable: (TaskDto | null)[][] = splitChunks(taskHitMissTable, 7);
@@ -149,7 +178,6 @@ export const calculateHitMissTable = (tasks: TaskDto[], days: Date[]) => {
   });
 
   let result = allTasksAllMonthHitMissTable.map(mergeWeek).map(flattenAllWeeks);
-  //   .map(rotateWeek).flat(1);
   if (result.length == 0) {
     const emptyArray = [[...new Array(7)], [...new Array(7)], [...new Array(7)], [...new Array(7)], [...new Array(7)]];
     result = [...emptyArray];
