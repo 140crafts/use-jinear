@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,5 +38,9 @@ public class ReminderJobRetrieveService {
         return reminderJobRepository.findFirstByReminderIdAndReminderJobStatusAndPassiveIdIsNullOrderByDateAsc(reminderId, reminderJobStatus)
                 .map(reminderJobConverter::map)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public boolean checkIfAnyReminderJobExistsForReminderAtDate(String reminderId, ZonedDateTime nextDate) {
+        return reminderJobRepository.countAllByReminderIdAndDateAndPassiveIdIsNull(reminderId, nextDate) > 0L;
     }
 }

@@ -29,7 +29,11 @@ public class ReminderJobProcessService {
 
     private void process(ReminderJobDto reminderJobDto) {
         log.info("Process reminder job has started. reminderJobDto: {}", reminderJobDto);
-        ReminderJobProcessStrategy reminderJobProcessStrategy = reminderJobProcessStrategyFactory.getStrategy(reminderJobDto.getReminder().getType());
-        reminderJobProcessStrategy.process(reminderJobDto);
+        try {
+            ReminderJobProcessStrategy reminderJobProcessStrategy = reminderJobProcessStrategyFactory.getStrategy(reminderJobDto.getReminder().getType());
+            reminderJobProcessStrategy.process(reminderJobDto);
+        } catch (Exception e) {
+            log.error("Process reminder job has failed.", e);
+        }
     }
 }

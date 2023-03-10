@@ -12,9 +12,9 @@ import co.jinear.core.model.enumtype.reminder.ReminderType;
 import co.jinear.core.model.vo.mail.TaskReminderMailVo;
 import co.jinear.core.model.vo.reminder.InitializeReminderJobVo;
 import co.jinear.core.service.mail.MailService;
-import co.jinear.core.service.reminder.ReminderOperationService;
 import co.jinear.core.service.reminder.job.ReminderJobDateCalculatorService;
 import co.jinear.core.service.reminder.job.ReminderJobOperationService;
+import co.jinear.core.service.reminder.job.ReminderJobRetrieveService;
 import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.reminder.TaskReminderOperationService;
 import co.jinear.core.service.task.reminder.TaskReminderRetrieveService;
@@ -36,7 +36,7 @@ import static co.jinear.core.model.enumtype.reminder.ReminderJobStatus.PENDING;
 public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrategy {
 
     private final TaskRetrieveService taskRetrieveService;
-    private final ReminderOperationService reminderOperationService;
+    private final ReminderJobRetrieveService reminderJobRetrieveService;
     private final ReminderJobOperationService reminderJobOperationService;
     private final ReminderJobDateCalculatorService reminderJobDateCalculatorService;
     private final ReminderJobConverter reminderJobConverter;
@@ -52,26 +52,26 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
         log.info("Task reminder job process has started. reminderJobDto: {}", reminderJobDto);
         TaskDto taskDto = retrieveTask(reminderJobDto);
         TaskReminderDto taskReminderDto = taskReminderRetrieveService.retrieveByTaskIdAndReminderId(taskDto.getTaskId(), reminderJobDto.getReminderId());
-        retrieveSubscribersAndRelatedAccountsAndSendNotification(taskDto, taskReminderDto,reminderJobDto);
+        retrieveSubscribersAndRelatedAccountsAndSendNotification(taskDto, taskReminderDto, reminderJobDto);
         reminderJobOperationService.updateReminderJobStatus(reminderJobDto.getReminderJobId(), COMPLETED);
         calculateNextDateAndInitializeNextReminderJob(reminderJobDto, taskReminderDto);
     }
 
-    private void retrieveSubscribersAndRelatedAccountsAndSendNotification(TaskDto taskDto, TaskReminderDto taskReminderDto,ReminderJobDto reminderJobDto) {
+    private void retrieveSubscribersAndRelatedAccountsAndSendNotification(TaskDto taskDto, TaskReminderDto taskReminderDto, ReminderJobDto reminderJobDto) {
         Set<TaskReminderMailVo> receiverSet = new HashSet<>();
         List<TaskSubscriptionDto> taskSubscribers = taskSubscriptionListingService.listTaskSubscribers(taskDto.getTaskId());
         taskSubscribers
                 .stream()
                 .map(TaskSubscriptionDto::getPlainAccountProfileDto)
-                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto,reminderJobDto))
+                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto, reminderJobDto))
                 .forEach(receiverSet::add);
         Optional.of(taskDto)
                 .map(TaskDto::getOwner)
-                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto,reminderJobDto))
+                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto, reminderJobDto))
                 .ifPresent(receiverSet::add);
         Optional.of(taskDto)
                 .map(TaskDto::getAssignedToAccount)
-                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto,reminderJobDto))
+                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto, reminderJobDto))
                 .ifPresent(receiverSet::add);
         receiverSet.forEach(this::notifyAccount);
     }
@@ -110,13 +110,18 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
     }
 
     private void initializeNextReminderJob(ZonedDateTime nextDate, ReminderJobDto reminderJobDto, TaskReminderDto taskReminderDto) {
+        final String reminderId = reminderJobDto.getReminderId();
         ZonedDateTime repeatEnd = reminderJobDto.getReminder().getRepeatEnd();
         if (Objects.nonNull(repeatEnd) && nextDate.isAfter(repeatEnd)) {
             log.info("Next date is after repeat end. Won't initialize next reminder job and set reminder as passive.");
             passivizeReminderAndAllActiveJobs(taskReminderDto);
             return;
         }
-        InitializeReminderJobVo nextInitializeReminderJobVo = reminderJobConverter.map(nextDate, reminderJobDto.getReminderId(), PENDING);
+        if (reminderJobRetrieveService.checkIfAnyReminderJobExistsForReminderAtDate(reminderId, nextDate)) {
+            log.info("There is an existing reminder. Not creating new one. reminderId: {}, nextDate: {}", reminderId, nextDate);
+            return;
+        }
+        InitializeReminderJobVo nextInitializeReminderJobVo = reminderJobConverter.map(nextDate, reminderId, PENDING);
         reminderJobOperationService.initializeReminderJob(nextInitializeReminderJobVo);
         log.info("Next reminder job has initialized. nextDate: {}", nextDate);
     }
