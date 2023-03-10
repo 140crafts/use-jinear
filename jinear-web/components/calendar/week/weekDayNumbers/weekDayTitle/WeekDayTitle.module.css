@@ -1,0 +1,24 @@
+.titleContainer {
+  flex: 1;
+  cursor: default;
+  padding: 0.25rem 0.5rem;
+  font-weight: 700;
+  border-top-style: solid;
+  border-top-width: thin;
+  border-top-color: var(--c-primary-shade-1);
+  z-index: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1ch;
+}
+
+.differentMonthContainer {
+  opacity: 0.25;
+}
+
+.today {
+  border-bottom: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--c-secondary-shade-1);
+}

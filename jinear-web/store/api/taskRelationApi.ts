@@ -12,6 +12,7 @@ export const taskRelationApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         "retrieve-task-activity",
         "team-task-list",
+        "workspace-task-list",
         "workplace-task-with-name-and-tag",
         "team-workflow-task-list",
       ],
@@ -25,6 +26,7 @@ export const taskRelationApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         "retrieve-task-activity",
         "team-task-list",
+        "workspace-task-list",
         "workplace-task-with-name-and-tag",
         "team-workflow-task-list",
       ],

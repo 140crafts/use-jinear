@@ -9,7 +9,7 @@ export const taskApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["team-task-list", "workplace-task-with-name-and-tag", "team-workflow-task-list"],
+      invalidatesTags: ["team-task-list", "workspace-task-list", "workplace-task-with-name-and-tag", "team-workflow-task-list"],
     }),
     //
     retrieveWithWorkspaceNameAndTeamTagNo: build.query<

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-03-04 13:57:58.
+// Generated using typescript-generator version 3.0.1157 on 2023-03-05 15:04:19.
 
 export interface BaseDto {
   createdDate: Date;
@@ -207,9 +207,7 @@ export interface TeamMemberDto extends BaseDto {
 }
 
 export interface GroupedTeamWorkflowStatusListDto {
-  groupedTeamWorkflowStatuses: {
-    [P in TeamWorkflowStateGroup]?: TeamWorkflowStatusDto[];
-  };
+  groupedTeamWorkflowStatuses: { [P in TeamWorkflowStateGroup]?: TeamWorkflowStatusDto[] };
 }
 
 export interface TeamWorkflowStatusDto {
@@ -369,6 +367,19 @@ export interface TaskReminderInitializeRequest extends BaseRequest {
   specificRemindDateRepeatType?: RepeatType | null;
 }
 
+export interface RetrieveIntersectingTasksFromTeamRequest extends BaseRequest {
+  workspaceId: string;
+  teamId: string;
+  timespanStart: Date;
+  timespanEnd: Date;
+}
+
+export interface RetrieveIntersectingTasksFromWorkspaceRequest extends BaseRequest {
+  workspaceId: string;
+  timespanStart: Date;
+  timespanEnd: Date;
+}
+
 export interface TaskAssigneeUpdateRequest {
   assigneeId?: string | null;
 }
@@ -404,13 +415,6 @@ export interface TaskRetrieveAllRequest extends BaseRequest {
   workspaceId: string;
   teamId: string;
   page: number;
-}
-
-export interface TaskRetrieveIntersectingRequest extends BaseRequest {
-  workspaceId: string;
-  teamId: string;
-  timespanStart: Date;
-  timespanEnd: Date;
 }
 
 export interface TaskUpdateDescriptionRequest extends BaseRequest {

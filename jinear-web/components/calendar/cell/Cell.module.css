@@ -1,0 +1,77 @@
+.container {
+  display: flex;
+  align-items: center;
+  height: var(--calendar-event-height);
+  color: var(--c-text-color);
+  cursor: default;
+  pointer-events: none;
+  transition: all var(--fade);
+  z-index: 1;
+}
+
+.fill {
+  background-color: var(--c-primary-shade-0);
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.title {
+  cursor: pointer;
+  padding-left: 0.5rem;
+}
+
+.startDayEndDayMargin {
+  /* margin-left: calc(var(--calendar-event-gap) / 2); */
+  margin-right: var(--calendar-event-gap);
+}
+
+.startDay {
+  border-top-left-radius: var(--border-radius);
+  border-bottom-left-radius: var(--border-radius);
+  /* margin-left: calc(var(--calendar-event-gap) / 2);
+  margin-right: calc(var(--calendar-event-gap) / 2); */
+}
+
+.endDay {
+  border-top-right-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  /* margin-left: calc(var(--calendar-event-gap) / 2);
+  margin-right: calc(var(--calendar-event-gap) / 2); */
+}
+
+.highlight {
+  background-color: var(--c-primary-shade-1);
+  font-weight: 500;
+}
+
+.arrow-right {
+  width: 0;
+  height: var(--calendar-event-height);
+  border-top: calc(var(--calendar-event-height) / 2) solid transparent;
+  border-bottom: calc(var(--calendar-event-height) / 2) solid transparent;
+  border-left: calc(var(--calendar-event-height) / 2) solid var(--c-primary);
+}
+
+.arrow-right-end-bg {
+  width: calc(var(--calendar-event-height) / 2);
+  height: var(--calendar-event-height);
+  background-color: var(--c-primary);
+  /* background-color: red; */
+  position: absolute;
+  right: 0;
+}
+
+.arrow-right-end {
+  width: 0;
+  height: var(--calendar-event-height);
+  border-top: calc(var(--calendar-event-height) / 2) solid transparent;
+  border-bottom: calc(var(--calendar-event-height) / 2) solid transparent;
+  border-left: calc(var(--calendar-event-height) / 2) solid var(--c-primary-shade-0);
+  position: absolute;
+  right: 0;
+  transition: all var(--fade);
+}
+
+.arrow-right-end-highlight {
+  border-left: calc(var(--calendar-event-height) / 2) solid var(--c-primary-shade-1);
+}

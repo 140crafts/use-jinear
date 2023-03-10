@@ -1,4 +1,4 @@
-import { useRetrieveAllIntersectingTasksQuery } from "@/store/api/taskListingApi";
+import { useRetrieveAllIntersectingTasksFromTeamQuery } from "@/store/api/taskListingApi";
 import { useUpdateTaskWorkflowStatusMutation } from "@/store/api/taskWorkflowStatusApi";
 import { useRetrieveAllFromTeamQuery } from "@/store/api/teamWorkflowStatusApi";
 import Logger from "@/utils/logger";
@@ -26,7 +26,7 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamI
     data: taskListingResponse,
     isFetching: isTaskListingFetching,
     isSuccess: isTaskListingSuccess,
-  } = useRetrieveAllIntersectingTasksQuery(
+  } = useRetrieveAllIntersectingTasksFromTeamQuery(
     {
       teamId,
       workspaceId,

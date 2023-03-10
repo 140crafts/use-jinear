@@ -1,0 +1,23 @@
+.calendarLineContainer {
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.calendarLine {
+  border-style: solid;
+  border-color: var(--c-primary-shade-0-op05);
+  border-width: 1px;
+  border-bottom-color: var(--c-primary-shade-1);
+  /* border-bottom-width: 2px; */
+  flex: 1 1;
+  height: 100%;
+}
+.calendarLine:hover {
+  background: linear-gradient(0, var(--c-primary), 40%, var(--c-primary-shade-0-op05));
+}
