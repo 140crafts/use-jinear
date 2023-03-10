@@ -119,7 +119,7 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
   }, [hasAnyAssignedDateReminder, hasAnyDueDateReminder]);
 
   return (
-    <Modal visible={visible} title={t("taskNewReminderModalTitle")} bodyClass={styles.container} hasTitleCloseButton={true}>
+    <Modal visible={visible} title={t("taskNewReminderModalTitle")} bodyClass={styles.container}>
       <form
         autoComplete="off"
         id={"initialize-task-reminder-form"}

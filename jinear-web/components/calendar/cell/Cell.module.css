@@ -7,6 +7,7 @@
   pointer-events: none;
   transition: all var(--fade);
   z-index: 1;
+  gap: 0.5rem;
 }
 
 .fill {
@@ -15,9 +16,29 @@
   pointer-events: all;
 }
 
+.iconContainer {
+  padding-left: 0.5rem;
+}
+
 .title {
   cursor: pointer;
-  padding-left: 0.5rem;
+}
+
+.title-line-through {
+  text-decoration: line-through;
+}
+
+.completed-fill {
+  opacity: 0.5;
+}
+
+.completed-fill:hover {
+  opacity: 1;
+}
+
+.completed-fill:hover .title-line-through {
+  opacity: 1;
+  text-decoration: unset;
 }
 
 .startDayEndDayMargin {
