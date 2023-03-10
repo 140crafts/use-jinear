@@ -1,4 +1,5 @@
 import { TaskDto } from "@/model/be/jinear-core";
+import { retrieveTaskStatusIcon } from "@/utils/taskIconFactory";
 import cn from "classnames";
 import Link from "next/link";
 import React from "react";
@@ -41,6 +42,12 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
   const isEndDateNotInViewingPeriodAndTodayIsLastDayOfViewingPeriod =
     _dueDate && !isDueDateWithinPeriod && isDateLastDayOfViewingPeriod;
 
+  const Icon = retrieveTaskStatusIcon(task?.workflowStatus.workflowStateGroup);
+  const isCompleted =
+    task &&
+    task.workflowStatus.workflowStateGroup &&
+    (task.workflowStatus.workflowStateGroup == "COMPLETED" || task.workflowStatus.workflowStateGroup == "CANCELLED");
+
   const _hoverStart = () => {
     if (task) {
       setHighlightedTaskId?.(task.taskId);
@@ -62,14 +69,20 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
         highlighted && styles.highlight,
         (isDueDateWithinThisWeek || isOneOfDatesNotSet) && styles.startDayEndDayMargin,
         (isAssignedDateWithinThisWeek || isOneOfDatesNotSet) && styles.startDay,
-        (isDueDateWithinThisWeek || isOneOfDatesNotSet) && styles.endDay
+        (isDueDateWithinThisWeek || isOneOfDatesNotSet) && styles.endDay,
+        isCompleted && styles["completed-fill"]
       )}
       style={{ flex: weight }}
       onMouseEnter={_hoverStart}
       onMouseOut={_hoverEnd}
     >
       {isStartDateNotInViewingPeriodAndTodayIsFirstDayOfViewingPeriod && <div className={styles["arrow-right"]}></div>}
-      <div className={cn(styles.title, "line-clamp")} onMouseEnter={_hoverStart} onMouseOut={_hoverEnd}>
+      <div className={styles.iconContainer}>{task && <Icon size={17} />}</div>
+      <div
+        className={cn(styles.title, "line-clamp", isCompleted && styles["title-line-through"])}
+        onMouseEnter={_hoverStart}
+        onMouseOut={_hoverEnd}
+      >
         {task?.title}
       </div>
       {isEndDateNotInViewingPeriodAndTodayIsLastDayOfViewingPeriod && (

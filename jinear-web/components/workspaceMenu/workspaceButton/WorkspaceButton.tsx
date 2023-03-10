@@ -19,14 +19,14 @@ const WorkspaceButton: React.FC<WorkspaceButtonProps> = ({ workspace }) => {
   const router = useRouter();
   const prefferedWorkspaceId = useTypedSelector(selectCurrentAccountsPreferredWorkspaceId);
   const isPreffered = workspace.workspaceId == prefferedWorkspaceId;
-  const [updatePreferredWorkspace, { isLoading }] = useUpdatePreferredWorkspaceMutation();
+  const [updatePreferredWorkspace, { isLoading, isSuccess }] = useUpdatePreferredWorkspaceMutation();
 
   useEffect(() => {
-    dispatch(changeLoadingModalVisibility({ visible: isLoading }));
-    if (isLoading) {
-      router.replace("/");
+    dispatch(changeLoadingModalVisibility({ visible: isLoading || isSuccess }));
+    if (isSuccess) {
+      // router.replace(ROUTE_IF_LOGGED_IN);
     }
-  }, [isLoading]);
+  }, [isSuccess, isLoading]);
 
   const changePrefferedWorkspace = () => {
     if (!isPreffered) {
