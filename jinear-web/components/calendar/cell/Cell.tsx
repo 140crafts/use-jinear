@@ -55,6 +55,7 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
         styles.container,
         task && styles.fill,
         highlighted && styles.highlight,
+        (isDueDateWithinThisWeek || isOneOfDatesNotSet) && styles.startDayEndDayMargin,
         (isAssignedDateWithinThisWeek || isOneOfDatesNotSet) && styles.startDay,
         (isDueDateWithinThisWeek || isOneOfDatesNotSet) && styles.endDay
       )}

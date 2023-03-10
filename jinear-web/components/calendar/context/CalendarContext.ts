@@ -4,6 +4,7 @@ import { createContext, useContext } from "react";
 
 interface ICalendarContext {
   viewingDate: Date;
+  setViewingDate?: React.Dispatch<React.SetStateAction<Date>>;
   selectedDate: Date;
   periodStart: Date;
   periodEnd: Date;
@@ -30,6 +31,11 @@ export default CalendarContext;
 export function useViewingDate() {
   const ctx = useContext(CalendarContext);
   return ctx.viewingDate;
+}
+
+export function useSetViewingDate() {
+  const ctx = useContext(CalendarContext);
+  return ctx.setViewingDate;
 }
 
 export function useHighligtedTaskId() {

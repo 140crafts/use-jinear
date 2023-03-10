@@ -19,16 +19,23 @@
   padding-left: 0.5rem;
 }
 
+.startDayEndDayMargin {
+  /* margin-left: calc(var(--calendar-event-gap) / 2); */
+  margin-right: var(--calendar-event-gap);
+}
+
 .startDay {
   border-top-left-radius: var(--border-radius);
   border-bottom-left-radius: var(--border-radius);
-  margin-left: var(--calendar-event-gap);
+  /* margin-left: calc(var(--calendar-event-gap) / 2);
+  margin-right: calc(var(--calendar-event-gap) / 2); */
 }
 
 .endDay {
   border-top-right-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
-  margin-left: var(--calendar-event-gap);
+  /* margin-left: calc(var(--calendar-event-gap) / 2);
+  margin-right: calc(var(--calendar-event-gap) / 2); */
 }
 
 .highlight {

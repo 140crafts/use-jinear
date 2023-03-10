@@ -1,6 +1,7 @@
 import Logger from "@/utils/logger";
 import React from "react";
 import { ICalendarWeekRowCell } from "../calendarUtils";
+import Tile from "./tile/Tile";
 import styles from "./Week.module.css";
 import WeekDayNumbers from "./weekDayNumbers/WeekDayNumbers";
 import WeekRow from "./weekRow/WeekRow";
@@ -18,6 +19,7 @@ const Week: React.FC<WeekProps> = ({ id, week, weekIndex, weekTasks }) => {
   return (
     <div id={id} className={styles.container}>
       <WeekDayNumbers week={week} />
+      <Tile id={`${id}-tile-container`} />
       {weekTasks.map((rowTasks, rowIndex) => (
         <WeekRow
           id={`${id}-row-${rowIndex}`}

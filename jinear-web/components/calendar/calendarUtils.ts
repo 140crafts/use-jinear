@@ -148,8 +148,12 @@ export const calculateHitMissTable = (tasks: TaskDto[], days: Date[]) => {
     });
   });
 
-  const result = allTasksAllMonthHitMissTable.map(mergeWeek).map(flattenAllWeeks);
+  let result = allTasksAllMonthHitMissTable.map(mergeWeek).map(flattenAllWeeks);
   //   .map(rotateWeek).flat(1);
+  if (result.length == 0) {
+    const emptyArray = [[...new Array(7)], [...new Array(7)], [...new Array(7)], [...new Array(7)], [...new Array(7)]];
+    result = [...emptyArray];
+  }
   logger.log({ allTasksAllHitMissTable: result });
   return result;
 };

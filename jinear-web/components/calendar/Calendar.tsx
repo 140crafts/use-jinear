@@ -54,6 +54,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspaceId, initialDate = startOfD
         highlightedTaskId,
         setHighlightedTaskId,
         viewingDate,
+        setViewingDate,
         periodStart,
         periodEnd,
         selectedDate,
@@ -64,9 +65,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspaceId, initialDate = startOfD
     >
       <div className={styles.container}>
         <CalendarHeader days={days} />
-
         {monthTable && <Month monthTable={monthTable} days={days} />}
-
         {isFetching && (
           <div className={styles.loadingContainer}>
             <CircularProgress />

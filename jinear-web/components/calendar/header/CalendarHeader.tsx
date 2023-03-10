@@ -1,9 +1,9 @@
 import Button from "@/components/button";
-import { format } from "date-fns";
+import { addMonths, format, startOfToday } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoCaretBack, IoCaretForward, IoEllipse } from "react-icons/io5";
-import { useViewingDate } from "../context/CalendarContext";
+import { useSetViewingDate, useViewingDate } from "../context/CalendarContext";
 import styles from "./CalendarHeader.module.css";
 
 interface CalendarHeaderProps {
@@ -13,15 +13,28 @@ interface CalendarHeaderProps {
 const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days }) => {
   const { t } = useTranslation();
   const viewingDate = useViewingDate();
+  const setViewingDate = useSetViewingDate();
   const title = !viewingDate
     ? ""
     : format(viewingDate, "MMMM yy", {
         locale: t("dateFnsLocale") as any,
       });
 
-  const prevMonth = () => {};
-  const thisMonth = () => {};
-  const nextMonth = () => {};
+  const prevMonth = () => {
+    if (viewingDate) {
+      setViewingDate?.(addMonths(viewingDate, -1));
+    }
+  };
+
+  const nextMonth = () => {
+    if (viewingDate) {
+      setViewingDate?.(addMonths(viewingDate, 1));
+    }
+  };
+
+  const thisMonth = () => {
+    setViewingDate?.(startOfToday());
+  };
 
   return (
     <>
