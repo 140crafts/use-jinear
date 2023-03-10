@@ -12,9 +12,8 @@ import java.time.ZonedDateTime;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskRetrieveIntersectingRequest extends BaseRequest {
+public class RetrieveIntersectingTasksFromWorkspaceRequest extends BaseRequest {
     private String workspaceId;
-    private String teamId;
     private ZonedDateTime timespanStart;
     private ZonedDateTime timespanEnd;
 }

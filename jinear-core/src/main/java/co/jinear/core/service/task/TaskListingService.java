@@ -2,7 +2,8 @@ package co.jinear.core.service.task;
 
 import co.jinear.core.converter.task.TaskDtoConverter;
 import co.jinear.core.model.dto.task.TaskDto;
-import co.jinear.core.model.vo.task.SearchIntersectingTasksVo;
+import co.jinear.core.model.vo.task.SearchIntersectingTasksFromTeamVo;
+import co.jinear.core.model.vo.task.SearchIntersectingTasksFromWorkspaceVo;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.repository.TaskSearchRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,6 @@ import java.util.List;
 public class TaskListingService {
 
     private static final int PAGE_SIZE = 50;
-//    private static final int PAGE_SIZE = 2;
 
     private final TaskRepository taskRepository;
     private final TaskSearchRepository taskSearchRepository;
@@ -32,9 +32,18 @@ public class TaskListingService {
                 .map(taskDtoConverter::map);
     }
 
-    public List<TaskDto> retrieveAllIntersectingTasks(SearchIntersectingTasksVo searchIntersectingTasksVo) {
-        log.info("Find all intersecting tasks has started. searchIntersectingTasksVo: {}", searchIntersectingTasksVo);
-        return taskSearchRepository.findAllIntersectingTasksFromWorkspaceAndTeamBetween(searchIntersectingTasksVo).stream()
+    public List<TaskDto> retrieveAllIntersectingTasksFromTeam(SearchIntersectingTasksFromTeamVo searchIntersectingTasksFromTeamVo) {
+        log.info("Find all intersecting tasks from team has started. searchIntersectingTasksVo: {}", searchIntersectingTasksFromTeamVo);
+        return taskSearchRepository.findAllIntersectingTasksFromWorkspaceAndTeamBetween(searchIntersectingTasksFromTeamVo)
+                .stream()
+                .map(taskDtoConverter::map)
+                .toList();
+    }
+
+    public List<TaskDto> retrieveAllIntersectingTasksFromTeamList(SearchIntersectingTasksFromWorkspaceVo searchIntersectingTasksFromWorkspaceVo) {
+        log.info("Find all intersecting tasks from team has started. searchIntersectingTasksVo: {}", searchIntersectingTasksFromWorkspaceVo);
+        return taskSearchRepository.findAllIntersectingTasksFromWorkspaceAndTeamListBetween(searchIntersectingTasksFromWorkspaceVo)
+                .stream()
                 .map(taskDtoConverter::map)
                 .toList();
     }
