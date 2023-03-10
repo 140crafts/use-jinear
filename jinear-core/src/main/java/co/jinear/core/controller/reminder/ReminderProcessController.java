@@ -21,8 +21,8 @@ public class ReminderProcessController {
     @PreAuthorize("hasAuthority('reminders:process')")
     public BaseResponse processUpcoming(@RequestHeader("User-Agent") String userAgent) {
         log.info("Process upcoming reminder controller triggered from user agent: {}", userAgent);
-//        return reminderProcessManager.remindUpcomingJobs();
-        return new BaseResponse();
+        return reminderProcessManager.remindUpcomingJobs();
+//        return new BaseResponse();
     }
 
 }

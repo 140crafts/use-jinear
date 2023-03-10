@@ -28,4 +28,6 @@ public interface ReminderJobRepository extends JpaRepository<ReminderJob, String
                         reminderJob.passiveId is null
                 """)
     void updateAllWithReminderId(@Param("reminderId") String reminderId, @Param("reminderJobStatus") ReminderJobStatus reminderJobStatus);
+
+    Long countAllByReminderIdAndDateAndPassiveIdIsNull(String reminderId,ZonedDateTime dateTime);
 }

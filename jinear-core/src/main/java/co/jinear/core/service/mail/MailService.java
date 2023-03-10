@@ -9,15 +9,18 @@ import co.jinear.core.model.vo.mail.LoginMailVo;
 import co.jinear.core.model.vo.mail.SendMailVo;
 import co.jinear.core.model.vo.mail.TaskReminderMailVo;
 import co.jinear.core.system.NormalizeHelper;
+import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.util.ByteArrayDataSource;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.nlab.smtp.pool.SmtpConnectionPool;
+import org.nlab.smtp.transport.connection.ClosableSmtpConnection;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
@@ -53,25 +56,30 @@ public class MailService {
                     TaskReminderType.SPECIFIC_DATE, LocaleStringType.TASK_REMINDER_TYPE_SPECIFIC_DATE
             );
 
-    private final JavaMailSender sender;
+    private final SmtpConnectionPool smtpConnectionPool;
     private final LocaleStringService localeStringService;
     private final MailProperties mailProperties;
 
-    private void sendMail(SendMailVo sendMailVo) throws MessagingException {
+    private void sendMail(SendMailVo sendMailVo) throws Exception {
         log.info("Send mail has started. to: {}", sendMailVo.getTo());
-        MimeMessage message = sender.createMimeMessage();
-        message.setFrom(mailProperties.getMailUserName());
-        MimeMessageHelper helper = new MimeMessageHelper(message, Objects.nonNull(sendMailVo.getAttachment()));
-        helper.setTo(sendMailVo.getTo());
-        helper.setText(sendMailVo.getContext(), true);
-        helper.setSubject(sendMailVo.getSubject());
-        attachFile(sendMailVo, helper);
-        sender.send(message);
+        try (ClosableSmtpConnection transport = smtpConnectionPool.borrowObject()) {
+            MimeMessage message = new MimeMessage(transport.getSession());
+            message.setFrom(mailProperties.getMailUserName());
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(sendMailVo.getTo()));
+            message.setSubject(sendMailVo.getSubject(), "UTF-8");
+            message.setContent(sendMailVo.getContext(),"text/html; charset=UTF-8");
+//            MimeMessageHelper helper = new MimeMessageHelper(message, Objects.nonNull(sendMailVo.getAttachment()));
+//            helper.setTo(sendMailVo.getTo());
+//            helper.setText(sendMailVo.getContext(), true);
+//            helper.setSubject(sendMailVo.getSubject());
+//            attachFile(sendMailVo, helper);
+            transport.sendMessage(message);
+        }
         log.info("Send mail has finished. to: {}", sendMailVo.getTo());
     }
 
     @Async
-    public void sendLoginMail(LoginMailVo loginMailVo) throws IOException, MessagingException {
+    public void sendLoginMail(LoginMailVo loginMailVo) throws Exception {
         LocaleType preferredLocale = Optional.ofNullable(loginMailVo.getPreferredLocale()).orElse(LocaleType.EN);
         String title = retrieveLoginMailTitle(loginMailVo, preferredLocale);
         String text = retrieveLoginMailText(preferredLocale);
@@ -81,7 +89,7 @@ public class MailService {
     }
 
     @Async
-    public void sendMailConfirmationMail(AccountEngageMailVo accountEngageMailVo) throws IOException, MessagingException {
+    public void sendMailConfirmationMail(AccountEngageMailVo accountEngageMailVo) throws Exception {
         LocaleType preferredLocale = Optional.ofNullable(accountEngageMailVo.getPreferredLocale()).orElse(LocaleType.EN);
         String title = localeStringService.retrieveLocalString(LocaleStringType.MAIL_CONFIRMATION_TITLE, preferredLocale);
         String text = localeStringService.retrieveLocalString(LocaleStringType.MAIL_CONFIRMATION_TEXT, preferredLocale);
@@ -96,7 +104,7 @@ public class MailService {
     }
 
     @Async
-    public void sendResetPasswordMail(AccountEngageMailVo accountEngageMailVo) throws IOException, MessagingException {
+    public void sendResetPasswordMail(AccountEngageMailVo accountEngageMailVo) throws Exception {
         LocaleType preferredLocale = Optional.ofNullable(accountEngageMailVo.getPreferredLocale()).orElse(LocaleType.EN);
         String title = localeStringService.retrieveLocalString(LocaleStringType.PASSWORD_RESET_TITLE, preferredLocale);
         String text = localeStringService.retrieveLocalString(LocaleStringType.PASSWORD_RESET_TEXT, preferredLocale);
@@ -111,7 +119,7 @@ public class MailService {
     }
 
     @Async
-    public void sendNewPasswordMail(AccountEngageMailVo accountEngageMailVo) throws IOException, MessagingException {
+    public void sendNewPasswordMail(AccountEngageMailVo accountEngageMailVo) throws Exception {
         LocaleType preferredLocale = Optional.ofNullable(accountEngageMailVo.getPreferredLocale()).orElse(LocaleType.EN);
         String title = localeStringService.retrieveLocalString(LocaleStringType.NEW_PASSWORD_TITLE, preferredLocale);
         String text = localeStringService.retrieveLocalString(LocaleStringType.NEW_PASSWORD_TEXT, preferredLocale);
@@ -123,7 +131,7 @@ public class MailService {
     }
 
     @Async
-    public void sendTaskReminderMail(TaskReminderMailVo taskReminderMailVo) throws IOException, MessagingException {
+    public void sendTaskReminderMail(TaskReminderMailVo taskReminderMailVo) throws Exception {
         LocaleType preferredLocale = Optional.ofNullable(taskReminderMailVo.getPreferredLocale()).orElse(LocaleType.EN);
         LocaleStringType taskReminderTypeLocaleString = taskReminderLocaleStringMap.getOrDefault(taskReminderMailVo.getTaskReminderType(), LocaleStringType.TASK_REMINDER_TYPE_SPECIFIC_DATE);
         String taskReminderTypeText = localeStringService.retrieveLocalString(taskReminderTypeLocaleString, preferredLocale);
