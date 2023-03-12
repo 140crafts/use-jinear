@@ -25,6 +25,11 @@ interface NewTaskFormProps {
   className?: string;
 }
 
+export interface NewTaskExtendedForm extends TaskInitializeRequest {
+  assignedDate_ISO?: string;
+  dueDate_ISO?: string;
+}
+
 const logger = Logger("NewTaskForm");
 
 const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskOf, onClose, className }) => {
@@ -34,8 +39,10 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskO
     handleSubmit,
     setFocus,
     setValue,
+    reset,
     formState: { errors },
-  } = useForm<TaskInitializeRequest>();
+    watch,
+  } = useForm<NewTaskExtendedForm>();
 
   const [
     initializeTask,
@@ -43,8 +50,10 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskO
   ] = useInitializeTaskMutation();
 
   useEffect(() => {
+    reset?.();
     setTimeout(() => {
       setFocus("title");
+      setValue("topicId", "no-topic");
       setValue("assignedTo", "no-assignee");
       setValue("teamId", teamId);
     }, 250);
@@ -63,20 +72,20 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskO
       } else {
         toast(t("genericSuccess"));
       }
+      reset?.();
       onClose?.();
     }
   }, [isInitializeTaskSuccess, initializeTaskResponse]);
 
-  const submit: SubmitHandler<TaskInitializeRequest> = (data) => {
+  const submit: SubmitHandler<NewTaskExtendedForm> = (data) => {
     if (data.assignedTo == "no-assignee") {
       data.assignedTo = undefined;
     }
     if (data.topicId == "no-topic") {
       data.topicId = undefined;
     }
-    if (data.assignedDate) {
-      //@ts-ignore
-      data.assignedDate = parse(data.assignedDate, "yyyy-MM-dd", new Date());
+    if (data.assignedDate_ISO) {
+      data.assignedDate = new Date(data.assignedDate_ISO);
     }
     if (data.dueDate) {
       //@ts-ignore
@@ -106,10 +115,8 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskO
 
         <DescriptionInput labelClass={styles.label} inputClass={styles.textAreaInput} register={register} setValue={setValue} />
 
-        <div className={styles.dateInputContainer}>
-          <AssignedDateInput labelClass={styles.label} register={register} />
-          <DueDateInput labelClass={styles.label} register={register} />
-        </div>
+        <AssignedDateInput labelClass={styles.label} register={register} watch={watch} setValue={setValue} />
+        <DueDateInput labelClass={styles.label} register={register} watch={watch} setValue={setValue} />
 
         <TopicSelect
           teamId={teamId}

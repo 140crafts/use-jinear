@@ -1,5 +1,5 @@
 .assignSelfButton {
-  align-self: flex-start;
+  align-self: flex-end;
 }
 .assignSelfButton {
   color: var(--c-link-color);

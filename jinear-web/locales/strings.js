@@ -1178,4 +1178,24 @@ export default {
     en: "more...",
     tr: "daha...",
   },
+  newTaskModalUnsetDate: {
+    en: "Unset",
+    tr: "Kaldır",
+  },
+  newTaskModalToday: {
+    en: "Today",
+    tr: "Bugün",
+  },
+  newTaskModalTomorrow: {
+    en: "Tomorrow",
+    tr: "Yarın",
+  },
+  newTaskModalStartOfNextWeek: {
+    en: "Next Week",
+    tr: "Sonraki Hafta",
+  },
+  newTaskModalDayAfterAssignedDate: {
+    en: "Day after assigned day",
+    tr: "Atanan günün ertesi gün",
+  },
 };

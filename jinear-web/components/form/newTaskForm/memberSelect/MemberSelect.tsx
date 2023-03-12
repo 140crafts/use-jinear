@@ -57,7 +57,7 @@ const MemberSelect: React.FC<MemberSelectProps> = ({ teamId, setValue, register,
       </select>
       <Button
         className={styles.assignSelfButton}
-        heightVariant={ButtonHeight.mid}
+        heightVariant={ButtonHeight.short}
         variant={ButtonVariants.filled}
         onClick={assignTaskToCurrentAccount}
       >

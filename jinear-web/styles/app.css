@@ -318,6 +318,7 @@ select {
   border-radius: var(--border-radius);
   position: absolute;
   white-space: nowrap;
+  pointer-events: none;
   z-index: 99;
 }
 
