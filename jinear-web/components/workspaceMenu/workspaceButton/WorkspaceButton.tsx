@@ -5,6 +5,7 @@ import { useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDispla
 import { selectCurrentAccountsPreferredWorkspaceId } from "@/store/slice/accountSlice";
 import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import cn from "classnames";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -30,6 +31,8 @@ const WorkspaceButton: React.FC<WorkspaceButtonProps> = ({ workspace }) => {
 
   const changePrefferedWorkspace = () => {
     if (!isPreffered) {
+      //to avoid WorkspaceAndTeamChangeListener kick in when user is at task page
+      router.replace(ROUTE_IF_LOGGED_IN);
       updatePreferredWorkspace({ workspaceId: workspace.workspaceId });
     }
   };

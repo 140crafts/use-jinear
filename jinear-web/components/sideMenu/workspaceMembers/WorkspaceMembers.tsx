@@ -17,14 +17,16 @@ const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({}) => {
     isLoading,
     isError,
   } = useRetrieveWorkspaceMembersQuery(preferredWorkspace?.workspaceId || "", {
-    skip: !preferredWorkspace?.workspaceId,
+    skip: !preferredWorkspace?.workspaceId && !preferredWorkspace?.isPersonal,
   });
 
   return (
     <div className={styles.container}>
       {/* <MenuGroupTitle label={t("sideMenuWorkspaceMembers")} /> */}
       {/* <div className="spacer-h-1" /> */}
-      {isSuccess && workplaceMembersResponse && <MenuMemberList page={workplaceMembersResponse.data} type="workspace" />}
+      {isSuccess && !preferredWorkspace?.isPersonal && workplaceMembersResponse && (
+        <MenuMemberList page={workplaceMembersResponse.data} type="workspace" />
+      )}
     </div>
   );
 };

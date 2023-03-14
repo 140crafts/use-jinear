@@ -1,4 +1,4 @@
-import { popMenu } from "@/store/slice/displayPreferenceSlice";
+import { toggleMenu } from "@/store/slice/displayPreferenceSlice";
 import { popNewTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -13,8 +13,8 @@ const TabBar: React.FC<TabBarProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const _popMenu = () => {
-    dispatch(popMenu());
+  const _toggleMenu = () => {
+    dispatch(toggleMenu());
   };
 
   const newTask = () => {
@@ -23,7 +23,7 @@ const TabBar: React.FC<TabBarProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      <Button onClick={_popMenu} className={styles.button}>
+      <Button onClick={_toggleMenu} className={styles.button}>
         <IoMenu />
         {t("tabBarMenu")}
       </Button>

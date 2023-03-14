@@ -272,7 +272,7 @@ export default {
   },
   accountPageTab_Team: {
     en: "Team",
-    tr: "Takım",
+    tr: "Ekip",
   },
   accountTabPersonalInfoTitle: {
     en: "Personal Info",
@@ -328,11 +328,11 @@ export default {
   },
   sideMenuWorkspaceTeams: {
     en: "Teams",
-    tr: "Takımlar",
+    tr: "Ekipler",
   },
   sideMenuWorkspaceCurrentTeam: {
     en: "Current Team",
-    tr: "Takım",
+    tr: "Ekip",
   },
   sideMenuWorkspaceMembersMore: {
     en: "${number} more",
@@ -364,7 +364,7 @@ export default {
   },
   sideMenuTeamListNoTeam: {
     en: "Create a team to track your tasks",
-    tr: "Görevlerini takip etmek için bir takım oluştur",
+    tr: "Görevlerini takip etmek için bir ekip oluştur",
   },
   sideMenuTeamNoTopics: {
     en: "Create a topic to label your tasks",
@@ -412,7 +412,7 @@ export default {
   },
   newTaskModalTeamSelectLabel: {
     en: "Team",
-    tr: "Takım",
+    tr: "Ekip",
   },
   newTaskModalTaskTitle: {
     en: "Title",
@@ -444,7 +444,7 @@ export default {
   },
   newTaskModalTaskTopicNoContentTooltip: {
     en: "We couldn't find any topics for this team",
-    tr: "Bu takım için oluşturulmuş bir konu bulamadık",
+    tr: "Bu ekip için oluşturulmuş bir konu bulamadık",
   },
   newTaskModalAssignToYourself: {
     en: "Assign to me",
@@ -460,11 +460,11 @@ export default {
   },
   teamOptionsMenu: {
     en: "Team Options",
-    tr: "Takım Seçenekleri",
+    tr: "Ekip Seçenekleri",
   },
   teamSelectMenu: {
     en: "Teams",
-    tr: "Takımlar",
+    tr: "Ekipler",
   },
   teamOptionsCurrentTeam: {
     en: "(Current)",
@@ -472,7 +472,7 @@ export default {
   },
   teamOptionsSelectActiveTeamTitle: {
     en: "Change team",
-    tr: "Görüntülenen takımı değiştir",
+    tr: "Görüntülenen ekibi değiştir",
   },
   newTastCreatedToastText: {
     en: 'Task created. "${taskNo}"',
@@ -808,7 +808,7 @@ export default {
   },
   changeTaskAssigneeModalFilterLabel: {
     en: "Filter team members by name",
-    tr: "Takım üyelerini isme göre filtrele",
+    tr: "Ekip üyelerini isme göre filtrele",
   },
   changeTaskAssigneeModalFilteredListEmpty: {
     en: "No one found",
@@ -960,15 +960,15 @@ export default {
   },
   newTeamModalTitle: {
     en: "New Team",
-    tr: "Yeni Takım",
+    tr: "Yeni Ekip",
   },
   newTeamFormName: {
     en: "Team name",
-    tr: "Takım adı",
+    tr: "Ekip adı",
   },
   newTeamFormTag: {
     en: "Tag (short code for easy access. For example Engineering -> ENG)",
-    tr: "Takım kısa kodu (Kolay erişim için. Örneğin Mühendislik -> MUH)",
+    tr: "Ekip kısa kodu (Kolay erişim için. Örneğin Mühendislik -> MUH)",
   },
   currentWorkspaceHeaderWorkspaceDetail: {
     en: "Workspace detail",
@@ -1197,5 +1197,9 @@ export default {
   newTaskModalDayAfterAssignedDate: {
     en: "Day after assigned day",
     tr: "Atanan günün ertesi gün",
+  },
+  workspaceMenuPersonalTitle: {
+    en: "My Personal Workspace",
+    tr: "Kişisel Çalışma Alanım",
   },
 };
