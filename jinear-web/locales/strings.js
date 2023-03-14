@@ -398,6 +398,10 @@ export default {
     en: "Archive",
     tr: "Arşiv",
   },
+  sideMenuCalendar: {
+    en: "Calendar",
+    tr: "Takvim",
+  },
   tabBarMenu: {
     en: "Menu",
     tr: "Menü",

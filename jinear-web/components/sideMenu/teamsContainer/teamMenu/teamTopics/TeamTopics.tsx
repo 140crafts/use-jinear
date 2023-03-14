@@ -55,7 +55,7 @@ const TeamTopics: React.FC<TeamTopicsProps> = ({ teamId }) => {
           <Button
             key={topic.topicId}
             variant={ButtonVariants.outline}
-            heightVariant={ButtonHeight.mid}
+            heightVariant={ButtonHeight.short}
             className={cn(styles.button)}
             data-tooltip-multiline={topic.name.length > 12 ? topic.name : undefined}
           >
@@ -68,7 +68,7 @@ const TeamTopics: React.FC<TeamTopicsProps> = ({ teamId }) => {
             href={`/${preferredWorkspace?.username}/${preferredTeam?.name}/topic/list`}
             variant={ButtonVariants.filled2}
             className={styles.button}
-            heightVariant={ButtonHeight.mid}
+            heightVariant={ButtonHeight.short}
             style={{ opacity: 0.5 }}
           >
             {moreButtonLabel}
