@@ -4,7 +4,6 @@ import { TaskInitializeRequest } from "@/model/be/jinear-core";
 import { useInitializeTaskMutation } from "@/store/api/taskApi";
 import Logger from "@/utils/logger";
 import cn from "classnames";
-import { parse } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -87,9 +86,8 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskO
     if (data.assignedDate_ISO) {
       data.assignedDate = new Date(data.assignedDate_ISO);
     }
-    if (data.dueDate) {
-      //@ts-ignore
-      data.dueDate = parse(data.dueDate, "yyyy-MM-dd", new Date());
+    if (data.dueDate_ISO) {
+      data.dueDate = new Date(data.dueDate_ISO);
     }
     console.log({ NewTaskForm: data });
     if (isInitializeTaskLoading) {

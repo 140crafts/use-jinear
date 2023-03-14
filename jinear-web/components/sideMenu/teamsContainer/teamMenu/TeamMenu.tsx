@@ -30,6 +30,7 @@ const TeamMenu: React.FC<TeamMenuProps> = ({
 }) => {
   return (
     <div className={styles.container}>
+      {!isPersonalWorkspace && <div className="spacer-h-1" />}
       {!isPersonalWorkspace && <TeamTitle name={name} />}
       {!isPersonalWorkspace && <TeamMemberList teamId={teamId} />}
       <TeamActionButtons name={name} workspaceUsername={workspaceUsername} />
