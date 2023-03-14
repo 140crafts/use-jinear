@@ -5,7 +5,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoCheckmarkCircleOutline, IoFileTrayOutline, IoPlayForwardOutline } from "react-icons/io5";
+import { IoCalendarNumberOutline, IoCheckmarkCircleOutline, IoFileTrayOutline, IoPlayForwardOutline } from "react-icons/io5";
 import { TiPlus } from "react-icons/ti";
 import styles from "./ActionButtonContainer.module.css";
 
@@ -28,8 +28,14 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
         className={cn(styles.button, styles.newTaskButton)}
         onClick={_popNewTaskModal}
       >
-        <TiPlus />
+        <TiPlus size={17} className={styles.addIcon} />
+        {/* <TbSquareRoundedPlus  /> */}
         <div>{t("sideMenuNewTask")}</div>
+      </Button>
+
+      <Button href={`/${preferredWorkspace?.username}`} variant={ButtonVariants.hoverFilled2} className={styles.button}>
+        <IoCalendarNumberOutline />
+        <div>{t("sideMenuCalendar")}</div>
       </Button>
 
       {!preferredWorkspace?.isPersonal && (
