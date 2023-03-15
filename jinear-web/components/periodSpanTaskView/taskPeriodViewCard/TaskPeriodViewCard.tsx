@@ -57,7 +57,7 @@ const TaskPeriodViewCard: React.FC<TaskPeriodViewCardProps> = ({
               <IoTime size={12} />
             </Button>
 
-            <AssigneeCell task={task} className={styles.taskTagCell} />
+            {!task.workspace?.isPersonal && <AssigneeCell task={task} className={styles.taskTagCell} />}
             <div className="flex-1" />
             <DueDateAfterIcon dueDate={task.dueDate} isDueDateAfter={isDueDateAfter} />
           </div>
