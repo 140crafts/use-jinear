@@ -68,7 +68,7 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
         <>
           <TaskPageHeader taskTag={taskTag} title={taskResponse.data.title} />
           <div className={styles.contentContainer}>
-            <TaskDetailBreadcrumb task={taskResponse.data} />
+            {!taskResponse.data.workspace?.isPersonal && <TaskDetailBreadcrumb task={taskResponse.data} />}
             <TaskDetail task={taskResponse.data} />
           </div>
         </>
