@@ -4,6 +4,7 @@ import { popNewTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
+import { useRouter } from "next/router";
 import React from "react";
 import { IoCalendarNumberOutline, IoCheckmarkCircleOutline, IoFileTrayOutline, IoPlayForwardOutline } from "react-icons/io5";
 import { TiPlus } from "react-icons/ti";
@@ -15,6 +16,10 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
+
+  const router = useRouter();
+  const currentPath = router.asPath;
+  const calendarPath = `/${preferredWorkspace?.username}`;
 
   const _popNewTaskModal = () => {
     dispatch(popNewTaskModal());
@@ -29,11 +34,14 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
         onClick={_popNewTaskModal}
       >
         <TiPlus size={17} className={styles.addIcon} />
-        {/* <TbSquareRoundedPlus  /> */}
         <div>{t("sideMenuNewTask")}</div>
       </Button>
 
-      <Button href={`/${preferredWorkspace?.username}`} variant={ButtonVariants.hoverFilled2} className={styles.button}>
+      <Button
+        href={`/${preferredWorkspace?.username}`}
+        variant={currentPath == calendarPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+        className={styles.button}
+      >
         <IoCalendarNumberOutline />
         <div>{t("sideMenuCalendar")}</div>
       </Button>
