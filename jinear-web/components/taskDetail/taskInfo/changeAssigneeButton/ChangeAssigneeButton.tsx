@@ -20,7 +20,7 @@ const ChangeAssigneeButton: React.FC<ChangeAssigneeButtonProps> = ({ className }
     dispatch(popChangeTaskAssigneeModal({ visible: true, task }));
   };
 
-  return (
+  return task.workspace?.isPersonal ? null : (
     <Button
       variant={ButtonVariants.filled}
       heightVariant={ButtonHeight.mid}

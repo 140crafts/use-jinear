@@ -378,6 +378,14 @@ export default {
     en: "Task",
     tr: "Görevler",
   },
+  sideMenuTeamTimeBased: {
+    en: "By date",
+    tr: "Tarihe göre",
+  },
+  sideMenuTeamStatusBased: {
+    en: "By status",
+    tr: "Duruma göre",
+  },
   sideMenuTeamThisWeek: {
     en: "This Week",
     tr: "Bu Hafta",
@@ -393,6 +401,10 @@ export default {
   sideMenuTeamActiveTaskList: {
     en: "Active",
     tr: "Aktif",
+  },
+  sideMenuTeamTaskListAll: {
+    en: "All",
+    tr: "Tümü",
   },
   sideMenuTeamArchive: {
     en: "Archive",
@@ -926,6 +938,10 @@ export default {
     en: "Archive",
     tr: "Arşiv",
   },
+  taskListScreenBreadcrumb_all: {
+    en: "All Tasks",
+    tr: "Tüm Görevler",
+  },
   workflowTaskListEmpty: {
     en: "Task List is Empty",
     tr: "Görev Listesi Boş",
@@ -1205,5 +1221,9 @@ export default {
   workspaceMenuPersonalTitle: {
     en: "My Personal Workspace",
     tr: "Kişisel Çalışma Alanım",
+  },
+  allTasksPageListTitle: {
+    en: "All Tasks",
+    tr: "Tüm Görevler",
   },
 };

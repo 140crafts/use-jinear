@@ -9,7 +9,12 @@ export const taskReminderApi = api.injectEndpoints({
         method: "POST",
         body: req,
       }),
-      invalidatesTags: (_result, _err, req) => ["team-task-list", "workplace-task-with-name-and-tag", "team-workflow-task-list"],
+      invalidatesTags: (_result, _err, req) => [
+        "team-task-list",
+        "workplace-task-with-name-and-tag",
+        "team-workflow-task-list",
+        "team-all-task-list",
+      ],
     }),
     //
     retrieveNextJob: build.query<ReminderJobResponse, { taskReminderId: string }>({

@@ -3,7 +3,7 @@ import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle"
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
 import React from "react";
-import { IoArchiveOutline, IoCalendarOutline, IoFolderOutline, IoList, IoTodayOutline } from "react-icons/io5";
+import { IoArchiveOutline, IoCalendarOutline, IoFolderOutline, IoList, IoPlayOutline, IoTodayOutline } from "react-icons/io5";
 import styles from "./TeamActionButtons.module.css";
 interface TeamActionButtonsProps {
   name: string;
@@ -19,10 +19,11 @@ const TeamActionButtons: React.FC<TeamActionButtonsProps> = ({ name, workspaceUs
   const taskListPath = `/${workspaceUsername}/${name}/active`;
   const backlogPath = `/${workspaceUsername}/${name}/backlog`;
   const archivePath = `/${workspaceUsername}/${name}/archive`;
+  const allPath = `/${workspaceUsername}/${name}/all`;
 
   return (
     <div className={styles.container}>
-      <MenuGroupTitle label={t("sideMenuTeamTasks")} />
+      <MenuGroupTitle label={t("sideMenuTeamTimeBased")} />
       <Button
         href={weeklyPath}
         variant={currentPath == weeklyPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
@@ -39,12 +40,14 @@ const TeamActionButtons: React.FC<TeamActionButtonsProps> = ({ name, workspaceUs
         <IoCalendarOutline />
         <div className={currentPath == monthlyPath ? styles.activeButton : undefined}>{t("sideMenuTeamThisMonth")}</div>
       </Button>
+      <div className="spacer-h-1" />
+      <MenuGroupTitle label={t("sideMenuTeamStatusBased")} />
       <Button
         href={taskListPath}
         variant={currentPath == taskListPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
         className={styles.button}
       >
-        <IoList />
+        <IoPlayOutline />
         <div className={currentPath == taskListPath ? styles.activeButton : undefined}>{t("sideMenuTeamActiveTaskList")}</div>
       </Button>
       <Button
@@ -62,6 +65,14 @@ const TeamActionButtons: React.FC<TeamActionButtonsProps> = ({ name, workspaceUs
       >
         <IoArchiveOutline />
         <div className={currentPath == archivePath ? styles.activeButton : undefined}>{t("sideMenuTeamArchive")}</div>
+      </Button>
+      <Button
+        href={allPath}
+        variant={currentPath == allPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+        className={styles.button}
+      >
+        <IoList />
+        <div className={currentPath == allPath ? styles.activeButton : undefined}>{t("sideMenuTeamTaskListAll")}</div>
       </Button>
     </div>
   );

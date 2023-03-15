@@ -11,10 +11,10 @@ interface DueDateChangeDiffInfoProps {
 const DueDateChangeDiffInfo: React.FC<DueDateChangeDiffInfoProps> = ({ activity }) => {
   const { t } = useTranslation();
   const oldVal = activity.oldState
-    ? format(new Date(activity.oldState), t("dateFormat"))
+    ? format(new Date(activity.oldState), activity.oldState.indexOf("T") != -1 ? t("dateTimeFormat") : t("dateFormat"))
     : t("taskWorkflowActivityInfoAssigneeNoDate");
   const newVal = activity.newState
-    ? format(new Date(activity.newState), t("dateFormat"))
+    ? format(new Date(activity.newState), activity.newState.indexOf("T") != -1 ? t("dateTimeFormat") : t("dateFormat"))
     : t("taskWorkflowActivityInfoAssigneeNoDate");
 
   return (

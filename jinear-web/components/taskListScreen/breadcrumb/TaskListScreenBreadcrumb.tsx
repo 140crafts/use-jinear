@@ -6,7 +6,7 @@ import useTranslation from "locales/useTranslation";
 import React from "react";
 
 interface TaskListScreenBreadcrumbProps {
-  type: "active" | "archive" | "backlog";
+  type: "active" | "archive" | "backlog" | "all";
 }
 
 const TaskListScreenBreadcrumb: React.FC<TaskListScreenBreadcrumbProps> = ({ type }) => {
@@ -19,13 +19,13 @@ const TaskListScreenBreadcrumb: React.FC<TaskListScreenBreadcrumbProps> = ({ typ
   const workspaceUsernameEncoded = encodeURI(workspaceUsername);
   const teamNameEncoded = encodeURI(teamName);
 
-  return (
+  return workspace?.isPersonal ? null : (
     <Breadcrumb>
       <BreadcrumbLink label={workspaceUsername} url={`/${workspaceUsernameEncoded}`} />
       <BreadcrumbLink label={teamName} url={`/${workspaceUsernameEncoded}/${teamNameEncoded}`} />
       <BreadcrumbLink
         label={t(`taskListScreenBreadcrumb_${type}`)}
-        url={`/${workspaceUsernameEncoded}/${teamNameEncoded}/task-list`}
+        url={`/${workspaceUsernameEncoded}/${teamNameEncoded}/${type}`}
       />
     </Breadcrumb>
   );
