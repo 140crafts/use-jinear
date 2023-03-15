@@ -24,7 +24,7 @@
   border-right-style: solid;
   border-right-width: 1px;
   border-right-color: var(--c-primary-shade-1);
-  height: 98vh;
+  height: max(100%, 98vh);
 }
 
 .mainMenu {
