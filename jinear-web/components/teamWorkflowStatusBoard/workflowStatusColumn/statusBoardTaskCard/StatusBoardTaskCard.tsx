@@ -1,6 +1,6 @@
 import AssigneeCell from "@/components/assigneeCell/AssigneeCell";
 import Button from "@/components/button";
-import TopicInfo from "@/components/taskListScreen/breadcrumb/taskListGroupedByWorkflowStatus/workflowTaskList/taskRow/topicInfo/TopicInfo";
+import TopicInfo from "@/components/taskListScreen/taskLists/taskRow/topicInfo/TopicInfo";
 import TeamTagCell from "@/components/teamTagCell/TeamTagCell";
 import { TaskDto } from "@/model/be/jinear-core";
 import { popChangeTaskDateModal } from "@/store/slice/modalSlice";

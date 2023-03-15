@@ -57,6 +57,26 @@ export const taskListingApi = api.injectEndpoints({
         },
       ],
     }),
+    //
+    retrieveAllTasks: build.query<
+      TaskListingPaginatedResponse,
+      {
+        workspaceId: string;
+        teamId: string;
+        page: number;
+      }
+    >({
+      query: (req: { workspaceId: string; teamId: string; page: number }) => {
+        const page = req.page ? req.page : 0;
+        return `v1/task/list/${req.workspaceId}/team/${req.teamId}?page=${page}`;
+      },
+      providesTags: (_result, _err, req) => [
+        {
+          type: "team-all-task-list",
+          id: `${JSON.stringify(req)}`,
+        },
+      ],
+    }),
   }),
 });
 
@@ -64,8 +84,9 @@ export const {
   useRetrieveAllIntersectingTasksQuery,
   useRetrieveAllIntersectingTasksFromTeamQuery,
   useRetrieveFromWorkflowStatusQuery,
+  useRetrieveAllTasksQuery,
 } = taskListingApi;
 
 export const {
-  endpoints: { retrieveAllIntersectingTasks, retrieveAllIntersectingTasksFromTeam, retrieveFromWorkflowStatus },
+  endpoints: { retrieveAllIntersectingTasks, retrieveAllIntersectingTasksFromTeam, retrieveFromWorkflowStatus, retrieveAllTasks },
 } = taskListingApi;

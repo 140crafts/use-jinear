@@ -15,6 +15,7 @@ export const taskRelationApi = api.injectEndpoints({
         "workspace-task-list",
         "workplace-task-with-name-and-tag",
         "team-workflow-task-list",
+        "team-all-task-list",
       ],
     }),
     //
@@ -29,6 +30,7 @@ export const taskRelationApi = api.injectEndpoints({
         "workspace-task-list",
         "workplace-task-with-name-and-tag",
         "team-workflow-task-list",
+        "team-all-task-list",
       ],
     }),
     //

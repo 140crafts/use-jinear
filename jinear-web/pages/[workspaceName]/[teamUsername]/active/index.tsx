@@ -1,5 +1,5 @@
-import TaskListGroupedByWorkflowStatus from "@/components/taskListScreen/breadcrumb/taskListGroupedByWorkflowStatus/TaskListGroupedByWorkflowStatus";
 import TaskListScreenBreadcrumb from "@/components/taskListScreen/breadcrumb/TaskListScreenBreadcrumb";
+import TaskListGroupedByWorkflowStatus from "@/components/taskListScreen/taskLists/taskListGroupedByWorkflowStatus/TaskListGroupedByWorkflowStatus";
 import { selectCurrentAccountsPreferredTeam } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { useRouter } from "next/router";
