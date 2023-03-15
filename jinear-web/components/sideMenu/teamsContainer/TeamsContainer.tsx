@@ -80,6 +80,7 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
           <MenuGroupTitle
             label={t("sideMenuWorkspaceCurrentTeam")}
             buttonVariant={teamsResponse?.data.length == 0 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+            titleClassName={styles.menuGroupTitle}
           />
           <Button variant={ButtonVariants.hoverFilled2} onClick={routeTeamHome} heightVariant={ButtonHeight.short}>
             <IoScan />
