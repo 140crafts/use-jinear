@@ -1,6 +1,6 @@
 import { TaskInitializeRequest } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
-import React from "react";
+import React, { useEffect } from "react";
 import { UseFormRegister } from "react-hook-form";
 
 interface TitleInputProps {
@@ -10,6 +10,11 @@ interface TitleInputProps {
 
 const TitleInput: React.FC<TitleInputProps> = ({ register, labelClass }) => {
   const { t } = useTranslation();
+  useEffect(() => {
+    setTimeout(() => {
+      document.getElementById("new-task-title")?.click();
+    }, 250);
+  }, []);
   return (
     <label className={labelClass} htmlFor={"new-task-title"}>
       {`${t("newTaskModalTaskTitle")} *`}

@@ -50,7 +50,9 @@ const TeamMonthlyScreen: React.FC<TeamMonthlyScreenProps> = ({}) => {
       }}
     >
       <div className={styles.container}>
-        <TeamMonthlyScreenBreadcrumb workspaceName={workspaceName} teamUsername={teamUsername} />
+        {!currentWorkspace?.isPersonal && (
+          <TeamMonthlyScreenBreadcrumb workspaceName={workspaceName} teamUsername={teamUsername} />
+        )}
         <MonthYearNo />
 
         <div className="spacer-h-2" />

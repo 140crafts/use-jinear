@@ -55,7 +55,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskO
       setValue("topicId", "no-topic");
       setValue("assignedTo", "no-assignee");
       setValue("teamId", teamId);
-    }, 250);
+    }, 200);
   }, []);
 
   useEffect(() => {

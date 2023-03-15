@@ -31,7 +31,9 @@ const TeamWeeklyScreen: React.FC<TeamWeeklyScreenProps> = ({}) => {
   return (
     <TeamWeeklyScreenContext.Provider value={{ viewingWeekStart, setViewingWeekStart }}>
       <div className={styles.container}>
-        <TeamWeeklyScreenBreadcrumb workspaceName={currentWorkspace?.username || ""} teamUsername={teamUsername} />
+        {!currentWorkspace?.isPersonal && (
+          <TeamWeeklyScreenBreadcrumb workspaceName={currentWorkspace?.username || ""} teamUsername={teamUsername} />
+        )}
         <YearWeekNo />
 
         <div className="spacer-h-2" />
