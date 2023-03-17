@@ -1226,4 +1226,8 @@ export default {
     en: "All Tasks",
     tr: "Tüm Görevler",
   },
+  datePickerModalQuickActionToday: {
+    en: "Today",
+    tr: "Bugün",
+  },
 };

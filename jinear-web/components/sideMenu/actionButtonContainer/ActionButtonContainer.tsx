@@ -1,7 +1,8 @@
 import Button, { ButtonVariants } from "@/components/button";
-import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { popNewTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
@@ -12,10 +13,13 @@ import styles from "./ActionButtonContainer.module.css";
 
 interface ActionButtonContainerProps {}
 
+const logger = Logger("ActionButtonContainer");
+
 const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
+  const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
   const router = useRouter();
   const currentPath = router.asPath;
@@ -25,6 +29,7 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
     dispatch(popNewTaskModal());
   };
 
+  logger.log({ preferredTeam });
   return (
     <div className={styles.container}>
       {/* <MenuGroupTitle label={t("sideMenuActionsTeams")} /> */}
@@ -52,7 +57,11 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
           <div>{t("sideMenuInbox")}</div>
         </Button>
       )}
-      <Button variant={ButtonVariants.hoverFilled2} className={styles.button}>
+      <Button
+        href={`/${preferredWorkspace?.username}/${preferredTeam?.name}/last-activities`}
+        variant={ButtonVariants.hoverFilled2}
+        className={styles.button}
+      >
         <IoPlayForwardOutline />
         <div>{t("sideMenuActivities")}</div>
       </Button>
