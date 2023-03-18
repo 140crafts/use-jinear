@@ -38,6 +38,7 @@
 .menuContent {
   display: flex;
   flex-direction: row;
+  padding-bottom: calc(var(--tab-bar-height) * 2);
 }
 
 .content {

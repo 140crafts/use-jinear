@@ -3,6 +3,8 @@ import TimePicker from "@/components/timePicker/TimePicker";
 import { useUpdateTaskDatesMutation } from "@/store/api/taskUpdateApi";
 import {
   closeChangeTaskDateModal,
+  closeDatePickerModal,
+  popDatePickerModal,
   selectChangeTaskDateModalHasPreciseAssignedDate,
   selectChangeTaskDateModalHasPreciseDueDate,
   selectChangeTaskDateModalTaskCurrentAssignedDate,
@@ -114,14 +116,34 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
     }
   }, [hasPreciseAssignedDate, hasPreciseDueDate]);
 
-  const onAssignedDateChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    try {
-      const parsed = parse(value, "yyyy-MM-dd", new Date());
-      setAssignedDateVal(parsed);
-    } catch (error) {
-      console.error(error);
-    }
+  const popDatePickerForAssignedDate = () => {
+    dispatch(
+      popDatePickerModal({
+        visible: true,
+        initialDate: assignedDateVal ? assignedDateVal : new Date(),
+        onDateChange: onAssignedDateChangeFromModal,
+      })
+    );
+  };
+
+  const popDatePickerForDueDate = () => {
+    dispatch(
+      popDatePickerModal({
+        visible: true,
+        initialDate: dueDateVal ? dueDateVal : new Date(),
+        onDateChange: onDueDateChangeFromModal,
+      })
+    );
+  };
+
+  const onAssignedDateChangeFromModal = (date: Date) => {
+    setAssignedDateVal(date);
+    dispatch(closeDatePickerModal());
+  };
+
+  const onDueDateChangeFromModal = (date: Date) => {
+    setDueDateVal(date);
+    dispatch(closeDatePickerModal());
   };
 
   const onDueDateChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -270,17 +292,12 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
       hasTitleCloseButton={true}
       requestClose={close}
     >
-      <label className={styles.label} htmlFor={"task-update-assigned-date"}>
+      <div className={styles.label}>
         {t("changeTaskDateDateLabel_assigned")}
         <div className={styles.inputContainer}>
-          <input
-            id={"task-update-assigned-date"}
-            type={"date"}
-            ref={assignedInputRef}
-            className={styles.dateInput}
-            value={assignedDateVal ? format(assignedDateVal, "yyyy-MM-dd") : ""}
-            onChange={onAssignedDateChange}
-          />
+          <Button className={styles.dateInput} variant={ButtonVariants.filled} onClick={popDatePickerForAssignedDate}>
+            {assignedDateVal ? format(new Date(assignedDateVal), t("dateFormat")) : t("datePickerSelectDate")}
+          </Button>
           {assignedDateVal && assignedDateTimePickerVisible && (
             <TimePicker
               id={"task-date-change-assigned-date-time"}
@@ -298,7 +315,7 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
             </Button>
           )}
         </div>
-      </label>
+      </div>
 
       <div className={styles.dateActionContainer}>
         <Button className={styles.actionButton} onClick={setAssignedDateToday}>
@@ -313,17 +330,12 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
         </Button>
       </div>
 
-      <label className={styles.label} htmlFor={"task-update-due-date"}>
+      <div className={styles.label}>
         {t("changeTaskDateDateLabel_due")}
         <div className={styles.inputContainer}>
-          <input
-            id={"task-update-due-date"}
-            type={"date"}
-            ref={dueInputRef}
-            className={styles.dateInput}
-            value={dueDateVal ? format(dueDateVal, "yyyy-MM-dd") : ""}
-            onChange={onDueDateChange}
-          />
+          <Button className={styles.dateInput} variant={ButtonVariants.filled} onClick={popDatePickerForDueDate}>
+            {dueDateVal ? format(new Date(dueDateVal), t("dateFormat")) : t("datePickerSelectDate")}
+          </Button>
           {dueDateVal && dueDateTimePickerVisible && (
             <TimePicker
               id={"task-date-change-due-date-time"}
@@ -341,7 +353,7 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
             </Button>
           )}
         </div>
-      </label>
+      </div>
 
       <div className={styles.dateActionContainer}>
         <Button className={styles.actionButton} onClick={setDueDateDayAfterAssignedDate}>

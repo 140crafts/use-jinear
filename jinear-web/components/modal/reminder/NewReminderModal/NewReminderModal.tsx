@@ -1,11 +1,18 @@
 import Button, { ButtonVariants } from "@/components/button";
 import Line from "@/components/line/Line";
+import TimePicker from "@/components/timePicker/TimePicker";
 import { RepeatType, TaskReminderInitializeRequest } from "@/model/be/jinear-core";
 import { useInitializeTaskReminderMutation } from "@/store/api/taskReminderApi";
-import { closeNewReminderModal, selectNewReminderModalTask, selectNewReminderModalVisible } from "@/store/slice/modalSlice";
+import {
+  closeDatePickerModal,
+  closeNewReminderModal,
+  popDatePickerModal,
+  selectNewReminderModalTask,
+  selectNewReminderModalVisible,
+} from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
-import { addDays, format, setHours, setMinutes } from "date-fns";
+import { addDays, format, getHours, getMinutes, setHours, setMinutes, startOfToday } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -45,6 +52,7 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
   const specificDate = watch("specificDate");
   const specificRemindDate = watch("specificRemindDate");
   const specificRemindDateRepeatType = watch("specificRemindDateRepeatType");
+  const specificRemindRepeatEnd = watch("specificRemindRepeatEnd");
 
   const hasAnyAssignedDateReminder = task?.taskReminders?.find(
     (taskReminder) => taskReminder.taskReminderType == "ASSIGNED_DATE"
@@ -113,10 +121,64 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
     if (!hasAnyAssignedDateReminder && !hasAnyDueDateReminder) {
       setValue("specificDate", true);
       const date = format(setMinutes(setHours(addDays(new Date(), 1), 9), 0), "yyyy-MM-dd HH:mm");
-      //@ts-ignore
+      // @ts-ignore
       setValue("specificRemindDate", date);
     }
   }, [hasAnyAssignedDateReminder, hasAnyDueDateReminder]);
+
+  const popDatePickerForSpecificRemindDate = () => {
+    dispatch(
+      popDatePickerModal({
+        visible: true,
+        initialDate: specificRemindDate ? new Date(specificRemindDate) : new Date(),
+        onDateChange: onSpecificDateChange,
+      })
+    );
+  };
+
+  const onSpecificDateChange = (date: Date) => {
+    setValue("specificRemindDate", date);
+    dispatch(closeDatePickerModal());
+  };
+
+  const popDatePickerForSpecificRemindRepeatEndDate = () => {
+    dispatch(
+      popDatePickerModal({
+        visible: true,
+        initialDate: specificRemindRepeatEnd ? new Date(specificRemindRepeatEnd) : new Date(),
+        onDateChange: onSpecificRemindRepeatEndDateChange,
+      })
+    );
+  };
+
+  const onSpecificRemindRepeatEndDateChange = (date: Date) => {
+    setValue("specificRemindRepeatEnd", date);
+    dispatch(closeDatePickerModal());
+  };
+
+  const onSpecificDateHoursChange = (val: string) => {
+    const current = specificRemindDate ? new Date(specificRemindDate) : startOfToday();
+    const result = setHours(current, parseInt(val));
+    setValue("specificRemindDate", result);
+  };
+
+  const onSpecificDateMinutesChange = (val: string) => {
+    const current = specificRemindDate ? new Date(specificRemindDate) : startOfToday();
+    const result = setMinutes(current, parseInt(val));
+    setValue("specificRemindDate", result);
+  };
+
+  const onSpecificDateRemindRepeatEndHoursChange = (val: string) => {
+    const current = specificRemindRepeatEnd ? new Date(specificRemindRepeatEnd) : startOfToday();
+    const result = setHours(current, parseInt(val));
+    setValue("specificRemindRepeatEnd", result);
+  };
+
+  const onSpecificDateRemindRepeatEndMinutesChange = (val: string) => {
+    const current = specificRemindRepeatEnd ? new Date(specificRemindRepeatEnd) : startOfToday();
+    const result = setMinutes(current, parseInt(val));
+    setValue("specificRemindRepeatEnd", result);
+  };
 
   return (
     <Modal visible={visible} title={t("taskNewReminderModalTitle")} bodyClass={styles.container}>
@@ -157,15 +219,27 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
 
         {specificDate && (
           <div className={styles.specificDateContainer}>
-            <label className={styles.label} htmlFor={"specific-remind-date"}>
-              <input
-                id={"specific-remind-date"}
-                type={"datetime-local"}
-                //@ts-ignore
-                value={specificRemindDate}
-                {...register("specificRemindDate")}
-              />
-            </label>
+            <div className={styles.dateTimePickerContainer}>
+              <Button variant={ButtonVariants.filled} onClick={popDatePickerForSpecificRemindDate}>
+                {specificRemindDate ? format(new Date(specificRemindDate), t("dateFormat")) : t("datePickerSelectDate")}
+              </Button>
+              {specificRemindDate && (
+                <TimePicker
+                  id={"task-specific-date-reminder-time"}
+                  minuteResolution={15}
+                  onHourChange={onSpecificDateHoursChange}
+                  onMinuteChange={onSpecificDateMinutesChange}
+                  defaultHours={`${getHours(specificRemindDate ? new Date(specificRemindDate) : startOfToday())}`.padStart(
+                    2,
+                    "0"
+                  )}
+                  defaultMinutes={`${getMinutes(specificRemindDate ? new Date(specificRemindDate) : startOfToday())}`.padStart(
+                    2,
+                    "0"
+                  )}
+                />
+              )}
+            </div>
 
             <label className={styles.label} htmlFor={"repeat-type"}>
               <b>{t("taskNewReminderModalRepeat")}</b>
@@ -187,10 +261,31 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
                 </label>
 
                 {repeat && (
-                  <label className={styles.label} htmlFor={"remind-end-date"}>
+                  <div>
                     {t("taskNewReminderModalRepeatEndDateLabel")}
-                    <input id={"remind-end-date"} type={"date"} {...register("specificRemindRepeatEnd")} />
-                  </label>
+                    <div className={styles.dateTimePickerContainer}>
+                      <input id={"remind-end-date"} type={"hidden"} {...register("specificRemindRepeatEnd")} />
+                      <Button variant={ButtonVariants.filled} onClick={popDatePickerForSpecificRemindRepeatEndDate}>
+                        {specificRemindRepeatEnd
+                          ? format(new Date(specificRemindRepeatEnd), t("dateFormat"))
+                          : t("datePickerSelectDate")}
+                      </Button>
+                      {specificRemindRepeatEnd && (
+                        <TimePicker
+                          id={"task-specific-date-reminder-repeat-end-time"}
+                          minuteResolution={15}
+                          onHourChange={onSpecificDateRemindRepeatEndHoursChange}
+                          onMinuteChange={onSpecificDateRemindRepeatEndMinutesChange}
+                          defaultHours={`${getHours(
+                            specificRemindRepeatEnd ? new Date(specificRemindRepeatEnd) : startOfToday()
+                          )}`.padStart(2, "0")}
+                          defaultMinutes={`${getMinutes(
+                            specificRemindDate ? new Date(specificRemindDate) : startOfToday()
+                          )}`.padStart(2, "0")}
+                        />
+                      )}
+                    </div>
+                  </div>
                 )}
               </div>
             )}
