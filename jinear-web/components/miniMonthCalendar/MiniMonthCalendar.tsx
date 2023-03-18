@@ -1,3 +1,4 @@
+import { useFirstRender } from "@/hooks/useFirstRender";
 import Logger from "@/utils/logger";
 import { eachDayOfInterval, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, parse, startOfWeek } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -7,25 +8,28 @@ import MiniMonthCalendarHeader from "./miniMonthCalendarHeader/MiniMonthCalendar
 import WeekDays from "./weekDays/WeekDays";
 
 interface MiniMonthCalendarProps {
-  selectedDate?: Date;
+  initialDate?: Date;
   onDateChange?: (day: Date) => void;
 }
 
 const logger = Logger("MiniMonthCalendar");
 
-const MiniMonthCalendar: React.FC<MiniMonthCalendarProps> = ({ selectedDate = new Date(), onDateChange }) => {
-  const [viewingDate, setViewingDate] = useState(selectedDate);
+const MiniMonthCalendar: React.FC<MiniMonthCalendarProps> = ({ initialDate = new Date(), onDateChange }) => {
+  const firstRender = useFirstRender();
+  const [selectedDate, setSelectedDate] = useState(initialDate);
+  const [viewingDate, setViewingDate] = useState(initialDate);
   const currentMonth = format(viewingDate, "MMM-yyyy");
   const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const periodStart = startOfWeek(firstDayCurrentMonth, { weekStartsOn: 1 });
   const periodEnd = endOfWeek(endOfMonth(firstDayCurrentMonth), { weekStartsOn: 1 });
   const days = eachDayOfInterval({ start: periodStart, end: periodEnd });
+
   useEffect(() => {
-    setViewingDate(selectedDate);
+    if (!firstRender) {
+      setViewingDate(selectedDate);
+      onDateChange?.(selectedDate);
+    }
   }, [selectedDate]);
-  useEffect(() => {
-    onDateChange?.(viewingDate);
-  }, [viewingDate]);
 
   return (
     <div className={styles.container}>
@@ -35,9 +39,9 @@ const MiniMonthCalendar: React.FC<MiniMonthCalendarProps> = ({ selectedDate = ne
         {days.map((day) => (
           <Button
             key={`mini-calendar-day-${day.getTime()}`}
-            variant={isSameDay(viewingDate, day) ? ButtonVariants.filled : ButtonVariants.default}
+            variant={isSameDay(selectedDate, day) ? ButtonVariants.filled : ButtonVariants.default}
             className={!isSameMonth(viewingDate, day) ? styles.differentMonth : undefined}
-            onClick={() => setViewingDate(day)}
+            onClick={() => setSelectedDate(day)}
           >
             {format(day, "d")}
           </Button>

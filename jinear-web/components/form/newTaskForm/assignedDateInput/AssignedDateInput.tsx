@@ -1,6 +1,8 @@
-import Button, { ButtonHeight } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import TimePicker from "@/components/timePicker/TimePicker";
 import { useToggle } from "@/hooks/useToggle";
+import { closeDatePickerModal, popDatePickerModal } from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
 import {
   addWeeks,
   format,
@@ -28,6 +30,7 @@ interface AssignedDateInputProps {
 
 const AssignedDateInput: React.FC<AssignedDateInputProps> = ({ register, labelClass, watch, setValue }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const { current: hasPreciseDate, toggle: toggleHasPreciseDate } = useToggle(false);
 
   const assignedDate = watch("assignedDate");
@@ -80,21 +83,38 @@ const AssignedDateInput: React.FC<AssignedDateInputProps> = ({ register, labelCl
     setValue("assignedDate", format(startOfNextWeek, "yyyy-MM-dd"));
   };
 
+  const onDateSelect = (day: Date) => {
+    // @ts-ignore
+    setValue("assignedDate", format(day, "yyyy-MM-dd"));
+    dispatch(closeDatePickerModal());
+  };
+
+  const popDatePickerForAssignedDate = () => {
+    dispatch(
+      popDatePickerModal({
+        visible: true,
+        initialDate: assignedDate ? new Date(assignedDate) : new Date(),
+        onDateChange: onDateSelect,
+      })
+    );
+  };
+
   return (
     <label className={styles.container} htmlFor={"new-task-assigned-date"}>
       <div className={styles.labelContainer}>
-        <div className={styles.labelTextContainer}>
-          {t("newTaskModalTaskAssignedDate")}
-          {assignedDateISO && (
-            <Button data-tooltip-right={t("newTaskModalUnsetDate")} onClick={unsetDate} heightVariant={ButtonHeight.short}>
-              <IoClose size={11} />
-            </Button>
-          )}
-        </div>
-
+        <div className={styles.labelTextContainer}>{t("newTaskModalTaskAssignedDate")}</div>
+        <div className="flex-1" />
+        {assignedDateISO && (
+          <Button data-tooltip-right={t("newTaskModalUnsetDate")} onClick={unsetDate} heightVariant={ButtonHeight.short}>
+            <IoClose size={11} />
+          </Button>
+        )}
         <div className={styles.inputContainer}>
-          <input type={"date"} id={"ui_new-task-assigned-date"} {...register("assignedDate")} />
+          <input type={"hidden"} id={"ui_new-task-assigned-date"} {...register("assignedDate")} />
           <input type={"hidden"} id={"new-task-assigned-date"} {...register("assignedDate_ISO")} />
+          <Button variant={ButtonVariants.filled} onClick={popDatePickerForAssignedDate}>
+            {assignedDateISO ? format(new Date(assignedDateISO), t("dateFormat")) : t("datePickerSelectDate")}
+          </Button>
           {assignedDateISO && hasPreciseDate && (
             <TimePicker
               id={"new-task-assigned-date-time"}

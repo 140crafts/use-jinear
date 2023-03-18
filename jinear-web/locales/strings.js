@@ -1230,4 +1230,8 @@ export default {
     en: "Today",
     tr: "Bugün",
   },
+  datePickerSelectDate: {
+    en: "Select Date",
+    tr: "Tarih Seçin",
+  },
 };
