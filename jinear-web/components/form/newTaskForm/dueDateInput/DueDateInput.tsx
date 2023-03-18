@@ -1,6 +1,8 @@
-import Button, { ButtonHeight } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import TimePicker from "@/components/timePicker/TimePicker";
 import { useToggle } from "@/hooks/useToggle";
+import { closeDatePickerModal, popDatePickerModal } from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
 import { addDays, format, getHours, getMinutes, setHours, setMinutes, startOfToday } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
@@ -18,8 +20,8 @@ interface DueDateInputProps {
 
 const DueDateInput: React.FC<DueDateInputProps> = ({ register, labelClass, watch, setValue }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const { current: hasPreciseDate, toggle: toggleHasPreciseDate } = useToggle(false);
-
   const dueDate = watch("dueDate");
   const dueDateISO = watch("dueDate_ISO");
   const assignedDateISO = watch("assignedDate_ISO");
@@ -63,21 +65,34 @@ const DueDateInput: React.FC<DueDateInputProps> = ({ register, labelClass, watch
     setValue("dueDate", format(nextDay, "yyyy-MM-dd"));
   };
 
+  const onDateSelect = (day: Date) => {
+    // @ts-ignore
+    setValue("dueDate", format(day, "yyyy-MM-dd"));
+    dispatch(closeDatePickerModal());
+  };
+
+  const popDatePickerForDueDate = () => {
+    dispatch(
+      popDatePickerModal({ visible: true, initialDate: dueDate ? new Date(dueDate) : new Date(), onDateChange: onDateSelect })
+    );
+  };
+
   return (
     <label className={styles.container} htmlFor={"new-task-due-date"}>
       <div className={styles.labelContainer}>
-        <div className={styles.labelTextContainer}>
-          {t("newTaskModalTaskDueDate")}
-          {dueDateISO && (
-            <Button data-tooltip-right={t("newTaskModalUnsetDate")} onClick={unsetDate}>
-              <IoClose size={11} />
-            </Button>
-          )}
-        </div>
-
+        <div className={styles.labelTextContainer}>{t("newTaskModalTaskDueDate")}</div>
+        <div className="flex-1" />
+        {dueDateISO && (
+          <Button data-tooltip-right={t("newTaskModalUnsetDate")} onClick={unsetDate}>
+            <IoClose size={11} />
+          </Button>
+        )}
         <div className={styles.inputContainer}>
-          <input type={"date"} id={"ui_new-task-due-date"} {...register("dueDate")} />
+          <input type={"hidden"} id={"ui_new-task-due-date"} {...register("dueDate")} />
           <input type={"hidden"} id={"new-task-due-date"} {...register("dueDate_ISO")} />
+          <Button variant={ButtonVariants.filled} onClick={popDatePickerForDueDate}>
+            {dueDateISO ? format(new Date(dueDateISO), t("dateFormat")) : t("datePickerSelectDate")}
+          </Button>
           {dueDateISO && hasPreciseDate && (
             <TimePicker
               id={"new-task-due-date-time"}
@@ -98,13 +113,13 @@ const DueDateInput: React.FC<DueDateInputProps> = ({ register, labelClass, watch
           <input type={"hidden"} value={`${hasPreciseDate}`} {...register("hasPreciseDueDate")} />
         </div>
       </div>
-      {assignedDateISO && (
-        <div className={styles.quickActionsContainer}>
+      <div className={styles.quickActionsContainer}>
+        {assignedDateISO && (
           <Button className={styles.quickDateButton} heightVariant={ButtonHeight.short} onClick={setNextDay}>
             {t("newTaskModalDayAfterAssignedDate")}
           </Button>
-        </div>
-      )}
+        )}
+      </div>
     </label>
   );
 };

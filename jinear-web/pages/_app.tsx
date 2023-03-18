@@ -1,6 +1,7 @@
 import AuthCheck from "@/components/authCheck/AuthCheck";
 import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import MainHeader from "@/components/mainHeader/MainHeader";
+import DatePickerModal from "@/components/modal/datePicker/DatePickerModal";
 import DialogModal from "@/components/modal/dialogModal/DialogModal";
 import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
 import LoginWith2FaMailModal from "@/components/modal/loginWith2FaMailModal/LoginWith2FaMailModal";
@@ -21,6 +22,10 @@ import Transition from "@/components/transition/Transition";
 import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
 import ThemeContext, { getTheme } from "@/store/context/themeContext";
 import { store } from "@/store/store";
+import enUsLocale from "date-fns/locale/en-US";
+import trTrLocale from "date-fns/locale/tr";
+import setDefaultOptions from "date-fns/setDefaultOptions";
+import useTranslation from "locales/useTranslation";
 import { AppProps } from "next/app";
 import { useContext, useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
@@ -51,6 +56,7 @@ const globalModals: any = (
     <TeamOptionsModal />
     <NewTaskModal />
     <LoginWith2FaMailModal />
+    <DatePickerModal />
     <DialogModal />
     <NotFoundModal />
     <LoadingModal />
@@ -58,7 +64,11 @@ const globalModals: any = (
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const { t } = useTranslation();
   const [theme, setTheme] = useState(getTheme());
+
+  const dateFnsLocale = t("localeType") == "TR" ? trTrLocale : enUsLocale;
+  setDefaultOptions({ locale: dateFnsLocale });
 
   const toggleTheme = () => {
     const next = theme == "dark" ? "light" : "dark";

@@ -5,6 +5,7 @@ import ModalState, {
   ChangeTaskDateModalState,
   ChangeTaskTopicModalState,
   ChangeTaskWorkflowStatusModalState,
+  DatePickerModalState,
   DialogModalState,
   LoginWith2FaMailModalState,
   NewReminderModalState,
@@ -70,6 +71,9 @@ const initialState = {
   newReminderModal: {
     visible: false,
   },
+  datePickerModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -87,6 +91,7 @@ const initialState = {
   dialogModal: null | DialogModalState;
   reminderListModal: null | ReminderListModalState;
   newReminderModal: null | NewReminderModalState;
+  datePickerModal: null | DatePickerModalState;
 };
 
 const slice = createSlice({
@@ -201,6 +206,13 @@ const slice = createSlice({
       state.newReminderModal = initialState.newReminderModal;
     },
 
+    popDatePickerModal: (state, action: PayloadAction<DatePickerModalState>) => {
+      state.datePickerModal = { ...action.payload, visible: true };
+    },
+    closeDatePickerModal: (state, action: PayloadAction<void>) => {
+      state.datePickerModal = initialState.datePickerModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -246,6 +258,8 @@ export const {
   closeReminderListModal,
   popNewReminderModal,
   closeNewReminderModal,
+  popDatePickerModal,
+  closeDatePickerModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -318,3 +332,7 @@ export const selectReminderListModalTask = (state: RootState) => state.modal.rem
 
 export const selectNewReminderModalVisible = (state: RootState) => state.modal.newReminderModal?.visible;
 export const selectNewReminderModalTask = (state: RootState) => state.modal.newReminderModal?.task;
+
+export const selectDatePickerModalVisible = (state: RootState) => state.modal.datePickerModal?.visible;
+export const selectDatePickerModalInitialDate = (state: RootState) => state.modal.datePickerModal?.initialDate;
+export const selectDatePickerModalOnDateChange = (state: RootState) => state.modal.datePickerModal?.onDateChange;

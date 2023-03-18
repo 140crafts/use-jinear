@@ -50,3 +50,8 @@ export interface ReminderListModalState extends ModalState {
 export interface NewReminderModalState extends ModalState {
   task?: TaskDto;
 }
+
+export interface DatePickerModalState extends ModalState {
+  initialDate?: Date;
+  onDateChange?: (date: Date) => void;
+}

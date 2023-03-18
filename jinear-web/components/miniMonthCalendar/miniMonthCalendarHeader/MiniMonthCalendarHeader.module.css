@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.dateLabel {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.calendarNavigation {
+  display: flex;
+  flex-direction: row;
+}

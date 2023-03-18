@@ -1226,4 +1226,12 @@ export default {
     en: "All Tasks",
     tr: "Tüm Görevler",
   },
+  datePickerModalQuickActionToday: {
+    en: "Today",
+    tr: "Bugün",
+  },
+  datePickerSelectDate: {
+    en: "Select Date",
+    tr: "Tarih Seçin",
+  },
 };
