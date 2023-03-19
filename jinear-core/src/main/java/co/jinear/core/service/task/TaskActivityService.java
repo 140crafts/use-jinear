@@ -80,11 +80,11 @@ public class TaskActivityService {
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before)
                 .map(TaskDto::getAssignedDate)
-                .map(assignedDate -> Boolean.TRUE.equals(before.getHasPreciseAssignedDate()) ? ZonedDateHelper.formatWithDateTimeFormat3(assignedDate) : ZonedDateHelper.formatWithDateTimeFormat2(assignedDate))
+                .map(assignedDate -> Boolean.TRUE.equals(before.getHasPreciseAssignedDate()) ? ZonedDateHelper.formatWithDateTimeFormat5(assignedDate) : ZonedDateHelper.formatWithDateTimeFormat4(assignedDate))
                 .ifPresent(vo::setOldState);
         Optional.of(after)
                 .map(TaskDto::getAssignedDate)
-                .map(assignedDate -> Boolean.TRUE.equals(after.getHasPreciseAssignedDate()) ? ZonedDateHelper.formatWithDateTimeFormat3(assignedDate) : ZonedDateHelper.formatWithDateTimeFormat2(assignedDate))
+                .map(assignedDate -> Boolean.TRUE.equals(after.getHasPreciseAssignedDate()) ? ZonedDateHelper.formatWithDateTimeFormat5(assignedDate) : ZonedDateHelper.formatWithDateTimeFormat4(assignedDate))
                 .ifPresent(vo::setNewState);
         vo.setType(WorkspaceActivityType.TASK_CHANGE_ASSIGNED_DATE);
         if (!Objects.equals(vo.getOldState(), vo.getNewState())) {
@@ -96,11 +96,11 @@ public class TaskActivityService {
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before)
                 .map(TaskDto::getDueDate)
-                .map(dueDate -> Boolean.TRUE.equals(before.getHasPreciseDueDate()) ? ZonedDateHelper.formatWithDateTimeFormat3(dueDate) : ZonedDateHelper.formatWithDateTimeFormat2(dueDate))
+                .map(dueDate -> Boolean.TRUE.equals(before.getHasPreciseDueDate()) ? ZonedDateHelper.formatWithDateTimeFormat5(dueDate) : ZonedDateHelper.formatWithDateTimeFormat4(dueDate))
                 .ifPresent(vo::setOldState);
         Optional.of(after)
                 .map(TaskDto::getDueDate)
-                .map(dueDate -> Boolean.TRUE.equals(after.getHasPreciseDueDate()) ? ZonedDateHelper.formatWithDateTimeFormat3(dueDate) : ZonedDateHelper.formatWithDateTimeFormat2(dueDate))
+                .map(dueDate -> Boolean.TRUE.equals(after.getHasPreciseDueDate()) ? ZonedDateHelper.formatWithDateTimeFormat5(dueDate) : ZonedDateHelper.formatWithDateTimeFormat4(dueDate))
                 .ifPresent(vo::setNewState);
         vo.setType(WorkspaceActivityType.TASK_CHANGE_DUE_DATE);
         if (!Objects.equals(vo.getOldState(), vo.getNewState())) {

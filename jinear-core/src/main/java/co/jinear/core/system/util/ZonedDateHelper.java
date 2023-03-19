@@ -16,11 +16,13 @@ public class ZonedDateHelper {
     public static final String DATE_TIME_FORMAT_1 = "(HH:mm dd.MM.yyyy)";
     public static final String DATE_TIME_FORMAT_2 = "dd.MM.yyyy";
     public static final String DATE_TIME_FORMAT_3 = "dd.MM.yyyy HH:mm";
+    public static final String DATE_TIME_FORMAT_4 = "yyyy-MM-dd";
+    public static final String DATE_TIME_FORMAT_5 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     public static ZonedDateTime atTimeZone(ZonedDateTime zonedDateTime, String timeZone) {
         return Optional.ofNullable(timeZone)
                 .map(ZoneId::of)
-                .map(tz -> zonedDateTime.withZoneSameInstant(tz))
+                .map(zonedDateTime::withZoneSameInstant)
                 .orElseThrow(BusinessException::new);
     }
 
@@ -30,6 +32,7 @@ public class ZonedDateHelper {
     }
 
     public static String formatWithDateTimeFormat1(ZonedDateTime zonedDateTime) {
+
         return format(zonedDateTime, DATE_TIME_FORMAT_1);
     }
 
@@ -39,5 +42,13 @@ public class ZonedDateHelper {
 
     public static String formatWithDateTimeFormat3(ZonedDateTime zonedDateTime) {
         return format(zonedDateTime, DATE_TIME_FORMAT_3);
+    }
+
+    public static String formatWithDateTimeFormat4(ZonedDateTime zonedDateTime) {
+        return format(zonedDateTime, DATE_TIME_FORMAT_4);
+    }
+
+    public static String formatWithDateTimeFormat5(ZonedDateTime zonedDateTime) {
+        return format(zonedDateTime, DATE_TIME_FORMAT_5);
     }
 }
