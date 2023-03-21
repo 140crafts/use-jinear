@@ -4,6 +4,7 @@ import co.jinear.core.converter.task.SearchIntersectingTasksVoConverter;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
+import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromTeamRequest;
 import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromWorkspaceRequest;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
@@ -13,6 +14,7 @@ import co.jinear.core.model.vo.task.SearchIntersectingTasksFromWorkspaceVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskListingService;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
+import co.jinear.core.service.topic.TopicRetrieveService;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,7 @@ public class TaskListingManager {
     private final TaskListingService taskListingService;
     private final SearchIntersectingTasksVoConverter searchIntersectingTasksVoConverter;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
+    private final TopicRetrieveService topicRetrieveService;
 
     public TaskListingPaginatedResponse retrieveAllTasks(String workspaceId, String teamId, int page) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -72,6 +75,16 @@ public class TaskListingManager {
         validateTeamAccess(currentAccount, workspaceId, teamId);
         log.info("Retrieve tasks from workflow status has started. currentAccount: {}", currentAccount);
         Page<TaskDto> taskDtoPage = taskListingService.retrieveAllTasksFromWorkspaceAndTeamWithWorkflowStatus(workspaceId, teamId, workflowStatusId, page);
+        return mapResponse(taskDtoPage);
+    }
+
+    public TaskListingPaginatedResponse retrieveFromTopic(String workspaceId, String teamId, String topicTag, Integer page) {
+        String currentAccount = sessionInfoService.currentAccountId();
+        validateWorkspaceAccess(currentAccount, workspaceId);
+        validateTeamAccess(currentAccount, workspaceId, teamId);
+        log.info("Retrieve tasks from topic has started. currentAccount: {}", currentAccount);
+        TopicDto topicDto = topicRetrieveService.retrieveByTag(teamId, workspaceId, topicTag);
+        Page<TaskDto> taskDtoPage = taskListingService.retrieveAllTasksFromWorkspaceAndTeamWithTopic(workspaceId, teamId, topicDto.getTopicId(), page);
         return mapResponse(taskDtoPage);
     }
 

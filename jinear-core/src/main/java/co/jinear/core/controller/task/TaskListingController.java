@@ -52,4 +52,13 @@ public class TaskListingController {
                                                                    @RequestParam(required = false, defaultValue = "0") Integer page) {
         return taskListingManager.retrieveFromWorkflowStatus(workspaceId, teamId, workflowStatusId, page);
     }
+
+    @GetMapping("/{workspaceId}/team/{teamId}/with-topic/{topicTag}")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskListingPaginatedResponse retrieveFromTopic(@PathVariable String workspaceId,
+                                                          @PathVariable String teamId,
+                                                          @PathVariable String topicTag,
+                                                          @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return taskListingManager.retrieveFromTopic(workspaceId, teamId, topicTag, page);
+    }
 }
