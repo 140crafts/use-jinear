@@ -28,7 +28,7 @@ const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      <TopicListScreenBreadcrumb />
+      {!preferredWorkspace?.isPersonal && <TopicListScreenBreadcrumb />}
       <div className="spacer-h-4" />
       <h1>{t("topicListScreenTitle")}</h1>
       <div className="spacer-h-4" />

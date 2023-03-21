@@ -8,7 +8,9 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-self: center;
   gap: 1rem;
+  width: var(--content);
 }
 
 .loadingContainer {

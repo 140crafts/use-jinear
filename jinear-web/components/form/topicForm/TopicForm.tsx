@@ -4,6 +4,7 @@ import { useDeleteTopicMutation, useInitializeTopicMutation, useUpdateTopicMutat
 import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
+import { normalizeStrictly } from "@/utils/normalizeHelper";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -54,14 +55,14 @@ const TopicForm: React.FC<TopicFormProps> = ({ workspaceId, teamId, topicId, col
 
   useEffect(() => {
     if (name) {
-      const tag = name?.toUpperCase?.()?.split(" ")?.join("-")?.substring(0, 3);
+      const tag = normalizeStrictly(name)?.substring(0, 3);
       setValue("tag", tag);
     }
   }, [name]);
 
   useEffect(() => {
     if (tag) {
-      setValue("tag", tag?.toUpperCase?.()?.split(" ")?.join("-"));
+      setValue("tag", normalizeStrictly(tag));
     }
   }, [tag]);
 

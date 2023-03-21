@@ -15,7 +15,9 @@ const TopicCard: React.FC<TopicCardProps> = ({ topic, workspaceName, teamName })
   const { t } = useTranslation();
   return (
     <div className={styles.container}>
-      <div className={styles.nameContainer}>{topic.name}</div>
+      <Button className={styles.nameContainer} href={`/${workspaceName}/${teamName}/topic/related-tasks/${topic.tag}`}>
+        <div className={styles.nameText}>{topic.name}</div>
+      </Button>
       <div className={styles.actionContainer}>
         <Button
           href={`/${workspaceName}/${teamName}/topic/edit/${topic.topicId}`}
@@ -26,8 +28,10 @@ const TopicCard: React.FC<TopicCardProps> = ({ topic, workspaceName, teamName })
           <IoPencil />
         </Button>
       </div>
-      <div className={styles.topicTag}>{topic.tag}</div>
-      <input disabled type={"color"} value={`#${topic.color}`} />
+      <div className={styles.infoContainer}>
+        <div className={styles.topicTag}>{topic.tag}</div>
+        <input disabled type={"color"} value={`#${topic.color}`} />
+      </div>
     </div>
   );
 };

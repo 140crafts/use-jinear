@@ -1,10 +1,10 @@
 .container {
   display: flex;
   flex-direction: row;
-  align-items: center;
+  // align-items: center;
   gap: 1ch;
   border-radius: var(--border-radius);
-  padding: 0.55rem 0.75rem;
+  padding: 0.15rem 0.75rem;
   min-height: 2.25rem;
 }
 
@@ -15,12 +15,19 @@
 
 .container:hover .actionContainer {
   display: flex;
+  align-items: center;
 }
 
 .nameContainer {
   flex: 1;
-  text-align: justify;
+  display: flex;
+  align-items: center;
   padding-right: 2rem;
+  justify-content: flex-start;
+}
+
+.nameText {
+  text-align: justify;
 }
 
 .colorBox {
@@ -47,7 +54,13 @@
 
 .actionContainer {
   display: none;
+  align-items: center;
   flex-direction: row;
   gap: 0.5ch;
-  height: 3ch;
+  // height: 3ch;
+}
+
+.infoContainer {
+  display: flex;
+  align-items: center;
 }

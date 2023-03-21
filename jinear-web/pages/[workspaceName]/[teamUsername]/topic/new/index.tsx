@@ -16,7 +16,7 @@ const NewTopicPage: React.FC<NewTopicPageProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      <NewTopicScreenBreadcrumb />
+      {!workspace?.isPersonal && <NewTopicScreenBreadcrumb />}
       <div className="spacer-h-4" />
       <h1>{t("newTopicScreenTitle")}</h1>
       <div className={styles.formContainer}>

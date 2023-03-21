@@ -13,6 +13,7 @@ export const taskReminderApi = api.injectEndpoints({
         "team-task-list",
         "workplace-task-with-name-and-tag",
         "team-workflow-task-list",
+        "team-topic-task-list",
         "team-all-task-list",
       ],
     }),
