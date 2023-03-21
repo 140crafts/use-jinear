@@ -1234,4 +1234,8 @@ export default {
     en: "Select Date",
     tr: "Tarih Seçin",
   },
+  topicTaskListName: {
+    en: "Listing tasks '${topicTag}'",
+    tr: "Görevler listeleniyor '${topicTag}'",
+  },
 };

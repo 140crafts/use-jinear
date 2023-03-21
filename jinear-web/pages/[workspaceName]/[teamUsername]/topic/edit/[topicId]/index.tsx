@@ -28,7 +28,7 @@ const EditTopicScreen: React.FC<EditTopicScreenProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {topicResponse && <EditTopicBreadCrumb topicName={topicResponse.data.name} topicId={topicId} />}
+      {!workspace?.isPersonal && topicResponse && <EditTopicBreadCrumb topicName={topicResponse.data.name} topicId={topicId} />}
       <div className="spacer-h-4" />
       <h1>{t("topicEditScreenTitle")}</h1>
       {isTopicResponseLoading && (

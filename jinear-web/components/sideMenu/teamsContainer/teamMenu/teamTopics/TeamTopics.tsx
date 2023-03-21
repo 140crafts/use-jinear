@@ -54,6 +54,7 @@ const TeamTopics: React.FC<TeamTopicsProps> = ({ teamId }) => {
         {teamTopicListingResponse?.data?.content?.slice(0, SLICE_SIZE).map((topic) => (
           <Button
             key={topic.topicId}
+            href={`/${preferredWorkspace?.username}/${preferredTeam?.name}/topic/related-tasks/${topic.tag}`}
             variant={ButtonVariants.outline}
             heightVariant={ButtonHeight.short}
             className={cn(styles.button)}
