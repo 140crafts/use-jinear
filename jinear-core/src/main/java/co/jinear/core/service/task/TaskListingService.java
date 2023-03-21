@@ -54,4 +54,11 @@ public class TaskListingService {
                         workspaceId, teamId, workflowStatusId, PageRequest.of(page, PAGE_SIZE))
                 .map(taskDtoConverter::map);
     }
+
+    public Page<TaskDto> retrieveAllTasksFromWorkspaceAndTeamWithTopic(String workspaceId, String teamId, String topicId, int page) {
+        log.info("Retrieve all tasks from workspace and team with workflow status id has started. workspaceId: {}, teamId: {}, topicId: {}, page: {}", workspaceId, teamId, topicId, page);
+        return taskRepository.findAllByWorkspaceIdAndTeamIdAndTopicIdAndPassiveIdIsNullOrderByCreatedDateDesc(
+                        workspaceId, teamId, topicId, PageRequest.of(page, PAGE_SIZE))
+                .map(taskDtoConverter::map);
+    }
 }

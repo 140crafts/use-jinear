@@ -38,6 +38,12 @@ public class TopicRetrieveService {
         return retrieveOptional(topicId).orElseThrow(NotFoundException::new);
     }
 
+    public TopicDto retrieveByTag(String teamId, String workspaceId, String tag) {
+        return topicRepository.findByTeamIdAndWorkspaceIdAndTagAndPassiveIdIsNull(teamId,workspaceId,tag)
+                .map(topicDtoConverter::map)
+                .orElseThrow(NotFoundException::new);
+    }
+
     public Page<TopicDto> retrieveTeamTopics(String teamId, int page) {
         log.info("Retrieve team topic page has started. teamId: {}, page: {}", teamId, page);
         return topicRepository.findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateDesc(teamId, PageRequest.of(page, PAGE_SIZE))
