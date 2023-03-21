@@ -5,6 +5,7 @@ import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.entity.topic.Topic;
 import co.jinear.core.model.vo.topic.TopicInitializeVo;
 import co.jinear.core.repository.TopicRepository;
+import co.jinear.core.system.NormalizeHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,7 @@ public class TopicInitializeService {
         topic.setTeamId(topicInitializeVo.getTeamId());
         topic.setColor(topicInitializeVo.getColor());
         topic.setName(topicInitializeVo.getName());
-        topic.setTag(topicInitializeVo.getTag());
+        topic.setTag(NormalizeHelper.normalizeStrictly(topicInitializeVo.getTag()));
         return topic;
     }
 }
