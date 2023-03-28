@@ -29,7 +29,7 @@ public class TeamMemberService {
         log.info("Add team member has started. teamMemberAddVo: {}", teamMemberAddVo);
         TeamMember teamMember = teamMemberConverter.map(teamMemberAddVo);
         assignWorkspaceId(teamMemberAddVo, teamMember);
-        TeamMember saved = teamMemberRepository.save(teamMember);
+        TeamMember saved = teamMemberRepository.saveAndFlush(teamMember);
         return teamMemberConverter.map(saved);
     }
 

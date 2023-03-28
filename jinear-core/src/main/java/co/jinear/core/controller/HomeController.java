@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @Slf4j
 @RestController
 @RequestMapping(value = "/")
@@ -16,7 +18,7 @@ public class HomeController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public String root() {
-        return greetings;
+    public Map root() {
+        return Map.of("message", greetings);
     }
 }

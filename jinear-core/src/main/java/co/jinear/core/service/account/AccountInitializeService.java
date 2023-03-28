@@ -49,7 +49,7 @@ public class AccountInitializeService {
         assignUserRole(account);
         initializeUsername(account);
         initializeAccountPassword(account, accountInitializeVo);
-        initializePersonalWorkspace(account, accountInitializeVo.getLocale());
+//        initializePersonalWorkspace(account, accountInitializeVo.getLocale());
         sendMailConfirmationMail(account, accountInitializeVo);
         log.info("Account initialize has ended.");
         return accountDtoConverter.map(account);

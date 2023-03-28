@@ -478,4 +478,44 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace_invitation">
+        <createTable tableName="workspace_invitation">
+            <column name="workspace_invitation_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invited_by" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="for_role" type="int"/>
+            <column name="status" type="int"/>
+        </createTable>
+
+        <createIndex indexName="ix_workspace_id" tableName="workspace_invitation">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="ix_invited_by" tableName="workspace_invitation">
+            <column name="invited_by"/>
+        </createIndex>
+        <createIndex indexName="ix_account_id" tableName="workspace_invitation">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-initial_team_id-column-to-workspace_invitation">
+        <addColumn tableName="workspace_invitation">
+            <column name="initial_team_id" type="char(26)" afterColumn="workspace_id">
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

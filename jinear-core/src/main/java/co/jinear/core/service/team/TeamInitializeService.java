@@ -18,11 +18,11 @@ import co.jinear.core.service.team.workflow.TeamWorkflowStatusService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.validator.team.TeamValidator;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,7 +66,7 @@ public class TeamInitializeService {
     private void validatePersonalWorkspaceTeamLimit(String workspaceId) {
         log.info("Validate personal workspace limit has started.");
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
-        if (workspaceDto.getIsPersonal()) {
+        if (Boolean.TRUE.equals(workspaceDto.getIsPersonal())) {
             List<TeamDto> teamDtoList = teamRetrieveService.retrieveWorkspaceTeams(workspaceId);
             if (!teamDtoList.isEmpty()) {
                 throw new BusinessException();

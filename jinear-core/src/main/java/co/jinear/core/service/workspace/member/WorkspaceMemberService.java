@@ -7,10 +7,12 @@ import co.jinear.core.model.vo.workspace.DeleteWorkspaceMemberVo;
 import co.jinear.core.model.vo.workspace.InitializeWorkspaceMemberVo;
 import co.jinear.core.repository.WorkspaceMemberRepository;
 import co.jinear.core.service.passive.PassiveService;
+import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.system.NumberCompareHelper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -61,6 +63,7 @@ public class WorkspaceMemberService {
     }
 
     public void validateAccountHasRoleInWorkspace(String accountId, String workspaceId, List<WorkspaceAccountRoleType> roleTypes) {
+        log.info("Has any role for workspace started. workspaceId: {}, accountId: {}, roleTypes: {}", workspaceId, accountId, StringUtils.join(roleTypes, NormalizeHelper.COMMA_SEPARATOR));
         Long count = workspaceMemberRepository.countAllByAccountIdAndWorkspaceIdAndRoleIsInAndPassiveIdIsNull(accountId, workspaceId, roleTypes);
         if (NumberCompareHelper.isEquals(count, 0)) {
             throw new BusinessException();

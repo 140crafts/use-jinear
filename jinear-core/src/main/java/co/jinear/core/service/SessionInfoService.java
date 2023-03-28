@@ -44,6 +44,15 @@ public class SessionInfoService {
                 .orElseThrow(BusinessException::new);
     }
 
+    public Optional<String> currentAccountIdOptional() {
+        AbstractAuthenticationToken auth = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        return Optional.ofNullable(auth)
+                .map(AbstractAuthenticationToken::getPrincipal)
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .filter(accountId -> !ANONYMOUS_USER.equalsIgnoreCase(accountId));
+    }
+
     public String currentAccountIdInclAnonymous() {
         AbstractAuthenticationToken auth = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         return Optional.ofNullable(auth)

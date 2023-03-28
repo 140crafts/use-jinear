@@ -19,7 +19,7 @@ public class TeamMemberRetrieveService {
 
     public List<TeamMemberDto> retrieveAllTeamMembershipsOfAnAccount(String accountId, String workspaceId) {
         log.info("Retrieve all team memberships of an account has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
-        return teamMemberRepository.findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNull(accountId, workspaceId).stream()
+        return teamMemberRepository.findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNullAndTeam_PassiveIdIsNull(accountId, workspaceId).stream()
                 .map(teamMemberConverter::map)
                 .toList();
     }

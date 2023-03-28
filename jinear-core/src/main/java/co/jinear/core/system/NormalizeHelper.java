@@ -11,6 +11,7 @@ public class NormalizeHelper {
     private static final String LOCALE_EN = "en-EN";
     public static final String EMPTY_STRING = "";
     public static final String SPACE_STRING = " ";
+    public static final String COMMA_SEPARATOR = ", ";
     public static final String HYPHEN = "-";
     public static final String MASK_CHAR = "*";
     private static final String ACCENT_REGEX = "\\p{M}";

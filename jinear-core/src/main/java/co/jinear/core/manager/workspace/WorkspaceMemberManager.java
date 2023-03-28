@@ -1,50 +1,91 @@
 package co.jinear.core.manager.workspace;
 
-import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.converter.workspace.WorkspaceInvitationInfoResponseConverter;
+import co.jinear.core.converter.workspace.WorkspaceInvitationInitializeVoConverter;
+import co.jinear.core.converter.workspace.WorkspaceInvitationRespondVoConverter;
+import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.NoAccessException;
+import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
-import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
+import co.jinear.core.model.dto.workspace.WorkspaceInvitationInfoDto;
+import co.jinear.core.model.dto.workspace.WorkspaceSettingDto;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
+import co.jinear.core.model.enumtype.workspace.WorkspaceJoinType;
+import co.jinear.core.model.request.workspace.WorkspaceMemberInvitationRespondRequest;
+import co.jinear.core.model.request.workspace.WorkspaceMemberInviteRequest;
 import co.jinear.core.model.response.BaseResponse;
-import co.jinear.core.model.response.workspace.WorkspaceMemberListingBaseResponse;
+import co.jinear.core.model.response.workspace.WorkspaceInvitationInfoResponse;
 import co.jinear.core.model.vo.workspace.DeleteWorkspaceMemberVo;
 import co.jinear.core.model.vo.workspace.InitializeWorkspaceMemberVo;
+import co.jinear.core.model.vo.workspace.WorkspaceInvitationInitializeVo;
+import co.jinear.core.model.vo.workspace.WorkspaceInvitationRespondVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
-import co.jinear.core.service.workspace.member.WorkspaceMemberListingService;
+import co.jinear.core.service.workspace.member.WorkspaceInvitationOperationService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
+import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.ADMIN;
+import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.OWNER;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class WorkspaceMemberManager {
 
-    private final int WORKSPACE_MEMBER_PAGE_SIZE = 50;
-
     private final WorkspaceRetrieveService workspaceRetrieveService;
     private final WorkspaceMemberService workspaceMemberService;
     private final SessionInfoService sessionInfoService;
-    private final WorkspaceMemberListingService workspaceMemberListingService;
+    private final WorkspaceInvitationOperationService workspaceInvitationOperationService;
+    private final WorkspaceInvitationInitializeVoConverter workspaceInvitationInitializeVoConverter;
     private final WorkspaceValidator workspaceValidator;
+    private final WorkspaceInvitationRespondVoConverter workspaceInvitationRespondVoConverter;
+    private final AccountRetrieveService accountRetrieveService;
+    private final WorkspaceInvitationInfoResponseConverter workspaceInvitationInfoResponseConverter;
 
-    public WorkspaceMemberListingBaseResponse retrieveWorkspaceMembers(String workspaceId, Integer page) {
-        String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
-        log.info("Retrieve workspace members has started. workspaceId: {}, page: {}, currentAccountId: {}", workspaceId, page, currentAccountId);
-        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
-        workspaceValidator.validateHasAccess(currentAccountId, workspaceDto);
-        Page<WorkspaceMemberDto> workspaceMemberDtoPage = decideAndRetrievePage(page, currentAccountId, workspaceDto);
-        return mapValues(workspaceMemberDtoPage);
+    @Transactional
+    public BaseResponse invite(WorkspaceMemberInviteRequest workspaceMemberInviteRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        String workspaceId = workspaceMemberInviteRequest.getWorkspaceId();
+        workspaceMemberService.validateAccountHasRoleInWorkspace(currentAccountId, workspaceId, List.of(OWNER, ADMIN));
+        workspaceValidator.validateWorkspaceIsNotPersonal(workspaceId);
+        validateInviteNotForOwnerRole(workspaceMemberInviteRequest);
+        validateAccountIsExistingMemberIfAccountPresent(workspaceMemberInviteRequest, workspaceId);
+        log.info("Invite workspace member has started. currentAccountId: {}", currentAccountId);
+        WorkspaceInvitationInitializeVo vo = workspaceInvitationInitializeVoConverter.convert(workspaceMemberInviteRequest, currentAccountId);
+        workspaceInvitationOperationService.initializeInvitation(vo);
+        return new BaseResponse();
     }
 
-    public BaseResponse joinWorkspace(String workspaceUsername) {
+    public WorkspaceInvitationInfoResponse retrieveInvitationInfo(String token) {
+        String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
+        log.info("Retrieve invitation info has started. currentAccountId: {}", currentAccountId);
+        WorkspaceInvitationInfoDto workspaceInvitationInfoDto = workspaceInvitationOperationService.retrieveInvitationInfo(token);
+        return workspaceInvitationInfoResponseConverter.convert(workspaceInvitationInfoDto);
+    }
+
+    public BaseResponse respondInvitation(WorkspaceMemberInvitationRespondRequest workspaceMemberInvitationRespondRequest) {
+        log.info("Respond workspace invitation has started");
+        Optional<String> optionalCurrentAccountId = sessionInfoService.currentAccountIdOptional();
+        WorkspaceInvitationRespondVo workspaceInvitationRespondVo = workspaceInvitationRespondVoConverter.convert(workspaceMemberInvitationRespondRequest, optionalCurrentAccountId, accountRetrieveService);
+        workspaceInvitationOperationService.decideAndFinalizeInvitation(workspaceInvitationRespondVo);
+        return new BaseResponse();
+    }
+
+    public BaseResponse joinWorkspace(String workspaceId) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        log.info("Join workspace has started. workspaceUsername: {}, currentAccountId: {}", workspaceUsername, currentAccountId);
-        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithUsername(workspaceUsername);
+        log.info("Join workspace has started. workspaceId: {}, currentAccountId: {}", workspaceId, currentAccountId);
+        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
+        validateWorkspaceJoinTypeIsPublic(workspaceDto);
         InitializeWorkspaceMemberVo initializeWorkspaceMemberVo = mapValues(currentAccountId, workspaceDto);
         workspaceMemberService.initializeWorkspaceMember(initializeWorkspaceMemberVo);
         return new BaseResponse();
@@ -60,19 +101,6 @@ public class WorkspaceMemberManager {
         return new BaseResponse();
     }
 
-    private Page<WorkspaceMemberDto> decideAndRetrievePage(Integer page, String currentAccountId, WorkspaceDto workspaceDto) {
-        boolean isMember = workspaceMemberService.isAccountWorkspaceMember(currentAccountId, workspaceDto.getWorkspaceId());
-        return isMember ? workspaceMemberListingService.retrieveWorkspaceMembersDetailed(workspaceDto.getWorkspaceId(), PageRequest.of(page, WORKSPACE_MEMBER_PAGE_SIZE)) :
-                workspaceMemberListingService.retrieveWorkspaceMembers(workspaceDto.getWorkspaceId(), PageRequest.of(page, WORKSPACE_MEMBER_PAGE_SIZE));
-    }
-
-    private WorkspaceMemberListingBaseResponse mapValues(Page<WorkspaceMemberDto> workspaceMemberDtoPage) {
-        PageDto pageDto = new PageDto<>(workspaceMemberDtoPage);
-        WorkspaceMemberListingBaseResponse workspaceMemberListingResponse = new WorkspaceMemberListingBaseResponse();
-        workspaceMemberListingResponse.setWorkspaceMemberDtoPage(pageDto);
-        return workspaceMemberListingResponse;
-    }
-
     private InitializeWorkspaceMemberVo mapValues(String currentAccountId, WorkspaceDto workspaceDto) {
         InitializeWorkspaceMemberVo initializeWorkspaceMemberVo = new InitializeWorkspaceMemberVo();
         initializeWorkspaceMemberVo.setWorkspaceId(workspaceDto.getWorkspaceId());
@@ -86,5 +114,22 @@ public class WorkspaceMemberManager {
         deleteWorkspaceMemberVo.setWorkspaceId(workspaceDto.getWorkspaceId());
         deleteWorkspaceMemberVo.setAccountId(currentAccountId);
         return deleteWorkspaceMemberVo;
+    }
+
+    private void validateWorkspaceJoinTypeIsPublic(WorkspaceDto workspaceDto) {
+        Optional.of(workspaceDto).map(WorkspaceDto::getSettings).map(WorkspaceSettingDto::getJoinType).filter(WorkspaceJoinType.PUBLIC::equals).orElseThrow(NoAccessException::new);
+    }
+
+    private void validateInviteNotForOwnerRole(WorkspaceMemberInviteRequest workspaceMemberInviteRequest) {
+        if (OWNER.equals(workspaceMemberInviteRequest.getForRole())) {
+            throw new BusinessException();
+        }
+    }
+
+    private void validateAccountIsExistingMemberIfAccountPresent(WorkspaceMemberInviteRequest workspaceMemberInviteRequest, String workspaceId) {
+        String accountId = accountRetrieveService.retrieveByEmail(workspaceMemberInviteRequest.getEmail()).map(AccountDto::getAccountId).orElse(null);
+        if (Objects.nonNull(accountId) && workspaceMemberService.isAccountWorkspaceMember(accountId, workspaceId)) {
+            throw new BusinessException();
+        }
     }
 }
