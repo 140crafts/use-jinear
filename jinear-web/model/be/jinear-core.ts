@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-03-05 15:04:19.
+// Generated using typescript-generator version 3.0.1157 on 2023-03-28 20:41:28.
 
 export interface BaseDto {
   createdDate: Date;
@@ -278,6 +278,7 @@ export interface WorkspaceDisplayPreferenceDto {
   preferredTeamId?: string | null;
   workspace?: WorkspaceDto | null;
   team?: TeamDto | null;
+  workspaceRole?: WorkspaceAccountRoleType | null;
 }
 
 export interface WorkspaceDto extends BaseDto {
@@ -288,6 +289,21 @@ export interface WorkspaceDto extends BaseDto {
   username: string;
   settings: WorkspaceSettingDto;
   profilePicture: MediaDto;
+}
+
+export interface WorkspaceInvitationDto extends BaseDto {
+  workspaceInvitationId: string;
+  workspaceId: string;
+  invitedBy: string;
+  accountId: string;
+  email: string;
+  status: WorkspaceInvitationStatusType;
+}
+
+export interface WorkspaceInvitationInfoDto extends BaseDto {
+  accountDto: PlainAccountProfileDto;
+  workspaceDto: WorkspaceDto;
+  invitationDto: WorkspaceInvitationDto;
 }
 
 export interface WorkspaceMemberDto extends BaseDto {
@@ -475,6 +491,18 @@ export interface WorkspaceInitializeRequest extends BaseRequest {
   joinType: WorkspaceJoinType;
 }
 
+export interface WorkspaceMemberInvitationRespondRequest extends BaseRequest {
+  token: string;
+  accepted: boolean;
+}
+
+export interface WorkspaceMemberInviteRequest extends BaseRequest {
+  email: string;
+  workspaceId: string;
+  initialTeamId: string;
+  forRole: WorkspaceAccountRoleType;
+}
+
 export interface BaseResponse {
   responseStatusType: ResponseStatusType;
   errorCode: string;
@@ -561,6 +589,10 @@ export interface WorkspaceBaseResponse extends BaseResponse {
   data: WorkspaceDto;
 }
 
+export interface WorkspaceInvitationInfoResponse extends BaseResponse {
+  data: WorkspaceInvitationInfoDto;
+}
+
 export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
   data: PageDto<WorkspaceMemberDto>;
 }
@@ -597,11 +629,15 @@ export type LocaleStringType =
   | "TASK_REMINDER_TYPE_ASSIGNED_DATE"
   | "TASK_REMINDER_TYPE_DUE_DATE"
   | "TASK_REMINDER_TYPE_SPECIFIC_DATE"
-  | "TASK_REMINDER_GO_TO_TASK";
+  | "TASK_REMINDER_GO_TO_TASK"
+  | "WORKSPACE_INVITATION_TITLE_MAIL"
+  | "WORKSPACE_INVITATION_TITLE_BODY"
+  | "WORKSPACE_INVITATION_TEXT"
+  | "WORKSPACE_INVITATION_CTA_LABEL";
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET";
 
 export type FileType = "PROFILE_PIC";
 
@@ -667,7 +703,8 @@ export type TokenType =
   | "BOOKING_EMAIL_VALIDATION"
   | "CONTINUE_AS_LOGIN_TOKEN"
   | "CONFIRM_EMAIL"
-  | "RESET_PASSWORD";
+  | "RESET_PASSWORD"
+  | "WORKSPACE_INVITATION";
 
 export type TopicVisibility = "SHARED" | "PRIVATE";
 
@@ -693,6 +730,8 @@ export type WorkspaceActivityType =
   | "RELATION_REMOVED";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
+
+export type WorkspaceInvitationStatusType = "WAITING_FOR_ANSWER" | "ACCEPTED" | "DECLINED" | "TIMED_OUT";
 
 export type WorkspaceJoinType = "NEVER" | "PUBLIC" | "WITH_REQUEST" | "WITH_PASSWORD";
 

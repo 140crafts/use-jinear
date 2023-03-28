@@ -335,8 +335,12 @@ export default {
     tr: "Ekip",
   },
   sideMenuWorkspaceMembersMore: {
-    en: "${number} more",
-    tr: "${number} daha",
+    en: "...${number} more",
+    tr: "...${number} daha",
+  },
+  sideMenuWorkspaceInviteMember: {
+    en: "Add People",
+    tr: "Kişi Ekle",
   },
   sideMenuTeamTopicsMore: {
     en: "${number} more",
@@ -1237,5 +1241,113 @@ export default {
   topicTaskListName: {
     en: "Listing tasks '${topicTag}'",
     tr: "Görevler listeleniyor '${topicTag}'",
+  },
+  engageWorkspaceInvitationTitle: {
+    en: "${fromName} invited you to join ${workspaceName}",
+    tr: "${fromName} seni ${workspaceName} çalışma alanına davet etti",
+  },
+  engageWorkspaceInvitationAcceptButton: {
+    en: "Join",
+    tr: "Katıl",
+  },
+  engageWorkspaceInvitationDeclineButton: {
+    en: "Decline",
+    tr: "Reddet",
+  },
+  engageWorkspaceInvitationGoBackButton: {
+    en: "Home",
+    tr: "Anasayfa",
+  },
+  engageWorkspaceInvitationYoureLoggedInAs: {
+    en: "You're logged in as",
+    tr: "Şu kullanıcı olarak oturum açtınız",
+  },
+  engageWorkspaceInvitationLogout: {
+    en: "Logout",
+    tr: "Çıkış",
+  },
+  engageWorkspaceInvitationAboutJinear: {
+    en: "Jinear helps you track your tasks collaboratively",
+    tr: "Jinear, görevlerinizi çalışma arkadaşlarınızla birlikte takip etmenize yardımcı olur.",
+  },
+  engageWorkspaceInvitationLogOutCurrentAccount: {
+    en: "You're logged in as <b>${currentAccountEmail}</b>. This invitation is for <b>${invitationToEmail}</b>. Please logout from your current account to accept invitation.",
+    tr: "<b>${currentAccountEmail}</b> hesabı ile oturum açtınız. Bu davetiye <b>${invitationToEmail}</b> kişisine gönderildi. Lütfen devam etmek için oturumu kapatın.",
+  },
+  engageWorkspaceInvitationAccepted: {
+    en: "You're now part of the <b>${workspaceName}</b> workspace",
+    tr: "Artık <b>${workspaceName}</b> çalışma alanının bir parçasısınız",
+  },
+  engageWorkspaceInvitationAcceptedLoginInfoText: {
+    en: "If you did not have an account before we've created one for you. If you wish, you can log in with the single-use login code we will provide you via email. Or you can generate a new password for your account via forgot password flow.",
+    tr: "Daha önce bir hesabınız yoksa, sizin için bir tane oluşturduk. İsterseniz, e-posta yoluyla size sağlayacağımız tek kullanımlık giriş kodu ile giriş yapabilirsiniz. Veya şifre sıfırlama akışı aracılığıyla hesabınız için yeni bir şifre oluşturabilirsiniz.",
+  },
+  engageWorkspaceInvitationAcceptedLoginWithEmailCode: {
+    en: "Login With Email Code",
+    tr: "Giriş Kodu ile Oturum Aç",
+  },
+  engageWorkspaceInvitationAcceptedLoginWithPassword: {
+    en: "Login With Password",
+    tr: "Şifre ile Oturum Aç",
+  },
+  engageWorkspaceInvitationAcceptedResetPassword: {
+    en: "Reset Password",
+    tr: "Şifre Sıfırla",
+  },
+  sideMenuFooterLogout: {
+    en: "Logout",
+    tr: "Çıkış Yap",
+  },
+  workspaceMemberInviteModalTitle: {
+    en: "Invite Someone to Workspace",
+    tr: "Çalışma Alanına Birini Davet Et",
+  },
+  workspaceMemberInvititationFormEmailLabel: {
+    en: "Email",
+    tr: "Email",
+  },
+  workspaceMemberInvititationFormEmailText: {
+    en: "We will send an invitation mail.",
+    tr: "Davet edeceğiniz kişiye bir davetiye linki gönderilecek",
+  },
+  workspaceMemberInvititationFormForRoleLabel: {
+    en: "Role",
+    tr: "Yetki",
+  },
+  workspaceMemberInvititationFormForRole_GUEST: {
+    en: "Guest",
+    tr: "Misafir",
+  },
+  workspaceMemberInvititationFormForRole_ADMIN: {
+    en: "Admin",
+    tr: "Yönetici",
+  },
+  workspaceMemberInvititationFormForRole_MEMBER: {
+    en: "Team Member",
+    tr: "Ekip Üyesi",
+  },
+  workspaceMemberInvititationFormForRoleText_GUEST: {
+    en: "Guest role is read only. Members only view tasks can not edit them.",
+    tr: "Misafir rolünde kullanıcılar görevleri yanlızca görüntüler, değişiklik yapamazlar.",
+  },
+  workspaceMemberInvititationFormForRoleText_ADMIN: {
+    en: "Admins can add new members to workspace, initialize and edit teams, tasks etc.",
+    tr: "Yöneticiler çalışma alanına yeni kişiler davet edebilir. Ekipleri ve taskları oluşturabilir ve düzenleyebilirler. ",
+  },
+  workspaceMemberInvititationFormForRoleText_MEMBER: {
+    en: "Members can create and edit tasks.",
+    tr: "Ekip üyeleri görevler oluşturabilir ve düzenleyebilirler.",
+  },
+  workspaceMemberInvititationFormInitialTeam: {
+    en: "Team",
+    tr: "Ekip",
+  },
+  workspaceMemberInvititationFormInitialTeamText: {
+    en: "Member can be added/removed to other teams later.",
+    tr: "Üye daha sonra diğer ekiplere de eklenip çıkarılabilir.",
+  },
+  workspaceMemberInvititationFormSubmit: {
+    en: "Invite",
+    tr: "Davet Et",
   },
 };

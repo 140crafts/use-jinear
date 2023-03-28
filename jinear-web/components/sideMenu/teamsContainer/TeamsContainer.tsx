@@ -1,7 +1,11 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { useUpdatePreferredTeamMutation } from "@/store/api/workspaceDisplayPreferenceApi";
-import { selectCurrentAccountsPreferredTeamId, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import {
+  selectCurrentAccountsPreferredTeamId,
+  selectCurrentAccountsPreferredWorkspace,
+  selectCurrentAccountsPreferredWorkspaceRoleIsAdminOrOwner,
+} from "@/store/slice/accountSlice";
 import { changeLoadingModalVisibility, popNewTeamModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -24,6 +28,7 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
   const router = useRouter();
 
   const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
+  const isPreferredWorkspaceRoleAdminOrOwner = useTypedSelector(selectCurrentAccountsPreferredWorkspaceRoleIsAdminOrOwner);
   const preferredTeamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
 
   const [updatePreferredTeamMutation, { isSuccess: isUpdatePreferredTeamSuccess, isLoading: isUpdatePreferredTeamLoading }] =
@@ -85,12 +90,16 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
           <Button variant={ButtonVariants.hoverFilled2} onClick={routeTeamHome} heightVariant={ButtonHeight.short}>
             <IoScan />
           </Button>
+          {/* {isPreferredWorkspaceRoleAdminOrOwner && ( */}
           <Button variant={ButtonVariants.hoverFilled2} onClick={routeTeamSettings} heightVariant={ButtonHeight.short}>
             <IoEllipsisHorizontal />
           </Button>
-          <Button variant={ButtonVariants.hoverFilled2} onClick={_popNewTeamModal} heightVariant={ButtonHeight.short}>
-            <IoAdd />
-          </Button>
+          {/* )} */}
+          {isPreferredWorkspaceRoleAdminOrOwner && (
+            <Button variant={ButtonVariants.hoverFilled2} onClick={_popNewTeamModal} heightVariant={ButtonHeight.short}>
+              <IoAdd />
+            </Button>
+          )}
         </div>
       )}
       <div className={styles.teamsList}>

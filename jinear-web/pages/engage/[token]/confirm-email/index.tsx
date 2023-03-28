@@ -14,19 +14,19 @@ const logger = Logger("ConfirmEmailPage");
 const ConfirmEmailPage: React.FC<ConfirmEmailPageProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const [confirmEmail, { isSuccess, isError, isLoading }] = useConfirmEmailMutation();
+  const [confirmEmail, { data, isSuccess, isError, isLoading }] = useConfirmEmailMutation();
   const [resendConfirmEmail, { error: resendErrorResponse, isLoading: resendLoading, isError: isResendError }] =
     useResendConfirmEmailMutation();
   const token: string = router.query?.token as string;
 
   useEffect(() => {
-    if (token && !isLoading) {
+    if (token && !isLoading && !data) {
       logger.log({ token, isLoading });
       confirmEmail({
         uniqueToken: token,
       });
     }
-  }, [token]);
+  }, [token, data]);
 
   useEffect(() => {
     logger.log({ resendErrorResponse });

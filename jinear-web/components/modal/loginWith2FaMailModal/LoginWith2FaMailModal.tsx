@@ -2,7 +2,11 @@ import Button, { ButtonVariants } from "@/components/button";
 import { LocaleType } from "@/model/be/jinear-core";
 import { useEmailLoginTokenRequestMutation, useEmailOtpLoginCompleteMutation } from "@/store/api/authApi";
 
-import { changeLoginWith2FaMailModalVisibility, selectLoginWith2FaMailModalVisible } from "@/store/slice/modalSlice";
+import {
+  changeLoginWith2FaMailModalVisibility,
+  selectLoginWith2FaMailModalAutoSubmitEmail,
+  selectLoginWith2FaMailModalVisible,
+} from "@/store/slice/modalSlice";
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { validateEmail } from "@/utils/validator";
@@ -33,12 +37,23 @@ const LoginWith2FaMailModal: React.FC<LoginWith2FaMailModalProps> = ({}) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const loginModalVisible = useTypedSelector(selectLoginWith2FaMailModalVisible);
+  const autoSubmitEmail = useTypedSelector(selectLoginWith2FaMailModalAutoSubmitEmail);
   const step = requestTokenResponse?.csrf == null ? 0 : 1;
 
   const emailInputRef = useRef<HTMLInputElement>(null);
   const codeInputRef = useRef<HTMLInputElement>(null);
 
   const [counter, setCounter] = useState<number>(INITIAL_COUNTER);
+
+  useEffect(() => {
+    if (autoSubmitEmail && emailInputRef.current) {
+      emailInputRef.current.disabled = true;
+      emailInputRef.current.value = autoSubmitEmail;
+      setTimeout(() => {
+        requestTokenCall();
+      }, 100);
+    }
+  }, [emailInputRef, autoSubmitEmail]);
 
   useEffect(() => {
     let id: number;
@@ -118,7 +133,7 @@ const LoginWith2FaMailModal: React.FC<LoginWith2FaMailModalProps> = ({}) => {
   };
 
   return (
-    <Modal visible={loginModalVisible} requestClose={close} title={t("loginScreenTitle")}>
+    <Modal visible={loginModalVisible} title={t("loginScreenTitle")} hasTitleCloseButton={true} onTitleCloeButtonClick={close}>
       {step === 0 && (
         <EmailStage
           onPrimaryButtonClick={onPrimaryButtonClick}

@@ -1,5 +1,5 @@
 import Button, { ButtonVariants } from "@/components/button";
-import { WorkspaceInitializeRequest } from "@/model/be/jinear-core";
+import { LocaleType, WorkspaceInitializeRequest } from "@/model/be/jinear-core";
 import { useInitializeWorkspaceMutation } from "@/store/api/workspaceApi";
 import { useAppDispatch } from "@/store/store";
 import { HOST } from "@/utils/constants";
@@ -28,7 +28,7 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
 
   const submit: SubmitHandler<WorkspaceInitializeRequest> = (data) => {
     logger.log({ data });
-    initializeWorkspace(data);
+    initializeWorkspace({ ...data, locale: t("localeType") as LocaleType });
   };
 
   useEffect(() => {

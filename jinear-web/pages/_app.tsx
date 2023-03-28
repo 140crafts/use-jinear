@@ -17,6 +17,7 @@ import TaskDateChangeModal from "@/components/modal/taskDetailModals/taskDateCha
 import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicChangeModal/TaskTopicChangeModal";
 import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal";
 import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
+import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
 import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
@@ -44,6 +45,7 @@ export function useThemeToggle() {
 
 const globalModals: any = (
   <>
+    <WorkspaceInviteMemberModal />
     <ReminderListModal />
     <NewReminderModal />
     <SearchTaskModal />

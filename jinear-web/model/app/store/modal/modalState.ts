@@ -6,6 +6,7 @@ export default interface ModalState {
 
 export interface LoginWith2FaMailModalState extends ModalState {
   rerouteDisabled?: boolean;
+  autoSubmitEmail?: string;
 }
 
 export interface NotFoundModalState extends ModalState {

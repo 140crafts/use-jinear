@@ -13,6 +13,7 @@ const PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS = [
   "/engage/[token]/confirm-email",
   "/engage/[token]/reset-password-complete",
   "/engage/[token]/forgot-password",
+  "/engage/[token]/workspace-invitation",
 ];
 
 const ONLY_NOT_LOGGED_IN_PATHS = ["/forgot-password", "/register", "/login"];

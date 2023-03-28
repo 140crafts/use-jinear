@@ -7,6 +7,7 @@ import { selectAuthState } from "@/store/slice/accountSlice";
 import { closeMenu, selectAppMenuVisible } from "@/store/slice/displayPreferenceSlice";
 import { selectAnyModalVisible } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import Logger from "@/utils/logger";
 import isPwa from "@/utils/pwaHelper";
 import cn from "classnames";
 import { useRouter } from "next/router";
@@ -20,6 +21,18 @@ interface LayoutProps {
   children?: React.ReactNode;
 }
 
+const logger = Logger("Layout");
+
+const ROUTES_WITHOUT_SIDE_MENU = [
+  "/forgot-password",
+  "/register",
+  "/login",
+  "/engage/[token]/confirm-email",
+  "/engage/[token]/reset-password-complete",
+  "/engage/[token]/forgot-password",
+  "/engage/[token]/workspace-invitation",
+];
+
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const router = useRouter();
   const isAnyModalVisible = useTypedSelector(selectAnyModalVisible);
@@ -28,6 +41,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   //only in desktop
   const isMenuVisible = useTypedSelector(selectAppMenuVisible);
   const pwa = isPwa();
+
+  logger.log({ pathName: router.pathname, isAnyModalVisible, authState, isMenuVisible, pwa });
 
   useEffect(() => {
     _closeMenu();
@@ -48,14 +63,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [isAnyModalVisible, isMenuVisible]);
 
+  const sideMenuEnabled = authState == "LOGGED_IN" && ROUTES_WITHOUT_SIDE_MENU.indexOf(router.pathname) == -1;
+
   const _closeMenu = () => {
     dispatch(closeMenu());
   };
 
   return (
     <div className={styles.layoutMain}>
-      {authState == "LOGGED_IN" && (
+      {sideMenuEnabled && (
         <div
+          id="side-menu"
           className={styles.sideMenuContainer}
           style={{
             marginBottom: isMenuVisible ? 0 : "-100vh",
@@ -77,9 +95,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           />
         </div>
       )}
-      <div className={styles.content}>{children}</div>
+      <div className={cn(styles.content, !sideMenuEnabled && styles.contentWithoutSideMenu)}>{children}</div>
 
-      {authState == "LOGGED_IN" && (
+      {sideMenuEnabled && (
         <div className={cn(styles.tabBarContainer, pwa && styles.pwaPadding)}>
           <TabBar />
         </div>

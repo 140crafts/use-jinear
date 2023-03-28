@@ -74,6 +74,9 @@ const initialState = {
   datePickerModal: {
     visible: false,
   },
+  workspaceMemberInviteModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -92,6 +95,7 @@ const initialState = {
   reminderListModal: null | ReminderListModalState;
   newReminderModal: null | NewReminderModalState;
   datePickerModal: null | DatePickerModalState;
+  workspaceMemberInviteModal: null | ModalState;
 };
 
 const slice = createSlice({
@@ -213,6 +217,13 @@ const slice = createSlice({
       state.datePickerModal = initialState.datePickerModal;
     },
 
+    popWorkspaceMemberInviteModal: (state, action: PayloadAction<void>) => {
+      state.workspaceMemberInviteModal = { visible: true };
+    },
+    closeWorkspaceMemberInviteModal: (state, action: PayloadAction<void>) => {
+      state.workspaceMemberInviteModal = initialState.workspaceMemberInviteModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -260,6 +271,9 @@ export const {
   closeNewReminderModal,
   popDatePickerModal,
   closeDatePickerModal,
+  popWorkspaceMemberInviteModal,
+  closeWorkspaceMemberInviteModal,
+
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -272,6 +286,9 @@ export const selectAnyModalVisible = (state: RootState) => {
 };
 
 export const selectLoginWith2FaMailModalVisible = (state: RootState) => state.modal.loginWith2FaMailModal?.visible;
+export const selectLoginWith2FaMailModalAutoSubmitEmail = (state: RootState) =>
+  state.modal.loginWith2FaMailModal?.autoSubmitEmail;
+
 export const selectLoadingModalVisible = (state: RootState) => state.modal.loadingModal?.visible;
 
 export const selectNotFoundModalVisible = (state: RootState) => state.modal.notFoundModal?.visible;
@@ -336,3 +353,5 @@ export const selectNewReminderModalTask = (state: RootState) => state.modal.newR
 export const selectDatePickerModalVisible = (state: RootState) => state.modal.datePickerModal?.visible;
 export const selectDatePickerModalInitialDate = (state: RootState) => state.modal.datePickerModal?.initialDate;
 export const selectDatePickerModalOnDateChange = (state: RootState) => state.modal.datePickerModal?.onDateChange;
+
+export const selectWorkspaceMemberInviteModalVisible = (state: RootState) => state.modal.workspaceMemberInviteModal?.visible;

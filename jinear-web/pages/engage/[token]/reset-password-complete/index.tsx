@@ -1,4 +1,5 @@
 import Button from "@/components/button";
+import { useFirstRender } from "@/hooks/useFirstRender";
 import { LocaleType } from "@/model/be/jinear-core";
 import { useCompleteResetPasswordMutation } from "@/store/api/accountPasswordApi";
 import { CircularProgress } from "@mui/material";
@@ -12,18 +13,19 @@ interface ResetPasswordCompletePageProps {}
 const ResetPasswordCompletePage: React.FC<ResetPasswordCompletePageProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const [completeResetPassword, { isSuccess, isError, isLoading }] = useCompleteResetPasswordMutation();
+  const firstRender = useFirstRender();
+  const [completeResetPassword, { data, isSuccess, isError, isLoading }] = useCompleteResetPasswordMutation();
 
   const token: string = router.query?.token as string;
 
   useEffect(() => {
-    if (token && !isLoading) {
+    if (token && !isLoading && !data) {
       completeResetPassword({
         uniqueToken: token,
         locale: t("localeType") as LocaleType,
       });
     }
-  }, [token]);
+  }, [token, firstRender]);
 
   return (
     <div className={styles.container}>
