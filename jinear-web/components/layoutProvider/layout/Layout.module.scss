@@ -51,6 +51,10 @@
   padding-left: calc(var(--side-menu-main-menu-width) + var(--side-menu-workspace-menu-width));
 }
 
+.contentWithoutSideMenu {
+  padding-left: 0;
+}
+
 .closeMenuContainer {
   display: none;
 }

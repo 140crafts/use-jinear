@@ -1,4 +1,4 @@
-import MenuMemberList from "@/components/sideMenu/menuMemberList/MenuMemberList";
+import WorkspaceTeamMemberList from "@/components/sideMenu/menuMemberList/workspaceTeamMemberList/WorkspaceTeamMemberList";
 import { useRetrieveTeamMembersQuery } from "@/store/api/teamMemberApi";
 import React from "react";
 import styles from "./TeamMemberList.module.css";
@@ -17,7 +17,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ teamId }) => {
 
   return (
     <div className={styles.container}>
-      {isSuccess && teamMembersResponse && <MenuMemberList page={teamMembersResponse.data} type="team" />}
+      {isSuccess && teamMembersResponse && <WorkspaceTeamMemberList page={teamMembersResponse.data} />}
     </div>
   );
 };

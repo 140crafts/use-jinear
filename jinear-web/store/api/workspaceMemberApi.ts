@@ -1,4 +1,10 @@
-import { WorkspaceMemberListingBaseResponse } from "@/model/be/jinear-core";
+import {
+  BaseResponse,
+  WorkspaceInvitationInfoResponse,
+  WorkspaceMemberInvitationRespondRequest,
+  WorkspaceMemberInviteRequest,
+  WorkspaceMemberListingBaseResponse,
+} from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const workplaceMemberApi = api.injectEndpoints({
@@ -12,11 +18,45 @@ export const workplaceMemberApi = api.injectEndpoints({
         },
       ],
     }),
+    //
+    inviteWorkspace: build.mutation<BaseResponse, WorkspaceMemberInviteRequest>({
+      query: (body) => ({
+        url: `v1/workspace/member/invite`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [""], //TODO workspace-invitations
+    }),
+    //
+    retrieveInvitationInfo: build.query<WorkspaceInvitationInfoResponse, string>({
+      query: (token: string) => `v1/workspace/member/invitation-info/${token}`,
+      providesTags: (_result, _err, token) => [
+        {
+          type: "workspace-invitation-info",
+          id: token,
+        },
+      ],
+    }),
+    //
+    respondInvitation: build.mutation<BaseResponse, WorkspaceMemberInvitationRespondRequest>({
+      query: (body) => ({
+        url: `v1/workspace/member/respond-invitation`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Account-Current", "workplace-member-list", "workplace-team-list", "team-member-list", "team-topic-list"],
+    }),
+    //
   }),
 });
 
-export const { useRetrieveWorkspaceMembersQuery } = workplaceMemberApi;
+export const {
+  useRetrieveWorkspaceMembersQuery,
+  useInviteWorkspaceMutation,
+  useRetrieveInvitationInfoQuery,
+  useRespondInvitationMutation,
+} = workplaceMemberApi;
 
 export const {
-  endpoints: { retrieveWorkspaceMembers },
+  endpoints: { retrieveWorkspaceMembers, inviteWorkspace, retrieveInvitationInfo, respondInvitation },
 } = workplaceMemberApi;

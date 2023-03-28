@@ -28,6 +28,7 @@ const EmailStage: React.FC<EmailStageProps> = ({ onPrimaryButtonClick, className
   return (
     <div className={className}>
       <h3>{t("loginScreenText")}</h3>
+      <div className="spacer-h-2" />
       <TextInput ref={inputRef} type={"email"} onEnterCallback={onEnterCallBack} placeholder={t("loginScreenEmailPlaceholder")} />
       <span className={infoClassName} dangerouslySetInnerHTML={{ __html: t("loginScreenEmailSubText") }} />
     </div>

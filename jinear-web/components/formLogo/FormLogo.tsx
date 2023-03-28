@@ -39,7 +39,7 @@ const FormLogo: React.FC<FormLogoProps> = ({}) => {
               position: isPresent ? "static" : "absolute",
             }}
           >
-            Jinear
+            jinear
           </motion.div>
         </AnimatePresence>
       </div>

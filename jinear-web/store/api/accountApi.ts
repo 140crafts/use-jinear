@@ -24,11 +24,20 @@ export const accountApi = api.injectEndpoints({
       }),
       invalidatesTags: tagTypes,
     }),
+    //
+    logoutRequest: build.mutation<void, void>({
+      query: () => ({
+        url: "logout",
+        method: "POST",
+      }),
+      invalidatesTags: tagTypes,
+    }),
+    //
   }),
 });
 
-export const { useMeQuery, useConfirmEmailMutation, useResendConfirmEmailMutation } = accountApi;
+export const { useMeQuery, useConfirmEmailMutation, useResendConfirmEmailMutation, useLogoutRequestMutation } = accountApi;
 
 export const {
-  endpoints: { me, confirmEmail, resendConfirmEmail },
+  endpoints: { me, confirmEmail, resendConfirmEmail, logoutRequest },
 } = accountApi;

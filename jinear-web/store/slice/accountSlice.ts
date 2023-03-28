@@ -61,6 +61,13 @@ export const selectCurrentAccountsCollectiveWorkspaces = (state: RootState) =>
 export const selectCurrentAccountsPreferredWorkspace = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.workspace;
 };
+export const selectCurrentAccountsPreferredWorkspaceRole = (state: RootState) => {
+  return state.account.current?.workspaceDisplayPreference?.workspaceRole;
+};
+export const selectCurrentAccountsPreferredWorkspaceRoleIsAdminOrOwner = (state: RootState) => {
+  const role = state.account.current?.workspaceDisplayPreference?.workspaceRole;
+  return role == "ADMIN" || role == "OWNER";
+};
 
 export const selectCurrentAccountsPreferredWorkspaceId = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.workspace?.workspaceId;

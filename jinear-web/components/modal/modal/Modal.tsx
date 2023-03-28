@@ -8,6 +8,7 @@ import styles from "./Modal.module.css";
 interface ModalProps extends BaseModalProps {
   visible?: boolean;
   requestClose?: () => void;
+  onTitleCloeButtonClick?: () => void;
   children: any;
   contentContainerClass?: string;
   bodyClass?: string;
@@ -25,7 +26,16 @@ const Modal: React.FC<ModalProps> = ({
   width = "medium-fixed",
   title,
   hasTitleCloseButton = false,
+  onTitleCloeButtonClick,
 }) => {
+  const titleCloseClick = () => {
+    if (onTitleCloeButtonClick) {
+      onTitleCloeButtonClick?.();
+      return;
+    }
+    requestClose?.();
+  };
+
   return (
     <BaseModal
       visible={visible}
@@ -37,7 +47,7 @@ const Modal: React.FC<ModalProps> = ({
         <div className={styles.titleBar}>
           {hasTitleCloseButton && (
             <div className={styles.titleBarIconButtonContainer}>
-              <Button onClick={requestClose}>
+              <Button onClick={titleCloseClick}>
                 <IoClose size={18} />
               </Button>
             </div>

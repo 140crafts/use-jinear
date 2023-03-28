@@ -20,6 +20,7 @@ const CodeStage: React.FC<CodeStageProps> = ({ onPrimaryButtonClick, className, 
   return (
     <div className={className}>
       <h3>{t("loginScreenCodeText")}</h3>
+      <div className="spacer-h-2" />
       <TextInput
         ref={inputRef}
         type={"number"}
