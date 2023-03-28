@@ -31,7 +31,7 @@ public class TeamAccessValidator {
     }
 
     public void validateTeamAccess(String accountId, String workspaceId, String teamId) {
-        if (!isWorkspaceAdminOrOwner(accountId, workspaceId) || !isAccountTeamMember(accountId, teamId)) {
+        if (!isWorkspaceAdminOrOwner(accountId, workspaceId) && !isAccountTeamMember(accountId, teamId)) {
             throw new NoAccessException();
         }
     }

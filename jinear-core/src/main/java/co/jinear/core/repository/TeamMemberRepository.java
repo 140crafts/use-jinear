@@ -11,7 +11,7 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, String> 
 
     Page<TeamMember> findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(String teamId, Pageable pageable);
 
-    List<TeamMember> findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNull(String accountId, String workspaceId);
+    List<TeamMember> findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNullAndTeam_PassiveIdIsNull(String accountId, String workspaceId);
 
     Long countAllByAccountIdAndTeamIdAndPassiveIdIsNull(String accountId, String teamId);
 }

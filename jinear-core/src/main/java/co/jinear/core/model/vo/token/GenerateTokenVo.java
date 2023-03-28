@@ -1,13 +1,13 @@
 package co.jinear.core.model.vo.token;
 
 import co.jinear.core.model.enumtype.token.TokenType;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Builder
 @Getter
 @Setter
+@RequiredArgsConstructor
+@AllArgsConstructor
 public class GenerateTokenVo {
     private String relatedObject;
     private TokenType tokenType;

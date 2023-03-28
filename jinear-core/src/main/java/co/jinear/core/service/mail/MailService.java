@@ -4,10 +4,7 @@ import co.jinear.core.config.properties.MailProperties;
 import co.jinear.core.model.enumtype.localestring.LocaleStringType;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.enumtype.task.TaskReminderType;
-import co.jinear.core.model.vo.mail.AccountEngageMailVo;
-import co.jinear.core.model.vo.mail.LoginMailVo;
-import co.jinear.core.model.vo.mail.SendMailVo;
-import co.jinear.core.model.vo.mail.TaskReminderMailVo;
+import co.jinear.core.model.vo.mail.*;
 import co.jinear.core.system.NormalizeHelper;
 import jakarta.mail.Message;
 import jakarta.mail.MessagingException;
@@ -48,6 +45,9 @@ public class MailService {
     @Value("${fe.task-url}")
     private String taskUrl;
 
+    @Value("${fe.workspace-invitation-url}")
+    private String workspaceInvitationUrl;
+
     private static final String S3_BUCKET_URL = "https://storage.googleapis.com/bittit-b0/";
     private static final Map<TaskReminderType, LocaleStringType> taskReminderLocaleStringMap =
             Map.of(
@@ -67,7 +67,7 @@ public class MailService {
             message.setFrom(mailProperties.getMailUserName());
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(sendMailVo.getTo()));
             message.setSubject(sendMailVo.getSubject(), "UTF-8");
-            message.setContent(sendMailVo.getContext(),"text/html; charset=UTF-8");
+            message.setContent(sendMailVo.getContext(), "text/html; charset=UTF-8");
 //            MimeMessageHelper helper = new MimeMessageHelper(message, Objects.nonNull(sendMailVo.getAttachment()));
 //            helper.setTo(sendMailVo.getTo());
 //            helper.setText(sendMailVo.getContext(), true);
@@ -166,6 +166,33 @@ public class MailService {
                         .append(date));
 
         sendMail(new SendMailVo(taskReminderMailVo.getEmail(), titleStringBuilder.toString(), mailBody));
+    }
+
+    @Async
+    public void sendWorkspaceInvitationMail(WorkspaceInvitationMailVo workspaceInvitationMailVo) throws Exception {
+        LocaleType preferredLocale = Optional.ofNullable(workspaceInvitationMailVo.getPreferredLocale()).orElse(LocaleType.EN);
+
+        String titleMail = localeStringService.retrieveLocalString(LocaleStringType.WORKSPACE_INVITATION_TITLE_MAIL, preferredLocale);
+        titleMail = titleMail.replaceAll(Pattern.quote("${fromName}"), workspaceInvitationMailVo.getSenderName())
+                .replaceAll(Pattern.quote("${workspaceName}"), workspaceInvitationMailVo.getWorkspaceName());
+
+        String titleBody = localeStringService.retrieveLocalString(LocaleStringType.WORKSPACE_INVITATION_TITLE_BODY, preferredLocale);
+        titleBody = titleBody.replaceAll(Pattern.quote("${fromName}"), workspaceInvitationMailVo.getSenderName())
+                .replaceAll(Pattern.quote("${workspaceName}"), workspaceInvitationMailVo.getWorkspaceName());
+
+        String text = localeStringService.retrieveLocalString(LocaleStringType.WORKSPACE_INVITATION_TEXT, preferredLocale);
+        String ctaLabel = localeStringService.retrieveLocalString(LocaleStringType.WORKSPACE_INVITATION_CTA_LABEL, preferredLocale);
+
+
+        String mailBody = retrieveMailTemplate("email-workspace-invitation-mail.html");
+
+        String href = workspaceInvitationUrl.replaceAll(Pattern.quote("{token}"), workspaceInvitationMailVo.getToken());
+
+        mailBody = mailBody.replaceAll(Pattern.quote("${title}"), titleBody)
+                .replaceAll(Pattern.quote("${text}"), text)
+                .replaceAll(Pattern.quote("${confirm}"), ctaLabel)
+                .replaceAll(Pattern.quote("${href}"), href);
+        sendMail(new SendMailVo(workspaceInvitationMailVo.getEmail(), titleMail, mailBody));
     }
 
     private String retrieveLoginMailTitle(LoginMailVo loginMailVo, LocaleType preferredLocale) {

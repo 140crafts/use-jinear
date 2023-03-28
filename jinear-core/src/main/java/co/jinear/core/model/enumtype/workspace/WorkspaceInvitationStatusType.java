@@ -5,11 +5,12 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum WorkspaceAccountRoleType {
-    OWNER(0),
-    ADMIN(1),
-    MEMBER(2),
-    GUEST(3);
+public enum WorkspaceInvitationStatusType {
+
+    WAITING_FOR_ANSWER(0),
+    ACCEPTED(1),
+    DECLINED(2),
+    TIMED_OUT(3);
 
     private final int value;
 }

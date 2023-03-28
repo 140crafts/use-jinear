@@ -11,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
+import java.util.Arrays;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 @Slf4j
 @Component
@@ -19,6 +22,28 @@ public class ApiAdviceHelper {
 
     private static final String ERROR_MESSAGE_SPLITTER = ";";
     private final MessageSourceLocalizer messageSourceLocalizer;
+
+    public String getErrorCode(LocaleMessage localeMessage) {
+        return Optional.ofNullable(localeMessage)
+                .map(LocaleMessage::getErrorMessage)
+                .map(errorMessage -> errorMessage.split(ERROR_MESSAGE_SPLITTER))
+                .map(Arrays::stream)
+                .map(Stream::findFirst)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .orElse(null);
+    }
+
+    public String getErrorMessage(LocaleMessage localeMessage) {
+        return Optional.ofNullable(localeMessage)
+                .map(LocaleMessage::getErrorMessage)
+                .map(errorMessage -> errorMessage.split(ERROR_MESSAGE_SPLITTER))
+                .map(Arrays::stream)
+                .map(stringStream -> stringStream.reduce((s, s2) -> s2))
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .orElse(null);
+    }
 
     public BaseResponse createErrorResponse(LocaleMessage localeMessage) {
         String[] errorCodeMessage = localeMessage.getErrorMessage().split(ERROR_MESSAGE_SPLITTER);
@@ -38,7 +63,7 @@ public class ApiAdviceHelper {
         return errorCodeMessage[1] + " (" + errorCodeMessage[0] + ")";
     }
 
-    private BaseResponse createResponse(String errorCode, String errorMessage, String consumerErrorMessage) {
+    public BaseResponse createResponse(String errorCode, String errorMessage, String consumerErrorMessage) {
         BaseResponse baseResponse = new BaseResponse();
         baseResponse.setResponseStatusType(ResponseStatusType.FAILURE);
         baseResponse.setErrorCode(errorCode);

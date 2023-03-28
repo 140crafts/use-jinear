@@ -40,6 +40,8 @@ public class SecurityConfiguration {
             "/v1/account/password/reset/initialize",
             "/v1/account/password/reset/complete",
             "/v1/service-record/with-handle/{handle}",
+            "/v1/workspace/member/respond-invitation",
+            "/v1/workspace/member/invitation-info/{token}",
             "/debug/**"
     };
 
@@ -56,7 +58,7 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors().configurationSource(corsConfigurationSource())
                 .and()
-                .authorizeHttpRequests( auth -> auth
+                .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -65,6 +67,12 @@ public class SecurityConfiguration {
                 .exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 .and()
+                .logout()
+                .clearAuthentication(true)
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                .logoutSuccessUrl("/").deleteCookies("JWT","JSESSIONID", "SESSION", "SESSIONID")
+                .invalidateHttpSession(true)
+                .and()
                 .build();
     }
 
@@ -72,10 +80,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers( new AntPathRequestMatcher("swagger-ui/**")).permitAll()
-                        .requestMatchers( new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
-                        .requestMatchers( new AntPathRequestMatcher("v3/api-docs/**")).permitAll()
-                        .requestMatchers( new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("swagger-ui/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("v3/api-docs/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
                         .anyRequest().authenticated())
                 .httpBasic();
         return httpSecurity.build();

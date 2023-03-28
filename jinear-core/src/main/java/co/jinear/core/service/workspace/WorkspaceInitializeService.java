@@ -19,11 +19,11 @@ import co.jinear.core.service.team.TeamInitializeService;
 import co.jinear.core.service.username.UsernameService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.system.NormalizeHelper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
 import java.util.Objects;
 
 @Slf4j
