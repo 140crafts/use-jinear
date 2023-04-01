@@ -8,6 +8,7 @@ import co.jinear.core.model.dto.workspace.WorkspaceInvitationDto;
 import co.jinear.core.model.dto.workspace.WorkspaceInvitationInfoDto;
 import co.jinear.core.model.entity.workspace.WorkspaceInvitation;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
+import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceInvitationStatusType;
 import co.jinear.core.model.vo.account.AccountInitializeVo;
 import co.jinear.core.model.vo.mail.WorkspaceInvitationMailVo;
@@ -19,6 +20,7 @@ import co.jinear.core.repository.WorkspaceInvitationRepository;
 import co.jinear.core.service.account.AccountInitializeService;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.mail.MailService;
+import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.team.member.TeamMemberService;
 import co.jinear.core.service.token.TokenService;
 import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
@@ -53,6 +55,7 @@ public class WorkspaceInvitationOperationService {
     private final InitializeWorkspaceMemberVoConverter initializeWorkspaceMemberVoConverter;
     private final WorkspaceInvitationInfoDtoConverter workspaceInvitationInfoDtoConverter;
     private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
+    private final PassiveService passiveService;
 
     @Transactional
     public WorkspaceInvitationDto initializeInvitation(WorkspaceInvitationInitializeVo vo) {
@@ -62,6 +65,17 @@ public class WorkspaceInvitationOperationService {
         WorkspaceInvitation saved = saveInvitation(workspaceInvitation);
         generateAndSendInvitationMail(vo, saved);
         return workspaceInvitationDtoConverter.convert(workspaceInvitation);
+    }
+
+    @Transactional
+    public String deleteInvitation(String invitationId) {
+        log.info("Delete invitation has started. invitationId: {}", invitationId);
+        WorkspaceInvitation workspaceInvitation = workspaceInvitationRetrieveService.retrieveEntity(invitationId);
+        String passiveId = passiveService.createUserActionPassive();
+        passivizeInvitation(passiveId, workspaceInvitation);
+        tokenService.retrieveValidTokenWithRelatedObject(invitationId, WORKSPACE_INVITATION)
+                .ifPresent(tokenDto -> tokenService.passivizeToken(tokenDto.getTokenId(), passiveId));
+        return passiveId;
     }
 
     public WorkspaceInvitationInfoDto retrieveInvitationInfo(String token) {
@@ -92,6 +106,7 @@ public class WorkspaceInvitationOperationService {
         workspaceMemberService.initializeWorkspaceMember(initializeWorkspaceMemberVo);
         assignTeam(invitation, accountId);
         setPreferredTeam(invitation, accountId);
+        //todo add workspace activity
     }
 
     private void declineInvitation(WorkspaceInvitation invitation) {
@@ -167,11 +182,17 @@ public class WorkspaceInvitationOperationService {
         TeamMemberAddVo teamMemberAddVo = new TeamMemberAddVo();
         teamMemberAddVo.setAccountId(accountId);
         teamMemberAddVo.setTeamId(invitation.getInitialTeamId());
+        teamMemberAddVo.setRole(TeamMemberRoleType.MEMBER);
         teamMemberService.addTeamMember(teamMemberAddVo);
     }
 
     private void setPreferredTeam(WorkspaceInvitation invitation, String accountId) {
         workspaceDisplayPreferenceService.setAccountPreferredWorkspace(accountId, invitation.getWorkspaceId());
         workspaceDisplayPreferenceService.setAccountPreferredTeamId(accountId, invitation.getInitialTeamId());
+    }
+
+    private void passivizeInvitation(String passiveId, WorkspaceInvitation workspaceInvitation) {
+        workspaceInvitation.setPassiveId(passiveId);
+        workspaceInvitationRepository.save(workspaceInvitation);
     }
 }

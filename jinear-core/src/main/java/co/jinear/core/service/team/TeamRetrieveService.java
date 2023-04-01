@@ -62,17 +62,11 @@ public class TeamRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public TeamDto retrieveActiveTeamByName(String teamName, String workspaceId) {
-        log.info("Retrieve active team by name has started. teamName: {}, workspaceId: {}", teamName, workspaceId);
-        return teamRepository.findByNameAndWorkspaceIdAndPassiveIdIsNull(teamName, workspaceId)
+    public TeamDto retrieveActiveTeamByUsername(String teamUsername, String workspaceId) {
+        log.info("Retrieve active team by name has started. teamUsername: {}, workspaceId: {}", teamUsername, workspaceId);
+        return teamRepository.findByUsernameAndWorkspaceIdAndPassiveIdIsNull(teamUsername, workspaceId)
                 .map(teamConverter::map)
                 .orElseThrow(NotFoundException::new);
-    }
-
-    public Optional<TeamDto> retrieveActiveTeamByNameOptional(String teamName, String workspaceId) {
-        log.info("Retrieve active team by name has started. teamName: {}, workspaceId: {}", teamName, workspaceId);
-        return teamRepository.findByNameAndWorkspaceIdAndPassiveIdIsNull(teamName, workspaceId)
-                .map(teamConverter::map);
     }
 
     public Optional<TeamDto> retrieveTeamIncludingPassivesByNameOptional(String teamName, String workspaceId) {
@@ -90,6 +84,12 @@ public class TeamRetrieveService {
     public Optional<TeamDto> retrieveTeamByTagOptional(String tag, String workspaceId) {
         log.info("Retrieve team by tag has started. tag: {}, workspaceId: {}", tag, workspaceId);
         return teamRepository.findByTagAndWorkspaceIdAndPassiveIdIsNull(tag, workspaceId)
+                .map(teamConverter::map);
+    }
+
+    public Optional<TeamDto> retrieveTeamByUsernameOptional(String username, String workspaceId) {
+        log.info("Retrieve team by username has started. username: {}, workspaceId: {}", username, workspaceId);
+        return teamRepository.findByUsernameAndWorkspaceIdAndPassiveIdIsNull(username, workspaceId)
                 .map(teamConverter::map);
     }
 }

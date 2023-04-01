@@ -32,10 +32,10 @@ public class WorkspaceDisplayPreferenceController {
         return workspaceManager.updatePreferredWorkspaceWithUsername(workspaceUsername);
     }
 
-    @PutMapping("/with-username/{workspaceUsername}/set-preferred-team/{teamName}")
+    @PutMapping("/with-username/{workspaceUsername}/set-preferred-team/{teamUsername}")
     @ResponseStatus(HttpStatus.CREATED)
     public BaseResponse updatePreferredTeamWithUsername(@PathVariable String workspaceUsername,
-                                            @PathVariable String teamName) {
-        return workspaceManager.updatePreferredTeamWithUsername(workspaceUsername,teamName);
+                                            @PathVariable String teamUsername) {
+        return workspaceManager.updatePreferredTeamWithUsername(workspaceUsername,teamUsername);
     }
 }

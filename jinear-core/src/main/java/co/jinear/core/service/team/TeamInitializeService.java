@@ -8,11 +8,14 @@ import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.enumtype.localestring.LocaleStringType;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
+import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.vo.team.TeamInitializeVo;
+import co.jinear.core.model.vo.team.member.TeamMemberAddVo;
 import co.jinear.core.model.vo.team.workflow.InitializeTeamWorkflowStatusVo;
 import co.jinear.core.repository.TeamRepository;
 import co.jinear.core.service.mail.LocaleStringService;
+import co.jinear.core.service.team.member.TeamMemberService;
 import co.jinear.core.service.team.member.TeamMemberSyncService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
@@ -39,6 +42,7 @@ public class TeamInitializeService {
     private final LocaleStringService localeStringService;
     private final TeamMemberSyncService teamMemberSyncService;
     private final TeamConverter teamConverter;
+    private final TeamMemberService teamMemberService;
 
     @Transactional
     public TeamDto initializeTeam(TeamInitializeVo teamInitializeVo) {
@@ -47,6 +51,7 @@ public class TeamInitializeService {
         validatePersonalWorkspaceTeamLimit(teamInitializeVo.getWorkspaceId());
         validateTeamNameIsNotUsedInWorkspace(teamInitializeVo);
         validateTeamTagIsNotUsedInWorkspace(teamInitializeVo);
+        validateTeamUsernameIsNotUsedInWorkspace(teamInitializeVo);
         Team team = teamConverter.map(teamInitializeVo);
         Team saved = teamRepository.saveAndFlush(team);
         checkAndSyncMembersWithWorkspace(saved);
@@ -75,9 +80,18 @@ public class TeamInitializeService {
     }
 
     private void checkAndSyncMembersWithWorkspace(Team team) {
+        assignInitializedByAccountToTeam(team);
         if (TeamJoinMethodType.SYNC_MEMBERS_WITH_WORKSPACE.equals(team.getJoinMethod())) {
             teamMemberSyncService.syncTeamMembersWithWorkspace(team.getTeamId(), team.getInitializedBy());
         }
+    }
+
+    private void assignInitializedByAccountToTeam(Team team) {
+        TeamMemberAddVo teamMemberAddVo = new TeamMemberAddVo();
+        teamMemberAddVo.setAccountId(team.getInitializedBy());
+        teamMemberAddVo.setTeamId(team.getTeamId());
+        teamMemberAddVo.setRole(TeamMemberRoleType.ADMIN);
+        teamMemberService.addTeamMember(teamMemberAddVo);
     }
 
     private void validateTeamNameIsNotUsedInWorkspace(TeamInitializeVo teamInitializeVo) {
@@ -88,6 +102,11 @@ public class TeamInitializeService {
     private void validateTeamTagIsNotUsedInWorkspace(TeamInitializeVo teamInitializeVo) {
         log.info("Validating team tag is not used in workspace before.");
         teamValidator.validateTeamTagIsNotUsedInWorkspace(teamInitializeVo.getTag(), teamInitializeVo.getWorkspaceId());
+    }
+
+    private void validateTeamUsernameIsNotUsedInWorkspace(TeamInitializeVo teamInitializeVo) {
+        log.info("Validating team username is not used in workspace before.");
+        teamValidator.validateTeamUsernameIsNotUsedInWorkspace(teamInitializeVo.getUsername(), teamInitializeVo.getWorkspaceId());
     }
 
     private void initializeDefaultWorkflow(String teamId, String workspaceId, LocaleType locale) {

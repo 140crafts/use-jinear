@@ -518,4 +518,32 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-add-username-column-to-team">
+        <addColumn tableName="team">
+            <column name="username" type="varchar(255)" afterColumn="tag">
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-update-team#username-with-team#tag">
+        <sql>
+            update team
+            set username = tag
+            where username is null
+        </sql>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-not-null-constrait-team#username-">
+        <addNotNullConstraint tableName="team" columnName="username" columnDataType="varchar(255)"/>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-role-column-to-team_member">
+        <addColumn tableName="team_member">
+            <column name="role" type="int" afterColumn="team_id" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+
 </databaseChangeLog>

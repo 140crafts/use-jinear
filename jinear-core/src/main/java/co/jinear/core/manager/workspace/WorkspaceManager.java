@@ -83,10 +83,10 @@ public class WorkspaceManager {
         return updatePreferredWorkspace(workspaceDto.getWorkspaceId());
     }
 
-    public BaseResponse updatePreferredTeamWithUsername(String workspaceUsername, String teamName) {
-        log.info("Update preferred team with username has started. workspaceUsername: {}, teamName: {}", workspaceUsername, teamName);
+    public BaseResponse updatePreferredTeamWithUsername(String workspaceUsername, String teamUsername) {
+        log.info("Update preferred team with username has started. workspaceUsername: {}, teamUsername: {}", workspaceUsername, teamUsername);
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithUsername(workspaceUsername);
-        TeamDto teamDto = teamRetrieveService.retrieveActiveTeamByName(teamName, workspaceDto.getWorkspaceId());
+        TeamDto teamDto = teamRetrieveService.retrieveActiveTeamByUsername(teamUsername, workspaceDto.getWorkspaceId());
         return updatePreferredTeam(teamDto.getTeamId());
     }
 

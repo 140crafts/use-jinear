@@ -32,7 +32,8 @@ public class WorkspaceDisplayPreferenceService {
         log.info("Retrieve account preferred workspace has started. accountId: {}", accountId);
         return retrieveEntityByAccountId(accountId)
                 .map(workspaceDisplayPreferenceConverter::map)
-                .map(this::retrieveAndSetWorkspaceMemberRole);
+                .map(this::retrieveAndSetWorkspaceMemberRole)
+                .map(this::retrieveAndSetTeamMemberRole);
     }
 
     public WorkspaceDisplayPreferenceDto setAccountPreferredWorkspace(String accountId, String workspaceId) {
@@ -86,6 +87,13 @@ public class WorkspaceDisplayPreferenceService {
     private WorkspaceDisplayPreferenceDto retrieveAndSetWorkspaceMemberRole(WorkspaceDisplayPreferenceDto workspaceDisplayPreferenceDto) {
         WorkspaceAccountRoleType workspaceAccountRoleType = workspaceMemberRetrieveService.retrieveAccountWorkspaceRole(workspaceDisplayPreferenceDto.getAccountId(), workspaceDisplayPreferenceDto.getPreferredWorkspaceId());
         workspaceDisplayPreferenceDto.setWorkspaceRole(workspaceAccountRoleType);
+        return workspaceDisplayPreferenceDto;
+    }
+
+    private WorkspaceDisplayPreferenceDto retrieveAndSetTeamMemberRole(WorkspaceDisplayPreferenceDto workspaceDisplayPreferenceDto) {
+        teamMemberRetrieveService.retrieve(workspaceDisplayPreferenceDto.getAccountId(), workspaceDisplayPreferenceDto.getPreferredTeamId())
+                .map(TeamMemberDto::getRole)
+                .ifPresent(workspaceDisplayPreferenceDto::setTeamRole);
         return workspaceDisplayPreferenceDto;
     }
 }

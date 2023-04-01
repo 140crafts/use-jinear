@@ -62,6 +62,13 @@ public class TokenService {
         tokenRepository.save(token);
     }
 
+    public void passivizeToken(String tokenId, String existingPassiveId) {
+        log.info("Passive token has started for tokenId: {}, existingPassiveId: {}", tokenId, existingPassiveId);
+        Token token = tokenRepository.findById(tokenId).orElseThrow(NotFoundException::new);
+        token.setPassiveId(existingPassiveId);
+        tokenRepository.save(token);
+    }
+
     public void shortenTokenLifespan(TokenDto tokenDto) {
         log.info("Shortening token lifespan tokenId: {}", tokenDto.getTokenId());
         shortenTokenLifespan(tokenDto, (long) (10 * 60 * 1000));

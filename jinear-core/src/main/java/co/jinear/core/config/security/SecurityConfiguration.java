@@ -40,8 +40,8 @@ public class SecurityConfiguration {
             "/v1/account/password/reset/initialize",
             "/v1/account/password/reset/complete",
             "/v1/service-record/with-handle/{handle}",
-            "/v1/workspace/member/respond-invitation",
-            "/v1/workspace/member/invitation-info/{token}",
+            "/v1/workspace/member/invitation/respond",
+            "/v1/workspace/member/invitation/info/{token}",
             "/debug/**"
     };
 

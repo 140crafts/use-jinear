@@ -15,6 +15,7 @@ public class TeamInitializeVo {
     private String initializedBy;
     private String workspaceId;
     private String name;
+    private String username;
     private String tag;
     private TeamVisibilityType visibility;
     private TeamJoinMethodType joinMethod;

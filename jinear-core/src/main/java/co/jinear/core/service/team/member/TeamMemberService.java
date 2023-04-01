@@ -33,12 +33,13 @@ public class TeamMemberService {
         return teamMemberConverter.map(saved);
     }
 
-    public List<TeamMemberDto> addAllFromWorkspace(String teamId) {
+    public List<TeamMemberDto> addAllFromWorkspace(String teamId, List<String> excludeAccountIds) {
         log.info("Add all members from workspace has started for teamId: {}", teamId);
         String workspaceId = retrieveWorkspaceIdFromTeamId(teamId);
         List<WorkspaceMemberDto> workspaceMembers = workspaceMemberListingService.listAllWorkspaceMembers(workspaceId);
         List<TeamMember> teamMembers = workspaceMembers
                 .stream()
+                .filter(workspaceMemberDto -> isWorkspaceMemberIsInExcludedAccountIds(excludeAccountIds, workspaceMemberDto))
                 .map(workspaceMemberDto -> convertToTeamMember(teamId, workspaceMemberDto))
                 .toList();
         List<TeamMemberDto> saved = teamMemberRepository.saveAll(teamMembers)
@@ -60,6 +61,10 @@ public class TeamMemberService {
         String workspaceId = teamDto.getWorkspaceId();
         log.info("Retrieve workspaceId from teamId has ended. teamId: {}, workspaceId: {}", teamId, workspaceId);
         return workspaceId;
+    }
+
+    private boolean isWorkspaceMemberIsInExcludedAccountIds(List<String> excludeAccountIds, WorkspaceMemberDto workspaceMemberDto) {
+        return !excludeAccountIds.contains(workspaceMemberDto.getAccountId());
     }
 
     private TeamMember convertToTeamMember(String teamId, WorkspaceMemberDto workspaceMemberDto) {

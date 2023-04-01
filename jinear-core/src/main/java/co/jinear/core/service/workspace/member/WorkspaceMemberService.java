@@ -1,6 +1,7 @@
 package co.jinear.core.service.workspace.member;
 
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.entity.workspace.WorkspaceMember;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.model.vo.workspace.DeleteWorkspaceMemberVo;
@@ -34,12 +35,18 @@ public class WorkspaceMemberService {
     }
 
     @Transactional
-    public void deleteWorkspaceMember(DeleteWorkspaceMemberVo deleteWorkspaceMemberVo) {
+    public String deleteWorkspaceMember(String workspaceMemberId) {
+        log.info("Delete workspace member has started. workspaceMemberId: {}", workspaceMemberId);
+        return workspaceMemberRepository.findByWorkspaceMemberIdAndPassiveIdIsNull(workspaceMemberId)
+                .map(this::deleteMember)
+                .orElseThrow(NotFoundException::new);
+    }
+
+    public String deleteWorkspaceMember(DeleteWorkspaceMemberVo deleteWorkspaceMemberVo) {
         log.info("Delete workspace member has started. deleteWorkspaceMemberVo: {}", deleteWorkspaceMemberVo);
-        workspaceMemberRepository.findByAccountIdAndWorkspaceIdAndPassiveIdIsNull(deleteWorkspaceMemberVo.getAccountId(), deleteWorkspaceMemberVo.getWorkspaceId())
-                .ifPresent(workspaceMember -> {
-                    deleteMember(deleteWorkspaceMemberVo, workspaceMember);
-                });
+        return workspaceMemberRepository.findByAccountIdAndWorkspaceIdAndPassiveIdIsNull(deleteWorkspaceMemberVo.getAccountId(), deleteWorkspaceMemberVo.getWorkspaceId())
+                .map(this::deleteMember)
+                .orElseThrow(NotFoundException::new);
     }
 
     public boolean isAccountWorkspaceOwner(String accountId, String workspaceId) {
@@ -84,10 +91,11 @@ public class WorkspaceMemberService {
         workspaceMemberRepository.saveAndFlush(workspaceMember);
     }
 
-    private void deleteMember(DeleteWorkspaceMemberVo deleteWorkspaceMemberVo, WorkspaceMember workspaceMember) {
-        String passiveId = passiveService.createUserActionPassive(deleteWorkspaceMemberVo.getAccountId());
+    private String deleteMember(WorkspaceMember workspaceMember) {
+        String passiveId = passiveService.createUserActionPassive();
         workspaceMember.setPassiveId(passiveId);
         workspaceMemberRepository.save(workspaceMember);
         log.info("Delete workspace member has finished. workspaceMemberId: {}, passiveId: {}", workspaceMember.getWorkspaceMemberId(), passiveId);
+        return passiveId;
     }
 }

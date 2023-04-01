@@ -1,6 +1,7 @@
 package co.jinear.core.model.dto.workspace;
 
 import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,4 +22,6 @@ public class WorkspaceDisplayPreferenceDto {
     private TeamDto team;
     @Nullable
     private WorkspaceAccountRoleType workspaceRole;
+    @Nullable
+    private TeamMemberRoleType teamRole;
 }

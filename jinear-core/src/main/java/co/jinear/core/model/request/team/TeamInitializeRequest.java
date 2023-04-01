@@ -15,7 +15,9 @@ public class TeamInitializeRequest extends BaseRequest {
     @NotBlank
     private String name;
     @NotBlank
+    private String username;
+    @NotBlank
     private String tag;
     private TeamVisibilityType visibility = TeamVisibilityType.VISIBLE;
-    private TeamJoinMethodType joinMethod = TeamJoinMethodType.SYNC_MEMBERS_WITH_WORKSPACE;
+    private TeamJoinMethodType joinMethod = TeamJoinMethodType.FROM_TEAM_ADMIN;
 }

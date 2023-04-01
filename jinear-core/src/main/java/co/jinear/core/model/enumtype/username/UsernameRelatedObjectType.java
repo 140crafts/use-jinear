@@ -5,6 +5,5 @@ import lombok.Getter;
 @Getter
 public enum UsernameRelatedObjectType {
     ACCOUNT,
-    COMMUNITY,
     WORKSPACE;
 }

@@ -75,7 +75,7 @@ public class UsernameService {
                 .map(usernameRepository::countAllByRelatedObjectIdAndPassiveIdIsNull)
                 .filter(count -> count > 0L)
                 .ifPresent(count -> {
-                    log.info("Account already has username");
+                    log.info("Related object already has an username. initializeUsernameVo: {},", initializeUsernameVo);
                     throw new BusinessException();
                 });
     }

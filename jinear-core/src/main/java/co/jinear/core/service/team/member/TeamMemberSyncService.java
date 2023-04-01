@@ -17,7 +17,7 @@ public class TeamMemberSyncService {
 
     public void syncTeamMembersWithWorkspace(String teamId, String initializedBy) {
         log.info("Sync members with workspace has started.");
-        List<TeamMemberDto> teamMemberDtoList = teamMemberService.addAllFromWorkspace(teamId);
+        List<TeamMemberDto> teamMemberDtoList = teamMemberService.addAllFromWorkspace(teamId, List.of(initializedBy));
         asyncTeamActivityService.initializeTeamMemberAddedBatchActivity(initializedBy, teamMemberDtoList);
     }
 }
