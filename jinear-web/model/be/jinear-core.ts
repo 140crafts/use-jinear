@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-03-28 20:41:28.
+// Generated using typescript-generator version 3.0.1157 on 2023-03-29 11:26:49.
 
 export interface BaseDto {
   createdDate: Date;
@@ -591,6 +591,10 @@ export interface WorkspaceBaseResponse extends BaseResponse {
 
 export interface WorkspaceInvitationInfoResponse extends BaseResponse {
   data: WorkspaceInvitationInfoDto;
+}
+
+export interface WorkspaceInvitationListingResponse extends BaseResponse {
+  data: PageDto<WorkspaceInvitationDto>;
 }
 
 export interface WorkspaceMemberListingBaseResponse extends BaseResponse {

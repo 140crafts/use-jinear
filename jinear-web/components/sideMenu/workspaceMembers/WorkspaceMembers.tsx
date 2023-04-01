@@ -16,14 +16,17 @@ const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({}) => {
     isSuccess,
     isLoading,
     isError,
-  } = useRetrieveWorkspaceMembersQuery(preferredWorkspace?.workspaceId || "", {
-    skip: !preferredWorkspace?.workspaceId && !preferredWorkspace?.isPersonal,
-  });
+  } = useRetrieveWorkspaceMembersQuery(
+    { workspaceId: preferredWorkspace?.workspaceId || "" },
+    {
+      skip: !preferredWorkspace?.workspaceId && !preferredWorkspace?.isPersonal,
+    }
+  );
 
   return (
     <div className={styles.container}>
-      {isSuccess && !preferredWorkspace?.isPersonal && workplaceMembersResponse && (
-        <WorkspaceMemberList page={workplaceMembersResponse.data} />
+      {isSuccess && preferredWorkspace && !preferredWorkspace.isPersonal && workplaceMembersResponse && (
+        <WorkspaceMemberList page={workplaceMembersResponse.data} workspaceUsername={preferredWorkspace.username} />
       )}
     </div>
   );

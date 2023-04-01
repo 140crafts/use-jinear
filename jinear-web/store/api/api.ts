@@ -29,6 +29,7 @@ export const tagTypes = [
   "team-workflow-task-list",
   "reminder-next-job",
   "workspace-task-list",
+  "workspace-invitation-list",
 ];
 
 export const api = createApi({

@@ -342,6 +342,10 @@ export default {
     en: "Add People",
     tr: "Kişi Ekle",
   },
+  sideMenuWorkspaceMembers: {
+    en: "Workspace members",
+    tr: "Çalışma alanı üyeleri",
+  },
   sideMenuTeamTopicsMore: {
     en: "${number} more",
     tr: "${number} daha",
@@ -1349,5 +1353,77 @@ export default {
   workspaceMemberInvititationFormSubmit: {
     en: "Invite",
     tr: "Davet Et",
+  },
+  activeInvitationListTitle: {
+    en: "Active Invitations",
+    tr: "Bekleyen Davetler",
+  },
+  activeInvitationListEmptyMessage: {
+    en: "No active invitations found",
+    tr: "Bekleyen davetiye bulunamadı",
+  },
+  activeInvitationCancel: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  activeWorkspaceMemberListEmptyMessage: {
+    en: "No members found",
+    tr: "Hiçbir üye bulunamadı",
+  },
+  activeWorkspaceMemberListTitle: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri",
+  },
+  activeWorkspaceMemberKick: {
+    en: "Kick Member",
+    tr: "Üyeyi At",
+  },
+  workspaceMemberRole_OWNER: {
+    en: "Owner",
+    tr: "Alan Sahibi",
+  },
+  workspaceMemberRole_ADMIN: {
+    en: "Admin",
+    tr: "Yönetici",
+  },
+  workspaceMemberRole_MEMBER: {
+    en: "Member",
+    tr: "Ekip Üyesi",
+  },
+  workspaceMemberRole_GUEST: {
+    en: "Guest",
+    tr: "Misafir",
+  },
+  deleteWorkspaceInvitationAreYouSureTitle: {
+    en: "Remove Invitation",
+    tr: "Daveti Geri Çek",
+  },
+  deleteWorkspaceInvitationAreYouSureText: {
+    en: "Are you sure to remove this workspace invitation?",
+    tr: "Daveti geri çekmek istediğinize emin misiniz?",
+  },
+  deleteWorkspaceInvitationAreYouSureConfirmLabel: {
+    en: "Remove",
+    tr: "Geri çek",
+  },
+  workspaceMemberScreenBreadcrumbTitle: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri",
+  },
+  workspaceMemberScreenInviteMember: {
+    en: "Add People",
+    tr: "Kişi Ekle",
+  },
+  deleteWorkspaceMemberAreYouSureTitle: {
+    en: "Kick Member",
+    tr: "Üyeyi Çalışma Alanından At",
+  },
+  deleteWorkspaceMemberAreYouSureText: {
+    en: "Are you sure to kick member from this workspace?",
+    tr: "Üyeyi çalışma alanından atmak istediğinize emin misiniz?",
+  },
+  deleteWorkspaceMemberAreYouSureConfirmLabel: {
+    en: "Kick",
+    tr: "At",
   },
 };

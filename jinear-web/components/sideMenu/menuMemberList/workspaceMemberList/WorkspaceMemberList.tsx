@@ -5,15 +5,16 @@ import { popWorkspaceMemberInviteModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoAdd } from "react-icons/io5";
+import { IoEllipsisHorizontal } from "react-icons/io5";
 import MemberProfilePictureList from "../memberProfilePictureList/MemberProfilePictureList";
 import styles from "./WorkspaceMemberList.module.css";
 
 interface WorkspaceMemberListProps {
   page: PageDto<WorkspaceMemberDto>;
+  workspaceUsername: string;
 }
 
-const WorkspaceMemberList: React.FC<WorkspaceMemberListProps> = ({ page }) => {
+const WorkspaceMemberList: React.FC<WorkspaceMemberListProps> = ({ workspaceUsername, page }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -33,12 +34,12 @@ const WorkspaceMemberList: React.FC<WorkspaceMemberListProps> = ({ page }) => {
       <MemberProfilePictureList accountList={page.content.map((member) => member.account)} type="workspace" />
       {currentAccountAdminOrOwner && (
         <Button
-          onClick={popInvitationModal}
+          href={`/${workspaceUsername}/members`}
+          data-tooltip-right={t("sideMenuWorkspaceMembers")}
           variant={ButtonVariants.hoverFilled2}
           heightVariant={ButtonHeight.short}
-          data-tooltip-right={t("sideMenuWorkspaceInviteMember")}
         >
-          <IoAdd />
+          <IoEllipsisHorizontal />
         </Button>
       )}
     </div>

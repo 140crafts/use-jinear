@@ -1,7 +1,7 @@
 import Button, { ButtonVariants } from "@/components/button";
 import { WorkspaceMemberInviteRequest } from "@/model/be/jinear-core";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
-import { useInviteWorkspaceMutation } from "@/store/api/workspaceMemberApi";
+import { useInviteWorkspaceMutation } from "@/store/api/workspaceMemberInvitationApi";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";

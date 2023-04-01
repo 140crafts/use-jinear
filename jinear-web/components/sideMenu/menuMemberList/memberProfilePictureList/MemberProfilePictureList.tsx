@@ -1,4 +1,3 @@
-import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import ProfilePhoto from "@/components/profilePhoto";
 import { AccountDto } from "@/model/be/jinear-core";
 import { motion, usePresence } from "framer-motion";
@@ -62,11 +61,7 @@ const MemberProfilePictureList: React.FC<MemberProfilePictureListProps> = ({ acc
         </div>
       ))}
 
-      {remainingCount > 0 && (
-        <Button variant={ButtonVariants.hoverFilled2} className={styles.moreButton} heightVariant={ButtonHeight.short}>
-          {moreButtonLabel}
-        </Button>
-      )}
+      {remainingCount > 0 && <div className={styles.moreButton}>{moreButtonLabel}</div>}
     </motion.div>
   );
 };

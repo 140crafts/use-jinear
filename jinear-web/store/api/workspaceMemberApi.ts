@@ -1,62 +1,31 @@
-import {
-  BaseResponse,
-  WorkspaceInvitationInfoResponse,
-  WorkspaceMemberInvitationRespondRequest,
-  WorkspaceMemberInviteRequest,
-  WorkspaceMemberListingBaseResponse,
-} from "@/model/be/jinear-core";
+import { BaseResponse, WorkspaceMemberListingBaseResponse } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const workplaceMemberApi = api.injectEndpoints({
   endpoints: (build) => ({
-    retrieveWorkspaceMembers: build.query<WorkspaceMemberListingBaseResponse, string>({
-      query: (workspaceId: string) => `v1/workspace/member/${workspaceId}/list`,
-      providesTags: (_result, _err, workspaceId) => [
+    retrieveWorkspaceMembers: build.query<WorkspaceMemberListingBaseResponse, { workspaceId: string; page?: number }>({
+      query: ({ workspaceId, page = 0 }) => `v1/workspace/member/${workspaceId}/list?page=${page}`,
+      providesTags: (_result, _err, { workspaceId, page = 0 }) => [
         {
           type: "workplace-member-list",
-          id: workspaceId,
+          id: `${workspaceId}-${page}}`,
         },
       ],
     }),
     //
-    inviteWorkspace: build.mutation<BaseResponse, WorkspaceMemberInviteRequest>({
-      query: (body) => ({
-        url: `v1/workspace/member/invite`,
-        method: "POST",
-        body,
+    kickMemberFromWorkspace: build.mutation<BaseResponse, { workspaceId: string; workspaceMemberId: string }>({
+      query: ({ workspaceId, workspaceMemberId }) => ({
+        url: `v1/workspace/member/${workspaceId}/kick/${workspaceMemberId}`,
+        method: "DELETE",
       }),
-      invalidatesTags: [""], //TODO workspace-invitations
-    }),
-    //
-    retrieveInvitationInfo: build.query<WorkspaceInvitationInfoResponse, string>({
-      query: (token: string) => `v1/workspace/member/invitation-info/${token}`,
-      providesTags: (_result, _err, token) => [
-        {
-          type: "workspace-invitation-info",
-          id: token,
-        },
-      ],
-    }),
-    //
-    respondInvitation: build.mutation<BaseResponse, WorkspaceMemberInvitationRespondRequest>({
-      query: (body) => ({
-        url: `v1/workspace/member/respond-invitation`,
-        method: "POST",
-        body,
-      }),
-      invalidatesTags: ["Account-Current", "workplace-member-list", "workplace-team-list", "team-member-list", "team-topic-list"],
+      invalidatesTags: ["workplace-member-list"],
     }),
     //
   }),
 });
 
-export const {
-  useRetrieveWorkspaceMembersQuery,
-  useInviteWorkspaceMutation,
-  useRetrieveInvitationInfoQuery,
-  useRespondInvitationMutation,
-} = workplaceMemberApi;
+export const { useRetrieveWorkspaceMembersQuery, useKickMemberFromWorkspaceMutation } = workplaceMemberApi;
 
 export const {
-  endpoints: { retrieveWorkspaceMembers, inviteWorkspace, retrieveInvitationInfo, respondInvitation },
+  endpoints: { retrieveWorkspaceMembers, kickMemberFromWorkspace },
 } = workplaceMemberApi;
