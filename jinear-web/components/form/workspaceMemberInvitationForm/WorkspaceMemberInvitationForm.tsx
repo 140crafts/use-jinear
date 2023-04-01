@@ -76,20 +76,6 @@ const WorkspaceMemberInvitationForm: React.FC<WorkspaceMemberInvitationFormProps
           <input id={"new-member-mail"} type={"email"} {...register("email", { required: t("formRequiredField") })} />
           <div className={styles.inputSubtext}>{t("workspaceMemberInvititationFormEmailText")}</div>
         </label>
-        <div>
-          <label className={styles.label} htmlFor={"new-member-initial-team"}>
-            {t("workspaceMemberInvititationFormInitialTeam")}
-            <select id="new-member-initial-team" {...register("initialTeamId")}>
-              {teamsResponse?.data.map((team) => (
-                <option key={`new-member-initial-team-${team.teamId}`} value={team.teamId}>
-                  {team.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="spacer-h-1" />
-          <div className={styles.inputSubtext}>{t("workspaceMemberInvititationFormInitialTeamText")}</div>
-        </div>
 
         <div>
           <label className={styles.label} htmlFor={"new-member-role"}>
@@ -106,6 +92,21 @@ const WorkspaceMemberInvitationForm: React.FC<WorkspaceMemberInvitationFormProps
           <div className={cn(styles.inputSubtext, styles.inputRoleText)}>
             {t(`workspaceMemberInvititationFormForRoleText_${forRole}`)}
           </div>
+        </div>
+
+        <div>
+          <label className={styles.label} htmlFor={"new-member-initial-team"}>
+            {t("workspaceMemberInvititationFormInitialTeam")}
+            <select id="new-member-initial-team" {...register("initialTeamId")}>
+              {teamsResponse?.data.map((team) => (
+                <option key={`new-member-initial-team-${team.teamId}`} value={team.teamId}>
+                  {team.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="spacer-h-1" />
+          <div className={styles.inputSubtext}>{t("workspaceMemberInvititationFormInitialTeamText")}</div>
         </div>
 
         <div className="spacer-h-4" />

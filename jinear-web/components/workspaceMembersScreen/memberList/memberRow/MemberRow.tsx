@@ -2,8 +2,9 @@ import Button, { ButtonVariants } from "@/components/button";
 import Line from "@/components/line/Line";
 import { WorkspaceMemberDto } from "@/model/be/jinear-core";
 import { useKickMemberFromWorkspaceMutation } from "@/store/api/workspaceMemberApi";
+import { selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
-import { useAppDispatch } from "@/store/store";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -21,6 +22,8 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, workspaceRoleIsAdminOrOwn
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [kickMemberFromWorkspace, {}] = useKickMemberFromWorkspaceMutation();
+  const currentAccountId = useTypedSelector(selectCurrentAccountId);
+  const viewingHimself = member.accountId == currentAccountId;
 
   const deleteWorkspaceMember = () => {
     logger.log({ deleteWorkspaceMember: member });
@@ -48,7 +51,7 @@ const MemberRow: React.FC<MemberRowProps> = ({ member, workspaceRoleIsAdminOrOwn
           <div className={styles.title}>{member.account.email}</div>
         </div>
 
-        {workspaceRoleIsAdminOrOwner && (
+        {workspaceRoleIsAdminOrOwner && !viewingHimself && (
           <div className={styles.rightInfoContainer}>
             <Button
               variant={ButtonVariants.filled}

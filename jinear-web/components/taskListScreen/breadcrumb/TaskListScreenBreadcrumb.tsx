@@ -14,19 +14,16 @@ const TaskListScreenBreadcrumb: React.FC<TaskListScreenBreadcrumbProps> = ({ typ
   const workspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const team = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
+  const workspaceTitle = workspace?.title || "";
   const workspaceUsername = workspace?.username || "";
   const teamName = team?.name || "";
-  const workspaceUsernameEncoded = encodeURI(workspaceUsername);
-  const teamNameEncoded = encodeURI(teamName);
+  const teamUsername = team?.username || "";
 
   return workspace?.isPersonal ? null : (
     <Breadcrumb>
-      <BreadcrumbLink label={workspaceUsername} url={`/${workspaceUsernameEncoded}`} />
-      <BreadcrumbLink label={teamName} url={`/${workspaceUsernameEncoded}/${teamNameEncoded}`} />
-      <BreadcrumbLink
-        label={t(`taskListScreenBreadcrumb_${type}`)}
-        url={`/${workspaceUsernameEncoded}/${teamNameEncoded}/${type}`}
-      />
+      <BreadcrumbLink label={workspaceTitle} url={`/${workspaceUsername}`} />
+      <BreadcrumbLink label={teamName} url={`/${workspaceUsername}/${teamUsername}`} />
+      <BreadcrumbLink label={t(`taskListScreenBreadcrumb_${type}`)} url={`/${workspaceUsername}/${teamUsername}/${type}`} />
     </Breadcrumb>
   );
 };

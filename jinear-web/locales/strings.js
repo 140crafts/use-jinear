@@ -350,6 +350,10 @@ export default {
     en: "${number} more",
     tr: "${number} daha",
   },
+  sideMenuTeamMembers: {
+    en: "Team members",
+    tr: "Ekip üyeleri",
+  },
   sideMenuActionsTeams: {
     en: "Actions",
     tr: "Aksiyonlar",
@@ -995,8 +999,8 @@ export default {
     tr: "Ekip adı",
   },
   newTeamFormTag: {
-    en: "Tag (short code for easy access. For example Engineering -> ENG)",
-    tr: "Ekip kısa kodu (Kolay erişim için. Örneğin Mühendislik -> MUH)",
+    en: "Tag (short code for easy access. For example Sales -> SLS)",
+    tr: "Ekip kısa kodu (Kolay erişim için. Örneğin Pazarlama -> STS)",
   },
   currentWorkspaceHeaderWorkspaceDetail: {
     en: "Workspace detail",
@@ -1315,8 +1319,8 @@ export default {
     tr: "Davet edeceğiniz kişiye bir davetiye linki gönderilecek",
   },
   workspaceMemberInvititationFormForRoleLabel: {
-    en: "Role",
-    tr: "Yetki",
+    en: "Workspace Role",
+    tr: "Çalışma Alanı Yetkisi",
   },
   workspaceMemberInvititationFormForRole_GUEST: {
     en: "Guest",
@@ -1339,12 +1343,12 @@ export default {
     tr: "Yöneticiler çalışma alanına yeni kişiler davet edebilir. Ekipleri ve taskları oluşturabilir ve düzenleyebilirler. ",
   },
   workspaceMemberInvititationFormForRoleText_MEMBER: {
-    en: "Members can create and edit tasks.",
-    tr: "Ekip üyeleri görevler oluşturabilir ve düzenleyebilirler.",
+    en: "Members can create and edit tasks but can not change workspace settings and members.",
+    tr: "Ekip üyeleri görevler oluşturabilir ve düzenleyebilirler ancak çalışma alanı ayarlarını değiştiremez, üye ekleyip çıkartamazlar.",
   },
   workspaceMemberInvititationFormInitialTeam: {
-    en: "Team",
-    tr: "Ekip",
+    en: "Initial Team",
+    tr: "Dahil Olacağı Ekip",
   },
   workspaceMemberInvititationFormInitialTeamText: {
     en: "Member can be added/removed to other teams later.",
@@ -1437,5 +1441,29 @@ export default {
   logoutAreYouSureConfirmLabel: {
     en: "Logout",
     tr: "Çık",
+  },
+  teamMemberScreenBreadcrumbTitle: {
+    en: "Team Members",
+    tr: "Ekip Üyeleri",
+  },
+  teamMemberScreenAddMember: {
+    en: "Add People",
+    tr: "Kişi Ekle",
+  },
+  teamMemberScreenListTitle: {
+    en: "Team Members",
+    tr: "Ekip Üyeleri",
+  },
+  teamMemberRole_ADMIN: {
+    en: "Admin",
+    tr: "Yönetici",
+  },
+  teamMemberRole_MEMBER: {
+    en: "Member",
+    tr: "Ekip Üyesi",
+  },
+  teamMemberRole_GUEST: {
+    en: "Guest",
+    tr: "Misafir",
   },
 };

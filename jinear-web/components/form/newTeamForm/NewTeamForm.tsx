@@ -33,15 +33,16 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
   const currTag = watch("tag");
 
   useEffect(() => {
-    const normalized = normalizeUsernameReplaceSpaces(currName)?.substring(0, MAX_TAG_LENGTH)?.toLocaleUpperCase();
-    setCandidateUsername(normalized);
-    setValue("tag", normalized);
+    const normalizedUsername = normalizeUsernameReplaceSpaces(currName);
+    const normalizedTag = normalizedUsername?.substring(0, MAX_TAG_LENGTH)?.toLocaleUpperCase();
+    setCandidateUsername(normalizedUsername);
+    setValue("tag", normalizedTag);
+    setValue("username", normalizedUsername);
   }, [currName]);
 
   useEffect(() => {
-    const normalized = normalizeUsernameReplaceSpaces(currTag)?.substring(0, MAX_TAG_LENGTH)?.toLocaleUpperCase();
-    setCandidateUsername(normalized);
-    setValue("tag", normalized);
+    const normalizedTag = normalizeUsernameReplaceSpaces(currTag)?.substring(0, MAX_TAG_LENGTH)?.toLocaleUpperCase();
+    setValue("tag", normalizedTag);
   }, [currTag]);
 
   useEffect(() => {
@@ -66,10 +67,14 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
   return (
     <form autoComplete="off" id={"new-team-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
       {currentWorkspace && <input type="hidden" value={currentWorkspace.workspaceId} {...register("workspaceId")} />}
+      <input id={"new-team-username"} type={"hidden"} {...register("username")} />
+
       <label className={cn(styles.label, "flex-1")} htmlFor={"new-team-name"}>
         {`${t("newTeamFormName")} *`}
         <input id={"new-team-name"} type={"text"} {...register("name", { required: t("formRequiredField") })} />
+        <div className={styles.link}>{`${HOST}/${currentWorkspace?.username}/${candidateUsername?.toLocaleLowerCase()}`}</div>
       </label>
+
       <label className={cn(styles.label, "flex-1")} htmlFor={"new-team-tag"}>
         {`${t("newTeamFormTag")} * ${currTag?.length}/${MAX_TAG_LENGTH}`}
         <input
@@ -79,7 +84,6 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
           maxLength={10}
           {...register("tag", { required: t("formRequiredField") })}
         />
-        <div className={styles.link}>{`${HOST}/${currentWorkspace?.username}/${candidateUsername?.toLocaleLowerCase()}`}</div>
       </label>
 
       <div className={styles.footerContainer}>

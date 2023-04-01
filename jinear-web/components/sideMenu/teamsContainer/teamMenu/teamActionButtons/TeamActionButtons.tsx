@@ -7,19 +7,20 @@ import { IoArchiveOutline, IoCalendarOutline, IoFolderOutline, IoList, IoPlayOut
 import styles from "./TeamActionButtons.module.css";
 interface TeamActionButtonsProps {
   name: string;
+  username: string;
   workspaceUsername: string;
 }
 
-const TeamActionButtons: React.FC<TeamActionButtonsProps> = ({ name, workspaceUsername }) => {
+const TeamActionButtons: React.FC<TeamActionButtonsProps> = ({ name, username, workspaceUsername }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const currentPath = router.asPath;
-  const weeklyPath = `/${workspaceUsername}/${name}/weekly`;
-  const monthlyPath = `/${workspaceUsername}/${name}/monthly`;
-  const taskListPath = `/${workspaceUsername}/${name}/active`;
-  const backlogPath = `/${workspaceUsername}/${name}/backlog`;
-  const archivePath = `/${workspaceUsername}/${name}/archive`;
-  const allPath = `/${workspaceUsername}/${name}/all`;
+  const weeklyPath = `/${workspaceUsername}/${username}/weekly`;
+  const monthlyPath = `/${workspaceUsername}/${username}/monthly`;
+  const taskListPath = `/${workspaceUsername}/${username}/active`;
+  const backlogPath = `/${workspaceUsername}/${username}/backlog`;
+  const archivePath = `/${workspaceUsername}/${username}/archive`;
+  const allPath = `/${workspaceUsername}/${username}/all`;
 
   return (
     <div className={styles.container}>

@@ -13,7 +13,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ teamId }) => {
     isSuccess,
     isLoading,
     isError,
-  } = useRetrieveTeamMembersQuery(teamId, { skip: teamId == null });
+  } = useRetrieveTeamMembersQuery({ teamId }, { skip: teamId == null });
 
   return (
     <div className={styles.container}>

@@ -64,13 +64,13 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
 
   const routeTeamSettings = () => {
     if (selectedTeam) {
-      router.push(`/${preferredWorkspace?.username}/${selectedTeam.name}/settings`);
+      router.push(`/${preferredWorkspace?.username}/${selectedTeam.username}/settings`);
     }
   };
 
   const routeTeamHome = () => {
     if (selectedTeam) {
-      router.push(`/${preferredWorkspace?.username}/${selectedTeam.name}`);
+      router.push(`/${preferredWorkspace?.username}/${selectedTeam.username}`);
     }
   };
 

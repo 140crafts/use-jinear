@@ -3,12 +3,12 @@ import { api } from "./api";
 
 export const teamMemberApi = api.injectEndpoints({
   endpoints: (build) => ({
-    retrieveTeamMembers: build.query<TeamMemberListingResponse, string>({
-      query: (teamId: string) => `v1/team/member/${teamId}/list`,
-      providesTags: (_result, _err, teamId) => [
+    retrieveTeamMembers: build.query<TeamMemberListingResponse, { teamId: string; page?: number }>({
+      query: ({ teamId, page = 0 }) => `v1/team/member/${teamId}/list?page=${page}`,
+      providesTags: (_result, _err, { teamId, page = 0 }) => [
         {
           type: "team-member-list",
-          id: teamId,
+          id: `${teamId}-${page}`,
         },
       ],
     }),

@@ -28,7 +28,7 @@ const MemberSelect: React.FC<MemberSelectProps> = ({ teamId, setValue, register,
     isSuccess: teamMembersIsSuccess,
     isLoading: teamMembersIsLoading,
     isError: teamMembersIsError,
-  } = useRetrieveTeamMembersQuery(teamId, { skip: teamId == null });
+  } = useRetrieveTeamMembersQuery({ teamId }, { skip: teamId == null });
 
   const assignTaskToCurrentAccount = () => {
     setValue("assignedTo", currentAccountId);

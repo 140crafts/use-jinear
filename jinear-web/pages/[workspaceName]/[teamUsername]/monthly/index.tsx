@@ -5,7 +5,7 @@ import MonthYearNo from "@/components/teamMonthlyScreen/monthYearNo/MonthYearNo"
 import TeamMonthlyScreenBreadcrumb from "@/components/teamMonthlyScreen/teamMonthlyScreenBreadcrumb/TeamMonthlyScreenBreadcrumb";
 import WorkflowStatusTab from "@/components/workflowStatusTab/WorkflowStatusTab";
 import TeamMonthlyScreenContext from "@/store/context/screen/team/monthly/teamMonthlyScreenContext";
-import { selectCurrentAccountsPreferredTeamId, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { endOfMonth, endOfWeek, startOfMonth, startOfToday } from "date-fns";
@@ -22,11 +22,9 @@ const TeamMonthlyScreen: React.FC<TeamMonthlyScreenProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
   const monthlyPlanTabContainerRef = useRef<HTMLDivElement>(null);
-  const workspaceName: string = router.query?.workspaceName as string;
-  const teamUsername: string = router.query?.teamUsername as string;
 
   const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const preferredTeamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
+  const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
   const today = startOfToday();
   const [viewingPeriodOf, setViewingPeriodOf] = useState<Date>(today);
@@ -51,7 +49,12 @@ const TeamMonthlyScreen: React.FC<TeamMonthlyScreenProps> = ({}) => {
     >
       <div className={styles.container}>
         {!currentWorkspace?.isPersonal && (
-          <TeamMonthlyScreenBreadcrumb workspaceName={workspaceName} teamUsername={teamUsername} />
+          <TeamMonthlyScreenBreadcrumb
+            workspaceName={currentWorkspace?.title || ""}
+            workspaceUsername={currentWorkspace?.username || ""}
+            teamName={preferredTeam?.name}
+            teamUsername={preferredTeam?.username}
+          />
         )}
         <MonthYearNo />
 
@@ -64,7 +67,7 @@ const TeamMonthlyScreen: React.FC<TeamMonthlyScreenProps> = ({}) => {
             containerClassName={styles.tabViewContainer}
           >
             <WorkflowStatusTab
-              teamId={preferredTeamId}
+              teamId={preferredTeam?.teamId}
               workspaceId={currentWorkspace?.workspaceId}
               startDate={viewingPeriodStart}
               endDate={endOfWeek(viewingPeriodEnd, { weekStartsOn: 1 })}
@@ -79,7 +82,7 @@ const TeamMonthlyScreen: React.FC<TeamMonthlyScreenProps> = ({}) => {
           >
             <MonthlyPlanTab
               containerRef={monthlyPlanTabContainerRef}
-              teamId={preferredTeamId}
+              teamId={preferredTeam?.teamId}
               workspaceId={currentWorkspace?.workspaceId}
               viewingPeriodStart={viewingPeriodStart}
               viewingPeriodEnd={viewingPeriodEnd}

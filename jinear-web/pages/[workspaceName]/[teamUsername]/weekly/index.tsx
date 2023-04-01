@@ -5,7 +5,7 @@ import WeeklyPlanTab from "@/components/teamWeeklyScreen/weeklyPlanTab/WeeklyPla
 import YearWeekNo from "@/components/teamWeeklyScreen/yearWeekNo/YearWeekNo";
 import WorkflowStatusTab from "@/components/workflowStatusTab/WorkflowStatusTab";
 import TeamWeeklyScreenContext from "@/store/context/screen/team/weekly/teamWeeklyScreenContext";
-import { selectCurrentAccountsPreferredTeamId, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { endOfWeek, startOfToday, startOfWeek } from "date-fns";
 import useTranslation from "locales/useTranslation";
@@ -19,10 +19,9 @@ const TeamWeeklyScreen: React.FC<TeamWeeklyScreenProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
   const weeklyPlanTabContainerRef = useRef<HTMLDivElement>(null);
-  const workspaceName: string = router.query?.workspaceName as string;
   const teamUsername: string = router.query?.teamUsername as string;
   const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const preferredTeamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
+  const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
   let today = startOfToday();
 
@@ -32,7 +31,12 @@ const TeamWeeklyScreen: React.FC<TeamWeeklyScreenProps> = ({}) => {
     <TeamWeeklyScreenContext.Provider value={{ viewingWeekStart, setViewingWeekStart }}>
       <div className={styles.container}>
         {!currentWorkspace?.isPersonal && (
-          <TeamWeeklyScreenBreadcrumb workspaceName={currentWorkspace?.username || ""} teamUsername={teamUsername} />
+          <TeamWeeklyScreenBreadcrumb
+            workspaceName={currentWorkspace?.title || ""}
+            workspaceUsername={currentWorkspace?.username || ""}
+            teamUsername={preferredTeam?.username || ""}
+            teamName={preferredTeam?.name || ""}
+          />
         )}
         <YearWeekNo />
 
@@ -45,7 +49,7 @@ const TeamWeeklyScreen: React.FC<TeamWeeklyScreenProps> = ({}) => {
             containerClassName={styles.tabViewContainer}
           >
             <WorkflowStatusTab
-              teamId={preferredTeamId}
+              teamId={preferredTeam?.teamId}
               workspaceId={currentWorkspace?.workspaceId}
               startDate={viewingWeekStart}
               endDate={endOfWeek(viewingWeekStart, { weekStartsOn: 1 })}
@@ -59,7 +63,7 @@ const TeamWeeklyScreen: React.FC<TeamWeeklyScreenProps> = ({}) => {
             containerRef={weeklyPlanTabContainerRef}
           >
             <WeeklyPlanTab
-              teamId={preferredTeamId}
+              teamId={preferredTeam?.teamId}
               workspaceId={currentWorkspace?.workspaceId}
               viewingWeekStart={viewingWeekStart}
               containerRef={weeklyPlanTabContainerRef}

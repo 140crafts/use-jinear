@@ -27,9 +27,9 @@ export const workspaceDisplayPreferenceApi = api.injectEndpoints({
       }),
       invalidatesTags: ["Account-Current", "workplace-member-list", "workplace-team-list", "team-member-list", "team-topic-list"],
     }),
-    updatePreferredTeamWithUsername: build.mutation<BaseResponse, { workspaceUsername: string; teamName: string }>({
-      query: (body: { workspaceUsername: string; teamName: string }) => ({
-        url: `v1/workspace/display-preferences/with-username/${body.workspaceUsername}/set-preferred-team/${body.teamName}`,
+    updatePreferredTeamWithUsername: build.mutation<BaseResponse, { workspaceUsername: string; teamUsername: string }>({
+      query: (body: { workspaceUsername: string; teamUsername: string }) => ({
+        url: `v1/workspace/display-preferences/with-username/${body.workspaceUsername}/set-preferred-team/${body.teamUsername}`,
         method: "PUT",
         body,
       }),

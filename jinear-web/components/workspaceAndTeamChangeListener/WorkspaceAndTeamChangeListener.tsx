@@ -43,12 +43,12 @@ const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerPro
   }, [router.asPath, workspaceNameFromUrl, currentWorkspace]);
 
   useEffect(() => {
-    if (workspaceNameFromUrl && teamUsernameFromUrl && preferredTeam && preferredTeam.name != teamUsernameFromUrl) {
-      const log = `Current team is different from url. fromUrl: ${teamUsernameFromUrl}, preferredTeamName: ${preferredTeam.name}`;
+    if (workspaceNameFromUrl && teamUsernameFromUrl && preferredTeam && preferredTeam.username != teamUsernameFromUrl) {
+      const log = `Current team is different from url. fromUrl: ${teamUsernameFromUrl}, preferredTeamUsername: ${preferredTeam.username}`;
       logger.log(log);
       updatePreferredTeamWithUsername({
         workspaceUsername: workspaceNameFromUrl,
-        teamName: teamUsernameFromUrl,
+        teamUsername: teamUsernameFromUrl,
       });
     }
   }, [router.asPath, workspaceNameFromUrl, teamUsernameFromUrl, preferredTeam]);

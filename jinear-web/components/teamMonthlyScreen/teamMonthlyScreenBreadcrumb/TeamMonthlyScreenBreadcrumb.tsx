@@ -5,16 +5,23 @@ import React from "react";
 
 interface TeamMonthlyScreenBreadcrumbProps {
   workspaceName: string;
-  teamUsername: string;
+  workspaceUsername: string;
+  teamName?: string;
+  teamUsername?: string;
 }
 
-const TeamMonthlyScreenBreadcrumb: React.FC<TeamMonthlyScreenBreadcrumbProps> = ({ workspaceName, teamUsername }) => {
+const TeamMonthlyScreenBreadcrumb: React.FC<TeamMonthlyScreenBreadcrumbProps> = ({
+  workspaceName,
+  workspaceUsername,
+  teamName = "",
+  teamUsername = "",
+}) => {
   const { t } = useTranslation();
   return (
     <Breadcrumb>
-      <BreadcrumbLink label={workspaceName} url={`/${workspaceName}`} />
-      <BreadcrumbLink label={teamUsername} url={`/${workspaceName}/${teamUsername}`} />
-      <BreadcrumbLink label={t("teamMonthlyScreenBreadcrumbLabel")} url={`/${workspaceName}/${teamUsername}/monthly`} />
+      <BreadcrumbLink label={workspaceName} url={`/${workspaceUsername}`} />
+      <BreadcrumbLink label={teamName} url={`/${workspaceUsername}/${teamUsername}`} />
+      <BreadcrumbLink label={t("teamMonthlyScreenBreadcrumbLabel")} url={`/${workspaceUsername}/${teamUsername}/monthly`} />
     </Breadcrumb>
   );
 };

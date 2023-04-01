@@ -64,9 +64,16 @@ export const selectCurrentAccountsPreferredWorkspace = (state: RootState) => {
 export const selectCurrentAccountsPreferredWorkspaceRole = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.workspaceRole;
 };
+export const selectCurrentAccountsPreferredTeamRole = (state: RootState) => {
+  return state.account.current?.workspaceDisplayPreference?.teamRole;
+};
 export const selectCurrentAccountsPreferredWorkspaceRoleIsAdminOrOwner = (state: RootState) => {
   const role = state.account.current?.workspaceDisplayPreference?.workspaceRole;
   return role == "ADMIN" || role == "OWNER";
+};
+export const selectCurrentAccountsPreferredTeamRoleIsAdmin = (state: RootState) => {
+  const role = state.account.current?.workspaceDisplayPreference?.teamRole;
+  return role == "ADMIN";
 };
 
 export const selectCurrentAccountsPreferredWorkspaceId = (state: RootState) => {

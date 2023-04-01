@@ -1,9 +1,8 @@
 import TaskListScreenBreadcrumb from "@/components/taskListScreen/breadcrumb/TaskListScreenBreadcrumb";
 import PaginatedAllTasksList from "@/components/taskListScreen/taskLists/paginatedAllTasksList/PaginatedAllTasksList";
-import { selectCurrentAccountsPersonalWorkspace, selectCurrentAccountsPreferredTeam } from "@/store/slice/accountSlice";
+import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
-import { useRouter } from "next/router";
 import React from "react";
 import styles from "./index.module.css";
 
@@ -11,8 +10,7 @@ interface AllTaskListScreenProps {}
 
 const AllTaskListScreen: React.FC<AllTaskListScreenProps> = ({}) => {
   const { t } = useTranslation();
-  const router = useRouter();
-  const workspace = useTypedSelector(selectCurrentAccountsPersonalWorkspace);
+  const workspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const team = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
   return (
