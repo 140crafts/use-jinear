@@ -1426,4 +1426,16 @@ export default {
     en: "Kick",
     tr: "At",
   },
+  logoutAreYouSureTitle: {
+    en: "Logout",
+    tr: "Çıkış Yap",
+  },
+  logoutAreYouSureText: {
+    en: "Are you sure to logout?",
+    tr: "Çıkış yapmak istediğinize emin misiniz?",
+  },
+  logoutAreYouSureConfirmLabel: {
+    en: "Logout",
+    tr: "Çık",
+  },
 };
