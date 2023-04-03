@@ -7,6 +7,7 @@ import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
 import co.jinear.core.model.entity.team.TeamMember;
 import co.jinear.core.model.vo.team.member.TeamMemberAddVo;
 import co.jinear.core.repository.TeamMemberRepository;
+import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberListingService;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +25,8 @@ public class TeamMemberService {
     private final TeamRetrieveService teamRetrieveService;
     private final WorkspaceMemberListingService workspaceMemberListingService;
     private final TeamMemberConverter teamMemberConverter;
+    private final TeamMemberRetrieveService teamMemberRetrieveService;
+    private final PassiveService passiveService;
 
     public TeamMemberDto addTeamMember(TeamMemberAddVo teamMemberAddVo) {
         log.info("Add team member has started. teamMemberAddVo: {}", teamMemberAddVo);
@@ -31,6 +34,16 @@ public class TeamMemberService {
         assignWorkspaceId(teamMemberAddVo, teamMember);
         TeamMember saved = teamMemberRepository.saveAndFlush(teamMember);
         return teamMemberConverter.map(saved);
+    }
+
+    public String removeTeamMember(String teamMemberId) {
+        log.info("Remove team member has started. teamMemberId: {}", teamMemberId);
+        TeamMember teamMember = teamMemberRetrieveService.retrieveEntity(teamMemberId);
+        String passiveId = passiveService.createUserActionPassive();
+        teamMember.setPassiveId(passiveId);
+        teamMemberRepository.save(teamMember);
+        log.info("Remove team member has completed. teamMemberId: {}, passiveId: {}", teamMemberId, passiveId);
+        return passiveId;
     }
 
     public List<TeamMemberDto> addAllFromWorkspace(String teamId, List<String> excludeAccountIds) {

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-04-01 18:20:32.
+// Generated using typescript-generator version 3.0.1157 on 2023-04-02 14:07:50.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountDto extends BaseDto {
@@ -453,6 +453,12 @@ export interface TaskUpdateRequest extends BaseRequest {
 
 export interface TaskUpdateTitleRequest extends BaseRequest {
     title: string;
+}
+
+export interface AddTeamMemberRequest extends BaseRequest {
+    accountId: string;
+    teamId: string;
+    role: TeamMemberRoleType;
 }
 
 export interface InitializeTeamWorkflowStatusRequest extends BaseRequest {
