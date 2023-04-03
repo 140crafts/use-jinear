@@ -47,8 +47,8 @@
   flex-direction: row;
   justify-content: center;
   margin-top: 25px;
-  padding-bottom: var(--tab-bar-height);
   padding-left: calc(var(--side-menu-main-menu-width) + var(--side-menu-workspace-menu-width));
+  padding-bottom: calc(var(--tab-bar-height) * 4);
 }
 
 .contentWithoutSideMenu {

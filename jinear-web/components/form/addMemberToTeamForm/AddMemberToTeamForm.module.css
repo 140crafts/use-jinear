@@ -1,0 +1,19 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+
+.inputSubtext {
+  margin-top: 0.125rem;
+}
+.inputRoleText {
+  min-height: 3rem;
+}

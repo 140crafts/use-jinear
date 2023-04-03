@@ -1,22 +1,40 @@
-import { TeamMemberListingResponse } from "@/model/be/jinear-core";
+import { AddTeamMemberRequest, BaseResponse, TeamMemberListingResponse } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const teamMemberApi = api.injectEndpoints({
   endpoints: (build) => ({
-    retrieveTeamMembers: build.query<TeamMemberListingResponse, string>({
-      query: (teamId: string) => `v1/team/member/${teamId}/list`,
-      providesTags: (_result, _err, teamId) => [
+    retrieveTeamMembers: build.query<TeamMemberListingResponse, { teamId: string; page?: number }>({
+      query: ({ teamId, page = 0 }) => `v1/team/member/list/${teamId}?page=${page}`,
+      providesTags: (_result, _err, { teamId, page = 0 }) => [
         {
           type: "team-member-list",
-          id: teamId,
+          id: `${teamId}-${page}`,
         },
       ],
     }),
+    //
+    kickMemberFromTeam: build.mutation<BaseResponse, { teamMemberId: string }>({
+      query: ({ teamMemberId }) => ({
+        url: `v1/team/member/${teamMemberId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["team-member-list"],
+    }),
+    //
+    addTeamMember: build.mutation<BaseResponse, AddTeamMemberRequest>({
+      query: (req) => ({
+        url: `v1/team/member`,
+        method: "POST",
+        body: req,
+      }),
+      invalidatesTags: ["team-member-list"],
+    }),
+    //
   }),
 });
 
-export const { useRetrieveTeamMembersQuery } = teamMemberApi;
+export const { useRetrieveTeamMembersQuery, useKickMemberFromTeamMutation, useAddTeamMemberMutation } = teamMemberApi;
 
 export const {
-  endpoints: { retrieveTeamMembers },
+  endpoints: { retrieveTeamMembers, kickMemberFromTeam, addTeamMember },
 } = teamMemberApi;

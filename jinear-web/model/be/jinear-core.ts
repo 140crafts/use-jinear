@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-03-28 20:41:28.
+// Generated using typescript-generator version 3.0.1157 on 2023-04-02 14:07:50.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  first: boolean;
   last: boolean;
+  first: boolean;
 }
 
 export interface AccountDto extends BaseDto {
@@ -191,6 +191,7 @@ export interface TeamDto extends BaseDto {
   workspaceId: string;
   workspaceUsername: string;
   name: string;
+  username: string;
   tag: string;
   visibility: TeamVisibilityType;
   joinMethod: TeamJoinMethodType;
@@ -202,6 +203,7 @@ export interface TeamMemberDto extends BaseDto {
   accountId: string;
   workspaceId: string;
   teamId: string;
+  role: TeamMemberRoleType;
   team: TeamDto;
   account: AccountDto;
 }
@@ -279,6 +281,7 @@ export interface WorkspaceDisplayPreferenceDto {
   workspace?: WorkspaceDto | null;
   team?: TeamDto | null;
   workspaceRole?: WorkspaceAccountRoleType | null;
+  teamRole?: TeamMemberRoleType | null;
 }
 
 export interface WorkspaceDto extends BaseDto {
@@ -451,6 +454,12 @@ export interface TaskUpdateTitleRequest extends BaseRequest {
   title: string;
 }
 
+export interface AddTeamMemberRequest extends BaseRequest {
+  accountId: string;
+  teamId: string;
+  role: TeamMemberRoleType;
+}
+
 export interface InitializeTeamWorkflowStatusRequest extends BaseRequest {
   workflowStateGroup: TeamWorkflowStateGroup;
   name: string;
@@ -459,6 +468,7 @@ export interface InitializeTeamWorkflowStatusRequest extends BaseRequest {
 export interface TeamInitializeRequest extends BaseRequest {
   workspaceId: string;
   name: string;
+  username: string;
   tag: string;
   visibility: TeamVisibilityType;
   joinMethod: TeamJoinMethodType;
@@ -593,6 +603,10 @@ export interface WorkspaceInvitationInfoResponse extends BaseResponse {
   data: WorkspaceInvitationInfoDto;
 }
 
+export interface WorkspaceInvitationListingResponse extends BaseResponse {
+  data: PageDto<WorkspaceInvitationDto>;
+}
+
 export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
   data: PageDto<WorkspaceMemberDto>;
 }
@@ -692,6 +706,8 @@ export type TaskState = "TO_DO" | "IN_PROGRESS" | "IN_TEST" | "WONT_DO" | "DONE"
 
 export type TeamJoinMethodType = "SYNC_MEMBERS_WITH_WORKSPACE" | "ON_DEMAND" | "FROM_TEAM_ADMIN";
 
+export type TeamMemberRoleType = "ADMIN" | "MEMBER" | "GUEST";
+
 export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
 
 export type TeamWorkflowStateGroup = "BACKLOG" | "NOT_STARTED" | "STARTED" | "COMPLETED" | "CANCELLED";
@@ -708,7 +724,7 @@ export type TokenType =
 
 export type TopicVisibility = "SHARED" | "PRIVATE";
 
-export type UsernameRelatedObjectType = "ACCOUNT" | "COMMUNITY" | "WORKSPACE";
+export type UsernameRelatedObjectType = "ACCOUNT" | "WORKSPACE";
 
 export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER" | "GUEST";
 

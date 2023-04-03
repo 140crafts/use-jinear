@@ -11,6 +11,7 @@ interface TeamMenuProps {
   teamId: string;
   workspaceId: string;
   name: string;
+  username: string;
   tag: string;
   visibility: TeamVisibilityType;
   joinMethod: TeamJoinMethodType;
@@ -22,6 +23,7 @@ const TeamMenu: React.FC<TeamMenuProps> = ({
   teamId,
   workspaceId,
   name,
+  username,
   tag,
   visibility,
   joinMethod,
@@ -33,7 +35,7 @@ const TeamMenu: React.FC<TeamMenuProps> = ({
       {!isPersonalWorkspace && <div className="spacer-h-1" />}
       {!isPersonalWorkspace && <TeamTitle name={name} />}
       {!isPersonalWorkspace && <TeamMemberList teamId={teamId} />}
-      <TeamActionButtons name={name} workspaceUsername={workspaceUsername} />
+      <TeamActionButtons name={name} username={username} workspaceUsername={workspaceUsername} />
       <TeamTopics teamId={teamId} />
       <TeamThreads />
     </div>

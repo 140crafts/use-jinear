@@ -342,9 +342,17 @@ export default {
     en: "Add People",
     tr: "Kişi Ekle",
   },
+  sideMenuWorkspaceMembers: {
+    en: "Workspace members",
+    tr: "Çalışma alanı üyeleri",
+  },
   sideMenuTeamTopicsMore: {
     en: "${number} more",
     tr: "${number} daha",
+  },
+  sideMenuTeamMembers: {
+    en: "Team members",
+    tr: "Ekip üyeleri",
   },
   sideMenuActionsTeams: {
     en: "Actions",
@@ -991,8 +999,8 @@ export default {
     tr: "Ekip adı",
   },
   newTeamFormTag: {
-    en: "Tag (short code for easy access. For example Engineering -> ENG)",
-    tr: "Ekip kısa kodu (Kolay erişim için. Örneğin Mühendislik -> MUH)",
+    en: "Tag (short code for easy access. For example Sales -> SLS)",
+    tr: "Ekip kısa kodu (Kolay erişim için. Örneğin Pazarlama -> STS)",
   },
   currentWorkspaceHeaderWorkspaceDetail: {
     en: "Workspace detail",
@@ -1311,8 +1319,8 @@ export default {
     tr: "Davet edeceğiniz kişiye bir davetiye linki gönderilecek",
   },
   workspaceMemberInvititationFormForRoleLabel: {
-    en: "Role",
-    tr: "Yetki",
+    en: "Workspace Role",
+    tr: "Çalışma Alanı Yetkisi",
   },
   workspaceMemberInvititationFormForRole_GUEST: {
     en: "Guest",
@@ -1335,12 +1343,12 @@ export default {
     tr: "Yöneticiler çalışma alanına yeni kişiler davet edebilir. Ekipleri ve taskları oluşturabilir ve düzenleyebilirler. ",
   },
   workspaceMemberInvititationFormForRoleText_MEMBER: {
-    en: "Members can create and edit tasks.",
-    tr: "Ekip üyeleri görevler oluşturabilir ve düzenleyebilirler.",
+    en: "Members can create and edit tasks but can not change workspace settings and members.",
+    tr: "Ekip üyeleri görevler oluşturabilir ve düzenleyebilirler ancak çalışma alanı ayarlarını değiştiremez, üye ekleyip çıkartamazlar.",
   },
   workspaceMemberInvititationFormInitialTeam: {
-    en: "Team",
-    tr: "Ekip",
+    en: "Initial Team",
+    tr: "Dahil Olacağı Ekip",
   },
   workspaceMemberInvititationFormInitialTeamText: {
     en: "Member can be added/removed to other teams later.",
@@ -1349,5 +1357,165 @@ export default {
   workspaceMemberInvititationFormSubmit: {
     en: "Invite",
     tr: "Davet Et",
+  },
+  activeInvitationListTitle: {
+    en: "Active Invitations",
+    tr: "Bekleyen Davetler",
+  },
+  activeInvitationListEmptyMessage: {
+    en: "No active invitations found",
+    tr: "Bekleyen davetiye bulunamadı",
+  },
+  activeInvitationCancel: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  activeWorkspaceMemberListEmptyMessage: {
+    en: "No members found",
+    tr: "Hiçbir üye bulunamadı",
+  },
+  activeWorkspaceMemberListTitle: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri",
+  },
+  activeWorkspaceMemberKick: {
+    en: "Kick Member",
+    tr: "Üyeyi At",
+  },
+  workspaceMemberRole_OWNER: {
+    en: "Owner",
+    tr: "Alan Sahibi",
+  },
+  workspaceMemberRole_ADMIN: {
+    en: "Admin",
+    tr: "Yönetici",
+  },
+  workspaceMemberRole_MEMBER: {
+    en: "Member",
+    tr: "Ekip Üyesi",
+  },
+  workspaceMemberRole_GUEST: {
+    en: "Guest",
+    tr: "Misafir",
+  },
+  deleteWorkspaceInvitationAreYouSureTitle: {
+    en: "Remove Invitation",
+    tr: "Daveti Geri Çek",
+  },
+  deleteWorkspaceInvitationAreYouSureText: {
+    en: "Are you sure to remove this workspace invitation?",
+    tr: "Daveti geri çekmek istediğinize emin misiniz?",
+  },
+  deleteWorkspaceInvitationAreYouSureConfirmLabel: {
+    en: "Remove",
+    tr: "Geri çek",
+  },
+  workspaceMemberScreenBreadcrumbTitle: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri",
+  },
+  workspaceMemberScreenInviteMember: {
+    en: "Add People",
+    tr: "Kişi Ekle",
+  },
+  deleteWorkspaceMemberAreYouSureTitle: {
+    en: "Kick Member",
+    tr: "Üyeyi Çalışma Alanından At",
+  },
+  deleteWorkspaceMemberAreYouSureText: {
+    en: "Are you sure to kick member from this workspace?",
+    tr: "Üyeyi çalışma alanından atmak istediğinize emin misiniz?",
+  },
+  deleteWorkspaceMemberAreYouSureConfirmLabel: {
+    en: "Kick",
+    tr: "At",
+  },
+  logoutAreYouSureTitle: {
+    en: "Logout",
+    tr: "Çıkış Yap",
+  },
+  logoutAreYouSureText: {
+    en: "Are you sure to logout?",
+    tr: "Çıkış yapmak istediğinize emin misiniz?",
+  },
+  logoutAreYouSureConfirmLabel: {
+    en: "Logout",
+    tr: "Çık",
+  },
+  teamMemberScreenBreadcrumbTitle: {
+    en: "Team Members",
+    tr: "Ekip Üyeleri",
+  },
+  teamMemberScreenAddMember: {
+    en: "Add People",
+    tr: "Kişi Ekle",
+  },
+  teamMemberScreenListTitle: {
+    en: "Team Members",
+    tr: "Ekip Üyeleri",
+  },
+  teamMemberRole_ADMIN: {
+    en: "Admin",
+    tr: "Yönetici",
+  },
+  teamMemberRole_MEMBER: {
+    en: "Member",
+    tr: "Ekip Üyesi",
+  },
+  teamMemberRole_GUEST: {
+    en: "Guest",
+    tr: "Misafir",
+  },
+  deleteTeamMemberAreYouSureTitle: {
+    en: "Kick Member",
+    tr: "Üyeyi Ekipten At",
+  },
+  deleteTeamMemberAreYouSureText: {
+    en: "Are you sure to kick member from this team?",
+    tr: "Üyeyi ekipten atmak istediğinize emin misiniz?",
+  },
+  deleteTeamMemberAreYouSureConfirmLabel: {
+    en: "Kick",
+    tr: "At",
+  },
+  addMemberToTeamModalTitle: {
+    en: "Add Someone To Team",
+    tr: "Ekibe Birini Ekle",
+  },
+  addMemberToTeamFormAccountSelectLabel: {
+    en: "Select someone from workspace",
+    tr: "Eklenecek kişi",
+  },
+  addMemberToTeamFormAccountTeamRole: {
+    en: "Team Role",
+    tr: "Ekipteki Rolü",
+  },
+  addMemberToTeamFormRole_ADMIN: {
+    en: "Team Admin",
+    tr: "Ekip Yöneticisi",
+  },
+  addMemberToTeamFormRole_MEMBER: {
+    en: "Team Member",
+    tr: "Ekip Üyesi",
+  },
+  addMemberToTeamFormRole_GUEST: {
+    en: "Guest",
+    tr: "Ziyaretçi",
+  },
+  addMemberToTeamFormRoleText_ADMIN: {
+    en: "Team admins can add/remove members to team. Can edit team workflows and tasks.",
+    tr: "Ekip yöneticileri ekibe kişi ekleyip çıkartabilir. İş akışlarını ve görevleri düzenleyebilir.",
+  },
+  addMemberToTeamFormRoleText_MEMBER: {
+    en: "Team members can edit tasks.",
+    tr: "Ekip üyeleri görevler üzerinde değişiklik yapabilirler.",
+  },
+  addMemberToTeamFormRoleText_GUEST: {
+    en: "Guests can view tasks. They can not edit tasks.",
+    tr: "Ziyaretçiler görevleri yanlızca görüntüleyebilirler. ",
+  },
+  addMemberToTeamFormSubmit: {
+    en: "Add",
+    tr: "Ekle",
   },
 };

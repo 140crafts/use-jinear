@@ -22,9 +22,12 @@ interface TeamMemberListProps {
 const TeamMemberList: React.FC<TeamMemberListProps> = ({ teamId, filter, close }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { data: teamMemberListResponse, isFetching } = useRetrieveTeamMembersQuery(teamId, {
-    skip: teamId == null,
-  });
+  const { data: teamMemberListResponse, isFetching } = useRetrieveTeamMembersQuery(
+    { teamId },
+    {
+      skip: teamId == null,
+    }
+  );
   const taskId = useTypedSelector(selectChangeTaskAssigneeModalTaskId);
   const taskCurrentAssignee = useTypedSelector(selectChangeTaskAssigneeModalTaskCurrentAssigneeId);
 

@@ -1,6 +1,7 @@
 import AuthCheck from "@/components/authCheck/AuthCheck";
 import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import MainHeader from "@/components/mainHeader/MainHeader";
+import AddMemberToTeamModal from "@/components/modal/addMemberToTeamModal/AddMemberToTeamModal";
 import DatePickerModal from "@/components/modal/datePicker/DatePickerModal";
 import DialogModal from "@/components/modal/dialogModal/DialogModal";
 import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
@@ -45,6 +46,7 @@ export function useThemeToggle() {
 
 const globalModals: any = (
   <>
+    <AddMemberToTeamModal />
     <WorkspaceInviteMemberModal />
     <ReminderListModal />
     <NewReminderModal />

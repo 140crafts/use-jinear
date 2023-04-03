@@ -1,7 +1,7 @@
 import Button, { ButtonVariants } from "@/components/button";
 import { WorkspaceMemberInviteRequest } from "@/model/be/jinear-core";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
-import { useInviteWorkspaceMutation } from "@/store/api/workspaceMemberApi";
+import { useInviteWorkspaceMutation } from "@/store/api/workspaceMemberInvitationApi";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
@@ -52,13 +52,8 @@ const WorkspaceMemberInvitationForm: React.FC<WorkspaceMemberInvitationFormProps
   }, [onInviteSuccess, isInviteSuccess]);
 
   const submit: SubmitHandler<WorkspaceMemberInviteRequest> = (data) => {
-    // if (isInviteLoading) {
-    //   return;
-    // }
     logger.log({ data });
     inviteWorkspace(data);
-    // const request = { ...data, forRole: data.isGuest ? "GUEST" : ("MEMBER" as WorkspaceAccountRoleType) };
-    // inviteWorkspace(request);
   };
 
   return (
@@ -76,20 +71,6 @@ const WorkspaceMemberInvitationForm: React.FC<WorkspaceMemberInvitationFormProps
           <input id={"new-member-mail"} type={"email"} {...register("email", { required: t("formRequiredField") })} />
           <div className={styles.inputSubtext}>{t("workspaceMemberInvititationFormEmailText")}</div>
         </label>
-        <div>
-          <label className={styles.label} htmlFor={"new-member-initial-team"}>
-            {t("workspaceMemberInvititationFormInitialTeam")}
-            <select id="new-member-initial-team" {...register("initialTeamId")}>
-              {teamsResponse?.data.map((team) => (
-                <option key={`new-member-initial-team-${team.teamId}`} value={team.teamId}>
-                  {team.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="spacer-h-1" />
-          <div className={styles.inputSubtext}>{t("workspaceMemberInvititationFormInitialTeamText")}</div>
-        </div>
 
         <div>
           <label className={styles.label} htmlFor={"new-member-role"}>
@@ -106,6 +87,21 @@ const WorkspaceMemberInvitationForm: React.FC<WorkspaceMemberInvitationFormProps
           <div className={cn(styles.inputSubtext, styles.inputRoleText)}>
             {t(`workspaceMemberInvititationFormForRoleText_${forRole}`)}
           </div>
+        </div>
+
+        <div>
+          <label className={styles.label} htmlFor={"new-member-initial-team"}>
+            {t("workspaceMemberInvititationFormInitialTeam")}
+            <select id="new-member-initial-team" {...register("initialTeamId")}>
+              {teamsResponse?.data.map((team) => (
+                <option key={`new-member-initial-team-${team.teamId}`} value={team.teamId}>
+                  {team.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <div className="spacer-h-1" />
+          <div className={styles.inputSubtext}>{t("workspaceMemberInvititationFormInitialTeamText")}</div>
         </div>
 
         <div className="spacer-h-4" />

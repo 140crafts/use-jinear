@@ -6,7 +6,7 @@ import InvitedAccountDifferentCurrentAccountInfo from "@/components/workspaceInv
 import LoadingBar from "@/components/workspaceInvitationScreen/loading/LoadingBar";
 import NotLoggedInUserAfterInvitationAcceptedActions from "@/components/workspaceInvitationScreen/notLoggedInUserAfterInvitationAcceptedActions/NotLoggedInUserAfterInvitationAcceptedActions";
 import { useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDisplayPreferenceApi";
-import { useRespondInvitationMutation, useRetrieveInvitationInfoQuery } from "@/store/api/workspaceMemberApi";
+import { useRespondInvitationMutation, useRetrieveInvitationInfoQuery } from "@/store/api/workspaceMemberInvitationApi";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
 import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
