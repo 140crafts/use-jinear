@@ -31,6 +31,7 @@ const ROUTES_WITHOUT_SIDE_MENU = [
   "/engage/[token]/reset-password-complete",
   "/engage/[token]/forgot-password",
   "/engage/[token]/workspace-invitation",
+  "/new-workspace",
 ];
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {

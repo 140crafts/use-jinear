@@ -54,6 +54,8 @@ export const selectCurrentAccountsWorkspaces = (state: RootState) => state.accou
 
 export const selectCurrentAccountsPersonalWorkspace = (state: RootState) =>
   state.account.current?.workspaces?.find((w) => w.isPersonal);
+export const selectCurrentAccountHasAPersonalWorkspace = (state: RootState) =>
+  state.account.current?.workspaces?.findIndex((w) => w.isPersonal) != -1;
 
 export const selectCurrentAccountsCollectiveWorkspaces = (state: RootState) =>
   state.account.current?.workspaces?.filter((w) => !w.isPersonal);

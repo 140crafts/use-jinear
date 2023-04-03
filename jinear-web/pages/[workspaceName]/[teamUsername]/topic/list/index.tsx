@@ -54,7 +54,7 @@ const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
               <div>{t("topicListScreenNoContentLabel")}</div>
               <Button
                 variant={ButtonVariants.filled}
-                href={`/${preferredWorkspace.username}/${encodeURI(preferredTeam.name)}/topic/new`}
+                href={`/${preferredWorkspace.username}/${encodeURI(preferredTeam.username)}/topic/new`}
               >
                 {t("topicListScreenNoContentNewTopicLabel")}
               </Button>
