@@ -45,6 +45,9 @@ const MainHeader: React.FC<MainHeaderProps> = ({}) => {
       <meta property="og:site_name" content="Jinear" />
       <meta property="og:url" content="https://jinear.140crafts.com" />
       <meta property="og:image" content="https://jinear.140crafts.com/icons/apple-touch-icon-180x180.png" />
+
+      <link rel="preload" href="/images/gif/loading-1.gif" as="loading-gif-1" />
+      <link rel="preload" href="/images/gif/loading-2.gif" as="loading-gif-2" />
     </Head>
   );
 };

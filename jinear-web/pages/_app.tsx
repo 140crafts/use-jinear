@@ -19,6 +19,7 @@ import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicC
 import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal";
 import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
 import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
+import OnboardListener from "@/components/onboardListener/OnboardListener";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
 import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
@@ -96,6 +97,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <TitleHandler />
             <AuthCheck />
             <WorkspaceAndTeamChangeListener />
+            <OnboardListener />
             <Transition>
               <Component {...pageProps} />
             </Transition>
