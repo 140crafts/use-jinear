@@ -1466,4 +1466,56 @@ export default {
     en: "Guest",
     tr: "Misafir",
   },
+  deleteTeamMemberAreYouSureTitle: {
+    en: "Kick Member",
+    tr: "Üyeyi Ekipten At",
+  },
+  deleteTeamMemberAreYouSureText: {
+    en: "Are you sure to kick member from this team?",
+    tr: "Üyeyi ekipten atmak istediğinize emin misiniz?",
+  },
+  deleteTeamMemberAreYouSureConfirmLabel: {
+    en: "Kick",
+    tr: "At",
+  },
+  addMemberToTeamModalTitle: {
+    en: "Add Someone To Team",
+    tr: "Ekibe Birini Ekle",
+  },
+  addMemberToTeamFormAccountSelectLabel: {
+    en: "Select someone from workspace",
+    tr: "Eklenecek kişi",
+  },
+  addMemberToTeamFormAccountTeamRole: {
+    en: "Team Role",
+    tr: "Ekipteki Rolü",
+  },
+  addMemberToTeamFormRole_ADMIN: {
+    en: "Team Admin",
+    tr: "Ekip Yöneticisi",
+  },
+  addMemberToTeamFormRole_MEMBER: {
+    en: "Team Member",
+    tr: "Ekip Üyesi",
+  },
+  addMemberToTeamFormRole_GUEST: {
+    en: "Guest",
+    tr: "Ziyaretçi",
+  },
+  addMemberToTeamFormRoleText_ADMIN: {
+    en: "Team admins can add/remove members to team. Can edit team workflows and tasks.",
+    tr: "Ekip yöneticileri ekibe kişi ekleyip çıkartabilir. İş akışlarını ve görevleri düzenleyebilir.",
+  },
+  addMemberToTeamFormRoleText_MEMBER: {
+    en: "Team members can edit tasks.",
+    tr: "Ekip üyeleri görevler üzerinde değişiklik yapabilirler.",
+  },
+  addMemberToTeamFormRoleText_GUEST: {
+    en: "Guests can view tasks. They can not edit tasks.",
+    tr: "Ziyaretçiler görevleri yanlızca görüntüleyebilirler. ",
+  },
+  addMemberToTeamFormSubmit: {
+    en: "Add",
+    tr: "Ekle",
+  },
 };

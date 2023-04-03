@@ -77,6 +77,9 @@ const initialState = {
   workspaceMemberInviteModal: {
     visible: false,
   },
+  addMemberToTeamModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -96,6 +99,7 @@ const initialState = {
   newReminderModal: null | NewReminderModalState;
   datePickerModal: null | DatePickerModalState;
   workspaceMemberInviteModal: null | ModalState;
+  addMemberToTeamModal: null | ModalState;
 };
 
 const slice = createSlice({
@@ -224,6 +228,13 @@ const slice = createSlice({
       state.workspaceMemberInviteModal = initialState.workspaceMemberInviteModal;
     },
 
+    popAddMemberToTeamModal: (state, action: PayloadAction<void>) => {
+      state.addMemberToTeamModal = { visible: true };
+    },
+    closeAddMemberToTeamModal: (state, action: PayloadAction<void>) => {
+      state.addMemberToTeamModal = initialState.addMemberToTeamModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -273,6 +284,8 @@ export const {
   closeDatePickerModal,
   popWorkspaceMemberInviteModal,
   closeWorkspaceMemberInviteModal,
+  popAddMemberToTeamModal,
+  closeAddMemberToTeamModal,
 
   resetModals,
 } = slice.actions;
@@ -355,3 +368,5 @@ export const selectDatePickerModalInitialDate = (state: RootState) => state.moda
 export const selectDatePickerModalOnDateChange = (state: RootState) => state.modal.datePickerModal?.onDateChange;
 
 export const selectWorkspaceMemberInviteModalVisible = (state: RootState) => state.modal.workspaceMemberInviteModal?.visible;
+
+export const selectAddMemberToTeamModalVisible = (state: RootState) => state.modal.addMemberToTeamModal?.visible;

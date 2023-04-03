@@ -52,13 +52,8 @@ const WorkspaceMemberInvitationForm: React.FC<WorkspaceMemberInvitationFormProps
   }, [onInviteSuccess, isInviteSuccess]);
 
   const submit: SubmitHandler<WorkspaceMemberInviteRequest> = (data) => {
-    // if (isInviteLoading) {
-    //   return;
-    // }
     logger.log({ data });
     inviteWorkspace(data);
-    // const request = { ...data, forRole: data.isGuest ? "GUEST" : ("MEMBER" as WorkspaceAccountRoleType) };
-    // inviteWorkspace(request);
   };
 
   return (

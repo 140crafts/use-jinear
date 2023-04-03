@@ -1,8 +1,11 @@
 import Button, { ButtonVariants } from "@/components/button";
 import Line from "@/components/line/Line";
 import { TeamMemberDto } from "@/model/be/jinear-core";
+import { useKickMemberFromTeamMutation } from "@/store/api/teamMemberApi";
 import { selectCurrentAccountId, selectCurrentAccountsPreferredTeamRoleIsAdmin } from "@/store/slice/accountSlice";
+import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { GiHighKick } from "react-icons/gi";
@@ -12,6 +15,8 @@ interface TeamMemberRowProps {
   teamMember: TeamMemberDto;
 }
 
+const logger = Logger("TeamMemberRow");
+
 const TeamMemberRow: React.FC<TeamMemberRowProps> = ({ teamMember }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -19,6 +24,26 @@ const TeamMemberRow: React.FC<TeamMemberRowProps> = ({ teamMember }) => {
   const isTeamAdmin = useTypedSelector(selectCurrentAccountsPreferredTeamRoleIsAdmin);
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
   const viewingHimself = teamMember.accountId == currentAccountId;
+
+  const [kickMemberFromTeam, {}] = useKickMemberFromTeamMutation();
+
+  const kickTeamMember = () => {
+    logger.log({ kickTeamMember: teamMember });
+    kickMemberFromTeam({ teamMemberId: teamMember.teamMemberId });
+    dispatch(closeDialogModal());
+  };
+
+  const popAreYouSureModalForDeleteMember = () => {
+    dispatch(
+      popDialogModal({
+        visible: true,
+        title: t("deleteTeamMemberAreYouSureTitle"),
+        content: t("deleteTeamMemberAreYouSureText"),
+        confirmButtonLabel: t("deleteTeamMemberAreYouSureConfirmLabel"),
+        onConfirm: kickTeamMember,
+      })
+    );
+  };
 
   return (
     <>
@@ -33,7 +58,7 @@ const TeamMemberRow: React.FC<TeamMemberRowProps> = ({ teamMember }) => {
             <Button
               variant={ButtonVariants.filled}
               className={styles.button}
-              //   onClick={popAreYouSureModalForDeleteMember}
+              onClick={popAreYouSureModalForDeleteMember}
               data-tooltip-right={t("activeWorkspaceMemberKick")}
             >
               <div className={styles.iconContainer}>
