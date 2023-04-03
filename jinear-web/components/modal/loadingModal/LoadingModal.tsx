@@ -2,6 +2,7 @@ import { selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { selectLoadingModalVisible } from "@/store/slice/modalSlice";
 import { useTypedSelector } from "@/store/store";
 import { __DEV__ } from "@/utils/constants";
+import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
 import Image from "next/image";
 import React, { useMemo } from "react";
@@ -16,6 +17,8 @@ const GIF_LOADING_ACCOUNT_IDS = [
   "01gp94s0sk9q4g8g3m9jpsvd0t", //irgat
 ];
 
+const logger = Logger("LoadingModal");
+
 const LoadingModal: React.FC<LoadingModalProps> = ({}) => {
   const visibile = useTypedSelector(selectLoadingModalVisible);
 
@@ -23,7 +26,8 @@ const LoadingModal: React.FC<LoadingModalProps> = ({}) => {
 
   const gifType = Math.random() * 10 < 5 ? "1" : "2";
   const gifLoading = useMemo(() => {
-    return __DEV__ || GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || "") != -1;
+    logger.log(GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || ""));
+    return __DEV__ || GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || "") == -1;
   }, [currentAccountId]);
 
   return (
