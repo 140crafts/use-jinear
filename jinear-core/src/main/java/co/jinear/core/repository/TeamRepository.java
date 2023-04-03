@@ -12,9 +12,9 @@ public interface TeamRepository extends JpaRepository<Team, String> {
 
     Optional<Team> findByTeamIdAndPassiveIdIsNull(String teamId);
 
-    Optional<Team> findByNameAndWorkspaceIdAndPassiveIdIsNull(String name, String workspaceId);
-
     Optional<Team> findByNameAndWorkspaceId(String name, String workspaceId);
 
     Optional<Team> findByTagAndWorkspaceIdAndPassiveIdIsNull(String tag, String workspaceId);
+
+    Optional<Team> findByUsernameAndWorkspaceIdAndPassiveIdIsNull(String username, String workspaceId);
 }

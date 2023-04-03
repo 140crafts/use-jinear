@@ -1,13 +1,14 @@
 package co.jinear.core.model.entity.team;
 
+import co.jinear.core.converter.workspace.TeamMemberRoleTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
 import co.jinear.core.model.entity.workspace.Workspace;
+import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-
-import jakarta.persistence.*;
 
 @Getter
 @Setter
@@ -31,6 +32,10 @@ public class TeamMember extends BaseEntity {
 
     @Column(name = "team_id")
     private String teamId;
+
+    @Convert(converter = TeamMemberRoleTypeConverter.class)
+    @Column(name = "role")
+    private TeamMemberRoleType role;
 
     @ManyToOne
     @JoinColumn(name = "account_id", insertable = false, updatable = false)

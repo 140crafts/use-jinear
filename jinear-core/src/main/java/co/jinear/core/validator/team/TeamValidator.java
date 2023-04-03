@@ -28,4 +28,12 @@ public class TeamValidator {
                     throw new BusinessException("workspace.team.team-tag-is-taken");
                 });
     }
+
+    public void validateTeamUsernameIsNotUsedInWorkspace(String username, String workspaceId) {
+        log.info("Validating team username is not used in workspace before. teamUsername: {}, workspaceId: {}", username, workspaceId);
+        teamRetrieveService.retrieveTeamByUsernameOptional(username, workspaceId)
+                .ifPresent(teamDto -> {
+                    throw new BusinessException("workspace.team.team-username-is-taken");
+                });
+    }
 }

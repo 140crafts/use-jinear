@@ -57,7 +57,7 @@ public class AccountRetrieveService {
         log.info("Retrieve account with basic info has started. accountId: {}", accountId);
         AccountDto accountDto = retrieve(accountId);
         setProfilePicture(accountId, accountDto);
-        setPreferredWorkspaceId(accountId, accountDto);
+        setPreferredWorkspace(accountId, accountDto);
         return accountDto;
     }
 
@@ -81,7 +81,7 @@ public class AccountRetrieveService {
                 .ifPresent(accountDto::setProfilePicture);
     }
 
-    private void setPreferredWorkspaceId(String accountId, AccountDto accountDto) {
+    private void setPreferredWorkspace(String accountId, AccountDto accountDto) {
         workspaceDisplayPreferenceService.retrieveAccountPreferredWorkspace(accountId)
                 .ifPresent(accountDto::setWorkspaceDisplayPreference);
     }

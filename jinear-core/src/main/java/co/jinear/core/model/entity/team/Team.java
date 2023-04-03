@@ -4,6 +4,7 @@ import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.workspace.Workspace;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -11,7 +12,6 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
-import jakarta.persistence.*;
 import java.util.Set;
 
 @Getter
@@ -39,6 +39,9 @@ public class Team extends BaseEntity {
 
     @Column(name = "tag")
     private String tag;
+
+    @Column(name = "username")
+    private String username;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "visibility")
