@@ -32,11 +32,11 @@ const TeamTopics: React.FC<TeamTopicsProps> = ({ teamId }) => {
   const moreButtonLabel = t("sideMenuTeamTopicsMore").replace("${number}", `${remainingCount}`);
 
   const popNewTopicModal = () => {
-    router.push(`/${preferredWorkspace?.username}/${preferredTeam?.name}/topic/new`);
+    router.push(`/${preferredWorkspace?.username}/${preferredTeam?.username}/topic/new`);
   };
 
   const routeTopicList = () => {
-    router.push(`/${preferredWorkspace?.username}/${preferredTeam?.name}/topic/list`);
+    router.push(`/${preferredWorkspace?.username}/${preferredTeam?.username}/topic/list`);
   };
 
   return (
@@ -54,7 +54,7 @@ const TeamTopics: React.FC<TeamTopicsProps> = ({ teamId }) => {
         {teamTopicListingResponse?.data?.content?.slice(0, SLICE_SIZE).map((topic) => (
           <Button
             key={topic.topicId}
-            href={`/${preferredWorkspace?.username}/${preferredTeam?.name}/topic/related-tasks/${topic.tag}`}
+            href={`/${preferredWorkspace?.username}/${preferredTeam?.username}/topic/related-tasks/${topic.tag}`}
             variant={ButtonVariants.outline}
             heightVariant={ButtonHeight.short}
             className={cn(styles.button)}
@@ -66,7 +66,7 @@ const TeamTopics: React.FC<TeamTopicsProps> = ({ teamId }) => {
 
         {remainingCount > 0 && (
           <Button
-            href={`/${preferredWorkspace?.username}/${preferredTeam?.name}/topic/list`}
+            href={`/${preferredWorkspace?.username}/${preferredTeam?.username}/topic/list`}
             variant={ButtonVariants.filled2}
             className={styles.button}
             heightVariant={ButtonHeight.short}

@@ -81,7 +81,7 @@ const TopicForm: React.FC<TopicFormProps> = ({ workspaceId, teamId, topicId, col
 
   useEffect(() => {
     if (isInitializeTopicSuccess || isUpdateTopicSuccess || isDeleteSuccess) {
-      router.replace(`/${preferredWorkspace?.username}/${preferredTeam?.name}/topic/list`);
+      router.replace(`/${preferredWorkspace?.username}/${preferredTeam?.username}/topic/list`);
     }
   }, [isInitializeTopicSuccess, isUpdateTopicSuccess, isDeleteSuccess]);
 
