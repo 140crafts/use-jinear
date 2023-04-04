@@ -13,6 +13,7 @@ import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
 import co.jinear.core.service.workspace.WorkspaceInitializeService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
+import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -35,6 +37,7 @@ public class WorkspaceManager {
     private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
     private final TeamRetrieveService teamRetrieveService;
     private final WorkspaceInitializeVoConverter workspaceInitializeVoConverter;
+    private final WorkspaceMemberService workspaceMemberService;
 
     public WorkspaceBaseResponse retrieveWorkspaceWithUsername(String workspaceUsername) {
         String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
@@ -57,6 +60,7 @@ public class WorkspaceManager {
     public WorkspaceBaseResponse initializeWorkspace(WorkspaceInitializeRequest workspaceInitializeRequest) {
         log.info("Initialize workspace has started with request: {}", workspaceInitializeRequest);
         String accountId = sessionInfoService.currentAccountId();
+        validateAccountDontHaveAnyPersonalWorkspaceIfRequestIsPersonal(workspaceInitializeRequest, accountId);
         WorkspaceDto workspaceDto = initializeWorkspace(workspaceInitializeRequest, accountId);
         return mapValues(workspaceDto);
     }
@@ -92,8 +96,8 @@ public class WorkspaceManager {
 
     private WorkspaceDto initializeWorkspace(WorkspaceInitializeRequest workspaceInitializeRequest, String accountId) {
         WorkspaceInitializeVo workspaceInitializeVo = workspaceInitializeVoConverter.map(workspaceInitializeRequest, accountId);
-        workspaceInitializeVo.setAppendRandomStrOnCollision(Boolean.TRUE);
-        workspaceInitializeVo.setIsPersonal(Boolean.FALSE);
+        workspaceInitializeVo.setAppendRandomStrOnCollision(Boolean.FALSE);
+        workspaceInitializeVo.setIsPersonal(workspaceInitializeRequest.getIsPersonal());
         setHandleIfNotProvided(workspaceInitializeVo);
         return workspaceInitializeService.initializeWorkspace(workspaceInitializeVo);
     }
@@ -110,5 +114,11 @@ public class WorkspaceManager {
         workspaceResponse.setWorkspace(workspaceDto);
         log.info("Initialize workspace has ended. workspaceResponse: {}", workspaceResponse);
         return workspaceResponse;
+    }
+
+    private void validateAccountDontHaveAnyPersonalWorkspaceIfRequestIsPersonal(WorkspaceInitializeRequest workspaceInitializeRequest, String accountId) {
+        Optional.of(workspaceInitializeRequest)
+                .filter(WorkspaceInitializeRequest::getIsPersonal)
+                .ifPresent(req -> workspaceMemberService.validateAccountDontHavePersonalWorkspace(accountId));
     }
 }

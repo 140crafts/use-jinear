@@ -43,7 +43,7 @@ public class UsernameService {
                 .map(InitializeUsernameVo::getAppendRandomStrOnCollision)
                 .filter(Boolean.TRUE::equals)
                 .map(appendOnCollision -> appendNumAndAssign(initializeUsernameVo))
-                .orElseThrow(BusinessException::new);
+                .orElseThrow(() -> new BusinessException("username.taken"));
     }
 
     private UsernameDto appendNumAndAssign(InitializeUsernameVo initializeUsernameVo) {

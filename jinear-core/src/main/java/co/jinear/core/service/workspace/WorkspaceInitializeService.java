@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -57,12 +57,18 @@ public class WorkspaceInitializeService {
 
     private TeamDto createInitialTeam(Workspace workspace, WorkspaceInitializeVo workspaceInitializeVo) {
         log.info("Create initial team has started for workspaceId: {}", workspace.getWorkspaceId());
+
         String teamTag = NormalizeHelper.normalizeStrictly(workspace.getTitle());
         teamTag = teamTag.substring(0, Math.min(teamTag.length(), 3));
+
+        String teamUsername = NormalizeHelper.normalizeStrictly(workspace.getTitle());
+        teamUsername = teamUsername.substring(0, Math.min(teamTag.length(), 3));
+
         TeamInitializeVo teamInitializeVo = new TeamInitializeVo();
         teamInitializeVo.setWorkspaceId(workspace.getWorkspaceId());
         teamInitializeVo.setName(workspace.getTitle());
         teamInitializeVo.setTag(teamTag);
+        teamInitializeVo.setUsername(teamUsername);
         teamInitializeVo.setVisibility(TeamVisibilityType.VISIBLE);
         teamInitializeVo.setJoinMethod(TeamJoinMethodType.SYNC_MEMBERS_WITH_WORKSPACE);
         teamInitializeVo.setLocale(workspaceInitializeVo.getLocale());
@@ -87,8 +93,9 @@ public class WorkspaceInitializeService {
     }
 
     private UsernameDto assignUsername(WorkspaceInitializeVo workspaceInitializeVo, Workspace workspace) {
-        Boolean appendRandomStrOnCollision = Objects.isNull(workspaceInitializeVo.getAppendRandomStrOnCollision()) ?
-                Boolean.FALSE : workspaceInitializeVo.getAppendRandomStrOnCollision();
+        Boolean appendRandomStrOnCollision = Optional.of(workspaceInitializeVo)
+                .map(WorkspaceInitializeVo::getAppendRandomStrOnCollision)
+                .orElse(Boolean.TRUE);
         InitializeUsernameVo initializeUsernameVo = new InitializeUsernameVo();
         initializeUsernameVo.setRelatedObjectId(workspace.getWorkspaceId());
         initializeUsernameVo.setRelatedObjectType(UsernameRelatedObjectType.WORKSPACE);

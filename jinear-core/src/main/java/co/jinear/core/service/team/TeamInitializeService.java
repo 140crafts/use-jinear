@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -46,7 +47,7 @@ public class TeamInitializeService {
 
     @Transactional
     public TeamDto initializeTeam(TeamInitializeVo teamInitializeVo) {
-        sanitizeTag(teamInitializeVo);
+        sanitizeTagAndUsername(teamInitializeVo);
         log.info("Initialize team has started. teamInitializeVo: {}", teamInitializeVo);
         validatePersonalWorkspaceTeamLimit(teamInitializeVo.getWorkspaceId());
         validateTeamNameIsNotUsedInWorkspace(teamInitializeVo);
@@ -60,12 +61,25 @@ public class TeamInitializeService {
         return teamConverter.map(saved);
     }
 
-    private void sanitizeTag(TeamInitializeVo teamInitializeVo) {
-        log.info("Sanitize tag has started teamInitializeVo: {}", teamInitializeVo);
+    private void sanitizeTagAndUsername(TeamInitializeVo teamInitializeVo) {
+        log.info("Sanitize tag and username has started teamInitializeVo: {}", teamInitializeVo);
+        if (Objects.isNull(teamInitializeVo.getTag())) {
+            throw new BusinessException();
+        }
+
         Optional.of(teamInitializeVo)
                 .map(TeamInitializeVo::getTag)
                 .map(NormalizeHelper::normalizeUsernameReplaceSpaces)
                 .ifPresent(teamInitializeVo::setTag);
+
+        if (Objects.isNull(teamInitializeVo.getUsername())) {
+            teamInitializeVo.setUsername(teamInitializeVo.getUsername());
+        }
+
+        Optional.of(teamInitializeVo)
+                .map(TeamInitializeVo::getUsername)
+                .map(NormalizeHelper::normalizeUsernameReplaceSpaces)
+                .ifPresent(teamInitializeVo::setUsername);
     }
 
     private void validatePersonalWorkspaceTeamLimit(String workspaceId) {
@@ -106,7 +120,10 @@ public class TeamInitializeService {
 
     private void validateTeamUsernameIsNotUsedInWorkspace(TeamInitializeVo teamInitializeVo) {
         log.info("Validating team username is not used in workspace before.");
-        teamValidator.validateTeamUsernameIsNotUsedInWorkspace(teamInitializeVo.getUsername(), teamInitializeVo.getWorkspaceId());
+        String teamUsernameCandid = Optional.of(teamInitializeVo)
+                .map(TeamInitializeVo::getUsername)
+                .orElseThrow(BusinessException::new);
+        teamValidator.validateTeamUsernameIsNotUsedInWorkspace(teamUsernameCandid, teamInitializeVo.getWorkspaceId());
     }
 
     private void initializeDefaultWorkflow(String teamId, String workspaceId, LocaleType locale) {

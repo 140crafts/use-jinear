@@ -4,6 +4,7 @@ import co.jinear.core.model.enumtype.workspace.WorkspaceJoinType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceVisibilityType;
 import co.jinear.core.model.request.BaseRequest;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,4 +22,6 @@ public class WorkspaceInitializeRequest extends BaseRequest {
     private String handle;
     private WorkspaceVisibilityType visibility = WorkspaceVisibilityType.HIDDEN_UNLISTED;
     private WorkspaceJoinType joinType = WorkspaceJoinType.WITH_REQUEST;
+    @NotNull
+    private Boolean isPersonal;
 }
