@@ -46,6 +46,7 @@
   --calendar-event-background-highlighted: #f7ce46;
   /*  */
   --gap: clamp(1rem, 6vw, 3rem);
+  --page: min(85ch, 100% - var(--gap) * 2);
   --full: calc(100% - (var(--gap)));
   --content: min(50ch, 100% - var(--gap) * 2);
   --popout: minmax(0, 2rem);

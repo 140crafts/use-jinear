@@ -1,7 +1,22 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: var(--full);
-  max-width: var(--full);
+  align-items: center;
+  width: var(--page);
+  max-width: var(--page);
+  padding: 0 2ch;
   gap: 1rem;
+}
+
+.header {
+  align-self: flex-start;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  width: var(--content);
+  max-width: var(--content);
 }
