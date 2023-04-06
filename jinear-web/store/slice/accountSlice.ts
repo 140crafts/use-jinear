@@ -51,6 +51,8 @@ export const selectIsAccountIdIsCurrentAccountId = (accountId: string) => (state
   accountId == state.account.current?.accountId;
 
 export const selectCurrentAccountsWorkspaces = (state: RootState) => state.account.current?.workspaces;
+export const selectCurrentAccountHasAnyWorkspace = (state: RootState) =>
+  state.account.current?.workspaces == null || state.account.current?.workspaces.length == 0;
 
 export const selectCurrentAccountsPersonalWorkspace = (state: RootState) =>
   state.account.current?.workspaces?.find((w) => w.isPersonal);

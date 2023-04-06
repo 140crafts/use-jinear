@@ -51,10 +51,6 @@
   gap: 1rem;
   position: sticky;
   bottom: 0;
-  /* background-color: var(--c-primary);
-  border-top-color: var(--c-primary-shade-1);
-  border-top-width: 1px;
-  border-top-style: solid; */
   padding: 1rem 0;
   z-index: 3;
 }
@@ -67,4 +63,55 @@
   opacity: 0.8;
   font-size: 0.7rem;
   color: var(--c-link-color);
+}
+
+.urlInputsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.hostInput {
+  background: var(--c-primary-shade-0) !important;
+  color: var(--c-text-color) !important;
+  opacity: 0.85;
+  font-weight: 600;
+  caret-color: var(--c-text-color) !important;
+  border-color: transparent;
+  border-width: 1px;
+  border-radius: var(--border-radius);
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--fade);
+  text-decoration: none;
+  padding: 7.5px;
+  padding-right: 0;
+  min-height: 1rem;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.usernameInput {
+  flex: 1;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  background: var(--c-primary-shade-0) !important;
+  padding-left: 0;
+  min-width: 1rem;
+}
+
+.unsetWorkspaceTypeButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 1rem;
+  font-weight: 600;
+}
+
+.photoTitleContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
 }

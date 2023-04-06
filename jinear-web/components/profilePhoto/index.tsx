@@ -1,4 +1,5 @@
 import { s3Base } from "@/store/api/api";
+import Logger from "@/utils/logger";
 import cn from "classnames";
 import Image from "next/image";
 import React from "react";
@@ -64,6 +65,8 @@ interface ProfilePhotoProps {
   imgClassName?: string;
   objectFit?: string;
 }
+
+const logger = Logger("ProfilePhoto");
 
 const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
   boringAvatarKey = "",

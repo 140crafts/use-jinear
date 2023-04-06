@@ -1,10 +1,10 @@
 .wrapper {
   padding: 3px;
 }
+
 .container {
   width: 40px;
   height: 40px;
-  background-color: var(--c-primary-shade-1);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -15,10 +15,14 @@
   background-color: var(--c-primary);
 }
 
+.container-without-profile-pic {
+  background-color: var(--c-primary-shade-1);
+}
+
 .preffered {
   border-style: solid;
   border-width: 2px;
-  border-color: var(--c-primary-shade-1);
+  border-color: var(--c-secondary-shade-0-op05);
   border-radius: 17px;
 }
 

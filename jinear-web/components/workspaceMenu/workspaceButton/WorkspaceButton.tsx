@@ -39,7 +39,11 @@ const WorkspaceButton: React.FC<WorkspaceButtonProps> = ({ workspace }) => {
 
   return (
     <div className={cn(styles.wrapper, isPreffered && styles.preffered)}>
-      <Button onClick={changePrefferedWorkspace} className={cn(styles.container)} data-tooltip={workspace.username}>
+      <Button
+        onClick={changePrefferedWorkspace}
+        className={cn(styles.container, !workspace?.profilePicture?.storagePath && styles["container-without-profile-pic"])}
+        data-tooltip={workspace.username}
+      >
         {workspace?.profilePicture?.storagePath ? (
           <ProfilePhoto
             boringAvatarKey={workspace.workspaceId}

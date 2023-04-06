@@ -2,14 +2,14 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
   width: 175px;
   height: 175px;
   border-radius: 70px;
   border-color: var(--c-primary-shade-1);
   border-width: thin;
   /* border-width: 0px; */
-  border-style: solid;
+  /* border-style: solid; */
+  /* background-color: red; */
 }
 
 @media screen and (max-width: 760px) {

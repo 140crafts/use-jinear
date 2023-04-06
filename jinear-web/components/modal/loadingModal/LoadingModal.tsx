@@ -34,7 +34,7 @@ const LoadingModal: React.FC<LoadingModalProps> = ({}) => {
     <Modal visible={visibile} contentContainerClass={styles.container}>
       <div className={styles.circularProgressContainer}>
         {gifLoading ? (
-          <Image src={`/images/gif/loading-${gifType}.gif`} alt="loading-gif" width={150} height={150} />
+          <Image src={`/images/gif/loading-${gifType}.gif`} alt="loading-gif" width={150} height={150} className={styles.image} />
         ) : (
           <CircularProgress className={styles.circularProgress} size={24} />
         )}

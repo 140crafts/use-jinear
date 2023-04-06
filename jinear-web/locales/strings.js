@@ -42,6 +42,10 @@ export default {
     en: "Success",
     tr: "İşlem Başarılı",
   },
+  notYetAvailable: {
+    en: "Not yet available",
+    tr: "Henüz aktif değil",
+  },
   loginScreenTitle: {
     en: "Login",
     tr: "Giriş Yap",
@@ -971,8 +975,8 @@ export default {
     tr: "Çalışma alanı adı",
   },
   newWorkspaceFormWorkspaceHandleShort: {
-    en: "Web username",
-    tr: "Kullanıcı adı",
+    en: "Workspace URL",
+    tr: "Çalışma Alanı Linki",
   },
   newWorkspaceFormWorkspaceHandleInfo: {
     en: "${host}/${username}",
@@ -989,6 +993,30 @@ export default {
   newWorkspaceFormCancel: {
     en: "Cancel",
     tr: "Vazgeç",
+  },
+  newWorkspaceFormPersonalTitle: {
+    en: "Personal Workspace",
+    tr: "Kişisel Çalışma Alanı",
+  },
+  newWorkspaceFormCollaborativeTitle: {
+    en: "Collaborative Workspace",
+    tr: "Çok Katılımcılı Çalışma Alanı",
+  },
+  newWorkspaceFormSearchTitle: {
+    en: "Search Existing",
+    tr: "Var olanları ara",
+  },
+  newWorkspaceFormPersonalText: {
+    en: "You can track your tasks create reminders etc.",
+    tr: "Görevlerinizi takip edebilir anımsatıcılar oluşturabilirsiniz.",
+  },
+  newWorkspaceFormCollaborativeText: {
+    en: "You can invite other people to this workspace. You can create teams and assign tasks to people.",
+    tr: "Diğer kişileri bu çalışma alanına davet edebilir, takımlar oluşturabilir ve kişilere görevler atayabilirsiniz.",
+  },
+  newWorkspaceFormSearchText: {
+    en: "Search and join existing workspace.",
+    tr: "Katılmak için var olan bir çalışma alanı arayın.",
   },
   newTeamModalTitle: {
     en: "New Team",

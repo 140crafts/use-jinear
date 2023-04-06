@@ -1,101 +1,167 @@
 import Button, { ButtonVariants } from "@/components/button";
-import { LocaleType, WorkspaceInitializeRequest } from "@/model/be/jinear-core";
+import { BaseResponse, LocaleType, WorkspaceInitializeRequest } from "@/model/be/jinear-core";
 import { useInitializeWorkspaceMutation } from "@/store/api/workspaceApi";
-import { useAppDispatch } from "@/store/store";
+import { selectCurrentAccountHasAPersonalWorkspace } from "@/store/slice/accountSlice";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { HOST } from "@/utils/constants";
 import Logger from "@/utils/logger";
+import { normalizeUsernameReplaceSpaces } from "@/utils/normalizeHelper";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { IoArrowBack } from "react-icons/io5";
 import styles from "./NewWorkspaceForm.module.css";
+import NewWorkspaceLogoPicker from "./newWorkspaceLogoPicker/NewWorkspaceLogoPicker";
+import WorkspaceTypeSelect from "./workspaceTypeSelect/WorkspaceTypeSelect";
 
 interface NewWorkspaceFormProps {
   close?: () => void;
+  onSuccess?: () => void;
 }
 
 const logger = Logger("NewWorkspaceForm");
-const USERNAME_REGEX = /[^A-Za-z0-9-_]/;
 
-const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
+const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close, onSuccess }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { register, handleSubmit, setFocus, setValue, watch } = useForm<WorkspaceInitializeRequest>();
+  const handleRef = useRef<HTMLInputElement | null>(null);
+  const { ref: handleHookFormRef, ...handleRegisterRest } = register("handle", { required: t("formRequiredField") });
+
+  const hasPersonalWorkspace = useTypedSelector(selectCurrentAccountHasAPersonalWorkspace);
+
+  const [isPersonal, setIsPersonal] = useState<boolean>();
+
+  const [selectedFile, setSelectedFile] = useState<File | undefined>();
+  const [selectedFilePreview, setSelectedFilePreview] = useState<string | undefined>();
+
   const currTitle = watch("title");
   const currHandle = watch("handle");
 
-  const [initializeWorkspace, { isLoading, isSuccess }] = useInitializeWorkspaceMutation();
+  const [initializeWorkspace, { isLoading, isSuccess, error }] = useInitializeWorkspaceMutation();
 
   const submit: SubmitHandler<WorkspaceInitializeRequest> = (data) => {
     logger.log({ data });
-    initializeWorkspace({ ...data, locale: t("localeType") as LocaleType });
+    let formData = new FormData();
+    if (selectedFile) {
+      formData.append("logo", selectedFile);
+    }
+    const request = { ...data, formData };
+    initializeWorkspace({ ...request, locale: t("localeType") as LocaleType });
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      setFocus("title");
-    }, 100);
-  }, []);
+    if (isPersonal != null) {
+      setTimeout(() => {
+        setFocus("title");
+      }, 100);
+    }
+  }, [isPersonal]);
 
   useEffect(() => {
     if (currTitle && currTitle.length > 0) {
-      setValue("handle", currTitle.toLocaleLowerCase("en-US")?.split(USERNAME_REGEX)?.join("")?.substring(0, 255));
+      const normalizedUsername = normalizeUsernameReplaceSpaces(currTitle);
+      setValue("handle", normalizedUsername?.substring(0, 255));
+    } else {
+      setValue("handle", "");
     }
   }, [currTitle]);
 
   useEffect(() => {
+    if (currHandle && currHandle.length > 0) {
+      const normalizedUsername = normalizeUsernameReplaceSpaces(currHandle);
+      setValue("handle", normalizedUsername?.substring(0, 255));
+    } else {
+      setValue("handle", "");
+    }
+  }, [currHandle]);
+
+  useEffect(() => {
     if (isSuccess) {
+      onSuccess?.();
       close?.();
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    logger.log({ error });
+    // @ts-ignore
+    const err = error?.data as BaseResponse;
+    if (err && err.errorCode == "19001") {
+      setFocus("handle");
+      // @ts-ignore
+      handleRef?.current?.select?.();
+    }
+  }, [error, handleRef]);
+
+  const unsetType = () => {
+    setIsPersonal(undefined);
+  };
+
   return (
     <form autoComplete="off" id={"new-workspace-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
-      <label className={cn(styles.label, "flex-1")} htmlFor={"new-workspace-title"}>
-        {`${t("newWorkspaceFormWorkspaceTitle")} *`}
-        <input id={"new-workspace-title"} type={"text"} {...register("title", { required: t("formRequiredField") })} />
-      </label>
+      <input type={"hidden"} value={`${isPersonal}`} {...register("isPersonal")} />
+      {isPersonal == null ? (
+        <WorkspaceTypeSelect hasPersonalWorkspace={hasPersonalWorkspace} setIsPersonal={setIsPersonal} setValue={setValue} />
+      ) : (
+        <>
+          <Button className={styles.unsetWorkspaceTypeButton} variant={ButtonVariants.outline} onClick={unsetType}>
+            <IoArrowBack />
+            {t(isPersonal ? "newWorkspaceFormPersonalTitle" : "newWorkspaceFormCollaborativeTitle")}
+          </Button>
 
-      <label
-        className={styles.label}
-        htmlFor={"new-workspace-handle"}
-        //   data-tooltip-new-workspace-handle={t(
-        //     "newWorkspaceFormWorkspaceHandle"
-        //   )}
-      >
-        {`${t("newWorkspaceFormWorkspaceHandleShort")} *`}
-        <input
-          id={"new-workspace-handle"}
-          type={"text"}
-          minLength={1}
-          maxLength={255}
-          {...register("handle", { required: t("formRequiredField") })}
-        />
-        <span className={cn(styles.link, "single-line")}>
-          {t("newWorkspaceFormWorkspaceHandleInfo")
-            ?.replace("${host}", HOST)
-            ?.replace("${username}", currHandle ? currHandle : "example")}
-        </span>
-      </label>
-      <label className={styles.label} htmlFor={"new-workspace-description"}>
-        {`${t("newWorkspaceFormWorkspaceDescription")}`}
-        <textarea id={"new-workspace-description"} rows={4} {...register("description")} />
-      </label>
+          <div className={styles.photoTitleContainer}>
+            <NewWorkspaceLogoPicker
+              selectedFile={selectedFile}
+              setSelectedFile={setSelectedFile}
+              selectedFilePreview={selectedFilePreview}
+              setSelectedFilePreview={setSelectedFilePreview}
+            />
 
-      <div className={styles.footerContainer}>
-        <Button disabled={isLoading} onClick={close} className={styles.footerButton}>
-          {t("newWorkspaceFormCancel")}
-        </Button>
-        <Button
-          type="submit"
-          disabled={isLoading}
-          loading={isLoading}
-          className={styles.footerButton}
-          variant={ButtonVariants.contrast}
-        >
-          {t("newWorkspaceFormCreate")}
-        </Button>
-      </div>
+            <label className={cn(styles.label, "flex-1")} htmlFor={"new-workspace-title"}>
+              {`${t("newWorkspaceFormWorkspaceTitle")} *`}
+              <input id={"new-workspace-title"} type={"text"} {...register("title", { required: t("formRequiredField") })} />
+            </label>
+          </div>
+
+          <label className={styles.label} htmlFor={"new-workspace-handle"}>
+            {t("newWorkspaceFormWorkspaceHandleShort")}
+            <div className={styles.urlInputsContainer}>
+              <div className={styles.hostInput}>{`${HOST?.replace("https://", "")?.replace("http://", "")}/`}</div>
+              <input
+                className={styles.usernameInput}
+                id={"new-workspace-handle"}
+                type={"text"}
+                minLength={1}
+                maxLength={255}
+                {...handleRegisterRest}
+                ref={(e) => {
+                  handleHookFormRef(e);
+                  handleRef.current = e;
+                }}
+              />
+            </div>
+          </label>
+
+          <div className={styles.footerContainer}>
+            {close && (
+              <Button disabled={isLoading} onClick={close} className={styles.footerButton}>
+                {t("newWorkspaceFormCancel")}
+              </Button>
+            )}
+            <Button
+              type="submit"
+              disabled={isLoading}
+              loading={isLoading}
+              className={styles.footerButton}
+              variant={ButtonVariants.contrast}
+            >
+              {t("newWorkspaceFormCreate")}
+            </Button>
+          </div>
+        </>
+      )}
     </form>
   );
 };
