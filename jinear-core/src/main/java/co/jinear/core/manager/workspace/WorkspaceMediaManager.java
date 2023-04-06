@@ -1,4 +1,4 @@
-package co.jinear.core.manager.media;
+package co.jinear.core.manager.workspace;
 
 import co.jinear.core.model.enumtype.media.FileType;
 import co.jinear.core.model.enumtype.media.MediaOwnerType;
@@ -6,6 +6,7 @@ import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.vo.media.InitializeMediaVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.media.MediaOperationService;
+import co.jinear.core.service.media.MediaValidator;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,24 +21,17 @@ import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.O
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MediaManager {
+public class WorkspaceMediaManager {
 
     private final MediaOperationService mediaOperationService;
     private final WorkspaceMemberService workspaceMemberService;
     private final SessionInfoService sessionInfoService;
-
-    public BaseResponse changeAccountProfilePicture(MultipartFile file) {
-        String currentAccountId = sessionInfoService.currentAccountId();
-        log.info("Change profile picture has started. accountId: {}", currentAccountId);
-        InitializeMediaVo initializeMediaVo = mapInitializeVo(file, currentAccountId, currentAccountId, MediaOwnerType.USER);
-        mediaOperationService.changeProfilePicture(initializeMediaVo);
-        log.info("Change profile picture has finished. accountId: {}", currentAccountId);
-        return new BaseResponse();
-    }
+    private final MediaValidator mediaValidator;
 
     public BaseResponse changeWorkspaceProfilePicture(MultipartFile file, String workspaceId) {
         String currentAccountId = sessionInfoService.currentAccountId();
         log.info("Change workspace picture has started. accountId: {}, workspaceId: {}", currentAccountId, workspaceId);
+        mediaValidator.validateForSafeImage(file);
         InitializeMediaVo initializeMediaVo = mapInitializeVo(file, currentAccountId, workspaceId, MediaOwnerType.USER);
         workspaceMemberService.validateAccountHasRoleInWorkspace(currentAccountId, workspaceId, List.of(OWNER, ADMIN));
         mediaOperationService.changeProfilePicture(initializeMediaVo);

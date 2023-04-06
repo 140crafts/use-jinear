@@ -12,15 +12,13 @@ import co.jinear.core.repository.MediaRepository;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.system.Try;
 import co.jinear.core.system.gcloud.storage.CloudStorage;
-import co.jinear.core.system.gcloud.vision.CloudVision;
-import co.jinear.core.system.gcloud.vision.GVisionApiResponse;
 import co.jinear.core.system.util.DateHelper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import jakarta.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -48,7 +46,6 @@ public class MediaOperationService {
     @Transactional
     public MediaDto initializeMedia(InitializeMediaVo initializeMediaVo) {
         log.info("Initialize media has started. initializeMediaVo: {}", initializeMediaVo);
-        validateForSafeImage(initializeMediaVo.getFile());
         String path = generatePath(initializeMediaVo);
         String bucketName = gCloudProperties.getBucketName();
         Media media = saveMedia(initializeMediaVo, path, bucketName);
@@ -108,19 +105,6 @@ public class MediaOperationService {
         }
     }
 
-    private void validateForSafeImage(MultipartFile file) {
-        if (containsExplicitContent(file)) {
-            log.info("File contains explicit content.");
-            throw new BusinessException("media.explicit.content");
-        }
-    }
-
-    private boolean containsExplicitContent(MultipartFile file) {
-        log.info("Contains explicit content for file has started.");
-        GVisionApiResponse visionApiResponse = CloudVision.analyzeImage(file);
-        log.info("Contains explicit content for file has finished. visionApiResponse: {}", visionApiResponse);
-        return !visionApiResponse.getIsSafe();
-    }
 
     private String generatePath(InitializeMediaVo initializeMediaVo) {
         String today = DateHelper.getFileDate(DateHelper.now());

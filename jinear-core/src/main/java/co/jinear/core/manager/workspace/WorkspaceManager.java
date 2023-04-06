@@ -9,9 +9,11 @@ import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
 import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.media.MediaRetrieveService;
+import co.jinear.core.service.media.MediaValidator;
 import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
 import co.jinear.core.service.workspace.WorkspaceInitializeService;
+import co.jinear.core.service.workspace.WorkspaceMediaService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.validator.team.TeamAccessValidator;
@@ -19,6 +21,7 @@ import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -38,6 +41,18 @@ public class WorkspaceManager {
     private final TeamRetrieveService teamRetrieveService;
     private final WorkspaceInitializeVoConverter workspaceInitializeVoConverter;
     private final WorkspaceMemberService workspaceMemberService;
+    private final MediaValidator mediaValidator;
+    private final WorkspaceMediaService workspaceMediaService;
+
+    public WorkspaceBaseResponse initializeWorkspace(MultipartFile logo, WorkspaceInitializeRequest workspaceInitializeRequest) {
+        log.info("Initialize workspace has started with request: {}", workspaceInitializeRequest);
+        String accountId = sessionInfoService.currentAccountId();
+        validateAccountDontHaveAnyPersonalWorkspaceIfRequestIsPersonal(workspaceInitializeRequest, accountId);
+        Optional.ofNullable(logo).ifPresent(mediaValidator::validateForSafeImage);
+        WorkspaceDto workspaceDto = initializeWorkspace(workspaceInitializeRequest, accountId);
+        setLogoIfPresents(logo, workspaceDto);
+        return mapValues(workspaceDto);
+    }
 
     public WorkspaceBaseResponse retrieveWorkspaceWithUsername(String workspaceUsername) {
         String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
@@ -54,14 +69,6 @@ public class WorkspaceManager {
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
         workspaceValidator.validateHasAccess(currentAccountId, workspaceDto);
         mediaRetrieveService.retrieveProfilePictureOptional(workspaceDto.getWorkspaceId()).ifPresent(workspaceDto::setProfilePicture);
-        return mapValues(workspaceDto);
-    }
-
-    public WorkspaceBaseResponse initializeWorkspace(WorkspaceInitializeRequest workspaceInitializeRequest) {
-        log.info("Initialize workspace has started with request: {}", workspaceInitializeRequest);
-        String accountId = sessionInfoService.currentAccountId();
-        validateAccountDontHaveAnyPersonalWorkspaceIfRequestIsPersonal(workspaceInitializeRequest, accountId);
-        WorkspaceDto workspaceDto = initializeWorkspace(workspaceInitializeRequest, accountId);
         return mapValues(workspaceDto);
     }
 
@@ -120,5 +127,11 @@ public class WorkspaceManager {
         Optional.of(workspaceInitializeRequest)
                 .filter(WorkspaceInitializeRequest::getIsPersonal)
                 .ifPresent(req -> workspaceMemberService.validateAccountDontHavePersonalWorkspace(accountId));
+    }
+
+    private void setLogoIfPresents(MultipartFile logo, WorkspaceDto workspaceDto) {
+        Optional.ofNullable(logo)
+                .map(file -> workspaceMediaService.changeProfilePicture(file, workspaceDto.getWorkspaceId()))
+                .ifPresent(workspaceDto::setProfilePicture);
     }
 }
