@@ -14,7 +14,6 @@ const NewWorkspaceScreen: React.FC<NewWorkspaceScreenProps> = ({}) => {
   const routeHome = () => {
     router.replace(ROUTE_IF_LOGGED_IN);
   };
-
   return (
     <div className={styles.container}>
       <div className={styles.headerContainer}>
