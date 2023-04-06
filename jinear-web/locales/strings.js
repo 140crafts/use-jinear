@@ -1000,7 +1000,7 @@ export default {
   },
   newWorkspaceFormCollaborativeTitle: {
     en: "Collaborative Workspace",
-    tr: "Çok Katılımcılı Çalışma Alanı",
+    tr: "Kolektif Çalışma Alanı",
   },
   newWorkspaceFormSearchTitle: {
     en: "Search Existing",
@@ -1545,5 +1545,17 @@ export default {
   addMemberToTeamFormSubmit: {
     en: "Add",
     tr: "Ekle",
+  },
+  newWorkspaceScreenTitle: {
+    en: "Let's create a initial workspace for you",
+    tr: "İlk çalışma alanını yaratalım",
+  },
+  newWorkspaceScreenText: {
+    en: "Workspaces can be personal or shared environments. If you're trying to keep your tasks to yourself continue with a personal workspace or if you work with a team and track tasks together continue with collabrative workspace.",
+    tr: "Çalışma alanları kişisel veya paylaşılan ortamlar olabilir. Görevlerinizi kendinize saklamaya çalışıyorsanız kişisel bir çalışma alanıyla devam edin veya ekip olarak çalışıyor ve görevleri birlikte takip ediyorsanız, ortak çalışma alanıyla devam edin.",
+  },
+  newWorkspaceScreenSubtext: {
+    en: "You can create more workspaces later.",
+    tr: "Daha sonra başka çalışma alanları oluşturabilirsiniz.",
   },
 };

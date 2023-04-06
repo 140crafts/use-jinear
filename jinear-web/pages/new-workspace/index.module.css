@@ -1,11 +1,18 @@
 .container {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* align-items: center; */
   width: var(--page);
   max-width: var(--page);
   padding: 0 2ch;
   gap: 1rem;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .header {
@@ -14,9 +21,17 @@
   font-size: 1rem;
 }
 
+.text {
+  text-align: justify;
+}
+
+.subText {
+  font-weight: 600;
+}
+
 .formContainer {
   display: flex;
   flex-direction: column;
-  width: var(--content);
-  max-width: var(--content);
+  /* width: var(--content);
+  max-width: var(--content); */
 }
