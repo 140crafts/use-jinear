@@ -58,7 +58,7 @@ public class GVisionApiResponse {
 
         this.isSafe = !((adult == Likelihood.LIKELY.getNumber() || adult == Likelihood.VERY_LIKELY.getNumber()) ||
                 (medical == Likelihood.LIKELY.getNumber() || medical == Likelihood.VERY_LIKELY.getNumber()) ||
-                (spoof == Likelihood.LIKELY.getNumber() || spoof == Likelihood.VERY_LIKELY.getNumber()) ||
+//                (spoof == Likelihood.LIKELY.getNumber() || spoof == Likelihood.VERY_LIKELY.getNumber()) ||
                 (violence == Likelihood.LIKELY.getNumber() || violence == Likelihood.VERY_LIKELY.getNumber()));
         //(racy.getNumber() == Likelihood.LIKELY.getNumber() || racy.getNumber() == Likelihood.VERY_LIKELY.getNumber())
     }

@@ -2,11 +2,10 @@ package co.jinear.core.model.entity.workspace;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-
-import jakarta.persistence.*;
 
 @Getter
 @Setter
@@ -31,4 +30,8 @@ public class WorkspaceMember extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private WorkspaceAccountRoleType role;
+
+    @ManyToOne
+    @JoinColumn(name = "workspace_id", insertable = false, updatable = false)
+    private Workspace workspace;
 }

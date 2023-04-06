@@ -5,6 +5,7 @@ import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
 import co.jinear.core.repository.WorkspaceRepository;
+import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberListingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ public class WorkspaceRetrieveService {
     private final WorkspaceRepository workspaceRepository;
     private final WorkspaceMemberListingService workspaceMemberListingService;
     private final WorkspaceDtoConverter workspaceDtoConverter;
+    private final MediaRetrieveService mediaRetrieveService;
 
     public WorkspaceDto retrieveWorkspaceWithId(String workspaceId) {
         log.info("Retrieving workspace with id: {}", workspaceId);
@@ -41,6 +43,7 @@ public class WorkspaceRetrieveService {
         return workspaceRepository.findAllByWorkspaceIdIsInAndPassiveIdIsNull(workspaceIds)
                 .stream()
                 .map(workspaceDtoConverter::map)
+                .map(this::setProfilePicture)
                 .toList();
     }
 
@@ -50,5 +53,11 @@ public class WorkspaceRetrieveService {
                 .map(WorkspaceMemberDto::getWorkspaceId)
                 .toList();
         return retrieveAllById(accountWorkspaceIds);
+    }
+
+    private WorkspaceDto setProfilePicture(WorkspaceDto workspaceDto) {
+        mediaRetrieveService.retrieveProfilePictureOptional(workspaceDto.getWorkspaceId())
+                .ifPresent(workspaceDto::setProfilePicture);
+        return workspaceDto;
     }
 }

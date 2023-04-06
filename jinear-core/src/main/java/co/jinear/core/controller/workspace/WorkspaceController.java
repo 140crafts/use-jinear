@@ -7,6 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,6 +15,13 @@ import org.springframework.web.bind.annotation.*;
 public class WorkspaceController {
 
     private final WorkspaceManager workspaceManager;
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public WorkspaceBaseResponse initializeWorkspace(@RequestParam(value = "logo", required = false) MultipartFile logo,
+                                                     @Valid WorkspaceInitializeRequest workspaceInitializeRequest) {
+        return workspaceManager.initializeWorkspace(logo, workspaceInitializeRequest);
+    }
 
     @GetMapping("/{workspaceUsername}")
     @ResponseStatus(HttpStatus.OK)
@@ -26,11 +34,4 @@ public class WorkspaceController {
     public WorkspaceBaseResponse retrieveWorkspaceWithId(@PathVariable String workspaceId) {
         return workspaceManager.retrieveWorkspaceWithId(workspaceId);
     }
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public WorkspaceBaseResponse initializeWorkspace(@Valid @RequestBody WorkspaceInitializeRequest workspaceInitializeRequest) {
-        return workspaceManager.initializeWorkspace(workspaceInitializeRequest);
-    }
-
 }
