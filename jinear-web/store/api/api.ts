@@ -5,7 +5,7 @@ export const server = __DEV__ ? "staging.jinear" : "api.jinear";
 export const root = __DEV__ ? "http://localhost:8085/" : `https://${server}.140crafts.com/`;
 // : "http://localhost:8085/";
 
-export const s3Base = "https://storage.googleapis.com/jienar-b0/";
+export const s3Base = "https://storage.googleapis.com/jinear-b0/";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: root,

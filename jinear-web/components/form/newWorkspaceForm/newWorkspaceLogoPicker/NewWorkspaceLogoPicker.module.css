@@ -1,0 +1,23 @@
+.photoInput {
+  display: none;
+}
+
+.profilePicture {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 65px;
+  height: 65px;
+  border-radius: 26px;
+  border-color: var(--c-primary-shade-1);
+  border-width: thin;
+  /* border-width: 0px; */
+  border-style: solid;
+  object-fit: cover;
+}
+
+.profilePicture:hover {
+  background-color: var(--c-primary-shade-0);
+  cursor: pointer;
+}

@@ -65,12 +65,6 @@
   color: var(--c-link-color);
 }
 
-.workspaceTypePickerButtonsContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
 .urlInputsContainer {
   display: flex;
   flex-direction: row;
@@ -80,6 +74,8 @@
 .hostInput {
   background: var(--c-primary-shade-0) !important;
   color: var(--c-text-color) !important;
+  opacity: 0.85;
+  font-weight: 600;
   caret-color: var(--c-text-color) !important;
   border-color: transparent;
   border-width: 1px;
@@ -101,6 +97,7 @@
   flex: 1;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  background: var(--c-primary-shade-0) !important;
   padding-left: 0;
   min-width: 1rem;
 }
@@ -110,29 +107,7 @@
   flex-direction: row;
   justify-content: flex-start;
   gap: 1rem;
-}
-
-.profilePicture {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  width: 65px;
-  height: 65px;
-  border-radius: 26px;
-  border-color: var(--c-primary-shade-1);
-  border-width: thin;
-  /* border-width: 0px; */
-  border-style: solid;
-}
-
-.profilePicture:hover {
-  background-color: var(--c-primary-shade-0);
-  cursor: pointer;
-}
-
-.photoInput {
-  display: none;
+  font-weight: 600;
 }
 
 .photoTitleContainer {

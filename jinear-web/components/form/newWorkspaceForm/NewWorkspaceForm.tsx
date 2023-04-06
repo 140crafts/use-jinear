@@ -1,56 +1,63 @@
 import Button, { ButtonVariants } from "@/components/button";
-import OrLine from "@/components/orLine/OrLine";
-import ThemeToggle from "@/components/themeToggle/ThemeToggle";
-import { LocaleType, WorkspaceInitializeRequest } from "@/model/be/jinear-core";
+import { BaseResponse, LocaleType, WorkspaceInitializeRequest } from "@/model/be/jinear-core";
 import { useInitializeWorkspaceMutation } from "@/store/api/workspaceApi";
-import { selectCurrentAccountHasAnyWorkspace, selectCurrentAccountHasAPersonalWorkspace } from "@/store/slice/accountSlice";
+import { selectCurrentAccountHasAPersonalWorkspace } from "@/store/slice/accountSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { HOST } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { normalizeUsernameReplaceSpaces } from "@/utils/normalizeHelper";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { IoArrowBack, IoCamera } from "react-icons/io5";
+import { IoArrowBack } from "react-icons/io5";
 import styles from "./NewWorkspaceForm.module.css";
-import WorkspaceTypeSelectButton from "./workspaceTypeSelectButton/WorkspaceTypeSelectButton";
+import NewWorkspaceLogoPicker from "./newWorkspaceLogoPicker/NewWorkspaceLogoPicker";
+import WorkspaceTypeSelect from "./workspaceTypeSelect/WorkspaceTypeSelect";
 
 interface NewWorkspaceFormProps {
   close?: () => void;
+  onSuccess?: () => void;
 }
 
 const logger = Logger("NewWorkspaceForm");
-const USERNAME_REGEX = /[^A-Za-z0-9-_]/;
 
-const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
+const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close, onSuccess }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { register, handleSubmit, setFocus, setValue, watch } = useForm<WorkspaceInitializeRequest>();
+  const handleRef = useRef<HTMLInputElement | null>(null);
+  const { ref: handleHookFormRef, ...handleRegisterRest } = register("handle", { required: t("formRequiredField") });
+
   const hasPersonalWorkspace = useTypedSelector(selectCurrentAccountHasAPersonalWorkspace);
-  const hasAnyWorkspace = useTypedSelector(selectCurrentAccountHasAnyWorkspace);
 
   const [isPersonal, setIsPersonal] = useState<boolean>();
 
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [selectedFilePreview, setSelectedFilePreview] = useState<string | undefined>();
-  const photoPickerButtonRef = useRef<HTMLInputElement>(null);
 
   const currTitle = watch("title");
   const currHandle = watch("handle");
 
-  const [initializeWorkspace, { isLoading, isSuccess }] = useInitializeWorkspaceMutation();
+  const [initializeWorkspace, { isLoading, isSuccess, error }] = useInitializeWorkspaceMutation();
 
   const submit: SubmitHandler<WorkspaceInitializeRequest> = (data) => {
     logger.log({ data });
-    initializeWorkspace({ ...data, locale: t("localeType") as LocaleType });
+    let formData = new FormData();
+    if (selectedFile) {
+      formData.append("logo", selectedFile);
+    }
+    const request = { ...data, formData };
+    initializeWorkspace({ ...request, locale: t("localeType") as LocaleType });
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      setFocus("title");
-    }, 100);
-  }, []);
+    if (isPersonal != null) {
+      setTimeout(() => {
+        setFocus("title");
+      }, 100);
+    }
+  }, [isPersonal]);
 
   useEffect(() => {
     if (currTitle && currTitle.length > 0) {
@@ -72,64 +79,31 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
 
   useEffect(() => {
     if (isSuccess) {
+      onSuccess?.();
       close?.();
     }
   }, [isSuccess]);
 
-  const setPersonal = () => {
-    setIsPersonal(true);
-    setValue("isPersonal", true);
-  };
-  const setCollaborative = () => {
-    setIsPersonal(false);
-    setValue("isPersonal", false);
-  };
+  useEffect(() => {
+    logger.log({ error });
+    // @ts-ignore
+    const err = error?.data as BaseResponse;
+    if (err && err.errorCode == "19001") {
+      setFocus("handle");
+      // @ts-ignore
+      handleRef?.current?.select?.();
+    }
+  }, [error, handleRef]);
+
   const unsetType = () => {
     setIsPersonal(undefined);
-  };
-
-  const onSearchClick = () => {};
-
-  const onSelectFile = (event: ChangeEvent<HTMLInputElement>) => {
-    const target = event.target as HTMLInputElement;
-    if (target.files && target.files.length) {
-      const file = event.target?.files?.[0];
-      setSelectedFile(file);
-      return;
-    }
-    setSelectedFile(undefined);
-  };
-
-  useEffect(() => {
-    if (!selectedFile) {
-      setSelectedFilePreview(undefined);
-      return;
-    }
-    const objectUrl = URL.createObjectURL(selectedFile);
-    setSelectedFilePreview(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [selectedFile]);
-
-  const pickPhoto = () => {
-    logger.log({ selectedFilePreview });
-    setSelectedFile(undefined);
-    if (photoPickerButtonRef.current) {
-      photoPickerButtonRef.current.value = "";
-      photoPickerButtonRef.current.click();
-    }
   };
 
   return (
     <form autoComplete="off" id={"new-workspace-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
       <input type={"hidden"} value={`${isPersonal}`} {...register("isPersonal")} />
       {isPersonal == null ? (
-        <div className={styles.workspaceTypePickerButtonsContainer}>
-          <WorkspaceTypeSelectButton onClick={setPersonal} buttonType={"personal"} />
-          <WorkspaceTypeSelectButton onClick={setCollaborative} buttonType={"collaborative"} />
-          <OrLine />
-          <WorkspaceTypeSelectButton onClick={onSearchClick} buttonType={"search"} />
-          <ThemeToggle />
-        </div>
+        <WorkspaceTypeSelect hasPersonalWorkspace={hasPersonalWorkspace} setIsPersonal={setIsPersonal} setValue={setValue} />
       ) : (
         <>
           <Button className={styles.unsetWorkspaceTypeButton} variant={ButtonVariants.outline} onClick={unsetType}>
@@ -138,20 +112,11 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
           </Button>
 
           <div className={styles.photoTitleContainer}>
-            {selectedFile ? (
-              <img src={selectedFilePreview} className={styles.profilePicture} onClick={pickPhoto} />
-            ) : (
-              <Button className={styles.profilePicture} onClick={pickPhoto}>
-                <IoCamera size={32} />
-              </Button>
-            )}
-            <input
-              ref={photoPickerButtonRef}
-              id={"photo-picker"}
-              type="file"
-              accept="image/*"
-              className={styles.photoInput}
-              onChange={onSelectFile}
+            <NewWorkspaceLogoPicker
+              selectedFile={selectedFile}
+              setSelectedFile={setSelectedFile}
+              selectedFilePreview={selectedFilePreview}
+              setSelectedFilePreview={setSelectedFilePreview}
             />
 
             <label className={cn(styles.label, "flex-1")} htmlFor={"new-workspace-title"}>
@@ -163,14 +128,18 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close }) => {
           <label className={styles.label} htmlFor={"new-workspace-handle"}>
             {t("newWorkspaceFormWorkspaceHandleShort")}
             <div className={styles.urlInputsContainer}>
-              <div className={styles.hostInput}>{`${HOST}/`}</div>
+              <div className={styles.hostInput}>{`${HOST?.replace("https://", "")?.replace("http://", "")}/`}</div>
               <input
                 className={styles.usernameInput}
                 id={"new-workspace-handle"}
                 type={"text"}
                 minLength={1}
                 maxLength={255}
-                {...register("handle", { required: t("formRequiredField") })}
+                {...handleRegisterRest}
+                ref={(e) => {
+                  handleHookFormRef(e);
+                  handleRef.current = e;
+                }}
               />
             </div>
           </label>

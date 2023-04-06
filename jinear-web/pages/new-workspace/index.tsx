@@ -1,4 +1,5 @@
 import NewWorkspaceForm from "@/components/form/newWorkspaceForm/NewWorkspaceForm";
+import ThemeToggle from "@/components/themeToggle/ThemeToggle";
 import { selectCurrentAccountHasAPersonalWorkspace } from "@/store/slice/accountSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
@@ -20,8 +21,9 @@ const NewWorkspaceScreen: React.FC<NewWorkspaceScreenProps> = ({}) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>Create new workspace</div>
+      <ThemeToggle />
       <div className={styles.formContainer}>
-        <NewWorkspaceForm close={routeHome} />
+        <NewWorkspaceForm onSuccess={routeHome} />
       </div>
     </div>
   );

@@ -21,7 +21,6 @@
   color: var(--c-BABY_POWDER3) !important;
 }
 
-.loading-gif-1 {
-  width: 25px;
-  height: 25px;
+.image {
+  /* filter: grayscale(100%); */
 }
