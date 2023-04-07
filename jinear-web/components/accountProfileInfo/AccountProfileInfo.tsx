@@ -17,7 +17,13 @@ const AccountProfileInfo: React.FC<AccountProfileInfoProps> = ({ accountId, emai
         <div className={styles.username}>{username}</div>
         <div className={styles.email}>{email}</div>
       </div>
-      <ProfilePhoto boringAvatarKey={accountId} storagePath={profilePicture?.storagePath} wrapperClassName={styles.profilePic} />
+      <div className={styles.profilePicContainer}>
+        <ProfilePhoto
+          boringAvatarKey={accountId}
+          storagePath={profilePicture?.storagePath}
+          wrapperClassName={styles.profilePic}
+        />
+      </div>
     </div>
   );
 };

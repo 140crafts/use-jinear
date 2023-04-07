@@ -22,3 +22,7 @@
 .email {
   font-size: 0.75rem;
 }
+
+.profilePicContainer {
+  position: relative;
+}
