@@ -19,7 +19,13 @@ const MiniMonthCalendar: React.FC<MiniMonthCalendarProps> = ({ initialDate = new
   const [selectedDate, setSelectedDate] = useState(initialDate);
   const [viewingDate, setViewingDate] = useState(initialDate);
   const currentMonth = format(viewingDate, "MMM-yyyy");
-  const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
+  let firstDayCurrentMonth = new Date();
+  try {
+    firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
+  } catch (error) {
+    console.error(error);
+    console.log({ miniMonthCalendar: currentMonth });
+  }
   const periodStart = startOfWeek(firstDayCurrentMonth, { weekStartsOn: 1 });
   const periodEnd = endOfWeek(endOfMonth(firstDayCurrentMonth), { weekStartsOn: 1 });
   const days = eachDayOfInterval({ start: periodStart, end: periodEnd });
