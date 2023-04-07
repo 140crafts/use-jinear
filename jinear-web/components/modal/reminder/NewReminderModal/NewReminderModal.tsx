@@ -1,4 +1,5 @@
 import Button, { ButtonVariants } from "@/components/button";
+import ErrorBoundary from "@/components/errorBoundary/ErrorBoundary";
 import Line from "@/components/line/Line";
 import TimePicker from "@/components/timePicker/TimePicker";
 import { RepeatType, TaskReminderInitializeRequest } from "@/model/be/jinear-core";
@@ -42,6 +43,15 @@ const REPEAT_TYPES = [
 
 const logger = Logger("NewReminderModal");
 
+const formatDate = (dateString: Date, dateFormat: string) => {
+  try {
+    return format(new Date(dateString), dateFormat);
+  } catch (error) {
+    console.error({ error });
+    return null;
+  }
+};
+
 const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -57,17 +67,16 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
   const hasAnyAssignedDateReminder = task?.taskReminders?.find(
     (taskReminder) => taskReminder.taskReminderType == "ASSIGNED_DATE"
   );
-  const taskHasAssignedDate = task?.assignedDate;
 
+  const taskHasAssignedDate = task?.assignedDate;
   const formattedAssignedDate =
-    taskHasAssignedDate &&
-    format(new Date(task.assignedDate), task.hasPreciseAssignedDate ? t("dateTimeFormat") : t("dateFormat"));
+    taskHasAssignedDate && formatDate(task.assignedDate, task.hasPreciseAssignedDate ? t("dateTimeFormat") : t("dateFormat"));
 
   const hasAnyDueDateReminder = task?.taskReminders?.find((taskReminder) => taskReminder.taskReminderType == "DUE_DATE");
-  const taskHasDueDate = task?.dueDate;
 
+  const taskHasDueDate = task?.dueDate;
   const formattedDueDate =
-    taskHasDueDate && format(new Date(task.dueDate), task.hasPreciseDueDate ? t("dateTimeFormat") : t("dateFormat"));
+    taskHasDueDate && formatDate(task.dueDate, task.hasPreciseDueDate ? t("dateTimeFormat") : t("dateFormat"));
 
   const [initializeTaskReminder, { isSuccess, isLoading, isError }] = useInitializeTaskReminderMutation();
 
@@ -224,20 +233,22 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
                 {specificRemindDate ? format(new Date(specificRemindDate), t("dateFormat")) : t("datePickerSelectDate")}
               </Button>
               {specificRemindDate && (
-                <TimePicker
-                  id={"task-specific-date-reminder-time"}
-                  minuteResolution={15}
-                  onHourChange={onSpecificDateHoursChange}
-                  onMinuteChange={onSpecificDateMinutesChange}
-                  defaultHours={`${getHours(specificRemindDate ? new Date(specificRemindDate) : startOfToday())}`.padStart(
-                    2,
-                    "0"
-                  )}
-                  defaultMinutes={`${getMinutes(specificRemindDate ? new Date(specificRemindDate) : startOfToday())}`.padStart(
-                    2,
-                    "0"
-                  )}
-                />
+                <ErrorBoundary message="time-picker-task-specific-date-reminder-time">
+                  <TimePicker
+                    id={"task-specific-date-reminder-time"}
+                    minuteResolution={15}
+                    onHourChange={onSpecificDateHoursChange}
+                    onMinuteChange={onSpecificDateMinutesChange}
+                    defaultHours={`${getHours(specificRemindDate ? new Date(specificRemindDate) : startOfToday())}`.padStart(
+                      2,
+                      "0"
+                    )}
+                    defaultMinutes={`${getMinutes(specificRemindDate ? new Date(specificRemindDate) : startOfToday())}`.padStart(
+                      2,
+                      "0"
+                    )}
+                  />
+                </ErrorBoundary>
               )}
             </div>
 
@@ -271,18 +282,20 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
                           : t("datePickerSelectDate")}
                       </Button>
                       {specificRemindRepeatEnd && (
-                        <TimePicker
-                          id={"task-specific-date-reminder-repeat-end-time"}
-                          minuteResolution={15}
-                          onHourChange={onSpecificDateRemindRepeatEndHoursChange}
-                          onMinuteChange={onSpecificDateRemindRepeatEndMinutesChange}
-                          defaultHours={`${getHours(
-                            specificRemindRepeatEnd ? new Date(specificRemindRepeatEnd) : startOfToday()
-                          )}`.padStart(2, "0")}
-                          defaultMinutes={`${getMinutes(
-                            specificRemindDate ? new Date(specificRemindDate) : startOfToday()
-                          )}`.padStart(2, "0")}
-                        />
+                        <ErrorBoundary message="time-picker-task-specific-date-reminder-repeat-end-time">
+                          <TimePicker
+                            id={"task-specific-date-reminder-repeat-end-time"}
+                            minuteResolution={15}
+                            onHourChange={onSpecificDateRemindRepeatEndHoursChange}
+                            onMinuteChange={onSpecificDateRemindRepeatEndMinutesChange}
+                            defaultHours={`${getHours(
+                              specificRemindRepeatEnd ? new Date(specificRemindRepeatEnd) : startOfToday()
+                            )}`.padStart(2, "0")}
+                            defaultMinutes={`${getMinutes(
+                              specificRemindDate ? new Date(specificRemindDate) : startOfToday()
+                            )}`.padStart(2, "0")}
+                          />
+                        </ErrorBoundary>
                       )}
                     </div>
                   </div>
