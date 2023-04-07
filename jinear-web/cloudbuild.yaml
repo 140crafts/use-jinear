@@ -13,3 +13,5 @@ steps:
 
 images:
   - gcr.io/selam-255606/jinear-web
+options:
+  machineType: "e2-highcpu-8"
