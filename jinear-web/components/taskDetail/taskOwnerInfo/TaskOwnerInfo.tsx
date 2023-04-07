@@ -12,17 +12,7 @@ interface TaskOwnerAndAssigneeInfoProps {
 const TaskOwnerAndAssigneeInfo: React.FC<TaskOwnerAndAssigneeInfoProps> = ({ createdDate, owner }) => {
   const { t } = useTranslation();
 
-  return (
-    <div className={styles.container}>
-      {/* <div>
-        {`${t("taskDetailPageCreatedAt")} ${format(
-          new Date(createdDate),
-          t("dateTimeFormat")
-        )}`}
-      </div> */}
-      {owner && <AccountProfileInfo {...owner} />}
-    </div>
-  );
+  return <div className={styles.container}>{owner && <AccountProfileInfo {...owner} />}</div>;
 };
 
 export default TaskOwnerAndAssigneeInfo;
