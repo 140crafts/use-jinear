@@ -129,9 +129,13 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
   useEffect(() => {
     if (!hasAnyAssignedDateReminder && !hasAnyDueDateReminder) {
       setValue("specificDate", true);
-      const date = format(setMinutes(setHours(addDays(new Date(), 1), 9), 0), "yyyy-MM-dd HH:mm");
-      // @ts-ignore
-      setValue("specificRemindDate", date);
+      try {
+        const date = format(setMinutes(setHours(addDays(new Date(), 1), 9), 0), "yyyy-MM-dd HH:mm");
+        // @ts-ignore
+        setValue("specificRemindDate", date);
+      } catch (error) {
+        console.error(error);
+      }
     }
   }, [hasAnyAssignedDateReminder, hasAnyDueDateReminder]);
 
