@@ -18,7 +18,7 @@ build:
       when: always
     - when: never
   script:
-    - gcloud builds submit --tag gcr.io/selam-255606/$PROJECT_NAME --timeout=900s
+    - gcloud builds submit --tag gcr.io/selam-255606/$PROJECT_NAME --timeout=900s --substitutions=SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
 
 deploy:
   stage: deploy
