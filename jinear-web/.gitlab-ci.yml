@@ -18,7 +18,7 @@ build:
       when: always
     - when: never
   script:
-    - gcloud builds submit --config=cloudbuild.yaml --timeout=900s --substitutions=_SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+    - gcloud builds submit --config=cloudbuild.yaml --substitutions=_SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
 
 deploy:
   stage: deploy
