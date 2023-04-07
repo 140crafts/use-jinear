@@ -1,7 +1,7 @@
 steps:
   # build the container images
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "gcr.io/selam-255606/jinear-web", "./client"]
+    args: ["build", "-t", "gcr.io/selam-255606/jinear-web", "."]
     env:
       - "SENTRY_AUTH_TOKEN=${_SENTRY_AUTH_TOKEN}"
 
