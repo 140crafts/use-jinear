@@ -12,6 +12,7 @@ WORKDIR /app
 
 # https://github.com/webpack/webpack/issues/14532
 ENV NODE_OPTIONS=--openssl-legacy-provider
+ENV SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
 
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
