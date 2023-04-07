@@ -5,7 +5,7 @@ export const getLoggerEnabledOnProd = () => {
   if (typeof window === "object") {
     return localStorage.getItem("DEBUG") != null || localStorage.getItem("debug") != null;
   }
-  return "dark";
+  return false;
 };
 
 const Logger = (tag = "NoTag") => {
