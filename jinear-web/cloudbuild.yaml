@@ -13,3 +13,5 @@ steps:
 
 images:
   - gcr.io/selam-255606/jinear-web
+env:
+  - "SENTRY_AUTH_TOKEN=${_SENTRY_AUTH_TOKEN}"
