@@ -1,24 +1,25 @@
 import AuthCheck from "@/components/authCheck/AuthCheck";
+// import ErrorBoundary from "@/components/errorBoundary/ErrorBoundary";
 import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import MainHeader from "@/components/mainHeader/MainHeader";
-import AddMemberToTeamModal from "@/components/modal/addMemberToTeamModal/AddMemberToTeamModal";
-import DatePickerModal from "@/components/modal/datePicker/DatePickerModal";
-import DialogModal from "@/components/modal/dialogModal/DialogModal";
-import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
-import LoginWith2FaMailModal from "@/components/modal/loginWith2FaMailModal/LoginWith2FaMailModal";
-import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
-import NewTeamModal from "@/components/modal/newTeamModal/NewTeamModal";
-import NewWorkspaceModal from "@/components/modal/newWorkspaceModal/NewWorkspaceModal";
-import NotFoundModal from "@/components/modal/notFoundModal/NotFoundModal";
-import NewReminderModal from "@/components/modal/reminder/NewReminderModal/NewReminderModal";
-import ReminderListModal from "@/components/modal/reminder/reminderListModal/ReminderListModal";
-import SearchTaskModal from "@/components/modal/searchTaskModal/SearchTaskModal";
-import TaskAssigneeChangeModal from "@/components/modal/taskDetailModals/taskAssigneeChangeModal/TaskAssigneeChangeModal";
-import TaskDateChangeModal from "@/components/modal/taskDetailModals/taskDateChangeModal/TaskDateChangeModal";
-import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicChangeModal/TaskTopicChangeModal";
-import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal";
-import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
-import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
+// import AddMemberToTeamModal from "@/components/modal/addMemberToTeamModal/AddMemberToTeamModal";
+// import DatePickerModal from "@/components/modal/datePicker/DatePickerModal";
+// import DialogModal from "@/components/modal/dialogModal/DialogModal";
+// import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
+// import LoginWith2FaMailModal from "@/components/modal/loginWith2FaMailModal/LoginWith2FaMailModal";
+// import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
+// import NewTeamModal from "@/components/modal/newTeamModal/NewTeamModal";
+// import NewWorkspaceModal from "@/components/modal/newWorkspaceModal/NewWorkspaceModal";
+// import NotFoundModal from "@/components/modal/notFoundModal/NotFoundModal";
+// import NewReminderModal from "@/components/modal/reminder/NewReminderModal/NewReminderModal";
+// import ReminderListModal from "@/components/modal/reminder/reminderListModal/ReminderListModal";
+// import SearchTaskModal from "@/components/modal/searchTaskModal/SearchTaskModal";
+// import TaskAssigneeChangeModal from "@/components/modal/taskDetailModals/taskAssigneeChangeModal/TaskAssigneeChangeModal";
+// import TaskDateChangeModal from "@/components/modal/taskDetailModals/taskDateChangeModal/TaskDateChangeModal";
+// import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicChangeModal/TaskTopicChangeModal";
+// import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal";
+// import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
+// import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
@@ -45,28 +46,28 @@ export function useThemeToggle() {
   return theme.toggleTheme;
 }
 
-const globalModals: any = (
-  <>
-    <AddMemberToTeamModal />
-    <WorkspaceInviteMemberModal />
-    <ReminderListModal />
-    <NewReminderModal />
-    <SearchTaskModal />
-    <NewTeamModal />
-    <NewWorkspaceModal />
-    <TaskAssigneeChangeModal />
-    <TaskDateChangeModal />
-    <TaskTopicChangeModal />
-    <WorkflowChangeStatusModal />
-    <TeamOptionsModal />
-    <NewTaskModal />
-    <LoginWith2FaMailModal />
-    <DatePickerModal />
-    <DialogModal />
-    <NotFoundModal />
-    <LoadingModal />
-  </>
-);
+// const globalModals: any = (
+//   <>
+//     <AddMemberToTeamModal />
+//     <WorkspaceInviteMemberModal />
+//     <ReminderListModal />
+//     <NewReminderModal />
+//     <SearchTaskModal />
+//     <NewTeamModal />
+//     <NewWorkspaceModal />
+//     <TaskAssigneeChangeModal />
+//     <TaskDateChangeModal />
+//     <TaskTopicChangeModal />
+//     <WorkflowChangeStatusModal />
+//     <TeamOptionsModal />
+//     <NewTaskModal />
+//     <LoginWith2FaMailModal />
+//     <DatePickerModal />
+//     <DialogModal />
+//     <NotFoundModal />
+//     <LoadingModal />
+//   </>
+// );
 
 function MyApp({ Component, pageProps }: AppProps) {
   const { t } = useTranslation();
@@ -102,7 +103,7 @@ function MyApp({ Component, pageProps }: AppProps) {
               <Component {...pageProps} />
             </Transition>
             <Toaster position="bottom-center" containerStyle={{ bottom: 68 }} toastOptions={{ className: "toast" }} />
-            {globalModals}
+            {/* <ErrorBoundary message={"Global Modals"}>{globalModals}</ErrorBoundary> */}
           </LayoutProvider>
         </ThemeContext.Provider>
       </Provider>
