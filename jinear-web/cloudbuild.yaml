@@ -8,5 +8,8 @@ steps:
   # push the container images to Container Registry
   - name: "gcr.io/cloud-builders/docker"
     args: ["push", "gcr.io/selam-255606/jinear-web"]
+    env:
+      - "SENTRY_AUTH_TOKEN=${_SENTRY_AUTH_TOKEN}"
+
 images:
   - gcr.io/selam-255606/jinear-web
