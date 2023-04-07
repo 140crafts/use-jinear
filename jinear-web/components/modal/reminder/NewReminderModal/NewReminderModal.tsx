@@ -234,7 +234,7 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
           <div className={styles.specificDateContainer}>
             <div className={styles.dateTimePickerContainer}>
               <Button variant={ButtonVariants.filled} onClick={popDatePickerForSpecificRemindDate}>
-                {specificRemindDate ? format(new Date(specificRemindDate), t("dateFormat")) : t("datePickerSelectDate")}
+                {specificRemindDate ? formatDate(specificRemindDate, t("dateFormat")) : t("datePickerSelectDate")}
               </Button>
               {specificRemindDate && (
                 <ErrorBoundary message="time-picker-task-specific-date-reminder-time">
@@ -282,7 +282,7 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
                       <input id={"remind-end-date"} type={"hidden"} {...register("specificRemindRepeatEnd")} />
                       <Button variant={ButtonVariants.filled} onClick={popDatePickerForSpecificRemindRepeatEndDate}>
                         {specificRemindRepeatEnd
-                          ? format(new Date(specificRemindRepeatEnd), t("dateFormat"))
+                          ? formatDate(specificRemindRepeatEnd, t("dateFormat"))
                           : t("datePickerSelectDate")}
                       </Button>
                       {specificRemindRepeatEnd && (
