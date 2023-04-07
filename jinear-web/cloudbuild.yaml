@@ -1,0 +1,13 @@
+steps:
+  # build the container images
+  #, "./client"
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/selam-255606/jinear-web"]
+    env:
+      - "SENTRY_AUTH_TOKEN=${_SENTRY_AUTH_TOKEN}"
+
+  # push the container images to Container Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/selam-255606/jinear-web"]
+images:
+  - gcr.io/selam-255606/jinear-web
