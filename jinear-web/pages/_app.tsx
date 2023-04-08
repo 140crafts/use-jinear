@@ -48,60 +48,24 @@ export function useThemeToggle() {
 
 const globalModals: any = (
   <>
-    <ErrorBoundary message={"AddMemberToTeamModal"}>
-      <AddMemberToTeamModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"WorkspaceInviteMemberModal"}>
-      <WorkspaceInviteMemberModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"ReminderListModal"}>
-      <ReminderListModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"NewReminderModal"}>
-      <NewReminderModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"SearchTaskModal"}>
-      <SearchTaskModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"NewTeamModal"}>
-      <NewTeamModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"NewWorkspaceModal"}>
-      <NewWorkspaceModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"TaskAssigneeChangeModal"}>
-      <TaskAssigneeChangeModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"TaskDateChangeModal"}>
-      <TaskDateChangeModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"TaskTopicChangeModal"}>
-      <TaskTopicChangeModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"WorkflowChangeStatusModal"}>
-      <WorkflowChangeStatusModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"TeamOptionsModal"}>
-      <TeamOptionsModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"NewTaskModal"}>
-      <NewTaskModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"LoginWith2FaMailModal"}>
-      <LoginWith2FaMailModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"DatePickerModal"}>
-      <DatePickerModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"DialogModal"}>
-      <DialogModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"NotFoundModal"}>
-      <NotFoundModal />
-    </ErrorBoundary>
-    <ErrorBoundary message={"LoadingModal"}>
-      <LoadingModal />
-    </ErrorBoundary>
+    <AddMemberToTeamModal />
+    <WorkspaceInviteMemberModal />
+    <ReminderListModal />
+    <NewReminderModal />
+    <SearchTaskModal />
+    <NewTeamModal />
+    <NewWorkspaceModal />
+    <TaskAssigneeChangeModal />
+    <TaskDateChangeModal />
+    <TaskTopicChangeModal />
+    <WorkflowChangeStatusModal />
+    <TeamOptionsModal />
+    <NewTaskModal />
+    <LoginWith2FaMailModal />
+    <DatePickerModal />
+    <DialogModal />
+    <NotFoundModal />
+    <LoadingModal />
   </>
 );
 

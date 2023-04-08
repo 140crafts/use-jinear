@@ -1,5 +1,4 @@
 import Button, { ButtonVariants } from "@/components/button";
-import ErrorBoundary from "@/components/errorBoundary/ErrorBoundary";
 import Line from "@/components/line/Line";
 import TimePicker from "@/components/timePicker/TimePicker";
 import { RepeatType, TaskReminderInitializeRequest } from "@/model/be/jinear-core";
@@ -237,22 +236,20 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
                 {specificRemindDate ? formatDate(specificRemindDate, t("dateFormat")) : t("datePickerSelectDate")}
               </Button>
               {specificRemindDate && (
-                <ErrorBoundary message="time-picker-task-specific-date-reminder-time">
-                  <TimePicker
-                    id={"task-specific-date-reminder-time"}
-                    minuteResolution={15}
-                    onHourChange={onSpecificDateHoursChange}
-                    onMinuteChange={onSpecificDateMinutesChange}
-                    defaultHours={`${getHours(specificRemindDate ? new Date(specificRemindDate) : startOfToday())}`.padStart(
-                      2,
-                      "0"
-                    )}
-                    defaultMinutes={`${getMinutes(specificRemindDate ? new Date(specificRemindDate) : startOfToday())}`.padStart(
-                      2,
-                      "0"
-                    )}
-                  />
-                </ErrorBoundary>
+                <TimePicker
+                  id={"task-specific-date-reminder-time"}
+                  minuteResolution={15}
+                  onHourChange={onSpecificDateHoursChange}
+                  onMinuteChange={onSpecificDateMinutesChange}
+                  defaultHours={`${getHours(specificRemindDate ? new Date(specificRemindDate) : startOfToday())}`.padStart(
+                    2,
+                    "0"
+                  )}
+                  defaultMinutes={`${getMinutes(specificRemindDate ? new Date(specificRemindDate) : startOfToday())}`.padStart(
+                    2,
+                    "0"
+                  )}
+                />
               )}
             </div>
 
@@ -286,20 +283,18 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
                           : t("datePickerSelectDate")}
                       </Button>
                       {specificRemindRepeatEnd && (
-                        <ErrorBoundary message="time-picker-task-specific-date-reminder-repeat-end-time">
-                          <TimePicker
-                            id={"task-specific-date-reminder-repeat-end-time"}
-                            minuteResolution={15}
-                            onHourChange={onSpecificDateRemindRepeatEndHoursChange}
-                            onMinuteChange={onSpecificDateRemindRepeatEndMinutesChange}
-                            defaultHours={`${getHours(
-                              specificRemindRepeatEnd ? new Date(specificRemindRepeatEnd) : startOfToday()
-                            )}`.padStart(2, "0")}
-                            defaultMinutes={`${getMinutes(
-                              specificRemindDate ? new Date(specificRemindDate) : startOfToday()
-                            )}`.padStart(2, "0")}
-                          />
-                        </ErrorBoundary>
+                        <TimePicker
+                          id={"task-specific-date-reminder-repeat-end-time"}
+                          minuteResolution={15}
+                          onHourChange={onSpecificDateRemindRepeatEndHoursChange}
+                          onMinuteChange={onSpecificDateRemindRepeatEndMinutesChange}
+                          defaultHours={`${getHours(
+                            specificRemindRepeatEnd ? new Date(specificRemindRepeatEnd) : startOfToday()
+                          )}`.padStart(2, "0")}
+                          defaultMinutes={`${getMinutes(
+                            specificRemindDate ? new Date(specificRemindDate) : startOfToday()
+                          )}`.padStart(2, "0")}
+                        />
                       )}
                     </div>
                   </div>
