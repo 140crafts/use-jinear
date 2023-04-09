@@ -11,6 +11,7 @@ import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
 import NewTeamModal from "@/components/modal/newTeamModal/NewTeamModal";
 import NewWorkspaceModal from "@/components/modal/newWorkspaceModal/NewWorkspaceModal";
 import NotFoundModal from "@/components/modal/notFoundModal/NotFoundModal";
+import NotificationPermissionModal from "@/components/modal/notificationPermissionModal/NotificationPermissionModal";
 import NewReminderModal from "@/components/modal/reminder/NewReminderModal/NewReminderModal";
 import ReminderListModal from "@/components/modal/reminder/reminderListModal/ReminderListModal";
 import SearchTaskModal from "@/components/modal/searchTaskModal/SearchTaskModal";
@@ -21,6 +22,7 @@ import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workf
 import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
 import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
+import OneSignalSubscriber from "@/components/oneSignalSubscriber/OneSignalSubscriber";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
 import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
@@ -48,6 +50,7 @@ export function useThemeToggle() {
 
 const globalModals: any = (
   <>
+    <NotificationPermissionModal />
     <AddMemberToTeamModal />
     <WorkspaceInviteMemberModal />
     <ReminderListModal />
@@ -99,6 +102,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <AuthCheck />
             <WorkspaceAndTeamChangeListener />
             <OnboardListener />
+            <OneSignalSubscriber />
             <Transition>
               <Component {...pageProps} />
             </Transition>

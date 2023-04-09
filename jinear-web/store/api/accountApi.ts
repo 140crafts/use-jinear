@@ -25,19 +25,19 @@ export const accountApi = api.injectEndpoints({
       invalidatesTags: tagTypes,
     }),
     //
-    logoutRequest: build.mutation<void, void>({
-      query: () => ({
-        url: "logout",
-        method: "POST",
-      }),
-      invalidatesTags: tagTypes,
-    }),
+    // logoutRequest: build.mutation<void, void>({
+    //   query: () => ({
+    //     url: "v1/auth/logout",
+    //     method: "POST",
+    //   }),
+    //   invalidatesTags: tagTypes,
+    // }),
     //
   }),
 });
 
-export const { useMeQuery, useConfirmEmailMutation, useResendConfirmEmailMutation, useLogoutRequestMutation } = accountApi;
+export const { useMeQuery, useConfirmEmailMutation, useResendConfirmEmailMutation } = accountApi;
 
 export const {
-  endpoints: { me, confirmEmail, resendConfirmEmail, logoutRequest },
+  endpoints: { me, confirmEmail, resendConfirmEmail },
 } = accountApi;

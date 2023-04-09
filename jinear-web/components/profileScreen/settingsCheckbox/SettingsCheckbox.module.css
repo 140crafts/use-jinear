@@ -1,0 +1,6 @@
+.label {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  font-weight: 600;
+}

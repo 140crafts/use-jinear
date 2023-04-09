@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-04-04 08:06:09.
+// Generated using typescript-generator version 3.0.1157 on 2023-04-09 14:49:20.
 
 export interface BaseDto {
   createdDate: Date;
@@ -62,6 +62,13 @@ export interface MediaDto extends BaseDto {
   bucketName: string;
   storagePath: string;
   originalName: string;
+}
+
+export interface NotificationTargetDto extends BaseDto {
+  externalTargetId: string;
+  accountId: string;
+  sessionInfoId: string;
+  targetType: NotificationTargetType;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -376,6 +383,11 @@ export interface LoginWithPasswordRequest extends BaseRequest {
   timeZone?: string | null;
 }
 
+export interface NotificationTargetInitializeRequest extends BaseRequest {
+  externalTargetId: string;
+  targetType?: NotificationTargetType | null;
+}
+
 export interface TaskReminderInitializeRequest extends BaseRequest {
   taskId: string;
   beforeAssignedDate?: boolean | null;
@@ -656,7 +668,9 @@ export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | 
 
 export type FileType = "PROFILE_PIC";
 
-export type MediaOwnerType = "USER" | "COMMUNITY" | "WORKSPACE";
+export type MediaOwnerType = "USER" | "WORKSPACE";
+
+export type NotificationTargetType = "WEB";
 
 export type PassiveReason =
   | "SYSTEM"

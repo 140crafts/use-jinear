@@ -1,6 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
-import { useLogoutRequestMutation } from "@/store/api/accountApi";
+import { useLogoutMutation } from "@/store/api/authApi";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
 import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
@@ -17,7 +17,7 @@ interface SideMenuFooterProps {
 const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [logoutCall, { isLoading, isError }] = useLogoutRequestMutation();
+  const [logoutCall, { isLoading, isError }] = useLogoutMutation();
   const currentAccount = useTypedSelector(selectCurrentAccount);
 
   const logout = () => {
@@ -40,7 +40,7 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
   return (
     <div className={cn(styles.container, className)}>
       <ThemeToggle />
-      <Button variant={ButtonVariants.hoverFilled} className={styles.accountButton}>
+      <Button href={"/profile"} variant={ButtonVariants.hoverFilled} className={styles.accountButton}>
         {currentAccount?.username}
       </Button>
       <Button
