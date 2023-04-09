@@ -1,6 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
 import { WorkspaceInvitationInfoResponse } from "@/model/be/jinear-core";
-import { useLogoutRequestMutation } from "@/store/api/accountApi";
+import { useLogoutMutation } from "@/store/api/authApi";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import styles from "./InvitationActionContainer.module.css";
@@ -27,7 +27,7 @@ const InvitationActionContainer: React.FC<InvitationActionContainerProps> = ({
     .replace("${currentAccountEmail}", currentAccountEmail || "")
     .replace("${invitationToEmail}", invitationInfoResponse?.data?.invitationDto?.email || "");
 
-  const [logout, { isLoading, isError }] = useLogoutRequestMutation();
+  const [logout, { isLoading, isError }] = useLogoutMutation();
 
   return (
     <div className={styles.container}>

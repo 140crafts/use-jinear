@@ -1558,4 +1558,32 @@ export default {
     en: "You can create more workspaces later.",
     tr: "Daha sonra başka çalışma alanları oluşturabilirsiniz.",
   },
+  communicationPrefrencesTitle: {
+    en: "Communication Prefrences",
+    tr: "İletişim Tercihleri",
+  },
+  communicationPrefrencesEmail: {
+    en: "Email",
+    tr: "Email",
+  },
+  communicationPrefrencesPushNotifications: {
+    en: "Push Notification",
+    tr: "Anlık Bildirimler",
+  },
+  notificationPermissionModalTitle: {
+    en: "Enable Notifications",
+    tr: "Anlık Bildirimleri Etkinleştir",
+  },
+  notificationPermissionModalAllowPermissions: {
+    en: "Enable",
+    tr: "Etkinleştir",
+  },
+  notificationPermissionModalDismiss: {
+    en: "Dismiss",
+    tr: "Kapat",
+  },
+  notificationPermissionModalInfoText: {
+    en: "To receive updates from tasks you subscribe enable notifications.",
+    tr: "Takip ettiğin görevler hakkında bildirim almak için bildirimleri etkinleştir.",
+  },
 };

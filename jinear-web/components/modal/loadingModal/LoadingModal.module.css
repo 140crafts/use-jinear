@@ -20,7 +20,3 @@
 .circularProgress > svg {
   color: var(--c-BABY_POWDER3) !important;
 }
-
-.image {
-  /* filter: grayscale(100%); */
-}
