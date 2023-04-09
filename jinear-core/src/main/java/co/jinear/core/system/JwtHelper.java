@@ -48,6 +48,10 @@ public class JwtHelper {
         return EnumUtils.getEnum(LocaleType.class, locale);
     }
 
+    public String getSessionIdFromToken(String token) {
+        return getClaimFromToken(token, claims -> claims.get(SESSION_INFO_ID, String.class));
+    }
+
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);

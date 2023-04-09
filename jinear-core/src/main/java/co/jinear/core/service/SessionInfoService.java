@@ -114,6 +114,16 @@ public class SessionInfoService {
                 .orElseThrow(BusinessException::new);
     }
 
+    public String currentAccountSessionId() {
+        AbstractAuthenticationToken auth = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        return Optional.of(auth)
+                .map(Authentication::getCredentials)
+                .filter(String.class::isInstance)
+                .map(String.class::cast)
+                .map(jwtHelper::getSessionIdFromToken)
+                .orElseThrow(BusinessException::new);
+    }
+
     private String saveSessionInfo(ProviderType provider, String accountId) {
         log.info("New session info save has started. provider: {}, accountId: {}", provider, accountId);
         String sessionId = RequestContextHolder.currentRequestAttributes().getSessionId();
