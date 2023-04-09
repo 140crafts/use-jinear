@@ -7,6 +7,7 @@ import co.jinear.core.model.request.auth.AuthInitializeRequest;
 import co.jinear.core.model.request.auth.LoginWithPasswordRequest;
 import co.jinear.core.model.response.auth.AuthInitializeResponse;
 import co.jinear.core.model.response.auth.AuthResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,8 @@ public class AuthController {
 
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.OK)
-    public void logout(HttpServletResponse response) {
-        logoutManager.logout(response);
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        logoutManager.logout(request,response);
     }
 
     @PostMapping("/otp/email/initialize")

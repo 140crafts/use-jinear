@@ -12,6 +12,7 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -29,6 +30,7 @@ public class SecurityConfiguration {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtRequestFilter jwtRequestFilter;
 
+    private static final String LOGOUT_ENDPOINT = "/v1/auth/logout";
     private static final String[] PUBLIC_ENDPOINTS = new String[]{
             "/",
             "/v1/auth/otp/email/initialize",
@@ -69,8 +71,9 @@ public class SecurityConfiguration {
                 .and()
                 .logout()
                 .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/").deleteCookies("JWT","JSESSIONID", "SESSION", "SESSIONID")
+//                .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_ENDPOINT))
+//                .logoutSuccessHandler(logoutSuccessHandler())
+                .logoutSuccessUrl("/").deleteCookies("JWT", "JSESSIONID", "SESSION", "SESSIONID")
                 .invalidateHttpSession(true)
                 .and()
                 .build();
@@ -103,5 +106,10 @@ public class SecurityConfiguration {
     @Bean
     SessionRegistry sessionRegistry() {
         return new SessionRegistryImpl();
+    }
+
+    @Bean
+    public LogoutSuccessHandler logoutSuccessHandler() {
+        return new CustomLogoutSuccessHandler();
     }
 }

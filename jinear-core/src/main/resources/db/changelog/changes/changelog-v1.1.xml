@@ -545,5 +545,36 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-notification_target">
+        <createTable tableName="notification_target">
+            <column name="notification_target_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="external_target_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="session_info_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="target_type" type="int"/>
+        </createTable>
 
+        <createIndex indexName="ix_account_id" tableName="notification_target">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="ix_external_target_id" tableName="notification_target">
+            <column name="external_target_id"/>
+        </createIndex>
+        <createIndex indexName="ix_session_info_id" tableName="notification_target">
+            <column name="session_info_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

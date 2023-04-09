@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-04-05 23:20:47.
+// Generated using typescript-generator version 3.0.1157 on 2023-04-09 14:49:20.
 
 export interface BaseDto {
     createdDate: Date;
@@ -62,6 +62,13 @@ export interface MediaDto extends BaseDto {
     bucketName: string;
     storagePath: string;
     originalName: string;
+}
+
+export interface NotificationTargetDto extends BaseDto {
+    externalTargetId: string;
+    accountId: string;
+    sessionInfoId: string;
+    targetType: NotificationTargetType;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -377,6 +384,11 @@ export interface LoginWithPasswordRequest extends BaseRequest {
     timeZone?: string | null;
 }
 
+export interface NotificationTargetInitializeRequest extends BaseRequest {
+    externalTargetId: string;
+    targetType?: NotificationTargetType | null;
+}
+
 export interface TaskReminderInitializeRequest extends BaseRequest {
     taskId: string;
     beforeAssignedDate?: boolean | null;
@@ -632,6 +644,8 @@ export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | 
 export type FileType = "PROFILE_PIC";
 
 export type MediaOwnerType = "USER" | "WORKSPACE";
+
+export type NotificationTargetType = "WEB";
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
 
