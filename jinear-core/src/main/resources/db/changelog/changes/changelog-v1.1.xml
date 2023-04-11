@@ -577,4 +577,92 @@
             <column name="session_info_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-notification_event">
+        <createTable tableName="notification_event">
+            <column name="notification_event_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="notification_template_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_read" type="tinyint" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_state" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_account_id" tableName="notification_event">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="ix_notification_template_id" tableName="notification_event">
+            <column name="notification_template_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-notification_event_param">
+        <createTable tableName="notification_event_param">
+            <column name="notification_event_param_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="notification_event_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="param_key" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="param_value" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_notification_event_id" tableName="notification_event_param">
+            <column name="notification_event_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-notification_template">
+        <createTable tableName="notification_template">
+            <column name="notification_template_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="template_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="locale" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="template_title" type="text"/>
+            <column name="template_text" type="text"/>
+            <column name="launch_url" type="text"/>
+        </createTable>
+
+        <createIndex indexName="ix_template_type" tableName="notification_template">
+            <column name="template_type"/>
+        </createIndex>
+        <createIndex indexName="ix_locale" tableName="notification_template">
+            <column name="locale"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

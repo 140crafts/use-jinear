@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-04-09 14:49:20.
+// Generated using typescript-generator version 3.0.1157 on 2023-04-11 22:32:36.
 
 export interface BaseDto {
     createdDate: Date;
@@ -69,6 +69,15 @@ export interface NotificationTargetDto extends BaseDto {
     accountId: string;
     sessionInfoId: string;
     targetType: NotificationTargetType;
+}
+
+export interface NotificationTemplateDto extends BaseDto {
+    notificationTemplateId: string;
+    templateName: string;
+    title: string;
+    text: string;
+    launchUrl: string;
+    localeType: LocaleType;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -645,7 +654,11 @@ export type FileType = "PROFILE_PIC";
 
 export type MediaOwnerType = "USER" | "WORKSPACE";
 
+export type NotificationEventState = "INITIALIZED" | "SENT";
+
 export type NotificationTargetType = "WEB";
+
+export type NotificationTemplateType = "TASK_REMINDER" | "TASK_ASSIGNED";
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
 
