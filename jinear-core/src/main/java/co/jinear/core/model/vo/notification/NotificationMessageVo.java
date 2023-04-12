@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -14,4 +16,5 @@ public class NotificationMessageVo {
     private String text;
     private String launchUrl;
     private LocaleType localeType;
+    private List<String> targetIds;
 }

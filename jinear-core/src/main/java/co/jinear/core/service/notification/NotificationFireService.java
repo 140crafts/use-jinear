@@ -6,12 +6,14 @@ import co.jinear.core.model.entity.notification.NotificationEvent;
 import co.jinear.core.model.enumtype.notification.NotificationEventState;
 import co.jinear.core.model.vo.notification.NotificationMessageVo;
 import co.jinear.core.model.vo.notification.NotificationSendVo;
+import co.jinear.core.service.notification.provider.NotificationClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -22,6 +24,7 @@ public class NotificationFireService {
     private final NotificationTemplatePopulateService notificationTemplatePopulateService;
     private final NotificationEventOperationService notificationEventOperationService;
     private final NotificationTemplateRetrieveService templateRetrieveService;
+    private final NotificationClient notificationClient;
 
     public void fire(NotificationSendVo notificationSendVo) {
         log.info("Send notification has started. notificationSendVo: {}", notificationSendVo);
@@ -37,14 +40,16 @@ public class NotificationFireService {
                 .map(NotificationSendVo::getAccountId)
                 .map(notificationTargetRetrieveService::retrieveLatestAccountTargets)
                 .map(Collection::stream)
-                .ifPresent(notificationTargetDtoStream -> notificationTargetDtoStream.forEach(targetDto -> send(targetDto, notificationMessageVo)));
+                .map(notificationTargetDtoStream -> notificationTargetDtoStream.map(NotificationTargetDto::getExternalTargetId))
+                .map(Stream::toList)
+                .ifPresent(notificationMessageVo::setTargetIds);
+        send(notificationMessageVo);
     }
 
-    private void send(NotificationTargetDto targetDto, NotificationMessageVo notificationMessageVo) {
-        log.info("Send notification for target {} has started. sessionId: {}", targetDto.getExternalTargetId(), targetDto.getSessionInfoId());
+    private void send(NotificationMessageVo notificationMessageVo) {
+        log.info("Send notification has started. notificationMessageVo: {}", notificationMessageVo);
         try {
-            //todo
-            log.info("notificationMessageVo: {}", notificationMessageVo);
+            notificationClient.send(notificationMessageVo);
         } catch (Exception e) {
             log.error("Send notification has failed.", e);
         }

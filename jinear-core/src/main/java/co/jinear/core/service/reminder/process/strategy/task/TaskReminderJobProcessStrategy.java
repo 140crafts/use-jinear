@@ -1,7 +1,6 @@
-package co.jinear.core.service.reminder.process.strategy;
+package co.jinear.core.service.reminder.process.strategy.task;
 
 import co.jinear.core.converter.reminder.ReminderJobConverter;
-import co.jinear.core.converter.reminder.TaskReminderMailVoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.reminder.ReminderDto;
 import co.jinear.core.model.dto.reminder.ReminderJobDto;
@@ -9,12 +8,11 @@ import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskReminderDto;
 import co.jinear.core.model.dto.task.TaskSubscriptionDto;
 import co.jinear.core.model.enumtype.reminder.ReminderType;
-import co.jinear.core.model.vo.mail.TaskReminderMailVo;
 import co.jinear.core.model.vo.reminder.InitializeReminderJobVo;
-import co.jinear.core.service.mail.MailService;
 import co.jinear.core.service.reminder.job.ReminderJobDateCalculatorService;
 import co.jinear.core.service.reminder.job.ReminderJobOperationService;
 import co.jinear.core.service.reminder.job.ReminderJobRetrieveService;
+import co.jinear.core.service.reminder.process.strategy.ReminderJobProcessStrategy;
 import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.reminder.TaskReminderOperationService;
 import co.jinear.core.service.task.reminder.TaskReminderRetrieveService;
@@ -25,7 +23,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static co.jinear.core.model.enumtype.reminder.ReminderJobStatus.COMPLETED;
 import static co.jinear.core.model.enumtype.reminder.ReminderJobStatus.PENDING;
@@ -43,8 +43,7 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
     private final TaskSubscriptionListingService taskSubscriptionListingService;
     private final TaskReminderRetrieveService taskReminderRetrieveService;
     private final TaskReminderOperationService taskReminderOperationService;
-    private final TaskReminderMailVoConverter taskReminderMailVoConverter;
-    private final MailService mailService;
+    private final TaskReminderAccountReachOutService taskReminderAccountReachOutService;
 
     @Override
     @Transactional
@@ -52,38 +51,10 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
         log.info("Task reminder job process has started. reminderJobDto: {}", reminderJobDto);
         TaskDto taskDto = retrieveTask(reminderJobDto);
         TaskReminderDto taskReminderDto = taskReminderRetrieveService.retrieveByTaskIdAndReminderId(taskDto.getTaskId(), reminderJobDto.getReminderId());
-        retrieveSubscribersAndRelatedAccountsAndSendNotification(taskDto, taskReminderDto, reminderJobDto);
+        List<TaskSubscriptionDto> taskSubscribers = taskSubscriptionListingService.listTaskSubscribers(taskDto.getTaskId());
+        taskReminderAccountReachOutService.notify(taskSubscribers, taskDto, taskReminderDto, reminderJobDto);
         reminderJobOperationService.updateReminderJobStatus(reminderJobDto.getReminderJobId(), COMPLETED);
         calculateNextDateAndInitializeNextReminderJob(reminderJobDto, taskReminderDto);
-    }
-
-    private void retrieveSubscribersAndRelatedAccountsAndSendNotification(TaskDto taskDto, TaskReminderDto taskReminderDto, ReminderJobDto reminderJobDto) {
-        Set<TaskReminderMailVo> receiverSet = new HashSet<>();
-        List<TaskSubscriptionDto> taskSubscribers = taskSubscriptionListingService.listTaskSubscribers(taskDto.getTaskId());
-        taskSubscribers
-                .stream()
-                .map(TaskSubscriptionDto::getPlainAccountProfileDto)
-                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto, reminderJobDto))
-                .forEach(receiverSet::add);
-        Optional.of(taskDto)
-                .map(TaskDto::getOwner)
-                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto, reminderJobDto))
-                .ifPresent(receiverSet::add);
-        Optional.of(taskDto)
-                .map(TaskDto::getAssignedToAccount)
-                .map(acc -> taskReminderMailVoConverter.map(acc, taskDto, taskReminderDto, reminderJobDto))
-                .ifPresent(receiverSet::add);
-        receiverSet.forEach(this::notifyAccount);
-    }
-
-    private void notifyAccount(TaskReminderMailVo taskReminderMailVo) {
-        try {
-            log.info("Task reminder notify account has started. taskReminderMailVo: {}", taskReminderMailVo);
-            mailService.sendTaskReminderMail(taskReminderMailVo);
-            log.info("Task reminder notify account has completed.");
-        } catch (Exception e) {
-            log.error("Task reminder notify account has failed. ", e);
-        }
     }
 
     @Override

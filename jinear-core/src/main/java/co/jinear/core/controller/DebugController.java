@@ -32,7 +32,7 @@ public class DebugController {
         NotificationSendVo notificationSendVo = new NotificationSendVo();
         notificationSendVo.setTemplateType(TASK_REMINDER);
         notificationSendVo.setLocaleType(TR);
-        notificationSendVo.setAccountId("01gxjxdwmcb40yxh1n4hc3dx6p");
+        notificationSendVo.setAccountId("01gjw45thcmavz8sctdy3crqs1");
         notificationSendVo.setParams(Map.of("taskTag","TAG-1","taskTitle","Lorem Ipsum Sik Sok Amet Zart zurt Gomet","reminderTypeText","asdreminderTypeText reminderTypeText reminderTypeText reminderTypeText reminderTypeText"));
         notificationFireService.fire(notificationSendVo);
     }
