@@ -1,6 +1,7 @@
 package co.jinear.core.model.entity.notification;
 
 
+import co.jinear.core.model.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Setter
 @Entity
 @Table(name = "notification_event_param")
-public class NotificationEventParam {
+public class NotificationEventParam extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "ULID")

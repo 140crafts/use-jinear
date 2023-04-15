@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -43,7 +44,12 @@ public class NotificationFireService {
                 .map(notificationTargetDtoStream -> notificationTargetDtoStream.map(NotificationTargetDto::getExternalTargetId))
                 .map(Stream::toList)
                 .ifPresent(notificationMessageVo::setTargetIds);
-        send(notificationMessageVo);
+
+        Optional.of(notificationMessageVo)
+                .map(NotificationMessageVo::getTargetIds)
+                .map(List::isEmpty)
+                .filter(Boolean.FALSE::equals)
+                .ifPresent(hasTargets -> send(notificationMessageVo));
     }
 
     private void send(NotificationMessageVo notificationMessageVo) {
@@ -54,5 +60,4 @@ public class NotificationFireService {
             log.error("Send notification has failed.", e);
         }
     }
-
 }

@@ -48,4 +48,8 @@ public class Account extends BaseEntity {
 
     @OneToOne(mappedBy = "account")
     private AccountPassword accountPassword;
+
+    @OneToOne(mappedBy = "account")
+//    @NotFound(action = NotFoundAction.IGNORE)
+    private AccountCommunicationPermission communicationPermission;
 }

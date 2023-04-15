@@ -1,6 +1,7 @@
 package co.jinear.core.model.entity.notification;
 
 import co.jinear.core.converter.notification.NotificationEventStateTypeConverter;
+import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.enumtype.notification.NotificationEventState;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "notification_event")
-public class NotificationEvent {
+public class NotificationEvent extends BaseEntity {
 
     @Id
     @GeneratedValue(generator = "ULID")

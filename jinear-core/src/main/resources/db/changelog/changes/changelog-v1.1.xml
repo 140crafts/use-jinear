@@ -665,4 +665,30 @@
         </createIndex>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-account_communication_permission">
+        <createTable tableName="account_communication_permission">
+            <column name="account_communication_permission_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="tinyint" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="push_notification" type="tinyint" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_account_id" tableName="account_communication_permission">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>
