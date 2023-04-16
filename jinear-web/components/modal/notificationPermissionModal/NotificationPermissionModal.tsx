@@ -1,6 +1,9 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
+import { selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { closeNotificationPermissionModal, selectNotificationPermissionModalVisible } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoNotifications } from "react-icons/io5";
@@ -10,11 +13,15 @@ import styles from "./NotificationPermissionModal.module.css";
 
 interface NotificationPermissionModalProps {}
 
+const logger = Logger("NotificationPermissionModal");
+
 const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const title = t("notificationPermissionModalTitle");
   const visible = useTypedSelector(selectNotificationPermissionModalVisible);
+  const currentAccountId = useTypedSelector(selectCurrentAccountId);
+  const [initializeNotificationTarget, {}] = useInitializeNotificationTargetMutation();
 
   const close = () => {
     dispatch(closeNotificationPermissionModal());
@@ -22,7 +29,22 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
   const askPermissions = async () => {
     await OneSignal.showNativePrompt();
+    const notificationPermission = await OneSignal.getNotificationPermission();
+    if (notificationPermission == "granted" && currentAccountId) {
+      attachAccount(currentAccountId);
+    }
     close();
+  };
+
+  const attachAccount = async (accountId: string) => {
+    OneSignal.setSubscription(true);
+    const userId = await OneSignal.getUserId();
+    OneSignal.setExternalUserId(accountId);
+    logger.log(`Setting OneSignal account. accountId: ${accountId}, oneSignalUserId: ${userId}`);
+    if (userId) {
+      logger.log(`Attach notification target api call has started.`);
+      initializeNotificationTarget({ externalTargetId: userId });
+    }
   };
 
   return (

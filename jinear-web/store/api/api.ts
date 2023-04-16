@@ -30,6 +30,7 @@ export const tagTypes = [
   "reminder-next-job",
   "workspace-task-list",
   "workspace-invitation-list",
+  "account-communication-permissions",
 ];
 
 export const api = createApi({

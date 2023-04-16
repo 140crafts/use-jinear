@@ -1570,6 +1570,14 @@ export default {
     en: "Push Notification",
     tr: "Anlık Bildirimler",
   },
+  communicationPrefrencesEmailText: {
+    en: "Recieve emails like task reminders. (You will continue receiving system mails like login codes, password reset mails etc.)",
+    tr: "Görev anımsatıcıları gibi emailler al. (Şifremi unuttum maili veya giriş kodu gibi sistem mailleri almaya devam edeceksin.)",
+  },
+  communicationPrefrencesPushNotificationsText: {
+    en: "Receive push notifications from your devices related to tasks and etc.",
+    tr: "Görevlerinizle ilgili cihazlarınızdan anlık bildirimler alın.",
+  },
   notificationPermissionModalTitle: {
     en: "Enable Notifications",
     tr: "Anlık Bildirimleri Etkinleştir",
