@@ -31,7 +31,7 @@ public class TaskReminderNotificationConverter {
         LocaleStringType taskReminderTypeLocaleString = TASK_REMINDER_LOCALE_STRING_MAP.getOrDefault(taskReminderDto.getTaskReminderType(), LocaleStringType.TASK_REMINDER_TYPE_SPECIFIC_DATE);
         String taskReminderTypeText = localeStringService.retrieveLocalString(taskReminderTypeLocaleString, localeType);
         String taskTag = taskTagConverter.retrieveTaskTag(taskDto);
-        boolean isSilent = hasPushNotificationPermission(accountId);
+        boolean isSilent = !hasPushNotificationPermission(accountId);
 
         NotificationSendVo notificationSendVo = new NotificationSendVo();
         notificationSendVo.setTemplateType(TASK_REMINDER);
