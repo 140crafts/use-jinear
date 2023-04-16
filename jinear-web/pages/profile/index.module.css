@@ -1,8 +1,8 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: var(--content);
-  max-width: var(--content);
+  width: var(--full);
+  max-width: var(--full);
   padding: 0 2ch;
   gap: 1rem;
 }
