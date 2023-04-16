@@ -47,6 +47,13 @@
         <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
+
     <dependencyManagement>
         <dependencies>
             <dependency>
@@ -281,6 +288,7 @@
             <artifactId>checker-qual</artifactId>
             <version>3.26.0</version>
         </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
@@ -322,6 +330,12 @@
             <groupId>com.github.nithril</groupId>
             <artifactId>smtp-connection-pool</artifactId>
             <version>2.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.OneSignal</groupId>
+            <artifactId>onesignal-java-api</artifactId>
+            <version>5ade5f8aa98061ce045c0ef2b4e03aba48dcc083</version>
         </dependency>
 
     </dependencies>

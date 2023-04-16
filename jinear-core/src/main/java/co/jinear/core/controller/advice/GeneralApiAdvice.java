@@ -11,7 +11,6 @@ import co.jinear.core.system.NormalizeHelper;
 import jakarta.validation.ConstraintViolation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -20,9 +19,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -88,13 +84,15 @@ public class GeneralApiAdvice {
                     .stream()
                     .map(err -> err.unwrap(ConstraintViolation.class))
                     .map(this::generateConstraintViolationMessage)
-                    .map(messageSourceLocalizer::getLocaleMessage)
                     .toList();
 
-            Set<String> errorMessages = messages.stream().map(apiAdviceHelper::getErrorMessage).collect(Collectors.toSet());
-            String unifiedErrorMessage = StringUtils.join(errorMessages, NormalizeHelper.COMMA_SEPARATOR);
+            StringBuilder sb = new StringBuilder();
+            messages.stream()
+                    .map(LocaleMessage::getConsumerErrorMessage)
+                    .forEach(consumerMessage -> sb.append(consumerMessage).append(NormalizeHelper.SPACE_STRING));
+
             log.error(ex.getMessage(), ex);
-            BaseResponse baseResponse = apiAdviceHelper.createResponse("", unifiedErrorMessage, unifiedErrorMessage);
+            BaseResponse baseResponse = apiAdviceHelper.createResponse("", sb.toString(), sb.toString());
             return new ResponseEntity<>(baseResponse, HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             return apiAdviceHelper.getUnknownExceptionResponse(ex);
@@ -106,10 +104,7 @@ public class GeneralApiAdvice {
         return apiAdviceHelper.getUnknownExceptionResponse(ex);
     }
 
-    private String generateConstraintViolationMessage(ConstraintViolation err) {
-        StringBuilder sb = new StringBuilder();
-        Optional.ofNullable(err).map(ConstraintViolation::getPropertyPath).map(propertyPath -> sb.append(propertyPath).append(NormalizeHelper.SPACE_STRING));
-        Optional.ofNullable(err).map(ConstraintViolation::getMessage).map(sb::append);
-        return sb.toString();
+    private LocaleMessage generateConstraintViolationMessage(ConstraintViolation err) {
+        return messageSourceLocalizer.getLocaleMessage(err.getMessage(), err.getPropertyPath());
     }
 }

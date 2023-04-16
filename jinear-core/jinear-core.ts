@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-04-09 14:49:20.
+// Generated using typescript-generator version 3.0.1157 on 2023-04-16 17:25:45.
 
 export interface BaseDto {
     createdDate: Date;
@@ -20,6 +20,12 @@ export interface PageDto<T> {
     hasPrevious: boolean;
     first: boolean;
     last: boolean;
+}
+
+export interface AccountCommunicationPermissionDto extends BaseDto {
+    accountId: string;
+    email: boolean;
+    pushNotification: boolean;
 }
 
 export interface AccountDto extends BaseDto {
@@ -64,11 +70,37 @@ export interface MediaDto extends BaseDto {
     originalName: string;
 }
 
+export interface NotificationEventDto extends BaseDto {
+    notificationEventId: string;
+    notificationTemplateId: number;
+    accountId: string;
+    isRead: boolean;
+    eventState: NotificationEventState;
+    template: NotificationTemplateDto;
+    params: NotificationEventParamDto[];
+}
+
+export interface NotificationEventParamDto extends BaseDto {
+    notificationEventParamId: string;
+    notificationEventId: string;
+    paramKey: string;
+    paramValue: string;
+}
+
 export interface NotificationTargetDto extends BaseDto {
     externalTargetId: string;
     accountId: string;
     sessionInfoId: string;
     targetType: NotificationTargetType;
+}
+
+export interface NotificationTemplateDto extends BaseDto {
+    notificationTemplateId: number;
+    templateName: string;
+    title: string;
+    text: string;
+    launchUrl: string;
+    localeType: LocaleType;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -95,6 +127,13 @@ export interface RichTextDto {
     value: string;
     type: RichTextType;
     sourceStack: RichTextSourceStack;
+}
+
+export interface DetailedTaskSubscriptionDto extends BaseDto {
+    taskSubscriptionId: string;
+    taskId: string;
+    accountId: string;
+    accountDto: AccountDto;
 }
 
 export interface RelatedTaskDto extends BaseDto {
@@ -355,6 +394,11 @@ export interface ResendConfirmEmailRequest extends BaseRequest {
     token: string;
 }
 
+export interface SetCommunicationPermissionsRequest extends BaseRequest {
+    email?: boolean | null;
+    pushNotification?: boolean | null;
+}
+
 export interface UpdatePasswordRequest extends BaseRequest {
     currentPassword: string;
     newPassword: string;
@@ -538,6 +582,10 @@ export interface BaseResponse {
     conversationId: string;
 }
 
+export interface AccountCommunicationPermissionsResponse extends BaseResponse {
+    data: AccountCommunicationPermissionDto;
+}
+
 export interface AccountRetrieveResponse extends BaseResponse {
     data: AccountDto;
 }
@@ -551,6 +599,10 @@ export interface AuthInitializeResponse extends BaseResponse {
 
 export interface AuthResponse extends BaseResponse {
     token: string;
+}
+
+export interface NotificationEventListingResponse extends BaseResponse {
+    data: PageDto<NotificationEventDto>;
 }
 
 export interface ReminderJobResponse extends BaseResponse {
@@ -645,7 +697,11 @@ export type FileType = "PROFILE_PIC";
 
 export type MediaOwnerType = "USER" | "WORKSPACE";
 
+export type NotificationEventState = "INITIALIZED" | "SENT";
+
 export type NotificationTargetType = "WEB";
+
+export type NotificationTemplateType = "TASK_REMINDER" | "TASK_ASSIGNED";
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
 
