@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class NotificationFireService {
+public class NotificationCreateService {
 
     private final NotificationTargetRetrieveService notificationTargetRetrieveService;
     private final NotificationTemplatePopulateService notificationTemplatePopulateService;
@@ -27,7 +27,7 @@ public class NotificationFireService {
     private final NotificationTemplateRetrieveService templateRetrieveService;
     private final NotificationClient notificationClient;
 
-    public void fire(NotificationSendVo notificationSendVo) {
+    public void create(NotificationSendVo notificationSendVo) {
         log.info("Send notification has started. notificationSendVo: {}", notificationSendVo);
         NotificationTemplateDto notificationTemplateDto = templateRetrieveService.retrieve(notificationSendVo.getTemplateType(), notificationSendVo.getLocaleType());
         NotificationMessageVo notificationMessageVo = notificationTemplatePopulateService.populate(notificationTemplateDto, notificationSendVo);
@@ -37,19 +37,22 @@ public class NotificationFireService {
     }
 
     private void fanOutAccountNotificationTargets(NotificationSendVo notificationSendVo, NotificationMessageVo notificationMessageVo) {
-        Optional.of(notificationSendVo)
-                .map(NotificationSendVo::getAccountId)
-                .map(notificationTargetRetrieveService::retrieveLatestAccountTargets)
-                .map(Collection::stream)
-                .map(notificationTargetDtoStream -> notificationTargetDtoStream.map(NotificationTargetDto::getExternalTargetId))
-                .map(Stream::toList)
-                .ifPresent(notificationMessageVo::setTargetIds);
+        if (Boolean.FALSE.equals(notificationSendVo.getIsSilent())) {
+            log.info("Fan out account notification targets has started.");
+            Optional.of(notificationSendVo)
+                    .map(NotificationSendVo::getAccountId)
+                    .map(notificationTargetRetrieveService::retrieveLatestAccountTargets)
+                    .map(Collection::stream)
+                    .map(notificationTargetDtoStream -> notificationTargetDtoStream.map(NotificationTargetDto::getExternalTargetId))
+                    .map(Stream::toList)
+                    .ifPresent(notificationMessageVo::setTargetIds);
 
-        Optional.of(notificationMessageVo)
-                .map(NotificationMessageVo::getTargetIds)
-                .map(List::isEmpty)
-                .filter(Boolean.FALSE::equals)
-                .ifPresent(hasTargets -> send(notificationMessageVo));
+            Optional.of(notificationMessageVo)
+                    .map(NotificationMessageVo::getTargetIds)
+                    .map(List::isEmpty)
+                    .filter(Boolean.FALSE::equals)
+                    .ifPresent(hasTargets -> send(notificationMessageVo));
+        }
     }
 
     private void send(NotificationMessageVo notificationMessageVo) {

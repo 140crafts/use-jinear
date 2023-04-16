@@ -17,8 +17,11 @@ public class NotificationSendVo {
 
     @EqualsAndHashCode.Include
     private String accountId;
+    private String workspaceId;
+    private String teamId;
     @EqualsAndHashCode.Include
     private NotificationTemplateType templateType;
     private Map<String, String> params;
     private LocaleType localeType;
+    private Boolean isSilent;
 }

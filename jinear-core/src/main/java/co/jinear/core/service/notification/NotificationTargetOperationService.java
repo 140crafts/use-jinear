@@ -7,6 +7,7 @@ import co.jinear.core.model.dto.notification.NotificationTargetDto;
 import co.jinear.core.model.entity.notification.NotificationTarget;
 import co.jinear.core.model.vo.notification.NotificationTargetInitializeVo;
 import co.jinear.core.repository.NotificationTargetRepository;
+import co.jinear.core.service.account.AccountCommunicationPermissionService;
 import co.jinear.core.service.passive.PassiveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,12 +22,14 @@ public class NotificationTargetOperationService {
     private final InitializeNotificationTargetVoConverter initializeNotificationTargetVoConverter;
     private final NotificationTargetDtoConverter notificationTargetDtoConverter;
     private final NotificationTargetRetrieveService notificationTargetRetrieveService;
+    private final AccountCommunicationPermissionService accountCommunicationPermissionService;
     private final PassiveService passiveService;
 
     public NotificationTargetDto initializeNotificationTarget(NotificationTargetInitializeVo notificationTargetInitializeVo) {
         log.info("Initialize notification target has started. notificationTargetInitializeVo: {}", notificationTargetInitializeVo);
         NotificationTarget notificationTarget = initializeNotificationTargetVoConverter.convert(notificationTargetInitializeVo);
         NotificationTarget saved = notificationTargetRepository.save(notificationTarget);
+        updateNotificationPermissionsAsGiven(notificationTarget);
         log.info("Initialize notification target has completed. notificationTargetId: {}", saved.getNotificationTargetId());
         return notificationTargetDtoConverter.convert(notificationTarget);
     }
@@ -44,5 +47,9 @@ public class NotificationTargetOperationService {
     private NotificationTarget retrieveNotificationTarget(String sessionInfoId) {
         return notificationTargetRetrieveService.retrieveEntityBySessionId(sessionInfoId)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    private void updateNotificationPermissionsAsGiven(NotificationTarget notificationTarget) {
+        accountCommunicationPermissionService.updatePushNotification(notificationTarget.getAccountId(), Boolean.TRUE);
     }
 }

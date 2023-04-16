@@ -37,7 +37,10 @@ public class NotificationEventOperationService {
         NotificationEvent notificationEvent = new NotificationEvent();
         notificationEvent.setNotificationTemplateId(notificationTemplateDto.getNotificationTemplateId());
         notificationEvent.setAccountId(notificationSendVo.getAccountId());
+        notificationEvent.setWorkspaceId(notificationSendVo.getWorkspaceId());
+        notificationEvent.setTeamId(notificationSendVo.getTeamId());
         notificationEvent.setIsRead(Boolean.FALSE);
+        notificationEvent.setIsSilent(notificationSendVo.getIsSilent());
         notificationEvent.setEventState(NotificationEventState.INITIALIZED);
         return notificationEventRepository.save(notificationEvent);
     }

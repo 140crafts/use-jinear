@@ -35,7 +35,7 @@ public class AccountCommunicationPermission extends BaseEntity {
 
     @JsonIgnore
     @ToString.Exclude
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;

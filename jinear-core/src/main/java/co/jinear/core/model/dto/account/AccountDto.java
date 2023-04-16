@@ -4,7 +4,6 @@ import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
-import co.jinear.core.model.entity.account.AccountCommunicationPermission;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
 import lombok.Getter;
 import lombok.Setter;
@@ -31,6 +30,4 @@ public class AccountDto extends BaseDto {
     private List<WorkspaceDto> workspaces;
     @Nullable
     private WorkspaceDisplayPreferenceDto workspaceDisplayPreference;
-    @Nullable
-    private AccountCommunicationPermission communicationPermission;
 }

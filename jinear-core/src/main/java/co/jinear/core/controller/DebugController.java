@@ -2,7 +2,7 @@ package co.jinear.core.controller;
 
 import co.jinear.core.model.vo.notification.NotificationSendVo;
 import co.jinear.core.service.account.AccountRoleService;
-import co.jinear.core.service.notification.NotificationFireService;
+import co.jinear.core.service.notification.NotificationCreateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -24,7 +24,7 @@ import static co.jinear.core.model.enumtype.notification.NotificationTemplateTyp
 public class DebugController {
 
     private final AccountRoleService accountRoleService;
-    private final NotificationFireService notificationFireService;
+    private final NotificationCreateService notificationCreateService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
@@ -34,6 +34,6 @@ public class DebugController {
         notificationSendVo.setLocaleType(TR);
         notificationSendVo.setAccountId("01gjw45thcmavz8sctdy3crqs1");
         notificationSendVo.setParams(Map.of("taskTag","TAG-1","taskTitle","Lorem Ipsum Sik Sok Amet Zart zurt Gomet","reminderTypeText","asdreminderTypeText reminderTypeText reminderTypeText reminderTypeText reminderTypeText"));
-        notificationFireService.fire(notificationSendVo);
+        notificationCreateService.create(notificationSendVo);
     }
 }

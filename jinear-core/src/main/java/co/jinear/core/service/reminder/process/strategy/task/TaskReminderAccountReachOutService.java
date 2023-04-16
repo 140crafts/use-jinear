@@ -9,12 +9,11 @@ import co.jinear.core.model.dto.reminder.ReminderJobDto;
 import co.jinear.core.model.dto.task.DetailedTaskSubscriptionDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskReminderDto;
-import co.jinear.core.model.entity.account.AccountCommunicationPermission;
 import co.jinear.core.model.vo.mail.TaskReminderMailVo;
 import co.jinear.core.model.vo.notification.NotificationSendVo;
 import co.jinear.core.service.account.AccountCommunicationPermissionService;
 import co.jinear.core.service.mail.MailService;
-import co.jinear.core.service.notification.NotificationFireService;
+import co.jinear.core.service.notification.NotificationCreateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,7 @@ public class TaskReminderAccountReachOutService {
 
     private final TaskReminderMailVoMapper taskReminderMailVoMapper;
     private final MailService mailService;
-    private final NotificationFireService notificationFireService;
+    private final NotificationCreateService notificationCreateService;
     private final TaskReminderNotificationConverter taskReminderNotificationConverter;
     private final AccountCommunicationPermissionService accountCommunicationPermissionService;
 
@@ -79,18 +78,16 @@ public class TaskReminderAccountReachOutService {
         //todo remove this after subscription module complete
         Optional.of(taskDto)
                 .map(TaskDto::getOwner)
-                .filter(this::hasPushNotificationPermission)
                 .map(acc -> taskReminderNotificationConverter.mapNotificationSendVo(acc.getAccountId(), acc.getLocaleType(), taskDto, taskReminderDto))
                 .ifPresent(receiverSet::add);
 
         //todo remove this after subscription module complete
         Optional.of(taskDto)
                 .map(TaskDto::getAssignedToAccount)
-                .filter(this::hasPushNotificationPermission)
                 .map(acc -> taskReminderNotificationConverter.mapNotificationSendVo(acc.getAccountId(), acc.getLocaleType(), taskDto, taskReminderDto))
                 .ifPresent(receiverSet::add);
 
-        receiverSet.forEach(this::notifyAccountViaPushNotif);
+        receiverSet.forEach(this::notifyAccountViaPushNotification);
     }
 
     private void notifyAccountViaMail(TaskReminderMailVo taskReminderMailVo) {
@@ -103,10 +100,10 @@ public class TaskReminderAccountReachOutService {
         }
     }
 
-    private void notifyAccountViaPushNotif(NotificationSendVo notificationSendVo) {
+    private void notifyAccountViaPushNotification(NotificationSendVo notificationSendVo) {
         try {
             log.info("Task reminder notify account with push notif has started. notificationSendVo: {}", notificationSendVo);
-            notificationFireService.fire(notificationSendVo);
+            notificationCreateService.create(notificationSendVo);
             log.info("Task reminder notify account with push notif has completed.");
         } catch (Exception e) {
             log.error("Task reminder notify account with push notif has failed. ", e);
@@ -115,18 +112,14 @@ public class TaskReminderAccountReachOutService {
 
     private boolean isEmailCommunicationPermitted(AccountDto accountDto) {
         return Optional.of(accountDto)
-                .map(AccountDto::getCommunicationPermission)
-                .map(AccountCommunicationPermission::getEmail)
+                .map(AccountDto::getAccountId)
+                .map(accountCommunicationPermissionService::retrieve)
+                .map(AccountCommunicationPermissionDto::getEmail)
                 .orElse(Boolean.FALSE);
     }
 
     private boolean hasEmailPermission(PlainAccountProfileDto account) {
         AccountCommunicationPermissionDto accountCommunicationPermissionDto = accountCommunicationPermissionService.retrieve(account.getAccountId());
         return Boolean.TRUE.equals(accountCommunicationPermissionDto.getEmail());
-    }
-
-    private boolean hasPushNotificationPermission(PlainAccountProfileDto account) {
-        AccountCommunicationPermissionDto accountCommunicationPermissionDto = accountCommunicationPermissionService.retrieve(account.getAccountId());
-        return Boolean.TRUE.equals(accountCommunicationPermissionDto.getPushNotification());
     }
 }

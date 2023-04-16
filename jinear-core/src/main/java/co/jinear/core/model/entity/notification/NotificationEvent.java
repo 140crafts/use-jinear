@@ -31,8 +31,17 @@ public class NotificationEvent extends BaseEntity {
     @Column(name = "account_id")
     private String accountId;
 
+    @Column(name = "workspace_id")
+    private String workspaceId;
+
+    @Column(name = "team_id")
+    private String teamId;
+
     @Column(name = "is_read")
     private Boolean isRead;
+
+    @Column(name = "is_silent")
+    private Boolean isSilent;
 
     @Convert(converter = NotificationEventStateTypeConverter.class)
     @Column(name = "event_state")
