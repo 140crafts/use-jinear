@@ -8,7 +8,6 @@ const { withSentryConfig } = require("@sentry/nextjs");
 
 const withPWA = require("next-pwa")({
   dest: "public",
-  importScripts: ["/external-sws/OneSignalSDKWorker.js"],
 });
 
 const nextConfig = {
