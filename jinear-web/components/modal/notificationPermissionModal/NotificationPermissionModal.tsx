@@ -31,7 +31,7 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
     await OneSignal.showNativePrompt();
     const notificationPermission = await OneSignal.getNotificationPermission();
     if (notificationPermission == "granted" && currentAccountId) {
-      attachAccount(currentAccountId);
+      await attachAccount(currentAccountId);
     }
     close();
   };
