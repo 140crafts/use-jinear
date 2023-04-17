@@ -1,5 +1,5 @@
 import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
-import { selectCurrentAccountId } from "@/store/slice/accountSlice";
+import { selectAuthState, selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { popNotificationPermissionModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { __DEV__ } from "@/utils/constants";
@@ -23,6 +23,7 @@ const ONE_SIGNAL_IDS = __DEV__
 
 const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
   const dispatch = useAppDispatch();
+  const authState = useTypedSelector(selectAuthState);
   const [oneSignalInitialized, setOneSignalInitialized] = useState<boolean>(false);
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
 
@@ -33,13 +34,14 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
   }, []);
 
   useEffect(() => {
-    if (currentAccountId) {
-      checkAndPrompt();
-      attachAccount(currentAccountId);
-    } else {
-      detachAccount();
+    if (authState == "LOGGED_IN") {
+      if (currentAccountId) {
+        checkAndPrompt(currentAccountId);
+      } else {
+        detachAccount();
+      }
     }
-  }, [currentAccountId]);
+  }, [currentAccountId, authState]);
 
   const attachAccount = async (accountId: string) => {
     OneSignal.setSubscription(true);
@@ -80,11 +82,13 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
     logger.log("Initialize OneSignal has completed.");
   };
 
-  const checkAndPrompt = async () => {
+  const checkAndPrompt = async (currentAccountId: string) => {
     const notificationPermission = await OneSignal.getNotificationPermission();
     if (notificationPermission == "default") {
       dispatch(popNotificationPermissionModal());
+      return;
     }
+    attachAccount(currentAccountId);
   };
 
   return null;
