@@ -20,5 +20,6 @@ const nextConfig = {
 };
 
 module.exports = withPWA(nextConfig);
+// module.exports = withSentryConfig(withPWA(nextConfig), { silent: false }, { hideSourcemaps: true });
 
-module.exports = withSentryConfig(module.exports, { silent: false }, { hideSourcemaps: true });
+// module.exports = withSentryConfig(module.exports, { silent: false }, { hideSourcemaps: true });
