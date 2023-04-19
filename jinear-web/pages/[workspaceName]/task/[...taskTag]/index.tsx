@@ -1,6 +1,6 @@
 import TaskDetail from "@/components/taskDetail/TaskDetail";
+import TaskDetailHeader from "@/components/taskDetail/taskDetailHeader/TaskDetailHeader";
 import TaskPageHeader from "@/components/taskDetail/taskPageHeader/TaskPageHeader";
-import TaskDetailBreadcrumb from "@/components/taskDetailBreadcrumb/TaskDetailBreadcrumb";
 import { useRetrieveWithWorkspaceNameAndTeamTagNoQuery } from "@/store/api/taskApi";
 import { useUpdatePreferredTeamMutation, useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDisplayPreferenceApi";
 import { selectCurrentAccountsPreferredTeamId, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
@@ -68,7 +68,7 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
         <>
           <TaskPageHeader taskTag={taskTag} title={taskResponse.data.title} />
           <div className={styles.contentContainer}>
-            {!taskResponse.data.workspace?.isPersonal && <TaskDetailBreadcrumb task={taskResponse.data} />}
+            <TaskDetailHeader task={taskResponse.data} />
             <TaskDetail task={taskResponse.data} />
           </div>
         </>
