@@ -6,7 +6,6 @@ import co.jinear.core.service.reminder.process.strategy.ReminderJobProcessStrate
 import co.jinear.core.service.reminder.process.strategy.ReminderJobProcessStrategyFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -19,7 +18,6 @@ public class ReminderJobProcessService {
     private final ReminderJobListingService reminderJobListingService;
     private final ReminderJobProcessStrategyFactory reminderJobProcessStrategyFactory;
 
-    @Async
     public void processAllUpcomingJobs(ZonedDateTime beforeDate) {
         log.info("Process all upcoming jobs before date has started. beforeDate: {}", beforeDate);
         reminderJobListingService.retrieveAllByReminderJobStatusAndBeforeDate(ReminderJobStatus.PENDING, beforeDate)

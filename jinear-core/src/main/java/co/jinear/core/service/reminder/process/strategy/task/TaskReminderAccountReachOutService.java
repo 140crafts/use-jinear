@@ -16,6 +16,7 @@ import co.jinear.core.service.mail.MailService;
 import co.jinear.core.service.notification.NotificationCreateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -34,6 +35,7 @@ public class TaskReminderAccountReachOutService {
     private final TaskReminderNotificationConverter taskReminderNotificationConverter;
     private final AccountCommunicationPermissionService accountCommunicationPermissionService;
 
+    @Async
     public void notify(List<DetailedTaskSubscriptionDto> taskSubscribers, TaskDto taskDto, TaskReminderDto taskReminderDto, ReminderJobDto reminderJobDto) {
         sendNotification(taskSubscribers, taskDto, taskReminderDto);
         sendMail(taskSubscribers, taskDto, taskReminderDto, reminderJobDto);
