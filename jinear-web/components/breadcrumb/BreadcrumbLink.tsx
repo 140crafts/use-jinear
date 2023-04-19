@@ -15,7 +15,7 @@ const BreadcrumbLink: React.FC<BreadcrumbLinkProps> = ({ label, url }) => {
   const isTooLong = label?.length > MAX_WIDTH;
   return (
     <Link href={url} className={cn(styles.link, "line-clamp")} data-tooltip-multiline={isTooLong ? label : undefined}>
-      {isTooLong ? `${label.substring(0, PART_SIZE)}...${label.substring(label.length - PART_SIZE, label.length)}` : label}
+      <b>{isTooLong ? `${label.substring(0, PART_SIZE)}...${label.substring(label.length - PART_SIZE, label.length)}` : label}</b>
     </Link>
   );
 };

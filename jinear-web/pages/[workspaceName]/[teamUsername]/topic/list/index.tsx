@@ -46,7 +46,7 @@ const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
               key={topicDto.topicId}
               topic={topicDto}
               workspaceName={preferredWorkspace.username}
-              teamName={preferredTeam.name}
+              teamUsername={preferredTeam.username}
             />
           ))}
           {!teamTopicListingResponse?.data.hasContent && (
