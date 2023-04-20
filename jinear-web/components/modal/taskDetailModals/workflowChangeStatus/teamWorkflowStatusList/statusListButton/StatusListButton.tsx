@@ -8,6 +8,7 @@ import {
   selectChangeTaskWorkflowStatusModalTask,
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { IoCheckmarkCircle, IoCloseCircle, IoContrast, IoEllipseOutline, IoPauseCircleOutline } from "react-icons/io5";
 import styles from "./StatusListButton.module.css";
@@ -24,6 +25,7 @@ const groupIconMap = {
 };
 
 const StatusListButton: React.FC<StatusListButtonProps> = ({ wfs }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const task = useTypedSelector(selectChangeTaskWorkflowStatusModalTask);
   const currentWorkflowStatusId = task?.workflowStatus.teamWorkflowStatusId;
@@ -58,6 +60,11 @@ const StatusListButton: React.FC<StatusListButtonProps> = ({ wfs }) => {
       className={styles.button}
       onClick={change}
       variant={wfs.teamWorkflowStatusId == currentWorkflowStatusId ? ButtonVariants.filled2 : ButtonVariants.default}
+      data-tooltip={
+        ["COMPLETED", "CANCELLED"].indexOf(wfs.workflowStateGroup) != -1 && wfs.teamWorkflowStatusId != currentWorkflowStatusId
+          ? t("taskStatusChangeModalRemovesRemindersTooltip")
+          : null
+      }
     >
       {groupIconMap?.[wfs.workflowStateGroup]}
       {wfs.name}

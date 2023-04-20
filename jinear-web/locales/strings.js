@@ -1610,4 +1610,8 @@ export default {
     en: "You don't have any notifications",
     tr: "Hiçbir bildiriminiz bulunmuyor",
   },
+  taskStatusChangeModalRemovesRemindersTooltip: {
+    en: "Changing to this status will remove existing reminders",
+    tr: "Görev bu statuye çekildiğinde tüm hatırlatıcılar kapatılır",
+  },
 };
