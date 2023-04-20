@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-04-16 17:25:45.
+// Generated using typescript-generator version 3.0.1157 on 2023-04-20 15:52:51.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -87,6 +87,14 @@ export interface NotificationEventParamDto extends BaseDto {
     paramValue: string;
 }
 
+export interface NotificationMessageDto extends BaseDto {
+    notificationEventId: string;
+    title?: string | null;
+    text?: string | null;
+    launchUrl?: string | null;
+    templateType: NotificationTemplateType;
+}
+
 export interface NotificationTargetDto extends BaseDto {
     externalTargetId: string;
     accountId: string;
@@ -96,6 +104,7 @@ export interface NotificationTargetDto extends BaseDto {
 
 export interface NotificationTemplateDto extends BaseDto {
     notificationTemplateId: number;
+    templateType: NotificationTemplateType;
     templateName: string;
     title: string;
     text: string;
@@ -602,7 +611,11 @@ export interface AuthResponse extends BaseResponse {
 }
 
 export interface NotificationEventListingResponse extends BaseResponse {
-    data: PageDto<NotificationEventDto>;
+    data: PageDto<NotificationMessageDto>;
+}
+
+export interface RetrieveUnreadNotificationEventCountResponse extends BaseResponse {
+    unreadNotificationCount: number;
 }
 
 export interface ReminderJobResponse extends BaseResponse {

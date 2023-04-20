@@ -1,22 +1,23 @@
 package co.jinear.core.model.dto.notification;
 
 import co.jinear.core.model.dto.BaseDto;
-import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.enumtype.notification.NotificationTemplateType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-@Setter
 @Getter
-@ToString(callSuper = true)
-public class NotificationTemplateDto extends BaseDto {
+@Setter
+@ToString
+public class NotificationMessageDto extends BaseDto {
 
-    private Long notificationTemplateId;
-    private NotificationTemplateType templateType;
-    private String templateName;
+    private String notificationEventId;
+    @Nullable
     private String title;
+    @Nullable
     private String text;
+    @Nullable
     private String launchUrl;
-    private LocaleType localeType;
+    private NotificationTemplateType templateType;
 }

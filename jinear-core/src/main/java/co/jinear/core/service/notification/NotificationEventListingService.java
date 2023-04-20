@@ -2,6 +2,9 @@ package co.jinear.core.service.notification;
 
 import co.jinear.core.converter.notification.NotificationEventDtoConverter;
 import co.jinear.core.model.dto.notification.NotificationEventDto;
+import co.jinear.core.model.dto.notification.NotificationMessageDto;
+import co.jinear.core.model.entity.notification.NotificationEvent;
+import co.jinear.core.model.vo.notification.NotificationEventListingVo;
 import co.jinear.core.repository.NotificationEventRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,14 +17,29 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class NotificationEventListingService {
 
-    private static final int PAGE_SIZE = 50;
+    private static final int PAGE_SIZE = 150;
 
     private final NotificationEventRepository notificationEventRepository;
     private final NotificationEventDtoConverter notificationEventDtoConverter;
+    private final NotificationTemplatePopulateService notificationTemplatePopulateService;
 
-    public Page<NotificationEventDto> retrieveNotificationEvents(String accountId, int page) {
-        log.info("Retrieve notification events has started. accountId: {}, page: {}", accountId, page);
-        return notificationEventRepository.findAllByAccountIdAndPassiveIdIsNullOrderByCreatedDateDesc(accountId, PageRequest.of(page, PAGE_SIZE))
-                .map(notificationEventDtoConverter::convert);
+    public Page<NotificationMessageDto> retrieveNotificationEvents(NotificationEventListingVo notificationEventListingVo) {
+        log.info("Retrieve notification events has started. notificationEventListingVo: {}", notificationEventListingVo);
+        return notificationEventRepository
+                .findAllByWorkspaceIdAndAccountIdAndPassiveIdIsNullOrderByCreatedDateDesc(
+                        notificationEventListingVo.getWorkspaceId(),
+                        notificationEventListingVo.getCurrentAccountId(),
+                        PageRequest.of(notificationEventListingVo.getPage(), PAGE_SIZE))
+                .map(this::convert);
+    }
+
+    public Long retrieveUnreadNotificationEventCount(String workspaceId, String currentAccountId) {
+        log.info("Retrieve notification events has started. workspaceId: {}, currentAccountId: {}", workspaceId, currentAccountId);
+        return notificationEventRepository.countAllByWorkspaceIdAndAccountIdAndIsReadAndPassiveIdIsNull(workspaceId, currentAccountId, Boolean.FALSE);
+    }
+
+    private NotificationMessageDto convert(NotificationEvent notificationEvent) {
+        NotificationEventDto notificationEventDto = notificationEventDtoConverter.convert(notificationEvent);
+        return notificationTemplatePopulateService.populate(notificationEventDto);
     }
 }
