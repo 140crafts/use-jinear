@@ -19,7 +19,8 @@ const InboxButton: React.FC<InboxButtonProps> = ({ workspace, buttonStyle }) => 
     { skip: workspace == null }
   );
   const unreadCount = countResponse?.unreadNotificationCount ? countResponse?.unreadNotificationCount : 0;
-  const unreadLabel = unreadCount == 0 ? "" : `${unreadCount}`;
+  const unreadLabel = unreadCount == 0 ? "" : unreadCount > 99 ? "99+" : `${unreadCount}`;
+
   return (
     <Button variant={ButtonVariants.hoverFilled2} className={buttonStyle} href={`/${workspace?.username}/inbox`}>
       <IoFileTrayOutline />
