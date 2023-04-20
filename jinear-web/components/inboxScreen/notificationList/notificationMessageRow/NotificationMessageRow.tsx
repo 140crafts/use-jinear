@@ -8,6 +8,7 @@ import styles from "./NotificationMessageRow.module.scss";
 
 interface NotificationMessageRowProps {
   notificationMessage: NotificationMessageDto;
+  withDateTitle: boolean;
 }
 
 const NOTIFICATION_ICON_MAP = {
@@ -20,11 +21,14 @@ export const getNotificationIcon = (templateType?: NotificationTemplateType) => 
   return templateType ? NOTIFICATION_ICON_MAP?.[templateType] || NOTIFICATION_ICON_MAP.default : NOTIFICATION_ICON_MAP.default;
 };
 
-const NotificationMessageRow: React.FC<NotificationMessageRowProps> = ({ notificationMessage }) => {
+const NotificationMessageRow: React.FC<NotificationMessageRowProps> = ({ notificationMessage, withDateTitle = false }) => {
   const { t } = useTranslation();
   const Icon = getNotificationIcon(notificationMessage?.templateType);
   return (
     <>
+      {withDateTitle && (
+        <div className={styles.dateTitle}>{format(new Date(notificationMessage.createdDate), t("dateFormat"))}</div>
+      )}
       <div className={styles.container}>
         <div>
           <Icon size={17} />

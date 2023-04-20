@@ -2,10 +2,23 @@
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
+  padding-bottom: 2rem;
 }
+
 .loadingContainer {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 4rem;
+}
+
+.statusGroupWithExplaination {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.explaination {
+  text-align: right;
+  font-size: 0.65rem;
 }

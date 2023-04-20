@@ -2,6 +2,7 @@ import Pagination from "@/components/pagination/Pagination";
 import { NotificationMessageDto, PageDto } from "@/model/be/jinear-core";
 import { CircularProgress } from "@mui/material";
 import cn from "classnames";
+import { isSameDay } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import styles from "./NotificationList.module.scss";
@@ -39,9 +40,17 @@ const NotificationList: React.FC<NotificationListProps> = ({ data, isFetching, i
       </div>
 
       <div className={cn(styles.content, styles.gradientBg)}>
-        {data?.content.map((notificationMessage) => (
-          <NotificationMessageRow key={`${notificationMessage.notificationEventId}`} notificationMessage={notificationMessage} />
-        ))}
+        {data?.content.map((notificationMessage, i) => {
+          const oneBefore = i == 0 ? null : data.content?.[i - 1];
+          const datesEqual = oneBefore && isSameDay(new Date(oneBefore.createdDate), new Date(notificationMessage.createdDate));
+          return (
+            <NotificationMessageRow
+              key={`${notificationMessage.notificationEventId}`}
+              notificationMessage={notificationMessage}
+              withDateTitle={!datesEqual}
+            />
+          );
+        })}
 
         {!data?.hasContent && (
           <div className={styles.emptyStateContainer}>
