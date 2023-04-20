@@ -12,11 +12,13 @@ interface CurrentWorkspaceHeaderProps {}
 const CurrentWorkspaceHeader: React.FC<CurrentWorkspaceHeaderProps> = ({}) => {
   const { t } = useTranslation();
   const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
+  const isTitleSingleWord = preferredWorkspace?.title?.split?.(" ")?.length != 0;
+  const isPersonal = preferredWorkspace?.isPersonal;
 
   return (
     <div className={styles.container}>
-      <div className={cn(styles.title)}>
-        {preferredWorkspace?.isPersonal ? t("workspaceMenuPersonalTitle") : preferredWorkspace?.title}
+      <div className={cn(styles.title, isTitleSingleWord && !isPersonal ? "single-line" : undefined)}>
+        {isPersonal ? t("workspaceMenuPersonalTitle") : preferredWorkspace?.title}
       </div>
       <div className="flex-1" />
       <Button
