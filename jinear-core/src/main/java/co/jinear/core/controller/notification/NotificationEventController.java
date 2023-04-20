@@ -2,6 +2,7 @@ package co.jinear.core.controller.notification;
 
 import co.jinear.core.manager.notification.NotificationEventListingManager;
 import co.jinear.core.model.response.notification.NotificationEventListingResponse;
+import co.jinear.core.model.response.notification.RetrieveUnreadNotificationEventCountResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -15,9 +16,16 @@ public class NotificationEventController {
 
     private final NotificationEventListingManager notificationEventListingManager;
 
-    @GetMapping
+    @GetMapping("/{workspaceId}")
     @ResponseStatus(HttpStatus.OK)
-    public NotificationEventListingResponse retrieveNotifications(@RequestParam(required = false, defaultValue = "0") Integer page) {
-        return notificationEventListingManager.retrieveNotifications(page);
+    public NotificationEventListingResponse retrieveNotifications(@PathVariable String workspaceId,
+                                                                  @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return notificationEventListingManager.retrieveNotifications(workspaceId, page);
+    }
+
+    @GetMapping("/{workspaceId}/unread-count")
+    @ResponseStatus(HttpStatus.OK)
+    public RetrieveUnreadNotificationEventCountResponse retrieveUnreadNotificationCount(@PathVariable String workspaceId) {
+        return notificationEventListingManager.retrieveUnreadNotificationCount(workspaceId);
     }
 }
