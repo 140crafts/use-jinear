@@ -31,6 +31,8 @@ export const tagTypes = [
   "workspace-task-list",
   "workspace-invitation-list",
   "account-communication-permissions",
+  "count-workspace-notification-events",
+  "account-workspace-notification-unread-count",
 ];
 
 export const api = createApi({

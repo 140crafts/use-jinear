@@ -1594,4 +1594,20 @@ export default {
     en: "To receive updates from tasks you subscribe enable notifications.",
     tr: "Takip ettiğin görevler hakkında bildirim almak için bildirimleri etkinleştir.",
   },
+  inboxScreenBreadcrumbLabel: {
+    en: "Inbox",
+    tr: "Gelen Kutusu",
+  },
+  inboxScreenHeader: {
+    en: "Inbox",
+    tr: "Gelen Kutusu",
+  },
+  notificationEventListName: {
+    en: "Your notifications",
+    tr: "Bildirimlerin",
+  },
+  notificationEventListEmpty: {
+    en: "You don't have any notifications",
+    tr: "Hiçbir bildiriminiz bulunmuyor",
+  },
 };

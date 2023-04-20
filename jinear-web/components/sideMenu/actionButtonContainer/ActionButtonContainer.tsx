@@ -7,9 +7,10 @@ import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
 import React from "react";
-import { IoCalendarNumberOutline, IoCheckmarkCircleOutline, IoFileTrayOutline, IoPlayForwardOutline } from "react-icons/io5";
+import { IoCalendarNumberOutline, IoCheckmarkCircleOutline, IoPlayForwardOutline } from "react-icons/io5";
 import { TiPlus } from "react-icons/ti";
 import styles from "./ActionButtonContainer.module.css";
+import InboxButton from "./inboxButton/InboxButton";
 
 interface ActionButtonContainerProps {}
 
@@ -51,12 +52,8 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
         <div>{t("sideMenuCalendar")}</div>
       </Button>
 
-      {!preferredWorkspace?.isPersonal && (
-        <Button variant={ButtonVariants.hoverFilled2} className={styles.button}>
-          <IoFileTrayOutline />
-          <div>{t("sideMenuInbox")}</div>
-        </Button>
-      )}
+      <InboxButton workspace={preferredWorkspace} buttonStyle={styles.button} />
+
       <Button
         href={`/${preferredWorkspace?.username}/${preferredTeam?.name}/last-activities`}
         variant={ButtonVariants.hoverFilled2}
