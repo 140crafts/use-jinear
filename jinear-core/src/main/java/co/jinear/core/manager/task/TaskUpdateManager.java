@@ -5,6 +5,7 @@ import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.task.TaskDto;
+import co.jinear.core.model.dto.task.UpdateTaskWorkflowDto;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.request.task.TaskAssigneeUpdateRequest;
 import co.jinear.core.model.request.task.TaskDateUpdateRequest;
@@ -18,6 +19,7 @@ import co.jinear.core.model.vo.task.TaskDescriptionUpdateVo;
 import co.jinear.core.model.vo.task.TaskTitleUpdateVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.account.AccountRetrieveService;
+import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.task.TaskActivityService;
 import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.TaskUpdateService;
@@ -48,6 +50,7 @@ public class TaskUpdateManager {
     private final TopicRetrieveService topicRetrieveService;
     private final TaskDatesUpdateVoConverter taskDatesUpdateVoConverter;
     private final AccountRetrieveService accountRetrieveService;
+    private final PassiveService passiveService;
 
     public BaseResponse updateTaskTitle(String taskId, TaskUpdateTitleRequest taskUpdateTitleRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -73,8 +76,10 @@ public class TaskUpdateManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
         log.info("Update task workflow status has started. accountId: {}, taskId: {}, newWorkflowStatusId: {}", currentAccountId, taskId, workflowStatusId);
-        TaskDto taskDto = taskUpdateService.updateTaskWorkflow(taskId, workflowStatusId);
+        UpdateTaskWorkflowDto updateTaskWorkflowDto = taskUpdateService.updateTaskWorkflow(taskId, workflowStatusId);
+        TaskDto taskDto = updateTaskWorkflowDto.getTaskDto();
         taskActivityService.initializeStatusUpdateActivity(currentAccountId, taskDtoBeforeUpdate, taskDto);
+        assignRemindersPassiveIdOwnershipIfExists(currentAccountId, updateTaskWorkflowDto);
         return mapResponse(taskDto);
     }
 
@@ -185,5 +190,11 @@ public class TaskUpdateManager {
             return dueDate.truncatedTo(ChronoUnit.DAYS).equals(assignedDate.truncatedTo(ChronoUnit.DAYS));
         }
         return false;
+    }
+
+    private void assignRemindersPassiveIdOwnershipIfExists(String currentAccountId, UpdateTaskWorkflowDto updateTaskWorkflowDto) {
+        if (Objects.nonNull(updateTaskWorkflowDto.getRemindersPassiveId())) {
+            passiveService.assignOwnership(updateTaskWorkflowDto.getRemindersPassiveId(), currentAccountId);
+        }
     }
 }

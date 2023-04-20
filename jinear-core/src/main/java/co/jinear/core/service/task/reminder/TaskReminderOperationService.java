@@ -55,6 +55,18 @@ public class TaskReminderOperationService {
         log.info("Passivize task reminder has finished. passiveId: {}", passiveId);
     }
 
+    public String passivizeAllWithRelatedTask(String taskId) {
+        log.info("Passivize all task reminders with related task has started. taskId: {}", taskId);
+        List<TaskReminder> relatedReminders = taskReminderRetrieveService.retrieveReminderEntitiesWithRelatedTask(taskId);
+        if (!relatedReminders.isEmpty()) {
+            String passiveId = passiveService.createUserActionPassive();
+            relatedReminders.stream().forEach(taskReminder -> taskReminder.setPassiveId(passiveId));
+            taskReminderRepository.saveAll(relatedReminders);
+            return passiveId;
+        }
+        return null;
+    }
+
     private String passivizeTaskReminder(TaskReminder taskReminder) {
         String passiveId = passiveService.createUserActionPassive();
         taskReminder.setPassiveId(passiveId);
