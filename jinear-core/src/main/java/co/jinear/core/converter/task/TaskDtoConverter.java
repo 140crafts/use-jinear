@@ -2,6 +2,7 @@ package co.jinear.core.converter.task;
 
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskRelationDto;
+import co.jinear.core.model.dto.task.UpdateTaskWorkflowDto;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.entity.task.TaskRelation;
 import org.mapstruct.Mapper;
@@ -9,6 +10,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface TaskDtoConverter {
+
+    UpdateTaskWorkflowDto map(TaskDto taskDto, String remindersPassiveId);
 
     @Mapping(source = "owner.username.username", target = "owner.username")
     @Mapping(source = "assignedToAccount.username.username", target = "assignedToAccount.username")

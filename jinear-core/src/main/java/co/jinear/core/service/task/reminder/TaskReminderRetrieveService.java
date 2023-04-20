@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -38,9 +39,14 @@ public class TaskReminderRetrieveService {
     }
 
     public Optional<TaskReminderDto> retrieveRelated(String taskId, TaskReminderType taskReminderType) {
-        log.info("Retrieve related task reminder exists has started. taskId: {}, taskReminderType:{}", taskId, taskReminderType);
+        log.info("Retrieve related task reminder has started. taskId: {}, taskReminderType:{}", taskId, taskReminderType);
         return taskReminderRepository.findFirstByTaskIdAndTaskReminderTypeAndPassiveIdIsNull(taskId, taskReminderType)
                 .map(taskReminderConverter::map);
+    }
+
+    public List<TaskReminder> retrieveReminderEntitiesWithRelatedTask(String taskId) {
+        log.info("Retrieve related task reminder has started. taskId: {}", taskId);
+        return taskReminderRepository.findAllByTaskIdAndPassiveIdIsNull(taskId);
     }
 
     public boolean hasAnyRelated(String taskId, TaskReminderType taskReminderType) {
