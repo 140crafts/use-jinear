@@ -26,6 +26,10 @@ export default {
     en: "MM.dd.yyyy hh:mm aaa",
     tr: "dd.MM.yyyy  HH:mm",
   },
+  timeFormat: {
+    en: "hh:mm aaa",
+    tr: "HH:mm",
+  },
   continue: {
     en: "Continue",
     tr: "Devam",
