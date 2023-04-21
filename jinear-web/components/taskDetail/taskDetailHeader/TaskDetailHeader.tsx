@@ -8,9 +8,10 @@ import styles from "./TaskDetailHeader.module.css";
 
 interface TaskDetailHeaderProps {
   task: TaskDto;
+  backButtonVisible?: boolean;
 }
 
-const TaskDetailHeader: React.FC<TaskDetailHeaderProps> = ({ task }) => {
+const TaskDetailHeader: React.FC<TaskDetailHeaderProps> = ({ task, backButtonVisible = false }) => {
   const router = useRouter();
 
   const goBack = () => {
@@ -20,6 +21,7 @@ const TaskDetailHeader: React.FC<TaskDetailHeaderProps> = ({ task }) => {
   return (
     <div className={styles.headerContainer}>
       {task.workspace?.isPersonal ? (
+        backButtonVisible &&
         document.referrer?.indexOf(HOST) != -1 && (
           <Button onClick={goBack} variant={ButtonVariants.filled}>
             <b>{"<-"}</b>

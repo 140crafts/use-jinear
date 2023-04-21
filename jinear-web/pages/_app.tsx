@@ -19,6 +19,7 @@ import TaskAssigneeChangeModal from "@/components/modal/taskDetailModals/taskAss
 import TaskDateChangeModal from "@/components/modal/taskDetailModals/taskDateChangeModal/TaskDateChangeModal";
 import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicChangeModal/TaskTopicChangeModal";
 import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal";
+import TaskOverviewModal from "@/components/modal/taskOverviewModal/TaskOverviewModal";
 import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
 import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
@@ -50,6 +51,7 @@ export function useThemeToggle() {
 
 const globalModals: any = (
   <>
+    <TaskOverviewModal />
     <NotificationPermissionModal />
     <AddMemberToTeamModal />
     <WorkspaceInviteMemberModal />

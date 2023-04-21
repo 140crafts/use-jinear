@@ -1,0 +1,33 @@
+.modalBody {
+  height: 95vh;
+  max-height: unset;
+  padding: 0;
+}
+
+.modal {
+  position: relative;
+  height: 95vh;
+}
+
+.loadingContainer {
+  align-self: center;
+  margin: 4rem 0;
+}
+
+.footer {
+  position: sticky;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  flex: 1;
+  bottom: 0;
+  padding-bottom: 1ch;
+  backdrop-filter: var(--backdrop-filter-blur);
+}
+
+.taskContentWrapper {
+  height: 100%;
+  padding: 0 2.5rem;
+  margin-bottom: 3rem;
+}

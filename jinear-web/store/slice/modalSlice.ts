@@ -12,6 +12,7 @@ import ModalState, {
   NotFoundModalState,
   ReminderListModalState,
   SearchTaskModalState,
+  TaskOverviewModalState,
 } from "model/app/store/modal/modalState";
 import { accountApi } from "../api/accountApi";
 import { RootState } from "../store";
@@ -83,6 +84,9 @@ const initialState = {
   notificationPermissionModal: {
     visible: false,
   },
+  taskOverviewModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -104,6 +108,7 @@ const initialState = {
   workspaceMemberInviteModal: null | ModalState;
   addMemberToTeamModal: null | ModalState;
   notificationPermissionModal: null | ModalState;
+  taskOverviewModal: null | TaskOverviewModalState;
 };
 
 const slice = createSlice({
@@ -246,6 +251,13 @@ const slice = createSlice({
       state.notificationPermissionModal = initialState.notificationPermissionModal;
     },
 
+    popTaskOverviewModal: (state, action: PayloadAction<TaskOverviewModalState>) => {
+      state.taskOverviewModal = { ...action.payload, visible: true };
+    },
+    closeTaskOverviewModal: (state, action: PayloadAction<void>) => {
+      state.taskOverviewModal = initialState.taskOverviewModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -299,6 +311,8 @@ export const {
   closeAddMemberToTeamModal,
   popNotificationPermissionModal,
   closeNotificationPermissionModal,
+  popTaskOverviewModal,
+  closeTaskOverviewModal,
 
   resetModals,
 } = slice.actions;
@@ -385,3 +399,7 @@ export const selectWorkspaceMemberInviteModalVisible = (state: RootState) => sta
 export const selectAddMemberToTeamModalVisible = (state: RootState) => state.modal.addMemberToTeamModal?.visible;
 
 export const selectNotificationPermissionModalVisible = (state: RootState) => state.modal.notificationPermissionModal?.visible;
+
+export const selectTaskOverviewModalVisible = (state: RootState) => state.modal.taskOverviewModal?.visible;
+export const selectTaskOverviewModalTaskTag = (state: RootState) => state.modal.taskOverviewModal?.taskTag;
+export const selectTaskOverviewModalWorkspaceName = (state: RootState) => state.modal.taskOverviewModal?.workspaceName;

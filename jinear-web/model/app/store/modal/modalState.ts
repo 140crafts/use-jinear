@@ -56,3 +56,8 @@ export interface DatePickerModalState extends ModalState {
   initialDate?: Date;
   onDateChange?: (date: Date) => void;
 }
+
+export interface TaskOverviewModalState extends ModalState {
+  workspaceName?: string;
+  taskTag?: string;
+}

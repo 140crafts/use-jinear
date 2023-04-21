@@ -68,7 +68,7 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
         <>
           <TaskPageHeader taskTag={taskTag} title={taskResponse.data.title} />
           <div className={styles.contentContainer}>
-            <TaskDetailHeader task={taskResponse.data} />
+            <TaskDetailHeader task={taskResponse.data} backButtonVisible={true} />
             <TaskDetail task={taskResponse.data} />
           </div>
         </>

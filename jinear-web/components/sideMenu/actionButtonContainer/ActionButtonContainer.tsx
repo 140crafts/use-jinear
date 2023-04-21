@@ -55,7 +55,7 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
       <InboxButton workspace={preferredWorkspace} buttonStyle={styles.button} />
 
       <Button
-        href={`/${preferredWorkspace?.username}/${preferredTeam?.name}/last-activities`}
+        href={`/${preferredWorkspace?.username}/${preferredTeam?.username}/last-activities`}
         variant={ButtonVariants.hoverFilled2}
         className={styles.button}
       >
