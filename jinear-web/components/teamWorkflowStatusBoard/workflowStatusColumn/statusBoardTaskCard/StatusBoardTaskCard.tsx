@@ -2,8 +2,9 @@ import AssigneeCell from "@/components/assigneeCell/AssigneeCell";
 import Button from "@/components/button";
 import TopicInfo from "@/components/taskListScreen/taskLists/taskRow/topicInfo/TopicInfo";
 import TeamTagCell from "@/components/teamTagCell/TeamTagCell";
+import useWindowSize from "@/hooks/useWindowSize";
 import { TaskDto } from "@/model/be/jinear-core";
-import { popChangeTaskDateModal } from "@/store/slice/modalSlice";
+import { popChangeTaskDateModal, popTaskOverviewModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import Link from "next/link";
@@ -19,10 +20,24 @@ interface StatusBoardTaskCardProps {
 
 const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({ task, index = 0 }) => {
   const dispatch = useAppDispatch();
+  const { isMobile } = useWindowSize();
 
   const popChangeDatesModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event?.preventDefault?.();
     dispatch(popChangeTaskDateModal({ visible: true, task }));
+  };
+
+  const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
+    if (!isMobile) {
+      event?.preventDefault();
+      openTaskOverviewModal();
+    }
+  };
+
+  const openTaskOverviewModal = () => {
+    const workspaceName = task?.workspace?.username;
+    const taskTag = `${task?.team?.tag}-${task?.teamTagNo}`;
+    dispatch(popTaskOverviewModal({ taskTag, workspaceName, visible: true }));
   };
 
   return (
@@ -31,6 +46,7 @@ const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({ task, index =
         <Link
           href={`/${task.workspace?.username}/task/${task.team?.tag}-${task.teamTagNo}`}
           className={styles.container}
+          onClick={onLinkClick}
           ref={providedDraggable.innerRef}
           {...providedDraggable.draggableProps}
           {...providedDraggable.dragHandleProps}

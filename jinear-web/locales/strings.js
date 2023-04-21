@@ -1618,4 +1618,8 @@ export default {
     en: "Changing to this status will remove existing reminders",
     tr: "Görev bu statuye çekildiğinde tüm hatırlatıcılar kapatılır",
   },
+  taskOverviewModalGoToTask: {
+    en: "Open in page",
+    tr: "Tam sayfa görüntüle",
+  },
 };

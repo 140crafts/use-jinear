@@ -1,4 +1,7 @@
+import useWindowSize from "@/hooks/useWindowSize";
 import { TaskDto } from "@/model/be/jinear-core";
+import { popTaskOverviewModal } from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
 import { retrieveTaskStatusIcon } from "@/utils/taskIconFactory";
 import cn from "classnames";
 import Link from "next/link";
@@ -22,6 +25,9 @@ interface CellProps {
 }
 
 const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => {
+  const dispatch = useAppDispatch();
+  const { isMobile } = useWindowSize();
+
   const highlightedTaskId = useHighligtedTaskId();
   const setHighlightedTaskId = useSetHighlightedTaskId();
   const highlighted = task && highlightedTaskId == task.taskId;
@@ -58,10 +64,24 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
     setHighlightedTaskId?.("");
   };
 
+  const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
+    if (!isMobile) {
+      event?.preventDefault();
+      openTaskOverviewModal();
+    }
+  };
+
+  const openTaskOverviewModal = () => {
+    const workspaceName = task?.workspace?.username;
+    const taskTag = `${task?.team?.tag}-${task?.teamTagNo}`;
+    dispatch(popTaskOverviewModal({ taskTag, workspaceName, visible: true }));
+  };
+
   return (
     <Link
       tabIndex={task ? undefined : -1}
       href={`/${task?.workspace?.username}/task/${task?.team?.tag}-${task?.teamTagNo}`}
+      onClick={onLinkClick}
       id={id}
       className={cn(
         styles.container,

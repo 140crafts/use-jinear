@@ -1,7 +1,8 @@
 import Button from "@/components/button";
 import TeamTagCell from "@/components/teamTagCell/TeamTagCell";
+import useWindowSize from "@/hooks/useWindowSize";
 import { TaskDto } from "@/model/be/jinear-core";
-import { popChangeTaskDateModal } from "@/store/slice/modalSlice";
+import { popChangeTaskDateModal, popTaskOverviewModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import Link from "next/link";
@@ -33,15 +34,30 @@ const TaskPeriodViewCard: React.FC<TaskPeriodViewCardProps> = ({
   duration = 1,
 }) => {
   const dispatch = useAppDispatch();
+  const { isMobile } = useWindowSize();
 
   const popChangeDatesModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event?.preventDefault?.();
     dispatch(popChangeTaskDateModal({ visible: true, task }));
   };
 
+  const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
+    if (!isMobile) {
+      event?.preventDefault();
+      openTaskOverviewModal();
+    }
+  };
+
+  const openTaskOverviewModal = () => {
+    const workspaceName = task?.workspace?.username;
+    const taskTag = `${task?.team?.tag}-${task?.teamTagNo}`;
+    dispatch(popTaskOverviewModal({ taskTag, workspaceName, visible: true }));
+  };
+
   return (
     <Link
       href={`/${task.workspace?.username}/task/${task.team?.tag}-${task.teamTagNo}`}
+      onClick={onLinkClick}
       className={cn(styles.container, className)}
       style={style}
     >
