@@ -37,7 +37,7 @@ const NotificationMessageRow: React.FC<NotificationMessageRowProps> = ({ notific
           <b>{notificationMessage.title}</b>
         </div>
         <div className={styles.text}>{notificationMessage.text}</div>
-        <div className={styles.date}>{format(new Date(notificationMessage.createdDate), t("dateTimeFormat"))}</div>
+        <div className={styles.date}>{format(new Date(notificationMessage.createdDate), t("timeFormat"))}</div>
       </div>
       <Line className={styles.line} />
     </>
