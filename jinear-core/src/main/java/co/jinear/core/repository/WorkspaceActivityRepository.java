@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface WorkspaceActivityRepository extends JpaRepository<WorkspaceActivity, String> {
 
-    List<WorkspaceActivity> findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateAsc(String taskId);
+    List<WorkspaceActivity> findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateDesc(String taskId);
 }
