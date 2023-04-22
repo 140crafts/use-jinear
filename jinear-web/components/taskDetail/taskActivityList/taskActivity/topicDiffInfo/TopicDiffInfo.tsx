@@ -10,7 +10,9 @@ const MAX_CHAR = 36;
 
 const TopicDiffInfo: React.FC<TopicDiffInfoProps> = ({ activity }) => {
   const oldTopicTooLong = activity.oldTopicDto && activity.oldTopicDto.name.length > 36;
-  const oldTopic = activity.oldTopicDto?.name?.substring(0, MAX_CHAR) + (oldTopicTooLong ? "..." : "");
+  const oldTopic = activity.oldTopicDto?.name
+    ? activity.oldTopicDto?.name?.substring(0, MAX_CHAR) + (oldTopicTooLong ? "..." : "")
+    : " - ";
 
   const newTopicTooLong = activity.newTopicDto && activity.newTopicDto.name.length > 36;
   const newTopic = activity.newTopicDto?.name?.substring(0, MAX_CHAR) + (newTopicTooLong ? "..." : "");
