@@ -22,7 +22,7 @@ const TaskDueDateButton: React.FC<TaskDueDateButtonProps> = ({}) => {
   return (
     <Button
       variant={ButtonVariants.filled}
-      heightVariant={ButtonHeight.mid}
+      heightVariant={ButtonHeight.short}
       className={styles.button}
       onClick={popChangeDueDateModal}
     >

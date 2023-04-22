@@ -14,7 +14,7 @@ import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import Modal from "../modal/Modal";
-import styles from "./TaskOverviewModal.module.css";
+import styles from "./TaskOverviewModal.module.scss";
 
 interface TaskOverviewModalProps {}
 

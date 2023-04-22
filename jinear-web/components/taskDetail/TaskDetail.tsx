@@ -26,8 +26,8 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
       <div className={styles.taskLayout}>
         <TaskBody className={styles.taskBody} />
         <Line />
-        <TaskInfo className={styles.taskInfo} />
         <TaskSubtaskList />
+        <TaskInfo className={styles.taskInfo} />
         <Line />
         <TaskActivityList taskId={task.taskId} />
       </div>

@@ -9,6 +9,7 @@ import ModalState, {
   DialogModalState,
   LoginWith2FaMailModalState,
   NewReminderModalState,
+  NewTaskModalState,
   NotFoundModalState,
   ReminderListModalState,
   SearchTaskModalState,
@@ -91,7 +92,7 @@ const initialState = {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
   notFoundModal: null | NotFoundModalState;
-  newTaskModal: null | ModalState;
+  newTaskModal: null | NewTaskModalState;
   teamOptionsModal: null | ModalState;
   newTopicModal: null | ModalState;
   changeTaskWorkflowStatusModal: null | ChangeTaskWorkflowStatusModalState;
@@ -133,6 +134,9 @@ const slice = createSlice({
     },
     popNewTaskModal: (state, action: PayloadAction<void>) => {
       state.newTaskModal = { visible: true };
+    },
+    popNewTaskWithSubtaskRelationModal: (state, action: PayloadAction<NewTaskModalState>) => {
+      state.newTaskModal = { ...action.payload, visible: true };
     },
     closeNewTaskModal: (state, action: PayloadAction<void>) => {
       state.newTaskModal = initialState.newTaskModal;
@@ -280,6 +284,7 @@ export const {
   popNotFoundModal,
   closeNotFoundModal,
   popNewTaskModal,
+  popNewTaskWithSubtaskRelationModal,
   closeNewTaskModal,
   popTeamOptionsModal,
   closeTeamOptionsModal,
@@ -338,6 +343,8 @@ export const selectNotFoundModalImgSrc = (state: RootState) => state.modal.notFo
 export const selectNotFoundModalImgAlt = (state: RootState) => state.modal.notFoundModal?.imgAlt;
 
 export const selectNewTaskModalVisible = (state: RootState) => state.modal.newTaskModal?.visible;
+export const selectNewTaskModalSubTaskOf = (state: RootState) => state.modal.newTaskModal?.subTaskOf;
+export const selectNewTaskModalSubTaskOfLabel = (state: RootState) => state.modal.newTaskModal?.subTaskOfLabel;
 
 export const selectTeamOptionsModalVisible = (state: RootState) => state.modal.teamOptionsModal?.visible;
 

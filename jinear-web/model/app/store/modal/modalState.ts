@@ -61,3 +61,8 @@ export interface TaskOverviewModalState extends ModalState {
   workspaceName?: string;
   taskTag?: string;
 }
+
+export interface NewTaskModalState extends ModalState {
+  subTaskOf?: string;
+  subTaskOfLabel?: string;
+}

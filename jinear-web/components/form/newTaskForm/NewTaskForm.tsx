@@ -20,6 +20,7 @@ interface NewTaskFormProps {
   workspaceId: string;
   teamId: string;
   subTaskOf?: string;
+  subTaskOfLabel?: string;
   onClose: () => void;
   className?: string;
 }
@@ -31,7 +32,7 @@ export interface NewTaskExtendedForm extends TaskInitializeRequest {
 
 const logger = Logger("NewTaskForm");
 
-const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskOf, onClose, className }) => {
+const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskOf, subTaskOfLabel, onClose, className }) => {
   const { t } = useTranslation();
   const {
     register,
@@ -108,6 +109,12 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskO
         <input type="hidden" value={workspaceId} {...register("workspaceId")} />
         <input type="hidden" value={teamId} {...register("teamId")} />
         {subTaskOf && <input type="hidden" value={subTaskOf} {...register("subTaskOf")} />}
+
+        {subTaskOfLabel && (
+          <div
+            dangerouslySetInnerHTML={{ __html: t("newTaskFormSubtaskOfLabel").replace("${subtaskOfLabel}", subTaskOfLabel) }}
+          />
+        )}
 
         <TitleInput labelClass={styles.label} register={register} />
 
