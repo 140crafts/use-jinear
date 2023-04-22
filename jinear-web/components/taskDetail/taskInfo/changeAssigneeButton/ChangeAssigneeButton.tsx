@@ -23,7 +23,7 @@ const ChangeAssigneeButton: React.FC<ChangeAssigneeButtonProps> = ({ className }
   return task.workspace?.isPersonal ? null : (
     <Button
       variant={ButtonVariants.filled}
-      heightVariant={ButtonHeight.mid}
+      heightVariant={ButtonHeight.short}
       className={className}
       onClick={popChangeAssigneeModal}
     >

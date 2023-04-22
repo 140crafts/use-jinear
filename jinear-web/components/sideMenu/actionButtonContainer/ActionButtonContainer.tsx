@@ -25,6 +25,7 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
   const router = useRouter();
   const currentPath = router.asPath;
   const calendarPath = `/${preferredWorkspace?.username}`;
+  const inboxPath = `/${preferredWorkspace?.username}/inbox`;
 
   const _popNewTaskModal = () => {
     dispatch(popNewTaskModal());
@@ -52,7 +53,7 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
         <div>{t("sideMenuCalendar")}</div>
       </Button>
 
-      <InboxButton workspace={preferredWorkspace} buttonStyle={styles.button} />
+      <InboxButton isActive={inboxPath == currentPath} workspace={preferredWorkspace} buttonStyle={styles.button} />
 
       <Button
         href={`/${preferredWorkspace?.username}/${preferredTeam?.username}/last-activities`}

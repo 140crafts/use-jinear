@@ -9,9 +9,10 @@ import styles from "./InboxButton.module.css";
 interface InboxButtonProps {
   workspace?: WorkspaceDto | null;
   buttonStyle: string;
+  isActive: boolean;
 }
 
-const InboxButton: React.FC<InboxButtonProps> = ({ workspace, buttonStyle }) => {
+const InboxButton: React.FC<InboxButtonProps> = ({ isActive, workspace, buttonStyle }) => {
   const { t } = useTranslation();
 
   const { data: countResponse } = useRetrieveUnreadNotificationCountQuery(
@@ -22,7 +23,11 @@ const InboxButton: React.FC<InboxButtonProps> = ({ workspace, buttonStyle }) => 
   const unreadLabel = unreadCount == 0 ? "" : unreadCount > 99 ? "99+" : `${unreadCount}`;
 
   return (
-    <Button variant={ButtonVariants.hoverFilled2} className={buttonStyle} href={`/${workspace?.username}/inbox`}>
+    <Button
+      variant={isActive ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+      className={buttonStyle}
+      href={`/${workspace?.username}/inbox`}
+    >
       <IoFileTrayOutline />
       <div>{t("sideMenuInbox")}</div>
       {unreadCount != 0 && <div className={styles.unreadWrapper}>{unreadLabel}</div>}

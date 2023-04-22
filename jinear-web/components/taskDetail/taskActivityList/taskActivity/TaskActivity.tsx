@@ -11,7 +11,7 @@ import AssignedDateChangeDiffInfo from "./assignedDateChangeDiffInfo/AssignedDat
 import AssigneeChangeDiffInfo from "./assigneeChangeDiffInfo/AssigneeChangeDiffInfo";
 import DescDiffInfo from "./descDiffInfo/DescDiffInfo";
 import DueDateChangeDiffInfo from "./dueDateChangeDiffInfo/DueDateChangeDiffInfo";
-import styles from "./TaskActivity.module.css";
+import styles from "./TaskActivity.module.scss";
 import TaskRelationChangedDiffInfo from "./taskRelationChangedDiffInfo/TaskRelationChangedDiffInfo";
 import TitleDiffInfo from "./titleDiffInfo/TitleDiffInfo";
 import TopicDiffInfo from "./topicDiffInfo/TopicDiffInfo";
@@ -38,6 +38,7 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
 
   const Icon = useMemo(() => decideWorkspaceActivityIcon(activity.type), [activity.workspaceActivityId]);
 
+  const createdDate = format(new Date(activity.createdDate), t("dateTimeFormat"));
   const dateDiff = useMemo(() => {
     const diffInDays = differenceInDays(new Date(), new Date(activity.createdDate));
     if (diffInDays != 0) {
@@ -54,28 +55,27 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
     return t("taskWorkflowActivityInfoLabelDateJustNow");
   }, [activity.createdDate]);
 
-  const createdDate = format(new Date(activity.createdDate), t("dateTimeFormat"));
+  const activityDateLabel = t(`taskWorkflowActivityInfoLabel_${activity.type}`);
+  const userName = activity?.performedByAccount?.username;
 
   return (
     <div className={styles.container}>
       <Button
         onClick={TASK_RELATED_ACTIONS_WITH_DIFF.indexOf(activity.type) != -1 ? toggleDiff : undefined}
-        // variant={ButtonVariants.filled}
         className={styles.contentContainer}
+        data-tooltip-right={createdDate}
       >
-        <div>{<Icon size={15} className={styles.icon} />}</div>
-        <div className={styles.labelContainer}>
-          <b>{activity?.performedByAccount?.username}</b>
-          <div className={styles.label}>{t(`taskWorkflowActivityInfoLabel_${activity.type}`)}</div>
-          <div className={styles.dateDiff} data-tooltip={createdDate}>
-            {dateDiff}
-          </div>
-        </div>
+        <Icon size={15} className={styles.icon} />
+        {`${userName} ${activityDateLabel} (${dateDiff})`}
       </Button>
 
       <Transition
         initial={true}
-        className={cn(styles.diffContainer, activity.type == "EDIT_TASK_DESC" && styles["diffContainer-fullWidth"])}
+        className={cn(
+          styles.diffContainer,
+          diffVisible && styles.diffContainerVisible,
+          activity.type == "EDIT_TASK_DESC" && styles["diffContainer-fullWidth"]
+        )}
       >
         {diffVisible && (
           <>

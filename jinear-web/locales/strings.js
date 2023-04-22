@@ -1038,13 +1038,9 @@ export default {
     en: "Workspace detail",
     tr: "Çalışma Alanı detayları",
   },
-  taskDetailCreateChecklist: {
-    en: "Create To-Do list",
-    tr: "Yapılacak Listesi oluştur",
-  },
-  taskDetailCreateChecklistTooltip: {
-    en: "Add sub-tasks to follow the to-do list",
-    tr: "Yapılacak listesini takip etmek için alt görevler ekle",
+  taskDetailCreateRelatedTasklist: {
+    en: "Link Task",
+    tr: "Görev İlişkilendir",
   },
   taskSubtaskList: {
     en: "Sub Tasks",
@@ -1055,10 +1051,18 @@ export default {
     tr: "Bu görev için iliştirilmiş herhangi bir alt görev bulunamadı",
   },
   taskSubtaskListAddNewTaskButton: {
+    en: "New Task",
+    tr: "Yeni Görev",
+  },
+  taskSubtaskListAddExistingTaskButton: {
+    en: "Existing Task",
+    tr: "Var Olan Görev",
+  },
+  taskSubtaskListAddNewTaskButtonTooltip: {
     en: "Create a new subtask",
     tr: "Alt görev oluştur",
   },
-  taskSubtaskListAddExistingTaskButton: {
+  taskSubtaskListAddExistingTaskButtonTooltip: {
     en: "Add existing task as a new subtask",
     tr: "Var olan görevi ilişkilendir",
   },
@@ -1621,5 +1625,9 @@ export default {
   taskOverviewModalGoToTask: {
     en: "Open in page",
     tr: "Tam sayfa görüntüle",
+  },
+  newTaskFormSubtaskOfLabel: {
+    en: "This task will be subtask of <b>${subtaskOfLabel}</b>",
+    tr: "Bu görev, şu göreve alt görev olarak açılıyor. <b>${subtaskOfLabel}</b>",
   },
 };

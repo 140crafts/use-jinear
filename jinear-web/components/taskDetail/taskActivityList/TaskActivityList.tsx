@@ -22,16 +22,15 @@ const TaskActivityList: React.FC<TaskActivityListProps> = ({ taskId }) => {
     <div className={styles.container}>
       <h3>{t("taskActivityListTitle")}</h3>
       <div className="spacer-h-2" />
+      {(isFetching || isLoading) && (
+        <div className={styles.loading}>
+          <CircularProgress size={12} />
+        </div>
+      )}
       {isSuccess &&
         retrieveTaskActivityResponse.data.map((activity) => (
           <TaskActivity key={activity.workspaceActivityId} activity={activity} />
         ))}
-
-      {(isFetching || isLoading) && (
-        <div className={styles.loading}>
-          <CircularProgress size={17} />
-        </div>
-      )}
     </div>
   );
 };

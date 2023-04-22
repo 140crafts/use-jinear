@@ -27,7 +27,7 @@ const TaskTagNoButton: React.FC<TaskTagNoButtonProps> = ({ className }) => {
     <Button
       onClick={copyToClipboard}
       variant={ButtonVariants.filled}
-      heightVariant={ButtonHeight.mid}
+      heightVariant={ButtonHeight.short}
       className={className}
       data-tooltip-right={t("taskDetailCopyLinkTooltip")}
     >
