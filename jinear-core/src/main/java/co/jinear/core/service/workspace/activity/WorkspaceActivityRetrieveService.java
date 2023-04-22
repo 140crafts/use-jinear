@@ -35,7 +35,7 @@ public class WorkspaceActivityRetrieveService {
 
     public List<WorkspaceActivityDto> retrieveTaskActivity(RetrieveTaskActivityVo retrieveTaskActivityVo) {
         log.info("Retrieve task activity has started. retrieveTaskActivityVo: {}", retrieveTaskActivityVo);
-        List<WorkspaceActivity> workspaceActivities = workspaceActivityRepository.findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateAsc(retrieveTaskActivityVo.getTaskId());
+        List<WorkspaceActivity> workspaceActivities = workspaceActivityRepository.findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateDesc(retrieveTaskActivityVo.getTaskId());
         return workspaceActivities.stream()
                 .map(workspaceActivityConverter::map)
                 .map(this::retrieveTaskDescriptionChanges)
