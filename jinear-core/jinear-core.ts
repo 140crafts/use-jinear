@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-04-20 15:52:51.
+// Generated using typescript-generator version 3.0.1157 on 2023-04-23 22:41:15.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -138,6 +138,21 @@ export interface RichTextDto {
     sourceStack: RichTextSourceStack;
 }
 
+export interface ChecklistDto extends BaseDto {
+    checklistId: string;
+    taskId: string;
+    ownerId: string;
+    title: string;
+    checklistItems: ChecklistItemDto[];
+}
+
+export interface ChecklistItemDto extends BaseDto {
+    checklistItemId: string;
+    checklistId: string;
+    label: string;
+    isChecked: boolean;
+}
+
 export interface DetailedTaskSubscriptionDto extends BaseDto {
     taskSubscriptionId: string;
     taskId: string;
@@ -193,6 +208,7 @@ export interface TaskDto extends BaseDto {
     relations?: TaskRelationDto[] | null;
     relatedIn?: TaskRelationDto[] | null;
     taskReminders?: TaskReminderDto[] | null;
+    checklist?: ChecklistDto | null;
 }
 
 export interface TaskRelationDto {
@@ -240,6 +256,11 @@ export interface TaskSubscriptionDto extends BaseDto {
     taskId: string;
     accountId: string;
     plainAccountProfileDto: PlainAccountProfileDto;
+}
+
+export interface UpdateTaskWorkflowDto {
+    remindersPassiveId: string;
+    taskDto: TaskDto;
 }
 
 export interface TeamDto extends BaseDto {
@@ -452,6 +473,11 @@ export interface TaskReminderInitializeRequest extends BaseRequest {
     specificRemindDateRepeatType?: RepeatType | null;
 }
 
+export interface InitializeChecklistRequest extends BaseRequest {
+    title: string;
+    initialItemLabel: string;
+}
+
 export interface RetrieveIntersectingTasksFromTeamRequest extends BaseRequest {
     workspaceId: string;
     teamId: string;
@@ -624,6 +650,10 @@ export interface ReminderJobResponse extends BaseResponse {
 
 export interface ReminderResponse extends BaseResponse {
     data: ReminderDto[];
+}
+
+export interface RetrieveChecklistResponse extends BaseResponse {
+    data: ChecklistDto;
 }
 
 export interface TaskActivityRetrieveResponse extends BaseResponse {

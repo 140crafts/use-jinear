@@ -112,4 +112,7 @@ public class Task extends BaseEntity {
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<TaskReminder> taskReminders;
+
+    @OneToOne(mappedBy = "task")
+    private Checklist checklist;
 }
