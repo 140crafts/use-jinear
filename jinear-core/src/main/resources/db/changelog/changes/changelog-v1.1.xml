@@ -718,4 +718,61 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-checklist">
+        <createTable tableName="checklist">
+            <column name="checklist_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_task_id" tableName="checklist">
+            <column name="task_id"/>
+        </createIndex>
+        <createIndex indexName="ix_owner_id" tableName="checklist">
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-checklist_item">
+        <createTable tableName="checklist_item">
+            <column name="checklist_item_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="checklist_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="label" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_checked" type="tinyint" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_checklist_id" tableName="checklist_item">
+            <column name="checklist_id"/>
+        </createIndex>
+    </changeSet>
+
+
 </databaseChangeLog>
