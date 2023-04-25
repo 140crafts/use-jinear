@@ -15,7 +15,9 @@ const TopicDiffInfo: React.FC<TopicDiffInfoProps> = ({ activity }) => {
     : " - ";
 
   const newTopicTooLong = activity.newTopicDto && activity.newTopicDto.name.length > 36;
-  const newTopic = activity.newTopicDto?.name?.substring(0, MAX_CHAR) + (newTopicTooLong ? "..." : "");
+  const newTopic = activity.newTopicDto?.name
+    ? activity.newTopicDto?.name?.substring(0, MAX_CHAR) + (newTopicTooLong ? "..." : "")
+    : " - ";
 
   return (
     <div className={styles.container}>

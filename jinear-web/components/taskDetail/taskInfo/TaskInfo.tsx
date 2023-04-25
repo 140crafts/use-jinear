@@ -6,6 +6,7 @@ import ChangeAssigneeButton from "./changeAssigneeButton/ChangeAssigneeButton";
 import ChangeTopicButton from "./changeTopicButton/ChangeTopicButton";
 import ChangeWorkflowStatusButton from "./changeWorkflowStatusButton/ChangeWorkflowStatusButton";
 import RemindersButton from "./remindersButton/RemindersButton";
+import TaskAddChecklistButton from "./taskAddChecklistButton/TaskAddChecklistButton";
 import TaskAssignedDateButton from "./taskAssignedDateButton/TaskAssignedDateButton";
 import TaskDueDateButton from "./taskDueDateButton/TaskDueDateButton";
 import TaskTagNoButton from "./taskTagNoButton/TaskTagNoButton";
@@ -25,6 +26,7 @@ const TaskInfo: React.FC<TaskInfoProps> = ({ className }) => {
       <ChangeAssigneeButton className={styles.button} />
       <RemindersButton className={styles.button} />
       <AddSubtaskButton className={styles.button} />
+      <TaskAddChecklistButton className={styles.button} />
     </div>
   );
 };

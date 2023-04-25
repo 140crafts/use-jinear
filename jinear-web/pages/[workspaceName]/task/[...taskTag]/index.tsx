@@ -4,7 +4,8 @@ import TaskPageHeader from "@/components/taskDetail/taskPageHeader/TaskPageHeade
 import { useRetrieveWithWorkspaceNameAndTeamTagNoQuery } from "@/store/api/taskApi";
 import { useUpdatePreferredTeamMutation, useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDisplayPreferenceApi";
 import { selectCurrentAccountsPreferredTeamId, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
-import { useTypedSelector } from "@/store/store";
+import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
 import { useRouter } from "next/router";
@@ -15,6 +16,7 @@ interface TaskDetailPageProps {}
 const logger = Logger("TaskDetailPage");
 
 const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const preferredTeamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
@@ -25,6 +27,7 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
     data: taskResponse,
     isLoading: isTaskResponseLoading,
     isSuccess: isTaskResponseSuccess,
+    isFetching: isTaskRetrieveFetching,
   } = useRetrieveWithWorkspaceNameAndTeamTagNoQuery(
     { workspaceName, taskTag },
     { skip: workspaceName == null || taskTag == null }
@@ -32,6 +35,10 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
 
   const [updatePreferredWorkspace] = useUpdatePreferredWorkspaceMutation();
   const [updatePreferredTeam] = useUpdatePreferredTeamMutation();
+
+  useEffect(() => {
+    dispatch(changeLoadingModalVisibility({ visible: isTaskRetrieveFetching }));
+  }, [isTaskRetrieveFetching]);
 
   useEffect(() => {
     if (currentWorkspace && isTaskResponseSuccess && taskResponse && preferredTeamId) {

@@ -5,6 +5,7 @@ import Line from "../line/Line";
 import TaskDetailContext from "./context/TaskDetailContext";
 import TaskActivityList from "./taskActivityList/TaskActivityList";
 import TaskBody from "./taskBody/TaskBody";
+import TaskChecklistContainer from "./taskChecklistContainer/TaskChecklistContainer";
 import styles from "./TaskDetail.module.css";
 import TaskInfo from "./taskInfo/TaskInfo";
 import TaskSubtaskList from "./taskSubtaskList/TaskSubtaskList";
@@ -26,8 +27,9 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
       <div className={styles.taskLayout}>
         <TaskBody className={styles.taskBody} />
         <Line />
-        <TaskSubtaskList />
         <TaskInfo className={styles.taskInfo} />
+        <TaskChecklistContainer />
+        <TaskSubtaskList />
         <Line />
         <TaskActivityList taskId={task.taskId} />
       </div>
