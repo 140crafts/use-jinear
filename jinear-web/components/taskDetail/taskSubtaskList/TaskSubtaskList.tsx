@@ -66,9 +66,10 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
 
   return showSubTaskListEvenIfNoSubtasks || hasSubTasks ? (
     <>
+      <Line />
       <div className={styles.container}>
         <div className={styles.headerContainer}>
-          <h4>{t("taskSubtaskList")}</h4>
+          <h3>{t("taskSubtaskList")}</h3>
 
           <div className={styles.newTaskInputButtonContainer}>
             <Button
@@ -97,7 +98,6 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
           {!hasSubTasks && <div>{t("taskSubtaskListEmpty")}</div>}
         </div>
       </div>
-      <Line />
     </>
   ) : null;
 };

@@ -1630,4 +1630,36 @@ export default {
     en: "This task will be subtask of <b>${subtaskOfLabel}</b>",
     tr: "Bu görev, şu göreve alt görev olarak açılıyor. <b>${subtaskOfLabel}</b>",
   },
+  checklistNewItemPlaceholder: {
+    en: "Type to add new item",
+    tr: "Madde eklemek için başlık yazın",
+  },
+  checklistNewChecklistTitle: {
+    en: "Checklist",
+    tr: "Checklist",
+  },
+  checklistDeleteButtonTooltip: {
+    en: "Delete checklist",
+    tr: "Checklisti Sil",
+  },
+  checklistDeleteAreYouSureTitle: {
+    en: "Delete checklist",
+    tr: "Checklisti Sil",
+  },
+  checklistDeleteAreYouSureText: {
+    en: "Are you sure to delete checklist? This action can not be undone!",
+    tr: "Checklisti silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+  },
+  checklistDeleteAreYouSureConfirmText: {
+    en: "Delete",
+    tr: "Sil",
+  },
+  taskDetailAddChecklistButtonLabel: {
+    en: "Add Checklist",
+    tr: "Checklist Ekle",
+  },
+  newChecklistDefaultTitle: {
+    en: "Checklist - ${no}",
+    tr: "Checklist - ${no}",
+  },
 };
