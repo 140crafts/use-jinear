@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 
 @Slf4j
@@ -35,24 +37,34 @@ public class ChecklistService {
         return convertAndSetInitialItem(checklist, initialItem);
     }
 
-    public String passivizeChecklist(String taskId) {
-        log.info("Passivize checklist has started. taskId: {}", taskId);
-        Checklist checklist = checklistRetrieveService.retrieveEntityByTaskId(taskId);
+    public String passivizeChecklist(String checklistId) {
+        log.info("Passivize checklist has started. checklistId: {]", checklistId);
+        Checklist checklist = checklistRetrieveService.retrieveEntity(checklistId);
         String passiveId = passiveService.createUserActionPassive();
         checklist.setPassiveId(passiveId);
         checklistRepository.save(checklist);
         return passiveId;
     }
 
+    public void updateChecklistTitle(String checklistId, String title) {
+        log.info("Update checklist title has started. checklistId: {}, title: {}", checklistId, title);
+        Checklist checklist = checklistRetrieveService.retrieveEntity(checklistId);
+        checklist.setTitle(title);
+        checklistRepository.save(checklist);
+    }
+
     private ChecklistDto convertAndSetInitialItem(Checklist checklist, ChecklistItemDto initialItem) {
         ChecklistDto checklistDto = checklistDtoConverter.convert(checklist);
-        checklistDto.setChecklistItems(Set.of(initialItem));
+        Optional.ofNullable(initialItem).map(Set::of).ifPresent(checklistDto::setChecklistItems);
         return checklistDto;
     }
 
     private ChecklistItemDto createInitialChecklistItem(InitializeChecklistVo initializeChecklistVo, Checklist saved) {
-        InitializeChecklistItemVo initializeChecklistItemVo = mapInitialChecklistItemVo(initializeChecklistVo, saved);
-        return checklistItemService.initialize(initializeChecklistItemVo);
+        if (Objects.nonNull(initializeChecklistVo.getInitialItemLabel())) {
+            InitializeChecklistItemVo initializeChecklistItemVo = mapInitialChecklistItemVo(initializeChecklistVo, saved);
+            return checklistItemService.initialize(initializeChecklistItemVo);
+        }
+        return null;
     }
 
     private InitializeChecklistItemVo mapInitialChecklistItemVo(InitializeChecklistVo initializeChecklistVo, Checklist saved) {

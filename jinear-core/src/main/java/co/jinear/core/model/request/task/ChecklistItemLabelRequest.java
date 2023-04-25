@@ -10,5 +10,6 @@ import lombok.ToString;
 @ToString(callSuper = true)
 public class ChecklistItemLabelRequest extends BaseRequest {
 
+    private String checklistId;
     private String label;
 }

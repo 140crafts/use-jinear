@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-04-23 22:41:15.
+// Generated using typescript-generator version 3.0.1157 on 2023-04-25 21:48:44.
 
 export interface BaseDto {
     createdDate: Date;
@@ -208,7 +208,7 @@ export interface TaskDto extends BaseDto {
     relations?: TaskRelationDto[] | null;
     relatedIn?: TaskRelationDto[] | null;
     taskReminders?: TaskReminderDto[] | null;
-    checklist?: ChecklistDto | null;
+    checklists?: ChecklistDto[] | null;
 }
 
 export interface TaskRelationDto {
@@ -473,9 +473,15 @@ export interface TaskReminderInitializeRequest extends BaseRequest {
     specificRemindDateRepeatType?: RepeatType | null;
 }
 
+export interface ChecklistItemLabelRequest extends BaseRequest {
+    checklistId: string;
+    label: string;
+}
+
 export interface InitializeChecklistRequest extends BaseRequest {
+    taskId: string;
     title: string;
-    initialItemLabel: string;
+    initialItemLabel?: string | null;
 }
 
 export interface RetrieveIntersectingTasksFromTeamRequest extends BaseRequest {
@@ -543,6 +549,10 @@ export interface TaskUpdateRequest extends BaseRequest {
 }
 
 export interface TaskUpdateTitleRequest extends BaseRequest {
+    title: string;
+}
+
+export interface UpdateChecklistTitleRequest extends BaseRequest {
     title: string;
 }
 

@@ -10,5 +10,5 @@ public interface InitializeChecklistVoConverter {
 
     @Mapping(target = "title", source = "initializeChecklistRequest.title")
     @Mapping(target = "initialItemLabel", source = "initializeChecklistRequest.initialItemLabel")
-    InitializeChecklistVo convert(String taskId, String ownerId, InitializeChecklistRequest initializeChecklistRequest);
+    InitializeChecklistVo convert(String ownerId, InitializeChecklistRequest initializeChecklistRequest);
 }

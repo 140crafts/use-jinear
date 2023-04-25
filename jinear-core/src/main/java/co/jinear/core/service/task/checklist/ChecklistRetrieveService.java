@@ -17,16 +17,16 @@ public class ChecklistRetrieveService {
     private final ChecklistRepository checklistRepository;
     private final ChecklistDtoConverter checklistDtoConverter;
 
-    public ChecklistDto retrieveByTaskId(String taskId) {
-        log.info("Retrieve checklist by task id has started. taskId: {}", taskId);
-        return checklistRepository.findByTaskIdAndPassiveIdIsNull(taskId)
+    public ChecklistDto retrieve(String checklistId) {
+        log.info("Retrieve checklist has started. checklistId: {}", checklistId);
+        return checklistRepository.findByChecklistIdAndPassiveIdIsNull(checklistId)
                 .map(checklistDtoConverter::convert)
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Checklist retrieveEntityByTaskId(String taskId) {
-        log.info("Retrieve checklist entity by task id has started. taskId: {}", taskId);
-        return checklistRepository.findByTaskIdAndPassiveIdIsNull(taskId)
+    public Checklist retrieveEntity(String checklistId) {
+        log.info("Retrieve checklist entity has started. checklistId: {}", checklistId);
+        return checklistRepository.findByChecklistIdAndPassiveIdIsNull(checklistId)
                 .orElseThrow(NotFoundException::new);
     }
 

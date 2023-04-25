@@ -30,7 +30,7 @@ public class Checklist extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "task_id", insertable = false, updatable = false)
     private Task task;
 
