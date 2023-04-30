@@ -1,8 +1,8 @@
 package co.jinear.core.controller;
 
-import co.jinear.core.model.vo.notification.NotificationSendVo;
 import co.jinear.core.service.account.AccountRoleService;
 import co.jinear.core.service.notification.NotificationCreateService;
+import co.jinear.core.service.task.subscription.TaskSubscriptionListingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -12,11 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-
-import static co.jinear.core.model.enumtype.localestring.LocaleType.TR;
-import static co.jinear.core.model.enumtype.notification.NotificationTemplateType.TASK_REMINDER;
-
 @Slf4j
 @RestController
 @RequestMapping(value = "/debug")
@@ -25,15 +20,11 @@ public class DebugController {
 
     private final AccountRoleService accountRoleService;
     private final NotificationCreateService notificationCreateService;
+    private final TaskSubscriptionListingService taskSubscriptionListingService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
     public void debug(HttpEntity<String> httpEntity) {
-        NotificationSendVo notificationSendVo = new NotificationSendVo();
-        notificationSendVo.setTemplateType(TASK_REMINDER);
-        notificationSendVo.setLocaleType(TR);
-        notificationSendVo.setAccountId("01gjw45thcmavz8sctdy3crqs1");
-        notificationSendVo.setParams(Map.of("taskTag","TAG-1","taskTitle","Lorem Ipsum Sik Sok Amet Zart zurt Gomet","reminderTypeText","asdreminderTypeText reminderTypeText reminderTypeText reminderTypeText reminderTypeText"));
-        notificationCreateService.create(notificationSendVo);
+
     }
 }

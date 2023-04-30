@@ -8,7 +8,7 @@ public enum WorkspaceActivityType {
     MEMBER_LEFT,
     MEMBER_REMOVED,
     MEMBER_REQUESTED_ACCESS,
-    //
+    //task stuff
     TASK_INITIALIZED,
     TASK_CLOSED,
     EDIT_TASK_TITLE,
@@ -19,5 +19,5 @@ public enum WorkspaceActivityType {
     TASK_CHANGE_ASSIGNED_DATE,
     TASK_CHANGE_DUE_DATE,
     RELATION_INITIALIZED,
-    RELATION_REMOVED;
+    RELATION_REMOVED
 }

@@ -4,7 +4,6 @@ import co.jinear.core.converter.reminder.ReminderJobConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.reminder.ReminderDto;
 import co.jinear.core.model.dto.reminder.ReminderJobDto;
-import co.jinear.core.model.dto.task.DetailedTaskSubscriptionDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskReminderDto;
 import co.jinear.core.model.enumtype.reminder.ReminderType;
@@ -16,14 +15,12 @@ import co.jinear.core.service.reminder.process.strategy.ReminderJobProcessStrate
 import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.reminder.TaskReminderOperationService;
 import co.jinear.core.service.task.reminder.TaskReminderRetrieveService;
-import co.jinear.core.service.task.subscription.TaskSubscriptionListingService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -40,7 +37,6 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
     private final ReminderJobOperationService reminderJobOperationService;
     private final ReminderJobDateCalculatorService reminderJobDateCalculatorService;
     private final ReminderJobConverter reminderJobConverter;
-    private final TaskSubscriptionListingService taskSubscriptionListingService;
     private final TaskReminderRetrieveService taskReminderRetrieveService;
     private final TaskReminderOperationService taskReminderOperationService;
     private final TaskReminderAccountReachOutService taskReminderAccountReachOutService;
@@ -51,8 +47,7 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
         log.info("Task reminder job process has started. reminderJobDto: {}", reminderJobDto);
         TaskDto taskDto = retrieveTask(reminderJobDto);
         TaskReminderDto taskReminderDto = taskReminderRetrieveService.retrieveByTaskIdAndReminderId(taskDto.getTaskId(), reminderJobDto.getReminderId());
-        List<DetailedTaskSubscriptionDto> taskSubscribers = taskSubscriptionListingService.listDetailedTaskSubscribers(taskDto.getTaskId());
-        taskReminderAccountReachOutService.notify(taskSubscribers, taskDto, taskReminderDto, reminderJobDto);
+        taskReminderAccountReachOutService.notify(taskDto, taskReminderDto, reminderJobDto);
         reminderJobOperationService.updateReminderJobStatus(reminderJobDto.getReminderJobId(), COMPLETED);
         calculateNextDateAndInitializeNextReminderJob(reminderJobDto, taskReminderDto);
     }

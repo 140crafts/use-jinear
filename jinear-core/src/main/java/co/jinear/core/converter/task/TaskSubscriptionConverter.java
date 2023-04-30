@@ -3,7 +3,7 @@ package co.jinear.core.converter.task;
 import co.jinear.core.model.dto.task.DetailedTaskSubscriptionDto;
 import co.jinear.core.model.dto.task.TaskSubscriptionDto;
 import co.jinear.core.model.entity.task.TaskSubscription;
-import co.jinear.core.model.response.topic.TaskSubscriptionResponse;
+import co.jinear.core.model.response.task.TaskSubscriptionResponse;
 import co.jinear.core.model.vo.task.TaskSubscriptionInitializeVo;
 import org.mapstruct.Mapper;
 

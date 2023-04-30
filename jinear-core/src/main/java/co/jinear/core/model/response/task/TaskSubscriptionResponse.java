@@ -1,4 +1,4 @@
-package co.jinear.core.model.response.topic;
+package co.jinear.core.model.response.task;
 
 import co.jinear.core.model.dto.task.TaskSubscriptionDto;
 import co.jinear.core.model.response.BaseResponse;

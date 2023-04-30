@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-04-25 21:48:44.
+// Generated using typescript-generator version 3.0.1157 on 2023-04-27 08:22:32.
 
 export interface BaseDto {
     createdDate: Date;
@@ -686,6 +686,14 @@ export interface TaskSearchResponse extends BaseResponse {
     data: PageDto<TaskSearchResultDto>;
 }
 
+export interface TaskSubscribersListingResponse extends BaseRequest {
+    data: TaskSubscriptionDto[];
+}
+
+export interface TaskSubscriptionResponse extends BaseResponse {
+    data: TaskSubscriptionDto;
+}
+
 export interface TeamListingResponse extends BaseResponse {
     data: TeamDto[];
 }
@@ -700,10 +708,6 @@ export interface TeamResponse extends BaseResponse {
 
 export interface TeamWorkflowStatusListingResponse extends BaseResponse {
     data: GroupedTeamWorkflowStatusListDto;
-}
-
-export interface TaskSubscriptionResponse extends BaseResponse {
-    data: TaskSubscriptionDto;
 }
 
 export interface TopicListingResponse extends BaseResponse {

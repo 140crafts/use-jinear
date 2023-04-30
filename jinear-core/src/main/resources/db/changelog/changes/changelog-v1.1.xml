@@ -774,5 +774,35 @@
         </createIndex>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-notification_event">
+        <addColumn tableName="notification_event">
+            <column name="type" type="int" afterColumn="event_state"/>
+        </addColumn>
+
+        <addColumn tableName="notification_event">
+            <column name="locale" type="varchar(255)" afterColumn="type"/>
+        </addColumn>
+
+        <addColumn tableName="notification_event">
+            <column name="title" type="varchar(255)" afterColumn="locale"/>
+        </addColumn>
+
+        <addColumn tableName="notification_event">
+            <column name="text" type="text" afterColumn="title"/>
+        </addColumn>
+
+        <addColumn tableName="notification_event">
+            <column name="launch_url" type="varchar(512)" afterColumn="text"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-drop-notification-tables">
+        <dropTable tableName="notification_event_param" />
+        <dropTable tableName="notification_template" />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-drop-column-notification-template">
+        <dropColumn tableName="notification_event" columnName="notification_template_id" />
+    </changeSet>
 
 </databaseChangeLog>

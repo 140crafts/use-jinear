@@ -1,12 +1,12 @@
 package co.jinear.core.model.dto.notification;
 
 import co.jinear.core.model.dto.BaseDto;
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.enumtype.notification.NotificationEventState;
+import co.jinear.core.model.enumtype.notification.NotificationType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.Set;
 
 @Setter
 @Getter
@@ -14,10 +14,12 @@ import java.util.Set;
 public class NotificationEventDto extends BaseDto {
 
     private String notificationEventId;
-    private Long notificationTemplateId;
     private String accountId;
     private Boolean isRead;
     private NotificationEventState eventState;
-    private NotificationTemplateDto template;
-    private Set<NotificationEventParamDto> params;
+    private NotificationType notificationType;
+    private LocaleType localeType;
+    private String title;
+    private String text;
+    private String launchUrl;
 }
