@@ -870,6 +870,34 @@ export default {
     en: "",
     tr: "",
   },
+  taskWorkflowActivityInfoLabel_CHECKLIST_INITIALIZED: {
+    en: "initialized a checklist.",
+    tr: "bir kontrol listesi oluşturdu.",
+  },
+  taskWorkflowActivityInfoLabel_CHECKLIST_REMOVED: {
+    en: "removed checklist.",
+    tr: "Kontrol listesi silindi.",
+  },
+  taskWorkflowActivityInfoLabel_CHECKLIST_TITLE_CHANGED: {
+    en: "changed checklist title.",
+    tr: "kontrol listesi başlığını değiştirildi.",
+  },
+  taskWorkflowActivityInfoLabel_CHECKLIST_ITEM_CHECKED_STATUS_CHANGED: {
+    en: "changed checklist item status.",
+    tr: "kontrol listesi maddesinin durumunu değiştirdi.",
+  },
+  taskWorkflowActivityInfoLabel_CHECKLIST_ITEM_LABEL_CHANGED: {
+    en: "changed checklist item label.",
+    tr: "kontrol listesi maddesinin i̇çeriğini değiştirdi.",
+  },
+  taskWorkflowActivityInfoLabel_CHECKLIST_ITEM_REMOVED: {
+    en: "removed checklist item.",
+    tr: "kontrol listesi maddesini sildi.",
+  },
+  taskWorkflowActivityInfoLabel_CHECKLIST_ITEM_INITIALIZED: {
+    en: "initialized checklist item.",
+    tr: "kontrol listesi maddesi oluşturdu.",
+  },
   taskWorkflowActivityInfoLabel_TASK_INITIALIZED: {
     en: "has created the task.",
     tr: "görev oluşturdu.",
@@ -1636,19 +1664,19 @@ export default {
   },
   checklistNewChecklistTitle: {
     en: "Checklist",
-    tr: "Checklist",
+    tr: "Kontrol Listesi",
   },
   checklistDeleteButtonTooltip: {
     en: "Delete checklist",
-    tr: "Checklisti Sil",
+    tr: "Kontrol Listesini Sil",
   },
   checklistDeleteAreYouSureTitle: {
     en: "Delete checklist",
-    tr: "Checklisti Sil",
+    tr: "Kontrol Listesini Sil",
   },
   checklistDeleteAreYouSureText: {
     en: "Are you sure to delete checklist? This action can not be undone!",
-    tr: "Checklisti silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+    tr: "Kontrol Listesini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
   },
   checklistDeleteAreYouSureConfirmText: {
     en: "Delete",
@@ -1656,10 +1684,26 @@ export default {
   },
   taskDetailAddChecklistButtonLabel: {
     en: "Add Checklist",
-    tr: "Checklist Ekle",
+    tr: "Kontrol Listesi Ekle",
   },
   newChecklistDefaultTitle: {
     en: "Checklist - ${no}",
-    tr: "Checklist - ${no}",
+    tr: "Kontrol Listesi - ${no}",
+  },
+  taskSubscriptionActionButtonSubscribe: {
+    en: "Subscribe",
+    tr: "Takip Et",
+  },
+  taskSubscriptionActionButtonUnsubscribe: {
+    en: "Subscribed",
+    tr: "Takip Ediliyor",
+  },
+  taskSubscriptionActionButtonSubscribeTooltip: {
+    en: "Stay informed about the process regarding the task",
+    tr: "Görev üzerindeki gelişmelerden haberdar ol",
+  },
+  taskSubscriptionActionButtonUnsubscribeTooltip: {
+    en: "Unsubscribe",
+    tr: "Takibi Bırak",
   },
 };

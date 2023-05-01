@@ -23,6 +23,14 @@
   margin-top: 3px;
 }
 
+.infoText {
+  color: var(--c-secondary-shade-0-op05);
+}
+
+.userName {
+  color: var(--c-text-color);
+}
+
 .diffContainer {
   display: none;
   flex-direction: row;

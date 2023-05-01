@@ -1,44 +1,49 @@
+import Button from "@/components/button";
 import Line from "@/components/line/Line";
-import { NotificationMessageDto, NotificationTemplateType } from "@/model/be/jinear-core";
+import { NotificationEventDto, NotificationType } from "@/model/be/jinear-core";
+import Logger from "@/utils/logger";
 import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoAlarmOutline, IoCaretForwardCircleOutline, IoRadioButtonOn } from "react-icons/io5";
+import { IoAlarmOutline, IoNotificationsOutline, IoReaderOutline } from "react-icons/io5";
 import styles from "./NotificationMessageRow.module.scss";
 
 interface NotificationMessageRowProps {
-  notificationMessage: NotificationMessageDto;
+  notificationEvent: NotificationEventDto;
   withDateTitle: boolean;
 }
 
 const NOTIFICATION_ICON_MAP = {
   TASK_REMINDER: IoAlarmOutline,
-  TASK_ASSIGNED: IoCaretForwardCircleOutline,
-  default: IoRadioButtonOn,
+  WORKSPACE_ACTIVITY: IoReaderOutline,
+  default: IoNotificationsOutline,
 };
 
-export const getNotificationIcon = (templateType?: NotificationTemplateType) => {
+const logger = Logger("NotificationMessageRow");
+
+export const getNotificationIcon = (templateType?: NotificationType) => {
+  logger.log(templateType);
   return templateType ? NOTIFICATION_ICON_MAP?.[templateType] || NOTIFICATION_ICON_MAP.default : NOTIFICATION_ICON_MAP.default;
 };
 
-const NotificationMessageRow: React.FC<NotificationMessageRowProps> = ({ notificationMessage, withDateTitle = false }) => {
+const NotificationMessageRow: React.FC<NotificationMessageRowProps> = ({ notificationEvent, withDateTitle = false }) => {
   const { t } = useTranslation();
-  const Icon = getNotificationIcon(notificationMessage?.templateType);
+  const Icon = getNotificationIcon(notificationEvent?.notificationType);
   return (
     <>
       {withDateTitle && (
-        <div className={styles.dateTitle}>{format(new Date(notificationMessage.createdDate), t("dateFormat"))}</div>
+        <div className={styles.dateTitle}>{format(new Date(notificationEvent.createdDate), t("dateFormat"))}</div>
       )}
-      <div className={styles.container}>
+      <Button className={styles.container} href={notificationEvent.launchUrl}>
         <div>
           <Icon size={17} />
         </div>
         <div>
-          <b>{notificationMessage.title}</b>
+          <b>{notificationEvent.title}</b>
         </div>
-        <div className={styles.text}>{notificationMessage.text}</div>
-        <div className={styles.date}>{format(new Date(notificationMessage.createdDate), t("timeFormat"))}</div>
-      </div>
+        <div className={styles.text}>{notificationEvent.text}</div>
+        <div className={styles.date}>{format(new Date(notificationEvent.createdDate), t("timeFormat"))}</div>
+      </Button>
       <Line className={styles.line} />
     </>
   );

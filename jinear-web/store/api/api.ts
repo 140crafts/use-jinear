@@ -34,6 +34,8 @@ export const tagTypes = [
   "count-workspace-notification-events",
   "account-workspace-notification-unread-count",
   "task-checklist",
+  "task-subscription",
+  "task-subscription-subscriber-list",
 ];
 
 export const api = createApi({

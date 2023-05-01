@@ -7,11 +7,11 @@ import cn from "classnames";
 import { differenceInDays, differenceInHours, differenceInMinutes, format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { useMemo } from "react";
+import styles from "./TaskActivity.module.scss";
 import AssignedDateChangeDiffInfo from "./assignedDateChangeDiffInfo/AssignedDateChangeDiffInfo";
 import AssigneeChangeDiffInfo from "./assigneeChangeDiffInfo/AssigneeChangeDiffInfo";
 import DescDiffInfo from "./descDiffInfo/DescDiffInfo";
 import DueDateChangeDiffInfo from "./dueDateChangeDiffInfo/DueDateChangeDiffInfo";
-import styles from "./TaskActivity.module.scss";
 import TaskRelationChangedDiffInfo from "./taskRelationChangedDiffInfo/TaskRelationChangedDiffInfo";
 import TitleDiffInfo from "./titleDiffInfo/TitleDiffInfo";
 import TopicDiffInfo from "./topicDiffInfo/TopicDiffInfo";
@@ -55,7 +55,7 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
     return t("taskWorkflowActivityInfoLabelDateJustNow");
   }, [activity.createdDate]);
 
-  const activityDateLabel = t(`taskWorkflowActivityInfoLabel_${activity.type}`);
+  const activityDateLabel = t(`taskWorkflowActivityInfoLabel_${activity.type}`) || "";
   const userName = activity?.performedByAccount?.username;
 
   return (
@@ -66,7 +66,10 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
         data-tooltip-right={createdDate}
       >
         <Icon size={15} className={styles.icon} />
-        {`${userName} ${activityDateLabel} (${dateDiff})`}
+        <span className={styles.infoText}>
+          <b className={styles.userName}>{`${userName}`}</b>
+          {` ${activityDateLabel} (${dateDiff})`}
+        </span>
       </Button>
 
       <Transition

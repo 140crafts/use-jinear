@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./TaskInfo.module.css";
+import styles from "./TaskActionBar.module.css";
 
 import AddSubtaskButton from "./addSubtaskButton/AddSubtaskButton";
 import ChangeAssigneeButton from "./changeAssigneeButton/ChangeAssigneeButton";
@@ -9,13 +9,14 @@ import RemindersButton from "./remindersButton/RemindersButton";
 import TaskAddChecklistButton from "./taskAddChecklistButton/TaskAddChecklistButton";
 import TaskAssignedDateButton from "./taskAssignedDateButton/TaskAssignedDateButton";
 import TaskDueDateButton from "./taskDueDateButton/TaskDueDateButton";
+import TaskSubscribeButton from "./taskSubscribeButton/TaskSubscribeButton";
 import TaskTagNoButton from "./taskTagNoButton/TaskTagNoButton";
 
-interface TaskInfoProps {
+interface TaskActionBarProps {
   className?: string;
 }
 
-const TaskInfo: React.FC<TaskInfoProps> = ({ className }) => {
+const TaskActionBar: React.FC<TaskActionBarProps> = ({ className }) => {
   return (
     <div className={styles.container}>
       <TaskTagNoButton className={styles.button} />
@@ -27,8 +28,9 @@ const TaskInfo: React.FC<TaskInfoProps> = ({ className }) => {
       <RemindersButton className={styles.button} />
       <AddSubtaskButton className={styles.button} />
       <TaskAddChecklistButton className={styles.button} />
+      <TaskSubscribeButton className={styles.button} />
     </div>
   );
 };
 
-export default TaskInfo;
+export default TaskActionBar;

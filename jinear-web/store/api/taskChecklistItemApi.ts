@@ -9,7 +9,7 @@ export const taskChecklistItemApi = api.injectEndpoints({
         method: "POST",
         body: req,
       }),
-      invalidatesTags: ["task-checklist"],
+      invalidatesTags: ["task-checklist", "retrieve-task-activity"],
     }),
     //
     updateCheckedStatus: build.mutation<
@@ -23,7 +23,7 @@ export const taskChecklistItemApi = api.injectEndpoints({
         url: `v1/task/checklist/item/${req.checklistItemId}/${req.checked}`,
         method: "PUT",
       }),
-      invalidatesTags: (_result, _err, req) => [],
+      invalidatesTags: (_result, _err, req) => ["retrieve-task-activity"],
     }),
     //
     updateLabel: build.mutation<
@@ -39,7 +39,7 @@ export const taskChecklistItemApi = api.injectEndpoints({
         method: "PUT",
         body: req,
       }),
-      invalidatesTags: (_result, _err, req) => [],
+      invalidatesTags: (_result, _err, req) => ["retrieve-task-activity"],
     }),
     //
     deleteChecklistItem: build.mutation<
@@ -52,7 +52,7 @@ export const taskChecklistItemApi = api.injectEndpoints({
         url: `v1/task/checklist/item/${req.checklistItemId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["task-checklist"],
+      invalidatesTags: ["task-checklist", "retrieve-task-activity"],
     }),
     //
   }),

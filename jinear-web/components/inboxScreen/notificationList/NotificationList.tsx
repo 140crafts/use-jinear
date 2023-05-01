@@ -40,13 +40,13 @@ const NotificationList: React.FC<NotificationListProps> = ({ data, isFetching, i
       </div>
 
       <div className={cn(styles.content, styles.gradientBg)}>
-        {data?.content.map((notificationMessage, i) => {
+        {data?.content.map((notificationEvent, i) => {
           const oneBefore = i == 0 ? null : data.content?.[i - 1];
-          const datesEqual = oneBefore && isSameDay(new Date(oneBefore.createdDate), new Date(notificationMessage.createdDate));
+          const datesEqual = oneBefore && isSameDay(new Date(oneBefore.createdDate), new Date(notificationEvent.createdDate));
           return (
             <NotificationMessageRow
-              key={`${notificationMessage.notificationEventId}`}
-              notificationMessage={notificationMessage}
+              key={`${notificationEvent.notificationEventId}`}
+              notificationEvent={notificationEvent}
               withDateTitle={!datesEqual}
             />
           );

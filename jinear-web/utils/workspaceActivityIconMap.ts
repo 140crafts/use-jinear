@@ -3,6 +3,7 @@ import {
   IoCalendar,
   IoCaretForward,
   IoCheckmark,
+  IoCheckmarkCircleSharp,
   IoClose,
   IoCog,
   IoPencil,
@@ -30,6 +31,13 @@ const workspaceIconMap = {
   TASK_CHANGE_DUE_DATE: IoCalendar,
   RELATION_INITIALIZED: IoSparkles,
   RELATION_REMOVED: IoClose,
+  CHECKLIST_INITIALIZED: IoCheckmarkCircleSharp,
+  CHECKLIST_REMOVED: IoCheckmarkCircleSharp,
+  CHECKLIST_TITLE_CHANGED: IoCheckmarkCircleSharp,
+  CHECKLIST_ITEM_CHECKED_STATUS_CHANGED: IoCheckmarkCircleSharp,
+  CHECKLIST_ITEM_LABEL_CHANGED: IoCheckmarkCircleSharp,
+  CHECKLIST_ITEM_REMOVED: IoCheckmarkCircleSharp,
+  CHECKLIST_ITEM_INITIALIZED: IoCheckmarkCircleSharp,
 };
 
 const decideWorkspaceActivityIcon = (type: WorkspaceActivityType) => {
