@@ -1,5 +1,4 @@
 import Button from "@/components/button";
-import Transition from "@/components/transition/Transition";
 import { useToggle } from "@/hooks/useToggle";
 import { WorkspaceActivityDto } from "@/model/be/jinear-core";
 import decideWorkspaceActivityIcon from "@/utils/workspaceActivityIconMap";
@@ -68,12 +67,14 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
         <Icon size={15} className={styles.icon} />
         <span className={styles.infoText}>
           <b className={styles.userName}>{`${userName}`}</b>
-          {` ${activityDateLabel} (${dateDiff})`}
+          {`${activityDateLabel}`}
+          <div className="flex-1" />
+          <p>{`(${dateDiff})`}</p>
         </span>
       </Button>
 
-      <Transition
-        initial={true}
+      <div
+        // initial={true}
         className={cn(
           styles.diffContainer,
           diffVisible && styles.diffContainerVisible,
@@ -94,7 +95,7 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
             )}
           </>
         )}
-      </Transition>
+      </div>
       {diffVisible && <div className="spacer-h-1" />}
     </div>
   );
