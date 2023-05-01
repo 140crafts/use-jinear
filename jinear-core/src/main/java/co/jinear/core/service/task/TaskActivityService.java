@@ -81,7 +81,7 @@ public class TaskActivityService {
 
     public void initializeChecklistCreateActivity(String performedBy, TaskDto after, ChecklistDto checklistDto) {
         WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_INITIALIZED;
-        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistDto.getChecklistId());
         vo.setNewState(checklistDto.getChecklistId());
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
@@ -90,7 +90,7 @@ public class TaskActivityService {
 
     public void initializeChecklistRemovedActivity(String performedBy, TaskDto after, ChecklistDto checklistDto) {
         WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_REMOVED;
-        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistDto.getChecklistId());
         vo.setOldState(checklistDto.getChecklistId());
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
@@ -99,7 +99,7 @@ public class TaskActivityService {
 
     public void initializeChecklistTitleChangedActivity(String performedBy, TaskDto after, ChecklistDto oldChecklist, ChecklistDto newChecklist) {
         WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_TITLE_CHANGED;
-        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, newChecklist.getChecklistId());
         vo.setOldState(oldChecklist.getTitle());
         vo.setNewState(newChecklist.getTitle());
         vo.setType(type);

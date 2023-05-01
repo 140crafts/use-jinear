@@ -56,6 +56,12 @@ public class ChecklistItemService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    public ChecklistItemDto retrieveIncludingPassive(String checklistItemId) {
+        return checklistItemRepository.findByChecklistItemId(checklistItemId)
+                .map(checklistItemDtoConverter::convert)
+                .orElseThrow(NotFoundException::new);
+    }
+
     public ChecklistItem retrieveEntity(String checklistItemId) {
         return checklistItemRepository.findByChecklistItemIdAndPassiveIdIsNull(checklistItemId)
                 .orElseThrow(NotFoundException::new);
