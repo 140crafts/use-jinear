@@ -20,6 +20,10 @@ public class TaskAccessValidator {
 
     public void validateTaskAccess(String accountId, String taskId) {
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
+        validateTaskAccess(accountId, taskDto);
+    }
+
+    public void validateTaskAccess(String accountId, TaskDto taskDto) {
         final String workspaceId = taskDto.getWorkspaceId();
         final String teamId = taskDto.getTeamId();
         workspaceValidator.validateHasAccess(accountId, workspaceId);

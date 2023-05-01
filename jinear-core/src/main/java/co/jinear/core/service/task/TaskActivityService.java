@@ -1,6 +1,7 @@
 package co.jinear.core.service.task;
 
 import co.jinear.core.model.dto.richtext.RichTextDto;
+import co.jinear.core.model.dto.task.ChecklistDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
 import co.jinear.core.model.vo.task.NotifyTaskSubscribersVo;
@@ -78,6 +79,70 @@ public class TaskActivityService {
         notifyTaskSubscribers(after, type);
     }
 
+    public void initializeChecklistCreateActivity(String performedBy, TaskDto after, ChecklistDto checklistDto) {
+        WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_INITIALIZED;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
+        vo.setNewState(checklistDto.getChecklistId());
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(after, type);
+    }
+
+    public void initializeChecklistRemovedActivity(String performedBy, TaskDto after, ChecklistDto checklistDto) {
+        WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_REMOVED;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
+        vo.setOldState(checklistDto.getChecklistId());
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(after, type);
+    }
+
+    public void initializeChecklistTitleChangedActivity(String performedBy, TaskDto after, ChecklistDto oldChecklist, ChecklistDto newChecklist) {
+        WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_TITLE_CHANGED;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
+        vo.setOldState(oldChecklist.getTitle());
+        vo.setNewState(newChecklist.getTitle());
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(after, type);
+    }
+
+    public void initializeChecklistItemCheckedStatusChangedActivity(String performedBy, TaskDto after, String checklistItemId, Boolean oldCheckedStatus, Boolean newCheckedStatus) {
+        WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_ITEM_CHECKED_STATUS_CHANGED;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistItemId);
+        Optional.ofNullable(oldCheckedStatus).map(String::valueOf).ifPresent(vo::setOldState);
+        Optional.ofNullable(newCheckedStatus).map(String::valueOf).ifPresent(vo::setNewState);
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(after, type);
+    }
+
+    public void initializeChecklistItemLabelChangedActivity(String performedBy, TaskDto after, String checklistItemId, String oldLabel, String newLabel) {
+        WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_ITEM_LABEL_CHANGED;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistItemId);
+        Optional.ofNullable(oldLabel).ifPresent(vo::setOldState);
+        Optional.ofNullable(newLabel).ifPresent(vo::setNewState);
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(after, type);
+    }
+
+    public void initializeChecklistItemRemovedActivity(String performedBy, TaskDto after, String checklistItemId) {
+        WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_ITEM_REMOVED;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistItemId);
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(after, type);
+    }
+
+    public void initializeChecklistItemInitializedActivity(String performedBy, TaskDto after, String checklistItemId) {
+        WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_ITEM_INITIALIZED;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistItemId);
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(after, type);
+    }
+
     private void initializeAssignedDateUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_CHANGE_ASSIGNED_DATE;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
@@ -122,6 +187,17 @@ public class TaskActivityService {
                 .taskId(taskDto.getTaskId())
                 .performedBy(performedBy)
                 .relatedObjectId(taskDto.getTaskId())
+                .build();
+    }
+
+    private WorkspaceActivityCreateVo buildWithCommonValues(String performedBy, TaskDto taskDto, String relatedObjectId) {
+        return WorkspaceActivityCreateVo
+                .builder()
+                .workspaceId(taskDto.getWorkspaceId())
+                .teamId(taskDto.getTeamId())
+                .taskId(taskDto.getTaskId())
+                .performedBy(performedBy)
+                .relatedObjectId(relatedObjectId)
                 .build();
     }
 

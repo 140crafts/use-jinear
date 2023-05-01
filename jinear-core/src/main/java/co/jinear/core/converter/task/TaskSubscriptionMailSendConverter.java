@@ -42,7 +42,14 @@ public class TaskSubscriptionMailSendConverter {
             entry(TASK_CHANGE_ASSIGNED_DATE, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CHANGE_ASSIGNED_DATE),
             entry(TASK_CHANGE_DUE_DATE, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CHANGE_DUE_DATE),
             entry(RELATION_INITIALIZED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_RELATION_INITIALIZED),
-            entry(RELATION_REMOVED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_RELATION_REMOVED)
+            entry(RELATION_REMOVED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_RELATION_REMOVED),
+            entry(CHECKLIST_INITIALIZED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_INITIALIZED),
+            entry(CHECKLIST_REMOVED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_REMOVED),
+            entry(CHECKLIST_TITLE_CHANGED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_TITLE_CHANGED),
+            entry(CHECKLIST_ITEM_CHECKED_STATUS_CHANGED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_CHECKED_STATUS_CHANGED),
+            entry(CHECKLIST_ITEM_LABEL_CHANGED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_LABEL_CHANGED),
+            entry(CHECKLIST_ITEM_REMOVED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_REMOVED),
+            entry(CHECKLIST_ITEM_INITIALIZED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_INITIALIZED)
     );
 
     private static final String MAIL_BODY_TITLE = "${notificationTitle}";
@@ -71,7 +78,7 @@ public class TaskSubscriptionMailSendConverter {
     }
 
     private String retrieveMailBodyTitle(TaskSubscriptionWithCommunicationPreferencesDto subscription, NotifyTaskSubscribersVo notifyTaskSubscribersVo) {
-        LocaleStringType titleLocaleStringType = TITLE_MAP.get(notifyTaskSubscribersVo.getWorkspaceActivityType());
+        LocaleStringType titleLocaleStringType = TITLE_MAP.getOrDefault(notifyTaskSubscribersVo.getWorkspaceActivityType(), WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_GENERIC_ACTIVITY);
         String notificationTitle = localeStringService.retrieveLocalString(titleLocaleStringType, subscription.getLocaleType());
 
         StringSubstitutor sub = new StringSubstitutor(Map.of("notificationTitle", notificationTitle));

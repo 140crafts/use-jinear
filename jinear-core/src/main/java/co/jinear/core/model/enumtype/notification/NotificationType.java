@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum NotificationType {
     TASK_REMINDER(0),
-    WORKSPACE_ACTIVITY(0);
+    WORKSPACE_ACTIVITY(1);
 
     private final int value;
 }
