@@ -46,11 +46,12 @@ public class ChecklistService {
         return passiveId;
     }
 
-    public void updateChecklistTitle(String checklistId, String title) {
+    public ChecklistDto updateChecklistTitle(String checklistId, String title) {
         log.info("Update checklist title has started. checklistId: {}, title: {}", checklistId, title);
         Checklist checklist = checklistRetrieveService.retrieveEntity(checklistId);
         checklist.setTitle(title);
-        checklistRepository.save(checklist);
+        Checklist saved = checklistRepository.save(checklist);
+        return checklistDtoConverter.convert(saved);
     }
 
     private ChecklistDto convertAndSetInitialItem(Checklist checklist, ChecklistItemDto initialItem) {

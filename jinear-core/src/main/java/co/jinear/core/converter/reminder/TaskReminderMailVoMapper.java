@@ -43,7 +43,7 @@ public class TaskReminderMailVoMapper {
         Optional.of(taskDto)
                 .map(TaskDto::getWorkspace)
                 .map(WorkspaceDto::getUsername)
-                .ifPresent(taskReminderMailVo::setWorkspaceName);
+                .ifPresent(taskReminderMailVo::setWorkspaceUsername);
     }
 
     private void mapLocaleDate(String timeZone, ReminderJobDto reminderJobDto, TaskReminderMailVo taskReminderMailVo) {

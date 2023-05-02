@@ -3,6 +3,8 @@ package co.jinear.core.model.dto.workspace;
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
+import co.jinear.core.model.dto.task.ChecklistDto;
+import co.jinear.core.model.dto.task.ChecklistItemDto;
 import co.jinear.core.model.dto.task.TaskRelationDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.dto.topic.TopicDto;
@@ -49,4 +51,8 @@ public class WorkspaceActivityDto extends BaseDto {
     private TaskRelationDto oldTaskRelationDto;
     @Nullable
     private TaskRelationDto newTaskRelationDto;
+    @Nullable
+    private ChecklistDto relatedChecklist;
+    @Nullable
+    private ChecklistItemDto relatedChecklistItem;
 }

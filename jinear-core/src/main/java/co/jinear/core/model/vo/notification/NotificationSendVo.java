@@ -1,13 +1,11 @@
 package co.jinear.core.model.vo.notification;
 
 import co.jinear.core.model.enumtype.localestring.LocaleType;
-import co.jinear.core.model.enumtype.notification.NotificationTemplateType;
+import co.jinear.core.model.enumtype.notification.NotificationType;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
-import java.util.Map;
 
 @Getter
 @Setter
@@ -19,9 +17,10 @@ public class NotificationSendVo {
     private String accountId;
     private String workspaceId;
     private String teamId;
-    @EqualsAndHashCode.Include
-    private NotificationTemplateType templateType;
-    private Map<String, String> params;
+    private String title;
+    private String text;
+    private String launchUrl;
     private LocaleType localeType;
     private Boolean isSilent;
+    private NotificationType notificationType;
 }

@@ -24,6 +24,13 @@ public class ChecklistRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    public ChecklistDto retrieveIncludingPassive(String checklistId) {
+        log.info("Retrieve checklist inc passive has started. checklistId: {}", checklistId);
+        return checklistRepository.findByChecklistId(checklistId)
+                .map(checklistDtoConverter::convert)
+                .orElseThrow(NotFoundException::new);
+    }
+
     public Checklist retrieveEntity(String checklistId) {
         log.info("Retrieve checklist entity has started. checklistId: {}", checklistId);
         return checklistRepository.findByChecklistIdAndPassiveIdIsNull(checklistId)

@@ -1,15 +1,15 @@
 package co.jinear.core.model.entity.notification;
 
 import co.jinear.core.converter.notification.NotificationEventStateTypeConverter;
+import co.jinear.core.converter.notification.NotificationTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
+import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.enumtype.notification.NotificationEventState;
+import co.jinear.core.model.enumtype.notification.NotificationType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Where;
-
-import java.util.Set;
 
 @Getter
 @Setter
@@ -24,9 +24,6 @@ public class NotificationEvent extends BaseEntity {
             strategy = "co.jinear.core.config.idgenerator.ULIDIdGenerator")
     @Column(name = "notification_event_id")
     private String notificationEventId;
-
-    @Column(name = "notification_template_id")
-    private Long notificationTemplateId;
 
     @Column(name = "account_id")
     private String accountId;
@@ -47,11 +44,19 @@ public class NotificationEvent extends BaseEntity {
     @Column(name = "event_state")
     private NotificationEventState eventState;
 
-    @ManyToOne
-    @JoinColumn(name = "notification_template_id", insertable = false, updatable = false)
-    private NotificationTemplate template;
+    @Convert(converter = NotificationTypeConverter.class)
+    @Column(name = "type")
+    private NotificationType notificationType;
 
-    @OneToMany(mappedBy = "notificationEvent")
-    @Where(clause = "passive_id is null")
-    private Set<NotificationEventParam> params;
+    @Column(name = "locale")
+    private LocaleType localeType;
+
+    @Column(name = "title")
+    private String title;
+
+    @Column(name = "text")
+    private String text;
+
+    @Column(name = "launch_url")
+    private String launchUrl;
 }

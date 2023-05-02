@@ -1,6 +1,8 @@
 package co.jinear.core.validator.task;
 
 import co.jinear.core.model.dto.task.ChecklistDto;
+import co.jinear.core.model.dto.task.TaskDto;
+import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.checklist.ChecklistRetrieveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,10 +15,13 @@ public class ChecklistAccessValidator {
 
     private final ChecklistRetrieveService checklistRetrieveService;
     private final TaskAccessValidator taskAccessValidator;
+    private final TaskRetrieveService taskRetrieveService;
 
-    public void validateHasChecklistAccess(String accountId, String checklistId) {
+    public TaskDto validateHasChecklistAccess(String accountId, String checklistId) {
         log.info("Validate has checklist access has started.");
         ChecklistDto checklistDto = checklistRetrieveService.retrieve(checklistId);
-        taskAccessValidator.validateTaskAccess(accountId, checklistDto.getTaskId());
+        TaskDto taskDto = taskRetrieveService.retrievePlain(checklistDto.getTaskId());
+        taskAccessValidator.validateTaskAccess(accountId, taskDto);
+        return taskDto;
     }
 }

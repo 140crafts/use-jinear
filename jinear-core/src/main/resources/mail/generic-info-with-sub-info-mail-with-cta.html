@@ -9,6 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Yesteryear&display=swap" rel="stylesheet">
 
     <style type="text/css">
+        h1 {
+            font-size: medium;
+        }
+
         .logo {
             font-family: Yesteryear !important;
             background-color: #FBEA4E !important;
@@ -57,21 +61,23 @@
 
     <div style="
             font-size: x-large;
+            text-align: left;
             font-weight: 400;
             color:#16171A;
             margin:20px;
             margin-top: 0px;
             margin-bottom: 10px;">
-        ${title}
+        <b>${mailBodyTitle}</b>
+        <p>${mailBodyText}</p>
     </div>
     <div style="
-            font-size: large;
+            font-size: small;
+            text-align: left;
             font-weight: 400;
             color:#16171A;
-            margin:10px;">
-        ${text}
+            margin:20px;">
+        ${mailBodySubtext}
     </div>
-
     <div style="
             margin-top: 30px;
             padding:10px;
@@ -80,24 +86,26 @@
             max-width: 150px;
             background-color: #16171A;
             box-shadow: #767675 0px 1px 2px;">
-        <a href="${href}" target="_blank" style="    display: inline;
+        <a href="${href}" target="_blank" style="
+                            display: inline;
                             font-weight: 400;
                             font-style: italic;
                             text-decoration: none;
                             color:#FDFFFC;
                             margin:10px;">
-            ${confirm}
+            ${ctaLabel}
         </a>
     </div>
-    <div style="height:75px;"></div>
-    <div style="
+</div>
+<div style="height:75px;"></div>
+<div style="
             font-size: x-small;
             font-weight: 400;
             font-style: italic;
             color:#F2F2F2;
            ">
-        <a href="https://jinear.140crafts.com" style="color: #16171A;">jinear.140crafts.com</a>
-    </div>
+    <a href="https://jinear.140crafts.com" style="color: #16171A;">jinear.140crafts.com</a>
+</div>
 
 </div>
 </body>

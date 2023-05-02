@@ -20,7 +20,7 @@ public class OneSignalNotificationClient implements NotificationClient {
 
     @Override
     public void send(NotificationMessageVo notificationMessageVo) throws Exception {
-        log.info("One signal notification send has started.");
+        log.info("One signal notification send has started. notificationMessageVo: {}", notificationMessageVo);
         Notification notification = createNotification(notificationMessageVo);
         CreateNotificationSuccessResponse response = oneSignalApiClient.createNotification(notification);
         log.info("One signal notification created. oneSignalNotificationId: {}", response.getId());

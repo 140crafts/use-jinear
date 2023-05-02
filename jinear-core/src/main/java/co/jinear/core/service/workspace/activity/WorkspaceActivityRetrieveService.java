@@ -1,13 +1,18 @@
 package co.jinear.core.service.workspace.activity;
 
 import co.jinear.core.converter.workspace.WorkspaceActivityConverter;
+import co.jinear.core.model.dto.task.ChecklistDto;
+import co.jinear.core.model.dto.task.ChecklistItemDto;
 import co.jinear.core.model.dto.task.TaskRelationDto;
 import co.jinear.core.model.dto.workspace.WorkspaceActivityDto;
 import co.jinear.core.model.entity.workspace.WorkspaceActivity;
+import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
 import co.jinear.core.model.vo.workspace.RetrieveTaskActivityVo;
 import co.jinear.core.repository.WorkspaceActivityRepository;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.richtext.RichTextRetrieveService;
+import co.jinear.core.service.task.checklist.ChecklistItemService;
+import co.jinear.core.service.task.checklist.ChecklistRetrieveService;
 import co.jinear.core.service.task.relation.TaskRelationRetrieveService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
 import co.jinear.core.service.topic.TopicRetrieveService;
@@ -25,6 +30,17 @@ import static co.jinear.core.model.enumtype.workspace.WorkspaceActivityType.*;
 @RequiredArgsConstructor
 public class WorkspaceActivityRetrieveService {
 
+    private static final List<WorkspaceActivityType> CHECKLIST_RELATED_TYPES = List.of(
+            CHECKLIST_INITIALIZED,
+            CHECKLIST_REMOVED,
+            CHECKLIST_TITLE_CHANGED);
+
+    private static final List<WorkspaceActivityType> CHECKLIST_ITEM_RELATED_TYPES = List.of(
+            CHECKLIST_ITEM_CHECKED_STATUS_CHANGED,
+            CHECKLIST_ITEM_LABEL_CHANGED,
+            CHECKLIST_ITEM_REMOVED,
+            CHECKLIST_ITEM_INITIALIZED);
+
     private final WorkspaceActivityRepository workspaceActivityRepository;
     private final RichTextRetrieveService richTextRetrieveService;
     private final TeamWorkflowStatusRetrieveService teamWorkflowStatusRetrieveService;
@@ -32,6 +48,8 @@ public class WorkspaceActivityRetrieveService {
     private final AccountRetrieveService accountRetrieveService;
     private final TaskRelationRetrieveService taskRelationRetrieveService;
     private final WorkspaceActivityConverter workspaceActivityConverter;
+    private final ChecklistRetrieveService checklistRetrieveService;
+    private final ChecklistItemService checklistItemService;
 
     public List<WorkspaceActivityDto> retrieveTaskActivity(RetrieveTaskActivityVo retrieveTaskActivityVo) {
         log.info("Retrieve task activity has started. retrieveTaskActivityVo: {}", retrieveTaskActivityVo);
@@ -44,6 +62,8 @@ public class WorkspaceActivityRetrieveService {
                 .map(this::retrieveAssigneeChanges)
                 .map(this::retrieveRelationInitialized)
                 .map(this::retrieveRelationRemoved)
+                .map(this::retrieveRelatedChecklist)
+                .map(this::retrieveRelatedChecklistItem)
                 .toList();
     }
 
@@ -104,4 +124,21 @@ public class WorkspaceActivityRetrieveService {
         }
         return workspaceActivityDto;
     }
+
+    private WorkspaceActivityDto retrieveRelatedChecklist(WorkspaceActivityDto workspaceActivityDto) {
+        if (CHECKLIST_RELATED_TYPES.contains(workspaceActivityDto.getType())) {
+            ChecklistDto checklistDto = checklistRetrieveService.retrieveIncludingPassive(workspaceActivityDto.getRelatedObjectId());
+            workspaceActivityDto.setRelatedChecklist(checklistDto);
+        }
+        return workspaceActivityDto;
+    }
+
+    private WorkspaceActivityDto retrieveRelatedChecklistItem(WorkspaceActivityDto workspaceActivityDto) {
+        if (CHECKLIST_ITEM_RELATED_TYPES.contains(workspaceActivityDto.getType())) {
+            ChecklistItemDto checklistItemDto = checklistItemService.retrieveIncludingPassive(workspaceActivityDto.getRelatedObjectId());
+            workspaceActivityDto.setRelatedChecklistItem(checklistItemDto);
+        }
+        return workspaceActivityDto;
+    }
+
 }

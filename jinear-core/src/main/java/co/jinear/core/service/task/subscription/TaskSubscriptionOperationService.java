@@ -33,13 +33,14 @@ public class TaskSubscriptionOperationService {
         return Optional.of(taskSubscriptionConverter.map(saved));
     }
 
-    public void removeTaskSubscription(String taskSubscriptionId, String performedAccountId) {
-        log.info("Remove task subscription has started. taskSubscriptionId: {}, performed accountId: {}", taskSubscriptionId, performedAccountId);
+    public String removeTaskSubscription(String taskSubscriptionId) {
+        log.info("Remove task subscription has started. taskSubscriptionId: {}", taskSubscriptionId);
         TaskSubscription taskSubscription = taskSubscriptionRetrieveService.retrieveEntity(taskSubscriptionId);
-        String passiveId = passiveService.createUserActionPassive(performedAccountId);
+        String passiveId = passiveService.createUserActionPassive();
         taskSubscription.setPassiveId(passiveId);
         taskSubscriptionRepository.save(taskSubscription);
         log.info("Remove task subscription has finished. taskSubscriptionId: {}, passiveId: {}", taskSubscriptionId, passiveId);
+        return passiveId;
     }
 
     private boolean checkAlreadySubscribed(TaskSubscriptionInitializeVo taskSubscriptionInitializeVo) {

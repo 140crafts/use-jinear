@@ -1,5 +1,6 @@
 package co.jinear.core.service.mail;
 
+import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.config.properties.MailProperties;
 import co.jinear.core.model.enumtype.localestring.LocaleStringType;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
@@ -16,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
 import org.nlab.smtp.pool.SmtpConnectionPool;
 import org.nlab.smtp.transport.connection.ClosableSmtpConnection;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.scheduling.annotation.Async;
@@ -31,22 +31,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import static co.jinear.core.system.NormalizeHelper.EMPTY_STRING;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class MailService {
-
-    @Value("${fe.email-confirmation-url}")
-    private String emailConfirmationUrl;
-
-    @Value("${fe.password-reset-url}")
-    private String passwordResetUrl;
-
-    @Value("${fe.task-url}")
-    private String taskUrl;
-
-    @Value("${fe.workspace-invitation-url}")
-    private String workspaceInvitationUrl;
 
     private static final String S3_BUCKET_URL = "https://storage.googleapis.com/bittit-b0/";
     private static final Map<TaskReminderType, LocaleStringType> taskReminderLocaleStringMap =
@@ -59,6 +49,7 @@ public class MailService {
     private final SmtpConnectionPool smtpConnectionPool;
     private final LocaleStringService localeStringService;
     private final MailProperties mailProperties;
+    private final FeProperties feProperties;
 
     private void sendMail(SendMailVo sendMailVo) throws Exception {
         log.info("Send mail has started. to: {}", sendMailVo.getTo());
@@ -68,11 +59,6 @@ public class MailService {
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(sendMailVo.getTo()));
             message.setSubject(sendMailVo.getSubject(), "UTF-8");
             message.setContent(sendMailVo.getContext(), "text/html; charset=UTF-8");
-//            MimeMessageHelper helper = new MimeMessageHelper(message, Objects.nonNull(sendMailVo.getAttachment()));
-//            helper.setTo(sendMailVo.getTo());
-//            helper.setText(sendMailVo.getContext(), true);
-//            helper.setSubject(sendMailVo.getSubject());
-//            attachFile(sendMailVo, helper);
             transport.sendMessage(message);
         }
         log.info("Send mail has finished. to: {}", sendMailVo.getTo());
@@ -95,7 +81,7 @@ public class MailService {
         String text = localeStringService.retrieveLocalString(LocaleStringType.MAIL_CONFIRMATION_TEXT, preferredLocale);
         String ctaLabel = localeStringService.retrieveLocalString(LocaleStringType.MAIL_CONFIRMATION_CTA_LABEL, preferredLocale);
         String mailBody = retrieveMailTemplate("email-confirm-mail.html");
-        String href = emailConfirmationUrl.replaceAll(Pattern.quote("{token}"), accountEngageMailVo.getToken());
+        String href = feProperties.getEmailConfirmationUrl().replaceAll(Pattern.quote("{token}"), accountEngageMailVo.getToken());
         mailBody = mailBody.replaceAll(Pattern.quote("${title}"), title)
                 .replaceAll(Pattern.quote("${text}"), text)
                 .replaceAll(Pattern.quote("${confirm}"), ctaLabel)
@@ -110,7 +96,7 @@ public class MailService {
         String text = localeStringService.retrieveLocalString(LocaleStringType.PASSWORD_RESET_TEXT, preferredLocale);
         String ctaLabel = localeStringService.retrieveLocalString(LocaleStringType.PASSWORD_RESET_CTA_LABEL, preferredLocale);
         String mailBody = retrieveMailTemplate("reset-password-mail.html");
-        String href = passwordResetUrl.replaceAll(Pattern.quote("{token}"), accountEngageMailVo.getToken());
+        String href = feProperties.getPasswordResetUrl().replaceAll(Pattern.quote("{token}"), accountEngageMailVo.getToken());
         mailBody = mailBody.replaceAll(Pattern.quote("${title}"), title)
                 .replaceAll(Pattern.quote("${text}"), text)
                 .replaceAll(Pattern.quote("${confirm}"), ctaLabel)
@@ -143,7 +129,7 @@ public class MailService {
 
         String reminderText = localeStringService.retrieveLocalString(LocaleStringType.TASK_REMINDER_TEXT, preferredLocale);
 
-        String taskCtaHref = taskUrl.replaceAll(Pattern.quote("{workspaceName}"), taskReminderMailVo.getWorkspaceName())
+        String taskCtaHref = feProperties.getTaskUrl().replaceAll(Pattern.quote("{workspaceName}"), taskReminderMailVo.getWorkspaceUsername())
                 .replaceAll(Pattern.quote("{taskTag}"), taskReminderMailVo.getTaskTag());
         String ctaLabel = localeStringService.retrieveLocalString(LocaleStringType.TASK_REMINDER_GO_TO_TASK, preferredLocale);
 
@@ -186,13 +172,33 @@ public class MailService {
 
         String mailBody = retrieveMailTemplate("email-workspace-invitation-mail.html");
 
-        String href = workspaceInvitationUrl.replaceAll(Pattern.quote("{token}"), workspaceInvitationMailVo.getToken());
+        String href = feProperties.getWorkspaceInvitationUrl().replaceAll(Pattern.quote("{token}"), workspaceInvitationMailVo.getToken());
 
         mailBody = mailBody.replaceAll(Pattern.quote("${title}"), titleBody)
                 .replaceAll(Pattern.quote("${text}"), text)
                 .replaceAll(Pattern.quote("${confirm}"), ctaLabel)
                 .replaceAll(Pattern.quote("${href}"), href);
         sendMail(new SendMailVo(workspaceInvitationMailVo.getEmail(), titleMail, mailBody));
+    }
+
+    @Async
+    public void sendGenericInfoWithSubInfoMail(GenericInfoWithSubInfoMailVo genericInfoWithSubInfoMail) throws Exception {
+        String mailBody = retrieveMailTemplate("generic-info-with-sub-info-mail.html")
+                .replaceAll(Pattern.quote("${mailBodyTitle}"), Optional.of(genericInfoWithSubInfoMail).map(GenericInfoWithSubInfoMailVo::getMailBodyTitle).orElse(EMPTY_STRING))
+                .replaceAll(Pattern.quote("${mailBodyText}"), Optional.of(genericInfoWithSubInfoMail).map(GenericInfoWithSubInfoMailVo::getMailBodyText).orElse(EMPTY_STRING))
+                .replaceAll(Pattern.quote("${mailBodySubtext}"), Optional.of(genericInfoWithSubInfoMail).map(GenericInfoWithSubInfoMailVo::getMailBodySubtext).orElse(EMPTY_STRING));
+        sendMail(new SendMailVo(genericInfoWithSubInfoMail.getEmail(), genericInfoWithSubInfoMail.getMailTitle(), mailBody));
+    }
+
+    @Async
+    public void sendGenericInfoWithSubInfoWithCtaButtonMail(GenericInfoWithSubInfoMailWithCtaButtonVo genericInfoWithSubInfoMailWithCtaButtonVo) throws Exception {
+        String mailBody = retrieveMailTemplate("generic-info-with-sub-info-mail-with-cta.html")
+                .replaceAll(Pattern.quote("${mailBodyTitle}"), Optional.of(genericInfoWithSubInfoMailWithCtaButtonVo).map(GenericInfoWithSubInfoMailWithCtaButtonVo::getMailBodyTitle).orElse(EMPTY_STRING))
+                .replaceAll(Pattern.quote("${mailBodyText}"), Optional.of(genericInfoWithSubInfoMailWithCtaButtonVo).map(GenericInfoWithSubInfoMailWithCtaButtonVo::getMailBodyText).orElse(EMPTY_STRING))
+                .replaceAll(Pattern.quote("${mailBodySubtext}"), Optional.of(genericInfoWithSubInfoMailWithCtaButtonVo).map(GenericInfoWithSubInfoMailWithCtaButtonVo::getMailBodySubtext).orElse(EMPTY_STRING))
+                .replaceAll(Pattern.quote("${href}"), Optional.of(genericInfoWithSubInfoMailWithCtaButtonVo).map(GenericInfoWithSubInfoMailWithCtaButtonVo::getHref).orElse(EMPTY_STRING))
+                .replaceAll(Pattern.quote("${ctaLabel}"), Optional.of(genericInfoWithSubInfoMailWithCtaButtonVo).map(GenericInfoWithSubInfoMailWithCtaButtonVo::getCtaLabel).orElse(EMPTY_STRING));
+        sendMail(new SendMailVo(genericInfoWithSubInfoMailWithCtaButtonVo.getEmail(), genericInfoWithSubInfoMailWithCtaButtonVo.getMailTitle(), mailBody));
     }
 
     private String retrieveLoginMailTitle(LoginMailVo loginMailVo, LocaleType preferredLocale) {

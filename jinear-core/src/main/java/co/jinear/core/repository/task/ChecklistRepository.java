@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface ChecklistRepository extends JpaRepository<Checklist, String> {
 
+    Optional<Checklist> findByChecklistId(String checklistId);
+
     Optional<Checklist> findByChecklistIdAndPassiveIdIsNull(String checklistId);
 
     long countAllByTaskIdAndPassiveIdIsNull(String taskId);

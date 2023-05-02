@@ -22,6 +22,6 @@ public class TaskReminderMailVo {
     @ToString.Exclude
     private String taskDetail;
     private TaskReminderType taskReminderType;
-    private String workspaceName;
+    private String workspaceUsername;
     private String accountLocaleDate;
 }

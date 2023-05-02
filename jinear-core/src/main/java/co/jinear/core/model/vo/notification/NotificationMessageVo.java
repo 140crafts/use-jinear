@@ -12,9 +12,11 @@ import java.util.List;
 @ToString
 public class NotificationMessageVo {
 
+    private String accountId;
     private String title;
     private String text;
     private String launchUrl;
     private LocaleType localeType;
     private List<String> targetIds;
+    private Boolean isSilent;
 }

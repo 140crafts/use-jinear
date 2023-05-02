@@ -5,6 +5,7 @@ import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.task.DetailedTaskSubscriptionDto;
 import co.jinear.core.model.dto.task.TaskSubscriptionDto;
+import co.jinear.core.model.dto.task.TaskSubscriptionWithCommunicationPreferencesDto;
 import co.jinear.core.repository.task.TaskSubscriptionRepository;
 import co.jinear.core.service.account.AccountRetrieveService;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,11 @@ public class TaskSubscriptionListingService {
                 .map(taskSubscriptionConverter::mapDetailed)
                 .map(this::fillAccountInfo)
                 .toList();
+    }
+
+    public List<TaskSubscriptionWithCommunicationPreferencesDto> retrieveSubscribersWithCommunicationInfo(String taskId) {
+        log.info("List all task subscribers with communication info has started. taskId: {}", taskId);
+        return taskSubscriptionRepository.retrieveSubscribersWithCommunicationInfo(taskId);
     }
 
     private TaskSubscriptionDto fillAccountInfo(TaskSubscriptionDto taskSubscriptionDto) {

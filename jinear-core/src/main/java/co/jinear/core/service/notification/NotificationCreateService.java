@@ -1,7 +1,6 @@
 package co.jinear.core.service.notification;
 
 import co.jinear.core.model.dto.notification.NotificationTargetDto;
-import co.jinear.core.model.dto.notification.NotificationTemplateDto;
 import co.jinear.core.model.entity.notification.NotificationEvent;
 import co.jinear.core.model.enumtype.notification.NotificationEventState;
 import co.jinear.core.model.vo.notification.NotificationMessageVo;
@@ -12,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -22,31 +22,20 @@ import java.util.stream.Stream;
 public class NotificationCreateService {
 
     private final NotificationTargetRetrieveService notificationTargetRetrieveService;
-    private final NotificationTemplatePopulateService notificationTemplatePopulateService;
     private final NotificationEventOperationService notificationEventOperationService;
-    private final NotificationTemplateRetrieveService templateRetrieveService;
     private final NotificationClient notificationClient;
 
     public void create(NotificationSendVo notificationSendVo) {
         log.info("Send notification has started. notificationSendVo: {}", notificationSendVo);
-        NotificationTemplateDto notificationTemplateDto = templateRetrieveService.retrieve(notificationSendVo.getTemplateType(), notificationSendVo.getLocaleType());
-        NotificationMessageVo notificationMessageVo = notificationTemplatePopulateService.populate(notificationTemplateDto, notificationSendVo);
-        NotificationEvent notificationEvent = notificationEventOperationService.initialize(notificationTemplateDto, notificationSendVo);
-        fanOutAccountNotificationTargets(notificationSendVo, notificationMessageVo);
+        NotificationEvent notificationEvent = notificationEventOperationService.initialize(notificationSendVo);
+        NotificationMessageVo notificationMessageVo = mapToNotificationMessageVo(notificationSendVo);
+        fanOutAccountNotificationTargets(notificationMessageVo);
         notificationEventOperationService.updateEventState(notificationEvent, NotificationEventState.SENT);
     }
 
-    private void fanOutAccountNotificationTargets(NotificationSendVo notificationSendVo, NotificationMessageVo notificationMessageVo) {
-        if (Boolean.FALSE.equals(notificationSendVo.getIsSilent())) {
+    private void fanOutAccountNotificationTargets(NotificationMessageVo notificationMessageVo) {
+        if (Boolean.FALSE.equals(notificationMessageVo.getIsSilent())) {
             log.info("Fan out account notification targets has started.");
-            Optional.of(notificationSendVo)
-                    .map(NotificationSendVo::getAccountId)
-                    .map(notificationTargetRetrieveService::retrieveLatestAccountTargets)
-                    .map(Collection::stream)
-                    .map(notificationTargetDtoStream -> notificationTargetDtoStream.map(NotificationTargetDto::getExternalTargetId))
-                    .map(Stream::toList)
-                    .ifPresent(notificationMessageVo::setTargetIds);
-
             Optional.of(notificationMessageVo)
                     .map(NotificationMessageVo::getTargetIds)
                     .map(List::isEmpty)
@@ -62,5 +51,28 @@ public class NotificationCreateService {
         } catch (Exception e) {
             log.error("Send notification has failed.", e);
         }
+    }
+
+    private NotificationMessageVo mapToNotificationMessageVo(NotificationSendVo notificationSendVo) {
+        List<String> targetIds = retrieveTargetIds(notificationSendVo.getAccountId());
+
+        NotificationMessageVo notificationMessageVo = new NotificationMessageVo();
+        notificationMessageVo.setAccountId(notificationSendVo.getAccountId());
+        notificationMessageVo.setTitle(notificationSendVo.getTitle());
+        notificationMessageVo.setText(notificationSendVo.getText());
+        notificationMessageVo.setLaunchUrl(notificationSendVo.getLaunchUrl());
+        notificationMessageVo.setLocaleType(notificationSendVo.getLocaleType());
+        notificationMessageVo.setTargetIds(targetIds);
+        notificationMessageVo.setIsSilent(notificationMessageVo.getIsSilent());
+        return notificationMessageVo;
+    }
+
+    private List<String> retrieveTargetIds(String accountId) {
+        return Optional.of(accountId)
+                .map(notificationTargetRetrieveService::retrieveLatestAccountTargets)
+                .map(Collection::stream)
+                .map(notificationTargetDtoStream -> notificationTargetDtoStream.map(NotificationTargetDto::getExternalTargetId))
+                .map(Stream::toList)
+                .orElse(Collections.emptyList());
     }
 }

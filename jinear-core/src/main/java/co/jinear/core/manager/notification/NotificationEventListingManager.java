@@ -1,7 +1,7 @@
 package co.jinear.core.manager.notification;
 
 import co.jinear.core.model.dto.PageDto;
-import co.jinear.core.model.dto.notification.NotificationMessageDto;
+import co.jinear.core.model.dto.notification.NotificationEventDto;
 import co.jinear.core.model.response.notification.NotificationEventListingResponse;
 import co.jinear.core.model.response.notification.RetrieveUnreadNotificationEventCountResponse;
 import co.jinear.core.model.vo.notification.NotificationEventListingVo;
@@ -30,7 +30,7 @@ public class NotificationEventListingManager {
         workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
         log.info("Retrieve notifications has started. accountId: {}, workspaceId: {}, page: {}", currentAccountId, workspaceId, page);
         NotificationEventListingVo notificationEventListingVo = mapVo(workspaceId, currentAccountId, page);
-        Page<NotificationMessageDto> eventDtoPage = notificationEventListingService.retrieveNotificationEvents(notificationEventListingVo);
+        Page<NotificationEventDto> eventDtoPage = notificationEventListingService.retrieveNotificationEvents(notificationEventListingVo);
         notificationEventOperationService.updateAllAsRead(currentAccountId, workspaceId);
         return mapUnreadCountResponse(eventDtoPage);
     }
@@ -51,7 +51,7 @@ public class NotificationEventListingManager {
     }
 
     @NonNull
-    private NotificationEventListingResponse mapUnreadCountResponse(Page<NotificationMessageDto> eventDtoPage) {
+    private NotificationEventListingResponse mapUnreadCountResponse(Page<NotificationEventDto> eventDtoPage) {
         NotificationEventListingResponse notificationEventListingResponse = new NotificationEventListingResponse();
         notificationEventListingResponse.setEventDtoPage(new PageDto<>(eventDtoPage));
         return notificationEventListingResponse;
