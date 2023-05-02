@@ -1,5 +1,6 @@
 import Pagination from "@/components/pagination/Pagination";
-import { NotificationMessageDto, PageDto } from "@/model/be/jinear-core";
+
+import { NotificationEventDto, PageDto } from "@/model/be/jinear-core";
 import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import { isSameDay } from "date-fns";
@@ -9,7 +10,7 @@ import styles from "./NotificationList.module.scss";
 import NotificationMessageRow from "./notificationMessageRow/NotificationMessageRow";
 
 interface NotificationListProps {
-  data?: PageDto<NotificationMessageDto>;
+  data?: PageDto<NotificationEventDto>;
   isFetching: boolean;
   isLoading: boolean;
   page: number;
