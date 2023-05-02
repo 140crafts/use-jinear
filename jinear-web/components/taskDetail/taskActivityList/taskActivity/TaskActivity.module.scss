@@ -26,7 +26,7 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 1.25ch;
+  gap: 1ch;
   color: var(--c-secondary-shade-0-op05);
   width: 100%;
 }
@@ -50,6 +50,20 @@
 
 .diffContainer-fullWidth {
   width: 100%;
+}
+
+.diffStateCell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1ch;
+}
+
+.checklistItemRemovedDiffCell {
+  text-decoration: line-through;
+  text-decoration-color: var(--c-secondary-shade-0-op05);
+  text-decoration-thickness: 1px;
+  opacity: 0.9;
 }
 
 @media (max-width: $mobile-l) {

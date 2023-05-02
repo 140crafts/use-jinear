@@ -1706,4 +1706,12 @@ export default {
     en: "Unsubscribe",
     tr: "Takibi Bırak",
   },
+  taskActivityChecklistStateChecked: {
+    en: "Done",
+    tr: "Tamamlandı",
+  },
+  taskActivityChecklistStateUnchecked: {
+    en: "Undone",
+    tr: "Tamamlanmadı",
+  },
 };
