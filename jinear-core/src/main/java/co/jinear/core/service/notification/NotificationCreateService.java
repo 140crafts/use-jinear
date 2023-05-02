@@ -63,7 +63,7 @@ public class NotificationCreateService {
         notificationMessageVo.setLaunchUrl(notificationSendVo.getLaunchUrl());
         notificationMessageVo.setLocaleType(notificationSendVo.getLocaleType());
         notificationMessageVo.setTargetIds(targetIds);
-        notificationMessageVo.setIsSilent(notificationMessageVo.getIsSilent());
+        notificationMessageVo.setIsSilent(notificationSendVo.getIsSilent());
         return notificationMessageVo;
     }
 
