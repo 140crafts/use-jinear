@@ -2,8 +2,8 @@ import { useRetrieveTaskActivityQuery } from "@/store/api/taskActivityApi";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import TaskActivity from "./taskActivity/TaskActivity";
 import styles from "./TaskActivityList.module.css";
+import TaskActivity from "./taskActivity/TaskActivity";
 
 interface TaskActivityListProps {
   taskId: string;
@@ -27,10 +27,13 @@ const TaskActivityList: React.FC<TaskActivityListProps> = ({ taskId }) => {
           <CircularProgress size={12} />
         </div>
       )}
-      {isSuccess &&
-        retrieveTaskActivityResponse.data.map((activity) => (
-          <TaskActivity key={activity.workspaceActivityId} activity={activity} />
-        ))}
+      {isSuccess && (
+        <div className={styles.gradientBg}>
+          {retrieveTaskActivityResponse.data.map((activity) => (
+            <TaskActivity key={activity.workspaceActivityId} activity={activity} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-04-25 21:48:44.
+// Generated using typescript-generator version 3.0.1157 on 2023-05-01 15:05:59.
 
 export interface BaseDto {
   createdDate: Date;
@@ -72,12 +72,14 @@ export interface MediaDto extends BaseDto {
 
 export interface NotificationEventDto extends BaseDto {
   notificationEventId: string;
-  notificationTemplateId: number;
   accountId: string;
   isRead: boolean;
   eventState: NotificationEventState;
-  template: NotificationTemplateDto;
-  params: NotificationEventParamDto[];
+  notificationType: NotificationType;
+  localeType: LocaleType;
+  title: string;
+  text: string;
+  launchUrl: string;
 }
 
 export interface NotificationEventParamDto extends BaseDto {
@@ -87,29 +89,11 @@ export interface NotificationEventParamDto extends BaseDto {
   paramValue: string;
 }
 
-export interface NotificationMessageDto extends BaseDto {
-  notificationEventId: string;
-  title?: string | null;
-  text?: string | null;
-  launchUrl?: string | null;
-  templateType: NotificationTemplateType;
-}
-
 export interface NotificationTargetDto extends BaseDto {
   externalTargetId: string;
   accountId: string;
   sessionInfoId: string;
   targetType: NotificationTargetType;
-}
-
-export interface NotificationTemplateDto extends BaseDto {
-  notificationTemplateId: number;
-  templateType: NotificationTemplateType;
-  templateName: string;
-  title: string;
-  text: string;
-  launchUrl: string;
-  localeType: LocaleType;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -257,6 +241,15 @@ export interface TaskSubscriptionDto extends BaseDto {
   plainAccountProfileDto: PlainAccountProfileDto;
 }
 
+export interface TaskSubscriptionWithCommunicationPreferencesDto {
+  accountId: string;
+  email: string;
+  localeType: LocaleType;
+  timeZone: string;
+  hasEmailPermission: boolean;
+  hasPushNotificationPermission: boolean;
+}
+
 export interface UpdateTaskWorkflowDto {
   remindersPassiveId: string;
   taskDto: TaskDto;
@@ -348,6 +341,8 @@ export interface WorkspaceActivityDto extends BaseDto {
   newAssignedToAccount?: PlainAccountProfileDto | null;
   oldTaskRelationDto?: TaskRelationDto | null;
   newTaskRelationDto?: TaskRelationDto | null;
+  relatedChecklist?: ChecklistDto | null;
+  relatedChecklistItem?: ChecklistItemDto | null;
 }
 
 export interface WorkspaceDisplayPreferenceDto {
@@ -646,7 +641,7 @@ export interface AuthResponse extends BaseResponse {
 }
 
 export interface NotificationEventListingResponse extends BaseResponse {
-  data: PageDto<NotificationMessageDto>;
+  data: PageDto<NotificationEventDto>;
 }
 
 export interface RetrieveUnreadNotificationEventCountResponse extends BaseResponse {
@@ -685,6 +680,14 @@ export interface TaskSearchResponse extends BaseResponse {
   data: PageDto<TaskSearchResultDto>;
 }
 
+export interface TaskSubscribersListingResponse extends BaseRequest {
+  data: TaskSubscriptionDto[];
+}
+
+export interface TaskSubscriptionResponse extends BaseResponse {
+  data: TaskSubscriptionDto;
+}
+
 export interface TeamListingResponse extends BaseResponse {
   data: TeamDto[];
 }
@@ -699,10 +702,6 @@ export interface TeamResponse extends BaseResponse {
 
 export interface TeamWorkflowStatusListingResponse extends BaseResponse {
   data: GroupedTeamWorkflowStatusListDto;
-}
-
-export interface TaskSubscriptionResponse extends BaseResponse {
-  data: TaskSubscriptionDto;
 }
 
 export interface TopicListingResponse extends BaseResponse {
@@ -765,7 +764,28 @@ export type LocaleStringType =
   | "WORKSPACE_INVITATION_TITLE_MAIL"
   | "WORKSPACE_INVITATION_TITLE_BODY"
   | "WORKSPACE_INVITATION_TEXT"
-  | "WORKSPACE_INVITATION_CTA_LABEL";
+  | "WORKSPACE_INVITATION_CTA_LABEL"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_INITIALIZED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CLOSED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_EDIT_TASK_TITLE"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_EDIT_TASK_DESC"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_UPDATE_TOPIC"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_UPDATE_WORKFLOW_STATUS"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CHANGE_ASSIGNEE"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CHANGE_ASSIGNED_DATE"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CHANGE_DUE_DATE"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_RELATION_INITIALIZED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_RELATION_REMOVED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_SUBTEXT_VISIT_TASK_PAGE_TO_GET_MORE_DETAIL"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_CTA_LABEL"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_GENERIC_ACTIVITY"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_INITIALIZED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_REMOVED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_TITLE_CHANGED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_CHECKED_STATUS_CHANGED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_LABEL_CHANGED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_REMOVED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_INITIALIZED";
 
 export type LocaleType = "TR" | "EN";
 
@@ -779,7 +799,7 @@ export type NotificationEventState = "INITIALIZED" | "SENT";
 
 export type NotificationTargetType = "WEB";
 
-export type NotificationTemplateType = "TASK_REMINDER" | "TASK_ASSIGNED";
+export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY";
 
 export type PassiveReason =
   | "SYSTEM"
@@ -867,7 +887,14 @@ export type WorkspaceActivityType =
   | "TASK_CHANGE_ASSIGNED_DATE"
   | "TASK_CHANGE_DUE_DATE"
   | "RELATION_INITIALIZED"
-  | "RELATION_REMOVED";
+  | "RELATION_REMOVED"
+  | "CHECKLIST_INITIALIZED"
+  | "CHECKLIST_REMOVED"
+  | "CHECKLIST_TITLE_CHANGED"
+  | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED"
+  | "CHECKLIST_ITEM_LABEL_CHANGED"
+  | "CHECKLIST_ITEM_REMOVED"
+  | "CHECKLIST_ITEM_INITIALIZED";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 

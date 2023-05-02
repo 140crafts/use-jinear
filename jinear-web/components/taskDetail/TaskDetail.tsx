@@ -2,12 +2,12 @@ import { useToggle } from "@/hooks/useToggle";
 import { TaskDto } from "@/model/be/jinear-core";
 import React from "react";
 import Line from "../line/Line";
+import styles from "./TaskDetail.module.css";
 import TaskDetailContext from "./context/TaskDetailContext";
+import TaskActionBar from "./taskActionBar/TaskActionBar";
 import TaskActivityList from "./taskActivityList/TaskActivityList";
 import TaskBody from "./taskBody/TaskBody";
 import TaskChecklistContainer from "./taskChecklistContainer/TaskChecklistContainer";
-import styles from "./TaskDetail.module.css";
-import TaskInfo from "./taskInfo/TaskInfo";
 import TaskSubtaskList from "./taskSubtaskList/TaskSubtaskList";
 
 interface TaskDetailProps {
@@ -27,7 +27,7 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
       <div className={styles.taskLayout}>
         <TaskBody className={styles.taskBody} />
         <Line />
-        <TaskInfo className={styles.taskInfo} />
+        <TaskActionBar className={styles.taskInfo} />
         <TaskChecklistContainer />
         <TaskSubtaskList />
         <Line />

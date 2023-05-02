@@ -1,5 +1,6 @@
 import Pagination from "@/components/pagination/Pagination";
-import { NotificationMessageDto, PageDto } from "@/model/be/jinear-core";
+
+import { NotificationEventDto, PageDto } from "@/model/be/jinear-core";
 import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import { isSameDay } from "date-fns";
@@ -9,7 +10,7 @@ import styles from "./NotificationList.module.scss";
 import NotificationMessageRow from "./notificationMessageRow/NotificationMessageRow";
 
 interface NotificationListProps {
-  data?: PageDto<NotificationMessageDto>;
+  data?: PageDto<NotificationEventDto>;
   isFetching: boolean;
   isLoading: boolean;
   page: number;
@@ -40,13 +41,13 @@ const NotificationList: React.FC<NotificationListProps> = ({ data, isFetching, i
       </div>
 
       <div className={cn(styles.content, styles.gradientBg)}>
-        {data?.content.map((notificationMessage, i) => {
+        {data?.content.map((notificationEvent, i) => {
           const oneBefore = i == 0 ? null : data.content?.[i - 1];
-          const datesEqual = oneBefore && isSameDay(new Date(oneBefore.createdDate), new Date(notificationMessage.createdDate));
+          const datesEqual = oneBefore && isSameDay(new Date(oneBefore.createdDate), new Date(notificationEvent.createdDate));
           return (
             <NotificationMessageRow
-              key={`${notificationMessage.notificationEventId}`}
-              notificationMessage={notificationMessage}
+              key={`${notificationEvent.notificationEventId}`}
+              notificationEvent={notificationEvent}
               withDateTitle={!datesEqual}
             />
           );
