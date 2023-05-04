@@ -36,6 +36,8 @@ export const tagTypes = [
   "task-checklist",
   "task-subscription",
   "task-subscription-subscriber-list",
+  "task-list-with-assignee",
+  "task-list-assigned-to-current-account",
 ];
 
 export const api = createApi({

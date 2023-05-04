@@ -79,6 +79,46 @@ export const taskListingApi = api.injectEndpoints({
       ],
     }),
     //
+    retrieveWithAssignee: build.query<
+      TaskListingPaginatedResponse,
+      {
+        workspaceId: string;
+        teamId: string;
+        assigneeId: string;
+        page: number;
+      }
+    >({
+      query: (req: { workspaceId: string; teamId: string; assigneeId: string; page: number }) => {
+        const page = req.page ? req.page : 0;
+        return `v1/task/list/${req.workspaceId}/team/${req.teamId}/with-assignee/${req.assigneeId}?page=${page}`;
+      },
+      providesTags: (_result, _err, req) => [
+        {
+          type: "task-list-with-assignee",
+          id: `${JSON.stringify(req)}`,
+        },
+      ],
+    }),
+    //
+    retrieveAssignedToCurrentAccount: build.query<
+      TaskListingPaginatedResponse,
+      {
+        workspaceId: string;
+        page: number;
+      }
+    >({
+      query: (req: { workspaceId: string; page: number }) => {
+        const page = req.page ? req.page : 0;
+        return `v1/task/list/${req.workspaceId}/assigned-to-me?page=${page}`;
+      },
+      providesTags: (_result, _err, req) => [
+        {
+          type: "task-list-assigned-to-current-account",
+          id: `${JSON.stringify(req)}`,
+        },
+      ],
+    }),
+    //
     retrieveAllTasks: build.query<
       TaskListingPaginatedResponse,
       {
@@ -107,6 +147,8 @@ export const {
   useRetrieveFromWorkflowStatusQuery,
   useRetrieveFromTopicQuery,
   useRetrieveAllTasksQuery,
+  useRetrieveWithAssigneeQuery,
+  useRetrieveAssignedToCurrentAccountQuery,
 } = taskListingApi;
 
 export const {
@@ -116,5 +158,7 @@ export const {
     retrieveFromWorkflowStatus,
     retrieveAllTasks,
     retrieveFromTopic,
+    retrieveWithAssignee,
+    retrieveAssignedToCurrentAccount,
   },
 } = taskListingApi;

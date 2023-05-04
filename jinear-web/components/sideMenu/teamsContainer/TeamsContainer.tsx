@@ -1,4 +1,5 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import Line from "@/components/line/Line";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { useUpdatePreferredTeamMutation } from "@/store/api/workspaceDisplayPreferenceApi";
 import {
@@ -15,8 +16,8 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { IoAdd, IoEllipsisHorizontal, IoScan } from "react-icons/io5";
 import MenuGroupTitle from "../menuGroupTitle/MenuGroupTitle";
-import TeamMenu from "./teamMenu/TeamMenu";
 import styles from "./TeamsContainer.module.css";
+import TeamMenu from "./teamMenu/TeamMenu";
 
 interface TeamsContainerProps {}
 
@@ -81,26 +82,30 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
   return (
     <div className={styles.container}>
       {!preferredWorkspace?.isPersonal && (
-        <div className={styles.teamsTitleContainer}>
-          <MenuGroupTitle
-            label={t("sideMenuWorkspaceCurrentTeam")}
-            buttonVariant={teamsResponse?.data.length == 0 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
-            titleClassName={styles.menuGroupTitle}
-          />
-          <Button variant={ButtonVariants.hoverFilled2} onClick={routeTeamHome} heightVariant={ButtonHeight.short}>
-            <IoScan />
-          </Button>
-          {/* {isPreferredWorkspaceRoleAdminOrOwner && ( */}
-          <Button variant={ButtonVariants.hoverFilled2} onClick={routeTeamSettings} heightVariant={ButtonHeight.short}>
-            <IoEllipsisHorizontal />
-          </Button>
-          {/* )} */}
-          {isPreferredWorkspaceRoleAdminOrOwner && (
-            <Button variant={ButtonVariants.hoverFilled2} onClick={_popNewTeamModal} heightVariant={ButtonHeight.short}>
-              <IoAdd />
+        <>
+          <div className="spacer-h-2" />
+          <Line />
+          <div className={styles.teamsTitleContainer}>
+            <MenuGroupTitle
+              label={t("sideMenuWorkspaceCurrentTeam")}
+              buttonVariant={teamsResponse?.data.length == 0 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+              titleClassName={styles.menuGroupTitle}
+            />
+            <Button variant={ButtonVariants.hoverFilled2} onClick={routeTeamHome} heightVariant={ButtonHeight.short}>
+              <IoScan />
             </Button>
-          )}
-        </div>
+            {/* {isPreferredWorkspaceRoleAdminOrOwner && ( */}
+            <Button variant={ButtonVariants.hoverFilled2} onClick={routeTeamSettings} heightVariant={ButtonHeight.short}>
+              <IoEllipsisHorizontal />
+            </Button>
+            {/* )} */}
+            {isPreferredWorkspaceRoleAdminOrOwner && (
+              <Button variant={ButtonVariants.hoverFilled2} onClick={_popNewTeamModal} heightVariant={ButtonHeight.short}>
+                <IoAdd />
+              </Button>
+            )}
+          </div>
+        </>
       )}
       <div className={styles.teamsList}>
         {isLoading && <CircularProgress size={15} className={styles.loading} />}

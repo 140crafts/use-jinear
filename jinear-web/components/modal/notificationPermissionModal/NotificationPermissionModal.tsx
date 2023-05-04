@@ -48,7 +48,7 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
   };
 
   return (
-    <Modal visible={visible} title={title} bodyClass={styles.container} requestClose={close} width={"default"}>
+    <Modal visible={visible} title={title} bodyClass={styles.container} requestClose={close} width={"medium-fixed"}>
       <div className={styles.body}>
         <IoNotifications size={32} />
         {t("notificationPermissionModalInfoText")}
