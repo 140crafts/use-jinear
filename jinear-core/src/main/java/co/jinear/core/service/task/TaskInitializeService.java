@@ -12,7 +12,6 @@ import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.model.vo.task.TaskInitializeVo;
 import co.jinear.core.model.vo.task.TaskRelationInitializeVo;
 import co.jinear.core.model.vo.task.TaskSubscriptionInitializeVo;
-import co.jinear.core.model.vo.workspace.WorkspaceActivityCreateVo;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.richtext.RichTextInitializeService;
 import co.jinear.core.service.task.relation.TaskRelationInitializeService;
@@ -20,7 +19,6 @@ import co.jinear.core.service.task.subscription.TaskSubscriptionOperationService
 import co.jinear.core.service.team.TeamLockService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
 import co.jinear.core.service.topic.TopicSequenceService;
-import co.jinear.core.service.workspace.activity.WorkspaceActivityService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,8 +26,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
-
-import static co.jinear.core.model.enumtype.workspace.WorkspaceActivityType.TASK_INITIALIZED;
 
 @Slf4j
 @Service
@@ -43,7 +39,6 @@ public class TaskInitializeService {
     private final TeamWorkflowStatusRetrieveService teamWorkflowStatusRetrieveService;
     private final TopicSequenceService incrementTopicSequence;
     private final RichTextInitializeService richTextInitializeService;
-    private final WorkspaceActivityService workspaceActivityService;
     private final TaskDtoConverter taskDtoConverter;
     private final TaskRelationInitializeService taskRelationInitializeService;
     private final TaskSubscriptionConverter taskSubscriptionConverter;
@@ -61,7 +56,6 @@ public class TaskInitializeService {
             Task saved = taskRepository.saveAndFlush(task);
             TaskDto taskDto = taskDtoConverter.map(saved);
             initializeAndAssignRichText(taskInitializeVo, taskDto);
-            initializeTaskCreatedActivity(task);
             initializeSubtaskRelation(taskInitializeVo, saved);
             initializeTaskSubscription(taskInitializeVo, saved);
             return taskDto;
@@ -128,19 +122,6 @@ public class TaskInitializeService {
         task.setDueDate(taskInitializeVo.getDueDate());
         task.setTitle(taskInitializeVo.getTitle());
         return task;
-    }
-
-    private void initializeTaskCreatedActivity(Task task) {
-        WorkspaceActivityCreateVo vo = WorkspaceActivityCreateVo
-                .builder()
-                .workspaceId(task.getWorkspaceId())
-                .teamId(task.getTeamId())
-                .taskId(task.getTaskId())
-                .performedBy(task.getOwnerId())
-                .relatedObjectId(task.getTaskId())
-                .type(TASK_INITIALIZED)
-                .build();
-        workspaceActivityService.createWorkspaceActivity(vo);
     }
 
     private void initializeSubtaskRelation(TaskInitializeVo taskInitializeVo, Task saved) {

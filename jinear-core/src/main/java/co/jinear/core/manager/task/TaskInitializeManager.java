@@ -9,6 +9,7 @@ import co.jinear.core.model.request.task.TaskInitializeRequest;
 import co.jinear.core.model.response.task.TaskResponse;
 import co.jinear.core.model.vo.task.TaskInitializeVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.task.TaskActivityService;
 import co.jinear.core.service.task.TaskInitializeService;
 import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
@@ -33,6 +34,7 @@ public class TaskInitializeManager {
     private final WorkspaceValidator workspaceValidator;
     private final TeamAccessValidator teamAccessValidator;
     private final TaskInitializeVoConverter taskInitializeVoConverter;
+    private final TaskActivityService taskActivityService;
 
     public TaskResponse initializeTask(TaskInitializeRequest taskInitializeRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -45,6 +47,7 @@ public class TaskInitializeManager {
         TaskDto initializedTask = taskInitializeService.initializeTask(taskInitializeVo);
         retrieveAndSetTeamDto(initializedTask);
         retrieveAndSetWorkspaceDto(initializedTask);
+        taskActivityService.initializeNewTaskActivity(currentAccount, initializedTask);
         return mapResponse(initializedTask);
     }
 

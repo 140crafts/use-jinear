@@ -21,5 +21,9 @@ public interface TaskRepository extends JpaRepository<Task, String> {
 
     Page<Task> findAllByWorkspaceIdAndTeamIdAndTopicIdAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, String teamId, String topicId, Pageable pageable);
 
+    Page<Task> findAllByWorkspaceIdAndTeamIdAndAssignedToAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, String teamId, String assignedTo, Pageable pageable);
+
+    Page<Task> findAllByWorkspaceIdAndAssignedToAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, String assignedTo, Pageable pageable);
+
     Optional<Task> findByWorkspaceIdAndTeamIdAndTeamTagNoAndPassiveIdIsNull(String workspaceId, String teamId, Integer teamTagNo);
 }

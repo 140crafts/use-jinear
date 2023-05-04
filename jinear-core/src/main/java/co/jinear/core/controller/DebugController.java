@@ -1,5 +1,6 @@
 package co.jinear.core.controller;
 
+import co.jinear.core.manager.reminder.ReminderProcessManager;
 import co.jinear.core.service.account.AccountRoleService;
 import co.jinear.core.service.notification.NotificationCreateService;
 import co.jinear.core.service.task.subscription.TaskSubscriptionListingService;
@@ -21,6 +22,7 @@ public class DebugController {
     private final AccountRoleService accountRoleService;
     private final NotificationCreateService notificationCreateService;
     private final TaskSubscriptionListingService taskSubscriptionListingService;
+    private final ReminderProcessManager reminderProcessManager;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
