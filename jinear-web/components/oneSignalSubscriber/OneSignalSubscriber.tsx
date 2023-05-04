@@ -1,3 +1,4 @@
+import { NotificationMessageExternalDataDto } from "@/model/be/jinear-core";
 import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
 import { selectAuthState, selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { popNotificationPermissionModal } from "@/store/slice/modalSlice";
@@ -76,9 +77,9 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
         enable: false,
       },
       subdomainName: "jinear",
-
       allowLocalhostAsSecureOrigin: true,
     });
+    OneSignal.on("notificationDisplay", onNotificationDisplay);
     logger.log("Initialize OneSignal has completed.");
   };
 
@@ -89,6 +90,11 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
       return;
     }
     attachAccount(currentAccountId);
+  };
+
+  const onNotificationDisplay = (eventData: Notification) => {
+    const data: NotificationMessageExternalDataDto = eventData.data;
+    logger.log({ notificationData: data });
   };
 
   return null;
