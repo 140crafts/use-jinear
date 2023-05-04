@@ -805,4 +805,13 @@
         <dropColumn tableName="notification_event" columnName="notification_template_id" />
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-1-add-task_id-column-to-notification_event">
+        <addColumn tableName="notification_event">
+            <column name="task_id" type="char(26)" afterColumn="team_id"/>
+        </addColumn>
+
+        <createIndex indexName="ix_task_id" tableName="notification_event">
+            <column name="task_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>
