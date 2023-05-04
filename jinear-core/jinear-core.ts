@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-05-01 15:05:59.
+// Generated using typescript-generator version 3.0.1157 on 2023-05-04 22:27:10.
 
 export interface BaseDto {
     createdDate: Date;
@@ -87,6 +87,14 @@ export interface NotificationEventParamDto extends BaseDto {
     notificationEventId: string;
     paramKey: string;
     paramValue: string;
+}
+
+export interface NotificationMessageExternalDataDto {
+    workspaceId: string;
+    teamId: string;
+    taskId: string;
+    taskTag: string;
+    notificationType: NotificationType;
 }
 
 export interface NotificationTargetDto extends BaseDto {
@@ -753,7 +761,7 @@ export type NotificationEventState = "INITIALIZED" | "SENT";
 
 export type NotificationTargetType = "WEB";
 
-export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY";
+export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED";
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
 

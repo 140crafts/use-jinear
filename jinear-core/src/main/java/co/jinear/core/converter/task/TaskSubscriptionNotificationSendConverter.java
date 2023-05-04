@@ -51,6 +51,28 @@ public class TaskSubscriptionNotificationSendConverter {
             entry(CHECKLIST_ITEM_REMOVED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_REMOVED),
             entry(CHECKLIST_ITEM_INITIALIZED, WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_INITIALIZED)
     );
+
+    public static final Map<WorkspaceActivityType, NotificationType> NOTIFICATION_TYPE_MAP = Map.ofEntries(
+            entry(TASK_INITIALIZED, NotificationType.TASK_INITIALIZED),
+            entry(TASK_CLOSED, NotificationType.TASK_CLOSED),
+            entry(EDIT_TASK_TITLE, NotificationType.EDIT_TASK_TITLE),
+            entry(EDIT_TASK_DESC, NotificationType.EDIT_TASK_DESC),
+            entry(TASK_UPDATE_TOPIC, NotificationType.TASK_UPDATE_TOPIC),
+            entry(TASK_UPDATE_WORKFLOW_STATUS, NotificationType.TASK_UPDATE_WORKFLOW_STATUS),
+            entry(TASK_CHANGE_ASSIGNEE, NotificationType.TASK_CHANGE_ASSIGNEE),
+            entry(TASK_CHANGE_ASSIGNED_DATE, NotificationType.TASK_CHANGE_ASSIGNED_DATE),
+            entry(TASK_CHANGE_DUE_DATE, NotificationType.TASK_CHANGE_DUE_DATE),
+            entry(RELATION_INITIALIZED, NotificationType.RELATION_INITIALIZED),
+            entry(RELATION_REMOVED, NotificationType.RELATION_REMOVED),
+            entry(CHECKLIST_INITIALIZED, NotificationType.CHECKLIST_INITIALIZED),
+            entry(CHECKLIST_REMOVED, NotificationType.CHECKLIST_REMOVED),
+            entry(CHECKLIST_TITLE_CHANGED, NotificationType.CHECKLIST_TITLE_CHANGED),
+            entry(CHECKLIST_ITEM_CHECKED_STATUS_CHANGED, NotificationType.CHECKLIST_ITEM_CHECKED_STATUS_CHANGED),
+            entry(CHECKLIST_ITEM_LABEL_CHANGED, NotificationType.CHECKLIST_ITEM_LABEL_CHANGED),
+            entry(CHECKLIST_ITEM_REMOVED, NotificationType.CHECKLIST_ITEM_REMOVED),
+            entry(CHECKLIST_ITEM_INITIALIZED, NotificationType.CHECKLIST_ITEM_INITIALIZED)
+    );
+
     private static final String NOTIFICATION_TEXT = "[${taskTag}] ${taskTitle}";
 
     public NotificationSendVo mapToNotificationSendVo(TaskSubscriptionWithCommunicationPreferencesDto subscription,
@@ -61,17 +83,21 @@ public class TaskSubscriptionNotificationSendConverter {
         String text = retrieveNotificationText(taskDto, taskTag);
         String launchUrl = retrieveTaskUrl(taskDto, taskTag);
         Boolean isSilent = Boolean.FALSE.equals(subscription.getHasPushNotificationPermission());
+        NotificationType type = NOTIFICATION_TYPE_MAP.getOrDefault(notifyTaskSubscribersVo.getWorkspaceActivityType(), NotificationType.WORKSPACE_ACTIVITY);
 
         NotificationSendVo notificationSendVo = new NotificationSendVo();
         notificationSendVo.setAccountId(subscription.getAccountId());
         notificationSendVo.setWorkspaceId(taskDto.getWorkspaceId());
         notificationSendVo.setTeamId(taskDto.getTeamId());
+        notificationSendVo.setTaskId(taskDto.getTaskId());
+        notificationSendVo.setTaskTag(taskTag);
         notificationSendVo.setTitle(title);
         notificationSendVo.setText(text);
         notificationSendVo.setLaunchUrl(launchUrl);
         notificationSendVo.setLocaleType(subscription.getLocaleType());
         notificationSendVo.setIsSilent(isSilent);
-        notificationSendVo.setNotificationType(NotificationType.WORKSPACE_ACTIVITY);
+        notificationSendVo.setNotificationType(type);
+        notificationSendVo.setRelatedTaskTag(taskTag);
         return notificationSendVo;
     }
 

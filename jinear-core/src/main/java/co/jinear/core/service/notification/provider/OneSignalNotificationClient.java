@@ -31,6 +31,7 @@ public class OneSignalNotificationClient implements NotificationClient {
         notification.setAppId(oneSignalConfig.getAppId());
         notification.setIncludePlayerIds(notificationMessageVo.getTargetIds());
         notification.setUrl(notificationMessageVo.getLaunchUrl());
+        notification.setData(notificationMessageVo.getData());
 
         StringMap titleMap = new StringMap();
         titleMap.en(notificationMessageVo.getTitle());

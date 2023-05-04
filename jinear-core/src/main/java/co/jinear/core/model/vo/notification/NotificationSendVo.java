@@ -17,10 +17,13 @@ public class NotificationSendVo {
     private String accountId;
     private String workspaceId;
     private String teamId;
+    private String taskId;
+    private String taskTag;
     private String title;
     private String text;
     private String launchUrl;
     private LocaleType localeType;
     private Boolean isSilent;
     private NotificationType notificationType;
+    private String relatedTaskTag;
 }

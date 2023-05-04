@@ -1,5 +1,6 @@
 package co.jinear.core.service.notification;
 
+import co.jinear.core.model.dto.notification.NotificationMessageExternalDataDto;
 import co.jinear.core.model.dto.notification.NotificationTargetDto;
 import co.jinear.core.model.entity.notification.NotificationEvent;
 import co.jinear.core.model.enumtype.notification.NotificationEventState;
@@ -56,6 +57,12 @@ public class NotificationCreateService {
     private NotificationMessageVo mapToNotificationMessageVo(NotificationSendVo notificationSendVo) {
         List<String> targetIds = retrieveTargetIds(notificationSendVo.getAccountId());
 
+        NotificationMessageExternalDataDto data = new NotificationMessageExternalDataDto();
+        data.setWorkspaceId(notificationSendVo.getWorkspaceId());
+        data.setTeamId(notificationSendVo.getTeamId());
+        data.setTaskId(notificationSendVo.getTaskId());
+        data.setTaskTag(notificationSendVo.getTaskTag());
+
         NotificationMessageVo notificationMessageVo = new NotificationMessageVo();
         notificationMessageVo.setAccountId(notificationSendVo.getAccountId());
         notificationMessageVo.setTitle(notificationSendVo.getTitle());
@@ -64,6 +71,7 @@ public class NotificationCreateService {
         notificationMessageVo.setLocaleType(notificationSendVo.getLocaleType());
         notificationMessageVo.setTargetIds(targetIds);
         notificationMessageVo.setIsSilent(notificationSendVo.getIsSilent());
+        notificationMessageVo.setData(data);
         return notificationMessageVo;
     }
 

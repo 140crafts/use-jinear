@@ -1,5 +1,6 @@
 package co.jinear.core.model.vo.notification;
 
+import co.jinear.core.model.dto.notification.NotificationMessageExternalDataDto;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,4 +20,5 @@ public class NotificationMessageVo {
     private LocaleType localeType;
     private List<String> targetIds;
     private Boolean isSilent;
+    private NotificationMessageExternalDataDto data;
 }

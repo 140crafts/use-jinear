@@ -34,6 +34,9 @@ public class NotificationEvent extends BaseEntity {
     @Column(name = "team_id")
     private String teamId;
 
+    @Column(name = "task_id")
+    private String taskId;
+
     @Column(name = "is_read")
     private Boolean isRead;
 

@@ -55,6 +55,8 @@ public class TaskReminderNotificationConverter {
         notificationSendVo.setAccountId(taskSubscriptionWithCommunicationPreferencesDto.getAccountId());
         notificationSendVo.setWorkspaceId(taskDto.getWorkspaceId());
         notificationSendVo.setTeamId(taskDto.getTeamId());
+        notificationSendVo.setTaskId(taskDto.getTaskId());
+        notificationSendVo.setTaskTag(taskTag);
         notificationSendVo.setLocaleType(taskSubscriptionWithCommunicationPreferencesDto.getLocaleType());
 
         notificationSendVo.setTitle(retrieveTitle(taskTag, taskDto.getTitle()));
@@ -63,6 +65,7 @@ public class TaskReminderNotificationConverter {
 
         notificationSendVo.setIsSilent(isSilent);
         notificationSendVo.setNotificationType(NotificationType.TASK_REMINDER);
+        notificationSendVo.setRelatedTaskTag(taskTag);
         return notificationSendVo;
     }
 
