@@ -24,6 +24,15 @@ public class TaskActivityService {
     private final WorkspaceActivityService workspaceActivityService;
     private final TaskReachOutService taskReachOutService;
 
+    public void initializeNewTaskActivity(String performedBy, TaskDto taskDto) {
+        WorkspaceActivityType type = WorkspaceActivityType.TASK_INITIALIZED;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, taskDto);
+        vo.setNewState(taskDto.getTitle());
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(taskDto, type);
+    }
+
     public void initializeEditTitleActivity(String performedBy, TaskDto before, TaskDto after) {
         WorkspaceActivityType type = WorkspaceActivityType.EDIT_TASK_TITLE;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);

@@ -88,6 +88,23 @@ public class TaskListingManager {
         return mapResponse(taskDtoPage);
     }
 
+    public TaskListingPaginatedResponse retrieveWithAssignee(String workspaceId, String teamId, String assigneeId, Integer page) {
+        String currentAccount = sessionInfoService.currentAccountId();
+        validateWorkspaceAccess(currentAccount, workspaceId);
+        validateTeamAccess(currentAccount, workspaceId, teamId);
+        log.info("Retrieve tasks with assignee has started. currentAccount: {}", currentAccount);
+        Page<TaskDto> taskDtoPage = taskListingService.retrieveAllTasksWithAssignee(workspaceId, teamId, assigneeId, page);
+        return mapResponse(taskDtoPage);
+    }
+
+    public TaskListingPaginatedResponse retrieveTasksAssignedToCurrentAccount(String workspaceId, Integer page) {
+        String currentAccount = sessionInfoService.currentAccountId();
+        validateWorkspaceAccess(currentAccount, workspaceId);
+        log.info("Retrieve tasks assigneed to current account has started. currentAccount: {}", currentAccount);
+        Page<TaskDto> taskDtoPage = taskListingService.retrieveAllTasksWithAssignee(workspaceId, currentAccount, page);
+        return mapResponse(taskDtoPage);
+    }
+
     private void validateWorkspaceAccess(String accountId, String workspaceId) {
         workspaceValidator.validateHasAccess(accountId, workspaceId);
     }

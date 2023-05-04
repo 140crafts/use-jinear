@@ -61,4 +61,20 @@ public class TaskListingController {
                                                           @RequestParam(required = false, defaultValue = "0") Integer page) {
         return taskListingManager.retrieveFromTopic(workspaceId, teamId, topicTag, page);
     }
+
+    @GetMapping("/{workspaceId}/team/{teamId}/with-assignee/{assigneeId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskListingPaginatedResponse retrieveWithAssignee(@PathVariable String workspaceId,
+                                                             @PathVariable String teamId,
+                                                             @PathVariable String assigneeId,
+                                                             @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return taskListingManager.retrieveWithAssignee(workspaceId, teamId, assigneeId, page);
+    }
+
+    @GetMapping("/{workspaceId}/assigned-to-me")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskListingPaginatedResponse retrieveTasksAssignedToCurrentAccount(@PathVariable String workspaceId,
+                                                                              @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return taskListingManager.retrieveTasksAssignedToCurrentAccount(workspaceId, page);
+    }
 }

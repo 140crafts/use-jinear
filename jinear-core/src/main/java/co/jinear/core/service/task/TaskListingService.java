@@ -61,4 +61,18 @@ public class TaskListingService {
                         workspaceId, teamId, topicId, PageRequest.of(page, PAGE_SIZE))
                 .map(taskDtoConverter::map);
     }
+
+    public Page<TaskDto> retrieveAllTasksWithAssignee(String workspaceId, String teamId, String assigneeId, int page) {
+        log.info("Retrieve all tasks with assignee has started. workspaceId: {}, teamId: {}, assigneeId: {}, page: {}", workspaceId, teamId, assigneeId, page);
+        return taskRepository.findAllByWorkspaceIdAndTeamIdAndAssignedToAndPassiveIdIsNullOrderByCreatedDateDesc(
+                        workspaceId, teamId, assigneeId, PageRequest.of(page, PAGE_SIZE))
+                .map(taskDtoConverter::map);
+    }
+
+    public Page<TaskDto> retrieveAllTasksWithAssignee(String workspaceId, String assigneeId, int page) {
+        log.info("Retrieve all tasks with assignee has started. workspaceId: {}, assigneeId: {}, page: {}", workspaceId, assigneeId, page);
+        return taskRepository.findAllByWorkspaceIdAndAssignedToAndPassiveIdIsNullOrderByCreatedDateDesc(
+                        workspaceId, assigneeId, PageRequest.of(page, PAGE_SIZE))
+                .map(taskDtoConverter::map);
+    }
 }
