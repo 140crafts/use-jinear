@@ -64,6 +64,8 @@ export const taskUpdateApi = api.injectEndpoints({
         { type: "team-task-list" },
         { type: "workspace-task-list" },
         { type: "workplace-task-with-name-and-tag" },
+        { type: "task-list-with-assignee" },
+        { type: "task-list-assigned-to-current-account" },
         { type: "retrieve-task-activity", id: req.taskId },
       ],
     }),

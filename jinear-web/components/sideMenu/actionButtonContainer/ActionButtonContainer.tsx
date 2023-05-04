@@ -26,6 +26,7 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
   const currentPath = router.asPath;
   const calendarPath = `/${preferredWorkspace?.username}`;
   const inboxPath = `/${preferredWorkspace?.username}/inbox`;
+  const assignedToMePath = `/${preferredWorkspace?.username}/assigned-to-me`;
 
   const _popNewTaskModal = () => {
     dispatch(popNewTaskModal());
@@ -63,8 +64,13 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
         <IoPlayForwardOutline />
         <div>{t("sideMenuActivities")}</div>
       </Button>
+
       {!preferredWorkspace?.isPersonal && (
-        <Button variant={ButtonVariants.hoverFilled2} className={styles.button}>
+        <Button
+          href={assignedToMePath}
+          variant={currentPath == assignedToMePath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+          className={styles.button}
+        >
           <IoCheckmarkCircleOutline size={17} style={{ marginLeft: -2 }} />
           <div>{t("sideMenuMyAssignments")}</div>
         </Button>

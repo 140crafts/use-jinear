@@ -1714,4 +1714,12 @@ export default {
     en: "Undone",
     tr: "Tamamlanmadı",
   },
+  assigneeTaskListName: {
+    en: "Listing tasks assigned to '${assigneeName}'",
+    tr: "Şu kişiye atanan görevler listeleniyor. '${assigneeName}'",
+  },
+  assignedToMeTaskListName: {
+    en: "Listing tasks assigned to you",
+    tr: "Sana atanan görevler listeleniyor",
+  },
 };
