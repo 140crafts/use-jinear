@@ -62,6 +62,7 @@ public class NotificationCreateService {
         data.setTeamId(notificationSendVo.getTeamId());
         data.setTaskId(notificationSendVo.getTaskId());
         data.setTaskTag(notificationSendVo.getTaskTag());
+        data.setNotificationType(notificationSendVo.getNotificationType());
 
         NotificationMessageVo notificationMessageVo = new NotificationMessageVo();
         notificationMessageVo.setAccountId(notificationSendVo.getAccountId());
