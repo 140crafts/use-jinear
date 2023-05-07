@@ -1,6 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
 import TaskCreatedToast from "@/components/taskCreatedToast/TaskCreatedToast";
-import { TaskInitializeRequest } from "@/model/be/jinear-core";
+import { TaskInitializeRequest, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useInitializeTaskMutation } from "@/store/api/taskApi";
 import Logger from "@/utils/logger";
 import cn from "classnames";
@@ -8,17 +8,18 @@ import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import styles from "./NewTaskForm.module.css";
 import AssignedDateInput from "./assignedDateInput/AssignedDateInput";
 import DescriptionInput from "./descriptionInput/DescriptionInput";
 import DueDateInput from "./dueDateInput/DueDateInput";
 import MemberSelect from "./memberSelect/MemberSelect";
-import styles from "./NewTaskForm.module.css";
 import TitleInput from "./titleInput/TitleInput";
 import TopicSelect from "./topicSelect/TopicSelect";
+import WorkspaceAndTeamInfo from "./workspaceAndTeamInfo/WorkspaceAndTeamInfo";
 
 interface NewTaskFormProps {
-  workspaceId: string;
-  teamId: string;
+  workspace: WorkspaceDto;
+  team: TeamDto;
   subTaskOf?: string;
   subTaskOfLabel?: string;
   onClose: () => void;
@@ -32,7 +33,7 @@ export interface NewTaskExtendedForm extends TaskInitializeRequest {
 
 const logger = Logger("NewTaskForm");
 
-const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskOf, subTaskOfLabel, onClose, className }) => {
+const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspace, team, subTaskOf, subTaskOfLabel, onClose, className }) => {
   const { t } = useTranslation();
   const {
     register,
@@ -43,6 +44,8 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskO
     formState: { errors },
     watch,
   } = useForm<NewTaskExtendedForm>();
+  const workspaceId = workspace.workspaceId;
+  const teamId = team.teamId;
 
   const [
     initializeTask,
@@ -106,6 +109,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspaceId, teamId, subTaskO
       action="#"
     >
       <div className={styles.formContent}>
+        <WorkspaceAndTeamInfo workspace={workspace} team={team} />
         <input type="hidden" value={workspaceId} {...register("workspaceId")} />
         <input type="hidden" value={teamId} {...register("teamId")} />
         {subTaskOf && <input type="hidden" value={subTaskOf} {...register("subTaskOf")} />}

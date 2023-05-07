@@ -1734,4 +1734,8 @@ export default {
     en: "Dismiss",
     tr: "Önemseme",
   },
+  newTaskFormWorkspaceAndTeamInfoLabel: {
+    en: "You're creating new task under following workspace and team",
+    tr: "Şu çalışma alanı ve takım için bir görev oluşturuyorsun",
+  },
 };
