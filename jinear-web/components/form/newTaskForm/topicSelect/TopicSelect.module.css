@@ -1,0 +1,9 @@
+.selectContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.newTopicButton {
+  align-self: flex-end;
+}

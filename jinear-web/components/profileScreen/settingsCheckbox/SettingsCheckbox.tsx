@@ -27,7 +27,7 @@ const SettingsCheckbox: React.FC<SettingsCheckboxProps> = ({ id, label, text, ch
       <input id={id} type={"checkbox"} checked={_checked} onChange={changeHandler} />
       <div className={styles.textContainer}>
         <h3>{label}</h3>
-        <span>{text}</span>
+        <span className={styles.info}>{text}</span>
       </div>
     </label>
   );

@@ -147,6 +147,12 @@ const slice = createSlice({
     closeTeamOptionsModal: (state, action: PayloadAction<void>) => {
       state.teamOptionsModal = { visible: false };
     },
+    popNewTopicModal: (state, action: PayloadAction<void>) => {
+      state.newTopicModal = { visible: true };
+    },
+    closeNewTopicModal: (state, action: PayloadAction<void>) => {
+      state.newTopicModal = { visible: false };
+    },
     popChangeTaskWorkflowStatusModal: (state, action: PayloadAction<ChangeTaskWorkflowStatusModalState>) => {
       state.changeTaskWorkflowStatusModal = {
         visible: true,
@@ -288,6 +294,8 @@ export const {
   closeNewTaskModal,
   popTeamOptionsModal,
   closeTeamOptionsModal,
+  popNewTopicModal,
+  closeNewTopicModal,
   popChangeTaskWorkflowStatusModal,
   closeChangeTaskWorkflowStatusModal,
   popChangeTaskTopicModal,
@@ -347,6 +355,8 @@ export const selectNewTaskModalSubTaskOf = (state: RootState) => state.modal.new
 export const selectNewTaskModalSubTaskOfLabel = (state: RootState) => state.modal.newTaskModal?.subTaskOfLabel;
 
 export const selectTeamOptionsModalVisible = (state: RootState) => state.modal.teamOptionsModal?.visible;
+
+export const selectNewTopicModalVisible = (state: RootState) => state.modal.newTopicModal?.visible;
 
 export const selectChangeTaskWorkflowStatusModalVisible = (state: RootState) =>
   state.modal.changeTaskWorkflowStatusModal?.visible;

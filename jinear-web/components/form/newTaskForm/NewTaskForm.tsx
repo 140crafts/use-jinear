@@ -124,9 +124,6 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspace, team, subTaskOf, s
 
         <DescriptionInput labelClass={styles.label} inputClass={styles.textAreaInput} register={register} setValue={setValue} />
 
-        <AssignedDateInput labelClass={styles.label} register={register} watch={watch} setValue={setValue} />
-        <DueDateInput labelClass={styles.label} register={register} watch={watch} setValue={setValue} />
-
         <TopicSelect
           teamId={teamId}
           register={register}
@@ -136,14 +133,19 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspace, team, subTaskOf, s
           selectClass={styles.select}
         />
 
-        <MemberSelect
-          teamId={teamId}
-          register={register}
-          setValue={setValue}
-          labelClass={styles.label}
-          loadingClass={styles.loadingContainer}
-          selectClass={styles.select}
-        />
+        <AssignedDateInput labelClass={styles.label} register={register} watch={watch} setValue={setValue} />
+        <DueDateInput labelClass={styles.label} register={register} watch={watch} setValue={setValue} />
+
+        {!workspace.isPersonal && (
+          <MemberSelect
+            teamId={teamId}
+            register={register}
+            setValue={setValue}
+            labelClass={styles.label}
+            loadingClass={styles.loadingContainer}
+            selectClass={styles.select}
+          />
+        )}
       </div>
 
       <div className={styles.footerContainer}>

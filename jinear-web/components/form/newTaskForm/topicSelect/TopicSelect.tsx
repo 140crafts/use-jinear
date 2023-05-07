@@ -1,5 +1,8 @@
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { TaskInitializeRequest } from "@/model/be/jinear-core";
 import { useRetrieveTeamTopicsQuery } from "@/store/api/topicListingApi";
+import { popNewTopicModal } from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
@@ -18,6 +21,7 @@ interface TopicSelectProps {
 
 const TopicSelect: React.FC<TopicSelectProps> = ({ teamId, setValue, register, labelClass, loadingClass, selectClass }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const {
     data: teamTopicListingResponse,
     isSuccess: isTeamTopicListingSuccess,
@@ -25,40 +29,51 @@ const TopicSelect: React.FC<TopicSelectProps> = ({ teamId, setValue, register, l
     isLoading: isTeamTopicListingLoading,
   } = useRetrieveTeamTopicsQuery(teamId, { skip: teamId == null });
 
+  const hasAnyTopicDefined = teamTopicListingResponse?.data?.hasContent;
+
   useEffect(() => {
-    if (!teamTopicListingResponse?.data?.hasContent) {
+    if (!hasAnyTopicDefined) {
       setValue("topicId", "no-topic");
     } else {
       setValue("topicId", teamTopicListingResponse?.data?.content?.[0].topicId);
     }
   }, [teamTopicListingResponse]);
 
+  const popCreateNewTopicModal = () => {
+    dispatch(popNewTopicModal());
+  };
+
   return isTeamTopicListingLoading ? (
     <div className={cn(labelClass, styles.topicLabel, loadingClass)}>
       <CircularProgress size={18} />
     </div>
   ) : (
-    <label
-      className={labelClass}
-      htmlFor="task-topic-id"
-      data-tooltip={!teamTopicListingResponse?.data?.hasContent ? t("newTaskModalTaskTopicNoContentTooltip") : undefined}
-    >
-      {t("newTaskModalTaskTopicLabel")}
-      <select
-        disabled={!teamTopicListingResponse?.data?.hasContent}
-        id="task-topic-id"
-        className={selectClass}
-        {...register("topicId")}
+    <div className={styles.selectContainer}>
+      <label
+        className={labelClass}
+        htmlFor="task-topic-id"
+        data-tooltip={!hasAnyTopicDefined ? t("newTaskModalTaskTopicNoContentTooltip") : undefined}
       >
-        <option value={"no-topic"}>{t("newTaskModalTaskTopicNoContentValue")}</option>
+        {t("newTaskModalTaskTopicLabel")}
+        <select disabled={!hasAnyTopicDefined} id="task-topic-id" className={selectClass} {...register("topicId")}>
+          <option value={"no-topic"}>{t("newTaskModalTaskTopicNoContentValue")}</option>
 
-        {teamTopicListingResponse?.data?.content.map((topic) => (
-          <option key={topic.topicId} value={topic.topicId}>
-            {topic.name}
-          </option>
-        ))}
-      </select>
-    </label>
+          {teamTopicListingResponse?.data?.content.map((topic) => (
+            <option key={topic.topicId} value={topic.topicId}>
+              {topic.name}
+            </option>
+          ))}
+        </select>
+      </label>
+      <Button
+        className={styles.newTopicButton}
+        heightVariant={ButtonHeight.short}
+        variant={ButtonVariants.filled}
+        onClick={popCreateNewTopicModal}
+      >
+        {t("newTaskModalNewTopicButton")}
+      </Button>
+    </div>
   );
 };
 

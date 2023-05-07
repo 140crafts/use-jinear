@@ -11,3 +11,7 @@
   flex-direction: column;
   gap: 0.25rem;
 }
+
+.info {
+  font-weight: 400;
+}
