@@ -1,6 +1,6 @@
 import NewTaskForm from "@/components/form/newTaskForm/NewTaskForm";
 import useWindowSize from "@/hooks/useWindowSize";
-import { selectCurrentAccountsPreferredTeamId, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import {
   closeNewTaskModal,
   selectNewTaskModalSubTaskOf,
@@ -22,8 +22,8 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const subTaskOf = useTypedSelector(selectNewTaskModalSubTaskOf);
   const subTaskOfLabel = useTypedSelector(selectNewTaskModalSubTaskOfLabel);
   const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
+  const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
   const workspaceId = preferredWorkspace?.workspaceId;
-  const teamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
 
   const { isMobile } = useWindowSize();
 
@@ -38,10 +38,10 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
       bodyClass={styles.container}
       width={isMobile ? "fullscreen" : "large"}
     >
-      {workspaceId && teamId && (
+      {workspaceId && preferredTeam?.teamId && (
         <NewTaskForm
-          workspaceId={workspaceId}
-          teamId={teamId}
+          workspace={preferredWorkspace}
+          team={preferredTeam}
           subTaskOf={subTaskOf}
           subTaskOfLabel={subTaskOfLabel}
           onClose={close}
