@@ -8,6 +8,7 @@ import TaskActionBar from "./taskActionBar/TaskActionBar";
 import TaskActivityList from "./taskActivityList/TaskActivityList";
 import TaskBody from "./taskBody/TaskBody";
 import TaskChecklistContainer from "./taskChecklistContainer/TaskChecklistContainer";
+import TaskHasUpdatesInfo from "./taskHasUpdatesInfo/TaskHasUpdatesInfo";
 import TaskSubtaskList from "./taskSubtaskList/TaskSubtaskList";
 
 interface TaskDetailProps {
@@ -25,6 +26,7 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
       }}
     >
       <div className={styles.taskLayout}>
+        <TaskHasUpdatesInfo />
         <TaskBody className={styles.taskBody} />
         <Line />
         <TaskActionBar className={styles.taskInfo} />

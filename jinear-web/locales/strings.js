@@ -1722,4 +1722,16 @@ export default {
     en: "Listing tasks assigned to you",
     tr: "Sana atanan görevler listeleniyor",
   },
+  taskHasNewUpdates: {
+    en: "There has been updates on this task.",
+    tr: "Bu görev üzerinde güncellemeler bulunuyor.",
+  },
+  taskHasNewUpdatesRefreshPage: {
+    en: "Refresh Page",
+    tr: "Sayfayı Yenile",
+  },
+  taskHasNewUpdatesDismiss: {
+    en: "Dismiss",
+    tr: "Önemseme",
+  },
 };

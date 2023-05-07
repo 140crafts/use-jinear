@@ -1,7 +1,9 @@
 import { NotificationMessageExternalDataDto } from "@/model/be/jinear-core";
+import { api } from "@/store/api/api";
 import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
 import { selectAuthState, selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { popNotificationPermissionModal } from "@/store/slice/modalSlice";
+import { markHasUnreadNotification } from "@/store/slice/taskAdditionalDataSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { __DEV__ } from "@/utils/constants";
 import Logger from "@/utils/logger";
@@ -11,6 +13,25 @@ import OneSignal from "react-onesignal";
 interface OneSignalSubscriberProps {}
 
 const logger = Logger("OneSignalSubscriber");
+
+const TASK_UPDATE_NOTIFICATIONS = [
+  "EDIT_TASK_TITLE",
+  "EDIT_TASK_DESC",
+  "TASK_UPDATE_TOPIC",
+  "TASK_UPDATE_WORKFLOW_STATUS",
+  "TASK_CHANGE_ASSIGNEE",
+  "TASK_CHANGE_ASSIGNED_DATE",
+  "TASK_CHANGE_DUE_DATE",
+  "RELATION_INITIALIZED",
+  "RELATION_REMOVED",
+  "CHECKLIST_INITIALIZED",
+  "CHECKLIST_REMOVED",
+  "CHECKLIST_TITLE_CHANGED",
+  "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED",
+  "CHECKLIST_ITEM_LABEL_CHANGED",
+  "CHECKLIST_ITEM_REMOVED",
+  "CHECKLIST_ITEM_INITIALIZED",
+];
 
 const ONE_SIGNAL_IDS = __DEV__
   ? {
@@ -93,8 +114,21 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
   };
 
   const onNotificationDisplay = (eventData: Notification) => {
-    const data: NotificationMessageExternalDataDto = eventData.data;
-    logger.log({ notificationData: data });
+    try {
+      const data: NotificationMessageExternalDataDto = eventData.data;
+      logger.log({ notificationData: data });
+      const notificationType = data.notificationType;
+      dispatch(api.util.invalidateTags(["account-workspace-notification-unread-count"]));
+      if (notificationType == "TASK_INITIALIZED") {
+        dispatch(api.util.invalidateTags(["team-task-list", "team-workflow-task-list", "workspace-task-list"]));
+      }
+      if (data.taskId && TASK_UPDATE_NOTIFICATIONS.indexOf(notificationType) != -1) {
+        dispatch(markHasUnreadNotification({ taskId: data.taskId }));
+      }
+    } catch (e) {
+      console.error(e);
+      logger.log({ onNotificationDisplayError: e });
+    }
   };
 
   return null;
