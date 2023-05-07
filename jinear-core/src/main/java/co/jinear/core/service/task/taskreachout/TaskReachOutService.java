@@ -2,7 +2,9 @@ package co.jinear.core.service.task.taskreachout;
 
 import co.jinear.core.converter.task.TaskSubscriptionMailSendConverter;
 import co.jinear.core.converter.task.TaskSubscriptionNotificationSendConverter;
+import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskSubscriptionWithCommunicationPreferencesDto;
+import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.vo.mail.GenericInfoWithSubInfoMailWithCtaButtonVo;
 import co.jinear.core.model.vo.notification.NotificationSendVo;
 import co.jinear.core.model.vo.task.NotifyTaskSubscribersVo;
@@ -14,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -27,10 +30,12 @@ public class TaskReachOutService {
     private final TaskSubscriptionMailSendConverter taskSubscriptionMailSendConverter;
 
     public void notifyTaskSubscribers(NotifyTaskSubscribersVo notifyTaskSubscribersVo) {
-        log.info("Notify task subscribers has started. notifyTaskSubscribersVo: {}", notifyTaskSubscribersVo);
-        List<TaskSubscriptionWithCommunicationPreferencesDto> taskSubscribers = taskSubscriptionListingService.retrieveSubscribersWithCommunicationInfo(notifyTaskSubscribersVo.getTaskDto().getTaskId());
-        mapAndCreatePushNotification(taskSubscribers, notifyTaskSubscribersVo);
-        mapAndCreateGenericMail(notifyTaskSubscribersVo, taskSubscribers);
+        if (checkRelatedWorkspaceIsNotPersonal(notifyTaskSubscribersVo)) {
+            log.info("Notify task subscribers has started. notifyTaskSubscribersVo: {}", notifyTaskSubscribersVo);
+            List<TaskSubscriptionWithCommunicationPreferencesDto> taskSubscribers = taskSubscriptionListingService.retrieveSubscribersWithCommunicationInfo(notifyTaskSubscribersVo.getTaskDto().getTaskId());
+            mapAndCreatePushNotification(taskSubscribers, notifyTaskSubscribersVo);
+            mapAndCreateGenericMail(notifyTaskSubscribersVo, taskSubscribers);
+        }
     }
 
     private void mapAndCreatePushNotification(List<TaskSubscriptionWithCommunicationPreferencesDto> taskSubscribers, NotifyTaskSubscribersVo notifyTaskSubscribersVo) {
@@ -63,5 +68,13 @@ public class TaskReachOutService {
         } catch (Exception e) {
             log.error("Task activity, reach out via email has failed. ", e);
         }
+    }
+
+    private static boolean checkRelatedWorkspaceIsNotPersonal(NotifyTaskSubscribersVo notifyTaskSubscribersVo) {
+        return Optional.of(notifyTaskSubscribersVo)
+                .map(NotifyTaskSubscribersVo::getTaskDto)
+                .map(TaskDto::getWorkspace)
+                .map(WorkspaceDto::getIsPersonal)
+                .orElse(Boolean.FALSE);
     }
 }
