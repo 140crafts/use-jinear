@@ -1,6 +1,7 @@
 import { useFirstRender } from "@/hooks/useFirstRender";
 import Logger from "@/utils/logger";
-import { eachDayOfInterval, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, parse, startOfWeek } from "date-fns";
+import cn from "classnames";
+import { eachDayOfInterval, endOfMonth, endOfWeek, format, isSameDay, isSameMonth, isToday, parse, startOfWeek } from "date-fns";
 import React, { useEffect, useState } from "react";
 import Button, { ButtonVariants } from "../button";
 import styles from "./MiniMonthCalendar.module.css";
@@ -40,10 +41,14 @@ const MiniMonthCalendar: React.FC<MiniMonthCalendarProps> = ({ initialDate = new
           <Button
             key={`mini-calendar-day-${day.getTime()}`}
             variant={isSameDay(selectedDate, day) ? ButtonVariants.filled : ButtonVariants.default}
-            className={!isSameMonth(viewingDate, day) ? styles.differentMonth : undefined}
+            className={cn(
+              styles.buttonBase,
+              !isSameMonth(viewingDate, day) ? styles.differentMonth : undefined,
+              isSameDay(selectedDate, day) ? styles.bold : undefined
+            )}
             onClick={() => setSelectedDate(day)}
           >
-            {format(day, "d")}
+            <div className={cn(isToday(day) ? styles.today : undefined)}>{format(day, "d")}</div>
           </Button>
         ))}
       </div>

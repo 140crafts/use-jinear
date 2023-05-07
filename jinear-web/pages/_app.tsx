@@ -9,6 +9,7 @@ import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
 import LoginWith2FaMailModal from "@/components/modal/loginWith2FaMailModal/LoginWith2FaMailModal";
 import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
 import NewTeamModal from "@/components/modal/newTeamModal/NewTeamModal";
+import NewTopicModal from "@/components/modal/newTopicModal/NewTopicModal";
 import NewWorkspaceModal from "@/components/modal/newWorkspaceModal/NewWorkspaceModal";
 import NotFoundModal from "@/components/modal/notFoundModal/NotFoundModal";
 import NotificationPermissionModal from "@/components/modal/notificationPermissionModal/NotificationPermissionModal";
@@ -66,6 +67,7 @@ const globalModals: any = (
     <WorkflowChangeStatusModal />
     <TeamOptionsModal />
     <NewTaskModal />
+    <NewTopicModal />
     <LoginWith2FaMailModal />
     <DatePickerModal />
     <DialogModal />

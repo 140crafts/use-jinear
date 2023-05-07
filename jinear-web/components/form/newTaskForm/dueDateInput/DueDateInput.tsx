@@ -90,7 +90,7 @@ const DueDateInput: React.FC<DueDateInputProps> = ({ register, labelClass, watch
         <div className={styles.inputContainer}>
           <input type={"hidden"} id={"ui_new-task-due-date"} {...register("dueDate")} />
           <input type={"hidden"} id={"new-task-due-date"} {...register("dueDate_ISO")} />
-          <Button variant={ButtonVariants.filled} onClick={popDatePickerForDueDate}>
+          <Button variant={ButtonVariants.filled} onClick={popDatePickerForDueDate} heightVariant={ButtonHeight.short}>
             {dueDateISO ? format(new Date(dueDateISO), t("dateFormat")) : t("datePickerSelectDate")}
           </Button>
           {dueDateISO && hasPreciseDate && (

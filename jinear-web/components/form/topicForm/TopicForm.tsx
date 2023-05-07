@@ -9,10 +9,10 @@ import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import styles from "./TopicForm.module.css";
 import ColorInput from "./colorInput/ColorInput";
 import NameInput from "./nameInput/NameInput";
 import TagInput from "./tagInput/TagInput";
-import styles from "./TopicForm.module.css";
 
 export interface ITopicForm {
   workspaceId?: string;
@@ -30,11 +30,12 @@ interface TopicFormProps {
   color?: string;
   taskName?: string;
   taskTag?: string;
+  onSuccess?: () => void;
 }
 
 const logger = Logger("TopicForm");
 
-const TopicForm: React.FC<TopicFormProps> = ({ workspaceId, teamId, topicId, color, taskName, taskTag }) => {
+const TopicForm: React.FC<TopicFormProps> = ({ workspaceId, teamId, topicId, color, taskName, taskTag, onSuccess }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -81,7 +82,7 @@ const TopicForm: React.FC<TopicFormProps> = ({ workspaceId, teamId, topicId, col
 
   useEffect(() => {
     if (isInitializeTopicSuccess || isUpdateTopicSuccess || isDeleteSuccess) {
-      router.replace(`/${preferredWorkspace?.username}/${preferredTeam?.username}/topic/list`);
+      onSuccess ? onSuccess() : routeToList();
     }
   }, [isInitializeTopicSuccess, isUpdateTopicSuccess, isDeleteSuccess]);
 
@@ -99,6 +100,10 @@ const TopicForm: React.FC<TopicFormProps> = ({ workspaceId, teamId, topicId, col
     if (topicId) {
       deleteTopicCall(topicId);
     }
+  };
+
+  const routeToList = () => {
+    router.replace(`/${preferredWorkspace?.username}/${preferredTeam?.username}/topic/list`);
   };
 
   return (

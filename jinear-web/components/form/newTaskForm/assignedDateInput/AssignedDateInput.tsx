@@ -112,7 +112,7 @@ const AssignedDateInput: React.FC<AssignedDateInputProps> = ({ register, labelCl
         <div className={styles.inputContainer}>
           <input type={"hidden"} id={"ui_new-task-assigned-date"} {...register("assignedDate")} />
           <input type={"hidden"} id={"new-task-assigned-date"} {...register("assignedDate_ISO")} />
-          <Button variant={ButtonVariants.filled} onClick={popDatePickerForAssignedDate}>
+          <Button variant={ButtonVariants.filled} onClick={popDatePickerForAssignedDate} heightVariant={ButtonHeight.short}>
             {assignedDateISO ? format(new Date(assignedDateISO), t("dateFormat")) : t("datePickerSelectDate")}
           </Button>
           {assignedDateISO && hasPreciseDate && (

@@ -1738,4 +1738,12 @@ export default {
     en: "You're creating new task under following workspace and team",
     tr: "Şu çalışma alanı ve takım için bir görev oluşturuyorsun",
   },
+  newTaskModalNewTopicButton: {
+    en: "New Topic",
+    tr: "Yeni Konu",
+  },
+  newTopicModalTitle: {
+    en: "New Topic",
+    tr: "Yeni Konu",
+  },
 };
