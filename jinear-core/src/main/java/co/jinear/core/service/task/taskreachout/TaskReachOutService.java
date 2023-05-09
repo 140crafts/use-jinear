@@ -71,10 +71,11 @@ public class TaskReachOutService {
     }
 
     private static boolean checkRelatedWorkspaceIsNotPersonal(NotifyTaskSubscribersVo notifyTaskSubscribersVo) {
-        return Optional.of(notifyTaskSubscribersVo)
+        boolean isPersonal = Optional.of(notifyTaskSubscribersVo)
                 .map(NotifyTaskSubscribersVo::getTaskDto)
                 .map(TaskDto::getWorkspace)
                 .map(WorkspaceDto::getIsPersonal)
                 .orElse(Boolean.FALSE);
+        return !isPersonal;
     }
 }
