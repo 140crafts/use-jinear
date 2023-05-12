@@ -1,11 +1,11 @@
 import { useToggle } from "@/hooks/useToggle";
 import { TaskDto } from "@/model/be/jinear-core";
 import React from "react";
+import LastTaskActivitiesList from "../lastActivitiesScreen/lastTaskActivitiesList/LastTaskActivitiesList";
 import Line from "../line/Line";
 import styles from "./TaskDetail.module.css";
 import TaskDetailContext from "./context/TaskDetailContext";
 import TaskActionBar from "./taskActionBar/TaskActionBar";
-import TaskActivityList from "./taskActivityList/TaskActivityList";
 import TaskBody from "./taskBody/TaskBody";
 import TaskChecklistContainer from "./taskChecklistContainer/TaskChecklistContainer";
 import TaskHasUpdatesInfo from "./taskHasUpdatesInfo/TaskHasUpdatesInfo";
@@ -33,7 +33,8 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
         <TaskChecklistContainer />
         <TaskSubtaskList />
         <Line />
-        <TaskActivityList taskId={task.taskId} />
+        {/* <TaskActivityList taskId={task.taskId} /> */}
+        <LastTaskActivitiesList workspaceId={task.workspaceId} taskId={task.taskId} />
       </div>
     </TaskDetailContext.Provider>
   );

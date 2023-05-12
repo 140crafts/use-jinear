@@ -38,6 +38,8 @@ export const tagTypes = [
   "task-subscription-subscriber-list",
   "task-list-with-assignee",
   "task-list-assigned-to-current-account",
+  "workspace-activity-list",
+  "workspace-team-activity-list",
 ];
 
 export const api = createApi({

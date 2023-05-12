@@ -1044,7 +1044,7 @@ export default {
   },
   newWorkspaceFormCollaborativeText: {
     en: "You can invite other people to this workspace. You can create teams and assign tasks to people.",
-    tr: "Diğer kişileri bu çalışma alanına davet edebilir, takımlar oluşturabilir ve kişilere görevler atayabilirsiniz.",
+    tr: "Diğer kişileri bu çalışma alanına davet edebilir, ekipler oluşturabilir ve kişilere görevler atayabilirsiniz.",
   },
   newWorkspaceFormSearchText: {
     en: "Search and join existing workspace.",
@@ -1736,7 +1736,7 @@ export default {
   },
   newTaskFormWorkspaceAndTeamInfoLabel: {
     en: "You're creating new task under following workspace and team",
-    tr: "Şu çalışma alanı ve takım için bir görev oluşturuyorsun",
+    tr: "Şu çalışma alanı ve ekip için bir görev oluşturuyorsun",
   },
   newTaskModalNewTopicButton: {
     en: "New Topic",
@@ -1745,5 +1745,41 @@ export default {
   newTopicModalTitle: {
     en: "New Topic",
     tr: "Yeni Konu",
+  },
+  lastActivitiesScreenAllTeamsTitle: {
+    en: "All Activities",
+    tr: "Tüm Aktiviteler",
+  },
+  lastActivitiesScreenAllTeamsText: {
+    en: "Listing activities from all teams",
+    tr: "Tüm ekiplerdeki son aktiviteler listeleniyor",
+  },
+  lastActivitiesScreenFilteredTitle: {
+    en: "Team Activities",
+    tr: "Ekip Aktiviteleri",
+  },
+  lastActivitiesScreenFilteredText: {
+    en: "Listing activities from team <b>${teamName}</b>",
+    tr: "<b>${teamName}</b> ekibindeki son aktiviteler listeleniyor",
+  },
+  lastActivitiesScreenFilterButton: {
+    en: "Filter",
+    tr: "Filtrele",
+  },
+  lastActivitiesScreenClearFilterButton: {
+    en: "Clear Filter",
+    tr: "Filtreyi Kaldır",
+  },
+  activityListEmpty: {
+    en: "There isn't any activity",
+    tr: "Hiçbir aktivite bulunamadı",
+  },
+  teamPickerModalPickATeam: {
+    en: "Pick a team",
+    tr: "Bir ekip seçin",
+  },
+  newTaskFormPersonalWorkspaceSelected: {
+    en: "Your Personal Workspace",
+    tr: "Kişisel Çalışma Alanın",
   },
 };

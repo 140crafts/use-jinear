@@ -3,3 +3,10 @@
   flex-direction: column;
   gap: 0.35rem;
 }
+
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 0.25rem;
+}

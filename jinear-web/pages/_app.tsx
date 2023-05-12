@@ -22,6 +22,7 @@ import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicC
 import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal";
 import TaskOverviewModal from "@/components/modal/taskOverviewModal/TaskOverviewModal";
 import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
+import TeamPickerModal from "@/components/modal/teamPickerModal/TeamPickerModal";
 import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
 import OneSignalSubscriber from "@/components/oneSignalSubscriber/OneSignalSubscriber";
@@ -65,8 +66,9 @@ const globalModals: any = (
     <TaskDateChangeModal />
     <TaskTopicChangeModal />
     <WorkflowChangeStatusModal />
-    <TeamOptionsModal />
     <NewTaskModal />
+    <TeamOptionsModal />
+    <TeamPickerModal />
     <NewTopicModal />
     <LoginWith2FaMailModal />
     <DatePickerModal />

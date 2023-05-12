@@ -27,6 +27,7 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
   const calendarPath = `/${preferredWorkspace?.username}`;
   const inboxPath = `/${preferredWorkspace?.username}/inbox`;
   const assignedToMePath = `/${preferredWorkspace?.username}/assigned-to-me`;
+  const lastActivitiesPath = `/${preferredWorkspace?.username}/last-activities`;
 
   const _popNewTaskModal = () => {
     dispatch(popNewTaskModal());
@@ -57,8 +58,8 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
       <InboxButton isActive={inboxPath == currentPath} workspace={preferredWorkspace} buttonStyle={styles.button} />
 
       <Button
-        href={`/${preferredWorkspace?.username}/${preferredTeam?.username}/last-activities`}
-        variant={ButtonVariants.hoverFilled2}
+        href={lastActivitiesPath}
+        variant={currentPath == lastActivitiesPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
         className={styles.button}
       >
         <IoPlayForwardOutline />
