@@ -47,6 +47,13 @@ public class TeamMemberRetrieveService {
                 .toList();
     }
 
+    public List<String> retrieveAllTeamIdsOfAnAccount(String accountId, String workspaceId) {
+        log.info("Retrieve all team ids of an account has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
+        return teamMemberRepository.findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNullAndTeam_PassiveIdIsNull(accountId, workspaceId).stream()
+                .map(TeamMember::getTeamId)
+                .toList();
+    }
+
     public boolean isAccountTeamMember(String accountId, String teamId) {
         log.info("Is account team member has started. accountId: {}, teamId: {}", accountId, teamId);
         return teamMemberRepository.countAllByAccountIdAndTeamIdAndPassiveIdIsNull(accountId, teamId) > 0L;
