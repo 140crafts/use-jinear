@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-05-04 22:27:10.
+// Generated using typescript-generator version 3.0.1157 on 2023-05-13 17:53:39.
 
 export interface BaseDto {
     createdDate: Date;
@@ -336,6 +336,9 @@ export interface WorkspaceActivityDto extends BaseDto {
     type: WorkspaceActivityType;
     performedBy: string;
     relatedObjectId: string;
+    groupId?: string | null;
+    groupTitle?: string | null;
+    groupLink?: string | null;
     oldState?: string | null;
     newState?: string | null;
     performedByAccount: PlainAccountProfileDto;
@@ -352,6 +355,7 @@ export interface WorkspaceActivityDto extends BaseDto {
     newTaskRelationDto?: TaskRelationDto | null;
     relatedChecklist?: ChecklistDto | null;
     relatedChecklistItem?: ChecklistItemDto | null;
+    relatedTask?: TaskDto | null;
 }
 
 export interface WorkspaceDisplayPreferenceDto {
@@ -721,8 +725,16 @@ export interface TopicResponse extends BaseResponse {
     data: TopicDto;
 }
 
+export interface WorkspaceActivityListResponse extends BaseResponse {
+    data: PageDto<WorkspaceActivityDto>;
+}
+
 export interface WorkspaceBaseResponse extends BaseResponse {
     data: WorkspaceDto;
+}
+
+export interface WorkspaceDisplayPreferenceResponse extends BaseResponse {
+    data: WorkspaceDisplayPreferenceDto;
 }
 
 export interface WorkspaceInvitationInfoResponse extends BaseResponse {

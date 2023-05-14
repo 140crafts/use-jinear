@@ -28,7 +28,16 @@ public class WorkspaceDisplayPreferenceService {
     private final WorkspaceMemberRetrieveService workspaceMemberRetrieveService;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
 
-    public Optional<WorkspaceDisplayPreferenceDto> retrieveAccountPreferredWorkspace(String accountId) {
+    public WorkspaceDisplayPreferenceDto retrieveAccountPreferredWorkspace(String accountId) {
+        log.info("Retrieve account preferred workspace has started. accountId: {}", accountId);
+        return retrieveEntityByAccountId(accountId)
+                .map(workspaceDisplayPreferenceConverter::map)
+                .map(this::retrieveAndSetWorkspaceMemberRole)
+                .map(this::retrieveAndSetTeamMemberRole)
+                .orElseThrow(NotFoundException::new);
+    }
+
+    public Optional<WorkspaceDisplayPreferenceDto> retrieveAccountPreferredWorkspaceOptional(String accountId) {
         log.info("Retrieve account preferred workspace has started. accountId: {}", accountId);
         return retrieveEntityByAccountId(accountId)
                 .map(workspaceDisplayPreferenceConverter::map)
@@ -36,17 +45,15 @@ public class WorkspaceDisplayPreferenceService {
                 .map(this::retrieveAndSetTeamMemberRole);
     }
 
-    public WorkspaceDisplayPreferenceDto setAccountPreferredWorkspace(String accountId, String workspaceId) {
+    public void setAccountPreferredWorkspace(String accountId, String workspaceId) {
         log.info("Set account preferred workspace has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
         WorkspaceDisplayPreference workspaceDisplayPreference = retrieveEntityByAccountId(accountId)
                 .orElseGet(() -> initializeDefault(accountId, workspaceId));
         changeTeamIdIfWorkspaceHasChanged(workspaceDisplayPreference, workspaceId);
         workspaceDisplayPreference.setAccountId(accountId);
         workspaceDisplayPreference.setPreferredWorkspaceId(workspaceId);
-        WorkspaceDisplayPreference saved = workspaceDisplayPreferenceRepository.save(workspaceDisplayPreference);
+        workspaceDisplayPreferenceRepository.saveAndFlush(workspaceDisplayPreference);
         log.info("Account preferred workspace has been set.");
-        WorkspaceDisplayPreferenceDto workspaceDisplayPreferenceDto = workspaceDisplayPreferenceConverter.map(saved);
-        return retrieveAndSetWorkspaceMemberRole(workspaceDisplayPreferenceDto);
     }
 
     public WorkspaceDisplayPreferenceDto setAccountPreferredTeamId(String accountId, String teamId) {

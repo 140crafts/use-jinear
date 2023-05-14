@@ -2,13 +2,12 @@ package co.jinear.core.model.entity.workspace;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.team.Team;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-
-import jakarta.persistence.*;
 
 @Getter
 @Setter
