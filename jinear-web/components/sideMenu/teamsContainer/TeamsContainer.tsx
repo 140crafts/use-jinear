@@ -41,7 +41,7 @@ const TeamsContainer: React.FC<TeamsContainerProps> = ({}) => {
     isError,
     isLoading,
   } = useRetrieveWorkspaceTeamsQuery(preferredWorkspace?.workspaceId || "", {
-    skip: preferredWorkspace?.workspaceId == null,
+    skip: preferredWorkspace?.workspaceId == null || preferredWorkspace?.workspaceId == "",
   });
 
   const preferredTeam = teamsResponse?.data?.find((team) => team.teamId == preferredTeamId);

@@ -10,7 +10,9 @@ export const taskRelationApi = api.injectEndpoints({
         body: req,
       }),
       invalidatesTags: (_result, _err, req) => [
-        "retrieve-task-activity",
+        "workspace-activity-list",
+        "workspace-team-activity-list",
+        "workspace-task-activity-list",
         "team-task-list",
         "workspace-task-list",
         "workplace-task-with-name-and-tag",
@@ -26,7 +28,9 @@ export const taskRelationApi = api.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags: (_result, _err, req) => [
-        "retrieve-task-activity",
+        "workspace-activity-list",
+        "workspace-team-activity-list",
+        "workspace-task-activity-list",
         "team-task-list",
         "workspace-task-list",
         "workplace-task-with-name-and-tag",

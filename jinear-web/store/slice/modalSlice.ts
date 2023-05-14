@@ -14,6 +14,8 @@ import ModalState, {
   ReminderListModalState,
   SearchTaskModalState,
   TaskOverviewModalState,
+  TeamPickerModalState,
+  WorkspacePickerModalState,
 } from "model/app/store/modal/modalState";
 import { accountApi } from "../api/accountApi";
 import { RootState } from "../store";
@@ -88,6 +90,12 @@ const initialState = {
   taskOverviewModal: {
     visible: false,
   },
+  teamPickerModal: {
+    visible: false,
+  },
+  workspacePickerModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -110,6 +118,8 @@ const initialState = {
   addMemberToTeamModal: null | ModalState;
   notificationPermissionModal: null | ModalState;
   taskOverviewModal: null | TaskOverviewModalState;
+  teamPickerModal: null | TeamPickerModalState;
+  workspacePickerModal: null | WorkspacePickerModalState;
 };
 
 const slice = createSlice({
@@ -268,6 +278,20 @@ const slice = createSlice({
       state.taskOverviewModal = initialState.taskOverviewModal;
     },
 
+    popTeamPickerModal: (state, action: PayloadAction<TeamPickerModalState>) => {
+      state.teamPickerModal = { ...action.payload, visible: true };
+    },
+    closeTeamPickerModal: (state, action: PayloadAction<void>) => {
+      state.teamPickerModal = initialState.teamPickerModal;
+    },
+
+    popWorkspacePickerModal: (state, action: PayloadAction<WorkspacePickerModalState>) => {
+      state.workspacePickerModal = { ...action.payload, visible: true };
+    },
+    closeWorkspacePickerModal: (state, action: PayloadAction<void>) => {
+      state.workspacePickerModal = initialState.workspacePickerModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -326,6 +350,10 @@ export const {
   closeNotificationPermissionModal,
   popTaskOverviewModal,
   closeTaskOverviewModal,
+  popTeamPickerModal,
+  closeTeamPickerModal,
+  popWorkspacePickerModal,
+  closeWorkspacePickerModal,
 
   resetModals,
 } = slice.actions;
@@ -420,3 +448,12 @@ export const selectNotificationPermissionModalVisible = (state: RootState) => st
 export const selectTaskOverviewModalVisible = (state: RootState) => state.modal.taskOverviewModal?.visible;
 export const selectTaskOverviewModalTaskTag = (state: RootState) => state.modal.taskOverviewModal?.taskTag;
 export const selectTaskOverviewModalWorkspaceName = (state: RootState) => state.modal.taskOverviewModal?.workspaceName;
+
+export const selectTeamPickerModalVisible = (state: RootState) => state.modal.teamPickerModal?.visible;
+export const selectTeamPickerModalWorkspaceId = (state: RootState) => state.modal.teamPickerModal?.workspaceId;
+export const selectTeamPickerModalOnPick = (state: RootState) => state.modal.teamPickerModal?.onPick;
+
+export const selectWorkspacePickerModalVisible = (state: RootState) => state.modal.workspacePickerModal?.visible;
+export const selectWorkspacePickerModalCurrentWorkspaceId = (state: RootState) =>
+  state.modal.workspacePickerModal?.currentWorkspaceId;
+export const selectWorkspacePickerModalOnPick = (state: RootState) => state.modal.workspacePickerModal?.onPick;

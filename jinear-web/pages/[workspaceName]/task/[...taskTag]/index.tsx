@@ -49,6 +49,7 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
         });
         updatePreferredWorkspace({
           workspaceId: taskResponse.data.workspaceId,
+          dontReroute: true,
         });
       }
       if (preferredTeamId != taskResponse.data.teamId) {
@@ -59,6 +60,7 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
         updatePreferredTeam({
           teamId: taskResponse.data.teamId,
           workspaceId: taskResponse.data.workspaceId,
+          dontReroute: true,
         });
       }
     }
