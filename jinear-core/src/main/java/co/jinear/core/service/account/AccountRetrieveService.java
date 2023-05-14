@@ -82,7 +82,7 @@ public class AccountRetrieveService {
     }
 
     private void setPreferredWorkspace(String accountId, AccountDto accountDto) {
-        workspaceDisplayPreferenceService.retrieveAccountPreferredWorkspace(accountId)
+        workspaceDisplayPreferenceService.retrieveAccountPreferredWorkspaceOptional(accountId)
                 .ifPresent(accountDto::setWorkspaceDisplayPreference);
     }
 }

@@ -2,10 +2,11 @@ package co.jinear.core.manager.workspace;
 
 import co.jinear.core.converter.workspace.WorkspaceInitializeVoConverter;
 import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.request.workspace.WorkspaceInitializeRequest;
-import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
+import co.jinear.core.model.response.workspace.WorkspaceDisplayPreferenceResponse;
 import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.media.MediaRetrieveService;
@@ -18,6 +19,7 @@ import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -43,6 +45,7 @@ public class WorkspaceManager {
     private final WorkspaceMemberService workspaceMemberService;
     private final MediaValidator mediaValidator;
     private final WorkspaceMediaService workspaceMediaService;
+    private final EntityManager entityManager;
 
     public WorkspaceBaseResponse initializeWorkspace(MultipartFile logo, WorkspaceInitializeRequest workspaceInitializeRequest) {
         log.info("Initialize workspace has started with request: {}", workspaceInitializeRequest);
@@ -72,29 +75,31 @@ public class WorkspaceManager {
         return mapValues(workspaceDto);
     }
 
-    public BaseResponse updatePreferredWorkspace(String workspaceId) {
+    public WorkspaceDisplayPreferenceResponse updatePreferredWorkspace(String workspaceId) {
         String accountId = sessionInfoService.currentAccountId();
         workspaceValidator.validateHasAccess(accountId, workspaceId);
         log.info("Update preferred workspace has started. workspaceId: {}, accountId: {}", workspaceId, accountId);
         workspaceDisplayPreferenceService.setAccountPreferredWorkspace(accountId, workspaceId);
-        return new BaseResponse();
+        entityManager.clear();
+        WorkspaceDisplayPreferenceDto workspaceDisplayPreferenceDto = workspaceDisplayPreferenceService.retrieveAccountPreferredWorkspace(accountId);
+        return mapResponse(workspaceDisplayPreferenceDto);
     }
 
-    public BaseResponse updatePreferredTeam(String teamId) {
+    public WorkspaceDisplayPreferenceResponse updatePreferredTeam(String teamId) {
         String accountId = sessionInfoService.currentAccountId();
         teamAccessValidator.validateTeamAccess(accountId, teamId);
         log.info("Update preferred team has started. teamId: {}, accountId: {}", teamId, accountId);
-        workspaceDisplayPreferenceService.setAccountPreferredTeamId(accountId, teamId);
-        return new BaseResponse();
+        WorkspaceDisplayPreferenceDto workspaceDisplayPreferenceDto = workspaceDisplayPreferenceService.setAccountPreferredTeamId(accountId, teamId);
+        return mapResponse(workspaceDisplayPreferenceDto);
     }
 
-    public BaseResponse updatePreferredWorkspaceWithUsername(String workspaceUsername) {
+    public WorkspaceDisplayPreferenceResponse updatePreferredWorkspaceWithUsername(String workspaceUsername) {
         log.info("Update preferred workspace with username has started. workspaceUsername: {}", workspaceUsername);
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithUsername(workspaceUsername);
         return updatePreferredWorkspace(workspaceDto.getWorkspaceId());
     }
 
-    public BaseResponse updatePreferredTeamWithUsername(String workspaceUsername, String teamUsername) {
+    public WorkspaceDisplayPreferenceResponse updatePreferredTeamWithUsername(String workspaceUsername, String teamUsername) {
         log.info("Update preferred team with username has started. workspaceUsername: {}, teamUsername: {}", workspaceUsername, teamUsername);
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithUsername(workspaceUsername);
         TeamDto teamDto = teamRetrieveService.retrieveActiveTeamByUsername(teamUsername, workspaceDto.getWorkspaceId());
@@ -133,5 +138,11 @@ public class WorkspaceManager {
         Optional.ofNullable(logo)
                 .map(file -> workspaceMediaService.changeProfilePicture(file, workspaceDto.getWorkspaceId()))
                 .ifPresent(workspaceDto::setProfilePicture);
+    }
+
+    private static WorkspaceDisplayPreferenceResponse mapResponse(WorkspaceDisplayPreferenceDto workspaceDisplayPreferenceDto) {
+        WorkspaceDisplayPreferenceResponse workspaceDisplayPreferenceResponse = new WorkspaceDisplayPreferenceResponse();
+        workspaceDisplayPreferenceResponse.setWorkspaceDisplayPreferenceDto(workspaceDisplayPreferenceDto);
+        return workspaceDisplayPreferenceResponse;
     }
 }
