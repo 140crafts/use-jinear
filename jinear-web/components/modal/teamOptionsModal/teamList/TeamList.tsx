@@ -30,7 +30,7 @@ const TeamList: React.FC<TeamListProps> = ({ preferredWorkspace, preferredTeamId
     isError,
     isLoading,
   } = useRetrieveWorkspaceTeamsQuery(preferredWorkspace?.workspaceId || "", {
-    skip: preferredWorkspace == null,
+    skip: preferredWorkspace == null || preferredWorkspace?.workspaceId == "",
   });
 
   const preferredTeam = teamsResponse?.data?.find((team) => team.teamId == preferredTeamId);

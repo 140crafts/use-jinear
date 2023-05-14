@@ -55,7 +55,7 @@ const WorkspaceInvitationResponseScreen: React.FC<WorkspaceInvitationResponseScr
     if (isResponseSuccess && invitationInfoResponse && accepted) {
       updatePreferredWorkspace({ workspaceId: invitationInfoResponse.data.workspaceDto.workspaceId });
       if (currentAccount) {
-        router.replace(ROUTE_IF_LOGGED_IN);
+        // router.replace(ROUTE_IF_LOGGED_IN);
       }
     }
     if (isResponseSuccess && invitationInfoResponse && !accepted) {

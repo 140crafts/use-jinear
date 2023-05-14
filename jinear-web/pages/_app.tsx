@@ -24,10 +24,12 @@ import TaskOverviewModal from "@/components/modal/taskOverviewModal/TaskOverview
 import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
 import TeamPickerModal from "@/components/modal/teamPickerModal/TeamPickerModal";
 import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
+import WorkspacePickerModal from "@/components/modal/workspacePickerModal/WorkspacePickerModal";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
 import OneSignalSubscriber from "@/components/oneSignalSubscriber/OneSignalSubscriber";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
+import InternalWorkspacePrefChangeListener from "@/components/workspaceAndTeamChangeListener/InternalWorkspacePrefChangeListener";
 import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
 import ThemeContext, { getTheme } from "@/store/context/themeContext";
 import { store } from "@/store/store";
@@ -69,6 +71,7 @@ const globalModals: any = (
     <NewTaskModal />
     <TeamOptionsModal />
     <TeamPickerModal />
+    <WorkspacePickerModal />
     <NewTopicModal />
     <LoginWith2FaMailModal />
     <DatePickerModal />
@@ -106,6 +109,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <LayoutProvider>
             <TitleHandler />
             <AuthCheck />
+            <InternalWorkspacePrefChangeListener />
             <WorkspaceAndTeamChangeListener />
             <OnboardListener />
             <OneSignalSubscriber />

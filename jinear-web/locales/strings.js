@@ -1736,7 +1736,11 @@ export default {
   },
   newTaskFormWorkspaceAndTeamInfoLabel: {
     en: "You're creating new task under following workspace and team",
-    tr: "Şu çalışma alanı ve ekip için bir görev oluşturuyorsun",
+    tr: "Görev oluşturduğun çalışma alanı ve ekip",
+  },
+  newTaskFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel: {
+    en: "You're creating new task under following workspace",
+    tr: "Görev oluşturduğun çalışma alanı",
   },
   newTaskModalNewTopicButton: {
     en: "New Topic",
@@ -1753,6 +1757,10 @@ export default {
   lastActivitiesScreenAllTeamsText: {
     en: "Listing activities from all teams",
     tr: "Tüm ekiplerdeki son aktiviteler listeleniyor",
+  },
+  lastActivitiesScreenPersonalWorkspaceText: {
+    en: "Listing latest activities from all tasks",
+    tr: "Tüm görevlerdeki son aktiviteler listeleniyor",
   },
   lastActivitiesScreenFilteredTitle: {
     en: "Team Activities",
@@ -1779,6 +1787,18 @@ export default {
     tr: "Bir ekip seçin",
   },
   newTaskFormPersonalWorkspaceSelected: {
+    en: "Your Personal Workspace",
+    tr: "Kişisel Çalışma Alanın",
+  },
+  workspacePickerModalTitle: {
+    en: "Select Workspace",
+    tr: "Çalışma Alanı Seç",
+  },
+  workspacePickerModalPickAWorkspace: {
+    en: "Pick a workspace",
+    tr: "Bir çalışma alanı seçin",
+  },
+  workspacePickerModalPersonalWorkspace: {
     en: "Your Personal Workspace",
     tr: "Kişisel Çalışma Alanın",
   },

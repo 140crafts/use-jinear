@@ -12,7 +12,9 @@ export const taskChecklistApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         "workplace-task-with-name-and-tag",
         "task-checklist",
-        { type: "retrieve-task-activity", id: req.taskId },
+        "workspace-activity-list",
+        "workspace-team-activity-list",
+        "workspace-task-activity-list",
       ],
     }),
     //
@@ -41,7 +43,12 @@ export const taskChecklistApi = api.injectEndpoints({
         url: `v1/task/checklist/${req.checklistId}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _err, req) => ["workplace-task-with-name-and-tag", "retrieve-task-activity"],
+      invalidatesTags: (_result, _err, req) => [
+        "workplace-task-with-name-and-tag",
+        "workspace-activity-list",
+        "workspace-team-activity-list",
+        "workspace-task-activity-list",
+      ],
     }),
     //
     updateChecklistLabel: build.mutation<
@@ -59,7 +66,9 @@ export const taskChecklistApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         "workplace-task-with-name-and-tag",
         { type: "task-checklist", id: req.checklistId },
-        "retrieve-task-activity",
+        "workspace-activity-list",
+        "workspace-team-activity-list",
+        "workspace-task-activity-list",
       ],
     }),
     //

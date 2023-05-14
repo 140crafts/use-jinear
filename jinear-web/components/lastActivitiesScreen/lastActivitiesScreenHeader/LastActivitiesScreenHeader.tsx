@@ -1,5 +1,5 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { TeamDto } from "@/model/be/jinear-core";
+import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { popTeamPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -8,17 +8,17 @@ import { IoClose } from "react-icons/io5";
 import styles from "./LastActivitiesScreenHeader.module.css";
 
 interface LastActivitiesScreenHeaderProps {
-  workspaceId: string;
+  workspace: WorkspaceDto;
   filterBy?: TeamDto;
   setFilterBy?: React.Dispatch<React.SetStateAction<TeamDto | undefined>>;
 }
 
-const LastActivitiesScreenHeader: React.FC<LastActivitiesScreenHeaderProps> = ({ workspaceId, filterBy, setFilterBy }) => {
+const LastActivitiesScreenHeader: React.FC<LastActivitiesScreenHeaderProps> = ({ workspace, filterBy, setFilterBy }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const popFilterTeamModal = () => {
-    dispatch(popTeamPickerModal({ workspaceId, visible: true, onPick: setFilterBy }));
+    dispatch(popTeamPickerModal({ workspaceId: workspace.workspaceId, visible: true, onPick: setFilterBy }));
   };
 
   const clearFilter = () => {
@@ -34,25 +34,29 @@ const LastActivitiesScreenHeader: React.FC<LastActivitiesScreenHeaderProps> = ({
           dangerouslySetInnerHTML={{
             __html: filterBy
               ? t("lastActivitiesScreenFilteredText").replace("${teamName}", filterBy.name)
+              : workspace.isPersonal
+              ? t("lastActivitiesScreenPersonalWorkspaceText")
               : t("lastActivitiesScreenAllTeamsText"),
           }}
         />
-        <Button
-          onClick={filterBy ? clearFilter : popFilterTeamModal}
-          variant={ButtonVariants.filled}
-          heightVariant={ButtonHeight.short}
-          className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
-        >
-          {filterBy ? (
-            <>
-              <IoClose />
-              <div className="spacer-w-1" />
-              {t("lastActivitiesScreenClearFilterButton")}
-            </>
-          ) : (
-            t("lastActivitiesScreenFilterButton")
-          )}
-        </Button>
+        {!workspace.isPersonal && (
+          <Button
+            onClick={filterBy ? clearFilter : popFilterTeamModal}
+            variant={ButtonVariants.filled}
+            heightVariant={ButtonHeight.short}
+            className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
+          >
+            {filterBy ? (
+              <>
+                <IoClose />
+                <div className="spacer-w-1" />
+                {t("lastActivitiesScreenClearFilterButton")}
+              </>
+            ) : (
+              t("lastActivitiesScreenFilterButton")
+            )}
+          </Button>
+        )}
       </div>
     </div>
   );

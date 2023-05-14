@@ -18,7 +18,13 @@ const TeamPickerModal: React.FC<TeamPickerModalProps> = ({}) => {
   const visible = useTypedSelector(selectTeamPickerModalVisible);
   const workspaceId = useTypedSelector(selectTeamPickerModalWorkspaceId) || "";
 
-  const { data: teamsResponse, isSuccess, isError, isLoading, isFetching } = useRetrieveWorkspaceTeamsQuery(workspaceId);
+  const {
+    data: teamsResponse,
+    isSuccess,
+    isError,
+    isLoading,
+    isFetching,
+  } = useRetrieveWorkspaceTeamsQuery(workspaceId, { skip: workspaceId == null || workspaceId == "" });
 
   const close = () => {
     dispatch(closeTeamPickerModal());

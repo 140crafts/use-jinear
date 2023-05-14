@@ -16,7 +16,7 @@ const LastActivitiesList: React.FC<LastActivitiesListProps> = ({ workspace }) =>
   const [filterBy, setFilterBy] = useState<TeamDto>();
   return (
     <div className={styles.container}>
-      <LastActivitiesScreenHeader workspaceId={workspace.workspaceId} filterBy={filterBy} setFilterBy={setFilterBy} />
+      <LastActivitiesScreenHeader workspace={workspace} filterBy={filterBy} setFilterBy={setFilterBy} />
       <div className="spacer-h-2" />
       {filterBy ? (
         <LastTeamActivitiesList workspaceId={filterBy.workspaceId} teamId={filterBy.teamId} />
