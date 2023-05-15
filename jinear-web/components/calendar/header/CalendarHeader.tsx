@@ -1,17 +1,24 @@
-import Button from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import { TeamDto } from "@/model/be/jinear-core";
+import { popTeamPickerModal } from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
 import { addMonths, format, startOfToday } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoCaretBack, IoCaretForward, IoEllipse } from "react-icons/io5";
+import { IoCaretBack, IoCaretForward, IoClose, IoEllipse } from "react-icons/io5";
 import { useSetViewingDate, useViewingDate } from "../context/CalendarContext";
 import styles from "./CalendarHeader.module.css";
 
 interface CalendarHeaderProps {
   days: Date[];
+  filterBy?: TeamDto;
+  setFilterBy?: React.Dispatch<React.SetStateAction<TeamDto | undefined>>;
+  workspaceId: string;
 }
 
-const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days }) => {
+const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilterBy, workspaceId }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const viewingDate = useViewingDate();
   const setViewingDate = useSetViewingDate();
   const title = !viewingDate
@@ -36,10 +43,45 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days }) => {
     setViewingDate?.(startOfToday());
   };
 
+  const popFilterTeamModal = () => {
+    dispatch(popTeamPickerModal({ workspaceId, visible: true, onPick: setFilterBy }));
+  };
+
+  const clearFilter = () => {
+    setFilterBy?.(undefined);
+  };
+
   return (
     <>
       <div className={styles.mainCalendarHeader}>
-        <h1 className={styles.monthHeader}>{title}</h1>
+        <div className={styles.headerInfoContainer}>
+          <h1 className={styles.monthHeader}>{title}</h1>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: filterBy
+                ? t("calendarHeaderFilteredTeamSubtitle").replace("${teamName}", filterBy.name)
+                : t("calendarHeaderAllTeamsSubtitle"),
+            }}
+          />
+        </div>
+        <div>
+          <Button
+            onClick={filterBy ? clearFilter : popFilterTeamModal}
+            heightVariant={ButtonHeight.short}
+            variant={ButtonVariants.filled}
+            className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
+          >
+            {filterBy ? (
+              <>
+                <IoClose />
+                <div className="spacer-w-1" />
+                {t("calendarClearFilterButton")}
+              </>
+            ) : (
+              t("calendarFilterButton")
+            )}
+          </Button>
+        </div>
         <div className={styles.calendarNavigation}>
           <Button onClick={prevMonth}>
             <IoCaretBack />
