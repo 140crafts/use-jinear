@@ -1,11 +1,12 @@
-import { useRetrieveAllIntersectingTasksQuery } from "@/store/api/taskListingApi";
+import { TeamDto } from "@/model/be/jinear-core";
+import { useRetrieveAllIntersectingTasksFromTeamQuery, useRetrieveAllIntersectingTasksQuery } from "@/store/api/taskListingApi";
 import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import { eachDayOfInterval, endOfMonth, endOfWeek, format, parse, startOfDay, startOfWeek } from "date-fns";
 import React, { useMemo, useState } from "react";
 import styles from "./Calendar.module.css";
-import { calculateHitMissTable, ICalendarWeekRowCell } from "./calendarUtils";
+import { ICalendarWeekRowCell, calculateHitMissTable } from "./calendarUtils";
 import CalendarContext from "./context/CalendarContext";
 import CalendarHeader from "./header/CalendarHeader";
 import Month from "./month/Month";
@@ -18,6 +19,7 @@ interface CalendarProps {
 const logger = Logger("Calendar");
 
 const Calendar: React.FC<CalendarProps> = ({ workspaceId, initialDate = startOfDay(new Date()), className }) => {
+  const [filterBy, setFilterBy] = useState<TeamDto>();
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
   const [viewingDate, setViewingDate] = useState(initialDate);
   const currentMonth = format(viewingDate, "MMM-yyyy");
@@ -25,16 +27,17 @@ const Calendar: React.FC<CalendarProps> = ({ workspaceId, initialDate = startOfD
   const periodStart = startOfWeek(firstDayCurrentMonth, { weekStartsOn: 1 });
   const periodEnd = endOfWeek(endOfMonth(firstDayCurrentMonth), { weekStartsOn: 1 });
   const days = eachDayOfInterval({ start: periodStart, end: periodEnd });
-
+  const query = filterBy ? useRetrieveAllIntersectingTasksFromTeamQuery : useRetrieveAllIntersectingTasksQuery;
   const {
     data: taskListingResponse,
     isFetching,
     isSuccess,
-  } = useRetrieveAllIntersectingTasksQuery(
+  } = query(
     {
       workspaceId,
       timespanStart: periodStart,
       timespanEnd: periodEnd,
+      teamId: filterBy ? filterBy.teamId : "",
     },
     { skip: workspaceId == null }
   );
@@ -60,7 +63,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspaceId, initialDate = startOfD
       }}
     >
       <div className={cn(styles.container, className)}>
-        <CalendarHeader days={days} />
+        <CalendarHeader days={days} workspaceId={workspaceId} filterBy={filterBy} setFilterBy={setFilterBy} />
         {monthTable && <Month monthTable={monthTable} days={days} />}
         {isFetching && (
           <div className={styles.loadingContainer}>

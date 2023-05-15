@@ -11,3 +11,7 @@
 .taskInfo {
   background-color: unset;
 }
+
+.taskActivitiesTitle {
+  font-size: 0.8rem;
+}

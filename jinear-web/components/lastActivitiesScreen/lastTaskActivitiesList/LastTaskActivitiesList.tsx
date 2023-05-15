@@ -6,9 +6,16 @@ import styles from "./LastTaskActivitiesList.module.css";
 interface LastTaskActivitiesListProps {
   workspaceId: string;
   taskId: string;
+  listTitle?: string;
+  listTitleClassName?: string;
 }
 
-const LastTaskActivitiesList: React.FC<LastTaskActivitiesListProps> = ({ workspaceId, taskId }) => {
+const LastTaskActivitiesList: React.FC<LastTaskActivitiesListProps> = ({
+  workspaceId,
+  taskId,
+  listTitle = "",
+  listTitleClassName,
+}) => {
   const [page, setPage] = useState<number>(0);
   const { data: response, isLoading, isFetching } = useRetrieveActivitiesFromTaskQuery({ workspaceId, taskId, page });
 
@@ -16,7 +23,8 @@ const LastTaskActivitiesList: React.FC<LastTaskActivitiesListProps> = ({ workspa
     <div className={styles.container}>
       <PaginatedActivityList
         id={"last-workspace-task-activities-list"}
-        name={""}
+        name={listTitle}
+        listNameClassName={listTitleClassName}
         response={response}
         isFetching={isFetching}
         isLoading={isLoading}
