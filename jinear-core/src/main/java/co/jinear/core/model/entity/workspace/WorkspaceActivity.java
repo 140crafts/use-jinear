@@ -3,15 +3,13 @@ package co.jinear.core.model.entity.workspace;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
 import co.jinear.core.model.entity.task.Task;
-import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-
-import jakarta.persistence.*;
 
 @Getter
 @Setter
@@ -64,7 +62,7 @@ public class WorkspaceActivity extends BaseEntity {
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(name = "related_object_id", insertable = false, updatable = false)
+    @JoinColumn(name = "task_id", insertable = false, updatable = false)
     private Task relatedTask;
 
 }
