@@ -53,14 +53,16 @@ const NotificationMessageRow: React.FC<NotificationMessageRowProps> = ({ notific
         <div className={styles.dateTitle}>{format(new Date(notificationEvent.createdDate), t("dateFormat"))}</div>
       )}
       <Button className={styles.container} href={notificationEvent.launchUrl}>
-        <div>
+        <div className={styles.iconContainer}>
           <Icon size={17} />
         </div>
-        <div>
-          <b>{notificationEvent.title}</b>
+        <div className={styles.contentContainer}>
+          <div>
+            <b>{notificationEvent.title}</b>
+          </div>
+          <div className={styles.text}>{notificationEvent.text}</div>
+          <div className={styles.date}>{format(new Date(notificationEvent.createdDate), t("timeFormat"))}</div>
         </div>
-        <div className={styles.text}>{notificationEvent.text}</div>
-        <div className={styles.date}>{format(new Date(notificationEvent.createdDate), t("timeFormat"))}</div>
       </Button>
       <Line className={styles.line} />
     </>
