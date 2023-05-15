@@ -4,7 +4,8 @@
   width: var(--full);
   max-width: var(--full);
   gap: 1rem;
-  height: 90vh;
+  /* height: 90vh;
+  padding-bottom: calc(2 * var(--tab-bar-height)); */
 }
 
 .calendar {
