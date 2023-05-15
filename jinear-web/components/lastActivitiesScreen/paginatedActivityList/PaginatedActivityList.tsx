@@ -16,6 +16,7 @@ interface PaginatedActivityListProps {
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   ignoreGrouping?: boolean;
+  listNameClassName?: string;
 }
 
 const PaginatedActivityList: React.FC<PaginatedActivityListProps> = ({
@@ -27,6 +28,7 @@ const PaginatedActivityList: React.FC<PaginatedActivityListProps> = ({
   page,
   setPage,
   ignoreGrouping,
+  listNameClassName,
 }) => {
   const { t } = useTranslation();
   const activityList = response?.data.content;
@@ -34,7 +36,7 @@ const PaginatedActivityList: React.FC<PaginatedActivityListProps> = ({
   return (
     <div id={id} className={cn(styles.container)}>
       <div className={styles.header}>
-        <h2>{name}</h2>
+        <h2 className={listNameClassName}>{name}</h2>
         {response && (
           <Pagination
             id={`${id}-paginator`}

@@ -1,5 +1,6 @@
 import { useToggle } from "@/hooks/useToggle";
 import { TaskDto } from "@/model/be/jinear-core";
+import useTranslation from "locales/useTranslation";
 import React from "react";
 import LastTaskActivitiesList from "../lastActivitiesScreen/lastTaskActivitiesList/LastTaskActivitiesList";
 import Line from "../line/Line";
@@ -16,7 +17,9 @@ interface TaskDetailProps {
 }
 
 const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
+  const { t } = useTranslation();
   const { current: showSubTaskListEvenIfNoSubtasks, toggle: toggleShowSubTaskListEvenIfNoSubtasks } = useToggle(false);
+
   return (
     <TaskDetailContext.Provider
       value={{
@@ -34,7 +37,12 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
         <TaskSubtaskList />
         <Line />
         {/* <TaskActivityList taskId={task.taskId} /> */}
-        <LastTaskActivitiesList workspaceId={task.workspaceId} taskId={task.taskId} />
+        <LastTaskActivitiesList
+          workspaceId={task.workspaceId}
+          taskId={task.taskId}
+          listTitle={t("taskActivityListTitle")}
+          listTitleClassName={styles.taskActivitiesTitle}
+        />
       </div>
     </TaskDetailContext.Provider>
   );
