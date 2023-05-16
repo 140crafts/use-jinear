@@ -64,7 +64,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilt
             }}
           />
         </div>
-        <div>
+        <div className={styles.calendarNavigation}>
           <Button
             onClick={filterBy ? clearFilter : popFilterTeamModal}
             heightVariant={ButtonHeight.short}
@@ -81,8 +81,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilt
               t("calendarFilterButton")
             )}
           </Button>
-        </div>
-        <div className={styles.calendarNavigation}>
+          <div className="spacer-w-2" />
           <Button onClick={prevMonth}>
             <IoCaretBack />
           </Button>

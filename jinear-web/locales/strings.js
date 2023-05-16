@@ -1803,8 +1803,8 @@ export default {
     tr: "Kişisel Çalışma Alanın",
   },
   calendarHeaderAllTeamsSubtitle: {
-    en: "Listing tasks with assigned and/or due date from all teams",
-    tr: "Tüm ekiplerdeki tarih atanmış olan görevler listeleniyor",
+    en: "Listing tasks with assigned and/or due date from <b>all teams</b>",
+    tr: "<b>Tüm ekipler</b>deki tarih atanmış olan görevler listeleniyor",
   },
   calendarHeaderFilteredTeamSubtitle: {
     en: "Listing tasks with assigned and/or due date from team <b>${teamName}</b>",
