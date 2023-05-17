@@ -1,6 +1,7 @@
 .container {
   z-index: 3;
 }
+
 .actionBar {
   display: flex;
   flex-direction: row;

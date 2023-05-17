@@ -22,6 +22,26 @@ export const notificationEventApi = api.injectEndpoints({
       ],
     }),
     //
+    retrieveTeamNotifications: build.query<
+      NotificationEventListingResponse,
+      {
+        workspaceId: string;
+        teamId: string;
+        page: number;
+      }
+    >({
+      query: (req: { workspaceId: string; teamId: string; page: number }) => {
+        const page = req.page ? req.page : 0;
+        return `v1/notification/event/${req.workspaceId}/team/${req.teamId}?page=${page}`;
+      },
+      providesTags: (_result, _err, req) => [
+        {
+          type: "account-workspace-team-notification-events",
+          id: `${req.workspaceId}-${req.teamId}-${req.page}`,
+        },
+      ],
+    }),
+    //
     retrieveUnreadNotificationCount: build.query<
       RetrieveUnreadNotificationEventCountResponse,
       {
@@ -40,7 +60,8 @@ export const notificationEventApi = api.injectEndpoints({
   }),
 });
 
-export const { useRetrieveNotificationsQuery, useRetrieveUnreadNotificationCountQuery } = notificationEventApi;
+export const { useRetrieveNotificationsQuery, useRetrieveTeamNotificationsQuery, useRetrieveUnreadNotificationCountQuery } =
+  notificationEventApi;
 
 export const {
   endpoints: { retrieveNotifications, retrieveUnreadNotificationCount },

@@ -1,5 +1,5 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { TeamDto } from "@/model/be/jinear-core";
+import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { popTeamPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import { addMonths, format, startOfToday } from "date-fns";
@@ -13,10 +13,10 @@ interface CalendarHeaderProps {
   days: Date[];
   filterBy?: TeamDto;
   setFilterBy?: React.Dispatch<React.SetStateAction<TeamDto | undefined>>;
-  workspaceId: string;
+  workspace: WorkspaceDto;
 }
 
-const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilterBy, workspaceId }) => {
+const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilterBy, workspace }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const viewingDate = useViewingDate();
@@ -44,7 +44,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilt
   };
 
   const popFilterTeamModal = () => {
-    dispatch(popTeamPickerModal({ workspaceId, visible: true, onPick: setFilterBy }));
+    dispatch(popTeamPickerModal({ workspaceId: workspace.workspaceId, visible: true, onPick: setFilterBy }));
   };
 
   const clearFilter = () => {
@@ -58,30 +58,37 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilt
           <h1 className={styles.monthHeader}>{title}</h1>
           <div
             dangerouslySetInnerHTML={{
-              __html: filterBy
+              __html: workspace?.isPersonal
+                ? t("calendarHeaderPersonalWorkspaceSubtitle")
+                : filterBy
                 ? t("calendarHeaderFilteredTeamSubtitle").replace("${teamName}", filterBy.name)
                 : t("calendarHeaderAllTeamsSubtitle"),
             }}
           />
         </div>
         <div className={styles.calendarNavigation}>
-          <Button
-            onClick={filterBy ? clearFilter : popFilterTeamModal}
-            heightVariant={ButtonHeight.short}
-            variant={ButtonVariants.filled}
-            className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
-          >
-            {filterBy ? (
-              <>
-                <IoClose />
-                <div className="spacer-w-1" />
-                {t("calendarClearFilterButton")}
-              </>
-            ) : (
-              t("calendarFilterButton")
-            )}
-          </Button>
-          <div className="spacer-w-2" />
+          {!workspace?.isPersonal && (
+            <>
+              <Button
+                onClick={filterBy ? clearFilter : popFilterTeamModal}
+                heightVariant={ButtonHeight.short}
+                variant={ButtonVariants.filled}
+                className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
+              >
+                {filterBy ? (
+                  <>
+                    <IoClose />
+                    <div className="spacer-w-1" />
+                    {t("calendarClearFilterButton")}
+                  </>
+                ) : (
+                  t("calendarFilterButton")
+                )}
+              </Button>
+              <div className="spacer-w-2" />
+            </>
+          )}
+
           <Button onClick={prevMonth}>
             <IoCaretBack />
           </Button>

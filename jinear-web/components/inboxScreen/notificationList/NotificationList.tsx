@@ -22,7 +22,7 @@ const NotificationList: React.FC<NotificationListProps> = ({ data, isFetching, i
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2>{t("notificationEventListName")}</h2>
+        {/* <h2>{t("notificationEventListName")}</h2> */}
         {data && (
           <Pagination
             id={`notification-events-paginator`}
