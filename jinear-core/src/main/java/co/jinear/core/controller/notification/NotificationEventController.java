@@ -23,6 +23,14 @@ public class NotificationEventController {
         return notificationEventListingManager.retrieveNotifications(workspaceId, page);
     }
 
+    @GetMapping("/{workspaceId}/team/{teamId}")
+    @ResponseStatus(HttpStatus.OK)
+    public NotificationEventListingResponse retrieveTeamNotifications(@PathVariable String workspaceId,
+                                                                      @PathVariable String teamId,
+                                                                      @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return notificationEventListingManager.retrieveTeamNotifications(workspaceId, teamId, page);
+    }
+
     @GetMapping("/{workspaceId}/unread-count")
     @ResponseStatus(HttpStatus.OK)
     public RetrieveUnreadNotificationEventCountResponse retrieveUnreadNotificationCount(@PathVariable String workspaceId) {

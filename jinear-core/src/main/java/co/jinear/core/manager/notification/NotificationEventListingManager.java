@@ -5,9 +5,11 @@ import co.jinear.core.model.dto.notification.NotificationEventDto;
 import co.jinear.core.model.response.notification.NotificationEventListingResponse;
 import co.jinear.core.model.response.notification.RetrieveUnreadNotificationEventCountResponse;
 import co.jinear.core.model.vo.notification.NotificationEventListingVo;
+import co.jinear.core.model.vo.notification.TeamNotificationEventListingVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.notification.NotificationEventListingService;
 import co.jinear.core.service.notification.NotificationEventOperationService;
+import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +26,7 @@ public class NotificationEventListingManager {
     private final NotificationEventListingService notificationEventListingService;
     private final WorkspaceValidator workspaceValidator;
     private final NotificationEventOperationService notificationEventOperationService;
+    private final TeamAccessValidator teamAccessValidator;
 
     public NotificationEventListingResponse retrieveNotifications(String workspaceId, int page) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -35,12 +38,22 @@ public class NotificationEventListingManager {
         return mapUnreadCountResponse(eventDtoPage);
     }
 
+    public NotificationEventListingResponse retrieveTeamNotifications(String workspaceId, String teamId, Integer page) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        teamAccessValidator.validateTeamAccess(currentAccountId, teamId);
+        log.info("Retrieve notifications has started. accountId: {}, workspaceId: {}, teamId: {}, page: {}", currentAccountId, workspaceId, teamId, page);
+        TeamNotificationEventListingVo teamNotificationEventListingVo = mapVo(workspaceId, teamId, currentAccountId, page);
+        Page<NotificationEventDto> eventDtoPage = notificationEventListingService.retrieveTeamNotificationEvents(teamNotificationEventListingVo);
+        notificationEventOperationService.updateAllAsRead(currentAccountId, teamId, workspaceId);
+        return mapUnreadCountResponse(eventDtoPage);
+    }
+
     public RetrieveUnreadNotificationEventCountResponse retrieveUnreadNotificationCount(String workspaceId) {
         String currentAccountId = sessionInfoService.currentAccountId();
         workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
         log.info("Retrieve unread notification count has started. accountId: {}, workspaceId: {}", currentAccountId, workspaceId);
-        Long count = notificationEventListingService.retrieveUnreadNotificationEventCount(workspaceId,currentAccountId);
-            return mapUnreadCountResponse(count);
+        Long count = notificationEventListingService.retrieveUnreadNotificationEventCount(workspaceId, currentAccountId);
+        return mapUnreadCountResponse(count);
     }
 
     @NonNull
@@ -63,5 +76,14 @@ public class NotificationEventListingManager {
         notificationEventListingVo.setCurrentAccountId(currentAccountId);
         notificationEventListingVo.setPage(page);
         return notificationEventListingVo;
+    }
+
+    private TeamNotificationEventListingVo mapVo(String workspaceId, String teamId, String currentAccountId, int page) {
+        TeamNotificationEventListingVo teamNotificationEventListingVo = new TeamNotificationEventListingVo();
+        teamNotificationEventListingVo.setWorkspaceId(workspaceId);
+        teamNotificationEventListingVo.setTeamId(teamId);
+        teamNotificationEventListingVo.setCurrentAccountId(currentAccountId);
+        teamNotificationEventListingVo.setPage(page);
+        return teamNotificationEventListingVo;
     }
 }

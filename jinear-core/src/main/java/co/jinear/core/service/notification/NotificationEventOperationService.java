@@ -41,6 +41,13 @@ public class NotificationEventOperationService {
         notificationEventRepository.updateAllBeforeAsRead(accountId, workspaceId, before);
     }
 
+    @Transactional
+    public void updateAllAsRead(String accountId, String workspaceId, String teamId) {
+        Date before = DateHelper.now();
+        log.info("Update all notification events as read has started. accountId: {}, workspaceId: {}, teamId: {}, before: {}", accountId, workspaceId, teamId, before);
+        notificationEventRepository.updateAllFromTeamBeforeAsRead(accountId, workspaceId, teamId, before);
+    }
+
     private NotificationEvent saveInitialEntry(NotificationSendVo notificationSendVo) {
         Boolean isSilent = Optional.of(notificationSendVo).map(NotificationSendVo::getIsSilent).orElse(Boolean.TRUE);
         NotificationEvent notificationEvent = new NotificationEvent();
