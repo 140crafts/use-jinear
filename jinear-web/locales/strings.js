@@ -1755,12 +1755,12 @@ export default {
     tr: "Tüm Aktiviteler",
   },
   lastActivitiesScreenAllTeamsText: {
-    en: "Listing activities from all teams",
-    tr: "Tüm ekiplerdeki son aktiviteler listeleniyor",
+    en: "Listing activities from <b>all teams</b>",
+    tr: "<b>Tüm ekiplerdeki</b> son aktiviteler listeleniyor",
   },
   lastActivitiesScreenPersonalWorkspaceText: {
-    en: "Listing latest activities from all tasks",
-    tr: "Tüm görevlerdeki son aktiviteler listeleniyor",
+    en: "Listing latest activities from <b>all teams</b>",
+    tr: "<b>Tüm ekiplerdeki</b> son aktiviteler listeleniyor",
   },
   lastActivitiesScreenFilteredTitle: {
     en: "Team Activities",
@@ -1804,7 +1804,11 @@ export default {
   },
   calendarHeaderAllTeamsSubtitle: {
     en: "Listing tasks with assigned and/or due date from <b>all teams</b>",
-    tr: "<b>Tüm ekipler</b>deki tarih atanmış olan görevler listeleniyor",
+    tr: "<b>Tüm ekiplerdeki</b> tarih atanmış olan görevler listeleniyor",
+  },
+  calendarHeaderPersonalWorkspaceSubtitle: {
+    en: "Listing tasks with assigned and/or due date from your personal workspace",
+    tr: "Kişisel çalışma alanındaki tarih atanmış olan görevler listeleniyor",
   },
   calendarHeaderFilteredTeamSubtitle: {
     en: "Listing tasks with assigned and/or due date from team <b>${teamName}</b>",
@@ -1815,6 +1819,26 @@ export default {
     tr: "Filtrele",
   },
   calendarClearFilterButton: {
+    en: "Clear Filter",
+    tr: "Filtreyi Kaldır",
+  },
+  inboxHeaderPersonalWorkspaceSubtitle: {
+    en: "Listing your notifications",
+    tr: "Bildirimlerin listeleniyor",
+  },
+  inboxHeaderFilteredTeamSubtitle: {
+    en: "Listing your notifications from team <b>${teamName}</b>",
+    tr: "<b>${teamName}</b>&nbsp;ekibindeki bildirimlerin listeleniyor",
+  },
+  inboxHeaderAllTeamsSubtitle: {
+    en: "Listing your notifications from <b>all teams</b>",
+    tr: "<b>Tüm ekiplerdeki</b>&nbsp;bildirimlerin listeleniyor",
+  },
+  inboxScreenFilterButton: {
+    en: "Filter",
+    tr: "Filtrele",
+  },
+  inboxScreenClearFilterButton: {
     en: "Clear Filter",
     tr: "Filtreyi Kaldır",
   },

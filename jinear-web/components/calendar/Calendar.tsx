@@ -1,4 +1,4 @@
-import { TeamDto } from "@/model/be/jinear-core";
+import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useRetrieveAllIntersectingTasksFromTeamQuery, useRetrieveAllIntersectingTasksQuery } from "@/store/api/taskListingApi";
 import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
@@ -12,13 +12,13 @@ import CalendarHeader from "./header/CalendarHeader";
 import Month from "./month/Month";
 interface CalendarProps {
   initialDate?: Date;
-  workspaceId: string;
+  workspace: WorkspaceDto;
   className?: string;
 }
 
 const logger = Logger("Calendar");
 
-const Calendar: React.FC<CalendarProps> = ({ workspaceId, initialDate = startOfDay(new Date()), className }) => {
+const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay(new Date()), className }) => {
   const [filterBy, setFilterBy] = useState<TeamDto>();
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
   const [viewingDate, setViewingDate] = useState(initialDate);
@@ -34,12 +34,12 @@ const Calendar: React.FC<CalendarProps> = ({ workspaceId, initialDate = startOfD
     isSuccess,
   } = query(
     {
-      workspaceId,
+      workspaceId: workspace.workspaceId,
       timespanStart: periodStart,
       timespanEnd: periodEnd,
       teamId: filterBy ? filterBy.teamId : "",
     },
-    { skip: workspaceId == null }
+    { skip: workspace == null }
   );
 
   const monthTable: ICalendarWeekRowCell[][][] | undefined = useMemo(() => {
@@ -63,7 +63,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspaceId, initialDate = startOfD
       }}
     >
       <div className={cn(styles.container, className)}>
-        <CalendarHeader days={days} workspaceId={workspaceId} filterBy={filterBy} setFilterBy={setFilterBy} />
+        <CalendarHeader days={days} workspace={workspace} filterBy={filterBy} setFilterBy={setFilterBy} />
         {monthTable && <Month monthTable={monthTable} days={days} />}
         {isFetching && (
           <div className={styles.loadingContainer}>
