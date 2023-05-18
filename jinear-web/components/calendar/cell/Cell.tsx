@@ -54,6 +54,18 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
     task.workflowStatus.workflowStateGroup &&
     (task.workflowStatus.workflowStateGroup == "COMPLETED" || task.workflowStatus.workflowStateGroup == "CANCELLED");
 
+  const topicColor = task?.topic?.color;
+  const topicCellStyle = topicColor
+    ? {
+        flex: weight,
+        borderBottomColor: `#${topicColor}`,
+        borderBottomStyle: "solid",
+        borderBottomWidth: 2,
+        // borderBottomLeftRadius: 0,
+        // borderBottomRightRadius: 0,
+      }
+    : { flex: weight };
+
   const _hoverStart = () => {
     if (task) {
       setHighlightedTaskId?.(task.taskId);
@@ -92,7 +104,8 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
         (isDueDateWithinThisWeek || isOneOfDatesNotSet) && styles.endDay,
         isCompleted && styles["completed-fill"]
       )}
-      style={{ flex: weight }}
+      // @ts-ignore
+      style={topicCellStyle}
       onMouseEnter={_hoverStart}
       onMouseOut={_hoverEnd}
     >
