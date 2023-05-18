@@ -1842,4 +1842,20 @@ export default {
     en: "Clear Filter",
     tr: "Filtreyi Kaldır",
   },
+  assignedToMeScreenBreadcrumbLabel: {
+    en: "Assigned to me",
+    tr: "Bana Atananlar",
+  },
+  assignedToMeScreenSubtitleAllTeams: {
+    en: "Listing tasks assigned to you from <b>all teams</b>",
+    tr: "<b>Tüm ekiplerdeki</b> sana atanan görevler listeleniyor",
+  },
+  assignedToMeScreenSubtitleTeamFiltered: {
+    en: "Listing tasks assigned to you from <b>${teamName}</b>",
+    tr: "<b>${teamName}</b> ekibindeki sana atanan görevler listeleniyor",
+  },
+  lastActivitiesScreenBreadcrumbLabel: {
+    en: "Last Activities",
+    tr: "Son Aktiviteler",
+  },
 };

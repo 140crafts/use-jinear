@@ -1,16 +1,39 @@
+import AssignedToMeScreenHeader from "@/components/assignedToMeScreen/assignedToMeScreenHeader/AssignedToMeScreenHeader";
 import PaginatedAssignedToCurrentAccountTaskList from "@/components/taskListScreen/taskLists/paginatedAssignedToCurrentAccountTaskList/PaginatedAssignedToCurrentAccountTaskList";
-import { selectCurrentAccountsPreferredWorkspaceId } from "@/store/slice/accountSlice";
+import PaginatedFromTeamWithAssigneeTaskList from "@/components/taskListScreen/taskLists/paginatedFromTeamWithAssigneeTaskList/PaginatedFromTeamWithAssigneeTaskList";
+import { TeamDto } from "@/model/be/jinear-core";
+import {
+  selectCurrentAccountId,
+  selectCurrentAccountsPreferredTeamId,
+  selectCurrentAccountsPreferredWorkspaceId,
+} from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
-import React from "react";
+import React, { useState } from "react";
 import styles from "./index.module.css";
 
 interface AssignedToMePageProps {}
 
 const AssignedToMePage: React.FC<AssignedToMePageProps> = ({}) => {
+  const currentAccountId = useTypedSelector(selectCurrentAccountId);
   const currentWorkspaceId = useTypedSelector(selectCurrentAccountsPreferredWorkspaceId);
+  const currentTeamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
+  const [filterBy, setFilterBy] = useState<TeamDto>();
+
   return (
     <div className={styles.container}>
-      {currentWorkspaceId && <PaginatedAssignedToCurrentAccountTaskList workspaceId={currentWorkspaceId} />}
+      {currentWorkspaceId && (
+        <AssignedToMeScreenHeader filterBy={filterBy} setFilterBy={setFilterBy} workspaceId={currentWorkspaceId} />
+      )}
+      {currentWorkspaceId &&
+        (filterBy ? (
+          <PaginatedFromTeamWithAssigneeTaskList
+            workspaceId={currentWorkspaceId}
+            teamId={filterBy.teamId || ""}
+            assigneeId={currentAccountId || ""}
+          />
+        ) : (
+          <PaginatedAssignedToCurrentAccountTaskList workspaceId={currentWorkspaceId} />
+        ))}
     </div>
   );
 };
