@@ -1,5 +1,4 @@
 import { useRetrieveAssignedToCurrentAccountQuery } from "@/store/api/taskListingApi";
-import useTranslation from "locales/useTranslation";
 import React, { useState } from "react";
 import BaseTaskList from "../baseTaskList/BaseTaskList";
 
@@ -8,7 +7,6 @@ interface PaginatedAssignedToCurrentAccountTaskListProps {
 }
 
 const PaginatedAssignedToCurrentAccountTaskList: React.FC<PaginatedAssignedToCurrentAccountTaskListProps> = ({ workspaceId }) => {
-  const { t } = useTranslation();
   const [page, setPage] = useState<number>(0);
 
   const {
@@ -25,7 +23,7 @@ const PaginatedAssignedToCurrentAccountTaskList: React.FC<PaginatedAssignedToCur
   return (
     <BaseTaskList
       id={`assigned-to-me-tasks-${workspaceId}`}
-      name={t("assignedToMeTaskListName")}
+      name={""}
       response={response}
       isFetching={isFetching}
       isLoading={isLoading}
