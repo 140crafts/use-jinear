@@ -96,3 +96,9 @@
 .arrow-right-end-highlight {
   border-left: calc(var(--calendar-event-height) / 2) solid var(--c-primary-shade-1);
 }
+
+.hoverInfoCard {
+  width: 135px;
+  min-height: 135px;
+  background-color: red;
+}
