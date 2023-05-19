@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   height: var(--calendar-event-height);
+  width: 0px;
   color: var(--c-text-color);
   cursor: default;
   pointer-events: none;
@@ -17,11 +18,15 @@
 }
 
 .iconContainer {
+  min-width: 23px;
+  cursor: pointer;
+  pointer-events: none;
   padding-left: 0.5rem;
 }
 
 .title {
   cursor: pointer;
+  pointer-events: none;
 }
 
 .title-line-through {
