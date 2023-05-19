@@ -60,9 +60,9 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
         flex: weight,
         borderBottomColor: `#${topicColor}`,
         borderBottomStyle: "solid",
-        borderBottomWidth: 2,
-        // borderBottomLeftRadius: 0,
-        // borderBottomRightRadius: 0,
+        borderBottomWidth: 1.25,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
       }
     : { flex: weight };
 
