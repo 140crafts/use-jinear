@@ -84,24 +84,14 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <IoChevronDownSharp size={17} />
           </Button>
 
-          <SideMenuFooter
-            className={cn(styles.sideMenuFooter, !isMenuVisible && styles.sideMenuFooterMenuOpen, pwa && styles.pwaPadding)}
-          />
+          <SideMenuFooter className={cn(styles.sideMenuFooter, !isMenuVisible && styles.sideMenuFooterMenuOpen)} />
 
           <div className={styles.menuContent}>
             <div className={styles.mainMenu}>
               <SideMenu />
             </div>
           </div>
-          <div
-            // className={styles.workspaceMenu}
-            className={cn(styles.workspaceMenu, !isMenuVisible && styles.workspaceMenuOpen, pwa && styles.pwaPadding)}
-            style={
-              {
-                // marginBottom: isMenuVisible ? 0 : "-5vh",
-              }
-            }
-          >
+          <div className={cn(styles.workspaceMenu, !isMenuVisible && styles.workspaceMenuOpen, pwa && styles.pwaPadding)}>
             <WorkspaceMenu />
           </div>
         </div>
