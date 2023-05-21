@@ -91,7 +91,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <SideMenu />
             </div>
           </div>
-          <div className={cn(styles.workspaceMenu, !isMenuVisible && styles.workspaceMenuOpen, pwa && styles.pwaPadding)}>
+          <div className={cn(styles.workspaceMenu, !isMenuVisible && styles.workspaceMenuOpen, pwa && styles.pwaMargin)}>
             <WorkspaceMenu />
           </div>
         </div>
