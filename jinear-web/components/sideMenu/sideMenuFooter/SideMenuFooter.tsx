@@ -7,7 +7,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoLogOutOutline } from "react-icons/io5";
+import { IoLogOutOutline, IoPerson } from "react-icons/io5";
 import styles from "./SideMenuFooter.module.css";
 
 interface SideMenuFooterProps {
@@ -39,17 +39,20 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
 
   return (
     <div className={cn(styles.container, className)}>
-      <ThemeToggle />
       <Button href={"/profile"} variant={ButtonVariants.hoverFilled} className={styles.accountButton}>
+        <div>
+          <IoPerson size={14} />
+        </div>
         {currentAccount?.username}
-      </Button>
+      </Button>{" "}
+      <ThemeToggle variant={ButtonVariants.hoverFilled} />
       <Button
         loading={isLoading}
         variant={ButtonVariants.hoverFilled}
         data-tooltip-top-right={t("sideMenuFooterLogout")}
         onClick={popAreYouSureModalForLogout}
       >
-        <IoLogOutOutline size={19} />
+        <IoLogOutOutline size={17} />
       </Button>
     </div>
   );

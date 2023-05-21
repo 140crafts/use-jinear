@@ -27,7 +27,7 @@ const CurrentWorkspaceHeader: React.FC<CurrentWorkspaceHeaderProps> = ({}) => {
         data-tooltip-right={t("currentWorkspaceHeaderWorkspaceDetail")}
         className={styles.button}
       >
-        <IoEllipsisHorizontal size={17} />
+        <IoEllipsisHorizontal />
       </Button>
     </div>
   );

@@ -10,7 +10,7 @@
 
 .teamSelectButton {
   flex: 1;
-  max-width: calc(var(--side-menu-main-menu-width) - 1rem);
+  /* max-width: calc(var(--side-menu-main-menu-width) - 1rem); */
 }
 
 .spacer {
