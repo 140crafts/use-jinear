@@ -83,17 +83,27 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <Button className={styles.closeMenuContainer} onClick={_closeMenu}>
             <IoChevronDownSharp size={17} />
           </Button>
+
+          <SideMenuFooter
+            className={cn(styles.sideMenuFooter, !isMenuVisible && styles.sideMenuFooterMenuOpen, pwa && styles.pwaPadding)}
+          />
+
           <div className={styles.menuContent}>
-            <div className={styles.workspaceMenu}>
-              <WorkspaceMenu />
-            </div>
             <div className={styles.mainMenu}>
               <SideMenu />
             </div>
           </div>
-          <SideMenuFooter
-            className={cn(styles.sideMenuFooter, !isMenuVisible && styles.sideMenuFooterMenuOpen, pwa && styles.pwaPadding)}
-          />
+          <div
+            // className={styles.workspaceMenu}
+            className={cn(styles.workspaceMenu, !isMenuVisible && styles.workspaceMenuOpen, pwa && styles.pwaPadding)}
+            style={
+              {
+                // marginBottom: isMenuVisible ? 0 : "-5vh",
+              }
+            }
+          >
+            <WorkspaceMenu />
+          </div>
         </div>
       )}
       <div className={cn(styles.content, !sideMenuEnabled && styles.contentWithoutSideMenu)}>{children}</div>

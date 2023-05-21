@@ -13,4 +13,5 @@
   text-align: left;
   justify-content: flex-start;
   font-weight: 500;
+  gap: 0.5rem;
 }

@@ -1,9 +1,8 @@
 import { TeamJoinMethodType, TeamVisibilityType } from "@/model/be/jinear-core";
 import React from "react";
+import styles from "./TeamMenu.module.css";
 import TeamActionButtons from "./teamActionButtons/TeamActionButtons";
 import TeamMemberList from "./teamMemberList/TeamMemberList";
-import styles from "./TeamMenu.module.css";
-import TeamThreads from "./teamThreads/TeamThreads";
 import TeamTitle from "./teamTitle/TeamTitle";
 import TeamTopics from "./teamTopics/TeamTopics";
 
@@ -37,7 +36,7 @@ const TeamMenu: React.FC<TeamMenuProps> = ({
       {!isPersonalWorkspace && <TeamMemberList teamId={teamId} />}
       <TeamActionButtons name={name} username={username} workspaceUsername={workspaceUsername} />
       <TeamTopics teamId={teamId} />
-      <TeamThreads />
+      {/* <TeamThreads /> */}
     </div>
   );
 };

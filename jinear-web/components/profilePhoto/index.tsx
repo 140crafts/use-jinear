@@ -64,6 +64,7 @@ interface ProfilePhotoProps {
   wrapperClassName?: string;
   imgClassName?: string;
   objectFit?: string;
+  fill?: boolean;
 }
 
 const logger = Logger("ProfilePhoto");
@@ -75,6 +76,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
   wrapperClassName,
   imgClassName,
   objectFit,
+  fill,
 }) => {
   return (
     <div className={cn(styles.wrapper, wrapperClassName)}>
@@ -86,6 +88,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
         // @ts-ignore
         objectFit={objectFit || "cover"}
         layout="fill"
+        fill={fill}
       />
     </div>
   );

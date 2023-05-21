@@ -3,16 +3,35 @@
 }
 
 .container {
-  width: 40px;
-  height: 40px;
+  min-width: 25px;
+  width: 25px;
+  height: 25px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 12px;
+  position: relative;
 }
 
 .container:hover {
   background-color: var(--c-primary);
+}
+
+.usernameLabelContainer {
+  max-width: 0;
+  transition: var(--fade);
+}
+
+.usernameLabel {
+  display: none;
+}
+
+.container:hover .usernameLabelContainer {
+  max-width: 250px;
+}
+
+.container:hover .usernameLabel {
+  display: flex;
 }
 
 .container-without-profile-pic {
@@ -27,8 +46,8 @@
 }
 
 .profilePic {
-  width: 40px;
-  height: 40px;
+  width: 25px;
+  height: 25px;
   border-radius: 12px;
   position: unset !important;
 }
@@ -42,5 +61,5 @@
   text-align: center;
   color: var(--c-secondary-shade-0);
   font-weight: 700;
-  font-size: 1.25rem;
+  /* font-size: 1.25rem; */
 }

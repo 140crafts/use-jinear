@@ -1,13 +1,35 @@
 .container {
+  position: relative;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 0.5rem;
-  padding-top: 1rem;
+  justify-content: center;
+  background-color: var(--c-primary-shade-0);
+
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: var(--c-primary-shade-1);
+  border-radius: 0;
 }
 
-.button {
-  border-radius: 12px;
-  width: 40px;
-  height: 40px;
+.workspaceList {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  overflow-x: scroll;
+  overflow-y: visible;
+  padding: 0 10px;
+}
+
+.addIcon {
+  max-width: unset;
+}
+
+.newWorkspaceButton {
+  height: var(--side-menu-bottom-workspace-menu-height);
+  border-radius: 0;
 }
