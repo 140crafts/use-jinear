@@ -49,7 +49,7 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
       <Button
         loading={isLoading}
         variant={ButtonVariants.hoverFilled}
-        data-tooltip-top-right={t("sideMenuFooterLogout")}
+        data-tooltip-right={t("sideMenuFooterLogout")}
         onClick={popAreYouSureModalForLogout}
       >
         <IoLogOutOutline size={17} />

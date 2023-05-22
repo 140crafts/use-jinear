@@ -3,13 +3,13 @@
 }
 
 .container {
-  min-width: 25px;
-  width: 25px;
-  height: 25px;
+  min-width: 28px;
+  width: 28px;
+  height: 28px;
+  border-radius: 9.6px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
   position: relative;
 }
 
@@ -48,12 +48,12 @@
 .profilePic {
   width: 25px;
   height: 25px;
-  border-radius: 12px;
+  border-radius: 9.6px;
   position: unset !important;
 }
 
 .profilePicImg {
-  border-radius: 12px;
+  border-radius: 9.6px;
   border: none;
 }
 

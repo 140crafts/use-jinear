@@ -29,13 +29,13 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({}) => {
         {otherWorkspaces?.map((workspace, index) => (
           <WorkspaceButton key={`workspace-menu-${workspace.workspaceId}`} workspace={workspace} index={index} />
         ))}
-      </div>
 
-      <Button className={styles.newWorkspaceButton} variant={ButtonVariants.filled} onClick={onNewWorkspaceButtonClick}>
-        <div>
-          <HiPlus className={styles.addIcon} size={10} />
-        </div>
-      </Button>
+        <Button className={styles.newWorkspaceButton} variant={ButtonVariants.filled} onClick={onNewWorkspaceButtonClick}>
+          <div>
+            <HiPlus className={styles.addIcon} size={10} />
+          </div>
+        </Button>
+      </div>
     </div>
   );
 };
