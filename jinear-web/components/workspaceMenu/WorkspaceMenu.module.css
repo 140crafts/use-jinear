@@ -18,18 +18,26 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
   gap: 0.25rem;
   overflow-x: scroll;
   overflow-y: visible;
-  padding: 0 10px;
+  padding: 7.5px;
 }
 
 .addIcon {
   max-width: unset;
+  color: var(--c-secondary-shade-1);
+  opacity: 0.5;
 }
 
 .newWorkspaceButton {
-  height: var(--side-menu-bottom-workspace-menu-height);
-  border-radius: 0;
+  /* height: var(--side-menu-bottom-workspace-menu-height); */
+  /* width: 35px; */
+  width: 28px;
+  height: 28px;
+  border-radius: 9.6px;
+}
+
+.newWorkspaceButton:hover .addIcon {
+  opacity: 1;
 }
