@@ -5,9 +5,11 @@ import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
+import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.entity.workspace.WorkspaceDisplayPreference;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.repository.WorkspaceDisplayPreferenceRepository;
+import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberRetrieveService;
@@ -27,6 +29,7 @@ public class WorkspaceDisplayPreferenceService {
     private final WorkspaceDisplayPreferenceConverter workspaceDisplayPreferenceConverter;
     private final WorkspaceMemberRetrieveService workspaceMemberRetrieveService;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
+    private final MediaRetrieveService mediaRetrieveService;
 
     public WorkspaceDisplayPreferenceDto retrieveAccountPreferredWorkspace(String accountId) {
         log.info("Retrieve account preferred workspace has started. accountId: {}", accountId);
@@ -34,6 +37,7 @@ public class WorkspaceDisplayPreferenceService {
                 .map(workspaceDisplayPreferenceConverter::map)
                 .map(this::retrieveAndSetWorkspaceMemberRole)
                 .map(this::retrieveAndSetTeamMemberRole)
+                .map(this::setProfilePicture)
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -42,7 +46,8 @@ public class WorkspaceDisplayPreferenceService {
         return retrieveEntityByAccountId(accountId)
                 .map(workspaceDisplayPreferenceConverter::map)
                 .map(this::retrieveAndSetWorkspaceMemberRole)
-                .map(this::retrieveAndSetTeamMemberRole);
+                .map(this::retrieveAndSetTeamMemberRole)
+                .map(this::setProfilePicture);
     }
 
     public void setAccountPreferredWorkspace(String accountId, String workspaceId) {
@@ -101,6 +106,14 @@ public class WorkspaceDisplayPreferenceService {
         teamMemberRetrieveService.retrieve(workspaceDisplayPreferenceDto.getAccountId(), workspaceDisplayPreferenceDto.getPreferredTeamId())
                 .map(TeamMemberDto::getRole)
                 .ifPresent(workspaceDisplayPreferenceDto::setTeamRole);
+        return workspaceDisplayPreferenceDto;
+    }
+
+    private WorkspaceDisplayPreferenceDto setProfilePicture(WorkspaceDisplayPreferenceDto workspaceDisplayPreferenceDto) {
+        WorkspaceDto workspace = workspaceDisplayPreferenceDto.getWorkspace();
+        mediaRetrieveService.retrieveProfilePictureOptional(workspaceDisplayPreferenceDto.getPreferredWorkspaceId())
+                .ifPresent(workspace::setProfilePicture);
+        workspaceDisplayPreferenceDto.setWorkspace(workspace);
         return workspaceDisplayPreferenceDto;
     }
 }
