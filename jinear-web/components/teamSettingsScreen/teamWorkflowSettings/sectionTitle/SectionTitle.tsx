@@ -9,7 +9,7 @@ interface SectionTitleProps {
 const SectionTitle: React.FC<SectionTitleProps> = ({ title, description }) => {
   return (
     <div className={styles.container}>
-      <div className={styles.title}>{title}</div>
+      <h2 className={styles.title}>{title}</h2>
       <div>{description}</div>
     </div>
   );
