@@ -1858,4 +1858,12 @@ export default {
     en: "Last Activities",
     tr: "Son Aktiviteler",
   },
+  workspaceSettingsPageWorkspaceInfoTab: {
+    en: "Info",
+    tr: "Genel Bilgiler",
+  },
+  userProfilePersonalInfoTitle: {
+    en: "Personal Info",
+    tr: "Kişisel Bilgiler",
+  },
 };

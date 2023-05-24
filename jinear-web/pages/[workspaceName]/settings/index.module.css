@@ -4,5 +4,5 @@
   width: var(--full);
   max-width: var(--full);
   padding: 0 2ch;
-  gap: 3rem;
+  gap: 1rem;
 }

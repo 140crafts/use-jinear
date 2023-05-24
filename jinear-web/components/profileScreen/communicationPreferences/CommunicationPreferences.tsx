@@ -6,9 +6,11 @@ import React, { useEffect } from "react";
 import SettingsCheckbox from "../settingsCheckbox/SettingsCheckbox";
 import styles from "./CommunicationPreferences.module.css";
 
-interface CommunicationPreferencesProps {}
+interface CommunicationPreferencesProps {
+  title?: string;
+}
 
-const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({}) => {
+const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({ title }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -33,7 +35,7 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({}) =
 
   return (
     <div className={styles.container}>
-      <h3>{t("communicationPrefrencesTitle")}</h3>
+      {title && <h2>{title}</h2>}
       <SettingsCheckbox
         id={"communication-prefrences-email"}
         label={t("communicationPrefrencesEmail")}

@@ -26,6 +26,7 @@ const CurrentWorkspaceHeader: React.FC<CurrentWorkspaceHeaderProps> = ({}) => {
         heightVariant={ButtonHeight.short}
         data-tooltip-right={t("currentWorkspaceHeaderWorkspaceDetail")}
         className={styles.button}
+        href={`/${preferredWorkspace?.username}/settings`}
       >
         <IoEllipsisHorizontal />
       </Button>
