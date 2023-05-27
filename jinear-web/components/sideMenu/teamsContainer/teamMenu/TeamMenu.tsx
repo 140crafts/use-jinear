@@ -3,6 +3,7 @@ import React from "react";
 import styles from "./TeamMenu.module.css";
 import TeamActionButtons from "./teamActionButtons/TeamActionButtons";
 import TeamMemberList from "./teamMemberList/TeamMemberList";
+import TeamTaskLists from "./teamTaskLists/TeamTaskLists";
 import TeamTitle from "./teamTitle/TeamTitle";
 import TeamTopics from "./teamTopics/TeamTopics";
 
@@ -35,6 +36,7 @@ const TeamMenu: React.FC<TeamMenuProps> = ({
       {!isPersonalWorkspace && <TeamTitle name={name} />}
       {!isPersonalWorkspace && <TeamMemberList teamId={teamId} />}
       <TeamActionButtons name={name} username={username} workspaceUsername={workspaceUsername} />
+      <TeamTaskLists teamId={teamId} workspaceId={workspaceId} />
       <TeamTopics teamId={teamId} />
       {/* <TeamThreads /> */}
     </div>

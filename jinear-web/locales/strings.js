@@ -694,6 +694,10 @@ export default {
     en: "Threads",
     tr: "Tartışmalar",
   },
+  sideMenuTeamTaskLists: {
+    en: "Task Lists",
+    tr: "Görev Listeleri",
+  },
   topicCardEditTooltip: {
     en: "Edit Topic",
     tr: "Konuyu Düzenle",
@@ -1865,5 +1869,41 @@ export default {
   userProfilePersonalInfoTitle: {
     en: "Personal Info",
     tr: "Kişisel Bilgiler",
+  },
+  sideMenuTaskListsNoTaskListExists: {
+    en: "There isn't any task list initialized yet. Create a new task list.",
+    tr: "Hiçbir görev listesi bulunamadı. Yeni bir görev listesi oluşturun.",
+  },
+  newTaskListModalTitle: {
+    en: "New Task List",
+    tr: "Yeni Görev Listesi",
+  },
+  newTaskListFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel: {
+    en: "You're creating new task list under following workspace",
+    tr: "Görev listesi oluşturduğun çalışma alanı",
+  },
+  newTaskListFormWorkspaceAndTeamInfoLabel: {
+    en: "You're creating new task list under following workspace and team",
+    tr: "Görev listesi oluşturduğun çalışma alanı ve ekip",
+  },
+  newTaskListFormPersonalWorkspaceSelected: {
+    en: "Your Personal Workspace",
+    tr: "Kişisel Çalışma Alanın",
+  },
+  newTaskListModalTaskListTitle: {
+    en: "Title",
+    tr: "Başlık",
+  },
+  newTaskListModalTaskListDueDate: {
+    en: "Due date",
+    tr: "Şu tarihe dek",
+  },
+  newTaskListModalCancel: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  newTaskListModalCreate: {
+    en: "Create Task List",
+    tr: "Görev Listesi Oluştur",
   },
 };

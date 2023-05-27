@@ -96,6 +96,9 @@ const initialState = {
   workspacePickerModal: {
     visible: false,
   },
+  newTaskListModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -120,6 +123,7 @@ const initialState = {
   taskOverviewModal: null | TaskOverviewModalState;
   teamPickerModal: null | TeamPickerModalState;
   workspacePickerModal: null | WorkspacePickerModalState;
+  newTaskListModal: null | ModalState;
 };
 
 const slice = createSlice({
@@ -292,6 +296,13 @@ const slice = createSlice({
       state.workspacePickerModal = initialState.workspacePickerModal;
     },
 
+    popNewTaskListModal: (state, action: PayloadAction<void>) => {
+      state.newTaskListModal = { visible: true };
+    },
+    closeNewTaskListModal: (state, action: PayloadAction<void>) => {
+      state.newTaskListModal = initialState.newTaskListModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -354,7 +365,8 @@ export const {
   closeTeamPickerModal,
   popWorkspacePickerModal,
   closeWorkspacePickerModal,
-
+  popNewTaskListModal,
+  closeNewTaskListModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -457,3 +469,5 @@ export const selectWorkspacePickerModalVisible = (state: RootState) => state.mod
 export const selectWorkspacePickerModalCurrentWorkspaceId = (state: RootState) =>
   state.modal.workspacePickerModal?.currentWorkspaceId;
 export const selectWorkspacePickerModalOnPick = (state: RootState) => state.modal.workspacePickerModal?.onPick;
+
+export const selectNewTaskListModalVisible = (state: RootState) => state.modal.newTaskListModal?.visible;

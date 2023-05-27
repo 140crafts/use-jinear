@@ -36,7 +36,7 @@ export const taskApi = api.injectEndpoints({
     }),
   }),
 });
-///from-workspace/{workspaceName}/{teamTag}-{tagNo}
+
 export const { useInitializeTaskMutation, useRetrieveWithWorkspaceNameAndTeamTagNoQuery } = taskApi;
 
 export const {

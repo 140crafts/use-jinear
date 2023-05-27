@@ -23,6 +23,7 @@ export const tagTypes = [
   "team-topic-list",
   "workplace-task-with-name-and-tag",
   "team-task-list",
+  "team-all-task-list",
   "workflow-status-from-team",
   "retrieve-topic",
   "retrieve-task-activity",
@@ -41,6 +42,8 @@ export const tagTypes = [
   "workspace-activity-list",
   "workspace-team-activity-list",
   "workspace-task-activity-list",
+  "task-list-listing",
+  "task-list-entry-listing",
 ];
 
 export const api = createApi({
