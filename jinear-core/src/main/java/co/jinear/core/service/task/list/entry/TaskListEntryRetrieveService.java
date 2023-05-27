@@ -1,7 +1,7 @@
 package co.jinear.core.service.task.list.entry;
 
-
 import co.jinear.core.converter.task.TaskListEntryDtoConverter;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.task.TaskListEntryDto;
 import co.jinear.core.model.entity.task.TaskListEntry;
@@ -29,5 +29,13 @@ public class TaskListEntryRetrieveService {
         return taskListEntryRepository.findByTaskListEntryIdAndPassiveIdIsNull(taskListEntryId)
                 .map(taskListEntryDtoConverter::map)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public void validateNotExists(String taskId, String taskListId) {
+        taskListEntryRepository.findByTaskIdAndTaskListIdAndPassiveIdIsNull(taskId, taskListId)
+                .ifPresent(taskListEntry -> {
+                    log.info("Task list entry is exist. taskListEntryId: {}", taskListEntry.getTaskListId());
+                    throw new BusinessException("common.error.already-exists");
+                });
     }
 }

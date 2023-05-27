@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-05-13 17:53:39.
+// Generated using typescript-generator version 3.0.1157 on 2023-05-27 21:33:21.
 
 export interface BaseDto {
     createdDate: Date;
@@ -201,6 +201,28 @@ export interface TaskDto extends BaseDto {
     relatedIn?: TaskRelationDto[] | null;
     taskReminders?: TaskReminderDto[] | null;
     checklists?: ChecklistDto[] | null;
+}
+
+export interface TaskListDetailedDto extends TaskListDto {
+    taskListEntries: TaskListEntryDto[];
+}
+
+export interface TaskListDto extends BaseDto {
+    taskListId: string;
+    workspaceId: string;
+    teamId: string;
+    ownerId: string;
+    title: string;
+    dueDate: Date;
+    state: TaskListStateType;
+}
+
+export interface TaskListEntryDto extends BaseDto {
+    taskListEntryId: string;
+    taskListId: string;
+    taskId: string;
+    order: number;
+    task: TaskDto;
 }
 
 export interface TaskRelationDto {
@@ -529,6 +551,34 @@ export interface TaskInitializeRequest extends BaseRequest {
     subTaskOf?: string | null;
 }
 
+export interface TaskListEntryInitializeRequest extends BaseRequest {
+    taskListId: string;
+    taskId: string;
+}
+
+export interface TaskListInitializeRequest extends BaseRequest {
+    workspaceId: string;
+    teamId: string;
+    title: string;
+    dueDate?: Date | null;
+}
+
+export interface TaskListUpdateDueDateRequest extends TaskListUpdateRequest {
+    dueDate?: Date | null;
+}
+
+export interface TaskListUpdateRequest extends BaseRequest {
+    taskListId: string;
+}
+
+export interface TaskListUpdateStateRequest extends TaskListUpdateRequest {
+    state: TaskListStateType;
+}
+
+export interface TaskListUpdateTitleRequest extends TaskListUpdateRequest {
+    title: string;
+}
+
 export interface TaskRelationInitializeRequest extends BaseRequest {
     taskId: string;
     relatedTaskId: string;
@@ -677,6 +727,18 @@ export interface TaskActivityRetrieveResponse extends BaseResponse {
     data: WorkspaceActivityDto[];
 }
 
+export interface TaskListEntryPaginatedResponse extends BaseResponse {
+    data: PageDto<TaskListEntryDto>;
+}
+
+export interface TaskListListingPaginatedResponse extends BaseResponse {
+    data: PageDto<TaskListDto>;
+}
+
+export interface TaskListResponse extends BaseResponse {
+    data: TaskListDto;
+}
+
 export interface TaskListingPaginatedResponse extends BaseResponse {
     data: PageDto<TaskDto>;
 }
@@ -763,7 +825,7 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_LIST_EDIT";
 
 export type FileType = "PROFILE_PIC";
 
@@ -786,6 +848,8 @@ export type RepeatType = "NONE" | "HOURLY" | "DAILY" | "WEEKLY" | "BIWEEKLY" | "
 export type RichTextSourceStack = "WYSIWYG" | "RC";
 
 export type RichTextType = "TASK_DETAIL";
+
+export type TaskListStateType = "OPEN" | "CLOSED";
 
 export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
 

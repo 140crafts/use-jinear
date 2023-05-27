@@ -43,8 +43,8 @@ public class TaskList extends BaseEntity {
     @Convert(converter = TaskListStateTypeConverter.class)
     private TaskListStateType state;
 
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "taskList")
     @Where(clause = "passive_id is null")
-    @OrderBy("order DESC")
+    @OrderBy("order asc")
     private Set<TaskListEntry> taskListEntries;
 }

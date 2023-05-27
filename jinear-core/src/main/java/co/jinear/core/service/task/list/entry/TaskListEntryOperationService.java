@@ -30,13 +30,21 @@ public class TaskListEntryOperationService {
         log.info("Initialize task list entry has started. initializeTaskListEntryVo: {}", initializeTaskListEntryVo);
         try {
             taskListLockService.lockTaskListForUpdate(initializeTaskListEntryVo.getTaskListId());
+            validateNotInListAlready(initializeTaskListEntryVo);
             return initializeEntry(initializeTaskListEntryVo);
+        } catch (BusinessException e) {
+            throw e;
         } catch (Exception e) {
             log.error("Initialize task list entry has failed.", e);
             throw new BusinessException();
         } finally {
             taskListLockService.unlockTaskListForUpdate(initializeTaskListEntryVo.getTaskListId());
         }
+    }
+
+    private void validateNotInListAlready(InitializeTaskListEntryVo initializeTaskListEntryVo) {
+        log.info("Validate task is not already in task list has started.");
+        taskListEntryRetrieveService.validateNotExists(initializeTaskListEntryVo.getTaskId(), initializeTaskListEntryVo.getTaskListId());
     }
 
     public String deleteEntry(String taskListEntryId) {
@@ -56,6 +64,7 @@ public class TaskListEntryOperationService {
         final String taskListId = taskListEntry.getTaskListId();
         int comparison = currentOrder.compareTo(newOrder);
         switch (comparison) {
+            //todo fix queries
             case -1 -> taskListEntryRepository.updateOrderDownward(taskListId, currentOrder, newOrder);
             case 1 -> taskListEntryRepository.updateOrderUpward(taskListId, currentOrder, newOrder);
             default -> log.info("Order is same.");

@@ -1,6 +1,8 @@
 package co.jinear.core.repository;
 
 import co.jinear.core.model.entity.task.TaskListEntry;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +14,10 @@ public interface TaskListEntryRepository extends JpaRepository<TaskListEntry, St
 
     Optional<TaskListEntry> findByTaskListEntryIdAndPassiveIdIsNull(String taskListEntryId);
 
+    Optional<TaskListEntry> findByTaskIdAndTaskListIdAndPassiveIdIsNull(String taskId, String taskListId);
+
+    Page<TaskListEntry> findAllByTaskListIdAndPassiveIdIsNullOrderByOrder(String taskListId, Pageable pageable);
+
     Long countAllByTaskListIdAndPassiveIdIsNull(String taskListId);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
@@ -20,12 +26,12 @@ public interface TaskListEntryRepository extends JpaRepository<TaskListEntry, St
                 set taskListEntry.order = taskListEntry.order + 1
                     where 
                         taskListEntry.taskListId = :taskListId and 
-                        (:newOrder <= taskListEntry.order and :currentOrder < taskListEntry.order) and  
+                        (:newOrder <= taskListEntry.order and taskListEntry.order < :currentOrder) and  
                         taskListEntry.passiveId is null
                 """)
     void updateOrderUpward(@Param("taskListId") String taskListId,
-                             @Param("currentOrder") int currentOrder,
-                             @Param("newOrder") int newOrder);
+                           @Param("currentOrder") int currentOrder,
+                           @Param("newOrder") int newOrder);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
@@ -37,7 +43,7 @@ public interface TaskListEntryRepository extends JpaRepository<TaskListEntry, St
                         taskListEntry.passiveId is null
                 """)
     void updateOrderDownward(@Param("taskListId") String taskListId,
-                           @Param("currentOrder") int currentOrder,
-                           @Param("newOrder") int newOrder);
+                             @Param("currentOrder") int currentOrder,
+                             @Param("newOrder") int newOrder);
 
 }
