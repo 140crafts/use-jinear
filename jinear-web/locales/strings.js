@@ -1906,4 +1906,24 @@ export default {
     en: "Create Task List",
     tr: "Görev Listesi Oluştur",
   },
+  sideMenuTeamTaskListsShowMore: {
+    en: "...${number} more lists",
+    tr: "...${number} liste daha",
+  },
+  taskListListScreenBreadcrumbLabel: {
+    en: "Task Lists",
+    tr: "Görev Listeleri",
+  },
+  taskListsListTitle: {
+    en: "Task Lists",
+    tr: "Görev Listeleri",
+  },
+  taskListsListEmptyLabel: {
+    en: "There isn't any task lists.",
+    tr: "Herhangi bir görev listesi bulunamadı.",
+  },
+  taskBoardEmptyLabel: {
+    en: "There isn't any task in this board.",
+    tr: "Bu panoda herhangi bir görev bulunamadı.",
+  },
 };

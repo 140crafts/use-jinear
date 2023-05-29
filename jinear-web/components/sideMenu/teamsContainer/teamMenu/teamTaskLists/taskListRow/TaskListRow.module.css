@@ -8,6 +8,14 @@
   /* padding-left: var(--indent-8); */
 }
 
-/* .title {
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  /* background-color: red; */
+}
+
+.title {
   width: 100%;
-} */
+}

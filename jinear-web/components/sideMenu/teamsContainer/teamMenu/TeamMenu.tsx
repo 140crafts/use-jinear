@@ -36,7 +36,7 @@ const TeamMenu: React.FC<TeamMenuProps> = ({
       {!isPersonalWorkspace && <TeamTitle name={name} />}
       {!isPersonalWorkspace && <TeamMemberList teamId={teamId} />}
       <TeamActionButtons name={name} username={username} workspaceUsername={workspaceUsername} />
-      <TeamTaskLists teamId={teamId} workspaceId={workspaceId} />
+      <TeamTaskLists teamId={teamId} workspaceId={workspaceId} workspaceUsername={workspaceUsername} teamUsername={username} />
       <TeamTopics teamId={teamId} />
       {/* <TeamThreads /> */}
     </div>

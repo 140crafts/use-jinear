@@ -21,7 +21,7 @@ const NewTaskListModal: React.FC<NewTaskListModalProps> = ({}) => {
 
   return (
     <Modal visible={visible} title={t("newTaskListModalTitle")} bodyClass={styles.container} requestClose={close}>
-      {workspace && team && <NewTaskListForm workspace={workspace} team={team} />}
+      {workspace && team && <NewTaskListForm workspace={workspace} team={team} onClose={close} />}
     </Modal>
   );
 };
