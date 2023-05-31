@@ -27,7 +27,7 @@ const LoadingModal: React.FC<LoadingModalProps> = ({}) => {
   const gifType = Math.random() * 10 < 5 ? "1" : "2";
   const gifLoading = useMemo(() => {
     logger.log(GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || ""));
-    return __DEV__ || GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || "") == -1;
+    return __DEV__ || GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || "") != -1;
   }, [currentAccountId]);
 
   return (
