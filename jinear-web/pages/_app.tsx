@@ -7,7 +7,7 @@ import DatePickerModal from "@/components/modal/datePicker/DatePickerModal";
 import DialogModal from "@/components/modal/dialogModal/DialogModal";
 import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
 import LoginWith2FaMailModal from "@/components/modal/loginWith2FaMailModal/LoginWith2FaMailModal";
-import NewTaskListModal from "@/components/modal/newTaskListModal/NewTaskListModal";
+import NewTaskBoardModal from "@/components/modal/newTaskListModal/NewTaskListModal";
 import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
 import NewTeamModal from "@/components/modal/newTeamModal/NewTeamModal";
 import NewTopicModal from "@/components/modal/newTopicModal/NewTopicModal";
@@ -70,7 +70,7 @@ const globalModals: any = (
     <TaskTopicChangeModal />
     <WorkflowChangeStatusModal />
     <NewTaskModal />
-    <NewTaskListModal />
+    <NewTaskBoardModal />
     <TeamOptionsModal />
     <TeamPickerModal />
     <WorkspacePickerModal />

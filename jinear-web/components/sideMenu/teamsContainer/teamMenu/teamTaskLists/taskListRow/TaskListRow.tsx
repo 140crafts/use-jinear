@@ -1,23 +1,29 @@
 import Button, { ButtonVariants } from "@/components/button";
-import { TaskListDto } from "@/model/be/jinear-core";
+import { TaskBoardDto } from "@/model/be/jinear-core";
 import cn from "classnames";
 import React from "react";
 import { IoReaderOutline } from "react-icons/io5";
 import styles from "./TaskListRow.module.css";
 
-interface TaskListRowProps {
-  taskListDto: TaskListDto;
+interface TaskBoardRowProps {
+  taskBoardDto: TaskBoardDto;
+  workspaceUsername: string;
+  teamUsername: string;
 }
 
-const TaskListRow: React.FC<TaskListRowProps> = ({ taskListDto }) => {
+const TaskBoardRow: React.FC<TaskBoardRowProps> = ({ taskBoardDto, workspaceUsername, teamUsername }) => {
   return (
-    <Button className={styles.container} variant={ButtonVariants.hoverFilled}>
+    <Button
+      className={styles.container}
+      variant={ButtonVariants.hoverFilled}
+      href={`/${workspaceUsername}/${teamUsername}/task-boards/${taskBoardDto.taskBoardId}`}
+    >
       <div className={styles.iconContainer}>
         <IoReaderOutline />
       </div>
-      <div className={cn(styles.title, "line-clamp")}>{taskListDto.title}</div>
+      <div className={cn(styles.title, "line-clamp")}>{taskBoardDto.title}</div>
     </Button>
   );
 };
 
-export default TaskListRow;
+export default TaskBoardRow;

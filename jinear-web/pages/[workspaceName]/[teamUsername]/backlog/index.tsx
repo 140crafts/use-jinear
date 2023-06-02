@@ -1,5 +1,5 @@
 import TaskListScreenBreadcrumb from "@/components/taskListScreen/breadcrumb/TaskListScreenBreadcrumb";
-import TaskListGroupedByWorkflowStatus from "@/components/taskListScreen/taskLists/taskListGroupedByWorkflowStatus/TaskListGroupedByWorkflowStatus";
+import TaskListGroupedByWorkflowStatus from "@/components/taskLists/taskListGroupedByWorkflowStatus/TaskListGroupedByWorkflowStatus";
 import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import React from "react";

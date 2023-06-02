@@ -8,6 +8,12 @@
   gap: 0.5rem;
 }
 
+.bottomBorderLine {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--c-primary-shade-1-op025);
+}
+
 .button {
   display: flex;
   flex: 1;

@@ -694,9 +694,9 @@ export default {
     en: "Threads",
     tr: "Tartışmalar",
   },
-  sideMenuTeamTaskLists: {
-    en: "Task Lists",
-    tr: "Görev Listeleri",
+  sideMenuTeamTaskBoards: {
+    en: "Task Boards",
+    tr: "Görev Panoları",
   },
   topicCardEditTooltip: {
     en: "Edit Topic",
@@ -1870,21 +1870,21 @@ export default {
     en: "Personal Info",
     tr: "Kişisel Bilgiler",
   },
-  sideMenuTaskListsNoTaskListExists: {
-    en: "There isn't any task list initialized yet. Create a new task list.",
-    tr: "Hiçbir görev listesi bulunamadı. Yeni bir görev listesi oluşturun.",
+  sideMenuTaskBoardsNoTaskBoardExists: {
+    en: "There isn't any task board initialized yet. Create a new task board.",
+    tr: "Hiçbir görev panosu bulunamadı. Yeni bir görev panosu oluşturun.",
   },
-  newTaskListModalTitle: {
-    en: "New Task List",
-    tr: "Yeni Görev Listesi",
+  newTaskBoardModalTitle: {
+    en: "New Task Board",
+    tr: "Yeni Görev Panosu",
   },
   newTaskListFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel: {
-    en: "You're creating new task list under following workspace",
-    tr: "Görev listesi oluşturduğun çalışma alanı",
+    en: "You're creating new task board under following workspace",
+    tr: "Görev panosu oluşturduğun çalışma alanı",
   },
   newTaskListFormWorkspaceAndTeamInfoLabel: {
-    en: "You're creating new task list under following workspace and team",
-    tr: "Görev listesi oluşturduğun çalışma alanı ve ekip",
+    en: "You're creating new task board under following workspace and team",
+    tr: "Görev panosu oluşturduğun çalışma alanı ve ekip",
   },
   newTaskListFormPersonalWorkspaceSelected: {
     en: "Your Personal Workspace",
@@ -1903,27 +1903,31 @@ export default {
     tr: "Vazgeç",
   },
   newTaskListModalCreate: {
-    en: "Create Task List",
-    tr: "Görev Listesi Oluştur",
+    en: "Create Task Board",
+    tr: "Görev Panosu Oluştur",
   },
   sideMenuTeamTaskListsShowMore: {
-    en: "...${number} more lists",
-    tr: "...${number} liste daha",
+    en: "...${number} more boards",
+    tr: "...${number} pano daha",
   },
-  taskListListScreenBreadcrumbLabel: {
-    en: "Task Lists",
-    tr: "Görev Listeleri",
+  taskBoardListScreenBreadcrumbLabel: {
+    en: "Task Board",
+    tr: "Görev Panosu",
   },
-  taskListsListTitle: {
-    en: "Task Lists",
-    tr: "Görev Listeleri",
+  taskBoardsListTitle: {
+    en: "Boards",
+    tr: "Panolar",
   },
-  taskListsListEmptyLabel: {
+  taskBoardsListEmptyLabel: {
     en: "There isn't any task lists.",
     tr: "Herhangi bir görev listesi bulunamadı.",
   },
   taskBoardEmptyLabel: {
     en: "There isn't any task in this board.",
     tr: "Bu panoda herhangi bir görev bulunamadı.",
+  },
+  taskBoardAddTaskButtonLabel: {
+    en: "Add Task",
+    tr: "Görev Ekle",
   },
 };

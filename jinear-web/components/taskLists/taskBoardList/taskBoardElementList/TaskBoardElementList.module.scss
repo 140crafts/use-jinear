@@ -1,0 +1,46 @@
+@import "/styles/breakpoints.scss";
+
+.listTitle {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.listTitleButton {
+  justify-content: flex-start;
+  align-items: flex-start;
+  color: var(--c-text-color);
+}
+
+.itemContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: grab !important;
+
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--c-primary-shade-1-op025);
+}
+
+.taskRow {
+  flex: 1;
+}
+
+.taskRowContainer {
+  display: flex;
+  flex: 1;
+}
+
+.itemDragIconContainer {
+  padding: 0.75rem;
+  /* padding-right: 0.5rem; */
+}
+
+@media (max-width: $tablet) {
+  .itemContainer {
+    align-items: flex-start;
+  }
+}

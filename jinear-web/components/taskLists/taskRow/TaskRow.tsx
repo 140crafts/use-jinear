@@ -1,11 +1,11 @@
 import AssigneeCell from "@/components/assigneeCell/AssigneeCell";
 import Button, { ButtonVariants } from "@/components/button";
-import Line from "@/components/line/Line";
 import TeamTagCell from "@/components/teamTagCell/TeamTagCell";
 import useWindowSize from "@/hooks/useWindowSize";
 import { TaskDto } from "@/model/be/jinear-core";
 import { popChangeTaskDateModal, popTaskOverviewModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
+import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoTime } from "react-icons/io5";
@@ -14,10 +14,12 @@ import TopicInfo from "./topicInfo/TopicInfo";
 import WorkflowStatus from "./workflowStatus/WorkflowStatus";
 
 interface TaskRowProps {
+  className?: string;
+  withBottomBorderLine?: boolean;
   task: TaskDto;
 }
 
-const TaskRow: React.FC<TaskRowProps> = ({ task }) => {
+const TaskRow: React.FC<TaskRowProps> = ({ className, task, withBottomBorderLine = true }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const tag = `${task.team?.tag}-${task.teamTagNo}`;
@@ -42,33 +44,30 @@ const TaskRow: React.FC<TaskRowProps> = ({ task }) => {
   };
 
   return task.workspace && task.team ? (
-    <>
-      <div className={styles.container}>
-        <Button href={`/${task.workspace?.username}/task/${tag}`} className={styles.button} onClick={onLinkClick}>
-          <div className={styles.leftInfoContainer}>
-            <TeamTagCell task={task} />
-          </div>
-          <div className={styles.title}>{task.title}</div>
-        </Button>
-
-        <div className={styles.rightInfoContainer}>
-          {task.topic && <TopicInfo topic={task.topic} />}
-          <WorkflowStatus task={task} />
-          {!task.workspace.isPersonal && <AssigneeCell task={task} />}
-          <Button
-            variant={ButtonVariants.filled}
-            className={styles.datesButton}
-            onClick={popChangeDatesModal}
-            data-tooltip-right={t("taskRowChangeTaskDates")}
-          >
-            <div className={styles.iconContainer}>
-              <IoTime size={14} />
-            </div>
-          </Button>
+    <div className={cn(styles.container, withBottomBorderLine ? styles.bottomBorderLine : null, className)}>
+      <Button href={`/${task.workspace?.username}/task/${tag}`} className={styles.button} onClick={onLinkClick}>
+        <div className={styles.leftInfoContainer}>
+          <TeamTagCell task={task} />
         </div>
+        <div className={styles.title}>{task.title}</div>
+      </Button>
+
+      <div className={styles.rightInfoContainer}>
+        {task.topic && <TopicInfo topic={task.topic} />}
+        <WorkflowStatus task={task} />
+        {!task.workspace.isPersonal && <AssigneeCell task={task} />}
+        <Button
+          variant={ButtonVariants.filled}
+          className={styles.datesButton}
+          onClick={popChangeDatesModal}
+          data-tooltip-right={t("taskRowChangeTaskDates")}
+        >
+          <div className={styles.iconContainer}>
+            <IoTime size={14} />
+          </div>
+        </Button>
       </div>
-      <Line className={styles.line} />
-    </>
+    </div>
   ) : null;
 };
 

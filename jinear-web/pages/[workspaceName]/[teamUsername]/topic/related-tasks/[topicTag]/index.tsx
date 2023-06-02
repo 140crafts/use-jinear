@@ -1,4 +1,4 @@
-import PaginatedTopicTaskList from "@/components/taskListScreen/taskLists/paginatedTopicTaskList/PaginatedTopicTaskList";
+import PaginatedTopicTaskList from "@/components/taskLists/paginatedTopicTaskList/PaginatedTopicTaskList";
 import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";

@@ -5,9 +5,9 @@ import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 
-interface TaskListListBreadCrumbProps {}
+interface TaskBoardListBreadCrumbProps {}
 
-const TaskListListBreadCrumb: React.FC<TaskListListBreadCrumbProps> = ({}) => {
+const TaskBoardListBreadCrumb: React.FC<TaskBoardListBreadCrumbProps> = ({}) => {
   const { t } = useTranslation();
   const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const currentTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
@@ -20,11 +20,11 @@ const TaskListListBreadCrumb: React.FC<TaskListListBreadCrumbProps> = ({}) => {
         url={`/${currentWorkspace?.username || ""}/${currentTeam?.username || ""}`}
       />
       <BreadcrumbLink
-        label={t("taskListListScreenBreadcrumbLabel")}
-        url={`/${currentWorkspace?.username || ""}/${currentTeam?.username || ""}/task-lists`}
+        label={t("taskBoardListScreenBreadcrumbLabel")}
+        url={`/${currentWorkspace?.username || ""}/${currentTeam?.username || ""}/task-boards`}
       />
     </Breadcrumb>
   );
 };
 
-export default TaskListListBreadCrumb;
+export default TaskBoardListBreadCrumb;

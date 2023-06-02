@@ -36,7 +36,6 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
         <TaskChecklistContainer />
         <TaskSubtaskList />
         <Line />
-        {/* <TaskActivityList taskId={task.taskId} /> */}
         <LastTaskActivitiesList
           workspaceId={task.workspaceId}
           taskId={task.taskId}

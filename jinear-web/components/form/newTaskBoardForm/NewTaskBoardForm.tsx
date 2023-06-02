@@ -1,6 +1,6 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { TaskListInitializeRequest, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
-import { useInitializeTaskListMutation } from "@/store/api/taskListApi";
+import { TaskBoardInitializeRequest, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import { useInitializeTaskBoardMutation } from "@/store/api/taskBoardApi";
 import { changeLoadingModalVisibility, closeDatePickerModal, popDatePickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -10,35 +10,35 @@ import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
 import WorkspaceAndTeamInfo from "../common/workspaceAndTeamInfo/WorkspaceAndTeamInfo";
-import styles from "./NewTaskListForm.module.css";
+import styles from "./NewTaskBoardForm.module.css";
 
-interface NewTaskListFormProps {
+interface NewTaskBoardFormProps {
   workspace: WorkspaceDto;
   team: TeamDto;
   onClose: () => void;
 }
 
-const logger = Logger("NewTaskListForm");
+const logger = Logger("NewTaskBoardForm");
 
-const NewTaskListForm: React.FC<NewTaskListFormProps> = ({ workspace, team, onClose }) => {
+const NewTaskBoardForm: React.FC<NewTaskBoardFormProps> = ({ workspace, team, onClose }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [date, setDate] = useState<Date>();
 
-  const [initializeTaskList, { isLoading: isInitializeTaskListLoading, isSuccess }] = useInitializeTaskListMutation();
+  const [initializeTaskBoard, { isLoading: isInitializeTaskBoardLoading, isSuccess }] = useInitializeTaskBoardMutation();
 
-  const { register, handleSubmit, setFocus, setValue, watch } = useForm<TaskListInitializeRequest>();
+  const { register, handleSubmit, setFocus, setValue, watch } = useForm<TaskBoardInitializeRequest>();
 
   useEffect(() => {
-    dispatch(changeLoadingModalVisibility({ visible: isInitializeTaskListLoading }));
+    dispatch(changeLoadingModalVisibility({ visible: isInitializeTaskBoardLoading }));
     if (isSuccess) {
       onClose?.();
     }
-  }, [isInitializeTaskListLoading, isSuccess]);
+  }, [isInitializeTaskBoardLoading, isSuccess]);
 
-  const submit: SubmitHandler<TaskListInitializeRequest> = (data) => {
+  const submit: SubmitHandler<TaskBoardInitializeRequest> = (data) => {
     logger.log({ data });
-    initializeTaskList(data);
+    initializeTaskBoard(data);
   };
 
   const clearDueDate = () => {
@@ -55,7 +55,7 @@ const NewTaskListForm: React.FC<NewTaskListFormProps> = ({ workspace, team, onCl
   };
 
   return (
-    <form autoComplete="off" id={"new-task-list-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
+    <form autoComplete="off" id={"new-task-board-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
       <div className={styles.formContent}>
         <WorkspaceAndTeamInfo
           workspace={workspace}
@@ -68,9 +68,9 @@ const NewTaskListForm: React.FC<NewTaskListFormProps> = ({ workspace, team, onCl
         <input type="hidden" value={team.teamId} {...register("teamId")} />
         {date && <input type="hidden" value={date?.toISOString?.()} {...register("dueDate")} />}
 
-        <label className={styles.label} htmlFor={"new-task-list-title"}>
+        <label className={styles.label} htmlFor={"new-task-board-title"}>
           {`${t("newTaskListModalTaskListTitle")} *`}
-          <input id={"new-task-list-title"} type={"text"} {...register("title", { required: t("formRequiredField") })} />
+          <input id={"new-task-board-title"} type={"text"} {...register("title", { required: t("formRequiredField") })} />
         </label>
 
         <div className={styles.label}>
@@ -88,13 +88,13 @@ const NewTaskListForm: React.FC<NewTaskListFormProps> = ({ workspace, team, onCl
         </div>
 
         <div className={styles.footerContainer}>
-          <Button disabled={isInitializeTaskListLoading} onClick={onClose} className={styles.footerButton}>
+          <Button disabled={isInitializeTaskBoardLoading} onClick={onClose} className={styles.footerButton}>
             {t("newTaskListModalCancel")}
           </Button>
           <Button
             type="submit"
-            disabled={isInitializeTaskListLoading}
-            loading={isInitializeTaskListLoading}
+            disabled={isInitializeTaskBoardLoading}
+            loading={isInitializeTaskBoardLoading}
             className={styles.footerButton}
             variant={ButtonVariants.contrast}
           >
@@ -106,4 +106,4 @@ const NewTaskListForm: React.FC<NewTaskListFormProps> = ({ workspace, team, onCl
   );
 };
 
-export default NewTaskListForm;
+export default NewTaskBoardForm;

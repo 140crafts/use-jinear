@@ -1,29 +1,29 @@
-import NewTaskListForm from "@/components/form/newTaskListForm/NewTaskListForm";
+import NewTaskBoardForm from "@/components/form/newTaskBoardForm/NewTaskBoardForm";
 import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
-import { closeNewTaskListModal, selectNewTaskListModalVisible } from "@/store/slice/modalSlice";
+import { closeNewTaskBoardModal, selectNewTaskBoardModalVisible } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import Modal from "../modal/Modal";
 import styles from "./NewTaskListModal.module.css";
 
-interface NewTaskListModalProps {}
+interface NewTaskBoardModalProps {}
 
-const NewTaskListModal: React.FC<NewTaskListModalProps> = ({}) => {
+const NewTaskBoardModal: React.FC<NewTaskBoardModalProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const visible = useTypedSelector(selectNewTaskListModalVisible);
+  const visible = useTypedSelector(selectNewTaskBoardModalVisible);
   const workspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const team = useTypedSelector(selectCurrentAccountsPreferredTeam);
   const close = () => {
-    dispatch(closeNewTaskListModal());
+    dispatch(closeNewTaskBoardModal());
   };
 
   return (
-    <Modal visible={visible} title={t("newTaskListModalTitle")} bodyClass={styles.container} requestClose={close}>
-      {workspace && team && <NewTaskListForm workspace={workspace} team={team} onClose={close} />}
+    <Modal visible={visible} title={t("newTaskBoardModalTitle")} bodyClass={styles.container} requestClose={close}>
+      {workspace && team && <NewTaskBoardForm workspace={workspace} team={team} onClose={close} />}
     </Modal>
   );
 };
 
-export default NewTaskListModal;
+export default NewTaskBoardModal;

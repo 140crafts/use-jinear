@@ -1,7 +1,7 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle";
-import { useRetrieveAllTaskListsQuery } from "@/store/api/TaskListListingApi";
-import { popNewTaskListModal } from "@/store/slice/modalSlice";
+import { useRetrieveAllTaskBoardsQuery } from "@/store/api/taskBoardListingApi";
+import { popNewTaskBoardModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
@@ -19,46 +19,52 @@ interface TeamTaskListsProps {
 
 const VISIBLE_SIZE = 3;
 
-const TeamTaskLists: React.FC<TeamTaskListsProps> = ({ teamId, workspaceId, workspaceUsername, teamUsername }) => {
+const TeamTaskBoards: React.FC<TeamTaskListsProps> = ({ teamId, workspaceId, workspaceUsername, teamUsername }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const router = useRouter();
 
-  const { data: taskListListingResponse, isFetching } = useRetrieveAllTaskListsQuery({ teamId, workspaceId });
-  const hasMore = taskListListingResponse?.data.totalElements && taskListListingResponse?.data.totalElements > VISIBLE_SIZE;
-  const notVisibleSize = hasMore ? taskListListingResponse?.data.totalElements - VISIBLE_SIZE : 0;
+  const { data: taskBoardListingResponse, isFetching } = useRetrieveAllTaskBoardsQuery({ teamId, workspaceId });
+  const hasMore =
+    taskBoardListingResponse?.data.totalElements != null && taskBoardListingResponse?.data.totalElements > VISIBLE_SIZE;
+  const notVisibleSize = hasMore ? taskBoardListingResponse?.data.totalElements - VISIBLE_SIZE : 0;
 
-  const openNewTaskListModal = () => {
-    dispatch(popNewTaskListModal());
+  const openNewTaskBoardModal = () => {
+    dispatch(popNewTaskBoardModal());
   };
 
-  const routeToTaskListScreen = () => {
-    router.push(`/${workspaceUsername}/${teamUsername}/task-lists`);
+  const routeToTaskBoardsScreen = () => {
+    router.push(`/${workspaceUsername}/${teamUsername}/task-boards`);
   };
 
   return (
     <div className={styles.container}>
       <MenuGroupTitle
-        label={t("sideMenuTeamTaskLists")}
+        label={t("sideMenuTeamTaskBoards")}
         hasDetailButton={true}
         hasAddButton={true}
-        onAddButtonClick={openNewTaskListModal}
-        onDetailButtonClick={routeToTaskListScreen}
+        onAddButtonClick={openNewTaskBoardModal}
+        onDetailButtonClick={routeToTaskBoardsScreen}
       />
       <div className={styles.listsContainer}>
         {isFetching && <CircularProgress size={11} />}
-        {!taskListListingResponse?.data?.hasContent && !isFetching && (
-          <div className={styles.noContentLabel}>{t("sideMenuTaskListsNoTaskListExists")}</div>
+        {!taskBoardListingResponse?.data?.hasContent && !isFetching && (
+          <div className={styles.noContentLabel}>{t("sideMenuTaskBoardsNoTaskBoardExists")}</div>
         )}
-        {taskListListingResponse?.data?.content?.slice(0, VISIBLE_SIZE).map((taskListDto) => (
-          <TaskListRow key={taskListDto.taskListId} taskListDto={taskListDto} />
+        {taskBoardListingResponse?.data?.content?.slice(0, VISIBLE_SIZE).map((taskBoardDto) => (
+          <TaskListRow
+            key={taskBoardDto.taskBoardId}
+            taskBoardDto={taskBoardDto}
+            workspaceUsername={workspaceUsername}
+            teamUsername={teamUsername}
+          />
         ))}
         {hasMore && (
           <Button
             variant={ButtonVariants.hoverFilled}
             className={styles.hasMoreButton}
             heightVariant={ButtonHeight.short}
-            href={`/${workspaceUsername}/${teamUsername}/task-lists`}
+            href={`/${workspaceUsername}/${teamUsername}/task-boards`}
           >
             {t("sideMenuTeamTaskListsShowMore").replace("${number}", `${notVisibleSize}`)}
           </Button>
@@ -68,4 +74,4 @@ const TeamTaskLists: React.FC<TeamTaskListsProps> = ({ teamId, workspaceId, work
   );
 };
 
-export default TeamTaskLists;
+export default TeamTaskBoards;

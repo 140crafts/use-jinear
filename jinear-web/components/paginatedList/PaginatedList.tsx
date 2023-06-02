@@ -19,6 +19,7 @@ interface PaginatedListProps<T> {
   hidePaginationOnSinglePages?: boolean;
   containerClassName?: string;
   contentContainerClassName?: string;
+  listTitleComponent?: ReactElement;
 }
 
 const PaginatedList = <T,>({
@@ -34,6 +35,7 @@ const PaginatedList = <T,>({
   hidePaginationOnSinglePages = false,
   containerClassName,
   contentContainerClassName,
+  listTitleComponent,
 }: PaginatedListProps<T>): ReactElement | null => {
   const { t } = useTranslation();
 
@@ -42,7 +44,7 @@ const PaginatedList = <T,>({
   return (
     <div id={id} className={cn(styles.container, containerClassName)}>
       <div className={styles.header}>
-        <h2>{listTitle}</h2>
+        {listTitleComponent ? listTitleComponent : <h2>{listTitle}</h2>}
         {!(hidePaginationOnSinglePages && emptyOrSinglePage) && data && (
           <Pagination
             id={`${id}-paginator`}
