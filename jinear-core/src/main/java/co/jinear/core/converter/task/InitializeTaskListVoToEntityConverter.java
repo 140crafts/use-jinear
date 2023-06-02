@@ -1,8 +1,8 @@
 package co.jinear.core.converter.task;
 
-import co.jinear.core.model.entity.task.TaskList;
-import co.jinear.core.model.enumtype.task.TaskListStateType;
-import co.jinear.core.model.vo.task.InitializeTaskListVo;
+import co.jinear.core.model.entity.task.TaskBoard;
+import co.jinear.core.model.enumtype.task.TaskBoardStateType;
+import co.jinear.core.model.vo.task.InitializeTaskBoardVo;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -10,10 +10,10 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface InitializeTaskListVoToEntityConverter {
 
-    TaskList map(InitializeTaskListVo initializeTaskListVo);
+    TaskBoard map(InitializeTaskBoardVo initializeTaskBoardVo);
 
     @AfterMapping
-    default void afterMap(@MappingTarget TaskList taskList) {
-        taskList.setState(TaskListStateType.OPEN);
+    default void afterMap(@MappingTarget TaskBoard taskBoard) {
+        taskBoard.setState(TaskBoardStateType.OPEN);
     }
 }

@@ -815,9 +815,9 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task_list">
-        <createTable tableName="task_list">
-            <column name="task_list_id" type="char(26)">
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task_board">
+        <createTable tableName="task_board">
+            <column name="task_board_id" type="char(26)">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -843,20 +843,20 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="task_list">
+        <createIndex indexName="ix_workspace_id" tableName="task_board">
             <column name="workspace_id"/>
         </createIndex>
-        <createIndex indexName="ix_team_id" tableName="task_list">
+        <createIndex indexName="ix_team_id" tableName="task_board">
             <column name="team_id"/>
         </createIndex>
-        <createIndex indexName="ix_owner_id" tableName="task_list">
+        <createIndex indexName="ix_owner_id" tableName="task_board">
             <column name="owner_id"/>
         </createIndex>
     </changeSet>
 
-    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task_list_entry">
-        <createTable tableName="task_list_entry">
-            <column name="task_list_entry_id" type="char(26)">
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task_board_entry">
+        <createTable tableName="task_board_entry">
+            <column name="task_board_entry_id" type="char(26)">
                 <constraints nullable="false" primaryKey="true" unique="true"/>
             </column>
             <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -864,7 +864,7 @@
             </column>
             <column name="udate" type="datetime"/>
             <column name="passive_id" type="char(26)"/>
-            <column name="task_list_id" type="char(26)">
+            <column name="task_board_id" type="char(26)">
                 <constraints nullable="false"/>
             </column>
             <column name="task_id" type="char(26)">
@@ -873,10 +873,10 @@
             <column name="order" type="int" defaultValueNumeric="0"/>
         </createTable>
 
-        <createIndex indexName="ix_task_list_id" tableName="task_list_entry">
-            <column name="task_list_id"/>
+        <createIndex indexName="ix_task_board_id" tableName="task_board_entry">
+            <column name="task_board_id"/>
         </createIndex>
-        <createIndex indexName="ix_task_id" tableName="task_list_entry">
+        <createIndex indexName="ix_task_id" tableName="task_board_entry">
             <column name="task_id"/>
         </createIndex>
     </changeSet>
