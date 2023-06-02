@@ -695,8 +695,8 @@ export default {
     tr: "Tartışmalar",
   },
   sideMenuTeamTaskBoards: {
-    en: "Task Boards",
-    tr: "Görev Panoları",
+    en: "Boards",
+    tr: "Panolar",
   },
   topicCardEditTooltip: {
     en: "Edit Topic",
