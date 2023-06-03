@@ -3,6 +3,7 @@ import ErrorBoundary from "@/components/errorBoundary/ErrorBoundary";
 import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import MainHeader from "@/components/mainHeader/MainHeader";
 import AddMemberToTeamModal from "@/components/modal/addMemberToTeamModal/AddMemberToTeamModal";
+import BasicTextInputModal from "@/components/modal/basicTextInputModal/BasicTextInputModal";
 import DatePickerModal from "@/components/modal/datePicker/DatePickerModal";
 import DialogModal from "@/components/modal/dialogModal/DialogModal";
 import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
@@ -77,6 +78,7 @@ const globalModals: any = (
     <NewTopicModal />
     <LoginWith2FaMailModal />
     <DatePickerModal />
+    <BasicTextInputModal />
     <DialogModal />
     <NotFoundModal />
     <LoadingModal />

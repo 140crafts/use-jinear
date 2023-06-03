@@ -4,6 +4,7 @@
   flex: 1;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
 }
@@ -12,6 +13,8 @@
   justify-content: flex-start;
   align-items: flex-start;
   color: var(--c-text-color);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .itemContainer {
@@ -35,8 +38,36 @@
 }
 
 .itemDragIconContainer {
-  padding: 0.75rem;
-  /* padding-right: 0.5rem; */
+  cursor: grab !important;
+}
+
+.itemDragIconContainer:hover {
+  background-color: unset !important;
+}
+
+.titleActionBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.titleLabelContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.editTitleButton {
+  display: none;
+}
+
+.titleLabelContainer:hover {
+  .editTitleButton {
+    display: flex;
+  }
 }
 
 @media (max-width: $tablet) {

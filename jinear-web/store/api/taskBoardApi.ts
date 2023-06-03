@@ -16,7 +16,7 @@ export const taskBoardApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["task-board-listing"],
+      invalidatesTags: ["task-board-listing", "task-board-retrieve", "task-board-listing"],
     }),
     //
     updateDueDate: build.mutation<BaseResponse, TaskBoardUpdateDueDateRequest>({
@@ -25,7 +25,7 @@ export const taskBoardApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["task-board-listing"],
+      invalidatesTags: ["task-board-listing", "task-board-retrieve", "task-board-listing"],
     }),
     //
     updateTitle: build.mutation<BaseResponse, TaskBoardUpdateTitleRequest>({
@@ -34,7 +34,7 @@ export const taskBoardApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["task-board-listing"],
+      invalidatesTags: ["task-board-listing", "task-board-retrieve", "task-board-listing"],
     }),
     //
     updateState: build.mutation<BaseResponse, TaskBoardUpdateStateRequest>({
@@ -43,7 +43,7 @@ export const taskBoardApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["task-board-listing"],
+      invalidatesTags: ["task-board-listing", "task-board-retrieve", "task-board-listing"],
     }),
     //
   }),

@@ -76,3 +76,10 @@ export interface WorkspacePickerModalState extends ModalState {
   currentWorkspaceId?: string;
   onPick?: (workspace: WorkspaceDto) => void;
 }
+
+export interface BasicTextInputModalState extends ModalState {
+  title?: string;
+  infoText?: string;
+  initialText?: string;
+  onSubmit?: (text: string) => void;
+}

@@ -405,3 +405,7 @@ pre {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
 }
+
+.op-05 {
+  opacity: 0.5;
+}

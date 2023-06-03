@@ -1,6 +1,7 @@
 import { TaskSearchResultDto } from "@/model/be/jinear-core";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ModalState, {
+  BasicTextInputModalState,
   ChangeTaskAssigneeModalState,
   ChangeTaskDateModalState,
   ChangeTaskTopicModalState,
@@ -99,6 +100,9 @@ const initialState = {
   newTaskBoardModal: {
     visible: false,
   },
+  basicTextInputModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -124,6 +128,7 @@ const initialState = {
   teamPickerModal: null | TeamPickerModalState;
   workspacePickerModal: null | WorkspacePickerModalState;
   newTaskBoardModal: null | ModalState;
+  basicTextInputModal: null | BasicTextInputModalState;
 };
 
 const slice = createSlice({
@@ -303,6 +308,13 @@ const slice = createSlice({
       state.newTaskBoardModal = initialState.newTaskBoardModal;
     },
 
+    popBasicTextInputModal: (state, action: PayloadAction<BasicTextInputModalState>) => {
+      state.basicTextInputModal = { ...action.payload, visible: true };
+    },
+    closeBasicTextInputModal: (state, action: PayloadAction<void>) => {
+      state.basicTextInputModal = initialState.basicTextInputModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -367,6 +379,8 @@ export const {
   closeWorkspacePickerModal,
   popNewTaskBoardModal,
   closeNewTaskBoardModal,
+  popBasicTextInputModal,
+  closeBasicTextInputModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -471,3 +485,9 @@ export const selectWorkspacePickerModalCurrentWorkspaceId = (state: RootState) =
 export const selectWorkspacePickerModalOnPick = (state: RootState) => state.modal.workspacePickerModal?.onPick;
 
 export const selectNewTaskBoardModalVisible = (state: RootState) => state.modal.newTaskBoardModal?.visible;
+
+export const selectBasicTextInputModalVisible = (state: RootState) => state.modal.basicTextInputModal?.visible;
+export const selectBasicTextInputModalTitle = (state: RootState) => state.modal.basicTextInputModal?.title;
+export const selectBasicTextInputModalInfoText = (state: RootState) => state.modal.basicTextInputModal?.infoText;
+export const selectBasicTextInputModalInfoInitialText = (state: RootState) => state.modal.basicTextInputModal?.initialText;
+export const selectBasicTextInputModalInfoOnSubmit = (state: RootState) => state.modal.basicTextInputModal?.onSubmit;

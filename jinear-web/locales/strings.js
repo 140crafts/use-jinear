@@ -1907,7 +1907,7 @@ export default {
     tr: "Görev Panosu Oluştur",
   },
   sideMenuTeamTaskListsShowMore: {
-    en: "...${number} more boards",
+    en: "...${number} more board(s)",
     tr: "...${number} pano daha",
   },
   taskBoardListScreenBreadcrumbLabel: {
@@ -1929,5 +1929,41 @@ export default {
   taskBoardAddTaskButtonLabel: {
     en: "Add Task",
     tr: "Görev Ekle",
+  },
+  taskBoardRemainingDaysLabelDateInDays: {
+    en: "${num} days remain",
+    tr: "${num} gün kaldı",
+  },
+  taskBoardDeadlineTomorrow: {
+    en: "Deadline is tomorrow",
+    tr: "Son tarih yarın",
+  },
+  taskBoardDueDatePast: {
+    en: "The deadline expired ${num} days ago",
+    tr: "${num} gün önce süresi doldu",
+  },
+  taskBoardDueDateToday: {
+    en: "Due date is today",
+    tr: "Son tarih bugün",
+  },
+  taskBoardAssignDueDate: {
+    en: "Assign Due Date",
+    tr: "Son Tarih Ata",
+  },
+  taskBoardChangeTitleModalTitle: {
+    en: "Update Title",
+    tr: "Başlık Güncelle",
+  },
+  taskBoardChangeTitleModalInfoText: {
+    en: "Please provide an another title for task board.",
+    tr: "Görev panosu için yeni bir başlık girin.",
+  },
+  basicTextInputModalSubmitLabel: {
+    en: "Confirm",
+    tr: "Devam",
+  },
+  basicTextInputModalCancelLabel: {
+    en: "Cancel",
+    tr: "Vazgeç",
   },
 };

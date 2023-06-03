@@ -25,16 +25,18 @@ const TaskBoardDetailScreen: React.FC<TaskBoardDetailScreenProps> = ({}) => {
 
   return (
     <div className={styles.container}>
+      <TaskBoardDetailBreadcrumb title={taskBoardResponse?.data.title || ""} taskBoardId={taskBoardId} />
       {(isLoading || isFetching) && (
         <div className={styles.loadingContainer}>
-          <CircularProgress size={11} />
+          <CircularProgress size={14} />
         </div>
       )}
-      <TaskBoardDetailBreadcrumb title={taskBoardResponse?.data.title || ""} taskBoardId={taskBoardId} />
       {team && workspace && taskBoardResponse && (
         <TaskBoardElementList
           title={taskBoardResponse.data.title}
           taskBoardId={taskBoardResponse.data.taskBoardId}
+          boardState={taskBoardResponse.data.state}
+          dueDate={taskBoardResponse.data.dueDate}
           team={team}
           workspace={workspace}
         />

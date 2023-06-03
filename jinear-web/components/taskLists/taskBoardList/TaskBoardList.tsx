@@ -27,8 +27,10 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({ team, workspace }) => {
         key={item.taskBoardId}
         title={item.title}
         taskBoardId={item.taskBoardId}
+        dueDate={item.dueDate}
         team={team}
         workspace={workspace}
+        boardState={item.state}
       />
     );
   };
