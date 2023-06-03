@@ -1,14 +1,18 @@
 package co.jinear.core.manager.task;
 
 import co.jinear.core.converter.task.TaskBoardEntryInitializeRequestConverter;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.task.TaskBoardDto;
 import co.jinear.core.model.dto.task.TaskBoardEntryDto;
+import co.jinear.core.model.enumtype.task.TaskBoardStateType;
 import co.jinear.core.model.request.task.TaskBoardEntryInitializeRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.TaskBoardEntryPaginatedResponse;
 import co.jinear.core.model.vo.task.InitializeTaskBoardEntryVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.passive.PassiveService;
+import co.jinear.core.service.task.board.TaskBoardRetrieveService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryListingService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryOperationService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryRetrieveService;
@@ -30,10 +34,13 @@ public class TaskBoardEntryManager {
     private final TaskBoardEntryListingService taskBoardEntryListingService;
     private final TaskBoardEntryInitializeRequestConverter taskBoardEntryInitializeRequestConverter;
     private final PassiveService passiveService;
+    private final TaskBoardRetrieveService taskBoardRetrieveService;
 
     public BaseResponse initializeTaskBoardEntry(TaskBoardEntryInitializeRequest taskBoardInitializeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        taskBoardAccessValidator.validateHasTaskBoardAccess(taskBoardInitializeRequest.getTaskBoardId(), currentAccountId);
+        TaskBoardDto taskBoardDto = taskBoardRetrieveService.retrieve(taskBoardInitializeRequest.getTaskBoardId());
+        validateBoardStatus(taskBoardDto);
+        taskBoardAccessValidator.validateHasTaskBoardAccess(taskBoardDto, currentAccountId);
         InitializeTaskBoardEntryVo initializeTaskBoardEntryVo = taskBoardEntryInitializeRequestConverter.convert(taskBoardInitializeRequest);
         taskBoardEntryOperationService.initialize(initializeTaskBoardEntryVo);
         return new BaseResponse();
@@ -62,6 +69,12 @@ public class TaskBoardEntryManager {
         log.info("Retrieve task board entries from task board has started. currentAccountId: {}", currentAccountId);
         Page<TaskBoardEntryDto> results = taskBoardEntryListingService.retrieveTaskBoardEntries(taskBoardId, page);
         return mapResults(results);
+    }
+
+    private void validateBoardStatus(TaskBoardDto taskBoardDto) {
+        if (TaskBoardStateType.CLOSED.equals(taskBoardDto.getState())) {
+            throw new BusinessException();
+        }
     }
 
     private void validateAccess(String taskBoardEntryId, String currentAccountId) {
