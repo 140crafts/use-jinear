@@ -63,17 +63,20 @@ public class TaskBoardEntryOperationService {
         log.info("Change task board entry order has started. taskBoardEntryId: {}, currentOrder: {}, newOrder: {}", taskBoardEntryId, currentOrder, newOrder);
         final String taskBoardId = taskBoardEntry.getTaskBoardId();
         int comparison = currentOrder.compareTo(newOrder);
+        log.info("Order comparison result: {}", comparison);
         switch (comparison) {
             //todo fix queries
             case -1 -> taskBoardEntryRepository.updateOrderDownward(taskBoardId, currentOrder, newOrder);
             case 1 -> taskBoardEntryRepository.updateOrderUpward(taskBoardId, currentOrder, newOrder);
             default -> log.info("Order is same.");
         }
+        taskBoardEntry.setOrder(newOrder);
+        taskBoardEntryRepository.save(taskBoardEntry);
     }
 
     private TaskBoardEntryDto initializeEntry(InitializeTaskBoardEntryVo initializeTaskBoardEntryVo) {
         Long taskBoardSize = taskBoardEntryRepository.countAllByTaskBoardIdAndPassiveIdIsNull(initializeTaskBoardEntryVo.getTaskBoardId());
-        TaskBoardEntry taskBoardEntry = initializeTaskBoardEntryVoToEntityConverter.map(initializeTaskBoardEntryVo, taskBoardSize.intValue() + 1);
+        TaskBoardEntry taskBoardEntry = initializeTaskBoardEntryVoToEntityConverter.map(initializeTaskBoardEntryVo, taskBoardSize.intValue());
         TaskBoardEntry saved = taskBoardEntryRepository.save(taskBoardEntry);
         return taskBoardEntryDtoConverter.map(saved);
     }

@@ -17,10 +17,19 @@ public class TaskBoardAccessValidator {
 
     public void validateHasTaskBoardAccess(String taskBoardId, String currentAccountId) {
         TaskBoardDto taskBoardDto = taskBoardRetrieveService.retrieve(taskBoardId);
-        validateHasTaskBoardAccess(taskBoardDto,currentAccountId);
+        validateHasTaskBoardAccess(taskBoardDto, currentAccountId);
     }
 
     public void validateHasTaskBoardAccess(TaskBoardDto taskBoardDto, String currentAccountId) {
         teamAccessValidator.validateTeamAccess(currentAccountId, taskBoardDto.getTeamId());
+    }
+
+    public void validateHasTaskBoardTeamAdminOrTaskBoardWorkspaceAdmin(String taskBoardId, String currentAccountId) {
+        TaskBoardDto taskBoardDto = taskBoardRetrieveService.retrieve(taskBoardId);
+        validateHasTaskBoardAccess(taskBoardDto, currentAccountId);
+    }
+
+    public void validateHasTaskBoardTeamAdminOrTaskBoardWorkspaceAdmin(TaskBoardDto taskBoardDto, String currentAccountId) {
+        teamAccessValidator.validateTeamAdminOrWorkspaceAdminOrWorkspaceOwner(currentAccountId, taskBoardDto.getWorkspaceId(), taskBoardDto.getTeamId());
     }
 }

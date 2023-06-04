@@ -59,7 +59,7 @@ public class TaskBoardManager {
 
     public BaseResponse updateState(TaskBoardUpdateStateRequest taskBoardUpdateStateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        validateHasTaskBoardAccess(taskBoardUpdateStateRequest, currentAccountId);
+        validateHasTaskBoardStateChangeAccess(taskBoardUpdateStateRequest, currentAccountId);
         log.info("Update task board state has started. currentAccountId: {}", currentAccountId);
         UpdateTaskBoardStateVo updateTaskBoardStateVo = taskBoardUpdateRequestConverter.convert(taskBoardUpdateStateRequest);
         taskBoardOperationService.updateState(updateTaskBoardStateVo);
@@ -68,6 +68,10 @@ public class TaskBoardManager {
 
     private void validateHasTaskBoardAccess(TaskBoardUpdateRequest request, String currentAccountId) {
         taskBoardAccessValidator.validateHasTaskBoardAccess(request.getTaskBoardId(), currentAccountId);
+    }
+
+    private void validateHasTaskBoardStateChangeAccess(TaskBoardUpdateRequest request, String currentAccountId) {
+        taskBoardAccessValidator.validateHasTaskBoardTeamAdminOrTaskBoardWorkspaceAdmin(request.getTaskBoardId(), currentAccountId);
     }
 
     private TaskBoardResponse mapResponse(TaskBoardDto taskBoardDto) {

@@ -39,7 +39,7 @@ public interface TaskBoardEntryRepository extends JpaRepository<TaskBoardEntry, 
                 set taskBoardEntry.order = taskBoardEntry.order - 1
                     where 
                         taskBoardEntry.taskBoardId = :taskBoardId and 
-                        (:currentOrder < taskBoardEntry.order and :newOrder <= taskBoardEntry.order) and  
+                        ( taskBoardEntry.order > :currentOrder and taskBoardEntry.order <= :newOrder) and  
                         taskBoardEntry.passiveId is null
                 """)
     void updateOrderDownward(@Param("taskBoardId") String taskBoardId,
