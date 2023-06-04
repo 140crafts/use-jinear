@@ -8,6 +8,7 @@ import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import WorkspaceAndTeamInfo from "../common/workspaceAndTeamInfo/WorkspaceAndTeamInfo";
 import styles from "./NewTaskForm.module.css";
 import AssignedDateInput from "./assignedDateInput/AssignedDateInput";
 import DescriptionInput from "./descriptionInput/DescriptionInput";
@@ -15,7 +16,6 @@ import DueDateInput from "./dueDateInput/DueDateInput";
 import MemberSelect from "./memberSelect/MemberSelect";
 import TitleInput from "./titleInput/TitleInput";
 import TopicSelect from "./topicSelect/TopicSelect";
-import WorkspaceAndTeamInfo from "./workspaceAndTeamInfo/WorkspaceAndTeamInfo";
 
 interface NewTaskFormProps {
   workspace: WorkspaceDto;
@@ -109,7 +109,13 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspace, team, subTaskOf, s
       action="#"
     >
       <div className={styles.formContent}>
-        <WorkspaceAndTeamInfo workspace={workspace} team={team} />
+        <WorkspaceAndTeamInfo
+          workspace={workspace}
+          team={team}
+          personalWorkspaceTitle={t("newTaskFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel")}
+          workspaceTitle={t("newTaskFormWorkspaceAndTeamInfoLabel")}
+          personalWorkspaceLabel={t("newTaskFormPersonalWorkspaceSelected")}
+        />
         <input type="hidden" value={workspaceId} {...register("workspaceId")} />
         <input type="hidden" value={teamId} {...register("teamId")} />
         {subTaskOf && <input type="hidden" value={subTaskOf} {...register("subTaskOf")} />}

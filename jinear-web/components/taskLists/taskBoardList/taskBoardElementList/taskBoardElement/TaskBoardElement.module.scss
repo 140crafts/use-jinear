@@ -1,0 +1,25 @@
+@import "/styles/breakpoints.scss";
+
+.itemContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: grab !important;
+
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--c-primary-shade-1-op025);
+}
+
+.taskRow {
+  flex: 1;
+}
+
+@media (max-width: $tablet) {
+  .itemContainer {
+    align-items: flex-start;
+  }
+  .itemDetailButton {
+    margin-top: 0.5rem;
+  }
+}

@@ -1,0 +1,10 @@
+@import "/styles/breakpoints.scss";
+
+.taskRowContainer {
+  display: flex;
+  flex: 1;
+}
+
+.draggableBoardElementContainer:active {
+  background-color: var(--c-primary);
+}

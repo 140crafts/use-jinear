@@ -12,9 +12,18 @@ import styles from "./WorkspaceAndTeamInfo.module.css";
 interface WorkspaceAndTeamInfoProps {
   workspace: WorkspaceDto;
   team: TeamDto;
+  personalWorkspaceTitle: string;
+  workspaceTitle: string;
+  personalWorkspaceLabel: string;
 }
 
-const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({ workspace, team }) => {
+const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
+  workspace,
+  team,
+  personalWorkspaceTitle,
+  workspaceTitle,
+  personalWorkspaceLabel,
+}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const currentWorkspaceId = useTypedSelector(selectCurrentAccountsPreferredWorkspaceId);
@@ -38,12 +47,10 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({ workspace, 
 
   return (
     <div className={styles.container}>
-      {workspace.isPersonal
-        ? t("newTaskFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel")
-        : t("newTaskFormWorkspaceAndTeamInfoLabel")}
+      {workspace.isPersonal ? personalWorkspaceTitle : workspaceTitle}
       <div className={styles.buttonContainer}>
         <Button variant={ButtonVariants.filled} heightVariant={ButtonHeight.short} onClick={popChangeWorkspaceModal}>
-          <b>{workspace.isPersonal ? t("newTaskFormPersonalWorkspaceSelected") : workspace.title}</b>
+          <b>{workspace.isPersonal ? personalWorkspaceLabel : workspace.title}</b>
         </Button>
         {!workspace.isPersonal && (
           <>

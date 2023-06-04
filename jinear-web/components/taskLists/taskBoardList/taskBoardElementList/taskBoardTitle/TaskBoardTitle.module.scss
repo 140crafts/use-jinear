@@ -1,0 +1,48 @@
+@import "/styles/breakpoints.scss";
+
+.listTitle {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1;
+}
+
+.closedListTitle {
+  color: var(--c-primary-shade-1-op025) !important;
+}
+
+.listTitleButton {
+  justify-content: flex-start;
+  align-items: flex-start;
+  color: var(--c-text-color);
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.titleLabelContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.titleLabelContainer:hover {
+  .editTitleButton {
+    display: flex;
+  }
+}
+
+.titleActionBar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.editTitleButton {
+  display: none;
+}

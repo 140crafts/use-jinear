@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-05-13 17:53:39.
+// Generated using typescript-generator version 3.0.1157 on 2023-06-01 22:16:41.
 
 export interface BaseDto {
   createdDate: Date;
@@ -173,6 +173,28 @@ export interface RelatedTaskDto extends BaseDto {
   workspace?: WorkspaceDto | null;
   team?: TeamDto | null;
   workflowStatus: TeamWorkflowStatusDto;
+}
+
+export interface TaskBoardDetailedDto extends TaskBoardDto {
+  taskListEntries: TaskBoardEntryDto[];
+}
+
+export interface TaskBoardDto extends BaseDto {
+  taskBoardId: string;
+  workspaceId: string;
+  teamId: string;
+  ownerId: string;
+  title: string;
+  dueDate: Date;
+  state: TaskBoardStateType;
+}
+
+export interface TaskBoardEntryDto extends BaseDto {
+  taskBoardEntryId: string;
+  taskBoardId: string;
+  taskId: string;
+  order: number;
+  task: TaskDto;
 }
 
 export interface TaskDto extends BaseDto {
@@ -507,6 +529,34 @@ export interface TaskAssigneeUpdateRequest {
   assigneeId?: string | null;
 }
 
+export interface TaskBoardEntryInitializeRequest extends BaseRequest {
+  taskBoardId: string;
+  taskId: string;
+}
+
+export interface TaskBoardInitializeRequest extends BaseRequest {
+  workspaceId: string;
+  teamId: string;
+  title: string;
+  dueDate?: Date | null;
+}
+
+export interface TaskBoardUpdateDueDateRequest extends TaskBoardUpdateRequest {
+  dueDate?: Date | null;
+}
+
+export interface TaskBoardUpdateRequest extends BaseRequest {
+  taskBoardId: string;
+}
+
+export interface TaskBoardUpdateStateRequest extends TaskBoardUpdateRequest {
+  state: TaskBoardStateType;
+}
+
+export interface TaskBoardUpdateTitleRequest extends TaskBoardUpdateRequest {
+  title: string;
+}
+
 export interface TaskDateUpdateRequest {
   assignedDate?: Date | null;
   dueDate?: Date | null;
@@ -676,6 +726,22 @@ export interface TaskActivityRetrieveResponse extends BaseResponse {
   data: WorkspaceActivityDto[];
 }
 
+export interface TaskBoardEntryPaginatedResponse extends BaseResponse {
+  data: PageDto<TaskBoardEntryDto>;
+}
+
+export interface TaskBoardListingPaginatedResponse extends BaseResponse {
+  data: PageDto<TaskBoardDto>;
+}
+
+export interface TaskBoardResponse extends BaseResponse {
+  data: TaskBoardDto;
+}
+
+export interface TaskBoardRetrieveResponse extends BaseResponse {
+  data: TaskBoardDto;
+}
+
 export interface TaskListingPaginatedResponse extends BaseResponse {
   data: PageDto<TaskDto>;
 }
@@ -809,7 +875,13 @@ export type LocaleStringType =
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET";
+export type LockSourceType =
+  | "BALANCE"
+  | "TOPIC_TASK_INIT"
+  | "TEAM_TASK_INIT"
+  | "TEAM_WORKFLOW_STATUS"
+  | "ACCOUNT_PASSWORD_RESET"
+  | "TASK_BOARD_EDIT";
 
 export type FileType = "PROFILE_PIC";
 
@@ -881,6 +953,8 @@ export type RepeatType =
 export type RichTextSourceStack = "WYSIWYG" | "RC";
 
 export type RichTextType = "TASK_DETAIL";
+
+export type TaskBoardStateType = "OPEN" | "CLOSED";
 
 export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
 

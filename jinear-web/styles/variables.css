@@ -3,9 +3,11 @@
   --c-background: #fdfffc;
   --c-text-color: #16171a;
   --c-primary: #fdfffc;
-  --c-primary-shade-0-op05: #f5f5f580;
   --c-primary-shade-0: #f5f5f5;
+  --c-primary-shade-0-op05: #f5f5f580;
   --c-primary-shade-1: #e5e5e5;
+  --c-primary-shade-1-op05: #e5e5e580;
+  --c-primary-shade-1-op025: #e5e5e540;
   --c-secondary: #16171a;
   --c-secondary-shade-0-op05: #1f212480;
   --c-secondary-shade-0: #1f2124;
@@ -105,9 +107,11 @@
   --c-background: #16171a;
   --c-text-color: #fdfffc;
   --c-primary: #16171a;
-  --c-primary-shade-0-op05: #1f212480;
   --c-primary-shade-0: #1f2124;
+  --c-primary-shade-0-op05: #1f212480;
   --c-primary-shade-1: #393e41;
+  --c-primary-shade-1-op05: #393e4180;
+  --c-primary-shade-1-op025: #393e4140;
   --c-secondary: #fdfffc;
   --c-secondary-shade-0: #f5f5f5;
   --c-secondary-shade-0-op05: #f5f5f580;

@@ -1,0 +1,19 @@
+.noContentLabel {
+  color: var(--c-secondary-shade-0-op05);
+  text-align: center;
+  font-size: 0.8rem;
+  margin: 1.25rem 1rem;
+}
+
+.listsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.hasMoreButton {
+  background-color: var(--c-primary-shade-0-op05);
+}
+
+.hasMoreButton:hover {
+  background-color: var(--c-primary-shade-1);
+}

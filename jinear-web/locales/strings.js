@@ -694,6 +694,10 @@ export default {
     en: "Threads",
     tr: "Tartışmalar",
   },
+  sideMenuTeamTaskBoards: {
+    en: "Boards",
+    tr: "Panolar",
+  },
   topicCardEditTooltip: {
     en: "Edit Topic",
     tr: "Konuyu Düzenle",
@@ -1865,5 +1869,117 @@ export default {
   userProfilePersonalInfoTitle: {
     en: "Personal Info",
     tr: "Kişisel Bilgiler",
+  },
+  sideMenuTaskBoardsNoTaskBoardExists: {
+    en: "There isn't any task board initialized yet. Create a new task board.",
+    tr: "Hiçbir görev panosu bulunamadı. Yeni bir görev panosu oluşturun.",
+  },
+  newTaskBoardModalTitle: {
+    en: "New Task Board",
+    tr: "Yeni Görev Panosu",
+  },
+  newTaskListFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel: {
+    en: "You're creating new task board under following workspace",
+    tr: "Görev panosu oluşturduğun çalışma alanı",
+  },
+  newTaskListFormWorkspaceAndTeamInfoLabel: {
+    en: "You're creating new task board under following workspace and team",
+    tr: "Görev panosu oluşturduğun çalışma alanı ve ekip",
+  },
+  newTaskListFormPersonalWorkspaceSelected: {
+    en: "Your Personal Workspace",
+    tr: "Kişisel Çalışma Alanın",
+  },
+  newTaskListModalTaskListTitle: {
+    en: "Title",
+    tr: "Başlık",
+  },
+  newTaskListModalTaskListDueDate: {
+    en: "Due date",
+    tr: "Şu tarihe dek",
+  },
+  newTaskListModalCancel: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  newTaskListModalCreate: {
+    en: "Create Task Board",
+    tr: "Görev Panosu Oluştur",
+  },
+  sideMenuTeamTaskListsShowMore: {
+    en: "...${number} more board(s)",
+    tr: "...${number} pano daha",
+  },
+  taskBoardListScreenBreadcrumbLabel: {
+    en: "Task Board",
+    tr: "Görev Panosu",
+  },
+  taskBoardsListTitle: {
+    en: "Boards",
+    tr: "Panolar",
+  },
+  taskBoardsListEmptyLabel: {
+    en: "There isn't any task lists.",
+    tr: "Herhangi bir görev listesi bulunamadı.",
+  },
+  taskBoardEmptyLabel: {
+    en: "There isn't any task in this board.",
+    tr: "Bu panoda herhangi bir görev bulunamadı.",
+  },
+  taskBoardAddTaskButtonLabel: {
+    en: "Add Task",
+    tr: "Görev Ekle",
+  },
+  taskBoardRemainingDaysLabelDateInDays: {
+    en: "${num} days remain",
+    tr: "${num} gün kaldı",
+  },
+  taskBoardDeadlineTomorrow: {
+    en: "Deadline is tomorrow",
+    tr: "Son tarih yarın",
+  },
+  taskBoardDueDatePast: {
+    en: "The deadline expired ${num} day(s) ago",
+    tr: "${num} gün önce süresi doldu",
+  },
+  taskBoardDueDateToday: {
+    en: "Due date is today",
+    tr: "Son tarih bugün",
+  },
+  taskBoardAssignDueDate: {
+    en: "Assign Due Date",
+    tr: "Son Tarih Ata",
+  },
+  taskBoardChangeTitleModalTitle: {
+    en: "Update Title",
+    tr: "Başlık Güncelle",
+  },
+  taskBoardChangeTitleModalInfoText: {
+    en: "Please provide an another title for task board.",
+    tr: "Görev panosu için yeni bir başlık girin.",
+  },
+  taskBoardItemRemoveElementTooltip: {
+    en: "Remove from board",
+    tr: "Panodan kaldır",
+  },
+  taskBoardEntryDeleteAreYouSureTitle: {
+    en: "Remove from board",
+    tr: "Panodan kaldır",
+  },
+  taskBoardEntryDeleteAreYouSureText: {
+    en: "Are you sure to remove this task from board? You can always add this task to any board you like.",
+    tr: "Bu görevi panodan kaldırmak istediğine emin misin? Görevi daha sonra tekrar panoya ekleyebilirsin.",
+  },
+  taskBoardEntryDeleteAreYouSureConfirmLabel: {
+    en: "Confirm",
+    tr: "Onay",
+  },
+  basicTextInputModalSubmitLabel: {
+    en: "Confirm",
+    tr: "Devam",
+  },
+  basicTextInputModalCancelLabel: {
+    en: "Cancel",
+    tr: "Vazgeç",
   },
 };

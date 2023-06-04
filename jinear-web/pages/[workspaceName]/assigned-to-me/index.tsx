@@ -1,6 +1,6 @@
 import AssignedToMeScreenHeader from "@/components/assignedToMeScreen/assignedToMeScreenHeader/AssignedToMeScreenHeader";
-import PaginatedAssignedToCurrentAccountTaskList from "@/components/taskListScreen/taskLists/paginatedAssignedToCurrentAccountTaskList/PaginatedAssignedToCurrentAccountTaskList";
-import PaginatedFromTeamWithAssigneeTaskList from "@/components/taskListScreen/taskLists/paginatedFromTeamWithAssigneeTaskList/PaginatedFromTeamWithAssigneeTaskList";
+import PaginatedAssignedToCurrentAccountTaskList from "@/components/taskLists/paginatedAssignedToCurrentAccountTaskList/PaginatedAssignedToCurrentAccountTaskList";
+import PaginatedFromTeamWithAssigneeTaskList from "@/components/taskLists/paginatedFromTeamWithAssigneeTaskList/PaginatedFromTeamWithAssigneeTaskList";
 import { TeamDto } from "@/model/be/jinear-core";
 import {
   selectCurrentAccountId,

@@ -3,10 +3,12 @@ import ErrorBoundary from "@/components/errorBoundary/ErrorBoundary";
 import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import MainHeader from "@/components/mainHeader/MainHeader";
 import AddMemberToTeamModal from "@/components/modal/addMemberToTeamModal/AddMemberToTeamModal";
+import BasicTextInputModal from "@/components/modal/basicTextInputModal/BasicTextInputModal";
 import DatePickerModal from "@/components/modal/datePicker/DatePickerModal";
 import DialogModal from "@/components/modal/dialogModal/DialogModal";
 import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
 import LoginWith2FaMailModal from "@/components/modal/loginWith2FaMailModal/LoginWith2FaMailModal";
+import NewTaskBoardModal from "@/components/modal/newTaskListModal/NewTaskListModal";
 import NewTaskModal from "@/components/modal/newTaskModal/NewTaskModal";
 import NewTeamModal from "@/components/modal/newTeamModal/NewTeamModal";
 import NewTopicModal from "@/components/modal/newTopicModal/NewTopicModal";
@@ -69,12 +71,14 @@ const globalModals: any = (
     <TaskTopicChangeModal />
     <WorkflowChangeStatusModal />
     <NewTaskModal />
+    <NewTaskBoardModal />
     <TeamOptionsModal />
     <TeamPickerModal />
     <WorkspacePickerModal />
     <NewTopicModal />
     <LoginWith2FaMailModal />
     <DatePickerModal />
+    <BasicTextInputModal />
     <DialogModal />
     <NotFoundModal />
     <LoadingModal />
