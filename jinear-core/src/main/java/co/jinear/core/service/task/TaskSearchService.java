@@ -28,7 +28,7 @@ public class TaskSearchService {
 
     public Page<TaskSearchResultDto> searchTasks(TaskSearchVo taskSearchVo) {
         log.info("Searching tasks has started. {}", taskSearchVo);
-        return taskFtsSearchRepository.searchAllTasks(taskSearchVo.getTitle(), taskSearchVo.getWorkspaceId(), taskSearchVo.getTeamId(), PageRequest.of(taskSearchVo.getPage(), PAGE_SIZE))
+        return taskFtsSearchRepository.searchAllTasks(taskSearchVo.getTitle() , taskSearchVo.getWorkspaceId(), taskSearchVo.getTeamId(), PageRequest.of(taskSearchVo.getPage(), PAGE_SIZE))
                 .map(this::mapTupleToDto);
     }
 

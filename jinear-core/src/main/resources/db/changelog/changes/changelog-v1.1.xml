@@ -797,12 +797,12 @@
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-drop-notification-tables">
-        <dropTable tableName="notification_event_param" />
-        <dropTable tableName="notification_template" />
+        <dropTable tableName="notification_event_param"/>
+        <dropTable tableName="notification_template"/>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-drop-column-notification-template">
-        <dropColumn tableName="notification_event" columnName="notification_template_id" />
+        <dropColumn tableName="notification_event" columnName="notification_template_id"/>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-task_id-column-to-notification_event">
@@ -811,6 +811,72 @@
         </addColumn>
 
         <createIndex indexName="ix_task_id" tableName="notification_event">
+            <column name="task_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task_board">
+        <createTable tableName="task_board">
+            <column name="task_board_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="due_date" type="datetime"/>
+            <column name="state" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_workspace_id" tableName="task_board">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="ix_team_id" tableName="task_board">
+            <column name="team_id"/>
+        </createIndex>
+        <createIndex indexName="ix_owner_id" tableName="task_board">
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task_board_entry">
+        <createTable tableName="task_board_entry">
+            <column name="task_board_entry_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_board_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order" type="int" defaultValueNumeric="0"/>
+        </createTable>
+
+        <createIndex indexName="ix_task_board_id" tableName="task_board_entry">
+            <column name="task_board_id"/>
+        </createIndex>
+        <createIndex indexName="ix_task_id" tableName="task_board_entry">
             <column name="task_id"/>
         </createIndex>
     </changeSet>

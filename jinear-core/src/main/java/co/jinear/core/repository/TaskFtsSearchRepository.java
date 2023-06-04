@@ -31,7 +31,7 @@ public interface TaskFtsSearchRepository extends JpaRepository<Task, String> {
                 teamWorkflowStatus.workflow_state_group as workflowStateGroup
             from task
                 inner join team_workflow_status tws on task.workflow_status_id = tws.team_workflow_status_id
-                inner join topic topic on task.topic_id = topic.topic_id
+                left join topic topic on task.topic_id = topic.topic_id
                 inner join team team on task.team_id = team.team_id
                 inner join team_workflow_status teamWorkflowStatus on task.workflow_status_id = teamWorkflowStatus.team_workflow_status_id
                     where match(task.title) against(:title'*' in boolean mode)
