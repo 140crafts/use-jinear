@@ -44,6 +44,7 @@ export const tagTypes = [
   "workspace-task-activity-list",
   "task-list-listing",
   "task-list-entry-listing",
+  "task-board-entry-listing",
 ];
 
 export const api = createApi({

@@ -7,10 +7,10 @@ import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
 import React from "react";
-import styles from "./TeamTaskLists.module.css";
-import TaskListRow from "./taskListRow/TaskListRow";
+import styles from "./TeamTaskBoards.module.css";
+import TaskBoardRow from "./taskBoardRow/TaskBoardRow";
 
-interface TeamTaskListsProps {
+interface TeamTaskBoardsProps {
   teamId: string;
   workspaceId: string;
   workspaceUsername: string;
@@ -19,7 +19,7 @@ interface TeamTaskListsProps {
 
 const VISIBLE_SIZE = 3;
 
-const TeamTaskBoards: React.FC<TeamTaskListsProps> = ({ teamId, workspaceId, workspaceUsername, teamUsername }) => {
+const TeamTaskBoards: React.FC<TeamTaskBoardsProps> = ({ teamId, workspaceId, workspaceUsername, teamUsername }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -52,7 +52,7 @@ const TeamTaskBoards: React.FC<TeamTaskListsProps> = ({ teamId, workspaceId, wor
           <div className={styles.noContentLabel}>{t("sideMenuTaskBoardsNoTaskBoardExists")}</div>
         )}
         {taskBoardListingResponse?.data?.content?.slice(0, VISIBLE_SIZE).map((taskBoardDto) => (
-          <TaskListRow
+          <TaskBoardRow
             key={taskBoardDto.taskBoardId}
             taskBoardDto={taskBoardDto}
             workspaceUsername={workspaceUsername}

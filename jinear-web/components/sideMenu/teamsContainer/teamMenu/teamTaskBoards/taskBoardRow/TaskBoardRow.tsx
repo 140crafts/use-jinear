@@ -3,7 +3,7 @@ import { TaskBoardDto } from "@/model/be/jinear-core";
 import cn from "classnames";
 import React from "react";
 import { IoReaderOutline } from "react-icons/io5";
-import styles from "./TaskListRow.module.css";
+import styles from "./TaskBoardRow.module.css";
 
 interface TaskBoardRowProps {
   taskBoardDto: TaskBoardDto;

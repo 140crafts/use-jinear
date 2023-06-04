@@ -25,7 +25,7 @@ export const taskBoardEntryApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [{ type: "task-board-entry-listing", id: req.taskBoardId }],
     }),
     //
-    changeOrder: build.mutation<BaseResponse, { taskBoardEntryId: string; newOrder: number; taskBoardId?: string }>({
+    changeBoardEntryOrder: build.mutation<BaseResponse, { taskBoardEntryId: string; newOrder: number; taskBoardId?: string }>({
       query: (req: { taskBoardEntryId: string; newOrder: number }) => ({
         url: `v1/task-board/entry/${req.taskBoardEntryId}/change-order?newOrder=${req.newOrder}`,
         method: "PUT",
@@ -50,10 +50,10 @@ export const taskBoardEntryApi = api.injectEndpoints({
 export const {
   useInitializeTaskBoardEntryMutation,
   useDeleteTaskBoardEntryMutation,
-  useChangeOrderMutation,
+  useChangeBoardEntryOrderMutation,
   useRetrieveFromTaskBoardQuery,
 } = taskBoardEntryApi;
 
 export const {
-  endpoints: { initializeTaskBoardEntry, deleteTaskBoardEntry, changeOrder, retrieveFromTaskBoard },
+  endpoints: { initializeTaskBoardEntry, deleteTaskBoardEntry, changeBoardEntryOrder, retrieveFromTaskBoard },
 } = taskBoardEntryApi;

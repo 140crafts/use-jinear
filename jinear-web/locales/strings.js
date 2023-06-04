@@ -1939,7 +1939,7 @@ export default {
     tr: "Son tarih yarın",
   },
   taskBoardDueDatePast: {
-    en: "The deadline expired ${num} days ago",
+    en: "The deadline expired ${num} day(s) ago",
     tr: "${num} gün önce süresi doldu",
   },
   taskBoardDueDateToday: {
@@ -1957,6 +1957,22 @@ export default {
   taskBoardChangeTitleModalInfoText: {
     en: "Please provide an another title for task board.",
     tr: "Görev panosu için yeni bir başlık girin.",
+  },
+  taskBoardItemRemoveElementTooltip: {
+    en: "Remove from board",
+    tr: "Panodan kaldır",
+  },
+  taskBoardEntryDeleteAreYouSureTitle: {
+    en: "Remove from board",
+    tr: "Panodan kaldır",
+  },
+  taskBoardEntryDeleteAreYouSureText: {
+    en: "Are you sure to remove this task from board? You can always add this task to any board you like.",
+    tr: "Bu görevi panodan kaldırmak istediğine emin misin? Görevi daha sonra tekrar panoya ekleyebilirsin.",
+  },
+  taskBoardEntryDeleteAreYouSureConfirmLabel: {
+    en: "Confirm",
+    tr: "Onay",
   },
   basicTextInputModalSubmitLabel: {
     en: "Confirm",

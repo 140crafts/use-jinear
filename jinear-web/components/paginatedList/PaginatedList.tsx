@@ -14,7 +14,7 @@ interface PaginatedListProps<T> {
   isLoading: boolean;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
-  renderItem: (data: T) => ReactElement;
+  renderItem: (data: T, index: number) => ReactElement;
   emptyLabel: string;
   hidePaginationOnSinglePages?: boolean;
   containerClassName?: string;
