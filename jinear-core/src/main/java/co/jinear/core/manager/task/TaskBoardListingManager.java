@@ -15,10 +15,12 @@ import co.jinear.core.validator.task.TaskAccessValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -69,7 +71,12 @@ public class TaskBoardListingManager {
                 .stream()
                 .map(TaskBoardEntryDto::getTaskBoardId)
                 .toList();
-        Page<TaskBoardDto> recentBoardsPage = taskBoardListingService.retrieveTaskBoardsExcludingSomeAndFilterByName(taskAlreadyInTheseBoardsIds, taskDto.getWorkspaceId(), taskDto.getTeamId(), filterRecentsByName, 0);
+
+        Page<TaskBoardDto> recentBoardsPage = Optional.ofNullable(filterRecentsByName)
+                .filter(StringUtils::isNotBlank)
+                .map(name -> taskBoardListingService.retrieveTaskBoardsExcludingSomeAndFilterByName(taskAlreadyInTheseBoardsIds, taskDto.getWorkspaceId(), taskDto.getTeamId(), filterRecentsByName, 0))
+                .orElseGet(() -> taskBoardListingService.retrieveTaskBoardsExcludingSome(taskAlreadyInTheseBoardsIds, taskDto.getWorkspaceId(), taskDto.getTeamId(), 0));
+
         PageDto<TaskBoardDto> recentBoardsPageDto = new PageDto<>(recentBoardsPage);
         return recentBoardsPageDto;
     }
