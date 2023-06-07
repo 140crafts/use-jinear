@@ -1166,6 +1166,10 @@ export default {
     en: "Change Dates",
     tr: "Tarihleri Değiştir",
   },
+  taskRowBoardsTooltip: {
+    en: "Boards",
+    tr: "Panolar",
+  },
   taskDetailRemindersButtonLabel: {
     en: "Reminders",
     tr: "Anımsatıcılar",
