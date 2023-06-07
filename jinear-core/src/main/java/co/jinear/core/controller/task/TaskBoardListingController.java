@@ -1,6 +1,7 @@
 package co.jinear.core.controller.task;
 
 import co.jinear.core.manager.task.TaskBoardListingManager;
+import co.jinear.core.model.response.task.TaskAndTaskBoardRelationResponse;
 import co.jinear.core.model.response.task.TaskBoardListingPaginatedResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,4 +21,13 @@ public class TaskBoardListingController {
                                                          @RequestParam(required = false, defaultValue = "0") Integer page) {
         return taskBoardListingManager.retrieveAll(workspaceId, teamId, page);
     }
+
+    @GetMapping("/related-with-task/{taskId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskAndTaskBoardRelationResponse retrieveTaskAndTaskBoardsRelation(@PathVariable String taskId,
+                                                                              @RequestParam(required = false, defaultValue = "") String filterRecentsByName) {
+        return taskBoardListingManager.retrieveTasksBoardAndRecentBoards(taskId, filterRecentsByName);
+    }
+
+
 }

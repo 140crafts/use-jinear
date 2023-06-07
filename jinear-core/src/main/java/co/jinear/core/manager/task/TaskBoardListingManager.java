@@ -2,17 +2,23 @@ package co.jinear.core.manager.task;
 
 
 import co.jinear.core.model.dto.PageDto;
-import co.jinear.core.model.dto.task.TaskBoardDto;
+import co.jinear.core.model.dto.task.*;
+import co.jinear.core.model.response.task.TaskAndTaskBoardRelationResponse;
 import co.jinear.core.model.response.task.TaskBoardListingPaginatedResponse;
 import co.jinear.core.model.response.task.TaskBoardRetrieveResponse;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.board.TaskBoardListingService;
 import co.jinear.core.service.task.board.TaskBoardRetrieveService;
+import co.jinear.core.service.task.board.entry.TaskBoardEntryListingService;
+import co.jinear.core.validator.task.TaskAccessValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -23,6 +29,9 @@ public class TaskBoardListingManager {
     private final SessionInfoService sessionInfoService;
     private final TaskBoardListingService taskBoardListingService;
     private final TaskBoardRetrieveService taskBoardRetrieveService;
+    private final TaskAccessValidator taskAccessValidator;
+    private final TaskBoardEntryListingService taskBoardEntryListingService;
+    private final TaskRetrieveService taskRetrieveService;
 
     public TaskBoardRetrieveResponse retrieve(String taskBoardId) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -38,6 +47,44 @@ public class TaskBoardListingManager {
         log.info("Retrieve all task boards has started. currentAccountId: {}", currentAccountId);
         Page<TaskBoardDto> results = taskBoardListingService.retrieveTaskBoards(workspaceId, teamId, page);
         return mapResponse(results);
+    }
+
+    public TaskAndTaskBoardRelationResponse retrieveTasksBoardAndRecentBoards(String taskId, String filterRecentsByName) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
+        taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
+        log.info("Retrieve tasks board and recent boards has started. currentAccountId: {}", currentAccountId);
+        List<TaskBoardEntryDetailedDto> taskAlreadyInTheseBoards = retrieveTasksBoards(taskId);
+        PageDto<TaskBoardDto> recentBoardsPageDto = retrieveRecentBoardsTaskNotInAndFilterByName(taskDto, taskAlreadyInTheseBoards, filterRecentsByName);
+        TaskAndTaskBoardRelationDto taskAndTaskBoardRelation = mapTaskAndTaskBoardRelationDto(taskAlreadyInTheseBoards, recentBoardsPageDto);
+        return mapResponse(taskAndTaskBoardRelation);
+    }
+
+    private List<TaskBoardEntryDetailedDto> retrieveTasksBoards(String taskId) {
+        return taskBoardEntryListingService.retrieveAllEntriesRelatedWithTask(taskId);
+    }
+
+    private PageDto<TaskBoardDto> retrieveRecentBoardsTaskNotInAndFilterByName(TaskDto taskDto, List<TaskBoardEntryDetailedDto> taskAlreadyInTheseBoards, String filterRecentsByName) {
+        List<String> taskAlreadyInTheseBoardsIds = taskAlreadyInTheseBoards
+                .stream()
+                .map(TaskBoardEntryDto::getTaskBoardId)
+                .toList();
+        Page<TaskBoardDto> recentBoardsPage = taskBoardListingService.retrieveTaskBoardsExcludingSomeAndFilterByName(taskAlreadyInTheseBoardsIds, taskDto.getWorkspaceId(), taskDto.getTeamId(), filterRecentsByName, 0);
+        PageDto<TaskBoardDto> recentBoardsPageDto = new PageDto<>(recentBoardsPage);
+        return recentBoardsPageDto;
+    }
+
+    private TaskAndTaskBoardRelationDto mapTaskAndTaskBoardRelationDto(List<TaskBoardEntryDetailedDto> taskAlreadyInTheseBoards, PageDto<TaskBoardDto> recentBoardsPageDto) {
+        TaskAndTaskBoardRelationDto taskAndTaskBoardRelation = new TaskAndTaskBoardRelationDto();
+        taskAndTaskBoardRelation.setRecentBoards(recentBoardsPageDto);
+        taskAndTaskBoardRelation.setAlreadyAddedBoards(taskAlreadyInTheseBoards);
+        return taskAndTaskBoardRelation;
+    }
+
+    private TaskAndTaskBoardRelationResponse mapResponse(TaskAndTaskBoardRelationDto taskAndTaskBoardRelation) {
+        TaskAndTaskBoardRelationResponse taskAndTaskBoardRelationResponse = new TaskAndTaskBoardRelationResponse();
+        taskAndTaskBoardRelationResponse.setTaskAndTaskBoardRelation(taskAndTaskBoardRelation);
+        return taskAndTaskBoardRelationResponse;
     }
 
     private TaskBoardRetrieveResponse mapResponse(TaskBoardDto taskBoardDto) {

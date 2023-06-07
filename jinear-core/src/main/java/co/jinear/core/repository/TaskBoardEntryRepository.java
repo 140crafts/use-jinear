@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface TaskBoardEntryRepository extends JpaRepository<TaskBoardEntry, String> {
@@ -17,6 +18,8 @@ public interface TaskBoardEntryRepository extends JpaRepository<TaskBoardEntry, 
     Optional<TaskBoardEntry> findByTaskIdAndTaskBoardIdAndPassiveIdIsNull(String taskId, String taskBoardId);
 
     Page<TaskBoardEntry> findAllByTaskBoardIdAndPassiveIdIsNullOrderByOrder(String taskListId, Pageable pageable);
+
+    List<TaskBoardEntry> findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateDesc(String taskId,Pageable pageable);
 
     Long countAllByTaskBoardIdAndPassiveIdIsNull(String taskListId);
 

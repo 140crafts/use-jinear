@@ -1,8 +1,10 @@
 package co.jinear.core.system;
 
 import lombok.experimental.UtilityClass;
+import org.apache.commons.lang3.StringUtils;
 
 import java.text.Normalizer;
+import java.util.List;
 import java.util.Locale;
 
 @UtilityClass
@@ -66,5 +68,9 @@ public class NormalizeHelper {
         String postMaskedPart = str.substring(maskEnd);
         return preMaskedPart + maskedPart + postMaskedPart;
 
+    }
+
+    public static String listToString(List<String> list) {
+        return StringUtils.join(list, COMMA_SEPARATOR);
     }
 }
