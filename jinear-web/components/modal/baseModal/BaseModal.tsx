@@ -4,6 +4,7 @@ import React from "react";
 import styles from "./style.module.css";
 
 export type ModalWidth = "medium-fixed" | "default" | "large" | "xlarge" | "xxlarge" | "fullscreen";
+export type ModalHeight = "default" | "height-medium-or-full";
 
 export interface BaseModalProps {
   visible?: boolean;
@@ -13,6 +14,7 @@ export interface BaseModalProps {
   contentClassName?: string;
   closepadClassName?: string;
   width?: ModalWidth;
+  height?: ModalHeight;
 }
 
 const BaseModal: React.FC<BaseModalProps> = ({
@@ -23,6 +25,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
   contentClassName,
   closepadClassName,
   width = "default",
+  height = "default",
 }) => {
   const avoid = () => {};
 
@@ -30,7 +33,10 @@ const BaseModal: React.FC<BaseModalProps> = ({
     <AnimatePresence initial={false} exitBeforeEnter={true}>
       {visible && (
         <div className={cn(styles.container, styles[`${width}-container`])}>
-          <div className={cn([styles.content, styles[`${width}-content`], contentClassName])} onClick={avoid}>
+          <div
+            className={cn([styles.content, styles[`${width}-content`], styles[`${height}-content`], contentClassName])}
+            onClick={avoid}
+          >
             <motion.div
               className={cn(styles.children, contentContainerClass)}
               initial={{ opacity: 0 }}

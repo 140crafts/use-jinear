@@ -8,6 +8,7 @@ import ChangeWorkflowStatusButton from "./changeWorkflowStatusButton/ChangeWorkf
 import RemindersButton from "./remindersButton/RemindersButton";
 import TaskAddChecklistButton from "./taskAddChecklistButton/TaskAddChecklistButton";
 import TaskAssignedDateButton from "./taskAssignedDateButton/TaskAssignedDateButton";
+import TaskBoardsButton from "./taskBoardsButton/TaskBoardsButton";
 import TaskDueDateButton from "./taskDueDateButton/TaskDueDateButton";
 import TaskSubscribeButton from "./taskSubscribeButton/TaskSubscribeButton";
 import TaskTagNoButton from "./taskTagNoButton/TaskTagNoButton";
@@ -28,6 +29,7 @@ const TaskActionBar: React.FC<TaskActionBarProps> = ({ className }) => {
       <RemindersButton className={styles.button} />
       <AddSubtaskButton className={styles.button} />
       <TaskAddChecklistButton className={styles.button} />
+      <TaskBoardsButton className={styles.button} />
       <TaskSubscribeButton className={styles.button} />
     </div>
   );

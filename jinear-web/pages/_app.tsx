@@ -23,6 +23,7 @@ import TaskDateChangeModal from "@/components/modal/taskDetailModals/taskDateCha
 import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicChangeModal/TaskTopicChangeModal";
 import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal";
 import TaskOverviewModal from "@/components/modal/taskOverviewModal/TaskOverviewModal";
+import TaskTaskBoardModal from "@/components/modal/taskTaskBoardModal/TaskTaskBoardModal";
 import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
 import TeamPickerModal from "@/components/modal/teamPickerModal/TeamPickerModal";
 import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
@@ -69,6 +70,7 @@ const globalModals: any = (
     <TaskAssigneeChangeModal />
     <TaskDateChangeModal />
     <TaskTopicChangeModal />
+    <TaskTaskBoardModal />
     <WorkflowChangeStatusModal />
     <NewTaskModal />
     <NewTaskBoardModal />

@@ -1,4 +1,4 @@
-import { TaskBoardListingPaginatedResponse } from "@/model/be/jinear-core";
+import { TaskAndTaskBoardRelationResponse, TaskBoardListingPaginatedResponse } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 interface ITaskBoardListingRequest {
@@ -6,7 +6,10 @@ interface ITaskBoardListingRequest {
   teamId: string;
   page?: number;
 }
-
+interface IRetrieveTaskAndTaskBoardsRelation {
+  taskId: string;
+  filterRecentsByName: string;
+}
 export const taskBoardListingApi = api.injectEndpoints({
   endpoints: (build) => ({
     retrieveAllTaskBoards: build.query<TaskBoardListingPaginatedResponse, ITaskBoardListingRequest>({
@@ -19,13 +22,23 @@ export const taskBoardListingApi = api.injectEndpoints({
         },
       ],
     }),
+    //
+    retrieveTaskAndTaskBoardsRelation: build.query<TaskAndTaskBoardRelationResponse, IRetrieveTaskAndTaskBoardsRelation>({
+      query: ({ taskId, filterRecentsByName = "" }: IRetrieveTaskAndTaskBoardsRelation) =>
+        `v1/task-board/list/related-with-task/${taskId}?filterRecentsByName=${encodeURI(filterRecentsByName)}`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: "retrieve-task-and-task-boards-relation",
+          id: `${req.taskId}`,
+        },
+      ],
+    }),
+    //
   }),
-  //
-  //
 });
 
-export const { useRetrieveAllTaskBoardsQuery } = taskBoardListingApi;
+export const { useRetrieveAllTaskBoardsQuery, useRetrieveTaskAndTaskBoardsRelationQuery } = taskBoardListingApi;
 
 export const {
-  endpoints: { retrieveAllTaskBoards },
+  endpoints: { retrieveAllTaskBoards, retrieveTaskAndTaskBoardsRelation },
 } = taskBoardListingApi;

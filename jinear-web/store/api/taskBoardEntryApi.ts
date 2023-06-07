@@ -14,7 +14,10 @@ export const taskBoardEntryApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: (_result, _err, req) => [{ type: "task-board-entry-listing", id: req.taskBoardId }],
+      invalidatesTags: (_result, _err, req) => [
+        { type: "task-board-entry-listing", id: req.taskBoardId },
+        "retrieve-task-and-task-boards-relation",
+      ],
     }),
     //
     deleteTaskBoardEntry: build.mutation<BaseResponse, { taskBoardEntryId: string; taskBoardId?: string }>({
@@ -22,7 +25,10 @@ export const taskBoardEntryApi = api.injectEndpoints({
         url: `v1/task-board/entry/${req.taskBoardEntryId}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _err, req) => [{ type: "task-board-entry-listing", id: req.taskBoardId }],
+      invalidatesTags: (_result, _err, req) => [
+        { type: "task-board-entry-listing", id: req.taskBoardId },
+        "retrieve-task-and-task-boards-relation",
+      ],
     }),
     //
     changeBoardEntryOrder: build.mutation<BaseResponse, { taskBoardEntryId: string; newOrder: number; taskBoardId?: string }>({

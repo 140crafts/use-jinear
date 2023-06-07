@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-06-01 22:16:41.
+// Generated using typescript-generator version 3.0.1157 on 2023-06-07 09:57:35.
 
 export interface BaseDto {
   createdDate: Date;
@@ -175,6 +175,11 @@ export interface RelatedTaskDto extends BaseDto {
   workflowStatus: TeamWorkflowStatusDto;
 }
 
+export interface TaskAndTaskBoardRelationDto extends BaseDto {
+  alreadyAddedBoards: TaskBoardEntryDetailedDto[];
+  recentBoards: PageDto<TaskBoardDto>;
+}
+
 export interface TaskBoardDetailedDto extends TaskBoardDto {
   taskListEntries: TaskBoardEntryDto[];
 }
@@ -187,6 +192,10 @@ export interface TaskBoardDto extends BaseDto {
   title: string;
   dueDate: Date;
   state: TaskBoardStateType;
+}
+
+export interface TaskBoardEntryDetailedDto extends TaskBoardEntryDto {
+  taskBoard: TaskBoardDto;
 }
 
 export interface TaskBoardEntryDto extends BaseDto {
@@ -724,6 +733,10 @@ export interface RetrieveChecklistResponse extends BaseResponse {
 
 export interface TaskActivityRetrieveResponse extends BaseResponse {
   data: WorkspaceActivityDto[];
+}
+
+export interface TaskAndTaskBoardRelationResponse extends BaseResponse {
+  data: TaskAndTaskBoardRelationDto;
 }
 
 export interface TaskBoardEntryPaginatedResponse extends BaseResponse {

@@ -1982,4 +1982,28 @@ export default {
     en: "Cancel",
     tr: "Vazgeç",
   },
+  taskTaskBoardModalTitle: {
+    en: "Task Boards",
+    tr: "Görev Panoları",
+  },
+  taskTaskBoardModalEmptyState: {
+    en: "No task board found",
+    tr: "Hiçbir pano bulunamadı",
+  },
+  taskTaskBoardModalInitialState: {
+    en: "To list task boards search with title",
+    tr: "Panoları listelemek için başlığı ile ara",
+  },
+  taskTaskBoardModalFilterPlaceholder: {
+    en: "Filter by board name",
+    tr: "Pano adına göre filtrele",
+  },
+  taskBoardsActionButtonTooltip: {
+    en: "Add or remove from task board",
+    tr: "Panoya ekle/çıkar",
+  },
+  taskBoardsActionButtonLabel: {
+    en: "Boards",
+    tr: "Panolar",
+  },
 };
