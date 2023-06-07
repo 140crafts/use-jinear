@@ -15,6 +15,7 @@ import ModalState, {
   ReminderListModalState,
   SearchTaskModalState,
   TaskOverviewModalState,
+  TaskTaskBoardAssignModalState,
   TeamPickerModalState,
   WorkspacePickerModalState,
 } from "model/app/store/modal/modalState";
@@ -103,6 +104,9 @@ const initialState = {
   basicTextInputModal: {
     visible: false,
   },
+  taskTaskBoardAssignModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -129,6 +133,7 @@ const initialState = {
   workspacePickerModal: null | WorkspacePickerModalState;
   newTaskBoardModal: null | ModalState;
   basicTextInputModal: null | BasicTextInputModalState;
+  taskTaskBoardAssignModal: null | TaskTaskBoardAssignModalState;
 };
 
 const slice = createSlice({
@@ -315,6 +320,13 @@ const slice = createSlice({
       state.basicTextInputModal = initialState.basicTextInputModal;
     },
 
+    popTaskTaskBoardAssignModal: (state, action: PayloadAction<TaskTaskBoardAssignModalState>) => {
+      state.taskTaskBoardAssignModal = { ...action.payload, visible: true };
+    },
+    closeTaskTaskBoardAssignModal: (state, action: PayloadAction<void>) => {
+      state.taskTaskBoardAssignModal = initialState.taskTaskBoardAssignModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -381,6 +393,8 @@ export const {
   closeNewTaskBoardModal,
   popBasicTextInputModal,
   closeBasicTextInputModal,
+  popTaskTaskBoardAssignModal,
+  closeTaskTaskBoardAssignModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -491,3 +505,6 @@ export const selectBasicTextInputModalTitle = (state: RootState) => state.modal.
 export const selectBasicTextInputModalInfoText = (state: RootState) => state.modal.basicTextInputModal?.infoText;
 export const selectBasicTextInputModalInfoInitialText = (state: RootState) => state.modal.basicTextInputModal?.initialText;
 export const selectBasicTextInputModalInfoOnSubmit = (state: RootState) => state.modal.basicTextInputModal?.onSubmit;
+
+export const selectTaskTaskBoardAssignModalVisible = (state: RootState) => state.modal.taskTaskBoardAssignModal?.visible;
+export const selectTaskTaskBoardAssignModalTaskId = (state: RootState) => state.modal.taskTaskBoardAssignModal?.taskId;

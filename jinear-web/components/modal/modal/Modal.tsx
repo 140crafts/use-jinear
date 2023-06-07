@@ -2,7 +2,7 @@ import Button from "@/components/button";
 import cn from "classnames";
 import React from "react";
 import { IoClose } from "react-icons/io5";
-import BaseModal, { BaseModalProps, ModalWidth } from "../baseModal/BaseModal";
+import BaseModal, { BaseModalProps, ModalHeight, ModalWidth } from "../baseModal/BaseModal";
 import styles from "./Modal.module.css";
 
 interface ModalProps extends BaseModalProps {
@@ -13,6 +13,7 @@ interface ModalProps extends BaseModalProps {
   contentContainerClass?: string;
   bodyClass?: string;
   width?: ModalWidth;
+  height?: ModalHeight;
   title?: string;
   hasTitleCloseButton?: boolean;
 }
@@ -24,6 +25,7 @@ const Modal: React.FC<ModalProps> = ({
   contentContainerClass,
   bodyClass,
   width = "medium-fixed",
+  height = "default",
   title,
   hasTitleCloseButton = false,
   onTitleCloeButtonClick,
@@ -42,6 +44,7 @@ const Modal: React.FC<ModalProps> = ({
       requestClose={requestClose}
       contentContainerClass={cn(styles.container, contentContainerClass)}
       width={width}
+      height={height}
     >
       {title && (
         <div className={styles.titleBar}>

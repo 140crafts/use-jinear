@@ -83,3 +83,7 @@ export interface BasicTextInputModalState extends ModalState {
   initialText?: string;
   onSubmit?: (text: string) => void;
 }
+
+export interface TaskTaskBoardAssignModalState extends ModalState {
+  taskId?: string;
+}
