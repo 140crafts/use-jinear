@@ -3,12 +3,12 @@ import Button, { ButtonVariants } from "@/components/button";
 import TeamTagCell from "@/components/teamTagCell/TeamTagCell";
 import useWindowSize from "@/hooks/useWindowSize";
 import { TaskDto } from "@/model/be/jinear-core";
-import { popChangeTaskDateModal, popTaskOverviewModal } from "@/store/slice/modalSlice";
+import { popChangeTaskDateModal, popTaskOverviewModal, popTaskTaskBoardAssignModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoTime } from "react-icons/io5";
+import { IoReaderOutline, IoTime } from "react-icons/io5";
 import styles from "./TaskRow.module.scss";
 import TopicInfo from "./topicInfo/TopicInfo";
 import WorkflowStatus from "./workflowStatus/WorkflowStatus";
@@ -43,6 +43,10 @@ const TaskRow: React.FC<TaskRowProps> = ({ className, task, withBottomBorderLine
     dispatch(popTaskOverviewModal({ taskTag, workspaceName, visible: true }));
   };
 
+  const popBoardsModal = () => {
+    dispatch(popTaskTaskBoardAssignModal({ visible: true, taskId: task.taskId }));
+  };
+
   return task.workspace && task.team ? (
     <div className={cn(styles.container, withBottomBorderLine ? styles.bottomBorderLine : null, className)}>
       <Button href={`/${task.workspace?.username}/task/${tag}`} className={styles.button} onClick={onLinkClick}>
@@ -58,12 +62,22 @@ const TaskRow: React.FC<TaskRowProps> = ({ className, task, withBottomBorderLine
         {!task.workspace.isPersonal && <AssigneeCell task={task} />}
         <Button
           variant={ButtonVariants.filled}
-          className={styles.datesButton}
+          className={styles.iconButton}
           onClick={popChangeDatesModal}
           data-tooltip-right={t("taskRowChangeTaskDates")}
         >
           <div className={styles.iconContainer}>
             <IoTime size={14} />
+          </div>
+        </Button>
+        <Button
+          variant={ButtonVariants.filled}
+          className={styles.iconButton}
+          onClick={popBoardsModal}
+          data-tooltip-right={t("taskRowBoardsTooltip")}
+        >
+          <div className={styles.iconContainer}>
+            <IoReaderOutline size={14} />
           </div>
         </Button>
       </div>
