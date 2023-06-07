@@ -30,8 +30,11 @@ public class TaskBoardListingService {
     }
 
     public Page<TaskBoardDto> retrieveTaskBoardsExcludingSomeAndFilterByName(List<String> excludingBoardIds, String workspaceId, String teamId, String filterRecentsByName, int page) {
-        String filterLike = "%" + filterRecentsByName + "%";
         log.info("Retrieve all task boards with some exclusion from workspace and team has started. workspaceId: {}, teamId: {}, filterRecentsByName: {}, page: {}, excludingBoardIds: [{}]", workspaceId, teamId, page, NormalizeHelper.listToString(excludingBoardIds));
+        if (filterRecentsByName.isEmpty()) {
+            return retrieveTaskBoards(workspaceId, teamId, page);
+        }
+        String filterLike = "%" + filterRecentsByName + "%";
         return taskBoardRepository.findAllByTaskBoardIdNotInAndWorkspaceIdAndTeamIdAndTitleLikeIgnoreCaseAndPassiveIdIsNullOrderByCreatedDateDesc(excludingBoardIds, workspaceId, teamId, filterLike, PageRequest.of(page, SEARCH_PAGE_SIZE))
                 .map(taskBoardDtoConverter::convert);
     }
