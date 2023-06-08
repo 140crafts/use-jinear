@@ -75,7 +75,11 @@ public class TaskBoardListingManager {
         Page<TaskBoardDto> recentBoardsPage = Optional.ofNullable(filterRecentsByName)
                 .filter(StringUtils::isNotBlank)
                 .map(name -> taskBoardListingService.retrieveTaskBoardsExcludingSomeAndFilterByName(taskAlreadyInTheseBoardsIds, taskDto.getWorkspaceId(), taskDto.getTeamId(), filterRecentsByName, 0))
-                .orElseGet(() -> taskBoardListingService.retrieveTaskBoardsExcludingSome(taskAlreadyInTheseBoardsIds, taskDto.getWorkspaceId(), taskDto.getTeamId(), 0));
+                .orElseGet(() -> Optional.of(taskAlreadyInTheseBoardsIds)
+                        .filter(boardIds -> Boolean.FALSE.equals(boardIds.isEmpty()))
+                        .map(boardIds -> taskBoardListingService.retrieveTaskBoardsExcludingSome(taskAlreadyInTheseBoardsIds, taskDto.getWorkspaceId(), taskDto.getTeamId(), 0))
+                        .orElseGet(() -> taskBoardListingService.retrieveTaskBoards(taskDto.getWorkspaceId(), taskDto.getTeamId(), 0))
+                );
 
         PageDto<TaskBoardDto> recentBoardsPageDto = new PageDto<>(recentBoardsPage);
         return recentBoardsPageDto;
