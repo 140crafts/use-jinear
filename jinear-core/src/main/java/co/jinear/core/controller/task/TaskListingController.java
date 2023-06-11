@@ -3,8 +3,10 @@ package co.jinear.core.controller.task;
 import co.jinear.core.manager.task.TaskListingManager;
 import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromTeamRequest;
 import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromWorkspaceRequest;
+import co.jinear.core.model.request.task.TaskFilterRequest;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
 import co.jinear.core.model.response.task.TaskListingResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,12 @@ import java.time.ZonedDateTime;
 public class TaskListingController {
 
     private final TaskListingManager taskListingManager;
+
+    @PostMapping("/filter")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskListingPaginatedResponse filter(@Valid @RequestBody TaskFilterRequest taskFilterRequest) {
+        return taskListingManager.filterTasks(taskFilterRequest);
+    }
 
     @GetMapping("/{workspaceId}/intersecting/{start}/{end}")
     @ResponseStatus(HttpStatus.OK)

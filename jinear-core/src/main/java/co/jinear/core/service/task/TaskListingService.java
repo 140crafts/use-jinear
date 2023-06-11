@@ -4,6 +4,7 @@ import co.jinear.core.converter.task.TaskDtoDetailedConverter;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.vo.task.SearchIntersectingTasksFromTeamVo;
 import co.jinear.core.model.vo.task.SearchIntersectingTasksFromWorkspaceVo;
+import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.repository.TaskSearchRepository;
 import lombok.RequiredArgsConstructor;
@@ -73,6 +74,12 @@ public class TaskListingService {
         log.info("Retrieve all tasks with assignee has started. workspaceId: {}, assigneeId: {}, page: {}", workspaceId, assigneeId, page);
         return taskRepository.findAllByWorkspaceIdAndAssignedToAndPassiveIdIsNullOrderByCreatedDateDesc(
                         workspaceId, assigneeId, PageRequest.of(page, PAGE_SIZE))
+                .map(taskDtoDetailedConverter::mapAndRetrieveProfilePictures);
+    }
+
+    public Page<TaskDto> filterTasks(TaskSearchFilterVo taskSearchFilterVo) {
+        log.info("Filter tasks has started. taskSearchFilterVo: {}", taskSearchFilterVo);
+        return taskSearchRepository.filterBy(taskSearchFilterVo)
                 .map(taskDtoDetailedConverter::mapAndRetrieveProfilePictures);
     }
 }

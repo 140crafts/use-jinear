@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-06-07 09:57:35.
+// Generated using typescript-generator version 3.0.1157 on 2023-06-11 21:20:18.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -572,6 +572,18 @@ export interface TaskDateUpdateRequest {
     dueDate?: Date | null;
     hasPreciseAssignedDate?: boolean | null;
     hasPreciseDueDate?: boolean | null;
+}
+
+export interface TaskFilterRequest {
+    page: number;
+    workspaceId: string;
+    teamIdList: string[];
+    topicIds: string[];
+    ownerIds: string[];
+    assigneeIds: string[];
+    workflowStatusIdList: string[];
+    timespanStart: Date;
+    timespanEnd: Date;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
