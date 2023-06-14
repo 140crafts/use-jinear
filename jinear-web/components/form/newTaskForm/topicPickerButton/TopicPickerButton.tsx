@@ -1,0 +1,59 @@
+import SelectDeselectButton from "@/components/selectDeselectButton/SelectDeselectButton";
+import { TaskInitializeRequest, TopicDto } from "@/model/be/jinear-core";
+import { popTopicPickerModal } from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
+import useTranslation from "locales/useTranslation";
+import React, { useEffect, useState } from "react";
+import { UseFormRegister, UseFormSetValue } from "react-hook-form";
+import { IoPricetag } from "react-icons/io5";
+import styles from "./TopicPickerButton.module.css";
+
+interface TopicPickerButtonProps {
+  teamId: string;
+  register: UseFormRegister<TaskInitializeRequest>;
+  setValue: UseFormSetValue<TaskInitializeRequest>;
+}
+
+const TopicPickerButton: React.FC<TopicPickerButtonProps> = ({ teamId, setValue, register }) => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const [selectedTopic, setSelectedTopic] = useState<TopicDto>();
+
+  useEffect(() => {
+    setValue("topicId", selectedTopic ? selectedTopic.topicId : "no-topic");
+  }, [selectedTopic]);
+
+  const onModalPick = (selection: TopicDto[]) => {
+    if (selection.length != 0) {
+      setSelectedTopic(selection[0]);
+    }
+  };
+
+  const popTopicPicker = () => {
+    dispatch(popTopicPickerModal({ visible: true, multiple: false, teamId, onPick: onModalPick }));
+  };
+
+  const deselect = () => {
+    setSelectedTopic(undefined);
+  };
+
+  return (
+    <div className={styles.container}>
+      <SelectDeselectButton
+        hasSelection={selectedTopic != null}
+        onPickClick={popTopicPicker}
+        selectedComponent={
+          <div className={styles.selectedContainer}>
+            <IoPricetag />
+            {selectedTopic?.name}
+          </div>
+        }
+        emptySelectionLabel={t("newTaskFormPickTopicButtonLabel")}
+        onUnpickClick={deselect}
+      />
+      <input type="hidden" value={selectedTopic?.topicId || "no-topic"} {...register("topicId")} />
+    </div>
+  );
+};
+
+export default TopicPickerButton;

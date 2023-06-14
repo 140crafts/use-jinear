@@ -2,6 +2,7 @@ import Button, { ButtonVariants } from "@/components/button";
 import TaskCreatedToast from "@/components/taskCreatedToast/TaskCreatedToast";
 import { TaskInitializeRequest, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useInitializeTaskMutation } from "@/store/api/taskApi";
+import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
@@ -13,9 +14,9 @@ import styles from "./NewTaskForm.module.css";
 import AssignedDateInput from "./assignedDateInput/AssignedDateInput";
 import DescriptionInput from "./descriptionInput/DescriptionInput";
 import DueDateInput from "./dueDateInput/DueDateInput";
-import MemberSelect from "./memberSelect/MemberSelect";
+import TeamMemberPickerButton from "./teamMemberPickerButton/TeamMemberPickerButton";
 import TitleInput from "./titleInput/TitleInput";
-import TopicSelect from "./topicSelect/TopicSelect";
+import TopicPickerButton from "./topicPickerButton/TopicPickerButton";
 
 interface NewTaskFormProps {
   workspace: WorkspaceDto;
@@ -35,6 +36,7 @@ const logger = Logger("NewTaskForm");
 
 const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspace, team, subTaskOf, subTaskOfLabel, onClose, className }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const {
     register,
     handleSubmit,
@@ -128,21 +130,17 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspace, team, subTaskOf, s
 
         <TitleInput labelClass={styles.label} register={register} />
 
-        <DescriptionInput labelClass={styles.label} inputClass={styles.textAreaInput} register={register} setValue={setValue} />
+        <div className={styles.actionBar}>
+          <TopicPickerButton register={register} setValue={setValue} teamId={teamId} />
+          {!workspace.isPersonal && <TeamMemberPickerButton register={register} setValue={setValue} teamId={teamId} />}
+        </div>
 
-        <TopicSelect
-          teamId={teamId}
-          register={register}
-          setValue={setValue}
-          labelClass={styles.label}
-          loadingClass={styles.loadingContainer}
-          selectClass={styles.select}
-        />
+        <DescriptionInput labelClass={styles.label} inputClass={styles.textAreaInput} register={register} setValue={setValue} />
 
         <AssignedDateInput labelClass={styles.label} register={register} watch={watch} setValue={setValue} />
         <DueDateInput labelClass={styles.label} register={register} watch={watch} setValue={setValue} />
 
-        {!workspace.isPersonal && (
+        {/* {!workspace.isPersonal && (
           <MemberSelect
             teamId={teamId}
             register={register}
@@ -151,7 +149,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspace, team, subTaskOf, s
             loadingClass={styles.loadingContainer}
             selectClass={styles.select}
           />
-        )}
+        )} */}
       </div>
 
       <div className={styles.footerContainer}>

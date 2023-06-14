@@ -1,6 +1,7 @@
 import {
   RetrieveIntersectingTasksFromTeamRequest,
   RetrieveIntersectingTasksFromWorkspaceRequest,
+  TaskFilterRequest,
   TaskListingPaginatedResponse,
   TaskListingResponse,
 } from "@/model/be/jinear-core";
@@ -8,6 +9,16 @@ import { api } from "./api";
 
 export const taskListingApi = api.injectEndpoints({
   endpoints: (build) => ({
+    filterTasks: build.query<TaskListingPaginatedResponse, TaskFilterRequest>({
+      query: (req) => ({ url: `v1/task/list/filter`, method: "POST", body: req }),
+      providesTags: (_result, _err, req) => [
+        {
+          type: "task-listing-filter",
+          id: `${JSON.stringify(req)}`,
+        },
+      ],
+    }),
+    //
     retrieveAllIntersectingTasks: build.query<TaskListingResponse, RetrieveIntersectingTasksFromWorkspaceRequest>({
       query: (req) => {
         const start = new Date(req.timespanStart).toISOString();
@@ -142,6 +153,7 @@ export const taskListingApi = api.injectEndpoints({
 });
 
 export const {
+  useFilterTasksQuery,
   useRetrieveAllIntersectingTasksQuery,
   useRetrieveAllIntersectingTasksFromTeamQuery,
   useRetrieveFromWorkflowStatusQuery,
@@ -153,6 +165,7 @@ export const {
 
 export const {
   endpoints: {
+    filterTasks,
     retrieveAllIntersectingTasks,
     retrieveAllIntersectingTasksFromTeam,
     retrieveFromWorkflowStatus,

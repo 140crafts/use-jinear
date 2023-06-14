@@ -2010,4 +2010,52 @@ export default {
     en: "Boards",
     tr: "Panolar",
   },
+  topicPickerModalTitle: {
+    en: "Topics",
+    tr: "Konular",
+  },
+  topicPickerModalFilterPlaceholder: {
+    en: "Filter by topic name or tag",
+    tr: "Konu adı veya etiketine göre filtrele",
+  },
+  topicPickerModalEmptyState: {
+    en: "No topic found",
+    tr: "Hiçbir konu bulunamadı",
+  },
+  topicPickerModalSelectButton: {
+    en: "Select",
+    tr: "Seç",
+  },
+  topicPickerModalCancelButton: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  newTaskFormPickTopicButtonLabel: {
+    en: "Assign a topic",
+    tr: "Bir konu ata",
+  },
+  teamMemberPickerModalTitle: {
+    en: "Team Members",
+    tr: "Ekip Üyeleri",
+  },
+  teamMemberPickerModalFilterPlaceholder: {
+    en: "Filter by username",
+    tr: "Kullanıcı adına göre filtrele",
+  },
+  teamMemberPickerModalEmptyState: {
+    en: "No team member found",
+    tr: "Hiçbir ekip üyesi bulunamadı",
+  },
+  teamMemberPickerModalSelectButton: {
+    en: "Select",
+    tr: "Seç",
+  },
+  teamMemberPickerModalCancelButton: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  newTaskFormPickAssigneeButtonLabel: {
+    en: "Assign to someone",
+    tr: "Birine ata",
+  },
 };
