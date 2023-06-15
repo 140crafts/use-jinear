@@ -11,9 +11,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import WorkspaceAndTeamInfo from "../common/workspaceAndTeamInfo/WorkspaceAndTeamInfo";
 import styles from "./NewTaskForm.module.css";
-import AssignedDateInput from "./assignedDateInput/AssignedDateInput";
-import DescriptionInput from "./descriptionInput/DescriptionInput";
-import DueDateInput from "./dueDateInput/DueDateInput";
+import DatePickerButton from "./datePickerButton/DatePickerButton";
 import TeamMemberPickerButton from "./teamMemberPickerButton/TeamMemberPickerButton";
 import TitleInput from "./titleInput/TitleInput";
 import TopicPickerButton from "./topicPickerButton/TopicPickerButton";
@@ -25,6 +23,7 @@ interface NewTaskFormProps {
   subTaskOfLabel?: string;
   onClose: () => void;
   className?: string;
+  footerContainerClass?: string;
 }
 
 export interface NewTaskExtendedForm extends TaskInitializeRequest {
@@ -34,7 +33,15 @@ export interface NewTaskExtendedForm extends TaskInitializeRequest {
 
 const logger = Logger("NewTaskForm");
 
-const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspace, team, subTaskOf, subTaskOfLabel, onClose, className }) => {
+const NewTaskForm: React.FC<NewTaskFormProps> = ({
+  workspace,
+  team,
+  subTaskOf,
+  subTaskOfLabel,
+  onClose,
+  className,
+  footerContainerClass,
+}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const {
@@ -111,13 +118,6 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspace, team, subTaskOf, s
       action="#"
     >
       <div className={styles.formContent}>
-        <WorkspaceAndTeamInfo
-          workspace={workspace}
-          team={team}
-          personalWorkspaceTitle={t("newTaskFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel")}
-          workspaceTitle={t("newTaskFormWorkspaceAndTeamInfoLabel")}
-          personalWorkspaceLabel={t("newTaskFormPersonalWorkspaceSelected")}
-        />
         <input type="hidden" value={workspaceId} {...register("workspaceId")} />
         <input type="hidden" value={teamId} {...register("teamId")} />
         {subTaskOf && <input type="hidden" value={subTaskOf} {...register("subTaskOf")} />}
@@ -133,26 +133,26 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({ workspace, team, subTaskOf, s
         <div className={styles.actionBar}>
           <TopicPickerButton register={register} setValue={setValue} teamId={teamId} />
           {!workspace.isPersonal && <TeamMemberPickerButton register={register} setValue={setValue} teamId={teamId} />}
-        </div>
-
-        <DescriptionInput labelClass={styles.label} inputClass={styles.textAreaInput} register={register} setValue={setValue} />
-
-        <AssignedDateInput labelClass={styles.label} register={register} watch={watch} setValue={setValue} />
-        <DueDateInput labelClass={styles.label} register={register} watch={watch} setValue={setValue} />
-
-        {/* {!workspace.isPersonal && (
-          <MemberSelect
-            teamId={teamId}
+          <DatePickerButton
             register={register}
             setValue={setValue}
-            labelClass={styles.label}
-            loadingClass={styles.loadingContainer}
-            selectClass={styles.select}
+            fieldName="assignedDate"
+            isPreciseFieldName="hasPreciseAssignedDate"
           />
-        )} */}
+          <DatePickerButton register={register} setValue={setValue} fieldName="dueDate" isPreciseFieldName="hasPreciseDueDate" />
+        </div>
+
+        <WorkspaceAndTeamInfo
+          workspace={workspace}
+          team={team}
+          personalWorkspaceTitle={t("newTaskFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel")}
+          workspaceTitle={t("newTaskFormWorkspaceAndTeamInfoLabel")}
+          personalWorkspaceLabel={t("newTaskFormPersonalWorkspaceSelected")}
+        />
+        {/* <DescriptionInput labelClass={styles.label} inputClass={styles.textAreaInput} register={register} setValue={setValue} /> */}
       </div>
 
-      <div className={styles.footerContainer}>
+      <div className={cn(styles.footerContainer, footerContainerClass)}>
         <Button disabled={isInitializeTaskLoading} onClick={onClose} className={styles.footerButton}>
           {t("newTaskModalCancel")}
         </Button>

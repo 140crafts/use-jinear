@@ -2058,4 +2058,12 @@ export default {
     en: "Assign to someone",
     tr: "Birine ata",
   },
+  newTaskFormPickAssignedDateButtonLabel: {
+    en: "Pick assigned date",
+    tr: "Planlanan tarih seç",
+  },
+  newTaskFormPickDueDateButtonLabel: {
+    en: "Pick due date",
+    tr: "Son tarih seç",
+  },
 };

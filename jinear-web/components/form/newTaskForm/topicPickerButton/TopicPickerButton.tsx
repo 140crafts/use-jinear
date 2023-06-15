@@ -5,7 +5,7 @@ import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
-import { IoPricetag } from "react-icons/io5";
+import { IoPricetagOutline } from "react-icons/io5";
 import styles from "./TopicPickerButton.module.css";
 
 interface TopicPickerButtonProps {
@@ -44,7 +44,7 @@ const TopicPickerButton: React.FC<TopicPickerButtonProps> = ({ teamId, setValue,
         onPickClick={popTopicPicker}
         selectedComponent={
           <div className={styles.selectedContainer}>
-            <IoPricetag />
+            <IoPricetagOutline />
             {selectedTopic?.name}
           </div>
         }

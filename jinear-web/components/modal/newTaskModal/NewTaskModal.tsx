@@ -44,6 +44,8 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
           team={preferredTeam}
           subTaskOf={subTaskOf}
           subTaskOfLabel={subTaskOfLabel}
+          className={isMobile ? styles.formMobileClassName : undefined}
+          footerContainerClass={isMobile ? styles.mobileFooterContainerClass : undefined}
           onClose={close}
         />
       )}

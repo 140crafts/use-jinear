@@ -6,7 +6,7 @@ import { changeLoadingModalVisibility, popTeamOptionsModal, popWorkspacePickerMo
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
-import { IoChevronForward } from "react-icons/io5";
+import { IoHomeOutline, IoPeopleOutline } from "react-icons/io5";
 import styles from "./WorkspaceAndTeamInfo.module.css";
 
 interface WorkspaceAndTeamInfoProps {
@@ -49,18 +49,25 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
     <div className={styles.container}>
       {workspace.isPersonal ? personalWorkspaceTitle : workspaceTitle}
       <div className={styles.buttonContainer}>
-        <Button variant={ButtonVariants.filled} heightVariant={ButtonHeight.short} onClick={popChangeWorkspaceModal}>
+        <Button
+          className={styles.button}
+          variant={ButtonVariants.filled}
+          heightVariant={ButtonHeight.short}
+          onClick={popChangeWorkspaceModal}
+        >
+          <IoHomeOutline />
           <b>{workspace.isPersonal ? personalWorkspaceLabel : workspace.title}</b>
         </Button>
         {!workspace.isPersonal && (
-          <>
-            {/* <div className="spacer-w-1" /> */}
-            <IoChevronForward size={15} />
-            {/* <div className="spacer-w-1" /> */}
-            <Button variant={ButtonVariants.filled} heightVariant={ButtonHeight.short} onClick={popChangeTeamModal}>
-              <b>{team.name}</b>
-            </Button>
-          </>
+          <Button
+            className={styles.button}
+            variant={ButtonVariants.filled}
+            heightVariant={ButtonHeight.short}
+            onClick={popChangeTeamModal}
+          >
+            <IoPeopleOutline />
+            <b>{team.name}</b>
+          </Button>
         )}
       </div>
     </div>
