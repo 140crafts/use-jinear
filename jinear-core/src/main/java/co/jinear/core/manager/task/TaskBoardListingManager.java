@@ -81,8 +81,7 @@ public class TaskBoardListingManager {
                         .orElseGet(() -> taskBoardListingService.retrieveTaskBoards(taskDto.getWorkspaceId(), taskDto.getTeamId(), 0))
                 );
 
-        PageDto<TaskBoardDto> recentBoardsPageDto = new PageDto<>(recentBoardsPage);
-        return recentBoardsPageDto;
+        return new PageDto<>(recentBoardsPage);
     }
 
     private TaskAndTaskBoardRelationDto mapTaskAndTaskBoardRelationDto(List<TaskBoardEntryDetailedDto> taskAlreadyInTheseBoards, PageDto<TaskBoardDto> recentBoardsPageDto) {

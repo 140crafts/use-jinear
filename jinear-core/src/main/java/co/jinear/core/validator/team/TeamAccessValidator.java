@@ -31,6 +31,11 @@ public class TeamAccessValidator {
         validateTeamAccess(accountId, workspaceId, teamId);
     }
 
+    public void validateTeamAccess(String accountId, TeamDto teamDto) {
+        String workspaceId = teamDto.getWorkspaceId();
+        validateTeamAccess(accountId, workspaceId, teamDto.getTeamId());
+    }
+
     public void validateTeamAccess(String accountId, String workspaceId, String teamId) {
         if (!isWorkspaceAdminOrOwner(accountId, workspaceId) && !isAccountTeamMember(accountId, teamId)) {
             throw new NoAccessException();

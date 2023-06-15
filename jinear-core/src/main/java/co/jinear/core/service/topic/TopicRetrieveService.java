@@ -6,12 +6,14 @@ import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.entity.topic.Topic;
 import co.jinear.core.repository.TopicRepository;
+import co.jinear.core.repository.TopicSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -23,6 +25,7 @@ public class TopicRetrieveService {
 
     private final TopicRepository topicRepository;
     private final TopicDtoConverter topicDtoConverter;
+    private final TopicSearchRepository topicSearchRepository;
 
     public Topic retrieveEntity(String topicId) {
         return topicRepository.findByTopicIdAndPassiveIdIsNull(topicId)
@@ -39,7 +42,7 @@ public class TopicRetrieveService {
     }
 
     public TopicDto retrieveByTag(String teamId, String workspaceId, String tag) {
-        return topicRepository.findByTeamIdAndWorkspaceIdAndTagAndPassiveIdIsNull(teamId,workspaceId,tag)
+        return topicRepository.findByTeamIdAndWorkspaceIdAndTagAndPassiveIdIsNull(teamId, workspaceId, tag)
                 .map(topicDtoConverter::map)
                 .orElseThrow(NotFoundException::new);
     }
@@ -48,6 +51,14 @@ public class TopicRetrieveService {
         log.info("Retrieve team topic page has started. teamId: {}, page: {}", teamId, page);
         return topicRepository.findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateDesc(teamId, PageRequest.of(page, PAGE_SIZE))
                 .map(topicDtoConverter::map);
+    }
+
+    public List<TopicDto> searchTeamTopics(String workspaceId, String teamId, String nameOrTag) {
+        log.info("Search team topics has started. workspaceId: {}, teamId: {}, nameOrTag: {}", workspaceId, teamId, nameOrTag);
+        return topicSearchRepository.filterBy(workspaceId, teamId, nameOrTag)
+                .stream()
+                .map(topicDtoConverter::map)
+                .toList();
     }
 
     public void validateTagNotExists(String workspaceId, String tag) {

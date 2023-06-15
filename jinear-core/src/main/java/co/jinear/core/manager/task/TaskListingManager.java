@@ -1,16 +1,20 @@
 package co.jinear.core.manager.task;
 
 import co.jinear.core.converter.task.SearchIntersectingTasksVoConverter;
+import co.jinear.core.converter.task.TaskFilterRequestConverter;
+import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromTeamRequest;
 import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromWorkspaceRequest;
+import co.jinear.core.model.request.task.TaskFilterRequest;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
 import co.jinear.core.model.response.task.TaskListingResponse;
 import co.jinear.core.model.vo.task.SearchIntersectingTasksFromTeamVo;
 import co.jinear.core.model.vo.task.SearchIntersectingTasksFromWorkspaceVo;
+import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskListingService;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
@@ -19,10 +23,14 @@ import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -36,6 +44,16 @@ public class TaskListingManager {
     private final SearchIntersectingTasksVoConverter searchIntersectingTasksVoConverter;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
     private final TopicRetrieveService topicRetrieveService;
+    private final TaskFilterRequestConverter taskFilterRequestConverter;
+
+    public TaskListingPaginatedResponse filterTasks(TaskFilterRequest taskFilterRequest) {
+        String currentAccount = sessionInfoService.currentAccountId();
+        validateWorkspaceAccess(currentAccount, taskFilterRequest.getWorkspaceId());
+        validateTeamAccess(currentAccount, taskFilterRequest);
+        TaskSearchFilterVo taskSearchFilterVo = taskFilterRequestConverter.convert(taskFilterRequest);
+        Page<TaskDto> taskDtoPage = taskListingService.filterTasks(taskSearchFilterVo);
+        return mapResponse(taskDtoPage);
+    }
 
     public TaskListingPaginatedResponse retrieveAllTasks(String workspaceId, String teamId, int page) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -111,6 +129,22 @@ public class TaskListingManager {
 
     private void validateTeamAccess(String currentAccount, String workspaceId, String teamId) {
         teamAccessValidator.validateTeamAccess(currentAccount, workspaceId, teamId);
+    }
+
+    private void validateTeamAccess(String currentAccount, TaskFilterRequest taskFilterRequest) {
+        List<String> teamIdList = taskFilterRequest.getTeamIdList();
+        if (Objects.isNull(teamIdList) || teamIdList.isEmpty()) {
+            throw new NotValidException();
+        }
+        boolean anyTeamIdIsEmpty = teamIdList.stream().anyMatch(Strings::isBlank);
+        if (anyTeamIdIsEmpty) {
+            throw new NotValidException();
+        }
+        Optional.of(taskFilterRequest)
+                .map(TaskFilterRequest::getTeamIdList)
+                .map(Collection::stream)
+                .ifPresent(teamIdStream -> teamIdStream.forEach(teamId -> teamAccessValidator.validateTeamAccess(currentAccount, teamId)));
+
     }
 
     private TaskListingPaginatedResponse mapResponse(Page<TaskDto> taskDtoPage) {
