@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-06-07 09:57:35.
+// Generated using typescript-generator version 3.0.1157 on 2023-06-13 08:41:17.
 
 export interface BaseDto {
   createdDate: Date;
@@ -573,6 +573,18 @@ export interface TaskDateUpdateRequest {
   hasPreciseDueDate?: boolean | null;
 }
 
+export interface TaskFilterRequest {
+  page: number;
+  workspaceId: string;
+  teamIdList: string[];
+  topicIds: string[];
+  ownerIds: string[];
+  assigneeIds: string[];
+  workflowStatusIdList: string[];
+  timespanStart: Date;
+  timespanEnd: Date;
+}
+
 export interface TaskInitializeRequest extends BaseRequest {
   workspaceId: string;
   teamId: string;
@@ -801,6 +813,10 @@ export interface TopicListingResponse extends BaseResponse {
 
 export interface TopicResponse extends BaseResponse {
   data: TopicDto;
+}
+
+export interface TopicSearchResponse extends BaseResponse {
+  data: TopicDto[];
 }
 
 export interface WorkspaceActivityListResponse extends BaseResponse {

@@ -24,8 +24,10 @@ import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicC
 import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal";
 import TaskOverviewModal from "@/components/modal/taskOverviewModal/TaskOverviewModal";
 import TaskTaskBoardModal from "@/components/modal/taskTaskBoardModal/TaskTaskBoardModal";
+import TeamMemberPickerModal from "@/components/modal/teamMemberPickerModal/TeamMemberPickerModal";
 import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
 import TeamPickerModal from "@/components/modal/teamPickerModal/TeamPickerModal";
+import TopicPickerModal from "@/components/modal/topicPickerModal/TopicPickerModal";
 import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
 import WorkspacePickerModal from "@/components/modal/workspacePickerModal/WorkspacePickerModal";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
@@ -76,7 +78,9 @@ const globalModals: any = (
     <NewTaskBoardModal />
     <TeamOptionsModal />
     <TeamPickerModal />
+    <TeamMemberPickerModal />
     <WorkspacePickerModal />
+    <TopicPickerModal />
     <NewTopicModal />
     <LoginWith2FaMailModal />
     <DatePickerModal />

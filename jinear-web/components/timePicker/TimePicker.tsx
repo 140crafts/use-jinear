@@ -1,3 +1,4 @@
+import cn from "classnames";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import styles from "./TimePicker.module.css";
@@ -12,6 +13,8 @@ interface TimePickerProps {
   defaultMinutes?: string;
   onHourChange?: (val: string) => void;
   onMinuteChange?: (val: string) => void;
+  hourSelectClassName?: string;
+  minuteSelectClassName?: string;
 }
 
 const TimePicker: React.FC<TimePickerProps> = ({
@@ -24,6 +27,8 @@ const TimePicker: React.FC<TimePickerProps> = ({
   defaultMinutes = "00",
   onHourChange,
   onMinuteChange,
+  hourSelectClassName,
+  minuteSelectClassName,
 }) => {
   const [hours, setHours] = useState<string>(defaultHours);
   const [minutes, setMinutes] = useState<string>(defaultMinutes);
@@ -53,7 +58,14 @@ const TimePicker: React.FC<TimePickerProps> = ({
 
   return (
     <div className={styles.container}>
-      <select disabled={disabled} id={id} className={styles.select} value={hours} onChange={_onHourChange} {...registerProps}>
+      <select
+        disabled={disabled}
+        id={id}
+        className={cn(styles.select, hourSelectClassName)}
+        value={hours}
+        onChange={_onHourChange}
+        {...registerProps}
+      >
         {Array.from(Array(24).keys())
           .map((hour) => `${hour}`.padStart(2, "0"))
           .map((hour) => (
@@ -63,7 +75,14 @@ const TimePicker: React.FC<TimePickerProps> = ({
           ))}
       </select>
       <div>:</div>
-      <select disabled={disabled} id={id} className={styles.select} value={minutes} onChange={_onMinuteChange} {...registerProps}>
+      <select
+        disabled={disabled}
+        id={id}
+        className={cn(styles.select, minuteSelectClassName)}
+        value={minutes}
+        onChange={_onMinuteChange}
+        {...registerProps}
+      >
         {Array.from(Array(60).keys())
           .filter((minute) => minute % minuteResolution == 0)
           .map((minute) => `${minute}`.padStart(2, "0"))

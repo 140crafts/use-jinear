@@ -47,6 +47,9 @@ export const tagTypes = [
   "task-board-entry-listing",
   "retrieve-task-and-task-boards-relation",
   "team-topic-task-list",
+  "task-listing-filter",
+  "team-topic-search",
+  "task-board-listing",
 ];
 
 export const api = createApi({

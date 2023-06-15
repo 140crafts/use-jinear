@@ -1,5 +1,10 @@
-import { TopicListingResponse } from "@/model/be/jinear-core";
+import { TopicListingResponse, TopicSearchResponse } from "@/model/be/jinear-core";
 import { api } from "./api";
+
+interface ISearchTeamTopics {
+  teamId: string;
+  nameOrTag: string;
+}
 
 export const topicListingApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -12,11 +17,22 @@ export const topicListingApi = api.injectEndpoints({
         },
       ],
     }),
+    //
+    searchTeamTopics: build.query<TopicSearchResponse, ISearchTeamTopics>({
+      query: ({ teamId, nameOrTag = "" }: ISearchTeamTopics) =>
+        `v1/topic/list/${teamId}/search?nameOrTag=${encodeURI(nameOrTag)}`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: "team-topic-search",
+          id: `${req.teamId}-${req.nameOrTag}`,
+        },
+      ],
+    }),
   }),
 });
 
-export const { useRetrieveTeamTopicsQuery } = topicListingApi;
+export const { useRetrieveTeamTopicsQuery, useSearchTeamTopicsQuery } = topicListingApi;
 
 export const {
-  endpoints: { retrieveTeamTopics },
+  endpoints: { retrieveTeamTopics, searchTeamTopics },
 } = topicListingApi;
