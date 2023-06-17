@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-06-13 08:41:17.
+// Generated using typescript-generator version 3.0.1157 on 2023-06-17 10:45:06.
 
 export interface BaseDto {
     createdDate: Date;
@@ -656,6 +656,10 @@ export interface TeamInitializeRequest extends BaseRequest {
 
 export interface TeamWorkflowStatusNameChangeRequest extends BaseRequest {
     name: string;
+}
+
+export interface RetrieveTopicListRequest extends BaseRequest {
+    topicIds: string[];
 }
 
 export interface TopicInitializeRequest extends BaseRequest {

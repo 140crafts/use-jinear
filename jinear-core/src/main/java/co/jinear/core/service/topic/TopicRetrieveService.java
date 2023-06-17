@@ -7,6 +7,7 @@ import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.entity.topic.Topic;
 import co.jinear.core.repository.TopicRepository;
 import co.jinear.core.repository.TopicSearchRepository;
+import co.jinear.core.system.NormalizeHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -51,6 +52,14 @@ public class TopicRetrieveService {
         log.info("Retrieve team topic page has started. teamId: {}, page: {}", teamId, page);
         return topicRepository.findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateDesc(teamId, PageRequest.of(page, PAGE_SIZE))
                 .map(topicDtoConverter::map);
+    }
+
+    public List<TopicDto> retrieveTeamTopics(String teamId, List<String> topicIds) {
+        log.info("Retrieve team topics has started. teamId: {}, topicIds: {}", teamId, NormalizeHelper.listToString(topicIds));
+        return topicRepository.findAllByTeamIdAndTopicIdIsInAndPassiveIdIsNullOrderByCreatedDateDesc(teamId, topicIds)
+                .stream()
+                .map(topicDtoConverter::map)
+                .toList();
     }
 
     public List<TopicDto> searchTeamTopics(String workspaceId, String teamId, String nameOrTag) {
