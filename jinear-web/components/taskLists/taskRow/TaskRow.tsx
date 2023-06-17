@@ -8,7 +8,7 @@ import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoReaderOutline, IoTime } from "react-icons/io5";
+import { IoReaderOutline, IoTimeOutline } from "react-icons/io5";
 import styles from "./TaskRow.module.scss";
 import TopicInfo from "./topicInfo/TopicInfo";
 import WorkflowStatus from "./workflowStatus/WorkflowStatus";
@@ -67,7 +67,7 @@ const TaskRow: React.FC<TaskRowProps> = ({ className, task, withBottomBorderLine
           data-tooltip-right={t("taskRowChangeTaskDates")}
         >
           <div className={styles.iconContainer}>
-            <IoTime size={14} />
+            <IoTimeOutline size={14} />
           </div>
         </Button>
         <Button

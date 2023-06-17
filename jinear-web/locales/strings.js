@@ -2066,4 +2066,72 @@ export default {
     en: "Pick due date",
     tr: "Son tarih seç",
   },
+  taskFilterTopicFilterButtonEmpty: {
+    en: "Topic",
+    tr: "Konu",
+  },
+  taskFilterTopicFilterButtonSelected: {
+    en: "${count} Topic(s)",
+    tr: "${count} Konu",
+  },
+  taskFilterOwnerFilterButtonEmpty: {
+    en: "Owner",
+    tr: "Bildiren",
+  },
+  taskFilterOwnerFilterButtonSingleSelection: {
+    en: "Owner: ",
+    tr: "Bildiren: ",
+  },
+  taskFilterOwnerFilterButtonSelected: {
+    en: "${count} Owners",
+    tr: "${count} Bildiren Kişi",
+  },
+  taskFilterAssigneeFilterButtonEmpty: {
+    en: "Assignee",
+    tr: "Atanan",
+  },
+  taskFilterAssigneeFilterButtonSingleSelection: {
+    en: "Assignee: ",
+    tr: "Atanan: ",
+  },
+  taskFilterAssigneeFilterButtonSelected: {
+    en: "${count} Assignees",
+    tr: "${count} Atanan",
+  },
+  teamWorkflowStatusPickerModalTitle: {
+    en: "Pick Workflow Status",
+    tr: "İş Akış Durumu Seç",
+  },
+  teamWorkflowStatusPickerModalFilterPlaceholder: {
+    en: "Filter by name",
+    tr: "Ada göre filtrele",
+  },
+  teamWorkflowStatusPickerModalEmptyState: {
+    en: "No team workflow status found",
+    tr: "Hiçbir iş akış durumu bulunamadı",
+  },
+  teamWorkflowStatusPickerModalSelectButton: {
+    en: "Select",
+    tr: "Seç",
+  },
+  teamWorkflowStatusPickerModalCancelButton: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  taskFilterWorkflowStatusFilterButtonEmpty: {
+    en: "Status",
+    tr: "Durum",
+  },
+  taskFilterWorkflowStatusFilterButtonSelected: {
+    en: "${count} statuses",
+    tr: "${count} durum",
+  },
+  taskFilterFromDateFilterButtonEmpty: {
+    en: "From",
+    tr: "Başlangıç Tarihi",
+  },
+  taskFilterToDateFilterButtonEmpty: {
+    en: "To",
+    tr: "Bitiş Tarihi",
+  },
 };

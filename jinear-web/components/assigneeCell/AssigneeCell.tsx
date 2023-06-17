@@ -4,7 +4,7 @@ import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoPerson } from "react-icons/io5";
+import { IoPersonOutline } from "react-icons/io5";
 import Button, { ButtonVariants } from "../button";
 import styles from "./AssigneeCell.module.css";
 import CurrentAccountInfo from "./currentAccountInfo/CurrentAccountInfo";
@@ -40,7 +40,7 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({ task, tooltipPosition = "ri
         <CurrentAccountInfo assignedToAccount={task.assignedToAccount} />
       ) : (
         <div className={styles.iconContainer}>
-          <IoPerson size={12} className={styles.noAssigneeIcon} />
+          <IoPersonOutline size={12} className={styles.noAssigneeIcon} />
         </div>
       )}
     </Button>

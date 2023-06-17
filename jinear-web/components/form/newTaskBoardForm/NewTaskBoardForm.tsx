@@ -57,24 +57,17 @@ const NewTaskBoardForm: React.FC<NewTaskBoardFormProps> = ({ workspace, team, on
   return (
     <form autoComplete="off" id={"new-task-board-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
       <div className={styles.formContent}>
-        <WorkspaceAndTeamInfo
-          workspace={workspace}
-          team={team}
-          personalWorkspaceTitle={t("newTaskListFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel")}
-          workspaceTitle={t("newTaskListFormWorkspaceAndTeamInfoLabel")}
-          personalWorkspaceLabel={t("newTaskListFormPersonalWorkspaceSelected")}
-        />
         <input type="hidden" value={workspace.workspaceId} {...register("workspaceId")} />
         <input type="hidden" value={team.teamId} {...register("teamId")} />
         {date && <input type="hidden" value={date?.toISOString?.()} {...register("dueDate")} />}
 
         <label className={styles.label} htmlFor={"new-task-board-title"}>
-          {`${t("newTaskListModalTaskListTitle")} *`}
+          <b>{`${t("newTaskListModalTaskListTitle")} *`}</b>
           <input id={"new-task-board-title"} type={"text"} {...register("title", { required: t("formRequiredField") })} />
         </label>
 
         <div className={styles.label}>
-          {t("newTaskListModalTaskListDueDate")}
+          <b>{t("newTaskListModalTaskListDueDate")}</b>
           <div className={styles.dateButtonContainer}>
             {date && (
               <Button onClick={clearDueDate}>
@@ -86,7 +79,13 @@ const NewTaskBoardForm: React.FC<NewTaskBoardFormProps> = ({ workspace, team, on
             </Button>
           </div>
         </div>
-
+        <WorkspaceAndTeamInfo
+          workspace={workspace}
+          team={team}
+          personalWorkspaceTitle={t("newTaskListFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel")}
+          workspaceTitle={t("newTaskListFormWorkspaceAndTeamInfoLabel")}
+          personalWorkspaceLabel={t("newTaskListFormPersonalWorkspaceSelected")}
+        />
         <div className={styles.footerContainer}>
           <Button disabled={isInitializeTaskBoardLoading} onClick={onClose} className={styles.footerButton}>
             {t("newTaskListModalCancel")}
