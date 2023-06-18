@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -14,15 +15,22 @@ import java.util.List;
 @ToString
 public class TaskFilterRequest {
 
-    private int page = 0;
+    @Nullable
+    private Integer page = 0;
     @NotBlank
     private String workspaceId;
     @NotEmpty
     private List<String> teamIdList;
+    @Nullable
     private List<String> topicIds;
+    @Nullable
     private List<String> ownerIds;
+    @Nullable
     private List<String> assigneeIds;
+    @Nullable
     private List<String> workflowStatusIdList;
+    @Nullable
     private ZonedDateTime timespanStart;
+    @Nullable
     private ZonedDateTime timespanEnd;
 }
