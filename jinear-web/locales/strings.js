@@ -2066,4 +2066,92 @@ export default {
     en: "Pick due date",
     tr: "Son tarih seç",
   },
+  taskFilterTopicFilterButtonEmpty: {
+    en: "Topic",
+    tr: "Konu",
+  },
+  taskFilterTopicFilterButtonSelected: {
+    en: "${count} Topic(s)",
+    tr: "${count} Konu",
+  },
+  taskFilterOwnerFilterButtonEmpty: {
+    en: "Owner",
+    tr: "Bildiren",
+  },
+  taskFilterOwnerFilterButtonSingleSelection: {
+    en: "Owner: ",
+    tr: "Bildiren: ",
+  },
+  taskFilterOwnerFilterButtonSelected: {
+    en: "${count} Owners",
+    tr: "${count} Bildiren Kişi",
+  },
+  taskFilterAssigneeFilterButtonEmpty: {
+    en: "Assignee",
+    tr: "Atanan",
+  },
+  taskFilterAssigneeFilterButtonSingleSelection: {
+    en: "Assignee: ",
+    tr: "Atanan: ",
+  },
+  taskFilterAssigneeFilterButtonSelected: {
+    en: "${count} Assignees",
+    tr: "${count} Atanan",
+  },
+  teamWorkflowStatusPickerModalTitle: {
+    en: "Pick Workflow Status",
+    tr: "İş Akış Durumu Seç",
+  },
+  teamWorkflowStatusPickerModalFilterPlaceholder: {
+    en: "Filter by name",
+    tr: "Ada göre filtrele",
+  },
+  teamWorkflowStatusPickerModalEmptyState: {
+    en: "No team workflow status found",
+    tr: "Hiçbir iş akış durumu bulunamadı",
+  },
+  teamWorkflowStatusPickerModalSelectButton: {
+    en: "Select",
+    tr: "Seç",
+  },
+  teamWorkflowStatusPickerModalCancelButton: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  taskFilterWorkflowStatusFilterButtonEmpty: {
+    en: "Status",
+    tr: "Durum",
+  },
+  taskFilterWorkflowStatusFilterButtonSelected: {
+    en: "${count} statuses",
+    tr: "${count} durum",
+  },
+  taskFilterFromDateFilterButtonEmpty: {
+    en: "After",
+    tr: "Sonra",
+  },
+  taskFilterToDateFilterButtonEmpty: {
+    en: "Before",
+    tr: "Önce",
+  },
+  taskListTitleAndViewTypeListTooltip: {
+    en: "List View",
+    tr: "Liste Görünümü",
+  },
+  taskListTitleAndViewTypeStatusColumnsTooltip: {
+    en: "Status Columns View",
+    tr: "Durum Görünümü",
+  },
+  activeTasksPageTitle: {
+    en: "Active Tasks",
+    tr: "Aktif Görevler",
+  },
+  archivedTasksPageTitle: {
+    en: "Archived Tasks",
+    tr: "Arşivlenmiş Görevler",
+  },
+  backlogTasksPageTitle: {
+    en: "Backlogged Tasks",
+    tr: "Geri Plandaki Görevler",
+  },
 };

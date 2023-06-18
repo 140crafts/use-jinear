@@ -13,8 +13,10 @@ interface TimePickerProps {
   defaultMinutes?: string;
   onHourChange?: (val: string) => void;
   onMinuteChange?: (val: string) => void;
+  containerClassName?: string;
   hourSelectClassName?: string;
   minuteSelectClassName?: string;
+  dividerClassName?: string;
 }
 
 const TimePicker: React.FC<TimePickerProps> = ({
@@ -27,8 +29,10 @@ const TimePicker: React.FC<TimePickerProps> = ({
   defaultMinutes = "00",
   onHourChange,
   onMinuteChange,
+  containerClassName,
   hourSelectClassName,
   minuteSelectClassName,
+  dividerClassName,
 }) => {
   const [hours, setHours] = useState<string>(defaultHours);
   const [minutes, setMinutes] = useState<string>(defaultMinutes);
@@ -57,7 +61,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
   };
 
   return (
-    <div className={styles.container}>
+    <div className={cn(styles.container, containerClassName)}>
       <select
         disabled={disabled}
         id={id}
@@ -74,7 +78,7 @@ const TimePicker: React.FC<TimePickerProps> = ({
             </option>
           ))}
       </select>
-      <div>:</div>
+      <div className={dividerClassName}>:</div>
       <select
         disabled={disabled}
         id={id}

@@ -5,6 +5,7 @@ import { TeamMemberDto } from "@/model/be/jinear-core";
 import { useRetrieveTeamMembersQuery } from "@/store/api/teamMemberApi";
 import {
   closeTeamMemberPickerModal,
+  selectTeamMemberPickerModalInitialSelectionOnMultiple,
   selectTeamMemberPickerModalMultiple,
   selectTeamMemberPickerModalOnPick,
   selectTeamMemberPickerModalTeamId,
@@ -13,7 +14,7 @@ import {
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./TeamMemberPickerModal.module.css";
@@ -30,6 +31,7 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
   const [selectedTeamMembers, setSelectedTeamMembers] = useState<TeamMemberDto[]>([]);
   const teamId = useTypedSelector(selectTeamMemberPickerModalTeamId);
   const multiple = useTypedSelector(selectTeamMemberPickerModalMultiple);
+  const initialSelectionOnMultiple = useTypedSelector(selectTeamMemberPickerModalInitialSelectionOnMultiple);
   const onPick = useTypedSelector(selectTeamMemberPickerModalOnPick);
 
   const { data: teamMemberListResponse, isFetching } = useRetrieveTeamMembersQuery(
@@ -44,6 +46,12 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
       (teamMemberDto) => searchValue == "" || teamMemberDto.account.username?.indexOf(searchValue.toLowerCase()) != -1
     ) || [];
 
+  useEffect(() => {
+    if (initialSelectionOnMultiple != null && initialSelectionOnMultiple?.length != 0) {
+      setSelectedTeamMembers(initialSelectionOnMultiple);
+    }
+  }, [initialSelectionOnMultiple]);
+
   useDebouncedEffect(() => setSearchValue(input), [input], 500);
 
   const onTextChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +61,7 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
   const close = () => {
     setSearchValue("");
     setInput("");
+    setSelectedTeamMembers([]);
     dispatch(closeTeamMemberPickerModal());
   };
 
@@ -121,11 +130,13 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
             ))}
           </>
         )}
+
         <div className={styles.messageContainer}>
           {!isFetching && filteredList?.length == 0 && <div>{t("teamMemberPickerModalEmptyState")}</div>}
           {isFetching && <CircularProgress size={17} />}
         </div>
       </div>
+
       {multiple && selectedTeamMembers.length != 0 && (
         <div className={styles.selectedTopicListContainer}>
           {selectedTeamMembers.map((teamMember) => (
@@ -159,7 +170,7 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
             variant={ButtonVariants.contrast}
             className={styles.contButton}
             onClick={submitPickedAndClose}
-            disabled={selectedTeamMembers?.length == 0}
+            disabled={selectedTeamMembers?.length == 0 && !multiple}
           >
             {t("teamMemberPickerModalSelectButton")}
           </Button>

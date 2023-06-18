@@ -1,4 +1,4 @@
-import { TopicListingResponse, TopicSearchResponse } from "@/model/be/jinear-core";
+import { RetrieveTopicListRequest, TopicListingResponse, TopicSearchResponse } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 interface ISearchTeamTopics {
@@ -18,6 +18,20 @@ export const topicListingApi = api.injectEndpoints({
       ],
     }),
     //
+    retrieveExactTeamTopics: build.query<TopicSearchResponse, { teamId: string; body: RetrieveTopicListRequest }>({
+      query: (req: { teamId: string; body: RetrieveTopicListRequest }) => ({
+        url: `v1/topic/list/${req.teamId}/retrieve-exact`,
+        method: "POST",
+        body: req.body,
+      }),
+      providesTags: (_result, _err, req) => [
+        {
+          type: "team-topic-find-exact",
+          id: `${JSON.stringify(req)}`,
+        },
+      ],
+    }),
+    //
     searchTeamTopics: build.query<TopicSearchResponse, ISearchTeamTopics>({
       query: ({ teamId, nameOrTag = "" }: ISearchTeamTopics) =>
         `v1/topic/list/${teamId}/search?nameOrTag=${encodeURI(nameOrTag)}`,
@@ -31,8 +45,8 @@ export const topicListingApi = api.injectEndpoints({
   }),
 });
 
-export const { useRetrieveTeamTopicsQuery, useSearchTeamTopicsQuery } = topicListingApi;
+export const { useRetrieveTeamTopicsQuery, useRetrieveExactTeamTopicsQuery, useSearchTeamTopicsQuery } = topicListingApi;
 
 export const {
-  endpoints: { retrieveTeamTopics, searchTeamTopics },
+  endpoints: { retrieveTeamTopics, retrieveExactTeamTopics, searchTeamTopics },
 } = topicListingApi;

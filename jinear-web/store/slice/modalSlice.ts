@@ -18,6 +18,7 @@ import ModalState, {
   TaskTaskBoardAssignModalState,
   TeamMemberPickerModalState,
   TeamPickerModalState,
+  TeamWorkflowStatusPickerModalState,
   TopicPickerModalState,
   WorkspacePickerModalState,
 } from "model/app/store/modal/modalState";
@@ -115,6 +116,9 @@ const initialState = {
   teamMemberPickerModal: {
     visible: false,
   },
+  teamWorkflowStatusPickerModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -144,6 +148,7 @@ const initialState = {
   taskTaskBoardAssignModal: null | TaskTaskBoardAssignModalState;
   topicPickerModal: null | TopicPickerModalState;
   teamMemberPickerModal: null | TeamMemberPickerModalState;
+  teamWorkflowStatusPickerModal: null | TeamWorkflowStatusPickerModalState;
 };
 
 const slice = createSlice({
@@ -351,6 +356,13 @@ const slice = createSlice({
       state.teamMemberPickerModal = initialState.teamMemberPickerModal;
     },
 
+    popTeamWorkflowStatusPickerModal: (state, action: PayloadAction<TeamWorkflowStatusPickerModalState>) => {
+      state.teamWorkflowStatusPickerModal = { ...action.payload, visible: true };
+    },
+    closeTeamWorkflowStatusPickerModal: (state, action: PayloadAction<void>) => {
+      state.teamWorkflowStatusPickerModal = initialState.teamWorkflowStatusPickerModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -423,6 +435,8 @@ export const {
   closeTopicPickerModal,
   popTeamMemberPickerModal,
   closeTeamMemberPickerModal,
+  popTeamWorkflowStatusPickerModal,
+  closeTeamWorkflowStatusPickerModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -541,10 +555,25 @@ export const selectTopicPickerModalVisible = (state: RootState) => state.modal.t
 export const selectTopicPickerModalTeamId = (state: RootState) => state.modal.topicPickerModal?.teamId;
 export const selectTopicPickerModalWorkspaceId = (state: RootState) => state.modal.topicPickerModal?.workspaceId;
 export const selectTopicPickerModalMultiple = (state: RootState) => state.modal.topicPickerModal?.multiple;
+export const selectTopicPickerModalInitialSelectionOnMultiple = (state: RootState) =>
+  state.modal.topicPickerModal?.initialSelectionOnMultiple;
 export const selectTopicPickerModalOnPick = (state: RootState) => state.modal.topicPickerModal?.onPick;
 
 export const selectTeamMemberPickerModalVisible = (state: RootState) => state.modal.teamMemberPickerModal?.visible;
 export const selectTeamMemberPickerModalTeamId = (state: RootState) => state.modal.teamMemberPickerModal?.teamId;
 export const selectTeamMemberPickerModalWorkspaceId = (state: RootState) => state.modal.teamMemberPickerModal?.workspaceId;
 export const selectTeamMemberPickerModalMultiple = (state: RootState) => state.modal.teamMemberPickerModal?.multiple;
+export const selectTeamMemberPickerModalInitialSelectionOnMultiple = (state: RootState) =>
+  state.modal.teamMemberPickerModal?.initialSelectionOnMultiple;
 export const selectTeamMemberPickerModalOnPick = (state: RootState) => state.modal.teamMemberPickerModal?.onPick;
+
+export const selectTeamWorkflowStatusPickerModalVisible = (state: RootState) =>
+  state.modal.teamWorkflowStatusPickerModal?.visible;
+export const selectTeamWorkflowStatusPickerModalTeamId = (state: RootState) => state.modal.teamWorkflowStatusPickerModal?.teamId;
+export const selectTeamWorkflowStatusPickerModalWorkspaceId = (state: RootState) =>
+  state.modal.teamWorkflowStatusPickerModal?.workspaceId;
+export const selectTeamWorkflowStatusPickerModalMultiple = (state: RootState) =>
+  state.modal.teamWorkflowStatusPickerModal?.multiple;
+export const selectTeamWorkflowStatusPickerModalInitialSelectionOnMultiple = (state: RootState) =>
+  state.modal.teamWorkflowStatusPickerModal?.initialSelectionOnMultiple;
+export const selectTeamWorkflowStatusPickerModalOnPick = (state: RootState) => state.modal.teamWorkflowStatusPickerModal?.onPick;

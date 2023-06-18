@@ -18,6 +18,7 @@ export const taskWorkflowStatusApi = api.injectEndpoints({
         { type: "workspace-activity-list" },
         { type: "workspace-team-activity-list" },
         { type: "workspace-task-activity-list" },
+        { type: "task-listing-filter" },
       ],
     }),
     //

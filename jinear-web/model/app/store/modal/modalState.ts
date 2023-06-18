@@ -1,4 +1,12 @@
-import { TaskDto, TaskSearchResultDto, TeamDto, TeamMemberDto, TopicDto, WorkspaceDto } from "@/model/be/jinear-core";
+import {
+  TaskDto,
+  TaskSearchResultDto,
+  TeamDto,
+  TeamMemberDto,
+  TeamWorkflowStatusDto,
+  TopicDto,
+  WorkspaceDto,
+} from "@/model/be/jinear-core";
 
 export default interface ModalState {
   visible: boolean;
@@ -92,6 +100,7 @@ export interface TopicPickerModalState extends ModalState {
   workspaceId?: string;
   teamId?: string;
   multiple?: boolean;
+  initialSelectionOnMultiple?: TopicDto[];
   onPick?: (pickedList: TopicDto[]) => void;
 }
 
@@ -99,5 +108,14 @@ export interface TeamMemberPickerModalState extends ModalState {
   workspaceId?: string;
   teamId?: string;
   multiple?: boolean;
+  initialSelectionOnMultiple?: TeamMemberDto[];
   onPick?: (pickedList: TeamMemberDto[]) => void;
+}
+
+export interface TeamWorkflowStatusPickerModalState extends ModalState {
+  workspaceId?: string;
+  teamId?: string;
+  multiple?: boolean;
+  initialSelectionOnMultiple?: TeamWorkflowStatusDto[];
+  onPick?: (pickedList: TeamWorkflowStatusDto[]) => void;
 }

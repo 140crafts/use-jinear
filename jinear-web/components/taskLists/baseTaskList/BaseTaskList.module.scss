@@ -17,12 +17,19 @@
 .content {
   display: flex;
   flex-direction: column;
-  min-height: min(28vh, 25rem);
+  min-height: min(28vh, 8rem);
 }
 
 .gradientBg {
   background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-0-op05));
   border-radius: var(--border-radius);
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
 }
 
 .container-disabled {

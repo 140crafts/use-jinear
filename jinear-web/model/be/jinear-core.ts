@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-06-13 08:41:17.
+// Generated using typescript-generator version 3.0.1157 on 2023-06-18 11:50:36.
 
 export interface BaseDto {
   createdDate: Date;
@@ -574,15 +574,15 @@ export interface TaskDateUpdateRequest {
 }
 
 export interface TaskFilterRequest {
-  page: number;
+  page?: number | null;
   workspaceId: string;
   teamIdList: string[];
-  topicIds: string[];
-  ownerIds: string[];
-  assigneeIds: string[];
-  workflowStatusIdList: string[];
-  timespanStart: Date;
-  timespanEnd: Date;
+  topicIds?: string[] | null;
+  ownerIds?: string[] | null;
+  assigneeIds?: string[] | null;
+  workflowStatusIdList?: string[] | null;
+  timespanStart?: Date | null;
+  timespanEnd?: Date | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -655,6 +655,10 @@ export interface TeamInitializeRequest extends BaseRequest {
 
 export interface TeamWorkflowStatusNameChangeRequest extends BaseRequest {
   name: string;
+}
+
+export interface RetrieveTopicListRequest extends BaseRequest {
+  topicIds: string[];
 }
 
 export interface TopicInitializeRequest extends BaseRequest {

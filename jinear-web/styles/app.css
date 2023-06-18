@@ -409,3 +409,10 @@ pre {
 .op-05 {
   opacity: 0.5;
 }
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}

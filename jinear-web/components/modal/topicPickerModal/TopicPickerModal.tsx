@@ -5,6 +5,7 @@ import { useSearchTeamTopicsQuery } from "@/store/api/topicListingApi";
 import {
   closeTopicPickerModal,
   popNewTopicModal,
+  selectTopicPickerModalInitialSelectionOnMultiple,
   selectTopicPickerModalMultiple,
   selectTopicPickerModalOnPick,
   selectTopicPickerModalTeamId,
@@ -13,7 +14,7 @@ import {
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./TopicPickerModal.module.css";
@@ -30,12 +31,19 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
   const [selectedTopics, setSelectedTopics] = useState<TopicDto[]>([]);
   const teamId = useTypedSelector(selectTopicPickerModalTeamId);
   const multiple = useTypedSelector(selectTopicPickerModalMultiple);
+  const initialSelectionOnMultiple = useTypedSelector(selectTopicPickerModalInitialSelectionOnMultiple);
   const onPick = useTypedSelector(selectTopicPickerModalOnPick);
 
   const { data: searchResponse, isFetching } = useSearchTeamTopicsQuery(
     { teamId: teamId || "", nameOrTag: searchValue },
     { skip: teamId == null || teamId == "" }
   );
+
+  useEffect(() => {
+    if (initialSelectionOnMultiple != null && initialSelectionOnMultiple?.length != 0) {
+      setSelectedTopics(initialSelectionOnMultiple);
+    }
+  }, [initialSelectionOnMultiple]);
 
   useDebouncedEffect(() => setSearchValue(input), [input], 500);
 
@@ -46,6 +54,7 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
   const close = () => {
     setInput("");
     setSearchValue("");
+    setSelectedTopics([]);
     dispatch(closeTopicPickerModal());
   };
 
@@ -148,7 +157,7 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
             variant={ButtonVariants.contrast}
             className={styles.contButton}
             onClick={submitPickedAndClose}
-            disabled={selectedTopics?.length == 0}
+            disabled={selectedTopics?.length == 0 && !multiple}
           >
             {t("topicPickerModalSelectButton")}
           </Button>
