@@ -1,5 +1,5 @@
 import TaskListScreenBreadcrumb from "@/components/taskListScreen/breadcrumb/TaskListScreenBreadcrumb";
-import PaginatedAllTasksList from "@/components/taskLists/paginatedAllTasksList/PaginatedAllTasksList";
+import MultiViewTaskList from "@/components/taskLists/multiViewTaskList/MultiViewTaskList";
 import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -16,7 +16,14 @@ const AllTaskListScreen: React.FC<AllTaskListScreenProps> = ({}) => {
   return (
     <div className={styles.container}>
       {!workspace?.isPersonal && <TaskListScreenBreadcrumb type="all" />}
-      {team && <PaginatedAllTasksList workspaceId={team.workspaceId} teamId={team.teamId} name={t("allTasksPageListTitle")} />}
+      {team && (
+        <MultiViewTaskList
+          title={t("allTasksPageListTitle")}
+          workspaceId={team.workspaceId}
+          teamId={team.teamId}
+          activeDisplayFormat="LIST"
+        />
+      )}
     </div>
   );
 };

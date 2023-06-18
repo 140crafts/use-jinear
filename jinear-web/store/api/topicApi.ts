@@ -13,6 +13,24 @@ export const topicApi = api.injectEndpoints({
       ],
     }),
     //
+    retrieveTopicByTag: build.query<
+      TopicResponse,
+      {
+        topicTag: string;
+        workspaceId: string;
+        teamId: string;
+      }
+    >({
+      query: (req: { topicTag: string; workspaceId: string; teamId: string }) =>
+        `v1/topic/tag/${req.topicTag}/workspace/${req.workspaceId}/team/${req.teamId}`,
+      providesTags: (_result, _err, req: { topicTag: string; workspaceId: string; teamId: string }) => [
+        {
+          type: "retrieve-topic-by-tag",
+          id: `${req.topicTag}-${req.workspaceId}-${req.teamId}`,
+        },
+      ],
+    }),
+    //
     initializeTopic: build.mutation<TopicResponse, TopicInitializeRequest>({
       query: (request: TopicInitializeRequest) => ({
         url: `v1/topic`,
@@ -42,8 +60,14 @@ export const topicApi = api.injectEndpoints({
   }),
 });
 
-export const { useRetrieveTopicQuery, useInitializeTopicMutation, useUpdateTopicMutation, useDeleteTopicMutation } = topicApi;
+export const {
+  useRetrieveTopicQuery,
+  useRetrieveTopicByTagQuery,
+  useInitializeTopicMutation,
+  useUpdateTopicMutation,
+  useDeleteTopicMutation,
+} = topicApi;
 
 export const {
-  endpoints: { retrieveTopic, initializeTopic, updateTopic, deleteTopic },
+  endpoints: { retrieveTopic, retrieveTopicByTag, initializeTopic, updateTopic, deleteTopic },
 } = topicApi;

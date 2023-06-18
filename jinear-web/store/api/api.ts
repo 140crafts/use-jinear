@@ -51,6 +51,7 @@ export const tagTypes = [
   "team-topic-search",
   "task-board-listing",
   "team-topic-find-exact",
+  "retrieve-topic-by-tag",
 ];
 
 export const api = createApi({

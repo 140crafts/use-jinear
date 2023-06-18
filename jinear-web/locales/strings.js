@@ -2127,11 +2127,31 @@ export default {
     tr: "${count} durum",
   },
   taskFilterFromDateFilterButtonEmpty: {
-    en: "From",
-    tr: "Başlangıç Tarihi",
+    en: "After",
+    tr: "Sonra",
   },
   taskFilterToDateFilterButtonEmpty: {
-    en: "To",
-    tr: "Bitiş Tarihi",
+    en: "Before",
+    tr: "Önce",
+  },
+  taskListTitleAndViewTypeListTooltip: {
+    en: "List View",
+    tr: "Liste Görünümü",
+  },
+  taskListTitleAndViewTypeStatusColumnsTooltip: {
+    en: "Status Columns View",
+    tr: "Durum Görünümü",
+  },
+  activeTasksPageTitle: {
+    en: "Active Tasks",
+    tr: "Aktif Görevler",
+  },
+  archivedTasksPageTitle: {
+    en: "Archived Tasks",
+    tr: "Arşivlenmiş Görevler",
+  },
+  backlogTasksPageTitle: {
+    en: "Backlogged Tasks",
+    tr: "Geri Plandaki Görevler",
   },
 };

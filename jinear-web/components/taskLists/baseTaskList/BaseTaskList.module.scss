@@ -25,6 +25,13 @@
   border-radius: var(--border-radius);
 }
 
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
 .container-disabled {
   opacity: 0.25;
   pointer-events: none;

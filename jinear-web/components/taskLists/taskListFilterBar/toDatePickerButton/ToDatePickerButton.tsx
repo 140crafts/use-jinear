@@ -65,14 +65,14 @@ const ToDatePickerButton: React.FC<ToDatePickerButtonProps> = ({}) => {
     <div className={styles.container}>
       <Button
         heightVariant={ButtonHeight.short}
-        variant={ButtonVariants.filled}
+        variant={!toDate ? ButtonVariants.filled : ButtonVariants.filled2}
         className={toDate ? styles.selectedButton : undefined}
         onClick={onPickClick}
       >
         {toDate ? (
           <div className={styles.labelButton}>
             <IoPlaySkipBackOutline />
-            {format(toDate, t("dateFormat"))}
+            <b>{format(toDate, t("dateFormat"))}</b>
           </div>
         ) : (
           t("taskFilterToDateFilterButtonEmpty")
@@ -89,6 +89,7 @@ const ToDatePickerButton: React.FC<ToDatePickerButtonProps> = ({}) => {
             defaultMinutes={toDate ? `${getMinutes(toDate)}`.padStart(2, "0") : undefined}
             hourSelectClassName={styles.hourSelectClassName}
             minuteSelectClassName={styles.minuteSelectClassName}
+            containerClassName={styles.timePickerContainerClassName}
           />
         ) : (
           <Button variant={ButtonVariants.filled} className={styles.timePickerToggleButton} onClick={toggleHasPreciseDate}>

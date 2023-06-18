@@ -22,7 +22,7 @@ export const topicListingApi = api.injectEndpoints({
       query: (req: { teamId: string; body: RetrieveTopicListRequest }) => ({
         url: `v1/topic/list/${req.teamId}/retrieve-exact`,
         method: "POST",
-        body: req,
+        body: req.body,
       }),
       providesTags: (_result, _err, req) => [
         {

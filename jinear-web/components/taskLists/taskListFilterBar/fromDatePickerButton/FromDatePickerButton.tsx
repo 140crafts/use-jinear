@@ -70,7 +70,7 @@ const FromDatePickerButton: React.FC<FromDatePickerButtonProps> = ({}) => {
     <div className={styles.container}>
       <Button
         heightVariant={ButtonHeight.short}
-        variant={ButtonVariants.filled}
+        variant={!fromDate ? ButtonVariants.filled : ButtonVariants.filled2}
         className={fromDate ? styles.selectedButton : undefined}
         onClick={onPickClick}
       >
@@ -78,7 +78,7 @@ const FromDatePickerButton: React.FC<FromDatePickerButtonProps> = ({}) => {
           <div className={styles.labelButton}>
             <IoPlaySkipForwardOutline />
             {/* : <IoPlaySkipBackOutline /> */}
-            {format(fromDate, t("dateFormat"))}
+            <b>{format(fromDate, t("dateFormat"))}</b>
           </div>
         ) : (
           t("taskFilterFromDateFilterButtonEmpty")
@@ -95,6 +95,7 @@ const FromDatePickerButton: React.FC<FromDatePickerButtonProps> = ({}) => {
             defaultMinutes={fromDate ? `${getMinutes(fromDate)}`.padStart(2, "0") : undefined}
             hourSelectClassName={styles.hourSelectClassName}
             minuteSelectClassName={styles.minuteSelectClassName}
+            containerClassName={styles.timePickerContainerClassName}
           />
         ) : (
           <Button variant={ButtonVariants.filled} className={styles.timePickerToggleButton} onClick={toggleHasPreciseDate}>

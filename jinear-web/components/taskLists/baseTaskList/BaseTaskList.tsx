@@ -7,6 +7,8 @@ import React from "react";
 import TaskRow from "../taskRow/TaskRow";
 import styles from "./BaseTaskList.module.scss";
 
+export type PaginationPosition = "TOP" | "BOTTOM";
+
 interface BaseTaskListProps {
   id: string;
   name: string;
@@ -15,15 +17,25 @@ interface BaseTaskListProps {
   isLoading: boolean;
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
+  paginationPosition?: PaginationPosition;
 }
 
-const BaseTaskList: React.FC<BaseTaskListProps> = ({ id, name, response, isFetching, isLoading, page, setPage }) => {
+const BaseTaskList: React.FC<BaseTaskListProps> = ({
+  id,
+  name,
+  response,
+  isFetching,
+  isLoading,
+  page,
+  setPage,
+  paginationPosition = "TOP",
+}) => {
   const { t } = useTranslation();
   return (
     <div id={id} className={cn(styles.container)}>
       <div className={styles.header}>
         <h2>{name}</h2>
-        {response && (
+        {response && paginationPosition == "TOP" && (
           <Pagination
             id={`${id}-paginator`}
             className={styles.pagination}
@@ -57,6 +69,23 @@ const BaseTaskList: React.FC<BaseTaskListProps> = ({ id, name, response, isFetch
           <CircularProgress />
         </div>
       )}
+      <div className={styles.footer}>
+        {response && paginationPosition == "BOTTOM" && (
+          <Pagination
+            id={`${id}-paginator`}
+            className={styles.pagination}
+            pageNumber={response.data.number}
+            pageSize={response.data.size}
+            totalPages={response.data.totalPages}
+            totalElements={response.data.totalElements}
+            hasPrevious={response.data.hasPrevious}
+            hasNext={response.data.hasNext}
+            isLoading={isLoading || isFetching}
+            page={page}
+            setPage={setPage}
+          />
+        )}
+      </div>
     </div>
   );
 };

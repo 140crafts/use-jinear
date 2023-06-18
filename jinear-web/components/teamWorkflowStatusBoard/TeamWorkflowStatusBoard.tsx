@@ -1,4 +1,4 @@
-import { useRetrieveAllIntersectingTasksFromTeamQuery } from "@/store/api/taskListingApi";
+import { TaskDto } from "@/model/be/jinear-core";
 import { useUpdateTaskWorkflowStatusMutation } from "@/store/api/taskWorkflowStatusApi";
 import { useRetrieveAllFromTeamQuery } from "@/store/api/teamWorkflowStatusApi";
 import Logger from "@/utils/logger";
@@ -14,28 +14,13 @@ export interface IWorkflowStatusUpdatePendingTask {
 }
 
 interface TeamWorkflowStatusBoardProps {
-  workspaceId: string;
   teamId: string;
-  startDate: Date;
-  endDate: Date;
+  taskList: TaskDto[];
+  isTaskListingLoading?: boolean;
 }
 const logger = Logger("TeamWorkflowStatusBoard");
 
-const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamId, workspaceId, startDate, endDate }) => {
-  const {
-    data: taskListingResponse,
-    isFetching: isTaskListingFetching,
-    isSuccess: isTaskListingSuccess,
-  } = useRetrieveAllIntersectingTasksFromTeamQuery(
-    {
-      teamId,
-      workspaceId,
-      timespanStart: startDate,
-      timespanEnd: endDate,
-    },
-    { skip: teamId == null || workspaceId == null }
-  );
-
+const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamId, taskList, isTaskListingLoading = false }) => {
   const { data: teamWorkflowListData, isFetching: isTeamWorkflowListFetching } = useRetrieveAllFromTeamQuery(
     { teamId },
     { skip: teamId == null }
@@ -46,10 +31,10 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamI
   const [workflowStatusUpdatePendingTask, setWorkflowStatusUpdatePendingTask] = useState<IWorkflowStatusUpdatePendingTask>();
 
   useEffect(() => {
-    if (!isTaskListingFetching) {
+    if (!isTaskListingLoading) {
       setWorkflowStatusUpdatePendingTask(undefined);
     }
-  }, [isTaskListingFetching]);
+  }, [isTaskListingLoading]);
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -66,7 +51,7 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamI
     updateTaskWorkflowStatus({ taskId, workflowStatusId });
   };
 
-  const _isLoading = isTaskListingFetching || isTeamWorkflowListFetching || workflowStatusUpdatePendingTask;
+  const _isLoading = isTaskListingLoading || isTeamWorkflowListFetching || workflowStatusUpdatePendingTask;
 
   return (
     <div className={cn(styles.container, _isLoading ? styles["container-disabled"] : undefined)}>
@@ -75,7 +60,7 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamI
           <WorkflowStatusColumn
             key={workflowDto.teamWorkflowStatusId}
             workflowStatusDto={workflowDto}
-            tasks={taskListingResponse?.data}
+            tasks={taskList}
             workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
           />
         ))}
@@ -83,7 +68,7 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamI
           <WorkflowStatusColumn
             key={workflowDto.teamWorkflowStatusId}
             workflowStatusDto={workflowDto}
-            tasks={taskListingResponse?.data}
+            tasks={taskList}
             workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
           />
         ))}
@@ -91,7 +76,7 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamI
           <WorkflowStatusColumn
             key={workflowDto.teamWorkflowStatusId}
             workflowStatusDto={workflowDto}
-            tasks={taskListingResponse?.data}
+            tasks={taskList}
             workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
           />
         ))}
@@ -99,7 +84,7 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamI
           <WorkflowStatusColumn
             key={workflowDto.teamWorkflowStatusId}
             workflowStatusDto={workflowDto}
-            tasks={taskListingResponse?.data}
+            tasks={taskList}
             workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
           />
         ))}
@@ -107,7 +92,7 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamI
           <WorkflowStatusColumn
             key={workflowDto.teamWorkflowStatusId}
             workflowStatusDto={workflowDto}
-            tasks={taskListingResponse?.data}
+            tasks={taskList}
             workflowStatusUpdatePendingTask={workflowStatusUpdatePendingTask}
           />
         ))}

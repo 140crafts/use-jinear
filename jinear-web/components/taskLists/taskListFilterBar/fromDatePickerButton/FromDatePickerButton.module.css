@@ -26,6 +26,8 @@
   border-left-style: solid;
   border-left-color: var(--c-primary-shade-1);
   padding: 0.25rem 0.75rem;
+  font-weight: 600;
+  background-color: var(--c-primary-shade-1) !important;
 }
 
 .minuteSelectClassName {
@@ -34,6 +36,8 @@
   border-right-style: solid;
   border-right-color: var(--c-primary-shade-1);
   padding: 0.25rem 0.75rem;
+  font-weight: 600;
+  background-color: var(--c-primary-shade-1) !important;
 }
 
 .labelButton {
@@ -42,4 +46,9 @@
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
+}
+
+.timePickerContainerClassName {
+  font-weight: 600;
+  background-color: var(--c-primary-shade-1) !important;
 }

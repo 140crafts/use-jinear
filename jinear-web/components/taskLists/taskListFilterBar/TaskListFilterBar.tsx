@@ -1,6 +1,9 @@
-import { TeamMemberDto, TeamWorkflowStatusDto, TopicDto } from "@/model/be/jinear-core";
+import { TaskFilterRequest, TeamMemberDto, TeamWorkflowStatusDto, TopicDto } from "@/model/be/jinear-core";
 import { useRetrieveTeamMembersQuery } from "@/store/api/teamMemberApi";
+import { useRetrieveAllFromTeamQuery } from "@/store/api/teamWorkflowStatusApi";
 import { useRetrieveExactTeamTopicsQuery } from "@/store/api/topicListingApi";
+import Logger from "@/utils/logger";
+import { setHours, setMinutes } from "date-fns";
 import React, { useEffect, useState } from "react";
 import styles from "./TaskListFilterBar.module.css";
 import AssigneeFilterButton from "./assigneeFilterButton/AssigneeFilterButton";
@@ -10,7 +13,6 @@ import OwnerFilterButton from "./ownerFilterButton/OwnerFilterButton";
 import ToDatePickerButton from "./toDatePickerButton/ToDatePickerButton";
 import TopicFilterButton from "./topicFilterButton/TopicFilterButton";
 import WorkflowStatusFilterButton from "./workflowStatusFilterButton/WorkflowStatusFilterButton";
-
 interface TaskListFilterBarProps {
   workspaceId: string;
   teamId: string;
@@ -20,7 +22,12 @@ interface TaskListFilterBarProps {
   workflowStatusIdList?: string[];
   timespanStart?: Date;
   timespanEnd?: Date;
+  hasPreciseFromDate?: boolean;
+  hasPreciseToDate?: boolean;
+  onFilterChange?: (filter: TaskFilterRequest) => void;
 }
+
+const logger = Logger("TaskListFilterBar");
 
 const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
   workspaceId,
@@ -28,6 +35,10 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
   topicIds,
   ownerIds = [],
   assigneeIds = [],
+  workflowStatusIdList = [],
+  timespanStart,
+  timespanEnd,
+  onFilterChange,
 }) => {
   const [selectedTopics, setSelectedTopics] = useState<TopicDto[]>([]);
   const [selectedOwners, setSelectedOwners] = useState<TeamMemberDto[]>([]);
@@ -37,6 +48,17 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
   const [toDate, setToDate] = useState<Date>();
   const [hasPreciseFromDate, setHasPreciseFromDate] = useState<Boolean>(false);
   const [hasPreciseToDate, setHasPreciseToDate] = useState<Boolean>(false);
+
+  const filter: TaskFilterRequest = {
+    workspaceId: workspaceId,
+    teamIdList: [teamId],
+    topicIds: selectedTopics?.map?.((topicDto) => topicDto.topicId),
+    ownerIds: selectedOwners?.map?.((owner) => owner.accountId),
+    assigneeIds: selectedAssignees?.map?.((assignee) => assignee.accountId),
+    workflowStatusIdList: selectedWorkflowStatuses?.map?.((wfs) => wfs.teamWorkflowStatusId),
+    timespanStart: fromDate,
+    timespanEnd: toDate ? (hasPreciseToDate ? toDate : setMinutes(setHours(toDate || new Date(), 23), 59)) : undefined,
+  };
 
   const { data: findExactTeamTopicsResponse } = useRetrieveExactTeamTopicsQuery(
     {
@@ -52,6 +74,20 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
       skip: ownerIds.length == 0 || assigneeIds.length == 0,
     }
   );
+
+  const { data: teamWorkflowStatusListResponse } = useRetrieveAllFromTeamQuery(
+    { teamId: teamId || "" },
+    {
+      skip: teamId == null || workflowStatusIdList.length == 0,
+    }
+  );
+
+  useEffect(() => {
+    if (filter) {
+      //   logger.log({ filter });
+      onFilterChange?.(filter);
+    }
+  }, [filter]);
 
   useEffect(() => {
     if (topicIds != null && topicIds?.length != 0 && findExactTeamTopicsResponse && findExactTeamTopicsResponse.data) {
@@ -74,6 +110,36 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
       setSelectedAssignees(assignees);
     }
   }, [assigneeIds, teamMembersResponse]);
+
+  useEffect(() => {
+    if (workflowStatusIdList.length != 0 && teamWorkflowStatusListResponse) {
+      const backlogList = teamWorkflowStatusListResponse.data.groupedTeamWorkflowStatuses.BACKLOG || [];
+      const notStartedList = teamWorkflowStatusListResponse.data.groupedTeamWorkflowStatuses.NOT_STARTED || [];
+      const startedList = teamWorkflowStatusListResponse.data.groupedTeamWorkflowStatuses.STARTED || [];
+      const completedList = teamWorkflowStatusListResponse.data.groupedTeamWorkflowStatuses.COMPLETED || [];
+      const cancelledList = teamWorkflowStatusListResponse.data.groupedTeamWorkflowStatuses.CANCELLED || [];
+      const workflowStatues = [...backlogList, ...notStartedList, ...startedList, ...completedList, ...cancelledList];
+      const selected = workflowStatues.filter(
+        (teamWorkflowStatusDto) => workflowStatusIdList.indexOf(teamWorkflowStatusDto.teamWorkflowStatusId) != -1
+      );
+      setSelectedWorkflowStatuses(selected);
+    }
+  }, [workflowStatusIdList, teamWorkflowStatusListResponse]);
+
+  useEffect(() => {
+    if (timespanStart) {
+      setFromDate(timespanStart);
+    }
+    if (timespanEnd) {
+      setToDate(timespanEnd);
+    }
+    if (hasPreciseFromDate != null) {
+      setHasPreciseFromDate(hasPreciseFromDate);
+    }
+    if (hasPreciseToDate != null) {
+      setHasPreciseToDate(hasPreciseToDate);
+    }
+  }, [timespanStart, timespanEnd, hasPreciseFromDate, hasPreciseToDate]);
 
   return (
     <TaskListFilterBarContext.Provider
@@ -109,4 +175,10 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
   );
 };
 
-export default TaskListFilterBar;
+export default React.memo(TaskListFilterBar, (prevProps, nextProps) => {
+  const prev = JSON.stringify(prevProps);
+  const next = JSON.stringify(nextProps);
+  const areEqual = prev == next;
+  logger.log({ prevProps, nextProps, areEqual });
+  return areEqual;
+});
