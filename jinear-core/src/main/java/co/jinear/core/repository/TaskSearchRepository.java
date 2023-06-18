@@ -68,7 +68,7 @@ public class TaskSearchRepository {
         taskSearchCriteriaBuilder.addOwnerIdList(taskSearchFilterVo.getOwnerIds(), criteriaBuilder, taskRoot, predicateList);
         taskSearchCriteriaBuilder.addAssignedToList(taskSearchFilterVo.getAssigneeIds(), criteriaBuilder, taskRoot, predicateList);
         taskSearchCriteriaBuilder.addWorkflowStatusIdList(taskSearchFilterVo.getWorkflowStatusIdList(), criteriaBuilder, taskRoot, predicateList);
-        taskSearchCriteriaBuilder.addIntersectingTasksPredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, predicateList);
+        taskSearchCriteriaBuilder.addDatePredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, predicateList);
         return predicateList;
     }
 
@@ -76,7 +76,7 @@ public class TaskSearchRepository {
         List<Predicate> predicateList = Lists.newArrayList();
         taskSearchCriteriaBuilder.addWorkspaceId(searchIntersectingTasksFromTeamVo.getWorkspaceId(), criteriaBuilder, taskRoot, predicateList);
         taskSearchCriteriaBuilder.addTeamId(searchIntersectingTasksFromTeamVo.getTeamId(), criteriaBuilder, taskRoot, predicateList);
-        taskSearchCriteriaBuilder.addIntersectingTasksPredicates(searchIntersectingTasksFromTeamVo.getTimespanStart(), searchIntersectingTasksFromTeamVo.getTimespanEnd(), criteriaBuilder, taskRoot, predicateList);
+        taskSearchCriteriaBuilder.addDatePredicates(searchIntersectingTasksFromTeamVo.getTimespanStart(), searchIntersectingTasksFromTeamVo.getTimespanEnd(), criteriaBuilder, taskRoot, predicateList);
         return predicateList;
     }
 
@@ -84,7 +84,7 @@ public class TaskSearchRepository {
         List<Predicate> predicateList = Lists.newArrayList();
         taskSearchCriteriaBuilder.addWorkspaceId(searchIntersectingTasksFromWorkspaceVo.getWorkspaceId(), criteriaBuilder, taskRoot, predicateList);
         taskSearchCriteriaBuilder.addTeamIdList(searchIntersectingTasksFromWorkspaceVo.getTeamIdList(), criteriaBuilder, taskRoot, predicateList);
-        taskSearchCriteriaBuilder.addIntersectingTasksPredicates(searchIntersectingTasksFromWorkspaceVo.getTimespanStart(), searchIntersectingTasksFromWorkspaceVo.getTimespanEnd(), criteriaBuilder, taskRoot, predicateList);
+        taskSearchCriteriaBuilder.addDatePredicates(searchIntersectingTasksFromWorkspaceVo.getTimespanStart(), searchIntersectingTasksFromWorkspaceVo.getTimespanEnd(), criteriaBuilder, taskRoot, predicateList);
         return predicateList;
     }
 

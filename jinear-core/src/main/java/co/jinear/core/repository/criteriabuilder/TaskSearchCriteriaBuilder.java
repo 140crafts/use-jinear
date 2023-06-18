@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Component
@@ -69,7 +70,21 @@ public class TaskSearchCriteriaBuilder {
         }
     }
 
-    public void addIntersectingTasksPredicates(ZonedDateTime start, ZonedDateTime end, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
+    public void addDatePredicates(ZonedDateTime start, ZonedDateTime end, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
+        if (Objects.nonNull(start) && Objects.nonNull(end)) {
+            addIntersectingTasksPredicates(start, end, criteriaBuilder, root, predicateList);
+        } else if (Objects.nonNull(start)) {
+            Predicate assignedDateOrDueDateAfterPredicate = getAssignedDateOrDueDateAfterPredicate(start, criteriaBuilder, root);
+            Optional.ofNullable(assignedDateOrDueDateAfterPredicate)
+                    .ifPresent(predicateList::add);
+        } else if (Objects.nonNull(end)) {
+            Predicate assignedDateOrDueDateBeforePredicate = getAssignedDateOrDueDateBeforePredicate(end, criteriaBuilder, root);
+            Optional.ofNullable(assignedDateOrDueDateBeforePredicate)
+                    .ifPresent(predicateList::add);
+        }
+    }
+
+    private void addIntersectingTasksPredicates(ZonedDateTime start, ZonedDateTime end, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
         if (Objects.nonNull(start) && Objects.nonNull(end)) {
             Predicate assignedDateBetweenPredicate = getAssignedDateBetweenPredicate(start, end, criteriaBuilder, root);
             Predicate dueDateBetweenPredicate = getDueDateBetweenPredicate(start, end, criteriaBuilder, root);
@@ -112,6 +127,29 @@ public class TaskSearchCriteriaBuilder {
                 getAssignedDateBeforePredicate(start, criteriaBuilder, root),
                 getDueDateAfterPredicate(end, criteriaBuilder, root)
         );
+    }
 
+    private Predicate getAssignedDateOrDueDateAfterPredicate(ZonedDateTime start, CriteriaBuilder criteriaBuilder, Root<Task> root) {
+        if (Objects.nonNull(start)) {
+            Predicate assignedDateAfter = criteriaBuilder.greaterThanOrEqualTo(root.<ZonedDateTime>get("assignedDate"), start);
+            Predicate dueDateAfter = criteriaBuilder.greaterThanOrEqualTo(root.<ZonedDateTime>get("dueDate"), start);
+            return criteriaBuilder.or(
+                    assignedDateAfter,
+                    dueDateAfter
+            );
+        }
+        return null;
+    }
+
+    private Predicate getAssignedDateOrDueDateBeforePredicate(ZonedDateTime end, CriteriaBuilder criteriaBuilder, Root<Task> root) {
+        if (Objects.nonNull(end)) {
+            Predicate assignedDateBefore = criteriaBuilder.lessThanOrEqualTo(root.<ZonedDateTime>get("assignedDate"), end);
+            Predicate dueDateBefore = criteriaBuilder.lessThanOrEqualTo(root.<ZonedDateTime>get("dueDate"), end);
+            return criteriaBuilder.or(
+                    assignedDateBefore,
+                    dueDateBefore
+            );
+        }
+        return null;
     }
 }

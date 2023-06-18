@@ -23,6 +23,14 @@ public class TopicController {
         return topicManager.retrieveTopic(topicId);
     }
 
+    @GetMapping("/tag/{topicTag}/workspace/{workspaceId}/team/{teamId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TopicResponse retrieveTopicByTag(@PathVariable String topicTag,
+                                            @PathVariable String workspaceId,
+                                            @PathVariable String teamId) {
+        return topicManager.retrieveTopicByTag(teamId, workspaceId, topicTag);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public TopicResponse initializeTopic(@Valid @RequestBody TopicInitializeRequest topicInitializeRequest) {

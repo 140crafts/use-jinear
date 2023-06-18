@@ -3,6 +3,7 @@ package co.jinear.core.manager.topic;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.topic.TopicDto;
+import co.jinear.core.model.request.topic.RetrieveTopicListRequest;
 import co.jinear.core.model.response.topic.TopicListingResponse;
 import co.jinear.core.model.response.topic.TopicSearchResponse;
 import co.jinear.core.service.SessionInfoService;
@@ -32,6 +33,14 @@ public class TopicListingManager {
         log.info("Retrieve team topics has started. accountId: {}", currentAccountId);
         Page<TopicDto> topicDtoPage = topicRetrieveService.retrieveTeamTopics(teamId, page);
         return mapResponse(topicDtoPage);
+    }
+
+    public TopicSearchResponse retrieveTeamExactTopics(String teamId, RetrieveTopicListRequest retrieveTopicListRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        teamAccessValidator.validateTeamAccess(currentAccountId, teamId);
+        log.info("Retrieve exact team topics has started. accountId: {}", currentAccountId);
+        List<TopicDto> topicDtoList = topicRetrieveService.retrieveTeamTopics(teamId, retrieveTopicListRequest.getTopicIds());
+        return mapResponse(topicDtoList);
     }
 
     public TopicSearchResponse searchTeamTopics(String teamId, String nameOrTag) {
