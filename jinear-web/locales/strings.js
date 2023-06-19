@@ -2154,4 +2154,28 @@ export default {
     en: "Backlogged Tasks",
     tr: "Geri Plandaki Görevler",
   },
+  quickFilterBarThisWeek: {
+    en: "This Week",
+    tr: "Bu Hafta",
+  },
+  quickFilterBarThisMonth: {
+    en: "This Month",
+    tr: "Bu Ay",
+  },
+  quickFilterBarActive: {
+    en: "Active",
+    tr: "Aktif",
+  },
+  quickFilterBarArchived: {
+    en: "Archive",
+    tr: "Arşiv",
+  },
+  quickFilterBarBacklog: {
+    en: "Backlog",
+    tr: "Geri Plan",
+  },
+  quickFilterBarClearAll: {
+    en: "Clear",
+    tr: "Temizle",
+  },
 };

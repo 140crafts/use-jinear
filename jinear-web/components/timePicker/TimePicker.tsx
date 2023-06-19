@@ -95,6 +95,14 @@ const TimePicker: React.FC<TimePickerProps> = ({
               {minute}
             </option>
           ))}
+        {Array.from(Array(60).keys())
+          .filter((minute) => minute % minuteResolution == 0)
+          .map((minute) => `${minute}`.padStart(2, "0"))
+          .filter((minute) => minutes == minute).length == 0 ? (
+          <option key={`${id}-hour-${minutes}`} value={minutes}>
+            {minutes}
+          </option>
+        ) : undefined}
       </select>
     </div>
   );

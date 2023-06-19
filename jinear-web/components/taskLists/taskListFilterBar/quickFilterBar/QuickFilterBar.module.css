@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  /* gap: 0.5rem; */
+}
+
+.button {
+  color: var(--c-link-color);
+  padding: 0.25rem 0.75rem;
+}
+.button:hover {
+  color: var(--c-link-color);
+}
