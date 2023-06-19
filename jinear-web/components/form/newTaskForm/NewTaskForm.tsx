@@ -96,11 +96,9 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
     if (data.topicId == "no-topic") {
       data.topicId = undefined;
     }
-    if (data.assignedDate_ISO) {
-      data.assignedDate = new Date(data.assignedDate_ISO);
-    }
-    if (data.dueDate_ISO) {
-      data.dueDate = new Date(data.dueDate_ISO);
+    // @ts-ignore
+    if (data.assignedDate == "no-date") {
+      data.assignedDate = undefined;
     }
     console.log({ NewTaskForm: data });
     if (isInitializeTaskLoading) {
