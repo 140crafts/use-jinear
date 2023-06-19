@@ -19,6 +19,7 @@ interface ITaskListFilterBarContext {
   setHasPreciseFromDate?: React.Dispatch<React.SetStateAction<Boolean>>;
   hasPreciseToDate: Boolean;
   setHasPreciseToDate?: React.Dispatch<React.SetStateAction<Boolean>>;
+  resetState?: () => void;
 }
 
 const TaskListFilterBarContext = createContext<ITaskListFilterBarContext>({
@@ -116,4 +117,9 @@ export function useHasPreciseToDate() {
 export function useSetHasPreciseToDate() {
   const ctx = useContext(TaskListFilterBarContext);
   return ctx.setHasPreciseToDate;
+}
+
+export function useResetState() {
+  const ctx = useContext(TaskListFilterBarContext);
+  return ctx.resetState;
 }

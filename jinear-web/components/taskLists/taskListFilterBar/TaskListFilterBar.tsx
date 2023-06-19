@@ -10,6 +10,7 @@ import AssigneeFilterButton from "./assigneeFilterButton/AssigneeFilterButton";
 import TaskListFilterBarContext from "./context/TaskListFilterBarContext";
 import FromDatePickerButton from "./fromDatePickerButton/FromDatePickerButton";
 import OwnerFilterButton from "./ownerFilterButton/OwnerFilterButton";
+import QuickFilterBar from "./quickFilterBar/QuickFilterBar";
 import ToDatePickerButton from "./toDatePickerButton/ToDatePickerButton";
 import TopicFilterButton from "./topicFilterButton/TopicFilterButton";
 import WorkflowStatusFilterButton from "./workflowStatusFilterButton/WorkflowStatusFilterButton";
@@ -141,6 +142,17 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
     }
   }, [timespanStart, timespanEnd, hasPreciseFromDate, hasPreciseToDate]);
 
+  const resetState = () => {
+    setSelectedTopics([]);
+    setSelectedOwners([]);
+    setSelectedAssignees([]);
+    setSelectedWorkflowStatuses([]);
+    setFromDate(undefined);
+    setToDate(undefined);
+    setHasPreciseFromDate(false);
+    setHasPreciseToDate(false);
+  };
+
   return (
     <TaskListFilterBarContext.Provider
       value={{
@@ -161,16 +173,20 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
         setHasPreciseFromDate,
         hasPreciseToDate,
         setHasPreciseToDate,
+        resetState,
       }}
     >
-      <div className={styles.container}>
-        <FromDatePickerButton />
-        <ToDatePickerButton />
-        <WorkflowStatusFilterButton />
-        <AssigneeFilterButton />
-        <OwnerFilterButton />
-        <TopicFilterButton />
-      </div>
+      <>
+        <div className={styles.container}>
+          <FromDatePickerButton />
+          <ToDatePickerButton />
+          <WorkflowStatusFilterButton />
+          <AssigneeFilterButton />
+          <OwnerFilterButton />
+          <TopicFilterButton />
+        </div>
+        <QuickFilterBar />
+      </>
     </TaskListFilterBarContext.Provider>
   );
 };
