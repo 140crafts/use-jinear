@@ -25,8 +25,10 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({ fieldName, isPrecis
   const { current: hasPreciseDate, toggle: toggleHasPreciseDate } = useToggle(false);
 
   useEffect(() => {
-    // @ts-ignore
-    setValue(fieldName, selectedDate ? selectedDate.toISOString() : "no-date");
+    if (selectedDate) {
+      // @ts-ignore
+      setValue(fieldName, selectedDate.toISOString());
+    }
     setValue(isPreciseFieldName, hasPreciseDate);
   }, [selectedDate, hasPreciseDate, fieldName, isPreciseFieldName]);
 
@@ -69,7 +71,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({ fieldName, isPrecis
 
   return (
     <div className={styles.container}>
-      <input type="hidden" value={selectedDate?.toISOString() || "no-date"} {...register(fieldName)} />
+      <input type="hidden" value={selectedDate?.toISOString() || undefined} {...register(fieldName)} />
       <input type="hidden" value={`${hasPreciseDate}`} {...register(isPreciseFieldName)} />
       <Button
         heightVariant={ButtonHeight.short}
