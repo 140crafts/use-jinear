@@ -25,6 +25,7 @@ import java.util.List;
 public class TaskSearchRepository {
 
     private static final int PAGE_SIZE = 50;
+    private static final int FILTER_PAGE_SIZE = 250;
 
     private final EntityManager entityManager;
     private final TaskSearchCriteriaBuilder taskSearchCriteriaBuilder;
@@ -41,7 +42,7 @@ public class TaskSearchRepository {
         countQuery.select(criteriaBuilder.count(countRoot));
         List<Predicate> countPredicateList = retrieveFilterPredicateList(taskSearchFilterVo, criteriaBuilder, countRoot);
 
-        return executeAndRetrievePageableResults(criteriaBuilder, taskCriteriaQuery, countQuery, taskRoot, predicateList, countPredicateList, PageRequest.of(taskSearchFilterVo.getPage(), PAGE_SIZE));
+        return executeAndRetrievePageableResults(criteriaBuilder, taskCriteriaQuery, countQuery, taskRoot, predicateList, countPredicateList, PageRequest.of(taskSearchFilterVo.getPage(), FILTER_PAGE_SIZE));
     }
 
     public List<Task> findAllIntersectingTasksFromWorkspaceAndTeamListBetween(SearchIntersectingTasksFromWorkspaceVo searchIntersectingTasksFromWorkspaceVo) {
