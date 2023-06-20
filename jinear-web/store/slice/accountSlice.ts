@@ -93,3 +93,6 @@ export const selectCurrentAccountsPreferredTeam = (state: RootState) => {
 export const selectCurrentAccountsPreferredTeamId = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.team?.teamId;
 };
+
+export const selectWorkspaceFromWorkspaceUsername = (workspaceUsername: string) => (state: RootState) =>
+  state.account.current?.workspaces.find((workspace) => workspace.username == workspaceUsername);

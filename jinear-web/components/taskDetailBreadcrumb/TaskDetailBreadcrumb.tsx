@@ -16,7 +16,7 @@ const TaskDetailBreadcrumb: React.FC<TaskDetailBreadcrumbProps> = ({ task }) => 
   return (
     <Breadcrumb>
       <BreadcrumbLink label={workspaceTitle} url={`/${workspaceUsername}`} />
-      <BreadcrumbLink label={teamName} url={`/${workspaceUsername}/${teamUsername}/weekly`} />
+      <BreadcrumbLink label={teamName} url={`/${workspaceUsername}/${teamUsername}`} />
       <BreadcrumbLink
         label={`${task.team?.tag}-${task.teamTagNo}` || ""}
         url={`/${workspaceUsername}/task/${task.team?.tag}-${task.teamTagNo}`}

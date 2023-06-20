@@ -10,6 +10,7 @@ import ModalState, {
   DialogModalState,
   LoginWith2FaMailModalState,
   NewReminderModalState,
+  NewTaskBoardModalState,
   NewTaskModalState,
   NotFoundModalState,
   ReminderListModalState,
@@ -143,7 +144,7 @@ const initialState = {
   taskOverviewModal: null | TaskOverviewModalState;
   teamPickerModal: null | TeamPickerModalState;
   workspacePickerModal: null | WorkspacePickerModalState;
-  newTaskBoardModal: null | ModalState;
+  newTaskBoardModal: null | NewTaskBoardModalState;
   basicTextInputModal: null | BasicTextInputModalState;
   taskTaskBoardAssignModal: null | TaskTaskBoardAssignModalState;
   topicPickerModal: null | TopicPickerModalState;
@@ -321,8 +322,8 @@ const slice = createSlice({
       state.workspacePickerModal = initialState.workspacePickerModal;
     },
 
-    popNewTaskBoardModal: (state, action: PayloadAction<void>) => {
-      state.newTaskBoardModal = { visible: true };
+    popNewTaskBoardModal: (state, action: PayloadAction<NewTaskBoardModalState>) => {
+      state.newTaskBoardModal = { ...action.payload, visible: true };
     },
     closeNewTaskBoardModal: (state, action: PayloadAction<void>) => {
       state.newTaskBoardModal = initialState.newTaskBoardModal;
@@ -541,6 +542,8 @@ export const selectWorkspacePickerModalCurrentWorkspaceId = (state: RootState) =
 export const selectWorkspacePickerModalOnPick = (state: RootState) => state.modal.workspacePickerModal?.onPick;
 
 export const selectNewTaskBoardModalVisible = (state: RootState) => state.modal.newTaskBoardModal?.visible;
+export const selectNewTaskBoardModalWorkspace = (state: RootState) => state.modal.newTaskBoardModal?.workspace;
+export const selectNewTaskBoardModalTeam = (state: RootState) => state.modal.newTaskBoardModal?.team;
 
 export const selectBasicTextInputModalVisible = (state: RootState) => state.modal.basicTextInputModal?.visible;
 export const selectBasicTextInputModalTitle = (state: RootState) => state.modal.basicTextInputModal?.title;

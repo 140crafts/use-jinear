@@ -1,24 +1,24 @@
 import Breadcrumb from "@/components/breadcrumb/Breadcrumb";
 import BreadcrumbLink from "@/components/breadcrumb/BreadcrumbLink";
-import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
-import { useTypedSelector } from "@/store/store";
+import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 
-interface TopicListScreenBreadcrumbProps {}
+interface TopicListScreenBreadcrumbProps {
+  workspace: WorkspaceDto;
+  team: TeamDto;
+}
 
-const TopicListScreenBreadcrumb: React.FC<TopicListScreenBreadcrumbProps> = ({}) => {
+const TopicListScreenBreadcrumb: React.FC<TopicListScreenBreadcrumbProps> = ({ workspace, team }) => {
   const { t } = useTranslation();
-  const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const currentteam = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
-  return (
+  return !workspace?.isPersonal ? (
     <Breadcrumb>
-      <BreadcrumbLink label={currentWorkspace?.title || ""} url={`/${currentWorkspace?.username}`} />
-      <BreadcrumbLink label={currentteam?.name || ""} url={`/${currentWorkspace?.username}/${currentteam?.name}`} />
-      <BreadcrumbLink label={t("topicListScreenTitle")} url={`/${currentWorkspace?.username}/${currentteam?.name}/topic/list`} />
+      <BreadcrumbLink label={workspace?.title || ""} url={`/${workspace?.username}`} />
+      <BreadcrumbLink label={team?.name || ""} url={`/${workspace?.username}/${team?.name}`} />
+      <BreadcrumbLink label={t("topicListScreenTitle")} url={`/${workspace?.username}/${team?.name}/topic/list`} />
     </Breadcrumb>
-  );
+  ) : null;
 };
 
 export default TopicListScreenBreadcrumb;

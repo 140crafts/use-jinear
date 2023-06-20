@@ -30,7 +30,7 @@ const TeamTaskBoards: React.FC<TeamTaskBoardsProps> = ({ teamId, workspaceId, wo
   const notVisibleSize = hasMore ? taskBoardListingResponse?.data.totalElements - VISIBLE_SIZE : 0;
 
   const openNewTaskBoardModal = () => {
-    dispatch(popNewTaskBoardModal());
+    dispatch(popNewTaskBoardModal({ visible: true }));
   };
 
   const routeToTaskBoardsScreen = () => {

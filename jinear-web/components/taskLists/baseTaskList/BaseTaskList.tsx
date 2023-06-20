@@ -18,6 +18,7 @@ interface BaseTaskListProps {
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   paginationPosition?: PaginationPosition;
+  hidePaginationOnSinglePages?: boolean;
 }
 
 const BaseTaskList: React.FC<BaseTaskListProps> = ({
@@ -29,13 +30,17 @@ const BaseTaskList: React.FC<BaseTaskListProps> = ({
   page,
   setPage,
   paginationPosition = "TOP",
+  hidePaginationOnSinglePages = true,
 }) => {
   const { t } = useTranslation();
+
+  const emptyOrSinglePage = response?.data?.totalPages == 0 || response?.data?.totalPages == 1;
+
   return (
     <div id={id} className={cn(styles.container)}>
       <div className={styles.header}>
         <h2>{name}</h2>
-        {response && paginationPosition == "TOP" && (
+        {!(hidePaginationOnSinglePages && emptyOrSinglePage) && response && paginationPosition == "TOP" && (
           <Pagination
             id={`${id}-paginator`}
             className={styles.pagination}
@@ -70,7 +75,7 @@ const BaseTaskList: React.FC<BaseTaskListProps> = ({
         </div>
       )}
       <div className={styles.footer}>
-        {response && paginationPosition == "BOTTOM" && (
+        {!(hidePaginationOnSinglePages && emptyOrSinglePage) && response && paginationPosition == "BOTTOM" && (
           <Pagination
             id={`${id}-paginator`}
             className={styles.pagination}

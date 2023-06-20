@@ -1,5 +1,6 @@
-import TopicForm from "@/components/form/topicForm/TopicForm";
-import NewTopicScreenBreadcrumb from "@/components/topicScreen/newTopicScreen/newTopicScreenBreadcrumb/NewTopicScreenBreadcrumb";
+import CircularLoading from "@/components/circularLoading/CircularLoading";
+import MultiViewTaskList from "@/components/taskLists/multiViewTaskList/MultiViewTaskList";
+import TasksScreenBreadcrumb from "@/components/tasksScreen/tasksScreenBreadcrumb/TasksScreenBreadcrumb";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
@@ -8,13 +9,14 @@ import { useRouter } from "next/router";
 import React from "react";
 import styles from "./index.module.css";
 
-interface NewTopicPageProps {}
+interface TasksScreenProps {}
 
-const NewTopicPage: React.FC<NewTopicPageProps> = ({}) => {
+const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
   const workspaceName: string = router.query?.workspaceName as string;
   const teamUsername: string = router.query?.teamUsername as string;
+  const topicId = router?.query.topic as string | undefined;
 
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
   const { data: teamsResponse, isFetching: isTeamsFetching } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
@@ -24,14 +26,19 @@ const NewTopicPage: React.FC<NewTopicPageProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {workspace && team && <NewTopicScreenBreadcrumb workspace={workspace} team={team} />}
-      <div className="spacer-h-4" />
-      <h1>{t("newTopicScreenTitle")}</h1>
-      <div className={styles.formContainer}>
-        <TopicForm workspaceId={workspace?.workspaceId} teamId={team?.teamId} />
-      </div>
+      {workspace && team && <TasksScreenBreadcrumb workspace={workspace} team={team} />}
+      {isTeamsFetching && <CircularLoading />}
+      {workspace && team && !isTeamsFetching && (
+        <MultiViewTaskList
+          title={t("tasksScreenBreadcrumbLabel")}
+          workspaceId={workspace.workspaceId}
+          teamId={team.teamId}
+          activeDisplayFormat="LIST"
+          topicIds={topicId ? [topicId] : []}
+        />
+      )}
     </div>
   );
 };
 
-export default NewTopicPage;
+export default TasksScreen;

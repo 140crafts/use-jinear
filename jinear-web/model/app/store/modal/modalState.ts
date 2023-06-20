@@ -85,6 +85,11 @@ export interface WorkspacePickerModalState extends ModalState {
   onPick?: (workspace: WorkspaceDto) => void;
 }
 
+export interface NewTaskBoardModalState extends ModalState {
+  workspace?: WorkspaceDto;
+  team?: TeamDto;
+}
+
 export interface BasicTextInputModalState extends ModalState {
   title?: string;
   infoText?: string;

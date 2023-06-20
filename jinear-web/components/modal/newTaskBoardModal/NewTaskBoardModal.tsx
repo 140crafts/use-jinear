@@ -1,11 +1,15 @@
 import NewTaskBoardForm from "@/components/form/newTaskBoardForm/NewTaskBoardForm";
-import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
-import { closeNewTaskBoardModal, selectNewTaskBoardModalVisible } from "@/store/slice/modalSlice";
+import {
+  closeNewTaskBoardModal,
+  selectNewTaskBoardModalTeam,
+  selectNewTaskBoardModalVisible,
+  selectNewTaskBoardModalWorkspace,
+} from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import Modal from "../modal/Modal";
-import styles from "./NewTaskListModal.module.css";
+import styles from "./NewTaskBoardModal.module.css";
 
 interface NewTaskBoardModalProps {}
 
@@ -13,8 +17,8 @@ const NewTaskBoardModal: React.FC<NewTaskBoardModalProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectNewTaskBoardModalVisible);
-  const workspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const team = useTypedSelector(selectCurrentAccountsPreferredTeam);
+  const workspace = useTypedSelector(selectNewTaskBoardModalWorkspace);
+  const team = useTypedSelector(selectNewTaskBoardModalTeam);
   const close = () => {
     dispatch(closeNewTaskBoardModal());
   };

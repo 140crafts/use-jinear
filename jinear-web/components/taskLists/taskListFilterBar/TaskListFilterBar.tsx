@@ -93,6 +93,8 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
   useEffect(() => {
     if (topicIds != null && topicIds?.length != 0 && findExactTeamTopicsResponse && findExactTeamTopicsResponse.data) {
       setSelectedTopics(findExactTeamTopicsResponse.data);
+    } else if (topicIds != null && topicIds?.length == 0) {
+      setSelectedTopics([]);
     }
   }, [topicIds, findExactTeamTopicsResponse]);
 
