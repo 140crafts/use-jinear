@@ -2,8 +2,8 @@ package co.jinear.core.service.workspace;
 
 import co.jinear.core.converter.workspace.WorkspaceDtoConverter;
 import co.jinear.core.exception.NotFoundException;
+import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
-import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
 import co.jinear.core.repository.WorkspaceRepository;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberListingService;
@@ -47,12 +47,8 @@ public class WorkspaceRetrieveService {
                 .toList();
     }
 
-    public List<WorkspaceDto> retrieveAccountWorkspace(String accountId) {
-        List<String> accountWorkspaceIds = workspaceMemberListingService.retrieveAccountsWorkspaceMemberships(accountId)
-                .stream()
-                .map(WorkspaceMemberDto::getWorkspaceId)
-                .toList();
-        return retrieveAllById(accountWorkspaceIds);
+    public List<DetailedWorkspaceMemberDto> retrieveAccountWorkspaces(String accountId) {
+        return workspaceMemberListingService.retrieveAccountsWorkspaceMemberships(accountId);
     }
 
     private WorkspaceDto setProfilePicture(WorkspaceDto workspaceDto) {
