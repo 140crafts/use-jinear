@@ -1,8 +1,10 @@
 package co.jinear.core.manager.account;
 
+import co.jinear.core.converter.workspace.AccountsWorkspacePerspectiveDtoConverter;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.token.TokenDto;
-import co.jinear.core.model.dto.workspace.WorkspaceDto;
+import co.jinear.core.model.dto.workspace.AccountsWorkspacePerspectiveDto;
+import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
 import co.jinear.core.model.enumtype.token.TokenType;
 import co.jinear.core.model.request.account.ConfirmEmailRequest;
 import co.jinear.core.model.request.account.ResendConfirmEmailRequest;
@@ -31,6 +33,7 @@ public class AccountManager {
     private final WorkspaceRetrieveService workspaceRetrieveService;
     private final SessionInfoService sessionInfoService;
     private final TokenService tokenService;
+    private final AccountsWorkspacePerspectiveDtoConverter accountsWorkspacePerspectiveDtoConverter;
 
     public AccountRetrieveResponse retrieveCurrentAccount() {
         log.info("Retrieve current account has started.");
@@ -59,8 +62,11 @@ public class AccountManager {
     }
 
     private void setWorkspaces(String accountId, AccountDto accountDto) {
-        List<WorkspaceDto> workspaces = workspaceRetrieveService.retrieveAccountWorkspace(accountId);
-        accountDto.setWorkspaces(workspaces);
+        List<DetailedWorkspaceMemberDto> workspaces = workspaceRetrieveService.retrieveAccountWorkspaces(accountId);
+        List<AccountsWorkspacePerspectiveDto> accountsWorkspacePerspectiveDtos = workspaces.stream()
+                .map(accountsWorkspacePerspectiveDtoConverter::convert)
+                .toList();
+        accountDto.setWorkspaces(accountsWorkspacePerspectiveDtos);
     }
 
     private void decideAndResendEmail(ResendConfirmEmailRequest resendConfirmEmailRequest, String accountId) {

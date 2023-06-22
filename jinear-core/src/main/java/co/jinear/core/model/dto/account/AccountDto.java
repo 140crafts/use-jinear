@@ -2,8 +2,8 @@ package co.jinear.core.model.dto.account;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.media.MediaDto;
+import co.jinear.core.model.dto.workspace.AccountsWorkspacePerspectiveDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
-import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,7 +27,7 @@ public class AccountDto extends BaseDto {
     private Set<AccountRoleDto> roles;
     @Nullable
     private MediaDto profilePicture;
-    private List<WorkspaceDto> workspaces;
+    private List<AccountsWorkspacePerspectiveDto> workspaces;
     @Nullable
     private WorkspaceDisplayPreferenceDto workspaceDisplayPreference;
 }
