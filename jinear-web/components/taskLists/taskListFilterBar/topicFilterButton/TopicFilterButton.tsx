@@ -5,7 +5,7 @@ import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoPricetag } from "react-icons/io5";
-import { useSelectedTopics, useSetSelectedTopics, useTeamId } from "../context/TaskListFilterBarContext";
+import { useSelectedTopics, useSetSelectedTopics, useTeam, useWorkspace } from "../context/TaskListFilterBarContext";
 import styles from "./TopicFilterButton.module.css";
 
 interface TopicFilterButtonProps {}
@@ -13,7 +13,8 @@ interface TopicFilterButtonProps {}
 const TopicFilterButton: React.FC<TopicFilterButtonProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const teamId = useTeamId();
+  const workspace = useWorkspace();
+  const team = useTeam();
   const selectedTopics = useSelectedTopics();
   const setSelectedTopics = useSetSelectedTopics();
   const isEmpty = selectedTopics?.length == 0;
@@ -23,7 +24,9 @@ const TopicFilterButton: React.FC<TopicFilterButtonProps> = ({}) => {
   };
 
   const popPicker = () => {
-    dispatch(popTopicPickerModal({ visible: true, teamId, multiple: true, initialSelectionOnMultiple: selectedTopics, onPick }));
+    dispatch(
+      popTopicPickerModal({ visible: true, team, workspace, multiple: true, initialSelectionOnMultiple: selectedTopics, onPick })
+    );
   };
 
   return (

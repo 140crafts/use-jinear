@@ -8,6 +8,10 @@
   gap: 0.5rem;
 }
 
+.archivedButton {
+  opacity: 0.35;
+}
+
 .bottomBorderLine {
   border-bottom-style: solid;
   border-bottom-width: 1px;
@@ -48,6 +52,10 @@
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
+}
+
+.archivedTitle {
+  text-decoration: line-through;
 }
 
 .iconButton {

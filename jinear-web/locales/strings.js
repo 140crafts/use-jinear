@@ -358,9 +358,17 @@ export default {
     en: "${number} more",
     tr: "${number} daha",
   },
+  sideMenuTeamTopicsNew: {
+    en: "New Topic",
+    tr: "Yeni Konu",
+  },
   sideMenuTeamMembers: {
     en: "Team members",
     tr: "Ekip üyeleri",
+  },
+  sideMenuTeamSettings: {
+    en: "Team settings",
+    tr: "Ekip ayarları",
   },
   sideMenuActionsTeams: {
     en: "Actions",
@@ -995,8 +1003,8 @@ export default {
     tr: "Tüm Görevler",
   },
   workflowTaskListEmpty: {
-    en: "Task List is Empty",
-    tr: "Görev Listesi Boş",
+    en: "Task list is empty",
+    tr: "Görev listesi boş",
   },
   newWorkspaceButtonTooltip: {
     en: "New Workspace",
@@ -1875,8 +1883,8 @@ export default {
     tr: "Kişisel Bilgiler",
   },
   sideMenuTaskBoardsNoTaskBoardExists: {
-    en: "There isn't any task board initialized yet. Create a new task board.",
-    tr: "Hiçbir görev panosu bulunamadı. Yeni bir görev panosu oluşturun.",
+    en: "There isn't any task board.",
+    tr: "Hiçbir görev panosu bulunamadı.",
   },
   newTaskBoardModalTitle: {
     en: "New Task Board",
@@ -1899,8 +1907,8 @@ export default {
     tr: "Başlık",
   },
   newTaskListModalTaskListDueDate: {
-    en: "Due date",
-    tr: "Şu tarihe dek",
+    en: "Add Due date",
+    tr: "Son Tarih Ekle",
   },
   newTaskListModalCancel: {
     en: "Cancel",
@@ -1923,8 +1931,8 @@ export default {
     tr: "Panolar",
   },
   taskBoardsListEmptyLabel: {
-    en: "There isn't any task lists.",
-    tr: "Herhangi bir görev listesi bulunamadı.",
+    en: "There isn't any task board.",
+    tr: "Herhangi bir görev panosu bulunamadı.",
   },
   taskBoardEmptyLabel: {
     en: "There isn't any task in this board.",
@@ -2177,5 +2185,33 @@ export default {
   quickFilterBarClearAll: {
     en: "Clear",
     tr: "Temizle",
+  },
+  sideMenuTeamsTitle: {
+    en: "Your Teams",
+    tr: "Ekiplerin",
+  },
+  sideMenuTeamActionButtonLabelTasks: {
+    en: "Tasks",
+    tr: "Görevler",
+  },
+  sideMenuTeamActionButtonLabelBoards: {
+    en: "Boards",
+    tr: "Panolar",
+  },
+  sideMenuTeamActionButtonLabelBoardsNew: {
+    en: "New Board",
+    tr: "Yeni Pano",
+  },
+  sideMenuTeamActionButtonLabelTopics: {
+    en: "Topics",
+    tr: "Konular",
+  },
+  sideMenuTeamTopicListsShowMore: {
+    en: "...${number} more topic(s)",
+    tr: "...${number} konu daha",
+  },
+  tasksScreenBreadcrumbLabel: {
+    en: "Tasks",
+    tr: "Görevler",
   },
 };

@@ -18,3 +18,9 @@
   flex-direction: row;
   gap: 0.5rem;
 }
+
+.button:disabled {
+  opacity: 1;
+  cursor: default;
+  background-color: unset !important;
+}

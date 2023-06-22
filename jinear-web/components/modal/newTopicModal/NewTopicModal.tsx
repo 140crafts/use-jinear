@@ -1,6 +1,10 @@
 import TopicForm from "@/components/form/topicForm/TopicForm";
-import { selectCurrentAccountsPreferredTeamId, selectCurrentAccountsPreferredWorkspaceId } from "@/store/slice/accountSlice";
-import { closeNewTopicModal, selectNewTopicModalVisible } from "@/store/slice/modalSlice";
+import {
+  closeNewTopicModal,
+  selectNewTopicModalTeam,
+  selectNewTopicModalVisible,
+  selectNewTopicModalWorkspace,
+} from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -13,8 +17,8 @@ const NewTopicModal: React.FC<NewTopicModalProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectNewTopicModalVisible);
-  const workspaceId = useTypedSelector(selectCurrentAccountsPreferredWorkspaceId);
-  const teamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
+  const workspace = useTypedSelector(selectNewTopicModalWorkspace);
+  const team = useTypedSelector(selectNewTopicModalTeam);
 
   const close = () => {
     dispatch(closeNewTopicModal());
@@ -25,11 +29,10 @@ const NewTopicModal: React.FC<NewTopicModalProps> = ({}) => {
       visible={visible}
       title={t("newTopicModalTitle")}
       bodyClass={styles.container}
-      //   width={isMobile ? "fullscreen" : "large"}
       hasTitleCloseButton={true}
       requestClose={close}
     >
-      <TopicForm workspaceId={workspaceId} teamId={teamId} onSuccess={close} />
+      {workspace && team && <TopicForm workspace={workspace} team={team} onSuccess={close} />}
     </Modal>
   );
 };

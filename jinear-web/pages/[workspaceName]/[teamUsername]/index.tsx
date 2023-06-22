@@ -10,7 +10,7 @@ const TeamPage: React.FC<TeamPageProps> = ({}) => {
   const teamUsername: string = router.query?.teamUsername as string;
 
   useEffect(() => {
-    router.replace(`/${workspaceName}/${teamUsername}/weekly`);
+    router.replace(`/${workspaceName}/${teamUsername}/tasks`);
   }, []);
 
   return <div className={styles.container}></div>;

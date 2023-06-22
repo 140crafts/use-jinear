@@ -2,9 +2,11 @@ import TabbedPanel from "@/components/tabbedPanel/TabbedPanel";
 import TabView from "@/components/tabbedPanel/tabView/TabView";
 import TeamWorkflowSettings from "@/components/teamSettingsScreen/teamWorkflowSettings/TeamWorkflowSettings";
 import WorkspaceInfoTab from "@/components/workspaceSettingsScreen/workspaceInfoTab/WorkspaceInfoTab";
-import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
+import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
+import { useRouter } from "next/router";
 import React from "react";
 import styles from "./index.module.css";
 
@@ -12,18 +14,24 @@ interface WorkspaceSettingsScreenProps {}
 
 const WorkspaceSettingsScreen: React.FC<WorkspaceSettingsScreenProps> = ({}) => {
   const { t } = useTranslation();
-  const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const currentTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
+  const router = useRouter();
+  const workspaceName: string = router.query?.workspaceName as string;
+  const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
+
+  const { data: teamsResponse } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
+    skip: workspace == null,
+  });
+  const team = teamsResponse?.data?.find((team) => team);
 
   return (
     <div className={styles.container}>
       <TabbedPanel initialTabName="workflow">
         <TabView name="workspace-info" label={t("workspaceSettingsPageWorkspaceInfoTab")}>
-          <WorkspaceInfoTab />
+          {workspace && <WorkspaceInfoTab workspace={workspace} />}
         </TabView>
-        {currentTeam && currentWorkspace?.isPersonal && (
+        {workspace?.isPersonal && team && (
           <TabView name="plan" label={t("teamSettingsScreenWorkflowSectionTitle")}>
-            <TeamWorkflowSettings teamId={currentTeam.teamId} />
+            <TeamWorkflowSettings teamId={team.teamId} />
           </TabView>
         )}
       </TabbedPanel>

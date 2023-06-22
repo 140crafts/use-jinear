@@ -1,8 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
-import { TopicInitializeRequest, TopicUpdateRequest } from "@/model/be/jinear-core";
+import { TeamDto, TopicInitializeRequest, TopicUpdateRequest, WorkspaceDto } from "@/model/be/jinear-core";
 import { useDeleteTopicMutation, useInitializeTopicMutation, useUpdateTopicMutation } from "@/store/api/topicApi";
-import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { normalizeStrictly } from "@/utils/normalizeHelper";
 import useTranslation from "locales/useTranslation";
@@ -24,8 +22,8 @@ export interface ITopicForm {
 }
 
 interface TopicFormProps {
-  workspaceId?: string;
-  teamId?: string;
+  workspace: WorkspaceDto;
+  team: TeamDto;
   topicId?: string;
   color?: string;
   taskName?: string;
@@ -35,12 +33,9 @@ interface TopicFormProps {
 
 const logger = Logger("TopicForm");
 
-const TopicForm: React.FC<TopicFormProps> = ({ workspaceId, teamId, topicId, color, taskName, taskTag, onSuccess }) => {
+const TopicForm: React.FC<TopicFormProps> = ({ workspace, team, topicId, color, taskName, taskTag, onSuccess }) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
   const { register, handleSubmit, control, setFocus, setValue, watch } = useForm<ITopicForm>();
 
@@ -103,14 +98,14 @@ const TopicForm: React.FC<TopicFormProps> = ({ workspaceId, teamId, topicId, col
   };
 
   const routeToList = () => {
-    router.replace(`/${preferredWorkspace?.username}/${preferredTeam?.username}/topic/list`);
+    router.replace(`/${workspace.username}/${team.username}/topic/list`);
   };
 
   return (
     <form autoComplete="off" id={"topic-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
       <div className={styles.formContent}>
-        {workspaceId && <input type="hidden" value={workspaceId} {...register("workspaceId")} />}
-        {teamId && <input type="hidden" value={teamId} {...register("teamId")} />}
+        <input type="hidden" value={workspace.workspaceId} {...register("workspaceId")} />
+        <input type="hidden" value={team.teamId} {...register("teamId")} />
         {topicId && <input type="hidden" value={topicId} {...register("topicId")} />}
 
         <NameInput register={register} labelClass={styles.label} />

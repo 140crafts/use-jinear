@@ -2,11 +2,13 @@ import Button, { ButtonVariants } from "@/components/button";
 import TopicCard from "@/components/topicScreen/topicListScreen/topicCard/TopicCard";
 import TopicListScreenBreadcrumb from "@/components/topicScreen/topicListScreen/topicListScreenBreadcrumb/TopicListScreenBreadcrumb";
 import Transition from "@/components/transition/Transition";
+import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { useRetrieveTeamTopicsQuery } from "@/store/api/topicListingApi";
-import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
+import { useRouter } from "next/router";
 import React from "react";
 import styles from "./index.module.css";
 
@@ -14,21 +16,28 @@ interface TeamTopicListScreenProps {}
 
 const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
   const { t } = useTranslation();
-  const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
+  const router = useRouter();
+  const workspaceName: string = router.query?.workspaceName as string;
+  const teamUsername: string = router.query?.teamUsername as string;
+
+  const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
+  const { data: teamsResponse, isFetching: isTeamsFetching } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
+    skip: workspace == null,
+  });
+  const team = teamsResponse?.data.find((teamDto) => teamDto.username == teamUsername);
 
   const {
     data: teamTopicListingResponse,
     isSuccess,
-    isError,
     isLoading,
-  } = useRetrieveTeamTopicsQuery(preferredTeam?.teamId || "", {
-    skip: preferredTeam?.teamId == null,
+  } = useRetrieveTeamTopicsQuery(team?.teamId || "", {
+    skip: team == null,
   });
 
   return (
     <div className={styles.container}>
-      {!preferredWorkspace?.isPersonal && <TopicListScreenBreadcrumb />}
+      {workspace && team && <TopicListScreenBreadcrumb workspace={workspace} team={team} />}
+
       <div className="spacer-h-4" />
       <h1>{t("topicListScreenTitle")}</h1>
       <div className="spacer-h-4" />
@@ -39,23 +48,15 @@ const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
         </div>
       )}
 
-      {!isLoading && isSuccess && preferredWorkspace && preferredTeam && (
+      {!isLoading && isSuccess && workspace && team && (
         <Transition className={styles.content} initial={true}>
           {teamTopicListingResponse.data.content.map((topicDto) => (
-            <TopicCard
-              key={topicDto.topicId}
-              topic={topicDto}
-              workspaceName={preferredWorkspace.username}
-              teamUsername={preferredTeam.username}
-            />
+            <TopicCard key={topicDto.topicId} topic={topicDto} workspaceName={workspace.username} teamUsername={team.username} />
           ))}
           {!teamTopicListingResponse?.data.hasContent && (
             <div className={styles.emptyStateContainer}>
               <div>{t("topicListScreenNoContentLabel")}</div>
-              <Button
-                variant={ButtonVariants.filled}
-                href={`/${preferredWorkspace.username}/${encodeURI(preferredTeam.username)}/topic/new`}
-              >
+              <Button variant={ButtonVariants.filled} href={`/${workspace.username}/${encodeURI(team.username)}/topic/new`}>
                 {t("topicListScreenNoContentNewTopicLabel")}
               </Button>
             </div>

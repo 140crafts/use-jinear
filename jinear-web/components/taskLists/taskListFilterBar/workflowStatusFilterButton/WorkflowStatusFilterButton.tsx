@@ -5,7 +5,7 @@ import { useAppDispatch } from "@/store/store";
 import { retrieveTaskStatusIcon } from "@/utils/taskIconFactory";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { useSelectedWorkflowStatuses, useSetSelectedWorkflowStatuses, useTeamId } from "../context/TaskListFilterBarContext";
+import { useSelectedWorkflowStatuses, useSetSelectedWorkflowStatuses, useTeam } from "../context/TaskListFilterBarContext";
 import styles from "./WorkflowStatusFilterButton.module.css";
 
 interface WorkflowStatusFilterButtonProps {}
@@ -13,7 +13,7 @@ interface WorkflowStatusFilterButtonProps {}
 const WorkflowStatusFilterButton: React.FC<WorkflowStatusFilterButtonProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const teamId = useTeamId();
+  const team = useTeam();
   const selectedWorkflowStatuses = useSelectedWorkflowStatuses();
   const setSelectedWorkflowStatuses = useSetSelectedWorkflowStatuses();
   const isEmpty = selectedWorkflowStatuses?.length == 0;
@@ -26,7 +26,7 @@ const WorkflowStatusFilterButton: React.FC<WorkflowStatusFilterButtonProps> = ({
     dispatch(
       popTeamWorkflowStatusPickerModal({
         visible: true,
-        teamId,
+        teamId: team?.teamId,
         multiple: true,
         initialSelectionOnMultiple: selectedWorkflowStatuses,
         onPick,

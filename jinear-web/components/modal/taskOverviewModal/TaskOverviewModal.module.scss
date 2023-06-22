@@ -16,16 +16,24 @@
   margin: 4rem 0;
 }
 
-.footer {
+.actionBar {
   position: sticky;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   width: 100%;
   flex: 1;
-  bottom: 0;
-  padding-bottom: 1ch;
-  backdrop-filter: var(--backdrop-filter-blur);
+  top: 0;
+  padding: 0.5rem;
+  // padding-bottom: 1ch;
+  // backdrop-filter: var(--backdrop-filter-blur);
+  z-index: 99;
+}
+
+.goToTaskButton {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
 }
 
 .taskContentWrapper {

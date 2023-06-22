@@ -2,7 +2,7 @@ import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDisplayPreferenceApi";
 import { selectCurrentAccountsPreferredWorkspaceId } from "@/store/slice/accountSlice";
-import { changeLoadingModalVisibility, popTeamOptionsModal, popWorkspacePickerModal } from "@/store/slice/modalSlice";
+import { changeLoadingModalVisibility, popTeamPickerModal, popWorkspacePickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
@@ -15,6 +15,8 @@ interface WorkspaceAndTeamInfoProps {
   personalWorkspaceTitle: string;
   workspaceTitle: string;
   personalWorkspaceLabel: string;
+  onTeamChange?: (team: TeamDto) => void;
+  readOnly?: boolean;
 }
 
 const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
@@ -23,6 +25,8 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
   personalWorkspaceTitle,
   workspaceTitle,
   personalWorkspaceLabel,
+  onTeamChange,
+  readOnly = false,
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -37,12 +41,16 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
     updatePreferredWorkspace({ workspaceId: workspace.workspaceId });
   };
 
+  const onTeamPick = (team: TeamDto) => {
+    onTeamChange?.(team);
+  };
+
   const popChangeWorkspaceModal = () => {
     dispatch(popWorkspacePickerModal({ currentWorkspaceId, onPick: onWorkspacePick, visible: true }));
   };
 
   const popChangeTeamModal = () => {
-    dispatch(popTeamOptionsModal());
+    dispatch(popTeamPickerModal({ visible: true, workspaceId: workspace.workspaceId, onPick: onTeamPick }));
   };
 
   return (
@@ -50,6 +58,7 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
       {workspace.isPersonal ? personalWorkspaceTitle : workspaceTitle}
       <div className={styles.buttonContainer}>
         <Button
+          disabled={readOnly}
           className={styles.button}
           variant={ButtonVariants.filled}
           heightVariant={ButtonHeight.short}
@@ -60,6 +69,7 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
         </Button>
         {!workspace.isPersonal && (
           <Button
+            disabled={readOnly}
             className={styles.button}
             variant={ButtonVariants.filled}
             heightVariant={ButtonHeight.short}

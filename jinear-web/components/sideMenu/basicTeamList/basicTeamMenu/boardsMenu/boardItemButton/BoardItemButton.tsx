@@ -1,0 +1,26 @@
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import { TaskBoardDto, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import cn from "classnames";
+import React from "react";
+import styles from "./BoardItemButton.module.css";
+
+interface BoardItemButtonProps {
+  workspace: WorkspaceDto;
+  team: TeamDto;
+  taskBoardDto: TaskBoardDto;
+}
+
+const BoardItemButton: React.FC<BoardItemButtonProps> = ({ workspace, team, taskBoardDto }) => {
+  return (
+    <Button
+      className={cn(styles.button, "line-clamp")}
+      variant={ButtonVariants.hoverFilled}
+      heightVariant={ButtonHeight.short}
+      href={`/${workspace.username}/${team.username}/task-boards/${taskBoardDto.taskBoardId}`}
+    >
+      {taskBoardDto.title}
+    </Button>
+  );
+};
+
+export default BoardItemButton;

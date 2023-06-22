@@ -1,7 +1,10 @@
 import WorkspaceMemberInvitationForm from "@/components/form/workspaceMemberInvitationForm/WorkspaceMemberInvitationForm";
 import useWindowSize from "@/hooks/useWindowSize";
-import { selectCurrentAccountsPreferredWorkspaceId } from "@/store/slice/accountSlice";
-import { closeWorkspaceMemberInviteModal, selectWorkspaceMemberInviteModalVisible } from "@/store/slice/modalSlice";
+import {
+  closeWorkspaceMemberInviteModal,
+  selectWorkspaceMemberInviteModalVisible,
+  selectWorkspaceMemberInviteModalWorkspaceId,
+} from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -13,7 +16,7 @@ const WorkspaceInviteMemberModal: React.FC<WorkspaceInviteMemberModalProps> = ({
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectWorkspaceMemberInviteModalVisible);
-  const preferredWorkspaceId = useTypedSelector(selectCurrentAccountsPreferredWorkspaceId);
+  const workspaceId = useTypedSelector(selectWorkspaceMemberInviteModalWorkspaceId);
   const { isMobile } = useWindowSize();
 
   const close = () => {
@@ -28,7 +31,7 @@ const WorkspaceInviteMemberModal: React.FC<WorkspaceInviteMemberModalProps> = ({
       hasTitleCloseButton={true}
       requestClose={close}
     >
-      {preferredWorkspaceId && <WorkspaceMemberInvitationForm workspaceId={preferredWorkspaceId} onInviteSuccess={close} />}
+      {workspaceId && <WorkspaceMemberInvitationForm workspaceId={workspaceId} onInviteSuccess={close} />}
     </Modal>
   );
 };

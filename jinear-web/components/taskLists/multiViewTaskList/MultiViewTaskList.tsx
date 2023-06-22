@@ -1,5 +1,5 @@
 import Line from "@/components/line/Line";
-import { TaskFilterRequest } from "@/model/be/jinear-core";
+import { TaskFilterRequest, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useFilterTasksQuery } from "@/store/api/taskListingApi";
 import React, { useState } from "react";
 import BaseTaskList from "../baseTaskList/BaseTaskList";
@@ -9,8 +9,8 @@ import TaskWorkflowStatusBoardView from "../taskWorkflowStatusBoardView/TaskWork
 import styles from "./MultiViewTaskList.module.css";
 
 interface MultiViewTaskListProps {
-  workspaceId: string;
-  teamId: string;
+  workspace: WorkspaceDto;
+  team: TeamDto;
   title: string;
   activeDisplayFormat: TaskDisplayFormat;
   topicIds?: string[];
@@ -24,8 +24,8 @@ interface MultiViewTaskListProps {
 }
 
 const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
-  workspaceId,
-  teamId,
+  workspace,
+  team,
   title,
   activeDisplayFormat = "LIST",
   topicIds,
@@ -62,8 +62,8 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
         onTaskDisplayFormatChange={onTaskDisplayFormatChange}
       />
       <TaskListFilterBar
-        workspaceId={workspaceId}
-        teamId={teamId}
+        workspace={workspace}
+        team={team}
         topicIds={topicIds}
         ownerIds={ownerIds}
         assigneeIds={assigneeIds}
@@ -77,7 +77,7 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
       <Line />
       {displayFormat == "LIST" && (
         <BaseTaskList
-          id={`filtered-tasks-${workspaceId}-${teamId}`}
+          id={`filtered-tasks-${workspace?.workspaceId}-${team?.teamId}`}
           name={""}
           response={filterResponse}
           isFetching={isFetching}
@@ -89,7 +89,7 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
       )}
       {displayFormat == "WFS_COLUMN" && (
         <TaskWorkflowStatusBoardView
-          teamId={teamId}
+          teamId={team.teamId}
           taskList={filterResponse?.data?.content || []}
           isTaskListingLoading={isFetching}
         />

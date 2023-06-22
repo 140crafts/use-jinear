@@ -24,9 +24,15 @@ export interface NotFoundModalState extends ModalState {
   label?: string;
 }
 
+export interface NewTopicModalState extends ModalState {
+  workspace?: WorkspaceDto;
+  team?: TeamDto;
+}
+
 export interface ChangeTaskWorkflowStatusModalState extends ModalState {
   task?: TaskDto;
 }
+
 export interface ChangeTaskTopicModalState extends ModalState {
   task?: TaskDto;
 }
@@ -65,12 +71,23 @@ export interface DatePickerModalState extends ModalState {
   onDateChange?: (date: Date) => void;
 }
 
+export interface WorkspaceMemberInviteModalState extends ModalState {
+  workspaceId?: string;
+}
+
+export interface AddMemberToTeamModalState extends ModalState {
+  workspace?: WorkspaceDto;
+  team?: TeamDto;
+}
+
 export interface TaskOverviewModalState extends ModalState {
   workspaceName?: string;
   taskTag?: string;
 }
 
 export interface NewTaskModalState extends ModalState {
+  workspace?: WorkspaceDto;
+  team?: TeamDto;
   subTaskOf?: string;
   subTaskOfLabel?: string;
 }
@@ -85,6 +102,11 @@ export interface WorkspacePickerModalState extends ModalState {
   onPick?: (workspace: WorkspaceDto) => void;
 }
 
+export interface NewTaskBoardModalState extends ModalState {
+  workspace?: WorkspaceDto;
+  team?: TeamDto;
+}
+
 export interface BasicTextInputModalState extends ModalState {
   title?: string;
   infoText?: string;
@@ -97,8 +119,8 @@ export interface TaskTaskBoardAssignModalState extends ModalState {
 }
 
 export interface TopicPickerModalState extends ModalState {
-  workspaceId?: string;
-  teamId?: string;
+  workspace?: WorkspaceDto;
+  team?: TeamDto;
   multiple?: boolean;
   initialSelectionOnMultiple?: TopicDto[];
   onPick?: (pickedList: TopicDto[]) => void;

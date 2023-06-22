@@ -4,19 +4,19 @@ import Breadcrumb from "../breadcrumb/Breadcrumb";
 import BreadcrumbLink from "../breadcrumb/BreadcrumbLink";
 
 interface GenericBreadcrumbProps {
-  workspace?: WorkspaceDto | null;
-  team?: TeamDto | null;
+  workspace: WorkspaceDto;
+  team: TeamDto;
   label: string;
   pathAfterWorkspaceAndTeam: string;
 }
 
 const GenericBreadcrumb: React.FC<GenericBreadcrumbProps> = ({ workspace, team, label, pathAfterWorkspaceAndTeam }) => {
-  const workspaceUsername = workspace?.username;
-  const teamUsername = team?.username;
+  const workspaceUsername = workspace.username;
+  const teamUsername = team.username;
   return workspace && team && workspace.isPersonal ? null : (
     <Breadcrumb>
-      <BreadcrumbLink label={workspace?.title || ""} url={`/${workspaceUsername}`} />
-      <BreadcrumbLink label={team?.name || ""} url={`/${workspaceUsername}/${teamUsername}`} />
+      <BreadcrumbLink label={workspace.title} url={`/${workspaceUsername}`} />
+      <BreadcrumbLink label={team.name} url={`/${workspaceUsername}/${teamUsername}`} />
       <BreadcrumbLink label={label} url={`/${workspaceUsername}/${teamUsername}/${pathAfterWorkspaceAndTeam}`} />
     </Breadcrumb>
   );

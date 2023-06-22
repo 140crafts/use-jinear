@@ -1,6 +1,7 @@
 import { TaskSearchResultDto } from "@/model/be/jinear-core";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ModalState, {
+  AddMemberToTeamModalState,
   BasicTextInputModalState,
   ChangeTaskAssigneeModalState,
   ChangeTaskDateModalState,
@@ -10,7 +11,9 @@ import ModalState, {
   DialogModalState,
   LoginWith2FaMailModalState,
   NewReminderModalState,
+  NewTaskBoardModalState,
   NewTaskModalState,
+  NewTopicModalState,
   NotFoundModalState,
   ReminderListModalState,
   SearchTaskModalState,
@@ -20,6 +23,7 @@ import ModalState, {
   TeamPickerModalState,
   TeamWorkflowStatusPickerModalState,
   TopicPickerModalState,
+  WorkspaceMemberInviteModalState,
   WorkspacePickerModalState,
 } from "model/app/store/modal/modalState";
 import { accountApi } from "../api/accountApi";
@@ -125,7 +129,7 @@ const initialState = {
   notFoundModal: null | NotFoundModalState;
   newTaskModal: null | NewTaskModalState;
   teamOptionsModal: null | ModalState;
-  newTopicModal: null | ModalState;
+  newTopicModal: null | NewTopicModalState;
   changeTaskWorkflowStatusModal: null | ChangeTaskWorkflowStatusModalState;
   changeTaskTopicModal: null | ChangeTaskTopicModalState;
   changeTaskDateModal: null | ChangeTaskDateModalState;
@@ -137,13 +141,13 @@ const initialState = {
   reminderListModal: null | ReminderListModalState;
   newReminderModal: null | NewReminderModalState;
   datePickerModal: null | DatePickerModalState;
-  workspaceMemberInviteModal: null | ModalState;
-  addMemberToTeamModal: null | ModalState;
+  workspaceMemberInviteModal: null | WorkspaceMemberInviteModalState;
+  addMemberToTeamModal: null | AddMemberToTeamModalState;
   notificationPermissionModal: null | ModalState;
   taskOverviewModal: null | TaskOverviewModalState;
   teamPickerModal: null | TeamPickerModalState;
   workspacePickerModal: null | WorkspacePickerModalState;
-  newTaskBoardModal: null | ModalState;
+  newTaskBoardModal: null | NewTaskBoardModalState;
   basicTextInputModal: null | BasicTextInputModalState;
   taskTaskBoardAssignModal: null | TaskTaskBoardAssignModalState;
   topicPickerModal: null | TopicPickerModalState;
@@ -171,8 +175,8 @@ const slice = createSlice({
     closeNotFoundModal: (state, action: PayloadAction<void>) => {
       state.notFoundModal = initialState.notFoundModal;
     },
-    popNewTaskModal: (state, action: PayloadAction<void>) => {
-      state.newTaskModal = { visible: true };
+    popNewTaskModal: (state, action: PayloadAction<NewTaskModalState>) => {
+      state.newTaskModal = { ...action.payload, visible: true };
     },
     popNewTaskWithSubtaskRelationModal: (state, action: PayloadAction<NewTaskModalState>) => {
       state.newTaskModal = { ...action.payload, visible: true };
@@ -186,8 +190,8 @@ const slice = createSlice({
     closeTeamOptionsModal: (state, action: PayloadAction<void>) => {
       state.teamOptionsModal = { visible: false };
     },
-    popNewTopicModal: (state, action: PayloadAction<void>) => {
-      state.newTopicModal = { visible: true };
+    popNewTopicModal: (state, action: PayloadAction<NewTopicModalState>) => {
+      state.newTopicModal = { ...action.payload, visible: true };
     },
     closeNewTopicModal: (state, action: PayloadAction<void>) => {
       state.newTopicModal = { visible: false };
@@ -279,15 +283,15 @@ const slice = createSlice({
       state.datePickerModal = initialState.datePickerModal;
     },
 
-    popWorkspaceMemberInviteModal: (state, action: PayloadAction<void>) => {
-      state.workspaceMemberInviteModal = { visible: true };
+    popWorkspaceMemberInviteModal: (state, action: PayloadAction<WorkspaceMemberInviteModalState>) => {
+      state.workspaceMemberInviteModal = { ...action.payload, visible: true };
     },
     closeWorkspaceMemberInviteModal: (state, action: PayloadAction<void>) => {
       state.workspaceMemberInviteModal = initialState.workspaceMemberInviteModal;
     },
 
-    popAddMemberToTeamModal: (state, action: PayloadAction<void>) => {
-      state.addMemberToTeamModal = { visible: true };
+    popAddMemberToTeamModal: (state, action: PayloadAction<AddMemberToTeamModalState>) => {
+      state.addMemberToTeamModal = { ...action.payload, visible: true };
     },
     closeAddMemberToTeamModal: (state, action: PayloadAction<void>) => {
       state.addMemberToTeamModal = initialState.addMemberToTeamModal;
@@ -321,8 +325,8 @@ const slice = createSlice({
       state.workspacePickerModal = initialState.workspacePickerModal;
     },
 
-    popNewTaskBoardModal: (state, action: PayloadAction<void>) => {
-      state.newTaskBoardModal = { visible: true };
+    popNewTaskBoardModal: (state, action: PayloadAction<NewTaskBoardModalState>) => {
+      state.newTaskBoardModal = { ...action.payload, visible: true };
     },
     closeNewTaskBoardModal: (state, action: PayloadAction<void>) => {
       state.newTaskBoardModal = initialState.newTaskBoardModal;
@@ -463,10 +467,14 @@ export const selectNotFoundModalImgAlt = (state: RootState) => state.modal.notFo
 export const selectNewTaskModalVisible = (state: RootState) => state.modal.newTaskModal?.visible;
 export const selectNewTaskModalSubTaskOf = (state: RootState) => state.modal.newTaskModal?.subTaskOf;
 export const selectNewTaskModalSubTaskOfLabel = (state: RootState) => state.modal.newTaskModal?.subTaskOfLabel;
+export const selectNewTaskModalWorkspace = (state: RootState) => state.modal.newTaskModal?.workspace;
+export const selectNewTaskModalTeam = (state: RootState) => state.modal.newTaskModal?.team;
 
 export const selectTeamOptionsModalVisible = (state: RootState) => state.modal.teamOptionsModal?.visible;
 
 export const selectNewTopicModalVisible = (state: RootState) => state.modal.newTopicModal?.visible;
+export const selectNewTopicModalWorkspace = (state: RootState) => state.modal.newTopicModal?.workspace;
+export const selectNewTopicModalTeam = (state: RootState) => state.modal.newTopicModal?.team;
 
 export const selectChangeTaskWorkflowStatusModalVisible = (state: RootState) =>
   state.modal.changeTaskWorkflowStatusModal?.visible;
@@ -522,8 +530,12 @@ export const selectDatePickerModalInitialDate = (state: RootState) => state.moda
 export const selectDatePickerModalOnDateChange = (state: RootState) => state.modal.datePickerModal?.onDateChange;
 
 export const selectWorkspaceMemberInviteModalVisible = (state: RootState) => state.modal.workspaceMemberInviteModal?.visible;
+export const selectWorkspaceMemberInviteModalWorkspaceId = (state: RootState) =>
+  state.modal.workspaceMemberInviteModal?.workspaceId;
 
 export const selectAddMemberToTeamModalVisible = (state: RootState) => state.modal.addMemberToTeamModal?.visible;
+export const selectAddMemberToTeamModalWorkspace = (state: RootState) => state.modal.addMemberToTeamModal?.workspace;
+export const selectAddMemberToTeamModalTeam = (state: RootState) => state.modal.addMemberToTeamModal?.team;
 
 export const selectNotificationPermissionModalVisible = (state: RootState) => state.modal.notificationPermissionModal?.visible;
 
@@ -541,6 +553,8 @@ export const selectWorkspacePickerModalCurrentWorkspaceId = (state: RootState) =
 export const selectWorkspacePickerModalOnPick = (state: RootState) => state.modal.workspacePickerModal?.onPick;
 
 export const selectNewTaskBoardModalVisible = (state: RootState) => state.modal.newTaskBoardModal?.visible;
+export const selectNewTaskBoardModalWorkspace = (state: RootState) => state.modal.newTaskBoardModal?.workspace;
+export const selectNewTaskBoardModalTeam = (state: RootState) => state.modal.newTaskBoardModal?.team;
 
 export const selectBasicTextInputModalVisible = (state: RootState) => state.modal.basicTextInputModal?.visible;
 export const selectBasicTextInputModalTitle = (state: RootState) => state.modal.basicTextInputModal?.title;
@@ -552,8 +566,8 @@ export const selectTaskTaskBoardAssignModalVisible = (state: RootState) => state
 export const selectTaskTaskBoardAssignModalTaskId = (state: RootState) => state.modal.taskTaskBoardAssignModal?.taskId;
 
 export const selectTopicPickerModalVisible = (state: RootState) => state.modal.topicPickerModal?.visible;
-export const selectTopicPickerModalTeamId = (state: RootState) => state.modal.topicPickerModal?.teamId;
-export const selectTopicPickerModalWorkspaceId = (state: RootState) => state.modal.topicPickerModal?.workspaceId;
+export const selectTopicPickerModalWorkspace = (state: RootState) => state.modal.topicPickerModal?.workspace;
+export const selectTopicPickerModalTeam = (state: RootState) => state.modal.topicPickerModal?.team;
 export const selectTopicPickerModalMultiple = (state: RootState) => state.modal.topicPickerModal?.multiple;
 export const selectTopicPickerModalInitialSelectionOnMultiple = (state: RootState) =>
   state.modal.topicPickerModal?.initialSelectionOnMultiple;

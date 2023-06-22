@@ -2,8 +2,8 @@ import TaskDetail from "@/components/taskDetail/TaskDetail";
 import TaskDetailHeader from "@/components/taskDetail/taskDetailHeader/TaskDetailHeader";
 import TaskPageHeader from "@/components/taskDetail/taskPageHeader/TaskPageHeader";
 import { useRetrieveWithWorkspaceNameAndTeamTagNoQuery } from "@/store/api/taskApi";
-import { useUpdatePreferredTeamMutation, useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDisplayPreferenceApi";
-import { selectCurrentAccountsPreferredTeamId, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDisplayPreferenceApi";
+import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -19,7 +19,7 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const preferredTeamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
+
   const workspaceName: string = router.query?.workspaceName as string;
   const taskTag: string = router.query?.taskTag as string;
 
@@ -34,14 +34,13 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
   );
 
   const [updatePreferredWorkspace] = useUpdatePreferredWorkspaceMutation();
-  const [updatePreferredTeam] = useUpdatePreferredTeamMutation();
 
   useEffect(() => {
     dispatch(changeLoadingModalVisibility({ visible: isTaskRetrieveFetching }));
   }, [isTaskRetrieveFetching]);
 
   useEffect(() => {
-    if (currentWorkspace && isTaskResponseSuccess && taskResponse && preferredTeamId) {
+    if (currentWorkspace && isTaskResponseSuccess && taskResponse) {
       if (taskResponse.data.workspaceId != currentWorkspace.workspaceId) {
         logger.log({
           taskResponseWorkspaceId: taskResponse.data.workspaceId,
@@ -52,19 +51,8 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
           dontReroute: true,
         });
       }
-      if (preferredTeamId != taskResponse.data.teamId) {
-        logger.log({
-          preferredTeamId,
-          taskResponseTeamId: taskResponse.data.teamId,
-        });
-        updatePreferredTeam({
-          teamId: taskResponse.data.teamId,
-          workspaceId: taskResponse.data.workspaceId,
-          dontReroute: true,
-        });
-      }
     }
-  }, [currentWorkspace, preferredTeamId, taskResponse, isTaskResponseSuccess]);
+  }, [currentWorkspace, taskResponse, isTaskResponseSuccess]);
 
   return (
     <div className={styles.container}>

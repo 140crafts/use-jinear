@@ -8,8 +8,9 @@ import {
   selectTopicPickerModalInitialSelectionOnMultiple,
   selectTopicPickerModalMultiple,
   selectTopicPickerModalOnPick,
-  selectTopicPickerModalTeamId,
+  selectTopicPickerModalTeam,
   selectTopicPickerModalVisible,
+  selectTopicPickerModalWorkspace,
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
@@ -29,15 +30,24 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
   const [input, setInput] = useState<string>("");
   const [searchValue, setSearchValue] = useState<string>("");
   const [selectedTopics, setSelectedTopics] = useState<TopicDto[]>([]);
-  const teamId = useTypedSelector(selectTopicPickerModalTeamId);
+  const team = useTypedSelector(selectTopicPickerModalTeam);
+  const workspace = useTypedSelector(selectTopicPickerModalWorkspace);
   const multiple = useTypedSelector(selectTopicPickerModalMultiple);
   const initialSelectionOnMultiple = useTypedSelector(selectTopicPickerModalInitialSelectionOnMultiple);
   const onPick = useTypedSelector(selectTopicPickerModalOnPick);
 
   const { data: searchResponse, isFetching } = useSearchTeamTopicsQuery(
-    { teamId: teamId || "", nameOrTag: searchValue },
-    { skip: teamId == null || teamId == "" }
+    { teamId: team?.teamId || "", nameOrTag: searchValue },
+    { skip: team == null }
   );
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (visible && inputRef.current) {
+        inputRef.current.focus?.();
+      }
+    }, 250);
+  }, [visible]);
 
   useEffect(() => {
     if (initialSelectionOnMultiple != null && initialSelectionOnMultiple?.length != 0) {
@@ -48,7 +58,7 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
   useDebouncedEffect(() => setSearchValue(input), [input], 500);
 
   const popCreateNewTopicModal = () => {
-    dispatch(popNewTopicModal());
+    dispatch(popNewTopicModal({ visible: true, team, workspace }));
   };
 
   const close = () => {

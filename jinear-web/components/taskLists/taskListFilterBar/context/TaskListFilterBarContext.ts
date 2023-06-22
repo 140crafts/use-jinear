@@ -1,8 +1,9 @@
-import { TeamMemberDto, TeamWorkflowStatusDto, TopicDto } from "@/model/be/jinear-core";
+import { TeamDto, TeamMemberDto, TeamWorkflowStatusDto, TopicDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { createContext, useContext } from "react";
 
 interface ITaskListFilterBarContext {
-  teamId: string;
+  workspace?: WorkspaceDto;
+  team?: TeamDto;
   selectedTopics: TopicDto[];
   setSelectedTopics?: React.Dispatch<React.SetStateAction<TopicDto[]>>;
   selectedOwners: TeamMemberDto[];
@@ -23,7 +24,8 @@ interface ITaskListFilterBarContext {
 }
 
 const TaskListFilterBarContext = createContext<ITaskListFilterBarContext>({
-  teamId: "",
+  workspace: undefined,
+  team: undefined,
   selectedTopics: [],
   selectedOwners: [],
   selectedAssignees: [],
@@ -34,9 +36,14 @@ const TaskListFilterBarContext = createContext<ITaskListFilterBarContext>({
 
 export default TaskListFilterBarContext;
 
-export function useTeamId() {
+export function useWorkspace() {
   const ctx = useContext(TaskListFilterBarContext);
-  return ctx.teamId;
+  return ctx.workspace;
+}
+
+export function useTeam() {
+  const ctx = useContext(TaskListFilterBarContext);
+  return ctx.team;
 }
 
 export function useSelectedTopics() {

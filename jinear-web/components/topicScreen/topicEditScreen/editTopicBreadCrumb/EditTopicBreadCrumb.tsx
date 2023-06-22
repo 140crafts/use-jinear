@@ -1,28 +1,27 @@
 import Breadcrumb from "@/components/breadcrumb/Breadcrumb";
 import BreadcrumbLink from "@/components/breadcrumb/BreadcrumbLink";
-import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
-import { useTypedSelector } from "@/store/store";
+import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 
 interface EditTopicBreadCrumbProps {
+  workspace: WorkspaceDto;
+  team: TeamDto;
   topicName: string;
   topicId: string;
 }
 
-const EditTopicBreadCrumb: React.FC<EditTopicBreadCrumbProps> = ({ topicName, topicId }) => {
+const EditTopicBreadCrumb: React.FC<EditTopicBreadCrumbProps> = ({ workspace, team, topicName, topicId }) => {
   const { t } = useTranslation();
-  const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const currentteam = useTypedSelector(selectCurrentAccountsPreferredTeam);
 
-  return (
+  return !workspace.isPersonal ? (
     <Breadcrumb>
-      <BreadcrumbLink label={currentWorkspace?.title || ""} url={`/${currentWorkspace?.username}`} />
-      <BreadcrumbLink label={currentteam?.name || ""} url={`/${currentWorkspace?.username}/${currentteam?.name}/topic/list`} />
-      <BreadcrumbLink label={t("topicListScreenTitle")} url={`/${currentWorkspace?.username}/${currentteam?.name}/topic/list`} />
-      <BreadcrumbLink label={topicName} url={`/${currentWorkspace?.username}/${currentteam?.name}/topic/edit/${topicId}`} />
+      <BreadcrumbLink label={workspace?.title || ""} url={`/${workspace?.username}`} />
+      <BreadcrumbLink label={team?.name || ""} url={`/${workspace?.username}/${team?.name}/topic/list`} />
+      <BreadcrumbLink label={t("topicListScreenTitle")} url={`/${workspace?.username}/${team?.name}/topic/list`} />
+      <BreadcrumbLink label={topicName} url={`/${workspace?.username}/${team?.name}/topic/edit/${topicId}`} />
     </Breadcrumb>
-  );
+  ) : null;
 };
 
 export default EditTopicBreadCrumb;

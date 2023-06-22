@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-06-18 11:50:36.
+// Generated using typescript-generator version 3.0.1157 on 2023-06-21 09:09:29.
 
 export interface BaseDto {
   createdDate: Date;
@@ -37,7 +37,7 @@ export interface AccountDto extends BaseDto {
   username?: string | null;
   roles: AccountRoleDto[];
   profilePicture?: MediaDto | null;
-  workspaces: WorkspaceDto[];
+  workspaces: AccountsWorkspacePerspectiveDto[];
   workspaceDisplayPreference?: WorkspaceDisplayPreferenceDto | null;
 }
 
@@ -356,6 +356,14 @@ export interface UsernameDto {
   username: string;
   relatedObjectId: string;
   relatedObjectType: UsernameRelatedObjectType;
+}
+
+export interface AccountsWorkspacePerspectiveDto extends WorkspaceDto {
+  role: WorkspaceAccountRoleType;
+}
+
+export interface DetailedWorkspaceMemberDto extends WorkspaceMemberDto {
+  workspace: WorkspaceDto;
 }
 
 export interface WorkspaceActivityDto extends BaseDto {
