@@ -36,7 +36,6 @@ import OneSignalSubscriber from "@/components/oneSignalSubscriber/OneSignalSubsc
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
 import InternalWorkspacePrefChangeListener from "@/components/workspaceAndTeamChangeListener/InternalWorkspacePrefChangeListener";
-import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
 import ThemeContext, { getTheme } from "@/store/context/themeContext";
 import { store } from "@/store/store";
 import enUsLocale from "date-fns/locale/en-US";
@@ -122,7 +121,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <TitleHandler />
             <AuthCheck />
             <InternalWorkspacePrefChangeListener />
-            <WorkspaceAndTeamChangeListener />
+            {/* <WorkspaceAndTeamChangeListener /> */}
             <OnboardListener />
             <OneSignalSubscriber />
             <Transition>

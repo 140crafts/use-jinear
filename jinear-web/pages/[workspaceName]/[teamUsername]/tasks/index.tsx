@@ -31,8 +31,8 @@ const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
       {workspace && team && !isTeamsFetching && (
         <MultiViewTaskList
           title={t("tasksScreenBreadcrumbLabel")}
-          workspaceId={workspace.workspaceId}
-          teamId={team.teamId}
+          workspace={workspace}
+          team={team}
           activeDisplayFormat="LIST"
           topicIds={topicId ? [topicId] : []}
         />

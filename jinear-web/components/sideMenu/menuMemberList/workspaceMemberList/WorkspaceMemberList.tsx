@@ -1,7 +1,6 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { PageDto, WorkspaceAccountRoleType, WorkspaceMemberDto } from "@/model/be/jinear-core";
 import { selectCurrentAccountId } from "@/store/slice/accountSlice";
-import { popWorkspaceMemberInviteModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -26,7 +25,7 @@ const WorkspaceMemberList: React.FC<WorkspaceMemberListProps> = ({ workspaceUser
     currentAccountsWorkspaceRole.indexOf("ADMIN") != -1 || currentAccountsWorkspaceRole.indexOf("OWNER") != -1;
 
   const popInvitationModal = () => {
-    dispatch(popWorkspaceMemberInviteModal());
+    // dispatch(popWorkspaceMemberInviteModal());
   };
 
   return (

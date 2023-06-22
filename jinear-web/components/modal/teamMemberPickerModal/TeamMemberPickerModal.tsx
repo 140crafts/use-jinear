@@ -47,6 +47,14 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
     ) || [];
 
   useEffect(() => {
+    setTimeout(() => {
+      if (visible && inputRef.current) {
+        inputRef.current.focus?.();
+      }
+    }, 250);
+  }, [visible]);
+
+  useEffect(() => {
     if (initialSelectionOnMultiple != null && initialSelectionOnMultiple?.length != 0) {
       setSelectedTeamMembers(initialSelectionOnMultiple);
     }

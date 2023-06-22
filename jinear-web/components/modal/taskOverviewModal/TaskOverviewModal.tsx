@@ -13,6 +13,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
 import React from "react";
+import { IoResize } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./TaskOverviewModal.module.scss";
 
@@ -58,23 +59,26 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
           <CircularProgress size={21} />
         </div>
       )}
+
       {isTaskResponseSuccess && (
-        <div className={styles.taskContentWrapper}>
-          <TaskDetailHeader task={taskResponse.data} />
-          <TaskDetail task={taskResponse.data} />
+        <div className={styles.actionBar}>
+          <Button
+            heightVariant={ButtonHeight.short}
+            variant={ButtonVariants.filled}
+            className={styles.goToTaskButton}
+            onClick={onGoToTaskClick}
+            href={`/${taskResponse.data?.workspace?.username}/task/${taskResponse.data?.team?.tag}-${taskResponse.data?.teamTagNo}`}
+          >
+            <IoResize />
+            <b>{t("taskOverviewModalGoToTask")}</b>
+          </Button>
         </div>
       )}
 
       {isTaskResponseSuccess && (
-        <div className={styles.footer}>
-          <Button
-            heightVariant={ButtonHeight.short}
-            variant={ButtonVariants.contrast}
-            href={`/${taskResponse.data?.workspace?.username}/task/${taskResponse.data?.team?.tag}-${taskResponse.data?.teamTagNo}`}
-            onClick={onGoToTaskClick}
-          >
-            <b>{t("taskOverviewModalGoToTask")}</b>
-          </Button>
+        <div className={styles.taskContentWrapper}>
+          <TaskDetailHeader task={taskResponse.data} />
+          <TaskDetail task={taskResponse.data} />
         </div>
       )}
     </Modal>

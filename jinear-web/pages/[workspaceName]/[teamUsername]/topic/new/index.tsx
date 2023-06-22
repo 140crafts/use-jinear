@@ -27,9 +27,7 @@ const NewTopicPage: React.FC<NewTopicPageProps> = ({}) => {
       {workspace && team && <NewTopicScreenBreadcrumb workspace={workspace} team={team} />}
       <div className="spacer-h-4" />
       <h1>{t("newTopicScreenTitle")}</h1>
-      <div className={styles.formContainer}>
-        <TopicForm workspaceId={workspace?.workspaceId} teamId={team?.teamId} />
-      </div>
+      <div className={styles.formContainer}>{workspace && team && <TopicForm workspace={workspace} team={team} />}</div>
     </div>
   );
 };

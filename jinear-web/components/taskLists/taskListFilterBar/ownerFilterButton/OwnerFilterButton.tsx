@@ -5,7 +5,7 @@ import { popTeamMemberPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { useSelectedOwners, useSetSelectedOwners, useTeamId } from "../context/TaskListFilterBarContext";
+import { useSelectedOwners, useSetSelectedOwners, useTeam } from "../context/TaskListFilterBarContext";
 import styles from "./OwnerFilterButton.module.css";
 
 interface OwnerFilterButtonProps {}
@@ -13,7 +13,7 @@ interface OwnerFilterButtonProps {}
 const OwnerFilterButton: React.FC<OwnerFilterButtonProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const teamId = useTeamId();
+  const team = useTeam();
   const selectedOwners = useSelectedOwners();
   const setSelectedOwners = useSetSelectedOwners();
   const isEmpty = selectedOwners?.length == 0;
@@ -24,7 +24,13 @@ const OwnerFilterButton: React.FC<OwnerFilterButtonProps> = ({}) => {
 
   const popPicker = () => {
     dispatch(
-      popTeamMemberPickerModal({ visible: true, teamId, multiple: true, initialSelectionOnMultiple: selectedOwners, onPick })
+      popTeamMemberPickerModal({
+        visible: true,
+        teamId: team?.teamId,
+        multiple: true,
+        initialSelectionOnMultiple: selectedOwners,
+        onPick,
+      })
     );
   };
 

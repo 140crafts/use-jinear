@@ -5,7 +5,7 @@ import { popTeamMemberPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { useSelectedAssignees, useSetSelectedAssignees, useTeamId } from "../context/TaskListFilterBarContext";
+import { useSelectedAssignees, useSetSelectedAssignees, useTeam } from "../context/TaskListFilterBarContext";
 import styles from "./AssigneeFilterButton.module.css";
 
 interface AssigneeFilterButtonProps {}
@@ -13,7 +13,7 @@ interface AssigneeFilterButtonProps {}
 const AssigneeFilterButton: React.FC<AssigneeFilterButtonProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const teamId = useTeamId();
+  const team = useTeam();
   const selectedAssignees = useSelectedAssignees();
   const setSelectedAssignees = useSetSelectedAssignees();
   const isEmpty = selectedAssignees?.length == 0;
@@ -24,7 +24,13 @@ const AssigneeFilterButton: React.FC<AssigneeFilterButtonProps> = ({}) => {
 
   const popPicker = () => {
     dispatch(
-      popTeamMemberPickerModal({ visible: true, teamId, multiple: true, initialSelectionOnMultiple: selectedAssignees, onPick })
+      popTeamMemberPickerModal({
+        visible: true,
+        teamId: team?.teamId,
+        multiple: true,
+        initialSelectionOnMultiple: selectedAssignees,
+        onPick,
+      })
     );
   };
 

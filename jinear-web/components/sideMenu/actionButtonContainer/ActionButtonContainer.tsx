@@ -1,5 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
-import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
+import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { popNewTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -20,7 +21,11 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
+
+  const { data: teamsResponse } = useRetrieveWorkspaceTeamsQuery(preferredWorkspace?.workspaceId || "", {
+    skip: preferredWorkspace == null,
+  });
+  const team = teamsResponse?.data?.find((team) => team);
 
   const router = useRouter();
   const currentPath = router.asPath;
@@ -30,10 +35,11 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
   const lastActivitiesPath = `/${preferredWorkspace?.username}/last-activities`;
 
   const _popNewTaskModal = () => {
-    dispatch(popNewTaskModal());
+    if (preferredWorkspace) {
+      dispatch(popNewTaskModal({ visible: true, workspace: preferredWorkspace, team }));
+    }
   };
 
-  logger.log({ preferredTeam });
   return (
     <div className={styles.container}>
       {/* <MenuGroupTitle label={t("sideMenuActionsTeams")} /> */}

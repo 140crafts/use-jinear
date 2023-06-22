@@ -1,9 +1,6 @@
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
-import {
-  selectCurrentAccountsPreferredWorkspace,
-  selectCurrentAccountsPreferredWorkspaceRoleIsAdminOrOwner,
-} from "@/store/slice/accountSlice";
+import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -16,7 +13,6 @@ interface BasicTeamListProps {}
 const BasicTeamList: React.FC<BasicTeamListProps> = ({}) => {
   const { t } = useTranslation();
   const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const isPreferredWorkspaceRoleAdminOrOwner = useTypedSelector(selectCurrentAccountsPreferredWorkspaceRoleIsAdminOrOwner);
 
   const {
     data: teamsResponse,

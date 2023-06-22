@@ -1,4 +1,4 @@
-import { TaskFilterRequest, TeamMemberDto, TeamWorkflowStatusDto, TopicDto } from "@/model/be/jinear-core";
+import { TaskFilterRequest, TeamDto, TeamMemberDto, TeamWorkflowStatusDto, TopicDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useRetrieveTeamMembersQuery } from "@/store/api/teamMemberApi";
 import { useRetrieveAllFromTeamQuery } from "@/store/api/teamWorkflowStatusApi";
 import { useRetrieveExactTeamTopicsQuery } from "@/store/api/topicListingApi";
@@ -15,8 +15,8 @@ import ToDatePickerButton from "./toDatePickerButton/ToDatePickerButton";
 import TopicFilterButton from "./topicFilterButton/TopicFilterButton";
 import WorkflowStatusFilterButton from "./workflowStatusFilterButton/WorkflowStatusFilterButton";
 interface TaskListFilterBarProps {
-  workspaceId: string;
-  teamId: string;
+  workspace: WorkspaceDto;
+  team: TeamDto;
   topicIds?: string[];
   ownerIds?: string[];
   assigneeIds?: string[];
@@ -31,8 +31,8 @@ interface TaskListFilterBarProps {
 const logger = Logger("TaskListFilterBar");
 
 const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
-  workspaceId,
-  teamId,
+  workspace,
+  team,
   topicIds,
   ownerIds = [],
   assigneeIds = [],
@@ -51,8 +51,8 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
   const [hasPreciseToDate, setHasPreciseToDate] = useState<Boolean>(false);
 
   const filter: TaskFilterRequest = {
-    workspaceId: workspaceId,
-    teamIdList: [teamId],
+    workspaceId: workspace.workspaceId,
+    teamIdList: [team.teamId],
     topicIds: selectedTopics?.map?.((topicDto) => topicDto.topicId),
     ownerIds: selectedOwners?.map?.((owner) => owner.accountId),
     assigneeIds: selectedAssignees?.map?.((assignee) => assignee.accountId),
@@ -63,23 +63,23 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
 
   const { data: findExactTeamTopicsResponse } = useRetrieveExactTeamTopicsQuery(
     {
-      teamId: teamId || "",
+      teamId: team.teamId,
       body: { topicIds: topicIds || [] },
     },
-    { skip: teamId == null || teamId == "" || topicIds == null || topicIds?.length == 0 }
+    { skip: team == null || topicIds == null || topicIds?.length == 0 }
   );
 
   const { data: teamMembersResponse } = useRetrieveTeamMembersQuery(
-    { teamId },
+    { teamId: team.teamId },
     {
       skip: ownerIds.length == 0 || assigneeIds.length == 0,
     }
   );
 
   const { data: teamWorkflowStatusListResponse } = useRetrieveAllFromTeamQuery(
-    { teamId: teamId || "" },
+    { teamId: team.teamId },
     {
-      skip: teamId == null || workflowStatusIdList.length == 0,
+      skip: team == null || workflowStatusIdList.length == 0,
     }
   );
 
@@ -158,7 +158,8 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
   return (
     <TaskListFilterBarContext.Provider
       value={{
-        teamId,
+        team,
+        workspace,
         selectedTopics,
         setSelectedTopics,
         selectedOwners,

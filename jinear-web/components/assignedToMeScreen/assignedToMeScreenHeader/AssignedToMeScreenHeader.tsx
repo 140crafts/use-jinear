@@ -1,5 +1,5 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { TeamDto } from "@/model/be/jinear-core";
+import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { popTeamPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -9,17 +9,17 @@ import styles from "./AssignedToMeScreenHeader.module.css";
 import AssignedToMeScreenBreadcrumb from "./breadcrumb/AssignedToMeScreenBreadcrumb";
 
 interface AssignedToMeScreenHeaderProps {
-  workspaceId: string;
+  workspace: WorkspaceDto;
   filterBy?: TeamDto;
   setFilterBy?: React.Dispatch<React.SetStateAction<TeamDto | undefined>>;
 }
 
-const AssignedToMeScreenHeader: React.FC<AssignedToMeScreenHeaderProps> = ({ workspaceId, filterBy, setFilterBy }) => {
+const AssignedToMeScreenHeader: React.FC<AssignedToMeScreenHeaderProps> = ({ workspace, filterBy, setFilterBy }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const popFilterTeamModal = () => {
-    dispatch(popTeamPickerModal({ workspaceId, visible: true, onPick: setFilterBy }));
+    dispatch(popTeamPickerModal({ workspaceId: workspace.workspaceId, visible: true, onPick: setFilterBy }));
   };
 
   const clearFilter = () => {

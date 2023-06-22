@@ -1,18 +1,22 @@
 import LastActivitiesList from "@/components/lastActivitiesScreen/LastActivitiesList";
 import LastActivitiesBreadCrumb from "@/components/lastActivitiesScreen/lastActivitiesScreenHeader/breadcrumb/LastActivitiesBreadCrumb";
-import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
+import { useRouter } from "next/router";
 import React from "react";
 import styles from "./index.module.css";
 
 interface LastActivitiesScreenProps {}
 
 const LastActivitiesScreen: React.FC<LastActivitiesScreenProps> = ({}) => {
-  const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
+  const router = useRouter();
+  const workspaceName: string = router.query?.workspaceName as string;
+  const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
+
   return (
     <div className={styles.container}>
-      <LastActivitiesBreadCrumb />
-      {currentWorkspace && <LastActivitiesList workspace={currentWorkspace} />}
+      {workspace && <LastActivitiesBreadCrumb workspace={workspace} />}
+      {workspace && <LastActivitiesList workspace={workspace} />}
     </div>
   );
 };

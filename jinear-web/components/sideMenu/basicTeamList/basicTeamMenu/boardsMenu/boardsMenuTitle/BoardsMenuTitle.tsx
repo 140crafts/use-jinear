@@ -1,4 +1,4 @@
-import Button, { ButtonVariants } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { popNewTaskBoardModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
@@ -33,7 +33,12 @@ const BoardsMenuTitle: React.FC<BoardsMenuTitleProps> = ({ workspace, team }) =>
         <div>{t("sideMenuTeamActionButtonLabelBoards")}</div>
       </Button>
       <div className={styles.actionButtonsContainer}>
-        <Button variant={ButtonVariants.hoverFilled2} onClick={openNewTaskBoardModal}>
+        <Button
+          variant={ButtonVariants.hoverFilled2}
+          heightVariant={ButtonHeight.short}
+          onClick={openNewTaskBoardModal}
+          data-tooltip-right={t("sideMenuTeamActionButtonLabelBoardsNew")}
+        >
           <IoAdd />
         </Button>
       </div>

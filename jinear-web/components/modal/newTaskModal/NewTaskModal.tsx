@@ -1,11 +1,12 @@
 import NewTaskForm from "@/components/form/newTaskForm/NewTaskForm";
 import useWindowSize from "@/hooks/useWindowSize";
-import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import {
   closeNewTaskModal,
   selectNewTaskModalSubTaskOf,
   selectNewTaskModalSubTaskOfLabel,
+  selectNewTaskModalTeam,
   selectNewTaskModalVisible,
+  selectNewTaskModalWorkspace,
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -21,9 +22,9 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const visible = useTypedSelector(selectNewTaskModalVisible);
   const subTaskOf = useTypedSelector(selectNewTaskModalSubTaskOf);
   const subTaskOfLabel = useTypedSelector(selectNewTaskModalSubTaskOfLabel);
-  const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
-  const workspaceId = preferredWorkspace?.workspaceId;
+  const workspace = useTypedSelector(selectNewTaskModalWorkspace);
+  const team = useTypedSelector(selectNewTaskModalTeam);
+  const workspaceId = workspace?.workspaceId;
 
   const { isMobile } = useWindowSize();
 
@@ -38,10 +39,10 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
       bodyClass={styles.container}
       width={isMobile ? "fullscreen" : "large"}
     >
-      {workspaceId && preferredTeam?.teamId && (
+      {workspaceId && team?.teamId && (
         <NewTaskForm
-          workspace={preferredWorkspace}
-          team={preferredTeam}
+          workspace={workspace}
+          initialTeam={team}
           subTaskOf={subTaskOf}
           subTaskOfLabel={subTaskOfLabel}
           className={isMobile ? styles.formMobileClassName : undefined}

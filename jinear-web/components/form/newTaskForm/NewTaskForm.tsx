@@ -6,7 +6,7 @@ import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import WorkspaceAndTeamInfo from "../common/workspaceAndTeamInfo/WorkspaceAndTeamInfo";
@@ -18,7 +18,7 @@ import TopicPickerButton from "./topicPickerButton/TopicPickerButton";
 
 interface NewTaskFormProps {
   workspace: WorkspaceDto;
-  team: TeamDto;
+  initialTeam: TeamDto;
   subTaskOf?: string;
   subTaskOfLabel?: string;
   onClose: () => void;
@@ -26,16 +26,11 @@ interface NewTaskFormProps {
   footerContainerClass?: string;
 }
 
-export interface NewTaskExtendedForm extends TaskInitializeRequest {
-  assignedDate_ISO?: string;
-  dueDate_ISO?: string;
-}
-
 const logger = Logger("NewTaskForm");
 
 const NewTaskForm: React.FC<NewTaskFormProps> = ({
   workspace,
-  team,
+  initialTeam,
   subTaskOf,
   subTaskOfLabel,
   onClose,
@@ -51,10 +46,9 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
     setValue,
     reset,
     formState: { errors },
-    watch,
-  } = useForm<NewTaskExtendedForm>();
+  } = useForm<TaskInitializeRequest>();
+  const [selectedTeam, setSelectedTeam] = useState<TeamDto>(initialTeam);
   const workspaceId = workspace.workspaceId;
-  const teamId = team.teamId;
 
   const [
     initializeTask,
@@ -67,9 +61,19 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
       setFocus("title");
       setValue("topicId", "no-topic");
       setValue("assignedTo", "no-assignee");
-      setValue("teamId", teamId);
+      setValue("teamId", selectedTeam.teamId);
     }, 200);
   }, []);
+
+  useEffect(() => {
+    setSelectedTeam(initialTeam);
+  }, [initialTeam]);
+
+  useEffect(() => {
+    if (selectedTeam) {
+      setValue("teamId", selectedTeam.teamId);
+    }
+  }, [selectedTeam]);
 
   useEffect(() => {
     if (isInitializeTaskSuccess && initializeTaskResponse) {
@@ -89,7 +93,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
     }
   }, [isInitializeTaskSuccess, initializeTaskResponse]);
 
-  const submit: SubmitHandler<NewTaskExtendedForm> = (data) => {
+  const submit: SubmitHandler<TaskInitializeRequest> = (data) => {
     if (data.assignedTo == "no-assignee") {
       data.assignedTo = undefined;
     }
@@ -117,7 +121,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
     >
       <div className={styles.formContent}>
         <input type="hidden" value={workspaceId} {...register("workspaceId")} />
-        <input type="hidden" value={teamId} {...register("teamId")} />
+        <input type="hidden" value={selectedTeam?.teamId} {...register("teamId")} />
         {subTaskOf && <input type="hidden" value={subTaskOf} {...register("subTaskOf")} />}
 
         {subTaskOfLabel && (
@@ -129,8 +133,10 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
         <TitleInput labelClass={styles.label} register={register} />
 
         <div className={styles.actionBar}>
-          <TopicPickerButton register={register} setValue={setValue} teamId={teamId} />
-          {!workspace.isPersonal && <TeamMemberPickerButton register={register} setValue={setValue} teamId={teamId} />}
+          <TopicPickerButton register={register} setValue={setValue} workspace={workspace} team={selectedTeam} />
+          {!workspace.isPersonal && (
+            <TeamMemberPickerButton register={register} setValue={setValue} teamId={selectedTeam.teamId} />
+          )}
           <DatePickerButton
             register={register}
             setValue={setValue}
@@ -142,7 +148,8 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
 
         <WorkspaceAndTeamInfo
           workspace={workspace}
-          team={team}
+          team={selectedTeam}
+          onTeamChange={setSelectedTeam}
           personalWorkspaceTitle={t("newTaskFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel")}
           workspaceTitle={t("newTaskFormWorkspaceAndTeamInfoLabel")}
           personalWorkspaceLabel={t("newTaskFormPersonalWorkspaceSelected")}

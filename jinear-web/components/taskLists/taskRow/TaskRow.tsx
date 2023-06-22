@@ -25,6 +25,9 @@ const TaskRow: React.FC<TaskRowProps> = ({ className, task, withBottomBorderLine
   const tag = `${task.team?.tag}-${task.teamTagNo}`;
   const { isMobile } = useWindowSize();
 
+  const workflowStateGroup = task.workflowStatus.workflowStateGroup;
+  const isArchived = ["COMPLETED", "CANCELLED"].indexOf(workflowStateGroup) != -1;
+
   const popChangeDatesModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event?.preventDefault?.();
     dispatch(popChangeTaskDateModal({ visible: true, task }));
@@ -49,11 +52,15 @@ const TaskRow: React.FC<TaskRowProps> = ({ className, task, withBottomBorderLine
 
   return task.workspace && task.team ? (
     <div className={cn(styles.container, withBottomBorderLine ? styles.bottomBorderLine : null, className)}>
-      <Button href={`/${task.workspace?.username}/task/${tag}`} className={styles.button} onClick={onLinkClick}>
+      <Button
+        href={`/${task.workspace?.username}/task/${tag}`}
+        className={cn(styles.button, isArchived ? styles.archivedButton : null)}
+        onClick={onLinkClick}
+      >
         <div className={styles.leftInfoContainer}>
           <TeamTagCell task={task} />
         </div>
-        <div className={styles.title}>{task.title}</div>
+        <div className={cn(styles.title, isArchived ? styles.archivedTitle : null)}>{task.title}</div>
       </Button>
 
       <div className={styles.rightInfoContainer}>

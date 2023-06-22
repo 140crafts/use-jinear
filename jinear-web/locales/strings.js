@@ -358,9 +358,17 @@ export default {
     en: "${number} more",
     tr: "${number} daha",
   },
+  sideMenuTeamTopicsNew: {
+    en: "New Topic",
+    tr: "Yeni Konu",
+  },
   sideMenuTeamMembers: {
     en: "Team members",
     tr: "Ekip üyeleri",
+  },
+  sideMenuTeamSettings: {
+    en: "Team settings",
+    tr: "Ekip ayarları",
   },
   sideMenuActionsTeams: {
     en: "Actions",
@@ -1899,8 +1907,8 @@ export default {
     tr: "Başlık",
   },
   newTaskListModalTaskListDueDate: {
-    en: "Due date",
-    tr: "Şu tarihe dek",
+    en: "Add Due date",
+    tr: "Son Tarih Ekle",
   },
   newTaskListModalCancel: {
     en: "Cancel",
@@ -2189,6 +2197,10 @@ export default {
   sideMenuTeamActionButtonLabelBoards: {
     en: "Boards",
     tr: "Panolar",
+  },
+  sideMenuTeamActionButtonLabelBoardsNew: {
+    en: "New Board",
+    tr: "Yeni Pano",
   },
   sideMenuTeamActionButtonLabelTopics: {
     en: "Topics",

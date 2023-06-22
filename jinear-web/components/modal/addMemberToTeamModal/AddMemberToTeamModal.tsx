@@ -1,7 +1,11 @@
 import AddMemberToTeamForm from "@/components/form/addMemberToTeamForm/AddMemberToTeamForm";
 import useWindowSize from "@/hooks/useWindowSize";
-import { selectCurrentAccountsPreferredTeamId, selectCurrentAccountsPreferredWorkspaceId } from "@/store/slice/accountSlice";
-import { closeAddMemberToTeamModal, selectAddMemberToTeamModalVisible } from "@/store/slice/modalSlice";
+import {
+  closeAddMemberToTeamModal,
+  selectAddMemberToTeamModalTeam,
+  selectAddMemberToTeamModalVisible,
+  selectAddMemberToTeamModalWorkspace,
+} from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -13,8 +17,8 @@ const AddMemberToTeamModal: React.FC<AddMemberToTeamModalProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectAddMemberToTeamModalVisible);
-  const preferredWorkspaceId = useTypedSelector(selectCurrentAccountsPreferredWorkspaceId);
-  const preferredTeamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
+  const workspace = useTypedSelector(selectAddMemberToTeamModalWorkspace);
+  const team = useTypedSelector(selectAddMemberToTeamModalTeam);
   const { isMobile } = useWindowSize();
 
   const close = () => {
@@ -29,9 +33,7 @@ const AddMemberToTeamModal: React.FC<AddMemberToTeamModalProps> = ({}) => {
       hasTitleCloseButton={true}
       requestClose={close}
     >
-      {preferredWorkspaceId && preferredTeamId && (
-        <AddMemberToTeamForm workspaceId={preferredWorkspaceId} teamId={preferredTeamId} onAddSuccess={close} />
-      )}
+      {workspace && team && <AddMemberToTeamForm workspaceId={workspace.workspaceId} teamId={team.teamId} onAddSuccess={close} />}
     </Modal>
   );
 };

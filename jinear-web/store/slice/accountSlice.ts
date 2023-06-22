@@ -1,5 +1,5 @@
 import { accountApi } from "@/api/accountApi";
-import { AccountDto } from "@/model/be/jinear-core";
+import { AccountDto, AccountsWorkspacePerspectiveDto } from "@/model/be/jinear-core";
 import Logger from "@/utils/logger";
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
@@ -73,10 +73,7 @@ export const selectCurrentAccountsPreferredWorkspaceRole = (state: RootState) =>
 export const selectCurrentAccountsPreferredTeamRole = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.teamRole;
 };
-export const selectCurrentAccountsPreferredWorkspaceRoleIsAdminOrOwner = (state: RootState) => {
-  const role = state.account.current?.workspaceDisplayPreference?.workspaceRole;
-  return role == "ADMIN" || role == "OWNER";
-};
+
 export const selectCurrentAccountsPreferredTeamRoleIsAdmin = (state: RootState) => {
   const role = state.account.current?.workspaceDisplayPreference?.teamRole;
   return role == "ADMIN";
@@ -86,12 +83,22 @@ export const selectCurrentAccountsPreferredWorkspaceId = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.workspace?.workspaceId;
 };
 
+//
 export const selectCurrentAccountsPreferredTeam = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.team;
 };
 
 export const selectCurrentAccountsPreferredTeamId = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.team?.teamId;
+};
+
+//
+
+export const selectCurrentAccountsWorkspaceRoleIsAdminOrOwner = (
+  accountsWorkspacePerspectiveDto: AccountsWorkspacePerspectiveDto
+) => {
+  const role = accountsWorkspacePerspectiveDto?.role;
+  return role == "ADMIN" || role == "OWNER";
 };
 
 export const selectWorkspaceFromWorkspaceUsername = (workspaceUsername: string) => (state: RootState) =>

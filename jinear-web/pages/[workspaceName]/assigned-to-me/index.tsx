@@ -2,12 +2,9 @@ import AssignedToMeScreenHeader from "@/components/assignedToMeScreen/assignedTo
 import PaginatedAssignedToCurrentAccountTaskList from "@/components/taskLists/paginatedAssignedToCurrentAccountTaskList/PaginatedAssignedToCurrentAccountTaskList";
 import PaginatedFromTeamWithAssigneeTaskList from "@/components/taskLists/paginatedFromTeamWithAssigneeTaskList/PaginatedFromTeamWithAssigneeTaskList";
 import { TeamDto } from "@/model/be/jinear-core";
-import {
-  selectCurrentAccountId,
-  selectCurrentAccountsPreferredTeamId,
-  selectCurrentAccountsPreferredWorkspaceId,
-} from "@/store/slice/accountSlice";
+import { selectCurrentAccountId, selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
+import { useRouter } from "next/router";
 import React, { useState } from "react";
 import styles from "./index.module.css";
 
@@ -15,24 +12,23 @@ interface AssignedToMePageProps {}
 
 const AssignedToMePage: React.FC<AssignedToMePageProps> = ({}) => {
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
-  const currentWorkspaceId = useTypedSelector(selectCurrentAccountsPreferredWorkspaceId);
-  const currentTeamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
+  const router = useRouter();
+  const workspaceName: string = router.query?.workspaceName as string;
+  const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
   const [filterBy, setFilterBy] = useState<TeamDto>();
 
   return (
     <div className={styles.container}>
-      {currentWorkspaceId && (
-        <AssignedToMeScreenHeader filterBy={filterBy} setFilterBy={setFilterBy} workspaceId={currentWorkspaceId} />
-      )}
-      {currentWorkspaceId &&
+      {workspace && <AssignedToMeScreenHeader filterBy={filterBy} setFilterBy={setFilterBy} workspace={workspace} />}
+      {workspace &&
         (filterBy ? (
           <PaginatedFromTeamWithAssigneeTaskList
-            workspaceId={currentWorkspaceId}
+            workspaceId={workspace.workspaceId}
             teamId={filterBy.teamId || ""}
             assigneeId={currentAccountId || ""}
           />
         ) : (
-          <PaginatedAssignedToCurrentAccountTaskList workspaceId={currentWorkspaceId} />
+          <PaginatedAssignedToCurrentAccountTaskList workspaceId={workspace.workspaceId} />
         ))}
     </div>
   );

@@ -1,7 +1,7 @@
 import Pagination from "@/components/pagination/Pagination";
+import { AccountsWorkspacePerspectiveDto } from "@/model/be/jinear-core";
 import { useRetrieveWorkspaceMembersQuery } from "@/store/api/workspaceMemberApi";
-import { selectCurrentAccountsPreferredWorkspaceRoleIsAdminOrOwner } from "@/store/slice/accountSlice";
-import { useTypedSelector } from "@/store/store";
+import { selectCurrentAccountsWorkspaceRoleIsAdminOrOwner } from "@/store/slice/accountSlice";
 import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
@@ -10,20 +10,18 @@ import styles from "./MemberList.module.scss";
 import MemberRow from "./memberRow/MemberRow";
 
 interface MemberListProps {
-  workspaceId: string;
+  workspace: AccountsWorkspacePerspectiveDto;
 }
 
-const MemberList: React.FC<MemberListProps> = ({ workspaceId }) => {
+const MemberList: React.FC<MemberListProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const [page, setPage] = useState<number>(0);
-  const workspaceRoleIsAdminOrOwner = useTypedSelector(selectCurrentAccountsPreferredWorkspaceRoleIsAdminOrOwner);
+  const workspaceRoleIsAdminOrOwner = selectCurrentAccountsWorkspaceRoleIsAdminOrOwner(workspace);
   const {
     data: workplaceMembersResponse,
-    isSuccess,
     isLoading,
     isFetching,
-    isError,
-  } = useRetrieveWorkspaceMembersQuery({ workspaceId, page });
+  } = useRetrieveWorkspaceMembersQuery({ workspaceId: workspace.workspaceId, page });
 
   return (
     <div className={styles.container}>

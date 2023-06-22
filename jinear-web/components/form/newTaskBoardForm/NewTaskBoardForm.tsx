@@ -66,20 +66,18 @@ const NewTaskBoardForm: React.FC<NewTaskBoardFormProps> = ({ workspace, team, on
           <input id={"new-task-board-title"} type={"text"} {...register("title", { required: t("formRequiredField") })} />
         </label>
 
-        <div className={styles.label}>
-          <b>{t("newTaskListModalTaskListDueDate")}</b>
-          <div className={styles.dateButtonContainer}>
-            {date && (
-              <Button onClick={clearDueDate}>
-                <IoClose />
-              </Button>
-            )}
-            <Button variant={ButtonVariants.filled} onClick={popDatePickerForDueDate} heightVariant={ButtonHeight.short}>
-              {date ? format(date, t("dateFormat")) : t("datePickerSelectDate")}
+        <div className={styles.dateButtonContainer}>
+          {date && (
+            <Button onClick={clearDueDate}>
+              <IoClose />
             </Button>
-          </div>
+          )}
+          <Button variant={ButtonVariants.filled} onClick={popDatePickerForDueDate} heightVariant={ButtonHeight.short}>
+            {date ? format(date, t("dateFormat")) : t("newTaskListModalTaskListDueDate")}
+          </Button>
         </div>
         <WorkspaceAndTeamInfo
+          readOnly
           workspace={workspace}
           team={team}
           personalWorkspaceTitle={t("newTaskListFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel")}

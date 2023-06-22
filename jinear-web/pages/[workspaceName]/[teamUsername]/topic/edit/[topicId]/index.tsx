@@ -43,11 +43,11 @@ const EditTopicScreen: React.FC<EditTopicScreenProps> = ({}) => {
         </div>
       )}
 
-      {!isTopicResponseLoading && isTopicResponseSuccess && (
+      {!isTopicResponseLoading && isTopicResponseSuccess && workspace && team && (
         <Transition initial={true} className={styles.formContainer}>
           <TopicForm
-            workspaceId={workspace?.workspaceId}
-            teamId={team?.teamId}
+            workspace={workspace}
+            team={team}
             topicId={topicResponse?.data.topicId}
             color={topicResponse?.data.color}
             taskName={topicResponse?.data.name}

@@ -1,5 +1,5 @@
 import SelectDeselectButton from "@/components/selectDeselectButton/SelectDeselectButton";
-import { TaskInitializeRequest, TopicDto } from "@/model/be/jinear-core";
+import { TaskInitializeRequest, TeamDto, TopicDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { popTopicPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -9,12 +9,13 @@ import { IoPricetagOutline } from "react-icons/io5";
 import styles from "./TopicPickerButton.module.css";
 
 interface TopicPickerButtonProps {
-  teamId: string;
+  workspace: WorkspaceDto;
+  team: TeamDto;
   register: UseFormRegister<TaskInitializeRequest>;
   setValue: UseFormSetValue<TaskInitializeRequest>;
 }
 
-const TopicPickerButton: React.FC<TopicPickerButtonProps> = ({ teamId, setValue, register }) => {
+const TopicPickerButton: React.FC<TopicPickerButtonProps> = ({ workspace, team, setValue, register }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [selectedTopic, setSelectedTopic] = useState<TopicDto>();
@@ -30,7 +31,7 @@ const TopicPickerButton: React.FC<TopicPickerButtonProps> = ({ teamId, setValue,
   };
 
   const popTopicPicker = () => {
-    dispatch(popTopicPickerModal({ visible: true, multiple: false, teamId, onPick: onModalPick }));
+    dispatch(popTopicPickerModal({ visible: true, multiple: false, team, workspace, onPick: onModalPick }));
   };
 
   const deselect = () => {

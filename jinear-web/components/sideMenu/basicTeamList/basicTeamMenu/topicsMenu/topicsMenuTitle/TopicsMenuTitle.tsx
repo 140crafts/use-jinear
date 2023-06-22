@@ -1,4 +1,4 @@
-import Button, { ButtonVariants } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
@@ -26,7 +26,12 @@ const TopicsMenuTitle: React.FC<TopicsMenuTitleProps> = ({ workspace, team }) =>
         <div>{t("sideMenuTeamTopics")}</div>
       </Button>
       <div className={styles.actionButtonsContainer}>
-        <Button variant={ButtonVariants.hoverFilled2} href={`/${workspace?.username}/${team?.username}/topic/new`}>
+        <Button
+          variant={ButtonVariants.hoverFilled2}
+          heightVariant={ButtonHeight.short}
+          href={`/${workspace?.username}/${team?.username}/topic/new`}
+          data-tooltip-right={t("sideMenuTeamTopicsNew")}
+        >
           <IoAdd />
         </Button>
       </div>

@@ -19,6 +19,7 @@ const NewTaskBoardModal: React.FC<NewTaskBoardModalProps> = ({}) => {
   const visible = useTypedSelector(selectNewTaskBoardModalVisible);
   const workspace = useTypedSelector(selectNewTaskBoardModalWorkspace);
   const team = useTypedSelector(selectNewTaskBoardModalTeam);
+
   const close = () => {
     dispatch(closeNewTaskBoardModal());
   };

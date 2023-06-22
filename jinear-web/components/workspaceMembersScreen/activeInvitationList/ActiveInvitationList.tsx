@@ -1,7 +1,7 @@
 import Pagination from "@/components/pagination/Pagination";
+import { AccountsWorkspacePerspectiveDto } from "@/model/be/jinear-core";
 import { useListInvitationsQuery } from "@/store/api/workspaceMemberInvitationApi";
-import { selectCurrentAccountsPreferredWorkspaceRoleIsAdminOrOwner } from "@/store/slice/accountSlice";
-import { useTypedSelector } from "@/store/store";
+import { selectCurrentAccountsWorkspaceRoleIsAdminOrOwner } from "@/store/slice/accountSlice";
 import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
@@ -10,14 +10,18 @@ import styles from "./ActiveInvitationList.module.scss";
 import InvitationRow from "./invitationRow/InvitationRow";
 
 interface ActiveInvitationListProps {
-  workspaceId: string;
+  workspace: AccountsWorkspacePerspectiveDto;
 }
 
-const ActiveInvitationList: React.FC<ActiveInvitationListProps> = ({ workspaceId }) => {
+const ActiveInvitationList: React.FC<ActiveInvitationListProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const [page, setPage] = useState<number>(0);
-  const workspaceRoleIsAdminOrOwner = useTypedSelector(selectCurrentAccountsPreferredWorkspaceRoleIsAdminOrOwner);
-  const { data: invitationListResponse, isLoading, isFetching } = useListInvitationsQuery({ workspaceId, page });
+  const workspaceRoleIsAdminOrOwner = selectCurrentAccountsWorkspaceRoleIsAdminOrOwner(workspace);
+  const {
+    data: invitationListResponse,
+    isLoading,
+    isFetching,
+  } = useListInvitationsQuery({ workspaceId: workspace.workspaceId, page });
 
   return (
     <div className={styles.container}>

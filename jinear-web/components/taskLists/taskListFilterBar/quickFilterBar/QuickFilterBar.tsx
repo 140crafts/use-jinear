@@ -8,7 +8,7 @@ import {
   useSetFromDate,
   useSetSelectedWorkflowStatuses,
   useSetToDate,
-  useTeamId,
+  useTeam,
 } from "../context/TaskListFilterBarContext";
 import styles from "./QuickFilterBar.module.css";
 
@@ -16,13 +16,16 @@ interface QuickFilterBarProps {}
 
 const QuickFilterBar: React.FC<QuickFilterBarProps> = ({}) => {
   const { t } = useTranslation();
-  const teamId = useTeamId();
+  const team = useTeam();
   const setFromDate = useSetFromDate();
   const setToDate = useSetToDate();
   const setSelectedWorkflowStatuses = useSetSelectedWorkflowStatuses();
   const resetState = useResetState();
 
-  const { data: teamWorkflowStatusListResponse, isFetching } = useRetrieveAllFromTeamQuery({ teamId }, { skip: teamId == null });
+  const { data: teamWorkflowStatusListResponse, isFetching } = useRetrieveAllFromTeamQuery(
+    { teamId: team?.teamId || "" },
+    { skip: team == null }
+  );
 
   const notStartedStatuses = teamWorkflowStatusListResponse?.data.groupedTeamWorkflowStatuses.NOT_STARTED || [];
   const startedStatuses = teamWorkflowStatusListResponse?.data.groupedTeamWorkflowStatuses.STARTED || [];
