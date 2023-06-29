@@ -1,8 +1,10 @@
-import { TaskDto } from "@/model/be/jinear-core";
+import { TaskDto, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { isSameDay, startOfDay } from "date-fns";
 import { createContext, useContext } from "react";
 
 interface ICalendarContext {
+  workspace?: WorkspaceDto;
+  newTasksFromTeam?: TeamDto;
   viewingDate: Date;
   setViewingDate?: React.Dispatch<React.SetStateAction<Date>>;
 
@@ -66,4 +68,14 @@ export function useIsDateBetweenViewingPeriod(day?: Date) {
   }
   const milis = day.getTime();
   return periodStart <= milis && milis <= periodEnd;
+}
+
+export function useCalendarWorkspace() {
+  const ctx = useContext(CalendarContext);
+  return ctx.workspace;
+}
+
+export function useCalendarNewTaskFromTeam() {
+  const ctx = useContext(CalendarContext);
+  return ctx.newTasksFromTeam;
 }

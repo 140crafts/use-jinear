@@ -14,11 +14,18 @@ import styles from "./DatePickerButton.module.css";
 interface DatePickerButtonProps {
   fieldName: "assignedDate" | "dueDate";
   isPreciseFieldName: "hasPreciseAssignedDate" | "hasPreciseDueDate";
+  initialAssignedDate?: Date;
   register: UseFormRegister<TaskInitializeRequest>;
   setValue: UseFormSetValue<TaskInitializeRequest>;
 }
 
-const DatePickerButton: React.FC<DatePickerButtonProps> = ({ fieldName, isPreciseFieldName, register, setValue }) => {
+const DatePickerButton: React.FC<DatePickerButtonProps> = ({
+  fieldName,
+  isPreciseFieldName,
+  initialAssignedDate,
+  register,
+  setValue,
+}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -31,6 +38,12 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({ fieldName, isPrecis
     }
     setValue(isPreciseFieldName, hasPreciseDate);
   }, [selectedDate, hasPreciseDate, fieldName, isPreciseFieldName]);
+
+  useEffect(() => {
+    if (initialAssignedDate) {
+      setSelectedDate(initialAssignedDate);
+    }
+  }, [initialAssignedDate]);
 
   const onDateSelect = (day: Date) => {
     setSelectedDate(day);

@@ -483,6 +483,7 @@ export const selectNewTaskModalSubTaskOf = (state: RootState) => state.modal.new
 export const selectNewTaskModalSubTaskOfLabel = (state: RootState) => state.modal.newTaskModal?.subTaskOfLabel;
 export const selectNewTaskModalWorkspace = (state: RootState) => state.modal.newTaskModal?.workspace;
 export const selectNewTaskModalTeam = (state: RootState) => state.modal.newTaskModal?.team;
+export const selectNewTaskModalInitialAssignedDate = (state: RootState) => state.modal.newTaskModal?.initialAssignedDate;
 
 export const selectTeamOptionsModalVisible = (state: RootState) => state.modal.teamOptionsModal?.visible;
 

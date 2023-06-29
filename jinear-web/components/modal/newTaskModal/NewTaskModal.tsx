@@ -2,6 +2,7 @@ import NewTaskForm from "@/components/form/newTaskForm/NewTaskForm";
 import useWindowSize from "@/hooks/useWindowSize";
 import {
   closeNewTaskModal,
+  selectNewTaskModalInitialAssignedDate,
   selectNewTaskModalSubTaskOf,
   selectNewTaskModalSubTaskOfLabel,
   selectNewTaskModalTeam,
@@ -24,6 +25,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const subTaskOfLabel = useTypedSelector(selectNewTaskModalSubTaskOfLabel);
   const workspace = useTypedSelector(selectNewTaskModalWorkspace);
   const team = useTypedSelector(selectNewTaskModalTeam);
+  const initialAssignedDate = useTypedSelector(selectNewTaskModalInitialAssignedDate);
   const workspaceId = workspace?.workspaceId;
 
   const { isMobile } = useWindowSize();
@@ -45,6 +47,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
           initialTeam={team}
           subTaskOf={subTaskOf}
           subTaskOfLabel={subTaskOfLabel}
+          initialAssignedDate={initialAssignedDate}
           className={isMobile ? styles.formMobileClassName : undefined}
           footerContainerClass={isMobile ? styles.mobileFooterContainerClass : undefined}
           onClose={close}

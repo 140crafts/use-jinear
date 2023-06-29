@@ -91,6 +91,7 @@ export interface NewTaskModalState extends ModalState {
   team?: TeamDto;
   subTaskOf?: string;
   subTaskOfLabel?: string;
+  initialAssignedDate?: Date;
 }
 
 export interface TeamPickerModalState extends ModalState {
