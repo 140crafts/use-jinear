@@ -17,6 +17,7 @@ import ModalState, {
   NotFoundModalState,
   ReminderListModalState,
   SearchTaskModalState,
+  TaskBoardPickerModalState,
   TaskOverviewModalState,
   TaskTaskBoardAssignModalState,
   TeamMemberPickerModalState,
@@ -123,6 +124,9 @@ const initialState = {
   teamWorkflowStatusPickerModal: {
     visible: false,
   },
+  taskBoardPickerModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -153,6 +157,7 @@ const initialState = {
   topicPickerModal: null | TopicPickerModalState;
   teamMemberPickerModal: null | TeamMemberPickerModalState;
   teamWorkflowStatusPickerModal: null | TeamWorkflowStatusPickerModalState;
+  taskBoardPickerModal: null | TaskBoardPickerModalState;
 };
 
 const slice = createSlice({
@@ -367,6 +372,13 @@ const slice = createSlice({
       state.teamWorkflowStatusPickerModal = initialState.teamWorkflowStatusPickerModal;
     },
 
+    popBoardPickerModal: (state, action: PayloadAction<TaskBoardPickerModalState>) => {
+      state.taskBoardPickerModal = { ...action.payload, visible: true };
+    },
+    closeBoardPickerModal: (state, action: PayloadAction<void>) => {
+      state.taskBoardPickerModal = initialState.taskBoardPickerModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -441,6 +453,8 @@ export const {
   closeTeamMemberPickerModal,
   popTeamWorkflowStatusPickerModal,
   closeTeamWorkflowStatusPickerModal,
+  popBoardPickerModal,
+  closeBoardPickerModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -591,3 +605,11 @@ export const selectTeamWorkflowStatusPickerModalMultiple = (state: RootState) =>
 export const selectTeamWorkflowStatusPickerModalInitialSelectionOnMultiple = (state: RootState) =>
   state.modal.teamWorkflowStatusPickerModal?.initialSelectionOnMultiple;
 export const selectTeamWorkflowStatusPickerModalOnPick = (state: RootState) => state.modal.teamWorkflowStatusPickerModal?.onPick;
+
+export const selectTaskBoardPickerModalVisible = (state: RootState) => state.modal.taskBoardPickerModal?.visible;
+export const selectTaskBoardPickerModalTeamId = (state: RootState) => state.modal.taskBoardPickerModal?.teamId;
+export const selectTaskBoardPickerModalWorkspaceId = (state: RootState) => state.modal.taskBoardPickerModal?.workspaceId;
+export const selectTaskBoardPickerModalMultiple = (state: RootState) => state.modal.taskBoardPickerModal?.multiple;
+export const selectTaskBoardPickerModalInitialSelectionOnMultiple = (state: RootState) =>
+  state.modal.taskBoardPickerModal?.initialSelectionOnMultiple;
+export const selectTaskBoardPickerModalOnPick = (state: RootState) => state.modal.taskBoardPickerModal?.onPick;

@@ -11,6 +11,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import WorkspaceAndTeamInfo from "../common/workspaceAndTeamInfo/WorkspaceAndTeamInfo";
 import styles from "./NewTaskForm.module.css";
+import BoardPickerButton from "./boardPickerButton/BoardPickerButton";
 import DatePickerButton from "./datePickerButton/DatePickerButton";
 import TeamMemberPickerButton from "./teamMemberPickerButton/TeamMemberPickerButton";
 import TitleInput from "./titleInput/TitleInput";
@@ -61,6 +62,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
       setFocus("title");
       setValue("topicId", "no-topic");
       setValue("assignedTo", "no-assignee");
+      setValue("boardId", "no-board");
       setValue("teamId", selectedTeam.teamId);
     }, 200);
   }, []);
@@ -100,6 +102,9 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
     if (data.topicId == "no-topic") {
       data.topicId = undefined;
     }
+    if (data.boardId == "no-board") {
+      data.boardId = undefined;
+    }
     // @ts-ignore
     if (data.assignedDate == "no-date") {
       data.assignedDate = undefined;
@@ -137,6 +142,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
           {!workspace.isPersonal && (
             <TeamMemberPickerButton register={register} setValue={setValue} teamId={selectedTeam.teamId} />
           )}
+          <BoardPickerButton register={register} setValue={setValue} workspace={workspace} team={selectedTeam} />
           <DatePickerButton
             register={register}
             setValue={setValue}

@@ -18,7 +18,7 @@ const TopicItemButton: React.FC<TopicItemButtonProps> = ({ workspace, team, topi
       heightVariant={ButtonHeight.short}
       href={`/${workspace.username}/${team.username}/tasks?topic=${topic.topicId}`}
     >
-      {topic.tag}
+      {topic.name}
     </Button>
   );
 };
