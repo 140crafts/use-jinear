@@ -153,9 +153,12 @@ public class TaskInitializeService {
     }
 
     private void initializeTaskBoardEntry(TaskInitializeVo taskInitializeVo, Task task) {
-        InitializeTaskBoardEntryVo initializeTaskBoardEntryVo = new InitializeTaskBoardEntryVo();
-        initializeTaskBoardEntryVo.setTaskId(task.getTaskId());
-        initializeTaskBoardEntryVo.setTaskBoardId(taskInitializeVo.getBoardId());
-        taskBoardEntryOperationService.initialize(initializeTaskBoardEntryVo);
+        String boardId = taskInitializeVo.getBoardId();
+        if (Objects.nonNull(boardId)) {
+            InitializeTaskBoardEntryVo initializeTaskBoardEntryVo = new InitializeTaskBoardEntryVo();
+            initializeTaskBoardEntryVo.setTaskId(task.getTaskId());
+            initializeTaskBoardEntryVo.setTaskBoardId(boardId);
+            taskBoardEntryOperationService.initialize(initializeTaskBoardEntryVo);
+        }
     }
 }
