@@ -18,5 +18,7 @@ public interface TaskBoardRepository extends JpaRepository<TaskBoard, String> {
 
     Page<TaskBoard> findAllByTaskBoardIdNotInAndWorkspaceIdAndTeamIdAndPassiveIdIsNullOrderByCreatedDateDesc(List<String> excludingBoardIds, String workspaceId, String teamId, Pageable pageable);
 
+    Page<TaskBoard> findAllByWorkspaceIdAndTeamIdAndTitleLikeIgnoreCaseAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, String teamId, String filterRecentsByName, Pageable pageable);
+
     Page<TaskBoard> findAllByTaskBoardIdNotInAndWorkspaceIdAndTeamIdAndTitleLikeIgnoreCaseAndPassiveIdIsNullOrderByCreatedDateDesc(List<String> excludingBoardIds, String workspaceId, String teamId, String filterRecentsByName, Pageable pageable);
 }

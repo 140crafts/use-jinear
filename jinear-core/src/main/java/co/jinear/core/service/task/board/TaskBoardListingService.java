@@ -35,8 +35,15 @@ public class TaskBoardListingService {
                 .map(taskBoardDtoConverter::convert);
     }
 
+    public Page<TaskBoardDto> retrieveTaskBoardsFilterByName(String workspaceId, String teamId, String filterRecentsByName, int page) {
+        log.info("Retrieve filtered task boards from workspace and team has started. workspaceId: {}, teamId: {}, filterRecentsByName: {}, page: {}", workspaceId, teamId, filterRecentsByName, page);
+        String filterLike = "%" + filterRecentsByName + "%";
+        return taskBoardRepository.findAllByWorkspaceIdAndTeamIdAndTitleLikeIgnoreCaseAndPassiveIdIsNullOrderByCreatedDateDesc(workspaceId, teamId, filterLike, PageRequest.of(page, SEARCH_PAGE_SIZE))
+                .map(taskBoardDtoConverter::convert);
+    }
+
     public Page<TaskBoardDto> retrieveTaskBoardsExcludingSomeAndFilterByName(List<String> excludingBoardIds, String workspaceId, String teamId, String filterRecentsByName, int page) {
-        log.info("Retrieve all task boards with some exclusion from workspace and team has started. workspaceId: {}, teamId: {}, filterRecentsByName: {}, page: {}, excludingBoardIds: [{}]", workspaceId, teamId, page, NormalizeHelper.listToString(excludingBoardIds));
+        log.info("Retrieve all task boards with some exclusion from workspace and team has started. workspaceId: {}, teamId: {}, filterRecentsByName: {}, page: {}, excludingBoardIds: [{}]", workspaceId, teamId, filterRecentsByName, page, NormalizeHelper.listToString(excludingBoardIds));
         String filterLike = "%" + filterRecentsByName + "%";
         return taskBoardRepository.findAllByTaskBoardIdNotInAndWorkspaceIdAndTeamIdAndTitleLikeIgnoreCaseAndPassiveIdIsNullOrderByCreatedDateDesc(excludingBoardIds, workspaceId, teamId, filterLike, PageRequest.of(page, SEARCH_PAGE_SIZE))
                 .map(taskBoardDtoConverter::convert);

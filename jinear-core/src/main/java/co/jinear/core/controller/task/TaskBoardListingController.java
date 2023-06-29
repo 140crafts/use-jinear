@@ -22,6 +22,15 @@ public class TaskBoardListingController {
         return taskBoardListingManager.retrieveAll(workspaceId, teamId, page);
     }
 
+    @GetMapping("/{workspaceId}/team/{teamId}/filter")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskBoardListingPaginatedResponse retrieveAll(@PathVariable String workspaceId,
+                                                         @PathVariable String teamId,
+                                                         @RequestParam(required = false, defaultValue = "") String name,
+                                                         @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return taskBoardListingManager.filter(workspaceId, teamId, name, page);
+    }
+
     @GetMapping("/related-with-task/{taskId}")
     @ResponseStatus(HttpStatus.OK)
     public TaskAndTaskBoardRelationResponse retrieveTaskAndTaskBoardsRelation(@PathVariable String taskId,

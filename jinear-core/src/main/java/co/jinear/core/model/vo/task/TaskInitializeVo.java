@@ -23,4 +23,5 @@ public class TaskInitializeVo {
     private String title;
     private String description;
     private String subTaskOf;
+    private String boardId;
 }
