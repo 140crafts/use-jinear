@@ -22,6 +22,7 @@ interface NewTaskFormProps {
   initialTeam: TeamDto;
   subTaskOf?: string;
   subTaskOfLabel?: string;
+  initialAssignedDate?: Date;
   onClose: () => void;
   className?: string;
   footerContainerClass?: string;
@@ -34,6 +35,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
   initialTeam,
   subTaskOf,
   subTaskOfLabel,
+  initialAssignedDate,
   onClose,
   className,
   footerContainerClass,
@@ -148,6 +150,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             setValue={setValue}
             fieldName="assignedDate"
             isPreciseFieldName="hasPreciseAssignedDate"
+            initialAssignedDate={initialAssignedDate}
           />
           <DatePickerButton register={register} setValue={setValue} fieldName="dueDate" isPreciseFieldName="hasPreciseDueDate" />
         </div>

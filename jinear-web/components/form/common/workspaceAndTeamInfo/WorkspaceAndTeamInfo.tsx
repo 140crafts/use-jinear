@@ -58,7 +58,8 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
       {workspace.isPersonal ? personalWorkspaceTitle : workspaceTitle}
       <div className={styles.buttonContainer}>
         <Button
-          disabled={readOnly}
+          //fixed
+          disabled={true}
           className={styles.button}
           variant={ButtonVariants.filled}
           heightVariant={ButtonHeight.short}
