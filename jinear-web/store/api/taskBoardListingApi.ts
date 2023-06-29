@@ -6,6 +6,11 @@ interface ITaskBoardListingRequest {
   teamId: string;
   page?: number;
 }
+
+interface ITaskBoardFilterRequest extends ITaskBoardListingRequest {
+  name: string;
+}
+
 interface IRetrieveTaskAndTaskBoardsRelation {
   taskId: string;
   filterRecentsByName: string;
@@ -18,6 +23,17 @@ export const taskBoardListingApi = api.injectEndpoints({
       providesTags: (_result, _err, req) => [
         {
           type: "task-board-listing",
+          id: `${req.workspaceId}-${req.teamId}-${req.page}`,
+        },
+      ],
+    }),
+    //
+    filterTaskBoards: build.query<TaskBoardListingPaginatedResponse, ITaskBoardFilterRequest>({
+      query: ({ workspaceId, teamId, name = "", page = 0 }: ITaskBoardFilterRequest) =>
+        `v1/task-board/list/${workspaceId}/team/${teamId}/filter?name=${encodeURI(name)}&page=${page}`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: "task-board-filter",
           id: `${req.workspaceId}-${req.teamId}-${req.page}`,
         },
       ],
@@ -37,8 +53,9 @@ export const taskBoardListingApi = api.injectEndpoints({
   }),
 });
 
-export const { useRetrieveAllTaskBoardsQuery, useRetrieveTaskAndTaskBoardsRelationQuery } = taskBoardListingApi;
+export const { useRetrieveAllTaskBoardsQuery, useFilterTaskBoardsQuery, useRetrieveTaskAndTaskBoardsRelationQuery } =
+  taskBoardListingApi;
 
 export const {
-  endpoints: { retrieveAllTaskBoards, retrieveTaskAndTaskBoardsRelation },
+  endpoints: { retrieveAllTaskBoards, filterTaskBoards, retrieveTaskAndTaskBoardsRelation },
 } = taskBoardListingApi;

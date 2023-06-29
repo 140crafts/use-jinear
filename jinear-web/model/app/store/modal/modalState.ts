@@ -1,4 +1,5 @@
 import {
+  TaskBoardDto,
   TaskDto,
   TaskSearchResultDto,
   TeamDto,
@@ -140,4 +141,12 @@ export interface TeamWorkflowStatusPickerModalState extends ModalState {
   multiple?: boolean;
   initialSelectionOnMultiple?: TeamWorkflowStatusDto[];
   onPick?: (pickedList: TeamWorkflowStatusDto[]) => void;
+}
+
+export interface TaskBoardPickerModalState extends ModalState {
+  workspaceId?: string;
+  teamId?: string;
+  multiple?: boolean;
+  initialSelectionOnMultiple?: TaskBoardDto[];
+  onPick?: (pickedList: TaskBoardDto[]) => void;
 }

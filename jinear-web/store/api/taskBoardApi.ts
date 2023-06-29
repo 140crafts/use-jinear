@@ -19,7 +19,7 @@ export const taskBoardApi = api.injectEndpoints({
       invalidatesTags: [
         "task-board-listing",
         "task-board-retrieve",
-        "task-board-listing",
+        "task-board-filter",
         "retrieve-task-and-task-boards-relation",
       ],
     }),
@@ -30,7 +30,7 @@ export const taskBoardApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["task-board-listing", "task-board-retrieve", "task-board-listing"],
+      invalidatesTags: ["task-board-listing", "task-board-retrieve", "task-board-filter"],
     }),
     //
     updateTitle: build.mutation<BaseResponse, TaskBoardUpdateTitleRequest>({
@@ -42,7 +42,7 @@ export const taskBoardApi = api.injectEndpoints({
       invalidatesTags: [
         "task-board-listing",
         "task-board-retrieve",
-        "task-board-listing",
+        "task-board-filter",
         "retrieve-task-and-task-boards-relation",
       ],
     }),
@@ -53,7 +53,7 @@ export const taskBoardApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["task-board-listing", "task-board-retrieve", "task-board-listing"],
+      invalidatesTags: ["task-board-listing", "task-board-retrieve", "task-board-filter"],
     }),
     //
   }),

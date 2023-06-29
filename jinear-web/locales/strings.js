@@ -2042,6 +2042,10 @@ export default {
     en: "Assign a topic",
     tr: "Bir konu ata",
   },
+  newTaskFormPickBoardButtonLabel: {
+    en: "Add to Board",
+    tr: "Panoya Ekle",
+  },
   teamMemberPickerModalTitle: {
     en: "Team Members",
     tr: "Ekip Üyeleri",
@@ -2213,5 +2217,17 @@ export default {
   tasksScreenBreadcrumbLabel: {
     en: "Tasks",
     tr: "Görevler",
+  },
+  boardPickerModalTitle: {
+    en: "Boards",
+    tr: "Panolar",
+  },
+  boardPickerModalFilterPlaceholder: {
+    en: "Filter by board name",
+    tr: "Pano adına göre filtrele",
+  },
+  boardPickerModalEmptyState: {
+    en: "No task board found",
+    tr: "Hiçbir pano bulunamadı",
   },
 };

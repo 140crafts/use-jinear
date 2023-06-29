@@ -4,6 +4,7 @@ import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import MainHeader from "@/components/mainHeader/MainHeader";
 import AddMemberToTeamModal from "@/components/modal/addMemberToTeamModal/AddMemberToTeamModal";
 import BasicTextInputModal from "@/components/modal/basicTextInputModal/BasicTextInputModal";
+import BoardPickerModal from "@/components/modal/boardPickerModal/BoardPickerModal";
 import DatePickerModal from "@/components/modal/datePicker/DatePickerModal";
 import DialogModal from "@/components/modal/dialogModal/DialogModal";
 import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
@@ -82,6 +83,7 @@ const globalModals: any = (
     <TeamMemberPickerModal />
     <TopicPickerModal />
     <TeamWorkflowStatusModal />
+    <BoardPickerModal />
     <NewTopicModal />
     <LoginWith2FaMailModal />
     <DatePickerModal />
