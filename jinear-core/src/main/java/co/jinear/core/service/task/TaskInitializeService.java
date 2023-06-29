@@ -9,11 +9,13 @@ import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.enumtype.task.TaskRelationType;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
+import co.jinear.core.model.vo.task.InitializeTaskBoardEntryVo;
 import co.jinear.core.model.vo.task.TaskInitializeVo;
 import co.jinear.core.model.vo.task.TaskRelationInitializeVo;
 import co.jinear.core.model.vo.task.TaskSubscriptionInitializeVo;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.richtext.RichTextInitializeService;
+import co.jinear.core.service.task.board.entry.TaskBoardEntryOperationService;
 import co.jinear.core.service.task.relation.TaskRelationInitializeService;
 import co.jinear.core.service.task.subscription.TaskSubscriptionOperationService;
 import co.jinear.core.service.team.TeamLockService;
@@ -43,6 +45,7 @@ public class TaskInitializeService {
     private final TaskRelationInitializeService taskRelationInitializeService;
     private final TaskSubscriptionConverter taskSubscriptionConverter;
     private final TaskSubscriptionOperationService taskSubscriptionOperationService;
+    private final TaskBoardEntryOperationService taskBoardEntryOperationService;
 
     @Transactional
     public TaskDto initializeTask(TaskInitializeVo taskInitializeVo) {
@@ -58,6 +61,7 @@ public class TaskInitializeService {
             initializeAndAssignRichText(taskInitializeVo, taskDto);
             initializeSubtaskRelation(taskInitializeVo, saved);
             initializeTaskSubscription(taskInitializeVo, saved);
+            initializeTaskBoardEntry(taskInitializeVo, task);
             return taskDto;
         } finally {
             releaseLocks(taskInitializeVo);
@@ -146,5 +150,12 @@ public class TaskInitializeService {
             TaskSubscriptionInitializeVo assigneeSubscriptionInitializeVo = taskSubscriptionConverter.map(taskInitializeVo.getAssignedTo(), saved.getTaskId());
             taskSubscriptionOperationService.initializeTaskSubscription(assigneeSubscriptionInitializeVo);
         }
+    }
+
+    private void initializeTaskBoardEntry(TaskInitializeVo taskInitializeVo, Task task) {
+        InitializeTaskBoardEntryVo initializeTaskBoardEntryVo = new InitializeTaskBoardEntryVo();
+        initializeTaskBoardEntryVo.setTaskId(task.getTaskId());
+        initializeTaskBoardEntryVo.setTaskBoardId(taskInitializeVo.getBoardId());
+        taskBoardEntryOperationService.initialize(initializeTaskBoardEntryVo);
     }
 }

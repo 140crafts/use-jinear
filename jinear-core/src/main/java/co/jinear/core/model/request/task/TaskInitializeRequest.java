@@ -49,4 +49,7 @@ public class TaskInitializeRequest extends BaseRequest {
 
     @Nullable
     private String subTaskOf;
+
+    @Nullable
+    private String boardId;
 }

@@ -13,6 +13,7 @@ import co.jinear.core.model.response.account.AccountRetrieveResponse;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.account.AccountMailConfirmationService;
 import co.jinear.core.service.account.AccountRetrieveService;
+import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.token.TokenService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class AccountManager {
     private final SessionInfoService sessionInfoService;
     private final TokenService tokenService;
     private final AccountsWorkspacePerspectiveDtoConverter accountsWorkspacePerspectiveDtoConverter;
+    private final MediaRetrieveService mediaRetrieveService;
 
     public AccountRetrieveResponse retrieveCurrentAccount() {
         log.info("Retrieve current account has started.");
@@ -65,6 +67,7 @@ public class AccountManager {
         List<DetailedWorkspaceMemberDto> workspaces = workspaceRetrieveService.retrieveAccountWorkspaces(accountId);
         List<AccountsWorkspacePerspectiveDto> accountsWorkspacePerspectiveDtos = workspaces.stream()
                 .map(accountsWorkspacePerspectiveDtoConverter::convert)
+                .map(this::setProfilePicture)
                 .toList();
         accountDto.setWorkspaces(accountsWorkspacePerspectiveDtos);
     }
@@ -76,5 +79,11 @@ public class AccountManager {
         } else {
             accountMailConfirmationService.sendConfirmEmailMail(accountId, resendConfirmEmailRequest.getLocale());
         }
+    }
+
+    private AccountsWorkspacePerspectiveDto setProfilePicture(AccountsWorkspacePerspectiveDto workspaceDto) {
+        mediaRetrieveService.retrieveProfilePictureOptional(workspaceDto.getWorkspaceId())
+                .ifPresent(workspaceDto::setProfilePicture);
+        return workspaceDto;
     }
 }

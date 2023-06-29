@@ -13,6 +13,7 @@ import co.jinear.core.service.task.TaskActivityService;
 import co.jinear.core.service.task.TaskInitializeService;
 import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
+import co.jinear.core.validator.task.TaskBoardAccessValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
@@ -35,12 +36,14 @@ public class TaskInitializeManager {
     private final TeamAccessValidator teamAccessValidator;
     private final TaskInitializeVoConverter taskInitializeVoConverter;
     private final TaskActivityService taskActivityService;
+    private final TaskBoardAccessValidator taskBoardAccessValidator;
 
     public TaskResponse initializeTask(TaskInitializeRequest taskInitializeRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
         validateWorkspaceAccess(currentAccount, taskInitializeRequest);
         validateTeamAccess(currentAccount, taskInitializeRequest);
         validateDueDateIsAfterAssignedDate(taskInitializeRequest.getAssignedDate(), taskInitializeRequest.getDueDate());
+        validateTaskBoardAccess(taskInitializeRequest, currentAccount);
         log.info("Initialize task has started. currentAccount: {}", currentAccount);
         TaskInitializeVo taskInitializeVo = taskInitializeVoConverter.map(taskInitializeRequest);
         taskInitializeVo.setOwnerId(currentAccount);
@@ -49,6 +52,12 @@ public class TaskInitializeManager {
         retrieveAndSetWorkspaceDto(initializedTask);
         taskActivityService.initializeNewTaskActivity(currentAccount, initializedTask);
         return mapResponse(initializedTask);
+    }
+
+    private void validateTaskBoardAccess(TaskInitializeRequest taskInitializeRequest, String currentAccount) {
+        if (Objects.nonNull(taskInitializeRequest.getBoardId())) {
+            taskBoardAccessValidator.validateHasTaskBoardAccess(taskInitializeRequest.getBoardId(), currentAccount);
+        }
     }
 
     private void validateDueDateIsAfterAssignedDate(ZonedDateTime assignedDate, ZonedDateTime dueDate) {

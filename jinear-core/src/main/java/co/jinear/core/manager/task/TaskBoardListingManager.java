@@ -51,6 +51,14 @@ public class TaskBoardListingManager {
         return mapResponse(results);
     }
 
+    public TaskBoardListingPaginatedResponse filter(String workspaceId, String teamId, String filterRecentsByName, Integer page) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        teamAccessValidator.validateTeamAccess(currentAccountId, teamId);
+        log.info("Retrieve all task boards has started. currentAccountId: {}", currentAccountId);
+        Page<TaskBoardDto> results = taskBoardListingService.retrieveTaskBoardsFilterByName(workspaceId, teamId, filterRecentsByName, page);
+        return mapResponse(results);
+    }
+
     public TaskAndTaskBoardRelationResponse retrieveTasksBoardAndRecentBoards(String taskId, String filterRecentsByName) {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
