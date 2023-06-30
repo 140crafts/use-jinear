@@ -1,6 +1,7 @@
 package co.jinear.core.repository;
 
 import co.jinear.core.model.entity.task.Task;
+import co.jinear.core.model.enumtype.task.TaskFilterSort;
 import co.jinear.core.model.vo.task.SearchIntersectingTasksFromTeamVo;
 import co.jinear.core.model.vo.task.SearchIntersectingTasksFromWorkspaceVo;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
@@ -42,7 +43,15 @@ public class TaskSearchRepository {
         countQuery.select(criteriaBuilder.count(countRoot));
         List<Predicate> countPredicateList = retrieveFilterPredicateList(taskSearchFilterVo, criteriaBuilder, countRoot);
 
-        return executeAndRetrievePageableResults(criteriaBuilder, taskCriteriaQuery, countQuery, taskRoot, predicateList, countPredicateList, PageRequest.of(taskSearchFilterVo.getPage(), FILTER_PAGE_SIZE));
+        return executeAndRetrievePageableResults(
+                criteriaBuilder,
+                taskCriteriaQuery,
+                countQuery,
+                taskRoot,
+                predicateList,
+                countPredicateList,
+                taskSearchFilterVo.getTaskFilterSort(),
+                PageRequest.of(taskSearchFilterVo.getPage(), FILTER_PAGE_SIZE));
     }
 
     public List<Task> findAllIntersectingTasksFromWorkspaceAndTeamListBetween(SearchIntersectingTasksFromWorkspaceVo searchIntersectingTasksFromWorkspaceVo) {
@@ -97,10 +106,18 @@ public class TaskSearchRepository {
                 .getResultList();
     }
 
-    private Page<Task> executeAndRetrievePageableResults(CriteriaBuilder criteriaBuilder, CriteriaQuery<Task> taskCriteriaQuery, CriteriaQuery<Long> countQuery, Root<Task> taskRoot, List<Predicate> predicateList, List<Predicate> countPredicateList, Pageable pageable) {
-        taskCriteriaQuery
-                .where(predicateList.toArray(Predicate[]::new))
-                .orderBy(criteriaBuilder.asc(taskRoot.get("assignedDate")));
+    private Page<Task> executeAndRetrievePageableResults(CriteriaBuilder criteriaBuilder,
+                                                         CriteriaQuery<Task> taskCriteriaQuery,
+                                                         CriteriaQuery<Long> countQuery,
+                                                         Root<Task> taskRoot,
+                                                         List<Predicate> predicateList,
+                                                         List<Predicate> countPredicateList,
+                                                         TaskFilterSort taskFilterSort,
+                                                         Pageable pageable) {
+
+        taskCriteriaQuery.where(predicateList.toArray(Predicate[]::new));
+        setOrder(criteriaBuilder, taskCriteriaQuery, taskRoot, taskFilterSort);
+
         List<Task> result = entityManager.createQuery(taskCriteriaQuery)
                 .setFirstResult((int) pageable.getOffset())
                 .setMaxResults(pageable.getPageSize())
@@ -111,5 +128,17 @@ public class TaskSearchRepository {
         Long count = entityManager.createQuery(countQuery).getSingleResult();
 
         return new PageImpl(result, pageable, count);
+    }
+
+    private static void setOrder(CriteriaBuilder criteriaBuilder, CriteriaQuery<Task> taskCriteriaQuery, Root<Task> taskRoot, TaskFilterSort taskFilterSort) {
+        if (TaskFilterSort.IDATE_ASC.equals(taskFilterSort)) {
+            taskCriteriaQuery.orderBy(criteriaBuilder.asc(taskRoot.get("createdDate")));
+        } else if (TaskFilterSort.IDATE_DESC.equals(taskFilterSort)) {
+            taskCriteriaQuery.orderBy(criteriaBuilder.desc(taskRoot.get("createdDate")));
+        } else if (TaskFilterSort.ASSIGNED_DATE_DESC.equals(taskFilterSort)) {
+            taskCriteriaQuery.orderBy(criteriaBuilder.desc(taskRoot.get("assignedDate")));
+        } else if (TaskFilterSort.ASSIGNED_DATE_ASC.equals(taskFilterSort)) {
+            taskCriteriaQuery.orderBy(criteriaBuilder.asc(taskRoot.get("assignedDate")));
+        }
     }
 }
