@@ -16,6 +16,7 @@ export const taskApi = api.injectEndpoints({
         "team-workflow-task-list",
         "team-topic-task-list",
         "team-all-task-list",
+        "task-board-entry-listing",
       ],
     }),
     //
