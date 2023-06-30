@@ -259,6 +259,22 @@ select {
   height: 2rem;
 }
 
+.spacer-h-5 {
+  height: 2.5rem;
+}
+
+.spacer-h-6 {
+  height: 3rem;
+}
+
+.spacer-h-7 {
+  height: 3.5rem;
+}
+
+.spacer-h-8 {
+  height: 4rem;
+}
+
 .spacer-w-1 {
   width: 0.5rem;
 }
