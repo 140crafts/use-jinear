@@ -24,6 +24,7 @@ interface LayoutProps {
 const logger = Logger("Layout");
 
 const ROUTES_WITHOUT_SIDE_MENU = [
+  "/",
   "/forgot-password",
   "/register",
   "/login",

@@ -2230,4 +2230,32 @@ export default {
     en: "No task board found",
     tr: "Hiçbir pano bulunamadı",
   },
+  homescreenActionBarPricing: {
+    en: "Pricing",
+    tr: "Fiyatlandırma",
+  },
+  homescreenHeroTitleLine1: {
+    en: "Focus on your job",
+    tr: "İşinize odaklanın",
+  },
+  homescreenHeroTitleLine2: {
+    en: "not juggling tasks",
+    tr: "proje yönetimine değil",
+  },
+  homescreenHeroText: {
+    en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, manage projects collaboratively.",
+    tr: "Tüm karmaşayı bir kenara bırakın, iş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, projeleri işbirliğiyle yönetin.",
+  },
+  homescreenGoToApp: {
+    en: "Go to App",
+    tr: "Uygulamaya Git",
+  },
+  homescreenLogin: {
+    en: "Login",
+    tr: "Giriş Yap",
+  },
+  homescreenRegister: {
+    en: "Create an account",
+    tr: "Hesap Oluştur",
+  },
 };
