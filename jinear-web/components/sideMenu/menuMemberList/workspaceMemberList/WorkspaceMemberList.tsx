@@ -1,10 +1,10 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { PageDto, WorkspaceAccountRoleType, WorkspaceMemberDto } from "@/model/be/jinear-core";
 import { selectCurrentAccountId } from "@/store/slice/accountSlice";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoEllipsisHorizontal } from "react-icons/io5";
+import { IoPeopleOutline } from "react-icons/io5";
 import MemberProfilePictureList from "../memberProfilePictureList/MemberProfilePictureList";
 import styles from "./WorkspaceMemberList.module.css";
 
@@ -15,7 +15,6 @@ interface WorkspaceMemberListProps {
 
 const WorkspaceMemberList: React.FC<WorkspaceMemberListProps> = ({ workspaceUsername, page }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
 
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
   const currentAccountsWorkspaceRole: WorkspaceAccountRoleType[] = page?.content
@@ -23,10 +22,6 @@ const WorkspaceMemberList: React.FC<WorkspaceMemberListProps> = ({ workspaceUser
     .map((memberShip) => memberShip?.role);
   const currentAccountAdminOrOwner =
     currentAccountsWorkspaceRole.indexOf("ADMIN") != -1 || currentAccountsWorkspaceRole.indexOf("OWNER") != -1;
-
-  const popInvitationModal = () => {
-    // dispatch(popWorkspaceMemberInviteModal());
-  };
 
   return (
     <div className={styles.container}>
@@ -38,7 +33,7 @@ const WorkspaceMemberList: React.FC<WorkspaceMemberListProps> = ({ workspaceUser
           variant={ButtonVariants.hoverFilled2}
           heightVariant={ButtonHeight.short}
         >
-          <IoEllipsisHorizontal />
+          <IoPeopleOutline />
         </Button>
       )}
     </div>

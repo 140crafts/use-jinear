@@ -33,7 +33,7 @@ export default function Home() {
     <div className={styles.container}>
       <div className={styles.header}>
         <FormLogo />
-        <div className={styles.actionBar}>
+        <div className={styles.headerActionBar}>
           <Button href="/pricing">
             <b>{t("homescreenActionBarPricing")}</b>
           </Button>
