@@ -1,7 +1,8 @@
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
-import { useTypedSelector } from "@/store/store";
+import { popNewTeamModal } from "@/store/slice/modalSlice";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import MenuGroupTitle from "../menuGroupTitle/MenuGroupTitle";
@@ -12,6 +13,7 @@ interface BasicTeamListProps {}
 
 const BasicTeamList: React.FC<BasicTeamListProps> = ({}) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
 
   const {
@@ -22,12 +24,16 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({}) => {
     skip: preferredWorkspace == null,
   });
 
+  const openNewTeamModal = () => {
+    dispatch(popNewTeamModal());
+  };
+
   return (
     <div className={styles.container}>
       {!preferredWorkspace?.isPersonal && (
         <>
           <div className="spacer-h-1" />
-          <MenuGroupTitle label={t("sideMenuTeamsTitle")} />
+          <MenuGroupTitle label={t("sideMenuTeamsTitle")} hasAddButton={true} onAddButtonClick={openNewTeamModal} />
         </>
       )}
       {isFetching && <CircularLoading />}

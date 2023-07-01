@@ -1072,7 +1072,7 @@ export default {
   },
   newTeamFormTag: {
     en: "Tag (short code for easy access. For example Sales -> SLS)",
-    tr: "Ekip kısa kodu (Kolay erişim için. Örneğin Pazarlama -> STS)",
+    tr: "Ekip kısa kodu (Kolay erişim için. Örneğin Satış -> STS)",
   },
   currentWorkspaceHeaderWorkspaceDetail: {
     en: "Workspace detail",
@@ -2244,7 +2244,7 @@ export default {
   },
   homescreenHeroText: {
     en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, manage projects collaboratively.",
-    tr: "Tüm karmaşayı bir kenara bırakın, iş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, projeleri işbirliğiyle yönetin.",
+    tr: "Karmaşayı bir kenara bırakın, iş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, projeleri işbirliğiyle yönetin.",
   },
   homescreenGoToApp: {
     en: "Go to App",
