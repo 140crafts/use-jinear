@@ -35,17 +35,17 @@ const MainHeader: React.FC<MainHeaderProps> = ({}) => {
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
 
         <meta name="twitter:card" content="summary" />
-        <meta name="twitter:url" content="https://jinear.140crafts.com" />
+        <meta name="twitter:url" content="https://jinear.co" />
         <meta name="twitter:title" content="Jinear" />
         <meta name="twitter:description" content="Manage your tasks easily" />
-        <meta name="twitter:image" content="https://jinear.140crafts.com/icons/android-chrome-192x192.png" />
+        <meta name="twitter:image" content="https://jinear.co/icons/android-chrome-192x192.png" />
         <meta name="twitter:creator" content="@cagdastunca" />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Jinear" />
         <meta property="og:description" content="Manage your tasks easily" />
         <meta property="og:site_name" content="Jinear" />
-        <meta property="og:url" content="https://jinear.140crafts.com" />
-        <meta property="og:image" content="https://jinear.140crafts.com/icons/apple-touch-icon-180x180.png" />
+        <meta property="og:url" content="https://jinear.co" />
+        <meta property="og:image" content="https://jinear.co/icons/apple-touch-icon-180x180.png" />
 
         <link rel="preload" href="/images/gif/loading-1.gif" as="image" />
         <link rel="preload" href="/images/gif/loading-2.gif" as="image" />

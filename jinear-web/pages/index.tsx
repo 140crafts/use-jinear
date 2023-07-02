@@ -9,13 +9,17 @@ import isPwa from "@/utils/pwaHelper";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import { useTheme } from "./_app";
 import styles from "./index.module.scss";
 
 export default function Home() {
+  const theme = useTheme();
   const pwa = isPwa();
   const router = useRouter();
   const { t } = useTranslation();
   const authState = useTypedSelector(selectAuthState);
+
+  const homeScreen = `/_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=640&q=75 640w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=750&q=75 750w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=828&q=75 828w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=1080&q=75 1080w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=1200&q=75 1200w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=1920&q=75 1920w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=2048&q=75 2048w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=3840&q=75 3840w`;
 
   useEffect(() => {
     if (pwa) {
@@ -67,6 +71,12 @@ export default function Home() {
           </>
         )}
         {authState == "NOT_DECIDED" && <CircularLoading />}
+      </div>
+
+      <div className="spacer-h-6" />
+
+      <div className={styles.section}>
+        <img className={styles.image} srcSet={homeScreen} />
       </div>
     </div>
   );
