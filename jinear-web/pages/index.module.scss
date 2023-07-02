@@ -48,6 +48,15 @@
   gap: 0.5rem;
 }
 
+.section {
+  display: flex;
+  flex-direction: column;
+}
+
+.image {
+  border-radius: var(--border-radius);
+}
+
 @media (max-width: $laptop) {
   .heroTitle {
     font-size: 3.25rem;

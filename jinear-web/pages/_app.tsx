@@ -107,6 +107,14 @@ function MyApp({ Component, pageProps }: AppProps) {
   };
 
   useEffect(() => {
+    const legacyHost = "jinear.140crafts.com";
+    const host = "jinear.co";
+    if (window && window.location.hostname == legacyHost) {
+      window.location.href = window.location.href.replace(legacyHost, host);
+    }
+  }, []);
+
+  useEffect(() => {
     const $html = document.querySelector("html");
     $html?.classList.remove("light");
     $html?.classList.remove("dark");
