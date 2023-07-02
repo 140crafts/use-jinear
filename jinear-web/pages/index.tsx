@@ -90,11 +90,8 @@ export default function Home() {
         <Line />
         <div className={styles.section}>
           <IoCalendarNumberOutline size={ICON_SIZE} />
-          <h1>Calendar and tasks. No bullshit</h1>
-          <span>
-            Stop mocking around. You don't need fancy graphs and charts, you need to get shit done. Here's simple calendar and
-            your tasks.
-          </span>
+          <h1>{t("homescreenCardTitle_Calendar")}</h1>
+          <span>{t("homescreenCardText_Calendar")}</span>
           <Image alt={""} src={`/images/homescreen/home-${theme}.png`} fill className={styles.image} />
         </div>
 
@@ -102,11 +99,8 @@ export default function Home() {
 
         <div className={styles.section}>
           <IoCheckmarkCircleOutline size={ICON_SIZE} />
-          <h1>What needs to be done?</h1>
-          <span>
-            You don't need to fill something like tax return form to plan your next meeting. With little patience you will be able
-            to teach your grandma to plan next sprint.
-          </span>
+          <h1>{t("homescreenCardTitle_NewTask")}</h1>
+          <span>{t("homescreenCardText_NewTask")}</span>
           <Image alt={""} src={`/images/homescreen/new-task-${theme}.png`} fill className={styles.image} />
         </div>
 
@@ -115,11 +109,8 @@ export default function Home() {
         <div className={styles.section}>
           <IoAlarmOutline size={ICON_SIZE} />
 
-          <h1>Remember the milk!</h1>
-          <span>
-            You keep forgetting tasks? You want us to remind you what to do? Say no more you piece of irresponsible shit. We'll
-            spam you with email and notifications.
-          </span>
+          <h1>{t("homescreenCardTitle_Reminder")}</h1>
+          <span>{t("homescreenCardText_Reminder")}</span>
           <Image alt={""} src={`/images/homescreen/reminders-${theme}.png`} fill className={styles.image} />
         </div>
 
@@ -127,8 +118,8 @@ export default function Home() {
 
         <div className={styles.section}>
           <IoPeopleOutline size={ICON_SIZE} />
-          <h1>Team up</h1>
-          <span>Create a collaborative workspace. Close tasks with your team</span>
+          <h1>{t("homescreenCardTitle_CollabWorkspace")}</h1>
+          <span>{t("homescreenCardText_CollabWorkspace")}</span>
           <Image alt={""} src={`/images/homescreen/invite-${theme}.png`} fill className={styles.image} />
         </div>
 
@@ -136,8 +127,8 @@ export default function Home() {
 
         <div className={styles.section}>
           <IoReaderOutline size={ICON_SIZE} />
-          <h1>Set goals with Boards!</h1>
-          <span>Focus your team on what work should be done next with deadline.</span>
+          <h1>{t("homescreenCardTitle_Boards")}</h1>
+          <span>{t("homescreenCardText_Boards")}</span>
           <Image alt={""} src={`/images/homescreen/board-${theme}.png`} fill className={styles.image} />
         </div>
 
@@ -145,12 +136,8 @@ export default function Home() {
 
         <div className={styles.section}>
           <IoCheckmarkCircleOutline size={ICON_SIZE} />
-
-          <h1>Don't need fancy words</h1>
-          <span>
-            Create and control your tasks. Link them together, assign somebody, track and subscribe to task activity or add a
-            checklist. Simple.
-          </span>
+          <h1>{t("homescreenCardTitle_Task")}</h1>
+          <span>{t("homescreenCardText_Task")}</span>
           <Image alt={""} src={`/images/homescreen/task-detail-${theme}.png`} fill className={styles.image} />
         </div>
       </div>
