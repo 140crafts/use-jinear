@@ -2258,4 +2258,52 @@ export default {
     en: "Create an account",
     tr: "Hesap Oluştur",
   },
+  homescreenCardTitle_Calendar: {
+    en: "Calendar and tasks. No bullshit",
+    tr: "Görevler ve takvim. Lafı dolandırmadan",
+  },
+  homescreenCardText_Calendar: {
+    en: "Stop mocking around. You don't need fancy graphs and charts, you need to get shit done. Here's simple calendar and your tasks.",
+    tr: "Boş yapma. Süslü grafikler ve tablolara ihtiyacın yok, işlerin hallolmasına ihtiyacın var. İşte sade bir takvim ve görevlerin.",
+  },
+  homescreenCardTitle_NewTask: {
+    en: "What needs to be done?",
+    tr: "Hangi işin yapılması gerek?",
+  },
+  homescreenCardText_NewTask: {
+    en: "You don't need to fill something like tax return form to plan your next meeting. With little patience you will be able to teach your grandma to plan next sprint.",
+    tr: "Bir sonraki toplantını planlamak için vergi iade formu gibi bir şey doldurmana gerek yok. Biraz sabırla babaannene bile sonraki sprinti planlatabilirsin.",
+  },
+  homescreenCardTitle_Reminder: {
+    en: "Remember the milk!",
+    tr: "Unutma",
+  },
+  homescreenCardText_Reminder: {
+    en: "You keep forgetting tasks? You want us to remind you what to do? Say no more you piece of irresponsible shit. We'll spam you with email and notifications.",
+    tr: "Görevleri sürekli unutuyor musun? Sana ne yapman gerektiğini hatırlatmamızı mı istiyorsun? Tamamdır, sorumsuz herif. Seni e-posta ve bildirim yağmuruna tutacağız.",
+  },
+  homescreenCardTitle_CollabWorkspace: {
+    en: "Team up",
+    tr: "Takım çalışması",
+  },
+  homescreenCardText_CollabWorkspace: {
+    en: "Create a collaborative workspace. Close tasks with your team.",
+    tr: "Kolektif bir çalışma alanı oluştur. Görevleri takımın ile birlikte tamamla.",
+  },
+  homescreenCardTitle_Boards: {
+    en: "Set goals with Boards!",
+    tr: "Panolar yardımıyla hedefler koy!",
+  },
+  homescreenCardText_Boards: {
+    en: "Focus your team on what work should be done next with deadline.",
+    tr: "Takımın sonraki aşamada neye odaklanması gerektiğini son tarih atayarak belirle.",
+  },
+  homescreenCardTitle_Task: {
+    en: "Don't need fancy words",
+    tr: "Laf salatasına gerek yok",
+  },
+  homescreenCardText_Task: {
+    en: "Create and control your tasks. Link them together, assign somebody, track and subscribe to task activity or add a checklist. Simple.",
+    tr: "Görevler oluşturun ve kontrol edin. Görevleri birbirine bağlayın, birine atayın, aktiviteleri takip edin veya bir checklist ekleyin. Gayet basit.",
+  },
 };

@@ -1,16 +1,28 @@
 import Button, { ButtonVariants } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import FormLogo from "@/components/formLogo/FormLogo";
+import Line from "@/components/line/Line";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
 import { selectAuthState } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import isPwa from "@/utils/pwaHelper";
 import useTranslation from "locales/useTranslation";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import {
+  IoAlarmOutline,
+  IoArrowForward,
+  IoCalendarNumberOutline,
+  IoCheckmarkCircleOutline,
+  IoPeopleOutline,
+  IoReaderOutline,
+} from "react-icons/io5";
 import { useTheme } from "./_app";
 import styles from "./index.module.scss";
+
+const ICON_SIZE = 42;
 
 export default function Home() {
   const theme = useTheme();
@@ -18,8 +30,6 @@ export default function Home() {
   const router = useRouter();
   const { t } = useTranslation();
   const authState = useTypedSelector(selectAuthState);
-
-  const homeScreen = `/_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=640&q=75 640w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=750&q=75 750w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=828&q=75 828w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=1080&q=75 1080w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=1200&q=75 1200w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=1920&q=75 1920w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=2048&q=75 2048w, /_next/image?url=%2Fimages%2Fhomescreen%2Fhome-${theme}.png&w=3840&q=75 3840w`;
 
   useEffect(() => {
     if (pwa) {
@@ -56,8 +66,9 @@ export default function Home() {
 
       <div className={styles.actionBar}>
         {authState == "LOGGED_IN" && (
-          <Button variant={ButtonVariants.contrast} href={ROUTE_IF_LOGGED_IN}>
+          <Button variant={ButtonVariants.contrast} href={ROUTE_IF_LOGGED_IN} className={styles.goToAppButton}>
             {t("homescreenGoToApp")}
+            <IoArrowForward />
           </Button>
         )}
         {authState == "NOT_LOGGED_IN" && (
@@ -75,8 +86,60 @@ export default function Home() {
 
       <div className="spacer-h-6" />
 
-      <div className={styles.section}>
-        <img className={styles.image} srcSet={homeScreen} />
+      <div className={styles.sectionContainer}>
+        <Line />
+        <div className={styles.section}>
+          <IoCalendarNumberOutline size={ICON_SIZE} />
+          <h1>{t("homescreenCardTitle_Calendar")}</h1>
+          <span>{t("homescreenCardText_Calendar")}</span>
+          <Image alt={""} src={`/images/homescreen/home-${theme}.png`} fill className={styles.image} />
+        </div>
+
+        <Line />
+
+        <div className={styles.section}>
+          <IoCheckmarkCircleOutline size={ICON_SIZE} />
+          <h1>{t("homescreenCardTitle_NewTask")}</h1>
+          <span>{t("homescreenCardText_NewTask")}</span>
+          <Image alt={""} src={`/images/homescreen/new-task-${theme}.png`} fill className={styles.image} />
+        </div>
+
+        <Line />
+
+        <div className={styles.section}>
+          <IoAlarmOutline size={ICON_SIZE} />
+
+          <h1>{t("homescreenCardTitle_Reminder")}</h1>
+          <span>{t("homescreenCardText_Reminder")}</span>
+          <Image alt={""} src={`/images/homescreen/reminders-${theme}.png`} fill className={styles.image} />
+        </div>
+
+        <Line />
+
+        <div className={styles.section}>
+          <IoPeopleOutline size={ICON_SIZE} />
+          <h1>{t("homescreenCardTitle_CollabWorkspace")}</h1>
+          <span>{t("homescreenCardText_CollabWorkspace")}</span>
+          <Image alt={""} src={`/images/homescreen/invite-${theme}.png`} fill className={styles.image} />
+        </div>
+
+        <Line />
+
+        <div className={styles.section}>
+          <IoReaderOutline size={ICON_SIZE} />
+          <h1>{t("homescreenCardTitle_Boards")}</h1>
+          <span>{t("homescreenCardText_Boards")}</span>
+          <Image alt={""} src={`/images/homescreen/board-${theme}.png`} fill className={styles.image} />
+        </div>
+
+        <Line />
+
+        <div className={styles.section}>
+          <IoCheckmarkCircleOutline size={ICON_SIZE} />
+          <h1>{t("homescreenCardTitle_Task")}</h1>
+          <span>{t("homescreenCardText_Task")}</span>
+          <Image alt={""} src={`/images/homescreen/task-detail-${theme}.png`} fill className={styles.image} />
+        </div>
       </div>
     </div>
   );

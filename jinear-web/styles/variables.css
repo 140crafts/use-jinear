@@ -3,6 +3,7 @@
   --c-background: #fdfffc;
   --c-text-color: #16171a;
   --c-primary: #fdfffc;
+  --c-primary-op05: #fdfffc80;
   --c-primary-shade-0: #f5f5f5;
   --c-primary-shade-0-op05: #f5f5f580;
   --c-primary-shade-1: #e5e5e5;
@@ -97,6 +98,8 @@
   --border-radius-xl: 0.9rem;
   --menu-workplace-title-color: #fe0934;
   --backdrop-filter-blur: saturate(80%) blur(2.5px);
+  --backdrop-filter-blur-2: saturate(80%) blur(5px);
+  --backdrop-filter-blur-3: saturate(180%) blur(15px);
   /*  */
   --line-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg width='480' height='42' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-opacity='.1' stroke='%23000' d='M0 41.5h480'/%3E%3C/svg%3E");
   /* text-editor */
@@ -108,6 +111,7 @@
   --c-background: #16171a;
   --c-text-color: #fdfffc;
   --c-primary: #16171a;
+  --c-primary-op05: #16171a80;
   --c-primary-shade-0: #1f2124;
   --c-primary-shade-0-op05: #1f212480;
   --c-primary-shade-1: #393e41;
