@@ -1,24 +1,15 @@
 import Button, { ButtonVariants } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import FormLogo from "@/components/formLogo/FormLogo";
-import Line from "@/components/line/Line";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
 import { selectAuthState } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import isPwa from "@/utils/pwaHelper";
 import useTranslation from "locales/useTranslation";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import {
-  IoAlarmOutline,
-  IoArrowForward,
-  IoCalendarNumberOutline,
-  IoCheckmarkCircleOutline,
-  IoPeopleOutline,
-  IoReaderOutline,
-} from "react-icons/io5";
+import { IoArrowForward } from "react-icons/io5";
 import { useTheme } from "./_app";
 import styles from "./index.module.scss";
 
@@ -86,7 +77,7 @@ export default function Home() {
 
       <div className="spacer-h-6" />
 
-      <div className={styles.sectionContainer}>
+      {/* <div className={styles.sectionContainer}>
         <Line />
         <div className={styles.section}>
           <IoCalendarNumberOutline size={ICON_SIZE} />
@@ -138,9 +129,15 @@ export default function Home() {
           <IoCheckmarkCircleOutline size={ICON_SIZE} />
           <h1>{t("homescreenCardTitle_Task")}</h1>
           <span>{t("homescreenCardText_Task")}</span>
-          <Image alt={""} src={`/images/homescreen/task-detail-${theme}.png`} fill className={styles.image} />
+          <Image
+            sizes="(min-width: 525px) 95vw, 70vw"
+            alt={""}
+            src={`/images/homescreen/task-detail-${theme}.png`}
+            fill
+            className={styles.image}
+          />
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
