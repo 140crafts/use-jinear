@@ -186,8 +186,8 @@ export default function Home() {
           <Image
             alt={""}
             src={`/images/homescreen/task-detail-${theme}.png`}
-            width={0}
-            height={0}
+            width={550}
+            height={550}
             sizes="(min-width: 525px) 95vw, 70vw"
             className={styles.image}
           />
