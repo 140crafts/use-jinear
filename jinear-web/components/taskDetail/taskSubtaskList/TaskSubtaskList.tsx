@@ -12,8 +12,8 @@ import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { useShowSubTaskListEvenIfNoSubtasks, useTask } from "../context/TaskDetailContext";
-import TaskRelationRow from "./taskRelationRow/TaskRelationRow";
 import styles from "./TaskSubtaskList.module.scss";
+import TaskRelationRow from "./taskRelationRow/TaskRelationRow";
 
 interface TaskSubtaskListProps {}
 
@@ -55,13 +55,19 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
   };
 
   const popNewTaskModalWithRelation = () => {
-    dispatch(
-      popNewTaskWithSubtaskRelationModal({
-        visible: true,
-        subTaskOf: task.taskId,
-        subTaskOfLabel: `[${task.team?.tag}-${task.teamTagNo}] ${task.title}`,
-      })
-    );
+    const workspace = task.workspace;
+    const team = task.team;
+    if (workspace && team) {
+      dispatch(
+        popNewTaskWithSubtaskRelationModal({
+          visible: true,
+          subTaskOf: task.taskId,
+          workspace,
+          team,
+          subTaskOfLabel: `[${task.team?.tag}-${task.teamTagNo}] ${task.title}`,
+        })
+      );
+    }
   };
 
   return showSubTaskListEvenIfNoSubtasks || hasSubTasks ? (
