@@ -156,6 +156,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
         </div>
 
         <WorkspaceAndTeamInfo
+          readOnly={subTaskOf != null}
           workspace={workspace}
           team={selectedTeam}
           onTeamChange={setSelectedTeam}
