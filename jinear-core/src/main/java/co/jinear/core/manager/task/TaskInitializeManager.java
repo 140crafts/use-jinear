@@ -2,8 +2,10 @@ package co.jinear.core.manager.task;
 
 import co.jinear.core.converter.task.TaskInitializeVoConverter;
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.request.task.TaskInitializeRequest;
 import co.jinear.core.model.response.task.TaskResponse;
@@ -11,7 +13,9 @@ import co.jinear.core.model.vo.task.TaskInitializeVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskActivityService;
 import co.jinear.core.service.task.TaskInitializeService;
+import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.team.TeamRetrieveService;
+import co.jinear.core.service.topic.TopicRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.validator.task.TaskBoardAccessValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
@@ -37,6 +41,8 @@ public class TaskInitializeManager {
     private final TaskInitializeVoConverter taskInitializeVoConverter;
     private final TaskActivityService taskActivityService;
     private final TaskBoardAccessValidator taskBoardAccessValidator;
+    private final TaskRetrieveService taskRetrieveService;
+    private final TopicRetrieveService topicRetrieveService;
 
     public TaskResponse initializeTask(TaskInitializeRequest taskInitializeRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -44,6 +50,9 @@ public class TaskInitializeManager {
         validateTeamAccess(currentAccount, taskInitializeRequest);
         validateDueDateIsAfterAssignedDate(taskInitializeRequest.getAssignedDate(), taskInitializeRequest.getDueDate());
         validateTaskBoardAccess(taskInitializeRequest, currentAccount);
+        validateSubtaskAndNewTaskIsInSameTeamAndWorkspace(taskInitializeRequest);
+        validateTopicAndNewTaskIsInSameTeamAndWorkspace(taskInitializeRequest);
+
         log.info("Initialize task has started. currentAccount: {}", currentAccount);
         TaskInitializeVo taskInitializeVo = taskInitializeVoConverter.map(taskInitializeRequest);
         taskInitializeVo.setOwnerId(currentAccount);
@@ -52,6 +61,26 @@ public class TaskInitializeManager {
         retrieveAndSetWorkspaceDto(initializedTask);
         taskActivityService.initializeNewTaskActivity(currentAccount, initializedTask);
         return mapResponse(initializedTask);
+    }
+
+    private void validateTopicAndNewTaskIsInSameTeamAndWorkspace(TaskInitializeRequest taskInitializeRequest) {
+        String topicId = taskInitializeRequest.getTopicId();
+        if (Objects.nonNull(topicId)) {
+            TopicDto topicDto = topicRetrieveService.retrieve(topicId);
+            if (!taskInitializeRequest.getTeamId().equalsIgnoreCase(topicDto.getTeamId()) || !taskInitializeRequest.getWorkspaceId().equalsIgnoreCase(topicDto.getWorkspaceId())) {
+                throw new NotValidException();
+            }
+        }
+    }
+
+    private void validateSubtaskAndNewTaskIsInSameTeamAndWorkspace(TaskInitializeRequest taskInitializeRequest) {
+        String subTaskOf = taskInitializeRequest.getSubTaskOf();
+        if (Objects.nonNull(subTaskOf)) {
+            TaskDto taskDto = taskRetrieveService.retrievePlain(subTaskOf);
+            if (!taskInitializeRequest.getTeamId().equalsIgnoreCase(taskDto.getTeamId()) || !taskInitializeRequest.getWorkspaceId().equalsIgnoreCase(taskDto.getWorkspaceId())) {
+                throw new NotValidException();
+            }
+        }
     }
 
     private void validateTaskBoardAccess(TaskInitializeRequest taskInitializeRequest, String currentAccount) {
