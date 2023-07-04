@@ -14,9 +14,9 @@
   justify-content: space-between;
   position: sticky;
   top: 0;
-  background-color: var(--c-primary-op05);
-  backdrop-filter: var(--backdrop-filter-blur-3);
-  background: var();
+  z-index: 99;
+  background-color: var(--c-primary);
+  // backdrop-filter: var(--backdrop-filter-blur-3);
   padding: 0.25rem 0;
 }
 
