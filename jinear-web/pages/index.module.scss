@@ -66,10 +66,14 @@
   flex-direction: column;
   gap: 0.75rem;
 }
-
+.imageContainer {
+  position: relative;
+  min-height: 450px;
+}
 .image {
-  position: unset !important;
   border-radius: var(--border-radius);
+  width: 100%;
+  height: auto;
 }
 
 .sectionContainer {

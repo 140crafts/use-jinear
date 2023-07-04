@@ -2244,7 +2244,7 @@ export default {
   },
   homescreenHeroText: {
     en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, manage projects collaboratively.",
-    tr: "Karmaşayı bir kenara bırakın, iş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, projeleri işbirliğiyle yönetin.",
+    tr: "İş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, projeleri işbirliğiyle yönetin.",
   },
   homescreenGoToApp: {
     en: "Go to App",
@@ -2260,11 +2260,11 @@ export default {
   },
   homescreenCardTitle_Calendar: {
     en: "Calendar and tasks. No bullshit",
-    tr: "Görevler ve takvim. Lafı dolandırmadan",
+    tr: "Görevler ve takvim",
   },
   homescreenCardText_Calendar: {
     en: "Stop mocking around. You don't need fancy graphs and charts, you need to get shit done. Here's simple calendar and your tasks.",
-    tr: "Boş yapma. Süslü grafikler ve tablolara ihtiyacın yok, işlerin hallolmasına ihtiyacın var. İşte sade bir takvim ve görevlerin.",
+    tr: "Süslü grafikler ve tablolara ihtiyacın yok, işlerin hallolmasına ihtiyacın var. İşte sade bir takvim ve görevlerin.",
   },
   homescreenCardTitle_NewTask: {
     en: "What needs to be done?",
@@ -2272,7 +2272,7 @@ export default {
   },
   homescreenCardText_NewTask: {
     en: "You don't need to fill something like tax return form to plan your next meeting. With little patience you will be able to teach your grandma to plan next sprint.",
-    tr: "Bir sonraki toplantını planlamak için vergi iade formu gibi bir şey doldurmana gerek yok. Biraz sabırla babaannene bile sonraki sprinti planlatabilirsin.",
+    tr: "Bir sonraki haftanı planlamak için vergi iade formu gibi bir şey doldurmana gerek yok. Biraz sabırla babaannene bile sonraki sprinti planlatabilirsin.",
   },
   homescreenCardTitle_Reminder: {
     en: "Remember the milk!",
@@ -2280,11 +2280,11 @@ export default {
   },
   homescreenCardText_Reminder: {
     en: "You keep forgetting tasks? You want us to remind you what to do? Say no more you piece of irresponsible shit. We'll spam you with email and notifications.",
-    tr: "Görevleri sürekli unutuyor musun? Sana ne yapman gerektiğini hatırlatmamızı mı istiyorsun? Tamamdır, sorumsuz herif. Seni e-posta ve bildirim yağmuruna tutacağız.",
+    tr: "Görevleri sürekli unutuyor musun? Sana ne yapman gerektiğini hatırlatmamızı mı istiyorsun? Tamamdır. Seni e-posta ve bildirim yağmuruna tutacağız.",
   },
   homescreenCardTitle_CollabWorkspace: {
     en: "Team up",
-    tr: "Takım çalışması",
+    tr: "İşler Birlikte Kolay",
   },
   homescreenCardText_CollabWorkspace: {
     en: "Create a collaborative workspace. Close tasks with your team.",
