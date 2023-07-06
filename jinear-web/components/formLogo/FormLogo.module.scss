@@ -18,7 +18,6 @@
   flex-direction: row;
   align-items: center;
   gap: 0.5rem;
-  margin-left: -22px;
 }
 
 .logoText {
@@ -31,11 +30,8 @@
   margin-bottom: 0.5rem;
 }
 
-.logoImg {
-  height: 40px;
-  width: 40px;
-  border-radius: 25px;
-  background-color: var(--c-primary-shade-1);
+.logoButton:hover {
+  background-color: unset !important;
 }
 
 @media (max-width: $mobile-l) {

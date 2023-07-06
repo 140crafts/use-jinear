@@ -38,7 +38,7 @@
   font-size: 3.5rem;
   line-height: 4rem;
   width: 85%;
-  font-weight: 600;
+  font-weight: 800;
   margin: 2rem 0;
 }
 
@@ -66,10 +66,12 @@
   flex-direction: column;
   gap: 0.75rem;
 }
+
 .imageContainer {
   position: relative;
-  min-height: 450px;
+  min-height: 250px;
 }
+
 .image {
   border-radius: var(--border-radius);
   width: 100%;
@@ -81,6 +83,10 @@
   flex-direction: column;
   gap: 2.5rem;
   font-size: 1rem;
+}
+
+.logo {
+  margin-left: -1rem;
 }
 
 @media (max-width: $laptop) {
