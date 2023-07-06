@@ -1,5 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
+import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 import FormLogo from "@/components/formLogo/FormLogo";
 import Line from "@/components/line/Line";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
@@ -46,7 +47,7 @@ export default function Home() {
   ) : (
     <div className={styles.container}>
       <div className={styles.header}>
-        <FormLogo />
+        <FormLogo contentClassName={styles.logo} />
         <div className={styles.headerActionBar}>
           <Button href="/pricing">
             <b>{t("homescreenActionBarPricing")}</b>
@@ -85,114 +86,115 @@ export default function Home() {
       </div>
 
       <div className="spacer-h-6" />
+      <PureClientOnly>
+        <div className={styles.sectionContainer}>
+          <Line />
+          <div className={styles.section}>
+            <IoCalendarNumberOutline size={ICON_SIZE} />
+            <h1>{t("homescreenCardTitle_Calendar")}</h1>
+            <span>{t("homescreenCardText_Calendar")}</span>
+            <div className={styles.imageContainer}>
+              <Image
+                alt={""}
+                src={`/images/homescreen/home-${theme}.png`}
+                width={550}
+                height={550}
+                sizes="(max-width: 768px) 100vw, 75vw"
+                className={styles.image}
+              />
+            </div>
+          </div>
 
-      <div className={styles.sectionContainer}>
-        <Line />
-        <div className={styles.section}>
-          <IoCalendarNumberOutline size={ICON_SIZE} />
-          <h1>{t("homescreenCardTitle_Calendar")}</h1>
-          <span>{t("homescreenCardText_Calendar")}</span>
-          <div className={styles.imageContainer}>
+          <Line />
+
+          <div className={styles.section}>
+            <IoCheckmarkCircleOutline size={ICON_SIZE} />
+            <h1>{t("homescreenCardTitle_NewTask")}</h1>
+            <span>{t("homescreenCardText_NewTask")}</span>
+            <div className={styles.imageContainer}>
+              <Image
+                alt={""}
+                src={`/images/homescreen/new-task-${theme}.png`}
+                width={550}
+                height={550}
+                sizes="(max-width: 768px) 100vw, 75vw"
+                className={styles.image}
+              />
+            </div>
+          </div>
+
+          <Line />
+
+          <div className={styles.section}>
+            <IoAlarmOutline size={ICON_SIZE} />
+
+            <h1>{t("homescreenCardTitle_Reminder")}</h1>
+            <span>{t("homescreenCardText_Reminder")}</span>
+            <div className={styles.imageContainer}>
+              <Image
+                alt={""}
+                src={`/images/homescreen/reminders-${theme}.png`}
+                width={550}
+                height={550}
+                sizes="(max-width: 768px) 100vw, 75vw"
+                className={styles.image}
+              />
+            </div>
+          </div>
+
+          <Line />
+
+          <div className={styles.section}>
+            <IoPeopleOutline size={ICON_SIZE} />
+            <h1>{t("homescreenCardTitle_CollabWorkspace")}</h1>
+            <span>{t("homescreenCardText_CollabWorkspace")}</span>
+            <div className={styles.imageContainer}>
+              <Image
+                alt={""}
+                src={`/images/homescreen/invite-${theme}.png`}
+                width={550}
+                height={550}
+                sizes="(max-width: 768px) 100vw, 75vw"
+                className={styles.image}
+              />
+            </div>
+          </div>
+
+          <Line />
+
+          <div className={styles.section}>
+            <IoReaderOutline size={ICON_SIZE} />
+            <h1>{t("homescreenCardTitle_Boards")}</h1>
+            <span>{t("homescreenCardText_Boards")}</span>
+            <div className={styles.imageContainer}>
+              <Image
+                alt={""}
+                src={`/images/homescreen/board-${theme}.png`}
+                width={550}
+                height={550}
+                sizes="(max-width: 768px) 100vw, 75vw"
+                className={styles.image}
+              />
+            </div>
+          </div>
+
+          <Line />
+
+          <div className={styles.section}>
+            <IoCheckmarkCircleOutline size={ICON_SIZE} />
+            <h1>{t("homescreenCardTitle_Task")}</h1>
+            <span>{t("homescreenCardText_Task")}</span>
             <Image
               alt={""}
-              src={`/images/homescreen/home-${theme}.png`}
+              src={`/images/homescreen/task-detail-${theme}.png`}
               width={550}
               height={550}
-              // sizes="(min-width: 525px) 95vw, 70vw"
+              sizes="(max-width: 768px) 100vw, 75vw"
               className={styles.image}
             />
           </div>
         </div>
-
-        <Line />
-
-        <div className={styles.section}>
-          <IoCheckmarkCircleOutline size={ICON_SIZE} />
-          <h1>{t("homescreenCardTitle_NewTask")}</h1>
-          <span>{t("homescreenCardText_NewTask")}</span>
-          <div className={styles.imageContainer}>
-            <Image
-              alt={""}
-              src={`/images/homescreen/new-task-${theme}.png`}
-              width={550}
-              height={550}
-              sizes="(min-width: 525px) 95vw, 70vw"
-              className={styles.image}
-            />
-          </div>
-        </div>
-
-        <Line />
-
-        <div className={styles.section}>
-          <IoAlarmOutline size={ICON_SIZE} />
-
-          <h1>{t("homescreenCardTitle_Reminder")}</h1>
-          <span>{t("homescreenCardText_Reminder")}</span>
-          <div className={styles.imageContainer}>
-            <Image
-              alt={""}
-              src={`/images/homescreen/reminders-${theme}.png`}
-              width={550}
-              height={550}
-              sizes="(min-width: 525px) 95vw, 70vw"
-              className={styles.image}
-            />
-          </div>
-        </div>
-
-        <Line />
-
-        <div className={styles.section}>
-          <IoPeopleOutline size={ICON_SIZE} />
-          <h1>{t("homescreenCardTitle_CollabWorkspace")}</h1>
-          <span>{t("homescreenCardText_CollabWorkspace")}</span>
-          <div className={styles.imageContainer}>
-            <Image
-              alt={""}
-              src={`/images/homescreen/invite-${theme}.png`}
-              width={550}
-              height={550}
-              sizes="(min-width: 525px) 95vw, 70vw"
-              className={styles.image}
-            />
-          </div>
-        </div>
-
-        <Line />
-
-        <div className={styles.section}>
-          <IoReaderOutline size={ICON_SIZE} />
-          <h1>{t("homescreenCardTitle_Boards")}</h1>
-          <span>{t("homescreenCardText_Boards")}</span>
-          <div className={styles.imageContainer}>
-            <Image
-              alt={""}
-              src={`/images/homescreen/board-${theme}.png`}
-              width={550}
-              height={550}
-              sizes="(min-width: 525px) 95vw, 70vw"
-              className={styles.image}
-            />
-          </div>
-        </div>
-
-        <Line />
-
-        <div className={styles.section}>
-          <IoCheckmarkCircleOutline size={ICON_SIZE} />
-          <h1>{t("homescreenCardTitle_Task")}</h1>
-          <span>{t("homescreenCardText_Task")}</span>
-          <Image
-            alt={""}
-            src={`/images/homescreen/task-detail-${theme}.png`}
-            width={550}
-            height={550}
-            sizes="(min-width: 525px) 95vw, 70vw"
-            className={styles.image}
-          />
-        </div>
-      </div>
+      </PureClientOnly>
     </div>
   );
 }

@@ -1,10 +1,14 @@
+import cn from "classnames";
 import { AnimatePresence, motion, usePresence } from "framer-motion";
 import React from "react";
+import Button from "../button";
 import styles from "./FormLogo.module.scss";
 
-interface FormLogoProps {}
+interface FormLogoProps {
+  contentClassName?: string;
+}
 
-const FormLogo: React.FC<FormLogoProps> = ({}) => {
+const FormLogo: React.FC<FormLogoProps> = ({ contentClassName }) => {
   const [isPresent, safeToRemove] = usePresence();
 
   const animations = {
@@ -29,8 +33,7 @@ const FormLogo: React.FC<FormLogoProps> = ({}) => {
   return (
     <div className={styles.logoContainer}>
       <div className={styles.logoLine}></div>
-      <div className={styles.logoContent}>
-        <div className={styles.logoImg}></div>
+      <div className={cn(styles.logoContent, contentClassName)}>
         <AnimatePresence>
           <motion.div
             {...animations}
@@ -39,7 +42,9 @@ const FormLogo: React.FC<FormLogoProps> = ({}) => {
               position: isPresent ? "static" : "absolute",
             }}
           >
-            jinear
+            <Button href="/" className={styles.logoButton}>
+              jinear
+            </Button>
           </motion.div>
         </AnimatePresence>
       </div>
