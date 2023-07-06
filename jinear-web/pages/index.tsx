@@ -97,6 +97,8 @@ export default function Home() {
               <Image
                 alt={""}
                 src={`/images/homescreen/home-${theme}.png`}
+                placeholder={"blur"}
+                blurDataURL={`/images/homescreen/home-${theme}-blur.png`}
                 width={550}
                 height={550}
                 sizes="(max-width: 768px) 100vw, 75vw"
@@ -115,6 +117,8 @@ export default function Home() {
               <Image
                 alt={""}
                 src={`/images/homescreen/new-task-${theme}.png`}
+                placeholder={"blur"}
+                blurDataURL={`/images/homescreen/new-task-${theme}-blur.png`}
                 width={550}
                 height={550}
                 sizes="(max-width: 768px) 100vw, 75vw"
@@ -134,6 +138,8 @@ export default function Home() {
               <Image
                 alt={""}
                 src={`/images/homescreen/reminders-${theme}.png`}
+                placeholder={"blur"}
+                blurDataURL={`/images/homescreen/reminders-${theme}-blur.png`}
                 width={550}
                 height={550}
                 sizes="(max-width: 768px) 100vw, 75vw"
@@ -152,6 +158,8 @@ export default function Home() {
               <Image
                 alt={""}
                 src={`/images/homescreen/invite-${theme}.png`}
+                placeholder={"blur"}
+                blurDataURL={`/images/homescreen/invite-${theme}-blur.png`}
                 width={550}
                 height={550}
                 sizes="(max-width: 768px) 100vw, 75vw"
@@ -170,6 +178,8 @@ export default function Home() {
               <Image
                 alt={""}
                 src={`/images/homescreen/board-${theme}.png`}
+                placeholder={"blur"}
+                blurDataURL={`/images/homescreen/board-${theme}-blur.png`}
                 width={550}
                 height={550}
                 sizes="(max-width: 768px) 100vw, 75vw"
@@ -187,6 +197,8 @@ export default function Home() {
             <Image
               alt={""}
               src={`/images/homescreen/task-detail-${theme}.png`}
+              placeholder={"blur"}
+              blurDataURL={`/images/homescreen/task-detail-${theme}-blur.png`}
               width={550}
               height={550}
               sizes="(max-width: 768px) 100vw, 75vw"
