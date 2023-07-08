@@ -1,8 +1,10 @@
 package co.jinear.core.model.entity.workspace;
 
+import co.jinear.core.converter.workspace.WorkspaceTierTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.entity.username.Username;
+import co.jinear.core.model.enumtype.workspace.WorkspaceTier;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +35,10 @@ public class Workspace extends BaseEntity {
 
     @Column(name = "is_personal")
     private Boolean isPersonal;
+
+    @Convert(converter = WorkspaceTierTypeConverter.class)
+    @Column(name = "tier")
+    private WorkspaceTier tier;
 
     @OneToOne(mappedBy = "workspace")
     private Username username;

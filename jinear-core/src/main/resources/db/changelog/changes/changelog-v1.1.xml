@@ -880,4 +880,12 @@
             <column name="task_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-tier-column">
+        <addColumn tableName="workspace">
+            <column name="tier" type="int" afterColumn="is_personal" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

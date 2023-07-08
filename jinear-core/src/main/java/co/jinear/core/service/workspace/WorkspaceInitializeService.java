@@ -9,6 +9,7 @@ import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
 import co.jinear.core.model.enumtype.username.UsernameRelatedObjectType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
+import co.jinear.core.model.enumtype.workspace.WorkspaceTier;
 import co.jinear.core.model.vo.team.TeamInitializeVo;
 import co.jinear.core.model.vo.username.InitializeUsernameVo;
 import co.jinear.core.model.vo.workspace.InitializeWorkspaceMemberVo;
@@ -109,6 +110,7 @@ public class WorkspaceInitializeService {
         workspace.setTitle(workspaceInitializeVo.getTitle());
         workspace.setDescription(workspaceInitializeVo.getDescription());
         workspace.setIsPersonal(workspaceInitializeVo.getIsPersonal());
+        workspace.setTier(WorkspaceTier.BASIC);
         return workspaceRepository.saveAndFlush(workspace);
     }
 
@@ -117,6 +119,7 @@ public class WorkspaceInitializeService {
         workspaceDto.setWorkspaceId(workspace.getWorkspaceId());
         workspaceDto.setTitle(workspace.getTitle());
         workspaceDto.setDescription(workspace.getDescription());
+        workspaceDto.setTier(workspace.getTier());
         workspaceDto.setUsername(usernameDto.getUsername());
         workspaceDto.setSettings(workspaceSettingDto);
         return workspaceDto;
