@@ -2150,9 +2150,17 @@ export default {
     en: "List View",
     tr: "Liste Görünümü",
   },
+  taskListTitleAndViewTypeListLabel: {
+    en: "List",
+    tr: "Liste",
+  },
   taskListTitleAndViewTypeStatusColumnsTooltip: {
     en: "Status Columns View",
     tr: "Durum Görünümü",
+  },
+  taskListTitleAndViewTypeStatusColumnsLabel: {
+    en: "Status Columns",
+    tr: "Durum",
   },
   activeTasksPageTitle: {
     en: "Active Tasks",
