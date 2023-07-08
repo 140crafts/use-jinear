@@ -1,4 +1,7 @@
+import { __DEV__ } from "@/utils/constants";
+import { GA_TRACKING_ID } from "@/utils/gtag";
 import Head from "next/head";
+import Script from "next/script";
 import React from "react";
 
 interface MainHeaderProps {}
@@ -50,6 +53,26 @@ const MainHeader: React.FC<MainHeaderProps> = ({}) => {
         <link rel="preload" href="/images/gif/loading-1.gif" as="image" />
         <link rel="preload" href="/images/gif/loading-2.gif" as="image" />
       </Head>
+
+      {__DEV__ && (
+        <>
+          {/* Global Site Tag (gtag.js) - Google Analytics */}
+          <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
+          <Script
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+            }}
+          />
+        </>
+      )}
     </>
   );
 };

@@ -43,7 +43,7 @@ const FormLogo: React.FC<FormLogoProps> = ({ contentClassName }) => {
             }}
           >
             <Button href="/" className={styles.logoButton}>
-              Jinear
+              JINEAR
             </Button>
           </motion.div>
         </AnimatePresence>
