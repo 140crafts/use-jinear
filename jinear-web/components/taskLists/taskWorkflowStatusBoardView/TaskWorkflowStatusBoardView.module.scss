@@ -18,14 +18,9 @@
   min-height: 8rem;
   padding-bottom: 2rem;
   max-width: calc(100vw - var(--side-menu-width));
-  //   border-width: 1px;
-  //   border-style: solid;
-  //   border-color: var(--c-primary-shade-1);
-  //   border-radius: var(--border-radius);
-  //   padding: 0.25rem 1rem;
 }
 
-@media (max-width: $mobile-l) {
+@media (max-width: $tablet) {
   .statusBoardContainer {
     max-width: 100vw;
     overflow-x: scroll;

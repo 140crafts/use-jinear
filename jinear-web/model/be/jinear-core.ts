@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-06-29 17:01:50.
+// Generated using typescript-generator version 3.0.1157 on 2023-07-07 10:33:15.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  last: boolean;
   first: boolean;
+  last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -411,6 +411,7 @@ export interface WorkspaceDto extends BaseDto {
   title: string;
   description: string;
   isPersonal: boolean;
+  tier: WorkspaceTier;
   username: string;
   settings: WorkspaceSettingDto;
   profilePicture: MediaDto;
@@ -998,6 +999,8 @@ export type RichTextType = "TASK_DETAIL";
 
 export type TaskBoardStateType = "OPEN" | "CLOSED";
 
+export type TaskFilterSort = "IDATE_DESC" | "IDATE_ASC" | "ASSIGNED_DATE_DESC" | "ASSIGNED_DATE_ASC";
+
 export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
 
 export type TaskReminderType = "ASSIGNED_DATE" | "DUE_DATE" | "SPECIFIC_DATE";
@@ -1057,5 +1060,7 @@ export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 export type WorkspaceInvitationStatusType = "WAITING_FOR_ANSWER" | "ACCEPTED" | "DECLINED" | "TIMED_OUT";
 
 export type WorkspaceJoinType = "NEVER" | "PUBLIC" | "WITH_REQUEST" | "WITH_PASSWORD";
+
+export type WorkspaceTier = "BASIC" | "PLUS";
 
 export type WorkspaceVisibilityType = "VISIBLE" | "HIDDEN_LISTED" | "HIDDEN_UNLISTED";

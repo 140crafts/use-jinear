@@ -1,4 +1,3 @@
-import { selectCurrentAccountsPreferredTeamId } from "@/store/slice/accountSlice";
 import {
   closeChangeTaskWorkflowStatusModal,
   selectChangeTaskWorkflowStatusModalTask,
@@ -8,8 +7,8 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import Modal from "../../modal/Modal";
-import TeamWorkflowStatusList from "./teamWorkflowStatusList/TeamWorkflowStatusList";
 import styles from "./WorkflowChangeStatusModal.module.css";
+import TeamWorkflowStatusList from "./teamWorkflowStatusList/TeamWorkflowStatusList";
 
 interface WorkflowChangeStatusModalProps {}
 
@@ -18,7 +17,7 @@ const WorkflowChangeStatusModal: React.FC<WorkflowChangeStatusModalProps> = ({})
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectChangeTaskWorkflowStatusModalVisible);
   const task = useTypedSelector(selectChangeTaskWorkflowStatusModalTask);
-  const teamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
+  const teamId = task?.teamId;
 
   const close = () => {
     dispatch(closeChangeTaskWorkflowStatusModal());
