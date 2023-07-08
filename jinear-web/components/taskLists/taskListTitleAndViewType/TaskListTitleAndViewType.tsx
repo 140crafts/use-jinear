@@ -42,16 +42,20 @@ const TaskListTitleAndViewType: React.FC<TaskListTitleAndViewTypeProps> = ({
         <Button
           onClick={changeDisplayFormatToList}
           variant={displayFormat == "LIST" ? ButtonVariants.filled2 : ButtonVariants.filled}
-          data-tooltip-right={t("taskListTitleAndViewTypeListTooltip")}
+          className={styles.button}
+          // data-tooltip-right={t("taskListTitleAndViewTypeListTooltip")}
         >
           <IoList />
+          {t("taskListTitleAndViewTypeListTooltip")}
         </Button>
         <Button
           onClick={changeDisplayFormatToWfsColumn}
           variant={displayFormat == "WFS_COLUMN" ? ButtonVariants.filled2 : ButtonVariants.filled}
-          data-tooltip-right={t("taskListTitleAndViewTypeStatusColumnsTooltip")}
+          className={styles.button}
+          // data-tooltip-right={t("taskListTitleAndViewTypeStatusColumnsTooltip")}
         >
           <IoStatsChart className={styles.wfsColumnIcon} />
+          {t("taskListTitleAndViewTypeStatusColumnsTooltip")}
         </Button>
       </div>
     </div>
