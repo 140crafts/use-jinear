@@ -48,9 +48,6 @@ const initialState = {
   newTaskModal: {
     visible: false,
   },
-  teamOptionsModal: {
-    visible: false,
-  },
   newTopicModal: {
     visible: false,
   },
@@ -132,7 +129,6 @@ const initialState = {
   loadingModal: null | ModalState;
   notFoundModal: null | NotFoundModalState;
   newTaskModal: null | NewTaskModalState;
-  teamOptionsModal: null | ModalState;
   newTopicModal: null | NewTopicModalState;
   changeTaskWorkflowStatusModal: null | ChangeTaskWorkflowStatusModalState;
   changeTaskTopicModal: null | ChangeTaskTopicModalState;
@@ -188,12 +184,6 @@ const slice = createSlice({
     },
     closeNewTaskModal: (state, action: PayloadAction<void>) => {
       state.newTaskModal = initialState.newTaskModal;
-    },
-    popTeamOptionsModal: (state, action: PayloadAction<void>) => {
-      state.teamOptionsModal = { visible: true };
-    },
-    closeTeamOptionsModal: (state, action: PayloadAction<void>) => {
-      state.teamOptionsModal = { visible: false };
     },
     popNewTopicModal: (state, action: PayloadAction<NewTopicModalState>) => {
       state.newTopicModal = { ...action.payload, visible: true };
@@ -403,8 +393,6 @@ export const {
   popNewTaskModal,
   popNewTaskWithSubtaskRelationModal,
   closeNewTaskModal,
-  popTeamOptionsModal,
-  closeTeamOptionsModal,
   popNewTopicModal,
   closeNewTopicModal,
   popChangeTaskWorkflowStatusModal,
@@ -485,8 +473,6 @@ export const selectNewTaskModalWorkspace = (state: RootState) => state.modal.new
 export const selectNewTaskModalTeam = (state: RootState) => state.modal.newTaskModal?.team;
 export const selectNewTaskModalInitialAssignedDate = (state: RootState) => state.modal.newTaskModal?.initialAssignedDate;
 
-export const selectTeamOptionsModalVisible = (state: RootState) => state.modal.teamOptionsModal?.visible;
-
 export const selectNewTopicModalVisible = (state: RootState) => state.modal.newTopicModal?.visible;
 export const selectNewTopicModalWorkspace = (state: RootState) => state.modal.newTopicModal?.workspace;
 export const selectNewTopicModalTeam = (state: RootState) => state.modal.newTopicModal?.team;
@@ -497,6 +483,7 @@ export const selectChangeTaskWorkflowStatusModalTask = (state: RootState) => sta
 
 export const selectChangeTaskTopicModalVisible = (state: RootState) => state.modal.changeTaskTopicModal?.visible;
 export const selectChangeTaskTopicModalTaskId = (state: RootState) => state.modal.changeTaskTopicModal?.task?.taskId;
+export const selectChangeTaskTopicModalTeamId = (state: RootState) => state.modal.changeTaskTopicModal?.task?.teamId;
 export const selectChangeTaskTopicModalTaskCurrentTopicId = (state: RootState) => state.modal.changeTaskTopicModal?.task?.topicId;
 
 export const selectChangeTaskDateModalVisible = (state: RootState) => state.modal.changeTaskDateModal?.visible;

@@ -26,7 +26,6 @@ import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workf
 import TaskOverviewModal from "@/components/modal/taskOverviewModal/TaskOverviewModal";
 import TaskTaskBoardModal from "@/components/modal/taskTaskBoardModal/TaskTaskBoardModal";
 import TeamMemberPickerModal from "@/components/modal/teamMemberPickerModal/TeamMemberPickerModal";
-import TeamOptionsModal from "@/components/modal/teamOptionsModal/TeamOptionsModal";
 import TeamPickerModal from "@/components/modal/teamPickerModal/TeamPickerModal";
 import TeamWorkflowStatusModal from "@/components/modal/teamWorkflowStatusModal/TeamWorkflowStatusModal";
 import TopicPickerModal from "@/components/modal/topicPickerModal/TopicPickerModal";
@@ -77,7 +76,6 @@ const globalModals: any = (
     <WorkflowChangeStatusModal />
     <NewTaskModal />
     <NewTaskBoardModal />
-    <TeamOptionsModal />
     <TeamPickerModal />
     <WorkspacePickerModal />
     <TeamMemberPickerModal />

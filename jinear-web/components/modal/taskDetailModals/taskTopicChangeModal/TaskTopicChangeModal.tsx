@@ -1,11 +1,14 @@
-import { selectCurrentAccountsPreferredTeamId } from "@/store/slice/accountSlice";
-import { closeChangeTaskTopicModal, selectChangeTaskTopicModalVisible } from "@/store/slice/modalSlice";
+import {
+  closeChangeTaskTopicModal,
+  selectChangeTaskTopicModalTeamId,
+  selectChangeTaskTopicModalVisible,
+} from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Modal from "../../modal/Modal";
-import RemoveCurrentTopic from "./removeCurrentTopic/RemoveCurrentTopic";
 import styles from "./TaskTopicChangeModal.module.css";
+import RemoveCurrentTopic from "./removeCurrentTopic/RemoveCurrentTopic";
 import TopicList from "./topicList/TopicList";
 
 interface TaskTopicChangeModalProps {}
@@ -14,7 +17,7 @@ const TaskTopicChangeModal: React.FC<TaskTopicChangeModalProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectChangeTaskTopicModalVisible);
-  const teamId = useTypedSelector(selectCurrentAccountsPreferredTeamId);
+  const teamId = useTypedSelector(selectChangeTaskTopicModalTeamId);
   const filterInputRef = useRef<HTMLInputElement>(null);
   const [filterValue, setFilterValue] = useState<string>("");
 
