@@ -25,6 +25,7 @@ public class AccountsWorkspacePerspectiveDtoConverter {
         accountsWorkspacePerspectiveDto.setTitle(workspaceDto.getTitle());
         accountsWorkspacePerspectiveDto.setDescription(workspaceDto.getDescription());
         accountsWorkspacePerspectiveDto.setIsPersonal(workspaceDto.getIsPersonal());
+        accountsWorkspacePerspectiveDto.setTier(workspaceDto.getTier());
         accountsWorkspacePerspectiveDto.setUsername(workspaceDto.getUsername());
         accountsWorkspacePerspectiveDto.setSettings(workspaceDto.getSettings());
         accountsWorkspacePerspectiveDto.setProfilePicture(workspaceDto.getProfilePicture());
