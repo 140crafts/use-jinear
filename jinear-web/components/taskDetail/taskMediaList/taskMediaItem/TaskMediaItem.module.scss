@@ -1,0 +1,89 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.mainButton {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  text-align: left;
+  justify-content: flex-start;
+}
+
+.iconAndNameContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+}
+
+.mediaInfoContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.mediaNameLabel {
+  flex: 1;
+}
+
+.mediaSizeLabel {
+  min-width: 10ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.dateLabel {
+  min-width: 14ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+}
+
+.icon {
+  color: var(--c-secondary-shade-0-op05);
+}
+
+.container:hover .icon {
+  color: var(--c-secondary);
+}
+
+.deleteButton {
+  min-width: 24px;
+  min-height: 24px;
+}
+
+@media (max-width: $mobile-l) {
+  .container {
+    align-items: flex-start;
+  }
+  .mainButton {
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
+  }
+  .mediaSizeLabel {
+    min-width: unset;
+    text-align: left;
+  }
+  .dateLabel {
+    min-width: unset;
+    text-align: left;
+  }
+  .iconAndNameContainer {
+    align-items: center;
+  }
+}

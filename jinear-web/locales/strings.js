@@ -2314,4 +2314,36 @@ export default {
     en: "Create and control your tasks. Link them together, assign somebody, track and subscribe to task activity or add a checklist. Simple.",
     tr: "Görevler oluşturun ve kontrol edin. Görevleri birbirine bağlayın, birine atayın, aktiviteleri takip edin veya bir checklist ekleyin. Gayet basit.",
   },
+  taskDetailMediaTitle: {
+    en: "Attachments",
+    tr: "Ekler",
+  },
+  taskDetailMediaAddMedia: {
+    en: "Add attachment",
+    tr: "Dosya ekle",
+  },
+  taskDetailMediaUploading: {
+    en: "Uploading...",
+    tr: "Yükleniyor...",
+  },
+  taskDetailMediaDeleteMedia: {
+    en: "Delete",
+    tr: "Sil",
+  },
+  taskDetailMediaDeleteMediaAreYouSureTitle: {
+    en: "Delete Attachment",
+    tr: "Dosyayı Sil",
+  },
+  taskDetailMediaDeleteMediaAreYouSureText: {
+    en: "Are you sure to delete attachment? This action can not be undone!",
+    tr: "Dosyayı silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!",
+  },
+  taskDetailMediaDeleteMediaAreYouSureConfirmLabel: {
+    en: "Delete",
+    tr: "Sil",
+  },
+  taskDetailMediaListEmpty: {
+    en: "There isn't any attachments.",
+    tr: "Herhangi bir ek bulunmuyor.",
+  },
 };

@@ -10,6 +10,7 @@ import TaskActionBar from "./taskActionBar/TaskActionBar";
 import TaskBody from "./taskBody/TaskBody";
 import TaskChecklistContainer from "./taskChecklistContainer/TaskChecklistContainer";
 import TaskHasUpdatesInfo from "./taskHasUpdatesInfo/TaskHasUpdatesInfo";
+import TaskMediaList from "./taskMediaList/TaskMediaList";
 import TaskSubtaskList from "./taskSubtaskList/TaskSubtaskList";
 
 interface TaskDetailProps {
@@ -34,6 +35,12 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
         <Line />
         <TaskActionBar className={styles.taskInfo} />
         <TaskChecklistContainer />
+        {task.workspace?.tier == "PLUS" && (
+          <>
+            <Line />
+            <TaskMediaList />
+          </>
+        )}
         <TaskSubtaskList />
         <Line />
         <LastTaskActivitiesList
