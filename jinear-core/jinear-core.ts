@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-07-11 16:19:15.
+// Generated using typescript-generator version 3.0.1157 on 2023-07-12 10:55:59.
 
 export interface BaseDto {
     createdDate: Date;
@@ -72,6 +72,7 @@ export interface MediaDto extends BaseDto {
     fileType: FileType;
     bucketName: string;
     originalName: string;
+    size: number;
 }
 
 export interface NotificationEventDto extends BaseDto {
@@ -870,7 +871,7 @@ export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY"
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
 
-export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB";
+export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXPIRE_TEMP_PUBLIC_MEDIA";
 
 export type RoleType = "ADMIN" | "SERVICE" | "USER";
 

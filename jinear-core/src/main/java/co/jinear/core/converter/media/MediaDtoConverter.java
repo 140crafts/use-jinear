@@ -17,7 +17,7 @@ public interface MediaDtoConverter {
 
     @AfterMapping
     default void afterMap(@MappingTarget AccessibleMediaDto accessibleMediaDto, Media media) {
-        String storagePath = FileStorageUtils.generatePath(media.getMediaOwnerType(), media.getRelatedObjectId(), media.getFileType(), media.getMediaKey());
+        String storagePath = FileStorageUtils.generatePath(media.getMediaOwnerType(), media.getRelatedObjectId(), media.getFileType(), media.getMediaKey(), media.getOriginalName());
         accessibleMediaDto.setStoragePath(storagePath);
     }
 }

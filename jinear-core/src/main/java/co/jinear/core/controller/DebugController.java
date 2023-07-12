@@ -1,6 +1,8 @@
 package co.jinear.core.controller;
 
+import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.repository.MediaRepository;
+import co.jinear.core.system.FileStorageUtils;
 import co.jinear.core.system.gcloud.storage.CloudStorage;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
 
 @Slf4j
 @RestController
@@ -43,6 +48,28 @@ public class DebugController {
 //        });
 //                CloudStorage.makeObjectPublic("jinear-b0",
 //                        "FILE_STORAGE/WORKSPACE/01h3je8n45t3qhw6vfp0azctjf/PROFILE_PIC/01h4zdpnskwrc302zret9w7y37");
+
+
+        List<Media> mediaList = mediaRepository.findAll();
+        mediaList.forEach(media -> {
+            try {
+                String originalName = Objects.isNull(media.getOriginalName()) ? UUID.randomUUID().toString() : media.getOriginalName();
+                String currentPath = FileStorageUtils.generatePath(media.getMediaOwnerType(), media.getRelatedObjectId(), media.getFileType(), media.getMediaKey(), null);
+                String newPath = FileStorageUtils.generatePath(media.getMediaOwnerType(), media.getRelatedObjectId(), media.getFileType(), media.getMediaKey(), originalName);
+
+                CloudStorage.renameObject(media.getBucketName(), currentPath, newPath);
+                CloudStorage.makeObjectPublic(media.getBucketName(), newPath);
+
+                if (Objects.isNull(media.getOriginalName())) {
+                    media.setOriginalName(originalName);
+                    mediaRepository.save(media);
+                }
+            } catch (Exception e) {
+                log.error("Error on media. mediaId: {}", media.getMediaId());
+            }
+        });
+
+
     }
 
     @GetMapping

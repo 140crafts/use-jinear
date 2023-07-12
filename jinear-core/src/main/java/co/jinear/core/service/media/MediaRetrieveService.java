@@ -55,7 +55,7 @@ public class MediaRetrieveService {
 
     public String retrievePublicDownloadLink(AccessibleMediaDto accessibleMediaDto) {
         log.info("Retrieve public download link for accessible media has started. accessibleMediaDto: {}", accessibleMediaDto);
-        return FileStorageUtils.generateFullPath(accessibleMediaDto.getBucketName(), accessibleMediaDto.getMediaOwnerType(), accessibleMediaDto.getRelatedObjectId(), accessibleMediaDto.getFileType(), accessibleMediaDto.getMediaKey());
+        return FileStorageUtils.generateFullPath(accessibleMediaDto.getBucketName(), accessibleMediaDto.getMediaOwnerType(), accessibleMediaDto.getRelatedObjectId(), accessibleMediaDto.getFileType(), accessibleMediaDto.getMediaKey(), accessibleMediaDto.getOriginalName());
     }
 
     public List<String> retrieveAllTemporaryPublicAndExpired() {

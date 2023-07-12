@@ -2,8 +2,10 @@ package co.jinear.core.controller.task;
 
 import co.jinear.core.manager.task.TaskMediaManager;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.task.TaskMediaResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +21,7 @@ public class TaskMediaController {
 
     @GetMapping(value = "/{taskId}")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse retrieveTaskMediaList(@PathVariable String taskId) {
+    public TaskMediaResponse retrieveTaskMediaList(@PathVariable String taskId) {
         return taskMediaManager.retrieveTaskMediaList(taskId);
     }
 
@@ -43,6 +45,7 @@ public class TaskMediaController {
                                   @PathVariable String mediaId,
                                   HttpServletResponse response) throws IOException {
         String redirectUrl = taskMediaManager.downloadTaskMedia(taskId, mediaId);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"My-Super-Video.mp4");
         response.sendRedirect(redirectUrl);
     }
 }

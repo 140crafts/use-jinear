@@ -16,4 +16,5 @@ public class MediaDto extends BaseDto {
     private FileType fileType;
     private String bucketName;
     private String originalName;
+    private Long size;
 }

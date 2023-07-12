@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -78,7 +79,7 @@ public class MediaOperationService {
         log.info("Update media as temporary public has started. mediaId: {}, publicUntil: {}", mediaId, publicUntil);
         Media media = retrieveMedia(mediaId);
 
-        String path = FileStorageUtils.generatePath(media.getMediaOwnerType(), media.getRelatedObjectId(), media.getFileType(), media.getMediaKey());
+        String path = FileStorageUtils.generatePath(media.getMediaOwnerType(), media.getRelatedObjectId(), media.getFileType(), media.getMediaKey(), media.getOriginalName());
         String bucketName = gCloudProperties.getBucketName();
         makePublicOnStorage(bucketName, path);
 
@@ -92,7 +93,7 @@ public class MediaOperationService {
         log.info("Update media as private has started. mediaId: {}", mediaId);
         Media media = retrieveMedia(mediaId);
 
-        String path = FileStorageUtils.generatePath(media.getMediaOwnerType(), media.getRelatedObjectId(), media.getFileType(), media.getMediaKey());
+        String path = FileStorageUtils.generatePath(media.getMediaOwnerType(), media.getRelatedObjectId(), media.getFileType(), media.getMediaKey(), media.getOriginalName());
         String bucketName = gCloudProperties.getBucketName();
         makePrivateOnStorage(bucketName, path);
 
@@ -126,10 +127,11 @@ public class MediaOperationService {
         media.setBucketName(bucketName);
         media.setStoragePath(path);
 
-        Optional.of(initializeMediaVo)
+        String originalName = Optional.of(initializeMediaVo)
                 .map(InitializeMediaVo::getFile)
                 .map(MultipartFile::getOriginalFilename)
-                .ifPresent(media::setOriginalName);
+                .orElse(UUID.randomUUID().toString());
+        media.setOriginalName(originalName);
 
         Optional.of(initializeMediaVo)
                 .map(InitializeMediaVo::getFile)
@@ -172,6 +174,10 @@ public class MediaOperationService {
     }
 
     private String generatePath(InitializeMediaVo initializeMediaVo, String mediaKey) {
-        return FileStorageUtils.generatePath(initializeMediaVo.getMediaOwnerType(), initializeMediaVo.getRelatedObjectId(), initializeMediaVo.getFileType(), mediaKey);
+        String originalName = Optional.of(initializeMediaVo)
+                .map(InitializeMediaVo::getFile)
+                .map(MultipartFile::getOriginalFilename)
+                .orElse(UUID.randomUUID().toString());
+        return FileStorageUtils.generatePath(initializeMediaVo.getMediaOwnerType(), initializeMediaVo.getRelatedObjectId(), initializeMediaVo.getFileType(), mediaKey, originalName);
     }
 }
