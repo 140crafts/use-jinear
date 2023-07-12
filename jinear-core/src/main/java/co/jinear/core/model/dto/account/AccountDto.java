@@ -1,7 +1,7 @@
 package co.jinear.core.model.dto.account;
 
 import co.jinear.core.model.dto.BaseDto;
-import co.jinear.core.model.dto.media.MediaDto;
+import co.jinear.core.model.dto.media.AccessibleMediaDto;
 import co.jinear.core.model.dto.workspace.AccountsWorkspacePerspectiveDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
@@ -26,7 +26,7 @@ public class AccountDto extends BaseDto {
     private String username;
     private Set<AccountRoleDto> roles;
     @Nullable
-    private MediaDto profilePicture;
+    private AccessibleMediaDto profilePicture;
     private List<AccountsWorkspacePerspectiveDto> workspaces;
     @Nullable
     private WorkspaceDisplayPreferenceDto workspaceDisplayPreference;

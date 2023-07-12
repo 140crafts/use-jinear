@@ -2,12 +2,14 @@ package co.jinear.core.system;
 
 import co.jinear.core.exception.BusinessException;
 import com.google.common.io.BaseEncoding;
+import de.huxhorn.sulky.ulid.ULID;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.Random;
 
@@ -26,6 +28,10 @@ public class RandomHelper {
             log.error("Cannot initialize secure random instance.", e);
             throw new BusinessException();
         }
+    }
+
+    public static String generateULID(){
+        return new ULID().nextULID().toLowerCase(Locale.ROOT);
     }
 
     public static String generateEmailCode() {

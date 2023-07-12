@@ -9,13 +9,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static co.jinear.core.model.enumtype.account.PermissionType.EXPIRE_TEMP_PUBLIC_MEDIA;
 import static co.jinear.core.model.enumtype.account.PermissionType.PROCESS_REMINDER_JOB;
 
 @Getter
 @AllArgsConstructor
 public enum RoleType {
     ADMIN(Stream.of(PermissionType.values()).collect(Collectors.toSet())),
-    SERVICE(Set.of(PROCESS_REMINDER_JOB)),
+    SERVICE(Set.of(PROCESS_REMINDER_JOB, EXPIRE_TEMP_PUBLIC_MEDIA)),
     USER(new HashSet<>());
 
     private final Set<PermissionType> permissions;

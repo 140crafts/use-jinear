@@ -7,14 +7,13 @@ import lombok.experimental.UtilityClass;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 @UtilityClass
 public class CloudStorage {
 
-    private static final String CACHE_CONTROL="max-age=2629743";
-    private static final String DEFAULT_CONTENT_TYPE="image/jpeg";
+    private static final String CACHE_CONTROL = "max-age=2629743";
+    private static final String DEFAULT_CONTENT_TYPE = "image/jpeg";
 
     @Getter
     @Setter
@@ -47,20 +46,28 @@ public class CloudStorage {
         Storage storage = getStorage();
         BlobId blobId = BlobId.of(bucketName, objectName);
         storage.createAcl(blobId, Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
+
     }
 
-    @SuppressWarnings("Not tested")
     public static void makeObjectPrivate(String bucketName, String objectName) {
         Storage storage = getStorage();
-
         BlobId blobId = BlobId.of(bucketName, objectName);
         Blob blob = storage.get(blobId);
-        List<Acl>  acls = blob.getAcl();
-        acls.stream().forEach(acl -> blob.deleteAcl(acl.getEntity()));
+        blob.deleteAcl(blob.getAcl(Acl.User.ofAllUsers()).getEntity());
     }
 
     public static void deleteObject(String bucketName, String objectName) {
         Storage storage = getStorage();
         storage.delete(bucketName, objectName);
+    }
+
+    public static void renameObject(String bucketName, String objectName, String newObjectName) {
+        Storage storage = getStorage();
+        BlobId source = BlobId.of(bucketName, objectName);
+        BlobId target = BlobId.of(bucketName, newObjectName);
+        Storage.BlobTargetOption precondition = Storage.BlobTargetOption.doesNotExist();
+        storage.copy(Storage.CopyRequest.newBuilder().setSource(source).setTarget(target, precondition).build());
+        storage.get(target);
+        storage.get(source).delete();
     }
 }
