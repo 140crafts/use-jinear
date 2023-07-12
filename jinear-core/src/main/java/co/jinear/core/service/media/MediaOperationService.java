@@ -131,6 +131,11 @@ public class MediaOperationService {
                 .map(MultipartFile::getOriginalFilename)
                 .ifPresent(media::setOriginalName);
 
+        Optional.of(initializeMediaVo)
+                .map(InitializeMediaVo::getFile)
+                .map(MultipartFile::getSize)
+                .ifPresent(media::setSize);
+
         Media saved = mediaRepository.save(media);
         log.info("Media saved. mediaId: {}", saved.getMediaId());
         return saved;

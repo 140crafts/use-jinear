@@ -11,6 +11,7 @@ import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.media.TaskMediaOperationService;
 import co.jinear.core.service.task.media.TaskMediaRetrieveService;
 import co.jinear.core.validator.task.TaskAccessValidator;
+import co.jinear.core.validator.workspace.WorkspaceMediaLimitValidator;
 import co.jinear.core.validator.workspace.WorkspaceTierValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class TaskMediaManager {
     private final TaskRetrieveService taskRetrieveService;
     private final TaskAccessValidator taskAccessValidator;
     private final WorkspaceTierValidator workspaceTierValidator;
+    private final WorkspaceMediaLimitValidator workspaceMediaLimitValidator;
 
     public TaskMediaResponse retrieveTaskMediaList(String taskId) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -45,6 +47,7 @@ public class TaskMediaManager {
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         workspaceTierValidator.validateWorkspaceTier(taskDto.getWorkspaceId(), WorkspaceTier.PLUS);
+        workspaceMediaLimitValidator.validateWorkspaceStorageLimitNotExceeded(taskDto.getWorkspaceId(),file.getSize());
         log.info("Upload task media has started. currentAccountId: {}", currentAccountId);
         taskMediaOperationService.upload(currentAccountId, taskDto, file);
         return new BaseResponse();
