@@ -1,6 +1,7 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { useRetrieveTaskMediaListQuery, useUploadTaskMediaMutation } from "@/store/api/taskMediaApi";
+import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
 import React, { ChangeEvent, useRef } from "react";
 import { useTask } from "../context/TaskDetailContext";
@@ -9,6 +10,7 @@ import TaskMediaItem from "./taskMediaItem/TaskMediaItem";
 
 interface TaskMediaListProps {}
 
+const logger = Logger("TaskMediaList");
 const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
   const { t } = useTranslation();
   const attachmentPickerRef = useRef<HTMLInputElement>(null);
@@ -42,7 +44,12 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
     <div className={styles.container}>
       <div className={styles.actionBar}>
         <h3>{t("taskDetailMediaTitle")}</h3>
-        <Button variant={ButtonVariants.filled} heightVariant={ButtonHeight.short} onClick={pickAttachment}>
+        <Button
+          disabled={isUploadTaskMediaLoading}
+          variant={ButtonVariants.filled}
+          heightVariant={ButtonHeight.short}
+          onClick={pickAttachment}
+        >
           {t("taskDetailMediaAddMedia")}
         </Button>
         <input
