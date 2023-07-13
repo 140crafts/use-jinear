@@ -2,6 +2,7 @@ package co.jinear.core.manager.account;
 
 import co.jinear.core.model.enumtype.media.FileType;
 import co.jinear.core.model.enumtype.media.MediaOwnerType;
+import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.vo.media.InitializeMediaVo;
 import co.jinear.core.service.SessionInfoService;
@@ -38,6 +39,7 @@ public class AccountMediaManager {
         initializeMediaVo.setFile(file);
         initializeMediaVo.setFileType(FileType.PROFILE_PIC);
         initializeMediaVo.setMediaOwnerType(MediaOwnerType.USER);
+        initializeMediaVo.setVisibility(MediaVisibilityType.PUBLIC);
         return initializeMediaVo;
     }
 }

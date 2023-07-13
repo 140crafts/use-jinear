@@ -888,4 +888,44 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-visibility-column-to-media">
+        <addColumn tableName="media">
+            <column name="visibility" type="int" afterColumn="original_name" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-media_key-column-to-media">
+        <addColumn tableName="media">
+            <column name="media_key" type="char(26)" afterColumn="media_id"/>
+        </addColumn>
+    </changeSet>
+
+
+    <changeSet author="cagdas.tunca" id="jinear-208-update-media_key-column-with-media-id">
+        <sql>
+            update media
+            set media_key = media_id
+            where media_key is null
+        </sql>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-media_key-column-not-null-constraint">
+        <addNotNullConstraint tableName="media" columnName="media_key" columnDataType="char(26)"/>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-public_until-column-to-media">
+        <addColumn tableName="media">
+            <column name="public_until" type="datetime" afterColumn="visibility"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-size-column-to-media">
+        <addColumn tableName="media">
+            <column name="size" type="bigint" afterColumn="original_name"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

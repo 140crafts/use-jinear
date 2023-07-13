@@ -1,7 +1,7 @@
 package co.jinear.core.model.dto.account;
 
 import co.jinear.core.model.dto.BaseDto;
-import co.jinear.core.model.dto.media.MediaDto;
+import co.jinear.core.model.dto.media.AccessibleMediaDto;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
 import lombok.Getter;
 import lombok.Setter;
@@ -18,5 +18,5 @@ public class PlainAccountProfileDto extends BaseDto {
     private LocaleType localeType;
     private String timeZone;
     @Nullable
-    private MediaDto profilePicture;
+    private AccessibleMediaDto profilePicture;
 }

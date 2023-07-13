@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-07-07 10:33:15.
+// Generated using typescript-generator version 3.0.1157 on 2023-07-12 10:55:59.
 
 export interface BaseDto {
     createdDate: Date;
@@ -36,7 +36,7 @@ export interface AccountDto extends BaseDto {
     timeZone: string;
     username?: string | null;
     roles: AccountRoleDto[];
-    profilePicture?: MediaDto | null;
+    profilePicture?: AccessibleMediaDto | null;
     workspaces: AccountsWorkspacePerspectiveDto[];
     workspaceDisplayPreference?: WorkspaceDisplayPreferenceDto | null;
 }
@@ -56,7 +56,12 @@ export interface PlainAccountProfileDto extends BaseDto {
     username: string;
     localeType: LocaleType;
     timeZone: string;
-    profilePicture?: MediaDto | null;
+    profilePicture?: AccessibleMediaDto | null;
+}
+
+export interface AccessibleMediaDto extends MediaDto {
+    mediaKey: string;
+    storagePath: string;
 }
 
 export interface MediaDto extends BaseDto {
@@ -66,8 +71,8 @@ export interface MediaDto extends BaseDto {
     mediaOwnerType: MediaOwnerType;
     fileType: FileType;
     bucketName: string;
-    storagePath: string;
     originalName: string;
+    size: number;
 }
 
 export interface NotificationEventDto extends BaseDto {
@@ -415,7 +420,7 @@ export interface WorkspaceDto extends BaseDto {
     tier: WorkspaceTier;
     username: string;
     settings: WorkspaceSettingDto;
-    profilePicture: MediaDto;
+    profilePicture: AccessibleMediaDto;
 }
 
 export interface WorkspaceInvitationDto extends BaseDto {
@@ -790,6 +795,10 @@ export interface TaskListingResponse extends BaseResponse {
     data: TaskDto[];
 }
 
+export interface TaskMediaResponse extends BaseResponse {
+    data: MediaDto[];
+}
+
 export interface TaskResponse extends BaseResponse {
     data: TaskDto;
 }
@@ -862,7 +871,7 @@ export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY"
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
 
-export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB";
+export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXPIRE_TEMP_PUBLIC_MEDIA";
 
 export type RoleType = "ADMIN" | "SERVICE" | "USER";
 
@@ -874,9 +883,11 @@ export type LocaleType = "TR" | "EN";
 
 export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT";
 
-export type FileType = "PROFILE_PIC";
+export type FileType = "PROFILE_PIC" | "TASK_FILE";
 
-export type MediaOwnerType = "USER" | "WORKSPACE";
+export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK";
+
+export type MediaVisibilityType = "PUBLIC" | "PRIVATE" | "TEMP_PUBLIC";
 
 export type NotificationEventState = "INITIALIZED" | "SENT";
 

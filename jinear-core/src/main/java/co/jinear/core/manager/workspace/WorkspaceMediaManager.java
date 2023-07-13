@@ -2,6 +2,7 @@ package co.jinear.core.manager.workspace;
 
 import co.jinear.core.model.enumtype.media.FileType;
 import co.jinear.core.model.enumtype.media.MediaOwnerType;
+import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.vo.media.InitializeMediaVo;
 import co.jinear.core.service.SessionInfoService;
@@ -32,7 +33,7 @@ public class WorkspaceMediaManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         log.info("Change workspace picture has started. accountId: {}, workspaceId: {}", currentAccountId, workspaceId);
         mediaValidator.validateForSafeImage(file);
-        InitializeMediaVo initializeMediaVo = mapInitializeVo(file, currentAccountId, workspaceId, MediaOwnerType.USER);
+        InitializeMediaVo initializeMediaVo = mapInitializeVo(file, currentAccountId, workspaceId, MediaOwnerType.WORKSPACE);
         workspaceMemberService.validateAccountHasRoleInWorkspace(currentAccountId, workspaceId, List.of(OWNER, ADMIN));
         mediaOperationService.changeProfilePicture(initializeMediaVo);
         log.info("Change workspace picture has finished. accountId: {}, workspaceId: {}", currentAccountId, workspaceId);
@@ -46,6 +47,7 @@ public class WorkspaceMediaManager {
         initializeMediaVo.setFile(file);
         initializeMediaVo.setFileType(FileType.PROFILE_PIC);
         initializeMediaVo.setMediaOwnerType(mediaOwnerType);
+        initializeMediaVo.setVisibility(MediaVisibilityType.PUBLIC);
         return initializeMediaVo;
     }
 }
