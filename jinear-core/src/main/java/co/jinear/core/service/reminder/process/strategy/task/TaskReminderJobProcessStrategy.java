@@ -24,8 +24,7 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
-import static co.jinear.core.model.enumtype.reminder.ReminderJobStatus.COMPLETED;
-import static co.jinear.core.model.enumtype.reminder.ReminderJobStatus.PENDING;
+import static co.jinear.core.model.enumtype.reminder.ReminderJobStatus.*;
 
 @Slf4j
 @Service
@@ -46,15 +45,26 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
     public void process(ReminderJobDto reminderJobDto) {
         log.info("Task reminder job process has started. reminderJobDto: {}", reminderJobDto);
         TaskDto taskDto = retrieveTask(reminderJobDto);
-        TaskReminderDto taskReminderDto = taskReminderRetrieveService.retrieveByTaskIdAndReminderId(taskDto.getTaskId(), reminderJobDto.getReminderId());
-        taskReminderAccountReachOutService.notify(taskDto, taskReminderDto, reminderJobDto);
-        reminderJobOperationService.updateReminderJobStatus(reminderJobDto.getReminderJobId(), COMPLETED);
-        calculateNextDateAndInitializeNextReminderJob(reminderJobDto, taskReminderDto);
+        Optional<TaskReminderDto> taskReminderDtoOptional = taskReminderRetrieveService.retrieveByTaskIdAndReminderIdOptional(taskDto.getTaskId(), reminderJobDto.getReminderId());
+        taskReminderDtoOptional.ifPresentOrElse(
+                taskReminderDto -> processTaskReminder(taskReminderDto, reminderJobDto, taskDto),
+                () -> updateReminderJobAsCancelled(reminderJobDto));
     }
 
     @Override
     public ReminderType getType() {
         return ReminderType.TASK;
+    }
+
+    private void updateReminderJobAsCancelled(ReminderJobDto reminderJobDto) {
+        log.warn("Task reminder job couldn't processed. Task reminder can not be found. Updating reminder job as [FAILED]");
+        reminderJobOperationService.updateReminderJobStatus(reminderJobDto.getReminderJobId(), FAILED);
+    }
+
+    private void processTaskReminder(TaskReminderDto taskReminderDto, ReminderJobDto reminderJobDto, TaskDto taskDto) {
+        taskReminderAccountReachOutService.notify(taskDto, taskReminderDto, reminderJobDto);
+        reminderJobOperationService.updateReminderJobStatus(reminderJobDto.getReminderJobId(), COMPLETED);
+        calculateNextDateAndInitializeNextReminderJob(reminderJobDto, taskReminderDto);
     }
 
     private TaskDto retrieveTask(ReminderJobDto reminderJobDto) {

@@ -17,12 +17,17 @@ public class ReminderJobProcessService {
 
     private final ReminderJobListingService reminderJobListingService;
     private final ReminderJobProcessStrategyFactory reminderJobProcessStrategyFactory;
+    private final ReminderJobProcessLockService reminderJobProcessLockService;
 
     public void processAllUpcomingJobs(ZonedDateTime beforeDate) {
+        reminderJobProcessLockService.lockReminderJobProcessing();
         log.info("Process all upcoming jobs before date has started. beforeDate: {}", beforeDate);
-        reminderJobListingService.retrieveAllByReminderJobStatusAndBeforeDate(ReminderJobStatus.PENDING, beforeDate)
-                .stream()
-                .forEach(this::process);
+        try {
+            reminderJobListingService.retrieveAllByReminderJobStatusAndBeforeDate(ReminderJobStatus.PENDING, beforeDate)
+                    .forEach(this::process);
+        } finally {
+            reminderJobProcessLockService.unlockReminderJobProcessing();
+        }
     }
 
     private void process(ReminderJobDto reminderJobDto) {

@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum ReminderJobStatus {
     PENDING(0),
     COMPLETED(1),
-    CANCELLED(-1);
+    CANCELLED(-1),
+    FAILED(-2);
 
-    private int value;
+    private final int value;
 }

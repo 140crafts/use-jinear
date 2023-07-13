@@ -62,10 +62,9 @@ public class TaskReminderRetrieveService {
         return reminderJobRetrieveService.findFirstReminderJob(taskReminderDto.getReminderId(), ReminderJobStatus.PENDING);
     }
 
-    public TaskReminderDto retrieveByTaskIdAndReminderId(String taskId, String reminderId) {
+    public Optional<TaskReminderDto> retrieveByTaskIdAndReminderIdOptional(String taskId, String reminderId) {
         log.info("Retrieve task reminder by task id and reminder id has started. taskId: {}, reminderId: {}", taskId, reminderId);
         return taskReminderRepository.findByTaskIdAndReminderIdAndPassiveIdIsNull(taskId, reminderId)
-                .map(taskReminderConverter::map)
-                .orElseThrow(NotFoundException::new);
+                .map(taskReminderConverter::map);
     }
 }
