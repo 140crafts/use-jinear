@@ -56,15 +56,15 @@ public class TaskReminderJobProcessStrategy implements ReminderJobProcessStrateg
         return ReminderType.TASK;
     }
 
-    private void updateReminderJobAsCancelled(ReminderJobDto reminderJobDto) {
-        log.warn("Task reminder job couldn't processed. Task reminder can not be found. Updating reminder job as [FAILED]");
-        reminderJobOperationService.updateReminderJobStatus(reminderJobDto.getReminderJobId(), FAILED);
-    }
-
     private void processTaskReminder(TaskReminderDto taskReminderDto, ReminderJobDto reminderJobDto, TaskDto taskDto) {
         taskReminderAccountReachOutService.notify(taskDto, taskReminderDto, reminderJobDto);
         reminderJobOperationService.updateReminderJobStatus(reminderJobDto.getReminderJobId(), COMPLETED);
         calculateNextDateAndInitializeNextReminderJob(reminderJobDto, taskReminderDto);
+    }
+
+    private void updateReminderJobAsCancelled(ReminderJobDto reminderJobDto) {
+        log.warn("Task reminder job couldn't processed. Task reminder can not be found. Updating reminder job as [FAILED]");
+        reminderJobOperationService.updateReminderJobStatus(reminderJobDto.getReminderJobId(), FAILED);
     }
 
     private TaskDto retrieveTask(ReminderJobDto reminderJobDto) {
