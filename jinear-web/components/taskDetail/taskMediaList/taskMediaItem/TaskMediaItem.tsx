@@ -68,7 +68,7 @@ const TaskMediaItem: React.FC<TaskMediaItemProps> = ({ media, mock = false }) =>
         disabled={isDeleteLoading}
         className={styles.mainButton}
         heightVariant={ButtonHeight.short}
-        href={media && !isDeleteLoading ? root + `/v1/task/media/${media.relatedObjectId}/download/${media.mediaId}` : undefined}
+        href={media && !isDeleteLoading ? root + `v1/task/media/${media.relatedObjectId}/download/${media.mediaId}` : undefined}
         target={media && !isDeleteLoading ? "_blank" : undefined}
         download={media && !isDeleteLoading ? media.originalName : undefined}
       >

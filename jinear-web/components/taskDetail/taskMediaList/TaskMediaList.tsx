@@ -4,6 +4,7 @@ import { useRetrieveTaskMediaListQuery, useUploadTaskMediaMutation } from "@/sto
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
 import React, { ChangeEvent, useRef } from "react";
+import { toast } from "react-hot-toast";
 import { useTask } from "../context/TaskDetailContext";
 import styles from "./TaskMediaList.module.css";
 import TaskMediaItem from "./taskMediaItem/TaskMediaItem";
@@ -32,6 +33,11 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
     if (target.files && target.files.length) {
       const file = event.target?.files?.[0];
       if (file) {
+        const fileSize = file?.size || 0;
+        if (fileSize / 1000 / 1000 > 32) {
+          toast(t("apiFileTooLargeError"));
+          return;
+        }
         let formData = new FormData();
         formData.append("file", file);
         uploadTaskMedia({ taskId: task.taskId, formData });
