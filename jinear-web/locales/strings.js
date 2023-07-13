@@ -2346,4 +2346,8 @@ export default {
     en: "There isn't any attachments.",
     tr: "Herhangi bir ek bulunmuyor.",
   },
+  apiFileTooLargeError: {
+    en: "File is too large. Maximum file size is 32Mb",
+    tr: "Dosya maksimum boyutun üzerinde. Maksimum dosya boyutu 32Mb",
+  },
 };

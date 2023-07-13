@@ -11,10 +11,13 @@ export const rtkQueryErrorLogger: Middleware = (api: MiddlewareAPI) => (next) =>
   if (isRejectedWithValue(action)) {
     const status = action?.payload?.status;
     const originalStatus = action?.payload?.originalStatus;
-    if (status !== 401) {
+    console.error({ status, originalStatus });
+    if (status == 413) {
+      const message = getTranslatedMessage("apiFileTooLargeError");
+      toast(message);
+    } else if (status !== 401) {
       const message = action?.payload?.data?.consumerErrorMessage || getTranslatedMessage("genericError");
       toast(message);
-      console.error({ message, originalStatus });
     }
   }
   return next(action);

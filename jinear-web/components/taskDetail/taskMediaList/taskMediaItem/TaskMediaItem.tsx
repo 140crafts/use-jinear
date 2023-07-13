@@ -7,6 +7,7 @@ import { useDeleteTaskMediaMutation } from "@/store/api/taskMediaApi";
 import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import { humanReadibleFileSize } from "@/utils/FileSizeFormatter";
+import cn from "classnames";
 import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -73,7 +74,9 @@ const TaskMediaItem: React.FC<TaskMediaItemProps> = ({ media, mock = false }) =>
       >
         <div className={styles.iconAndNameContainer}>
           <div className={styles.iconContainer}>{mock ? <CircularLoading /> : renderFileIcon()}</div>
-          <div className={styles.mediaNameLabel}>{mock ? t("taskDetailMediaUploading") : media?.originalName}</div>
+          <div className={cn(styles.mediaNameLabel, "single-line")}>
+            {mock ? t("taskDetailMediaUploading") : media?.originalName}
+          </div>
         </div>
 
         <div className={styles.mediaInfoContainer}>

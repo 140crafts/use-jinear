@@ -30,6 +30,7 @@
 }
 
 .mediaNameLabel {
+  width: 0;
   flex: 1;
 }
 
@@ -66,7 +67,7 @@
   min-height: 24px;
 }
 
-@media (max-width: $mobile-l) {
+@media (max-width: $tablet) {
   .container {
     align-items: flex-start;
   }
@@ -74,6 +75,9 @@
     flex-direction: column;
     gap: 0.25rem;
     align-items: flex-start;
+  }
+  .mediaNameLabel {
+    width: 50vw;
   }
   .mediaSizeLabel {
     min-width: unset;
