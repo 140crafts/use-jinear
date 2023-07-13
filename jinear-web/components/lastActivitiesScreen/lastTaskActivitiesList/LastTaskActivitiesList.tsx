@@ -31,6 +31,7 @@ const LastTaskActivitiesList: React.FC<LastTaskActivitiesListProps> = ({
         page={page}
         setPage={setPage}
         ignoreGrouping={true}
+        hidePaginationOnSinglePages={true}
       />
     </div>
   );

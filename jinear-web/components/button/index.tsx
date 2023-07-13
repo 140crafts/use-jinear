@@ -67,6 +67,7 @@ interface ButtonProps {
   type?: string;
   form?: string;
   style?: any;
+  download?: string;
 }
 
 const Button: React.FC<ButtonProps> = ({
