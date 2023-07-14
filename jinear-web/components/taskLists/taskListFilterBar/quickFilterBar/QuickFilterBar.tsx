@@ -33,6 +33,7 @@ const QuickFilterBar: React.FC<QuickFilterBarProps> = ({}) => {
   const cancelledStatuses = teamWorkflowStatusListResponse?.data.groupedTeamWorkflowStatuses.CANCELLED || [];
   const backlogStatuses = teamWorkflowStatusListResponse?.data.groupedTeamWorkflowStatuses.BACKLOG || [];
   const activeStatuses = [...notStartedStatuses, ...startedStatuses];
+  const undoneStatuses = [...backlogStatuses, ...notStartedStatuses, ...startedStatuses];
   const archivedStatuses = [...completedStatuses, ...cancelledStatuses];
 
   const setFilterThisMonth = () => {
@@ -51,6 +52,10 @@ const QuickFilterBar: React.FC<QuickFilterBarProps> = ({}) => {
 
   const setActiveStatusesAsFiltered = () => {
     setSelectedWorkflowStatuses?.(activeStatuses);
+  };
+
+  const setUndoneStatusesAsFiltered = () => {
+    setSelectedWorkflowStatuses?.(undoneStatuses);
   };
 
   const setBacklogStatusesAsFiltered = () => {
@@ -86,6 +91,14 @@ const QuickFilterBar: React.FC<QuickFilterBarProps> = ({}) => {
         onClick={setActiveStatusesAsFiltered}
       >
         {t("quickFilterBarActive")}
+      </Button>
+      <Button
+        className={styles.button}
+        heightVariant={ButtonHeight.short}
+        variant={ButtonVariants.default}
+        onClick={setUndoneStatusesAsFiltered}
+      >
+        {t("quickFilterBarUndone")}
       </Button>
       <Button
         className={styles.button}
