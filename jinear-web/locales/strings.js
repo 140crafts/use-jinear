@@ -2186,6 +2186,10 @@ export default {
     en: "Active",
     tr: "Aktif",
   },
+  quickFilterBarUndone: {
+    en: "Undone",
+    tr: "Tamamlanmamış",
+  },
   quickFilterBarArchived: {
     en: "Archive",
     tr: "Arşiv",
