@@ -1,10 +1,8 @@
-import {
-  useUpdatePreferredTeamWithUsernameMutation,
-  useUpdatePreferredWorkspaceWithUsernameMutation,
-} from "@/store/api/workspaceDisplayPreferenceApi";
-import { selectCurrentAccountsPreferredTeam, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { useUpdatePreferredWorkspaceWithUsernameMutation } from "@/store/api/workspaceDisplayPreferenceApi";
+import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { selectReroute } from "@/store/slice/displayPreferenceSlice";
 import { useTypedSelector } from "@/store/store";
+import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -16,27 +14,21 @@ const logger = Logger("WorkspaceAndTeamChangeListener");
 const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerProps> = ({}) => {
   const router = useRouter();
   const workspaceNameFromUrl: string = router.query?.workspaceName as string;
-  const teamUsernameFromUrl: string = router.query?.teamUsername as string;
   const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const preferredTeam = useTypedSelector(selectCurrentAccountsPreferredTeam);
   const activeReroute = useTypedSelector(selectReroute);
 
   const currentWorkspaceDifferentFromUrl =
     currentWorkspace && workspaceNameFromUrl && currentWorkspace.username != workspaceNameFromUrl;
-  const currentTeamDifferentFromUrl =
-    workspaceNameFromUrl && teamUsernameFromUrl && preferredTeam && preferredTeam.username != teamUsernameFromUrl;
 
-  const [updatePreferredWorkspaceWithUsername, { isError: isTeamUpdateError, status: teamUpdateStatus }] =
+  const [updatePreferredWorkspaceWithUsername, { isError: isWorkspaceUpdateError, status: workspaceUpdateStatus }] =
     useUpdatePreferredWorkspaceWithUsernameMutation();
-  const [updatePreferredTeamWithUsername, { isError: isWorkspaceUpdateError, status: workspaceUpdateStatus }] =
-    useUpdatePreferredTeamWithUsernameMutation();
 
   useEffect(() => {
-    if (isWorkspaceUpdateError || isTeamUpdateError) {
-      logger.log({ teamUpdateStatus, workspaceUpdateStatus });
-      router.replace("/");
+    if (isWorkspaceUpdateError) {
+      logger.log({ workspaceUpdateStatus });
+      router.replace(ROUTE_IF_LOGGED_IN);
     }
-  }, [isTeamUpdateError, isWorkspaceUpdateError, teamUpdateStatus, workspaceUpdateStatus]);
+  }, [isWorkspaceUpdateError, workspaceUpdateStatus]);
 
   useEffect(() => {
     if (activeReroute) {
@@ -46,22 +38,13 @@ const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerPro
         workspaceUsername: workspaceNameFromUrl,
         dontReroute: true,
       });
-    } else if (currentTeamDifferentFromUrl) {
-      updatePreferredTeamWithUsername({
-        workspaceUsername: workspaceNameFromUrl,
-        teamUsername: teamUsernameFromUrl,
-        dontReroute: true,
-      });
     }
-  }, [activeReroute, currentWorkspaceDifferentFromUrl, currentTeamDifferentFromUrl]);
+  }, [activeReroute, currentWorkspaceDifferentFromUrl]);
 
   logger.log({
     workspaceNameFromUrl,
-    teamUsernameFromUrl,
     currentWorkspace,
-    preferredTeam,
     currentWorkspaceDifferentFromUrl,
-    currentTeamDifferentFromUrl,
     activeReroute,
   });
 
