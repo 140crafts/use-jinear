@@ -17,6 +17,9 @@ export const taskBoardEntryApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         { type: "task-board-entry-listing", id: req.taskBoardId },
         "retrieve-task-and-task-boards-relation",
+        "workspace-task-activity-list",
+        "workspace-team-activity-list",
+        "workspace-activity-list",
       ],
     }),
     //
@@ -28,6 +31,9 @@ export const taskBoardEntryApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         { type: "task-board-entry-listing", id: req.taskBoardId },
         "retrieve-task-and-task-boards-relation",
+        "workspace-task-activity-list",
+        "workspace-team-activity-list",
+        "workspace-activity-list",
       ],
     }),
     //
@@ -47,6 +53,9 @@ export const taskBoardEntryApi = api.injectEndpoints({
           type: "task-board-entry-listing",
           id: `${req.taskBoardId}`,
         },
+        "workspace-task-activity-list",
+        "workspace-team-activity-list",
+        "workspace-activity-list",
       ],
     }),
     //

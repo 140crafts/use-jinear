@@ -954,6 +954,26 @@ export default {
     en: "has removed task relation.",
     tr: "görev ilişkisini kaldırdı.",
   },
+  taskWorkflowActivityInfoLabel_ATTACHMENT_ADDED: {
+    en: "has added an attachment.",
+    tr: "bir dosya ekledi.",
+  },
+  taskWorkflowActivityInfoLabel_ATTACHMENT_DELETED: {
+    en: "has deleted an attachment.",
+    tr: "bir dosya sildi.",
+  },
+  taskWorkflowActivityInfoLabel_TASK_BOARD_ENTRY_INIT: {
+    en: "has added task to a board.",
+    tr: "görevi bir panoya ekledi.",
+  },
+  taskWorkflowActivityInfoLabel_TASK_BOARD_ENTRY_REMOVED: {
+    en: "has removed task from a board.",
+    tr: "görevi bir panodan kaldırdı.",
+  },
+  taskWorkflowActivityInfoLabel_TASK_BOARD_ENTRY_ORDER_CHANGE: {
+    en: "has changed task order from a board.",
+    tr: "görevin bir panodaki sırasını değiştirdi.",
+  },
   taskWorkflowActivityInfoLabelDateInDays: {
     en: "${num} days ago.",
     tr: "${num} gün önce",
