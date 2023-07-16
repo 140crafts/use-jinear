@@ -58,7 +58,8 @@ export default function Home() {
 
       <div className={styles.heroContainer}>
         <span className={styles.heroTitle}>
-          {t("homescreenHeroTitleLine1")} <br />
+          <span className={styles.heroHighlighted}>{t("homescreenHeroTitleLine1")}</span>
+          <br />
           {t("homescreenHeroTitleLine2")}
         </span>
 

@@ -5,13 +5,16 @@ import {
   IoCheckmarkOutline,
   IoCloseOutline,
   IoCogOutline,
+  IoDocumentAttachOutline,
   IoPencilOutline,
   IoPersonAddOutline,
   IoPersonRemoveOutline,
   IoPlayForwardOutline,
   IoPricetagOutline,
+  IoReaderOutline,
   IoShieldOutline,
   IoSparklesOutline,
+  IoTrashBinOutline,
 } from "react-icons/io5";
 
 const workspaceIconMap = {
@@ -37,6 +40,11 @@ const workspaceIconMap = {
   CHECKLIST_ITEM_LABEL_CHANGED: IoCheckmarkOutline,
   CHECKLIST_ITEM_REMOVED: IoCheckmarkOutline,
   CHECKLIST_ITEM_INITIALIZED: IoCheckmarkOutline,
+  ATTACHMENT_ADDED: IoDocumentAttachOutline,
+  ATTACHMENT_DELETED: IoTrashBinOutline,
+  TASK_BOARD_ENTRY_INIT: IoReaderOutline,
+  TASK_BOARD_ENTRY_REMOVED: IoReaderOutline,
+  TASK_BOARD_ENTRY_ORDER_CHANGE: IoReaderOutline,
 };
 
 const decideWorkspaceActivityIcon = (type: WorkspaceActivityType) => {

@@ -35,11 +35,21 @@
 }
 
 .heroTitle {
+  position: relative;
   font-size: 3.5rem;
   line-height: 4rem;
   width: 85%;
   font-weight: 800;
   margin: 2rem 0;
+  overflow: visible;
+}
+
+.heroHighlighted {
+  color: black;
+  background-color: var(--c-HIGHLIGHT_YELLOW);
+  border-radius: 0.25rem;
+  padding: 0.25rem 1rem;
+  margin-left: -1rem;
 }
 
 .heroText {

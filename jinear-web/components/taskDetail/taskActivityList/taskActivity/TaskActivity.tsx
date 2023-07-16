@@ -1,4 +1,4 @@
-import Button from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { useToggle } from "@/hooks/useToggle";
 import { WorkspaceActivityDto } from "@/model/be/jinear-core";
 import decideWorkspaceActivityIcon from "@/utils/workspaceActivityIconMap";
@@ -37,6 +37,11 @@ const TASK_RELATED_ACTIONS_WITH_DIFF = [
   "CHECKLIST_ITEM_LABEL_CHANGED",
   "CHECKLIST_ITEM_REMOVED",
   "CHECKLIST_ITEM_INITIALIZED",
+  "ATTACHMENT_ADDED",
+  "ATTACHMENT_DELETED",
+  "TASK_BOARD_ENTRY_INIT",
+  "TASK_BOARD_ENTRY_REMOVED",
+  "TASK_BOARD_ENTRY_ORDER_CHANGE",
 ];
 
 const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
@@ -161,10 +166,27 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
                 }
               />
             )}
+            {["ATTACHMENT_DELETED", "ATTACHMENT_ADDED"].indexOf(activity.type) != -1 && (
+              <BasicTextDiff oldState={activity.relatedTaskMedia?.originalName} />
+            )}
+            {["TASK_BOARD_ENTRY_INIT", "TASK_BOARD_ENTRY_REMOVED", "TASK_BOARD_ENTRY_ORDER_CHANGE"].indexOf(activity.type) !=
+              -1 && (
+              <Button
+                heightVariant={ButtonHeight.short}
+                variant={ButtonVariants.filled}
+                href={
+                  activity.workspaceDto && activity.teamDto
+                    ? `/${activity.workspaceDto?.username}/${activity.teamDto?.username}/task-boards/${activity.taskBoard?.taskBoardId}`
+                    : undefined
+                }
+              >
+                {activity.taskBoard?.title}
+              </Button>
+            )}
           </>
         )}
       </div>
-      {diffVisible && <div className="spacer-h-1" />}
+      {/* {diffVisible && <div className="spacer-h-1" />} */}
     </div>
   );
 };

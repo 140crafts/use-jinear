@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-07-12 10:55:59.
+// Generated using typescript-generator version 3.0.1157 on 2023-07-16 11:18:00.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  first: boolean;
   last: boolean;
+  first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -385,6 +385,8 @@ export interface WorkspaceActivityDto extends BaseDto {
   oldState?: string | null;
   newState?: string | null;
   performedByAccount: PlainAccountProfileDto;
+  workspaceDto?: WorkspaceDto | null;
+  teamDto?: TeamDto | null;
   relatedAccount?: PlainAccountProfileDto | null;
   oldDescription?: RichTextDto | null;
   newDescription?: RichTextDto | null;
@@ -399,6 +401,8 @@ export interface WorkspaceActivityDto extends BaseDto {
   relatedChecklist?: ChecklistDto | null;
   relatedChecklistItem?: ChecklistItemDto | null;
   relatedTask?: TaskDto | null;
+  taskBoard?: TaskBoardDto | null;
+  relatedTaskMedia?: MediaDto | null;
 }
 
 export interface WorkspaceDisplayPreferenceDto {
@@ -933,7 +937,8 @@ export type LockSourceType =
   | "TEAM_TASK_INIT"
   | "TEAM_WORKFLOW_STATUS"
   | "ACCOUNT_PASSWORD_RESET"
-  | "TASK_BOARD_EDIT";
+  | "TASK_BOARD_EDIT"
+  | "REMINDER_JOB_PROCESS";
 
 export type FileType = "PROFILE_PIC" | "TASK_FILE";
 
@@ -989,7 +994,7 @@ export type PassiveReason =
   | "UNFOLLOW"
   | "PAYMENT_ISSUE";
 
-export type ReminderJobStatus = "PENDING" | "COMPLETED" | "CANCELLED";
+export type ReminderJobStatus = "PENDING" | "COMPLETED" | "CANCELLED" | "FAILED";
 
 export type ReminderType = "TASK";
 
@@ -1064,7 +1069,12 @@ export type WorkspaceActivityType =
   | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED"
   | "CHECKLIST_ITEM_LABEL_CHANGED"
   | "CHECKLIST_ITEM_REMOVED"
-  | "CHECKLIST_ITEM_INITIALIZED";
+  | "CHECKLIST_ITEM_INITIALIZED"
+  | "ATTACHMENT_ADDED"
+  | "ATTACHMENT_DELETED"
+  | "TASK_BOARD_ENTRY_INIT"
+  | "TASK_BOARD_ENTRY_REMOVED"
+  | "TASK_BOARD_ENTRY_ORDER_CHANGE";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 

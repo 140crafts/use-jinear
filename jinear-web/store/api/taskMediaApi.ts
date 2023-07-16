@@ -38,7 +38,12 @@ export const taskMediaApi = api.injectEndpoints({
         method: "POST",
         body: req.formData,
       }),
-      invalidatesTags: (_result, _err, req) => [{ type: "task-media-list", id: req.taskId }],
+      invalidatesTags: (_result, _err, req) => [
+        { type: "task-media-list", id: req.taskId },
+        "workspace-task-activity-list",
+        "workspace-team-activity-list",
+        "workspace-activity-list",
+      ],
     }),
     //
     deleteTaskMedia: build.mutation<BaseResponse, IDeleteTaskMediaRequest>({
@@ -54,7 +59,12 @@ export const taskMediaApi = api.injectEndpoints({
         url: `v1/task/media/${req.taskId}/download/${req.mediaId}`,
         method: "GET",
       }),
-      providesTags: (_result, _err, req) => [{ type: "task-media-download", id: `${req.taskId}-${req.mediaId}` }],
+      providesTags: (_result, _err, req) => [
+        { type: "task-media-download", id: `${req.taskId}-${req.mediaId}` },
+        "workspace-task-activity-list",
+        "workspace-team-activity-list",
+        "workspace-activity-list",
+      ],
     }),
     //
   }),
