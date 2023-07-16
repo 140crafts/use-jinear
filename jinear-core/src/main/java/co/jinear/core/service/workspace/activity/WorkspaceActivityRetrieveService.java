@@ -3,10 +3,12 @@ package co.jinear.core.service.workspace.activity;
 import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.converter.task.TaskTagConverter;
 import co.jinear.core.converter.workspace.WorkspaceActivityConverter;
+import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.dto.task.ChecklistDto;
 import co.jinear.core.model.dto.task.ChecklistItemDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskRelationDto;
+import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceActivityDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.entity.workspace.WorkspaceActivity;
@@ -18,9 +20,12 @@ import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.richtext.RichTextRetrieveService;
 import co.jinear.core.service.task.checklist.ChecklistItemService;
 import co.jinear.core.service.task.checklist.ChecklistRetrieveService;
+import co.jinear.core.service.task.media.TaskMediaRetrieveService;
 import co.jinear.core.service.task.relation.TaskRelationRetrieveService;
+import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusRetrieveService;
 import co.jinear.core.service.topic.TopicRetrieveService;
+import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.system.NormalizeHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +34,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
@@ -53,6 +59,10 @@ public class WorkspaceActivityRetrieveService {
             CHECKLIST_ITEM_REMOVED,
             CHECKLIST_ITEM_INITIALIZED);
 
+    private static final List<WorkspaceActivityType> TASK_MEDIA_RELATED_TYPES = List.of(
+            ATTACHMENT_ADDED,
+            ATTACHMENT_DELETED);
+
     private static final List<WorkspaceActivityType> GROUP_BY_TASK_TYPES = List.of(
             TASK_INITIALIZED,
             TASK_CLOSED,
@@ -71,7 +81,12 @@ public class WorkspaceActivityRetrieveService {
             CHECKLIST_ITEM_CHECKED_STATUS_CHANGED,
             CHECKLIST_ITEM_LABEL_CHANGED,
             CHECKLIST_ITEM_REMOVED,
-            CHECKLIST_ITEM_INITIALIZED
+            CHECKLIST_ITEM_INITIALIZED,
+            ATTACHMENT_ADDED,
+            ATTACHMENT_DELETED,
+            TASK_BOARD_ENTRY_INIT,
+            TASK_BOARD_ENTRY_REMOVED,
+            TASK_BOARD_ENTRY_ORDER_CHANGE
     );
 
     private final WorkspaceActivityRepository workspaceActivityRepository;
@@ -84,6 +99,9 @@ public class WorkspaceActivityRetrieveService {
     private final ChecklistRetrieveService checklistRetrieveService;
     private final ChecklistItemService checklistItemService;
     private final TaskTagConverter taskTagConverter;
+    private final TaskMediaRetrieveService taskMediaRetrieveService;
+    private final WorkspaceRetrieveService workspaceRetrieveService;
+    private final TeamRetrieveService teamRetrieveService;
     private final FeProperties feProperties;
 
     public Page<WorkspaceActivityDto> retrieveWorkspaceActivities(RetrieveWorkspaceActivityPageVo retrieveWorkspaceActivityPageVo) {
@@ -114,6 +132,8 @@ public class WorkspaceActivityRetrieveService {
     private WorkspaceActivityDto retrieveDetailsAndMap(WorkspaceActivity workspaceActivity) {
         return Optional.of(workspaceActivity)
                 .map(workspaceActivityConverter::map)
+                .map(this::retrieveWorkspace)
+                .map(this::retrieveTeam)
                 .map(this::retrieveTaskDescriptionChanges)
                 .map(this::retrieveWorkflowStatusChanges)
                 .map(this::retrieveTopicChanges)
@@ -122,8 +142,27 @@ public class WorkspaceActivityRetrieveService {
                 .map(this::retrieveRelationRemoved)
                 .map(this::retrieveRelatedChecklist)
                 .map(this::retrieveRelatedChecklistItem)
+                .map(this::retrieveRelatedTaskMedia)
                 .map(this::decideGroupAttributes)
                 .orElse(null);
+    }
+
+    private WorkspaceActivityDto retrieveWorkspace(WorkspaceActivityDto workspaceActivityDto) {
+        String workspaceId = workspaceActivityDto.getWorkspaceId();
+        if (Objects.nonNull(workspaceId)) {
+            WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
+            workspaceActivityDto.setWorkspaceDto(workspaceDto);
+        }
+        return workspaceActivityDto;
+    }
+
+    private WorkspaceActivityDto retrieveTeam(WorkspaceActivityDto workspaceActivityDto) {
+        String teamId = workspaceActivityDto.getTeamId();
+        if (Objects.nonNull(teamId)) {
+            TeamDto teamDto = teamRetrieveService.retrieveTeam(teamId);
+            workspaceActivityDto.setTeamDto(teamDto);
+        }
+        return workspaceActivityDto;
     }
 
     private WorkspaceActivityDto retrieveTaskDescriptionChanges(WorkspaceActivityDto workspaceActivityDto) {
@@ -196,6 +235,14 @@ public class WorkspaceActivityRetrieveService {
         if (CHECKLIST_ITEM_RELATED_TYPES.contains(workspaceActivityDto.getType())) {
             ChecklistItemDto checklistItemDto = checklistItemService.retrieveIncludingPassive(workspaceActivityDto.getRelatedObjectId());
             workspaceActivityDto.setRelatedChecklistItem(checklistItemDto);
+        }
+        return workspaceActivityDto;
+    }
+
+    private WorkspaceActivityDto retrieveRelatedTaskMedia(WorkspaceActivityDto workspaceActivityDto) {
+        if (TASK_MEDIA_RELATED_TYPES.contains(workspaceActivityDto.getType())) {
+            MediaDto mediaDto = taskMediaRetrieveService.retrieveInclDeleted(workspaceActivityDto.getTaskId(), workspaceActivityDto.getRelatedObjectId());
+            workspaceActivityDto.setRelatedTaskMedia(mediaDto);
         }
         return workspaceActivityDto;
     }

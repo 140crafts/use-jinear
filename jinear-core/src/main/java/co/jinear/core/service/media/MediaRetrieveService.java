@@ -66,4 +66,11 @@ public class MediaRetrieveService {
                 .map(Media::getMediaId)
                 .toList();
     }
+
+    public MediaDto retrieveMediaWithMediaIdAndRelatedObjectIdIncludingPassive(String mediaId, String relatedObjectId) {
+        log.info("Retrieve media with key has started. mediaId: {}, relatedObjectId: {}", mediaId, relatedObjectId);
+        return mediaRepository.findByMediaIdAndRelatedObjectId(mediaId, relatedObjectId)
+                .map(mediaDtoConverter::map)
+                .orElseThrow(NotFoundException::new);
+    }
 }

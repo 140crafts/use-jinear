@@ -20,6 +20,7 @@ public class WorkspaceActivityService {
         workspaceActivity.setWorkspaceId(workspaceActivityCreateVo.getWorkspaceId());
         workspaceActivity.setTeamId(workspaceActivityCreateVo.getTeamId());
         workspaceActivity.setTaskId(workspaceActivityCreateVo.getTaskId());
+        workspaceActivity.setBoardId(workspaceActivityCreateVo.getBoardId());
         workspaceActivity.setType(workspaceActivityCreateVo.getType());
         workspaceActivity.setPerformedBy(workspaceActivityCreateVo.getPerformedBy());
         workspaceActivity.setRelatedObjectId(workspaceActivityCreateVo.getRelatedObjectId());

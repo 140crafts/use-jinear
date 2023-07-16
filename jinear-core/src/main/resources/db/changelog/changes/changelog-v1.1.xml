@@ -928,4 +928,10 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-171-add-board_id-columnt-to-workspace_activity">
+        <addColumn tableName="workspace_activity">
+            <column name="board_id" type="char(26)" afterColumn="task_id"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

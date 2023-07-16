@@ -60,7 +60,7 @@ public class MediaOperationService {
     }
 
     @Transactional
-    public void deleteMedia(RemoveMediaVo removeMediaVo) {
+    public AccessibleMediaDto deleteMedia(RemoveMediaVo removeMediaVo) {
         log.info("Delete media has started for removeMediaVo: {}", removeMediaVo);
         Media media = retrieveMedia(removeMediaVo.getMediaId());
         String passiveId = passiveService.createSystemActionPassive(removeMediaVo.getResponsibleAccountId());
@@ -72,6 +72,7 @@ public class MediaOperationService {
                 .filter(Try::isFailure)
                 .map(Try::getThrownMessage)
                 .ifPresent(throwable -> log.error("Delete object has failed.", throwable));
+        return mediaDtoConverter.mapToAccessibleMediaDto(saved);
     }
 
     @Transactional

@@ -1,5 +1,6 @@
 package co.jinear.core.service.task.media;
 
+import co.jinear.core.model.dto.media.AccessibleMediaDto;
 import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.enumtype.media.FileType;
@@ -26,23 +27,23 @@ public class TaskMediaOperationService {
     private final MediaOperationService mediaOperationService;
     private final MediaRetrieveService mediaRetrieveService;
 
-    public void upload(String ownerId, TaskDto taskDto, MultipartFile file) {
+    public AccessibleMediaDto upload(String ownerId, TaskDto taskDto, MultipartFile file) {
         log.info("Upload task file has started. ownerId: {}, taskId: {}, originalName: {}, size: {}", ownerId, taskDto.getTaskId(), file.getOriginalFilename(), file.getSize());
         InitializeMediaVo initializeMediaVo = mapInitializeMediaVo(ownerId, taskDto.getTaskId(), file);
-        mediaOperationService.initializeMedia(initializeMediaVo);
+        return mediaOperationService.initializeMedia(initializeMediaVo);
     }
 
-    public void delete(String responsibleAccountId, String mediaId, String taskId) {
+    public AccessibleMediaDto delete(String responsibleAccountId, String mediaId, String taskId) {
         log.info("Delete task media has started. responsibleAccountId: {}, mediaId: {}, taskId: {}", responsibleAccountId, mediaId, taskId);
         MediaDto mediaDto = retrieveMedia(mediaId, taskId);
-        delete(responsibleAccountId, mediaDto);
+        return delete(responsibleAccountId, mediaDto);
     }
 
-    private void delete(String responsibleAccountId, MediaDto mediaDto) {
+    private AccessibleMediaDto delete(String responsibleAccountId, MediaDto mediaDto) {
         RemoveMediaVo removeMediaVo = new RemoveMediaVo();
         removeMediaVo.setMediaId(mediaDto.getMediaId());
         removeMediaVo.setResponsibleAccountId(responsibleAccountId);
-        mediaOperationService.deleteMedia(removeMediaVo);
+        return mediaOperationService.deleteMedia(removeMediaVo);
     }
 
     private MediaDto retrieveMedia(String mediaId, String taskId) {

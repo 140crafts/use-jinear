@@ -5,6 +5,7 @@ import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.task.TaskBoardDto;
 import co.jinear.core.model.dto.task.TaskBoardEntryDto;
+import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.enumtype.task.TaskBoardStateType;
 import co.jinear.core.model.request.task.TaskBoardEntryInitializeRequest;
 import co.jinear.core.model.response.BaseResponse;
@@ -12,6 +13,8 @@ import co.jinear.core.model.response.task.TaskBoardEntryPaginatedResponse;
 import co.jinear.core.model.vo.task.InitializeTaskBoardEntryVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.passive.PassiveService;
+import co.jinear.core.service.task.TaskActivityService;
+import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.board.TaskBoardRetrieveService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryListingService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryOperationService;
@@ -35,6 +38,8 @@ public class TaskBoardEntryManager {
     private final TaskBoardEntryInitializeRequestConverter taskBoardEntryInitializeRequestConverter;
     private final PassiveService passiveService;
     private final TaskBoardRetrieveService taskBoardRetrieveService;
+    private final TaskActivityService taskActivityService;
+    private final TaskRetrieveService taskRetrieveService;
 
     public BaseResponse initializeTaskBoardEntry(TaskBoardEntryInitializeRequest taskBoardInitializeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -42,7 +47,8 @@ public class TaskBoardEntryManager {
         validateBoardStatus(taskBoardDto);
         taskBoardAccessValidator.validateHasTaskBoardAccess(taskBoardDto, currentAccountId);
         InitializeTaskBoardEntryVo initializeTaskBoardEntryVo = taskBoardEntryInitializeRequestConverter.convert(taskBoardInitializeRequest);
-        taskBoardEntryOperationService.initialize(initializeTaskBoardEntryVo);
+        TaskBoardEntryDto boardEntryDto = taskBoardEntryOperationService.initialize(initializeTaskBoardEntryVo);
+        initializeWorkspaceActivity(currentAccountId, boardEntryDto);
         return new BaseResponse();
     }
 
@@ -50,8 +56,9 @@ public class TaskBoardEntryManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateAccess(taskBoardEntryId, currentAccountId);
         log.info("Delete task board entry has started. currentAccountId: {}", currentAccountId);
-        String passiveId = taskBoardEntryOperationService.deleteEntry(taskBoardEntryId);
-        passiveService.assignOwnership(passiveId, currentAccountId);
+        TaskBoardEntryDto entryDto = taskBoardEntryOperationService.deleteEntry(taskBoardEntryId);
+        passiveService.assignOwnership(entryDto.getPassiveId(), currentAccountId);
+        taskActivityService.initializeTaskRemovedFromTaskBoardActivity(currentAccountId, entryDto);
         return new BaseResponse();
     }
 
@@ -59,7 +66,8 @@ public class TaskBoardEntryManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateAccess(taskBoardEntryId, currentAccountId);
         log.info("Change task board entry order has started. currentAccountId: {}", currentAccountId);
-        taskBoardEntryOperationService.changeOrder(taskBoardEntryId, newOrder);
+        TaskBoardEntryDto boardEntryDto = taskBoardEntryOperationService.changeOrder(taskBoardEntryId, newOrder);
+        taskActivityService.initializeTaskOrderChangedOnTaskBoardActivity(currentAccountId, boardEntryDto);
         return new BaseResponse();
     }
 
@@ -71,9 +79,14 @@ public class TaskBoardEntryManager {
         return mapResults(results);
     }
 
+    private void initializeWorkspaceActivity(String currentAccountId, TaskBoardEntryDto boardEntryDto) {
+        TaskDto taskDto = taskRetrieveService.retrievePlain(boardEntryDto.getTaskId());
+        taskActivityService.initializeTaskAddedToTaskBoardActivity(currentAccountId, taskDto, boardEntryDto.getTaskBoardId());
+    }
+
     private void validateBoardStatus(TaskBoardDto taskBoardDto) {
         if (TaskBoardStateType.CLOSED.equals(taskBoardDto.getState())) {
-            throw new BusinessException();
+            throw new BusinessException("task-board.entry.board-closed");
         }
     }
 

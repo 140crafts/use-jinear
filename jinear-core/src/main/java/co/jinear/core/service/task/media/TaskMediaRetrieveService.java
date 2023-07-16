@@ -22,6 +22,11 @@ public class TaskMediaRetrieveService {
         return mediaRetrieveService.retrieveMediaWithMediaIdAndRelatedObjectId(mediaId, taskId);
     }
 
+    public MediaDto retrieveInclDeleted(String taskId, String mediaId) {
+        log.info("Retrieve task media including deleted has started. taskId: {}, mediaId: {}", taskId, mediaId);
+        return mediaRetrieveService.retrieveMediaWithMediaIdAndRelatedObjectIdIncludingPassive(mediaId, taskId);
+    }
+
     public AccessibleMediaDto retrieveAccessible(String taskId, String mediaId) {
         log.info("Retrieve task media has started. taskId: {}, mediaId: {}", taskId, mediaId);
         return mediaRetrieveService.retrieveAccessibleMediaWithMediaIdAndRelatedObjectId(mediaId, taskId);
