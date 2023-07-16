@@ -2,11 +2,10 @@ package co.jinear.core.model.dto.workspace;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
-import co.jinear.core.model.dto.task.ChecklistDto;
-import co.jinear.core.model.dto.task.ChecklistItemDto;
-import co.jinear.core.model.dto.task.TaskDto;
-import co.jinear.core.model.dto.task.TaskRelationDto;
+import co.jinear.core.model.dto.task.*;
+import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
@@ -37,6 +36,10 @@ public class WorkspaceActivityDto extends BaseDto {
     private String newState;
     private PlainAccountProfileDto performedByAccount;
     @Nullable
+    private WorkspaceDto workspaceDto;
+    @Nullable
+    private TeamDto teamDto;
+    @Nullable
     private PlainAccountProfileDto relatedAccount;
     @Nullable
     private RichTextDto oldDescription;
@@ -64,4 +67,8 @@ public class WorkspaceActivityDto extends BaseDto {
     private ChecklistItemDto relatedChecklistItem;
     @Nullable
     private TaskDto relatedTask;
+    @Nullable
+    private TaskBoardDto taskBoard;
+    @Nullable
+    private MediaDto relatedTaskMedia;
 }

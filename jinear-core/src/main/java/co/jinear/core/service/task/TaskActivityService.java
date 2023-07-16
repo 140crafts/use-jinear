@@ -1,7 +1,9 @@
 package co.jinear.core.service.task;
 
+import co.jinear.core.model.dto.media.AccessibleMediaDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.ChecklistDto;
+import co.jinear.core.model.dto.task.TaskBoardEntryDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
 import co.jinear.core.model.vo.task.NotifyTaskSubscribersVo;
@@ -150,6 +152,49 @@ public class TaskActivityService {
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
         notifyTaskSubscribers(after, type);
+    }
+
+    public void initializeTaskAddedToTaskBoardActivity(String performedBy, TaskDto taskDto, String taskBoardId) {
+        WorkspaceActivityType type = WorkspaceActivityType.TASK_BOARD_ENTRY_INIT;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, taskDto, taskBoardId);
+        vo.setType(type);
+        vo.setBoardId(taskBoardId);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(taskDto, type);
+    }
+
+    public void initializeTaskRemovedFromTaskBoardActivity(String performedBy, TaskBoardEntryDto boardEntryDto) {
+        WorkspaceActivityType type = WorkspaceActivityType.TASK_BOARD_ENTRY_REMOVED;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, boardEntryDto.getTask(), boardEntryDto.getTaskBoardId());
+        vo.setType(type);
+        vo.setBoardId(boardEntryDto.getTaskBoardId());
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(boardEntryDto.getTask(), type);
+    }
+
+    public void initializeTaskOrderChangedOnTaskBoardActivity(String performedBy, TaskBoardEntryDto boardEntryDto) {
+        WorkspaceActivityType type = WorkspaceActivityType.TASK_BOARD_ENTRY_ORDER_CHANGE;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, boardEntryDto.getTask(), boardEntryDto.getTaskBoardId());
+        vo.setType(type);
+        vo.setBoardId(boardEntryDto.getTaskBoardId());
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(boardEntryDto.getTask(), type);
+    }
+
+    public void initializeTaskAttachmentAddedActivity(String performedBy, TaskDto taskDto, AccessibleMediaDto accessibleMediaDto) {
+        WorkspaceActivityType type = WorkspaceActivityType.ATTACHMENT_ADDED;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, taskDto, accessibleMediaDto.getMediaId());
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(taskDto, type);
+    }
+
+    public void initializeTaskAttachmentDeletedActivity(String performedBy, TaskDto taskDto, AccessibleMediaDto accessibleMediaDto) {
+        WorkspaceActivityType type = WorkspaceActivityType.ATTACHMENT_DELETED;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, taskDto, accessibleMediaDto.getMediaId());
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(taskDto, type);
     }
 
     private void initializeAssignedDateUpdateActivity(String performedBy, TaskDto before, TaskDto after) {

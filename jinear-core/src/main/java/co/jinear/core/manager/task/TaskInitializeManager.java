@@ -60,6 +60,7 @@ public class TaskInitializeManager {
         retrieveAndSetTeamDto(initializedTask);
         retrieveAndSetWorkspaceDto(initializedTask);
         taskActivityService.initializeNewTaskActivity(currentAccount, initializedTask);
+        initializeTaskBoardActivity(taskInitializeRequest, currentAccount, initializedTask);
         return mapResponse(initializedTask);
     }
 
@@ -111,6 +112,13 @@ public class TaskInitializeManager {
     private void retrieveAndSetWorkspaceDto(TaskDto initializedTask) {
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(initializedTask.getWorkspaceId());
         initializedTask.setWorkspace(workspaceDto);
+    }
+    
+    private void initializeTaskBoardActivity(TaskInitializeRequest taskInitializeRequest, String currentAccount, TaskDto initializedTask) {
+        String boardId = taskInitializeRequest.getBoardId();
+        if (Objects.nonNull(boardId)) {
+            taskActivityService.initializeTaskAddedToTaskBoardActivity(currentAccount, initializedTask, taskInitializeRequest.getBoardId());
+        }
     }
 
     private TaskResponse mapResponse(TaskDto taskDto) {

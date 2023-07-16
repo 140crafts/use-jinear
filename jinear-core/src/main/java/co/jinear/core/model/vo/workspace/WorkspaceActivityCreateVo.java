@@ -14,6 +14,7 @@ public class WorkspaceActivityCreateVo {
     private String workspaceId;
     private String teamId;
     private String taskId;
+    private String boardId;
     private String performedBy;
     private String relatedObjectId;
     private WorkspaceActivityType type;

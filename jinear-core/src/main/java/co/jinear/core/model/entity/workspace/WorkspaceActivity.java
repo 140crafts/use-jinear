@@ -3,6 +3,7 @@ package co.jinear.core.model.entity.workspace;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
 import co.jinear.core.model.entity.task.Task;
+import co.jinear.core.model.entity.task.TaskBoard;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -34,6 +35,9 @@ public class WorkspaceActivity extends BaseEntity {
     @Column(name = "task_id")
     private String taskId;
 
+    @Column(name = "board_id")
+    private String boardId;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "activity_type")
     private WorkspaceActivityType type;
@@ -64,5 +68,10 @@ public class WorkspaceActivity extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "task_id", insertable = false, updatable = false)
     private Task relatedTask;
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "board_id", insertable = false, updatable = false)
+    private TaskBoard taskBoard;
 
 }

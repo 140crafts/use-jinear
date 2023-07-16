@@ -47,17 +47,17 @@ public class TaskBoardEntryOperationService {
         taskBoardEntryRetrieveService.validateNotExists(initializeTaskBoardEntryVo.getTaskId(), initializeTaskBoardEntryVo.getTaskBoardId());
     }
 
-    public String deleteEntry(String taskBoardEntryId) {
+    public TaskBoardEntryDto deleteEntry(String taskBoardEntryId) {
         log.info("Delete task board entry has started. taskBoardEntryId: {}", taskBoardEntryId);
         TaskBoardEntry taskBoardEntry = taskBoardEntryRetrieveService.retrieveEntity(taskBoardEntryId);
         String passiveId = passiveService.createUserActionPassive();
         taskBoardEntry.setPassiveId(passiveId);
-        taskBoardEntryRepository.save(taskBoardEntry);
-        return passiveId;
+        TaskBoardEntry saved = taskBoardEntryRepository.save(taskBoardEntry);
+        return taskBoardEntryDtoConverter.map(saved);
     }
 
     @Transactional
-    public void changeOrder(String taskBoardEntryId, Integer newOrder) {
+    public TaskBoardEntryDto changeOrder(String taskBoardEntryId, Integer newOrder) {
         TaskBoardEntry taskBoardEntry = taskBoardEntryRetrieveService.retrieveEntity(taskBoardEntryId);
         Integer currentOrder = taskBoardEntry.getOrder();
         log.info("Change task board entry order has started. taskBoardEntryId: {}, currentOrder: {}, newOrder: {}", taskBoardEntryId, currentOrder, newOrder);
@@ -65,13 +65,13 @@ public class TaskBoardEntryOperationService {
         int comparison = currentOrder.compareTo(newOrder);
         log.info("Order comparison result: {}", comparison);
         switch (comparison) {
-            //todo fix queries
             case -1 -> taskBoardEntryRepository.updateOrderDownward(taskBoardId, currentOrder, newOrder);
             case 1 -> taskBoardEntryRepository.updateOrderUpward(taskBoardId, currentOrder, newOrder);
             default -> log.info("Order is same.");
         }
         taskBoardEntry.setOrder(newOrder);
-        taskBoardEntryRepository.save(taskBoardEntry);
+        TaskBoardEntry saved = taskBoardEntryRepository.save(taskBoardEntry);
+        return taskBoardEntryDtoConverter.map(saved);
     }
 
     private TaskBoardEntryDto initializeEntry(InitializeTaskBoardEntryVo initializeTaskBoardEntryVo) {

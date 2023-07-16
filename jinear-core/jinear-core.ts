@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-07-12 10:55:59.
+// Generated using typescript-generator version 3.0.1157 on 2023-07-16 11:18:00.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -386,6 +386,8 @@ export interface WorkspaceActivityDto extends BaseDto {
     oldState?: string | null;
     newState?: string | null;
     performedByAccount: PlainAccountProfileDto;
+    workspaceDto?: WorkspaceDto | null;
+    teamDto?: TeamDto | null;
     relatedAccount?: PlainAccountProfileDto | null;
     oldDescription?: RichTextDto | null;
     newDescription?: RichTextDto | null;
@@ -400,6 +402,8 @@ export interface WorkspaceActivityDto extends BaseDto {
     relatedChecklist?: ChecklistDto | null;
     relatedChecklistItem?: ChecklistItemDto | null;
     relatedTask?: TaskDto | null;
+    taskBoard?: TaskBoardDto | null;
+    relatedTaskMedia?: MediaDto | null;
 }
 
 export interface WorkspaceDisplayPreferenceDto {
@@ -881,7 +885,7 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS";
 
 export type FileType = "PROFILE_PIC" | "TASK_FILE";
 
@@ -897,7 +901,7 @@ export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_IN
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
 
-export type ReminderJobStatus = "PENDING" | "COMPLETED" | "CANCELLED";
+export type ReminderJobStatus = "PENDING" | "COMPLETED" | "CANCELLED" | "FAILED";
 
 export type ReminderType = "TASK";
 
@@ -933,7 +937,7 @@ export type UsernameRelatedObjectType = "ACCOUNT" | "WORKSPACE";
 
 export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER" | "GUEST";
 
-export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED";
+export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "ATTACHMENT_ADDED" | "ATTACHMENT_DELETED" | "TASK_BOARD_ENTRY_INIT" | "TASK_BOARD_ENTRY_REMOVED" | "TASK_BOARD_ENTRY_ORDER_CHANGE";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 
