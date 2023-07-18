@@ -2230,6 +2230,10 @@ export default {
     en: "Tasks",
     tr: "Görevler",
   },
+  sideMenuTeamActionButtonLabelFiles: {
+    en: "Files",
+    tr: "Dosyalar",
+  },
   sideMenuTeamActionButtonLabelBoards: {
     en: "Boards",
     tr: "Panolar",
@@ -2373,5 +2377,17 @@ export default {
   apiFileTooLargeError: {
     en: "File is too large. Maximum file size is 32Mb",
     tr: "Dosya maksimum boyutun üzerinde. Maksimum dosya boyutu 32Mb",
+  },
+  teamFilesScreenBreadcrumbTitle: {
+    en: "Team Files",
+    tr: "Ekip Dosyaları",
+  },
+  teamFilesListTitle: {
+    en: "Files",
+    tr: "Dosyalar",
+  },
+  teamFilesListEmptyLabel: {
+    en: "There isn't any files.",
+    tr: "Herhangi bir dosya bulunamadı.",
   },
 };

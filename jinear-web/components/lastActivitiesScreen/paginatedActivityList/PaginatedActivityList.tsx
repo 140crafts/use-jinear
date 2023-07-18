@@ -67,6 +67,7 @@ const PaginatedActivityList: React.FC<PaginatedActivityListProps> = ({
               sameGroup={sameGroup}
               ignoreGrouping={ignoreGrouping}
               activity={activity}
+              index={i}
             />
           );
         })}

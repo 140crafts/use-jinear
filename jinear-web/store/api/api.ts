@@ -53,6 +53,8 @@ export const tagTypes = [
   "team-topic-find-exact",
   "retrieve-topic-by-tag",
   "task-board-filter",
+  "task-media-list",
+  "task-media-list-from-team",
 ];
 
 export const api = createApi({
