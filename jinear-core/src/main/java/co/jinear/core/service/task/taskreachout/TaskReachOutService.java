@@ -40,6 +40,7 @@ public class TaskReachOutService {
 
     private void mapAndCreatePushNotification(List<TaskSubscriptionWithCommunicationPreferencesDto> taskSubscribers, NotifyTaskSubscribersVo notifyTaskSubscribersVo) {
         taskSubscribers.stream()
+                .filter(TaskSubscriptionWithCommunicationPreferencesDto::getHasPushNotificationPermission)
                 .map(subscription -> taskSubscriptionNotificationSendConverter.mapToNotificationSendVo(subscription, notifyTaskSubscribersVo))
                 .forEach(this::createPushNotification);
     }
@@ -56,6 +57,7 @@ public class TaskReachOutService {
 
     private void mapAndCreateGenericMail(NotifyTaskSubscribersVo notifyTaskSubscribersVo, List<TaskSubscriptionWithCommunicationPreferencesDto> taskSubscribers) {
         taskSubscribers.stream()
+                .filter(TaskSubscriptionWithCommunicationPreferencesDto::getHasEmailPermission)
                 .map(subscription -> taskSubscriptionMailSendConverter.mapToGenericMailWithSubInfoMailVo(subscription, notifyTaskSubscribersVo))
                 .forEach(this::createMail);
     }
