@@ -14,5 +14,5 @@ steps:
 images:
   - gcr.io/selam-255606/jinear-web
 options:
-  machineType: "E2_HIGHCPU_32"
+  machineType: "UNSPECIFIED"
 timeout: 1500s
