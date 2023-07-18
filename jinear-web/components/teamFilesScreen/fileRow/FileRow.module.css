@@ -1,19 +1,17 @@
-.container {
+.fileRow {
   display: flex;
   flex-direction: column;
 }
 
-.titleContainer {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  /* margin: 0.75rem 0 0.25rem 0; */
+.fileInfoContainer {
+  padding-left: 1rem;
 }
 
-.groupTitle {
+.fileTaskButton {
+  justify-content: flex-start;
+  text-align: left;
   font-size: 0.8rem;
 }
-
 .iconContainer {
   min-width: 15px;
   display: flex;

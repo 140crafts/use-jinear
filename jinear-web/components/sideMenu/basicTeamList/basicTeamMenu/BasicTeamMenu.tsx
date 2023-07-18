@@ -3,6 +3,7 @@ import useTranslation from "locales/useTranslation";
 import React from "react";
 import styles from "./BasicTeamMenu.module.css";
 import BoardsMenu from "./boardsMenu/BoardsMenu";
+import FilesMenu from "./filesMenu/FilesMenu";
 import TasksMenu from "./tasksMenu/TasksMenu";
 import TeamTitle from "./teamTitle/TeamTitle";
 import TopicsMenu from "./topicsMenu/TopicsMenu";
@@ -27,6 +28,7 @@ const BasicTeamMenu: React.FC<BasicTeamMenuProps> = ({ workspace, team }) => {
         <TasksMenu workspace={workspace} team={team} />
         <BoardsMenu workspace={workspace} team={team} />
         <TopicsMenu workspace={workspace} team={team} />
+        <FilesMenu workspace={workspace} team={team} />
       </div>
     </div>
   );

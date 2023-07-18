@@ -11,7 +11,7 @@ import cn from "classnames";
 import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoClose, IoDocumentOutline, IoImage } from "react-icons/io5";
+import { IoClose, IoDocumentOutline, IoImage, IoVideocam } from "react-icons/io5";
 import styles from "./TaskMediaItem.module.scss";
 
 interface TaskMediaItemProps {
@@ -27,6 +27,17 @@ const ICON_MAP = {
   jpeg: IoImage,
   gif: IoImage,
   ico: IoImage,
+  webm: IoImage,
+  mp4: IoVideocam,
+  mpeg4: IoVideocam,
+  mov: IoVideocam,
+  wmv: IoVideocam,
+  avi: IoVideocam,
+  avchd: IoVideocam,
+  flv: IoVideocam,
+  f4v: IoVideocam,
+  swf: IoVideocam,
+  mkv: IoVideocam,
 };
 
 const TaskMediaItem: React.FC<TaskMediaItemProps> = ({ media, mock = false }) => {
