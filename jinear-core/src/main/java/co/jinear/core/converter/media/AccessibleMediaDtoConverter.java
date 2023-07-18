@@ -1,7 +1,6 @@
 package co.jinear.core.converter.media;
 
 import co.jinear.core.model.dto.media.AccessibleMediaDto;
-import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.system.FileStorageUtils;
 import org.mapstruct.AfterMapping;
@@ -9,9 +8,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
-public interface MediaDtoConverter {
+public interface AccessibleMediaDtoConverter {
 
-    MediaDto map(Media media);
+    AccessibleMediaDto mapToAccessibleMediaDto(Media media);
 
     @AfterMapping
     default void afterMap(@MappingTarget AccessibleMediaDto accessibleMediaDto, Media media) {

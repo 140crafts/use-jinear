@@ -3,6 +3,7 @@ package co.jinear.core.controller.task;
 import co.jinear.core.manager.task.TaskMediaManager;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.TaskMediaResponse;
+import co.jinear.core.model.response.task.TaskPaginatedMediaResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,13 @@ public class TaskMediaController {
     @ResponseStatus(HttpStatus.OK)
     public TaskMediaResponse retrieveTaskMediaList(@PathVariable String taskId) {
         return taskMediaManager.retrieveTaskMediaList(taskId);
+    }
+
+    @GetMapping(value = "/from-team/{teamId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskPaginatedMediaResponse retrieveTaskMediaListFromTeam(@PathVariable String teamId,
+                                                                    @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return taskMediaManager.retrieveTaskMediaListFromTeam(teamId, page);
     }
 
     @PostMapping(value = "/{taskId}/upload", consumes = "multipart/form-data")

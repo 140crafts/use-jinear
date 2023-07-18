@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-07-16 11:18:00.
+// Generated using typescript-generator version 3.0.1157 on 2023-07-18 07:45:29.
 
 export interface BaseDto {
     createdDate: Date;
@@ -237,6 +237,11 @@ export interface TaskDto extends BaseDto {
     relatedIn?: TaskRelationDto[] | null;
     taskReminders?: TaskReminderDto[] | null;
     checklists?: ChecklistDto[] | null;
+}
+
+export interface TaskMediaDto extends BaseDto {
+    task: TaskDto;
+    media: MediaDto;
 }
 
 export interface TaskRelationDto {
@@ -801,6 +806,10 @@ export interface TaskListingResponse extends BaseResponse {
 
 export interface TaskMediaResponse extends BaseResponse {
     data: MediaDto[];
+}
+
+export interface TaskPaginatedMediaResponse extends BaseResponse {
+    data: PageDto<TaskMediaDto>;
 }
 
 export interface TaskResponse extends BaseResponse {

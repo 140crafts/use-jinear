@@ -1,6 +1,7 @@
 package co.jinear.core.service.media;
 
 import co.jinear.core.config.properties.GCloudProperties;
+import co.jinear.core.converter.media.AccessibleMediaDtoConverter;
 import co.jinear.core.converter.media.MediaDtoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
@@ -35,6 +36,7 @@ public class MediaOperationService {
     private final PassiveService passiveService;
     private final MediaRetrieveService mediaRetrieveService;
     private final MediaDtoConverter mediaDtoConverter;
+    private final AccessibleMediaDtoConverter accessibleMediaDtoConverter;
 
     @Transactional
     public AccessibleMediaDto changeProfilePicture(InitializeMediaVo initializeMediaVo) {
@@ -56,7 +58,7 @@ public class MediaOperationService {
         if (MediaVisibilityType.PUBLIC.equals(media.getVisibility())) {
             makePublicOnStorage(bucketName, path);
         }
-        return mediaDtoConverter.mapToAccessibleMediaDto(media);
+        return accessibleMediaDtoConverter.mapToAccessibleMediaDto(media);
     }
 
     @Transactional
@@ -72,7 +74,7 @@ public class MediaOperationService {
                 .filter(Try::isFailure)
                 .map(Try::getThrownMessage)
                 .ifPresent(throwable -> log.error("Delete object has failed.", throwable));
-        return mediaDtoConverter.mapToAccessibleMediaDto(saved);
+        return accessibleMediaDtoConverter.mapToAccessibleMediaDto(saved);
     }
 
     @Transactional

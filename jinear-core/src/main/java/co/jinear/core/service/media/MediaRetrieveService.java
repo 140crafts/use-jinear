@@ -1,5 +1,6 @@
 package co.jinear.core.service.media;
 
+import co.jinear.core.converter.media.AccessibleMediaDtoConverter;
 import co.jinear.core.converter.media.MediaDtoConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.media.AccessibleMediaDto;
@@ -24,11 +25,12 @@ public class MediaRetrieveService {
 
     private final MediaRepository mediaRepository;
     private final MediaDtoConverter mediaDtoConverter;
+    private final AccessibleMediaDtoConverter accessibleMediaDtoConverter;
 
     public Optional<AccessibleMediaDto> retrieveProfilePictureOptional(String relatedObjectId) {
         log.info("Retrieve profile picture optional has started. relatedObjectId: {}", relatedObjectId);
         return mediaRepository.findFirstByRelatedObjectIdAndFileTypeAndPassiveIdIsNull(relatedObjectId, FileType.PROFILE_PIC)
-                .map(mediaDtoConverter::mapToAccessibleMediaDto);
+                .map(accessibleMediaDtoConverter::mapToAccessibleMediaDto);
     }
 
     public MediaDto retrieveMediaWithMediaIdAndRelatedObjectId(String mediaId, String relatedObjectId) {
@@ -41,7 +43,7 @@ public class MediaRetrieveService {
     public AccessibleMediaDto retrieveAccessibleMediaWithMediaIdAndRelatedObjectId(String mediaId, String relatedObjectId) {
         log.info("Retrieve media with key has started. mediaId: {}, relatedObjectId: {}", mediaId, relatedObjectId);
         return mediaRepository.findByMediaIdAndRelatedObjectIdAndPassiveIdIsNull(mediaId, relatedObjectId)
-                .map(mediaDtoConverter::mapToAccessibleMediaDto)
+                .map(accessibleMediaDtoConverter::mapToAccessibleMediaDto)
                 .orElseThrow(NotFoundException::new);
     }
 
