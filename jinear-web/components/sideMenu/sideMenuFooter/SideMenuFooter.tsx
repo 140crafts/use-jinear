@@ -1,4 +1,5 @@
 import Button, { ButtonVariants } from "@/components/button";
+import ProfilePhoto from "@/components/profilePhoto";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
 import { useLogoutMutation } from "@/store/api/authApi";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
@@ -41,7 +42,15 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
     <div className={cn(styles.container, className)}>
       <Button href={"/profile"} variant={ButtonVariants.hoverFilled} className={styles.accountButton}>
         <div>
-          <IoPerson size={14} />
+          {currentAccount ? (
+            <ProfilePhoto
+              boringAvatarKey={currentAccount.accountId}
+              storagePath={currentAccount.profilePicture?.storagePath}
+              wrapperClassName={styles.profilePic}
+            />
+          ) : (
+            <IoPerson size={14} />
+          )}
         </div>
         {currentAccount?.username}
       </Button>{" "}

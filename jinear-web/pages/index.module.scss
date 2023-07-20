@@ -16,8 +16,9 @@
   top: 0;
   z-index: 99;
   background-color: var(--c-primary);
-  // backdrop-filter: var(--backdrop-filter-blur-3);
   padding: 0.25rem 0;
+  min-width: calc(100% + 1rem);
+  margin-left: -1rem;
 }
 
 .headerActionBar {

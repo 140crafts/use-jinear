@@ -56,12 +56,10 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
   }, []);
 
   useEffect(() => {
-    if (authState == "LOGGED_IN") {
-      if (currentAccountId) {
-        checkAndPrompt(currentAccountId);
-      } else {
-        detachAccount();
-      }
+    if (authState == "LOGGED_IN" && currentAccountId) {
+      checkAndPrompt(currentAccountId);
+    } else if (authState == "NOT_LOGGED_IN") {
+      detachAccount();
     }
   }, [currentAccountId, authState]);
 
@@ -92,16 +90,22 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
     }
     logger.log("Initialize OneSignal has started.");
     setOneSignalInitialized(true);
-    await OneSignal.init({
-      ...ONE_SIGNAL_IDS,
-      notifyButton: {
-        enable: false,
-      },
-      subdomainName: "jinear",
-      allowLocalhostAsSecureOrigin: true,
-    });
-    OneSignal.on("notificationDisplay", onNotificationDisplay);
-    logger.log("Initialize OneSignal has completed.");
+    try {
+      await OneSignal.init({
+        ...ONE_SIGNAL_IDS,
+        notifyButton: {
+          enable: false,
+        },
+        subdomainName: "jinear",
+        allowLocalhostAsSecureOrigin: true,
+      });
+      OneSignal.on("notificationDisplay", onNotificationDisplay);
+      logger.log("Initialize OneSignal has completed.");
+    } catch (ex) {
+      logger.log("Initialize OneSignal has failed.");
+      console.error(ex);
+      setOneSignalInitialized(false);
+    }
   };
 
   const checkAndPrompt = async (currentAccountId: string) => {

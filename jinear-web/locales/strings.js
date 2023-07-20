@@ -2390,4 +2390,16 @@ export default {
     en: "There isn't any files.",
     tr: "Herhangi bir dosya bulunamadı.",
   },
+  pricingPageStickerTitle: {
+    en: "IT'S FREE",
+    tr: "TAMAMEN ÜCRETSİZ",
+  },
+  pricingPageStickerText: {
+    en: "All of the features are free during our beta. Than it's 49.99$ for collabrative workspaces with unlimited everything. <br><br>  Personal spaces stay free for ever.",
+    tr: "Tüm özellikler beta sürecinde ücretsiz. Sonrasında  kolektif çalısma alanları için tüm özellikler sınırlama olmadan aylık 49.99$. <br><br> Kisisel çalısma alanları sonsuza kadar ücretsiz.",
+  },
+  pricingPageGoBack: {
+    en: "Return to home",
+    tr: "Anasayfaya dön",
+  },
 };
