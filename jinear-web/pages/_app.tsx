@@ -1,4 +1,5 @@
 import AuthCheck from "@/components/authCheck/AuthCheck";
+import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 import ErrorBoundary from "@/components/errorBoundary/ErrorBoundary";
 import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import MainHeader from "@/components/mainHeader/MainHeader";
@@ -132,7 +133,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             <InternalWorkspacePrefChangeListener />
             <WorkspaceAndTeamChangeListener />
             <OnboardListener />
-            <OneSignalSubscriber />
+            <PureClientOnly>
+              <OneSignalSubscriber />
+            </PureClientOnly>
             <Transition>
               <Component {...pageProps} />
             </Transition>

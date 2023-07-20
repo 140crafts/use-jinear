@@ -12,6 +12,11 @@
   flex: 1;
   text-align: left;
   justify-content: flex-start;
-  font-weight: 500;
+  font-weight: 800;
   gap: 0.5rem;
+}
+
+.profilePic {
+  height: 35px;
+  width: 35px;
 }
