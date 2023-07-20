@@ -63,6 +63,38 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
     }
   }, [currentAccountId, authState]);
 
+  const initializeOneSignal = async () => {
+    if (oneSignalInitialized) {
+      return;
+    }
+    logger.log("Initialize OneSignal has started.");
+    setOneSignalInitialized(true);
+    try {
+      await OneSignal.init({
+        ...ONE_SIGNAL_IDS,
+        notifyButton: {
+          enable: false,
+        },
+        allowLocalhostAsSecureOrigin: true,
+      });
+      OneSignal.on("notificationDisplay", onNotificationDisplay);
+      logger.log("Initialize OneSignal has completed.");
+    } catch (ex) {
+      logger.log("Initialize OneSignal has failed.");
+      console.error(ex);
+      setOneSignalInitialized(false);
+    }
+  };
+
+  const checkAndPrompt = async (currentAccountId: string) => {
+    const notificationPermission = await OneSignal.getNotificationPermission();
+    if (notificationPermission == "default") {
+      dispatch(popNotificationPermissionModal());
+      return;
+    }
+    attachAccount(currentAccountId);
+  };
+
   const attachAccount = async (accountId: string) => {
     OneSignal.setSubscription(true);
     const userId = await OneSignal.getUserId();
@@ -82,39 +114,6 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
     if (userId) {
       logger.log(`Detach notification target api call has started.`);
     }
-  };
-
-  const initializeOneSignal = async () => {
-    if (oneSignalInitialized) {
-      return;
-    }
-    logger.log("Initialize OneSignal has started.");
-    setOneSignalInitialized(true);
-    try {
-      await OneSignal.init({
-        ...ONE_SIGNAL_IDS,
-        notifyButton: {
-          enable: false,
-        },
-        subdomainName: "jinear",
-        allowLocalhostAsSecureOrigin: true,
-      });
-      OneSignal.on("notificationDisplay", onNotificationDisplay);
-      logger.log("Initialize OneSignal has completed.");
-    } catch (ex) {
-      logger.log("Initialize OneSignal has failed.");
-      console.error(ex);
-      setOneSignalInitialized(false);
-    }
-  };
-
-  const checkAndPrompt = async (currentAccountId: string) => {
-    const notificationPermission = await OneSignal.getNotificationPermission();
-    if (notificationPermission == "default") {
-      dispatch(popNotificationPermissionModal());
-      return;
-    }
-    attachAccount(currentAccountId);
   };
 
   const onNotificationDisplay = (eventData: Notification) => {
