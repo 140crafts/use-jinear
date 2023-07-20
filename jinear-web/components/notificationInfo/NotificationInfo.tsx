@@ -57,7 +57,7 @@ const NotificationInfo: React.FC<NotificationInfoProps> = ({}) => {
   return (
     <div className={styles.container}>
       <div>
-        oneSignalUserId: <b>{oneSignalUserId}</b>
+        OneSignalUserId: <b>{oneSignalUserId}</b>
       </div>
       <div>
         Notifications: <b>{notificationPermissionState}</b>
