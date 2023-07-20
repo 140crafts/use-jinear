@@ -2,7 +2,7 @@ import { NotificationMessageExternalDataDto } from "@/model/be/jinear-core";
 import { api } from "@/store/api/api";
 import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
 import { selectAuthState, selectCurrentAccountId } from "@/store/slice/accountSlice";
-import { popNotificationPermissionModal } from "@/store/slice/modalSlice";
+// import { popNotificationPermissionModal } from "@/store/slice/modalSlice";
 import { markHasUnreadNotification } from "@/store/slice/taskAdditionalDataSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { __DEV__ } from "@/utils/constants";
@@ -75,7 +75,7 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
         notifyButton: {
           enable: false,
         },
-        subdomainName: __DEV__ ? "jinear" : undefined,
+        // subdomainName: __DEV__ ? "jinear" : undefined,
         allowLocalhostAsSecureOrigin: true,
       });
       OneSignal.on("notificationDisplay", onNotificationDisplay);
@@ -90,7 +90,7 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
   const checkAndPrompt = async (currentAccountId: string) => {
     const notificationPermission = await OneSignal.getNotificationPermission();
     if (notificationPermission == "default") {
-      dispatch(popNotificationPermissionModal());
+      // dispatch(popNotificationPermissionModal());
       return;
     }
     attachAccount(currentAccountId);

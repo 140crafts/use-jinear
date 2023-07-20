@@ -55,13 +55,13 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
     await OneSignal.setSubscription(true);
     toast("Getting userId.");
     const userId = await OneSignal.getUserId();
-    toast("Setting external userId.");
-    OneSignal.setExternalUserId(accountId);
     logger.log(`Setting OneSignal account. accountId: ${accountId}, oneSignalUserId: ${userId}`);
     if (userId) {
       logger.log(`Attach notification target api call has started.`);
       toast("Initializing notification target.");
       initializeNotificationTarget({ externalTargetId: userId });
+      toast("Setting external userId.");
+      OneSignal.setExternalUserId(accountId);
     }
   };
 
