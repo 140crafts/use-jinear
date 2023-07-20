@@ -2402,4 +2402,20 @@ export default {
     en: "Return to home",
     tr: "Anasayfaya dön",
   },
+  notificationPermission_denied: {
+    en: "Denied",
+    tr: "Reddedildi",
+  },
+  notificationPermission_granted: {
+    en: "Granted",
+    tr: "İzin verildi",
+  },
+  notificationPermission_default: {
+    en: "Not decided",
+    tr: "Karar verilmedi",
+  },
+  notificationPermission_not_supported: {
+    en: "Not supported",
+    tr: "Desteklenmiyor",
+  },
 };
