@@ -48,6 +48,12 @@ const NotificationInfo: React.FC<NotificationInfoProps> = ({}) => {
     dispatch(popNotificationPermissionModal());
   };
 
+  const selfPush = () => {
+    try {
+      OneSignal.sendSelfNotification();
+    } catch (error) {}
+  };
+
   return (
     <div className={styles.container}>
       <div>
@@ -62,6 +68,7 @@ const NotificationInfo: React.FC<NotificationInfoProps> = ({}) => {
       <Button variant={ButtonVariants.filled} onClick={popModal}>
         Pop Perm Modal
       </Button>
+      <Button onClick={selfPush}>send self notif</Button>
     </div>
   );
 };
