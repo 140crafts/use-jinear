@@ -75,6 +75,7 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
         notifyButton: {
           enable: false,
         },
+        subdomainName: __DEV__ ? "jinear" : undefined,
         allowLocalhostAsSecureOrigin: true,
       });
       OneSignal.on("notificationDisplay", onNotificationDisplay);
