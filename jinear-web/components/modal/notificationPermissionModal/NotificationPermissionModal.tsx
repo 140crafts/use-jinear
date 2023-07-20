@@ -5,7 +5,7 @@ import { closeNotificationPermissionModal, selectNotificationPermissionModalVisi
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
-import React from "react";
+import React, { useEffect } from "react";
 import { IoNotifications } from "react-icons/io5";
 import OneSignal from "react-onesignal";
 import Modal from "../modal/Modal";
@@ -21,22 +21,33 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
   const title = t("notificationPermissionModalTitle");
   const visible = useTypedSelector(selectNotificationPermissionModalVisible);
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
-  const [initializeNotificationTarget, {}] = useInitializeNotificationTargetMutation();
+  const [initializeNotificationTarget, { isSuccess: isInitNotifTargetSuccess, isLoading: isInitNotifTargetLoading }] =
+    useInitializeNotificationTargetMutation();
+
+  useEffect(() => {
+    if (!isInitNotifTargetLoading && isInitNotifTargetSuccess) {
+      close();
+    }
+  }, [isInitNotifTargetSuccess, isInitNotifTargetLoading]);
 
   const close = () => {
     dispatch(closeNotificationPermissionModal());
   };
 
   const askPermissions = async () => {
-    await OneSignal.showNativePrompt();
+    logger.log(`Ask permission has started. Showing native prompt.`);
+    await OneSignal.showSlidedownPrompt();
+    logger.log(`Native prompt shown. Getting notification permission.`);
     const notificationPermission = await OneSignal.getNotificationPermission();
+    logger.log(`Retrieved notification permission. ${notificationPermission}`);
     if (notificationPermission == "granted" && currentAccountId) {
+      logger.log(`Attaching account. ${currentAccountId} - ${notificationPermission}`);
       await attachAccount(currentAccountId);
     }
-    close();
   };
 
   const attachAccount = async (accountId: string) => {
+    logger.log(`Attaching account. accountId: ${accountId}`);
     OneSignal.setSubscription(true);
     const userId = await OneSignal.getUserId();
     OneSignal.setExternalUserId(accountId);
@@ -55,11 +66,22 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
       </div>
 
       <div className={styles.actionBar}>
-        <Button heightVariant={ButtonHeight.mid} variant={ButtonVariants.contrast} onClick={askPermissions}>
+        <Button
+          disabled={isInitNotifTargetLoading}
+          loading={isInitNotifTargetLoading}
+          heightVariant={ButtonHeight.mid}
+          variant={ButtonVariants.contrast}
+          onClick={askPermissions}
+        >
           {t("notificationPermissionModalAllowPermissions")}
         </Button>
 
-        <Button heightVariant={ButtonHeight.mid} variant={ButtonVariants.default} onClick={close}>
+        <Button
+          disabled={isInitNotifTargetLoading}
+          heightVariant={ButtonHeight.mid}
+          variant={ButtonVariants.default}
+          onClick={close}
+        >
           {t("notificationPermissionModalDismiss")}
         </Button>
       </div>

@@ -1,3 +1,4 @@
+import Button from "@/components/button";
 import CommunicationPreferences from "@/components/profileScreen/communicationPreferences/CommunicationPreferences";
 import PersonalInfoTab from "@/components/profileScreen/personalInfoTab/PersonalInfoTab";
 import useTranslation from "locales/useTranslation";
@@ -13,6 +14,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({}) => {
     <div className={styles.container}>
       <PersonalInfoTab />
       <CommunicationPreferences title={t("communicationPrefrencesTitle")} />
+      <Button href="/debug">.</Button>
     </div>
   );
 };
