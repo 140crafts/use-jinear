@@ -36,7 +36,8 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
   const askPermissions = async () => {
     logger.log(`Ask permission has started. Showing native prompt.`);
-    await OneSignal.showSlidedownPrompt();
+    // await OneSignal.showSlidedownPrompt();
+    await Notification.requestPermission();
     logger.log(`Native prompt shown. Getting notification permission.`);
     const notificationPermission = await OneSignal.getNotificationPermission();
     logger.log(`Retrieved notification permission. ${notificationPermission}`);
