@@ -6,6 +6,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
+import { toast } from "react-hot-toast";
 import { IoNotifications } from "react-icons/io5";
 import OneSignal from "react-onesignal";
 import Modal from "../modal/Modal";
@@ -26,6 +27,7 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
   useEffect(() => {
     if (!isInitNotifTargetLoading && isInitNotifTargetSuccess) {
+      toast("Notification target initialized.");
       close();
     }
   }, [isInitNotifTargetSuccess, isInitNotifTargetLoading]);
@@ -49,12 +51,16 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
   const attachAccount = async (accountId: string) => {
     logger.log(`Attaching account. accountId: ${accountId}`);
-    OneSignal.setSubscription(true);
+    toast("Setting subscription.");
+    await OneSignal.setSubscription(true);
+    toast("Getting userId.");
     const userId = await OneSignal.getUserId();
-    OneSignal.setExternalUserId(accountId);
+    toast("Setting external userId.");
+    await OneSignal.setExternalUserId(accountId);
     logger.log(`Setting OneSignal account. accountId: ${accountId}, oneSignalUserId: ${userId}`);
     if (userId) {
       logger.log(`Attach notification target api call has started.`);
+      toast("Initializing notification target.");
       initializeNotificationTarget({ externalTargetId: userId });
     }
   };
