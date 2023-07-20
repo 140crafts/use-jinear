@@ -52,7 +52,7 @@ const MainHeader: React.FC<MainHeaderProps> = ({}) => {
         <link rel="preload" href="/images/gif/loading-2.gif" as="image" />
       </Head>
 
-      {__DEV__ && (
+      {!__DEV__ && (
         <>
           <script
             defer
