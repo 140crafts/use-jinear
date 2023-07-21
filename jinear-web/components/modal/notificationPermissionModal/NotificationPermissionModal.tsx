@@ -6,7 +6,6 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
-import { toast } from "react-hot-toast";
 import { IoNotifications } from "react-icons/io5";
 import OneSignal from "react-onesignal";
 import Modal from "../modal/Modal";
@@ -27,7 +26,6 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
   useEffect(() => {
     if (!isInitNotifTargetLoading && isInitNotifTargetSuccess) {
-      toast("Notification target initialized.");
       close();
     }
   }, [isInitNotifTargetSuccess, isInitNotifTargetLoading]);
@@ -38,31 +36,24 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
   const askPermissions = async () => {
     logger.log(`Ask permission has started. Showing native prompt.`);
-    // await OneSignal.showSlidedownPrompt();
-    toast("Requesting permission.");
-    const notificationPermission = await Notification.requestPermission();
+    await OneSignal.showNativePrompt();
     logger.log(`Native prompt shown.`);
-    // const notificationPermission = await OneSignal.getNotificationPermission();
+    const notificationPermission = await OneSignal.getNotificationPermission();
     logger.log(`Retrieved notification permission. ${notificationPermission}`);
     if (notificationPermission == "granted" && currentAccountId) {
       logger.log(`Attaching account. ${currentAccountId} - ${notificationPermission}`);
-      toast("Attaching account.");
       await attachAccount(currentAccountId);
     }
   };
 
   const attachAccount = async (accountId: string) => {
     logger.log(`Attaching account. accountId: ${accountId}`);
-    toast("Setting subscription.");
     await OneSignal.setSubscription(true);
-    toast("Getting userId.");
     const userId = await OneSignal.getUserId();
     logger.log(`Setting OneSignal account. accountId: ${accountId}, oneSignalUserId: ${userId}`);
     if (userId) {
       logger.log(`Attach notification target api call has started.`);
-      toast("Initializing notification target.");
       initializeNotificationTarget({ externalTargetId: userId });
-      toast("Setting external userId.");
       OneSignal.setExternalUserId(accountId);
     }
   };
