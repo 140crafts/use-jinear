@@ -38,7 +38,7 @@
   bottom: 0%;
   z-index: 2;
   /* background-color: #ff7519; */
-  background-color: #ecdf2e;
+  background-color: var(--c-HIGHLIGHT_YELLOW);
   background-image: linear-gradient(
     180deg,
     transparent,
