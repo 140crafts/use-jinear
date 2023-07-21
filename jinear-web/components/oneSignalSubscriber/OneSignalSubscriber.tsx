@@ -87,6 +87,8 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
       toast("OneSignal init completed.");
       setOneSignalInitialized("completed");
       OneSignal.on("notificationDisplay", onNotificationDisplay);
+      OneSignal.on("subscriptionChange", onSubscriptionChange);
+
       toast("OneSignal notification display event added.");
       logger.log("Initialize OneSignal has completed.");
     } catch (ex) {
@@ -142,6 +144,10 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
       console.error(e);
       logger.log({ onNotificationDisplayError: e });
     }
+  };
+
+  const onSubscriptionChange = (data: any) => {
+    console.log(data);
   };
 
   return null;
