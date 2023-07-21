@@ -39,12 +39,14 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
   const askPermissions = async () => {
     logger.log(`Ask permission has started. Showing native prompt.`);
     // await OneSignal.showSlidedownPrompt();
-    await Notification.requestPermission();
-    logger.log(`Native prompt shown. Getting notification permission.`);
-    const notificationPermission = await OneSignal.getNotificationPermission();
+    toast("Requesting permission.");
+    const notificationPermission = await Notification.requestPermission();
+    logger.log(`Native prompt shown.`);
+    // const notificationPermission = await OneSignal.getNotificationPermission();
     logger.log(`Retrieved notification permission. ${notificationPermission}`);
     if (notificationPermission == "granted" && currentAccountId) {
       logger.log(`Attaching account. ${currentAccountId} - ${notificationPermission}`);
+      toast("Attaching account.");
       await attachAccount(currentAccountId);
     }
   };

@@ -8,6 +8,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { __DEV__ } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import OneSignal from "react-onesignal";
 
 interface OneSignalSubscriberProps {}
@@ -83,8 +84,10 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
       };
       logger.log({ oneSignalConfig: config });
       await OneSignal.init(config);
+      toast("OneSignal init completed.");
       setOneSignalInitialized("completed");
       OneSignal.on("notificationDisplay", onNotificationDisplay);
+      toast("OneSignal notification display event added.");
       logger.log("Initialize OneSignal has completed.");
     } catch (ex) {
       logger.log("Initialize OneSignal has failed.");
