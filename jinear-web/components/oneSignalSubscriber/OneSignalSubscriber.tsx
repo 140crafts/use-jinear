@@ -46,7 +46,9 @@ const ONE_SIGNAL_IDS = __DEV__
 const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
   const dispatch = useAppDispatch();
   const authState = useTypedSelector(selectAuthState);
-  const [oneSignalInitialized, setOneSignalInitialized] = useState<boolean>(false);
+  const [oneSignalInitialized, setOneSignalInitialized] = useState<"not-started" | "started" | "completed" | "failed">(
+    "not-started"
+  );
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
 
   const [initializeNotificationTarget, {}] = useInitializeNotificationTargetMutation();
@@ -56,34 +58,38 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
   }, []);
 
   useEffect(() => {
-    if (authState == "LOGGED_IN" && currentAccountId) {
-      checkAndPrompt(currentAccountId);
-    } else if (authState == "NOT_LOGGED_IN") {
-      detachAccount();
+    if (oneSignalInitialized == "completed") {
+      if (authState == "LOGGED_IN" && currentAccountId) {
+        checkAndPrompt(currentAccountId);
+      } else if (authState == "NOT_LOGGED_IN") {
+        detachAccount();
+      }
     }
-  }, [currentAccountId, authState]);
+  }, [currentAccountId, authState, oneSignalInitialized]);
 
   const initializeOneSignal = async () => {
-    if (oneSignalInitialized) {
+    if (oneSignalInitialized != "not-started") {
       return;
     }
     logger.log("Initialize OneSignal has started.");
-    setOneSignalInitialized(true);
+    setOneSignalInitialized("started");
     try {
-      await OneSignal.init({
+      const config = {
         ...ONE_SIGNAL_IDS,
         notifyButton: {
           enable: false,
         },
-        // subdomainName: __DEV__ ? "jinear" : undefined,
         allowLocalhostAsSecureOrigin: true,
-      });
+      };
+      logger.log({ oneSignalConfig: config });
+      await OneSignal.init(config);
+      setOneSignalInitialized("completed");
       OneSignal.on("notificationDisplay", onNotificationDisplay);
       logger.log("Initialize OneSignal has completed.");
     } catch (ex) {
       logger.log("Initialize OneSignal has failed.");
       console.error(ex);
-      setOneSignalInitialized(false);
+      setOneSignalInitialized("failed");
     }
   };
 
