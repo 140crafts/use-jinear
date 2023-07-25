@@ -48,6 +48,9 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
   const attachAccount = async (accountId: string) => {
     logger.log(`Attaching account. accountId: ${accountId}`);
+    setTimeout(() => {
+      close();
+    }, 2000);
     await OneSignal.setSubscription(true);
     const userId = await OneSignal.getUserId();
     logger.log(`Setting OneSignal account. accountId: ${accountId}, oneSignalUserId: ${userId}`);
