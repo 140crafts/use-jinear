@@ -109,7 +109,7 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
     logger.log(`Setting OneSignal account. accountId: ${accountId}, oneSignalUserId: ${userId}`);
     if (userId) {
       logger.log(`Attach notification target api call has started.`);
-      initializeNotificationTarget({ externalTargetId: userId });
+      initializeNotificationTarget({ externalTargetId: userId, providerType: "ONE_SIGNAL" });
     }
   };
 

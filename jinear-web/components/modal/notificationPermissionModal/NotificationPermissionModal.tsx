@@ -1,13 +1,15 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import { VAPID_PUBLIC_KEY } from "@/components/firebaseConfiguration/FirebaseConfigration";
 import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
 import { selectCurrentAccountId } from "@/store/slice/accountSlice";
+import { selectMessaging } from "@/store/slice/firebaseSlice";
 import { closeNotificationPermissionModal, selectNotificationPermissionModalVisible } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
+import { getToken } from "firebase/messaging";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { IoNotifications } from "react-icons/io5";
-import OneSignal from "react-onesignal";
 import Modal from "../modal/Modal";
 import styles from "./NotificationPermissionModal.module.css";
 
@@ -21,24 +23,27 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
   const title = t("notificationPermissionModalTitle");
   const visible = useTypedSelector(selectNotificationPermissionModalVisible);
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
+  const [initializing, setInitializing] = useState<boolean>(false);
   const [initializeNotificationTarget, { isSuccess: isInitNotifTargetSuccess, isLoading: isInitNotifTargetLoading }] =
     useInitializeNotificationTargetMutation();
+
+  const messaging = useTypedSelector(selectMessaging);
 
   useEffect(() => {
     if (!isInitNotifTargetLoading && isInitNotifTargetSuccess) {
       close();
     }
+    setInitializing(isInitNotifTargetLoading);
   }, [isInitNotifTargetSuccess, isInitNotifTargetLoading]);
 
   const close = () => {
+    setInitializing(false);
     dispatch(closeNotificationPermissionModal());
   };
 
   const askPermissions = async () => {
     logger.log(`Ask permission has started. Showing native prompt.`);
-    await OneSignal.showNativePrompt();
-    logger.log(`Native prompt shown.`);
-    const notificationPermission = await OneSignal.getNotificationPermission();
+    const notificationPermission = await Notification.requestPermission();
     logger.log(`Retrieved notification permission. ${notificationPermission}`);
     if (notificationPermission == "granted" && currentAccountId) {
       logger.log(`Attaching account. ${currentAccountId} - ${notificationPermission}`);
@@ -47,17 +52,16 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
   };
 
   const attachAccount = async (accountId: string) => {
-    logger.log(`Attaching account. accountId: ${accountId}`);
-    setTimeout(() => {
-      close();
-    }, 2000);
-    await OneSignal.setSubscription(true);
-    const userId = await OneSignal.getUserId();
-    logger.log(`Setting OneSignal account. accountId: ${accountId}, oneSignalUserId: ${userId}`);
-    if (userId) {
-      logger.log(`Attach notification target api call has started.`);
-      initializeNotificationTarget({ externalTargetId: userId });
-      OneSignal.setExternalUserId(accountId);
+    if (messaging) {
+      setInitializing(true);
+      const currentFirebaseToken = await getToken(messaging, { vapidKey: VAPID_PUBLIC_KEY });
+      logger.log(
+        `Firebase token retrieved attaching now. accountId: ${accountId}, currentFirebaseToken: ${currentFirebaseToken}`
+      );
+      if (currentFirebaseToken) {
+        logger.log(`Attach notification target api call has started.`);
+        initializeNotificationTarget({ externalTargetId: currentFirebaseToken, providerType: "FIREBASE" });
+      }
     }
   };
 
@@ -70,8 +74,8 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
       <div className={styles.actionBar}>
         <Button
-          disabled={isInitNotifTargetLoading}
-          loading={isInitNotifTargetLoading}
+          disabled={initializing}
+          loading={initializing}
           heightVariant={ButtonHeight.mid}
           variant={ButtonVariants.contrast}
           onClick={askPermissions}

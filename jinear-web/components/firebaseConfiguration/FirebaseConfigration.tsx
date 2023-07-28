@@ -1,0 +1,118 @@
+import { useMobileDetect } from "@/hooks/useMobileDetect";
+import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
+import { selectAuthState, selectCurrentAccountId } from "@/store/slice/accountSlice";
+import { selectFirebase, selectMessaging, setFirebase, setMessaging } from "@/store/slice/firebaseSlice";
+import { popNotificationPermissionModal } from "@/store/slice/modalSlice";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
+import Logger from "@/utils/logger";
+import { initializeApp } from "firebase/app";
+import { MessagePayload, deleteToken, getMessaging, getToken, onMessage } from "firebase/messaging";
+import React, { useEffect } from "react";
+import { toast } from "react-hot-toast";
+import ForegroundNotification from "../foregroundNotification/ForegroundNotification";
+
+interface FirebaseConfigrationProps {}
+
+const logger = Logger("FirebaseConfigration");
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBZq8Pg2pDDweDSNqTwdrCR-xBe1mJGBco",
+  authDomain: "jinear-f3ab4.firebaseapp.com",
+  projectId: "jinear-f3ab4",
+  storageBucket: "jinear-f3ab4.appspot.com",
+  messagingSenderId: "72155538781",
+  appId: "1:72155538781:web:767cb1558cd358cfacf4b4",
+  measurementId: "G-FMXGQ5XM95",
+};
+
+export const VAPID_PUBLIC_KEY = "BFO8Qjsa5Y1W32XyMCa8owjYxkCziaKzl8M2TzMZuHKbEPmtSeowuZzPhdot9aMC64qr7zGRpzrCyg6MzN5nkQc";
+
+const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
+  const dispatch = useAppDispatch();
+  const detectMobile = useMobileDetect();
+  const authState = useTypedSelector(selectAuthState);
+  const currentAccountId = useTypedSelector(selectCurrentAccountId);
+
+  const firebaseApp = useTypedSelector(selectFirebase);
+  const messaging = useTypedSelector(selectMessaging);
+
+  const [initializeNotificationTarget, {}] = useInitializeNotificationTargetMutation();
+
+  useEffect(() => {
+    initializeFirebase();
+  }, []);
+
+  useEffect(() => {
+    if (firebaseApp) {
+      if (firebaseApp && currentAccountId && authState == "LOGGED_IN") {
+        checkAndPrompt(currentAccountId);
+      } else if (firebaseApp && messaging && authState == "NOT_LOGGED_IN") {
+        detachAccount();
+      }
+    }
+  }, [currentAccountId, authState, firebaseApp, messaging]);
+
+  const initializeFirebase = () => {
+    const app = initializeApp(firebaseConfig);
+    const messaging = getMessaging(firebaseApp);
+    onMessage(messaging, onForegroundMessage);
+    dispatch(setFirebase(app));
+    dispatch(setMessaging(messaging));
+  };
+
+  const checkAndPrompt = async (currentAccountId: string) => {
+    const notificationPermission = Notification.permission;
+    if (notificationPermission == "default") {
+      dispatch(popNotificationPermissionModal());
+      return;
+    } else if (notificationPermission == "granted" && currentAccountId) {
+      attachAccount(currentAccountId);
+    }
+  };
+
+  const attachAccount = async (accountId: string) => {
+    try {
+      if (messaging) {
+        const currentFirebaseToken = await getToken(messaging, { vapidKey: VAPID_PUBLIC_KEY });
+        logger.log(
+          `Firebase token retrieved attaching now. accountId: ${accountId}, currentFirebaseToken: ${currentFirebaseToken}`
+        );
+        if (currentFirebaseToken) {
+          logger.log(`Attach notification target api call has started.`);
+          initializeNotificationTarget({ externalTargetId: currentFirebaseToken, providerType: "FIREBASE" });
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      setTimeout(() => {
+        attachAccount(accountId);
+      }, 2500);
+    }
+  };
+
+  const detachAccount = async () => {
+    logger.log(`Detach firebase messaging has started.`);
+    if (messaging) {
+      try {
+        deleteToken(messaging);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  const onForegroundMessage = (payload: MessagePayload) => {
+    logger.log({ onForegroundMessage: payload });
+    if (payload.notification) {
+      const { title = "", body = "" } = payload.notification;
+      toast((t) => <ForegroundNotification title={title} body={body} />, {
+        position: window.innerWidth < 768 ? "top-center" : "top-right",
+        duration: 6000,
+      });
+    }
+  };
+
+  return null;
+};
+
+export default FirebaseConfigration;

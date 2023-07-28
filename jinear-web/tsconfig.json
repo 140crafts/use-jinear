@@ -34,7 +34,8 @@
     "utils/debounce.js",
     "utils/clipboard.js",
     "utils/colorHelper.js",
-    "utils/gtag.js"
+    "utils/gtag.js",
+    "public/firebase-messaging-sw.js"
   ],
   "exclude": ["node_modules"]
 }

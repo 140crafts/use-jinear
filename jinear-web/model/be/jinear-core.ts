@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-07-18 07:45:29.
+// Generated using typescript-generator version 3.0.1157 on 2023-07-26 21:50:17.
 
 export interface BaseDto {
   createdDate: Date;
@@ -107,6 +107,7 @@ export interface NotificationTargetDto extends BaseDto {
   accountId: string;
   sessionInfoId: string;
   targetType: NotificationTargetType;
+  providerType: NotificationProviderType;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -521,6 +522,7 @@ export interface LoginWithPasswordRequest extends BaseRequest {
 export interface NotificationTargetInitializeRequest extends BaseRequest {
   externalTargetId: string;
   targetType?: NotificationTargetType | null;
+  providerType: NotificationProviderType;
 }
 
 export interface TaskReminderInitializeRequest extends BaseRequest {
@@ -956,6 +958,8 @@ export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK";
 export type MediaVisibilityType = "PUBLIC" | "PRIVATE" | "TEMP_PUBLIC";
 
 export type NotificationEventState = "INITIALIZED" | "SENT";
+
+export type NotificationProviderType = "ONE_SIGNAL" | "FIREBASE";
 
 export type NotificationTargetType = "WEB";
 
