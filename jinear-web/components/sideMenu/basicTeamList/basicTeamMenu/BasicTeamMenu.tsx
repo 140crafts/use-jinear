@@ -28,7 +28,7 @@ const BasicTeamMenu: React.FC<BasicTeamMenuProps> = ({ workspace, team }) => {
         <TasksMenu workspace={workspace} team={team} />
         <BoardsMenu workspace={workspace} team={team} />
         <TopicsMenu workspace={workspace} team={team} />
-        <FilesMenu workspace={workspace} team={team} />
+        {workspace.tier == "PLUS" && <FilesMenu workspace={workspace} team={team} />}
       </div>
     </div>
   );
