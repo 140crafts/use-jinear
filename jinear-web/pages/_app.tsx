@@ -1,6 +1,7 @@
 import AuthCheck from "@/components/authCheck/AuthCheck";
 import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 import ErrorBoundary from "@/components/errorBoundary/ErrorBoundary";
+import FirebaseConfigration from "@/components/firebaseConfiguration/FirebaseConfigration";
 import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import MainHeader from "@/components/mainHeader/MainHeader";
 import AddMemberToTeamModal from "@/components/modal/addMemberToTeamModal/AddMemberToTeamModal";
@@ -33,7 +34,6 @@ import TopicPickerModal from "@/components/modal/topicPickerModal/TopicPickerMod
 import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
 import WorkspacePickerModal from "@/components/modal/workspacePickerModal/WorkspacePickerModal";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
-import OneSignalSubscriber from "@/components/oneSignalSubscriber/OneSignalSubscriber";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
 import InternalWorkspacePrefChangeListener from "@/components/workspaceAndTeamChangeListener/InternalWorkspacePrefChangeListener";
@@ -134,7 +134,7 @@ function MyApp({ Component, pageProps }: AppProps) {
             <WorkspaceAndTeamChangeListener />
             <OnboardListener />
             <PureClientOnly>
-              <OneSignalSubscriber />
+              <FirebaseConfigration />
             </PureClientOnly>
             <Transition>
               <Component {...pageProps} />

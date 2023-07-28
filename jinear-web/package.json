@@ -20,6 +20,7 @@
     "draftjs-to-html": "^0.9.1",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.5",
+    "firebase": "^10.1.0",
     "framer-motion": "^7.6.12",
     "html-to-draftjs": "^1.5.0",
     "immutable": "^4.1.0",
@@ -44,6 +45,7 @@
   },
   "devDependencies": {
     "@types/draftjs-to-html": "^0.8.1",
+    "@types/firebase": "^3.2.1",
     "@types/html-to-draftjs": "^1.4.0",
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
