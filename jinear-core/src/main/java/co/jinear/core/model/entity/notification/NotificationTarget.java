@@ -1,7 +1,9 @@
 package co.jinear.core.model.entity.notification;
 
+import co.jinear.core.converter.notification.NotificationProviderTypeConverter;
 import co.jinear.core.converter.notification.NotificationTargetTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
+import co.jinear.core.model.enumtype.notification.NotificationProviderType;
 import co.jinear.core.model.enumtype.notification.NotificationTargetType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -34,4 +36,8 @@ public class NotificationTarget extends BaseEntity {
     @Convert(converter = NotificationTargetTypeConverter.class)
     @Column(name = "target_type")
     private NotificationTargetType targetType;
+
+    @Convert(converter = NotificationProviderTypeConverter.class)
+    @Column(name = "provider")
+    private NotificationProviderType providerType;
 }

@@ -1,6 +1,7 @@
 package co.jinear.core.service.notification.provider;
 
 import co.jinear.core.config.OneSignalConfig;
+import co.jinear.core.model.enumtype.notification.NotificationProviderType;
 import co.jinear.core.model.vo.notification.NotificationMessageVo;
 import com.onesignal.client.api.DefaultApi;
 import com.onesignal.client.model.CreateNotificationSuccessResponse;
@@ -10,10 +11,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class OneSignalNotificationClient implements NotificationClient {
+public class OneSignalNotificationDeliveryStrategy implements NotificationDeliveryStrategy {
 
     private final OneSignalConfig oneSignalConfig;
     private final DefaultApi oneSignalApiClient;
@@ -26,10 +29,15 @@ public class OneSignalNotificationClient implements NotificationClient {
         log.info("One signal notification created. oneSignalNotificationId: {}", response.getId());
     }
 
+    @Override
+    public NotificationProviderType getProviderType() {
+        return NotificationProviderType.ONE_SIGNAL;
+    }
+
     private Notification createNotification(NotificationMessageVo notificationMessageVo) {
         Notification notification = new Notification();
         notification.setAppId(oneSignalConfig.getAppId());
-        notification.setIncludePlayerIds(notificationMessageVo.getTargetIds());
+        notification.setIncludePlayerIds(List.of(notificationMessageVo.getTarget().getExternalTargetId()));
         notification.setUrl(notificationMessageVo.getLaunchUrl());
         notification.setData(notificationMessageVo.getData());
 

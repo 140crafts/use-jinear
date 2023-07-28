@@ -934,4 +934,11 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-216-add-provider-column-to-notification_target">
+        <addColumn tableName="notification_target">
+            <column name="provider" type="int" afterColumn="target_type" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

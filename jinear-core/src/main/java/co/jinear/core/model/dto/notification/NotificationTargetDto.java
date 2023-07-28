@@ -1,6 +1,7 @@
 package co.jinear.core.model.dto.notification;
 
 import co.jinear.core.model.dto.BaseDto;
+import co.jinear.core.model.enumtype.notification.NotificationProviderType;
 import co.jinear.core.model.enumtype.notification.NotificationTargetType;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,4 +16,5 @@ public class NotificationTargetDto extends BaseDto {
     private String accountId;
     private String sessionInfoId;
     private NotificationTargetType targetType;
+    private NotificationProviderType providerType;
 }
