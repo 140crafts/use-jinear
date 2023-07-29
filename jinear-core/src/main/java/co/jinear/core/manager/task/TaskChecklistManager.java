@@ -37,12 +37,13 @@ public class TaskChecklistManager {
 
     public BaseResponse initializeChecklist(InitializeChecklistRequest initializeChecklistRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDto = taskRetrieveService.retrievePlain(initializeChecklistRequest.getTaskId());
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         log.info("Initialize checklist has started. currentAccountId: {}", currentAccountId);
         InitializeChecklistVo initializeChecklistVo = initializeChecklistVoConverter.convert(currentAccountId, initializeChecklistRequest);
         ChecklistDto checklistDto = checklistService.initializeChecklist(initializeChecklistVo);
-        taskActivityService.initializeChecklistCreateActivity(currentAccountId, taskDto, checklistDto);
+        taskActivityService.initializeChecklistCreateActivity(currentAccountId, currentAccountSessionId, taskDto, checklistDto);
         return new BaseResponse();
     }
 
@@ -56,24 +57,26 @@ public class TaskChecklistManager {
 
     public BaseResponse passivizeChecklist(String checklistId) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         ChecklistDto checklistDto = checklistRetrieveService.retrieve(checklistId);
         TaskDto taskDto = taskRetrieveService.retrievePlain(checklistDto.getTaskId());
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         log.info("Passivize checklist has started. currentAccountId: {}", currentAccountId);
         String passiveId = checklistService.passivizeChecklist(checklistId);
         passiveService.assignOwnership(passiveId, currentAccountId);
-        taskActivityService.initializeChecklistRemovedActivity(currentAccountId, taskDto, checklistDto);
+        taskActivityService.initializeChecklistRemovedActivity(currentAccountId, currentAccountSessionId, taskDto, checklistDto);
         return new BaseResponse();
     }
 
     public BaseResponse updateChecklistLabel(String checklistId, UpdateChecklistTitleRequest updateChecklistTitleRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         ChecklistDto checklistDto = checklistRetrieveService.retrieve(checklistId);
         TaskDto taskDto = taskRetrieveService.retrievePlain(checklistDto.getTaskId());
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         log.info("Update checklist title has started. currentAccountId: {}", currentAccountId);
         ChecklistDto updatedChecklist = checklistService.updateChecklistTitle(checklistId, updateChecklistTitleRequest.getTitle());
-        taskActivityService.initializeChecklistTitleChangedActivity(currentAccountId, taskDto, checklistDto, updatedChecklist);
+        taskActivityService.initializeChecklistTitleChangedActivity(currentAccountId, currentAccountSessionId, taskDto, checklistDto, updatedChecklist);
         return new BaseResponse();
     }
 

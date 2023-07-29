@@ -98,6 +98,7 @@ public class TaskSubscriptionNotificationSendConverter {
         notificationSendVo.setIsSilent(isSilent);
         notificationSendVo.setNotificationType(type);
         notificationSendVo.setRelatedTaskTag(taskTag);
+        notificationSendVo.setSenderSessionId(notifyTaskSubscribersVo.getPerformingAccountSessionId());
         return notificationSendVo;
     }
 

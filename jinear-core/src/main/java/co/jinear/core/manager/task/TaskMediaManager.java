@@ -63,23 +63,25 @@ public class TaskMediaManager {
 
     public BaseResponse uploadTaskMedia(String taskId, MultipartFile file) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         workspaceTierValidator.validateWorkspaceTier(taskDto.getWorkspaceId(), WorkspaceTier.PLUS);
         workspaceMediaLimitValidator.validateWorkspaceStorageLimitNotExceeded(taskDto.getWorkspaceId(), file.getSize());
         log.info("Upload task media has started. currentAccountId: {}", currentAccountId);
         AccessibleMediaDto accessibleMediaDto = taskMediaOperationService.upload(currentAccountId, taskDto, file);
-        taskActivityService.initializeTaskAttachmentAddedActivity(currentAccountId, taskDto, accessibleMediaDto);
+        taskActivityService.initializeTaskAttachmentAddedActivity(currentAccountId, currentAccountSessionId, taskDto, accessibleMediaDto);
         return new BaseResponse();
     }
 
     public BaseResponse deleteTaskMedia(String taskId, String mediaId) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         log.info("Delete task media has started. currentAccountId: {}", currentAccountId);
         AccessibleMediaDto accessibleMediaDto = taskMediaOperationService.delete(currentAccountId, mediaId, taskId);
-        taskActivityService.initializeTaskAttachmentDeletedActivity(currentAccountId, taskDto, accessibleMediaDto);
+        taskActivityService.initializeTaskAttachmentDeletedActivity(currentAccountId, currentAccountSessionId, taskDto, accessibleMediaDto);
         return new BaseResponse();
     }
 

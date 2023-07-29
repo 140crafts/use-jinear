@@ -85,9 +85,14 @@ public class FirebaseNotificationDeliveryStrategy implements NotificationDeliver
                 .ifPresent(param -> map.put("notificationType", param));
 
         Optional.of(notificationMessageVo)
+                .map(NotificationMessageVo::getData)
+                .map(NotificationMessageExternalDataDto::getSenderSessionId)
+                .ifPresent(param -> map.put("senderSessionInfoId", param));
+
+        Optional.of(notificationMessageVo)
                 .map(NotificationMessageVo::getTarget)
                 .map(NotificationTargetDto::getSessionInfoId)
-                .ifPresent(param -> map.put("sessionInfoId", param));
+                .ifPresent(param -> map.put("targetSessionInfoId", param));
 
         return Message.builder()
                 .putAllData(map)

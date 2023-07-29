@@ -35,42 +35,46 @@ public class TaskChecklistItemManager {
 
     public BaseResponse initializeChecklistItem(ChecklistItemLabelRequest checklistItemLabelRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         log.info("Initialize checklist item has started. currentAccountId: {}", currentAccountId);
         ChecklistDto checklistDto = checklistRetrieveService.retrieve(checklistItemLabelRequest.getChecklistId());
         TaskDto taskDto = taskRetrieveService.retrievePlain(checklistDto.getTaskId());
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         InitializeChecklistItemVo initializeChecklistItemVo = mapInitializeVo(checklistItemLabelRequest.getLabel(), checklistDto);
         ChecklistItemDto checklistItemDto = checklistItemService.initialize(initializeChecklistItemVo);
-        taskActivityService.initializeChecklistItemInitializedActivity(currentAccountId, taskDto, checklistItemDto.getChecklistItemId());
+        taskActivityService.initializeChecklistItemInitializedActivity(currentAccountId, currentAccountSessionId, taskDto, checklistItemDto.getChecklistItemId());
         return new BaseResponse();
     }
 
     public BaseResponse updateCheckedStatus(String checklistItemId, boolean checked) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         ChecklistItem checklistItem = checklistItemService.retrieveEntity(checklistItemId);
         ChecklistDto checklistDto = checklistRetrieveService.retrieve(checklistItem.getChecklistId());
         TaskDto taskDto = taskRetrieveService.retrievePlain(checklistDto.getTaskId());
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         log.info("Update checklist item checked status has started. checklistItemId: {}, checked: {}", checklistItemId, checked);
         checklistItemService.updateCheckState(checklistItemId, checked);
-        taskActivityService.initializeChecklistItemCheckedStatusChangedActivity(currentAccountId, taskDto, checklistItem.getChecklistItemId(), checklistItem.getIsChecked(), checked);
+        taskActivityService.initializeChecklistItemCheckedStatusChangedActivity(currentAccountId, currentAccountSessionId, taskDto, checklistItem.getChecklistItemId(), checklistItem.getIsChecked(), checked);
         return new BaseResponse();
     }
 
     public BaseResponse updateLabel(String checklistItemId, ChecklistItemLabelRequest checklistItemLabelRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         ChecklistItem checklistItem = checklistItemService.retrieveEntity(checklistItemId);
         ChecklistDto checklistDto = checklistRetrieveService.retrieve(checklistItem.getChecklistId());
         TaskDto taskDto = taskRetrieveService.retrievePlain(checklistDto.getTaskId());
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         log.info("Update checklist item label has started. checklistItemId: {}, checklistItemLabelRequest: {}", checklistItemId, checklistItemLabelRequest);
         checklistItemService.updateLabel(checklistItemId, checklistItemLabelRequest.getLabel());
-        taskActivityService.initializeChecklistItemLabelChangedActivity(currentAccountId, taskDto, checklistItem.getChecklistItemId(), checklistItem.getLabel(), checklistItemLabelRequest.getLabel());
+        taskActivityService.initializeChecklistItemLabelChangedActivity(currentAccountId, currentAccountSessionId, taskDto, checklistItem.getChecklistItemId(), checklistItem.getLabel(), checklistItemLabelRequest.getLabel());
         return new BaseResponse();
     }
 
     public BaseResponse passivizeChecklistItem(String checklistItemId) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         ChecklistItem checklistItem = checklistItemService.retrieveEntity(checklistItemId);
         ChecklistDto checklistDto = checklistRetrieveService.retrieve(checklistItem.getChecklistId());
         TaskDto taskDto = taskRetrieveService.retrievePlain(checklistDto.getTaskId());
@@ -78,7 +82,7 @@ public class TaskChecklistItemManager {
         log.info("Passivize checklist item has started. checklistItemId: {}", checklistItemId);
         String passiveId = checklistItemService.passivizeChecklistItem(checklistItemId);
         passiveService.assignOwnership(passiveId, currentAccountId);
-        taskActivityService.initializeChecklistItemRemovedActivity(currentAccountId, taskDto, checklistItem.getChecklistItemId());
+        taskActivityService.initializeChecklistItemRemovedActivity(currentAccountId, currentAccountSessionId, taskDto, checklistItem.getChecklistItemId());
         return new BaseResponse();
     }
 

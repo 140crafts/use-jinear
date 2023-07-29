@@ -46,6 +46,7 @@ public class TaskInitializeManager {
 
     public TaskResponse initializeTask(TaskInitializeRequest taskInitializeRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         validateWorkspaceAccess(currentAccount, taskInitializeRequest);
         validateTeamAccess(currentAccount, taskInitializeRequest);
         validateDueDateIsAfterAssignedDate(taskInitializeRequest.getAssignedDate(), taskInitializeRequest.getDueDate());
@@ -59,8 +60,8 @@ public class TaskInitializeManager {
         TaskDto initializedTask = taskInitializeService.initializeTask(taskInitializeVo);
         retrieveAndSetTeamDto(initializedTask);
         retrieveAndSetWorkspaceDto(initializedTask);
-        taskActivityService.initializeNewTaskActivity(currentAccount, initializedTask);
-        initializeTaskBoardActivity(taskInitializeRequest, currentAccount, initializedTask);
+        taskActivityService.initializeNewTaskActivity(currentAccount, currentAccountSessionId, initializedTask);
+        initializeTaskBoardActivity(taskInitializeRequest, currentAccount, currentAccountSessionId, initializedTask);
         return mapResponse(initializedTask);
     }
 
@@ -113,11 +114,11 @@ public class TaskInitializeManager {
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(initializedTask.getWorkspaceId());
         initializedTask.setWorkspace(workspaceDto);
     }
-    
-    private void initializeTaskBoardActivity(TaskInitializeRequest taskInitializeRequest, String currentAccount, TaskDto initializedTask) {
+
+    private void initializeTaskBoardActivity(TaskInitializeRequest taskInitializeRequest, String currentAccount, String currentAccountSessionId, TaskDto initializedTask) {
         String boardId = taskInitializeRequest.getBoardId();
         if (Objects.nonNull(boardId)) {
-            taskActivityService.initializeTaskAddedToTaskBoardActivity(currentAccount, initializedTask, taskInitializeRequest.getBoardId());
+            taskActivityService.initializeTaskAddedToTaskBoardActivity(currentAccount, currentAccountSessionId, initializedTask, taskInitializeRequest.getBoardId());
         }
     }
 

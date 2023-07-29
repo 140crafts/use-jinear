@@ -15,4 +15,5 @@ public class NotificationMessageExternalDataDto {
     private String taskId;
     private String taskTag;
     private NotificationType notificationType;
+    private String senderSessionId;
 }
