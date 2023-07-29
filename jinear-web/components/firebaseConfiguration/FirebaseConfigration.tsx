@@ -1,6 +1,5 @@
-import { useMobileDetect } from "@/hooks/useMobileDetect";
 import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
-import { selectAuthState, selectCurrentAccountId } from "@/store/slice/accountSlice";
+import { selectAuthState, selectCurrentAccountId, selectCurrentSessionId } from "@/store/slice/accountSlice";
 import { selectFirebase, selectMessaging, setFirebase, setMessaging } from "@/store/slice/firebaseSlice";
 import { popNotificationPermissionModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
@@ -29,9 +28,9 @@ export const VAPID_PUBLIC_KEY = "BFO8Qjsa5Y1W32XyMCa8owjYxkCziaKzl8M2TzMZuHKbEPm
 
 const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
   const dispatch = useAppDispatch();
-  const detectMobile = useMobileDetect();
   const authState = useTypedSelector(selectAuthState);
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
+  const currentSessionId = useTypedSelector(selectCurrentSessionId);
 
   const firebaseApp = useTypedSelector(selectFirebase);
   const messaging = useTypedSelector(selectMessaging);
@@ -105,10 +104,14 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
     logger.log({ onForegroundMessage: payload });
     if (payload.notification) {
       const { title = "", body = "" } = payload.notification;
-      toast((t) => <ForegroundNotification title={title} body={body} />, {
-        position: window.innerWidth < 768 ? "top-center" : "top-right",
-        duration: 6000,
-      });
+      const launchUrl = payload?.data?.launchUrl;
+      const senderSessionInfoId = payload?.data?.senderSessionInfoId;
+      if (currentSessionId != senderSessionInfoId) {
+        toast((t) => <ForegroundNotification title={title} body={body} launchUrl={launchUrl} />, {
+          position: window.innerWidth < 768 ? "top-center" : "top-right",
+          duration: 6000,
+        });
+      }
     }
   };
 
