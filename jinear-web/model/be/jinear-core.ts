@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-07-26 21:50:17.
+// Generated using typescript-generator version 3.0.1157 on 2023-07-29 11:28:31.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  last: boolean;
   first: boolean;
+  last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -740,6 +740,7 @@ export interface AccountCommunicationPermissionsResponse extends BaseResponse {
 
 export interface AccountRetrieveResponse extends BaseResponse {
   data: AccountDto;
+  sessionId: string;
 }
 
 export interface AuthInitializeResponse extends BaseResponse {

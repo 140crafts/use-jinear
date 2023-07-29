@@ -9,9 +9,11 @@ export type NavigationStatus = "NOT_DECIDED" | "LOGGED_IN" | "NOT_LOGGED_IN";
 const initialState = {
   current: null,
   authState: "NOT_DECIDED",
+  sessionId: undefined,
 } as {
   current: null | AccountDto;
   authState: NavigationStatus;
+  sessionId?: string;
 };
 
 const logger = Logger("accountSlice");
@@ -27,10 +29,12 @@ const slice = createSlice({
       .addMatcher(accountApi.endpoints.me.matchFulfilled, (state, action) => {
         state.current = action.payload.data;
         state.authState = "LOGGED_IN";
+        state.sessionId = action.payload.sessionId;
       })
       .addMatcher(accountApi.endpoints.me.matchRejected, (state, action) => {
         logger.log({ rejected: action });
         state.current = null;
+        state.sessionId = undefined;
         if (action.error?.name != "ConditionError") {
           state.authState = "NOT_LOGGED_IN";
         }
@@ -44,6 +48,7 @@ export default slice.reducer;
 export const selectAuthState = (state: RootState) => state.account.authState;
 export const selectIsLoggedIn = (state: RootState) => state.account.authState == "LOGGED_IN";
 
+export const selectCurrentSessionId = (state: RootState) => state.account.sessionId;
 export const selectCurrentAccount = (state: RootState) => state.account.current;
 export const selectCurrentAccountId = (state: RootState) => state.account.current?.accountId;
 
