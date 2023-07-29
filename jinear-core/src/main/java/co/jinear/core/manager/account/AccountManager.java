@@ -40,9 +40,10 @@ public class AccountManager {
     public AccountRetrieveResponse retrieveCurrentAccount() {
         log.info("Retrieve current account has started.");
         String accountId = sessionInfoService.currentAccountId();
+        String currentSessionId = sessionInfoService.currentAccountSessionId();
         AccountDto accountDto = accountRetrieveService.retrieveWithBasicInfo(accountId);
         setWorkspaces(accountId, accountDto);
-        return mapAccountRetrieveResponse(accountDto);
+        return mapAccountRetrieveResponse(accountDto, currentSessionId);
     }
 
     public BaseResponse confirmEmail(ConfirmEmailRequest confirmEmailRequest) {
@@ -57,9 +58,10 @@ public class AccountManager {
         return new BaseResponse();
     }
 
-    private AccountRetrieveResponse mapAccountRetrieveResponse(AccountDto accountDto) {
+    private AccountRetrieveResponse mapAccountRetrieveResponse(AccountDto accountDto, String currentSessionId) {
         AccountRetrieveResponse accountRetrieveResponse = new AccountRetrieveResponse();
         accountRetrieveResponse.setAccountDto(accountDto);
+        accountRetrieveResponse.setSessionId(currentSessionId);
         return accountRetrieveResponse;
     }
 

@@ -14,4 +14,7 @@ public class AccountRetrieveResponse extends BaseResponse {
 
     @JsonProperty("data")
     private AccountDto accountDto;
+
+    @JsonProperty("sessionId")
+    private String sessionId;
 }

@@ -43,31 +43,34 @@ public class TaskBoardEntryManager {
 
     public BaseResponse initializeTaskBoardEntry(TaskBoardEntryInitializeRequest taskBoardInitializeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskBoardDto taskBoardDto = taskBoardRetrieveService.retrieve(taskBoardInitializeRequest.getTaskBoardId());
         validateBoardStatus(taskBoardDto);
         taskBoardAccessValidator.validateHasTaskBoardAccess(taskBoardDto, currentAccountId);
         InitializeTaskBoardEntryVo initializeTaskBoardEntryVo = taskBoardEntryInitializeRequestConverter.convert(taskBoardInitializeRequest);
         TaskBoardEntryDto boardEntryDto = taskBoardEntryOperationService.initialize(initializeTaskBoardEntryVo);
-        initializeWorkspaceActivity(currentAccountId, boardEntryDto);
+        initializeWorkspaceActivity(currentAccountId, currentAccountSessionId, boardEntryDto);
         return new BaseResponse();
     }
 
     public BaseResponse deleteTaskBoardEntry(String taskBoardEntryId) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         validateAccess(taskBoardEntryId, currentAccountId);
         log.info("Delete task board entry has started. currentAccountId: {}", currentAccountId);
         TaskBoardEntryDto entryDto = taskBoardEntryOperationService.deleteEntry(taskBoardEntryId);
         passiveService.assignOwnership(entryDto.getPassiveId(), currentAccountId);
-        taskActivityService.initializeTaskRemovedFromTaskBoardActivity(currentAccountId, entryDto);
+        taskActivityService.initializeTaskRemovedFromTaskBoardActivity(currentAccountId, currentAccountSessionId, entryDto);
         return new BaseResponse();
     }
 
     public BaseResponse changeOrder(String taskBoardEntryId, Integer newOrder) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         validateAccess(taskBoardEntryId, currentAccountId);
         log.info("Change task board entry order has started. currentAccountId: {}", currentAccountId);
         TaskBoardEntryDto boardEntryDto = taskBoardEntryOperationService.changeOrder(taskBoardEntryId, newOrder);
-        taskActivityService.initializeTaskOrderChangedOnTaskBoardActivity(currentAccountId, boardEntryDto);
+        taskActivityService.initializeTaskOrderChangedOnTaskBoardActivity(currentAccountId, currentAccountSessionId, boardEntryDto);
         return new BaseResponse();
     }
 
@@ -79,9 +82,9 @@ public class TaskBoardEntryManager {
         return mapResults(results);
     }
 
-    private void initializeWorkspaceActivity(String currentAccountId, TaskBoardEntryDto boardEntryDto) {
+    private void initializeWorkspaceActivity(String currentAccountId, String currentAccountSessionId, TaskBoardEntryDto boardEntryDto) {
         TaskDto taskDto = taskRetrieveService.retrievePlain(boardEntryDto.getTaskId());
-        taskActivityService.initializeTaskAddedToTaskBoardActivity(currentAccountId, taskDto, boardEntryDto.getTaskBoardId());
+        taskActivityService.initializeTaskAddedToTaskBoardActivity(currentAccountId, currentAccountSessionId, taskDto, boardEntryDto.getTaskBoardId());
     }
 
     private void validateBoardStatus(TaskBoardDto taskBoardDto) {

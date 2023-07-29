@@ -26,178 +26,178 @@ public class TaskActivityService {
     private final WorkspaceActivityService workspaceActivityService;
     private final TaskReachOutService taskReachOutService;
 
-    public void initializeNewTaskActivity(String performedBy, TaskDto taskDto) {
+    public void initializeNewTaskActivity(String performedBy, String performingAccountSessionId, TaskDto taskDto) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_INITIALIZED;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, taskDto);
         vo.setNewState(taskDto.getTitle());
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(taskDto, type);
+        notifyTaskSubscribers(taskDto, type, performingAccountSessionId);
     }
 
-    public void initializeEditTitleActivity(String performedBy, TaskDto before, TaskDto after) {
+    public void initializeEditTitleActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
         WorkspaceActivityType type = WorkspaceActivityType.EDIT_TASK_TITLE;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         vo.setOldState(before.getTitle());
         vo.setNewState(after.getTitle());
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeEditDescriptionActivity(String performedBy, TaskDto before, TaskDto after) {
+    public void initializeEditDescriptionActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
         WorkspaceActivityType type = WorkspaceActivityType.EDIT_TASK_DESC;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before).map(TaskDto::getDescription).map(RichTextDto::getRichTextId).ifPresent(vo::setOldState);
         Optional.of(after).map(TaskDto::getDescription).map(RichTextDto::getRichTextId).ifPresent(vo::setNewState);
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeStatusUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
+    public void initializeStatusUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_UPDATE_WORKFLOW_STATUS;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before).map(TaskDto::getWorkflowStatusId).ifPresent(vo::setOldState);
         Optional.of(after).map(TaskDto::getWorkflowStatusId).ifPresent(vo::setNewState);
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeTopicUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
+    public void initializeTopicUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_UPDATE_TOPIC;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before).map(TaskDto::getTopicId).ifPresent(vo::setOldState);
         Optional.of(after).map(TaskDto::getTopicId).ifPresent(vo::setNewState);
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeDatesUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
-        initializeAssignedDateUpdateActivity(performedBy, before, after);
-        initializeDueDateUpdateActivity(performedBy, before, after);
+    public void initializeDatesUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
+        initializeAssignedDateUpdateActivity(performedBy, performingAccountSessionId, before, after);
+        initializeDueDateUpdateActivity(performedBy, performingAccountSessionId, before, after);
     }
 
-    public void initializeAssigneeUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
+    public void initializeAssigneeUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_CHANGE_ASSIGNEE;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before).map(TaskDto::getAssignedTo).ifPresent(vo::setOldState);
         Optional.of(after).map(TaskDto::getAssignedTo).ifPresent(vo::setNewState);
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeChecklistCreateActivity(String performedBy, TaskDto after, ChecklistDto checklistDto) {
+    public void initializeChecklistCreateActivity(String performedBy, String performingAccountSessionId, TaskDto after, ChecklistDto checklistDto) {
         WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_INITIALIZED;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistDto.getChecklistId());
         vo.setNewState(checklistDto.getChecklistId());
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeChecklistRemovedActivity(String performedBy, TaskDto after, ChecklistDto checklistDto) {
+    public void initializeChecklistRemovedActivity(String performedBy, String performingAccountSessionId, TaskDto after, ChecklistDto checklistDto) {
         WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_REMOVED;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistDto.getChecklistId());
         vo.setOldState(checklistDto.getChecklistId());
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeChecklistTitleChangedActivity(String performedBy, TaskDto after, ChecklistDto oldChecklist, ChecklistDto newChecklist) {
+    public void initializeChecklistTitleChangedActivity(String performedBy, String performingAccountSessionId, TaskDto after, ChecklistDto oldChecklist, ChecklistDto newChecklist) {
         WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_TITLE_CHANGED;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, newChecklist.getChecklistId());
         vo.setOldState(oldChecklist.getTitle());
         vo.setNewState(newChecklist.getTitle());
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeChecklistItemCheckedStatusChangedActivity(String performedBy, TaskDto after, String checklistItemId, Boolean oldCheckedStatus, Boolean newCheckedStatus) {
+    public void initializeChecklistItemCheckedStatusChangedActivity(String performedBy, String performingAccountSessionId, TaskDto after, String checklistItemId, Boolean oldCheckedStatus, Boolean newCheckedStatus) {
         WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_ITEM_CHECKED_STATUS_CHANGED;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistItemId);
         Optional.ofNullable(oldCheckedStatus).map(String::valueOf).ifPresent(vo::setOldState);
         Optional.ofNullable(newCheckedStatus).map(String::valueOf).ifPresent(vo::setNewState);
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeChecklistItemLabelChangedActivity(String performedBy, TaskDto after, String checklistItemId, String oldLabel, String newLabel) {
+    public void initializeChecklistItemLabelChangedActivity(String performedBy, String performingAccountSessionId, TaskDto after, String checklistItemId, String oldLabel, String newLabel) {
         WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_ITEM_LABEL_CHANGED;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistItemId);
         Optional.ofNullable(oldLabel).ifPresent(vo::setOldState);
         Optional.ofNullable(newLabel).ifPresent(vo::setNewState);
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeChecklistItemRemovedActivity(String performedBy, TaskDto after, String checklistItemId) {
+    public void initializeChecklistItemRemovedActivity(String performedBy, String performingAccountSessionId, TaskDto after, String checklistItemId) {
         WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_ITEM_REMOVED;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistItemId);
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeChecklistItemInitializedActivity(String performedBy, TaskDto after, String checklistItemId) {
+    public void initializeChecklistItemInitializedActivity(String performedBy, String performingAccountSessionId, TaskDto after, String checklistItemId) {
         WorkspaceActivityType type = WorkspaceActivityType.CHECKLIST_ITEM_INITIALIZED;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after, checklistItemId);
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(after, type);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeTaskAddedToTaskBoardActivity(String performedBy, TaskDto taskDto, String taskBoardId) {
+    public void initializeTaskAddedToTaskBoardActivity(String performedBy, String performingAccountSessionId, TaskDto taskDto, String taskBoardId) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_BOARD_ENTRY_INIT;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, taskDto, taskBoardId);
         vo.setType(type);
         vo.setBoardId(taskBoardId);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(taskDto, type);
+        notifyTaskSubscribers(taskDto, type, performingAccountSessionId);
     }
 
-    public void initializeTaskRemovedFromTaskBoardActivity(String performedBy, TaskBoardEntryDto boardEntryDto) {
+    public void initializeTaskRemovedFromTaskBoardActivity(String performedBy, String performingAccountSessionId, TaskBoardEntryDto boardEntryDto) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_BOARD_ENTRY_REMOVED;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, boardEntryDto.getTask(), boardEntryDto.getTaskBoardId());
         vo.setType(type);
         vo.setBoardId(boardEntryDto.getTaskBoardId());
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(boardEntryDto.getTask(), type);
+        notifyTaskSubscribers(boardEntryDto.getTask(), type, performingAccountSessionId);
     }
 
-    public void initializeTaskOrderChangedOnTaskBoardActivity(String performedBy, TaskBoardEntryDto boardEntryDto) {
+    public void initializeTaskOrderChangedOnTaskBoardActivity(String performedBy, String performingAccountSessionId, TaskBoardEntryDto boardEntryDto) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_BOARD_ENTRY_ORDER_CHANGE;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, boardEntryDto.getTask(), boardEntryDto.getTaskBoardId());
         vo.setType(type);
         vo.setBoardId(boardEntryDto.getTaskBoardId());
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(boardEntryDto.getTask(), type);
+        notifyTaskSubscribers(boardEntryDto.getTask(), type, performingAccountSessionId);
     }
 
-    public void initializeTaskAttachmentAddedActivity(String performedBy, TaskDto taskDto, AccessibleMediaDto accessibleMediaDto) {
+    public void initializeTaskAttachmentAddedActivity(String performedBy, String performingAccountSessionId, TaskDto taskDto, AccessibleMediaDto accessibleMediaDto) {
         WorkspaceActivityType type = WorkspaceActivityType.ATTACHMENT_ADDED;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, taskDto, accessibleMediaDto.getMediaId());
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(taskDto, type);
+        notifyTaskSubscribers(taskDto, type, performingAccountSessionId);
     }
 
-    public void initializeTaskAttachmentDeletedActivity(String performedBy, TaskDto taskDto, AccessibleMediaDto accessibleMediaDto) {
+    public void initializeTaskAttachmentDeletedActivity(String performedBy, String performingAccountSessionId, TaskDto taskDto, AccessibleMediaDto accessibleMediaDto) {
         WorkspaceActivityType type = WorkspaceActivityType.ATTACHMENT_DELETED;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, taskDto, accessibleMediaDto.getMediaId());
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
-        notifyTaskSubscribers(taskDto, type);
+        notifyTaskSubscribers(taskDto, type, performingAccountSessionId);
     }
 
-    private void initializeAssignedDateUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
+    private void initializeAssignedDateUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_CHANGE_ASSIGNED_DATE;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before)
@@ -211,11 +211,11 @@ public class TaskActivityService {
         vo.setType(type);
         if (!Objects.equals(vo.getOldState(), vo.getNewState())) {
             workspaceActivityService.createWorkspaceActivity(vo);
-            notifyTaskSubscribers(after, type);
+            notifyTaskSubscribers(after, type, performingAccountSessionId);
         }
     }
 
-    private void initializeDueDateUpdateActivity(String performedBy, TaskDto before, TaskDto after) {
+    private void initializeDueDateUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_CHANGE_DUE_DATE;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before)
@@ -229,7 +229,7 @@ public class TaskActivityService {
         vo.setType(type);
         if (!Objects.equals(vo.getOldState(), vo.getNewState())) {
             workspaceActivityService.createWorkspaceActivity(vo);
-            notifyTaskSubscribers(after, type);
+            notifyTaskSubscribers(after, type, performingAccountSessionId);
         }
     }
 
@@ -255,10 +255,11 @@ public class TaskActivityService {
                 .build();
     }
 
-    private void notifyTaskSubscribers(TaskDto after, WorkspaceActivityType type) {
+    private void notifyTaskSubscribers(TaskDto after, WorkspaceActivityType type, String performingAccountSessionId) {
         NotifyTaskSubscribersVo notifyTaskSubscribersVo = new NotifyTaskSubscribersVo();
         notifyTaskSubscribersVo.setTaskDto(after);
         notifyTaskSubscribersVo.setWorkspaceActivityType(type);
+        notifyTaskSubscribersVo.setPerformingAccountSessionId(performingAccountSessionId);
         taskReachOutService.notifyTaskSubscribers(notifyTaskSubscribersVo);
     }
 }

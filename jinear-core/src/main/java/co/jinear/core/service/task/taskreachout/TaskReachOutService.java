@@ -30,12 +30,10 @@ public class TaskReachOutService {
     private final TaskSubscriptionMailSendConverter taskSubscriptionMailSendConverter;
 
     public void notifyTaskSubscribers(NotifyTaskSubscribersVo notifyTaskSubscribersVo) {
-        if (checkRelatedWorkspaceIsNotPersonal(notifyTaskSubscribersVo)) {
-            log.info("Notify task subscribers has started. notifyTaskSubscribersVo: {}", notifyTaskSubscribersVo);
-            List<TaskSubscriptionWithCommunicationPreferencesDto> taskSubscribers = taskSubscriptionListingService.retrieveSubscribersWithCommunicationInfo(notifyTaskSubscribersVo.getTaskDto().getTaskId());
-            mapAndCreatePushNotification(taskSubscribers, notifyTaskSubscribersVo);
-            mapAndCreateGenericMail(notifyTaskSubscribersVo, taskSubscribers);
-        }
+        log.info("Notify task subscribers has started. notifyTaskSubscribersVo: {}", notifyTaskSubscribersVo);
+        List<TaskSubscriptionWithCommunicationPreferencesDto> taskSubscribers = taskSubscriptionListingService.retrieveSubscribersWithCommunicationInfo(notifyTaskSubscribersVo.getTaskDto().getTaskId());
+        mapAndCreatePushNotification(taskSubscribers, notifyTaskSubscribersVo);
+        mapAndCreateGenericMail(notifyTaskSubscribersVo, taskSubscribers);
     }
 
     private void mapAndCreatePushNotification(List<TaskSubscriptionWithCommunicationPreferencesDto> taskSubscribers, NotifyTaskSubscribersVo notifyTaskSubscribersVo) {

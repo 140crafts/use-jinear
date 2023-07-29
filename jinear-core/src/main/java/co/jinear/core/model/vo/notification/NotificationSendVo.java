@@ -26,4 +26,5 @@ public class NotificationSendVo {
     private Boolean isSilent;
     private NotificationType notificationType;
     private String relatedTaskTag;
+    private String senderSessionId;
 }

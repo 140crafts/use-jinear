@@ -941,4 +941,10 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-216-add-sender_session_id-column-to-notification_event">
+        <addColumn tableName="notification_event">
+            <column name="sender_session_id" type="char(26)" afterColumn="notification_event_id"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -25,6 +25,9 @@ public class NotificationEvent extends BaseEntity {
     @Column(name = "notification_event_id")
     private String notificationEventId;
 
+    @Column(name = "sender_session_id")
+    private String senderSessionId;
+
     @Column(name = "account_id")
     private String accountId;
 

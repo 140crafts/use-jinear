@@ -52,6 +52,7 @@ public class NotificationEventOperationService {
         Boolean isSilent = Optional.of(notificationSendVo).map(NotificationSendVo::getIsSilent).orElse(Boolean.TRUE);
         NotificationEvent notificationEvent = new NotificationEvent();
         notificationEvent.setAccountId(notificationSendVo.getAccountId());
+        notificationEvent.setSenderSessionId(notificationSendVo.getSenderSessionId());
         notificationEvent.setWorkspaceId(notificationSendVo.getWorkspaceId());
         notificationEvent.setTeamId(notificationSendVo.getTeamId());
         notificationEvent.setTaskId(notificationSendVo.getTaskId());

@@ -54,42 +54,46 @@ public class TaskUpdateManager {
 
     public BaseResponse updateTaskTitle(String taskId, TaskUpdateTitleRequest taskUpdateTitleRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
         log.info("Update task description has started. accountId: {}", currentAccountId);
         TaskTitleUpdateVo taskTitleUpdateVo = mapRequest(taskId, taskUpdateTitleRequest);
         TaskDto taskDtoAfterUpdate = taskUpdateService.updateTaskTitle(taskTitleUpdateVo);
-        taskActivityService.initializeEditTitleActivity(currentAccountId, taskDtoBeforeUpdate, taskDtoAfterUpdate);
+        taskActivityService.initializeEditTitleActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDtoAfterUpdate);
         return new BaseResponse();
     }
 
     public BaseResponse updateTaskDescription(String taskId, TaskUpdateDescriptionRequest taskUpdateDescriptionRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
         log.info("Update task description has started. accountId: {}", currentAccountId);
         TaskDescriptionUpdateVo taskDescriptionUpdateVo = mapRequest(taskId, taskUpdateDescriptionRequest);
         TaskDto taskDtoAfterUpdate = taskUpdateService.updateTaskDescription(taskDescriptionUpdateVo);
-        taskActivityService.initializeEditDescriptionActivity(currentAccountId, taskDtoBeforeUpdate, taskDtoAfterUpdate);
+        taskActivityService.initializeEditDescriptionActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDtoAfterUpdate);
         return new BaseResponse();
     }
 
     public TaskResponse updateTaskWorkflowStatus(String taskId, String workflowStatusId) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
         log.info("Update task workflow status has started. accountId: {}, taskId: {}, newWorkflowStatusId: {}", currentAccountId, taskId, workflowStatusId);
         UpdateTaskWorkflowDto updateTaskWorkflowDto = taskUpdateService.updateTaskWorkflow(taskId, workflowStatusId);
         TaskDto taskDto = updateTaskWorkflowDto.getTaskDto();
-        taskActivityService.initializeStatusUpdateActivity(currentAccountId, taskDtoBeforeUpdate, taskDto);
+        taskActivityService.initializeStatusUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
         assignRemindersPassiveIdOwnershipIfExists(currentAccountId, updateTaskWorkflowDto);
         return mapResponse(taskDto);
     }
 
     public TaskResponse updateTaskTopic(String taskId, String topicId) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
         validateTaskAndTopicIsInSameTeam(taskDtoBeforeUpdate, topicId);
         log.info("Update task topic has started. accountId: {}, taskId: {}, topicId: {}", currentAccountId, taskId, topicId);
         TaskDto taskDto = taskUpdateService.updateTaskTopic(taskId, topicId);
-        taskActivityService.initializeTopicUpdateActivity(currentAccountId, taskDtoBeforeUpdate, taskDto);
+        taskActivityService.initializeTopicUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
         return mapResponse(taskDto);
     }
 
@@ -99,24 +103,26 @@ public class TaskUpdateManager {
 
     public TaskResponse updateTaskDates(String taskId, TaskDateUpdateRequest taskDateUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
         PlainAccountProfileDto accountDto = accountRetrieveService.retrievePlainAccountProfile(currentAccountId);
         validateDueDateIsAfterAssignedDate(taskDateUpdateRequest, accountDto.getTimeZone());
         log.info("Update task dates has started. accountId: {}, taskId: {}", currentAccountId, taskId);
         TaskDatesUpdateVo taskDatesUpdateVo = taskDatesUpdateVoConverter.map(taskDateUpdateRequest, taskId);
         TaskDto taskDto = taskUpdateService.updateTaskDates(taskDatesUpdateVo);
-        taskActivityService.initializeDatesUpdateActivity(currentAccountId, taskDtoBeforeUpdate, taskDto);
+        taskActivityService.initializeDatesUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
         return mapResponse(taskDto);
     }
 
     public TaskResponse updateTaskAssignee(String taskId, TaskAssigneeUpdateRequest taskAssigneeUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
         validateNewAssigneeHasTaskAccess(taskId, taskAssigneeUpdateRequest);
         log.info("Update task assignee has started. accountId: {}, taskId: {}, taskAssigneeUpdateRequest: {}", currentAccountId, taskId, taskAssigneeUpdateRequest);
         TaskAssigneeUpdateVo taskAssigneeUpdateVo = taskDatesUpdateVoConverter.map(taskAssigneeUpdateRequest, taskId);
         TaskDto taskDto = taskUpdateService.updateTaskAssignee(taskAssigneeUpdateVo);
-        taskActivityService.initializeAssigneeUpdateActivity(currentAccountId, taskDtoBeforeUpdate, taskDto);
+        taskActivityService.initializeAssigneeUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
         return mapResponse(taskDto);
     }
 
