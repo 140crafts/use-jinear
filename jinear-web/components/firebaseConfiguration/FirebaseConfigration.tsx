@@ -42,6 +42,12 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
   }, []);
 
   useEffect(() => {
+    if (messaging && currentSessionId) {
+      onMessage(messaging, onForegroundMessage);
+    }
+  }, [messaging, currentSessionId]);
+
+  useEffect(() => {
     if (firebaseApp) {
       if (firebaseApp && currentAccountId && authState == "LOGGED_IN") {
         checkAndPrompt(currentAccountId);
@@ -54,7 +60,6 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
   const initializeFirebase = () => {
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(firebaseApp);
-    onMessage(messaging, onForegroundMessage);
     dispatch(setFirebase(app));
     dispatch(setMessaging(messaging));
   };
