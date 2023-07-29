@@ -27,6 +27,17 @@ public class NotificationTargetOperationService {
 
     public NotificationTargetDto initializeNotificationTarget(NotificationTargetInitializeVo notificationTargetInitializeVo) {
         log.info("Initialize notification target has started. notificationTargetInitializeVo: {}", notificationTargetInitializeVo);
+        return notificationTargetRetrieveService.retrieveEntityBySessionIdAndExternalTargetId(notificationTargetInitializeVo.getSessionInfoId(), notificationTargetInitializeVo.getExternalTargetId())
+                .map(this::logAndMapExistingTarget)
+                .orElseGet(() -> initialize(notificationTargetInitializeVo));
+    }
+
+    private NotificationTargetDto logAndMapExistingTarget(NotificationTarget existing) {
+        log.info("Notification target already exists related with current session.");
+        return notificationTargetDtoConverter.convert(existing);
+    }
+
+    private NotificationTargetDto initialize(NotificationTargetInitializeVo notificationTargetInitializeVo) {
         NotificationTarget notificationTarget = initializeNotificationTargetVoConverter.convert(notificationTargetInitializeVo);
         NotificationTarget saved = notificationTargetRepository.save(notificationTarget);
         updateNotificationPermissionsAsGiven(notificationTarget);

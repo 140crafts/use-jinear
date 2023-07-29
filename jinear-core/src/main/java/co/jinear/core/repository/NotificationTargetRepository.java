@@ -11,7 +11,7 @@ public interface NotificationTargetRepository extends JpaRepository<Notification
 
     Optional<NotificationTarget> findBySessionInfoIdAndPassiveIdIsNull(String sessionInfoId);
 
-    Long countAllBySessionInfoIdAndPassiveIdIsNull(String sessionInfoId);
+    Optional<NotificationTarget> findFirstBySessionInfoIdAndExternalTargetIdAndPassiveIdIsNull(String sessionInfoId, String externalTargetId);
 
     List<NotificationTarget> findAllByAccountIdAndPassiveIdIsNullOrderByCreatedDateDesc(String accountId, Pageable pageable);
 }

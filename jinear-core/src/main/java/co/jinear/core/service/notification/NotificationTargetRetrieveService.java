@@ -25,9 +25,9 @@ public class NotificationTargetRetrieveService {
         return notificationTargetRepository.findBySessionInfoIdAndPassiveIdIsNull(sessionInfoId);
     }
 
-    public boolean hasNotificationTargetWithSessionInfoId(String sessionInfoId) {
-        log.info("Check notification target exists has started. sessionInfoId:{}", sessionInfoId);
-        return notificationTargetRepository.countAllBySessionInfoIdAndPassiveIdIsNull(sessionInfoId) > 0L;
+    public Optional<NotificationTarget> retrieveEntityBySessionIdAndExternalTargetId(String sessionInfoId, String externalTargetId) {
+        log.info("Retrieve notification target by session id and external target id. sessionInfoId:{}, externalTargetId: {}", sessionInfoId, externalTargetId);
+        return notificationTargetRepository.findFirstBySessionInfoIdAndExternalTargetIdAndPassiveIdIsNull(sessionInfoId, externalTargetId);
     }
 
     public List<NotificationTargetDto> retrieveLatestAccountTargets(String accountId) {
