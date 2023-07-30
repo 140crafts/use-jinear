@@ -1,7 +1,9 @@
+import { api } from "@/store/api/api";
 import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
 import { selectAuthState, selectCurrentAccountId, selectCurrentSessionId } from "@/store/slice/accountSlice";
 import { selectFirebase, selectMessaging, setFirebase, setMessaging } from "@/store/slice/firebaseSlice";
 import { popNotificationPermissionModal } from "@/store/slice/modalSlice";
+import { markHasUnreadNotification } from "@/store/slice/taskAdditionalDataSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { initializeApp } from "firebase/app";
@@ -13,6 +15,25 @@ import ForegroundNotification from "../foregroundNotification/ForegroundNotifica
 interface FirebaseConfigrationProps {}
 
 const logger = Logger("FirebaseConfigration");
+
+const TASK_UPDATE_NOTIFICATIONS = [
+  "EDIT_TASK_TITLE",
+  "EDIT_TASK_DESC",
+  "TASK_UPDATE_TOPIC",
+  "TASK_UPDATE_WORKFLOW_STATUS",
+  "TASK_CHANGE_ASSIGNEE",
+  "TASK_CHANGE_ASSIGNED_DATE",
+  "TASK_CHANGE_DUE_DATE",
+  "RELATION_INITIALIZED",
+  "RELATION_REMOVED",
+  "CHECKLIST_INITIALIZED",
+  "CHECKLIST_REMOVED",
+  "CHECKLIST_TITLE_CHANGED",
+  "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED",
+  "CHECKLIST_ITEM_LABEL_CHANGED",
+  "CHECKLIST_ITEM_REMOVED",
+  "CHECKLIST_ITEM_INITIALIZED",
+];
 
 const firebaseConfig = {
   apiKey: "AIzaSyBZq8Pg2pDDweDSNqTwdrCR-xBe1mJGBco",
@@ -116,6 +137,15 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
           position: window.innerWidth < 768 ? "top-center" : "top-right",
           duration: 6000,
         });
+      }
+
+      const notificationType = payload?.data?.notificationType || "";
+      dispatch(api.util.invalidateTags(["account-workspace-notification-unread-count"]));
+      if (notificationType == "TASK_INITIALIZED") {
+        dispatch(api.util.invalidateTags(["team-task-list", "team-workflow-task-list", "workspace-task-list"]));
+      }
+      if (payload?.data?.taskId && TASK_UPDATE_NOTIFICATIONS.indexOf(notificationType) != -1) {
+        dispatch(markHasUnreadNotification({ taskId: payload?.data?.taskId }));
       }
     }
   };
