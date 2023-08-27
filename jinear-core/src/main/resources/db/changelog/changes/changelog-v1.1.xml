@@ -947,4 +947,48 @@
             <column name="sender_session_id" type="char(26)" afterColumn="notification_event_id"/>
         </addColumn>
     </changeSet>
+
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-payment_settings">
+        <createTable tableName="payment_settings">
+            <column name="payment_settings_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="last_sync" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-subscription">
+        <createTable tableName="subscription">
+            <column name="subscription_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="payments_service_subscription_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_object_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_payments_service_subscription_id" tableName="subscription">
+            <column name="payments_service_subscription_id"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>
