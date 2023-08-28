@@ -1,4 +1,5 @@
 import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import { hasWorkspaceFilePermissions } from "@/utils/permissionHelper";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import styles from "./BasicTeamMenu.module.css";
@@ -28,7 +29,7 @@ const BasicTeamMenu: React.FC<BasicTeamMenuProps> = ({ workspace, team }) => {
         <TasksMenu workspace={workspace} team={team} />
         <BoardsMenu workspace={workspace} team={team} />
         <TopicsMenu workspace={workspace} team={team} />
-        {workspace.tier == "PLUS" && <FilesMenu workspace={workspace} team={team} />}
+        {hasWorkspaceFilePermissions(workspace) && <FilesMenu workspace={workspace} team={team} />}
       </div>
     </div>
   );

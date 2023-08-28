@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-07-29 11:28:31.
+// Generated using typescript-generator version 3.0.1157 on 2023-08-28 20:59:32.
 
 export interface BaseDto {
   createdDate: Date;
@@ -100,6 +100,7 @@ export interface NotificationMessageExternalDataDto {
   taskId: string;
   taskTag: string;
   notificationType: NotificationType;
+  senderSessionId: string;
 }
 
 export interface NotificationTargetDto extends BaseDto {
@@ -108,6 +109,13 @@ export interface NotificationTargetDto extends BaseDto {
   sessionInfoId: string;
   targetType: NotificationTargetType;
   providerType: NotificationProviderType;
+}
+
+export interface SubscriptionDto extends BaseDto {
+  subscriptionId: string;
+  paymentsServiceSubscriptionId: string;
+  subscriptionStatus: SubscriptionStatus;
+  relatedObjectId: string;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -1096,6 +1104,8 @@ export type WorkspaceInvitationStatusType = "WAITING_FOR_ANSWER" | "ACCEPTED" | 
 
 export type WorkspaceJoinType = "NEVER" | "PUBLIC" | "WITH_REQUEST" | "WITH_PASSWORD";
 
-export type WorkspaceTier = "BASIC" | "PLUS";
+export type WorkspaceTier = "BASIC" | "PRO";
 
 export type WorkspaceVisibilityType = "VISIBLE" | "HIDDEN_LISTED" | "HIDDEN_UNLISTED";
+
+export type SubscriptionStatus = "ACTIVE" | "TRIALING" | "PAST_DUE" | "PAUSED" | "DELETED";

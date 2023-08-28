@@ -2418,4 +2418,32 @@ export default {
     en: "Not supported",
     tr: "Desteklenmiyor",
   },
+  workspaceInfoTabWorkspaceType_Personal: {
+    en: "Personal Workspace",
+    tr: "Kişisel Çalışma Alanı",
+  },
+  workspaceInfoTabWorkspaceType_Personal_detail: {
+    en: "Your personal use only. You cannot invite others.",
+    tr: "Size özel, diğer kullanıcılar davet edilemez.",
+  },
+  workspaceInfoTabWorkspaceType_Collaborative_BASIC: {
+    en: "Basic Collaborative Workspace",
+    tr: "Basit Ortak Çalışma Alanı",
+  },
+  workspaceInfoTabWorkspaceType_Collaborative_BASIC_detail: {
+    en: "Work with up to 5 people. File sharing not allowed.",
+    tr: "5 Kişiye kadar birlikte çalışılabilir. Dosya paylaşımı yapılamaz.",
+  },
+  workspaceInfoTabWorkspaceType_Collaborative_PRO: {
+    en: "Professional Collaborative Workspace",
+    tr: "Profesyonel Ortak Çalışma Alanı",
+  },
+  workspaceInfoTabWorkspaceType_Collaborative_PRO_detail: {
+    en: "Invite as many people you want. Share your files.",
+    tr: "İstediğiniz kadar kişiyi çalışma alanına ekleyin. Dosya paylaşımı yapılabilir.",
+  },
+  workspaceTierUpgradeButton: {
+    en: "Upgrade Your Plan",
+    tr: "Planı Yükselt",
+  },
 };

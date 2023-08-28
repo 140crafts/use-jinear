@@ -16,7 +16,6 @@ const SideMenu: React.FC<SideMenuProps> = ({}) => {
   return (
     <div className={styles.content}>
       <CurrentWorkspaceHeader />
-      <div className="spacer-h-1" />
       <WorkspaceMembers />
       <div className="spacer-h-1" />
       <ActionButtonContainer />

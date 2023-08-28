@@ -1,10 +1,10 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import WorkspaceUpgradeButton from "@/components/workspaceUpgradeButton/WorkspaceUpgradeButton";
 import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoEllipsisHorizontal } from "react-icons/io5";
 import styles from "./CurrentWorkspaceHeader.module.scss";
 
 interface CurrentWorkspaceHeaderProps {}
@@ -17,19 +17,18 @@ const CurrentWorkspaceHeader: React.FC<CurrentWorkspaceHeaderProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      <div className={cn(styles.title, isTitleSingleWord && !isPersonal ? "single-line" : undefined)}>
-        {isPersonal ? t("workspaceMenuPersonalTitle") : preferredWorkspace?.title}
-      </div>
-      <div className="flex-1" />
       <Button
         variant={ButtonVariants.hoverFilled2}
         heightVariant={ButtonHeight.short}
-        data-tooltip-right={t("currentWorkspaceHeaderWorkspaceDetail")}
-        className={styles.button}
+        className={cn(styles.title, isTitleSingleWord && !isPersonal ? "line-clamp" : undefined)}
+        // data-tooltip-right={t("currentWorkspaceHeaderWorkspaceDetail")}
         href={`/${preferredWorkspace?.username}/settings`}
       >
-        <IoEllipsisHorizontal />
+        {isPersonal ? t("workspaceMenuPersonalTitle") : preferredWorkspace?.title}
       </Button>
+      {preferredWorkspace && (
+        <WorkspaceUpgradeButton workspace={preferredWorkspace} variant={"ICON"} className={styles.upgradeButton} />
+      )}
     </div>
   );
 };
