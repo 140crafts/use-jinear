@@ -1,0 +1,55 @@
+.headerContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 5rem;
+}
+.proLogoContainer {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.proLabel {
+  font-weight: 800;
+  font-size: 1rem;
+  color: black;
+  background-color: var(--c-HIGHLIGHT_YELLOW);
+  border-radius: 0.25rem;
+  padding: 0.0125rem 1rem;
+  margin-top: 0.35rem;
+  margin-left: -0.5rem;
+}
+
+.proFeaturesLabel {
+  text-align: justify;
+  font-weight: 500;
+  font-size: 0.75rem;
+  line-height: 1.5rem;
+}
+
+.autoRenewsText {
+  font-size: 0.6rem;
+  opacity: 0.7;
+  text-align: center;
+}
+
+.appliesOnlyWorkspaceText {
+  font-size: 0.6rem;
+  opacity: 0.7;
+  text-align: left;
+  margin-top: 0.25rem;
+}
+
+.successContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.successIcon {
+  color: var(--c-SUCCESS_GREEN);
+}

@@ -74,6 +74,7 @@ const WorkspaceInfoTab: React.FC<WorkspaceInfoTabProps> = ({ workspace }) => {
               <span>{workspaceTierDetailLabel}</span>
             </div>
             <WorkspaceUpgradeButton workspace={workspace} variant={"FULL"} className={styles.upgradeButton} />
+            <div>TODO conditional cancel plan next billing date section</div>
           </div>
         </div>
       </div>

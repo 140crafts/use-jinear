@@ -5,10 +5,11 @@ import Button from "../button";
 import styles from "./FormLogo.module.scss";
 
 interface FormLogoProps {
+  withLeftLine?: boolean;
   contentClassName?: string;
 }
 
-const FormLogo: React.FC<FormLogoProps> = ({ contentClassName }) => {
+const FormLogo: React.FC<FormLogoProps> = ({ withLeftLine = true, contentClassName }) => {
   const [isPresent, safeToRemove] = usePresence();
 
   const animations = {
@@ -32,7 +33,7 @@ const FormLogo: React.FC<FormLogoProps> = ({ contentClassName }) => {
 
   return (
     <div className={styles.logoContainer}>
-      <div className={styles.logoLine}></div>
+      {withLeftLine && <div className={styles.logoLine}></div>}
       <div className={cn(styles.logoContent, contentClassName)}>
         <AnimatePresence>
           <motion.div

@@ -97,6 +97,10 @@ export const selectCurrentAccountsPreferredTeamId = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.team?.teamId;
 };
 
+export const selectCurrentAccountsWorkspace = (workspaceId?: string) => (state: RootState) => {
+  return state.account.current?.workspaces.find((workspace) => workspace.workspaceId == workspaceId);
+};
+
 //
 
 export const selectCurrentAccountsWorkspaceRoleIsAdminOrOwner = (
