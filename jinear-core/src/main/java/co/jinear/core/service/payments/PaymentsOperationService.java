@@ -9,14 +9,17 @@ import co.jinear.core.service.client.paymentprocessor.model.dto.purchase.Purchas
 import co.jinear.core.service.client.paymentprocessor.model.enumtype.ProductType;
 import co.jinear.core.service.client.paymentprocessor.model.enumtype.SubscriptionStatus;
 import co.jinear.core.service.workspace.WorkspaceTierService;
+import co.jinear.core.system.util.payment.PassthroughHelper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import static co.jinear.core.service.client.paymentprocessor.model.enumtype.PassthroughType.WORKSPACE_ID;
 import static co.jinear.core.service.client.paymentprocessor.model.enumtype.SubscriptionStatus.*;
 
 @Slf4j
@@ -43,7 +46,8 @@ public class PaymentsOperationService {
 
     private PurchaseListingDto retrievePurchasesAfter(ZonedDateTime lastSyncDate) {
         log.info("Retrieving purchase updates. lastSyncDate: {}", lastSyncDate);
-        return paymentProcessorClient.retrievePurchasesAfter(ProductType.JINEAR, lastSyncDate).getPurchaseListingDto();
+        String formatted = lastSyncDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        return paymentProcessorClient.retrievePurchasesAfter(ProductType.JINEAR, formatted).getPurchaseListingDto();
     }
 
     private void initializeOrUpdateSubscription(SubscriptionDto subscriptionDto) {
@@ -75,11 +79,12 @@ public class PaymentsOperationService {
     private void updatePlan(Subscription subscription, SubscriptionDto subscriptionDto) {
         SubscriptionStatus oldSubscriptionStatus = subscription.getSubscriptionStatus();
         SubscriptionStatus newSubscriptionStatus = subscriptionDto.getSubscriptionStatus();
+        String workspaceId = PassthroughHelper.retrievePassthroughValue(subscriptionDto.getPassthroughDetails(), WORKSPACE_ID);
         log.info("Change plan has started. oldSubscriptionStatus: {}, newSubscriptionStatus: {}", oldSubscriptionStatus, newSubscriptionStatus);
         if (ACTIVE_PLAN_STATUSES.contains(oldSubscriptionStatus) && PASSIVE_PLAN_STATUSES.contains(newSubscriptionStatus)) {
-            workspaceTierService.updateWorkspaceTier(subscriptionDto.getRelatedObjectId(), WorkspaceTier.BASIC);
+            workspaceTierService.updateWorkspaceTier(workspaceId, WorkspaceTier.BASIC);
         } else if (PASSIVE_PLAN_STATUSES.contains(oldSubscriptionStatus) && ACTIVE_PLAN_STATUSES.contains(newSubscriptionStatus)) {
-            workspaceTierService.updateWorkspaceTier(subscriptionDto.getRelatedObjectId(), WorkspaceTier.PLUS);
+            workspaceTierService.updateWorkspaceTier(workspaceId, WorkspaceTier.PRO);
         }
     }
 
@@ -87,7 +92,8 @@ public class PaymentsOperationService {
         SubscriptionStatus newSubscriptionStatus = subscriptionDto.getSubscriptionStatus();
         log.info("Initialize plan has started. newSubscriptionStatus: {}", newSubscriptionStatus);
         if (ACTIVE_PLAN_STATUSES.contains(newSubscriptionStatus)) {
-            workspaceTierService.updateWorkspaceTier(subscriptionDto.getRelatedObjectId(), WorkspaceTier.PLUS);
+            String workspaceId = PassthroughHelper.retrievePassthroughValue(subscriptionDto.getPassthroughDetails(), WORKSPACE_ID);
+            workspaceTierService.updateWorkspaceTier(workspaceId, WorkspaceTier.PRO);
         }
     }
 }

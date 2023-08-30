@@ -29,6 +29,9 @@ public class Subscription extends BaseEntity {
     @Column(name = "status")
     private SubscriptionStatus subscriptionStatus;
 
-    @Column(name = "related_object_id")
-    private String relatedObjectId;
+    @Column(name = "workspace_id")
+    private String workspaceId;
+
+    @Column(name = "account_id")
+    private String accountId;
 }

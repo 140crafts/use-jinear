@@ -991,4 +991,14 @@
         </createIndex>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-223-add-passthrough-columns-to-subscription">
+        <addColumn tableName="subscription">
+            <column name="workspace_id" type="char(26)" afterColumn="status"/>
+        </addColumn>
+        <addColumn tableName="subscription">
+            <column name="account_id" type="char(26)" afterColumn="workspace_id"/>
+        </addColumn>
+        <dropColumn tableName="subscription" columnName="related_object_id"/>
+    </changeSet>
+
 </databaseChangeLog>

@@ -3,7 +3,9 @@ package co.jinear.core.service.payments;
 import co.jinear.core.model.dto.payments.SubscriptionDto;
 import co.jinear.core.model.entity.payments.Subscription;
 import co.jinear.core.repository.SubscriptionRepository;
+import co.jinear.core.service.client.paymentprocessor.model.enumtype.PassthroughType;
 import co.jinear.core.service.client.paymentprocessor.model.enumtype.SubscriptionStatus;
+import co.jinear.core.system.util.payment.PassthroughHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +22,8 @@ public class SubscriptionOperationService {
         Subscription subscription = new Subscription();
         subscription.setPaymentsServiceSubscriptionId(subscriptionDto.getPaymentsServiceSubscriptionId());
         subscription.setSubscriptionStatus(subscriptionDto.getSubscriptionStatus());
-        subscription.setRelatedObjectId(subscriptionDto.getRelatedObjectId());
+        subscription.setAccountId(PassthroughHelper.retrievePassthroughValue(subscriptionDto.getPassthroughDetails(), PassthroughType.ACCOUNT_ID));
+        subscription.setWorkspaceId(PassthroughHelper.retrievePassthroughValue(subscriptionDto.getPassthroughDetails(), PassthroughType.WORKSPACE_ID));
         Subscription saved = subscriptionRepository.save(subscription);
         log.info("Initialize subscription has completed. subscriptionId: {}", saved.getSubscriptionId());
     }

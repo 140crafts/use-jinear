@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 public class ClientSubscriptionDtoToSubscriptionDtoConverter {
 
     public SubscriptionDto convert(co.jinear.core.service.client.paymentprocessor.model.dto.subscription.SubscriptionDto clientSubscriptionDto) {
-        log.info("Covnert client subscriptionDto to subscriptionDto has started. clientSubscriptionDto: {}", clientSubscriptionDto);
+        log.info("Convert client subscriptionDto to subscriptionDto has started. clientSubscriptionDto: {}", clientSubscriptionDto);
         SubscriptionDto subscriptionDto = new SubscriptionDto();
         subscriptionDto.setPaymentsServiceSubscriptionId(clientSubscriptionDto.getSubscriptionId());
         subscriptionDto.setSubscriptionStatus(clientSubscriptionDto.getSubscriptionStatus());
-        subscriptionDto.setRelatedObjectId(clientSubscriptionDto.getRelatedObjectId());
+        subscriptionDto.setPassthroughDetails(clientSubscriptionDto.getPassthroughDetails());
         return subscriptionDto;
     }
 }
