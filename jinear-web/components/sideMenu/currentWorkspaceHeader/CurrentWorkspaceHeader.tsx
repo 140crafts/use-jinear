@@ -2,6 +2,7 @@ import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import WorkspaceUpgradeButton from "@/components/workspaceUpgradeButton/WorkspaceUpgradeButton";
 import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
+import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -24,7 +25,9 @@ const CurrentWorkspaceHeader: React.FC<CurrentWorkspaceHeaderProps> = ({}) => {
         // data-tooltip-right={t("currentWorkspaceHeaderWorkspaceDetail")}
         href={`/${preferredWorkspace?.username}/settings`}
       >
-        {isPersonal ? t("workspaceMenuPersonalTitle") : preferredWorkspace?.title}
+        {isPersonal
+          ? t("workspaceMenuPersonalTitle")
+          : shortenStringIfMoreThanMaxLength({ text: preferredWorkspace?.title || "", maxLength: 26 })}
       </Button>
       {preferredWorkspace && (
         <WorkspaceUpgradeButton workspace={preferredWorkspace} variant={"ICON"} className={styles.upgradeButton} />

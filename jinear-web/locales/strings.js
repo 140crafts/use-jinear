@@ -2474,4 +2474,28 @@ export default {
     en: "We successfully received your purchase. Your workspace will be updated in a moment.",
     tr: "Satın alma başarılı. Çalışma alanın kısa süre içerisinde güncellenecek.",
   },
+  subscriptionReceiptUrlButtonLabel: {
+    en: "Receipt",
+    tr: "Fatura",
+  },
+  subscriptionNextBillingDate: {
+    en: "Next billing date is ${date}",
+    tr: "Bir sonraki fatura tarihi ${date}",
+  },
+  subscriptionUpdate: {
+    en: "Update payment method",
+    tr: "Ödeme yöntemini değiştir",
+  },
+  subscriptionCancel: {
+    en: "Cancel subscription",
+    tr: "Aboneliği iptal et",
+  },
+  billingTitle: {
+    en: "Billing",
+    tr: "Faturalandırma",
+  },
+  subscriptionCancelsAfter: {
+    en: "Subscription canceled. You can use your plan until ${date}",
+    tr: "Abonelik sonlandırıldı. Planınızı ${date} tarihine kadar kullanabilirsiniz.",
+  },
 };

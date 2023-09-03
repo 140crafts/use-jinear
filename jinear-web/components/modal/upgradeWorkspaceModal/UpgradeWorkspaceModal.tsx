@@ -13,6 +13,7 @@ import {
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { __DEV__ } from "@/utils/constants";
 import Logger from "@/utils/logger";
+import { isWorkspaceInPaidTier } from "@/utils/permissionHelper";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -23,6 +24,7 @@ import styles from "./UpgradeWorkspaceModal.module.css";
 interface UpgradeWorkspaceModalProps {}
 
 const PADDLE_CATALOG = {
+  business_daily: { sandbox: 63817, prod: -1, price: "3.30$" },
   business_monthly: { sandbox: 63716, prod: 848738, price: "49.90$" },
   business_yearly: { sandbox: 63717, prod: 848737, price: "499$" },
 };
@@ -51,13 +53,18 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
   }, [visible, workspaceId, refreshPayments]);
 
   useEffect(() => {
-    if (isSuccess) {
-      setTimeout(() => {
+    const isInPaidTier = isWorkspaceInPaidTier(workspace);
+    if (isSuccess && !isLoading) {
+      if (isInPaidTier) {
         router.replace(`/${workspace?.username}/settings`);
         close();
-      }, 7000);
+      } else {
+        setTimeout(() => {
+          refreshPayments();
+        }, 3000);
+      }
     }
-  }, [isSuccess, workspace]);
+  }, [workspace, isSuccess]);
 
   const close = () => {
     dispatch(closeUpgradeWorkspacePlanModal());
@@ -106,6 +113,18 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
           {workspace && <WorkspaceInfo workspace={workspace} />}
           <div className={styles.appliesOnlyWorkspaceText}>{t("upgradeWorkspaceTierModalAppliesToWorkspaceText")}</div>
           <div className="spacer-h-4" />
+
+          {__DEV__ && (
+            <>
+              <Button
+                variant={ButtonVariants.default}
+                onClick={() => openCheckoutForm({ productId: PADDLE_CATALOG.business_daily[__DEV__ ? "sandbox" : "prod"] })}
+              >
+                DEVELOPMENT ONLY PLAN DAILY
+              </Button>
+              <div className="spacer-h-2" />
+            </>
+          )}
 
           <Button
             variant={ButtonVariants.contrast}

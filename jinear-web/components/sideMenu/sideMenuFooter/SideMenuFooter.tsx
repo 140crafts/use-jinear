@@ -5,6 +5,7 @@ import { useLogoutMutation } from "@/store/api/authApi";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
 import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -52,7 +53,7 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
             <IoPerson size={14} />
           )}
         </div>
-        {currentAccount?.username}
+        {shortenStringIfMoreThanMaxLength({ text: currentAccount?.username || "", maxLength: 18 })}
       </Button>{" "}
       <ThemeToggle variant={ButtonVariants.hoverFilled} />
       <Button

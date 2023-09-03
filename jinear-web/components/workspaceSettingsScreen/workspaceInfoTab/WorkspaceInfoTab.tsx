@@ -1,3 +1,4 @@
+import WorkspaceSubscriptionInfo from "@/components/workspaceSubscriptionInfo/WorkspaceSubscriptionInfo";
 import WorkspaceUpgradeButton from "@/components/workspaceUpgradeButton/WorkspaceUpgradeButton";
 import { LocaleType, WorkspaceDto } from "@/model/be/jinear-core";
 import { s3Base } from "@/store/api/api";
@@ -6,6 +7,7 @@ import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import { HOST } from "@/utils/constants";
 import Logger from "@/utils/logger";
+import { isWorkspaceInPaidTier } from "@/utils/permissionHelper";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import Link from "next/link";
@@ -73,8 +75,9 @@ const WorkspaceInfoTab: React.FC<WorkspaceInfoTabProps> = ({ workspace }) => {
               <h3>{workspaceTierLabel}</h3>
               <span>{workspaceTierDetailLabel}</span>
             </div>
+
             <WorkspaceUpgradeButton workspace={workspace} variant={"FULL"} className={styles.upgradeButton} />
-            <div>TODO conditional cancel plan next billing date section</div>
+            {workspace && isWorkspaceInPaidTier(workspace) && <WorkspaceSubscriptionInfo workspaceId={workspace.workspaceId} />}
           </div>
         </div>
       </div>
