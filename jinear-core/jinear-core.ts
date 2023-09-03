@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-08-28 20:59:32.
+// Generated using typescript-generator version 3.0.1157 on 2023-09-03 12:42:48.
 
 export interface BaseDto {
     createdDate: Date;
@@ -115,7 +115,35 @@ export interface SubscriptionDto extends BaseDto {
     subscriptionId: string;
     paymentsServiceSubscriptionId: string;
     subscriptionStatus: SubscriptionStatus;
-    relatedObjectId: string;
+    workspaceId: string;
+    accountId: string;
+}
+
+export interface SubscriptionEditDto extends BaseDto {
+    cancelUrl: string;
+    updateUrl: string;
+}
+
+export interface SubscriptionExternalDto extends BaseDto {
+    subscriptionId: string;
+    paymentsServiceSubscriptionId: string;
+    subscriptionStatus: SubscriptionStatus;
+    passthroughDetails: PassthroughDetailDto[];
+}
+
+export interface SubscriptionInfoDto extends BaseDto {
+    cancelsAfter: Date;
+    retrieveSubscriptionEditInfo: SubscriptionEditDto;
+    subscriptionPaymentInfoList: SubscriptionPaymentInfoDto[];
+}
+
+export interface SubscriptionPaymentInfoDto extends BaseDto {
+    relatedEntityId: string;
+    balanceGross: string;
+    currency: string;
+    receiptUrl: string;
+    parsedEventTime: Date;
+    parsedNextBillDate: Date;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -771,6 +799,10 @@ export interface RetrieveUnreadNotificationEventCountResponse extends BaseRespon
     unreadNotificationCount: number;
 }
 
+export interface RetrieveSubscriptionInfoResponse extends BaseResponse {
+    data: SubscriptionInfoDto;
+}
+
 export interface ReminderJobResponse extends BaseResponse {
     data: ReminderJobDto;
 }
@@ -891,6 +923,11 @@ export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
     data: PageDto<WorkspaceMemberDto>;
 }
 
+export interface PassthroughDetailDto {
+    passthroughType: PassthroughType;
+    detailValue: string;
+}
+
 export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
@@ -972,3 +1009,5 @@ export type WorkspaceTier = "BASIC" | "PRO";
 export type WorkspaceVisibilityType = "VISIBLE" | "HIDDEN_LISTED" | "HIDDEN_UNLISTED";
 
 export type SubscriptionStatus = "ACTIVE" | "TRIALING" | "PAST_DUE" | "PAUSED" | "DELETED";
+
+export type PassthroughType = "ACCOUNT_ID" | "WORKSPACE_ID" | "EMAIL" | "EMAIL_CONFIRMED";

@@ -16,6 +16,11 @@ import java.util.Optional;
 @Component
 public class TaskSearchCriteriaBuilder {
 
+    public void addPassiveIdIsNull(CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
+        Predicate predicate = criteriaBuilder.isNull(root.<String>get("passiveId"));
+        predicateList.add(predicate);
+    }
+
     public void addWorkspaceId(String workspaceId, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
         if (Objects.nonNull(workspaceId)) {
             Predicate predicate = criteriaBuilder.equal(root.<String>get("workspaceId"), workspaceId);

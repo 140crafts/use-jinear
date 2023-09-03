@@ -1,7 +1,7 @@
 package co.jinear.core.service.payments;
 
-import co.jinear.core.converter.payments.ClientSubscriptionDtoToSubscriptionDtoConverter;
-import co.jinear.core.model.dto.payments.SubscriptionDto;
+import co.jinear.core.converter.payments.ClientSubscriptionDtoToSubscriptionExternalDtoConverter;
+import co.jinear.core.model.dto.payments.SubscriptionExternalDto;
 import co.jinear.core.model.entity.payments.Subscription;
 import co.jinear.core.model.enumtype.workspace.WorkspaceTier;
 import co.jinear.core.service.client.paymentprocessor.PaymentProcessorClient;
@@ -32,7 +32,7 @@ public class PaymentsOperationService {
 
     private final PaymentProcessorClient paymentProcessorClient;
     private final SubscriptionRetrieveService subscriptionRetrieveService;
-    private final ClientSubscriptionDtoToSubscriptionDtoConverter clientSubscriptionDtoToSubscriptionDtoConverter;
+    private final ClientSubscriptionDtoToSubscriptionExternalDtoConverter clientSubscriptionDtoToSubscriptionExternalDtoConverter;
     private final SubscriptionOperationService subscriptionOperationService;
     private final WorkspaceTierService workspaceTierService;
 
@@ -40,7 +40,7 @@ public class PaymentsOperationService {
         log.info("Retrieve and apply latest payments has started.");
         PurchaseListingDto purchaseListingDto = retrievePurchasesAfter(lastSyncDate);
         purchaseListingDto.getSubscriptionDtoList().stream()
-                .map(clientSubscriptionDtoToSubscriptionDtoConverter::convert)
+                .map(clientSubscriptionDtoToSubscriptionExternalDtoConverter::convert)
                 .forEach(this::initializeOrUpdateSubscription);
     }
 
@@ -50,36 +50,36 @@ public class PaymentsOperationService {
         return paymentProcessorClient.retrievePurchasesAfter(ProductType.JINEAR, formatted).getPurchaseListingDto();
     }
 
-    private void initializeOrUpdateSubscription(SubscriptionDto subscriptionDto) {
-        log.info("Initialize or update subscription has started. subscriptionDto: {}", subscriptionDto);
+    private void initializeOrUpdateSubscription(SubscriptionExternalDto subscriptionExternalDto) {
+        log.info("Initialize or update subscription has started. subscriptionDto: {}", subscriptionExternalDto);
         try {
-            subscriptionRetrieveService.retrieveSubscriptionWithPaymentServiceId(subscriptionDto.getPaymentsServiceSubscriptionId())
+            subscriptionRetrieveService.retrieveSubscriptionWithPaymentServiceId(subscriptionExternalDto.getPaymentsServiceSubscriptionId())
                     .ifPresentOrElse(
-                            subscription -> updateExistingSubscription(subscription, subscriptionDto),
-                            () -> initializeSubscription(subscriptionDto));
+                            subscription -> updateExistingSubscription(subscription, subscriptionExternalDto),
+                            () -> initializeSubscription(subscriptionExternalDto));
         } catch (Exception e) {
-            log.error("Initialize or update subscription has failed. subscriptionDto: {}", subscriptionDto);
+            log.error("Initialize or update subscription has failed. subscriptionDto: {}", subscriptionExternalDto);
         }
     }
 
     @Transactional
-    public void updateExistingSubscription(Subscription subscription, SubscriptionDto subscriptionDto) {
-        log.info("Update existing subscription has started. subscriptionId: {}, subscriptionDto: {}", subscription.getSubscriptionId(), subscriptionDto);
-        updatePlan(subscription, subscriptionDto);
-        subscriptionOperationService.updateSubscriptionStatus(subscription, subscriptionDto.getSubscriptionStatus());
+    public void updateExistingSubscription(Subscription subscription, SubscriptionExternalDto subscriptionExternalDto) {
+        log.info("Update existing subscription has started. subscriptionId: {}, subscriptionDto: {}", subscription.getSubscriptionId(), subscriptionExternalDto);
+        updatePlan(subscription, subscriptionExternalDto);
+        subscriptionOperationService.updateSubscriptionStatus(subscription, subscriptionExternalDto.getSubscriptionStatus());
     }
 
     @Transactional
-    public void initializeSubscription(SubscriptionDto subscriptionDto) {
-        log.info("Initialize subscription has started. subscriptionDto: {}", subscriptionDto);
-        initializePlan(subscriptionDto);
-        subscriptionOperationService.initializeSubscription(subscriptionDto);
+    public void initializeSubscription(SubscriptionExternalDto subscriptionExternalDto) {
+        log.info("Initialize subscription has started. subscriptionDto: {}", subscriptionExternalDto);
+        initializePlan(subscriptionExternalDto);
+        subscriptionOperationService.initializeSubscription(subscriptionExternalDto);
     }
 
-    private void updatePlan(Subscription subscription, SubscriptionDto subscriptionDto) {
+    private void updatePlan(Subscription subscription, SubscriptionExternalDto subscriptionExternalDto) {
         SubscriptionStatus oldSubscriptionStatus = subscription.getSubscriptionStatus();
-        SubscriptionStatus newSubscriptionStatus = subscriptionDto.getSubscriptionStatus();
-        String workspaceId = PassthroughHelper.retrievePassthroughValue(subscriptionDto.getPassthroughDetails(), WORKSPACE_ID);
+        SubscriptionStatus newSubscriptionStatus = subscriptionExternalDto.getSubscriptionStatus();
+        String workspaceId = PassthroughHelper.retrievePassthroughValue(subscriptionExternalDto.getPassthroughDetails(), WORKSPACE_ID);
         log.info("Change plan has started. oldSubscriptionStatus: {}, newSubscriptionStatus: {}", oldSubscriptionStatus, newSubscriptionStatus);
         if (ACTIVE_PLAN_STATUSES.contains(oldSubscriptionStatus) && PASSIVE_PLAN_STATUSES.contains(newSubscriptionStatus)) {
             workspaceTierService.updateWorkspaceTier(workspaceId, WorkspaceTier.BASIC);
@@ -88,11 +88,11 @@ public class PaymentsOperationService {
         }
     }
 
-    private void initializePlan(SubscriptionDto subscriptionDto) {
-        SubscriptionStatus newSubscriptionStatus = subscriptionDto.getSubscriptionStatus();
+    private void initializePlan(SubscriptionExternalDto subscriptionExternalDto) {
+        SubscriptionStatus newSubscriptionStatus = subscriptionExternalDto.getSubscriptionStatus();
         log.info("Initialize plan has started. newSubscriptionStatus: {}", newSubscriptionStatus);
         if (ACTIVE_PLAN_STATUSES.contains(newSubscriptionStatus)) {
-            String workspaceId = PassthroughHelper.retrievePassthroughValue(subscriptionDto.getPassthroughDetails(), WORKSPACE_ID);
+            String workspaceId = PassthroughHelper.retrievePassthroughValue(subscriptionExternalDto.getPassthroughDetails(), WORKSPACE_ID);
             workspaceTierService.updateWorkspaceTier(workspaceId, WorkspaceTier.PRO);
         }
     }

@@ -18,13 +18,13 @@ import java.util.concurrent.TimeUnit;
 @RequestMapping(value = "v1/payments/process")
 public class PaymentProcessController {
 
-    private static final int WAIT_FOR_CALLBACK_COMPLETION_SECONDS = 2;
+    private static final int WAIT_FOR_CALLBACK_COMPLETION_IN_SECONDS = 2;
     private final PaymentsManager paymentsManager;
 
     @PostMapping("/refresh")
     @ResponseStatus(HttpStatus.OK)
     public BaseResponse process() throws InterruptedException {
-        Thread.sleep(TimeUnit.SECONDS.toMillis(WAIT_FOR_CALLBACK_COMPLETION_SECONDS));
+        Thread.sleep(TimeUnit.SECONDS.toMillis(WAIT_FOR_CALLBACK_COMPLETION_IN_SECONDS));
         return paymentsManager.retrieveAndApplyLatestPayments();
     }
 }

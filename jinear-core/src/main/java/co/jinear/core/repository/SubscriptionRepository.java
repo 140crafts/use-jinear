@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface SubscriptionRepository extends JpaRepository<Subscription, String> {
 
     Optional<Subscription> findByPaymentsServiceSubscriptionIdAndPassiveIdIsNull(String paymentsServiceSubscriptionId);
+
+    Optional<Subscription> findByWorkspaceIdAndPassiveIdIsNull(String workspaceId);
 }

@@ -2,6 +2,7 @@ package co.jinear.core.service.client.paymentprocessor;
 
 import co.jinear.core.config.client.paymentprocessor.PaymentProcessorApiClientConfig;
 import co.jinear.core.service.client.paymentprocessor.model.enumtype.ProductType;
+import co.jinear.core.service.client.paymentprocessor.model.response.RetrieveSubscriptionInfoResponse;
 import co.jinear.core.service.client.paymentprocessor.model.response.purchase.PurchaseListingResponse;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -19,4 +20,7 @@ public interface PaymentProcessorFeignClient extends PaymentProcessorClient {
     @GetMapping("/purchase-listing/{product}/{after}")
     PurchaseListingResponse retrievePurchasesAfter(@PathVariable ProductType product,
                                                    @PathVariable String after);
+
+    @GetMapping("/subscription/info/{subscriptionId}")
+    RetrieveSubscriptionInfoResponse retrieveSubscriptionInfo(@PathVariable String subscriptionId);
 }

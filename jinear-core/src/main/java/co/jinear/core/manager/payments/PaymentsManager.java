@@ -20,9 +20,8 @@ public class PaymentsManager {
     public BaseResponse retrieveAndApplyLatestPayments() {
         log.info("Retrieve and apply latest payments has started.");
         ZonedDateTime lastSyncDate = paymentSettingsService.retrieveLastSyncDate();
-        paymentsOperationService.retrieveAndApplyLatestPayments(lastSyncDate);
+        paymentsOperationService.retrieveAndApplyLatestPayments(lastSyncDate.minusHours(1));
         paymentSettingsService.updateLastSyncDate(ZonedDateTime.now());
         return new BaseResponse();
     }
-
 }

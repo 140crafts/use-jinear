@@ -1,6 +1,6 @@
 package co.jinear.core.service.payments;
 
-import co.jinear.core.model.dto.payments.SubscriptionDto;
+import co.jinear.core.model.dto.payments.SubscriptionExternalDto;
 import co.jinear.core.model.entity.payments.Subscription;
 import co.jinear.core.repository.SubscriptionRepository;
 import co.jinear.core.service.client.paymentprocessor.model.enumtype.PassthroughType;
@@ -17,13 +17,13 @@ public class SubscriptionOperationService {
 
     private final SubscriptionRepository subscriptionRepository;
 
-    public void initializeSubscription(SubscriptionDto subscriptionDto) {
-        log.info("Initialize subscription has started. subscriptionDto: {}", subscriptionDto);
+    public void initializeSubscription(SubscriptionExternalDto subscriptionExternalDto) {
+        log.info("Initialize subscription has started. subscriptionDto: {}", subscriptionExternalDto);
         Subscription subscription = new Subscription();
-        subscription.setPaymentsServiceSubscriptionId(subscriptionDto.getPaymentsServiceSubscriptionId());
-        subscription.setSubscriptionStatus(subscriptionDto.getSubscriptionStatus());
-        subscription.setAccountId(PassthroughHelper.retrievePassthroughValue(subscriptionDto.getPassthroughDetails(), PassthroughType.ACCOUNT_ID));
-        subscription.setWorkspaceId(PassthroughHelper.retrievePassthroughValue(subscriptionDto.getPassthroughDetails(), PassthroughType.WORKSPACE_ID));
+        subscription.setPaymentsServiceSubscriptionId(subscriptionExternalDto.getPaymentsServiceSubscriptionId());
+        subscription.setSubscriptionStatus(subscriptionExternalDto.getSubscriptionStatus());
+        subscription.setAccountId(PassthroughHelper.retrievePassthroughValue(subscriptionExternalDto.getPassthroughDetails(), PassthroughType.ACCOUNT_ID));
+        subscription.setWorkspaceId(PassthroughHelper.retrievePassthroughValue(subscriptionExternalDto.getPassthroughDetails(), PassthroughType.WORKSPACE_ID));
         Subscription saved = subscriptionRepository.save(subscription);
         log.info("Initialize subscription has completed. subscriptionId: {}", saved.getSubscriptionId());
     }
