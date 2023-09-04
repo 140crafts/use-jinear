@@ -2431,8 +2431,8 @@ export default {
     tr: "Basit Ortak Çalışma Alanı",
   },
   workspaceInfoTabWorkspaceType_Collaborative_BASIC_detail: {
-    en: "Work with up to 5 people. File sharing not allowed.",
-    tr: "5 Kişiye kadar birlikte çalışılabilir. Dosya paylaşımı yapılamaz.",
+    en: "Work with up to 3 people. File sharing not allowed.",
+    tr: "3 Kişiye kadar birlikte çalışılabilir. Dosya paylaşımı yapılamaz.",
   },
   workspaceInfoTabWorkspaceType_Collaborative_PRO: {
     en: "Professional Collaborative Workspace",
