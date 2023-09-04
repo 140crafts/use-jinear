@@ -441,6 +441,4 @@ pre {
   border-color: var(--c-primary-shade-1);
   border-width: 1px;
   border-style: solid;
-  /* white-space: nowrap; */
-  /* display: inline-block; */
 }

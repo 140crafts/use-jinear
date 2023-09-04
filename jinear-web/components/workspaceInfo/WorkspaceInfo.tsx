@@ -1,7 +1,5 @@
 import { WorkspaceDto } from "@/model/be/jinear-core";
-import { HOST } from "@/utils/constants";
 import cn from "classnames";
-import Link from "next/link";
 import React from "react";
 import ProfilePhoto from "../profilePhoto";
 import styles from "./WorkspaceInfo.module.css";
@@ -32,11 +30,11 @@ const WorkspaceInfo: React.FC<WorkspaceInfoProps> = ({ workspace }) => {
       </div>
       <div className={styles.infoContainer}>
         <span className={cn(styles.title, "line-clamp-2")}>{workspace?.title}</span>
-        <span>
+        {/* <span>
           <Link target="_blank" href={`${HOST}/${workspace?.username}`}>
             {`${HOST?.replace("https://", "")?.replace("http://", "")}/${workspace?.username}`}
           </Link>
-        </span>
+        </span> */}
       </div>
     </div>
   );

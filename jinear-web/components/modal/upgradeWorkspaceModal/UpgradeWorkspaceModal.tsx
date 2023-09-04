@@ -54,7 +54,8 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
 
   useEffect(() => {
     const isInPaidTier = isWorkspaceInPaidTier(workspace);
-    if (isSuccess && !isLoading) {
+    logger.log({ isInPaidTier, workspaceId, workspace, isSuccess });
+    if (workspace && isSuccess && !isLoading && isInPaidTier != null) {
       if (isInPaidTier) {
         router.replace(`/${workspace?.username}/settings`);
         close();
@@ -64,7 +65,7 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
         }, 3000);
       }
     }
-  }, [workspace, isSuccess]);
+  }, [workspace, workspaceId, isSuccess]);
 
   const close = () => {
     dispatch(closeUpgradeWorkspacePlanModal());
@@ -114,7 +115,7 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
           <div className={styles.appliesOnlyWorkspaceText}>{t("upgradeWorkspaceTierModalAppliesToWorkspaceText")}</div>
           <div className="spacer-h-4" />
 
-          {__DEV__ && (
+          {/* {__DEV__ && (
             <>
               <Button
                 variant={ButtonVariants.default}
@@ -124,7 +125,7 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
               </Button>
               <div className="spacer-h-2" />
             </>
-          )}
+          )} */}
 
           <Button
             variant={ButtonVariants.contrast}

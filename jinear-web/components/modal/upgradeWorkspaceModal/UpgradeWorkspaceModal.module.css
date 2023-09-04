@@ -14,7 +14,7 @@
   font-weight: 800;
   font-size: 1rem;
   color: black;
-  background-color: var(--c-HIGHLIGHT_YELLOW);
+  background-color: var(--c-JINEAR_YELLOW);
   border-radius: 0.25rem;
   padding: 0.0125rem 1rem;
   margin-top: 0.35rem;
@@ -23,22 +23,23 @@
 
 .proFeaturesLabel {
   text-align: justify;
-  font-weight: 500;
+  /* font-weight: 500; */
   font-size: 0.75rem;
   line-height: 1.5rem;
 }
 
 .autoRenewsText {
   font-size: 0.6rem;
-  opacity: 0.7;
+  opacity: 0.9;
   text-align: center;
 }
 
 .appliesOnlyWorkspaceText {
   font-size: 0.6rem;
-  opacity: 0.7;
+  opacity: 0.9;
   text-align: left;
-  margin-top: 0.25rem;
+  margin-top: 0.75rem;
+  /* font-style: italic; */
 }
 
 .successContainer {
