@@ -151,3 +151,7 @@ export interface TaskBoardPickerModalState extends ModalState {
   initialSelectionOnMultiple?: TaskBoardDto[];
   onPick?: (pickedList: TaskBoardDto[]) => void;
 }
+
+export interface UpgradeWorkspacePlanModalState extends ModalState {
+  workspaceId?: string;
+}

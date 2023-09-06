@@ -24,6 +24,7 @@ import ModalState, {
   TeamPickerModalState,
   TeamWorkflowStatusPickerModalState,
   TopicPickerModalState,
+  UpgradeWorkspacePlanModalState,
   WorkspaceMemberInviteModalState,
   WorkspacePickerModalState,
 } from "model/app/store/modal/modalState";
@@ -124,6 +125,9 @@ const initialState = {
   taskBoardPickerModal: {
     visible: false,
   },
+  upgradeWorkspacePlanModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -154,6 +158,7 @@ const initialState = {
   teamMemberPickerModal: null | TeamMemberPickerModalState;
   teamWorkflowStatusPickerModal: null | TeamWorkflowStatusPickerModalState;
   taskBoardPickerModal: null | TaskBoardPickerModalState;
+  upgradeWorkspacePlanModal: null | UpgradeWorkspacePlanModalState;
 };
 
 const slice = createSlice({
@@ -369,6 +374,13 @@ const slice = createSlice({
       state.taskBoardPickerModal = initialState.taskBoardPickerModal;
     },
 
+    popUpgradeWorkspacePlanModal: (state, action: PayloadAction<UpgradeWorkspacePlanModalState>) => {
+      state.upgradeWorkspacePlanModal = { ...action.payload, visible: true };
+    },
+    closeUpgradeWorkspacePlanModal: (state, action: PayloadAction<void>) => {
+      state.upgradeWorkspacePlanModal = initialState.upgradeWorkspacePlanModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -443,6 +455,8 @@ export const {
   closeTeamWorkflowStatusPickerModal,
   popBoardPickerModal,
   closeBoardPickerModal,
+  popUpgradeWorkspacePlanModal,
+  closeUpgradeWorkspacePlanModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -601,3 +615,7 @@ export const selectTaskBoardPickerModalMultiple = (state: RootState) => state.mo
 export const selectTaskBoardPickerModalInitialSelectionOnMultiple = (state: RootState) =>
   state.modal.taskBoardPickerModal?.initialSelectionOnMultiple;
 export const selectTaskBoardPickerModalOnPick = (state: RootState) => state.modal.taskBoardPickerModal?.onPick;
+
+export const selectUpgradeWorkspacePlanModalVisible = (state: RootState) => state.modal.upgradeWorkspacePlanModal?.visible;
+export const selectUpgradeWorkspacePlanModalWorkspaceId = (state: RootState) =>
+  state.modal.upgradeWorkspacePlanModal?.workspaceId;

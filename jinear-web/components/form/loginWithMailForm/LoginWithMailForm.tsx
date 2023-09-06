@@ -34,7 +34,7 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
   const router = useRouter();
   const dispatch = useDispatch();
   const [loginWithpassword, { isSuccess, isError, isLoading }] = useLoginWithPasswordMutation();
-  const { register, setValue, handleSubmit } = useForm<ILoginWithMailForm>();
+  const { register, setValue, handleSubmit, setFocus } = useForm<ILoginWithMailForm>();
 
   useEffect(() => {
     if (isSuccess && !isError) {
@@ -47,6 +47,7 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
   useEffect(() => {
     if (initialEmail) {
       setValue("email", initialEmail);
+      setFocus("password");
     }
   }, [initialEmail]);
 

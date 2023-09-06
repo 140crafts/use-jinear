@@ -1,19 +1,32 @@
 .container {
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.75rem;
-  // width: calc(var(--side-menu-main-menu-width) - 3ch);
 }
 
 .title {
   cursor: default;
   font-weight: 500;
   font-size: 1rem;
-  // flex: 1;
+  // padding: 0.25rem 0.2rem;
+  padding: 0.1rem 0.5rem;
+  margin-left: -0.5rem;
+  flex: 1;
+  text-align: left;
+  justify-content: flex-start;
 }
 
 .button {
   padding-right: 0.5ch;
   padding-left: 0.5ch;
+}
+
+.upgradeButton {
+  align-self: center;
+  color: var(--c-gradient-gold-0) !important;
+  background: unset !important;
+}
+.upgradeButton:hover {
+  background-color: var(--c-primary-shade-1) !important;
 }

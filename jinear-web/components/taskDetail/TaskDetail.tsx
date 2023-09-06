@@ -1,5 +1,6 @@
 import { useToggle } from "@/hooks/useToggle";
 import { TaskDto } from "@/model/be/jinear-core";
+import { hasWorkspaceFilePermissions } from "@/utils/permissionHelper";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import LastTaskActivitiesList from "../lastActivitiesScreen/lastTaskActivitiesList/LastTaskActivitiesList";
@@ -35,7 +36,7 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
         <Line />
         <TaskActionBar className={styles.taskInfo} />
         <TaskChecklistContainer />
-        {task.workspace?.tier == "PLUS" && (
+        {hasWorkspaceFilePermissions(task.workspace) && (
           <>
             <Line />
             <TaskMediaList />

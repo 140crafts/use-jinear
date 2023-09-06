@@ -2418,4 +2418,88 @@ export default {
     en: "Not supported",
     tr: "Desteklenmiyor",
   },
+  workspaceInfoTabWorkspaceType_Personal: {
+    en: "Personal Workspace",
+    tr: "Kişisel Çalışma Alanı",
+  },
+  workspaceInfoTabWorkspaceType_Personal_detail: {
+    en: "Your personal use only. You cannot invite others.",
+    tr: "Size özel, diğer kullanıcılar davet edilemez.",
+  },
+  workspaceInfoTabWorkspaceType_Collaborative_BASIC: {
+    en: "Basic Collaborative Workspace",
+    tr: "Basit Ortak Çalışma Alanı",
+  },
+  workspaceInfoTabWorkspaceType_Collaborative_BASIC_detail: {
+    en: "Work with up to 3 people. File sharing not allowed.",
+    tr: "3 Kişiye kadar birlikte çalışılabilir. Dosya paylaşımı yapılamaz.",
+  },
+  workspaceInfoTabWorkspaceType_Collaborative_PRO: {
+    en: "Professional Collaborative Workspace",
+    tr: "Profesyonel Ortak Çalışma Alanı",
+  },
+  workspaceInfoTabWorkspaceType_Collaborative_PRO_detail: {
+    en: "Invite as many people you want. Share your files.",
+    tr: "İstediğiniz kadar kişiyi çalışma alanına ekleyin. Dosya paylaşımı yapılabilir.",
+  },
+  workspaceTierUpgradeButton: {
+    en: "Upgrade Your Plan",
+    tr: "Planı Yükselt",
+  },
+  upgradeWorkspaceTierModalTitle: {
+    en: "Upgrade Your Plan",
+    tr: "Planı Yükselt",
+  },
+  upgradeWorkspaceTierModalText: {
+    en: "Upgrade workspace to add <span class='workspace-tier-upgrade-highlight'>unlimited users</span> to to your workspace and <span class='workspace-tier-upgrade-highlight'>share files</span> with <span class='workspace-tier-upgrade-highlight'>unlimited file storage</span>.  First-in-line <span class='workspace-tier-upgrade-highlight'>7/24 priority support</span>. <span class='workspace-tier-upgrade-highlight'>1:1 onboarding</span>  tour with our team.",
+    tr: "Çalışma alanı planını yükseltin, çalışma alanına <span class='workspace-tier-upgrade-highlight'>sınırsız sayıda kullanıcı</span> ekleyin, <span class='workspace-tier-upgrade-highlight'>sınırsız sayıda dosya paylaşımı</span> yapın. <span class='workspace-tier-upgrade-highlight'>7/24 öncelikli destek</span> alın. Onboarding sürecinizi <span class='workspace-tier-upgrade-highlight'>1:1 destek</span> ile yönetelim.",
+  },
+  upgradeWorkspaceTierModalAppliesToWorkspaceText: {
+    en: "This applies only the workspace above. Features specified will be applied to this workspace and teams under it.",
+    tr: "Bu işlem yukarıdaki çalışma alanı için geçerlidir. Çalışma alanı ve altındaki takımlarda belirtilen özellikler aktif olacaktır.",
+  },
+  upgradeWorkspaceTierModalAutoRenewsText: {
+    en: "Auto renews. Cancel anytime.",
+    tr: "Otomatik yenilenir. İstediğiniz zaman iptal edebilirsiniz.",
+  },
+  upgradeWorkspaceTierButtonMonthly: {
+    en: "${price} per month",
+    tr: "Aylık ${price}",
+  },
+  upgradeWorkspaceTierButtonYearly: {
+    en: "${price} per year (2 Month Free)",
+    tr: "Yıllık ${price} (2 Ay ücretsiz)",
+  },
+  upgradeWorkspaceTierSuccess: {
+    en: "We successfully received your purchase. Your workspace will be updated in a moment.",
+    tr: "Satın alma başarılı. Çalışma alanın kısa süre içerisinde güncellenecek.",
+  },
+  subscriptionReceiptUrlButtonLabel: {
+    en: "Receipt",
+    tr: "Fatura",
+  },
+  subscriptionNextBillingDate: {
+    en: "Next billing date is ${date}",
+    tr: "Bir sonraki fatura tarihi ${date}",
+  },
+  subscriptionUpdate: {
+    en: "Update payment method",
+    tr: "Ödeme yöntemini değiştir",
+  },
+  subscriptionCancel: {
+    en: "Cancel subscription",
+    tr: "Aboneliği iptal et",
+  },
+  billingTitle: {
+    en: "Billing",
+    tr: "Faturalandırma",
+  },
+  subscriptionCancelsAfter: {
+    en: "Subscription canceled. You can use your plan until ${date}",
+    tr: "Abonelik sonlandırıldı. Planınızı ${date} tarihine kadar kullanabilirsiniz.",
+  },
+  subscriptionPastPayments: {
+    en: "Payments",
+    tr: "Geçmiş Ödemeler",
+  },
 };

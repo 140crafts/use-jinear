@@ -31,6 +31,7 @@ import TeamMemberPickerModal from "@/components/modal/teamMemberPickerModal/Team
 import TeamPickerModal from "@/components/modal/teamPickerModal/TeamPickerModal";
 import TeamWorkflowStatusModal from "@/components/modal/teamWorkflowStatusModal/TeamWorkflowStatusModal";
 import TopicPickerModal from "@/components/modal/topicPickerModal/TopicPickerModal";
+import UpgradeWorkspaceModal from "@/components/modal/upgradeWorkspaceModal/UpgradeWorkspaceModal";
 import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
 import WorkspacePickerModal from "@/components/modal/workspacePickerModal/WorkspacePickerModal";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
@@ -85,6 +86,7 @@ const globalModals: any = (
     <TeamWorkflowStatusModal />
     <BoardPickerModal />
     <NewTopicModal />
+    <UpgradeWorkspaceModal />
     <LoginWith2FaMailModal />
     <DatePickerModal />
     <BasicTextInputModal />

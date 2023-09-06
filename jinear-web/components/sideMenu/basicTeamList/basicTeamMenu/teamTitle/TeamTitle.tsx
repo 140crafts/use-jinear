@@ -1,5 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
 import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -16,7 +17,7 @@ const TeamTitle: React.FC<TeamTitleProps> = ({ workspace, team }) => {
 
   return (
     <div className={styles.container}>
-      <b className={cn(styles.teamName, "line-clamp")}>{team.name}</b>
+      <b className={cn(styles.teamName, "line-clamp")}>{shortenStringIfMoreThanMaxLength({ text: team.name, maxLength: 29 })}</b>
       <Button
         variant={ButtonVariants.hoverFilled2}
         href={`/${workspace?.username}/${team?.username}/members`}

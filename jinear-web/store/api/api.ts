@@ -55,6 +55,7 @@ export const tagTypes = [
   "task-board-filter",
   "task-media-list",
   "task-media-list-from-team",
+  "payments-info-workspace-subscription",
 ];
 
 export const api = createApi({

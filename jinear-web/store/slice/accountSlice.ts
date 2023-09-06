@@ -1,5 +1,5 @@
 import { accountApi } from "@/api/accountApi";
-import { AccountDto, AccountsWorkspacePerspectiveDto } from "@/model/be/jinear-core";
+import { AccountDto, AccountsWorkspacePerspectiveDto, WorkspaceDto } from "@/model/be/jinear-core";
 import Logger from "@/utils/logger";
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../store";
@@ -97,6 +97,10 @@ export const selectCurrentAccountsPreferredTeamId = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.team?.teamId;
 };
 
+export const selectCurrentAccountsWorkspace = (workspaceId?: string) => (state: RootState) => {
+  return state.account.current?.workspaces.find((workspace) => workspace.workspaceId == workspaceId);
+};
+
 //
 
 export const selectCurrentAccountsWorkspaceRoleIsAdminOrOwner = (
@@ -105,6 +109,13 @@ export const selectCurrentAccountsWorkspaceRoleIsAdminOrOwner = (
   const role = accountsWorkspacePerspectiveDto?.role;
   return role == "ADMIN" || role == "OWNER";
 };
+
+export const selectCurrentAccountsWorkspaceRoleIsAdminOrOwnerWithPlainWorkspaceDto =
+  (workspace: WorkspaceDto) => (state: RootState) => {
+    const accountsWorkspacePerspectiveDto = state.account.current?.workspaces.find((w) => w.workspaceId == workspace.workspaceId);
+    const role = accountsWorkspacePerspectiveDto?.role;
+    return role == "ADMIN" || role == "OWNER";
+  };
 
 export const selectWorkspaceFromWorkspaceUsername = (workspaceUsername: string) => (state: RootState) =>
   state.account.current?.workspaces.find((workspace) => workspace.username == workspaceUsername);

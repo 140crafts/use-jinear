@@ -1,0 +1,72 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+}
+
+.profilePicContainer {
+  min-width: 56px;
+  width: 56px;
+  height: 56px;
+  border-radius: 19.2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.profilePicContainer:hover {
+  background-color: var(--c-primary);
+}
+
+.usernameLabelContainer {
+  max-width: 0;
+  transition: var(--fade);
+}
+
+.usernameLabel {
+  display: none;
+}
+
+.profilePicContainer:hover .usernameLabelContainer {
+  max-width: 250px;
+}
+
+.profilePicContainer:hover .usernameLabel {
+  display: flex;
+}
+
+.profilePicContainer-without-profile-pic {
+  background-color: var(--c-primary-shade-1);
+}
+
+.profilePic {
+  width: 50px;
+  height: 50px;
+  border-radius: 19.2px;
+  position: unset !important;
+}
+
+.profilePicImg {
+  border-radius: 19.2px;
+  border: none;
+}
+
+.firstLetter {
+  text-align: center;
+  color: var(--c-secondary-shade-0);
+  font-weight: 700;
+  font-size: 1.25rem;
+}

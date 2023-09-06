@@ -433,3 +433,12 @@ pre {
   justify-content: center;
   width: 100%;
 }
+
+.workspace-tier-upgrade-highlight {
+  font-weight: 600;
+  padding: 0.05rem 0.25rem;
+  border-radius: 0.25rem;
+  border-color: var(--c-primary-shade-1);
+  border-width: 1px;
+  border-style: solid;
+}
