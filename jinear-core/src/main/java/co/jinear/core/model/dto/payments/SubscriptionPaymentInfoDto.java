@@ -12,7 +12,10 @@ import java.time.ZonedDateTime;
 @ToString(callSuper = true)
 public class SubscriptionPaymentInfoDto extends BaseDto {
     private String relatedEntityId;
+    private String balanceCurrency;
     private String balanceGross;
+    private String saleGross;
+    private String unitPrice;
     private String currency;
     private String receiptUrl;
     private ZonedDateTime parsedEventTime;

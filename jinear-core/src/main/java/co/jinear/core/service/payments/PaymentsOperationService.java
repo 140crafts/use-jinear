@@ -45,8 +45,8 @@ public class PaymentsOperationService {
     }
 
     private PurchaseListingDto retrievePurchasesAfter(ZonedDateTime lastSyncDate) {
-        log.info("Retrieving purchase updates. lastSyncDate: {}", lastSyncDate);
         String formatted = lastSyncDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        log.info("Retrieving purchase updates. lastSyncDate: {}, formatted: {}", lastSyncDate, formatted);
         return paymentProcessorClient.retrievePurchasesAfter(ProductType.JINEAR, formatted).getPurchaseListingDto();
     }
 
