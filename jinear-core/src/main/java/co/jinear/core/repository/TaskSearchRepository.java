@@ -72,6 +72,7 @@ public class TaskSearchRepository {
 
     private List<Predicate> retrieveFilterPredicateList(TaskSearchFilterVo taskSearchFilterVo, CriteriaBuilder criteriaBuilder, Root<Task> taskRoot) {
         List<Predicate> predicateList = Lists.newArrayList();
+        taskSearchCriteriaBuilder.addPassiveIdIsNull(criteriaBuilder, taskRoot, predicateList);
         taskSearchCriteriaBuilder.addWorkspaceId(taskSearchFilterVo.getWorkspaceId(), criteriaBuilder, taskRoot, predicateList);
         taskSearchCriteriaBuilder.addTeamIdList(taskSearchFilterVo.getTeamIdList(), criteriaBuilder, taskRoot, predicateList);
         taskSearchCriteriaBuilder.addTopicIdList(taskSearchFilterVo.getTopicIds(), criteriaBuilder, taskRoot, predicateList);

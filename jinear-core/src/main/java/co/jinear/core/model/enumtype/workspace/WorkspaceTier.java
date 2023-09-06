@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum WorkspaceTier {
 
     BASIC(0),
-    PLUS(1);
+    PRO(1);
 
     private final int value;
 }

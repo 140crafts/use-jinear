@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-07-29 11:28:31.
+// Generated using typescript-generator version 3.0.1157 on 2023-09-06 08:36:01.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -100,6 +100,7 @@ export interface NotificationMessageExternalDataDto {
     taskId: string;
     taskTag: string;
     notificationType: NotificationType;
+    senderSessionId: string;
 }
 
 export interface NotificationTargetDto extends BaseDto {
@@ -108,6 +109,44 @@ export interface NotificationTargetDto extends BaseDto {
     sessionInfoId: string;
     targetType: NotificationTargetType;
     providerType: NotificationProviderType;
+}
+
+export interface SubscriptionDto extends BaseDto {
+    subscriptionId: string;
+    paymentsServiceSubscriptionId: string;
+    subscriptionStatus: SubscriptionStatus;
+    workspaceId: string;
+    accountId: string;
+}
+
+export interface SubscriptionEditDto extends BaseDto {
+    cancelUrl: string;
+    updateUrl: string;
+}
+
+export interface SubscriptionExternalDto extends BaseDto {
+    subscriptionId: string;
+    paymentsServiceSubscriptionId: string;
+    subscriptionStatus: SubscriptionStatus;
+    passthroughDetails: PassthroughDetailDto[];
+}
+
+export interface SubscriptionInfoDto extends BaseDto {
+    cancelsAfter: Date;
+    retrieveSubscriptionEditInfo: SubscriptionEditDto;
+    subscriptionPaymentInfoList: SubscriptionPaymentInfoDto[];
+}
+
+export interface SubscriptionPaymentInfoDto extends BaseDto {
+    relatedEntityId: string;
+    balanceCurrency: string;
+    balanceGross: string;
+    saleGross: string;
+    unitPrice: string;
+    currency: string;
+    receiptUrl: string;
+    parsedEventTime: Date;
+    parsedNextBillDate: Date;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -763,6 +802,10 @@ export interface RetrieveUnreadNotificationEventCountResponse extends BaseRespon
     unreadNotificationCount: number;
 }
 
+export interface RetrieveSubscriptionInfoResponse extends BaseResponse {
+    data: SubscriptionInfoDto;
+}
+
 export interface ReminderJobResponse extends BaseResponse {
     data: ReminderJobDto;
 }
@@ -883,6 +926,11 @@ export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
     data: PageDto<WorkspaceMemberDto>;
 }
 
+export interface PassthroughDetailDto {
+    passthroughType: PassthroughType;
+    detailValue: string;
+}
+
 export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
@@ -959,6 +1007,10 @@ export type WorkspaceInvitationStatusType = "WAITING_FOR_ANSWER" | "ACCEPTED" | 
 
 export type WorkspaceJoinType = "NEVER" | "PUBLIC" | "WITH_REQUEST" | "WITH_PASSWORD";
 
-export type WorkspaceTier = "BASIC" | "PLUS";
+export type WorkspaceTier = "BASIC" | "PRO";
 
 export type WorkspaceVisibilityType = "VISIBLE" | "HIDDEN_LISTED" | "HIDDEN_UNLISTED";
+
+export type SubscriptionStatus = "ACTIVE" | "TRIALING" | "PAST_DUE" | "PAUSED" | "DELETED";
+
+export type PassthroughType = "ACCOUNT_ID" | "WORKSPACE_ID" | "EMAIL" | "EMAIL_CONFIRMED";

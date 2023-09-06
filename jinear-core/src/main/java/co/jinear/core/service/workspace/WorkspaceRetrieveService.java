@@ -4,6 +4,7 @@ import co.jinear.core.converter.workspace.WorkspaceDtoConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
+import co.jinear.core.model.entity.workspace.Workspace;
 import co.jinear.core.repository.WorkspaceRepository;
 import co.jinear.core.service.workspace.member.WorkspaceMemberListingService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,12 @@ public class WorkspaceRetrieveService {
     private final WorkspaceRepository workspaceRepository;
     private final WorkspaceMemberListingService workspaceMemberListingService;
     private final WorkspaceDtoConverter workspaceDtoConverter;
+
+    public Workspace retrieveWorkspaceEntityWithId(String workspaceId) {
+        log.info("Retrieving workspace entity with id: {}", workspaceId);
+        return workspaceRepository.findByWorkspaceIdAndPassiveIdIsNull(workspaceId)
+                .orElseThrow(NotFoundException::new);
+    }
 
     public WorkspaceDto retrieveWorkspaceWithId(String workspaceId) {
         log.info("Retrieving workspace with id: {}", workspaceId);

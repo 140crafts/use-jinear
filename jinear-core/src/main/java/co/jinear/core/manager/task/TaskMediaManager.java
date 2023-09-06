@@ -66,7 +66,7 @@ public class TaskMediaManager {
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
-        workspaceTierValidator.validateWorkspaceTier(taskDto.getWorkspaceId(), WorkspaceTier.PLUS);
+        workspaceTierValidator.validateWorkspaceTier(taskDto.getWorkspaceId(), WorkspaceTier.PRO);
         workspaceMediaLimitValidator.validateWorkspaceStorageLimitNotExceeded(taskDto.getWorkspaceId(), file.getSize());
         log.info("Upload task media has started. currentAccountId: {}", currentAccountId);
         AccessibleMediaDto accessibleMediaDto = taskMediaOperationService.upload(currentAccountId, taskDto, file);
