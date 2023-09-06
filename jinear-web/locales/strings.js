@@ -2498,4 +2498,8 @@ export default {
     en: "Subscription canceled. You can use your plan until ${date}",
     tr: "Abonelik sonlandırıldı. Planınızı ${date} tarihine kadar kullanabilirsiniz.",
   },
+  subscriptionPastPayments: {
+    en: "Payments",
+    tr: "Geçmiş Ödemeler",
+  },
 };

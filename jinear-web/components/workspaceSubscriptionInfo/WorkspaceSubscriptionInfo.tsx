@@ -2,7 +2,7 @@ import { useRetrieveSubscriptionInfoQuery } from "@/store/api/paymentInfoApi";
 import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { useMemo } from "react";
-import Button from "../button";
+import Button, { ButtonHeight, ButtonVariants } from "../button";
 import CircularLoading from "../circularLoading/CircularLoading";
 import styles from "./WorkspaceSubscriptionInfo.module.css";
 import PaymentInfoDetail from "./paymentInfoDetail/PaymentInfoDetail";
@@ -57,19 +57,36 @@ const WorkspaceSubscriptionInfo: React.FC<WorkspaceSubscriptionInfoProps> = ({ w
                 <div className={styles.nextBillingDate}>
                   {t("subscriptionNextBillingDate").replace("${date}", nextBillingDate)}
                 </div>
+                <div className="spacer-h-2" />
                 <div className={styles.subscriptionActionButtonsContainer}>
-                  <Button href={retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.updateUrl} target="_blank">
-                    {t("subscriptionUpdate")}
-                  </Button>
-                  <Button href={retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.cancelUrl} target="_blank">
-                    {t("subscriptionCancel")}
-                  </Button>
+                  {retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.updateUrl && (
+                    <Button
+                      variant={ButtonVariants.filled}
+                      heightVariant={ButtonHeight.short}
+                      href={retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.updateUrl}
+                      target="_blank"
+                    >
+                      {t("subscriptionUpdate")}
+                    </Button>
+                  )}
+                  {retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.cancelUrl && (
+                    <Button
+                      variant={ButtonVariants.filled}
+                      heightVariant={ButtonHeight.short}
+                      href={retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.cancelUrl}
+                      target="_blank"
+                    >
+                      {t("subscriptionCancel")}
+                    </Button>
+                  )}
                 </div>
+                <div className="spacer-h-2" />
               </>
             )}
           </div>
 
           <div className={styles.receiptList}>
+            <h3>{t("subscriptionPastPayments")}</h3>
             {retrieveSubscriptionInfoResponse?.data?.subscriptionPaymentInfoList?.map((subscriptionPaymentInfo) => (
               <PaymentInfoDetail
                 key={`${subscriptionPaymentInfo.relatedEntityId}`}

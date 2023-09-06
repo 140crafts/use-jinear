@@ -62,13 +62,15 @@ const WorkspaceInfoTab: React.FC<WorkspaceInfoTabProps> = ({ workspace }) => {
         />
 
         <div className={styles.infoContainer}>
-          <h2 className={cn(styles.title, "line-clamp-2")}>{workspace?.title}</h2>
+          <div>
+            <h2 className={cn(styles.title, "line-clamp-2")}>{workspace?.title}</h2>
 
-          <h3>
-            <Link target="_blank" href={`${HOST}/${workspace?.username}`}>
-              {`${HOST?.replace("https://", "")?.replace("http://", "")}/${workspace?.username}`}
-            </Link>
-          </h3>
+            <h3>
+              <Link target="_blank" href={`${HOST}/${workspace?.username}`}>
+                {`${HOST?.replace("https://", "")?.replace("http://", "")}/${workspace?.username}`}
+              </Link>
+            </h3>
+          </div>
 
           <div className={styles.workspaceTierContainer}>
             <div className={styles.workspaceTierLabelContainer}>

@@ -39,6 +39,7 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
   const visible = useTypedSelector(selectUpgradeWorkspacePlanModalVisible);
   const workspaceId = useTypedSelector(selectUpgradeWorkspacePlanModalWorkspaceId);
   const workspace = useTypedSelector(selectCurrentAccountsWorkspace(workspaceId));
+  const isInPaidTier = isWorkspaceInPaidTier(workspace);
   const account = useTypedSelector(selectCurrentAccount);
   const [refreshPayments, { isLoading, isSuccess }] = useRefreshPaymentsMutation();
 
@@ -53,7 +54,6 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
   }, [visible, workspaceId, refreshPayments]);
 
   useEffect(() => {
-    const isInPaidTier = isWorkspaceInPaidTier(workspace);
     logger.log({ isInPaidTier, workspaceId, workspace, isSuccess });
     if (workspace && isSuccess && !isLoading && isInPaidTier != null) {
       if (isInPaidTier) {
@@ -65,7 +65,7 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
         }, 3000);
       }
     }
-  }, [workspace, workspaceId, isSuccess]);
+  }, [workspace, isInPaidTier, workspaceId, isSuccess]);
 
   const close = () => {
     dispatch(closeUpgradeWorkspacePlanModal());
@@ -96,7 +96,7 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
     >
       {isLoading ? (
         <CircularLoading />
-      ) : isSuccess ? (
+      ) : isSuccess && isInPaidTier ? (
         <div className={styles.successContainer}>
           <IoCheckmarkCircle size={48} className={styles.successIcon} />
           <h2>{t("upgradeWorkspaceTierSuccess")}</h2>

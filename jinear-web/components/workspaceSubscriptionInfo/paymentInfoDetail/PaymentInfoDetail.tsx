@@ -26,7 +26,7 @@ const PaymentInfoDetail: React.FC<PaymentInfoDetailProps> = ({ subscriptionPayme
     <div className={styles.container}>
       <div className={styles.date}>{formattedDate}</div>
       <div className="spacer-w-2" />
-      <div className={styles.priceInfo}>{`${subscriptionPaymentInfo.balanceGross} ${subscriptionPaymentInfo.currency}`}</div>
+      <div className={styles.priceInfo}>{`${subscriptionPaymentInfo.unitPrice} ${subscriptionPaymentInfo.currency}`}</div>
       <div className="flex-1" />
       <Button href={subscriptionPaymentInfo.receiptUrl} target="_blank">
         {t("subscriptionReceiptUrlButtonLabel")}

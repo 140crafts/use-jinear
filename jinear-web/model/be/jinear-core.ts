@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-09-03 12:24:11.
+// Generated using typescript-generator version 3.0.1157 on 2023-09-04 17:51:33.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  first: boolean;
   last: boolean;
+  first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -139,7 +139,10 @@ export interface SubscriptionInfoDto extends BaseDto {
 
 export interface SubscriptionPaymentInfoDto extends BaseDto {
   relatedEntityId: string;
+  balanceCurrency: string;
   balanceGross: string;
+  saleGross: string;
+  unitPrice: string;
   currency: string;
   receiptUrl: string;
   parsedEventTime: Date;
