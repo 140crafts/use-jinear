@@ -15,6 +15,7 @@ const PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS = [
   "/engage/[token]/forgot-password",
   "/engage/[token]/workspace-invitation",
   "/pricing",
+  "/terms",
   "/debug",
 ];
 

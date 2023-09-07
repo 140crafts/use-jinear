@@ -2270,6 +2270,10 @@ export default {
     en: "Pricing",
     tr: "Fiyatlandırma",
   },
+  homescreenActionBarTerms: {
+    en: "Terms & Conditions",
+    tr: "Şartlar ve Koşullar",
+  },
   homescreenHeroTitleLine1: {
     en: "Focus on your job",
     tr: "İşinize odaklanın",
@@ -2501,5 +2505,9 @@ export default {
   subscriptionPastPayments: {
     en: "Payments",
     tr: "Geçmiş Ödemeler",
+  },
+  termsPageGoBack: {
+    en: "Return to home",
+    tr: "Anasayfaya dön",
   },
 };
