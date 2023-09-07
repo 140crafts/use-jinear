@@ -175,7 +175,7 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
                     </a>{" "}
                     to your Account.
                   </li>
-                  <li>Navigate to the workspace you want to cancel it's subscription.</li>
+                  <li>Navigate to the workspace you want to cancel it&apos;s subscription.</li>
                   <li>Go to workspace settings by clicking the workspace name from the side menu</li>
                   <li>There you can cancel or update payment information</li>
                 </ul>
