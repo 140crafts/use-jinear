@@ -52,6 +52,9 @@ export default function Home() {
           <Button href="/pricing">
             <b>{t("homescreenActionBarPricing")}</b>
           </Button>
+          <Button href="/terms">
+            <b>{t("homescreenActionBarTerms")}</b>
+          </Button>
           <ThemeToggle />
         </div>
       </div>

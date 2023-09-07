@@ -100,12 +100,12 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({ className }
             id={"register-with-email-agree-terms"}
             type={"checkbox"}
             required
-            {...register("termsAgree", { required: "ASD" })}
+            {...register("termsAgree")}
             aria-invalid={errors.termsAgree ? "true" : "false"}
           />
           <div>
             {t("registerWithEmailAgreeTerms")}
-            <Link target="_blank" href={"/legal/terms"}>
+            <Link target="_blank" href={"/terms"}>
               {` ${t("terms")}`}
             </Link>
           </div>
@@ -123,7 +123,7 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({ className }
 
         <div className={styles.privacyPolicyContainer}>
           {t("registerPrivacyPolicyText")}
-          <Link className={styles.forgotPasswordLink} href={"/legal/privacy"} target="_blank">
+          <Link className={styles.forgotPasswordLink} href={"/terms"} target="_blank">
             {` ${t("privacyPolicy")}`}
           </Link>
         </div>
