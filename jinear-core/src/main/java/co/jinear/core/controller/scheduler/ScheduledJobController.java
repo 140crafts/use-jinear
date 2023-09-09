@@ -29,7 +29,7 @@ public class ScheduledJobController {
 
     @GetMapping("/sync-payments")
     @ResponseStatus(HttpStatus.OK)
-//    @PreAuthorize("hasRole('ROLE_SERVICE')")
+    @PreAuthorize("hasRole('ROLE_SERVICE')")
     public BaseResponse retrieveAndApplyLatestPayments(@RequestHeader("User-Agent") String userAgent) {
         log.info("Retrieve and apply latest payments has started. userAgent: {}", userAgent);
         return paymentsManager.retrieveAndApplyLatestPayments();
