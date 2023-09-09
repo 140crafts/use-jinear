@@ -35,7 +35,6 @@ public class FirebaseNotificationDeliveryStrategy implements NotificationDeliver
             log.info("Firebase response {}", response);
         } catch (FirebaseMessagingException e) {
             log.error("Firebase send message has failed.");
-            throw new RuntimeException(e);
         }
     }
 
