@@ -5,6 +5,7 @@ import account from "@/slice/accountSlice";
 import displayPreference from "@/slice/displayPreferenceSlice";
 import firebase from "@/slice/firebaseSlice";
 import modal from "@/slice/modalSlice";
+import sseSlice from "@/slice/sseSlice";
 import taskAdditionalData from "@/slice/taskAdditionalDataSlice";
 import { api } from "./api/api";
 import { rtkQueryErrorLogger } from "./api/errorMiddleware";
@@ -18,6 +19,7 @@ export const createStore = (options?: ConfigureStoreOptions["preloadedState"] | 
       displayPreference,
       taskAdditionalData,
       firebase,
+      sseSlice,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

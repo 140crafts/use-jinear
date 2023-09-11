@@ -58,6 +58,10 @@ export const tagTypes = [
   "payments-info-workspace-subscription",
 ];
 
+export const tagTypesToInvalidateOnNewBackgroundActivity = () => {
+  return tagTypes.filter((tag) => tag != "Account-Current");
+};
+
 export const api = createApi({
   baseQuery: baseQuery,
   tagTypes,
