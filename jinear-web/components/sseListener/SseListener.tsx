@@ -1,0 +1,112 @@
+import { WorkspaceActivityResponse } from "@/model/be/jinear-core";
+import { api, root, tagTypesToInvalidateOnNewBackgroundActivity } from "@/store/api/api";
+import { useRetrieveActivitiesQuery } from "@/store/api/workspaceActivityApi";
+import { selectCurrentAccountId, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { selectLatestWorkspaceActivity, setLatestWorkspaceActivity } from "@/store/slice/sseSlice";
+import { clearHasUnreadNotificationOnAllTasks } from "@/store/slice/taskAdditionalDataSlice";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
+import Logger from "@/utils/logger";
+import useTranslation from "locales/useTranslation";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
+import ForegroundNotification from "../foregroundNotification/ForegroundNotification";
+
+interface SseListenerProps {}
+
+const logger = Logger("SseListener");
+const SseListener: React.FC<SseListenerProps> = ({}) => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+  const accountId = useTypedSelector(selectCurrentAccountId);
+  const workspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
+  const workspaceId = workspace?.workspaceId;
+  const workspaceUsername = workspace?.username;
+  const [sseWorkspaceActivity, setSseWorkspaceActivity] = useState<EventSource>();
+  const [toastId, setToastId] = useState<string>();
+
+  const latestWorkspaceActivity = useTypedSelector(selectLatestWorkspaceActivity);
+  const { data: retrieveWorkspaceActivitiesResponse } = useRetrieveActivitiesQuery(
+    { workspaceId: workspaceId || "", page: 0 },
+    { skip: workspaceId == null }
+  );
+
+  useEffect(() => {
+    if (sseWorkspaceActivity) {
+      sseWorkspaceActivity.removeEventListener("workspace-activity", onMessage);
+      sseWorkspaceActivity.close();
+      setSseWorkspaceActivity(undefined);
+      dispatch(setLatestWorkspaceActivity(undefined));
+      logger.log("Sse uninitialized.");
+    }
+    if (accountId && workspaceId) {
+      const url = `${root}v1/sse/workspace/activity/${workspaceId}`;
+      const sse = new EventSource(url, { withCredentials: true });
+      sse.addEventListener("workspace-activity", onMessage);
+      setSseWorkspaceActivity(sse);
+      logger.log({ sseInitializedForUrl: url });
+    }
+  }, [accountId, workspaceId]);
+
+  useEffect(() => {
+    if (
+      latestWorkspaceActivity == null ||
+      latestWorkspaceActivity?.workspaceId != workspaceId ||
+      retrieveWorkspaceActivitiesResponse == null
+    ) {
+      return;
+    }
+    const lastRetrievedActivity = retrieveWorkspaceActivitiesResponse.data?.content?.[0];
+    if (latestWorkspaceActivity.workspaceActivityId != lastRetrievedActivity.workspaceActivityId) {
+      logger.log({ on: "Diff", latestWorkspaceActivity, retrieveWorkspaceActivitiesResponse });
+      const title = t("newChangesExistsToastTitle");
+      const body = t("newChangesExistsToastBody");
+      if (!toastId) {
+        const notifToastId = toast(
+          (t) => (
+            <ForegroundNotification
+              title={title}
+              body={body}
+              launchUrl={`/${workspaceUsername}/last-activities`}
+              onClick={invalidateEverything}
+              onClose={resetToastState}
+              closeable={true}
+            />
+          ),
+          {
+            position: window.innerWidth < 768 ? "top-center" : "top-right",
+            duration: 60000000,
+          }
+        );
+        setToastId(notifToastId);
+      }
+    }
+  }, [workspaceId, latestWorkspaceActivity, retrieveWorkspaceActivitiesResponse]);
+
+  const invalidateEverything = () => {
+    dispatch(api.util.invalidateTags(tagTypesToInvalidateOnNewBackgroundActivity()));
+    dispatch(clearHasUnreadNotificationOnAllTasks());
+    setTimeout(() => {
+      toast.dismiss(toastId);
+      setToastId(undefined);
+    }, 2500);
+  };
+
+  const resetToastState = () => {
+    setToastId(undefined);
+  };
+
+  const onMessage = (e: MessageEvent<any>) => {
+    try {
+      const rawData = e.data;
+      const workspaceActivityResponse: WorkspaceActivityResponse = JSON.parse(rawData);
+      const latestActivity = workspaceActivityResponse.data;
+      dispatch(setLatestWorkspaceActivity(latestActivity));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  return null;
+};
+
+export default SseListener;

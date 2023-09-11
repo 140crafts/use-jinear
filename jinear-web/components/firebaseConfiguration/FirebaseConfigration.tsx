@@ -8,6 +8,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { initializeApp } from "firebase/app";
 import { MessagePayload, deleteToken, getMessaging, getToken, onMessage } from "firebase/messaging";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import ForegroundNotification from "../foregroundNotification/ForegroundNotification";
@@ -49,6 +50,7 @@ export const VAPID_PUBLIC_KEY = "BFO8Qjsa5Y1W32XyMCa8owjYxkCziaKzl8M2TzMZuHKbEPm
 
 const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const authState = useTypedSelector(selectAuthState);
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
   const currentSessionId = useTypedSelector(selectCurrentSessionId);
@@ -137,6 +139,12 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
           position: window.innerWidth < 768 ? "top-center" : "top-right",
           duration: 6000,
         });
+        const notification = new Notification(title, { body, icon: "https://jinear.co/icons/notification-icon.png" });
+        if (launchUrl) {
+          notification.addEventListener("click", () => {
+            router.push(launchUrl);
+          });
+        }
       }
 
       const notificationType = payload?.data?.notificationType || "";
@@ -144,7 +152,11 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
       if (notificationType == "TASK_INITIALIZED") {
         dispatch(api.util.invalidateTags(["team-task-list", "team-workflow-task-list", "workspace-task-list"]));
       }
-      if (payload?.data?.taskId && TASK_UPDATE_NOTIFICATIONS.indexOf(notificationType) != -1) {
+      if (
+        currentSessionId != senderSessionInfoId &&
+        payload?.data?.taskId &&
+        TASK_UPDATE_NOTIFICATIONS.indexOf(notificationType) != -1
+      ) {
         dispatch(markHasUnreadNotification({ taskId: payload?.data?.taskId }));
       }
     }

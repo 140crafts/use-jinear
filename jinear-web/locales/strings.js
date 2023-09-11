@@ -2510,4 +2510,20 @@ export default {
     en: "Return to home",
     tr: "Anasayfaya dön",
   },
+  newChangesExistsToastTitle: {
+    en: "New Activities Exists",
+    tr: "Yeni Aktiviteler Bulunuyor",
+  },
+  newChangesExistsToastBody: {
+    en: "Go to activities page to see latest activities on workspace.",
+    tr: "Çalışma alanındaki son aktiviteleri görmek için son aktiviteler ekranına gidin.",
+  },
+  foregroundNotificationDefaultButtonLabel: {
+    en: "Continue",
+    tr: "Devam",
+  },
+  foregroundNotificationDefaultCloseButtonLabel: {
+    en: "Close",
+    tr: "Kapat",
+  },
 };

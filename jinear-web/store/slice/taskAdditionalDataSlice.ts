@@ -24,12 +24,19 @@ const slice = createSlice({
       taskData.hasUpdates = false;
       state.taskDataMap[taskId] = taskData;
     },
-
+    clearHasUnreadNotificationOnAllTasks: (state, action: PayloadAction<void>) => {
+      state.taskDataMap = initialState.taskDataMap;
+    },
     resetTaskAdditionalData: () => initialState,
   },
 });
 
-export const { markHasUnreadNotification, clearHasUnreadNotification, resetTaskAdditionalData } = slice.actions;
+export const {
+  markHasUnreadNotification,
+  clearHasUnreadNotification,
+  clearHasUnreadNotificationOnAllTasks,
+  resetTaskAdditionalData,
+} = slice.actions;
 export default slice.reducer;
 
 export const selectTaskAdditionalData = (taskId: string) => (state: RootState) => state.taskAdditionalData.taskDataMap[taskId];
