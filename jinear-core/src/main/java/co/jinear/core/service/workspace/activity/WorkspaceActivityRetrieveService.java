@@ -3,6 +3,7 @@ package co.jinear.core.service.workspace.activity;
 import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.converter.task.TaskTagConverter;
 import co.jinear.core.converter.workspace.WorkspaceActivityConverter;
+import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.dto.task.ChecklistDto;
 import co.jinear.core.model.dto.task.ChecklistItemDto;
@@ -103,6 +104,13 @@ public class WorkspaceActivityRetrieveService {
     private final WorkspaceRetrieveService workspaceRetrieveService;
     private final TeamRetrieveService teamRetrieveService;
     private final FeProperties feProperties;
+
+    public WorkspaceActivityDto retrieveWorkspaceLatestActivity(String workspaceId, List<String> teamIdList) {
+        log.info("Retrieve workspace latest activity has started. workspaceId: {}, teamIdList: {}", workspaceId, NormalizeHelper.listToString(teamIdList));
+        return workspaceActivityRepository.findFirstByWorkspaceIdAndTeamIdIsInAndPassiveIdIsNullOrderByCreatedDateDesc(workspaceId, teamIdList)
+                .map(workspaceActivityConverter::map)
+                .orElseThrow(NotFoundException::new);
+    }
 
     public Page<WorkspaceActivityDto> retrieveWorkspaceActivities(RetrieveWorkspaceActivityPageVo retrieveWorkspaceActivityPageVo) {
         log.info("Retrieve workspace activities has started. retrieveWorkspaceActivityPageVo: {}", retrieveWorkspaceActivityPageVo);
