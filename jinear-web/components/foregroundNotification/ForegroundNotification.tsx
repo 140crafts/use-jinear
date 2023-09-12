@@ -45,16 +45,18 @@ const ForegroundNotification: React.FC<ForegroundNotificationProps> = ({
         <b>{title}</b>
       </h2>
       <div>{body}</div>
-      {launchUrl && (
-        <Button variant={ButtonVariants.filled} onClick={_onClick}>
-          {buttonLabel ? buttonLabel : t("foregroundNotificationDefaultButtonLabel")}
-        </Button>
-      )}
-      {closeable && (
-        <Button variant={ButtonVariants.contrast} onClick={closeAll}>
-          {t("foregroundNotificationDefaultCloseButtonLabel")}
-        </Button>
-      )}
+      <div className={styles.buttonContainer}>
+        {launchUrl && (
+          <Button variant={ButtonVariants.filled} onClick={_onClick}>
+            {buttonLabel ? buttonLabel : t("foregroundNotificationDefaultButtonLabel")}
+          </Button>
+        )}
+        {closeable && (
+          <Button variant={ButtonVariants.contrast} onClick={closeAll}>
+            {t("foregroundNotificationDefaultCloseButtonLabel")}
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
