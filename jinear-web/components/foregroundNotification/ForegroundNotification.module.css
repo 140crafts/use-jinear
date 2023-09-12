@@ -4,3 +4,8 @@
   gap: 1rem;
   width: 100%;
 }
+.buttonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}

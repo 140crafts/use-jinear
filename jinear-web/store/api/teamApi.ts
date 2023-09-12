@@ -9,7 +9,7 @@ export const teamApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["workplace-team-list"],
+      invalidatesTags: ["workplace-team-list", "workspace-activity-list"],
     }),
     retrieveWorkspaceTeams: build.query<TeamListingResponse, string>({
       query: (workspaceId: string) => `v1/team/from-workspace/${workspaceId}`,

@@ -93,6 +93,7 @@ const SseListener: React.FC<SseListenerProps> = ({}) => {
 
   const resetToastState = () => {
     setToastId(undefined);
+    dispatch(api.util.invalidateTags(["workspace-activity-list"]));
   };
 
   const onMessage = (e: MessageEvent<any>) => {

@@ -37,7 +37,11 @@ export const topicApi = api.injectEndpoints({
         method: "POST",
         body: request,
       }),
-      invalidatesTags: (_result, _err, req) => [{ type: "team-topic-list", id: req.teamId }, "team-topic-search"],
+      invalidatesTags: (_result, _err, req) => [
+        { type: "team-topic-list", id: req.teamId },
+        "team-topic-search",
+        "workspace-activity-list",
+      ],
     }),
     //
     updateTopic: build.mutation<TopicResponse, TopicUpdateRequest>({
@@ -54,7 +58,7 @@ export const topicApi = api.injectEndpoints({
         url: `v1/topic/${topicId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["team-topic-list", "retrieve-topic", "team-topic-search"],
+      invalidatesTags: ["team-topic-list", "retrieve-topic", "team-topic-search", "workspace-activity-list"],
     }),
     //
   }),

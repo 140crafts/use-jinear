@@ -28,7 +28,14 @@ export const workspaceApi = api.injectEndpoints({
       invalidatesTags: (result) =>
         result == null
           ? []
-          : ["Account-Current", "workplace-member-list", "workplace-team-list", "team-member-list", "team-topic-list"],
+          : [
+              "Account-Current",
+              "workplace-member-list",
+              "workplace-team-list",
+              "team-member-list",
+              "team-topic-list",
+              "workspace-activity-list",
+            ],
     }),
   }),
 });
