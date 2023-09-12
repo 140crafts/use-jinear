@@ -41,6 +41,7 @@ public class TopicSearchRepository {
 
     private List<Predicate> retrieveSearchPredicateList(String workspaceId, String teamId, String nameOrTag, CriteriaBuilder criteriaBuilder, Root<Topic> topicRoot) {
         List<Predicate> predicateList = new ArrayList<>();
+        topicSearchCriteriaBuilder.addPassiveIdIsNull(criteriaBuilder, topicRoot, predicateList);
         topicSearchCriteriaBuilder.addWorkspaceId(workspaceId, criteriaBuilder, topicRoot, predicateList);
         topicSearchCriteriaBuilder.addTeamId(teamId, criteriaBuilder, topicRoot, predicateList);
         topicSearchCriteriaBuilder.addNameOrTag(nameOrTag, criteriaBuilder, topicRoot, predicateList);
