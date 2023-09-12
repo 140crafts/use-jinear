@@ -18,6 +18,7 @@ export const taskApi = api.injectEndpoints({
         "team-all-task-list",
         "task-board-entry-listing",
         "task-listing-filter",
+        "workspace-activity-list",
       ],
     }),
     //

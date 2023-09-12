@@ -18,7 +18,7 @@ export const teamMemberApi = api.injectEndpoints({
         url: `v1/team/member/${teamMemberId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["team-member-list"],
+      invalidatesTags: ["team-member-list", "workspace-activity-list"],
     }),
     //
     addTeamMember: build.mutation<BaseResponse, AddTeamMemberRequest>({
@@ -27,7 +27,7 @@ export const teamMemberApi = api.injectEndpoints({
         method: "POST",
         body: req,
       }),
-      invalidatesTags: ["team-member-list"],
+      invalidatesTags: ["team-member-list", "workspace-activity-list"],
     }),
     //
   }),
