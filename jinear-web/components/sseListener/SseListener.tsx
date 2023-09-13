@@ -6,6 +6,7 @@ import { selectLatestWorkspaceActivity, setLatestWorkspaceActivity } from "@/sto
 import { clearHasUnreadNotificationOnAllTasks } from "@/store/slice/taskAdditionalDataSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
+import { isAfter } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -56,7 +57,21 @@ const SseListener: React.FC<SseListenerProps> = ({}) => {
       return;
     }
     const lastRetrievedActivity = retrieveWorkspaceActivitiesResponse.data?.content?.[0];
-    if (latestWorkspaceActivity.workspaceActivityId != lastRetrievedActivity.workspaceActivityId) {
+
+    let lastRetrievedDate = new Date();
+    let latestWorkspaceActivityDate = new Date();
+
+    if (lastRetrievedActivity?.createdDate != null) {
+      lastRetrievedDate = new Date(lastRetrievedActivity?.createdDate);
+    }
+    if (latestWorkspaceActivity?.createdDate != null) {
+      latestWorkspaceActivityDate = new Date(latestWorkspaceActivity?.createdDate);
+    }
+
+    if (
+      latestWorkspaceActivity.workspaceActivityId != lastRetrievedActivity.workspaceActivityId &&
+      isAfter(lastRetrievedDate, latestWorkspaceActivityDate)
+    ) {
       logger.log({ on: "Diff", latestWorkspaceActivity, lastRetrievedActivity });
       const title = t("newChangesExistsToastTitle");
       const body = t("newChangesExistsToastBody");
