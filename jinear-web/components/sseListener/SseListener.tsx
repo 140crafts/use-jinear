@@ -69,6 +69,7 @@ const SseListener: React.FC<SseListenerProps> = ({}) => {
     }
 
     if (
+      lastRetrievedActivity != null &&
       latestWorkspaceActivity.workspaceActivityId != lastRetrievedActivity.workspaceActivityId &&
       isAfter(lastRetrievedDate, latestWorkspaceActivityDate)
     ) {
