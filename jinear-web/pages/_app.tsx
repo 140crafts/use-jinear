@@ -35,6 +35,7 @@ import UpgradeWorkspaceModal from "@/components/modal/upgradeWorkspaceModal/Upgr
 import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
 import WorkspacePickerModal from "@/components/modal/workspacePickerModal/WorkspacePickerModal";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
+import SseListener from "@/components/sseListener/SseListener";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
 import InternalWorkspacePrefChangeListener from "@/components/workspaceAndTeamChangeListener/InternalWorkspacePrefChangeListener";
@@ -138,9 +139,9 @@ function MyApp({ Component, pageProps }: AppProps) {
             <PureClientOnly>
               <FirebaseConfigration />
             </PureClientOnly>
-            {/* <PureClientOnly>
+            <PureClientOnly>
               <SseListener />
-            </PureClientOnly> */}
+            </PureClientOnly>
             <Transition>
               <Component {...pageProps} />
             </Transition>
