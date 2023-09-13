@@ -136,7 +136,9 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({ title, taskBoardId, boa
           href={`/${workspace?.username || ""}/${team?.username || ""}/task-boards/${taskBoardId}`}
           heightVariant={ButtonHeight.short}
         >
-          <b>{title}</b>
+          <h1>
+            <b>{title}</b>
+          </h1>
         </Button>
         {boardState == "OPEN" && (
           <Button heightVariant={ButtonHeight.short} className={styles.editTitleButton} onClick={popTitleChangeModal}>
