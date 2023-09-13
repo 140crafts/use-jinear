@@ -46,7 +46,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({ team, workspace }) => {
         setPage={setPage}
         renderItem={renderItem}
         emptyLabel={t("taskBoardsListEmptyLabel")}
-        listTitle={t("taskBoardsListTitle")}
+        // listTitle={t("taskBoardsListTitle")}
         hidePaginationOnSinglePages={true}
         contentContainerClassName={styles.list}
       />
