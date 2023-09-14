@@ -2526,4 +2526,12 @@ export default {
     en: "Close",
     tr: "Kapat",
   },
+  taskTitleChangeModalTitle: {
+    en: "Update Title",
+    tr: "Başlığı Güncelle",
+  },
+  taskTitleChangeModalInfoText: {
+    en: "Please provide an another title for task.",
+    tr: "Görev için yeni bir başlık girin.",
+  },
 };

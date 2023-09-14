@@ -98,6 +98,13 @@ const SseListener: React.FC<SseListenerProps> = ({}) => {
     }
   }, [workspaceId, latestWorkspaceActivity, retrieveWorkspaceActivitiesResponse, toastId, isRetrieveActivitiesQueryFetching]);
 
+  useEffect(() => {
+    if (isRetrieveActivitiesQueryFetching && toastId) {
+      toast.dismiss(toastId);
+      setToastId(undefined);
+    }
+  }, [isRetrieveActivitiesQueryFetching, toastId]);
+
   const invalidateEverything = () => {
     dispatch(api.util.invalidateTags(tagTypesToInvalidateOnNewBackgroundActivity()));
     dispatch(clearHasUnreadNotificationOnAllTasks());
@@ -108,6 +115,7 @@ const SseListener: React.FC<SseListenerProps> = ({}) => {
   };
 
   const resetToastState = () => {
+    toast.dismiss(toastId);
     setToastId(undefined);
     dispatch(api.util.invalidateTags(["workspace-activity-list"]));
   };
