@@ -23,7 +23,7 @@ interface IWorkspaceMemberInviteForm {
   isGuest: boolean;
 }
 type ASSIGNABLE_WORKSPACE_ROLE_TYPES = "ADMIN" | "MEMBER" | "GUEST";
-const ASSIGNABLE_WORKSPACE_ROLES: ASSIGNABLE_WORKSPACE_ROLE_TYPES[] = ["ADMIN", "MEMBER", "GUEST"];
+const ASSIGNABLE_WORKSPACE_ROLES: ASSIGNABLE_WORKSPACE_ROLE_TYPES[] = ["ADMIN", "MEMBER"]; //, "GUEST"
 
 const WorkspaceMemberInvitationForm: React.FC<WorkspaceMemberInvitationFormProps> = ({ workspaceId, onInviteSuccess }) => {
   const { t } = useTranslation();
