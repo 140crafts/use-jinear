@@ -8,7 +8,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { isAfter } from "date-fns";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import ForegroundNotification from "../foregroundNotification/ForegroundNotification";
 
@@ -23,13 +23,15 @@ const SseListener: React.FC<SseListenerProps> = ({}) => {
   const workspaceId = workspace?.workspaceId;
   const workspaceUsername = workspace?.username;
   const [sseWorkspaceActivity, setSseWorkspaceActivity] = useState<EventSource>();
-  const [toastId, setToastId] = useState<string>();
+  const toastId = useRef<string | null>(null);
+  const isInitial = useRef<boolean>(true);
 
-  const latestWorkspaceActivity = useTypedSelector(selectLatestWorkspaceActivity);
+  const latestWorkspaceActivityFromSSE = useTypedSelector(selectLatestWorkspaceActivity);
   const { data: retrieveWorkspaceActivitiesResponse, isFetching: isRetrieveActivitiesQueryFetching } = useRetrieveActivitiesQuery(
     { workspaceId: workspaceId || "", page: 0 },
     { skip: workspaceId == null }
   );
+  const lastRetrievedActivity = retrieveWorkspaceActivitiesResponse?.data?.content?.[0];
 
   useEffect(() => {
     if (sseWorkspaceActivity) {
@@ -50,33 +52,33 @@ const SseListener: React.FC<SseListenerProps> = ({}) => {
 
   useEffect(() => {
     if (
-      latestWorkspaceActivity == null ||
-      latestWorkspaceActivity?.workspaceId != workspaceId ||
-      retrieveWorkspaceActivitiesResponse == null
+      latestWorkspaceActivityFromSSE == null ||
+      latestWorkspaceActivityFromSSE?.workspaceId != workspaceId ||
+      retrieveWorkspaceActivitiesResponse == null ||
+      lastRetrievedActivity == null ||
+      isRetrieveActivitiesQueryFetching
     ) {
       return;
     }
-    const lastRetrievedActivity = retrieveWorkspaceActivitiesResponse.data?.content?.[0];
-
-    let lastRetrievedDate = new Date();
-    let latestWorkspaceActivityDate = new Date();
-
-    if (lastRetrievedActivity?.createdDate != null) {
-      lastRetrievedDate = new Date(lastRetrievedActivity?.createdDate);
-    }
-    if (latestWorkspaceActivity?.createdDate != null) {
-      latestWorkspaceActivityDate = new Date(latestWorkspaceActivity?.createdDate);
-    }
+    const lastRetrievedDate =
+      lastRetrievedActivity?.createdDate != null ? new Date(lastRetrievedActivity?.createdDate) : new Date();
+    const latestWorkspaceActivityDate =
+      latestWorkspaceActivityFromSSE?.createdDate != null ? new Date(latestWorkspaceActivityFromSSE?.createdDate) : new Date();
 
     if (
-      lastRetrievedActivity != null &&
-      latestWorkspaceActivity.workspaceActivityId != lastRetrievedActivity.workspaceActivityId &&
+      latestWorkspaceActivityFromSSE.workspaceActivityId != lastRetrievedActivity.workspaceActivityId &&
       isAfter(lastRetrievedDate, latestWorkspaceActivityDate)
     ) {
-      logger.log({ on: "Diff", latestWorkspaceActivity, lastRetrievedActivity });
+      logger.log({
+        on: "Diff",
+        latestWorkspaceActivityFromSSE,
+        lastRetrievedActivity,
+        toastId: toastId.current,
+        isInitial: isInitial.current,
+      });
       const title = t("newChangesExistsToastTitle");
       const body = t("newChangesExistsToastBody");
-      if (!toastId && !isRetrieveActivitiesQueryFetching) {
+      if (toastId.current == null || isInitial.current == false) {
         const notifToastId = toast(
           (t) => (
             <ForegroundNotification
@@ -93,15 +95,16 @@ const SseListener: React.FC<SseListenerProps> = ({}) => {
             duration: 60000000,
           }
         );
-        setToastId(notifToastId);
+        toastId.current = notifToastId;
       }
+      isInitial.current = false;
     }
-  }, [workspaceId, latestWorkspaceActivity, retrieveWorkspaceActivitiesResponse, toastId, isRetrieveActivitiesQueryFetching]);
+  }, [workspaceId, latestWorkspaceActivityFromSSE, lastRetrievedActivity, isRetrieveActivitiesQueryFetching]);
 
   useEffect(() => {
-    if (isRetrieveActivitiesQueryFetching && toastId) {
-      toast.dismiss(toastId);
-      setToastId(undefined);
+    if (isRetrieveActivitiesQueryFetching && toastId.current) {
+      toast.dismiss(toastId.current);
+      toastId.current = null;
     }
   }, [isRetrieveActivitiesQueryFetching, toastId]);
 
@@ -109,14 +112,14 @@ const SseListener: React.FC<SseListenerProps> = ({}) => {
     dispatch(api.util.invalidateTags(tagTypesToInvalidateOnNewBackgroundActivity()));
     dispatch(clearHasUnreadNotificationOnAllTasks());
     setTimeout(() => {
-      toast.dismiss(toastId);
-      setToastId(undefined);
+      toast.dismiss(toastId.current || undefined);
+      toastId.current = null;
     }, 2500);
   };
 
   const resetToastState = () => {
-    toast.dismiss(toastId);
-    setToastId(undefined);
+    toast.dismiss(toastId.current || undefined);
+    toastId.current = null;
     dispatch(api.util.invalidateTags(["workspace-activity-list"]));
   };
 
