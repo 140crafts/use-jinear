@@ -13,6 +13,7 @@ import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
+import co.jinear.core.validator.workspace.WorkspaceTierValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,12 +34,14 @@ public class WorkspaceMemberManager {
     private final WorkspaceMemberRetrieveService workspaceMemberRetrieveService;
     private final SessionInfoService sessionInfoService;
     private final PassiveService passiveService;
+    private final WorkspaceTierValidator workspaceTierValidator;
 
     public BaseResponse joinWorkspace(String workspaceId) {
         String currentAccountId = sessionInfoService.currentAccountId();
         log.info("Join workspace has started. workspaceId: {}, currentAccountId: {}", workspaceId, currentAccountId);
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
         validateWorkspaceJoinTypeIsPublic(workspaceDto);
+        workspaceTierValidator.validateWorkspaceCanAddMember(workspaceDto);
         InitializeWorkspaceMemberVo initializeWorkspaceMemberVo = mapValues(currentAccountId, workspaceDto);
         workspaceMemberService.initializeWorkspaceMember(initializeWorkspaceMemberVo);
         //todo add workspace activity

@@ -25,4 +25,14 @@ public class WorkspaceInvitationListingService {
         return workspaceInvitationRepository.findAllByWorkspaceIdAndStatusAndPassiveIdIsNullOrderByCreatedDateAsc(workspaceId, WorkspaceInvitationStatusType.WAITING_FOR_ANSWER, PageRequest.of(page, PAGE_SIZE))
                 .map(workspaceInvitationDtoConverter::convert);
     }
+
+    public Long workspaceActiveMemberInvitationCount(String workspaceId) {
+        log.info("Workspace active member invitation count has started. workspaceId: {}", workspaceId);
+        return workspaceInvitationRepository.countAllByWorkspaceIdAndStatusAndPassiveIdIsNull(workspaceId, WorkspaceInvitationStatusType.WAITING_FOR_ANSWER);
+    }
+
+    public boolean checkActiveInviteExists(String workspaceId, String email) {
+        return workspaceInvitationRepository.findFirstByWorkspaceIdAndStatusAndEmailAndPassiveIdIsNull(workspaceId, WorkspaceInvitationStatusType.WAITING_FOR_ANSWER, email)
+                .isPresent();
+    }
 }
