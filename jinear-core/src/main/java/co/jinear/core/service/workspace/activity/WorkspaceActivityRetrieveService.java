@@ -47,7 +47,8 @@ import static co.jinear.core.system.NormalizeHelper.EMPTY_STRING;
 @RequiredArgsConstructor
 public class WorkspaceActivityRetrieveService {
 
-    private static final int PAGE_SIZE = 125;
+    private static final int PAGE_SIZE = 25;
+    private static final int TASK_ACTIVITIES_PAGE_SIZE = 125;
 
     private static final List<WorkspaceActivityType> CHECKLIST_RELATED_TYPES = List.of(
             CHECKLIST_INITIALIZED,
@@ -124,7 +125,7 @@ public class WorkspaceActivityRetrieveService {
 
     public Page<WorkspaceActivityDto> retrieveTaskActivities(String taskId, int page) {
         log.info("Retrieve task activities has started. taskId: {}, page: {}", taskId, page);
-        PageRequest pageRequest = PageRequest.of(page, PAGE_SIZE);
+        PageRequest pageRequest = PageRequest.of(page, TASK_ACTIVITIES_PAGE_SIZE);
         return workspaceActivityRepository.findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateDesc(taskId, pageRequest)
                 .map(this::retrieveDetailsAndMap);
     }

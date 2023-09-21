@@ -22,6 +22,8 @@ import co.jinear.core.service.workspace.member.WorkspaceInvitationListingService
 import co.jinear.core.service.workspace.member.WorkspaceInvitationOperationService;
 import co.jinear.core.service.workspace.member.WorkspaceInvitationRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
+import co.jinear.core.validator.workspace.WorkspaceInvitationValidator;
+import co.jinear.core.validator.workspace.WorkspaceTierValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +52,8 @@ public class WorkspaceMemberInvitationManager {
     private final WorkspaceInvitationInfoResponseConverter workspaceInvitationInfoResponseConverter;
     private final WorkspaceInvitationListingService workspaceInvitationListingService;
     private final WorkspaceInvitationRetrieveService workspaceInvitationRetrieveService;
+    private final WorkspaceTierValidator workspaceTierValidator;
+    private final WorkspaceInvitationValidator workspaceInvitationValidator;
     private final PassiveService passiveService;
 
     public WorkspaceInvitationListingResponse listInvitations(String workspaceId, int page) {
@@ -65,6 +69,8 @@ public class WorkspaceMemberInvitationManager {
         String workspaceId = workspaceMemberInviteRequest.getWorkspaceId();
         workspaceMemberService.validateAccountHasRoleInWorkspace(currentAccountId, workspaceId, List.of(OWNER, ADMIN));
         workspaceValidator.validateWorkspaceIsNotPersonal(workspaceId);
+        workspaceInvitationValidator.validateActiveInviteExists(workspaceId,workspaceMemberInviteRequest.getEmail());
+        workspaceTierValidator.validateWorkspaceCanAddMember(workspaceId);
         validateInviteNotForOwnerRole(workspaceMemberInviteRequest);
         validateAccountIsExistingMemberIfAccountPresent(workspaceMemberInviteRequest, workspaceId);
         log.info("Invite workspace member has started. currentAccountId: {}", currentAccountId);
@@ -109,7 +115,7 @@ public class WorkspaceMemberInvitationManager {
     private void validateAccountIsExistingMemberIfAccountPresent(WorkspaceMemberInviteRequest workspaceMemberInviteRequest, String workspaceId) {
         String accountId = accountRetrieveService.retrieveByEmail(workspaceMemberInviteRequest.getEmail()).map(AccountDto::getAccountId).orElse(null);
         if (Objects.nonNull(accountId) && workspaceMemberService.isAccountWorkspaceMember(accountId, workspaceId)) {
-            throw new BusinessException();
+            throw new BusinessException("workspace.invitation.account-already-member");
         }
     }
 

@@ -53,6 +53,11 @@ public class WorkspaceMemberListingService {
                 .map(this::fillAccountDtoIfPresent);
     }
 
+    public Long workspaceActiveMemberCount(String workspaceId) {
+        log.info("Workspace active member count has started. workspaceId: {}", workspaceId);
+        return workspaceMemberRepository.countAllByWorkspaceIdAndPassiveIdIsNull(workspaceId);
+    }
+
     private WorkspaceMemberDto fillAccountDtoIfPresent(WorkspaceMemberDto workspaceMemberDto) {
         log.info("Fill accountDto if present has started for workspaceMemberDto: {}", workspaceMemberDto);
         accountRetrieveService.retrieveOptional(workspaceMemberDto.getAccountId())

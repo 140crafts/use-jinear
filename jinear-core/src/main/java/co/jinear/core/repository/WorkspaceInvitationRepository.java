@@ -14,4 +14,7 @@ public interface WorkspaceInvitationRepository extends JpaRepository<WorkspaceIn
 
     Page<WorkspaceInvitation> findAllByWorkspaceIdAndStatusAndPassiveIdIsNullOrderByCreatedDateAsc(String workspaceId, WorkspaceInvitationStatusType status, Pageable pageable);
 
+    Long countAllByWorkspaceIdAndStatusAndPassiveIdIsNull(String workspaceId, WorkspaceInvitationStatusType status);
+
+    Optional<WorkspaceInvitation> findFirstByWorkspaceIdAndStatusAndEmailAndPassiveIdIsNull(String workspaceInvitationId, WorkspaceInvitationStatusType status, String email);
 }
