@@ -1,5 +1,6 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { TaskBoardDto, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
 import React from "react";
 import styles from "./BoardItemButton.module.css";
@@ -18,7 +19,7 @@ const BoardItemButton: React.FC<BoardItemButtonProps> = ({ workspace, team, task
       heightVariant={ButtonHeight.short}
       href={`/${workspace.username}/${team.username}/task-boards/${taskBoardDto.taskBoardId}`}
     >
-      {taskBoardDto.title}
+      {shortenStringIfMoreThanMaxLength({ text: taskBoardDto.title, maxLength: 34 })}
     </Button>
   );
 };

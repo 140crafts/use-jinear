@@ -2,6 +2,7 @@ import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useRetrieveAllTaskBoardsQuery } from "@/store/api/taskBoardListingApi";
+import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import styles from "./BoardsMenu.module.css";
@@ -43,7 +44,10 @@ const BoardsMenu: React.FC<BoardsMenuProps> = ({ workspace, team }) => {
             heightVariant={ButtonHeight.short}
             href={`/${workspace.username}/${team.username}/task-boards`}
           >
-            {t("sideMenuTeamTaskListsShowMore").replace("${number}", `${notVisibleSize}`)}
+            {shortenStringIfMoreThanMaxLength({
+              text: t("sideMenuTeamTaskListsShowMore").replace("${number}", `${notVisibleSize}`),
+              maxLength: 34,
+            })}
           </Button>
         )}
       </div>

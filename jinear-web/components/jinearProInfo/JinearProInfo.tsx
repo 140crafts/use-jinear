@@ -1,0 +1,41 @@
+import useTranslation from "locales/useTranslation";
+import React from "react";
+import FormLogo from "../formLogo/FormLogo";
+import styles from "./JinearProInfo.module.css";
+
+interface JinearProInfoProps {
+  hasAdditionalToBasicPlanText?: boolean;
+}
+
+const JinearProInfo: React.FC<JinearProInfoProps> = ({ hasAdditionalToBasicPlanText = false }) => {
+  const { t } = useTranslation();
+
+  return (
+    <>
+      <div className={styles.headerContainer}>
+        <div className={styles.proLogoContainer}>
+          <FormLogo withLeftLine={false} />
+          <div className={styles.proLabel}>PRO</div>
+        </div>
+      </div>
+      {/* <div className={styles.proFeaturesLabel} dangerouslySetInnerHTML={{ __html: t("upgradeWorkspaceTierModalText") }} /> */}
+      {hasAdditionalToBasicPlanText && (
+        <>
+          <span>
+            <b>{t("pricesPageProFeature_additionalToBasicPlanText")}</b>
+          </span>
+        </>
+      )}
+      <ul className={styles.featureList}>
+        <li>{t("pricesPageProFeature_collaborative")}</li>
+        <li>{t("pricesPageProFeature_fixedPrices")}</li>
+        <li>{t("pricesPageProFeature_file")}</li>
+        <li>{t("pricesPageProFeature_unlimitedFileStorage")}</li>
+        <li>{t("pricesPageProFeature_UnlimitedSupport")}</li>
+        <li>{t("pricesPageProFeature_1to1Onboarding")}</li>
+      </ul>
+    </>
+  );
+};
+
+export default JinearProInfo;

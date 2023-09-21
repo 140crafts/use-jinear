@@ -34,6 +34,7 @@ const ROUTES_WITHOUT_SIDE_MENU = [
   "/engage/[token]/workspace-invitation",
   "/new-workspace",
   "/terms",
+  "/pricing",
 ];
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {

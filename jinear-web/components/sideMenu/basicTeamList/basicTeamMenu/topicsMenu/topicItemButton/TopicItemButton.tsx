@@ -1,5 +1,6 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { TeamDto, TopicDto, WorkspaceDto } from "@/model/be/jinear-core";
+import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
 import React from "react";
 import styles from "./TopicItemButton.module.css";
@@ -18,7 +19,7 @@ const TopicItemButton: React.FC<TopicItemButtonProps> = ({ workspace, team, topi
       heightVariant={ButtonHeight.short}
       href={`/${workspace.username}/${team.username}/tasks?topic=${topic.topicId}`}
     >
-      {topic.name}
+      {shortenStringIfMoreThanMaxLength({ text: topic.name, maxLength: 34 })}
     </Button>
   );
 };
