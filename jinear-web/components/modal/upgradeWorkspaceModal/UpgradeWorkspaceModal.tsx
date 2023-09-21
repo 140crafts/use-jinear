@@ -1,6 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
-import FormLogo from "@/components/formLogo/FormLogo";
+import JinearProInfo from "@/components/jinearProInfo/JinearProInfo";
 import WorkspaceInfo from "@/components/workspaceInfo/WorkspaceInfo";
 import useWindowSize from "@/hooks/useWindowSize";
 import { useRefreshPaymentsMutation } from "@/store/api/paymentProcessApi";
@@ -23,7 +23,7 @@ import styles from "./UpgradeWorkspaceModal.module.css";
 
 interface UpgradeWorkspaceModalProps {}
 
-const PADDLE_CATALOG = {
+export const PADDLE_CATALOG = {
   business_daily: { sandbox: 63817, prod: -1, price: "3.30$" },
   business_monthly: { sandbox: 63716, prod: 848738, price: "49.90$" },
   business_yearly: { sandbox: 63717, prod: 848737, price: "499$" },
@@ -103,13 +103,7 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
         </div>
       ) : (
         <>
-          <div className={styles.headerContainer}>
-            <div className={styles.proLogoContainer}>
-              <FormLogo withLeftLine={false} />
-              <div className={styles.proLabel}>PRO</div>
-            </div>
-          </div>
-          <div className={styles.proFeaturesLabel} dangerouslySetInnerHTML={{ __html: t("upgradeWorkspaceTierModalText") }} />
+          <JinearProInfo />
           <div className="spacer-h-4" />
           {workspace && <WorkspaceInfo workspace={workspace} />}
           <div className={styles.appliesOnlyWorkspaceText}>{t("upgradeWorkspaceTierModalAppliesToWorkspaceText")}</div>

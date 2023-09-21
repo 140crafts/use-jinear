@@ -2534,4 +2534,60 @@ export default {
     en: "Please provide an another title for task.",
     tr: "Görev için yeni bir başlık girin.",
   },
+  pricePageBasicPlan: {
+    en: "Always Free!",
+    tr: "Sonsuza Kadar Ücretsiz!",
+  },
+  pricesPageBasicFeature_UnlimitedTasks: {
+    en: "Create unlimited tasks, labels, checklists, boards",
+    tr: "Sınırsız görev, etiket, kontrol listesi, pano oluşturun",
+  },
+  pricesPageBasicFeature_Reminders: {
+    en: "Reminders! Set up reminders about your tasks.",
+    tr: "Görevleriniz için anımsatıcılar oluşturun",
+  },
+  pricesPageBasicFeature_collaborative: {
+    en: "Create collaborative workspaces and work with up to 3 people.",
+    tr: "Kolektif çalışma alanları yaratarak 3 Kişiye kadar birlikte çalışın.",
+  },
+  pricesPageProFeature_collaborative: {
+    en: "Add as many people as you need to your collaborative workspace.",
+    tr: "Kolektif çalışma alanına istediğiniz kadar kişi ekleyin.",
+  },
+  pricesPageProFeature_fixedPrices: {
+    en: "Fixed prices, no absurd per user charges.",
+    tr: "Sabitlenmiş fiyatlandırma, kişi başı absürt ücretlendirmeler yok.",
+  },
+  pricesPageProFeature_file: {
+    en: "Attach files to your tasks.",
+    tr: "Görevlerinize dosya ekleyin.",
+  },
+  pricesPageProFeature_unlimitedFileStorage: {
+    en: "Unlimited file storage.",
+    tr: "Sınırsız dosya saklama alanı.",
+  },
+  pricesPageProFeature_UnlimitedSupport: {
+    en: "7/24 unlimited support.",
+    tr: "7/24 sınırsız destek alın.",
+  },
+  pricesPageProFeature_1to1Onboarding: {
+    en: "1:1 onboarding tour.",
+    tr: "Uygulamaya dahil olma sürecinizde 1'e 1 görüşme ile destek.",
+  },
+  pricesPageProFeature_additionalToBasicPlanText: {
+    en: "Everything in free plan...",
+    tr: "Basic plandaki herşeye ek olarak...",
+  },
+  pricesPageProFeature_subscriptionsAppliesOnlySingleWorkspaceText: {
+    en: "* Each workspace has it's own plan. Upgrading a workspace to pro plan only affects itself.",
+    tr: "* Her bir çalışma alanı kendi planına sahiptir. Bir çalışma alanını 'Pro' plana yükseltmek yanlızca o çalışma alanını etkiler. Diğer çalışma alanlarına belirtilen özellikler gelmez.",
+  },
+  pricesPageProFeature_singleFileSizeLimit: {
+    en: "* While there is no total limit to file storage, currently, the size of each single file can be a maximum of 32MB.",
+    tr: "* Toplam yüklenebilecek dosya limiti bulunmamaktadır. Ancak şu anda her bir dosyanın boyutu maksimum 32MB olabilir.",
+  },
+  pricingPageTitle: {
+    en: "Pricing & Plans",
+    tr: "Planlar ve Fiyatlandırma",
+  },
 };

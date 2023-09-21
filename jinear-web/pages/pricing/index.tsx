@@ -1,7 +1,10 @@
-import Button, { ButtonVariants } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import JinearFreeInfo from "@/components/jinearFreeInfo/JinearFreeInfo";
+import JinearProInfo from "@/components/jinearProInfo/JinearProInfo";
+import { PADDLE_CATALOG } from "@/components/modal/upgradeWorkspaceModal/UpgradeWorkspaceModal";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import styles from "./index.module.css";
+import styles from "./index.module.scss";
 
 interface PricingPageProps {}
 
@@ -10,22 +13,39 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.note}>
-        <div className={styles.text}>
-          <h1>{t("pricingPageStickerTitle")}</h1>
-          <br></br>
-          <h2 dangerouslySetInnerHTML={{ __html: t("pricingPageStickerText") }}></h2>
+      <div className={styles.pageTitleContainer}>
+        <div className={styles.actionContainer}>
+          <Button href="/" variant={ButtonVariants.filled} heightVariant={ButtonHeight.short}>
+            {/* {t("pricingPageGoBack")} */}
+            <b>{"<-"}</b>
+          </Button>
+        </div>
+        <h1>{t("pricingPageTitle")}</h1>
+      </div>
+      <div className={styles.plansContainer}>
+        <div className={styles.plan}>
+          <JinearFreeInfo />
+          <div className="flex-1" />
+          <div className={styles.priceLabel}>{t("pricePageBasicPlan")}</div>
         </div>
 
-        <div className={styles.stickyNote} />
-        <div className={styles.stickyNoteShadow} />
-        <div className={styles.stickyNoteShadow2} />
-      </div>
-
-      <div className={styles.actionContainer}>
-        <Button href="/" variant={ButtonVariants.contrast}>
-          {t("pricingPageGoBack")}
-        </Button>
+        <div className={styles.plan}>
+          <JinearProInfo hasAdditionalToBasicPlanText={true} />
+          <div className="spacer-h-2" />
+          <span className={styles.subtext}>
+            <b>{t("pricesPageProFeature_subscriptionsAppliesOnlySingleWorkspaceText")}</b>
+          </span>
+          <span className={styles.subtext}>
+            <b>{t("pricesPageProFeature_singleFileSizeLimit")}</b>
+          </span>
+          <div className="flex-1" />
+          <div className={styles.priceLabel}>
+            {t("upgradeWorkspaceTierButtonMonthly").replace("${price}", PADDLE_CATALOG.business_monthly.price)}
+          </div>
+          <div className={styles.priceLabel}>
+            {t("upgradeWorkspaceTierButtonYearly").replace("${price}", PADDLE_CATALOG.business_yearly.price)}
+          </div>
+        </div>
       </div>
     </div>
   );
