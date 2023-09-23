@@ -25,7 +25,10 @@
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  gap: 0.5rem;
+}
+
+.themeToggleButton {
+  margin-top: 0.2rem;
 }
 
 .heroContainer {
@@ -108,6 +111,15 @@
 }
 
 @media (max-width: $tablet) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .headerActionBar {
+    align-self: flex-end;
+    align-items: center;
+    margin-top: -1rem;
+  }
   .heroTitle {
     font-size: 2.5rem;
     line-height: 3rem;

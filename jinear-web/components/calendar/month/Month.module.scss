@@ -1,0 +1,35 @@
+@import "/styles/breakpoints.scss";
+
+.weeksContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 95vw;
+  overflow-x: scroll;
+}
+
+.weeksBaseContentContainer {
+  min-width: unset;
+}
+
+// following one for user to toggle below $tablet width
+.weeksContentContainer {
+  min-width: 56rem;
+}
+
+.weekdayHeaderContainer {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 0.75rem;
+}
+
+.weekdayHeader {
+  flex: 1;
+  padding: 0.25rem 0.5rem;
+  font-weight: 700;
+}
+
+@media (min-width: 1240px) {
+  .weeksBaseContentContainer {
+    min-width: 56rem;
+  }
+}

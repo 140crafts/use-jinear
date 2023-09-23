@@ -1,5 +1,7 @@
 import { popNewTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
+import cn from "classnames";
+import { isToday } from "date-fns";
 import React from "react";
 import { useCalendarNewTaskFromTeam, useCalendarWorkspace } from "../../context/CalendarContext";
 import styles from "./Tile.module.css";
@@ -23,7 +25,7 @@ const Tile: React.FC<TileProps> = ({ id, week }) => {
       {Array.from(Array(7).keys()).map((i) => (
         <div
           key={`${id}-tile-${i}`}
-          className={styles.calendarLine}
+          className={cn(styles.calendarLine, isToday(week[i]) && styles.todayCalendarLine)}
           onClick={() => popNewTaskModalWithAssignedDatePreSelected(week[i])}
         />
       ))}

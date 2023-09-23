@@ -6,7 +6,7 @@ import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import { eachDayOfInterval, endOfMonth, endOfWeek, format, parse, startOfDay, startOfWeek } from "date-fns";
 import React, { useMemo, useState } from "react";
-import styles from "./Calendar.module.css";
+import styles from "./Calendar.module.scss";
 import { ICalendarWeekRowCell, calculateHitMissTable } from "./calendarUtils";
 import CalendarContext from "./context/CalendarContext";
 import CalendarHeader from "./header/CalendarHeader";
@@ -25,6 +25,8 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
 
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
   const [viewingDate, setViewingDate] = useState(initialDate);
+  const [squeezedView, setSqueezedView] = useState<boolean>(false);
+
   const currentMonth = format(viewingDate, "MMM-yyyy");
   const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const periodStart = startOfWeek(firstDayCurrentMonth, { weekStartsOn: 1 });
@@ -74,8 +76,15 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
       }}
     >
       <div className={cn(styles.container, className)}>
-        <CalendarHeader days={days} workspace={workspace} filterBy={filterBy} setFilterBy={setFilterBy} />
-        {monthTable && <Month monthTable={monthTable} days={days} />}
+        <CalendarHeader
+          days={days}
+          workspace={workspace}
+          filterBy={filterBy}
+          setFilterBy={setFilterBy}
+          squeezedView={squeezedView}
+          setSqueezedView={setSqueezedView}
+        />
+        {monthTable && <Month monthTable={monthTable} days={days} squeezedView={squeezedView} />}
         {isFetching && (
           <div className={styles.loadingContainer}>
             <CircularProgress />

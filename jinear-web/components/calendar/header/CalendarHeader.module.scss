@@ -1,3 +1,5 @@
+@import "/styles/breakpoints.scss";
+
 .mainCalendarHeader {
   display: flex;
   flex-direction: column;
@@ -23,18 +25,16 @@
   align-self: flex-end;
 }
 
-.weekdayHeaderContainer {
-  display: flex;
-  flex-direction: row;
-  margin-bottom: 0.75rem;
-}
-
-.weekdayHeader {
-  flex: 1;
-  padding: 0.25rem 0.5rem;
-  font-weight: 700;
-}
-
 .filterButtonWithActiveFilter {
   font-weight: 700;
+}
+
+.squeezedViewToggleButton {
+  display: none;
+}
+
+@media (max-width: 1240px) {
+  .squeezedViewToggleButton {
+    display: flex;
+  }
 }

@@ -55,7 +55,7 @@ export default function Home() {
           <Button href="/terms">
             <b>{t("homescreenActionBarTerms")}</b>
           </Button>
-          <ThemeToggle />
+          <ThemeToggle buttonStyle={styles.themeToggleButton} />
         </div>
       </div>
 

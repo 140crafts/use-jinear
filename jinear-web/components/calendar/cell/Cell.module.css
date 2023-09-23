@@ -48,7 +48,7 @@
 
 .startDayEndDayMargin {
   /* margin-left: calc(var(--calendar-event-gap) / 2); */
-  margin-right: var(--calendar-event-gap);
+  /* margin-right: var(--calendar-event-gap); */
 }
 
 .startDay {
