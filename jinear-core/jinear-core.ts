@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-09-10 22:09:26.
+// Generated using typescript-generator version 3.0.1157 on 2023-09-23 08:34:04.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -465,7 +465,6 @@ export interface WorkspaceDto extends BaseDto {
     workspaceId: string;
     title: string;
     description: string;
-    isPersonal: boolean;
     tier: WorkspaceTier;
     username: string;
     settings: WorkspaceSettingDto;
@@ -748,7 +747,6 @@ export interface WorkspaceInitializeRequest extends BaseRequest {
     handle: string;
     visibility: WorkspaceVisibilityType;
     joinType: WorkspaceJoinType;
-    isPersonal: boolean;
 }
 
 export interface WorkspaceMemberInvitationRespondRequest extends BaseRequest {

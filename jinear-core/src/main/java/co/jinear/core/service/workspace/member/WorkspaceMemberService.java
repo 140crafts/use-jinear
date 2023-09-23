@@ -58,10 +58,6 @@ public class WorkspaceMemberService {
         return workspaceMemberRepository.countAllByAccountIdAndWorkspaceIdAndPassiveIdIsNull(accountId, workspaceId) > 0L;
     }
 
-    public boolean isAccountHasPersonalWorkspace(String accountId) {
-        return workspaceMemberRepository.countAllByAccountIdAndRoleAndWorkspace_IsPersonalAndWorkspace_PassiveIdIsNullAndPassiveIdIsNull(accountId, WorkspaceAccountRoleType.OWNER, Boolean.TRUE) > 0L;
-    }
-
     public void validateAccountWorkspaceMember(String accountId, String workspaceId) {
         if (Boolean.FALSE.equals(isAccountWorkspaceMember(accountId, workspaceId))) {
             throw new BusinessException("workspace.not-a-member");
@@ -85,12 +81,6 @@ public class WorkspaceMemberService {
     public void validateAccountIsNotWorkspaceOwner(String accountId, String workspaceId) {
         if (isAccountWorkspaceOwner(accountId, workspaceId)) {
             throw new BusinessException();
-        }
-    }
-
-    public void validateAccountDontHavePersonalWorkspace(String accountId) {
-        if (isAccountHasPersonalWorkspace(accountId)) {
-            throw new BusinessException("workspace.has-personal-workspace");
         }
     }
 

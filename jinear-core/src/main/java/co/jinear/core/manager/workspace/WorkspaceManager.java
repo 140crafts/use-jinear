@@ -16,7 +16,6 @@ import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
 import co.jinear.core.service.workspace.WorkspaceInitializeService;
 import co.jinear.core.service.workspace.WorkspaceMediaService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
-import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import jakarta.persistence.EntityManager;
@@ -42,7 +41,6 @@ public class WorkspaceManager {
     private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
     private final TeamRetrieveService teamRetrieveService;
     private final WorkspaceInitializeVoConverter workspaceInitializeVoConverter;
-    private final WorkspaceMemberService workspaceMemberService;
     private final MediaValidator mediaValidator;
     private final WorkspaceMediaService workspaceMediaService;
     private final EntityManager entityManager;
@@ -50,7 +48,6 @@ public class WorkspaceManager {
     public WorkspaceBaseResponse initializeWorkspace(MultipartFile logo, WorkspaceInitializeRequest workspaceInitializeRequest) {
         log.info("Initialize workspace has started with request: {}", workspaceInitializeRequest);
         String accountId = sessionInfoService.currentAccountId();
-        validateAccountDontHaveAnyPersonalWorkspaceIfRequestIsPersonal(workspaceInitializeRequest, accountId);
         Optional.ofNullable(logo).ifPresent(mediaValidator::validateForSafeImage);
         WorkspaceDto workspaceDto = initializeWorkspace(workspaceInitializeRequest, accountId);
         setLogoIfPresents(logo, workspaceDto);
@@ -109,7 +106,6 @@ public class WorkspaceManager {
     private WorkspaceDto initializeWorkspace(WorkspaceInitializeRequest workspaceInitializeRequest, String accountId) {
         WorkspaceInitializeVo workspaceInitializeVo = workspaceInitializeVoConverter.map(workspaceInitializeRequest, accountId);
         workspaceInitializeVo.setAppendRandomStrOnCollision(Boolean.FALSE);
-        workspaceInitializeVo.setIsPersonal(workspaceInitializeRequest.getIsPersonal());
         setHandleIfNotProvided(workspaceInitializeVo);
         return workspaceInitializeService.initializeWorkspace(workspaceInitializeVo);
     }
@@ -126,12 +122,6 @@ public class WorkspaceManager {
         workspaceResponse.setWorkspace(workspaceDto);
         log.info("Initialize workspace has ended. workspaceResponse: {}", workspaceResponse);
         return workspaceResponse;
-    }
-
-    private void validateAccountDontHaveAnyPersonalWorkspaceIfRequestIsPersonal(WorkspaceInitializeRequest workspaceInitializeRequest, String accountId) {
-        Optional.of(workspaceInitializeRequest)
-                .filter(WorkspaceInitializeRequest::getIsPersonal)
-                .ifPresent(req -> workspaceMemberService.validateAccountDontHavePersonalWorkspace(accountId));
     }
 
     private void setLogoIfPresents(MultipartFile logo, WorkspaceDto workspaceDto) {

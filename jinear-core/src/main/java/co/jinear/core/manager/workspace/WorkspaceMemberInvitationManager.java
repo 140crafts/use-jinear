@@ -68,7 +68,6 @@ public class WorkspaceMemberInvitationManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         String workspaceId = workspaceMemberInviteRequest.getWorkspaceId();
         workspaceMemberService.validateAccountHasRoleInWorkspace(currentAccountId, workspaceId, List.of(OWNER, ADMIN));
-        workspaceValidator.validateWorkspaceIsNotPersonal(workspaceId);
         workspaceInvitationValidator.validateActiveInviteExists(workspaceId,workspaceMemberInviteRequest.getEmail());
         workspaceTierValidator.validateWorkspaceCanAddMember(workspaceId);
         validateInviteNotForOwnerRole(workspaceMemberInviteRequest);

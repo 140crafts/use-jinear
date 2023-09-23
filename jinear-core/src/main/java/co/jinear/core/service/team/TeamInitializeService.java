@@ -3,7 +3,6 @@ package co.jinear.core.service.team;
 import co.jinear.core.converter.team.TeamConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.team.TeamDto;
-import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.enumtype.localestring.LocaleStringType;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
@@ -26,7 +25,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -49,7 +47,6 @@ public class TeamInitializeService {
     public TeamDto initializeTeam(TeamInitializeVo teamInitializeVo) {
         sanitizeTagAndUsername(teamInitializeVo);
         log.info("Initialize team has started. teamInitializeVo: {}", teamInitializeVo);
-        validatePersonalWorkspaceTeamLimit(teamInitializeVo.getWorkspaceId());
         validateTeamNameIsNotUsedInWorkspace(teamInitializeVo);
         validateTeamTagIsNotUsedInWorkspace(teamInitializeVo);
         validateTeamUsernameIsNotUsedInWorkspace(teamInitializeVo);
@@ -80,17 +77,6 @@ public class TeamInitializeService {
                 .map(TeamInitializeVo::getUsername)
                 .map(NormalizeHelper::normalizeUsernameReplaceSpaces)
                 .ifPresent(teamInitializeVo::setUsername);
-    }
-
-    private void validatePersonalWorkspaceTeamLimit(String workspaceId) {
-        log.info("Validate personal workspace limit has started.");
-        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
-        if (Boolean.TRUE.equals(workspaceDto.getIsPersonal())) {
-            List<TeamDto> teamDtoList = teamRetrieveService.retrieveWorkspaceTeams(workspaceId);
-            if (!teamDtoList.isEmpty()) {
-                throw new BusinessException();
-            }
-        }
     }
 
     private void checkAndSyncMembersWithWorkspace(Team team) {
