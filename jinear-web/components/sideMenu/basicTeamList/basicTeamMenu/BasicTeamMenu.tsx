@@ -19,12 +19,8 @@ const BasicTeamMenu: React.FC<BasicTeamMenuProps> = ({ workspace, team }) => {
 
   return (
     <div className={styles.container}>
-      {!workspace.isPersonal && (
-        <>
-          <TeamTitle workspace={workspace} team={team} />
-          <div className="spacer-h-1" />
-        </>
-      )}
+      <TeamTitle workspace={workspace} team={team} />
+      <div className="spacer-h-1" />
       <div className={styles.teamActionButtonContainer}>
         <TasksMenu workspace={workspace} team={team} />
         <BoardsMenu workspace={workspace} team={team} />

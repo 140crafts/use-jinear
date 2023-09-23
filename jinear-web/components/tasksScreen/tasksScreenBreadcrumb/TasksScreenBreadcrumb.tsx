@@ -11,7 +11,7 @@ interface TasksScreenBreadcrumbProps {
 
 const TasksScreenBreadcrumb: React.FC<TasksScreenBreadcrumbProps> = ({ workspace, team }) => {
   const { t } = useTranslation();
-  return workspace?.isPersonal ? null : (
+  return (
     <Breadcrumb>
       <BreadcrumbLink label={workspace.title} url={`/${workspace.username}`} />
       <BreadcrumbLink label={team.name} url={`/${workspace.username}/${team.username}`} />

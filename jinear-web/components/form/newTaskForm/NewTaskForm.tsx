@@ -141,9 +141,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
 
         <div className={styles.actionBar}>
           <TopicPickerButton register={register} setValue={setValue} workspace={workspace} team={selectedTeam} />
-          {!workspace.isPersonal && (
-            <TeamMemberPickerButton register={register} setValue={setValue} teamId={selectedTeam.teamId} />
-          )}
+          <TeamMemberPickerButton register={register} setValue={setValue} teamId={selectedTeam.teamId} />
           <BoardPickerButton register={register} setValue={setValue} workspace={workspace} team={selectedTeam} />
           <DatePickerButton
             register={register}
@@ -160,9 +158,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
           workspace={workspace}
           team={selectedTeam}
           onTeamChange={setSelectedTeam}
-          personalWorkspaceTitle={t("newTaskFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel")}
           workspaceTitle={t("newTaskFormWorkspaceAndTeamInfoLabel")}
-          personalWorkspaceLabel={t("newTaskFormPersonalWorkspaceSelected")}
         />
         {/* <DescriptionInput labelClass={styles.label} inputClass={styles.textAreaInput} register={register} setValue={setValue} /> */}
       </div>

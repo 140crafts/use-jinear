@@ -66,7 +66,7 @@ const TaskRow: React.FC<TaskRowProps> = ({ className, task, withBottomBorderLine
       <div className={styles.rightInfoContainer}>
         {task.topic && <TopicInfo topic={task.topic} />}
         <WorkflowStatus task={task} />
-        {!task.workspace.isPersonal && <AssigneeCell task={task} />}
+        <AssigneeCell task={task} />
         <Button
           variant={ButtonVariants.filled}
           className={styles.iconButton}

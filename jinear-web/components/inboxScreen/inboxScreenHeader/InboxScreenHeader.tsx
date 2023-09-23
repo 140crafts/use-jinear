@@ -35,31 +35,27 @@ const InboxScreenHeader: React.FC<InboxScreenHeaderProps> = ({ workspace, filter
         <div
           className={styles.subTitle}
           dangerouslySetInnerHTML={{
-            __html: workspace?.isPersonal
-              ? t("inboxHeaderPersonalWorkspaceSubtitle")
-              : filterBy
+            __html: filterBy
               ? t("inboxHeaderFilteredTeamSubtitle").replace("${teamName}", filterBy.name)
               : t("inboxHeaderAllTeamsSubtitle"),
           }}
         />
-        {!workspace?.isPersonal && (
-          <Button
-            onClick={filterBy ? clearFilter : popFilterTeamModal}
-            variant={ButtonVariants.filled}
-            heightVariant={ButtonHeight.short}
-            className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
-          >
-            {filterBy ? (
-              <>
-                <IoClose />
-                <div className="spacer-w-1" />
-                {t("inboxScreenClearFilterButton")}
-              </>
-            ) : (
-              t("inboxScreenFilterButton")
-            )}
-          </Button>
-        )}
+        <Button
+          onClick={filterBy ? clearFilter : popFilterTeamModal}
+          variant={ButtonVariants.filled}
+          heightVariant={ButtonHeight.short}
+          className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
+        >
+          {filterBy ? (
+            <>
+              <IoClose />
+              <div className="spacer-w-1" />
+              {t("inboxScreenClearFilterButton")}
+            </>
+          ) : (
+            t("inboxScreenFilterButton")
+          )}
+        </Button>
       </div>
     </div>
   );

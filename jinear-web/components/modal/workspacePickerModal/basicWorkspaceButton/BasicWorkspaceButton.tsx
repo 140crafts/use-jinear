@@ -29,7 +29,7 @@ const BasicWorkspaceButton: React.FC<BasicWorkspaceButtonProps> = ({ workspace, 
       className={cn(styles.container, isSelected && styles.selectedWorkspace)}
       variant={isSelected ? ButtonVariants.filled : ButtonVariants.default}
     >
-      {workspace.isPersonal ? t("workspacePickerModalPersonalWorkspace") : workspace.title}
+      {workspace.title}
     </Button>
   );
 };

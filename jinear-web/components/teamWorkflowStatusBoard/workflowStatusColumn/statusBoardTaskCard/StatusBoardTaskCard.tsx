@@ -58,14 +58,11 @@ const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({ task, index =
             <Button className={styles.taskIconButton} onClick={popChangeDatesModal}>
               <IoTime size={12} />
             </Button>
-
-            {!task.workspace?.isPersonal && (
-              <AssigneeCell
-                task={task}
-                tooltipPosition={task.workflowStatus.workflowStateGroup == "BACKLOG" ? "left" : "right"}
-                className={styles.taskIconButton}
-              />
-            )}
+            <AssigneeCell
+              task={task}
+              tooltipPosition={task.workflowStatus.workflowStateGroup == "BACKLOG" ? "left" : "right"}
+              className={styles.taskIconButton}
+            />
             <TeamTagCell task={task} className={styles.taskTagCell} />
           </div>
         </Link>

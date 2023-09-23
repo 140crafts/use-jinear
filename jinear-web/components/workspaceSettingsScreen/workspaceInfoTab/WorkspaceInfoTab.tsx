@@ -30,12 +30,8 @@ const WorkspaceInfoTab: React.FC<WorkspaceInfoTabProps> = ({ workspace }) => {
 
   const [updateWorkspaceProfilePicture, { isSuccess, isLoading, isError }] = useUpdateWorkspaceProfilePictureMutation();
   const workspaceTier = workspace.tier;
-  const workspaceTierLabel = workspace.isPersonal
-    ? t("workspaceInfoTabWorkspaceType_Personal")
-    : t(`workspaceInfoTabWorkspaceType_Collaborative_${workspaceTier}`);
-  const workspaceTierDetailLabel = workspace.isPersonal
-    ? t("workspaceInfoTabWorkspaceType_Personal_detail")
-    : t(`workspaceInfoTabWorkspaceType_Collaborative_${workspaceTier}_detail`);
+  const workspaceTierLabel = t(`workspaceInfoTabWorkspaceType_Collaborative_${workspaceTier}`);
+  const workspaceTierDetailLabel = t(`workspaceInfoTabWorkspaceType_Collaborative_${workspaceTier}_detail`);
 
   useEffect(() => {
     if (selectedFile && workspace) {

@@ -58,36 +58,32 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilt
           <h1 className={styles.monthHeader}>{title}</h1>
           <div
             dangerouslySetInnerHTML={{
-              __html: workspace?.isPersonal
-                ? t("calendarHeaderPersonalWorkspaceSubtitle")
-                : filterBy
+              __html: filterBy
                 ? t("calendarHeaderFilteredTeamSubtitle").replace("${teamName}", filterBy.name)
                 : t("calendarHeaderAllTeamsSubtitle"),
             }}
           />
         </div>
         <div className={styles.calendarNavigation}>
-          {!workspace?.isPersonal && (
-            <>
-              <Button
-                onClick={filterBy ? clearFilter : popFilterTeamModal}
-                heightVariant={ButtonHeight.short}
-                variant={ButtonVariants.filled}
-                className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
-              >
-                {filterBy ? (
-                  <>
-                    <IoClose />
-                    <div className="spacer-w-1" />
-                    {t("calendarClearFilterButton")}
-                  </>
-                ) : (
-                  t("calendarFilterButton")
-                )}
-              </Button>
-              <div className="spacer-w-2" />
-            </>
-          )}
+          <>
+            <Button
+              onClick={filterBy ? clearFilter : popFilterTeamModal}
+              heightVariant={ButtonHeight.short}
+              variant={ButtonVariants.filled}
+              className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
+            >
+              {filterBy ? (
+                <>
+                  <IoClose />
+                  <div className="spacer-w-1" />
+                  {t("calendarClearFilterButton")}
+                </>
+              ) : (
+                t("calendarFilterButton")
+              )}
+            </Button>
+            <div className="spacer-w-2" />
+          </>
 
           <Button onClick={prevMonth}>
             <IoCaretBack />

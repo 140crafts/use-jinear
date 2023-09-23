@@ -12,13 +12,13 @@ interface TopicListScreenBreadcrumbProps {
 const TopicListScreenBreadcrumb: React.FC<TopicListScreenBreadcrumbProps> = ({ workspace, team }) => {
   const { t } = useTranslation();
 
-  return !workspace?.isPersonal ? (
+  return (
     <Breadcrumb>
       <BreadcrumbLink label={workspace?.title || ""} url={`/${workspace?.username}`} />
       <BreadcrumbLink label={team?.name || ""} url={`/${workspace?.username}/${team?.name}`} />
       <BreadcrumbLink label={t("topicListScreenTitle")} url={`/${workspace?.username}/${team?.name}/topic/list`} />
     </Breadcrumb>
-  ) : null;
+  );
 };
 
 export default TopicListScreenBreadcrumb;

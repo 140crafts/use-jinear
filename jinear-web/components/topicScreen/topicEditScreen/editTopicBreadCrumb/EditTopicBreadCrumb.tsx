@@ -14,14 +14,14 @@ interface EditTopicBreadCrumbProps {
 const EditTopicBreadCrumb: React.FC<EditTopicBreadCrumbProps> = ({ workspace, team, topicName, topicId }) => {
   const { t } = useTranslation();
 
-  return !workspace.isPersonal ? (
+  return (
     <Breadcrumb>
       <BreadcrumbLink label={workspace?.title || ""} url={`/${workspace?.username}`} />
       <BreadcrumbLink label={team?.name || ""} url={`/${workspace?.username}/${team?.name}/topic/list`} />
       <BreadcrumbLink label={t("topicListScreenTitle")} url={`/${workspace?.username}/${team?.name}/topic/list`} />
       <BreadcrumbLink label={topicName} url={`/${workspace?.username}/${team?.name}/topic/edit/${topicId}`} />
     </Breadcrumb>
-  ) : null;
+  );
 };
 
 export default EditTopicBreadCrumb;

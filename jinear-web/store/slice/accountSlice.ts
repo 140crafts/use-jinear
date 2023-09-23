@@ -56,18 +56,9 @@ export const selectIsAccountIdIsCurrentAccountId = (accountId: string) => (state
   accountId == state.account.current?.accountId;
 
 export const selectCurrentAccountsWorkspaces = (state: RootState) => state.account.current?.workspaces;
-export const selectCurrentAccountsNonPersonalWorkspaces = (state: RootState) =>
-  state.account.current?.workspaces.filter((w) => !w.isPersonal);
+
 export const selectCurrentAccountHasAnyWorkspace = (state: RootState) =>
   state.account.current?.workspaces == null || state.account.current?.workspaces.length == 0;
-
-export const selectCurrentAccountsPersonalWorkspace = (state: RootState) =>
-  state.account.current?.workspaces?.find((w) => w.isPersonal);
-export const selectCurrentAccountHasAPersonalWorkspace = (state: RootState) =>
-  state.account.current?.workspaces?.findIndex((w) => w.isPersonal) != -1;
-
-export const selectCurrentAccountsCollectiveWorkspaces = (state: RootState) =>
-  state.account.current?.workspaces?.filter((w) => !w.isPersonal);
 
 export const selectCurrentAccountsPreferredWorkspace = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.workspace;

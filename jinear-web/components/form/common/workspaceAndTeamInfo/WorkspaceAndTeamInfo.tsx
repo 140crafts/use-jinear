@@ -12,9 +12,7 @@ import styles from "./WorkspaceAndTeamInfo.module.css";
 interface WorkspaceAndTeamInfoProps {
   workspace: WorkspaceDto;
   team: TeamDto;
-  personalWorkspaceTitle: string;
   workspaceTitle: string;
-  personalWorkspaceLabel: string;
   onTeamChange?: (team: TeamDto) => void;
   readOnly?: boolean;
 }
@@ -22,9 +20,7 @@ interface WorkspaceAndTeamInfoProps {
 const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
   workspace,
   team,
-  personalWorkspaceTitle,
   workspaceTitle,
-  personalWorkspaceLabel,
   onTeamChange,
   readOnly = false,
 }) => {
@@ -55,7 +51,7 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
 
   return (
     <div className={styles.container}>
-      {workspace.isPersonal ? personalWorkspaceTitle : workspaceTitle}
+      {workspaceTitle}
       <div className={styles.buttonContainer}>
         <Button
           //fixed
@@ -66,20 +62,18 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
           onClick={popChangeWorkspaceModal}
         >
           <IoHomeOutline />
-          <b>{workspace.isPersonal ? personalWorkspaceLabel : workspace.title}</b>
+          <b>{workspace.title}</b>
         </Button>
-        {!workspace.isPersonal && (
-          <Button
-            disabled={readOnly}
-            className={styles.button}
-            variant={ButtonVariants.filled}
-            heightVariant={ButtonHeight.short}
-            onClick={popChangeTeamModal}
-          >
-            <IoPeopleOutline />
-            <b>{team.name}</b>
-          </Button>
-        )}
+        <Button
+          disabled={readOnly}
+          className={styles.button}
+          variant={ButtonVariants.filled}
+          heightVariant={ButtonHeight.short}
+          onClick={popChangeTeamModal}
+        >
+          <IoPeopleOutline />
+          <b>{team.name}</b>
+        </Button>
       </div>
     </div>
   );

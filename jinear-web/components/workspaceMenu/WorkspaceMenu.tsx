@@ -1,4 +1,4 @@
-import { selectCurrentAccountsNonPersonalWorkspaces, selectCurrentAccountsPersonalWorkspace } from "@/store/slice/accountSlice";
+import { selectCurrentAccountsWorkspaces } from "@/store/slice/accountSlice";
 import { popNewWorkspaceModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -13,8 +13,7 @@ interface WorkspaceMenuProps {}
 const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const personalWorkspace = useTypedSelector(selectCurrentAccountsPersonalWorkspace);
-  const otherWorkspaces = useTypedSelector(selectCurrentAccountsNonPersonalWorkspaces);
+  const workspaces = useTypedSelector(selectCurrentAccountsWorkspaces);
 
   const onNewWorkspaceButtonClick = () => {
     dispatch(popNewWorkspaceModal());
@@ -23,10 +22,7 @@ const WorkspaceMenu: React.FC<WorkspaceMenuProps> = ({}) => {
   return (
     <div className={styles.container}>
       <div className={styles.workspaceList}>
-        {personalWorkspace && (
-          <WorkspaceButton key={`workspace-menu-${personalWorkspace.workspaceId}`} workspace={personalWorkspace} index={0} />
-        )}
-        {otherWorkspaces?.map((workspace, index) => (
+        {workspaces?.map((workspace, index) => (
           <WorkspaceButton key={`workspace-menu-${workspace.workspaceId}`} workspace={workspace} index={index} />
         ))}
 
