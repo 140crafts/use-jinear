@@ -1,7 +1,10 @@
+@import "/styles/breakpoints.scss";
+
 .container {
   display: flex;
   flex-direction: column;
   position: relative;
+  max-width: calc(100vw - var(--side-menu-width));
 }
 
 .loadingContainer {
@@ -20,4 +23,10 @@
 .weeks {
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: $tablet) {
+  .container {
+    max-width: unset;
+  }
 }

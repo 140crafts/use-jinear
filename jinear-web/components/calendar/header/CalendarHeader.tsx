@@ -7,16 +7,25 @@ import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoCaretBack, IoCaretForward, IoClose, IoEllipse } from "react-icons/io5";
 import { useSetViewingDate, useViewingDate } from "../context/CalendarContext";
-import styles from "./CalendarHeader.module.css";
+import styles from "./CalendarHeader.module.scss";
 
 interface CalendarHeaderProps {
   days: Date[];
   filterBy?: TeamDto;
   setFilterBy?: React.Dispatch<React.SetStateAction<TeamDto | undefined>>;
   workspace: WorkspaceDto;
+  squeezedView: boolean;
+  setSqueezedView: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilterBy, workspace }) => {
+const CalendarHeader: React.FC<CalendarHeaderProps> = ({
+  days,
+  filterBy,
+  setFilterBy,
+  workspace,
+  squeezedView,
+  setSqueezedView,
+}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const viewingDate = useViewingDate();
@@ -51,6 +60,10 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilt
     setFilterBy?.(undefined);
   };
 
+  const toggleSquezeedView = () => {
+    setSqueezedView(!squeezedView);
+  };
+
   return (
     <>
       <div className={styles.mainCalendarHeader}>
@@ -64,26 +77,35 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilt
             }}
           />
         </div>
+        <div className="spacer-h-1" />
         <div className={styles.calendarNavigation}>
-          <>
-            <Button
-              onClick={filterBy ? clearFilter : popFilterTeamModal}
-              heightVariant={ButtonHeight.short}
-              variant={ButtonVariants.filled}
-              className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
-            >
-              {filterBy ? (
-                <>
-                  <IoClose />
-                  <div className="spacer-w-1" />
-                  {t("calendarClearFilterButton")}
-                </>
-              ) : (
-                t("calendarFilterButton")
-              )}
-            </Button>
-            <div className="spacer-w-2" />
-          </>
+          <Button
+            heightVariant={ButtonHeight.short}
+            variant={squeezedView ? ButtonVariants.filled2 : ButtonVariants.filled}
+            onClick={toggleSquezeedView}
+            className={styles.squeezedViewToggleButton}
+          >
+            {squeezedView ? <IoCaretBack /> : <IoCaretForward />}
+            {!squeezedView ? <IoCaretBack /> : <IoCaretForward />}
+          </Button>
+          <div className="spacer-w-1" />
+          <Button
+            onClick={filterBy ? clearFilter : popFilterTeamModal}
+            heightVariant={ButtonHeight.short}
+            variant={ButtonVariants.filled}
+            className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
+          >
+            {filterBy ? (
+              <>
+                <IoClose />
+                <div className="spacer-w-1" />
+                {t("calendarClearFilterButton")}
+              </>
+            ) : (
+              t("calendarFilterButton")
+            )}
+          </Button>
+          <div className="spacer-w-2" />
 
           <Button onClick={prevMonth}>
             <IoCaretBack />
@@ -95,13 +117,6 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ days, filterBy, setFilt
             <IoCaretForward />
           </Button>
         </div>
-      </div>
-      <div className={styles.weekdayHeaderContainer}>
-        {days.slice(0, 7).map((day) => (
-          <div key={`header-${day.getTime()}`} className={styles.weekdayHeader}>
-            {format(day, "E", { weekStartsOn: 1 })}
-          </div>
-        ))}
       </div>
     </>
   );

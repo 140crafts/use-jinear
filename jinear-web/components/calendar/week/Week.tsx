@@ -28,8 +28,6 @@ const Week: React.FC<WeekProps> = ({ id, week, weekIndex, weekTasks }) => {
           weekEnd={week[week.length - 1]}
         />
       ))}
-      {/* todo */}
-      {/* <div>SHOW 3 MORE</div> */}
       <Tile id={`${id}-tile-container`} week={week} />
     </div>
   );
