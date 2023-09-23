@@ -19,13 +19,13 @@ const WorkspaceMembers: React.FC<WorkspaceMembersProps> = ({}) => {
   } = useRetrieveWorkspaceMembersQuery(
     { workspaceId: preferredWorkspace?.workspaceId || "" },
     {
-      skip: !preferredWorkspace?.workspaceId && !preferredWorkspace?.isPersonal,
+      skip: !preferredWorkspace?.workspaceId,
     }
   );
 
   return (
     <div className={styles.container}>
-      {isSuccess && preferredWorkspace && !preferredWorkspace.isPersonal && workplaceMembersResponse && (
+      {isSuccess && preferredWorkspace && workplaceMembersResponse && (
         <WorkspaceMemberList page={workplaceMembersResponse.data} workspaceUsername={preferredWorkspace.username} />
       )}
     </div>

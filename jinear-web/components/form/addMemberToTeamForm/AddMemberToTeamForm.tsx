@@ -17,7 +17,7 @@ interface AddMemberToTeamFormProps {
 
 const logger = Logger("AddMemberToTeamForm");
 
-const AVAILABLE_TEAM_ROLES: TeamMemberRoleType[] = ["ADMIN", "MEMBER", "GUEST"];
+const AVAILABLE_TEAM_ROLES: TeamMemberRoleType[] = ["ADMIN", "MEMBER"]; //, "GUEST"
 
 const AddMemberToTeamForm: React.FC<AddMemberToTeamFormProps> = ({ workspaceId, teamId, onAddSuccess }) => {
   const { t } = useTranslation();
@@ -85,7 +85,7 @@ const AddMemberToTeamForm: React.FC<AddMemberToTeamFormProps> = ({ workspaceId, 
           </div>
         </div>
 
-        <div className="spacer-h-4" />
+        <div className="spacer-h-1" />
 
         <Button
           disabled={isAddLoading}

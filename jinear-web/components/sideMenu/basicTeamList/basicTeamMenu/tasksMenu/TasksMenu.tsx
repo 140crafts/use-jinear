@@ -30,18 +30,16 @@ const TasksMenu: React.FC<TasksMenuProps> = ({ workspace, team }) => {
         <IoList />
         <div>{t("sideMenuTeamActionButtonLabelTasks")}</div>
       </Button>
-      {!workspace.isPersonal && (
-        <div className={styles.actionButtonsContainer}>
-          <Button
-            variant={ButtonVariants.hoverFilled2}
-            heightVariant={ButtonHeight.short}
-            data-tooltip-right={t("sideMenuNewTask")}
-            onClick={popNewTask}
-          >
-            <IoAdd />
-          </Button>
-        </div>
-      )}
+      <div className={styles.actionButtonsContainer}>
+        <Button
+          variant={ButtonVariants.hoverFilled2}
+          heightVariant={ButtonHeight.short}
+          data-tooltip-right={t("sideMenuNewTask")}
+          onClick={popNewTask}
+        >
+          <IoAdd />
+        </Button>
+      </div>
     </div>
   );
 };

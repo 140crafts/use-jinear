@@ -115,3 +115,11 @@
   flex-direction: row;
   gap: 1rem;
 }
+
+.usernameSuggestionsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}

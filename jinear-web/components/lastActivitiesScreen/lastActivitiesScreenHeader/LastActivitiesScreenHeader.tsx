@@ -34,29 +34,25 @@ const LastActivitiesScreenHeader: React.FC<LastActivitiesScreenHeaderProps> = ({
           dangerouslySetInnerHTML={{
             __html: filterBy
               ? t("lastActivitiesScreenFilteredText").replace("${teamName}", filterBy.name)
-              : workspace.isPersonal
-              ? t("lastActivitiesScreenPersonalWorkspaceText")
               : t("lastActivitiesScreenAllTeamsText"),
           }}
         />
-        {!workspace.isPersonal && (
-          <Button
-            onClick={filterBy ? clearFilter : popFilterTeamModal}
-            variant={ButtonVariants.filled}
-            heightVariant={ButtonHeight.short}
-            className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
-          >
-            {filterBy ? (
-              <>
-                <IoClose />
-                <div className="spacer-w-1" />
-                {t("lastActivitiesScreenClearFilterButton")}
-              </>
-            ) : (
-              t("lastActivitiesScreenFilterButton")
-            )}
-          </Button>
-        )}
+        <Button
+          onClick={filterBy ? clearFilter : popFilterTeamModal}
+          variant={ButtonVariants.filled}
+          heightVariant={ButtonHeight.short}
+          className={filterBy ? styles.filterButtonWithActiveFilter : undefined}
+        >
+          {filterBy ? (
+            <>
+              <IoClose />
+              <div className="spacer-w-1" />
+              {t("lastActivitiesScreenClearFilterButton")}
+            </>
+          ) : (
+            t("lastActivitiesScreenFilterButton")
+          )}
+        </Button>
       </div>
     </div>
   );

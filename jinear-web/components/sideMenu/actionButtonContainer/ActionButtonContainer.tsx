@@ -71,17 +71,14 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
         <IoPlayForwardOutline />
         <div>{t("sideMenuActivities")}</div>
       </Button>
-
-      {!preferredWorkspace?.isPersonal && (
-        <Button
-          href={assignedToMePath}
-          variant={currentPath == assignedToMePath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
-          className={styles.button}
-        >
-          <IoCheckmarkCircleOutline size={17} style={{ marginLeft: -2 }} />
-          <div>{t("sideMenuMyAssignments")}</div>
-        </Button>
-      )}
+      <Button
+        href={assignedToMePath}
+        variant={currentPath == assignedToMePath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+        className={styles.button}
+      >
+        <IoCheckmarkCircleOutline size={17} style={{ marginLeft: -2 }} />
+        <div>{t("sideMenuMyAssignments")}</div>
+      </Button>
     </div>
   );
 };

@@ -15,7 +15,7 @@ interface TaskBoardDetailBreadcrumbProps {
 const TaskBoardDetailBreadcrumb: React.FC<TaskBoardDetailBreadcrumbProps> = ({ workspace, team, title, taskBoardId }) => {
   const { t } = useTranslation();
 
-  return !workspace.isPersonal ? (
+  return (
     <Breadcrumb>
       <BreadcrumbLink label={workspace.title} url={`/${workspace.username}`} />
       <BreadcrumbLink label={team.name} url={`/${workspace.username}/${team.username}`} />
@@ -25,7 +25,7 @@ const TaskBoardDetailBreadcrumb: React.FC<TaskBoardDetailBreadcrumbProps> = ({ w
       />
       <BreadcrumbLink label={title} url={`/${workspace.username}/${team.username}/task-boards/${taskBoardId}`} />
     </Breadcrumb>
-  ) : null;
+  );
 };
 
 export default TaskBoardDetailBreadcrumb;

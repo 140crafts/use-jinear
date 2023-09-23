@@ -30,14 +30,10 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {!preferredWorkspace?.isPersonal && (
-        <>
-          <div className="spacer-h-1" />
-          <MenuGroupTitle label={t("sideMenuTeamsTitle")} hasAddButton={true} onAddButtonClick={openNewTeamModal} />
-        </>
-      )}
+      <div className="spacer-h-1" />
+      <MenuGroupTitle label={t("sideMenuTeamsTitle")} hasAddButton={true} onAddButtonClick={openNewTeamModal} />
       {isFetching && <CircularLoading />}
-      {!preferredWorkspace?.isPersonal && <div className="spacer-h-1" />}
+      <div className="spacer-h-1" />
       <div className={styles.teamListContainer}>
         {preferredWorkspace &&
           teamsResponse?.data.map((teamDto) => (

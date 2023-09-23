@@ -1,6 +1,5 @@
 import TabbedPanel from "@/components/tabbedPanel/TabbedPanel";
 import TabView from "@/components/tabbedPanel/tabView/TabView";
-import TeamWorkflowSettings from "@/components/teamSettingsScreen/teamWorkflowSettings/TeamWorkflowSettings";
 import WorkspaceInfoTab from "@/components/workspaceSettingsScreen/workspaceInfoTab/WorkspaceInfoTab";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
@@ -29,11 +28,6 @@ const WorkspaceSettingsScreen: React.FC<WorkspaceSettingsScreenProps> = ({}) => 
         <TabView name="workspace-info" label={t("workspaceSettingsPageWorkspaceInfoTab")}>
           {workspace && <WorkspaceInfoTab workspace={workspace} />}
         </TabView>
-        {workspace?.isPersonal && team && (
-          <TabView name="plan" label={t("teamSettingsScreenWorkflowSectionTitle")}>
-            <TeamWorkflowSettings teamId={team.teamId} />
-          </TabView>
-        )}
       </TabbedPanel>
     </div>
   );

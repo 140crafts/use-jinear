@@ -14,20 +14,17 @@ const CurrentWorkspaceHeader: React.FC<CurrentWorkspaceHeaderProps> = ({}) => {
   const { t } = useTranslation();
   const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const isTitleSingleWord = preferredWorkspace?.title?.split?.(" ")?.length != 0;
-  const isPersonal = preferredWorkspace?.isPersonal;
 
   return (
     <div className={styles.container}>
       <Button
         variant={ButtonVariants.hoverFilled2}
         heightVariant={ButtonHeight.short}
-        className={cn(styles.title, isTitleSingleWord && !isPersonal ? "line-clamp" : undefined)}
+        className={cn(styles.title, isTitleSingleWord && "line-clamp")}
         // data-tooltip-right={t("currentWorkspaceHeaderWorkspaceDetail")}
         href={`/${preferredWorkspace?.username}/settings`}
       >
-        {isPersonal
-          ? t("workspaceMenuPersonalTitle")
-          : shortenStringIfMoreThanMaxLength({ text: preferredWorkspace?.title || "", maxLength: 26 })}
+        {shortenStringIfMoreThanMaxLength({ text: preferredWorkspace?.title || "", maxLength: 26 })}
       </Button>
       {preferredWorkspace && (
         <WorkspaceUpgradeButton workspace={preferredWorkspace} variant={"ICON"} className={styles.upgradeButton} />

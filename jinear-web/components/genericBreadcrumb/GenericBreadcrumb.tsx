@@ -13,13 +13,13 @@ interface GenericBreadcrumbProps {
 const GenericBreadcrumb: React.FC<GenericBreadcrumbProps> = ({ workspace, team, label, pathAfterWorkspaceAndTeam }) => {
   const workspaceUsername = workspace.username;
   const teamUsername = team.username;
-  return workspace && team && workspace.isPersonal ? null : (
+  return workspace && team ? (
     <Breadcrumb>
       <BreadcrumbLink label={workspace.title} url={`/${workspaceUsername}`} />
       <BreadcrumbLink label={team.name} url={`/${workspaceUsername}/${teamUsername}`} />
       <BreadcrumbLink label={label} url={`/${workspaceUsername}/${teamUsername}/${pathAfterWorkspaceAndTeam}`} />
     </Breadcrumb>
-  );
+  ) : null;
 };
 
 export default GenericBreadcrumb;

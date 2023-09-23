@@ -80,9 +80,7 @@ const NewTaskBoardForm: React.FC<NewTaskBoardFormProps> = ({ workspace, team, on
           readOnly
           workspace={workspace}
           team={team}
-          personalWorkspaceTitle={t("newTaskListFormWorkspaceAndTeamInfoForPersonalWorkspaceLabel")}
           workspaceTitle={t("newTaskListFormWorkspaceAndTeamInfoLabel")}
-          personalWorkspaceLabel={t("newTaskListFormPersonalWorkspaceSelected")}
         />
         <div className={styles.footerContainer}>
           <Button disabled={isInitializeTaskBoardLoading} onClick={onClose} className={styles.footerButton}>

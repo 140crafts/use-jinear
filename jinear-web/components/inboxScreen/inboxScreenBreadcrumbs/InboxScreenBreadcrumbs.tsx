@@ -14,7 +14,7 @@ const InboxScreenBreadcrumbs: React.FC<InboxScreenBreadcrumbsProps> = ({}) => {
   const workspaceTitle = currentWorkspace?.title || "";
   const workspaceUsername = currentWorkspace?.username || "";
 
-  return currentWorkspace?.isPersonal ? null : (
+  return (
     <Breadcrumb>
       <BreadcrumbLink label={workspaceTitle} url={`/${workspaceUsername}`} />
       <BreadcrumbLink label={t("inboxScreenBreadcrumbLabel")} url={`/${workspaceUsername}/inbox`} />
