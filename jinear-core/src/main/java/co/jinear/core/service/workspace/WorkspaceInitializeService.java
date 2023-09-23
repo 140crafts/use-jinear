@@ -109,7 +109,6 @@ public class WorkspaceInitializeService {
         Workspace workspace = new Workspace();
         workspace.setTitle(workspaceInitializeVo.getTitle());
         workspace.setDescription(workspaceInitializeVo.getDescription());
-        workspace.setIsPersonal(workspaceInitializeVo.getIsPersonal());
         workspace.setTier(WorkspaceTier.BASIC);
         return workspaceRepository.saveAndFlush(workspace);
     }

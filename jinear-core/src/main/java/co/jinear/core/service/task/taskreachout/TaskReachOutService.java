@@ -2,9 +2,7 @@ package co.jinear.core.service.task.taskreachout;
 
 import co.jinear.core.converter.task.TaskSubscriptionMailSendConverter;
 import co.jinear.core.converter.task.TaskSubscriptionNotificationSendConverter;
-import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskSubscriptionWithCommunicationPreferencesDto;
-import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.vo.mail.GenericInfoWithSubInfoMailWithCtaButtonVo;
 import co.jinear.core.model.vo.notification.NotificationSendVo;
 import co.jinear.core.model.vo.task.NotifyTaskSubscribersVo;
@@ -16,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -68,14 +65,5 @@ public class TaskReachOutService {
         } catch (Exception e) {
             log.error("Task activity, reach out via email has failed. ", e);
         }
-    }
-
-    private static boolean checkRelatedWorkspaceIsNotPersonal(NotifyTaskSubscribersVo notifyTaskSubscribersVo) {
-        boolean isPersonal = Optional.of(notifyTaskSubscribersVo)
-                .map(NotifyTaskSubscribersVo::getTaskDto)
-                .map(TaskDto::getWorkspace)
-                .map(WorkspaceDto::getIsPersonal)
-                .orElse(Boolean.FALSE);
-        return !isPersonal;
     }
 }

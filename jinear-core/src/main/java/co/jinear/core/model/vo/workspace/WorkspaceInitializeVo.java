@@ -18,6 +18,5 @@ public class WorkspaceInitializeVo {
     private WorkspaceVisibilityType visibility;
     private WorkspaceJoinType joinType;
     private Boolean appendRandomStrOnCollision;
-    private Boolean isPersonal;
     private LocaleType locale;
 }

@@ -32,10 +32,7 @@ public class Workspace extends BaseEntity {
 
     @Column(name = "description")
     private String description;
-
-    @Column(name = "is_personal")
-    private Boolean isPersonal;
-
+    
     @Convert(converter = WorkspaceTierTypeConverter.class)
     @Column(name = "tier")
     private WorkspaceTier tier;

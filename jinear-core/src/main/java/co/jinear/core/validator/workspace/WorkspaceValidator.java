@@ -1,6 +1,5 @@
 package co.jinear.core.validator.workspace;
 
-import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
@@ -29,13 +28,6 @@ public class WorkspaceValidator {
     public void validateHasContentAccess(String currentAccountId, WorkspaceDto workspaceDto) {
         if (HIDDEN.equals(workspaceDto.getSettings().getContentVisibility())) {
             workspaceMemberService.validateAccountWorkspaceMember(currentAccountId, workspaceDto.getWorkspaceId());
-        }
-    }
-
-    public void validateWorkspaceIsNotPersonal(String workspaceId){
-        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
-        if (Boolean.TRUE.equals(workspaceDto.getIsPersonal())){
-            throw new BusinessException();
         }
     }
 }
