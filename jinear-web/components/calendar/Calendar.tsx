@@ -25,7 +25,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
 
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
   const [viewingDate, setViewingDate] = useState(initialDate);
-  const [squeezedView, setSqueezedView] = useState<boolean>(false);
+  const [squeezedView, setSqueezedView] = useState<boolean>(true);
 
   const currentMonth = format(viewingDate, "MMM-yyyy");
   const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
