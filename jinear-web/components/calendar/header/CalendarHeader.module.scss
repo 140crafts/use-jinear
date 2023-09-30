@@ -15,6 +15,13 @@
   gap: 0.35rem;
 }
 
+.headerLabelContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
 .monthHeader {
   font-size: 2rem;
 }
@@ -31,6 +38,10 @@
 
 .squeezedViewToggleButton {
   display: none;
+}
+
+.viewTypeSegmentLabel {
+  text-align: center;
 }
 
 @media (max-width: 1240px) {

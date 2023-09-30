@@ -3,9 +3,9 @@ import Logger from "@/utils/logger";
 import cn from "classnames";
 import { format, isThisMonth } from "date-fns";
 import React, { useEffect, useRef } from "react";
-import { ICalendarWeekRowCell } from "../calendarUtils";
-import { useViewingDate } from "../context/CalendarContext";
-import Week from "../week/Week";
+import { ICalendarWeekRowCell } from "../../calendarUtils";
+import Week from "../../common/week/Week";
+import { useViewingDate } from "../../context/CalendarContext";
 import styles from "./Month.module.scss";
 
 interface MonthProps {
