@@ -30,6 +30,10 @@ export default {
     en: "hh:mm aaa",
     tr: "HH:mm",
   },
+  timeFormatShort: {
+    en: "hh aaa",
+    tr: "HH",
+  },
   continue: {
     en: "Continue",
     tr: "Devam",
@@ -2589,5 +2593,17 @@ export default {
   pricingPageTitle: {
     en: "Pricing & Plans",
     tr: "Planlar ve Fiyatlandırma",
+  },
+  calendarViewTypeSegment_Month: {
+    en: "Month",
+    tr: "Aylık",
+  },
+  calendarViewTypeSegment_Week: {
+    en: "Week",
+    tr: "Haftalık",
+  },
+  calendarWeekViewAllDayLabel: {
+    en: "All Day",
+    tr: "Tüm Gün",
   },
 };

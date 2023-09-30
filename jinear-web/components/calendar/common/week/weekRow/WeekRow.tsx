@@ -1,5 +1,5 @@
 import React from "react";
-import { ICalendarWeekRowCell } from "../../calendarUtils";
+import { ICalendarWeekRowCell } from "../../../calendarUtils";
 import Cell from "../../cell/Cell";
 import styles from "./WeekRow.module.css";
 

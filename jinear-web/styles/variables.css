@@ -48,6 +48,10 @@
   --calendar-event-gap: 5px;
   --calendar-event-background: #fdf5da;
   --calendar-event-background-highlighted: #f7ce46;
+  --calendar-week-view-day-cell-height: 12px;
+  --calendar-week-view-day-minute-pixel-ratio: 1;
+  --calendar-week-view-day-minute-pixel-ratio-in-pixels: 1px;
+  --calendar-week-view-left-hour-label-container-width: 2rem;
   /*  */
   --gap: clamp(1rem, 6vw, 3rem);
   --page: min(85ch, 100% - var(--gap) * 2);
@@ -84,6 +88,7 @@
   --c-BASE_DARK_BACKGROUND: #0e0e0e;
   --c-APPLE_LIGHT_BLUE: #5fc9f8;
   --c-FACEBOOK_BLUE: #4152af;
+  --c-LIGHT_BLUE: #5fc9f8;
   --c-gradient-gold-0: #dca54e;
   --c-gradient-gold-1: #ecd082;
   --c-gradient-gold-1-alternative: #efca62;

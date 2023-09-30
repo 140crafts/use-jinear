@@ -6,14 +6,14 @@ import { retrieveTaskStatusIcon } from "@/utils/taskIconFactory";
 import cn from "classnames";
 import Link from "next/link";
 import React from "react";
-import { isDateBetween } from "../calendarUtils";
+import { isDateBetween } from "../../calendarUtils";
 import {
   useHighligtedTaskId,
   useIsDateBetweenViewingPeriod,
   useIsDateFirstDayOfViewingPeriod,
   useIsDateLastDayOfViewingPeriod,
   useSetHighlightedTaskId,
-} from "../context/CalendarContext";
+} from "../../context/CalendarContext";
 import styles from "./Cell.module.css";
 
 interface CellProps {

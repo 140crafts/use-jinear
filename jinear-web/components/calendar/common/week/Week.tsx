@@ -1,6 +1,7 @@
 import Logger from "@/utils/logger";
+import cn from "classnames";
 import React from "react";
-import { ICalendarWeekRowCell } from "../calendarUtils";
+import { ICalendarWeekRowCell } from "../../calendarUtils";
 import styles from "./Week.module.css";
 import Tile from "./tile/Tile";
 import WeekDayNumbers from "./weekDayNumbers/WeekDayNumbers";
@@ -11,15 +12,16 @@ interface WeekProps {
   weekIndex: number;
   week: Date[];
   id: string;
+  className?: string;
 }
 
 const logger = Logger("Week");
 
-const Week: React.FC<WeekProps> = ({ id, week, weekIndex, weekTasks }) => {
+const Week: React.FC<WeekProps> = ({ id, week, weekIndex, weekTasks, className }) => {
   return (
-    <div id={id} className={styles.container}>
+    <div id={id} className={cn(styles.container, className)}>
       <WeekDayNumbers week={week} />
-      {weekTasks.map((rowTasks, rowIndex) => (
+      {weekTasks?.map((rowTasks, rowIndex) => (
         <WeekRow
           id={`${id}-row-${rowIndex}`}
           key={`${id}-row-${rowIndex}`}

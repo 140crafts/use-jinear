@@ -1,0 +1,25 @@
+@import "/styles/breakpoints.scss";
+
+.weekViewContainer {
+  display: flex;
+  flex-direction: column;
+  max-width: 95vw;
+  // height: 98vh;
+  overflow-x: scroll;
+}
+
+.weekViewBaseContentContainer {
+  min-width: unset;
+}
+
+// following one for user to toggle below $tablet width
+.weekViewContentContainer {
+  min-width: 112rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.dayInfoContainer {
+  position: sticky;
+  top: 0;
+}

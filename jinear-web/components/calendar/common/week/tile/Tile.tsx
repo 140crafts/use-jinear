@@ -3,7 +3,7 @@ import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import { isToday } from "date-fns";
 import React from "react";
-import { useCalendarNewTaskFromTeam, useCalendarWorkspace } from "../../context/CalendarContext";
+import { useCalendarNewTaskFromTeam, useCalendarWorkspace } from "../../../context/CalendarContext";
 import styles from "./Tile.module.css";
 
 interface TileProps {

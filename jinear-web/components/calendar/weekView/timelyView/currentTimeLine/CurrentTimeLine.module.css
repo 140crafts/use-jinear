@@ -1,0 +1,16 @@
+.currentTimeLine {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  border-top: solid;
+  border-color: var(--c-secondary);
+  border-top-width: 1px;
+  z-index: 9;
+}
+
+.label {
+  background-color: var(--c-primary);
+  width: unset;
+  position: sticky;
+  left: 0;
+}

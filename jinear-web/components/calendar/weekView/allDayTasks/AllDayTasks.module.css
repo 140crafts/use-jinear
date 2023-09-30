@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.weekContainer {
+  flex: 1;
+}
+
+.allDayLabelContainer {
+  width: var(--calendar-week-view-left-hour-label-container-width);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: sticky;
+  left: 0;
+  z-index: 9;
+  background-color: var(--c-primary);
+  border-right: 1px;
+  border-right: solid;
+  border-right-color: var(--c-primary-shade-0);
+
+  border-top-style: solid;
+  border-top-width: 4px;
+  border-top-color: var(--c-primary-shade-1);
+}
+
+.allDayLabel {
+  text-align: left;
+  font-size: 0.5rem;
+  font-weight: 500;
+  margin-top: -0.5rem;
+}
+
+.week {
+  min-height: unset !important;
+}

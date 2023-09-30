@@ -1,16 +1,14 @@
 import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
-import { useRetrieveAllIntersectingTasksFromTeamQuery, useRetrieveAllIntersectingTasksQuery } from "@/store/api/taskListingApi";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import Logger from "@/utils/logger";
-import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import { eachDayOfInterval, endOfMonth, endOfWeek, format, parse, startOfDay, startOfWeek } from "date-fns";
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import styles from "./Calendar.module.scss";
-import { ICalendarWeekRowCell, calculateHitMissTable } from "./calendarUtils";
 import CalendarContext from "./context/CalendarContext";
 import CalendarHeader from "./header/CalendarHeader";
-import Month from "./month/Month";
+import MonthView from "./monthView/MonthView";
+import WeekView from "./weekView/WeekView";
 
 interface CalendarProps {
   initialDate?: Date;
@@ -18,9 +16,12 @@ interface CalendarProps {
   className?: string;
 }
 
+export type CalendarViewType = "MONTH" | "WEEK";
+
 const logger = Logger("Calendar");
 
 const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay(new Date()), className }) => {
+  const [viewType, setViewType] = useState<CalendarViewType>("MONTH");
   const [filterBy, setFilterBy] = useState<TeamDto>();
 
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
@@ -33,63 +34,42 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
   const periodEnd = endOfWeek(endOfMonth(firstDayCurrentMonth), { weekStartsOn: 1 });
   const days = eachDayOfInterval({ start: periodStart, end: periodEnd });
 
-  const query = filterBy ? useRetrieveAllIntersectingTasksFromTeamQuery : useRetrieveAllIntersectingTasksQuery;
-  const {
-    data: taskListingResponse,
-    isFetching,
-    isSuccess,
-  } = query(
-    {
-      workspaceId: workspace.workspaceId,
-      timespanStart: periodStart,
-      timespanEnd: periodEnd,
-      teamId: filterBy ? filterBy.teamId : "",
-    },
-    { skip: workspace == null }
-  );
+  const weekViewPeriodStart = startOfWeek(viewingDate, { weekStartsOn: 1 });
+  const weekViewPeriodEnd = endOfWeek(viewingDate, { weekStartsOn: 1 });
+  const weekDays = eachDayOfInterval({ start: weekViewPeriodStart, end: weekViewPeriodEnd });
 
   const { data: teamsResponse } = useRetrieveWorkspaceTeamsQuery(workspace.workspaceId, {
     skip: workspace == null,
   });
   const workspacesFirstTeam = teamsResponse?.data?.find((team) => team);
 
-  const monthTable: ICalendarWeekRowCell[][][] | undefined = useMemo(() => {
-    if (!taskListingResponse || !taskListingResponse.data) {
-      return;
-    }
-    const tasks = taskListingResponse.data;
-    return calculateHitMissTable(tasks, days);
-  }, [JSON.stringify(days), JSON.stringify(taskListingResponse)]);
-
   return (
     <CalendarContext.Provider
       value={{
+        viewType,
+        setViewType,
         workspace,
         newTasksFromTeam: filterBy ? filterBy : workspacesFirstTeam,
+        filterBy,
+        setFilterBy,
         highlightedTaskId,
         setHighlightedTaskId,
         viewingDate,
         setViewingDate,
         periodStart,
         periodEnd,
-        tasks: taskListingResponse?.data,
+        days,
+        weekViewPeriodStart,
+        weekViewPeriodEnd,
+        weekDays,
+        squeezedView,
+        setSqueezedView,
       }}
     >
       <div className={cn(styles.container, className)}>
-        <CalendarHeader
-          days={days}
-          workspace={workspace}
-          filterBy={filterBy}
-          setFilterBy={setFilterBy}
-          squeezedView={squeezedView}
-          setSqueezedView={setSqueezedView}
-        />
-        {monthTable && <Month monthTable={monthTable} days={days} squeezedView={squeezedView} />}
-        {isFetching && (
-          <div className={styles.loadingContainer}>
-            <CircularProgress />
-          </div>
-        )}
+        <CalendarHeader workspace={workspace} />
+        {viewType == "MONTH" && <MonthView />}
+        {viewType == "WEEK" && <WeekView />}
       </div>
     </CalendarContext.Provider>
   );
