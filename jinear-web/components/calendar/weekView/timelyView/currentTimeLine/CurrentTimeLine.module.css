@@ -5,6 +5,7 @@
   border-top-width: 1px;
   z-index: 4;
   height: 1px;
+  pointer-events: none;
 }
 
 .dashed {

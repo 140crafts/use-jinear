@@ -1,9 +1,12 @@
 import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import Logger from "@/utils/logger";
+import { createUrl } from "@/utils/urlUtils";
 import cn from "classnames";
 import { eachDayOfInterval, endOfMonth, endOfWeek, format, parse, startOfDay, startOfWeek } from "date-fns";
-import React, { useState } from "react";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import styles from "./Calendar.module.scss";
 import CalendarContext from "./context/CalendarContext";
 import CalendarHeader from "./header/CalendarHeader";
@@ -20,12 +23,21 @@ export type CalendarViewType = "MONTH" | "WEEK";
 
 const logger = Logger("Calendar");
 
+const URL_DATE_FORMAT = "yyyy-dd-MM";
+
 const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay(new Date()), className }) => {
-  const [viewType, setViewType] = useState<CalendarViewType>("MONTH");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  logger.log({ searchParams: searchParams?.toString() });
+
+  const viewingDateSearchParam = searchParams.get("viewingDate");
+  const [viewType, setViewType] = useState<CalendarViewType>((searchParams.get("viewType") as CalendarViewType) || "MONTH");
   const [filterBy, setFilterBy] = useState<TeamDto>();
 
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
-  const [viewingDate, setViewingDate] = useState(initialDate);
+  const [viewingDate, setViewingDate] = useState(
+    viewingDateSearchParam ? parse(viewingDateSearchParam, URL_DATE_FORMAT, new Date()) : initialDate
+  );
   const [squeezedView, setSqueezedView] = useState<boolean>(true);
 
   const currentMonth = format(viewingDate, "MMM-yyyy");
@@ -42,6 +54,24 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
     skip: workspace == null,
   });
   const workspacesFirstTeam = teamsResponse?.data?.find((team) => team);
+
+  useEffect(() => {
+    if (workspace) {
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.delete("workspaceName");
+      newParams.set("viewType", viewType);
+      router.push(createUrl(`/${workspace.username}`, newParams));
+    }
+  }, [workspace, viewType]);
+
+  useEffect(() => {
+    if (workspace) {
+      const newParams = new URLSearchParams(searchParams.toString());
+      newParams.delete("workspaceName");
+      newParams.set("viewingDate", format(viewingDate, URL_DATE_FORMAT));
+      router.push(createUrl(`/${workspace.username}`, newParams));
+    }
+  }, [workspace, viewingDate]);
 
   return (
     <CalendarContext.Provider
