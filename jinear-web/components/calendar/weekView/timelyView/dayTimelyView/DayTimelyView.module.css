@@ -4,3 +4,7 @@
   position: relative;
   border: 1px var(--c-primary-shade-0) solid;
 }
+
+.today {
+  background: linear-gradient(0, var(--c-primary), 40%, var(--c-primary-shade-0));
+}

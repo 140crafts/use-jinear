@@ -7,7 +7,8 @@
 }
 
 .container:hover {
-  background-color: var(--c-primary-shade-0-op05);
+  background: var(--c-primary-shade-0);
+  cursor: pointer;
 }
 
 .label {

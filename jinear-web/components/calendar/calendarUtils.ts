@@ -382,8 +382,8 @@ export const convertTaskToCell = (task: TaskDto, day: Date, minuteInPx = 2.5) =>
 
   const top = differenceInMinutes(startTime, day) * minuteInPx;
   const height = differenceInMinutes(endTime, startTime) * minuteInPx;
-  const width = 100;
-  const left = 0;
+  const width = 90;
+  const left = 10;
   logger.log({ minuteInPx });
   return { task, startTime, endTime, top, height, width, left };
 };

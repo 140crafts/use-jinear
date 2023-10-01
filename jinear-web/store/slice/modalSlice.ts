@@ -486,6 +486,10 @@ export const selectNewTaskModalSubTaskOfLabel = (state: RootState) => state.moda
 export const selectNewTaskModalWorkspace = (state: RootState) => state.modal.newTaskModal?.workspace;
 export const selectNewTaskModalTeam = (state: RootState) => state.modal.newTaskModal?.team;
 export const selectNewTaskModalInitialAssignedDate = (state: RootState) => state.modal.newTaskModal?.initialAssignedDate;
+export const selectNewTaskModalInitialAssignedDateIsPrecise = (state: RootState) =>
+  state.modal.newTaskModal?.initialAssignedDateIsPrecise;
+export const selectNewTaskModalInitialDueDate = (state: RootState) => state.modal.newTaskModal?.initialDueDate;
+export const selectNewTaskModalInitialDueDateIsPrecise = (state: RootState) => state.modal.newTaskModal?.initialDueDateIsPrecise;
 
 export const selectNewTopicModalVisible = (state: RootState) => state.modal.newTopicModal?.visible;
 export const selectNewTopicModalWorkspace = (state: RootState) => state.modal.newTopicModal?.workspace;

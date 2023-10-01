@@ -3,6 +3,9 @@ import useWindowSize from "@/hooks/useWindowSize";
 import {
   closeNewTaskModal,
   selectNewTaskModalInitialAssignedDate,
+  selectNewTaskModalInitialAssignedDateIsPrecise,
+  selectNewTaskModalInitialDueDate,
+  selectNewTaskModalInitialDueDateIsPrecise,
   selectNewTaskModalSubTaskOf,
   selectNewTaskModalSubTaskOfLabel,
   selectNewTaskModalTeam,
@@ -26,6 +29,9 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const workspace = useTypedSelector(selectNewTaskModalWorkspace);
   const team = useTypedSelector(selectNewTaskModalTeam);
   const initialAssignedDate = useTypedSelector(selectNewTaskModalInitialAssignedDate);
+  const initialAssignedDateIsPrecise = useTypedSelector(selectNewTaskModalInitialAssignedDateIsPrecise);
+  const initialDueDate = useTypedSelector(selectNewTaskModalInitialDueDate);
+  const initialDueDateIsPrecise = useTypedSelector(selectNewTaskModalInitialDueDateIsPrecise);
   const workspaceId = workspace?.workspaceId;
 
   const { isMobile } = useWindowSize();
@@ -48,6 +54,9 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
           subTaskOf={subTaskOf}
           subTaskOfLabel={subTaskOfLabel}
           initialAssignedDate={initialAssignedDate}
+          initialAssignedDateIsPrecise={initialAssignedDateIsPrecise}
+          initialDueDate={initialDueDate}
+          initialDueDateIsPrecise={initialDueDateIsPrecise}
           className={isMobile ? styles.formMobileClassName : undefined}
           footerContainerClass={isMobile ? styles.mobileFooterContainerClass : undefined}
           onClose={close}
