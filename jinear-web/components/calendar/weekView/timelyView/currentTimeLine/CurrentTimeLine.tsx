@@ -1,3 +1,4 @@
+import cn from "classnames";
 import { differenceInMinutes, format, startOfDay } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useRef, useState } from "react";
@@ -5,9 +6,15 @@ import styles from "./CurrentTimeLine.module.css";
 
 interface CurrentTimeLineProps {
   calendarWeekViewDayMinutePixelRatio: number;
+  variant?: "dashed" | "solid";
+  withLabel?: boolean;
 }
 
-const CurrentTimeLine: React.FC<CurrentTimeLineProps> = ({ calendarWeekViewDayMinutePixelRatio }) => {
+const CurrentTimeLine: React.FC<CurrentTimeLineProps> = ({
+  withLabel = true,
+  variant = "dashed",
+  calendarWeekViewDayMinutePixelRatio,
+}) => {
   const { t } = useTranslation();
   const tickerRef = useRef<any>();
   const [now, setNow] = useState(new Date());
@@ -30,12 +37,12 @@ const CurrentTimeLine: React.FC<CurrentTimeLineProps> = ({ calendarWeekViewDayMi
   return (
     <div
       id="calendar-week-view-current-time-line"
-      className={styles.currentTimeLine}
+      className={cn(styles.currentTimeLine, styles[variant])}
       style={{
         top: minutesFromStartOfDay * calendarWeekViewDayMinutePixelRatio,
       }}
     >
-      <div className={styles.label}>{format(now, t("timeFormat"))}</div>
+      {withLabel && <div className={styles.label}>{format(now, t("timeFormat"))}</div>}
     </div>
   );
 };

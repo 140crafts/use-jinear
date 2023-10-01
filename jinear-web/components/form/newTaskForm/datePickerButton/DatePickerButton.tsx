@@ -14,7 +14,8 @@ import styles from "./DatePickerButton.module.css";
 interface DatePickerButtonProps {
   fieldName: "assignedDate" | "dueDate";
   isPreciseFieldName: "hasPreciseAssignedDate" | "hasPreciseDueDate";
-  initialAssignedDate?: Date;
+  initialDate?: Date;
+  initialDateIsPrecise?: boolean;
   register: UseFormRegister<TaskInitializeRequest>;
   setValue: UseFormSetValue<TaskInitializeRequest>;
 }
@@ -22,14 +23,15 @@ interface DatePickerButtonProps {
 const DatePickerButton: React.FC<DatePickerButtonProps> = ({
   fieldName,
   isPreciseFieldName,
-  initialAssignedDate,
+  initialDate,
+  initialDateIsPrecise,
   register,
   setValue,
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [selectedDate, setSelectedDate] = useState<Date>();
-  const { current: hasPreciseDate, toggle: toggleHasPreciseDate } = useToggle(false);
+  const { current: hasPreciseDate, toggle: toggleHasPreciseDate } = useToggle(initialDateIsPrecise);
 
   useEffect(() => {
     if (selectedDate) {
@@ -40,10 +42,10 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
   }, [selectedDate, hasPreciseDate, fieldName, isPreciseFieldName]);
 
   useEffect(() => {
-    if (initialAssignedDate) {
-      setSelectedDate(initialAssignedDate);
+    if (initialDate) {
+      setSelectedDate(initialDate);
     }
-  }, [initialAssignedDate]);
+  }, [initialDate]);
 
   const onDateSelect = (day: Date) => {
     setSelectedDate(day);

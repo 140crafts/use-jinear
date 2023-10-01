@@ -92,6 +92,9 @@ export interface NewTaskModalState extends ModalState {
   subTaskOf?: string;
   subTaskOfLabel?: string;
   initialAssignedDate?: Date;
+  initialAssignedDateIsPrecise?: boolean;
+  initialDueDate?: Date;
+  initialDueDateIsPrecise?: boolean;
 }
 
 export interface TeamPickerModalState extends ModalState {
