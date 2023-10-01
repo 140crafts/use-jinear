@@ -39,6 +39,7 @@ import TitleHandler from "@/components/titleHandler/TitleHandler";
 import Transition from "@/components/transition/Transition";
 import InternalWorkspacePrefChangeListener from "@/components/workspaceAndTeamChangeListener/InternalWorkspacePrefChangeListener";
 import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
+import { usePreserveScroll } from "@/hooks/usePreserveScroll";
 import ThemeContext, { getTheme } from "@/store/context/themeContext";
 import { store } from "@/store/store";
 import enUsLocale from "date-fns/locale/en-US";
@@ -99,7 +100,7 @@ const globalModals: any = (
 function MyApp({ Component, pageProps }: AppProps) {
   const { t } = useTranslation();
   const [theme, setTheme] = useState(getTheme());
-
+  usePreserveScroll();
   const dateFnsLocale = t("localeType") == "TR" ? trTrLocale : enUsLocale;
   setDefaultOptions({ locale: dateFnsLocale });
 

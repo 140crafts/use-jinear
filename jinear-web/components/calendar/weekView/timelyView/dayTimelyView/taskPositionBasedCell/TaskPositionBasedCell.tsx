@@ -47,7 +47,7 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
         borderLeftColor: `#${topicColor}`,
       }
     : {};
-  const zIndexStyle = highlightedZIndex ? { zIndex: 3 } : { zIndex: undefined };
+  const zIndexStyle = highlightedZIndex ? { zIndex: 5 } : { zIndex: undefined };
 
   useDebouncedEffect(
     () => {
