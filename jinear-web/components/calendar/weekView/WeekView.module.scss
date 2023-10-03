@@ -4,8 +4,7 @@
   display: flex;
   flex-direction: column;
   max-width: 95vw;
-  // height: 98vh;
-  overflow-x: scroll;
+  // overflow-x: scroll;
 }
 
 .weekViewBaseContentContainer {
@@ -14,7 +13,7 @@
 
 // following one for user to toggle below $tablet width
 .weekViewContentContainer {
-  min-width: 112rem;
+  // min-width: 112rem;
   display: flex;
   flex-direction: column;
 }
@@ -22,4 +21,6 @@
 .dayInfoContainer {
   position: sticky;
   top: 0;
+  background-color: var(--c-primary);
+  z-index: 5;
 }
