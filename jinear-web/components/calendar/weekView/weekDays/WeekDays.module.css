@@ -1,7 +1,12 @@
 .weekViewWeekdayHeaderContainer {
   display: flex;
   flex-direction: row;
-  margin-bottom: 0.75rem;
+
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background-color: var(--c-primary);
+  border-bottom: 1px var(--c-primary-shade-0) solid;
 }
 
 .weekdayHeader {
@@ -12,4 +17,9 @@
 
 .sideHourLabelSpacer {
   width: var(--calendar-week-view-left-hour-label-container-width);
+}
+
+.today {
+  background-color: var(--c-primary-shade-1);
+  border-radius: 0;
 }

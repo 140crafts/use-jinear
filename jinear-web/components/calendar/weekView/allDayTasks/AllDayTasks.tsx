@@ -25,6 +25,7 @@ const AllDayTasks: React.FC<AllDayTasksProps> = ({ days, weekTable }) => {
             weekIndex={weekIndex}
             week={days.slice(weekIndex * 7, weekIndex * 7 + 7)}
             className={styles.week}
+            omitNumbers={true}
           />
         ))}
       </div>

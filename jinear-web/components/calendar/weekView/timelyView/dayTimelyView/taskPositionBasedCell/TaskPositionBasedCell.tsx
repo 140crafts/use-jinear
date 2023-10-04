@@ -99,7 +99,7 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
       onMouseOut={_hoverEnd}
     >
       <div
-        className={cn(styles.title, "single-line", isCompleted && styles["title-line-through"])}
+        className={cn(styles.title, isCompleted && styles["title-line-through"])}
         onMouseEnter={_hoverStart}
         onMouseOut={_hoverEnd}
       >
