@@ -12,15 +12,16 @@ interface WeekProps {
   weekIndex: number;
   week: Date[];
   id: string;
+  omitNumbers?: boolean;
   className?: string;
 }
 
 const logger = Logger("Week");
 
-const Week: React.FC<WeekProps> = ({ id, week, weekIndex, weekTasks, className }) => {
+const Week: React.FC<WeekProps> = ({ id, week, weekIndex, weekTasks, omitNumbers = false, className }) => {
   return (
     <div id={id} className={cn(styles.container, className)}>
-      <WeekDayNumbers week={week} />
+      {!omitNumbers && <WeekDayNumbers week={week} />}
       {weekTasks?.map((rowTasks, rowIndex) => (
         <WeekRow
           id={`${id}-row-${rowIndex}`}

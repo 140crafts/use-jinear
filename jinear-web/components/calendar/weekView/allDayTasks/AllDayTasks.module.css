@@ -1,6 +1,7 @@
 .container {
   display: flex;
   flex-direction: row;
+  min-height: 4rem;
 }
 
 .weekContainer {
@@ -14,15 +15,9 @@
   justify-content: flex-start;
   position: sticky;
   left: 0;
-  z-index: 9;
-  background-color: var(--c-primary);
   border-right: 1px;
   border-right: solid;
   border-right-color: var(--c-primary-shade-0);
-
-  border-top-style: solid;
-  border-top-width: 4px;
-  border-top-color: var(--c-primary-shade-1);
 }
 
 .allDayLabel {
@@ -33,5 +28,5 @@
 }
 
 .week {
-  min-height: unset !important;
+  min-height: 4rem;
 }

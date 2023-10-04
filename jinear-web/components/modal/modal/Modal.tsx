@@ -55,7 +55,7 @@ const Modal: React.FC<ModalProps> = ({
               </Button>
             </div>
           )}
-          <h3 className={styles.title}>{title}</h3>
+          <h3 className={cn(styles.title, "single-line")}>{title}</h3>
           {hasTitleCloseButton && <div className={styles.titleBarIconButtonContainer} />}
         </div>
       )}

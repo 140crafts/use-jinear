@@ -70,7 +70,7 @@ const WeekView: React.FC<WeekViewProps> = ({}) => {
   useEffect(() => {
     setTimeout(() => {
       const weekViewContainer = document.getElementById("week-view-container");
-      const todayTitle = document.getElementById("calendar-title-today");
+      const todayTitle = document.getElementById("calendar-weekday-title-today");
       const currentTimeLine = document.getElementById("calendar-week-view-current-time-line");
 
       if (viewingDate && isDateBetween(periodStart, viewingDate, periodEnd)) {
@@ -97,10 +97,8 @@ const WeekView: React.FC<WeekViewProps> = ({}) => {
   return (
     <div id="week-view-container" ref={weekViewContainerRef} className={styles.weekViewContainer}>
       <div id="week-view-content-container" className={cn(styles.weekViewContentContainer)}>
-        <div className={styles.dayInfoContainer}>
-          <WeekDays days={days} />
-          <AllDayTasks days={days} weekTable={weekTableWithoutPreciseDates} />
-        </div>
+        <WeekDays days={days} />
+        <AllDayTasks days={days} weekTable={weekTableWithoutPreciseDates} />
         <TimelyView days={days} tasks={weekTasksWithPreciseDates} />
         <OverlayLoading isFetching={isFetching} />
       </div>

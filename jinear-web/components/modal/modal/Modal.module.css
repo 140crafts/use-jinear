@@ -23,6 +23,8 @@
   border-bottom-style: solid;
   border-bottom-width: 1px;
   border-bottom-color: var(--c-primary-shade-0);
+
+  overflow: hidden;
 }
 
 .titleBarIconButtonContainer {
