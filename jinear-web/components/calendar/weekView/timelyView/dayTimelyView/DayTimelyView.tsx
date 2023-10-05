@@ -61,7 +61,7 @@ const DayTimelyView: React.FC<DayTimelyViewProps> = ({ day, tasks, minuteInPx })
         <Tile
           key={`${day}-tile-${i}`}
           onClick={() => {
-            const date = addHours(startOfDay(new Date()), i);
+            const date = addHours(startOfDay(day), i);
             popNewTaskModalWithAssignedDatePreSelected(date);
           }}
         />
