@@ -2606,8 +2606,4 @@ export default {
     en: "All Day",
     tr: "Tüm Gün",
   },
-  mentionListNoResults: {
-    en: "No Results",
-    tr: "Sonuç bulunamadı",
-  },
 };

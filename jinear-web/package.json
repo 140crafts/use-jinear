@@ -14,11 +14,6 @@
     "@mui/material": "^5.10.15",
     "@reduxjs/toolkit": "^1.9.0",
     "@sentry/nextjs": "^7.47.0",
-    "@tiptap/extension-mention": "^2.1.11",
-    "@tiptap/pm": "^2.1.11",
-    "@tiptap/react": "^2.1.11",
-    "@tiptap/starter-kit": "^2.1.11",
-    "@tiptap/suggestion": "^2.1.11",
     "classnames": "^2.3.2",
     "date-fns": "^2.29.3",
     "draft-js": "^0.11.7",
@@ -46,8 +41,7 @@
     "react-use-measure": "^2.1.1",
     "redux": "^4.2.0",
     "redux-devtools-extension": "^2.13.9",
-    "sanitize-html": "^2.9.0",
-    "tippy.js": "^6.3.7"
+    "sanitize-html": "^2.9.0"
   },
   "devDependencies": {
     "@types/draftjs-to-html": "^0.8.1",

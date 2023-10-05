@@ -1,6 +1,5 @@
 import TextEditorBasic from "@/components/TextEditorBasic/TextEditorBasic";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import Tiptap from "@/components/tiptap/Tiptap";
 import { useToggle } from "@/hooks/useToggle";
 import { RichTextDto } from "@/model/be/jinear-core";
 import { useUpdateTaskDescriptionMutation } from "@/store/api/taskUpdateApi";
@@ -72,7 +71,6 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
         initialValue={initialValue}
         placeholder={initialValue ? undefined : t("taskDetalPageTaskDescription")}
       />
-      <Tiptap initialValue={initialValue} suggestionList={["cagdas", "pelin", "sucuk"]} />
       {readOnly && (
         <Button onClick={toggle} className={styles.editButton} variant={ButtonVariants.filled2}>
           {t("taskDescriptionEdit")}
