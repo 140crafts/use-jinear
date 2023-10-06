@@ -59,6 +59,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
     if (workspace) {
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.delete("workspaceName");
+      newParams.delete("teamUsername");
       newParams.set("viewType", viewType);
       router.push(createUrl(`/${workspace.username}`, newParams));
     }
@@ -68,6 +69,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
     if (workspace) {
       const newParams = new URLSearchParams(searchParams.toString());
       newParams.delete("workspaceName");
+      newParams.delete("teamUsername");
       newParams.set("viewingDate", format(viewingDate, URL_DATE_FORMAT));
       router.push(createUrl(`/${workspace.username}`, newParams));
     }

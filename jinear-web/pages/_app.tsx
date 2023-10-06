@@ -42,16 +42,19 @@ import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeL
 import { usePreserveScroll } from "@/hooks/usePreserveScroll";
 import ThemeContext, { getTheme } from "@/store/context/themeContext";
 import { store } from "@/store/store";
+import Logger from "@/utils/logger";
 import enUsLocale from "date-fns/locale/en-US";
 import trTrLocale from "date-fns/locale/tr";
 import setDefaultOptions from "date-fns/setDefaultOptions";
 import useTranslation from "locales/useTranslation";
 import { AppProps } from "next/app";
+import { useRouter } from "next/router";
 import { useContext, useEffect, useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
 import "../styles/app.css";
 
+const logger = Logger("_app");
 export function useTheme() {
   const theme = useContext(ThemeContext);
   return theme.theme;
@@ -98,9 +101,18 @@ const globalModals: any = (
 );
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  router.events?.on("routeChangeStart", () => {
+    logger.log({ routeChangeStart: router.asPath });
+  });
+  router.events?.on("routeChangeComplete", () => {
+    logger.log({ routeChangeComplete: router.asPath });
+  });
+
   const { t } = useTranslation();
   const [theme, setTheme] = useState(getTheme());
   usePreserveScroll();
+
   const dateFnsLocale = t("localeType") == "TR" ? trTrLocale : enUsLocale;
   setDefaultOptions({ locale: dateFnsLocale });
 

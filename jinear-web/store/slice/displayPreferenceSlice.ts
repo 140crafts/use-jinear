@@ -61,8 +61,7 @@ const setRerouteOnPreferenceChangeSuccess = (state: any, action: any) => {
     return;
   }
   const workspaceUsername = action.payload.data.workspace?.username;
-  const teamUsername = action.payload.data.team?.username;
-  const reroute = `/${workspaceUsername}/${teamUsername}`;
+  const reroute = `/${workspaceUsername}`;
   logger.log({ reroute, originalArgs: action?.meta?.arg?.originalArgs });
   state.reroute = reroute;
 };
