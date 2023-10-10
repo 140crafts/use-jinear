@@ -1,7 +1,8 @@
+import Logger from "@/utils/logger";
 import cn from "classnames";
 import React, { ChangeEvent } from "react";
 import { IoCaretBack, IoCaretForward } from "react-icons/io5";
-import Button from "../button";
+import Button, { ButtonHeight } from "../button";
 import PageInfo from "../pageInfo/PageInfo";
 import styles from "./Pagination.module.css";
 
@@ -19,6 +20,7 @@ interface PaginationProps {
   setPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
+const logger = Logger("Pagination");
 const Pagination: React.FC<PaginationProps> = ({
   id,
   className,
@@ -34,6 +36,7 @@ const Pagination: React.FC<PaginationProps> = ({
 }) => {
   const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
     const newPage = parseInt(e.target.value) - 1;
+    logger.log({ newPage });
     setPage(newPage);
   };
 
@@ -43,13 +46,14 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className={styles.buttonContainer}>
         <Button
           disabled={isLoading || !hasPrevious}
+          heightVariant={ButtonHeight.short}
           onClick={() => {
             setPage(page - 1);
           }}
         >
           <IoCaretBack />
         </Button>
-        <select onChange={onSelectChange} value={pageNumber}>
+        <select onChange={onSelectChange} value={pageNumber + 1}>
           {totalPages == 0 ? <option>0</option> : null}
           {Array.from(Array(totalPages).keys()).map((i) => (
             <option key={`${id}-pagination-option-${i}`}>{i + 1}</option>
@@ -57,6 +61,7 @@ const Pagination: React.FC<PaginationProps> = ({
         </select>
         <Button
           disabled={isLoading || !hasNext}
+          heightVariant={ButtonHeight.short}
           onClick={() => {
             setPage(page + 1);
           }}

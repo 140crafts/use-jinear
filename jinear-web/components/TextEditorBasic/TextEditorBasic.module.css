@@ -10,6 +10,10 @@
   min-height: 4rem;
 }
 
+.contentEditableContainer {
+  position: relative;
+}
+
 .placeholder {
   position: absolute;
   top: 0;

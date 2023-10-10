@@ -10,6 +10,7 @@ import TaskDetailContext from "./context/TaskDetailContext";
 import TaskActionBar from "./taskActionBar/TaskActionBar";
 import TaskBody from "./taskBody/TaskBody";
 import TaskChecklistContainer from "./taskChecklistContainer/TaskChecklistContainer";
+import TaskComments from "./taskComments/TaskComments";
 import TaskHasUpdatesInfo from "./taskHasUpdatesInfo/TaskHasUpdatesInfo";
 import TaskMediaList from "./taskMediaList/TaskMediaList";
 import TaskSubtaskList from "./taskSubtaskList/TaskSubtaskList";
@@ -43,6 +44,8 @@ const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
           </>
         )}
         <TaskSubtaskList />
+        <Line />
+        <TaskComments />
         <Line />
         <LastTaskActivitiesList
           workspaceId={task.workspaceId}

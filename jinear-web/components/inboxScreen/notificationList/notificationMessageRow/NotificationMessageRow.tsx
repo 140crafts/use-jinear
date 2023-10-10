@@ -5,7 +5,7 @@ import Logger from "@/utils/logger";
 import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoAlarmOutline, IoNotificationsOutline, IoReaderOutline } from "react-icons/io5";
+import { IoAlarmOutline, IoChatboxOutline, IoNotificationsOutline, IoReaderOutline } from "react-icons/io5";
 import styles from "./NotificationMessageRow.module.scss";
 
 interface NotificationMessageRowProps {
@@ -34,6 +34,7 @@ const NOTIFICATION_ICON_MAP = {
   CHECKLIST_ITEM_LABEL_CHANGED: IoReaderOutline,
   CHECKLIST_ITEM_REMOVED: IoReaderOutline,
   CHECKLIST_ITEM_INITIALIZED: IoReaderOutline,
+  TASK_NEW_COMMENT: IoChatboxOutline,
   default: IoNotificationsOutline,
 };
 

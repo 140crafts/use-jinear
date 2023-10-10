@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-09-23 08:34:04.
+// Generated using typescript-generator version 3.0.1157 on 2023-10-10 22:00:59.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  last: boolean;
   first: boolean;
+  last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -188,6 +188,16 @@ export interface ChecklistItemDto extends BaseDto {
   checklistId: string;
   label: string;
   isChecked: boolean;
+}
+
+export interface CommentDto extends BaseDto {
+  commentId: string;
+  taskId: string;
+  ownerId: string;
+  richTextId: string;
+  owner: PlainAccountProfileDto;
+  richText: RichTextDto;
+  quote: CommentDto;
 }
 
 export interface DetailedTaskSubscriptionDto extends BaseDto {
@@ -584,6 +594,12 @@ export interface InitializeChecklistRequest extends BaseRequest {
   initialItemLabel?: string | null;
 }
 
+export interface InitializeTaskCommentRequest extends BaseRequest {
+  taskId: string;
+  quoteCommentId?: string | null;
+  comment: string;
+}
+
 export interface RetrieveIntersectingTasksFromTeamRequest extends BaseRequest {
   workspaceId: string;
   teamId: string;
@@ -811,6 +827,10 @@ export interface ReminderResponse extends BaseResponse {
   data: ReminderDto[];
 }
 
+export interface PaginatedTaskCommentResponse extends BaseResponse {
+  data: PageDto<CommentDto>;
+}
+
 export interface RetrieveChecklistResponse extends BaseResponse {
   data: ChecklistDto;
 }
@@ -989,7 +1009,8 @@ export type LocaleStringType =
   | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_CHECKED_STATUS_CHANGED"
   | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_LABEL_CHANGED"
   | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_REMOVED"
-  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_INITIALIZED";
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_INITIALIZED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_NEW_COMMENT";
 
 export type LocaleType = "TR" | "EN";
 
@@ -1034,7 +1055,8 @@ export type NotificationType =
   | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED"
   | "CHECKLIST_ITEM_LABEL_CHANGED"
   | "CHECKLIST_ITEM_REMOVED"
-  | "CHECKLIST_ITEM_INITIALIZED";
+  | "CHECKLIST_ITEM_INITIALIZED"
+  | "TASK_NEW_COMMENT";
 
 export type PassiveReason =
   | "SYSTEM"
@@ -1075,7 +1097,7 @@ export type RepeatType =
 
 export type RichTextSourceStack = "WYSIWYG" | "RC";
 
-export type RichTextType = "TASK_DETAIL";
+export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT";
 
 export type TaskBoardStateType = "OPEN" | "CLOSED";
 
@@ -1125,6 +1147,7 @@ export type WorkspaceActivityType =
   | "TASK_CHANGE_ASSIGNEE"
   | "TASK_CHANGE_ASSIGNED_DATE"
   | "TASK_CHANGE_DUE_DATE"
+  | "TASK_NEW_COMMENT"
   | "RELATION_INITIALIZED"
   | "RELATION_REMOVED"
   | "CHECKLIST_INITIALIZED"

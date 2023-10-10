@@ -978,19 +978,23 @@ export default {
     en: "has changed task order from a board.",
     tr: "görevin bir panodaki sırasını değiştirdi.",
   },
-  taskWorkflowActivityInfoLabelDateInDays: {
+  taskWorkflowActivityInfoLabel_TASK_NEW_COMMENT: {
+    en: "added new comment.",
+    tr: " yeni bir yorum ekledi.",
+  },
+  dateDiffLabelDateInDays: {
     en: "${num} days ago.",
     tr: "${num} gün önce",
   },
-  taskWorkflowActivityInfoLabelDateInHours: {
+  dateDiffLabelDateInHours: {
     en: "${num} hours ago.",
     tr: "${num} saat önce",
   },
-  taskWorkflowActivityInfoLabelDateInMinutes: {
+  dateDiffLabelDateInMinutes: {
     en: "${num} minutes ago.",
     tr: "${num} dakika önce",
   },
-  taskWorkflowActivityInfoLabelDateJustNow: {
+  dateDiffLabelDateJustNow: {
     en: "Just now",
     tr: "Biraz önce",
   },
@@ -2605,5 +2609,65 @@ export default {
   calendarWeekViewAllDayLabel: {
     en: "All Day",
     tr: "Tüm Gün",
+  },
+  taskCommentsTitle: {
+    en: "Comments",
+    tr: "Yorumlar",
+  },
+  taskCommentsInputPlaceholder: {
+    en: "Leave a comment",
+    tr: "Bir yorum bırakın",
+  },
+  taskCommentsCommentSubmit: {
+    en: "Submit",
+    tr: "Gönder",
+  },
+  taskCommentsCommentHeaderText: {
+    en: "added a comment",
+    tr: "bir yorum ekledi",
+  },
+  taskCommentDelete: {
+    en: "Delete",
+    tr: "Sil",
+  },
+  deleteCommentAreYouSureTitle: {
+    en: "Delete Comment",
+    tr: "Yorumu Sil",
+  },
+  deleteCommentAreYouSureText: {
+    en: "Are you sure to delete this comment?",
+    tr: "Bu yorumu silmek istediğinize emin misiniz?",
+  },
+  deleteCommentAreYouSureDeleteButton: {
+    en: "Delete",
+    tr: "Sil",
+  },
+  commentThisCommentDeleted: {
+    en: "Comment deleted by user.",
+    tr: "Kullanıcı tarafından bu yorum silinmiş.",
+  },
+  commentLastUpdateDate: {
+    en: "Last update ",
+    tr: "Son güncelleme ",
+  },
+  taskCommentReply: {
+    en: "Reply",
+    tr: "Alıntıla",
+  },
+  taskCommentCreateDate: {
+    en: "Initialized at ",
+    tr: "Oluşturma ",
+  },
+  taskCommentUpdateDate: {
+    en: "Updated at ",
+    tr: "Güncelleme ",
+  },
+  taskCommentQuote: {
+    en: "Quote",
+    tr: "Alıntı",
+  },
+  taskCommentListEmpty: {
+    en: "There isn't any comments about this task.",
+    tr: "İlk yorum yapan siz olun",
   },
 };
