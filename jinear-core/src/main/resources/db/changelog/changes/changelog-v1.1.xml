@@ -1001,4 +1001,38 @@
         <dropColumn tableName="subscription" columnName="related_object_id"/>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-259-initialize-comment">
+        <createTable tableName="comment">
+            <column name="comment_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rich_text_id" type="char(26)"/>
+            <column name="quote_comment_id" type="char(26)"/>
+        </createTable>
+
+        <createIndex indexName="ix_task_id" tableName="comment">
+            <column name="task_id"/>
+        </createIndex>
+        <createIndex indexName="ix_owner_id" tableName="comment">
+            <column name="owner_id"/>
+        </createIndex>
+        <createIndex indexName="ix_rich_text_id" tableName="comment">
+            <column name="rich_text_id"/>
+        </createIndex>
+        <createIndex indexName="ix_quote_comment_id" tableName="comment">
+            <column name="quote_comment_id"/>
+        </createIndex>
+    </changeSet>
+
 </databaseChangeLog>

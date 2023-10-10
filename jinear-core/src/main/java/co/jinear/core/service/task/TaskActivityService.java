@@ -197,6 +197,15 @@ public class TaskActivityService {
         notifyTaskSubscribers(taskDto, type, performingAccountSessionId);
     }
 
+    public void initializeNewCommentActivity(String performedBy, String performingAccountSessionId,String commentId, TaskDto before) {
+        WorkspaceActivityType type = WorkspaceActivityType.TASK_NEW_COMMENT;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, before);
+        vo.setNewState(commentId);
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(before, type, performingAccountSessionId);
+    }
+
     private void initializeAssignedDateUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_CHANGE_ASSIGNED_DATE;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
@@ -255,9 +264,9 @@ public class TaskActivityService {
                 .build();
     }
 
-    private void notifyTaskSubscribers(TaskDto after, WorkspaceActivityType type, String performingAccountSessionId) {
+    private void notifyTaskSubscribers(TaskDto taskDto, WorkspaceActivityType type, String performingAccountSessionId) {
         NotifyTaskSubscribersVo notifyTaskSubscribersVo = new NotifyTaskSubscribersVo();
-        notifyTaskSubscribersVo.setTaskDto(after);
+        notifyTaskSubscribersVo.setTaskDto(taskDto);
         notifyTaskSubscribersVo.setWorkspaceActivityType(type);
         notifyTaskSubscribersVo.setPerformingAccountSessionId(performingAccountSessionId);
         taskReachOutService.notifyTaskSubscribers(notifyTaskSubscribersVo);

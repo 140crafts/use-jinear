@@ -44,6 +44,13 @@ public class RichTextInitializeService {
         return initializeRichText(initializeRichTextVo);
     }
 
+    public void updateRelatedObjectId(String richTextId, String relatedObjectId) {
+        log.info("Update rich text related object id has started. richTextId: {}, relatedObjectId: {}", richTextId, relatedObjectId);
+        RichText richText = richTextRetrieveService.retrieveEntity(richTextId);
+        richText.setRelatedObjectId(relatedObjectId);
+        richTextRepository.save(richText);
+    }
+
     private void passivizeRichText(RichText richText) {
         final String richTextId = richText.getRichTextId();
         log.info("Passivize rich text has started for richTextId: {}", richTextId);
