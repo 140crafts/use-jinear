@@ -2,6 +2,7 @@ import { WorkspaceActivityType } from "@/model/be/jinear-core";
 import {
   IoCalendarOutline,
   IoCaretForward,
+  IoChatboxOutline,
   IoCheckmarkOutline,
   IoCloseOutline,
   IoCogOutline,
@@ -45,6 +46,7 @@ const workspaceIconMap = {
   TASK_BOARD_ENTRY_INIT: IoReaderOutline,
   TASK_BOARD_ENTRY_REMOVED: IoReaderOutline,
   TASK_BOARD_ENTRY_ORDER_CHANGE: IoReaderOutline,
+  TASK_NEW_COMMENT: IoChatboxOutline,
 };
 
 const decideWorkspaceActivityIcon = (type: WorkspaceActivityType) => {

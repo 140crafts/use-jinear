@@ -81,7 +81,7 @@ const PaginatedActivityList: React.FC<PaginatedActivityListProps> = ({
 
       {isFetching && (
         <div className={styles.loading}>
-          <CircularProgress />
+          <CircularProgress size={12} />
         </div>
       )}
     </div>

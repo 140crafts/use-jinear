@@ -20,6 +20,8 @@ interface PaginatedListProps<T> {
   containerClassName?: string;
   contentContainerClassName?: string;
   listTitleComponent?: ReactElement;
+  listTitleClassName?: string;
+  paginationPosition?: "top" | "bottom";
 }
 
 const PaginatedList = <T,>({
@@ -36,6 +38,8 @@ const PaginatedList = <T,>({
   containerClassName,
   contentContainerClassName,
   listTitleComponent,
+  listTitleClassName,
+  paginationPosition = "top",
 }: PaginatedListProps<T>): ReactElement | null => {
   const { t } = useTranslation();
 
@@ -44,8 +48,8 @@ const PaginatedList = <T,>({
   return (
     <div id={id} className={cn(styles.container, containerClassName)}>
       <div className={styles.header}>
-        {listTitleComponent ? listTitleComponent : <h2>{listTitle}</h2>}
-        {!(hidePaginationOnSinglePages && emptyOrSinglePage) && data && (
+        {listTitleComponent ? listTitleComponent : <h2 className={listTitleClassName}>{listTitle}</h2>}
+        {!(hidePaginationOnSinglePages && emptyOrSinglePage) && data && paginationPosition == "top" && (
           <Pagination
             id={`${id}-paginator`}
             className={styles.pagination}
@@ -65,16 +69,34 @@ const PaginatedList = <T,>({
       <div className={cn(styles.content, styles.gradientBg, contentContainerClassName)}>
         {data?.content.map(renderItem)}
 
-        {!data?.hasContent && (
+        {!data?.hasContent && emptyLabel && (
           <div className={styles.emptyStateContainer}>
             <div className={styles.emptyLabel}>{emptyLabel}</div>
           </div>
         )}
       </div>
 
+      <div className={styles.header}>
+        <div className="flex-1" />
+        {!(hidePaginationOnSinglePages && emptyOrSinglePage) && data && paginationPosition == "bottom" && (
+          <Pagination
+            id={`${id}-paginator`}
+            className={styles.pagination}
+            pageNumber={data.number}
+            pageSize={data.size}
+            totalPages={data.totalPages}
+            totalElements={data.totalElements}
+            hasPrevious={data.hasPrevious}
+            hasNext={data.hasNext}
+            isLoading={isLoading || isFetching}
+            page={page}
+            setPage={setPage}
+          />
+        )}
+      </div>
       {isFetching && (
         <div className={styles.loading}>
-          <CircularProgress />
+          <CircularProgress size={12} />
         </div>
       )}
     </div>

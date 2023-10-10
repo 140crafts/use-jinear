@@ -1,12 +1,14 @@
 import { urlify } from "@/utils/isUrl";
 import Logger from "@/utils/logger";
+import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useRef, useState } from "react";
 import ContentEditable, { ContentEditableEvent } from "react-contenteditable";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import sanitizeHtml from "sanitize-html";
-import EditorButton from "./editorButton/EditorButton";
 import styles from "./TextEditorBasic.module.css";
+import EditorButton from "./editorButton/EditorButton";
+
 interface TextEditorBasicProps {
   variant?: "simple" | "full";
   htmlInputId?: string;
@@ -15,6 +17,7 @@ interface TextEditorBasicProps {
   formSetValue?: UseFormSetValue<any>;
   readOnly?: boolean;
   initialValue?: string;
+  editorClassName?: string;
 }
 
 const logger = Logger("TextEditorBasic");
@@ -39,6 +42,7 @@ const TextEditorBasic: React.FC<TextEditorBasicProps> = ({
   formSetValue,
   readOnly = false,
   initialValue,
+  editorClassName,
 }) => {
   const { t } = useTranslation();
   const [value, setValue] = useState<string>(initialValue || "");
@@ -86,17 +90,18 @@ const TextEditorBasic: React.FC<TextEditorBasicProps> = ({
           <EditorButton cmd={"insertUnorderedList"} label={t("textEditorUl")} />
         </div>
       )}
-      <ContentEditable
-        innerRef={contentEditableRef}
-        className={styles.contentEditable}
-        html={text.current}
-        disabled={readOnly}
-        onChange={handleChange}
-        onBlur={sanitizeData}
-      />
+      <div className={styles.contentEditableContainer}>
+        <ContentEditable
+          innerRef={contentEditableRef}
+          className={cn(styles.contentEditable, editorClassName)}
+          html={text.current}
+          disabled={readOnly}
+          onChange={handleChange}
+          onBlur={sanitizeData}
+        />
 
-      {(!value || value == "") && readOnly && <div className={styles.placeholder}>{placeholder}</div>}
-
+        {(!text.current || text.current == "") && readOnly && <div className={styles.placeholder}>{placeholder}</div>}
+      </div>
       {htmlInputId && <input id={htmlInputId} type="hidden" {...register?.(htmlInputId)} value={value} />}
     </div>
   );

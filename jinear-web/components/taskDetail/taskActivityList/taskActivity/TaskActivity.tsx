@@ -54,17 +54,17 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
   const dateDiff = useMemo(() => {
     const diffInDays = differenceInDays(new Date(), new Date(activity.createdDate));
     if (diffInDays != 0) {
-      return t("taskWorkflowActivityInfoLabelDateInDays")?.replace("${num}", `${diffInDays}`);
+      return t("dateDiffLabelDateInDays")?.replace("${num}", `${diffInDays}`);
     }
     const diffInHours = differenceInHours(new Date(), new Date(activity.createdDate));
     if (diffInHours != 0) {
-      return t("taskWorkflowActivityInfoLabelDateInHours")?.replace("${num}", `${diffInHours}`);
+      return t("dateDiffLabelDateInHours")?.replace("${num}", `${diffInHours}`);
     }
     const diffInMinutes = differenceInMinutes(new Date(), new Date(activity.createdDate));
     if (diffInMinutes != 0) {
-      return t("taskWorkflowActivityInfoLabelDateInMinutes")?.replace("${num}", `${diffInMinutes}`);
+      return t("dateDiffLabelDateInMinutes")?.replace("${num}", `${diffInMinutes}`);
     }
-    return t("taskWorkflowActivityInfoLabelDateJustNow");
+    return t("dateDiffLabelDateJustNow");
   }, [activity.createdDate]);
 
   const activityDateLabel = t(`taskWorkflowActivityInfoLabel_${activity.type}`) || "";
@@ -186,7 +186,6 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
           </>
         )}
       </div>
-      {/* {diffVisible && <div className="spacer-h-1" />} */}
     </div>
   );
 };
