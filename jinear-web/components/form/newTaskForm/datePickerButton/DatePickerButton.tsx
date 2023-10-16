@@ -16,6 +16,10 @@ interface DatePickerButtonProps {
   isPreciseFieldName: "hasPreciseAssignedDate" | "hasPreciseDueDate";
   initialDate?: Date;
   initialDateIsPrecise?: boolean;
+  dateSpanStart?: Date;
+  dateSpanEnd?: Date;
+  disabledBefore?: Date;
+  disabledAfter?: Date;
   register: UseFormRegister<TaskInitializeRequest>;
   setValue: UseFormSetValue<TaskInitializeRequest>;
 }
@@ -25,6 +29,10 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
   isPreciseFieldName,
   initialDate,
   initialDateIsPrecise,
+  dateSpanStart,
+  dateSpanEnd,
+  disabledBefore,
+  disabledAfter,
   register,
   setValue,
 }) => {
@@ -34,10 +42,8 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
   const { current: hasPreciseDate, toggle: toggleHasPreciseDate } = useToggle(initialDateIsPrecise);
 
   useEffect(() => {
-    if (selectedDate) {
-      // @ts-ignore
-      setValue(fieldName, selectedDate.toISOString());
-    }
+    // @ts-ignore
+    setValue(fieldName, selectedDate ? selectedDate.toISOString() : null);
     setValue(isPreciseFieldName, hasPreciseDate);
   }, [selectedDate, hasPreciseDate, fieldName, isPreciseFieldName]);
 
@@ -53,11 +59,18 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
   };
 
   const onPickClick = () => {
+    const title =
+      fieldName == "assignedDate" ? t("newTaskFormPickAssignedDateButtonLabel") : t("newTaskFormPickDueDateButtonLabel");
     dispatch(
       popDatePickerModal({
         visible: true,
         initialDate: selectedDate ? new Date(selectedDate) : new Date(),
         onDateChange: onDateSelect,
+        dateSpanStart,
+        dateSpanEnd,
+        disabledBefore,
+        disabledAfter,
+        title,
       })
     );
   };

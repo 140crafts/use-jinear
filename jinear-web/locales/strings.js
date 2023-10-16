@@ -2670,4 +2670,12 @@ export default {
     en: "There isn't any comments about this task.",
     tr: "İlk yorum yapan siz olun",
   },
+  datePickerButtonPickFutureDate: {
+    en: "Please pick future date",
+    tr: "Gelecek tarih seçin",
+  },
+  datePickerButtonPickPastDate: {
+    en: "Please pick past date",
+    tr: "Daha geri bir tarih seçin",
+  },
 };

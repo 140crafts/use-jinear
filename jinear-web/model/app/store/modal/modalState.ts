@@ -68,7 +68,12 @@ export interface NewReminderModalState extends ModalState {
 }
 
 export interface DatePickerModalState extends ModalState {
+  title?: string;
   initialDate?: Date;
+  dateSpanStart?: Date;
+  dateSpanEnd?: Date;
+  disabledBefore?: Date;
+  disabledAfter?: Date;
   onDateChange?: (date: Date) => void;
 }
 

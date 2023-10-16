@@ -546,7 +546,12 @@ export const selectNewReminderModalVisible = (state: RootState) => state.modal.n
 export const selectNewReminderModalTask = (state: RootState) => state.modal.newReminderModal?.task;
 
 export const selectDatePickerModalVisible = (state: RootState) => state.modal.datePickerModal?.visible;
+export const selectDatePickerModalTitle = (state: RootState) => state.modal.datePickerModal?.title;
 export const selectDatePickerModalInitialDate = (state: RootState) => state.modal.datePickerModal?.initialDate;
+export const selectDatePickerModalDateSpanStart = (state: RootState) => state.modal.datePickerModal?.dateSpanStart;
+export const selectDatePickerModalDateSpanEnd = (state: RootState) => state.modal.datePickerModal?.dateSpanEnd;
+export const selectDatePickerModalDisabledBefore = (state: RootState) => state.modal.datePickerModal?.disabledBefore;
+export const selectDatePickerModalDisabledAfter = (state: RootState) => state.modal.datePickerModal?.disabledAfter;
 export const selectDatePickerModalOnDateChange = (state: RootState) => state.modal.datePickerModal?.onDateChange;
 
 export const selectWorkspaceMemberInviteModalVisible = (state: RootState) => state.modal.workspaceMemberInviteModal?.visible;

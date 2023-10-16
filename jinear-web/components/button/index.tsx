@@ -64,6 +64,7 @@ interface ButtonProps {
   className?: string;
   onClick?: (event?: any) => void;
   onMouseDown?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+  onMouseOver?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   type?: string;
   form?: string;
   style?: any;

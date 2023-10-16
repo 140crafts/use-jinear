@@ -12,9 +12,10 @@ interface CommentSimpleProps {
   setQuotedComment?: Dispatch<SetStateAction<CommentDto | undefined>>;
   asQuoted?: boolean;
   className?: string;
+  withDivider?: boolean;
 }
 
-const CommentSimple: React.FC<CommentSimpleProps> = ({ comment, setQuotedComment, asQuoted, className }) => {
+const CommentSimple: React.FC<CommentSimpleProps> = ({ comment, setQuotedComment, asQuoted, withDivider = true, className }) => {
   const { t } = useTranslation();
   return (
     <div className={cn(styles.container, className)}>
@@ -28,7 +29,7 @@ const CommentSimple: React.FC<CommentSimpleProps> = ({ comment, setQuotedComment
       <CommentBody comment={comment} />
       <CommentActionBar comment={comment} asQuoted={asQuoted} setQuotedComment={setQuotedComment} />
       <CommentFooter comment={comment} />
-      {!asQuoted && <div className={styles.divider} />}
+      {!asQuoted && withDivider && <div className={styles.divider} />}
     </div>
   );
 };
