@@ -88,7 +88,8 @@ public class WorkspaceActivityRetrieveService {
             ATTACHMENT_DELETED,
             TASK_BOARD_ENTRY_INIT,
             TASK_BOARD_ENTRY_REMOVED,
-            TASK_BOARD_ENTRY_ORDER_CHANGE
+            TASK_BOARD_ENTRY_ORDER_CHANGE,
+            TASK_NEW_COMMENT
     );
 
     private final WorkspaceActivityRepository workspaceActivityRepository;

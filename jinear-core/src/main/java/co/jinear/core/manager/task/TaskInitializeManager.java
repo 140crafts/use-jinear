@@ -93,7 +93,7 @@ public class TaskInitializeManager {
 
     private void validateDueDateIsAfterAssignedDate(ZonedDateTime assignedDate, ZonedDateTime dueDate) {
         if (Objects.nonNull(assignedDate) && Objects.nonNull(dueDate) && assignedDate.isAfter(dueDate)) {
-            throw new BusinessException();
+            throw new BusinessException("task.init.assigned-date-after-due-date");
         }
     }
 
