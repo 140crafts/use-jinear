@@ -37,8 +37,8 @@ import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { IoAdd, IoClose, IoTimeOutline } from "react-icons/io5";
 import Modal from "../../modal/Modal";
-import QuickDateActionBar from "./quickDateActionBar/QuickDateActionBar";
 import styles from "./TaskDateChangeModal.module.css";
+import QuickDateActionBar from "./quickDateActionBar/QuickDateActionBar";
 
 interface TaskDateChangeModalProps {}
 
@@ -122,6 +122,9 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
         visible: true,
         initialDate: assignedDateVal ? assignedDateVal : new Date(),
         onDateChange: onAssignedDateChangeFromModal,
+        dateSpanStart: assignedDateVal && dueDateVal ? new Date(assignedDateVal) : undefined,
+        dateSpanEnd: dueDateVal ? new Date(dueDateVal) : undefined,
+        disabledAfter: dueDateVal ? new Date(dueDateVal) : undefined,
       })
     );
   };
@@ -132,6 +135,9 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
         visible: true,
         initialDate: dueDateVal ? dueDateVal : new Date(),
         onDateChange: onDueDateChangeFromModal,
+        dateSpanStart: assignedDateVal ? new Date(assignedDateVal) : undefined,
+        dateSpanEnd: dueDateVal ? new Date(dueDateVal) : undefined,
+        disabledBefore: assignedDateVal ? new Date(assignedDateVal) : undefined,
       })
     );
   };
@@ -296,7 +302,7 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
         {t("changeTaskDateDateLabel_assigned")}
         <div className={styles.inputContainer}>
           <Button className={styles.dateInput} variant={ButtonVariants.filled} onClick={popDatePickerForAssignedDate}>
-            {assignedDateVal ? format(new Date(assignedDateVal), t("dateFormat")) : t("datePickerSelectDate")}
+            <b>{assignedDateVal ? format(new Date(assignedDateVal), t("dateFormat")) : t("datePickerSelectDate")}</b>
           </Button>
           {assignedDateVal && assignedDateTimePickerVisible && (
             <TimePicker
@@ -334,7 +340,7 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
         {t("changeTaskDateDateLabel_due")}
         <div className={styles.inputContainer}>
           <Button className={styles.dateInput} variant={ButtonVariants.filled} onClick={popDatePickerForDueDate}>
-            {dueDateVal ? format(new Date(dueDateVal), t("dateFormat")) : t("datePickerSelectDate")}
+            <b>{dueDateVal ? format(new Date(dueDateVal), t("dateFormat")) : t("datePickerSelectDate")}</b>
           </Button>
           {dueDateVal && dueDateTimePickerVisible && (
             <TimePicker

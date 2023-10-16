@@ -1,0 +1,55 @@
+.buttonBase {
+  position: relative;
+  height: 2.25rem;
+}
+
+.differentMonth {
+  opacity: 0.25;
+}
+
+.bold {
+  font-weight: 800;
+}
+
+.today {
+  opacity: 0.9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* border-color: var(--c-gradient-gold-0); */
+  color: var(--c-gradient-gold-0);
+  font-weight: 800;
+}
+
+.today:hover {
+  opacity: 1;
+  color: var(--c-gradient-gold-0);
+}
+
+.betweenHoveringDay {
+  opacity: 1;
+  border-style: none;
+  background-color: var(--c-primary-shade-0);
+  border-radius: 0;
+}
+
+.borderLeftRadius {
+  background-color: var(--c-primary-shade-1);
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.borderRightRadius {
+  background-color: var(--c-primary-shade-1);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.spanEnd {
+  background-color: var(--c-primary-shade-1) !important;
+  opacity: 1;
+}
+
+.disabled {
+  opacity: 0.25 !important;
+}

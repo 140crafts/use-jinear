@@ -53,11 +53,14 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
     handleSubmit,
     setFocus,
     setValue,
+    watch,
     reset,
     formState: { errors },
   } = useForm<TaskInitializeRequest>();
   const [selectedTeam, setSelectedTeam] = useState<TeamDto>(initialTeam);
   const workspaceId = workspace.workspaceId;
+  const assignedDate = watch("assignedDate");
+  const dueDate = watch("dueDate");
 
   const [
     initializeTask,
@@ -156,6 +159,9 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             isPreciseFieldName="hasPreciseAssignedDate"
             initialDate={initialAssignedDate}
             initialDateIsPrecise={initialAssignedDateIsPrecise}
+            dateSpanStart={assignedDate && dueDate ? new Date(assignedDate) : undefined}
+            dateSpanEnd={dueDate ? new Date(dueDate) : undefined}
+            disabledAfter={dueDate ? new Date(dueDate) : undefined}
           />
           <DatePickerButton
             register={register}
@@ -164,6 +170,9 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             isPreciseFieldName="hasPreciseDueDate"
             initialDate={initialDueDate}
             initialDateIsPrecise={initialDueDateIsPrecise}
+            dateSpanStart={assignedDate ? new Date(assignedDate) : undefined}
+            dateSpanEnd={dueDate ? new Date(dueDate) : undefined}
+            disabledBefore={assignedDate ? new Date(assignedDate) : undefined}
           />
         </div>
 

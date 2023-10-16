@@ -18,7 +18,14 @@ const TaskComments: React.FC<TaskCommentsProps> = ({}) => {
   const { data: response, isLoading, isFetching } = useRetrieveTaskCommentsQuery({ taskId: task.taskId, page });
 
   const renderItem = (data: CommentDto, index: number) => {
-    return <CommentSimple key={data.commentId} comment={data} setQuotedComment={setQuotedComment} />;
+    return (
+      <CommentSimple
+        key={data.commentId}
+        comment={data}
+        setQuotedComment={setQuotedComment}
+        withDivider={index + 1 != response?.data.content.length}
+      />
+    );
   };
 
   return (
