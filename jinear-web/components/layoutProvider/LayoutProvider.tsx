@@ -1,7 +1,7 @@
+"use client";
 import Logger from "@/utils/logger";
 import { usePathname, useRouter } from "next/navigation";
 import React from "react";
-import { PureClientOnly } from "../clientOnly/ClientOnly";
 import Layout from "./layout/Layout";
 
 interface LayoutProviderProps {
@@ -26,7 +26,8 @@ const LayoutProvider: React.FC<LayoutProviderProps> = ({ children }) => {
     return false;
   };
 
-  const Wrapper = PAGES_WITHOUT_LAYOUT.indexOf(currPath) != -1 || anyHideParamsExists() ? PureClientOnly : Layout;
+  // const Wrapper = PAGES_WITHOUT_LAYOUT.indexOf(currPath) != -1 || anyHideParamsExists() ? PureClientOnly : Layout;
+  const Wrapper = Layout;
   logger.log({ currPath, Wrapper });
 
   return <Wrapper>{children}</Wrapper>;

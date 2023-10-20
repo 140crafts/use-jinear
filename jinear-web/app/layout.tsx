@@ -139,26 +139,26 @@ function MyApp({ children }: { children: React.ReactNode }) {
   return (
     <html>
       <MainHeader />
-      <Provider store={store}>
-        <ThemeContext.Provider value={{ theme, toggleTheme }}>
-          <LayoutProvider>
-            <TitleHandler />
-            <AuthCheck />
-            <InternalWorkspacePrefChangeListener />
-            <WorkspaceAndTeamChangeListener />
-            <OnboardListener />
-            <PureClientOnly>
-              <FirebaseConfigration />
-            </PureClientOnly>
-            <PureClientOnly>{/* <SseListener /> */}</PureClientOnly>
-            <body>
+      <body>
+        <Provider store={store}>
+          <ThemeContext.Provider value={{ theme, toggleTheme }}>
+            <LayoutProvider>
+              <TitleHandler />
+              <AuthCheck />
+              <InternalWorkspacePrefChangeListener />
+              <WorkspaceAndTeamChangeListener />
+              <OnboardListener />
+              <PureClientOnly>
+                <FirebaseConfigration />
+              </PureClientOnly>
+              <PureClientOnly>{/* <SseListener /> */}</PureClientOnly>
               <Transition>{children}</Transition>
               <Toaster position="bottom-center" containerStyle={{ bottom: 68 }} toastOptions={{ className: "toast" }} />
               <ErrorBoundary message={"Global Modals"}>{/* {globalModals} */}</ErrorBoundary>
-            </body>
-          </LayoutProvider>
-        </ThemeContext.Provider>
-      </Provider>
+            </LayoutProvider>
+          </ThemeContext.Provider>
+        </Provider>
+      </body>
     </html>
   );
 }
