@@ -2,7 +2,7 @@ import { useMeQuery } from "@/store/api/accountApi";
 import { selectAuthState } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 interface AuthCheckProps {}
@@ -24,7 +24,7 @@ const ONLY_NOT_LOGGED_IN_PATHS = ["/forgot-password", "/register", "/login"];
 const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
   const { data, error, isLoading } = useMeQuery();
   const router = useRouter();
-  const pathname = router.pathname;
+  const pathname = usePathname() || "";
   const authState = useTypedSelector(selectAuthState);
   logger.log({
     authState,

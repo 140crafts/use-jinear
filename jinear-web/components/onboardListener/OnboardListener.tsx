@@ -1,7 +1,7 @@
 import { selectAuthState, selectCurrentAccountsWorkspaces } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 interface OnboardListenerProps {}

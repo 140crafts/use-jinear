@@ -1,6 +1,6 @@
 import cn from "classnames";
 import { AnimatePresence, motion } from "framer-motion";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import styles from "./Transition.module.css";
 
@@ -14,7 +14,8 @@ interface TransitionProps {
 
 const Transition: React.FC<TransitionProps> = ({ initial = false, className, children, outDuration = 0, inDuration = 0.25 }) => {
   const router = useRouter();
-  const currPath = router?.asPath?.split("#")[0]?.split("?")?.[0];
+  const pathName = usePathname();
+  const currPath = pathName?.split("#")[0]?.split("?")?.[0];
 
   const variants = {
     out: {
