@@ -6,7 +6,6 @@ import { selectCurrentAccountsPreferredWorkspaceId } from "@/store/slice/account
 import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import cn from "classnames";
-import { useRouter } from "next/router";
 import React, { useEffect, useRef } from "react";
 import styles from "./WorkspaceButton.module.css";
 
@@ -18,7 +17,6 @@ interface WorkspaceButtonProps {
 const WorkspaceButton: React.FC<WorkspaceButtonProps> = ({ workspace, index = 0 }) => {
   const workspaceButtonRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const prefferedWorkspaceId = useTypedSelector(selectCurrentAccountsPreferredWorkspaceId);
   const isPreffered = workspace.workspaceId == prefferedWorkspaceId;

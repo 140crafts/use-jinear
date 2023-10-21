@@ -1,4 +1,5 @@
-import Button, { ButtonVariants } from "@/components/button";
+"use client";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import ProfilePhoto from "@/components/profilePhoto";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
 import { useLogoutMutation } from "@/store/api/authApi";
@@ -10,7 +11,7 @@ import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoLogOutOutline, IoPerson } from "react-icons/io5";
-import styles from "./SideMenuFooter.module.css";
+import styles from "./SideMenuFooter.module.scss";
 
 interface SideMenuFooterProps {
   className?: string;
@@ -41,7 +42,13 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
 
   return (
     <div className={cn(styles.container, className)}>
-      <Button href={"/profile"} variant={ButtonVariants.hoverFilled} className={styles.accountButton}>
+      <ThemeToggle variant={ButtonVariants.hoverFilled} />
+      <Button
+        href={"/profile"}
+        variant={ButtonVariants.hoverFilled}
+        className={styles.accountButton}
+        heightVariant={ButtonHeight.short}
+      >
         <div>
           {currentAccount ? (
             <ProfilePhoto
@@ -53,9 +60,10 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
             <IoPerson size={14} />
           )}
         </div>
-        {shortenStringIfMoreThanMaxLength({ text: currentAccount?.username || "", maxLength: 18 })}
-      </Button>{" "}
-      <ThemeToggle variant={ButtonVariants.hoverFilled} />
+        <span className={styles.userName}>
+          {shortenStringIfMoreThanMaxLength({ text: currentAccount?.username || "", maxLength: 18 })}
+        </span>
+      </Button>
       <Button
         loading={isLoading}
         variant={ButtonVariants.hoverFilled}

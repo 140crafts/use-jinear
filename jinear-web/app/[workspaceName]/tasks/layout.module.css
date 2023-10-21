@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  margin-top: calc(var(--workspace-layout-content-vertical-padding) * -1);
+  margin-bottom: calc(var(--workspace-layout-content-vertical-padding) * -1);
+  height: calc(100vh - var(--workspace-header-height));
+  /* flex: 1; */
+}
+
+.tasksSideMenuContainer {
+  z-index: 99;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: var(--c-primary-shade-0);
+  height: calc(100vh - var(--workspace-header-height));
+  min-height: calc(100vh - var(--workspace-header-height));
+  max-height: calc(100vh - var(--workspace-header-height));
+  width: var(--tasks-section-sidebar-width);
+  min-width: var(--tasks-section-sidebar-width);
+  max-width: var(--tasks-section-sidebar-width);
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.contentContainer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  overflow: scroll;
+  height: calc(100vh - var(--workspace-header-height));
+  min-height: calc(100vh - var(--workspace-header-height));
+  max-height: calc(100vh - var(--workspace-header-height));
+}

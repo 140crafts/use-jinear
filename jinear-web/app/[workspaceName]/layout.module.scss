@@ -1,0 +1,77 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 1;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  display: flex;
+  flex: 1;
+  height: var(--workspace-header-height);
+  min-height: var(--workspace-header-height);
+  max-height: var(--workspace-header-height);
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--c-primary);
+  border-bottom-style: solid;
+  border-bottom-color: var(--c-primary-shade-0);
+  border-bottom-width: 1px;
+}
+
+.content {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  padding-top: var(--workspace-header-height);
+  height: 100vh;
+  max-height: 100vh;
+  min-height: 100vh;
+}
+
+.workspaceSideMenuContainer {
+  padding-top: 1rem;
+  max-width: var(--workspace-side-menu-max-width);
+  min-width: var(--workspace-side-menu-max-width);
+  background-color: var(--c-primary);
+  width: 100%;
+  z-index: 99;
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: var(--c-primary-shade-0);
+  overflow: scroll;
+}
+
+.pageContent {
+  flex: 1;
+  overflow: scroll;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  padding: 0;
+  padding-top: var(--workspace-layout-content-vertical-padding);
+  padding-bottom: var(--workspace-layout-content-vertical-padding);
+}
+
+@media (max-width: $tablet) {
+  .workspaceSideMenuContainer {
+    padding-top: unset;
+    max-width: unset;
+    min-width: unset;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: var(--c-primary-shade-0);
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}

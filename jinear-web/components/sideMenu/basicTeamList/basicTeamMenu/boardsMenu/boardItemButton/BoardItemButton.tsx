@@ -17,7 +17,7 @@ const BoardItemButton: React.FC<BoardItemButtonProps> = ({ workspace, team, task
       className={cn(styles.button, "line-clamp")}
       variant={ButtonVariants.hoverFilled}
       heightVariant={ButtonHeight.short}
-      href={`/${workspace.username}/${team.username}/task-boards/${taskBoardDto.taskBoardId}`}
+      href={`/${workspace.username}/tasks/${team.username}/task-boards/${taskBoardDto.taskBoardId}`}
     >
       {shortenStringIfMoreThanMaxLength({ text: taskBoardDto.title, maxLength: 34 })}
     </Button>

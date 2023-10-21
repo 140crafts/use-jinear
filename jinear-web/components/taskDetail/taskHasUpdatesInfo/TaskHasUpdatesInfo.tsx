@@ -3,7 +3,7 @@ import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
 import { clearHasUnreadNotification, selectTaskAdditionalData } from "@/store/slice/taskAdditionalDataSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { IoClose, IoWarning } from "react-icons/io5";
 import { useTask } from "../context/TaskDetailContext";
@@ -21,7 +21,8 @@ const TaskHasUpdatesInfo: React.FC<TaskHasUpdatesInfoProps> = ({}) => {
 
   const refreshPage = () => {
     dispatch(changeLoadingModalVisibility({ visible: true }));
-    router.reload();
+    // TODO cgds-275 test
+    router.refresh();
   };
 
   const clearHasUpdatesOnTask = () => {

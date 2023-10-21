@@ -2678,4 +2678,24 @@ export default {
     en: "Please pick past date",
     tr: "Daha geri bir tarih seçin",
   },
+  mainFeaturesMenuLabelTasks: {
+    en: "Tasks",
+    tr: "Görevler",
+  },
+  mainFeaturesMenuLabelCalendar: {
+    en: "Calendar",
+    tr: "Takvim",
+  },
+  mainFeaturesMenuLabelNotifications: {
+    en: "Notifications",
+    tr: "Bildirimler",
+  },
+  mainFeaturesMenuLabelLastActivities: {
+    en: "Updates",
+    tr: "Güncellemeler",
+  },
+  mainFeaturesMenuLabelAssignedToMe: {
+    en: "My Assignments",
+    tr: "Bana Atananlar",
+  },
 };

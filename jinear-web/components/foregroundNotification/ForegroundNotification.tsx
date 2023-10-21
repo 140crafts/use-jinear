@@ -1,5 +1,5 @@
 import useTranslation from "locales/useTranslation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "react-hot-toast";
 import Button, { ButtonVariants } from "../button";

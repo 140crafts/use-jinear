@@ -25,7 +25,7 @@ const TasksMenu: React.FC<TasksMenuProps> = ({ workspace, team }) => {
       <Button
         className={styles.labelButton}
         variant={ButtonVariants.hoverFilled2}
-        href={`/${workspace.username}/${team.username}/tasks`}
+        href={`/${workspace.username}/tasks/${team.username}/tasks`}
       >
         <IoList />
         <div>{t("sideMenuTeamActionButtonLabelTasks")}</div>

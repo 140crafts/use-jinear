@@ -1,0 +1,148 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  width: var(--page-extended);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  background-color: var(--c-primary);
+  padding: 0.25rem 0;
+  min-width: calc(100% + 1rem);
+  margin-left: -1rem;
+}
+
+.headerActionBar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.themeToggleButton {
+  margin-top: 0.2rem;
+}
+
+.heroContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.heroTitle {
+  position: relative;
+  font-size: 3.5rem;
+  line-height: 4rem;
+  width: 85%;
+  font-weight: 800;
+  margin: 2rem 0;
+  overflow: visible;
+}
+
+.heroHighlighted {
+  color: black;
+  background-color: var(--c-JINEAR_YELLOW);
+  border-radius: 0.25rem;
+  padding: 0.25rem 1rem;
+  margin-left: -1rem;
+}
+
+.heroText {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.actionBar {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.goToAppButton {
+  display: flex;
+  flex-direction: row;
+  min-width: 8rem;
+  gap: 0.5rem;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.imageContainer {
+  position: relative;
+  min-height: 250px;
+}
+
+.image {
+  border-radius: var(--border-radius);
+  width: 100%;
+  height: auto;
+}
+
+.sectionContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+  font-size: 1rem;
+}
+
+.logo {
+  margin-left: -1rem;
+}
+
+@media (max-width: $laptop) {
+  .heroTitle {
+    font-size: 3.25rem;
+    line-height: 3.75rem;
+  }
+}
+
+@media (max-width: $tablet) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .headerActionBar {
+    align-self: flex-end;
+    align-items: center;
+    margin-top: -1rem;
+  }
+  .heroTitle {
+    font-size: 2.5rem;
+    line-height: 3rem;
+    margin: 1.5rem 0;
+  }
+  .heroText {
+    font-size: 1rem;
+    line-height: 1.5rem;
+  }
+}
+
+@media (max-width: $mobile-l) {
+  .heroTitle {
+    font-size: 2rem;
+    line-height: 2.5rem;
+    margin: 1rem 0;
+  }
+}
+
+@media (max-width: $mobile-s) {
+  .heroTitle {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    margin: 1rem 0;
+  }
+}

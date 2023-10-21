@@ -1,3 +1,4 @@
+"use client";
 import { s3Base } from "@/store/api/api";
 import Logger from "@/utils/logger";
 import cn from "classnames";

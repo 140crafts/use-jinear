@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "@/components/button";
 import SideMenu from "@/components/sideMenu/SideMenu";
 import SideMenuFooter from "@/components/sideMenu/sideMenuFooter/SideMenuFooter";
@@ -25,16 +27,16 @@ const logger = Logger("Layout");
 
 const ROUTES_WITHOUT_SIDE_MENU = [
   "/",
-  "/forgot-password",
+  "/terms",
   "/register",
+  "/pricing",
+  "/new-workspace",
   "/login",
+  "/forgot-password",
   "/engage/[token]/confirm-email",
   "/engage/[token]/reset-password-complete",
   "/engage/[token]/forgot-password",
   "/engage/[token]/workspace-invitation",
-  "/new-workspace",
-  "/terms",
-  "/pricing",
 ];
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {

@@ -17,7 +17,7 @@ const FilesMenu: React.FC<FilesMenuProps> = ({ workspace, team }) => {
       <Button
         className={styles.labelButton}
         variant={ButtonVariants.hoverFilled2}
-        href={`/${workspace.username}/${team.username}/files`}
+        href={`/${workspace.username}/tasks/${team.username}/files`}
       >
         <IoDocumentOutline />
         <div>{t("sideMenuTeamActionButtonLabelFiles")}</div>

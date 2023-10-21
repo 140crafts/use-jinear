@@ -15,7 +15,7 @@ import { __DEV__ } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { isWorkspaceInPaidTier } from "@/utils/permissionHelper";
 import useTranslation from "locales/useTranslation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { IoCheckmarkCircle } from "react-icons/io5";
 import Modal from "../modal/Modal";

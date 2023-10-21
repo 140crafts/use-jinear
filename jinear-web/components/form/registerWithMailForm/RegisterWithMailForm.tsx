@@ -5,7 +5,7 @@ import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -43,10 +43,8 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({ className }
     if (isSuccess && !isError) {
       toast(t("registerWithEmailIsSuccessfull"));
       setTimeout(() => {
-        router.replace({
-          pathname: "/login",
-          query: { email },
-        });
+        const params = email ? `?email=${email}` : "";
+        router.replace(`/login${params}`);
       }, 2500);
     }
   }, [isSuccess, isError]);

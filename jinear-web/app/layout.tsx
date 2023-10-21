@@ -3,7 +3,6 @@ import AuthCheck from "@/components/authCheck/AuthCheck";
 import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 import ErrorBoundary from "@/components/errorBoundary/ErrorBoundary";
 import FirebaseConfigration from "@/components/firebaseConfiguration/FirebaseConfigration";
-import LayoutProvider from "@/components/layoutProvider/LayoutProvider";
 import MainHeader from "@/components/mainHeader/MainHeader";
 import AddMemberToTeamModal from "@/components/modal/addMemberToTeamModal/AddMemberToTeamModal";
 import BasicTextInputModal from "@/components/modal/basicTextInputModal/BasicTextInputModal";
@@ -37,7 +36,6 @@ import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMember
 import WorkspacePickerModal from "@/components/modal/workspacePickerModal/WorkspacePickerModal";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
 import TitleHandler from "@/components/titleHandler/TitleHandler";
-import Transition from "@/components/transition/Transition";
 import InternalWorkspacePrefChangeListener from "@/components/workspaceAndTeamChangeListener/InternalWorkspacePrefChangeListener";
 import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
 import ThemeContext, { getTheme } from "@/store/context/themeContext";
@@ -142,20 +140,18 @@ function MyApp({ children }: { children: React.ReactNode }) {
       <body>
         <Provider store={store}>
           <ThemeContext.Provider value={{ theme, toggleTheme }}>
-            <LayoutProvider>
-              <TitleHandler />
-              <AuthCheck />
-              <InternalWorkspacePrefChangeListener />
-              <WorkspaceAndTeamChangeListener />
-              <OnboardListener />
-              <PureClientOnly>
-                <FirebaseConfigration />
-              </PureClientOnly>
-              <PureClientOnly>{/* <SseListener /> */}</PureClientOnly>
-              <Transition>{children}</Transition>
-              <Toaster position="bottom-center" containerStyle={{ bottom: 68 }} toastOptions={{ className: "toast" }} />
-              <ErrorBoundary message={"Global Modals"}>{/* {globalModals} */}</ErrorBoundary>
-            </LayoutProvider>
+            <TitleHandler />
+            <AuthCheck />
+            <InternalWorkspacePrefChangeListener />
+            <WorkspaceAndTeamChangeListener />
+            <OnboardListener />
+            <PureClientOnly>
+              <FirebaseConfigration />
+            </PureClientOnly>
+            <PureClientOnly>{/* <SseListener /> */}</PureClientOnly>
+            <div className={styles.content}>{children}</div>
+            <Toaster position="bottom-center" containerStyle={{ bottom: 68 }} toastOptions={{ className: "toast" }} />
+            <ErrorBoundary message={"Global Modals"}>{globalModals}</ErrorBoundary>
           </ThemeContext.Provider>
         </Provider>
       </body>
@@ -164,3 +160,5 @@ function MyApp({ children }: { children: React.ReactNode }) {
 }
 
 export default MyApp;
+
+import styles from "./layout.module.css";

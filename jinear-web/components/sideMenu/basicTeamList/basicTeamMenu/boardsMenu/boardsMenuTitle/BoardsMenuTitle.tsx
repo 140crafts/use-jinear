@@ -3,7 +3,7 @@ import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { popNewTaskBoardModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React from "react";
 import { IoAdd, IoReaderOutline } from "react-icons/io5";
 import styles from "./BoardsMenuTitle.module.css";
@@ -23,7 +23,7 @@ const BoardsMenuTitle: React.FC<BoardsMenuTitleProps> = ({ workspace, team }) =>
   };
 
   const routeToTaskBoardsScreen = () => {
-    router.push(`/${workspace.username}/${team.username}/task-boards`);
+    router.push(`/${workspace.username}/tasks/${team.username}/task-boards`);
   };
 
   return (

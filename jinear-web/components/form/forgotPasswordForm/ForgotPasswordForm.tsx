@@ -5,7 +5,7 @@ import { useInitializeResetPasswordMutation } from "@/store/api/accountPasswordA
 import { changeLoginWith2FaMailModalVisibility } from "@/store/slice/modalSlice";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";

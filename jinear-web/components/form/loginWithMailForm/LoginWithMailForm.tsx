@@ -9,7 +9,7 @@ import cn from "classnames";
 import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
