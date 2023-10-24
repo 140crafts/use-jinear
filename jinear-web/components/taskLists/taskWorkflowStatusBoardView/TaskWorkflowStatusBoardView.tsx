@@ -7,14 +7,27 @@ interface TaskWorkflowStatusBoardViewProps {
   teamId: string;
   taskList: TaskDto[];
   isTaskListingLoading: boolean;
+  workflowStatusBoardClassName?: string;
 }
 
-const TaskWorkflowStatusBoardView: React.FC<TaskWorkflowStatusBoardViewProps> = ({ teamId, taskList, isTaskListingLoading }) => {
+const TaskWorkflowStatusBoardView: React.FC<TaskWorkflowStatusBoardViewProps> = ({
+  teamId,
+  taskList,
+  isTaskListingLoading,
+  workflowStatusBoardClassName,
+}) => {
   return (
     <div className={styles.container}>
       <div className={styles.actionBarContainer}></div>
       <span className={styles.statusBoardContainer}>
-        {teamId && <TeamWorkflowStatusBoard teamId={teamId} taskList={taskList} isTaskListingLoading={isTaskListingLoading} />}
+        {teamId && (
+          <TeamWorkflowStatusBoard
+            teamId={teamId}
+            taskList={taskList}
+            isTaskListingLoading={isTaskListingLoading}
+            className={workflowStatusBoardClassName}
+          />
+        )}
       </span>
     </div>
   );

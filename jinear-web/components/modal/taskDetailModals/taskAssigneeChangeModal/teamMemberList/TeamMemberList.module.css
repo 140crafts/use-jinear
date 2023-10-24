@@ -8,8 +8,8 @@
 }
 
 .button {
-  text-align: left;
-  justify-content: flex-start;
+  text-align: left !important;
+  justify-content: flex-start !important;
 }
 
 .centeredInfo {

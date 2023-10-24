@@ -9,7 +9,7 @@
 }
 
 .archivedButton {
-  opacity: 0.35;
+  opacity: 0.35 !important;
 }
 
 .bottomBorderLine {
@@ -19,13 +19,13 @@
 }
 
 .button {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  justify-content: flex-start;
-  text-align: left;
-  gap: 0.5rem;
-  width: 100%;
+  display: flex !important;
+  flex: 1 !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
 }
 
 .line {
@@ -59,11 +59,11 @@
 }
 
 .iconButton {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.1ch 1ch;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.1ch 1ch !important;
 }
 
 .iconContainer {
@@ -80,7 +80,7 @@
     align-items: flex-start;
   }
   .button {
-    align-items: flex-start;
+    align-items: flex-start !important;
   }
   .title {
     -webkit-line-clamp: 3;

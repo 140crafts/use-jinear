@@ -1,5 +1,4 @@
 "use client";
-import TeamSettingsScreenBreadcrumb from "@/components/teamSettingsScreen/teamSettingsScreenBreadcrumb/TeamSettingsScreenBreadcrumb";
 import TeamWorkflowSettings from "@/components/teamSettingsScreen/teamWorkflowSettings/TeamWorkflowSettings";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
@@ -21,12 +20,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({}) => {
   });
   const team = teamsResponse?.data.find((teamDto) => teamDto.username == teamUsername);
 
-  return (
-    <div className={styles.container}>
-      {workspace && team && <TeamSettingsScreenBreadcrumb workspace={workspace} team={team} />}
-      {team && <TeamWorkflowSettings teamId={team.teamId} />}
-    </div>
-  );
+  return <div className={styles.container}>{team && <TeamWorkflowSettings teamId={team.teamId} />}</div>;
 };
 
 export default SettingsScreen;

@@ -1,5 +1,4 @@
 "use client";
-import TaskListListBreadCrumb from "@/components/taskBoardsListScreen/taskBoardListBreadCrumb/TaskBoardListBreadCrumb";
 import TaskListList from "@/components/taskLists/taskBoardList/TaskBoardList";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
@@ -21,12 +20,7 @@ const TaskBoardListScreen: React.FC<TaskBoardListScreenProps> = ({}) => {
   });
   const team = teamsResponse?.data.find((teamDto) => teamDto.username == teamUsername);
 
-  return (
-    <div className={styles.container}>
-      {workspace && team && <TaskListListBreadCrumb workspace={workspace} team={team} />}
-      {team && workspace && <TaskListList team={team} workspace={workspace} />}
-    </div>
-  );
+  return <div className={styles.container}>{team && workspace && <TaskListList team={team} workspace={workspace} />}</div>;
 };
 
 export default TaskBoardListScreen;

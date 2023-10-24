@@ -1,5 +1,4 @@
 "use client";
-import TaskBoardDetailBreadcrumb from "@/components/taskBoardDetailScreen/taskBoardDetailBreadcrumb/TaskBoardDetailBreadcrumb";
 import TaskBoardElementList from "@/components/taskLists/taskBoardList/taskBoardElementList/TaskBoardElementList";
 import { useRetrieveTaskBoardQuery } from "@/store/api/taskBoardRetrieveApi";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
@@ -32,14 +31,6 @@ const TaskBoardDetailScreen: React.FC<TaskBoardDetailScreenProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {workspace && team && taskBoardResponse && (
-        <TaskBoardDetailBreadcrumb
-          workspace={workspace}
-          team={team}
-          title={taskBoardResponse.data.title}
-          taskBoardId={taskBoardId}
-        />
-      )}
       {(isLoading || isFetching) && (
         <div className={styles.loadingContainer}>
           <CircularProgress size={14} />

@@ -46,7 +46,8 @@
   border-right-style: solid;
   border-right-width: 1px;
   border-right-color: var(--c-primary-shade-0);
-  overflow: scroll;
+  overflow-x: visible;
+  overflow-y: scroll;
 }
 
 .pageContent {
@@ -58,6 +59,7 @@
   padding: 0;
   padding-top: var(--workspace-layout-content-vertical-padding);
   padding-bottom: var(--workspace-layout-content-vertical-padding);
+  padding: var(--workspace-layout-page-padding);
 }
 
 @media (max-width: $tablet) {
@@ -73,5 +75,8 @@
     bottom: 0;
     left: 0;
     right: 0;
+    height: var(--workspace-side-menu-mobile-navigator-height);
+    overflow-x: scroll;
+    overflow-y: visible;
   }
 }

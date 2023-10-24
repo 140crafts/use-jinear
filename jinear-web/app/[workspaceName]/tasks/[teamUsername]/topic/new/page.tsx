@@ -1,6 +1,5 @@
 "use client";
 import TopicForm from "@/components/form/topicForm/TopicForm";
-import NewTopicScreenBreadcrumb from "@/components/topicScreen/newTopicScreen/newTopicScreenBreadcrumb/NewTopicScreenBreadcrumb";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
@@ -25,8 +24,6 @@ const NewTopicPage: React.FC<NewTopicPageProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {workspace && team && <NewTopicScreenBreadcrumb workspace={workspace} team={team} />}
-      <div className="spacer-h-4" />
       <h1>{t("newTopicScreenTitle")}</h1>
       <div className={styles.formContainer}>{workspace && team && <TopicForm workspace={workspace} team={team} />}</div>
     </div>

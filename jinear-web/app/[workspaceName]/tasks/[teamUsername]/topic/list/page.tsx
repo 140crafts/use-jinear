@@ -1,7 +1,6 @@
 "use client";
 import Button, { ButtonVariants } from "@/components/button";
 import TopicCard from "@/components/topicScreen/topicListScreen/topicCard/TopicCard";
-import TopicListScreenBreadcrumb from "@/components/topicScreen/topicListScreen/topicListScreenBreadcrumb/TopicListScreenBreadcrumb";
 import Transition from "@/components/transition/Transition";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { useRetrieveTeamTopicsQuery } from "@/store/api/topicListingApi";
@@ -37,9 +36,6 @@ const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {workspace && team && <TopicListScreenBreadcrumb workspace={workspace} team={team} />}
-
-      <div className="spacer-h-4" />
       <h1>{t("topicListScreenTitle")}</h1>
       <div className="spacer-h-4" />
 

@@ -1,5 +1,4 @@
 "use client";
-import GenericBreadcrumb from "@/components/genericBreadcrumb/GenericBreadcrumb";
 import TeamFileList from "@/components/teamFilesScreen/TeamFileList";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
@@ -23,19 +22,7 @@ const FilesScreen: React.FC<FilesScreenProps> = ({}) => {
   });
   const team = teamsResponse?.data.find((teamDto) => teamDto.username == teamUsername);
 
-  return (
-    <div className={styles.container}>
-      {workspace && team && (
-        <GenericBreadcrumb
-          workspace={workspace}
-          team={team}
-          label={t("teamFilesScreenBreadcrumbTitle")}
-          pathAfterWorkspaceAndTeam="/files"
-        />
-      )}
-      {team && <TeamFileList teamId={team.teamId} />}
-    </div>
-  );
+  return <div className={styles.container}>{team && <TeamFileList teamId={team.teamId} />}</div>;
 };
 
 export default FilesScreen;

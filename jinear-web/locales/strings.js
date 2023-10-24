@@ -2692,7 +2692,7 @@ export default {
   },
   mainFeaturesMenuLabelLastActivities: {
     en: "Updates",
-    tr: "Güncellemeler",
+    tr: "Son Aktiviteler",
   },
   mainFeaturesMenuLabelAssignedToMe: {
     en: "My Assignments",

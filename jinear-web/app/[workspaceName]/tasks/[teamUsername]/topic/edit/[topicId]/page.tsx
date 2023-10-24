@@ -1,6 +1,5 @@
 "use client";
 import TopicForm from "@/components/form/topicForm/TopicForm";
-import EditTopicBreadCrumb from "@/components/topicScreen/topicEditScreen/editTopicBreadCrumb/EditTopicBreadCrumb";
 import Transition from "@/components/transition/Transition";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { useRetrieveTopicQuery } from "@/store/api/topicApi";
@@ -33,9 +32,6 @@ const EditTopicScreen: React.FC<EditTopicScreenProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {workspace && team && topicResponse && (
-        <EditTopicBreadCrumb workspace={workspace} team={team} topicName={topicResponse.data.name} topicId={topicId} />
-      )}
       <div className="spacer-h-4" />
       <h1>{t("topicEditScreenTitle")}</h1>
       {isTopicResponseLoading && (

@@ -34,9 +34,9 @@
 }
 
 .listItemButton {
-  text-align: left;
-  justify-content: left;
-  gap: 0.5rem;
+  text-align: left !important;
+  justify-content: left !important;
+  gap: 0.5rem !important;
 }
 
 .listItemIcon {
@@ -101,6 +101,6 @@
 }
 
 .profilePic {
-  width: 20px;
-  height: 20px;
+  width: 20px !important;
+  height: 20px !important;
 }

@@ -1,6 +1,5 @@
 "use client";
 import TaskDetail from "@/components/taskDetail/TaskDetail";
-import TaskDetailHeader from "@/components/taskDetail/taskDetailHeader/TaskDetailHeader";
 import TaskPageHeader from "@/components/taskDetail/taskPageHeader/TaskPageHeader";
 import { useRetrieveWithWorkspaceNameAndTeamTagNoQuery } from "@/store/api/taskApi";
 import { useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDisplayPreferenceApi";
@@ -67,7 +66,7 @@ const TaskDetailPage: React.FC<TaskDetailPageProps> = ({}) => {
         <>
           <TaskPageHeader taskTag={taskTag} title={taskResponse.data.title} />
           <div className={styles.contentContainer}>
-            <TaskDetailHeader task={taskResponse.data} backButtonVisible={true} />
+            {/* <TaskDetailHeader task={taskResponse.data} backButtonVisible={true} /> */}
             <TaskDetail task={taskResponse.data} />
           </div>
         </>

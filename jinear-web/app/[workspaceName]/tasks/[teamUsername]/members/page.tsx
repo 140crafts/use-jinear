@@ -1,5 +1,4 @@
 "use client";
-import GenericBreadcrumb from "@/components/genericBreadcrumb/GenericBreadcrumb";
 import TeamMemberList from "@/components/teamMembersScreen/teamMemberList/TeamMemberList";
 import TeamMembersScreenHeader from "@/components/teamMembersScreen/teamMembersScreenHeader/TeamMembersScreenHeader";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
@@ -26,14 +25,6 @@ const TeamMembersScreen: React.FC<TeamMembersScreenProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {workspace && team && (
-        <GenericBreadcrumb
-          workspace={workspace}
-          team={team}
-          label={t("teamMemberScreenBreadcrumbTitle")}
-          pathAfterWorkspaceAndTeam="/members"
-        />
-      )}
       {workspace && team && <TeamMembersScreenHeader workspace={workspace} team={team} />}
       {team && <TeamMemberList teamId={team.teamId} />}
     </div>

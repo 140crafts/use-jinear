@@ -1,7 +1,6 @@
 "use client";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import MultiViewTaskList from "@/components/taskLists/multiViewTaskList/MultiViewTaskList";
-import TasksScreenBreadcrumb from "@/components/tasksScreen/tasksScreenBreadcrumb/TasksScreenBreadcrumb";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
@@ -27,7 +26,6 @@ const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {workspace && team && <TasksScreenBreadcrumb workspace={workspace} team={team} />}
       {isTeamsFetching && <CircularLoading />}
       {workspace && team && !isTeamsFetching && (
         <MultiViewTaskList
@@ -36,6 +34,7 @@ const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
           team={team}
           activeDisplayFormat="LIST"
           topicIds={topicId ? [topicId] : []}
+          workflowStatusBoardClassName={styles.workflowStatusBoard}
         />
       )}
     </div>
