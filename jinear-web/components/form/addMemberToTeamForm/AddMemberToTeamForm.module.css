@@ -17,3 +17,12 @@
 .inputRoleText {
   min-height: 3rem;
 }
+
+.workspaceMembersInfoContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.workspaceMembersButton {
+  align-self: flex-end;
+}

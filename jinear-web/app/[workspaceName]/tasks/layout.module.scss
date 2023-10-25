@@ -13,9 +13,9 @@
 .sideMenu {
   position: absolute;
   z-index: 99;
-  width: 50px;
-  min-width: 50px;
-  max-width: 50px;
+  width: 85px;
+  min-width: 85px;
+  max-width: 85px;
   overflow-x: hidden;
   overflow-y: scroll;
   transition: all var(--fade-2);
@@ -55,6 +55,14 @@
   padding-top: var(--workspace-layout-content-vertical-padding);
   padding-bottom: var(--workspace-layout-content-vertical-padding);
   padding: var(--workspace-layout-page-padding);
+}
+
+.sideMenuCollapsedLabel {
+  display: none;
+}
+
+.sideMenuCollapsedLabelClosed {
+  display: flex;
 }
 
 @media (max-width: $tablet) {
@@ -101,12 +109,17 @@
     height: var(--mobile-menu-action-bar-height);
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
-    border-color: var(--c-primary-shade-1-op05) !important;
+    // border-color: var(--c-primary-shade-1-op05) !important;
     background-color: var(--c-primary) !important;
+    background: linear-gradient(0, var(--c-primary), 40%, var(--c-primary-shade-0-op05));
   }
 
   .menuToggleIcon {
     transition: all var(--fade-2);
     transform: rotate(-90deg);
+  }
+
+  .sideMenuCollapsedLabelClosed {
+    display: none;
   }
 }

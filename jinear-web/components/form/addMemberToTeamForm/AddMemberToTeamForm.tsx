@@ -11,15 +11,23 @@ import styles from "./AddMemberToTeamForm.module.css";
 
 interface AddMemberToTeamFormProps {
   workspaceId: string;
+  workspaceName: string;
   teamId: string;
   onAddSuccess: () => void;
+  requestClose: () => void;
 }
 
 const logger = Logger("AddMemberToTeamForm");
 
 const AVAILABLE_TEAM_ROLES: TeamMemberRoleType[] = ["ADMIN", "MEMBER"]; //, "GUEST"
 
-const AddMemberToTeamForm: React.FC<AddMemberToTeamFormProps> = ({ workspaceId, teamId, onAddSuccess }) => {
+const AddMemberToTeamForm: React.FC<AddMemberToTeamFormProps> = ({
+  workspaceId,
+  workspaceName,
+  teamId,
+  onAddSuccess,
+  requestClose,
+}) => {
   const { t } = useTranslation();
   const { register, handleSubmit, setFocus, setValue, watch } = useForm<AddTeamMemberRequest>();
   const currentSelectedRole: TeamMemberRoleType = watch("role");
@@ -67,6 +75,13 @@ const AddMemberToTeamForm: React.FC<AddMemberToTeamFormProps> = ({ workspaceId, 
             ))}
           </select>
         </label>
+
+        <span className={styles.workspaceMembersInfoContainer}>
+          {t("addMemberToTeamFormAccountSelectInfo")}
+          <Button href={`/${workspaceName}/members`} onClick={requestClose} className={styles.workspaceMembersButton}>
+            {t("addMemberToTeamFormAccountSelectInfoWorkspaceMembers")}
+          </Button>
+        </span>
 
         <div>
           <label className={styles.label} htmlFor={"new-member-team-role"}>

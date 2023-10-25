@@ -63,6 +63,8 @@ export function useThemeToggle() {
 
 const globalModals: any = (
   <>
+    <WorkspaceSwitchModal />
+    <AccountProfileModal />
     <TaskOverviewModal />
     <NotificationPermissionModal />
     <AddMemberToTeamModal />
@@ -161,4 +163,6 @@ function MyApp({ children }: { children: React.ReactNode }) {
 
 export default MyApp;
 
+import AccountProfileModal from "@/components/modal/accountProfileModal/AccountProfileModal";
+import WorkspaceSwitchModal from "@/components/modal/workspaceSwitchModal/WorkspaceSwitchModal";
 import styles from "./layout.module.css";

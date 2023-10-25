@@ -1035,8 +1035,8 @@ export default {
     tr: "Görev listesi boş",
   },
   newWorkspaceButtonTooltip: {
-    en: "New Workspace",
-    tr: "Yeni Çalışma Alanı",
+    en: "Create a new workspace",
+    tr: "Yeni çalışma alanı oluştur",
   },
   newWorkspaceModalTitle: {
     en: "New Workspace",
@@ -1593,6 +1593,14 @@ export default {
   addMemberToTeamFormAccountSelectLabel: {
     en: "Select someone from workspace",
     tr: "Eklenecek kişi",
+  },
+  addMemberToTeamFormAccountSelectInfo: {
+    en: "You can select existing workspace members, if you want to add someone to this workspace please visit ",
+    tr: "Var olan çalışma alanı üyelerini seçebilirsiniz. Eğer çalışma alanına birini eklemek istiyorsanız lütfen şuradan devam edin ",
+  },
+  addMemberToTeamFormAccountSelectInfoWorkspaceMembers: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri",
   },
   addMemberToTeamFormAccountTeamRole: {
     en: "Team Role",
@@ -2697,5 +2705,29 @@ export default {
   mainFeaturesMenuLabelAssignedToMe: {
     en: "My Assignments",
     tr: "Bana Atananlar",
+  },
+  tasksLayoutSideMenuCollapsedLabel: {
+    en: "Menu",
+    tr: "Menü",
+  },
+  homeScreenLoadingWorkspaceText: {
+    en: "Workspace is loading.",
+    tr: "Çalışma alanı yükleniyor.",
+  },
+  accountProfileModalTitle: {
+    en: "Profile",
+    tr: "Profil",
+  },
+  workspaceInfoListItemChangeWorkspace: {
+    en: "Switch",
+    tr: "Git",
+  },
+  workspaceInfoListItemWorkspaceSettings: {
+    en: "Settings",
+    tr: "Ayarlar",
+  },
+  workspaceSwitchModalTitle: {
+    en: "Switch Workspace",
+    tr: "Çalışma Alanını Değiştir",
   },
 };

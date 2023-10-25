@@ -5,7 +5,6 @@ import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoClose } from "react-icons/io5";
-import InboxScreenBreadcrumbs from "../inboxScreenBreadcrumbs/InboxScreenBreadcrumbs";
 import styles from "./InboxScreenHeader.module.css";
 
 interface InboxScreenHeaderProps {
@@ -28,8 +27,8 @@ const InboxScreenHeader: React.FC<InboxScreenHeaderProps> = ({ workspace, filter
 
   return (
     <div className={styles.container}>
-      <InboxScreenBreadcrumbs />
-      <div className="spacer-h-2" />
+      {/* <InboxScreenBreadcrumbs /> */}
+      {/* <div className="spacer-h-2" /> */}
       <h2>{t("inboxScreenHeader")}</h2>
       <div className={styles.actionBar}>
         <div

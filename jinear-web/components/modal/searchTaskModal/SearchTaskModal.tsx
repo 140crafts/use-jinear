@@ -101,7 +101,7 @@ const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
               onSelect?.(taskDto);
             }}
           >
-            {groupIconMap?.[taskDto.workflowStateGroup]}
+            <div className={styles.iconContainer}>{groupIconMap?.[taskDto.workflowStateGroup]}</div>
             <div className={styles.titleContainer}>
               {taskDto.teamTag ? taskDto.teamTag + "-" + taskDto.teamTagNo + " " : ""}
               {taskDto.title}

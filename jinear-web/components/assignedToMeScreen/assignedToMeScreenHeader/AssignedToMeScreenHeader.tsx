@@ -6,7 +6,6 @@ import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoClose } from "react-icons/io5";
 import styles from "./AssignedToMeScreenHeader.module.css";
-import AssignedToMeScreenBreadcrumb from "./breadcrumb/AssignedToMeScreenBreadcrumb";
 
 interface AssignedToMeScreenHeaderProps {
   workspace: WorkspaceDto;
@@ -28,8 +27,8 @@ const AssignedToMeScreenHeader: React.FC<AssignedToMeScreenHeaderProps> = ({ wor
 
   return (
     <div className={styles.container}>
-      <AssignedToMeScreenBreadcrumb />
-      <div className="spacer-h-2" />
+      {/* <AssignedToMeScreenBreadcrumb /> */}
+      {/* <div className="spacer-h-2" /> */}
       <h2>{t("assignedToMeTaskListName")}</h2>
       <div className="spacer-h-1" />
       <div

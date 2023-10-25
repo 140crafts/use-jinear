@@ -1,5 +1,3 @@
-import Breadcrumb from "@/components/breadcrumb/Breadcrumb";
-import BreadcrumbLink from "@/components/breadcrumb/BreadcrumbLink";
 import Button, { ButtonVariants } from "@/components/button";
 import { WorkspaceDto } from "@/model/be/jinear-core";
 import { popWorkspaceMemberInviteModal } from "@/store/slice/modalSlice";
@@ -21,11 +19,11 @@ const WorkspaceMembersScreenHeader: React.FC<WorkspaceMembersScreenHeaderProps> 
   };
   return (
     <div className={styles.container}>
-      <Breadcrumb>
+      {/* <Breadcrumb>
         <BreadcrumbLink label={workspace.username} url={`/${workspace.username}`} />
         <BreadcrumbLink label={t("workspaceMemberScreenBreadcrumbTitle")} url={`/${workspace.username}/members`} />
       </Breadcrumb>
-      <div className="spacer-h-4" />
+      <div className="spacer-h-4" /> */}
       <div className={styles.actionBar}>
         <Button variant={ButtonVariants.contrast} onClick={popInviteModal}>
           {t("workspaceMemberScreenInviteMember")}

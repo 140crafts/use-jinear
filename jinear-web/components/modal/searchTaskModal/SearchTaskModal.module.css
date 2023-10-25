@@ -32,8 +32,13 @@
 }
 
 .searchResultItem {
-  text-align: left;
-  justify-content: left;
+  text-align: left !important;
+  justify-content: left !important;
+  align-items: flex-start !important;
+}
+
+.iconContainer {
+  padding-top: 0.1rem;
 }
 
 .titleContainer {

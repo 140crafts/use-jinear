@@ -1,7 +1,8 @@
 import { useUpdateProfilePictureMutation } from "@/store/api/accountMediaApi";
 import { s3Base } from "@/store/api/api";
+import { useLogoutMutation } from "@/store/api/authApi";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
-import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
+import { changeLoadingModalVisibility, closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import cn from "classnames";
@@ -9,6 +10,8 @@ import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
 import styles from "./PersonalInfoTab.module.css";
 import UserProfilePicturePicker from "./userProfilePicturePicker/UserProfilePicturePicker";
+
+import Button, { ButtonVariants } from "@/components/button";
 
 interface PersonalInfoTabProps {}
 
@@ -22,6 +25,24 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
   const [selectedFilePreview, setSelectedFilePreview] = useState<string | undefined>();
 
   const [updateProfilePicture, { isSuccess, isLoading, isError }] = useUpdateProfilePictureMutation();
+  const [logoutCall, { isLoading: isLogoutLoading }] = useLogoutMutation();
+
+  const logout = () => {
+    logoutCall();
+    dispatch(closeDialogModal());
+  };
+
+  const popAreYouSureModalForLogout = () => {
+    dispatch(
+      popDialogModal({
+        visible: true,
+        title: t("logoutAreYouSureTitle"),
+        content: t("logoutAreYouSureText"),
+        confirmButtonLabel: t("logoutAreYouSureConfirmLabel"),
+        onConfirm: logout,
+      })
+    );
+  };
 
   useEffect(() => {
     if (selectedFile && currentAccount) {
@@ -56,6 +77,14 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
             {/* {`${HOST?.replace("https://", "")?.replace("http://", "")}/${selectedWorkspace?.username}`} */}
             {/* </Link> */}
           </h3>
+          <Button
+            className={styles.logoutButton}
+            loading={isLogoutLoading}
+            variant={ButtonVariants.filled}
+            onClick={popAreYouSureModalForLogout}
+          >
+            {t("sideMenuFooterLogout")}
+          </Button>
         </div>
       </div>
     </div>

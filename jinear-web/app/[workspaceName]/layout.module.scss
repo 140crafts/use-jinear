@@ -15,11 +15,13 @@
   z-index: 99;
   display: flex;
   flex: 1;
+  gap: 1rem;
+  padding: 0 1rem;
   height: var(--workspace-header-height);
   min-height: var(--workspace-header-height);
   max-height: var(--workspace-header-height);
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   background-color: var(--c-primary);
   border-bottom-style: solid;
   border-bottom-color: var(--c-primary-shade-0);
@@ -60,6 +62,15 @@
   padding-top: var(--workspace-layout-content-vertical-padding);
   padding-bottom: var(--workspace-layout-content-vertical-padding);
   padding: var(--workspace-layout-page-padding);
+}
+
+.upgradeButton {
+  align-self: center;
+  color: var(--c-gradient-gold-0) !important;
+  background: unset !important;
+}
+.upgradeButton:hover {
+  background-color: var(--c-primary-shade-1) !important;
 }
 
 @media (max-width: $tablet) {

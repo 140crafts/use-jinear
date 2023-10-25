@@ -1,26 +1,34 @@
 .container {
   display: flex;
   flex-direction: row;
-  align-items: center;
   gap: 0.5rem;
 }
 
 .infoContainer {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.nameContainer {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  background-color: red;
 }
 
 .title {
   font-weight: 600;
-  font-size: 1.1rem;
   text-transform: uppercase;
 }
 
 .profilePicContainer {
-  min-width: 56px;
-  width: 56px;
-  height: 56px;
-  border-radius: 19.2px;
+  min-width: 32.5px;
+  width: 32.5px;
+  height: 32.5px;
+  border-radius: 14.4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -53,14 +61,14 @@
 }
 
 .profilePic {
-  width: 50px !important;
-  height: 50px !important;
-  border-radius: 19.2px !important;
-  position: unset !important ;
+  width: 32.5px !important;
+  height: 32.5px !important;
+  border-radius: 14.4px !important;
+  position: unset !important;
 }
 
 .profilePicImg {
-  border-radius: 19.2px;
+  border-radius: 14.4px;
   border: none;
 }
 
@@ -68,5 +76,10 @@
   text-align: center;
   color: var(--c-secondary-shade-0);
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 0.75rem;
+}
+
+.actionBarContianer {
+  display: flex;
+  flex-direction: row;
 }

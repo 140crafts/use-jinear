@@ -15,11 +15,11 @@ interface AddMemberToTeamModalProps {}
 
 const AddMemberToTeamModal: React.FC<AddMemberToTeamModalProps> = ({}) => {
   const { t } = useTranslation();
+  const { isMobile } = useWindowSize();
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectAddMemberToTeamModalVisible);
   const workspace = useTypedSelector(selectAddMemberToTeamModalWorkspace);
   const team = useTypedSelector(selectAddMemberToTeamModalTeam);
-  const { isMobile } = useWindowSize();
 
   const close = () => {
     dispatch(closeAddMemberToTeamModal());
@@ -33,7 +33,15 @@ const AddMemberToTeamModal: React.FC<AddMemberToTeamModalProps> = ({}) => {
       hasTitleCloseButton={true}
       requestClose={close}
     >
-      {workspace && team && <AddMemberToTeamForm workspaceId={workspace.workspaceId} teamId={team.teamId} onAddSuccess={close} />}
+      {workspace && team && (
+        <AddMemberToTeamForm
+          workspaceId={workspace.workspaceId}
+          workspaceName={workspace.username}
+          teamId={team.teamId}
+          onAddSuccess={close}
+          requestClose={close}
+        />
+      )}
     </Modal>
   );
 };
