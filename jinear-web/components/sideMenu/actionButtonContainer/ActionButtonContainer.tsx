@@ -6,7 +6,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { IoCalendarNumberOutline, IoCheckmarkCircleOutline, IoPlayForwardOutline } from "react-icons/io5";
 import { TiPlus } from "react-icons/ti";
@@ -27,8 +27,7 @@ const ActionButtonContainer: React.FC<ActionButtonContainerProps> = ({}) => {
   });
   const team = teamsResponse?.data?.find((team) => team);
 
-  const router = useRouter();
-  const currentPath = router.asPath;
+  const currentPath = usePathname();
   const calendarPath = `/${preferredWorkspace?.username}`;
   const inboxPath = `/${preferredWorkspace?.username}/inbox`;
   const assignedToMePath = `/${preferredWorkspace?.username}/assigned-to-me`;

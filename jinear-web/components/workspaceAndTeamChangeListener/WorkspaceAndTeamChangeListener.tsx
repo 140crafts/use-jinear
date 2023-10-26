@@ -4,7 +4,7 @@ import { selectReroute } from "@/store/slice/displayPreferenceSlice";
 import { useTypedSelector } from "@/store/store";
 import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import Logger from "@/utils/logger";
-import { useRouter } from "next/router";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 interface WorkspaceAndTeamChangeListenerProps {}
@@ -13,7 +13,8 @@ const logger = Logger("WorkspaceAndTeamChangeListener");
 
 const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerProps> = ({}) => {
   const router = useRouter();
-  const workspaceNameFromUrl: string = router.query?.workspaceName as string;
+  const params = useParams();
+  const workspaceNameFromUrl: string = params?.workspaceName as string;
   const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const activeReroute = useTypedSelector(selectReroute);
 

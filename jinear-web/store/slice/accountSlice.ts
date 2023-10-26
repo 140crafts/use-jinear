@@ -108,5 +108,11 @@ export const selectCurrentAccountsWorkspaceRoleIsAdminOrOwnerWithPlainWorkspaceD
     return role == "ADMIN" || role == "OWNER";
   };
 
+export const selectCurrentAccountsWorkspaceRoleIsAdminOrOwnerWithWorkspaceUsername = (username: string) => (state: RootState) => {
+  const accountsWorkspacePerspectiveDto = state.account.current?.workspaces.find((w) => w.username == username);
+  const role = accountsWorkspacePerspectiveDto?.role;
+  return role == "ADMIN" || role == "OWNER";
+};
+
 export const selectWorkspaceFromWorkspaceUsername = (workspaceUsername: string) => (state: RootState) =>
   state.account.current?.workspaces.find((workspace) => workspace.username == workspaceUsername);

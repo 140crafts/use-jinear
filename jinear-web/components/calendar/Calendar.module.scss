@@ -4,7 +4,8 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  max-width: calc(100vw - var(--side-menu-width));
+  //TODO cgds-275
+  // max-width: calc(100vw - var(--side-menu-width));
 }
 
 .weeks {

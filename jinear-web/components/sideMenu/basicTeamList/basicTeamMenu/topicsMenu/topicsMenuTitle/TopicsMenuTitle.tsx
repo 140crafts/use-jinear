@@ -1,7 +1,7 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { IoAdd, IoPricetagOutline } from "react-icons/io5";
 import styles from "./TopicsMenuTitle.module.css";
@@ -13,14 +13,15 @@ interface TopicsMenuTitleProps {
 
 const TopicsMenuTitle: React.FC<TopicsMenuTitleProps> = ({ workspace, team }) => {
   const { t } = useTranslation();
-  const router = useRouter();
+  const pathname = usePathname();
+  const topicsPath = `/${workspace.username}/tasks/${team.username}/topic/list`;
 
   return (
     <div className={styles.container}>
       <Button
         className={styles.labelButton}
-        variant={ButtonVariants.hoverFilled2}
-        href={`/${workspace?.username}/${team?.username}/topic/list`}
+        variant={pathname == topicsPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        href={`/${workspace?.username}/tasks/${team?.username}/topic/list`}
       >
         <IoPricetagOutline />
         <div>{t("sideMenuTeamTopics")}</div>
@@ -29,7 +30,7 @@ const TopicsMenuTitle: React.FC<TopicsMenuTitleProps> = ({ workspace, team }) =>
         <Button
           variant={ButtonVariants.hoverFilled2}
           heightVariant={ButtonHeight.short}
-          href={`/${workspace?.username}/${team?.username}/topic/new`}
+          href={`/${workspace?.username}/tasks/${team?.username}/topic/new`}
           data-tooltip-right={t("sideMenuTeamTopicsNew")}
         >
           <IoAdd />

@@ -5,8 +5,8 @@
 }
 
 .profilePic {
-  height: 25px;
-  width: 25px;
+  height: 25px !important;
+  width: 25px !important;
 }
 
 .moreButton {

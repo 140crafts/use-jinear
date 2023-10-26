@@ -1,6 +1,6 @@
 .button {
-  display: flex;
-  flex-direction: row;
-  gap: 2ch;
-  justify-content: flex-start;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 2ch !important;
+  justify-content: flex-start !important;
 }

@@ -3,6 +3,7 @@ import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { popNewTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
+import { usePathname } from "next/navigation";
 import React from "react";
 import { IoAdd, IoList } from "react-icons/io5";
 import styles from "./TasksMenu.module.css";
@@ -15,6 +16,8 @@ interface TasksMenuProps {
 const TasksMenu: React.FC<TasksMenuProps> = ({ workspace, team }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const pathname = usePathname();
+  const tasksPath = `/${workspace.username}/tasks/${team.username}/tasks`;
 
   const popNewTask = () => {
     dispatch(popNewTaskModal({ visible: true, workspace, team }));
@@ -24,8 +27,8 @@ const TasksMenu: React.FC<TasksMenuProps> = ({ workspace, team }) => {
     <div className={styles.container}>
       <Button
         className={styles.labelButton}
-        variant={ButtonVariants.hoverFilled2}
-        href={`/${workspace.username}/${team.username}/tasks`}
+        variant={tasksPath == pathname ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        href={`/${workspace.username}/tasks/${team.username}/tasks`}
       >
         <IoList />
         <div>{t("sideMenuTeamActionButtonLabelTasks")}</div>

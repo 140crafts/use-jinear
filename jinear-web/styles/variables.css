@@ -39,6 +39,13 @@
   --side-menu-main-menu-width: 230px;
   --side-menu-workspace-menu-width: 60px;
   --side-menu-bottom-workspace-menu-height: 56px;
+  --workspace-header-height: 56px;
+  --workspace-side-menu-max-width: 75px;
+  --workspace-side-menu-mobile-navigator-height: 90px;
+  --workspace-layout-content-vertical-padding: 1rem;
+  --workspace-layout-page-padding: 1rem;
+  --tasks-section-sidebar-width: 230px;
+  --mobile-menu-action-bar-height: 36px;
   /*  */
   --user-profile-card-height: 200px;
   --user-profile-card-height-medium: 150px;

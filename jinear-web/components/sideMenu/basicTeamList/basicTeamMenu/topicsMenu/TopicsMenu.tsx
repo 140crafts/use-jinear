@@ -41,7 +41,7 @@ const TopicsMenu: React.FC<TopicsMenuProps> = ({ workspace, team }) => {
             variant={ButtonVariants.hoverFilled}
             className={styles.hasMoreButton}
             heightVariant={ButtonHeight.short}
-            href={`/${workspace.username}/${team.username}/topic/list`}
+            href={`/${workspace.username}/tasks/${team.username}/topic/list`}
           >
             {t("sideMenuTeamTopicListsShowMore").replace("${number}", `${notVisibleSize}`)}
           </Button>

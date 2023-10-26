@@ -7,6 +7,7 @@ import { RootState } from "../store";
 const initialState = {
   appMenu: {
     mobileVisible: false,
+    tasksMenuVisible: true,
   },
   reroute: undefined,
 } as {
@@ -25,6 +26,19 @@ const slice = createSlice({
     },
     closeMenu: (state, action: PayloadAction<void>) => {
       state.appMenu.mobileVisible = false;
+    },
+    popTasksMenu: (state, action: PayloadAction<void>) => {
+      state.appMenu.tasksMenuVisible = true;
+    },
+    toggleTasksMenu: (state, action: PayloadAction<void>) => {
+      state.appMenu.tasksMenuVisible = !state.appMenu.tasksMenuVisible;
+    },
+    closeTasksMenu: (state, action: PayloadAction<void>) => {
+      state.appMenu.tasksMenuVisible = false;
+    },
+    closeAllMenus: (state, action: PayloadAction<void>) => {
+      state.appMenu.mobileVisible = false;
+      state.appMenu.tasksMenuVisible = false;
     },
     toggleMenu: (state, action: PayloadAction<void>) => {
       state.appMenu.mobileVisible = !state.appMenu.mobileVisible;
@@ -66,9 +80,11 @@ const setRerouteOnPreferenceChangeSuccess = (state: any, action: any) => {
   state.reroute = reroute;
 };
 
-export const { popMenu, closeMenu, toggleMenu, clearReroute } = slice.actions;
+export const { popMenu, closeMenu, popTasksMenu, closeTasksMenu, toggleTasksMenu, closeAllMenus, toggleMenu, clearReroute } =
+  slice.actions;
 export default slice.reducer;
 
 export const selectAppMenuVisible = (state: RootState) => state.displayPreference.appMenu.mobileVisible;
+export const selectTasksMenuVisible = (state: RootState) => state.displayPreference.appMenu.tasksMenuVisible;
 
 export const selectReroute = (state: RootState) => state.displayPreference.reroute;

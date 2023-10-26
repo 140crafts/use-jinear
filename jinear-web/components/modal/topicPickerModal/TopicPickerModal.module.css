@@ -36,9 +36,9 @@
 }
 
 .listItemButton {
-  text-align: left;
-  justify-content: left;
-  gap: 0.5rem;
+  text-align: left !important;
+  justify-content: left !important;
+  gap: 0.5rem !important;
 }
 
 .listItemIcon {

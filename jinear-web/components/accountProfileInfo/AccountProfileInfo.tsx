@@ -1,3 +1,4 @@
+"use client";
 import ProfilePhoto from "@/components/profilePhoto";
 import { AccessibleMediaDto } from "@/model/be/jinear-core";
 import React from "react";

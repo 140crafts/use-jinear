@@ -1,3 +1,5 @@
+"use client";
+
 import Button from "@/components/button";
 import SideMenu from "@/components/sideMenu/SideMenu";
 import SideMenuFooter from "@/components/sideMenu/sideMenuFooter/SideMenuFooter";
@@ -10,7 +12,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import isPwa from "@/utils/pwaHelper";
 import cn from "classnames";
-import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import { IoChevronDownSharp } from "react-icons/io5";
 import styles from "./Layout.module.scss";
@@ -25,20 +27,20 @@ const logger = Logger("Layout");
 
 const ROUTES_WITHOUT_SIDE_MENU = [
   "/",
-  "/forgot-password",
+  "/terms",
   "/register",
+  "/pricing",
+  "/new-workspace",
   "/login",
+  "/forgot-password",
   "/engage/[token]/confirm-email",
   "/engage/[token]/reset-password-complete",
   "/engage/[token]/forgot-password",
   "/engage/[token]/workspace-invitation",
-  "/new-workspace",
-  "/terms",
-  "/pricing",
 ];
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
-  const router = useRouter();
+  const pathName = usePathname() || "";
   const isAnyModalVisible = useTypedSelector(selectAnyModalVisible);
   const authState = useTypedSelector(selectAuthState);
   const dispatch = useAppDispatch();
@@ -46,11 +48,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const isMenuVisible = useTypedSelector(selectAppMenuVisible);
   const pwa = isPwa();
 
-  logger.log({ pathName: router.pathname, isAnyModalVisible, authState, isMenuVisible, pwa });
+  logger.log({ pathName, isAnyModalVisible, authState, isMenuVisible, pwa });
 
   useEffect(() => {
     _closeMenu();
-  }, [router.asPath]);
+  }, [pathName]);
 
   useEffect(() => {
     if (document && window) {
@@ -67,7 +69,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [isAnyModalVisible, isMenuVisible]);
 
-  const sideMenuEnabled = authState == "LOGGED_IN" && ROUTES_WITHOUT_SIDE_MENU.indexOf(router.pathname) == -1;
+  const sideMenuEnabled = authState == "LOGGED_IN" && ROUTES_WITHOUT_SIDE_MENU.indexOf(pathName) == -1;
 
   const _closeMenu = () => {
     dispatch(closeMenu());

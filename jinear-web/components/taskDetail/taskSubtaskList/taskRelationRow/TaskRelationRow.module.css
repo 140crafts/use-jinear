@@ -17,10 +17,10 @@
 }
 
 .workflowStatusButton {
-  width: 32px;
-  height: 32px;
-  padding-left: 4px;
-  padding-right: 4px;
+  width: 32px !important;
+  height: 32px !important;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
 }
 
 .deleteButton {

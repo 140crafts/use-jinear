@@ -1,7 +1,7 @@
 import { clearReroute, selectReroute } from "@/store/slice/displayPreferenceSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 interface InternalWorkspacePrefChangeListenerProps {}

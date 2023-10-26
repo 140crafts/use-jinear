@@ -3,23 +3,23 @@
 }
 
 .profilePicture {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  width: 125px;
-  height: 125px;
-  border-radius: 50px;
-  border-color: var(--c-primary-shade-1);
-  border-width: thin;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  position: relative !important;
+  width: 125px !important;
+  height: 125px !important;
+  border-radius: 50px !important;
+  border-color: var(--c-primary-shade-1) !important;
+  border-width: thin !important;
   /* border-width: 0px; */
-  border-style: solid;
-  object-fit: cover;
+  border-style: solid !important;
+  object-fit: cover !important;
 }
 
 .profilePicture:hover {
-  background-color: var(--c-primary-shade-0);
-  cursor: pointer;
+  background-color: var(--c-primary-shade-0) !important;
+  cursor: pointer !important;
 }
 
 .photoContainer {

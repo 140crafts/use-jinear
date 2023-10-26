@@ -8,7 +8,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { initializeApp } from "firebase/app";
 import { MessagePayload, deleteToken, getMessaging, getToken, onMessage } from "firebase/messaging";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import ForegroundNotification from "../foregroundNotification/ForegroundNotification";

@@ -128,6 +128,15 @@ const initialState = {
   upgradeWorkspacePlanModal: {
     visible: false,
   },
+  accountProfileModal: {
+    visible: false,
+  },
+  workspaceSwitchModal: {
+    visible: false,
+  },
+  menuMoreActionModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -159,6 +168,9 @@ const initialState = {
   teamWorkflowStatusPickerModal: null | TeamWorkflowStatusPickerModalState;
   taskBoardPickerModal: null | TaskBoardPickerModalState;
   upgradeWorkspacePlanModal: null | UpgradeWorkspacePlanModalState;
+  accountProfileModal: null | ModalState;
+  workspaceSwitchModal: null | ModalState;
+  menuMoreActionModal: null | ModalState;
 };
 
 const slice = createSlice({
@@ -381,6 +393,27 @@ const slice = createSlice({
       state.upgradeWorkspacePlanModal = initialState.upgradeWorkspacePlanModal;
     },
 
+    popAccountProfileModal: (state, action: PayloadAction<void>) => {
+      state.accountProfileModal = { visible: true };
+    },
+    closeAccountProfileModal: (state, action: PayloadAction<void>) => {
+      state.accountProfileModal = initialState.accountProfileModal;
+    },
+
+    popWorkspaceSwitchModal: (state, action: PayloadAction<void>) => {
+      state.workspaceSwitchModal = { visible: true };
+    },
+    closeWorkspaceSwitchModal: (state, action: PayloadAction<void>) => {
+      state.workspaceSwitchModal = initialState.workspaceSwitchModal;
+    },
+
+    popMenuMoreActionModal: (state, action: PayloadAction<void>) => {
+      state.menuMoreActionModal = { visible: true };
+    },
+    closeMenuMoreActionModal: (state, action: PayloadAction<void>) => {
+      state.menuMoreActionModal = initialState.menuMoreActionModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -457,6 +490,12 @@ export const {
   closeBoardPickerModal,
   popUpgradeWorkspacePlanModal,
   closeUpgradeWorkspacePlanModal,
+  popAccountProfileModal,
+  closeAccountProfileModal,
+  popWorkspaceSwitchModal,
+  closeWorkspaceSwitchModal,
+  popMenuMoreActionModal,
+  closeMenuMoreActionModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -628,3 +667,9 @@ export const selectTaskBoardPickerModalOnPick = (state: RootState) => state.moda
 export const selectUpgradeWorkspacePlanModalVisible = (state: RootState) => state.modal.upgradeWorkspacePlanModal?.visible;
 export const selectUpgradeWorkspacePlanModalWorkspaceId = (state: RootState) =>
   state.modal.upgradeWorkspacePlanModal?.workspaceId;
+
+export const selectAccountProfileModalVisible = (state: RootState) => state.modal.accountProfileModal?.visible;
+
+export const selectWorkspaceSwitchModalVisible = (state: RootState) => state.modal.workspaceSwitchModal?.visible;
+
+export const selectMenuMoreActionModalVisible = (state: RootState) => state.modal.menuMoreActionModal?.visible;

@@ -1035,8 +1035,8 @@ export default {
     tr: "Görev listesi boş",
   },
   newWorkspaceButtonTooltip: {
-    en: "New Workspace",
-    tr: "Yeni Çalışma Alanı",
+    en: "Create a new workspace",
+    tr: "Yeni çalışma alanı oluştur",
   },
   newWorkspaceModalTitle: {
     en: "New Workspace",
@@ -1593,6 +1593,14 @@ export default {
   addMemberToTeamFormAccountSelectLabel: {
     en: "Select someone from workspace",
     tr: "Eklenecek kişi",
+  },
+  addMemberToTeamFormAccountSelectInfo: {
+    en: "You can select existing workspace members, if you want to add someone to this workspace please visit ",
+    tr: "Var olan çalışma alanı üyelerini seçebilirsiniz. Eğer çalışma alanına birini eklemek istiyorsanız lütfen şuradan devam edin ",
+  },
+  addMemberToTeamFormAccountSelectInfoWorkspaceMembers: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri",
   },
   addMemberToTeamFormAccountTeamRole: {
     en: "Team Role",
@@ -2677,5 +2685,65 @@ export default {
   datePickerButtonPickPastDate: {
     en: "Please pick past date",
     tr: "Daha geri bir tarih seçin",
+  },
+  mainFeaturesMenuLabelTasks: {
+    en: "Tasks",
+    tr: "Görevler",
+  },
+  mainFeaturesMenuLabelCalendar: {
+    en: "Calendar",
+    tr: "Takvim",
+  },
+  mainFeaturesMenuLabelNotifications: {
+    en: "Notifications",
+    tr: "Bildirimler",
+  },
+  mainFeaturesMenuLabelLastActivities: {
+    en: "Updates",
+    tr: "Son Aktiviteler",
+  },
+  mainFeaturesMenuLabelAssignedToMe: {
+    en: "My Assignments",
+    tr: "Bana Atananlar",
+  },
+  mainFeaturesMenuLabelMore: {
+    en: "More",
+    tr: "Daha Fazla",
+  },
+  tasksLayoutSideMenuCollapsedLabel: {
+    en: "Menu",
+    tr: "Menü",
+  },
+  homeScreenLoadingWorkspaceText: {
+    en: "Workspace is loading.",
+    tr: "Çalışma alanı yükleniyor.",
+  },
+  accountProfileModalTitle: {
+    en: "Profile",
+    tr: "Profil",
+  },
+  workspaceInfoListItemChangeWorkspace: {
+    en: "Switch",
+    tr: "Git",
+  },
+  workspaceInfoListItemWorkspaceSettings: {
+    en: "Settings",
+    tr: "Ayarlar",
+  },
+  workspaceSwitchModalTitle: {
+    en: "Switch Workspace",
+    tr: "Çalışma Alanını Değiştir",
+  },
+  moreMenuActionModalTitle: {
+    en: "More",
+    tr: "Daha Fazla",
+  },
+  workspaceMembersMoreMenuButton: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri",
+  },
+  workspaceSettingsMoreMenuButton: {
+    en: "Workspace Settings",
+    tr: "Çalışma Alanı Ayarları",
   },
 };

@@ -20,14 +20,14 @@ const TeamTitle: React.FC<TeamTitleProps> = ({ workspace, team }) => {
       <b className={cn(styles.teamName, "line-clamp")}>{shortenStringIfMoreThanMaxLength({ text: team.name, maxLength: 29 })}</b>
       <Button
         variant={ButtonVariants.hoverFilled2}
-        href={`/${workspace?.username}/${team?.username}/members`}
+        href={`/${workspace?.username}/tasks/${team?.username}/members`}
         data-tooltip-right={t("sideMenuTeamMembers")}
       >
         <IoPeopleOutline />
       </Button>
       <Button
         variant={ButtonVariants.hoverFilled2}
-        href={`/${workspace?.username}/${team?.username}/settings`}
+        href={`/${workspace?.username}/tasks/${team?.username}/settings`}
         data-tooltip-right={t("sideMenuTeamSettings")}
       >
         <IoEllipsisHorizontal />

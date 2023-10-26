@@ -42,7 +42,7 @@ const BoardsMenu: React.FC<BoardsMenuProps> = ({ workspace, team }) => {
             variant={ButtonVariants.hoverFilled}
             className={styles.hasMoreButton}
             heightVariant={ButtonHeight.short}
-            href={`/${workspace.username}/${team.username}/task-boards`}
+            href={`/${workspace.username}/tasks/${team.username}/task-boards`}
           >
             {shortenStringIfMoreThanMaxLength({
               text: t("sideMenuTeamTaskListsShowMore").replace("${number}", `${notVisibleSize}`),

@@ -4,8 +4,7 @@ import Logger from "@/utils/logger";
 import { createUrl } from "@/utils/urlUtils";
 import cn from "classnames";
 import { eachDayOfInterval, endOfMonth, endOfWeek, format, parse, startOfDay, startOfWeek } from "date-fns";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import styles from "./Calendar.module.scss";
 import CalendarContext from "./context/CalendarContext";
@@ -30,8 +29,8 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
   const searchParams = useSearchParams();
   logger.log({ searchParams: searchParams?.toString() });
 
-  const viewingDateSearchParam = searchParams.get("viewingDate");
-  const [viewType, setViewType] = useState<CalendarViewType>((searchParams.get("viewType") as CalendarViewType) || "MONTH");
+  const viewingDateSearchParam = searchParams?.get("viewingDate");
+  const [viewType, setViewType] = useState<CalendarViewType>((searchParams?.get("viewType") as CalendarViewType) || "MONTH");
   const [filterBy, setFilterBy] = useState<TeamDto>();
 
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
@@ -57,21 +56,21 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
 
   useEffect(() => {
     if (workspace) {
-      const newParams = new URLSearchParams(searchParams.toString());
+      const newParams = new URLSearchParams(searchParams?.toString());
       newParams.delete("workspaceName");
       newParams.delete("teamUsername");
       newParams.set("viewType", viewType);
-      router.push(createUrl(`/${workspace.username}`, newParams));
+      router.push(createUrl(`/${workspace.username}/calendar`, newParams));
     }
   }, [workspace, viewType]);
 
   useEffect(() => {
     if (workspace) {
-      const newParams = new URLSearchParams(searchParams.toString());
+      const newParams = new URLSearchParams(searchParams?.toString());
       newParams.delete("workspaceName");
       newParams.delete("teamUsername");
       newParams.set("viewingDate", format(viewingDate, URL_DATE_FORMAT));
-      router.push(createUrl(`/${workspace.username}`, newParams));
+      router.push(createUrl(`/${workspace.username}/calendar`, newParams));
     }
   }, [workspace, viewingDate]);
 

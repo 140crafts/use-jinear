@@ -1,4 +1,5 @@
 import React, { ErrorInfo } from "react";
+import styles from "./ErrorBoundary.module.css";
 
 export default class ErrorBoundary extends React.Component<
   { children: React.ReactNode; message: string },
@@ -20,7 +21,7 @@ export default class ErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       // You can render any custom fallback UI
-      return <h1>Something went wrong. {this.props.message}</h1>;
+      return <h1 className={styles.container}>Something went wrong. {this.props.message}</h1>;
     }
     return this.props.children;
   }

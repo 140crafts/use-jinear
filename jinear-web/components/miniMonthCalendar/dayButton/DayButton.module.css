@@ -1,10 +1,10 @@
 .buttonBase {
-  position: relative;
-  height: 2.25rem;
+  position: relative !important;
+  height: 2.25rem !important;
 }
 
 .differentMonth {
-  opacity: 0.25;
+  opacity: 0.25 !important;
 }
 
 .bold {
@@ -12,37 +12,37 @@
 }
 
 .today {
-  opacity: 0.9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  opacity: 0.9 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   /* border-color: var(--c-gradient-gold-0); */
-  color: var(--c-gradient-gold-0);
-  font-weight: 800;
+  color: var(--c-gradient-gold-0) !important;
+  font-weight: 800 !important;
 }
 
 .today:hover {
-  opacity: 1;
-  color: var(--c-gradient-gold-0);
+  opacity: 1 !important;
+  color: var(--c-gradient-gold-0) !important;
 }
 
 .betweenHoveringDay {
-  opacity: 1;
-  border-style: none;
-  background-color: var(--c-primary-shade-0);
-  border-radius: 0;
+  opacity: 1 !important;
+  border-style: none !important;
+  background-color: var(--c-primary-shade-0) !important;
+  border-radius: 0 !important;
 }
 
 .borderLeftRadius {
-  background-color: var(--c-primary-shade-1);
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  background-color: var(--c-primary-shade-1) !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
 }
 
 .borderRightRadius {
-  background-color: var(--c-primary-shade-1);
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  background-color: var(--c-primary-shade-1) !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
 }
 
 .spanEnd {

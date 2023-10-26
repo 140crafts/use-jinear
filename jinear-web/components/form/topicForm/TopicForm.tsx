@@ -4,7 +4,7 @@ import { useDeleteTopicMutation, useInitializeTopicMutation, useUpdateTopicMutat
 import Logger from "@/utils/logger";
 import { normalizeStrictly } from "@/utils/normalizeHelper";
 import useTranslation from "locales/useTranslation";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import styles from "./TopicForm.module.css";
@@ -98,7 +98,7 @@ const TopicForm: React.FC<TopicFormProps> = ({ workspace, team, topicId, color, 
   };
 
   const routeToList = () => {
-    router.replace(`/${workspace.username}/${team.username}/topic/list`);
+    router.replace(`/${workspace.username}/tasks/${team.username}/topic/list`);
   };
 
   return (

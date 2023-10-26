@@ -1,3 +1,4 @@
+"use client";
 import CircularProgress from "@mui/material/CircularProgress";
 import cn from "classnames";
 import Link from "next/link";

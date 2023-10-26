@@ -21,6 +21,7 @@ interface MultiViewTaskListProps {
   timespanEnd?: Date;
   hasPreciseFromDate?: boolean;
   hasPreciseToDate?: boolean;
+  workflowStatusBoardClassName?: string;
 }
 
 const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
@@ -36,6 +37,7 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
   timespanEnd,
   hasPreciseFromDate,
   hasPreciseToDate,
+  workflowStatusBoardClassName,
 }) => {
   const [displayFormat, setDisplayFormat] = useState<TaskDisplayFormat>(activeDisplayFormat);
   const [page, setPage] = useState<number>(0);
@@ -92,6 +94,7 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
           teamId={team.teamId}
           taskList={filterResponse?.data?.content || []}
           isTaskListingLoading={isFetching}
+          workflowStatusBoardClassName={workflowStatusBoardClassName}
         />
       )}
     </div>

@@ -8,7 +8,7 @@ import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoSparkles } from "react-icons/io5";
-import Button, { ButtonHeight } from "../button";
+import Button, { ButtonHeight, ButtonVariants } from "../button";
 import styles from "./WorkspaceUpgradeButton.module.css";
 
 interface WorkspaceUpgradeButtonProps {
@@ -35,6 +35,7 @@ const WorkspaceUpgradeButton: React.FC<WorkspaceUpgradeButtonProps> = ({ workspa
   return isWorkspaceUpgradable(workspace) && workspaceRoleIsAdminOrOwner ? (
     <Button
       heightVariant={ButtonHeight.short}
+      variant={ButtonVariants.outline}
       className={cn(styles.container, className)}
       data-tooltip-right={variant == "ICON" ? t("workspaceTierUpgradeButton") : undefined}
       onClick={popUpgradeModal}

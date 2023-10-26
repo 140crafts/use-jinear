@@ -17,10 +17,16 @@ interface TeamWorkflowStatusBoardProps {
   teamId: string;
   taskList: TaskDto[];
   isTaskListingLoading?: boolean;
+  className?: string;
 }
 const logger = Logger("TeamWorkflowStatusBoard");
 
-const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamId, taskList, isTaskListingLoading = false }) => {
+const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({
+  teamId,
+  taskList,
+  isTaskListingLoading = false,
+  className,
+}) => {
   const { data: teamWorkflowListData, isFetching: isTeamWorkflowListFetching } = useRetrieveAllFromTeamQuery(
     { teamId },
     { skip: teamId == null }
@@ -54,7 +60,7 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({ teamI
   const _isLoading = isTaskListingLoading || isTeamWorkflowListFetching || workflowStatusUpdatePendingTask;
 
   return (
-    <div className={cn(styles.container, _isLoading ? styles["container-disabled"] : undefined)}>
+    <div className={cn(styles.container, className, _isLoading ? styles["container-disabled"] : undefined)}>
       <DragDropContext onDragEnd={onDragEnd}>
         {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.BACKLOG?.map((workflowDto) => (
           <WorkflowStatusColumn

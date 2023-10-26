@@ -1,5 +1,5 @@
 .button {
-  justify-content: flex-start;
+  justify-content: flex-start !important;
   padding-left: 1.5rem;
   padding-right: 0;
 }
