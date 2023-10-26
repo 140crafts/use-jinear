@@ -2,7 +2,7 @@
 import Button, { ButtonHeight } from "@/components/button";
 import MainFeaturesSideMenu from "@/components/mainFeaturesSideMenu/MainFeaturesSideMenu";
 import SideMenuFooter from "@/components/sideMenu/sideMenuFooter/SideMenuFooter";
-import Transition from "@/components/transition/Transition";
+import WorkspaceMoreActionsButton from "@/components/sideMenu/workspaceMoreActionsButton/WorkspaceMoreActionsButton";
 import WorkspaceChangeButton from "@/components/workspaceChangeButton/WorkspaceChangeButton";
 import WorkspaceUpgradeButton from "@/components/workspaceUpgradeButton/WorkspaceUpgradeButton";
 import useWidthLimit from "@/hooks/useWidthLimit";
@@ -11,7 +11,6 @@ import { closeAllMenus } from "@/store/slice/displayPreferenceSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { LuSettings, LuUsers2 } from "react-icons/lu";
 import styles from "./layout.module.scss";
 
 interface WorkspaceLayoutProps {
@@ -29,6 +28,7 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   const isMobile = useWidthLimit({ limit: MOBILE_LAYOUT_BREAKPOINT });
   const workspaceName = params?.workspaceName as string;
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
+  const upgradeButtonVariant = isMobile ? "ICON" : "FULL";
 
   useEffect(() => {
     if (isMobile) {
@@ -39,27 +39,27 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <Button heightVariant={ButtonHeight.short} onClick={router.back}>
-          {"<-"}
-        </Button>
-        {workspace && <WorkspaceChangeButton currentWorkspace={workspace} />}
-        {workspace && <WorkspaceUpgradeButton workspace={workspace} variant={"ICON"} className={styles.upgradeButton} />}
-        <Button>
-          <LuUsers2 />
-        </Button>
-        <Button>
-          <LuSettings />
-        </Button>
-        <div className="flex-1"></div>
-        <SideMenuFooter />
+        <div className={styles.headerLeftContent}>
+          <Button heightVariant={ButtonHeight.short} onClick={router.back}>
+            <b>{"<-"}</b>
+          </Button>
+          {workspace && (
+            <>
+              <WorkspaceChangeButton currentWorkspace={workspace} />
+              <WorkspaceMoreActionsButton />
+              <WorkspaceUpgradeButton workspace={workspace} variant={upgradeButtonVariant} className={styles.upgradeButton} />
+            </>
+          )}
+        </div>
+        <div className={styles.headerRightContent}>
+          <SideMenuFooter />
+        </div>
       </div>
       <div className={styles.content}>
         <div className={styles.workspaceSideMenuContainer}>
           <MainFeaturesSideMenu />
         </div>
-        <Transition>
-          <div className={styles.pageContent}>{children}</div>
-        </Transition>
+        <div className={styles.pageContent}>{children}</div>
       </div>
     </div>
   );

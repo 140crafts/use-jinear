@@ -1,9 +1,0 @@
-.button {
-  display: flex;
-  flex: 0.75;
-  width: 0;
-}
-.label {
-  display: block;
-  flex: 1;
-}

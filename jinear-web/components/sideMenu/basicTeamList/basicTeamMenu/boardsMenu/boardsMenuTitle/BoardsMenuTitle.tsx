@@ -3,7 +3,7 @@ import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { popNewTaskBoardModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 import { IoAdd, IoReaderOutline } from "react-icons/io5";
 import styles from "./BoardsMenuTitle.module.css";
@@ -16,6 +16,9 @@ interface BoardsMenuTitleProps {
 const BoardsMenuTitle: React.FC<BoardsMenuTitleProps> = ({ workspace, team }) => {
   const { t } = useTranslation();
   const router = useRouter();
+  const pathname = usePathname();
+  const boardsPath = `/${workspace.username}/tasks/${team.username}/task-boards`;
+
   const dispatch = useAppDispatch();
 
   const openNewTaskBoardModal = () => {
@@ -28,7 +31,11 @@ const BoardsMenuTitle: React.FC<BoardsMenuTitleProps> = ({ workspace, team }) =>
 
   return (
     <div className={styles.container}>
-      <Button className={styles.labelButton} variant={ButtonVariants.hoverFilled2} onClick={routeToTaskBoardsScreen}>
+      <Button
+        className={styles.labelButton}
+        variant={pathname == boardsPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        onClick={routeToTaskBoardsScreen}
+      >
         <IoReaderOutline />
         <div>{t("sideMenuTeamActionButtonLabelBoards")}</div>
       </Button>

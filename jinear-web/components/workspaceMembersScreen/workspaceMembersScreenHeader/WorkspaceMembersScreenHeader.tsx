@@ -8,9 +8,10 @@ import styles from "./WorkspaceMembersScreenHeader.module.css";
 
 interface WorkspaceMembersScreenHeaderProps {
   workspace: WorkspaceDto;
+  isWorkspaceAdminOrOwner: boolean;
 }
 
-const WorkspaceMembersScreenHeader: React.FC<WorkspaceMembersScreenHeaderProps> = ({ workspace }) => {
+const WorkspaceMembersScreenHeader: React.FC<WorkspaceMembersScreenHeaderProps> = ({ workspace, isWorkspaceAdminOrOwner }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -19,15 +20,12 @@ const WorkspaceMembersScreenHeader: React.FC<WorkspaceMembersScreenHeaderProps> 
   };
   return (
     <div className={styles.container}>
-      {/* <Breadcrumb>
-        <BreadcrumbLink label={workspace.username} url={`/${workspace.username}`} />
-        <BreadcrumbLink label={t("workspaceMemberScreenBreadcrumbTitle")} url={`/${workspace.username}/members`} />
-      </Breadcrumb>
-      <div className="spacer-h-4" /> */}
       <div className={styles.actionBar}>
-        <Button variant={ButtonVariants.contrast} onClick={popInviteModal}>
-          {t("workspaceMemberScreenInviteMember")}
-        </Button>
+        {isWorkspaceAdminOrOwner && (
+          <Button variant={ButtonVariants.contrast} onClick={popInviteModal}>
+            {t("workspaceMemberScreenInviteMember")}
+          </Button>
+        )}
       </div>
     </div>
   );

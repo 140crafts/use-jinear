@@ -8,6 +8,7 @@
   -webkit-animation: upgrade 8s ease infinite;
   -moz-animation: upgrade 8s ease infinite;
   animation: upgrade 8s ease infinite;
+  min-height: 1.75rem;
 }
 
 .container:hover {

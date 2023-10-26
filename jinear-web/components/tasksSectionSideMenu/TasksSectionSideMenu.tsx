@@ -8,7 +8,6 @@ import { useParams } from "next/navigation";
 import React from "react";
 import Button, { ButtonHeight, ButtonVariants } from "../button";
 import BasicTeamList from "../sideMenu/basicTeamList/BasicTeamList";
-import Transition from "../transition/Transition";
 import styles from "./TasksSectionSideMenu.module.css";
 
 interface TasksSectionSideMenuProps {}
@@ -32,7 +31,8 @@ const TasksSectionSideMenu: React.FC<TasksSectionSideMenuProps> = ({}) => {
   };
 
   return (
-    <Transition className={styles.container} initial={true} outDuration={3.25}>
+    // <Transition className={styles.container} initial={true} outDuration={3.25}>
+    <div className={styles.container}>
       {workspace && team && (
         <>
           <Button
@@ -46,7 +46,8 @@ const TasksSectionSideMenu: React.FC<TasksSectionSideMenuProps> = ({}) => {
           <BasicTeamList />
         </>
       )}
-    </Transition>
+    </div>
+    // </Transition>
   );
 };
 

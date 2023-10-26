@@ -1,5 +1,4 @@
 "use client";
-import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -7,7 +6,6 @@ import { usePathname } from "next/navigation";
 import React from "react";
 import { LuCalendarDays, LuCheckSquare, LuClipboardEdit, LuRss } from "react-icons/lu";
 import Button, { ButtonVariants } from "../button";
-import Transition from "../transition/Transition";
 import styles from "./MainFeaturesSideMenu.module.scss";
 import InboxButton from "./inboxButton/InboxButton";
 
@@ -17,11 +15,6 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({}) => {
   const { t } = useTranslation();
   const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
 
-  const { data: teamsResponse } = useRetrieveWorkspaceTeamsQuery(preferredWorkspace?.workspaceId || "", {
-    skip: preferredWorkspace == null,
-  });
-  const team = teamsResponse?.data?.find((team) => team);
-
   const currentPath = usePathname();
   const calendarPath = `/${preferredWorkspace?.username}/calendar`;
   const tasksPath = `/${preferredWorkspace?.username}/tasks`;
@@ -30,7 +23,8 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({}) => {
   const lastActivitiesPath = `/${preferredWorkspace?.username}/last-activities`;
 
   return !preferredWorkspace ? null : (
-    <Transition className={styles.container} initial={true}>
+    // <Transition className={styles.container} initial={true}>
+    <div className={styles.container}>
       <InboxButton
         isActive={inboxPath == currentPath}
         workspace={preferredWorkspace}
@@ -69,7 +63,8 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({}) => {
         <LuClipboardEdit className={styles.icon} />
         {t("mainFeaturesMenuLabelAssignedToMe")}
       </Button>
-    </Transition>
+    </div>
+    // </Transition>
   );
 };
 

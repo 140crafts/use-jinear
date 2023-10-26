@@ -2706,6 +2706,10 @@ export default {
     en: "My Assignments",
     tr: "Bana Atananlar",
   },
+  mainFeaturesMenuLabelMore: {
+    en: "More",
+    tr: "Daha Fazla",
+  },
   tasksLayoutSideMenuCollapsedLabel: {
     en: "Menu",
     tr: "Menü",
@@ -2729,5 +2733,17 @@ export default {
   workspaceSwitchModalTitle: {
     en: "Switch Workspace",
     tr: "Çalışma Alanını Değiştir",
+  },
+  moreMenuActionModalTitle: {
+    en: "More",
+    tr: "Daha Fazla",
+  },
+  workspaceMembersMoreMenuButton: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri",
+  },
+  workspaceSettingsMoreMenuButton: {
+    en: "Workspace Settings",
+    tr: "Çalışma Alanı Ayarları",
   },
 };

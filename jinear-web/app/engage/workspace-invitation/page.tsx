@@ -14,7 +14,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import styles from "./index.module.css";
 
@@ -26,9 +26,9 @@ const WorkspaceInvitationResponseScreen: React.FC<WorkspaceInvitationResponseScr
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const router = useRouter();
-  const params = useParams();
+  const params = useSearchParams();
   const [accepted, setAccepted] = useState<boolean>(false);
-  const token: string = params?.token as string;
+  const token: string = params?.get("token") as string;
   const currentAccount = useTypedSelector(selectCurrentAccount);
   const {
     data: invitationInfoResponse,

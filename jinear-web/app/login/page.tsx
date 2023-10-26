@@ -2,7 +2,7 @@
 import LoginWithMailForm from "@/components/form/loginWithMailForm/LoginWithMailForm";
 import FormLogo from "@/components/formLogo/FormLogo";
 import Logger from "@/utils/logger";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React from "react";
 import styles from "./index.module.scss";
 
@@ -12,8 +12,8 @@ const logger = Logger("LoginPage");
 
 const LoginPage: React.FC<LoginPageProps> = ({}) => {
   logger.log("LoginPage");
-  const params = useParams();
-  const email = params?.email;
+  const params = useSearchParams();
+  const email = params?.get("email");
 
   return (
     <div className={styles.container}>

@@ -5,7 +5,7 @@ import { LocaleType } from "@/model/be/jinear-core";
 import { useCompleteResetPasswordMutation } from "@/store/api/accountPasswordApi";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
-import { useParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 import styles from "./index.module.css";
 
@@ -13,11 +13,11 @@ interface ResetPasswordCompletePageProps {}
 
 const ResetPasswordCompletePage: React.FC<ResetPasswordCompletePageProps> = ({}) => {
   const { t } = useTranslation();
-  const params = useParams();
+  const params = useSearchParams();
   const firstRender = useFirstRender();
   const [completeResetPassword, { data, isSuccess, isError, isLoading }] = useCompleteResetPasswordMutation();
 
-  const token: string = params?.token as string;
+  const token: string = params?.get("token") as string;
 
   useEffect(() => {
     if (token && !isLoading && !data) {

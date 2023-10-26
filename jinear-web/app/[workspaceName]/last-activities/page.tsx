@@ -1,6 +1,5 @@
 "use client";
 import LastActivitiesList from "@/components/lastActivitiesScreen/LastActivitiesList";
-import LastActivitiesBreadCrumb from "@/components/lastActivitiesScreen/lastActivitiesScreenHeader/breadcrumb/LastActivitiesBreadCrumb";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { useParams } from "next/navigation";
@@ -16,7 +15,7 @@ const LastActivitiesScreen: React.FC<LastActivitiesScreenProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {workspace && <LastActivitiesBreadCrumb workspace={workspace} />}
+      {/* {workspace && <LastActivitiesBreadCrumb workspace={workspace} />} */}
       {workspace && <LastActivitiesList workspace={workspace} />}
     </div>
   );

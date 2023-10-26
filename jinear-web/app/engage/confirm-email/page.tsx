@@ -5,7 +5,7 @@ import { useConfirmEmailMutation, useResendConfirmEmailMutation } from "@/store/
 import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
-import { useParams, useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
 import styles from "./index.module.css";
 
@@ -15,11 +15,11 @@ const logger = Logger("ConfirmEmailPage");
 const ConfirmEmailPage: React.FC<ConfirmEmailPageProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const params = useParams();
+  const params = useSearchParams();
   const [confirmEmail, { data, isSuccess, isError, isLoading }] = useConfirmEmailMutation();
   const [resendConfirmEmail, { error: resendErrorResponse, isLoading: resendLoading, isError: isResendError }] =
     useResendConfirmEmailMutation();
-  const token: string = params?.token as string;
+  const token: string = params?.get("token") as string;
 
   useEffect(() => {
     if (token && !isLoading && !data) {

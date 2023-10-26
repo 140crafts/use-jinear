@@ -98,7 +98,7 @@ const TopicForm: React.FC<TopicFormProps> = ({ workspace, team, topicId, color, 
   };
 
   const routeToList = () => {
-    router.replace(`/${workspace.username}/${team.username}/topic/list`);
+    router.replace(`/${workspace.username}/tasks/${team.username}/topic/list`);
   };
 
   return (

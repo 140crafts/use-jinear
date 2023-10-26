@@ -2,7 +2,7 @@ import { useUpdateProfilePictureMutation } from "@/store/api/accountMediaApi";
 import { s3Base } from "@/store/api/api";
 import { useLogoutMutation } from "@/store/api/authApi";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
-import { changeLoadingModalVisibility, closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
+import { changeLoadingModalVisibility, popDialogModal, resetModals } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import cn from "classnames";
@@ -29,7 +29,7 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
 
   const logout = () => {
     logoutCall();
-    dispatch(closeDialogModal());
+    dispatch(resetModals());
   };
 
   const popAreYouSureModalForLogout = () => {
@@ -70,13 +70,8 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
           setSelectedFilePreview={setSelectedFilePreview}
         />
         <div className={styles.infoContainer}>
-          <h2 className={cn(styles.title, "line-clamp-2")}>{currentAccount?.username}</h2>
-          <label className={cn(styles.title, "line-clamp-2")}>{currentAccount?.email}</label>
-          <h3>
-            {/* <Link target="_blank" href={`${HOST}/${selectedWorkspace?.username}`}> */}
-            {/* {`${HOST?.replace("https://", "")?.replace("http://", "")}/${selectedWorkspace?.username}`} */}
-            {/* </Link> */}
-          </h3>
+          <h2 className={cn(styles.title, "single-line")}>{currentAccount?.username}</h2>
+          <label className={cn(styles.title, "single-line")}>{currentAccount?.email}</label>
           <Button
             className={styles.logoutButton}
             loading={isLogoutLoading}

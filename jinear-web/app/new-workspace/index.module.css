@@ -6,6 +6,7 @@
   max-width: var(--page);
   padding: 0 2ch;
   gap: 1rem;
+  padding-top: 2rem;
 }
 
 .headerContainer {

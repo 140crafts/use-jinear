@@ -5,7 +5,6 @@ import styles from "./SideMenu.module.scss";
 import ActionButtonContainer from "./actionButtonContainer/ActionButtonContainer";
 import BasicTeamList from "./basicTeamList/BasicTeamList";
 import CurrentWorkspaceHeader from "./currentWorkspaceHeader/CurrentWorkspaceHeader";
-import WorkspaceMembers from "./workspaceMembers/WorkspaceMembers";
 
 interface SideMenuProps {}
 
@@ -16,7 +15,7 @@ const SideMenu: React.FC<SideMenuProps> = ({}) => {
   return (
     <div className={styles.content}>
       <CurrentWorkspaceHeader />
-      <WorkspaceMembers />
+      {/* <WorkspaceMembers /> */}
       <div className="spacer-h-1" />
       <ActionButtonContainer />
       <BasicTeamList />

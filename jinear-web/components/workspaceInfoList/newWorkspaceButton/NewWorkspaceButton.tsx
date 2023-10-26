@@ -4,7 +4,7 @@ import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { LuSparkles } from "react-icons/lu";
+import { LuPlus } from "react-icons/lu";
 import styles from "./NewWorkspaceButton.module.css";
 
 interface NewWorkspaceButtonProps {}
@@ -21,7 +21,7 @@ const NewWorkspaceButton: React.FC<NewWorkspaceButtonProps> = ({}) => {
     <div className={styles.infoContainer}>
       <div className={cn(styles.profilePicContainer, styles["profilePicContainer-without-profile-pic"])}>
         <div className={styles.firstLetter}>
-          <LuSparkles />
+          <LuPlus />
         </div>
       </div>
       <Button className={styles.nameContainer} onClick={popNewWorkspace}>

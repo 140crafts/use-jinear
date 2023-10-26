@@ -1,3 +1,4 @@
 .iconButton {
-  color: var(--c-secondary-shade-1);
+  color: var(--c-secondary-shade-1) !important;
+  min-width: 40px !important;
 }

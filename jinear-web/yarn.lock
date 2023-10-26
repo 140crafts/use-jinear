@@ -4410,10 +4410,10 @@ next-pwa@^5.6.0:
     workbox-webpack-plugin "^6.5.4"
     workbox-window "^6.5.4"
 
-next-redux-wrapper@^8.0.0:
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/next-redux-wrapper/-/next-redux-wrapper-8.0.0.tgz#588f2d89146c60c77d4a40c0af7e5282acfe4773"
-  integrity sha512-zKRdpvDeqNXQr1j5DUWwsB2fz6XpHR32iy2qJGItTKLsbLB9GvtxDL9b4mFCfhDvnzy5dw97UqMjWDpFY8h0zA==
+next-redux-wrapper@^8.1.0:
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/next-redux-wrapper/-/next-redux-wrapper-8.1.0.tgz#d9c135f1ceeb2478375bdacd356eb9db273d3a07"
+  integrity sha512-2hIau0hcI6uQszOtrvAFqgc0NkZegKYhBB7ZAKiG3jk7zfuQb4E7OV9jfxViqqojh3SEHdnFfPkN9KErttUKuw==
 
 next@^13.5.6:
   version "13.5.6"

@@ -43,7 +43,7 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({ className }
     if (isSuccess && !isError) {
       toast(t("registerWithEmailIsSuccessfull"));
       setTimeout(() => {
-        const params = email ? `?email=${email}` : "";
+        const params = email ? `?email=${encodeURIComponent(email)}` : "";
         router.replace(`/login${params}`);
       }, 2500);
     }

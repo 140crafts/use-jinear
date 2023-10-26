@@ -134,6 +134,9 @@ const initialState = {
   workspaceSwitchModal: {
     visible: false,
   },
+  menuMoreActionModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -167,6 +170,7 @@ const initialState = {
   upgradeWorkspacePlanModal: null | UpgradeWorkspacePlanModalState;
   accountProfileModal: null | ModalState;
   workspaceSwitchModal: null | ModalState;
+  menuMoreActionModal: null | ModalState;
 };
 
 const slice = createSlice({
@@ -403,6 +407,13 @@ const slice = createSlice({
       state.workspaceSwitchModal = initialState.workspaceSwitchModal;
     },
 
+    popMenuMoreActionModal: (state, action: PayloadAction<void>) => {
+      state.menuMoreActionModal = { visible: true };
+    },
+    closeMenuMoreActionModal: (state, action: PayloadAction<void>) => {
+      state.menuMoreActionModal = initialState.menuMoreActionModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -483,6 +494,8 @@ export const {
   closeAccountProfileModal,
   popWorkspaceSwitchModal,
   closeWorkspaceSwitchModal,
+  popMenuMoreActionModal,
+  closeMenuMoreActionModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -658,3 +671,5 @@ export const selectUpgradeWorkspacePlanModalWorkspaceId = (state: RootState) =>
 export const selectAccountProfileModalVisible = (state: RootState) => state.modal.accountProfileModal?.visible;
 
 export const selectWorkspaceSwitchModalVisible = (state: RootState) => state.modal.workspaceSwitchModal?.visible;
+
+export const selectMenuMoreActionModalVisible = (state: RootState) => state.modal.menuMoreActionModal?.visible;

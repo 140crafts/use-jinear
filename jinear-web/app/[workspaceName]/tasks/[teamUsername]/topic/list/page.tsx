@@ -53,7 +53,10 @@ const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
           {!teamTopicListingResponse?.data.hasContent && (
             <div className={styles.emptyStateContainer}>
               <div>{t("topicListScreenNoContentLabel")}</div>
-              <Button variant={ButtonVariants.filled} href={`/${workspace.username}/${encodeURI(team.username)}/topic/new`}>
+              <Button
+                variant={ButtonVariants.filled}
+                href={`/${workspace.username}/tasks/${encodeURIComponent(team.username)}/topic/new`}
+              >
                 {t("topicListScreenNoContentNewTopicLabel")}
               </Button>
             </div>

@@ -28,7 +28,7 @@
   .container {
     flex-direction: row !important;
     height: unset !important;
-    z-index: 99 !important;
+    z-index: 9 !important;
     padding: 0.5rem 0 1.5rem 0 !important;
   }
 
@@ -36,6 +36,8 @@
     flex: 1;
     gap: 0.75rem;
     font-size: 0.75rem;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
   .icon {
     font-size: 1rem;

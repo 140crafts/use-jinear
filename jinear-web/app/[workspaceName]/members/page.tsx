@@ -2,7 +2,10 @@
 import ActiveInvitationList from "@/components/workspaceMembersScreen/activeInvitationList/ActiveInvitationList";
 import MemberList from "@/components/workspaceMembersScreen/memberList/MemberList";
 import WorkspaceMembersScreenHeader from "@/components/workspaceMembersScreen/workspaceMembersScreenHeader/WorkspaceMembersScreenHeader";
-import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
+import {
+  selectCurrentAccountsWorkspaceRoleIsAdminOrOwnerWithWorkspaceUsername,
+  selectWorkspaceFromWorkspaceUsername,
+} from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { useParams } from "next/navigation";
 import React from "react";
@@ -14,13 +17,16 @@ const WorkspaceMembersScreen: React.FC<WorkspaceMembersScreenProps> = ({}) => {
   const params = useParams();
   const workspaceName: string = params?.workspaceName as string;
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
+  const isWorkspaceAdminOrOwner = useTypedSelector(
+    selectCurrentAccountsWorkspaceRoleIsAdminOrOwnerWithWorkspaceUsername(workspaceName)
+  );
 
   return (
     <div className={styles.container}>
-      {workspace && <WorkspaceMembersScreenHeader workspace={workspace} />}
+      {workspace && <WorkspaceMembersScreenHeader workspace={workspace} isWorkspaceAdminOrOwner={isWorkspaceAdminOrOwner} />}
       {workspace && <MemberList workspace={workspace} />}
       <div className="spacer-h-4" />
-      {workspace && <ActiveInvitationList workspace={workspace} />}
+      {workspace && isWorkspaceAdminOrOwner && <ActiveInvitationList workspace={workspace} />}
     </div>
   );
 };

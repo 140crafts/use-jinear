@@ -10,10 +10,10 @@ interface AuthCheckProps {}
 const logger = Logger("AuthCheck");
 
 const PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS = [
-  "/engage/[token]/confirm-email",
-  "/engage/[token]/reset-password-complete",
-  "/engage/[token]/forgot-password",
-  "/engage/[token]/workspace-invitation",
+  "/engage/confirm-email",
+  "/engage/reset-password-complete",
+  "/engage/forgot-password",
+  "/engage/workspace-invitation",
   "/pricing",
   "/terms",
   "/debug",
