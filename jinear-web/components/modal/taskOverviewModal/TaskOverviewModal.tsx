@@ -30,6 +30,7 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
     data: taskResponse,
     isLoading: isTaskResponseLoading,
     isSuccess: isTaskResponseSuccess,
+    isFetching: isTaskResponseFetching,
   } = useRetrieveWithWorkspaceNameAndTeamTagNoQuery(
     { workspaceName: workspaceName || "", taskTag: taskTag || "" },
     { skip: workspaceName == null || taskTag == null }
@@ -53,13 +54,13 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
       bodyClass={styles.modalBody}
       contentContainerClass={styles.modal}
     >
-      {isTaskResponseLoading && (
+      {isTaskResponseFetching && (
         <div className={styles.loadingContainer}>
           <CircularProgress size={21} />
         </div>
       )}
 
-      {isTaskResponseSuccess && (
+      {isTaskResponseSuccess && !isTaskResponseFetching && (
         <div className={styles.actionBar}>
           <Button
             heightVariant={ButtonHeight.short}
@@ -74,7 +75,7 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
         </div>
       )}
 
-      {isTaskResponseSuccess && (
+      {isTaskResponseSuccess && !isTaskResponseFetching && (
         <div className={styles.taskContentWrapper}>
           {/* <TaskDetailHeader task={taskResponse.data} /> */}
           <TaskDetail task={taskResponse.data} />
