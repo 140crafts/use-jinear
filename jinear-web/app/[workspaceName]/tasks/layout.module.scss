@@ -111,12 +111,13 @@
     border-bottom-right-radius: 0 !important;
     // border-color: var(--c-primary-shade-1-op05) !important;
     background-color: var(--c-primary) !important;
-    background: linear-gradient(0, var(--c-primary), 40%, var(--c-primary-shade-0-op05));
+    background: linear-gradient(0, var(--c-primary), 20%, var(--c-primary-shade-0-op05)) !important;
   }
 
   .menuToggleIcon {
     transition: all var(--fade-2);
     transform: rotate(-90deg);
+    color: var(--c-secondary) !important;
   }
 
   .sideMenuCollapsedLabelClosed {

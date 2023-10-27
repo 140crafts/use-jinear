@@ -1,3 +1,4 @@
+"use client";
 import cn from "classnames";
 import { AnimatePresence, motion, usePresence } from "framer-motion";
 import React from "react";

@@ -4,6 +4,7 @@ import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 import FormLogo from "@/components/formLogo/FormLogo";
 import Line from "@/components/line/Line";
+import { useTheme } from "@/components/themeProvider/ThemeProvider";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
 import { selectAuthState } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
@@ -22,7 +23,6 @@ import {
   IoReaderOutline,
 } from "react-icons/io5";
 import styles from "./index.module.scss";
-import { useTheme } from "./layout";
 
 const ICON_SIZE = 42;
 

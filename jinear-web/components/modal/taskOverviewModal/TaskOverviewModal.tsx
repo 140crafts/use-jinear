@@ -1,6 +1,5 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import TaskDetail from "@/components/taskDetail/TaskDetail";
-import TaskDetailHeader from "@/components/taskDetail/taskDetailHeader/TaskDetailHeader";
 import useWindowSize from "@/hooks/useWindowSize";
 import { useRetrieveWithWorkspaceNameAndTeamTagNoQuery } from "@/store/api/taskApi";
 import {
@@ -77,7 +76,7 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
 
       {isTaskResponseSuccess && (
         <div className={styles.taskContentWrapper}>
-          <TaskDetailHeader task={taskResponse.data} />
+          {/* <TaskDetailHeader task={taskResponse.data} /> */}
           <TaskDetail task={taskResponse.data} />
         </div>
       )}

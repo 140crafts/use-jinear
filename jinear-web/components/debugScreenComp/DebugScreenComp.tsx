@@ -1,14 +1,13 @@
 "use client";
-import Button from "@/components/button";
 import React from "react";
-import styles from "./index.module.css";
+import Button from "../button";
+import styles from "./DebugScreenComp.module.css";
 
 interface DebugScreenProps {}
 
-const DebugScreen: React.FC<DebugScreenProps> = ({}) => {
+const DebugScreenComp: React.FC<DebugScreenProps> = ({}) => {
   return (
     <div className={styles.container}>
-      {/* <DebugScreenComp /> */}
       <Button href={"/asd"} className={styles.zort}>
         123
       </Button>
@@ -19,4 +18,4 @@ const DebugScreen: React.FC<DebugScreenProps> = ({}) => {
   );
 };
 
-export default DebugScreen;
+export default DebugScreenComp;

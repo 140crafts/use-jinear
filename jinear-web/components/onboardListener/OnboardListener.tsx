@@ -1,3 +1,4 @@
+"use client";
 import { selectAuthState, selectCurrentAccountsWorkspaces } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";

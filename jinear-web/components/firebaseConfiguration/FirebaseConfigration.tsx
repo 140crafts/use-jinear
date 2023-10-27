@@ -1,3 +1,4 @@
+"use client";
 import { api } from "@/store/api/api";
 import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
 import { selectAuthState, selectCurrentAccountId, selectCurrentSessionId } from "@/store/slice/accountSlice";

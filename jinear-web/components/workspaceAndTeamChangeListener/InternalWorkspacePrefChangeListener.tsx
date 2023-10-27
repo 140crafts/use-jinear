@@ -1,3 +1,4 @@
+"use client";
 import { clearReroute, selectReroute } from "@/store/slice/displayPreferenceSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";

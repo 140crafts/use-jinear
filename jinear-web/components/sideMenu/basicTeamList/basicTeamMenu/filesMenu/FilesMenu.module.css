@@ -5,9 +5,9 @@
 }
 
 .labelButton {
-  gap: 1rem;
-  flex: 1;
-  justify-content: flex-start;
+  gap: 1rem !important;
+  flex: 1 !important;
+  justify-content: flex-start !important;
 }
 
 .actionButtonsContainer {
