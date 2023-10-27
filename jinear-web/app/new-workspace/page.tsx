@@ -5,7 +5,7 @@ import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/navigation";
 import React from "react";
-import styles from "./index.module.css";
+import styles from "./page.module.css";
 
 interface NewWorkspaceScreenProps {}
 

@@ -24,7 +24,7 @@ const TasksLayout: React.FC<TasksLayoutProps> = ({ children }) => {
   };
 
   const MenuIcon = tasksMenuVisible ? LuChevronLeft : LuChevronRight;
-  const menuVariant = tasksMenuVisible ? ButtonVariants.default : ButtonVariants.outline;
+  const menuVariant = tasksMenuVisible ? ButtonVariants.default : ButtonVariants.contrast;
 
   return (
     <div className={styles.container}>

@@ -1,3 +1,4 @@
+"use client";
 import { useMeQuery } from "@/store/api/accountApi";
 import { selectAuthState } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";

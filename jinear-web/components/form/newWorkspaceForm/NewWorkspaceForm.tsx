@@ -1,3 +1,4 @@
+"use client";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { BaseResponse, LocaleType, WorkspaceInitializeRequest } from "@/model/be/jinear-core";
 import { useInitializeWorkspaceMutation } from "@/store/api/workspaceApi";

@@ -1,9 +1,10 @@
-import { useTheme, useThemeToggle } from "@/pages/_app";
+"use client";
 import cn from "classnames";
 import React from "react";
 import { IoMoon, IoMoonOutline } from "react-icons/io5";
 import Button, { ButtonVariants } from "../button";
 import ClientOnly from "../clientOnly/ClientOnly";
+import { useTheme, useThemeToggle } from "../themeProvider/ThemeProvider";
 import styles from "./ThemeToggle.module.css";
 
 interface ThemeToggleProps {

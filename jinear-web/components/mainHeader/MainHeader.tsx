@@ -1,3 +1,4 @@
+"use client";
 import { __DEV__ } from "@/utils/constants";
 import Head from "next/head";
 import Script from "next/script";
@@ -14,6 +15,8 @@ const MainHeader: React.FC<MainHeaderProps> = ({}) => {
           name="viewport"
           content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
         />
+        <meta name="theme-color" content="#16171a" />
+
         <meta name="application-name" content="Jinear" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -21,7 +24,6 @@ const MainHeader: React.FC<MainHeaderProps> = ({}) => {
         <meta name="description" content="Manage your tasks" />
         <meta name="format-detection" content="telephone=no" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#16171a" />
 
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon-180x180.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/apple-touch-icon-152x152.png" />

@@ -5,7 +5,7 @@ import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import React from "react";
 import styles from "./index.module.css";
 
@@ -14,9 +14,10 @@ interface TasksScreenProps {}
 const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
   const { t } = useTranslation();
   const params = useParams();
+  const searchParams = useSearchParams();
   const workspaceName: string = params?.workspaceName as string;
   const teamUsername: string = params?.teamUsername as string;
-  const topicId = params?.topic as string | undefined;
+  const topicId = searchParams?.get("topic") as string | undefined;
 
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
   const { data: teamsResponse, isFetching: isTeamsFetching } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {

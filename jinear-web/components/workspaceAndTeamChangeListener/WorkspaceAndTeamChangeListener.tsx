@@ -1,3 +1,4 @@
+"use client";
 import { useUpdatePreferredWorkspaceWithUsernameMutation } from "@/store/api/workspaceDisplayPreferenceApi";
 import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { selectReroute } from "@/store/slice/displayPreferenceSlice";
