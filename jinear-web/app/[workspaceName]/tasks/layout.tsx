@@ -1,14 +1,12 @@
 "use client";
-import TasksSectionSideMenu from "@/components/tasksSectionSideMenu/TasksSectionSideMenu";
 import { selectTasksMenuVisible, toggleTasksMenu } from "@/store/slice/displayPreferenceSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
-import cn from "classnames";
 import React from "react";
 import styles from "./layout.module.scss";
 
-import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import SecondLevelSideMenu from "@/components/secondLevelSideMenu/SecondLevelSideMenu";
+import TasksSectionSideMenu from "@/components/tasksSectionSideMenu/TasksSectionSideMenu";
 import useTranslation from "locales/useTranslation";
-import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 
 interface TasksLayoutProps {
   children: React.ReactNode;
@@ -23,12 +21,9 @@ const TasksLayout: React.FC<TasksLayoutProps> = ({ children }) => {
     dispatch(toggleTasksMenu());
   };
 
-  const MenuIcon = tasksMenuVisible ? LuChevronLeft : LuChevronRight;
-  const menuVariant = tasksMenuVisible ? ButtonVariants.default : ButtonVariants.contrast;
-
   return (
     <div className={styles.container}>
-      <div className={cn(styles.sideMenu, tasksMenuVisible && styles.sideMenuVisible)}>
+      {/* <div className={cn(styles.sideMenu, tasksMenuVisible && styles.sideMenuVisible)}>
         <div className={styles.sideMenuActionBar}>
           <Button
             className={styles.menuToggleButton}
@@ -43,8 +38,10 @@ const TasksLayout: React.FC<TasksLayoutProps> = ({ children }) => {
           </Button>
         </div>
         {tasksMenuVisible && <TasksSectionSideMenu />}
-      </div>
-
+      </div> */}
+      <SecondLevelSideMenu open={tasksMenuVisible} toggle={toggleMenu}>
+        <TasksSectionSideMenu />
+      </SecondLevelSideMenu>
       <div className={styles.contentContainer}>{children}</div>
     </div>
   );
