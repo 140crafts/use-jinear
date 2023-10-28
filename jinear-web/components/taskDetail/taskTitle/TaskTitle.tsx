@@ -4,7 +4,7 @@ import { closeBasicTextInputModal, popBasicTextInputModal } from "@/store/slice/
 import { useAppDispatch } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoPencil } from "react-icons/io5";
 import styles from "./TaskTitle.module.css";
 
@@ -19,6 +19,10 @@ const TaskTitle: React.FC<TaskTitleProps> = ({ taskId, title }) => {
   const [taskTitle, setTaskTitle] = useState(title);
   const [updateTaskTitle, { isLoading: isUpdateTaskTitleLoading, isSuccess: isUpdateTaskTitleSuccess }] =
     useUpdateTaskTitleMutation();
+
+  useEffect(() => {
+    setTaskTitle(title);
+  }, [title]);
 
   const changeTitle = (title: string) => {
     dispatch(closeBasicTextInputModal());

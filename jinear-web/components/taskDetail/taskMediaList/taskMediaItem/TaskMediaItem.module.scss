@@ -7,11 +7,11 @@
 
 .mainButton {
   flex: 1;
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  text-align: left;
-  justify-content: flex-start;
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 1rem !important;
+  text-align: left !important;
+  justify-content: flex-start !important;
 }
 
 .iconAndNameContainer {
@@ -63,8 +63,8 @@
 }
 
 .deleteButton {
-  min-width: 24px;
-  min-height: 24px;
+  min-width: 24px !important;
+  min-height: 24px !important;
 }
 
 @media (max-width: $tablet) {
