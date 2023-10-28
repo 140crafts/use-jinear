@@ -37,8 +37,8 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   }, [pathName, isMobile]);
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
+    <div id="workspace-layout-container" className={styles.container}>
+      <div id="workspace-layout-header" className={styles.header}>
         <div className={styles.headerLeftContent}>
           <Button heightVariant={ButtonHeight.short} onClick={router.back}>
             <b>{"<-"}</b>
@@ -55,11 +55,13 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
           <SideMenuFooter />
         </div>
       </div>
-      <div className={styles.content}>
-        <div className={styles.workspaceSideMenuContainer}>
+      <div id="workspace-layout-content" className={styles.content}>
+        <div id="workspace-layout-page-side-menu-container" className={styles.workspaceSideMenuContainer}>
           <MainFeaturesSideMenu />
         </div>
-        <div className={styles.pageContent}>{children}</div>
+        <div id="workspace-layout-page-content" className={styles.pageContent}>
+          {children}
+        </div>
       </div>
     </div>
   );

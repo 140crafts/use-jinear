@@ -1,9 +1,9 @@
 .container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.1ch 1ch;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.1ch 1ch !important;
 }
 
 .iconContainer {

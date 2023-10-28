@@ -9,10 +9,10 @@ const DebugScreen: React.FC<DebugScreenProps> = ({}) => {
   return (
     <div className={styles.container}>
       {/* <DebugScreenComp /> */}
-      <Button href={"/asd"} className={styles.zort}>
+      <Button href={"/asd"} className={styles.button0}>
         123
       </Button>
-      <Button href={"/asd2"} className={styles.zort2}>
+      <Button href={"/asd2"} className={styles.button}>
         1234
       </Button>
     </div>
