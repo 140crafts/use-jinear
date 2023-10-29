@@ -72,7 +72,6 @@
   align-items: stretch;
   padding: var(--workspace-layout-page-padding);
   padding-top: var(--workspace-layout-content-vertical-padding);
-  padding-bottom: calc(var(--workspace-side-menu-mobile-navigator-height) + var(--mobile-menu-action-bar-height));
 }
 
 .upgradeButton {
@@ -100,6 +99,17 @@
     height: var(--workspace-side-menu-mobile-navigator-height);
     // overflow-x: scroll;
     overflow-y: visible;
+  }
+}
+
+@media (max-width: $tablet) {
+  .pageContent {
+    padding-bottom: calc(
+      calc(
+          calc(var(--workspace-side-menu-mobile-navigator-height) + var(--mobile-menu-action-bar-height)) +
+            var(--workspace-header-height)
+        ) + 2rem
+    ) !important;
   }
 }
 
