@@ -104,12 +104,8 @@
 
 @media (max-width: $tablet) {
   .pageContent {
-    padding-bottom: calc(
-      calc(
-          calc(var(--workspace-side-menu-mobile-navigator-height) + var(--mobile-menu-action-bar-height)) +
-            var(--workspace-header-height)
-        ) + 2rem
-    ) !important;
+    // padding-bottom: calc(var(--workspace-side-menu-mobile-navigator-height) + var(--mobile-menu-action-bar-height)) !important;
+    padding-bottom: var(--workspace-side-menu-mobile-navigator-height);
   }
 }
 
