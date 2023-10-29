@@ -95,6 +95,16 @@
     background: linear-gradient(0, var(--c-primary), 20%, var(--c-primary-shade-0-op05)) !important;
   }
 
+  .menuToggleButton:focus {
+    outline-style: solid;
+    // outline-color: var(--c-primary-shade-0-op05) !important;
+    outline-color: transparent !important;
+    // outline-offset: 2px;
+    // outline-width: 2px;
+    z-index: 99;
+    /* outline-width: 2px; */
+  }
+
   .menuToggleIcon {
     transition: all var(--fade-2);
     transform: rotate(-90deg);
