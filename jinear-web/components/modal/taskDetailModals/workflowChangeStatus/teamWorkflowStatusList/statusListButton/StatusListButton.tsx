@@ -60,7 +60,7 @@ const StatusListButton: React.FC<StatusListButtonProps> = ({ wfs }) => {
       className={styles.button}
       onClick={change}
       variant={wfs.teamWorkflowStatusId == currentWorkflowStatusId ? ButtonVariants.filled2 : ButtonVariants.default}
-      data-tooltip={
+      data-tooltip-right={
         ["COMPLETED", "CANCELLED"].indexOf(wfs.workflowStateGroup) != -1 && wfs.teamWorkflowStatusId != currentWorkflowStatusId
           ? t("taskStatusChangeModalRemovesRemindersTooltip")
           : null
