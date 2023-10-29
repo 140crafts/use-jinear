@@ -58,9 +58,10 @@
     top: calc(calc(calc(var(--workspace-header-height) - 100dvh) + var(--workspace-side-menu-mobile-navigator-height)) * -1);
     margin-top: 0.75rem;
 
-    width: 100vw;
-    min-width: 100vw;
-    max-width: 100vw;
+    width: calc(100vw - calc(var(--workspace-layout-page-padding) * 2));
+    min-width: calc(100vw - calc(var(--workspace-layout-page-padding) * 2));
+    max-width: calc(100vw - calc(var(--workspace-layout-page-padding) * 2));
+
     overflow-x: hidden;
     overflow-y: scroll;
     transition: all var(--fade-2);
@@ -70,12 +71,10 @@
 
   .sideMenuVisible {
     position: fixed;
-    top: calc(var(--mobile-menu-action-bar-height) + calc(var(--mobile-menu-action-bar-height) / 2));
+    top: var(--mobile-menu-action-bar-height);
     bottom: unset;
 
-    border-right-style: solid;
-    border-right-width: 1px;
-    border-right-color: var(--c-primary-shade-0);
+    border-right-style: none;
   }
 
   .sideMenuActionBar {

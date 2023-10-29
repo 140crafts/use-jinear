@@ -24,9 +24,9 @@
 }
 
 .deleteButton {
-  display: none;
+  display: none !important;
 }
 
 .container:hover .deleteButton {
-  display: flex;
+  display: flex !important;
 }

@@ -16,7 +16,7 @@
 }
 
 .container:hover .button {
-  background-color: var(--c-primary-shade-1);
+  background-color: var(--c-primary-shade-1) !important;
 }
 
 .container:hover .rightInfoContainer {

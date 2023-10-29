@@ -72,9 +72,9 @@
     align-items: flex-start;
   }
   .mainButton {
-    flex-direction: column;
-    gap: 0.25rem;
-    align-items: flex-start;
+    flex-direction: column !important;
+    gap: 0.25rem !important;
+    align-items: flex-start !important;
   }
   .mediaNameLabel {
     width: 50vw;

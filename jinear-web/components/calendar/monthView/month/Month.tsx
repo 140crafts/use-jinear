@@ -2,7 +2,7 @@ import { getOffset, getSize } from "@/utils/htmlUtis";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import { format, isThisMonth } from "date-fns";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { ICalendarWeekRowCell } from "../../calendarUtils";
 import Week from "../../common/week/Week";
 import { useViewingDate } from "../../context/CalendarContext";
@@ -15,19 +15,20 @@ interface MonthProps {
 }
 
 const logger = Logger("Month");
+
 const Month: React.FC<MonthProps> = ({ monthTable, days, squeezedView }) => {
-  const weeksContainerRef = useRef<HTMLDivElement>(null);
   const viewingDate = useViewingDate();
 
   useEffect(() => {
     if (viewingDate && isThisMonth(viewingDate)) {
       setTimeout(() => {
         const todayTitle = document.getElementById("calendar-title-today");
-        if (todayTitle) {
+        const pageContent = document.getElementById("workspace-layout-page-content");
+        if (todayTitle && pageContent) {
           const offset = getOffset(todayTitle);
           const size = getSize(todayTitle);
 
-          weeksContainerRef.current?.scrollTo?.({
+          pageContent?.scrollTo?.({
             left: offset.left + size.width,
             top: offset.top - size.height,
             behavior: "smooth",
@@ -39,7 +40,7 @@ const Month: React.FC<MonthProps> = ({ monthTable, days, squeezedView }) => {
   }, [viewingDate]);
 
   return (
-    <div id="weeks-container" ref={weeksContainerRef} className={styles.weeksContainer}>
+    <div id="weeks-container" className={styles.weeksContainer}>
       <div className={cn(styles.weeksBaseContentContainer, squeezedView ? undefined : styles.weeksContentContainer)}>
         <div className={styles.weekdayHeaderContainer}>
           {days.slice(0, 7).map((day) => (
