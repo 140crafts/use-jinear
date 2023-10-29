@@ -4,44 +4,9 @@
   position: relative;
   display: flex;
   flex-direction: row;
-  margin: calc(var(--workspace-layout-page-padding) * -1);
   margin-top: calc(var(--workspace-layout-content-vertical-padding) * -1);
   margin-bottom: calc(var(--workspace-side-menu-mobile-navigator-height) * -1);
   height: calc(100dvh - var(--workspace-header-height));
-}
-
-.sideMenu {
-  position: absolute;
-  z-index: 9;
-  width: 85px;
-  min-width: 85px;
-  max-width: 85px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  transition: all var(--fade-2);
-}
-
-.sideMenuVisible {
-  position: unset;
-  border-right-style: solid;
-  border-right-width: 1px;
-  border-right-color: var(--c-primary-shade-0);
-  // height: calc(100dvh - var(--workspace-header-height));
-  // min-height: calc(100dvh - var(--workspace-header-height));
-  // max-height: calc(100dvh - var(--workspace-header-height));
-  width: var(--tasks-section-sidebar-width);
-  min-width: var(--tasks-section-sidebar-width);
-  max-width: var(--tasks-section-sidebar-width);
-}
-
-.sideMenuActionBar {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 0.25rem;
-  margin-top: 0.25rem;
-  padding: 0.25rem;
 }
 
 .contentContainer {
@@ -49,81 +14,14 @@
   display: flex;
   justify-content: center;
   overflow: scroll;
-  // height: calc(100dvh - var(--workspace-header-height));
-  // min-height: calc(100dvh - var(--workspace-header-height));
-  // max-height: calc(100dvh - var(--workspace-header-height));
   padding: var(--workspace-layout-page-padding);
   padding-top: var(--workspace-layout-content-vertical-padding);
   padding-bottom: var(--workspace-layout-content-vertical-padding);
-}
-
-.sideMenuCollapsedLabel {
-  display: none;
-}
-
-.sideMenuCollapsedLabelClosed {
-  display: flex;
 }
 
 @media (max-width: $tablet) {
   .container {
     flex-direction: column-reverse;
     height: calc(100dvh - calc(var(--workspace-side-menu-mobile-navigator-height) + var(--workspace-header-height)));
-  }
-
-  .sideMenu {
-    position: absolute;
-    z-index: 5;
-
-    // height: calc(var(--workspace-side-menu-mobile-navigator-height) + var(--mobile-menu-action-bar-height));
-    // min-height: calc(var(--workspace-side-menu-mobile-navigator-height) + var(--mobile-menu-action-bar-height));
-    // max-height: calc(var(--workspace-side-menu-mobile-navigator-height) + var(--mobile-menu-action-bar-height));
-
-    width: 100vw;
-    min-width: 100vw;
-    max-width: 100vw;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    transition: all var(--fade-2);
-  }
-
-  .sideMenuVisible {
-    position: unset;
-    border-right-style: solid;
-    border-right-width: 1px;
-    border-right-color: var(--c-primary-shade-0);
-
-    // height: calc(100dvh - var(--workspace-header-height));
-    // min-height: calc(100dvh - var(--workspace-header-height));
-    // max-height: calc(100dvh - var(--workspace-header-height));
-  }
-
-  .sideMenuActionBar {
-    height: var(--mobile-menu-action-bar-height);
-    justify-content: center;
-    position: sticky;
-    top: 0;
-    background-color: var(--c-primary) !important;
-    z-index: 1;
-  }
-
-  .menuToggleButton {
-    flex: 1;
-    height: var(--mobile-menu-action-bar-height);
-    border-bottom-left-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-    // border-color: var(--c-primary-shade-1-op05) !important;
-    background-color: var(--c-primary) !important;
-    background: linear-gradient(0, var(--c-primary), 20%, var(--c-primary-shade-0-op05)) !important;
-  }
-
-  .menuToggleIcon {
-    transition: all var(--fade-2);
-    transform: rotate(-90deg);
-    color: var(--c-secondary) !important;
-  }
-
-  .sideMenuCollapsedLabelClosed {
-    display: none;
   }
 }
