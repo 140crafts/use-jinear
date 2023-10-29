@@ -79,12 +79,13 @@ const WeekView: React.FC<WeekViewProps> = ({}) => {
           const todayTitleSize = getSize(todayTitle);
           const currentTimeLineOffset = getOffset(currentTimeLine);
           const currentTimeLineSize = getSize(currentTimeLine);
+          const pageContent = document.getElementById("workspace-layout-page-content");
 
-          weekViewContainer?.scrollTo?.({
+          pageContent?.scrollTo?.({
             left: todayTitleOffset.left,
             behavior: "smooth",
           });
-          scroll({
+          pageContent?.scroll?.({
             top: currentTimeLineOffset.top - currentTimeLineSize.height - 200,
             behavior: "smooth",
           });
