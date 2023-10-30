@@ -14,6 +14,7 @@ import ModalProvider from "@/components/modalProvider/ModalProvider";
 import ReduxProvider from "@/components/reduxProvider/ReduxProvider";
 // import Root from "@/components/root/Root";
 import BodyFixer from "@/components/bodyFixer/BodyFixer";
+import OfflineListener from "@/components/offlineListener/OfflineListener";
 import Root from "@/components/root/Root";
 import ThemeProvider from "@/components/themeProvider/ThemeProvider";
 import ToasterProvider from "@/components/toasterProvider/ToasterProvider";
@@ -62,6 +63,7 @@ function MyApp({ children }: { children: React.ReactNode }) {
               {children}
               <ToasterProvider />
               <BodyFixer />
+              <OfflineListener />
               <ModalProvider />
             </ThemeProvider>
           </ReduxProvider>
