@@ -137,6 +137,9 @@ const initialState = {
   menuMoreActionModal: {
     visible: false,
   },
+  deviceOfflineModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -171,6 +174,7 @@ const initialState = {
   accountProfileModal: null | ModalState;
   workspaceSwitchModal: null | ModalState;
   menuMoreActionModal: null | ModalState;
+  deviceOfflineModal: null | ModalState;
 };
 
 const slice = createSlice({
@@ -414,6 +418,13 @@ const slice = createSlice({
       state.menuMoreActionModal = initialState.menuMoreActionModal;
     },
 
+    popDeviceOfflineModal: (state, action: PayloadAction<void>) => {
+      state.deviceOfflineModal = { visible: true };
+    },
+    closeDeviceOfflineModal: (state, action: PayloadAction<void>) => {
+      state.deviceOfflineModal = initialState.deviceOfflineModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -496,6 +507,8 @@ export const {
   closeWorkspaceSwitchModal,
   popMenuMoreActionModal,
   closeMenuMoreActionModal,
+  popDeviceOfflineModal,
+  closeDeviceOfflineModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -673,3 +686,5 @@ export const selectAccountProfileModalVisible = (state: RootState) => state.moda
 export const selectWorkspaceSwitchModalVisible = (state: RootState) => state.modal.workspaceSwitchModal?.visible;
 
 export const selectMenuMoreActionModalVisible = (state: RootState) => state.modal.menuMoreActionModal?.visible;
+
+export const selectDeviceOfflineModal = (state: RootState) => state.modal.deviceOfflineModal?.visible;

@@ -35,6 +35,7 @@ import UpgradeWorkspaceModal from "@/components/modal/upgradeWorkspaceModal/Upgr
 import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMemberModal/WorkspaceInviteMemberModal";
 import WorkspacePickerModal from "@/components/modal/workspacePickerModal/WorkspacePickerModal";
 import WorkspaceSwitchModal from "@/components/modal/workspaceSwitchModal/WorkspaceSwitchModal";
+import DeviceOfflineModal from "../modal/deviceOfflineModal/DeviceOfflineModal";
 
 interface ModalProviderProps {}
 
@@ -72,6 +73,7 @@ const globalModals: any = (
     <BasicTextInputModal />
     <DialogModal />
     <NotFoundModal />
+    <DeviceOfflineModal />
     <LoadingModal />
   </>
 );

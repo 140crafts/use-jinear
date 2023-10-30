@@ -2746,4 +2746,8 @@ export default {
     en: "Workspace Settings",
     tr: "Çalışma Alanı Ayarları",
   },
+  deviceOfflineModalText: {
+    en: "Unable to connect internet.",
+    tr: "İnternet bağlantınız yok",
+  },
 };
