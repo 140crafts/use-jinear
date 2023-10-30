@@ -13,6 +13,7 @@ import MainHeader from "@/components/mainHeader/MainHeader";
 import ModalProvider from "@/components/modalProvider/ModalProvider";
 import ReduxProvider from "@/components/reduxProvider/ReduxProvider";
 // import Root from "@/components/root/Root";
+import BodyFixer from "@/components/bodyFixer/BodyFixer";
 import Root from "@/components/root/Root";
 import ThemeProvider from "@/components/themeProvider/ThemeProvider";
 import ToasterProvider from "@/components/toasterProvider/ToasterProvider";
@@ -60,6 +61,7 @@ function MyApp({ children }: { children: React.ReactNode }) {
               <PureClientOnly>{/* <SseListener /> */}</PureClientOnly>
               {children}
               <ToasterProvider />
+              <BodyFixer />
               <ModalProvider />
             </ThemeProvider>
           </ReduxProvider>

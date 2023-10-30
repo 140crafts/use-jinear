@@ -4,8 +4,6 @@
   position: relative;
   display: flex;
   flex-direction: row;
-  margin-top: calc(var(--workspace-layout-content-vertical-padding) * -1);
-  margin-bottom: calc(var(--workspace-side-menu-mobile-navigator-height) * -1);
 }
 
 .contentContainer {
@@ -13,13 +11,12 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  overflow: scroll;
+  transition: all var(--fade);
   padding: var(--workspace-layout-page-padding);
-  padding-top: var(--workspace-layout-content-vertical-padding);
-  padding-bottom: calc(
-    calc(var(--workspace-layout-content-vertical-padding) + var(--workspace-side-menu-mobile-navigator-height)) +
-      var(--mobile-menu-action-bar-height)
-  );
+}
+
+.contentContainerWithSideMenu {
+  padding-left: calc(var(--tasks-section-sidebar-width) + var(--workspace-layout-page-padding));
 }
 
 @media (max-width: $tablet) {
