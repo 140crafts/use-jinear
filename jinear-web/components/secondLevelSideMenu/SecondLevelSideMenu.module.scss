@@ -1,7 +1,10 @@
 @import "/styles/breakpoints.scss";
 
 .sideMenu {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  padding-top: var(--workspace-header-height);
+
   z-index: 9;
   width: 85px;
   min-width: 85px;
@@ -13,13 +16,14 @@
 }
 
 .sideMenuVisible {
-  position: unset;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+
   border-right-style: solid;
   border-right-width: 1px;
   border-right-color: var(--c-primary-shade-0);
-  height: calc(100dvh - var(--workspace-header-height));
-  min-height: calc(100dvh - var(--workspace-header-height));
-  max-height: calc(100dvh - var(--workspace-header-height));
+
   width: var(--tasks-section-sidebar-width);
   min-width: var(--tasks-section-sidebar-width);
   max-width: var(--tasks-section-sidebar-width);
@@ -31,7 +35,6 @@
   justify-content: flex-end;
   align-items: center;
   margin-bottom: 0.25rem;
-  margin-top: 0.25rem;
   padding: 0.25rem;
 }
 
@@ -48,23 +51,23 @@
 }
 
 .sideMenuContentVisible {
-  display: unset;
+  display: block;
 }
 
 @media (max-width: $tablet) {
   .sideMenu {
     position: fixed;
-    z-index: 5;
-    top: calc(calc(calc(var(--workspace-header-height) - 100dvh) + var(--workspace-side-menu-mobile-navigator-height)) * -1);
-    margin-top: 0.75rem;
+    top: unset;
+    bottom: var(--workspace-side-menu-mobile-navigator-height);
+    padding-top: unset;
 
+    z-index: 5;
     width: calc(100vw - calc(var(--workspace-layout-page-padding) * 2));
     min-width: calc(100vw - calc(var(--workspace-layout-page-padding) * 2));
     max-width: calc(100vw - calc(var(--workspace-layout-page-padding) * 2));
 
     overflow-x: hidden;
     overflow-y: scroll;
-    transition: all var(--fade-2);
 
     will-change: top;
   }
@@ -72,8 +75,8 @@
   .sideMenuVisible {
     position: fixed;
     top: var(--mobile-menu-action-bar-height);
-    bottom: unset;
-
+    bottom: 0;
+    padding-top: 1rem;
     border-right-style: none;
   }
 
@@ -97,12 +100,8 @@
 
   .menuToggleButton:focus {
     outline-style: solid;
-    // outline-color: var(--c-primary-shade-0-op05) !important;
     outline-color: transparent !important;
-    // outline-offset: 2px;
-    // outline-width: 2px;
     z-index: 99;
-    /* outline-width: 2px; */
   }
 
   .menuToggleIcon {
@@ -120,6 +119,7 @@
   }
 
   .sideMenuContentVisible {
-    display: unset;
+    display: block;
+    padding-bottom: calc(var(--workspace-side-menu-mobile-navigator-height) + 1rem);
   }
 }

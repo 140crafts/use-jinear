@@ -13,49 +13,26 @@
   left: 0;
   right: 0;
   z-index: 99;
-  display: flex;
-  flex: 1;
-  gap: 1rem;
-  padding: 0 1rem;
   height: var(--workspace-header-height);
-  min-height: var(--workspace-header-height);
-  max-height: var(--workspace-header-height);
-  align-items: center;
-  justify-content: space-between;
   background-color: var(--c-primary);
-  border-bottom-style: solid;
-  border-bottom-color: var(--c-primary-shade-0);
-  border-bottom-width: 1px;
-}
-
-.headerLeftContent {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
-}
-
-.headerRightContent {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
 }
 
 .content {
   display: flex;
   flex-direction: row;
   flex: 1;
-  padding-top: var(--workspace-header-height);
-  height: 100dvh;
-  max-height: 100dvh;
   min-height: 100dvh;
+  padding-top: var(--workspace-header-height);
 }
 
 .workspaceSideMenuContainer {
-  padding-top: 1rem;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  padding-top: calc(var(--workspace-header-height) + 1rem);
   max-width: var(--workspace-side-menu-max-width);
   min-width: var(--workspace-side-menu-max-width);
   background-color: var(--c-primary);
-  width: 100%;
   z-index: 98;
   border-right-style: solid;
   border-right-width: 1px;
@@ -66,24 +43,19 @@
 
 .pageContent {
   flex: 1;
-  overflow: scroll;
   display: flex;
   flex-direction: column;
   align-items: stretch;
   padding: var(--workspace-layout-page-padding);
+  padding-left: calc(var(--workspace-side-menu-max-width) + var(--workspace-layout-page-padding));
   padding-top: var(--workspace-layout-content-vertical-padding);
 }
 
-.upgradeButton {
-  align-self: center;
-  color: var(--c-gradient-gold-0) !important;
-  background: unset !important;
-}
-.upgradeButton:hover {
-  background-color: var(--c-primary-shade-1) !important;
-}
-
 @media (max-width: $tablet) {
+  .content {
+    padding-bottom: var(--workspace-side-menu-mobile-navigator-height);
+  }
+
   .workspaceSideMenuContainer {
     padding-top: unset;
     max-width: unset;
@@ -93,12 +65,16 @@
     border-top-color: var(--c-primary-shade-0);
 
     position: fixed;
+    top: unset;
     bottom: 0;
     left: 0;
     right: 0;
     height: var(--workspace-side-menu-mobile-navigator-height);
-    // overflow-x: scroll;
     overflow-y: visible;
+  }
+
+  .pageContent {
+    padding-left: var(--workspace-layout-page-padding);
   }
 }
 
@@ -106,11 +82,5 @@
   .pageContent {
     // padding-bottom: calc(var(--workspace-side-menu-mobile-navigator-height) + var(--mobile-menu-action-bar-height)) !important;
     padding-bottom: var(--workspace-side-menu-mobile-navigator-height);
-  }
-}
-
-@media (max-width: $mobile-m) {
-  .upgradeButton {
-    display: none !important;
   }
 }

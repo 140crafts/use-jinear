@@ -86,5 +86,7 @@ export default slice.reducer;
 
 export const selectAppMenuVisible = (state: RootState) => state.displayPreference.appMenu.mobileVisible;
 export const selectTasksMenuVisible = (state: RootState) => state.displayPreference.appMenu.tasksMenuVisible;
+export const selectAnyMenuVisible = (state: RootState) =>
+  state.displayPreference.appMenu.mobileVisible || state.displayPreference.appMenu.tasksMenuVisible;
 
 export const selectReroute = (state: RootState) => state.displayPreference.reroute;
