@@ -7,8 +7,8 @@
 }
 
 .button {
-  color: var(--c-link-color);
-  padding: 0.25rem 0.75rem;
+  color: var(--c-link-color) !important;
+  padding: 0.25rem 0.75rem !important;
 }
 .button:hover {
   color: var(--c-link-color);
