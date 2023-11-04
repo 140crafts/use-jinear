@@ -6,7 +6,7 @@ import TitleHandler from "@/components/titleHandler/TitleHandler";
 import InternalWorkspacePrefChangeListener from "@/components/workspaceAndTeamChangeListener/InternalWorkspacePrefChangeListener";
 import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
 import Logger from "@/utils/logger";
-import { Viewport } from "next";
+import { Metadata, Viewport } from "next";
 
 import DateFnsConfigration from "@/components/dateFnsConfigration/DateFnsConfigration";
 import MainHeader from "@/components/mainHeader/MainHeader";
@@ -30,6 +30,57 @@ export const viewport: Viewport = {
   minimumScale: 1,
   userScalable: false,
   viewportFit: "cover",
+};
+
+export const metadata: Metadata = {
+  manifest: "/manifest.json", // we are accessing our manifest file here
+  title: "Jinear",
+  applicationName: "Jinear",
+  description: "Manage your tasks",
+  twitter: {
+    // card: 'summary_large_image',
+    title: "Jinear",
+    description: "Manage Your Tasks",
+    // siteId: '1467726470533754880',
+    creator: "@cagdastunca",
+    // creatorId: '1467726470533754880',
+    // images: ['https://nextjs.org/og.png'],
+  },
+  formatDetection: {
+    email: true,
+    address: true,
+    telephone: true,
+  },
+  appleWebApp: {
+    title: "Jinear",
+    statusBarStyle: "default",
+  },
+  icons: {
+    icon: [
+      {
+        url: "/icons/favicon-16x16.png",
+        sizes: "16x16",
+        type: "image/png",
+      },
+      {
+        url: "/icons/favicon-32x32.png",
+        sizes: "32x32",
+        type: "image/png",
+      },
+    ],
+    shortcut: "/favicon-new.ico",
+    apple: [
+      { url: "/icons/apple-touch-icon-180x180.png" },
+      { url: "/icons/apple-touch-icon-76x76.png", sizes: "76x76", type: "image/png" },
+      { url: "/icons/apple-touch-icon-120x120.png", sizes: "120x120", type: "image/png" },
+      { url: "/icons/apple-touch-icon-152x152.png", sizes: "152x152", type: "image/png" },
+      { url: "/icons/apple-touch-icon-180x180.png", sizes: "180x180", type: "image/png" },
+    ],
+    other: {
+      rel: "apple-touch-icon-precomposed",
+      url: "/apple-touch-icon-precomposed.png",
+    },
+  },
 };
 
 function MyApp({ children }: { children: React.ReactNode }) {

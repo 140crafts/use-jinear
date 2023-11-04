@@ -48,7 +48,7 @@ export default function Home() {
   ) : (
     <div className={styles.container}>
       <div className={styles.header}>
-        <FormLogo contentClassName={styles.logo} />
+        <FormLogo contentClassName={styles.logo} withLeftLine={false} />
         <div className={styles.headerActionBar}>
           <Button href="/pricing">
             <b>{t("homescreenActionBarPricing")}</b>
