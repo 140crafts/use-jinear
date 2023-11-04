@@ -36,6 +36,10 @@ const slice = createSlice({
     closeTasksMenu: (state, action: PayloadAction<void>) => {
       state.appMenu.tasksMenuVisible = false;
     },
+    popAllMenus: (state, action: PayloadAction<void>) => {
+      state.appMenu.mobileVisible = true;
+      state.appMenu.tasksMenuVisible = true;
+    },
     closeAllMenus: (state, action: PayloadAction<void>) => {
       state.appMenu.mobileVisible = false;
       state.appMenu.tasksMenuVisible = false;
@@ -80,8 +84,17 @@ const setRerouteOnPreferenceChangeSuccess = (state: any, action: any) => {
   state.reroute = reroute;
 };
 
-export const { popMenu, closeMenu, popTasksMenu, closeTasksMenu, toggleTasksMenu, closeAllMenus, toggleMenu, clearReroute } =
-  slice.actions;
+export const {
+  popMenu,
+  closeMenu,
+  popTasksMenu,
+  closeTasksMenu,
+  toggleTasksMenu,
+  popAllMenus,
+  closeAllMenus,
+  toggleMenu,
+  clearReroute,
+} = slice.actions;
 export default slice.reducer;
 
 export const selectAppMenuVisible = (state: RootState) => state.displayPreference.appMenu.mobileVisible;
