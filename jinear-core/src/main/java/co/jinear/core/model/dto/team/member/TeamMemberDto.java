@@ -6,9 +6,11 @@ import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 public class TeamMemberDto extends BaseDto {
 
     private String teamMemberId;

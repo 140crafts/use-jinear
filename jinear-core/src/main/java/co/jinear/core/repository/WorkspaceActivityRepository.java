@@ -15,6 +15,4 @@ public interface WorkspaceActivityRepository extends JpaRepository<WorkspaceActi
     Page<WorkspaceActivity> findAllByWorkspaceIdAndTeamIdIsInAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, List<String> teamIdList, Pageable pageable);
 
     Page<WorkspaceActivity> findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateDesc(String taskId, Pageable pageable);
-
-    List<WorkspaceActivity> findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateDesc(String taskId);
 }

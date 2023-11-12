@@ -4,7 +4,6 @@ import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.workflow.GroupedTeamWorkflowStatusListDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
-import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.request.team.InitializeTeamWorkflowStatusRequest;
 import co.jinear.core.model.request.team.TeamWorkflowStatusNameChangeRequest;
 import co.jinear.core.model.response.BaseResponse;
@@ -18,10 +17,6 @@ import co.jinear.core.validator.team.TeamAccessValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 @Slf4j
 @Service
@@ -44,7 +39,7 @@ public class TeamWorkflowStatusManager {
 
     public BaseResponse initializeTeamWorkflowStatus(String teamId, InitializeTeamWorkflowStatusRequest initializeTeamWorkflowStatusRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        teamAccessValidator.validateTeamAccess(currentAccountId, teamId);
+        teamAccessValidator.validateTeamAdminAccess(currentAccountId, teamId);
         log.info("Initialize team workflow status has started. currentAccountId: {}", currentAccountId);
         TeamDto teamDto = teamRetrieveService.retrieveTeam(teamId);
         InitializeTeamWorkflowStatusVo initializeTeamWorkflowStatusVo = mapRequestToInitializeVo(initializeTeamWorkflowStatusRequest, teamDto);
@@ -54,7 +49,7 @@ public class TeamWorkflowStatusManager {
 
     public BaseResponse removeTeamWorkflowStatus(String teamId, String teamWorkflowStatusId) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        teamAccessValidator.validateTeamAccess(currentAccountId, teamId);
+        teamAccessValidator.validateTeamAdminAccess(currentAccountId, teamId);
         validateTeamIdAndTeamWorkflowStatusTeamIdMatch(teamId, teamWorkflowStatusId);
         log.info("Remove team workflow status has started. currentAccountId: {}", currentAccountId);
         teamWorkflowStatusService.removeTeamWorkflowStatus(teamWorkflowStatusId, currentAccountId);
@@ -63,7 +58,7 @@ public class TeamWorkflowStatusManager {
 
     public BaseResponse changeTeamWorkflowStatusName(String teamId, String teamWorkflowStatusId, TeamWorkflowStatusNameChangeRequest teamWorkflowStatusNameChangeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        teamAccessValidator.validateTeamAccess(currentAccountId, teamId);
+        teamAccessValidator.validateTeamAdminAccess(currentAccountId, teamId);
         validateTeamIdAndTeamWorkflowStatusTeamIdMatch(teamId, teamWorkflowStatusId);
         log.info("Change team workflow status name has started. currentAccountId: {}", currentAccountId);
         teamWorkflowStatusService.changeTeamWorkflowStatusName(teamWorkflowStatusId, teamWorkflowStatusNameChangeRequest.getName());
@@ -72,7 +67,7 @@ public class TeamWorkflowStatusManager {
 
     public BaseResponse changeOrder(String teamId, String teamWorkflowStatusId, String replaceWithTeamWorkflowStatusId) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        teamAccessValidator.validateTeamAccess(currentAccountId, teamId);
+        teamAccessValidator.validateTeamAdminAccess(currentAccountId, teamId);
         validateTeamWorkflowStatusesInSameTeamAndBothAreInGivenTeam(teamId, teamWorkflowStatusId, replaceWithTeamWorkflowStatusId);
         log.info("Change team workflow status order has started. currentAccountId: {}", currentAccountId);
         teamWorkflowStatusService.changeTeamWorkflowStatusOrder(teamWorkflowStatusId, replaceWithTeamWorkflowStatusId);

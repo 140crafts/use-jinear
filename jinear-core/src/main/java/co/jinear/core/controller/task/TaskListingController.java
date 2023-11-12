@@ -1,18 +1,12 @@
 package co.jinear.core.controller.task;
 
 import co.jinear.core.manager.task.TaskListingManager;
-import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromTeamRequest;
-import co.jinear.core.model.request.task.RetrieveIntersectingTasksFromWorkspaceRequest;
 import co.jinear.core.model.request.task.TaskFilterRequest;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
-import co.jinear.core.model.response.task.TaskListingResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.ZonedDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,64 +19,5 @@ public class TaskListingController {
     @ResponseStatus(HttpStatus.OK)
     public TaskListingPaginatedResponse filter(@Valid @RequestBody TaskFilterRequest taskFilterRequest) {
         return taskListingManager.filterTasks(taskFilterRequest);
-    }
-
-    @GetMapping("/{workspaceId}/intersecting/{start}/{end}")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskListingResponse retrieveAllIntersectingTasks(@PathVariable String workspaceId,
-                                                            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
-                                                            @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end) {
-        return taskListingManager.retrieveAllIntersectingTasks(new RetrieveIntersectingTasksFromWorkspaceRequest(workspaceId, start, end));
-    }
-
-    @GetMapping("/{workspaceId}/team/{teamId}")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskListingPaginatedResponse retrieveAllTasks(@PathVariable String workspaceId,
-                                                         @PathVariable String teamId,
-                                                         @RequestParam(required = false, defaultValue = "0") Integer page) {
-        return taskListingManager.retrieveAllTasks(workspaceId, teamId, page);
-    }
-
-    @GetMapping("/{workspaceId}/team/{teamId}/intersecting/{start}/{end}")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskListingResponse retrieveAllIntersectingTasksFromTeam(@PathVariable String workspaceId,
-                                                                    @PathVariable String teamId,
-                                                                    @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime start,
-                                                                    @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime end) {
-        return taskListingManager.retrieveAllIntersectingTasksFromTeam(new RetrieveIntersectingTasksFromTeamRequest(workspaceId, teamId, start, end));
-    }
-
-    @GetMapping("/{workspaceId}/team/{teamId}/with-workflow/{workflowStatusId}")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskListingPaginatedResponse retrieveFromWorkflowStatus(@PathVariable String workspaceId,
-                                                                   @PathVariable String teamId,
-                                                                   @PathVariable String workflowStatusId,
-                                                                   @RequestParam(required = false, defaultValue = "0") Integer page) {
-        return taskListingManager.retrieveFromWorkflowStatus(workspaceId, teamId, workflowStatusId, page);
-    }
-
-    @GetMapping("/{workspaceId}/team/{teamId}/with-topic/{topicTag}")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskListingPaginatedResponse retrieveFromTopic(@PathVariable String workspaceId,
-                                                          @PathVariable String teamId,
-                                                          @PathVariable String topicTag,
-                                                          @RequestParam(required = false, defaultValue = "0") Integer page) {
-        return taskListingManager.retrieveFromTopic(workspaceId, teamId, topicTag, page);
-    }
-
-    @GetMapping("/{workspaceId}/team/{teamId}/with-assignee/{assigneeId}")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskListingPaginatedResponse retrieveWithAssignee(@PathVariable String workspaceId,
-                                                             @PathVariable String teamId,
-                                                             @PathVariable String assigneeId,
-                                                             @RequestParam(required = false, defaultValue = "0") Integer page) {
-        return taskListingManager.retrieveWithAssignee(workspaceId, teamId, assigneeId, page);
-    }
-
-    @GetMapping("/{workspaceId}/assigned-to-me")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskListingPaginatedResponse retrieveTasksAssignedToCurrentAccount(@PathVariable String workspaceId,
-                                                                              @RequestParam(required = false, defaultValue = "0") Integer page) {
-        return taskListingManager.retrieveTasksAssignedToCurrentAccount(workspaceId, page);
     }
 }

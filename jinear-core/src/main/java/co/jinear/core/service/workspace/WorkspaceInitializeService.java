@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceSettingDto;
 import co.jinear.core.model.entity.workspace.Workspace;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
+import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
 import co.jinear.core.model.enumtype.username.UsernameRelatedObjectType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
@@ -72,6 +73,7 @@ public class WorkspaceInitializeService {
         teamInitializeVo.setUsername(teamUsername);
         teamInitializeVo.setVisibility(TeamVisibilityType.VISIBLE);
         teamInitializeVo.setJoinMethod(TeamJoinMethodType.SYNC_MEMBERS_WITH_WORKSPACE);
+        teamInitializeVo.setTaskVisibility(TeamTaskVisibilityType.VISIBLE_TO_ALL_TEAM_MEMBERS);
         teamInitializeVo.setLocale(workspaceInitializeVo.getLocale());
         teamInitializeVo.setInitializedBy(workspaceInitializeVo.getOwnerId());
         return teamInitializeService.initializeTeam(teamInitializeVo);
