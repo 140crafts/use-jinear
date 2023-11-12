@@ -1,8 +1,8 @@
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { useTask } from "../context/TaskDetailContext";
-import TaskRelationCell from "./taskRelationCell/TaskRelationCell";
 import styles from "./TaskRelationList.module.css";
+import TaskRelationCell from "./taskRelationCell/TaskRelationCell";
 
 interface TaskRelationListProps {}
 
@@ -19,7 +19,7 @@ const TaskRelationList: React.FC<TaskRelationListProps> = ({}) => {
         <div className="spacer-h-1" />
         <div className={styles.relationList}>
           {task.relations?.map((relation) => (
-            <TaskRelationCell key={`task-relation-cell-${relation.taskRelationId}`} relation={relation} />
+            <TaskRelationCell key={`task-relation-cell-${relation.taskRelationId}`} {...relation} />
           ))}
         </div>
       </div>

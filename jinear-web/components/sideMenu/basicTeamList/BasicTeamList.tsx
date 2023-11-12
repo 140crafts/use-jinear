@@ -1,5 +1,5 @@
 import CircularLoading from "@/components/circularLoading/CircularLoading";
-import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
+import { useRetrieveMembershipsQuery } from "@/store/api/teamMemberApi";
 import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { popNewTeamModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
@@ -17,12 +17,15 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({}) => {
   const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
 
   const {
-    data: teamsResponse,
+    data: membershipsResponse,
     isSuccess,
     isFetching,
-  } = useRetrieveWorkspaceTeamsQuery(preferredWorkspace?.workspaceId || "", {
-    skip: preferredWorkspace == null,
-  });
+  } = useRetrieveMembershipsQuery(
+    { workspaceId: preferredWorkspace?.workspaceId || "" },
+    {
+      skip: preferredWorkspace == null,
+    }
+  );
 
   const openNewTeamModal = () => {
     dispatch(popNewTeamModal());
@@ -36,8 +39,15 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({}) => {
       <div className="spacer-h-1" />
       <div className={styles.teamListContainer}>
         {preferredWorkspace &&
-          teamsResponse?.data.map((teamDto) => (
-            <BasicTeamMenu key={`basic-team-menu-${teamDto.teamId}`} team={teamDto} workspace={preferredWorkspace} />
+          !isFetching &&
+          isSuccess &&
+          membershipsResponse?.data.map((teamMemberDto) => (
+            <BasicTeamMenu
+              key={`basic-team-menu-${teamMemberDto.team.teamId}`}
+              team={teamMemberDto.team}
+              workspace={preferredWorkspace}
+              role={teamMemberDto.role}
+            />
           ))}
       </div>
     </div>

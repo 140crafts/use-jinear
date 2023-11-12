@@ -1,4 +1,4 @@
-import { useRetrieveAllIntersectingTasksFromTeamQuery, useRetrieveAllIntersectingTasksQuery } from "@/store/api/taskListingApi";
+import { useFilterTasksQuery } from "@/store/api/taskListingApi";
 import React, { useMemo } from "react";
 import { ICalendarWeekRowCell, calculateHitMissTable } from "../calendarUtils";
 import OverlayLoading from "../common/overlayLoading/OverlayLoading";
@@ -22,24 +22,27 @@ const MonthView: React.FC<MonthViewProps> = ({}) => {
   const days = useCalendarDays();
   const squeezedView = useSqueezedView();
 
-  const query = filterBy ? useRetrieveAllIntersectingTasksFromTeamQuery : useRetrieveAllIntersectingTasksQuery;
-  const { data: taskListingResponse, isFetching } = query(
+  const {
+    data: filterResponse,
+    isFetching,
+    isLoading,
+  } = useFilterTasksQuery(
     {
       workspaceId: workspace?.workspaceId || "",
+      teamIdList: filterBy ? [filterBy.teamId] : undefined,
       timespanStart: periodStart,
       timespanEnd: periodEnd,
-      teamId: filterBy ? filterBy.teamId : "",
     },
     { skip: workspace == null }
   );
 
   const monthTable: ICalendarWeekRowCell[][][] | undefined = useMemo(() => {
-    if (!taskListingResponse || !taskListingResponse.data) {
+    if (!filterResponse || !filterResponse.data.content) {
       return;
     }
-    const tasks = taskListingResponse.data;
+    const tasks = filterResponse.data.content;
     return calculateHitMissTable({ tasks, days });
-  }, [JSON.stringify(days), JSON.stringify(taskListingResponse)]);
+  }, [JSON.stringify(days), JSON.stringify(filterResponse)]);
 
   return (
     <>

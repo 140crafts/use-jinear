@@ -18,6 +18,7 @@ import {
 import styles from "./WorkflowStatus.module.scss";
 
 interface WorkflowStatusProps {
+  editable: boolean;
   deletable: boolean;
   orderChangable: boolean;
   workflowDto: TeamWorkflowStatusDto;
@@ -31,7 +32,7 @@ const groupIconMap = {
   CANCELLED: <IoCloseCircle size={20} />,
 };
 
-const WorkflowStatus: React.FC<WorkflowStatusProps> = ({ workflowDto, deletable, orderChangable }) => {
+const WorkflowStatus: React.FC<WorkflowStatusProps> = ({ workflowDto, deletable, orderChangable, editable }) => {
   const { t } = useTranslation();
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -71,7 +72,9 @@ const WorkflowStatus: React.FC<WorkflowStatusProps> = ({ workflowDto, deletable,
       <div className={styles.icon}>{groupIconMap[workflowDto.workflowStateGroup]}</div>
 
       {!isEditing && <div className={cn(styles.name, "single-line")}>{workflowDto.name}</div>}
-      {isEditing && <input ref={nameInputRef} type="text" value={name} onChange={onNameChange} className={styles.nameInput} />}
+      {isEditing && editable && (
+        <input ref={nameInputRef} type="text" value={name} onChange={onNameChange} className={styles.nameInput} />
+      )}
 
       {!isEditing && <div className="flex-1" />}
       {!isEditing && (
@@ -95,17 +98,19 @@ const WorkflowStatus: React.FC<WorkflowStatusProps> = ({ workflowDto, deletable,
             </Button>
           )}
 
-          <Button
-            heightVariant={ButtonHeight.short}
-            variant={ButtonVariants.hoverFilled2}
-            data-tooltip-right={t("workflowStatusEditTooltip")}
-            onClick={() => {
-              setIsEditing(true);
-            }}
-          >
-            <IoPencil />
-          </Button>
-          {deletable && (
+          {editable && (
+            <Button
+              heightVariant={ButtonHeight.short}
+              variant={ButtonVariants.hoverFilled2}
+              data-tooltip-right={t("workflowStatusEditTooltip")}
+              onClick={() => {
+                setIsEditing(true);
+              }}
+            >
+              <IoPencil />
+            </Button>
+          )}
+          {deletable && editable && (
             <Button
               heightVariant={ButtonHeight.short}
               variant={ButtonVariants.hoverFilled2}

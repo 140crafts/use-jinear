@@ -1,7 +1,7 @@
 import AssigneeCell from "@/components/assigneeCell/AssigneeCell";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import useWindowSize from "@/hooks/useWindowSize";
-import { TaskRelationDto } from "@/model/be/jinear-core";
+import { RelatedTaskDto, TaskRelationType } from "@/model/be/jinear-core";
 import { useDeleteTaskRelationMutation } from "@/store/api/taskRelationApi";
 import {
   changeLoadingModalVisibility,
@@ -16,11 +16,25 @@ import useTranslation from "locales/useTranslation";
 import Link from "next/link";
 import React, { useEffect } from "react";
 
-import { IoCheckmarkCircle, IoClose, IoCloseCircle, IoContrast, IoEllipseOutline, IoPauseCircleOutline } from "react-icons/io5";
+import {
+  IoCheckmarkCircle,
+  IoClose,
+  IoCloseCircle,
+  IoContrast,
+  IoEllipseOutline,
+  IoPauseCircleOutline,
+  IoRemove,
+} from "react-icons/io5";
 import styles from "./TaskRelationRow.module.css";
 
 interface TaskRelationRowProps {
-  relation: TaskRelationDto;
+  taskRelationId: string;
+  taskId?: string | null;
+  relatedTaskId?: string | null;
+  relationType: TaskRelationType;
+  task?: RelatedTaskDto | null;
+  relatedTask?: RelatedTaskDto | null;
+  noAccessLabel: string;
 }
 
 const ICON_SIZE = 17;
@@ -32,15 +46,25 @@ const groupIconMap = {
   CANCELLED: <IoCloseCircle size={ICON_SIZE} />,
 };
 
-const TaskRelationRow: React.FC<TaskRelationRowProps> = ({ relation }) => {
+const TaskRelationRow: React.FC<TaskRelationRowProps> = ({
+  taskRelationId,
+  taskId,
+  relatedTaskId,
+  relationType,
+  task,
+  relatedTask,
+  noAccessLabel,
+}) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
-  const tag = `${relation.task.team?.tag}-${relation.task.teamTagNo}`;
+  const tag = `${task?.team?.tag}-${task?.teamTagNo}`;
   const [deleteTaskRelation, { isSuccess: isDeleteSuccess, isError: isDeleteError }] = useDeleteTaskRelationMutation();
   const { isMobile } = useWindowSize();
 
   const popChangeWorkflowStatusModal = () => {
-    dispatch(popChangeTaskWorkflowStatusModal({ visible: true, task: relation.task }));
+    if (task) {
+      dispatch(popChangeTaskWorkflowStatusModal({ visible: true, task }));
+    }
   };
 
   useEffect(() => {
@@ -50,7 +74,7 @@ const TaskRelationRow: React.FC<TaskRelationRowProps> = ({ relation }) => {
   const removeRelation = () => {
     dispatch(closeDialogModal());
     dispatch(changeLoadingModalVisibility({ visible: true }));
-    deleteTaskRelation({ relationId: relation.taskRelationId });
+    deleteTaskRelation({ relationId: taskRelationId });
   };
 
   const popAreYouSureModal = () => {
@@ -73,40 +97,44 @@ const TaskRelationRow: React.FC<TaskRelationRowProps> = ({ relation }) => {
   };
 
   const openTaskOverviewModal = () => {
-    const task = relation.task;
     const workspaceName = task?.workspace?.username;
     const taskTag = `${task?.team?.tag}-${task?.teamTagNo}`;
     dispatch(popTaskOverviewModal({ taskTag, workspaceName, visible: true }));
   };
 
   return (
-    <div className={styles.container}>
+    <div className={cn(styles.container, task ? undefined : styles.disabled)}>
       <Button
+        disabled={!task}
         onClick={popChangeWorkflowStatusModal}
         heightVariant={ButtonHeight.short}
         variant={ButtonVariants.filled}
         className={styles.workflowStatusButton}
       >
-        {groupIconMap?.[relation.task.workflowStatus.workflowStateGroup]}
+        {task ? groupIconMap?.[task?.workflowStatus.workflowStateGroup] : <IoRemove size={ICON_SIZE} />}
       </Button>
       <div className="spacer-w-1" />
-      <Link className={cn(styles.linkButton)} href={`/${relation.task.workspace?.username}/task/${tag}`} onClick={onLinkClick}>
-        <div className="line-clamp">
-          {tag} {relation.task.title}
-        </div>
-      </Link>
+      {task && (
+        <Link className={styles.linkButton} href={`/${task?.workspace?.username}/task/${tag}`} onClick={onLinkClick}>
+          <div className="line-clamp">{`${tag} ${task.title}`}</div>
+        </Link>
+      )}
 
-      <Button
-        className={cn(styles.workflowStatusButton, styles.deleteButton)}
-        variant={ButtonVariants.hoverFilled2}
-        onClick={popAreYouSureModal}
-        data-tooltip-right={t("taskRelationUnlink_dialogModalTitle")}
-      >
-        <IoClose size={ICON_SIZE * 0.8} />
-      </Button>
+      {!task && <div className={styles.noAccessLabel}>{noAccessLabel}</div>}
+
+      {task && (
+        <Button
+          className={cn(styles.workflowStatusButton, styles.deleteButton)}
+          variant={ButtonVariants.hoverFilled2}
+          onClick={popAreYouSureModal}
+          data-tooltip-right={t("taskRelationUnlink_dialogModalTitle")}
+        >
+          <IoClose size={ICON_SIZE * 0.8} />
+        </Button>
+      )}
 
       <div className="spacer-w-1" />
-      <AssigneeCell task={relation.task} tooltipPosition={"right"} className={styles.workflowStatusButton} />
+      {task && <AssigneeCell task={task} tooltipPosition={"right"} className={styles.workflowStatusButton} />}
     </div>
   );
 };

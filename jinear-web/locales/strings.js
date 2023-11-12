@@ -2747,7 +2747,39 @@ export default {
     tr: "Çalışma Alanı Ayarları",
   },
   deviceOfflineModalText: {
-    en: "Unable to connect internet.",
+    en: "Unable to connect internet",
     tr: "İnternet bağlantınız yok",
+  },
+  taskRelatedTaskNoAccess: {
+    en: "You don't have access to this task.",
+    tr: "Bu göreve erişim yetkiniz bulunmamaktadır.",
+  },
+  teamSettingsScreenTaskVisibilitySectionTitle: {
+    en: "Task Visibility",
+    tr: "Görev Görünülürlüğü",
+  },
+  teamSettingsScreenTaskVisibilitySectionDescription: {
+    en: "You can set who can list and see tasks.",
+    tr: "Görevleri kimlerin listeleyip görüntüleyebileceğini ayarlayabilirsiniz.",
+  },
+  teamSettingsScreenTaskVisibilitySectionSave: {
+    en: "Save Changes",
+    tr: "Değişiklikleri Kaydet",
+  },
+  teamTaskVisibility_VISIBLE_TO_ALL_TEAM_MEMBERS: {
+    en: "Everyone on team",
+    tr: "Takımdaki herkes",
+  },
+  teamTaskVisibility_OWNER_ASSIGNEE_AND_ADMINS: {
+    en: "Owners & Assignee & Admins",
+    tr: "Görevi Oluşturan & Atanan & Yöneticiler",
+  },
+  teamTaskVisibilityDetail_VISIBLE_TO_ALL_TEAM_MEMBERS: {
+    en: "All team members can list all tasks within this team.",
+    tr: "Takımdaki herkes takımdaki görevleri listeleyebilir.",
+  },
+  teamTaskVisibilityDetail_OWNER_ASSIGNEE_AND_ADMINS: {
+    en: "Tasks will be visibile to its owners, assignees and team admins.",
+    tr: "Görevler yanlızca onları oluşturan, onlarin atandığı kişilerce ve takım yöneticileri tarafından görüntülenebilir.",
   },
 };

@@ -1,4 +1,4 @@
-import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import { TeamDto, TeamMemberRoleType, WorkspaceDto } from "@/model/be/jinear-core";
 import { hasWorkspaceFilePermissions } from "@/utils/permissionHelper";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -12,14 +12,15 @@ import TopicsMenu from "./topicsMenu/TopicsMenu";
 interface BasicTeamMenuProps {
   workspace: WorkspaceDto;
   team: TeamDto;
+  role: TeamMemberRoleType;
 }
 
-const BasicTeamMenu: React.FC<BasicTeamMenuProps> = ({ workspace, team }) => {
+const BasicTeamMenu: React.FC<BasicTeamMenuProps> = ({ workspace, team, role }) => {
   const { t } = useTranslation();
 
   return (
     <div className={styles.container}>
-      <TeamTitle workspace={workspace} team={team} />
+      <TeamTitle workspace={workspace} team={team} role={role} />
       <div className="spacer-h-1" />
       <div className={styles.teamActionButtonContainer}>
         <TasksMenu workspace={workspace} team={team} />

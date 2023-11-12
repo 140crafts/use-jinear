@@ -1,4 +1,4 @@
-import { AddTeamMemberRequest, BaseResponse, TeamMemberListingResponse } from "@/model/be/jinear-core";
+import { AddTeamMemberRequest, BaseResponse, TeamMemberListingResponse, TeamMembershipsResponse } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const teamMemberApi = api.injectEndpoints({
@@ -30,11 +30,26 @@ export const teamMemberApi = api.injectEndpoints({
       invalidatesTags: ["team-member-list", "workspace-activity-list"],
     }),
     //
+    retrieveMemberships: build.query<TeamMembershipsResponse, { workspaceId: string }>({
+      query: ({ workspaceId }) => `v1/team/member/memberships/${workspaceId}`,
+      providesTags: (_result, _err, { workspaceId }) => [
+        {
+          type: "workspace-team-membership-list",
+          id: `${workspaceId}`,
+        },
+      ],
+    }),
+    //
   }),
 });
 
-export const { useRetrieveTeamMembersQuery, useKickMemberFromTeamMutation, useAddTeamMemberMutation } = teamMemberApi;
+export const {
+  useRetrieveTeamMembersQuery,
+  useKickMemberFromTeamMutation,
+  useAddTeamMemberMutation,
+  useRetrieveMembershipsQuery,
+} = teamMemberApi;
 
 export const {
-  endpoints: { retrieveTeamMembers, kickMemberFromTeam, addTeamMember },
+  endpoints: { retrieveTeamMembers, kickMemberFromTeam, addTeamMember, retrieveMemberships },
 } = teamMemberApi;

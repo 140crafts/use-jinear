@@ -1,4 +1,4 @@
-import { useRetrieveAllIntersectingTasksFromTeamQuery, useRetrieveAllIntersectingTasksQuery } from "@/store/api/taskListingApi";
+import { useFilterTasksQuery } from "@/store/api/taskListingApi";
 import { getOffset, getSize } from "@/utils/htmlUtis";
 import Logger from "@/utils/logger";
 import cn from "classnames";
@@ -34,22 +34,25 @@ const WeekView: React.FC<WeekViewProps> = ({}) => {
 
   const weekViewContainerRef = useRef<HTMLDivElement>(null);
 
-  const query = filterBy ? useRetrieveAllIntersectingTasksFromTeamQuery : useRetrieveAllIntersectingTasksQuery;
-  const { data: taskListingResponse, isFetching } = query(
+  const {
+    data: filterResponse,
+    isFetching,
+    isLoading,
+  } = useFilterTasksQuery(
     {
       workspaceId: workspace?.workspaceId || "",
+      teamIdList: filterBy ? [filterBy.teamId] : undefined,
       timespanStart: periodStart,
       timespanEnd: periodEnd,
-      teamId: filterBy ? filterBy.teamId : "",
     },
     { skip: workspace == null }
   );
 
   const weekTableWithoutPreciseDates: ICalendarWeekRowCell[][][] | undefined = useMemo(() => {
-    if (!taskListingResponse || !taskListingResponse.data) {
+    if (!filterResponse || !filterResponse.data.content) {
       return;
     }
-    const tasks = taskListingResponse.data;
+    const tasks = filterResponse.data.content;
 
     return calculateHitMissTable({
       tasks,
@@ -58,11 +61,11 @@ const WeekView: React.FC<WeekViewProps> = ({}) => {
       excludePreciseDueDates: true,
       rowCount: 1,
     });
-  }, [JSON.stringify(days), JSON.stringify(taskListingResponse)]);
+  }, [JSON.stringify(days), JSON.stringify(filterResponse)]);
 
   const weekTasksWithPreciseDates = useMemo(
-    () => taskListingResponse?.data.filter((task) => task.hasPreciseAssignedDate || task.hasPreciseDueDate) || [],
-    [JSON.stringify(taskListingResponse)]
+    () => filterResponse?.data.content.filter((task) => task.hasPreciseAssignedDate || task.hasPreciseDueDate) || [],
+    [JSON.stringify(filterResponse)]
   );
 
   logger.log({ weekTableWithoutPreciseDates });

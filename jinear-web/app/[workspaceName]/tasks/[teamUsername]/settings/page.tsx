@@ -1,5 +1,7 @@
 "use client";
+import TeamTaskVisibilityTypeSettings from "@/components/teamSettingsScreen/teamTaskVisibilityTypeSettings/TeamTaskVisibilityTypeSettings";
 import TeamWorkflowSettings from "@/components/teamSettingsScreen/teamWorkflowSettings/TeamWorkflowSettings";
+import { useTeamRole } from "@/hooks/useTeamRole";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
@@ -19,8 +21,14 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({}) => {
     skip: workspace == null,
   });
   const team = teamsResponse?.data.find((teamDto) => teamDto.username == teamUsername);
+  const teamRole = useTeamRole({ workspaceId: workspace?.workspaceId, teamId: team?.teamId });
 
-  return <div className={styles.container}>{team && <TeamWorkflowSettings teamId={team.teamId} />}</div>;
+  return (
+    <div className={styles.container}>
+      {team && <TeamWorkflowSettings teamId={team.teamId} teamRole={teamRole} />}
+      {team && <TeamTaskVisibilityTypeSettings team={team} />}
+    </div>
+  );
 };
 
 export default SettingsScreen;

@@ -1,7 +1,6 @@
 "use client";
 import AssignedToMeScreenHeader from "@/components/assignedToMeScreen/assignedToMeScreenHeader/AssignedToMeScreenHeader";
-import PaginatedAssignedToCurrentAccountTaskList from "@/components/taskLists/paginatedAssignedToCurrentAccountTaskList/PaginatedAssignedToCurrentAccountTaskList";
-import PaginatedFromTeamWithAssigneeTaskList from "@/components/taskLists/paginatedFromTeamWithAssigneeTaskList/PaginatedFromTeamWithAssigneeTaskList";
+import PrefilteredPaginatedTaskList from "@/components/taskLists/prefilteredPaginatedTaskList/PrefilteredPaginatedTaskList";
 import { TeamDto } from "@/model/be/jinear-core";
 import { selectCurrentAccountId, selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
@@ -21,16 +20,12 @@ const AssignedToMePage: React.FC<AssignedToMePageProps> = ({}) => {
   return (
     <div className={styles.container}>
       {workspace && <AssignedToMeScreenHeader filterBy={filterBy} setFilterBy={setFilterBy} workspace={workspace} />}
-      {workspace &&
-        (filterBy ? (
-          <PaginatedFromTeamWithAssigneeTaskList
-            workspaceId={workspace.workspaceId}
-            teamId={filterBy.teamId || ""}
-            assigneeId={currentAccountId || ""}
-          />
-        ) : (
-          <PaginatedAssignedToCurrentAccountTaskList workspaceId={workspace.workspaceId} />
-        ))}
+      {workspace && currentAccountId && (
+        <PrefilteredPaginatedTaskList
+          id={"assigned-to-me-task-list"}
+          filter={{ workspaceId: workspace.workspaceId, assigneeIds: [currentAccountId] }}
+        />
+      )}
     </div>
   );
 };

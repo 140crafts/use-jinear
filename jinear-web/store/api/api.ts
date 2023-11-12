@@ -57,6 +57,7 @@ export const tagTypes = [
   "task-media-list-from-team",
   "payments-info-workspace-subscription",
   "task-comments",
+  "workspace-team-membership-list",
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

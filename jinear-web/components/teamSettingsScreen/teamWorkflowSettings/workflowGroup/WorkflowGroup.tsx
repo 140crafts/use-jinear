@@ -7,9 +7,10 @@ import WorkflowStatus from "./workflowStatus/WorkflowStatus";
 interface WorkflowGroupProps {
   groupType: TeamWorkflowStateGroup;
   statuses: TeamWorkflowStatusDto[] | undefined;
+  editable: boolean;
 }
 
-const WorkflowGroup: React.FC<WorkflowGroupProps> = ({ groupType, statuses }) => {
+const WorkflowGroup: React.FC<WorkflowGroupProps> = ({ groupType, statuses, editable }) => {
   const { t } = useTranslation();
   return (
     <div className={styles.container}>
@@ -20,6 +21,7 @@ const WorkflowGroup: React.FC<WorkflowGroupProps> = ({ groupType, statuses }) =>
           workflowDto={workflowDto}
           deletable={statuses?.length == 0}
           orderChangable={statuses?.length == 0}
+          editable={editable}
         />
       ))}
     </div>

@@ -1,5 +1,5 @@
 import Button, { ButtonVariants } from "@/components/button";
-import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import { TeamDto, TeamMemberRoleType, WorkspaceDto } from "@/model/be/jinear-core";
 import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
@@ -10,9 +10,10 @@ import styles from "./TeamTitle.module.css";
 interface TeamTitleProps {
   workspace: WorkspaceDto;
   team: TeamDto;
+  role: TeamMemberRoleType;
 }
 
-const TeamTitle: React.FC<TeamTitleProps> = ({ workspace, team }) => {
+const TeamTitle: React.FC<TeamTitleProps> = ({ workspace, team, role }) => {
   const { t } = useTranslation();
 
   return (
@@ -25,13 +26,15 @@ const TeamTitle: React.FC<TeamTitleProps> = ({ workspace, team }) => {
       >
         <IoPeopleOutline />
       </Button>
-      <Button
-        variant={ButtonVariants.hoverFilled2}
-        href={`/${workspace?.username}/tasks/${team?.username}/settings`}
-        data-tooltip-right={t("sideMenuTeamSettings")}
-      >
-        <IoEllipsisHorizontal />
-      </Button>
+      {role == "ADMIN" && (
+        <Button
+          variant={ButtonVariants.hoverFilled2}
+          href={`/${workspace?.username}/tasks/${team?.username}/settings`}
+          data-tooltip-right={t("sideMenuTeamSettings")}
+        >
+          <IoEllipsisHorizontal />
+        </Button>
+      )}
     </div>
   );
 };

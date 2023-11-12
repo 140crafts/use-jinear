@@ -70,6 +70,7 @@ export const selectCurrentAccountsPreferredTeamRole = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.teamRole;
 };
 
+//TODO: REPLACE
 export const selectCurrentAccountsPreferredTeamRoleIsAdmin = (state: RootState) => {
   const role = state.account.current?.workspaceDisplayPreference?.teamRole;
   return role == "ADMIN";

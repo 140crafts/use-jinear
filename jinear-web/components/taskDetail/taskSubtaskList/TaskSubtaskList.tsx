@@ -98,7 +98,7 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
         </div>
         <div className={styles.content}>
           {task.relatedIn?.map((relation) => (
-            <TaskRelationRow key={relation.taskRelationId} relation={relation} />
+            <TaskRelationRow key={relation.taskRelationId} {...relation} noAccessLabel={t("taskRelatedTaskNoAccess")} />
           ))}
 
           {!hasSubTasks && <div>{t("taskSubtaskListEmpty")}</div>}
