@@ -1,4 +1,4 @@
-package co.jinear.core.model.request.task;
+package co.jinear.core.model.request.workspace;
 
 import co.jinear.core.model.request.BaseRequest;
 import jakarta.validation.constraints.NotBlank;
@@ -7,13 +7,12 @@ import lombok.Setter;
 import lombok.ToString;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 
 @Getter
 @Setter
 @ToString
-public class TaskFilterRequest extends BaseRequest {
+public class WorkspaceActivityFilterRequest extends BaseRequest {
 
     @Nullable
     private Integer page = 0;
@@ -22,15 +21,5 @@ public class TaskFilterRequest extends BaseRequest {
     @Nullable
     private List<String> teamIdList;
     @Nullable
-    private List<String> topicIds;
-    @Nullable
-    private List<String> ownerIds;
-    @Nullable
-    private List<String> assigneeIds;
-    @Nullable
-    private List<String> workflowStatusIdList;
-    @Nullable
-    private ZonedDateTime timespanStart;
-    @Nullable
-    private ZonedDateTime timespanEnd;
+    private List<String> taskIds;
 }

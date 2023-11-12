@@ -1,6 +1,7 @@
 package co.jinear.core.model.request.team;
 
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
+import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
 import co.jinear.core.model.request.BaseRequest;
 import jakarta.validation.constraints.NotBlank;
@@ -20,4 +21,5 @@ public class TeamInitializeRequest extends BaseRequest {
     private String tag;
     private TeamVisibilityType visibility = TeamVisibilityType.VISIBLE;
     private TeamJoinMethodType joinMethod = TeamJoinMethodType.FROM_TEAM_ADMIN;
+    private TeamTaskVisibilityType taskVisibility = TeamTaskVisibilityType.VISIBLE_TO_ALL_TEAM_MEMBERS;
 }

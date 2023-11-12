@@ -28,11 +28,17 @@ public class TaskSearchService {
 
     public Page<TaskSearchResultDto> searchTasks(TaskSearchVo taskSearchVo) {
         log.info("Searching tasks has started. {}", taskSearchVo);
-        return taskFtsSearchRepository.searchAllTasks(taskSearchVo.getTitle() , taskSearchVo.getWorkspaceId(), taskSearchVo.getTeamId(), PageRequest.of(taskSearchVo.getPage(), PAGE_SIZE))
+        return taskFtsSearchRepository.searchAllTasks(taskSearchVo.getTitle(), taskSearchVo.getWorkspaceId(), taskSearchVo.getTeamId(), PageRequest.of(taskSearchVo.getPage(), PAGE_SIZE))
                 .map(this::mapTupleToDto);
     }
 
-    public TaskSearchResultDto mapTupleToDto(Tuple tuple) {
+    public Page<TaskSearchResultDto> searchTasksWithAssigneeOrOwner(TaskSearchVo taskSearchVo) {
+        log.info("Searching tasks with assignee or owner has started. {}", taskSearchVo);
+        return taskFtsSearchRepository.searchTasksWithAssigneeOrOwner(taskSearchVo.getTitle(), taskSearchVo.getWorkspaceId(), taskSearchVo.getTeamId(), taskSearchVo.getAssignedTo(), taskSearchVo.getOwnerId(), PageRequest.of(taskSearchVo.getPage(), PAGE_SIZE))
+                .map(this::mapTupleToDto);
+    }
+
+    private TaskSearchResultDto mapTupleToDto(Tuple tuple) {
         return TaskSearchResultDto.builder()
                 .taskId(tuple.get("task_id", String.class))
                 .topicId(tuple.get("topic_id", String.class))

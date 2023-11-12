@@ -59,6 +59,15 @@ public class TaskSearchCriteriaBuilder {
         }
     }
 
+    public Predicate getOwnerIdInListPredicate(List<String> ownerIdList, CriteriaBuilder criteriaBuilder, Root<Task> root) {
+        if (Objects.nonNull(ownerIdList) && !ownerIdList.isEmpty()) {
+            CriteriaBuilder.In<String> in = criteriaBuilder.in(root.get("ownerId"));
+            ownerIdList.forEach(in::value);
+            return in;
+        }
+        return null;
+    }
+
     public void addWorkflowStatusIdList(List<String> workflowStatusIdList, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
         if (Objects.nonNull(workflowStatusIdList) && !workflowStatusIdList.isEmpty()) {
             CriteriaBuilder.In<String> in = criteriaBuilder.in(root.get("workflowStatusId"));
@@ -73,6 +82,15 @@ public class TaskSearchCriteriaBuilder {
             assignedToList.forEach(in::value);
             predicateList.add(in);
         }
+    }
+
+    public Predicate getAssignedToInListPredicate(List<String> assignedToList, CriteriaBuilder criteriaBuilder, Root<Task> root) {
+        if (Objects.nonNull(assignedToList) && !assignedToList.isEmpty()) {
+            CriteriaBuilder.In<String> in = criteriaBuilder.in(root.get("assignedTo"));
+            assignedToList.forEach(in::value);
+            return in;
+        }
+        return null;
     }
 
     public void addDatePredicates(ZonedDateTime start, ZonedDateTime end, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {

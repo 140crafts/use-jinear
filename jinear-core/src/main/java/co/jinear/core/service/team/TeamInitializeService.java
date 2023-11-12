@@ -17,7 +17,6 @@ import co.jinear.core.service.mail.LocaleStringService;
 import co.jinear.core.service.team.member.TeamMemberService;
 import co.jinear.core.service.team.member.TeamMemberSyncService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusService;
-import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.validator.team.TeamValidator;
 import jakarta.transaction.Transactional;
@@ -35,8 +34,6 @@ public class TeamInitializeService {
 
     private final TeamRepository teamRepository;
     private final TeamValidator teamValidator;
-    private final WorkspaceRetrieveService workspaceRetrieveService;
-    private final TeamRetrieveService teamRetrieveService;
     private final TeamWorkflowStatusService teamWorkflowStatusService;
     private final LocaleStringService localeStringService;
     private final TeamMemberSyncService teamMemberSyncService;

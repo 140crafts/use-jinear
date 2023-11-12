@@ -4,6 +4,7 @@ import co.jinear.core.manager.team.TeamMemberManager;
 import co.jinear.core.model.request.team.AddTeamMemberRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.team.TeamMemberListingResponse;
+import co.jinear.core.model.response.team.TeamMembershipsResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,6 +34,12 @@ public class TeamMemberController {
     public TeamMemberListingResponse retrieveTeamMembers(@PathVariable String teamId,
                                                          @RequestParam(required = false, defaultValue = "0") Integer page) {
         return teamMemberManager.retrieveTeamMembers(teamId, page);
+    }
+
+    @GetMapping("/memberships/{workspaceId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TeamMembershipsResponse retrieveMemberships(@PathVariable String workspaceId) {
+        return teamMemberManager.retrieveMemberships(workspaceId);
     }
 
 }

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-10-10 22:00:59.
+// Generated using typescript-generator version 3.0.1157 on 2023-11-12 12:31:42.
 
 export interface BaseDto {
     createdDate: Date;
@@ -296,11 +296,11 @@ export interface TaskMediaDto extends BaseDto {
 
 export interface TaskRelationDto {
     taskRelationId: string;
-    taskId: string;
-    relatedTaskId: string;
+    taskId?: string | null;
+    relatedTaskId?: string | null;
     relationType: TaskRelationType;
-    task: RelatedTaskDto;
-    relatedTask: RelatedTaskDto;
+    task?: RelatedTaskDto | null;
+    relatedTask?: RelatedTaskDto | null;
 }
 
 export interface TaskReminderDto extends BaseDto {
@@ -364,6 +364,7 @@ export interface TeamDto extends BaseDto {
     tag: string;
     visibility: TeamVisibilityType;
     joinMethod: TeamJoinMethodType;
+    taskVisibility: TeamTaskVisibilityType;
     workflowStatuses: TeamWorkflowStatusDto[];
 }
 
@@ -601,19 +602,6 @@ export interface InitializeTaskCommentRequest extends BaseRequest {
     comment: string;
 }
 
-export interface RetrieveIntersectingTasksFromTeamRequest extends BaseRequest {
-    workspaceId: string;
-    teamId: string;
-    timespanStart: Date;
-    timespanEnd: Date;
-}
-
-export interface RetrieveIntersectingTasksFromWorkspaceRequest extends BaseRequest {
-    workspaceId: string;
-    timespanStart: Date;
-    timespanEnd: Date;
-}
-
 export interface TaskAssigneeUpdateRequest {
     assigneeId?: string | null;
 }
@@ -653,10 +641,10 @@ export interface TaskDateUpdateRequest {
     hasPreciseDueDate?: boolean | null;
 }
 
-export interface TaskFilterRequest {
+export interface TaskFilterRequest extends BaseRequest {
     page?: number | null;
     workspaceId: string;
-    teamIdList: string[];
+    teamIdList?: string[] | null;
     topicIds?: string[] | null;
     ownerIds?: string[] | null;
     assigneeIds?: string[] | null;
@@ -732,6 +720,7 @@ export interface TeamInitializeRequest extends BaseRequest {
     tag: string;
     visibility: TeamVisibilityType;
     joinMethod: TeamJoinMethodType;
+    taskVisibility: TeamTaskVisibilityType;
 }
 
 export interface TeamWorkflowStatusNameChangeRequest extends BaseRequest {
@@ -755,6 +744,13 @@ export interface TopicUpdateRequest extends BaseRequest {
     color: string;
     name: string;
     tag: string;
+}
+
+export interface WorkspaceActivityFilterRequest extends BaseRequest {
+    page?: number | null;
+    workspaceId: string;
+    teamIdList?: string[] | null;
+    taskIds?: string[] | null;
 }
 
 export interface WorkspaceInitializeRequest extends BaseRequest {
@@ -864,10 +860,6 @@ export interface TaskListingPaginatedResponse extends BaseResponse {
     data: PageDto<TaskDto>;
 }
 
-export interface TaskListingResponse extends BaseResponse {
-    data: TaskDto[];
-}
-
 export interface TaskMediaResponse extends BaseResponse {
     data: MediaDto[];
 }
@@ -898,6 +890,10 @@ export interface TeamListingResponse extends BaseResponse {
 
 export interface TeamMemberListingResponse extends BaseResponse {
     data: PageDto<TeamMemberDto>;
+}
+
+export interface TeamMembershipsResponse extends BaseResponse {
+    data: TeamMemberDto[];
 }
 
 export interface TeamResponse extends BaseResponse {
@@ -955,6 +951,8 @@ export interface PassthroughDetailDto {
 
 export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
 
+export type FilterSort = "IDATE_DESC" | "IDATE_ASC" | "ASSIGNED_DATE_DESC" | "ASSIGNED_DATE_ASC";
+
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
 
 export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXPIRE_TEMP_PUBLIC_MEDIA";
@@ -997,8 +995,6 @@ export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT";
 
 export type TaskBoardStateType = "OPEN" | "CLOSED";
 
-export type TaskFilterSort = "IDATE_DESC" | "IDATE_ASC" | "ASSIGNED_DATE_DESC" | "ASSIGNED_DATE_ASC";
-
 export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
 
 export type TaskReminderType = "ASSIGNED_DATE" | "DUE_DATE" | "SPECIFIC_DATE";
@@ -1008,6 +1004,8 @@ export type TaskState = "TO_DO" | "IN_PROGRESS" | "IN_TEST" | "WONT_DO" | "DONE"
 export type TeamJoinMethodType = "SYNC_MEMBERS_WITH_WORKSPACE" | "ON_DEMAND" | "FROM_TEAM_ADMIN";
 
 export type TeamMemberRoleType = "ADMIN" | "MEMBER" | "GUEST";
+
+export type TeamTaskVisibilityType = "VISIBLE_TO_ALL_TEAM_MEMBERS" | "OWNER_ASSIGNEE_AND_ADMINS";
 
 export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
 

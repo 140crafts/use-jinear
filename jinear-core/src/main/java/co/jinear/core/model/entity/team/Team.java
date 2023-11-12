@@ -1,8 +1,10 @@
 package co.jinear.core.model.entity.team;
 
+import co.jinear.core.converter.workspace.TeamTaskVisibilityTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.workspace.Workspace;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
+import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -50,6 +52,10 @@ public class Team extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "join_method")
     private TeamJoinMethodType joinMethod;
+
+    @Convert(converter = TeamTaskVisibilityTypeConverter.class)
+    @Column(name = "task_visibility")
+    private TeamTaskVisibilityType taskVisibility;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)

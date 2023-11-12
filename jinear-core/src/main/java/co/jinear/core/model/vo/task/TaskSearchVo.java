@@ -11,5 +11,7 @@ public class TaskSearchVo {
     private String title;
     private String workspaceId;
     private String teamId;
+    private String assignedTo;
+    private String ownerId;
     private int page;
 }

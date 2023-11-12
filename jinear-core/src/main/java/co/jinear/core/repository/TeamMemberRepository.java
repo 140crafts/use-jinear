@@ -15,11 +15,15 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, String> 
 
     Optional<TeamMember> findByAccountIdAndTeamIdAndPassiveIdIsNull(String accountId, String teamId);
 
+    Optional<TeamMember> findByAccountIdAndWorkspaceIdAndTeamIdAndPassiveIdIsNull(String accountId, String workspaceId, String teamId);
+
     Page<TeamMember> findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(String teamId, Pageable pageable);
 
-    List<TeamMember> findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNullAndTeam_PassiveIdIsNull(String accountId, String workspaceId);
+    List<TeamMember> findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNullAndTeam_PassiveIdIsNullOrderByCreatedDateAsc(String accountId, String workspaceId);
 
     Long countAllByAccountIdAndTeamIdAndPassiveIdIsNull(String accountId, String teamId);
 
     Long countAllByAccountIdAndTeamIdAndRoleAndPassiveIdIsNull(String accountId, String teamId, TeamMemberRoleType role);
+
+    List<TeamMember> findAllByWorkspaceIdAndAccountIdAndTeamIdInAndPassiveIdIsNull(String workspaceId, String accountId, List<String> teamId);
 }

@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.entity.team.TeamMember;
 import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
 import co.jinear.core.repository.TeamMemberRepository;
+import co.jinear.core.system.NormalizeHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -42,14 +43,14 @@ public class TeamMemberRetrieveService {
 
     public List<TeamMemberDto> retrieveAllTeamMembershipsOfAnAccount(String accountId, String workspaceId) {
         log.info("Retrieve all team memberships of an account has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
-        return teamMemberRepository.findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNullAndTeam_PassiveIdIsNull(accountId, workspaceId).stream()
+        return teamMemberRepository.findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNullAndTeam_PassiveIdIsNullOrderByCreatedDateAsc(accountId, workspaceId).stream()
                 .map(teamMemberConverter::map)
                 .toList();
     }
 
     public List<String> retrieveAllTeamIdsOfAnAccount(String accountId, String workspaceId) {
         log.info("Retrieve all team ids of an account has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
-        return teamMemberRepository.findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNullAndTeam_PassiveIdIsNull(accountId, workspaceId).stream()
+        return teamMemberRepository.findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNullAndTeam_PassiveIdIsNullOrderByCreatedDateAsc(accountId, workspaceId).stream()
                 .map(TeamMember::getTeamId)
                 .toList();
     }
@@ -62,5 +63,19 @@ public class TeamMemberRetrieveService {
     public boolean isAccountHasRoleInTeam(String accountId, String teamId, TeamMemberRoleType role) {
         log.info("Is account has role in team has started.. accountId: {}, teamId: {}, role: {}", accountId, teamId, role);
         return teamMemberRepository.countAllByAccountIdAndTeamIdAndRoleAndPassiveIdIsNull(accountId, teamId, role) > 0L;
+    }
+
+    public List<TeamMemberDto> retrieveMemberships(String workspaceId, String accountId, List<String> teamIds) {
+        log.info("Retrieve memberships has started. workspaceId: {}, accountId: {}, teamIds: {}", workspaceId, accountId, NormalizeHelper.listToString(teamIds));
+        return teamMemberRepository.findAllByWorkspaceIdAndAccountIdAndTeamIdInAndPassiveIdIsNull(workspaceId, accountId, teamIds)
+                .stream()
+                .map(teamMemberConverter::map)
+                .toList();
+    }
+
+    public Optional<TeamMemberDto> retrieveMembership(String workspaceId, String teamId, String accountId) {
+        log.info("Retrieve memberships has started. workspaceId: {}, teamId: {}, accountId: {}", workspaceId, teamId, accountId);
+        return teamMemberRepository.findByAccountIdAndWorkspaceIdAndTeamIdAndPassiveIdIsNull(accountId, workspaceId, teamId)
+                .map(teamMemberConverter::map);
     }
 }

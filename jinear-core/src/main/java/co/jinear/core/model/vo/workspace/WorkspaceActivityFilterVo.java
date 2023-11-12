@@ -1,5 +1,4 @@
-package co.jinear.core.model.vo.task;
-
+package co.jinear.core.model.vo.workspace;
 
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.enumtype.FilterSort;
@@ -8,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -17,16 +15,13 @@ import static co.jinear.core.model.enumtype.FilterSort.IDATE_DESC;
 @Getter
 @Setter
 @ToString
-public class TaskSearchFilterVo {
+public class WorkspaceActivityFilterVo {
 
     private int page = 0;
     private String workspaceId;
     private Map<TeamTaskVisibilityType, List<TeamMemberDto>> teamMemberMap;
-    private List<String> topicIds;
+    private List<String> taskIds;
     private List<String> ownerIds;
     private List<String> assigneeIds;
-    private List<String> workflowStatusIdList;
-    private ZonedDateTime timespanStart;
-    private ZonedDateTime timespanEnd;
     private FilterSort taskFilterSort = IDATE_DESC;
 }

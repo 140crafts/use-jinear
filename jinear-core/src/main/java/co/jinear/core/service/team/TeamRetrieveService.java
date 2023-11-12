@@ -5,6 +5,7 @@ import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
+import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.repository.TeamRepository;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
@@ -53,6 +54,12 @@ public class TeamRetrieveService {
         return teamMemberRetrieveService.retrieveAllTeamMembershipsOfAnAccount(accountId, workspaceId).stream()
                 .map(TeamMemberDto::getTeam)
                 .toList();
+    }
+
+    public Team retrieveEntity(String teamId) {
+        log.info("Retrieve team entity has started. teamId: {}", teamId);
+        return teamRepository.findByTeamIdAndPassiveIdIsNull(teamId)
+                .orElseThrow(NotFoundException::new);
     }
 
     public TeamDto retrieveTeam(String teamId) {

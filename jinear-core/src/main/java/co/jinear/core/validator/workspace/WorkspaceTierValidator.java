@@ -2,8 +2,10 @@ package co.jinear.core.validator.workspace;
 
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.workspace.WorkspaceExceedsTierLimitsException;
+import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.enumtype.workspace.WorkspaceTier;
+import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceInvitationListingService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberListingService;
@@ -22,6 +24,7 @@ public class WorkspaceTierValidator {
 
     private static final Long BASIC_TIER_MAX_MEMBER_COUNT = 3L;
 
+    private final TeamRetrieveService teamRetrieveService;
     private final WorkspaceRetrieveService workspaceRetrieveService;
     private final WorkspaceMemberListingService workspaceMemberListingService;
     private final WorkspaceInvitationListingService workspaceInvitationListingService;
@@ -53,6 +56,24 @@ public class WorkspaceTierValidator {
                     .map(this::retrieveActiveMemberAndInvitationCount)
                     .filter(workspaceMemberCount -> Longs.compare(BASIC_TIER_MAX_MEMBER_COUNT, workspaceMemberCount) > 0)
                     .orElseThrow(WorkspaceExceedsTierLimitsException::new);
+        }
+    }
+
+    public void validateTeamsWorkspaceHasAdvancedTeamTaskVisibilityTypesAccess(String teamId) {
+        log.info("Validate team's workspace has advanced team task visibility access has started. teamId: {}", teamId);
+        TeamDto teamDto = teamRetrieveService.retrieveTeam(teamId);
+        validateWorkspaceHasAdvancedTeamTaskVisibilityTypesAccess(teamDto.getWorkspaceId());
+    }
+
+    public void validateWorkspaceHasAdvancedTeamTaskVisibilityTypesAccess(String workspaceId) {
+        log.info("Validate workspace has advanced team task visibility access has started. workspaceId: {}", workspaceId);
+        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
+        validateWorkspaceHasAdvancedTeamTaskVisibilityTypesAccess(workspaceDto);
+    }
+
+    public void validateWorkspaceHasAdvancedTeamTaskVisibilityTypesAccess(WorkspaceDto workspaceDto) {
+        if (WorkspaceTier.BASIC.equals(workspaceDto.getTier())) {
+            throw new WorkspaceExceedsTierLimitsException();
         }
     }
 

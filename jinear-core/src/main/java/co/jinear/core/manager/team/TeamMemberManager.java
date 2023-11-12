@@ -7,6 +7,7 @@ import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.request.team.AddTeamMemberRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.team.TeamMemberListingResponse;
+import co.jinear.core.model.response.team.TeamMembershipsResponse;
 import co.jinear.core.model.vo.team.member.TeamMemberAddVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.passive.PassiveService;
@@ -15,10 +16,13 @@ import co.jinear.core.service.team.member.TeamMemberListingService;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.service.team.member.TeamMemberService;
 import co.jinear.core.validator.team.TeamAccessValidator;
+import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -32,6 +36,7 @@ public class TeamMemberManager {
     private final TeamMemberService teamMemberService;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
     private final TeamMemberConverter teamMemberConverter;
+    private final WorkspaceValidator workspaceValidator;
     private final PassiveService passiveService;
 
     public BaseResponse addTeamMember(AddTeamMemberRequest addTeamMemberRequest) {
@@ -61,6 +66,20 @@ public class TeamMemberManager {
         log.info("Retrieve team members has started. teamId: {}, page: {}, accountId: {}", teamId, page, accountId);
         Page<TeamMemberDto> teamMemberDtoPage = teamMemberListingService.retrieveTeamMembers(teamId, page);
         return mapToResponse(teamMemberDtoPage);
+    }
+
+    public TeamMembershipsResponse retrieveMemberships(String workspaceId) {
+        String accountId = sessionInfoService.currentAccountId();
+        workspaceValidator.validateHasAccess(accountId, workspaceId);
+        log.info("Retrieve memberships has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
+        List<TeamMemberDto> teamMemberDtos = teamMemberRetrieveService.retrieveAllTeamMembershipsOfAnAccount(accountId, workspaceId);
+        return mapResponse(teamMemberDtos);
+    }
+
+    private TeamMembershipsResponse mapResponse(List<TeamMemberDto> teamMemberDtos) {
+        TeamMembershipsResponse teamMembershipsResponse = new TeamMembershipsResponse();
+        teamMembershipsResponse.setTeamMemberDtoList(teamMemberDtos);
+        return teamMembershipsResponse;
     }
 
     private TeamMemberListingResponse mapToResponse(Page<TeamMemberDto> teamMemberDtoPage) {
