@@ -18,7 +18,6 @@ const LastTaskActivitiesList: React.FC<LastTaskActivitiesListProps> = ({
 }) => {
   const [page, setPage] = useState<number>(0);
   const { data: response, isLoading, isFetching } = useFilterWorkspaceActivitiesQuery({ workspaceId, taskIds: [taskId], page });
-  // const { data: response, isLoading, isFetching } = useRetrieveActivitiesFromTaskQuery({ workspaceId, taskId, page });
 
   return (
     <div className={styles.container}>

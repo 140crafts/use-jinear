@@ -28,10 +28,6 @@ const SseListener: React.FC<SseListenerProps> = ({}) => {
 
   const latestWorkspaceActivityFromSSE = useTypedSelector(selectLatestWorkspaceActivity);
 
-  // const { data: retrieveWorkspaceActivitiesResponse, isFetching: isRetrieveActivitiesQueryFetching } = useRetrieveActivitiesQuery(
-  //   { workspaceId: workspaceId || "", page: 0 },
-  //   { skip: workspaceId == null }
-  // );
   const { data: retrieveWorkspaceActivitiesResponse, isFetching: isRetrieveActivitiesQueryFetching } =
     useFilterWorkspaceActivitiesQuery({ workspaceId: workspaceId || "", page: 0 });
 

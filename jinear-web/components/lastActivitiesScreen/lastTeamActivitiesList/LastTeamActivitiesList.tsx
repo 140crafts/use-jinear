@@ -10,7 +10,6 @@ interface LastTeamActivitiesListProps {
 
 const LastTeamActivitiesList: React.FC<LastTeamActivitiesListProps> = ({ workspaceId, teamId }) => {
   const [page, setPage] = useState<number>(0);
-  // const { data: response, isLoading, isFetching } = useRetrieveActivitiesFromTeamQuery({ workspaceId, teamId, page });
   const {
     data: response,
     isLoading,

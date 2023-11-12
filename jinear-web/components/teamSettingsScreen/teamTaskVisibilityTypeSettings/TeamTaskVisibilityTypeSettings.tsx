@@ -8,7 +8,7 @@ import { useUpdateTeamTaskVisibilityTypeMutation } from "@/store/api/teamApi";
 import { hasWorkspaceTeamVisibilityTypeSelectAccess } from "@/utils/permissionHelper";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
-import styles from "./TeamTaskVisibilityTypeSettings.module.css";
+import styles from "./TeamTaskVisibilityTypeSettings.module.scss";
 
 interface TeamTaskVisibilityTypeSettingsProps {
   team: TeamDto;
@@ -48,17 +48,19 @@ const TeamTaskVisibilityTypeSettings: React.FC<TeamTaskVisibilityTypeSettingsPro
         </div>
       )}
       <Transition initial={true} className={styles.content}>
-        <SegmentedControl
-          id="existing-team-task-visibility-type-segment-control"
-          name="existing-team-task-visibility-type-segment-control"
-          defaultIndex={["VISIBLE_TO_ALL_TEAM_MEMBERS", "OWNER_ASSIGNEE_AND_ADMINS"].indexOf(team.taskVisibility)}
-          segments={[
-            { label: t("teamTaskVisibility_VISIBLE_TO_ALL_TEAM_MEMBERS"), value: "VISIBLE_TO_ALL_TEAM_MEMBERS" },
-            { label: t("teamTaskVisibility_OWNER_ASSIGNEE_AND_ADMINS"), value: "OWNER_ASSIGNEE_AND_ADMINS" },
-          ]}
-          segmentLabelClassName={styles.viewTypeSegmentLabel}
-          callback={changeViewType}
-        />
+        <div className={styles.segmentedControlContainer}>
+          <SegmentedControl
+            id="existing-team-task-visibility-type-segment-control"
+            name="existing-team-task-visibility-type-segment-control"
+            defaultIndex={["VISIBLE_TO_ALL_TEAM_MEMBERS", "OWNER_ASSIGNEE_AND_ADMINS"].indexOf(team.taskVisibility)}
+            segments={[
+              { label: t("teamTaskVisibility_VISIBLE_TO_ALL_TEAM_MEMBERS"), value: "VISIBLE_TO_ALL_TEAM_MEMBERS" },
+              { label: t("teamTaskVisibility_OWNER_ASSIGNEE_AND_ADMINS"), value: "OWNER_ASSIGNEE_AND_ADMINS" },
+            ]}
+            segmentLabelClassName={styles.viewTypeSegmentLabel}
+            callback={changeViewType}
+          />
+        </div>
 
         <div className={styles.detail}>
           <label>{t(`teamTaskVisibilityDetail_${nextViewType}`)}</label>
@@ -66,7 +68,7 @@ const TeamTaskVisibilityTypeSettings: React.FC<TeamTaskVisibilityTypeSettingsPro
           {nextViewType != team.taskVisibility && (
             <Button
               loading={isLoading}
-              disabled={isLoading || !hasAccess}
+              //   disabled={isLoading || !hasAccess}
               heightVariant={ButtonHeight.short}
               variant={ButtonVariants.contrast}
               onClick={saveChanges}
