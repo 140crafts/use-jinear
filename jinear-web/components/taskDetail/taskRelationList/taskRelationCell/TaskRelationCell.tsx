@@ -1,22 +1,35 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import useWindowSize from "@/hooks/useWindowSize";
-import { TaskRelationDto } from "@/model/be/jinear-core";
+import { RelatedTaskDto, TaskRelationType } from "@/model/be/jinear-core";
 import { closeTaskOverviewModal, popTaskOverviewModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
+import useTranslation from "locales/useTranslation";
 import React from "react";
 import styles from "./TaskRelationCell.module.css";
 
 interface TaskRelationCellProps {
-  relation: TaskRelationDto;
+  taskRelationId: string;
+  taskId?: string | null;
+  relatedTaskId?: string | null;
+  relationType: TaskRelationType;
+  task?: RelatedTaskDto | null;
+  relatedTask?: RelatedTaskDto | null;
 }
 
 const logger = Logger("TaskRelationCell");
 
-const TaskRelationCell: React.FC<TaskRelationCellProps> = ({ relation }) => {
+const TaskRelationCell: React.FC<TaskRelationCellProps> = ({
+  taskRelationId,
+  taskId,
+  relatedTaskId,
+  relationType,
+  task,
+  relatedTask,
+}) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const relatedTask = relation.relatedTask;
-  const tag = `${relatedTask.team?.tag}-${relatedTask.teamTagNo}`;
+  const tag = `${relatedTask?.team?.tag}-${relatedTask?.teamTagNo}`;
   const { isMobile } = useWindowSize();
 
   const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
@@ -37,7 +50,7 @@ const TaskRelationCell: React.FC<TaskRelationCellProps> = ({ relation }) => {
     dispatch(popTaskOverviewModal({ taskTag, workspaceName, visible: true }));
   };
 
-  return (
+  return relatedTask ? (
     <Button
       className={styles.container}
       variant={ButtonVariants.filled}
@@ -47,6 +60,15 @@ const TaskRelationCell: React.FC<TaskRelationCellProps> = ({ relation }) => {
     >
       <div>{tag}</div>
       <div className="single-line flex-1">{relatedTask.title}</div>
+    </Button>
+  ) : (
+    <Button
+      className={styles.noAccessContainer}
+      variant={ButtonVariants.filled}
+      heightVariant={ButtonHeight.short}
+      disabled={true}
+    >
+      {t("taskRelatedTaskNoAccess")}
     </Button>
   );
 };

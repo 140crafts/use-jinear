@@ -3,7 +3,7 @@
   flex-direction: row;
 
   position: sticky;
-  top: calc(var(--workspace-layout-content-vertical-padding) * -1);
+  top: var(--workspace-header-height);
   z-index: 5;
   background-color: var(--c-primary);
   border-bottom: 1px var(--c-primary-shade-0) solid;

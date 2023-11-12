@@ -1102,6 +1102,10 @@ export default {
     en: "Tag (short code for easy access. For example Sales -> SLS)",
     tr: "Ekip kısa kodu (Kolay erişim için. Örneğin Satış -> STS)",
   },
+  newTeamTaskVisibility: {
+    en: "Task visibility",
+    tr: "Görev görünülülürlüğü",
+  },
   currentWorkspaceHeaderWorkspaceDetail: {
     en: "Workspace detail",
     tr: "Çalışma Alanı detayları",
@@ -2574,6 +2578,14 @@ export default {
     en: "Fixed prices, no absurd per user charges.",
     tr: "Sabitlenmiş fiyatlandırma, kişi başı absürt ücretlendirmeler yok.",
   },
+  pricesPageProFeature_team_task_visibility: {
+    en: "Increased task visibility settings.",
+    tr: "Arttırılmış görev görüntüleme izinleri.",
+  },
+  pricesPageProFeature_team_task_visibility_description: {
+    en: "You can set task visiblity to only task owners & assignees on teams that handles sensitive jobs.",
+    tr: "Hassas işleri yöneten takımlarda, görev görünürlüğünü sadece görev sahiplerinin ve atanmış kişilerin görebilmesini sağlayın.",
+  },
   pricesPageProFeature_file: {
     en: "Attach files to your tasks.",
     tr: "Görevlerinize dosya ekleyin.",
@@ -2747,7 +2759,43 @@ export default {
     tr: "Çalışma Alanı Ayarları",
   },
   deviceOfflineModalText: {
-    en: "Unable to connect internet.",
+    en: "Unable to connect internet",
     tr: "İnternet bağlantınız yok",
+  },
+  taskRelatedTaskNoAccess: {
+    en: "You don't have access to this task.",
+    tr: "Bu göreve erişim yetkiniz bulunmamaktadır.",
+  },
+  teamSettingsScreenTaskVisibilitySectionTitle: {
+    en: "Task Visibility",
+    tr: "Görev Görünülürlüğü",
+  },
+  teamSettingsScreenTaskVisibilitySectionDescription: {
+    en: "You can set who can list and see tasks.",
+    tr: "Görevleri kimlerin listeleyip görüntüleyebileceğini ayarlayabilirsiniz.",
+  },
+  teamSettingsScreenTaskVisibilitySectionSave: {
+    en: "Save Changes",
+    tr: "Değişiklikleri Kaydet",
+  },
+  teamTaskVisibility_VISIBLE_TO_ALL_TEAM_MEMBERS: {
+    en: "Everyone on team",
+    tr: "Takımdaki herkes",
+  },
+  teamTaskVisibility_OWNER_ASSIGNEE_AND_ADMINS: {
+    en: "Owners & Assignees",
+    tr: "Oluşturan & Atanan",
+  },
+  teamTaskVisibilityDetail_VISIBLE_TO_ALL_TEAM_MEMBERS: {
+    en: "All team members can list all tasks within this team.",
+    tr: "Takımdaki herkes takımdaki görevleri listeleyebilir.",
+  },
+  teamTaskVisibilityDetail_OWNER_ASSIGNEE_AND_ADMINS: {
+    en: "Tasks will be visibile to its owners, assignees and team admins.",
+    tr: "Görevler yanlızca onları oluşturan, onlarin atandığı kişilerce ve takım yöneticileri tarafından görüntülenebilir.",
+  },
+  genericYouNeedToUpgradePlanText: {
+    en: "You need to upgrade your plan to use this feature.",
+    tr: "Bu özelliği kullanabilmeniz için planınızı yükseltin.",
   },
 };

@@ -1,5 +1,5 @@
 import Button, { ButtonVariants } from "@/components/button";
-import TaskActivity from "@/components/taskDetail/taskActivityList/taskActivity/TaskActivity";
+import TaskActivity from "@/components/taskDetail/taskActivity/TaskActivity";
 import useWindowSize from "@/hooks/useWindowSize";
 import { WorkspaceActivityDto } from "@/model/be/jinear-core";
 import { popTaskOverviewModal } from "@/store/slice/modalSlice";

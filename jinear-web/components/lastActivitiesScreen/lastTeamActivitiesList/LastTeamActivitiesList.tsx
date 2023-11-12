@@ -1,4 +1,4 @@
-import { useRetrieveActivitiesFromTeamQuery } from "@/store/api/workspaceActivityApi";
+import { useFilterWorkspaceActivitiesQuery } from "@/store/api/workspaceActivityApi";
 import React, { useState } from "react";
 import PaginatedActivityList from "../paginatedActivityList/PaginatedActivityList";
 import styles from "./LastTeamActivitiesList.module.css";
@@ -10,7 +10,12 @@ interface LastTeamActivitiesListProps {
 
 const LastTeamActivitiesList: React.FC<LastTeamActivitiesListProps> = ({ workspaceId, teamId }) => {
   const [page, setPage] = useState<number>(0);
-  const { data: response, isLoading, isFetching } = useRetrieveActivitiesFromTeamQuery({ workspaceId, teamId, page });
+  // const { data: response, isLoading, isFetching } = useRetrieveActivitiesFromTeamQuery({ workspaceId, teamId, page });
+  const {
+    data: response,
+    isLoading,
+    isFetching,
+  } = useFilterWorkspaceActivitiesQuery({ workspaceId, teamIdList: [teamId], page });
 
   return (
     <div className={styles.container}>

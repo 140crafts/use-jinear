@@ -5,3 +5,12 @@
   gap: 1ch;
   max-width: 14rem;
 }
+
+.noAccessContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1ch;
+  background-color: var(--c-primary-shade-0) !important;
+  max-width: unset !important;
+}

@@ -26,7 +26,6 @@ export const tagTypes = [
   "team-all-task-list",
   "workflow-status-from-team",
   "retrieve-topic",
-  "retrieve-task-activity",
   "team-workflow-task-list",
   "reminder-next-job",
   "workspace-task-list",
@@ -57,6 +56,8 @@ export const tagTypes = [
   "task-media-list-from-team",
   "payments-info-workspace-subscription",
   "task-comments",
+  "workspace-team-membership-list",
+  "workspace-activity-filtered-list",
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

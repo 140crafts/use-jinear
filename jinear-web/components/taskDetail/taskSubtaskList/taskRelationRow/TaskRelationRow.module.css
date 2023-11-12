@@ -16,6 +16,11 @@
   color: var(--c-text-color);
 }
 
+.noAccessLabel {
+  flex: 1;
+  justify-content: flex-start;
+}
+
 .workflowStatusButton {
   width: 32px !important;
   height: 32px !important;
@@ -29,4 +34,9 @@
 
 .container:hover .deleteButton {
   display: flex !important;
+}
+
+.disabled {
+  opacity: 0.85 !important;
+  cursor: not-allowed !important;
 }

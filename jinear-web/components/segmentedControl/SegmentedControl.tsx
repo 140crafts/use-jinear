@@ -41,27 +41,30 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
   return !segments ? null : (
     <div id={id} className={cn(styles.container, contentContainerClassName)}>
       <div className={styles.wrapper}>
-        {segments?.map((item, i) => (
-          <div className={styles.inputContainer} key={`segment-${name}-${i}`}>
-            {i === activeIndex && <SelectionBox id={`segment-${name}`} />}
-            <input
-              type="radio"
-              value={item.value}
-              id={item.segmentId ? item.segmentId : item.label}
-              name={item.segmentId ? item.segmentId : name + "-" + i}
-              checked={i === activeIndex}
-              {...item?.inputProps}
-              onChange={(e) => {
-                onInputChange(item.value, i);
-                item?.inputProps?.onChange?.(e);
-              }}
-            />
-            <label htmlFor={item.segmentId ? item.segmentId : item.label} className={cn(styles.label, segmentLabelClassName)}>
-              {item?.icon}
-              {item.label}
-            </label>
-          </div>
-        ))}
+        {segments?.map((item, i) => {
+          const segmentId = item.segmentId ? item.segmentId : `${id}-${name}-${item.label}`;
+          return (
+            <div className={styles.inputContainer} key={`segment-${name}-${i}`}>
+              {i === activeIndex && <SelectionBox id={`segment-${name}`} />}
+              <input
+                type="radio"
+                value={item.value}
+                id={segmentId}
+                name={item.segmentId ? item.segmentId : name + "-" + i}
+                checked={i === activeIndex}
+                {...item?.inputProps}
+                onChange={(e) => {
+                  onInputChange(item.value, i);
+                  item?.inputProps?.onChange?.(e);
+                }}
+              />
+              <label htmlFor={segmentId} className={cn(styles.label, segmentLabelClassName)}>
+                {item?.icon}
+                {item.label}
+              </label>
+            </div>
+          );
+        })}
       </div>
       {segments?.[activeIndex]?.longLabel && (
         <div className={styles.longLabelContainer}>

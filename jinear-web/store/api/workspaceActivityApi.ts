@@ -1,8 +1,18 @@
-import { WorkspaceActivityListResponse } from "@/model/be/jinear-core";
+import { WorkspaceActivityFilterRequest, WorkspaceActivityListResponse } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const workspaceActivityApi = api.injectEndpoints({
   endpoints: (build) => ({
+    filterWorkspaceActivities: build.query<WorkspaceActivityListResponse, WorkspaceActivityFilterRequest>({
+      query: (req) => ({ url: `v1/workspace/activity/filter`, method: "POST", body: req }),
+      providesTags: (_result, _err, req) => [
+        {
+          type: "workspace-activity-filtered-list",
+          id: `${JSON.stringify(req)}`,
+        },
+      ],
+    }),
+    //
     retrieveActivities: build.query<WorkspaceActivityListResponse, { workspaceId: string; page?: number }>({
       query: ({ workspaceId, page = 0 }) => `v1/workspace/activity/${workspaceId}?page=${page}`,
       providesTags: (_result, _err, { workspaceId, page }) => [
@@ -39,8 +49,12 @@ export const workspaceActivityApi = api.injectEndpoints({
   }),
 });
 
-export const { useRetrieveActivitiesQuery, useRetrieveActivitiesFromTeamQuery, useRetrieveActivitiesFromTaskQuery } =
-  workspaceActivityApi;
+export const {
+  useFilterWorkspaceActivitiesQuery,
+  useRetrieveActivitiesQuery,
+  useRetrieveActivitiesFromTeamQuery,
+  useRetrieveActivitiesFromTaskQuery,
+} = workspaceActivityApi;
 
 export const {
   endpoints: { retrieveActivities, retrieveActivitiesFromTeam, retrieveActivitiesFromTask },
