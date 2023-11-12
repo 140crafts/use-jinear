@@ -1,5 +1,7 @@
 import Button, { ButtonVariants } from "@/components/button";
-import { TeamInitializeRequest } from "@/model/be/jinear-core";
+import SegmentedControl from "@/components/segmentedControl/SegmentedControl";
+import WorkspaceUpgradeButton from "@/components/workspaceUpgradeButton/WorkspaceUpgradeButton";
+import { TeamInitializeRequest, TeamTaskVisibilityType } from "@/model/be/jinear-core";
 import { useInitializeTeamMutation } from "@/store/api/teamApi";
 import { useUpdatePreferredTeamMutation } from "@/store/api/workspaceDisplayPreferenceApi";
 import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
@@ -8,6 +10,7 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { HOST } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { normalizeUsernameReplaceSpaces } from "@/utils/normalizeHelper";
+import { hasWorkspaceTeamVisibilityTypeSelectAccess } from "@/utils/permissionHelper";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
@@ -31,6 +34,8 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
   const [candidateUsername, setCandidateUsername] = useState<string>("example-team");
   const currName = watch("name");
   const currTag = watch("tag");
+  const [taskVisibilityType, setTaskVisibilityType] = useState<TeamTaskVisibilityType>("VISIBLE_TO_ALL_TEAM_MEMBERS");
+  const hasAccess = hasWorkspaceTeamVisibilityTypeSelectAccess(currentWorkspace);
 
   useEffect(() => {
     const normalizedUsername = normalizeUsernameReplaceSpaces(currName);
@@ -59,9 +64,17 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
     isPrefferedTeamUpdateLoading && close?.();
   }, [isPrefferedTeamUpdateLoading]);
 
+  const changeTaskVisibilityType = (value: string, index: number) => {
+    if (value && (value == "VISIBLE_TO_ALL_TEAM_MEMBERS" || value == "OWNER_ASSIGNEE_AND_ADMINS")) {
+      setTaskVisibilityType?.(value);
+    }
+  };
+
   const submit: SubmitHandler<TeamInitializeRequest> = (data) => {
-    logger.log({ data });
-    initializeTeam(data);
+    const req = { ...data };
+    req.taskVisibility = taskVisibilityType;
+    logger.log({ req });
+    initializeTeam(req);
   };
 
   return (
@@ -86,13 +99,37 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
         />
       </label>
 
+      <label className={cn(styles.label, "flex-1")} htmlFor={"new-team-name"}>
+        {t("newTeamTaskVisibility")}
+        <div className={styles.visibilityTypeContainer}>
+          <SegmentedControl
+            id="new-team-task-visibility-type-segment-control"
+            name="new-team-task-visibility-type-segment-control"
+            defaultIndex={["VISIBLE_TO_ALL_TEAM_MEMBERS", "OWNER_ASSIGNEE_AND_ADMINS"].indexOf(taskVisibilityType)}
+            segments={[
+              { label: t("teamTaskVisibility_VISIBLE_TO_ALL_TEAM_MEMBERS"), value: "VISIBLE_TO_ALL_TEAM_MEMBERS" },
+              { label: t("teamTaskVisibility_OWNER_ASSIGNEE_AND_ADMINS"), value: "OWNER_ASSIGNEE_AND_ADMINS" },
+            ]}
+            segmentLabelClassName={styles.viewTypeSegmentLabel}
+            callback={changeTaskVisibilityType}
+          />
+          <label>{t(`teamTaskVisibilityDetail_${taskVisibilityType}`)}</label>
+          {!hasAccess && currentWorkspace && taskVisibilityType != "VISIBLE_TO_ALL_TEAM_MEMBERS" && (
+            <div className={styles.upgradeYourPlanContainer}>
+              {t("genericYouNeedToUpgradePlanText")}
+              <WorkspaceUpgradeButton workspace={currentWorkspace} variant={"FULL"} className={styles.upgradeButton} />
+            </div>
+          )}
+        </div>
+      </label>
+
       <div className={styles.footerContainer}>
         <Button disabled={isLoading} onClick={close} className={styles.footerButton}>
           {t("newWorkspaceFormCancel")}
         </Button>
         <Button
           type="submit"
-          disabled={isLoading}
+          disabled={isLoading || (taskVisibilityType != "VISIBLE_TO_ALL_TEAM_MEMBERS" && !hasAccess)}
           loading={isLoading}
           className={styles.footerButton}
           variant={ButtonVariants.contrast}

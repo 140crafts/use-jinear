@@ -2,20 +2,24 @@ import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import SectionTitle from "@/components/sectionTitle/SectionTitle";
 import SegmentedControl from "@/components/segmentedControl/SegmentedControl";
 import Transition from "@/components/transition/Transition";
-import { TeamDto, TeamTaskVisibilityType } from "@/model/be/jinear-core";
+import WorkspaceUpgradeButton from "@/components/workspaceUpgradeButton/WorkspaceUpgradeButton";
+import { TeamDto, TeamTaskVisibilityType, WorkspaceDto } from "@/model/be/jinear-core";
 import { useUpdateTeamTaskVisibilityTypeMutation } from "@/store/api/teamApi";
+import { hasWorkspaceTeamVisibilityTypeSelectAccess } from "@/utils/permissionHelper";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
 import styles from "./TeamTaskVisibilityTypeSettings.module.css";
 
 interface TeamTaskVisibilityTypeSettingsProps {
   team: TeamDto;
+  workspace: WorkspaceDto;
 }
 
-const TeamTaskVisibilityTypeSettings: React.FC<TeamTaskVisibilityTypeSettingsProps> = ({ team }) => {
+const TeamTaskVisibilityTypeSettings: React.FC<TeamTaskVisibilityTypeSettingsProps> = ({ team, workspace }) => {
   const { t } = useTranslation();
   const [nextViewType, setNextViewType] = useState<TeamTaskVisibilityType>(team.taskVisibility);
   const [updateTeamTaskVisibilityType, { isLoading }] = useUpdateTeamTaskVisibilityTypeMutation();
+  const hasAccess = hasWorkspaceTeamVisibilityTypeSelectAccess(workspace);
 
   useEffect(() => {
     setNextViewType(team.taskVisibility);
@@ -37,9 +41,16 @@ const TeamTaskVisibilityTypeSettings: React.FC<TeamTaskVisibilityTypeSettingsPro
         title={t("teamSettingsScreenTaskVisibilitySectionTitle")}
         description={t("teamSettingsScreenTaskVisibilitySectionDescription")}
       />
+      {!hasAccess && (
+        <div className={styles.upgradeYourPlanContainer}>
+          {t("genericYouNeedToUpgradePlanText")}
+          <WorkspaceUpgradeButton workspace={workspace} variant={"FULL"} className={styles.upgradeButton} />
+        </div>
+      )}
       <Transition initial={true} className={styles.content}>
         <SegmentedControl
-          name="calendar-view-type-segment-control"
+          id="existing-team-task-visibility-type-segment-control"
+          name="existing-team-task-visibility-type-segment-control"
           defaultIndex={["VISIBLE_TO_ALL_TEAM_MEMBERS", "OWNER_ASSIGNEE_AND_ADMINS"].indexOf(team.taskVisibility)}
           segments={[
             { label: t("teamTaskVisibility_VISIBLE_TO_ALL_TEAM_MEMBERS"), value: "VISIBLE_TO_ALL_TEAM_MEMBERS" },
@@ -55,7 +66,7 @@ const TeamTaskVisibilityTypeSettings: React.FC<TeamTaskVisibilityTypeSettingsPro
           {nextViewType != team.taskVisibility && (
             <Button
               loading={isLoading}
-              disabled={isLoading}
+              disabled={isLoading || !hasAccess}
               heightVariant={ButtonHeight.short}
               variant={ButtonVariants.contrast}
               onClick={saveChanges}

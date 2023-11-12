@@ -1,4 +1,4 @@
-import { useRetrieveActivitiesFromTaskQuery } from "@/store/api/workspaceActivityApi";
+import { useFilterWorkspaceActivitiesQuery } from "@/store/api/workspaceActivityApi";
 import React, { useState } from "react";
 import PaginatedActivityList from "../paginatedActivityList/PaginatedActivityList";
 import styles from "./LastTaskActivitiesList.module.css";
@@ -17,7 +17,8 @@ const LastTaskActivitiesList: React.FC<LastTaskActivitiesListProps> = ({
   listTitleClassName,
 }) => {
   const [page, setPage] = useState<number>(0);
-  const { data: response, isLoading, isFetching } = useRetrieveActivitiesFromTaskQuery({ workspaceId, taskId, page });
+  const { data: response, isLoading, isFetching } = useFilterWorkspaceActivitiesQuery({ workspaceId, taskIds: [taskId], page });
+  // const { data: response, isLoading, isFetching } = useRetrieveActivitiesFromTaskQuery({ workspaceId, taskId, page });
 
   return (
     <div className={styles.container}>

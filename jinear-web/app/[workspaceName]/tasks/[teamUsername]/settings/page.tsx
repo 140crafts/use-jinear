@@ -26,7 +26,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({}) => {
   return (
     <div className={styles.container}>
       {team && <TeamWorkflowSettings teamId={team.teamId} teamRole={teamRole} />}
-      {team && <TeamTaskVisibilityTypeSettings team={team} />}
+      {team && workspace && <TeamTaskVisibilityTypeSettings team={team} workspace={workspace} />}
     </div>
   );
 };

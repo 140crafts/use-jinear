@@ -4,6 +4,10 @@ export const hasWorkspaceFilePermissions = (workspace?: WorkspaceDto | null) => 
   return workspace?.tier == "PRO";
 };
 
+export const hasWorkspaceTeamVisibilityTypeSelectAccess = (workspace?: WorkspaceDto | null) => {
+  return workspace?.tier == "PRO";
+};
+
 export const isWorkspaceUpgradable = (workspace?: WorkspaceDto | null) => {
   return workspace?.tier == "BASIC";
 };

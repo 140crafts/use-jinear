@@ -1102,6 +1102,10 @@ export default {
     en: "Tag (short code for easy access. For example Sales -> SLS)",
     tr: "Ekip kısa kodu (Kolay erişim için. Örneğin Satış -> STS)",
   },
+  newTeamTaskVisibility: {
+    en: "Task visibility",
+    tr: "Görev görünülülürlüğü",
+  },
   currentWorkspaceHeaderWorkspaceDetail: {
     en: "Workspace detail",
     tr: "Çalışma Alanı detayları",
@@ -2574,6 +2578,14 @@ export default {
     en: "Fixed prices, no absurd per user charges.",
     tr: "Sabitlenmiş fiyatlandırma, kişi başı absürt ücretlendirmeler yok.",
   },
+  pricesPageProFeature_team_task_visibility: {
+    en: "Increased task visibility settings.",
+    tr: "Arttırılmış görev görüntüleme izinleri.",
+  },
+  pricesPageProFeature_team_task_visibility_description: {
+    en: "You can set task visiblity to only task owners & assignees on teams that handles sensitive jobs.",
+    tr: "Hassas işleri yöneten takımlarda, görev görünürlüğünü sadece görev sahiplerinin ve atanmış kişilerin görebilmesini sağlayın.",
+  },
   pricesPageProFeature_file: {
     en: "Attach files to your tasks.",
     tr: "Görevlerinize dosya ekleyin.",
@@ -2771,8 +2783,8 @@ export default {
     tr: "Takımdaki herkes",
   },
   teamTaskVisibility_OWNER_ASSIGNEE_AND_ADMINS: {
-    en: "Owners & Assignee & Admins",
-    tr: "Görevi Oluşturan & Atanan & Yöneticiler",
+    en: "Owners & Assignees",
+    tr: "Oluşturan & Atanan",
   },
   teamTaskVisibilityDetail_VISIBLE_TO_ALL_TEAM_MEMBERS: {
     en: "All team members can list all tasks within this team.",
@@ -2781,5 +2793,9 @@ export default {
   teamTaskVisibilityDetail_OWNER_ASSIGNEE_AND_ADMINS: {
     en: "Tasks will be visibile to its owners, assignees and team admins.",
     tr: "Görevler yanlızca onları oluşturan, onlarin atandığı kişilerce ve takım yöneticileri tarafından görüntülenebilir.",
+  },
+  genericYouNeedToUpgradePlanText: {
+    en: "You need to upgrade your plan to use this feature.",
+    tr: "Bu özelliği kullanabilmeniz için planınızı yükseltin.",
   },
 };

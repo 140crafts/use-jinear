@@ -35,7 +35,7 @@ export const teamApi = api.injectEndpoints({
         "workplace-task-with-name-and-tag",
         "team-task-list",
         "team-all-task-list",
-        "retrieve-task-activity",
+
         "team-workflow-task-list",
         "reminder-next-job",
         "workspace-task-list",

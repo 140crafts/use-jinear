@@ -36,3 +36,27 @@
   font-size: 0.7rem;
   color: var(--c-link-color);
 }
+
+.visibilityTypeContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 8rem;
+}
+
+.upgradeYourPlanContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.upgradeButton {
+  align-self: center;
+  color: var(--c-gradient-gold-0) !important;
+  background: unset !important;
+}
+
+.upgradeButton:hover {
+  background-color: var(--c-primary-shade-1) !important;
+}

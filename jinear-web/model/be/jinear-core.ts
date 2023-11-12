@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-11-10 08:14:01.
+// Generated using typescript-generator version 3.0.1157 on 2023-11-12 12:19:42.
 
 export interface BaseDto {
   createdDate: Date;
@@ -640,7 +640,7 @@ export interface TaskDateUpdateRequest {
   hasPreciseDueDate?: boolean | null;
 }
 
-export interface TaskFilterRequest {
+export interface TaskFilterRequest extends BaseRequest {
   page?: number | null;
   workspaceId: string;
   teamIdList?: string[] | null;
@@ -743,6 +743,13 @@ export interface TopicUpdateRequest extends BaseRequest {
   color: string;
   name: string;
   tag: string;
+}
+
+export interface WorkspaceActivityFilterRequest extends BaseRequest {
+  page?: number | null;
+  workspaceId: string;
+  teamIdList?: string[] | null;
+  taskIds?: string[] | null;
 }
 
 export interface WorkspaceInitializeRequest extends BaseRequest {
@@ -943,6 +950,8 @@ export interface PassthroughDetailDto {
 
 export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
 
+export type FilterSort = "IDATE_DESC" | "IDATE_ASC" | "ASSIGNED_DATE_DESC" | "ASSIGNED_DATE_ASC";
+
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
 
 export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXPIRE_TEMP_PUBLIC_MEDIA";
@@ -1089,8 +1098,6 @@ export type RichTextSourceStack = "WYSIWYG" | "RC";
 export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT";
 
 export type TaskBoardStateType = "OPEN" | "CLOSED";
-
-export type TaskFilterSort = "IDATE_DESC" | "IDATE_ASC" | "ASSIGNED_DATE_DESC" | "ASSIGNED_DATE_ASC";
 
 export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
 

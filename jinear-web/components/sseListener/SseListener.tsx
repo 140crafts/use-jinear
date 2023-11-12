@@ -1,6 +1,6 @@
 import { WorkspaceActivityResponse } from "@/model/be/jinear-core";
 import { api, root, tagTypesToInvalidateOnNewBackgroundActivity } from "@/store/api/api";
-import { useRetrieveActivitiesQuery } from "@/store/api/workspaceActivityApi";
+import { useFilterWorkspaceActivitiesQuery } from "@/store/api/workspaceActivityApi";
 import { selectCurrentAccountId, selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { selectLatestWorkspaceActivity, setLatestWorkspaceActivity } from "@/store/slice/sseSlice";
 import { clearHasUnreadNotificationOnAllTasks } from "@/store/slice/taskAdditionalDataSlice";
@@ -27,10 +27,14 @@ const SseListener: React.FC<SseListenerProps> = ({}) => {
   const isInitial = useRef<boolean>(true);
 
   const latestWorkspaceActivityFromSSE = useTypedSelector(selectLatestWorkspaceActivity);
-  const { data: retrieveWorkspaceActivitiesResponse, isFetching: isRetrieveActivitiesQueryFetching } = useRetrieveActivitiesQuery(
-    { workspaceId: workspaceId || "", page: 0 },
-    { skip: workspaceId == null }
-  );
+
+  // const { data: retrieveWorkspaceActivitiesResponse, isFetching: isRetrieveActivitiesQueryFetching } = useRetrieveActivitiesQuery(
+  //   { workspaceId: workspaceId || "", page: 0 },
+  //   { skip: workspaceId == null }
+  // );
+  const { data: retrieveWorkspaceActivitiesResponse, isFetching: isRetrieveActivitiesQueryFetching } =
+    useFilterWorkspaceActivitiesQuery({ workspaceId: workspaceId || "", page: 0 });
+
   const lastRetrievedActivity = retrieveWorkspaceActivitiesResponse?.data?.content?.[0];
 
   useEffect(() => {
