@@ -68,7 +68,7 @@ const TeamTaskVisibilityTypeSettings: React.FC<TeamTaskVisibilityTypeSettingsPro
           {nextViewType != team.taskVisibility && (
             <Button
               loading={isLoading}
-              //   disabled={isLoading || !hasAccess}
+              disabled={isLoading || !hasAccess}
               heightVariant={ButtonHeight.short}
               variant={ButtonVariants.contrast}
               onClick={saveChanges}
