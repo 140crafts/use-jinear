@@ -9,8 +9,6 @@ interface LastWorkspaceActivitiesListProps {
 
 const LastWorkspaceActivitiesList: React.FC<LastWorkspaceActivitiesListProps> = ({ workspaceId }) => {
   const [page, setPage] = useState<number>(0);
-  // const { data: response, isLoading, isFetching } = useRetrieveActivitiesQuery({ workspaceId, page });
-
   const { data: response, isLoading, isFetching } = useFilterWorkspaceActivitiesQuery({ workspaceId, page });
 
   return (

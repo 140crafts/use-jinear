@@ -99,7 +99,7 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
         />
       </label>
 
-      <label className={cn(styles.label, "flex-1")} htmlFor={"new-team-name"}>
+      <label className={cn(styles.label, "flex-1")} htmlFor={"new-team-task-visibility-type-segment-control"}>
         {t("newTeamTaskVisibility")}
         <div className={styles.visibilityTypeContainer}>
           <SegmentedControl
