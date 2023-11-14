@@ -1,10 +1,13 @@
 "use client";
 import MainFeaturesSideMenu from "@/components/mainFeaturesSideMenu/MainFeaturesSideMenu";
+import SseListenerWorkspaceActivities from "@/components/sseListenerWorkspaceActivities/SseListenerWorkspaceActivities";
+import SseProviderWorkspaceActivities from "@/components/sseProviderWorkspaceActivities/SseProviderWorkspaceActivities";
 import WorkspaceLayoutHeader from "@/components/workspaceLayoutHeader/WorkspaceLayoutHeader";
 import useWidthLimit from "@/hooks/useWidthLimit";
+import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { closeAllMenus } from "@/store/slice/displayPreferenceSlice";
-import { useAppDispatch } from "@/store/store";
-import { usePathname } from "next/navigation";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { useParams, usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import styles from "./layout.module.scss";
 
@@ -17,8 +20,11 @@ const MOBILE_LAYOUT_BREAKPOINT = 768;
 
 const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   const dispatch = useAppDispatch();
+  const params = useParams();
   const pathName = usePathname();
   const isMobile = useWidthLimit({ limit: MOBILE_LAYOUT_BREAKPOINT });
+  const workspaceName = params?.workspaceName as string;
+  const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
 
   useEffect(() => {
     if (isMobile) {
@@ -36,7 +42,15 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
           <MainFeaturesSideMenu />
         </div>
         <div id="workspace-layout-page-content" className={styles.pageContent}>
-          {children}
+          <SseProviderWorkspaceActivities workspaceId={workspace?.workspaceId}>
+            {workspace ? (
+              <SseListenerWorkspaceActivities workspaceId={workspace.workspaceId} workspaceUsername={workspace.username}>
+                {children}
+              </SseListenerWorkspaceActivities>
+            ) : (
+              children
+            )}
+          </SseProviderWorkspaceActivities>
         </div>
       </div>
     </div>
