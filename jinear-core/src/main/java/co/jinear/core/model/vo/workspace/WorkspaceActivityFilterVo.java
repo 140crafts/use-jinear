@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static co.jinear.core.model.enumtype.FilterSort.IDATE_DESC;
+import static co.jinear.core.repository.WorkspaceActivityFilterRepository.FILTER_PAGE_SIZE;
 
 @Getter
 @Setter
@@ -18,6 +19,7 @@ import static co.jinear.core.model.enumtype.FilterSort.IDATE_DESC;
 public class WorkspaceActivityFilterVo {
 
     private int page = 0;
+    private int size = FILTER_PAGE_SIZE;
     private String workspaceId;
     private Map<TeamTaskVisibilityType, List<TeamMemberDto>> teamMemberMap;
     private List<String> taskIds;

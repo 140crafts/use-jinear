@@ -31,7 +31,7 @@ import static co.jinear.core.model.enumtype.team.TeamMemberRoleType.ADMIN;
 @RequiredArgsConstructor
 public class WorkspaceActivityFilterRepository {
 
-    private static final int FILTER_PAGE_SIZE = 25;
+    public static final int FILTER_PAGE_SIZE = 25;
 
     private final EntityManager entityManager;
     private final WorkspaceActivityCriteriaBuilder workspaceActivityCriteriaBuilder;
@@ -48,6 +48,7 @@ public class WorkspaceActivityFilterRepository {
         Predicate searchPredicate = retrievePredicates(workspaceActivityFilterVo, criteriaBuilder, root);
         Predicate countPredicate = retrievePredicates(workspaceActivityFilterVo, criteriaBuilder, countRoot);
 
+        int size = Math.max(1, Math.min(workspaceActivityFilterVo.getSize(), FILTER_PAGE_SIZE));
         return executeAndRetrievePageableResults(
                 criteriaBuilder,
                 criteriaQuery,
@@ -56,7 +57,7 @@ public class WorkspaceActivityFilterRepository {
                 searchPredicate,
                 countPredicate,
                 workspaceActivityFilterVo.getTaskFilterSort(),
-                PageRequest.of(workspaceActivityFilterVo.getPage(), FILTER_PAGE_SIZE));
+                PageRequest.of(workspaceActivityFilterVo.getPage(), size));
     }
 
     @Nullable
