@@ -1,7 +1,5 @@
 "use client";
 import MainFeaturesSideMenu from "@/components/mainFeaturesSideMenu/MainFeaturesSideMenu";
-import SseListenerWorkspaceActivities from "@/components/sseListenerWorkspaceActivities/SseListenerWorkspaceActivities";
-import SseProviderWorkspaceActivities from "@/components/sseProviderWorkspaceActivities/SseProviderWorkspaceActivities";
 import WorkspaceLayoutHeader from "@/components/workspaceLayoutHeader/WorkspaceLayoutHeader";
 import useWidthLimit from "@/hooks/useWidthLimit";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
@@ -42,6 +40,8 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
           <MainFeaturesSideMenu />
         </div>
         <div id="workspace-layout-page-content" className={styles.pageContent}>
+          {/* 
+          // disabled feature/cgds-301
           <SseProviderWorkspaceActivities workspaceId={workspace?.workspaceId}>
             {workspace ? (
               <SseListenerWorkspaceActivities workspaceId={workspace.workspaceId} workspaceUsername={workspace.username}>
@@ -49,8 +49,9 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
               </SseListenerWorkspaceActivities>
             ) : (
               children
-            )}
-          </SseProviderWorkspaceActivities>
+              )}
+          </SseProviderWorkspaceActivities> */}
+          {children}
         </div>
       </div>
     </div>
