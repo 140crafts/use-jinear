@@ -1,5 +1,6 @@
 package co.jinear.core.controller.workspace;
 
+import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.manager.workspace.WorkspaceActivitySseManager;
 import co.jinear.core.model.response.workspace.WorkspaceActivityListResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ public class WorkspaceActivityServerSentEventController {
     @ReadOperation(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public Flux<ServerSentEvent<WorkspaceActivityListResponse>> retrieveActivities(@PathVariable String workspaceId) {
-        return workspaceActivitySseManager.retrieveWorkspaceLatestActivity(workspaceId);
+        throw new NoAccessException();
+//        return workspaceActivitySseManager.retrieveWorkspaceLatestActivity(workspaceId);
     }
 }
