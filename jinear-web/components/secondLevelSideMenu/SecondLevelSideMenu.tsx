@@ -7,19 +7,20 @@ import Button, { ButtonHeight, ButtonVariants } from "../button";
 import styles from "./SecondLevelSideMenu.module.scss";
 
 interface SecondLevelSideMenuProps {
+  className?: string;
   children: React.ReactNode;
   open: boolean;
   toggle: () => void;
 }
 
-const SecondLevelSideMenu: React.FC<SecondLevelSideMenuProps> = ({ children, open = true, toggle }) => {
+const SecondLevelSideMenu: React.FC<SecondLevelSideMenuProps> = ({ className, children, open = true, toggle }) => {
   const { t } = useTranslation();
 
   const MenuIcon = open ? LuChevronLeft : LuChevronRight;
-  const menuVariant = open ? ButtonVariants.default : ButtonVariants.contrast;
+  const menuVariant = open ? ButtonVariants.default : ButtonVariants.blur;
 
   return (
-    <div className={cn(styles.sideMenu, open && styles.sideMenuVisible)}>
+    <div className={cn(styles.sideMenu, open && styles.sideMenuVisible, className)}>
       <div id="second-level-side-menu-action-bar" className={styles.sideMenuActionBar}>
         <Button className={styles.menuToggleButton} heightVariant={ButtonHeight.short} onClick={toggle} variant={menuVariant}>
           <div className={cn(styles.sideMenuCollapsedLabel, !open && styles.sideMenuCollapsedLabelClosed)}>

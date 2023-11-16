@@ -14,6 +14,7 @@
   flex-direction: row;
   /* padding: 0.55rem 0.75rem; */
   padding: 0.42rem 0.75rem;
+  transition: all var(--fade);
 }
 
 .button:disabled {
@@ -46,6 +47,19 @@
 
 .filled:hover {
   background-color: var(--c-primary-shade-1);
+}
+
+.blur {
+  backdrop-filter: var(--backdrop-filter-blur);
+}
+
+.blur:disabled {
+  backdrop-filter: var(--backdrop-filter-blur);
+}
+
+.blur:hover {
+  background-color: unset !important;
+  backdrop-filter: var(--backdrop-filter-blur-2);
 }
 
 .filled2 {

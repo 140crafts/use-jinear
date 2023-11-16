@@ -19,6 +19,10 @@
   padding-left: calc(var(--tasks-section-sidebar-width) + var(--workspace-layout-page-padding));
 }
 
+.secondLevelSideMenu {
+  margin-left: calc(-1 * var(--workspace-layout-page-padding)) !important;
+}
+
 @media (max-width: $tablet) {
   .container {
     flex-direction: column-reverse;
@@ -26,5 +30,8 @@
   .contentContainer {
     padding-left: unset;
     padding-right: unset;
+  }
+  .secondLevelSideMenu {
+    margin-left: unset !important;
   }
 }

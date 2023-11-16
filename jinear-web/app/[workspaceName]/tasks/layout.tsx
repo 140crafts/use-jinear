@@ -22,7 +22,7 @@ const TasksLayout: React.FC<TasksLayoutProps> = ({ children }) => {
 
   return (
     <div id="tasks-layout-container" className={styles.container}>
-      <SecondLevelSideMenu open={tasksMenuVisible} toggle={toggleMenu}>
+      <SecondLevelSideMenu open={tasksMenuVisible} toggle={toggleMenu} className={styles.secondLevelSideMenu}>
         <TasksSectionSideMenu />
       </SecondLevelSideMenu>
       <div
