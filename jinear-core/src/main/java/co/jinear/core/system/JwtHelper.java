@@ -3,6 +3,8 @@ package co.jinear.core.system;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.system.util.DateHelper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -29,6 +31,8 @@ public class JwtHelper {
 
     @Value("${jwt.is-secure}")
     private Boolean isSecure;
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public String getAccountIdFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -73,6 +77,17 @@ public class JwtHelper {
 
     public Claims getAllClaimsFromToken(String token) {
         return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+    }
+
+    public Map<String, Object> getAllClaimsFromTokenUnsigned(String jwt) {
+        var claimsBase64 = jwt.substring(jwt.indexOf('.') + 1, jwt.lastIndexOf('.'));
+        try {
+            byte[] claimsByte = Base64.getDecoder().decode(claimsBase64);
+            return MAPPER.readValue(claimsByte, new TypeReference<Map<String, Object>>() {
+            });
+        } catch (Exception exception) {
+            return Collections.emptyMap();
+        }
     }
 
     public Boolean isSecure() {

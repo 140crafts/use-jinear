@@ -1043,4 +1043,168 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-service_log">
+        <createTable tableName="service_log">
+            <column name="service_log_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="direction" type="varchar(255)"/>
+            <column name="client_ip" type="varchar(255)"/>
+            <column name="uri" type="text"/>
+            <column name="request_headers" type="text"/>
+            <column name="request_time" type="datetime"/>
+            <column name="request_payload" type="text"/>
+            <column name="response_headers" type="text"/>
+            <column name="response_time" type="datetime"/>
+            <column name="response_payload" type="text"/>
+            <column name="status_code" type="int"/>
+            <column name="status_text" type="text"/>
+            <column name="method" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-google_token">
+        <createTable tableName="google_token">
+            <column name="google_token_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="expires_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="access_token" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="refresh_token" type="text"/>
+            <column name="id_token" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="google_user_info_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_gui_id" tableName="google_token">
+            <column name="google_user_info_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-google_token_scope">
+        <createTable tableName="google_token_scope">
+            <column name="google_token_scope_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="google_token_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scope" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_google_token_id" tableName="google_token_scope">
+            <column name="google_token_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-google_user_info">
+        <createTable tableName="google_user_info">
+            <column name="google_user_info_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="sub" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email_verified" type="varchar(255)"/>
+            <column name="name" type="varchar(512)"/>
+            <column name="picture" type="text"/>
+            <column name="given_name" type="varchar(512)"/>
+            <column name="family_name" type="varchar(512)"/>
+            <column name="locale" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="ix_sub" tableName="google_user_info">
+            <column name="sub"/>
+        </createIndex>
+        <createIndex indexName="ix_email" tableName="google_user_info">
+            <column name="email"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-integration_info">
+        <createTable tableName="integration_info">
+            <column name="integration_info_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="provider" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_object_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_related_object_id" tableName="integration_info">
+            <column name="related_object_id"/>
+        </createIndex>
+        <createIndex indexName="ix_account_id" tableName="integration_info">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-integration_scope">
+        <createTable tableName="integration_scope">
+            <column name="integration_scope_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="integration_info_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scope" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_integration_info_id" tableName="integration_scope">
+            <column name="integration_info_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

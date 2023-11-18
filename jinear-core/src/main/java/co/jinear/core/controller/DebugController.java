@@ -1,6 +1,8 @@
 package co.jinear.core.controller;
 
-import co.jinear.core.repository.MediaRepository;
+import co.jinear.core.model.enumtype.google.UserConsentPurposeType;
+import co.jinear.core.model.vo.google.GenerateUserConsentUrlVo;
+import co.jinear.core.service.google.GoogleOAuthApiCallerService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,7 +18,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class DebugController {
 
-    private final MediaRepository mediaRepository;
+    private final GoogleOAuthApiCallerService googleOAuthApiCallerService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
@@ -24,6 +26,14 @@ public class DebugController {
     }
 
     @GetMapping
-    public void debug2(HttpServletResponse response) throws IOException {
+    public String debug2(HttpServletResponse response) throws IOException {
+        GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
+        generateUserConsentUrlVo.setUserConsentPurposeType(UserConsentPurposeType.LOGIN);
+        generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.FALSE);
+        generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.FALSE);
+
+        String redirect = googleOAuthApiCallerService.generateUserConsentUrl(generateUserConsentUrlVo);
+        log.info("redirect: {}", redirect);
+        return redirect;
     }
 }

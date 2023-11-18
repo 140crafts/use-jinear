@@ -17,4 +17,19 @@ public class GCloudProperties {
 
     @Value("${gcloud.cloudStorage.bucketName}")
     private String bucketName;
+
+    @Value("${gcloud.oauth.baseUrl}")
+    private String oauthBaseUrl;
+
+    @Value("${gcloud.oauth.clientId}")
+    private String oauthClientId;
+
+    @Value("${gcloud.oauth.clientSecret}")
+    private String oauthClientSecret;
+
+    @Value("${gcloud.oauth.redirect-url.login}")
+    private String loginRedirectUrl;
+
+    @Value("${gcloud.oauth.redirect-url.attach-account}")
+    private String attachAccountRedirectUrl;
 }

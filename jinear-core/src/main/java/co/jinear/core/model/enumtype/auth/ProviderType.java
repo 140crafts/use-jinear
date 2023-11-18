@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ProviderType {
+    OAUTH_MAIL,
     OTP_MAIL,
     PASSWORD_MAIL;
 }

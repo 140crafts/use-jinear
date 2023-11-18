@@ -130,7 +130,7 @@ public class WorkspaceManager {
                 .ifPresent(workspaceDto::setProfilePicture);
     }
 
-    private static WorkspaceDisplayPreferenceResponse mapResponse(WorkspaceDisplayPreferenceDto workspaceDisplayPreferenceDto) {
+    private WorkspaceDisplayPreferenceResponse mapResponse(WorkspaceDisplayPreferenceDto workspaceDisplayPreferenceDto) {
         WorkspaceDisplayPreferenceResponse workspaceDisplayPreferenceResponse = new WorkspaceDisplayPreferenceResponse();
         workspaceDisplayPreferenceResponse.setWorkspaceDisplayPreferenceDto(workspaceDisplayPreferenceDto);
         return workspaceDisplayPreferenceResponse;
