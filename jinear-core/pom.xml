@@ -357,8 +357,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <source>${java.version}</source> <!-- depending on your project -->
-                    <target>${java.version}</target> <!-- depending on your project -->
+                    <source>17</source> <!-- depending on your project -->
+                    <target>17</target> <!-- depending on your project -->
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>
@@ -376,6 +376,7 @@
                             <version>${org.mapstruct.version}</version>
                         </path>
                     </annotationProcessorPaths>
+                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
             </plugin>
             <plugin>

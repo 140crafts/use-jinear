@@ -44,6 +44,9 @@ public class SecurityConfiguration {
             "/v1/service-record/with-handle/{handle}",
             "/v1/workspace/member/invitation/respond",
             "/v1/workspace/member/invitation/info/{token}",
+            "/v1/oauth/google/login-redirect-info",
+            "/v1/oauth/google/callback/login",
+            "/v1/oauth/google/callback/attach-account",
             "/debug/**"
     };
 
@@ -82,7 +85,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-                .authorizeHttpRequests((requests) -> requests
+                .authorizeHttpRequests(requests -> requests
                         .requestMatchers(new AntPathRequestMatcher("swagger-ui/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("v3/api-docs/**")).permitAll()

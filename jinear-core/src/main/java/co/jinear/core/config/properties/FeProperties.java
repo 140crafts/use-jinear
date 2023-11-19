@@ -23,4 +23,7 @@ public class FeProperties {
 
     @Value("${fe.workspace-invitation-url}")
     private String workspaceInvitationUrl;
+
+    @Value("${fe.home-url}")
+    private String homeUrl;
 }
