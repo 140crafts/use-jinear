@@ -1,3 +1,4 @@
+"use client";
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import useWindowSize from "@/hooks/useWindowSize";
 import { selectCurrentAccountId } from "@/store/slice/accountSlice";

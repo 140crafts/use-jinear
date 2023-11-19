@@ -1,3 +1,4 @@
+"use client";
 import Button, { ButtonVariants } from "@/components/button";
 import OrLine from "@/components/orLine/OrLine";
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
