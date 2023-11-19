@@ -1,3 +1,4 @@
+"use client";
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import { selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { selectLoadingModalVisible } from "@/store/slice/modalSlice";
