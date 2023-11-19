@@ -30,6 +30,9 @@ public class GCloudProperties {
     @Value("${gcloud.oauth.redirect-url.login}")
     private String loginRedirectUrl;
 
-    @Value("${gcloud.oauth.redirect-url.attach-account}")
-    private String attachAccountRedirectUrl;
+    @Value("${gcloud.oauth.redirect-url.attach-mail}")
+    private String attachMailRedirectUrl;
+
+    @Value("${gcloud.oauth.redirect-url.attach-calendar}")
+    private String attachCalendarRedirectUrl;
 }

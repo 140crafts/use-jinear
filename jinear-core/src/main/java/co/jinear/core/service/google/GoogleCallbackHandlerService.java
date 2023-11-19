@@ -36,11 +36,25 @@ public class GoogleCallbackHandlerService {
     private final PassiveService passiveService;
     private final GenerateUserConsentUrlVoToUrlConverter generateUserConsentUrlVoToUrlConverter;
 
-    public String retrieveLoginUrl(){
+    public String retrieveLoginUrl() {
         GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
         generateUserConsentUrlVo.setUserConsentPurposeType(UserConsentPurposeType.LOGIN);
         generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.FALSE);
         generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.FALSE);
+        return generateUserConsentUrlVoToUrlConverter.convert(generateUserConsentUrlVo);
+    }
+
+    public String retrieveAttachMailUrl() {
+        GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
+        generateUserConsentUrlVo.setUserConsentPurposeType(UserConsentPurposeType.ATTACH_MAIL);
+        generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.TRUE);
+        return generateUserConsentUrlVoToUrlConverter.convert(generateUserConsentUrlVo);
+    }
+
+    public String retrieveAttachCalendarUrl() {
+        GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
+        generateUserConsentUrlVo.setUserConsentPurposeType(UserConsentPurposeType.ATTACH_CALENDAR);
+        generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.TRUE);
         return generateUserConsentUrlVoToUrlConverter.convert(generateUserConsentUrlVo);
     }
 

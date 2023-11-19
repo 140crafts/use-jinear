@@ -44,7 +44,9 @@ public class SecurityConfiguration {
             "/v1/service-record/with-handle/{handle}",
             "/v1/workspace/member/invitation/respond",
             "/v1/workspace/member/invitation/info/{token}",
-            "/v1/oauth/google/login-redirect-info",
+            "/v1/oauth/google/redirect-info/login",
+            "/v1/oauth/google/redirect-info/attach-mail",
+            "/v1/oauth/google/redirect-info/attach-calendar",
             "/v1/oauth/google/callback/login",
             "/v1/oauth/google/callback/attach-account",
             "/debug/**"

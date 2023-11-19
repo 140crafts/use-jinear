@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.google.GoogleUserInfoDto;
 import co.jinear.core.model.enumtype.auth.ProviderType;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
 import co.jinear.core.model.enumtype.integration.IntegrationScopeType;
+import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.auth.AuthRedirectInfoResponse;
 import co.jinear.core.model.response.auth.AuthResponse;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
@@ -45,6 +46,18 @@ public class GoogleOAuthManager {
         return new AuthRedirectInfoResponse(redirectUrl);
     }
 
+    public AuthRedirectInfoResponse retrieveAttachMailUrl() {
+        log.info("Retrieve mail attach redirect url has started.");
+        String redirectUrl = googleCallbackHandlerService.retrieveAttachMailUrl();
+        return new AuthRedirectInfoResponse(redirectUrl);
+    }
+
+    public AuthRedirectInfoResponse retrieveAttachCalendarUrl() {
+        log.info("Retrieve calendar attach redirect url has started.");
+        String redirectUrl = googleCallbackHandlerService.retrieveAttachCalendarUrl();
+        return new AuthRedirectInfoResponse(redirectUrl);
+    }
+
     public AuthResponse login(String code, String scopes, HttpServletResponse response) {
         log.info("Login with google has started.");
         GoogleHandleLoginResponseDto googleHandleLoginResponseDto = googleCallbackHandlerService.handleLogin(code, scopes);
@@ -54,6 +67,12 @@ public class GoogleOAuthManager {
         initializeIntegration(googleHandleLoginResponseDto, authResponseVo);
         authCookieManager.addAuthCookie(token, response);
         return mapResponse(token);
+    }
+
+    public BaseResponse attachAccount(String code, String scopes) {
+
+        return new BaseResponse();
+
     }
 
     private void initializeIntegration(GoogleHandleLoginResponseDto googleHandleLoginResponseDto, AuthResponseVo authResponseVo) {
