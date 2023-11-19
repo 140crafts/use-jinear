@@ -80,6 +80,16 @@ public enum GoogleScopeType {
                 .toList();
     }
 
+    public static List<GoogleScopeType> getMailScopeTypes() {
+        return List.of(MAIL,
+                GMAIL_ADDONS_CURRENT_MESSAGE_ACTION,
+                GMAIL_ADDONS_CURRENT_MESSAGE_METADATA,
+                GMAIL_ADDONS_CURRENT_MESSAGE_READONLY,
+                GMAIL_METADATA,
+                GMAIL_MODIFY,
+                GMAIL_READONLY);
+    }
+
     public static GoogleScopeType fromString(String scope) {
         return Arrays.stream(GoogleScopeType.values())
                 .filter(type -> type.getKeys().contains(scope))

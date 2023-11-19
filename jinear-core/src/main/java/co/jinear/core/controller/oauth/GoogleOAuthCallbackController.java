@@ -1,7 +1,7 @@
 package co.jinear.core.controller.oauth;
 
 import co.jinear.core.config.properties.FeProperties;
-import co.jinear.core.manager.oauth.GoogleOAuthManager;
+import co.jinear.core.manager.oauth.GoogleOAuthCallbackManager;
 import co.jinear.core.model.response.BaseResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +19,12 @@ import java.io.IOException;
 public class GoogleOAuthCallbackController {
 
     private final FeProperties feProperties;
-    private final GoogleOAuthManager googleOAuthManager;
+    private final GoogleOAuthCallbackManager googleOAuthCallbackManager;
 
     @GetMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     public void login(@RequestParam String code, @RequestParam String scope, HttpServletResponse response) throws IOException {
-        googleOAuthManager.login(code, scope, response);
+        googleOAuthCallbackManager.login(code, scope, response);
         response.sendRedirect(feProperties.getHomeUrl());
     }
 

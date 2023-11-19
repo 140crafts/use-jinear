@@ -1,6 +1,6 @@
 package co.jinear.core.controller.oauth;
 
-import co.jinear.core.manager.oauth.GoogleOAuthManager;
+import co.jinear.core.manager.oauth.GoogleOAuthRedirectInfoManager;
 import co.jinear.core.model.response.auth.AuthRedirectInfoResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,23 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "v1/oauth/google/redirect-info")
 public class GoogleOAuthController {
 
-    private final GoogleOAuthManager googleOAuthManager;
+    private final GoogleOAuthRedirectInfoManager googleOAuthRedirectInfoManager;
 
     @GetMapping("/login")
     @ResponseStatus(HttpStatus.OK)
     public AuthRedirectInfoResponse retrieveLoginRedirectInfo() {
-        return googleOAuthManager.retrieveLoginRedirectUrl();
+        return googleOAuthRedirectInfoManager.retrieveLoginRedirectUrl();
     }
 
     @GetMapping("/attach-mail")
     @ResponseStatus(HttpStatus.OK)
     public AuthRedirectInfoResponse retrieveAccountAttachRedirectUrl() {
-        return googleOAuthManager.retrieveAttachMailUrl();
+        return googleOAuthRedirectInfoManager.retrieveAttachMailUrl();
     }
 
     @GetMapping("/attach-calendar")
     @ResponseStatus(HttpStatus.OK)
     public AuthRedirectInfoResponse retrieveCalendarAttachRedirectUrl() {
-        return googleOAuthManager.retrieveAttachCalendarUrl();
+        return googleOAuthRedirectInfoManager.retrieveAttachCalendarUrl();
     }
 }
