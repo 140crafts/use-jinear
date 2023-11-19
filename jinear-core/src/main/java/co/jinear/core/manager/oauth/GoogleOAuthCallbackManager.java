@@ -1,13 +1,15 @@
 package co.jinear.core.manager.oauth;
 
+import co.jinear.core.converter.google.GoogleScopeConverter;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.manager.auth.AuthCookieManager;
 import co.jinear.core.model.dto.google.GoogleHandleLoginResponseDto;
 import co.jinear.core.model.dto.google.GoogleUserInfoDto;
 import co.jinear.core.model.enumtype.auth.ProviderType;
+import co.jinear.core.model.enumtype.google.GoogleScopeType;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
 import co.jinear.core.model.enumtype.integration.IntegrationScopeType;
 import co.jinear.core.model.response.BaseResponse;
-import co.jinear.core.model.response.auth.AuthRedirectInfoResponse;
 import co.jinear.core.model.response.auth.AuthResponse;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
@@ -23,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 import static co.jinear.core.model.enumtype.auth.ProviderType.OAUTH_MAIL;
@@ -30,7 +33,7 @@ import static co.jinear.core.model.enumtype.auth.ProviderType.OAUTH_MAIL;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class GoogleOAuthManager {
+public class GoogleOAuthCallbackManager {
 
     private final AuthenticationStrategyFactory authenticationStrategyFactory;
     private final PassiveService passiveService;
@@ -39,24 +42,7 @@ public class GoogleOAuthManager {
     private final JwtHelper jwtHelper;
     private final GoogleCallbackHandlerService googleCallbackHandlerService;
     private final IntegrationHandleService integrationHandleService;
-
-    public AuthRedirectInfoResponse retrieveLoginRedirectUrl() {
-        log.info("Retrieve login redirect url has started.");
-        String redirectUrl = googleCallbackHandlerService.retrieveLoginUrl();
-        return new AuthRedirectInfoResponse(redirectUrl);
-    }
-
-    public AuthRedirectInfoResponse retrieveAttachMailUrl() {
-        log.info("Retrieve mail attach redirect url has started.");
-        String redirectUrl = googleCallbackHandlerService.retrieveAttachMailUrl();
-        return new AuthRedirectInfoResponse(redirectUrl);
-    }
-
-    public AuthRedirectInfoResponse retrieveAttachCalendarUrl() {
-        log.info("Retrieve calendar attach redirect url has started.");
-        String redirectUrl = googleCallbackHandlerService.retrieveAttachCalendarUrl();
-        return new AuthRedirectInfoResponse(redirectUrl);
-    }
+    private final GoogleScopeConverter googleScopeConverter;
 
     public AuthResponse login(String code, String scopes, HttpServletResponse response) {
         log.info("Login with google has started.");
@@ -72,6 +58,8 @@ public class GoogleOAuthManager {
     public BaseResponse attachMail(String code, String scopes) {
         String currentAccountId = sessionInfoService.currentAccountId();
         log.info("Attach mail has started. currentAccountId: {}", currentAccountId);
+        validateScopes(scopes);
+
         return new BaseResponse();
 
     }
@@ -105,6 +93,16 @@ public class GoogleOAuthManager {
 
     private String initializeSessionInfo(AuthResponseVo auth) {
         return sessionInfoService.initialize(OAUTH_MAIL, auth.getAccountId());
+    }
+
+    private void validateScopes(String scopes) {
+        List<GoogleScopeType> returnedScopes = googleScopeConverter.convert(scopes);
+        List<GoogleScopeType> mailScopeTypes = GoogleScopeType.getMailScopeTypes();
+        returnedScopes.forEach(scp -> {
+            if (!mailScopeTypes.contains(scp)) {
+                throw new BusinessException("integration.google.mail.insufficient-scopes");
+            }
+        });
     }
 
     private AuthResponse mapResponse(String token) {
