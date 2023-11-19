@@ -2,15 +2,14 @@ package co.jinear.core.service.google;
 
 import co.jinear.core.converter.google.AuthTokenResponseToGoogleAuthTokenVoConverter;
 import co.jinear.core.converter.google.GenerateUserConsentUrlVoToUrlConverter;
+import co.jinear.core.converter.google.GoogleScopeConverter;
 import co.jinear.core.converter.google.TokenInfoResponseToInitializeOrUpdateTokenInfoVoConverter;
 import co.jinear.core.model.dto.google.GoogleHandleLoginResponseDto;
 import co.jinear.core.model.dto.google.GoogleTokenDto;
 import co.jinear.core.model.dto.google.GoogleUserInfoDto;
-import co.jinear.core.model.enumtype.google.GoogleScopeType;
 import co.jinear.core.model.enumtype.google.UserConsentPurposeType;
 import co.jinear.core.model.vo.google.*;
 import co.jinear.core.service.passive.PassiveService;
-import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.system.gcloud.auth.model.response.AuthTokenResponse;
 import co.jinear.core.system.gcloud.auth.model.response.TokenInfoResponse;
 import jakarta.transaction.Transactional;
@@ -18,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,6 +33,7 @@ public class GoogleCallbackHandlerService {
     private final AuthTokenResponseToGoogleAuthTokenVoConverter authTokenResponseToGoogleAuthTokenVoConverter;
     private final PassiveService passiveService;
     private final GenerateUserConsentUrlVoToUrlConverter generateUserConsentUrlVoToUrlConverter;
+    private final GoogleScopeConverter googleScopeConverter;
 
     public String retrieveLoginUrl() {
         GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
@@ -71,7 +70,7 @@ public class GoogleCallbackHandlerService {
         GoogleTokenDto googleTokenDto = googleTokenOperationService.initializeOrUpdateGoogleToken(initializeOrUpdateGoogleAuthTokenVo);
 
         String passiveIdForScopeDeletion = checkAnDeleteExistingScopes(googleTokenDto);
-        List<InitializeGoogleTokenScopeVo> initializeGoogleTokenScopeVos = convertToInitializeGoogleTokenScopeVo(googleTokenDto.getGoogleTokenId(), scopes);
+        List<InitializeGoogleTokenScopeVo> initializeGoogleTokenScopeVos = googleScopeConverter.convertToInitializeGoogleTokenScopeVo(googleTokenDto.getGoogleTokenId(), scopes);
         googleTokenScopeOperationService.initializeAll(initializeGoogleTokenScopeVos);
         return new GoogleHandleLoginResponseDto(googleUserInfoDto, passiveIdForScopeDeletion);
     }
@@ -90,12 +89,5 @@ public class GoogleCallbackHandlerService {
         getAuthTokenVo.setCode(code);
         getAuthTokenVo.setUserConsentPurposeType(UserConsentPurposeType.LOGIN);
         return getAuthTokenVo;
-    }
-
-    private List<InitializeGoogleTokenScopeVo> convertToInitializeGoogleTokenScopeVo(String googleTokenId, String scopes) {
-        return Arrays.stream(scopes.split(NormalizeHelper.SPACE_STRING))
-                .map(GoogleScopeType::fromString)
-                .map(googleScopeType -> new InitializeGoogleTokenScopeVo(googleTokenId, googleScopeType))
-                .toList();
     }
 }

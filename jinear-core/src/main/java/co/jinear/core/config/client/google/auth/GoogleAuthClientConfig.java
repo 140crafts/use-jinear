@@ -24,7 +24,7 @@ public class GoogleAuthClientConfig {
     @Bean("googleAuthRestTemplate")
     public RestTemplate googleAuthRestTemplate(UriTemplateHandler googleAuthUriTemplateHandler,
                                                @Autowired GenericClientLoggingInterceptor genericClientLoggingInterceptor,
-                                               GenericResponseErrorHandler genericResponseErrorHandler) {
+                                               @Autowired GenericResponseErrorHandler genericResponseErrorHandler) {
         SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
         BufferingClientHttpRequestFactory bufferingClientHttpRequestFactory = new BufferingClientHttpRequestFactory(simpleClientHttpRequestFactory);
 

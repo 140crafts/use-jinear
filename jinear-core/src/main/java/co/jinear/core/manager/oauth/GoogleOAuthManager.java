@@ -69,8 +69,9 @@ public class GoogleOAuthManager {
         return mapResponse(token);
     }
 
-    public BaseResponse attachAccount(String code, String scopes) {
-
+    public BaseResponse attachMail(String code, String scopes) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        log.info("Attach mail has started. currentAccountId: {}", currentAccountId);
         return new BaseResponse();
 
     }
