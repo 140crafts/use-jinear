@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-11-12 12:19:42.
+// Generated using typescript-generator version 3.0.1157 on 2023-11-18 22:58:06.
 
 export interface BaseDto {
   createdDate: Date;
@@ -57,6 +57,55 @@ export interface PlainAccountProfileDto extends BaseDto {
   localeType: LocaleType;
   timeZone: string;
   profilePicture?: AccessibleMediaDto | null;
+}
+
+export interface GoogleHandleLoginResponseDto {
+  googleUserInfoDto: GoogleUserInfoDto;
+  passiveIdForScopeDeletion: string;
+}
+
+export interface GoogleTokenDto extends BaseDto {
+  googleTokenId: string;
+  expiresAt: Date;
+  accessToken: string;
+  refreshToken: string;
+  idToken: string;
+  tokenType: string;
+  googleUserInfoId: string;
+  scopes: GoogleTokenScopeDto[];
+  googleUserInfo: GoogleUserInfoDto;
+}
+
+export interface GoogleTokenScopeDto extends BaseDto {
+  googleTokenScopeId: string;
+  googleTokenId: string;
+  scope: GoogleScopeType;
+}
+
+export interface GoogleUserInfoDto extends BaseDto {
+  googleUserInfoId: string;
+  sub: string;
+  email: string;
+  emailVerified: string;
+  name: string;
+  picture: string;
+  givenName: string;
+  familyName: string;
+  locale: string;
+}
+
+export interface IntegrationInfoDto extends BaseDto {
+  integrationInfoId: string;
+  provider: IntegrationProvider;
+  accountId: string;
+  relatedObjectId: string;
+  scopes: IntegrationScopeDto[];
+}
+
+export interface IntegrationScopeDto extends BaseDto {
+  integrationScopeId: string;
+  integrationInfoId: string;
+  scope: IntegrationScopeType;
 }
 
 export interface AccessibleMediaDto extends MediaDto {
@@ -747,6 +796,7 @@ export interface TopicUpdateRequest extends BaseRequest {
 
 export interface WorkspaceActivityFilterRequest extends BaseRequest {
   page?: number | null;
+  size?: number | null;
   workspaceId: string;
   teamIdList?: string[] | null;
   taskIds?: string[] | null;
@@ -797,6 +847,10 @@ export interface AuthInitializeResponse extends BaseResponse {
   csrf: string;
   preferredLocaleId: number;
   code: string;
+}
+
+export interface AuthRedirectInfoResponse extends BaseResponse {
+  redirectUrl: string;
 }
 
 export interface AuthResponse extends BaseResponse {
@@ -958,7 +1012,34 @@ export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXP
 
 export type RoleType = "ADMIN" | "SERVICE" | "USER";
 
-export type ProviderType = "OTP_MAIL" | "PASSWORD_MAIL";
+export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL";
+
+export type GoogleScopeType =
+  | "OPEN_ID"
+  | "USERINFO_PROFILE"
+  | "USERINFO_EMAIL"
+  | "USERINFO_PROFILE_2"
+  | "USERINFO_EMAIL_2"
+  | "CALENDAR"
+  | "CALENDAR_EVENTS"
+  | "CALENDAR_SETTINGS_READONLY"
+  | "ADMIN_DIRECTORY_RESOURCE_CALENDAR_READONLY"
+  | "CONTACTS"
+  | "CONTACTS_OTHER_READONLY"
+  | "DIRECTORY_READONLY"
+  | "MAIL"
+  | "GMAIL_ADDONS_CURRENT_MESSAGE_ACTION"
+  | "GMAIL_ADDONS_CURRENT_MESSAGE_METADATA"
+  | "GMAIL_ADDONS_CURRENT_MESSAGE_READONLY"
+  | "GMAIL_METADATA"
+  | "GMAIL_MODIFY"
+  | "GMAIL_READONLY";
+
+export type UserConsentPurposeType = "LOGIN" | "ATTACH_ACCOUNT";
+
+export type IntegrationProvider = "GOOGLE";
+
+export type IntegrationScopeType = "LOGIN" | "EMAIL" | "CALENDAR";
 
 export type LocaleStringType =
   | "LOGIN_SMS_TEXT"

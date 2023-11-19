@@ -1,9 +1,7 @@
 "use client";
 import Button, { ButtonVariants } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
-import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 import FormLogo from "@/components/formLogo/FormLogo";
-import Line from "@/components/line/Line";
 import { useTheme } from "@/components/themeProvider/ThemeProvider";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
 import { selectAuthState } from "@/store/slice/accountSlice";
@@ -11,17 +9,9 @@ import { useTypedSelector } from "@/store/store";
 import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import isPwa from "@/utils/pwaHelper";
 import useTranslation from "locales/useTranslation";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import {
-  IoAlarmOutline,
-  IoArrowForward,
-  IoCalendarNumberOutline,
-  IoCheckmarkCircleOutline,
-  IoPeopleOutline,
-  IoReaderOutline,
-} from "react-icons/io5";
+import { IoArrowForward } from "react-icons/io5";
 import styles from "./index.module.scss";
 
 const ICON_SIZE = 42;
@@ -91,7 +81,7 @@ export default function Home() {
       </div>
 
       <div className="spacer-h-6" />
-      <PureClientOnly>
+      {/* <PureClientOnly>
         <div className={styles.sectionContainer}>
           <Line />
           <div className={styles.section}>
@@ -211,7 +201,7 @@ export default function Home() {
             />
           </div>
         </div>
-      </PureClientOnly>
+      </PureClientOnly> */}
     </div>
   );
 }
