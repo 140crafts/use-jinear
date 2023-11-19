@@ -82,7 +82,6 @@ public class GenerateUserConsentUrlVoToUrlConverter {
         return switch (generateUserConsentUrlVo.getUserConsentPurposeType()) {
             case LOGIN -> gCloudProperties.getLoginRedirectUrl();
             case ATTACH_ACCOUNT -> gCloudProperties.getAttachAccountRedirectUrl();
-            case null -> throw new BusinessException();
         };
     }
 }

@@ -1,7 +1,6 @@
 package co.jinear.core.converter.google;
 
 import co.jinear.core.config.properties.GCloudProperties;
-import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.enumtype.google.UserConsentPurposeType;
 import co.jinear.core.model.vo.google.GetAuthTokenVo;
 import co.jinear.core.model.vo.google.GetRefreshTokenVo;
@@ -44,7 +43,6 @@ public class GoogleTokenVoConverter {
         return switch (userConsentPurposeType) {
             case LOGIN -> gCloudProperties.getLoginRedirectUrl();
             case ATTACH_ACCOUNT -> gCloudProperties.getAttachAccountRedirectUrl();
-            case null -> throw new BusinessException();
         };
     }
 }
