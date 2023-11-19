@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.google.GoogleUserInfoDto;
 import co.jinear.core.model.enumtype.auth.ProviderType;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
 import co.jinear.core.model.enumtype.integration.IntegrationScopeType;
+import co.jinear.core.model.response.auth.AuthRedirectInfoResponse;
 import co.jinear.core.model.response.auth.AuthResponse;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
@@ -37,6 +38,12 @@ public class GoogleOAuthManager {
     private final JwtHelper jwtHelper;
     private final GoogleCallbackHandlerService googleCallbackHandlerService;
     private final IntegrationHandleService integrationHandleService;
+
+    public AuthRedirectInfoResponse retrieveLoginRedirectUrl() {
+        log.info("Retrieve login redirect url has started.");
+        String redirectUrl = googleCallbackHandlerService.retrieveLoginUrl();
+        return new AuthRedirectInfoResponse(redirectUrl);
+    }
 
     public AuthResponse login(String code, String scopes, HttpServletResponse response) {
         log.info("Login with google has started.");

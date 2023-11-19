@@ -1,16 +1,14 @@
 package co.jinear.core.service.google;
 
 import co.jinear.core.converter.google.AuthTokenResponseToGoogleAuthTokenVoConverter;
+import co.jinear.core.converter.google.GenerateUserConsentUrlVoToUrlConverter;
 import co.jinear.core.converter.google.TokenInfoResponseToInitializeOrUpdateTokenInfoVoConverter;
 import co.jinear.core.model.dto.google.GoogleHandleLoginResponseDto;
 import co.jinear.core.model.dto.google.GoogleTokenDto;
 import co.jinear.core.model.dto.google.GoogleUserInfoDto;
 import co.jinear.core.model.enumtype.google.GoogleScopeType;
 import co.jinear.core.model.enumtype.google.UserConsentPurposeType;
-import co.jinear.core.model.vo.google.GetAuthTokenVo;
-import co.jinear.core.model.vo.google.InitializeGoogleTokenScopeVo;
-import co.jinear.core.model.vo.google.InitializeOrUpdateGoogleAuthTokenVo;
-import co.jinear.core.model.vo.google.InitializeOrUpdateTokenInfoVo;
+import co.jinear.core.model.vo.google.*;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.system.gcloud.auth.model.response.AuthTokenResponse;
@@ -36,6 +34,15 @@ public class GoogleCallbackHandlerService {
     private final TokenInfoResponseToInitializeOrUpdateTokenInfoVoConverter tokenInfoResponseToInitializeOrUpdateTokenInfoVoConverter;
     private final AuthTokenResponseToGoogleAuthTokenVoConverter authTokenResponseToGoogleAuthTokenVoConverter;
     private final PassiveService passiveService;
+    private final GenerateUserConsentUrlVoToUrlConverter generateUserConsentUrlVoToUrlConverter;
+
+    public String retrieveLoginUrl(){
+        GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
+        generateUserConsentUrlVo.setUserConsentPurposeType(UserConsentPurposeType.LOGIN);
+        generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.FALSE);
+        generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.FALSE);
+        return generateUserConsentUrlVoToUrlConverter.convert(generateUserConsentUrlVo);
+    }
 
     @Transactional
     public GoogleHandleLoginResponseDto handleLogin(String code, String scopes) {
@@ -49,16 +56,19 @@ public class GoogleCallbackHandlerService {
         InitializeOrUpdateGoogleAuthTokenVo initializeOrUpdateGoogleAuthTokenVo = authTokenResponseToGoogleAuthTokenVoConverter.convert(authTokenResponse, googleUserInfoDto.getGoogleUserInfoId());
         GoogleTokenDto googleTokenDto = googleTokenOperationService.initializeOrUpdateGoogleToken(initializeOrUpdateGoogleAuthTokenVo);
 
+        String passiveIdForScopeDeletion = checkAnDeleteExistingScopes(googleTokenDto);
+        List<InitializeGoogleTokenScopeVo> initializeGoogleTokenScopeVos = convertToInitializeGoogleTokenScopeVo(googleTokenDto.getGoogleTokenId(), scopes);
+        googleTokenScopeOperationService.initializeAll(initializeGoogleTokenScopeVos);
+        return new GoogleHandleLoginResponseDto(googleUserInfoDto, passiveIdForScopeDeletion);
+    }
+
+    private String checkAnDeleteExistingScopes(GoogleTokenDto googleTokenDto) {
         String passiveIdForScopeDeletion = null;
         if (Objects.nonNull(googleTokenDto.getScopes()) && !googleTokenDto.getScopes().isEmpty()) {
             passiveIdForScopeDeletion = passiveService.createUserActionPassive();
             googleTokenScopeOperationService.removeAllWithGoogleTokenId(googleTokenDto.getGoogleTokenId(), passiveIdForScopeDeletion);
         }
-
-        List<InitializeGoogleTokenScopeVo> initializeGoogleTokenScopeVos = convertToInitializeGoogleTokenScopeVo(googleTokenDto.getGoogleTokenId(), scopes);
-        googleTokenScopeOperationService.initializeAll(initializeGoogleTokenScopeVos);
-
-        return new GoogleHandleLoginResponseDto(googleUserInfoDto, passiveIdForScopeDeletion);
+        return passiveIdForScopeDeletion;
     }
 
     private GetAuthTokenVo mapGetAuthTokenVo(String code) {

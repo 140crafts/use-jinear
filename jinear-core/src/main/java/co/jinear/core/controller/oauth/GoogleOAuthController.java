@@ -1,7 +1,9 @@
 package co.jinear.core.controller.oauth;
 
+import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.manager.oauth.GoogleOAuthManager;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.auth.AuthRedirectInfoResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,13 +19,20 @@ import java.io.IOException;
 @RequestMapping(value = "v1/oauth/google")
 public class GoogleOAuthController {
 
+    private final FeProperties feProperties;
     private final GoogleOAuthManager googleOAuthManager;
+
+    @GetMapping("/login-redirect-info")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthRedirectInfoResponse retrieveLoginRedirectInfo() {
+        return googleOAuthManager.retrieveLoginRedirectUrl();
+    }
 
     @GetMapping("/callback/login")
     @ResponseStatus(HttpStatus.OK)
     public void login(@RequestParam String code, @RequestParam String scope, HttpServletResponse response) throws IOException {
         googleOAuthManager.login(code, scope, response);
-        response.sendRedirect("https://jinear.co/home");
+        response.sendRedirect(feProperties.getHomeUrl());
     }
 
     @GetMapping("/callback/attach-account")
