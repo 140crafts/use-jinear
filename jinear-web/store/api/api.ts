@@ -58,6 +58,7 @@ export const tagTypes = [
   "task-comments",
   "workspace-team-membership-list",
   "workspace-activity-filtered-list",
+  "oauth/google/login-redirect-info",
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

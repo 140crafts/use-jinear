@@ -2798,4 +2798,8 @@ export default {
     en: "You need to upgrade your plan to use this feature.",
     tr: "Bu özelliği kullanabilmeniz için planınızı yükseltin.",
   },
+  loginScreenLoginWithGoogle: {
+    en: "Login With Google",
+    tr: "Google ile Giriş Yap",
+  },
 };

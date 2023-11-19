@@ -1,3 +1,4 @@
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import { selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { selectLoadingModalVisible } from "@/store/slice/modalSlice";
 import { useTypedSelector } from "@/store/store";
@@ -21,14 +22,14 @@ const logger = Logger("LoadingModal");
 
 const LoadingModal: React.FC<LoadingModalProps> = ({}) => {
   const visibile = useTypedSelector(selectLoadingModalVisible);
-
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
+  const loadingEasterEggEnabled = useFeatureFlag("EASTER_EGG_LOADING");
 
   const gifType = Math.random() * 10 < 5 ? "1" : "2";
   const gifLoading = useMemo(() => {
     logger.log(GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || ""));
-    return __DEV__ || GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || "") != -1;
-  }, [currentAccountId]);
+    return __DEV__ || loadingEasterEggEnabled || GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || "") != -1;
+  }, [currentAccountId, loadingEasterEggEnabled]);
 
   return (
     <Modal visible={visibile} contentContainerClass={styles.container}>

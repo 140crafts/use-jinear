@@ -1,3 +1,4 @@
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import useWindowSize from "@/hooks/useWindowSize";
 import { selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { selectDeviceOfflineModal } from "@/store/slice/modalSlice";
@@ -34,6 +35,7 @@ const DeviceOfflineModal: React.FC<DeviceOfflineModalProps> = ({}) => {
   const { t } = useTranslation();
   const visible = useTypedSelector(selectDeviceOfflineModal);
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
+  const networkEasterEggEnabled = useFeatureFlag("EASTER_EGG_NETWORK");
   const interval = useRef<any>();
 
   const { width, height } = useWindowSize();
@@ -54,10 +56,10 @@ const DeviceOfflineModal: React.FC<DeviceOfflineModalProps> = ({}) => {
   }, [width, height]);
 
   const gifBounce = useMemo(() => {
-    const should = __DEV__ || GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || "") != -1;
+    const should = __DEV__ || networkEasterEggEnabled || GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || "") != -1;
     logger.log({ should, indexOf: GIF_LOADING_ACCOUNT_IDS.indexOf(currentAccountId || "") });
     return should;
-  }, [currentAccountId]);
+  }, [currentAccountId, networkEasterEggEnabled]);
 
   useEffect(() => {
     if (gifBounce && visible && interval.current == null) {
