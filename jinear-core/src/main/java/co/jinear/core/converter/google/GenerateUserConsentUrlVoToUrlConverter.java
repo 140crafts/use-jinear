@@ -81,7 +81,8 @@ public class GenerateUserConsentUrlVoToUrlConverter {
     private String getRedirectUrl(GenerateUserConsentUrlVo generateUserConsentUrlVo) {
         return switch (generateUserConsentUrlVo.getUserConsentPurposeType()) {
             case LOGIN -> gCloudProperties.getLoginRedirectUrl();
-            case ATTACH_ACCOUNT -> gCloudProperties.getAttachAccountRedirectUrl();
+            case ATTACH_MAIL -> gCloudProperties.getAttachMailRedirectUrl();
+            case ATTACH_CALENDAR -> gCloudProperties.getAttachCalendarRedirectUrl();
         };
     }
 }

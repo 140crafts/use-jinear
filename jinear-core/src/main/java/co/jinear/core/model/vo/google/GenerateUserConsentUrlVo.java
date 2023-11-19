@@ -16,6 +16,6 @@ public class GenerateUserConsentUrlVo {
     private AccessType accessType = AccessType.OFFLINE;
     private String includeGrantedScopes = "true";
     private String state = "state_parameter_passthrough_value";
-    private Boolean includeCalendarScopes=Boolean.FALSE;
-    private Boolean includeEmailScopes=Boolean.FALSE;
+    private Boolean includeCalendarScopes = Boolean.FALSE;
+    private Boolean includeEmailScopes = Boolean.FALSE;
 }

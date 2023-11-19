@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum UserConsentPurposeType {
     LOGIN(0),
-    ATTACH_ACCOUNT(1);
+    ATTACH_MAIL(1),
+    ATTACH_CALENDAR(2);
 
     private final int value;
 }

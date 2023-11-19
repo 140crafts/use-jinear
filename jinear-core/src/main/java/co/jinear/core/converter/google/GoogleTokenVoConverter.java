@@ -42,7 +42,8 @@ public class GoogleTokenVoConverter {
     private String getRedirectUrl(UserConsentPurposeType userConsentPurposeType) {
         return switch (userConsentPurposeType) {
             case LOGIN -> gCloudProperties.getLoginRedirectUrl();
-            case ATTACH_ACCOUNT -> gCloudProperties.getAttachAccountRedirectUrl();
+            case ATTACH_MAIL -> gCloudProperties.getAttachMailRedirectUrl();
+            case ATTACH_CALENDAR -> gCloudProperties.getAttachCalendarRedirectUrl();
         };
     }
 }
