@@ -18,6 +18,7 @@ public class GoogleTokenDto extends BaseDto {
     private String idToken;
     private String tokenType;
     private String googleUserInfoId;
+    private ZonedDateTime lastMailCheck;
     private Set<GoogleTokenScopeDto> scopes;
     private GoogleUserInfoDto googleUserInfo;
 }

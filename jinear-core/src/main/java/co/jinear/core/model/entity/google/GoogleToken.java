@@ -48,6 +48,9 @@ public class GoogleToken extends BaseEntity {
     @Column(name = "google_user_info_id")
     private String googleUserInfoId;
 
+    @Column(name = "last_mail_check")
+    private ZonedDateTime lastMailCheck;
+
     @OneToMany(mappedBy = "googleToken")
     @Where(clause = "passive_id is null")
     private Set<GoogleTokenScope> scopes;

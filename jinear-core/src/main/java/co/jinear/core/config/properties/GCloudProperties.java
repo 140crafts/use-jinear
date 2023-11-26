@@ -35,4 +35,10 @@ public class GCloudProperties {
 
     @Value("${gcloud.oauth.redirect-url.attach-calendar}")
     private String attachCalendarRedirectUrl;
+
+    @Value("${google.apis.baseUrl}")
+    private String googleApisBaseUrl;
+
+    @Value("${google.apis.gmail.baseUrl}")
+    private String googleApisGmailBaseUrl;
 }

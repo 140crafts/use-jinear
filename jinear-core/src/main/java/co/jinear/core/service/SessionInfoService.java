@@ -104,14 +104,13 @@ public class SessionInfoService {
         return retrieveCurrentAccountRoles().stream().anyMatch(role -> roleType.name().equalsIgnoreCase(role));
     }
 
-    public LocaleType currentAccountLocale() {
+    public Optional<LocaleType> currentAccountLocale() {
         AbstractAuthenticationToken auth = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         return Optional.of(auth)
                 .map(Authentication::getCredentials)
                 .filter(String.class::isInstance)
                 .map(String.class::cast)
-                .map(jwtHelper::getLocaleFromToken)
-                .orElseThrow(BusinessException::new);
+                .map(jwtHelper::getLocaleFromToken);
     }
 
     public String currentAccountSessionId() {

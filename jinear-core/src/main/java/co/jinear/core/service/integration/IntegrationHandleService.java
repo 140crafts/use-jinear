@@ -21,16 +21,18 @@ public class IntegrationHandleService {
     private final IntegrationScopeRetrieveService integrationScopeRetrieveService;
     private final IntegrationScopeOperationService integrationScopeOperationService;
 
-    public void initializeOrUpdateInfo(String accountId, IntegrationProvider provider, IntegrationScopeType scope, String relatedObjectId) {
+    public String initializeOrUpdateInfo(String accountId, IntegrationProvider provider, IntegrationScopeType scope, String relatedObjectId) {
         Optional<IntegrationScopeDto> integrationScopeDtoOptional = integrationScopeRetrieveService.retrieveIntegrationWithScope(accountId, provider, scope);
         if (integrationScopeDtoOptional.isEmpty()) {
-            checkIntegrationInfoAndInitializeScope(accountId, provider, scope, relatedObjectId);
+            return checkIntegrationInfoAndInitializeScope(accountId, provider, scope, relatedObjectId);
         }
+        return integrationScopeDtoOptional.get().getIntegrationInfoId();
     }
 
-    private void checkIntegrationInfoAndInitializeScope(String accountId, IntegrationProvider provider, IntegrationScopeType scope, String relatedObjectId) {
+    private String checkIntegrationInfoAndInitializeScope(String accountId, IntegrationProvider provider, IntegrationScopeType scope, String relatedObjectId) {
         IntegrationInfoDto integrationInfoDto = getIntegrationInfoDto(accountId, provider, relatedObjectId);
         integrationScopeOperationService.initializeScope(integrationInfoDto.getIntegrationInfoId(), scope);
+        return integrationInfoDto.getIntegrationInfoId();
     }
 
     private IntegrationInfoDto initializeIntegrationInfo(String accountId, IntegrationProvider provider, String relatedObjectId) {

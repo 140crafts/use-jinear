@@ -1,10 +1,13 @@
 package co.jinear.core.service.team;
 
+import co.jinear.core.converter.integration.IntegrationInfoDtoConverter;
 import co.jinear.core.converter.team.TeamConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
+import co.jinear.core.model.dto.integration.IntegrationInfoDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
+import co.jinear.core.model.entity.integration.IntegrationInfo;
 import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.repository.TeamRepository;
@@ -29,6 +32,7 @@ public class TeamRetrieveService {
     private final WorkspaceMemberRetrieveService workspaceMemberRetrieveService;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
     private final TeamConverter teamConverter;
+    private final IntegrationInfoDtoConverter integrationInfoDtoConverter;
 
     public List<TeamDto> listWorkspaceTeamsByAccountWorkspaceRole(String accountId, String workspaceId) {
         log.info("List workspace teams by account role has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
@@ -98,5 +102,10 @@ public class TeamRetrieveService {
         log.info("Retrieve team by username has started. username: {}, workspaceId: {}", username, workspaceId);
         return teamRepository.findByUsernameAndWorkspaceIdAndPassiveIdIsNull(username, workspaceId)
                 .map(teamConverter::map);
+    }
+
+    public IntegrationInfoDto retrieveTeamIntegrationInfo(String teamId) {
+        IntegrationInfo integrationInfo = retrieveEntity(teamId).getIntegrationInfo();
+        return integrationInfoDtoConverter.map(integrationInfo);
     }
 }

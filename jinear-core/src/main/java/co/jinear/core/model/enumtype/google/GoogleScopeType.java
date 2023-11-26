@@ -48,16 +48,33 @@ public enum GoogleScopeType {
                 .toList();
     }
 
+    public static List<GoogleScopeType> getCalendarScopeTypes() {
+        return List.of(
+                CALENDAR,
+                CALENDAR_EVENTS,
+                CALENDAR_SETTINGS_READONLY,
+                ADMIN_DIRECTORY_RESOURCE_CALENDAR_READONLY,
+                CONTACTS,
+                CONTACTS_OTHER_READONLY,
+                DIRECTORY_READONLY
+        );
+    }
+
+    public static List<GoogleScopeType> getMailScopeTypes() {
+        return List.of(
+                MAIL,
+                GMAIL_ADDONS_CURRENT_MESSAGE_ACTION,
+                GMAIL_ADDONS_CURRENT_MESSAGE_METADATA,
+                GMAIL_ADDONS_CURRENT_MESSAGE_READONLY,
+                GMAIL_READONLY,
+                GMAIL_MODIFY
+//                GMAIL_METADATA
+        );
+    }
+
     public static List<String> getCalendarScopes() {
-        return Stream.of(
-                        CALENDAR,
-                        CALENDAR_EVENTS,
-                        CALENDAR_SETTINGS_READONLY,
-                        ADMIN_DIRECTORY_RESOURCE_CALENDAR_READONLY,
-                        CONTACTS,
-                        CONTACTS_OTHER_READONLY,
-                        DIRECTORY_READONLY
-                )
+        return getCalendarScopeTypes()
+                .stream()
                 .map(GoogleScopeType::getKeys)
                 .map(List::iterator)
                 .map(Iterator::next)
@@ -65,30 +82,14 @@ public enum GoogleScopeType {
     }
 
     public static List<String> getMailScopes() {
-        return Stream.of(
-                        MAIL,
-                        GMAIL_ADDONS_CURRENT_MESSAGE_ACTION,
-                        GMAIL_ADDONS_CURRENT_MESSAGE_METADATA,
-                        GMAIL_ADDONS_CURRENT_MESSAGE_READONLY,
-                        GMAIL_METADATA,
-                        GMAIL_MODIFY,
-                        GMAIL_READONLY
-                )
+        return getMailScopeTypes()
+                .stream()
                 .map(GoogleScopeType::getKeys)
                 .map(List::iterator)
                 .map(Iterator::next)
                 .toList();
     }
 
-    public static List<GoogleScopeType> getMailScopeTypes() {
-        return List.of(MAIL,
-                GMAIL_ADDONS_CURRENT_MESSAGE_ACTION,
-                GMAIL_ADDONS_CURRENT_MESSAGE_METADATA,
-                GMAIL_ADDONS_CURRENT_MESSAGE_READONLY,
-                GMAIL_METADATA,
-                GMAIL_MODIFY,
-                GMAIL_READONLY);
-    }
 
     public static GoogleScopeType fromString(String scope) {
         return Arrays.stream(GoogleScopeType.values())

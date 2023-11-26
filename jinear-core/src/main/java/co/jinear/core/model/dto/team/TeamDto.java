@@ -3,6 +3,7 @@ package co.jinear.core.model.dto.team;
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
+import co.jinear.core.model.enumtype.team.TeamTaskSourceType;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
 import lombok.Getter;
@@ -25,4 +26,5 @@ public class TeamDto extends BaseDto {
     private TeamJoinMethodType joinMethod;
     private TeamTaskVisibilityType taskVisibility;
     private Set<TeamWorkflowStatusDto> workflowStatuses;
+    private TeamTaskSourceType taskSourceType;
 }
