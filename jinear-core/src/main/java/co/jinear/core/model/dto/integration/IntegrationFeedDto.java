@@ -2,11 +2,13 @@ package co.jinear.core.model.dto.integration;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 @Getter
 @Setter
-public class IntegrationFeedDto<T> {
+public class IntegrationFeedDto {
 
-    private Page<T> data;
+    private List<FeedItemDto> feedItemList;
+    private String nextPageToken;
 }

@@ -1,6 +1,7 @@
 package co.jinear.core.controller.team;
 
 import co.jinear.core.manager.team.TeamIntegrationFeedManager;
+import co.jinear.core.model.response.team.TeamIntegrationFeedItemResponse;
 import co.jinear.core.model.response.team.TeamIntegrationFeedResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,14 @@ public class TeamIntegrationFeedController {
     @GetMapping("/{teamId}")
     @ResponseStatus(HttpStatus.OK)
     public TeamIntegrationFeedResponse retrieveTeamIntegrationFeed(@PathVariable String teamId,
-                                                              @RequestParam(required = false, defaultValue = "0") Integer page) {
-        return teamIntegrationFeedManager.retrieveFeed(teamId, page);
+                                                                   @RequestParam(required = false) String pageToken) {
+        return teamIntegrationFeedManager.retrieveFeed(teamId, pageToken);
+    }
+
+    @GetMapping("/{teamId}/item/{itemId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TeamIntegrationFeedItemResponse retrieveTeamIntegrationFeedItem(@PathVariable String teamId,
+                                                                           @PathVariable String itemId) {
+        return teamIntegrationFeedManager.retrieveFeedItem(teamId, itemId);
     }
 }

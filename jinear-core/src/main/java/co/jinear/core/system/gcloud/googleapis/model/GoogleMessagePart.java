@@ -13,4 +13,5 @@ public class GoogleMessagePart {
     private String filename;
     private List<GoogleBatchResponseHeader> headers;
     private GoogleBatchMessageBody body;
+    private List<GoogleMessagePart> parts;
 }

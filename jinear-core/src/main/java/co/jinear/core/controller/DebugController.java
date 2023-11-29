@@ -1,8 +1,6 @@
 package co.jinear.core.controller;
 
 import co.jinear.core.model.dto.google.GoogleTokenDto;
-import co.jinear.core.repository.GmailThreadRepository;
-import co.jinear.core.service.google.GmailThreadOperationService;
 import co.jinear.core.service.google.GoogleOAuthApiCallerService;
 import co.jinear.core.service.google.GoogleRedirectInfoService;
 import co.jinear.core.service.google.GoogleTokenValidatedRetrieveService;
@@ -26,8 +24,6 @@ public class DebugController {
     private final RestGoogleApisClient restGoogleApisClient;
     private final GmailApiClient gmailApiClient;
     private final GoogleRedirectInfoService googleRedirectInfoService;
-    private final GmailThreadOperationService gmailThreadOperationService;
-    private final GmailThreadRepository gmailThreadRepository;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
