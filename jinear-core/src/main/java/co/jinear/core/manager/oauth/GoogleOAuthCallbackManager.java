@@ -1,7 +1,6 @@
 package co.jinear.core.manager.oauth;
 
 import co.jinear.core.converter.google.GoogleScopeConverter;
-import co.jinear.core.converter.team.TeamInitializeVoFromCallbackConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.manager.auth.AuthCookieManager;
 import co.jinear.core.model.dto.google.GoogleHandleTokenDto;
@@ -11,20 +10,20 @@ import co.jinear.core.model.enumtype.google.GoogleScopeType;
 import co.jinear.core.model.enumtype.google.UserConsentPurposeType;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
 import co.jinear.core.model.enumtype.integration.IntegrationScopeType;
-import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.auth.AuthResponse;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
+import co.jinear.core.model.vo.feed.InitializeFeedVo;
 import co.jinear.core.model.vo.google.AttachAccountStateParameters;
-import co.jinear.core.model.vo.team.TeamInitializeVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.auth.AuthenticationStrategy;
 import co.jinear.core.service.auth.AuthenticationStrategyFactory;
+import co.jinear.core.service.feed.FeedOperationService;
+import co.jinear.core.service.feed.FeedRetrieveService;
 import co.jinear.core.service.google.GoogleCallbackHandlerService;
 import co.jinear.core.service.integration.IntegrationHandleService;
 import co.jinear.core.service.passive.PassiveService;
-import co.jinear.core.service.team.TeamInitializeService;
 import co.jinear.core.system.JwtHelper;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import com.google.gson.Gson;
@@ -52,9 +51,9 @@ public class GoogleOAuthCallbackManager {
     private final IntegrationHandleService integrationHandleService;
     private final GoogleScopeConverter googleScopeConverter;
     private final Gson gson;
-    private final TeamInitializeService teamInitializeService;
     private final WorkspaceValidator workspaceValidator;
-    private final TeamInitializeVoFromCallbackConverter teamInitializeVoFromCallbackConverter;
+    private final FeedOperationService feedOperationService;
+    private final FeedRetrieveService feedRetrieveService;
 
     public AuthResponse login(String code, String scopes, HttpServletResponse response) {
         log.info("Login with google has started.");
@@ -69,7 +68,6 @@ public class GoogleOAuthCallbackManager {
 
     public BaseResponse attachMail(String code, String scopes, String state) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        LocaleType localeType = sessionInfoService.currentAccountLocale().orElse(LocaleType.EN);
         AttachAccountStateParameters parameters = gson.fromJson(state, AttachAccountStateParameters.class);
         String workspaceId = parameters.getWorkspaceId();
         workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
@@ -78,15 +76,22 @@ public class GoogleOAuthCallbackManager {
         GoogleHandleTokenDto googleHandleTokenDto = googleCallbackHandlerService.handleToken(code, scopes, UserConsentPurposeType.ATTACH_MAIL);
         assignExistingTokenDeletionOwnership(googleHandleTokenDto, currentAccountId);
         String integrationInfoId = initializeIntegration(googleHandleTokenDto, IntegrationScopeType.EMAIL, currentAccountId);
-        initializeTeam(currentAccountId, localeType, workspaceId, googleHandleTokenDto, integrationInfoId);
+        initializeFeed(currentAccountId, workspaceId, googleHandleTokenDto, integrationInfoId);
         return new BaseResponse();
     }
 
-    private void initializeTeam(String currentAccountId, LocaleType localeType, String workspaceId, GoogleHandleTokenDto googleHandleTokenDto, String integrationInfoId) {
-        TeamInitializeVo teamInitializeVo = teamInitializeVoFromCallbackConverter.mapTeamInitializeVo(currentAccountId, localeType, workspaceId, googleHandleTokenDto, integrationInfoId);
-        teamInitializeService.initializeTeam(teamInitializeVo);
+    private void initializeFeed(String currentAccountId, String workspaceId, GoogleHandleTokenDto googleHandleTokenDto, String integrationInfoId) {
+        Boolean feedExists = feedRetrieveService.checkFeedExist(workspaceId, currentAccountId, integrationInfoId);
+        if (Boolean.FALSE.equals(feedExists)) {
+            GoogleUserInfoDto googleUserInfoDto = googleHandleTokenDto.getGoogleUserInfoDto();
+            InitializeFeedVo initializeFeedVo = new InitializeFeedVo();
+            initializeFeedVo.setWorkspaceId(workspaceId);
+            initializeFeedVo.setInitializedBy(currentAccountId);
+            initializeFeedVo.setIntegrationInfoId(integrationInfoId);
+            initializeFeedVo.setName(googleUserInfoDto.getEmail());
+            feedOperationService.initializeFeed(initializeFeedVo);
+        }
     }
-
 
     public BaseResponse attachCalendar(String code, String scopes) {
         String currentAccountId = sessionInfoService.currentAccountId();

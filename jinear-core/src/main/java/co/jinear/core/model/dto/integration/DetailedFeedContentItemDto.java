@@ -12,14 +12,8 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeedItemDto {
+public class DetailedFeedContentItemDto extends FeedContentItemDto {
 
-    @Nullable
-    private String title;
-    @Nullable
-    private String text;
-    @Nullable
-    private String externalId;
     @Nullable
     private List<FeedItemMessage> messages;
 }

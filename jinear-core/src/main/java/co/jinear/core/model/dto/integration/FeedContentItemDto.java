@@ -1,5 +1,6 @@
 package co.jinear.core.model.dto.integration;
 
+import co.jinear.core.model.dto.feed.FeedDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,27 +9,25 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FeedItemMessage {
+public class FeedContentItemDto {
 
+    @Nullable
+    private Set<FeedItemParticipant> participants;
+    @Nullable
+    private String title;
+    @Nullable
+    private String text;
     @Nullable
     private String externalId;
     @Nullable
-    private String externalGroupId;
-    @Nullable
-    private FeedItemParticipant from;
-    @Nullable
-    private FeedItemParticipant to;
-    @Nullable
-    private String subject;
-    @Nullable
-    private String body;
+    private List<FeedItemMessage> messages;
     @Nullable
     private ZonedDateTime date;
-    @Nullable
-    private List<FeedItemMessageData> detailDataList;
+    private FeedDto feed;
 }

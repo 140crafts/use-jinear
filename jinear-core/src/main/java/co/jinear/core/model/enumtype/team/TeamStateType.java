@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum TeamTaskSourceType {
-    APP(0),
-    INTEGRATION(1);
+public enum TeamStateType {
+
+    ARCHIVED(-1),
+    ACTIVE(0);
 
     private final int value;
 }

@@ -1,12 +1,14 @@
 package co.jinear.core.converter.task;
 
+import co.jinear.core.converter.team.TeamDtoConverter;
 import co.jinear.core.model.dto.task.TaskRelationDto;
 import co.jinear.core.model.entity.task.TaskRelation;
 import co.jinear.core.model.vo.task.TaskRelationInitializeVo;
+import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = {TeamDtoConverter.class})
 public interface TaskRelationConverter {
 
     @Mapping(source = "relation",target = "relationType")

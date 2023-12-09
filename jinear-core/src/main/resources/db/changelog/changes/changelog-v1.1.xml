@@ -1287,20 +1287,6 @@
         </createIndex>
     </changeSet>
 
-    <changeSet author="cagdas.tunca" id="jinear-302-add-columns-to-team-task_source_type-integration_info_id">
-        <addColumn tableName="team">
-            <column name="task_source_type" type="int" afterColumn="task_visibility" defaultValueNumeric="0">
-                <constraints nullable="false"/>
-            </column>
-        </addColumn>
-        <addColumn tableName="team">
-            <column name="integration_info_id" type="char(26)" afterColumn="task_source_type"/>
-        </addColumn>
-        <createIndex indexName="ix_integration_info_id" tableName="team">
-            <column name="integration_info_id"/>
-        </createIndex>
-    </changeSet>
-
     <changeSet author="cagdas.tunca" id="jinear-302-add-index-to-gmail_message-ix_gmail_thread_id">
         <createIndex indexName="ix_gmail_thread_id" tableName="gmail_message">
             <column name="gmail_thread_id"/>
@@ -1311,5 +1297,80 @@
         <addColumn tableName="gmail_thread">
             <column name="snippet" type="text" afterColumn="g_history_id"/>
         </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-add-columns-to-team-team_state">
+        <addColumn tableName="team">
+            <column name="team_state" type="int" afterColumn="task_source_type" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-feed">
+        <createTable tableName="feed">
+            <column name="feed_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initialized_by" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="integration_info_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_workspace_id" tableName="feed">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="ix_initialized_by" tableName="feed">
+            <column name="initialized_by"/>
+        </createIndex>
+        <createIndex indexName="ix_integration_info_id" tableName="feed">
+            <column name="integration_info_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-feed_member">
+        <createTable tableName="feed_member">
+            <column name="feed_member_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feed_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_workspace_id" tableName="feed_member">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="ix_account_id" tableName="feed_member">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="ix_feed_id" tableName="feed_member">
+            <column name="feed_id"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>

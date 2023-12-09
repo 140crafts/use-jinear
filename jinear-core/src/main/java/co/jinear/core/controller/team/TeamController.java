@@ -3,6 +3,7 @@ package co.jinear.core.controller.team;
 import co.jinear.core.manager.team.TeamInitializeManager;
 import co.jinear.core.manager.team.TeamRetrieveManager;
 import co.jinear.core.manager.team.TeamUpdateManager;
+import co.jinear.core.model.enumtype.team.TeamStateType;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.model.request.team.TeamInitializeRequest;
 import co.jinear.core.model.response.BaseResponse;
@@ -37,7 +38,15 @@ public class TeamController {
 
     @PutMapping("/{teamId}/task-visibility-type/{taskVisibilityType}")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse updateTeamTaskVisibilityType(@PathVariable String teamId, @PathVariable TeamTaskVisibilityType taskVisibilityType) {
+    public BaseResponse updateTeamTaskVisibilityType(@PathVariable String teamId,
+                                                     @PathVariable TeamTaskVisibilityType taskVisibilityType) {
         return teamUpdateManager.updateTeamTaskVisibilityType(teamId, taskVisibilityType);
+    }
+
+    @PutMapping("/{teamId}/team-state/{teamState}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateTeamState(@PathVariable String teamId,
+                                        @PathVariable TeamStateType teamState) {
+        return teamUpdateManager.updateTeamState(teamId, teamState);
     }
 }

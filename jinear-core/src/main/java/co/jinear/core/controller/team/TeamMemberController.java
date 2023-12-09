@@ -41,5 +41,4 @@ public class TeamMemberController {
     public TeamMembershipsResponse retrieveMemberships(@PathVariable String workspaceId) {
         return teamMemberManager.retrieveMemberships(workspaceId);
     }
-
 }

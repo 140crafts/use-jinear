@@ -8,8 +8,8 @@ import lombok.Getter;
 public enum IntegrationScopeType {
 
     LOGIN(0),
-    EMAIL(0),
-    CALENDAR(0);
+    EMAIL(1),
+    CALENDAR(2);
 
     private final int value;
 }

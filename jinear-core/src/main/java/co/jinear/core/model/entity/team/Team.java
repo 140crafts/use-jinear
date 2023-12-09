@@ -1,12 +1,11 @@
 package co.jinear.core.model.entity.team;
 
-import co.jinear.core.converter.workspace.TeamTaskSourceTypeConverter;
+import co.jinear.core.converter.workspace.TeamStateTypeConverter;
 import co.jinear.core.converter.workspace.TeamTaskVisibilityTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
-import co.jinear.core.model.entity.integration.IntegrationInfo;
 import co.jinear.core.model.entity.workspace.Workspace;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
-import co.jinear.core.model.enumtype.team.TeamTaskSourceType;
+import co.jinear.core.model.enumtype.team.TeamStateType;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
 import jakarta.persistence.*;
@@ -60,12 +59,9 @@ public class Team extends BaseEntity {
     @Column(name = "task_visibility")
     private TeamTaskVisibilityType taskVisibility;
 
-    @Convert(converter = TeamTaskSourceTypeConverter.class)
-    @Column(name = "task_source_type")
-    private TeamTaskSourceType taskSourceType;
-
-    @Column(name = "integration_info_id")
-    private String integrationInfoId;
+    @Convert(converter = TeamStateTypeConverter.class)
+    @Column(name = "team_state")
+    private TeamStateType teamState;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
@@ -81,9 +77,4 @@ public class Team extends BaseEntity {
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<TeamWorkflowStatus> workflowStatuses;
-
-    @ManyToOne
-    @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(name = "integration_info_id", insertable = false, updatable = false)
-    private IntegrationInfo integrationInfo;
 }

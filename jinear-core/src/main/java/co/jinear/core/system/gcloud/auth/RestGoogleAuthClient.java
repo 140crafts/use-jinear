@@ -53,7 +53,24 @@ public class RestGoogleAuthClient implements GoogleAuthClient {
 
     @Override
     public AuthTokenResponse refreshToken(GoogleRefreshTokenRequest request) {
-        return googleAuthRestTemplate.postForObject(TOKEN, request, AuthTokenResponse.class);
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+            MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+            map.add("client_id", request.getClientId());
+            map.add("client_secret", request.getClientSecret());
+            map.add("access_type", request.getAccessType().getValue());
+            map.add("grant_type", request.getGrantType().getValue());
+            map.add("refresh_token", request.getRefreshToken());
+
+            HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(map, headers);
+            ResponseEntity<AuthTokenResponse> response = googleAuthRestTemplate.postForEntity(TOKEN, requestEntity, AuthTokenResponse.class);
+            return response.getBody();
+        } catch (Exception e) {
+            log.error("Get refresh token call has failed.", e);
+            throw new BusinessException();
+        }
     }
 
     @Override

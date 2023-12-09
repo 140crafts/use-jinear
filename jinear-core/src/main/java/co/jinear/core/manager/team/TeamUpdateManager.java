@@ -1,5 +1,6 @@
 package co.jinear.core.manager.team;
 
+import co.jinear.core.model.enumtype.team.TeamStateType;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.service.SessionInfoService;
@@ -26,6 +27,14 @@ public class TeamUpdateManager {
         workspaceTierValidator.validateTeamsWorkspaceHasAdvancedTeamTaskVisibilityTypesAccess(teamId);
         log.info("Update team task visibility type has started. currentAccountId: {}", currentAccountId);
         teamUpdateService.updateTeamTaskVisibilityType(teamId, taskVisibilityType);
+        return new BaseResponse();
+    }
+
+    public BaseResponse updateTeamState(String teamId, TeamStateType teamState) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        teamAccessValidator.validateTeamAdminAccess(currentAccountId, teamId);
+        log.info("Update team task visibility type has started. currentAccountId: {}", currentAccountId);
+        teamUpdateService.updateTeamState(teamId, teamState);
         return new BaseResponse();
     }
 }

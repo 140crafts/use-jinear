@@ -1,6 +1,7 @@
 package co.jinear.core.service.team;
 
 import co.jinear.core.converter.team.TeamConverter;
+import co.jinear.core.converter.team.TeamDtoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.entity.team.Team;
@@ -38,6 +39,7 @@ public class TeamInitializeService {
     private final LocaleStringService localeStringService;
     private final TeamMemberSyncService teamMemberSyncService;
     private final TeamConverter teamConverter;
+    private final TeamDtoConverter teamDtoConverter;
     private final TeamMemberService teamMemberService;
 
     @Transactional
@@ -52,7 +54,7 @@ public class TeamInitializeService {
         checkAndSyncMembersWithWorkspace(saved);
         initializeDefaultWorkflow(saved.getTeamId(), saved.getWorkspaceId(), teamInitializeVo.getLocale());
         log.info("Initialize team has finished. teamId: {}", saved.getTeamId());
-        return teamConverter.map(saved);
+        return teamDtoConverter.map(saved);
     }
 
     private void sanitizeTagAndUsername(TeamInitializeVo teamInitializeVo) {

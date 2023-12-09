@@ -2,7 +2,6 @@ package co.jinear.core.controller.oauth;
 
 import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.manager.oauth.GoogleOAuthCallbackManager;
-import co.jinear.core.model.response.BaseResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +28,15 @@ public class GoogleOAuthCallbackController {
 
     @GetMapping("/attach-mail")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse attachMail(@RequestParam String code, @RequestParam String scope, @RequestParam String state) {
-        return googleOAuthCallbackManager.attachMail(code, scope, state);
+    public void attachMail(@RequestParam String code, @RequestParam String scope, @RequestParam String state, HttpServletResponse response) throws IOException {
+        googleOAuthCallbackManager.attachMail(code, scope, state);
+        response.sendRedirect(feProperties.getHomeUrl());
     }
 
     @GetMapping("/attach-calendar")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse attachCalendar(@RequestParam String code, @RequestParam String scope) {
-        return googleOAuthCallbackManager.attachCalendar(code, scope);
+    public void attachCalendar(@RequestParam String code, @RequestParam String scope, HttpServletResponse response) throws IOException {
+        googleOAuthCallbackManager.attachCalendar(code, scope);
+        response.sendRedirect(feProperties.getHomeUrl());
     }
 }
