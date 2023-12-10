@@ -18,13 +18,9 @@ const WeekDayTitle: React.FC<WeekDayTitleProps> = ({ day }) => {
     <div
       id={isToday ? "calendar-title-today" : undefined}
       ref={containerRef}
-      className={cn(
-        styles.titleContainer,
-        isCurrentDayAndVieweingDateInDifferentMonth && styles.differentMonthContainer,
-        isToday && styles.today
-      )}
+      className={cn(styles.titleContainer, isCurrentDayAndVieweingDateInDifferentMonth && styles.differentMonthContainer)}
     >
-      {format(day, "dd")}
+      <div className={cn(styles.dayNo, isToday ? styles.today : undefined)}>{format(day, "dd")}</div>
     </div>
   );
 };

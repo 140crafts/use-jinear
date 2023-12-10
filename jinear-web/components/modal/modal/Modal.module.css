@@ -111,3 +111,8 @@
 .object-scale-down {
   object-fit: scale-down;
 }
+
+.body-height-height-full {
+  max-height: 95vh;
+  height: 100%;
+}

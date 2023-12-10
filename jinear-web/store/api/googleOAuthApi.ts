@@ -7,7 +7,17 @@ export const googleOAuthApi = api.injectEndpoints({
       query: (req) => `v1/oauth/google/redirect-info/login`,
       providesTags: (_result, _err, req) => [
         {
-          type: "oauth/google/login-redirect-info",
+          type: "oauth/google/redirect-info/login",
+        },
+      ],
+    }),
+    //
+    retrieveAttachMailRedirectInfo: build.query<AuthRedirectInfoResponse, { workspaceId: string }>({
+      query: (req: { workspaceId: string }) => `v1/oauth/google/redirect-info/attach-mail?workspaceId=${req.workspaceId}`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: "v1/oauth/google/redirect-info/attach-mail",
+          id: req.workspaceId,
         },
       ],
     }),
@@ -15,8 +25,8 @@ export const googleOAuthApi = api.injectEndpoints({
   }),
 });
 
-export const { useRetrieveLoginRedirectInfoQuery } = googleOAuthApi;
+export const { useRetrieveLoginRedirectInfoQuery, useRetrieveAttachMailRedirectInfoQuery } = googleOAuthApi;
 
 export const {
-  endpoints: { retrieveLoginRedirectInfo },
+  endpoints: { retrieveLoginRedirectInfo, retrieveAttachMailRedirectInfo },
 } = googleOAuthApi;

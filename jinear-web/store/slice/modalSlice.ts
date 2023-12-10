@@ -9,7 +9,9 @@ import ModalState, {
   ChangeTaskWorkflowStatusModalState,
   DatePickerModalState,
   DialogModalState,
+  IntegrationFeedItemDetailModalState,
   LoginWith2FaMailModalState,
+  NewMailIntegrationModalState,
   NewReminderModalState,
   NewTaskBoardModalState,
   NewTaskModalState,
@@ -140,6 +142,12 @@ const initialState = {
   deviceOfflineModal: {
     visible: false,
   },
+  newMailIntegrationModal: {
+    visible: false,
+  },
+  integrationFeedItemDetailModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -175,6 +183,8 @@ const initialState = {
   workspaceSwitchModal: null | ModalState;
   menuMoreActionModal: null | ModalState;
   deviceOfflineModal: null | ModalState;
+  newMailIntegrationModal: null | NewMailIntegrationModalState;
+  integrationFeedItemDetailModal: null | IntegrationFeedItemDetailModalState;
 };
 
 const slice = createSlice({
@@ -425,6 +435,20 @@ const slice = createSlice({
       state.deviceOfflineModal = initialState.deviceOfflineModal;
     },
 
+    popNewMailIntegrationModal: (state, action: PayloadAction<NewMailIntegrationModalState>) => {
+      state.newMailIntegrationModal = { visible: true, workspaceId: action.payload.workspaceId };
+    },
+    closeNewMailIntegrationModal: (state, action: PayloadAction<void>) => {
+      state.newMailIntegrationModal = initialState.newMailIntegrationModal;
+    },
+
+    popIntegrationFeedItemDetailModal: (state, action: PayloadAction<IntegrationFeedItemDetailModalState>) => {
+      state.integrationFeedItemDetailModal = { ...action.payload, visible: true };
+    },
+    closeIntegrationFeedItemDetailModal: (state, action: PayloadAction<void>) => {
+      state.integrationFeedItemDetailModal = initialState.integrationFeedItemDetailModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -509,6 +533,10 @@ export const {
   closeMenuMoreActionModal,
   popDeviceOfflineModal,
   closeDeviceOfflineModal,
+  popNewMailIntegrationModal,
+  closeNewMailIntegrationModal,
+  popIntegrationFeedItemDetailModal,
+  closeIntegrationFeedItemDetailModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -688,3 +716,16 @@ export const selectWorkspaceSwitchModalVisible = (state: RootState) => state.mod
 export const selectMenuMoreActionModalVisible = (state: RootState) => state.modal.menuMoreActionModal?.visible;
 
 export const selectDeviceOfflineModal = (state: RootState) => state.modal.deviceOfflineModal?.visible;
+
+export const selectNewMailIntegrationModalVisible = (state: RootState) => state.modal.newMailIntegrationModal?.visible;
+export const selectNewMailIntegrationModalWorkspaceId = (state: RootState) => state.modal.newMailIntegrationModal?.workspaceId;
+
+export const selectIntegrationFeedItemDetailModalVisible = (state: RootState) =>
+  state.modal.integrationFeedItemDetailModal?.visible;
+export const selectIntegrationFeedItemDetailModalWorkspaceId = (state: RootState) =>
+  state.modal.integrationFeedItemDetailModal?.workspaceId;
+export const selectIntegrationFeedItemDetailModalFeedId = (state: RootState) =>
+  state.modal.integrationFeedItemDetailModal?.feedId;
+export const selectIntegrationFeedItemDetailModalFeedItemId = (state: RootState) =>
+  state.modal.integrationFeedItemDetailModal?.itemId;
+export const selectIntegrationFeedItemDetailModalTitle = (state: RootState) => state.modal.integrationFeedItemDetailModal?.title;

@@ -1,4 +1,6 @@
 "use client";
+import Line from "@/components/line/Line";
+import TeamStateSettings from "@/components/teamSettingsScreen/teamStateSettings/TeamStateSettings";
 import TeamTaskVisibilityTypeSettings from "@/components/teamSettingsScreen/teamTaskVisibilityTypeSettings/TeamTaskVisibilityTypeSettings";
 import TeamWorkflowSettings from "@/components/teamSettingsScreen/teamWorkflowSettings/TeamWorkflowSettings";
 import { useTeamRole } from "@/hooks/useTeamRole";
@@ -25,8 +27,24 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {team && <TeamWorkflowSettings teamId={team.teamId} teamRole={teamRole} />}
-      {team && workspace && <TeamTaskVisibilityTypeSettings team={team} workspace={workspace} />}
+      {team && workspace && (
+        <>
+          <TeamTaskVisibilityTypeSettings team={team} workspace={workspace} />
+          <Line />
+        </>
+      )}
+
+      {team && (
+        <>
+          <TeamWorkflowSettings teamId={team.teamId} teamRole={teamRole} />
+          <Line />
+        </>
+      )}
+      {team && teamRole == "ADMIN" && (
+        <>
+          <TeamStateSettings team={team} />
+        </>
+      )}
     </div>
   );
 };

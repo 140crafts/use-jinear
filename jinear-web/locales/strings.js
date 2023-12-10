@@ -2246,9 +2246,17 @@ export default {
     en: "Your Teams",
     tr: "Ekiplerin",
   },
+  sideMenuArchivedTeamsTitle: {
+    en: "Archived Teams (${n})",
+    tr: "Arşivlenmiş Ekipler (${n})",
+  },
   sideMenuTeamActionButtonLabelTasks: {
     en: "Tasks",
     tr: "Görevler",
+  },
+  sideMenuTeamActionButtonLabelFeed: {
+    en: "Feed",
+    tr: "Akış",
   },
   sideMenuTeamActionButtonLabelFiles: {
     en: "Files",
@@ -2801,5 +2809,85 @@ export default {
   loginScreenLoginWithGoogle: {
     en: "Login With Google",
     tr: "Google ile Giriş Yap",
+  },
+  teamSettingsScreenTeamStateSectionTitle_ARCHIVED: {
+    en: "Unarchive Team",
+    tr: "Takımı Tekrar Aktifleştir",
+  },
+  teamSettingsScreenTeamStateSectionDescription_ARCHIVED: {
+    en: "You can continue to use this team as before by taking it out of the archive.",
+    tr: "Bu takımı arşivden çıkararak eskisi gibi kullanmaya devam edebilirsiniz",
+  },
+  teamSettingsScreenTeamStateSectionTitle_ACTIVE: {
+    en: "Archive Team",
+    tr: "Takımı Arşive Kaldır",
+  },
+  teamSettingsScreenTeamStateSectionDescription_ACTIVE: {
+    en: "Archive this team and make it read only.",
+    tr: "Bu takımı arşivle ve salt okunur yap.",
+  },
+  teamSettingsScreenTeamStateSectionActionButton_ARCHIVED: {
+    en: "Activate",
+    tr: "Aktifleştir",
+  },
+  teamSettingsScreenTeamStateSectionActionButton_ACTIVE: {
+    en: "Archive",
+    tr: "Arşivle",
+  },
+  sideMenuAddMailIntegrationLabel: {
+    en: "Add Gmail Feed",
+    tr: "Gmail Akışı Ekle",
+  },
+  newMailIntegrationModalTitle: {
+    en: "New Gmail Integration",
+    tr: "Yeni Gmail Entegrasyonu",
+  },
+  newMailIntegrationModalLabel: {
+    en: "We carefully minimized the scope of access. All requested permissions are necessary for us to list your emails. Your emails are not recorded by Jinear, and they are not used for any data processing purposes.",
+    tr: "Erişim kapsamını dikkatlice en aza indirdik. İstenen tüm izinler, maillerinizi listelememiz için gereklidir. Mailleriniz Jinear tarafından kayit altina alınmaz, hiçbir veri işleme için kullanılmazlar.",
+  },
+  newMailIntegrationModalAddGmailLabel: {
+    en: "Add Gmail Feed",
+    tr: "Gmail Akışı Ekle",
+  },
+  sideMenuFeedsTitle: {
+    en: "Your Feeds",
+    tr: "Akışların",
+  },
+  sideMenuFeedMembers: {
+    en: "Feed members",
+    tr: "Akış üyeleri",
+  },
+  sideMenuFeedSettings: {
+    en: "Feed settings",
+    tr: "Akış ayarları",
+  },
+  feedPageTitle: {
+    en: "Feed",
+    tr: "Akış",
+  },
+  feedPageEmptyLabel: {
+    en: "There isn't any content in this feed",
+    tr: "Bu akışta herhangi bir öge bulunmuyor",
+  },
+  feedPageLoadMoreLabel: {
+    en: "Load More",
+    tr: "Daha Fazla",
+  },
+  feedItemLabelToday: {
+    en: "Today",
+    tr: "Bugün",
+  },
+  feedItemLabelYesterday: {
+    en: "Yesterday",
+    tr: "Dün",
+  },
+  feedLastUpdateLabel: {
+    en: "Last update ${date}",
+    tr: "Son güncelleme ${date}",
+  },
+  feedItemDetailCreateTask: {
+    en: "Create A Task",
+    tr: "Görev Oluştur",
   },
 };

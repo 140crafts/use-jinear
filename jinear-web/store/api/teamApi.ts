@@ -1,4 +1,10 @@
-import { TeamInitializeRequest, TeamListingResponse, TeamResponse, TeamTaskVisibilityType } from "@/model/be/jinear-core";
+import {
+  TeamInitializeRequest,
+  TeamListingResponse,
+  TeamResponse,
+  TeamStateType,
+  TeamTaskVisibilityType,
+} from "@/model/be/jinear-core";
 import { api, tagTypes } from "./api";
 
 export const teamApi = api.injectEndpoints({
@@ -34,11 +40,24 @@ export const teamApi = api.injectEndpoints({
       invalidatesTags: tagTypes,
     }),
     //
+    updateTeamState: build.mutation<TeamResponse, { teamId: string; teamState: TeamStateType }>({
+      query: ({ teamId, teamState }) => ({
+        url: `v1/team/${teamId}/team-state/${teamState}`,
+        method: "PUT",
+      }),
+      invalidatesTags: tagTypes,
+    }),
+    //
   }),
 });
 
-export const { useInitializeTeamMutation, useRetrieveWorkspaceTeamsQuery, useUpdateTeamTaskVisibilityTypeMutation } = teamApi;
+export const {
+  useInitializeTeamMutation,
+  useRetrieveWorkspaceTeamsQuery,
+  useUpdateTeamTaskVisibilityTypeMutation,
+  useUpdateTeamStateMutation,
+} = teamApi;
 
 export const {
-  endpoints: { initializeTeam, retrieveWorkspaceTeams, updateTeamTaskVisibilityType },
+  endpoints: { initializeTeam, retrieveWorkspaceTeams, updateTeamTaskVisibilityType, updateTeamState },
 } = teamApi;

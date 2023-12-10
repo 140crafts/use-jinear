@@ -36,11 +36,15 @@ import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMember
 import WorkspacePickerModal from "@/components/modal/workspacePickerModal/WorkspacePickerModal";
 import WorkspaceSwitchModal from "@/components/modal/workspaceSwitchModal/WorkspaceSwitchModal";
 import DeviceOfflineModal from "../modal/deviceOfflineModal/DeviceOfflineModal";
+import IntegrationFeedItemDetailModal from "../modal/integrationFeedItemDetailModal/IntegrationFeedItemDetailModal";
+import NewMailIntegrationModal from "../modal/newMailIntegrationModal/NewMailIntegrationModal";
 
 interface ModalProviderProps {}
 
 const globalModals: any = (
   <>
+    <IntegrationFeedItemDetailModal />
+    <NewMailIntegrationModal />
     <MenuMoreActionModal />
     <WorkspaceSwitchModal />
     <AccountProfileModal />

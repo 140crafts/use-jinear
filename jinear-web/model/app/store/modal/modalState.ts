@@ -163,3 +163,13 @@ export interface TaskBoardPickerModalState extends ModalState {
 export interface UpgradeWorkspacePlanModalState extends ModalState {
   workspaceId?: string;
 }
+
+export interface NewMailIntegrationModalState extends ModalState {
+  workspaceId?: string;
+}
+export interface IntegrationFeedItemDetailModalState extends ModalState {
+  workspaceId?: string;
+  feedId?: string;
+  itemId?: string;
+  title?: string | null;
+}

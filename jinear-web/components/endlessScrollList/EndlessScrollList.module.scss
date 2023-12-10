@@ -1,0 +1,65 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  min-height: min(28vh, 8rem);
+}
+
+.gradientBg {
+  background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-0-op05));
+  border-radius: var(--border-radius);
+}
+
+.container-disabled {
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+@media (max-width: $tablet) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    // align-items: s;
+  }
+  .pagination {
+    align-self: flex-end;
+  }
+}
+
+.emptyStateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.emptyLabel {
+  opacity: 0.8;
+}
+
+.loading {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: var(--backdrop-filter-blur);
+  pointer-events: none;
+}

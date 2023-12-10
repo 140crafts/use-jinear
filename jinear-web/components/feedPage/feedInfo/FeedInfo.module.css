@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  border-bottom: solid;
+  border-bottom-width: thin;
+  border-bottom-color: var(--c-primary-shade-1-op05);
+  padding-bottom: 1rem;
+}

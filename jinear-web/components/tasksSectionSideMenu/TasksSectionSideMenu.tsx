@@ -7,6 +7,7 @@ import useTranslation from "locales/useTranslation";
 import { useParams } from "next/navigation";
 import React from "react";
 import Button, { ButtonHeight, ButtonVariants } from "../button";
+import BasicFeedList from "../sideMenu/basicFeedList/BasicFeedList";
 import BasicTeamList from "../sideMenu/basicTeamList/BasicTeamList";
 import styles from "./TasksSectionSideMenu.module.css";
 
@@ -43,7 +44,8 @@ const TasksSectionSideMenu: React.FC<TasksSectionSideMenuProps> = ({}) => {
           >
             <div>{t("sideMenuNewTask")}</div>
           </Button>
-          <BasicTeamList />
+          {workspace && <BasicFeedList workspace={workspace} />}
+          {workspace && <BasicTeamList workspace={workspace} />}
         </>
       )}
     </div>

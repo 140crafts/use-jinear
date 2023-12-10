@@ -33,7 +33,7 @@
   outline-color: var(--c-link-color);
   outline-offset: 2px;
   outline-width: 2px;
-  z-index: 99;
+  z-index: 3;
   /* outline-width: 2px; */
 }
 

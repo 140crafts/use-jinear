@@ -27,14 +27,16 @@ const TopicsMenuTitle: React.FC<TopicsMenuTitleProps> = ({ workspace, team }) =>
         <div>{t("sideMenuTeamTopics")}</div>
       </Button>
       <div className={styles.actionButtonsContainer}>
-        <Button
-          variant={ButtonVariants.hoverFilled2}
-          heightVariant={ButtonHeight.short}
-          href={`/${workspace?.username}/tasks/${team?.username}/topic/new`}
-          data-tooltip-right={t("sideMenuTeamTopicsNew")}
-        >
-          <IoAdd />
-        </Button>
+        {team.teamState == "ACTIVE" && (
+          <Button
+            variant={ButtonVariants.hoverFilled2}
+            heightVariant={ButtonHeight.short}
+            href={`/${workspace?.username}/tasks/${team?.username}/topic/new`}
+            data-tooltip-right={t("sideMenuTeamTopicsNew")}
+          >
+            <IoAdd />
+          </Button>
+        )}
       </div>
     </div>
   );
