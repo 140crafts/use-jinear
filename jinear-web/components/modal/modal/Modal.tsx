@@ -59,7 +59,11 @@ const Modal: React.FC<ModalProps> = ({
           {hasTitleCloseButton && <div className={styles.titleBarIconButtonContainer} />}
         </div>
       )}
-      <div className={cn(styles.body, width == "fullscreen" && styles.fullHeightBody, bodyClass)}>{children}</div>
+      <div
+        className={cn(styles.body, width == "fullscreen" && styles.fullHeightBody, styles[`body-height-${height}`], bodyClass)}
+      >
+        {children}
+      </div>
     </BaseModal>
   );
 };

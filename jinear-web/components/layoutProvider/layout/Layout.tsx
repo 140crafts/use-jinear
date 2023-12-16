@@ -1,7 +1,6 @@
 "use client";
 
 import Button from "@/components/button";
-import SideMenu from "@/components/sideMenu/SideMenu";
 import SideMenuFooter from "@/components/sideMenu/sideMenuFooter/SideMenuFooter";
 import TabBar from "@/components/tabBar/TabBar";
 import WorkspaceMenu from "@/components/workspaceMenu/WorkspaceMenu";
@@ -92,9 +91,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           <SideMenuFooter className={cn(styles.sideMenuFooter, !isMenuVisible && styles.sideMenuFooterMenuOpen)} />
 
           <div className={styles.menuContent}>
-            <div className={styles.mainMenu}>
-              <SideMenu />
-            </div>
+            <div className={styles.mainMenu}>{/* <SideMenu /> */}</div>
           </div>
           <div className={cn(styles.workspaceMenu, !isMenuVisible && styles.workspaceMenuOpen, pwa && styles.pwaMargin)}>
             <WorkspaceMenu />

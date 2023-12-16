@@ -26,7 +26,6 @@ const MemberList: React.FC<MemberListProps> = ({ workspace }) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2>{t("activeWorkspaceMemberListTitle")}</h2>
         {workplaceMembersResponse && (
           <Pagination
             id={`active-invitation-list-paginator`}

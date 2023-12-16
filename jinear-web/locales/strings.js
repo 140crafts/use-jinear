@@ -1490,6 +1490,10 @@ export default {
     en: "Workspace Members",
     tr: "Çalışma Alanı Üyeleri",
   },
+  activeWorkspaceMemberListText: {
+    en: "Only accounts below can see workspace content.",
+    tr: "Yanlızca aşağıdaki hesaplar çalışma alanı içeriğine erişebilir.",
+  },
   activeWorkspaceMemberKick: {
     en: "Kick Member",
     tr: "Üyeyi At",
@@ -1565,6 +1569,10 @@ export default {
   teamMemberScreenListTitle: {
     en: "Team Members",
     tr: "Ekip Üyeleri",
+  },
+  teamMemberScreenListText: {
+    en: "Only members below and workspace admins can see team content.",
+    tr: "Yanlızca aşağıdaki ekip üyeleri ve çalışma alanı yöneticileri ekip içeriğine erişebilir.",
   },
   teamMemberRole_ADMIN: {
     en: "Admin",
@@ -2246,9 +2254,17 @@ export default {
     en: "Your Teams",
     tr: "Ekiplerin",
   },
+  sideMenuArchivedTeamsTitle: {
+    en: "Archived Teams (${n})",
+    tr: "Arşivlenmiş Ekipler (${n})",
+  },
   sideMenuTeamActionButtonLabelTasks: {
     en: "Tasks",
     tr: "Görevler",
+  },
+  sideMenuTeamActionButtonLabelFeed: {
+    en: "Feed",
+    tr: "Akış",
   },
   sideMenuTeamActionButtonLabelFiles: {
     en: "Files",
@@ -2801,5 +2817,173 @@ export default {
   loginScreenLoginWithGoogle: {
     en: "Login With Google",
     tr: "Google ile Giriş Yap",
+  },
+  teamSettingsScreenTeamStateSectionTitle_ARCHIVED: {
+    en: "Unarchive Team",
+    tr: "Takımı Tekrar Aktifleştir",
+  },
+  teamSettingsScreenTeamStateSectionDescription_ARCHIVED: {
+    en: "You can continue to use this team as before by taking it out of the archive.",
+    tr: "Bu takımı arşivden çıkararak eskisi gibi kullanmaya devam edebilirsiniz",
+  },
+  teamSettingsScreenTeamStateSectionTitle_ACTIVE: {
+    en: "Archive Team",
+    tr: "Takımı Arşive Kaldır",
+  },
+  teamSettingsScreenTeamStateSectionDescription_ACTIVE: {
+    en: "Archive this team and make it read only.",
+    tr: "Bu takımı arşivle ve salt okunur yap.",
+  },
+  teamSettingsScreenTeamStateSectionActionButton_ARCHIVED: {
+    en: "Activate",
+    tr: "Aktifleştir",
+  },
+  teamSettingsScreenTeamStateSectionActionButton_ACTIVE: {
+    en: "Archive",
+    tr: "Arşivle",
+  },
+  sideMenuAddMailIntegrationLabel: {
+    en: "Add Gmail Feed",
+    tr: "Gmail Akışı Ekle",
+  },
+  newMailIntegrationModalTitle: {
+    en: "New Gmail Integration",
+    tr: "Yeni Gmail Entegrasyonu",
+  },
+  newMailIntegrationModalLabel: {
+    en: "We carefully minimized the scope of access. All requested permissions are necessary for us to list your emails. Your emails are not recorded by Jinear, and they are not used for any data processing purposes.",
+    tr: "Erişim kapsamını dikkatlice en aza indirdik. İstenen tüm izinler, maillerinizi listelememiz için gereklidir. Mailleriniz Jinear tarafından kayit altina alınmaz, hiçbir veri işleme için kullanılmazlar.",
+  },
+  newMailIntegrationModalAddGmailLabel: {
+    en: "Add Gmail Feed",
+    tr: "Gmail Akışı Ekle",
+  },
+  sideMenuFeedsTitle: {
+    en: "Your Feeds",
+    tr: "Akışların",
+  },
+  sideMenuFeedMembers: {
+    en: "Feed members",
+    tr: "Akış üyeleri",
+  },
+  sideMenuFeedSettings: {
+    en: "Feed settings",
+    tr: "Akış ayarları",
+  },
+  feedPageTitle: {
+    en: "Feed",
+    tr: "Akış",
+  },
+  feedPageEmptyLabel: {
+    en: "There isn't any content in this feed",
+    tr: "Bu akışta herhangi bir öge bulunmuyor",
+  },
+  feedPageLoadMoreLabel: {
+    en: "Load More",
+    tr: "Daha Fazla",
+  },
+  feedItemLabelToday: {
+    en: "Today",
+    tr: "Bugün",
+  },
+  feedItemLabelYesterday: {
+    en: "Yesterday",
+    tr: "Dün",
+  },
+  feedLastUpdateLabel: {
+    en: "Last update ${date}",
+    tr: "Son güncelleme ${date}",
+  },
+  feedItemDetailCreateTask: {
+    en: "Create A Task",
+    tr: "Görev Oluştur",
+  },
+  feedItemDetailOpenInProvider_GOOGLE: {
+    en: "Open in Gmail",
+    tr: "Gmail de Görüntüle",
+  },
+  newTaskFormFeedItemDefaultTitle: {
+    en: "Feed item added",
+    tr: "Akış elemanı eklendi",
+  },
+  taskDetailFeedsTitle: {
+    en: "Related Feed Items",
+    tr: "İlgili Akış Elemanları",
+  },
+  deleteFeedCardTitle: {
+    en: "Delete Feed",
+    tr: "Akışı Sil",
+  },
+  deleteFeedCardText: {
+    en: "Deleting feed does not deletes task related to them but removes relation.",
+    tr: "Akışı silmek bu akışla bağlantılı görevleri silmez yanlızca aralarındaki bağı kopartır.",
+  },
+  deleteFeedButton: {
+    en: "Delete Feed",
+    tr: "Akışı Sil",
+  },
+  deleteFeedCardAreYouSureTitle: {
+    en: "Are you sure to delete this feed?",
+    tr: "Bu akışı silmek istediğinize emin misiniz?",
+  },
+  deleteFeedCardAreYouSureText: {
+    en: "This action can not be undone but you can always re-add feed.",
+    tr: "Bu işlem geri alınamaz ancak her zaman tekrar akış ekleyebilirsiniz.",
+  },
+  feedMemberListTitle: {
+    en: "Feed Members",
+    tr: "Akış Üyeleri",
+  },
+  feedMemberListText: {
+    en: "Only members below and workspace admins can see feed content.",
+    tr: "Yanlızca aşağıdaki akış üyeleri ve çalışma alanı yöneticileri akış içeriğine erişebilir.",
+  },
+  feedMemberListItemOwner: {
+    en: "Owner",
+    tr: "Oluşturan",
+  },
+  feedMemberListItemUser: {
+    en: "Member",
+    tr: "Üye",
+  },
+  feedMemberListEmptyLabel: {
+    en: "No feed member found.",
+    tr: "Hiçbir üye bulunamadı.",
+  },
+  deleteFeedMemberAreYouSureTitle: {
+    en: "Kick Member",
+    tr: "Üyeyi Akış Üyelerinden At",
+  },
+  deleteFeedMemberAreYouSureText: {
+    en: "Are you sure to remove member access from this feed?",
+    tr: "Üyeyi akış üyelerinden atmak istediğinize emin misiniz?",
+  },
+  deleteFeedMemberAreYouSureConfirmLabel: {
+    en: "Kick",
+    tr: "At",
+  },
+  feedMemberAddMember: {
+    en: "Add Member",
+    tr: "Üye Ekle",
+  },
+  workspaceMemberPickerModalTitle: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri",
+  },
+  workspaceMemberPickerModalFilterPlaceholder: {
+    en: "Filter by username",
+    tr: "Kullanıcı adına göre filtrele",
+  },
+  workspaceMemberPickerModalEmptyState: {
+    en: "No workspace member found",
+    tr: "Hiçbir çalışma alanı üyesi bulunamadı",
+  },
+  workspaceMemberPickerModalCancelButton: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  workspaceMemberPickerModalSelectButton: {
+    en: "Select",
+    tr: "Seç",
   },
 };

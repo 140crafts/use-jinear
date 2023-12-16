@@ -1,30 +1,40 @@
+import Button, { ButtonHeight } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
+import { WorkspaceDto } from "@/model/be/jinear-core";
 import { useRetrieveMembershipsQuery } from "@/store/api/teamMemberApi";
-import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { popNewTeamModal } from "@/store/slice/modalSlice";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { useAppDispatch } from "@/store/store";
+import { useToggle } from "@uidotdev/usehooks";
 import useTranslation from "locales/useTranslation";
-import React from "react";
+import React, { useMemo } from "react";
+import { LuChevronDown, LuChevronRight } from "react-icons/lu";
 import MenuGroupTitle from "../menuGroupTitle/MenuGroupTitle";
 import styles from "./BasicTeamList.module.css";
 import BasicTeamMenu from "./basicTeamMenu/BasicTeamMenu";
 
-interface BasicTeamListProps {}
+interface BasicTeamListProps {
+  workspace: WorkspaceDto;
+}
 
-const BasicTeamList: React.FC<BasicTeamListProps> = ({}) => {
+const BasicTeamList: React.FC<BasicTeamListProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
+  const [archivedVisible, toggleArchivedVisible] = useToggle(false);
 
   const {
     data: membershipsResponse,
     isSuccess,
     isFetching,
-  } = useRetrieveMembershipsQuery(
-    { workspaceId: preferredWorkspace?.workspaceId || "" },
-    {
-      skip: preferredWorkspace == null,
-    }
+  } = useRetrieveMembershipsQuery({ workspaceId: workspace.workspaceId });
+
+  const activeTeamMembershipList = useMemo(
+    () => membershipsResponse?.data?.filter((teamMemberDto) => teamMemberDto?.team?.teamState == "ACTIVE"),
+    [membershipsResponse]
+  );
+
+  const archivedTeamMembershipList = useMemo(
+    () => membershipsResponse?.data?.filter((teamMemberDto) => teamMemberDto?.team?.teamState == "ARCHIVED"),
+    [membershipsResponse]
   );
 
   const openNewTeamModal = () => {
@@ -38,17 +48,38 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({}) => {
       {isFetching && <CircularLoading />}
       <div className="spacer-h-1" />
       <div className={styles.teamListContainer}>
-        {preferredWorkspace &&
-          !isFetching &&
-          isSuccess &&
-          membershipsResponse?.data.map((teamMemberDto) => (
-            <BasicTeamMenu
-              key={`basic-team-menu-${teamMemberDto.team.teamId}`}
-              team={teamMemberDto.team}
-              workspace={preferredWorkspace}
-              role={teamMemberDto.role}
-            />
-          ))}
+        {!isFetching && isSuccess && (
+          <>
+            {activeTeamMembershipList?.map((teamMemberDto) => (
+              <BasicTeamMenu
+                key={`basic-team-menu-${teamMemberDto.team.teamId}`}
+                team={teamMemberDto.team}
+                workspace={workspace}
+                role={teamMemberDto.role}
+              />
+            ))}
+            {archivedTeamMembershipList && archivedTeamMembershipList.length != 0 && (
+              <div className={styles.archivedListContainer}>
+                <Button heightVariant={ButtonHeight.short} className={styles.menuActionButton} onClick={toggleArchivedVisible}>
+                  {archivedVisible ? <LuChevronDown /> : <LuChevronRight />}
+                  {t("sideMenuArchivedTeamsTitle").replace("${n}", archivedTeamMembershipList.length + "")}
+                </Button>
+                {archivedVisible && (
+                  <div className={styles.archivedList}>
+                    {archivedTeamMembershipList.map((teamMemberDto) => (
+                      <BasicTeamMenu
+                        key={`basic-team-menu-${teamMemberDto.team.teamId}`}
+                        team={teamMemberDto.team}
+                        workspace={workspace}
+                        role={teamMemberDto.role}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );

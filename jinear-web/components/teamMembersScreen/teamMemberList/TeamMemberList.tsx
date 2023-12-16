@@ -20,7 +20,6 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({ teamId }) => {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2>{t("teamMemberScreenListTitle")}</h2>
         {teamMembersResponse && (
           <Pagination
             id={`active-invitation-list-paginator`}

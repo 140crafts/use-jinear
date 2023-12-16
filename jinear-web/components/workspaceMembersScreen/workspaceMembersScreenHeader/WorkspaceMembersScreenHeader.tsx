@@ -1,4 +1,5 @@
-import Button, { ButtonVariants } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import SectionTitle from "@/components/sectionTitle/SectionTitle";
 import { WorkspaceDto } from "@/model/be/jinear-core";
 import { popWorkspaceMemberInviteModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
@@ -20,9 +21,10 @@ const WorkspaceMembersScreenHeader: React.FC<WorkspaceMembersScreenHeaderProps> 
   };
   return (
     <div className={styles.container}>
+      <SectionTitle title={t("activeWorkspaceMemberListTitle")} description={t("activeWorkspaceMemberListText")} />
       <div className={styles.actionBar}>
         {isWorkspaceAdminOrOwner && (
-          <Button variant={ButtonVariants.contrast} onClick={popInviteModal}>
+          <Button variant={ButtonVariants.contrast} heightVariant={ButtonHeight.short} onClick={popInviteModal}>
             {t("workspaceMemberScreenInviteMember")}
           </Button>
         )}

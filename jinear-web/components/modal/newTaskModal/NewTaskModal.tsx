@@ -6,6 +6,7 @@ import {
   selectNewTaskModalInitialAssignedDateIsPrecise,
   selectNewTaskModalInitialDueDate,
   selectNewTaskModalInitialDueDateIsPrecise,
+  selectNewTaskModalInitialRelatedFeedItemData,
   selectNewTaskModalSubTaskOf,
   selectNewTaskModalSubTaskOfLabel,
   selectNewTaskModalTeam,
@@ -32,6 +33,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const initialAssignedDateIsPrecise = useTypedSelector(selectNewTaskModalInitialAssignedDateIsPrecise);
   const initialDueDate = useTypedSelector(selectNewTaskModalInitialDueDate);
   const initialDueDateIsPrecise = useTypedSelector(selectNewTaskModalInitialDueDateIsPrecise);
+  const initialRelatedFeedItemData = useTypedSelector(selectNewTaskModalInitialRelatedFeedItemData);
   const workspaceId = workspace?.workspaceId;
 
   const { isMobile } = useWindowSize();
@@ -43,9 +45,10 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   return (
     <Modal
       visible={visible}
-      title={t("newTaskModalTitle")}
+      // title={t("newTaskModalTitle")}
       bodyClass={styles.container}
-      width={isMobile ? "fullscreen" : "large"}
+      // width={isMobile ? "fullscreen" : "large"}
+      width={"large"}
     >
       {workspaceId && team?.teamId && (
         <NewTaskForm
@@ -57,8 +60,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
           initialAssignedDateIsPrecise={initialAssignedDateIsPrecise}
           initialDueDate={initialDueDate}
           initialDueDateIsPrecise={initialDueDateIsPrecise}
-          className={isMobile ? styles.formMobileClassName : undefined}
-          footerContainerClass={isMobile ? styles.mobileFooterContainerClass : undefined}
+          initialRelatedFeedItemData={initialRelatedFeedItemData}
           onClose={close}
         />
       )}

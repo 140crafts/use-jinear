@@ -58,7 +58,14 @@ export const tagTypes = [
   "task-comments",
   "workspace-team-membership-list",
   "workspace-activity-filtered-list",
-  "oauth/google/login-redirect-info",
+  "oauth/google/redirect-info/login",
+  "v1/feed/content/workspace/{workspaceId}/{feedId}",
+  "v1/feed/content/workspace/{workspaceId}/{feedId}/item/{itemId}",
+  "v1/team/{teamId}/team-state/{teamState}",
+  "v1/oauth/google/redirect-info/attach-mail",
+  "v1/feed/member/memberships/{workspaceId}",
+  "v1/task/feed-item/from-task/req.taskId",
+  "v1/feed/member/list/{feedId}",
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

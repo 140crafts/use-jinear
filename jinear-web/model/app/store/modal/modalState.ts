@@ -1,4 +1,5 @@
 import {
+  IntegrationProvider,
   TaskBoardDto,
   TaskDto,
   TaskSearchResultDto,
@@ -7,7 +8,15 @@ import {
   TeamWorkflowStatusDto,
   TopicDto,
   WorkspaceDto,
+  WorkspaceMemberDto,
 } from "@/model/be/jinear-core";
+
+export interface IRelatedFeedItemData {
+  feedId: string;
+  feedItemId: string;
+  itemTitle?: string;
+  integrationProvider?: IntegrationProvider;
+}
 
 export default interface ModalState {
   visible: boolean;
@@ -100,6 +109,7 @@ export interface NewTaskModalState extends ModalState {
   initialAssignedDateIsPrecise?: boolean;
   initialDueDate?: Date;
   initialDueDateIsPrecise?: boolean;
+  initialRelatedFeedItemData?: IRelatedFeedItemData;
 }
 
 export interface TeamPickerModalState extends ModalState {
@@ -162,4 +172,21 @@ export interface TaskBoardPickerModalState extends ModalState {
 
 export interface UpgradeWorkspacePlanModalState extends ModalState {
   workspaceId?: string;
+}
+
+export interface NewMailIntegrationModalState extends ModalState {
+  workspaceId?: string;
+}
+export interface IntegrationFeedItemDetailModalState extends ModalState {
+  workspace?: WorkspaceDto;
+  feedId?: string;
+  itemId?: string;
+  title?: string | null;
+}
+
+export interface WorkspaceMemberPickerModalState extends ModalState {
+  workspaceId?: string;
+  multiple?: boolean;
+  initialSelectionOnMultiple?: WorkspaceMemberDto[];
+  onPick?: (pickedList: WorkspaceMemberDto[]) => void;
 }

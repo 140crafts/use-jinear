@@ -40,14 +40,16 @@ const BoardsMenuTitle: React.FC<BoardsMenuTitleProps> = ({ workspace, team }) =>
         <div>{t("sideMenuTeamActionButtonLabelBoards")}</div>
       </Button>
       <div className={styles.actionButtonsContainer}>
-        <Button
-          variant={ButtonVariants.hoverFilled2}
-          heightVariant={ButtonHeight.short}
-          onClick={openNewTaskBoardModal}
-          data-tooltip-right={t("sideMenuTeamActionButtonLabelBoardsNew")}
-        >
-          <IoAdd />
-        </Button>
+        {team.teamState == "ACTIVE" && (
+          <Button
+            variant={ButtonVariants.hoverFilled2}
+            heightVariant={ButtonHeight.short}
+            onClick={openNewTaskBoardModal}
+            data-tooltip-right={t("sideMenuTeamActionButtonLabelBoardsNew")}
+          >
+            <IoAdd />
+          </Button>
+        )}
       </div>
     </div>
   );

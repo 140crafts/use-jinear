@@ -1,7 +1,6 @@
 "use client";
 import Button, { ButtonVariants } from "@/components/button";
 import OrLine from "@/components/orLine/OrLine";
-import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import { LocaleType } from "@/model/be/jinear-core";
 import { useLoginWithPasswordMutation } from "@/store/api/authApi";
 import { useRetrieveLoginRedirectInfoQuery } from "@/store/api/googleOAuthApi";
@@ -38,7 +37,6 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
   const router = useRouter();
   const dispatch = useDispatch();
   const [loginWithpassword, { isSuccess, isError, isLoading }] = useLoginWithPasswordMutation();
-  const loginWithGoogleEnabled = useFeatureFlag("LOGIN_WITH_GOOGLE");
   const { data: authRedirectInfoResponse, isLoading: isAuthRedirectRetrieveLoading } = useRetrieveLoginRedirectInfoQuery();
   const { register, setValue, handleSubmit, setFocus } = useForm<ILoginWithMailForm>();
 
@@ -112,18 +110,16 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
       <div className="spacer-h-1" />
 
       <div className={styles.otherMethodsContainer}>
-        {loginWithGoogleEnabled && (
-          <Button
-            disabled={isLoading}
-            loading={isLoading}
-            href={authRedirectInfoResponse?.redirectUrl}
-            variant={ButtonVariants.outline}
-            className={styles.iconButton}
-          >
-            <IoLogoGoogle className={styles.icon} />
-            <div>{t("loginScreenLoginWithGoogle")}</div>
-          </Button>
-        )}
+        <Button
+          disabled={isLoading}
+          loading={isLoading}
+          href={authRedirectInfoResponse?.redirectUrl}
+          variant={ButtonVariants.outline}
+          className={styles.iconButton}
+        >
+          <IoLogoGoogle className={styles.icon} />
+          <div>{t("loginScreenLoginWithGoogle")}</div>
+        </Button>
         <Button onClick={pop2FaMailModal} variant={ButtonVariants.outline} className={styles.iconButton}>
           <IoMail className={styles.icon} />
           <div>{t("loginWith2FaMail")}</div>

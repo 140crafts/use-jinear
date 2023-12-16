@@ -34,14 +34,16 @@ const TasksMenu: React.FC<TasksMenuProps> = ({ workspace, team }) => {
         <div>{t("sideMenuTeamActionButtonLabelTasks")}</div>
       </Button>
       <div className={styles.actionButtonsContainer}>
-        <Button
-          variant={ButtonVariants.hoverFilled2}
-          heightVariant={ButtonHeight.short}
-          data-tooltip-right={t("sideMenuNewTask")}
-          onClick={popNewTask}
-        >
-          <IoAdd />
-        </Button>
+        {team.teamState == "ACTIVE" && (
+          <Button
+            variant={ButtonVariants.hoverFilled2}
+            heightVariant={ButtonHeight.short}
+            data-tooltip-right={t("sideMenuNewTask")}
+            onClick={popNewTask}
+          >
+            <IoAdd />
+          </Button>
+        )}
       </div>
     </div>
   );

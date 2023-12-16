@@ -2,7 +2,6 @@ import AuthCheck from "@/components/authCheck/AuthCheck";
 import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 import FirebaseConfigration from "@/components/firebaseConfiguration/FirebaseConfigration";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
-import TitleHandler from "@/components/titleHandler/TitleHandler";
 import InternalWorkspacePrefChangeListener from "@/components/workspaceAndTeamChangeListener/InternalWorkspacePrefChangeListener";
 import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
 import Logger from "@/utils/logger";
@@ -102,7 +101,6 @@ function MyApp({ children }: { children: React.ReactNode }) {
           <ReduxProvider>
             <DateFnsConfigration />
             <ThemeProvider>
-              <TitleHandler />
               <AuthCheck />
               <InternalWorkspacePrefChangeListener />
               <WorkspaceAndTeamChangeListener />

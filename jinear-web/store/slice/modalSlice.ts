@@ -9,7 +9,9 @@ import ModalState, {
   ChangeTaskWorkflowStatusModalState,
   DatePickerModalState,
   DialogModalState,
+  IntegrationFeedItemDetailModalState,
   LoginWith2FaMailModalState,
+  NewMailIntegrationModalState,
   NewReminderModalState,
   NewTaskBoardModalState,
   NewTaskModalState,
@@ -26,6 +28,7 @@ import ModalState, {
   TopicPickerModalState,
   UpgradeWorkspacePlanModalState,
   WorkspaceMemberInviteModalState,
+  WorkspaceMemberPickerModalState,
   WorkspacePickerModalState,
 } from "model/app/store/modal/modalState";
 import { accountApi } from "../api/accountApi";
@@ -140,6 +143,15 @@ const initialState = {
   deviceOfflineModal: {
     visible: false,
   },
+  newMailIntegrationModal: {
+    visible: false,
+  },
+  integrationFeedItemDetailModal: {
+    visible: false,
+  },
+  workspaceMemberPickerModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -175,6 +187,9 @@ const initialState = {
   workspaceSwitchModal: null | ModalState;
   menuMoreActionModal: null | ModalState;
   deviceOfflineModal: null | ModalState;
+  newMailIntegrationModal: null | NewMailIntegrationModalState;
+  integrationFeedItemDetailModal: null | IntegrationFeedItemDetailModalState;
+  workspaceMemberPickerModal: null | WorkspaceMemberPickerModalState;
 };
 
 const slice = createSlice({
@@ -425,6 +440,27 @@ const slice = createSlice({
       state.deviceOfflineModal = initialState.deviceOfflineModal;
     },
 
+    popNewMailIntegrationModal: (state, action: PayloadAction<NewMailIntegrationModalState>) => {
+      state.newMailIntegrationModal = { visible: true, workspaceId: action.payload.workspaceId };
+    },
+    closeNewMailIntegrationModal: (state, action: PayloadAction<void>) => {
+      state.newMailIntegrationModal = initialState.newMailIntegrationModal;
+    },
+
+    popIntegrationFeedItemDetailModal: (state, action: PayloadAction<IntegrationFeedItemDetailModalState>) => {
+      state.integrationFeedItemDetailModal = { ...action.payload, visible: true };
+    },
+    closeIntegrationFeedItemDetailModal: (state, action: PayloadAction<void>) => {
+      state.integrationFeedItemDetailModal = initialState.integrationFeedItemDetailModal;
+    },
+
+    popWorkspaceMemberPickerModal: (state, action: PayloadAction<WorkspaceMemberPickerModalState>) => {
+      state.workspaceMemberPickerModal = { ...action.payload, visible: true };
+    },
+    closeWorkspaceMemberPickerModal: (state, action: PayloadAction<void>) => {
+      state.workspaceMemberPickerModal = initialState.workspaceMemberPickerModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -509,6 +545,12 @@ export const {
   closeMenuMoreActionModal,
   popDeviceOfflineModal,
   closeDeviceOfflineModal,
+  popNewMailIntegrationModal,
+  closeNewMailIntegrationModal,
+  popIntegrationFeedItemDetailModal,
+  closeIntegrationFeedItemDetailModal,
+  popWorkspaceMemberPickerModal,
+  closeWorkspaceMemberPickerModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -542,6 +584,8 @@ export const selectNewTaskModalInitialAssignedDateIsPrecise = (state: RootState)
   state.modal.newTaskModal?.initialAssignedDateIsPrecise;
 export const selectNewTaskModalInitialDueDate = (state: RootState) => state.modal.newTaskModal?.initialDueDate;
 export const selectNewTaskModalInitialDueDateIsPrecise = (state: RootState) => state.modal.newTaskModal?.initialDueDateIsPrecise;
+export const selectNewTaskModalInitialRelatedFeedItemData = (state: RootState) =>
+  state.modal.newTaskModal?.initialRelatedFeedItemData;
 
 export const selectNewTopicModalVisible = (state: RootState) => state.modal.newTopicModal?.visible;
 export const selectNewTopicModalWorkspace = (state: RootState) => state.modal.newTopicModal?.workspace;
@@ -688,3 +732,24 @@ export const selectWorkspaceSwitchModalVisible = (state: RootState) => state.mod
 export const selectMenuMoreActionModalVisible = (state: RootState) => state.modal.menuMoreActionModal?.visible;
 
 export const selectDeviceOfflineModal = (state: RootState) => state.modal.deviceOfflineModal?.visible;
+
+export const selectNewMailIntegrationModalVisible = (state: RootState) => state.modal.newMailIntegrationModal?.visible;
+export const selectNewMailIntegrationModalWorkspaceId = (state: RootState) => state.modal.newMailIntegrationModal?.workspaceId;
+
+export const selectIntegrationFeedItemDetailModalVisible = (state: RootState) =>
+  state.modal.integrationFeedItemDetailModal?.visible;
+export const selectIntegrationFeedItemDetailModalWorkspace = (state: RootState) =>
+  state.modal.integrationFeedItemDetailModal?.workspace;
+export const selectIntegrationFeedItemDetailModalFeedId = (state: RootState) =>
+  state.modal.integrationFeedItemDetailModal?.feedId;
+export const selectIntegrationFeedItemDetailModalFeedItemId = (state: RootState) =>
+  state.modal.integrationFeedItemDetailModal?.itemId;
+export const selectIntegrationFeedItemDetailModalTitle = (state: RootState) => state.modal.integrationFeedItemDetailModal?.title;
+
+export const selectWorkspaceMemberPickerModalVisible = (state: RootState) => state.modal.workspaceMemberPickerModal?.visible;
+export const selectWorkspaceMemberPickerModalWorkspaceId = (state: RootState) =>
+  state.modal.workspaceMemberPickerModal?.workspaceId;
+export const selectWorkspaceMemberPickerModalMultiple = (state: RootState) => state.modal.workspaceMemberPickerModal?.multiple;
+export const selectWorkspaceMemberPickerModalInitialSelectionOnMultiple = (state: RootState) =>
+  state.modal.workspaceMemberPickerModal?.initialSelectionOnMultiple;
+export const selectWorkspaceMemberPickerModalOnPick = (state: RootState) => state.modal.workspaceMemberPickerModal?.onPick;

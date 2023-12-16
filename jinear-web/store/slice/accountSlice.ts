@@ -80,11 +80,11 @@ export const selectCurrentAccountsPreferredWorkspaceId = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.workspace?.workspaceId;
 };
 
-//
+//TODO remove preferred team
 export const selectCurrentAccountsPreferredTeam = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.team;
 };
-
+//TODO remove preferred team
 export const selectCurrentAccountsPreferredTeamId = (state: RootState) => {
   return state.account.current?.workspaceDisplayPreference?.team?.teamId;
 };

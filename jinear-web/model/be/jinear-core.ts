@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-11-18 22:58:06.
+// Generated using typescript-generator version 3.0.1157 on 2023-12-14 08:14:18.
 
 export interface BaseDto {
   createdDate: Date;
@@ -59,7 +59,47 @@ export interface PlainAccountProfileDto extends BaseDto {
   profilePicture?: AccessibleMediaDto | null;
 }
 
-export interface GoogleHandleLoginResponseDto {
+export interface InMemoryCacheItem {
+  item: any;
+  expiresAt: Date;
+  expired: boolean;
+  notExpired: boolean;
+}
+
+export interface FeedDto extends BaseDto {
+  feedId: string;
+  workspaceId: string;
+  initializedBy: string;
+  integrationInfoId: string;
+  name: string;
+  provider: IntegrationProvider;
+  scopes: IntegrationScopeType[];
+}
+
+export interface FeedMemberDto extends BaseDto {
+  feedMemberId: string;
+  accountId: string;
+  workspaceId: string;
+  feedId: string;
+  account: AccountDto;
+  feed: FeedDto;
+}
+
+export interface GmailMessageDto extends BaseDto {
+  gmailMessageId: string;
+  gmailThreadId: string;
+  snippet: string;
+  from: string;
+  to: string;
+  subject: string;
+  body: string;
+  gid: string;
+  gthreadId: string;
+  ghistoryId: string;
+  ginternalDate: string;
+}
+
+export interface GoogleHandleTokenDto {
   googleUserInfoDto: GoogleUserInfoDto;
   passiveIdForScopeDeletion: string;
 }
@@ -72,6 +112,7 @@ export interface GoogleTokenDto extends BaseDto {
   idToken: string;
   tokenType: string;
   googleUserInfoId: string;
+  lastMailCheck: Date;
   scopes: GoogleTokenScopeDto[];
   googleUserInfo: GoogleUserInfoDto;
 }
@@ -92,6 +133,46 @@ export interface GoogleUserInfoDto extends BaseDto {
   givenName: string;
   familyName: string;
   locale: string;
+}
+
+export interface DetailedFeedContentItemDto extends FeedContentItemDto {}
+
+export interface FeedContentDto {
+  feedItemList: FeedContentItemDto[];
+  nextPageToken: string;
+  feed: FeedDto;
+}
+
+export interface FeedContentItemDto {
+  participants?: FeedItemParticipant[] | null;
+  title?: string | null;
+  text?: string | null;
+  externalId?: string | null;
+  messages?: FeedItemMessage[] | null;
+  date?: Date | null;
+  feed: FeedDto;
+}
+
+export interface FeedItemMessage {
+  externalId?: string | null;
+  externalGroupId?: string | null;
+  from?: FeedItemParticipant | null;
+  to?: FeedItemParticipant | null;
+  subject?: string | null;
+  body?: string | null;
+  date?: Date | null;
+  detailDataList?: FeedItemMessageData[] | null;
+}
+
+export interface FeedItemMessageData {
+  mimeType?: string | null;
+  data?: string | null;
+  parts?: FeedItemMessageData[] | null;
+}
+
+export interface FeedItemParticipant {
+  name: string;
+  address: string;
 }
 
 export interface IntegrationInfoDto extends BaseDto {
@@ -338,6 +419,19 @@ export interface TaskDto extends BaseDto {
   checklists?: ChecklistDto[] | null;
 }
 
+export interface TaskFeedItemDto extends BaseDto {
+  taskFeedItemId: string;
+  taskId: string;
+  feedId: string;
+  feedItemId: string;
+  feed: FeedDto;
+}
+
+export interface TaskFeedItemListDto {
+  feedContentItemList?: FeedContentItemDto[] | null;
+  totalItemCount?: number | null;
+}
+
 export interface TaskMediaDto extends BaseDto {
   task: TaskDto;
   media: MediaDto;
@@ -413,6 +507,7 @@ export interface TeamDto extends BaseDto {
   visibility: TeamVisibilityType;
   joinMethod: TeamJoinMethodType;
   taskVisibility: TeamTaskVisibilityType;
+  teamState: TeamStateType;
   workflowStatuses: TeamWorkflowStatusDto[];
 }
 
@@ -714,6 +809,8 @@ export interface TaskInitializeRequest extends BaseRequest {
   description?: string | null;
   subTaskOf?: string | null;
   boardId?: string | null;
+  feedId?: string | null;
+  feedItemId?: string | null;
 }
 
 export interface TaskRelationInitializeRequest extends BaseRequest {
@@ -857,6 +954,14 @@ export interface AuthResponse extends BaseResponse {
   token: string;
 }
 
+export interface FeedMemberListingResponse extends BaseResponse {
+  data: FeedMemberDto[];
+}
+
+export interface FeedMemberPaginatedResponse extends BaseResponse {
+  data: PageDto<FeedMemberDto>;
+}
+
 export interface NotificationEventListingResponse extends BaseResponse {
   data: PageDto<NotificationEventDto>;
 }
@@ -909,6 +1014,10 @@ export interface TaskBoardRetrieveResponse extends BaseResponse {
   data: TaskBoardDto;
 }
 
+export interface TaskFeedItemResponse extends BaseResponse {
+  data: TaskFeedItemListDto;
+}
+
 export interface TaskListingPaginatedResponse extends BaseResponse {
   data: PageDto<TaskDto>;
 }
@@ -935,6 +1044,14 @@ export interface TaskSubscribersListingResponse extends BaseRequest {
 
 export interface TaskSubscriptionResponse extends BaseResponse {
   data: TaskSubscriptionDto;
+}
+
+export interface FeedContentItemResponse extends BaseResponse {
+  data: FeedContentItemDto;
+}
+
+export interface FeedContentResponse extends BaseResponse {
+  data: FeedContentDto;
 }
 
 export interface TeamListingResponse extends BaseResponse {
@@ -1018,8 +1135,6 @@ export type GoogleScopeType =
   | "OPEN_ID"
   | "USERINFO_PROFILE"
   | "USERINFO_EMAIL"
-  | "USERINFO_PROFILE_2"
-  | "USERINFO_EMAIL_2"
   | "CALENDAR"
   | "CALENDAR_EVENTS"
   | "CALENDAR_SETTINGS_READONLY"
@@ -1035,7 +1150,7 @@ export type GoogleScopeType =
   | "GMAIL_MODIFY"
   | "GMAIL_READONLY";
 
-export type UserConsentPurposeType = "LOGIN" | "ATTACH_ACCOUNT";
+export type UserConsentPurposeType = "LOGIN" | "ATTACH_MAIL" | "ATTACH_CALENDAR";
 
 export type IntegrationProvider = "GOOGLE";
 
@@ -1189,6 +1304,8 @@ export type TaskState = "TO_DO" | "IN_PROGRESS" | "IN_TEST" | "WONT_DO" | "DONE"
 export type TeamJoinMethodType = "SYNC_MEMBERS_WITH_WORKSPACE" | "ON_DEMAND" | "FROM_TEAM_ADMIN";
 
 export type TeamMemberRoleType = "ADMIN" | "MEMBER" | "GUEST";
+
+export type TeamStateType = "ARCHIVED" | "ACTIVE";
 
 export type TeamTaskVisibilityType = "VISIBLE_TO_ALL_TEAM_MEMBERS" | "OWNER_ASSIGNEE_AND_ADMINS";
 
