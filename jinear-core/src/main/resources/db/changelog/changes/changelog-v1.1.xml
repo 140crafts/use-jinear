@@ -1301,7 +1301,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-302-add-columns-to-team-team_state">
         <addColumn tableName="team">
-            <column name="team_state" type="int" afterColumn="task_source_type" defaultValueNumeric="0">
+            <column name="team_state" type="int" afterColumn="task_visibility" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
