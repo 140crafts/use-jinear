@@ -52,7 +52,7 @@ const FeedContentPage: React.FC<FeedContentPageProps> = ({}) => {
     }
     const oneBefore = index == 0 ? null : feedData?.[index - 1];
     const datesEqual = oneBefore && oneBefore.date && data.date && isSameDay(new Date(oneBefore.date), new Date(data.date));
-    return <FeedListItem key={data.externalId} data={data} withDateTitle={!datesEqual} workspaceId={workspace.workspaceId} />;
+    return <FeedListItem key={data.externalId} data={data} withDateTitle={!datesEqual} workspace={workspace} />;
   };
 
   const loadMore = () => {

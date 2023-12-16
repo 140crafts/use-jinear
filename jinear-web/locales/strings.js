@@ -1490,6 +1490,10 @@ export default {
     en: "Workspace Members",
     tr: "Çalışma Alanı Üyeleri",
   },
+  activeWorkspaceMemberListText: {
+    en: "Only accounts below can see workspace content.",
+    tr: "Yanlızca aşağıdaki hesaplar çalışma alanı içeriğine erişebilir.",
+  },
   activeWorkspaceMemberKick: {
     en: "Kick Member",
     tr: "Üyeyi At",
@@ -1565,6 +1569,10 @@ export default {
   teamMemberScreenListTitle: {
     en: "Team Members",
     tr: "Ekip Üyeleri",
+  },
+  teamMemberScreenListText: {
+    en: "Only members below and workspace admins can see team content.",
+    tr: "Yanlızca aşağıdaki ekip üyeleri ve çalışma alanı yöneticileri ekip içeriğine erişebilir.",
   },
   teamMemberRole_ADMIN: {
     en: "Admin",
@@ -2889,5 +2897,93 @@ export default {
   feedItemDetailCreateTask: {
     en: "Create A Task",
     tr: "Görev Oluştur",
+  },
+  feedItemDetailOpenInProvider_GOOGLE: {
+    en: "Open in Gmail",
+    tr: "Gmail de Görüntüle",
+  },
+  newTaskFormFeedItemDefaultTitle: {
+    en: "Feed item added",
+    tr: "Akış elemanı eklendi",
+  },
+  taskDetailFeedsTitle: {
+    en: "Related Feed Items",
+    tr: "İlgili Akış Elemanları",
+  },
+  deleteFeedCardTitle: {
+    en: "Delete Feed",
+    tr: "Akışı Sil",
+  },
+  deleteFeedCardText: {
+    en: "Deleting feed does not deletes task related to them but removes relation.",
+    tr: "Akışı silmek bu akışla bağlantılı görevleri silmez yanlızca aralarındaki bağı kopartır.",
+  },
+  deleteFeedButton: {
+    en: "Delete Feed",
+    tr: "Akışı Sil",
+  },
+  deleteFeedCardAreYouSureTitle: {
+    en: "Are you sure to delete this feed?",
+    tr: "Bu akışı silmek istediğinize emin misiniz?",
+  },
+  deleteFeedCardAreYouSureText: {
+    en: "This action can not be undone but you can always re-add feed.",
+    tr: "Bu işlem geri alınamaz ancak her zaman tekrar akış ekleyebilirsiniz.",
+  },
+  feedMemberListTitle: {
+    en: "Feed Members",
+    tr: "Akış Üyeleri",
+  },
+  feedMemberListText: {
+    en: "Only members below and workspace admins can see feed content.",
+    tr: "Yanlızca aşağıdaki akış üyeleri ve çalışma alanı yöneticileri akış içeriğine erişebilir.",
+  },
+  feedMemberListItemOwner: {
+    en: "Owner",
+    tr: "Oluşturan",
+  },
+  feedMemberListItemUser: {
+    en: "Member",
+    tr: "Üye",
+  },
+  feedMemberListEmptyLabel: {
+    en: "No feed member found.",
+    tr: "Hiçbir üye bulunamadı.",
+  },
+  deleteFeedMemberAreYouSureTitle: {
+    en: "Kick Member",
+    tr: "Üyeyi Akış Üyelerinden At",
+  },
+  deleteFeedMemberAreYouSureText: {
+    en: "Are you sure to remove member access from this feed?",
+    tr: "Üyeyi akış üyelerinden atmak istediğinize emin misiniz?",
+  },
+  deleteFeedMemberAreYouSureConfirmLabel: {
+    en: "Kick",
+    tr: "At",
+  },
+  feedMemberAddMember: {
+    en: "Add Member",
+    tr: "Üye Ekle",
+  },
+  workspaceMemberPickerModalTitle: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri",
+  },
+  workspaceMemberPickerModalFilterPlaceholder: {
+    en: "Filter by username",
+    tr: "Kullanıcı adına göre filtrele",
+  },
+  workspaceMemberPickerModalEmptyState: {
+    en: "No workspace member found",
+    tr: "Hiçbir çalışma alanı üyesi bulunamadı",
+  },
+  workspaceMemberPickerModalCancelButton: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  workspaceMemberPickerModalSelectButton: {
+    en: "Select",
+    tr: "Seç",
   },
 };

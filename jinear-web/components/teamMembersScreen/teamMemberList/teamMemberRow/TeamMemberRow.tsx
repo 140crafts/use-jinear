@@ -9,7 +9,7 @@ import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { GiHighKick } from "react-icons/gi";
-import styles from "./TeamMemberRow_1.module.scss";
+import styles from "./TeamMemberRow.module.scss";
 
 interface TeamMemberRowProps {
   teamMember: TeamMemberDto;

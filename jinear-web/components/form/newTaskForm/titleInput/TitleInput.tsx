@@ -1,25 +1,32 @@
 import { TaskInitializeRequest } from "@/model/be/jinear-core";
+import { focusAndOpenKeyboard } from "@/utils/htmlUtis";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { UseFormRegister } from "react-hook-form";
+import styles from "./TitleInput.module.css";
 
 interface TitleInputProps {
   register: UseFormRegister<TaskInitializeRequest>;
-  labelClass: string;
+  labelClass?: string;
 }
 
 const TitleInput: React.FC<TitleInputProps> = ({ register, labelClass }) => {
   const { t } = useTranslation();
+  const inputId = "new-task-title";
+
   useEffect(() => {
     setTimeout(() => {
-      document.getElementById("new-task-title")?.click();
+      focusAndOpenKeyboard(inputId);
     }, 250);
   }, []);
   return (
-    <label className={labelClass} htmlFor={"new-task-title"}>
-      <b>{`${t("newTaskModalTaskTitle")} *`}</b>
-      <input id={"new-task-title"} type={"text"} {...register("title", { required: t("formRequiredField") })} />
-    </label>
+    <input
+      id={inputId}
+      type={"text"}
+      placeholder={t("newTaskModalTaskTitle")}
+      className={styles.input}
+      {...register("title", { required: t("formRequiredField") })}
+    />
   );
 };
 

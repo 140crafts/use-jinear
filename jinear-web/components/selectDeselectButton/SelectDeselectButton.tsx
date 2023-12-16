@@ -5,10 +5,10 @@ import styles from "./SelectDeselectButton.module.css";
 
 interface SelectDeselectButtonProps {
   hasSelection: boolean;
-  onPickClick: () => void;
+  onPickClick?: () => void;
   onUnpickClick: () => void;
   selectedComponent: React.ReactNode;
-  emptySelectionLabel: string;
+  emptySelectionLabel?: string;
 }
 
 const SelectDeselectButton: React.FC<SelectDeselectButtonProps> = ({

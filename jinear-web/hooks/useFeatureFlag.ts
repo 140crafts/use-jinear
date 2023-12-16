@@ -8,7 +8,5 @@ export const useFeatureFlag = (flag: FEATURE_FLAG) => {
     const boolValue = value ? new Boolean(value) : false;
     localStorage.setItem(flag, `${boolValue}`);
     return boolValue;
-    // const [_flag, _setFlag] = useLocalStorage<any>(flag, false);
-    // return _flag;
   }
 };

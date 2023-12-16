@@ -38,12 +38,13 @@ import WorkspaceSwitchModal from "@/components/modal/workspaceSwitchModal/Worksp
 import DeviceOfflineModal from "../modal/deviceOfflineModal/DeviceOfflineModal";
 import IntegrationFeedItemDetailModal from "../modal/integrationFeedItemDetailModal/IntegrationFeedItemDetailModal";
 import NewMailIntegrationModal from "../modal/newMailIntegrationModal/NewMailIntegrationModal";
+import WorkspaceMemberPickerModal from "../modal/workspaceMemberPickerModal/WorkspaceMemberPickerModal";
 
 interface ModalProviderProps {}
 
 const globalModals: any = (
   <>
-    <IntegrationFeedItemDetailModal />
+    <WorkspaceMemberPickerModal />
     <NewMailIntegrationModal />
     <MenuMoreActionModal />
     <WorkspaceSwitchModal />
@@ -62,6 +63,7 @@ const globalModals: any = (
     <TaskTopicChangeModal />
     <TaskTaskBoardModal />
     <WorkflowChangeStatusModal />
+    <IntegrationFeedItemDetailModal />
     <NewTaskModal />
     <NewTaskBoardModal />
     <TeamPickerModal />

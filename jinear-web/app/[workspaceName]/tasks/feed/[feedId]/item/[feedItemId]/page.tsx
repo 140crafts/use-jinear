@@ -19,9 +19,7 @@ const FeedItemDetailPage: React.FC<FeedItemDetailPageProps> = ({}) => {
 
   return (
     <div className={styles.container}>
-      {feedId && feedItemId && workspace && (
-        <FeedItemDetail workspaceId={workspace.workspaceId} feedId={feedId} itemId={feedItemId} />
-      )}
+      {feedId && feedItemId && workspace && <FeedItemDetail workspace={workspace} feedId={feedId} itemId={feedItemId} />}
     </div>
   );
 };

@@ -7,15 +7,12 @@
 
 .actionButtonContainer {
   position: sticky;
-  bottom: 0;
+  bottom: -1.5rem;
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
   gap: 1rem;
-  /* background-color: var(--c-primary);
-  box-shadow: var(--box-shadow-soft);
-  border-radius: var(--border-radius);
-  border-style: solid;
-  border-color: var(--c-primary-shade-0);
-  padding: 0.5rem; */
+  /* width: 100%; */
+  background-color: var(--c-primary);
+  padding: 0.5rem;
 }

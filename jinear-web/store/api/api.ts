@@ -64,6 +64,8 @@ export const tagTypes = [
   "v1/team/{teamId}/team-state/{teamState}",
   "v1/oauth/google/redirect-info/attach-mail",
   "v1/feed/member/memberships/{workspaceId}",
+  "v1/task/feed-item/from-task/req.taskId",
+  "v1/feed/member/list/{feedId}",
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

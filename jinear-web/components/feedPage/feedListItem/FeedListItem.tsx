@@ -1,7 +1,7 @@
 "use client";
 import Button from "@/components/button";
 import useWindowSize from "@/hooks/useWindowSize";
-import { FeedContentItemDto } from "@/model/be/jinear-core";
+import { FeedContentItemDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { popIntegrationFeedItemDetailModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -15,10 +15,10 @@ const logger = Logger("FeedListItem");
 interface FeedListItemProps {
   data: FeedContentItemDto;
   withDateTitle?: boolean;
-  workspaceId: string;
+  workspace: WorkspaceDto;
 }
 
-const FeedListItem: React.FC<FeedListItemProps> = ({ workspaceId, withDateTitle, data }) => {
+const FeedListItem: React.FC<FeedListItemProps> = ({ workspace, withDateTitle, data }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { isMobile } = useWindowSize();
@@ -49,7 +49,7 @@ const FeedListItem: React.FC<FeedListItemProps> = ({ workspaceId, withDateTitle,
     const feedId = data.feed.feedId;
     const itemId = data.externalId;
     const title = data.title;
-    feedId && itemId && dispatch(popIntegrationFeedItemDetailModal({ visible: true, workspaceId, feedId, itemId, title }));
+    feedId && itemId && dispatch(popIntegrationFeedItemDetailModal({ visible: true, workspace, feedId, itemId, title }));
   };
 
   return (

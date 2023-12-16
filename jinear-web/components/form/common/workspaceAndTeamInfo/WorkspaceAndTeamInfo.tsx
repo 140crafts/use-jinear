@@ -4,6 +4,7 @@ import { useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDispla
 import { selectCurrentAccountsPreferredWorkspaceId } from "@/store/slice/accountSlice";
 import { changeLoadingModalVisibility, popTeamPickerModal, popWorkspacePickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { IoHomeOutline, IoPeopleOutline } from "react-icons/io5";
@@ -12,9 +13,11 @@ import styles from "./WorkspaceAndTeamInfo.module.css";
 interface WorkspaceAndTeamInfoProps {
   workspace: WorkspaceDto;
   team: TeamDto;
-  workspaceTitle: string;
+  workspaceTitle?: string;
   onTeamChange?: (team: TeamDto) => void;
   readOnly?: boolean;
+  buttonContainerClassName?: string;
+  heightVariant?: string;
 }
 
 const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
@@ -23,6 +26,8 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
   workspaceTitle,
   onTeamChange,
   readOnly = false,
+  buttonContainerClassName,
+  heightVariant = ButtonHeight.default,
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -51,14 +56,19 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
 
   return (
     <div className={styles.container}>
-      {workspaceTitle}
-      <div className={styles.buttonContainer}>
+      {workspaceTitle && (
+        <>
+          {workspaceTitle}
+          <div className="spacer-h-1" />
+        </>
+      )}
+      <div className={cn(styles.buttonContainer, buttonContainerClassName)}>
         <Button
           //fixed
           disabled={true}
           className={styles.button}
           variant={ButtonVariants.filled}
-          heightVariant={ButtonHeight.short}
+          heightVariant={heightVariant}
           onClick={popChangeWorkspaceModal}
         >
           <IoHomeOutline />
@@ -68,7 +78,7 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
           disabled={readOnly}
           className={styles.button}
           variant={ButtonVariants.filled}
-          heightVariant={ButtonHeight.short}
+          heightVariant={heightVariant}
           onClick={popChangeTeamModal}
         >
           <IoPeopleOutline />

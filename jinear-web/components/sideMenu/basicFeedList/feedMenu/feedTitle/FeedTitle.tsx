@@ -6,7 +6,7 @@ import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoEllipsisHorizontal } from "react-icons/io5";
+import { IoEllipsisHorizontal, IoPeopleOutline } from "react-icons/io5";
 import styles from "./FeedTitle.module.css";
 
 interface FeedTitleProps {
@@ -34,9 +34,9 @@ const FeedTitle: React.FC<FeedTitleProps> = ({ feed, workspace }) => {
           {shortenStringIfMoreThanMaxLength({ text: feed.name, maxLength: MAX_NAME_LENGTH })}
         </b>
       </Button>
-      {/* <Button variant={ButtonVariants.hoverFilled2} href={membersUri} data-tooltip-right={t("sideMenuFeedMembers")}>
+      <Button variant={ButtonVariants.hoverFilled2} href={membersUri} data-tooltip-right={t("sideMenuFeedMembers")}>
         <IoPeopleOutline />
-      </Button> */}
+      </Button>
       {isAdmin && (
         <Button variant={ButtonVariants.hoverFilled2} href={settingsUri} data-tooltip-right={t("sideMenuFeedSettings")}>
           <IoEllipsisHorizontal />

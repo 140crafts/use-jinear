@@ -6,7 +6,7 @@ import {
   selectIntegrationFeedItemDetailModalFeedItemId,
   selectIntegrationFeedItemDetailModalTitle,
   selectIntegrationFeedItemDetailModalVisible,
-  selectIntegrationFeedItemDetailModalWorkspaceId,
+  selectIntegrationFeedItemDetailModalWorkspace,
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -21,7 +21,7 @@ const IntegrationFeedItemDetailModal: React.FC<IntegrationFeedItemDetailModalPro
   const { isMobile } = useWindowSize();
 
   const visible = useTypedSelector(selectIntegrationFeedItemDetailModalVisible);
-  const workspaceId = useTypedSelector(selectIntegrationFeedItemDetailModalWorkspaceId);
+  const workspace = useTypedSelector(selectIntegrationFeedItemDetailModalWorkspace);
   const feedId = useTypedSelector(selectIntegrationFeedItemDetailModalFeedId);
   const itemId = useTypedSelector(selectIntegrationFeedItemDetailModalFeedItemId);
   const title = useTypedSelector(selectIntegrationFeedItemDetailModalTitle);
@@ -39,7 +39,7 @@ const IntegrationFeedItemDetailModal: React.FC<IntegrationFeedItemDetailModalPro
       hasTitleCloseButton={true}
       requestClose={close}
     >
-      {feedId && itemId && workspaceId && <FeedItemDetail workspaceId={workspaceId} feedId={feedId} itemId={itemId} />}
+      {feedId && itemId && workspace && <FeedItemDetail workspace={workspace} feedId={feedId} itemId={itemId} />}
     </Modal>
   );
 };
