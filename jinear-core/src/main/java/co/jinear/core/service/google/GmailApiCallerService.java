@@ -25,7 +25,7 @@ public class GmailApiCallerService {
     }
 
     public GmailThreadVo getThread(String googleUserId, String threadId, String accessToken) {
-        log.info("List threads has started. googleUserId: {}, threadId: {}", googleUserId, threadId);
+        log.info("Get thread has started. googleUserId: {}, threadId: {}", googleUserId, threadId);
         return gmailApiClient.getThread(googleUserId, threadId, accessToken);
     }
 

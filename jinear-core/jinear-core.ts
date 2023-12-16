@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-12-04 09:24:18.
+// Generated using typescript-generator version 3.0.1157 on 2023-12-16 10:31:33.
 
 export interface BaseDto {
     createdDate: Date;
@@ -420,6 +420,19 @@ export interface TaskDto extends BaseDto {
     checklists?: ChecklistDto[] | null;
 }
 
+export interface TaskFeedItemDto extends BaseDto {
+    taskFeedItemId: string;
+    taskId: string;
+    feedId: string;
+    feedItemId: string;
+    feed: FeedDto;
+}
+
+export interface TaskFeedItemListDto {
+    feedContentItemList?: FeedContentItemDto[] | null;
+    totalItemCount?: number | null;
+}
+
 export interface TaskMediaDto extends BaseDto {
     task: TaskDto;
     media: MediaDto;
@@ -798,6 +811,8 @@ export interface TaskInitializeRequest extends BaseRequest {
     description?: string | null;
     subTaskOf?: string | null;
     boardId?: string | null;
+    feedId?: string | null;
+    feedItemId?: string | null;
 }
 
 export interface TaskRelationInitializeRequest extends BaseRequest {
@@ -945,6 +960,10 @@ export interface FeedMemberListingResponse extends BaseResponse {
     data: FeedMemberDto[];
 }
 
+export interface FeedMemberPaginatedResponse extends BaseResponse {
+    data: PageDto<FeedMemberDto>;
+}
+
 export interface NotificationEventListingResponse extends BaseResponse {
     data: PageDto<NotificationEventDto>;
 }
@@ -995,6 +1014,10 @@ export interface TaskBoardResponse extends BaseResponse {
 
 export interface TaskBoardRetrieveResponse extends BaseResponse {
     data: TaskBoardDto;
+}
+
+export interface TaskFeedItemResponse extends BaseResponse {
+    data: TaskFeedItemListDto;
 }
 
 export interface TaskListingPaginatedResponse extends BaseResponse {

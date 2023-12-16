@@ -1373,4 +1373,37 @@
             <column name="feed_id"/>
         </createIndex>
     </changeSet>
+
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-task_feed_item">
+        <createTable tableName="task_feed_item">
+            <column name="task_feed_item_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feed_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feed_item_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_task_id" tableName="task_feed_item">
+            <column name="task_id"/>
+        </createIndex>
+        <createIndex indexName="ix_feed_id" tableName="task_feed_item">
+            <column name="feed_id"/>
+        </createIndex>
+        <createIndex indexName="ix_feed_item_id" tableName="task_feed_item">
+            <column name="feed_item_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

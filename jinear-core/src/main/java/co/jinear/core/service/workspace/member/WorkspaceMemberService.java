@@ -1,6 +1,7 @@
 package co.jinear.core.service.workspace.member;
 
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.entity.workspace.WorkspaceMember;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
@@ -17,6 +18,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.ADMIN;
+import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.OWNER;
 
 @Slf4j
 @Service
@@ -69,6 +73,20 @@ public class WorkspaceMemberService {
             throw new BusinessException();
         }
     }
+
+    public boolean doesAccountHaveWorkspaceAdminAccess(String accountId, String workspaceId) {
+        log.info("Does account have workspace admin access started. workspaceId: {}, accountId: {}", workspaceId, accountId);
+        Long count = workspaceMemberRepository.countAllByAccountIdAndWorkspaceIdAndRoleIsInAndPassiveIdIsNull(accountId, workspaceId, List.of(OWNER, ADMIN));
+        return !NumberCompareHelper.isEquals(count, 0);
+    }
+
+    public void validateAccountHaveWorkspaceAdminAccess(String accountId, String workspaceId) {
+        log.info("Validate account have workspace admin access started. workspaceId: {}, accountId: {}", workspaceId, accountId);
+        if (!doesAccountHaveWorkspaceAdminAccess(accountId, workspaceId)) {
+            throw new NoAccessException();
+        }
+    }
+
 
     public void validateAccountHasRoleInWorkspace(String accountId, String workspaceId, List<WorkspaceAccountRoleType> roleTypes) {
         log.info("Has any role for workspace started. workspaceId: {}, accountId: {}, roleTypes: {}", workspaceId, accountId, StringUtils.join(roleTypes, NormalizeHelper.COMMA_SEPARATOR));

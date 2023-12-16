@@ -52,4 +52,10 @@ public class TaskInitializeRequest extends BaseRequest {
 
     @Nullable
     private String boardId;
+
+    @Nullable
+    private String feedId;
+
+    @Nullable
+    private String feedItemId;
 }
