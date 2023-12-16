@@ -49,7 +49,7 @@ public class GoogleOAuthApiCallerService {
 
     private void validateAud(TokenInfoResponse tokenInfoResponse) {
         if (!gCloudProperties.getOauthClientId().equals(tokenInfoResponse.getAud())) {
-            log.error("Aud validation failed.");
+            log.error("Aud validation failed. responseAud: {}", tokenInfoResponse.getAud());
             throw new NoAccessException();
         }
     }

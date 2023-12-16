@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class WorkspaceMemberRetrieveManager {
-    private final int WORKSPACE_MEMBER_PAGE_SIZE = 50;
+    private final int WORKSPACE_MEMBER_PAGE_SIZE = 250;
 
     private final WorkspaceRetrieveService workspaceRetrieveService;
     private final WorkspaceMemberService workspaceMemberService;

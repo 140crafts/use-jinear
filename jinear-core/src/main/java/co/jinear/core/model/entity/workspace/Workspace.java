@@ -2,6 +2,7 @@ package co.jinear.core.model.entity.workspace;
 
 import co.jinear.core.converter.workspace.WorkspaceTierTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
+import co.jinear.core.model.entity.feed.Feed;
 import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.entity.username.Username;
 import co.jinear.core.model.enumtype.workspace.WorkspaceTier;
@@ -47,4 +48,9 @@ public class Workspace extends BaseEntity {
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<Team> teams;
+
+    @OneToMany(mappedBy = "workspace")
+    @Where(clause = "passive_id is null")
+    @OrderBy("createdDate ASC")
+    private Set<Feed> feeds;
 }

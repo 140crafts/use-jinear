@@ -16,6 +16,7 @@ public class NormalizeHelper {
     public static final String COMMA_SEPARATOR = ", ";
     public static final String HYPHEN = "-";
     public static final String MASK_CHAR = "*";
+    public static final String NEW_LINE = "\n";
     private static final String ACCENT_REGEX = "\\p{M}";
     private static final String ALPHANUMERIC_REGEX = "[^A-Za-z0-9]";
     private static final String USERNAME_REGEX = "[^A-Za-z0-9-_[.]]";

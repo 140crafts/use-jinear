@@ -104,23 +104,4 @@ public class CryptoHelper {
 
         return new String(plainText, UTF_8);
     }
-
-    public static void main(String[] args) {
-
-        String OUTPUT_FORMAT = "%-30s:%s";
-         String pText = "ya29.a0AfB_byDI1O7vu8YJrObeZOoZH1TBI7P_oaWwyrWcdloTGevEHwjV2XxOU0SGSHcH63jBQ7Kn-X24DWc8nPYqcUW1bjbb8d5SR5oMSWC6762G2AY6A-ljNLATWdUApIlftvt3LVGtI4-cwlCkVJqjj3JEH-K1Gvkqr2yxaCgYKAfASARISFQHGX2Mic-RNuIj8u8qtGnFFX-23QA0171";
-
-        String encryptedTextBase64 = encrypt(pText);
-
-        System.out.println("\n------ AES GCM Password-based Encryption ------");
-        System.out.println(String.format(OUTPUT_FORMAT, "Input (plain text)", pText));
-        System.out.println(String.format(OUTPUT_FORMAT, "Encrypted (base64) ", encryptedTextBase64));
-
-        System.out.println("\n------ AES GCM Password-based Decryption ------");
-        System.out.println(String.format(OUTPUT_FORMAT, "Input (base64)", encryptedTextBase64));
-
-        String decryptedText = decrypt(encryptedTextBase64);
-        System.out.println(String.format(OUTPUT_FORMAT, "Decrypted (plain text)", decryptedText));
-
-    }
 }

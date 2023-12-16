@@ -1,9 +1,11 @@
 package co.jinear.core.model.entity.team;
 
+import co.jinear.core.converter.workspace.TeamStateTypeConverter;
 import co.jinear.core.converter.workspace.TeamTaskVisibilityTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.workspace.Workspace;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
+import co.jinear.core.model.enumtype.team.TeamStateType;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
 import jakarta.persistence.*;
@@ -56,6 +58,10 @@ public class Team extends BaseEntity {
     @Convert(converter = TeamTaskVisibilityTypeConverter.class)
     @Column(name = "task_visibility")
     private TeamTaskVisibilityType taskVisibility;
+
+    @Convert(converter = TeamStateTypeConverter.class)
+    @Column(name = "team_state")
+    private TeamStateType teamState;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)

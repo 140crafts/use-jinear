@@ -1,0 +1,27 @@
+package co.jinear.core.system.gcloud.googleapis;
+
+import co.jinear.core.system.gcloud.googleapis.model.GmailMessageVo;
+import co.jinear.core.system.gcloud.googleapis.model.GmailThreadVo;
+import co.jinear.core.system.gcloud.googleapis.model.RetrieveBatchRequestVo;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Service;
+
+import java.util.Collections;
+import java.util.List;
+
+@Slf4j
+@Service
+@ConditionalOnProperty(value = "mock.google-apis-client.enabled", havingValue = "true")
+public class MockGoogleApisClient implements GoogleApisClient {
+
+    @Override
+    public List<GmailMessageVo> retrieveBatchMessages(String token, List<RetrieveBatchRequestVo> messageVoList) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public List<GmailThreadVo> retrieveBatchThreads(String token, List<RetrieveBatchRequestVo> messageVoList) {
+        return Collections.emptyList();
+    }
+}

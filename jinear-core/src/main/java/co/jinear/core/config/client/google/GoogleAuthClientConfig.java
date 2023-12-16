@@ -1,4 +1,4 @@
-package co.jinear.core.config.client.google.auth;
+package co.jinear.core.config.client.google;
 
 import co.jinear.core.config.interceptor.GenericClientLoggingInterceptor;
 import co.jinear.core.config.interceptor.GenericResponseErrorHandler;
@@ -9,10 +9,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriTemplateHandler;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Configuration
@@ -33,6 +35,7 @@ public class GoogleAuthClientConfig {
         restTemplate.setUriTemplateHandler(googleAuthUriTemplateHandler);
         restTemplate.setInterceptors(List.of(genericClientLoggingInterceptor));
         restTemplate.setErrorHandler(genericResponseErrorHandler);
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate;
     }
 

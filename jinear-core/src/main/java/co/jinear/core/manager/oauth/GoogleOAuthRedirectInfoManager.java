@@ -1,7 +1,9 @@
 package co.jinear.core.manager.oauth;
 
 import co.jinear.core.model.response.auth.AuthRedirectInfoResponse;
+import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.google.GoogleRedirectInfoService;
+import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +14,8 @@ import org.springframework.stereotype.Service;
 public class GoogleOAuthRedirectInfoManager {
 
     private final GoogleRedirectInfoService googleRedirectInfoService;
+    private final SessionInfoService sessionInfoService;
+    private final WorkspaceValidator workspaceValidator;
 
     public AuthRedirectInfoResponse retrieveLoginRedirectUrl() {
         log.info("Retrieve login redirect url has started.");
@@ -19,9 +23,11 @@ public class GoogleOAuthRedirectInfoManager {
         return new AuthRedirectInfoResponse(redirectUrl);
     }
 
-    public AuthRedirectInfoResponse retrieveAttachMailUrl() {
-        log.info("Retrieve mail attach redirect url has started.");
-        String redirectUrl = googleRedirectInfoService.retrieveAttachMailUrl();
+    public AuthRedirectInfoResponse retrieveAttachMailUrl(String workspaceId) {
+        String accountId = sessionInfoService.currentAccountId();
+        workspaceValidator.validateHasAccess(accountId, workspaceId);
+        log.info("Retrieve mail attach redirect url has started. workspaceId: {}, accountId: {}", workspaceId, accountId);
+        String redirectUrl = googleRedirectInfoService.retrieveAttachMailUrl(workspaceId);
         return new AuthRedirectInfoResponse(redirectUrl);
     }
 

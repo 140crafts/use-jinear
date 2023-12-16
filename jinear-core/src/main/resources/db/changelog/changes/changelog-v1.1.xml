@@ -1207,4 +1207,203 @@
             <column name="integration_info_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-increase-column-size-service_log-response_payload">
+        <modifyDataType tableName="service_log" columnName="response_payload" newDataType="mediumtext"/>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-add-column-to-google_token-last_mail_check">
+        <addColumn tableName="google_token">
+            <column name="last_mail_check" type="datetime" afterColumn="google_user_info_id"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-gmail_thread">
+        <createTable tableName="gmail_thread">
+            <column name="gmail_thread_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="google_token_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_history_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_google_token_id" tableName="gmail_thread">
+            <column name="google_token_id"/>
+        </createIndex>
+        <createIndex indexName="ix_g_id" tableName="gmail_thread">
+            <column name="g_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-gmail_message">
+        <createTable tableName="gmail_message">
+            <column name="gmail_message_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="gmail_thread_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_thread_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_history_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_internal_date" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="snippet" type="text"/>
+            <column name="from" type="varchar(255)"/>
+            <column name="to" type="varchar(255)"/>
+            <column name="subject" type="text"/>
+            <column name="body" type="mediumtext"/>
+        </createTable>
+
+        <createIndex indexName="ix_g_id" tableName="gmail_message">
+            <column name="g_id"/>
+        </createIndex>
+        <createIndex indexName="ix_g_thread_id" tableName="gmail_message">
+            <column name="g_thread_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-add-index-to-gmail_message-ix_gmail_thread_id">
+        <createIndex indexName="ix_gmail_thread_id" tableName="gmail_message">
+            <column name="gmail_thread_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-add-columns-to-gmail_thread-snippet">
+        <addColumn tableName="gmail_thread">
+            <column name="snippet" type="text" afterColumn="g_history_id"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-add-columns-to-team-team_state">
+        <addColumn tableName="team">
+            <column name="team_state" type="int" afterColumn="task_source_type" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-feed">
+        <createTable tableName="feed">
+            <column name="feed_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initialized_by" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="integration_info_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_workspace_id" tableName="feed">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="ix_initialized_by" tableName="feed">
+            <column name="initialized_by"/>
+        </createIndex>
+        <createIndex indexName="ix_integration_info_id" tableName="feed">
+            <column name="integration_info_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-feed_member">
+        <createTable tableName="feed_member">
+            <column name="feed_member_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feed_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_workspace_id" tableName="feed_member">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="ix_account_id" tableName="feed_member">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="ix_feed_id" tableName="feed_member">
+            <column name="feed_id"/>
+        </createIndex>
+    </changeSet>
+
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-task_feed_item">
+        <createTable tableName="task_feed_item">
+            <column name="task_feed_item_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feed_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feed_item_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_task_id" tableName="task_feed_item">
+            <column name="task_id"/>
+        </createIndex>
+        <createIndex indexName="ix_feed_id" tableName="task_feed_item">
+            <column name="feed_id"/>
+        </createIndex>
+        <createIndex indexName="ix_feed_item_id" tableName="task_feed_item">
+            <column name="feed_item_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

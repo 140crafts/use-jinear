@@ -8,5 +8,7 @@ import java.util.Optional;
 
 public interface IntegrationInfoRepository extends JpaRepository<IntegrationInfo, String> {
 
+    Optional<IntegrationInfo> findByIntegrationInfoIdAndPassiveIdIsNull(String integrationInfoId);
+
     Optional<IntegrationInfo> findByAccountIdAndProviderAndPassiveIdIsNull(String accountId, IntegrationProvider provider);
 }

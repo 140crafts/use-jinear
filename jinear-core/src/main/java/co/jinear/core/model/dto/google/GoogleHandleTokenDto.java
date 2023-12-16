@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GoogleHandleLoginResponseDto {
+public class GoogleHandleTokenDto {
 
     private GoogleUserInfoDto googleUserInfoDto;
     private String passiveIdForScopeDeletion;

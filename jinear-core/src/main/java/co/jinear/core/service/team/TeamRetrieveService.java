@@ -1,6 +1,7 @@
 package co.jinear.core.service.team;
 
-import co.jinear.core.converter.team.TeamConverter;
+import co.jinear.core.converter.integration.IntegrationInfoDtoConverter;
+import co.jinear.core.converter.team.TeamDtoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.team.TeamDto;
@@ -28,7 +29,8 @@ public class TeamRetrieveService {
     private final TeamRepository teamRepository;
     private final WorkspaceMemberRetrieveService workspaceMemberRetrieveService;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
-    private final TeamConverter teamConverter;
+    private final TeamDtoConverter teamDtoConverter;
+    private final IntegrationInfoDtoConverter integrationInfoDtoConverter;
 
     public List<TeamDto> listWorkspaceTeamsByAccountWorkspaceRole(String accountId, String workspaceId) {
         log.info("List workspace teams by account role has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
@@ -45,7 +47,7 @@ public class TeamRetrieveService {
     public List<TeamDto> retrieveWorkspaceTeams(String workspaceId) {
         log.info("Retrieve workspace teams has started. workspaceId: {}", workspaceId);
         return teamRepository.findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateAsc(workspaceId).stream()
-                .map(teamConverter::map)
+                .map(teamDtoConverter::map)
                 .toList();
     }
 
@@ -65,21 +67,21 @@ public class TeamRetrieveService {
     public TeamDto retrieveTeam(String teamId) {
         log.info("Retrieve team has started. teamId: {}", teamId);
         return teamRepository.findByTeamIdAndPassiveIdIsNull(teamId)
-                .map(teamConverter::map)
+                .map(teamDtoConverter::map)
                 .orElseThrow(NotFoundException::new);
     }
 
     public TeamDto retrieveActiveTeamByUsername(String teamUsername, String workspaceId) {
         log.info("Retrieve active team by name has started. teamUsername: {}, workspaceId: {}", teamUsername, workspaceId);
         return teamRepository.findByUsernameAndWorkspaceIdAndPassiveIdIsNull(teamUsername, workspaceId)
-                .map(teamConverter::map)
+                .map(teamDtoConverter::map)
                 .orElseThrow(NotFoundException::new);
     }
 
     public Optional<TeamDto> retrieveTeamIncludingPassivesByNameOptional(String teamName, String workspaceId) {
         log.info("Retrieve team including passives by name has started. teamName: {}, workspaceId: {}", teamName, workspaceId);
         return teamRepository.findByNameAndWorkspaceId(teamName, workspaceId)
-                .map(teamConverter::map);
+                .map(teamDtoConverter::map);
     }
 
     public TeamDto retrieveTeamByTag(String tag, String workspaceId) {
@@ -91,12 +93,12 @@ public class TeamRetrieveService {
     public Optional<TeamDto> retrieveTeamByTagOptional(String tag, String workspaceId) {
         log.info("Retrieve team by tag has started. tag: {}, workspaceId: {}", tag, workspaceId);
         return teamRepository.findByTagAndWorkspaceIdAndPassiveIdIsNull(tag, workspaceId)
-                .map(teamConverter::map);
+                .map(teamDtoConverter::map);
     }
 
     public Optional<TeamDto> retrieveTeamByUsernameOptional(String username, String workspaceId) {
         log.info("Retrieve team by username has started. username: {}, workspaceId: {}", username, workspaceId);
         return teamRepository.findByUsernameAndWorkspaceIdAndPassiveIdIsNull(username, workspaceId)
-                .map(teamConverter::map);
+                .map(teamDtoConverter::map);
     }
 }

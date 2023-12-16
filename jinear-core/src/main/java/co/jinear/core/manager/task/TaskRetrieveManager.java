@@ -29,7 +29,7 @@ public class TaskRetrieveManager {
     private final TaskRetrieveService taskRetrieveService;
     private final SessionInfoService sessionInfoService;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
-    private final TaskTeamVisibilityTypeAccessValidator validateTaskAccess;
+    private final TaskTeamVisibilityTypeAccessValidator teamVisibilityTypeAccessValidator;
     private final TaskTeamVisibilityMaskService taskTeamVisibilityMaskService;
 
     public TaskResponse retrieveWithWorkspaceNameAndTeamTagNo(String workspaceName,
@@ -41,7 +41,7 @@ public class TaskRetrieveManager {
         TeamDto teamDto = teamRetrieveService.retrieveTeamByTag(teamTag, workspaceDto.getWorkspaceId());
         TeamMemberDto teamMemberDto = validateAccess(currentAccountId, workspaceDto, teamDto);
         TaskDto taskDto = taskRetrieveService.retrieve(workspaceDto.getWorkspaceId(), teamDto.getTeamId(), tagNo);
-        validateTaskAccess.validateTaskAccess(currentAccountId, teamMemberDto, taskDto.getOwnerId(), taskDto.getAssignedTo());
+        teamVisibilityTypeAccessValidator.validateTaskAccess(currentAccountId, teamMemberDto, taskDto.getOwnerId(), taskDto.getAssignedTo());
         taskDto = taskTeamVisibilityMaskService.maskRelations(currentAccountId, teamMemberDto, taskDto);
         return mapResponse(taskDto);
     }

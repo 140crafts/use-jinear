@@ -9,13 +9,11 @@ import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.enumtype.task.TaskRelationType;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
-import co.jinear.core.model.vo.task.InitializeTaskBoardEntryVo;
-import co.jinear.core.model.vo.task.TaskInitializeVo;
-import co.jinear.core.model.vo.task.TaskRelationInitializeVo;
-import co.jinear.core.model.vo.task.TaskSubscriptionInitializeVo;
+import co.jinear.core.model.vo.task.*;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.richtext.RichTextInitializeService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryOperationService;
+import co.jinear.core.service.task.feed.TaskFeedItemOperationService;
 import co.jinear.core.service.task.relation.TaskRelationInitializeService;
 import co.jinear.core.service.task.subscription.TaskSubscriptionOperationService;
 import co.jinear.core.service.team.TeamLockService;
@@ -46,6 +44,7 @@ public class TaskInitializeService {
     private final TaskSubscriptionConverter taskSubscriptionConverter;
     private final TaskSubscriptionOperationService taskSubscriptionOperationService;
     private final TaskBoardEntryOperationService taskBoardEntryOperationService;
+    private final TaskFeedItemOperationService taskFeedItemOperationService;
 
     @Transactional
     public TaskDto initializeTask(TaskInitializeVo taskInitializeVo) {
@@ -62,6 +61,7 @@ public class TaskInitializeService {
             initializeSubtaskRelation(taskInitializeVo, saved);
             initializeTaskSubscription(taskInitializeVo, saved);
             initializeTaskBoardEntry(taskInitializeVo, task);
+            initializeTaskFeedItem(taskInitializeVo, task);
             return taskDto;
         } finally {
             releaseLocks(taskInitializeVo);
@@ -159,6 +159,13 @@ public class TaskInitializeService {
             initializeTaskBoardEntryVo.setTaskId(task.getTaskId());
             initializeTaskBoardEntryVo.setTaskBoardId(boardId);
             taskBoardEntryOperationService.initialize(initializeTaskBoardEntryVo);
+        }
+    }
+
+    private void initializeTaskFeedItem(TaskInitializeVo taskInitializeVo, Task task) {
+        if (Objects.nonNull(taskInitializeVo.getFeedId()) && Objects.nonNull(taskInitializeVo.getFeedItemId())) {
+            InitializeTaskFeedItemVo initializeTaskFeedItemVo = new InitializeTaskFeedItemVo(task.getTaskId(), taskInitializeVo.getFeedId(), taskInitializeVo.getFeedItemId());
+            taskFeedItemOperationService.initializeTaskFeedItemRelation(initializeTaskFeedItemVo);
         }
     }
 }

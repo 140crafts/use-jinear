@@ -1,6 +1,7 @@
 package co.jinear.core.service.team;
 
 import co.jinear.core.model.entity.team.Team;
+import co.jinear.core.model.enumtype.team.TeamStateType;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.repository.TeamRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,13 @@ public class TeamUpdateService {
         log.info("Update team task visibility type has started. teamId: {}, taskVisibilityType: {}", teamId, taskVisibilityType);
         Team team = teamRetrieveService.retrieveEntity(teamId);
         team.setTaskVisibility(taskVisibilityType);
+        teamRepository.save(team);
+    }
+
+    public void updateTeamState(String teamId, TeamStateType teamState) {
+        log.info("Update team state has started. teamId: {}, teamState: {}", teamId, teamState);
+        Team team = teamRetrieveService.retrieveEntity(teamId);
+        team.setTeamState(teamState);
         teamRepository.save(team);
     }
 }

@@ -2,6 +2,7 @@ package co.jinear.core.model.vo.team;
 
 import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
+import co.jinear.core.model.enumtype.team.TeamStateType;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
 import lombok.Getter;
@@ -21,5 +22,6 @@ public class TeamInitializeVo {
     private TeamVisibilityType visibility;
     private TeamJoinMethodType joinMethod;
     private TeamTaskVisibilityType taskVisibility;
+    private TeamStateType teamState = TeamStateType.ACTIVE;
     private LocaleType locale;
 }

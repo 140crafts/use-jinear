@@ -3,7 +3,7 @@ package co.jinear.core.service.google;
 import co.jinear.core.converter.google.AuthTokenResponseToGoogleAuthTokenVoConverter;
 import co.jinear.core.converter.google.GoogleScopeConverter;
 import co.jinear.core.converter.google.TokenInfoResponseToInitializeOrUpdateTokenInfoVoConverter;
-import co.jinear.core.model.dto.google.GoogleHandleLoginResponseDto;
+import co.jinear.core.model.dto.google.GoogleHandleTokenDto;
 import co.jinear.core.model.dto.google.GoogleTokenDto;
 import co.jinear.core.model.dto.google.GoogleUserInfoDto;
 import co.jinear.core.model.enumtype.google.UserConsentPurposeType;
@@ -37,8 +37,8 @@ public class GoogleCallbackHandlerService {
     private final GoogleScopeConverter googleScopeConverter;
 
     @Transactional
-    public GoogleHandleLoginResponseDto handleLogin(String code, String scopes) {
-        GetAuthTokenVo getAuthTokenVo = mapGetAuthTokenVo(code);
+    public GoogleHandleTokenDto handleToken(String code, String scopes, UserConsentPurposeType userConsentPurposeType) {
+        GetAuthTokenVo getAuthTokenVo = mapGetAuthTokenVo(code, userConsentPurposeType);
         AuthTokenResponse authTokenResponse = googleOAuthApiCallerService.getToken(getAuthTokenVo);
         TokenInfoResponse tokenInfoResponse = googleOAuthApiCallerService.tokenInfo(authTokenResponse.getIdToken());
 
@@ -51,7 +51,7 @@ public class GoogleCallbackHandlerService {
         String passiveIdForScopeDeletion = checkAnDeleteExistingScopes(googleTokenDto);
         List<InitializeGoogleTokenScopeVo> initializeGoogleTokenScopeVos = googleScopeConverter.convertToInitializeGoogleTokenScopeVo(googleTokenDto.getGoogleTokenId(), scopes);
         googleTokenScopeOperationService.initializeAll(initializeGoogleTokenScopeVos);
-        return new GoogleHandleLoginResponseDto(googleUserInfoDto, passiveIdForScopeDeletion);
+        return new GoogleHandleTokenDto(googleUserInfoDto, passiveIdForScopeDeletion);
     }
 
     private String checkAnDeleteExistingScopes(GoogleTokenDto googleTokenDto) {
@@ -63,10 +63,10 @@ public class GoogleCallbackHandlerService {
         return passiveIdForScopeDeletion;
     }
 
-    private GetAuthTokenVo mapGetAuthTokenVo(String code) {
+    private GetAuthTokenVo mapGetAuthTokenVo(String code, UserConsentPurposeType userConsentPurposeType) {
         GetAuthTokenVo getAuthTokenVo = new GetAuthTokenVo();
         getAuthTokenVo.setCode(code);
-        getAuthTokenVo.setUserConsentPurposeType(UserConsentPurposeType.LOGIN);
+        getAuthTokenVo.setUserConsentPurposeType(userConsentPurposeType);
         return getAuthTokenVo;
     }
 }
