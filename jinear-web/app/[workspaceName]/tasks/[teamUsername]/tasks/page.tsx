@@ -5,7 +5,7 @@ import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams, usePathname, useSearchParams } from "next/navigation";
 import React from "react";
 import styles from "./index.module.css";
 
@@ -14,6 +14,7 @@ interface TasksScreenProps {}
 const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
   const { t } = useTranslation();
   const params = useParams();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const workspaceName: string = params?.workspaceName as string;
   const teamUsername: string = params?.teamUsername as string;
@@ -36,6 +37,7 @@ const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
           activeDisplayFormat="LIST"
           topicIds={topicId ? [topicId] : []}
           workflowStatusBoardClassName={styles.workflowStatusBoard}
+          pathname={pathname}
         />
       )}
     </div>

@@ -85,7 +85,7 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({
 
   useEffect(() => {
     if (filter) {
-      //   logger.log({ filter });
+      logger.log({ filter });
       onFilterChange?.(filter);
     }
   }, [filter]);
