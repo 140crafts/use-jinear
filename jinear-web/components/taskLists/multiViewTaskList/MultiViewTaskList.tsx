@@ -128,7 +128,13 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
   };
 
   //@ts-ignore
-  const { data: filterResponse, isFetching, isLoading } = useFilterTasksQuery(filter, { skip: filter == null });
+  const {
+    data: filterResponse,
+    isFetching,
+    isLoading,
+  } = useFilterTasksQuery(filter, {
+    skip: filter == null || filter.workspaceId == null || filter.teamIdList == null || filter.teamIdList?.length == 0,
+  });
 
   return (
     <div className={styles.container}>
