@@ -108,7 +108,7 @@
 }
 
 .progessContrast > svg {
-  color: var(--c-primary-shade-1);
+  color: var(--c-primary-shade-1) !important;
 }
 
 .hover-filled:hover {
