@@ -15,4 +15,5 @@
   /* width: 100%; */
   background-color: var(--c-primary);
   padding: 0.5rem;
+  padding-bottom: 2rem;
 }
