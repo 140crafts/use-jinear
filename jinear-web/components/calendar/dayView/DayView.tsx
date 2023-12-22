@@ -1,3 +1,4 @@
+import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { useFilterTasksQuery } from "@/store/api/taskListingApi";
 import { endOfDay, startOfDay } from "date-fns";
 import React, { useMemo } from "react";
@@ -49,6 +50,7 @@ const DayView: React.FC<DayViewProps> = ({}) => {
     <div className={styles.container}>
       <WeekDays days={days} />
       <div className={styles.listContainer}>
+        {isFetching && <CircularLoading />}
         {viewingDayTasks && <TaskList viewingDayTasks={viewingDayTasks} className={styles.taskList} />}
       </div>
     </div>

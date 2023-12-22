@@ -1,5 +1,5 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import TaskRow from "@/components/taskLists/taskRow/TaskRow";
+import TaskRow from "@/components/taskRow/TaskRow";
 import { TaskBoardEntryDto } from "@/model/be/jinear-core";
 import { useDeleteTaskBoardEntryMutation } from "@/store/api/taskBoardEntryApi";
 import { changeLoadingModalVisibility, closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";

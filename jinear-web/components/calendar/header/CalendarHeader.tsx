@@ -116,7 +116,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ workspace }) => {
             }}
           />
         </div>
-        <div className="spacer-h-1" />
+        <div className="spacer-h-2" />
         <div className={styles.calendarNavigation}>
           {viewType == "MONTH" && (
             <>

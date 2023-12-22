@@ -1,4 +1,4 @@
-import TaskRow from "@/components/taskLists/taskRow/TaskRow";
+import TaskRow from "@/components/taskRow/TaskRow";
 import { TaskDto } from "@/model/be/jinear-core";
 import Logger from "@/utils/logger";
 import cn from "classnames";
@@ -18,7 +18,7 @@ const TaskList: React.FC<TaskListProps> = ({ className, viewingDayTasks }) => {
   return (
     <div className={cn(styles.container, className)}>
       {viewingDayTasks.map((task) => (
-        <TaskRow task={task} />
+        <TaskRow key={task.taskId} task={task} />
       ))}
     </div>
   );

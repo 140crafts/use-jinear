@@ -1,6 +1,6 @@
 import AssigneeCell from "@/components/assigneeCell/AssigneeCell";
 import Button from "@/components/button";
-import TopicInfo from "@/components/taskLists/taskRow/topicInfo/TopicInfo";
+import TopicInfo from "@/components/taskRow/topicInfo/TopicInfo";
 import TeamTagCell from "@/components/teamTagCell/TeamTagCell";
 import useWindowSize from "@/hooks/useWindowSize";
 import { TaskDto } from "@/model/be/jinear-core";

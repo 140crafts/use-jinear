@@ -37,10 +37,10 @@
 }
 
 .viewingDate {
-  color: var(--c-primary);
-  background-color: var(--c-secondary);
+  color: var(--c-primary) !important;
+  background-color: var(--c-secondary) !important;
 }
 .viewingDate:hover {
-  color: var(--c-primary-shade-1);
-  background-color: var(--c-secondary-shade-1);
+  color: var(--c-primary-shade-1) !important;
+  background-color: var(--c-secondary-shade-1) !important;
 }

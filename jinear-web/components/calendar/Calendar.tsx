@@ -31,7 +31,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
   logger.log({ searchParams: searchParams?.toString() });
 
   const viewingDateSearchParam = searchParams?.get("viewingDate");
-  const [viewType, setViewType] = useState<CalendarViewType>((searchParams?.get("viewType") as CalendarViewType) || "DAY");
+  const [viewType, setViewType] = useState<CalendarViewType>((searchParams?.get("viewType") as CalendarViewType) || "MONTH");
   const [filterBy, setFilterBy] = useState<TeamDto>();
 
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
