@@ -34,7 +34,7 @@ interface ICalendarContext {
 const initialDate = startOfDay(new Date());
 
 const CalendarContext = createContext<ICalendarContext>({
-  viewType: "WEEK",
+  viewType: "w",
   viewingDate: initialDate,
   periodStart: initialDate,
   periodEnd: initialDate,
