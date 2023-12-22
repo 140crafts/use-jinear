@@ -11,6 +11,7 @@ import CalendarContext from "./context/CalendarContext";
 import DayView from "./dayView/DayView";
 import CalendarHeader from "./header/CalendarHeader";
 import MonthView from "./monthView/MonthView";
+import TwoDayView from "./twoDayView/TwoDayView";
 import WeekView from "./weekView/WeekView";
 
 interface CalendarProps {
@@ -19,7 +20,7 @@ interface CalendarProps {
   className?: string;
 }
 
-export type CalendarViewType = "MONTH" | "WEEK" | "DAY";
+export type CalendarViewType = "m" | "w" | "d" | "2d";
 
 const logger = Logger("Calendar");
 
@@ -31,7 +32,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
   logger.log({ searchParams: searchParams?.toString() });
 
   const viewingDateSearchParam = searchParams?.get("viewingDate");
-  const [viewType, setViewType] = useState<CalendarViewType>((searchParams?.get("viewType") as CalendarViewType) || "MONTH");
+  const [viewType, setViewType] = useState<CalendarViewType>((searchParams?.get("viewType") as CalendarViewType) || "m");
   const [filterBy, setFilterBy] = useState<TeamDto>();
 
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
@@ -100,9 +101,10 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
     >
       <div className={cn(styles.container, className)}>
         <CalendarHeader workspace={workspace} />
-        {viewType == "MONTH" && <MonthView />}
-        {viewType == "WEEK" && <WeekView />}
-        {viewType == "DAY" && <DayView />}
+        {viewType == "m" && <MonthView />}
+        {viewType == "w" && <WeekView />}
+        {viewType == "d" && <DayView />}
+        {viewType == "2d" && <TwoDayView />}
       </div>
     </CalendarContext.Provider>
   );

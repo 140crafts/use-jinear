@@ -9,8 +9,13 @@ interface AllDayTasksProps {
   weekTable: ICalendarWeekRowCell[][][] | undefined;
 }
 
+import Logger from "@/utils/logger";
+
+const logger = Logger("AllDayTasks");
+
 const AllDayTasks: React.FC<AllDayTasksProps> = ({ days, weekTable }) => {
   const { t } = useTranslation();
+  logger.log({ weekTable, days });
   return (
     <div className={styles.container}>
       <div className={styles.allDayLabelContainer}>
@@ -23,7 +28,7 @@ const AllDayTasks: React.FC<AllDayTasksProps> = ({ days, weekTable }) => {
             key={`week-view-${weekIndex}`}
             weekTasks={week}
             weekIndex={weekIndex}
-            week={days.slice(weekIndex * 7, weekIndex * 7 + 7)}
+            week={days.slice(weekIndex * (days.length + 1), weekIndex * (days.length + 1) + (days.length + 1))}
             className={styles.week}
             omitNumbers={true}
           />

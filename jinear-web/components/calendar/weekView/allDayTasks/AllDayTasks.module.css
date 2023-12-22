@@ -2,6 +2,11 @@
   display: flex;
   flex-direction: row;
   min-height: 4rem;
+
+  position: sticky;
+  top: calc(var(--workspace-header-height) + var(--calendar-weekdays-header-height));
+  background-color: var(--c-primary);
+  z-index: 9;
 }
 
 .weekContainer {

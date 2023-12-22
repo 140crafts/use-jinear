@@ -11,7 +11,7 @@ const WeekDays: React.FC<WeekDaysProps> = ({ days }) => {
   return (
     <div className={styles.weekViewWeekdayHeaderContainer}>
       <div className={styles.sideHourLabelSpacer} />
-      {days.slice(0, 7).map((day) => {
+      {days.slice(0, Math.min(days.length, 7)).map((day) => {
         const isToday = isSameDay(startOfToday(), day);
         return (
           <div

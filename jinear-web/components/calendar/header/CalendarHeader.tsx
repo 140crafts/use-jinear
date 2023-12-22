@@ -46,11 +46,13 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ workspace }) => {
   const prevPeriod = () => {
     if (viewingDate) {
       const prev =
-        viewType == "MONTH"
+        viewType == "m"
           ? addMonths(viewingDate, -1)
-          : viewType == "WEEK"
+          : viewType == "w"
           ? addWeeks(startOfWeek(viewingDate, { weekStartsOn: 1 }), -1)
-          : addDays(startOfDay(viewingDate), -1);
+          : viewType == "d"
+          ? addDays(startOfDay(viewingDate), -1)
+          : addDays(startOfDay(viewingDate), -2);
       setViewingDate?.(prev);
     }
   };
@@ -58,11 +60,13 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ workspace }) => {
   const nextPeriod = () => {
     if (viewingDate) {
       const next =
-        viewType == "MONTH"
+        viewType == "m"
           ? addMonths(viewingDate, 1)
-          : viewType == "WEEK"
+          : viewType == "w"
           ? addWeeks(startOfWeek(viewingDate, { weekStartsOn: 1 }), 1)
-          : addDays(startOfDay(viewingDate), 1);
+          : viewType == "d"
+          ? addDays(startOfDay(viewingDate), 1)
+          : addDays(startOfDay(viewingDate), 2);
       logger.log({ nextPeriod: next });
       setViewingDate?.(next);
     }
@@ -85,7 +89,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ workspace }) => {
   };
 
   const changeViewType = (value: string, index: number) => {
-    if (value && (value == "MONTH" || value == "WEEK" || value == "DAY")) {
+    if (value && (value == "m" || value == "w" || value == "d" || value == "2d")) {
       setViewType?.(value);
     }
   };
@@ -98,11 +102,12 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ workspace }) => {
             <h1 className={styles.monthHeader}>{title}</h1>
             <SegmentedControl
               name="calendar-view-type-segment-control"
-              defaultIndex={["DAY", "WEEK", "MONTH"].indexOf(viewType)}
+              defaultIndex={["d", "2d", "w", "m"].indexOf(viewType)}
               segments={[
-                { label: t("calendarViewTypeSegment_Day"), value: "DAY" },
-                { label: t("calendarViewTypeSegment_Week"), value: "WEEK" },
-                { label: t("calendarViewTypeSegment_Month"), value: "MONTH" },
+                { label: t("calendarViewTypeSegment_Day"), value: "d" },
+                { label: t("calendarViewTypeSegment_2Day"), value: "2d" },
+                { label: t("calendarViewTypeSegment_Week"), value: "w" },
+                { label: t("calendarViewTypeSegment_Month"), value: "m" },
               ]}
               segmentLabelClassName={styles.viewTypeSegmentLabel}
               callback={changeViewType}
@@ -118,7 +123,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ workspace }) => {
         </div>
         <div className="spacer-h-2" />
         <div className={styles.calendarNavigation}>
-          {viewType == "MONTH" && (
+          {viewType == "m" && (
             <>
               <Button
                 heightVariant={ButtonHeight.short}

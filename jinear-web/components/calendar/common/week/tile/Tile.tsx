@@ -22,7 +22,7 @@ const Tile: React.FC<TileProps> = ({ id, week }) => {
 
   return (
     <div className={styles.calendarLineContainer}>
-      {Array.from(Array(7).keys()).map((i) => (
+      {Array.from(Array(week.length).keys()).map((i) => (
         <div
           key={`${id}-tile-${i}`}
           className={cn(styles.calendarLine, isToday(week[i]) && styles.todayCalendarLine)}

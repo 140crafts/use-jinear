@@ -2636,15 +2636,19 @@ export default {
   },
   calendarViewTypeSegment_Month: {
     en: "Month",
-    tr: "Aylık",
+    tr: "Ay",
   },
   calendarViewTypeSegment_Day: {
     en: "Day",
-    tr: "Günlük",
+    tr: "Gün",
+  },
+  calendarViewTypeSegment_2Day: {
+    en: "2 Day",
+    tr: "2 Gün",
   },
   calendarViewTypeSegment_Week: {
     en: "Week",
-    tr: "Haftalık",
+    tr: "Hafta",
   },
   calendarWeekViewAllDayLabel: {
     en: "All Day",
