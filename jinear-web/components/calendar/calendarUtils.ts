@@ -270,6 +270,7 @@ export const calculateDailyHitMissTable = ({ tasks, day, dayResolutionInMinutes 
   logger.log({ tasks, flatColumns });
   return flatColumns;
 };
+
 export const splitDayDateToResolution = (day: Date, dayResolutionInMinutes: number) => {
   const start = startOfDay(day);
   const times = [start];

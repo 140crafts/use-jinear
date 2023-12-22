@@ -2638,6 +2638,10 @@ export default {
     en: "Month",
     tr: "Aylık",
   },
+  calendarViewTypeSegment_Day: {
+    en: "Day",
+    tr: "Günlük",
+  },
   calendarViewTypeSegment_Week: {
     en: "Week",
     tr: "Haftalık",

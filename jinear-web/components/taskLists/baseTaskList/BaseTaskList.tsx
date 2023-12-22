@@ -4,7 +4,7 @@ import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import TaskRow from "../taskRow/TaskRow";
+import TaskRow from "../../taskRow/TaskRow";
 import styles from "./BaseTaskList.module.scss";
 
 export type PaginationPosition = "TOP" | "BOTTOM";

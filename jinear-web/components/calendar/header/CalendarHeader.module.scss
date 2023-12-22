@@ -12,18 +12,19 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 1rem;
 }
 
 .headerLabelContainer {
   display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  // justify-content: space-between;
+  align-items: flex-end;
 }
 
 .monthHeader {
   font-size: 2rem;
+  align-self: flex-start;
 }
 
 .calendarNavigation {

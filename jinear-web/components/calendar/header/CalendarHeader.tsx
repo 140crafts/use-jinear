@@ -4,7 +4,7 @@ import { WorkspaceDto } from "@/model/be/jinear-core";
 import { popTeamPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
-import { addMonths, addWeeks, format, startOfToday, startOfWeek } from "date-fns";
+import { addDays, addMonths, addWeeks, format, startOfDay, startOfToday, startOfWeek } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoCaretBack, IoCaretForward, IoClose, IoEllipse, IoScan } from "react-icons/io5";
@@ -45,14 +45,24 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ workspace }) => {
 
   const prevPeriod = () => {
     if (viewingDate) {
-      const prev = viewType == "MONTH" ? addMonths(viewingDate, -1) : addWeeks(startOfWeek(viewingDate, { weekStartsOn: 1 }), -1);
+      const prev =
+        viewType == "MONTH"
+          ? addMonths(viewingDate, -1)
+          : viewType == "WEEK"
+          ? addWeeks(startOfWeek(viewingDate, { weekStartsOn: 1 }), -1)
+          : addDays(startOfDay(viewingDate), -1);
       setViewingDate?.(prev);
     }
   };
 
   const nextPeriod = () => {
     if (viewingDate) {
-      const next = viewType == "MONTH" ? addMonths(viewingDate, 1) : addWeeks(startOfWeek(viewingDate, { weekStartsOn: 1 }), 1);
+      const next =
+        viewType == "MONTH"
+          ? addMonths(viewingDate, 1)
+          : viewType == "WEEK"
+          ? addWeeks(startOfWeek(viewingDate, { weekStartsOn: 1 }), 1)
+          : addDays(startOfDay(viewingDate), 1);
       logger.log({ nextPeriod: next });
       setViewingDate?.(next);
     }
@@ -75,7 +85,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ workspace }) => {
   };
 
   const changeViewType = (value: string, index: number) => {
-    if (value && (value == "MONTH" || value == "WEEK")) {
+    if (value && (value == "MONTH" || value == "WEEK" || value == "DAY")) {
       setViewType?.(value);
     }
   };
@@ -88,8 +98,9 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ workspace }) => {
             <h1 className={styles.monthHeader}>{title}</h1>
             <SegmentedControl
               name="calendar-view-type-segment-control"
-              defaultIndex={["WEEK", "MONTH"].indexOf(viewType)}
+              defaultIndex={["DAY", "WEEK", "MONTH"].indexOf(viewType)}
               segments={[
+                { label: t("calendarViewTypeSegment_Day"), value: "DAY" },
                 { label: t("calendarViewTypeSegment_Week"), value: "WEEK" },
                 { label: t("calendarViewTypeSegment_Month"), value: "MONTH" },
               ]}
@@ -105,7 +116,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({ workspace }) => {
             }}
           />
         </div>
-        <div className="spacer-h-1" />
+        <div className="spacer-h-2" />
         <div className={styles.calendarNavigation}>
           {viewType == "MONTH" && (
             <>
