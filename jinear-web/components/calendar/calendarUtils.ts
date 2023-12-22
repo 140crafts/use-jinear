@@ -384,7 +384,7 @@ export const convertTaskToCell = (task: TaskDto, day: Date, minuteInPx = 2.5) =>
   const top = differenceInMinutes(startTime, day) * minuteInPx;
   const height = differenceInMinutes(endTime, startTime) * minuteInPx;
   const width = 90;
-  const left = 10;
+  const left = 0; //10
   logger.log({ minuteInPx });
   return { task, startTime, endTime, top, height, width, left };
 };
@@ -433,12 +433,12 @@ export const doesCellsTitlesIntersect = (dayCell_A: ICalendarDayRowCell, dayCell
   const Bx1 = dayCell_B.left + dayCell_B.width;
 
   const Ay0 = dayCell_A.top;
-  const Ay1 = dayCell_A.top + 25;
+  const Ay1 = dayCell_A.top + dayCell_A.height;
   const By0 = dayCell_B.top;
-  const By1 = dayCell_B.top + 25;
+  const By1 = dayCell_B.top + dayCell_A.height;
 
-  const intersectsAtXaxis = (Ax0 <= Bx0 && Bx0 <= Ax1) || (Ax0 <= Bx1 && Bx1 <= Ax1);
-  const intersectsAtYaxis = (Ay0 <= By0 && By0 <= Ay1) || (Ay0 <= By1 && By1 <= Ay1);
+  const intersectsAtXaxis = (Ax0 < Bx0 && Bx0 < Ax1) || (Ax0 < Bx1 && Bx1 < Ax1);
+  const intersectsAtYaxis = (Ay0 < By0 && By0 < Ay1) || (Ay0 < By1 && By1 < Ay1);
   return intersectsAtXaxis && intersectsAtYaxis;
 };
 

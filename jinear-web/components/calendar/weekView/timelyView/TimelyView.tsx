@@ -32,6 +32,7 @@ const TimelyView: React.FC<TimelyViewProps> = ({ days, tasks }) => {
           <Tile
             key={`week-time-tile-${i}`}
             topLabel={format(addHours(startOfDay(new Date()), i), t("timeFormatShort"))}
+            topClassName={i == 0 ? styles.zeroHoursLabel : undefined}
             bottomLabel={i == 23 ? format(addHours(startOfDay(new Date()), i + 1), t("timeFormatShort")) : undefined}
           />
         ))}

@@ -17,3 +17,7 @@
   border-right: solid;
   border-right-color: var(--c-primary-shade-0);
 }
+
+.zeroHoursLabel {
+  top: 0.25rem !important;
+}

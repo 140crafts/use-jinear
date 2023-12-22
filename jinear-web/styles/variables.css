@@ -59,6 +59,7 @@
   --calendar-week-view-day-minute-pixel-ratio: 1;
   --calendar-week-view-day-minute-pixel-ratio-in-pixels: 1px;
   --calendar-week-view-left-hour-label-container-width: 2rem;
+  --calendar-weekdays-header-height: 45px;
   /*  */
   --gap: clamp(1rem, 6vw, 3rem);
   --page: min(85ch, 100% - var(--gap) * 2);

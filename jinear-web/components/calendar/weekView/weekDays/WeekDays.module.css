@@ -1,7 +1,7 @@
 .weekViewWeekdayHeaderContainer {
   display: flex;
   flex-direction: row;
-
+  height: var(--calendar-weekdays-header-height);
   position: sticky;
   top: var(--workspace-header-height);
   z-index: 5;
