@@ -1,4 +1,4 @@
-import Button, { ButtonVariants } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
 import { IoList, IoStatsChart } from "react-icons/io5";
@@ -44,6 +44,7 @@ const TaskListTitleAndViewType: React.FC<TaskListTitleAndViewTypeProps> = ({
           variant={displayFormat == "LIST" ? ButtonVariants.filled2 : ButtonVariants.filled}
           className={styles.button}
           data-tooltip-right={t("taskListTitleAndViewTypeListTooltip")}
+          heightVariant={ButtonHeight.short}
         >
           <IoList />
           {t("taskListTitleAndViewTypeListLabel")}
@@ -53,6 +54,7 @@ const TaskListTitleAndViewType: React.FC<TaskListTitleAndViewTypeProps> = ({
           variant={displayFormat == "WFS_COLUMN" ? ButtonVariants.filled2 : ButtonVariants.filled}
           className={styles.button}
           data-tooltip-right={t("taskListTitleAndViewTypeStatusColumnsTooltip")}
+          heightVariant={ButtonHeight.short}
         >
           <IoStatsChart className={styles.wfsColumnIcon} />
           {t("taskListTitleAndViewTypeStatusColumnsLabel")}

@@ -2994,4 +2994,12 @@ export default {
     en: "Select",
     tr: "Seç",
   },
+  calendarDayViewEmptyDayLabel: {
+    en: "There isn't any task on this day.",
+    tr: "Bugün için herhangi bir görev bulunamadı.",
+  },
+  calendarDayViewNewTaskButton: {
+    en: "New Task",
+    tr: "Yeni Görev",
+  },
 };

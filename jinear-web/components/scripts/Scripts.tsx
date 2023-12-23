@@ -3,21 +3,21 @@ import { __DEV__ } from "@/utils/constants";
 import Script from "next/script";
 import React from "react";
 
-interface MainHeaderProps {}
+interface ScriptsProps {}
 
-const MainHeader: React.FC<MainHeaderProps> = ({}) => {
+const Scripts: React.FC<ScriptsProps> = ({}) => {
   return (
     <>
       {!__DEV__ && (
         <>
-          <script
+          <Script
             defer
             type="text/javascript"
             src="https://datapulse.app/datapulse.min.js"
             id="datapulse"
             data-endpoint="https://datapulse.app/api/v1/event"
             data-workspace="clkammqdb2jf8e937nd3n2ow7"
-          ></script>
+          ></Script>
         </>
       )}
       <Script
@@ -37,4 +37,4 @@ const MainHeader: React.FC<MainHeaderProps> = ({}) => {
   );
 };
 
-export default MainHeader;
+export default Scripts;
