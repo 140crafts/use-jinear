@@ -44,3 +44,5 @@ export const getTranslatedMessage = (key: keyof typeof strings) => {
 };
 
 export default useTranslation;
+
+export type TranslationKey = keyof typeof strings;

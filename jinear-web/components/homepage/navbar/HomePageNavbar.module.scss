@@ -1,0 +1,42 @@
+@import "/styles/breakpoints.scss";
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  background-color: var(--c-primary);
+  padding: 0.25rem 0;
+  min-width: calc(100% + 1rem);
+  margin-left: -1rem;
+}
+
+.headerActionBar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.themeToggleButton {
+  margin-top: 0.2rem;
+}
+
+.logo {
+  // margin-left: -1rem;
+}
+
+@media (max-width: $tablet) {
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .headerActionBar {
+    align-self: flex-end;
+    align-items: center;
+    margin-top: -1rem;
+  }
+}

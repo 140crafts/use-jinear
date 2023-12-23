@@ -3002,4 +3002,28 @@ export default {
     en: "New Task",
     tr: "Yeni Görev",
   },
+  homePageFeature_calendar: {
+    en: "Calendar",
+    tr: "Takvim",
+  },
+  homePageFeature_reminders: {
+    en: "Reminders",
+    tr: "Anımsatıcı",
+  },
+  homePageFeature_teams: {
+    en: "Collaborative Work",
+    tr: "Kolektif Çalışma",
+  },
+  homePageFeature_gmail: {
+    en: "Gmail Integration",
+    tr: "Gmail Entegrasyonu",
+  },
+  homePageFeature_files: {
+    en: "File Storage",
+    tr: "Dosya Saklama",
+  },
+  homePageFeature_workflowmanagement: {
+    en: "Workflow Management",
+    tr: "İş Akışı Yönetimi",
+  },
 };
