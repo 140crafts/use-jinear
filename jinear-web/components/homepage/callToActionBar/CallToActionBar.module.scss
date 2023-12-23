@@ -1,0 +1,13 @@
+.actionBar {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.goToAppButton {
+  display: flex;
+  flex-direction: row;
+  min-width: 8rem;
+  gap: 0.5rem;
+}
