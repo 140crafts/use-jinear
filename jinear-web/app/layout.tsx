@@ -8,13 +8,13 @@ import Logger from "@/utils/logger";
 import { Metadata, Viewport } from "next";
 
 import DateFnsConfigration from "@/components/dateFnsConfigration/DateFnsConfigration";
-import MainHeader from "@/components/mainHeader/MainHeader";
 import ModalProvider from "@/components/modalProvider/ModalProvider";
 import ReduxProvider from "@/components/reduxProvider/ReduxProvider";
 // import Root from "@/components/root/Root";
 import BodyFixer from "@/components/bodyFixer/BodyFixer";
 import OfflineListener from "@/components/offlineListener/OfflineListener";
 import Root from "@/components/root/Root";
+import Scripts from "@/components/scripts/Scripts";
 import ThemeProvider from "@/components/themeProvider/ThemeProvider";
 import ToasterProvider from "@/components/toasterProvider/ToasterProvider";
 import "../styles/app.css";
@@ -95,7 +95,6 @@ function MyApp({ children }: { children: React.ReactNode }) {
 
   return (
     <html>
-      <MainHeader />
       <body>
         <Root>
           <ReduxProvider>
@@ -117,6 +116,7 @@ function MyApp({ children }: { children: React.ReactNode }) {
             </ThemeProvider>
           </ReduxProvider>
         </Root>
+        <Scripts />
       </body>
     </html>
   );
