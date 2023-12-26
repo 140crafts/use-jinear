@@ -1,3 +1,4 @@
+"use client";
 import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import Logger from "@/utils/logger";
@@ -26,13 +27,32 @@ const logger = Logger("Calendar");
 
 const URL_DATE_FORMAT = "yyyy-dd-MM";
 
+const getStoredCalendarViewType = (): CalendarViewType => {
+  if (typeof window === "object") {
+    const value = localStorage.getItem("calendarViewType") || "m";
+    localStorage.setItem("calendarViewType", value);
+    return value as CalendarViewType;
+  }
+  return "m";
+};
+
+const storeCalendarViewType = (value: CalendarViewType) => {
+  if (typeof window === "object") {
+    localStorage.setItem("calendarViewType", value);
+  }
+};
+
 const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay(new Date()), className }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   logger.log({ searchParams: searchParams?.toString() });
 
   const viewingDateSearchParam = searchParams?.get("viewingDate");
-  const [viewType, setViewType] = useState<CalendarViewType>((searchParams?.get("viewType") as CalendarViewType) || "m");
+
+  const viewTypeSearchParam = searchParams?.get("viewType") as CalendarViewType;
+  const viewTypeStored = getStoredCalendarViewType();
+
+  const [viewType, setViewType] = useState<CalendarViewType>(viewTypeSearchParam ? viewTypeSearchParam : viewTypeStored);
   const [filterBy, setFilterBy] = useState<TeamDto>();
 
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
@@ -61,20 +81,16 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
       const newParams = new URLSearchParams(searchParams?.toString());
       newParams.delete("workspaceName");
       newParams.delete("teamUsername");
-      newParams.set("viewType", viewType);
+      if (viewingDate) {
+        newParams.set("viewingDate", format(viewingDate, URL_DATE_FORMAT));
+      }
+      if (viewType) {
+        newParams.set("viewType", viewType);
+        storeCalendarViewType(viewType);
+      }
       router.push(createUrl(`/${workspace.username}/calendar`, newParams));
     }
-  }, [workspace, viewType]);
-
-  useEffect(() => {
-    if (workspace) {
-      const newParams = new URLSearchParams(searchParams?.toString());
-      newParams.delete("workspaceName");
-      newParams.delete("teamUsername");
-      newParams.set("viewingDate", format(viewingDate, URL_DATE_FORMAT));
-      router.push(createUrl(`/${workspace.username}/calendar`, newParams));
-    }
-  }, [workspace, viewingDate]);
+  }, [workspace, viewingDate, viewType]);
 
   return (
     <CalendarContext.Provider
