@@ -7,6 +7,7 @@ import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
+import co.jinear.core.model.enumtype.team.TeamStateType;
 import co.jinear.core.model.request.task.TaskInitializeRequest;
 import co.jinear.core.model.response.task.TaskResponse;
 import co.jinear.core.model.vo.task.TaskInitializeVo;
@@ -47,7 +48,9 @@ public class TaskInitializeManager {
     public TaskResponse initializeTask(TaskInitializeRequest taskInitializeRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
+
         validateWorkspaceAccess(currentAccount, taskInitializeRequest);
+        validateTeamExistenceAndState(taskInitializeRequest);
         validateTeamAccess(currentAccount, taskInitializeRequest);
         validateDueDateIsAfterAssignedDate(taskInitializeRequest.getAssignedDate(), taskInitializeRequest.getDueDate());
         validateTaskBoardAccess(taskInitializeRequest, currentAccount);
@@ -103,6 +106,13 @@ public class TaskInitializeManager {
 
     private void validateTeamAccess(String currentAccount, TaskInitializeRequest taskInitializeRequest) {
         teamAccessValidator.validateTeamAccess(currentAccount, taskInitializeRequest.getWorkspaceId(), taskInitializeRequest.getTeamId());
+    }
+
+    private void validateTeamExistenceAndState(TaskInitializeRequest taskInitializeRequest) {
+        boolean existsAndActive = teamRetrieveService.checkTeamExistenceWithState(taskInitializeRequest.getTeamId(), TeamStateType.ACTIVE);
+        if (Boolean.FALSE.equals(existsAndActive)) {
+            throw new BusinessException();
+        }
     }
 
     private void retrieveAndSetTeamDto(TaskDto initializedTask) {

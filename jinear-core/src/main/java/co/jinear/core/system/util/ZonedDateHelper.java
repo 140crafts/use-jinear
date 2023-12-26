@@ -1,6 +1,5 @@
 package co.jinear.core.system.util;
 
-import co.jinear.core.exception.BusinessException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +22,7 @@ public class ZonedDateHelper {
         return Optional.ofNullable(timeZone)
                 .map(ZoneId::of)
                 .map(zonedDateTime::withZoneSameInstant)
-                .orElseThrow(BusinessException::new);
+                .orElseGet(()->zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()));
     }
 
     public static String format(ZonedDateTime zonedDateTime, String pattern) {

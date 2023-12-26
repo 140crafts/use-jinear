@@ -1,12 +1,12 @@
 package co.jinear.core.service.team;
 
-import co.jinear.core.converter.integration.IntegrationInfoDtoConverter;
 import co.jinear.core.converter.team.TeamDtoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.entity.team.Team;
+import co.jinear.core.model.enumtype.team.TeamStateType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.repository.TeamRepository;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
@@ -30,7 +30,6 @@ public class TeamRetrieveService {
     private final WorkspaceMemberRetrieveService workspaceMemberRetrieveService;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
     private final TeamDtoConverter teamDtoConverter;
-    private final IntegrationInfoDtoConverter integrationInfoDtoConverter;
 
     public List<TeamDto> listWorkspaceTeamsByAccountWorkspaceRole(String accountId, String workspaceId) {
         log.info("List workspace teams by account role has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
@@ -100,5 +99,9 @@ public class TeamRetrieveService {
         log.info("Retrieve team by username has started. username: {}, workspaceId: {}", username, workspaceId);
         return teamRepository.findByUsernameAndWorkspaceIdAndPassiveIdIsNull(username, workspaceId)
                 .map(teamDtoConverter::map);
+    }
+
+    public boolean checkTeamExistenceWithState(String teamId, TeamStateType teamStateType){
+        return teamRepository.existsByTeamIdAndTeamStateAndPassiveIdIsNull(teamId,teamStateType);
     }
 }

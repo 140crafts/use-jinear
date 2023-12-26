@@ -1,6 +1,7 @@
 package co.jinear.core.repository;
 
 import co.jinear.core.model.entity.team.Team;
+import co.jinear.core.model.enumtype.team.TeamStateType;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -17,4 +18,6 @@ public interface TeamRepository extends JpaRepository<Team, String> {
     Optional<Team> findByTagAndWorkspaceIdAndPassiveIdIsNull(String tag, String workspaceId);
 
     Optional<Team> findByUsernameAndWorkspaceIdAndPassiveIdIsNull(String username, String workspaceId);
+
+    boolean existsByTeamIdAndTeamStateAndPassiveIdIsNull(String teamId, TeamStateType teamStateType);
 }
