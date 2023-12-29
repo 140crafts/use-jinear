@@ -1,7 +1,7 @@
 import React from "react";
-import styles from "./Tile.module.css";
+import styles from "./HourTile.module.css";
 
-interface TileProps {
+interface HourTileProps {
   topLabel?: string;
   bottomLabel?: string;
   onClick?: () => void;
@@ -11,10 +11,10 @@ interface TileProps {
 import Logger from "@/utils/logger";
 import cn from "classnames";
 
-const logger = Logger("Tile");
-const Tile: React.FC<TileProps> = ({ topLabel, bottomLabel, onClick, topClassName }) => {
+const logger = Logger("HourTile");
+const HourTile: React.FC<HourTileProps> = ({ topLabel, bottomLabel, onClick, topClassName }) => {
   const _onClick = () => {
-    logger.log({ msg: "tile click", onClick });
+    logger.log({ msg: "HourTile click", onClick });
     onClick?.();
   };
   return (
@@ -25,4 +25,4 @@ const Tile: React.FC<TileProps> = ({ topLabel, bottomLabel, onClick, topClassNam
   );
 };
 
-export default Tile;
+export default HourTile;

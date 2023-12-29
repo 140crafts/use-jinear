@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import styles from "./style.module.css";
 
-export type ModalWidth = "medium-fixed" | "default" | "large" | "xlarge" | "xxlarge" | "fullscreen";
+export type ModalWidth = "small" | "medium-fixed" | "default" | "large" | "xlarge" | "xxlarge" | "fullscreen";
 export type ModalHeight = "default" | "height-medium-or-full" | "height-full";
 
 export interface BaseModalProps {

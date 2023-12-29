@@ -114,6 +114,7 @@ export interface NewTaskModalState extends ModalState {
 
 export interface TeamPickerModalState extends ModalState {
   workspaceId?: string;
+  filterActiveTeams?: boolean;
   onPick?: (team: TeamDto) => void;
 }
 

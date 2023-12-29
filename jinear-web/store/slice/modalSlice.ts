@@ -666,6 +666,7 @@ export const selectTaskOverviewModalWorkspaceName = (state: RootState) => state.
 
 export const selectTeamPickerModalVisible = (state: RootState) => state.modal.teamPickerModal?.visible;
 export const selectTeamPickerModalWorkspaceId = (state: RootState) => state.modal.teamPickerModal?.workspaceId;
+export const selectTeamPickerModalFilterActiveTeams = (state: RootState) => state.modal.teamPickerModal?.filterActiveTeams;
 export const selectTeamPickerModalOnPick = (state: RootState) => state.modal.teamPickerModal?.onPick;
 
 export const selectWorkspacePickerModalVisible = (state: RootState) => state.modal.workspacePickerModal?.visible;

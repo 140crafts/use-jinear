@@ -60,6 +60,7 @@
   --calendar-week-view-day-minute-pixel-ratio-in-pixels: 1px;
   --calendar-week-view-left-hour-label-container-width: 2rem;
   --calendar-weekdays-header-height: 45px;
+  --calendar-month-week-day-numbers: 35px;
   /*  */
   --gap: clamp(1rem, 6vw, 3rem);
   --page: min(85ch, 100% - var(--gap) * 2);
@@ -106,6 +107,7 @@
   --c-WHATIEAT_YELLOW: #fdf074;
   --c-HIGHLIGHT_YELLOW: #dcff31;
   --c-JINEAR_YELLOW: #fac26d;
+  --c-JINEAR_ORANGE: #f56e0f;
   --border-radius-xs: 0.15rem;
   --border-radius-s: 0.25rem;
   --border-radius: 0.35rem;

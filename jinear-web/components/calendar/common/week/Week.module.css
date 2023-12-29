@@ -8,3 +8,10 @@
   padding-bottom: 2rem;
   /* flex: 1; */
 }
+
+.weekRowContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--calendar-month-week-day-numbers);
+  gap: var(--calendar-event-gap);
+}

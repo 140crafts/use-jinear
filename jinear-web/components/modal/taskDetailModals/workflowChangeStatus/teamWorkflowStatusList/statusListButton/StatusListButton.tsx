@@ -8,10 +8,12 @@ import {
   selectChangeTaskWorkflowStatusModalTask,
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
 import { IoCheckmarkCircle, IoCloseCircle, IoContrast, IoEllipseOutline, IoPauseCircleOutline } from "react-icons/io5";
 import styles from "./StatusListButton.module.css";
+
 interface StatusListButtonProps {
   wfs: TeamWorkflowStatusDto;
 }
@@ -66,8 +68,8 @@ const StatusListButton: React.FC<StatusListButtonProps> = ({ wfs }) => {
           : null
       }
     >
-      {groupIconMap?.[wfs.workflowStateGroup]}
-      {wfs.name}
+      <div className={styles.iconContainer}>{groupIconMap?.[wfs.workflowStateGroup]}</div>
+      <div className={cn("line-clamp-2", styles.label)}>{wfs.name}</div>
     </Button>
   );
 };

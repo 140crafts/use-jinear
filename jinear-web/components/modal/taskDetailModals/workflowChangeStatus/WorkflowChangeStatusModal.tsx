@@ -30,6 +30,7 @@ const WorkflowChangeStatusModal: React.FC<WorkflowChangeStatusModalProps> = ({})
       bodyClass={styles.container}
       hasTitleCloseButton={true}
       requestClose={close}
+      width={"small"}
     >
       {teamId && task && <TeamWorkflowStatusList teamId={teamId} />}
     </Modal>

@@ -16,8 +16,8 @@ import Logger from "@/utils/logger";
 import cn from "classnames";
 import { addHours, isToday, startOfDay } from "date-fns";
 import CurrentTimeLine from "../currentTimeLine/CurrentTimeLine";
+import HourTile from "./hourTile/HourTile";
 import TaskPositionBasedCell from "./taskPositionBasedCell/TaskPositionBasedCell";
-import Tile from "./tile/Tile";
 
 const logger = Logger("DayTimelyView");
 
@@ -58,7 +58,7 @@ const DayTimelyView: React.FC<DayTimelyViewProps> = ({ day, tasks, minuteInPx })
       {_isToday && <CurrentTimeLine variant="solid" withLabel={false} calendarWeekViewDayMinutePixelRatio={minuteInPx} />}
 
       {[...new Array(24)].map((_, i) => (
-        <Tile
+        <HourTile
           key={`${day}-tile-${i}`}
           onClick={() => {
             const date = addHours(startOfDay(day), i);

@@ -1,5 +1,5 @@
 "use client";
-import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import { TaskDto, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import Logger from "@/utils/logger";
 import { createUrl } from "@/utils/urlUtils";
@@ -56,6 +56,11 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
   const [filterBy, setFilterBy] = useState<TeamDto>();
 
   const [highlightedTaskId, setHighlightedTaskId] = useState<string>("");
+  const [draggingTask, setDraggingTask] = useState<TaskDto>();
+  const [ghostTask, setGhostTask] = useState<TaskDto>();
+
+  const [calenderLoading, setCalenderLoading] = useState<boolean>(false);
+
   const [viewingDate, setViewingDate] = useState(
     viewingDateSearchParam ? parse(viewingDateSearchParam, URL_DATE_FORMAT, new Date()) : initialDate
   );
@@ -75,6 +80,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
     skip: workspace == null,
   });
   const workspacesFirstTeam = teamsResponse?.data?.find((team) => team);
+  logger.log({ draggingTask });
 
   useEffect(() => {
     if (workspace) {
@@ -113,6 +119,12 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, initialDate = startOfDay
         weekDays,
         squeezedView,
         setSqueezedView,
+        draggingTask,
+        setDraggingTask,
+        ghostTask,
+        setGhostTask,
+        calenderLoading,
+        setCalenderLoading,
       }}
     >
       <div className={cn(styles.container, className)}>

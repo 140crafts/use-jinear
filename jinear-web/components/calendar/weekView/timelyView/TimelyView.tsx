@@ -8,7 +8,7 @@ import React from "react";
 import styles from "./TimelyView.module.css";
 import CurrentTimeLine from "./currentTimeLine/CurrentTimeLine";
 import DayTimelyView from "./dayTimelyView/DayTimelyView";
-import Tile from "./dayTimelyView/tile/Tile";
+import HourTile from "./dayTimelyView/hourTile/HourTile";
 
 interface TimelyViewProps {
   days: Date[];
@@ -29,7 +29,7 @@ const TimelyView: React.FC<TimelyViewProps> = ({ days, tasks }) => {
     <div className={styles.container} style={{ minHeight: MINUTES_IN_A_DAY * calendarWeekViewDayMinutePixelRatio }}>
       <div className={styles.hourLabelContainer}>
         {[...new Array(24)].map((_, i) => (
-          <Tile
+          <HourTile
             key={`week-time-tile-${i}`}
             topLabel={format(addHours(startOfDay(new Date()), i), t("timeFormatShort"))}
             topClassName={i == 0 ? styles.zeroHoursLabel : undefined}
