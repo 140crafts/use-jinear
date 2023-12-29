@@ -40,6 +40,10 @@
   width: max(35vw, 375px);
 }
 
+.small-content {
+  width: max(25vw, 275px);
+}
+
 .large-content {
   width: max(35vw, 475px);
 }

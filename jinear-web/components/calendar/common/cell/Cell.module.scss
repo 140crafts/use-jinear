@@ -6,7 +6,7 @@
   color: var(--c-text-color);
   cursor: default;
   pointer-events: none;
-  transition: all var(--fade);
+  transition: background-color var(--fade);
   z-index: 1;
   gap: 0.5rem;
 }
@@ -106,4 +106,24 @@
   width: 135px;
   min-height: 135px;
   background-color: red;
+}
+
+.ghost {
+  background-color: var(--c-secondary-shade-1) !important;
+  color: var(--c-primary) !important;
+  font-weight: 500;
+  /* opacity: 0.5; */
+  pointer-events: none;
+}
+
+.ghost-arrow-right {
+  border-left: calc(var(--calendar-event-height) / 2) solid var(--c-secondary-shade-1) !important;
+}
+
+.ghost-arrow-right-end-highlight {
+  border-left: calc(var(--calendar-event-height) / 2) solid var(--c-secondary-shade-1);
+}
+
+.noPointerEvents {
+  pointer-events: none;
 }

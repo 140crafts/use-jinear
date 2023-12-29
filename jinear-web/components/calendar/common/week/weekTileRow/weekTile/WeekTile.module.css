@@ -1,14 +1,3 @@
-.calendarLineContainer {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
 .calendarLine {
   border-style: solid;
   border-color: var(--c-primary-shade-0-op05);
@@ -29,4 +18,8 @@
 
 .todayCalendarLine:hover {
   background: linear-gradient(0, var(--c-primary), 1%, var(--c-primary-shade-0-op05));
+}
+
+.dragOver {
+  background: linear-gradient(0, var(--c-primary), 1%, var(--c-primary-shade-0-op05)) !important;
 }

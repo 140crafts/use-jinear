@@ -51,7 +51,9 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
   };
 
   const popChangeTeamModal = () => {
-    dispatch(popTeamPickerModal({ visible: true, workspaceId: workspace.workspaceId, onPick: onTeamPick }));
+    dispatch(
+      popTeamPickerModal({ visible: true, workspaceId: workspace.workspaceId, filterActiveTeams: true, onPick: onTeamPick })
+    );
   };
 
   return (

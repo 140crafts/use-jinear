@@ -1,4 +1,4 @@
-import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import { TaskDto, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { isSameDay, startOfDay } from "date-fns";
 import { createContext, useContext } from "react";
 import { CalendarViewType } from "../Calendar";
@@ -29,6 +29,15 @@ interface ICalendarContext {
 
   squeezedView: boolean;
   setSqueezedView?: React.Dispatch<React.SetStateAction<boolean>>;
+
+  draggingTask?: TaskDto;
+  setDraggingTask?: React.Dispatch<React.SetStateAction<TaskDto | undefined>>;
+
+  ghostTask?: TaskDto;
+  setGhostTask?: React.Dispatch<React.SetStateAction<TaskDto | undefined>>;
+
+  calenderLoading?: boolean;
+  setCalenderLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const initialDate = startOfDay(new Date());
@@ -44,6 +53,12 @@ const CalendarContext = createContext<ICalendarContext>({
   weekDays: [],
   highlightedTaskId: "",
   squeezedView: true,
+  draggingTask: undefined,
+  setDraggingTask: undefined,
+  ghostTask: undefined,
+  setGhostTask: undefined,
+  calenderLoading: false,
+  setCalenderLoading: undefined,
 });
 
 export default CalendarContext;
@@ -136,6 +151,36 @@ export function useWeekViewPeriodEnd() {
 export function useWeekDays() {
   const ctx = useContext(CalendarContext);
   return ctx.weekDays;
+}
+
+export function useDraggingTask() {
+  const ctx = useContext(CalendarContext);
+  return ctx.draggingTask;
+}
+
+export function useSetDraggingTask() {
+  const ctx = useContext(CalendarContext);
+  return ctx.setDraggingTask;
+}
+
+export function useGhostTask() {
+  const ctx = useContext(CalendarContext);
+  return ctx.ghostTask;
+}
+
+export function useSetGhostTask() {
+  const ctx = useContext(CalendarContext);
+  return ctx.setGhostTask;
+}
+
+export function useCalenderLoading() {
+  const ctx = useContext(CalendarContext);
+  return ctx.calenderLoading || false;
+}
+
+export function useSetCalenderLoading() {
+  const ctx = useContext(CalendarContext);
+  return ctx.setCalenderLoading;
 }
 
 //helper hooks

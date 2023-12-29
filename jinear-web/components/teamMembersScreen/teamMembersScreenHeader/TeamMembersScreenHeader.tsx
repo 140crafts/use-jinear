@@ -24,9 +24,11 @@ const TeamMembersScreenHeader: React.FC<TeamMembersScreenHeaderProps> = ({ works
     <div className={styles.container}>
       <SectionTitle title={t("teamMemberScreenListTitle")} description={t("teamMemberScreenListText")} />
       <div className={styles.actionBar}>
-        <Button variant={ButtonVariants.contrast} heightVariant={ButtonHeight.short} onClick={popInviteModal}>
-          {t("teamMemberScreenAddMember")}
-        </Button>
+        {team.teamState != "ARCHIVED" && (
+          <Button variant={ButtonVariants.contrast} heightVariant={ButtonHeight.short} onClick={popInviteModal}>
+            {t("teamMemberScreenAddMember")}
+          </Button>
+        )}
       </div>
     </div>
   );

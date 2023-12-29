@@ -25,5 +25,7 @@
 .today {
   background-color: var(--c-secondary-shade-0);
   color: var(--c-primary);
+  /* background-color: var(--c-JINEAR_ORANGE); */
+  /* color: var(--c-BABY_POWDER); */
   border-radius: 0.25rem;
 }

@@ -1,6 +1,11 @@
 import useWindowSize from "@/hooks/useWindowSize";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
-import { closeTeamPickerModal, selectTeamPickerModalVisible, selectTeamPickerModalWorkspaceId } from "@/store/slice/modalSlice";
+import {
+  closeTeamPickerModal,
+  selectTeamPickerModalFilterActiveTeams,
+  selectTeamPickerModalVisible,
+  selectTeamPickerModalWorkspaceId,
+} from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
@@ -17,6 +22,7 @@ const TeamPickerModal: React.FC<TeamPickerModalProps> = ({}) => {
   const { isMobile } = useWindowSize();
   const visible = useTypedSelector(selectTeamPickerModalVisible);
   const workspaceId = useTypedSelector(selectTeamPickerModalWorkspaceId) || "";
+  const filterActiveTeams = useTypedSelector(selectTeamPickerModalFilterActiveTeams) || false;
 
   const {
     data: teamsResponse,
@@ -45,9 +51,11 @@ const TeamPickerModal: React.FC<TeamPickerModalProps> = ({}) => {
         </div>
       )}
       {teamsResponse && <div className={styles.title}>{t("teamPickerModalPickATeam")}</div>}
-      {teamsResponse?.data.map((teamDto) => (
-        <BasicTeamButton key={`basic-team-button-${teamDto.teamId}`} team={teamDto} close={close} />
-      ))}
+      {teamsResponse?.data
+        .filter((teamDto) => (filterActiveTeams ? teamDto.teamState == "ACTIVE" : true))
+        .map((teamDto) => (
+          <BasicTeamButton key={`basic-team-button-${teamDto.teamId}`} team={teamDto} close={close} />
+        ))}
     </Modal>
   );
 };
