@@ -86,12 +86,13 @@ const WeekTile: React.FC<WeekTileProps> = ({ day }) => {
         hasPreciseDueDate: ghostTask.hasPreciseDueDate,
       };
       const currentVals = {
-        assignedDate: draggingTask.assignedDate,
-        dueDate: draggingTask.dueDate,
+        assignedDate: draggingTask.assignedDate ? new Date(draggingTask.assignedDate) : undefined,
+        dueDate: draggingTask.dueDate ? new Date(draggingTask.dueDate) : undefined,
         hasPreciseAssignedDate: draggingTask.hasPreciseAssignedDate,
         hasPreciseDueDate: draggingTask.hasPreciseDueDate,
       };
       if (JSON.stringify(currentVals) != JSON.stringify(req)) {
+        logger.log({ currentVals, req });
         updateTaskDates({
           taskId: draggingTask.taskId,
           body: req,
