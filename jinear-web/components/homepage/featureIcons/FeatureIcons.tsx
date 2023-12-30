@@ -1,3 +1,4 @@
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import { TranslationKey } from "locales/useTranslation";
 import React from "react";
 import { IconType } from "react-icons";
@@ -40,9 +41,11 @@ const FEATURES: IFeature[] = [
 ];
 
 const FeatureIcons: React.FC<FeatureIconsProps> = ({}) => {
+  const feedsEnabled = useFeatureFlag("FEEDS");
+
   return (
     <div className={styles.container}>
-      {FEATURES.map((feature) => (
+      {FEATURES.filter((feature) => (feature.label == "homePageFeature_gmail" ? feedsEnabled : true)).map((feature) => (
         <Feature key={feature.label} feature={feature} />
       ))}
     </div>
