@@ -4,7 +4,7 @@ import Logger from "@/utils/logger";
 import cn from "classnames";
 import React, { useEffect, useMemo, useRef } from "react";
 import { ICalendarWeekRowCell, calculateHitMissTable, isDateBetween } from "../../calendarUtils";
-import { useCalendarWorkspace, useFilterBy } from "../../context/CalendarContext";
+import { useCalendarWorkspace, useCalenderLoading, useFilterBy, useGhostTask } from "../../context/CalendarContext";
 import AllDayTasks from "../../weekView/allDayTasks/AllDayTasks";
 import TimelyView from "../../weekView/timelyView/TimelyView";
 import WeekDays from "../../weekView/weekDays/WeekDays";
@@ -26,6 +26,9 @@ const DayspanTimelyView: React.FC<DayspanTimelyViewProps> = ({ viewingDate, peri
 
   const weekViewContainerRef = useRef<HTMLDivElement>(null);
 
+  const ghostTask = useGhostTask();
+  const calendarLoading = useCalenderLoading();
+
   const {
     data: filterResponse,
     isFetching,
@@ -44,7 +47,11 @@ const DayspanTimelyView: React.FC<DayspanTimelyViewProps> = ({ viewingDate, peri
     if (!filterResponse || !filterResponse.data.content) {
       return;
     }
-    const tasks = filterResponse.data.content;
+    const responseTasks = filterResponse.data.content;
+    const tasks = [...responseTasks];
+    if (ghostTask) {
+      tasks.unshift(ghostTask);
+    }
 
     return calculateHitMissTable({
       tasks,
@@ -53,7 +60,7 @@ const DayspanTimelyView: React.FC<DayspanTimelyViewProps> = ({ viewingDate, peri
       excludePreciseDueDates: true,
       rowCount: 1,
     });
-  }, [JSON.stringify(days), JSON.stringify(filterResponse)]);
+  }, [JSON.stringify(days), JSON.stringify(filterResponse), JSON.stringify(ghostTask)]);
 
   const weekTasksWithPreciseDates = useMemo(
     () => filterResponse?.data.content.filter((task) => task.hasPreciseAssignedDate || task.hasPreciseDueDate) || [],
@@ -87,7 +94,7 @@ const DayspanTimelyView: React.FC<DayspanTimelyViewProps> = ({ viewingDate, peri
         }
       }
     }, 500);
-  }, [periodStart?.getTime(), viewingDate?.getTime(), periodEnd?.getTime()]);
+  }, [periodStart?.getTime(), viewingDate?.getTime(), periodEnd?.getTime(), JSON.stringify(ghostTask)]);
 
   return (
     <div ref={weekViewContainerRef} className={styles.weekViewContainer}>
