@@ -1,4 +1,5 @@
 .container {
+  position: relative;
   display: flex;
   flex-direction: row;
   gap: 0.5rem;
@@ -61,18 +62,7 @@
 }
 
 .input {
-  flex: 1;
   background: transparent !important;
-  font-family: inherit;
-  font-size: inherit;
-  padding: 1px 6px;
-  overflow: hidden;
-  resize: none !important;
-  content: attr(data-value) " ";
-  min-height: 2.5rem;
-
-  /* form-sizing vs. field-sizing this will be available later*/
-  /* form-sizing: content; */
 }
 
 .input:hover {
@@ -84,42 +74,15 @@
   outline: none !important;
 }
 
-.placeHolder {
-  pointer-events: none;
-  position: absolute;
-  top: 0.05rem;
-  left: 0.6rem;
-  color: var(--c-secondary-shade-0-op05);
-}
-
 .inputContainer {
   position: relative;
-}
-
-.toolbar {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  background-color: var(--c-primary);
-  border-radius: var(--border-radius);
-  border-style: solid;
-  border-color: var(--c-primary-shade-1-op05);
-  padding: 0.15rem 0.5rem;
-  min-width: 135px;
-}
-
-.submitButton {
-  position: absolute;
-  right: 0;
-  bottom: 0;
 }
 
 .quotedCommentContainer {
   background-color: var(--c-primary);
   border-radius: var(--border-radius);
   margin-top: 1.25rem;
-  margin-bottom: 1.25rem;
+  // margin-bottom: 1.25rem;
 }
 
 .unquoteCommentButtonContainer {
@@ -133,4 +96,12 @@
   position: absolute;
   right: 0;
   top: -0.6rem;
+}
+
+.actionContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-end;
 }

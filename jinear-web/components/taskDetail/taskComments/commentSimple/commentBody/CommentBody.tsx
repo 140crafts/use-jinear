@@ -1,6 +1,8 @@
+import Tiptap from "@/components/tiptap/Tiptap";
 import { CommentDto } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
 import React from "react";
+
 import styles from "./CommentBody.module.css";
 
 interface CommentBodyProps {
@@ -14,7 +16,7 @@ const CommentBody: React.FC<CommentBodyProps> = ({ comment }) => {
   return isDeleted ? (
     <i>{t("commentThisCommentDeleted")}</i>
   ) : (
-    <div className={styles.commentText} dangerouslySetInnerHTML={{ __html: comment.richText?.value }}></div>
+    <Tiptap content={comment.richText?.value} className={styles.editor} editorClassName={styles.editor} editable={false} />
   );
 };
 

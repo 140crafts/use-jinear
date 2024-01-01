@@ -1,14 +1,9 @@
 import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
-import TextEditorBasic from "@/components/TextEditorBasic/TextEditorBasic";
+import Tiptap from "@/components/tiptap/Tiptap";
 import { TaskInitializeRequest } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
-import dynamic from "next/dynamic";
 import React from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
-
-const TextEditor = dynamic(import("@/components/textEditor/TextEditor"), {
-  ssr: false,
-});
 
 interface DescriptionInputProps {
   register: UseFormRegister<TaskInitializeRequest>;
@@ -23,7 +18,12 @@ const DescriptionInput: React.FC<DescriptionInputProps> = ({ register, setValue,
     <label className={labelClass} htmlFor={"new-task-description"}>
       {t("newTaskModalTaskDescription")}
       <PureClientOnly>
-        <TextEditorBasic htmlInputId={"description"} register={register} formSetValue={setValue} />
+        <Tiptap
+          placeholder={t("taskDetalPageTaskDescription")}
+          register={register}
+          formSetValue={setValue}
+          htmlInputId={`description`}
+        />
       </PureClientOnly>
     </label>
   );

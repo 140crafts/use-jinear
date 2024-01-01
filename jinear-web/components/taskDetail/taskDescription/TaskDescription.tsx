@@ -1,5 +1,5 @@
-import TextEditorBasic from "@/components/TextEditorBasic/TextEditorBasic";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
 import { useToggle } from "@/hooks/useToggle";
 import { RichTextDto } from "@/model/be/jinear-core";
 import { useUpdateTaskDescriptionMutation } from "@/store/api/taskUpdateApi";
@@ -7,13 +7,10 @@ import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
-import dynamic from "next/dynamic";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { LuPencil } from "react-icons/lu";
 import styles from "./TaskDescription.module.css";
 
-const TextEditor = dynamic(import("@/components/textEditor/TextEditor"), {
-  ssr: false,
-});
 interface TaskDescriptionProps {
   taskId: string;
   description?: RichTextDto | null;
@@ -26,6 +23,7 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
   const { current: readOnly, toggle: toggleReadOnly } = useToggle(true);
   const [initialValue, setInitialValue] = useState(description?.value);
   const [updateTaskDescription, { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading }] = useUpdateTaskDescriptionMutation();
+  const tiptapRef = useRef<ITiptapRef>(null);
 
   useEffect(() => {
     if (description?.value) {
@@ -51,6 +49,8 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
     toggleReadOnly();
     if (!readOnly) {
       save();
+    } else {
+      tiptapRef?.current?.focus();
     }
   };
 
@@ -64,16 +64,21 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
 
   return (
     <div className={cn(styles.container)}>
-      <TextEditorBasic
+      <Tiptap
+        ref={tiptapRef}
+        content={initialValue}
+        editable={!readOnly}
+        placeholder={t("taskDetalPageTaskDescription")}
         htmlInputId={`${description?.richTextId}`}
-        readOnly={readOnly}
-        variant={"full"}
-        initialValue={initialValue}
-        placeholder={initialValue ? undefined : t("taskDetalPageTaskDescription")}
       />
       {readOnly && (
-        <Button onClick={toggle} className={styles.editButton} variant={ButtonVariants.filled2}>
-          {t("taskDescriptionEdit")}
+        <Button
+          onClick={toggle}
+          className={styles.editButton}
+          variant={ButtonVariants.filled2}
+          data-tooltip-right={t("taskDescriptionEdit")}
+        >
+          <LuPencil />
         </Button>
       )}
 
