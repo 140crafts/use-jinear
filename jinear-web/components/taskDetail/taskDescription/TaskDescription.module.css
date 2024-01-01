@@ -12,7 +12,7 @@
 .editButton {
   display: none;
   flex-direction: row;
-  position: absolute;
+  position: absolute !important;
   right: 0;
   top: 0;
   z-index: 5;
