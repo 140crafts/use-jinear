@@ -1,5 +1,5 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import Tiptap from "@/components/tiptap/Tiptap";
+import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
 import { useToggle } from "@/hooks/useToggle";
 import { RichTextDto } from "@/model/be/jinear-core";
 import { useUpdateTaskDescriptionMutation } from "@/store/api/taskUpdateApi";
@@ -7,7 +7,7 @@ import Logger from "@/utils/logger";
 import { CircularProgress } from "@mui/material";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { LuPencil } from "react-icons/lu";
 import styles from "./TaskDescription.module.css";
 
@@ -23,6 +23,7 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
   const { current: readOnly, toggle: toggleReadOnly } = useToggle(true);
   const [initialValue, setInitialValue] = useState(description?.value);
   const [updateTaskDescription, { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading }] = useUpdateTaskDescriptionMutation();
+  const tiptapRef = useRef<ITiptapRef>(null);
 
   useEffect(() => {
     if (description?.value) {
@@ -48,6 +49,8 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
     toggleReadOnly();
     if (!readOnly) {
       save();
+    } else {
+      tiptapRef?.current?.focus();
     }
   };
 
@@ -62,6 +65,7 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
   return (
     <div className={cn(styles.container)}>
       <Tiptap
+        ref={tiptapRef}
         content={initialValue}
         editable={!readOnly}
         placeholder={t("taskDetalPageTaskDescription")}

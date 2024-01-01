@@ -2666,6 +2666,10 @@ export default {
     en: "Submit",
     tr: "Gönder",
   },
+  taskCommentsCommentCancel: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
   taskCommentsCommentHeaderText: {
     en: "added a comment",
     tr: "bir yorum ekledi",
@@ -3025,5 +3029,9 @@ export default {
   homePageFeature_workflowmanagement: {
     en: "Workflow Management",
     tr: "İş Akışı Yönetimi",
+  },
+  taskDetailCommentsNewComment: {
+    en: "New Comment",
+    tr: "Yeni Yorum",
   },
 };

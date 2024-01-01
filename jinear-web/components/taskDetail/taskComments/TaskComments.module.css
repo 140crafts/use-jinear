@@ -1,7 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
 .listTitle {
   font-size: 0.8rem;
 }
+
 .list {
   gap: 0.25rem;
   min-height: 0 !important;
+}
+
+.newCommentButton {
+  align-self: flex-end;
 }

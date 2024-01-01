@@ -4,10 +4,16 @@ import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import cn from "classnames";
-import React, { useEffect, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import styles from "./Tiptap.module.css";
 import ActionBar from "./actionBar/ActionBar";
+
+export interface ITiptapRef {
+  clearContent: () => void;
+  getHTML: () => string;
+  focus: (position?: "start" | "end" | "all" | number | boolean | null, options?: { scrollIntoView?: boolean }) => void;
+}
 
 interface TiptapProps {
   content?: string;
@@ -20,16 +26,10 @@ interface TiptapProps {
   formSetValue?: UseFormSetValue<any>;
 }
 
-const Tiptap: React.FC<TiptapProps> = ({
-  content,
-  className,
-  editorClassName,
-  placeholder,
-  editable = true,
-  htmlInputId,
-  register,
-  formSetValue,
-}) => {
+const Tiptap = (
+  { content, className, editorClassName, placeholder, editable = true, htmlInputId, register, formSetValue }: TiptapProps,
+  ref: any
+) => {
   const [html, setHtml] = useState<string>();
   const editor = useEditor({
     editorProps: {
@@ -42,6 +42,7 @@ const Tiptap: React.FC<TiptapProps> = ({
       Placeholder.configure({
         placeholder,
         showOnlyWhenEditable: false,
+        emptyEditorClass: styles["is-editor-empty"],
       }),
       Link.configure({
         HTMLAttributes: {
@@ -57,6 +58,13 @@ const Tiptap: React.FC<TiptapProps> = ({
     },
   });
 
+  useImperativeHandle(ref, () => ({
+    clearContent: () => editor?.commands.clearContent(true),
+    getHTML: () => editor?.getHTML(),
+    focus: (position?: "start" | "end" | "all" | number | boolean | null, options?: { scrollIntoView?: boolean }) =>
+      editor?.commands.focus(position, options),
+  }));
+
   useEffect(() => {
     editor?.setEditable(editable);
   }, [editable, editor]);
@@ -70,4 +78,4 @@ const Tiptap: React.FC<TiptapProps> = ({
   );
 };
 
-export default Tiptap;
+export default forwardRef<ITiptapRef, TiptapProps>(Tiptap);

@@ -3,6 +3,7 @@
   flex-direction: column;
   background-color: var(--c-primary-shade-0);
   border-radius: var(--border-radius);
+  /* gap: 1rem; */
 }
 
 .tiptap {
@@ -15,8 +16,8 @@
   border-style: solid;
   transition: var(--fade);
   text-decoration: none;
-  padding: 7.5px;
-  min-height: 1rem;
+  padding: 1rem 7.5px;
+  min-height: 3.25rem;
 }
 
 .tiptap:focus {
@@ -25,6 +26,14 @@
 }
 
 .tiptap p.is-editor-empty:first-child::before {
+  color: var(--c-secondary-shade-1-op05);
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.is-editor-empty {
   color: var(--c-secondary-shade-1-op05);
   content: attr(data-placeholder);
   float: left;

@@ -1,8 +1,10 @@
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import PaginatedList from "@/components/paginatedList/PaginatedList";
 import { CommentDto } from "@/model/be/jinear-core";
 import { useRetrieveTaskCommentsQuery } from "@/store/api/taskCommentApi";
+import { useToggle } from "@uidotdev/usehooks";
 import useTranslation from "locales/useTranslation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTask } from "../context/TaskDetailContext";
 import styles from "./TaskComments.module.css";
 import CommentInput from "./commentInput/CommentInput";
@@ -15,7 +17,15 @@ const TaskComments: React.FC<TaskCommentsProps> = ({}) => {
   const task = useTask();
   const [page, setPage] = useState<number>(0);
   const [quotedComment, setQuotedComment] = useState<CommentDto>();
+  const [newCommentInputVisible, toggleNewCommentInputVisible] = useToggle(false);
+
   const { data: response, isLoading, isFetching } = useRetrieveTaskCommentsQuery({ taskId: task.taskId, page });
+
+  useEffect(() => {
+    if (quotedComment) {
+      toggleNewCommentInputVisible(true);
+    }
+  }, [quotedComment]);
 
   const renderItem = (data: CommentDto, index: number) => {
     return (
@@ -46,7 +56,23 @@ const TaskComments: React.FC<TaskCommentsProps> = ({}) => {
         listTitleClassName={styles.listTitle}
         paginationPosition="bottom"
       />
-      <CommentInput taskId={task.taskId} quotedComment={quotedComment} setQuotedComment={setQuotedComment} />
+      {newCommentInputVisible ? (
+        <CommentInput
+          taskId={task.taskId}
+          quotedComment={quotedComment}
+          setQuotedComment={setQuotedComment}
+          toggleInput={toggleNewCommentInputVisible}
+        />
+      ) : (
+        <Button
+          className={styles.newCommentButton}
+          variant={ButtonVariants.filled}
+          heightVariant={ButtonHeight.short}
+          onClick={toggleNewCommentInputVisible}
+        >
+          {t("taskDetailCommentsNewComment")}
+        </Button>
+      )}
     </div>
   );
 };
