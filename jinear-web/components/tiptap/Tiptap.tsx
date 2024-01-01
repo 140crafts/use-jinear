@@ -3,6 +3,7 @@ import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import cn from "classnames";
 import React, { useEffect, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import styles from "./Tiptap.module.css";
@@ -10,6 +11,8 @@ import ActionBar from "./actionBar/ActionBar";
 
 interface TiptapProps {
   content?: string;
+  className?: string;
+  editorClassName?: string;
   placeholder?: string;
   editable?: boolean;
   htmlInputId?: string;
@@ -17,9 +20,23 @@ interface TiptapProps {
   formSetValue?: UseFormSetValue<any>;
 }
 
-const Tiptap: React.FC<TiptapProps> = ({ content, placeholder, editable = true, htmlInputId, register, formSetValue }) => {
+const Tiptap: React.FC<TiptapProps> = ({
+  content,
+  className,
+  editorClassName,
+  placeholder,
+  editable = true,
+  htmlInputId,
+  register,
+  formSetValue,
+}) => {
   const [html, setHtml] = useState<string>();
   const editor = useEditor({
+    editorProps: {
+      attributes: {
+        class: cn(styles.tiptap, editorClassName),
+      },
+    },
     extensions: [
       StarterKit,
       Placeholder.configure({
@@ -45,7 +62,7 @@ const Tiptap: React.FC<TiptapProps> = ({ content, placeholder, editable = true, 
   }, [editable, editor]);
 
   return (
-    <div className={styles.container}>
+    <div className={cn(styles.container, className)}>
       {editor && editable && <ActionBar editor={editor} />}
       <EditorContent editor={editor} />
       {htmlInputId && <input id={htmlInputId} type="hidden" {...register?.(htmlInputId)} value={html} />}

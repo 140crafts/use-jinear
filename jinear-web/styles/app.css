@@ -444,7 +444,7 @@ pre {
 }
 
 /* TIPTAP */
-.tiptap {
+/* .tiptap {
   background: var(--c-primary-shade-0) !important;
   color: var(--c-text-color) !important;
   caret-color: var(--c-text-color) !important;
@@ -469,5 +469,9 @@ pre {
   float: left;
   height: 0;
   pointer-events: none;
-}
+} */
 /*  */
+
+pre {
+  white-space: normal;
+}
