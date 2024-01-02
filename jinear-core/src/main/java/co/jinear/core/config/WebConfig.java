@@ -40,10 +40,24 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean(name = "htmlSanitizerPolicy")
     PolicyFactory htmlSanitizerPolicy() {
+        final String TARGET = "target";
+        final String _BLANK = "_blank";
+
         return new HtmlPolicyBuilder()
-                .allowElements("h1","p","b","i","em","strong","a","br","li","ul","ol","blockquote","br")
                 .allowUrlProtocols("https")
-                .allowAttributes("href","target").onElements("a")
+                .allowElements((elementName, attrs) -> {
+                    if ("a".equalsIgnoreCase(elementName)) {
+                        int targetIndex = attrs.indexOf(TARGET);
+                        if (targetIndex < 0) {
+                            attrs.add(TARGET);
+                            attrs.add(_BLANK);
+                        } else {
+                            attrs.set(targetIndex + 1, _BLANK);
+                        }
+                    }
+                    return elementName;
+                }, "h1", "h2", "h3", "h4", "h5", "h6", "p", "b", "i", "em", "strong", "a", "br", "li", "ul", "ol", "blockquote", "hr", "pre", "code")
+                .allowAttributes("href", TARGET, "rel").onElements("a")
                 .requireRelNofollowOnLinks()
                 .toFactory();
     }
