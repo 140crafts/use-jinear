@@ -1,9 +1,11 @@
 package co.jinear.core.manager.team;
 
 import co.jinear.core.converter.team.TeamMemberConverter;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
+import co.jinear.core.model.enumtype.team.TeamStateType;
 import co.jinear.core.model.request.team.AddTeamMemberRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.team.TeamMemberListingResponse;
@@ -41,6 +43,7 @@ public class TeamMemberManager {
 
     public BaseResponse addTeamMember(AddTeamMemberRequest addTeamMemberRequest) {
         String accountId = sessionInfoService.currentAccountId();
+        validateTeamExistenceAndState(addTeamMemberRequest);
         TeamDto teamDto = teamRetrieveService.retrieveTeam(addTeamMemberRequest.getTeamId());
         teamAccessValidator.validateTeamAdminOrWorkspaceAdminOrWorkspaceOwner(accountId, teamDto.getWorkspaceId(), teamDto.getTeamId());
         TeamMemberAddVo teamMemberAddVo = teamMemberConverter.map(addTeamMemberRequest);
@@ -74,6 +77,13 @@ public class TeamMemberManager {
         log.info("Retrieve memberships has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
         List<TeamMemberDto> teamMemberDtos = teamMemberRetrieveService.retrieveAllTeamMembershipsOfAnAccount(accountId, workspaceId);
         return mapResponse(teamMemberDtos);
+    }
+
+    private void validateTeamExistenceAndState(AddTeamMemberRequest addTeamMemberRequest) {
+        boolean existsAndActive = teamRetrieveService.checkTeamExistenceWithState(addTeamMemberRequest.getTeamId(), TeamStateType.ACTIVE);
+        if (Boolean.FALSE.equals(existsAndActive)) {
+            throw new BusinessException();
+        }
     }
 
     private TeamMembershipsResponse mapResponse(List<TeamMemberDto> teamMemberDtos) {
