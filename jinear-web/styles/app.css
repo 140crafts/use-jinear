@@ -34,6 +34,7 @@ div::-webkit-scrollbar {
 }
 
 a {
+  word-break: break-all;
   color: var(--c-link-color);
   text-decoration: none;
 }
