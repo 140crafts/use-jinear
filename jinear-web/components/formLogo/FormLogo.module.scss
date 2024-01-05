@@ -31,6 +31,10 @@
   margin-bottom: 0.5rem;
 }
 
+.logoButton {
+  word-break: normal;
+}
+
 .logoButton:hover {
   background-color: unset !important;
 }
