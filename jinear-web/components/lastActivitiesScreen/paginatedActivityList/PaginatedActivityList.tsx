@@ -18,6 +18,7 @@ interface PaginatedActivityListProps {
   ignoreGrouping?: boolean;
   listNameClassName?: string;
   hidePaginationOnSinglePages?: boolean;
+  contentContainerClassName?: string;
 }
 
 const PaginatedActivityList: React.FC<PaginatedActivityListProps> = ({
@@ -31,6 +32,7 @@ const PaginatedActivityList: React.FC<PaginatedActivityListProps> = ({
   ignoreGrouping,
   listNameClassName,
   hidePaginationOnSinglePages = false,
+  contentContainerClassName,
 }) => {
   const { t } = useTranslation();
   const activityList = response?.data.content;
@@ -57,7 +59,7 @@ const PaginatedActivityList: React.FC<PaginatedActivityListProps> = ({
         )}
       </div>
 
-      <div className={cn(styles.content, styles.gradientBg)}>
+      <div className={cn(styles.content, styles.gradientBg, contentContainerClassName)}>
         {activityList?.map((activity, i) => {
           const oneBefore = i == 0 ? null : activityList?.[i - 1];
           const sameGroup = oneBefore && activity.groupId == oneBefore?.groupId;

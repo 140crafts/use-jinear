@@ -1,0 +1,42 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  container-type: inline-size;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  min-height: 4rem;
+}
+
+.content {
+  display: grid;
+  grid-template-areas:
+    "numbers tasks tasks tasks"
+    "activities activities activities activities";
+  gap: 1rem;
+}
+
+.numbers {
+  grid-area: numbers;
+}
+
+.tasks {
+  grid-area: tasks;
+}
+
+.activities {
+  grid-area: activities;
+}
+
+@container (max-width: 850px) {
+  .content {
+    grid-template-areas:
+      "numbers"
+      "tasks"
+      "activities";
+  }
+}

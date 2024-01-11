@@ -21,7 +21,7 @@ const WorkspaceTasksPage: React.FC<WorkspaceTasksPageProps> = ({}) => {
 
   useEffect(() => {
     if (team) {
-      router.push(`tasks/${team.username}/tasks`);
+      router.push(`tasks/${team.username}`);
     }
   }, [team]);
 

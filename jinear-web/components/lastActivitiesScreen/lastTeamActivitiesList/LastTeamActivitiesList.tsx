@@ -6,15 +6,22 @@ import styles from "./LastTeamActivitiesList.module.css";
 interface LastTeamActivitiesListProps {
   workspaceId: string;
   teamId: string;
+  size?: number;
+  contentContainerClassName?: string;
 }
 
-const LastTeamActivitiesList: React.FC<LastTeamActivitiesListProps> = ({ workspaceId, teamId }) => {
+const LastTeamActivitiesList: React.FC<LastTeamActivitiesListProps> = ({
+  workspaceId,
+  teamId,
+  size = 25,
+  contentContainerClassName,
+}) => {
   const [page, setPage] = useState<number>(0);
   const {
     data: response,
     isLoading,
     isFetching,
-  } = useFilterWorkspaceActivitiesQuery({ workspaceId, teamIdList: [teamId], page });
+  } = useFilterWorkspaceActivitiesQuery({ workspaceId, teamIdList: [teamId], page, size });
 
   return (
     <div className={styles.container}>
@@ -26,6 +33,7 @@ const LastTeamActivitiesList: React.FC<LastTeamActivitiesListProps> = ({ workspa
         isLoading={isLoading}
         page={page}
         setPage={setPage}
+        contentContainerClassName={contentContainerClassName}
       />
     </div>
   );

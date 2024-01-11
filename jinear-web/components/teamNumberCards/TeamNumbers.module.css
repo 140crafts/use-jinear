@@ -1,0 +1,20 @@
+.numbersContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.deadlineCounts {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.numberCard {
+  flex: 1;
+  min-height: 8rem;
+}
+
+.overviewCard {
+  min-height: 8rem;
+}
