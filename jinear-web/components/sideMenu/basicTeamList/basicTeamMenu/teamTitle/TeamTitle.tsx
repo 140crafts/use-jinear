@@ -3,8 +3,9 @@ import { TeamDto, TeamMemberRoleType, WorkspaceDto } from "@/model/be/jinear-cor
 import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
+import { usePathname } from "next/navigation";
 import React from "react";
-import { IoEllipsisHorizontal, IoPeopleOutline } from "react-icons/io5";
+import { IoEllipsisHorizontal, IoHome, IoPeopleOutline } from "react-icons/io5";
 import styles from "./TeamTitle.module.css";
 
 interface TeamTitleProps {
@@ -16,20 +17,37 @@ interface TeamTitleProps {
 const TeamTitle: React.FC<TeamTitleProps> = ({ workspace, team, role }) => {
   const { t } = useTranslation();
 
+  const currentPath = usePathname();
+  const homePath = `/${workspace?.username}/tasks/${team?.username}`;
+  const membersPath = `/${workspace?.username}/tasks/${team?.username}/members`;
+  const settingsPath = `/${workspace?.username}/tasks/${team?.username}/settings`;
+
   return (
     <div className={styles.container}>
-      <b className={cn(styles.teamName, "line-clamp")}>{shortenStringIfMoreThanMaxLength({ text: team.name, maxLength: 29 })}</b>
+      <b className={cn(styles.teamName, "line-clamp")}>
+        {shortenStringIfMoreThanMaxLength({
+          text: team.name,
+          maxLength: 29,
+        })}
+      </b>
       <Button
-        variant={ButtonVariants.hoverFilled2}
-        href={`/${workspace?.username}/tasks/${team?.username}/members`}
+        variant={homePath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        href={homePath}
+        data-tooltip-right={t("sideMenuTeamHome")}
+      >
+        <IoHome />
+      </Button>
+      <Button
+        variant={membersPath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        href={membersPath}
         data-tooltip-right={t("sideMenuTeamMembers")}
       >
         <IoPeopleOutline />
       </Button>
       {role == "ADMIN" && (
         <Button
-          variant={ButtonVariants.hoverFilled2}
-          href={`/${workspace?.username}/tasks/${team?.username}/settings`}
+          variant={settingsPath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+          href={settingsPath}
           data-tooltip-right={t("sideMenuTeamSettings")}
         >
           <IoEllipsisHorizontal />

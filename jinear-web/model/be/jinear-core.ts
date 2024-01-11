@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2023-12-14 08:14:18.
+// Generated using typescript-generator version 3.0.1157 on 2024-01-10 21:33:23.
 
 export interface BaseDto {
   createdDate: Date;
@@ -62,8 +62,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
   item: any;
   expiresAt: Date;
-  expired: boolean;
   notExpired: boolean;
+  expired: boolean;
 }
 
 export interface FeedDto extends BaseDto {
@@ -93,10 +93,10 @@ export interface GmailMessageDto extends BaseDto {
   to: string;
   subject: string;
   body: string;
-  gid: string;
+  ginternalDate: string;
   gthreadId: string;
   ghistoryId: string;
-  ginternalDate: string;
+  gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -358,6 +358,15 @@ export interface RelatedTaskDto extends BaseDto {
   workspace?: WorkspaceDto | null;
   team?: TeamDto | null;
   workflowStatus: TeamWorkflowStatusDto;
+}
+
+export interface TaskAnalyticNumbersDto {
+  missedDeadlineCount: number;
+  deadlineComingUpCount: number;
+  totalOpenTaskCount: number;
+  totalClosedTaskCount: number;
+  totalTaskCount: number;
+  statusCounts: { [P in TeamWorkflowStateGroup]?: number };
 }
 
 export interface TaskAndTaskBoardRelationDto extends BaseDto {
@@ -786,14 +795,17 @@ export interface TaskDateUpdateRequest {
 
 export interface TaskFilterRequest extends BaseRequest {
   page?: number | null;
+  size?: number | null;
   workspaceId: string;
   teamIdList?: string[] | null;
   topicIds?: string[] | null;
   ownerIds?: string[] | null;
   assigneeIds?: string[] | null;
   workflowStatusIdList?: string[] | null;
+  workflowStateGroups?: TeamWorkflowStateGroup[] | null;
   timespanStart?: Date | null;
   timespanEnd?: Date | null;
+  sort?: FilterSort | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -1024,6 +1036,10 @@ export interface TaskListingPaginatedResponse extends BaseResponse {
 
 export interface TaskMediaResponse extends BaseResponse {
   data: MediaDto[];
+}
+
+export interface TaskNumbersResponse {
+  data: TaskAnalyticNumbersDto;
 }
 
 export interface TaskPaginatedMediaResponse extends BaseResponse {

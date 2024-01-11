@@ -34,7 +34,6 @@ const TasksSectionSideMenu: React.FC<TasksSectionSideMenuProps> = ({}) => {
   };
 
   return (
-    // <Transition className={styles.container}>
     <div className={styles.container}>
       {workspace && team && (
         <>
@@ -51,7 +50,6 @@ const TasksSectionSideMenu: React.FC<TasksSectionSideMenuProps> = ({}) => {
         </>
       )}
     </div>
-    // </Transition>
   );
 };
 

@@ -19,6 +19,8 @@ interface BaseTaskListProps {
   setPage: React.Dispatch<React.SetStateAction<number>>;
   paginationPosition?: PaginationPosition;
   hidePaginationOnSinglePages?: boolean;
+  containerClassName?: string;
+  contentContainerClassName?: string;
 }
 
 const BaseTaskList: React.FC<BaseTaskListProps> = ({
@@ -31,13 +33,15 @@ const BaseTaskList: React.FC<BaseTaskListProps> = ({
   setPage,
   paginationPosition = "TOP",
   hidePaginationOnSinglePages = true,
+  containerClassName,
+  contentContainerClassName,
 }) => {
   const { t } = useTranslation();
 
   const emptyOrSinglePage = response?.data?.totalPages == 0 || response?.data?.totalPages == 1;
 
   return (
-    <div id={id} className={cn(styles.container)}>
+    <div id={id} className={cn(styles.container, containerClassName)}>
       <div className={styles.header}>
         <h2>{name}</h2>
         {!(hidePaginationOnSinglePages && emptyOrSinglePage) && response && paginationPosition == "TOP" && (
@@ -57,7 +61,7 @@ const BaseTaskList: React.FC<BaseTaskListProps> = ({
         )}
       </div>
 
-      <div className={cn(styles.content, styles.gradientBg)}>
+      <div className={cn(styles.content, styles.gradientBg, contentContainerClassName)}>
         {response?.data.content.map((taskDto) => (
           <TaskRow key={`${id}-list-task-${taskDto.taskId}`} task={taskDto} />
         ))}

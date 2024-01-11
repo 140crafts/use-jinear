@@ -370,6 +370,10 @@ export default {
     en: "Team members",
     tr: "Ekip üyeleri",
   },
+  sideMenuTeamHome: {
+    en: "Team Home",
+    tr: "Ekip Anasayfası",
+  },
   sideMenuTeamSettings: {
     en: "Team settings",
     tr: "Ekip ayarları",
@@ -3033,5 +3037,65 @@ export default {
   taskDetailCommentsNewComment: {
     en: "New Comment",
     tr: "Yeni Yorum",
+  },
+  taskNumbersOverviewTtitle: {
+    en: "Overview",
+    tr: "Genel Bakış",
+  },
+  taskNumbersOverviewTotalOpenTaskCount: {
+    en: "Open",
+    tr: "Açık",
+  },
+  taskNumbersOverviewTotalClosedTaskCount: {
+    en: "Closed",
+    tr: "Kapatılmış",
+  },
+  taskNumbersOverviewTotalTaskCount: {
+    en: "Total",
+    tr: "Toplam",
+  },
+  taskNumbersDeadlineComingUpCount: {
+    en: "Deadline Coming Up",
+    tr: "Son Tarihi Yaklaşanlar",
+  },
+  taskNumbersMissedDeadlineCount: {
+    en: "Missed Deadline",
+    tr: "Son Tarihi Geçen",
+  },
+  workflowStateGroupStats_BACKLOG: {
+    en: "Backlog",
+    tr: "Geri Plan",
+  },
+  workflowStateGroupStats_NOT_STARTED: {
+    en: "Not Started",
+    tr: "Henüz Başlamamış",
+  },
+  workflowStateGroupStats_STARTED: {
+    en: "Started",
+    tr: "Başlamış",
+  },
+  workflowStateGroupStats_COMPLETED: {
+    en: "Completed",
+    tr: "Tamamlanan",
+  },
+  workflowStateGroupStats_CANCELLED: {
+    en: "Cancelled",
+    tr: "Vazgeçildi",
+  },
+  workflowStateGroupStatsTitle: {
+    en: "Workflow State Groups",
+    tr: "İş Akışı Durumlarına Göre",
+  },
+  teamLongLastingTasksTitle: {
+    en: "Oldest Waiting Tasks",
+    tr: "Uzun Süredir Sonuçlanmamış Görevler",
+  },
+  teamLastActivitiesTitle: {
+    en: "Last Activities",
+    tr: "Son Aktiviteler",
+  },
+  teamHomePageTitle: {
+    en: "Team ${teamName} Home",
+    tr: "Genel Bakış - ${teamName}",
   },
 };
