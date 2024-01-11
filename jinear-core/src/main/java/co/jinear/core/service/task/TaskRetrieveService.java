@@ -39,18 +39,4 @@ public class TaskRetrieveService {
                 .map(taskDtoDetailedConverter::mapAndRetrieveProfilePicturesAndTaskDetail)
                 .orElseThrow(NotFoundException::new);
     }
-
-    public Long countAllByTopicId(String topicId) {
-        log.info("Count all by topic id has started for topicId: {}", topicId);
-        Long count = taskRepository.countAllByTopicId(topicId);
-        log.info("Found [{}] tasks with topicId: {}", count, topicId);
-        return count;
-    }
-
-    public Long countAllByTeamId(String teamId) {
-        log.info("Count all by team id has started for teamId: {}", teamId);
-        Long count = taskRepository.countAllByTeamId(teamId);
-        log.info("Found [{}] tasks with teamId: {}", count, teamId);
-        return count;
-    }
 }

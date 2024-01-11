@@ -1,6 +1,7 @@
 package co.jinear.core.repository.criteriabuilder;
 
 import co.jinear.core.model.entity.task.Task;
+import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -72,6 +73,14 @@ public class TaskSearchCriteriaBuilder {
         if (Objects.nonNull(workflowStatusIdList) && !workflowStatusIdList.isEmpty()) {
             CriteriaBuilder.In<String> in = criteriaBuilder.in(root.get("workflowStatusId"));
             workflowStatusIdList.forEach(in::value);
+            predicateList.add(in);
+        }
+    }
+
+    public void addWorkflowStateGroupList(List<TeamWorkflowStateGroup> workflowStateGroups, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
+        if (Objects.nonNull(workflowStateGroups) && !workflowStateGroups.isEmpty()) {
+            CriteriaBuilder.In<String> in = criteriaBuilder.in(root.get("workflowStatus").get("workflowStateGroup").as(String.class));
+            workflowStateGroups.forEach(teamWorkflowStateGroup -> in.value(teamWorkflowStateGroup.toString()));
             predicateList.add(in);
         }
     }

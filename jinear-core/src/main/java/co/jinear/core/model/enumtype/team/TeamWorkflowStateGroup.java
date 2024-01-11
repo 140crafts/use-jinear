@@ -11,5 +11,6 @@ public enum TeamWorkflowStateGroup {
     STARTED(3),
     COMPLETED(4),
     CANCELLED(5);
-    private int value;
+
+    private final int value;
 }
