@@ -32,7 +32,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TaskInitializeService {
 
-    private final TaskRetrieveService taskRetrieveService;
     private final TaskRepository taskRepository;
     private final TaskLockService taskLockService;
     private final TeamLockService teamLockService;
@@ -45,6 +44,7 @@ public class TaskInitializeService {
     private final TaskSubscriptionOperationService taskSubscriptionOperationService;
     private final TaskBoardEntryOperationService taskBoardEntryOperationService;
     private final TaskFeedItemOperationService taskFeedItemOperationService;
+    private final TaskAnalyticsService taskAnalyticsService;
 
     @Transactional
     public TaskDto initializeTask(TaskInitializeVo taskInitializeVo) {
@@ -91,7 +91,7 @@ public class TaskInitializeService {
     }
 
     private void assignTeamTaskNo(Task task) {
-        Long count = taskRetrieveService.countAllByTeamId(task.getTeamId());
+        Long count = taskAnalyticsService.countAllByTeamId(task.getTeamId());
         task.setTeamTagNo(count.intValue() + 1);
     }
 

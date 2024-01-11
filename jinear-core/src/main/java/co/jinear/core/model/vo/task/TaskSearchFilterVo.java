@@ -4,6 +4,7 @@ package co.jinear.core.model.vo.task;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.enumtype.FilterSort;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
+import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -20,13 +21,15 @@ import static co.jinear.core.model.enumtype.FilterSort.IDATE_DESC;
 public class TaskSearchFilterVo {
 
     private int page = 0;
+    private int size = 250;
     private String workspaceId;
     private Map<TeamTaskVisibilityType, List<TeamMemberDto>> teamMemberMap;
     private List<String> topicIds;
     private List<String> ownerIds;
     private List<String> assigneeIds;
     private List<String> workflowStatusIdList;
+    private List<TeamWorkflowStateGroup> workflowStateGroups;
     private ZonedDateTime timespanStart;
     private ZonedDateTime timespanEnd;
-    private FilterSort taskFilterSort = IDATE_DESC;
+    private FilterSort sort = IDATE_DESC;
 }

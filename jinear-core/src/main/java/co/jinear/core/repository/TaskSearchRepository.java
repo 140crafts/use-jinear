@@ -30,8 +30,6 @@ import static co.jinear.core.model.enumtype.team.TeamMemberRoleType.ADMIN;
 @RequiredArgsConstructor
 public class TaskSearchRepository {
 
-    private static final int FILTER_PAGE_SIZE = 250;
-
     private final EntityManager entityManager;
     private final TaskSearchCriteriaBuilder taskSearchCriteriaBuilder;
 
@@ -75,8 +73,8 @@ public class TaskSearchRepository {
                 taskRoot,
                 searchPredicate,
                 countPredicate,
-                taskSearchFilterVo.getTaskFilterSort(),
-                PageRequest.of(taskSearchFilterVo.getPage(), FILTER_PAGE_SIZE));
+                taskSearchFilterVo.getSort(),
+                PageRequest.of(taskSearchFilterVo.getPage(), taskSearchFilterVo.getSize()));
     }
 
     private Predicate retrieveFilterPredicateListForTeamsWithTaskVisibilityVisibleToAllTeamMembers(TaskSearchFilterVo taskSearchFilterVo, CriteriaBuilder criteriaBuilder, Root<Task> taskRoot) {
@@ -92,6 +90,7 @@ public class TaskSearchRepository {
             taskSearchCriteriaBuilder.addOwnerIdList(taskSearchFilterVo.getOwnerIds(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addAssignedToList(taskSearchFilterVo.getAssigneeIds(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addWorkflowStatusIdList(taskSearchFilterVo.getWorkflowStatusIdList(), criteriaBuilder, taskRoot, predicateList);
+            taskSearchCriteriaBuilder.addWorkflowStateGroupList(taskSearchFilterVo.getWorkflowStateGroups(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addDatePredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, predicateList);
             return criteriaBuilder.and(predicateList.toArray(Predicate[]::new));
         }
@@ -147,6 +146,7 @@ public class TaskSearchRepository {
                 taskSearchCriteriaBuilder.addTeamIdList(List.of(teamId), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addTopicIdList(taskSearchFilterVo.getTopicIds(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addWorkflowStatusIdList(taskSearchFilterVo.getWorkflowStatusIdList(), criteriaBuilder, taskRoot, teamPredicateList);
+                taskSearchCriteriaBuilder.addWorkflowStateGroupList(taskSearchFilterVo.getWorkflowStateGroups(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addDatePredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, teamPredicateList);
 
                 Predicate teamPredicate = criteriaBuilder.and(teamPredicateList.toArray(Predicate[]::new));
@@ -156,7 +156,6 @@ public class TaskSearchRepository {
         }
         return null;
     }
-
 
     @SuppressWarnings("java:S107")
     private Page<Task> executeAndRetrievePageableResults(CriteriaBuilder criteriaBuilder,
