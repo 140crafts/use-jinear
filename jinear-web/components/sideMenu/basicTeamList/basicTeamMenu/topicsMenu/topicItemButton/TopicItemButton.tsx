@@ -17,7 +17,7 @@ const TopicItemButton: React.FC<TopicItemButtonProps> = ({ workspace, team, topi
       className={cn(styles.button, "line-clamp")}
       variant={ButtonVariants.hoverFilled}
       heightVariant={ButtonHeight.short}
-      href={`/${workspace.username}/tasks/${team.username}/tasks?topic=${topic.topicId}`}
+      href={`/${workspace.username}/tasks/${team.username}/tasks?topicIds=${topic.topicId}`}
     >
       {shortenStringIfMoreThanMaxLength({ text: topic.name, maxLength: 34 })}
     </Button>

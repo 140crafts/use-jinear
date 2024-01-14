@@ -1,12 +1,19 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import TimePicker from "@/components/timePicker/TimePicker";
+import {
+  queryStateAnyToStringConverter,
+  queryStateBooleanParser,
+  queryStateDateToIsoDateConverter,
+  queryStateIsoDateParser,
+  useQueryState,
+  useSetQueryState,
+} from "@/hooks/useQueryState";
 import { closeDatePickerModal, popDatePickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import { format, getHours, getMinutes, setHours, setMinutes } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoAdd, IoClose, IoPlaySkipBackOutline, IoTimeOutline } from "react-icons/io5";
-import { useHasPreciseToDate, useSetHasPreciseToDate, useSetToDate, useToDate } from "../context/TaskListFilterBarContext";
 import styles from "./ToDatePickerButton.module.css";
 
 interface ToDatePickerButtonProps {}
@@ -14,10 +21,17 @@ interface ToDatePickerButtonProps {}
 const ToDatePickerButton: React.FC<ToDatePickerButtonProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const toDate = useToDate();
-  const setToDate = useSetToDate();
-  const hasPreciseToDate = useHasPreciseToDate();
-  const setHasPreciseToDate = useSetHasPreciseToDate();
+  const setQueryState = useSetQueryState();
+  const toDate = useQueryState<Date>("timespanEnd", queryStateIsoDateParser);
+  const hasPreciseToDate = useQueryState<boolean>("hasPreciseToDate", queryStateBooleanParser);
+
+  const setToDate = (day?: Date) => {
+    setQueryState("timespanEnd", queryStateDateToIsoDateConverter(day));
+  };
+
+  const setHasPreciseToDate = (hasPreciseToDate?: boolean) => {
+    setQueryState("hasPreciseToDate", queryStateAnyToStringConverter(hasPreciseToDate));
+  };
 
   const onDateSelect = (day: Date) => {
     setToDate?.(day);

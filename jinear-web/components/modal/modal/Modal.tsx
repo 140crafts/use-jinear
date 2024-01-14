@@ -10,6 +10,7 @@ interface ModalProps extends BaseModalProps {
   requestClose?: () => void;
   onTitleCloeButtonClick?: () => void;
   children: any;
+  containerClassName?: string;
   contentContainerClass?: string;
   bodyClass?: string;
   width?: ModalWidth;
@@ -22,6 +23,7 @@ const Modal: React.FC<ModalProps> = ({
   visible = true,
   requestClose,
   children,
+  containerClassName,
   contentContainerClass,
   bodyClass,
   width = "medium-fixed",
@@ -43,6 +45,7 @@ const Modal: React.FC<ModalProps> = ({
       visible={visible}
       requestClose={requestClose}
       contentContainerClass={cn(styles.container, contentContainerClass)}
+      containerClassName={containerClassName}
       width={width}
       height={height}
     >

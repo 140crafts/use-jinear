@@ -1,15 +1,16 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import {
+  queryStateAnyToStringConverter,
+  queryStateDateToIsoDateConverter,
+  useSetQueryState,
+  useSetQueryStateMultiple,
+} from "@/hooks/useQueryState";
+import { TeamWorkflowStatusDto } from "@/model/be/jinear-core";
 import { useRetrieveAllFromTeamQuery } from "@/store/api/teamWorkflowStatusApi";
 import { endOfMonth, endOfWeek, startOfMonth, startOfToday, startOfWeek } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import {
-  useResetState,
-  useSetFromDate,
-  useSetSelectedWorkflowStatuses,
-  useSetToDate,
-  useTeam,
-} from "../context/TaskListFilterBarContext";
+import { useTeam } from "../context/TaskListFilterBarContext";
 import styles from "./QuickFilterBar.module.css";
 
 interface QuickFilterBarProps {}
@@ -17,10 +18,8 @@ interface QuickFilterBarProps {}
 const QuickFilterBar: React.FC<QuickFilterBarProps> = ({}) => {
   const { t } = useTranslation();
   const team = useTeam();
-  const setFromDate = useSetFromDate();
-  const setToDate = useSetToDate();
-  const setSelectedWorkflowStatuses = useSetSelectedWorkflowStatuses();
-  const resetState = useResetState();
+  const setQueryState = useSetQueryState();
+  const setQueryStateMultiple = useSetQueryStateMultiple();
 
   const { data: teamWorkflowStatusListResponse, isFetching } = useRetrieveAllFromTeamQuery(
     { teamId: team?.teamId || "" },
@@ -36,18 +35,48 @@ const QuickFilterBar: React.FC<QuickFilterBarProps> = ({}) => {
   const undoneStatuses = [...backlogStatuses, ...notStartedStatuses, ...startedStatuses];
   const archivedStatuses = [...completedStatuses, ...cancelledStatuses];
 
+  const resetState = () => {
+    setQueryStateMultiple(
+      new Map([
+        ["page", undefined],
+        ["topicIds", undefined],
+        ["ownerIds", undefined],
+        ["assigneeIds", undefined],
+        ["workflowStatusIdList", undefined],
+        ["workflowStateGroups", undefined],
+        ["timespanStart", undefined],
+        ["hasPreciseFromDate", undefined],
+        ["timespanEnd", undefined],
+        ["hasPreciseToDate", undefined],
+      ])
+    );
+  };
+
+  const setSelectedWorkflowStatuses = (teamWorkflowStatusDtos: TeamWorkflowStatusDto[]) => {
+    const ids = teamWorkflowStatusDtos.map((tws) => tws.teamWorkflowStatusId);
+    setQueryState("workflowStatusIdList", queryStateAnyToStringConverter(teamWorkflowStatusDtos));
+  };
+
   const setFilterThisMonth = () => {
     const from = startOfMonth(startOfToday());
     const to = endOfMonth(startOfToday());
-    setFromDate?.(from);
-    setToDate?.(to);
+    setQueryStateMultiple(
+      new Map([
+        ["timespanStart", queryStateDateToIsoDateConverter(from)],
+        ["timespanEnd", queryStateDateToIsoDateConverter(to)],
+      ])
+    );
   };
 
   const setFilterThisWeek = () => {
     const from = startOfWeek(startOfToday(), { weekStartsOn: 1 });
     const to = endOfWeek(startOfToday(), { weekStartsOn: 1 });
-    setFromDate?.(from);
-    setToDate?.(to);
+    setQueryStateMultiple(
+      new Map([
+        ["timespanStart", queryStateDateToIsoDateConverter(from)],
+        ["timespanEnd", queryStateDateToIsoDateConverter(to)],
+      ])
+    );
   };
 
   const setActiveStatusesAsFiltered = () => {

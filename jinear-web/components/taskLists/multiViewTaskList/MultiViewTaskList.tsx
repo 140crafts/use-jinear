@@ -1,10 +1,18 @@
 import Line from "@/components/line/Line";
-import { TaskFilterRequest, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import {
+  queryStateAnyToStringConverter,
+  queryStateArrayParser,
+  queryStateBooleanParser,
+  queryStateIntParser,
+  queryStateIsoDateParser,
+  useQueryState,
+  useSetQueryState,
+  useSetQueryStateMultiple,
+} from "@/hooks/useQueryState";
+import { TaskFilterRequest, TeamDto, TeamWorkflowStateGroup, WorkspaceDto } from "@/model/be/jinear-core";
 import { useFilterTasksQuery } from "@/store/api/taskListingApi";
 import Logger from "@/utils/logger";
-import { createUrl } from "@/utils/urlUtils";
-import { ReadonlyURLSearchParams, useRouter, useSearchParams } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import BaseTaskList from "../baseTaskList/BaseTaskList";
 import TaskListFilterBar from "../taskListFilterBar/TaskListFilterBar";
 import TaskListTitleAndViewType, { TaskDisplayFormat } from "../taskListTitleAndViewType/TaskListTitleAndViewType";
@@ -16,109 +24,73 @@ interface MultiViewTaskListProps {
   team: TeamDto;
   title: string;
   activeDisplayFormat: TaskDisplayFormat;
-  topicIds?: string[];
-  ownerIds?: string[];
-  assigneeIds?: string[];
-  workflowStatusIdList?: string[];
-  timespanStart?: Date;
-  timespanEnd?: Date;
-  hasPreciseFromDate?: boolean;
-  hasPreciseToDate?: boolean;
   workflowStatusBoardClassName?: string;
   pathname: string;
 }
 
+export interface ExtendedTaskFilterRequest extends TaskFilterRequest {
+  hasPreciseFromDate?: boolean;
+  hasPreciseToDate?: boolean;
+}
+
 const logger = Logger("MultiViewTaskList");
-
-const convertToSearchParams = (searchParams: ReadonlyURLSearchParams, filter: TaskFilterRequest): URLSearchParams => {
-  logger.log({ convertToSearchParams: filter, searchParams: searchParams.toString() });
-  const urlSearchParams = new URLSearchParams(searchParams);
-  filter.page && urlSearchParams.set("page", filter.page.toString());
-  filter.workspaceId && urlSearchParams.set("workspaceId", filter.workspaceId);
-  filter.teamIdList && filter.teamIdList.length != 0 && urlSearchParams.set("teamIdList", filter.teamIdList.toString());
-  filter.topicIds && filter.topicIds.length != 0 && urlSearchParams.set("topicIds", filter.topicIds.toString());
-  filter.ownerIds && filter.ownerIds.length != 0 && urlSearchParams.set("ownerIds", filter.ownerIds.toString());
-  filter.assigneeIds && filter.assigneeIds.length != 0 && urlSearchParams.set("assigneeIds", filter.assigneeIds.toString());
-  filter.workflowStatusIdList &&
-    filter.workflowStatusIdList.length != 0 &&
-    urlSearchParams.set("workflowStatusIdList", filter.workflowStatusIdList.toString());
-  filter.timespanStart && urlSearchParams.set("timespanStart", new Date(filter.timespanStart).toISOString());
-  filter.timespanEnd && urlSearchParams.set("timespanEnd", new Date(filter.timespanEnd).toISOString());
-  return urlSearchParams;
-};
-
-const convertToFilter = (searchParams: ReadonlyURLSearchParams): TaskFilterRequest => {
-  logger.log({ convertToFilter: searchParams.toString() });
-  const filter = {} as TaskFilterRequest;
-  const page = searchParams.get("page");
-  filter.page = page ? parseInt(page) : undefined;
-  const workspaceId = searchParams.get("workspaceId");
-  if (workspaceId) {
-    filter.workspaceId = workspaceId;
-  }
-  const teamIdList = searchParams.get("teamIdList");
-  if (teamIdList) {
-    filter.teamIdList = teamIdList.split(",");
-  }
-  const topicIds = searchParams.get("topicIds");
-  if (topicIds) {
-    filter.topicIds = topicIds.split(",");
-  }
-  const ownerIds = searchParams.get("ownerIds");
-  if (ownerIds) {
-    filter.ownerIds = ownerIds.split(",");
-  }
-  const assigneeIds = searchParams.get("assigneeIds");
-  if (assigneeIds) {
-    filter.assigneeIds = assigneeIds.split(",");
-  }
-  const workflowStatusIdList = searchParams.get("workflowStatusIdList");
-  if (workflowStatusIdList) {
-    filter.workflowStatusIdList = workflowStatusIdList.split(",");
-  }
-  const timespanStart = searchParams.get("timespanStart");
-  if (timespanStart) {
-    filter.timespanStart = new Date(timespanStart);
-  }
-  const timespanEnd = searchParams.get("timespanEnd");
-  if (timespanEnd) {
-    filter.timespanEnd = new Date(timespanEnd);
-  }
-  return filter;
-};
 
 const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
   workspace,
   team,
   title,
   activeDisplayFormat = "LIST",
-  topicIds,
-  ownerIds,
-  assigneeIds,
-  workflowStatusIdList,
-  timespanStart,
-  timespanEnd,
-  hasPreciseFromDate,
-  hasPreciseToDate,
   workflowStatusBoardClassName,
-  pathname,
 }) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const [displayFormat, setDisplayFormat] = useState<TaskDisplayFormat>(activeDisplayFormat);
-  const [page, setPage] = useState<number>(0);
-  const [filter, setFilter] = useState<TaskFilterRequest>(convertToFilter(searchParams));
+  const setQueryState = useSetQueryState();
+  const setQueryStateMultiple = useSetQueryStateMultiple();
+  const page = useQueryState<number>("page", queryStateIntParser) || 0;
+  const workspaceId = useQueryState<string>("workspaceId") || workspace.workspaceId;
+  const teamIdList = useQueryState<string[]>("teamIdList", queryStateArrayParser) || [team.teamId];
+  const topicIds = useQueryState<string[]>("topicIds", queryStateArrayParser);
+  const ownerIds = useQueryState<string[]>("ownerIds", queryStateArrayParser);
+  const assigneeIds = useQueryState<string[]>("assigneeIds", queryStateArrayParser);
+  const workflowStatusIdList = useQueryState<string[]>("workflowStatusIdList", queryStateArrayParser);
+  const workflowStateGroups = useQueryState<TeamWorkflowStateGroup[]>("workflowStateGroups", queryStateArrayParser);
+  const timespanStart = useQueryState<Date>("timespanStart", queryStateIsoDateParser);
+  const timespanEnd = useQueryState<Date>("timespanEnd", queryStateIsoDateParser);
+  const hasPreciseFromDate = useQueryState<boolean>("hasPreciseFromDate", queryStateBooleanParser);
+  const hasPreciseToDate = useQueryState<boolean>("hasPreciseToDate", queryStateBooleanParser);
+  const displayFormat = useQueryState<TaskDisplayFormat>("displayFormat") || "LIST";
+
+  const filter = {
+    page,
+    workspaceId,
+    teamIdList,
+    topicIds,
+    ownerIds,
+    assigneeIds,
+    workflowStatusIdList,
+    workflowStateGroups,
+    timespanStart,
+    timespanEnd,
+    hasPreciseFromDate,
+    hasPreciseToDate,
+  };
 
   useEffect(() => {
-    setFilter(convertToFilter(searchParams));
-  }, [searchParams]);
+    if (team && workspace) {
+      setQueryStateMultiple(
+        new Map([
+          ["workspaceId", queryStateAnyToStringConverter(workspace.workspaceId)],
+          ["teamIdList", queryStateAnyToStringConverter([team.teamId])],
+          ["displayFormat", activeDisplayFormat],
+        ])
+      );
+    }
+  }, [team, workspace, activeDisplayFormat]);
 
-  const onTaskListFilterChange = (taskFilterFromBar: TaskFilterRequest) => {
-    const nextFilter = { ...taskFilterFromBar, page };
-    // setFilter(nextFilter);
-    const urlSearchParams = convertToSearchParams(searchParams, nextFilter);
-    router.push(createUrl(pathname, urlSearchParams));
-    logger.log({ pathname, urlSearchParams: urlSearchParams.toString() });
+  const setPage = (nextPage?: number) => {
+    setQueryState("page", queryStateAnyToStringConverter(nextPage));
+  };
+
+  const setDisplayFormat = (displayFormat: TaskDisplayFormat) => {
+    setQueryState("displayFormat", queryStateAnyToStringConverter(displayFormat));
   };
 
   const onTaskDisplayFormatChange = (format: TaskDisplayFormat) => {
@@ -127,7 +99,6 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
     }
   };
 
-  //@ts-ignore
   const {
     data: filterResponse,
     isFetching,
@@ -143,19 +114,7 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
         taskDisplayFormat={displayFormat}
         onTaskDisplayFormatChange={onTaskDisplayFormatChange}
       />
-      <TaskListFilterBar
-        workspace={workspace}
-        team={team}
-        topicIds={topicIds}
-        ownerIds={ownerIds}
-        assigneeIds={assigneeIds}
-        workflowStatusIdList={workflowStatusIdList}
-        timespanStart={timespanStart}
-        timespanEnd={timespanEnd}
-        hasPreciseFromDate={hasPreciseFromDate}
-        hasPreciseToDate={hasPreciseToDate}
-        onFilterChange={onTaskListFilterChange}
-      />
+      <TaskListFilterBar workspace={workspace} team={team} />
       <Line />
       {displayFormat == "LIST" && (
         <BaseTaskList

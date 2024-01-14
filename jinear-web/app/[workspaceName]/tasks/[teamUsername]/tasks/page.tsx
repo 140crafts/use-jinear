@@ -5,7 +5,7 @@ import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
-import { useParams, usePathname, useSearchParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import React from "react";
 import styles from "./index.module.css";
 
@@ -15,10 +15,8 @@ const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
   const { t } = useTranslation();
   const params = useParams();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const workspaceName: string = params?.workspaceName as string;
   const teamUsername: string = params?.teamUsername as string;
-  const topicId = searchParams?.get("topic") as string | undefined;
 
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
   const { data: teamsResponse, isFetching: isTeamsFetching } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
@@ -35,7 +33,6 @@ const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
           workspace={workspace}
           team={team}
           activeDisplayFormat="LIST"
-          topicIds={topicId ? [topicId] : []}
           workflowStatusBoardClassName={styles.workflowStatusBoard}
           pathname={pathname}
         />

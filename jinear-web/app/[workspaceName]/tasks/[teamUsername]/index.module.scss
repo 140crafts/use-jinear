@@ -14,6 +14,7 @@
 
 .content {
   display: grid;
+  grid-template-columns: auto 1fr;
   grid-template-areas:
     "numbers tasks tasks tasks"
     "activities activities activities activities";
@@ -34,6 +35,7 @@
 
 @container (max-width: 850px) {
   .content {
+    grid-template-columns: auto;
     grid-template-areas:
       "numbers"
       "tasks"

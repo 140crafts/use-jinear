@@ -1,4 +1,5 @@
 import cn from "classnames";
+import Link from "next/link";
 import React from "react";
 import styles from "./SingleNumberCard.module.css";
 
@@ -6,14 +7,15 @@ interface SingleNumberCardProps {
   className?: string;
   title: string;
   number: number;
+  href: string;
 }
 
-const SingleNumberCard: React.FC<SingleNumberCardProps> = ({ className, title, number }) => {
+const SingleNumberCard: React.FC<SingleNumberCardProps> = ({ className, title, number, href }) => {
   return (
-    <div className={cn(className, styles.container)}>
+    <Link className={cn(className, styles.container)} href={href}>
       <span className={styles.text}>{title}</span>
       <div className={styles.number}>{number}</div>
-    </div>
+    </Link>
   );
 };
 

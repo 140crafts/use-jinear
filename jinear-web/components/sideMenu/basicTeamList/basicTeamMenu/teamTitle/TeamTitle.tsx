@@ -24,7 +24,7 @@ const TeamTitle: React.FC<TeamTitleProps> = ({ workspace, team, role }) => {
 
   return (
     <div className={styles.container}>
-      <b className={cn(styles.teamName, "line-clamp")}>
+      <b className={cn(styles.teamName, "single-line")}>
         {shortenStringIfMoreThanMaxLength({
           text: team.name,
           maxLength: 29,

@@ -15,6 +15,7 @@ export const taskTopicApi = api.injectEndpoints({
         "workspace-activity-list",
         "workspace-team-activity-list",
         "workspace-task-activity-list",
+        "v1/task-analytics/{workspaceId}/team/{teamId}",
       ],
     }),
     //
@@ -30,6 +31,7 @@ export const taskTopicApi = api.injectEndpoints({
         "workspace-activity-list",
         "workspace-team-activity-list",
         "workspace-task-activity-list",
+        "v1/task-analytics/{workspaceId}/team/{teamId}",
       ],
     }),
   }),

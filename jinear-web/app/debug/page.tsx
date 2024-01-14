@@ -1,19 +1,32 @@
 "use client";
 import Button from "@/components/button";
+import { useQueryState, useSetQueryState } from "@/hooks/useQueryState";
 import React from "react";
 import styles from "./index.module.css";
 
 interface DebugScreenProps {}
 
 const DebugScreen: React.FC<DebugScreenProps> = ({}) => {
+  const sucuk = useQueryState<string>("sucuk");
+  const setQueryState = useSetQueryState();
   return (
     <div className={styles.container}>
-      {/* <DebugScreenComp /> */}
-      <Button href={"/asd"} className={styles.button0}>
-        123
+      <h1>{sucuk}</h1>
+      <Button
+        onClick={() => {
+          setQueryState("sucuk", `${parseInt(`${Math.random() * 100}`)}`);
+        }}
+        className={styles.button0}
+      >
+        Set Random
       </Button>
-      <Button href={"/asd2"} className={styles.button}>
-        1234
+      <Button
+        onClick={() => {
+          setQueryState("sucuk", undefined);
+        }}
+        className={styles.button0}
+      >
+        Clear
       </Button>
     </div>
   );

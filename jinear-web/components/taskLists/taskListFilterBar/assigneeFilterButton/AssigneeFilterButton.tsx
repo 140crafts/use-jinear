@@ -1,11 +1,13 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import ProfilePhoto from "@/components/profilePhoto";
+import { queryStateAnyToStringConverter, queryStateArrayParser, useQueryState, useSetQueryState } from "@/hooks/useQueryState";
 import { TeamMemberDto } from "@/model/be/jinear-core";
+import { useRetrieveTeamMembersQuery } from "@/store/api/teamMemberApi";
 import { popTeamMemberPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { useSelectedAssignees, useSetSelectedAssignees, useTeam } from "../context/TaskListFilterBarContext";
+import { useTeam } from "../context/TaskListFilterBarContext";
 import styles from "./AssigneeFilterButton.module.css";
 
 interface AssigneeFilterButtonProps {}
@@ -14,12 +16,24 @@ const AssigneeFilterButton: React.FC<AssigneeFilterButtonProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const team = useTeam();
-  const selectedAssignees = useSelectedAssignees();
-  const setSelectedAssignees = useSetSelectedAssignees();
-  const isEmpty = selectedAssignees?.length == 0;
+
+  const setQueryState = useSetQueryState();
+  const selectedAssigneeIds = useQueryState<string[]>("assigneeIds", queryStateArrayParser);
+  const isEmpty = selectedAssigneeIds == null || selectedAssigneeIds.length == 0;
+
+  const { data: teamMemberListResponse } = useRetrieveTeamMembersQuery(
+    { teamId: team?.teamId || "" },
+    {
+      skip: team == null,
+    }
+  );
+  const selectedAssignees = teamMemberListResponse?.data.content.filter(
+    (member) => selectedAssigneeIds && selectedAssigneeIds.indexOf(member.accountId) != -1
+  );
 
   const onPick = (pickedList: TeamMemberDto[]) => {
-    setSelectedAssignees?.(pickedList);
+    const pickedIds = pickedList.map((teamMemberDto) => teamMemberDto.accountId);
+    setQueryState("assigneeIds", queryStateAnyToStringConverter(pickedIds));
   };
 
   const popPicker = () => {

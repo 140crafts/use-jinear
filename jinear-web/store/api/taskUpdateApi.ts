@@ -24,6 +24,7 @@ export const taskUpdateApi = api.injectEndpoints({
         { type: "workspace-task-activity-list" },
         { type: "team-task-list" },
         { type: "task-listing-filter" },
+        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" },
       ],
     }),
     //
@@ -41,6 +42,7 @@ export const taskUpdateApi = api.injectEndpoints({
         { type: "workspace-team-activity-list" },
         { type: "workspace-task-activity-list" },
         { type: "task-listing-filter" },
+        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" },
       ],
     }),
     //
@@ -59,6 +61,7 @@ export const taskUpdateApi = api.injectEndpoints({
         { type: "workspace-task-activity-list" },
         { type: "reminder-next-job" },
         { type: "task-listing-filter" },
+        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" },
       ],
     }),
     //
@@ -79,6 +82,7 @@ export const taskUpdateApi = api.injectEndpoints({
         { type: "workspace-team-activity-list" },
         { type: "workspace-task-activity-list" },
         { type: "task-listing-filter" },
+        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" },
       ],
     }),
     //
