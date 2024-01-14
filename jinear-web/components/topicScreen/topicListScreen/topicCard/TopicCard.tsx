@@ -15,7 +15,7 @@ const TopicCard: React.FC<TopicCardProps> = ({ topic, workspaceName, teamUsernam
   const { t } = useTranslation();
   return (
     <div className={styles.container}>
-      <Button className={styles.nameContainer} href={`/${workspaceName}/tasks/${teamUsername}/tasks?topic=${topic.topicId}`}>
+      <Button className={styles.nameContainer} href={`/${workspaceName}/tasks/${teamUsername}/tasks?topicIds=${topic.topicId}`}>
         <div className={styles.nameText}>{topic.name}</div>
       </Button>
       <div className={styles.actionContainer}>

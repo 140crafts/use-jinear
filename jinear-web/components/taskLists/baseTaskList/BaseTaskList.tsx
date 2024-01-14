@@ -16,7 +16,7 @@ interface BaseTaskListProps {
   isFetching: boolean;
   isLoading: boolean;
   page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  setPage: React.Dispatch<React.SetStateAction<number>> | ((nextPage?: number) => void);
   paginationPosition?: PaginationPosition;
   hidePaginationOnSinglePages?: boolean;
   containerClassName?: string;

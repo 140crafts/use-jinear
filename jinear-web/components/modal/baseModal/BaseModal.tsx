@@ -10,6 +10,7 @@ export interface BaseModalProps {
   visible?: boolean;
   requestClose?: () => void;
   children: any;
+  containerClassName?: string;
   contentContainerClass?: string;
   contentClassName?: string;
   closepadClassName?: string;
@@ -21,6 +22,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
   visible = true,
   requestClose,
   children,
+  containerClassName,
   contentContainerClass,
   contentClassName,
   closepadClassName,
@@ -32,7 +34,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
   return (
     <AnimatePresence initial={false} exitBeforeEnter={true}>
       {visible && (
-        <div className={cn(styles.container, styles[`${width}-container`])}>
+        <div className={cn(styles.container, styles[`${width}-container`], containerClassName)}>
           <div
             className={cn([styles.content, styles[`${width}-content`], styles[`${height}-content`], contentClassName])}
             onClick={avoid}

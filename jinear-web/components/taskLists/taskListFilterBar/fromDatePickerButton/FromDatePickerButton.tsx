@@ -1,17 +1,19 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import TimePicker from "@/components/timePicker/TimePicker";
+import {
+  queryStateAnyToStringConverter,
+  queryStateBooleanParser,
+  queryStateDateToIsoDateConverter,
+  queryStateIsoDateParser,
+  useQueryState,
+  useSetQueryState,
+} from "@/hooks/useQueryState";
 import { closeDatePickerModal, popDatePickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import { format, getHours, getMinutes, setHours, setMinutes } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoAdd, IoClose, IoPlaySkipForwardOutline, IoTimeOutline } from "react-icons/io5";
-import {
-  useFromDate,
-  useHasPreciseFromDate,
-  useSetFromDate,
-  useSetHasPreciseFromDate,
-} from "../context/TaskListFilterBarContext";
 import styles from "./FromDatePickerButton.module.css";
 
 interface FromDatePickerButtonProps {}
@@ -19,13 +21,20 @@ interface FromDatePickerButtonProps {}
 const FromDatePickerButton: React.FC<FromDatePickerButtonProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const fromDate = useFromDate();
-  const setFromDate = useSetFromDate();
-  const hasPreciseFromDate = useHasPreciseFromDate();
-  const setHasPreciseFromDate = useSetHasPreciseFromDate();
+  const setQueryState = useSetQueryState();
+  const currentTimespanStart = useQueryState<Date>("timespanStart", queryStateIsoDateParser);
+  const currentHasPreciseFromDate = useQueryState<boolean>("hasPreciseFromDate", queryStateBooleanParser);
+
+  const setFromDate = (day?: Date) => {
+    setQueryState("timespanStart", queryStateDateToIsoDateConverter(day));
+  };
+
+  const setHasPreciseFromDate = (hasPreciseFromDate?: boolean) => {
+    setQueryState("hasPreciseFromDate", queryStateAnyToStringConverter(hasPreciseFromDate));
+  };
 
   const onDateSelect = (day: Date) => {
-    setFromDate?.(day);
+    setFromDate(day);
     dispatch(closeDatePickerModal());
   };
 
@@ -33,36 +42,36 @@ const FromDatePickerButton: React.FC<FromDatePickerButtonProps> = ({}) => {
     dispatch(
       popDatePickerModal({
         visible: true,
-        initialDate: fromDate ? fromDate : new Date(),
+        initialDate: currentTimespanStart ? currentTimespanStart : new Date(),
         onDateChange: onDateSelect,
       })
     );
   };
 
   const onHourChange = (val: string) => {
-    if (fromDate) {
-      const result = setHours(fromDate, parseInt(val));
-      setFromDate?.(result);
+    if (currentTimespanStart) {
+      const result = setHours(currentTimespanStart, parseInt(val));
+      setFromDate(result);
     }
   };
 
   const onMinuteChange = (val: string) => {
-    if (fromDate) {
-      const result = setMinutes(fromDate, parseInt(val));
-      setFromDate?.(result);
+    if (currentTimespanStart) {
+      const result = setMinutes(currentTimespanStart, parseInt(val));
+      setFromDate(result);
     }
   };
 
   const onUnpickClick = () => {
-    if (hasPreciseFromDate) {
+    if (currentHasPreciseFromDate) {
       setHasPreciseFromDate?.(false);
       return;
     }
-    setFromDate?.(undefined);
+    setFromDate(undefined);
   };
 
   const toggleHasPreciseDate = () => {
-    const next = !hasPreciseFromDate;
+    const next = !currentHasPreciseFromDate;
     setHasPreciseFromDate?.(next);
   };
 
@@ -70,40 +79,40 @@ const FromDatePickerButton: React.FC<FromDatePickerButtonProps> = ({}) => {
     <div className={styles.container}>
       <Button
         heightVariant={ButtonHeight.short}
-        variant={!fromDate ? ButtonVariants.filled : ButtonVariants.filled2}
-        className={fromDate ? styles.selectedButton : undefined}
+        variant={!currentTimespanStart ? ButtonVariants.filled : ButtonVariants.filled2}
+        className={currentTimespanStart ? styles.selectedButton : undefined}
         onClick={onPickClick}
       >
-        {fromDate ? (
+        {currentTimespanStart ? (
           <div className={styles.labelButton}>
             <IoPlaySkipForwardOutline />
             {/* : <IoPlaySkipBackOutline /> */}
-            <b>{format(fromDate, t("dateFormat"))}</b>
+            <b>{format(currentTimespanStart, t("dateFormat"))}</b>
           </div>
         ) : (
           t("taskFilterFromDateFilterButtonEmpty")
         )}
       </Button>
-      {fromDate &&
-        (hasPreciseFromDate ? (
+      {currentTimespanStart &&
+        (currentHasPreciseFromDate ? (
           <TimePicker
             id={`task-filter-from-date-time`}
             minuteResolution={15}
             onHourChange={onHourChange}
             onMinuteChange={onMinuteChange}
-            defaultHours={fromDate ? `${getHours(fromDate)}`.padStart(2, "0") : undefined}
-            defaultMinutes={fromDate ? `${getMinutes(fromDate)}`.padStart(2, "0") : undefined}
+            defaultHours={currentTimespanStart ? `${getHours(currentTimespanStart)}`.padStart(2, "0") : undefined}
+            defaultMinutes={currentTimespanStart ? `${getMinutes(currentTimespanStart)}`.padStart(2, "0") : undefined}
             hourSelectClassName={styles.hourSelectClassName}
             minuteSelectClassName={styles.minuteSelectClassName}
             containerClassName={styles.timePickerContainerClassName}
           />
         ) : (
           <Button variant={ButtonVariants.filled} className={styles.timePickerToggleButton} onClick={toggleHasPreciseDate}>
-            {hasPreciseFromDate ? <IoClose size={11} /> : <IoAdd size={11} />}
-            {!hasPreciseFromDate && <IoTimeOutline size={14} />}
+            {currentHasPreciseFromDate ? <IoClose size={11} /> : <IoAdd size={11} />}
+            {!currentHasPreciseFromDate && <IoTimeOutline size={14} />}
           </Button>
         ))}
-      {fromDate && (
+      {currentTimespanStart && (
         <Button
           heightVariant={ButtonHeight.short}
           variant={ButtonVariants.filled2}

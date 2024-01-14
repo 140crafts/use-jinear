@@ -68,9 +68,9 @@
   max-height: 90%;
 }
 
-.height-medium-or-full-content {
+/* .height-medium-or-full-content {
   height: min(60vh, 100%);
-}
+} */
 
 .height-full-content {
   height: 98%;

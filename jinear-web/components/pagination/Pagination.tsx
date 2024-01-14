@@ -17,7 +17,7 @@ interface PaginationProps {
   hasNext: boolean;
   isLoading: boolean;
   page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  setPage: React.Dispatch<React.SetStateAction<number>> | ((nextPage?: number) => void);
 }
 
 const logger = Logger("Pagination");
