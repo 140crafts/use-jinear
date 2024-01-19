@@ -66,17 +66,15 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
     task.workflowStatus.workflowStateGroup &&
     (task.workflowStatus.workflowStateGroup == "COMPLETED" || task.workflowStatus.workflowStateGroup == "CANCELLED");
 
-  const topicColor = task?.topic?.color;
-  const topicCellStyle = topicColor
-    ? {
-        flex: weight,
-        borderLeftColor: `#${topicColor}`,
-        borderLeftStyle: "solid",
-        borderLeftWidth: 2.1,
-        borderLeftLeftRadius: 0,
-        borderLeftRightRadius: 0,
-      }
-    : { flex: weight };
+  const topicColor = task?.topic?.color ? `#${task?.topic?.color}` : "transparent";
+  const topicCellStyle = {
+    flex: weight,
+    borderLeftColor: topicColor,
+    borderLeftStyle: "solid",
+    borderLeftWidth: 2.1,
+    borderLeftLeftRadius: 0,
+    borderLeftRightRadius: 0,
+  };
 
   const _hoverStart = () => {
     if (task) {
