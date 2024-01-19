@@ -13,6 +13,7 @@ import co.jinear.core.model.vo.media.RemoveMediaVo;
 import co.jinear.core.repository.MediaRepository;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.system.FileStorageUtils;
+import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.system.RandomHelper;
 import co.jinear.core.system.Try;
 import co.jinear.core.system.gcloud.storage.CloudStorage;
@@ -180,6 +181,7 @@ public class MediaOperationService {
         String originalName = Optional.of(initializeMediaVo)
                 .map(InitializeMediaVo::getFile)
                 .map(MultipartFile::getOriginalFilename)
+                .map(NormalizeHelper::normalizeUsernameReplaceSpaces)
                 .orElse(UUID.randomUUID().toString());
         return FileStorageUtils.generatePath(initializeMediaVo.getMediaOwnerType(), initializeMediaVo.getRelatedObjectId(), initializeMediaVo.getFileType(), mediaKey, originalName);
     }
