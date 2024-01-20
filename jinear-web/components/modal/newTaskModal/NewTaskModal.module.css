@@ -13,3 +13,8 @@
 .formMobileClassName {
   margin-bottom: 5rem;
 }
+
+.modalContainer {
+  align-items: flex-start;
+  padding-top: 12.5%;
+}

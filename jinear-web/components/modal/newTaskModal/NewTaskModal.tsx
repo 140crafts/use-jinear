@@ -49,6 +49,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
       bodyClass={styles.container}
       // width={isMobile ? "fullscreen" : "large"}
       width={"large"}
+      containerClassName={styles.modalContainer}
     >
       {workspaceId && team?.teamId && (
         <NewTaskForm
