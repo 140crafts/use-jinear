@@ -7,7 +7,7 @@ export const topicApi = api.injectEndpoints({
       query: (topicId: string) => `v1/topic/${topicId}`,
       providesTags: (_result, _err, topicId) => [
         {
-          type: "retrieve-topic",
+          type: "v1/topic/{topicId}",
           id: topicId,
         },
       ],
@@ -25,7 +25,7 @@ export const topicApi = api.injectEndpoints({
         `v1/topic/tag/${req.topicTag}/workspace/${req.workspaceId}/team/${req.teamId}`,
       providesTags: (_result, _err, req: { topicTag: string; workspaceId: string; teamId: string }) => [
         {
-          type: "retrieve-topic-by-tag",
+          type: "v1/topic/tag/{topicTag}/workspace/{workspaceId}/team/{teamId}",
           id: `${req.topicTag}-${req.workspaceId}-${req.teamId}`,
         },
       ],
@@ -38,9 +38,10 @@ export const topicApi = api.injectEndpoints({
         body: request,
       }),
       invalidatesTags: (_result, _err, req) => [
-        { type: "team-topic-list", id: req.teamId },
-        "team-topic-search",
-        "workspace-activity-list",
+        { type: "v1/topic/list/{teamId}", id: req.teamId },
+        "v1/topic/list/{teamId}/search",
+        "v1/workspace/activity/filter",
+        "v1/topic/list/{teamId}/retrieve-exact",
       ],
     }),
     //
@@ -50,7 +51,13 @@ export const topicApi = api.injectEndpoints({
         method: "PUT",
         body: request,
       }),
-      invalidatesTags: ["team-topic-list", "retrieve-topic", "team-topic-search"],
+      invalidatesTags: [
+        "v1/topic/list/{teamId}",
+        "v1/topic/{topicId}",
+        "v1/topic/tag/{topicTag}/workspace/{workspaceId}/team/{teamId}",
+        "v1/topic/list/{teamId}/search",
+        "v1/topic/list/{teamId}/retrieve-exact",
+      ],
     }),
     //
     deleteTopic: build.mutation<BaseResponse, string>({
@@ -58,7 +65,14 @@ export const topicApi = api.injectEndpoints({
         url: `v1/topic/${topicId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["team-topic-list", "retrieve-topic", "team-topic-search", "workspace-activity-list"],
+      invalidatesTags: [
+        "v1/topic/list/{teamId}",
+        "v1/topic/{topicId}",
+        "v1/topic/list/{teamId}/search",
+        "v1/topic/tag/{topicTag}/workspace/{workspaceId}/team/{teamId}",
+        "v1/workspace/activity/filter",
+        "v1/topic/list/{teamId}/retrieve-exact",
+      ],
     }),
     //
   }),

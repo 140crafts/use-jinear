@@ -10,16 +10,12 @@ export const taskApi = api.injectEndpoints({
         body,
       }),
       invalidatesTags: [
-        "team-task-list",
-        "workspace-task-list",
-        "workplace-task-with-name-and-tag",
-        "team-workflow-task-list",
-        "team-topic-task-list",
-        "team-all-task-list",
-        "task-board-entry-listing",
-        "task-listing-filter",
-        "workspace-activity-list",
+        "v1/task/from-workspace/{workspaceName}/{taskTag}",
+        "v1/task-board/entry/from-task-board/{taskBoardId}",
+        "v1/task/list/filter",
+        "v1/workspace/activity/filter",
         "v1/task-analytics/{workspaceId}/team/{teamId}",
+        "v1/task/search/${workspaceId}/${teamId}/{title}",
       ],
     }),
     //
@@ -33,7 +29,7 @@ export const taskApi = api.injectEndpoints({
       query: (req: { workspaceName: string; taskTag: string }) => `v1/task/from-workspace/${req.workspaceName}/${req.taskTag}`,
       providesTags: (_result, _err, req) => [
         {
-          type: "workplace-task-with-name-and-tag",
+          type: "v1/task/from-workspace/{workspaceName}/{taskTag}",
           id: `${req.workspaceName}/${req.taskTag}`,
         },
       ],

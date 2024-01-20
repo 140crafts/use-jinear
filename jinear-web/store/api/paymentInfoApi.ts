@@ -10,7 +10,7 @@ export const paymentInfoApi = api.injectEndpoints({
       }),
       providesTags: (_result, _err, req) => [
         {
-          type: "payments-info-workspace-subscription",
+          type: "v1/payments/info/workspace/{workspaceId}/subscription",
           id: `${req.workspaceId}`,
         },
       ],

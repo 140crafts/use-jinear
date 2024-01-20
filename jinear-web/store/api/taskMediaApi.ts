@@ -31,7 +31,7 @@ export const taskMediaApi = api.injectEndpoints({
       query: ({ taskId }: IRetrieveTaskMediaListRequest) => `v1/task/media/${taskId}`,
       providesTags: (_result, _err, req) => [
         {
-          type: "task-media-list",
+          type: "v1/task/media/{taskId}",
           id: `${req.taskId}`,
         },
       ],
@@ -41,7 +41,7 @@ export const taskMediaApi = api.injectEndpoints({
       query: ({ teamId, page = 0 }: IRetrieveTaskMediaListFromTeam) => `v1/task/media/from-team/${teamId}?page=${page}`,
       providesTags: (_result, _err, { teamId, page = 0 }) => [
         {
-          type: "task-media-list-from-team",
+          type: "v1/task/media/from-team/{teamId}",
           id: `${teamId}-${page}`,
         },
       ],
@@ -54,11 +54,9 @@ export const taskMediaApi = api.injectEndpoints({
         body: req.formData,
       }),
       invalidatesTags: (_result, _err, req) => [
-        { type: "task-media-list", id: req.taskId },
-        "task-media-list-from-team",
-        "workspace-task-activity-list",
-        "workspace-team-activity-list",
-        "workspace-activity-list",
+        { type: "v1/task/media/{taskId}", id: req.taskId },
+        "v1/task/media/from-team/{teamId}",
+        "v1/workspace/activity/filter",
       ],
     }),
     //
@@ -68,11 +66,9 @@ export const taskMediaApi = api.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags: (_result, _err, req) => [
-        { type: "task-media-list", id: req.taskId },
-        "task-media-list-from-team",
-        "workspace-task-activity-list",
-        "workspace-team-activity-list",
-        "workspace-activity-list",
+        { type: "v1/task/media/{taskId}", id: req.taskId },
+        "v1/task/media/from-team/{teamId}",
+        "v1/workspace/activity/filter",
       ],
     }),
     //

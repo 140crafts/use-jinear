@@ -110,7 +110,7 @@ const SseListenerWorkspaceActivities: React.FC<SseListenerWorkspaceActivitiesPro
   const resetToastState = () => {
     toast.dismiss(toastId.current || undefined);
     toastId.current = null;
-    dispatch(api.util.invalidateTags(["workspace-activity-filtered-list"]));
+    dispatch(api.util.invalidateTags(["v1/workspace/activity/filter"]));
   };
 
   return <>{children}</>;

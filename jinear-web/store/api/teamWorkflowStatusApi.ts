@@ -12,7 +12,7 @@ export const teamWorkflowStatusApi = api.injectEndpoints({
       query: (req: { teamId: string }) => `v1/team/workflow-status/${req.teamId}/list`,
       providesTags: (_result, _err, req) => [
         {
-          type: "workflow-status-from-team",
+          type: "v1/team/workflow-status/{teamId}/list",
           id: `${req.teamId}`,
         },
       ],
@@ -30,7 +30,7 @@ export const teamWorkflowStatusApi = api.injectEndpoints({
         method: "POST",
         body: request.initializeTeamWorkflowStatusRequest,
       }),
-      invalidatesTags: (_result, _err, req) => [{ type: "workflow-status-from-team", id: req.teamId }],
+      invalidatesTags: (_result, _err, req) => [{ type: "v1/team/workflow-status/{teamId}/list", id: req.teamId }],
     }),
 
     removeTeamWorkflowStatus: build.mutation<
@@ -44,7 +44,7 @@ export const teamWorkflowStatusApi = api.injectEndpoints({
         url: `v1/team/workflow-status/${request.teamId}/${request.teamWorkflowStatusId}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _err, req) => [{ type: "workflow-status-from-team", id: req.teamId }],
+      invalidatesTags: (_result, _err, req) => [{ type: "v1/team/workflow-status/{teamId}/list", id: req.teamId }],
     }),
 
     changeTeamWorkflowStatusName: build.mutation<
@@ -60,7 +60,7 @@ export const teamWorkflowStatusApi = api.injectEndpoints({
         method: "PUT",
         body: request,
       }),
-      invalidatesTags: (_result, _err, req) => [{ type: "workflow-status-from-team", id: req.teamId }],
+      invalidatesTags: (_result, _err, req) => [{ type: "v1/team/workflow-status/{teamId}/list", id: req.teamId }],
     }),
 
     changeOrder: build.mutation<
@@ -75,7 +75,7 @@ export const teamWorkflowStatusApi = api.injectEndpoints({
         url: `v1/team/workflow-status/${request.teamId}/change-order/${request.teamWorkflowStatusId}/with/${request.replaceWithTeamWorkflowStatusId}`,
         method: "PUT",
       }),
-      invalidatesTags: (_result, _err, req) => [{ type: "workflow-status-from-team", id: req.teamId }],
+      invalidatesTags: (_result, _err, req) => [{ type: "v1/team/workflow-status/{teamId}/list", id: req.teamId }],
     }),
   }),
 });

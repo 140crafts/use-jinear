@@ -15,7 +15,7 @@ export const workspaceMediaApi = api.injectEndpoints({
         method: "POST",
         body: request.formData,
       }),
-      invalidatesTags: (result) => (result == null ? [] : ["Account-Current"]),
+      invalidatesTags: (result) => (result == null ? [] : ["v1/account"]),
     }),
   }),
 });

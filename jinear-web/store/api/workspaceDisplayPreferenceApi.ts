@@ -9,7 +9,13 @@ export const workspaceDisplayPreferenceApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["Account-Current", "workplace-member-list", "workplace-team-list", "team-member-list", "team-topic-list"],
+      invalidatesTags: [
+        "v1/account",
+        "v1/workspace/member/{workspaceId}/list",
+        "v1/team/from-workspace/{workspaceId}",
+        "v1/team/member/list/{teamId}",
+        "v1/topic/list/{teamId}",
+      ],
     }),
     updatePreferredTeam: build.mutation<
       WorkspaceDisplayPreferenceResponse,
@@ -20,7 +26,7 @@ export const workspaceDisplayPreferenceApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["Account-Current", "team-member-list", "team-topic-list"],
+      invalidatesTags: ["v1/account", "v1/team/member/list/{teamId}", "v1/topic/list/{teamId}"],
     }),
     updatePreferredWorkspaceWithUsername: build.mutation<
       WorkspaceDisplayPreferenceResponse,
@@ -31,7 +37,13 @@ export const workspaceDisplayPreferenceApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["Account-Current", "workplace-member-list", "workplace-team-list", "team-member-list", "team-topic-list"],
+      invalidatesTags: [
+        "v1/account",
+        "v1/workspace/member/{workspaceId}/list",
+        "v1/team/from-workspace/{workspaceId}",
+        "v1/team/member/list/{teamId}",
+        "v1/topic/list/{teamId}",
+      ],
     }),
     updatePreferredTeamWithUsername: build.mutation<
       WorkspaceDisplayPreferenceResponse,
@@ -42,7 +54,7 @@ export const workspaceDisplayPreferenceApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["Account-Current", "team-member-list", "team-topic-list"],
+      invalidatesTags: ["v1/account", "v1/team/member/list/{teamId}", "v1/topic/list/{teamId}"],
     }),
   }),
 });

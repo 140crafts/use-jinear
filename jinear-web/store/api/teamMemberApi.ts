@@ -7,7 +7,7 @@ export const teamMemberApi = api.injectEndpoints({
       query: ({ teamId, page = 0 }) => `v1/team/member/list/${teamId}?page=${page}`,
       providesTags: (_result, _err, { teamId, page = 0 }) => [
         {
-          type: "team-member-list",
+          type: "v1/team/member/list/{teamId}",
           id: `${teamId}-${page}`,
         },
       ],
@@ -18,7 +18,7 @@ export const teamMemberApi = api.injectEndpoints({
         url: `v1/team/member/${teamMemberId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["team-member-list", "workspace-activity-list"],
+      invalidatesTags: ["v1/team/member/list/{teamId}", "v1/workspace/activity/filter"],
     }),
     //
     addTeamMember: build.mutation<BaseResponse, AddTeamMemberRequest>({
@@ -27,14 +27,14 @@ export const teamMemberApi = api.injectEndpoints({
         method: "POST",
         body: req,
       }),
-      invalidatesTags: ["team-member-list", "workspace-activity-list"],
+      invalidatesTags: ["v1/team/member/list/{teamId}", "v1/workspace/activity/filter"],
     }),
     //
     retrieveMemberships: build.query<TeamMembershipsResponse, { workspaceId: string }>({
       query: ({ workspaceId }) => `v1/team/member/memberships/${workspaceId}`,
       providesTags: (_result, _err, { workspaceId }) => [
         {
-          type: "workspace-team-membership-list",
+          type: "v1/team/member/memberships/{workspaceId}",
           id: `${workspaceId}`,
         },
       ],

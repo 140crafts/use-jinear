@@ -7,7 +7,7 @@ export const googleOAuthApi = api.injectEndpoints({
       query: (req) => `v1/oauth/google/redirect-info/login`,
       providesTags: (_result, _err, req) => [
         {
-          type: "oauth/google/redirect-info/login",
+          type: "v1/oauth/google/redirect-info/login",
         },
       ],
     }),

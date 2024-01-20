@@ -52,7 +52,7 @@ const InboxScreen: React.FC<InboxScreenProps> = ({}) => {
 
   const invalidateCountQuery = () => {
     logger.log("invalidateCountQuery has started");
-    dispatch(api.util.invalidateTags(["account-workspace-notification-unread-count"]));
+    dispatch(api.util.invalidateTags(["v1/notification/event/{workspaceId}/unread-count"]));
   };
 
   return (

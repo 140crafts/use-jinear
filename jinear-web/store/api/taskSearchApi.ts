@@ -11,7 +11,7 @@ export const taskSearchApi = api.injectEndpoints({
       },
       providesTags: (_result, _err, req) => [
         {
-          type: "team-task-search",
+          type: "v1/task/search/${workspaceId}/${teamId}/{title}",
           id: `${JSON.stringify(req)}`,
         },
       ],

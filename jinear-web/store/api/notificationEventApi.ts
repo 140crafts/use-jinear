@@ -16,7 +16,7 @@ export const notificationEventApi = api.injectEndpoints({
       },
       providesTags: (_result, _err, req) => [
         {
-          type: "account-workspace-notification-events",
+          type: "v1/notification/event/{workspaceId}",
           id: `${req.workspaceId}-${req.page}`,
         },
       ],
@@ -36,7 +36,7 @@ export const notificationEventApi = api.injectEndpoints({
       },
       providesTags: (_result, _err, req) => [
         {
-          type: "account-workspace-team-notification-events",
+          type: "v1/notification/event/{workspaceId}/team/{teamId}",
           id: `${req.workspaceId}-${req.teamId}-${req.page}`,
         },
       ],
@@ -51,7 +51,7 @@ export const notificationEventApi = api.injectEndpoints({
       query: (req: { workspaceId: string }) => `v1/notification/event/${req.workspaceId}/unread-count`,
       providesTags: (_result, _err, req) => [
         {
-          type: "account-workspace-notification-unread-count",
+          type: "v1/notification/event/{workspaceId}/unread-count",
           id: `${req.workspaceId}`,
         },
       ],

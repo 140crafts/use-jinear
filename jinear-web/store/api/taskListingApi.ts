@@ -7,7 +7,7 @@ export const taskListingApi = api.injectEndpoints({
       query: (req) => ({ url: `v1/task/list/filter`, method: "POST", body: req }),
       providesTags: (_result, _err, req) => [
         {
-          type: "task-listing-filter",
+          type: "v1/task/list/filter",
           id: `${JSON.stringify(req)}`,
         },
       ],

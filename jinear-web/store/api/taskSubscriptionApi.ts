@@ -8,7 +8,7 @@ export const taskSubscriptionApi = api.injectEndpoints({
         url: `v1/task/${req.taskId}/subscription`,
         method: "POST",
       }),
-      invalidatesTags: ["task-subscription-subscriber-list", "task-subscription"],
+      invalidatesTags: ["v1/task/{taskId}/subscription/list", "v1/task/{taskId}/subscription"],
     }),
     //
     removeTaskSubscription: build.mutation<TaskSubscriptionResponse, { taskId: string }>({
@@ -16,7 +16,7 @@ export const taskSubscriptionApi = api.injectEndpoints({
         url: `v1/task/${req.taskId}/subscription`,
         method: "DELETE",
       }),
-      invalidatesTags: ["task-subscription-subscriber-list", "task-subscription"],
+      invalidatesTags: ["v1/task/{taskId}/subscription/list", "v1/task/{taskId}/subscription"],
     }),
     //
     retrieveSubscription: build.query<TaskSubscriptionResponse, { taskId: string }>({
@@ -25,7 +25,7 @@ export const taskSubscriptionApi = api.injectEndpoints({
       }),
       providesTags: (_result, _err, req) => [
         {
-          type: "task-subscription",
+          type: "v1/task/{taskId}/subscription",
           id: req.taskId,
         },
       ],
@@ -37,7 +37,7 @@ export const taskSubscriptionApi = api.injectEndpoints({
       }),
       providesTags: (_result, _err, req) => [
         {
-          type: "task-subscription-subscriber-list",
+          type: "v1/task/{taskId}/subscription/list",
           id: req.taskId,
         },
       ],

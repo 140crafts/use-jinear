@@ -9,12 +9,7 @@ export const taskCommentApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: [
-        "task-comments",
-        "workspace-activity-list",
-        "workspace-team-activity-list",
-        "workspace-task-activity-list",
-      ],
+      invalidatesTags: ["v1/task/comment/from-task/{taskId}", "v1/workspace/activity/filter"],
     }),
     //
     retrieveTaskComments: build.query<
@@ -27,7 +22,7 @@ export const taskCommentApi = api.injectEndpoints({
       query: (req: { taskId: string; page?: number }) => `v1/task/comment/from-task/${req.taskId}?page=${req.page || "0"}`,
       providesTags: (_result, _err, req) => [
         {
-          type: "task-comments",
+          type: "v1/task/comment/from-task/{taskId}",
           id: `${req.taskId}-${req.page || "0"}`,
         },
       ],
@@ -43,12 +38,7 @@ export const taskCommentApi = api.injectEndpoints({
         url: `v1/task/comment/${req.commentId}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _err, req) => [
-        "task-comments",
-        "workspace-activity-list",
-        "workspace-team-activity-list",
-        "workspace-task-activity-list",
-      ],
+      invalidatesTags: (_result, _err, req) => ["v1/task/comment/from-task/{taskId}", "v1/workspace/activity/filter"],
     }),
     //
   }),
