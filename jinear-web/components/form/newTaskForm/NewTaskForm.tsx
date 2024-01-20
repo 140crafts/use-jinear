@@ -11,6 +11,7 @@ import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { IoInformationCircleOutline } from "react-icons/io5";
+import { LuChevronRight } from "react-icons/lu";
 import WorkspaceAndTeamInfo from "../common/workspaceAndTeamInfo/WorkspaceAndTeamInfo";
 import styles from "./NewTaskForm.module.scss";
 import BoardPickerButton from "./boardPickerButton/BoardPickerButton";
@@ -149,10 +150,20 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
         <input type="hidden" value={selectedTeam?.teamId} {...register("teamId")} />
         {subTaskOf && <input type="hidden" value={subTaskOf} {...register("subTaskOf")} />}
 
-        <TitleInput
-          //  labelClass={styles.label}
-          register={register}
-        />
+        <div className={styles.workspaceAndTeamInfoContainer}>
+          <WorkspaceAndTeamInfo
+            readOnly={subTaskOf != null}
+            workspace={workspace}
+            team={selectedTeam}
+            onTeamChange={setSelectedTeam}
+            buttonContainerClassName={styles.workspaceAndTeamInfoButtonContainer}
+            heightVariant={ButtonHeight.short}
+          />
+          <LuChevronRight />
+          <div>{t("newTaskModalTitle")}</div>
+        </div>
+
+        <TitleInput labelClass={styles.label} register={register} />
 
         {subTaskOfLabel && (
           <div className={styles.subtaskInfo}>
@@ -198,14 +209,6 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             dateSpanStart={assignedDate ? new Date(assignedDate) : undefined}
             dateSpanEnd={dueDate ? new Date(dueDate) : undefined}
             disabledBefore={assignedDate ? new Date(assignedDate) : undefined}
-          />
-          <WorkspaceAndTeamInfo
-            readOnly={subTaskOf != null}
-            workspace={workspace}
-            team={selectedTeam}
-            onTeamChange={setSelectedTeam}
-            buttonContainerClassName={styles.workspaceAndTeamInfoButtonContainer}
-            heightVariant={ButtonHeight.short}
           />
         </div>
 
