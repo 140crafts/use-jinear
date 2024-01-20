@@ -15,7 +15,12 @@ export const teamApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["v1/team/from-workspace/{workspaceId}", "v1/workspace/activity/filter"],
+      invalidatesTags: [
+        "v1/team/from-workspace/{workspaceId}",
+        "v1/workspace/activity/filter",
+        "v1/team/member/list/{teamId}",
+        "v1/team/member/memberships/{workspaceId}",
+      ],
     }),
     //
     retrieveWorkspaceTeams: build.query<TeamListingResponse, string>({
