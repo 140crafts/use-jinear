@@ -3,7 +3,6 @@ import SegmentedControl from "@/components/segmentedControl/SegmentedControl";
 import WorkspaceUpgradeButton from "@/components/workspaceUpgradeButton/WorkspaceUpgradeButton";
 import { TeamInitializeRequest, TeamTaskVisibilityType } from "@/model/be/jinear-core";
 import { useInitializeTeamMutation } from "@/store/api/teamApi";
-import { useUpdatePreferredTeamMutation } from "@/store/api/workspaceDisplayPreferenceApi";
 import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
@@ -28,7 +27,6 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [initializeTeam, { data: initializeResponse, isLoading }] = useInitializeTeamMutation();
-  const [updatePreferredTeam, { isLoading: isPrefferedTeamUpdateLoading }] = useUpdatePreferredTeamMutation();
   const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const { register, handleSubmit, setFocus, setValue, watch } = useForm<TeamInitializeRequest>();
   const [candidateUsername, setCandidateUsername] = useState<string>("example-team");
@@ -51,18 +49,9 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
   }, [currTag]);
 
   useEffect(() => {
-    if (initializeResponse && initializeResponse.data.teamId) {
-      updatePreferredTeam({
-        teamId: initializeResponse.data.teamId,
-        workspaceId: initializeResponse.data.workspaceId,
-      });
-    }
+    initializeResponse && dispatch(changeLoadingModalVisibility({ visible: false }));
+    initializeResponse && close?.();
   }, [initializeResponse]);
-
-  useEffect(() => {
-    dispatch(changeLoadingModalVisibility({ visible: isPrefferedTeamUpdateLoading }));
-    isPrefferedTeamUpdateLoading && close?.();
-  }, [isPrefferedTeamUpdateLoading]);
 
   const changeTaskVisibilityType = (value: string, index: number) => {
     if (value && (value == "VISIBLE_TO_ALL_TEAM_MEMBERS" || value == "OWNER_ASSIGNEE_AND_ADMINS")) {

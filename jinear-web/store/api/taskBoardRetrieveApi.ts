@@ -12,7 +12,7 @@ export const taskBoardRetrieveApi = api.injectEndpoints({
       query: ({ taskBoardId }: ITaskBoardRetrieve) => `v1/task-board/${taskBoardId}`,
       providesTags: (_result, _err, req) => [
         {
-          type: "task-board-retrieve",
+          type: "v1/task-board",
           id: `${req.taskBoardId}`,
         },
       ],

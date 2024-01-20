@@ -149,9 +149,9 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
       }
 
       const notificationType = payload?.data?.notificationType || "";
-      dispatch(api.util.invalidateTags(["account-workspace-notification-unread-count"]));
+      dispatch(api.util.invalidateTags(["v1/notification/event/{workspaceId}/unread-count"]));
       if (notificationType == "TASK_INITIALIZED") {
-        dispatch(api.util.invalidateTags(["team-task-list", "team-workflow-task-list", "workspace-task-list"]));
+        dispatch(api.util.invalidateTags(["v1/task/list/filter"]));
       }
       if (
         currentSessionId != senderSessionInfoId &&

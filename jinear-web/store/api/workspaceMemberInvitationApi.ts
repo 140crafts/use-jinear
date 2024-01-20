@@ -14,7 +14,7 @@ export const workspaceMemberInvitationApi = api.injectEndpoints({
       query: ({ workspaceId, page = 0 }) => `v1/workspace/member/invitation/list/${workspaceId}?page=${page}`,
       providesTags: (_result, _err, { workspaceId, page = 0 }) => [
         {
-          type: "workspace-invitation-list",
+          type: "v1/workspace/member/invitation/list/{workspaceId}",
           id: `${workspaceId}-${page}`,
         },
       ],
@@ -26,7 +26,7 @@ export const workspaceMemberInvitationApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["workspace-invitation-list"],
+      invalidatesTags: ["v1/workspace/member/invitation/list/{workspaceId}"],
     }),
     //
     deleteInvitation: build.mutation<BaseResponse, { invitationId: string }>({
@@ -34,14 +34,14 @@ export const workspaceMemberInvitationApi = api.injectEndpoints({
         url: `v1/workspace/member/invitation/${invitationId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["workspace-invitation-list"],
+      invalidatesTags: ["v1/workspace/member/invitation/list/{workspaceId}"],
     }),
     //
     retrieveInvitationInfo: build.query<WorkspaceInvitationInfoResponse, string>({
       query: (token: string) => `v1/workspace/member/invitation/info/${token}`,
       providesTags: (_result, _err, token) => [
         {
-          type: "workspace-invitation-info",
+          type: "v1/workspace/member/invitation/info/{token}",
           id: token,
         },
       ],
@@ -53,7 +53,13 @@ export const workspaceMemberInvitationApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["Account-Current", "workplace-member-list", "workplace-team-list", "team-member-list", "team-topic-list"],
+      invalidatesTags: [
+        "v1/account",
+        "v1/workspace/member/{workspaceId}/list",
+        "v1/team/from-workspace/{workspaceId}",
+        "v1/team/member/list/{teamId}",
+        "v1/topic/list/{teamId}",
+      ],
     }),
     //
   }),

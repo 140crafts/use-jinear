@@ -7,7 +7,7 @@ export const workplaceMemberApi = api.injectEndpoints({
       query: ({ workspaceId, page = 0 }) => `v1/workspace/member/${workspaceId}/list?page=${page}`,
       providesTags: (_result, _err, { workspaceId, page = 0 }) => [
         {
-          type: "workplace-member-list",
+          type: "v1/workspace/member/{workspaceId}/list",
           id: `${workspaceId}-${page}}`,
         },
       ],
@@ -18,7 +18,7 @@ export const workplaceMemberApi = api.injectEndpoints({
         url: `v1/workspace/member/${workspaceId}/kick/${workspaceMemberId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["workplace-member-list"],
+      invalidatesTags: ["v1/workspace/member/{workspaceId}/list"],
     }),
     //
   }),

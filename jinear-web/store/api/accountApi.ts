@@ -5,7 +5,7 @@ export const accountApi = api.injectEndpoints({
   endpoints: (build) => ({
     me: build.query<AccountRetrieveResponse, void>({
       query: () => "v1/account",
-      providesTags: ["Account-Current"],
+      providesTags: ["v1/account"],
     }),
     confirmEmail: build.mutation<BaseResponse, ConfirmEmailRequest>({
       query: (body: ConfirmEmailRequest) => ({
@@ -24,14 +24,6 @@ export const accountApi = api.injectEndpoints({
       }),
       invalidatesTags: tagTypes,
     }),
-    //
-    // logoutRequest: build.mutation<void, void>({
-    //   query: () => ({
-    //     url: "v1/auth/logout",
-    //     method: "POST",
-    //   }),
-    //   invalidatesTags: tagTypes,
-    // }),
     //
   }),
 });

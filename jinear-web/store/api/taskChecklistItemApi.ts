@@ -9,12 +9,7 @@ export const taskChecklistItemApi = api.injectEndpoints({
         method: "POST",
         body: req,
       }),
-      invalidatesTags: [
-        "task-checklist",
-        "workspace-activity-list",
-        "workspace-team-activity-list",
-        "workspace-task-activity-list",
-      ],
+      invalidatesTags: ["v1/task/checklist", "v1/workspace/activity/filter"],
     }),
     //
     updateCheckedStatus: build.mutation<
@@ -28,11 +23,7 @@ export const taskChecklistItemApi = api.injectEndpoints({
         url: `v1/task/checklist/item/${req.checklistItemId}/${req.checked}`,
         method: "PUT",
       }),
-      invalidatesTags: (_result, _err, req) => [
-        "workspace-activity-list",
-        "workspace-team-activity-list",
-        "workspace-task-activity-list",
-      ],
+      invalidatesTags: (_result, _err, req) => ["v1/workspace/activity/filter"],
     }),
     //
     updateLabel: build.mutation<
@@ -48,11 +39,7 @@ export const taskChecklistItemApi = api.injectEndpoints({
         method: "PUT",
         body: req,
       }),
-      invalidatesTags: (_result, _err, req) => [
-        "workspace-activity-list",
-        "workspace-team-activity-list",
-        "workspace-task-activity-list",
-      ],
+      invalidatesTags: (_result, _err, req) => ["v1/workspace/activity/filter"],
     }),
     //
     deleteChecklistItem: build.mutation<
@@ -65,12 +52,7 @@ export const taskChecklistItemApi = api.injectEndpoints({
         url: `v1/task/checklist/item/${req.checklistItemId}`,
         method: "DELETE",
       }),
-      invalidatesTags: [
-        "task-checklist",
-        "workspace-activity-list",
-        "workspace-team-activity-list",
-        "workspace-task-activity-list",
-      ],
+      invalidatesTags: ["v1/task/checklist", "v1/workspace/activity/filter"],
     }),
     //
   }),

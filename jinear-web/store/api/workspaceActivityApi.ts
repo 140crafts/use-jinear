@@ -7,7 +7,7 @@ export const workspaceActivityApi = api.injectEndpoints({
       query: (req) => ({ url: `v1/workspace/activity/filter`, method: "POST", body: req }),
       providesTags: (_result, _err, req) => [
         {
-          type: "workspace-activity-filtered-list",
+          type: "v1/workspace/activity/filter",
           id: `${JSON.stringify(req)}`,
         },
       ],

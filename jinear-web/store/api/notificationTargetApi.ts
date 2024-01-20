@@ -10,10 +10,7 @@ export const notificationTargetApi = api.injectEndpoints({
         method: "POST",
         body: req,
       }),
-      //   invalidatesTags: ["workplace-member-list"],
     }),
-    //
-
     //
   }),
 });

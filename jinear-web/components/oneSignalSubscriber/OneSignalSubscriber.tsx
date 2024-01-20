@@ -128,9 +128,9 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
       const data: NotificationMessageExternalDataDto = eventData.data;
       logger.log({ notificationData: data });
       const notificationType = data.notificationType;
-      dispatch(api.util.invalidateTags(["account-workspace-notification-unread-count"]));
+      dispatch(api.util.invalidateTags(["v1/notification/event/{workspaceId}/unread-count"]));
       if (notificationType == "TASK_INITIALIZED") {
-        dispatch(api.util.invalidateTags(["team-task-list", "team-workflow-task-list", "workspace-task-list"]));
+        dispatch(api.util.invalidateTags(["v1/task/list/filter"]));
       }
       if (data.taskId && TASK_UPDATE_NOTIFICATIONS.indexOf(notificationType) != -1) {
         dispatch(markHasUnreadNotification({ taskId: data.taskId }));

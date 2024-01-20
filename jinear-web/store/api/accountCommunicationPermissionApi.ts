@@ -10,7 +10,7 @@ export const accountCommunicationPermissionApi = api.injectEndpoints({
     //
     retrievePermissions: build.query<AccountCommunicationPermissionsResponse, void>({
       query: () => `v1/account/communication-permission`,
-      providesTags: ["account-communication-permissions"],
+      providesTags: ["v1/account/communication-permission"],
     }),
     //
     setPermissions: build.mutation<BaseResponse, SetCommunicationPermissionsRequest>({
@@ -19,7 +19,7 @@ export const accountCommunicationPermissionApi = api.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["account-communication-permissions"],
+      invalidatesTags: ["v1/account/communication-permission"],
     }),
     //
   }),

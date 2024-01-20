@@ -17,11 +17,11 @@ export const taskBoardApi = api.injectEndpoints({
         body,
       }),
       invalidatesTags: [
-        "task-board-listing",
-        "task-board-retrieve",
-        "task-board-filter",
-        "retrieve-task-and-task-boards-relation",
-        "workspace-activity-list",
+        "v1/task-board/list/${workspaceId}/team/${teamId}",
+        "v1/task-board",
+        "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
+        "v1/task-board/list/related-with-task/{taskId}",
+        "v1/workspace/activity/filter",
       ],
     }),
     //
@@ -31,7 +31,12 @@ export const taskBoardApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["task-board-listing", "task-board-retrieve", "task-board-filter", "workspace-activity-list"],
+      invalidatesTags: [
+        "v1/task-board/list/${workspaceId}/team/${teamId}",
+        "v1/task-board",
+        "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
+        "v1/workspace/activity/filter",
+      ],
     }),
     //
     updateTitle: build.mutation<BaseResponse, TaskBoardUpdateTitleRequest>({
@@ -41,11 +46,11 @@ export const taskBoardApi = api.injectEndpoints({
         body,
       }),
       invalidatesTags: [
-        "task-board-listing",
-        "task-board-retrieve",
-        "task-board-filter",
-        "retrieve-task-and-task-boards-relation",
-        "workspace-activity-list",
+        "v1/task-board/list/${workspaceId}/team/${teamId}",
+        "v1/task-board",
+        "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
+        "v1/task-board/list/related-with-task/{taskId}",
+        "v1/workspace/activity/filter",
       ],
     }),
     //
@@ -55,7 +60,12 @@ export const taskBoardApi = api.injectEndpoints({
         method: "PUT",
         body,
       }),
-      invalidatesTags: ["task-board-listing", "task-board-retrieve", "task-board-filter", "workspace-activity-list"],
+      invalidatesTags: [
+        "v1/task-board/list/${workspaceId}/team/${teamId}",
+        "v1/task-board",
+        "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
+        "v1/workspace/activity/filter",
+      ],
     }),
     //
   }),

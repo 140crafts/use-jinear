@@ -12,7 +12,7 @@ export const topicListingApi = api.injectEndpoints({
       query: (teamId: string) => `v1/topic/list/${teamId}`,
       providesTags: (_result, _err, teamId) => [
         {
-          type: "team-topic-list",
+          type: "v1/topic/list/{teamId}",
           id: teamId,
         },
       ],
@@ -26,7 +26,7 @@ export const topicListingApi = api.injectEndpoints({
       }),
       providesTags: (_result, _err, req) => [
         {
-          type: "team-topic-find-exact",
+          type: "v1/topic/list/{teamId}/retrieve-exact",
           id: `${JSON.stringify(req)}`,
         },
       ],
@@ -37,7 +37,7 @@ export const topicListingApi = api.injectEndpoints({
         `v1/topic/list/${teamId}/search?nameOrTag=${encodeURI(nameOrTag)}`,
       providesTags: (_result, _err, req) => [
         {
-          type: "team-topic-search",
+          type: "v1/topic/list/{teamId}/search",
           id: `${req.teamId}-${req.nameOrTag}`,
         },
       ],

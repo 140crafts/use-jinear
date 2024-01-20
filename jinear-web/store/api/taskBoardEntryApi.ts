@@ -15,11 +15,9 @@ export const taskBoardEntryApi = api.injectEndpoints({
         body,
       }),
       invalidatesTags: (_result, _err, req) => [
-        { type: "task-board-entry-listing", id: req.taskBoardId },
-        "retrieve-task-and-task-boards-relation",
-        "workspace-task-activity-list",
-        "workspace-team-activity-list",
-        "workspace-activity-list",
+        "v1/task-board/entry/from-task-board/{taskBoardId}",
+        "v1/task-board/list/related-with-task/{taskId}",
+        "v1/workspace/activity/filter",
       ],
     }),
     //
@@ -29,11 +27,9 @@ export const taskBoardEntryApi = api.injectEndpoints({
         method: "DELETE",
       }),
       invalidatesTags: (_result, _err, req) => [
-        { type: "task-board-entry-listing", id: req.taskBoardId },
-        "retrieve-task-and-task-boards-relation",
-        "workspace-task-activity-list",
-        "workspace-team-activity-list",
-        "workspace-activity-list",
+        "v1/task-board/entry/from-task-board/{taskBoardId}",
+        "v1/task-board/list/related-with-task/{taskId}",
+        "v1/workspace/activity/filter",
       ],
     }),
     //
@@ -42,7 +38,7 @@ export const taskBoardEntryApi = api.injectEndpoints({
         url: `v1/task-board/entry/${req.taskBoardEntryId}/change-order?newOrder=${req.newOrder}`,
         method: "PUT",
       }),
-      invalidatesTags: (_result, _err, req) => [{ type: "task-board-entry-listing", id: req.taskBoardId }],
+      invalidatesTags: (_result, _err, req) => ["v1/task-board/entry/from-task-board/{taskBoardId}"],
     }),
     //
     retrieveFromTaskBoard: build.query<TaskBoardEntryPaginatedResponse, IRetrieveFromTaskBoardRequest>({
@@ -50,12 +46,9 @@ export const taskBoardEntryApi = api.injectEndpoints({
         `v1/task-board/entry/from-task-board/${taskBoardId}?page=${page}`,
       providesTags: (_result, _err, req) => [
         {
-          type: "task-board-entry-listing",
-          id: `${req.taskBoardId}`,
+          type: "v1/task-board/entry/from-task-board/{taskBoardId}",
+          id: `${req.taskBoardId}-${req.page}`,
         },
-        "workspace-task-activity-list",
-        "workspace-team-activity-list",
-        "workspace-activity-list",
       ],
     }),
     //

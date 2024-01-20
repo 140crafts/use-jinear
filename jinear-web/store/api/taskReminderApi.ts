@@ -9,13 +9,7 @@ export const taskReminderApi = api.injectEndpoints({
         method: "POST",
         body: req,
       }),
-      invalidatesTags: (_result, _err, req) => [
-        "team-task-list",
-        "workplace-task-with-name-and-tag",
-        "team-workflow-task-list",
-        "team-topic-task-list",
-        "team-all-task-list",
-      ],
+      invalidatesTags: (_result, _err, req) => ["v1/task/from-workspace/{workspaceName}/{taskTag}"],
     }),
     //
     retrieveNextJob: build.query<ReminderJobResponse, { taskReminderId: string }>({
@@ -25,7 +19,7 @@ export const taskReminderApi = api.injectEndpoints({
       },
       providesTags: (_result, _err, req) => [
         {
-          type: "reminder-next-job",
+          type: "v1/task/reminder/job/{taskReminderId}/next",
           id: req.taskReminderId,
         },
       ],
@@ -36,7 +30,7 @@ export const taskReminderApi = api.injectEndpoints({
         url: `v1/task/reminder/${body.taskReminderId}`,
         method: "DELETE",
       }),
-      invalidatesTags: (_result, _err, req) => [{ type: "team-task-list" }, { type: "workplace-task-with-name-and-tag" }],
+      invalidatesTags: (_result, _err, req) => [{ type: "v1/task/from-workspace/{workspaceName}/{taskTag}" }],
     }),
     //
     //
