@@ -134,6 +134,7 @@ public class MediaOperationService {
         String originalName = Optional.of(initializeMediaVo)
                 .map(InitializeMediaVo::getFile)
                 .map(MultipartFile::getOriginalFilename)
+                .map(NormalizeHelper::normalizeUsernameReplaceSpaces)
                 .orElse(UUID.randomUUID().toString());
         media.setOriginalName(originalName);
 
