@@ -14,7 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import static co.jinear.core.model.enumtype.team.TeamTaskVisibilityType.VISIBLE_TO_ALL_TEAM_MEMBERS;
+import static co.jinear.core.model.enumtype.team.TeamTaskVisibilityType.OWNER_ASSIGNEE_AND_ADMINS;
 
 @Slf4j
 @Service
@@ -41,7 +41,7 @@ public class TeamInitializeManager {
 
     private void validateTeamVisibilityTypeAccess(TeamInitializeRequest teamInitializeRequest, String workspaceId) {
         TeamTaskVisibilityType taskVisibility = teamInitializeRequest.getTaskVisibility();
-        if (VISIBLE_TO_ALL_TEAM_MEMBERS.equals(taskVisibility)) {
+        if (OWNER_ASSIGNEE_AND_ADMINS.equals(taskVisibility)) {
             workspaceTierValidator.validateWorkspaceHasAdvancedTeamTaskVisibilityTypesAccess(workspaceId);
         }
     }
