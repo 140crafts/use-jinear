@@ -38,7 +38,7 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({ workspace }) => {
   );
 
   const openNewTeamModal = () => {
-    dispatch(popNewTeamModal());
+    dispatch(popNewTeamModal({ visible: true, workspace }));
   };
 
   return (

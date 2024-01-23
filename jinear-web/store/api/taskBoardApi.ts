@@ -17,7 +17,7 @@ export const taskBoardApi = api.injectEndpoints({
         body,
       }),
       invalidatesTags: [
-        "v1/task-board/list/${workspaceId}/team/${teamId}",
+        "v1/task-board/list/{workspaceId}/team/{teamId}",
         "v1/task-board",
         "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
         "v1/task-board/list/related-with-task/{taskId}",
@@ -32,7 +32,7 @@ export const taskBoardApi = api.injectEndpoints({
         body,
       }),
       invalidatesTags: [
-        "v1/task-board/list/${workspaceId}/team/${teamId}",
+        "v1/task-board/list/{workspaceId}/team/{teamId}",
         "v1/task-board",
         "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
         "v1/workspace/activity/filter",
@@ -46,7 +46,7 @@ export const taskBoardApi = api.injectEndpoints({
         body,
       }),
       invalidatesTags: [
-        "v1/task-board/list/${workspaceId}/team/${teamId}",
+        "v1/task-board/list/{workspaceId}/team/{teamId}",
         "v1/task-board",
         "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
         "v1/task-board/list/related-with-task/{taskId}",
@@ -61,7 +61,7 @@ export const taskBoardApi = api.injectEndpoints({
         body,
       }),
       invalidatesTags: [
-        "v1/task-board/list/${workspaceId}/team/${teamId}",
+        "v1/task-board/list/{workspaceId}/team/{teamId}",
         "v1/task-board",
         "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
         "v1/workspace/activity/filter",

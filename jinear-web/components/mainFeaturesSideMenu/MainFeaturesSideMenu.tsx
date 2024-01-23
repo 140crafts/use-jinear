@@ -1,6 +1,5 @@
 "use client";
-import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
-import { useTypedSelector } from "@/store/store";
+import { AccountsWorkspacePerspectiveDto } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -9,25 +8,26 @@ import Button, { ButtonVariants } from "../button";
 import styles from "./MainFeaturesSideMenu.module.scss";
 import InboxButton from "./inboxButton/InboxButton";
 
-interface MainFeaturesSideMenuProps {}
+interface MainFeaturesSideMenuProps {
+  workspace?: AccountsWorkspacePerspectiveDto;
+}
 
-const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({}) => {
+const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }) => {
   const { t } = useTranslation();
-  const preferredWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
 
   const currentPath = usePathname();
-  const calendarPath = `/${preferredWorkspace?.username}/calendar`;
-  const tasksPath = `/${preferredWorkspace?.username}/tasks`;
-  const inboxPath = `/${preferredWorkspace?.username}/inbox`;
-  const assignedToMePath = `/${preferredWorkspace?.username}/assigned-to-me`;
-  const lastActivitiesPath = `/${preferredWorkspace?.username}/last-activities`;
+  const calendarPath = `/${workspace?.username}/calendar`;
+  const tasksPath = `/${workspace?.username}/tasks`;
+  const inboxPath = `/${workspace?.username}/inbox`;
+  const assignedToMePath = `/${workspace?.username}/assigned-to-me`;
+  const lastActivitiesPath = `/${workspace?.username}/last-activities`;
 
-  return !preferredWorkspace ? null : (
+  return !workspace ? null : (
     // <Transition className={styles.container} initial={true}>
     <div className={styles.container}>
       <InboxButton
         isActive={inboxPath == currentPath}
-        workspace={preferredWorkspace}
+        workspace={workspace}
         buttonStyle={styles.iconButton}
         iconStyle={styles.icon}
       />

@@ -17,17 +17,7 @@ export const workspaceDisplayPreferenceApi = api.injectEndpoints({
         "v1/topic/list/{teamId}",
       ],
     }),
-    updatePreferredTeam: build.mutation<
-      WorkspaceDisplayPreferenceResponse,
-      { workspaceId: string; teamId: string; dontReroute?: boolean }
-    >({
-      query: (body: { workspaceId: string; teamId: string }) => ({
-        url: `v1/workspace/display-preferences/${body.workspaceId}/set-preferred-team/${body.teamId}`,
-        method: "PUT",
-        body,
-      }),
-      invalidatesTags: ["v1/account", "v1/team/member/list/{teamId}", "v1/topic/list/{teamId}"],
-    }),
+    //
     updatePreferredWorkspaceWithUsername: build.mutation<
       WorkspaceDisplayPreferenceResponse,
       { workspaceUsername: string; dontReroute?: boolean }
@@ -45,32 +35,13 @@ export const workspaceDisplayPreferenceApi = api.injectEndpoints({
         "v1/topic/list/{teamId}",
       ],
     }),
-    updatePreferredTeamWithUsername: build.mutation<
-      WorkspaceDisplayPreferenceResponse,
-      { workspaceUsername: string; teamUsername: string; dontReroute?: boolean }
-    >({
-      query: (body: { workspaceUsername: string; teamUsername: string }) => ({
-        url: `v1/workspace/display-preferences/with-username/${body.workspaceUsername}/set-preferred-team/${body.teamUsername}`,
-        method: "PUT",
-        body,
-      }),
-      invalidatesTags: ["v1/account", "v1/team/member/list/{teamId}", "v1/topic/list/{teamId}"],
-    }),
+    //
   }),
 });
 
-export const {
-  useUpdatePreferredTeamMutation,
-  useUpdatePreferredWorkspaceMutation,
-  useUpdatePreferredWorkspaceWithUsernameMutation,
-  useUpdatePreferredTeamWithUsernameMutation,
-} = workspaceDisplayPreferenceApi;
+export const { useUpdatePreferredWorkspaceMutation, useUpdatePreferredWorkspaceWithUsernameMutation } =
+  workspaceDisplayPreferenceApi;
 
 export const {
-  endpoints: {
-    updatePreferredWorkspace,
-    updatePreferredTeam,
-    updatePreferredWorkspaceWithUsername,
-    updatePreferredTeamWithUsername,
-  },
+  endpoints: { updatePreferredWorkspace, updatePreferredWorkspaceWithUsername },
 } = workspaceDisplayPreferenceApi;

@@ -27,8 +27,6 @@ const AssignedToMeScreenHeader: React.FC<AssignedToMeScreenHeaderProps> = ({ wor
 
   return (
     <div className={styles.container}>
-      {/* <AssignedToMeScreenBreadcrumb /> */}
-      {/* <div className="spacer-h-2" /> */}
       <h2>{t("assignedToMeTaskListName")}</h2>
       <div className="spacer-h-1" />
       <div

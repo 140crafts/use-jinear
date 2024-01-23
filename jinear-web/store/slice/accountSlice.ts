@@ -60,40 +60,9 @@ export const selectCurrentAccountsWorkspaces = (state: RootState) => state.accou
 export const selectCurrentAccountHasAnyWorkspace = (state: RootState) =>
   state.account.current?.workspaces == null || state.account.current?.workspaces.length == 0;
 
-export const selectCurrentAccountsPreferredWorkspace = (state: RootState) => {
-  return state.account.current?.workspaceDisplayPreference?.workspace;
-};
-export const selectCurrentAccountsPreferredWorkspaceRole = (state: RootState) => {
-  return state.account.current?.workspaceDisplayPreference?.workspaceRole;
-};
-export const selectCurrentAccountsPreferredTeamRole = (state: RootState) => {
-  return state.account.current?.workspaceDisplayPreference?.teamRole;
-};
-
-//TODO: REPLACE
-export const selectCurrentAccountsPreferredTeamRoleIsAdmin = (state: RootState) => {
-  const role = state.account.current?.workspaceDisplayPreference?.teamRole;
-  return role == "ADMIN";
-};
-
-export const selectCurrentAccountsPreferredWorkspaceId = (state: RootState) => {
-  return state.account.current?.workspaceDisplayPreference?.workspace?.workspaceId;
-};
-
-//TODO remove preferred team
-export const selectCurrentAccountsPreferredTeam = (state: RootState) => {
-  return state.account.current?.workspaceDisplayPreference?.team;
-};
-//TODO remove preferred team
-export const selectCurrentAccountsPreferredTeamId = (state: RootState) => {
-  return state.account.current?.workspaceDisplayPreference?.team?.teamId;
-};
-
 export const selectCurrentAccountsWorkspace = (workspaceId?: string) => (state: RootState) => {
   return state.account.current?.workspaces.find((workspace) => workspace.workspaceId == workspaceId);
 };
-
-//
 
 export const selectCurrentAccountsWorkspaceRoleIsAdminOrOwner = (
   accountsWorkspacePerspectiveDto: AccountsWorkspacePerspectiveDto

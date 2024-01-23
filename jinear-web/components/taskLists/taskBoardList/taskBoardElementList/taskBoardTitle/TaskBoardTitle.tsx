@@ -2,8 +2,8 @@ import { TaskBoardStateType, TaskSearchResultDto, TeamDto, WorkspaceDto } from "
 import { useInitializeTaskBoardEntryMutation } from "@/store/api/taskBoardEntryApi";
 
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import { useCurrentAccountsTeamRoleIsAdmin } from "@/hooks/useCurrentAccountsTeamRole";
 import { useUpdateDueDateMutation, useUpdateStateMutation, useUpdateTitleMutation } from "@/store/api/taskBoardApi";
-import { selectCurrentAccountsPreferredTeamRoleIsAdmin } from "@/store/slice/accountSlice";
 import {
   changeLoadingModalVisibility,
   closeBasicTextInputModal,
@@ -13,7 +13,7 @@ import {
   popDatePickerModal,
   popSearchTaskModal,
 } from "@/store/slice/modalSlice";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import { differenceInDays, format, isToday, startOfToday } from "date-fns";
 import useTranslation from "locales/useTranslation";
@@ -33,7 +33,7 @@ interface TaskBoardTitleProps {
 const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({ title, taskBoardId, boardState, team, workspace, dueDate }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const isTeamAdmin = useTypedSelector(selectCurrentAccountsPreferredTeamRoleIsAdmin);
+  const isTeamAdmin = useCurrentAccountsTeamRoleIsAdmin({ workspaceId: workspace.workspaceId, teamId: team.teamId });
 
   const [initializeTaskBoardEntry, { isLoading: isInitializeLoading, isSuccess: isInitializeSuccess }] =
     useInitializeTaskBoardEntryMutation();

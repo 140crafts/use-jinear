@@ -2,7 +2,7 @@ import AuthCheck from "@/components/authCheck/AuthCheck";
 import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 import FirebaseConfigration from "@/components/firebaseConfiguration/FirebaseConfigration";
 import OnboardListener from "@/components/onboardListener/OnboardListener";
-import InternalWorkspacePrefChangeListener from "@/components/workspaceAndTeamChangeListener/InternalWorkspacePrefChangeListener";
+
 import WorkspaceAndTeamChangeListener from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener";
 import Logger from "@/utils/logger";
 import { Metadata, Viewport } from "next";
@@ -293,13 +293,11 @@ function MyApp({ children }: { children: React.ReactNode }) {
             <DateFnsConfigration />
             <ThemeProvider>
               <AuthCheck />
-              <InternalWorkspacePrefChangeListener />
               <WorkspaceAndTeamChangeListener />
               <OnboardListener />
               <PureClientOnly>
                 <FirebaseConfigration />
               </PureClientOnly>
-              <PureClientOnly>{/* <SseListener /> */}</PureClientOnly>
               {children}
               <ToasterProvider />
               <BodyFixer />

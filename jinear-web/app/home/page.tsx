@@ -1,5 +1,5 @@
 "use client";
-import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
+import { useAccountsFirstWorkspace } from "@/hooks/useAccountsFirstWorkspace";
 import { useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
@@ -12,13 +12,14 @@ interface HomePageProps {}
 const HomePage: React.FC<HomePageProps> = ({}) => {
   const { t } = useTranslation();
   const router = useRouter();
-  const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-
+  const accountsFirstWorkspace = useAccountsFirstWorkspace();
+  const preferedWorkspace = useTypedSelector((state) => state.account.current?.workspaceDisplayPreference?.workspace);
+  const workspace = preferedWorkspace ? preferedWorkspace : accountsFirstWorkspace;
   useEffect(() => {
-    if (currentWorkspace?.username) {
-      router.replace(`/${currentWorkspace?.username}`);
+    if (workspace?.username) {
+      router.replace(`/${workspace?.username}`);
     }
-  }, [currentWorkspace?.username]);
+  }, [workspace?.username]);
 
   return (
     <div className={styles.container}>
@@ -26,7 +27,7 @@ const HomePage: React.FC<HomePageProps> = ({}) => {
       <div className="spacer-h-2" />
       <CircularProgress size={24} />
       <div className="spacer-h-2" />
-      <i>{currentWorkspace?.username}</i>
+      <i>{workspace?.username}</i>
     </div>
   );
 };
