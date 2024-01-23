@@ -25,4 +25,5 @@
 
 .workspaceMembersButton {
   align-self: flex-end;
+  color: var(--c-link-color) !important;
 }

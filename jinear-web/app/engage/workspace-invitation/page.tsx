@@ -6,7 +6,6 @@ import InvitationInfo from "@/components/workspaceInvitationScreen/invitationInf
 import InvitedAccountDifferentCurrentAccountInfo from "@/components/workspaceInvitationScreen/invitedAccountDifferentCurrentAccountInfo/InvitedAccountDifferentCurrentAccountInfo";
 import LoadingBar from "@/components/workspaceInvitationScreen/loading/LoadingBar";
 import NotLoggedInUserAfterInvitationAcceptedActions from "@/components/workspaceInvitationScreen/notLoggedInUserAfterInvitationAcceptedActions/NotLoggedInUserAfterInvitationAcceptedActions";
-import { useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDisplayPreferenceApi";
 import { useRespondInvitationMutation, useRetrieveInvitationInfoQuery } from "@/store/api/workspaceMemberInvitationApi";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
 import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
@@ -47,15 +46,11 @@ const WorkspaceInvitationResponseScreen: React.FC<WorkspaceInvitationResponseScr
   const [respondInvitation, { isLoading: isRespondLoading, isSuccess: isResponseSuccess, isError: isRespondError }] =
     useRespondInvitationMutation();
 
-  const [
-    updatePreferredWorkspace,
-    { isLoading: isUpdatePreferredWorkspaceLoading, isSuccess: isUpdatePreferredWorkspaceSuccess },
-  ] = useUpdatePreferredWorkspaceMutation();
-
   useEffect(() => {
     dispatch(changeLoadingModalVisibility({ visible: false }));
     if (isResponseSuccess && invitationInfoResponse && accepted) {
-      updatePreferredWorkspace({ workspaceId: invitationInfoResponse.data.workspaceDto.workspaceId });
+      router.push(`/${invitationInfoResponse.data.workspaceDto.username}`);
+      // updatePreferredWorkspace({ workspaceId: invitationInfoResponse.data.workspaceDto.workspaceId });
       if (currentAccount) {
         // router.replace(ROUTE_IF_LOGGED_IN);
       }

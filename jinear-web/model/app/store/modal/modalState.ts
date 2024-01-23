@@ -52,6 +52,11 @@ export interface ChangeTaskDateModalState extends ModalState {
 export interface ChangeTaskAssigneeModalState extends ModalState {
   task?: TaskDto;
 }
+
+export interface NewTeamModalState extends ModalState {
+  workspace?: WorkspaceDto;
+}
+
 export interface SearchTaskModalState extends ModalState {
   workspaceId?: string;
   teamId?: string;

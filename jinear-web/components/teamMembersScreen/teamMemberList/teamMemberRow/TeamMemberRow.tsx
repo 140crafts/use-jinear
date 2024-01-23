@@ -1,8 +1,9 @@
 import Button, { ButtonVariants } from "@/components/button";
 import Line from "@/components/line/Line";
+import { useCurrentAccountsTeamRoleIsAdmin } from "@/hooks/useCurrentAccountsTeamRole";
 import { TeamMemberDto } from "@/model/be/jinear-core";
 import { useKickMemberFromTeamMutation } from "@/store/api/teamMemberApi";
-import { selectCurrentAccountId, selectCurrentAccountsPreferredTeamRoleIsAdmin } from "@/store/slice/accountSlice";
+import { selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -21,7 +22,7 @@ const TeamMemberRow: React.FC<TeamMemberRowProps> = ({ teamMember }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const isTeamAdmin = useTypedSelector(selectCurrentAccountsPreferredTeamRoleIsAdmin);
+  const isTeamAdmin = useCurrentAccountsTeamRoleIsAdmin({ workspaceId: teamMember.workspaceId, teamId: teamMember.teamId });
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
   const viewingHimself = teamMember.accountId == currentAccountId;
 

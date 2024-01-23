@@ -1,6 +1,6 @@
 import NewTeamForm from "@/components/form/newTeamForm/NewTeamForm";
 import useWindowSize from "@/hooks/useWindowSize";
-import { closeNewTeamModal, selectNewTeamModalVisible } from "@/store/slice/modalSlice";
+import { closeNewTeamModal, selectNewTeamModalVisible, selectNewTeamModalWorkspace } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -14,6 +14,7 @@ const NewTeamModal: React.FC<NewTeamModalProps> = ({}) => {
   const dispatch = useAppDispatch();
   const { isMobile } = useWindowSize();
   const visible = useTypedSelector(selectNewTeamModalVisible);
+  const workspace = useTypedSelector(selectNewTeamModalWorkspace);
 
   const close = () => {
     dispatch(closeNewTeamModal());
@@ -27,7 +28,7 @@ const NewTeamModal: React.FC<NewTeamModalProps> = ({}) => {
       hasTitleCloseButton={true}
       requestClose={close}
     >
-      <NewTeamForm close={close} />
+      {workspace && <NewTeamForm close={close} workspace={workspace} />}
     </Modal>
   );
 };

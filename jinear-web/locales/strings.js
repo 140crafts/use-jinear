@@ -1610,6 +1610,10 @@ export default {
     en: "Select someone from workspace",
     tr: "Eklenecek kişi",
   },
+  addMemberToTeamFormAccountSelectNoWorkspaceMembers: {
+    en: "There is no suitable person to be added in the workspace.",
+    tr: "Çalışma alanında eklenebilecek uygun kimse bulunmuyor.",
+  },
   addMemberToTeamFormAccountSelectInfo: {
     en: "You can select existing workspace members, if you want to add someone to this workspace please visit ",
     tr: "Var olan çalışma alanı üyelerini seçebilirsiniz. Eğer çalışma alanına birini eklemek istiyorsanız lütfen şuradan devam edin ",

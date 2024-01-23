@@ -1,11 +1,10 @@
 import Button, { ButtonVariants } from "@/components/button";
 import SegmentedControl from "@/components/segmentedControl/SegmentedControl";
 import WorkspaceUpgradeButton from "@/components/workspaceUpgradeButton/WorkspaceUpgradeButton";
-import { TeamInitializeRequest, TeamTaskVisibilityType } from "@/model/be/jinear-core";
+import { TeamInitializeRequest, TeamTaskVisibilityType, WorkspaceDto } from "@/model/be/jinear-core";
 import { useInitializeTeamMutation } from "@/store/api/teamApi";
-import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
 import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { useAppDispatch } from "@/store/store";
 import { HOST } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { normalizeUsernameReplaceSpaces } from "@/utils/normalizeHelper";
@@ -17,23 +16,23 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import styles from "./NewTeamForm.module.css";
 
 interface NewTeamFormProps {
+  workspace: WorkspaceDto;
   close: () => void;
 }
 
 const logger = Logger("NewWorkspaceForm");
 const MAX_TAG_LENGTH = 10;
 
-const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
+const NewTeamForm: React.FC<NewTeamFormProps> = ({ workspace, close }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [initializeTeam, { data: initializeResponse, isLoading }] = useInitializeTeamMutation();
-  const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
   const { register, handleSubmit, setFocus, setValue, watch } = useForm<TeamInitializeRequest>();
   const [candidateUsername, setCandidateUsername] = useState<string>("example-team");
   const currName = watch("name");
   const currTag = watch("tag");
   const [taskVisibilityType, setTaskVisibilityType] = useState<TeamTaskVisibilityType>("VISIBLE_TO_ALL_TEAM_MEMBERS");
-  const hasAccess = hasWorkspaceTeamVisibilityTypeSelectAccess(currentWorkspace);
+  const hasAccess = hasWorkspaceTeamVisibilityTypeSelectAccess(workspace);
 
   useEffect(() => {
     const normalizedUsername = normalizeUsernameReplaceSpaces(currName);
@@ -68,13 +67,13 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
 
   return (
     <form autoComplete="off" id={"new-team-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
-      {currentWorkspace && <input type="hidden" value={currentWorkspace.workspaceId} {...register("workspaceId")} />}
+      {workspace && <input type="hidden" value={workspace.workspaceId} {...register("workspaceId")} />}
       <input id={"new-team-username"} type={"hidden"} {...register("username")} />
 
       <label className={cn(styles.label, "flex-1")} htmlFor={"new-team-name"}>
         {`${t("newTeamFormName")} *`}
         <input id={"new-team-name"} type={"text"} {...register("name", { required: t("formRequiredField") })} />
-        <div className={styles.link}>{`${HOST}/${currentWorkspace?.username}/${candidateUsername?.toLocaleLowerCase()}`}</div>
+        <div className={styles.link}>{`${HOST}/${workspace?.username}/${candidateUsername?.toLocaleLowerCase()}`}</div>
       </label>
 
       <label className={cn(styles.label, "flex-1")} htmlFor={"new-team-tag"}>
@@ -103,10 +102,10 @@ const NewTeamForm: React.FC<NewTeamFormProps> = ({ close }) => {
             callback={changeTaskVisibilityType}
           />
           <label>{t(`teamTaskVisibilityDetail_${taskVisibilityType}`)}</label>
-          {!hasAccess && currentWorkspace && taskVisibilityType != "VISIBLE_TO_ALL_TEAM_MEMBERS" && (
+          {!hasAccess && workspace && taskVisibilityType != "VISIBLE_TO_ALL_TEAM_MEMBERS" && (
             <div className={styles.upgradeYourPlanContainer}>
               {t("genericYouNeedToUpgradePlanText")}
-              <WorkspaceUpgradeButton workspace={currentWorkspace} variant={"FULL"} className={styles.upgradeButton} />
+              <WorkspaceUpgradeButton workspace={workspace} variant={"FULL"} className={styles.upgradeButton} />
             </div>
           )}
         </div>

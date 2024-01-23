@@ -27,8 +27,6 @@ const InboxScreenHeader: React.FC<InboxScreenHeaderProps> = ({ workspace, filter
 
   return (
     <div className={styles.container}>
-      {/* <InboxScreenBreadcrumbs /> */}
-      {/* <div className="spacer-h-2" /> */}
       <h2>{t("inboxScreenHeader")}</h2>
       <div className={styles.actionBar}>
         <div

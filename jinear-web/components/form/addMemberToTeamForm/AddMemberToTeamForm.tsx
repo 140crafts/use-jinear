@@ -67,13 +67,17 @@ const AddMemberToTeamForm: React.FC<AddMemberToTeamFormProps> = ({
 
         <label className={styles.label} htmlFor={"new-member-account-id"}>
           {t("addMemberToTeamFormAccountSelectLabel")}
-          <select id="new-member-account-id" {...register("accountId")}>
-            {availableMembers.map((member) => (
-              <option key={`available-member-${member.accountId}`} value={member.accountId}>
-                {member.account.username}
-              </option>
-            ))}
-          </select>
+          {availableMembers?.length == 0 ? (
+            <div>{t("addMemberToTeamFormAccountSelectNoWorkspaceMembers")}</div>
+          ) : (
+            <select id="new-member-account-id" {...register("accountId")}>
+              {availableMembers.map((member) => (
+                <option key={`available-member-${member.accountId}`} value={member.accountId}>
+                  {member.account.username}
+                </option>
+              ))}
+            </select>
+          )}
         </label>
 
         <span className={styles.workspaceMembersInfoContainer}>

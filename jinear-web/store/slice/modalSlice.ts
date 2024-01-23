@@ -15,6 +15,7 @@ import ModalState, {
   NewReminderModalState,
   NewTaskBoardModalState,
   NewTaskModalState,
+  NewTeamModalState,
   NewTopicModalState,
   NotFoundModalState,
   ReminderListModalState,
@@ -73,6 +74,7 @@ const initialState = {
   },
   newTeamModal: {
     visible: false,
+    workspace: undefined,
   },
   searchTaskModal: {
     visible: false,
@@ -163,7 +165,7 @@ const initialState = {
   changeTaskDateModal: null | ChangeTaskDateModalState;
   changeTaskAssigneeModal: null | ChangeTaskAssigneeModalState;
   newWorkspaceModal: null | ModalState;
-  newTeamModal: null | ModalState;
+  newTeamModal: null | NewTeamModalState;
   searchTaskModal: null | SearchTaskModalState;
   dialogModal: null | DialogModalState;
   reminderListModal: null | ReminderListModalState;
@@ -265,8 +267,8 @@ const slice = createSlice({
       state.newWorkspaceModal = initialState.newWorkspaceModal;
     },
 
-    popNewTeamModal: (state, action: PayloadAction<void>) => {
-      state.newTeamModal = { visible: true };
+    popNewTeamModal: (state, action: PayloadAction<NewTeamModalState>) => {
+      state.newTeamModal = { visible: true, workspace: action.payload.workspace };
     },
     closeNewTeamModal: (state, action: PayloadAction<void>) => {
       state.newTeamModal = initialState.newTeamModal;
@@ -620,6 +622,7 @@ export const selectChangeTaskAssigneeModalTaskCurrentTeamId = (state: RootState)
 export const selectNewWorkspaceModalVisible = (state: RootState) => state.modal.newWorkspaceModal?.visible;
 
 export const selectNewTeamModalVisible = (state: RootState) => state.modal.newTeamModal?.visible;
+export const selectNewTeamModalWorkspace = (state: RootState) => state.modal.newTeamModal?.workspace;
 
 export const selectSearchTaskModalVisible = (state: RootState) => state.modal.searchTaskModal?.visible;
 export const selectSearchTaskModalWorkspaceId = (state: RootState) => state.modal.searchTaskModal?.workspaceId;

@@ -1,11 +1,8 @@
 "use client";
 import { useUpdatePreferredWorkspaceWithUsernameMutation } from "@/store/api/workspaceDisplayPreferenceApi";
-import { selectCurrentAccountsPreferredWorkspace } from "@/store/slice/accountSlice";
-import { selectReroute } from "@/store/slice/displayPreferenceSlice";
 import { useTypedSelector } from "@/store/store";
-import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import Logger from "@/utils/logger";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import React, { useEffect } from "react";
 
 interface WorkspaceAndTeamChangeListenerProps {}
@@ -13,43 +10,23 @@ interface WorkspaceAndTeamChangeListenerProps {}
 const logger = Logger("WorkspaceAndTeamChangeListener");
 
 const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerProps> = ({}) => {
-  const router = useRouter();
   const params = useParams();
   const workspaceNameFromUrl: string = params?.workspaceName as string;
-  const currentWorkspace = useTypedSelector(selectCurrentAccountsPreferredWorkspace);
-  const activeReroute = useTypedSelector(selectReroute);
+  const preferedWorkspace = useTypedSelector((state) => state.account.current?.workspaceDisplayPreference?.workspace);
 
   const currentWorkspaceDifferentFromUrl =
-    currentWorkspace && workspaceNameFromUrl && currentWorkspace.username != workspaceNameFromUrl;
+    preferedWorkspace && workspaceNameFromUrl && preferedWorkspace.username != workspaceNameFromUrl;
 
-  const [updatePreferredWorkspaceWithUsername, { isError: isWorkspaceUpdateError, status: workspaceUpdateStatus }] =
-    useUpdatePreferredWorkspaceWithUsernameMutation();
-
-  useEffect(() => {
-    if (isWorkspaceUpdateError) {
-      logger.log({ workspaceUpdateStatus });
-      router.replace(ROUTE_IF_LOGGED_IN);
-    }
-  }, [isWorkspaceUpdateError, workspaceUpdateStatus]);
+  const [updatePreferredWorkspaceWithUsername] = useUpdatePreferredWorkspaceWithUsernameMutation();
 
   useEffect(() => {
-    if (activeReroute) {
-      return;
-    } else if (currentWorkspaceDifferentFromUrl) {
+    if (currentWorkspaceDifferentFromUrl) {
       updatePreferredWorkspaceWithUsername({
         workspaceUsername: workspaceNameFromUrl,
         dontReroute: true,
       });
     }
-  }, [activeReroute, currentWorkspaceDifferentFromUrl]);
-
-  logger.log({
-    workspaceNameFromUrl,
-    currentWorkspace,
-    currentWorkspaceDifferentFromUrl,
-    activeReroute,
-  });
-
+  }, [currentWorkspaceDifferentFromUrl]);
   return null;
 };
 

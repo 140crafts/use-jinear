@@ -1,12 +1,10 @@
 import Button from "@/components/button";
 import ProfilePhoto from "@/components/profilePhoto";
 import { WorkspaceDto } from "@/model/be/jinear-core";
-import { useUpdatePreferredWorkspaceMutation } from "@/store/api/workspaceDisplayPreferenceApi";
-import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
-import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import React from "react";
 import styles from "./WorkspaceInfoListItem.module.css";
 
 interface WorkspaceInfoListItemProps {
@@ -16,18 +14,11 @@ interface WorkspaceInfoListItemProps {
 
 const WorkspaceInfoListItem: React.FC<WorkspaceInfoListItemProps> = ({ workspace, onWorkspaceChangeComplete }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const [updatePreferredWorkspace, { isLoading, isSuccess }] = useUpdatePreferredWorkspaceMutation();
-
-  useEffect(() => {
-    dispatch(changeLoadingModalVisibility({ visible: isLoading }));
-    if (!isLoading && isSuccess) {
-      onWorkspaceChangeComplete?.();
-    }
-  }, [isLoading, isSuccess]);
+  const router = useRouter();
 
   const changePrefferedWorkspace = () => {
-    updatePreferredWorkspace({ workspaceId: workspace.workspaceId });
+    router.push(`/${workspace.username}`);
+    onWorkspaceChangeComplete?.();
   };
 
   return (
