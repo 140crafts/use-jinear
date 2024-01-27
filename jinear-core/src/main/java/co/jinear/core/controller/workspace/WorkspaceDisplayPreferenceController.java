@@ -19,6 +19,7 @@ public class WorkspaceDisplayPreferenceController {
         return workspaceManager.updatePreferredWorkspace(workspaceId);
     }
 
+    @Deprecated(forRemoval = true)
     @PutMapping("/{workspaceId}/set-preferred-team/{teamId}")
     @ResponseStatus(HttpStatus.CREATED)
     public WorkspaceDisplayPreferenceResponse updatePreferredTeam(@PathVariable String workspaceId,
@@ -32,6 +33,7 @@ public class WorkspaceDisplayPreferenceController {
         return workspaceManager.updatePreferredWorkspaceWithUsername(workspaceUsername);
     }
 
+    @Deprecated(forRemoval = true)
     @PutMapping("/with-username/{workspaceUsername}/set-preferred-team/{teamUsername}")
     @ResponseStatus(HttpStatus.CREATED)
     public WorkspaceDisplayPreferenceResponse updatePreferredTeamWithUsername(@PathVariable String workspaceUsername,
