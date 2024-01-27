@@ -199,6 +199,16 @@ export const calculateHitMissTable = (vo: {
         allTasksAllMonthHitMissTable[index].push(data);
       });
     });
+  logger.log({ allTasksAllMonthHitMissTable });
+  // sort tasks in each week with duration
+  allTasksAllMonthHitMissTable.forEach((data, index) => {
+    allTasksAllMonthHitMissTable[index] = data.sort((a, b) => {
+      const aNotNullLenght = a.filter((day) => day != null).length || 0;
+      const bNotNullLenght = b.filter((day) => day != null).length || 0;
+      return bNotNullLenght - aNotNullLenght;
+    });
+  });
+  logger.log({ allTasksAllMonthHitMissTableAfterSort: allTasksAllMonthHitMissTable });
 
   let result = allTasksAllMonthHitMissTable.map(mergeWeek).map(flattenAllWeeks);
   if (result.length == 0) {
