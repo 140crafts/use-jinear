@@ -159,19 +159,24 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             buttonContainerClassName={styles.workspaceAndTeamInfoButtonContainer}
             heightVariant={ButtonHeight.short}
           />
-          <LuChevronRight />
-          <div>{t("newTaskModalTitle")}</div>
+          <div className={styles.newTaskLabelContainer}>
+            <LuChevronRight className={styles.titleChevronIcon} />
+            <div className="single-line">{t("newTaskModalTitle")}</div>
+          </div>
         </div>
 
         <TitleInput labelClass={styles.label} register={register} />
 
         {subTaskOfLabel && (
-          <div className={styles.subtaskInfo}>
-            <IoInformationCircleOutline />
-            <div
-              dangerouslySetInnerHTML={{ __html: t("newTaskFormSubtaskOfLabel").replace("${subtaskOfLabel}", subTaskOfLabel) }}
-            />
-          </div>
+          <>
+            <div className={styles.subtaskInfo}>
+              <IoInformationCircleOutline />
+              <div
+                dangerouslySetInnerHTML={{ __html: t("newTaskFormSubtaskOfLabel").replace("${subtaskOfLabel}", subTaskOfLabel) }}
+              />
+            </div>
+            <div className="spacer-h-2" />
+          </>
         )}
 
         {initialRelatedFeedItemData && feedId && feedItemId && (
@@ -233,6 +238,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             className={styles.footerButton}
             variant={ButtonVariants.contrast}
             heightVariant={ButtonHeight.short}
+            progessClassname={styles.loadingButton}
           >
             {t("newTaskModalCreate")}
           </Button>

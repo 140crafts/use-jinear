@@ -2,9 +2,11 @@ import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { popTeamPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
+import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
 import React from "react";
 import { IoHomeOutline, IoPeopleOutline } from "react-icons/io5";
+import { LuChevronRight } from "react-icons/lu";
 import styles from "./WorkspaceAndTeamInfo.module.css";
 
 interface WorkspaceAndTeamInfoProps {
@@ -53,10 +55,12 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
           className={styles.button}
           variant={ButtonVariants.filled}
           heightVariant={heightVariant}
+          data-tooltip={workspace.title}
         >
-          <IoHomeOutline />
-          <b>{workspace.title}</b>
+          <IoHomeOutline className={styles.icon} />
+          <b className="single-line">{shortenStringIfMoreThanMaxLength({ text: workspace.title || "", maxLength: 12 })}</b>
         </Button>
+        <LuChevronRight className={styles.icon} />
         <Button
           disabled={readOnly}
           className={styles.button}
@@ -64,8 +68,8 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
           heightVariant={heightVariant}
           onClick={popChangeTeamModal}
         >
-          <IoPeopleOutline />
-          <b>{team.name}</b>
+          <IoPeopleOutline className={styles.icon} />
+          <b className="single-line">{team.name}</b>
         </Button>
       </div>
     </div>

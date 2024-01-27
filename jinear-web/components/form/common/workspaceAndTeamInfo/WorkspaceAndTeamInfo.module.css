@@ -24,3 +24,8 @@
   cursor: default;
   background-color: unset !important;
 }
+
+.icon {
+  width: 12px;
+  min-width: 12px;
+}

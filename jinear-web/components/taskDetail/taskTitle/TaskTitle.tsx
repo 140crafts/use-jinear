@@ -5,7 +5,7 @@ import { useAppDispatch } from "@/store/store";
 import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
-import { IoPencil } from "react-icons/io5";
+import { LuPencil } from "react-icons/lu";
 import styles from "./TaskTitle.module.css";
 
 interface TaskTitleProps {
@@ -61,7 +61,7 @@ const TaskTitle: React.FC<TaskTitleProps> = ({ taskId, title }) => {
           className={styles.editTitleButton}
           onClick={popTitleChangeModal}
         >
-          <IoPencil />
+          <LuPencil />
         </Button>
       )}
     </div>
