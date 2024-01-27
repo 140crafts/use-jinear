@@ -20,7 +20,7 @@ const TopicCard: React.FC<TopicCardProps> = ({ topic, workspaceName, teamUsernam
       </Button>
       <div className={styles.actionContainer}>
         <Button
-          href={`/${workspaceName}/${teamUsername}/topic/edit/${topic.topicId}`}
+          href={`/${workspaceName}/tasks/${teamUsername}/topic/edit/${topic.topicId}`}
           heightVariant={ButtonHeight.short}
           variant={ButtonVariants.hoverFilled2}
           data-tooltip-right={t("topicCardEditTooltip")}
