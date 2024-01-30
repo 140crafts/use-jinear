@@ -2,11 +2,14 @@ package co.jinear.core.model.entity.integration;
 
 import co.jinear.core.converter.integration.IntegrationProviderConverter;
 import co.jinear.core.model.entity.BaseEntity;
+import co.jinear.core.model.entity.google.GoogleUserInfo;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
 import java.util.Set;
@@ -38,4 +41,9 @@ public class IntegrationInfo extends BaseEntity {
     @OneToMany(mappedBy = "integrationInfo")
     @Where(clause = "passive_id is null")
     private Set<IntegrationScope> scopes;
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "related_object_id", referencedColumnName = "google_user_info_id", insertable = false, updatable = false)
+    private GoogleUserInfo googleUserInfo;
 }

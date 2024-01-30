@@ -1,4 +1,4 @@
-package co.jinear.core.service.google;
+package co.jinear.core.service.google.gmail;
 
 import co.jinear.core.service.cache.InMemoryCacheService;
 import co.jinear.core.system.gcloud.gmail.model.response.GmailListThreadsResponse;

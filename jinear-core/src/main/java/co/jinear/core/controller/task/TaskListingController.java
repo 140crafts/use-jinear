@@ -2,6 +2,8 @@ package co.jinear.core.controller.task;
 
 import co.jinear.core.manager.task.TaskListingManager;
 import co.jinear.core.model.request.task.TaskFilterRequest;
+import co.jinear.core.model.request.task.TaskNarrowFilterRequest;
+import co.jinear.core.model.response.task.TaskListingListedResponse;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +21,11 @@ public class TaskListingController {
     @ResponseStatus(HttpStatus.OK)
     public TaskListingPaginatedResponse filter(@Valid @RequestBody TaskFilterRequest taskFilterRequest) {
         return taskListingManager.filterTasks(taskFilterRequest);
+    }
+
+    @PostMapping("/filter/narrow")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskListingListedResponse filter(@Valid @RequestBody TaskNarrowFilterRequest taskNarrowFilterRequest) {
+        return taskListingManager.filterTasks(taskNarrowFilterRequest);
     }
 }

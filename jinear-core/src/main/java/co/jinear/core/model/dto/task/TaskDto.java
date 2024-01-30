@@ -2,11 +2,14 @@ package co.jinear.core.model.dto.task;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.dto.calendar.ExternalCalendarSourceDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
+import co.jinear.core.model.enumtype.task.TaskSource;
+import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarEventInfo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -55,4 +58,10 @@ public class TaskDto extends BaseDto {
     private Set<TaskReminderDto> taskReminders;
     @Nullable
     private Set<ChecklistDto> checklists;
+    @Nullable
+    private TaskSource taskSource;
+    @Nullable
+    private ExternalCalendarSourceDto externalCalendarSourceDto;
+    @Nullable
+    private GoogleCalendarEventInfo googleCalendarEventInfo;
 }

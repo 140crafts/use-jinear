@@ -10,15 +10,17 @@ import co.jinear.core.model.enumtype.google.GoogleScopeType;
 import co.jinear.core.model.enumtype.google.UserConsentPurposeType;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
 import co.jinear.core.model.enumtype.integration.IntegrationScopeType;
-import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.auth.AuthResponse;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
+import co.jinear.core.model.vo.calendar.InitializeCalendarVo;
 import co.jinear.core.model.vo.feed.InitializeFeedVo;
 import co.jinear.core.model.vo.google.AttachAccountStateParameters;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.auth.AuthenticationStrategy;
 import co.jinear.core.service.auth.AuthenticationStrategyFactory;
+import co.jinear.core.service.calendar.CalendarOperationService;
+import co.jinear.core.service.calendar.CalendarRetrieveService;
 import co.jinear.core.service.feed.FeedOperationService;
 import co.jinear.core.service.feed.FeedRetrieveService;
 import co.jinear.core.service.google.GoogleCallbackHandlerService;
@@ -54,6 +56,8 @@ public class GoogleOAuthCallbackManager {
     private final WorkspaceValidator workspaceValidator;
     private final FeedOperationService feedOperationService;
     private final FeedRetrieveService feedRetrieveService;
+    private final CalendarRetrieveService calendarRetrieveService;
+    private final CalendarOperationService calendarOperationService;
 
     public AuthResponse login(String code, String scopes, HttpServletResponse response) {
         log.info("Login with google has started.");
@@ -66,7 +70,7 @@ public class GoogleOAuthCallbackManager {
         return mapResponse(token);
     }
 
-    public BaseResponse attachMail(String code, String scopes, String state) {
+    public void attachMail(String code, String scopes, String state) {
         String currentAccountId = sessionInfoService.currentAccountId();
         AttachAccountStateParameters parameters = gson.fromJson(state, AttachAccountStateParameters.class);
         String workspaceId = parameters.getWorkspaceId();
@@ -77,7 +81,32 @@ public class GoogleOAuthCallbackManager {
         assignExistingTokenDeletionOwnership(googleHandleTokenDto, currentAccountId);
         String integrationInfoId = initializeIntegration(googleHandleTokenDto, IntegrationScopeType.EMAIL, currentAccountId);
         initializeFeed(currentAccountId, workspaceId, googleHandleTokenDto, integrationInfoId);
-        return new BaseResponse();
+    }
+
+    public void attachCalendar(String code, String scopes, String state) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        AttachAccountStateParameters parameters = gson.fromJson(state, AttachAccountStateParameters.class);
+        String workspaceId = parameters.getWorkspaceId();
+        workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
+        log.info("Attach calendar has started. currentAccountId: {}", currentAccountId);
+        validateCalendarScopes(scopes);
+        GoogleHandleTokenDto googleHandleTokenDto = googleCallbackHandlerService.handleToken(code, scopes, UserConsentPurposeType.ATTACH_CALENDAR);
+        assignExistingTokenDeletionOwnership(googleHandleTokenDto, currentAccountId);
+        String integrationInfoId = initializeIntegration(googleHandleTokenDto, IntegrationScopeType.CALENDAR, currentAccountId);
+        initializeCalendar(currentAccountId, workspaceId, googleHandleTokenDto, integrationInfoId);
+    }
+
+    private void initializeCalendar(String currentAccountId, String workspaceId, GoogleHandleTokenDto googleHandleTokenDto, String integrationInfoId) {
+        Boolean calendarExist = calendarRetrieveService.checkCalendarExist(workspaceId, currentAccountId, integrationInfoId);
+        if (Boolean.FALSE.equals(calendarExist)) {
+            GoogleUserInfoDto googleUserInfoDto = googleHandleTokenDto.getGoogleUserInfoDto();
+            InitializeCalendarVo initializeCalendarVo = new InitializeCalendarVo();
+            initializeCalendarVo.setWorkspaceId(workspaceId);
+            initializeCalendarVo.setInitializedBy(currentAccountId);
+            initializeCalendarVo.setIntegrationInfoId(integrationInfoId);
+            initializeCalendarVo.setName(googleUserInfoDto.getEmail());
+            calendarOperationService.initializeCalendar(initializeCalendarVo);
+        }
     }
 
     private void initializeFeed(String currentAccountId, String workspaceId, GoogleHandleTokenDto googleHandleTokenDto, String integrationInfoId) {
@@ -91,16 +120,6 @@ public class GoogleOAuthCallbackManager {
             initializeFeedVo.setName(googleUserInfoDto.getEmail());
             feedOperationService.initializeFeed(initializeFeedVo);
         }
-    }
-
-    public BaseResponse attachCalendar(String code, String scopes) {
-        String currentAccountId = sessionInfoService.currentAccountId();
-        log.info("Attach calendar has started. currentAccountId: {}", currentAccountId);
-        validateCalendarScopes(scopes);
-        GoogleHandleTokenDto googleHandleTokenDto = googleCallbackHandlerService.handleToken(code, scopes, UserConsentPurposeType.ATTACH_CALENDAR);
-        assignExistingTokenDeletionOwnership(googleHandleTokenDto, currentAccountId);
-        initializeIntegration(googleHandleTokenDto, IntegrationScopeType.CALENDAR, currentAccountId);
-        return new BaseResponse();
     }
 
     private String initializeIntegration(GoogleHandleTokenDto googleHandleTokenDto, IntegrationScopeType scope, String accountId) {
@@ -139,6 +158,7 @@ public class GoogleOAuthCallbackManager {
         List<GoogleScopeType> mailScopeTypes = GoogleScopeType.getMailScopeTypes();
         mailScopeTypes.forEach(scp -> {
             if (!returnedScopes.contains(scp)) {
+                log.error("Validate mail scopes failed. Scope does not exists. scp: {}", scp);
                 throw new BusinessException("integration.google.mail.insufficient-scopes");
             }
         });
@@ -147,8 +167,9 @@ public class GoogleOAuthCallbackManager {
     private void validateCalendarScopes(String scopes) {
         List<GoogleScopeType> returnedScopes = googleScopeConverter.convert(scopes);
         List<GoogleScopeType> calendarScopeTypes = GoogleScopeType.getCalendarScopeTypes();
-        returnedScopes.forEach(scp -> {
-            if (!calendarScopeTypes.contains(scp)) {
+        calendarScopeTypes.forEach(scp -> {
+            if (!returnedScopes.contains(scp)) {
+                log.error("Validate calendar scopes failed. Scope does not exists. scp: {}", scp);
                 throw new BusinessException("integration.google.mail.insufficient-scopes");
             }
         });

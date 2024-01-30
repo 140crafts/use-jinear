@@ -71,7 +71,7 @@ public class FeedMemberManager {
         String passiveId = passiveService.createUserActionPassive();
         feedMemberOperationService.removeFeedMember(feedId, accountId, passiveId);
         passiveService.assignOwnership(passiveId, accountId);
-        return null;
+        return new BaseResponse();
     }
 
     private FeedMemberPaginatedResponse mapResponse(Page<FeedMemberDto> feedMemberDtos) {

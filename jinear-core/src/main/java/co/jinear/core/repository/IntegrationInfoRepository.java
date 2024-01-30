@@ -10,5 +10,5 @@ public interface IntegrationInfoRepository extends JpaRepository<IntegrationInfo
 
     Optional<IntegrationInfo> findByIntegrationInfoIdAndPassiveIdIsNull(String integrationInfoId);
 
-    Optional<IntegrationInfo> findByAccountIdAndProviderAndPassiveIdIsNull(String accountId, IntegrationProvider provider);
+    Optional<IntegrationInfo> findByAccountIdAndProviderAndRelatedObjectIdAndPassiveIdIsNull(String accountId, IntegrationProvider provider, String relatedObjectId);
 }

@@ -3,6 +3,9 @@ package co.jinear.core.system.gcloud.googleapis;
 import co.jinear.core.system.gcloud.googleapis.model.GmailMessageVo;
 import co.jinear.core.system.gcloud.googleapis.model.GmailThreadVo;
 import co.jinear.core.system.gcloud.googleapis.model.RetrieveBatchRequestVo;
+import co.jinear.core.system.gcloud.googleapis.model.calendar.request.RetrieveEventListRequest;
+import co.jinear.core.system.gcloud.googleapis.model.calendar.response.GoogleCalendarEventListResponse;
+import co.jinear.core.system.gcloud.googleapis.model.calendar.response.GoogleCalendarListResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -23,5 +26,19 @@ public class MockGoogleApisClient implements GoogleApisClient {
     @Override
     public List<GmailThreadVo> retrieveBatchThreads(String token, List<RetrieveBatchRequestVo> messageVoList) {
         return Collections.emptyList();
+    }
+
+    @Override
+    public GoogleCalendarListResponse retrieveCalendarList(String token) {
+        GoogleCalendarListResponse googleCalendarListResponse = new GoogleCalendarListResponse();
+        googleCalendarListResponse.setItems(Collections.emptyList());
+        return googleCalendarListResponse;
+    }
+
+    @Override
+    public GoogleCalendarEventListResponse retrieveEventList(String token, RetrieveEventListRequest request) {
+        GoogleCalendarEventListResponse googleCalendarEventListResponse = new GoogleCalendarEventListResponse();
+        googleCalendarEventListResponse.setItems(Collections.emptyList());
+        return googleCalendarEventListResponse;
     }
 }

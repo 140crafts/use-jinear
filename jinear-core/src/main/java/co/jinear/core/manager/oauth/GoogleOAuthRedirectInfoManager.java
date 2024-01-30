@@ -31,9 +31,11 @@ public class GoogleOAuthRedirectInfoManager {
         return new AuthRedirectInfoResponse(redirectUrl);
     }
 
-    public AuthRedirectInfoResponse retrieveAttachCalendarUrl() {
-        log.info("Retrieve calendar attach redirect url has started.");
-        String redirectUrl = googleRedirectInfoService.retrieveAttachCalendarUrl();
+    public AuthRedirectInfoResponse retrieveAttachCalendarUrl(String workspaceId) {
+        String accountId = sessionInfoService.currentAccountId();
+        workspaceValidator.validateHasAccess(accountId, workspaceId);
+        log.info("Retrieve calendar attach redirect url has started. workspaceId: {}, accountId: {}", workspaceId, accountId);
+        String redirectUrl = googleRedirectInfoService.retrieveAttachCalendarUrl(workspaceId);
         return new AuthRedirectInfoResponse(redirectUrl);
     }
 }

@@ -9,6 +9,8 @@ import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
 import co.jinear.core.model.request.task.TaskFilterRequest;
+import co.jinear.core.model.request.task.TaskNarrowFilterRequest;
+import co.jinear.core.model.response.task.TaskListingListedResponse;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.service.SessionInfoService;
@@ -51,6 +53,10 @@ public class TaskListingManager {
         TaskSearchFilterVo taskSearchFilterVo = taskFilterRequestConverter.convert(taskFilterRequest, memberships);
         Page<TaskDto> taskDtoPage = taskListingService.filterTasks(taskSearchFilterVo);
         return mapResponse(taskDtoPage);
+    }
+
+    public TaskListingListedResponse filterTasks(TaskNarrowFilterRequest taskNarrowFilterRequest) {
+        return null;
     }
 
     private List<TeamMemberDto> retrieveMemberships(TaskFilterRequest taskFilterRequest, String currentAccount) {

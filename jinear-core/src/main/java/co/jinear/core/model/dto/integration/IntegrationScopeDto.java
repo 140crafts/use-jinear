@@ -12,4 +12,5 @@ public class IntegrationScopeDto extends BaseDto {
     private String integrationScopeId;
     private String integrationInfoId;
     private IntegrationScopeType scope;
+    private IntegrationInfoDto integrationInfo;
 }

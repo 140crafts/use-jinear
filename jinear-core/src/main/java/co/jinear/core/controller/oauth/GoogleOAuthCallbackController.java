@@ -35,8 +35,8 @@ public class GoogleOAuthCallbackController {
 
     @GetMapping("/attach-calendar")
     @ResponseStatus(HttpStatus.OK)
-    public void attachCalendar(@RequestParam String code, @RequestParam String scope, HttpServletResponse response) throws IOException {
-        googleOAuthCallbackManager.attachCalendar(code, scope);
+    public void attachCalendar(@RequestParam String code, @RequestParam String scope, @RequestParam String state, HttpServletResponse response) throws IOException {
+        googleOAuthCallbackManager.attachCalendar(code, scope, state);
         response.sendRedirect(feProperties.getHomeUrl());
     }
 }

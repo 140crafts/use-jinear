@@ -1406,4 +1406,71 @@
             <column name="feed_item_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-304-initialize-calendar">
+        <createTable tableName="calendar">
+            <column name="calendar_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initialized_by" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="integration_info_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_workspace_id" tableName="calendar">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="ix_initialized_by" tableName="calendar">
+            <column name="initialized_by"/>
+        </createIndex>
+        <createIndex indexName="ix_integration_info_id" tableName="calendar">
+            <column name="integration_info_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-304-initialize-calendar_member">
+        <createTable tableName="calendar_member">
+            <column name="calendar_member_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="calendar_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_workspace_id" tableName="calendar_member">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="ix_account_id" tableName="calendar_member">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="ix_calendar_id" tableName="calendar_member">
+            <column name="calendar_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

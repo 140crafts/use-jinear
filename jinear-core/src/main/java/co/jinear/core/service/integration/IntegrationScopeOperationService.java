@@ -3,7 +3,6 @@ package co.jinear.core.service.integration;
 import co.jinear.core.model.entity.integration.IntegrationScope;
 import co.jinear.core.model.enumtype.integration.IntegrationScopeType;
 import co.jinear.core.repository.IntegrationScopeRepository;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,8 +21,7 @@ public class IntegrationScopeOperationService {
         log.info("Initialize integration scope has completed.");
     }
 
-    @NonNull
-    private static IntegrationScope mapToEntity(String integrationInfoId, IntegrationScopeType scope) {
+    private IntegrationScope mapToEntity(String integrationInfoId, IntegrationScopeType scope) {
         IntegrationScope integrationScope = new IntegrationScope();
         integrationScope.setIntegrationInfoId(integrationInfoId);
         integrationScope.setScope(scope);
