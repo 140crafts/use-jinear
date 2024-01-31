@@ -28,7 +28,7 @@ public class CalendarExternalSourceRetrieveService {
         return calendarDto;
     }
 
-    private List<ExternalCalendarSourceDto> retrieveIntegrationCalendarSources(IntegrationInfoDto integrationInfoDto) {
+    public List<ExternalCalendarSourceDto> retrieveIntegrationCalendarSources(IntegrationInfoDto integrationInfoDto) {
         IntegrationCalendarRetrieveStrategy integrationCalendarRetrieveStrategy = integrationCalendarRetrieveStrategyFactory.getStrategy(integrationInfoDto.getProvider());
         return integrationCalendarRetrieveStrategy.retrieveCalendarSources(integrationInfoDto);
     }

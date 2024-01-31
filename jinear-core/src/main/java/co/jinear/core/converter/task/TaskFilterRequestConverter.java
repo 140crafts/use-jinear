@@ -18,4 +18,7 @@ public abstract class TaskFilterRequestConverter {
 
     @Mapping(target = "teamMemberMap", expression = "java(teamMembershipTeamVisibilityTypeMapConverter.convert(memberships))")
     public abstract TaskSearchFilterVo convert(TaskFilterRequest taskFilterRequest, List<TeamMemberDto> memberships);
+
+    @Mapping(target = "teamMemberMap", ignore = true)
+    public abstract TaskSearchFilterVo convert(TaskFilterRequest taskFilterRequest);
 }

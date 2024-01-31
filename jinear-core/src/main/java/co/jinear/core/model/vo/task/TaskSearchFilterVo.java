@@ -1,6 +1,7 @@
 package co.jinear.core.model.vo.task;
 
 
+import co.jinear.core.model.dto.calendar.TaskExternalCalendarFilterDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.enumtype.FilterSort;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
@@ -32,4 +33,5 @@ public class TaskSearchFilterVo {
     private ZonedDateTime timespanStart;
     private ZonedDateTime timespanEnd;
     private FilterSort sort = IDATE_DESC;
+    private List<TaskExternalCalendarFilterDto> externalCalendarList;
 }

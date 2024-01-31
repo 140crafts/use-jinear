@@ -11,7 +11,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 public class RetrieveEventListRequest {
 
-    private String calendarId;
+    private String calendarSourceId;
     private String timeMin;
     private String timeMax;
     private Integer maxResults = 2500;

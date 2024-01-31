@@ -19,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CalendarMemberRetrieveService {
 
-    private final int PAGE_SIZE = 50;
+    private static final int PAGE_SIZE = 50;
 
     private final CalendarMemberRepository calendarMemberRepository;
     private final CalendarMemberDtoConverter calendarMemberDtoConverter;
@@ -33,6 +33,15 @@ public class CalendarMemberRetrieveService {
     public List<CalendarMemberDto> retrieveAccountCalendarsIncludingExternalSources(String accountId, String workspaceId) {
         log.info("Retrieve account calendars has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
         return calendarMemberRepository.findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNull(accountId, workspaceId)
+                .stream()
+                .map(calendarMemberDtoConverter::convert)
+                .map(this::retrieveExternalCalendarSources)
+                .toList();
+    }
+
+    public List<CalendarMemberDto> retrieveCalendarsIncludingExternalSources(String accountId, String workspaceId, List<String> calendarIds) {
+        log.info("Retrieve account calendars has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
+        return calendarMemberRepository.findAllByAccountIdAndWorkspaceIdAndCalendarIdIsInAndPassiveIdIsNull(accountId, workspaceId, calendarIds)
                 .stream()
                 .map(calendarMemberDtoConverter::convert)
                 .map(this::retrieveExternalCalendarSources)

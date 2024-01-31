@@ -67,7 +67,7 @@ public class GoogleIntegrationCalendarRetrieveStrategy implements IntegrationCal
                 .map(GoogleTokenDto::getAccessToken)
                 .map(token -> googleApisClient.retrieveEventList(token, retrieveEventListRequest))
                 .map(googleCalendarEventListResponse -> {
-                    String calendarId = retrieveEventListRequest.getCalendarId();
+                    String calendarId = retrieveEventListRequest.getCalendarSourceId();
                     List<GoogleCalendarEventInfo> items = googleCalendarEventListResponse.getItems();
                     return items.stream()
                             .map(googleCalendarEventInfo -> googleCalendarEventInfoToTaskDtoConverter.mapCalendarEventToTaskDto(calendarId, googleCalendarEventListResponse, googleCalendarEventInfo))

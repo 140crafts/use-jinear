@@ -78,7 +78,7 @@ public class RestGoogleApisClient implements GoogleApisClient {
 
         UriTemplateHandler template = googleApisRestTemplate.getUriTemplateHandler();
         Map<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("calendarId", request.getCalendarId());
+        uriVariables.put("calendarId", request.getCalendarSourceId());
         uriVariables.put("timeMin", request.getTimeMin());
         uriVariables.put("timeMax", request.getTimeMax());
         uriVariables.put("maxResults", request.getMaxResults().toString());

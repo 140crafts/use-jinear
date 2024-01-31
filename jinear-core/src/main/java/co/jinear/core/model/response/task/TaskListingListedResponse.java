@@ -14,5 +14,5 @@ import java.util.List;
 @ToString(callSuper = true)
 public class TaskListingListedResponse extends BaseResponse {
     @JsonProperty("data")
-    private List<TaskDto> taskDtoPage;
+    private List<TaskDto> taskDtoList;
 }

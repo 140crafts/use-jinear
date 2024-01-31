@@ -17,6 +17,8 @@ public interface CalendarMemberRepository extends JpaRepository<CalendarMember, 
 
     List<CalendarMember> findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNull(String accountId, String workspaceId);
 
+    List<CalendarMember> findAllByAccountIdAndWorkspaceIdAndCalendarIdIsInAndPassiveIdIsNull(String accountId, String workspaceId, List<String> calendarIds);
+
     Page<CalendarMember> findAllByCalendarIdAndPassiveIdIsNull(String calendarId, Pageable pageable);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
