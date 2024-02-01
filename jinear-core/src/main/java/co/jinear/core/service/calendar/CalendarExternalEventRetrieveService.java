@@ -1,12 +1,8 @@
 package co.jinear.core.service.calendar;
 
 import co.jinear.core.converter.calendar.RetrieveEventListRequestConverter;
-import co.jinear.core.model.dto.calendar.CalendarDto;
-import co.jinear.core.model.dto.calendar.CalendarMemberDto;
-import co.jinear.core.model.dto.calendar.ExternalCalendarSourceDto;
-import co.jinear.core.model.dto.calendar.TaskExternalCalendarFilterDto;
+import co.jinear.core.model.dto.calendar.*;
 import co.jinear.core.model.dto.integration.IntegrationInfoDto;
-import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.service.integration.calendar.IntegrationCalendarRetrieveStrategy;
 import co.jinear.core.service.integration.calendar.IntegrationCalendarRetrieveStrategyFactory;
@@ -24,14 +20,14 @@ import java.util.stream.Stream;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CalendarEventRetrieveService {
+public class CalendarExternalEventRetrieveService {
 
     private final CalendarMemberRetrieveService calendarMemberRetrieveService;
     private final RetrieveEventListRequestConverter retrieveEventListRequestConverter;
     private final CalendarExternalSourceRetrieveService calendarExternalSourceRetrieveService;
     private final IntegrationCalendarRetrieveStrategyFactory integrationCalendarRetrieveStrategyFactory;
 
-    public List<TaskDto> retrieveCalendarTasks(String currentAccount, TaskSearchFilterVo taskSearchFilterVo) {
+    public List<CalendarEventDto> retrieveExternalCalendarTasks(String currentAccount, TaskSearchFilterVo taskSearchFilterVo) {
         log.info("Retrieve calendar tasks has started. currentAccount: {}, taskSearchFilterVo: {}", currentAccount, taskSearchFilterVo);
         List<String> requestedCalendarIds = mapRequestedCalendarIds(taskSearchFilterVo);
 
@@ -48,7 +44,7 @@ public class CalendarEventRetrieveService {
                 .toList();
     }
 
-    private List<TaskDto> convertAndRetrieveEveryCalendars(TaskSearchFilterVo taskSearchFilterVo, CalendarDto calendarDto) {
+    private List<CalendarEventDto> convertAndRetrieveEveryCalendars(TaskSearchFilterVo taskSearchFilterVo, CalendarDto calendarDto) {
         IntegrationInfoDto integrationInfoDto = calendarDto.getIntegrationInfo();
         List<TaskExternalCalendarFilterDto> externalCalendarList = getExternalCalendarFilterIfEmptyRetrieveAllSources(taskSearchFilterVo, calendarDto, integrationInfoDto);
         return externalCalendarList.stream()
@@ -84,7 +80,7 @@ public class CalendarEventRetrieveService {
                 .orElseGet(Collections::emptyList);
     }
 
-    private List<TaskDto> retrieveExternalSourceEvents(IntegrationInfoDto integrationInfoDto, RetrieveEventListRequest retrieveEventListRequest) {
+    private List<CalendarEventDto> retrieveExternalSourceEvents(IntegrationInfoDto integrationInfoDto, RetrieveEventListRequest retrieveEventListRequest) {
         log.info("Retrieve external source events has started. retrieveEventListRequest: {}", retrieveEventListRequest);
         IntegrationCalendarRetrieveStrategy integrationCalendarRetrieveStrategy = integrationCalendarRetrieveStrategyFactory.getStrategy(integrationInfoDto.getProvider());
         return integrationCalendarRetrieveStrategy.retrieveCalendarEvents(integrationInfoDto, retrieveEventListRequest);

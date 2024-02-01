@@ -13,7 +13,6 @@ import co.jinear.core.model.response.task.TaskListingListedResponse;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.service.SessionInfoService;
-import co.jinear.core.service.calendar.CalendarEventRetrieveService;
 import co.jinear.core.service.task.TaskListingService;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
@@ -23,7 +22,10 @@ import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static co.jinear.core.model.enumtype.team.TeamTaskVisibilityType.OWNER_ASSIGNEE_AND_ADMINS;
 
@@ -37,23 +39,8 @@ public class TaskListingManager {
     private final TaskListingService taskListingService;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
     private final TaskFilterRequestConverter taskFilterRequestConverter;
-    private final CalendarEventRetrieveService calendarEventRetrieveService;
 
     public TaskListingPaginatedResponse filterTasks(TaskFilterRequest taskFilterRequest) {
-        Page<TaskDto> taskDtoPage = validateAndFilter(taskFilterRequest);
-        return mapResponse(taskDtoPage);
-    }
-
-    public TaskListingListedResponse listedFilter(TaskFilterRequest taskFilterRequest) {
-        Page<TaskDto> taskDtoPage = validateAndFilter(taskFilterRequest);
-        List<TaskDto> allTasks = new ArrayList<>(taskDtoPage.getContent());
-        List<TaskDto> calendarTasks = retrieveCalendarEvents(taskFilterRequest);
-        allTasks.addAll(calendarTasks);
-
-        return mapResponse(allTasks);
-    }
-
-    private Page<TaskDto> validateAndFilter(TaskFilterRequest taskFilterRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
         validateWorkspaceAccess(currentAccount, taskFilterRequest.getWorkspaceId());
 
@@ -62,16 +49,8 @@ public class TaskListingManager {
         validateAccountMembershipsInRequestedTeams(taskFilterRequest, memberships);
         validateTeamTaskVisibilityAndMemberRoleForAll(memberships);
         TaskSearchFilterVo taskSearchFilterVo = taskFilterRequestConverter.convert(taskFilterRequest, memberships);
-        return taskListingService.filterTasks(taskSearchFilterVo);
-    }
-
-    private List<TaskDto> retrieveCalendarEvents(TaskFilterRequest taskFilterRequest) {
-        if (Objects.nonNull(taskFilterRequest.getTimespanStart()) && Objects.nonNull(taskFilterRequest.getTimespanEnd())) {
-            String currentAccount = sessionInfoService.currentAccountId();
-            TaskSearchFilterVo taskSearchFilterVo = taskFilterRequestConverter.convert(taskFilterRequest);
-            return calendarEventRetrieveService.retrieveCalendarTasks(currentAccount, taskSearchFilterVo);
-        }
-        return Collections.emptyList();
+        Page<TaskDto> taskDtoPage = taskListingService.filterTasks(taskSearchFilterVo);
+        return mapResponse(taskDtoPage);
     }
 
     private List<TeamMemberDto> retrieveMemberships(TaskFilterRequest taskFilterRequest, String currentAccount) {
@@ -92,18 +71,18 @@ public class TaskListingManager {
         memberships.forEach(this::validateTeamTaskVisibilityAndMemberRole);
     }
 
-    private void validateAccountMembershipsInRequestedTeams(TaskFilterRequest taskFilterRequest, List<TeamMemberDto> memberships) {
-        List<String> teamIdList = taskFilterRequest.getTeamIdList();
-        if (Objects.nonNull(teamIdList) && memberships.size() != teamIdList.size()) {
-            throw new NoAccessException();
-        }
-    }
-
     private void validateTeamTaskVisibilityAndMemberRole(TeamMemberDto teamMemberDto) {
         TeamDto teamDto = teamMemberDto.getTeam();
         TeamMemberRoleType role = teamMemberDto.getRole();
 
         if (OWNER_ASSIGNEE_AND_ADMINS.equals(teamDto.getTaskVisibility()) && !List.of(TeamMemberRoleType.ADMIN, TeamMemberRoleType.MEMBER).contains(role)) {
+            throw new NoAccessException();
+        }
+    }
+
+    private void validateAccountMembershipsInRequestedTeams(TaskFilterRequest taskFilterRequest, List<TeamMemberDto> memberships) {
+        List<String> teamIdList = taskFilterRequest.getTeamIdList();
+        if (Objects.nonNull(teamIdList) && memberships.size() != teamIdList.size()) {
             throw new NoAccessException();
         }
     }

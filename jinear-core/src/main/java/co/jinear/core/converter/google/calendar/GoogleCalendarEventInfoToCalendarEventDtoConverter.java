@@ -1,11 +1,11 @@
 package co.jinear.core.converter.google.calendar;
 
 
+import co.jinear.core.model.dto.calendar.CalendarEventDto;
 import co.jinear.core.model.dto.calendar.ExternalCalendarSourceDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
-import co.jinear.core.model.dto.task.TaskDto;
+import co.jinear.core.model.enumtype.calendar.CalendarEventSourceType;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
-import co.jinear.core.model.enumtype.task.TaskSource;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.response.GoogleCalendarEventListResponse;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarEventDate;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarEventInfo;
@@ -15,76 +15,70 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class GoogleCalendarEventInfoToTaskDtoConverter {
+public class GoogleCalendarEventInfoToCalendarEventDtoConverter {
 
-    public TaskDto mapCalendarEventToTaskDto(String calendarId, GoogleCalendarEventListResponse googleCalendarEventListResponse, GoogleCalendarEventInfo googleCalendarEventInfo) {
-        TaskDto taskDto = new TaskDto();
-        mapGeneratedTaskId(googleCalendarEventInfo, taskDto);
-        mapDescription(googleCalendarEventInfo, taskDto);
-        mapDates(googleCalendarEventListResponse, googleCalendarEventInfo, taskDto);
-        mapExternalCalendarSourceDto(calendarId, googleCalendarEventListResponse, taskDto);
+    public CalendarEventDto mapCalendarEventToCalendarEventDto(String calendarId, GoogleCalendarEventListResponse googleCalendarEventListResponse, GoogleCalendarEventInfo googleCalendarEventInfo) {
+        CalendarEventDto calendarEventDto = new CalendarEventDto();
+        calendarEventDto.setCalendarEventId(googleCalendarEventInfo.getId());
+        calendarEventDto.setTitle(googleCalendarEventInfo.getSummary());
+        calendarEventDto.setCalendarEventSourceType(CalendarEventSourceType.GOOGLE_CALENDAR);
+        calendarEventDto.setRelatedGoogleCalendarEventInfo(googleCalendarEventInfo);
 
-        taskDto.setTitle(googleCalendarEventInfo.getSummary());
-        taskDto.setTaskSource(TaskSource.GOOGLE_CALENDAR);
-        taskDto.setGoogleCalendarEventInfo(googleCalendarEventInfo);
-        taskDto.setTeamId(calendarId);
+        mapDescription(googleCalendarEventInfo, calendarEventDto);
+        mapDates(googleCalendarEventListResponse, googleCalendarEventInfo, calendarEventDto);
+        mapExternalCalendarSourceDto(calendarId, googleCalendarEventListResponse, calendarEventDto);
 
-        return taskDto;
+        return calendarEventDto;
     }
 
-    private void mapExternalCalendarSourceDto(String calendarId, GoogleCalendarEventListResponse googleCalendarEventListResponse, TaskDto taskDto) {
+    private void mapExternalCalendarSourceDto(String calendarId, GoogleCalendarEventListResponse googleCalendarEventListResponse, CalendarEventDto calendarEventDto) {
         ExternalCalendarSourceDto externalCalendarSourceDto = new ExternalCalendarSourceDto();
         externalCalendarSourceDto.setId(calendarId);
         externalCalendarSourceDto.setSummary(googleCalendarEventListResponse.getSummary());
         externalCalendarSourceDto.setDescription(googleCalendarEventListResponse.getDescription());
         externalCalendarSourceDto.setTimeZone(googleCalendarEventListResponse.getTimeZone());
-        taskDto.setExternalCalendarSourceDto(externalCalendarSourceDto);
+        calendarEventDto.setExternalCalendarSourceDto(externalCalendarSourceDto);
     }
 
-    private void mapDescription(GoogleCalendarEventInfo googleCalendarEventInfo, TaskDto taskDto) {
+    private void mapDescription(GoogleCalendarEventInfo googleCalendarEventInfo, CalendarEventDto calendarEventDto) {
         String eventDescription = googleCalendarEventInfo.getDescription();
 
         RichTextDto description = new RichTextDto();
-        description.setRichTextId(taskDto.getTaskId() + "-description");
-        description.setRelatedObjectId(taskDto.getTaskId());
+        description.setRichTextId(calendarEventDto.getCalendarEventId() + "-description");
+        description.setRelatedObjectId(calendarEventDto.getCalendarEventId());
         description.setType(RichTextType.TASK_DETAIL);
         description.setValue(eventDescription);
 
-        taskDto.setDescription(description);
+        calendarEventDto.setDescription(description);
     }
 
-    private void mapGeneratedTaskId(GoogleCalendarEventInfo googleCalendarEventInfo, TaskDto taskDto) {
-        String generatedTaskId = googleCalendarEventInfo.getId() + googleCalendarEventInfo.getEtag();
-        taskDto.setTaskId(generatedTaskId);
-    }
-
-    private void mapDates(GoogleCalendarEventListResponse googleCalendarEventListResponse, GoogleCalendarEventInfo googleCalendarEventInfo, TaskDto taskDto) {
+    private void mapDates(GoogleCalendarEventListResponse googleCalendarEventListResponse, GoogleCalendarEventInfo googleCalendarEventInfo, CalendarEventDto calendarEventDto) {
         Optional.of(googleCalendarEventInfo)
                 .map(GoogleCalendarEventInfo::getStart)
                 .map(GoogleCalendarEventDate::getDate)
                 .map(dateStr -> ZonedDateHelper.parseWithDateTimeFormat4(dateStr, googleCalendarEventListResponse.getTimeZone()))
-                .ifPresent(taskDto::setAssignedDate);
+                .ifPresent(calendarEventDto::setAssignedDate);
         Optional.of(googleCalendarEventInfo)
                 .map(GoogleCalendarEventInfo::getStart)
                 .map(GoogleCalendarEventDate::getDateTime)
                 .map(ZonedDateHelper::parseIsoDateTime)
                 .ifPresent(startDateTime -> {
-                    taskDto.setAssignedDate(startDateTime);
-                    taskDto.setHasPreciseAssignedDate(Boolean.TRUE);
+                    calendarEventDto.setAssignedDate(startDateTime);
+                    calendarEventDto.setHasPreciseAssignedDate(Boolean.TRUE);
                 });
 
         Optional.of(googleCalendarEventInfo)
                 .map(GoogleCalendarEventInfo::getEnd)
                 .map(GoogleCalendarEventDate::getDate)
                 .map(dateStr -> ZonedDateHelper.parseWithDateTimeFormat4(dateStr, googleCalendarEventListResponse.getTimeZone()))
-                .ifPresent(taskDto::setDueDate);
+                .ifPresent(calendarEventDto::setDueDate);
         Optional.of(googleCalendarEventInfo)
                 .map(GoogleCalendarEventInfo::getEnd)
                 .map(GoogleCalendarEventDate::getDateTime)
                 .map(ZonedDateHelper::parseIsoDateTime)
                 .ifPresent(startDateTime -> {
-                    taskDto.setDueDate(startDateTime);
-                    taskDto.setHasPreciseDueDate(Boolean.TRUE);
+                    calendarEventDto.setDueDate(startDateTime);
+                    calendarEventDto.setHasPreciseDueDate(Boolean.TRUE);
                 });
     }
 }

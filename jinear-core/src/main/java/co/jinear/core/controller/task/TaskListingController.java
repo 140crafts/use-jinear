@@ -2,7 +2,6 @@ package co.jinear.core.controller.task;
 
 import co.jinear.core.manager.task.TaskListingManager;
 import co.jinear.core.model.request.task.TaskFilterRequest;
-import co.jinear.core.model.response.task.TaskListingListedResponse;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,12 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class TaskListingController {
 
     private final TaskListingManager taskListingManager;
-
-    @PostMapping
-    @ResponseStatus(HttpStatus.OK)
-    public TaskListingListedResponse listedFilter(@Valid @RequestBody TaskFilterRequest taskFilterRequest) {
-        return taskListingManager.listedFilter(taskFilterRequest);
-    }
 
     @PostMapping("/filter")
     @ResponseStatus(HttpStatus.OK)

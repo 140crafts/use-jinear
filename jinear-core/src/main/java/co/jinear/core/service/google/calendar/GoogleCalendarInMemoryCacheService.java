@@ -1,7 +1,7 @@
 package co.jinear.core.service.google.calendar;
 
+import co.jinear.core.model.dto.calendar.CalendarEventDto;
 import co.jinear.core.model.dto.calendar.ExternalCalendarSourceDto;
-import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.service.cache.InMemoryCacheService;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.request.RetrieveEventListRequest;
 import lombok.RequiredArgsConstructor;
@@ -50,13 +50,13 @@ public class GoogleCalendarInMemoryCacheService {
         return Boolean.TRUE.equals(inMemoryCacheService.hasKey(key));
     }
 
-    public List<TaskDto> cacheCalendarEventList(RetrieveEventListRequest retrieveEventListRequest, List<TaskDto> taskDtoList) {
+    public List<CalendarEventDto> cacheCalendarEventList(RetrieveEventListRequest retrieveEventListRequest, List<CalendarEventDto> calendarEventDtoList) {
         String key = generateCalendarEventsKey(retrieveEventListRequest);
-        inMemoryCacheService.put(key, taskDtoList, Duration.ofMinutes(TTL).toSeconds());
-        return taskDtoList;
+        inMemoryCacheService.put(key, calendarEventDtoList, Duration.ofMinutes(TTL).toSeconds());
+        return calendarEventDtoList;
     }
 
-    public List<TaskDto> getCachedCalendarEventList(RetrieveEventListRequest retrieveEventListRequest) {
+    public List<CalendarEventDto> getCachedCalendarEventList(RetrieveEventListRequest retrieveEventListRequest) {
         log.info("Get cached calendar event list has started.");
         String key = generateCalendarEventsKey(retrieveEventListRequest);
         return cast(inMemoryCacheService.get(key));

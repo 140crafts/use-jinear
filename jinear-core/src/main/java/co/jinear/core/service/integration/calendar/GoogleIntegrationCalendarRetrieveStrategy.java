@@ -1,12 +1,12 @@
 package co.jinear.core.service.integration.calendar;
 
-import co.jinear.core.converter.google.calendar.GoogleCalendarEventInfoToTaskDtoConverter;
+import co.jinear.core.converter.google.calendar.GoogleCalendarEventInfoToCalendarEventDtoConverter;
 import co.jinear.core.converter.google.calendar.GoogleCalendarInfoToExternalCalendarSourceDtoConverter;
+import co.jinear.core.model.dto.calendar.CalendarEventDto;
 import co.jinear.core.model.dto.calendar.ExternalCalendarSourceDto;
 import co.jinear.core.model.dto.google.GoogleTokenDto;
 import co.jinear.core.model.dto.google.GoogleUserInfoDto;
 import co.jinear.core.model.dto.integration.IntegrationInfoDto;
-import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
 import co.jinear.core.service.google.GoogleTokenValidatedRetrieveService;
 import co.jinear.core.service.google.calendar.GoogleCalendarInMemoryCacheService;
@@ -34,7 +34,7 @@ public class GoogleIntegrationCalendarRetrieveStrategy implements IntegrationCal
     private final GoogleApisClient googleApisClient;
     private final GoogleCalendarInMemoryCacheService googleCalendarInMemoryCacheService;
     private final GoogleCalendarInfoToExternalCalendarSourceDtoConverter googleCalendarInfoToExternalCalendarSourceDtoConverter;
-    private final GoogleCalendarEventInfoToTaskDtoConverter googleCalendarEventInfoToTaskDtoConverter;
+    private final GoogleCalendarEventInfoToCalendarEventDtoConverter googleCalendarEventInfoToCalendarEventDtoConverter;
 
     @Override
     public IntegrationProvider getProvider() {
@@ -52,14 +52,14 @@ public class GoogleIntegrationCalendarRetrieveStrategy implements IntegrationCal
     }
 
     @Override
-    public List<TaskDto> retrieveCalendarEvents(IntegrationInfoDto integrationInfoDto, RetrieveEventListRequest retrieveEventListRequest) {
+    public List<CalendarEventDto> retrieveCalendarEvents(IntegrationInfoDto integrationInfoDto, RetrieveEventListRequest retrieveEventListRequest) {
         return Optional.of(retrieveEventListRequest)
                 .filter(googleCalendarInMemoryCacheService::hasCachedCalendarEventList)
                 .map(googleCalendarInMemoryCacheService::getCachedCalendarEventList)
                 .orElseGet(() -> retrieveAndCacheEvents(integrationInfoDto, retrieveEventListRequest));
     }
 
-    private List<TaskDto> retrieveAndCacheEvents(IntegrationInfoDto integrationInfoDto, RetrieveEventListRequest retrieveEventListRequest) {
+    private List<CalendarEventDto> retrieveAndCacheEvents(IntegrationInfoDto integrationInfoDto, RetrieveEventListRequest retrieveEventListRequest) {
         return Optional.of(integrationInfoDto)
                 .map(IntegrationInfoDto::getGoogleUserInfo)
                 .map(GoogleUserInfoDto::getGoogleUserInfoId)
@@ -70,10 +70,10 @@ public class GoogleIntegrationCalendarRetrieveStrategy implements IntegrationCal
                     String calendarId = retrieveEventListRequest.getCalendarSourceId();
                     List<GoogleCalendarEventInfo> items = googleCalendarEventListResponse.getItems();
                     return items.stream()
-                            .map(googleCalendarEventInfo -> googleCalendarEventInfoToTaskDtoConverter.mapCalendarEventToTaskDto(calendarId, googleCalendarEventListResponse, googleCalendarEventInfo))
+                            .map(googleCalendarEventInfo -> googleCalendarEventInfoToCalendarEventDtoConverter.mapCalendarEventToCalendarEventDto(calendarId, googleCalendarEventListResponse, googleCalendarEventInfo))
                             .toList();
                 })
-                .map(taskDtoList -> googleCalendarInMemoryCacheService.cacheCalendarEventList(retrieveEventListRequest, taskDtoList))
+                .map(calendarEventDtoList -> googleCalendarInMemoryCacheService.cacheCalendarEventList(retrieveEventListRequest, calendarEventDtoList))
                 .orElseGet(Collections::emptyList);
     }
 
