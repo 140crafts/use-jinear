@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-01-10 21:33:23.
+// Generated using typescript-generator version 3.0.1157 on 2024-02-01 22:30:36.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  first: boolean;
   last: boolean;
+  first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -62,8 +62,58 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
   item: any;
   expiresAt: Date;
-  notExpired: boolean;
   expired: boolean;
+  notExpired: boolean;
+}
+
+export interface CalendarDto {
+  calendarId: string;
+  workspaceId: string;
+  initializedBy: string;
+  integrationInfoId: string;
+  integrationInfo: IntegrationInfoDto;
+  name: string;
+  provider: IntegrationProvider;
+  scopes: IntegrationScopeType[];
+  calendarSources?: ExternalCalendarSourceDto[] | null;
+}
+
+export interface CalendarEventDto {
+  calendarEventId: string;
+  title: string;
+  assignedDate: Date;
+  dueDate: Date;
+  hasPreciseAssignedDate: boolean;
+  hasPreciseDueDate: boolean;
+  calendarEventSourceType: CalendarEventSourceType;
+  description?: RichTextDto | null;
+  location?: string | null;
+  externalLink?: string | null;
+  externalCalendarSourceDto?: ExternalCalendarSourceDto | null;
+  relatedTask?: TaskDto | null;
+  relatedGoogleCalendarEventInfo?: GoogleCalendarEventInfo | null;
+}
+
+export interface CalendarMemberDto {
+  calendarMemberId: string;
+  accountId: string;
+  workspaceId: string;
+  calendarId: string;
+  account: AccountDto;
+  calendar: CalendarDto;
+}
+
+export interface ExternalCalendarSourceDto {
+  id: string;
+  summary?: string | null;
+  description?: string | null;
+  location?: string | null;
+  timeZone?: string | null;
+}
+
+export interface TaskExternalCalendarFilterDto {
+  calendarId: string;
+  calendarSourceId: string;
 }
 
 export interface FeedDto extends BaseDto {
@@ -93,10 +143,10 @@ export interface GmailMessageDto extends BaseDto {
   to: string;
   subject: string;
   body: string;
-  ginternalDate: string;
+  gid: string;
   gthreadId: string;
   ghistoryId: string;
-  gid: string;
+  ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -180,13 +230,15 @@ export interface IntegrationInfoDto extends BaseDto {
   provider: IntegrationProvider;
   accountId: string;
   relatedObjectId: string;
-  scopes: IntegrationScopeDto[];
+  scopes: IntegrationScopeType[];
+  googleUserInfo: GoogleUserInfoDto;
 }
 
 export interface IntegrationScopeDto extends BaseDto {
   integrationScopeId: string;
   integrationInfoId: string;
   scope: IntegrationScopeType;
+  integrationInfo: IntegrationInfoDto;
 }
 
 export interface AccessibleMediaDto extends MediaDto {
@@ -721,6 +773,14 @@ export interface LoginWithPasswordRequest extends BaseRequest {
   timeZone?: string | null;
 }
 
+export interface CalendarEventFilterRequest extends BaseRequest {
+  workspaceId: string;
+  teamIdList?: string[] | null;
+  externalCalendarList?: TaskExternalCalendarFilterDto[] | null;
+  timespanStart: Date;
+  timespanEnd: Date;
+}
+
 export interface NotificationTargetInitializeRequest extends BaseRequest {
   externalTargetId: string;
   targetType?: NotificationTargetType | null;
@@ -806,6 +866,7 @@ export interface TaskFilterRequest extends BaseRequest {
   timespanStart?: Date | null;
   timespanEnd?: Date | null;
   sort?: FilterSort | null;
+  externalCalendarList?: TaskExternalCalendarFilterDto[] | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -966,6 +1027,18 @@ export interface AuthResponse extends BaseResponse {
   token: string;
 }
 
+export interface CalendarEventListingResponse extends BaseResponse {
+  data: CalendarEventDto[];
+}
+
+export interface CalendarMemberListingResponse extends BaseResponse {
+  data: CalendarMemberDto[];
+}
+
+export interface CalendarMemberPaginatedResponse extends BaseResponse {
+  data: PageDto<CalendarMemberDto>;
+}
+
 export interface FeedMemberListingResponse extends BaseResponse {
   data: FeedMemberDto[];
 }
@@ -1028,6 +1101,10 @@ export interface TaskBoardRetrieveResponse extends BaseResponse {
 
 export interface TaskFeedItemResponse extends BaseResponse {
   data: TaskFeedItemListDto;
+}
+
+export interface TaskListingListedResponse extends BaseResponse {
+  data: TaskDto[];
 }
 
 export interface TaskListingPaginatedResponse extends BaseResponse {
@@ -1130,9 +1207,64 @@ export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
   data: PageDto<WorkspaceMemberDto>;
 }
 
+export interface GoogleCalendarEventInfo {
+  kind: string;
+  etag: string;
+  id: string;
+  status: string;
+  htmlLink: string;
+  created: string;
+  updated: string;
+  summary: string;
+  description: string;
+  location: string;
+  colorId: string;
+  creator: GoogleCalendarEventAttendee;
+  organizer: GoogleCalendarEventAttendee;
+  start: GoogleCalendarEventDate;
+  end: GoogleCalendarEventDate;
+  endTimeUnspecified: boolean;
+  recurrence: string[];
+  recurringEventId: string;
+  originalStartTime: GoogleCalendarEventDate;
+  transparency: string;
+  visibility: string;
+  sequence: number;
+  attendees: GoogleCalendarEventAttendee[];
+  attendeesOmitted: boolean;
+  hangoutLink: string;
+  anyoneCanAddSelf: boolean;
+  guestsCanInviteOthers: boolean;
+  guestsCanModify: boolean;
+  guestsCanSeeOtherGuests: boolean;
+  privateCopy: boolean;
+  locked: boolean;
+  eventType: string;
+  icalUID: string;
+}
+
 export interface PassthroughDetailDto {
   passthroughType: PassthroughType;
   detailValue: string;
+}
+
+export interface GoogleCalendarEventAttendee {
+  id: string;
+  email: string;
+  displayName: string;
+  organizer: string;
+  self: string;
+  resource: string;
+  optional: string;
+  responseStatus: string;
+  comment: string;
+  additionalGuests: number;
+}
+
+export interface GoogleCalendarEventDate {
+  date: string;
+  dateTime: string;
+  timeZone: string;
 }
 
 export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
@@ -1146,6 +1278,8 @@ export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXP
 export type RoleType = "ADMIN" | "SERVICE" | "USER";
 
 export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL";
+
+export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
 export type GoogleScopeType =
   | "OPEN_ID"
@@ -1314,6 +1448,8 @@ export type TaskBoardStateType = "OPEN" | "CLOSED";
 export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
 
 export type TaskReminderType = "ASSIGNED_DATE" | "DUE_DATE" | "SPECIFIC_DATE";
+
+export type TaskSource = "GOOGLE_CALENDAR";
 
 export type TaskState = "TO_DO" | "IN_PROGRESS" | "IN_TEST" | "WONT_DO" | "DONE";
 

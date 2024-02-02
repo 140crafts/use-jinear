@@ -7,6 +7,7 @@ const initialState = {
   appMenu: {
     mobileVisible: false,
     tasksMenuVisible: true,
+    calendarsMenuVisible: true,
   },
 } as {
   appMenu: AppMenu;
@@ -33,13 +34,21 @@ const slice = createSlice({
     closeTasksMenu: (state, action: PayloadAction<void>) => {
       state.appMenu.tasksMenuVisible = false;
     },
+    toggleCalendarsMenu: (state, action: PayloadAction<void>) => {
+      state.appMenu.calendarsMenuVisible = !state.appMenu.calendarsMenuVisible;
+    },
+    closeCalendarsMenu: (state, action: PayloadAction<void>) => {
+      state.appMenu.calendarsMenuVisible = false;
+    },
     popAllMenus: (state, action: PayloadAction<void>) => {
       state.appMenu.mobileVisible = true;
       state.appMenu.tasksMenuVisible = true;
+      state.appMenu.calendarsMenuVisible = true;
     },
     closeAllMenus: (state, action: PayloadAction<void>) => {
       state.appMenu.mobileVisible = false;
       state.appMenu.tasksMenuVisible = false;
+      state.appMenu.calendarsMenuVisible = false;
     },
     toggleMenu: (state, action: PayloadAction<void>) => {
       state.appMenu.mobileVisible = !state.appMenu.mobileVisible;
@@ -48,11 +57,24 @@ const slice = createSlice({
   },
 });
 
-export const { popMenu, closeMenu, popTasksMenu, closeTasksMenu, toggleTasksMenu, popAllMenus, closeAllMenus, toggleMenu } =
-  slice.actions;
+export const {
+  popMenu,
+  closeMenu,
+  popTasksMenu,
+  closeTasksMenu,
+  toggleTasksMenu,
+  toggleCalendarsMenu,
+  closeCalendarsMenu,
+  popAllMenus,
+  closeAllMenus,
+  toggleMenu,
+} = slice.actions;
 export default slice.reducer;
 
 export const selectAppMenuVisible = (state: RootState) => state.displayPreference.appMenu.mobileVisible;
 export const selectTasksMenuVisible = (state: RootState) => state.displayPreference.appMenu.tasksMenuVisible;
+export const selectCalendarsMenuVisible = (state: RootState) => state.displayPreference.appMenu.calendarsMenuVisible;
 export const selectAnyMenuVisible = (state: RootState) =>
-  state.displayPreference.appMenu.mobileVisible || state.displayPreference.appMenu.tasksMenuVisible;
+  state.displayPreference.appMenu.mobileVisible ||
+  state.displayPreference.appMenu.tasksMenuVisible ||
+  state.displayPreference.appMenu.calendarsMenuVisible;

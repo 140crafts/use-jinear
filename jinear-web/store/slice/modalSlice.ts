@@ -11,6 +11,7 @@ import ModalState, {
   DialogModalState,
   IntegrationFeedItemDetailModalState,
   LoginWith2FaMailModalState,
+  NewCalendarIntegrationModalState,
   NewMailIntegrationModalState,
   NewReminderModalState,
   NewTaskBoardModalState,
@@ -154,6 +155,9 @@ const initialState = {
   workspaceMemberPickerModal: {
     visible: false,
   },
+  newCalendarIntegrationModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -192,6 +196,7 @@ const initialState = {
   newMailIntegrationModal: null | NewMailIntegrationModalState;
   integrationFeedItemDetailModal: null | IntegrationFeedItemDetailModalState;
   workspaceMemberPickerModal: null | WorkspaceMemberPickerModalState;
+  newCalendarIntegrationModal: null | NewCalendarIntegrationModalState;
 };
 
 const slice = createSlice({
@@ -463,6 +468,13 @@ const slice = createSlice({
       state.workspaceMemberPickerModal = initialState.workspaceMemberPickerModal;
     },
 
+    popNewCalendarIntegrationModal: (state, action: PayloadAction<NewCalendarIntegrationModalState>) => {
+      state.newCalendarIntegrationModal = { visible: true, workspaceId: action.payload.workspaceId };
+    },
+    closeNewCalendarIntegrationModal: (state, action: PayloadAction<void>) => {
+      state.newCalendarIntegrationModal = initialState.newMailIntegrationModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -553,6 +565,8 @@ export const {
   closeIntegrationFeedItemDetailModal,
   popWorkspaceMemberPickerModal,
   closeWorkspaceMemberPickerModal,
+  popNewCalendarIntegrationModal,
+  closeNewCalendarIntegrationModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -757,3 +771,7 @@ export const selectWorkspaceMemberPickerModalMultiple = (state: RootState) => st
 export const selectWorkspaceMemberPickerModalInitialSelectionOnMultiple = (state: RootState) =>
   state.modal.workspaceMemberPickerModal?.initialSelectionOnMultiple;
 export const selectWorkspaceMemberPickerModalOnPick = (state: RootState) => state.modal.workspaceMemberPickerModal?.onPick;
+
+export const selectNewCalendarIntegrationModalVisible = (state: RootState) => state.modal.newCalendarIntegrationModal?.visible;
+export const selectNewCalendarIntegrationModalWorkspaceId = (state: RootState) =>
+  state.modal.newCalendarIntegrationModal?.workspaceId;

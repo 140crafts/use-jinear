@@ -2874,6 +2874,10 @@ export default {
     en: "We carefully minimized the scope of access. All requested permissions are necessary for us to list your emails. Your emails are not recorded by Jinear, and they are not used for any data processing purposes.",
     tr: "Erişim kapsamını dikkatlice en aza indirdik. İstenen tüm izinler, maillerinizi listelememiz için gereklidir. Mailleriniz Jinear tarafından kayit altina alınmaz, hiçbir veri işleme için kullanılmazlar.",
   },
+  newMailIntegrationModalLabelSubtext: {
+    en: "* We cache Gmail responses fully encrypted for a couple of minutes in order to avoid hitting Gmail API limits. (Typically 1-2 minutes)",
+    tr: "* Gmail yanıtlarını tamamen şifreli bir şekilde birkaç dakika boyunca önbelleğe alıyoruz, böylece Gmail API sınırlarını aşmaktan kaçınıyoruz.",
+  },
   newMailIntegrationModalAddGmailLabel: {
     en: "Add Gmail Feed",
     tr: "Gmail Akışı Ekle",
@@ -3101,5 +3105,45 @@ export default {
   teamHomePageTitle: {
     en: "Team ${teamName} Home",
     tr: "Genel Bakış - ${teamName}",
+  },
+  sideMenuTeamCalendarsTitle: {
+    en: "Team Calendars",
+    tr: "Ekip Takvimleri",
+  },
+  sideMenuExternalCalendarsTitle: {
+    en: "External Calendars",
+    tr: "Harici Takvimler",
+  },
+  sideMenuAddCalendarIntegrationLabel: {
+    en: "Add Calendar",
+    tr: "Takvim Ekle",
+  },
+  newCalendarIntegrationModalLabel: {
+    en: "We carefully minimized the scope of access. All requested permissions are necessary for us to list your calendars. Your calendars and their events are not recorded by Jinear, and they are not used for any data processing purposes.",
+    tr: "Erişim kapsamını dikkatlice en aza indirdik. İstenen tüm izinler, takvimlerinizi listelememiz için gereklidir. Takvimleriniz ve etkinlikleriniz Jinear tarafından kayit altina alınmaz, hiçbir veri işleme için kullanılmazlar.",
+  },
+  newCalendarIntegrationModalLabelSubtext: {
+    en: "* We cache Google Calendar responses fully encrypted for a couple of minutes in order to avoid hitting Google Calendar API limits. (Typically 1-2 minutes)",
+    tr: "* Google Takvim yanıtlarını tamamen şifreli bir şekilde birkaç dakika boyunca önbelleğe alıyoruz, böylece Google Calendar API sınırlarını aşmaktan kaçınıyoruz.",
+  },
+  newCalendarIntegrationModalAddGoogleCalendarLabel: {
+    en: "Add Google Calendar",
+    tr: "Google Takvim Ekle",
+  },
+  newCalendarIntegrationModalTitle: {
+    en: "New Calendar Integration",
+    tr: "Yeni Takvim Entegrasyonu",
+  },
+  unnamedCalendar: {
+    en: "Unnamed Calendar",
+    tr: "Adlandırılmamış Takvim",
+  },
+  sideMenuCalendarMembers: {
+    en: "Calendar members",
+    tr: "Takvim üyeleri",
+  },
+  sideMenuCalendarSettings: {
+    en: "Calendar settings",
+    tr: "Takvim ayarları",
   },
 };

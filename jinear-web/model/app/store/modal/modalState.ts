@@ -196,3 +196,7 @@ export interface WorkspaceMemberPickerModalState extends ModalState {
   initialSelectionOnMultiple?: WorkspaceMemberDto[];
   onPick?: (pickedList: WorkspaceMemberDto[]) => void;
 }
+
+export interface NewCalendarIntegrationModalState extends ModalState {
+  workspaceId?: string;
+}

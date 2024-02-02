@@ -39,6 +39,8 @@ const NewMailIntegrationModal: React.FC<NewMailIntegrationModalProps> = ({}) => 
       requestClose={close}
     >
       <span className={styles.infoText}>{t("newMailIntegrationModalLabel")}</span>
+      <div className="spacer-h-2" />
+      <span className={styles.subInfoText}>{t("newMailIntegrationModalLabelSubtext")}</span>
       <div className="spacer-h-4" />
       <Button
         loading={isLoading}

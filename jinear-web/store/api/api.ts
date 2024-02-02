@@ -51,6 +51,7 @@ export const tagTypes = [
   "v1/feed/content/workspace/{workspaceId}/{feedId}/item/{itemId}",
   "v1/team/{teamId}/team-state/{teamState}",
   "v1/oauth/google/redirect-info/attach-mail",
+  "v1/oauth/google/redirect-info/attach-calendar",
   "v1/feed/member/memberships/{workspaceId}",
   "v1/task/feed-item/from-task/req.taskId",
   "v1/feed/member/list/{feedId}",
@@ -58,6 +59,8 @@ export const tagTypes = [
   "v1/notification/event/{workspaceId}",
   "v1/notification/event/{workspaceId}/team/{teamId}",
   "v1/task/search/${workspaceId}/${teamId}/{title}",
+  "v1/calendar/member/memberships/{workspaceId}",
+  "v1/calendar/member/list/{calendarId}",
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

@@ -37,6 +37,7 @@ import WorkspacePickerModal from "@/components/modal/workspacePickerModal/Worksp
 import WorkspaceSwitchModal from "@/components/modal/workspaceSwitchModal/WorkspaceSwitchModal";
 import DeviceOfflineModal from "../modal/deviceOfflineModal/DeviceOfflineModal";
 import IntegrationFeedItemDetailModal from "../modal/integrationFeedItemDetailModal/IntegrationFeedItemDetailModal";
+import NewCalendarIntegrationModal from "../modal/newCalendarIntegrationModal/NewCalendarIntegrationModal";
 import NewMailIntegrationModal from "../modal/newMailIntegrationModal/NewMailIntegrationModal";
 import WorkspaceMemberPickerModal from "../modal/workspaceMemberPickerModal/WorkspaceMemberPickerModal";
 
@@ -45,6 +46,7 @@ interface ModalProviderProps {}
 const globalModals: any = (
   <>
     <WorkspaceMemberPickerModal />
+    <NewCalendarIntegrationModal />
     <NewMailIntegrationModal />
     <MenuMoreActionModal />
     <WorkspaceSwitchModal />

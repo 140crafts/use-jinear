@@ -1,22 +1,21 @@
 import Button, { ButtonHeight } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
+import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle";
 import { WorkspaceDto } from "@/model/be/jinear-core";
 import { useRetrieveMembershipsQuery } from "@/store/api/teamMemberApi";
-import { popNewTeamModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import { useToggle } from "@uidotdev/usehooks";
 import useTranslation from "locales/useTranslation";
 import React, { useMemo } from "react";
 import { LuChevronDown, LuChevronRight } from "react-icons/lu";
-import MenuGroupTitle from "../menuGroupTitle/MenuGroupTitle";
-import styles from "./BasicTeamList.module.css";
-import BasicTeamMenu from "./basicTeamMenu/BasicTeamMenu";
+import CalendarSourceButton from "../calendarSourceButton/CalendarSourceButton";
+import styles from "./CalendarTeamsList.module.css";
 
-interface BasicTeamListProps {
+interface CalendarTeamsListProps {
   workspace: WorkspaceDto;
 }
 
-const BasicTeamList: React.FC<BasicTeamListProps> = ({ workspace }) => {
+const CalendarTeamsList: React.FC<CalendarTeamsListProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [archivedVisible, toggleArchivedVisible] = useToggle(false);
@@ -37,25 +36,21 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({ workspace }) => {
     [membershipsResponse]
   );
 
-  const openNewTeamModal = () => {
-    dispatch(popNewTeamModal({ visible: true, workspace }));
-  };
-
   return (
     <div className={styles.container}>
       <div className="spacer-h-1" />
-      <MenuGroupTitle label={t("sideMenuTeamsTitle")} hasAddButton={true} onAddButtonClick={openNewTeamModal} />
+      <MenuGroupTitle label={t("sideMenuTeamCalendarsTitle")} hasAddButton={false} />
       {isFetching && <CircularLoading />}
       <div className="spacer-h-1" />
-      <div className={styles.teamListContainer}>
+      <div className={styles.calendarTeamListContainer}>
         {!isFetching && isSuccess && (
           <>
             {activeTeamMembershipList?.map((teamMemberDto) => (
-              <BasicTeamMenu
-                key={`basic-team-menu-${teamMemberDto.team.teamId}`}
-                team={teamMemberDto.team}
-                workspace={workspace}
-                role={teamMemberDto.role}
+              <CalendarSourceButton
+                key={`team-cal-button-${teamMemberDto.teamId}`}
+                label={teamMemberDto.team.name}
+                teamId={teamMemberDto.teamId}
+                type={"TEAM"}
               />
             ))}
             {archivedTeamMembershipList && archivedTeamMembershipList.length != 0 && (
@@ -70,11 +65,11 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({ workspace }) => {
                 {archivedVisible && (
                   <div className={styles.archivedList}>
                     {archivedTeamMembershipList.map((teamMemberDto) => (
-                      <BasicTeamMenu
-                        key={`basic-team-menu-${teamMemberDto.team.teamId}`}
-                        team={teamMemberDto.team}
-                        workspace={workspace}
-                        role={teamMemberDto.role}
+                      <CalendarSourceButton
+                        key={`team-cal-button-${teamMemberDto.teamId}`}
+                        label={teamMemberDto.team.name}
+                        teamId={teamMemberDto.teamId}
+                        type={"TEAM"}
                       />
                     ))}
                   </div>
@@ -88,4 +83,4 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({ workspace }) => {
   );
 };
 
-export default BasicTeamList;
+export default CalendarTeamsList;

@@ -19,6 +19,7 @@ export const ButtonHeight = {
   default: "height-default",
   mid: "height-mid",
   short: "height-short",
+  short2x: "height-short-2x",
 };
 
 interface LinkButtonProps {
