@@ -9,8 +9,11 @@ import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
+import co.jinear.core.model.request.calendar.CalendarEventDateUpdateRequest;
 import co.jinear.core.model.request.calendar.CalendarEventFilterRequest;
+import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.calendar.CalendarEventListingResponse;
+import co.jinear.core.model.vo.calendar.CalendarEventSearchFilterVo;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.calendar.CalendarExternalEventRetrieveService;
@@ -51,17 +54,22 @@ public class CalendarEventManager {
         List<TeamMemberDto> memberships = retrieveMemberships(calendarEventFilterRequest, currentAccount);
         validateAccountMembershipsInRequestedTeams(calendarEventFilterRequest, memberships);
         validateTeamTaskVisibilityAndMemberRoleForAll(memberships);
-        TaskSearchFilterVo taskSearchFilterVo = calendarEventFilterRequestToTaskSearchFilterVoConverter.convert(calendarEventFilterRequest, memberships);
+
+        CalendarEventSearchFilterVo calendarEventSearchFilterVo = calendarEventFilterRequestToTaskSearchFilterVoConverter.convert(calendarEventFilterRequest, memberships);
 
         List<CalendarEventDto> all = new ArrayList<>();
-        List<CalendarEventDto> taskCalendarEventDtos = retrieveTaskCalendarEvents(taskSearchFilterVo);
-        List<CalendarEventDto> externalCalendarOriginatedEvents = calendarExternalEventRetrieveService.retrieveExternalCalendarTasks(currentAccount, taskSearchFilterVo);
+        List<CalendarEventDto> taskCalendarEventDtos = retrieveTaskCalendarEvents(calendarEventSearchFilterVo);
+        List<CalendarEventDto> externalCalendarOriginatedEvents = calendarExternalEventRetrieveService.retrieveExternalCalendarTasks(currentAccount, calendarEventSearchFilterVo);
         all.addAll(taskCalendarEventDtos);
         all.addAll(externalCalendarOriginatedEvents);
 
         CalendarEventListingResponse calendarEventListingResponse = new CalendarEventListingResponse();
         calendarEventListingResponse.setCalendarEventDtoList(all);
         return calendarEventListingResponse;
+    }
+
+    public BaseResponse updateEventDate(CalendarEventDateUpdateRequest calendarEventFilterRequest) {
+        return new BaseResponse();
     }
 
     @NonNull
@@ -118,5 +126,4 @@ public class CalendarEventManager {
             throw new NoAccessException();
         }
     }
-
 }

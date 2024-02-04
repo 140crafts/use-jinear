@@ -1,6 +1,5 @@
 package co.jinear.core.model.request.calendar;
 
-import co.jinear.core.model.dto.calendar.TaskExternalCalendarFilterDto;
 import co.jinear.core.model.request.BaseRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -22,10 +21,11 @@ public class CalendarEventFilterRequest extends BaseRequest {
     @Nullable
     private List<String> teamIdList;
     @Nullable
-    private List<TaskExternalCalendarFilterDto> externalCalendarList;
+    private List<String> excludingTeamIdList;
+    @Nullable
+    private List<String> calendarIdList;
     @NotNull
     private ZonedDateTime timespanStart;
     @NotNull
     private ZonedDateTime timespanEnd;
-
 }

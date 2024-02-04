@@ -1,9 +1,11 @@
 package co.jinear.core.service.calendar;
 
 import co.jinear.core.converter.calendar.RetrieveEventListRequestConverter;
-import co.jinear.core.model.dto.calendar.*;
+import co.jinear.core.model.dto.calendar.CalendarDto;
+import co.jinear.core.model.dto.calendar.CalendarEventDto;
+import co.jinear.core.model.dto.calendar.CalendarMemberDto;
 import co.jinear.core.model.dto.integration.IntegrationInfoDto;
-import co.jinear.core.model.vo.task.TaskSearchFilterVo;
+import co.jinear.core.model.vo.calendar.CalendarEventSearchFilterVo;
 import co.jinear.core.service.integration.calendar.IntegrationCalendarRetrieveStrategy;
 import co.jinear.core.service.integration.calendar.IntegrationCalendarRetrieveStrategyFactory;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.request.RetrieveEventListRequest;
@@ -24,59 +26,43 @@ public class CalendarExternalEventRetrieveService {
 
     private final CalendarMemberRetrieveService calendarMemberRetrieveService;
     private final RetrieveEventListRequestConverter retrieveEventListRequestConverter;
-    private final CalendarExternalSourceRetrieveService calendarExternalSourceRetrieveService;
     private final IntegrationCalendarRetrieveStrategyFactory integrationCalendarRetrieveStrategyFactory;
 
-    public List<CalendarEventDto> retrieveExternalCalendarTasks(String currentAccount, TaskSearchFilterVo taskSearchFilterVo) {
-        log.info("Retrieve calendar tasks has started. currentAccount: {}, taskSearchFilterVo: {}", currentAccount, taskSearchFilterVo);
-        List<String> requestedCalendarIds = mapRequestedCalendarIds(taskSearchFilterVo);
+    public List<CalendarEventDto> retrieveExternalCalendarTasks(String currentAccount, CalendarEventSearchFilterVo calendarEventSearchFilterVo) {
+        log.info("Retrieve calendar tasks has started. currentAccount: {}, calendarEventSearchFilterVo: {}", currentAccount, calendarEventSearchFilterVo);
+        List<String> requestedCalendarIds = mapRequestedCalendarIds(calendarEventSearchFilterVo);
 
         List<CalendarMemberDto> accountCalendarMemberships = Optional.of(requestedCalendarIds)
                 .filter(ids -> !ids.isEmpty())
-                .map(ids -> calendarMemberRetrieveService.retrieveCalendarsIncludingExternalSources(currentAccount, taskSearchFilterVo.getWorkspaceId(), ids))
-                .orElseGet(() -> calendarMemberRetrieveService.retrieveAccountCalendarsIncludingExternalSources(currentAccount, taskSearchFilterVo.getWorkspaceId()));
+                .map(ids -> calendarMemberRetrieveService.retrieveCalendarsIncludingExternalSources(currentAccount, calendarEventSearchFilterVo.getWorkspaceId(), ids))
+                .orElseGet(() -> calendarMemberRetrieveService.retrieveAccountCalendarsIncludingExternalSources(currentAccount, calendarEventSearchFilterVo.getWorkspaceId()));
 
         return accountCalendarMemberships
                 .stream()
                 .map(CalendarMemberDto::getCalendar)
-                .map(calendarDto -> convertAndRetrieveEveryCalendars(taskSearchFilterVo, calendarDto))
+                .map(calendarDto -> convertAndRetrieveEventsFromCalendar(calendarEventSearchFilterVo, calendarDto))
                 .flatMap(List::stream)
                 .toList();
     }
 
-    private List<CalendarEventDto> convertAndRetrieveEveryCalendars(TaskSearchFilterVo taskSearchFilterVo, CalendarDto calendarDto) {
+    private List<CalendarEventDto> convertAndRetrieveEventsFromCalendar(CalendarEventSearchFilterVo calendarEventSearchFilterVo, CalendarDto calendarDto) {
         IntegrationInfoDto integrationInfoDto = calendarDto.getIntegrationInfo();
-        List<TaskExternalCalendarFilterDto> externalCalendarList = getExternalCalendarFilterIfEmptyRetrieveAllSources(taskSearchFilterVo, calendarDto, integrationInfoDto);
-        return externalCalendarList.stream()
-                .map(taskExternalCalendarFilterDto -> retrieveEventListRequestConverter.convert(taskSearchFilterVo, taskExternalCalendarFilterDto))
-                .map(retrieveEventListRequest -> retrieveExternalSourceEvents(integrationInfoDto, retrieveEventListRequest))
-                .flatMap(List::stream)
-                .toList();
-    }
-
-    private List<TaskExternalCalendarFilterDto> getExternalCalendarFilterIfEmptyRetrieveAllSources(TaskSearchFilterVo taskSearchFilterVo, CalendarDto calendarDto, IntegrationInfoDto integrationInfoDto) {
-        return Optional.of(taskSearchFilterVo)
-                .map(TaskSearchFilterVo::getExternalCalendarList)
-                .filter(externalCalList -> !externalCalList.isEmpty())
-                .orElseGet(() -> {
-                    List<ExternalCalendarSourceDto> calendarSourceDtos = calendarExternalSourceRetrieveService.retrieveIntegrationCalendarSources(integrationInfoDto);
-                    return calendarSourceDtos.stream().map(externalCalendarSourceDto -> {
-                                TaskExternalCalendarFilterDto taskExternalCalendarFilterDto = new TaskExternalCalendarFilterDto();
-                                taskExternalCalendarFilterDto.setCalendarId(calendarDto.getCalendarId());
-                                taskExternalCalendarFilterDto.setCalendarSourceId(externalCalendarSourceDto.getId());
-                                return taskExternalCalendarFilterDto;
-                            })
-                            .toList();
-                });
-    }
-
-    private List<String> mapRequestedCalendarIds(TaskSearchFilterVo taskSearchFilterVo) {
-        log.info("Map requested calendar ids has started.");
-        return Optional.of(taskSearchFilterVo)
-                .map(TaskSearchFilterVo::getExternalCalendarList)
+        return Optional.of(calendarDto)
+                .map(CalendarDto::getCalendarSources)
                 .map(Collection::stream)
-                .map(calListStream -> calListStream.map(TaskExternalCalendarFilterDto::getCalendarId))
+                .map(sourceStream -> sourceStream
+                        .map(sourceDto -> retrieveEventListRequestConverter.convert(calendarEventSearchFilterVo, sourceDto))
+                        .map(request -> retrieveExternalSourceEvents(integrationInfoDto, request))
+                        .flatMap(List::stream)
+                )
                 .map(Stream::toList)
+                .orElseGet(Collections::emptyList);
+    }
+
+    private List<String> mapRequestedCalendarIds(CalendarEventSearchFilterVo calendarEventSearchFilterVo) {
+        log.info("Map requested calendar ids has started.");
+        return Optional.of(calendarEventSearchFilterVo)
+                .map(CalendarEventSearchFilterVo::getCalendarIdList)
                 .orElseGet(Collections::emptyList);
     }
 

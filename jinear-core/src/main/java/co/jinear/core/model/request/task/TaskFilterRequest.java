@@ -33,6 +33,8 @@ public class TaskFilterRequest extends BaseRequest {
     @Nullable
     private List<String> teamIdList;
     @Nullable
+    private List<String> excludingTeamIdList;
+    @Nullable
     private List<String> topicIds;
     @Nullable
     private List<String> ownerIds;

@@ -3,7 +3,7 @@ package co.jinear.core.converter.calendar;
 import co.jinear.core.converter.team.TeamMembershipTeamVisibilityTypeMapConverter;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.request.calendar.CalendarEventFilterRequest;
-import co.jinear.core.model.vo.task.TaskSearchFilterVo;
+import co.jinear.core.model.vo.calendar.CalendarEventSearchFilterVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,5 +17,5 @@ public abstract class CalendarEventFilterRequestToTaskSearchFilterVoConverter {
     protected TeamMembershipTeamVisibilityTypeMapConverter teamMembershipTeamVisibilityTypeMapConverter;
 
     @Mapping(target = "teamMemberMap", expression = "java(teamMembershipTeamVisibilityTypeMapConverter.convert(memberships))")
-    public abstract TaskSearchFilterVo convert(CalendarEventFilterRequest calendarEventFilterRequest, List<TeamMemberDto> memberships);
+    public abstract CalendarEventSearchFilterVo convert(CalendarEventFilterRequest calendarEventFilterRequest, List<TeamMemberDto> memberships);
 }

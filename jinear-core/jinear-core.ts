@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-02-01 22:30:36.
+// Generated using typescript-generator version 3.0.1157 on 2024-02-04 11:27:25.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -62,8 +62,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -143,10 +143,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
-    gthreadId: string;
-    ghistoryId: string;
     ginternalDate: string;
+    ghistoryId: string;
+    gthreadId: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -775,10 +775,20 @@ export interface LoginWithPasswordRequest extends BaseRequest {
     timeZone?: string | null;
 }
 
+export interface CalendarEventDateUpdateRequest {
+    type: CalendarEventSourceType;
+    calendarEventId: string;
+    assignedDate?: Date | null;
+    dueDate?: Date | null;
+    hasPreciseAssignedDate?: boolean | null;
+    hasPreciseDueDate?: boolean | null;
+}
+
 export interface CalendarEventFilterRequest extends BaseRequest {
     workspaceId: string;
     teamIdList?: string[] | null;
-    externalCalendarList?: TaskExternalCalendarFilterDto[] | null;
+    excludingTeamIdList?: string[] | null;
+    calendarIdList?: string[] | null;
     timespanStart: Date;
     timespanEnd: Date;
 }
@@ -860,6 +870,7 @@ export interface TaskFilterRequest extends BaseRequest {
     size?: number | null;
     workspaceId: string;
     teamIdList?: string[] | null;
+    excludingTeamIdList?: string[] | null;
     topicIds?: string[] | null;
     ownerIds?: string[] | null;
     assigneeIds?: string[] | null;
