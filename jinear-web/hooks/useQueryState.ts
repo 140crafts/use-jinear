@@ -1,4 +1,6 @@
+import { tryCatch } from "@/utils/tryCatch";
 import { createUrl } from "@/utils/urlUtils";
+import { format, formatISO, parse, parseISO } from "date-fns";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 export function useQueryState<T>(key: string, parser?: (value?: string) => T | undefined): T | undefined | null {
@@ -30,9 +32,20 @@ export const useSetQueryStateMultiple = () => {
     router.push(createUrl(pathname, urlSearchParams));
   };
 };
+
+const URL_DATE_FORMAT = "yyyy-dd-MM";
+
 export const queryStateIntParser = (val?: string) => (val ? parseInt(val) : undefined);
 export const queryStateArrayParser = <T>(val?: string) => (val ? (val.split(",") as T) : undefined);
-export const queryStateIsoDateParser = (val?: string) => (val ? new Date(val) : undefined);
+export const queryStateIsoDateParser = (val?: string) => (val ? parseISO(val) : undefined);
+export const queryStateShortDateParser = (val?: string) => {
+  if (val) {
+    const result = tryCatch(() => parse(val, URL_DATE_FORMAT, new Date())).result;
+    return !isNaN(result) ? result : undefined;
+  }
+  undefined;
+};
 export const queryStateBooleanParser = (val?: string) => (val ? val?.toLowerCase() == "true" : undefined);
-export const queryStateDateToIsoDateConverter = (date?: Date) => (date ? new Date(date).toISOString() : undefined);
+export const queryStateDateToIsoDateConverter = (date?: Date) => (date ? formatISO(date) : undefined);
+export const queryStateDateToShortDateConverter = (date?: Date) => (date ? format(date, URL_DATE_FORMAT) : undefined);
 export const queryStateAnyToStringConverter = (obj?: any) => (obj ? obj.toString() : undefined);

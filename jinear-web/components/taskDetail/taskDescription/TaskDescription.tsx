@@ -20,7 +20,7 @@ const logger = Logger("TaskDescription");
 
 const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }) => {
   const { t } = useTranslation();
-  const { current: readOnly, toggle: toggleReadOnly } = useToggle(true);
+  const [readOnly, toggleReadOnly] = useToggle(true);
   const [initialValue, setInitialValue] = useState(description?.value);
   const [updateTaskDescription, { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading }] = useUpdateTaskDescriptionMutation();
   const tiptapRef = useRef<ITiptapRef>(null);

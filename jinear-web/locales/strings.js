@@ -1874,26 +1874,7 @@ export default {
     en: "Your Personal Workspace",
     tr: "Kişisel Çalışma Alanın",
   },
-  calendarHeaderAllTeamsSubtitle: {
-    en: "Listing tasks with assigned and/or due date from <b>all teams</b>",
-    tr: "<b>Tüm ekiplerdeki</b> tarih atanmış olan görevler listeleniyor",
-  },
-  calendarHeaderPersonalWorkspaceSubtitle: {
-    en: "Listing tasks with assigned and/or due date from your personal workspace",
-    tr: "Kişisel çalışma alanındaki tarih atanmış olan görevler listeleniyor",
-  },
-  calendarHeaderFilteredTeamSubtitle: {
-    en: "Listing tasks with assigned and/or due date from team <b>${teamName}</b>",
-    tr: "<b>${teamName}</b> ekibindeki tarih atanmış olan görevler listeleniyor",
-  },
-  calendarFilterButton: {
-    en: "Filter",
-    tr: "Filtrele",
-  },
-  calendarClearFilterButton: {
-    en: "Clear Filter",
-    tr: "Filtreyi Kaldır",
-  },
+
   inboxHeaderPersonalWorkspaceSubtitle: {
     en: "Listing your notifications",
     tr: "Bildirimlerin listeleniyor",

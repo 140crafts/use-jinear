@@ -1,5 +1,5 @@
 import useWindowSize from "@/hooks/useWindowSize";
-import { TaskDto } from "@/model/be/jinear-core";
+import { CalendarEventDto } from "@/model/be/jinear-core";
 import { popTaskOverviewModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -7,45 +7,49 @@ import { retrieveTaskStatusIcon } from "@/utils/taskIconFactory";
 import cn from "classnames";
 import Link from "next/link";
 import React from "react";
-import { isDateBetween } from "../../calendarUtils";
+import { IoCalendarOutline } from "react-icons/io5";
 import {
-  useDraggingTask,
-  useHighligtedTaskId,
+  isDateBetween,
   useIsDateBetweenViewingPeriod,
   useIsDateFirstDayOfViewingPeriod,
   useIsDateLastDayOfViewingPeriod,
-  useSetDraggingTask,
-  useSetGhostTask,
-  useSetHighlightedTaskId,
+} from "../../calendarUtils";
+import {
+  useDraggingEvent,
+  useHighlightedEventId,
+  useSetDraggingEvent,
+  useSetGhostEvent,
+  useSetHighlightedEventId,
 } from "../../context/CalendarContext";
 import styles from "./Cell.module.scss";
 
 interface CellProps {
   weight: number;
-  task?: TaskDto | null;
+  calendarEvent?: CalendarEventDto | null;
   id: string;
   weekStart: Date;
   weekEnd: Date;
 }
 
 const logger = Logger("Cell");
-const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => {
+const Cell: React.FC<CellProps> = ({ id, weight, calendarEvent, weekStart, weekEnd }) => {
   const dispatch = useAppDispatch();
   const { isMobile } = useWindowSize();
 
-  const highlightedTaskId = useHighligtedTaskId();
-  const setHighlightedTaskId = useSetHighlightedTaskId();
-  const highlighted = task && highlightedTaskId == task.taskId;
+  const highlightedEventId = useHighlightedEventId();
+  const setHighlightedEventId = useSetHighlightedEventId();
 
-  const draggingTask = useDraggingTask();
-  const someTaskDragging = draggingTask != null;
-  const setDraggingTask = useSetDraggingTask();
-  const setGhostTask = useSetGhostTask();
-  const isGhostTask = task && task.taskId.indexOf("dragging") != -1;
-  const isDraggingTask = task && draggingTask && task.taskId == draggingTask.taskId;
+  const highlighted = calendarEvent && highlightedEventId == calendarEvent.calendarEventId;
 
-  const _assignedDate = task?.assignedDate && new Date(task.assignedDate);
-  const _dueDate = task?.dueDate && new Date(task.dueDate);
+  const draggingEvent = useDraggingEvent();
+  const someEventDragging = draggingEvent != null;
+  const setDraggingEvent = useSetDraggingEvent();
+  const setGhostEvent = useSetGhostEvent();
+  const isGhostEvent = calendarEvent && calendarEvent.calendarEventId.indexOf("dragging") != -1;
+  const isDraggingEvent = calendarEvent && draggingEvent && calendarEvent.calendarEventId == draggingEvent.calendarEventId;
+
+  const _assignedDate = calendarEvent?.assignedDate && new Date(calendarEvent.assignedDate);
+  const _dueDate = calendarEvent?.dueDate && new Date(calendarEvent.dueDate);
   const isAssignedDateWithinThisWeek = _assignedDate && isDateBetween(weekStart, _assignedDate, weekEnd);
   const isDueDateWithinThisWeek = _dueDate && isDateBetween(weekStart, _dueDate, weekEnd);
   const isOneOfDatesNotSet = !_assignedDate || !_dueDate;
@@ -60,13 +64,19 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
   const isEndDateNotInViewingPeriodAndTodayIsLastDayOfViewingPeriod =
     _dueDate && !isDueDateWithinPeriod && isDateLastDayOfViewingPeriod;
 
-  const Icon = retrieveTaskStatusIcon(task?.workflowStatus.workflowStateGroup);
-  const isCompleted =
-    task &&
-    task.workflowStatus.workflowStateGroup &&
-    (task.workflowStatus.workflowStateGroup == "COMPLETED" || task.workflowStatus.workflowStateGroup == "CANCELLED");
+  const Icon =
+    calendarEvent?.calendarEventSourceType == "TASK"
+      ? retrieveTaskStatusIcon(calendarEvent?.relatedTask?.workflowStatus.workflowStateGroup)
+      : IoCalendarOutline;
+  const iconSize = calendarEvent?.calendarEventSourceType == "TASK" ? 17 : 14;
 
-  const topicColor = task?.topic?.color ? `#${task?.topic?.color}` : "transparent";
+  const isCompleted =
+    calendarEvent &&
+    calendarEvent.relatedTask?.workflowStatus.workflowStateGroup &&
+    (calendarEvent.relatedTask?.workflowStatus.workflowStateGroup == "COMPLETED" ||
+      calendarEvent.relatedTask?.workflowStatus.workflowStateGroup == "CANCELLED");
+
+  const topicColor = calendarEvent?.relatedTask?.topic?.color ? `#${calendarEvent?.relatedTask?.topic?.color}` : "transparent";
   const topicCellStyle = {
     flex: weight,
     borderLeftColor: topicColor,
@@ -77,27 +87,27 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
   };
 
   const _hoverStart = () => {
-    if (task) {
-      setHighlightedTaskId?.(task.taskId);
+    if (calendarEvent) {
+      setHighlightedEventId?.(calendarEvent.calendarEventId);
     }
   };
 
   const _hoverEnd = () => {
-    setHighlightedTaskId?.("");
+    setHighlightedEventId?.("");
   };
 
   const _onDragStart = (event: React.DragEvent) => {
-    logger.log({ _onDragStart: task?.taskId, event });
-    event.dataTransfer.setData("text", `${task?.taskId}`);
-    if (task) {
-      setDraggingTask?.(task);
+    logger.log({ _onDragStart: calendarEvent?.calendarEventId, event });
+    event.dataTransfer.setData("text", `${calendarEvent?.calendarEventId}`);
+    if (calendarEvent) {
+      setDraggingEvent?.(calendarEvent);
     }
   };
 
   const _onDragEnd = (event: React.DragEvent) => {
-    logger.log({ _onDragEnd: task?.taskId, event });
-    setDraggingTask?.(undefined);
-    setGhostTask?.(undefined);
+    logger.log({ _onDragEnd: calendarEvent?.calendarEventId, event });
+    setDraggingEvent?.(undefined);
+    setGhostEvent?.(undefined);
   };
 
   const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
@@ -108,27 +118,27 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
   };
 
   const openTaskOverviewModal = () => {
-    const workspaceName = task?.workspace?.username;
-    const taskTag = `${task?.team?.tag}-${task?.teamTagNo}`;
+    const workspaceName = calendarEvent?.relatedTask?.workspace?.username;
+    const taskTag = `${calendarEvent?.relatedTask?.team?.tag}-${calendarEvent?.relatedTask?.teamTagNo}`;
     dispatch(popTaskOverviewModal({ taskTag, workspaceName, visible: true }));
   };
 
   return (
     <Link
-      tabIndex={task ? undefined : -1}
-      href={`/${task?.workspace?.username}/task/${task?.team?.tag}-${task?.teamTagNo}`}
+      tabIndex={calendarEvent ? undefined : -1}
+      href={`/${calendarEvent?.relatedTask?.workspace?.username}/task/${calendarEvent?.relatedTask?.team?.tag}-${calendarEvent?.relatedTask?.teamTagNo}`}
       onClick={onLinkClick}
       id={id}
       className={cn(
         styles.container,
-        task && isGhostTask && styles.ghost,
-        task && styles.fill,
-        task && highlighted && styles.highlight,
-        task && someTaskDragging && !isDraggingTask && styles.noPointerEvents,
+        calendarEvent && isGhostEvent && styles.ghost,
+        calendarEvent && styles.fill,
+        calendarEvent && highlighted && styles.highlight,
+        calendarEvent && someEventDragging && !isDraggingEvent && styles.noPointerEvents,
         (isDueDateWithinThisWeek || isOneOfDatesNotSet) && styles.startDayEndDayMargin,
         (isAssignedDateWithinThisWeek || isOneOfDatesNotSet) && styles.startDay,
         (isDueDateWithinThisWeek || isOneOfDatesNotSet) && styles.endDay,
-        task && isCompleted && styles["completed-fill"]
+        calendarEvent && isCompleted && styles["completed-fill"]
       )}
       // @ts-ignore
       style={topicCellStyle}
@@ -139,15 +149,17 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
       draggable={true}
     >
       {isStartDateNotInViewingPeriodAndTodayIsFirstDayOfViewingPeriod && (
-        <div className={cn(styles["arrow-right"], isGhostTask && styles["ghost-arrow-right"])}></div>
+        <div className={cn(styles["arrow-right"], isGhostEvent && styles["ghost-arrow-right"])}></div>
       )}
-      <div className={styles.iconContainer}>{task && <Icon size={17} />}</div>
+
+      {calendarEvent && <div className={styles.iconContainer}>{<Icon size={iconSize} />}</div>}
+
       <div
         className={cn(styles.title, "line-clamp", isCompleted && styles["title-line-through"])}
         onMouseEnter={_hoverStart}
         onMouseOut={_hoverEnd}
       >
-        {task?.title}
+        {calendarEvent?.title}
       </div>
       {isEndDateNotInViewingPeriodAndTodayIsLastDayOfViewingPeriod && (
         <div className={styles["arrow-right-end-bg"]}>
@@ -155,7 +167,7 @@ const Cell: React.FC<CellProps> = ({ id, weight, task, weekStart, weekEnd }) => 
             className={cn(
               styles["arrow-right-end"],
               highlighted && styles["arrow-right-end-highlight"],
-              isGhostTask && styles["ghost-arrow-right-end-highlight"]
+              isGhostEvent && styles["ghost-arrow-right-end-highlight"]
             )}
           ></div>
         </div>

@@ -8,7 +8,7 @@ import WeekRow from "./weekRow/WeekRow";
 import WeekTileRow from "./weekTileRow/WeekTileRow";
 
 interface WeekProps {
-  weekTasks: ICalendarWeekRowCell[][];
+  weekEvents: ICalendarWeekRowCell[][];
   weekIndex: number;
   week: Date[];
   id: string;
@@ -18,16 +18,16 @@ interface WeekProps {
 
 const logger = Logger("Week");
 
-const Week: React.FC<WeekProps> = ({ id, week, weekIndex, weekTasks, omitNumbers = false, className }) => {
+const Week: React.FC<WeekProps> = ({ id, week, weekIndex, weekEvents, omitNumbers = false, className }) => {
   return (
     <div id={id} className={cn(styles.container, className)}>
       {!omitNumbers && <WeekDayNumbers week={week} />}
       <div className={styles.weekRowContainer}>
-        {weekTasks?.map((rowTasks, rowIndex) => (
+        {weekEvents?.map((rowEvent, rowIndex) => (
           <WeekRow
             id={`${id}-row-${rowIndex}`}
             key={`${id}-row-${rowIndex}`}
-            rowTasks={rowTasks}
+            rowEvents={rowEvent}
             weekStart={week[0]}
             weekEnd={week[week.length - 1]}
           />

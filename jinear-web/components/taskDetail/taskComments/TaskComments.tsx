@@ -1,8 +1,8 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import PaginatedList from "@/components/paginatedList/PaginatedList";
+import { useToggle } from "@/hooks/useToggle";
 import { CommentDto } from "@/model/be/jinear-core";
 import { useRetrieveTaskCommentsQuery } from "@/store/api/taskCommentApi";
-import { useToggle } from "@uidotdev/usehooks";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
 import { useTask } from "../context/TaskDetailContext";

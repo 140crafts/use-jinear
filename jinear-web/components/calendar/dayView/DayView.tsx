@@ -1,57 +1,46 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
+import { queryStateShortDateParser, useQueryState } from "@/hooks/useQueryState";
 import { useWorkspaceFirstTeam } from "@/hooks/useWorkspaceFirstTeam";
-import { useFilterTasksQuery } from "@/store/api/taskListingApi";
+import { WorkspaceDto } from "@/model/be/jinear-core";
+import { useFilterCalendarEventsQuery } from "@/store/api/calendarEventApi";
 import { popNewTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
-import { endOfDay, startOfDay } from "date-fns";
+import { eachDayOfInterval, endOfDay, endOfWeek, startOfDay, startOfWeek } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React, { useMemo } from "react";
 import { isTaskDatesIntersect } from "../calendarUtils";
-import {
-  useCalendarWorkspace,
-  useFilterBy,
-  useSqueezedView,
-  useViewingDate,
-  useWeekDays,
-  useWeekViewPeriodEnd,
-  useWeekViewPeriodStart,
-} from "../context/CalendarContext";
 import styles from "./DayView.module.css";
 import TaskList from "./taskList/TaskList";
 import WeekDays from "./weekDays/WeekDays";
 
-interface DayViewProps {}
+interface DayViewProps {
+  workspace: WorkspaceDto;
+}
 
-const DayView: React.FC<DayViewProps> = ({}) => {
+const DayView: React.FC<DayViewProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const workspace = useCalendarWorkspace();
-  const filterBy = useFilterBy();
-  const periodStart = useWeekViewPeriodStart();
-  const periodEnd = useWeekViewPeriodEnd();
-  const days = useWeekDays();
-  const squeezedView = useSqueezedView();
-  const viewingDate = useViewingDate();
+  const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
+
+  const periodStart = startOfWeek(viewingDate, { weekStartsOn: 1 });
+  const periodEnd = endOfWeek(viewingDate, { weekStartsOn: 1 });
+  const days = eachDayOfInterval({ start: periodStart, end: periodEnd });
+
   const workspacesFirstTeam = useWorkspaceFirstTeam(workspace?.workspaceId || "");
 
-  const {
-    data: filterResponse,
-    isFetching,
-    isLoading,
-  } = useFilterTasksQuery(
+  const { data: filterResponse, isFetching } = useFilterCalendarEventsQuery(
     {
       workspaceId: workspace?.workspaceId || "",
-      teamIdList: filterBy ? [filterBy.teamId] : undefined,
       timespanStart: periodStart,
       timespanEnd: periodEnd,
     },
     { skip: workspace == null }
   );
 
-  const viewingDayTasks = useMemo(() => {
+  const viewingDayEvents = useMemo(() => {
     const dateSpan = [startOfDay(viewingDate), endOfDay(viewingDate)];
-    return filterResponse?.data.content.filter((task) => isTaskDatesIntersect(task, dateSpan));
+    return filterResponse?.data.filter((event) => isTaskDatesIntersect(event, dateSpan));
   }, [filterResponse, viewingDate]);
 
   const popNewTaskModalWithAssignedDatePreSelected = () => {
@@ -72,7 +61,7 @@ const DayView: React.FC<DayViewProps> = ({}) => {
       </div>
       <div className={styles.listContainer}>
         {isFetching && <CircularLoading />}
-        {viewingDayTasks && <TaskList viewingDayTasks={viewingDayTasks} className={styles.taskList} />}
+        {viewingDayEvents && <TaskList viewingDayEvents={viewingDayEvents} className={styles.taskList} />}
       </div>
     </div>
   );

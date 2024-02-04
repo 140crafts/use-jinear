@@ -39,7 +39,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [selectedDate, setSelectedDate] = useState<Date>();
-  const { current: hasPreciseDate, toggle: toggleHasPreciseDate } = useToggle(initialDateIsPrecise);
+  const [hasPreciseDate, toggleHasPreciseDate] = useToggle(initialDateIsPrecise);
 
   useEffect(() => {
     // @ts-ignore

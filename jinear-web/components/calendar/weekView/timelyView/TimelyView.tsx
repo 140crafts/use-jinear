@@ -1,4 +1,4 @@
-import { TaskDto } from "@/model/be/jinear-core";
+import { CalendarEventDto } from "@/model/be/jinear-core";
 import getCssVariable from "@/utils/cssHelper";
 import Logger from "@/utils/logger";
 import { tryCatch } from "@/utils/tryCatch";
@@ -12,14 +12,14 @@ import HourTile from "./dayTimelyView/hourTile/HourTile";
 
 interface TimelyViewProps {
   days: Date[];
-  tasks: TaskDto[];
+  events: CalendarEventDto[];
 }
 
 const MINUTES_IN_A_DAY = 24 * 60;
 
 const logger = Logger("TimelyView");
 
-const TimelyView: React.FC<TimelyViewProps> = ({ days, tasks }) => {
+const TimelyView: React.FC<TimelyViewProps> = ({ days, events }) => {
   const { t } = useTranslation();
   const calendarWeekViewDayMinutePixelRatio = tryCatch(() =>
     parseInt(getCssVariable("--calendar-week-view-day-minute-pixel-ratio"))
@@ -41,7 +41,7 @@ const TimelyView: React.FC<TimelyViewProps> = ({ days, tasks }) => {
         <DayTimelyView
           key={`day-timely-view-${day.getTime()}`}
           day={day}
-          tasks={tasks}
+          events={events}
           minuteInPx={calendarWeekViewDayMinutePixelRatio}
         />
       ))}

@@ -1,10 +1,10 @@
-import { TaskDto } from "@/model/be/jinear-core";
+import { CalendarEventDto } from "@/model/be/jinear-core";
 import React, { useMemo } from "react";
 import styles from "./DayTimelyView.module.css";
 
 interface DayTimelyViewProps {
   day: Date;
-  tasks: TaskDto[];
+  events: CalendarEventDto[];
   minuteInPx: number;
 }
 
@@ -21,7 +21,7 @@ import TaskPositionBasedCell from "./taskPositionBasedCell/TaskPositionBasedCell
 
 const logger = Logger("DayTimelyView");
 
-const DayTimelyView: React.FC<DayTimelyViewProps> = ({ day, tasks, minuteInPx }) => {
+const DayTimelyView: React.FC<DayTimelyViewProps> = ({ day, events, minuteInPx }) => {
   const dispatch = useAppDispatch();
   const workspace = useCalendarWorkspace();
   const team = useCalendarNewTaskFromTeam();
@@ -29,8 +29,8 @@ const DayTimelyView: React.FC<DayTimelyViewProps> = ({ day, tasks, minuteInPx })
   const _isToday = isToday(day);
 
   const dayPositionCells = useMemo(
-    () => calculateTaskDayPositions({ tasks: filterTasksByDay(tasks, day), day, minuteInPx }),
-    [JSON.stringify(day), JSON.stringify(tasks), minuteInPx]
+    () => calculateTaskDayPositions({ events: filterTasksByDay(events, day), day, minuteInPx }),
+    [JSON.stringify(day), JSON.stringify(events), minuteInPx]
   );
 
   logger.log({ day, dayPositionCells });
@@ -52,7 +52,7 @@ const DayTimelyView: React.FC<DayTimelyViewProps> = ({ day, tasks, minuteInPx })
   return (
     <div className={cn(styles.container, _isToday && styles.today)}>
       {dayPositionCells.map((cell) => (
-        <TaskPositionBasedCell key={`week-view-cell-${cell?.task?.taskId}`} cell={cell} />
+        <TaskPositionBasedCell key={`week-view-cell-${cell?.event?.calendarEventId}`} cell={cell} />
       ))}
 
       {_isToday && <CurrentTimeLine variant="solid" withLabel={false} calendarWeekViewDayMinutePixelRatio={minuteInPx} />}

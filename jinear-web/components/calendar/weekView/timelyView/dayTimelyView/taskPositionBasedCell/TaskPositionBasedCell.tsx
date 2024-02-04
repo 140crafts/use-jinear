@@ -1,10 +1,9 @@
 import { ICalendarDayRowCell } from "@/components/calendar/calendarUtils";
-import { useHighligtedTaskId, useSetHighlightedTaskId } from "@/components/calendar/context/CalendarContext";
+import { useHighlightedEventId, useSetHighlightedEventId } from "@/components/calendar/context/CalendarContext";
 import { useDebouncedEffect } from "@/hooks/useDebouncedEffect";
 import useWindowSize from "@/hooks/useWindowSize";
 import { popTaskOverviewModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
-import { retrieveTaskStatusIcon } from "@/utils/taskIconFactory";
 import cn from "classnames";
 import { differenceInMinutes } from "date-fns";
 import Link from "next/link";
@@ -16,24 +15,25 @@ interface TaskPositionBasedCellProps {
 }
 
 const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) => {
-  const task = cell.task;
-
+  const calendarEvent = cell.event;
   const dispatch = useAppDispatch();
   const { isMobile } = useWindowSize();
-  const highlightedTaskId = useHighligtedTaskId();
-  const setHighlightedTaskId = useSetHighlightedTaskId();
-  const highlighted = task && highlightedTaskId == task.taskId;
+
+  const highlightedEventId = useHighlightedEventId();
+  const setHighlightedEventId = useSetHighlightedEventId();
+
+  const highlighted = calendarEvent && highlightedEventId == calendarEvent.calendarEventId;
   const [highlightedZIndex, setHighlightedZIndex] = useState<boolean>(false);
 
-  const _assignedDate = task?.assignedDate && new Date(task.assignedDate);
-  const _dueDate = task?.dueDate && new Date(task.dueDate);
+  const _assignedDate = calendarEvent?.assignedDate && new Date(calendarEvent.assignedDate);
+  const _dueDate = calendarEvent?.dueDate && new Date(calendarEvent.dueDate);
   const diffInMinutes = differenceInMinutes(cell.endTime, cell.startTime);
 
-  const Icon = retrieveTaskStatusIcon(task?.workflowStatus.workflowStateGroup);
   const isCompleted =
-    task &&
-    task.workflowStatus.workflowStateGroup &&
-    (task.workflowStatus.workflowStateGroup == "COMPLETED" || task.workflowStatus.workflowStateGroup == "CANCELLED");
+    calendarEvent &&
+    calendarEvent?.relatedTask?.workflowStatus.workflowStateGroup &&
+    (calendarEvent?.relatedTask?.workflowStatus.workflowStateGroup == "COMPLETED" ||
+      calendarEvent?.relatedTask?.workflowStatus.workflowStateGroup == "CANCELLED");
 
   const cellStyle = {
     top: cell.top,
@@ -41,12 +41,10 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
     height: cell.height,
     width: `${cell.width}%`,
   };
-  const topicColor = task?.topic?.color;
-  const topicCellStyle = topicColor
-    ? {
-        borderLeftColor: `#${topicColor}`,
-      }
-    : {};
+  const topicColor = calendarEvent?.relatedTask?.topic?.color || "transparent";
+  const topicCellStyle = {
+    borderLeftColor: `#${topicColor}`,
+  };
   const zIndexStyle = highlightedZIndex ? { zIndex: 5 } : { zIndex: undefined };
 
   useDebouncedEffect(
@@ -58,6 +56,7 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
     [highlighted],
     1250
   );
+
   useEffect(() => {
     if (!highlighted) {
       setHighlightedZIndex(false);
@@ -65,13 +64,13 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
   }, [highlighted]);
 
   const _hoverStart = () => {
-    if (task) {
-      setHighlightedTaskId?.(task.taskId);
+    if (calendarEvent) {
+      setHighlightedEventId?.(calendarEvent.calendarEventId);
     }
   };
 
   const _hoverEnd = () => {
-    setHighlightedTaskId?.("");
+    setHighlightedEventId?.("");
   };
 
   const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
@@ -82,15 +81,15 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
   };
 
   const openTaskOverviewModal = () => {
-    const workspaceName = task?.workspace?.username;
-    const taskTag = `${task?.team?.tag}-${task?.teamTagNo}`;
+    const workspaceName = calendarEvent?.relatedTask?.workspace?.username;
+    const taskTag = `${calendarEvent?.relatedTask?.team?.tag}-${calendarEvent?.relatedTask?.teamTagNo}`;
     dispatch(popTaskOverviewModal({ taskTag, workspaceName, visible: true }));
   };
 
   return (
     <Link
-      tabIndex={task ? undefined : -1}
-      href={`/${task?.workspace?.username}/task/${task?.team?.tag}-${task?.teamTagNo}`}
+      tabIndex={calendarEvent ? undefined : -1}
+      href={`/${calendarEvent?.relatedTask?.workspace?.username}/task/${calendarEvent?.relatedTask?.team?.tag}-${calendarEvent?.relatedTask?.teamTagNo}`}
       onClick={onLinkClick}
       className={cn(styles.container, highlighted && styles.highlight, isCompleted && styles["completed-fill"])}
       // @ts-ignore
@@ -103,7 +102,7 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
         onMouseEnter={_hoverStart}
         onMouseOut={_hoverEnd}
       >
-        {task?.title}
+        {calendarEvent?.title}
       </div>
     </Link>
   );

@@ -46,7 +46,7 @@ const TASK_RELATED_ACTIONS_WITH_DIFF = [
 
 const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
   const { t } = useTranslation();
-  const { current: diffVisible, toggle: toggleDiff } = useToggle();
+  const [diffVisible, toggleDiff] = useToggle();
 
   const Icon = useMemo(() => decideWorkspaceActivityIcon(activity.type), [activity.workspaceActivityId]);
 

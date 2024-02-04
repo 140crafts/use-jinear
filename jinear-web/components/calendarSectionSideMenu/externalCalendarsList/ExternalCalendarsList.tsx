@@ -47,6 +47,7 @@ const ExternalCalendarsList: React.FC<ExternalCalendarsListProps> = ({ workspace
                 calendar={calendar}
               />
             ))}
+        {!isFetching && isSuccess && membershipsResponse.data?.length == 0 && <div></div>}
       </div>
       <div className="spacer-h-1" />
       <Button

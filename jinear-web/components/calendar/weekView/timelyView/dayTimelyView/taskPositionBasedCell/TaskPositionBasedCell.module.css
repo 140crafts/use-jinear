@@ -45,6 +45,7 @@
 .title {
   cursor: pointer;
   pointer-events: none;
+  word-break: break-word;
 }
 
 .title-line-through {

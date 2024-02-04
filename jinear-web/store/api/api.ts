@@ -61,6 +61,7 @@ export const tagTypes = [
   "v1/task/search/${workspaceId}/${teamId}/{title}",
   "v1/calendar/member/memberships/{workspaceId}",
   "v1/calendar/member/list/{calendarId}",
+  "v1/calendar/event/filter",
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

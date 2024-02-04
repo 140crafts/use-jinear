@@ -54,7 +54,7 @@ const QuickFilterBar: React.FC<QuickFilterBarProps> = ({}) => {
 
   const setSelectedWorkflowStatuses = (teamWorkflowStatusDtos: TeamWorkflowStatusDto[]) => {
     const ids = teamWorkflowStatusDtos.map((tws) => tws.teamWorkflowStatusId);
-    setQueryState("workflowStatusIdList", queryStateAnyToStringConverter(teamWorkflowStatusDtos));
+    setQueryState("workflowStatusIdList", queryStateAnyToStringConverter(ids));
   };
 
   const setFilterThisMonth = () => {

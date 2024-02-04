@@ -8,7 +8,7 @@
   pointer-events: none;
   transition: background-color var(--fade);
   z-index: 1;
-  gap: 0.5rem;
+  gap: 0.125rem;
 }
 
 .fill {
@@ -21,7 +21,9 @@
   min-width: 23px;
   cursor: pointer;
   pointer-events: none;
-  padding-left: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  display: flex;
 }
 
 .title {
