@@ -54,6 +54,10 @@ public class CalendarExternalEventRetrieveService {
                         .map(sourceDto -> retrieveEventListRequestConverter.convert(calendarEventSearchFilterVo, sourceDto))
                         .map(request -> retrieveExternalSourceEvents(integrationInfoDto, request))
                         .flatMap(List::stream)
+                        .map(calendarEventDto -> {
+                            calendarEventDto.setCalendarId(calendarDto.getCalendarId());
+                            return calendarEventDto;
+                        })
                 )
                 .map(Stream::toList)
                 .orElseGet(Collections::emptyList);

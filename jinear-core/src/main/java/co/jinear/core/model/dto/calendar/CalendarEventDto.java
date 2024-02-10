@@ -16,6 +16,7 @@ import java.time.ZonedDateTime;
 @ToString
 public class CalendarEventDto {
 
+    private String calendarId;
     private String calendarEventId;
     private String title;
     private ZonedDateTime assignedDate;

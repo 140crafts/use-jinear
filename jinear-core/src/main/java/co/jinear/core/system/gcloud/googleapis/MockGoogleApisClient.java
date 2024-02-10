@@ -6,6 +6,8 @@ import co.jinear.core.system.gcloud.googleapis.model.RetrieveBatchRequestVo;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.request.RetrieveEventListRequest;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.response.GoogleCalendarEventListResponse;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.response.GoogleCalendarListResponse;
+import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarEventInfo;
+import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,11 @@ public class MockGoogleApisClient implements GoogleApisClient {
     }
 
     @Override
+    public GoogleCalendarInfo retrieveCalendar(String token, String calendarId) {
+        return new GoogleCalendarInfo();
+    }
+
+    @Override
     public GoogleCalendarListResponse retrieveCalendarList(String token) {
         GoogleCalendarListResponse googleCalendarListResponse = new GoogleCalendarListResponse();
         googleCalendarListResponse.setItems(Collections.emptyList());
@@ -40,5 +47,15 @@ public class MockGoogleApisClient implements GoogleApisClient {
         GoogleCalendarEventListResponse googleCalendarEventListResponse = new GoogleCalendarEventListResponse();
         googleCalendarEventListResponse.setItems(Collections.emptyList());
         return googleCalendarEventListResponse;
+    }
+
+    @Override
+    public GoogleCalendarEventInfo retrieveEvent(String token, String calendarSourceId, String eventId) {
+        return new GoogleCalendarEventInfo();
+    }
+
+    @Override
+    public GoogleCalendarEventInfo updateEvent(String token, String calendarSourceId, GoogleCalendarEventInfo googleCalendarEventInfo) {
+        return new GoogleCalendarEventInfo();
     }
 }

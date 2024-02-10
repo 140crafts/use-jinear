@@ -7,8 +7,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class GoogleCalendarEventDate {
-    private String date;
-    private String dateTime;
-    private String timeZone;
+public class GoogleCalendarConferenceSolutionKey {
+    private String type;
 }

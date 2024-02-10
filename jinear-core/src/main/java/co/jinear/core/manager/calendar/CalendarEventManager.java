@@ -9,9 +9,7 @@ import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
-import co.jinear.core.model.request.calendar.CalendarEventDateUpdateRequest;
 import co.jinear.core.model.request.calendar.CalendarEventFilterRequest;
-import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.calendar.CalendarEventListingResponse;
 import co.jinear.core.model.vo.calendar.CalendarEventSearchFilterVo;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
@@ -66,10 +64,6 @@ public class CalendarEventManager {
         CalendarEventListingResponse calendarEventListingResponse = new CalendarEventListingResponse();
         calendarEventListingResponse.setCalendarEventDtoList(all);
         return calendarEventListingResponse;
-    }
-
-    public BaseResponse updateEventDate(CalendarEventDateUpdateRequest calendarEventFilterRequest) {
-        return new BaseResponse();
     }
 
     @NonNull

@@ -8,7 +8,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @Setter
 public class ExternalCalendarSourceDto {
 
-    private String id;
+    private String externalCalendarSourceId;
     @Nullable
     private String summary;
     @Nullable

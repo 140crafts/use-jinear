@@ -17,23 +17,37 @@ import java.util.Optional;
 @Component
 public class GoogleCalendarEventInfoToCalendarEventDtoConverter {
 
-    public CalendarEventDto mapCalendarEventToCalendarEventDto(String calendarId, GoogleCalendarEventListResponse googleCalendarEventListResponse, GoogleCalendarEventInfo googleCalendarEventInfo) {
+    public CalendarEventDto mapCalendarEventToCalendarEventDto(ExternalCalendarSourceDto externalCalendarSourceDto, GoogleCalendarEventInfo googleCalendarEventInfo) {
+        CalendarEventDto calendarEventDto = mapBaseValues(googleCalendarEventInfo);
+
+        mapDates(externalCalendarSourceDto.getTimeZone(), googleCalendarEventInfo, calendarEventDto);
+        calendarEventDto.setExternalCalendarSourceDto(externalCalendarSourceDto);
+
+        return calendarEventDto;
+    }
+
+    public CalendarEventDto mapCalendarEventToCalendarEventDto(String calendarSourceId, GoogleCalendarEventListResponse googleCalendarEventListResponse, GoogleCalendarEventInfo googleCalendarEventInfo) {
+        CalendarEventDto calendarEventDto = mapBaseValues(googleCalendarEventInfo);
+        mapDates(googleCalendarEventListResponse.getTimeZone(), googleCalendarEventInfo, calendarEventDto);
+        mapExternalCalendarSourceDto(calendarSourceId, googleCalendarEventListResponse, calendarEventDto);
+
+        return calendarEventDto;
+    }
+
+    private CalendarEventDto mapBaseValues(GoogleCalendarEventInfo googleCalendarEventInfo) {
         CalendarEventDto calendarEventDto = new CalendarEventDto();
         calendarEventDto.setCalendarEventId(googleCalendarEventInfo.getId());
         calendarEventDto.setTitle(googleCalendarEventInfo.getSummary());
         calendarEventDto.setCalendarEventSourceType(CalendarEventSourceType.GOOGLE_CALENDAR);
         calendarEventDto.setRelatedGoogleCalendarEventInfo(googleCalendarEventInfo);
-
+        calendarEventDto.setExternalLink(googleCalendarEventInfo.getHtmlLink());
         mapDescription(googleCalendarEventInfo, calendarEventDto);
-        mapDates(googleCalendarEventListResponse, googleCalendarEventInfo, calendarEventDto);
-        mapExternalCalendarSourceDto(calendarId, googleCalendarEventListResponse, calendarEventDto);
-
         return calendarEventDto;
     }
 
-    private void mapExternalCalendarSourceDto(String calendarId, GoogleCalendarEventListResponse googleCalendarEventListResponse, CalendarEventDto calendarEventDto) {
+    private void mapExternalCalendarSourceDto(String calendarSourceId, GoogleCalendarEventListResponse googleCalendarEventListResponse, CalendarEventDto calendarEventDto) {
         ExternalCalendarSourceDto externalCalendarSourceDto = new ExternalCalendarSourceDto();
-        externalCalendarSourceDto.setId(calendarId);
+        externalCalendarSourceDto.setExternalCalendarSourceId(calendarSourceId);
         externalCalendarSourceDto.setSummary(googleCalendarEventListResponse.getSummary());
         externalCalendarSourceDto.setDescription(googleCalendarEventListResponse.getDescription());
         externalCalendarSourceDto.setTimeZone(googleCalendarEventListResponse.getTimeZone());
@@ -52,11 +66,11 @@ public class GoogleCalendarEventInfoToCalendarEventDtoConverter {
         calendarEventDto.setDescription(description);
     }
 
-    private void mapDates(GoogleCalendarEventListResponse googleCalendarEventListResponse, GoogleCalendarEventInfo googleCalendarEventInfo, CalendarEventDto calendarEventDto) {
+    private void mapDates(String timeZone, GoogleCalendarEventInfo googleCalendarEventInfo, CalendarEventDto calendarEventDto) {
         Optional.of(googleCalendarEventInfo)
                 .map(GoogleCalendarEventInfo::getStart)
                 .map(GoogleCalendarEventDate::getDate)
-                .map(dateStr -> ZonedDateHelper.parseWithDateTimeFormat4(dateStr, googleCalendarEventListResponse.getTimeZone()))
+                .map(dateStr -> ZonedDateHelper.parseWithDateTimeFormat4(dateStr, timeZone))
                 .ifPresent(calendarEventDto::setAssignedDate);
         Optional.of(googleCalendarEventInfo)
                 .map(GoogleCalendarEventInfo::getStart)
@@ -70,7 +84,7 @@ public class GoogleCalendarEventInfoToCalendarEventDtoConverter {
         Optional.of(googleCalendarEventInfo)
                 .map(GoogleCalendarEventInfo::getEnd)
                 .map(GoogleCalendarEventDate::getDate)
-                .map(dateStr -> ZonedDateHelper.parseWithDateTimeFormat4(dateStr, googleCalendarEventListResponse.getTimeZone()))
+                .map(dateStr -> ZonedDateHelper.parseWithDateTimeFormat4(dateStr, timeZone))
                 .ifPresent(calendarEventDto::setDueDate);
         Optional.of(googleCalendarEventInfo)
                 .map(GoogleCalendarEventInfo::getEnd)

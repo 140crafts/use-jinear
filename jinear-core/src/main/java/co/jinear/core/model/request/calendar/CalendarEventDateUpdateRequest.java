@@ -1,6 +1,6 @@
 package co.jinear.core.model.request.calendar;
 
-import co.jinear.core.model.enumtype.calendar.CalendarEventSourceType;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,18 +12,20 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 public class CalendarEventDateUpdateRequest {
-    @NotNull
-    private CalendarEventSourceType type;
-    @NotNull
+    @NotBlank
+    private String calendarId;
+    @NotBlank
+    private String calendarSourceId;
+    @NotBlank
     private String calendarEventId;
-    @Nullable
+    @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime assignedDate;
-    @Nullable
+    @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime dueDate;
     @Nullable
-    private Boolean hasPreciseAssignedDate;
+    private Boolean hasPreciseAssignedDate = Boolean.FALSE;
     @Nullable
-    private Boolean hasPreciseDueDate;
+    private Boolean hasPreciseDueDate = Boolean.FALSE;
 }

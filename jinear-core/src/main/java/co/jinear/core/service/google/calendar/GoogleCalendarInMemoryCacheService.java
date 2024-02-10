@@ -21,6 +21,7 @@ public class GoogleCalendarInMemoryCacheService {
     private static final String PREFIX = "gcal:";
     private static final String GOOGLE_CALENDAR_INFO_LIST = "calendar-infos:";
     private static final String GOOGLE_CALENDAR_EVENT_LIST = "calendar-events:";
+    private static final String GOOGLE_CALENDAR_SOURCE = "calendar:";
 
     private final InMemoryCacheService inMemoryCacheService;
 
@@ -64,6 +65,33 @@ public class GoogleCalendarInMemoryCacheService {
 
     private String generateCalendarEventsKey(RetrieveEventListRequest retrieveEventListRequest) {
         return APP + PREFIX + GOOGLE_CALENDAR_EVENT_LIST + retrieveEventListRequest.toString();
+    }
+
+
+    public boolean hasCachedCalendarSource(String externalCalendarSourceId) {
+        String key = generateCalendarSourceKey(externalCalendarSourceId);
+        return Boolean.TRUE.equals(inMemoryCacheService.hasKey(key));
+    }
+
+    public ExternalCalendarSourceDto cacheCalendarSource(String externalCalendarSourceId, ExternalCalendarSourceDto externalCalendarSourceDto) {
+        String key = generateCalendarSourceKey(externalCalendarSourceId);
+        inMemoryCacheService.put(key, externalCalendarSourceDto, Duration.ofMinutes(TTL).toSeconds());
+        return externalCalendarSourceDto;
+    }
+
+    public ExternalCalendarSourceDto getCachedCalendarSource(String externalCalendarSourceId) {
+        log.info("Get cached calendar source has started.");
+        String key = generateCalendarSourceKey(externalCalendarSourceId);
+        return cast(inMemoryCacheService.get(key));
+    }
+
+
+    public void clearCalendarEventListCache(String calendarSourceId) {
+        inMemoryCacheService.removeIfKeyContains(calendarSourceId);
+    }
+
+    private String generateCalendarSourceKey(String externalCalendarSourceId) {
+        return APP + PREFIX + GOOGLE_CALENDAR_SOURCE + externalCalendarSourceId;
     }
 
     @SuppressWarnings("unchecked")

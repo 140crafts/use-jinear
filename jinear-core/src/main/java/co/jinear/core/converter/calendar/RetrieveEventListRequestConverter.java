@@ -11,7 +11,7 @@ public class RetrieveEventListRequestConverter {
 
     public RetrieveEventListRequest convert(TaskSearchFilterVo taskSearchFilterVo, ExternalCalendarSourceDto externalCalendarSourceDto) {
         RetrieveEventListRequest retrieveEventListRequest = new RetrieveEventListRequest();
-        retrieveEventListRequest.setCalendarSourceId(externalCalendarSourceDto.getId());
+        retrieveEventListRequest.setCalendarSourceId(externalCalendarSourceDto.getExternalCalendarSourceId());
         retrieveEventListRequest.setTimeMin(ZonedDateHelper.formatWithDateTimeFormat5(taskSearchFilterVo.getTimespanStart()));
         retrieveEventListRequest.setTimeMax(ZonedDateHelper.formatWithDateTimeFormat5(taskSearchFilterVo.getTimespanEnd()));
         return retrieveEventListRequest;

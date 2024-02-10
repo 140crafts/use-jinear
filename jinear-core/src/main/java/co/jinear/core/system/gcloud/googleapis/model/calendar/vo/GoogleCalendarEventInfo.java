@@ -1,5 +1,6 @@
 package co.jinear.core.system.gcloud.googleapis.model.calendar.vo;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class GoogleCalendarEventInfo {
 
     private String kind;
@@ -34,12 +36,21 @@ public class GoogleCalendarEventInfo {
     private Integer sequence;
     private List<GoogleCalendarEventAttendee> attendees;
     private Boolean attendeesOmitted;
+    private GoogleCalendarExtendedProperties extendedProperties;
     private String hangoutLink;
+    private GoogleCalendarConferenceData conferenceData;
+    private GoogleCalendarGadget gadget;
     private Boolean anyoneCanAddSelf;
     private Boolean guestsCanInviteOthers;
     private Boolean guestsCanModify;
     private Boolean guestsCanSeeOtherGuests;
     private Boolean privateCopy;
     private Boolean locked;
+    private GoogleCalendarReminder reminders;
+    private GoogleCalendarSource source;
+    private GoogleCalendarWorkingLocationProperties workingLocationProperties;
+    private GoogleCalendarOutOfOfficeProperties outOfOfficeProperties;
+    private GoogleCalendarFocusTimeProperties focusTimeProperties;
+    private List<GoogleCalendarAttachment> attachments;
     private String eventType;
 }

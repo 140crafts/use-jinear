@@ -8,6 +8,8 @@ import co.jinear.core.system.gcloud.googleapis.model.RetrieveBatchRequestVo;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.request.RetrieveEventListRequest;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.response.GoogleCalendarEventListResponse;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.response.GoogleCalendarListResponse;
+import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarEventInfo;
+import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarInfo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -27,16 +29,19 @@ import java.util.Map;
 @AllArgsConstructor
 @ConditionalOnProperty(value = "mock.google-apis-client.enabled", havingValue = "false", matchIfMissing = true)
 public class RestGoogleApisClient implements GoogleApisClient {
-
+    private static final String CALENDAR_ID_PARAM = "calendarId";
     private static final String AUTH_HEADER = "Bearer %s";
     private static final String GMAIL_BATCH = "batch/gmail/v1";
+    private static final String CALENDAR_GET = "calendar/v3/calendars/{calendarId}";
     private static final String CALENDAR_LIST = "calendar/v3/users/me/calendarList";
     private static final String CALENDAR_EVENT_LIST = "calendar/v3/calendars/{calendarId}/events?timeMin={timeMin}&timeMax={timeMax}&maxResults={maxResults}";
+    private static final String CALENDAR_EVENT = "calendar/v3/calendars/{calendarId}/events/{eventId}";
 
     private final RestTemplate googleApisRestTemplate;
     private final BatchRequestConverter batchRequestConverter;
     private final BatchResponseConverter batchResponseConverter;
 
+    @Override
     public List<GmailMessageVo> retrieveBatchMessages(String token, List<RetrieveBatchRequestVo> messageVoList) {
         String boundary = "batch-message-req";
         String body = batchRequestConverter.convertToMessagesRequestBody(messageVoList, boundary);
@@ -48,6 +53,7 @@ public class RestGoogleApisClient implements GoogleApisClient {
         return batchResponseConverter.mapToMessagesResponse(response);
     }
 
+    @Override
     public List<GmailThreadVo> retrieveBatchThreads(String token, List<RetrieveBatchRequestVo> messageVoList) {
         if (messageVoList.isEmpty()) {
             return Collections.emptyList();
@@ -60,6 +66,22 @@ public class RestGoogleApisClient implements GoogleApisClient {
         HttpEntity<String> requestEntity = new HttpEntity<>(body, headers);
         ResponseEntity<String> response = googleApisRestTemplate.postForEntity(GMAIL_BATCH, requestEntity, String.class);
         return batchResponseConverter.mapToThreadsResponse(response);
+    }
+
+    @Override
+    public GoogleCalendarInfo retrieveCalendar(String token, String calendarId) {
+        log.info("Retrieve calendar has started. calendarId: {}", calendarId);
+
+        UriTemplateHandler template = googleApisRestTemplate.getUriTemplateHandler();
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put(CALENDAR_ID_PARAM, calendarId);
+        URI uri = template.expand(CALENDAR_GET, uriVariables);
+
+        HttpHeaders headers = retrieveHeaders(token);
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+        ResponseEntity<GoogleCalendarInfo> response = googleApisRestTemplate
+                .exchange(uri, HttpMethod.GET, requestEntity, GoogleCalendarInfo.class);
+        return response.getBody();
     }
 
     @Override
@@ -78,7 +100,7 @@ public class RestGoogleApisClient implements GoogleApisClient {
 
         UriTemplateHandler template = googleApisRestTemplate.getUriTemplateHandler();
         Map<String, String> uriVariables = new HashMap<>();
-        uriVariables.put("calendarId", request.getCalendarSourceId());
+        uriVariables.put(CALENDAR_ID_PARAM, request.getCalendarSourceId());
         uriVariables.put("timeMin", request.getTimeMin());
         uriVariables.put("timeMax", request.getTimeMax());
         uriVariables.put("maxResults", request.getMaxResults().toString());
@@ -88,6 +110,42 @@ public class RestGoogleApisClient implements GoogleApisClient {
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
         ResponseEntity<GoogleCalendarEventListResponse> response = googleApisRestTemplate
                 .exchange(uri, HttpMethod.GET, requestEntity, GoogleCalendarEventListResponse.class);
+        return response.getBody();
+    }
+
+    @Override
+    public GoogleCalendarEventInfo retrieveEvent(String token, String calendarSourceId, String eventId) {
+        log.info("Retrieve event has started. calendarSourceId: {}, eventId: {}", calendarSourceId, eventId);
+
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put(CALENDAR_ID_PARAM, calendarSourceId);
+        uriVariables.put("eventId", eventId);
+
+        UriTemplateHandler template = googleApisRestTemplate.getUriTemplateHandler();
+        URI uri = template.expand(CALENDAR_EVENT, uriVariables);
+
+        HttpHeaders headers = retrieveHeaders(token);
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+        ResponseEntity<GoogleCalendarEventInfo> response = googleApisRestTemplate
+                .exchange(uri, HttpMethod.GET, requestEntity, GoogleCalendarEventInfo.class);
+        return response.getBody();
+    }
+
+    @Override
+    public GoogleCalendarEventInfo updateEvent(String token, String calendarSourceId, GoogleCalendarEventInfo googleCalendarEventInfo) {
+        String calendarEventId = googleCalendarEventInfo.getId();
+        log.info("Update calendar event has started. calendarSourceId: {}, eventId: {}", calendarSourceId, calendarEventId);
+
+        UriTemplateHandler template = googleApisRestTemplate.getUriTemplateHandler();
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put(CALENDAR_ID_PARAM, calendarSourceId);
+        uriVariables.put("eventId", calendarEventId);
+        URI uri = template.expand(CALENDAR_EVENT, uriVariables);
+
+        HttpHeaders headers = retrieveHeaders(token);
+        HttpEntity<GoogleCalendarEventInfo> requestEntity = new HttpEntity<>(googleCalendarEventInfo, headers);
+        ResponseEntity<GoogleCalendarEventInfo> response = googleApisRestTemplate
+                .exchange(uri, HttpMethod.PUT, requestEntity, GoogleCalendarEventInfo.class);
         return response.getBody();
     }
 

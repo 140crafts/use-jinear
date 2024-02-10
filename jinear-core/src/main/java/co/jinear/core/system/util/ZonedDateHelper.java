@@ -63,4 +63,10 @@ public class ZonedDateHelper {
                 .map(instant -> instant.atZone(ZoneId.of(zoneId)))
                 .orElse(null);
     }
+
+    public static void main(String[] args) {
+        ZonedDateTime zonedDateTime = atTimeZone(ZonedDateTime.now(),"GMT");
+
+        System.out.println(formatWithDateTimeFormat5(zonedDateTime) + " _____ " + zonedDateTime);
+    }
 }
