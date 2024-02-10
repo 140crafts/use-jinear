@@ -16,7 +16,7 @@ export const useSetQueryState = () => {
   return (key: string, val?: string) => {
     const urlSearchParams = new URLSearchParams(searchParams);
     val ? urlSearchParams.set(key, val) : urlSearchParams.delete(key);
-    router.push(createUrl(pathname, urlSearchParams));
+    router.push(createUrl(pathname, urlSearchParams), { scroll: false });
   };
 };
 
@@ -29,7 +29,7 @@ export const useSetQueryStateMultiple = () => {
     pairs.forEach((value, key) => {
       value ? urlSearchParams.set(key, value) : urlSearchParams.delete(key);
     });
-    router.push(createUrl(pathname, urlSearchParams));
+    router.push(createUrl(pathname, urlSearchParams), { scroll: false });
   };
 };
 

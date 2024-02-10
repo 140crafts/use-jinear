@@ -57,7 +57,7 @@ const TaskTitle: React.FC<TaskTitleProps> = ({ taskId, title }) => {
         <Button
           disabled={isUpdateTaskTitleLoading}
           heightVariant={ButtonHeight.short}
-          variant={ButtonVariants.filled2}
+          variant={ButtonVariants.filled}
           className={styles.editTitleButton}
           onClick={popTitleChangeModal}
         >

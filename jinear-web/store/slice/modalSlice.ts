@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ModalState, {
   AddMemberToTeamModalState,
   BasicTextInputModalState,
+  CalendarExternalEventViewModalState,
   ChangeTaskAssigneeModalState,
   ChangeTaskDateModalState,
   ChangeTaskTopicModalState,
@@ -158,6 +159,9 @@ const initialState = {
   newCalendarIntegrationModal: {
     visible: false,
   },
+  calendarExternalEventViewModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -197,6 +201,7 @@ const initialState = {
   integrationFeedItemDetailModal: null | IntegrationFeedItemDetailModalState;
   workspaceMemberPickerModal: null | WorkspaceMemberPickerModalState;
   newCalendarIntegrationModal: null | NewCalendarIntegrationModalState;
+  calendarExternalEventViewModal: null | CalendarExternalEventViewModalState;
 };
 
 const slice = createSlice({
@@ -475,6 +480,13 @@ const slice = createSlice({
       state.newCalendarIntegrationModal = initialState.newMailIntegrationModal;
     },
 
+    popCalendarExternalEventViewModal: (state, action: PayloadAction<CalendarExternalEventViewModalState>) => {
+      state.calendarExternalEventViewModal = { ...action.payload, visible: true };
+    },
+    closeCalendarExternalEventViewModal: (state, action: PayloadAction<void>) => {
+      state.calendarExternalEventViewModal = initialState.calendarExternalEventViewModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -567,6 +579,8 @@ export const {
   closeWorkspaceMemberPickerModal,
   popNewCalendarIntegrationModal,
   closeNewCalendarIntegrationModal,
+  popCalendarExternalEventViewModal,
+  closeCalendarExternalEventViewModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -775,3 +789,8 @@ export const selectWorkspaceMemberPickerModalOnPick = (state: RootState) => stat
 export const selectNewCalendarIntegrationModalVisible = (state: RootState) => state.modal.newCalendarIntegrationModal?.visible;
 export const selectNewCalendarIntegrationModalWorkspaceId = (state: RootState) =>
   state.modal.newCalendarIntegrationModal?.workspaceId;
+
+export const selectCalendarExternalEventViewModalVisible = (state: RootState) =>
+  state.modal.calendarExternalEventViewModal?.visible;
+export const selectCalendarExternalEventViewModalCalendarEvent = (state: RootState) =>
+  state.modal.calendarExternalEventViewModal?.calendarEventDto;

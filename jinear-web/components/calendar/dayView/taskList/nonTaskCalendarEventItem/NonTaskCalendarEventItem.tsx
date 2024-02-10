@@ -1,8 +1,11 @@
 import Button from "@/components/button";
 import { CalendarEventDto } from "@/model/be/jinear-core";
+import { popCalendarExternalEventViewModal } from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import React from "react";
-import styles from "./NonTaskCalendarEventItem.module.css";
+import { IoCalendarOutline } from "react-icons/io5";
+import styles from "./NonTaskCalendarEventItem.module.scss";
 
 interface NonTaskCalendarEventItemProps {
   calendarEvent: CalendarEventDto;
@@ -15,44 +18,24 @@ const NonTaskCalendarEventItem: React.FC<NonTaskCalendarEventItemProps> = ({
   className,
   withBottomBorderLine = true,
 }) => {
+  const dispatch = useAppDispatch();
+
+  const openCalendarExternalEventOverviewModal = () => {
+    if (calendarEvent) {
+      dispatch(popCalendarExternalEventViewModal({ calendarEventDto: calendarEvent, visible: true }));
+    }
+  };
+
   return (
     <div className={cn(styles.container, withBottomBorderLine ? styles.bottomBorderLine : null, className)}>
-      <Button
-        // href={`/${task.workspace?.username}/task/${tag}`}
-        className={cn(styles.button)}
-        // onClick={onLinkClick}
-      >
-        <div className={styles.leftInfoContainer}>
-          <TeamTagCell task={task} />
+      <div className={styles.leftContainer}>
+        <div className={styles.iconContainer}>
+          <IoCalendarOutline size={14} />
         </div>
-        <div className={cn(styles.title, isArchived ? styles.archivedTitle : null)}>{task.title}</div>
-      </Button>
-
-      <div className={styles.rightInfoContainer}>
-        {task.topic && <TopicInfo topic={task.topic} />}
-        <WorkflowStatus task={task} />
-        <AssigneeCell task={task} />
-        <Button
-          variant={ButtonVariants.filled}
-          className={styles.iconButton}
-          onClick={popChangeDatesModal}
-          data-tooltip-right={t("taskRowChangeTaskDates")}
-        >
-          <div className={styles.iconContainer}>
-            <IoTimeOutline size={14} />
-          </div>
-        </Button>
-        <Button
-          variant={ButtonVariants.filled}
-          className={styles.iconButton}
-          onClick={popBoardsModal}
-          data-tooltip-right={t("taskRowBoardsTooltip")}
-        >
-          <div className={styles.iconContainer}>
-            <IoReaderOutline size={14} />
-          </div>
-        </Button>
       </div>
+      <Button className={styles.button} onClick={openCalendarExternalEventOverviewModal}>
+        {calendarEvent.title}
+      </Button>
     </div>
   );
 };

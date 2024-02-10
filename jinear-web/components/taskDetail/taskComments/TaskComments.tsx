@@ -23,7 +23,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({}) => {
 
   useEffect(() => {
     if (quotedComment) {
-      toggleNewCommentInputVisible(true);
+      toggleNewCommentInputVisible();
     }
   }, [quotedComment]);
 

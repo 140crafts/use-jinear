@@ -7,7 +7,7 @@ import cn from "classnames";
 import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import styles from "./Tiptap.module.css";
-import ActionBar from "./actionBar/ActionBar";
+import ActionBar, { TipTapActionBarMode } from "./actionBar/ActionBar";
 
 export interface ITiptapRef {
   clearContent: () => void;
@@ -24,10 +24,21 @@ interface TiptapProps {
   htmlInputId?: string;
   register?: UseFormRegister<any>;
   formSetValue?: UseFormSetValue<any>;
+  actionBarMode?: TipTapActionBarMode;
 }
 
 const Tiptap = (
-  { content, className, editorClassName, placeholder, editable = true, htmlInputId, register, formSetValue }: TiptapProps,
+  {
+    content,
+    className,
+    editorClassName,
+    placeholder,
+    editable = true,
+    htmlInputId,
+    register,
+    formSetValue,
+    actionBarMode = "full",
+  }: TiptapProps,
   ref: any
 ) => {
   const [html, setHtml] = useState<string>();
@@ -71,7 +82,7 @@ const Tiptap = (
 
   return (
     <div className={cn(styles.container, className)}>
-      {editor && editable && <ActionBar editor={editor} />}
+      {editor && editable && <ActionBar editor={editor} mode={actionBarMode} />}
       <EditorContent editor={editor} />
       {htmlInputId && <input id={htmlInputId} type="hidden" {...register?.(htmlInputId)} value={html} />}
     </div>

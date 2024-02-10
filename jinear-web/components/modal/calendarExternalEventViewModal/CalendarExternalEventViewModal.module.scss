@@ -1,0 +1,55 @@
+@import "/styles/breakpoints.scss";
+
+.modalContainer {
+  align-items: flex-start;
+  padding-top: 12.5%;
+}
+
+.modalBody {
+  height: 95vh;
+  max-height: unset;
+  padding: 0;
+  padding-bottom: 1rem;
+}
+
+.modal {
+  position: relative;
+  // height: 95vh;
+}
+
+.eventContentWrapper {
+  height: 100%;
+  padding: 0 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.eventDetailLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.actionBar {
+  position: sticky;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  top: 0;
+  padding: 0.5rem;
+  // padding-bottom: 1ch;
+  // backdrop-filter: var(--backdrop-filter-blur);
+  z-index: 99;
+}
+
+.goToSourceButton {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+@media (max-width: $mobile-l) {
+  .eventContentWrapper {
+    padding: 0 0.5rem;
+  }
+}

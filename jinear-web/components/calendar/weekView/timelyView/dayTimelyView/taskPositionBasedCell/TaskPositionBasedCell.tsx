@@ -2,7 +2,7 @@ import { ICalendarDayRowCell } from "@/components/calendar/calendarUtils";
 import { useHighlightedEventId, useSetHighlightedEventId } from "@/components/calendar/context/CalendarContext";
 import { useDebouncedEffect } from "@/hooks/useDebouncedEffect";
 import useWindowSize from "@/hooks/useWindowSize";
-import { popTaskOverviewModal } from "@/store/slice/modalSlice";
+import { popCalendarExternalEventViewModal, popTaskOverviewModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import { differenceInMinutes } from "date-fns";
@@ -74,7 +74,10 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
   };
 
   const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
-    if (!isMobile) {
+    if (calendarEvent?.calendarEventSourceType != "TASK") {
+      event?.preventDefault();
+      openCalendarExternalEventOverviewModal();
+    } else if (!isMobile) {
       event?.preventDefault();
       openTaskOverviewModal();
     }
@@ -84,6 +87,12 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
     const workspaceName = calendarEvent?.relatedTask?.workspace?.username;
     const taskTag = `${calendarEvent?.relatedTask?.team?.tag}-${calendarEvent?.relatedTask?.teamTagNo}`;
     dispatch(popTaskOverviewModal({ taskTag, workspaceName, visible: true }));
+  };
+
+  const openCalendarExternalEventOverviewModal = () => {
+    if (calendarEvent) {
+      dispatch(popCalendarExternalEventViewModal({ calendarEventDto: calendarEvent, visible: true }));
+    }
   };
 
   return (

@@ -1,6 +1,6 @@
 import useWindowSize from "@/hooks/useWindowSize";
 import { CalendarEventDto } from "@/model/be/jinear-core";
-import { popTaskOverviewModal } from "@/store/slice/modalSlice";
+import { popCalendarExternalEventViewModal, popTaskOverviewModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
 import { retrieveTaskStatusIcon } from "@/utils/taskIconFactory";
@@ -111,7 +111,10 @@ const Cell: React.FC<CellProps> = ({ id, weight, calendarEvent, weekStart, weekE
   };
 
   const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
-    if (!isMobile) {
+    if (calendarEvent?.calendarEventSourceType != "TASK") {
+      event?.preventDefault();
+      openCalendarExternalEventOverviewModal();
+    } else if (!isMobile) {
       event?.preventDefault();
       openTaskOverviewModal();
     }
@@ -121,6 +124,12 @@ const Cell: React.FC<CellProps> = ({ id, weight, calendarEvent, weekStart, weekE
     const workspaceName = calendarEvent?.relatedTask?.workspace?.username;
     const taskTag = `${calendarEvent?.relatedTask?.team?.tag}-${calendarEvent?.relatedTask?.teamTagNo}`;
     dispatch(popTaskOverviewModal({ taskTag, workspaceName, visible: true }));
+  };
+
+  const openCalendarExternalEventOverviewModal = () => {
+    if (calendarEvent) {
+      dispatch(popCalendarExternalEventViewModal({ calendarEventDto: calendarEvent, visible: true }));
+    }
   };
 
   return (

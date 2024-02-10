@@ -6,21 +6,23 @@ import React from "react";
 import styles from "./DayButton.module.css";
 
 interface DayButtonProps {
+  className?: string;
   selectedDate: Date;
   viewingDate: Date;
   day: Date;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
+  setSelectedDate?: (value?: Date) => void;
   dateSpanStart?: Date;
   dateSpanEnd?: Date;
   disabledBefore?: Date;
   disabledAfter?: Date;
   hoveringDate?: Date;
-  setHoveringDate?: React.Dispatch<React.SetStateAction<Date>>;
+  setHoveringDate?: React.Dispatch<React.SetStateAction<Date | undefined>>;
 }
 
 const logger = Logger("DayButton");
 const DayButton: React.FC<DayButtonProps> = ({
   day,
+  className,
   selectedDate,
   viewingDate,
   setSelectedDate,
@@ -59,6 +61,7 @@ const DayButton: React.FC<DayButtonProps> = ({
       variant={isSameDay(selectedDate, day) ? ButtonVariants.filled : ButtonVariants.default}
       className={cn(
         styles.buttonBase,
+        className,
         !isSameMonth(viewingDate, day) ? styles.differentMonth : undefined,
         isSameDay(selectedDate, day) ? styles.bold : undefined,
         isToday(day) ? styles.today : undefined,
@@ -80,7 +83,7 @@ const DayButton: React.FC<DayButtonProps> = ({
           : undefined,
         isDisabled ? styles.disabled : undefined
       )}
-      onClick={() => setSelectedDate(day)}
+      onClick={() => setSelectedDate?.(day)}
       onMouseOver={onHover}
     >
       <div>{format(day, "d")}</div>

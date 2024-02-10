@@ -1,6 +1,6 @@
 import Button from "@/components/button";
 import {
-  queryStateDateToIsoDateConverter,
+  queryStateDateToShortDateConverter,
   queryStateShortDateParser,
   useQueryState,
   useSetQueryState,
@@ -19,7 +19,7 @@ const WeekDays: React.FC<WeekDaysProps> = ({ days }) => {
   const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
 
   const setViewingDate = (viewingDate: Date) => {
-    setQueryState("viewingDate", queryStateDateToIsoDateConverter(viewingDate));
+    setQueryState("viewingDate", queryStateDateToShortDateConverter(viewingDate));
   };
 
   return (

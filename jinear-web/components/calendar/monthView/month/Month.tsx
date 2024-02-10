@@ -37,7 +37,7 @@ const Month: React.FC<MonthProps> = ({ monthTable, days, squeezedView }) => {
         }
       }, 500);
     }
-  }, [viewingDate]);
+  }, [JSON.stringify(viewingDate)]);
 
   return (
     <div id="weeks-container" className={styles.weeksContainer}>

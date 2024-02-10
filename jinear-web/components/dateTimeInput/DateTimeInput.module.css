@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--c-primary-shade-0);
+  border-radius: var(--border-radius);
+  gap: 0.25rem;
+  min-height: 32px;
+}
+
+.deselectButton {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.divider {
+  width: 1px;
+  margin-left: 1px;
+  margin-right: 1px;
+  background-color: var(--c-primary-shade-1);
+}
+
+.labelButton {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+}

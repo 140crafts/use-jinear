@@ -31,6 +31,10 @@ const DatePickerModal: React.FC<DatePickerModalProps> = ({}) => {
 
   const onDateChange = useTypedSelector(selectDatePickerModalOnDateChange);
 
+  const setValue = (value?: Date | undefined) => {
+    value && onDateChange?.(value);
+  };
+
   const close = () => {
     dispatch(closeDatePickerModal());
   };
@@ -45,12 +49,12 @@ const DatePickerModal: React.FC<DatePickerModalProps> = ({}) => {
   return (
     <Modal visible={visible} bodyClass={styles.container} requestClose={close} hasTitleCloseButton={true} title={title}>
       <MiniMonthCalendar
-        initialDate={initialDate}
+        value={initialDate}
+        setValue={setValue}
         dateSpanStart={dateSpanStart}
         dateSpanEnd={dateSpanEnd}
         disabledBefore={disabledBefore}
         disabledAfter={disabledAfter}
-        onDateChange={onDateChange}
       />
     </Modal>
   );

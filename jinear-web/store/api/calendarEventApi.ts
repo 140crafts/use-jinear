@@ -19,16 +19,16 @@ export const calendarEventApi = api.injectEndpoints({
       ],
     }),
     //
-    updateDates: build.mutation<BaseResponse, CalendarEventDateUpdateRequest>({
-      query: (req) => ({ url: `v1/calendar/event/update-dates`, method: "PUT", body: req }),
+    updateCalendarEventDates: build.mutation<BaseResponse, CalendarEventDateUpdateRequest>({
+      query: (req) => ({ url: `v1/calendar/event/update/from-external/update-dates`, method: "PUT", body: req }),
       invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"],
     }),
     //
   }),
 });
 
-export const { useFilterCalendarEventsQuery, useUpdateDatesMutation } = calendarEventApi;
+export const { useFilterCalendarEventsQuery, useUpdateCalendarEventDatesMutation } = calendarEventApi;
 
 export const {
-  endpoints: { filterCalendarEvents, updateDates },
+  endpoints: { filterCalendarEvents, updateCalendarEventDates },
 } = calendarEventApi;

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-02-04 11:27:25.
+// Generated using typescript-generator version 3.0.1157 on 2024-02-10 12:25:00.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  first: boolean;
   last: boolean;
+  first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -62,8 +62,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
   item: any;
   expiresAt: Date;
-  notExpired: boolean;
   expired: boolean;
+  notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -79,6 +79,7 @@ export interface CalendarDto {
 }
 
 export interface CalendarEventDto {
+  calendarId: string;
   calendarEventId: string;
   title: string;
   assignedDate: Date;
@@ -104,7 +105,7 @@ export interface CalendarMemberDto {
 }
 
 export interface ExternalCalendarSourceDto {
-  id: string;
+  externalCalendarSourceId: string;
   summary?: string | null;
   description?: string | null;
   location?: string | null;
@@ -143,9 +144,9 @@ export interface GmailMessageDto extends BaseDto {
   to: string;
   subject: string;
   body: string;
-  ginternalDate: string;
-  ghistoryId: string;
   gthreadId: string;
+  ghistoryId: string;
+  ginternalDate: string;
   gid: string;
 }
 
@@ -774,10 +775,11 @@ export interface LoginWithPasswordRequest extends BaseRequest {
 }
 
 export interface CalendarEventDateUpdateRequest {
-  type: CalendarEventSourceType;
+  calendarId: string;
+  calendarSourceId: string;
   calendarEventId: string;
-  assignedDate?: Date | null;
-  dueDate?: Date | null;
+  assignedDate: Date;
+  dueDate: Date;
   hasPreciseAssignedDate?: boolean | null;
   hasPreciseDueDate?: boolean | null;
 }
@@ -1243,13 +1245,22 @@ export interface GoogleCalendarEventInfo {
   sequence: number;
   attendees: GoogleCalendarEventAttendee[];
   attendeesOmitted: boolean;
+  extendedProperties: GoogleCalendarExtendedProperties;
   hangoutLink: string;
+  conferenceData: GoogleCalendarConferenceData;
+  gadget: GoogleCalendarGadget;
   anyoneCanAddSelf: boolean;
   guestsCanInviteOthers: boolean;
   guestsCanModify: boolean;
   guestsCanSeeOtherGuests: boolean;
   privateCopy: boolean;
   locked: boolean;
+  reminders: GoogleCalendarReminder;
+  source: GoogleCalendarSource;
+  workingLocationProperties: GoogleCalendarWorkingLocationProperties;
+  outOfOfficeProperties: GoogleCalendarOutOfOfficeProperties;
+  focusTimeProperties: GoogleCalendarFocusTimeProperties;
+  attachments: GoogleCalendarAttachment[];
   eventType: string;
   icalUID: string;
 }
@@ -1276,6 +1287,113 @@ export interface GoogleCalendarEventDate {
   date: string;
   dateTime: string;
   timeZone: string;
+}
+
+export interface GoogleCalendarExtendedProperties {
+  private: { [index: string]: string };
+  shared: { [index: string]: string };
+}
+
+export interface GoogleCalendarConferenceData {
+  createRequest: GoogleCalendarConferenceDataRequest;
+  entryPoints: GoogleCalendarEntryPoint[];
+  conferenceSolution: GoogleCalendarConferenceSolution;
+  conferenceId: string;
+  signature: string;
+  notes: string;
+}
+
+export interface GoogleCalendarGadget {
+  type: string;
+  title: string;
+  link: string;
+  iconLink: string;
+  width: number;
+  height: number;
+  display: string;
+  preferences: { [index: string]: string };
+}
+
+export interface GoogleCalendarReminder {
+  useDefault: boolean;
+  overrides: GoogleCalendarReminderOverride[];
+}
+
+export interface GoogleCalendarSource {
+  url: string;
+  title: string;
+}
+
+export interface GoogleCalendarWorkingLocationProperties {
+  type: string;
+  homeOffice: any;
+  customLocation: GoogleCalendarCustomLocation;
+  officeLocation: GoogleCalendarOfficeLocation;
+}
+
+export interface GoogleCalendarOutOfOfficeProperties {
+  autoDeclineMode: string;
+  declineMessage: string;
+}
+
+export interface GoogleCalendarFocusTimeProperties extends GoogleCalendarOutOfOfficeProperties {
+  chatStatus: string;
+}
+
+export interface GoogleCalendarAttachment {
+  fileUrl: string;
+  title: string;
+  mimeType: string;
+  iconLink: string;
+  fileId: string;
+}
+
+export interface GoogleCalendarConferenceDataRequest {
+  requestId: string;
+  conferenceSolutionKey: GoogleCalendarConferenceSolutionKey;
+  status: GoogleCalendarConferenceDataStatus;
+}
+
+export interface GoogleCalendarEntryPoint {
+  entryPointType: string;
+  uri: string;
+  label: string;
+  pin: string;
+  accessCode: string;
+  meetingCode: string;
+  passcode: string;
+  password: string;
+}
+
+export interface GoogleCalendarConferenceSolution {
+  key: GoogleCalendarConferenceSolutionKey;
+  name: string;
+  iconUri: string;
+}
+
+export interface GoogleCalendarReminderOverride {
+  method: string;
+  minutes: number;
+}
+
+export interface GoogleCalendarCustomLocation {
+  label: string;
+}
+
+export interface GoogleCalendarOfficeLocation {
+  buildingId: string;
+  floorId: string;
+  floorSectionId: string;
+  deskId: string;
+  label: string;
+}
+
+export interface GoogleCalendarConferenceSolutionKey {
+  type: string;
+}
+
+export interface GoogleCalendarConferenceDataStatus {
+  statusCode: string;
 }
 
 export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";

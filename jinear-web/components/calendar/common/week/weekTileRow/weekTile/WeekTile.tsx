@@ -6,7 +6,8 @@ import {
   useSetCalenderLoading,
   useSetGhostEvent,
 } from "@/components/calendar/context/CalendarContext";
-import { useUpdateDatesMutation } from "@/store/api/calendarEventApi";
+import { useUpdateCalendarEventDatesMutation } from "@/store/api/calendarEventApi";
+import { useUpdateTaskDatesMutation } from "@/store/api/taskUpdateApi";
 import { popNewTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -29,7 +30,10 @@ const WeekTile: React.FC<WeekTileProps> = ({ day }) => {
   const setGhostEvent = useSetGhostEvent();
   const setCalendarLoading = useSetCalenderLoading();
   const [dragHovering, setDragHovering] = useState<boolean>(false);
-  const [updateEventDates, { isLoading: isUpdateEventDatesLoading }] = useUpdateDatesMutation();
+
+  const [updateTaskDates, { isLoading: isUpdateTaskDatesLoading }] = useUpdateTaskDatesMutation();
+  const [updateCalendarEventDates, { isLoading: isUpdateCalendarEventDatesLoading }] = useUpdateCalendarEventDatesMutation();
+  const isLoading = isUpdateTaskDatesLoading || isUpdateCalendarEventDatesLoading;
 
   const popNewTaskModalWithAssignedDatePreSelected = (initialAssignedDate: Date) => {
     dispatch(popNewTaskModal({ visible: true, workspace, team, initialAssignedDate }));
@@ -65,8 +69,8 @@ const WeekTile: React.FC<WeekTileProps> = ({ day }) => {
   }, [JSON.stringify(ghostEvent), dragHovering, JSON.stringify(day)]);
 
   useEffect(() => {
-    setCalendarLoading?.(isUpdateEventDatesLoading);
-  }, [isUpdateEventDatesLoading, setCalendarLoading]);
+    setCalendarLoading?.(isLoading);
+  }, [isLoading, setCalendarLoading]);
 
   const _onDragEnter = (event: React.DragEvent) => {
     setDragHovering(true);
@@ -93,11 +97,23 @@ const WeekTile: React.FC<WeekTileProps> = ({ day }) => {
       };
       if (JSON.stringify(currentVals) != JSON.stringify(req)) {
         logger.log({ currentVals, req });
-        updateEventDates({
-          ...req,
-          type: draggingEvent.calendarEventSourceType,
-          calendarEventId: draggingEvent.calendarEventId,
-        });
+        if (draggingEvent.calendarEventSourceType == "TASK" && draggingEvent.relatedTask) {
+          updateTaskDates({
+            taskId: draggingEvent.relatedTask.taskId,
+            body: req,
+          });
+        } else {
+          draggingEvent.externalCalendarSourceDto &&
+            updateCalendarEventDates({
+              calendarId: draggingEvent.calendarId,
+              calendarSourceId: draggingEvent.externalCalendarSourceDto.externalCalendarSourceId,
+              calendarEventId: draggingEvent.calendarEventId,
+              assignedDate: ghostEvent.assignedDate,
+              dueDate: ghostEvent.dueDate,
+              hasPreciseAssignedDate: ghostEvent.hasPreciseAssignedDate,
+              hasPreciseDueDate: ghostEvent.hasPreciseDueDate,
+            });
+        }
       }
     }
     setDragHovering(false);

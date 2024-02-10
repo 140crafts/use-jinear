@@ -7,6 +7,7 @@ import { startOfDay } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import styles from "./TaskList.module.css";
+import NonTaskCalendarEventItem from "./nonTaskCalendarEventItem/NonTaskCalendarEventItem";
 
 interface TaskListProps {
   className: string;
@@ -25,7 +26,7 @@ const TaskList: React.FC<TaskListProps> = ({ className, viewingDayEvents }) => {
         event.calendarEventSourceType == "TASK" && event.relatedTask ? (
           <TaskRow key={event.calendarEventId} task={event.relatedTask} />
         ) : (
-          <>todo events</>
+          <NonTaskCalendarEventItem key={event.calendarEventId} calendarEvent={event} />
         )
       )}
       {viewingDayEvents.length == 0 && <div className={styles.emptyLabel}>{t("calendarDayViewEmptyDayLabel")}</div>}

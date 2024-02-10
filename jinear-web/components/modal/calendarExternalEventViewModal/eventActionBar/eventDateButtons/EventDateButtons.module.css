@@ -1,0 +1,32 @@
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toggleButtonContainer {
+  background-color: var(--c-primary-shade-0);
+  border-radius: var(--border-radius);
+}
+
+.datesContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dateInputContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contentContainerClassName {
+  flex: 1;
+}
+.dateButtonClassName {
+  flex: 1;
+}

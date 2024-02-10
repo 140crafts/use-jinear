@@ -2,16 +2,32 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   padding: 1rem 0;
 }
 
+.infoContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
 .dateLabel {
   font-weight: 700;
-  font-size: 0.9rem;
+  /* font-size: 0.9rem; */
+  font-size: 0.65rem;
 }
 
 .calendarNavigation {
   display: flex;
   flex-direction: row;
+}
+
+.iconButton {
+  width: 30px !important;
+  height: 30px !important;
+  padding: 0.01rem !important;
 }

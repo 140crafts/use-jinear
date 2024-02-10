@@ -1358,6 +1358,10 @@ export default {
     en: "Today",
     tr: "Bugün",
   },
+  datePickerModalTitle: {
+    en: "Pick A Date",
+    tr: "Bir Tarih Seç",
+  },
   datePickerSelectDate: {
     en: "Select Date",
     tr: "Tarih Seçin",
@@ -3126,5 +3130,57 @@ export default {
   sideMenuCalendarSettings: {
     en: "Calendar settings",
     tr: "Takvim ayarları",
+  },
+  calendarEventDetailDescription: {
+    en: "No description",
+    tr: "Açıklama girilmedi",
+  },
+  calendarEventDetailDescriptionEdit: {
+    en: "Edit",
+    tr: "Düzenle",
+  },
+  calendarEventDetailDescriptionSave: {
+    en: "Save",
+    tr: "Kaydet",
+  },
+  calendarEventDetailDescriptionCancel: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  calendarEventTitleChangeModalTitle: {
+    en: "Update Title",
+    tr: "Başlığı Güncelle",
+  },
+  calendarEventTitleChangeModalInfoText: {
+    en: "Please provide an another title for calendar event.",
+    tr: "Takvim etkinliği için yeni bir başlık girin.",
+  },
+  calendarEventModalGoToSourceLink: {
+    en: "Open External Link",
+    tr: "Kaynağında Görüntüle",
+  },
+  calendarEventCalendarExternalSourceChange: {
+    en: "Change Calendar",
+    tr: "Takvimi Değiştir",
+  },
+  genericDateButtonLabel: {
+    en: "Pick A Date",
+    tr: "Bir Tarih Seçin",
+  },
+  calendarEventAllDayButtonLabel: {
+    en: "All Day",
+    tr: "Tüm Gün",
+  },
+  calendarEventSpesificDatesButtonLabel: {
+    en: "Spesific Dates",
+    tr: "Spesifik Tarih",
+  },
+  calendarEventDateStart: {
+    en: "Starts",
+    tr: "Başlangıç",
+  },
+  calendarEventDateEnds: {
+    en: "Ends",
+    tr: "Bitiş",
   },
 };

@@ -22,11 +22,14 @@ import { MdHorizontalRule, MdLayersClear } from "react-icons/md";
 import { PiListNumbers } from "react-icons/pi";
 import styles from "./ActionBar.module.css";
 
+export type TipTapActionBarMode = "simple" | "full";
+
 interface ActionBarProps {
   editor: Editor;
+  mode?: TipTapActionBarMode;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ editor }) => {
+const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full" }) => {
   return editor ? (
     <div className={styles.container}>
       <Button
@@ -57,98 +60,126 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor }) => {
       >
         <LuRemoveFormatting />
       </Button>
-      <Button
-        onClick={() => editor.chain().focus().clearNodes().run()}
-        disabled={!editor.can().chain().focus().unsetAllMarks().run()}
-        variant={ButtonVariants.hoverFilled}
-      >
-        <MdLayersClear />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
-        variant={editor.isActive("heading", { level: 1 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
-      >
-        <LuHeading1 />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-        variant={editor.isActive("heading", { level: 2 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
-      >
-        <LuHeading2 />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-        variant={editor.isActive("heading", { level: 3 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
-      >
-        <LuHeading3 />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
-        variant={editor.isActive("heading", { level: 4 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
-      >
-        <LuHeading4 />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
-        variant={editor.isActive("heading", { level: 5 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
-      >
-        <LuHeading5 />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
-        variant={editor.isActive("heading", { level: 6 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
-      >
-        <LuHeading6 />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleBulletList().run()}
-        disabled={!editor.can().chain().focus().toggleBulletList().run()}
-        variant={editor.isActive("bulletList") ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
-      >
-        <LuList />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleOrderedList().run()}
-        disabled={!editor.can().chain().focus().toggleOrderedList().run()}
-        variant={editor.isActive("orderedList") ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
-      >
-        <PiListNumbers />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-        disabled={!editor.can().chain().focus().toggleCodeBlock().run()}
-        variant={editor.isActive("codeBlock") ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
-      >
-        <LuCode2 />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().toggleBlockquote().run()}
-        disabled={!editor.can().chain().focus().toggleBlockquote().run()}
-        variant={editor.isActive("blockquote") ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
-      >
-        <LuQuote />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().setHorizontalRule().run()}
-        disabled={!editor.can().chain().focus().setHorizontalRule().run()}
-        variant={ButtonVariants.hoverFilled}
-      >
-        <MdHorizontalRule />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().undo().run()}
-        disabled={!editor.can().chain().focus().undo().run()}
-        variant={ButtonVariants.hoverFilled}
-      >
-        <LuUndo2 />
-      </Button>
-      <Button
-        onClick={() => editor.chain().focus().redo().run()}
-        disabled={!editor.can().chain().focus().redo().run()}
-        variant={ButtonVariants.hoverFilled}
-      >
-        <LuRedo2 />
-      </Button>
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().clearNodes().run()}
+          disabled={!editor.can().chain().focus().unsetAllMarks().run()}
+          variant={ButtonVariants.hoverFilled}
+        >
+          <MdLayersClear />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
+          variant={editor.isActive("heading", { level: 1 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+        >
+          <LuHeading1 />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          variant={editor.isActive("heading", { level: 2 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+        >
+          <LuHeading2 />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          variant={editor.isActive("heading", { level: 3 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+        >
+          <LuHeading3 />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
+          variant={editor.isActive("heading", { level: 4 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+        >
+          <LuHeading4 />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
+          variant={editor.isActive("heading", { level: 5 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+        >
+          <LuHeading5 />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
+          variant={editor.isActive("heading", { level: 6 }) ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+        >
+          <LuHeading6 />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().toggleBulletList().run()}
+          disabled={!editor.can().chain().focus().toggleBulletList().run()}
+          variant={editor.isActive("bulletList") ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+        >
+          <LuList />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().toggleOrderedList().run()}
+          disabled={!editor.can().chain().focus().toggleOrderedList().run()}
+          variant={editor.isActive("orderedList") ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+        >
+          <PiListNumbers />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().toggleCodeBlock().run()}
+          disabled={!editor.can().chain().focus().toggleCodeBlock().run()}
+          variant={editor.isActive("codeBlock") ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+        >
+          <LuCode2 />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().toggleBlockquote().run()}
+          disabled={!editor.can().chain().focus().toggleBlockquote().run()}
+          variant={editor.isActive("blockquote") ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+        >
+          <LuQuote />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().setHorizontalRule().run()}
+          disabled={!editor.can().chain().focus().setHorizontalRule().run()}
+          variant={ButtonVariants.hoverFilled}
+        >
+          <MdHorizontalRule />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().undo().run()}
+          disabled={!editor.can().chain().focus().undo().run()}
+          variant={ButtonVariants.hoverFilled}
+        >
+          <LuUndo2 />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().redo().run()}
+          disabled={!editor.can().chain().focus().redo().run()}
+          variant={ButtonVariants.hoverFilled}
+        >
+          <LuRedo2 />
+        </Button>
+      )}
     </div>
   ) : null;
 };

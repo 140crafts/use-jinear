@@ -8,3 +8,12 @@
 .newTaskButton {
   font-weight: 500;
 }
+
+.dayButtonClassName {
+  padding: 0 !important;
+}
+
+.miniMonthCalendarHeader {
+  padding: 0;
+  padding-bottom: 1rem;
+}
