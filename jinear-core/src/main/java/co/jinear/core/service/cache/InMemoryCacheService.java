@@ -39,6 +39,13 @@ public class InMemoryCacheService {
         refresh();
     }
 
+    public void removeIfKeyContains(String partOfKey) {
+        cache.keySet()
+                .stream()
+                .filter(key -> key.contains(partOfKey))
+                .forEach(cache::remove);
+    }
+
     private void refresh() {
         cache.keySet().forEach(key -> {
             InMemoryCacheItem inMemoryCacheItem = cache.get(key);

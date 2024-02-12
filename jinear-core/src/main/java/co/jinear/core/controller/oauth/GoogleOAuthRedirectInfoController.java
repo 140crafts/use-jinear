@@ -29,7 +29,7 @@ public class GoogleOAuthRedirectInfoController {
 
     @GetMapping("/attach-calendar")
     @ResponseStatus(HttpStatus.OK)
-    public AuthRedirectInfoResponse retrieveCalendarAttachRedirectUrl() {
-        return googleOAuthRedirectInfoManager.retrieveAttachCalendarUrl();
+    public AuthRedirectInfoResponse retrieveCalendarAttachRedirectUrl(@RequestParam String workspaceId) {
+        return googleOAuthRedirectInfoManager.retrieveAttachCalendarUrl(workspaceId);
     }
 }

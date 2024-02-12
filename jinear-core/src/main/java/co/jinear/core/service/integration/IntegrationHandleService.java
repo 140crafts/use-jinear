@@ -22,7 +22,7 @@ public class IntegrationHandleService {
     private final IntegrationScopeOperationService integrationScopeOperationService;
 
     public String initializeOrUpdateInfo(String accountId, IntegrationProvider provider, IntegrationScopeType scope, String relatedObjectId) {
-        Optional<IntegrationScopeDto> integrationScopeDtoOptional = integrationScopeRetrieveService.retrieveIntegrationWithScope(accountId, provider, scope);
+        Optional<IntegrationScopeDto> integrationScopeDtoOptional = integrationScopeRetrieveService.retrieveIntegrationWithScope(accountId, provider, relatedObjectId, scope);
         if (integrationScopeDtoOptional.isEmpty()) {
             return checkIntegrationInfoAndInitializeScope(accountId, provider, scope, relatedObjectId);
         }
@@ -42,7 +42,7 @@ public class IntegrationHandleService {
 
     private IntegrationInfoDto getIntegrationInfoDto(String accountId, IntegrationProvider provider, String relatedObjectId) {
         return integrationInfoRetrieveService
-                .retrieveIntegrationWithProvider(accountId, provider)
+                .retrieveIntegrationWithProvider(accountId, provider, relatedObjectId)
                 .orElseGet(() -> initializeIntegrationInfo(accountId, provider, relatedObjectId));
     }
 }

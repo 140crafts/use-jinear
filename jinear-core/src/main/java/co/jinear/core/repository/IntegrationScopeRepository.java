@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface IntegrationScopeRepository extends JpaRepository<IntegrationScope, String> {
 
-    Optional<IntegrationScope> findByIntegrationInfo_AccountIdAndIntegrationInfo_ProviderAndIntegrationInfo_PassiveIdIsNullAndScopeAndPassiveIdIsNull(String accountId, IntegrationProvider provider, IntegrationScopeType scope);
+    Optional<IntegrationScope> findByIntegrationInfo_AccountIdAndIntegrationInfo_ProviderAndIntegrationInfo_RelatedObjectIdAndIntegrationInfo_PassiveIdIsNullAndScopeAndPassiveIdIsNull(String accountId, IntegrationProvider provider, String relatedObjectId, IntegrationScopeType scope);
 }

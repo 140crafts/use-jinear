@@ -33,13 +33,13 @@ public class FeedAccessValidator {
         }
     }
 
+    private boolean isFeedMember(String accountId, String feedId) {
+        return feedMemberRetrieveService.isFeedMember(accountId, feedId);
+    }
+
     public boolean isFeedOwner(String accountId, String feedId) {
         FeedDto feedDto = feedRetrieveService.retrieveFeed(feedId);
         return feedDto.getInitializedBy().equals(accountId);
-    }
-
-    private boolean isFeedMember(String accountId, String feedId) {
-        return feedMemberRetrieveService.isFeedMember(accountId, feedId);
     }
 
     private boolean isFeedWorkspaceAdmin(String accountId, String feedId) {

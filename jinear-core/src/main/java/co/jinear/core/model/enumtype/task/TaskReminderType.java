@@ -10,5 +10,5 @@ public enum TaskReminderType {
     DUE_DATE(1),
     SPECIFIC_DATE(2);
 
-    private int value;
+    private final int value;
 }

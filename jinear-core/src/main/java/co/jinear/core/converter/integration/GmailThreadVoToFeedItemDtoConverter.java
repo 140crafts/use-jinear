@@ -7,11 +7,12 @@ import co.jinear.core.model.dto.integration.FeedItemMessageData;
 import co.jinear.core.model.dto.integration.FeedItemParticipant;
 import co.jinear.core.system.gcloud.gmail.model.GmailThreadInfo;
 import co.jinear.core.system.gcloud.googleapis.model.*;
+import com.google.common.collect.Streams;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.*;
 
@@ -40,7 +41,8 @@ public class GmailThreadVoToFeedItemDtoConverter {
         feedContentItemDto.setFeed(feedDto);
 
         messages.stream().findFirst().map(FeedItemMessage::getSubject).ifPresent(feedContentItemDto::setTitle);
-        messages.stream().findFirst().map(FeedItemMessage::getDate).ifPresent(feedContentItemDto::setDate);
+//        messages.stream().findFirst().map(FeedItemMessage::getDate).ifPresent(feedContentItemDto::setDate);
+        Streams.findLast(messages.stream()).map(FeedItemMessage::getDate).ifPresent(feedContentItemDto::setDate);
 
         mapParticipants(googleUserEmail, messages, feedContentItemDto);
 
@@ -162,7 +164,7 @@ public class GmailThreadVoToFeedItemDtoConverter {
             return null;
         }
         Instant i = Instant.ofEpochMilli(Long.parseLong(epochDate));
-        return ZonedDateTime.ofInstant(i, ZoneId.systemDefault());
+        return ZonedDateTime.ofInstant(i, ZoneOffset.UTC);
     }
 
     private void mapParticipants(String googleUserEmail, List<FeedItemMessage> messages, FeedContentItemDto feedContentItemDto) {

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.Optional;
 
 @Slf4j
@@ -22,7 +23,7 @@ public class ZonedDateHelper {
         return Optional.ofNullable(timeZone)
                 .map(ZoneId::of)
                 .map(zonedDateTime::withZoneSameInstant)
-                .orElseGet(()->zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()));
+                .orElseGet(() -> zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()));
     }
 
     public static String format(ZonedDateTime zonedDateTime, String pattern) {
@@ -49,5 +50,23 @@ public class ZonedDateHelper {
 
     public static String formatWithDateTimeFormat5(ZonedDateTime zonedDateTime) {
         return format(zonedDateTime, DATE_TIME_FORMAT_5);
+    }
+
+    public static ZonedDateTime parseIsoDateTime(String dateStr) {
+        return ZonedDateTime.parse(dateStr, DateTimeFormatter.ISO_DATE_TIME);
+    }
+
+    public static ZonedDateTime parseWithDateTimeFormat4(String dateStr, String zoneId) {
+        Date date = DateHelper.parseDate(DATE_TIME_FORMAT_4, dateStr);
+        return Optional.ofNullable(date)
+                .map(Date::toInstant)
+                .map(instant -> instant.atZone(ZoneId.of(zoneId)))
+                .orElse(null);
+    }
+
+    public static void main(String[] args) {
+        ZonedDateTime zonedDateTime = atTimeZone(ZonedDateTime.now(),"GMT");
+
+        System.out.println(formatWithDateTimeFormat5(zonedDateTime) + " _____ " + zonedDateTime);
     }
 }

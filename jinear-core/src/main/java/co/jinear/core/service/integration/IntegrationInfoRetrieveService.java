@@ -26,9 +26,9 @@ public class IntegrationInfoRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Optional<IntegrationInfoDto> retrieveIntegrationWithProvider(String accountId, IntegrationProvider provider) {
-        log.info("Retrieve integration with provider has started. accountId: {}, provider: {}", accountId, provider);
-        return integrationInfoRepository.findByAccountIdAndProviderAndPassiveIdIsNull(accountId, provider)
+    public Optional<IntegrationInfoDto> retrieveIntegrationWithProvider(String accountId, IntegrationProvider provider, String relatedObjectId) {
+        log.info("Retrieve integration with provider has started. accountId: {}, provider: {}, relatedObjectId: {}", accountId, provider, relatedObjectId);
+        return integrationInfoRepository.findByAccountIdAndProviderAndRelatedObjectIdAndPassiveIdIsNull(accountId, provider, relatedObjectId)
                 .map(integrationInfoDtoConverter::map);
     }
 }

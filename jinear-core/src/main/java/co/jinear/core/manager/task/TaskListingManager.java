@@ -9,6 +9,7 @@ import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
 import co.jinear.core.model.request.task.TaskFilterRequest;
+import co.jinear.core.model.response.task.TaskListingListedResponse;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.service.SessionInfoService;
@@ -47,7 +48,6 @@ public class TaskListingManager {
         List<TeamMemberDto> memberships = retrieveMemberships(taskFilterRequest, currentAccount);
         validateAccountMembershipsInRequestedTeams(taskFilterRequest, memberships);
         validateTeamTaskVisibilityAndMemberRoleForAll(memberships);
-
         TaskSearchFilterVo taskSearchFilterVo = taskFilterRequestConverter.convert(taskFilterRequest, memberships);
         Page<TaskDto> taskDtoPage = taskListingService.filterTasks(taskSearchFilterVo);
         return mapResponse(taskDtoPage);
@@ -71,18 +71,18 @@ public class TaskListingManager {
         memberships.forEach(this::validateTeamTaskVisibilityAndMemberRole);
     }
 
-    private void validateAccountMembershipsInRequestedTeams(TaskFilterRequest taskFilterRequest, List<TeamMemberDto> memberships) {
-        List<String> teamIdList = taskFilterRequest.getTeamIdList();
-        if (Objects.nonNull(teamIdList) && memberships.size() != teamIdList.size()) {
-            throw new NoAccessException();
-        }
-    }
-
     private void validateTeamTaskVisibilityAndMemberRole(TeamMemberDto teamMemberDto) {
         TeamDto teamDto = teamMemberDto.getTeam();
         TeamMemberRoleType role = teamMemberDto.getRole();
 
         if (OWNER_ASSIGNEE_AND_ADMINS.equals(teamDto.getTaskVisibility()) && !List.of(TeamMemberRoleType.ADMIN, TeamMemberRoleType.MEMBER).contains(role)) {
+            throw new NoAccessException();
+        }
+    }
+
+    private void validateAccountMembershipsInRequestedTeams(TaskFilterRequest taskFilterRequest, List<TeamMemberDto> memberships) {
+        List<String> teamIdList = taskFilterRequest.getTeamIdList();
+        if (Objects.nonNull(teamIdList) && memberships.size() != teamIdList.size()) {
             throw new NoAccessException();
         }
     }
@@ -101,5 +101,11 @@ public class TaskListingManager {
         TaskListingPaginatedResponse taskListingPaginatedResponse = new TaskListingPaginatedResponse();
         taskListingPaginatedResponse.setTaskDtoPage(new PageDto<>(taskDtoPage));
         return taskListingPaginatedResponse;
+    }
+
+    private TaskListingListedResponse mapResponse(List<TaskDto> allTasks) {
+        TaskListingListedResponse taskListingListedResponse = new TaskListingListedResponse();
+        taskListingListedResponse.setTaskDtoList(allTasks);
+        return taskListingListedResponse;
     }
 }

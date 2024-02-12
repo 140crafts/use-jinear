@@ -19,9 +19,9 @@ public class IntegrationScopeRetrieveService {
     private final IntegrationScopeRepository integrationScopeRepository;
     private final IntegrationScopeDtoConverter integrationScopeDtoConverter;
 
-    public Optional<IntegrationScopeDto> retrieveIntegrationWithScope(String accountId, IntegrationProvider provider, IntegrationScopeType scope) {
-        log.info("Retrieve integration with scope and provider has started. accountId: {}, provider: {}, scope: {}", accountId, provider, scope);
-        return integrationScopeRepository.findByIntegrationInfo_AccountIdAndIntegrationInfo_ProviderAndIntegrationInfo_PassiveIdIsNullAndScopeAndPassiveIdIsNull(accountId, provider, scope)
+    public Optional<IntegrationScopeDto> retrieveIntegrationWithScope(String accountId, IntegrationProvider provider, String relatedObjectId, IntegrationScopeType scope) {
+        log.info("Retrieve integration with scope and provider has started. accountId: {}, provider: {}, relatedObjectId: {}, scope: {}", accountId, provider, scope, relatedObjectId);
+        return integrationScopeRepository.findByIntegrationInfo_AccountIdAndIntegrationInfo_ProviderAndIntegrationInfo_RelatedObjectIdAndIntegrationInfo_PassiveIdIsNullAndScopeAndPassiveIdIsNull(accountId, provider, relatedObjectId, scope)
                 .map(integrationScopeDtoConverter::map);
     }
 }

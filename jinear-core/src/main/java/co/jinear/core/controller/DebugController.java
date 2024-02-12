@@ -1,6 +1,5 @@
 package co.jinear.core.controller;
 
-import co.jinear.core.model.dto.google.GoogleTokenDto;
 import co.jinear.core.service.google.GoogleOAuthApiCallerService;
 import co.jinear.core.service.google.GoogleRedirectInfoService;
 import co.jinear.core.service.google.GoogleTokenValidatedRetrieveService;
@@ -33,12 +32,13 @@ public class DebugController {
     }
 
     @GetMapping
-    public String debug2(HttpServletResponse response) throws Exception {
+    public Object debug2(HttpServletResponse response) throws Exception {
 //        return googleRedirectInfoService.retrieveAttachMailUrl("01hfhyn839211scjc8hfv0es0t");
+        return googleRedirectInfoService.retrieveAttachCalendarUrl("01hmnqcjeq54wqkmy2jd9tqeb5");
 
 
-        GoogleTokenDto token = googleTokenValidatedRetrieveService.retrieveValidatedToken("01hfhxh7yhyr9b7213dzmdcwm8");
-        String accessToken = token.getAccessToken();
+//        GoogleTokenDto token = googleTokenValidatedRetrieveService.retrieveValidatedToken("01hfhxh7yhyr9b7213dzmdcwm8");
+//        String accessToken = token.getAccessToken();
 //        RetrieveBatchMessageVo retrieveBatchMessageVo = new RetrieveBatchMessageVo();
 //        retrieveBatchMessageVo.setUserId("108296555126733890191");
 //        retrieveBatchMessageVo.setMessageId("18be89a31ba4db97");
@@ -60,10 +60,7 @@ public class DebugController {
 //        gmailThreadOperationService.fetchAndSaveLatestThreads(token);
 //        List<GmailThread> threadList = gmailThreadRepository.findAll();
 //        System.out.println(threadList);
-        return accessToken;
+//        return accessToken;
 //        return googleRedirectInfoService.retrieveAttachMailUrl("01hfhyn839211scjc8hfv0es0t");
-    }
-
-    public static void main(String[] args) {
     }
 }

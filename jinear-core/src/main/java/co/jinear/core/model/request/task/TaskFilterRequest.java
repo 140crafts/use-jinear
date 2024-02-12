@@ -1,5 +1,6 @@
 package co.jinear.core.model.request.task;
 
+import co.jinear.core.model.dto.calendar.TaskExternalCalendarFilterDto;
 import co.jinear.core.model.enumtype.FilterSort;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.request.BaseRequest;
@@ -32,6 +33,8 @@ public class TaskFilterRequest extends BaseRequest {
     @Nullable
     private List<String> teamIdList;
     @Nullable
+    private List<String> excludingTeamIdList;
+    @Nullable
     private List<String> topicIds;
     @Nullable
     private List<String> ownerIds;
@@ -47,4 +50,6 @@ public class TaskFilterRequest extends BaseRequest {
     private ZonedDateTime timespanEnd;
     @Nullable
     private FilterSort sort = IDATE_DESC;
+    @Nullable
+    private List<TaskExternalCalendarFilterDto> externalCalendarList;
 }

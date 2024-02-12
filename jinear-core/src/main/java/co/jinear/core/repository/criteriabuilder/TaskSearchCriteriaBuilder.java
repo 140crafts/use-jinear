@@ -44,6 +44,15 @@ public class TaskSearchCriteriaBuilder {
         }
     }
 
+    public void addTeamIdNotInList(List<String> teamIdList, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
+        if (Objects.nonNull(teamIdList) && !teamIdList.isEmpty()) {
+            CriteriaBuilder.In<String> in = criteriaBuilder.in(root.get("teamId"));
+            teamIdList.forEach(in::value);
+            Predicate notIn = criteriaBuilder.not(in);
+            predicateList.add(notIn);
+        }
+    }
+
     public void addTopicIdList(List<String> topicIdList, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
         if (Objects.nonNull(topicIdList) && !topicIdList.isEmpty()) {
             CriteriaBuilder.In<String> in = criteriaBuilder.in(root.get("topicId"));

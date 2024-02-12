@@ -24,6 +24,7 @@ public class TaskSearchFilterVo {
     private int size = 250;
     private String workspaceId;
     private Map<TeamTaskVisibilityType, List<TeamMemberDto>> teamMemberMap;
+    private List<String> excludingTeamIdList;
     private List<String> topicIds;
     private List<String> ownerIds;
     private List<String> assigneeIds;
