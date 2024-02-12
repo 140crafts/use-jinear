@@ -2,6 +2,7 @@ package co.jinear.core.controller.calendar;
 
 import co.jinear.core.manager.calendar.CalendarEventUpdateManager;
 import co.jinear.core.model.request.calendar.CalendarEventDateUpdateRequest;
+import co.jinear.core.model.request.calendar.CalendarEventTitleDescriptionUpdateRequest;
 import co.jinear.core.model.response.BaseResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,9 +16,15 @@ public class CalendarEventUpdateController {
 
     private final CalendarEventUpdateManager calendarEventUpdateManager;
 
-    @PutMapping("/update-dates")
+    @PutMapping("/dates")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse updateDates(@Valid @RequestBody CalendarEventDateUpdateRequest calendarEventFilterRequest) {
-        return calendarEventUpdateManager.updateEventDate(calendarEventFilterRequest);
+    public BaseResponse updateDates(@Valid @RequestBody CalendarEventDateUpdateRequest calendarEventDateUpdateRequest) {
+        return calendarEventUpdateManager.updateEventDate(calendarEventDateUpdateRequest);
+    }
+
+    @PutMapping("/title-description")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateTitleAndDescription(@Valid @RequestBody CalendarEventTitleDescriptionUpdateRequest calendarEventTitleDescriptionUpdateRequest) {
+        return calendarEventUpdateManager.updateTitleAndDescription(calendarEventTitleDescriptionUpdateRequest);
     }
 }

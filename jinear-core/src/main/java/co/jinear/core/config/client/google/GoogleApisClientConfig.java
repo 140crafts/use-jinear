@@ -1,7 +1,7 @@
 package co.jinear.core.config.client.google;
 
 import co.jinear.core.config.interceptor.GenericClientLoggingInterceptor;
-import co.jinear.core.config.interceptor.GenericResponseErrorHandler;
+import co.jinear.core.config.interceptor.GoogleClientsResponseErrorHandler;
 import co.jinear.core.config.properties.GCloudProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class GoogleApisClientConfig {
     @Bean("googleApisRestTemplate")
     public RestTemplate googleApisRestTemplate(UriTemplateHandler googleApisUriTemplateHandler,
                                                @Autowired GenericClientLoggingInterceptor genericClientLoggingInterceptor,
-                                               @Autowired GenericResponseErrorHandler genericResponseErrorHandler) {
+                                               @Autowired GoogleClientsResponseErrorHandler googleClientsResponseErrorHandler) {
         SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
         BufferingClientHttpRequestFactory bufferingClientHttpRequestFactory = new BufferingClientHttpRequestFactory(simpleClientHttpRequestFactory);
 
@@ -34,7 +34,7 @@ public class GoogleApisClientConfig {
         restTemplate.setRequestFactory(bufferingClientHttpRequestFactory);
         restTemplate.setUriTemplateHandler(googleApisUriTemplateHandler);
         restTemplate.setInterceptors(List.of(genericClientLoggingInterceptor));
-        restTemplate.setErrorHandler(genericResponseErrorHandler);
+        restTemplate.setErrorHandler(googleClientsResponseErrorHandler);
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate;
     }

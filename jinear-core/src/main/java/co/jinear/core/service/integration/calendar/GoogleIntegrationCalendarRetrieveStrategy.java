@@ -9,6 +9,7 @@ import co.jinear.core.model.dto.google.GoogleUserInfoDto;
 import co.jinear.core.model.dto.integration.IntegrationInfoDto;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
 import co.jinear.core.model.vo.calendar.UpdateExternalEventDatesVo;
+import co.jinear.core.model.vo.calendar.UpdateExternalEventTitleDescriptionVo;
 import co.jinear.core.service.google.GoogleTokenValidatedRetrieveService;
 import co.jinear.core.service.google.calendar.GoogleCalendarInMemoryCacheService;
 import co.jinear.core.system.gcloud.googleapis.GoogleApisClient;
@@ -125,6 +126,29 @@ public class GoogleIntegrationCalendarRetrieveStrategy implements IntegrationCal
 
         googleApisClient.updateEvent(accessToken, updateExternalEventDatesVo.getCalendarSourceId(), googleCalendarEventInfo);
         googleCalendarInMemoryCacheService.clearCalendarEventListCache(updateExternalEventDatesVo.getCalendarSourceId());
+    }
+
+    @Override
+    public void updateCalendarEventTitleDescription(IntegrationInfoDto integrationInfoDto, UpdateExternalEventTitleDescriptionVo updateExternalEventTitleDescriptionVo) {
+        log.info("Update calendar event title description has started. updateExternalEventTitleDescriptionVo: {}", updateExternalEventTitleDescriptionVo);
+        String accessToken = Optional.of(integrationInfoDto)
+                .map(IntegrationInfoDto::getGoogleUserInfo)
+                .map(GoogleUserInfoDto::getGoogleUserInfoId)
+                .map(googleTokenValidatedRetrieveService::retrieveValidatedToken)
+                .map(GoogleTokenDto::getAccessToken)
+                .orElseThrow();
+
+        GoogleCalendarEventInfo googleCalendarEventInfo = googleApisClient.retrieveEvent(accessToken, updateExternalEventTitleDescriptionVo.getCalendarSourceId(), updateExternalEventTitleDescriptionVo.getCalendarEventId());
+        Optional.of(updateExternalEventTitleDescriptionVo)
+                .map(UpdateExternalEventTitleDescriptionVo::getTitle)
+                .ifPresent(googleCalendarEventInfo::setSummary);
+
+        Optional.of(updateExternalEventTitleDescriptionVo)
+                .map(UpdateExternalEventTitleDescriptionVo::getDescription)
+                .ifPresent(googleCalendarEventInfo::setDescription);
+
+        googleApisClient.updateEvent(accessToken, updateExternalEventTitleDescriptionVo.getCalendarSourceId(), googleCalendarEventInfo);
+        googleCalendarInMemoryCacheService.clearCalendarEventListCache(updateExternalEventTitleDescriptionVo.getCalendarSourceId());
     }
 
     private ExternalCalendarSourceDto retrieveAndCacheCalendarSource(IntegrationInfoDto integrationInfoDto, String externalCalendarSourceId) {

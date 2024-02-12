@@ -2,6 +2,7 @@ package co.jinear.core.service.calendar;
 
 import co.jinear.core.model.dto.integration.IntegrationInfoDto;
 import co.jinear.core.model.vo.calendar.UpdateExternalEventDatesVo;
+import co.jinear.core.model.vo.calendar.UpdateExternalEventTitleDescriptionVo;
 import co.jinear.core.service.integration.calendar.IntegrationCalendarRetrieveStrategy;
 import co.jinear.core.service.integration.calendar.IntegrationCalendarRetrieveStrategyFactory;
 import lombok.RequiredArgsConstructor;
@@ -19,5 +20,11 @@ public class CalendarExternalEventUpdateService {
         log.info("Update calendar event dates has started. updateExternalEventDatesVo: {}", updateExternalEventDatesVo);
         IntegrationCalendarRetrieveStrategy integrationCalendarRetrieveStrategy = integrationCalendarRetrieveStrategyFactory.getStrategy(integrationInfoDto.getProvider());
         integrationCalendarRetrieveStrategy.updateCalendarEventDates(integrationInfoDto, updateExternalEventDatesVo);
+    }
+
+    public void updateCalendarEventTitleDescription(IntegrationInfoDto integrationInfoDto, UpdateExternalEventTitleDescriptionVo updateExternalEventTitleDescriptionVo) {
+        log.info("Update calendar event title and description has started. updateExternalEventTitleDescriptionVo: {}", updateExternalEventTitleDescriptionVo);
+        IntegrationCalendarRetrieveStrategy integrationCalendarRetrieveStrategy = integrationCalendarRetrieveStrategyFactory.getStrategy(integrationInfoDto.getProvider());
+        integrationCalendarRetrieveStrategy.updateCalendarEventTitleDescription(integrationInfoDto, updateExternalEventTitleDescriptionVo);
     }
 }

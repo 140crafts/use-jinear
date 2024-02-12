@@ -5,6 +5,7 @@ import co.jinear.core.model.dto.calendar.ExternalCalendarSourceDto;
 import co.jinear.core.model.dto.integration.IntegrationInfoDto;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
 import co.jinear.core.model.vo.calendar.UpdateExternalEventDatesVo;
+import co.jinear.core.model.vo.calendar.UpdateExternalEventTitleDescriptionVo;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.request.RetrieveEventListRequest;
 
 import java.util.List;
@@ -22,4 +23,6 @@ public interface IntegrationCalendarRetrieveStrategy {
     CalendarEventDto retrieveCalendarEvent(IntegrationInfoDto integrationInfoDto, String calendarSourceId, String eventId);
 
     void updateCalendarEventDates(IntegrationInfoDto integrationInfoDto, UpdateExternalEventDatesVo updateExternalEventDatesVo);
+
+    void updateCalendarEventTitleDescription(IntegrationInfoDto integrationInfoDto, UpdateExternalEventTitleDescriptionVo updateExternalEventTitleDescriptionVo);
 }
