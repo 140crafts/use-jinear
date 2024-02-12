@@ -9,6 +9,7 @@ import styles from "./WorkflowStatus.module.css";
 
 interface WorkflowStatusProps {
   task: TaskDto;
+  buttonVariant?: string;
 }
 
 const groupIconMap = {
@@ -19,7 +20,7 @@ const groupIconMap = {
   CANCELLED: <IoCloseCircle size={17} />,
 };
 
-const WorkflowStatus: React.FC<WorkflowStatusProps> = ({ task }) => {
+const WorkflowStatus: React.FC<WorkflowStatusProps> = ({ task, buttonVariant }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -30,9 +31,9 @@ const WorkflowStatus: React.FC<WorkflowStatusProps> = ({ task }) => {
   return (
     <Button
       onClick={popChangeWorkflowStatusModal}
-      variant={ButtonVariants.filled}
+      variant={buttonVariant ? buttonVariant : ButtonVariants.filled}
       className={styles.container}
-      data-tooltip-right={t("taskDetailChangeWorkflowStatusTooltip")}
+      data-tooltip={t("taskDetailChangeWorkflowStatusTooltip")}
     >
       <div className={styles.iconContainer}>{groupIconMap?.[task.workflowStatus.workflowStateGroup]}</div>
     </Button>

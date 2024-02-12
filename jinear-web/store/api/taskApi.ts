@@ -13,6 +13,7 @@ export const taskApi = api.injectEndpoints({
         "v1/task/from-workspace/{workspaceName}/{taskTag}",
         "v1/task-board/entry/from-task-board/{taskBoardId}",
         "v1/task/list/filter",
+        "v1/calendar/event/filter",
         "v1/workspace/activity/filter",
         "v1/task-analytics/{workspaceId}/team/{teamId}",
         "v1/task/search/${workspaceId}/${teamId}/{title}",

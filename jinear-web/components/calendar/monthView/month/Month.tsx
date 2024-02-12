@@ -1,11 +1,11 @@
+import { queryStateShortDateParser, useQueryState } from "@/hooks/useQueryState";
 import { getOffset, getSize } from "@/utils/htmlUtis";
 import Logger from "@/utils/logger";
 import cn from "classnames";
-import { format, isThisMonth } from "date-fns";
+import { format, isThisMonth, startOfDay } from "date-fns";
 import React, { useEffect } from "react";
 import { ICalendarWeekRowCell } from "../../calendarUtils";
 import Week from "../../common/week/Week";
-import { useViewingDate } from "../../context/CalendarContext";
 import styles from "./Month.module.scss";
 
 interface MonthProps {
@@ -17,7 +17,7 @@ interface MonthProps {
 const logger = Logger("Month");
 
 const Month: React.FC<MonthProps> = ({ monthTable, days, squeezedView }) => {
-  const viewingDate = useViewingDate();
+  const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
 
   useEffect(() => {
     if (viewingDate && isThisMonth(viewingDate)) {
@@ -37,7 +37,7 @@ const Month: React.FC<MonthProps> = ({ monthTable, days, squeezedView }) => {
         }
       }, 500);
     }
-  }, [viewingDate]);
+  }, [JSON.stringify(viewingDate)]);
 
   return (
     <div id="weeks-container" className={styles.weeksContainer}>
@@ -53,7 +53,7 @@ const Month: React.FC<MonthProps> = ({ monthTable, days, squeezedView }) => {
           <Week
             id={`week-${weekIndex}`}
             key={`week-${weekIndex}`}
-            weekTasks={week}
+            weekEvents={week}
             weekIndex={weekIndex}
             week={days.slice(weekIndex * 7, weekIndex * 7 + 7)}
           />

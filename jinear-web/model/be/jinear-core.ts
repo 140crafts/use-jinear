@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-01-10 21:33:23.
+// Generated using typescript-generator version 3.0.1157 on 2024-02-11 14:26:00.
 
 export interface BaseDto {
   createdDate: Date;
@@ -66,6 +66,57 @@ export interface InMemoryCacheItem {
   expired: boolean;
 }
 
+export interface CalendarDto {
+  calendarId: string;
+  workspaceId: string;
+  initializedBy: string;
+  integrationInfoId: string;
+  integrationInfo: IntegrationInfoDto;
+  name: string;
+  provider: IntegrationProvider;
+  scopes: IntegrationScopeType[];
+  calendarSources?: ExternalCalendarSourceDto[] | null;
+}
+
+export interface CalendarEventDto {
+  calendarId: string;
+  calendarEventId: string;
+  title: string;
+  assignedDate: Date;
+  dueDate: Date;
+  hasPreciseAssignedDate: boolean;
+  hasPreciseDueDate: boolean;
+  calendarEventSourceType: CalendarEventSourceType;
+  description?: RichTextDto | null;
+  location?: string | null;
+  externalLink?: string | null;
+  externalCalendarSourceDto?: ExternalCalendarSourceDto | null;
+  relatedTask?: TaskDto | null;
+  relatedGoogleCalendarEventInfo?: GoogleCalendarEventInfo | null;
+}
+
+export interface CalendarMemberDto {
+  calendarMemberId: string;
+  accountId: string;
+  workspaceId: string;
+  calendarId: string;
+  account: AccountDto;
+  calendar: CalendarDto;
+}
+
+export interface ExternalCalendarSourceDto {
+  externalCalendarSourceId: string;
+  summary?: string | null;
+  description?: string | null;
+  location?: string | null;
+  timeZone?: string | null;
+}
+
+export interface TaskExternalCalendarFilterDto {
+  calendarId: string;
+  calendarSourceId: string;
+}
+
 export interface FeedDto extends BaseDto {
   feedId: string;
   workspaceId: string;
@@ -93,8 +144,8 @@ export interface GmailMessageDto extends BaseDto {
   to: string;
   subject: string;
   body: string;
-  ginternalDate: string;
   gthreadId: string;
+  ginternalDate: string;
   ghistoryId: string;
   gid: string;
 }
@@ -180,13 +231,15 @@ export interface IntegrationInfoDto extends BaseDto {
   provider: IntegrationProvider;
   accountId: string;
   relatedObjectId: string;
-  scopes: IntegrationScopeDto[];
+  scopes: IntegrationScopeType[];
+  googleUserInfo: GoogleUserInfoDto;
 }
 
 export interface IntegrationScopeDto extends BaseDto {
   integrationScopeId: string;
   integrationInfoId: string;
   scope: IntegrationScopeType;
+  integrationInfo: IntegrationInfoDto;
 }
 
 export interface AccessibleMediaDto extends MediaDto {
@@ -721,6 +774,33 @@ export interface LoginWithPasswordRequest extends BaseRequest {
   timeZone?: string | null;
 }
 
+export interface CalendarEventDateUpdateRequest {
+  calendarId: string;
+  calendarSourceId: string;
+  calendarEventId: string;
+  assignedDate: Date;
+  dueDate: Date;
+  hasPreciseAssignedDate?: boolean | null;
+  hasPreciseDueDate?: boolean | null;
+}
+
+export interface CalendarEventFilterRequest extends BaseRequest {
+  workspaceId: string;
+  teamIdList?: string[] | null;
+  excludingTeamIdList?: string[] | null;
+  calendarIdList?: string[] | null;
+  timespanStart: Date;
+  timespanEnd: Date;
+}
+
+export interface CalendarEventTitleDescriptionUpdateRequest {
+  calendarId: string;
+  calendarSourceId: string;
+  calendarEventId: string;
+  title?: string | null;
+  description?: string | null;
+}
+
 export interface NotificationTargetInitializeRequest extends BaseRequest {
   externalTargetId: string;
   targetType?: NotificationTargetType | null;
@@ -798,6 +878,7 @@ export interface TaskFilterRequest extends BaseRequest {
   size?: number | null;
   workspaceId: string;
   teamIdList?: string[] | null;
+  excludingTeamIdList?: string[] | null;
   topicIds?: string[] | null;
   ownerIds?: string[] | null;
   assigneeIds?: string[] | null;
@@ -806,6 +887,7 @@ export interface TaskFilterRequest extends BaseRequest {
   timespanStart?: Date | null;
   timespanEnd?: Date | null;
   sort?: FilterSort | null;
+  externalCalendarList?: TaskExternalCalendarFilterDto[] | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -966,6 +1048,18 @@ export interface AuthResponse extends BaseResponse {
   token: string;
 }
 
+export interface CalendarEventListingResponse extends BaseResponse {
+  data: CalendarEventDto[];
+}
+
+export interface CalendarMemberListingResponse extends BaseResponse {
+  data: CalendarMemberDto[];
+}
+
+export interface CalendarMemberPaginatedResponse extends BaseResponse {
+  data: PageDto<CalendarMemberDto>;
+}
+
 export interface FeedMemberListingResponse extends BaseResponse {
   data: FeedMemberDto[];
 }
@@ -1028,6 +1122,10 @@ export interface TaskBoardRetrieveResponse extends BaseResponse {
 
 export interface TaskFeedItemResponse extends BaseResponse {
   data: TaskFeedItemListDto;
+}
+
+export interface TaskListingListedResponse extends BaseResponse {
+  data: TaskDto[];
 }
 
 export interface TaskListingPaginatedResponse extends BaseResponse {
@@ -1130,9 +1228,180 @@ export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
   data: PageDto<WorkspaceMemberDto>;
 }
 
+export interface GoogleCalendarEventInfo {
+  kind: string;
+  etag: string;
+  id: string;
+  status: string;
+  htmlLink: string;
+  created: string;
+  updated: string;
+  summary: string;
+  description: string;
+  location: string;
+  colorId: string;
+  creator: GoogleCalendarEventAttendee;
+  organizer: GoogleCalendarEventAttendee;
+  start: GoogleCalendarEventDate;
+  end: GoogleCalendarEventDate;
+  endTimeUnspecified: boolean;
+  recurrence: string[];
+  recurringEventId: string;
+  originalStartTime: GoogleCalendarEventDate;
+  transparency: string;
+  visibility: string;
+  sequence: number;
+  attendees: GoogleCalendarEventAttendee[];
+  attendeesOmitted: boolean;
+  extendedProperties: GoogleCalendarExtendedProperties;
+  hangoutLink: string;
+  conferenceData: GoogleCalendarConferenceData;
+  gadget: GoogleCalendarGadget;
+  anyoneCanAddSelf: boolean;
+  guestsCanInviteOthers: boolean;
+  guestsCanModify: boolean;
+  guestsCanSeeOtherGuests: boolean;
+  privateCopy: boolean;
+  locked: boolean;
+  reminders: GoogleCalendarReminder;
+  source: GoogleCalendarSource;
+  workingLocationProperties: GoogleCalendarWorkingLocationProperties;
+  outOfOfficeProperties: GoogleCalendarOutOfOfficeProperties;
+  focusTimeProperties: GoogleCalendarFocusTimeProperties;
+  attachments: GoogleCalendarAttachment[];
+  eventType: string;
+  icalUID: string;
+}
+
 export interface PassthroughDetailDto {
   passthroughType: PassthroughType;
   detailValue: string;
+}
+
+export interface GoogleCalendarEventAttendee {
+  id: string;
+  email: string;
+  displayName: string;
+  organizer: string;
+  self: string;
+  resource: string;
+  optional: string;
+  responseStatus: string;
+  comment: string;
+  additionalGuests: number;
+}
+
+export interface GoogleCalendarEventDate {
+  date: string;
+  dateTime: string;
+  timeZone: string;
+}
+
+export interface GoogleCalendarExtendedProperties {
+  private: { [index: string]: string };
+  shared: { [index: string]: string };
+}
+
+export interface GoogleCalendarConferenceData {
+  createRequest: GoogleCalendarConferenceDataRequest;
+  entryPoints: GoogleCalendarEntryPoint[];
+  conferenceSolution: GoogleCalendarConferenceSolution;
+  conferenceId: string;
+  signature: string;
+  notes: string;
+}
+
+export interface GoogleCalendarGadget {
+  type: string;
+  title: string;
+  link: string;
+  iconLink: string;
+  width: number;
+  height: number;
+  display: string;
+  preferences: { [index: string]: string };
+}
+
+export interface GoogleCalendarReminder {
+  useDefault: boolean;
+  overrides: GoogleCalendarReminderOverride[];
+}
+
+export interface GoogleCalendarSource {
+  url: string;
+  title: string;
+}
+
+export interface GoogleCalendarWorkingLocationProperties {
+  type: string;
+  homeOffice: any;
+  customLocation: GoogleCalendarCustomLocation;
+  officeLocation: GoogleCalendarOfficeLocation;
+}
+
+export interface GoogleCalendarOutOfOfficeProperties {
+  autoDeclineMode: string;
+  declineMessage: string;
+}
+
+export interface GoogleCalendarFocusTimeProperties extends GoogleCalendarOutOfOfficeProperties {
+  chatStatus: string;
+}
+
+export interface GoogleCalendarAttachment {
+  fileUrl: string;
+  title: string;
+  mimeType: string;
+  iconLink: string;
+  fileId: string;
+}
+
+export interface GoogleCalendarConferenceDataRequest {
+  requestId: string;
+  conferenceSolutionKey: GoogleCalendarConferenceSolutionKey;
+  status: GoogleCalendarConferenceDataStatus;
+}
+
+export interface GoogleCalendarEntryPoint {
+  entryPointType: string;
+  uri: string;
+  label: string;
+  pin: string;
+  accessCode: string;
+  meetingCode: string;
+  passcode: string;
+  password: string;
+}
+
+export interface GoogleCalendarConferenceSolution {
+  key: GoogleCalendarConferenceSolutionKey;
+  name: string;
+  iconUri: string;
+}
+
+export interface GoogleCalendarReminderOverride {
+  method: string;
+  minutes: number;
+}
+
+export interface GoogleCalendarCustomLocation {
+  label: string;
+}
+
+export interface GoogleCalendarOfficeLocation {
+  buildingId: string;
+  floorId: string;
+  floorSectionId: string;
+  deskId: string;
+  label: string;
+}
+
+export interface GoogleCalendarConferenceSolutionKey {
+  type: string;
+}
+
+export interface GoogleCalendarConferenceDataStatus {
+  statusCode: string;
 }
 
 export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
@@ -1146,6 +1415,8 @@ export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXP
 export type RoleType = "ADMIN" | "SERVICE" | "USER";
 
 export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL";
+
+export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
 export type GoogleScopeType =
   | "OPEN_ID"
@@ -1314,6 +1585,8 @@ export type TaskBoardStateType = "OPEN" | "CLOSED";
 export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
 
 export type TaskReminderType = "ASSIGNED_DATE" | "DUE_DATE" | "SPECIFIC_DATE";
+
+export type TaskSource = "GOOGLE_CALENDAR";
 
 export type TaskState = "TO_DO" | "IN_PROGRESS" | "IN_TEST" | "WONT_DO" | "DONE";
 

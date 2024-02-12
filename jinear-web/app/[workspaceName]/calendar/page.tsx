@@ -13,11 +13,7 @@ const CalendarPage: React.FC<CalendarPageProps> = ({}) => {
   const workspaceName: string = params?.workspaceName as string;
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
 
-  return (
-    <div className={styles.container}>
-      {workspace != null ? <Calendar className={styles.calendar} workspace={workspace} /> : <>Loading</>}
-    </div>
-  );
+  return <div className={styles.container}>{workspace && <Calendar className={styles.calendar} workspace={workspace} />}</div>;
 };
 
 export default CalendarPage;

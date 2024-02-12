@@ -1,44 +1,39 @@
-import { useFilterTasksQuery } from "@/store/api/taskListingApi";
+import { queryStateArrayParser, queryStateShortDateParser, useQueryState } from "@/hooks/useQueryState";
+import { WorkspaceDto } from "@/model/be/jinear-core";
+import { useFilterCalendarEventsQuery } from "@/store/api/calendarEventApi";
+import Logger from "@/utils/logger";
+import { eachDayOfInterval, endOfMonth, endOfWeek, format, parse, startOfDay, startOfWeek } from "date-fns";
 import React, { useMemo } from "react";
 import { ICalendarWeekRowCell, calculateHitMissTable } from "../calendarUtils";
 import OverlayLoading from "../common/overlayLoading/OverlayLoading";
-import {
-  useCalendarDays,
-  useCalendarWorkspace,
-  useCalenderLoading,
-  useFilterBy,
-  useGhostTask,
-  usePeriodEnd,
-  usePeriodStart,
-  useSqueezedView,
-} from "../context/CalendarContext";
+import { useCalenderLoading, useGhostEvent, useSqueezedView } from "../context/CalendarContext";
 import Month from "./month/Month";
 
-interface MonthViewProps {}
-
-import Logger from "@/utils/logger";
+interface MonthViewProps {
+  workspace: WorkspaceDto;
+}
 
 const logger = Logger("MonthView");
 
-const MonthView: React.FC<MonthViewProps> = ({}) => {
-  const workspace = useCalendarWorkspace();
-  const filterBy = useFilterBy();
-  const periodStart = usePeriodStart();
-  const periodEnd = usePeriodEnd();
-  const days = useCalendarDays();
+const MonthView: React.FC<MonthViewProps> = ({ workspace }) => {
   const squeezedView = useSqueezedView();
+  const hiddenCalendars = useQueryState<string[]>("hiddenCalendars", queryStateArrayParser) || [];
+  const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || [];
 
-  const ghostTask = useGhostTask();
+  const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
+
+  const currentMonth = format(viewingDate, "MMM-yyyy");
+  const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
+  const periodStart = startOfWeek(firstDayCurrentMonth, { weekStartsOn: 1 });
+  const periodEnd = endOfWeek(endOfMonth(firstDayCurrentMonth), { weekStartsOn: 1 });
+  const days = eachDayOfInterval({ start: periodStart, end: periodEnd });
+
+  const ghostEvent = useGhostEvent();
   const calendarLoading = useCalenderLoading();
 
-  const {
-    data: filterResponse,
-    isFetching,
-    isLoading,
-  } = useFilterTasksQuery(
+  const { data: filterResponse, isFetching } = useFilterCalendarEventsQuery(
     {
       workspaceId: workspace?.workspaceId || "",
-      teamIdList: filterBy ? [filterBy.teamId] : undefined,
       timespanStart: periodStart,
       timespanEnd: periodEnd,
     },
@@ -46,17 +41,29 @@ const MonthView: React.FC<MonthViewProps> = ({}) => {
   );
 
   const monthTable: ICalendarWeekRowCell[][][] | undefined = useMemo(() => {
-    if (!filterResponse || !filterResponse.data.content) {
+    if (!filterResponse || !filterResponse.data) {
       return;
     }
-    const responseTasks = filterResponse.data.content;
-    const tasks = [...responseTasks];
-    if (ghostTask) {
-      tasks.unshift(ghostTask);
+    const responseEvents = filterResponse.data.filter((val) => {
+      const lookUpSource = val.calendarEventSourceType == "TASK" ? hiddenTeams : hiddenCalendars;
+      const lookUpValue =
+        val.calendarEventSourceType == "TASK" ? val.relatedTask?.teamId : val.externalCalendarSourceDto?.externalCalendarSourceId;
+      return lookUpSource.findIndex((value) => value == lookUpValue) == -1;
+    });
+
+    const events = [...responseEvents];
+    if (ghostEvent) {
+      events.unshift(ghostEvent);
     }
 
-    return calculateHitMissTable({ tasks, days });
-  }, [JSON.stringify(days), JSON.stringify(filterResponse), JSON.stringify(ghostTask)]);
+    return calculateHitMissTable({ events, days });
+  }, [
+    JSON.stringify(days),
+    JSON.stringify(filterResponse),
+    JSON.stringify(ghostEvent),
+    JSON.stringify(hiddenTeams),
+    JSON.stringify(hiddenCalendars),
+  ]);
 
   return (
     <>

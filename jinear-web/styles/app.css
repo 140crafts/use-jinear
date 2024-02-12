@@ -44,6 +44,10 @@ a {
   font-weight: 600;
 }
 
+.bold {
+  font-weight: 600;
+}
+
 h1 {
   font-size: 1.15rem;
   font-weight: 600;
@@ -230,7 +234,7 @@ select {
   justify-content: center;
   transition: var(--fade);
   text-decoration: none;
-  padding: 7.5px;
+  padding: 4px 7.5px;
   min-height: 1rem;
 }
 

@@ -46,6 +46,32 @@
   min-width: 5rem;
 }
 
+.viewTypeContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--c-primary-shade-0);
+  border-radius: var(--border-radius);
+}
+
+.viewTypeIconContainer {
+  padding: 0.5rem 0.75rem;
+  background-color: var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.viewTypeSelect {
+  text-align: center;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.calendarNavigation {
+  font-weight: 600;
+}
+
 @media (max-width: 1240px) {
   .squeezedViewToggleButton {
     display: flex;

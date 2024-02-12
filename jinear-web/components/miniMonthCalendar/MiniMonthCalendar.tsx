@@ -1,35 +1,40 @@
-import { useFirstRender } from "@/hooks/useFirstRender";
 import Logger from "@/utils/logger";
 import { eachDayOfInterval, endOfMonth, endOfWeek, format, parse, startOfWeek } from "date-fns";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./MiniMonthCalendar.module.css";
 import DayButton from "./dayButton/DayButton";
 import MiniMonthCalendarHeader from "./miniMonthCalendarHeader/MiniMonthCalendarHeader";
 import WeekDays from "./weekDays/WeekDays";
 
 interface MiniMonthCalendarProps {
-  initialDate?: Date;
+  dayButtonClassName?: string;
+  headerContainerClassName?: string;
+  value?: Date;
+  setValue?: (value?: Date) => void;
   dateSpanStart?: Date;
   dateSpanEnd?: Date;
   disabledBefore?: Date;
   disabledAfter?: Date;
-  onDateChange?: (day: Date) => void;
+  showYearPicker?: boolean;
+  showLabel?: boolean;
 }
 
 const logger = Logger("MiniMonthCalendar");
 
 const MiniMonthCalendar: React.FC<MiniMonthCalendarProps> = ({
-  initialDate = new Date(),
+  dayButtonClassName,
+  headerContainerClassName,
+  value = new Date(),
+  setValue,
   dateSpanStart,
   dateSpanEnd,
   disabledBefore,
   disabledAfter,
-  onDateChange,
+  showYearPicker,
+  showLabel,
 }) => {
-  const firstRender = useFirstRender();
-  const [selectedDate, setSelectedDate] = useState(initialDate);
-  const [viewingDate, setViewingDate] = useState(initialDate);
-  const [hoveringDate, setHoveringDate] = useState(initialDate);
+  const [viewingDate, setViewingDate] = useState(value);
+  const [hoveringDate, setHoveringDate] = useState<Date | undefined>(value);
   const currentMonth = format(viewingDate, "MMM-yyyy");
   const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const periodStart = startOfWeek(firstDayCurrentMonth, { weekStartsOn: 1 });
@@ -37,37 +42,29 @@ const MiniMonthCalendar: React.FC<MiniMonthCalendarProps> = ({
   const days = eachDayOfInterval({ start: periodStart, end: periodEnd });
   const spanSelection = dateSpanStart || dateSpanEnd;
 
-  useEffect(() => {
-    if (!firstRender) {
-      setViewingDate(selectedDate);
-      onDateChange?.(selectedDate);
-    }
-  }, [selectedDate]);
+  const _onMouseLeave = () => {
+    setHoveringDate(undefined);
+  };
 
-  logger.log({
-    spanSelection,
-    dateSpanStart,
-    dateSpanEnd,
-    selectedDate,
-    viewingDate,
-    hoveringDate,
-    currentMonth,
-    firstDayCurrentMonth,
-    periodStart,
-    periodEnd,
-  });
   return (
-    <div className={styles.container}>
-      <MiniMonthCalendarHeader viewingDate={viewingDate} setViewingDate={setViewingDate} />
+    <div className={styles.container} onMouseLeave={_onMouseLeave}>
+      <MiniMonthCalendarHeader
+        containerClassName={headerContainerClassName}
+        viewingDate={viewingDate}
+        setViewingDate={setViewingDate}
+        showYearPicker={showYearPicker}
+        showLabel={showLabel}
+      />
       <WeekDays days={days} />
       <div className={styles.days}>
         {days.map((day) => (
           <DayButton
             key={`mini-calendar-day-${day.getTime()}`}
-            selectedDate={selectedDate}
+            className={dayButtonClassName}
+            selectedDate={value}
             viewingDate={viewingDate}
             day={day}
-            setSelectedDate={setSelectedDate}
+            setSelectedDate={setValue}
             dateSpanStart={dateSpanStart}
             dateSpanEnd={dateSpanEnd}
             disabledBefore={disabledBefore}

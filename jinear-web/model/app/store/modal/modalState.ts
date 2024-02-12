@@ -1,4 +1,5 @@
 import {
+  CalendarEventDto,
   IntegrationProvider,
   TaskBoardDto,
   TaskDto,
@@ -195,4 +196,13 @@ export interface WorkspaceMemberPickerModalState extends ModalState {
   multiple?: boolean;
   initialSelectionOnMultiple?: WorkspaceMemberDto[];
   onPick?: (pickedList: WorkspaceMemberDto[]) => void;
+}
+
+export interface NewCalendarIntegrationModalState extends ModalState {
+  workspaceId?: string;
+}
+
+export interface CalendarExternalEventViewModalState extends ModalState {
+  workspaceId?: string;
+  calendarEventDto?: CalendarEventDto;
 }

@@ -1358,6 +1358,10 @@ export default {
     en: "Today",
     tr: "Bugün",
   },
+  datePickerModalTitle: {
+    en: "Pick A Date",
+    tr: "Bir Tarih Seç",
+  },
   datePickerSelectDate: {
     en: "Select Date",
     tr: "Tarih Seçin",
@@ -1874,26 +1878,7 @@ export default {
     en: "Your Personal Workspace",
     tr: "Kişisel Çalışma Alanın",
   },
-  calendarHeaderAllTeamsSubtitle: {
-    en: "Listing tasks with assigned and/or due date from <b>all teams</b>",
-    tr: "<b>Tüm ekiplerdeki</b> tarih atanmış olan görevler listeleniyor",
-  },
-  calendarHeaderPersonalWorkspaceSubtitle: {
-    en: "Listing tasks with assigned and/or due date from your personal workspace",
-    tr: "Kişisel çalışma alanındaki tarih atanmış olan görevler listeleniyor",
-  },
-  calendarHeaderFilteredTeamSubtitle: {
-    en: "Listing tasks with assigned and/or due date from team <b>${teamName}</b>",
-    tr: "<b>${teamName}</b> ekibindeki tarih atanmış olan görevler listeleniyor",
-  },
-  calendarFilterButton: {
-    en: "Filter",
-    tr: "Filtrele",
-  },
-  calendarClearFilterButton: {
-    en: "Clear Filter",
-    tr: "Filtreyi Kaldır",
-  },
+
   inboxHeaderPersonalWorkspaceSubtitle: {
     en: "Listing your notifications",
     tr: "Bildirimlerin listeleniyor",
@@ -2874,6 +2859,10 @@ export default {
     en: "We carefully minimized the scope of access. All requested permissions are necessary for us to list your emails. Your emails are not recorded by Jinear, and they are not used for any data processing purposes.",
     tr: "Erişim kapsamını dikkatlice en aza indirdik. İstenen tüm izinler, maillerinizi listelememiz için gereklidir. Mailleriniz Jinear tarafından kayit altina alınmaz, hiçbir veri işleme için kullanılmazlar.",
   },
+  newMailIntegrationModalLabelSubtext: {
+    en: "* We cache Gmail responses fully encrypted for a couple of minutes in order to avoid hitting Gmail API limits. (Typically 1-2 minutes)",
+    tr: "* Gmail yanıtlarını tamamen şifreli bir şekilde birkaç dakika boyunca önbelleğe alıyoruz, böylece Gmail API sınırlarını aşmaktan kaçınıyoruz.",
+  },
   newMailIntegrationModalAddGmailLabel: {
     en: "Add Gmail Feed",
     tr: "Gmail Akışı Ekle",
@@ -3101,5 +3090,189 @@ export default {
   teamHomePageTitle: {
     en: "Team ${teamName} Home",
     tr: "Genel Bakış - ${teamName}",
+  },
+  sideMenuTeamCalendarsTitle: {
+    en: "Team Calendars",
+    tr: "Ekip Takvimleri",
+  },
+  sideMenuExternalCalendarsTitle: {
+    en: "External Calendars",
+    tr: "Harici Takvimler",
+  },
+  sideMenuAddCalendarIntegrationLabel: {
+    en: "Add Calendar",
+    tr: "Takvim Ekle",
+  },
+  newCalendarIntegrationModalLabel: {
+    en: "We carefully minimized the scope of access. All requested permissions are necessary for us to list your calendars. Your calendars and their events are not recorded by Jinear, and they are not used for any data processing purposes.",
+    tr: "Erişim kapsamını dikkatlice en aza indirdik. İstenen tüm izinler, takvimlerinizi listelememiz için gereklidir. Takvimleriniz ve etkinlikleriniz Jinear tarafından kayit altina alınmaz, hiçbir veri işleme için kullanılmazlar.",
+  },
+  newCalendarIntegrationModalLabelSubtext: {
+    en: "* We cache Google Calendar responses fully encrypted for a couple of minutes in order to avoid hitting Google Calendar API limits. (Typically 1-2 minutes)",
+    tr: "* Google Takvim yanıtlarını tamamen şifreli bir şekilde birkaç dakika boyunca önbelleğe alıyoruz, böylece Google Calendar API sınırlarını aşmaktan kaçınıyoruz.",
+  },
+  newCalendarIntegrationModalAddGoogleCalendarLabel: {
+    en: "Add Google Calendar",
+    tr: "Google Takvim Ekle",
+  },
+  newCalendarIntegrationModalTitle: {
+    en: "New Calendar Integration",
+    tr: "Yeni Takvim Entegrasyonu",
+  },
+  unnamedCalendar: {
+    en: "Unnamed Calendar",
+    tr: "Adlandırılmamış Takvim",
+  },
+  sideMenuCalendarMembers: {
+    en: "Calendar members",
+    tr: "Takvim üyeleri",
+  },
+  sideMenuCalendarSettings: {
+    en: "Calendar settings",
+    tr: "Takvim ayarları",
+  },
+  calendarEventDetailDescription: {
+    en: "No description",
+    tr: "Açıklama girilmedi",
+  },
+  calendarEventDetailDescriptionEdit: {
+    en: "Edit",
+    tr: "Düzenle",
+  },
+  calendarEventDetailDescriptionSave: {
+    en: "Save",
+    tr: "Kaydet",
+  },
+  calendarEventDetailDescriptionCancel: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  calendarEventTitleChangeModalTitle: {
+    en: "Update Title",
+    tr: "Başlığı Güncelle",
+  },
+  calendarEventTitleChangeModalInfoText: {
+    en: "Please provide an another title for calendar event.",
+    tr: "Takvim etkinliği için yeni bir başlık girin.",
+  },
+  calendarEventModalGoToSourceLink: {
+    en: "Open External Link",
+    tr: "Kaynağında Görüntüle",
+  },
+  calendarEventCalendarExternalSourceChange: {
+    en: "Change Calendar",
+    tr: "Takvimi Değiştir",
+  },
+  genericDateButtonLabel: {
+    en: "Pick A Date",
+    tr: "Bir Tarih Seçin",
+  },
+  calendarEventAllDayButtonLabel: {
+    en: "All Day",
+    tr: "Tüm Gün",
+  },
+  calendarEventSpesificDatesButtonLabel: {
+    en: "Spesific Dates",
+    tr: "Spesifik Tarih",
+  },
+  calendarEventDateStart: {
+    en: "Starts",
+    tr: "Başlangıç",
+  },
+  calendarEventDateEnds: {
+    en: "Ends",
+    tr: "Bitiş",
+  },
+  calendarDescriptionSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor",
+  },
+  calendarTitleSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor",
+  },
+  calendarDatesSaveButton: {
+    en: "Save",
+    tr: "Kaydet",
+  },
+  calendarDatesCancelButton: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  calendarDatesSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor",
+  },
+  assignedToMeClearFilterButton: {
+    en: "Clear Filter",
+    tr: "Filtreyi Kaldır",
+  },
+  assignedToMeFilterButton: {
+    en: "Filter",
+    tr: "Filtrele",
+  },
+  calendarSourceButtonHide: {
+    en: "Hide",
+    tr: "Gizle",
+  },
+  calendarMemberListTitle: {
+    en: "Calendar Members",
+    tr: "Takvim Üyeleri",
+  },
+  calendarMemberListText: {
+    en: "Only members below and workspace admins can see calendar content.",
+    tr: "Yanlızca aşağıdaki takvim üyeleri ve çalışma alanı yöneticileri takvim içeriğine erişebilir.",
+  },
+  calendarMemberAddMember: {
+    en: "Add Member",
+    tr: "Üye Ekle",
+  },
+  calendarMemberListEmptyLabel: {
+    en: "No calendar member found.",
+    tr: "Hiçbir üye bulunamadı.",
+  },
+  deleteCalendarMemberAreYouSureTitle: {
+    en: "Kick Member",
+    tr: "Üyeyi Takvim Üyelerinden At",
+  },
+  deleteCalendarMemberAreYouSureText: {
+    en: "Are you sure to remove member access from this calendar?",
+    tr: "Üyeyi takvim üyelerinden atmak istediğinize emin misiniz?",
+  },
+  deleteCalendarMemberAreYouSureConfirmLabel: {
+    en: "Kick",
+    tr: "At",
+  },
+  calendarMemberListItemOwner: {
+    en: "Owner",
+    tr: "Oluşturan",
+  },
+  calendarMemberListItemUser: {
+    en: "Member",
+    tr: "Üye",
+  },
+  activeCalendarMemberKick: {
+    en: "Kick Member",
+    tr: "Üyeyi At",
+  },
+  deleteCalendarCardAreYouSureTitle: {
+    en: "Are you sure to delete this calendar?",
+    tr: "Bu takvimi silmek istediğinize emin misiniz?",
+  },
+  deleteCalendarCardAreYouSureText: {
+    en: "This action can not be undone but you can always re-add calendar.",
+    tr: "Bu işlem geri alınamaz ancak her zaman tekrar takvim ekleyebilirsiniz.",
+  },
+  deleteCalendarButton: {
+    en: "Delete Calendar",
+    tr: "Takvimi Sil",
+  },
+  deleteCalendarCardTitle: {
+    en: "Delete Calendar",
+    tr: "Takvimi Sil",
+  },
+  deleteCalendarCardText: {
+    en: "Deleting the calendar does not delete the calendar from the original source and the events associated with this calendar, it only disconnects it from Jinear.",
+    tr: "Takvimi silmek orijinal kaynaktaki takvimi ve bu takvim ile bağlantılı etkinlikleri silmez yanlızca Jinear ile bağı kopartır.",
   },
 };

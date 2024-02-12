@@ -74,6 +74,12 @@
   height: 20px;
 }
 
+.mainInfoContainer {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
 @media (max-width: $tablet) {
   .container {
     flex-direction: column;

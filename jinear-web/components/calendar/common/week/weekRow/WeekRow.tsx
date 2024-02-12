@@ -4,16 +4,16 @@ import Cell from "../../cell/Cell";
 import styles from "./WeekRow.module.css";
 
 interface WeekRowProps {
-  rowTasks: ICalendarWeekRowCell[];
+  rowEvents: ICalendarWeekRowCell[];
   id: string;
   weekStart: Date;
   weekEnd: Date;
 }
 
-const WeekRow: React.FC<WeekRowProps> = ({ id, rowTasks, weekStart, weekEnd }) => {
+const WeekRow: React.FC<WeekRowProps> = ({ id, rowEvents, weekStart, weekEnd }) => {
   return (
     <div className={styles.container}>
-      {rowTasks?.map((cell, cellIndex) => (
+      {rowEvents?.map((cell, cellIndex) => (
         <Cell id={`${id}-cell-${cellIndex}`} key={`${id}-cell-${cellIndex}`} weekStart={weekStart} weekEnd={weekEnd} {...cell} />
       ))}
     </div>

@@ -1,10 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import Logger from "@/utils/logger";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 
-export const useToggle = (initialState = false) => {
-  const [current, setCurrent] = useState(initialState);
-  const toggle = useCallback(() => setCurrent((state) => !state), []);
-  useEffect(() => {
-    setCurrent(initialState);
-  }, [initialState]);
-  return { current, toggle };
-};
+const logger = Logger("useToggle");
+
+export function useToggle(defaultValue?: boolean): [boolean, () => void, Dispatch<SetStateAction<boolean>>] {
+  const [value, setValue] = useState(!!defaultValue);
+  logger.log({ defaultValue, value });
+  const toggle = useCallback(() => {
+    setValue((x) => !x);
+  }, []);
+
+  return [value, toggle, setValue];
+}

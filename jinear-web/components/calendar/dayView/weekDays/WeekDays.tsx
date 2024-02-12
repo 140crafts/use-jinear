@@ -1,8 +1,13 @@
 import Button from "@/components/button";
+import {
+  queryStateDateToShortDateConverter,
+  queryStateShortDateParser,
+  useQueryState,
+  useSetQueryState,
+} from "@/hooks/useQueryState";
 import cn from "classnames";
-import { format, isSameDay, startOfToday } from "date-fns";
+import { format, isSameDay, startOfDay, startOfToday } from "date-fns";
 import React from "react";
-import { useSetViewingDate, useViewingDate } from "../../context/CalendarContext";
 import styles from "./WeekDays.module.css";
 
 interface WeekDaysProps {
@@ -10,8 +15,13 @@ interface WeekDaysProps {
 }
 
 const WeekDays: React.FC<WeekDaysProps> = ({ days }) => {
-  const viewingDate = useViewingDate();
-  const setViewingDate = useSetViewingDate();
+  const setQueryState = useSetQueryState();
+  const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
+
+  const setViewingDate = (viewingDate: Date) => {
+    setQueryState("viewingDate", queryStateDateToShortDateConverter(viewingDate));
+  };
+
   return (
     <div className={styles.weekViewWeekdayHeaderContainer}>
       {days.slice(0, 7).map((day) => {

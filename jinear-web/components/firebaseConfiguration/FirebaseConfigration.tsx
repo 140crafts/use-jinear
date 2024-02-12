@@ -151,7 +151,7 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
       const notificationType = payload?.data?.notificationType || "";
       dispatch(api.util.invalidateTags(["v1/notification/event/{workspaceId}/unread-count"]));
       if (notificationType == "TASK_INITIALIZED") {
-        dispatch(api.util.invalidateTags(["v1/task/list/filter"]));
+        dispatch(api.util.invalidateTags(["v1/task/list/filter", "v1/calendar/event/filter"]));
       }
       if (
         currentSessionId != senderSessionInfoId &&

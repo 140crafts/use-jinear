@@ -1,28 +1,35 @@
 import TaskRow from "@/components/taskRow/TaskRow";
-import { TaskDto } from "@/model/be/jinear-core";
+import { queryStateShortDateParser, useQueryState } from "@/hooks/useQueryState";
+import { CalendarEventDto } from "@/model/be/jinear-core";
 import Logger from "@/utils/logger";
 import cn from "classnames";
+import { startOfDay } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { useViewingDate } from "../../context/CalendarContext";
 import styles from "./TaskList.module.css";
+import NonTaskCalendarEventItem from "./nonTaskCalendarEventItem/NonTaskCalendarEventItem";
 
 interface TaskListProps {
   className: string;
-  viewingDayTasks: TaskDto[];
+  viewingDayEvents: CalendarEventDto[];
 }
 
 const logger = Logger("TaskList");
-const TaskList: React.FC<TaskListProps> = ({ className, viewingDayTasks }) => {
+const TaskList: React.FC<TaskListProps> = ({ className, viewingDayEvents }) => {
   const { t } = useTranslation();
-  const viewingDate = useViewingDate();
-  logger.log({ viewingDate, viewingDayTasks });
+  const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
+  logger.log({ viewingDate, viewingDayEvents });
+
   return (
     <div className={cn(styles.container, className)}>
-      {viewingDayTasks.map((task) => (
-        <TaskRow key={task.taskId} task={task} />
-      ))}
-      {viewingDayTasks.length == 0 && <div className={styles.emptyLabel}>{t("calendarDayViewEmptyDayLabel")}</div>}
+      {viewingDayEvents.map((event) =>
+        event.calendarEventSourceType == "TASK" && event.relatedTask ? (
+          <TaskRow key={event.calendarEventId} task={event.relatedTask} />
+        ) : (
+          <NonTaskCalendarEventItem key={event.calendarEventId} calendarEvent={event} />
+        )
+      )}
+      {viewingDayEvents.length == 0 && <div className={styles.emptyLabel}>{t("calendarDayViewEmptyDayLabel")}</div>}
     </div>
   );
 };

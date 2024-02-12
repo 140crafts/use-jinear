@@ -52,20 +52,20 @@ const TaskRow: React.FC<TaskRowProps> = ({ className, task, withBottomBorderLine
 
   return task.workspace && task.team ? (
     <div className={cn(styles.container, withBottomBorderLine ? styles.bottomBorderLine : null, className)}>
-      <Button
-        href={`/${task.workspace?.username}/task/${tag}`}
-        className={cn(styles.button, isArchived ? styles.archivedButton : null)}
-        onClick={onLinkClick}
-      >
-        <div className={styles.leftInfoContainer}>
-          <TeamTagCell task={task} />
-        </div>
-        <div className={cn(styles.title, isArchived ? styles.archivedTitle : null)}>{task.title}</div>
-      </Button>
-
+      <div className={styles.mainInfoContainer}>
+        <WorkflowStatus task={task} buttonVariant={ButtonVariants.default} />
+        <Button
+          href={`/${task.workspace?.username}/task/${tag}`}
+          className={cn(styles.button, isArchived ? styles.archivedButton : null)}
+          onClick={onLinkClick}
+        >
+          {/* <div className={styles.leftInfoContainer}><TeamTagCell task={task} /></div> */}
+          <div className={cn(styles.title, isArchived ? styles.archivedTitle : null)}>{task.title}</div>
+        </Button>
+      </div>
       <div className={styles.rightInfoContainer}>
         {task.topic && <TopicInfo topic={task.topic} />}
-        <WorkflowStatus task={task} />
+        <TeamTagCell task={task} />
         <AssigneeCell task={task} />
         <Button
           variant={ButtonVariants.filled}

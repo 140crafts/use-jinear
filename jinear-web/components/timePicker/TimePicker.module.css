@@ -4,7 +4,7 @@
   align-items: center;
   background-color: var(--c-primary-shade-0);
   border-radius: var(--border-radius);
-  gap: 0.25ch;
+  height: 28px;
 }
 
 .select {

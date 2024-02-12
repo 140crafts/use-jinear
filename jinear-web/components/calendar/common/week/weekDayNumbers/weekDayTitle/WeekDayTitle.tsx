@@ -1,6 +1,6 @@
-import { useViewingDate } from "@/components/calendar/context/CalendarContext";
+import { queryStateShortDateParser, useQueryState } from "@/hooks/useQueryState";
 import cn from "classnames";
-import { format, isSameDay, isSameMonth, startOfToday } from "date-fns";
+import { format, isSameDay, isSameMonth, startOfDay, startOfToday } from "date-fns";
 import React, { useRef } from "react";
 import styles from "./WeekDayTitle.module.css";
 
@@ -10,7 +10,7 @@ interface WeekDayTitleProps {
 
 const WeekDayTitle: React.FC<WeekDayTitleProps> = ({ day }) => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const viewingDate = useViewingDate();
+  const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
   const isCurrentDayAndVieweingDateInDifferentMonth = !isSameMonth(viewingDate, day);
   const isToday = isSameDay(startOfToday(), day);
 

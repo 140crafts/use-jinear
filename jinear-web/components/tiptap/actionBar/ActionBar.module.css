@@ -4,6 +4,9 @@
   flex-wrap: wrap;
   gap: 0.25rem;
   padding: 0.5rem;
-  border-bottom-style: solid;
-  border-bottom-color: var(--c-primary-shade-1-op05);
+  border-style: solid;
+  border-color: var(--c-primary-shade-1-op025);
+  border-radius: var(--border-radius);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
 }

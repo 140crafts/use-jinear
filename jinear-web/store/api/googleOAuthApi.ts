@@ -22,10 +22,24 @@ export const googleOAuthApi = api.injectEndpoints({
       ],
     }),
     //
+    retrieveAttachCalendarRedirectInfo: build.query<AuthRedirectInfoResponse, { workspaceId: string }>({
+      query: (req: { workspaceId: string }) => `v1/oauth/google/redirect-info/attach-calendar?workspaceId=${req.workspaceId}`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: "v1/oauth/google/redirect-info/attach-calendar",
+          id: req.workspaceId,
+        },
+      ],
+    }),
+    //
   }),
 });
 
-export const { useRetrieveLoginRedirectInfoQuery, useRetrieveAttachMailRedirectInfoQuery } = googleOAuthApi;
+export const {
+  useRetrieveLoginRedirectInfoQuery,
+  useRetrieveAttachMailRedirectInfoQuery,
+  useRetrieveAttachCalendarRedirectInfoQuery,
+} = googleOAuthApi;
 
 export const {
   endpoints: { retrieveLoginRedirectInfo, retrieveAttachMailRedirectInfo },

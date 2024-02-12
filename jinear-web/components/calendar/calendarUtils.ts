@@ -1,7 +1,23 @@
-import { TaskDto } from "@/model/be/jinear-core";
+import { queryStateShortDateParser, useQueryState } from "@/hooks/useQueryState";
+import { CalendarEventDto } from "@/model/be/jinear-core";
 import Logger from "@/utils/logger";
 import { tryCatch } from "@/utils/tryCatch";
-import { addDays, addMinutes, differenceInMinutes, endOfDay, isAfter, isBefore, isSameDay, startOfDay } from "date-fns";
+
+import {
+  addDays,
+  addMinutes,
+  differenceInMinutes,
+  endOfDay,
+  endOfMonth,
+  endOfWeek,
+  format,
+  isAfter,
+  isBefore,
+  isSameDay,
+  parse,
+  startOfDay,
+  startOfWeek,
+} from "date-fns";
 
 const logger = Logger("calendar-utils");
 
@@ -9,7 +25,36 @@ export const DEFAULT_WEEKDAY_VIEW_RESOLUTION = 5;
 
 export interface ICalendarWeekRowCell {
   weight: number;
-  task: TaskDto | null;
+  calendarEvent: CalendarEventDto | null;
+}
+
+export function useIsDateFirstDayOfViewingPeriod(day: Date) {
+  const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
+  const currentMonth = format(viewingDate, "MMM-yyyy");
+  const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
+  const periodStart = startOfWeek(firstDayCurrentMonth, { weekStartsOn: 1 });
+  return isSameDay(day, periodStart);
+}
+
+export function useIsDateLastDayOfViewingPeriod(day: Date) {
+  const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
+  const currentMonth = format(viewingDate, "MMM-yyyy");
+  const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
+  const periodEnd = endOfWeek(endOfMonth(firstDayCurrentMonth), { weekStartsOn: 1 });
+  return isSameDay(day, periodEnd);
+}
+
+export function useIsDateBetweenViewingPeriod(day?: Date) {
+  const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
+  if (!day) {
+    return false;
+  }
+  const currentMonth = format(viewingDate, "MMM-yyyy");
+  const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
+  const periodStart = startOfWeek(firstDayCurrentMonth, { weekStartsOn: 1 }).getTime();
+  const periodEnd = endOfWeek(endOfMonth(firstDayCurrentMonth), { weekStartsOn: 1 }).getTime();
+  const milis = day.getTime();
+  return periodStart <= milis && milis <= periodEnd;
 }
 
 function splitChunks<T>(sourceArray: T[], chunkSize: number) {
@@ -23,11 +68,11 @@ function splitChunks<T>(sourceArray: T[], chunkSize: number) {
 }
 
 const canBeMerged = (
-  taskWeekLayoutUpper: (TaskDto | null)[] = [null, null, null, null, null, null, null],
-  taskWeekLayoutLower: (TaskDto | null)[] = [null, null, null, null, null, null, null]
+  taskWeekLayoutUpper: (CalendarEventDto | null)[] = [null, null, null, null, null, null, null],
+  taskWeekLayoutLower: (CalendarEventDto | null)[] = [null, null, null, null, null, null, null]
 ) => {
   if (taskWeekLayoutUpper != null && taskWeekLayoutUpper?.length != taskWeekLayoutLower?.length) {
-    console.error({ message: `Can not merge task week layouts`, taskWeekLayoutUpper, taskWeekLayoutLower });
+    console.error({ message: `Can not merge calendar event week layouts`, taskWeekLayoutUpper, taskWeekLayoutLower });
     return false;
   }
   logger.log({ method: "canBeMerged", taskWeekLayoutUpper, taskWeekLayoutLower });
@@ -46,14 +91,14 @@ const canBeMerged = (
 };
 
 const mergeWeekLines = (
-  taskWeekLayoutUpper: (TaskDto | null)[] = [null, null, null, null, null, null, null],
-  taskWeekLayoutLower: (TaskDto | null)[] = [null, null, null, null, null, null, null]
+  taskWeekLayoutUpper: (CalendarEventDto | null)[] = [null, null, null, null, null, null, null],
+  taskWeekLayoutLower: (CalendarEventDto | null)[] = [null, null, null, null, null, null, null]
 ) => {
   if (taskWeekLayoutUpper.length != taskWeekLayoutLower.length) {
-    console.error({ message: `Can not merge task week layouts`, taskWeekLayoutUpper, taskWeekLayoutLower });
+    console.error({ message: `Can not merge calendar event week layouts`, taskWeekLayoutUpper, taskWeekLayoutLower });
     return [null, null, null, null, null, null, null];
   }
-  const mergedWeekLine: (TaskDto | null)[] = [];
+  const mergedWeekLine: (CalendarEventDto | null)[] = [];
   taskWeekLayoutUpper.map((taskOnDayUpper, index) => {
     const taskOnDayLower = taskWeekLayoutLower[index];
     const task = taskOnDayUpper != null ? taskOnDayUpper : taskOnDayLower;
@@ -62,8 +107,8 @@ const mergeWeekLines = (
   return mergedWeekLine;
 };
 
-const mergeWeek = (week: (TaskDto | null)[][], weekIndex: number) => {
-  const mergedWeek: (TaskDto | null)[][] = [];
+const mergeWeek = (week: (CalendarEventDto | null)[][], weekIndex: number) => {
+  const mergedWeek: (CalendarEventDto | null)[][] = [];
   week.forEach((taskWeekLayout, taskIndex) => {
     let merged = false;
     for (let i = 0; i < mergedWeek.length; i++) {
@@ -84,8 +129,8 @@ const mergeWeek = (week: (TaskDto | null)[][], weekIndex: number) => {
   return mergedWeek;
 };
 
-const rotateWeek = (week: (TaskDto | null)[][], weekIndex: number) => {
-  const rotatedWeek: (TaskDto | null)[][] = [];
+const rotateWeek = (week: (CalendarEventDto | null)[][], weekIndex: number) => {
+  const rotatedWeek: (CalendarEventDto | null)[][] = [];
   const taskCount = week.length;
   for (let i = 0; i < 7; i++) {
     for (let j = 0; j < taskCount; j++) {
@@ -97,29 +142,29 @@ const rotateWeek = (week: (TaskDto | null)[][], weekIndex: number) => {
   return rotatedWeek;
 };
 
-export const taskForDateFilter = (task: TaskDto, day: Date) => {
-  const assignedDate = task.assignedDate && new Date(task.assignedDate);
-  const dueDate = task.dueDate && new Date(task.dueDate);
+export const taskForDateFilter = (event: CalendarEventDto, day: Date) => {
+  const assignedDate = event.assignedDate && new Date(event.assignedDate);
+  const dueDate = event.dueDate && new Date(event.dueDate);
   const onAssignedDate = assignedDate && isSameDay(assignedDate, day);
   const onDueDate = dueDate && isSameDay(dueDate, day);
   let isBetween = false;
   if (assignedDate && dueDate) {
-    const _assigned = task.hasPreciseAssignedDate ? assignedDate : startOfDay(assignedDate);
-    const _due = task.hasPreciseDueDate ? dueDate : endOfDay(dueDate);
+    const _assigned = event.hasPreciseAssignedDate ? assignedDate : startOfDay(assignedDate);
+    const _due = event.hasPreciseDueDate ? dueDate : endOfDay(dueDate);
     const milis = day.getTime();
     isBetween = _assigned.getTime() <= milis && milis <= _due.getTime();
   }
   return onAssignedDate || onDueDate || isBetween;
 };
 
-const flattenWeekRow = (week: (TaskDto | null)[]) => {
+const flattenWeekRow = (week: (CalendarEventDto | null)[]) => {
   const compressed: ICalendarWeekRowCell[] = [];
   for (let i = 0; i < week.length; i++) {
-    const task = week[i];
+    const event = week[i];
     let weight = 0;
     for (let j = i; j < week.length; j++) {
-      const nextTask = week[j];
-      if (task?.taskId == nextTask?.taskId) {
+      const nextEvent = week[j];
+      if (event?.calendarEventId == nextEvent?.calendarEventId) {
         weight++;
         if (j + 1 == week.length) {
           i = j + 1;
@@ -129,13 +174,13 @@ const flattenWeekRow = (week: (TaskDto | null)[]) => {
         break;
       }
     }
-    compressed.push({ weight, task });
+    compressed.push({ weight, calendarEvent: event });
   }
   logger.log({ flattenWeekRow: week, compressed });
   return compressed;
 };
 
-const flattenAllWeeks = (weeks: (TaskDto | null)[][]) => weeks.map(flattenWeekRow);
+const flattenAllWeeks = (weeks: (CalendarEventDto | null)[][]) => weeks.map(flattenWeekRow);
 
 /**
  *
@@ -166,7 +211,7 @@ const flattenAllWeeks = (weeks: (TaskDto | null)[][]) => weeks.map(flattenWeekRo
  *
  */
 export const calculateHitMissTable = (vo: {
-  tasks: TaskDto[];
+  events: CalendarEventDto[];
   days: Date[];
   excludePreciseAssignedDates?: boolean;
   excludePreciseDueDates?: boolean;
@@ -174,7 +219,7 @@ export const calculateHitMissTable = (vo: {
   onlyPreciseDueDates?: boolean;
   rowCount?: number;
 }) => {
-  const tasks = vo.tasks;
+  const events = vo.events;
   const days = vo.days;
   const excludePreciseAssignedDates = vo.excludePreciseAssignedDates == null ? false : vo.excludePreciseAssignedDates;
   const excludePreciseDueDates = vo.excludePreciseDueDates == null ? false : vo.excludePreciseDueDates;
@@ -184,16 +229,16 @@ export const calculateHitMissTable = (vo: {
 
   const rowCount = vo.rowCount ? vo.rowCount : 5; // there can be max 5 rows for month view calendar. //todo fix 2027 February is 4 row
 
-  const allTasksAllMonthHitMissTable: Array<TaskDto | null>[][] = [];
-  tasks
-    .filter((task) => !(excludePreciseAssignedDates && task.hasPreciseAssignedDate))
-    .filter((task) => !(excludePreciseDueDates && task.hasPreciseDueDate))
-    .filter((task) => (onlyPreciseAssignedDates ? task.hasPreciseAssignedDate : true))
-    .filter((task) => (onlyPreciseDueDates ? task.hasPreciseDueDate : true))
-    .forEach((task) => {
-      const taskHitMissTable: Array<TaskDto | null> = [];
-      days.forEach((day) => (taskForDateFilter(task, day) ? taskHitMissTable.push(task) : taskHitMissTable.push(null)));
-      const taskWeeklyHitMissTable: (TaskDto | null)[][] = splitChunks(taskHitMissTable, 7);
+  const allTasksAllMonthHitMissTable: Array<CalendarEventDto | null>[][] = [];
+  events
+    .filter((event) => !(excludePreciseAssignedDates && event.hasPreciseAssignedDate))
+    .filter((event) => !(excludePreciseDueDates && event.hasPreciseDueDate))
+    .filter((event) => (onlyPreciseAssignedDates ? event.hasPreciseAssignedDate : true))
+    .filter((event) => (onlyPreciseDueDates ? event.hasPreciseDueDate : true))
+    .forEach((event) => {
+      const taskHitMissTable: Array<CalendarEventDto | null> = [];
+      days.forEach((day) => (taskForDateFilter(event, day) ? taskHitMissTable.push(event) : taskHitMissTable.push(null)));
+      const taskWeeklyHitMissTable: (CalendarEventDto | null)[][] = splitChunks(taskHitMissTable, 7);
       taskWeeklyHitMissTable.forEach((data, index) => {
         allTasksAllMonthHitMissTable[index] = allTasksAllMonthHitMissTable[index] ? allTasksAllMonthHitMissTable[index] : [];
         allTasksAllMonthHitMissTable[index].push(data);
@@ -212,7 +257,6 @@ export const calculateHitMissTable = (vo: {
 
   let result = allTasksAllMonthHitMissTable.map(mergeWeek).map(flattenAllWeeks);
   if (result.length == 0) {
-    // const emptyArray = [[...new Array(7)], [...new Array(7)], [...new Array(7)], [...new Array(7)], [...new Array(7)]];
     const emptyArray = new Array(rowCount).map((_) => [...new Array(7)]);
     result = [...emptyArray];
   }
@@ -229,14 +273,18 @@ export const isDateBetween = (periodStart: Date, dayToLook: Date, periodEnd: Dat
   }
 };
 
-export const filterTasksByDay = (tasks: TaskDto[], day: Date) => {
-  const result = tasks.filter(
-    (task) =>
-      (task.assignedDate && isDateBetween(startOfDay(day), tryCatch(() => new Date(task.assignedDate)).result, endOfDay(day))) ||
-      (task.dueDate && isDateBetween(startOfDay(day), tryCatch(() => new Date(task.dueDate)).result, endOfDay(day))) ||
-      (task.assignedDate && task.dueDate && isBefore(new Date(task.assignedDate), day) && isAfter(new Date(task.dueDate), day))
+export const filterTasksByDay = (events: CalendarEventDto[], day: Date) => {
+  const result = events.filter(
+    (event) =>
+      (event.assignedDate &&
+        isDateBetween(startOfDay(day), tryCatch(() => new Date(event.assignedDate)).result, endOfDay(day))) ||
+      (event.dueDate && isDateBetween(startOfDay(day), tryCatch(() => new Date(event.dueDate)).result, endOfDay(day))) ||
+      (event.assignedDate &&
+        event.dueDate &&
+        isBefore(new Date(event.assignedDate), day) &&
+        isAfter(new Date(event.dueDate), day))
   );
-  logger.log({ day, filterTasksByDay: tasks, result });
+  logger.log({ day, filterEventsByDay: events, result });
   return result;
 };
 
@@ -262,22 +310,22 @@ export const filterTasksByDay = (tasks: TaskDto[], day: Date) => {
  *  datesIntersects
  *
  * */
-export const calculateDailyHitMissTable = ({ tasks, day, dayResolutionInMinutes = 15 }: ICalculateDailyHitMissTable) => {
+export const calculateDailyHitMissTable = ({ events, day, dayResolutionInMinutes = 15 }: ICalculateDailyHitMissTable) => {
   const timeChunks = splitDayDateToResolution(day, dayResolutionInMinutes);
-  const allTasksAllDayHitMissTable: (TaskDto | null)[][] = [];
-  tasks.map((task) => {
-    const taskHitMissTable: Array<TaskDto | null> = [];
+  const allTasksAllDayHitMissTable: (CalendarEventDto | null)[][] = [];
+  events.map((event) => {
+    const taskHitMissTable: Array<CalendarEventDto | null> = [];
     timeChunks
       .filter((chunk) => chunk)
       .forEach((dateSpan: Date[]) =>
-        isTaskDatesIntersect(task, dateSpan) ? taskHitMissTable.push(task) : taskHitMissTable.push(null)
+        isTaskDatesIntersect(event, dateSpan) ? taskHitMissTable.push(event) : taskHitMissTable.push(null)
       );
     allTasksAllDayHitMissTable.push(taskHitMissTable);
   });
   const flatColumns = flattenAllWeeks(mergeWeek(allTasksAllDayHitMissTable, 0));
   const mergedWeekDateSpans = mergeWeekDateSpans(allTasksAllDayHitMissTable);
   // const result = mergeWeek(allTasksAllDayHitMissTable, 0);
-  logger.log({ tasks, flatColumns });
+  logger.log({ events, flatColumns });
   return flatColumns;
 };
 
@@ -294,11 +342,11 @@ export const splitDayDateToResolution = (day: Date, dayResolutionInMinutes: numb
   return times.map((time, index) => times?.[index + 1] && [time, times?.[index + 1]]);
 };
 
-export const isTaskDatesIntersect = (task: TaskDto, dateSpan: Date[]) => {
+export const isTaskDatesIntersect = (event: CalendarEventDto, dateSpan: Date[]) => {
   const date0 = dateSpan[0];
   const date1 = dateSpan[1];
-  const assignedDate = task.assignedDate && new Date(task.assignedDate);
-  const dueDate = task.dueDate && new Date(task.dueDate);
+  const assignedDate = event.assignedDate && new Date(event.assignedDate);
+  const dueDate = event.dueDate && new Date(event.dueDate);
 
   const isAssignedDateBetweenTimespan =
     (assignedDate && date0.getTime() <= assignedDate.getTime() && assignedDate.getTime() <= date1.getTime()) || false;
@@ -324,7 +372,7 @@ export const isTaskDatesIntersect = (task: TaskDto, dateSpan: Date[]) => {
   );
 };
 
-export const mergeWeekDateSpans = (dayTable: (TaskDto | null)[][]) => {
+export const mergeWeekDateSpans = (dayTable: (CalendarEventDto | null)[][]) => {
   const resultTable: any = [];
   const dayTaskCount = dayTable.length;
 
@@ -333,9 +381,9 @@ export const mergeWeekDateSpans = (dayTable: (TaskDto | null)[][]) => {
     for (let i = 0; i < cellCountInThatDay; i++) {
       const tasksInThatTimespan = [];
       for (let j = 0; j < dayTaskCount; j++) {
-        const task = dayTable[j][i];
-        if (task) {
-          tasksInThatTimespan.push({ task, rowNo: i, columnNo: j });
+        const event = dayTable[j][i];
+        if (event) {
+          tasksInThatTimespan.push({ event, rowNo: i, columnNo: j });
         }
       }
       resultTable.push(tasksInThatTimespan);
@@ -365,38 +413,38 @@ export const flatColumnsToRows = (flatColumns: ICalendarWeekRowCell[][]) => {
 };
 
 export interface ICalculateDailyHitMissTable {
-  tasks: TaskDto[];
+  events: CalendarEventDto[];
   day: Date;
   dayResolutionInMinutes?: number;
 }
 
-export const calculateTaskDayPositions = ({ tasks, day, minuteInPx = 2.5 }: ICalculateTaskDayPositions) => {
+export const calculateTaskDayPositions = ({ events, day, minuteInPx = 2.5 }: ICalculateTaskDayPositions) => {
   //ICalculatePositionBasedDailyHitMissTable
-  const dayCells = tasks.map((task) => convertTaskToCell(task, day, minuteInPx));
+  const dayCells = events.map((event) => convertTaskToCell(event, day, minuteInPx));
   const modified = calculateIntersectionsAndModifyLeft(dayCells);
   logger.log({ dayCells, modified });
   return modified;
 };
 
-export const convertTaskToCell = (task: TaskDto, day: Date, minuteInPx = 2.5) => {
-  const startTime = task.assignedDate
-    ? isSameDay(new Date(task.assignedDate), day)
-      ? new Date(task.assignedDate)
+export const convertTaskToCell = (event: CalendarEventDto, day: Date, minuteInPx = 2.5) => {
+  const startTime = event.assignedDate
+    ? isSameDay(new Date(event.assignedDate), day)
+      ? new Date(event.assignedDate)
       : startOfDay(day)
-    : addMinutes(new Date(task.dueDate), -15);
+    : addMinutes(new Date(event.dueDate), -15);
 
-  const endTime = task.dueDate
-    ? isSameDay(new Date(task.dueDate), day)
-      ? new Date(task.dueDate)
+  const endTime = event.dueDate
+    ? isSameDay(new Date(event.dueDate), day)
+      ? new Date(event.dueDate)
       : endOfDay(day)
-    : addMinutes(new Date(task.assignedDate), 15);
+    : addMinutes(new Date(event.assignedDate), 15);
 
   const top = differenceInMinutes(startTime, day) * minuteInPx;
   const height = differenceInMinutes(endTime, startTime) * minuteInPx;
   const width = 90;
   const left = 0; //10
   logger.log({ minuteInPx });
-  return { task, startTime, endTime, top, height, width, left };
+  return { event, startTime, endTime, top, height, width, left };
 };
 
 export const calculateIntersectionsAndModifyLeft = (dayCells: ICalendarDayRowCell[], STEP_SIZE = 30) => {
@@ -457,13 +505,13 @@ export interface ICalendarDayRowCell {
   left: number;
   height: number;
   width: number;
-  task: TaskDto | null;
+  event: CalendarEventDto | null;
   startTime: Date;
   endTime: Date;
 }
 
 export interface ICalculateTaskDayPositions {
-  tasks: TaskDto[];
+  events: CalendarEventDto[];
   day: Date;
   minuteInPx?: number;
 }

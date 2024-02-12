@@ -21,7 +21,7 @@ interface TaskDetailProps {
 
 const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
   const { t } = useTranslation();
-  const { current: showSubTaskListEvenIfNoSubtasks, toggle: toggleShowSubTaskListEvenIfNoSubtasks } = useToggle(false);
+  const [showSubTaskListEvenIfNoSubtasks, toggleShowSubTaskListEvenIfNoSubtasks] = useToggle(false);
 
   return (
     <TaskDetailContext.Provider

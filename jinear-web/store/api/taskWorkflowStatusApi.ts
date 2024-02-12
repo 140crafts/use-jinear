@@ -11,6 +11,7 @@ export const taskWorkflowStatusApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         "v1/task/from-workspace/{workspaceName}/{taskTag}",
         "v1/task/list/filter",
+        "v1/calendar/event/filter",
         "v1/task-board/entry/from-task-board/{taskBoardId}",
         "v1/workspace/activity/filter",
         "v1/task-analytics/{workspaceId}/team/{teamId}",
