@@ -37,7 +37,7 @@ const CalendarSourceButton: React.FC<CalendarSourceButtonProps> = ({ teamId, cal
         })}
       </span>
       {!isHidden ? (
-        <div className={styles.icon} data-tooltip-right={t("sideMenuTeamMembers")}>
+        <div className={styles.icon} data-tooltip-right={t("calendarSourceButtonHide")}>
           <LuEye size={11} />
         </div>
       ) : (

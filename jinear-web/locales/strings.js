@@ -3183,4 +3183,96 @@ export default {
     en: "Ends",
     tr: "Bitiş",
   },
+  calendarDescriptionSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor",
+  },
+  calendarTitleSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor",
+  },
+  calendarDatesSaveButton: {
+    en: "Save",
+    tr: "Kaydet",
+  },
+  calendarDatesCancelButton: {
+    en: "Cancel",
+    tr: "Vazgeç",
+  },
+  calendarDatesSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor",
+  },
+  assignedToMeClearFilterButton: {
+    en: "Clear Filter",
+    tr: "Filtreyi Kaldır",
+  },
+  assignedToMeFilterButton: {
+    en: "Filter",
+    tr: "Filtrele",
+  },
+  calendarSourceButtonHide: {
+    en: "Hide",
+    tr: "Gizle",
+  },
+  calendarMemberListTitle: {
+    en: "Calendar Members",
+    tr: "Takvim Üyeleri",
+  },
+  calendarMemberListText: {
+    en: "Only members below and workspace admins can see calendar content.",
+    tr: "Yanlızca aşağıdaki takvim üyeleri ve çalışma alanı yöneticileri takvim içeriğine erişebilir.",
+  },
+  calendarMemberAddMember: {
+    en: "Add Member",
+    tr: "Üye Ekle",
+  },
+  calendarMemberListEmptyLabel: {
+    en: "No calendar member found.",
+    tr: "Hiçbir üye bulunamadı.",
+  },
+  deleteCalendarMemberAreYouSureTitle: {
+    en: "Kick Member",
+    tr: "Üyeyi Takvim Üyelerinden At",
+  },
+  deleteCalendarMemberAreYouSureText: {
+    en: "Are you sure to remove member access from this calendar?",
+    tr: "Üyeyi takvim üyelerinden atmak istediğinize emin misiniz?",
+  },
+  deleteCalendarMemberAreYouSureConfirmLabel: {
+    en: "Kick",
+    tr: "At",
+  },
+  calendarMemberListItemOwner: {
+    en: "Owner",
+    tr: "Oluşturan",
+  },
+  calendarMemberListItemUser: {
+    en: "Member",
+    tr: "Üye",
+  },
+  activeCalendarMemberKick: {
+    en: "Kick Member",
+    tr: "Üyeyi At",
+  },
+  deleteCalendarCardAreYouSureTitle: {
+    en: "Are you sure to delete this calendar?",
+    tr: "Bu takvimi silmek istediğinize emin misiniz?",
+  },
+  deleteCalendarCardAreYouSureText: {
+    en: "This action can not be undone but you can always re-add calendar.",
+    tr: "Bu işlem geri alınamaz ancak her zaman tekrar takvim ekleyebilirsiniz.",
+  },
+  deleteCalendarButton: {
+    en: "Delete Calendar",
+    tr: "Takvimi Sil",
+  },
+  deleteCalendarCardTitle: {
+    en: "Delete Calendar",
+    tr: "Takvimi Sil",
+  },
+  deleteCalendarCardText: {
+    en: "Deleting the calendar does not delete the calendar from the original source and the events associated with this calendar, it only disconnects it from Jinear.",
+    tr: "Takvimi silmek orijinal kaynaktaki takvimi ve bu takvim ile bağlantılı etkinlikleri silmez yanlızca Jinear ile bağı kopartır.",
+  },
 };

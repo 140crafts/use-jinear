@@ -6,8 +6,8 @@
 }
 
 .toggleButtonContainer {
-  background-color: var(--c-primary-shade-0);
-  border-radius: var(--border-radius);
+  display: flex;
+  gap: 0.5rem;
 }
 
 .datesContainer {
@@ -27,6 +27,24 @@
 .contentContainerClassName {
   flex: 1;
 }
+
 .dateButtonClassName {
   flex: 1;
+}
+
+.actionsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  z-index: 4;
+  transition: all var(--fade-2);
+}
+
+.loadingContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
 }

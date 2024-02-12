@@ -1,5 +1,4 @@
-import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import SegmentedControl from "@/components/segmentedControl/SegmentedControl";
+import Button from "@/components/button";
 import {
   queryStateAnyToStringConverter,
   queryStateDateToShortDateConverter,
@@ -9,23 +8,33 @@ import {
 } from "@/hooks/useQueryState";
 import Logger from "@/utils/logger";
 import { addDays, addMonths, addWeeks, format, startOfDay, startOfMonth, startOfToday, startOfWeek } from "date-fns";
+import strings from "locales/strings";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoCaretBack, IoCaretForward, IoEllipse, IoScan } from "react-icons/io5";
+import { IoCaretBack, IoCaretForward, IoEllipse } from "react-icons/io5";
+import { LuCalendar } from "react-icons/lu";
 import { CalendarViewType } from "../Calendar";
-import { useSetSqueezedView, useSqueezedView } from "../context/CalendarContext";
 import styles from "./CalendarHeader.module.scss";
 
 interface CalendarHeaderProps {}
+interface ICalendarViewType {
+  label: keyof typeof strings;
+  value: "d" | "2d" | "w" | "m";
+}
+
+const viewTypes: ICalendarViewType[] = [
+  { label: "calendarViewTypeSegment_Day", value: "d" },
+  { label: "calendarViewTypeSegment_2Day", value: "2d" },
+  { label: "calendarViewTypeSegment_Week", value: "w" },
+  { label: "calendarViewTypeSegment_Month", value: "m" },
+];
 
 const logger = Logger("CalendarHeader");
 const CalendarHeader: React.FC<CalendarHeaderProps> = ({}) => {
   const { t } = useTranslation();
-  const squeezedView = useSqueezedView();
-  const setSqueezedView = useSetSqueezedView();
   const setQueryState = useSetQueryState();
   const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
-  const viewType = useQueryState<CalendarViewType>("viewType") || "m";
+  const viewType = useQueryState<CalendarViewType>("viewType");
 
   const setViewingDate = (viewingDate: Date) => {
     logger.log({ setViewingDate: viewingDate });
@@ -76,11 +85,8 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({}) => {
     setViewingDate?.(startOfToday());
   };
 
-  const toggleSquezeedView = () => {
-    setSqueezedView?.(!squeezedView);
-  };
-
-  const changeViewType = (value: string, index: number) => {
+  const changeViewType = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = event.target.value;
     if (value && (value == "m" || value == "w" || value == "d" || value == "2d")) {
       setViewType?.(value);
     }
@@ -92,36 +98,27 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({}) => {
         <div className={styles.headerInfoContainer}>
           <div className={styles.headerLabelContainer}>
             <h1 className={styles.monthHeader}>{title}</h1>
-            <SegmentedControl
-              name="calendar-view-type-segment-control"
-              defaultIndex={["d", "2d", "w", "m"].indexOf(viewType)}
-              segments={[
-                { label: t("calendarViewTypeSegment_Day"), value: "d" },
-                { label: t("calendarViewTypeSegment_2Day"), value: "2d" },
-                { label: t("calendarViewTypeSegment_Week"), value: "w" },
-                { label: t("calendarViewTypeSegment_Month"), value: "m" },
-              ]}
-              segmentLabelClassName={styles.viewTypeSegmentLabel}
-              callback={changeViewType}
-            />
           </div>
         </div>
-        <div className="spacer-h-2" />
         <div className={styles.calendarNavigation}>
-          {viewType == "m" && (
-            <>
-              <Button
-                heightVariant={ButtonHeight.short}
-                variant={squeezedView ? ButtonVariants.filled2 : ButtonVariants.filled}
-                onClick={toggleSquezeedView}
-                className={styles.squeezedViewToggleButton}
-              >
-                <IoScan />
-              </Button>
-              <div className="spacer-w-1" />
-            </>
-          )}
-
+          <div className={styles.viewTypeContainer}>
+            <label htmlFor="calendar-view-type-select" className={styles.viewTypeIconContainer}>
+              <LuCalendar size={11} />
+            </label>
+            <select
+              id="calendar-view-type-select"
+              className={styles.viewTypeSelect}
+              onChange={changeViewType}
+              value={viewType || "m"}
+            >
+              {viewTypes.map((viewType) => (
+                <option key={`calendar-veiw-type-${viewType.value}`} value={viewType.value}>
+                  {t(viewType.label)}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="spacer-w-1" />
           <Button onClick={prevPeriod}>
             <IoCaretBack />
           </Button>

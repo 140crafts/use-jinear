@@ -1,35 +1,40 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
 import { useToggle } from "@/hooks/useToggle";
-import { RichTextDto } from "@/model/be/jinear-core";
+import { CalendarEventDto } from "@/model/be/jinear-core";
+import { useUpdateTitleAndDescriptionMutation } from "@/store/api/calendarEventApi";
+import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
 import React, { useRef, useState } from "react";
 import { LuPencil } from "react-icons/lu";
 import styles from "./EventDescription.module.css";
 
 interface EventDescriptionProps {
-  description?: RichTextDto | null;
+  calendarEvent: CalendarEventDto;
 }
 
-const EventDescription: React.FC<EventDescriptionProps> = ({ description }) => {
+const EventDescription: React.FC<EventDescriptionProps> = ({ calendarEvent }) => {
   const { t } = useTranslation();
   const [readOnly, toggleReadOnly] = useToggle(true);
-  const [initialValue, setInitialValue] = useState(description?.value);
-  // const [updateTaskDescription, { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading }] = useUpdateTaskDescriptionMutation();
+  const [initialValue, setInitialValue] = useState(calendarEvent.description?.value);
+  const [updateTitleAndDescription, { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading }] =
+    useUpdateTitleAndDescriptionMutation();
   const tiptapRef = useRef<ITiptapRef>(null);
 
   const save = () => {
-    const input: HTMLInputElement | null = document.getElementById(`${description?.richTextId}`) as HTMLInputElement;
-    if (input) {
+    const input: HTMLInputElement | null = document.getElementById(
+      `${calendarEvent.description?.richTextId}`
+    ) as HTMLInputElement;
+    if (input && calendarEvent.externalCalendarSourceDto) {
       const value = input?.value || "";
       const req = {
-        // taskId,
-        body: {
-          description: value,
-        },
+        calendarId: calendarEvent.calendarId,
+        calendarSourceId: calendarEvent.externalCalendarSourceDto.externalCalendarSourceId,
+        calendarEventId: calendarEvent.calendarEventId,
+        description: value,
       };
-      // TODO
-      //   updateTaskDescription(req);
+      updateTitleAndDescription(req);
+      setInitialValue(value);
     }
   };
 
@@ -46,7 +51,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ description }) => {
     toggleReadOnly();
     setInitialValue("");
     setTimeout(() => {
-      setInitialValue(description?.value);
+      setInitialValue(calendarEvent.description?.value);
     }, 100);
   };
 
@@ -57,7 +62,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ description }) => {
         content={initialValue}
         editable={!readOnly}
         placeholder={t("calendarEventDetailDescription")}
-        htmlInputId={`${description?.richTextId}`}
+        htmlInputId={`${calendarEvent.description?.richTextId}`}
         actionBarMode={"simple"}
       />
       {readOnly && (
@@ -72,18 +77,18 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ description }) => {
       )}
 
       <div className={styles.actionContainer}>
-        {/* {isUpdateLoading && (
+        {isUpdateLoading && (
           <div className={styles.loadingContainer}>
             <CircularProgress size={14} />
-            <div>{t("taskDescriptionSaving")}</div>
+            <div>{t("calendarDescriptionSaving")}</div>
           </div>
-        )} */}
+        )}
 
         {!readOnly && (
           <Button
-            // disabled={isUpdateLoading}
-            // loading={isUpdateLoading}
-            heightVariant={ButtonHeight.mid}
+            disabled={isUpdateLoading}
+            loading={isUpdateLoading}
+            heightVariant={ButtonHeight.short}
             variant={readOnly ? ButtonVariants.filled2 : ButtonVariants.contrast}
             onClick={toggle}
           >
@@ -91,12 +96,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ description }) => {
           </Button>
         )}
         {!readOnly && (
-          <Button
-            //    disabled={isUpdateLoading}
-            heightVariant={ButtonHeight.mid}
-            variant={ButtonVariants.filled2}
-            onClick={cancel}
-          >
+          <Button disabled={isUpdateLoading} heightVariant={ButtonHeight.short} variant={ButtonVariants.filled2} onClick={cancel}>
             {t("calendarEventDetailDescriptionCancel")}
           </Button>
         )}

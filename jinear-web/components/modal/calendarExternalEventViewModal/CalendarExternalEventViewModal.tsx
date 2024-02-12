@@ -1,4 +1,5 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import Line from "@/components/line/Line";
 import useWindowSize from "@/hooks/useWindowSize";
 import {
   closeCalendarExternalEventViewModal,
@@ -60,6 +61,7 @@ const CalendarExternalEventViewModal: React.FC<CalendarExternalEventViewModalPro
           <div className={styles.eventDetailLayout}>
             <EventBody calendarEvent={calendarEvent} />
             <EventDateButtons calendarEvent={calendarEvent} />
+            <Line />
             <EventActionBar calendarEvent={calendarEvent} />
           </div>
         </div>

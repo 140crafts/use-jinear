@@ -46,7 +46,8 @@ const MonthView: React.FC<MonthViewProps> = ({ workspace }) => {
     }
     const responseEvents = filterResponse.data.filter((val) => {
       const lookUpSource = val.calendarEventSourceType == "TASK" ? hiddenTeams : hiddenCalendars;
-      const lookUpValue = val.calendarEventSourceType == "TASK" ? val.relatedTask?.teamId : val.externalCalendarSourceDto?.id;
+      const lookUpValue =
+        val.calendarEventSourceType == "TASK" ? val.relatedTask?.teamId : val.externalCalendarSourceDto?.externalCalendarSourceId;
       return lookUpSource.findIndex((value) => value == lookUpValue) == -1;
     });
 

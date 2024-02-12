@@ -3,6 +3,7 @@ import {
   CalendarEventDateUpdateRequest,
   CalendarEventFilterRequest,
   CalendarEventListingResponse,
+  CalendarEventTitleDescriptionUpdateRequest,
 } from "@/model/be/jinear-core";
 import { api } from "./api";
 
@@ -20,15 +21,21 @@ export const calendarEventApi = api.injectEndpoints({
     }),
     //
     updateCalendarEventDates: build.mutation<BaseResponse, CalendarEventDateUpdateRequest>({
-      query: (req) => ({ url: `v1/calendar/event/update/from-external/update-dates`, method: "PUT", body: req }),
+      query: (req) => ({ url: `v1/calendar/event/update/from-external/dates`, method: "PUT", body: req }),
+      invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"],
+    }),
+    //
+    updateTitleAndDescription: build.mutation<BaseResponse, CalendarEventTitleDescriptionUpdateRequest>({
+      query: (req) => ({ url: `v1/calendar/event/update/from-external/title-description`, method: "PUT", body: req }),
       invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"],
     }),
     //
   }),
 });
 
-export const { useFilterCalendarEventsQuery, useUpdateCalendarEventDatesMutation } = calendarEventApi;
+export const { useFilterCalendarEventsQuery, useUpdateCalendarEventDatesMutation, useUpdateTitleAndDescriptionMutation } =
+  calendarEventApi;
 
 export const {
-  endpoints: { filterCalendarEvents, updateCalendarEventDates },
+  endpoints: { filterCalendarEvents, updateCalendarEventDates, updateTitleAndDescription },
 } = calendarEventApi;

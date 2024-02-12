@@ -1,9 +1,13 @@
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import DateTimeInput from "@/components/dateTimeInput/DateTimeInput";
-import SegmentedControl from "@/components/segmentedControl/SegmentedControl";
 import { useToggle } from "@/hooks/useToggle";
 import { CalendarEventDto } from "@/model/be/jinear-core";
+import { useUpdateCalendarEventDatesMutation } from "@/store/api/calendarEventApi";
+import Logger from "@/utils/logger";
+import { CircularProgress } from "@mui/material";
+import { isBefore } from "date-fns";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./EventDateButtons.module.css";
 
 interface EventDateButtonsProps {
@@ -11,18 +15,75 @@ interface EventDateButtonsProps {
   calendarEvent: CalendarEventDto;
 }
 
+const logger = Logger("EventDateButtons");
+
 const EventDateButtons: React.FC<EventDateButtonsProps> = ({ calendarEvent }) => {
   const { t } = useTranslation();
-  const [allDay, toggleAllDay, setAllDay] = useToggle(calendarEvent.hasPreciseAssignedDate && calendarEvent.hasPreciseDueDate);
+
+  const [initialAllDay, setInitialAllDay] = useState(calendarEvent.hasPreciseAssignedDate && calendarEvent.hasPreciseDueDate);
+  const [initialDates, setInitialDates] = useState({
+    assignedDate: isBefore(new Date(calendarEvent?.assignedDate), new Date(calendarEvent?.dueDate))
+      ? new Date(calendarEvent?.assignedDate)
+      : new Date(calendarEvent?.dueDate),
+    dueDate: isBefore(new Date(calendarEvent?.assignedDate), new Date(calendarEvent?.dueDate))
+      ? new Date(calendarEvent?.dueDate)
+      : new Date(calendarEvent?.assignedDate),
+  });
+
+  const [dates, setDates] = useState(initialDates);
+  const [allDay, toggleAllDay, setAllDay] = useToggle(initialAllDay);
+
+  const [updateCalendarEventDates, { isLoading }] = useUpdateCalendarEventDatesMutation();
+
+  logger.log({ allDay, dates });
 
   useEffect(() => {
     setAllDay(calendarEvent.hasPreciseAssignedDate && calendarEvent.hasPreciseDueDate);
   }, [calendarEvent.hasPreciseAssignedDate, calendarEvent.hasPreciseDueDate]);
 
-  const changeAllDayToggle = (value: string, index: number) => {
-    if (value && (value == "true" || value == "false")) {
-      setAllDay?.(value?.toLowerCase() == "true");
+  useEffect(() => {
+    if (isBefore(dates.dueDate, dates.assignedDate)) {
+      const nextAssignedDate = dates.dueDate;
+      const nextDueDate = dates.assignedDate;
+      setDates({ assignedDate: nextAssignedDate, dueDate: nextDueDate });
     }
+  }, [JSON.stringify(dates)]);
+
+  const changeAssignedDate = (date?: Date) => {
+    if (date) {
+      setDates({ ...dates, assignedDate: date });
+    }
+  };
+
+  const changeDueDate = (date?: Date) => {
+    if (date) {
+      setDates({ ...dates, dueDate: date });
+    }
+  };
+
+  const handleChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAllDay(event.target.checked);
+  };
+
+  const saveDates = () => {
+    if (calendarEvent.externalCalendarSourceDto) {
+      updateCalendarEventDates({
+        calendarId: calendarEvent.calendarId,
+        calendarSourceId: calendarEvent.externalCalendarSourceDto.externalCalendarSourceId,
+        calendarEventId: calendarEvent.calendarEventId,
+        assignedDate: dates.assignedDate,
+        dueDate: dates.dueDate,
+        hasPreciseAssignedDate: allDay,
+        hasPreciseDueDate: allDay,
+      });
+      setInitialDates({ assignedDate: dates.assignedDate, dueDate: dates.dueDate });
+      setInitialAllDay(allDay);
+    }
+  };
+
+  const changeToInitial = () => {
+    setDates(initialDates);
+    setAllDay(initialAllDay);
   };
 
   return (
@@ -32,24 +93,27 @@ const EventDateButtons: React.FC<EventDateButtonsProps> = ({ calendarEvent }) =>
           <DateTimeInput
             id={`${calendarEvent.calendarEventId}-event-assigned-date"`}
             type={allDay ? "date" : "date-time"}
-            // dateInputButtonIcon={IoPlaySkipForwardOutline}
             allowEmptyDate={false}
-            initialDate={calendarEvent.assignedDate ? new Date(calendarEvent.assignedDate) : undefined}
-            initialDateIsPrecise={!allDay}
+            value={dates.assignedDate}
+            setValue={changeAssignedDate}
+            valuePrecise={allDay}
+            toggleValuePrecise={toggleAllDay}
+            setValuePrecise={setAllDay}
             contentContainerClassName={styles.contentContainerClassName}
             dateButtonClassName={styles.dateButtonClassName}
           />
         </div>
         <div>{"->"}</div>
         <div className={styles.dateInputContainer}>
-          {/* <span>{t("calendarEventDateEnds")}</span> */}
           <DateTimeInput
             id={`${calendarEvent.calendarEventId}-event-due-date"`}
             type={allDay ? "date" : "date-time"}
-            // dateInputButtonIcon={IoPlaySkipBackOutline}
             allowEmptyDate={false}
-            initialDate={calendarEvent.dueDate ? new Date(calendarEvent.dueDate) : undefined}
-            initialDateIsPrecise={!allDay}
+            value={dates.dueDate}
+            setValue={changeDueDate}
+            valuePrecise={allDay}
+            toggleValuePrecise={toggleAllDay}
+            setValuePrecise={setAllDay}
             contentContainerClassName={styles.contentContainerClassName}
             dateButtonClassName={styles.dateButtonClassName}
           />
@@ -57,18 +121,42 @@ const EventDateButtons: React.FC<EventDateButtonsProps> = ({ calendarEvent }) =>
       </div>
 
       <div className={styles.toggleButtonContainer}>
-        <SegmentedControl
-          id="calendar-event-allday-toggle-segment-control"
-          name="new-team-task-visibility-type-segment-control"
-          defaultIndex={["true", "false"].indexOf(`${allDay}`)}
-          segments={[
-            { label: t("calendarEventAllDayButtonLabel"), value: "true" },
-            { label: t("calendarEventSpesificDatesButtonLabel"), value: "false" },
-          ]}
-          segmentLabelClassName={styles.viewTypeSegmentLabel}
-          callback={changeAllDayToggle}
-        />
+        <input id={"all-day-checkbox"} type="checkbox" checked={allDay} onChange={handleChecked} />
+        <label htmlFor={"all-day-checkbox"}>{t("calendarEventAllDayButtonLabel")}</label>
       </div>
+
+      {isLoading && (
+        <div className={styles.loadingContainer}>
+          <CircularProgress size={14} />
+          <div>{t("calendarDatesSaving")}</div>
+        </div>
+      )}
+
+      {(JSON.stringify(initialDates) != JSON.stringify(dates) || `${initialAllDay}` != `${allDay}`) && (
+        <div className={styles.actionsContainer}>
+          {!isLoading && (
+            <>
+              <Button
+                onClick={saveDates}
+                disabled={isLoading}
+                loading={isLoading}
+                heightVariant={ButtonHeight.short}
+                variant={ButtonVariants.contrast}
+              >
+                {t("calendarDatesSaveButton")}
+              </Button>
+              <Button
+                disabled={isLoading}
+                onClick={changeToInitial}
+                heightVariant={ButtonHeight.short}
+                variant={ButtonVariants.filled2}
+              >
+                {t("calendarDatesCancelButton")}
+              </Button>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 };

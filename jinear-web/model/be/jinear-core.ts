@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-02-10 12:25:00.
+// Generated using typescript-generator version 3.0.1157 on 2024-02-11 14:26:00.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  last: boolean;
   first: boolean;
+  last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -62,8 +62,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
   item: any;
   expiresAt: Date;
-  expired: boolean;
   notExpired: boolean;
+  expired: boolean;
 }
 
 export interface CalendarDto {
@@ -145,8 +145,8 @@ export interface GmailMessageDto extends BaseDto {
   subject: string;
   body: string;
   gthreadId: string;
-  ghistoryId: string;
   ginternalDate: string;
+  ghistoryId: string;
   gid: string;
 }
 
@@ -791,6 +791,14 @@ export interface CalendarEventFilterRequest extends BaseRequest {
   calendarIdList?: string[] | null;
   timespanStart: Date;
   timespanEnd: Date;
+}
+
+export interface CalendarEventTitleDescriptionUpdateRequest {
+  calendarId: string;
+  calendarSourceId: string;
+  calendarEventId: string;
+  title?: string | null;
+  description?: string | null;
 }
 
 export interface NotificationTargetInitializeRequest extends BaseRequest {

@@ -234,7 +234,7 @@ select {
   justify-content: center;
   transition: var(--fade);
   text-decoration: none;
-  padding: 5.5px 7.5px;
+  padding: 4px 7.5px;
   min-height: 1rem;
 }
 

@@ -1,13 +1,12 @@
-import { useToggle } from "@/hooks/useToggle";
 import { closeDatePickerModal, popDatePickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import { format, getHours, getMinutes, setHours, setMinutes } from "date-fns";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { IconType } from "react-icons";
-import { IoAdd, IoClose, IoTimeOutline } from "react-icons/io5";
+import { IoClose } from "react-icons/io5";
 import Button, { ButtonHeight, ButtonVariants } from "../button";
 import TimePicker from "../timePicker/TimePicker";
 import styles from "./DateTimeInput.module.css";
@@ -15,8 +14,11 @@ import styles from "./DateTimeInput.module.css";
 interface DateTimeInputProps {
   id?: string;
   type: "date" | "date-time";
-  initialDate?: Date;
-  initialDateIsPrecise?: boolean;
+  value: Date;
+  setValue: (date?: Date) => void;
+  valuePrecise: boolean;
+  toggleValuePrecise: () => void;
+  setValuePrecise: (next: boolean) => void;
   dateSpanStart?: Date;
   dateSpanEnd?: Date;
   disabledBefore?: Date;
@@ -34,8 +36,11 @@ const logger = Logger("DateTimeInput");
 const DateTimeInput: React.FC<DateTimeInputProps> = ({
   id,
   type,
-  initialDate,
-  initialDateIsPrecise,
+  value,
+  setValue,
+  valuePrecise,
+  toggleValuePrecise,
+  setValuePrecise,
   dateSpanStart,
   dateSpanEnd,
   disabledBefore,
@@ -50,42 +55,31 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [selectedDate, setSelectedDate] = useState<Date>();
-  const [hasPreciseDate, toggleHasPreciseDate, setHasPreciseDate] = useToggle();
-
-  useEffect(() => {
-    if (initialDate) {
-      setSelectedDate(initialDate);
-    }
-    if (initialDateIsPrecise != null) {
-      setHasPreciseDate(initialDateIsPrecise);
-    }
-  }, [initialDate, initialDateIsPrecise]);
 
   const onDateSelect = (day: Date) => {
-    setSelectedDate(day);
+    setValue(day);
     dispatch(closeDatePickerModal());
   };
 
   const onUnpickClick = () => {
-    if (hasPreciseDate) {
-      toggleHasPreciseDate();
+    if (valuePrecise) {
+      toggleValuePrecise();
       return;
     }
-    setSelectedDate(undefined);
+    setValue(undefined);
   };
 
   const onHourChange = (val: string) => {
-    if (selectedDate) {
-      const result = setHours(selectedDate, parseInt(val));
-      setSelectedDate(result);
+    if (value) {
+      const result = setHours(value, parseInt(val));
+      setValue(result);
     }
   };
 
   const onMinuteChange = (val: string) => {
-    if (selectedDate) {
-      const result = setMinutes(selectedDate, parseInt(val));
-      setSelectedDate(result);
+    if (value) {
+      const result = setMinutes(value, parseInt(val));
+      setValue(result);
     }
   };
 
@@ -93,7 +87,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
     dispatch(
       popDatePickerModal({
         visible: true,
-        initialDate: selectedDate ? new Date(selectedDate) : new Date(),
+        initialDate: value ? new Date(value) : new Date(),
         onDateChange: onDateSelect,
         dateSpanStart,
         dateSpanEnd,
@@ -114,10 +108,10 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
         onClick={onPickClick}
         className={dateButtonClassName}
       >
-        {selectedDate ? (
+        {value ? (
           <div className={styles.labelButton}>
             {Icon && <Icon />}
-            {format(selectedDate, t("dateFormat"))}
+            {format(value, t("dateFormat"))}
           </div>
         ) : dateButtonLabel ? (
           dateButtonLabel
@@ -126,31 +120,21 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
         )}
       </Button>
 
-      {selectedDate &&
-        type == "date-time" &&
-        (hasPreciseDate ? (
-          <>
-            <div className={styles.divider} />
-            <TimePicker
-              id={`${id}-time`}
-              minuteResolution={minuteResolution}
-              onHourChange={onHourChange}
-              onMinuteChange={onMinuteChange}
-              defaultHours={selectedDate ? `${getHours(selectedDate)}`.padStart(2, "0") : undefined}
-              defaultMinutes={selectedDate ? `${getMinutes(selectedDate)}`.padStart(2, "0") : undefined}
-            />
-          </>
-        ) : (
-          <>
-            <div className={styles.divider} />
-            <Button variant={ButtonVariants.filled} onClick={toggleHasPreciseDate}>
-              {hasPreciseDate ? <IoClose size={11} /> : <IoAdd size={11} />}
-              {!hasPreciseDate && <IoTimeOutline size={14} />}
-            </Button>
-          </>
-        ))}
+      {value && type == "date-time" && (
+        <>
+          <div className={styles.divider} />
+          <TimePicker
+            id={`${id}-time`}
+            minuteResolution={minuteResolution}
+            onHourChange={onHourChange}
+            onMinuteChange={onMinuteChange}
+            defaultHours={value ? `${getHours(value)}`.padStart(2, "0") : undefined}
+            defaultMinutes={value ? `${getMinutes(value)}`.padStart(2, "0") : undefined}
+          />
+        </>
+      )}
 
-      {allowEmptyDate && selectedDate && (
+      {allowEmptyDate && valuePrecise && (
         <Button
           heightVariant={ButtonHeight.short}
           variant={ButtonVariants.filled2}

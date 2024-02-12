@@ -1,13 +1,14 @@
 "use client";
-import { useLocalStorage, useSetLocalStorage } from "@/hooks/useLocalStorage";
+import { useLocalStorage } from "@/hooks/useLocalStorage";
 import {
   queryStateDateToShortDateConverter,
   queryStateShortDateParser,
   useQueryState,
-  useSetQueryState,
+  useSetQueryStateMultiple,
 } from "@/hooks/useQueryState";
 import { useWorkspaceFirstTeam } from "@/hooks/useWorkspaceFirstTeam";
 import { CalendarEventDto, WorkspaceDto } from "@/model/be/jinear-core";
+import Logger from "@/utils/logger";
 import cn from "classnames";
 import { startOfDay } from "date-fns";
 import React, { useEffect, useState } from "react";
@@ -26,20 +27,24 @@ interface CalendarProps {
 
 export type CalendarViewType = "m" | "w" | "d" | "2d";
 
-const getStoredCalendarViewType = (): CalendarViewType => {
+const useStoredCalendarViewType = (): CalendarViewType => {
   return useLocalStorage({ key: "calendarViewType", defaultValue: "m" }) as CalendarViewType;
 };
 
 const storeCalendarViewType = (value: CalendarViewType) => {
-  useSetLocalStorage({ key: "calendarViewType", value });
+  if (typeof window === "object") {
+    localStorage.setItem("calendarViewType", value);
+  }
 };
 
+const logger = Logger("Calendar");
+
 const Calendar: React.FC<CalendarProps> = ({ workspace, className }) => {
-  const setQueryState = useSetQueryState();
+  const setQueryStateMultiple = useSetQueryStateMultiple();
   const [highlightedEventId, setHighlightedEventId] = useState<string>("");
   const [squeezedView, setSqueezedView] = useState<boolean>(true);
-
-  const viewType = useQueryState<CalendarViewType>("viewType") || getStoredCalendarViewType();
+  const defaultCalendarViewType = useStoredCalendarViewType();
+  const viewType = useQueryState<CalendarViewType>("viewType");
   const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser);
 
   const [draggingEvent, setDraggingEvent] = useState<CalendarEventDto>();
@@ -49,14 +54,18 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, className }) => {
   const workspacesFirstTeam = useWorkspaceFirstTeam(workspace.workspaceId);
 
   useEffect(() => {
-    if (viewType) {
-      storeCalendarViewType(viewType);
+    const nextQueryState = new Map<string, string>([]);
+    if (!viewType) {
+      storeCalendarViewType(defaultCalendarViewType);
+      nextQueryState.set("viewType", defaultCalendarViewType);
     }
     if (!viewingDate) {
       const initialDay = startOfDay(new Date());
-      setQueryState("viewingDate", queryStateDateToShortDateConverter(initialDay));
+      nextQueryState.set("viewingDate", queryStateDateToShortDateConverter(initialDay) as string);
     }
-  }, [viewType, viewingDate]);
+    logger.log({ nextQueryState });
+    setQueryStateMultiple(nextQueryState);
+  }, [JSON.stringify(viewType), JSON.stringify(viewingDate), defaultCalendarViewType]);
 
   return (
     <CalendarContext.Provider

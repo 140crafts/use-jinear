@@ -47,10 +47,10 @@ const AssignedToMeScreenHeader: React.FC<AssignedToMeScreenHeaderProps> = ({ wor
             <>
               <IoClose />
               <div className="spacer-w-1" />
-              {t("calendarClearFilterButton")}
+              {t("assignedToMeClearFilterButton")}
             </>
           ) : (
-            t("calendarFilterButton")
+            t("assignedToMeFilterButton")
           )}
         </Button>
       </div>

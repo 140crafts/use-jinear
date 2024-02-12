@@ -18,9 +18,9 @@ const ExternalCalendar: React.FC<ExternalCalendarProps> = ({ workspace, calendar
       <div className={styles.calendarSourcesContainer}>
         {calendar.calendarSources?.map((calendarSource) => (
           <CalendarSourceButton
-            key={`${calendar.calendarId}-${calendarSource.id}`}
+            key={`${calendar.calendarId}-${calendarSource.externalCalendarSourceId}`}
             calendarId={calendar.calendarId}
-            calendarSourceId={calendarSource.id}
+            calendarSourceId={calendarSource.externalCalendarSourceId}
             label={calendarSource.summary || t("unnamedCalendar")}
             type={"EXTERNAL-CAL"}
           />

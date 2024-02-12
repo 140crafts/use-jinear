@@ -1,4 +1,3 @@
-import Line from "@/components/line/Line";
 import { CalendarEventDto } from "@/model/be/jinear-core";
 import React from "react";
 import styles from "./EventActionBar.module.css";
@@ -11,7 +10,6 @@ interface EventActionBarProps {
 const EventActionBar: React.FC<EventActionBarProps> = ({ calendarEvent }) => {
   return (
     <div className={styles.container}>
-      <Line />
       <EventSourceCalendarButton calendarEvent={calendarEvent} className={styles.button} />
     </div>
   );

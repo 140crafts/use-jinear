@@ -4,7 +4,6 @@
   background-color: var(--c-primary-shade-0);
   border-radius: var(--border-radius);
   gap: 0.25rem;
-  min-height: 32px;
 }
 
 .deselectButton {

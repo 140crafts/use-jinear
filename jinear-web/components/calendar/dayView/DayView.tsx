@@ -45,7 +45,10 @@ const DayView: React.FC<DayViewProps> = ({ workspace }) => {
     return filterResponse?.data
       .filter((val) => {
         const lookUpSource = val.calendarEventSourceType == "TASK" ? hiddenTeams : hiddenCalendars;
-        const lookUpValue = val.calendarEventSourceType == "TASK" ? val.relatedTask?.teamId : val.externalCalendarSourceDto?.id;
+        const lookUpValue =
+          val.calendarEventSourceType == "TASK"
+            ? val.relatedTask?.teamId
+            : val.externalCalendarSourceDto?.externalCalendarSourceId;
         return lookUpSource.findIndex((value) => value == lookUpValue) == -1;
       })
       .filter((event) => isTaskDatesIntersect(event, dateSpan));
@@ -69,7 +72,7 @@ const DayView: React.FC<DayViewProps> = ({ workspace }) => {
       </div>
       <div className={styles.listContainer}>
         {isFetching && <CircularLoading />}
-        {viewingDayEvents && <TaskList viewingDayEvents={viewingDayEvents} className={styles.taskList} />}
+        {viewingDayEvents && !isFetching && <TaskList viewingDayEvents={viewingDayEvents} className={styles.taskList} />}
       </div>
     </div>
   );

@@ -1,4 +1,3 @@
-import Line from "@/components/line/Line";
 import { CalendarEventDto } from "@/model/be/jinear-core";
 import React from "react";
 import EventDescription from "../eventDescription/EventDescription";
@@ -12,9 +11,8 @@ interface EventBodyProps {
 const EventBody: React.FC<EventBodyProps> = ({ calendarEvent }) => {
   return (
     <div className={styles.container}>
-      <EventTitle title={calendarEvent?.title} />
-      <EventDescription description={calendarEvent?.description} />
-      <Line />
+      <EventTitle calendarEvent={calendarEvent} />
+      <EventDescription calendarEvent={calendarEvent} />
     </div>
   );
 };

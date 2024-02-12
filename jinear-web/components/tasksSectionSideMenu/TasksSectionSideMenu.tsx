@@ -1,5 +1,4 @@
 "use client";
-import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { popNewTaskModal } from "@/store/slice/modalSlice";
@@ -20,7 +19,8 @@ const TasksSectionSideMenu: React.FC<TasksSectionSideMenuProps> = ({}) => {
   const params = useParams();
   const workspaceName = (params?.workspaceName as string) || "";
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
-  const feedsEnabled = useFeatureFlag("FEEDS");
+  // const feedsEnabled = useFeatureFlag("FEEDS");
+  const feedsEnabled = true;
 
   const { data: teamsResponse } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
     skip: workspace == null,
