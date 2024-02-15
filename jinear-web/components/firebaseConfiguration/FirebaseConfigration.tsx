@@ -8,7 +8,7 @@ import { markHasUnreadNotification } from "@/store/slice/taskAdditionalDataSlice
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { initializeApp } from "firebase/app";
-import { MessagePayload, deleteToken, getMessaging, getToken, onMessage } from "firebase/messaging";
+import { MessagePayload, deleteToken, getMessaging, getToken, isSupported, onMessage } from "firebase/messaging";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "react-hot-toast";
@@ -81,12 +81,16 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
     }
   }, [currentAccountId, authState, firebaseApp, messaging]);
 
-  const initializeFirebase = () => {
+  const initializeFirebase = async () => {
     console.log(`initializeFirebase has started.`);
-    const app = initializeApp(firebaseConfig);
-    const messaging = getMessaging(firebaseApp);
-    dispatch(setFirebase(app));
-    dispatch(setMessaging(messaging));
+    const isSupportedBrowser = await isSupported();
+    console.log(`isSupportedBrowser: ${isSupportedBrowser}`);
+    if (isSupportedBrowser) {
+      const app = initializeApp(firebaseConfig);
+      const messaging = getMessaging(firebaseApp);
+      dispatch(setFirebase(app));
+      dispatch(setMessaging(messaging));
+    }
   };
 
   const checkAndPrompt = async (currentAccountId: string) => {
