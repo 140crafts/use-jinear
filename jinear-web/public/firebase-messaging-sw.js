@@ -11,12 +11,21 @@ const firebaseConfig = {
   measurementId: "G-FMXGQ5XM95",
 };
 
-let firebaseApp = null;
-let messaging = null;
-
+const firebaseApp = firebase.initializeApp(firebaseConfig);
+const messaging = (async () => {
+  try {
+    const isSupportedBrowser = await isSupported();
+    if (isSupportedBrowser) {
+      return getMessaging(config);
+    }
+    console.log("Firebase not supported this browser");
+    return null;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+})();
 try {
-  firebaseApp = firebase.initializeApp(firebaseConfig);
-  messaging = firebase.messaging.isSupported() ? firebase.messaging() : null;
 } catch (error) {
   console.error({ error });
 }

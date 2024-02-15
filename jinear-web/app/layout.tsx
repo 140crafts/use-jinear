@@ -12,6 +12,7 @@ import ModalProvider from "@/components/modalProvider/ModalProvider";
 import ReduxProvider from "@/components/reduxProvider/ReduxProvider";
 // import Root from "@/components/root/Root";
 import BodyFixer from "@/components/bodyFixer/BodyFixer";
+import ErrorBoundary from "@/components/errorBoundary/ErrorBoundary";
 import OfflineListener from "@/components/offlineListener/OfflineListener";
 import Root from "@/components/root/Root";
 import Scripts from "@/components/scripts/Scripts";
@@ -296,7 +297,9 @@ function MyApp({ children }: { children: React.ReactNode }) {
               <WorkspaceAndTeamChangeListener />
               <OnboardListener />
               <PureClientOnly>
-                <FirebaseConfigration />
+                <ErrorBoundary message={"Firebase Configration"}>
+                  <FirebaseConfigration />
+                </ErrorBoundary>
               </PureClientOnly>
               {children}
               <ToasterProvider />
