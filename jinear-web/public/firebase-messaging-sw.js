@@ -11,9 +11,15 @@ const firebaseConfig = {
   measurementId: "G-FMXGQ5XM95",
 };
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
-// const messaging = firebase.messaging();
-const messaging = firebase.messaging.isSupported() ? firebase.messaging() : null;
+let firebaseApp = null;
+let messaging = null;
+
+try {
+  firebaseApp = firebase.initializeApp(firebaseConfig);
+  messaging = firebase.messaging.isSupported() ? firebase.messaging() : null;
+} catch (error) {
+  console.error({ error });
+}
 
 // messaging.onBackgroundMessage((payload) => {
 //   console.log("[firebase-messaging-sw.js] Received background message ", payload);
