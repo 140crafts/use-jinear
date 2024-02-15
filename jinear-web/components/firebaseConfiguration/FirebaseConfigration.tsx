@@ -82,6 +82,7 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
   }, [currentAccountId, authState, firebaseApp, messaging]);
 
   const initializeFirebase = () => {
+    console.log(`initializeFirebase has started.`);
     const app = initializeApp(firebaseConfig);
     const messaging = getMessaging(firebaseApp);
     dispatch(setFirebase(app));
