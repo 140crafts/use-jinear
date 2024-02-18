@@ -2304,12 +2304,12 @@ export default {
     tr: "Şartlar ve Koşullar",
   },
   homescreenHeroTitleLine1: {
-    en: "Focus on your job",
-    tr: "İşinize odaklanın",
+    en: "Calendar & Task Manager",
+    tr: "Takımlar ve Kişisel kullanım için",
   },
   homescreenHeroTitleLine2: {
-    en: "not juggling tasks",
-    tr: "proje yönetimine değil",
+    en: "for Individuals and Teams",
+    tr: "Takvim ve Görev Yönetimi",
   },
   homescreenHeroText: {
     en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, manage projects collaboratively.",
@@ -3003,30 +3003,6 @@ export default {
     en: "New Task",
     tr: "Yeni Görev",
   },
-  homePageFeature_calendar: {
-    en: "Calendar",
-    tr: "Takvim",
-  },
-  homePageFeature_reminders: {
-    en: "Reminders",
-    tr: "Anımsatıcı",
-  },
-  homePageFeature_teams: {
-    en: "Collaborative Work",
-    tr: "Kolektif Çalışma",
-  },
-  homePageFeature_gmail: {
-    en: "Gmail Integration",
-    tr: "Gmail Entegrasyonu",
-  },
-  homePageFeature_files: {
-    en: "File Storage",
-    tr: "Dosya Saklama",
-  },
-  homePageFeature_workflowmanagement: {
-    en: "Workflow Management",
-    tr: "İş Akışı Yönetimi",
-  },
   taskDetailCommentsNewComment: {
     en: "New Comment",
     tr: "Yeni Yorum",
@@ -3274,5 +3250,29 @@ export default {
   deleteCalendarCardText: {
     en: "Deleting the calendar does not delete the calendar from the original source and the events associated with this calendar, it only disconnects it from Jinear.",
     tr: "Takvimi silmek orijinal kaynaktaki takvimi ve bu takvim ile bağlantılı etkinlikleri silmez yanlızca Jinear ile bağı kopartır.",
+  },
+  homePageFeatureTitle_Calendar: {
+    en: "First class calendar experience to manage your tasks not just a Google Calendar skin",
+    tr: "Görevlerinizi takip etmek için kaliteli bir takvim deneyimi",
+  },
+  homePageFeatureText_Calendar: {
+    en: "Manage your or your teams tasks in calendar. You can always integrate Google Calendar and grant access to your teammates.",
+    tr: "Sizin veya takımınızın görevlerini takvim üzerinden takip edin. Ayrıca Google Takvim deki takvimlerinizi bağlayıp isterseniz takım arkadaslarınıza da erisim yetkisi verebilirsiniz.",
+  },
+  homePageFeatureTitle_Task: {
+    en: "Powerful task management",
+    tr: "Zengin görev yönetimi",
+  },
+  homePageFeatureText_Task: {
+    en: "Create tasks and assign team mates, set planned or due dates, comment, attach files, add reminders, link other tasks.",
+    tr: "Yarattığınız görevleri takım arkadaşlarınıza atayın, yapılacak tarihi veya son tarihi girin, yorumlar ekleyin, dosya iliştirin, anımsatıcılar oluşturun, diğer görevler ile ilişkilendirin.",
+  },
+  homePageFeatureTitle_Feed_GMail: {
+    en: "Integrate Gmail And Create Feeds & Tasks",
+    tr: "Gmail'i entegre edin, Akış ve Görevler oluşturun",
+  },
+  homePageFeatureText_Feed_Mail: {
+    en: "Useful for initializing 8tasks directly from inbox. You can add your company’s mail like support@yourcompany.com to feed and add team mates to it so they can view incoming requests and take action. Or add your personal mail for personal use and create tasks.",
+    tr: "Gelen kutusundan doğrudan görevler başlatmak için kullanışlıdır. destek@şirketiniz.com gibi şirketinizin posta adresininden bir akış oluşturabilir ve ekibinizi ekleyebilirsiniz, böylece ilgili ekip üyeleri gelen talepleri görebilir ve harekete geçebilirler. Veya kişisel kullanım için kişisel postanızı ekleyin ve görevler oluşturun",
   },
 };

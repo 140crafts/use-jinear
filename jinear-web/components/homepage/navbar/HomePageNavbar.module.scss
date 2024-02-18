@@ -22,21 +22,23 @@
 }
 
 .themeToggleButton {
-  margin-top: 0.2rem;
+  margin-top: 0.1rem;
 }
 
-.logo {
-  // margin-left: -1rem;
+.termsLabel {
+  display: flex;
+}
+
+.termsIcon {
+  display: none;
 }
 
 @media (max-width: $tablet) {
-  .header {
-    align-items: flex-start;
-    flex-direction: column;
+  .termsLabel {
+    display: none;
   }
-  .headerActionBar {
-    align-self: flex-end;
-    align-items: center;
-    margin-top: -1rem;
+
+  .termsIcon {
+    display: flex;
   }
 }

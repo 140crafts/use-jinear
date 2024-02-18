@@ -3,10 +3,10 @@
 .container {
   display: flex;
   flex-direction: column;
-  width: var(--page-extended);
+  position: relative;
 }
 
-.heroImageContainer {
+.imageContainer {
   position: relative;
   height: calc(min(120ch, calc(100vw - calc(var(--gap) * 2))) / 1.77);
   border: solid;
