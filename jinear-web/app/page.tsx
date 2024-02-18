@@ -54,7 +54,7 @@ export default function Home() {
 
       <div className="spacer-h-4" />
       <Line />
-      <div className="spacer-h-2" />
+      <div className="spacer-h-4" />
 
       <FeatureCard
         title={t("homePageFeatureTitle_Calendar")}
@@ -64,7 +64,7 @@ export default function Home() {
 
       <div className="spacer-h-4" />
       <Line />
-      <div className="spacer-h-2" />
+      <div className="spacer-h-4" />
 
       <FeatureCard
         title={t("homePageFeatureTitle_Task")}
@@ -74,13 +74,14 @@ export default function Home() {
 
       <div className="spacer-h-4" />
       <Line />
-      <div className="spacer-h-2" />
+      <div className="spacer-h-4" />
 
       <FeatureCard
         title={t("homePageFeatureTitle_Feed_GMail")}
         text={t("homePageFeatureText_Feed_Mail")}
         imageUrl={`https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/feed2-${theme}.png`}
       />
+      <div className="spacer-h-4" />
     </ClientOnly>
   );
 }
