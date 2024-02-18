@@ -11,9 +11,9 @@
   position: relative;
   font-size: 3.5rem;
   line-height: 4rem;
-  width: 85%;
-  font-weight: 800;
-  margin: 2rem 0;
+  // width: 85%;
+  font-weight: 400;
+  margin: 1rem 0;
   overflow: visible;
 }
 
@@ -32,35 +32,32 @@
 
 @media (max-width: $laptop) {
   .heroTitle {
-    font-size: 3.25rem;
+    font-size: 2.75rem;
     line-height: 3.75rem;
   }
 }
 
 @media (max-width: $tablet) {
   .heroTitle {
-    font-size: 2.5rem;
-    line-height: 3rem;
-    margin: 1.5rem 0;
+    font-size: 1.75rem;
+    line-height: 2.25rem;
   }
   .heroText {
-    font-size: 1rem;
-    line-height: 1.5rem;
+    font-size: unset;
+    line-height: unset;
   }
 }
 
 @media (max-width: $mobile-l) {
   .heroTitle {
-    font-size: 2rem;
-    line-height: 2.5rem;
-    margin: 1rem 0;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
 }
 
 @media (max-width: $mobile-s) {
   .heroTitle {
-    font-size: 1.5rem;
-    line-height: 2rem;
-    margin: 1rem 0;
+    font-size: 1.1rem;
+    line-height: 1.65rem;
   }
 }
