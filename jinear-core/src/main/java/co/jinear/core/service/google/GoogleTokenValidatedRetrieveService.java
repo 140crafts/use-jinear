@@ -35,7 +35,10 @@ public class GoogleTokenValidatedRetrieveService {
     }
 
     private boolean isStillValid(GoogleToken googleToken) {
-        return ZonedDateTime.now().isBefore(googleToken.getExpiresAt());
+        ZonedDateTime now = ZonedDateTime.now();
+        ZonedDateTime expiresAt = googleToken.getExpiresAt();
+        log.info("Checking google token is still valid. now: {}, expiresAt: {}",now,expiresAt);
+        return now.isBefore(expiresAt);
     }
 
     private GoogleTokenDto refreshAndUpdateToken(String googleUserInfoId, GoogleToken googleToken) {

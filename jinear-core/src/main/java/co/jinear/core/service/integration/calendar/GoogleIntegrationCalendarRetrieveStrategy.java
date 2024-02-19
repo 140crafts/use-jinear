@@ -57,7 +57,6 @@ public class GoogleIntegrationCalendarRetrieveStrategy implements IntegrationCal
     @Override
     public List<ExternalCalendarSourceDto> retrieveCalendarSources(IntegrationInfoDto integrationInfoDto) {
         try {
-            //TODO Handle Google 401 errors
             return Optional.of(integrationInfoDto)
                     .map(IntegrationInfoDto::getGoogleUserInfo)
                     .map(GoogleUserInfoDto::getGoogleUserInfoId)

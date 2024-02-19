@@ -85,7 +85,7 @@ public class GoogleCalendarEventInfoToCalendarEventDtoConverter {
                 .map(GoogleCalendarEventInfo::getEnd)
                 .map(GoogleCalendarEventDate::getDate)
                 .map(dateStr -> ZonedDateHelper.parseWithDateTimeFormat4(dateStr, timeZone))
-                .ifPresent(calendarEventDto::setDueDate);
+                .ifPresent(dueDate -> calendarEventDto.setDueDate(dueDate.minusSeconds(1L)));
         Optional.of(googleCalendarEventInfo)
                 .map(GoogleCalendarEventInfo::getEnd)
                 .map(GoogleCalendarEventDate::getDateTime)
