@@ -112,7 +112,6 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
       <div className={styles.otherMethodsContainer}>
         <Button
           disabled={isLoading}
-          loading={isLoading}
           href={authRedirectInfoResponse?.redirectUrl}
           variant={ButtonVariants.outline}
           className={styles.iconButton}
