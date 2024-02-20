@@ -49,6 +49,7 @@ public class SecurityConfiguration {
             "/v1/oauth/google/redirect-info/attach-calendar",
             "/v1/oauth/google/callback/login",
             "/v1/oauth/google/callback/attach-account",
+            "/v1/calendar/event/export-ics/{workspaceId}",
             "/debug/**"
     };
 
