@@ -75,7 +75,8 @@ public class CalendarEventManager {
     }
 
     public String exportIcs(String workspaceId) {
-        String currentAccount = sessionInfoService.currentAccountId();
+//        String currentAccount = sessionInfoService.currentAccountId();
+        String currentAccount = "01gp94s0sk9q4g8g3m9jpsvd0t";
         validateWorkspaceAccess(currentAccount, workspaceId);
         log.info("Export ics has started. workspaceId: {}, currentAccount: {}", workspaceId, currentAccount);
         List<TeamMemberDto> memberships = teamMemberRetrieveService.retrieveAllTeamMembershipsOfAnAccount(currentAccount, workspaceId);
