@@ -1,5 +1,12 @@
 package co.jinear.core.manager.calendar;
 
+import biweekly.Biweekly;
+import biweekly.ICalendar;
+import biweekly.component.VEvent;
+import biweekly.property.DateEnd;
+import biweekly.property.DateStart;
+import biweekly.property.Description;
+import biweekly.property.Summary;
 import co.jinear.core.converter.calendar.CalendarEventFilterRequestToTaskSearchFilterVoConverter;
 import co.jinear.core.converter.calendar.TaskDtoToCalendarEventDtoMapper;
 import co.jinear.core.exception.NoAccessException;
@@ -26,6 +33,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.stream.Stream;
 
@@ -64,6 +72,37 @@ public class CalendarEventManager {
         CalendarEventListingResponse calendarEventListingResponse = new CalendarEventListingResponse();
         calendarEventListingResponse.setCalendarEventDtoList(all);
         return calendarEventListingResponse;
+    }
+
+    public String exportIcs(String workspaceId) {
+        String currentAccount = sessionInfoService.currentAccountId();
+        validateWorkspaceAccess(currentAccount, workspaceId);
+        log.info("Export ics has started. workspaceId: {}, currentAccount: {}", workspaceId, currentAccount);
+        List<TeamMemberDto> memberships = teamMemberRetrieveService.retrieveAllTeamMembershipsOfAnAccount(currentAccount, workspaceId);
+        validateTeamTaskVisibilityAndMemberRoleForAll(memberships);
+        CalendarEventSearchFilterVo calendarEventSearchFilterVo = calendarEventFilterRequestToTaskSearchFilterVoConverter.convert(workspaceId, ZonedDateTime.now().minusYears(1), ZonedDateTime.now().plusYears(1), memberships);
+        List<CalendarEventDto> taskCalendarEventDtos = retrieveTaskCalendarEvents(calendarEventSearchFilterVo);
+
+        ICalendar ical = new ICalendar();
+        taskCalendarEventDtos.forEach(calendarEventDto -> {
+            VEvent event = new VEvent();
+            Summary summary = event.setSummary(calendarEventDto.getTitle());
+            event.setSummary(summary);
+            if (calendarEventDto.getAssignedDate() != null) {
+                DateStart dateStart = new DateStart(Date.from(calendarEventDto.getAssignedDate().toInstant()), calendarEventDto.getHasPreciseAssignedDate() == null ? Boolean.FALSE : calendarEventDto.getHasPreciseAssignedDate());
+                event.setDateStart(dateStart);
+            }
+            if (calendarEventDto.getDueDate() != null) {
+                DateEnd dateEnd = new DateEnd(Date.from(calendarEventDto.getDueDate().toInstant()), calendarEventDto.getHasPreciseDueDate() == null ? Boolean.FALSE : calendarEventDto.getHasPreciseDueDate());
+                event.setDateEnd(dateEnd);
+            }
+            if (calendarEventDto.getDescription() != null) {
+                Description description = new Description(calendarEventDto.getDescription().getValue());
+                event.setDescription(description);
+            }
+            ical.addEvent(event);
+        });
+        return Biweekly.write(ical).go();
     }
 
     @NonNull

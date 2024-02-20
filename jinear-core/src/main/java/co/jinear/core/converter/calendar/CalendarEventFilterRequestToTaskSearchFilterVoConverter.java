@@ -8,6 +8,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
@@ -18,4 +19,8 @@ public abstract class CalendarEventFilterRequestToTaskSearchFilterVoConverter {
 
     @Mapping(target = "teamMemberMap", expression = "java(teamMembershipTeamVisibilityTypeMapConverter.convert(memberships))")
     public abstract CalendarEventSearchFilterVo convert(CalendarEventFilterRequest calendarEventFilterRequest, List<TeamMemberDto> memberships);
+
+
+    @Mapping(target = "teamMemberMap", expression = "java(teamMembershipTeamVisibilityTypeMapConverter.convert(memberships))")
+    public abstract CalendarEventSearchFilterVo convert(String workspaceId, ZonedDateTime timespanStart, ZonedDateTime timespanEnd, List<TeamMemberDto> memberships);
 }

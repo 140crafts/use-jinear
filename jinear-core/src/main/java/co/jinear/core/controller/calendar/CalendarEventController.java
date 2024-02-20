@@ -20,4 +20,10 @@ public class CalendarEventController {
     public CalendarEventListingResponse filter(@Valid @RequestBody CalendarEventFilterRequest calendarEventFilterRequest) {
         return calendarEventManager.filterCalendarEvents(calendarEventFilterRequest);
     }
+
+    @GetMapping("/export-ics/{workspaceId}")
+    @ResponseStatus(HttpStatus.OK)
+    public String exportIcs(@PathVariable String workspaceId) {
+        return calendarEventManager.exportIcs(workspaceId);
+    }
 }

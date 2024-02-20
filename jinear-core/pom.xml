@@ -344,6 +344,11 @@
             <version>9.2.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>net.sf.biweekly</groupId>
+            <artifactId>biweekly</artifactId>
+            <version>0.6.8</version>
+        </dependency>
     </dependencies>
 
     <build>
