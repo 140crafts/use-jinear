@@ -33,7 +33,7 @@ public class NotificationTargetRetrieveService {
     public List<NotificationTargetDto> retrieveLatestAccountTargets(String accountId) {
         log.info("Retrieve latest account targets has started. accountId: {}", accountId);
         return notificationTargetRepository.findAllByAccountIdAndPassiveIdIsNullOrderByCreatedDateDesc(
-                        accountId, PageRequest.of(0, 25))
+                        accountId, PageRequest.of(0, 5))
                 .stream()
                 .map(notificationTargetDtoConverter::convert)
                 .toList();
