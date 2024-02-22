@@ -2,7 +2,7 @@ import Logger from "@/utils/logger";
 import cn from "classnames";
 import React from "react";
 import { ICalendarWeekRowCell } from "../../calendarUtils";
-import styles from "./Week.module.css";
+import styles from "./Week.module.scss";
 import WeekDayNumbers from "./weekDayNumbers/WeekDayNumbers";
 import WeekRow from "./weekRow/WeekRow";
 import WeekTileRow from "./weekTileRow/WeekTileRow";
