@@ -2,7 +2,9 @@ package co.jinear.core.controller.calendar;
 
 import co.jinear.core.manager.calendar.CalendarEventManager;
 import co.jinear.core.model.request.calendar.CalendarEventFilterRequest;
+import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.calendar.CalendarEventListingResponse;
+import co.jinear.core.model.response.calendar.CalendarShareableKeyResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,9 +23,21 @@ public class CalendarEventController {
         return calendarEventManager.filterCalendarEvents(calendarEventFilterRequest);
     }
 
-    @GetMapping("/export-ics/{workspaceId}")
+    @GetMapping("/exports/workspace/{workspaceId}/key")
     @ResponseStatus(HttpStatus.OK)
-    public String exportIcs(@PathVariable String workspaceId) {
-        return calendarEventManager.exportIcs(workspaceId);
+    public CalendarShareableKeyResponse retrieveShareableKey(@PathVariable String workspaceId) {
+        return calendarEventManager.retrieveShareableKey(workspaceId);
+    }
+
+    @PostMapping("/exports/workspace/{workspaceId}/key/refresh")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse refreshShareableKey(@PathVariable String workspaceId) {
+        return calendarEventManager.refreshShareableKey(workspaceId);
+    }
+
+    @GetMapping("/exports/{shareableKey}")
+    @ResponseStatus(HttpStatus.OK)
+    public String exportWorkspaceCalendarEvents(@PathVariable String shareableKey) {
+        return calendarEventManager.exportWorkspaceCalendarEvents(shareableKey);
     }
 }
