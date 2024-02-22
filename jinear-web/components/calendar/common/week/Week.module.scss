@@ -1,0 +1,45 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--calendar-event-gap);
+  padding-bottom: var(--calendar-event-gap);
+  /* min-height: 185px; */
+
+  min-height: calc(
+    calc(
+        100vh -
+          calc(
+            var(--calendar-header-main-height) + var(--calendar-container-gap) + var(--workspace-layout-page-padding) +
+              var(--workspace-layout-content-vertical-padding) + var(--workspace-header-height) + 4.4rem
+          )
+      ) / 5
+  );
+
+  position: relative;
+  padding-bottom: 2rem;
+  /* flex: 1; */
+}
+
+.weekRowContainer {
+  display: flex;
+  flex-direction: column;
+  margin-top: var(--calendar-month-week-day-numbers);
+  gap: var(--calendar-event-gap);
+}
+
+@media (max-width: $tablet) {
+  .container {
+    min-height: calc(
+      calc(
+          100vh -
+            calc(
+              var(--calendar-header-main-height) + var(--calendar-container-gap) + var(--workspace-layout-page-padding) +
+                var(--workspace-layout-content-vertical-padding) + var(--workspace-header-height) + 4.4rem +
+                var(--workspace-side-menu-mobile-navigator-height) + 1rem
+            )
+        ) / 5
+    );
+  }
+}

@@ -62,6 +62,8 @@
   --calendar-week-view-left-hour-label-container-width: 2rem;
   --calendar-weekdays-header-height: 45px;
   --calendar-month-week-day-numbers: 35px;
+  --calendar-header-main-height: 76px;
+  --calendar-container-gap: 1rem;
   /*  */
   --gap: clamp(1rem, 6vw, 3rem);
   --page: min(85ch, 100% - var(--gap) * 2);
