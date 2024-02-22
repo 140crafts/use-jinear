@@ -1,0 +1,17 @@
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.link {
+  flex: 1;
+}
+
+.infoText {
+  text-align: justify;
+}
+
+.subInfoText {
+  opacity: 0.8;
+  font-size: 0.6rem;
+}

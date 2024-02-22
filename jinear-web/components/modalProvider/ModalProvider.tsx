@@ -40,12 +40,14 @@ import DeviceOfflineModal from "../modal/deviceOfflineModal/DeviceOfflineModal";
 import IntegrationFeedItemDetailModal from "../modal/integrationFeedItemDetailModal/IntegrationFeedItemDetailModal";
 import NewCalendarIntegrationModal from "../modal/newCalendarIntegrationModal/NewCalendarIntegrationModal";
 import NewMailIntegrationModal from "../modal/newMailIntegrationModal/NewMailIntegrationModal";
+import ShareWorkspaceEventsModal from "../modal/shareWorkspaceEventsModal/ShareWorkspaceEventsModal";
 import WorkspaceMemberPickerModal from "../modal/workspaceMemberPickerModal/WorkspaceMemberPickerModal";
 
 interface ModalProviderProps {}
 
 const globalModals: any = (
   <>
+    <ShareWorkspaceEventsModal />
     <CalendarExternalEventViewModal />
     <WorkspaceMemberPickerModal />
     <NewCalendarIntegrationModal />

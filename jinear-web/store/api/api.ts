@@ -62,6 +62,7 @@ export const tagTypes = [
   "v1/calendar/member/memberships/{workspaceId}",
   "v1/calendar/member/list/{calendarId}",
   "v1/calendar/event/filter",
+  "v1/calendar/event/exports/workspace/{workspaceId}/key",
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

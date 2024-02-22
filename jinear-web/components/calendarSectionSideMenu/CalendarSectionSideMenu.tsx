@@ -41,9 +41,9 @@ const CalendarSectionSideMenu: React.FC<CalendarSectionSideMenuProps> = ({}) => 
             showLabel={true}
             headerContainerClassName={styles.miniMonthCalendarHeader}
           />
-          <ExternalCalendarsList workspace={workspace} />
-          <OrLine omitText={true} />
           <CalendarTeamsList workspace={workspace} />
+          <OrLine omitText={true} />
+          <ExternalCalendarsList workspace={workspace} />
         </>
       )}
     </div>

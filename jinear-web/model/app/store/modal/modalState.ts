@@ -206,3 +206,7 @@ export interface CalendarExternalEventViewModalState extends ModalState {
   workspaceId?: string;
   calendarEventDto?: CalendarEventDto;
 }
+
+export interface CalendarShareEventsModalState extends ModalState {
+  workspaceId?: string;
+}
