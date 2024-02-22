@@ -19,6 +19,7 @@
 
 .forgotPasswordLink {
   align-self: flex-end;
+  word-break: break-word;
 }
 
 .otherMethodsContainer {

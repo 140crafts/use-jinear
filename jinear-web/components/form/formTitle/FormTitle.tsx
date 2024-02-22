@@ -16,7 +16,7 @@ const FormTitle: React.FC<FormTitleProps> = ({ title, subTitle, linkLabel, link 
       <div className={styles.subtitleContainer}>
         <div className={styles.subTitle}>
           {subTitle}
-          {link && linkLabel && <Link style={{ paddingLeft: 3.5 }} href={link}>{` ${linkLabel}`}</Link>}
+          {link && linkLabel && <Link style={{ paddingLeft: 3.5, wordBreak: "break-word" }} href={link}>{` ${linkLabel}`}</Link>}
         </div>
       </div>
     </div>
