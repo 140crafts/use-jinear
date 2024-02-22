@@ -161,7 +161,7 @@ const Cell: React.FC<CellProps> = ({ id, weight, calendarEvent, weekStart, weekE
         <div className={cn(styles["arrow-right"], isGhostEvent && styles["ghost-arrow-right"])}></div>
       )}
 
-      {calendarEvent && <div className={styles.iconContainer}>{<Icon size={iconSize} />}</div>}
+      {calendarEvent && <div className={styles.iconContainer}>{<Icon className={styles.icon} size={iconSize} />}</div>}
 
       <div
         className={cn(styles.title, "line-clamp", isCompleted && styles["title-line-through"])}

@@ -36,7 +36,7 @@
   background-color: var(--c-primary-shade-1) !important;
 }
 
-@media (max-width: $mobile-m) {
+@media (max-width: $mobile-l) {
   .upgradeButton {
     display: none !important;
   }

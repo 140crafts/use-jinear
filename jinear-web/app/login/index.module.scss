@@ -17,5 +17,6 @@
 @media (max-width: $mobile-l) {
   .container {
     flex-direction: column-reverse;
+    height: unset;
   }
 }

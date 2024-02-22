@@ -1,3 +1,5 @@
+@import "/styles/breakpoints.scss";
+
 .container {
   display: flex;
   align-items: center;
@@ -128,4 +130,18 @@
 
 .noPointerEvents {
   pointer-events: none;
+}
+
+.icon {
+  display: block;
+}
+
+@media (max-width: $tablet) {
+  .iconContainer {
+    min-width: 3px;
+  }
+
+  .icon {
+    display: none;
+  }
 }
