@@ -1,12 +1,14 @@
-import Button, { ButtonHeight } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle";
 import { useToggle } from "@/hooks/useToggle";
 import { WorkspaceDto } from "@/model/be/jinear-core";
 import { useRetrieveMembershipsQuery } from "@/store/api/teamMemberApi";
+import { popCalendarShareEventsModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React, { useMemo } from "react";
+import { IoShareOutline } from "react-icons/io5";
 import { LuChevronDown, LuChevronRight } from "react-icons/lu";
 import CalendarSourceButton from "../calendarSourceButton/CalendarSourceButton";
 import styles from "./CalendarTeamsList.module.css";
@@ -36,10 +38,20 @@ const CalendarTeamsList: React.FC<CalendarTeamsListProps> = ({ workspace }) => {
     [membershipsResponse]
   );
 
+  const popShareWorkspaceEventsModal = () => {
+    dispatch(popCalendarShareEventsModal({ workspaceId: workspace.workspaceId, visible: true }));
+  };
+
   return (
     <div className={styles.container}>
       <div className="spacer-h-1" />
-      <MenuGroupTitle label={t("sideMenuTeamCalendarsTitle")} hasAddButton={false} />
+      <div className={styles.titleContainer}>
+        <MenuGroupTitle label={t("sideMenuTeamCalendarsTitle")} hasAddButton={false} />
+        <Button onClick={popShareWorkspaceEventsModal} variant={ButtonVariants.hoverFilled2} heightVariant={ButtonHeight.short}>
+          <IoShareOutline />
+        </Button>
+      </div>
+
       {isFetching && <CircularLoading />}
       <div className="spacer-h-1" />
       <div className={styles.calendarTeamListContainer}>

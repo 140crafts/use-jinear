@@ -3275,4 +3275,20 @@ export default {
     en: "Useful for initializing 8tasks directly from inbox. You can add your company’s mail like support@yourcompany.com to feed and add team mates to it so they can view incoming requests and take action. Or add your personal mail for personal use and create tasks.",
     tr: "Gelen kutusundan doğrudan görevler başlatmak için kullanışlıdır. destek@şirketiniz.com gibi şirketinizin posta adresininden bir akış oluşturabilir ve ekibinizi ekleyebilirsiniz, böylece ilgili ekip üyeleri gelen talepleri görebilir ve harekete geçebilirler. Veya kişisel kullanım için kişisel postanızı ekleyin ve görevler oluşturun",
   },
+  calendarEventsShareableKeyModalTitle: {
+    en: "Public Address in iCal Format",
+    tr: "iCal Biçimindeki Herkese Açık Adres",
+  },
+  calendarEventsShareableKeyModalText: {
+    en: "Use this address to access the calendar of events in this workspace from other applications.",
+    tr: "Bu çalışma alanındaki etkinlikler takvimine başka uygulamalardan erişmek için bu adresi kullanın.",
+  },
+  calendarEventsShareableKeyModalSubText: {
+    en: "This adress generated only for you. Anyone with this link can list your events so do not share it with anyone. You can re-generate if you share link accidentally.",
+    tr: "Bu adres yalnızca sizin için oluşturuldu. Bu bağlantıya sahip herkes etkinliklerinizi listeleyebilir, bu yüzden kimseyle paylaşmayın. Bağlantıyı yanlışlıkla paylaşırsanız yeniden oluşturabilirsiniz.",
+  },
+  calendarEventsShareableKeyModalCopy: {
+    en: "Copy Link",
+    tr: "Linki Kopyala",
+  },
 };

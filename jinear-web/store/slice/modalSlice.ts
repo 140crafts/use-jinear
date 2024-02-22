@@ -4,6 +4,7 @@ import ModalState, {
   AddMemberToTeamModalState,
   BasicTextInputModalState,
   CalendarExternalEventViewModalState,
+  CalendarShareEventsModalState,
   ChangeTaskAssigneeModalState,
   ChangeTaskDateModalState,
   ChangeTaskTopicModalState,
@@ -162,6 +163,9 @@ const initialState = {
   calendarExternalEventViewModal: {
     visible: false,
   },
+  calendarShareEventsModal: {
+    visible: false,
+  },
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -202,6 +206,7 @@ const initialState = {
   workspaceMemberPickerModal: null | WorkspaceMemberPickerModalState;
   newCalendarIntegrationModal: null | NewCalendarIntegrationModalState;
   calendarExternalEventViewModal: null | CalendarExternalEventViewModalState;
+  calendarShareEventsModal: null | CalendarShareEventsModalState;
 };
 
 const slice = createSlice({
@@ -487,6 +492,13 @@ const slice = createSlice({
       state.calendarExternalEventViewModal = initialState.calendarExternalEventViewModal;
     },
 
+    popCalendarShareEventsModal: (state, action: PayloadAction<CalendarShareEventsModalState>) => {
+      state.calendarShareEventsModal = { ...action.payload, visible: true };
+    },
+    closeCalendarShareEventsModal: (state, action: PayloadAction<void>) => {
+      state.calendarShareEventsModal = initialState.calendarShareEventsModal;
+    },
+
     resetModals: () => initialState,
   },
   extraReducers: (builder) => {
@@ -581,6 +593,8 @@ export const {
   closeNewCalendarIntegrationModal,
   popCalendarExternalEventViewModal,
   closeCalendarExternalEventViewModal,
+  popCalendarShareEventsModal,
+  closeCalendarShareEventsModal,
   resetModals,
 } = slice.actions;
 export default slice.reducer;
@@ -794,3 +808,6 @@ export const selectCalendarExternalEventViewModalVisible = (state: RootState) =>
   state.modal.calendarExternalEventViewModal?.visible;
 export const selectCalendarExternalEventViewModalCalendarEvent = (state: RootState) =>
   state.modal.calendarExternalEventViewModal?.calendarEventDto;
+
+export const selectCalendarShareEventsModalVisible = (state: RootState) => state.modal.calendarShareEventsModal?.visible;
+export const selectCalendarShareEventsModalWorkspaceId = (state: RootState) => state.modal.calendarShareEventsModal?.workspaceId;

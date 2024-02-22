@@ -4,6 +4,7 @@ import {
   CalendarEventFilterRequest,
   CalendarEventListingResponse,
   CalendarEventTitleDescriptionUpdateRequest,
+  CalendarShareableKeyResponse,
 } from "@/model/be/jinear-core";
 import { api } from "./api";
 
@@ -30,12 +31,41 @@ export const calendarEventApi = api.injectEndpoints({
       invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"],
     }),
     //
+    retrieveShareableKey: build.query<CalendarShareableKeyResponse, { workspaceId: string }>({
+      query: ({ workspaceId }: { workspaceId: string }) => `v1/calendar/event/exports/workspace/${workspaceId}/key`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: `v1/calendar/event/exports/workspace/{workspaceId}/key`,
+          id: req.workspaceId,
+        },
+      ],
+    }),
+    //
+    refreshShareableKey: build.mutation<BaseResponse, { workspaceId: string }>({
+      query: ({ workspaceId }: { workspaceId: string }) => ({
+        url: `v1/calendar/event/exports/workspace/${workspaceId}/key/refresh`,
+        method: "POST",
+      }),
+      invalidatesTags: [`v1/calendar/event/exports/workspace/{workspaceId}/key`],
+    }),
+    //
   }),
 });
 
-export const { useFilterCalendarEventsQuery, useUpdateCalendarEventDatesMutation, useUpdateTitleAndDescriptionMutation } =
-  calendarEventApi;
+export const {
+  useFilterCalendarEventsQuery,
+  useUpdateCalendarEventDatesMutation,
+  useUpdateTitleAndDescriptionMutation,
+  useRetrieveShareableKeyQuery,
+  useRefreshShareableKeyMutation,
+} = calendarEventApi;
 
 export const {
-  endpoints: { filterCalendarEvents, updateCalendarEventDates, updateTitleAndDescription },
+  endpoints: {
+    filterCalendarEvents,
+    updateCalendarEventDates,
+    updateTitleAndDescription,
+    retrieveShareableKey,
+    refreshShareableKey,
+  },
 } = calendarEventApi;
