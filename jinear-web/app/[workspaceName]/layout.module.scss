@@ -75,12 +75,6 @@
 
   .pageContent {
     padding-left: var(--workspace-layout-page-padding);
-  }
-}
-
-@media (max-width: $tablet) {
-  .pageContent {
-    // padding-bottom: calc(var(--workspace-side-menu-mobile-navigator-height) + var(--mobile-menu-action-bar-height)) !important;
-    padding-bottom: var(--workspace-side-menu-mobile-navigator-height);
+    // padding-bottom: var(--workspace-side-menu-mobile-navigator-height);
   }
 }
