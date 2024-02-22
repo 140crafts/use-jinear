@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-02-11 14:26:00.
+// Generated using typescript-generator version 3.0.1157 on 2024-02-21 23:42:44.
 
 export interface BaseDto {
     createdDate: Date;
@@ -104,6 +104,13 @@ export interface CalendarMemberDto {
     calendar: CalendarDto;
 }
 
+export interface CalendarShareKeyDto extends BaseDto {
+    calendarShareKeyId: string;
+    accountId: string;
+    workspaceId: string;
+    shareableKey: string;
+}
+
 export interface ExternalCalendarSourceDto {
     externalCalendarSourceId: string;
     summary?: string | null;
@@ -145,8 +152,8 @@ export interface GmailMessageDto extends BaseDto {
     subject: string;
     body: string;
     gthreadId: string;
-    ginternalDate: string;
     ghistoryId: string;
+    ginternalDate: string;
     gid: string;
 }
 
@@ -1060,6 +1067,10 @@ export interface CalendarMemberListingResponse extends BaseResponse {
 
 export interface CalendarMemberPaginatedResponse extends BaseResponse {
     data: PageDto<CalendarMemberDto>;
+}
+
+export interface CalendarShareableKeyResponse extends BaseResponse {
+    data: CalendarShareKeyDto;
 }
 
 export interface FeedMemberListingResponse extends BaseResponse {

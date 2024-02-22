@@ -1473,4 +1473,35 @@
             <column name="calendar_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-439-calendar_share_key">
+        <createTable tableName="calendar_share_key">
+            <column name="calendar_share_key_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shareable_key" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="ix_workspace_id" tableName="calendar_share_key">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="ix_account_id" tableName="calendar_share_key">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="ix_shareable_key" tableName="calendar_share_key">
+            <column name="shareable_key"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

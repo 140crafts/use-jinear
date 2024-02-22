@@ -1,31 +1,28 @@
 package co.jinear.core.manager.calendar;
 
-import biweekly.Biweekly;
-import biweekly.ICalendar;
-import biweekly.component.VEvent;
-import biweekly.property.DateEnd;
-import biweekly.property.DateStart;
-import biweekly.property.Description;
-import biweekly.property.Summary;
 import co.jinear.core.converter.calendar.CalendarEventFilterRequestToTaskSearchFilterVoConverter;
+import co.jinear.core.converter.calendar.CalendarEventsToICalConverter;
 import co.jinear.core.converter.calendar.TaskDtoToCalendarEventDtoMapper;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.calendar.CalendarEventDto;
+import co.jinear.core.model.dto.calendar.CalendarShareKeyDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
 import co.jinear.core.model.request.calendar.CalendarEventFilterRequest;
+import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.calendar.CalendarEventListingResponse;
+import co.jinear.core.model.response.calendar.CalendarShareableKeyResponse;
 import co.jinear.core.model.vo.calendar.CalendarEventSearchFilterVo;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.calendar.CalendarExternalEventRetrieveService;
+import co.jinear.core.service.calendar.CalendarShareKeyService;
 import co.jinear.core.service.task.TaskListingService;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
@@ -51,6 +48,8 @@ public class CalendarEventManager {
     private final TaskListingService taskListingService;
     private final TaskDtoToCalendarEventDtoMapper taskDtoToCalendarEventDtoMapper;
     private final CalendarExternalEventRetrieveService calendarExternalEventRetrieveService;
+    private final CalendarShareKeyService calendarShareKeyService;
+    private final CalendarEventsToICalConverter calendarEventsToICalConverter;
 
     public CalendarEventListingResponse filterCalendarEvents(CalendarEventFilterRequest calendarEventFilterRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -74,39 +73,40 @@ public class CalendarEventManager {
         return calendarEventListingResponse;
     }
 
-    public String exportIcs(String workspaceId) {
-//        String currentAccount = sessionInfoService.currentAccountId();
-        String currentAccount = "01gp94s0sk9q4g8g3m9jpsvd0t";
+    public CalendarShareableKeyResponse retrieveShareableKey(String workspaceId) {
+        String currentAccount = sessionInfoService.currentAccountId();
         validateWorkspaceAccess(currentAccount, workspaceId);
-        log.info("Export ics has started. workspaceId: {}, currentAccount: {}", workspaceId, currentAccount);
-        List<TeamMemberDto> memberships = teamMemberRetrieveService.retrieveAllTeamMembershipsOfAnAccount(currentAccount, workspaceId);
-        validateTeamTaskVisibilityAndMemberRoleForAll(memberships);
-        CalendarEventSearchFilterVo calendarEventSearchFilterVo = calendarEventFilterRequestToTaskSearchFilterVoConverter.convert(workspaceId, ZonedDateTime.now().minusYears(1), ZonedDateTime.now().plusYears(1), memberships);
-        List<CalendarEventDto> taskCalendarEventDtos = retrieveTaskCalendarEvents(calendarEventSearchFilterVo);
-
-        ICalendar ical = new ICalendar();
-        taskCalendarEventDtos.forEach(calendarEventDto -> {
-            VEvent event = new VEvent();
-            Summary summary = event.setSummary(calendarEventDto.getTitle());
-            event.setSummary(summary);
-            if (calendarEventDto.getAssignedDate() != null) {
-                DateStart dateStart = new DateStart(Date.from(calendarEventDto.getAssignedDate().toInstant()), calendarEventDto.getHasPreciseAssignedDate() == null ? Boolean.FALSE : calendarEventDto.getHasPreciseAssignedDate());
-                event.setDateStart(dateStart);
-            }
-            if (calendarEventDto.getDueDate() != null) {
-                DateEnd dateEnd = new DateEnd(Date.from(calendarEventDto.getDueDate().toInstant()), calendarEventDto.getHasPreciseDueDate() == null ? Boolean.FALSE : calendarEventDto.getHasPreciseDueDate());
-                event.setDateEnd(dateEnd);
-            }
-            if (calendarEventDto.getDescription() != null) {
-                Description description = new Description(calendarEventDto.getDescription().getValue());
-                event.setDescription(description);
-            }
-            ical.addEvent(event);
-        });
-        return Biweekly.write(ical).go();
+        log.info("Retrieve shareable key has started. currentAccount: {}, workspaceId: {}", currentAccount, workspaceId);
+        CalendarShareKeyDto calendarShareKeyDto = calendarShareKeyService.retrieveShareableKey(currentAccount, workspaceId);
+        return mapResponse(calendarShareKeyDto);
     }
 
-    @NonNull
+    public String exportWorkspaceCalendarEvents(String shareableKey) {
+        CalendarShareKeyDto calendarShareKeyDto = calendarShareKeyService.retrieveShareableKey(shareableKey);
+        validateWorkspaceAccess(calendarShareKeyDto.getAccountId(), calendarShareKeyDto.getWorkspaceId());
+        log.info("Export ics has started. calendarShareKeyDto: {}", calendarShareKeyDto);
+
+        String currentAccount = calendarShareKeyDto.getAccountId();
+        String workspaceId = calendarShareKeyDto.getWorkspaceId();
+        ZonedDateTime start = ZonedDateTime.now().minusYears(1);
+        ZonedDateTime end = ZonedDateTime.now().plusYears(1);
+
+        List<TeamMemberDto> memberships = teamMemberRetrieveService.retrieveAllTeamMembershipsOfAnAccount(currentAccount, workspaceId);
+        validateTeamTaskVisibilityAndMemberRoleForAll(memberships);
+        CalendarEventSearchFilterVo calendarEventSearchFilterVo = calendarEventFilterRequestToTaskSearchFilterVoConverter.convert(workspaceId, start, end, memberships);
+        List<CalendarEventDto> taskCalendarEventDtos = retrieveTaskCalendarEvents(calendarEventSearchFilterVo);
+
+        return calendarEventsToICalConverter.getICalendarString(workspaceId, taskCalendarEventDtos);
+    }
+
+    public BaseResponse refreshShareableKey(String workspaceId) {
+        String currentAccount = sessionInfoService.currentAccountId();
+        validateWorkspaceAccess(currentAccount, workspaceId);
+        log.info("Refresh shareable key has started. currentAccount: {}, workspaceId: {}", currentAccount, workspaceId);
+        calendarShareKeyService.refreshShareableKey(currentAccount, workspaceId);
+        return new BaseResponse();
+    }
+
     private List<CalendarEventDto> retrieveTaskCalendarEvents(TaskSearchFilterVo taskSearchFilterVo) {
         Page<TaskDto> taskDtoPage = taskListingService.filterTasks(taskSearchFilterVo);
         return Optional.of(taskDtoPage)
@@ -159,5 +159,11 @@ public class CalendarEventManager {
         if (OWNER_ASSIGNEE_AND_ADMINS.equals(teamDto.getTaskVisibility()) && !List.of(TeamMemberRoleType.ADMIN, TeamMemberRoleType.MEMBER).contains(role)) {
             throw new NoAccessException();
         }
+    }
+
+    private CalendarShareableKeyResponse mapResponse(CalendarShareKeyDto calendarShareKeyDto) {
+        CalendarShareableKeyResponse calendarShareableKeyResponse = new CalendarShareableKeyResponse();
+        calendarShareableKeyResponse.setCalendarShareKeyDto(calendarShareKeyDto);
+        return calendarShareableKeyResponse;
     }
 }

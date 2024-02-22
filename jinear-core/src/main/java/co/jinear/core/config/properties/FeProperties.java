@@ -26,4 +26,7 @@ public class FeProperties {
 
     @Value("${fe.home-url}")
     private String homeUrl;
+
+    @Value("${fe.workspace-calendar-url}")
+    private String workspaceCalendarUrl;
 }
