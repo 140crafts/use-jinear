@@ -20,6 +20,7 @@ import ThemeProvider from "@/components/themeProvider/ThemeProvider";
 import ToasterProvider from "@/components/toasterProvider/ToasterProvider";
 import WebViewEventListener from "@/components/webViewEventListener/WebViewEventListener";
 import "../styles/app.scss";
+import "../styles/fonts.css";
 
 const logger = Logger("_app");
 
