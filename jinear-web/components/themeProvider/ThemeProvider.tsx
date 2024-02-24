@@ -1,5 +1,6 @@
 "use client";
 import ThemeContext, { getTheme } from "@/store/context/themeContext";
+import { submitThemeChangeWebviewEvent } from "@/utils/webviewUtils";
 import React, { useContext, useEffect, useState } from "react";
 
 interface ThemeProviderProps {
@@ -30,6 +31,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
     $html?.classList.remove("dark");
     $html?.classList.add(theme);
     localStorage.setItem("THEME", theme);
+    submitThemeChangeWebviewEvent(theme as "dark" | "light");
   }, [theme]);
 
   return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;

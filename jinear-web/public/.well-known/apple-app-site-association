@@ -1,0 +1,23 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "GV8NX64YJL.co.jinear.app",
+        "paths": [
+          "/*"
+        ]
+      }
+    ]
+  },
+  "activitycontinuation": {
+    "apps": [
+      "GV8NX64YJL.co.jinear.app"
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "GV8NX64YJL.co.jinear.app"
+    ]
+  }
+}

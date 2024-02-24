@@ -48,6 +48,7 @@ const NewCalendarIntegrationModal: React.FC<NewCalendarIntegrationModalProps> = 
         variant={ButtonVariants.contrast}
         heightVariant={ButtonHeight.short}
         href={retrieveAttachCalendarRedirectInfoResponse?.redirectUrl}
+        target="_blank"
       >
         <IoLogoGoogle />
         {t("newCalendarIntegrationModalAddGoogleCalendarLabel")}

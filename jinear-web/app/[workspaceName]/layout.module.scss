@@ -53,7 +53,7 @@
 
 @media (max-width: $tablet) {
   .content {
-    padding-bottom: var(--workspace-side-menu-mobile-navigator-height);
+    padding-bottom: calc(var(--workspace-side-menu-mobile-navigator-height) + var(--mobile-menu-action-bar-height));
   }
 
   .workspaceSideMenuContainer {

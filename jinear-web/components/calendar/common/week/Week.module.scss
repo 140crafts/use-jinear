@@ -18,8 +18,6 @@
   );
 
   position: relative;
-  padding-bottom: 2rem;
-  /* flex: 1; */
 }
 
 .weekRowContainer {
@@ -37,7 +35,7 @@
             calc(
               var(--calendar-header-main-height) + var(--calendar-container-gap) + var(--workspace-layout-page-padding) +
                 var(--workspace-layout-content-vertical-padding) + var(--workspace-header-height) + 4.4rem +
-                var(--workspace-side-menu-mobile-navigator-height) + 1rem
+                var(--workspace-side-menu-mobile-navigator-height) + var(--mobile-menu-action-bar-height)
             )
         ) / 5
     );

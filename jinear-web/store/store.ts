@@ -8,6 +8,7 @@ import firebase from "@/slice/firebaseSlice";
 import modal from "@/slice/modalSlice";
 import sseSlice from "@/slice/sseSlice";
 import taskAdditionalData from "@/slice/taskAdditionalDataSlice";
+import { makeStoreAccessibleFromWindow } from "@/utils/webviewUtils";
 import { api } from "./api/api";
 import { rtkQueryErrorLogger } from "./api/errorMiddleware";
 
@@ -37,3 +38,5 @@ export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch: () => AppDispatch = useDispatch;
 export type RootState = ReturnType<typeof store.getState>;
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+makeStoreAccessibleFromWindow(store);
