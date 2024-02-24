@@ -18,7 +18,8 @@ import Root from "@/components/root/Root";
 import Scripts from "@/components/scripts/Scripts";
 import ThemeProvider from "@/components/themeProvider/ThemeProvider";
 import ToasterProvider from "@/components/toasterProvider/ToasterProvider";
-import "../styles/app.css";
+import WebViewEventListener from "@/components/webViewEventListener/WebViewEventListener";
+import "../styles/app.scss";
 
 const logger = Logger("_app");
 
@@ -296,6 +297,7 @@ function MyApp({ children }: { children: React.ReactNode }) {
               <AuthCheck />
               <WorkspaceAndTeamChangeListener />
               <OnboardListener />
+              <WebViewEventListener />
               <PureClientOnly>
                 <ErrorBoundary message={"Firebase Configration"}>
                   <FirebaseConfigration />
