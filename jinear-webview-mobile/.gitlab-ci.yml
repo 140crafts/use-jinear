@@ -1,0 +1,25 @@
+image: node:20.11-alpine3.18
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - ~/.npm
+    - .jest
+stages:
+  - deploy
+before_script:
+  - npm -v
+  - npm i
+  - npm install --global expo-cli
+  # - npm install -g eas-cli
+expo-deployments:
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "master"'
+      when: always
+    - when: never
+  script:
+    - apk add --no-cache bash
+    # - npx expo login --non-interactive -u cgdstnc Logging in with EXPO_TOKEN variable
+    # - npx expo publish --non-interactive
+    - npx expo publish --non-interactive --release-channel 'production'
+    # - eas build --platform all

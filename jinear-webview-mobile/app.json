@@ -1,7 +1,8 @@
 {
   "expo": {
-    "name": "jinear-mobile",
-    "slug": "jinear-mobile",
+    "name": "Jinear",
+    "slug": "Jinear",
+    "owner": "jinear",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -11,20 +12,43 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "bundleIdentifier": "co.jinear.app",
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "To upload a profile picture Jinear needs to access your photo library."
+      },
+      "associatedDomains": ["applinks:jinear.co"]
     },
     "android": {
+      "package": "co.jinear.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "*.jinear.co",
+              "pathPrefix": "/"
+            }
+          ],
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "fccf9ed4-9e4c-4151-b0f6-b45ce983447b"
+      }
     }
   }
 }
