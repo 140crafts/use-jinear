@@ -9,8 +9,8 @@ stages:
 before_script:
   - npm -v
   - npm i
-  - npm install --global expo-cli
-  # - npm install -g eas-cli
+  # - npm install --global expo-cli
+  - npm install -g eas-cli
 expo-deployments:
   stage: deploy
   rules:
@@ -21,5 +21,5 @@ expo-deployments:
     - apk add --no-cache bash
     # - npx expo login --non-interactive -u cgdstnc Logging in with EXPO_TOKEN variable
     # - npx expo publish --non-interactive
-    - npx expo publish --non-interactive --release-channel 'production'
-    # - eas build --platform all
+    # - npx expo publish --non-interactive --release-channel 'production'
+    - eas build --platform all --auto-submit --non-interactive
