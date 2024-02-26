@@ -14,7 +14,7 @@ before_script:
 expo-deployments:
   stage: deploy
   rules:
-    - if: '$CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_BRANCH == "main"'
       when: always
     - when: never
   script:
