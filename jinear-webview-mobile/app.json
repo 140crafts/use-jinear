@@ -12,14 +12,18 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "bundleIdentifier": "co.jinear.app",
       "supportsTablet": true,
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "To upload a profile picture Jinear needs to access your photo library."
       },
-      "associatedDomains": ["applinks:jinear.co"]
+      "associatedDomains": [
+        "applinks:jinear.co"
+      ]
     },
     "android": {
       "package": "co.jinear.app",
@@ -38,12 +42,20 @@
               "pathPrefix": "/"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
       ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ec4bae47-8364-47c7-ac39-9c41c4de227e"
+      }
     }
   }
 }
