@@ -23,4 +23,4 @@ expo-deployments:
     # - npx expo publish --non-interactive
     # - npx expo publish --non-interactive --release-channel 'production'
     # - eas build --platform all --auto-submit --non-interactive
-    - eas build --platform ios --auto-submit --non-interactive
+    - eas build --platform ios --auto-submit --non-interactive --no-wait
