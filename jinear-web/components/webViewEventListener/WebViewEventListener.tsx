@@ -45,6 +45,7 @@ const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
 
   const onMessageReceive = (message: any) => {
     const method = message.method;
+    console.log({ onMessageReceive: message });
     switch (method) {
       case "pushNotificationStateResulted":
         onPushNotificationStateResulted(message?.data);
