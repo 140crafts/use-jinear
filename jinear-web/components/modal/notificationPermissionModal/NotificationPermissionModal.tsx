@@ -3,9 +3,14 @@ import { VAPID_PUBLIC_KEY } from "@/components/firebaseConfiguration/FirebaseCon
 import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
 import { selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { selectMessaging } from "@/store/slice/firebaseSlice";
-import { closeNotificationPermissionModal, selectNotificationPermissionModalVisible } from "@/store/slice/modalSlice";
+import {
+  closeNotificationPermissionModal,
+  selectNotificationPermissionModalPlatform,
+  selectNotificationPermissionModalVisible,
+} from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
+import { submitNotificationPermissionRequestWebviewEvent } from "@/utils/webviewUtils";
 import { getToken } from "firebase/messaging";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
@@ -26,6 +31,7 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
   const [initializing, setInitializing] = useState<boolean>(false);
   const [initializeNotificationTarget, { isSuccess: isInitNotifTargetSuccess, isLoading: isInitNotifTargetLoading }] =
     useInitializeNotificationTargetMutation();
+  const platform = useTypedSelector(selectNotificationPermissionModalPlatform);
 
   const messaging = useTypedSelector(selectMessaging);
 
@@ -42,6 +48,10 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
   };
 
   const askPermissions = async () => {
+    if (platform == "expo-webview") {
+      submitNotificationPermissionRequestWebviewEvent();
+      return;
+    }
     logger.log(`Ask permission has started. Showing native prompt.`);
     const notificationPermission = await Notification.requestPermission();
     logger.log(`Retrieved notification permission. ${notificationPermission}`);

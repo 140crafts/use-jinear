@@ -1,5 +1,6 @@
 import { popNotificationPermissionModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
+import { isWebView } from "@/utils/webviewUtils";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
 import OneSignal from "react-onesignal";
@@ -11,6 +12,7 @@ interface NotificationInfoProps {}
 const NotificationInfo: React.FC<NotificationInfoProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const webView = isWebView();
   const [oneSignalUserId, setOneSignalUserId] = useState<any>();
   const [notificationPermissionState, setNotificationPermissionState] = useState("");
 
@@ -45,7 +47,7 @@ const NotificationInfo: React.FC<NotificationInfoProps> = ({}) => {
   };
 
   const popModal = () => {
-    dispatch(popNotificationPermissionModal());
+    dispatch(popNotificationPermissionModal({ visible: true, platform: webView ? "expo-webview" : "web" }));
   };
 
   const selfPush = () => {

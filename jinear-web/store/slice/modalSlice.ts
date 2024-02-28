@@ -21,6 +21,7 @@ import ModalState, {
   NewTeamModalState,
   NewTopicModalState,
   NotFoundModalState,
+  NotificationPermissionModalState,
   ReminderListModalState,
   SearchTaskModalState,
   TaskBoardPickerModalState,
@@ -102,6 +103,7 @@ const initialState = {
   },
   notificationPermissionModal: {
     visible: false,
+    platform: "web",
   },
   taskOverviewModal: {
     visible: false,
@@ -185,7 +187,7 @@ const initialState = {
   datePickerModal: null | DatePickerModalState;
   workspaceMemberInviteModal: null | WorkspaceMemberInviteModalState;
   addMemberToTeamModal: null | AddMemberToTeamModalState;
-  notificationPermissionModal: null | ModalState;
+  notificationPermissionModal: null | NotificationPermissionModalState;
   taskOverviewModal: null | TaskOverviewModalState;
   teamPickerModal: null | TeamPickerModalState;
   workspacePickerModal: null | WorkspacePickerModalState;
@@ -344,9 +346,8 @@ const slice = createSlice({
     closeAddMemberToTeamModal: (state, action: PayloadAction<void>) => {
       state.addMemberToTeamModal = initialState.addMemberToTeamModal;
     },
-
-    popNotificationPermissionModal: (state, action: PayloadAction<void>) => {
-      state.notificationPermissionModal = { visible: true };
+    popNotificationPermissionModal: (state, action: PayloadAction<NotificationPermissionModalState>) => {
+      state.notificationPermissionModal = { ...action.payload, visible: true };
     },
     closeNotificationPermissionModal: (state, action: PayloadAction<void>) => {
       state.notificationPermissionModal = initialState.notificationPermissionModal;
@@ -704,6 +705,7 @@ export const selectAddMemberToTeamModalWorkspace = (state: RootState) => state.m
 export const selectAddMemberToTeamModalTeam = (state: RootState) => state.modal.addMemberToTeamModal?.team;
 
 export const selectNotificationPermissionModalVisible = (state: RootState) => state.modal.notificationPermissionModal?.visible;
+export const selectNotificationPermissionModalPlatform = (state: RootState) => state.modal.notificationPermissionModal?.platform;
 
 export const selectTaskOverviewModalVisible = (state: RootState) => state.modal.taskOverviewModal?.visible;
 export const selectTaskOverviewModalTaskTag = (state: RootState) => state.modal.taskOverviewModal?.taskTag;

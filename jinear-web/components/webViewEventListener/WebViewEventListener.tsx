@@ -1,18 +1,70 @@
 "use client";
-import { selectAnyModalVisible } from "@/store/slice/modalSlice";
-import { useTypedSelector } from "@/store/store";
-import { submitAnyModalVisibleChangeWebviewEvent } from "@/utils/webviewUtils";
-import React, { useEffect } from "react";
+import { selectAuthState, selectCurrentAccountId } from "@/store/slice/accountSlice";
+import { popNotificationPermissionModal, selectAnyModalVisible } from "@/store/slice/modalSlice";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
+import {
+  isWebView,
+  submitAnyModalVisibleChangeWebviewEvent,
+  submitNotificationStateRequestWebviewEvent,
+} from "@/utils/webviewUtils";
+import React, { useEffect, useState } from "react";
 
 interface WebViewEventListenerProps {}
+interface IPushWebViewMessage {
+  method: "pushNotificationTokenResulted";
+  data?: any;
+}
 
 const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
+  const dispatch = useAppDispatch();
+  const _isWebView = isWebView();
   const isAnyModalVisible = useTypedSelector(selectAnyModalVisible);
+  const authState = useTypedSelector(selectAuthState);
+  const currentAccountId = useTypedSelector(selectCurrentAccountId);
+  const [shouldAskNotificationPermission, setShouldAskNotificationPermission] = useState<boolean>(false);
 
   useEffect(() => {
     submitAnyModalVisibleChangeWebviewEvent(isAnyModalVisible);
   }, [isAnyModalVisible]);
 
+  useEffect(() => {
+    document.addEventListener("app-message", onMessageReceive);
+    setTimeout(() => {
+      submitNotificationStateRequestWebviewEvent();
+    }, 2000);
+    return () => document.removeEventListener("app-message", onMessageReceive);
+  }, []);
+
+  useEffect(() => {
+    if (_isWebView && shouldAskNotificationPermission && currentAccountId && authState == "LOGGED_IN") {
+      dispatch(popNotificationPermissionModal({ visible: true, platform: "expo-webview" }));
+    } else if (authState == "NOT_LOGGED_IN") {
+      // detachAccount();
+    }
+  }, [_isWebView, shouldAskNotificationPermission, currentAccountId, authState]);
+
+  const onMessageReceive = (message: any) => {
+    const method = message.method;
+    switch (method) {
+      case "pushNotificationStateResulted":
+        onPushNotificationStateResulted(message?.data);
+        break;
+      case "pushNotificationTokenResulted":
+        onPushNotificationTokenResulted(message?.data);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const onPushNotificationStateResulted = (settings: any) => {
+    const shouldAskNotificationPermission = settings.status == "undetermined" && settings.canAskAgain;
+    setShouldAskNotificationPermission(shouldAskNotificationPermission);
+  };
+
+  const onPushNotificationTokenResulted = (token: any) => {
+    alert(JSON.stringify(token));
+  };
   return null;
 };
 

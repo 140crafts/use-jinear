@@ -96,7 +96,7 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
   const checkAndPrompt = async (currentAccountId: string) => {
     const notificationPermission = Notification.permission;
     if (notificationPermission == "default") {
-      dispatch(popNotificationPermissionModal());
+      dispatch(popNotificationPermissionModal({ visible: true, platform: "web" }));
       return;
     } else if (notificationPermission == "granted" && currentAccountId) {
       attachAccount(currentAccountId);

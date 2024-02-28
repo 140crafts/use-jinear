@@ -11,6 +11,7 @@ import { selectAuthState } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import isPwa from "@/utils/pwaHelper";
+import { isWebView } from "@/utils/webviewUtils";
 import useTranslation from "locales/useTranslation";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -19,22 +20,25 @@ import styles from "./index.module.scss";
 
 export default function Home() {
   const pwa = isPwa();
+  const isWebApp = isWebView();
+  const isMobileApp = pwa || isWebApp;
+
   const router = useRouter();
   const authState = useTypedSelector(selectAuthState);
   const theme = useTheme();
   const { t } = useTranslation();
 
   useEffect(() => {
-    if (pwa) {
+    if (isMobileApp) {
       if (authState == "NOT_LOGGED_IN") {
         router.replace("/login");
       } else if (authState == "LOGGED_IN") {
         router.replace(ROUTE_IF_LOGGED_IN);
       }
     }
-  }, [pwa, authState]);
+  }, [isMobileApp, authState]);
 
-  return pwa ? (
+  return isMobileApp ? (
     <CircularLoading />
   ) : (
     <ClientOnly className={styles.container}>
