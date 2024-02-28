@@ -101,6 +101,10 @@ export interface AddMemberToTeamModalState extends ModalState {
   team?: TeamDto;
 }
 
+export interface NotificationPermissionModalState extends ModalState {
+  platform: "web" | "expo-webview";
+}
+
 export interface TaskOverviewModalState extends ModalState {
   workspaceName?: string;
   taskTag?: string;

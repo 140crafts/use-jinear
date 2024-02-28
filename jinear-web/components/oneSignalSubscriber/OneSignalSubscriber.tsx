@@ -96,7 +96,7 @@ const OneSignalSubscriber: React.FC<OneSignalSubscriberProps> = ({}) => {
   const checkAndPrompt = async (currentAccountId: string) => {
     const notificationPermission = await OneSignal.getNotificationPermission();
     if (notificationPermission == "default") {
-      dispatch(popNotificationPermissionModal());
+      dispatch(popNotificationPermissionModal({ visible: true, platform: "web" }));
       return;
     }
     attachAccount(currentAccountId);

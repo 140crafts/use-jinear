@@ -4,9 +4,12 @@ import Logger from "./logger";
 const logger = Logger("WebViewUtils");
 
 export interface IWebViewMessage {
-  method: "themeChange" | "modalVisible";
+  method: "themeChange" | "modalVisible" | "pushNotificationTokenRequest" | "notificationStateRequest";
   payload?: any;
 }
+
+//@ts-ignore
+export const isWebView = () => window?.isWebView;
 
 export const makeStoreAccessibleFromWindow = (store: ToolkitStore) => {
   //@ts-ignore
@@ -22,6 +25,14 @@ export const submitThemeChangeWebviewEvent = (theme: "light" | "dark") => {
 
 export const submitAnyModalVisibleChangeWebviewEvent = (visibility: boolean) => {
   postWebviewMessage({ method: "modalVisible", payload: visibility });
+};
+
+export const submitNotificationPermissionRequestWebviewEvent = () => {
+  postWebviewMessage({ method: "pushNotificationTokenRequest" });
+};
+
+export const submitNotificationStateRequestWebviewEvent = () => {
+  postWebviewMessage({ method: "notificationStateRequest" });
 };
 
 export const postWebviewMessage = (message: IWebViewMessage) => {
