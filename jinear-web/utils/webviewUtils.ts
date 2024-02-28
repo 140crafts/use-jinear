@@ -9,7 +9,7 @@ export interface IWebViewMessage {
 }
 
 //@ts-ignore
-export const isWebView = () => window?.isWebView;
+export const isWebView = () => typeof window !== "undefined" && window?.isWebView;
 
 export const makeStoreAccessibleFromWindow = (store: ToolkitStore) => {
   //@ts-ignore
