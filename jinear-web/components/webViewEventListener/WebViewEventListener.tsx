@@ -49,10 +49,10 @@ const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
     const method = message.method;
     switch (method) {
       case "pushNotificationStateResulted":
-        onPushNotificationStateResulted(message?.payload?.data?.settings);
+        onPushNotificationStateResulted(message?.data?.payload?.settings);
         break;
       case "pushNotificationTokenResulted":
-        onPushNotificationTokenResulted(message?.payload?.data?.token);
+        onPushNotificationTokenResulted(message?.data?.payload?.token);
         break;
       default:
         break;
