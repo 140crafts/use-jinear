@@ -31,11 +31,12 @@ const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
     document.addEventListener("app-message", onMessageReceive);
     setTimeout(() => {
       submitNotificationStateRequestWebviewEvent();
-    }, 2000);
+    }, 5000);
     return () => document.removeEventListener("app-message", onMessageReceive);
   }, []);
 
   useEffect(() => {
+    console.log({ _isWebView, shouldAskNotificationPermission, currentAccountId, authState });
     if (_isWebView && shouldAskNotificationPermission && currentAccountId && authState == "LOGGED_IN") {
       dispatch(popNotificationPermissionModal({ visible: true, platform: "expo-webview" }));
     } else if (authState == "NOT_LOGGED_IN") {
@@ -44,14 +45,14 @@ const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
   }, [_isWebView, shouldAskNotificationPermission, currentAccountId, authState]);
 
   const onMessageReceive = (message: any) => {
-    const method = message.method;
     console.log({ onMessageReceive: message });
+    const method = message.method;
     switch (method) {
       case "pushNotificationStateResulted":
-        onPushNotificationStateResulted(message?.data);
+        onPushNotificationStateResulted(message?.data?.settings);
         break;
       case "pushNotificationTokenResulted":
-        onPushNotificationTokenResulted(message?.data);
+        onPushNotificationTokenResulted(message?.data?.token);
         break;
       default:
         break;
