@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "expo": "~50.0.7",
+    "expo-constants": "~15.4.5",
+    "expo-device": "~5.9.3",
+    "expo-notifications": "~0.27.6",
     "expo-status-bar": "~1.11.1",
+    "expo-web-browser": "~12.8.2",
     "react": "18.2.0",
     "react-native": "0.73.4",
-    "react-native-webview": "13.6.4",
-    "expo-notifications": "~0.27.6",
-    "expo-web-browser": "~12.8.2"
+    "react-native-webview": "13.6.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
