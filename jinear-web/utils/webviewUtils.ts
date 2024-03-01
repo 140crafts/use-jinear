@@ -4,7 +4,7 @@ import Logger from "./logger";
 const logger = Logger("WebViewUtils");
 
 export interface IWebViewMessage {
-  method: "themeChange" | "modalVisible" | "pushNotificationTokenRequest" | "notificationStateRequest";
+  method: "themeChange" | "modalVisible" | "pushNotificationTokenRequest" | "askPermissionsAndSendToken";
   payload?: any;
 }
 
@@ -31,8 +31,8 @@ export const submitNotificationPermissionRequestWebviewEvent = () => {
   postWebviewMessage({ method: "pushNotificationTokenRequest" });
 };
 
-export const submitNotificationStateRequestWebviewEvent = () => {
-  postWebviewMessage({ method: "notificationStateRequest" });
+export const submitAskPermissionsAndSendTokenEvent = () => {
+  postWebviewMessage({ method: "askPermissionsAndSendToken" });
 };
 
 export const postWebviewMessage = (message: IWebViewMessage) => {
