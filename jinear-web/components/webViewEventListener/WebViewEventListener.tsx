@@ -1,18 +1,20 @@
 "use client";
+import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
 import { selectAuthState, selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { popNotificationPermissionModal, selectAnyModalVisible } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
-import {
-  isWebView,
-  submitAnyModalVisibleChangeWebviewEvent,
-  submitNotificationStateRequestWebviewEvent,
-} from "@/utils/webviewUtils";
+import { isWebView, submitAnyModalVisibleChangeWebviewEvent } from "@/utils/webviewUtils";
 import React, { useEffect, useState } from "react";
 
 interface WebViewEventListenerProps {}
 interface IPushWebViewMessage {
   method: "pushNotificationTokenResulted";
   data?: any;
+}
+
+interface IRetrieveExpoPushTokenResult {
+  permissionNeeded?: boolean;
+  tokenData?: string;
 }
 
 const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
@@ -22,6 +24,7 @@ const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
   const authState = useTypedSelector(selectAuthState);
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
   const [shouldAskNotificationPermission, setShouldAskNotificationPermission] = useState<boolean>(false);
+  const [initializeNotificationTarget, {}] = useInitializeNotificationTargetMutation();
 
   useEffect(() => {
     submitAnyModalVisibleChangeWebviewEvent(isAnyModalVisible);
@@ -29,9 +32,6 @@ const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
 
   useEffect(() => {
     document.addEventListener("app-message", onMessageReceive);
-    setTimeout(() => {
-      submitNotificationStateRequestWebviewEvent();
-    }, 5000);
     return () => document.removeEventListener("app-message", onMessageReceive);
   }, []);
 
@@ -48,24 +48,22 @@ const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
     console.log({ onMessageReceive: message });
     const method = message?.data?.method;
     switch (method) {
-      case "pushNotificationStateResulted":
-        onPushNotificationStateResulted(message?.data?.payload?.settings);
-        break;
       case "pushNotificationTokenResulted":
-        onPushNotificationTokenResulted(message?.data?.payload?.token);
+        onPushNotificationTokenResulted(message?.data?.payload?.result);
         break;
       default:
         break;
     }
   };
 
-  const onPushNotificationStateResulted = (settings: any) => {
-    const shouldAsk = settings.status == "undetermined" && settings.canAskAgain;
-    setShouldAskNotificationPermission(shouldAsk);
-  };
-
-  const onPushNotificationTokenResulted = (token: any) => {
-    alert(JSON.stringify(token));
+  const onPushNotificationTokenResulted = (result?: IRetrieveExpoPushTokenResult) => {
+    const shouldAsk = result == null || result?.permissionNeeded;
+    if (shouldAsk) {
+      setShouldAskNotificationPermission(shouldAsk);
+    }
+    if (result?.tokenData) {
+      initializeNotificationTarget({ externalTargetId: result.tokenData, providerType: "EXPO", targetType: "WEBVIEW" });
+    }
   };
   return null;
 };

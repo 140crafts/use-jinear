@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-02-21 23:42:44.
+// Generated using typescript-generator version 3.0.1157 on 2024-03-01 09:09:31.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  first: boolean;
   last: boolean;
+  first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -62,8 +62,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
   item: any;
   expiresAt: Date;
-  notExpired: boolean;
   expired: boolean;
+  notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -151,10 +151,10 @@ export interface GmailMessageDto extends BaseDto {
   to: string;
   subject: string;
   body: string;
-  gthreadId: string;
+  gid: string;
   ghistoryId: string;
   ginternalDate: string;
-  gid: string;
+  gthreadId: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1523,9 +1523,9 @@ export type MediaVisibilityType = "PUBLIC" | "PRIVATE" | "TEMP_PUBLIC";
 
 export type NotificationEventState = "INITIALIZED" | "SENT";
 
-export type NotificationProviderType = "ONE_SIGNAL" | "FIREBASE";
+export type NotificationProviderType = "ONE_SIGNAL" | "FIREBASE" | "EXPO";
 
-export type NotificationTargetType = "WEB";
+export type NotificationTargetType = "WEB" | "WEBVIEW";
 
 export type NotificationType =
   | "TASK_REMINDER"

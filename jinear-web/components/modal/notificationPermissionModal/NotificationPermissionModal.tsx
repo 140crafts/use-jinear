@@ -10,7 +10,7 @@ import {
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
-import { submitNotificationPermissionRequestWebviewEvent } from "@/utils/webviewUtils";
+import { submitAskPermissionsAndSendTokenEvent } from "@/utils/webviewUtils";
 import { getToken } from "firebase/messaging";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
@@ -49,7 +49,7 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
   const askPermissions = async () => {
     if (platform == "expo-webview") {
-      submitNotificationPermissionRequestWebviewEvent();
+      submitAskPermissionsAndSendTokenEvent();
       return;
     }
     logger.log(`Ask permission has started. Showing native prompt.`);
