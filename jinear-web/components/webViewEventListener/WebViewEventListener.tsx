@@ -1,10 +1,15 @@
 "use client";
 import { useInitializeNotificationTargetMutation } from "@/store/api/notificationTargetApi";
 import { selectAuthState, selectCurrentAccountId } from "@/store/slice/accountSlice";
-import { popNotificationPermissionModal, selectAnyModalVisible } from "@/store/slice/modalSlice";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
-import { isWebView, submitAnyModalVisibleChangeWebviewEvent } from "@/utils/webviewUtils";
-import React, { useEffect, useState } from "react";
+import { selectAnyModalVisible } from "@/store/slice/modalSlice";
+import { useTypedSelector } from "@/store/store";
+import {
+  isWebView,
+  submitAnyModalVisibleChangeWebviewEvent,
+  submitAskPermissionsAndSendTokenEvent,
+  submitRemovePushNotificationTokenRequestEvent,
+} from "@/utils/webviewUtils";
+import React, { useEffect } from "react";
 
 interface WebViewEventListenerProps {}
 interface IPushWebViewMessage {
@@ -18,12 +23,10 @@ interface IRetrieveExpoPushTokenResult {
 }
 
 const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
-  const dispatch = useAppDispatch();
   const _isWebView = isWebView();
   const isAnyModalVisible = useTypedSelector(selectAnyModalVisible);
   const authState = useTypedSelector(selectAuthState);
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
-  const [shouldAskNotificationPermission, setShouldAskNotificationPermission] = useState<boolean>(false);
   const [initializeNotificationTarget, {}] = useInitializeNotificationTargetMutation();
 
   useEffect(() => {
@@ -36,13 +39,12 @@ const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
   }, []);
 
   useEffect(() => {
-    console.log({ _isWebView, shouldAskNotificationPermission, currentAccountId, authState });
-    if (_isWebView && shouldAskNotificationPermission && currentAccountId && authState == "LOGGED_IN") {
-      dispatch(popNotificationPermissionModal({ visible: true, platform: "expo-webview" }));
+    if (_isWebView && currentAccountId && authState == "LOGGED_IN") {
+      submitAskPermissionsAndSendTokenEvent();
     } else if (authState == "NOT_LOGGED_IN") {
-      // detachAccount();
+      submitRemovePushNotificationTokenRequestEvent();
     }
-  }, [_isWebView, shouldAskNotificationPermission, currentAccountId, authState]);
+  }, [_isWebView, currentAccountId, authState]);
 
   const onMessageReceive = (message: any) => {
     console.log({ onMessageReceive: message });
@@ -57,10 +59,6 @@ const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
   };
 
   const onPushNotificationTokenResulted = (result?: IRetrieveExpoPushTokenResult) => {
-    const shouldAsk = result == null || result?.permissionNeeded;
-    if (shouldAsk) {
-      setShouldAskNotificationPermission(shouldAsk);
-    }
     if (result?.tokenData) {
       initializeNotificationTarget({ externalTargetId: result.tokenData, providerType: "EXPO", targetType: "WEBVIEW" });
     }
