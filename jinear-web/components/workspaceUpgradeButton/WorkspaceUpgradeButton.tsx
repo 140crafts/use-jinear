@@ -4,6 +4,7 @@ import { popUpgradeWorkspacePlanModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { isWorkspaceUpgradable } from "@/utils/permissionHelper";
+import { isWebView } from "@/utils/webviewUtils";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React from "react";
@@ -21,6 +22,7 @@ const logger = Logger("WorkspaceUpgradeButton");
 
 const WorkspaceUpgradeButton: React.FC<WorkspaceUpgradeButtonProps> = ({ workspace, variant, className }) => {
   const { t } = useTranslation();
+  const _isWebView = isWebView();
   const dispatch = useAppDispatch();
   logger.log({ workspace });
 
@@ -32,7 +34,7 @@ const WorkspaceUpgradeButton: React.FC<WorkspaceUpgradeButtonProps> = ({ workspa
     dispatch(popUpgradeWorkspacePlanModal({ workspaceId: workspace.workspaceId, visible: true }));
   };
 
-  return isWorkspaceUpgradable(workspace) && workspaceRoleIsAdminOrOwner ? (
+  return !_isWebView && isWorkspaceUpgradable(workspace) && workspaceRoleIsAdminOrOwner ? (
     <Button
       heightVariant={ButtonHeight.short}
       variant={ButtonVariants.outline}
