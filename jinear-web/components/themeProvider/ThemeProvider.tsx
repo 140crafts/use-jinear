@@ -23,7 +23,6 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({ children }) => {
   const toggleTheme = () => {
     const next = theme == "dark" ? "light" : "dark";
     setTheme(next);
-    submitThemeChangeWebviewEvent(next as "dark" | "light");
   };
 
   useEffect(() => {
