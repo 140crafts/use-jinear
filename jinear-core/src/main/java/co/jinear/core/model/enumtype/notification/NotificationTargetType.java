@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum NotificationTargetType {
 
-    WEB(0);
+    WEB(0),
+    WEBVIEW(1);
 
     private final int value;
 }

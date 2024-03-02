@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum NotificationProviderType {
 
     ONE_SIGNAL(0),
-    FIREBASE(1);
+    FIREBASE(1),
+    EXPO(2);
 
     private final int value;
 }
