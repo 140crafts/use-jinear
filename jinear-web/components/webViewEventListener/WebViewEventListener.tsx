@@ -3,12 +3,7 @@ import { useInitializeNotificationTargetMutation } from "@/store/api/notificatio
 import { selectAuthState, selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { selectAnyModalVisible } from "@/store/slice/modalSlice";
 import { useTypedSelector } from "@/store/store";
-import {
-  isWebView,
-  submitAnyModalVisibleChangeWebviewEvent,
-  submitAskPermissionsAndSendTokenEvent,
-  submitRemovePushNotificationTokenRequestEvent,
-} from "@/utils/webviewUtils";
+import { isWebView, submitAnyModalVisibleChangeWebviewEvent } from "@/utils/webviewUtils";
 import React, { useEffect } from "react";
 
 interface WebViewEventListenerProps {}
@@ -40,9 +35,11 @@ const WebViewEventListener: React.FC<WebViewEventListenerProps> = ({}) => {
 
   useEffect(() => {
     if (_isWebView && currentAccountId && authState == "LOGGED_IN") {
-      submitAskPermissionsAndSendTokenEvent();
+      //todo
+      //   submitAskPermissionsAndSendTokenEvent();
     } else if (authState == "NOT_LOGGED_IN") {
-      submitRemovePushNotificationTokenRequestEvent();
+      //todo
+      //submitRemovePushNotificationTokenRequestEvent();
     }
   }, [_isWebView, currentAccountId, authState]);
 

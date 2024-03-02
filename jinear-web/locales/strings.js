@@ -395,8 +395,8 @@ export default {
     tr: "Son Aktiviteler",
   },
   sideMenuMyAssignments: {
-    en: "My Assignments",
-    tr: "Bana Atananlar",
+    en: "Assignments",
+    tr: "Atananlar",
   },
   sideMenuTeamListNoTeam: {
     en: "Create a team to track your tasks",
@@ -1884,11 +1884,11 @@ export default {
     tr: "Bildirimlerin listeleniyor",
   },
   inboxHeaderFilteredTeamSubtitle: {
-    en: "Listing your notifications from team <b>${teamName}</b>",
+    en: "Listing your notifications from team&nbsp;<b>${teamName}</b>",
     tr: "<b>${teamName}</b>&nbsp;ekibindeki bildirimlerin listeleniyor",
   },
   inboxHeaderAllTeamsSubtitle: {
-    en: "Listing your notifications from <b>all teams</b>",
+    en: "Listing your notifications from&nbsp;<b>all teams</b>",
     tr: "<b>Tüm ekiplerdeki</b>&nbsp;bildirimlerin listeleniyor",
   },
   inboxScreenFilterButton: {
@@ -1904,12 +1904,12 @@ export default {
     tr: "Bana Atananlar",
   },
   assignedToMeScreenSubtitleAllTeams: {
-    en: "Listing tasks assigned to you from <b>all teams</b>",
-    tr: "<b>Tüm ekiplerdeki</b> sana atanan görevler listeleniyor",
+    en: "Listing tasks assigned to you from&nbsp;<b>all teams</b>",
+    tr: "<b>Tüm ekiplerdeki</b>&nbsp;sana atanan görevler listeleniyor",
   },
   assignedToMeScreenSubtitleTeamFiltered: {
-    en: "Listing tasks assigned to you from <b>${teamName}</b>",
-    tr: "<b>${teamName}</b> ekibindeki sana atanan görevler listeleniyor",
+    en: "Listing tasks assigned to you from&nbsp;<b>${teamName}</b>",
+    tr: "<b>${teamName}</b>&nbsp;ekibindeki sana atanan görevler listeleniyor",
   },
   lastActivitiesScreenBreadcrumbLabel: {
     en: "Last Activities",
@@ -2736,8 +2736,8 @@ export default {
     tr: "Son Aktiviteler",
   },
   mainFeaturesMenuLabelAssignedToMe: {
-    en: "My Assignments",
-    tr: "Bana Atananlar",
+    en: "Assignments",
+    tr: "Atananlar",
   },
   mainFeaturesMenuLabelMore: {
     en: "More",

@@ -7,6 +7,7 @@ import { useRetrieveLoginRedirectInfoQuery } from "@/store/api/googleOAuthApi";
 import { changeLoginWith2FaMailModalVisibility } from "@/store/slice/modalSlice";
 import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import Logger from "@/utils/logger";
+import { isWebView } from "@/utils/webviewUtils";
 import cn from "classnames";
 import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
@@ -36,6 +37,7 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useDispatch();
+  const _isWebView = isWebView();
   const [loginWithpassword, { isSuccess, isError, isLoading }] = useLoginWithPasswordMutation();
   const { data: authRedirectInfoResponse, isLoading: isAuthRedirectRetrieveLoading } = useRetrieveLoginRedirectInfoQuery();
   const { register, setValue, handleSubmit, setFocus } = useForm<ILoginWithMailForm>();
@@ -110,15 +112,17 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
       <div className="spacer-h-1" />
 
       <div className={styles.otherMethodsContainer}>
-        <Button
-          disabled={isLoading}
-          href={authRedirectInfoResponse?.redirectUrl}
-          variant={ButtonVariants.outline}
-          className={styles.iconButton}
-        >
-          <IoLogoGoogle className={styles.icon} />
-          <div>{t("loginScreenLoginWithGoogle")}</div>
-        </Button>
+        {!_isWebView && (
+          <Button
+            disabled={isLoading}
+            href={authRedirectInfoResponse?.redirectUrl}
+            variant={ButtonVariants.outline}
+            className={styles.iconButton}
+          >
+            <IoLogoGoogle className={styles.icon} />
+            <div>{t("loginScreenLoginWithGoogle")}</div>
+          </Button>
+        )}
         <Button onClick={pop2FaMailModal} variant={ButtonVariants.outline} className={styles.iconButton}>
           <IoMail className={styles.icon} />
           <div>{t("loginWith2FaMail")}</div>

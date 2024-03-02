@@ -1,4 +1,5 @@
 "use client";
+import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
@@ -25,7 +26,11 @@ const WorkspaceTasksPage: React.FC<WorkspaceTasksPageProps> = ({}) => {
     }
   }, [team]);
 
-  return <div className={styles.container}>{workspaceName}</div>;
+  return (
+    <div className={styles.container}>
+      <CircularLoading />
+    </div>
+  );
 };
 
 export default WorkspaceTasksPage;

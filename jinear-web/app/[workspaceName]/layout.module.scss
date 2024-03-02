@@ -71,6 +71,13 @@
     right: 0;
     height: var(--workspace-side-menu-mobile-navigator-height);
     overflow-y: visible;
+
+    display: flex;
+    align-items: center;
+  }
+
+  .workspaceSideMenuContainerPwa {
+    align-items: flex-start !important;
   }
 
   .pageContent {
