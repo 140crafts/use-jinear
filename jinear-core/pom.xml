@@ -333,12 +333,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.github.OneSignal</groupId>
-            <artifactId>onesignal-java-api</artifactId>
-            <version>5ade5f8aa98061ce045c0ef2b4e03aba48dcc083</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.google.firebase</groupId>
             <artifactId>firebase-admin</artifactId>
             <version>9.2.0</version>
