@@ -23,7 +23,6 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
   const lastActivitiesPath = `/${workspace?.username}/last-activities`;
 
   return !workspace ? null : (
-    // <Transition className={styles.container} initial={true}>
     <div className={styles.container}>
       <InboxButton
         isActive={inboxPath == currentPath}
@@ -64,7 +63,6 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
         {t("mainFeaturesMenuLabelAssignedToMe")}
       </Button>
     </div>
-    // </Transition>
   );
 };
 

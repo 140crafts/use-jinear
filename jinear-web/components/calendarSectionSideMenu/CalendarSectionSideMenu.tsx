@@ -6,6 +6,7 @@ import {
 } from "@/hooks/useQueryState";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
+import { isWebView } from "@/utils/webviewUtils";
 import { useParams } from "next/navigation";
 import React from "react";
 import MiniMonthCalendar from "../miniMonthCalendar/MiniMonthCalendar";
@@ -22,6 +23,7 @@ const CalendarSectionSideMenu: React.FC<CalendarSectionSideMenuProps> = ({}) => 
   const workspaceName = (params?.workspaceName as string) || "";
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
   const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser);
+  const _isWebView = isWebView();
 
   const changeViewingDate = (day?: Date) => {
     if (day) {
@@ -42,8 +44,12 @@ const CalendarSectionSideMenu: React.FC<CalendarSectionSideMenuProps> = ({}) => 
             headerContainerClassName={styles.miniMonthCalendarHeader}
           />
           <CalendarTeamsList workspace={workspace} />
-          <OrLine omitText={true} />
-          <ExternalCalendarsList workspace={workspace} />
+          {!_isWebView && (
+            <>
+              <OrLine omitText={true} />
+              <ExternalCalendarsList workspace={workspace} />
+            </>
+          )}
         </>
       )}
     </div>

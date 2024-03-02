@@ -3,6 +3,7 @@ import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { popNewTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { isWebView } from "@/utils/webviewUtils";
 import useTranslation from "locales/useTranslation";
 import { useParams } from "next/navigation";
 import React from "react";
@@ -19,8 +20,9 @@ const TasksSectionSideMenu: React.FC<TasksSectionSideMenuProps> = ({}) => {
   const params = useParams();
   const workspaceName = (params?.workspaceName as string) || "";
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
+  const _isWebView = isWebView();
   // const feedsEnabled = useFeatureFlag("FEEDS");
-  const feedsEnabled = true;
+  const feedsEnabled = !_isWebView;
 
   const { data: teamsResponse } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
     skip: workspace == null,
