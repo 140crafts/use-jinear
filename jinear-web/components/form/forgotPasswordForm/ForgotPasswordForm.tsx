@@ -75,6 +75,10 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({ className }) =>
         <Button onClick={pop2FaMailModal} variant={ButtonVariants.outline}>
           {t("loginWith2FaMail")}
         </Button>
+
+        <Button href="/login" variant={ButtonVariants.outline}>
+          {t("forgotPasswordScreenBackToLogin")}
+        </Button>
       </form>
     </div>
   );

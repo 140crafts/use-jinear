@@ -146,6 +146,10 @@ export default {
     en: "Login",
     tr: "Giriş Yap",
   },
+  forgotPasswordScreenBackToLogin: {
+    en: "Back to Login",
+    tr: "Giriş Yapmaya Dön",
+  },
   or: {
     en: "or",
     tr: "veya",
