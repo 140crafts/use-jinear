@@ -20,7 +20,7 @@ const SCREEN_WIDTH = Dimensions.get("window").width;
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 
 const DARK_THEME = {
-  current: "light" as "light" | "dark",
+  current: "dark" as "light" | "dark",
   statusBarStyle: "light" as StatusBarStyle,
   backgroundColor: "#16171a",
   backgroundColorModalBackdrop: "#09090A",
@@ -28,7 +28,7 @@ const DARK_THEME = {
 };
 
 const LIGHT_THEME = {
-  current: "dark" as "light" | "dark",
+  current: "light" as "light" | "dark",
   statusBarStyle: "dark" as StatusBarStyle,
   backgroundColor: "#fdfffc",
   backgroundColorModalBackdrop: "#656665",
