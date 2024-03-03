@@ -19,6 +19,9 @@
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "To upload a profile picture Jinear needs to access your photo library."
       },
+      "config": {
+        "usesNonExemptEncryption": false
+      },
       "associatedDomains": ["applinks:jinear.co"]
     },
     "android": {
