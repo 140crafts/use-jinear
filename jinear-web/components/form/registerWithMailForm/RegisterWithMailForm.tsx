@@ -103,7 +103,7 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({ className }
           />
           <div>
             {t("registerWithEmailAgreeTerms")}
-            <Link target="_blank" href={"/terms"}>
+            <Link target="_blank" href={"/terms"} className={styles.link}>
               {` ${t("terms")}`}
             </Link>
           </div>
@@ -121,7 +121,7 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({ className }
 
         <div className={styles.privacyPolicyContainer}>
           {t("registerPrivacyPolicyText")}
-          <Link className={styles.forgotPasswordLink} href={"/terms"} target="_blank">
+          <Link className={styles.link} href={"/terms"} target="_blank">
             {` ${t("privacyPolicy")}`}
           </Link>
         </div>
