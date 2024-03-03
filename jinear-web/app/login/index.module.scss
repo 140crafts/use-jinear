@@ -14,7 +14,7 @@
   width: 100%;
 }
 
-@media (max-width: $mobile-l) {
+@media (max-width: $tablet) {
   .container {
     flex-direction: column-reverse;
     height: unset;
