@@ -27,3 +27,7 @@
 .privacyPolicyContainer {
   font-size: 0.8rem;
 }
+
+.link {
+  word-break: normal;
+}

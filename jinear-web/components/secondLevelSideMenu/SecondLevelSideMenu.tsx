@@ -24,7 +24,7 @@ const SecondLevelSideMenu: React.FC<SecondLevelSideMenuProps> = ({ className, ch
       <div id="second-level-side-menu-action-bar" className={styles.sideMenuActionBar}>
         <Button className={styles.menuToggleButton} heightVariant={ButtonHeight.short} onClick={toggle} variant={menuVariant}>
           <div className={cn(styles.sideMenuCollapsedLabel, !open && styles.sideMenuCollapsedLabelClosed)}>
-            {t("tasksLayoutSideMenuCollapsedLabel")}
+            <b>{t("tasksLayoutSideMenuCollapsedLabel")}</b>
           </div>
           <MenuIcon size={14} className={styles.menuToggleIcon} />
         </Button>
