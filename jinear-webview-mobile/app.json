@@ -17,7 +17,10 @@
       "bundleIdentifier": "co.jinear.app",
       "supportsTablet": true,
       "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "To upload a profile picture Jinear needs to access your photo library."
+        "NSCameraUsageDescription": "To take a profile picture Jinear needs to access your camera.",
+        "NSPhotoLibraryUsageDescription": "To upload a profile picture Jinear needs to access your photo library.",
+        "NSPhotoLibraryAddUsageDescription": "To save media Jinear needs to access your photo library.",
+        "NSMicrophoneUsageDescription": "To take voice memo Jinear needs to access your microphone."
       },
       "config": {
         "usesNonExemptEncryption": false
