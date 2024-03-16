@@ -1504,4 +1504,12 @@
             <column name="shareable_key"/>
         </createIndex>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-444-add-columns-to-account">
+        <addColumn tableName="account">
+            <column name="ghost" type="tinyint" afterColumn="time_zone" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -56,6 +56,7 @@ public class AccountInitializeService {
         account.setEmail(accountInitializeVo.getEmail());
         account.setEmailConfirmed(accountInitializeVo.getEmailConfirmed());
         account.setLocaleType(accountInitializeVo.getLocale());
+        account.setGhost(Boolean.FALSE);
         Account saved = accountRepository.save(account);
         log.info("Account create has finished. accountId: {}", saved.getAccountId());
         return saved;
@@ -69,7 +70,7 @@ public class AccountInitializeService {
     }
 
     private void validateEmailIsNotUsed(String email) {
-        accountRetrieveService.retrieveByEmail(email)
+        accountRetrieveService.retrieveByEmailOptional(email)
                 .ifPresent(accountDto -> {
                     throw new BusinessException("account.email-in-use");
                 });

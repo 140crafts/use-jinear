@@ -29,4 +29,7 @@ public class FeProperties {
 
     @Value("${fe.workspace-calendar-url}")
     private String workspaceCalendarUrl;
+
+    @Value("${fe.account-delete-url}")
+    private String accountDeleteUrl;
 }

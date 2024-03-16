@@ -11,11 +11,10 @@ import co.jinear.core.model.vo.token.GenerateTokenVo;
 import co.jinear.core.service.mail.MailService;
 import co.jinear.core.service.token.TokenService;
 import co.jinear.core.system.NormalizeHelper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import jakarta.transaction.Transactional;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -36,7 +35,7 @@ public class AccountMailConfirmationService {
 
     public void resendConfirmEmailMail(String email, LocaleType preferredLocale) {
         log.info("Resend confirm email mail. email: {}, preferredLocale: {}", email, preferredLocale);
-        AccountDto accountDto = accountRetrieveService.retrieveByEmail(email).orElseThrow(NotFoundException::new);
+        AccountDto accountDto = accountRetrieveService.retrieveByEmailOptional(email).orElseThrow(NotFoundException::new);
         validateAccountMailNotConfirmed(accountDto);
         sendConfirmEmailMail(accountDto.getAccountId(), preferredLocale);
     }

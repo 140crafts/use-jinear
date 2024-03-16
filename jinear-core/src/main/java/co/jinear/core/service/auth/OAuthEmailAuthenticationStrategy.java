@@ -49,7 +49,7 @@ public class OAuthEmailAuthenticationStrategy implements AuthenticationStrategy 
     }
 
     private String retrieveAccountId(String email) {
-        return accountRetrieveService.retrieveByEmail(email)
+        return accountRetrieveService.retrieveByEmailOptional(email)
                 .map(AccountDto::getAccountId)
                 .orElseGet(() -> createAccountIfNotFound(email));
     }

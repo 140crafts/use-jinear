@@ -112,7 +112,7 @@ public class WorkspaceMemberInvitationManager {
     }
 
     private void validateAccountIsExistingMemberIfAccountPresent(WorkspaceMemberInviteRequest workspaceMemberInviteRequest, String workspaceId) {
-        String accountId = accountRetrieveService.retrieveByEmail(workspaceMemberInviteRequest.getEmail()).map(AccountDto::getAccountId).orElse(null);
+        String accountId = accountRetrieveService.retrieveByEmailOptional(workspaceMemberInviteRequest.getEmail()).map(AccountDto::getAccountId).orElse(null);
         if (Objects.nonNull(accountId) && workspaceMemberService.isAccountWorkspaceMember(accountId, workspaceId)) {
             throw new BusinessException("workspace.invitation.account-already-member");
         }

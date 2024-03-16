@@ -19,8 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.ADMIN;
-import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.OWNER;
+import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.*;
 
 @Slf4j
 @Service
@@ -87,7 +86,6 @@ public class WorkspaceMemberService {
         }
     }
 
-
     public void validateAccountHasRoleInWorkspace(String accountId, String workspaceId, List<WorkspaceAccountRoleType> roleTypes) {
         log.info("Has any role for workspace started. workspaceId: {}, accountId: {}, roleTypes: {}", workspaceId, accountId, StringUtils.join(roleTypes, NormalizeHelper.COMMA_SEPARATOR));
         Long count = workspaceMemberRepository.countAllByAccountIdAndWorkspaceIdAndRoleIsInAndPassiveIdIsNull(accountId, workspaceId, roleTypes);
@@ -102,6 +100,12 @@ public class WorkspaceMemberService {
         }
     }
 
+    public void removeAllMembershipsOfAnAccount(String accountId, String passiveId) {
+        log.info("Remove all memberships of an account has started.");
+        workspaceMemberRepository.findAllByAccountIdAndPassiveIdIsNull(accountId)
+                .forEach(workspaceMember -> deleteMember(workspaceMember, passiveId));
+    }
+
     private void createWorkspaceRole(InitializeWorkspaceMemberVo initializeWorkspaceMemberVo) {
         WorkspaceMember workspaceMember = new WorkspaceMember();
         workspaceMember.setWorkspaceId(initializeWorkspaceMemberVo.getWorkspaceId());
@@ -112,9 +116,29 @@ public class WorkspaceMemberService {
 
     private String deleteMember(WorkspaceMember workspaceMember) {
         String passiveId = passiveService.createUserActionPassive();
+        return deleteMember(workspaceMember, passiveId);
+    }
+
+    private String deleteMember(WorkspaceMember workspaceMember, String passiveId) {
         workspaceMember.setPassiveId(passiveId);
         workspaceMemberRepository.save(workspaceMember);
         log.info("Delete workspace member has finished. workspaceMemberId: {}, passiveId: {}", workspaceMember.getWorkspaceMemberId(), passiveId);
         return passiveId;
+    }
+
+    @Transactional
+    public void transferWorkspaceOwnership(String workspaceId, String accountId, String toAccountId) {
+        log.info("Transfer workspace ownership has started. workspaceId: {}, accountId: {}, toAccountId: {}", workspaceId, accountId, toAccountId);
+        WorkspaceMember oldOwner = retrieveWorkspaceMember(workspaceId, accountId);
+        WorkspaceMember newOwner = retrieveWorkspaceMember(workspaceId, toAccountId);
+        oldOwner.setRole(MEMBER);
+        newOwner.setRole(OWNER);
+        workspaceMemberRepository.saveAll(List.of(oldOwner, newOwner));
+        log.info("Transfer workspace ownership has completed.");
+    }
+
+    private WorkspaceMember retrieveWorkspaceMember(String workspaceId, String accountId) {
+        return workspaceMemberRepository.findByAccountIdAndWorkspaceIdAndPassiveIdIsNull(accountId, workspaceId)
+                .orElseThrow(NotFoundException::new);
     }
 }

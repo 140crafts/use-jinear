@@ -44,13 +44,23 @@ public class AccountRetrieveService {
                 .map(accountDtoConverter::map);
     }
 
-    public Optional<AccountDto> retrieveByEmail(String email) {
+    public Optional<AccountDto> retrieveByEmailOptional(String email) {
         log.info("Retrieving account with email: {}", email);
         return Optional.ofNullable(email)
                 .map(accountRepository::findByEmailAndPassiveIdIsNull)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(accountDtoConverter::map);
+    }
+
+    public AccountDto retrieveByEmail(String email) {
+        log.info("Retrieving account with email: {}", email);
+        return Optional.ofNullable(email)
+                .map(accountRepository::findByEmailAndPassiveIdIsNull)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .map(accountDtoConverter::map)
+                .orElseThrow(NotFoundException::new);
     }
 
     public AccountDto retrieveWithBasicInfo(String accountId) {

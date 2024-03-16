@@ -21,8 +21,8 @@ public interface AccountRepository extends JpaRepository<Account, String> {
     @Query("""
             update Account account
                 set account.emailConfirmed=:emailConfirmed
-                    where 
-                        account.accountId = :accountId and 
+                    where
+                        account.accountId = :accountId and
                         account.passiveId is null
                 """)
     void updateEmailConfirmed(@Param("accountId") String accountId, @Param("emailConfirmed") boolean emailConfirmed);
@@ -31,8 +31,8 @@ public interface AccountRepository extends JpaRepository<Account, String> {
     @Query("""
             update Account account
                 set account.localeType=:localeType
-                    where 
-                        account.accountId = :accountId and 
+                    where
+                        account.accountId = :accountId and
                         account.passiveId is null
                 """)
     void updateLocaleType(@Param("accountId") String accountId, @Param("localeType") LocaleType localeType);
@@ -41,9 +41,19 @@ public interface AccountRepository extends JpaRepository<Account, String> {
     @Query("""
             update Account account
                 set account.timeZone=:timeZone
-                    where 
-                        account.accountId = :accountId and 
+                    where
+                        account.accountId = :accountId and
                         account.passiveId is null
                 """)
     void updateTimeZone(@Param("accountId") String accountId, @Param("timeZone") String timeZone);
+
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("""
+            update Account account
+                set account.ghost = true, account.email = ""
+                    where
+                        account.accountId = :accountId and
+                        account.passiveId is null
+                """)
+    void updateGhostAndEmailAsEmpty(@Param("accountId") String accountId);
 }

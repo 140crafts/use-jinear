@@ -63,6 +63,13 @@ public class TeamMemberService {
         return saved;
     }
 
+    public void removeAllTeamMembershipsOfAnAccount(String accountId, String passiveId) {
+        log.info("Remove all team memberships of an account has started. accountId: {}, passiveId: {}", accountId, passiveId);
+        List<TeamMember> teamMemberships = teamMemberRepository.findAllByAccountIdAndPassiveIdIsNull(accountId);
+        teamMemberships.forEach(teamMember -> teamMember.setPassiveId(passiveId));
+        teamMemberRepository.saveAll(teamMemberships);
+    }
+
     private void assignWorkspaceId(TeamMemberAddVo teamMemberAddVo, TeamMember teamMember) {
         String workspaceId = retrieveWorkspaceIdFromTeamId(teamMemberAddVo.getTeamId());
         teamMember.setWorkspaceId(workspaceId);

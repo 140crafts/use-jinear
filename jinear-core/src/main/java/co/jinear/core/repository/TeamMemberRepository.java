@@ -26,4 +26,6 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, String> 
     Long countAllByAccountIdAndTeamIdAndRoleAndPassiveIdIsNull(String accountId, String teamId, TeamMemberRoleType role);
 
     List<TeamMember> findAllByWorkspaceIdAndAccountIdAndTeamIdInAndPassiveIdIsNull(String workspaceId, String accountId, List<String> teamId);
+
+    List<TeamMember> findAllByAccountIdAndPassiveIdIsNull(String accountId);
 }

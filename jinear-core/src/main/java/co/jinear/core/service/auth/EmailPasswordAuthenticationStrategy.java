@@ -39,7 +39,7 @@ public class EmailPasswordAuthenticationStrategy implements AuthenticationStrate
     }
 
     private AccountDto retrieveAccount(AuthVo authVo) {
-        return accountRetrieveService.retrieveByEmail(authVo.getEmail())
+        return accountRetrieveService.retrieveByEmailOptional(authVo.getEmail())
                 .orElseThrow(NotFoundException::new);
     }
 

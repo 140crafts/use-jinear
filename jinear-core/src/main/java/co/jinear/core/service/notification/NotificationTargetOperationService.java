@@ -9,6 +9,7 @@ import co.jinear.core.model.vo.notification.NotificationTargetInitializeVo;
 import co.jinear.core.repository.NotificationTargetRepository;
 import co.jinear.core.service.account.AccountCommunicationPermissionService;
 import co.jinear.core.service.passive.PassiveService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -53,6 +54,11 @@ public class NotificationTargetOperationService {
         notificationTargetRepository.save(notificationTarget);
         log.info("Remove notification target has completed. passiveId: {}", passiveId);
         return passiveId;
+    }
+
+    @Transactional
+    public void updateAllAsPassiveWithAccountId(String accountId, String passiveId) {
+        notificationTargetRepository.updateAllByAccountId(accountId, passiveId);
     }
 
     private NotificationTarget retrieveNotificationTarget(String sessionInfoId) {

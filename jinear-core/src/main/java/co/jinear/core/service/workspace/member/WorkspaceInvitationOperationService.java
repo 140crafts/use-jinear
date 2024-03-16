@@ -136,7 +136,7 @@ public class WorkspaceInvitationOperationService {
     }
 
     private void setAccountIdIfExistingAccountPresent(WorkspaceInvitationInitializeVo vo, WorkspaceInvitation workspaceInvitation) {
-        Optional<AccountDto> existingAccount = accountRetrieveService.retrieveByEmail(vo.getEmail());
+        Optional<AccountDto> existingAccount = accountRetrieveService.retrieveByEmailOptional(vo.getEmail());
         existingAccount.map(AccountDto::getAccountId).ifPresent(workspaceInvitation::setAccountId);
     }
 
@@ -155,7 +155,7 @@ public class WorkspaceInvitationOperationService {
 
     private String retrieveAccountByEmailOrRegister(WorkspaceInvitation invitation, LocaleType preferredLocale) {
         log.info("Retrieve account by email or register has started.");
-        return accountRetrieveService.retrieveByEmail(invitation.getEmail())
+        return accountRetrieveService.retrieveByEmailOptional(invitation.getEmail())
                 .map(AccountDto::getAccountId)
                 .orElseGet(() -> registerAccount(invitation, preferredLocale));
     }

@@ -37,7 +37,7 @@ public class AccountPasswordResetService {
 
     public void sendResetPasswordMail(InitializeResetPasswordVo initializeResetPasswordVo) {
         log.info("Sending reset password mail. initializeResetPasswordVo: {}", initializeResetPasswordVo);
-        AccountDto accountDto = accountRetrieveService.retrieveByEmail(initializeResetPasswordVo.getEmail())
+        AccountDto accountDto = accountRetrieveService.retrieveByEmailOptional(initializeResetPasswordVo.getEmail())
                 .orElseThrow(NotFoundException::new);
         TokenDto tokenDto = tokenService.retrieveValidTokenWithRelatedObject(accountDto.getEmail(), CONFIRM_EMAIL)
                 .orElseGet(() -> generateResetPasswordToken(accountDto));

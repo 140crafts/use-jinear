@@ -37,6 +37,17 @@ public class UsernameService {
         return usernameConverter.map(username);
     }
 
+//    public UsernameDto updateUsername(String existingUsername, String desiredUsername) {
+//        log.info("Update username has started. existingUsername: {}, desiredUsername: {}", existingUsername, desiredUsername);
+//        validateUsernameIsNotReserved(desiredUsername);
+//        validateUsernameIsNotExists(desiredUsername);
+//        Username username = usernameRepository.findByUsername(existingUsername)
+//                .orElseThrow(NotFoundException::new);
+//        username.setUsername(desiredUsername);
+//        Username saved = usernameRepository.save(username);
+//        return usernameConverter.map(saved);
+//    }
+
     private UsernameDto handleUsernameExists(InitializeUsernameVo initializeUsernameVo) {
         log.info("Username already exist. Handling collision: {}", initializeUsernameVo);
         return Optional.of(initializeUsernameVo)
@@ -90,4 +101,21 @@ public class UsernameService {
                     throw new BusinessException();
                 });
     }
+
+    private void validateUsernameIsNotReserved(String username) {
+        Optional.of(username)
+                .map(reservedUsernameRepository::countAllByUsername)
+                .filter(count -> count > 0L)
+                .ifPresent(count -> {
+                    log.info("Username is reserved");
+                    throw new BusinessException();
+                });
+    }
+
+//    private void validateUsernameIsNotExists(String desiredUsername) {
+//        Optional<Username> existing = usernameRepository.findByUsername(desiredUsername);
+//        if (existing.isPresent()) {
+//            throw new BusinessException("username.taken");
+//        }
+//    }
 }
