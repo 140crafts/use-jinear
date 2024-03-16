@@ -1,3 +1,4 @@
+import AccountDeleteButton from "@/components/profileScreen/accountDeleteButton/AccountDeleteButton";
 import CommunicationPreferences from "@/components/profileScreen/communicationPreferences/CommunicationPreferences";
 import PersonalInfoTab from "@/components/profileScreen/personalInfoTab/PersonalInfoTab";
 import useWindowSize from "@/hooks/useWindowSize";
@@ -30,6 +31,8 @@ const AccountProfileModal: React.FC<AccountProfileModalProps> = ({}) => {
       <PersonalInfoTab />
       <CommunicationPreferences title={t("communicationPrefrencesTitle")} />
       <div className="spacer-h-4" />
+      <AccountDeleteButton />
+      <div className="spacer-h-2" />
     </Modal>
   );
 };
