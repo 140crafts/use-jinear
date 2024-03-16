@@ -22,6 +22,7 @@ public class AccountDto extends BaseDto {
     private Boolean emailConfirmed;
     private LocaleType localeType;
     private String timeZone;
+    private Boolean ghost;
     @Nullable
     private String username;
     private Set<AccountRoleDto> roles;

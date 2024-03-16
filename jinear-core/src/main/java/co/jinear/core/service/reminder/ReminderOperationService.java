@@ -3,7 +3,6 @@ package co.jinear.core.service.reminder;
 import co.jinear.core.converter.reminder.ReminderConverter;
 import co.jinear.core.converter.reminder.ReminderJobConverter;
 import co.jinear.core.exception.BusinessException;
-import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.reminder.ReminderDto;
 import co.jinear.core.model.entity.reminder.Reminder;
 import co.jinear.core.model.enumtype.reminder.ReminderJobStatus;
@@ -17,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -49,6 +49,11 @@ public class ReminderOperationService {
         return passiveId;
     }
 
+    public void passivizeReminderAndAllActiveJobsRelatedWithOwner(String ownerId, String passiveId) {
+        List<Reminder> reminders = reminderRepository.findAllByOwnerIdAndPassiveIdIsNull(ownerId);
+        reminders.forEach(reminder -> passivizeReminderAndAllActiveJobsWithExistingPassiveId(reminder.getReminderId(), passiveId));
+    }
+
     private void validateInitialRemindDateIsPresent(ReminderInitializeVo reminderInitializeVo) {
         if (Objects.isNull(reminderInitializeVo.getInitialRemindDate())) {
             throw new BusinessException();
@@ -60,17 +65,8 @@ public class ReminderOperationService {
         reminderJobOperationService.initializeReminderJob(initializeReminderJobVo);
     }
 
-    private Reminder retrieveEntity(String reminderId) {
-        log.info("Retrieve entity has started. reminderId: {}", reminderId);
-        return reminderRepository.findByReminderIdAndPassiveIdIsNull(reminderId)
-                .orElseThrow(NotFoundException::new);
-    }
-
-    private String updateAsPassive(String reminderId, String passiveId) {
-        Reminder reminder = retrieveEntity(reminderId);
-        reminder.setPassiveId(passiveId);
-        reminderRepository.save(reminder);
-        return passiveId;
+    private void updateAsPassive(String reminderId, String passiveId) {
+        reminderRepository.updatePassiveId(reminderId, passiveId);
     }
 
     private void passivizeAllActiveJobs(String reminderId) {

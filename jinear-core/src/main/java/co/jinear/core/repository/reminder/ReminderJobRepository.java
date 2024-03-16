@@ -23,8 +23,8 @@ public interface ReminderJobRepository extends JpaRepository<ReminderJob, String
     @Query("""
             update ReminderJob reminderJob
                 set reminderJob.reminderJobStatus=:reminderJobStatus
-                    where 
-                        reminderJob.reminderId=:reminderId and 
+                    where
+                        reminderJob.reminderId=:reminderId and
                         reminderJob.passiveId is null
                 """)
     void updateAllWithReminderId(@Param("reminderId") String reminderId, @Param("reminderJobStatus") ReminderJobStatus reminderJobStatus);

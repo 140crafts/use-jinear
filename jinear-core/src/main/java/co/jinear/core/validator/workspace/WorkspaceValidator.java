@@ -1,11 +1,13 @@
 package co.jinear.core.validator.workspace;
 
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
-import co.jinear.core.service.workspace.WorkspaceRetrieveService;
+import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 import static co.jinear.core.model.enumtype.workspace.WorkspaceContentVisibilityType.HIDDEN;
 
@@ -14,7 +16,6 @@ import static co.jinear.core.model.enumtype.workspace.WorkspaceContentVisibility
 @RequiredArgsConstructor
 public class WorkspaceValidator {
 
-    private final WorkspaceRetrieveService workspaceRetrieveService;
     private final WorkspaceMemberService workspaceMemberService;
 
     public void validateHasAccess(String currentAccountId, WorkspaceDto workspaceDto) {
@@ -29,5 +30,9 @@ public class WorkspaceValidator {
         if (HIDDEN.equals(workspaceDto.getSettings().getContentVisibility())) {
             workspaceMemberService.validateAccountWorkspaceMember(currentAccountId, workspaceDto.getWorkspaceId());
         }
+    }
+
+    public void validateWorkspaceRoles(String accountId, String workspaceId, List<WorkspaceAccountRoleType> roleTypes) {
+        workspaceMemberService.validateAccountHasRoleInWorkspace(accountId, workspaceId, roleTypes);
     }
 }

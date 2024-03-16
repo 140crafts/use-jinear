@@ -41,4 +41,10 @@ public class WorkspaceMemberController {
                              @PathVariable String workspaceMemberId) {
         return workspaceMemberManager.kick(workspaceId, workspaceMemberId);
     }
+
+    @GetMapping("/{workspaceId}/transfer-ownership/{toAccountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse transferOwnership(@PathVariable String workspaceId, @PathVariable String toAccountId) {
+        return workspaceMemberManager.transferWorkspaceOwnership(workspaceId, toAccountId);
+    }
 }

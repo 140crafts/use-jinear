@@ -38,6 +38,9 @@ public class Account extends BaseEntity {
     @Column(name = "time_zone")
     private String timeZone;
 
+    @Column(name = "ghost")
+    private Boolean ghost;
+
     @OneToMany(mappedBy = "account")
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")

@@ -10,10 +10,12 @@ import co.jinear.core.model.vo.workspace.DeleteWorkspaceMemberVo;
 import co.jinear.core.model.vo.workspace.InitializeWorkspaceMemberVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.passive.PassiveService;
+import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.validator.workspace.WorkspaceTierValidator;
+import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,8 @@ public class WorkspaceMemberManager {
     private final SessionInfoService sessionInfoService;
     private final PassiveService passiveService;
     private final WorkspaceTierValidator workspaceTierValidator;
+    private final WorkspaceValidator workspaceValidator;
+    private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
 
     public BaseResponse joinWorkspace(String workspaceId) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -56,6 +60,7 @@ public class WorkspaceMemberManager {
         DeleteWorkspaceMemberVo deleteWorkspaceMemberVo = mapToDeleteWorkspaceMember(currentAccountId, workspaceDto.getWorkspaceId());
         String passiveId = workspaceMemberService.deleteWorkspaceMember(deleteWorkspaceMemberVo);
         passiveService.assignOwnership(passiveId, currentAccountId);
+        //todo remove display preferences
         //todo add workspace activity
         return new BaseResponse();
     }
@@ -66,8 +71,19 @@ public class WorkspaceMemberManager {
         log.info("Kick account from workspace has started. workspaceMemberId: {}, workspaceId: {}, currentAccountId: {}", workspaceMemberId, workspaceId, currentAccountId);
         String passiveId = workspaceMemberService.deleteWorkspaceMember(workspaceMemberId);
         passiveService.assignOwnership(passiveId, currentAccountId);
+        //todo remove display preferences
         //todo add workspace activity
         return new BaseResponse();
+    }
+
+    public BaseResponse transferWorkspaceOwnership(String workspaceId, String toAccountId) {
+        String accountId = sessionInfoService.currentAccountId();
+        workspaceValidator.validateWorkspaceRoles(accountId, workspaceId, List.of(WorkspaceAccountRoleType.OWNER));
+        workspaceValidator.validateHasAccess(toAccountId, workspaceId);
+        log.info("Transfer workspace ownership has started. accountId: {}, toAccountId:{}, workspaceId: {}", accountId, toAccountId, workspaceId);
+        workspaceMemberService.transferWorkspaceOwnership(workspaceId, accountId, toAccountId);
+        //todo add workspace activity
+        return null;
     }
 
     private InitializeWorkspaceMemberVo mapValues(String currentAccountId, WorkspaceDto workspaceDto) {
