@@ -1,6 +1,6 @@
 {
   "name": "jinear-mobile",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "node_modules/expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
@@ -9,6 +9,7 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "1.21.0",
     "expo": "~50.0.7",
     "expo-constants": "~15.4.5",
     "expo-device": "~5.9.3",

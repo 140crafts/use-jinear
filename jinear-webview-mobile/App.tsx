@@ -1,4 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
@@ -100,15 +101,34 @@ interface IPushWebViewMessage {
   payload?: any;
 }
 
+const storeTheme = async (value: "light" | "dark") => {
+  try {
+    await AsyncStorage.setItem("theme", value);
+  } catch (e) {
+    // saving error
+  }
+};
+
+const getTheme = async () => {
+  try {
+    const value = await AsyncStorage.getItem("theme");
+    return value == "light" ? LIGHT_THEME : DARK_THEME;
+  } catch (e) {
+    // error reading value
+  }
+  return DARK_THEME;
+};
+
 export default function App() {
   const webViewRef = useRef<WebView>(null);
-  const [theme, setTheme] = useState(LIGHT_THEME);
+  const [theme, setTheme] = useState(DARK_THEME);
   const [webViewUrl, setWebViewUrl] = useState<string>(URL);
   const [webViewLoading, setWebViewLoading] = useState<boolean>(true);
   const [lastAppUrl, setLastAppUrl] = useState<string>();
   const [showWebViewNavBar, setShowWebViewNavBar] = useState<boolean>(false);
 
   useEffect(() => {
+    setStoredTheme();
     if (Platform.OS === "android") {
       BackHandler.addEventListener("hardwareBackPress", onAndroidBackPress);
       return () => {
@@ -116,6 +136,11 @@ export default function App() {
       };
     }
   }, []);
+
+  const setStoredTheme = async () => {
+    const storedTheme = await getTheme();
+    setTheme(storedTheme);
+  };
 
   const onAndroidBackPress = () => {
     if (webViewRef.current) {
@@ -151,7 +176,8 @@ export default function App() {
     webViewRef.current?.injectJavaScript(getInjectableJSMessage(message));
   };
 
-  const onThemeChangeMessage = (theme: string) => {
+  const onThemeChangeMessage = (theme: "light" | "dark") => {
+    storeTheme(theme);
     setTheme(theme == "light" ? LIGHT_THEME : DARK_THEME);
   };
 

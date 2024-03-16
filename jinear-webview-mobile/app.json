@@ -3,14 +3,14 @@
     "name": "Jinear",
     "slug": "Jinear",
     "owner": "jinear_co",
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#2C2929"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -31,7 +31,7 @@
       "package": "co.jinear.app",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#F56E0F"
       },
       "intentFilters": [
         {
