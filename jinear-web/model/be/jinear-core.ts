@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-03-01 09:09:31.
+// Generated using typescript-generator version 3.0.1157 on 2024-03-16 09:29:58.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  last: boolean;
   first: boolean;
+  last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -28,12 +28,18 @@ export interface AccountCommunicationPermissionDto extends BaseDto {
   pushNotification: boolean;
 }
 
+export interface AccountDeleteEligibilityDto {
+  workspacesWithActiveMembers: DetailedWorkspaceMemberDto[];
+  eligible: boolean;
+}
+
 export interface AccountDto extends BaseDto {
   accountId: string;
   email: string;
   emailConfirmed: boolean;
   localeType: LocaleType;
   timeZone: string;
+  ghost: boolean;
   username?: string | null;
   roles: AccountRoleDto[];
   profilePicture?: AccessibleMediaDto | null;
@@ -152,9 +158,9 @@ export interface GmailMessageDto extends BaseDto {
   subject: string;
   body: string;
   gid: string;
+  gthreadId: string;
   ghistoryId: string;
   ginternalDate: string;
-  gthreadId: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1035,6 +1041,10 @@ export interface AccountCommunicationPermissionsResponse extends BaseResponse {
   data: AccountCommunicationPermissionDto;
 }
 
+export interface AccountDeletionEligibilityResponse extends BaseResponse {
+  data: AccountDeleteEligibilityDto;
+}
+
 export interface AccountRetrieveResponse extends BaseResponse {
   data: AccountDto;
   sessionId: string;
@@ -1502,7 +1512,11 @@ export type LocaleStringType =
   | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_LABEL_CHANGED"
   | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_REMOVED"
   | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_INITIALIZED"
-  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_NEW_COMMENT";
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_NEW_COMMENT"
+  | "ACCOUNT_DELETION_MAIL_TITLE"
+  | "ACCOUNT_DELETION_MAIL_TEXT"
+  | "ACCOUNT_DELETION_MAIL_SUBTEXT"
+  | "ACCOUNT_DELETION_MAIL_CTA_LABEL";
 
 export type LocaleType = "TR" | "EN";
 
@@ -1621,7 +1635,8 @@ export type TokenType =
   | "CONTINUE_AS_LOGIN_TOKEN"
   | "CONFIRM_EMAIL"
   | "RESET_PASSWORD"
-  | "WORKSPACE_INVITATION";
+  | "WORKSPACE_INVITATION"
+  | "ACCOUNT_DELETION";
 
 export type TopicVisibility = "SHARED" | "PRIVATE";
 

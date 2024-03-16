@@ -3295,4 +3295,36 @@ export default {
     en: "Copy Link",
     tr: "Linki Kopyala",
   },
+  accountDeleteButtonLabel: {
+    en: "Delete Account",
+    tr: "Hesabı Sil",
+  },
+  accountDeleteAreYouSureTitle: {
+    en: "Are you sure to delete account?",
+    tr: "Hesabı silmek istediğine emin misin?",
+  },
+  accountDeleteAreYouSureText: {
+    en: "We will send you a confirmation email. If you choose to follow the link provided in the email, your account and personal information will be deleted. This action can not be undone.",
+    tr: "Sana bir onay e-postası göndereceğiz. E-postada verdiğimiz bağlantıyı takip ederseniz, hesabınız ve kişisel bilgileriniz silinecektir. Bu işlem geri alınamaz.",
+  },
+  accountDeleteAreYouSureConfirmLabel: {
+    en: "Confirm",
+    tr: "Onaylıyorum",
+  },
+  accountDeleteConfirmPageSuccessTitle: {
+    en: "Your account has been deleted successfully",
+    tr: "Hesabın başarıyla silindi",
+  },
+  accountDeleteConfirmPageFailureTitle: {
+    en: "Account deletion has failed",
+    tr: "Hesap silme başarısız",
+  },
+  accountDeleteConfirmPageFailureText: {
+    en: "Your request might be timed out. Please try again later or contact us.",
+    tr: "İsteğiniz zaman aşımına uğramış olabilir. Lütfen daha sonra tekrar deneyin veya bizimle irtibata geçin.",
+  },
+  accountDeletionMailSendSuccessfully: {
+    en: "Account deletion email successfully sent.",
+    tr: "Hesap silme e-postası başarıyla gönderildi.",
+  },
 };
