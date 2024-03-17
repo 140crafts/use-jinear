@@ -4,6 +4,7 @@ import Constants from "expo-constants";
 import * as Device from "expo-device";
 import * as Notifications from "expo-notifications";
 import { StatusBar, StatusBarStyle } from "expo-status-bar";
+import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
 import { useEffect, useRef, useState } from "react";
 import { BackHandler, Dimensions, Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
@@ -129,6 +130,7 @@ export default function App() {
 
   useEffect(() => {
     setStoredTheme();
+    askAppTrackingPermission();
     if (Platform.OS === "android") {
       BackHandler.addEventListener("hardwareBackPress", onAndroidBackPress);
       return () => {
@@ -136,6 +138,10 @@ export default function App() {
       };
     }
   }, []);
+
+  const askAppTrackingPermission = async () => {
+    await requestTrackingPermissionsAsync();
+  };
 
   const setStoredTheme = async () => {
     const storedTheme = await getTheme();

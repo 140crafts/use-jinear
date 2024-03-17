@@ -3,7 +3,7 @@
     "name": "Jinear",
     "slug": "Jinear",
     "owner": "jinear_co",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -55,6 +55,7 @@
       "eas": {
         "projectId": "ec4bae47-8364-47c7-ac39-9c41c4de227e"
       }
-    }
+    },
+    "plugins": ["expo-tracking-transparency"]
   }
 }
