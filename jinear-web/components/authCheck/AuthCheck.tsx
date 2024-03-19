@@ -3,6 +3,7 @@ import { useMeQuery } from "@/store/api/accountApi";
 import { selectAuthState } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
+import { askAppTrackingPermission } from "@/utils/webviewUtils";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
@@ -44,6 +45,9 @@ const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
     ) {
       logger.log("This path only for LOGGED IN users.");
       router.replace("/");
+    }
+    if (authState == "LOGGED_IN") {
+      askAppTrackingPermission();
     }
   }, [authState, pathname]);
 

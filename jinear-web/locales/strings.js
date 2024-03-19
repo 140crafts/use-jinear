@@ -3307,6 +3307,10 @@ export default {
     en: "We will send you a confirmation email. If you choose to follow the link provided in the email, your account and personal information will be deleted. This action can not be undone.",
     tr: "Sana bir onay e-postası göndereceğiz. E-postada verdiğimiz bağlantıyı takip ederseniz, hesabınız ve kişisel bilgileriniz silinecektir. Bu işlem geri alınamaz.",
   },
+  accountDeleteAreYouSureTextWithoutEmailConfirm: {
+    en: "Your account and personal information will be deleted. This action can not be undone.",
+    tr: "Hesabınız ve kişisel bilgileriniz silinecektir. Bu işlem geri alınamaz.",
+  },
   accountDeleteAreYouSureConfirmLabel: {
     en: "Confirm",
     tr: "Onaylıyorum",
@@ -3326,5 +3330,9 @@ export default {
   accountDeletionMailSendSuccessfully: {
     en: "Account deletion email successfully sent.",
     tr: "Hesap silme e-postası başarıyla gönderildi.",
+  },
+  accountDeletedSuccessfully: {
+    en: "Account successfully deleted.",
+    tr: "Hesap başarıyla silindi.",
   },
 };

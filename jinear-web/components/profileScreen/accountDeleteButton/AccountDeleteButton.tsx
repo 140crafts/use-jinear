@@ -1,5 +1,9 @@
 import Button from "@/components/button";
-import { useLazyCheckEligibilityQuery, useSendAccountDeleteEmailMutation } from "@/store/api/accountDeleteApi";
+import {
+  useDeleteWithoutConfirmationMutation,
+  useLazyCheckEligibilityQuery,
+  useSendAccountDeleteEmailMutation,
+} from "@/store/api/accountDeleteApi";
 import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -15,6 +19,10 @@ const AccountDeleteButton: React.FC<AccountDeleteButtonProps> = ({}) => {
   const [checkEligibility, { isFetching: isCheckEligibilityFetching }] = useLazyCheckEligibilityQuery();
   const [sendAccountDeleteEmail, { isLoading: isSendAccountDeleteEmailFetching, isSuccess: isSendAccountDeleteEmailSuccess }] =
     useSendAccountDeleteEmailMutation();
+  const [
+    deleteWithoutConfirmation,
+    { isLoading: isDeleteWithoutConfirmationLoading, isSuccess: isDeleteWithoutConfirmationSuccess },
+  ] = useDeleteWithoutConfirmationMutation();
 
   useEffect(() => {
     if (isSendAccountDeleteEmailSuccess) {
@@ -22,16 +30,27 @@ const AccountDeleteButton: React.FC<AccountDeleteButtonProps> = ({}) => {
     }
   }, [isSendAccountDeleteEmailSuccess]);
 
+  useEffect(() => {
+    if (isDeleteWithoutConfirmationSuccess) {
+      toast(t("accountDeletedSuccessfully"));
+    }
+  }, [isDeleteWithoutConfirmationSuccess]);
+
   const popAreYouSureModalForDeleteAccount = () => {
     dispatch(
       popDialogModal({
         visible: true,
         title: t("accountDeleteAreYouSureTitle"),
-        content: t("accountDeleteAreYouSureText"),
+        content: t("accountDeleteAreYouSureTextWithoutEmailConfirm"),
         confirmButtonLabel: t("accountDeleteAreYouSureConfirmLabel"),
-        onConfirm: sendEmail,
+        onConfirm: deleteAccount,
       })
     );
+  };
+
+  const deleteAccount = () => {
+    deleteWithoutConfirmation();
+    dispatch(closeDialogModal());
   };
 
   const sendEmail = () => {
