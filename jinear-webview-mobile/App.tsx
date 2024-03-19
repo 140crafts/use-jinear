@@ -130,7 +130,6 @@ export default function App() {
 
   useEffect(() => {
     setStoredTheme();
-    askAppTrackingPermission();
     if (Platform.OS === "android") {
       BackHandler.addEventListener("hardwareBackPress", onAndroidBackPress);
       return () => {
@@ -172,6 +171,8 @@ export default function App() {
         onAskPermissionsAndSendToken();
       case "removePushNotificationTokenRequest":
         onRemovePushNotificationTokenRequest();
+      case "askAppTrackingPermission":
+        askAppTrackingPermission();
       default:
         break;
     }
