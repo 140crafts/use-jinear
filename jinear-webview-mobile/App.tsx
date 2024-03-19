@@ -167,12 +167,16 @@ export default function App() {
         break;
       case "pushNotificationTokenRequest":
         onPushNotificationTokenRequest();
+        break;
       case "askPermissionsAndSendToken":
         onAskPermissionsAndSendToken();
+        break;
       case "removePushNotificationTokenRequest":
         onRemovePushNotificationTokenRequest();
+        break;
       case "askAppTrackingPermission":
         askAppTrackingPermission();
+        break;
       default:
         break;
     }
