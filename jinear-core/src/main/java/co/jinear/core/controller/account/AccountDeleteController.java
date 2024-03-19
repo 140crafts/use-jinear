@@ -22,6 +22,12 @@ public class AccountDeleteController {
         return accountDeleteManager.sendAccountDeleteEmail();
     }
 
+    @DeleteMapping
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse deleteWithoutConfirmation(HttpServletRequest request, HttpServletResponse response) {
+        return accountDeleteManager.deleteWithoutConfirmation(request, response);
+    }
+
     @GetMapping("/eligibility")
     @ResponseStatus(HttpStatus.OK)
     public AccountDeletionEligibilityResponse checkEligibility() {

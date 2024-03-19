@@ -45,6 +45,15 @@ public class AccountDeleteManager {
         return new BaseResponse();
     }
 
+    public BaseResponse deleteWithoutConfirmation(HttpServletRequest request, HttpServletResponse response){
+        log.info("Delete without confirmation has started.");
+        String currentAccountId = sessionInfoService.currentAccountId();
+        accountDeleteService.validateEligibilityAndAnonymize(currentAccountId);
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
+        accountLogoutService.logout(currentAccountId, currentAccountSessionId, request, response);
+        return new BaseResponse();
+    }
+
     private AccountDeletionEligibilityResponse mapResponse(AccountDeleteEligibilityDto accountDeleteEligibilityDto) {
         AccountDeletionEligibilityResponse accountDeletionEligibilityResponse = new AccountDeletionEligibilityResponse();
         accountDeletionEligibilityResponse.setAccountDeleteEligibilityDto(accountDeleteEligibilityDto);

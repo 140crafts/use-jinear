@@ -57,9 +57,15 @@ public class AccountDeleteService {
         TokenDto tokenDto = tokenService.retrieveValidToken(token, ACCOUNT_DELETION);
         String accountMail = tokenDto.getRelatedObject();
         AccountDto accountDto = accountRetrieveService.retrieveByEmail(accountMail);
+        String accountId = accountDto.getAccountId();
         validateLoggedInUserIsSameWithDeletingUser(currentAccountId, accountDto);
-        validateEligibility(accountDto.getAccountId());
-        accountUpdateService.anonymizeAccount(accountDto.getAccountId());
+        validateEligibilityAndAnonymize(accountId);
+    }
+
+    public void validateEligibilityAndAnonymize(String accountId) {
+        log.info("Validate eligibility and anonymize has started. accountId: {}", accountId);
+        validateEligibility(accountId);
+        accountUpdateService.anonymizeAccount(accountId);
     }
 
     private static void validateLoggedInUserIsSameWithDeletingUser(String currentAccountId, AccountDto accountDto) {
