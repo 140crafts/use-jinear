@@ -24,6 +24,14 @@ export const accountDeleteApi = api.injectEndpoints({
       invalidatesTags: tagTypes,
     }),
     //
+    deleteWithoutConfirmation: build.mutation<BaseResponse, void>({
+      query: () => ({
+        url: `v1/account/delete`,
+        method: "DELETE",
+      }),
+      invalidatesTags: tagTypes,
+    }),
+    //
   }),
 });
 
@@ -32,8 +40,9 @@ export const {
   useCheckEligibilityQuery,
   useLazyCheckEligibilityQuery,
   useConfirmAccountDeleteMutation,
+  useDeleteWithoutConfirmationMutation,
 } = accountDeleteApi;
 
 export const {
-  endpoints: { sendAccountDeleteEmail, checkEligibility, confirmAccountDelete },
+  endpoints: { sendAccountDeleteEmail, checkEligibility, confirmAccountDelete, deleteWithoutConfirmation },
 } = accountDeleteApi;

@@ -9,7 +9,8 @@ export interface IWebViewMessage {
     | "modalVisible"
     | "pushNotificationTokenRequest"
     | "askPermissionsAndSendToken"
-    | "removePushNotificationTokenRequest";
+    | "removePushNotificationTokenRequest"
+    | "askAppTrackingPermission";
   payload?: any;
 }
 
@@ -42,6 +43,10 @@ export const submitAskPermissionsAndSendTokenEvent = () => {
 
 export const submitRemovePushNotificationTokenRequestEvent = () => {
   postWebviewMessage({ method: "removePushNotificationTokenRequest" });
+};
+
+export const askAppTrackingPermission = () => {
+  postWebviewMessage({ method: "askAppTrackingPermission" });
 };
 
 export const postWebviewMessage = (message: IWebViewMessage) => {
