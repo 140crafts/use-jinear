@@ -4,7 +4,7 @@ import {
   useLazyCheckEligibilityQuery,
   useSendAccountDeleteEmailMutation,
 } from "@/store/api/accountDeleteApi";
-import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
+import { closeDialogModal, popDialogModal, resetModals } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";
@@ -50,7 +50,7 @@ const AccountDeleteButton: React.FC<AccountDeleteButtonProps> = ({}) => {
 
   const deleteAccount = () => {
     deleteWithoutConfirmation();
-    dispatch(closeDialogModal());
+    dispatch(resetModals());
   };
 
   const sendEmail = () => {
