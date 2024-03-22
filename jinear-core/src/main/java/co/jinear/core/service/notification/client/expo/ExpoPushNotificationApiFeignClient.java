@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 @FeignClient(
         name = "ExpoPushNotificationApiFeignClient",
@@ -14,5 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface ExpoPushNotificationApiFeignClient extends ExpoPushNotificationApiClient {
 
     @PostMapping("/v2/push/send")
-    void sendPushNotification(@RequestBody ExpoPushNotificationRequest expoPushNotificationRequest);
+    void sendPushNotification(@RequestHeader("Authorization") String bearerToken,
+                              @RequestBody ExpoPushNotificationRequest expoPushNotificationRequest);
 }

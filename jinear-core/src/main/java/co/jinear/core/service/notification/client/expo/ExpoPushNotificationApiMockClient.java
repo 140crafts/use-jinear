@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 public class ExpoPushNotificationApiMockClient implements ExpoPushNotificationApiClient {
 
     @Override
-    public void sendPushNotification(ExpoPushNotificationRequest expoPushNotificationRequest) {
+    public void sendPushNotification(String bearerToken, ExpoPushNotificationRequest expoPushNotificationRequest) {
         log.info("[MOCK] Send push notification has started. expoPushNotificationRequest: {}", expoPushNotificationRequest);
     }
 }
