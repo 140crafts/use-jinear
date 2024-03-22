@@ -4,7 +4,8 @@ import co.jinear.core.model.dto.notification.NotificationMessageExternalDataDto;
 import co.jinear.core.model.dto.notification.NotificationTargetDto;
 import co.jinear.core.model.enumtype.notification.NotificationProviderType;
 import co.jinear.core.model.vo.notification.NotificationMessageVo;
-import com.google.firebase.messaging.*;
+import co.jinear.core.service.notification.client.expo.ExpoPushNotificationApiClient;
+import co.jinear.core.service.notification.client.expo.request.ExpoPushNotificationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,46 +17,40 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FirebaseNotificationDeliveryStrategy implements NotificationDeliveryStrategy {
+public class ExpoNotificationDeliveryStrategy implements NotificationDeliveryStrategy {
 
-    private static final String NOTIFICATION_IMAGE = "https://jinear.co/images/icon/icon-192x192-notification.png";
+    private final ExpoPushNotificationApiClient expoPushNotificationApiClient;
 
     @Override
     public void send(NotificationMessageVo notificationMessageVo) {
-        log.info("Firebase notification send has started. notificationMessageVo: {}", notificationMessageVo);
-        Notification notification = initializeNotification(notificationMessageVo);
-        Message message = initializeMessage(notificationMessageVo, notification);
-        send(message);
-        log.info("Firebase notification send has completed. notificationMessageVo: {}", notificationMessageVo);
-    }
+        log.info("Expo notification send has started. notificationMessageVo: {}", notificationMessageVo);
 
-    private static void send(Message message) {
-        try {
-            String response = FirebaseMessaging.getInstance().send(message);
-            log.info("Firebase response {}", response);
-        } catch (FirebaseMessagingException e) {
-            log.error("Firebase send message has failed.");
-        }
+        ExpoPushNotificationRequest expoPushNotificationRequest = mapMessage(notificationMessageVo);
+        expoPushNotificationApiClient.sendPushNotification(expoPushNotificationRequest);
+
+        log.info("Expo notification send has completed. notificationMessageVo: {}", notificationMessageVo);
     }
 
     @Override
     public NotificationProviderType getProviderType() {
-        return NotificationProviderType.FIREBASE;
+        return NotificationProviderType.EXPO;
     }
 
-    private Message initializeMessage(NotificationMessageVo notificationMessageVo, Notification notification) {
+    private ExpoPushNotificationRequest mapMessage(NotificationMessageVo notificationMessageVo) {
+        ExpoPushNotificationRequest expoPushNotificationRequest = new ExpoPushNotificationRequest();
+        Optional.of(notificationMessageVo).map(NotificationMessageVo::getTarget).map(NotificationTargetDto::getExternalTargetId).ifPresent(expoPushNotificationRequest::setTo);
+        expoPushNotificationRequest.setTitle(notificationMessageVo.getTitle());
+        expoPushNotificationRequest.setBody(notificationMessageVo.getText());
+        expoPushNotificationRequest.setData(initializeMessage(notificationMessageVo));
+        return expoPushNotificationRequest;
+    }
+
+    private Map<String, String> initializeMessage(NotificationMessageVo notificationMessageVo) {
         Map<String, String> map = new HashMap<>();
 
         Optional.of(notificationMessageVo)
                 .map(NotificationMessageVo::getLaunchUrl)
                 .ifPresent(param -> map.put("launchUrl", param));
-
-        WebpushConfig webpushConfig = Optional.of(notificationMessageVo)
-                .map(NotificationMessageVo::getLaunchUrl)
-                .map(WebpushFcmOptions::withLink)
-                .map(webpushFcmOptions -> WebpushConfig.builder().setFcmOptions(webpushFcmOptions).build())
-                .orElse(null);
-
 
         Optional.of(notificationMessageVo)
                 .map(NotificationMessageVo::getData)
@@ -93,19 +88,6 @@ public class FirebaseNotificationDeliveryStrategy implements NotificationDeliver
                 .map(NotificationTargetDto::getSessionInfoId)
                 .ifPresent(param -> map.put("targetSessionInfoId", param));
 
-        return Message.builder()
-                .putAllData(map)
-                .setNotification(notification)
-                .setWebpushConfig(webpushConfig)
-                .setToken(notificationMessageVo.getTarget().getExternalTargetId())
-                .build();
-    }
-
-    private Notification initializeNotification(NotificationMessageVo notificationMessageVo) {
-        return Notification.builder()
-                .setTitle(notificationMessageVo.getTitle())
-                .setBody(notificationMessageVo.getText())
-                .setImage(NOTIFICATION_IMAGE)
-                .build();
+        return map;
     }
 }
