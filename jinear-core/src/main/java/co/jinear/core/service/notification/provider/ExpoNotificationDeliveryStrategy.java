@@ -1,6 +1,5 @@
 package co.jinear.core.service.notification.provider;
 
-import co.jinear.core.config.properties.ExpoProperties;
 import co.jinear.core.model.dto.notification.NotificationMessageExternalDataDto;
 import co.jinear.core.model.dto.notification.NotificationTargetDto;
 import co.jinear.core.model.enumtype.notification.NotificationProviderType;
@@ -21,14 +20,13 @@ import java.util.Optional;
 public class ExpoNotificationDeliveryStrategy implements NotificationDeliveryStrategy {
 
     private final ExpoPushNotificationApiClient expoPushNotificationApiClient;
-    private final ExpoProperties expoProperties;
 
     @Override
     public void send(NotificationMessageVo notificationMessageVo) {
         log.info("Expo notification send has started. notificationMessageVo: {}", notificationMessageVo);
 
         ExpoPushNotificationRequest expoPushNotificationRequest = mapMessage(notificationMessageVo);
-        expoPushNotificationApiClient.sendPushNotification(expoProperties.getToken(), expoPushNotificationRequest);
+        expoPushNotificationApiClient.sendPushNotification(expoPushNotificationRequest);
 
         log.info("Expo notification send has completed. notificationMessageVo: {}", notificationMessageVo);
     }

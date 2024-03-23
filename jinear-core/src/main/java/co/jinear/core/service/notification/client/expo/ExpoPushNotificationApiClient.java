@@ -4,5 +4,5 @@ import co.jinear.core.service.notification.client.expo.request.ExpoPushNotificat
 
 public interface ExpoPushNotificationApiClient {
 
-    void sendPushNotification(String bearerToken, ExpoPushNotificationRequest expoPushNotificationRequest);
+    void sendPushNotification( ExpoPushNotificationRequest expoPushNotificationRequest);
 }

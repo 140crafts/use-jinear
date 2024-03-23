@@ -14,4 +14,7 @@ public class ExpoProperties {
 
     @Value("${expo.token}")
     private String token;
+
+    @Value("${expo.push-notification.url}")
+    private String url;
 }
