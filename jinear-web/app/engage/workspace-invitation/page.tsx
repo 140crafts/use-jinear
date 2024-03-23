@@ -48,15 +48,17 @@ const WorkspaceInvitationResponseScreen: React.FC<WorkspaceInvitationResponseScr
 
   useEffect(() => {
     dispatch(changeLoadingModalVisibility({ visible: false }));
-    if (isResponseSuccess && invitationInfoResponse && accepted) {
-      router.push(`/${invitationInfoResponse.data.workspaceDto.username}`);
-      // updatePreferredWorkspace({ workspaceId: invitationInfoResponse.data.workspaceDto.workspaceId });
-      if (currentAccount) {
-        // router.replace(ROUTE_IF_LOGGED_IN);
+    if (isResponseSuccess && invitationInfoResponse) {
+      if (accepted) {
+        if (currentAccount) {
+          router.push(`/${invitationInfoResponse.data.workspaceDto.username}`);
+        }
+      } else {
+        //declined
+        if (currentAccount) {
+          router.replace(ROUTE_IF_LOGGED_IN);
+        }
       }
-    }
-    if (isResponseSuccess && invitationInfoResponse && !accepted) {
-      router.replace(ROUTE_IF_LOGGED_IN);
     }
   }, [isResponseSuccess, isRespondError, invitationInfoResponse, currentAccount]);
 

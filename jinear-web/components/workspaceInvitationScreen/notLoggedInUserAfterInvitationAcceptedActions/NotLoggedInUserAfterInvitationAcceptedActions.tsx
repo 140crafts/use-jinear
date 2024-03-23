@@ -4,7 +4,7 @@ import { WorkspaceInvitationInfoResponse } from "@/model/be/jinear-core";
 import { changeLoginWith2FaMailModalVisibility } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./NotLoggedInUserAfterInvitationAcceptedActions.module.css";
 
 interface NotLoggedInUserAfterInvitationAcceptedActionsProps {
@@ -25,6 +25,11 @@ const NotLoggedInUserAfterInvitationAcceptedActions: React.FC<NotLoggedInUserAft
       })
     );
   };
+
+  useEffect(() => {
+    loginWithEmailCode();
+  }, [invitationInfoResponse]);
+
   return (
     <div className={styles.container}>
       <div>
@@ -50,12 +55,12 @@ const NotLoggedInUserAfterInvitationAcceptedActions: React.FC<NotLoggedInUserAft
         <Button variant={ButtonVariants.filled2} onClick={loginWithEmailCode}>
           <b>{t("engageWorkspaceInvitationAcceptedLoginWithEmailCode")}</b>
         </Button>
-        <Button variant={ButtonVariants.filled} href={"/login"}>
+        {/* <Button variant={ButtonVariants.filled} href={"/login"}>
           {t("engageWorkspaceInvitationAcceptedLoginWithPassword")}
         </Button>
         <Button variant={ButtonVariants.default} href={"/forgot-password"}>
           {t("engageWorkspaceInvitationAcceptedResetPassword")}
-        </Button>
+        </Button> */}
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import Button, { ButtonVariants } from "@/components/button";
 import { LocaleType } from "@/model/be/jinear-core";
 import { useEmailLoginTokenRequestMutation, useEmailOtpLoginCompleteMutation } from "@/store/api/authApi";
 
+import { selectCurrentAccount } from "@/store/slice/accountSlice";
 import {
   changeLoginWith2FaMailModalVisibility,
   selectLoginWith2FaMailModalAutoSubmitEmail,
@@ -16,9 +17,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import Modal from "../modal/Modal";
+import styles from "./LoginWith2FaMailModal.module.css";
 import CodeStage from "./codeStage/CodeStage";
 import EmailStage from "./emailStage/EmailStage";
-import styles from "./LoginWith2FaMailModal.module.css";
 
 interface LoginWith2FaMailModalProps {}
 
@@ -38,6 +39,7 @@ const LoginWith2FaMailModal: React.FC<LoginWith2FaMailModalProps> = ({}) => {
   const { t } = useTranslation();
   const loginModalVisible = useTypedSelector(selectLoginWith2FaMailModalVisible);
   const autoSubmitEmail = useTypedSelector(selectLoginWith2FaMailModalAutoSubmitEmail);
+  const currentAccount = useTypedSelector(selectCurrentAccount);
   const step = requestTokenResponse?.csrf == null ? 0 : 1;
 
   const emailInputRef = useRef<HTMLInputElement>(null);
@@ -75,10 +77,10 @@ const LoginWith2FaMailModal: React.FC<LoginWith2FaMailModalProps> = ({}) => {
   }, [step]);
 
   useEffect(() => {
-    if (isLoginRequestSuccess) {
+    if (isLoginRequestSuccess || currentAccount) {
       close();
     }
-  }, [isLoginRequestSuccess]);
+  }, [isLoginRequestSuccess, currentAccount]);
 
   const close = () => {
     resetTokenCache();

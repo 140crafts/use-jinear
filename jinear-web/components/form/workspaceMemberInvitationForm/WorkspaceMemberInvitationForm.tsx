@@ -1,7 +1,10 @@
 import Button, { ButtonVariants } from "@/components/button";
+import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { WorkspaceMemberInviteRequest } from "@/model/be/jinear-core";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { useInviteWorkspaceMutation } from "@/store/api/workspaceMemberInvitationApi";
+import { popUpgradeWorkspacePlanModal } from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
@@ -27,6 +30,7 @@ const ASSIGNABLE_WORKSPACE_ROLES: ASSIGNABLE_WORKSPACE_ROLE_TYPES[] = ["ADMIN", 
 
 const WorkspaceMemberInvitationForm: React.FC<WorkspaceMemberInvitationFormProps> = ({ workspaceId, onInviteSuccess }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const { register, handleSubmit, setFocus, setValue, watch } = useForm<WorkspaceMemberInviteRequest>();
   //@ts-ignore
   const forRole: ASSIGNABLE_WORKSPACE_ROLE_TYPES = watch("forRole");
@@ -38,7 +42,16 @@ const WorkspaceMemberInvitationForm: React.FC<WorkspaceMemberInvitationFormProps
     isLoading: isTeamsResponseLoading,
   } = useRetrieveWorkspaceTeamsQuery(workspaceId);
 
-  const [inviteWorkspace, { isSuccess: isInviteSuccess, isLoading: isInviteLoading }] = useInviteWorkspaceMutation();
+  const [
+    inviteWorkspace,
+    {
+      data: inviteWorkspaceResponse,
+      isSuccess: isInviteSuccess,
+      isLoading: isInviteLoading,
+      isError: isInviteError,
+      error: inviteWorkspaceErrorResponse,
+    },
+  ] = useInviteWorkspaceMutation();
 
   useEffect(() => {
     setFocus("email");
@@ -51,6 +64,13 @@ const WorkspaceMemberInvitationForm: React.FC<WorkspaceMemberInvitationFormProps
     }
   }, [onInviteSuccess, isInviteSuccess]);
 
+  useEffect(() => {
+    // @ts-ignore
+    if (isInviteError && inviteWorkspaceErrorResponse?.data?.errorCode == "14100") {
+      dispatch(popUpgradeWorkspacePlanModal({ visible: true, workspaceId }));
+    }
+  }, [inviteWorkspaceErrorResponse, isInviteError]);
+
   const submit: SubmitHandler<WorkspaceMemberInviteRequest> = (data) => {
     logger.log({ data });
     inviteWorkspace(data);
@@ -58,65 +78,69 @@ const WorkspaceMemberInvitationForm: React.FC<WorkspaceMemberInvitationFormProps
 
   return (
     <div className={styles.container}>
-      <form
-        autoComplete="off"
-        id={"workspace-invitation-form"}
-        className={styles.form}
-        onSubmit={handleSubmit(submit)}
-        action="#"
-      >
-        <input type="hidden" value={workspaceId} {...register("workspaceId")} />
-        <label className={styles.label} htmlFor={"new-member-mail"}>
-          {`${t("workspaceMemberInvititationFormEmailLabel")} *`}
-          <input id={"new-member-mail"} type={"email"} {...register("email", { required: t("formRequiredField") })} />
-          <div className={styles.inputSubtext}>{t("workspaceMemberInvititationFormEmailText")}</div>
-        </label>
-
-        <div>
-          <label className={styles.label} htmlFor={"new-member-role"}>
-            {t("workspaceMemberInvititationFormForRoleLabel")}
-            <select id="new-member-role" {...register("forRole")}>
-              {ASSIGNABLE_WORKSPACE_ROLES.map((role) => (
-                <option key={`new-member-role-${role}`} value={role}>
-                  {t(`workspaceMemberInvititationFormForRole_${role}`)}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="spacer-h-1" />
-          <div className={cn(styles.inputSubtext, styles.inputRoleText)}>
-            {t(`workspaceMemberInvititationFormForRoleText_${forRole}`)}
-          </div>
-        </div>
-
-        <div>
-          <label className={styles.label} htmlFor={"new-member-initial-team"}>
-            {t("workspaceMemberInvititationFormInitialTeam")}
-            <select id="new-member-initial-team" {...register("initialTeamId")}>
-              {teamsResponse?.data.map((team) => (
-                <option key={`new-member-initial-team-${team.teamId}`} value={team.teamId}>
-                  {team.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <div className="spacer-h-1" />
-          <div className={styles.inputSubtext}>{t("workspaceMemberInvititationFormInitialTeamText")}</div>
-        </div>
-
-        <div className="spacer-h-4" />
-
-        <Button
-          disabled={isInviteLoading}
-          loading={isInviteLoading}
-          type="submit"
-          className={styles.submitButton}
-          variant={ButtonVariants.contrast}
+      {isTeamsResponseLoading ? (
+        <CircularLoading />
+      ) : (
+        <form
+          autoComplete="off"
+          id={"workspace-invitation-form"}
+          className={styles.form}
+          onSubmit={handleSubmit(submit)}
+          action="#"
         >
-          <div>{t("workspaceMemberInvititationFormSubmit")}</div>
-        </Button>
-        {/* <ErrorMessagee errors={errors} name="singleErrorInput" /> */}
-      </form>
+          <input type="hidden" value={workspaceId} {...register("workspaceId")} />
+          <label className={styles.label} htmlFor={"new-member-mail"}>
+            {`${t("workspaceMemberInvititationFormEmailLabel")} *`}
+            <input id={"new-member-mail"} type={"email"} {...register("email", { required: t("formRequiredField") })} />
+            <div className={styles.inputSubtext}>{t("workspaceMemberInvititationFormEmailText")}</div>
+          </label>
+
+          <div>
+            <label className={styles.label} htmlFor={"new-member-role"}>
+              {t("workspaceMemberInvititationFormForRoleLabel")}
+              <select id="new-member-role" {...register("forRole")}>
+                {ASSIGNABLE_WORKSPACE_ROLES.map((role) => (
+                  <option key={`new-member-role-${role}`} value={role}>
+                    {t(`workspaceMemberInvititationFormForRole_${role}`)}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="spacer-h-1" />
+            <div className={cn(styles.inputSubtext, styles.inputRoleText)}>
+              {t(`workspaceMemberInvititationFormForRoleText_${forRole}`)}
+            </div>
+          </div>
+
+          <div>
+            <label className={styles.label} htmlFor={"new-member-initial-team"}>
+              {t("workspaceMemberInvititationFormInitialTeam")}
+              <select id="new-member-initial-team" {...register("initialTeamId")}>
+                {teamsResponse?.data.map((team) => (
+                  <option key={`new-member-initial-team-${team.teamId}`} value={team.teamId}>
+                    {team.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <div className="spacer-h-1" />
+            <div className={styles.inputSubtext}>{t("workspaceMemberInvititationFormInitialTeamText")}</div>
+          </div>
+
+          <div className="spacer-h-4" />
+
+          <Button
+            disabled={isInviteLoading}
+            loading={isInviteLoading}
+            type="submit"
+            className={styles.submitButton}
+            variant={ButtonVariants.contrast}
+          >
+            <div>{t("workspaceMemberInvititationFormSubmit")}</div>
+          </Button>
+          {/* <ErrorMessagee errors={errors} name="singleErrorInput" /> */}
+        </form>
+      )}
     </div>
   );
 };

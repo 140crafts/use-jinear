@@ -54,7 +54,6 @@ export const workspaceMemberInvitationApi = api.injectEndpoints({
         body,
       }),
       invalidatesTags: [
-        "v1/account",
         "v1/workspace/member/{workspaceId}/list",
         "v1/team/from-workspace/{workspaceId}",
         "v1/team/member/list/{teamId}",
