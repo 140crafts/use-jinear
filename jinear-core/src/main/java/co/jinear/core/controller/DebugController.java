@@ -1,6 +1,5 @@
 package co.jinear.core.controller;
 
-import co.jinear.core.manager.calendar.CalendarEventManager;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +12,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/debug")
 @RequiredArgsConstructor
 public class DebugController {
-
-    private final CalendarEventManager calendarEventManager;
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
