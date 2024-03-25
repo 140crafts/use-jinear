@@ -1,1 +1,0 @@
-(()=>{"use strict";importScripts("https://jinear.co/firebase-messaging-sw.js")})();
