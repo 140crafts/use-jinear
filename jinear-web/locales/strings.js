@@ -3335,4 +3335,8 @@ export default {
     en: "Account successfully deleted.",
     tr: "Hesap başarıyla silindi.",
   },
+  calendarSyncing: {
+    en: "Syncing",
+    tr: "Eşitleniyor",
+  },
 };

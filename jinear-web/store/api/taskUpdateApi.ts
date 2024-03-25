@@ -6,6 +6,8 @@ import {
   TaskUpdateTitleRequest,
 } from "@/model/be/jinear-core";
 import { api } from "./api";
+import { calendarEventApi } from "./calendarEventApi";
+import { taskListingApi } from "./taskListingApi";
 
 export const taskUpdateApi = api.injectEndpoints({
   endpoints: (build) => ({
@@ -45,6 +47,49 @@ export const taskUpdateApi = api.injectEndpoints({
         method: "PUT",
         body: req.body,
       }),
+      onQueryStarted(req, { dispatch, queryFulfilled, getState }) {
+        //cgds-448 migh need later
+        const invalidatedTaskListFilterCaches = taskListingApi.util.selectInvalidatedBy(getState(), ["v1/task/list/filter"]);
+        const invalidatedEventFilterCaches = calendarEventApi.util.selectInvalidatedBy(getState(), ["v1/calendar/event/filter"]);
+        invalidatedEventFilterCaches
+          .filter((cache) => cache.endpointName == "filterCalendarEvents")
+          .forEach((cache) => {
+            dispatch(
+              calendarEventApi.util.updateQueryData("filterCalendarEvents", cache.originalArgs, (draft) => {
+                draft.data
+                  .filter((calendarEventDto) => calendarEventDto.calendarEventSourceType == "TASK")
+                  .filter((calendarEventDto) => calendarEventDto.relatedTask?.taskId == req.taskId)
+                  .forEach((calendarEventDto) => {
+                    if (req.body.assignedDate) {
+                      calendarEventDto.assignedDate = req.body.assignedDate;
+                      if (calendarEventDto.relatedTask) {
+                        calendarEventDto.relatedTask.assignedDate = req.body.assignedDate;
+                      }
+                    }
+                    if (req.body.dueDate) {
+                      calendarEventDto.dueDate = req.body.dueDate;
+                      if (calendarEventDto.relatedTask) {
+                        calendarEventDto.relatedTask.dueDate = req.body.dueDate;
+                      }
+                    }
+                    if (req.body.hasPreciseAssignedDate) {
+                      calendarEventDto.hasPreciseAssignedDate = req.body.hasPreciseAssignedDate;
+                      if (calendarEventDto.relatedTask) {
+                        calendarEventDto.relatedTask.hasPreciseAssignedDate = req.body.hasPreciseAssignedDate;
+                      }
+                    }
+                    if (req.body.hasPreciseDueDate) {
+                      calendarEventDto.hasPreciseDueDate = req.body.hasPreciseDueDate;
+                      if (calendarEventDto.relatedTask) {
+                        calendarEventDto.relatedTask.hasPreciseDueDate = req.body.hasPreciseDueDate;
+                      }
+                    }
+                  });
+                return draft;
+              })
+            );
+          });
+      },
       invalidatesTags: (_result, _err, req) => [
         { type: "v1/task/from-workspace/{workspaceName}/{taskTag}" },
         { type: "v1/workspace/activity/filter" },
