@@ -85,14 +85,17 @@ public class GoogleCalendarEventInfoToCalendarEventDtoConverter {
                 .map(GoogleCalendarEventInfo::getEnd)
                 .map(GoogleCalendarEventDate::getDate)
                 .map(dateStr -> ZonedDateHelper.parseWithDateTimeFormat4(dateStr, timeZone))
-                .ifPresent(dueDate -> calendarEventDto.setDueDate(dueDate.minusSeconds(1L)));
+                .ifPresent(calendarEventDto::setDueDate);
         Optional.of(googleCalendarEventInfo)
                 .map(GoogleCalendarEventInfo::getEnd)
                 .map(GoogleCalendarEventDate::getDateTime)
                 .map(ZonedDateHelper::parseIsoDateTime)
-                .ifPresent(startDateTime -> {
-                    calendarEventDto.setDueDate(startDateTime);
-                    calendarEventDto.setHasPreciseDueDate(Boolean.TRUE);
-                });
+                .ifPresentOrElse(
+                        startDateTime -> {
+                            calendarEventDto.setDueDate(startDateTime);
+                            calendarEventDto.setHasPreciseDueDate(Boolean.TRUE);
+                        },
+                        () -> calendarEventDto.setDueDate(calendarEventDto.getDueDate().minusSeconds(1L))
+                );
     }
 }
