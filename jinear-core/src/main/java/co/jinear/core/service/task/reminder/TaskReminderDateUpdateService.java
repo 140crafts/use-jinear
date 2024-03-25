@@ -8,6 +8,7 @@ import co.jinear.core.service.reminder.job.ReminderJobOperationService;
 import co.jinear.core.service.reminder.job.ReminderJobRetrieveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -21,6 +22,7 @@ public class TaskReminderDateUpdateService {
     private final ReminderJobRetrieveService reminderJobRetrieveService;
     private final ReminderJobOperationService reminderJobOperationService;
 
+    @Async
     public void updateTaskReminderWithTypeIfExists(String taskId, TaskReminderType taskReminderType, ZonedDateTime date) {
         log.info("Update task assigned date reminder if exists has started. taskId: {}, taskReminderType: {}, date: {}", taskId, taskReminderType, date);
         taskReminderRetrieveService.retrieveRelated(taskId, taskReminderType)
