@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-03-16 09:29:58.
+// Generated using typescript-generator version 3.0.1157 on 2024-03-25 23:29:38.
 
 export interface BaseDto {
   createdDate: Date;
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
   item: any;
   expiresAt: Date;
-  expired: boolean;
   notExpired: boolean;
+  expired: boolean;
 }
 
 export interface CalendarDto {
@@ -157,10 +157,10 @@ export interface GmailMessageDto extends BaseDto {
   to: string;
   subject: string;
   body: string;
-  gid: string;
-  gthreadId: string;
-  ghistoryId: string;
   ginternalDate: string;
+  ghistoryId: string;
+  gthreadId: string;
+  gid: string;
 }
 
 export interface GoogleHandleTokenDto {
