@@ -1,4 +1,4 @@
-import { ToolkitStore } from "@reduxjs/toolkit/dist/configureStore";
+import { store } from "@/store/store";
 import Logger from "./logger";
 
 const logger = Logger("WebViewUtils");
@@ -17,11 +17,11 @@ export interface IWebViewMessage {
 //@ts-ignore
 export const isWebView = () => typeof window !== "undefined" && window?.isWebView;
 
-export const makeStoreAccessibleFromWindow = (store: ToolkitStore) => {
+export const makeStoreAccessibleFromWindow = (_store: typeof store) => {
   //@ts-ignore
   if (typeof window !== "undefined" && window?.isWebView) {
     //@ts-ignore
-    window.store = store;
+    window.store = _store;
   }
 };
 
