@@ -7,15 +7,15 @@ import { toast } from "react-hot-toast";
 const logger = Logger("rtkQueryErrorLogger");
 
 export const rtkQueryErrorLogger: Middleware = (api: MiddlewareAPI) => (next) => (action) => {
-  logger.log(action);
   if (isRejectedWithValue(action)) {
+    logger.log({ rtkQueryErrorLogger: action });
+    //@ts-ignore
     const status = action?.payload?.status;
-    const originalStatus = action?.payload?.originalStatus;
-    console.error({ status, originalStatus });
     if (status == 413) {
       const message = getTranslatedMessage("apiFileTooLargeError");
       toast(message);
     } else if (status !== 401) {
+      //@ts-ignore
       const message = action?.payload?.data?.consumerErrorMessage || getTranslatedMessage("genericError");
       toast(message);
     }
