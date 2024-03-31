@@ -5,6 +5,7 @@ import co.jinear.core.config.locale.MessageSourceLocalizer;
 import co.jinear.core.controller.advice.ApiAdviceHelper;
 import co.jinear.core.model.response.BaseResponse;
 import com.google.gson.Gson;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import static co.jinear.core.system.JwtHelper.JWT_COOKIE;
 
 @Component
 @RequiredArgsConstructor
@@ -32,8 +35,17 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         response.setHeader("Content-Type", "application/json");
+        setJwtCookieInvalid(response);
         PrintWriter out = response.getWriter();
         out.print(gson.toJson(errorBaseResponse));
         response.flushBuffer();
+    }
+
+    private void setJwtCookieInvalid(HttpServletResponse response) {
+        Cookie cookie = new Cookie(JWT_COOKIE, null);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
     }
 }
