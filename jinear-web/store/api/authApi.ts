@@ -28,6 +28,7 @@ export const authApi = api.injectEndpoints({
       query: (body: AuthCompleteRequest) => ({
         url: "v1/auth/otp/email/complete",
         method: "POST",
+        credentials: "omit",
         body,
       }),
       invalidatesTags: tagTypes,
@@ -36,6 +37,7 @@ export const authApi = api.injectEndpoints({
       query: (body: LoginWithPasswordRequest) => ({
         url: "v1/auth/password/email",
         method: "POST",
+        credentials: "omit",
         body,
       }),
       invalidatesTags: tagTypes,
