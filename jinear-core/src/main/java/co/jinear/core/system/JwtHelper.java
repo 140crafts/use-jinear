@@ -14,6 +14,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 
@@ -76,7 +77,9 @@ public class JwtHelper {
     }
 
     public Claims getAllClaimsFromToken(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
+        return Jwts.parser()
+                .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
+                .parseClaimsJws(token).getBody();
     }
 
     public Map<String, Object> getAllClaimsFromTokenUnsigned(String jwt) {
@@ -105,7 +108,7 @@ public class JwtHelper {
                 .setSubject(subject)
                 .setIssuedAt(DateHelper.now())
                 .setExpiration(DateHelper.addDays(DateHelper.now(), JWT_TOKEN_VALIDITY))
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(SignatureAlgorithm.HS512, secret.getBytes(StandardCharsets.UTF_8))
                 .compact();
     }
 }
