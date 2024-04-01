@@ -1,8 +1,10 @@
 "use client";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { BaseResponse, LocaleType, WorkspaceInitializeRequest } from "@/model/be/jinear-core";
 import { useInitializeWorkspaceMutation } from "@/store/api/workspaceApi";
-import { useAppDispatch } from "@/store/store";
+import { selectCurrentAccount } from "@/store/slice/accountSlice";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { HOST } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { normalizeUsernameReplaceSpaces } from "@/utils/normalizeHelper";
@@ -23,6 +25,7 @@ const logger = Logger("NewWorkspaceForm");
 const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close, onSuccess }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const currentAccount = useTypedSelector(selectCurrentAccount);
   const { register, handleSubmit, setFocus, setValue, watch } = useForm<WorkspaceInitializeRequest>();
   const handleRef = useRef<HTMLInputElement | null>(null);
   const { ref: handleHookFormRef, ...handleRegisterRest } = register("handle", { required: t("formRequiredField") });
@@ -57,10 +60,14 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close, onSuccess })
   };
 
   useEffect(() => {
-    setTimeout(() => {
-      setFocus("title");
-    }, 250);
-  }, []);
+    if (currentAccount && currentAccount.username) {
+      setTimeout(() => {
+        const title = t("newWorkspaceTitlePostFix").replace("${username}", currentAccount.username || "");
+        setValue("title", title);
+        setFocus("title");
+      }, 250);
+    }
+  }, [currentAccount]);
 
   useEffect(() => {
     if (currTitle && currTitle.length > 0) {
@@ -101,7 +108,7 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close, onSuccess })
     }
   }, [error, handleRef]);
 
-  return (
+  return currentAccount ? (
     <form autoComplete="off" id={"new-workspace-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
       <div className={styles.photoTitleContainer}>
         <NewWorkspaceLogoPicker
@@ -173,6 +180,8 @@ const NewWorkspaceForm: React.FC<NewWorkspaceFormProps> = ({ close, onSuccess })
         </Button>
       </div>
     </form>
+  ) : (
+    <CircularLoading />
   );
 };
 
