@@ -1098,6 +1098,10 @@ export default {
     en: "Search and join existing workspace.",
     tr: "Katılmak için var olan bir çalışma alanı arayın.",
   },
+  newWorkspaceTitlePostFix: {
+    en: "${username}'s Workspace",
+    tr: "${username}'ın Çalışma Alanı",
+  },
   newTeamModalTitle: {
     en: "New Team",
     tr: "Yeni Ekip",
