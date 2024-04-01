@@ -127,6 +127,7 @@ export default function App() {
   const [webViewLoading, setWebViewLoading] = useState<boolean>(true);
   const [lastAppUrl, setLastAppUrl] = useState<string>();
   const [showWebViewNavBar, setShowWebViewNavBar] = useState<boolean>(false);
+  const [autoIncrementingNumber, setAutoIncrementingNumber] = useState(0);
 
   useEffect(() => {
     setStoredTheme();
@@ -258,12 +259,32 @@ export default function App() {
         </View>
       )}
       <WebView
+        key={autoIncrementingNumber}
         ref={webViewRef}
         injectedJavaScriptBeforeContentLoaded={`
         window.isWebView=true;
       `}
         onMessage={onWebViewMessage}
         webviewDebuggingEnabled={true}
+        onContentProcessDidTerminate={(syntheticEvent) => {
+          const { nativeEvent } = syntheticEvent;
+          console.warn("Content process terminated, reloading", nativeEvent);
+          setAutoIncrementingNumber(autoIncrementingNumber + 1);
+          try {
+            webViewRef.current?.reload();
+          } catch (e) {
+            console.error(e);
+          }
+        }}
+        onRenderProcessGone={(syntheticEvent) => {
+          const { nativeEvent } = syntheticEvent;
+          setAutoIncrementingNumber(autoIncrementingNumber + 1);
+          try {
+            webViewRef.current?.reload();
+          } catch (e) {
+            console.error(e);
+          }
+        }}
         bounces={false}
         overScrollMode="content"
         style={styles.webview}
