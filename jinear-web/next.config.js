@@ -2,6 +2,7 @@
 // with Sentry.
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+const { withAxiom } = require("next-axiom");
 const { withSentryConfig } = require("@sentry/nextjs");
 
 /** @type {import('next').NextConfig} */
@@ -20,4 +21,4 @@ const nextConfig = {
 };
 
 // module.exports = withPWA(nextConfig);
-module.exports = withSentryConfig(withPWA(nextConfig), { silent: false }, { hideSourcemaps: true });
+module.exports = withAxiom(withSentryConfig(withPWA(nextConfig), { silent: false }, { hideSourcemaps: true }));
