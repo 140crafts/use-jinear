@@ -19,6 +19,7 @@ import Scripts from "@/components/scripts/Scripts";
 import ThemeProvider from "@/components/themeProvider/ThemeProvider";
 import ToasterProvider from "@/components/toasterProvider/ToasterProvider";
 import WebViewEventListener from "@/components/webViewEventListener/WebViewEventListener";
+import { AxiomWebVitals } from "next-axiom";
 import "../styles/app.scss";
 import "../styles/fonts.css";
 
@@ -290,6 +291,7 @@ function MyApp({ children }: { children: React.ReactNode }) {
 
   return (
     <html>
+      <AxiomWebVitals />
       <body>
         <Root>
           <ReduxProvider>
