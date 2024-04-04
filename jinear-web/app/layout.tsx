@@ -291,7 +291,6 @@ function MyApp({ children }: { children: React.ReactNode }) {
 
   return (
     <html>
-      <AxiomWebVitals />
       <body>
         <Root>
           <ReduxProvider>
@@ -306,6 +305,7 @@ function MyApp({ children }: { children: React.ReactNode }) {
                   <FirebaseConfigration />
                 </ErrorBoundary>
               </PureClientOnly>
+              <AxiomWebVitals />
               {children}
               <ToasterProvider />
               <BodyFixer />
