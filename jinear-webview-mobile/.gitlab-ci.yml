@@ -22,5 +22,5 @@ expo-deployments:
     # - npx expo login --non-interactive -u cgdstnc Logging in with EXPO_TOKEN variable
     # - npx expo publish --non-interactive
     # - npx expo publish --non-interactive --release-channel 'production'
-    # - eas build --platform all --auto-submit --non-interactive
-    - eas build --platform ios --auto-submit --non-interactive --no-wait
+    - eas build --platform all --auto-submit --non-interactive --no-wait
+    # - eas build --platform ios --auto-submit --non-interactive --no-wait
