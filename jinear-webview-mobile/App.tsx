@@ -6,8 +6,8 @@ import * as Notifications from "expo-notifications";
 import { StatusBar, StatusBarStyle } from "expo-status-bar";
 import { requestTrackingPermissionsAsync } from "expo-tracking-transparency";
 import { useEffect, useRef, useState } from "react";
-import { BackHandler, Dimensions, Platform, StyleSheet, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { BackHandler, Dimensions, Platform, SafeAreaView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { SafeAreaView as SafeAreaViewFormContext } from "react-native-safe-area-context";
 import WebView, { WebViewMessageEvent } from "react-native-webview";
 import { ShouldStartLoadRequest } from "react-native-webview/lib/WebViewTypes";
 import Logger from "./utils/logger";
@@ -245,8 +245,10 @@ export default function App() {
     return true;
   };
 
+  const SafeAreaToUse = Platform.OS == "ios" ? SafeAreaView : SafeAreaViewFormContext;
+
   return (
-    <SafeAreaView style={{ ...styles.container, ...theme }}>
+    <SafeAreaToUse style={{ ...styles.container, ...theme }}>
       <StatusBar style={theme.statusBarStyle} />
       {showWebViewNavBar && (
         <View style={{ ...styles.webviewNav, ...theme }}>
@@ -295,7 +297,7 @@ export default function App() {
         onLoadEnd={loadingHandler}
         onShouldStartLoadWithRequest={_onShouldStartLoadWithRequest}
       />
-    </SafeAreaView>
+    </SafeAreaToUse>
   );
 }
 
