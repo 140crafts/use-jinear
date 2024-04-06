@@ -1,8 +1,7 @@
-package co.jinear.core.config.client.expo;
+package co.jinear.core.config.client.axiom;
 
-import co.jinear.core.config.interceptor.GenericClientLoggingInterceptor;
 import co.jinear.core.config.interceptor.GenericResponseErrorHandler;
-import co.jinear.core.config.properties.ExpoProperties;
+import co.jinear.core.config.properties.AxiomProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,32 +14,29 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriTemplateHandler;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
-public class ExpoClientConfig {
+public class AxiomClientConfig {
 
-    private final ExpoProperties expoProperties;
+    private final AxiomProperties axiomProperties;
 
-    @Bean("expoRestTemplate")
-    public RestTemplate expoRestTemplate(UriTemplateHandler expoApiUriTemplateHandler,
-                                         @Autowired GenericClientLoggingInterceptor genericClientLoggingInterceptor,
-                                         @Autowired GenericResponseErrorHandler genericResponseErrorHandler) {
+    @Bean("axiomRestTemplate")
+    public RestTemplate axiomRestTemplate(UriTemplateHandler axiomApiUriTemplateHandler,
+                                          @Autowired GenericResponseErrorHandler genericResponseErrorHandler) {
         SimpleClientHttpRequestFactory simpleClientHttpRequestFactory = new SimpleClientHttpRequestFactory();
         BufferingClientHttpRequestFactory bufferingClientHttpRequestFactory = new BufferingClientHttpRequestFactory(simpleClientHttpRequestFactory);
 
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setRequestFactory(bufferingClientHttpRequestFactory);
-        restTemplate.setUriTemplateHandler(expoApiUriTemplateHandler);
-        restTemplate.setInterceptors(List.of(genericClientLoggingInterceptor));
+        restTemplate.setUriTemplateHandler(axiomApiUriTemplateHandler);
         restTemplate.setErrorHandler(genericResponseErrorHandler);
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
         return restTemplate;
     }
 
     @Bean
-    public UriTemplateHandler expoApiUriTemplateHandler() {
-        return new DefaultUriBuilderFactory(expoProperties.getUrl());
+    public UriTemplateHandler axiomApiUriTemplateHandler() {
+        return new DefaultUriBuilderFactory(axiomProperties.getUrl());
     }
 }

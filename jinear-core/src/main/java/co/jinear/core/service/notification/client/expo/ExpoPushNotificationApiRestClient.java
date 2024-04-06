@@ -19,7 +19,7 @@ import org.springframework.web.client.RestTemplate;
 public class ExpoPushNotificationApiRestClient implements ExpoPushNotificationApiClient {
 
     private static final String AUTH_HEADER = "Bearer %s";
-    private static final String SEND = "/v2/push/send";
+    private static final String SEND = "/v2/push/send?useFcmV1=true";
 
     private final RestTemplate expoRestTemplate;
     private final ExpoProperties expoProperties;
