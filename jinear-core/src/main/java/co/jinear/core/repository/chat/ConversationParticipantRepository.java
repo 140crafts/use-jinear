@@ -2,6 +2,27 @@ package co.jinear.core.repository.chat;
 
 import co.jinear.core.model.entity.chat.ConversationParticipant;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface ConversationParticipantRepository extends JpaRepository<ConversationParticipant, String> {
+
+    @Query("""
+            select cp.conversationId
+            from ConversationParticipant cp
+            where
+            cp.accountId in :accountIds and
+            cp.passiveId is null and
+            cp.conversationId not in (select cp2.conversationId from ConversationParticipant cp2
+                                                                where cp2.accountId not in (:accountIds) and
+                                                                cp2.passiveId is null)
+            """)
+    String findConversationIdBetweenParticipants(@Param("accountIds") List<String> accountIds);
+
+    Optional<ConversationParticipant> findByConversationParticipantIdAndPassiveIdIsNull(String conversationParticipantId);
+
+    boolean existsByConversationIdAndAccountIdAndLeftAtIsNullAndPassiveIdIsNull(String conversationId, String accountId);
 }

@@ -1,7 +1,11 @@
 package co.jinear.core.repository.chat;
 
 import co.jinear.core.model.entity.chat.Thread;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ThreadRepository extends JpaRepository<Thread, String> {
+
+    Page<Thread> findAllByChannelIdAndPassiveIdIsNullOrderByLastActivityTimeDesc(String channelId, Pageable pageable);
 }

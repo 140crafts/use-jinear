@@ -9,6 +9,8 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
+import java.time.ZonedDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -30,7 +32,7 @@ public class Thread extends BaseEntity {
     private String channelId;
 
     @Column(name = "last_activity_time")
-    private String lastActivityTime;
+    private ZonedDateTime lastActivityTime;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
