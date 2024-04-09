@@ -35,4 +35,8 @@ public class WorkspaceValidator {
     public void validateWorkspaceRoles(String accountId, String workspaceId, List<WorkspaceAccountRoleType> roleTypes) {
         workspaceMemberService.validateAccountHasRoleInWorkspace(accountId, workspaceId, roleTypes);
     }
+
+    public boolean isWorkspaceAdminOrOwner(String accountId, String workspaceId) {
+        return workspaceMemberService.doesAccountHaveWorkspaceAdminAccess(accountId, workspaceId);
+    }
 }

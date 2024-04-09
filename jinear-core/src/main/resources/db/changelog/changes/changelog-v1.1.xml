@@ -1512,4 +1512,262 @@
             </column>
         </addColumn>
     </changeSet>
+
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-channel">
+        <createTable tableName="channel">
+            <column name="channel_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="participation_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="channel_visibility_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="ix_workspace_id" tableName="channel">
+            <column name="workspace_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-channel_member">
+        <createTable tableName="channel_member">
+            <column name="channel_member_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="channel_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="ix_channel_id" tableName="channel_member">
+            <column name="channel_id"/>
+        </createIndex>
+        <createIndex indexName="ix_account_id" tableName="channel_member">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-channel_settings">
+        <createTable tableName="channel_settings">
+            <column name="channel_settings_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="channel_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="settings_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="settings_value" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="ix_channel_id" tableName="channel_settings">
+            <column name="channel_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-conversation">
+        <createTable tableName="conversation">
+            <column name="conversation_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="last_activity_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-conversation_participant">
+        <createTable tableName="conversation_participant">
+            <column name="conversation_participant_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="conversation_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="left_at" type="datetime"/>
+        </createTable>
+
+        <createIndex indexName="ix_conversation_id" tableName="conversation_participant">
+            <column name="conversation_id"/>
+        </createIndex>
+        <createIndex indexName="ix_account_id" tableName="conversation_participant">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-message">
+        <createTable tableName="message">
+            <column name="message_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rich_text_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="thread_id" type="char(26)"/>
+            <column name="conversation_id" type="char(26)"/>
+        </createTable>
+
+        <createIndex indexName="ix_account_id" tableName="message">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="ix_thread_id" tableName="message">
+            <column name="thread_id"/>
+        </createIndex>
+        <createIndex indexName="ix_conversation_id" tableName="message">
+            <column name="conversation_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-message_data">
+        <createTable tableName="message_data">
+            <column name="message_data_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="message_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_key" type="int"/>
+            <column name="data_value" type="text"/>
+        </createTable>
+
+        <createIndex indexName="ix_message_id" tableName="message_data">
+            <column name="message_id"/>
+        </createIndex>
+        <createIndex indexName="ix_data_key" tableName="message_data">
+            <column name="data_key"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-message_reaction">
+        <createTable tableName="message_reaction">
+            <column name="message_reaction_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="message_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reaction_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unicode" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_message_id" tableName="message_reaction">
+            <column name="message_id"/>
+        </createIndex>
+        <createIndex indexName="ix_account_id" tableName="message_reaction">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-thread">
+        <createTable tableName="thread">
+            <column name="thread_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="channel_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_activity_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="ix_owner_id" tableName="thread">
+            <column name="owner_id"/>
+        </createIndex>
+        <createIndex indexName="ix_channel_id" tableName="thread">
+            <column name="channel_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-view-v_thread_message_info">
+        <createView
+                viewName="v_thread_message_info"
+                replaceIfExists="true">
+            select t.thread_id,
+                   (select m.message_id from message m where m.thread_id = t.thread_id order by m.idate asc limit 1) as initial_message_id, (select m.message_id from message m where m.thread_id = t.thread_id order by m.idate desc limit 1) as latest_message_id
+            from thread t;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-channel_member_role_type">
+        <addColumn tableName="channel_member">
+            <column name="role_type" type="int" afterColumn="account_id">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
