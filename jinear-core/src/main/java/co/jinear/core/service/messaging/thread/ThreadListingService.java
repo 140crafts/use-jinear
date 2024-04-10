@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ThreadListingService {
 
-    private static final int PAGE_SIZE = 25;
+    private static final int PAGE_SIZE = 100;
     private final ThreadRepository threadRepository;
 
     public Page<Thread> listThread(String channelId, int page) {

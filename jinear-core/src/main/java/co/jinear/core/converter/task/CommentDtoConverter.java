@@ -15,6 +15,7 @@ import java.util.Objects;
 
 @Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = {RichTextConverter.class, PlainAccountProfileDtoConverter.class})
 public interface CommentDtoConverter {
+//can be abstract class so AccountRetrieveService can be autowired
 
     CommentDto convert(Comment comment, AccountRetrieveService accountRetrieveService);
 
