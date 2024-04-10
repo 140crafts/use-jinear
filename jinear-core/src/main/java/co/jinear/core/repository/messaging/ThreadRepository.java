@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 public interface ThreadRepository extends JpaRepository<Thread, String> {
 
@@ -26,4 +27,6 @@ public interface ThreadRepository extends JpaRepository<Thread, String> {
                                 @Param("lastActivityTime") ZonedDateTime lastActivityTime);
 
     Page<Thread> findAllByChannelIdAndPassiveIdIsNullOrderByLastActivityTimeDesc(String channelId, Pageable pageable);
+
+    Optional<Thread> findByThreadIdAndPassiveIdIsNull(String threadId);
 }

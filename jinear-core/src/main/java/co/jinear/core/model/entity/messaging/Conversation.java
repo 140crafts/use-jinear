@@ -22,6 +22,12 @@ public class Conversation extends BaseEntity {
     @Column(name = "conversation_id")
     private String conversationId;
 
+    @Column(name = "workspace_id")
+    private String workspaceId;
+
     @Column(name = "last_activity_time")
     private ZonedDateTime lastActivityTime;
+
+    @OneToOne(mappedBy = "conversation")
+    private ConversationMessageInfo conversationMessageInfo;
 }

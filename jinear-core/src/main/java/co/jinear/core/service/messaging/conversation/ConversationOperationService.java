@@ -32,7 +32,7 @@ public class ConversationOperationService {
         try {
             log.info("Initialize conversation has started. participantAccountIds: {}", NormalizeHelper.listToString(participantAccountIds));
             conversationParticipantRetrieveService.validateConversationNotExistsBetweenAccounts(participantAccountIds);
-            Conversation conversation = initialize();
+            Conversation conversation = initialize(initializeConversationVo.getWorkspaceId());
             participantAccountIds.forEach(accId -> conversationParticipantOperationService.addParticipant(conversation.getConversationId(), accId));
             initializeFirstMessage(initializeConversationVo, conversation);
         } finally {
@@ -48,8 +48,9 @@ public class ConversationOperationService {
         messageOperationService.initialize(initializeMessageVo);
     }
 
-    private Conversation initialize() {
+    private Conversation initialize(String workspaceId) {
         Conversation conversation = new Conversation();
+        conversation.setWorkspaceId(workspaceId);
         conversation.setLastActivityTime(ZonedDateTime.now());
         return conversationRepository.save(conversation);
     }

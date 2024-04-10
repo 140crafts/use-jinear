@@ -1,6 +1,7 @@
 package co.jinear.core.service.messaging.thread;
 
-import co.jinear.core.model.entity.messaging.Thread;
+import co.jinear.core.converter.messaging.thread.ThreadDtoConverter;
+import co.jinear.core.model.dto.messaging.thread.ThreadDto;
 import co.jinear.core.repository.messaging.ThreadRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,9 +16,11 @@ public class ThreadListingService {
 
     private static final int PAGE_SIZE = 100;
     private final ThreadRepository threadRepository;
+    private final ThreadDtoConverter threadDtoConverter;
 
-    public Page<Thread> listThread(String channelId, int page) {
+    public Page<ThreadDto> listThreads(String channelId, int page) {
         log.info("List threads has started. channelId: {}, page: {}", channelId, page);
-        return threadRepository.findAllByChannelIdAndPassiveIdIsNullOrderByLastActivityTimeDesc(channelId, PageRequest.of(page, PAGE_SIZE));
+        return threadRepository.findAllByChannelIdAndPassiveIdIsNullOrderByLastActivityTimeDesc(channelId, PageRequest.of(page, PAGE_SIZE))
+                .map(threadDtoConverter::convert);
     }
 }

@@ -24,6 +24,9 @@ public class ThreadMessageInfo {
     @Column(name = "latest_message_id")
     private String latestMessageId;
 
+    @Column(name = "message_count")
+    private Long messageCount;
+
     @OneToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "initial_message_id", referencedColumnName = "message_id", insertable = false, updatable = false)

@@ -1,7 +1,7 @@
 package co.jinear.core.model.dto.messaging.message;
 
 import co.jinear.core.model.dto.BaseDto;
-import co.jinear.core.model.dto.account.PlainAccountDto;
+import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +20,7 @@ public class MessageDto extends BaseDto {
     private String threadId;
     @Nullable
     private String conversationId;
-    private PlainAccountDto account;
+    private PlainAccountProfileDto account;
     private RichTextDto richText;
     @Nullable
     private Set<MessageDataDto> messageData;

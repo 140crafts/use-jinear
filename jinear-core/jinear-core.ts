@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-04-09 22:09:20.
+// Generated using typescript-generator version 3.0.1157 on 2024-04-11 00:03:33.
 
 export interface BaseDto {
     createdDate: Date;
@@ -157,10 +157,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
     ginternalDate: string;
-    gthreadId: string;
     ghistoryId: string;
+    gthreadId: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -305,6 +305,29 @@ export interface PlainChannelDto extends BaseDto {
     channelVisibilityType: ChannelVisibilityType;
 }
 
+export interface ConversationDto {
+    conversationId: string;
+    workspaceId: string;
+    lastActivityTime: Date;
+    conversationMessageInfo: ConversationMessageInfoDto;
+}
+
+export interface ConversationMessageInfoDto {
+    conversationId: string;
+    lastMessageId: string;
+    lastMessage: MessageDto;
+}
+
+export interface ConversationParticipantDto extends BaseDto {
+    conversationParticipantId: string;
+    conversationId: string;
+    accountId: string;
+    lastCheck: Date;
+    leftAt: Date;
+    conversation: ConversationDto;
+    account: PlainAccountProfileDto;
+}
+
 export interface MessageDataDto extends BaseDto {
     messageDataId: string;
     messageId: string;
@@ -318,7 +341,7 @@ export interface MessageDto extends BaseDto {
     richTextId: string;
     threadId?: string | null;
     conversationId?: string | null;
-    account: PlainAccountDto;
+    account: PlainAccountProfileDto;
     richText: RichTextDto;
     messageData?: MessageDataDto[] | null;
     messageReactions?: MessageReactionDto[] | null;
@@ -330,22 +353,26 @@ export interface MessageReactionDto extends BaseDto {
     accountId: string;
     reactionType: MessageReactionType;
     unicode: string;
-    account: PlainAccountDto;
+    account: PlainAccountProfileDto;
 }
 
-export interface ThreadDto extends BaseDto {
+export interface PlainThreadDto extends BaseDto {
     threadId: string;
     ownerId: string;
     channelId: string;
     lastActivityTime: Date;
+}
+
+export interface ThreadDto extends PlainThreadDto {
     threadMessageInfo: ThreadMessageInfoDto;
-    account: PlainAccountDto;
+    account: PlainAccountProfileDto;
 }
 
 export interface ThreadMessageInfoDto {
     threadId: string;
     initialMessageId: string;
     latestMessageId: string;
+    messageCount: number;
     initialMessage: MessageDto;
     latestMessage: MessageDto;
 }
@@ -908,6 +935,22 @@ export interface InitializeChannelSettingsRequest extends BaseRequest {
     settingsValue: string;
 }
 
+export interface InitializeConversationRequest extends BaseRequest {
+    workspaceId: string;
+    initialMessageBody: string;
+    participantAccountIds: string[];
+}
+
+export interface SendMessageRequest extends BaseRequest {
+    body: string;
+    data?: { [index: string]: string } | null;
+}
+
+export interface InitializeThreadRequest extends BaseRequest {
+    channelId: string;
+    initialMessageBody: string;
+}
+
 export interface NotificationTargetInitializeRequest extends BaseRequest {
     externalTargetId: string;
     targetType?: NotificationTargetType | null;
@@ -1185,6 +1228,18 @@ export interface FeedMemberPaginatedResponse extends BaseResponse {
 
 export interface ChannelMemberListingResponse extends BaseResponse {
     data: ChannelMemberDto[];
+}
+
+export interface ConversationParticipantListingResponse extends BaseResponse {
+    data: ConversationParticipantDto[];
+}
+
+export interface MessageListingPaginatedResponse extends BaseResponse {
+    data: PageDto<MessageDto>;
+}
+
+export interface ThreadListingResponse extends BaseResponse {
+    data: PageDto<ThreadDto>;
 }
 
 export interface NotificationEventListingResponse extends BaseResponse {

@@ -11,6 +11,7 @@ public class ThreadMessageInfoDto {
     private String threadId;
     private String initialMessageId;
     private String latestMessageId;
+    private Long messageCount;
     private MessageDto initialMessage;
     private MessageDto latestMessage;
 }

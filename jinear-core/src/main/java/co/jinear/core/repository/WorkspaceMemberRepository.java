@@ -30,4 +30,6 @@ public interface WorkspaceMemberRepository extends JpaRepository<WorkspaceMember
     Optional<WorkspaceMember> findByWorkspaceMemberIdAndWorkspaceIdAndPassiveIdIsNull(String workspaceMemberId, String workspaceId);
 
     Optional<WorkspaceMember> findByWorkspaceMemberIdAndPassiveIdIsNull(String workspaceMemberId);
+
+    Long countAllByWorkspaceIdAndAccountIdIsInAndPassiveIdIsNull(String workspaceId, List<String> accountId);
 }

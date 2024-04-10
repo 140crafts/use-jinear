@@ -9,6 +9,7 @@ import java.util.List;
 @Setter
 public class InitializeConversationVo {
 
+    private String workspaceId;
     private String initializedBy;
     private String initialMessageBody;
     private List<String> participantAccountIds;

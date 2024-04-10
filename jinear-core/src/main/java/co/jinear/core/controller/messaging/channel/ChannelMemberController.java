@@ -15,13 +15,13 @@ public class ChannelMemberController {
     private final ChannelMemberManager channelMemberManager;
 
     @GetMapping("/memberships/{workspaceId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public ChannelMemberListingResponse retrieveMemberships(@PathVariable String workspaceId) {
         return channelMemberManager.retrieveMemberships(workspaceId);
     }
 
     @GetMapping("/list/{channelId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public ChannelMemberListingResponse retrieveChannelMembers(@PathVariable String channelId) {
         return channelMemberManager.retrieveMemberList(channelId);
     }
@@ -33,7 +33,7 @@ public class ChannelMemberController {
     }
 
     @PostMapping("/leave/{channelId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public BaseResponse leave(@PathVariable String channelId) {
         return channelMemberManager.leave(channelId);
     }
@@ -46,7 +46,7 @@ public class ChannelMemberController {
     }
 
     @PostMapping("/remove/{channelId}/account/{accountId}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public BaseResponse remove(@PathVariable String channelId,
                                @PathVariable String accountId) {
         return channelMemberManager.remove(channelId, accountId);

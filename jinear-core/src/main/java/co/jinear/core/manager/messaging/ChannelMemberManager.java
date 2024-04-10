@@ -42,7 +42,7 @@ public class ChannelMemberManager {
 
     public ChannelMemberListingResponse retrieveMemberList(String channelId) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        validateChannelMember(channelId, currentAccountId);
+        channelAccessValidator.validateChannelAccess(channelId, currentAccountId);
         log.info("Retrieve member list has started. channelId: {}, currentAccountId: {}", channelId, currentAccountId);
         List<ChannelMemberDto> channelMemberDtos = channelMemberListingService.retrieveChannelMembers(channelId);
         return mapResponse(channelMemberDtos);
@@ -50,7 +50,7 @@ public class ChannelMemberManager {
 
     public BaseResponse join(String channelId) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        validateIsNotAlreadyMember(channelId, currentAccountId);
+        channelAccessValidator.validateIsNotAlreadyMember(channelId, currentAccountId);
         validateChannelIsAccessible(channelId);
         log.info("Join has started. channelId: {}", channelId);
         channelMemberOperationService.addMember(channelId, currentAccountId, ChannelMemberRoleType.MEMBER);
@@ -68,8 +68,8 @@ public class ChannelMemberManager {
 
     public BaseResponse add(String channelId, String accountId) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        validateIsNotAlreadyMember(channelId, currentAccountId);
         validateUserNotTryingToCallItself(accountId, currentAccountId);
+        channelAccessValidator.validateIsNotAlreadyMember(channelId, accountId);
         log.info("Add has started. currentAccountId: {}, channelId: {}, accountId: {}", currentAccountId, channelId, accountId);
         channelAccessValidator.validateChannelAdminAccess(currentAccountId, channelId);
         channelMemberOperationService.addMember(channelId, accountId, ChannelMemberRoleType.MEMBER);
@@ -91,18 +91,6 @@ public class ChannelMemberManager {
         PlainChannelDto plainChannelDto = channelRetrieveService.retrievePlain(channelId);
         ChannelVisibilityType channelVisibilityType = plainChannelDto.getChannelVisibilityType();
         if (ChannelVisibilityType.MEMBERS_ONLY.equals(channelVisibilityType)) {
-            throw new NoAccessException();
-        }
-    }
-
-    private void validateIsNotAlreadyMember(String channelId, String currentAccountId) {
-        if (channelMemberOperationService.checkIsMember(channelId, currentAccountId)) {
-            throw new BusinessException();
-        }
-    }
-
-    private void validateChannelMember(String channelId, String currentAccountId) {
-        if (Boolean.FALSE.equals(channelMemberOperationService.checkIsMember(channelId, currentAccountId))) {
             throw new NoAccessException();
         }
     }

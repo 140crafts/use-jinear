@@ -106,6 +106,14 @@ public class WorkspaceMemberService {
                 .forEach(workspaceMember -> deleteMember(workspaceMember, passiveId));
     }
 
+    public void validateAllHasAccess(String workspaceId, List<String> accountIds) {
+        log.info("Validate all has access has started. workspaceId: {}, accountIds: {}", workspaceId, NormalizeHelper.listToString(accountIds));
+        Long existingCount = workspaceMemberRepository.countAllByWorkspaceIdAndAccountIdIsInAndPassiveIdIsNull(workspaceId, accountIds);
+        if (Boolean.FALSE.equals(NumberCompareHelper.isEquals(existingCount.intValue(), accountIds.size()))) {
+            throw new NoAccessException();
+        }
+    }
+
     private void createWorkspaceRole(InitializeWorkspaceMemberVo initializeWorkspaceMemberVo) {
         WorkspaceMember workspaceMember = new WorkspaceMember();
         workspaceMember.setWorkspaceId(initializeWorkspaceMemberVo.getWorkspaceId());

@@ -3,7 +3,9 @@ package co.jinear.core.controller.messaging.thread;
 import co.jinear.core.manager.messaging.ThreadManager;
 import co.jinear.core.model.request.messaging.thread.InitializeThreadRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.messaging.ThreadListingResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -21,4 +23,10 @@ public class ThreadController {
         return threadManager.initializeThread(initializeThreadRequest);
     }
 
+    @GetMapping("/channel/{channelId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ThreadListingResponse list(@PathVariable String channelId,
+                                      @RequestParam(required = false, defaultValue = "0") @Valid @Min(0) Integer page) {
+        return threadManager.listThreads(channelId, page);
+    }
 }

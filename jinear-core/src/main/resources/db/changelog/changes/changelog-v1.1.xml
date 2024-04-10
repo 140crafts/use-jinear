@@ -1770,4 +1770,60 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-461-update-chat-view-v_thread_message_info-add-message_count">
+        <createView
+                viewName="v_thread_message_info"
+                replaceIfExists="true">
+            select t.thread_id,
+                   (select m.message_id
+                    from message m
+                    where m.thread_id = t.thread_id
+                    order by m.idate asc
+                       limit 1) as initial_message_id,
+       (select m.message_id
+        from message m
+        where m.thread_id = t.thread_id
+        order by m.idate desc
+        limit 1) as latest_message_id,
+       (select count(*)
+        from message m
+        where m.thread_id = t.thread_id) as message_count
+            from thread t;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-workspace_id-to-conversation">
+        <addColumn tableName="conversation">
+            <column name="workspace_id" type="char(26)" afterColumn="conversation_id">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="ix_workspace_id" tableName="conversation">
+            <column name="workspace_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-view-v_conversation_message_info">
+        <createView
+                viewName="v_conversation_message_info"
+                replaceIfExists="true">
+            select c.conversation_id,
+                   (select m.message_id
+                    from message m
+                    where m.message_id = c.conversation_id
+                    order by c.idate desc
+                       limit 1) as last_message_id
+            from conversation c;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-last_check-to-conversation_participant">
+        <addColumn tableName="conversation_participant">
+            <column name="last_check" type="datetime" afterColumn="account_id">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

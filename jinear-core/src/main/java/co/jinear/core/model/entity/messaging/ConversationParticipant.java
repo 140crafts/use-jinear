@@ -31,6 +31,9 @@ public class ConversationParticipant extends BaseEntity {
     @Column(name = "account_id")
     private String accountId;
 
+    @Column(name = "last_check")
+    private ZonedDateTime lastCheck;
+
     @Column(name = "left_at")
     private ZonedDateTime leftAt;
 

@@ -25,4 +25,6 @@ public interface ConversationParticipantRepository extends JpaRepository<Convers
     Optional<ConversationParticipant> findByConversationParticipantIdAndPassiveIdIsNull(String conversationParticipantId);
 
     boolean existsByConversationIdAndAccountIdAndLeftAtIsNullAndPassiveIdIsNull(String conversationId, String accountId);
+
+    List<ConversationParticipant> findAllByConversation_WorkspaceIdAndAccountIdAndPassiveIdIsNullOrderByLastUpdatedDateDesc(String workspaceId, String accountId);
 }
