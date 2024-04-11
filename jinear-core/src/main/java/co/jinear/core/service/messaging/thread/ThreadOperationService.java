@@ -4,6 +4,7 @@ import co.jinear.core.model.entity.messaging.Thread;
 import co.jinear.core.model.vo.messaging.message.InitializeMessageVo;
 import co.jinear.core.repository.messaging.ThreadRepository;
 import co.jinear.core.service.messaging.message.MessageOperationService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class ThreadOperationService {
     private final ThreadRepository threadRepository;
     private final MessageOperationService messageOperationService;
 
+    @Transactional
     public void initializeThread(String ownerId, String channelId, String initialMessageBody) {
         log.info("Initialize thread has started. ownerId: {}, channelId: {}", ownerId, channelId);
         Thread thread = initialize(ownerId, channelId);

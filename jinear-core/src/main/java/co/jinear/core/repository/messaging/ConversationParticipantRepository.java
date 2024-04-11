@@ -15,9 +15,11 @@ public interface ConversationParticipantRepository extends JpaRepository<Convers
             from ConversationParticipant cp
             where
             cp.accountId in :accountIds and
+            cp.leftAt is null and
             cp.passiveId is null and
             cp.conversationId not in (select cp2.conversationId from ConversationParticipant cp2
                                                                 where cp2.accountId not in (:accountIds) and
+                                                                cp2.leftAt is null and
                                                                 cp2.passiveId is null)
             """)
     String findConversationIdBetweenParticipants(@Param("accountIds") List<String> accountIds);

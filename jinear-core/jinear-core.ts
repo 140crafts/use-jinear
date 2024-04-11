@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-04-11 00:03:33.
+// Generated using typescript-generator version 3.0.1157 on 2024-04-11 12:17:39.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -157,9 +157,9 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
     ghistoryId: string;
     gthreadId: string;
+    ginternalDate: string;
     gid: string;
 }
 
@@ -366,6 +366,7 @@ export interface PlainThreadDto extends BaseDto {
 export interface ThreadDto extends PlainThreadDto {
     threadMessageInfo: ThreadMessageInfoDto;
     account: PlainAccountProfileDto;
+    channel: PlainChannelDto;
 }
 
 export interface ThreadMessageInfoDto {
@@ -1172,6 +1173,7 @@ export interface BaseResponse {
     responseLocale: string;
     systemTime: number;
     conversationId: string;
+    additionalInfo: { [index: string]: string };
 }
 
 export interface AccountCommunicationPermissionsResponse extends BaseResponse {
@@ -1224,6 +1226,10 @@ export interface FeedMemberListingResponse extends BaseResponse {
 
 export interface FeedMemberPaginatedResponse extends BaseResponse {
     data: PageDto<FeedMemberDto>;
+}
+
+export interface ChannelListingResponse extends BaseResponse {
+    data: PlainChannelDto[];
 }
 
 export interface ChannelMemberListingResponse extends BaseResponse {
@@ -1618,7 +1624,7 @@ export type ChannelParticipationType = "EVERYONE" | "ADMINS_CAN_START_CONVERSATI
 
 export type ChannelSettingType = "SYNC_MEMBERS_WITH_TEAM";
 
-export type ChannelVisibilityType = "EVERYONE" | "MEMBERS_ONLY";
+export type ChannelVisibilityType = "EVERYONE" | "MEMBERS_ONLY" | "PUBLIC_WITH_GUESTS";
 
 export type MessageReactionType = "UNICODE_EMOJI";
 

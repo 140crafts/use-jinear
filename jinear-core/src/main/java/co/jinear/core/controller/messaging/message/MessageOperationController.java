@@ -22,5 +22,10 @@ public class MessageOperationController {
         return messageOperationManager.sendToThread(threadId, sendMessageRequest);
     }
 
-    // /conversation/{conversation}/send
+    @PostMapping("/conversation/{conversationId}/send")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BaseResponse sendToConversation(@PathVariable String conversationId,
+                                           @Valid @RequestBody SendMessageRequest sendMessageRequest) {
+        return messageOperationManager.sendToConversation(conversationId, sendMessageRequest);
+    }
 }

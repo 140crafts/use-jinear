@@ -1,6 +1,7 @@
 package co.jinear.core.model.dto.messaging.thread;
 
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.dto.messaging.channel.PlainChannelDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,4 +17,5 @@ public class ThreadDto extends PlainThreadDto {
     private ZonedDateTime lastActivityTime;
     private ThreadMessageInfoDto threadMessageInfo;
     private PlainAccountProfileDto account;
+    private PlainChannelDto channel;
 }

@@ -18,6 +18,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.*;
 
@@ -106,8 +107,8 @@ public class WorkspaceMemberService {
                 .forEach(workspaceMember -> deleteMember(workspaceMember, passiveId));
     }
 
-    public void validateAllHasAccess(String workspaceId, List<String> accountIds) {
-        log.info("Validate all has access has started. workspaceId: {}, accountIds: {}", workspaceId, NormalizeHelper.listToString(accountIds));
+    public void validateAllHasAccess(String workspaceId, Set<String> accountIds) {
+        log.info("Validate all has access has started. workspaceId: {}, accountIds: {}", workspaceId, StringUtils.join(accountIds, ","));
         Long existingCount = workspaceMemberRepository.countAllByWorkspaceIdAndAccountIdIsInAndPassiveIdIsNull(workspaceId, accountIds);
         if (Boolean.FALSE.equals(NumberCompareHelper.isEquals(existingCount.intValue(), accountIds.size()))) {
             throw new NoAccessException();

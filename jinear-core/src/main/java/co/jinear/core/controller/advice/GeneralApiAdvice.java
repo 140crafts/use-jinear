@@ -34,6 +34,7 @@ public class GeneralApiAdvice {
         log.error(ex.getMessage(), ex);
         try {
             BaseResponse baseResponse = apiAdviceHelper.createErrorResponse(localeMessage);
+            baseResponse.setAdditionalInfo(ex.getAdditionalInfo());
             return new ResponseEntity<>(baseResponse, HttpStatus.UNPROCESSABLE_ENTITY);
         } catch (Exception e) {
             return apiAdviceHelper.getUnknownExceptionResponse(ex);

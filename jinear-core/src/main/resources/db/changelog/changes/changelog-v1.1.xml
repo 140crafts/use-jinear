@@ -1826,4 +1826,42 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-461-remove-not-null-on-conversation_participant-last_check">
+        <dropNotNullConstraint
+                tableName="conversation_participant"
+                columnName="last_check"
+                columnDataType="datetime"
+        />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-update-chat-view-v_conversation_message_info">
+        <createView
+                viewName="v_conversation_message_info"
+                replaceIfExists="true">
+            select c.conversation_id,
+                   (select m.message_id
+                    from message m
+                    where m.conversation_id = c.conversation_id
+                    order by c.idate desc
+                       limit 1) as last_message_id
+            from conversation c;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-change-data-type-on-message_data">
+        <modifyDataType
+                tableName="message_data"
+                columnName="data_key"
+                newDataType="varchar(512)"
+        />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-silent_until-conversation_participant-channel_member">
+        <addColumn tableName="channel_member">
+            <column name="silent_until" type="datetime" afterColumn="role_type"/>
+        </addColumn>
+        <addColumn tableName="conversation_participant">
+            <column name="silent_until" type="datetime" afterColumn="left_at"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

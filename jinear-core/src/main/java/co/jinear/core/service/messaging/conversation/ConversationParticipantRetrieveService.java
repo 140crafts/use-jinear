@@ -1,6 +1,7 @@
 package co.jinear.core.service.messaging.conversation;
 
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.entity.messaging.ConversationParticipant;
 import co.jinear.core.repository.messaging.ConversationParticipantRepository;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Slf4j
@@ -26,7 +28,7 @@ public class ConversationParticipantRetrieveService {
     public void validateConversationNotExistsBetweenAccounts(List<String> participantAccountIds) {
         String existingConversationId = findConversationIdBetweenAccounts(participantAccountIds);
         if (Objects.nonNull(existingConversationId)) {
-            throw new BusinessException();
+            throw new BusinessException("messaging.conversation.exists-with-participants", Map.of("existingConversationId", existingConversationId));
         }
     }
 
@@ -37,12 +39,19 @@ public class ConversationParticipantRetrieveService {
 
     public void validateParticipantIsNotAlreadyInConversation(String conversationId, String accountId) {
         log.info("Check participant is already in conversation has started. conversationId: {}, accountId: {}", conversationId, accountId);
-        if (checkParticipantIsAlreadyInConversation(conversationId, accountId)) {
-            throw new BusinessException();
+        if (checkParticipantIsInConversation(conversationId, accountId)) {
+            throw new BusinessException("messaging.conversation.already-participant");
         }
     }
 
-    private boolean checkParticipantIsAlreadyInConversation(String conversationId, String accountId) {
+    public void validateParticipantIsInConversation(String accountId, String conversationId) {
+        log.info("Validate participant is in conversation has started. accountId: {}, conversationId: {}", accountId, conversationId);
+        if (Boolean.FALSE.equals(checkParticipantIsInConversation(conversationId, accountId))) {
+            throw new NoAccessException();
+        }
+    }
+
+    private boolean checkParticipantIsInConversation(String conversationId, String accountId) {
         return conversationParticipantRepository.existsByConversationIdAndAccountIdAndLeftAtIsNullAndPassiveIdIsNull(conversationId, accountId);
     }
 }

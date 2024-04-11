@@ -5,6 +5,7 @@ import co.jinear.core.model.enumtype.messaging.ChannelParticipationType;
 import co.jinear.core.model.enumtype.messaging.ChannelVisibilityType;
 import co.jinear.core.model.request.messaging.channel.InitializeChannelRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.messaging.ChannelListingResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,12 @@ public class ChannelController {
         return channelManager.initializeChannel(initializeChannelRequest);
     }
 
+    @GetMapping("/workspace/{workspaceId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ChannelListingResponse listChannels(@PathVariable String workspaceId) {
+        return channelManager.listChannels(workspaceId);
+    }
+
     @PutMapping("/{channelId}/participation/{participationType}")
     @ResponseStatus(HttpStatus.OK)
     public BaseResponse updateParticipation(@PathVariable String channelId,
@@ -32,7 +39,7 @@ public class ChannelController {
 
     @PutMapping("/{channelId}/visibility/{channelVisibilityType}")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse updateParticipation(@PathVariable String channelId,
+    public BaseResponse updateVisibility(@PathVariable String channelId,
                                             @PathVariable ChannelVisibilityType channelVisibilityType) {
         return channelManager.updateVisibility(channelId, channelVisibilityType);
     }

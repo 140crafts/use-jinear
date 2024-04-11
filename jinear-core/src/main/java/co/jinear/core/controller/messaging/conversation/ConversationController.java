@@ -27,5 +27,4 @@ public class ConversationController {
     public ConversationParticipantListingResponse retrieveParticipated(@PathVariable String workspaceId) {
         return conversationManager.retrieveParticipated(workspaceId);
     }
-
 }

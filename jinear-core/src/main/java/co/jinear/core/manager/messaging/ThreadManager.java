@@ -28,7 +28,7 @@ public class ThreadManager {
         String accountId = sessionInfoService.currentAccountId();
         String channelId = initializeThreadRequest.getChannelId();
         String initialMessageBody = initializeThreadRequest.getInitialMessageBody();
-        channelAccessValidator.validateChannelAdminAccess(accountId, channelId);
+        channelAccessValidator.validateChannelParticipationAccess(accountId, channelId);
         log.info("Initialize thread has started. accountId: {}, initializeThreadRequest: {}", accountId, initializeThreadRequest);
         threadOperationService.initializeThread(accountId, channelId, initialMessageBody);
         return new BaseResponse();

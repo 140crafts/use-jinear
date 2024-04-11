@@ -12,6 +12,8 @@ import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
+import java.time.ZonedDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -35,6 +37,9 @@ public class ChannelMember extends BaseEntity {
     @Convert(converter = ChannelMemberRoleTypeConverter.class)
     @Column(name = "role_type")
     private ChannelMemberRoleType roleType;
+
+    @Column(name = "silent_until")
+    private ZonedDateTime silentUntil;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)

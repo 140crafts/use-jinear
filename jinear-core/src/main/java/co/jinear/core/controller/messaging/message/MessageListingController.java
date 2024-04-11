@@ -19,8 +19,15 @@ public class MessageListingController {
 
     @GetMapping("/thread/{threadId}")
     @ResponseStatus(HttpStatus.OK)
-    public MessageListingPaginatedResponse retrieve(@PathVariable String threadId,
-                                                    @Valid @RequestParam("before") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime before) {
+    public MessageListingPaginatedResponse retrieveThread(@PathVariable String threadId,
+                                                          @Valid @RequestParam("before") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime before) {
         return messageListingManager.listThreadMessagesBefore(threadId, before);
+    }
+
+    @GetMapping("/conversation/{conversationId}")
+    @ResponseStatus(HttpStatus.OK)
+    public MessageListingPaginatedResponse retrieveConversation(@PathVariable String conversationId,
+                                                                @Valid @RequestParam("before") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime before) {
+        return messageListingManager.listConversationMessagesBefore(conversationId, before);
     }
 }

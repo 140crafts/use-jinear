@@ -9,5 +9,7 @@ import java.util.Date;
 
 public interface MessageRepository extends JpaRepository<Message, String> {
 
-    Page<Message> findAllByThreadIdAndCreatedDateBeforeAndPassiveIdIsNullOrderByCreatedDateAsc(String threadId, Date createdDateBefore, Pageable pageable);
+    Page<Message> findAllByThreadIdAndCreatedDateBeforeAndPassiveIdIsNullOrderByCreatedDateDesc(String threadId, Date createdDateBefore, Pageable pageable);
+
+    Page<Message> findAllByConversationIdAndCreatedDateBeforeAndPassiveIdIsNullOrderByCreatedDateDesc(String threadId, Date createdDateBefore, Pageable pageable);
 }

@@ -15,8 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -48,7 +49,7 @@ public class ConversationManager {
     }
 
     private void validateAllParticipantsHasAccessIncludingOwner(InitializeConversationRequest initializeConversationRequest, String currentAccountId) {
-        List<String> participants = new ArrayList<>(initializeConversationRequest.getParticipantAccountIds());
+        Set<String> participants = new HashSet<>(initializeConversationRequest.getParticipantAccountIds());
         participants.add(currentAccountId);
         workspaceMemberService.validateAllHasAccess(initializeConversationRequest.getWorkspaceId(), participants);
     }

@@ -35,9 +35,15 @@ public class MessageOperationService {
         RichTextDto richTextDto = initializeRichText(initializeMessageVo);
         Message saved = saveMessage(initializeMessageVo, richTextDto);
         richTextInitializeService.updateRelatedObjectId(richTextDto.getRichTextId(), saved.getMessageId());
-        messageDataOperationService.initializeAll(saved.getMessageId(), initializeMessageVo.getData());
+        initializeMessageData(initializeMessageVo, saved);
         updateConversationLastUpdateDateAsNow(saved);
         updateThreadConversationLastUpdateDateAsNow(saved);
+    }
+
+    private void initializeMessageData(InitializeMessageVo initializeMessageVo, Message saved) {
+        Optional.of(initializeMessageVo)
+                .map(InitializeMessageVo::getData)
+                .ifPresent(data -> messageDataOperationService.initializeAll(saved.getMessageId(), data));
     }
 
     private void updateThreadConversationLastUpdateDateAsNow(Message message) {

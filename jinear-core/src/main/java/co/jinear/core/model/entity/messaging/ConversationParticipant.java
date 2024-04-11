@@ -37,6 +37,9 @@ public class ConversationParticipant extends BaseEntity {
     @Column(name = "left_at")
     private ZonedDateTime leftAt;
 
+    @Column(name = "silent_until")
+    private ZonedDateTime silentUntil;
+
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "conversation_id", insertable = false, updatable = false)

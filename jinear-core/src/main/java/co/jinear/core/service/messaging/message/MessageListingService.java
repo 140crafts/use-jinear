@@ -23,7 +23,13 @@ public class MessageListingService {
 
     public Page<MessageDto> retrieveThreadMessagesBefore(String threadId, Date before) {
         log.info("Retrieve thread messages before has started. threadId: {}, before: {}", threadId, before);
-        return messageRepository.findAllByThreadIdAndCreatedDateBeforeAndPassiveIdIsNullOrderByCreatedDateAsc(threadId, before, PageRequest.of(0, PAGE_SIZE))
+        return messageRepository.findAllByThreadIdAndCreatedDateBeforeAndPassiveIdIsNullOrderByCreatedDateDesc(threadId, before, PageRequest.of(0, PAGE_SIZE))
+                .map(messageDtoConverter::convert);
+    }
+
+    public Page<MessageDto> retrieveConversationMessagesBefore(String conversationId, Date before) {
+        log.info("Retrieve conversation messages before has started. conversationId: {}, before: {}", conversationId, before);
+        return messageRepository.findAllByConversationIdAndCreatedDateBeforeAndPassiveIdIsNullOrderByCreatedDateDesc(conversationId, before, PageRequest.of(0, PAGE_SIZE))
                 .map(messageDtoConverter::convert);
     }
 }
