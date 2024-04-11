@@ -16,6 +16,6 @@ public class AxiomApiMockClient implements AxiomApiClient {
 
     @Override
     public void ingest(List<AxiomIngestRequest> axiomIngestRequest) {
-        log.info("[MOCK] Axiom ingest has started. axiomIngestRequest");
+//        log.info("[MOCK] Axiom ingest has started. axiomIngestRequest");
     }
 }
