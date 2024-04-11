@@ -35,6 +35,13 @@ public class TaskAnalyticsService {
         return count;
     }
 
+    public Long retrieveMaxTeamTagNo(String teamId) {
+        log.info("Retrieve max team tag no has started for teamId: {}", teamId);
+        Long max = taskAnalyticsRepository.getMaxTeamTagNo(teamId);
+        log.info("Retrieve max team tag no has completed: max: {}, teamId: {}", max, teamId);
+        return max;
+    }
+
     public TaskAnalyticNumbersDto retrieveNumbers(String workspaceId, String teamId, ZonedDateTime relativeDate) {
         log.info("Retrieve numbers has started. workspaceId: {}, teamId: {}, relativeDate: {}", workspaceId, teamId, relativeDate);
         Long missedDeadlineCount = countTasksBeforeDateWithStatus(workspaceId, teamId, UNDONE_STATES, relativeDate);

@@ -91,7 +91,7 @@ public class TaskInitializeService {
     }
 
     private void assignTeamTaskNo(Task task) {
-        Long count = taskAnalyticsService.countAllByTeamId(task.getTeamId());
+        Long count = taskAnalyticsService.retrieveMaxTeamTagNo(task.getTeamId());
         task.setTeamTagNo(count.intValue() + 1);
     }
 
