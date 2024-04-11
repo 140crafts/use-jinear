@@ -16,6 +16,9 @@ public interface TaskAnalyticsRepository extends JpaRepository<Task, String> {
 
     Long countAllByTeamId(String teamId);
 
+    @Query("select max(t.teamTagNo) from Task t where t.teamId = :teamId")
+    Long getMaxTeamTagNo(@Param("teamId") String teamId);
+
     @Query("""
                  select count(t)
                  from Task t where
