@@ -11,6 +11,7 @@ import co.jinear.core.model.response.messaging.ChannelMemberListingResponse;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.messaging.channel.ChannelMemberListingService;
 import co.jinear.core.service.messaging.channel.ChannelMemberOperationService;
+import co.jinear.core.service.messaging.channel.ChannelMemberRetrieveService;
 import co.jinear.core.service.messaging.channel.ChannelRetrieveService;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.validator.messaging.channel.ChannelAccessValidator;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 
 @Slf4j
@@ -29,6 +31,7 @@ public class ChannelMemberManager {
     private final SessionInfoService sessionInfoService;
     private final ChannelMemberListingService channelMemberListingService;
     private final ChannelMemberOperationService channelMemberOperationService;
+    private final ChannelMemberRetrieveService channelMemberRetrieveService;
     private final ChannelRetrieveService channelRetrieveService;
     private final ChannelAccessValidator channelAccessValidator;
     private final PassiveService passiveService;
@@ -84,6 +87,14 @@ public class ChannelMemberManager {
         log.info("Remove has started. currentAccountId: {}, channelId: {}, accountId: {}", currentAccountId, channelId, accountId);
         String passiveId = passiveService.createUserActionPassive(currentAccountId);
         channelMemberOperationService.removeMember(passiveId, channelId, accountId);
+        return new BaseResponse();
+    }
+
+    public BaseResponse mute(String channelId, ZonedDateTime silentUntil) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        ChannelMemberDto channelMemberDto = channelMemberRetrieveService.retrieve(channelId, currentAccountId);
+        log.info("Mute channel has started. currentAccountId: {}, channelId: {}, silentUntil: {}", currentAccountId, channelId, silentUntil);
+        channelMemberOperationService.updateSilentUntil(channelMemberDto.getChannelMemberId(), silentUntil);
         return new BaseResponse();
     }
 

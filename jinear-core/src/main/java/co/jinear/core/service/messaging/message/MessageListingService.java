@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -31,5 +32,10 @@ public class MessageListingService {
         log.info("Retrieve conversation messages before has started. conversationId: {}, before: {}", conversationId, before);
         return messageRepository.findAllByConversationIdAndCreatedDateBeforeAndPassiveIdIsNullOrderByCreatedDateDesc(conversationId, before, PageRequest.of(0, PAGE_SIZE))
                 .map(messageDtoConverter::convert);
+    }
+
+    public List<String> retrieveAccountIdsParticipatedInThread(String threadId) {
+        log.info("Retrieve account ids participated in thread has started. threadId: {}", threadId);
+        return messageRepository.findDistinctThreadParticipantAccounts(threadId);
     }
 }

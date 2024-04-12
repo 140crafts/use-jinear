@@ -8,6 +8,7 @@ import co.jinear.core.service.notification.client.expo.ExpoPushNotificationApiCl
 import co.jinear.core.service.notification.client.expo.request.ExpoPushNotificationRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class ExpoNotificationDeliveryStrategy implements NotificationDeliveryStr
 
     private final ExpoPushNotificationApiClient expoPushNotificationApiClient;
 
+    @Async
     @Override
     public void send(NotificationMessageVo notificationMessageVo) {
         log.info("Expo notification send has started. notificationMessageVo: {}", notificationMessageVo);

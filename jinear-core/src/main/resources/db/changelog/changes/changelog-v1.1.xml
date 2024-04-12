@@ -1864,4 +1864,16 @@
             <column name="silent_until" type="datetime" afterColumn="left_at"/>
         </addColumn>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-thread_id-notification_event">
+        <dropNotNullConstraint
+                tableName="notification_event"
+                columnName="team_id"
+                columnDataType="char(26)"
+        />
+        <addColumn tableName="notification_event">
+            <column name="thread_id" type="char(26)" afterColumn="task_id"/>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

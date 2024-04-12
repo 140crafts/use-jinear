@@ -3,9 +3,13 @@ package co.jinear.core.controller.messaging.channel;
 import co.jinear.core.manager.messaging.ChannelMemberManager;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.messaging.ChannelMemberListingResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.ZonedDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +36,7 @@ public class ChannelMemberController {
         return channelMemberManager.join(channelId);
     }
 
+
     @PostMapping("/leave/{channelId}")
     @ResponseStatus(HttpStatus.OK)
     public BaseResponse leave(@PathVariable String channelId) {
@@ -50,5 +55,12 @@ public class ChannelMemberController {
     public BaseResponse remove(@PathVariable String channelId,
                                @PathVariable String accountId) {
         return channelMemberManager.remove(channelId, accountId);
+    }
+
+    @PostMapping("/channel/{channelId}/mute")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BaseResponse mute(@PathVariable String channelId,
+                             @Valid @RequestParam("silentUntil") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime silentUntil) {
+        return channelMemberManager.mute(channelId, silentUntil);
     }
 }

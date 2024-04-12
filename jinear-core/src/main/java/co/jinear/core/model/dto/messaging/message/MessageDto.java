@@ -5,12 +5,14 @@ import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.Set;
 
 @Getter
 @Setter
+@ToString(callSuper = true)
 public class MessageDto extends BaseDto {
 
     private String messageId;
@@ -20,10 +22,14 @@ public class MessageDto extends BaseDto {
     private String threadId;
     @Nullable
     private String conversationId;
+    @ToString.Exclude
     private PlainAccountProfileDto account;
+    @ToString.Exclude
     private RichTextDto richText;
     @Nullable
+    @ToString.Exclude
     private Set<MessageDataDto> messageData;
     @Nullable
+    @ToString.Exclude
     private Set<MessageReactionDto> messageReactions;
 }

@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -41,5 +43,12 @@ public class ChannelMemberOperationService {
     public boolean checkIsMember(String channelId, String accountId) {
         log.info("Check is member has started. channelId: {}, accountId: {}", channelId, accountId);
         return channelMemberRepository.existsByChannelIdAndAccountIdAndPassiveIdIsNull(channelId, accountId);
+    }
+
+    public void updateSilentUntil(String channelMemberId, ZonedDateTime silentUntil) {
+        log.info("Update silent until has started. channelMemberId: {}, silentUntil: {}", channelMemberId, silentUntil);
+        ChannelMember channelMember = channelMemberRetrieveService.retrieveEntity(channelMemberId);
+        channelMember.setSilentUntil(silentUntil);
+        channelMemberRepository.save(channelMember);
     }
 }

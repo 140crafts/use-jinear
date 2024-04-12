@@ -1,5 +1,8 @@
 package co.jinear.core.service.messaging.thread;
 
+import co.jinear.core.converter.messaging.thread.ThreadDtoConverter;
+import co.jinear.core.model.dto.messaging.message.RichMessageDto;
+import co.jinear.core.model.dto.messaging.thread.ThreadDto;
 import co.jinear.core.model.entity.messaging.Thread;
 import co.jinear.core.model.vo.messaging.message.InitializeMessageVo;
 import co.jinear.core.repository.messaging.ThreadRepository;
@@ -18,20 +21,28 @@ public class ThreadOperationService {
 
     private final ThreadRepository threadRepository;
     private final MessageOperationService messageOperationService;
+    private final ThreadDtoConverter threadDtoConverter;
 
     @Transactional
-    public void initializeThread(String ownerId, String channelId, String initialMessageBody) {
+    public RichMessageDto initializeThread(String ownerId, String channelId, String initialMessageBody) {
         log.info("Initialize thread has started. ownerId: {}, channelId: {}", ownerId, channelId);
         Thread thread = initialize(ownerId, channelId);
-        initializeFirstMessage(ownerId, initialMessageBody, thread);
+        RichMessageDto richMessageDto = initializeFirstMessage(ownerId, initialMessageBody, thread);
+        return mapThread(thread, richMessageDto);
     }
 
-    private void initializeFirstMessage(String ownerId, String initialMessageBody, Thread saved) {
+    private RichMessageDto mapThread(Thread thread, RichMessageDto richMessageDto) {
+        ThreadDto threadDto = threadDtoConverter.convert(thread);
+        richMessageDto.setThread(threadDto);
+        return richMessageDto;
+    }
+
+    private RichMessageDto initializeFirstMessage(String ownerId, String initialMessageBody, Thread saved) {
         InitializeMessageVo initializeMessageVo = new InitializeMessageVo();
         initializeMessageVo.setAccountId(ownerId);
         initializeMessageVo.setBody(initialMessageBody);
         initializeMessageVo.setThreadId(saved.getThreadId());
-        messageOperationService.initialize(initializeMessageVo);
+        return messageOperationService.initialize(initializeMessageVo);
     }
 
     private Thread initialize(String ownerId, String channelId) {

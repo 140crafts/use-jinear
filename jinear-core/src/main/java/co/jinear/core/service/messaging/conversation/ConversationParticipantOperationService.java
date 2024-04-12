@@ -32,4 +32,11 @@ public class ConversationParticipantOperationService {
         conversationParticipant.setLeftAt(ZonedDateTime.now());
         conversationParticipantRepository.save(conversationParticipant);
     }
+
+    public void updateSilentUntil(String conversationParticipantId, ZonedDateTime silentUntil) {
+        log.info("Update silent until has started. conversationParticipantId: {}, silentUntil: {}", conversationParticipantId, silentUntil);
+        ConversationParticipant conversationParticipant = conversationParticipantRetrieveService.retrieveEntity(conversationParticipantId);
+        conversationParticipant.setSilentUntil(silentUntil);
+        conversationParticipantRepository.save(conversationParticipant);
+    }
 }

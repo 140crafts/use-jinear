@@ -1,6 +1,8 @@
 package co.jinear.core.service.messaging.message;
 
+import co.jinear.core.converter.messaging.message.MessageDtoConverter;
 import co.jinear.core.converter.messaging.message.MessageEntityConverter;
+import co.jinear.core.model.dto.messaging.message.RichMessageDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.entity.messaging.Message;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
@@ -28,9 +30,10 @@ public class MessageOperationService {
     private final MessageDataOperationService messageDataOperationService;
     private final ConversationUpdateService conversationUpdateService;
     private final ThreadUpdateService threadUpdateService;
+    private final MessageDtoConverter messageDtoConverter;
 
     @Transactional
-    public void initialize(InitializeMessageVo initializeMessageVo) {
+    public RichMessageDto initialize(InitializeMessageVo initializeMessageVo) {
         log.info("Initialize message has started. initializeMessageVo: {}", initializeMessageVo);
         RichTextDto richTextDto = initializeRichText(initializeMessageVo);
         Message saved = saveMessage(initializeMessageVo, richTextDto);
@@ -38,6 +41,7 @@ public class MessageOperationService {
         initializeMessageData(initializeMessageVo, saved);
         updateConversationLastUpdateDateAsNow(saved);
         updateThreadConversationLastUpdateDateAsNow(saved);
+        return messageDtoConverter.convertRich(saved);
     }
 
     private void initializeMessageData(InitializeMessageVo initializeMessageVo, Message saved) {

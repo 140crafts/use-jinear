@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.time.ZonedDateTime;
+
 @Getter
 @Setter
 public class ChannelMemberDto extends BaseDto {
@@ -15,6 +17,8 @@ public class ChannelMemberDto extends BaseDto {
     private String channelId;
     private String accountId;
     private ChannelMemberRoleType roleType;
+    @Nullable
+    private ZonedDateTime silentUntil;
     @Nullable
     private PlainAccountProfileDto account;
 }

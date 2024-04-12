@@ -62,6 +62,12 @@ public class WebConfig implements WebMvcConfigurer {
                 .toFactory();
     }
 
+    @Bean(name = "htmlToPlainTextPolicy")
+    PolicyFactory htmlToPlainTextPolicy() {
+        return new HtmlPolicyBuilder()
+                .toFactory();
+    }
+
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();

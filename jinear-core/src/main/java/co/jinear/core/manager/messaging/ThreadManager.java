@@ -1,11 +1,13 @@
 package co.jinear.core.manager.messaging;
 
 import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.messaging.message.RichMessageDto;
 import co.jinear.core.model.dto.messaging.thread.ThreadDto;
 import co.jinear.core.model.request.messaging.thread.InitializeThreadRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.messaging.ThreadListingResponse;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.messaging.channel.ChannelNotifierService;
 import co.jinear.core.service.messaging.thread.ThreadListingService;
 import co.jinear.core.service.messaging.thread.ThreadOperationService;
 import co.jinear.core.validator.messaging.channel.ChannelAccessValidator;
@@ -23,6 +25,7 @@ public class ThreadManager {
     private final SessionInfoService sessionInfoService;
     private final ChannelAccessValidator channelAccessValidator;
     private final ThreadListingService threadListingService;
+    private final ChannelNotifierService channelNotifierService;
 
     public BaseResponse initializeThread(InitializeThreadRequest initializeThreadRequest) {
         String accountId = sessionInfoService.currentAccountId();
@@ -30,7 +33,8 @@ public class ThreadManager {
         String initialMessageBody = initializeThreadRequest.getInitialMessageBody();
         channelAccessValidator.validateChannelParticipationAccess(accountId, channelId);
         log.info("Initialize thread has started. accountId: {}, initializeThreadRequest: {}", accountId, initializeThreadRequest);
-        threadOperationService.initializeThread(accountId, channelId, initialMessageBody);
+        RichMessageDto firstMessage = threadOperationService.initializeThread(accountId, channelId, initialMessageBody);
+        channelNotifierService.notifyChannelMembers(channelId, firstMessage);
         return new BaseResponse();
     }
 

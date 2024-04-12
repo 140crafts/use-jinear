@@ -23,6 +23,13 @@ public class ConversationParticipantListingService {
                 .stream()
                 .map(conversationParticipantDtoConverter::convert)
                 .toList();
+    }
 
+    public List<ConversationParticipantDto> retrieveActiveParticipants(String conversationId) {
+        log.info("Retrieve active participants has started. conversationId: {}", conversationId);
+        return conversationParticipantRepository.findAllByConversationIdAndLeftAtIsNullAndPassiveIdIsNull(conversationId)
+                .stream()
+                .map(conversationParticipantDtoConverter::convert)
+                .toList();
     }
 }

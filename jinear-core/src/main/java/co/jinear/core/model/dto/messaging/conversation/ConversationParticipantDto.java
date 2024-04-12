@@ -16,6 +16,7 @@ public class ConversationParticipantDto extends BaseDto {
     private String accountId;
     private ZonedDateTime lastCheck;
     private ZonedDateTime leftAt;
+    private ZonedDateTime silentUntil;
     private ConversationDto conversation;
     private PlainAccountProfileDto account;
 }

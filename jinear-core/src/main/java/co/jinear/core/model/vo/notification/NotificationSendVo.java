@@ -18,6 +18,7 @@ public class NotificationSendVo {
     private String workspaceId;
     private String teamId;
     private String taskId;
+    private String threadId;
     private String taskTag;
     private String title;
     private String text;

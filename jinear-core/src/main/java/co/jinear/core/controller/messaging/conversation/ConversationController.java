@@ -6,8 +6,11 @@ import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.messaging.ConversationParticipantListingResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.ZonedDateTime;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,5 +29,12 @@ public class ConversationController {
     @ResponseStatus(HttpStatus.OK)
     public ConversationParticipantListingResponse retrieveParticipated(@PathVariable String workspaceId) {
         return conversationManager.retrieveParticipated(workspaceId);
+    }
+
+    @PutMapping("/{conversationId}/mute")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse mute(@PathVariable String conversationId,
+                             @Valid @RequestParam("silentUntil") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime silentUntil) {
+        return conversationManager.mute(conversationId, silentUntil);
     }
 }

@@ -9,12 +9,15 @@ import co.jinear.core.model.vo.messaging.conversation.InitializeConversationVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.messaging.conversation.ConversationOperationService;
 import co.jinear.core.service.messaging.conversation.ConversationParticipantListingService;
+import co.jinear.core.service.messaging.conversation.ConversationParticipantOperationService;
+import co.jinear.core.service.messaging.conversation.ConversationParticipantRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +33,8 @@ public class ConversationManager {
     private final WorkspaceMemberService workspaceMemberService;
     private final WorkspaceValidator workspaceValidator;
     private final ConversationParticipantListingService conversationParticipantListingService;
+    private final ConversationParticipantRetrieveService conversationParticipantRetrieveService;
+    private final ConversationParticipantOperationService conversationParticipantOperationService;
 
     public BaseResponse initialize(InitializeConversationRequest initializeConversationRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -46,6 +51,14 @@ public class ConversationManager {
         log.info("Retrieve participated conversations has started. currentAccountId: {}, workspaceId: {}", currentAccountId, workspaceId);
         List<ConversationParticipantDto> conversationParticipantDtos = conversationParticipantListingService.retrieveParticipations(workspaceId, currentAccountId);
         return mapResponse(conversationParticipantDtos);
+    }
+
+    public BaseResponse mute(String conversationId, ZonedDateTime silentUntil) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        log.info("Mute conversation has started. conversationId: {}, currentAccountId: {}, silentUntil: {}", conversationId, currentAccountId, silentUntil);
+        ConversationParticipantDto conversationParticipantDto = conversationParticipantRetrieveService.retrieve(currentAccountId, conversationId);
+        conversationParticipantOperationService.updateSilentUntil(conversationParticipantDto.getConversationParticipantId(), silentUntil);
+        return new BaseResponse();
     }
 
     private void validateAllParticipantsHasAccessIncludingOwner(InitializeConversationRequest initializeConversationRequest, String currentAccountId) {

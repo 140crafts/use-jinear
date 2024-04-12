@@ -1,8 +1,10 @@
 package co.jinear.core.service.messaging.conversation;
 
+import co.jinear.core.converter.messaging.conversation.ConversationParticipantDtoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
+import co.jinear.core.model.dto.messaging.conversation.ConversationParticipantDto;
 import co.jinear.core.model.entity.messaging.ConversationParticipant;
 import co.jinear.core.repository.messaging.ConversationParticipantRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +21,16 @@ import java.util.Objects;
 public class ConversationParticipantRetrieveService {
 
     private final ConversationParticipantRepository conversationParticipantRepository;
+    private final ConversationParticipantDtoConverter conversationParticipantDtoConverter;
 
     public ConversationParticipant retrieveEntity(String conversationParticipantId) {
         return conversationParticipantRepository.findByConversationParticipantIdAndPassiveIdIsNull(conversationParticipantId)
+                .orElseThrow(NotFoundException::new);
+    }
+
+    public ConversationParticipantDto retrieve(String accountId, String conversationId) {
+        return conversationParticipantRepository.findByConversationIdAndAccountIdAndLeftAtIsNullAndPassiveIdIsNull(conversationId, accountId)
+                .map(conversationParticipantDtoConverter::convert)
                 .orElseThrow(NotFoundException::new);
     }
 
