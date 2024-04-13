@@ -3,7 +3,7 @@ import { AccountsWorkspacePerspectiveDto } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { LuCalendarDays, LuCheckSquare, LuClipboardEdit, LuRss } from "react-icons/lu";
+import { LuCalendarDays, LuCheckSquare, LuClipboardEdit, LuMessagesSquare, LuRss } from "react-icons/lu";
 import Button, { ButtonVariants } from "../button";
 import styles from "./MainFeaturesSideMenu.module.scss";
 import InboxButton from "./inboxButton/InboxButton";
@@ -21,6 +21,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
   const inboxPath = `/${workspace?.username}/inbox`;
   const assignedToMePath = `/${workspace?.username}/assigned-to-me`;
   const lastActivitiesPath = `/${workspace?.username}/last-activities`;
+  const conversationsPath = `/${workspace?.username}/conversations`;
 
   return !workspace ? null : (
     <div className={styles.container}>
@@ -30,6 +31,14 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
         buttonStyle={styles.iconButton}
         iconStyle={styles.icon}
       />
+      <Button
+        className={styles.iconButton}
+        href={conversationsPath}
+        variant={conversationsPath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+      >
+        <LuMessagesSquare className={styles.icon} />
+        {t("mainFeaturesMenuLabelConversations")}
+      </Button>
       <Button
         className={styles.iconButton}
         href={tasksPath}

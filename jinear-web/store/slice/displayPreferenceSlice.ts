@@ -8,6 +8,7 @@ const initialState = {
     mobileVisible: false,
     tasksMenuVisible: true,
     calendarsMenuVisible: true,
+    conversationsMenuVisible: true,
   },
 } as {
   appMenu: AppMenu;
@@ -40,6 +41,12 @@ const slice = createSlice({
     closeCalendarsMenu: (state, action: PayloadAction<void>) => {
       state.appMenu.calendarsMenuVisible = false;
     },
+    toggleConversationsMenu: (state, action: PayloadAction<void>) => {
+      state.appMenu.conversationsMenuVisible = !state.appMenu.conversationsMenuVisible;
+    },
+    closeConversationsMenu: (state, action: PayloadAction<void>) => {
+      state.appMenu.conversationsMenuVisible = false;
+    },
     popAllMenus: (state, action: PayloadAction<void>) => {
       state.appMenu.mobileVisible = true;
       state.appMenu.tasksMenuVisible = true;
@@ -65,6 +72,8 @@ export const {
   toggleTasksMenu,
   toggleCalendarsMenu,
   closeCalendarsMenu,
+  toggleConversationsMenu,
+  closeConversationsMenu,
   popAllMenus,
   closeAllMenus,
   toggleMenu,
@@ -74,7 +83,9 @@ export default slice.reducer;
 export const selectAppMenuVisible = (state: RootState) => state.displayPreference.appMenu.mobileVisible;
 export const selectTasksMenuVisible = (state: RootState) => state.displayPreference.appMenu.tasksMenuVisible;
 export const selectCalendarsMenuVisible = (state: RootState) => state.displayPreference.appMenu.calendarsMenuVisible;
+export const selectConversationsMenuVisible = (state: RootState) => state.displayPreference.appMenu.conversationsMenuVisible;
 export const selectAnyMenuVisible = (state: RootState) =>
   state.displayPreference.appMenu.mobileVisible ||
   state.displayPreference.appMenu.tasksMenuVisible ||
-  state.displayPreference.appMenu.calendarsMenuVisible;
+  state.displayPreference.appMenu.calendarsMenuVisible ||
+  state.displayPreference.appMenu.conversationsMenuVisible;

@@ -2747,6 +2747,10 @@ export default {
     en: "Assignments",
     tr: "Atananlar",
   },
+  mainFeaturesMenuLabelConversations: {
+    en: "Conversations",
+    tr: "Sohbetler",
+  },
   mainFeaturesMenuLabelMore: {
     en: "More",
     tr: "Daha Fazla",
