@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-03-25 23:29:38.
+// Generated using typescript-generator version 3.0.1157 on 2024-04-10 12:01:59.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  first: boolean;
   last: boolean;
+  first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -157,9 +157,9 @@ export interface GmailMessageDto extends BaseDto {
   to: string;
   subject: string;
   body: string;
-  ginternalDate: string;
-  ghistoryId: string;
   gthreadId: string;
+  ghistoryId: string;
+  ginternalDate: string;
   gid: string;
 }
 
@@ -269,6 +269,85 @@ export interface MediaDto extends BaseDto {
   bucketName: string;
   originalName: string;
   size: number;
+}
+
+export interface ChannelDto extends PlainChannelDto {
+  settings: ChannelSettingsDto[];
+  members: ChannelMemberDto[];
+}
+
+export interface ChannelMemberDto extends BaseDto {
+  channelMemberId: string;
+  channelId: string;
+  accountId: string;
+  roleType: ChannelMemberRoleType;
+  account?: PlainAccountProfileDto | null;
+}
+
+export interface ChannelSettingsDto extends BaseDto {
+  channelSettingsId: string;
+  channelId: string;
+  settingsType: ChannelSettingType;
+  settingsValue: string;
+}
+
+export interface InitialChannelSettingDto {
+  settingsType: ChannelSettingType;
+  settingsValue: string;
+}
+
+export interface PlainChannelDto extends BaseDto {
+  channelId: string;
+  workspaceId: string;
+  title: string;
+  participationType: ChannelParticipationType;
+  channelVisibilityType: ChannelVisibilityType;
+}
+
+export interface MessageDataDto extends BaseDto {
+  messageDataId: string;
+  messageId: string;
+  dataKey: string;
+  dataValue: string;
+}
+
+export interface MessageDto extends BaseDto {
+  messageId: string;
+  accountId: string;
+  richTextId: string;
+  threadId?: string | null;
+  conversationId?: string | null;
+  account: PlainAccountDto;
+  richText: RichTextDto;
+  messageData?: MessageDataDto[] | null;
+  messageReactions?: MessageReactionDto[] | null;
+}
+
+export interface MessageReactionDto extends BaseDto {
+  messageReactionId: string;
+  messageId: string;
+  accountId: string;
+  reactionType: MessageReactionType;
+  unicode: string;
+  account: PlainAccountDto;
+}
+
+export interface ThreadDto extends BaseDto {
+  threadId: string;
+  ownerId: string;
+  channelId: string;
+  lastActivityTime: Date;
+  threadMessageInfo: ThreadMessageInfoDto;
+  account: PlainAccountDto;
+}
+
+export interface ThreadMessageInfoDto {
+  threadId: string;
+  initialMessageId: string;
+  latestMessageId: string;
+  messageCount: number;
+  initialMessage: MessageDto;
+  latestMessage: MessageDto;
 }
 
 export interface NotificationEventDto extends BaseDto {
@@ -814,6 +893,25 @@ export interface CalendarEventTitleDescriptionUpdateRequest {
   description?: string | null;
 }
 
+export interface InitializeChannelRequest extends BaseRequest {
+  workspaceId: string;
+  title: string;
+  participationType: ChannelParticipationType;
+  channelVisibilityType: ChannelVisibilityType;
+  initialSettings?: InitialChannelSettingDto[] | null;
+}
+
+export interface InitializeChannelSettingsRequest extends BaseRequest {
+  channelId: string;
+  settingsType: ChannelSettingType;
+  settingsValue: string;
+}
+
+export interface InitializeThreadRequest extends BaseRequest {
+  channelId: string;
+  initialMessageBody: string;
+}
+
 export interface NotificationTargetInitializeRequest extends BaseRequest {
   externalTargetId: string;
   targetType?: NotificationTargetType | null;
@@ -1087,6 +1185,10 @@ export interface FeedMemberListingResponse extends BaseResponse {
 
 export interface FeedMemberPaginatedResponse extends BaseResponse {
   data: PageDto<FeedMemberDto>;
+}
+
+export interface ChannelMemberListingResponse extends BaseResponse {
+  data: ChannelMemberDto[];
 }
 
 export interface NotificationEventListingResponse extends BaseResponse {
@@ -1527,13 +1629,24 @@ export type LockSourceType =
   | "TEAM_WORKFLOW_STATUS"
   | "ACCOUNT_PASSWORD_RESET"
   | "TASK_BOARD_EDIT"
-  | "REMINDER_JOB_PROCESS";
+  | "REMINDER_JOB_PROCESS"
+  | "CONVERSATION_INIT";
 
 export type FileType = "PROFILE_PIC" | "TASK_FILE";
 
 export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK";
 
 export type MediaVisibilityType = "PUBLIC" | "PRIVATE" | "TEMP_PUBLIC";
+
+export type ChannelMemberRoleType = "OWNER" | "ADMIN" | "MEMBER";
+
+export type ChannelParticipationType = "EVERYONE" | "ADMINS_CAN_START_CONVERSATION_EVERYONE_CAN_REPLY" | "READ_ONLY";
+
+export type ChannelSettingType = "SYNC_MEMBERS_WITH_TEAM";
+
+export type ChannelVisibilityType = "EVERYONE" | "MEMBERS_ONLY";
+
+export type MessageReactionType = "UNICODE_EMOJI";
 
 export type NotificationEventState = "INITIALIZED" | "SENT";
 
@@ -1603,7 +1716,7 @@ export type RepeatType =
 
 export type RichTextSourceStack = "WYSIWYG" | "RC";
 
-export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT";
+export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT" | "MESSAGE";
 
 export type TaskBoardStateType = "OPEN" | "CLOSED";
 

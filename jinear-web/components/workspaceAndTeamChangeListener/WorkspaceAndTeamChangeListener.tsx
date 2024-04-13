@@ -35,7 +35,7 @@ const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerPro
     //@ts-ignore
     const data = error?.data as BaseResponse;
     logger.log({ data });
-    if (data?.errorCode == "14001") {
+    if (["14001", "001"].indexOf(data?.errorCode) != -1) {
       router.push(ROUTE_IF_LOGGED_IN);
     }
   }, [error]);
