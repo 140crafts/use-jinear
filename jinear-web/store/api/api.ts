@@ -12,7 +12,7 @@ const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     return headers;
   },
-  credentials: "include",
+  credentials: "include"
 });
 
 export const tagTypes = [
@@ -66,6 +66,8 @@ export const tagTypes = [
   "v1/account/delete",
   "v1/account/delete/eligibility",
   "v1/account/delete/confirm/{token}",
+  "v1/messaging/channel/member/memberships/{workspaceId}",
+  "v1/messaging/channel/member/list/{channelId}"
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {
@@ -75,5 +77,5 @@ export const tagTypesToInvalidateOnNewBackgroundActivity = () => {
 export const api = createApi({
   baseQuery: baseQuery,
   tagTypes,
-  endpoints: () => ({}),
+  endpoints: () => ({})
 });

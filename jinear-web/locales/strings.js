@@ -3347,4 +3347,12 @@ export default {
     en: "Syncing",
     tr: "Eşitleniyor",
   },
+  sideMenuChannelsTitle: {
+    en: "Channels",
+    tr: "Kanallar",
+  },
+  channelHeaderMembersMore: {
+    en: "...${number} more",
+    tr: "...${number} daha",
+  },
 };

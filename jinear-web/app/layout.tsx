@@ -22,6 +22,7 @@ import WebViewEventListener from "@/components/webViewEventListener/WebViewEvent
 import { AxiomWebVitals } from "next-axiom";
 import "../styles/app.scss";
 import "../styles/fonts.css";
+import { __DEV__ } from "utils/constants";
 
 const logger = Logger("_app");
 
@@ -305,7 +306,7 @@ function MyApp({ children }: { children: React.ReactNode }) {
                   <FirebaseConfigration />
                 </ErrorBoundary>
               </PureClientOnly>
-              <AxiomWebVitals />
+              {!__DEV__ && <AxiomWebVitals />}
               {children}
               <ToasterProvider />
               <BodyFixer />

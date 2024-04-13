@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.borderBottom {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--c-primary-shade-1) 0%, var(--c-primary) 100%);
+}
