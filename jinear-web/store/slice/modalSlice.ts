@@ -35,139 +35,143 @@ import ModalState, {
   WorkspaceMemberInviteModalState,
   WorkspaceMemberPickerModalState,
   WorkspacePickerModalState,
+  ChannelSettingsModalState
 } from "model/app/store/modal/modalState";
-import { accountApi } from "../api/accountApi";
+import { accountApi } from "@/api/accountApi";
 import { RootState } from "../store";
 
 const initialState = {
   loginWith2FaMailModal: {
     visible: false,
-    rerouteDisabled: false,
+    rerouteDisabled: false
   },
   loadingModal: {
-    visible: false,
+    visible: false
   },
   notFoundModal: {
     visible: false,
     imgSrc: "/images/gif/sad-doge.gif",
     imgAlt: "Illustration for not found modal. Sad doge gif.",
     title: undefined,
-    label: undefined,
+    label: undefined
   },
   newTaskModal: {
-    visible: false,
+    visible: false
   },
   newTopicModal: {
-    visible: false,
+    visible: false
   },
   changeTaskWorkflowStatusModal: {
-    visible: false,
+    visible: false
   },
   changeTaskTopicModal: {
-    visible: false,
+    visible: false
   },
   changeTaskDateModal: {
     visible: false,
-    dateType: "assigned",
+    dateType: "assigned"
   },
   changeTaskAssigneeModal: {
-    visible: false,
+    visible: false
   },
   newWorkspaceModal: {
-    visible: false,
+    visible: false
   },
   newTeamModal: {
     visible: false,
-    workspace: undefined,
+    workspace: undefined
   },
   searchTaskModal: {
-    visible: false,
+    visible: false
   },
   dialogModal: {
-    visible: false,
+    visible: false
   },
   reminderListModal: {
-    visible: false,
+    visible: false
   },
   newReminderModal: {
-    visible: false,
+    visible: false
   },
   datePickerModal: {
-    visible: false,
+    visible: false
   },
   workspaceMemberInviteModal: {
-    visible: false,
+    visible: false
   },
   addMemberToTeamModal: {
-    visible: false,
+    visible: false
   },
   notificationPermissionModal: {
     visible: false,
-    platform: "web",
+    platform: "web"
   },
   taskOverviewModal: {
-    visible: false,
+    visible: false
   },
   teamPickerModal: {
-    visible: false,
+    visible: false
   },
   workspacePickerModal: {
-    visible: false,
+    visible: false
   },
   newTaskBoardModal: {
-    visible: false,
+    visible: false
   },
   basicTextInputModal: {
-    visible: false,
+    visible: false
   },
   taskTaskBoardAssignModal: {
-    visible: false,
+    visible: false
   },
   topicPickerModal: {
-    visible: false,
+    visible: false
   },
   teamMemberPickerModal: {
-    visible: false,
+    visible: false
   },
   teamWorkflowStatusPickerModal: {
-    visible: false,
+    visible: false
   },
   taskBoardPickerModal: {
-    visible: false,
+    visible: false
   },
   upgradeWorkspacePlanModal: {
-    visible: false,
+    visible: false
   },
   accountProfileModal: {
-    visible: false,
+    visible: false
   },
   workspaceSwitchModal: {
-    visible: false,
+    visible: false
   },
   menuMoreActionModal: {
-    visible: false,
+    visible: false
   },
   deviceOfflineModal: {
-    visible: false,
+    visible: false
   },
   newMailIntegrationModal: {
-    visible: false,
+    visible: false
   },
   integrationFeedItemDetailModal: {
-    visible: false,
+    visible: false
   },
   workspaceMemberPickerModal: {
-    visible: false,
+    visible: false
   },
   newCalendarIntegrationModal: {
-    visible: false,
+    visible: false
   },
   calendarExternalEventViewModal: {
-    visible: false,
+    visible: false
   },
   calendarShareEventsModal: {
-    visible: false,
+    visible: false
   },
+  channelSettingsModal: {
+    visible: false
+  }
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
   loadingModal: null | ModalState;
@@ -209,6 +213,7 @@ const initialState = {
   newCalendarIntegrationModal: null | NewCalendarIntegrationModalState;
   calendarExternalEventViewModal: null | CalendarExternalEventViewModalState;
   calendarShareEventsModal: null | CalendarShareEventsModalState;
+  channelSettingsModal: null | ChannelSettingsModalState;
 };
 
 const slice = createSlice({
@@ -225,7 +230,7 @@ const slice = createSlice({
       state.notFoundModal = {
         ...state.notFoundModal,
         ...action.payload,
-        visible: true,
+        visible: true
       };
     },
     closeNotFoundModal: (state, action: PayloadAction<void>) => {
@@ -249,7 +254,7 @@ const slice = createSlice({
     popChangeTaskWorkflowStatusModal: (state, action: PayloadAction<ChangeTaskWorkflowStatusModalState>) => {
       state.changeTaskWorkflowStatusModal = {
         visible: true,
-        task: action.payload.task,
+        task: action.payload.task
       };
     },
     closeChangeTaskWorkflowStatusModal: (state, action: PayloadAction<void>) => {
@@ -500,7 +505,14 @@ const slice = createSlice({
       state.calendarShareEventsModal = initialState.calendarShareEventsModal;
     },
 
-    resetModals: () => initialState,
+    popChannelSettingsModal: (state, action: PayloadAction<ChannelSettingsModalState>) => {
+      state.channelSettingsModal = { ...action.payload, visible: true };
+    },
+    closeChannelSettingsModal: (state, action: PayloadAction<void>) => {
+      state.channelSettingsModal = initialState.channelSettingsModal;
+    },
+
+    resetModals: () => initialState
   },
   extraReducers: (builder) => {
     builder
@@ -513,7 +525,7 @@ const slice = createSlice({
       .addMatcher(accountApi.endpoints.me.matchRejected, (state, action) => {
         state.loadingModal = { visible: false };
       });
-  },
+  }
 });
 
 export const {
@@ -596,7 +608,9 @@ export const {
   closeCalendarExternalEventViewModal,
   popCalendarShareEventsModal,
   closeCalendarShareEventsModal,
-  resetModals,
+  popChannelSettingsModal,
+  closeChannelSettingsModal,
+  resetModals
 } = slice.actions;
 export default slice.reducer;
 
@@ -813,3 +827,8 @@ export const selectCalendarExternalEventViewModalCalendarEvent = (state: RootSta
 
 export const selectCalendarShareEventsModalVisible = (state: RootState) => state.modal.calendarShareEventsModal?.visible;
 export const selectCalendarShareEventsModalWorkspaceId = (state: RootState) => state.modal.calendarShareEventsModal?.workspaceId;
+
+export const selectChannelSettingsModalVisible = (state: RootState) => state.modal.channelSettingsModal?.visible;
+export const selectChannelSettingsModalChannelId = (state: RootState) => state.modal.channelSettingsModal?.channelId;
+export const selectChannelSettingsModalWorkspaceName = (state: RootState) => state.modal.channelSettingsModal?.workspaceName;
+export const selectChannelSettingsModalWorkspaceId = (state: RootState) => state.modal.channelSettingsModal?.workspaceId;

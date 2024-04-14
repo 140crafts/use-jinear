@@ -9,7 +9,7 @@ import {
   TeamWorkflowStatusDto,
   TopicDto,
   WorkspaceDto,
-  WorkspaceMemberDto,
+  WorkspaceMemberDto
 } from "@/model/be/jinear-core";
 
 export interface IRelatedFeedItemData {
@@ -47,9 +47,11 @@ export interface ChangeTaskWorkflowStatusModalState extends ModalState {
 export interface ChangeTaskTopicModalState extends ModalState {
   task?: TaskDto;
 }
+
 export interface ChangeTaskDateModalState extends ModalState {
   task?: TaskDto;
 }
+
 export interface ChangeTaskAssigneeModalState extends ModalState {
   task?: TaskDto;
 }
@@ -188,6 +190,7 @@ export interface UpgradeWorkspacePlanModalState extends ModalState {
 export interface NewMailIntegrationModalState extends ModalState {
   workspaceId?: string;
 }
+
 export interface IntegrationFeedItemDetailModalState extends ModalState {
   workspace?: WorkspaceDto;
   feedId?: string;
@@ -212,5 +215,11 @@ export interface CalendarExternalEventViewModalState extends ModalState {
 }
 
 export interface CalendarShareEventsModalState extends ModalState {
+  workspaceId?: string;
+}
+
+export interface ChannelSettingsModalState extends ModalState {
+  workspaceName?: string;
+  channelId?: string;
   workspaceId?: string;
 }

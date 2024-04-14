@@ -84,5 +84,5 @@ export const selectCurrentAccountsWorkspaceRoleIsAdminOrOwnerWithWorkspaceUserna
   return role == "ADMIN" || role == "OWNER";
 };
 
-export const selectWorkspaceFromWorkspaceUsername = (workspaceUsername: string) => (state: RootState) =>
+export const selectWorkspaceFromWorkspaceUsername = (workspaceUsername?: string) => (state: RootState) =>
   state.account.current?.workspaces.find((workspace) => workspace.username == workspaceUsername);

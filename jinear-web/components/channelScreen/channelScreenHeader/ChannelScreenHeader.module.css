@@ -9,3 +9,9 @@
     width: 100%;
     background: linear-gradient(90deg, var(--c-primary-shade-1) 0%, var(--c-primary) 100%);
 }
+
+.titleContainer{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}

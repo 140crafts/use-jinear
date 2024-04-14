@@ -42,11 +42,13 @@ import NewCalendarIntegrationModal from "../modal/newCalendarIntegrationModal/Ne
 import NewMailIntegrationModal from "../modal/newMailIntegrationModal/NewMailIntegrationModal";
 import ShareWorkspaceEventsModal from "../modal/shareWorkspaceEventsModal/ShareWorkspaceEventsModal";
 import WorkspaceMemberPickerModal from "../modal/workspaceMemberPickerModal/WorkspaceMemberPickerModal";
+import ChannelSettingsModal from "@/components/modal/channelSettingsModal/ChannelSettingsModal";
 
 interface ModalProviderProps {}
 
 const globalModals: any = (
   <>
+    <ChannelSettingsModal />
     <ShareWorkspaceEventsModal />
     <CalendarExternalEventViewModal />
     <WorkspaceMemberPickerModal />

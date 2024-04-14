@@ -5,6 +5,7 @@ import CircularLoading from "@/components/circularLoading/CircularLoading";
 import ProfilePhoto from "@/components/profilePhoto";
 import useTranslation from "@/locals/useTranslation";
 import { motion, usePresence } from "framer-motion";
+import Button from "@/components/button";
 
 interface ChannelMembersProps {
   channelId: string;
@@ -14,7 +15,7 @@ const SLICE_SIZE = 3;
 const ChannelMembers: React.FC<ChannelMembersProps> = ({ channelId }) => {
   const { t } = useTranslation();
   const { data: retrieveChannelMembersResponse, isFetching } = useRetrieveChannelMembersQuery({ channelId });
-  const remainingCount = retrieveChannelMembersResponse?.data?.length || 0 - SLICE_SIZE;
+  const remainingCount = (retrieveChannelMembersResponse?.data?.length || 0) - SLICE_SIZE;
   const [isPresent, safeToRemove] = usePresence();
 
   const animations = {
@@ -49,8 +50,7 @@ const ChannelMembers: React.FC<ChannelMembersProps> = ({ channelId }) => {
         ?.map((account, index) =>
           <div
             key={`channel-${channelId}-channel-member-profile-list-account-${account?.accountId}`}
-            data-tooltip={index < SLICE_SIZE / 2 ? account?.username : undefined}
-            data-tooltip-right={index >= SLICE_SIZE / 2 ? account?.username : undefined}
+            data-tooltip-right={account?.username}
             style={{
               display: "flex",
               alignItems: "center",
