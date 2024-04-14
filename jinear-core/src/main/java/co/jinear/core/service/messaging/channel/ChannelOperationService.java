@@ -46,6 +46,13 @@ public class ChannelOperationService {
         channelRepository.save(channel);
     }
 
+    public void updateTitle(String channelId, String title) {
+        log.info("Update title has started. channelId: {}, title: {}", channelId, title);
+        Channel channel = channelRetrieveService.retrieveEntity(channelId);
+        channel.setTitle(title);
+        channelRepository.save(channel);
+    }
+
     private void addOwner(InitializeChannelVo initializeChannelVo, Channel channel) {
         channelMemberOperationService.addMember(channel.getChannelId(), initializeChannelVo.getInitializedBy(), ChannelMemberRoleType.OWNER);
     }

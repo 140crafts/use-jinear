@@ -1,9 +1,8 @@
 package co.jinear.core.controller.messaging.channel;
 
 import co.jinear.core.manager.messaging.ChannelManager;
-import co.jinear.core.model.enumtype.messaging.ChannelParticipationType;
-import co.jinear.core.model.enumtype.messaging.ChannelVisibilityType;
 import co.jinear.core.model.request.messaging.channel.InitializeChannelRequest;
+import co.jinear.core.model.request.messaging.channel.UpdateChannelRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.messaging.ChannelListingResponse;
 import jakarta.validation.Valid;
@@ -30,17 +29,24 @@ public class ChannelController {
         return channelManager.listChannels(workspaceId);
     }
 
-    @PutMapping("/{channelId}/participation/{participationType}")
+    @PutMapping("/{channelId}/participation")
     @ResponseStatus(HttpStatus.OK)
     public BaseResponse updateParticipation(@PathVariable String channelId,
-                                            @PathVariable ChannelParticipationType participationType) {
-        return channelManager.updateParticipation(channelId, participationType);
+                                            @RequestBody UpdateChannelRequest updateChannelRequest) {
+        return channelManager.updateParticipation(channelId, updateChannelRequest.getParticipationType());
     }
 
-    @PutMapping("/{channelId}/visibility/{channelVisibilityType}")
+    @PutMapping("/{channelId}/visibility")
     @ResponseStatus(HttpStatus.OK)
     public BaseResponse updateVisibility(@PathVariable String channelId,
-                                            @PathVariable ChannelVisibilityType channelVisibilityType) {
-        return channelManager.updateVisibility(channelId, channelVisibilityType);
+                                         @RequestBody UpdateChannelRequest updateChannelRequest) {
+        return channelManager.updateVisibility(channelId, updateChannelRequest.getChannelVisibilityType());
+    }
+
+    @PutMapping("/{channelId}/title")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateTitle(@PathVariable String channelId,
+                                    @RequestBody UpdateChannelRequest updateChannelRequest) {
+        return channelManager.updateTitle(channelId, updateChannelRequest.getNewTitle());
     }
 }

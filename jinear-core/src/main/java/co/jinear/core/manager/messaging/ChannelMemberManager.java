@@ -1,6 +1,5 @@
 package co.jinear.core.manager.messaging;
 
-import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.messaging.channel.ChannelMemberDto;
 import co.jinear.core.model.dto.messaging.channel.PlainChannelDto;
@@ -108,7 +107,7 @@ public class ChannelMemberManager {
 
     private void validateUserNotTryingToCallItself(String accountId, String currentAccountId) {
         if (currentAccountId.equalsIgnoreCase(accountId)) {
-            throw new BusinessException();
+            throw new NoAccessException();
         }
     }
 

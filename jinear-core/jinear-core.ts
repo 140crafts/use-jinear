@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-04-12 11:59:48.
+// Generated using typescript-generator version 3.0.1157 on 2024-04-14 19:09:17.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -157,10 +157,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
+    gid: string;
     gthreadId: string;
     ghistoryId: string;
     ginternalDate: string;
-    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -282,7 +282,9 @@ export interface ChannelMemberDto extends BaseDto {
     channelId: string;
     accountId: string;
     roleType: ChannelMemberRoleType;
+    silentUntil?: Date | null;
     account?: PlainAccountProfileDto | null;
+    channel: PlainChannelDto;
 }
 
 export interface ChannelSettingsDto extends BaseDto {
@@ -324,6 +326,7 @@ export interface ConversationParticipantDto extends BaseDto {
     accountId: string;
     lastCheck: Date;
     leftAt: Date;
+    silentUntil: Date;
     conversation: ConversationDto;
     account: PlainAccountProfileDto;
 }
@@ -938,6 +941,12 @@ export interface InitializeChannelSettingsRequest extends BaseRequest {
     channelId: string;
     settingsType: ChannelSettingType;
     settingsValue: string;
+}
+
+export interface UpdateChannelRequest extends BaseRequest {
+    newTitle?: string | null;
+    channelVisibilityType?: ChannelVisibilityType | null;
+    participationType?: ChannelParticipationType | null;
 }
 
 export interface InitializeConversationRequest extends BaseRequest {
@@ -1638,7 +1647,7 @@ export type NotificationProviderType = "ONE_SIGNAL" | "FIREBASE" | "EXPO";
 
 export type NotificationTargetType = "WEB" | "WEBVIEW";
 
-export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "TASK_NEW_COMMENT" | "MESSAGING_NEW_THREAD_MESSAGE";
+export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "TASK_NEW_COMMENT" | "MESSAGING_NEW_MESSAGE_THREAD" | "MESSAGING_NEW_MESSAGE_CONVERSATION";
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
 

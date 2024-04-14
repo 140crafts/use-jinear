@@ -67,6 +67,14 @@ public class ChannelManager {
         return mapResponse(channelDtoList);
     }
 
+    public BaseResponse updateTitle(String channelId, String newTitle) {
+        String accountId = sessionInfoService.currentAccountId();
+        channelAccessValidator.validateChannelAdminAccess(accountId, channelId);
+        log.info("Update title has started. accountId: {}", accountId);
+        channelOperationService.updateTitle(channelId, newTitle);
+        return new BaseResponse();
+    }
+
     private ChannelListingResponse mapResponse(List<PlainChannelDto> channelDtoList) {
         ChannelListingResponse channelListingResponse = new ChannelListingResponse();
         channelListingResponse.setChannelDtoList(channelDtoList);
