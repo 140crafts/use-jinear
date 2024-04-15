@@ -1,7 +1,12 @@
 .container {
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    padding-top: 0.5rem;
     gap: .5rem;
+    position: sticky;
+    top: var(--workspace-header-height);
+    background-color: var(--c-primary);
 }
 
 .borderBottom {
@@ -10,8 +15,12 @@
     background: linear-gradient(90deg, var(--c-primary-shade-1) 0%, var(--c-primary) 100%);
 }
 
-.titleContainer{
+.titleContainer {
     display: flex;
     flex-direction: row;
     align-items: center;
+}
+
+.iconButton {
+    min-width: 38px !important;
 }

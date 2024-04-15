@@ -5,5 +5,5 @@
   width: 100%;
   height: 1px;
   border-radius: var(--border-radius);
-  z-index: 3;
+  z-index: 9;
 }

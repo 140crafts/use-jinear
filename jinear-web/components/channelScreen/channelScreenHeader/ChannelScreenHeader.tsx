@@ -25,7 +25,7 @@ const ChannelScreenHeader: React.FC<ChannelScreenHeaderProps> = ({ workspaceName
   return (
     <div className={styles.container}>
       <div className={styles.titleContainer}>
-        <Button heightVariant={ButtonHeight.short} onClick={popChannelSettings}><LuSettings2 /></Button>
+        <Button className={styles.iconButton} heightVariant={ButtonHeight.short} onClick={popChannelSettings}><LuSettings2 /></Button>
         <div className={"spacer-w-1"} />
         {channel && <h3>{channel.title}</h3>}
         <div className={"flex-1"} />

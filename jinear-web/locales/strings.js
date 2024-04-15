@@ -3404,8 +3404,8 @@ const translations = {
     tr: "Kanal Görünülürlüğü"
   },
   channelGeneralInfoChanelVisibility_EVERYONE: {
-    en: "Everyone in workspace",
-    tr: "Çalışma alanı içerisindeki herkes"
+    en: "Everyone",
+    tr: "Herkes"
   },
   channelGeneralInfoChanelVisibility_MEMBERS_ONLY: {
     en: "Channel Members",
@@ -3413,9 +3413,56 @@ const translations = {
   },
   channelGeneralInfoChanelVisibility_PUBLIC_WITH_GUESTS: {
     en: "Public with guests",
-    tr: "Ziyaretçiler ile birlikte herkese açık"
-  }
-
+    tr: "Ziyaretçiler Dahil Herkese"
+  },
+  channelGeneralInfoChanelVisibility_description_EVERYONE: {
+    en: "Everyone in workspace can list and join this channel.",
+    tr: "Çalışma alanı içerisindeki herkes"
+  },
+  channelGeneralInfoChanelVisibility_description_MEMBERS_ONLY: {
+    en: "Only channel members can see this channel.",
+    tr: "Yanlızca kanal üyeleri kanalı görebilir."
+  },
+  channelGeneralInfoChanelVisibility_description_PUBLIC_WITH_GUESTS: {
+    en: "Channel is public everyone including guests can see this channel.",
+    tr: "Kanal herkese açık, ziyaretçiler dahil kanal içeriği görüntülenebilir."
+  },
+  channelGeneralInfoChanelParticipation: {
+    en: "Channel Participation",
+    tr: "Mesaj Gönderimi"
+  },
+  channelGeneralInfoChanelParticipation_EVERYONE: {
+    en: "Everyone in Channel",
+    tr: "Kanaldaki Herkes"
+  },
+  channelGeneralInfoChanelParticipation_ADMINS_CAN_START_CONVERSATION_EVERYONE_CAN_REPLY: {
+    en: "Limited Replies",
+    tr: "Limitli Cevaplandırma"
+  },
+  channelGeneralInfoChanelParticipation_READ_ONLY: {
+    en: "Ready Only",
+    tr: "Salt Okunur"
+  },
+  channelGeneralInfoChanelParticipation_description_EVERYONE: {
+    en: "Everyone in channel can start thread and reply.",
+    tr: "Kanaldaki herkes sohbet başlatabilir ve cevaplayabilir. "
+  },
+  channelGeneralInfoChanelParticipation_description_ADMINS_CAN_START_CONVERSATION_EVERYONE_CAN_REPLY: {
+    en: "Admins can start conversation, everyone on channel can reply.",
+    tr: "Yöneticiler sohbet başlatabilir, kanaldaki herkes cevaplayabilir."
+  },
+  channelGeneralInfoChanelParticipation_description_READ_ONLY: {
+    en: "Only admins can post and reply.",
+    tr: "Yanlızca yöneticiler gönderi oluşturabilir."
+  },
+  newThreadFloatingButtonLabel: {
+    en: "New Post",
+    tr: "Yeni Gönderi"
+  },
+  newThreadInputPlaceholder: {
+    en: "Start a new thread...",
+    tr: "Yeni bir gönderi başlatın..."
+  },
 };
 
 export default translations;

@@ -24,13 +24,28 @@ export const channelApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         `v1/messaging/channel/member/{workspaceId}`
       ]
+    }),
+    //
+    updateChannelParticipation: build.mutation<BaseResponse, { channelId: string, body: UpdateChannelRequest }>({
+      query: ({ channelId, body }: { channelId: string, body: UpdateChannelRequest }) => ({
+        url: `v1/messaging/channel/${channelId}/participation`,
+        method: "PUT",
+        body: body
+      }),
+      invalidatesTags: (_result, _err, req) => [
+        `v1/messaging/channel/member/{workspaceId}`
+      ]
     })
     //
   })
 });
 
-export const { useUpdateChannelTitleMutation, useUpdateChannelVisibilityMutation } = channelApi;
+export const {
+  useUpdateChannelTitleMutation,
+  useUpdateChannelVisibilityMutation,
+  useUpdateChannelParticipationMutation
+} = channelApi;
 
 export const {
-  endpoints: { updateChannelTitle, updateChannelVisibility }
+  endpoints: { updateChannelTitle, updateChannelVisibility, updateChannelParticipation }
 } = channelApi;

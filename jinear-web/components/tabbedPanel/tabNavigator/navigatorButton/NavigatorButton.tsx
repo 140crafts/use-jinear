@@ -40,7 +40,7 @@ const NavigatorButton: React.FC<NavigatorButtonProps> = ({ name, label }) => {
   return (
     <motion.div {...animations} className={styles.container}>
       {isActive && <SelectedNavBottomBar />}
-      <Button onClick={onClick}>{label}</Button>
+      <Button className={styles.button} onClick={onClick}>{label}</Button>
     </motion.div>
   );
 };

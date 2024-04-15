@@ -34,7 +34,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
       <Button
         className={styles.iconButton}
         href={conversationsPath}
-        variant={conversationsPath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        variant={currentPath?.indexOf(conversationsPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
       >
         <LuMessagesSquare className={styles.icon} />
         {t("mainFeaturesMenuLabelConversations")}
@@ -50,7 +50,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
       <Button
         className={styles.iconButton}
         href={calendarPath}
-        variant={calendarPath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        variant={currentPath?.indexOf(calendarPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
       >
         <LuCalendarDays className={styles.icon} />
         {t("mainFeaturesMenuLabelCalendar")}
@@ -58,7 +58,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
       <Button
         className={styles.iconButton}
         href={lastActivitiesPath}
-        variant={lastActivitiesPath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        variant={currentPath?.indexOf(lastActivitiesPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
       >
         <LuRss className={styles.icon} />
         {t("mainFeaturesMenuLabelLastActivities")}
@@ -66,7 +66,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
       <Button
         className={styles.iconButton}
         href={assignedToMePath}
-        variant={assignedToMePath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        variant={currentPath?.indexOf(assignedToMePath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
       >
         <LuClipboardEdit className={styles.icon} />
         {t("mainFeaturesMenuLabelAssignedToMe")}
