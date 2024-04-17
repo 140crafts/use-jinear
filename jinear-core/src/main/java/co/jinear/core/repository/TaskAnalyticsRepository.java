@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskAnalyticsRepository extends JpaRepository<Task, String> {
 
@@ -17,7 +18,7 @@ public interface TaskAnalyticsRepository extends JpaRepository<Task, String> {
     Long countAllByTeamId(String teamId);
 
     @Query("select max(t.teamTagNo) from Task t where t.teamId = :teamId")
-    Long getMaxTeamTagNo(@Param("teamId") String teamId);
+    Optional<Long> getMaxTeamTagNo(@Param("teamId") String teamId);
 
     @Query("""
                  select count(t)
