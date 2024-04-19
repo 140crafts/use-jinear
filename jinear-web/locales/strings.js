@@ -3455,13 +3455,13 @@ const translations = {
     en: "Only admins can post and reply.",
     tr: "Yanlızca yöneticiler gönderi oluşturabilir."
   },
-  newThreadFloatingButtonLabel: {
-    en: "New Post",
-    tr: "Yeni Gönderi"
-  },
   newThreadInputPlaceholder: {
     en: "Start a new thread...",
-    tr: "Yeni bir gönderi başlatın..."
+    tr: "Yeni bir gönderi oluşturun..."
+  },
+  newThreadButtonLabel: {
+    en: "Post",
+    tr: "Gönder"
   },
 };
 

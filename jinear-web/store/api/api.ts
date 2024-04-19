@@ -67,7 +67,8 @@ export const tagTypes = [
   "v1/account/delete/eligibility",
   "v1/account/delete/confirm/{token}",
   "v1/messaging/channel/member/memberships/{workspaceId}",
-  "v1/messaging/channel/member/list/{channelId}"
+  "v1/messaging/channel/member/list/{channelId}",
+  "v1/messaging/thread/channel/{channelId}"
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

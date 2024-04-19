@@ -8,6 +8,7 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import styles from "./Tiptap.module.css";
 import ActionBar, { TipTapActionBarMode } from "./actionBar/ActionBar";
+import { Extension } from "@tiptap/core";
 
 export interface ITiptapRef {
   clearContent: () => void;
@@ -26,6 +27,7 @@ interface TiptapProps {
   formSetValue?: UseFormSetValue<any>;
   actionBarMode?: TipTapActionBarMode;
   hideActionBarWhenEmpty?: boolean;
+  extensions?: Extension[];
 }
 
 const Tiptap = (
@@ -39,7 +41,8 @@ const Tiptap = (
     register,
     formSetValue,
     actionBarMode = "full",
-    hideActionBarWhenEmpty = false
+    hideActionBarWhenEmpty = false,
+    extensions = []
   }: TiptapProps,
   ref: any
 ) => {
@@ -62,7 +65,8 @@ const Tiptap = (
           rel: "noopener noreferrer",
           target: null
         }
-      })
+      }),
+      ...extensions
     ],
     content,
     editable,
