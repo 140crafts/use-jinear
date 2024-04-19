@@ -52,6 +52,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at
             Jinear unless otherwise defined in this Privacy Policy.
           </p>
+
+          <br/>
+
           <p>
             <strong>Information Collection and Use</strong>
           </p>{" "}
@@ -89,6 +92,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
               </a>
             </li>
           </ul>
+
+          <br/>
+
           <p>
             <strong>Log Data</strong>
           </p>
@@ -99,6 +105,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             version, the configuration of the app when utilizing our Service, the time and date of your use of the Service, and
             other statistics.
           </p>
+
+          <br/>
+
           <p>
             <strong>Service Providers</strong>
           </p>{" "}
@@ -114,6 +123,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             is to perform the tasks assigned to them on our behalf. However, they are obligated not to disclose or use the
             information for any other purpose.
           </p>
+
+          <br/>
+
           <p>
             <strong>Security</strong>
           </p>{" "}
@@ -122,6 +134,132 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             means of protecting it. But remember that no method of transmission over the internet, or method of electronic storage
             is 100% secure and reliable, and We cannot guarantee its absolute security.
           </p>
+
+          <br/>
+
+          <p>
+            <strong>Data Protection Mechanisms For Sensitive Data</strong>
+          </p>{" "}
+          <p>
+            We are committed to protecting the privacy and security of your sensitive data. To ensure the confidentiality, integrity,
+            and availability of this data, we have implemented the following data protection mechanisms:
+            <br/>
+            <ul>
+              <li>
+                <b>Encryption</b>
+                <br/>
+                <p>
+                  All sensitive data transmitted between your device and our servers is encrypted using industry-standard encryption protocols. This ensures that even if intercepted, the data remains unreadable without the appropriate decryption key.
+                </p>
+              </li>
+              <li>
+                <b>Access Control</b>
+                <br/>
+                <p>
+                  Access to sensitive data is restricted to authorized personnel only. We employ strong authentication measures, such as passwords and multi-factor authentication, to prevent unauthorized access.
+                </p>
+              </li>
+              <li>
+                <b>Data Minimization</b>
+                <br/>
+                <p>
+                  We only collect and process sensitive data that is necessary for the purposes outlined in our privacy policy. We do not retain this data longer than necessary for its intended use.
+                </p>
+              </li>
+              <li>
+                <b>Anonymization and Pseudonymization</b>
+                <br/>
+                <p>
+                  Where possible, we anonymize or pseudonymize sensitive data to prevent identification of individuals. This helps mitigate the risk of data breaches and unauthorized access.
+                </p>
+              </li>
+              <li>
+                <b>Regular Audits and Monitoring</b>
+                <br/>
+                <p>
+                  We conduct regular audits of our data protection mechanisms and security practices to ensure compliance with industry standards and legal requirements. Additionally, we continuously monitor for any unauthorized access or suspicious activities.
+                </p>
+              </li>
+              <li>
+                <b>Data Breach Response Plan</b>
+                <br/>
+                <p>
+                  In the event of a data breach involving sensitive data, we have a comprehensive response plan in place. This includes immediate containment, notification of affected individuals and authorities as required by law, and remedial actions to prevent future breaches.
+                </p>
+              </li>
+              <li>
+                <b>User Education</b>
+                <br/>
+                <p>
+                  We provide resources and guidance to our users on best practices for protecting their sensitive data, such as using strong passwords, avoiding phishing attempts, and being cautious with sharing personal information.
+                </p>
+              </li>
+            </ul>
+            <p>
+              By implementing these data protection mechanisms, we strive to maintain the highest standards of security and privacy for your sensitive data.
+            </p>
+          </p>
+
+          <br/>
+
+          <p>
+            <strong>Data Retention and/or Deletion Disclosures</strong>
+          </p>{" "}
+          <p>
+            We are committed to transparently disclosing our data retention and deletion practices to ensure the protection of your privacy. Below are the key points regarding how we handle the retention and deletion of data:
+            <br/>
+            <ul>
+              <li>
+                <b>Retention Period</b>
+                <br/>
+                <p>
+                  We retain personal data only for as long as necessary to fulfill the purposes outlined in our privacy policy, unless a longer retention period is required or permitted by law. The specific retention periods may vary depending on the type of data and the applicable legal requirements.
+                </p>
+              </li>
+              <li>
+                <b>Purpose Limitation</b>
+                <br/>
+                <p>
+                  We only retain personal data for the purposes for which it was collected and authorized by you. If we intend to use the data for any other purpose, we will obtain your explicit consent unless the new purpose is compatible with the original purpose.
+                </p>
+              </li>
+              <li>
+                <b>Data Deletion</b>
+                <br/>
+                <p>
+                  When personal data is no longer needed for its intended purpose or when you withdraw your consent (where applicable), we will securely delete or anonymize the data to prevent unauthorized access or use. This includes data stored in our systems, backups, and any third-party services we utilize for data processing.
+                </p>
+              </li>
+              <li>
+                <b>User Requests</b>
+                <br/>
+                <p>
+                  You have the right to request the deletion of your personal data in certain circumstances, such as when the data is no longer necessary for the purposes for which it was collected, or when you withdraw your consent. To exercise this right, please contact us using the contact information provided in this privacy policy.
+                </p>
+              </li>
+              <li>
+                <b>Data Retention for Legal Compliance</b>
+                <br/>
+                <p>
+                  In some cases, we may be required to retain personal data for a longer period to comply with legal obligations, resolve disputes, enforce our agreements, or protect our legal rights. However, we will ensure that such data is only retained to the extent necessary for these purposes and will implement appropriate safeguards to protect your privacy.
+                </p>
+              </li>
+              <li>
+                <b>Backup Retention</b>
+                <br/>
+                <p>
+                  We may retain backup copies of your data for a limited period to protect against data loss due to technical failures or disasters. These backups are securely stored and are subject to the same data protection measures as our live data.
+                </p>
+              </li>
+            </ul>
+            <p>
+              By disclosing our data retention and deletion practices, we aim to provide transparency and clarity regarding how we handle your personal data throughout its lifecycle.
+            </p>
+          </p>
+
+          <br/>
+
+
           <p>
             <strong>Children’s Privacy</strong>
           </p>{" "}
@@ -131,6 +269,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             information, We immediately delete this from our servers. If you are a parent or guardian and you are aware that your
             child has provided us with personal information, please contact us so that we will be able to do necessary actions.
           </p>
+
+          <br/>
+
           <p>
             <strong>Changes to This Privacy Policy</strong>
           </p>{" "}
@@ -139,6 +280,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             changes. We may or may not notify you of any changes by posting the new Privacy Policy on this page. These changes are
             effective immediately after they are posted on this page.
           </p>
+
+          <br/>
+
           <p>
             <strong>Contact Us</strong>
           </p>{" "}
@@ -149,6 +293,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             </a>
             .
           </p>
+
+          <br/>
+
           <p>
             <strong>Refunds & Cancellations</strong>
           </p>{" "}
@@ -184,6 +331,7 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
           </p>
         </div>
       </div>
+      <br/>
       <div>
         <Button href="/" variant={ButtonVariants.filled}>
           {t("termsPageGoBack")}
