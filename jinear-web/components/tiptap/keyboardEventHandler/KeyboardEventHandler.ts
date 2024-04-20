@@ -1,6 +1,9 @@
 import { Extension } from "@tiptap/core";
 
-const CustomKeyboardEventHandler = ({ onEnter }: { onEnter?: (html: string) => void }) => {
+const CustomKeyboardEventHandler = ({ onEnter, shouldClearContentOnEnter = false }: {
+  onEnter?: (html: string) => void,
+  shouldClearContentOnEnter: boolean
+}) => {
   return Extension.create({
     name: "keyboardHandler",
     addKeyboardShortcuts() {
@@ -11,7 +14,10 @@ const CustomKeyboardEventHandler = ({ onEnter }: { onEnter?: (html: string) => v
             return false;
           }
           onEnter?.(this.editor.getHTML());
-          return this.editor.commands.clearContent();
+          if (shouldClearContentOnEnter) {
+            return this.editor.commands.clearContent();
+          }
+          return true;
         },
         "Shift-Enter": () => {
           return this.editor.commands.first(({ commands }) => [

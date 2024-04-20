@@ -3463,6 +3463,14 @@ const translations = {
     en: "Post",
     tr: "Gönder"
   },
+  threadReplyMessageInputButton: {
+    en: "Reply",
+    tr: "Cevapla"
+  },
+  threadReplyMessageInputPlaceholder: {
+    en: "Reply with a message",
+    tr: "Bir mesaj ile cevapla"
+  }
 };
 
 export default translations;

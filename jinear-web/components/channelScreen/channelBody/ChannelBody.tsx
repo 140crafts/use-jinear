@@ -3,6 +3,7 @@ import styles from "./ChannelBody.module.css";
 import { useLazyListThreadsQuery } from "@/api/threadApi";
 import { ThreadDto } from "@/be/jinear-core";
 import Logger from "@/utils/logger";
+import Thread from "@/components/channelScreen/channelBody/thread/Thread";
 
 interface ChannelBodyProps {
   workspaceName: string;
@@ -23,7 +24,7 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ workspaceName, channelId, wor
 
   const [threadMap, setThreadMap] = useState<ThreadMap>({});
   const sortedMapValues = useMemo(() => {
-    return Object.values(threadMap).sort((a, b) => new Date(a.lastActivityTime).getTime() - new Date(b.lastActivityTime).getTime());
+    return Object.values(threadMap).sort((a, b) => new Date(b.lastActivityTime).getTime() - new Date(a.lastActivityTime).getTime());
   }, [JSON.stringify(threadMap)]);
 
   logger.log({ threadMap, sortedMapValues, mapKeyLength: Object.keys(threadMap).length });
@@ -42,18 +43,21 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ workspaceName, channelId, wor
         return currentClone;
       });
       setHasMore(listThreadsResponse.data.hasNext);
+    }
+  }, [listThreadsResponse]);
 
-      if (typeof window === "object" && !initialScroll.current) {
+  useEffect(() => {
+    if (listThreadsResponse && typeof window === "object" && !initialScroll.current) {
+      setTimeout(() => {
         window.scrollTo({
           top: document.documentElement.scrollHeight - window.innerHeight,
           left: 0,
           behavior: "auto"
         });
         initialScroll.current = true;
-      }
-
+      }, 500);
     }
-  }, [initialScroll, listThreadsResponse]);
+  }, [listThreadsResponse]);
 
   const retrieveMore = () => {
 
@@ -61,13 +65,7 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ workspaceName, channelId, wor
 
   return (
     <div className={styles.container}>
-      {threadMap && Object.values(threadMap).map(threadDto => (
-        <div key={threadDto.threadId + threadDto.lastActivityTime}>
-          {new Date(threadDto.lastActivityTime).toISOString()}
-          {threadDto.threadMessageInfo.initialMessage.richText.value}
-          {threadDto.threadMessageInfo.latestMessage.richText.value}
-        </div>
-      ))}
+      {threadMap && Object.values(threadMap).map(threadDto => <Thread key={threadDto.threadId} thread={threadDto} />)}
     </div>
   );
 };

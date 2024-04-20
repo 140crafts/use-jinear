@@ -69,12 +69,13 @@ const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelI
           <Button
             loading={isInitializeThreadLoading}
             disabled={isInitializeThreadLoading}
-            variant={ButtonVariants.contrast}
+            variant={ButtonVariants.hoverFilled2}
             heightVariant={ButtonHeight.short}
             className={styles.submitButton}
             onClick={submit}
+            data-tooltip-right={t("newThreadButtonLabel")}
           >
-            <div>{t("newThreadButtonLabel")}</div>
+            <LuSendHorizonal />
           </Button>
         </div>
       </div>

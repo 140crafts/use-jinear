@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.replyToggleButton {
+    border-top-right-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+}
+
+.input {
+    background: transparent !important;
+}
+
+.input:hover {
+    background: transparent !important;
+}
+
+.input:focus {
+    border-color: transparent !important;
+    outline: none !important;
+}
+
+.inputContainer {
+    display: flex;
+    flex-direction: column;
+    border-style: solid;
+    border-width: thin;
+    border-color: var(--c-primary-shade-1);
+    border-radius: var(--border-radius);
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+.inputActionBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: .25rem
+}

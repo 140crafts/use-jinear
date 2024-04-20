@@ -8,6 +8,7 @@ import { useWorkspaceFromName } from "@/hooks/useWorkspaceFromName";
 import ChannelBody from "@/components/channelScreen/channelBody/ChannelBody";
 import NewThreadInput from "@/components/channelScreen/newThreadInput/NewThreadInput";
 import useElementSize from "@/hooks/useElementSize";
+import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 
 interface ChannelPageProps {
 
@@ -23,28 +24,30 @@ const ChannelPage: React.FC<ChannelPageProps> = ({}) => {
   const { offsetWidth } = useElementSize(containerRef.current);
 
   return (
-    <div ref={containerRef} className={styles.container}>
-      {workspace &&
-        <>
-          <ChannelScreenHeader channelId={channelId}
-                               workspaceName={workspaceName}
-                               workspaceId={workspace.workspaceId}
-          />
-          <ChannelBody
-            channelId={channelId}
-            workspaceName={workspaceName}
-            workspaceId={workspace.workspaceId}
-          />
-          <NewThreadInput
-            channelId={channelId}
-            workspaceName={workspaceName}
-            workspaceId={workspace.workspaceId}
-            width={offsetWidth || 0}
-          />
-        </>
-      }
+    <PureClientOnly>
+      <div ref={containerRef} className={styles.container}>
+        {workspace &&
+          <>
+            <ChannelScreenHeader channelId={channelId}
+                                 workspaceName={workspaceName}
+                                 workspaceId={workspace.workspaceId}
+            />
+            <ChannelBody
+              channelId={channelId}
+              workspaceName={workspaceName}
+              workspaceId={workspace.workspaceId}
+            />
+            <NewThreadInput
+              channelId={channelId}
+              workspaceName={workspaceName}
+              workspaceId={workspace.workspaceId}
+              width={offsetWidth || 0}
+            />
+          </>
+        }
 
-    </div>
+      </div>
+    </PureClientOnly>
   );
 };
 

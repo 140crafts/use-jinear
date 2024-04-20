@@ -74,7 +74,7 @@ const Tiptap = (
       setHtml(editor.getHTML());
     }
   });
-  const shouldHideActionBar = editor && !editor.isEmpty && hideActionBarWhenEmpty;
+  const shouldHideActionBar = editor && editor.isEmpty && hideActionBarWhenEmpty;
 
   useImperativeHandle(ref, () => ({
     clearContent: () => editor?.commands.clearContent(true),
@@ -89,7 +89,7 @@ const Tiptap = (
 
   return (
     <div className={cn(styles.container, className)}>
-      {editor && shouldHideActionBar && editable && <ActionBar editor={editor} mode={actionBarMode} />}
+      {editor && !shouldHideActionBar && editable && <ActionBar editor={editor} mode={actionBarMode} />}
       <EditorContent editor={editor} />
       {htmlInputId && <input id={htmlInputId} type="hidden" {...register?.(htmlInputId)} value={html} />}
     </div>
