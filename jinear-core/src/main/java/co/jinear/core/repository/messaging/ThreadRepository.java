@@ -26,7 +26,7 @@ public interface ThreadRepository extends JpaRepository<Thread, String> {
     void updateLastActivityTime(@Param("threadId") String threadId,
                                 @Param("lastActivityTime") ZonedDateTime lastActivityTime);
 
-    Page<Thread> findAllByChannelIdAndPassiveIdIsNullOrderByLastActivityTimeDesc(String channelId, Pageable pageable);
+    Page<Thread> findAllByChannelIdAndLastActivityTimeBeforeAndPassiveIdIsNullOrderByLastActivityTimeDesc(String channelId, ZonedDateTime lastActivityTimeBefore, Pageable pageable);
 
     Optional<Thread> findByThreadIdAndPassiveIdIsNull(String threadId);
 }

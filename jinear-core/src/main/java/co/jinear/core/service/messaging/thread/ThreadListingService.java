@@ -9,6 +9,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -18,9 +20,9 @@ public class ThreadListingService {
     private final ThreadRepository threadRepository;
     private final ThreadDtoConverter threadDtoConverter;
 
-    public Page<ThreadDto> listThreads(String channelId, int page) {
-        log.info("List threads has started. channelId: {}, page: {}", channelId, page);
-        return threadRepository.findAllByChannelIdAndPassiveIdIsNullOrderByLastActivityTimeDesc(channelId, PageRequest.of(page, PAGE_SIZE))
+    public Page<ThreadDto> listThreads(String channelId, ZonedDateTime before) {
+        log.info("List threads has started. channelId: {}, before: {}", channelId, before);
+        return threadRepository.findAllByChannelIdAndLastActivityTimeBeforeAndPassiveIdIsNullOrderByLastActivityTimeDesc(channelId, before, PageRequest.of(0, PAGE_SIZE))
                 .map(threadDtoConverter::convert);
     }
 }

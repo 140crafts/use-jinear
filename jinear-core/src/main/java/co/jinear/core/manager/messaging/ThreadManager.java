@@ -16,6 +16,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.time.ZonedDateTime;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -38,11 +40,11 @@ public class ThreadManager {
         return new BaseResponse();
     }
 
-    public ThreadListingResponse listThreads(String channelId, Integer page) {
+    public ThreadListingResponse listThreads(String channelId, ZonedDateTime before) {
         String currentAccountId = sessionInfoService.currentAccountId();
         channelAccessValidator.validateChannelAccess(channelId, currentAccountId);
-        log.info("List threads has started. currentAccountId: {}", currentAccountId);
-        Page<ThreadDto> threadPage = threadListingService.listThreads(channelId, page);
+        log.info("List threads has started. currentAccountId: {}, before: {}", currentAccountId, before);
+        Page<ThreadDto> threadPage = threadListingService.listThreads(channelId, before);
         return mapResponse(threadPage);
     }
 
