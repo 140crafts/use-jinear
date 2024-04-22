@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./NewThreadInput.module.scss";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { LuSendHorizonal } from "react-icons/lu";
+import { LuSendHorizonal, LuX } from "react-icons/lu";
 import useTranslation from "@/locals/useTranslation";
 import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
 import { useChannelFromChannelMemberships } from "@/hooks/messaging/useChannelFromChannelMemberships";
 import { useChannelMembership } from "@/hooks/messaging/useChannelMembership";
 import Logger from "@/utils/logger";
 import CustomKeyboardEventHandler from "@/components/tiptap/keyboardEventHandler/KeyboardEventHandler";
-import { useInitializeThreadMutation, useLazyListThreadsQuery } from "@/api/threadApi";
-import { addSeconds } from "date-fns";
+import { useInitializeThreadMutation } from "@/api/threadApi";
+import { useToggle } from "@/hooks/useToggle";
 
 interface NewThreadInputProps {
   workspaceName: string;
@@ -22,7 +22,7 @@ const logger = Logger("NewThreadInput");
 
 const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelId, workspaceId, width }) => {
   const { t } = useTranslation();
-  const [listThreads, { data: listThreadsResponse, isLoading: isListThreadsLoading }] = useLazyListThreadsQuery();
+  const [inputVisible, toggleInputVisible, setInputVisible] = useToggle(false);
   const [initializeThread, {
     data: initializeThreadResponse,
     isLoading: isInitializeThreadLoading
@@ -31,14 +31,15 @@ const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelI
   const tiptapRef = useRef<ITiptapRef>(null);
   const channel = useChannelFromChannelMemberships({ workspaceName, channelId });
   const channelMembership = useChannelMembership({ workspaceId: channel?.workspaceId, channelId: channel?.channelId });
-  const isAdmin = ["ADMIN", "OWNER"].includes(channelMembership?.roleType || "");
+  const isAdmin = ["ADMIN", "OWNER"].includes(channelMembership?.roleType ?? "");
   const canStartThread = channel?.participationType == "EVERYONE" || isAdmin;
 
   useEffect(() => {
     if (tiptapRef.current && !isInitializeThreadLoading) {
       tiptapRef.current.clearContent();
+      setInputVisible(false);
     }
-  }, [tiptapRef, channelId, isInitializeThreadLoading, listThreads, initializeThreadResponse]);
+  }, [tiptapRef, channelId, isInitializeThreadLoading, initializeThreadResponse, setInputVisible]);
 
   const onEnter = (html: string) => {
     initializeThread({ channelId, initialMessageBody: html });
@@ -54,7 +55,7 @@ const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelI
   const KeyboardEventHandler = CustomKeyboardEventHandler({ onEnter });
 
   return canStartThread ? (
-    <div className={styles.inputContainer} style={{ width: width }}>
+    inputVisible ? <div className={styles.inputContainer} style={{ width: width }}>
       <div className={styles.newThreadInputContainer}>
         <Tiptap
           ref={tiptapRef}
@@ -66,6 +67,13 @@ const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelI
           extensions={[KeyboardEventHandler]}
         />
         <div className={styles.actionBar}>
+          <Button
+            variant={ButtonVariants.hoverFilled2}
+            heightVariant={ButtonHeight.short}
+            onClick={toggleInputVisible}
+          >
+            <LuX />
+          </Button>
           <Button
             loading={isInitializeThreadLoading}
             disabled={isInitializeThreadLoading}
@@ -79,7 +87,13 @@ const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelI
           </Button>
         </div>
       </div>
-    </div>
+    </div> : <Button
+      variant={ButtonVariants.contrast}
+      className={styles.newThreadInputToggleButton}
+      onClick={toggleInputVisible}
+    >
+      {t("newThreadFloatingButtonLabel")}
+    </Button>
   ) : null;
 };
 

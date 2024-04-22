@@ -51,8 +51,8 @@ const ReplyInput: React.FC<ReplyInputProps> = ({ threadId }) => {
       {!replyVisible ?
         <Button variant={ButtonVariants.hoverFilled2} heightVariant={ButtonHeight.short} onClick={toggleReplyVisible}
                 className={styles.replyToggleButton}>
-          <LuReply />
-          <div className={"spacer-w-1"} />
+          {/*<LuReply />*/}
+          {/*<div className={"spacer-w-1"} />*/}
           {t("threadReplyMessageInputButton")}
         </Button> :
         <div className={styles.inputContainer}>

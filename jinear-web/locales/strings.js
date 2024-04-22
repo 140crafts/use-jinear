@@ -3463,6 +3463,10 @@ const translations = {
     en: "Post",
     tr: "Gönder"
   },
+  newThreadFloatingButtonLabel: {
+    en: "New Thread",
+    tr: "Yeni Gönderi"
+  },
   threadReplyMessageInputButton: {
     en: "Reply",
     tr: "Cevapla"
@@ -3470,6 +3474,18 @@ const translations = {
   threadReplyMessageInputPlaceholder: {
     en: "Reply with a message",
     tr: "Bir mesaj ile cevapla"
+  },
+  threadMessageRemainingMessageCount: {
+    en: "...{count} more messages",
+    tr: "...{count} mesaj daha"
+  },
+  threadMessageListLoadMore: {
+    en: "Show older",
+    tr: "Önceki mesajları görüntüle"
+  },
+  threadsLoadMore: {
+    en: "Show older",
+    tr: "Önceki gönderileri görüntüle"
   }
 };
 

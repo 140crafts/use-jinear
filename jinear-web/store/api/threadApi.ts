@@ -1,4 +1,4 @@
-import { BaseResponse, InitializeThreadRequest, ThreadListingResponse } from "@/model/be/jinear-core";
+import { BaseResponse, InitializeThreadRequest, ThreadListingResponse, ThreadResponse } from "@/model/be/jinear-core";
 import { api } from "./api";
 import { addSeconds } from "date-fns";
 
@@ -12,11 +12,11 @@ export const threadApi = api.injectEndpoints({
         body: req
       }),
       async onQueryStarted(props, { dispatch, queryFulfilled }) {
-        await queryFulfilled
+        await queryFulfilled;
         setTimeout(() => {
-          dispatch(api.util.invalidateTags([`v1/messaging/thread/channel/{channelId}`]))
-        }, 1500)
-      },
+          dispatch(api.util.invalidateTags([`v1/messaging/thread/channel/{channelId}`]));
+        }, 1500);
+      }
       // invalidatesTags: (_result, _err, req) => [
       //   // `v1/messaging/thread/channel/{channelId}`
       // ]
@@ -33,6 +33,18 @@ export const threadApi = api.injectEndpoints({
           id: `${req.channelId}-${req.before?.toISOString()}`
         }
       ]
+    }),
+    //
+    retrieveThread: build.query<ThreadResponse, { threadId: string }>({
+      query: ({ threadId }: {
+        threadId: string
+      }) => `v1/messaging/thread/${threadId}`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: `v1/messaging/thread/{threadId}`,
+          id: `${req.threadId}`
+        }
+      ]
     })
     //
   })
@@ -40,9 +52,10 @@ export const threadApi = api.injectEndpoints({
 
 export const {
   useInitializeThreadMutation,
-  useLazyListThreadsQuery
+  useLazyListThreadsQuery,
+  useRetrieveThreadQuery
 } = threadApi;
 
 export const {
-  endpoints: { initializeThread, listThreads }
+  endpoints: { initializeThread, listThreads, retrieveThread }
 } = threadApi;

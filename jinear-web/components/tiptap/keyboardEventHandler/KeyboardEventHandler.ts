@@ -2,7 +2,7 @@ import { Extension } from "@tiptap/core";
 
 const CustomKeyboardEventHandler = ({ onEnter, shouldClearContentOnEnter = false }: {
   onEnter?: (html: string) => void,
-  shouldClearContentOnEnter: boolean
+  shouldClearContentOnEnter?: boolean
 }) => {
   return Extension.create({
     name: "keyboardHandler",

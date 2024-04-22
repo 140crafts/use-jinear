@@ -1,48 +1,38 @@
 import React from "react";
 import styles from "./Thread.module.css";
 import { ThreadDto } from "@/be/jinear-core";
-import Message from "@/components/channelScreen/channelBody/thread/message/Message";
+import InitialMessage from "@/components/channelScreen/channelBody/thread/initialMessage/InitialMessage";
 import ReplyInput from "@/components/channelScreen/channelBody/thread/replyInput/ReplyInput";
 import Line from "@/components/line/Line";
-import ReplyMessage from "@/components/channelScreen/channelBody/thread/replyMessage/ReplyMessage";
-import { useRetrieveThreadMessagesQuery } from "@/api/messageListingApi";
-import { isAfter } from "date-fns";
 import Logger from "@/utils/logger";
+import MessageList from "@/components/channelScreen/channelBody/thread/messageList/MessageList";
 
 interface ThreadProps {
   thread: ThreadDto;
+  canReplyThreads: boolean;
+  workspaceName: string;
+  viewingAsDetail: boolean;
 }
 
 const logger = Logger("Thread");
 
-const Thread: React.FC<ThreadProps> = ({ thread }) => {
-  const { data: retrieveThreadMessagesResponse } = useRetrieveThreadMessagesQuery({ threadId: thread.threadId });
-  const lastRetrievedMessage = retrieveThreadMessagesResponse?.data?.content?.[0];
-  const isThreadInfoFirstAndLastMessageIsDifferent = thread.threadMessageInfo.latestMessage.messageId != thread.threadMessageInfo.initialMessage.messageId;
-  const isLastRetrievedMessageIsAfterThreadInfoLastMessage = lastRetrievedMessage && isAfter(new Date(lastRetrievedMessage?.createdDate), new Date(thread.threadMessageInfo.latestMessage.createdDate));
-  const actualLatestMessage = isThreadInfoFirstAndLastMessageIsDifferent ?
-    (isLastRetrievedMessageIsAfterThreadInfoLastMessage ? lastRetrievedMessage : thread.threadMessageInfo.latestMessage) :
-    null;
-
-  logger.log({
-    lastRetrievedMessage,
-    infoLatestMessage: thread.threadMessageInfo.latestMessage,
-    isAfter: lastRetrievedMessage?.createdDate && isAfter(new Date(lastRetrievedMessage?.createdDate), new Date(thread.threadMessageInfo.latestMessage.createdDate)),
-    actualLatestMessage,
-    isThreadInfoFirstAndLastMessageIsDifferent,
-    isLastRetrievedMessageIsAfterThreadInfoLastMessage
-  });
+const Thread: React.FC<ThreadProps> = ({ thread, canReplyThreads, workspaceName, viewingAsDetail = false }) => {
 
   return (
     <div className={styles.container}>
-      <Message message={thread.threadMessageInfo.initialMessage} />
-      {actualLatestMessage &&
-        <>
-          <Line />
-          <ReplyMessage key={actualLatestMessage.messageId} replyMessage={actualLatestMessage} />
-        </>}
-      <Line />
-      <ReplyInput threadId={thread.threadId} />
+      <InitialMessage
+        message={thread.threadMessageInfo.initialMessage}
+        workspaceName={workspaceName}
+        channelId={thread.channelId}
+        viewingAsDetail={viewingAsDetail}
+      />
+      <MessageList thread={thread} workspaceName={workspaceName} viewingAsDetail={viewingAsDetail} />
+      {canReplyThreads && <>
+        <Line />
+        <div className={"spacer-h-1"} />
+        <ReplyInput threadId={thread.threadId} />
+      </>
+      }
     </div>
   );
 };

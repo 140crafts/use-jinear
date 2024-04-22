@@ -12,6 +12,7 @@ import { makeStoreAccessibleFromWindow } from "@/utils/webviewUtils";
 import { combineReducers } from "redux";
 import { api } from "./api/api";
 import { rtkQueryErrorLogger } from "./api/errorMiddleware";
+import messagingSlice from "@/slice/messagingSlice";
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
   taskAdditionalData,
   firebase,
   sseSlice,
+  messagingSlice
 });
 
 export const createStore = (options?: ConfigureStoreOptions["preloadedState"] | undefined) =>

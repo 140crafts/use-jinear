@@ -1,7 +1,14 @@
 .container {
     display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-top: 1rem;
+}
+
+.contentContainer {
+    display: flex;
     flex-direction: column-reverse;
     justify-content: flex-end;
     padding-bottom: 8rem;
-    gap: 4rem;
+    gap: 1rem;
 }

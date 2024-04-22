@@ -1,5 +1,13 @@
 @import "/styles/breakpoints.scss";
 
+.newThreadInputToggleButton {
+  display: flex;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: unset;
+}
+
 .inputContainer {
   display: flex;
   position: fixed;
@@ -53,6 +61,10 @@
 
 @media (max-width: $tablet) {
   .inputContainer {
+    bottom: calc(var(--mobile-menu-action-bar-height) + var(--workspace-side-menu-mobile-navigator-height) + 1rem);
+  }
+
+  .newThreadInputToggleButton {
     bottom: calc(var(--mobile-menu-action-bar-height) + var(--workspace-side-menu-mobile-navigator-height) + 1rem);
   }
 }

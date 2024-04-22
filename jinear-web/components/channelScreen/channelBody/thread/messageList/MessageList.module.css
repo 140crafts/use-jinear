@@ -1,0 +1,6 @@
+.seeMoreRepliesButton {
+    padding-left: 2rem;
+    justify-content: flex-start !important;
+    text-align: left !important;
+    color: var(--c-link-color) !important;
+}

@@ -1,20 +1,27 @@
 import React from "react";
-import styles from "./Message.module.css";
+import styles from "./InitialMessage.module.css";
 import { MessageDto } from "@/be/jinear-core";
 import Tiptap from "@/components/tiptap/Tiptap";
 import ProfilePhoto from "@/components/profilePhoto";
 import { format } from "date-fns";
 import useTranslation from "@/locals/useTranslation";
+import Link from "next/link";
+import ClientOnly from "@/components/clientOnly/ClientOnly";
 
 interface MessageProps {
   message: MessageDto;
+  channelId: string;
+  workspaceName: string;
+  viewingAsDetail: boolean;
 }
 
-const Message: React.FC<MessageProps> = ({ message }) => {
+const InitialMessage: React.FC<MessageProps> = ({ message, channelId, workspaceName, viewingAsDetail }) => {
   const { t } = useTranslation();
-
+  const Wrapper = viewingAsDetail ? ClientOnly : Link;
   return (
-    <div className={styles.container}>
+    <Wrapper
+      href={`/${workspaceName}/conversations/channel/${channelId}/thread/${message.threadId}`}
+      className={styles.container}>
       <div className={styles.profileInfo}>
         <ProfilePhoto
           boringAvatarKey={message.account?.accountId || ""}
@@ -38,8 +45,8 @@ const Message: React.FC<MessageProps> = ({ message }) => {
           />
         </div>
       </div>
-    </div>
+    </Wrapper>
   );
 };
 
-export default Message;
+export default InitialMessage;

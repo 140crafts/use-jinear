@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-// Generated using typescript-generator version 3.0.1157 on 2024-04-14 19:09:17.
+// Generated using typescript-generator version 3.0.1157 on 2024-04-21 10:28:39.
 
 export interface BaseDto {
   createdDate: Date;
@@ -159,9 +159,9 @@ export interface GmailMessageDto extends BaseDto {
   subject: string;
   body: string;
   gid: string;
-  gthreadId: string;
   ghistoryId: string;
   ginternalDate: string;
+  gthreadId: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1258,8 +1258,16 @@ export interface MessageListingPaginatedResponse extends BaseResponse {
   data: PageDto<MessageDto>;
 }
 
+export interface MessageResponse extends BaseResponse {
+  data: MessageDto;
+}
+
 export interface ThreadListingResponse extends BaseResponse {
   data: PageDto<ThreadDto>;
+}
+
+export interface ThreadResponse extends BaseResponse {
+  data: ThreadDto;
 }
 
 export interface NotificationEventListingResponse extends BaseResponse {

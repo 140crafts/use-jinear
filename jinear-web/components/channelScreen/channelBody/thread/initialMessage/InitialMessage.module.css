@@ -1,7 +1,7 @@
 .container {
     display: flex;
     flex-direction: column;
-    padding: .5rem;
+    color: var(--c-text-color);
 }
 
 .profileInfo {
@@ -22,4 +22,6 @@
 
 .editor {
     background-color: unset !important;
+    min-height: 1.25rem !important;
+    padding: .5rem 7.5px .25rem 7.5px !important;
 }

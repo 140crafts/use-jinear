@@ -2,5 +2,6 @@
     display: flex;
     flex-direction: column;
     border-radius: var(--border-radius);
-    background-color: var(--c-primary-shade-0);
+    background-color: var(--c-primary-shade-1-op025);
+    padding: .5rem;
 }
