@@ -8,7 +8,7 @@ export const channelMemberApi = api.injectEndpoints({
       query: (req: { workspaceId: string }) => `v1/messaging/channel/member/memberships/${req.workspaceId}`,
       providesTags: (_result, _err, req) => [
         {
-          type: `v1/messaging/channel/member/{workspaceId}`,
+          type: `v1/messaging/channel/member/memberships/{workspaceId}`,
           id: `${req.workspaceId}`
         }
       ]

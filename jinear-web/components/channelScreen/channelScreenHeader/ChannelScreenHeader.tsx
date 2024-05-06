@@ -29,6 +29,7 @@ const ChannelScreenHeader: React.FC<ChannelScreenHeaderProps> = ({ workspaceName
         <div className={"spacer-w-1"} />
         {channel && <h3>{channel.title}</h3>}
         <div className={"flex-1"} />
+        <div className={"spacer-w-1"} />
         <ChannelMembers channelId={channelId} />
       </div>
       <div className={styles.borderBottom} />

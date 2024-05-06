@@ -14,3 +14,7 @@
     flex: 1;
     font-size: 0.75rem;
 }
+
+.unread {
+    font-weight: bold;
+}

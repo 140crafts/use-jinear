@@ -19,8 +19,12 @@ const ThreadDetailScreen: React.FC<ThreadDetailScreenProps> = ({}) => {
   const workspaceName: string = params?.workspaceName as string;
   const channelId: string = params?.channelId as string;
   const threadId: string = params?.threadId as string;
-  const { data: threadDetailResponse, isFetching } = useRetrieveThreadQuery({ threadId }, { skip: threadId == null });
   const workspace = useWorkspaceFromName(workspaceName);
+
+  const { data: threadDetailResponse, isFetching } = useRetrieveThreadQuery({
+    workspaceId: workspace?.workspaceId || "",
+    threadId
+  }, { skip: threadId == null || workspace == null });
   const channelMembership = useChannelMembership({ workspaceId: workspace?.workspaceId, channelId });
   const isAdmin = ["ADMIN", "OWNER"].includes(channelMembership?.roleType ?? "");
   const canReplyThreads = "READ_ONLY" != channelMembership?.channel.participationType || isAdmin;
@@ -35,12 +39,14 @@ const ThreadDetailScreen: React.FC<ThreadDetailScreenProps> = ({}) => {
                                  workspaceId={workspace.workspaceId}
             />
             {isFetching && <CircularLoading />}
-            <div className={'spacer-h-2'}/>
+            <div className={"spacer-h-2"} />
             {threadDetailResponse &&
               <Thread
-                thread={threadDetailResponse.data}
+                threadId={threadDetailResponse.data.threadId}
+                channelId={threadDetailResponse.data.channelId}
                 canReplyThreads={canReplyThreads}
                 workspaceName={workspaceName}
+                workspaceId={workspace.workspaceId}
                 viewingAsDetail={true}
               />
             }

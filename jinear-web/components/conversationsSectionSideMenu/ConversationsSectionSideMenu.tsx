@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import { useTypedSelector } from "@/store/store";
 import { selectWorkspaceFromWorkspaceUsername } from "@/slice/accountSlice";
 import ClientOnly from "@/components/clientOnly/ClientOnly";
+import ConversationList from "@/components/conversationsSectionSideMenu/conversationList/ConversationList";
 
 interface ConversationsSectionSideMenuProps {
 }
@@ -15,7 +16,10 @@ const ConversationsSectionSideMenu: React.FC<ConversationsSectionSideMenuProps> 
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
 
   return <ClientOnly className={styles.container}>
-    {workspace && <ChannelList workspace={workspace} />}
+    {workspace && <>
+      <ChannelList workspace={workspace} />
+      <ConversationList workspace={workspace} />
+    </>}
   </ClientOnly>;
 };
 

@@ -12,3 +12,7 @@
     padding-bottom: 8rem;
     gap: 1rem;
 }
+
+.emptyStateContainer {
+    text-align: center;
+}

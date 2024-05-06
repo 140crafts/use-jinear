@@ -70,7 +70,9 @@ export const tagTypes = [
   "v1/messaging/channel/member/list/{channelId}",
   "v1/messaging/thread/channel/{channelId}",
   "v1/messaging/message/thread/{threadId}",
-  "v1/messaging/thread/{threadId}"
+  "v1/messaging/thread/{threadId}",
+  `v1/messaging/conversation/participated/{workspaceId}`,
+  `v1/messaging/message/conversation/{conversationId}`
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

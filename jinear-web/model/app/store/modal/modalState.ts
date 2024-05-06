@@ -223,3 +223,12 @@ export interface ChannelSettingsModalState extends ModalState {
   channelId?: string;
   workspaceId?: string;
 }
+
+export interface NewChannelModalState extends ModalState {
+  workspaceId?: string;
+}
+
+export interface ConversationSettingsModalState extends ModalState {
+  workspaceId?: string;
+  conversationId?: string;
+}

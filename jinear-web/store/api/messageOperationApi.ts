@@ -4,7 +4,7 @@ import { api } from "./api";
 export const messageOperationApi = api.injectEndpoints({
   endpoints: (build) => ({
     //
-    sendToThread: build.mutation<MessageResponse, { threadId: string, body: SendMessageRequest }>({
+    sendToThread: build.mutation<MessageResponse, { workspaceId: string, channelId: string, threadId: string, body: SendMessageRequest }>({
       query: (req) => ({
         url: `v1/messaging/message/operation/thread/${req.threadId}/send`,
         method: "POST",
@@ -19,15 +19,36 @@ export const messageOperationApi = api.injectEndpoints({
           ]));
         }, 3000);
       }
+    }),
+    //
+    sendToConversation: build.mutation<MessageResponse, {
+      workspaceId: string,
+      conversationId: string,
+      body: SendMessageRequest
+    }>({
+      query: (req) => ({
+        url: `v1/messaging/message/operation/conversation/${req.conversationId}/send`,
+        method: "POST",
+        body: req.body
+      }),
+      async onQueryStarted(props, { dispatch, queryFulfilled }) {
+        await queryFulfilled;
+        setTimeout(() => {
+          dispatch(api.util.invalidateTags([
+            { type: "v1/messaging/message/conversation/{conversationId}", id: props.conversationId }
+          ]));
+        }, 3000);
+      }
     })
     //
   })
 });
 
 export const {
-  useSendToThreadMutation
+  useSendToThreadMutation,
+  useSendToConversationMutation
 } = messageOperationApi;
 
 export const {
-  endpoints: { sendToThread }
+  endpoints: { sendToThread, sendToConversation }
 } = messageOperationApi;

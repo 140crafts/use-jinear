@@ -38,9 +38,10 @@ const ChannelPage: React.FC<ChannelPageProps> = () => {
       <div id={`channel-page-container`} className={styles.container}>
         {workspace &&
           <>
-            <ChannelScreenHeader channelId={channelId}
-                                 workspaceName={workspaceName}
-                                 workspaceId={workspace.workspaceId}
+            <ChannelScreenHeader
+              channelId={channelId}
+              workspaceName={workspaceName}
+              workspaceId={workspace.workspaceId}
             />
             <ChannelBody
               channelId={channelId}

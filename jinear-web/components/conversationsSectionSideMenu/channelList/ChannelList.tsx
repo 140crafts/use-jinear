@@ -7,6 +7,7 @@ import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle"
 import useTranslation from "../../../locales/useTranslation";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import Logger from "@/utils/logger";
+import NewChannelButton from "@/components/conversationsSectionSideMenu/channelList/newChannelButton/NewChannelButton";
 
 interface ChannelListProps {
   workspace: WorkspaceDto;
@@ -25,30 +26,28 @@ const ChannelList: React.FC<ChannelListProps> = ({ workspace }) => {
   } = useRetrieveChannelMembershipsQuery({ workspaceId: workspace.workspaceId });
   logger.log({ ChannelList: workspace, channelMembershipsResponse, isSuccess, isError, error });
 
-  const onNewChannel = () => {
-  };
-
-  const onDetail = () => {
-  };
-
   return (
     <div className={styles.container}>
       <div className="spacer-h-1" />
       <div className={styles.titleContainer}>
-        <MenuGroupTitle label={t("sideMenuChannelsTitle")} hasAddButton={true} onAddButtonClick={onNewChannel}
-                        hasDetailButton={true} onDetailButtonClick={onDetail} />
+        <MenuGroupTitle label={t("sideMenuChannelsTitle")} />
       </div>
       {isFetching && <CircularLoading />}
       <div className="spacer-h-1" />
-
-      <div className={styles.channelListContainer}>
-        {channelMembershipsResponse?.data
-          ?.map(channelMembershipsResponse => channelMembershipsResponse.channel)
-          ?.filter(channel => channel != null)
-          ?.map(channel => <ChannelButton key={channel.channelId} channel={channel}
-                                          workspaceUsername={workspace.username} />)
-        }
-      </div>
+      {!isFetching && <>
+        <div className={styles.channelListContainer}>
+          {channelMembershipsResponse?.data
+            ?.map(channelMembershipsResponse => channelMembershipsResponse.channel)
+            ?.filter(channel => channel != null)
+            ?.map(channel =>
+              <ChannelButton
+                key={channel.channelId}
+                channel={channel}
+                workspaceUsername={workspace.username} />)
+          }
+          <NewChannelButton workspaceId={workspace.workspaceId} />
+        </div>
+      </>}
 
     </div>
   );

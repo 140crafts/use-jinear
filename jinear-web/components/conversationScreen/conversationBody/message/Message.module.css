@@ -1,0 +1,55 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    padding: .25rem .5rem;
+    gap: .5rem;
+    border-radius: var(--border-radius);
+}
+
+.small {
+    padding: 0 .5rem;
+    /*margin-top: -1.5rem;*/
+}
+
+.leftTimeText {
+    visibility: hidden;
+    font-size: .5rem;
+    align-self: center;
+}
+
+.container:hover {
+    background-color: var(--c-primary-shade-0);
+}
+
+.container:hover .leftTimeText {
+    visibility: visible;
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    width: 25px !important;
+}
+
+.profilePic {
+    height: 25px !important;
+    width: 25px !important;
+}
+
+.accountAndMessageInfoContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.editor {
+    background-color: unset !important;
+    padding: unset !important;
+    min-height: unset !important;
+}
+
+.date {
+    font-size: .5rem;
+}

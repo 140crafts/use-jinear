@@ -7,6 +7,8 @@ import Thread from "@/components/channelScreen/channelBody/thread/Thread";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import Button, { ButtonHeight } from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
+import { checkAndUpdateChannelLastCheck } from "@/slice/messagingSlice";
+import { useAppDispatch } from "@/store/store";
 
 interface ChannelBodyProps {
   workspaceName: string;
@@ -21,8 +23,9 @@ interface ThreadMap {
 
 const logger = Logger("ChannelBody");
 
-const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, workspaceName }) => {
+const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, workspaceId, workspaceName }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const [listThreads, { data: listThreadsResponse, isFetching: isListThreadsFetching }] = useLazyListThreadsQuery();
   const [hasMore, setHasMore] = useState<boolean>(true);
   const initialScroll = useRef<boolean>(false);
@@ -35,8 +38,17 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
   logger.log({ threadMap, sortedMapValues, mapKeyLength: Object.keys(threadMap).length });
 
   useEffect(() => {
-    listThreads({ channelId });
-  }, [listThreads, channelId]);
+    if (workspaceId && channelId) {
+      dispatch(checkAndUpdateChannelLastCheck({ workspaceId, channelId, lastCheckDate: new Date() }));
+    }
+  }, [dispatch, workspaceId, channelId]);
+
+  useEffect(() => {
+    if (workspaceId && channelId) {
+      listThreads({ workspaceId, channelId });
+      dispatch(checkAndUpdateChannelLastCheck({ workspaceId, channelId, lastCheckDate: new Date() }));
+    }
+  }, [dispatch, listThreads, workspaceId, channelId]);
 
   useEffect(() => {
     if (listThreadsResponse?.data) {
@@ -67,7 +79,7 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
   const retrieveMore = () => {
     const oldestThread = sortedMapValues[sortedMapValues.length - 1];
     if (oldestThread) {
-      listThreads({ channelId, before: new Date(oldestThread.lastActivityTime) });
+      listThreads({ workspaceId, channelId, before: new Date(oldestThread.lastActivityTime) });
     }
   };
 
@@ -85,12 +97,17 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
       }
       {isListThreadsFetching && !hasMore && <CircularLoading />}
       <div className={styles.contentContainer}>
-        {sortedMapValues?.map?.(threadDto => <Thread
-            key={threadDto.threadId}
-            thread={threadDto}
+        {sortedMapValues?.length == 0 && !isListThreadsFetching &&
+          <div className={styles.emptyStateContainer}>{t("threadsEmpty")}</div>}
+        {sortedMapValues?.map?.(threadDto =>
+          <Thread
+            key={`channel-overview-${threadDto.threadId}`}
+            threadId={threadDto.threadId}
+            channelId={threadDto.channelId}
             canReplyThreads={canReplyThreads}
             workspaceName={workspaceName}
             viewingAsDetail={false}
+            workspaceId={workspaceId}
           />
         )}
       </div>

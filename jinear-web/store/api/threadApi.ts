@@ -17,13 +17,11 @@ export const threadApi = api.injectEndpoints({
           dispatch(api.util.invalidateTags([`v1/messaging/thread/channel/{channelId}`]));
         }, 1500);
       }
-      // invalidatesTags: (_result, _err, req) => [
-      //   // `v1/messaging/thread/channel/{channelId}`
-      // ]
     }),
     //
-    listThreads: build.query<ThreadListingResponse, { channelId: string, before?: Date }>({
+    listThreads: build.query<ThreadListingResponse, { workspaceId: string, channelId: string, before?: Date }>({
       query: ({ channelId, before = addSeconds(new Date(), +10) }: {
+        workspaceId: string,
         channelId: string,
         before?: Date
       }) => `v1/messaging/thread/channel/${channelId}?before=${before.toISOString()}`,
@@ -35,7 +33,7 @@ export const threadApi = api.injectEndpoints({
       ]
     }),
     //
-    retrieveThread: build.query<ThreadResponse, { threadId: string }>({
+    retrieveThread: build.query<ThreadResponse, { workspaceId: string, threadId: string }>({
       query: ({ threadId }: {
         threadId: string
       }) => `v1/messaging/thread/${threadId}`,

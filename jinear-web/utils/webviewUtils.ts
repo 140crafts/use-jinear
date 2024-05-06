@@ -1,5 +1,6 @@
 import { store } from "@/store/store";
 import Logger from "./logger";
+import { __DEV__ } from "./constants";
 
 const logger = Logger("WebViewUtils");
 
@@ -19,7 +20,7 @@ export const isWebView = () => typeof window !== "undefined" && window?.isWebVie
 
 export const makeStoreAccessibleFromWindow = (_store: typeof store) => {
   //@ts-ignore
-  if (typeof window !== "undefined" && window?.isWebView) {
+  if (typeof window !== "undefined" && (window?.isWebView || __DEV__)) {
     //@ts-ignore
     window.store = _store;
   }

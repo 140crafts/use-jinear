@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-// Generated using typescript-generator version 3.0.1157 on 2024-04-21 10:28:39.
+// Generated using typescript-generator version 3.0.1157 on 2024-05-06 08:34:39.
 
 export interface BaseDto {
   createdDate: Date;
@@ -19,8 +19,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  first: boolean;
   last: boolean;
+  first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -158,10 +158,10 @@ export interface GmailMessageDto extends BaseDto {
   to: string;
   subject: string;
   body: string;
-  gid: string;
-  ghistoryId: string;
   ginternalDate: string;
+  ghistoryId: string;
   gthreadId: string;
+  gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -278,12 +278,18 @@ export interface ChannelDto extends PlainChannelDto {
   members: ChannelMemberDto[];
 }
 
+export interface ChannelInfoDto {
+  channelId: string;
+  lastChannelActivity?: Date | null;
+}
+
 export interface ChannelMemberDto extends BaseDto {
   channelMemberId: string;
   channelId: string;
   accountId: string;
   roleType: ChannelMemberRoleType;
   silentUntil?: Date | null;
+  lastCheck: Date;
   account?: PlainAccountProfileDto | null;
   channel: PlainChannelDto;
 }
@@ -306,6 +312,7 @@ export interface PlainChannelDto extends BaseDto {
   title: string;
   participationType: ChannelParticipationType;
   channelVisibilityType: ChannelVisibilityType;
+  channelInfo: ChannelInfoDto;
 }
 
 export interface ConversationDto {
@@ -313,23 +320,35 @@ export interface ConversationDto {
   workspaceId: string;
   lastActivityTime: Date;
   conversationMessageInfo: ConversationMessageInfoDto;
+  participants: PlainConversationParticipantDto[];
 }
 
 export interface ConversationMessageInfoDto {
   conversationId: string;
   lastMessageId: string;
   lastMessage: MessageDto;
+  initialMessage: MessageDto;
 }
 
-export interface ConversationParticipantDto extends BaseDto {
+export interface ConversationParticipantDto extends PlainConversationParticipantDto {
+  conversation: ConversationDto;
+}
+
+export interface ConversationParticipantInfoDto {
+  conversationParticipantId: string;
+  conversationId: string;
+  unreadCount: number;
+}
+
+export interface PlainConversationParticipantDto extends BaseDto {
   conversationParticipantId: string;
   conversationId: string;
   accountId: string;
   lastCheck: Date;
   leftAt: Date;
   silentUntil: Date;
-  conversation: ConversationDto;
   account: PlainAccountProfileDto;
+  conversationParticipantInfo: ConversationParticipantInfoDto;
 }
 
 export interface MessageDataDto extends BaseDto {
@@ -1635,7 +1654,6 @@ export type GoogleScopeType =
   | "GMAIL_ADDONS_CURRENT_MESSAGE_ACTION"
   | "GMAIL_ADDONS_CURRENT_MESSAGE_METADATA"
   | "GMAIL_ADDONS_CURRENT_MESSAGE_READONLY"
-  | "GMAIL_METADATA"
   | "GMAIL_MODIFY"
   | "GMAIL_READONLY";
 
@@ -1709,7 +1727,8 @@ export type LockSourceType =
   | "ACCOUNT_PASSWORD_RESET"
   | "TASK_BOARD_EDIT"
   | "REMINDER_JOB_PROCESS"
-  | "CONVERSATION_INIT";
+  | "CONVERSATION_INIT"
+  | "CONVERSATION";
 
 export type FileType = "PROFILE_PIC" | "TASK_FILE";
 

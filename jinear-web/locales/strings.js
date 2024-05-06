@@ -3486,6 +3486,46 @@ const translations = {
   threadsLoadMore: {
     en: "Show older",
     tr: "Önceki gönderileri görüntüle"
+  },
+  threadsEmpty: {
+    en: "There isn't any threads yet.",
+    tr: "Herhangi bir gönderi bulunamadı."
+  },
+  newChannelButton: {
+    en: "Create Channel",
+    tr: "Kanal Oluştur"
+  },
+  newChannelModalTitle: {
+    en: "Create Channel",
+    tr: "Kanal Oluştur"
+  },
+  newChannelModalFormChannelTitle: {
+    en: "Channel Title",
+    tr: "Kanal Başlığı"
+  },
+  newChannelModalFormSubmit: {
+    en: "Create Channel",
+    tr: "Kanalı Oluştur"
+  },
+  sideMenuConversations: {
+    en: "Conversations",
+    tr: "Sohbetler"
+  },
+  newConversationButton: {
+    en: "New Conversation",
+    tr: "Yeni Mesaj"
+  },
+  conversationsScreenTitle: {
+    en: "Conversation Settings",
+    tr: "Sohbet Ayarları"
+  },
+  conversationLoadMore: {
+    en: "Show older",
+    tr: "Önceki mesajları görüntüle"
+  },
+  conversationEmpty: {
+    en: "There isn't any messages yet.",
+    tr: "Herhangi bir mesaj bulunamadı."
   }
 };
 

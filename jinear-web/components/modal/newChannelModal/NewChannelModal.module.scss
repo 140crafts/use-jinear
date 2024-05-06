@@ -1,0 +1,24 @@
+@import "/styles/breakpoints.scss";
+
+.modalContainer {
+    align-items: flex-start;
+    padding-top: 12.5%;
+}
+
+.modal {
+    position: relative;
+// height: 95vh;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-weight: 600;
+}

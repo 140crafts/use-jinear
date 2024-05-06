@@ -12,7 +12,6 @@ import {
   useUpdateChannelTitleMutation,
   useUpdateChannelVisibilityMutation
 } from "@/api/channelApi";
-import { SelectChangeEvent } from "@mui/material";
 
 interface ChannelInfoTabProps {
   channel: PlainChannelDto;

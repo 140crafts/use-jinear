@@ -43,7 +43,7 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
           id="workspace-layout-page-side-menu-container"
           className={cn(styles.workspaceSideMenuContainer, _isPwa && styles.workspaceSideMenuContainerPwa)}
         >
-          <MainFeaturesSideMenu workspace={workspace} />
+          {workspace && <MainFeaturesSideMenu workspace={workspace} />}
         </div>
         <div id="workspace-layout-page-content" className={styles.pageContent}>
           {/* 

@@ -25,6 +25,30 @@
   font-size: 1.2rem;
 }
 
+.iconContainer {
+  position: relative;
+}
+
+.unreadWrapper {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--border-radius);
+  width: 32.5px;
+  height: 22.5px;
+  background-color: var(--c-primary-shade-1);
+  //background-color: var(--c-JINEAR_ORANGE);
+  border-color: var(--c-primary-shade-0);
+  border-width: thin;
+  border-style: solid;
+  /* color: var(--c-primary); */
+  font-weight: 700;
+  font-size: 0.6rem;
+  right: -2rem;
+  top: -0.75rem;
+}
+
 @media (max-width: $tablet) {
   .container {
     flex-direction: row !important;

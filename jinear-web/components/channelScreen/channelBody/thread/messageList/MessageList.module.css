@@ -4,3 +4,8 @@
     text-align: left !important;
     color: var(--c-link-color) !important;
 }
+
+.messageListContainer {
+    display: flex;
+    flex-direction: column-reverse;
+}
