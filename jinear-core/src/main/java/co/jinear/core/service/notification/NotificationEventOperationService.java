@@ -56,6 +56,7 @@ public class NotificationEventOperationService {
         notificationEvent.setWorkspaceId(notificationSendVo.getWorkspaceId());
         notificationEvent.setTeamId(notificationSendVo.getTeamId());
         notificationEvent.setTaskId(notificationSendVo.getTaskId());
+        notificationEvent.setThreadId(notificationSendVo.getThreadId());
         notificationEvent.setIsRead(Boolean.FALSE);
         notificationEvent.setIsSilent(isSilent);
         notificationEvent.setEventState(NotificationEventState.INITIALIZED);

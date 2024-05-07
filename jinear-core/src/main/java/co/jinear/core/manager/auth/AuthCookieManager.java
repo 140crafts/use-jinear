@@ -1,13 +1,12 @@
 package co.jinear.core.manager.auth;
 
 import co.jinear.core.system.JwtHelper;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 import static co.jinear.core.system.JwtHelper.JWT_COOKIE;
 import static co.jinear.core.system.JwtHelper.JWT_TOKEN_VALIDITY;
@@ -25,6 +24,7 @@ public class AuthCookieManager {
                 .secure(jwtHelper.isSecure())
                 .httpOnly(true)
                 .path("/")
+                .domain(jwtHelper.getDomain())
                 .maxAge(JWT_TOKEN_VALIDITY * 24 * 60 * 60)
                 .sameSite("Lax")
                 .build();
@@ -37,6 +37,7 @@ public class AuthCookieManager {
                 .secure(jwtHelper.isSecure())
                 .httpOnly(true)
                 .path("/")
+                .domain(jwtHelper.getDomain())
                 .maxAge(0)
                 .sameSite("Lax")
                 .build();

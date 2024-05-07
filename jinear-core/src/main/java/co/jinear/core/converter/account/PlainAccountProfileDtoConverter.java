@@ -3,6 +3,7 @@ package co.jinear.core.converter.account;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.entity.account.Account;
+import co.jinear.core.model.entity.username.Username;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -13,4 +14,6 @@ public interface PlainAccountProfileDtoConverter {
     PlainAccountProfileDto map(Account account);
 
     PlainAccountProfileDto map(AccountDto accountDto);
+
+    String map(Username value);
 }

@@ -3,6 +3,8 @@ package co.jinear.core.model.response;
 import co.jinear.core.model.enumtype.ResponseStatusType;
 import lombok.*;
 
+import java.util.Map;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,4 +19,5 @@ public class BaseResponse {
     private String responseLocale;
     private long systemTime = System.currentTimeMillis();
     private String conversationId;
+    private Map<String, String> additionalInfo;
 }

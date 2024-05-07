@@ -21,6 +21,7 @@ public class NotificationEventListingService {
     private final NotificationEventRepository notificationEventRepository;
     private final NotificationEventDtoConverter notificationEventDtoConverter;
 
+    //TODO: cgds-461 exclude conversation notifications
     public Page<NotificationEventDto> retrieveNotificationEvents(NotificationEventListingVo notificationEventListingVo) {
         log.info("Retrieve notification events has started. notificationEventListingVo: {}", notificationEventListingVo);
         return notificationEventRepository
