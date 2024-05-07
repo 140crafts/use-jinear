@@ -22,7 +22,7 @@ public class BaseEntity {
     @Column(name = "udate")
     private Date lastUpdatedDate;
 
-    @Column(name = "passiveId")
+    @Column(name = "passive_id")
     private String passiveId;
 
     @PrePersist

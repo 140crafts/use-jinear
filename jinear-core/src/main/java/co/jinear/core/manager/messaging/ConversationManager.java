@@ -8,9 +8,9 @@ import co.jinear.core.model.response.messaging.ConversationParticipantListingRes
 import co.jinear.core.model.vo.messaging.conversation.InitializeConversationVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.messaging.conversation.ConversationOperationService;
-import co.jinear.core.service.messaging.conversation.ConversationParticipantListingService;
-import co.jinear.core.service.messaging.conversation.ConversationParticipantOperationService;
-import co.jinear.core.service.messaging.conversation.ConversationParticipantRetrieveService;
+import co.jinear.core.service.messaging.conversation.participant.ConversationParticipantListingService;
+import co.jinear.core.service.messaging.conversation.participant.ConversationParticipantOperationService;
+import co.jinear.core.service.messaging.conversation.participant.ConversationParticipantRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
@@ -58,6 +58,14 @@ public class ConversationManager {
         log.info("Mute conversation has started. conversationId: {}, currentAccountId: {}, silentUntil: {}", conversationId, currentAccountId, silentUntil);
         ConversationParticipantDto conversationParticipantDto = conversationParticipantRetrieveService.retrieve(currentAccountId, conversationId);
         conversationParticipantOperationService.updateSilentUntil(conversationParticipantDto.getConversationParticipantId(), silentUntil);
+        return new BaseResponse();
+    }
+
+    public BaseResponse updateConversationParticipantLastCheck(String conversationId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        conversationParticipantRetrieveService.validateParticipantIsInConversation(currentAccountId, conversationId);
+        log.info("Update conversation participant last check has started. currentAccountId: {}, conversationId: {}", currentAccountId, conversationId);
+        conversationParticipantOperationService.updateLastCheck(conversationId, currentAccountId, ZonedDateTime.now());
         return new BaseResponse();
     }
 

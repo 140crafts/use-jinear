@@ -41,6 +41,9 @@ public class ChannelMember extends BaseEntity {
     @Column(name = "silent_until")
     private ZonedDateTime silentUntil;
 
+    @Column(name = "last_check")
+    private ZonedDateTime lastCheck;
+
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @Where(clause = "passive_id is null")

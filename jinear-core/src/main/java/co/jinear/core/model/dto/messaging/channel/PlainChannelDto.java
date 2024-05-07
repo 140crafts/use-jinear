@@ -15,4 +15,5 @@ public class PlainChannelDto extends BaseDto {
     private String title;
     private ChannelParticipationType participationType;
     private ChannelVisibilityType channelVisibilityType;
+    private ChannelInfoDto channelInfo;
 }

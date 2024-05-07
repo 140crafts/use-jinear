@@ -4,6 +4,7 @@ import co.jinear.core.manager.messaging.ThreadManager;
 import co.jinear.core.model.request.messaging.thread.InitializeThreadRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.messaging.ThreadListingResponse;
+import co.jinear.core.model.response.messaging.ThreadResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -23,6 +24,12 @@ public class ThreadController {
     @ResponseStatus(HttpStatus.CREATED)
     public BaseResponse initializeThread(@Valid @RequestBody InitializeThreadRequest initializeThreadRequest) {
         return threadManager.initializeThread(initializeThreadRequest);
+    }
+
+    @GetMapping("/{threadId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ThreadResponse retrieve(@PathVariable String threadId) {
+        return threadManager.retrieve(threadId);
     }
 
     @GetMapping("/channel/{channelId}")

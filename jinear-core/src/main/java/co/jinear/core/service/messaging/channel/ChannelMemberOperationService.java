@@ -3,6 +3,7 @@ package co.jinear.core.service.messaging.channel;
 import co.jinear.core.model.entity.messaging.ChannelMember;
 import co.jinear.core.model.enumtype.messaging.ChannelMemberRoleType;
 import co.jinear.core.repository.messaging.ChannelMemberRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,5 +51,11 @@ public class ChannelMemberOperationService {
         ChannelMember channelMember = channelMemberRetrieveService.retrieveEntity(channelMemberId);
         channelMember.setSilentUntil(silentUntil);
         channelMemberRepository.save(channelMember);
+    }
+
+    @Transactional
+    public void updateLastCheck(String channelId, String accountId, ZonedDateTime lastCheck) {
+        log.info("Update last check has started. channelId: {}, accountId: {}, lastCheck: {}", channelId, accountId, lastCheck);
+        channelMemberRepository.updateLastCheck(channelId, accountId, lastCheck);
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 public interface ConversationRepository extends JpaRepository<Conversation, String> {
 
@@ -23,4 +24,18 @@ public interface ConversationRepository extends JpaRepository<Conversation, Stri
     void updateLastActivityTime(@Param("conversationId") String conversationId,
                                 @Param("lastActivityTime") ZonedDateTime lastActivityTime);
 
+    @Modifying(flushAutomatically = true, clearAutomatically = true)
+    @Query("""
+            update Conversation c
+                set
+                 c.participantsKey = :participantsKey,
+                 c.lastUpdatedDate = current_timestamp()
+                where
+                     c.conversationId = :conversationId and
+                     c.passiveId is null
+                """)
+    void updateParticipantsKey(@Param("conversationId") String conversationId,
+                               @Param("participantsKey") String participantsKey);
+
+    Optional<Conversation> findByParticipantsKeyAndPassiveIdIsNull(String participantsKey);
 }

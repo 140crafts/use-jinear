@@ -2,7 +2,7 @@ package co.jinear.core.controller.messaging.message;
 
 import co.jinear.core.manager.messaging.MessageOperationManager;
 import co.jinear.core.model.request.messaging.message.SendMessageRequest;
-import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.messaging.MessageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,15 +17,15 @@ public class MessageOperationController {
 
     @PostMapping("/thread/{threadId}/send")
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse sendToThread(@PathVariable String threadId,
-                                     @Valid @RequestBody SendMessageRequest sendMessageRequest) {
+    public MessageResponse sendToThread(@PathVariable String threadId,
+                                        @Valid @RequestBody SendMessageRequest sendMessageRequest) {
         return messageOperationManager.sendToThread(threadId, sendMessageRequest);
     }
 
     @PostMapping("/conversation/{conversationId}/send")
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse sendToConversation(@PathVariable String conversationId,
-                                           @Valid @RequestBody SendMessageRequest sendMessageRequest) {
+    public MessageResponse sendToConversation(@PathVariable String conversationId,
+                                              @Valid @RequestBody SendMessageRequest sendMessageRequest) {
         return messageOperationManager.sendToConversation(conversationId, sendMessageRequest);
     }
 }

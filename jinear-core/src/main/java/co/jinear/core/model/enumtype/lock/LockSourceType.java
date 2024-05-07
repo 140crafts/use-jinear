@@ -15,7 +15,8 @@ public enum LockSourceType {
     ACCOUNT_PASSWORD_RESET("account:password-reset", 10, TimeUnit.SECONDS),
     TASK_BOARD_EDIT("task-board:edit", 5, TimeUnit.SECONDS),
     REMINDER_JOB_PROCESS("reminder-job:process", 15, TimeUnit.MINUTES),
-    CONVERSATION_INIT("conversation-init", 20, TimeUnit.SECONDS);
+    CONVERSATION_INIT("conversation-init", 20, TimeUnit.SECONDS),
+    CONVERSATION("conversation", 20, TimeUnit.SECONDS);
 
     private final String key;
     private final int ttl;

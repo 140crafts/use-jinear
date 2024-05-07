@@ -7,6 +7,7 @@ import co.jinear.core.model.entity.messaging.Thread;
 import co.jinear.core.model.vo.messaging.message.InitializeMessageVo;
 import co.jinear.core.repository.messaging.ThreadRepository;
 import co.jinear.core.service.messaging.message.MessageOperationService;
+import co.jinear.core.service.messaging.message.MessageRetrieveService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +22,7 @@ public class ThreadOperationService {
 
     private final ThreadRepository threadRepository;
     private final MessageOperationService messageOperationService;
+    private final MessageRetrieveService messageRetrieveService;
     private final ThreadDtoConverter threadDtoConverter;
 
     @Transactional
@@ -42,7 +44,8 @@ public class ThreadOperationService {
         initializeMessageVo.setAccountId(ownerId);
         initializeMessageVo.setBody(initialMessageBody);
         initializeMessageVo.setThreadId(saved.getThreadId());
-        return messageOperationService.initialize(initializeMessageVo);
+        RichMessageDto initialized = messageOperationService.initialize(initializeMessageVo);
+        return messageRetrieveService.retrieveRich(initialized.getMessageId());
     }
 
     private Thread initialize(String ownerId, String channelId) {

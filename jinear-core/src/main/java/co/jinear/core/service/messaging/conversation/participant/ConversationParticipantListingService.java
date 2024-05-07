@@ -1,4 +1,4 @@
-package co.jinear.core.service.messaging.conversation;
+package co.jinear.core.service.messaging.conversation.participant;
 
 import co.jinear.core.converter.messaging.conversation.ConversationParticipantDtoConverter;
 import co.jinear.core.model.dto.messaging.conversation.ConversationParticipantDto;

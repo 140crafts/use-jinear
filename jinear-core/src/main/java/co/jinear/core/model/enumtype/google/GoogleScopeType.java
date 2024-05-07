@@ -33,7 +33,7 @@ public enum GoogleScopeType {
     GMAIL_ADDONS_CURRENT_MESSAGE_ACTION(21, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.action")),
     GMAIL_ADDONS_CURRENT_MESSAGE_METADATA(22, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.metadata")),
     GMAIL_ADDONS_CURRENT_MESSAGE_READONLY(23, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.readonly")),
-    GMAIL_METADATA(24, List.of("https://www.googleapis.com/auth/gmail.metadata")),
+//    GMAIL_METADATA(24, List.of("https://www.googleapis.com/auth/gmail.metadata")),
     GMAIL_MODIFY(25, List.of("https://www.googleapis.com/auth/gmail.modify")),
     GMAIL_READONLY(26, List.of("https://www.googleapis.com/auth/gmail.readonly"));
 

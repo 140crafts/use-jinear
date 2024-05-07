@@ -21,6 +21,9 @@ public class ConversationMessageInfo {
     @Column(name = "last_message_id")
     private String lastMessageId;
 
+    @Column(name = "initial_message_id")
+    private String initialMessageId;
+
     @OneToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "conversation_id", insertable = false, updatable = false)
@@ -30,4 +33,9 @@ public class ConversationMessageInfo {
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "last_message_id", referencedColumnName = "message_id", insertable = false, updatable = false)
     private Message lastMessage;
+
+    @OneToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "initial_message_id", referencedColumnName = "message_id", insertable = false, updatable = false)
+    private Message initialMessage;
 }

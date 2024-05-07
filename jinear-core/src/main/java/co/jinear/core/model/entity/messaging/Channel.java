@@ -49,4 +49,7 @@ public class Channel extends BaseEntity {
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<ChannelMember> members;
+
+    @OneToOne(mappedBy = "channel")
+    private ChannelInfo channelInfo;
 }

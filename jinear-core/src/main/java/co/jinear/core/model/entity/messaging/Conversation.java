@@ -5,8 +5,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Where;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -28,6 +30,15 @@ public class Conversation extends BaseEntity {
     @Column(name = "last_activity_time")
     private ZonedDateTime lastActivityTime;
 
+    @Column(name = "participants_key")
+    private String participantsKey;
+
     @OneToOne(mappedBy = "conversation")
     private ConversationMessageInfo conversationMessageInfo;
+
+    @OneToMany
+    @JoinColumn(name = "conversation_id", referencedColumnName = "conversation_id", insertable = false, updatable = false)
+    @Where(clause = "passive_id is null and left_at is null")
+    @OrderBy("createdDate ASC")
+    private Set<ConversationParticipant> participants;
 }

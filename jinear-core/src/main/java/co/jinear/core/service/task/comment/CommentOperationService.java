@@ -43,6 +43,7 @@ public class CommentOperationService {
         Comment comment = commentRetrieveService.retrieveEntity(commentId);
         String passiveId = passiveService.createUserActionPassive();
         comment.setPassiveId(passiveId);
+        commentRepository.save(comment);
         log.info("Delete comment has completed. commentId: {},passiveId: {}", commentId, passiveId);
         return passiveId;
     }

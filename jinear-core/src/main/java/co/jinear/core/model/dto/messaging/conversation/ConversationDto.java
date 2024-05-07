@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.ZonedDateTime;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -13,4 +14,5 @@ public class ConversationDto {
     private String workspaceId;
     private ZonedDateTime lastActivityTime;
     private ConversationMessageInfoDto conversationMessageInfo;
+    private Set<PlainConversationParticipantDto> participants;
 }

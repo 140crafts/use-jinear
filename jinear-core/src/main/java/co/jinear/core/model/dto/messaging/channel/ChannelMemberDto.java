@@ -19,6 +19,7 @@ public class ChannelMemberDto extends BaseDto {
     private ChannelMemberRoleType roleType;
     @Nullable
     private ZonedDateTime silentUntil;
+    private ZonedDateTime lastCheck;
     @Nullable
     private PlainAccountProfileDto account;
     private PlainChannelDto channel;

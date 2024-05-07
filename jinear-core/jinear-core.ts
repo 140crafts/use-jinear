@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-04-14 19:09:17.
+// Generated using typescript-generator version 3.0.1157 on 2024-05-06 09:14:26.
 
 export interface BaseDto {
     createdDate: Date;
@@ -157,10 +157,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
-    gthreadId: string;
-    ghistoryId: string;
     ginternalDate: string;
+    ghistoryId: string;
+    gthreadId: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -277,12 +277,18 @@ export interface ChannelDto extends PlainChannelDto {
     members: ChannelMemberDto[];
 }
 
+export interface ChannelInfoDto {
+    channelId: string;
+    lastChannelActivity?: Date | null;
+}
+
 export interface ChannelMemberDto extends BaseDto {
     channelMemberId: string;
     channelId: string;
     accountId: string;
     roleType: ChannelMemberRoleType;
     silentUntil?: Date | null;
+    lastCheck: Date;
     account?: PlainAccountProfileDto | null;
     channel: PlainChannelDto;
 }
@@ -305,6 +311,7 @@ export interface PlainChannelDto extends BaseDto {
     title: string;
     participationType: ChannelParticipationType;
     channelVisibilityType: ChannelVisibilityType;
+    channelInfo: ChannelInfoDto;
 }
 
 export interface ConversationDto {
@@ -312,23 +319,35 @@ export interface ConversationDto {
     workspaceId: string;
     lastActivityTime: Date;
     conversationMessageInfo: ConversationMessageInfoDto;
+    participants: PlainConversationParticipantDto[];
 }
 
 export interface ConversationMessageInfoDto {
     conversationId: string;
     lastMessageId: string;
     lastMessage: MessageDto;
+    initialMessage: MessageDto;
 }
 
-export interface ConversationParticipantDto extends BaseDto {
+export interface ConversationParticipantDto extends PlainConversationParticipantDto {
+    conversation: ConversationDto;
+}
+
+export interface ConversationParticipantInfoDto {
+    conversationParticipantId: string;
+    conversationId: string;
+    unreadCount: number;
+}
+
+export interface PlainConversationParticipantDto extends BaseDto {
     conversationParticipantId: string;
     conversationId: string;
     accountId: string;
     lastCheck: Date;
     leftAt: Date;
     silentUntil: Date;
-    conversation: ConversationDto;
     account: PlainAccountProfileDto;
+    conversationParticipantInfo: ConversationParticipantInfoDto;
 }
 
 export interface MessageDataDto extends BaseDto {
@@ -1257,8 +1276,16 @@ export interface MessageListingPaginatedResponse extends BaseResponse {
     data: PageDto<MessageDto>;
 }
 
+export interface MessageResponse extends BaseResponse {
+    data: MessageDto;
+}
+
 export interface ThreadListingResponse extends BaseResponse {
     data: PageDto<ThreadDto>;
+}
+
+export interface ThreadResponse extends BaseResponse {
+    data: ThreadDto;
 }
 
 export interface NotificationEventListingResponse extends BaseResponse {
@@ -1611,7 +1638,7 @@ export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL";
 
 export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
-export type GoogleScopeType = "OPEN_ID" | "USERINFO_PROFILE" | "USERINFO_EMAIL" | "CALENDAR" | "CALENDAR_EVENTS" | "CALENDAR_SETTINGS_READONLY" | "ADMIN_DIRECTORY_RESOURCE_CALENDAR_READONLY" | "CONTACTS" | "CONTACTS_OTHER_READONLY" | "DIRECTORY_READONLY" | "MAIL" | "GMAIL_ADDONS_CURRENT_MESSAGE_ACTION" | "GMAIL_ADDONS_CURRENT_MESSAGE_METADATA" | "GMAIL_ADDONS_CURRENT_MESSAGE_READONLY" | "GMAIL_METADATA" | "GMAIL_MODIFY" | "GMAIL_READONLY";
+export type GoogleScopeType = "OPEN_ID" | "USERINFO_PROFILE" | "USERINFO_EMAIL" | "CALENDAR" | "CALENDAR_EVENTS" | "CALENDAR_SETTINGS_READONLY" | "ADMIN_DIRECTORY_RESOURCE_CALENDAR_READONLY" | "CONTACTS" | "CONTACTS_OTHER_READONLY" | "DIRECTORY_READONLY" | "MAIL" | "GMAIL_ADDONS_CURRENT_MESSAGE_ACTION" | "GMAIL_ADDONS_CURRENT_MESSAGE_METADATA" | "GMAIL_ADDONS_CURRENT_MESSAGE_READONLY" | "GMAIL_MODIFY" | "GMAIL_READONLY";
 
 export type UserConsentPurposeType = "LOGIN" | "ATTACH_MAIL" | "ATTACH_CALENDAR";
 
@@ -1623,7 +1650,7 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION";
 
 export type FileType = "PROFILE_PIC" | "TASK_FILE";
 

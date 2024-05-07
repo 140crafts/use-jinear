@@ -9,8 +9,6 @@ import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -19,17 +17,28 @@ public class ConversationLockService {
     private final LockService lockService;
 
     @Retryable(value = {LockedException.class}, maxAttempts = 4, backoff = @Backoff(delay = 200, multiplier = 2, maxDelay = 3000))
-    public void lockConversationInit(List<String> participantAccountIds) {
-        int participantAccountIdsHash = participantAccountIds.hashCode();
-        log.info("Lock conversation init has started. participantAccountIdsHash: {}", participantAccountIdsHash);
-        lockService.lock(String.valueOf(participantAccountIdsHash), LockSourceType.CONVERSATION_INIT);
-        log.info("Lock conversation init has completed. participantAccountIdsHash: {}", participantAccountIdsHash);
+    public void lockConversationInit(String participantsKey) {
+        log.info("Lock conversation init has started. participantsKey: {}", participantsKey);
+        lockService.lock(participantsKey, LockSourceType.CONVERSATION_INIT);
+        log.info("Lock conversation init has completed. participantsKey: {}", participantsKey);
     }
 
-    public void unlockConversationInit(List<String> participantAccountIds) {
-        int participantAccountIdsHash = participantAccountIds.hashCode();
-        log.info("Unlock conversation init has started. participantAccountIdsHash: {}", participantAccountIdsHash);
-        lockService.unlock(String.valueOf(participantAccountIdsHash), LockSourceType.CONVERSATION_INIT);
-        log.info("Unlock conversation init has completed. participantAccountIdsHash: {}", participantAccountIdsHash);
+    @Retryable(value = {LockedException.class}, maxAttempts = 4, backoff = @Backoff(delay = 200, multiplier = 2, maxDelay = 3000))
+    public void lockConversation(String conversationId) {
+        log.info("Lock conversation has started. conversationId: {}", conversationId);
+        lockService.lock(conversationId, LockSourceType.CONVERSATION);
+        log.info("Lock conversation has completed. conversationId: {}", conversationId);
+    }
+
+    public void unlockConversationInit(String participantsKey) {
+        log.info("Unlock conversation init has started. participantsKey: {}", participantsKey);
+        lockService.unlock(participantsKey, LockSourceType.CONVERSATION_INIT);
+        log.info("Unlock conversation init has completed. participantsKey: {}", participantsKey);
+    }
+
+    public void unlockConversation(String conversationId) {
+        log.info("Unlock conversation has started. conversationId: {}", conversationId);
+        lockService.unlock(conversationId, LockSourceType.CONVERSATION);
+        log.info("Unlock conversation has completed. conversationId: {}", conversationId);
     }
 }

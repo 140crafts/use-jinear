@@ -49,4 +49,7 @@ public class ConversationParticipant extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
+
+    @OneToOne(mappedBy = "conversationParticipant")
+    private ConversationParticipantInfo conversationParticipantInfo;
 }

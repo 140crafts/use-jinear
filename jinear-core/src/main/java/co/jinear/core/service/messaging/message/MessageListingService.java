@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MessageListingService {
 
-    private static final int PAGE_SIZE = 100;
+    private static final int PAGE_SIZE = 5;
 
     private final MessageRepository messageRepository;
     private final MessageDtoConverter messageDtoConverter;

@@ -16,7 +16,7 @@ import java.time.ZonedDateTime;
 @RequiredArgsConstructor
 public class ThreadListingService {
 
-    private static final int PAGE_SIZE = 100;
+    private static final int PAGE_SIZE = 5;
     private final ThreadRepository threadRepository;
     private final ThreadDtoConverter threadDtoConverter;
 

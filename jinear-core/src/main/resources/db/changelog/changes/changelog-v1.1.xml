@@ -1876,4 +1876,116 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-participants_key-conversation">
+        <addColumn tableName="conversation">
+            <column name="participants_key" type="char(128)" afterColumn="last_activity_time">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="ix_participants_key" tableName="conversation">
+            <column name="participants_key"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-last_check-channel_member">
+        <addColumn tableName="channel_member">
+            <column name="last_check" type="datetime" afterColumn="silent_until"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds_default_value-last_check-conversation_participant">
+        <addDefaultValue
+                tableName="conversation_participant"
+                columnName="last_check"
+                defaultValueComputed="CURRENT_TIMESTAMP"
+                columnDataType="datetime"
+        />
+        <update tableName="conversation_participant">
+            <column name="last_check" valueComputed="CURRENT_TIMESTAMP"/>
+            <where>last_check is null</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-addNotNullConstraint-last_check-conversation_participant">
+        <addNotNullConstraint
+                tableName="conversation_participant"
+                columnName="last_check"
+                columnDataType="datetime"
+        />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-fix-view-v_conversation_message_info">
+        <createView
+                viewName="v_conversation_message_info"
+                replaceIfExists="true">
+            select c.conversation_id,
+                   (select m.message_id
+                    from message m
+                    where m.conversation_id = c.conversation_id
+                    order by m.idate desc
+                       limit 1) as last_message_id
+            from conversation c;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-initial-message-v_conversation_message_info">
+        <createView
+                viewName="v_conversation_message_info"
+                replaceIfExists="true">
+            select c.conversation_id,
+                   (select m.message_id
+                    from message m
+                    where m.conversation_id = c.conversation_id
+                    order by m.idate desc
+                       limit 1) as last_message_id,
+                   (select m.message_id
+                    from message m
+                    where m.conversation_id = c.conversation_id
+                    order by m.idate asc
+                    limit 1) as initial_message_id
+                        from conversation c;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-create-conversation-participant-info-view">
+        <createView
+                viewName="v_conversation_participant_info"
+                replaceIfExists="true">
+            select cp.conversation_participant_id,
+                   cp.conversation_id,
+                   (select count(*)
+                    from message m
+                    where m.conversation_id = cp.conversation_id
+                      and m.idate > cp.last_check) as unread_count
+            from conversation_participant cp
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-create-channel_info_view">
+        <createView
+                viewName="v_channel_info"
+                replaceIfExists="true">
+            select c.channel_id,
+                   (select m.idate
+                    from message m
+                             inner join thread t on m.thread_id = t.thread_id
+                    where t.channel_id = c.channel_id
+                    order by m.idate desc
+                       limit 1) as last_channel_activity
+            from channel c
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-remove-not-null-on-channel_member-last_check">
+        <dropNotNullConstraint
+                tableName="channel_member"
+                columnName="last_check"
+                columnDataType="datetime"
+        />
+    </changeSet>
+
 </databaseChangeLog>

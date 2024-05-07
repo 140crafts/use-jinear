@@ -10,6 +10,7 @@ import co.jinear.core.model.dto.messaging.thread.ThreadDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.vo.notification.NotificationSendVo;
 import co.jinear.core.service.account.AccountCommunicationPermissionService;
+import co.jinear.core.service.messaging.conversation.participant.ConversationParticipantListingService;
 import co.jinear.core.service.notification.NotificationCreateService;
 import co.jinear.core.service.richtext.HtmlSanitizeService;
 import lombok.RequiredArgsConstructor;

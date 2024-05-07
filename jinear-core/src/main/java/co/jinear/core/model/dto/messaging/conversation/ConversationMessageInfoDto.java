@@ -11,4 +11,5 @@ public class ConversationMessageInfoDto {
     private String conversationId;
     private String lastMessageId;
     private MessageDto lastMessage;
+    private MessageDto initialMessage;
 }

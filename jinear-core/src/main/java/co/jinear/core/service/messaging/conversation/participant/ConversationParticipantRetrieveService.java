@@ -1,4 +1,4 @@
-package co.jinear.core.service.messaging.conversation;
+package co.jinear.core.service.messaging.conversation.participant;
 
 import co.jinear.core.converter.messaging.conversation.ConversationParticipantDtoConverter;
 import co.jinear.core.exception.BusinessException;
@@ -10,10 +10,6 @@ import co.jinear.core.repository.messaging.ConversationParticipantRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 @Slf4j
 @Service
@@ -32,18 +28,6 @@ public class ConversationParticipantRetrieveService {
         return conversationParticipantRepository.findByConversationIdAndAccountIdAndLeftAtIsNullAndPassiveIdIsNull(conversationId, accountId)
                 .map(conversationParticipantDtoConverter::convert)
                 .orElseThrow(NotFoundException::new);
-    }
-
-    public void validateConversationNotExistsBetweenAccounts(List<String> participantAccountIds) {
-        String existingConversationId = findConversationIdBetweenAccounts(participantAccountIds);
-        if (Objects.nonNull(existingConversationId)) {
-            throw new BusinessException("messaging.conversation.exists-with-participants", Map.of("existingConversationId", existingConversationId));
-        }
-    }
-
-    public String findConversationIdBetweenAccounts(List<String> accountIds) {
-        log.info("Find conversation id between accounts has started. accountIds: {}", accountIds);
-        return conversationParticipantRepository.findConversationIdBetweenParticipants(accountIds);
     }
 
     public void validateParticipantIsNotAlreadyInConversation(String conversationId, String accountId) {
