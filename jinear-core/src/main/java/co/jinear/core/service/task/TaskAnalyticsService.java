@@ -37,7 +37,7 @@ public class TaskAnalyticsService {
 
     public Long retrieveMaxTeamTagNo(String teamId) {
         log.info("Retrieve max team tag no has started for teamId: {}", teamId);
-        Long max = taskAnalyticsRepository.getMaxTeamTagNo(teamId);
+        Long max = taskAnalyticsRepository.getMaxTeamTagNo(teamId).orElse(0L);
         log.info("Retrieve max team tag no has completed: max: {}, teamId: {}", max, teamId);
         return max;
     }

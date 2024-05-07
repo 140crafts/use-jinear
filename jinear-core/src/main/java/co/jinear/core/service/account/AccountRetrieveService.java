@@ -47,7 +47,7 @@ public class AccountRetrieveService {
     public Optional<AccountDto> retrieveByEmailOptional(String email) {
         log.info("Retrieving account with email: {}", email);
         return Optional.ofNullable(email)
-                .map(accountRepository::findByEmailAndPassiveIdIsNull)
+                .map(accountRepository::findByEmailAndPassiveIdIsNullAndGhostIsFalse)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(accountDtoConverter::map);
@@ -56,7 +56,7 @@ public class AccountRetrieveService {
     public AccountDto retrieveByEmail(String email) {
         log.info("Retrieving account with email: {}", email);
         return Optional.ofNullable(email)
-                .map(accountRepository::findByEmailAndPassiveIdIsNull)
+                .map(accountRepository::findByEmailAndPassiveIdIsNullAndGhostIsFalse)
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .map(accountDtoConverter::map)
