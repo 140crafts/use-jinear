@@ -23,6 +23,7 @@ public class JwtHelper {
 
     public static final String JWT_COOKIE = "JWT";
     public static final int JWT_TOKEN_VALIDITY = 180;
+    public static final int MESSAGING_JWT_TOKEN_VALIDITY_IN_SECONDS = 120;
     public static final String AUTHORITIES = "authorities";
     public static final String SESSION_INFO_ID = "session_info_id";
     public static final String LOCALE = "locale";
@@ -30,8 +31,14 @@ public class JwtHelper {
     @Value("${jwt.secret}")
     private String secret;
 
+    @Value("${jwt.messaging.secret}")
+    private String messagingSecret;
+
     @Value("${jwt.is-secure}")
     private Boolean isSecure;
+
+    @Value("${jwt.domain}")
+    private String domain;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -71,6 +78,15 @@ public class JwtHelper {
         return doGenerateToken(claims, authResponseVo.getAccountId());
     }
 
+    public String generateMessagingToken(String accountId) {
+        return Jwts.builder()
+                .setSubject(accountId)
+                .setIssuedAt(DateHelper.now())
+                .setExpiration(DateHelper.addSeconds(DateHelper.now(), MESSAGING_JWT_TOKEN_VALIDITY_IN_SECONDS))
+                .signWith(SignatureAlgorithm.HS512, messagingSecret.getBytes(StandardCharsets.UTF_8))
+                .compact();
+    }
+
     public Boolean validateToken(String token, String accountId) {
         final String accountIdFromToken = getAccountIdFromToken(token);
         return (accountIdFromToken.equals(accountId) && !isTokenExpired(token));
@@ -95,6 +111,10 @@ public class JwtHelper {
 
     public Boolean isSecure() {
         return isSecure;
+    }
+
+    public String getDomain() {
+        return domain;
     }
 
     private Boolean isTokenExpired(String token) {
