@@ -25,6 +25,9 @@ const ConversationSettingsModal: React.FC<ConversationSettingsModalProps> = ({})
   const dispatch = useAppDispatch();
   const { isMobile } = useWindowSize();
 
+  const close = () => {
+  };
+
   return (<Modal
       visible={visible}
       width={isMobile ? "fullscreen" : "xxlarge"}
