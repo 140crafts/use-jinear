@@ -28,4 +28,8 @@ deploy:
     - ssh-keyscan $VM_IPADDRESS >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
   script:
-    - ssh $SSH_USER@$VM_IPADDRESS "hostname && echo 'Welcome!!!' > welcome.txt"
+    - ssh $SSH_USER@$VM_IPADDRESS
+    - cd app/jinear-message-service
+    - docker compose pull
+    - docker compose up -d
+    - docker image prune -f
