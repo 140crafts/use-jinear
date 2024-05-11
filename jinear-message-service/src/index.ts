@@ -1,5 +1,9 @@
 import express from "express";
 import winston from "winston";
+import {WinstonTransport as AxiomTransport} from '@axiomhq/winston';
+
+const dotenv = require('dotenv');
+dotenv.config();
 
 const morgan = require('morgan')
 
@@ -9,13 +13,22 @@ const {combine, timestamp, json, errors} = winston.format;
 const {
     PORT = 3001,
     INTERNAL_KEY = 'debug',
-    // CORE_SERVICE_URL
+    AXIOM_TOKEN = '',
+    AXIOM_ORG_ID = ''
 } = process.env;
 
 const logger = winston.createLogger({
     level: 'debug',
     format: combine(errors({stack: true}), timestamp(), json()),
-    transports: [new winston.transports.Console()],
+    defaultMeta: {service: 'jinear-message-service'},
+    transports: [
+        new AxiomTransport({
+            dataset: 'jinear_be',
+            token: AXIOM_TOKEN,
+            orgId: AXIOM_ORG_ID,
+        }),
+        new winston.transports.Console(),
+    ],
 });
 
 const morganMiddleware = morgan(
@@ -37,7 +50,9 @@ let http = require("http").Server(app);
 let io = require("socket.io")(http, {path: '/ws'});
 
 app.get('/', (req, resp) => {
-    console.log({...req.query})
+    const cookie = req.headers.cookie;
+    logger.log({level: 'info', message: `cookie: ${cookie}`});
+
     return resp.status(200).send("up");
 })
 
@@ -70,7 +85,6 @@ io.on('connection', async (socket: any) => {
     //     socket.disconnect();
     //     return;
     // }
-
     socket.join('accId');
     // socket.emit("msg", `joined room ${accId}`);
 });

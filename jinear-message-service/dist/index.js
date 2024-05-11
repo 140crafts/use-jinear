@@ -13,14 +13,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const { PORT = 3001, INTERNAL_KEY = 'debug', } = process.env;
+const winston_1 = __importDefault(require("winston"));
+const winston_2 = require("@axiomhq/winston");
+const dotenv = require('dotenv');
+dotenv.config();
+const morgan = require('morgan');
+const { combine, timestamp, json, errors } = winston_1.default.format;
+const { PORT = 3001, INTERNAL_KEY = 'debug', AXIOM_TOKEN = '', AXIOM_ORG_ID = '' } = process.env;
+const logger = winston_1.default.createLogger({
+    level: 'debug',
+    format: combine(errors({ stack: true }), timestamp(), json()),
+    defaultMeta: { service: 'jinear-message-service' },
+    transports: [
+        new winston_2.WinstonTransport({
+            dataset: 'jinear_be',
+            token: AXIOM_TOKEN,
+            orgId: AXIOM_ORG_ID,
+        }),
+        new winston_1.default.transports.Console(),
+    ],
+});
+const morganMiddleware = morgan(':method :url :status :res[content-length] - :response-time ms', {
+    stream: {
+        write: (message) => logger.http(message.trim()),
+    },
+});
 const app = (0, express_1.default)();
+app.disable('etag');
 app.set("port", PORT);
-app.use(express_1.default.json());
+app.use(express_1.default.json(), morganMiddleware);
 let http = require("http").Server(app);
 let io = require("socket.io")(http, { path: '/ws' });
 app.get('/', (req, resp) => {
-    console.log(Object.assign({}, req.query));
+    const cookie = req.headers.cookie;
+    logger.log({ level: 'info', message: `cookie: ${cookie}` });
     return resp.status(200).send("up");
 });
 app.get('/info', (req, resp) => {
@@ -45,6 +71,8 @@ app.post('/emit', (req, resp) => {
     return resp.status(200).send("ok");
 });
 io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    console.log({ headers: (_a = socket === null || socket === void 0 ? void 0 : socket.handshake) === null || _a === void 0 ? void 0 : _a.headers });
     socket.join('accId');
 }));
 http.listen(PORT, function () {

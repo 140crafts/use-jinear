@@ -55,3 +55,8 @@ next.config.original.js
 
 # worker
 /public/worker-*.js
+
+*.env
+*.env.example
+*.env.local
+*.env.staging

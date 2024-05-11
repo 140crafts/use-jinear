@@ -1,0 +1,16 @@
+image: docker:latest
+services:
+  - docker:dind
+
+variables:
+  DOCKER_DRIVER: overlay
+
+stages:
+  - package
+
+docker-build:
+  stage: package
+  script:
+    - docker build -t registry.gitlab.com/140crafts/jinear/projects/jinear-message-service .
+    - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN registry.gitlab.com
+    - docker push registry.gitlab.com/140crafts/jinear/projects/jinear-message-service
