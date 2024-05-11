@@ -53,7 +53,7 @@ app.get('/', (req, resp) => {
     const cookie = req.headers.cookie;
     logger.log({level: 'info', message: `cookie: ${cookie}`});
 
-    return resp.status(200).send("Hi!");
+    return resp.status(200).send("hi :*");
 })
 
 app.get('/info', (req, resp) => {
