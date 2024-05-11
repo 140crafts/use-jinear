@@ -29,7 +29,7 @@ deploy:
     - chmod 644 ~/.ssh/known_hosts
   script:
     - ssh $SSH_USER@$VM_IPADDRESS
-    - cd app/jinear-message-service
+    - cd ~/app/jinear-message-service
     - docker compose pull
     - docker compose up -d
     - docker image prune -f
