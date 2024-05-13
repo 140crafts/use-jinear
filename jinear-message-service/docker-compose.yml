@@ -11,3 +11,4 @@ services:
       PORT: 3001
       AXIOM_TOKEN: ${AXIOM_TOKEN}
       AXIOM_ORG_ID: ${AXIOM_ORG_ID}
+      CORE_ENDPOINT: https://message.jinear.co
