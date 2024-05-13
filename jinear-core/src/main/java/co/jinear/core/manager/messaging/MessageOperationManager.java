@@ -37,7 +37,6 @@ public class MessageOperationManager {
         InitializeMessageVo initializeMessageVo = sendMessageRequestConverter.convertForThread(currentAccountId, threadId, sendMessageRequest);
         RichMessageDto saved = messageOperationService.initialize(initializeMessageVo);
         RichMessageDto richMessageDto = messageRetrieveService.retrieveRich(saved.getMessageId());
-                //todo emit sockets
         threadNotifierService.notifyThreadParticipants(richMessageDto);
         return mapResponse(richMessageDto);
     }
@@ -49,8 +48,6 @@ public class MessageOperationManager {
         InitializeMessageVo initializeMessageVo = sendMessageRequestConverter.convertForConversation(currentAccountId, conversationId, sendMessageRequest);
         RichMessageDto saved = messageOperationService.initialize(initializeMessageVo);
         RichMessageDto richMessageDto = messageRetrieveService.retrieveRich(saved.getMessageId());
-
-        //todo emit sockets
         conversationNotifierService.notify(richMessageDto);
         return mapResponse(richMessageDto);
     }

@@ -1,18 +1,21 @@
 package co.jinear.core.service.messaging.conversation;
 
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.account.AccountCommunicationPermissionDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
-import co.jinear.core.model.dto.messaging.channel.PlainChannelDto;
+import co.jinear.core.model.dto.messaging.conversation.ConversationDto;
 import co.jinear.core.model.dto.messaging.conversation.ConversationParticipantDto;
 import co.jinear.core.model.dto.messaging.message.MessageDto;
 import co.jinear.core.model.dto.messaging.message.RichMessageDto;
-import co.jinear.core.model.dto.messaging.thread.ThreadDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.vo.notification.NotificationSendVo;
 import co.jinear.core.service.account.AccountCommunicationPermissionService;
+import co.jinear.core.service.client.messageapi.model.request.EmitRequest;
 import co.jinear.core.service.messaging.conversation.participant.ConversationParticipantListingService;
+import co.jinear.core.service.messaging.emit.EmitterService;
 import co.jinear.core.service.notification.NotificationCreateService;
 import co.jinear.core.service.richtext.HtmlSanitizeService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -33,11 +36,38 @@ public class ConversationNotifierService {
     private final NotificationCreateService notificationCreateService;
     private final AccountCommunicationPermissionService accountCommunicationPermissionService;
     private final HtmlSanitizeService htmlSanitizeService;
+    private final EmitterService emitterService;
+    private final ObjectMapper objectMapper;
 
     @Async
     public void notify(RichMessageDto richMessageDto) {
         String conversationId = richMessageDto.getConversationId();
         List<ConversationParticipantDto> conversationParticipantDtos = conversationParticipantListingService.retrieveActiveParticipants(conversationId);
+        emitMessage(richMessageDto, conversationParticipantDtos);
+        sendNotification(richMessageDto, conversationParticipantDtos);
+    }
+
+    private void emitMessage(RichMessageDto richMessageDto, List<ConversationParticipantDto> conversationParticipantDtos) {
+        conversationParticipantDtos.stream()
+                .map(ConversationParticipantDto::getAccountId)
+                .map(toAccountId -> mapEmitRequest(richMessageDto, toAccountId))
+                .forEach(emitterService::emitMessage);
+    }
+
+    private EmitRequest mapEmitRequest(RichMessageDto richMessageDto, String toAccountId) {
+        try {
+            EmitRequest emitRequest = new EmitRequest();
+            emitRequest.setChannel(toAccountId);
+            emitRequest.setTopic("conversation-message");
+            emitRequest.setMessage(objectMapper.writeValueAsString(richMessageDto));
+            return emitRequest;
+        } catch (Exception e) {
+            log.error("Map emit request failed.", e);
+            throw new BusinessException();
+        }
+    }
+
+    private void sendNotification(RichMessageDto richMessageDto, List<ConversationParticipantDto> conversationParticipantDtos) {
         conversationParticipantDtos.stream()
                 .filter(conversationParticipantDto -> filterSender(conversationParticipantDto, richMessageDto))
                 .filter(this::filterMuted)
@@ -70,9 +100,8 @@ public class ConversationNotifierService {
         //notificationSendVo.setSenderSessionId(null);
 
         Optional.of(richMessageDto)
-                .map(RichMessageDto::getThread)
-                .map(ThreadDto::getChannel)
-                .map(PlainChannelDto::getWorkspaceId)
+                .map(RichMessageDto::getConversation)
+                .map(ConversationDto::getWorkspaceId)
                 .ifPresent(notificationSendVo::setWorkspaceId);
         Optional.of(richMessageDto)
                 .map(MessageDto::getAccount)

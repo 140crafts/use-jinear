@@ -1,5 +1,6 @@
 package co.jinear.core.model.dto.messaging.message;
 
+import co.jinear.core.model.dto.messaging.conversation.ConversationDto;
 import co.jinear.core.model.dto.messaging.thread.ThreadDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,4 +12,5 @@ import lombok.ToString;
 public class RichMessageDto extends MessageDto {
 
     private ThreadDto thread;
+    private ConversationDto conversation;
 }
