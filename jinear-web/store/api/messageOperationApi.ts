@@ -17,7 +17,7 @@ export const messageOperationApi = api.injectEndpoints({
             { type: "v1/messaging/message/thread/{threadId}", id: props.threadId },
             { type: "v1/messaging/thread/{threadId}", id: props.threadId }
           ]));
-        }, 3000);
+        }, 30000);
       }
     }),
     //
@@ -37,7 +37,7 @@ export const messageOperationApi = api.injectEndpoints({
           dispatch(api.util.invalidateTags([
             { type: "v1/messaging/message/conversation/{conversationId}", id: props.conversationId }
           ]));
-        }, 3000);
+        }, 30000);
       }
     })
     //

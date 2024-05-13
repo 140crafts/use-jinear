@@ -34,7 +34,7 @@ const ConversationButton: React.FC<ConversationButtonProps> = ({
         continue;
       }
       const participantUsername = participant.account.username;
-      const currJoinChar = i == 0 ? "" : JOIN_CHAR;
+      const currJoinChar = joinedName?.length == 0 ? "" : JOIN_CHAR;
       if (joinedName.length + currJoinChar.length + participantUsername.length < MAX_CHAR) {
         joinedName += currJoinChar + participantUsername;
         shownParticipants.push(participant);
@@ -43,7 +43,6 @@ const ConversationButton: React.FC<ConversationButtonProps> = ({
         break;
       }
     }
-
     return { joinedName, shownParticipants, remaining };
   }, [conversation, currentAccountId]);
 

@@ -1,10 +1,11 @@
 "use client";
-import { s3Base } from "@/store/api/api";
+
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import Image from "next/image";
 import React, { CSSProperties } from "react";
 import styles from "./index.module.css";
+import { S3_BASE } from "@/utils/constants";
 
 const cyrb53 = function(str: string | undefined, seed = 0) {
   if (!str) {
@@ -87,7 +88,7 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
         alt="User profile photo"
         className={cn(styles.image, imgClassName)}
         style={style}
-        src={storagePath ? s3Base + storagePath : getRandomBoringAvatar(boringAvatarKey)}
+        src={storagePath ? S3_BASE + storagePath : getRandomBoringAvatar(boringAvatarKey)}
         sizes="(max-width: 320px) 90px, (max-width: 760px) 125px, 175px"
         // @ts-ignore
         objectFit={objectFit || "cover"}

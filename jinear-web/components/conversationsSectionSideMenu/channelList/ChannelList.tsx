@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styles from "./ChannelList.module.css";
 import { useRetrieveChannelMembershipsQuery } from "@/api/channelMemberApi";
 import { WorkspaceDto } from "@/be/jinear-core";
@@ -8,6 +8,9 @@ import useTranslation from "../../../locales/useTranslation";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import Logger from "@/utils/logger";
 import NewChannelButton from "@/components/conversationsSectionSideMenu/channelList/newChannelButton/NewChannelButton";
+import { useListChannelsQuery } from "@/api/channelApi";
+import JoinableChannelListButton
+  from "@/components/conversationsSectionSideMenu/channelList/joinableChannelListButton/JoinableChannelListButton";
 
 interface ChannelListProps {
   workspace: WorkspaceDto;
@@ -19,12 +22,16 @@ const ChannelList: React.FC<ChannelListProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const {
     data: channelMembershipsResponse,
-    isSuccess,
-    isError,
-    error,
-    isFetching
+    isFetching: isRetrieveChannelMembershipsFetching
   } = useRetrieveChannelMembershipsQuery({ workspaceId: workspace.workspaceId });
-  logger.log({ ChannelList: workspace, channelMembershipsResponse, isSuccess, isError, error });
+  const {
+    data: channelListResponse,
+    isFetching: isChannelListFetching
+  } = useListChannelsQuery({ workspaceId: workspace.workspaceId });
+  const joinable = useMemo(() => channelListResponse?.data?.filter(channelMembershipInfoDto => !channelMembershipInfoDto.isJoined) || [], [channelListResponse]);
+  const isFetching = isRetrieveChannelMembershipsFetching || isChannelListFetching;
+
+  logger.log({ ChannelList: workspace, channelMembershipsResponse });
 
   return (
     <div className={styles.container}>
@@ -45,9 +52,11 @@ const ChannelList: React.FC<ChannelListProps> = ({ workspace }) => {
                 channel={channel}
                 workspaceUsername={workspace.username} />)
           }
+          <JoinableChannelListButton workspaceId={workspace.workspaceId} count={joinable.length}/>
           <NewChannelButton workspaceId={workspace.workspaceId} />
         </div>
-      </>}
+      </>
+      }
 
     </div>
   );

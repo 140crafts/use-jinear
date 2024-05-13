@@ -16,13 +16,13 @@ import {
   LuRedo2,
   LuRemoveFormatting,
   LuStrikethrough,
-  LuUndo2,
+  LuUndo2
 } from "react-icons/lu";
 import { MdHorizontalRule, MdLayersClear } from "react-icons/md";
 import { PiListNumbers } from "react-icons/pi";
 import styles from "./ActionBar.module.css";
 
-export type TipTapActionBarMode = "simple" | "full";
+export type TipTapActionBarMode = "simple" | "full" | "none";
 
 interface ActionBarProps {
   editor: Editor;
@@ -30,7 +30,7 @@ interface ActionBarProps {
 }
 
 const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full" }) => {
-  return editor ? (
+  return (editor && mode != "none") ? (
     <div className={styles.container}>
       <Button
         onClick={() => editor.chain().focus().toggleBold().run()}

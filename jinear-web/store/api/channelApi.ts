@@ -1,4 +1,9 @@
-import { BaseResponse, InitializeChannelRequest, UpdateChannelRequest } from "@/model/be/jinear-core";
+import {
+  BaseResponse, ChannelListingResponse,
+  ChannelMemberListingResponse, ChannelMembershipInfoListingResponse,
+  InitializeChannelRequest,
+  UpdateChannelRequest
+} from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const channelApi = api.injectEndpoints({
@@ -46,6 +51,16 @@ export const channelApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         `v1/messaging/channel/member/memberships/{workspaceId}`
       ]
+    }),
+    //
+    listChannels: build.query<ChannelMembershipInfoListingResponse, { workspaceId: string }>({
+      query: (req: { workspaceId: string }) => `v1/messaging/channel/workspace/${req.workspaceId}`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: `v1/messaging/channel/workspace/{workspaceId}`,
+          id: `${req.workspaceId}`
+        }
+      ]
     })
     //
   })
@@ -55,9 +70,16 @@ export const {
   useInitializeChannelMutation,
   useUpdateChannelTitleMutation,
   useUpdateChannelVisibilityMutation,
-  useUpdateChannelParticipationMutation
+  useUpdateChannelParticipationMutation,
+  useListChannelsQuery
 } = channelApi;
 
 export const {
-  endpoints: { initializeChannel, updateChannelTitle, updateChannelVisibility, updateChannelParticipation }
+  endpoints: {
+    initializeChannel,
+    updateChannelTitle,
+    updateChannelVisibility,
+    updateChannelParticipation,
+    listChannels
+  }
 } = channelApi;

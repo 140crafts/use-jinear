@@ -2,10 +2,11 @@ import React, { useEffect, useRef } from "react";
 import styles from "./ReplyConversationInput.module.scss";
 import Button, { ButtonVariants } from "@/components/button";
 import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
-import { LuSendHorizonal } from "react-icons/lu";
+import { LuPencilLine, LuSendHorizonal } from "react-icons/lu";
 import CustomKeyboardEventHandler from "@/components/tiptap/keyboardEventHandler/KeyboardEventHandler";
 import useTranslation from "@/locals/useTranslation";
 import { useSendToConversationMutation } from "@/api/messageOperationApi";
+import { useToggle } from "@/hooks/useToggle";
 
 interface ReplyConversationInputProps {
   workspaceId: string;
@@ -20,6 +21,7 @@ const ReplyConversationInput: React.FC<ReplyConversationInputProps> = ({ workspa
     isLoading: isSendToConversationLoading,
     isSuccess: isSendToConversationSuccess
   }] = useSendToConversationMutation();
+  const [actionBarVisible, toggleActionBarVisible, setActionBarVisible] = useToggle(false);
 
   useEffect(() => {
     if (isSendToConversationSuccess && tiptapRef.current) {
@@ -47,11 +49,19 @@ const ReplyConversationInput: React.FC<ReplyConversationInputProps> = ({ workspa
           className={styles.input}
           editorClassName={styles.input}
           placeholder={t("threadReplyMessageInputPlaceholder")}
+          actionBarMode={actionBarVisible ? "full" : "none"}
           hideActionBarWhenEmpty={false}
           extensions={[KeyboardEventHandler]}
           editable={!isSendToConversationLoading}
         />
         <div className={styles.inputActionBar}>
+          <Button
+            variant={actionBarVisible ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+            disabled={isSendToConversationLoading}
+            onClick={toggleActionBarVisible}
+          >
+            <LuPencilLine />
+          </Button>
           <Button
             variant={ButtonVariants.hoverFilled2}
             disabled={isSendToConversationLoading}

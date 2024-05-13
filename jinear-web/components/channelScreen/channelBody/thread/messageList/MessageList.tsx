@@ -70,7 +70,7 @@ const MessageList: React.FC<MessageListProps> = ({
 
   return (
     <div className={styles.container}>
-      {remainingMessageCount != 0 && !viewingAsDetail &&
+      {remainingMessageCount > 0 && !viewingAsDetail &&
         <Button
           href={`/${workspaceName}/conversations/channel/${channelId}/thread/${threadId}`}
           heightVariant={ButtonHeight.short}

@@ -10,6 +10,8 @@ import cn from "classnames";
 import { useParams, usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import styles from "./layout.module.scss";
+import { useRetrieveChannelMembershipsQuery } from "@/api/channelMemberApi";
+import { useRetrieveParticipatedConversationsQuery } from "@/api/conversationApi";
 
 interface WorkspaceLayoutProps {
   children: React.ReactNode;
@@ -27,11 +29,15 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   const workspaceName = params?.workspaceName as string;
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
 
+  //so we can calculate unread count
+  const {} = useRetrieveChannelMembershipsQuery({ workspaceId: workspace?.workspaceId || "" }, { skip: !workspace });
+  const {} = useRetrieveParticipatedConversationsQuery({ workspaceId: workspace?.workspaceId || "" }, { skip: !workspace });
+
   useEffect(() => {
     if (isMobile) {
       dispatch(closeAllMenus());
     }
-  }, [pathName, isMobile]);
+  }, [dispatch, pathName, isMobile]);
 
   return (
     <div id="workspace-layout-container" className={styles.container}>
@@ -46,17 +52,6 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
           {workspace && <MainFeaturesSideMenu workspace={workspace} />}
         </div>
         <div id="workspace-layout-page-content" className={styles.pageContent}>
-          {/* 
-          // disabled feature/cgds-301
-          <SseProviderWorkspaceActivities workspaceId={workspace?.workspaceId}>
-            {workspace ? (
-              <SseListenerWorkspaceActivities workspaceId={workspace.workspaceId} workspaceUsername={workspace.username}>
-                {children}
-              </SseListenerWorkspaceActivities>
-            ) : (
-              children
-              )}
-          </SseProviderWorkspaceActivities> */}
           {children}
         </div>
       </div>

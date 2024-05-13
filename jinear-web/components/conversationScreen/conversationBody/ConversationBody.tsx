@@ -10,6 +10,7 @@ import { useAppDispatch } from "@/store/store";
 import { checkAndUpdateConversationLastCheck, upsertAllConversationMessages } from "@/slice/messagingSlice";
 import { useConversationMessagesSorted } from "@/hooks/messaging/conversationMessage/useConversationMessagesSorted";
 import { useConversationHasMoreMessages } from "@/hooks/messaging/conversation/useConversationHasMoreMessages";
+import Logger from "@/utils/logger";
 
 interface ConversationBodyProps {
   conversationId: string,
@@ -17,46 +18,45 @@ interface ConversationBodyProps {
 }
 
 const RENDER_MESSAGE_PROFILE_PIC_FROM_SAME_ACC_AFTER_MIN = 5;
+const logger = Logger("ConversationBody");
+
+const LIMIT_RATIO = 0.85;
 
 const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, workspaceId }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [retrieveConversationMessages, {
-    data: retrieveConversationMessagesResponse,
-    isFetching: isRetrieveConversationFetching
-  }] = useLazyRetrieveConversationMessagesQuery();
+  const [retrieveConversationMessages, { isFetching: isRetrieveConversationFetching }] = useLazyRetrieveConversationMessagesQuery();
 
   const hasMore = useConversationHasMoreMessages({ conversationId, workspaceId });
-  const initialScroll = useRef<boolean>(false);
   const sortedMessages = useConversationMessagesSorted({ workspaceId, conversationId });
+  const initialScroll = useRef<boolean>(false);
 
   useEffect(() => {
     dispatch(checkAndUpdateConversationLastCheck({ workspaceId, conversationId, lastCheckDate: new Date() }));
-  }, [dispatch, workspaceId, conversationId]);
+  }, [dispatch, workspaceId, conversationId, sortedMessages]);
 
   useEffect(() => {
     retrieveConversationMessages({ workspaceId, conversationId });
   }, [retrieveConversationMessages, workspaceId, conversationId]);
 
-  // useEffect(() => {
-  //   if (retrieveConversationMessagesResponse?.data) {
-  //     const retrievedContent = retrieveConversationMessagesResponse.data.content || [];
-  //     dispatch(upsertAllConversationMessages({ workspaceId, messageDtoList: retrievedContent }));
-  //   }
-  // }, [dispatch, workspaceId, retrieveConversationMessagesResponse]);
-
   useEffect(() => {
-    if (retrieveConversationMessagesResponse && typeof window === "object" && !initialScroll.current) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: document.documentElement.scrollHeight - window.innerHeight,
-          left: 0,
-          behavior: "auto"
-        });
-        initialScroll.current = true;
-      }, 500);
+    if (sortedMessages && typeof window === "object") {
+      const currentScrollY = window.scrollY;
+      const bottom = document.documentElement.scrollHeight - window.innerHeight;
+      const shouldScroll = currentScrollY >= (bottom * LIMIT_RATIO) || !initialScroll.current;
+      logger.log({ currentScrollY, bottom, shouldScroll });
+      if (shouldScroll) {
+        setTimeout(() => {
+          initialScroll.current = true;
+          window.scrollTo({
+            top: document.documentElement.scrollHeight - window.innerHeight,
+            left: 0,
+            behavior: "smooth"
+          });
+        }, 500);
+      }
     }
-  }, [retrieveConversationMessagesResponse]);
+  }, [sortedMessages]);
 
   const retrieveMore = () => {
     const oldestMessage = sortedMessages[sortedMessages.length - 1];

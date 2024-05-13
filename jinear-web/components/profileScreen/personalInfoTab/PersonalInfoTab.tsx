@@ -1,9 +1,8 @@
 import { useUpdateProfilePictureMutation } from "@/store/api/accountMediaApi";
-import { s3Base } from "@/store/api/api";
 import { useLogoutMutation } from "@/store/api/authApi";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
 import { changeLoadingModalVisibility, popDialogModal, resetModals } from "@/store/slice/modalSlice";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { resetAllStates, useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
@@ -12,8 +11,10 @@ import styles from "./PersonalInfoTab.module.css";
 import UserProfilePicturePicker from "./userProfilePicturePicker/UserProfilePicturePicker";
 
 import Button, { ButtonVariants } from "@/components/button";
+import { S3_BASE } from "@/utils/constants";
 
-interface PersonalInfoTabProps {}
+interface PersonalInfoTabProps {
+}
 
 const logger = Logger("PersonalInfoTab");
 
@@ -25,7 +26,13 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
   const [selectedFilePreview, setSelectedFilePreview] = useState<string | undefined>();
 
   const [updateProfilePicture, { isSuccess, isLoading, isError }] = useUpdateProfilePictureMutation();
-  const [logoutCall, { isLoading: isLogoutLoading }] = useLogoutMutation();
+  const [logoutCall, { isLoading: isLogoutLoading, isSuccess: isLogoutSuccess }] = useLogoutMutation();
+
+  useEffect(() => {
+    if (isLogoutSuccess) {
+      resetAllStates(dispatch);
+    }
+  }, [dispatch, isLogoutSuccess]);
 
   const logout = () => {
     logoutCall();
@@ -39,7 +46,7 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
         title: t("logoutAreYouSureTitle"),
         content: t("logoutAreYouSureText"),
         confirmButtonLabel: t("logoutAreYouSureConfirmLabel"),
-        onConfirm: logout,
+        onConfirm: logout
       })
     );
   };
@@ -62,7 +69,7 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
       <div className={styles.profileContainer}>
         <UserProfilePicturePicker
           currentPhotoPath={
-            currentAccount?.profilePicture?.storagePath ? s3Base + currentAccount?.profilePicture?.storagePath : undefined
+            currentAccount?.profilePicture?.storagePath ? S3_BASE + currentAccount?.profilePicture?.storagePath : undefined
           }
           selectedFile={selectedFile}
           setSelectedFile={setSelectedFile}

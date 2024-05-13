@@ -51,8 +51,12 @@ const slice = createSlice({
       state[workspaceId] = workspaceState;
     },
 
-    upsertThreadMessage: (state, action: PayloadAction<{ workspaceId: string, messageDto: MessageDto }>) => {
-      const { messageDto, workspaceId } = action.payload;
+    upsertThreadMessage: (state, action: PayloadAction<{
+      workspaceId: string,
+      messageDto: MessageDto,
+      channelId: string
+    }>) => {
+      const { messageDto, workspaceId, channelId } = action.payload;
       const threadId = messageDto.threadId as string;
       const workspaceState = state[workspaceId] || {};
       const threadMessageMap = { ...(workspaceState.threadMessageMap || {}) };
@@ -64,6 +68,15 @@ const slice = createSlice({
       logger.log({ upsertThreadMessage: threadMessageMap });
       workspaceState.threadMessageMap = threadMessageMap;
       state[workspaceId] = workspaceState;
+
+      slice.caseReducers.checkAndUpdateChannelLastActivity(state, {
+        payload: {
+          workspaceId,
+          channelId,
+          lastActivityDate: new Date()
+        }, type: "messaging/checkAndUpdateChannelLastActivity"
+      });
+
     },
 
     upsertAllThreadMessages: (state, action: PayloadAction<{
@@ -201,7 +214,7 @@ const slice = createSlice({
         const channelId = action.meta.arg.originalArgs.channelId;
         const sentMessage = action.payload.data;
         slice.caseReducers.upsertThreadMessage(state, {
-          payload: { workspaceId, messageDto: sentMessage },
+          payload: { workspaceId, messageDto: sentMessage, channelId },
           type: "messaging/upsertThreadMessage"
         });
         slice.caseReducers.checkAndUpdateChannelLastActivity(state, {
@@ -366,6 +379,8 @@ const slice = createSlice({
 export const {
   checkAndUpdateChannelLastCheck,
   checkAndUpdateConversationLastCheck,
+  upsertThreadMessage,
+  upsertConversationMessage,
   upsertAllConversationMessages,
   resetMessagingData
 } = slice.actions;

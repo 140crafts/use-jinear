@@ -3526,6 +3526,10 @@ const translations = {
   conversationEmpty: {
     en: "There isn't any messages yet.",
     tr: "Herhangi bir mesaj bulunamadı."
+  },
+  joinChannelButton: {
+    en: "Join Channel (${number})",
+    tr: "Kanala Katıl (${number})"
   }
 };
 

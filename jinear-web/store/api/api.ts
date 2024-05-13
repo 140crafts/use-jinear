@@ -1,14 +1,9 @@
-import { __DEV__ } from "@/utils/constants";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { API_ROOT } from "@/utils/constants";
 
-export const server = __DEV__ ? "staging.api" : "api";
-export const root = __DEV__ ? "http://localhost:8085/" : `https://${server}.jinear.co/`;
-// : "http://localhost:8085/";
-
-export const s3Base = "https://storage.googleapis.com/jinear-b0/";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: root,
+  baseUrl: API_ROOT,
   prepareHeaders: (headers, { getState }) => {
     return headers;
   },
@@ -72,7 +67,8 @@ export const tagTypes = [
   "v1/messaging/message/thread/{threadId}",
   "v1/messaging/thread/{threadId}",
   `v1/messaging/conversation/participated/{workspaceId}`,
-  `v1/messaging/message/conversation/{conversationId}`
+  `v1/messaging/message/conversation/{conversationId}`,
+  `v1/messaging/channel/workspace/{workspaceId}`
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

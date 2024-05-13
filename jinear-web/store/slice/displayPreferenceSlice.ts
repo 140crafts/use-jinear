@@ -77,6 +77,7 @@ export const {
   popAllMenus,
   closeAllMenus,
   toggleMenu,
+  resetDisplayPreferences,
 } = slice.actions;
 export default slice.reducer;
 

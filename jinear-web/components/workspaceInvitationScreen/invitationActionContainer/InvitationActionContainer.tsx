@@ -2,8 +2,9 @@ import Button, { ButtonVariants } from "@/components/button";
 import { WorkspaceInvitationInfoResponse } from "@/model/be/jinear-core";
 import { useLogoutMutation } from "@/store/api/authApi";
 import useTranslation from "locales/useTranslation";
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "./InvitationActionContainer.module.css";
+import { resetAllStates, useAppDispatch } from "@/store/store";
 
 interface InvitationActionContainerProps {
   isRespondLoading: boolean;
@@ -15,19 +16,26 @@ interface InvitationActionContainerProps {
 }
 
 const InvitationActionContainer: React.FC<InvitationActionContainerProps> = ({
-  isRespondLoading,
-  isLoggedInAndViewingOthersInvitation,
-  invitationInfoResponse,
-  currentAccountEmail,
-  accept,
-  decline,
-}) => {
+                                                                               isRespondLoading,
+                                                                               isLoggedInAndViewingOthersInvitation,
+                                                                               invitationInfoResponse,
+                                                                               currentAccountEmail,
+                                                                               accept,
+                                                                               decline
+                                                                             }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const message = t("engageWorkspaceInvitationLogOutCurrentAccount")
     .replace("${currentAccountEmail}", currentAccountEmail || "")
     .replace("${invitationToEmail}", invitationInfoResponse?.data?.invitationDto?.email || "");
 
-  const [logout, { isLoading, isError }] = useLogoutMutation();
+  const [logout, { isLoading, isError, isSuccess }] = useLogoutMutation();
+
+  useEffect(() => {
+    if (isSuccess) {
+      resetAllStates(dispatch);
+    }
+  }, [dispatch, isSuccess]);
 
   return (
     <div className={styles.container}>
