@@ -1,4 +1,4 @@
-import { root } from "@/store/api/api";
+import { API_ROOT } from "@/utils/constants";
 import React from "react";
 import { SSEProvider } from "react-hooks-sse";
 
@@ -9,7 +9,7 @@ interface SseProviderWorkspaceActivitiesProps {
 
 const SseProviderWorkspaceActivities: React.FC<SseProviderWorkspaceActivitiesProps> = ({ workspaceId, children }) => {
   const getSource = () => {
-    const url = `${root}v1/sse/workspace/activity/${workspaceId}`;
+    const url = `${API_ROOT}v1/sse/workspace/activity/${workspaceId}`;
     return new EventSource(url, { withCredentials: true });
   };
 

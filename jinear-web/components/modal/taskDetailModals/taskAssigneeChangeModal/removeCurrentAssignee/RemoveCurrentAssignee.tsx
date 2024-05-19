@@ -42,7 +42,7 @@ const RemoveCurrentAssignee: React.FC<RemoveCurrentAssigneeProps> = ({ close }) 
     <div className={styles.container}>
       <OrLine />
       <Button className={styles.button} onClick={removeAssignee}>
-        {t("changeTaskTopicModalRemoveTopic")}
+        {t("changeTaskAssigneeModalRemove")}
       </Button>
     </div>
   );

@@ -4,7 +4,10 @@
     "target": {
       "namespace": "android_app",
       "package_name": "co.jinear.app",
-      "sha256_cert_fingerprints": ["{sha256_cert_fingerprints}"]
+      "sha256_cert_fingerprints": [
+        "{sha256_cert_fingerprints}",
+        "59:BA:97:5E:AE:97:E7:E7:C8:6D:8F:2A:A7:B0:73:53:FE:E4:4F:C5:F5:C4:B3:E0:A2:97:BA:0E:E6:22:ED:D4"
+      ]
     }
   }
 ]

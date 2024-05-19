@@ -2,8 +2,7 @@ import { MediaDto } from "@/model/be/jinear-core";
 import React from "react";
 import { IoDocumentOutline, IoImage, IoVideocam } from "react-icons/io5";
 import styles from "./FileInfo.module.scss";
-
-import { root } from "@/store/api/api";
+import { API_ROOT } from "@/utils/constants";
 import { humanReadibleFileSize } from "@/utils/FileSizeFormatter";
 import cn from "classnames";
 import { format } from "date-fns";
@@ -51,7 +50,7 @@ const FileInfo: React.FC<FileInfoProps> = ({ media }) => {
         disabled={!media}
         className={styles.mainButton}
         heightVariant={ButtonHeight.short}
-        href={media ? root + `v1/task/media/${media.relatedObjectId}/download/${media.mediaId}` : undefined}
+        href={media ? API_ROOT + `v1/task/media/${media.relatedObjectId}/download/${media.mediaId}` : undefined}
         target={media && "_blank"}
         download={media ? media.originalName : undefined}
       >

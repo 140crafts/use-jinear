@@ -23,7 +23,8 @@
       "@/slice/*": ["store/slice/*"],
       "@/utils/*": ["utils/*"],
       "@/model/*": ["model/*"],
-      "@/be/*": ["model/be/*"]
+      "@/be/*": ["model/be/*"],
+      "@/locals/*": ["locales/*"]
     },
     "plugins": [
       {

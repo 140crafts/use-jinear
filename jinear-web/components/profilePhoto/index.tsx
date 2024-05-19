@@ -1,12 +1,13 @@
 "use client";
-import { s3Base } from "@/store/api/api";
+
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import Image from "next/image";
-import React from "react";
+import React, { CSSProperties } from "react";
 import styles from "./index.module.css";
+import { S3_BASE } from "@/utils/constants";
 
-const cyrb53 = function (str: string | undefined, seed = 0) {
+const cyrb53 = function(str: string | undefined, seed = 0) {
   if (!str) {
     return 0;
   }
@@ -51,7 +52,7 @@ export const getRandomBoringAvatar = (word: string) => {
     "Sacagawea",
     "SarahWinnemucca",
     "SojournerTruth",
-    "WillaCather",
+    "WillaCather"
   ];
   let index = all?.indexOf(word);
   index = index == -1 ? cyrb53(word) : index;
@@ -66,25 +67,28 @@ interface ProfilePhotoProps {
   imgClassName?: string;
   objectFit?: string;
   fill?: boolean;
+  style?: CSSProperties;
 }
 
 const logger = Logger("ProfilePhoto");
 
 const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
-  boringAvatarKey = "",
-  appFileId,
-  storagePath,
-  wrapperClassName,
-  imgClassName,
-  objectFit,
-  fill,
-}) => {
+                                                     boringAvatarKey = "",
+                                                     appFileId,
+                                                     storagePath,
+                                                     wrapperClassName,
+                                                     imgClassName,
+                                                     objectFit,
+                                                     fill,
+                                                     style
+                                                   }) => {
   return (
     <div className={cn(styles.wrapper, wrapperClassName)}>
       <Image
         alt="User profile photo"
         className={cn(styles.image, imgClassName)}
-        src={storagePath ? s3Base + storagePath : getRandomBoringAvatar(boringAvatarKey)}
+        style={style}
+        src={storagePath ? S3_BASE + storagePath : getRandomBoringAvatar(boringAvatarKey)}
         sizes="(max-width: 320px) 90px, (max-width: 760px) 125px, 175px"
         // @ts-ignore
         objectFit={objectFit || "cover"}

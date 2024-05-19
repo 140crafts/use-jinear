@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-04-10 12:01:59.
+
+// Generated using typescript-generator version 3.0.1157 on 2024-05-18 10:25:36.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +19,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  last: boolean;
   first: boolean;
+  last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -68,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
   item: any;
   expiresAt: Date;
-  notExpired: boolean;
   expired: boolean;
+  notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -157,10 +158,10 @@ export interface GmailMessageDto extends BaseDto {
   to: string;
   subject: string;
   body: string;
+  gid: string;
   gthreadId: string;
   ghistoryId: string;
   ginternalDate: string;
-  gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -199,7 +200,8 @@ export interface GoogleUserInfoDto extends BaseDto {
   locale: string;
 }
 
-export interface DetailedFeedContentItemDto extends FeedContentItemDto {}
+export interface DetailedFeedContentItemDto extends FeedContentItemDto {
+}
 
 export interface FeedContentDto {
   feedItemList: FeedContentItemDto[];
@@ -276,12 +278,25 @@ export interface ChannelDto extends PlainChannelDto {
   members: ChannelMemberDto[];
 }
 
+export interface ChannelInfoDto {
+  channelId: string;
+  lastChannelActivity?: Date | null;
+}
+
 export interface ChannelMemberDto extends BaseDto {
   channelMemberId: string;
   channelId: string;
   accountId: string;
   roleType: ChannelMemberRoleType;
+  silentUntil?: Date | null;
+  lastCheck: Date;
   account?: PlainAccountProfileDto | null;
+  channel: PlainChannelDto;
+}
+
+export interface ChannelMembershipInfoDto {
+  channel: PlainChannelDto;
+  isJoined: boolean;
 }
 
 export interface ChannelSettingsDto extends BaseDto {
@@ -302,6 +317,43 @@ export interface PlainChannelDto extends BaseDto {
   title: string;
   participationType: ChannelParticipationType;
   channelVisibilityType: ChannelVisibilityType;
+  channelInfo: ChannelInfoDto;
+}
+
+export interface ConversationDto {
+  conversationId: string;
+  workspaceId: string;
+  lastActivityTime: Date;
+  conversationMessageInfo: ConversationMessageInfoDto;
+  participants: PlainConversationParticipantDto[];
+}
+
+export interface ConversationMessageInfoDto {
+  conversationId: string;
+  lastMessageId: string;
+  lastMessage: MessageDto;
+  initialMessage: MessageDto;
+}
+
+export interface ConversationParticipantDto extends PlainConversationParticipantDto {
+  conversation: ConversationDto;
+}
+
+export interface ConversationParticipantInfoDto {
+  conversationParticipantId: string;
+  conversationId: string;
+  unreadCount: number;
+}
+
+export interface PlainConversationParticipantDto extends BaseDto {
+  conversationParticipantId: string;
+  conversationId: string;
+  accountId: string;
+  lastCheck: Date;
+  leftAt: Date;
+  silentUntil: Date;
+  account: PlainAccountProfileDto;
+  conversationParticipantInfo: ConversationParticipantInfoDto;
 }
 
 export interface MessageDataDto extends BaseDto {
@@ -317,7 +369,7 @@ export interface MessageDto extends BaseDto {
   richTextId: string;
   threadId?: string | null;
   conversationId?: string | null;
-  account: PlainAccountDto;
+  account: PlainAccountProfileDto;
   richText: RichTextDto;
   messageData?: MessageDataDto[] | null;
   messageReactions?: MessageReactionDto[] | null;
@@ -329,16 +381,25 @@ export interface MessageReactionDto extends BaseDto {
   accountId: string;
   reactionType: MessageReactionType;
   unicode: string;
-  account: PlainAccountDto;
+  account: PlainAccountProfileDto;
 }
 
-export interface ThreadDto extends BaseDto {
+export interface RichMessageDto extends MessageDto {
+  thread: ThreadDto;
+  conversation: ConversationDto;
+}
+
+export interface PlainThreadDto extends BaseDto {
   threadId: string;
   ownerId: string;
   channelId: string;
   lastActivityTime: Date;
+}
+
+export interface ThreadDto extends PlainThreadDto {
   threadMessageInfo: ThreadMessageInfoDto;
-  account: PlainAccountDto;
+  account: PlainAccountProfileDto;
+  channel: PlainChannelDto;
 }
 
 export interface ThreadMessageInfoDto {
@@ -348,6 +409,10 @@ export interface ThreadMessageInfoDto {
   messageCount: number;
   initialMessage: MessageDto;
   latestMessage: MessageDto;
+}
+
+export interface MessagingTokenDto {
+  token: string;
 }
 
 export interface NotificationEventDto extends BaseDto {
@@ -628,7 +693,8 @@ export interface TaskSearchResultDto extends BaseDto {
   workflowStateGroup: TeamWorkflowStateGroup;
 }
 
-export interface TaskSearchResultDtoBuilder {}
+export interface TaskSearchResultDtoBuilder {
+}
 
 export interface TaskSubscriptionDto extends BaseDto {
   taskSubscriptionId: string;
@@ -907,6 +973,23 @@ export interface InitializeChannelSettingsRequest extends BaseRequest {
   settingsValue: string;
 }
 
+export interface UpdateChannelRequest extends BaseRequest {
+  newTitle?: string | null;
+  channelVisibilityType?: ChannelVisibilityType | null;
+  participationType?: ChannelParticipationType | null;
+}
+
+export interface InitializeConversationRequest extends BaseRequest {
+  workspaceId: string;
+  initialMessageBody: string;
+  participantAccountIds: string[];
+}
+
+export interface SendMessageRequest extends BaseRequest {
+  body: string;
+  data?: { [index: string]: string } | null;
+}
+
 export interface InitializeThreadRequest extends BaseRequest {
   channelId: string;
   initialMessageBody: string;
@@ -1133,6 +1216,7 @@ export interface BaseResponse {
   responseLocale: string;
   systemTime: number;
   conversationId: string;
+  additionalInfo: { [index: string]: string };
 }
 
 export interface AccountCommunicationPermissionsResponse extends BaseResponse {
@@ -1187,8 +1271,44 @@ export interface FeedMemberPaginatedResponse extends BaseResponse {
   data: PageDto<FeedMemberDto>;
 }
 
+export interface ChannelListingResponse extends BaseResponse {
+  data: PlainChannelDto[];
+}
+
 export interface ChannelMemberListingResponse extends BaseResponse {
   data: ChannelMemberDto[];
+}
+
+export interface ChannelMembershipInfoListingResponse extends BaseResponse {
+  data: ChannelMembershipInfoDto[];
+}
+
+export interface ConversationInitializeResponse extends BaseResponse {
+  data: string;
+}
+
+export interface ConversationParticipantListingResponse extends BaseResponse {
+  data: ConversationParticipantDto[];
+}
+
+export interface MessageListingPaginatedResponse extends BaseResponse {
+  data: PageDto<MessageDto>;
+}
+
+export interface MessageResponse extends BaseResponse {
+  data: MessageDto;
+}
+
+export interface MessagingTokenResponse extends BaseResponse {
+  data: MessagingTokenDto;
+}
+
+export interface ThreadListingResponse extends BaseResponse {
+  data: PageDto<ThreadDto>;
+}
+
+export interface ThreadResponse extends BaseResponse {
+  data: ThreadDto;
 }
 
 export interface NotificationEventListingResponse extends BaseResponse {
@@ -1542,7 +1662,7 @@ export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL";
 export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
 export type GoogleScopeType =
-  | "OPEN_ID"
+  "OPEN_ID"
   | "USERINFO_PROFILE"
   | "USERINFO_EMAIL"
   | "CALENDAR"
@@ -1556,7 +1676,6 @@ export type GoogleScopeType =
   | "GMAIL_ADDONS_CURRENT_MESSAGE_ACTION"
   | "GMAIL_ADDONS_CURRENT_MESSAGE_METADATA"
   | "GMAIL_ADDONS_CURRENT_MESSAGE_READONLY"
-  | "GMAIL_METADATA"
   | "GMAIL_MODIFY"
   | "GMAIL_READONLY";
 
@@ -1567,7 +1686,7 @@ export type IntegrationProvider = "GOOGLE";
 export type IntegrationScopeType = "LOGIN" | "EMAIL" | "CALENDAR";
 
 export type LocaleStringType =
-  | "LOGIN_SMS_TEXT"
+  "LOGIN_SMS_TEXT"
   | "LOGIN_MAIL_TITLE"
   | "LOGIN_MAIL_TEXT"
   | "MAIL_CONFIRMATION_TITLE"
@@ -1623,14 +1742,15 @@ export type LocaleStringType =
 export type LocaleType = "TR" | "EN";
 
 export type LockSourceType =
-  | "BALANCE"
+  "BALANCE"
   | "TOPIC_TASK_INIT"
   | "TEAM_TASK_INIT"
   | "TEAM_WORKFLOW_STATUS"
   | "ACCOUNT_PASSWORD_RESET"
   | "TASK_BOARD_EDIT"
   | "REMINDER_JOB_PROCESS"
-  | "CONVERSATION_INIT";
+  | "CONVERSATION_INIT"
+  | "CONVERSATION";
 
 export type FileType = "PROFILE_PIC" | "TASK_FILE";
 
@@ -1644,7 +1764,7 @@ export type ChannelParticipationType = "EVERYONE" | "ADMINS_CAN_START_CONVERSATI
 
 export type ChannelSettingType = "SYNC_MEMBERS_WITH_TEAM";
 
-export type ChannelVisibilityType = "EVERYONE" | "MEMBERS_ONLY";
+export type ChannelVisibilityType = "EVERYONE" | "MEMBERS_ONLY" | "PUBLIC_WITH_GUESTS";
 
 export type MessageReactionType = "UNICODE_EMOJI";
 
@@ -1655,7 +1775,7 @@ export type NotificationProviderType = "ONE_SIGNAL" | "FIREBASE" | "EXPO";
 export type NotificationTargetType = "WEB" | "WEBVIEW";
 
 export type NotificationType =
-  | "TASK_REMINDER"
+  "TASK_REMINDER"
   | "WORKSPACE_ACTIVITY"
   | "TASK_INITIALIZED"
   | "TASK_CLOSED"
@@ -1675,10 +1795,12 @@ export type NotificationType =
   | "CHECKLIST_ITEM_LABEL_CHANGED"
   | "CHECKLIST_ITEM_REMOVED"
   | "CHECKLIST_ITEM_INITIALIZED"
-  | "TASK_NEW_COMMENT";
+  | "TASK_NEW_COMMENT"
+  | "MESSAGING_NEW_MESSAGE_THREAD"
+  | "MESSAGING_NEW_MESSAGE_CONVERSATION";
 
 export type PassiveReason =
-  | "SYSTEM"
+  "SYSTEM"
   | "USER_ACTION"
   | "FREEZE_ACCOUNT"
   | "DELETE_ACCOUNT"
@@ -1704,7 +1826,7 @@ export type ReminderJobStatus = "PENDING" | "COMPLETED" | "CANCELLED" | "FAILED"
 export type ReminderType = "TASK";
 
 export type RepeatType =
-  | "NONE"
+  "NONE"
   | "HOURLY"
   | "DAILY"
   | "WEEKLY"
@@ -1741,7 +1863,7 @@ export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
 export type TeamWorkflowStateGroup = "BACKLOG" | "NOT_STARTED" | "STARTED" | "COMPLETED" | "CANCELLED";
 
 export type TokenType =
-  | "SMS_LOGIN"
+  "SMS_LOGIN"
   | "EMAIL_LOGIN"
   | "WEB_USERNAME_LOGIN"
   | "BOOKING_EMAIL_VALIDATION"
@@ -1758,7 +1880,7 @@ export type UsernameRelatedObjectType = "ACCOUNT" | "WORKSPACE";
 export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER" | "GUEST";
 
 export type WorkspaceActivityType =
-  | "MEMBER_JOIN"
+  "MEMBER_JOIN"
   | "MEMBER_LEFT"
   | "MEMBER_REMOVED"
   | "MEMBER_REQUESTED_ACCESS"

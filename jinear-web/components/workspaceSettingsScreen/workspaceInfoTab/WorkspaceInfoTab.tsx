@@ -1,11 +1,10 @@
 import WorkspaceSubscriptionInfo from "@/components/workspaceSubscriptionInfo/WorkspaceSubscriptionInfo";
 import WorkspaceUpgradeButton from "@/components/workspaceUpgradeButton/WorkspaceUpgradeButton";
 import { LocaleType, WorkspaceDto } from "@/model/be/jinear-core";
-import { s3Base } from "@/store/api/api";
 import { useUpdateWorkspaceProfilePictureMutation } from "@/store/api/workspaceMediaApi";
 import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
-import { HOST } from "@/utils/constants";
+import { HOST, S3_BASE } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { isWorkspaceInPaidTier } from "@/utils/permissionHelper";
 import cn from "classnames";
@@ -54,7 +53,7 @@ const WorkspaceInfoTab: React.FC<WorkspaceInfoTabProps> = ({ workspace }) => {
           setSelectedFile={setSelectedFile}
           selectedFilePreview={selectedFilePreview}
           setSelectedFilePreview={setSelectedFilePreview}
-          currentPhotoPath={workspace?.profilePicture?.storagePath ? s3Base + workspace?.profilePicture?.storagePath : undefined}
+          currentPhotoPath={workspace?.profilePicture?.storagePath ? S3_BASE + workspace?.profilePicture?.storagePath : undefined}
         />
 
         <div className={styles.infoContainer}>
@@ -75,7 +74,8 @@ const WorkspaceInfoTab: React.FC<WorkspaceInfoTabProps> = ({ workspace }) => {
             </div>
 
             <WorkspaceUpgradeButton workspace={workspace} variant={"FULL"} className={styles.upgradeButton} />
-            {workspace && isWorkspaceInPaidTier(workspace) && <WorkspaceSubscriptionInfo workspaceId={workspace.workspaceId} />}
+            {workspace && isWorkspaceInPaidTier(workspace) &&
+              <WorkspaceSubscriptionInfo workspaceId={workspace.workspaceId} />}
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 import Button from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import useWindowSize from "@/hooks/useWindowSize";
-import { root } from "@/store/api/api";
 import { useRefreshShareableKeyMutation, useRetrieveShareableKeyQuery } from "@/store/api/calendarEventApi";
 import {
   closeCalendarShareEventsModal,
@@ -15,6 +14,7 @@ import React from "react";
 import { IoRefresh } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./ShareWorkspaceEventsModal.module.css";
+import { API_ROOT } from "@/utils/constants";
 
 interface ShareWorkspaceEventsModalProps {}
 
@@ -29,7 +29,7 @@ const ShareWorkspaceEventsModal: React.FC<ShareWorkspaceEventsModalProps> = ({})
     { workspaceId: workspaceId || "" },
     { skip: !workspaceId }
   );
-  const link = `${root}v1/calendar/event/exports/${calendarShareableKeyResponse?.data.shareableKey}`;
+  const link = `${API_ROOT}v1/calendar/event/exports/${calendarShareableKeyResponse?.data.shareableKey}`;
 
   const refreshLink = () => {
     if (workspaceId) {

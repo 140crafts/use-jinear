@@ -3,13 +3,14 @@ import { AccountsWorkspacePerspectiveDto } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { LuCalendarDays, LuCheckSquare, LuClipboardEdit, LuRss } from "react-icons/lu";
+import { LuBell, LuCalendarDays, LuCheckSquare, LuClipboardEdit, LuMessagesSquare, LuRss } from "react-icons/lu";
 import Button, { ButtonVariants } from "../button";
 import styles from "./MainFeaturesSideMenu.module.scss";
 import InboxButton from "./inboxButton/InboxButton";
+import { useUnreadConversationCount } from "@/hooks/messaging/conversationMessage/useUnreadConversationCount";
 
 interface MainFeaturesSideMenuProps {
-  workspace?: AccountsWorkspacePerspectiveDto;
+  workspace: AccountsWorkspacePerspectiveDto;
 }
 
 const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }) => {
@@ -21,6 +22,10 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
   const inboxPath = `/${workspace?.username}/inbox`;
   const assignedToMePath = `/${workspace?.username}/assigned-to-me`;
   const lastActivitiesPath = `/${workspace?.username}/last-activities`;
+  const conversationsPath = `/${workspace?.username}/conversations`;
+
+  const unreadConversationCount = useUnreadConversationCount({ workspaceId: workspace.workspaceId }) || 0;
+  const unreadConversationLabel = unreadConversationCount == 0 ? "" : unreadConversationCount > 99 ? "99+" : `${unreadConversationCount}`;
 
   return !workspace ? null : (
     <div className={styles.container}>
@@ -30,6 +35,20 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
         buttonStyle={styles.iconButton}
         iconStyle={styles.icon}
       />
+
+      <Button
+        className={styles.iconButton}
+        href={conversationsPath}
+        variant={currentPath?.indexOf(conversationsPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+      >
+        <div className={styles.iconContainer}>
+          <LuMessagesSquare className={styles.icon} />
+          {unreadConversationCount != 0 &&
+            <div className={styles.unreadWrapper}> {unreadConversationLabel}</div>}
+        </div>
+        {t("mainFeaturesMenuLabelConversations")}
+      </Button>
+
       <Button
         className={styles.iconButton}
         href={tasksPath}
@@ -41,7 +60,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
       <Button
         className={styles.iconButton}
         href={calendarPath}
-        variant={calendarPath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        variant={currentPath?.indexOf(calendarPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
       >
         <LuCalendarDays className={styles.icon} />
         {t("mainFeaturesMenuLabelCalendar")}
@@ -49,7 +68,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
       <Button
         className={styles.iconButton}
         href={lastActivitiesPath}
-        variant={lastActivitiesPath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        variant={currentPath?.indexOf(lastActivitiesPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
       >
         <LuRss className={styles.icon} />
         {t("mainFeaturesMenuLabelLastActivities")}
@@ -57,7 +76,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
       <Button
         className={styles.iconButton}
         href={assignedToMePath}
-        variant={assignedToMePath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        variant={currentPath?.indexOf(assignedToMePath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
       >
         <LuClipboardEdit className={styles.icon} />
         {t("mainFeaturesMenuLabelAssignedToMe")}

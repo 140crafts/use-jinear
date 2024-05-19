@@ -8,6 +8,7 @@ import { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import styles from "./Tiptap.module.css";
 import ActionBar, { TipTapActionBarMode } from "./actionBar/ActionBar";
+import { Extension } from "@tiptap/core";
 
 export interface ITiptapRef {
   clearContent: () => void;
@@ -25,6 +26,8 @@ interface TiptapProps {
   register?: UseFormRegister<any>;
   formSetValue?: UseFormSetValue<any>;
   actionBarMode?: TipTapActionBarMode;
+  hideActionBarWhenEmpty?: boolean;
+  extensions?: Extension[];
 }
 
 const Tiptap = (
@@ -38,6 +41,8 @@ const Tiptap = (
     register,
     formSetValue,
     actionBarMode = "full",
+    hideActionBarWhenEmpty = false,
+    extensions = []
   }: TiptapProps,
   ref: any
 ) => {
@@ -45,35 +50,37 @@ const Tiptap = (
   const editor = useEditor({
     editorProps: {
       attributes: {
-        class: cn(styles.tiptap, editorClassName),
-      },
+        class: cn(styles.tiptap, editorClassName)
+      }
     },
     extensions: [
       StarterKit,
       Placeholder.configure({
         placeholder,
         showOnlyWhenEditable: false,
-        emptyEditorClass: styles["is-editor-empty"],
+        emptyEditorClass: styles["is-editor-empty"]
       }),
       Link.configure({
         HTMLAttributes: {
           rel: "noopener noreferrer",
-          target: null,
-        },
+          target: null
+        }
       }),
+      ...extensions
     ],
     content,
     editable,
     onUpdate({ editor }) {
       setHtml(editor.getHTML());
-    },
+    }
   });
+  const shouldHideActionBar = editor && editor.isEmpty && hideActionBarWhenEmpty;
 
   useImperativeHandle(ref, () => ({
     clearContent: () => editor?.commands.clearContent(true),
     getHTML: () => editor?.getHTML(),
     focus: (position?: "start" | "end" | "all" | number | boolean | null, options?: { scrollIntoView?: boolean }) =>
-      editor?.commands.focus(position, options),
+      editor?.commands.focus(position, options)
   }));
 
   useEffect(() => {
@@ -82,7 +89,7 @@ const Tiptap = (
 
   return (
     <div className={cn(styles.container, className)}>
-      {editor && editable && <ActionBar editor={editor} mode={actionBarMode} />}
+      {editor && !shouldHideActionBar && editable && <ActionBar editor={editor} mode={actionBarMode} />}
       <EditorContent editor={editor} />
       {htmlInputId && <input id={htmlInputId} type="hidden" {...register?.(htmlInputId)} value={html} />}
     </div>

@@ -46,3 +46,12 @@ public/workbox-*.js.map
 
 # Sentry
 next.config.original.js
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+# worker
+/public/worker-*.js

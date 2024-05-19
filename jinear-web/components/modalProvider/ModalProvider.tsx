@@ -21,10 +21,12 @@ import NotificationPermissionModal from "@/components/modal/notificationPermissi
 import NewReminderModal from "@/components/modal/reminder/NewReminderModal/NewReminderModal";
 import ReminderListModal from "@/components/modal/reminder/reminderListModal/ReminderListModal";
 import SearchTaskModal from "@/components/modal/searchTaskModal/SearchTaskModal";
-import TaskAssigneeChangeModal from "@/components/modal/taskDetailModals/taskAssigneeChangeModal/TaskAssigneeChangeModal";
+import TaskAssigneeChangeModal
+  from "@/components/modal/taskDetailModals/taskAssigneeChangeModal/TaskAssigneeChangeModal";
 import TaskDateChangeModal from "@/components/modal/taskDetailModals/taskDateChangeModal/TaskDateChangeModal";
 import TaskTopicChangeModal from "@/components/modal/taskDetailModals/taskTopicChangeModal/TaskTopicChangeModal";
-import WorkflowChangeStatusModal from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal";
+import WorkflowChangeStatusModal
+  from "@/components/modal/taskDetailModals/workflowChangeStatus/WorkflowChangeStatusModal";
 import TaskOverviewModal from "@/components/modal/taskOverviewModal/TaskOverviewModal";
 import TaskTaskBoardModal from "@/components/modal/taskTaskBoardModal/TaskTaskBoardModal";
 import TeamMemberPickerModal from "@/components/modal/teamMemberPickerModal/TeamMemberPickerModal";
@@ -42,11 +44,22 @@ import NewCalendarIntegrationModal from "../modal/newCalendarIntegrationModal/Ne
 import NewMailIntegrationModal from "../modal/newMailIntegrationModal/NewMailIntegrationModal";
 import ShareWorkspaceEventsModal from "../modal/shareWorkspaceEventsModal/ShareWorkspaceEventsModal";
 import WorkspaceMemberPickerModal from "../modal/workspaceMemberPickerModal/WorkspaceMemberPickerModal";
+import ChannelSettingsModal from "@/components/modal/channelSettingsModal/ChannelSettingsModal";
+import NewChannelModal from "@/components/modal/newChannelModal/NewChannelModal";
+import ConversationSettingsModal from "@/components/modal/conversationSettingsModal/ConversationSettingsModal";
+import ChannelListModal from "@/components/modal/channelListModal/ChannelListModal";
+import NewConversationModal from "@/components/modal/newConversationModal/NewConversationModal";
 
-interface ModalProviderProps {}
+interface ModalProviderProps {
+}
 
 const globalModals: any = (
   <>
+    <NewConversationModal />
+    <ChannelListModal />
+    <ConversationSettingsModal />
+    <NewChannelModal />
+    <ChannelSettingsModal />
     <ShareWorkspaceEventsModal />
     <CalendarExternalEventViewModal />
     <WorkspaceMemberPickerModal />

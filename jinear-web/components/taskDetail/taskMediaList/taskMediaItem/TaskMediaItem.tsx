@@ -2,7 +2,7 @@ import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { MediaDto } from "@/model/be/jinear-core";
 
 import Button, { ButtonHeight } from "@/components/button";
-import { root } from "@/store/api/api";
+import { API_ROOT } from "@/utils/constants";
 import { useDeleteTaskMediaMutation } from "@/store/api/taskMediaApi";
 import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
@@ -79,7 +79,7 @@ const TaskMediaItem: React.FC<TaskMediaItemProps> = ({ media, mock = false }) =>
         disabled={isDeleteLoading}
         className={styles.mainButton}
         heightVariant={ButtonHeight.short}
-        href={media && !isDeleteLoading ? root + `v1/task/media/${media.relatedObjectId}/download/${media.mediaId}` : undefined}
+        href={media && !isDeleteLoading ? API_ROOT + `v1/task/media/${media.relatedObjectId}/download/${media.mediaId}` : undefined}
         target={media && !isDeleteLoading ? "_blank" : undefined}
         download={media && !isDeleteLoading ? media.originalName : undefined}
       >
