@@ -80,7 +80,7 @@ const retrieveJWT = (cookies?: IParsedCookie[]) => {
     return cookies?.find(value => value.name == "JWT")
 }
 
-const getAccountId = async (jwt: string): Promise<String> => {
+const getAccountId = async (jwt: string): Promise<string> => {
     const response = await fetch(`${CORE_ENDPOINT}/v1/account`, {
         "headers": {
             "accept": "*/*",
@@ -96,7 +96,7 @@ app.get('/', (req, resp) => {
     const cookie = req.headers.cookie;
     logger.log({level: 'info', message: `cookie: ${cookie}`});
 
-    return resp.status(200).send("hi :*");
+    return resp.status(200).send("up");
 })
 
 app.get('/info', (req, resp) => {
