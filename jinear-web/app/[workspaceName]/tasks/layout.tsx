@@ -1,33 +1,24 @@
 "use client";
-import { selectTasksMenuVisible, toggleTasksMenu } from "@/store/slice/displayPreferenceSlice";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
 import cn from "classnames";
 import React from "react";
 import styles from "./layout.module.scss";
-
-import SecondLevelSideMenu from "@/components/secondLevelSideMenu/SecondLevelSideMenu";
 import TasksSectionSideMenu from "@/components/tasksSectionSideMenu/TasksSectionSideMenu";
+import SecondLevelSideMenuV2 from "@/components/secondLevelSideMenuV2/SecondLevelSideMenuV2";
 
 interface TasksLayoutProps {
   children: React.ReactNode;
 }
 
 const TasksLayout: React.FC<TasksLayoutProps> = ({ children }) => {
-  const dispatch = useAppDispatch();
-  const tasksMenuVisible = useTypedSelector(selectTasksMenuVisible);
-
-  const toggleMenu = () => {
-    dispatch(toggleTasksMenu());
-  };
 
   return (
     <div id="tasks-layout-container" className={styles.container}>
-      <SecondLevelSideMenu open={tasksMenuVisible} toggle={toggleMenu} className={styles.secondLevelSideMenu}>
+      <SecondLevelSideMenuV2>
         <TasksSectionSideMenu />
-      </SecondLevelSideMenu>
+      </SecondLevelSideMenuV2>
       <div
         id="tasks-layout-content"
-        className={cn(styles.contentContainer, tasksMenuVisible && styles.contentContainerWithSideMenu)}
+        className={cn(styles.contentContainer, styles.contentContainerWithSideMenu)}
       >
         {children}
       </div>

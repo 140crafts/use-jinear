@@ -672,6 +672,7 @@ export default slice.reducer;
 
 export const selectAnyModalVisible = (state: RootState) => {
   const modalState = state.modal || {};
+
   return Object.values(modalState)
     ?.map((modalState) => modalState?.visible || false)
     ?.reduce((prev, curr) => prev || curr);
