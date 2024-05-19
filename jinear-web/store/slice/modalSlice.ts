@@ -9,13 +9,16 @@ import ModalState, {
   ChangeTaskDateModalState,
   ChangeTaskTopicModalState,
   ChangeTaskWorkflowStatusModalState,
-  ChannelSettingsModalState, ConversationSettingsModalState,
+  ChannelListModalState,
+  ChannelSettingsModalState,
+  ConversationSettingsModalState,
   DatePickerModalState,
   DialogModalState,
   IntegrationFeedItemDetailModalState,
   LoginWith2FaMailModalState,
   NewCalendarIntegrationModalState,
   NewChannelModalState,
+  NewConversationModalState,
   NewMailIntegrationModalState,
   NewReminderModalState,
   NewTaskBoardModalState,
@@ -178,6 +181,12 @@ const initialState = {
   },
   conversationSettingsModal: {
     visible: false
+  },
+  channelListModal: {
+    visible: false
+  },
+  newConversationModal: {
+    visible: false
   }
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
@@ -223,6 +232,8 @@ const initialState = {
   channelSettingsModal: null | ChannelSettingsModalState;
   newChannelModal: null | NewChannelModalState;
   conversationSettingsModal: null | ConversationSettingsModalState;
+  channelListModal: null | ChannelListModalState;
+  newConversationModal: null | NewConversationModalState;
 };
 
 const slice = createSlice({
@@ -535,6 +546,20 @@ const slice = createSlice({
       state.conversationSettingsModal = initialState.conversationSettingsModal;
     },
 
+    popChannelListModal: (state, action: PayloadAction<ChannelListModalState>) => {
+      state.channelListModal = { ...action.payload, visible: true };
+    },
+    closeChannelListModal: (state, action: PayloadAction<void>) => {
+      state.channelListModal = initialState.channelListModal;
+    },
+
+    popNewConversationModal: (state, action: PayloadAction<NewConversationModalState>) => {
+      state.newConversationModal = { ...action.payload, visible: true };
+    },
+    closeNewConversationModal: (state, action: PayloadAction<void>) => {
+      state.newConversationModal = initialState.newConversationModal;
+    },
+
     resetModals: () => initialState
   },
   extraReducers: (builder) => {
@@ -637,6 +662,10 @@ export const {
   closeNewChannelModal,
   popConversationSettingsModal,
   closeConversationSettingsModal,
+  popChannelListModal,
+  closeChannelListModal,
+  popNewConversationModal,
+  closeNewConversationModal,
   resetModals
 } = slice.actions;
 export default slice.reducer;
@@ -864,5 +893,12 @@ export const selectNewChannelModalVisible = (state: RootState) => state.modal.ne
 export const selectNewChannelModalWorkspaceId = (state: RootState) => state.modal.newChannelModal?.workspaceId;
 
 export const selectConversationSettingsModalVisible = (state: RootState) => state.modal.conversationSettingsModal?.visible;
-export const selectConversationSettingsModalWorkspaceId = (state: RootState) => state.modal.conversationSettingsModal?.workspaceId;
 export const selectConversationSettingsModalConversationId = (state: RootState) => state.modal.conversationSettingsModal?.conversationId;
+export const selectConversationSettingsModalWorkspaceId = (state: RootState) => state.modal.conversationSettingsModal?.workspaceId;
+
+export const selectChannelListModalVisible = (state: RootState) => state.modal.channelListModal?.visible;
+export const selectChannelListModalWorkspaceId = (state: RootState) => state.modal.channelListModal?.workspaceId;
+
+export const selectNewConversationModalVisible = (state: RootState) => state.modal.newConversationModal?.visible;
+export const selectNewConversationModalWorkspaceId = (state: RootState) => state.modal.newConversationModal?.workspaceId;
+export const selectNewConversationModalWorkspaceName = (state: RootState) => state.modal.newConversationModal?.workspaceName;

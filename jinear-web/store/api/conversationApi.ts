@@ -1,5 +1,5 @@
 import {
-  BaseResponse,
+  BaseResponse, ConversationInitializeResponse,
   ConversationParticipantListingResponse,
   InitializeConversationRequest
 } from "@/model/be/jinear-core";
@@ -9,7 +9,7 @@ import { addYears } from "date-fns";
 export const conversationApi = api.injectEndpoints({
   endpoints: (build) => ({
     //
-    initializeConversation: build.mutation<BaseResponse, InitializeConversationRequest>({
+    initializeConversation: build.mutation<ConversationInitializeResponse, InitializeConversationRequest>({
       query: (req) => ({
         url: `v1/messaging/conversation`,
         method: "POST",

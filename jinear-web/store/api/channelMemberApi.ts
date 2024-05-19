@@ -42,6 +42,60 @@ export const channelMemberApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         `v1/messaging/channel/member/list/{channelId}`
       ]
+    }),
+    //
+    joinChannel: build.mutation<BaseResponse, { channelId: string }>({
+      query: ({ channelId }: { channelId: string; }) => ({
+        url: `v1/messaging/channel/member/join/${channelId}`,
+        method: "POST"
+      }),
+      invalidatesTags: (_result, _err, req) => [
+        `v1/messaging/channel/member/list/{channelId}`,
+        `v1/messaging/channel/member/memberships/{workspaceId}`
+      ]
+    }),
+    //
+    leaveChannel: build.mutation<BaseResponse, { channelId: string }>({
+      query: ({ channelId }: { channelId: string }) => ({
+        url: `v1/messaging/channel/member/leave/${channelId}`,
+        method: "POST"
+      }),
+      invalidatesTags: (_result, _err, req) => [
+        `v1/messaging/channel/member/list/{channelId}`,
+        `v1/messaging/channel/member/memberships/{workspaceId}`
+      ]
+    }),
+    //
+    muteChannel: build.mutation<BaseResponse, { channelId: string }>({
+      query: ({ channelId }: { channelId: string }) => ({
+        url: `v1/messaging/channel/member/channel/${channelId}/mute`,
+        method: "POST"
+      }),
+      invalidatesTags: (_result, _err, req) => [
+        `v1/messaging/channel/member/memberships/{workspaceId}`
+      ]
+    }),
+    //
+    authorizeChannelMember: build.mutation<BaseResponse, { channelId: string, accountId: string }>({
+      query: ({ channelId, accountId }: { channelId: string; accountId: string }) => ({
+        url: `v1/messaging/channel/member/authorize/${channelId}/account/${accountId}`,
+        method: "POST"
+      }),
+      invalidatesTags: (_result, _err, req) => [
+        `v1/messaging/channel/member/memberships/{workspaceId}`,
+        `v1/messaging/channel/member/list/{channelId}`
+      ]
+    }),
+    //
+    unAuthorizeChannelMember: build.mutation<BaseResponse, { channelId: string, accountId: string }>({
+      query: ({ channelId, accountId }: { channelId: string; accountId: string }) => ({
+        url: `v1/messaging/channel/member/un-authorize/${channelId}/account/${accountId}`,
+        method: "POST"
+      }),
+      invalidatesTags: (_result, _err, req) => [
+        `v1/messaging/channel/member/memberships/{workspaceId}`,
+        `v1/messaging/channel/member/list/{channelId}`
+      ]
     })
     //
   })
@@ -51,9 +105,13 @@ export const {
   useRetrieveChannelMembershipsQuery,
   useRetrieveChannelMembersQuery,
   useRemoveChannelMemberMutation,
-  useAddChannelMemberMutation
+  useAddChannelMemberMutation,
+  useJoinChannelMutation,
+  useLeaveChannelMutation,
+  useAuthorizeChannelMemberMutation,
+  useUnAuthorizeChannelMemberMutation
 } = channelMemberApi;
 
 export const {
-  endpoints: { retrieveChannelMemberships, retrieveChannelMembers, removeChannelMember, addChannelMember }
+  endpoints: { retrieveChannelMemberships, retrieveChannelMembers, removeChannelMember, addChannelMember, joinChannel }
 } = channelMemberApi;

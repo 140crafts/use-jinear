@@ -47,12 +47,16 @@ import WorkspaceMemberPickerModal from "../modal/workspaceMemberPickerModal/Work
 import ChannelSettingsModal from "@/components/modal/channelSettingsModal/ChannelSettingsModal";
 import NewChannelModal from "@/components/modal/newChannelModal/NewChannelModal";
 import ConversationSettingsModal from "@/components/modal/conversationSettingsModal/ConversationSettingsModal";
+import ChannelListModal from "@/components/modal/channelListModal/ChannelListModal";
+import NewConversationModal from "@/components/modal/newConversationModal/NewConversationModal";
 
 interface ModalProviderProps {
 }
 
 const globalModals: any = (
   <>
+    <NewConversationModal />
+    <ChannelListModal />
     <ConversationSettingsModal />
     <NewChannelModal />
     <ChannelSettingsModal />

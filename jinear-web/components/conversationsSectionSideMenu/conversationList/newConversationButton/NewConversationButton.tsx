@@ -5,17 +5,19 @@ import { useAppDispatch } from "@/store/store";
 import Button, { ButtonHeight } from "@/components/button";
 import { LuPlus } from "react-icons/lu";
 import cn from "classnames";
+import { popNewConversationModal } from "@/slice/modalSlice";
 
 interface NewConversationButtonProps {
   workspaceId: string;
+  workspaceName: string;
 }
 
-const NewConversationButton: React.FC<NewConversationButtonProps> = ({ workspaceId }) => {
+const NewConversationButton: React.FC<NewConversationButtonProps> = ({ workspaceId, workspaceName }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const popModal = () => {
-    // dispatch(popNewChannelModal({ visible: true, workspaceId }));
+    dispatch(popNewConversationModal({ visible: true, workspaceId, workspaceName }));
   };
 
   return (

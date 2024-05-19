@@ -19,7 +19,7 @@ const Message: React.FC<MessageProps> = ({ message, renderMessageFrom }) => {
   const messageFullDate = format(new Date(message.createdDate), t("dateTimeFormat"));
 
   return (
-    <div className={cn(styles.container,!renderMessageFrom&&styles.small)}>
+    <div className={cn(styles.container, !renderMessageFrom && styles.small)}>
       <div className={styles.profileInfo}>
         {renderMessageFrom ? <ProfilePhoto
           boringAvatarKey={message.account?.accountId || ""}
@@ -31,7 +31,7 @@ const Message: React.FC<MessageProps> = ({ message, renderMessageFrom }) => {
       <div className={styles.messageBody}>
         {renderMessageFrom && (
           <div className={styles.accountAndMessageInfoContainer}>
-            <b>{message.account.username}</b>
+            <b className={styles.username}>{message.account.username}</b>
             <div className={"spacer-w-1"} />
             <div className={styles.date}
                  data-tooltip={sentToday ? messageFullDate : undefined}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import styles from "./WorkspaceMembersTab.module.scss";
 import { useAddChannelMemberMutation, useRetrieveChannelMembersQuery } from "@/api/channelMemberApi";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
@@ -7,7 +7,9 @@ import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
 import { popWorkspaceMemberPickerModal } from "@/slice/modalSlice";
 import { WorkspaceMemberDto } from "@/be/jinear-core";
-import { useAppDispatch } from "@/store/store";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { selectCurrentAccountId } from "@/slice/accountSlice";
+import { useChannelMembership } from "@/hooks/messaging/useChannelMembership";
 
 interface WorkspaceMembersTabProps {
   channelId: string;
@@ -18,6 +20,7 @@ const WorkspaceMembersTab: React.FC<WorkspaceMembersTabProps> = ({ channelId, wo
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { data: retrieveChannelMembersResponse, isFetching } = useRetrieveChannelMembersQuery({ channelId });
+  const usersMembership = useChannelMembership({ workspaceId, channelId });
   const [addChannelMember, { isLoading: isAddChannelMemberLoading }] = useAddChannelMemberMutation();
 
   const pickWorkspaceMember = () => {
@@ -46,9 +49,12 @@ const WorkspaceMembersTab: React.FC<WorkspaceMembersTabProps> = ({ channelId, wo
       </div>
       <div className={"spacer-h-1"} />
       {isFetching && <CircularLoading />}
-      {retrieveChannelMembersResponse
-        ?.data
-        ?.map(channelMember => <MemberRow key={channelMember.channelMemberId} member={channelMember} />)}
+      {usersMembership &&
+        retrieveChannelMembersResponse
+          ?.data
+          ?.map(channelMember => <MemberRow key={channelMember.channelMemberId}
+                                            member={channelMember}
+                                            currentUserRole={usersMembership.roleType} />)}
     </div>
   );
 };

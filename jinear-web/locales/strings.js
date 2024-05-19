@@ -1510,6 +1510,14 @@ const translations = {
     en: "Kick Member",
     tr: "Üyeyi At"
   },
+  makeChannelMemberAdmin: {
+    en: "Make Admin",
+    tr: "Yönetici Yap"
+  },
+  makeChannelMemberMember: {
+    en: "Remove Admin",
+    tr: "Yöneticiliği Kaldır"
+  },
   workspaceMemberRole_OWNER: {
     en: "Owner",
     tr: "Alan Sahibi"
@@ -3383,6 +3391,10 @@ const translations = {
     en: "Add Member",
     tr: "Üye Ekle"
   },
+  leaveChannel: {
+    en: "Leave Channel",
+    tr: "Kanaldan Ayrıl"
+  },
   channelGeneralInfoChannelTitle: {
     en: "Channel Title",
     tr: "Kanal Başlığı"
@@ -3530,6 +3542,30 @@ const translations = {
   joinChannelButton: {
     en: "Join Channel (${number})",
     tr: "Kanala Katıl (${number})"
+  },
+  channelListModalTitle: {
+    en: "Channels",
+    tr: "Kanallar"
+  },
+  channelListModalJoinChannel: {
+    en: "Join",
+    tr: "Katıl"
+  },
+  newConversationModalTitle: {
+    en: "New Conversation",
+    tr: "Yeni Sohbet"
+  },
+  workspaceMemberInputPickerModalEmptyState: {
+    en: "No workspace member found",
+    tr: "Hiçbir çalışma alanı üyesi bulunamadı"
+  },
+  newConversationSend: {
+    en: "Send",
+    tr: "Gönder"
+  },
+  newConversationSendToEmpty: {
+    en: "Please select one or more member",
+    tr: "Mesaj gönderilecek kişi seçin"
   }
 };
 

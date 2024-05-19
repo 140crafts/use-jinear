@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
-// Generated using typescript-generator version 3.0.1157 on 2024-05-13 22:08:12.
+// Generated using typescript-generator version 3.0.1157 on 2024-05-18 10:25:36.
 
 export interface BaseDto {
   createdDate: Date;
@@ -1281,6 +1281,10 @@ export interface ChannelMemberListingResponse extends BaseResponse {
 
 export interface ChannelMembershipInfoListingResponse extends BaseResponse {
   data: ChannelMembershipInfoDto[];
+}
+
+export interface ConversationInitializeResponse extends BaseResponse {
+  data: string;
 }
 
 export interface ConversationParticipantListingResponse extends BaseResponse {

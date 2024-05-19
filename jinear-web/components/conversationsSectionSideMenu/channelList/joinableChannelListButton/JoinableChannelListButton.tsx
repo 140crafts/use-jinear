@@ -2,9 +2,9 @@ import React from "react";
 import styles from "./JoinableChannelListButton.module.css";
 import useTranslation from "@/locals/useTranslation";
 import { useAppDispatch } from "@/store/store";
-import { popNewChannelModal } from "@/slice/modalSlice";
+import { popChannelListModal } from "@/slice/modalSlice";
 import Button, { ButtonHeight } from "@/components/button";
-import { LuChevronRight, LuPlus } from "react-icons/lu";
+import { LuChevronRight } from "react-icons/lu";
 import cn from "classnames";
 
 interface JoinableChannelListButtonProps {
@@ -17,7 +17,7 @@ const JoinableChannelListButton: React.FC<JoinableChannelListButtonProps> = ({ w
   const dispatch = useAppDispatch();
 
   const popModal = () => {
-    dispatch(popNewChannelModal({ visible: true, workspaceId }));
+    dispatch(popChannelListModal({ visible: true, workspaceId }));
   };
 
   return count > 0 ? (

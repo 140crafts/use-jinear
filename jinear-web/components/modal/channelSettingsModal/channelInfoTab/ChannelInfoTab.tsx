@@ -3,7 +3,7 @@ import styles from "./ChannelInfoTab.module.css";
 import { ChannelParticipationType, ChannelVisibilityType, PlainChannelDto } from "@/be/jinear-core";
 import useTranslation from "@/locals/useTranslation";
 import { useChannelMembership } from "@/hooks/messaging/useChannelMembership";
-import Button, { ButtonHeight } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { LuPen } from "react-icons/lu";
 import { changeLoadingModalVisibility, closeBasicTextInputModal, popBasicTextInputModal } from "@/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
@@ -12,6 +12,7 @@ import {
   useUpdateChannelTitleMutation,
   useUpdateChannelVisibilityMutation
 } from "@/api/channelApi";
+import { useLeaveChannelMutation } from "@/api/channelMemberApi";
 
 interface ChannelInfoTabProps {
   channel: PlainChannelDto;
@@ -23,6 +24,7 @@ const ChannelInfoTab: React.FC<ChannelInfoTabProps> = ({ channel }) => {
   const [updateChannelTitle, { isLoading: isUpdateTitleLoading }] = useUpdateChannelTitleMutation();
   const [updateChannelVisibility, { isLoading: isUpdateVisibilityLoading }] = useUpdateChannelVisibilityMutation();
   const [updateChannelParticipation, { isLoading: isUpdateParticipationLoading }] = useUpdateChannelParticipationMutation();
+  const [leaveChannel, { isLoading: isLeaveChannelLoading }] = useLeaveChannelMutation();
   const channelMembership = useChannelMembership({ workspaceId: channel.workspaceId, channelId: channel.channelId });
   const isAdmin = ["ADMIN", "OWNER"].includes(channelMembership?.roleType || "");
 
@@ -56,6 +58,10 @@ const ChannelInfoTab: React.FC<ChannelInfoTabProps> = ({ channel }) => {
     const participationType = event.target.value as ChannelParticipationType;
     updateChannelParticipation({ channelId: channel.channelId, body: { participationType } });
   };
+
+  const onLeaveChannel = ()=>{
+    leaveChannel({channelId:channel.channelId});
+  }
 
   return (
     <div className={styles.container}>
@@ -105,6 +111,21 @@ const ChannelInfoTab: React.FC<ChannelInfoTabProps> = ({ channel }) => {
           </div>
         </div>
       </div>
+
+      <div className={styles.section}>
+        <div className={styles.sectionDataContainer}>
+          <Button
+            variant={ButtonVariants.default}
+            heightVariant={ButtonHeight.short}
+            onClick={onLeaveChannel}
+            loading={isLeaveChannelLoading}
+            disabled={isLeaveChannelLoading}
+          >
+            {t("leaveChannel")}
+          </Button>
+        </div>
+      </div>
+
 
     </div>
   );

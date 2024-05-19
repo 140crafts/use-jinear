@@ -13,8 +13,9 @@
 
 .leftTimeText {
     visibility: hidden;
-    font-size: .5rem;
+    font-size: .65rem;
     align-self: center;
+    text-align: center;
 }
 
 .container:hover {
@@ -29,7 +30,8 @@
     display: flex;
     flex-direction: row;
     gap: 1rem;
-    width: 25px !important;
+    width: 27px !important;
+    min-width: 27px !important;
 }
 
 .profilePic {
@@ -50,6 +52,10 @@
     min-height: unset !important;
 }
 
+.username {
+    font-size: .75rem;
+}
+
 .date {
-    font-size: .5rem;
+    font-size: .75rem;
 }

@@ -8,7 +8,10 @@ import Message from "@/components/conversationScreen/conversationBody/message/Me
 import { differenceInMinutes } from "date-fns";
 import { useAppDispatch } from "@/store/store";
 import { checkAndUpdateConversationLastCheck, upsertAllConversationMessages } from "@/slice/messagingSlice";
-import { useConversationMessagesSorted } from "@/hooks/messaging/conversationMessage/useConversationMessagesSorted";
+import {
+  useConversationMessagesSorted,
+  useConversationMessagesSortedIDateAsc
+} from "@/hooks/messaging/conversationMessage/useConversationMessagesSorted";
 import { useConversationHasMoreMessages } from "@/hooks/messaging/conversation/useConversationHasMoreMessages";
 import Logger from "@/utils/logger";
 
@@ -30,6 +33,8 @@ const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, wor
   const hasMore = useConversationHasMoreMessages({ conversationId, workspaceId });
   const sortedMessages = useConversationMessagesSorted({ workspaceId, conversationId });
   const initialScroll = useRef<boolean>(false);
+
+  logger.log({ sortedMessages });
 
   useEffect(() => {
     dispatch(checkAndUpdateConversationLastCheck({ workspaceId, conversationId, lastCheckDate: new Date() }));
@@ -83,7 +88,7 @@ const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, wor
           <div className={styles.emptyStateContainer}>{t("conversationEmpty")}</div>}
         <div className={styles.messageListContainer}>
           {sortedMessages?.map?.((messageDto, index) => {
-              const oneBefore = sortedMessages?.[index - 1];
+              const oneBefore = sortedMessages?.[index + 1];
               const differenceInMin = oneBefore ? Math.abs(differenceInMinutes(new Date(oneBefore.createdDate), new Date(messageDto.createdDate))) : 999;
               const oneBeforeIsFromDifferentSender = messageDto.accountId != oneBefore?.accountId;
               const oneBeforeSameSenderAndOlderThanThreshold = !oneBeforeIsFromDifferentSender && differenceInMin > RENDER_MESSAGE_PROFILE_PIC_FROM_SAME_ACC_AFTER_MIN;

@@ -47,7 +47,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ workspace }) => {
               workspaceUsername={workspace.username} />
             )
           }
-          <NewConversationButton workspaceId={workspace.workspaceId} />
+          <NewConversationButton workspaceId={workspace.workspaceId} workspaceName={workspace.username} />
         </div>
       </>}
 

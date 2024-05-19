@@ -232,3 +232,12 @@ export interface ConversationSettingsModalState extends ModalState {
   workspaceId?: string;
   conversationId?: string;
 }
+
+export interface ChannelListModalState extends ModalState {
+  workspaceId?: string;
+}
+
+export interface NewConversationModalState extends ModalState {
+  workspaceId?: string;
+  workspaceName?: string;
+}

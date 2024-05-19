@@ -1,0 +1,19 @@
+.modalContainer {
+    align-items: flex-start;
+    padding-top: 12.5%;
+}
+
+.modalBody {
+    height: 95vh;
+    max-height: unset;
+}
+
+.modal {
+    position: relative;
+}
+
+.listContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
