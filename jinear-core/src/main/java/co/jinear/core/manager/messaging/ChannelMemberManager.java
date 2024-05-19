@@ -64,6 +64,7 @@ public class ChannelMemberManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         log.info("Leave has started. channelId: {}, currentAccountId: {}", channelId, currentAccountId);
         String passiveId = passiveService.createUserActionPassive(currentAccountId);
+        channelAccessValidator.validateChannelHasAnotherAdmin(channelId);
         channelMemberOperationService.removeMember(passiveId, channelId, currentAccountId);
         return new BaseResponse();
     }
@@ -94,6 +95,26 @@ public class ChannelMemberManager {
         ChannelMemberDto channelMemberDto = channelMemberRetrieveService.retrieve(channelId, currentAccountId);
         log.info("Mute channel has started. currentAccountId: {}, channelId: {}, silentUntil: {}", currentAccountId, channelId, silentUntil);
         channelMemberOperationService.updateSilentUntil(channelMemberDto.getChannelMemberId(), silentUntil);
+        return new BaseResponse();
+    }
+
+    public BaseResponse authorize(String channelId, String toAccountId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        validateUserNotTryingToCallItself(toAccountId, currentAccountId);
+        channelAccessValidator.validateChannelAdminAccess(currentAccountId, channelId);
+        log.info("Authorize account as admin has started. channelId: {}, toAccountId: {}, currentAccountId: {}", channelId, toAccountId, currentAccountId);
+        ChannelMemberDto channelMemberDto = channelMemberRetrieveService.retrieve(channelId, toAccountId);
+        channelMemberOperationService.updateRole(channelMemberDto.getChannelMemberId(), ChannelMemberRoleType.ADMIN);
+        return new BaseResponse();
+    }
+
+    public BaseResponse unAuthorize(String channelId, String toAccountId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        validateUserNotTryingToCallItself(toAccountId, currentAccountId);
+        channelAccessValidator.validateChannelAdminAccess(currentAccountId, channelId);
+        log.info("UnAuthorize account as admin has started. channelId: {}, toAccountId: {}, currentAccountId: {}", channelId, toAccountId, currentAccountId);
+        ChannelMemberDto channelMemberDto = channelMemberRetrieveService.retrieve(channelId, toAccountId);
+        channelMemberOperationService.updateRole(channelMemberDto.getChannelMemberId(), ChannelMemberRoleType.MEMBER);
         return new BaseResponse();
     }
 

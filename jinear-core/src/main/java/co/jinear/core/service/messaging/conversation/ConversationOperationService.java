@@ -1,6 +1,5 @@
 package co.jinear.core.service.messaging.conversation;
 
-import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.messaging.conversation.ConversationDto;
 import co.jinear.core.model.entity.messaging.Conversation;
 import co.jinear.core.model.vo.messaging.conversation.InitializeConversationVo;
@@ -16,9 +15,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -33,44 +31,54 @@ public class ConversationOperationService {
     private final ConversationRetrieveService conversationRetrieveService;
 
     @Transactional
-    public void initialize(InitializeConversationVo initializeConversationVo) {
-        List<String> participantAccountIds = initializeConversationVo.getParticipantAccountIds();
+    public String initializeAndRetrieveConversationId(InitializeConversationVo initializeConversationVo) {
+        Set<String> participantAccountIds = initializeConversationVo.getParticipantAccountIds();
         String participantsKey = conversationParticipantKeyCalculateService.calculate(participantAccountIds);
         conversationLockService.lockConversationInit(participantsKey);
         try {
             log.info("Initialize conversation has started. participantAccountIds: {}", NormalizeHelper.listToString(participantAccountIds));
-            validateConversationNotExistsBetweenAccounts(participantsKey);
-            Conversation conversation = initialize(initializeConversationVo.getWorkspaceId(), participantsKey);
-            participantAccountIds.forEach(accId -> conversationParticipantOperationService.initializeParticipant(conversation.getConversationId(), accId));
-            initializeFirstMessage(initializeConversationVo, conversation);
+            String conversationId = retrieveConversationId(initializeConversationVo, participantsKey);
+            initializeFirstMessage(initializeConversationVo, conversationId);
+            return conversationId;
         } finally {
             conversationLockService.unlockConversationInit(participantsKey);
         }
     }
 
-    private void initializeFirstMessage(InitializeConversationVo initializeConversationVo, Conversation conversation) {
-        InitializeMessageVo initializeMessageVo = new InitializeMessageVo();
-        initializeMessageVo.setConversationId(conversation.getConversationId());
-        initializeMessageVo.setAccountId(initializeConversationVo.getInitializedBy());
-        initializeMessageVo.setBody(initializeConversationVo.getInitialMessageBody());
-        messageOperationService.initialize(initializeMessageVo);
+    private String retrieveConversationId(InitializeConversationVo initializeConversationVo, String participantsKey) {
+        log.info("Retrieve conversation id has started. participantsKey: {}", participantsKey);
+        Optional<ConversationDto> optionalConversationDto = conversationRetrieveService.retrieveWithParticipantsKey(participantsKey);
+        return optionalConversationDto
+                .map(ConversationDto::getConversationId)
+                .orElseGet(() -> initializeAndAssignParticipants(initializeConversationVo, participantsKey));
     }
 
-    private Conversation initialize(String workspaceId, String participantsKey) {
+    private String initializeAndAssignParticipants(InitializeConversationVo initializeConversationVo, String participantsKey) {
+        String conversationId = initializeConversation(initializeConversationVo, participantsKey);
+        Set<String> participantAccountIds = initializeConversationVo.getParticipantAccountIds();
+        participantAccountIds.forEach(accId -> conversationParticipantOperationService.initializeParticipant(conversationId, accId));
+        return conversationId;
+    }
+
+    private String initializeConversation(InitializeConversationVo initializeConversationVo, String participantsKey) {
+        Conversation conversation = mapConversation(initializeConversationVo.getWorkspaceId(), participantsKey);
+        Conversation saved = conversationRepository.save(conversation);
+        return saved.getConversationId();
+    }
+
+    private Conversation mapConversation(String workspaceId, String participantsKey) {
         Conversation conversation = new Conversation();
         conversation.setWorkspaceId(workspaceId);
         conversation.setLastActivityTime(ZonedDateTime.now());
         conversation.setParticipantsKey(participantsKey);
-        return conversationRepository.save(conversation);
+        return conversation;
     }
 
-    private void validateConversationNotExistsBetweenAccounts(String participantsKey) {
-        Optional<ConversationDto> optionalConversationDto = conversationRetrieveService.retrieveWithParticipantsKey(participantsKey);
-        optionalConversationDto
-                .map(ConversationDto::getConversationId)
-                .map(existingConversationId -> new BusinessException("messaging.conversation.exists-with-participants", Map.of("existingConversationId", existingConversationId)))
-                .ifPresent(businessException -> {
-                    throw businessException;
-                });
+    private void initializeFirstMessage(InitializeConversationVo initializeConversationVo, String conversationId) {
+        InitializeMessageVo initializeMessageVo = new InitializeMessageVo();
+        initializeMessageVo.setConversationId(conversationId);
+        initializeMessageVo.setAccountId(initializeConversationVo.getInitializedBy());
+        initializeMessageVo.setBody(initializeConversationVo.getInitialMessageBody());
+        messageOperationService.initialize(initializeMessageVo);
     }
 }

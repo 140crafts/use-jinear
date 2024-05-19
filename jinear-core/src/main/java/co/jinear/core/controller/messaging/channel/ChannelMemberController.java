@@ -63,4 +63,18 @@ public class ChannelMemberController {
                              @Valid @RequestParam("silentUntil") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) ZonedDateTime silentUntil) {
         return channelMemberManager.mute(channelId, silentUntil);
     }
+
+    @PostMapping("/authorize/{channelId}/account/{accountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse authorize(@PathVariable String channelId,
+                                  @PathVariable String accountId) {
+        return channelMemberManager.authorize(channelId, accountId);
+    }
+
+    @PostMapping("/un-authorize/{channelId}/account/{accountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse unAuthorize(@PathVariable String channelId,
+                                    @PathVariable String accountId) {
+        return channelMemberManager.unAuthorize(channelId, accountId);
+    }
 }

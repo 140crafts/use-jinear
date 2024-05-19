@@ -45,4 +45,9 @@ public class ChannelMemberRetrieveService {
         Long count = channelMemberRepository.countAllByChannelIdAndAccountIdAndRoleTypeIsInAndPassiveIdIsNull(channelId, accountId, List.of(ChannelMemberRoleType.ADMIN, ChannelMemberRoleType.OWNER));
         return !NumberCompareHelper.isEquals(count, 0);
     }
+
+    public Long retrieveChannelAdminAccessMemberCount(String channelId) {
+        log.info("Retrieve channel admin access member count has started. channelId: {}", channelId);
+        return channelMemberRepository.countAllByChannelIdAndRoleTypeIsInAndPassiveIdIsNullAndAccount_PassiveIdIsNullAndAccount_Ghost(channelId, List.of(ChannelMemberRoleType.ADMIN, ChannelMemberRoleType.OWNER), Boolean.FALSE);
+    }
 }

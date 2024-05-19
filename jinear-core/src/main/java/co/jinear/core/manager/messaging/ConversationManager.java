@@ -4,6 +4,7 @@ import co.jinear.core.converter.messaging.conversation.InitializeConversationReq
 import co.jinear.core.model.dto.messaging.conversation.ConversationParticipantDto;
 import co.jinear.core.model.request.messaging.conversation.InitializeConversationRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.messaging.ConversationInitializeResponse;
 import co.jinear.core.model.response.messaging.ConversationParticipantListingResponse;
 import co.jinear.core.model.vo.messaging.conversation.InitializeConversationVo;
 import co.jinear.core.service.SessionInfoService;
@@ -36,13 +37,13 @@ public class ConversationManager {
     private final ConversationParticipantRetrieveService conversationParticipantRetrieveService;
     private final ConversationParticipantOperationService conversationParticipantOperationService;
 
-    public BaseResponse initialize(InitializeConversationRequest initializeConversationRequest) {
+    public ConversationInitializeResponse initialize(InitializeConversationRequest initializeConversationRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateAllParticipantsHasAccessIncludingOwner(initializeConversationRequest, currentAccountId);
         log.info("Initialize conversation has started. currentAccountId: {}", currentAccountId);
         InitializeConversationVo initializeConversationVo = initializeConversationRequestConverter.convert(currentAccountId, initializeConversationRequest);
-        conversationOperationService.initialize(initializeConversationVo);
-        return new BaseResponse();
+        String conversationId = conversationOperationService.initializeAndRetrieveConversationId(initializeConversationVo);
+        return new ConversationInitializeResponse(conversationId);
     }
 
     public ConversationParticipantListingResponse retrieveParticipated(String workspaceId) {

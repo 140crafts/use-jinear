@@ -9,8 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -21,13 +22,13 @@ public class ConversationParticipantKeyCalculateService {
 
     public String retrieveAndCalculate(String conversationId) {
         log.info("Retrieve and calculate has started. conversationId: {}", conversationId);
-        List<String> accountIds = conversationParticipantListingService.retrieveActiveParticipants(conversationId).stream()
+        Set<String> accountIds = conversationParticipantListingService.retrieveActiveParticipants(conversationId).stream()
                 .map(PlainConversationParticipantDto::getAccountId)
-                .toList();
+                .collect(Collectors.toSet());
         return calculate(accountIds);
     }
 
-    public String calculate(List<String> accountIds) {
+    public String calculate(Set<String> accountIds) {
         log.info("Calculate has started. accountIds: {}", NormalizeHelper.listToString(accountIds));
         if (Objects.isNull(accountIds)) {
             throw new UnsupportedOperationException();
