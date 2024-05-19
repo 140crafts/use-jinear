@@ -24,6 +24,7 @@ const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
     if (retrieveMessagingTokenResponse) {
       const socket = io(SOCKET_ROOT, {
         path: "/ws",
+        withCredentials: true,
         extraHeaders: { "X-TOKEN": retrieveMessagingTokenResponse.data.token }
       });
 
