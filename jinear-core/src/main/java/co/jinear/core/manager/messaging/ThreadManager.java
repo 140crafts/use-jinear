@@ -10,6 +10,7 @@ import co.jinear.core.model.response.messaging.ThreadResponse;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.messaging.channel.ChannelMemberOperationService;
 import co.jinear.core.service.messaging.channel.ChannelNotifierService;
+import co.jinear.core.service.messaging.message.MessageRetrieveService;
 import co.jinear.core.service.messaging.thread.ThreadListingService;
 import co.jinear.core.service.messaging.thread.ThreadOperationService;
 import co.jinear.core.service.messaging.thread.ThreadRetrieveService;
@@ -33,6 +34,7 @@ public class ThreadManager {
     private final ChannelNotifierService channelNotifierService;
     private final ThreadRetrieveService threadRetrieveService;
     private final ChannelMemberOperationService channelMemberOperationService;
+    private final MessageRetrieveService messageRetrieveService;
 
     public BaseResponse initializeThread(InitializeThreadRequest initializeThreadRequest) {
         String accountId = sessionInfoService.currentAccountId();
@@ -40,8 +42,8 @@ public class ThreadManager {
         String initialMessageBody = initializeThreadRequest.getInitialMessageBody();
         channelAccessValidator.validateChannelParticipationAccess(accountId, channelId);
         log.info("Initialize thread has started. accountId: {}, initializeThreadRequest: {}", accountId, initializeThreadRequest);
-        RichMessageDto firstMessage = threadOperationService.initializeThread(accountId, channelId, initialMessageBody);
-        channelNotifierService.notifyChannelMembers(channelId, firstMessage);
+        RichMessageDto saved = threadOperationService.initializeThread(accountId, channelId, initialMessageBody);
+        channelNotifierService.notifyChannelMembers(channelId, saved.getMessageId());
         return new BaseResponse();
     }
 

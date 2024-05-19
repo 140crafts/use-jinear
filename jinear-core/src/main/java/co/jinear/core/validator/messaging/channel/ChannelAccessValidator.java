@@ -8,6 +8,7 @@ import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.service.messaging.channel.ChannelMemberOperationService;
 import co.jinear.core.service.messaging.channel.ChannelMemberRetrieveService;
 import co.jinear.core.service.messaging.channel.ChannelRetrieveService;
+import co.jinear.core.system.NumberCompareHelper;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +58,13 @@ public class ChannelAccessValidator {
         boolean accountHasWorkspaceAdminAccess = workspaceValidator.isWorkspaceAdminOrOwner(accountId, plainChannelDto.getWorkspaceId());
         if (!accountHasChannelAdminAccess && !accountHasWorkspaceAdminAccess) {
             throw new NoAccessException();
+        }
+    }
+
+    public void validateChannelHasAnotherAdmin(String channelId) {
+        Long currentAdminCount = channelMemberRetrieveService.retrieveChannelAdminAccessMemberCount(channelId);
+        if (NumberCompareHelper.isLessThanOrEqual(currentAdminCount, 1L)) {
+            throw new BusinessException("messaging.channel.you-are-only-admin");
         }
     }
 }

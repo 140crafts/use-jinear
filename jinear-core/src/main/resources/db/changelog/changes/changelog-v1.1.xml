@@ -1988,4 +1988,12 @@
         />
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-461-remove-not-null-on-conversation_participant-last_check-2">
+        <dropNotNullConstraint
+                tableName="conversation_participant"
+                columnName="last_check"
+                columnDataType="datetime"
+        />
+    </changeSet>
+
 </databaseChangeLog>

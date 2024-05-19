@@ -3,6 +3,7 @@ package co.jinear.core.controller.messaging.conversation;
 import co.jinear.core.manager.messaging.ConversationManager;
 import co.jinear.core.model.request.messaging.conversation.InitializeConversationRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.messaging.ConversationInitializeResponse;
 import co.jinear.core.model.response.messaging.ConversationParticipantListingResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class ConversationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse initialize(@Valid @RequestBody InitializeConversationRequest initializeConversationRequest) {
+    public ConversationInitializeResponse initialize(@Valid @RequestBody InitializeConversationRequest initializeConversationRequest) {
         return conversationManager.initialize(initializeConversationRequest);
     }
 

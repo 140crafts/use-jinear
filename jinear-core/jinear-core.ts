@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-05-06 09:14:26.
+// Generated using typescript-generator version 3.0.1157 on 2024-05-18 10:45:14.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -157,10 +157,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
-    ghistoryId: string;
-    gthreadId: string;
     gid: string;
+    gthreadId: string;
+    ghistoryId: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -293,6 +293,11 @@ export interface ChannelMemberDto extends BaseDto {
     channel: PlainChannelDto;
 }
 
+export interface ChannelMembershipInfoDto {
+    channel: PlainChannelDto;
+    isJoined: boolean;
+}
+
 export interface ChannelSettingsDto extends BaseDto {
     channelSettingsId: string;
     channelId: string;
@@ -380,6 +385,7 @@ export interface MessageReactionDto extends BaseDto {
 
 export interface RichMessageDto extends MessageDto {
     thread: ThreadDto;
+    conversation: ConversationDto;
 }
 
 export interface PlainThreadDto extends BaseDto {
@@ -402,6 +408,10 @@ export interface ThreadMessageInfoDto {
     messageCount: number;
     initialMessage: MessageDto;
     latestMessage: MessageDto;
+}
+
+export interface MessagingTokenDto {
+    token: string;
 }
 
 export interface NotificationEventDto extends BaseDto {
@@ -1268,6 +1278,14 @@ export interface ChannelMemberListingResponse extends BaseResponse {
     data: ChannelMemberDto[];
 }
 
+export interface ChannelMembershipInfoListingResponse extends BaseResponse {
+    data: ChannelMembershipInfoDto[];
+}
+
+export interface ConversationInitializeResponse extends BaseResponse {
+    data: string;
+}
+
 export interface ConversationParticipantListingResponse extends BaseResponse {
     data: ConversationParticipantDto[];
 }
@@ -1278,6 +1296,10 @@ export interface MessageListingPaginatedResponse extends BaseResponse {
 
 export interface MessageResponse extends BaseResponse {
     data: MessageDto;
+}
+
+export interface MessagingTokenResponse extends BaseResponse {
+    data: MessagingTokenDto;
 }
 
 export interface ThreadListingResponse extends BaseResponse {

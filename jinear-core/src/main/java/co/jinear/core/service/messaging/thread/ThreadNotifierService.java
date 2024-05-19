@@ -1,5 +1,6 @@
 package co.jinear.core.service.messaging.thread;
 
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.account.AccountCommunicationPermissionDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.messaging.channel.PlainChannelDto;
@@ -9,9 +10,12 @@ import co.jinear.core.model.dto.messaging.thread.ThreadDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.vo.notification.NotificationSendVo;
 import co.jinear.core.service.account.AccountCommunicationPermissionService;
+import co.jinear.core.service.client.messageapi.model.request.EmitRequest;
+import co.jinear.core.service.messaging.emit.EmitterService;
 import co.jinear.core.service.messaging.message.MessageListingService;
 import co.jinear.core.service.notification.NotificationCreateService;
 import co.jinear.core.service.richtext.HtmlSanitizeService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -31,11 +35,37 @@ public class ThreadNotifierService {
     private final NotificationCreateService notificationCreateService;
     private final AccountCommunicationPermissionService accountCommunicationPermissionService;
     private final HtmlSanitizeService htmlSanitizeService;
+    private final EmitterService emitterService;
+    private final ObjectMapper objectMapper;
 
     @Async
     public void notifyThreadParticipants(RichMessageDto richMessageDto) {
         log.info("Notify thread participants has started. richMessageDto: {}", richMessageDto);
         List<String> accountIds = messageListingService.retrieveAccountIdsParticipatedInThread(richMessageDto.getThreadId());
+        emitMessage(richMessageDto, accountIds);
+        mapAndSendNotification(richMessageDto, accountIds);
+    }
+
+    private void emitMessage(RichMessageDto richMessageDto, List<String> accountIds) {
+        accountIds.stream()
+                .map(toAccountId -> mapEmitRequest(richMessageDto, toAccountId))
+                .forEach(emitterService::emitMessage);
+    }
+
+    private EmitRequest mapEmitRequest(RichMessageDto richMessageDto, String toAccountId) {
+        try {
+            EmitRequest emitRequest = new EmitRequest();
+            emitRequest.setChannel(toAccountId);
+            emitRequest.setTopic("thread-message");
+            emitRequest.setMessage(objectMapper.writeValueAsString(richMessageDto));
+            return emitRequest;
+        } catch (Exception e) {
+            log.error("Map emit request failed.", e);
+            throw new BusinessException();
+        }
+    }
+
+    private void mapAndSendNotification(RichMessageDto richMessageDto, List<String> accountIds) {
         accountIds.stream()
                 .filter(toAccountId -> !toAccountId.equals(richMessageDto.getAccountId()))
                 .map(toAccountId -> map(richMessageDto, toAccountId))
