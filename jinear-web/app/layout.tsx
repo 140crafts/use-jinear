@@ -35,7 +35,7 @@ export const viewport: Viewport = {
   minimumScale: 1,
   userScalable: false,
   viewportFit: "cover",
-  interactiveWidget:"resizes-content"
+  interactiveWidget: "resizes-content"
 };
 
 export const metadata: Metadata = {

@@ -1,32 +1,24 @@
 "use client";
 import ConversationsSectionSideMenu from "@/components/conversationsSectionSideMenu/ConversationsSectionSideMenu";
-import SecondLevelSideMenu from "@/components/secondLevelSideMenu/SecondLevelSideMenu";
-import { selectConversationsMenuVisible, toggleConversationsMenu } from "@/store/slice/displayPreferenceSlice";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
 import cn from "classnames";
 import React from "react";
 import styles from "./layout.module.scss";
+import SecondLevelSideMenuV2 from "@/components/secondLevelSideMenuV2/SecondLevelSideMenuV2";
 
 interface ConversationsLayoutProps {
   children: React.ReactNode;
 }
 
 const ConversationsLayout: React.FC<ConversationsLayoutProps> = ({ children }) => {
-  const dispatch = useAppDispatch();
-  const conversationsMenuVisible = useTypedSelector(selectConversationsMenuVisible);
-
-  const toggleMenu = () => {
-    dispatch(toggleConversationsMenu());
-  };
 
   return (
     <div id="conversations-layout-container" className={styles.container}>
-      <SecondLevelSideMenu open={conversationsMenuVisible} toggle={toggleMenu} className={styles.secondLevelSideMenu}>
+      <SecondLevelSideMenuV2>
         <ConversationsSectionSideMenu />
-      </SecondLevelSideMenu>
+      </SecondLevelSideMenuV2>
       <div
         id="conversations-layout-content"
-        className={cn(styles.contentContainer, conversationsMenuVisible && styles.contentContainerWithSideMenu)}
+        className={cn(styles.contentContainer, styles.contentContainerWithSideMenu)}
       >
         {children}
       </div>
