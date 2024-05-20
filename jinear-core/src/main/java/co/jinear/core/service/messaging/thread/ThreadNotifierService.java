@@ -77,12 +77,9 @@ public class ThreadNotifierService {
 
         notificationSendVo.setAccountId(toAccountId);
         notificationSendVo.setThreadId(richMessageDto.getThreadId());
-        //TODO cgds-461
-        notificationSendVo.setLaunchUrl("https://jinear.co/pricing");
+        notificationSendVo.setLaunchUrl("https://jinear.co/home");
         notificationSendVo.setIsSilent(retrieveIsSilent(toAccountId));
         notificationSendVo.setNotificationType(MESSAGING_NEW_MESSAGE_THREAD);
-        //todo: cgds-461 Test. Excluding message owner from notifications we probably shouldn't need this.
-        //notificationSendVo.setSenderSessionId(null);
 
         Optional.of(richMessageDto)
                 .map(RichMessageDto::getThread)
@@ -104,6 +101,6 @@ public class ThreadNotifierService {
     private boolean retrieveIsSilent(String accountId) {
         log.info("Retrieve is silent has started. accountId: {}", accountId);
         AccountCommunicationPermissionDto accountCommunicationPermissionDto = accountCommunicationPermissionService.retrieve(accountId);
-        return Boolean.TRUE.equals(accountCommunicationPermissionDto.getPushNotification());
+        return Boolean.FALSE.equals(accountCommunicationPermissionDto.getPushNotification());
     }
 }
