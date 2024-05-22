@@ -1,6 +1,7 @@
 package co.jinear.core.repository;
 
 import co.jinear.core.model.entity.notification.NotificationEvent;
+import co.jinear.core.model.enumtype.notification.NotificationType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -9,12 +10,13 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
+import java.util.List;
 
 public interface NotificationEventRepository extends JpaRepository<NotificationEvent, String> {
 
-    Page<NotificationEvent> findAllByWorkspaceIdAndAccountIdAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, String accountId, Pageable pageable);
+    Page<NotificationEvent> findAllByWorkspaceIdAndAccountIdAndNotificationTypeIsNotInAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, String accountId, List<NotificationType> excludeTypes, Pageable pageable);
 
-    Page<NotificationEvent> findAllByWorkspaceIdAndTeamIdAndAccountIdAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, String teamId, String accountId, Pageable pageable);
+    Page<NotificationEvent> findAllByWorkspaceIdAndTeamIdAndAccountIdAndNotificationTypeIsNotInAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, String teamId, String accountId, List<NotificationType> excludeTypes, Pageable pageable);
 
     Long countAllByWorkspaceIdAndAccountIdAndIsReadAndPassiveIdIsNull(String workspaceId, String accountId, Boolean isRead);
 
