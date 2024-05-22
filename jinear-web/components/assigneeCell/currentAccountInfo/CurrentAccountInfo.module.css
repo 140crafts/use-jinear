@@ -1,17 +1,17 @@
 .profilePic {
-  height: 20px;
-  width: 20px;
+    height: 20px !important;
+    width: 20px !important;
 }
 
 .noPicChar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--c-text-color);
-  background-color: var(--c-primary-shade-1);
-  height: 20px;
-  width: 20px;
-  border-radius: 10px;
-  font-weight: 600;
-  font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--c-text-color);
+    background-color: var(--c-primary-shade-1);
+    height: 20px;
+    width: 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 0.8rem;
 }
