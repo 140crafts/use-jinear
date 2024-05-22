@@ -11,6 +11,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+import static co.jinear.core.model.enumtype.notification.NotificationType.MESSAGING_NEW_MESSAGE_CONVERSATION;
+import static co.jinear.core.model.enumtype.notification.NotificationType.MESSAGING_NEW_MESSAGE_THREAD;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -21,13 +26,13 @@ public class NotificationEventListingService {
     private final NotificationEventRepository notificationEventRepository;
     private final NotificationEventDtoConverter notificationEventDtoConverter;
 
-    //TODO: cgds-461 exclude conversation notifications
     public Page<NotificationEventDto> retrieveNotificationEvents(NotificationEventListingVo notificationEventListingVo) {
         log.info("Retrieve notification events has started. notificationEventListingVo: {}", notificationEventListingVo);
         return notificationEventRepository
-                .findAllByWorkspaceIdAndAccountIdAndPassiveIdIsNullOrderByCreatedDateDesc(
+                .findAllByWorkspaceIdAndAccountIdAndNotificationTypeIsNotInAndPassiveIdIsNullOrderByCreatedDateDesc(
                         notificationEventListingVo.getWorkspaceId(),
                         notificationEventListingVo.getCurrentAccountId(),
+                        List.of(MESSAGING_NEW_MESSAGE_THREAD, MESSAGING_NEW_MESSAGE_CONVERSATION),
                         PageRequest.of(notificationEventListingVo.getPage(), PAGE_SIZE))
                 .map(notificationEventDtoConverter::convert);
     }
@@ -35,10 +40,11 @@ public class NotificationEventListingService {
     public Page<NotificationEventDto> retrieveTeamNotificationEvents(TeamNotificationEventListingVo teamNotificationEventListingVo) {
         log.info("Retrieve team notification events has started. teamNotificationEventListingVo: {}", teamNotificationEventListingVo);
         return notificationEventRepository
-                .findAllByWorkspaceIdAndTeamIdAndAccountIdAndPassiveIdIsNullOrderByCreatedDateDesc(
+                .findAllByWorkspaceIdAndTeamIdAndAccountIdAndNotificationTypeIsNotInAndPassiveIdIsNullOrderByCreatedDateDesc(
                         teamNotificationEventListingVo.getWorkspaceId(),
                         teamNotificationEventListingVo.getTeamId(),
                         teamNotificationEventListingVo.getCurrentAccountId(),
+                        List.of(MESSAGING_NEW_MESSAGE_THREAD, MESSAGING_NEW_MESSAGE_CONVERSATION),
                         PageRequest.of(teamNotificationEventListingVo.getPage(), PAGE_SIZE))
                 .map(notificationEventDtoConverter::convert);
     }

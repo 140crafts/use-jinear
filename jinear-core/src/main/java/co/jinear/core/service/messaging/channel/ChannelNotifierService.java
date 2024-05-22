@@ -95,12 +95,9 @@ public class ChannelNotifierService {
 
         notificationSendVo.setAccountId(toAccountId);
         notificationSendVo.setThreadId(firstMessage.getThreadId());
-        //TODO cgds-461
-        notificationSendVo.setLaunchUrl("https://jinear.co/pricing");
+        notificationSendVo.setLaunchUrl("https://jinear.co");
         notificationSendVo.setIsSilent(retrieveIsSilent(toAccountId));
         notificationSendVo.setNotificationType(MESSAGING_NEW_MESSAGE_CONVERSATION);
-        //todo: cgds-461 Test. Excluding message owner from notifications we probably shouldn't need this.
-        //notificationSendVo.setSenderSessionId(null);
 
         Optional.of(firstMessage)
                 .map(RichMessageDto::getThread)
