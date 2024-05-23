@@ -13,7 +13,7 @@ const ConversationsLayout: React.FC<ConversationsLayoutProps> = ({ children }) =
 
   return (
     <div id="conversations-layout-container" className={styles.container}>
-      <SecondLevelSideMenuV2>
+      <SecondLevelSideMenuV2 className={styles.menu}>
         <ConversationsSectionSideMenu />
       </SecondLevelSideMenuV2>
       <div

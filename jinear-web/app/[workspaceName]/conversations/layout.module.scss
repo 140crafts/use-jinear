@@ -23,6 +23,10 @@
   margin-left: calc(-1 * var(--workspace-layout-page-padding)) !important;
 }
 
+.menu {
+  display: flex;
+}
+
 @media (max-width: $tablet) {
   .container {
     flex-direction: column-reverse;
@@ -33,5 +37,9 @@
   }
   .secondLevelSideMenu {
     margin-left: unset !important;
+  }
+
+  .menu {
+    display: none;
   }
 }

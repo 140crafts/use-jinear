@@ -27,7 +27,7 @@ const ConversationPage: React.FC<ConversationPageProps> = ({}) => {
     setTimeout(() => {
       const container = document.getElementById(`conversation-page-container`);
       setContainer(container);
-    }, 750);
+    }, 150);
   }, []);
 
   return (

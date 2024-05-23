@@ -41,7 +41,7 @@
 
 @media (max-width: $tablet) {
   .container {
-    bottom: calc(var(--mobile-menu-action-bar-height) + var(--workspace-side-menu-mobile-navigator-height) + 1rem);
+    bottom: calc(var(--workspace-side-menu-mobile-navigator-height) + 1rem);
   }
 
   .input:focus #workspace-layout-page-side-menu-container, #conversations-second-level-menu {

@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import styles from "./NewConversationInput.module.scss";
-import Button, { ButtonVariants } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
 import { LuPencilLine } from "react-icons/lu";
 import CustomKeyboardEventHandler from "@/components/tiptap/keyboardEventHandler/KeyboardEventHandler";
@@ -47,6 +47,7 @@ const NewConversationInput: React.FC<NewConversationInputProps> = ({ onSubmit, i
             variant={actionBarVisible ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             disabled={isLoading}
             onClick={toggleActionBarVisible}
+            heightVariant={ButtonHeight.short}
           >
             <LuPencilLine />
           </Button>
@@ -55,6 +56,7 @@ const NewConversationInput: React.FC<NewConversationInputProps> = ({ onSubmit, i
             disabled={isLoading}
             loading={isLoading}
             onClick={send}
+            heightVariant={ButtonHeight.short}
           >
             {t("newConversationSend")}
           </Button>

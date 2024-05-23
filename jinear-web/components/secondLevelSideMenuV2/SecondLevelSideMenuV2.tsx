@@ -8,10 +8,11 @@ import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { closeSecondLevelMenu, popSecondLevelMenu, selectSecondLevelMenuVisible } from "@/slice/displayPreferenceSlice";
 
 interface SecondLevelSideMenuV2Props {
+  className?: string;
   children: React.ReactNode;
 }
 
-const SecondLevelSideMenuV2: React.FC<SecondLevelSideMenuV2Props> = ({ children }) => {
+const SecondLevelSideMenuV2: React.FC<SecondLevelSideMenuV2Props> = ({ className, children }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const menuModalVisible = useTypedSelector(selectSecondLevelMenuVisible);
@@ -25,7 +26,7 @@ const SecondLevelSideMenuV2: React.FC<SecondLevelSideMenuV2Props> = ({ children 
   };
 
   return (
-    <div className={styles.sideMenu}>
+    <div className={cn(styles.sideMenu, className)}>
       <div id="second-level-side-menu-content"
            className={cn(styles.sideMenuContent)}>
         {children}
