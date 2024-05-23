@@ -1,28 +1,28 @@
 @import "/styles/breakpoints.scss";
 
 .menu {
-  display: none;
+  display: none !important;
 }
 
 .emptyPageContent {
-  display: flex;
+  display: flex !important;
   flex-direction: column;
   gap: .75rem;
 }
 
 .actionButtonsContainer {
-  display: flex;
+  display: flex !important;
   align-self: center;
   margin-top: 1rem;
 }
 
 @media (max-width: $tablet) {
   .menu {
-    display: flex;
+    display: flex !important;
   }
 
   .emptyPageContent {
-    display: none;
+    display: none !important;
   }
 }
 
