@@ -6,16 +6,18 @@ import { useTypedSelector } from "@/store/store";
 import { selectWorkspaceFromWorkspaceUsername } from "@/slice/accountSlice";
 import ClientOnly from "@/components/clientOnly/ClientOnly";
 import ConversationList from "@/components/conversationsSectionSideMenu/conversationList/ConversationList";
+import cn from "classnames";
 
 interface ConversationsSectionSideMenuProps {
+  containerClassName?: string;
 }
 
-const ConversationsSectionSideMenu: React.FC<ConversationsSectionSideMenuProps> = ({}) => {
+const ConversationsSectionSideMenu: React.FC<ConversationsSectionSideMenuProps> = ({ containerClassName }) => {
   const params = useParams();
   const workspaceName = (params?.workspaceName as string) || "";
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
 
-  return <ClientOnly className={styles.container}>
+  return <ClientOnly className={cn(styles.container, containerClassName)}>
     {workspace && <>
       <ChannelList workspace={workspace} />
       <ConversationList workspace={workspace} />

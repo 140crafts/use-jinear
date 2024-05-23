@@ -14,7 +14,7 @@ interface ReplyConversationInputProps {
   width: number;
 }
 
-const ReplyConversationInput: React.FC<ReplyConversationInputProps> = ({ workspaceId, conversationId, width }) => {
+const ReplyConversationInput: React.FC<ReplyConversationInputProps> = ({ workspaceId, conversationId, width = 0 }) => {
   const { t } = useTranslation();
   const tiptapRef = useRef<ITiptapRef>(null);
   const [sendToConversation, {
@@ -41,7 +41,7 @@ const ReplyConversationInput: React.FC<ReplyConversationInputProps> = ({ workspa
 
   const KeyboardEventHandler = CustomKeyboardEventHandler({ onEnter, shouldClearContentOnEnter: false });
 
-  return (
+  return width == 0 ? null : (
     <div className={styles.container} style={{ width: width }}>
       <div className={styles.inputContainer}>
         <Tiptap

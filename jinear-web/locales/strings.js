@@ -3566,7 +3566,15 @@ const translations = {
   newConversationSendToEmpty: {
     en: "Please select one or more member",
     tr: "Mesaj gönderilecek kişi seçin"
-  }
+  },
+  conversationPageEmptyStateSubTitle: {
+    en: "No conversation selected.",
+    tr: "Herhangi bir sohbet seçilmedi."
+  },
+  conversationPageEmptyStateText: {
+    en: "Please select a conversation from the list or initiate a new one to begin your communication. Streamline your business interactions with seamless messaging.",
+    tr: "Lütfen listeden bir konuşma seçin veya yeni bir konuşma başlatarak iletişime geçin."
+  },
 };
 
 export default translations;

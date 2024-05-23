@@ -12,6 +12,7 @@ import React, { useEffect } from "react";
 import styles from "./layout.module.scss";
 import { useRetrieveChannelMembershipsQuery } from "@/api/channelMemberApi";
 import { useRetrieveParticipatedConversationsQuery } from "@/api/conversationApi";
+import useDetectKeyboardOpen from "@/hooks/useDetectKeyboardOpen";
 
 interface WorkspaceLayoutProps {
   children: React.ReactNode;
@@ -25,6 +26,7 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   const params = useParams();
   const pathName = usePathname();
   const isMobile = useWidthLimit({ limit: MOBILE_LAYOUT_BREAKPOINT });
+  const onScreenKeyboardOpen = useDetectKeyboardOpen();
   const _isPwa = isPwa();
   const workspaceName = params?.workspaceName as string;
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
