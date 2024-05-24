@@ -16,6 +16,7 @@ import {
   useThreadEarliestMessageAfterInitialMessage
 } from "@/hooks/messaging/threadMessage/useThreadEarliestMessageAfterInitialMessage";
 import { useThreadMessageInfo } from "@/hooks/messaging/threadMessage/useThreadMessageInfo";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 
 interface MessageListProps {
   channelId: string;
@@ -35,6 +36,7 @@ const MessageList: React.FC<MessageListProps> = ({
                                                    viewingAsDetail
                                                  }) => {
   const { t } = useTranslation();
+  const pageVisibility = usePageVisibility();
 
   const initialMessage = useThreadInitialMessageFromMessageInfo({ workspaceId, threadId });
   const lastMessage = useThreadLastMessageFromMessageMap({ workspaceId, threadId });
@@ -51,10 +53,10 @@ const MessageList: React.FC<MessageListProps> = ({
   });
 
   useEffect(() => {
-    if (threadId && workspaceId) {
+    if (threadId && workspaceId && pageVisibility) {
       retrieveThreadMessages({ channelId, workspaceId, threadId });
     }
-  }, [threadId, channelId, workspaceId, retrieveThreadMessages]);
+  }, [threadId, channelId, workspaceId, retrieveThreadMessages, pageVisibility]);
 
   const loadMore = () => {
     if (threadEarliestMessageAfterInitialMessage) {

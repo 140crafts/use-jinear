@@ -103,6 +103,7 @@ export const channelMemberApi = api.injectEndpoints({
 
 export const {
   useRetrieveChannelMembershipsQuery,
+  useLazyRetrieveChannelMembershipsQuery,
   useRetrieveChannelMembersQuery,
   useRemoveChannelMemberMutation,
   useAddChannelMemberMutation,
