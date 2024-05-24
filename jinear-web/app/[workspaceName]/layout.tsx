@@ -10,9 +10,13 @@ import cn from "classnames";
 import { useParams, usePathname } from "next/navigation";
 import React, { useEffect } from "react";
 import styles from "./layout.module.scss";
-import { useRetrieveChannelMembershipsQuery } from "@/api/channelMemberApi";
-import { useRetrieveParticipatedConversationsQuery } from "@/api/conversationApi";
+import { useLazyRetrieveChannelMembershipsQuery, useRetrieveChannelMembershipsQuery } from "@/api/channelMemberApi";
+import {
+  useLazyRetrieveParticipatedConversationsQuery,
+  useRetrieveParticipatedConversationsQuery
+} from "@/api/conversationApi";
 import useDetectKeyboardOpen from "@/hooks/useDetectKeyboardOpen";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 
 interface WorkspaceLayoutProps {
   children: React.ReactNode;
@@ -30,10 +34,18 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   const _isPwa = isPwa();
   const workspaceName = params?.workspaceName as string;
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
+  const pageVisibility = usePageVisibility();
 
   //so we can calculate unread count
-  const {} = useRetrieveChannelMembershipsQuery({ workspaceId: workspace?.workspaceId || "" }, { skip: !workspace });
-  const {} = useRetrieveParticipatedConversationsQuery({ workspaceId: workspace?.workspaceId || "" }, { skip: !workspace });
+  const [retrieveChannelMembershipsQuery] = useLazyRetrieveChannelMembershipsQuery();
+  const [retrieveParticipatedConversationsQuery] = useLazyRetrieveParticipatedConversationsQuery();
+
+  useEffect(() => {
+    if (pageVisibility && workspace && pageVisibility) {
+      retrieveChannelMembershipsQuery({ workspaceId: workspace.workspaceId });
+      retrieveParticipatedConversationsQuery({ workspaceId: workspace.workspaceId });
+    }
+  }, [retrieveChannelMembershipsQuery, retrieveParticipatedConversationsQuery, workspace, pageVisibility]);
 
   useEffect(() => {
     if (isMobile) {

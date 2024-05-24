@@ -9,6 +9,7 @@ import Button, { ButtonHeight } from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
 import { checkAndUpdateChannelLastCheck } from "@/slice/messagingSlice";
 import { useAppDispatch } from "@/store/store";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 
 interface ChannelBodyProps {
   workspaceName: string;
@@ -26,6 +27,7 @@ const logger = Logger("ChannelBody");
 const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, workspaceId, workspaceName }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const pageVisibility = usePageVisibility();
   const [listThreads, { data: listThreadsResponse, isFetching: isListThreadsFetching }] = useLazyListThreadsQuery();
   const [hasMore, setHasMore] = useState<boolean>(true);
   const initialScroll = useRef<boolean>(false);
@@ -38,17 +40,17 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
   logger.log({ threadMap, sortedMapValues, mapKeyLength: Object.keys(threadMap).length });
 
   useEffect(() => {
-    if (workspaceId && channelId) {
+    if (workspaceId && channelId && pageVisibility) {
       dispatch(checkAndUpdateChannelLastCheck({ workspaceId, channelId, lastCheckDate: new Date() }));
     }
-  }, [dispatch, workspaceId, channelId]);
+  }, [dispatch, workspaceId, channelId, pageVisibility]);
 
   useEffect(() => {
-    if (workspaceId && channelId) {
+    if (workspaceId && channelId && pageVisibility) {
       listThreads({ workspaceId, channelId });
       dispatch(checkAndUpdateChannelLastCheck({ workspaceId, channelId, lastCheckDate: new Date() }));
     }
-  }, [dispatch, listThreads, workspaceId, channelId]);
+  }, [dispatch, listThreads, workspaceId, channelId, pageVisibility]);
 
   useEffect(() => {
     if (listThreadsResponse?.data) {

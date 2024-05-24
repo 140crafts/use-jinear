@@ -46,6 +46,7 @@ export const conversationApi = api.injectEndpoints({
 export const {
   useInitializeConversationMutation,
   useRetrieveParticipatedConversationsQuery,
+  useLazyRetrieveParticipatedConversationsQuery,
   useMuteConversationMutation
 } = conversationApi;
 

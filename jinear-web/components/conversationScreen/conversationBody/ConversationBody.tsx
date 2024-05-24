@@ -14,6 +14,7 @@ import {
 } from "@/hooks/messaging/conversationMessage/useConversationMessagesSorted";
 import { useConversationHasMoreMessages } from "@/hooks/messaging/conversation/useConversationHasMoreMessages";
 import Logger from "@/utils/logger";
+import { usePageVisibility } from "@/hooks/usePageVisibility";
 
 interface ConversationBodyProps {
   conversationId: string,
@@ -28,6 +29,7 @@ const LIMIT_RATIO = 0.85;
 const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, workspaceId }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const pageVisibility = usePageVisibility();
   const [retrieveConversationMessages, { isFetching: isRetrieveConversationFetching }] = useLazyRetrieveConversationMessagesQuery();
 
   const hasMore = useConversationHasMoreMessages({ conversationId, workspaceId });
@@ -41,8 +43,10 @@ const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, wor
   }, [dispatch, workspaceId, conversationId, sortedMessages]);
 
   useEffect(() => {
-    retrieveConversationMessages({ workspaceId, conversationId });
-  }, [retrieveConversationMessages, workspaceId, conversationId]);
+    if (pageVisibility) {
+      retrieveConversationMessages({ workspaceId, conversationId });
+    }
+  }, [retrieveConversationMessages, workspaceId, conversationId, pageVisibility]);
 
   useEffect(() => {
     if (sortedMessages && typeof window === "object") {
