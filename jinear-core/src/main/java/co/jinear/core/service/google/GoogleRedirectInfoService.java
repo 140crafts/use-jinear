@@ -20,8 +20,8 @@ public class GoogleRedirectInfoService {
     public String retrieveLoginUrl() {
         GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
         generateUserConsentUrlVo.setUserConsentPurposeType(UserConsentPurposeType.LOGIN);
-        generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.FALSE);
-        generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.FALSE);
+        generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.TRUE);
+        generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.TRUE);
         return generateUserConsentUrlVoToUrlConverter.convert(generateUserConsentUrlVo);
     }
 
@@ -32,6 +32,7 @@ public class GoogleRedirectInfoService {
         GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
         generateUserConsentUrlVo.setUserConsentPurposeType(UserConsentPurposeType.ATTACH_MAIL);
         generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.TRUE);
+        generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.TRUE);
         generateUserConsentUrlVo.setState(gson.toJson(attachAccountStateParameters));
         return generateUserConsentUrlVoToUrlConverter.convert(generateUserConsentUrlVo);
     }
@@ -43,6 +44,7 @@ public class GoogleRedirectInfoService {
         GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
         generateUserConsentUrlVo.setUserConsentPurposeType(UserConsentPurposeType.ATTACH_CALENDAR);
         generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.TRUE);
+        generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.TRUE);
         generateUserConsentUrlVo.setState(gson.toJson(attachAccountStateParameters));
         return generateUserConsentUrlVoToUrlConverter.convert(generateUserConsentUrlVo);
     }
