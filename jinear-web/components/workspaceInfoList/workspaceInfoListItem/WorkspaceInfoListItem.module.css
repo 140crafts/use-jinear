@@ -1,86 +1,85 @@
 .container {
-  display: flex;
-  flex-direction: row;
-  gap: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
 }
 
 .infoContainer {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
 }
 
 .nameContainer {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  background-color: red;
+    display: flex;
+    flex-direction: row;
+    flex: 1;
 }
 
 .title {
-  font-weight: 600;
-  text-transform: uppercase;
-  text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    text-align: left;
 }
 
 .profilePicContainer {
-  min-width: 32.5px;
-  width: 32.5px;
-  height: 32.5px;
-  border-radius: 14.4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+    min-width: 32.5px;
+    width: 32.5px;
+    height: 32.5px;
+    border-radius: 14.4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
 }
 
 .profilePicContainer:hover {
-  background-color: var(--c-primary);
+    background-color: var(--c-primary);
 }
 
 .usernameLabelContainer {
-  max-width: 0;
-  transition: var(--fade);
+    max-width: 0;
+    transition: var(--fade);
 }
 
 .usernameLabel {
-  display: none;
+    display: none;
 }
 
 .profilePicContainer:hover .usernameLabelContainer {
-  max-width: 250px;
+    max-width: 250px;
 }
 
 .profilePicContainer:hover .usernameLabel {
-  display: flex;
+    display: flex;
 }
 
 .profilePicContainer-without-profile-pic {
-  background-color: var(--c-primary-shade-1);
+    background-color: var(--c-primary-shade-1);
 }
 
 .profilePic {
-  width: 32.5px !important;
-  height: 32.5px !important;
-  border-radius: 14.4px !important;
-  position: unset !important;
+    width: 32.5px !important;
+    height: 32.5px !important;
+    border-radius: 14.4px !important;
+    position: unset !important;
 }
 
 .profilePicImg {
-  border-radius: 14.4px;
-  border: none;
+    border-radius: 14.4px;
+    border: none;
 }
 
 .firstLetter {
-  text-align: center;
-  color: var(--c-secondary-shade-0);
-  font-weight: 700;
-  font-size: 0.75rem;
+    text-align: center;
+    color: var(--c-secondary-shade-0);
+    font-weight: 700;
+    font-size: 0.75rem;
 }
 
 .actionBarContianer {
-  display: flex;
-  flex-direction: row;
+    display: flex;
+    flex-direction: row;
 }
