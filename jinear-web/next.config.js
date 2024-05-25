@@ -10,13 +10,15 @@ const withPWA = require("next-pwa")({
 const nextConfig = {
   // reactStrictMode: true,
   reactStrictMode: false,
-  // swcMinify: true,
-  minify: false,
+  swcMinify: false,
   compress: false,
   images: {
     domains: ["storage.googleapis.com"]
-  }
+  },
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
 };
 
 
-module.exports = withAxiom(withSentryConfig(withPWA(nextConfig), { silent: false }, { hideSourcemaps: true }));
+module.exports = withAxiom(withSentryConfig(withPWA(nextConfig), { silent: false }, { hideSourceMaps: true }));
