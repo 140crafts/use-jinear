@@ -1,24 +1,22 @@
-// This file sets a custom webpack configuration to use your Next.js app
-// with Sentry.
-// https://nextjs.org/docs/api-reference/next.config.js/introduction
-// https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 const { withAxiom } = require("next-axiom");
 const { withSentryConfig } = require("@sentry/nextjs");
 
-/** @type {import('next').NextConfig} */
+/** @type {import("next").NextConfig} */
 
 const withPWA = require("next-pwa")({
-  dest: "public",
+  dest: "public"
 });
 
 const nextConfig = {
   // reactStrictMode: true,
   reactStrictMode: false,
-  swcMinify: true,
+  swcMinify: false,
+  minify: false,
+  compress: false,
   images: {
-    domains: ["storage.googleapis.com"],
-  },
+    domains: ["storage.googleapis.com"]
+  }
 };
 
-// module.exports = withPWA(nextConfig);
+
 module.exports = withAxiom(withSentryConfig(withPWA(nextConfig), { silent: false }, { hideSourcemaps: true }));
