@@ -10,7 +10,7 @@ const withPWA = require("next-pwa")({
 const nextConfig = {
   // reactStrictMode: true,
   reactStrictMode: false,
-  swcMinify: false,
+  // swcMinify: true,
   minify: false,
   compress: false,
   images: {
