@@ -2,7 +2,7 @@ export const getOffset = (el: HTMLElement) => {
   const rect = el.getBoundingClientRect();
   return {
     left: rect.left + window.scrollX,
-    top: rect.top + window.scrollY,
+    top: rect.top + window.scrollY
   };
 };
 
@@ -10,7 +10,7 @@ export const getSize = (el: HTMLElement) => {
   const rect = el.getBoundingClientRect();
   return {
     width: rect.width,
-    height: rect.height,
+    height: rect.height
   };
 };
 
@@ -33,11 +33,20 @@ export const focusAndOpenKeyboard = (inputElementId: string, timeout?: number) =
     document.body.appendChild(__tempEl__);
     __tempEl__.focus();
     // The keyboard is open. Now do a delayed focus on the target element
-    setTimeout(function () {
+    setTimeout(function() {
       el.focus();
       el.click();
       // Remove the temp element
       document.body.removeChild(__tempEl__);
     }, timeout);
   }
+};
+
+export const scrollToBottom = (vo?: { behavior?: "auto" | "smooth" }) => {
+  const behavior = vo?.behavior || "smooth";
+  window.scrollTo({
+    top: document.documentElement.scrollHeight - window.innerHeight,
+    left: 0,
+    behavior
+  });
 };

@@ -1,5 +1,5 @@
 import { TaskInitializeRequest } from "@/model/be/jinear-core";
-import { focusAndOpenKeyboard } from "@/utils/htmlUtis";
+import { focusAndOpenKeyboard } from "@/utils/htmlUtils";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect } from "react";

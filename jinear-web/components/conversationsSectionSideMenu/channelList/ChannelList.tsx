@@ -22,14 +22,14 @@ const ChannelList: React.FC<ChannelListProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const {
     data: channelMembershipsResponse,
-    isFetching: isRetrieveChannelMembershipsFetching
+    isLoading: isRetrieveChannelMembershipsLoading
   } = useRetrieveChannelMembershipsQuery({ workspaceId: workspace.workspaceId });
   const {
     data: channelListResponse,
-    isFetching: isChannelListFetching
+    isLoading: isChannelListLoading
   } = useListChannelsQuery({ workspaceId: workspace.workspaceId });
   const joinable = useMemo(() => channelListResponse?.data?.filter(channelMembershipInfoDto => !channelMembershipInfoDto.isJoined) || [], [channelListResponse]);
-  const isFetching = isRetrieveChannelMembershipsFetching || isChannelListFetching;
+  const isLoading = isRetrieveChannelMembershipsLoading || isChannelListLoading;
 
   logger.log({ ChannelList: workspace, channelMembershipsResponse });
 
@@ -39,9 +39,9 @@ const ChannelList: React.FC<ChannelListProps> = ({ workspace }) => {
       <div className={styles.titleContainer}>
         <MenuGroupTitle label={t("sideMenuChannelsTitle")} />
       </div>
-      {isFetching && <CircularLoading />}
+      {isLoading && <CircularLoading />}
       <div className="spacer-h-1" />
-      {!isFetching && <>
+      {!isLoading && <>
         <div className={styles.channelListContainer}>
           {channelMembershipsResponse?.data
             ?.map(channelMembershipsResponse => channelMembershipsResponse.channel)
@@ -52,7 +52,7 @@ const ChannelList: React.FC<ChannelListProps> = ({ workspace }) => {
                 channel={channel}
                 workspaceUsername={workspace.username} />)
           }
-          <JoinableChannelListButton workspaceId={workspace.workspaceId} count={joinable.length}/>
+          <JoinableChannelListButton workspaceId={workspace.workspaceId} count={joinable.length} />
           <NewChannelButton workspaceId={workspace.workspaceId} />
         </div>
       </>

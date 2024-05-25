@@ -1,5 +1,5 @@
 import { queryStateShortDateParser, useQueryState } from "@/hooks/useQueryState";
-import { getOffset, getSize } from "@/utils/htmlUtis";
+import { getOffset, getSize } from "@/utils/htmlUtils";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import { format, isThisMonth, startOfDay } from "date-fns";

@@ -24,7 +24,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ workspace }) => {
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
   const {
     data: participatedConversationsResponse,
-    isFetching
+    isLoading
   } = useRetrieveParticipatedConversationsQuery({ workspaceId: workspace.workspaceId });
 
   return (
@@ -33,9 +33,9 @@ const ConversationList: React.FC<ConversationListProps> = ({ workspace }) => {
       <div className={styles.titleContainer}>
         <MenuGroupTitle label={t("sideMenuConversations")} />
       </div>
-      {isFetching && <CircularLoading />}
+      {isLoading && <CircularLoading />}
       <div className="spacer-h-1" />
-      {!isFetching && currentAccountId && <>
+      {!isLoading && currentAccountId && <>
         <div className={styles.conversationsListContainer}>
           {participatedConversationsResponse?.data
             ?.map(conversationParticipant => conversationParticipant.conversation)

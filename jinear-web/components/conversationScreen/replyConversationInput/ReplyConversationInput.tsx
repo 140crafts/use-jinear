@@ -7,6 +7,7 @@ import CustomKeyboardEventHandler from "@/components/tiptap/keyboardEventHandler
 import useTranslation from "@/locals/useTranslation";
 import { useSendToConversationMutation } from "@/api/messageOperationApi";
 import { useToggle } from "@/hooks/useToggle";
+import { scrollToBottom } from "@/utils/htmlUtils";
 
 interface ReplyConversationInputProps {
   workspaceId: string;
@@ -39,6 +40,14 @@ const ReplyConversationInput: React.FC<ReplyConversationInputProps> = ({ workspa
     }
   };
 
+  const onActionBarToggleClick = () => {
+    if (!actionBarVisible) {
+      scrollToBottom();
+    }
+    toggleActionBarVisible();
+    tiptapRef?.current?.focus?.();
+  };
+
   const KeyboardEventHandler = CustomKeyboardEventHandler({ onEnter, shouldClearContentOnEnter: false });
 
   return width == 0 ? null : (
@@ -53,12 +62,13 @@ const ReplyConversationInput: React.FC<ReplyConversationInputProps> = ({ workspa
           hideActionBarWhenEmpty={false}
           extensions={[KeyboardEventHandler]}
           editable={!isSendToConversationLoading}
+          onFocus={scrollToBottom}
         />
         <div className={styles.inputActionBar}>
           <Button
             variant={actionBarVisible ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             disabled={isSendToConversationLoading}
-            onClick={toggleActionBarVisible}
+            onClick={onActionBarToggleClick}
           >
             <LuPencilLine />
           </Button>

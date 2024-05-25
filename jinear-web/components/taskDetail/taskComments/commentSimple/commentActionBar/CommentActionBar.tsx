@@ -4,7 +4,7 @@ import { useDeleteTaskCommentMutation } from "@/store/api/taskCommentApi";
 import { selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
-import { getOffset } from "@/utils/htmlUtis";
+import { getOffset } from "@/utils/htmlUtils";
 import useTranslation from "locales/useTranslation";
 import React, { Dispatch, SetStateAction } from "react";
 import { IoArrowForward, IoClose } from "react-icons/io5";

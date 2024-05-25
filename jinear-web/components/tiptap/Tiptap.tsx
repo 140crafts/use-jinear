@@ -28,6 +28,7 @@ interface TiptapProps {
   actionBarMode?: TipTapActionBarMode;
   hideActionBarWhenEmpty?: boolean;
   extensions?: Extension[];
+  onFocus?: () => void;
 }
 
 const Tiptap = (
@@ -42,7 +43,8 @@ const Tiptap = (
     formSetValue,
     actionBarMode = "full",
     hideActionBarWhenEmpty = false,
-    extensions = []
+    extensions = [],
+    onFocus
   }: TiptapProps,
   ref: any
 ) => {
@@ -88,7 +90,7 @@ const Tiptap = (
   }, [editable, editor]);
 
   return (
-    <div className={cn(styles.container, className)}>
+    <div className={cn(styles.container, className)} onFocus={onFocus}>
       {editor && !shouldHideActionBar && editable && <ActionBar editor={editor} mode={actionBarMode} />}
       <EditorContent editor={editor} />
       {htmlInputId && <input id={htmlInputId} type="hidden" {...register?.(htmlInputId)} value={html} />}
