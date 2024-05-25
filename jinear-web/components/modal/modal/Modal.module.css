@@ -7,7 +7,7 @@
   background-color: var(--c-primary);
   width: 100%;
   min-height: 100%;
-  align-self: center;
+  align-self: center !important;
 }
 
 .titleBar {

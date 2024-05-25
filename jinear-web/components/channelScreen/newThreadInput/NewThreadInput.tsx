@@ -10,6 +10,7 @@ import Logger from "@/utils/logger";
 import CustomKeyboardEventHandler from "@/components/tiptap/keyboardEventHandler/KeyboardEventHandler";
 import { useInitializeThreadMutation } from "@/api/threadApi";
 import { useToggle } from "@/hooks/useToggle";
+import { scrollToBottom } from "@/utils/htmlUtils";
 
 interface NewThreadInputProps {
   workspaceName: string;
@@ -41,6 +42,14 @@ const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelI
     }
   }, [tiptapRef, channelId, isInitializeThreadLoading, initializeThreadResponse, setInputVisible]);
 
+  useEffect(() => {
+    if (inputVisible) {
+      setTimeout(() => {
+        tiptapRef?.current?.focus();
+      }, 250);
+    }
+  }, [inputVisible]);
+
   const onEnter = (html: string) => {
     initializeThread({ channelId, initialMessageBody: html });
   };
@@ -50,6 +59,11 @@ const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelI
       const html = tiptapRef.current.getHTML();
       initializeThread({ channelId, initialMessageBody: html });
     }
+  };
+
+  const onNewThreadButtonClick = () => {
+    scrollToBottom();
+    toggleInputVisible();
   };
 
   const KeyboardEventHandler = CustomKeyboardEventHandler({ onEnter });
@@ -65,6 +79,7 @@ const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelI
           editable={!isInitializeThreadLoading}
           hideActionBarWhenEmpty={true}
           extensions={[KeyboardEventHandler]}
+          onFocus={scrollToBottom}
         />
         <div className={styles.actionBar}>
           <Button
@@ -90,7 +105,7 @@ const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelI
     </div> : <Button
       variant={ButtonVariants.contrast}
       className={styles.newThreadInputToggleButton}
-      onClick={toggleInputVisible}
+      onClick={onNewThreadButtonClick}
     >
       {t("newThreadFloatingButtonLabel")}
     </Button>

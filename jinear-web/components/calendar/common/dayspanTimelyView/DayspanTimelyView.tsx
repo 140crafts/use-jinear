@@ -1,7 +1,7 @@
 import { queryStateArrayParser, useQueryState } from "@/hooks/useQueryState";
 import { CalendarEventDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useFilterCalendarEventsQuery } from "@/store/api/calendarEventApi";
-import { getOffset, getSize } from "@/utils/htmlUtis";
+import { getOffset, getSize } from "@/utils/htmlUtils";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import React, { useEffect, useMemo, useRef } from "react";

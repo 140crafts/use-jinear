@@ -3,7 +3,7 @@ import { WorkspaceDto } from "@/model/be/jinear-core";
 import { useRetrieveFeedContentItemQuery } from "@/store/api/feedContentApi";
 import { popNewTaskModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
-import { getOffset } from "@/utils/htmlUtis";
+import { getOffset } from "@/utils/htmlUtils";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useMemo } from "react";

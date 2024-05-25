@@ -1,7 +1,7 @@
 import React from "react";
 
 export function getIsDocumentHidden() {
-  return !document.hidden;
+  return !document?.hidden;
 }
 
 export function usePageVisibility() {
@@ -9,9 +9,9 @@ export function usePageVisibility() {
   const onVisibilityChange = () => setIsVisible(getIsDocumentHidden());
 
   React.useEffect(() => {
-    document.addEventListener("visibilitychange", onVisibilityChange, false);
+    document?.addEventListener?.("visibilitychange", onVisibilityChange, false);
     return () => {
-      document.removeEventListener("visibilitychange", onVisibilityChange);
+      document?.removeEventListener?.("visibilitychange", onVisibilityChange);
     };
   });
 
