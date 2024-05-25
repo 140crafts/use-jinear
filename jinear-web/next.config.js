@@ -10,8 +10,8 @@ const withPWA = require("next-pwa")({
 const nextConfig = {
   // reactStrictMode: true,
   reactStrictMode: false,
-  swcMinify: false,
-  compress: false,
+  // swcMinify: false,
+  // compress: false,
   images: {
     domains: ["storage.googleapis.com"]
   },

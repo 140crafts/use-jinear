@@ -34,19 +34,19 @@
 }
 
 .modalBody {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
 }
 
 .modalContainer {
-  align-items: flex-end;
+  align-items: flex-end !important;
   padding-top: 12.5%;
   padding-bottom: var(--workspace-side-menu-mobile-navigator-height);
 }
 
 .modalContent {
-  width: 100%;
+  width: 100% !important;
   overflow: scroll;
   height: 75%;
   max-height: 75%;
