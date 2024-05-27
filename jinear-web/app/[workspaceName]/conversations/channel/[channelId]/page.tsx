@@ -57,7 +57,6 @@ const ChannelPage: React.FC<ChannelPageProps> = () => {
             />
           </>
         }
-
       </div>
     </PureClientOnly>
   );
