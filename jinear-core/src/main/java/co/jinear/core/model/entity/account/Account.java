@@ -51,4 +51,8 @@ public class Account extends BaseEntity {
 
     @OneToOne(mappedBy = "account")
     private AccountPassword accountPassword;
+
+    @OneToOne(mappedBy = "account")
+    private AccountProfileMedia accountProfileMedia;
+
 }
