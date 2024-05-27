@@ -81,7 +81,7 @@ const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
       });
 
     }
-  }, [retrieveMessagingTokenResponse]);
+  }, [dispatch, retrieveMessagingTokenResponse]);
 
   return null;
 };

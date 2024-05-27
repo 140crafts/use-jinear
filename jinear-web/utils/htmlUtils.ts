@@ -1,3 +1,6 @@
+import Logger from "@/utils/logger";
+
+const logger = Logger("htmlUtils");
 export const getOffset = (el: HTMLElement) => {
   const rect = el.getBoundingClientRect();
   return {
@@ -50,3 +53,29 @@ export const scrollToBottom = (vo?: { behavior?: "auto" | "smooth" }) => {
     behavior
   });
 };
+
+export const decideAndScrollToBottom = ({
+                                          initialShouldScroll = true,
+                                          limitRatio = 0.85,
+                                          timeout = 500,
+                                          callBack
+                                        }:
+                                          {
+                                            initialShouldScroll?: boolean,
+                                            limitRatio?: number,
+                                            timeout?: number;
+                                            callBack?: () => void
+                                          }
+  ) => {
+    const currentScrollY = window.scrollY;
+    const bottom = document.documentElement.scrollHeight - window.innerHeight;
+    logger.log({ initialShouldScroll, isAboveLimit: (currentScrollY >= (bottom * limitRatio)) });
+    const shouldScroll = (currentScrollY >= (bottom * limitRatio)) || initialShouldScroll;
+    if (shouldScroll) {
+      setTimeout(() => {
+        scrollToBottom();
+        callBack?.();
+      }, timeout);
+    }
+  }
+;
