@@ -1996,4 +1996,18 @@
         />
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-view-v_account_profile_media">
+        <createView
+                viewName="v_account_profile_media"
+                replaceIfExists="true">
+            select distinct(a.account_id) as account_id,
+                           m.media_id     as media_id
+            from media m
+                     inner join account a on m.related_object_id = a.account_id
+            where m.media_owner_type = 'USER'
+              and m.file_type = 'PROFILE_PIC'
+              and m.passive_id is null;
+        </createView>
+    </changeSet>
+
 </databaseChangeLog>
