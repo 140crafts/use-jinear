@@ -12,6 +12,7 @@ import {
   upsertThreadMessage
 } from "@/slice/messagingSlice";
 import { RichMessageDto } from "@/be/jinear-core";
+import { insertMessage } from "../../repository/MessageRepository";
 
 interface WebsocketHandlerProps {
 
@@ -50,7 +51,7 @@ const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
               messageDto: { ...data },
               channelId: data.thread.channelId
             }));
-
+            insertMessage({ ...data });
             logger.log({ SocketIoService: "thread-message", data });
           }
         }
@@ -65,11 +66,7 @@ const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
               workspaceId: data.conversation.workspaceId,
               messageDto: data
             }));
-            dispatch(checkAndUpdateConversationLastCheck({
-              workspaceId: data.conversation.workspaceId,
-              conversationId: data.conversationId,
-              lastCheckDate: new Date()
-            }));
+            insertMessage({ ...data });
             logger.log({ SocketIoService: "conversation-message", data });
           }
         }

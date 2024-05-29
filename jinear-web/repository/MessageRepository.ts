@@ -15,7 +15,7 @@ export class MessageRepository extends Dexie {
     super("messagesdb");
     const version = 1;
     this.version(version).stores({
-      message: "++_id, &messageId, accountId, threadId, conversationId", // Primary key and indexed props
+      message: "++_id, &messageId, accountId, threadId, conversationId" // Primary key and indexed props
     });
     logger.log(`Messages Db initialized with version ${version}`);
   }
@@ -57,9 +57,14 @@ export const getConversationLastMessage = async (conversationId: string) => {
   return messages?.[0];
 };
 
+export const getConversationMessages = async (conversationId: string) => {
+  return getDb().message.filter(message => message.conversationId == conversationId).reverse().sortBy("_timestamp");
+};
+
 export const getSortedConversationIds = async () => {
   const allConversationMessagesSorted = await getDb().message
     .filter(message => message.conversationId != null)
+    .reverse()
     .sortBy("_timestamp");
   const distinctConversationIds: string[] = [];
   allConversationMessagesSorted.forEach(message => {
