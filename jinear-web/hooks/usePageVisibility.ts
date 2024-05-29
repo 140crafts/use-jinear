@@ -1,7 +1,10 @@
 import React from "react";
 
 export function getIsDocumentHidden() {
-  return !document?.hidden;
+  if (typeof window !== "undefined") {
+    return !document?.hidden;
+  }
+  return true;
 }
 
 export function usePageVisibility() {
@@ -9,10 +12,12 @@ export function usePageVisibility() {
   const onVisibilityChange = () => setIsVisible(getIsDocumentHidden());
 
   React.useEffect(() => {
-    document?.addEventListener?.("visibilitychange", onVisibilityChange, false);
-    return () => {
-      document?.removeEventListener?.("visibilitychange", onVisibilityChange);
-    };
+    if (typeof window !== "undefined") {
+      document?.addEventListener?.("visibilitychange", onVisibilityChange, false);
+      return () => {
+        document?.removeEventListener?.("visibilitychange", onVisibilityChange);
+      };
+    }
   });
 
   return isVisible;

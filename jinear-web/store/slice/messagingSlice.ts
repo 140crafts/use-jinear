@@ -16,6 +16,7 @@ import { conversationApi } from "@/api/conversationApi";
 import Logger from "@/utils/logger";
 import { threadApi } from "@/api/threadApi";
 import { channelMemberApi } from "@/api/channelMemberApi";
+import { insertAllMessages, insertMessage } from "../../repository/MessageRepository";
 
 const initialState = {} as {
   [workspaceId: string]: {
@@ -221,6 +222,7 @@ const slice = createSlice({
           payload: { workspaceId, channelId, lastActivityDate: new Date() },
           type: "messaging/checkAndUpdateChannelLastActivity"
         });
+        insertMessage(sentMessage);
       })
 
       .addMatcher(messageOperationApi.endpoints.sendToConversation.matchFulfilled, (state, action) => {
@@ -230,6 +232,7 @@ const slice = createSlice({
           payload: { workspaceId, messageDto: sentMessage },
           type: "messaging/upsertThreadMessage"
         });
+        insertMessage(sentMessage);
       })
 
       .addMatcher(messageListingApi.endpoints.retrieveThreadMessages.matchFulfilled, (state, action) => {
@@ -250,7 +253,7 @@ const slice = createSlice({
             lastCheckDate: new Date()
           }, type: "messaging/checkAndUpdateChannelLastCheck"
         });
-
+        insertAllMessages(messagesPage.content || []);
       })
 
       .addMatcher(channelMemberApi.endpoints.retrieveChannelMemberships.matchFulfilled, (state, action) => {
@@ -303,7 +306,7 @@ const slice = createSlice({
               thread
             }, type: "messaging/upsertThread"
           });
-
+          insertAllMessages([initialMessage, latestMessage]);
         });
 
       })
@@ -325,6 +328,7 @@ const slice = createSlice({
             threadMessageInfo: thread.threadMessageInfo
           }, type: "messaging/upsertThreadMessageInfos"
         });
+        insertAllMessages([initialMessage, latestMessage]);
       })
 
       .addMatcher(messageListingApi.endpoints.retrieveConversationMessages.matchFulfilled, (state, action) => {
@@ -345,6 +349,8 @@ const slice = createSlice({
             lastCheckDate: new Date()
           }, type: "messaging/checkAndUpdateConversationLastCheck"
         });
+
+        insertAllMessages(messagesPage.content || []);
       })
 
       .addMatcher(conversationApi.endpoints.retrieveParticipatedConversations.matchFulfilled, (state, action) => {
@@ -370,7 +376,7 @@ const slice = createSlice({
               messageDtoList: [lastMessage]
             }, type: "messaging/upsertAllConversationMessages"
           });
-
+          insertMessage(lastMessage);
         });
       });
   }
