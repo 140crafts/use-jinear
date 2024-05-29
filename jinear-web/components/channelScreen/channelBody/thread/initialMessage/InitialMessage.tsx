@@ -7,18 +7,21 @@ import { format } from "date-fns";
 import useTranslation from "@/locals/useTranslation";
 import Link from "next/link";
 import ClientOnly from "@/components/clientOnly/ClientOnly";
+import { useLiveQuery } from "dexie-react-hooks";
+import { getThreadInitialMessage, getThreadMessages } from "../../../../../repository/MessageRepository";
 
 interface MessageProps {
-  message: MessageDto;
   channelId: string;
+  threadId: string;
   workspaceName: string;
   viewingAsDetail: boolean;
 }
 
-const InitialMessage: React.FC<MessageProps> = ({ message, channelId, workspaceName, viewingAsDetail }) => {
+const InitialMessage: React.FC<MessageProps> = ({ channelId, threadId, workspaceName, viewingAsDetail }) => {
   const { t } = useTranslation();
+  const message = useLiveQuery(() => getThreadInitialMessage(threadId));
   const Wrapper = viewingAsDetail ? ClientOnly : Link;
-  return (
+  return message == null ? null : (
     <Wrapper
       href={`/${workspaceName}/conversations/channel/${channelId}/thread/${message.threadId}`}
       className={styles.container}>

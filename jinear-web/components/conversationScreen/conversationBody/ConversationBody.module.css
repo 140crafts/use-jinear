@@ -21,3 +21,7 @@
 .emptyStateContainer {
     text-align: center;
 }
+
+.loadingContainer {
+    min-height: 2rem;
+}

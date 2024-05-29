@@ -28,6 +28,7 @@ const ChannelList: React.FC<ChannelListProps> = ({ workspace }) => {
     data: channelListResponse,
     isLoading: isChannelListLoading
   } = useListChannelsQuery({ workspaceId: workspace.workspaceId });
+
   const joinable = useMemo(() => channelListResponse?.data?.filter(channelMembershipInfoDto => !channelMembershipInfoDto.isJoined) || [], [channelListResponse]);
   const isLoading = isRetrieveChannelMembershipsLoading || isChannelListLoading;
 

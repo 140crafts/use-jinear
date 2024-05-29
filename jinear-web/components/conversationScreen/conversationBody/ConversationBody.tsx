@@ -28,16 +28,18 @@ const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, wor
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const pageVisibility = usePageVisibility();
-  const [retrieveConversationMessages, { isFetching: isRetrieveConversationFetching }] = useLazyRetrieveConversationMessagesQuery();
+  const [retrieveConversationMessages, {
+    isLoading: isRetrieveConversationLoading,
+    isFetching: isRetrieveConversationFetching
+  }] = useLazyRetrieveConversationMessagesQuery();
 
   const hasMore = useConversationHasMoreMessages({ conversationId, workspaceId });
   // const messages = useConversationMessagesSorted({ workspaceId, conversationId });
-  const messages = useLiveQuery(() => getConversationMessages(conversationId)) || [];
+  const messages = useLiveQuery(() => getConversationMessages(conversationId));
   const initialScroll = useRef<boolean>(false);
 
   logger.log({ sortedMessages: messages });
 
-  // TODO jin-474
   useEffect(() => {
     dispatch(checkAndUpdateConversationLastCheck({ workspaceId, conversationId, lastCheckDate: new Date() }));
   }, [dispatch, workspaceId, conversationId, messages]);
@@ -60,7 +62,7 @@ const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, wor
   }, [messages]);
 
   const retrieveMore = () => {
-    const oldestMessage = messages[messages.length - 1];
+    const oldestMessage = messages ? messages[messages.length - 1] : null;
     if (oldestMessage) {
       retrieveConversationMessages({ workspaceId, conversationId, before: new Date(oldestMessage.createdDate) });
     }
@@ -78,9 +80,11 @@ const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, wor
           {t("conversationLoadMore")}
         </Button>
       }
-      {isRetrieveConversationFetching && !hasMore && <CircularLoading />}
+      <div className={styles.loadingContainer}>
+        {isRetrieveConversationLoading && !hasMore && <CircularLoading />}
+      </div>
       <div className={styles.contentContainer}>
-        {messages?.length == 0 && !isRetrieveConversationFetching &&
+        {messages && messages?.length == 0 && !isRetrieveConversationLoading &&
           <div className={styles.emptyStateContainer}>{t("conversationEmpty")}</div>}
         <div className={styles.messageListContainer}>
           {messages?.map?.((messageDto, index) => {

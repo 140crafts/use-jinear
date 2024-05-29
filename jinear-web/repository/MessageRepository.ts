@@ -74,3 +74,27 @@ export const getSortedConversationIds = async () => {
   });
   return distinctConversationIds || [];
 };
+
+export const getThreadMessages = async (threadId: string) => {
+  return getDb().message.filter(message => message.threadId == threadId).reverse().sortBy("_timestamp");
+};
+
+export const getThreadInitialMessage = async (threadId: string) => {
+  const messages = await getDb().message.filter(message => message.threadId == threadId).sortBy("_timestamp");
+  return messages?.[0];
+};
+
+export const getThreadFirstReplyMessage = async (threadId: string) => {
+  const messages = await getDb().message.filter(message => message.threadId == threadId).sortBy("_timestamp");
+  return messages?.[1];
+};
+
+export const getThreadLastMessage = async (threadId: string) => {
+  const messages = await getDb().message.filter(message => message.threadId == threadId).reverse().sortBy("_timestamp");
+  return messages?.[0];
+};
+
+
+export const deleteAllEntries = () => {
+  getDb().message.clear();
+};

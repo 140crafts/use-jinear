@@ -6,6 +6,7 @@ import Logger from "@/utils/logger";
 import { askAppTrackingPermission } from "@/utils/webviewUtils";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
+import { deleteAllEntries } from "../../repository/MessageRepository";
 
 interface AuthCheckProps {
 }
@@ -25,6 +26,7 @@ const PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS = [
 const ONLY_NOT_LOGGED_IN_PATHS = ["/forgot-password", "/register", "/login"];
 
 const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
+  const dispatch = useAppDispatch();
   const { data, error, isLoading } = useMeQuery();
   const router = useRouter();
   const pathname = usePathname() || "";
@@ -50,8 +52,11 @@ const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
     if (authState == "LOGGED_IN") {
       askAppTrackingPermission();
     }
-
-  }, [router, authState, pathname]);
+    if (authState === "NOT_LOGGED_IN") {
+      resetAllStates(dispatch);
+      deleteAllEntries();
+    }
+  }, [router, dispatch, authState, pathname]);
 
   return null;
 };

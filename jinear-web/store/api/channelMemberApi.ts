@@ -30,7 +30,8 @@ export const channelMemberApi = api.injectEndpoints({
         method: "POST"
       }),
       invalidatesTags: (_result, _err, req) => [
-        `v1/messaging/channel/member/list/{channelId}`
+        `v1/messaging/channel/member/list/{channelId}`,
+        `v1/messaging/channel/workspace/{workspaceId}`
       ]
     }),
     //
@@ -40,7 +41,8 @@ export const channelMemberApi = api.injectEndpoints({
         method: "POST"
       }),
       invalidatesTags: (_result, _err, req) => [
-        `v1/messaging/channel/member/list/{channelId}`
+        `v1/messaging/channel/member/list/{channelId}`,
+        `v1/messaging/channel/workspace/{workspaceId}`
       ]
     }),
     //
@@ -51,7 +53,8 @@ export const channelMemberApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, req) => [
         `v1/messaging/channel/member/list/{channelId}`,
-        `v1/messaging/channel/member/memberships/{workspaceId}`
+        `v1/messaging/channel/member/memberships/{workspaceId}`,
+        `v1/messaging/channel/workspace/{workspaceId}`
       ]
     }),
     //
@@ -62,7 +65,8 @@ export const channelMemberApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, req) => [
         `v1/messaging/channel/member/list/{channelId}`,
-        `v1/messaging/channel/member/memberships/{workspaceId}`
+        `v1/messaging/channel/member/memberships/{workspaceId}`,
+        `v1/messaging/channel/workspace/{workspaceId}`
       ]
     }),
     //
@@ -72,7 +76,8 @@ export const channelMemberApi = api.injectEndpoints({
         method: "POST"
       }),
       invalidatesTags: (_result, _err, req) => [
-        `v1/messaging/channel/member/memberships/{workspaceId}`
+        `v1/messaging/channel/member/memberships/{workspaceId}`,
+        `v1/messaging/channel/workspace/{workspaceId}`
       ]
     }),
     //
@@ -83,7 +88,8 @@ export const channelMemberApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, req) => [
         `v1/messaging/channel/member/memberships/{workspaceId}`,
-        `v1/messaging/channel/member/list/{channelId}`
+        `v1/messaging/channel/member/list/{channelId}`,
+        `v1/messaging/channel/workspace/{workspaceId}`
       ]
     }),
     //
@@ -94,7 +100,8 @@ export const channelMemberApi = api.injectEndpoints({
       }),
       invalidatesTags: (_result, _err, req) => [
         `v1/messaging/channel/member/memberships/{workspaceId}`,
-        `v1/messaging/channel/member/list/{channelId}`
+        `v1/messaging/channel/member/list/{channelId}`,
+        `v1/messaging/channel/workspace/{workspaceId}`
       ]
     })
     //

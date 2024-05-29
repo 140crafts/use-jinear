@@ -27,13 +27,11 @@ const Thread: React.FC<ThreadProps> = ({
                                          viewingAsDetail = false
                                        }) => {
 
-  const initialMessage = useThreadInitialMessage({ workspaceId, threadId });
-
   return (
     <div className={styles.container}>
       <InitialMessage
-        message={initialMessage}
         workspaceName={workspaceName}
+        threadId={threadId}
         channelId={channelId}
         viewingAsDetail={viewingAsDetail}
       />
