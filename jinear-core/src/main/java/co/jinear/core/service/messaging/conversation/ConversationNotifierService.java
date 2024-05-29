@@ -3,12 +3,10 @@ package co.jinear.core.service.messaging.conversation;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.account.AccountCommunicationPermissionDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
-import co.jinear.core.model.dto.messaging.channel.PlainChannelDto;
 import co.jinear.core.model.dto.messaging.conversation.ConversationDto;
 import co.jinear.core.model.dto.messaging.conversation.ConversationParticipantDto;
 import co.jinear.core.model.dto.messaging.message.MessageDto;
 import co.jinear.core.model.dto.messaging.message.RichMessageDto;
-import co.jinear.core.model.dto.messaging.thread.ThreadDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.vo.notification.NotificationSendVo;
@@ -75,9 +73,8 @@ public class ConversationNotifierService {
 
     private void sendNotification(RichMessageDto richMessageDto, List<ConversationParticipantDto> conversationParticipantDtos) {
         String workspaceUsername = Optional.of(richMessageDto)
-                .map(RichMessageDto::getThread)
-                .map(ThreadDto::getChannel)
-                .map(PlainChannelDto::getWorkspaceId)
+                .map(RichMessageDto::getConversation)
+                .map(ConversationDto::getWorkspaceId)
                 .map(workspaceRetrieveService::retrieveWorkspaceWithId)
                 .map(WorkspaceDto::getUsername)
                 .orElse(null);

@@ -9,6 +9,7 @@ import co.jinear.core.model.dto.messaging.message.MessageDto;
 import co.jinear.core.model.dto.messaging.message.RichMessageDto;
 import co.jinear.core.model.dto.messaging.thread.ThreadDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
+import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.vo.notification.NotificationSendVo;
 import co.jinear.core.service.account.AccountCommunicationPermissionService;
 import co.jinear.core.service.client.messageapi.model.request.EmitRequest;
@@ -16,6 +17,7 @@ import co.jinear.core.service.messaging.emit.EmitterService;
 import co.jinear.core.service.messaging.message.MessageRetrieveService;
 import co.jinear.core.service.notification.NotificationCreateService;
 import co.jinear.core.service.richtext.HtmlSanitizeService;
+import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static co.jinear.core.model.enumtype.notification.NotificationType.MESSAGING_NEW_MESSAGE_CONVERSATION;
@@ -40,6 +43,7 @@ public class ChannelNotifierService {
     private final EmitterService emitterService;
     private final ObjectMapper objectMapper;
     private final MessageRetrieveService messageRetrieveService;
+    private final WorkspaceRetrieveService workspaceRetrieveService;
 
     @Async
     public void notifyChannelMembers(String channelId, String messageId) {
@@ -58,11 +62,18 @@ public class ChannelNotifierService {
     }
 
     private void notifyMembers(RichMessageDto firstMessage, List<ChannelMemberDto> channelMembers) {
+        String workspaceUsername = Optional.of(firstMessage)
+                .map(RichMessageDto::getThread)
+                .map(ThreadDto::getChannel)
+                .map(PlainChannelDto::getWorkspaceId)
+                .map(workspaceRetrieveService::retrieveWorkspaceWithId)
+                .map(WorkspaceDto::getUsername)
+                .orElse(null);
         channelMembers.stream()
                 .filter(channelMemberDto -> filterSender(firstMessage, channelMemberDto))
                 .filter(this::filterMuted)
                 .map(ChannelMemberDto::getAccountId)
-                .map(toAccountId -> map(firstMessage, toAccountId))
+                .map(toAccountId -> map(firstMessage, toAccountId, workspaceUsername))
                 .forEach(notificationCreateService::create);
     }
 
@@ -90,14 +101,19 @@ public class ChannelNotifierService {
                 .orElse(Boolean.TRUE);
     }
 
-    private NotificationSendVo map(RichMessageDto firstMessage, String toAccountId) {
+    private NotificationSendVo map(RichMessageDto firstMessage, String toAccountId, String workspaceUsername) {
         NotificationSendVo notificationSendVo = new NotificationSendVo();
+        String channelId = Optional.of(firstMessage).map(RichMessageDto::getThread).map(ThreadDto::getChannelId).orElse(null);
+        String threadId = Optional.of(firstMessage).map(RichMessageDto::getThreadId).orElse(null);
 
         notificationSendVo.setAccountId(toAccountId);
         notificationSendVo.setThreadId(firstMessage.getThreadId());
-        notificationSendVo.setLaunchUrl("https://jinear.co");
         notificationSendVo.setIsSilent(retrieveIsSilent(toAccountId));
         notificationSendVo.setNotificationType(MESSAGING_NEW_MESSAGE_CONVERSATION);
+
+        if (Objects.nonNull(workspaceUsername) && Objects.nonNull(channelId) && Objects.nonNull(threadId)) {
+            notificationSendVo.setLaunchUrl("https://jinear.co/" + workspaceUsername + "/conversations/channel/" + channelId + "/thread/" + threadId);
+        }
 
         Optional.of(firstMessage)
                 .map(RichMessageDto::getThread)
