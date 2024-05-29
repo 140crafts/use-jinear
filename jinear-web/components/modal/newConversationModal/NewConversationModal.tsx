@@ -4,7 +4,8 @@ import Modal from "@/components/modal/modal/Modal";
 import {
   closeNewConversationModal,
   selectNewConversationModalVisible,
-  selectNewConversationModalWorkspaceId, selectNewConversationModalWorkspaceName
+  selectNewConversationModalWorkspaceId,
+  selectNewConversationModalWorkspaceName
 } from "@/slice/modalSlice";
 import useTranslation from "@/locals/useTranslation";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
@@ -15,11 +16,13 @@ import NewConversationInput from "@/components/modal/newConversationModal/newCon
 import { useInitializeConversationMutation } from "@/api/conversationApi";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { selectCurrentAccountId } from "@/slice/accountSlice";
+import Logger from "@/utils/logger";
 
 interface NewConversationModalProps {
 
 }
+
+const logger = Logger("NewConversationModal");
 
 const NewConversationModal: React.FC<NewConversationModalProps> = ({}) => {
   const { t } = useTranslation();
@@ -33,10 +36,13 @@ const NewConversationModal: React.FC<NewConversationModalProps> = ({}) => {
   const [selectedWorkspaceMembers, setSelectedWorkspaceMembers] = useState<WorkspaceMemberDto[]>([]);
   const [initializeConversation, {
     data: initializeConversationResponse,
-    isLoading
+    isLoading,
+    reset
   }] = useInitializeConversationMutation();
 
   const close = () => {
+    reset();
+    setSelectedWorkspaceMembers([]);
     dispatch(closeNewConversationModal());
   };
 
@@ -56,6 +62,7 @@ const NewConversationModal: React.FC<NewConversationModalProps> = ({}) => {
   };
 
   useEffect(() => {
+    logger.log({ initializeConversationResponse });
     if (initializeConversationResponse?.responseStatusType == "SUCCESS" && initializeConversationResponse?.data && workspaceName) {
       const conversationId = initializeConversationResponse?.data;
       router.replace(`/${workspaceName}/conversations/${conversationId}`);

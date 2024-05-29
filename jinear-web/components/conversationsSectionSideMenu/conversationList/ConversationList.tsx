@@ -41,6 +41,8 @@ const ConversationList: React.FC<ConversationListProps> = ({ workspace }) => {
     return [];
   }, [participatedConversationsResponse, distinctSortedConversationIds]);
 
+  logger.log({ sortedParticipatedConversations, participatedConversationsResponse, distinctSortedConversationIds });
+
   return (
     <div className={styles.container}>
       <div className="spacer-h-1" />

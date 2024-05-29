@@ -13,6 +13,8 @@ import { useConversationHasMoreMessages } from "@/hooks/messaging/conversation/u
 import Logger from "@/utils/logger";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { decideAndScrollToBottom } from "@/utils/htmlUtils";
+import { useLiveQuery } from "dexie-react-hooks";
+import { getConversationMessages } from "../../../repository/MessageRepository";
 
 interface ConversationBodyProps {
   conversationId: string,
@@ -29,7 +31,8 @@ const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, wor
   const [retrieveConversationMessages, { isFetching: isRetrieveConversationFetching }] = useLazyRetrieveConversationMessagesQuery();
 
   const hasMore = useConversationHasMoreMessages({ conversationId, workspaceId });
-  const messages = useConversationMessagesSorted({ workspaceId, conversationId });
+  // const messages = useConversationMessagesSorted({ workspaceId, conversationId });
+  const messages = useLiveQuery(() => getConversationMessages(conversationId)) || [];
   const initialScroll = useRef<boolean>(false);
 
   logger.log({ sortedMessages: messages });
