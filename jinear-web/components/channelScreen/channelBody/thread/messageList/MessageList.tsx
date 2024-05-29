@@ -17,6 +17,13 @@ import {
 } from "@/hooks/messaging/threadMessage/useThreadEarliestMessageAfterInitialMessage";
 import { useThreadMessageInfo } from "@/hooks/messaging/threadMessage/useThreadMessageInfo";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
+import { useLiveQuery } from "dexie-react-hooks";
+import {
+  getThreadFirstReplyMessage,
+  getThreadInitialMessage,
+  getThreadLastMessage,
+  getThreadMessages
+} from "../../../../../repository/MessageRepository";
 
 interface MessageListProps {
   channelId: string;
@@ -38,19 +45,22 @@ const MessageList: React.FC<MessageListProps> = ({
   const { t } = useTranslation();
   const pageVisibility = usePageVisibility();
 
-  const initialMessage = useThreadInitialMessageFromMessageInfo({ workspaceId, threadId });
-  const lastMessage = useThreadLastMessageFromMessageMap({ workspaceId, threadId });
+  // const initialMessage = useThreadInitialMessageFromMessageInfo({ workspaceId, threadId });
+  // const lastMessage = useThreadLastMessageFromMessageMap({ workspaceId, threadId });
+  const initialMessage = useLiveQuery(() => getThreadInitialMessage(threadId));
+  const lastMessage = useLiveQuery(() => getThreadLastMessage(threadId));
 
   const threadMessageInfo = useThreadMessageInfo({ workspaceId, threadId });
   const hasMoreThanOneMessage = initialMessage?.messageId != lastMessage?.messageId;
   const remainingMessageCount = threadMessageInfo?.messageCount - (hasMoreThanOneMessage ? 2 : 1);
   const [retrieveThreadMessages, { isFetching: isRetrieveThreadMessagesFetching }] = useLazyRetrieveThreadMessagesQuery();
 
-  const hasMore = useThreadHasMoreMessages({ workspaceId, threadId });
-  const threadMessagesSorted = useThreadMessagesSorted({ workspaceId, threadId });
-  const threadEarliestMessageAfterInitialMessage = useThreadEarliestMessageAfterInitialMessage({
-    workspaceId, threadId
-  });
+  // const threadMessagesSorted = useThreadMessagesSorted({ workspaceId, threadId });
+  // const hasMore = useThreadHasMoreMessages({ workspaceId, threadId });
+  const threadMessagesSorted = useLiveQuery(() => getThreadMessages(threadId)) || [];
+  const hasMore = threadMessageInfo.messageCount > threadMessagesSorted.length;
+  // const threadEarliestMessageAfterInitialMessage = useThreadEarliestMessageAfterInitialMessage({workspaceId, threadId});
+  const threadEarliestMessageAfterInitialMessage = useLiveQuery(() => getThreadFirstReplyMessage(threadId));
 
   useEffect(() => {
     if (threadId && workspaceId && pageVisibility) {

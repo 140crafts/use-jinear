@@ -47,12 +47,14 @@ const ChannelListModal: React.FC<ChannelListModalProps> = ({}) => {
     >
       {isChannelListFetching && <CircularLoading />}
       <div className={styles.listContainer}>
-      {channelListResponse?.data?.map(channelInfo =>
-        <ChannelButton
-          key={`channel-list-modal-${channelInfo.channel.channelId}`}
-          channelMembershipInfoDto={channelInfo}
-        />
-      )}
+        {channelListResponse?.data
+          ?.filter(channelInfo => !channelInfo.isJoined)
+          ?.map(channelInfo =>
+            <ChannelButton
+              key={`channel-list-modal-${channelInfo.channel.channelId}`}
+              channelMembershipInfoDto={channelInfo}
+            />
+          )}
       </div>
     </Modal>
   );
