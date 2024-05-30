@@ -12,7 +12,7 @@ import {
   upsertThreadMessage
 } from "@/slice/messagingSlice";
 import { RichMessageDto } from "@/be/jinear-core";
-import { insertMessage } from "../../repository/MessageRepository";
+import { insertMessage } from "../../repository/IndexedDbRepository";
 
 interface WebsocketHandlerProps {
 

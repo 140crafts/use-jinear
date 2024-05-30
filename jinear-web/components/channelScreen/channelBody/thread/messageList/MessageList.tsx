@@ -6,24 +6,15 @@ import Button, { ButtonHeight } from "@/components/button";
 import { useLazyRetrieveThreadMessagesQuery } from "@/api/messageListingApi";
 import Logger from "@/utils/logger";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
-import { useThreadMessagesSorted } from "@/hooks/messaging/threadMessage/useThreadMessagesSorted";
-import { useThreadHasMoreMessages } from "@/hooks/messaging/threadMessage/useThreadHasMoreMessages";
-import {
-  useThreadInitialMessageFromMessageInfo
-} from "@/hooks/messaging/threadMessage/useThreadInitialMessageFromMessageInfo";
-import { useThreadLastMessageFromMessageMap } from "@/hooks/messaging/threadMessage/useThreadLastMessageFromMessageMap";
-import {
-  useThreadEarliestMessageAfterInitialMessage
-} from "@/hooks/messaging/threadMessage/useThreadEarliestMessageAfterInitialMessage";
-import { useThreadMessageInfo } from "@/hooks/messaging/threadMessage/useThreadMessageInfo";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { useLiveQuery } from "dexie-react-hooks";
 import {
   getThreadFirstReplyMessage,
   getThreadInitialMessage,
   getThreadLastMessage,
-  getThreadMessages
-} from "../../../../../repository/MessageRepository";
+  getThreadMessageInfo,
+  getThreadMessages, IMessageDto
+} from "../../../../../repository/IndexedDbRepository";
 
 interface MessageListProps {
   channelId: string;
@@ -31,6 +22,7 @@ interface MessageListProps {
   workspaceId: string;
   workspaceName: string;
   viewingAsDetail: boolean;
+  messages?: IMessageDto[];
 }
 
 const logger = Logger("MessageList");
@@ -40,27 +32,22 @@ const MessageList: React.FC<MessageListProps> = ({
                                                    threadId,
                                                    workspaceId,
                                                    workspaceName,
-                                                   viewingAsDetail
+                                                   viewingAsDetail,
+                                                   messages
                                                  }) => {
   const { t } = useTranslation();
   const pageVisibility = usePageVisibility();
 
-  // const initialMessage = useThreadInitialMessageFromMessageInfo({ workspaceId, threadId });
-  // const lastMessage = useThreadLastMessageFromMessageMap({ workspaceId, threadId });
   const initialMessage = useLiveQuery(() => getThreadInitialMessage(threadId));
   const lastMessage = useLiveQuery(() => getThreadLastMessage(threadId));
-
-  const threadMessageInfo = useThreadMessageInfo({ workspaceId, threadId });
-  const hasMoreThanOneMessage = initialMessage?.messageId != lastMessage?.messageId;
-  const remainingMessageCount = threadMessageInfo?.messageCount - (hasMoreThanOneMessage ? 2 : 1);
-  const [retrieveThreadMessages, { isFetching: isRetrieveThreadMessagesFetching }] = useLazyRetrieveThreadMessagesQuery();
-
-  // const threadMessagesSorted = useThreadMessagesSorted({ workspaceId, threadId });
-  // const hasMore = useThreadHasMoreMessages({ workspaceId, threadId });
+  const threadMessageInfo = useLiveQuery(() => getThreadMessageInfo(threadId));
   const threadMessagesSorted = useLiveQuery(() => getThreadMessages(threadId)) || [];
-  const hasMore = threadMessageInfo.messageCount > threadMessagesSorted.length;
-  // const threadEarliestMessageAfterInitialMessage = useThreadEarliestMessageAfterInitialMessage({workspaceId, threadId});
   const threadEarliestMessageAfterInitialMessage = useLiveQuery(() => getThreadFirstReplyMessage(threadId));
+
+  const hasMoreThanOneMessage = initialMessage?.messageId != lastMessage?.messageId;
+  const remainingMessageCount = threadMessageInfo ? (threadMessageInfo.messageCount - (hasMoreThanOneMessage ? 2 : 1)) : 0;
+  const hasMore = threadMessageInfo ? (threadMessageInfo.messageCount > threadMessagesSorted.length) : false;
+  const [retrieveThreadMessages, { isFetching: isRetrieveThreadMessagesFetching }] = useLazyRetrieveThreadMessagesQuery();
 
   useEffect(() => {
     if (threadId && workspaceId && pageVisibility) {
@@ -102,8 +89,7 @@ const MessageList: React.FC<MessageListProps> = ({
       }
       {isRetrieveThreadMessagesFetching && viewingAsDetail && <CircularLoading />}
       <div className={styles.messageListContainer}>
-        {threadMessagesSorted
-          .filter(message => message.messageId != initialMessage?.messageId)
+        {messages?.filter(message => message.messageId != initialMessage?.messageId)
           .slice(0, viewingAsDetail ? threadMessagesSorted.length : 2)
           .map(message =>
             <ThreadMessage key={message.messageId} threadMessage={message} />

@@ -6,6 +6,7 @@ import Line from "@/components/line/Line";
 import Logger from "@/utils/logger";
 import MessageList from "@/components/channelScreen/channelBody/thread/messageList/MessageList";
 import { useThreadInitialMessage } from "@/hooks/messaging/threadMessage/useThreadInitialMessage";
+import { IThreadWithMessages } from "../../../../repository/IndexedDbRepository";
 
 interface ThreadProps {
   canReplyThreads: boolean;
@@ -14,6 +15,7 @@ interface ThreadProps {
   workspaceName: string;
   workspaceId: string;
   viewingAsDetail: boolean;
+  threadWithMessages:IThreadWithMessages
 }
 
 const logger = Logger("Thread");
@@ -24,7 +26,8 @@ const Thread: React.FC<ThreadProps> = ({
                                          channelId,
                                          workspaceId,
                                          workspaceName,
-                                         viewingAsDetail = false
+                                         viewingAsDetail = false,
+                                         threadWithMessages
                                        }) => {
 
   return (
@@ -34,6 +37,7 @@ const Thread: React.FC<ThreadProps> = ({
         threadId={threadId}
         channelId={channelId}
         viewingAsDetail={viewingAsDetail}
+        message={threadWithMessages.messages?.[0]}
       />
       <MessageList
         channelId={channelId}
@@ -41,6 +45,7 @@ const Thread: React.FC<ThreadProps> = ({
         workspaceId={workspaceId}
         workspaceName={workspaceName}
         viewingAsDetail={viewingAsDetail}
+        messages={threadWithMessages.messages}
       />
       {canReplyThreads && <>
         <Line />

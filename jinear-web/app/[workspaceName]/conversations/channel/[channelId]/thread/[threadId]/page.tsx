@@ -9,6 +9,8 @@ import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 import { useRetrieveThreadQuery } from "@/api/threadApi";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import Thread from "@/components/channelScreen/channelBody/thread/Thread";
+import { getThreadWithMessages } from "../../../../../../../repository/IndexedDbRepository";
+import { useLiveQuery } from "dexie-react-hooks";
 
 interface ThreadDetailScreenProps {
 
@@ -21,13 +23,14 @@ const ThreadDetailScreen: React.FC<ThreadDetailScreenProps> = ({}) => {
   const threadId: string = params?.threadId as string;
   const workspace = useWorkspaceFromName(workspaceName);
 
-  const { data: threadDetailResponse, isFetching } = useRetrieveThreadQuery({
+  const { isFetching } = useRetrieveThreadQuery({
     workspaceId: workspace?.workspaceId || "",
     threadId
   }, { skip: threadId == null || workspace == null });
   const channelMembership = useChannelMembership({ workspaceId: workspace?.workspaceId, channelId });
   const isAdmin = ["ADMIN", "OWNER"].includes(channelMembership?.roleType ?? "");
   const canReplyThreads = "READ_ONLY" != channelMembership?.channel.participationType || isAdmin;
+  const threadWithMessages = useLiveQuery(() => getThreadWithMessages(threadId));
 
   return (
     <PureClientOnly>
@@ -40,14 +43,15 @@ const ThreadDetailScreen: React.FC<ThreadDetailScreenProps> = ({}) => {
             />
             {isFetching && <CircularLoading />}
             <div className={"spacer-h-2"} />
-            {threadDetailResponse &&
+            {threadWithMessages &&
               <Thread
-                threadId={threadDetailResponse.data.threadId}
-                channelId={threadDetailResponse.data.channelId}
+                threadId={threadWithMessages.threadId}
+                channelId={threadWithMessages.channelId}
                 canReplyThreads={canReplyThreads}
                 workspaceName={workspaceName}
                 workspaceId={workspace.workspaceId}
                 viewingAsDetail={true}
+                threadWithMessages={threadWithMessages}
               />
             }
           </>

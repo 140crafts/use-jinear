@@ -14,7 +14,7 @@ import Logger from "@/utils/logger";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { decideAndScrollToBottom } from "@/utils/htmlUtils";
 import { useLiveQuery } from "dexie-react-hooks";
-import { getConversationMessages } from "../../../repository/MessageRepository";
+import { getConversationMessages } from "../../../repository/IndexedDbRepository";
 
 interface ConversationBodyProps {
   conversationId: string,

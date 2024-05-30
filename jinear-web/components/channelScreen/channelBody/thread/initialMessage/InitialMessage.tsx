@@ -8,18 +8,18 @@ import useTranslation from "@/locals/useTranslation";
 import Link from "next/link";
 import ClientOnly from "@/components/clientOnly/ClientOnly";
 import { useLiveQuery } from "dexie-react-hooks";
-import { getThreadInitialMessage, getThreadMessages } from "../../../../../repository/MessageRepository";
+import { getThreadInitialMessage, getThreadMessages, IMessageDto } from "../../../../../repository/IndexedDbRepository";
 
 interface MessageProps {
   channelId: string;
   threadId: string;
   workspaceName: string;
   viewingAsDetail: boolean;
+  message?: IMessageDto;
 }
 
-const InitialMessage: React.FC<MessageProps> = ({ channelId, threadId, workspaceName, viewingAsDetail }) => {
+const InitialMessage: React.FC<MessageProps> = ({ channelId, threadId, workspaceName, viewingAsDetail, message }) => {
   const { t } = useTranslation();
-  const message = useLiveQuery(() => getThreadInitialMessage(threadId));
   const Wrapper = viewingAsDetail ? ClientOnly : Link;
   return message == null ? null : (
     <Wrapper
