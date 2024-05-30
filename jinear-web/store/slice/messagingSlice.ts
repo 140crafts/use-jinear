@@ -16,7 +16,7 @@ import { conversationApi } from "@/api/conversationApi";
 import Logger from "@/utils/logger";
 import { threadApi } from "@/api/threadApi";
 import { channelMemberApi } from "@/api/channelMemberApi";
-import { insertAllMessages, insertMessage } from "../../repository/MessageRepository";
+import { insertAllMessages, insertAllThreads, insertMessage, insertThread } from "../../repository/IndexedDbRepository";
 
 const initialState = {} as {
   [workspaceId: string]: {
@@ -285,6 +285,7 @@ const slice = createSlice({
       .addMatcher(threadApi.endpoints.listThreads.matchFulfilled, (state, action) => {
         const workspaceId = action.meta.arg.originalArgs.workspaceId;
         const threadsPage = action.payload.data;
+        insertAllThreads(threadsPage?.content);
 
         threadsPage?.content?.map(thread => {
           const { initialMessage, latestMessage } = thread.threadMessageInfo;
@@ -329,6 +330,7 @@ const slice = createSlice({
           }, type: "messaging/upsertThreadMessageInfos"
         });
         insertAllMessages([initialMessage, latestMessage]);
+        insertThread(thread);
       })
 
       .addMatcher(messageListingApi.endpoints.retrieveConversationMessages.matchFulfilled, (state, action) => {

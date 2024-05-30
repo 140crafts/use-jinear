@@ -30,8 +30,8 @@
     border-width: thin;
     border-color: var(--c-primary-shade-1);
     border-radius: var(--border-radius);
-    border-top-left-radius: 0;
-    border-top-right-radius: 0;
+    /*border-top-left-radius: 0;*/
+    /*border-top-right-radius: 0;*/
 }
 
 .inputActionBar {

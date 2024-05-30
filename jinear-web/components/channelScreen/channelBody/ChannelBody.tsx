@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./ChannelBody.module.css";
 import { useLazyListThreadsQuery } from "@/api/threadApi";
-import { ThreadDto } from "@/be/jinear-core";
 import Logger from "@/utils/logger";
 import Thread from "@/components/channelScreen/channelBody/thread/Thread";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
@@ -10,16 +9,15 @@ import useTranslation from "@/locals/useTranslation";
 import { checkAndUpdateChannelLastCheck } from "@/slice/messagingSlice";
 import { useAppDispatch } from "@/store/store";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
+import { useLiveQuery } from "dexie-react-hooks";
+import { getThreadsWithMessages } from "../../../repository/IndexedDbRepository";
+import { decideAndScrollToBottom } from "@/utils/htmlUtils";
 
 interface ChannelBodyProps {
   workspaceName: string;
   channelId: string;
   workspaceId: string;
   canReplyThreads: boolean;
-}
-
-interface ThreadMap {
-  [threadId: string]: ThreadDto;
 }
 
 const logger = Logger("ChannelBody");
@@ -30,14 +28,9 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
   const pageVisibility = usePageVisibility();
   const [listThreads, { data: listThreadsResponse, isFetching: isListThreadsFetching }] = useLazyListThreadsQuery();
   const [hasMore, setHasMore] = useState<boolean>(true);
+
   const initialScroll = useRef<boolean>(false);
-
-  const [threadMap, setThreadMap] = useState<ThreadMap>({});
-  const sortedMapValues = useMemo(() => {
-    return Object.values(threadMap).sort((a, b) => new Date(b.lastActivityTime).getTime() - new Date(a.lastActivityTime).getTime());
-  }, [JSON.stringify(threadMap)]);
-
-  logger.log({ threadMap, sortedMapValues, mapKeyLength: Object.keys(threadMap).length });
+  const threads = useLiveQuery(() => getThreadsWithMessages(channelId)) || [];
 
   useEffect(() => {
     if (workspaceId && channelId && pageVisibility) {
@@ -48,38 +41,22 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
   useEffect(() => {
     if (workspaceId && channelId && pageVisibility) {
       listThreads({ workspaceId, channelId });
-      dispatch(checkAndUpdateChannelLastCheck({ workspaceId, channelId, lastCheckDate: new Date() }));
     }
   }, [dispatch, listThreads, workspaceId, channelId, pageVisibility]);
 
   useEffect(() => {
-    if (listThreadsResponse?.data) {
-      setThreadMap(curr => {
-        const currentClone = { ...curr };
-        const retrievedContent = listThreadsResponse.data.content || [];
-        retrievedContent.forEach(val => currentClone[val.threadId] = val);
-        logger.log({ curr, currentClone });
-        return currentClone;
+    if (threads && threads.length > 1 && typeof window === "object" && !initialScroll.current) {
+      decideAndScrollToBottom({
+        initialShouldScroll: !initialScroll.current,
+        callBack: () => {
+          initialScroll.current = true;
+        }
       });
-      setHasMore(listThreadsResponse.data.hasNext);
     }
-  }, [listThreadsResponse]);
-
-  useEffect(() => {
-    if (listThreadsResponse && typeof window === "object" && !initialScroll.current) {
-      setTimeout(() => {
-        window.scrollTo({
-          top: document.documentElement.scrollHeight - window.innerHeight,
-          left: 0,
-          behavior: "auto"
-        });
-        initialScroll.current = true;
-      }, 500);
-    }
-  }, [listThreadsResponse]);
+  }, [threads]);
 
   const retrieveMore = () => {
-    const oldestThread = sortedMapValues[sortedMapValues.length - 1];
+    const oldestThread = threads[threads.length - 1];
     if (oldestThread) {
       listThreads({ workspaceId, channelId, before: new Date(oldestThread.lastActivityTime) });
     }
@@ -99,11 +76,12 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
       }
       {isListThreadsFetching && !hasMore && <CircularLoading />}
       <div className={styles.contentContainer}>
-        {sortedMapValues?.length == 0 && !isListThreadsFetching &&
+        {threads?.length == 0 && !isListThreadsFetching &&
           <div className={styles.emptyStateContainer}>{t("threadsEmpty")}</div>}
-        {sortedMapValues?.map?.(threadDto =>
+        {threads?.map?.(threadDto =>
           <Thread
             key={`channel-overview-${threadDto.threadId}`}
+            threadWithMessages={threadDto}
             threadId={threadDto.threadId}
             channelId={threadDto.channelId}
             canReplyThreads={canReplyThreads}

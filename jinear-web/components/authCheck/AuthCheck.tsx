@@ -6,7 +6,7 @@ import Logger from "@/utils/logger";
 import { askAppTrackingPermission } from "@/utils/webviewUtils";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { deleteAllEntries } from "../../repository/MessageRepository";
+import { deleteAllEntries } from "../../repository/IndexedDbRepository";
 
 interface AuthCheckProps {
 }
@@ -53,7 +53,7 @@ const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
       askAppTrackingPermission();
     }
     if (authState === "NOT_LOGGED_IN") {
-      resetAllStates(dispatch);
+      // resetAllStates(dispatch);
       deleteAllEntries();
     }
   }, [router, dispatch, authState, pathname]);

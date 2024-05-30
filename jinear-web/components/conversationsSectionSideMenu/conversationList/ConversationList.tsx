@@ -13,7 +13,7 @@ import { selectCurrentAccountId } from "@/slice/accountSlice";
 import NewConversationButton
   from "@/components/conversationsSectionSideMenu/conversationList/newConversationButton/NewConversationButton";
 import { useLiveQuery } from "dexie-react-hooks";
-import { getSortedConversationIds } from "../../../repository/MessageRepository";
+import { getSortedConversationIds } from "../../../repository/IndexedDbRepository";
 
 interface ConversationListProps {
   workspace: WorkspaceDto;
