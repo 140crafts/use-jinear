@@ -1,16 +1,11 @@
 "use client";
 import React, { useEffect } from "react";
 import { useRetrieveMessagingTokenQuery } from "@/api/messageTokenApi";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
+import { useTypedSelector } from "@/store/store";
 import { selectAuthState } from "@/slice/accountSlice";
 import { SOCKET_ROOT } from "@/utils/constants";
 import { io } from "socket.io-client";
 import Logger from "@/utils/logger";
-import {
-  checkAndUpdateConversationLastCheck,
-  upsertConversationMessage,
-  upsertThreadMessage
-} from "@/slice/messagingSlice";
 import { RichMessageDto } from "@/be/jinear-core";
 import { insertMessage } from "../../repository/IndexedDbRepository";
 
@@ -22,7 +17,6 @@ const logger = Logger("WebsocketHandler");
 
 const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
   const authState = useTypedSelector(selectAuthState);
-  const dispatch = useAppDispatch();
   const { data: retrieveMessagingTokenResponse } = useRetrieveMessagingTokenQuery({}, { skip: authState != "LOGGED_IN" });
 
   useEffect(() => {
@@ -46,12 +40,7 @@ const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
           const data: RichMessageDto = JSON.parse(message);
           logger.log({ SocketIoService: "thread-message", data });
           if (data) {
-            dispatch(upsertThreadMessage({
-              workspaceId: data.thread.channel.workspaceId,
-              messageDto: { ...data },
-              channelId: data.thread.channelId
-            }));
-            insertMessage({ ...data });
+            insertMessage(data.thread.channel.workspaceId, { ...data });
             logger.log({ SocketIoService: "thread-message", data });
           }
         }
@@ -61,12 +50,8 @@ const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
         if (message) {
           const data: RichMessageDto = JSON.parse(message);
           logger.log({ SocketIoService: "conversation-message", data });
-          if (data && data.conversationId) {
-            dispatch(upsertConversationMessage({
-              workspaceId: data.conversation.workspaceId,
-              messageDto: data
-            }));
-            insertMessage({ ...data });
+          if (data?.conversationId) {
+            insertMessage(data.conversation.workspaceId, { ...data });
             logger.log({ SocketIoService: "conversation-message", data });
           }
         }
@@ -78,7 +63,7 @@ const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
       });
 
     }
-  }, [dispatch, retrieveMessagingTokenResponse]);
+  }, [retrieveMessagingTokenResponse]);
 
   return null;
 };

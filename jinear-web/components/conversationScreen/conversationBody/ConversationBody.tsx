@@ -6,15 +6,13 @@ import CircularLoading from "@/components/circularLoading/CircularLoading";
 import useTranslation from "@/locals/useTranslation";
 import Message from "@/components/conversationScreen/conversationBody/message/Message";
 import { differenceInMinutes } from "date-fns";
-import { useAppDispatch } from "@/store/store";
-import { checkAndUpdateConversationLastCheck } from "@/slice/messagingSlice";
-import { useConversationMessagesSorted } from "@/hooks/messaging/conversationMessage/useConversationMessagesSorted";
+
 import { useConversationHasMoreMessages } from "@/hooks/messaging/conversation/useConversationHasMoreMessages";
 import Logger from "@/utils/logger";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { decideAndScrollToBottom } from "@/utils/htmlUtils";
 import { useLiveQuery } from "dexie-react-hooks";
-import { getConversationMessages } from "../../../repository/IndexedDbRepository";
+import { checkAndUpdateConversationLastCheck, getConversationMessages } from "../../../repository/IndexedDbRepository";
 
 interface ConversationBodyProps {
   conversationId: string,
@@ -26,27 +24,21 @@ const logger = Logger("ConversationBody");
 
 const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, workspaceId }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const pageVisibility = usePageVisibility();
   const [retrieveConversationMessages, {
     isLoading: isRetrieveConversationLoading,
     isFetching: isRetrieveConversationFetching
   }] = useLazyRetrieveConversationMessagesQuery();
 
+
   const hasMore = useConversationHasMoreMessages({ conversationId, workspaceId });
-  // const messages = useConversationMessagesSorted({ workspaceId, conversationId });
   const messages = useLiveQuery(() => getConversationMessages(conversationId));
   const initialScroll = useRef<boolean>(false);
-
-  logger.log({ sortedMessages: messages });
-
-  useEffect(() => {
-    dispatch(checkAndUpdateConversationLastCheck({ workspaceId, conversationId, lastCheckDate: new Date() }));
-  }, [dispatch, workspaceId, conversationId, messages]);
 
   useEffect(() => {
     if (pageVisibility) {
       retrieveConversationMessages({ workspaceId, conversationId });
+      checkAndUpdateConversationLastCheck({ workspaceId, conversationId, date: new Date() });
     }
   }, [retrieveConversationMessages, workspaceId, conversationId, pageVisibility]);
 

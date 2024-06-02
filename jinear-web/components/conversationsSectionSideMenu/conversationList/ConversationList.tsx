@@ -56,11 +56,10 @@ const ConversationList: React.FC<ConversationListProps> = ({ workspace }) => {
           {sortedParticipatedConversations
             ?.map(conversationParticipant => conversationParticipant.conversation)
             ?.filter(conversation => conversation != null)
-            ?.map(conversation => <ConversationButton
-              key={conversation.conversationId}
-              conversation={conversation}
-              currentAccountId={currentAccountId}
-              workspaceUsername={workspace.username} />
+            ?.map(conversation => <ConversationButton key={conversation.conversationId}
+                                                      conversation={conversation}
+                                                      currentAccountId={currentAccountId}
+                                                      workspaceUsername={workspace.username} />
             )
           }
           <NewConversationButton workspaceId={workspace.workspaceId} workspaceName={workspace.username} />
