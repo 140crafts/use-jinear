@@ -2,6 +2,7 @@ package co.jinear.core.service.messaging.conversation;
 
 import co.jinear.core.model.dto.messaging.conversation.ConversationDto;
 import co.jinear.core.model.entity.messaging.Conversation;
+import co.jinear.core.model.enumtype.messaging.MessageType;
 import co.jinear.core.model.vo.messaging.conversation.InitializeConversationVo;
 import co.jinear.core.model.vo.messaging.message.InitializeMessageVo;
 import co.jinear.core.repository.messaging.ConversationRepository;
@@ -78,7 +79,13 @@ public class ConversationOperationService {
         InitializeMessageVo initializeMessageVo = new InitializeMessageVo();
         initializeMessageVo.setConversationId(conversationId);
         initializeMessageVo.setAccountId(initializeConversationVo.getInitializedBy());
-        initializeMessageVo.setBody(initializeConversationVo.getInitialMessageBody());
+        initializeMessageVo.setMessageType(MessageType.CONVERSATION_INIT);
         messageOperationService.initialize(initializeMessageVo);
+
+        InitializeMessageVo firstMessageVo = new InitializeMessageVo();
+        firstMessageVo.setConversationId(conversationId);
+        firstMessageVo.setAccountId(initializeConversationVo.getInitializedBy());
+        firstMessageVo.setBody(initializeConversationVo.getInitialMessageBody());
+        messageOperationService.initialize(firstMessageVo);
     }
 }

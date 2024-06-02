@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-05-18 10:45:14.
+// Generated using typescript-generator version 3.0.1157 on 2024-06-02 11:19:18.
 
 export interface BaseDto {
     createdDate: Date;
@@ -157,10 +157,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
     gthreadId: string;
     ghistoryId: string;
     ginternalDate: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -366,10 +366,11 @@ export interface MessageDto extends BaseDto {
     messageId: string;
     accountId: string;
     richTextId: string;
+    messageType: MessageType;
     threadId?: string | null;
     conversationId?: string | null;
     account: PlainAccountProfileDto;
-    richText: RichTextDto;
+    richText?: RichTextDto | null;
     messageData?: MessageDataDto[] | null;
     messageReactions?: MessageReactionDto[] | null;
 }
@@ -390,6 +391,7 @@ export interface RichMessageDto extends MessageDto {
 
 export interface PlainThreadDto extends BaseDto {
     threadId: string;
+    threadType: ThreadType;
     ownerId: string;
     channelId: string;
     lastActivityTime: Date;
@@ -1689,6 +1691,10 @@ export type ChannelSettingType = "SYNC_MEMBERS_WITH_TEAM";
 export type ChannelVisibilityType = "EVERYONE" | "MEMBERS_ONLY" | "PUBLIC_WITH_GUESTS";
 
 export type MessageReactionType = "UNICODE_EMOJI";
+
+export type MessageType = "USER_MESSAGE" | "CONVERSATION_INIT";
+
+export type ThreadType = "CLASSIC" | "CHANNEL_INITIAL" | "INITIALIZED_BY_BOT_ACC";
 
 export type NotificationEventState = "INITIALIZED" | "SENT";
 

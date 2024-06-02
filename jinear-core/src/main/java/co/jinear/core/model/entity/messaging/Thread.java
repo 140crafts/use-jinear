@@ -1,7 +1,9 @@
 package co.jinear.core.model.entity.messaging;
 
+import co.jinear.core.converter.messaging.thread.ThreadTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
+import co.jinear.core.model.enumtype.messaging.ThreadType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,6 +26,10 @@ public class Thread extends BaseEntity {
             strategy = "co.jinear.core.config.idgenerator.ULIDIdGenerator")
     @Column(name = "thread_id")
     private String threadId;
+
+    @Convert(converter = ThreadTypeConverter.class)
+    @Column(name = "thread_type")
+    private ThreadType threadType;
 
     @Column(name = "owner_id")
     private String ownerId;

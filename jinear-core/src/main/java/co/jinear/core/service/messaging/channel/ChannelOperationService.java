@@ -7,6 +7,8 @@ import co.jinear.core.model.enumtype.messaging.ChannelParticipationType;
 import co.jinear.core.model.enumtype.messaging.ChannelVisibilityType;
 import co.jinear.core.model.vo.messaging.channel.InitializeChannelVo;
 import co.jinear.core.repository.messaging.ChannelRepository;
+import co.jinear.core.service.messaging.thread.ThreadOperationService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,12 +26,15 @@ public class ChannelOperationService {
     private final ChannelSettingsService channelSettingsService;
     private final ChannelRetrieveService channelRetrieveService;
     private final ChannelMemberOperationService channelMemberOperationService;
+    private final ThreadOperationService threadOperationService;
 
+    @Transactional
     public void initialize(InitializeChannelVo initializeChannelVo) {
         log.info("Initialize channel has started. initializeChannelVo: {}", initializeChannelVo);
         Channel channel = initializeChannel(initializeChannelVo);
         initializeInitialSettings(initializeChannelVo, channel);
         addOwner(initializeChannelVo, channel);
+        initializeFirstThread(initializeChannelVo, channel);
     }
 
     public void updateParticipation(String channelId, ChannelParticipationType participationType) {
@@ -67,5 +72,9 @@ public class ChannelOperationService {
                 .map(InitializeChannelVo::getInitialSettings)
                 .map(Collection::stream)
                 .ifPresent(stream -> stream.forEach(initializeChannelSettingsVo -> channelSettingsService.initialize(channel.getChannelId(), initializeChannelSettingsVo)));
+    }
+
+    private void initializeFirstThread(InitializeChannelVo initializeChannelVo, Channel channel) {
+        threadOperationService.initializeChannelFirstThread(initializeChannelVo.getInitializedBy(), channel.getChannelId());
     }
 }

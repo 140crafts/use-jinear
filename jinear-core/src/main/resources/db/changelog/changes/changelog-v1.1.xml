@@ -1947,7 +1947,7 @@
                     where m.conversation_id = c.conversation_id
                     order by m.idate asc
                     limit 1) as initial_message_id
-                        from conversation c;
+            from conversation c;
         </createView>
     </changeSet>
 
@@ -2010,4 +2010,27 @@
         </createView>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-461-remove-not-null-on-message-rich_text_id">
+        <dropNotNullConstraint
+                tableName="message"
+                columnName="rich_text_id"
+                columnDataType="char(26)"
+        />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-message-message_type">
+        <addColumn tableName="message">
+            <column name="message_type" type="int" afterColumn="account_id" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-thread-thread_type">
+        <addColumn tableName="thread">
+            <column name="thread_type" type="int" afterColumn="thread_id" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
