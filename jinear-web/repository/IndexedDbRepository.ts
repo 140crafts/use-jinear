@@ -39,8 +39,8 @@ export class IndexedDbRepository extends Dexie {
   lastCheckInfo!: Table<ILastCheckInfo>;
 
   constructor() {
-    super("messages-db");
     const version = 5;
+    super(`messages-db-${version}`);
     this.version(version).stores({
       // Primary key and indexed props
       message: "messageId, accountId, threadId, conversationId",
