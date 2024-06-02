@@ -1,12 +1,12 @@
 "use client";
 import { useMeQuery } from "@/store/api/accountApi";
 import { selectAuthState } from "@/store/slice/accountSlice";
-import { resetAllStates, useAppDispatch, useTypedSelector } from "@/store/store";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { askAppTrackingPermission } from "@/utils/webviewUtils";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
-import { deleteAllEntries } from "../../repository/IndexedDbRepository";
+import { deleteAllIndexedDbs } from "../../repository/IndexedDbRepository";
 
 interface AuthCheckProps {
 }
@@ -54,7 +54,7 @@ const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
     }
     if (authState === "NOT_LOGGED_IN") {
       // resetAllStates(dispatch);
-      deleteAllEntries();
+      deleteAllIndexedDbs();
     }
   }, [router, dispatch, authState, pathname]);
 
