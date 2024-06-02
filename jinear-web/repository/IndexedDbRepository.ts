@@ -32,6 +32,9 @@ export interface ILastCheckInfo {
   channelId?: string;
 }
 
+const VERSION = 5;
+const NAME = "messages-db-";
+
 export class IndexedDbRepository extends Dexie {
   message!: Table<IMessageDto>;
   thread!: Table<IThreadDto>;
@@ -39,18 +42,29 @@ export class IndexedDbRepository extends Dexie {
   lastCheckInfo!: Table<ILastCheckInfo>;
 
   constructor() {
-    const version = 5;
-    super(`messages-db-${version}`);
-    this.version(version).stores({
+    super(`${NAME}${VERSION}`);
+    this.version(VERSION).stores({
       // Primary key and indexed props
       message: "messageId, accountId, threadId, conversationId",
       thread: "threadId, channelId",
       threadMessageInfo: "threadId",
       lastCheckInfo: "++_id, conversationId, channelId"
     });
-    logger.log(`Messages Db initialized with version ${version}`);
+    logger.log(`Messages Db initialized with version ${VERSION}`);
   }
 }
+
+export const deleteAllIndexedDbs = () => {
+  if (typeof window === "object") {
+    for (let i = 0; i <= VERSION; i++) {
+      try {
+        window.indexedDB.deleteDatabase(`${NAME}${VERSION}`);
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
+};
 
 let __db: IndexedDbRepository;
 

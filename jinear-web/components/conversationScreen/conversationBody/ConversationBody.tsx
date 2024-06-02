@@ -79,20 +79,22 @@ const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, wor
         {messages && messages?.length == 0 && !isRetrieveConversationLoading &&
           <div className={styles.emptyStateContainer}>{t("conversationEmpty")}</div>}
         <div className={styles.messageListContainer}>
-          {messages?.map?.((messageDto, index) => {
-              const oneBefore = messages?.[index + 1];
-              const differenceInMin = oneBefore ? Math.abs(differenceInMinutes(new Date(oneBefore.createdDate), new Date(messageDto.createdDate))) : 999;
-              const oneBeforeIsFromDifferentSender = messageDto.accountId != oneBefore?.accountId;
-              const oneBeforeSameSenderAndOlderThanThreshold = !oneBeforeIsFromDifferentSender && differenceInMin > RENDER_MESSAGE_PROFILE_PIC_FROM_SAME_ACC_AFTER_MIN;
-              return (
-                <Message
-                  key={messageDto.messageId}
-                  message={messageDto}
-                  renderMessageFrom={oneBeforeIsFromDifferentSender || oneBeforeSameSenderAndOlderThanThreshold}
-                />
-              );
-            }
-          )}
+          {messages
+            ?.filter(message => message.messageType == "USER_MESSAGE")
+            ?.map?.((messageDto, index) => {
+                const oneBefore = messages?.[index + 1];
+                const differenceInMin = oneBefore ? Math.abs(differenceInMinutes(new Date(oneBefore.createdDate), new Date(messageDto.createdDate))) : 999;
+                const oneBeforeIsFromDifferentSender = messageDto.accountId != oneBefore?.accountId;
+                const oneBeforeSameSenderAndOlderThanThreshold = !oneBeforeIsFromDifferentSender && differenceInMin > RENDER_MESSAGE_PROFILE_PIC_FROM_SAME_ACC_AFTER_MIN;
+                return (
+                  <Message
+                    key={messageDto.messageId}
+                    message={messageDto}
+                    renderMessageFrom={oneBeforeIsFromDifferentSender || oneBeforeSameSenderAndOlderThanThreshold}
+                  />
+                );
+              }
+            )}
         </div>
       </div>
     </div>
