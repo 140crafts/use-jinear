@@ -16,7 +16,15 @@ import { conversationApi } from "@/api/conversationApi";
 import Logger from "@/utils/logger";
 import { threadApi } from "@/api/threadApi";
 import { channelMemberApi } from "@/api/channelMemberApi";
-import { insertAllMessages, insertAllThreads, insertMessage, insertThread } from "../../repository/IndexedDbRepository";
+import {
+  checkAndUpdateChannelLastActivity as checkAndUpdateChannelLastActivityRepo,
+  checkAndUpdateChannelLastCheck as checkAndUpdateChannelLastCheckRepo,
+  checkAndUpdateConversationLastCheck as checkAndUpdateConversationLastCheckRepo,
+  insertAllMessages,
+  insertAllThreads,
+  insertMessage,
+  insertThread
+} from "../../repository/IndexedDbRepository";
 
 const initialState = {} as {
   [workspaceId: string]: {
@@ -214,25 +222,20 @@ const slice = createSlice({
         const workspaceId = action.meta.arg.originalArgs.workspaceId;
         const channelId = action.meta.arg.originalArgs.channelId;
         const sentMessage = action.payload.data;
-        slice.caseReducers.upsertThreadMessage(state, {
-          payload: { workspaceId, messageDto: sentMessage, channelId },
-          type: "messaging/upsertThreadMessage"
-        });
-        slice.caseReducers.checkAndUpdateChannelLastActivity(state, {
-          payload: { workspaceId, channelId, lastActivityDate: new Date() },
-          type: "messaging/checkAndUpdateChannelLastActivity"
-        });
-        insertMessage(sentMessage);
+
+        insertMessage(workspaceId, sentMessage);
+        checkAndUpdateChannelLastCheckRepo({workspaceId, channelId, date: new Date() });
       })
 
       .addMatcher(messageOperationApi.endpoints.sendToConversation.matchFulfilled, (state, action) => {
         const workspaceId = action.meta.arg.originalArgs.workspaceId;
         const sentMessage = action.payload.data;
-        slice.caseReducers.upsertConversationMessage(state, {
-          payload: { workspaceId, messageDto: sentMessage },
-          type: "messaging/upsertThreadMessage"
+        insertMessage(workspaceId, sentMessage);
+        checkAndUpdateConversationLastCheckRepo({
+          workspaceId,
+          conversationId: sentMessage.conversationId || "",
+          date: new Date(sentMessage.createdDate)
         });
-        insertMessage(sentMessage);
       })
 
       .addMatcher(messageListingApi.endpoints.retrieveThreadMessages.matchFulfilled, (state, action) => {
@@ -240,76 +243,40 @@ const slice = createSlice({
         const channelId = action.meta.arg.originalArgs.channelId;
         const messagesPage = action.payload.data;
 
-        slice.caseReducers.upsertAllThreadMessages(state, {
-          payload: {
-            workspaceId,
-            messageDtoList: messagesPage.content || []
-          }, type: "messaging/upsertAllThreadMessages"
-        });
-        slice.caseReducers.checkAndUpdateChannelLastCheck(state, {
-          payload: {
-            workspaceId,
-            channelId,
-            lastCheckDate: new Date()
-          }, type: "messaging/checkAndUpdateChannelLastCheck"
-        });
-        insertAllMessages(messagesPage.content || []);
+        insertAllMessages(workspaceId, messagesPage.content || []);
+        checkAndUpdateChannelLastCheckRepo({workspaceId, channelId, date: new Date() });
       })
 
       .addMatcher(channelMemberApi.endpoints.retrieveChannelMemberships.matchFulfilled, (state, action) => {
         const workspaceId = action.meta.arg.originalArgs.workspaceId;
         const channelMemberDtos = action.payload.data;
 
-        channelMemberDtos.map(channelMember => {
+        channelMemberDtos.forEach(channelMember => {
           const channelInfo = channelMember?.channel?.channelInfo;
-          slice.caseReducers.checkAndUpdateChannelLastCheck(state, {
-            payload: {
+          if (channelInfo?.lastChannelActivity) {
+            checkAndUpdateChannelLastActivityRepo({
               workspaceId,
               channelId: channelInfo.channelId,
-              lastCheckDate: channelMember.lastCheck
-            }, type: "messaging/checkAndUpdateChannelLastActivity"
-          });
-
-          if (channelInfo?.lastChannelActivity) {
-            slice.caseReducers.checkAndUpdateChannelLastActivity(state, {
-              payload: {
-                workspaceId,
-                channelId: channelInfo.channelId,
-                lastActivityDate: new Date(channelInfo.lastChannelActivity)
-              }, type: "messaging/checkAndUpdateChannelLastActivity"
+              date: new Date(channelInfo.lastChannelActivity)
             });
           }
+          checkAndUpdateChannelLastCheckRepo({
+            workspaceId,
+            channelId: channelInfo.channelId,
+            date: new Date(channelMember.lastCheck)
+          });
+
         });
       })
 
       .addMatcher(threadApi.endpoints.listThreads.matchFulfilled, (state, action) => {
         const workspaceId = action.meta.arg.originalArgs.workspaceId;
         const threadsPage = action.payload.data;
-        insertAllThreads(threadsPage?.content);
-
-        threadsPage?.content?.map(thread => {
+        insertAllThreads(workspaceId, threadsPage?.content);
+        threadsPage?.content?.forEach(thread => {
           const { initialMessage, latestMessage } = thread.threadMessageInfo;
-          slice.caseReducers.upsertAllThreadMessages(state, {
-            payload: {
-              workspaceId,
-              messageDtoList: [initialMessage, latestMessage]
-            }, type: "messaging/upsertAllThreadMessages"
-          });
-          slice.caseReducers.upsertThreadMessageInfos(state, {
-            payload: {
-              workspaceId,
-              threadMessageInfo: thread.threadMessageInfo
-            }, type: "messaging/upsertThreadMessageInfos"
-          });
-          slice.caseReducers.upsertThread(state, {
-            payload: {
-              workspaceId,
-              thread
-            }, type: "messaging/upsertThread"
-          });
-          insertAllMessages([initialMessage, latestMessage]);
+          insertAllMessages(workspaceId, [initialMessage, latestMessage]);
         });
-
       })
 
       .addMatcher(threadApi.endpoints.retrieveThread.matchFulfilled, (state, action) => {
@@ -317,42 +284,16 @@ const slice = createSlice({
         const thread = action.payload.data;
 
         const { initialMessage, latestMessage } = thread.threadMessageInfo;
-        slice.caseReducers.upsertAllThreadMessages(state, {
-          payload: {
-            workspaceId,
-            messageDtoList: [initialMessage, latestMessage]
-          }, type: "messaging/upsertAllThreadMessages"
-        });
-        slice.caseReducers.upsertThreadMessageInfos(state, {
-          payload: {
-            workspaceId,
-            threadMessageInfo: thread.threadMessageInfo
-          }, type: "messaging/upsertThreadMessageInfos"
-        });
-        insertAllMessages([initialMessage, latestMessage]);
-        insertThread(thread);
+        insertAllMessages(workspaceId, [initialMessage, latestMessage]);
+        insertThread(workspaceId, thread);
       })
 
       .addMatcher(messageListingApi.endpoints.retrieveConversationMessages.matchFulfilled, (state, action) => {
         const workspaceId = action.meta.arg.originalArgs.workspaceId;
         const conversationId = action.meta.arg.originalArgs.conversationId;
         const messagesPage = action.payload.data;
-
-        slice.caseReducers.upsertAllConversationMessages(state, {
-          payload: {
-            workspaceId,
-            messageDtoList: messagesPage.content || []
-          }, type: "messaging/checkAndUpdateConversationLastCheck"
-        });
-        slice.caseReducers.checkAndUpdateConversationLastCheck(state, {
-          payload: {
-            workspaceId,
-            conversationId,
-            lastCheckDate: new Date()
-          }, type: "messaging/checkAndUpdateConversationLastCheck"
-        });
-
-        insertAllMessages(messagesPage.content || []);
+        checkAndUpdateConversationLastCheckRepo({ workspaceId, conversationId, date: new Date() });
+        insertAllMessages(workspaceId, messagesPage.content || []);
       })
 
       .addMatcher(conversationApi.endpoints.retrieveParticipatedConversations.matchFulfilled, (state, action) => {
@@ -364,72 +305,23 @@ const slice = createSlice({
           const initialMessage = participatedConversationMessageInfo.initialMessage;
           const lastMessage = participatedConversationMessageInfo.lastMessage;
 
-          slice.caseReducers.checkAndUpdateConversationLastCheck(state, {
-            payload: {
-              workspaceId,
-              conversationId,
-              lastCheckDate: participation.lastCheck
-            }, type: "messaging/checkAndUpdateConversationLastCheck"
+          checkAndUpdateConversationLastCheckRepo({
+            workspaceId,
+            conversationId: conversationId,
+            date: new Date(participation.lastCheck)
           });
           // initialMessage do not insert initial message. so we can check the earliest message is initial message.
-          slice.caseReducers.upsertAllConversationMessages(state, {
-            payload: {
-              workspaceId,
-              messageDtoList: [lastMessage]
-            }, type: "messaging/upsertAllConversationMessages"
-          });
-          insertMessage(lastMessage);
+          insertMessage(workspaceId, lastMessage);
         });
       });
   }
 });
 
 export const {
-  checkAndUpdateChannelLastCheck,
-  checkAndUpdateConversationLastCheck,
-  upsertThreadMessage,
-  upsertConversationMessage,
-  upsertAllConversationMessages,
   resetMessagingData
 } = slice.actions;
 export default slice.reducer;
 
-export const selectChannelThreads = ({ workspaceId, channelId }: {
-  workspaceId: string,
-  channelId: string
-}) => (state: RootState) => state.messagingSlice[workspaceId]?.channelThreadMap?.[channelId];
-
-export const selectChannelLastCheck = ({ workspaceId, channelId }: {
-  workspaceId: string,
-  channelId: string
-}) => (state: RootState) => state.messagingSlice[workspaceId]?.channelLastCheckMap?.[channelId];
-
-export const selectChannelLastActivity = ({ workspaceId, channelId }: {
-  workspaceId: string,
-  channelId: string
-}) => (state: RootState) => state.messagingSlice[workspaceId]?.channelLastActivityMap?.[channelId];
-
-
-export const selectThreadMessages = ({ workspaceId, threadId }: {
-  workspaceId: string,
-  threadId: string
-}) => (state: RootState) => state.messagingSlice[workspaceId]?.threadMessageMap?.[threadId];
-
-export const selectThreadMessageInfo = ({ workspaceId, threadId }: {
-  workspaceId: string,
-  threadId: string
-}) => (state: RootState) => state.messagingSlice[workspaceId]?.threadMessageInfoMap?.[threadId];
-
-export const selectConversationMessages = ({ workspaceId, conversationId }: {
-  workspaceId: string,
-  conversationId: string
-}) => (state: RootState) => state.messagingSlice[workspaceId]?.conversationMessageMap?.[conversationId];
-
 export const selectConversationMessagesMap = (workspaceId: string) => (state: RootState) => state.messagingSlice[workspaceId]?.conversationMessageMap;
-
-export const selectConversationLastCheck = ({ workspaceId, conversationId }: {
-  workspaceId: string,
-  conversationId: string
-}) => (state: RootState) => state.messagingSlice[workspaceId]?.conversationLastCheckMap[conversationId];
 
 export const selectConversationLastCheckMap = (workspaceId: string) => (state: RootState) => state.messagingSlice[workspaceId]?.conversationLastCheckMap;

@@ -5,9 +5,9 @@ import cn from "classnames";
 import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import { ConversationDto, PlainConversationParticipantDto } from "@/be/jinear-core";
 import ProfilePhoto from "@/components/profilePhoto";
-import {
-  useConversationHasUnreadMessages
-} from "@/hooks/messaging/conversationMessage/useConversationHasUnreadMessages";
+import { useLiveQuery } from "dexie-react-hooks";
+import { getConversationLastCheck, getConversationLastMessage } from "../../../../repository/IndexedDbRepository";
+import { isBefore } from "date-fns";
 
 interface ConversationButtonProps {
   conversation: ConversationDto;
@@ -46,10 +46,9 @@ const ConversationButton: React.FC<ConversationButtonProps> = ({
     return { joinedName, shownParticipants, remaining };
   }, [conversation, currentAccountId]);
 
-  const isUnread = useConversationHasUnreadMessages({
-    conversationId: conversation.conversationId,
-    workspaceId: conversation.workspaceId
-  });
+  const conversationLastMessage = useLiveQuery(() => getConversationLastMessage(conversation.conversationId));
+  const conversationLastCheck = useLiveQuery(() => getConversationLastCheck(conversation.conversationId));
+  const isUnread = conversationLastMessage && conversationLastCheck && currentAccountId != null && conversationLastMessage.accountId != currentAccountId && isBefore(new Date(conversationLastCheck._timestamp), new Date(conversationLastMessage._timestamp));
 
   return (
     <Button className={styles.container} heightVariant={ButtonHeight.short2x}

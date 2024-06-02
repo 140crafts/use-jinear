@@ -5,7 +5,6 @@ import ReplyInput from "@/components/channelScreen/channelBody/thread/replyInput
 import Line from "@/components/line/Line";
 import Logger from "@/utils/logger";
 import MessageList from "@/components/channelScreen/channelBody/thread/messageList/MessageList";
-import { useThreadInitialMessage } from "@/hooks/messaging/threadMessage/useThreadInitialMessage";
 import { IThreadWithMessages } from "../../../../repository/IndexedDbRepository";
 
 interface ThreadProps {

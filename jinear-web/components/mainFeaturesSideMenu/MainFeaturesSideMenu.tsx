@@ -3,11 +3,14 @@ import { AccountsWorkspacePerspectiveDto } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { LuBell, LuCalendarDays, LuCheckSquare, LuClipboardEdit, LuMessagesSquare, LuRss } from "react-icons/lu";
+import { LuCalendarDays, LuCheckSquare, LuClipboardEdit, LuMessagesSquare, LuRss } from "react-icons/lu";
 import Button, { ButtonVariants } from "../button";
 import styles from "./MainFeaturesSideMenu.module.scss";
 import InboxButton from "./inboxButton/InboxButton";
-import { useUnreadConversationCount } from "@/hooks/messaging/conversationMessage/useUnreadConversationCount";
+import { useLiveQuery } from "dexie-react-hooks";
+import { getUnreadConversationCount } from "../../repository/IndexedDbRepository";
+import { useTypedSelector } from "@/store/store";
+import { selectCurrentAccountId } from "@/slice/accountSlice";
 
 interface MainFeaturesSideMenuProps {
   workspace: AccountsWorkspacePerspectiveDto;
@@ -23,8 +26,9 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
   const assignedToMePath = `/${workspace?.username}/assigned-to-me`;
   const lastActivitiesPath = `/${workspace?.username}/last-activities`;
   const conversationsPath = `/${workspace?.username}/conversations`;
+  const currentAccountId = useTypedSelector(selectCurrentAccountId);
 
-  const unreadConversationCount = useUnreadConversationCount({ workspaceId: workspace.workspaceId }) || 0;
+  const unreadConversationCount = useLiveQuery(() => getUnreadConversationCount(workspace.workspaceId, currentAccountId)) ?? 0;
   const unreadConversationLabel = unreadConversationCount == 0 ? "" : unreadConversationCount > 99 ? "99+" : `${unreadConversationCount}`;
 
   return !workspace ? null : (

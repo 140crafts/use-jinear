@@ -5,7 +5,9 @@ import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
 import Button, { ButtonHeight } from "@/components/button";
 import { LuGlobe2, LuHash, LuLock } from "react-icons/lu";
-import { useChannelHasUnreadActivity } from "@/hooks/messaging/channel/useChannelHasUnreadActivity";
+import { useLiveQuery } from "dexie-react-hooks";
+import { getChannelLastActivity, getChannelLastCheck } from "../../../../repository/IndexedDbRepository";
+import { isAfter } from "date-fns";
 
 interface ChannelButtonProps {
   channel: PlainChannelDto;
@@ -20,7 +22,9 @@ const CHANNEL_VISIBILITY_ICON_MAP = {
 
 const ChannelButton: React.FC<ChannelButtonProps> = ({ channel, workspaceUsername }) => {
   const Icon = CHANNEL_VISIBILITY_ICON_MAP[channel.channelVisibilityType];
-  const unread = useChannelHasUnreadActivity({ channelId: channel.channelId, workspaceId: channel.workspaceId });
+  const channelLastCheck = useLiveQuery(() => getChannelLastCheck(channel.channelId));
+  const channelLastActivity = useLiveQuery(() => getChannelLastActivity(channel.channelId));
+  const unread = channelLastCheck && channelLastActivity && isAfter(new Date(channelLastActivity._timestamp), new Date(channelLastCheck._timestamp));
 
   return (
     <Button className={styles.container} heightVariant={ButtonHeight.short2x}

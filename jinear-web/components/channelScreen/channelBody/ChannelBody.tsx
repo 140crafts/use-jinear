@@ -6,11 +6,9 @@ import Thread from "@/components/channelScreen/channelBody/thread/Thread";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import Button, { ButtonHeight } from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
-import { checkAndUpdateChannelLastCheck } from "@/slice/messagingSlice";
-import { useAppDispatch } from "@/store/store";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { useLiveQuery } from "dexie-react-hooks";
-import { getThreadsWithMessages } from "../../../repository/IndexedDbRepository";
+import { checkAndUpdateChannelLastActivity, getThreadsWithMessages } from "../../../repository/IndexedDbRepository";
 import { decideAndScrollToBottom } from "@/utils/htmlUtils";
 
 interface ChannelBodyProps {
@@ -24,25 +22,24 @@ const logger = Logger("ChannelBody");
 
 const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, workspaceId, workspaceName }) => {
   const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const pageVisibility = usePageVisibility();
-  const [listThreads, { data: listThreadsResponse, isFetching: isListThreadsFetching }] = useLazyListThreadsQuery();
-  const [hasMore, setHasMore] = useState<boolean>(true);
+  const [listThreads, { isFetching: isListThreadsFetching }] = useLazyListThreadsQuery();
 
   const initialScroll = useRef<boolean>(false);
-  const threads = useLiveQuery(() => getThreadsWithMessages(channelId)) || [];
-
+  const threads = useLiveQuery(() => getThreadsWithMessages(channelId)) ?? [];
+  const hasMore = threads?.[threads?.length - 1]?.threadType != "CHANNEL_INITIAL";
+  logger.log({ threads });
   useEffect(() => {
-    if (workspaceId && channelId && pageVisibility) {
-      dispatch(checkAndUpdateChannelLastCheck({ workspaceId, channelId, lastCheckDate: new Date() }));
+    if (channelId && pageVisibility) {
+      checkAndUpdateChannelLastActivity({ workspaceId, channelId, date: new Date() });
     }
-  }, [dispatch, workspaceId, channelId, pageVisibility]);
+  }, [channelId, workspaceId, pageVisibility]);
 
   useEffect(() => {
     if (workspaceId && channelId && pageVisibility) {
       listThreads({ workspaceId, channelId });
     }
-  }, [dispatch, listThreads, workspaceId, channelId, pageVisibility]);
+  }, [listThreads, workspaceId, channelId, pageVisibility]);
 
   useEffect(() => {
     if (threads && threads.length > 1 && typeof window === "object" && !initialScroll.current) {
@@ -78,18 +75,20 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
       <div className={styles.contentContainer}>
         {threads?.length == 0 && !isListThreadsFetching &&
           <div className={styles.emptyStateContainer}>{t("threadsEmpty")}</div>}
-        {threads?.map?.(threadDto =>
-          <Thread
-            key={`channel-overview-${threadDto.threadId}`}
-            threadWithMessages={threadDto}
-            threadId={threadDto.threadId}
-            channelId={threadDto.channelId}
-            canReplyThreads={canReplyThreads}
-            workspaceName={workspaceName}
-            viewingAsDetail={false}
-            workspaceId={workspaceId}
-          />
-        )}
+        {threads
+          ?.filter(thread => thread.threadType != "CHANNEL_INITIAL")
+          .map?.(threadDto =>
+            <Thread
+              key={`channel-overview-${threadDto.threadId}`}
+              threadWithMessages={threadDto}
+              threadId={threadDto.threadId}
+              channelId={threadDto.channelId}
+              canReplyThreads={canReplyThreads}
+              workspaceName={workspaceName}
+              viewingAsDetail={false}
+              workspaceId={workspaceId}
+            />
+          )}
       </div>
     </div>
   );
