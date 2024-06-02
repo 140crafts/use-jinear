@@ -35,9 +35,9 @@ public class MessageOperationService {
     @Transactional
     public RichMessageDto initialize(InitializeMessageVo initializeMessageVo) {
         log.info("Initialize message has started. initializeMessageVo: {}", initializeMessageVo);
-        RichTextDto richTextDto = initializeRichText(initializeMessageVo);
-        Message saved = saveMessage(initializeMessageVo, richTextDto);
-        richTextInitializeService.updateRelatedObjectId(richTextDto.getRichTextId(), saved.getMessageId());
+        Optional<RichTextDto> richTextDtoOptional = initializeRichText(initializeMessageVo);
+        Message saved = saveMessage(initializeMessageVo, richTextDtoOptional);
+        updateRichTextRelatedObjectId(richTextDtoOptional, saved);
         initializeMessageData(initializeMessageVo, saved);
         updateConversationLastUpdateDateAsNow(saved);
         updateThreadConversationLastUpdateDateAsNow(saved);
@@ -62,16 +62,28 @@ public class MessageOperationService {
                 .ifPresent(conversationUpdateService::updateLastActivityTimeAsNow);
     }
 
-    private Message saveMessage(InitializeMessageVo initializeMessageVo, RichTextDto richTextDto) {
-        Message message = messageEntityConverter.convert(initializeMessageVo, richTextDto.getRichTextId());
+    private Message saveMessage(InitializeMessageVo initializeMessageVo, Optional<RichTextDto> richTextDtoOptional) {
+        Message message = messageEntityConverter.convert(initializeMessageVo, richTextDtoOptional);
         return messageRepository.save(message);
     }
 
-    private RichTextDto initializeRichText(InitializeMessageVo initializeMessageVo) {
-        InitializeRichTextVo initializeRichTextVo = new InitializeRichTextVo();
-        initializeRichTextVo.setValue(initializeMessageVo.getBody());
-        initializeRichTextVo.setType(RichTextType.MESSAGE);
+    private Optional<RichTextDto> initializeRichText(InitializeMessageVo initializeMessageVo) {
+        return Optional.of(initializeMessageVo)
+                .map(InitializeMessageVo::getBody)
+                .filter(body -> !body.isBlank())
+                .map(this::mapInitializeRichTextVo)
+                .map(richTextInitializeService::initializeRichText);
+    }
 
-        return richTextInitializeService.initializeRichText(initializeRichTextVo);
+    private InitializeRichTextVo mapInitializeRichTextVo(String body) {
+        InitializeRichTextVo initializeRichTextVo = new InitializeRichTextVo();
+        initializeRichTextVo.setValue(body);
+        initializeRichTextVo.setType(RichTextType.MESSAGE);
+        return initializeRichTextVo;
+    }
+
+    private void updateRichTextRelatedObjectId(Optional<RichTextDto> richTextDtoOptional, Message saved) {
+        richTextDtoOptional.map(RichTextDto::getRichTextId)
+                .ifPresent(richTextId -> richTextInitializeService.updateRelatedObjectId(richTextId, saved.getMessageId()));
     }
 }

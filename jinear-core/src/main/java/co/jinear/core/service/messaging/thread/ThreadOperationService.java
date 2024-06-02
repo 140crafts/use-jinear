@@ -2,6 +2,7 @@ package co.jinear.core.service.messaging.thread;
 
 import co.jinear.core.model.dto.messaging.message.RichMessageDto;
 import co.jinear.core.model.entity.messaging.Thread;
+import co.jinear.core.model.enumtype.messaging.ThreadType;
 import co.jinear.core.model.vo.messaging.message.InitializeMessageVo;
 import co.jinear.core.repository.messaging.ThreadRepository;
 import co.jinear.core.service.messaging.message.MessageOperationService;
@@ -20,10 +21,15 @@ public class ThreadOperationService {
     private final ThreadRepository threadRepository;
     private final MessageOperationService messageOperationService;
 
-    @Transactional
-    public RichMessageDto initializeThread(String ownerId, String channelId, String initialMessageBody) {
+    public void initializeChannelFirstThread(String ownerId, String channelId) {
         log.info("Initialize thread has started. ownerId: {}, channelId: {}", ownerId, channelId);
-        Thread thread = initialize(ownerId, channelId);
+        initialize(ownerId, channelId, ThreadType.CHANNEL_INITIAL);
+    }
+
+    @Transactional
+    public RichMessageDto initializeThread(String ownerId, String channelId, String initialMessageBody, ThreadType threadType) {
+        log.info("Initialize thread has started. ownerId: {}, channelId: {}", ownerId, channelId);
+        Thread thread = initialize(ownerId, channelId, threadType);
         return initializeFirstMessage(ownerId, initialMessageBody, thread);
     }
 
@@ -35,8 +41,9 @@ public class ThreadOperationService {
         return messageOperationService.initialize(initializeMessageVo);
     }
 
-    private Thread initialize(String ownerId, String channelId) {
+    private Thread initialize(String ownerId, String channelId, ThreadType threadType) {
         Thread thread = new Thread();
+        thread.setThreadType(threadType);
         thread.setOwnerId(ownerId);
         thread.setChannelId(channelId);
         thread.setLastActivityTime(ZonedDateTime.now());

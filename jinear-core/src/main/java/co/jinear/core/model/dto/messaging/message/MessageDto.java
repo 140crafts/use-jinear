@@ -3,6 +3,7 @@ package co.jinear.core.model.dto.messaging.message;
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
+import co.jinear.core.model.enumtype.messaging.MessageType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -18,6 +19,7 @@ public class MessageDto extends BaseDto {
     private String messageId;
     private String accountId;
     private String richTextId;
+    private MessageType messageType;
     @Nullable
     private String threadId;
     @Nullable
@@ -25,6 +27,7 @@ public class MessageDto extends BaseDto {
     @ToString.Exclude
     private PlainAccountProfileDto account;
     @ToString.Exclude
+    @Nullable
     private RichTextDto richText;
     @Nullable
     @ToString.Exclude

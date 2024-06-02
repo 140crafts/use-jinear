@@ -3,6 +3,7 @@ package co.jinear.core.manager.messaging;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.messaging.message.RichMessageDto;
 import co.jinear.core.model.dto.messaging.thread.ThreadDto;
+import co.jinear.core.model.enumtype.messaging.ThreadType;
 import co.jinear.core.model.request.messaging.thread.InitializeThreadRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.messaging.ThreadListingResponse;
@@ -10,7 +11,6 @@ import co.jinear.core.model.response.messaging.ThreadResponse;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.messaging.channel.ChannelMemberOperationService;
 import co.jinear.core.service.messaging.channel.ChannelNotifierService;
-import co.jinear.core.service.messaging.message.MessageRetrieveService;
 import co.jinear.core.service.messaging.thread.ThreadListingService;
 import co.jinear.core.service.messaging.thread.ThreadOperationService;
 import co.jinear.core.service.messaging.thread.ThreadRetrieveService;
@@ -34,7 +34,6 @@ public class ThreadManager {
     private final ChannelNotifierService channelNotifierService;
     private final ThreadRetrieveService threadRetrieveService;
     private final ChannelMemberOperationService channelMemberOperationService;
-    private final MessageRetrieveService messageRetrieveService;
 
     public BaseResponse initializeThread(InitializeThreadRequest initializeThreadRequest) {
         String accountId = sessionInfoService.currentAccountId();
@@ -42,7 +41,7 @@ public class ThreadManager {
         String initialMessageBody = initializeThreadRequest.getInitialMessageBody();
         channelAccessValidator.validateChannelParticipationAccess(accountId, channelId);
         log.info("Initialize thread has started. accountId: {}, initializeThreadRequest: {}", accountId, initializeThreadRequest);
-        RichMessageDto saved = threadOperationService.initializeThread(accountId, channelId, initialMessageBody);
+        RichMessageDto saved = threadOperationService.initializeThread(accountId, channelId, initialMessageBody, ThreadType.CLASSIC);
         channelNotifierService.notifyChannelMembers(channelId, saved.getMessageId());
         return new BaseResponse();
     }
