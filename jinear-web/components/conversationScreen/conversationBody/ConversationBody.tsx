@@ -83,7 +83,7 @@ const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, wor
             ?.filter(message => message.messageType == "USER_MESSAGE")
             ?.map?.((messageDto, index) => {
                 const oneBefore = messages?.[index + 1];
-                const differenceInMin = oneBefore ? Math.abs(differenceInMinutes(new Date(oneBefore.createdDate), new Date(messageDto.createdDate))) : 999;
+                const differenceInMin = (oneBefore && oneBefore.messageType != "CONVERSATION_INIT") ? Math.abs(differenceInMinutes(new Date(oneBefore.createdDate), new Date(messageDto.createdDate))) : 999;
                 const oneBeforeIsFromDifferentSender = messageDto.accountId != oneBefore?.accountId;
                 const oneBeforeSameSenderAndOlderThanThreshold = !oneBeforeIsFromDifferentSender && differenceInMin > RENDER_MESSAGE_PROFILE_PIC_FROM_SAME_ACC_AFTER_MIN;
                 return (

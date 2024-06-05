@@ -24,6 +24,7 @@ import "../styles/app.scss";
 import "../styles/fonts.css";
 import { __DEV__ } from "utils/constants";
 import WebsocketHandler from "@/components/websockerHandler/WebsocketHandler";
+import NextTopLoader from "nextjs-toploader";
 
 const logger = Logger("_app");
 
@@ -295,6 +296,10 @@ function MyApp({ children }: { children: React.ReactNode }) {
   return (
     <html>
     <body>
+    <NextTopLoader
+      color="#2299DD"
+      showSpinner={false}
+    />
     <Root>
       <ReduxProvider>
         <DateFnsConfigration />
