@@ -2752,7 +2752,7 @@ const translations = {
     tr: "Atananlar"
   },
   mainFeaturesMenuLabelConversations: {
-    en: "Conversations",
+    en: "Messages",
     tr: "Sohbetler"
   },
   mainFeaturesMenuLabelMore: {
