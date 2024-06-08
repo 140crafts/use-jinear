@@ -21,11 +21,11 @@
             <column name="join_method" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="team">
+        <createIndex indexName="team_ix_workspace_id" tableName="team">
             <column name="workspace_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_tag" tableName="team">
+        <createIndex indexName="team_ix_tag" tableName="team">
             <column name="tag"/>
         </createIndex>
     </changeSet>
@@ -45,15 +45,15 @@
             <column name="team_id" type="char(26)"/>
         </createTable>
 
-        <createIndex indexName="ix_account_id" tableName="team_member">
+        <createIndex indexName="team_member_ix_account_id" tableName="team_member">
             <column name="account_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_workspace_id" tableName="team_member">
+        <createIndex indexName="team_member_ix_workspace_id" tableName="team_member">
             <column name="workspace_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_team_id" tableName="team_member">
+        <createIndex indexName="team_member_ix_team_id" tableName="team_member">
             <column name="team_id"/>
         </createIndex>
     </changeSet>
@@ -76,19 +76,19 @@
             <column name="tag" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_owner_id" tableName="topic">
+        <createIndex indexName="topic_ix_owner_id" tableName="topic">
             <column name="owner_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_tag" tableName="topic">
+        <createIndex indexName="topic_ix_tag" tableName="topic">
             <column name="tag"/>
         </createIndex>
 
-        <createIndex indexName="ix_workspace_id" tableName="topic">
+        <createIndex indexName="topic_ix_workspace_id" tableName="topic">
             <column name="workspace_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_team_id" tableName="topic">
+        <createIndex indexName="topic_ix_team_id" tableName="topic">
             <column name="team_id"/>
         </createIndex>
     </changeSet>
@@ -119,18 +119,18 @@
             <column name="description" type="text"/>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="task">
+        <createIndex indexName="task_ix_workspace_id" tableName="task">
             <column name="workspace_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_topic_id" tableName="task">
+        <createIndex indexName="task_ix_topic_id" tableName="task">
             <column name="topic_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_owner_id" tableName="task">
+        <createIndex indexName="task_ix_owner_id" tableName="task">
             <column name="owner_id"/>
         </createIndex>
-        <createIndex indexName="ix_team_id" tableName="task">
+        <createIndex indexName="task_ix_team_id" tableName="task">
             <column name="team_id"/>
         </createIndex>
     </changeSet>
@@ -149,7 +149,7 @@
             <column name="seq" type="int"/>
         </createTable>
 
-        <createIndex indexName="ix_topic_id" tableName="topic_seq">
+        <createIndex indexName="topic_seq_ix_topic_id" tableName="topic_seq">
             <column name="topic_id"/>
         </createIndex>
     </changeSet>
@@ -168,31 +168,33 @@
             <column name="preferred_workspace_id" type="char(26)"/>
         </createTable>
 
-        <createIndex indexName="ix_account_id" tableName="workspace_display_preference">
+        <createIndex indexName="workspace_display_preference_ix_account_id" tableName="workspace_display_preference">
             <column name="account_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_preferred_workspace_id" tableName="workspace_display_preference">
+        <createIndex indexName="workspace_display_preference_ix_preferred_workspace_id"
+                     tableName="workspace_display_preference">
             <column name="preferred_workspace_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-task-assigned_to">
         <addColumn tableName="task">
-            <column name="assigned_to" type="char(26)" afterColumn="owner_id"/>
+            <column name="assigned_to" type="char(26)"/>
         </addColumn>
 
-        <createIndex indexName="ix_assigned_to" tableName="task">
+        <createIndex indexName="task_ix_assigned_to" tableName="task">
             <column name="assigned_to"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-workspace_display_preference-preferred_team_id">
         <addColumn tableName="workspace_display_preference">
-            <column name="preferred_team_id" type="char(26)" afterColumn="preferred_workspace_id"/>
+            <column name="preferred_team_id" type="char(26)"/>
         </addColumn>
 
-        <createIndex indexName="ix_preferred_team_id" tableName="workspace_display_preference">
+        <createIndex indexName="workspace_display_preference_ix_preferred_team_id"
+                     tableName="workspace_display_preference">
             <column name="preferred_team_id"/>
         </createIndex>
     </changeSet>
@@ -214,23 +216,23 @@
             <column name="order" type="int"/>
         </createTable>
 
-        <createIndex indexName="ix_team_id" tableName="team_workflow_status">
+        <createIndex indexName="team_workflow_status_ix_team_id" tableName="team_workflow_status">
             <column name="team_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_workspace_id" tableName="team_workflow_status">
+        <createIndex indexName="team_workflow_status_ix_workspace_id" tableName="team_workflow_status">
             <column name="workspace_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-task-workflow_status_id">
         <addColumn tableName="task">
-            <column name="workflow_status_id" type="char(26)" afterColumn="owner_id">
+            <column name="workflow_status_id" type="char(26)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
 
-        <createIndex indexName="ix_workflow_status_id" tableName="task">
+        <createIndex indexName="task_ix_workflow_status_id" tableName="task">
             <column name="workflow_status_id"/>
         </createIndex>
     </changeSet>
@@ -246,12 +248,12 @@
             <column name="udate" type="datetime"/>
             <column name="passive_id" type="char(26)"/>
             <column name="related_object_id" type="char(26)"/>
-            <column name="value" type="mediumblob"/>
+            <column name="value" type="text"/>
             <column name="type" type="varchar(255)"/>
             <column name="source_stack" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_related_object_id" tableName="rich_text">
+        <createIndex indexName="rich_text_ix_related_object_id" tableName="rich_text">
             <column name="related_object_id"/>
         </createIndex>
     </changeSet>
@@ -284,30 +286,30 @@
             <column name="new_state" type="text"/>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="workspace_activity">
+        <createIndex indexName="workspace_activity_ix_workspace_id" tableName="workspace_activity">
             <column name="workspace_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_team_id" tableName="workspace_activity">
+        <createIndex indexName="workspace_activity_ix_team_id" tableName="workspace_activity">
             <column name="team_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_task_id" tableName="workspace_activity">
+        <createIndex indexName="workspace_activity_ix_task_id" tableName="workspace_activity">
             <column name="task_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_performed_by" tableName="workspace_activity">
+        <createIndex indexName="workspace_activity_ix_performed_by" tableName="workspace_activity">
             <column name="performed_by"/>
         </createIndex>
 
-        <createIndex indexName="ix_related_object_id" tableName="workspace_activity">
+        <createIndex indexName="workspace_activity_ix_related_object_id" tableName="workspace_activity">
             <column name="related_object_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-team-initialized_by">
         <addColumn tableName="team">
-            <column name="initialized_by" type="char(26)" afterColumn="workspace_id" defaultValue="-">
+            <column name="initialized_by" type="char(26)" defaultValue="-">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -339,12 +341,12 @@
         </createTable>
     </changeSet>
 
-    <changeSet author="cagdas.tunca" id="jinear-1-add-fts-index">
-        <sql>
-            alter table task
-                add fulltext(title)
-        </sql>
-    </changeSet>
+    <!--    <changeSet author="cagdas.tunca" id="jinear-1-add-fts-index">-->
+    <!--        <sql>-->
+    <!--            alter table task-->
+    <!--                add fulltext(title)-->
+    <!--        </sql>-->
+    <!--    </changeSet>-->
 
     <changeSet author="cagdas.tunca" id="jinear-1-initialize-task-subscription">
         <createTable tableName="task_subscription">
@@ -392,11 +394,11 @@
             <column name="repeat_end" type="datetime"/>
         </createTable>
 
-        <createIndex indexName="ix_owner_id" tableName="reminder">
+        <createIndex indexName="reminder_ix_owner_id" tableName="reminder">
             <column name="owner_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_related_object_id" tableName="reminder">
+        <createIndex indexName="reminder_ix_related_object_id" tableName="reminder">
             <column name="related_object_id"/>
         </createIndex>
     </changeSet>
@@ -422,7 +424,7 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_reminder_id" tableName="reminder_job">
+        <createIndex indexName="reminder_job_ix_reminder_id" tableName="reminder_job">
             <column name="reminder_id"/>
         </createIndex>
     </changeSet>
@@ -448,32 +450,32 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_task_id" tableName="task_reminder">
+        <createIndex indexName="task_reminder_ix_task_id" tableName="task_reminder">
             <column name="task_id"/>
         </createIndex>
-        <createIndex indexName="ix_reminder_id" tableName="task_reminder">
+        <createIndex indexName="task_reminder_ix_reminder_id" tableName="task_reminder">
             <column name="reminder_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-locale_type-column-to-account">
         <addColumn tableName="account">
-            <column name="locale_type" type="char(3)" afterColumn="email_confirmed" defaultValue="EN"/>
+            <column name="locale_type" type="char(3)" defaultValue="EN"/>
         </addColumn>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-time_zone-column-to-account">
         <addColumn tableName="account">
-            <column name="time_zone" type="varchar(10)" afterColumn="locale_type"/>
+            <column name="time_zone" type="varchar(10)"/>
         </addColumn>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-precise-date-columns-to-task">
         <addColumn tableName="task">
-            <column name="has_precise_assigned_date" type="tinyint" afterColumn="due_date" defaultValueBoolean="false"/>
+            <column name="has_precise_assigned_date" type="boolean" defaultValueBoolean="false"/>
         </addColumn>
         <addColumn tableName="task">
-            <column name="has_precise_due_date" type="tinyint" afterColumn="has_precise_assigned_date"
+            <column name="has_precise_due_date" type="boolean"
                     defaultValueBoolean="false"/>
         </addColumn>
     </changeSet>
@@ -500,27 +502,27 @@
             <column name="status" type="int"/>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="workspace_invitation">
+        <createIndex indexName="workspace_invitation_ix_workspace_id" tableName="workspace_invitation">
             <column name="workspace_id"/>
         </createIndex>
-        <createIndex indexName="ix_invited_by" tableName="workspace_invitation">
+        <createIndex indexName="workspace_invitation_ix_invited_by" tableName="workspace_invitation">
             <column name="invited_by"/>
         </createIndex>
-        <createIndex indexName="ix_account_id" tableName="workspace_invitation">
+        <createIndex indexName="workspace_invitation_ix_account_id" tableName="workspace_invitation">
             <column name="account_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-initial_team_id-column-to-workspace_invitation">
         <addColumn tableName="workspace_invitation">
-            <column name="initial_team_id" type="char(26)" afterColumn="workspace_id">
+            <column name="initial_team_id" type="char(26)">
             </column>
         </addColumn>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-username-column-to-team">
         <addColumn tableName="team">
-            <column name="username" type="varchar(255)" afterColumn="tag">
+            <column name="username" type="varchar(255)">
             </column>
         </addColumn>
     </changeSet>
@@ -539,7 +541,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-role-column-to-team_member">
         <addColumn tableName="team_member">
-            <column name="role" type="int" afterColumn="team_id" defaultValue="0">
+            <column name="role" type="int" defaultValue="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -567,13 +569,13 @@
             <column name="target_type" type="int"/>
         </createTable>
 
-        <createIndex indexName="ix_account_id" tableName="notification_target">
+        <createIndex indexName="notification_target_ix_account_id" tableName="notification_target">
             <column name="account_id"/>
         </createIndex>
-        <createIndex indexName="ix_external_target_id" tableName="notification_target">
+        <createIndex indexName="notification_target_ix_external_target_id" tableName="notification_target">
             <column name="external_target_id"/>
         </createIndex>
-        <createIndex indexName="ix_session_info_id" tableName="notification_target">
+        <createIndex indexName="notification_target_ix_session_info_id" tableName="notification_target">
             <column name="session_info_id"/>
         </createIndex>
     </changeSet>
@@ -594,7 +596,7 @@
             <column name="account_id" type="char(26)">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_read" type="tinyint" defaultValueBoolean="false">
+            <column name="is_read" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
             <column name="event_state" type="int">
@@ -602,10 +604,10 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_account_id" tableName="notification_event">
+        <createIndex indexName="notification_event_ix_account_id" tableName="notification_event">
             <column name="account_id"/>
         </createIndex>
-        <createIndex indexName="ix_notification_template_id" tableName="notification_event">
+        <createIndex indexName="notification_event_ix_notification_template_id" tableName="notification_event">
             <column name="notification_template_id"/>
         </createIndex>
     </changeSet>
@@ -631,7 +633,7 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_notification_event_id" tableName="notification_event_param">
+        <createIndex indexName="notification_event_param_ix_notification_event_id" tableName="notification_event_param">
             <column name="notification_event_id"/>
         </createIndex>
     </changeSet>
@@ -657,10 +659,10 @@
             <column name="launch_url" type="text"/>
         </createTable>
 
-        <createIndex indexName="ix_template_type" tableName="notification_template">
+        <createIndex indexName="notification_template_ix_template_type" tableName="notification_template">
             <column name="template_type"/>
         </createIndex>
-        <createIndex indexName="ix_locale" tableName="notification_template">
+        <createIndex indexName="notification_template_ix_locale" tableName="notification_template">
             <column name="locale"/>
         </createIndex>
     </changeSet>
@@ -678,42 +680,43 @@
             <column name="account_id" type="char(26)">
                 <constraints nullable="false"/>
             </column>
-            <column name="email" type="tinyint" defaultValueBoolean="false">
+            <column name="email" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
-            <column name="push_notification" type="tinyint" defaultValueBoolean="false">
+            <column name="push_notification" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <createIndex indexName="ix_account_id" tableName="account_communication_permission">
+        <createIndex indexName="account_communication_permission_ix_account_id"
+                     tableName="account_communication_permission">
             <column name="account_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-workspace_id-and-team_id-column-to-notification_event">
         <addColumn tableName="notification_event">
-            <column name="workspace_id" type="char(26)" afterColumn="account_id">
+            <column name="workspace_id" type="char(26)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
         <addColumn tableName="notification_event">
-            <column name="team_id" type="char(26)" afterColumn="workspace_id">
+            <column name="team_id" type="char(26)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
 
-        <createIndex indexName="ix_workspace_id" tableName="notification_event">
+        <createIndex indexName="notification_event_ix_workspace_id" tableName="notification_event">
             <column name="workspace_id"/>
         </createIndex>
-        <createIndex indexName="ix_team_id" tableName="notification_event">
+        <createIndex indexName="notification_event_ix_team_id" tableName="notification_event">
             <column name="team_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-is_silent-column-to-notification_event">
         <addColumn tableName="notification_event">
-            <column name="is_silent" type="tinyint" afterColumn="is_read" defaultValueBoolean="true">
+            <column name="is_silent" type="boolean" defaultValueBoolean="true">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -740,10 +743,10 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_task_id" tableName="checklist">
+        <createIndex indexName="checklist_ix_task_id" tableName="checklist">
             <column name="task_id"/>
         </createIndex>
-        <createIndex indexName="ix_owner_id" tableName="checklist">
+        <createIndex indexName="checklist_ix_owner_id" tableName="checklist">
             <column name="owner_id"/>
         </createIndex>
     </changeSet>
@@ -764,35 +767,35 @@
             <column name="label" type="text">
                 <constraints nullable="false"/>
             </column>
-            <column name="is_checked" type="tinyint" defaultValueBoolean="false">
+            <column name="is_checked" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
         </createTable>
 
-        <createIndex indexName="ix_checklist_id" tableName="checklist_item">
+        <createIndex indexName="checklist_item_ix_checklist_id" tableName="checklist_item">
             <column name="checklist_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-notification_event">
         <addColumn tableName="notification_event">
-            <column name="type" type="int" afterColumn="event_state"/>
+            <column name="type" type="int"/>
         </addColumn>
 
         <addColumn tableName="notification_event">
-            <column name="locale" type="varchar(255)" afterColumn="type"/>
+            <column name="locale" type="varchar(255)"/>
         </addColumn>
 
         <addColumn tableName="notification_event">
-            <column name="title" type="varchar(255)" afterColumn="locale"/>
+            <column name="title" type="varchar(255)"/>
         </addColumn>
 
         <addColumn tableName="notification_event">
-            <column name="text" type="text" afterColumn="title"/>
+            <column name="text" type="text"/>
         </addColumn>
 
         <addColumn tableName="notification_event">
-            <column name="launch_url" type="varchar(512)" afterColumn="text"/>
+            <column name="launch_url" type="varchar(512)"/>
         </addColumn>
     </changeSet>
 
@@ -807,10 +810,10 @@
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-task_id-column-to-notification_event">
         <addColumn tableName="notification_event">
-            <column name="task_id" type="char(26)" afterColumn="team_id"/>
+            <column name="task_id" type="char(26)"/>
         </addColumn>
 
-        <createIndex indexName="ix_task_id" tableName="notification_event">
+        <createIndex indexName="notification_event_ix_task_id" tableName="notification_event">
             <column name="task_id"/>
         </createIndex>
     </changeSet>
@@ -843,13 +846,13 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="task_board">
+        <createIndex indexName="task_board_ix_workspace_id" tableName="task_board">
             <column name="workspace_id"/>
         </createIndex>
-        <createIndex indexName="ix_team_id" tableName="task_board">
+        <createIndex indexName="task_board_ix_team_id" tableName="task_board">
             <column name="team_id"/>
         </createIndex>
-        <createIndex indexName="ix_owner_id" tableName="task_board">
+        <createIndex indexName="task_board_ix_owner_id" tableName="task_board">
             <column name="owner_id"/>
         </createIndex>
     </changeSet>
@@ -873,17 +876,17 @@
             <column name="order" type="int" defaultValueNumeric="0"/>
         </createTable>
 
-        <createIndex indexName="ix_task_board_id" tableName="task_board_entry">
+        <createIndex indexName="task_board_entry_ix_task_board_id" tableName="task_board_entry">
             <column name="task_board_id"/>
         </createIndex>
-        <createIndex indexName="ix_task_id" tableName="task_board_entry">
+        <createIndex indexName="task_board_entry_ix_task_id" tableName="task_board_entry">
             <column name="task_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-208-add-tier-column">
         <addColumn tableName="workspace">
-            <column name="tier" type="int" afterColumn="is_personal" defaultValueNumeric="0">
+            <column name="tier" type="int" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -891,7 +894,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-208-add-visibility-column-to-media">
         <addColumn tableName="media">
-            <column name="visibility" type="int" afterColumn="original_name" defaultValueNumeric="0">
+            <column name="visibility" type="int" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -899,7 +902,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-208-add-media_key-column-to-media">
         <addColumn tableName="media">
-            <column name="media_key" type="char(26)" afterColumn="media_id"/>
+            <column name="media_key" type="char(26)"/>
         </addColumn>
     </changeSet>
 
@@ -918,25 +921,25 @@
 
     <changeSet author="cagdas.tunca" id="jinear-208-add-public_until-column-to-media">
         <addColumn tableName="media">
-            <column name="public_until" type="datetime" afterColumn="visibility"/>
+            <column name="public_until" type="datetime"/>
         </addColumn>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-208-add-size-column-to-media">
         <addColumn tableName="media">
-            <column name="size" type="bigint" afterColumn="original_name"/>
+            <column name="size" type="bigint"/>
         </addColumn>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-171-add-board_id-columnt-to-workspace_activity">
         <addColumn tableName="workspace_activity">
-            <column name="board_id" type="char(26)" afterColumn="task_id"/>
+            <column name="board_id" type="char(26)"/>
         </addColumn>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-216-add-provider-column-to-notification_target">
         <addColumn tableName="notification_target">
-            <column name="provider" type="int" afterColumn="target_type" defaultValueNumeric="0">
+            <column name="provider" type="int" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -944,7 +947,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-216-add-sender_session_id-column-to-notification_event">
         <addColumn tableName="notification_event">
-            <column name="sender_session_id" type="char(26)" afterColumn="notification_event_id"/>
+            <column name="sender_session_id" type="char(26)"/>
         </addColumn>
     </changeSet>
 
@@ -986,17 +989,17 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_payments_service_subscription_id" tableName="subscription">
+        <createIndex indexName="subscription_ix_payments_service_subscription_id" tableName="subscription">
             <column name="payments_service_subscription_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-223-add-passthrough-columns-to-subscription">
         <addColumn tableName="subscription">
-            <column name="workspace_id" type="char(26)" afterColumn="status"/>
+            <column name="workspace_id" type="char(26)"/>
         </addColumn>
         <addColumn tableName="subscription">
-            <column name="account_id" type="char(26)" afterColumn="workspace_id"/>
+            <column name="account_id" type="char(26)"/>
         </addColumn>
         <dropColumn tableName="subscription" columnName="related_object_id"/>
     </changeSet>
@@ -1021,23 +1024,23 @@
             <column name="quote_comment_id" type="char(26)"/>
         </createTable>
 
-        <createIndex indexName="ix_task_id" tableName="comment">
+        <createIndex indexName="comment_ix_task_id" tableName="comment">
             <column name="task_id"/>
         </createIndex>
-        <createIndex indexName="ix_owner_id" tableName="comment">
+        <createIndex indexName="comment_ix_owner_id" tableName="comment">
             <column name="owner_id"/>
         </createIndex>
-        <createIndex indexName="ix_rich_text_id" tableName="comment">
+        <createIndex indexName="comment_ix_rich_text_id" tableName="comment">
             <column name="rich_text_id"/>
         </createIndex>
-        <createIndex indexName="ix_quote_comment_id" tableName="comment">
+        <createIndex indexName="comment_ix_quote_comment_id" tableName="comment">
             <column name="quote_comment_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-team-team_task_visibility_type">
         <addColumn tableName="team">
-            <column name="task_visibility" type="char(26)" afterColumn="join_method" defaultValueNumeric="0">
+            <column name="task_visibility" type="int" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -1096,7 +1099,7 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_gui_id" tableName="google_token">
+        <createIndex indexName="google_token_ix_gui_id" tableName="google_token">
             <column name="google_user_info_id"/>
         </createIndex>
     </changeSet>
@@ -1119,7 +1122,7 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_google_token_id" tableName="google_token_scope">
+        <createIndex indexName="google_token_scope_ix_google_token_id" tableName="google_token_scope">
             <column name="google_token_id"/>
         </createIndex>
     </changeSet>
@@ -1148,10 +1151,10 @@
             <column name="locale" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_sub" tableName="google_user_info">
+        <createIndex indexName="google_user_info_ix_sub" tableName="google_user_info">
             <column name="sub"/>
         </createIndex>
-        <createIndex indexName="ix_email" tableName="google_user_info">
+        <createIndex indexName="google_user_info_ix_email" tableName="google_user_info">
             <column name="email"/>
         </createIndex>
     </changeSet>
@@ -1177,10 +1180,10 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_related_object_id" tableName="integration_info">
+        <createIndex indexName="integration_info_ix_related_object_id" tableName="integration_info">
             <column name="related_object_id"/>
         </createIndex>
-        <createIndex indexName="ix_account_id" tableName="integration_info">
+        <createIndex indexName="integration_info_ix_account_id" tableName="integration_info">
             <column name="account_id"/>
         </createIndex>
     </changeSet>
@@ -1203,7 +1206,7 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_integration_info_id" tableName="integration_scope">
+        <createIndex indexName="integration_scope_ix_integration_info_id" tableName="integration_scope">
             <column name="integration_info_id"/>
         </createIndex>
     </changeSet>
@@ -1214,7 +1217,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-302-add-column-to-google_token-last_mail_check">
         <addColumn tableName="google_token">
-            <column name="last_mail_check" type="datetime" afterColumn="google_user_info_id"/>
+            <column name="last_mail_check" type="datetime"/>
         </addColumn>
     </changeSet>
 
@@ -1239,10 +1242,10 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_google_token_id" tableName="gmail_thread">
+        <createIndex indexName="gmail_thread_ix_google_token_id" tableName="gmail_thread">
             <column name="google_token_id"/>
         </createIndex>
-        <createIndex indexName="ix_g_id" tableName="gmail_thread">
+        <createIndex indexName="gmail_thread_ix_g_id" tableName="gmail_thread">
             <column name="g_id"/>
         </createIndex>
     </changeSet>
@@ -1279,29 +1282,29 @@
             <column name="body" type="mediumtext"/>
         </createTable>
 
-        <createIndex indexName="ix_g_id" tableName="gmail_message">
+        <createIndex indexName="gmail_message_ix_g_id" tableName="gmail_message">
             <column name="g_id"/>
         </createIndex>
-        <createIndex indexName="ix_g_thread_id" tableName="gmail_message">
+        <createIndex indexName="gmail_message_ix_g_thread_id" tableName="gmail_message">
             <column name="g_thread_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-302-add-index-to-gmail_message-ix_gmail_thread_id">
-        <createIndex indexName="ix_gmail_thread_id" tableName="gmail_message">
+        <createIndex indexName="gmail_message_ix_gmail_thread_id" tableName="gmail_message">
             <column name="gmail_thread_id"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-302-add-columns-to-gmail_thread-snippet">
         <addColumn tableName="gmail_thread">
-            <column name="snippet" type="text" afterColumn="g_history_id"/>
+            <column name="snippet" type="text"/>
         </addColumn>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-302-add-columns-to-team-team_state">
         <addColumn tableName="team">
-            <column name="team_state" type="int" afterColumn="task_visibility" defaultValueNumeric="0">
+            <column name="team_state" type="int" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -1331,13 +1334,13 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="feed">
+        <createIndex indexName="feed_ix_workspace_id" tableName="feed">
             <column name="workspace_id"/>
         </createIndex>
-        <createIndex indexName="ix_initialized_by" tableName="feed">
+        <createIndex indexName="feed_ix_initialized_by" tableName="feed">
             <column name="initialized_by"/>
         </createIndex>
-        <createIndex indexName="ix_integration_info_id" tableName="feed">
+        <createIndex indexName="feed_ix_integration_info_id" tableName="feed">
             <column name="integration_info_id"/>
         </createIndex>
     </changeSet>
@@ -1363,13 +1366,13 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="feed_member">
+        <createIndex indexName="feed_member_ix_workspace_id" tableName="feed_member">
             <column name="workspace_id"/>
         </createIndex>
-        <createIndex indexName="ix_account_id" tableName="feed_member">
+        <createIndex indexName="feed_member_ix_account_id" tableName="feed_member">
             <column name="account_id"/>
         </createIndex>
-        <createIndex indexName="ix_feed_id" tableName="feed_member">
+        <createIndex indexName="feed_member_ix_feed_id" tableName="feed_member">
             <column name="feed_id"/>
         </createIndex>
     </changeSet>
@@ -1396,13 +1399,13 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_task_id" tableName="task_feed_item">
+        <createIndex indexName="task_feed_item_ix_task_id" tableName="task_feed_item">
             <column name="task_id"/>
         </createIndex>
-        <createIndex indexName="ix_feed_id" tableName="task_feed_item">
+        <createIndex indexName="task_feed_item_ix_feed_id" tableName="task_feed_item">
             <column name="feed_id"/>
         </createIndex>
-        <createIndex indexName="ix_feed_item_id" tableName="task_feed_item">
+        <createIndex indexName="task_feed_item_ix_feed_item_id" tableName="task_feed_item">
             <column name="feed_item_id"/>
         </createIndex>
     </changeSet>
@@ -1431,13 +1434,13 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="calendar">
+        <createIndex indexName="calendar_ix_workspace_id" tableName="calendar">
             <column name="workspace_id"/>
         </createIndex>
-        <createIndex indexName="ix_initialized_by" tableName="calendar">
+        <createIndex indexName="calendar_ix_initialized_by" tableName="calendar">
             <column name="initialized_by"/>
         </createIndex>
-        <createIndex indexName="ix_integration_info_id" tableName="calendar">
+        <createIndex indexName="calendar_ix_integration_info_id" tableName="calendar">
             <column name="integration_info_id"/>
         </createIndex>
     </changeSet>
@@ -1463,13 +1466,13 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="calendar_member">
+        <createIndex indexName="calendar_member_ix_workspace_id" tableName="calendar_member">
             <column name="workspace_id"/>
         </createIndex>
-        <createIndex indexName="ix_account_id" tableName="calendar_member">
+        <createIndex indexName="calendar_member_ix_account_id" tableName="calendar_member">
             <column name="account_id"/>
         </createIndex>
-        <createIndex indexName="ix_calendar_id" tableName="calendar_member">
+        <createIndex indexName="calendar_member_ix_calendar_id" tableName="calendar_member">
             <column name="calendar_id"/>
         </createIndex>
     </changeSet>
@@ -1494,20 +1497,20 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createIndex indexName="ix_workspace_id" tableName="calendar_share_key">
+        <createIndex indexName="calendar_share_key_ix_workspace_id" tableName="calendar_share_key">
             <column name="workspace_id"/>
         </createIndex>
-        <createIndex indexName="ix_account_id" tableName="calendar_share_key">
+        <createIndex indexName="calendar_share_key_ix_account_id" tableName="calendar_share_key">
             <column name="account_id"/>
         </createIndex>
-        <createIndex indexName="ix_shareable_key" tableName="calendar_share_key">
+        <createIndex indexName="calendar_share_key_ix_shareable_key" tableName="calendar_share_key">
             <column name="shareable_key"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-444-add-columns-to-account">
         <addColumn tableName="account">
-            <column name="ghost" type="tinyint" afterColumn="time_zone" defaultValueNumeric="0">
+            <column name="ghost" type="boolean" defaultValueBoolean="false">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -1537,7 +1540,7 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createIndex indexName="ix_workspace_id" tableName="channel">
+        <createIndex indexName="channel_ix_workspace_id" tableName="channel">
             <column name="workspace_id"/>
         </createIndex>
     </changeSet>
@@ -1559,10 +1562,10 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createIndex indexName="ix_channel_id" tableName="channel_member">
+        <createIndex indexName="channel_member_ix_channel_id" tableName="channel_member">
             <column name="channel_id"/>
         </createIndex>
-        <createIndex indexName="ix_account_id" tableName="channel_member">
+        <createIndex indexName="channel_member_ix_account_id" tableName="channel_member">
             <column name="account_id"/>
         </createIndex>
     </changeSet>
@@ -1587,7 +1590,7 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
-        <createIndex indexName="ix_channel_id" tableName="channel_settings">
+        <createIndex indexName="channel_settings_ix_channel_id" tableName="channel_settings">
             <column name="channel_id"/>
         </createIndex>
     </changeSet>
@@ -1627,10 +1630,10 @@
             <column name="left_at" type="datetime"/>
         </createTable>
 
-        <createIndex indexName="ix_conversation_id" tableName="conversation_participant">
+        <createIndex indexName="conversation_participant_ix_conversation_id" tableName="conversation_participant">
             <column name="conversation_id"/>
         </createIndex>
-        <createIndex indexName="ix_account_id" tableName="conversation_participant">
+        <createIndex indexName="conversation_participant_ix_account_id" tableName="conversation_participant">
             <column name="account_id"/>
         </createIndex>
     </changeSet>
@@ -1655,13 +1658,13 @@
             <column name="conversation_id" type="char(26)"/>
         </createTable>
 
-        <createIndex indexName="ix_account_id" tableName="message">
+        <createIndex indexName="message_ix_account_id" tableName="message">
             <column name="account_id"/>
         </createIndex>
-        <createIndex indexName="ix_thread_id" tableName="message">
+        <createIndex indexName="message_ix_thread_id" tableName="message">
             <column name="thread_id"/>
         </createIndex>
-        <createIndex indexName="ix_conversation_id" tableName="message">
+        <createIndex indexName="message_ix_conversation_id" tableName="message">
             <column name="conversation_id"/>
         </createIndex>
     </changeSet>
@@ -1683,10 +1686,10 @@
             <column name="data_value" type="text"/>
         </createTable>
 
-        <createIndex indexName="ix_message_id" tableName="message_data">
+        <createIndex indexName="message_data_ix_message_id" tableName="message_data">
             <column name="message_id"/>
         </createIndex>
-        <createIndex indexName="ix_data_key" tableName="message_data">
+        <createIndex indexName="message_data_ix_data_key" tableName="message_data">
             <column name="data_key"/>
         </createIndex>
     </changeSet>
@@ -1715,10 +1718,10 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_message_id" tableName="message_reaction">
+        <createIndex indexName="message_reaction_ix_message_id" tableName="message_reaction">
             <column name="message_id"/>
         </createIndex>
-        <createIndex indexName="ix_account_id" tableName="message_reaction">
+        <createIndex indexName="message_reaction_ix_account_id" tableName="message_reaction">
             <column name="account_id"/>
         </createIndex>
     </changeSet>
@@ -1744,10 +1747,10 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_owner_id" tableName="thread">
+        <createIndex indexName="thread_ix_owner_id" tableName="thread">
             <column name="owner_id"/>
         </createIndex>
-        <createIndex indexName="ix_channel_id" tableName="thread">
+        <createIndex indexName="thread_ix_channel_id" tableName="thread">
             <column name="channel_id"/>
         </createIndex>
     </changeSet>
@@ -1764,7 +1767,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-461-adds-column-channel_member_role_type">
         <addColumn tableName="channel_member">
-            <column name="role_type" type="int" afterColumn="account_id">
+            <column name="role_type" type="int">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -1794,12 +1797,12 @@
 
     <changeSet author="cagdas.tunca" id="jinear-461-adds-column-workspace_id-to-conversation">
         <addColumn tableName="conversation">
-            <column name="workspace_id" type="char(26)" afterColumn="conversation_id">
+            <column name="workspace_id" type="char(26)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
 
-        <createIndex indexName="ix_workspace_id" tableName="conversation">
+        <createIndex indexName="conversation_ix_workspace_id" tableName="conversation">
             <column name="workspace_id"/>
         </createIndex>
     </changeSet>
@@ -1820,7 +1823,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-461-adds-column-last_check-to-conversation_participant">
         <addColumn tableName="conversation_participant">
-            <column name="last_check" type="datetime" afterColumn="account_id">
+            <column name="last_check" type="datetime">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -1858,10 +1861,10 @@
 
     <changeSet author="cagdas.tunca" id="jinear-461-adds-column-silent_until-conversation_participant-channel_member">
         <addColumn tableName="channel_member">
-            <column name="silent_until" type="datetime" afterColumn="role_type"/>
+            <column name="silent_until" type="datetime"/>
         </addColumn>
         <addColumn tableName="conversation_participant">
-            <column name="silent_until" type="datetime" afterColumn="left_at"/>
+            <column name="silent_until" type="datetime"/>
         </addColumn>
     </changeSet>
 
@@ -1872,25 +1875,25 @@
                 columnDataType="char(26)"
         />
         <addColumn tableName="notification_event">
-            <column name="thread_id" type="char(26)" afterColumn="task_id"/>
+            <column name="thread_id" type="char(26)"/>
         </addColumn>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-461-adds-column-participants_key-conversation">
         <addColumn tableName="conversation">
-            <column name="participants_key" type="char(128)" afterColumn="last_activity_time">
+            <column name="participants_key" type="char(128)">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
 
-        <createIndex indexName="ix_participants_key" tableName="conversation">
+        <createIndex indexName="conversation_ix_participants_key" tableName="conversation">
             <column name="participants_key"/>
         </createIndex>
     </changeSet>
 
     <changeSet author="cagdas.tunca" id="jinear-461-adds-column-last_check-channel_member">
         <addColumn tableName="channel_member">
-            <column name="last_check" type="datetime" afterColumn="silent_until"
+            <column name="last_check" type="datetime"
                     defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
@@ -2020,7 +2023,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-461-adds-column-message-message_type">
         <addColumn tableName="message">
-            <column name="message_type" type="int" afterColumn="account_id" defaultValueNumeric="0">
+            <column name="message_type" type="int" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>
@@ -2028,7 +2031,7 @@
 
     <changeSet author="cagdas.tunca" id="jinear-461-adds-column-thread-thread_type">
         <addColumn tableName="thread">
-            <column name="thread_type" type="int" afterColumn="thread_id" defaultValueNumeric="0">
+            <column name="thread_type" type="int" defaultValueNumeric="0">
                 <constraints nullable="false"/>
             </column>
         </addColumn>

@@ -15,14 +15,14 @@
             <column name="udate" type="datetime"/>
             <column name="passive_id" type="char(26)"/>
             <column name="email" type="varchar(255)"/>
-            <column name="email_confirmed" type="tinyint" defaultValue="false"/>
+            <column name="email_confirmed" type="boolean" defaultValueBoolean="false"/>
         </createTable>
 
-        <createIndex indexName="ix_account_id" tableName="account">
+        <createIndex indexName="account_ix_account_id" tableName="account">
             <column name="account_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_email" tableName="account">
+        <createIndex indexName="account_ix_email" tableName="account">
             <column name="email"/>
         </createIndex>
     </changeSet>
@@ -44,7 +44,7 @@
             <column name="role" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_account_id" tableName="account_role">
+        <createIndex indexName="account_role_ix_account_id" tableName="account_role">
             <column name="account_id"/>
         </createIndex>
 
@@ -64,10 +64,10 @@
                 <constraints nullable="false" unique="true"/>
             </column>
             <column name="password" type="varchar(255)"/>
-            <column name="auto_generated" type="tinyint"/>
+            <column name="auto_generated" type="boolean"/>
         </createTable>
 
-        <createIndex indexName="ix_account_id" tableName="account_password">
+        <createIndex indexName="account_password_ix_account_id" tableName="account_password">
             <column name="account_id"/>
         </createIndex>
     </changeSet>
@@ -88,7 +88,7 @@
             <column name="reason_subtype" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_related_object_id" tableName="passive">
+        <createIndex indexName="passive_ix_related_object_id" tableName="passive">
             <column name="related_object_id"/>
         </createIndex>
     </changeSet>
@@ -113,7 +113,7 @@
             <column name="expires_at" type="bigint"/>
         </createTable>
 
-        <createIndex indexName="ix_related_object" tableName="token">
+        <createIndex indexName="token_ix_related_object" tableName="token">
             <column name="related_object"/>
         </createIndex>
     </changeSet>
@@ -183,11 +183,11 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_related_object_id" tableName="username">
+        <createIndex indexName="username_ix_related_object_id" tableName="username">
             <column name="related_object_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_username" tableName="username">
+        <createIndex indexName="username_ix_username" tableName="username">
             <column name="username"/>
         </createIndex>
     </changeSet>
@@ -202,7 +202,7 @@
             </column>
         </createTable>
 
-        <createIndex indexName="ix_username" tableName="reserved_username">
+        <createIndex indexName="reserved_username_ix_username" tableName="reserved_username">
             <column name="username"/>
         </createIndex>
 
@@ -222,7 +222,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="varchar(255)"/>
-            <column name="is_personal" type="tinyint" defaultValue="true"/>
+            <column name="is_personal" type="boolean" defaultValueBoolean="true"/>
         </createTable>
     </changeSet>
 
@@ -245,11 +245,11 @@
             <column name="role" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="workspace_member">
+        <createIndex indexName="workspace_member_ix_workspace_id" tableName="workspace_member">
             <column name="workspace_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_account_id" tableName="workspace_member">
+        <createIndex indexName="workspace_member_ix_account_id" tableName="workspace_member">
             <column name="account_id"/>
         </createIndex>
     </changeSet>
@@ -272,7 +272,7 @@
             <column name="join_type" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_workspace_id" tableName="workspace_setting">
+        <createIndex indexName="workspace_setting_ix_workspace_id" tableName="workspace_setting">
             <column name="workspace_id"/>
         </createIndex>
     </changeSet>
@@ -300,11 +300,11 @@
             <column name="original_name" type="varchar(255)"/>
         </createTable>
 
-        <createIndex indexName="ix_owner_id" tableName="media">
+        <createIndex indexName="media_ix_owner_id" tableName="media">
             <column name="owner_id"/>
         </createIndex>
 
-        <createIndex indexName="ix_related_object_id" tableName="media">
+        <createIndex indexName="media_ix_related_object_id" tableName="media">
             <column name="related_object_id"/>
         </createIndex>
     </changeSet>
