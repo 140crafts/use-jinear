@@ -1,15 +1,12 @@
 package co.jinear.core.model.entity.account;
 
-
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.enumtype.account.RoleType;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.GenericGenerator;
-
-import jakarta.persistence.*;
 
 @Getter
 @Setter
@@ -18,8 +15,7 @@ import jakarta.persistence.*;
 public class AccountRole extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_role_id")
     private Long accountRoleId;
 
