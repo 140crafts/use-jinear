@@ -137,12 +137,16 @@ export const getThreadMessages = async (threadId: string) => {
 
 export const getThreadInitialMessage = async (threadId: string) => {
   const messages = await getDb().message.filter(message => message.threadId == threadId).sortBy("_timestamp");
-  return messages?.[0];
+  const initialMessage = messages?.[0];
+  logger.log({ getThreadInitialMessage: initialMessage });
+  return initialMessage;
 };
 
 export const getThreadFirstReplyMessage = async (threadId: string) => {
   const messages = await getDb().message.filter(message => message.threadId == threadId).sortBy("_timestamp");
-  return messages?.[1];
+  const firstReply = messages?.[1];
+  logger.log({ getThreadFirstReplyMessage: firstReply });
+  return firstReply;
 };
 
 export const getThreadLastMessage = async (threadId: string) => {

@@ -14,7 +14,7 @@ interface ThreadProps {
   workspaceName: string;
   workspaceId: string;
   viewingAsDetail: boolean;
-  threadWithMessages:IThreadWithMessages
+  threadWithMessages: IThreadWithMessages;
 }
 
 const logger = Logger("Thread");
@@ -36,7 +36,6 @@ const Thread: React.FC<ThreadProps> = ({
         threadId={threadId}
         channelId={channelId}
         viewingAsDetail={viewingAsDetail}
-        message={threadWithMessages.messages?.[0]}
       />
       <MessageList
         channelId={channelId}

@@ -15,11 +15,11 @@ interface MessageProps {
   threadId: string;
   workspaceName: string;
   viewingAsDetail: boolean;
-  message?: IMessageDto;
 }
 
-const InitialMessage: React.FC<MessageProps> = ({ channelId, threadId, workspaceName, viewingAsDetail, message }) => {
+const InitialMessage: React.FC<MessageProps> = ({ channelId, threadId, workspaceName, viewingAsDetail }) => {
   const { t } = useTranslation();
+  const message = useLiveQuery(() => getThreadInitialMessage(threadId));
   const Wrapper = viewingAsDetail ? ClientOnly : Link;
   return message == null ? null : (
     <Wrapper
