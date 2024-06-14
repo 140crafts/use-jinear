@@ -1,11 +1,9 @@
 package co.jinear.core.model.entity.task;
 
 import co.jinear.core.model.entity.BaseEntity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
-
-import jakarta.persistence.*;
 
 @Getter
 @Setter
@@ -14,8 +12,7 @@ import jakarta.persistence.*;
 public class TopicSequence extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "topic_seq_id")
     private Long topicSeqId;
 
