@@ -2,10 +2,9 @@ package co.jinear.core.model.entity;
 
 import co.jinear.core.model.enumtype.localestring.LocaleStringType;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-
-import jakarta.persistence.*;
 
 @Getter
 @Setter
@@ -13,7 +12,7 @@ import jakarta.persistence.*;
 @Table(name = "locale_string")
 public class LocaleString extends BaseEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "locale_string_id")
     private Integer id;
 
