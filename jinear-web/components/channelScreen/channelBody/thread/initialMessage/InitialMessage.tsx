@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./InitialMessage.module.css";
-import { MessageDto } from "@/be/jinear-core";
 import Tiptap from "@/components/tiptap/Tiptap";
 import ProfilePhoto from "@/components/profilePhoto";
 import { format } from "date-fns";
@@ -8,7 +7,7 @@ import useTranslation from "@/locals/useTranslation";
 import Link from "next/link";
 import ClientOnly from "@/components/clientOnly/ClientOnly";
 import { useLiveQuery } from "dexie-react-hooks";
-import { getThreadInitialMessage, getThreadMessages, IMessageDto } from "../../../../../repository/IndexedDbRepository";
+import { getThreadInitialMessage } from "../../../../../repository/IndexedDbRepository";
 
 interface MessageProps {
   channelId: string;
