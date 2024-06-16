@@ -1,6 +1,6 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import Line from "@/components/line/Line";
-import { TaskSearchResultDto } from "@/model/be/jinear-core";
+import { TaskDto, TaskSearchResultDto } from "@/model/be/jinear-core";
 import { useInitializeTaskRelationMutation } from "@/store/api/taskRelationApi";
 import {
   changeLoadingModalVisibility,
@@ -35,7 +35,7 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
     }
   }, [isInitializeRelationSuccess, isInitializeRelationError]);
 
-  const onExistingTaskSelect = (selectedTask: TaskSearchResultDto) => {
+  const onExistingTaskSelect = (selectedTask: TaskDto) => {
     dispatch(changeLoadingModalVisibility({ visible: true }));
     initializeTaskRelation({
       taskId: selectedTask.taskId,
