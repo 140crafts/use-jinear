@@ -1,4 +1,4 @@
-import { TaskBoardStateType, TaskSearchResultDto, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import { TaskBoardStateType, TaskDto, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useInitializeTaskBoardEntryMutation } from "@/store/api/taskBoardEntryApi";
 
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
@@ -11,7 +11,7 @@ import {
   closeSearchTaskModal,
   popBasicTextInputModal,
   popDatePickerModal,
-  popSearchTaskModal,
+  popSearchTaskModal
 } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
@@ -30,7 +30,14 @@ interface TaskBoardTitleProps {
   dueDate: Date;
 }
 
-const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({ title, taskBoardId, boardState, team, workspace, dueDate }) => {
+const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
+                                                         title,
+                                                         taskBoardId,
+                                                         boardState,
+                                                         team,
+                                                         workspace,
+                                                         dueDate
+                                                       }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const isTeamAdmin = useCurrentAccountsTeamRoleIsAdmin({ workspaceId: workspace.workspaceId, teamId: team.teamId });
@@ -44,7 +51,7 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({ title, taskBoardId, boa
   useEffect(() => {
     dispatch(
       changeLoadingModalVisibility({
-        visible: isInitializeLoading || isUpdateStateLoading || isUpdateDueDateLoading || isUpdateTitleLoading,
+        visible: isInitializeLoading || isUpdateStateLoading || isUpdateDueDateLoading || isUpdateTitleLoading
       })
     );
     if (!isInitializeLoading) {
@@ -57,16 +64,16 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({ title, taskBoardId, boa
       popSearchTaskModal({
         workspaceId: workspace.workspaceId,
         teamId: team.teamId,
-        onSelect: onExistingTaskSelect,
+        onSelect: onExistingTaskSelect
       })
     );
   };
 
-  const onExistingTaskSelect = (selectedTask: TaskSearchResultDto) => {
+  const onExistingTaskSelect = (selectedTask: TaskDto) => {
     dispatch(changeLoadingModalVisibility({ visible: true }));
     initializeTaskBoardEntry({
       taskBoardId,
-      taskId: selectedTask.taskId,
+      taskId: selectedTask.taskId
     });
   };
 
@@ -89,7 +96,7 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({ title, taskBoardId, boa
     dispatch(
       popDatePickerModal({
         visible: true,
-        onDateChange: changeDueDate,
+        onDateChange: changeDueDate
       })
     );
   };
@@ -101,7 +108,7 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({ title, taskBoardId, boa
         title: t("taskBoardChangeTitleModalTitle"),
         infoText: t("taskBoardChangeTitleModalInfoText"),
         initialText: title,
-        onSubmit: changeTitle,
+        onSubmit: changeTitle
       })
     );
   };
