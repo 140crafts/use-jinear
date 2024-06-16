@@ -13,7 +13,7 @@ public interface AccountRepository extends JpaRepository<Account, String> {
 
     Optional<Account> findByAccountIdAndPassiveIdIsNull(String accountId);
 
-    @Query("from Account acc where acc.email = :email and acc.ghost= false")
+    @Query("from Account acc where acc.email = :email and acc.ghost= false and acc.passiveId is null")
     Optional<Account> findByEmailAndPassiveIdIsNull(@Param("email") String email);
 
     Long countAllByAccountIdAndPassiveIdIsNull(String accountId);
