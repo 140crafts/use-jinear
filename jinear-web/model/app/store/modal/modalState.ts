@@ -3,7 +3,6 @@ import {
   IntegrationProvider,
   TaskBoardDto,
   TaskDto,
-  TaskSearchResultDto,
   TeamDto,
   TeamMemberDto,
   TeamWorkflowStatusDto,
@@ -63,7 +62,7 @@ export interface NewTeamModalState extends ModalState {
 export interface SearchTaskModalState extends ModalState {
   workspaceId?: string;
   teamId?: string;
-  onSelect?: (task: TaskSearchResultDto) => void;
+  onSelect?: (task: TaskDto) => void;
 }
 
 export interface DialogModalState extends ModalState {

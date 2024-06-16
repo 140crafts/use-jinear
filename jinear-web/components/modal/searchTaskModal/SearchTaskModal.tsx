@@ -7,7 +7,7 @@ import {
   selectSearchTaskModalOnSelect,
   selectSearchTaskModalTeamId,
   selectSearchTaskModalVisible,
-  selectSearchTaskModalWorkspaceId,
+  selectSearchTaskModalWorkspaceId
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
@@ -17,14 +17,16 @@ import { IoCheckmarkCircle, IoCloseCircle, IoContrast, IoEllipseOutline, IoPause
 import Modal from "../modal/Modal";
 import styles from "./SearchTaskModal.module.css";
 
-interface SearchTaskModalProps {}
+interface SearchTaskModalProps {
+}
+
 const ICON_SIZE = 15;
 const groupIconMap = {
   BACKLOG: <IoPauseCircleOutline size={ICON_SIZE} />,
   NOT_STARTED: <IoEllipseOutline size={ICON_SIZE} />,
   STARTED: <IoContrast size={ICON_SIZE} />,
   COMPLETED: <IoCheckmarkCircle size={ICON_SIZE} />,
-  CANCELLED: <IoCloseCircle size={ICON_SIZE} />,
+  CANCELLED: <IoCloseCircle size={ICON_SIZE} />
 };
 
 const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
@@ -44,13 +46,13 @@ const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
     data: searchResponse,
     isSuccess,
     isError,
-    isLoading,
+    isFetching
   } = useSearchTaskQuery(
     {
       workspaceId: workspaceId || "",
       teamId: teamId || "",
       title: searchValue,
-      page: 0,
+      page: 0
     },
     { skip: workspaceId == null || teamId == null || searchValue == "" }
   );
@@ -93,7 +95,7 @@ const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
         />
       </div>
       <div className={styles.searchList}>
-        {searchResponse?.data.content?.map((taskDto) => (
+        {!isFetching && searchValue != "" && searchResponse?.data.content?.map((taskDto) => (
           <Button
             key={`search-result-${taskDto.taskId}`}
             className={styles.searchResultItem}
@@ -101,20 +103,20 @@ const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
               onSelect?.(taskDto);
             }}
           >
-            <div className={styles.iconContainer}>{groupIconMap?.[taskDto.workflowStateGroup]}</div>
+            <div className={styles.iconContainer}>{groupIconMap?.[taskDto.workflowStatus?.workflowStateGroup]}</div>
             <div className={styles.titleContainer}>
-              {taskDto.teamTag ? taskDto.teamTag + "-" + taskDto.teamTagNo + " " : ""}
+              {taskDto.team?.tag ? taskDto.team?.tag + "-" + taskDto.teamTagNo + " " : ""}
               {taskDto.title}
             </div>
           </Button>
         ))}
         <div className={styles.messageContainer}>
-          {!searchResponse?.data.hasContent && searchValue?.length != 0 && !isLoading && (
+          {!searchResponse?.data.hasContent && searchValue?.length != 0 && !isFetching && (
             <div>{t("searchTaskModalEmptyState")}</div>
           )}
-          {searchValue?.length == 0 && !isLoading && <div>{t("searchTaskModalInitialState")}</div>}
+          {searchValue?.length == 0 && !isFetching && <div>{t("searchTaskModalInitialState")}</div>}
 
-          {isLoading && <CircularProgress size={17} />}
+          {isFetching && <CircularProgress size={17} />}
         </div>
       </div>
     </Modal>
