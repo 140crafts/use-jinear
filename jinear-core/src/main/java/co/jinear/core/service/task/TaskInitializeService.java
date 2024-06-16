@@ -45,6 +45,7 @@ public class TaskInitializeService {
     private final TaskBoardEntryOperationService taskBoardEntryOperationService;
     private final TaskFeedItemOperationService taskFeedItemOperationService;
     private final TaskAnalyticsService taskAnalyticsService;
+    private final TaskSearchService taskSearchService;
 
     @Transactional
     public TaskDto initializeTask(TaskInitializeVo taskInitializeVo) {
@@ -62,6 +63,7 @@ public class TaskInitializeService {
             initializeTaskSubscription(taskInitializeVo, saved);
             initializeTaskBoardEntry(taskInitializeVo, task);
             initializeTaskFeedItem(taskInitializeVo, task);
+            taskSearchService.refreshTaskFtsMv();
             return taskDto;
         } finally {
             releaseLocks(taskInitializeVo);

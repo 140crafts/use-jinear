@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="cagdas.tunca" id="jinear-485-initialize-material-view-for-fts-task">
+        <!-- @formatter:off -->
+        <sql>
+            create materialized view mv_task_fts
+as
+            select task_id,
+                   t.workspace_id,
+                   t.team_id,
+                   t.passive_id,
+                   t.owner_id,
+                   t.assigned_to,
+                   t.title,
+                   rt.value                                                                                 as task_description,
+                   coalesce((select string_agg(rt.value::text, ', '::text) as comment_agg
+                             from comment c
+                                      inner join rich_text rt on c.rich_text_id = rt.rich_text_id
+                             where rt.passive_id is null
+                               and task_id = t.task_id), ''::text)                                          as comments_meta,
+                   coalesce((select string_agg(regexp_replace(m.original_name, '[^\w]+', ' ', 'g')::text,
+                                               ', '::text) as original_name_agg
+                             from media m
+                             where m.passive_id is null
+                               and m.related_object_id = t.task_id),
+                            ''::text)                                                                       as attachments_meta,
+                   setweight(to_tsvector((tm.tag || '-' || t.team_tag_no)), 'A')
+                       || setweight(to_tsvector('simple', coalesce(t.title,''::text)), 'A')
+                       || setweight(to_tsvector('simple', coalesce(rt.value,''::text)), 'B')
+                       || setweight(to_tsvector('simple', coalesce((select string_agg(rt.value::text, ', '::text) as comment_agg
+                                                                    from comment c
+                                                                             inner join rich_text rt on c.rich_text_id = rt.rich_text_id
+                                                                    where rt.passive_id is null
+                                                                      and task_id = t.task_id), ''::text)), 'B')
+                       ||
+                   setweight(to_tsvector('simple',
+                                         coalesce((select string_agg(regexp_replace(m.original_name, '[^\w]+', ' ', 'g')::text,
+                                                                     ', '::text) as original_name_agg
+                                                   from media m
+                                                   where m.passive_id is null
+                                                     and m.related_object_id = t.task_id), ''::text)), 'B') as fts
+            from task t
+                     inner join team tm on tm.team_id = t.team_id
+                     left join rich_text rt on rt.related_object_id = t.task_id
+            where t.passive_id is null and rt.passive_id is null
+            order by t.idate desc;
+
+            create index idx_mv_task_fts_fts_search on mv_task_fts using gin (fts);
+            create unique index idx_mv_task_fts_task_id on mv_task_fts (task_id);
+        </sql>
+        <!-- @formatter:on-->
+    </changeSet>
+
+</databaseChangeLog>

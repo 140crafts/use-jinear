@@ -11,6 +11,7 @@ import co.jinear.core.repository.task.CommentRepository;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.richtext.RichTextInitializeService;
+import co.jinear.core.service.task.TaskSearchService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class CommentOperationService {
     private final CommentRetrieveService commentRetrieveService;
     private final PassiveService passiveService;
     private final AccountRetrieveService accountRetrieveService;
+    private final TaskSearchService taskSearchService;
 
     @Transactional
     public CommentDto initializeTaskComment(InitializeTaskCommentVo initializeTaskCommentVo) {
@@ -34,6 +36,7 @@ public class CommentOperationService {
         RichTextDto richTextDto = initializeRichText(initializeTaskCommentVo);
         Comment saved = mapAndInitializeComment(initializeTaskCommentVo, richTextDto);
         richTextInitializeService.updateRelatedObjectId(richTextDto.getRichTextId(), saved.getCommentId());
+        taskSearchService.refreshTaskFtsMv();
         log.info("Initialize task comment has completed.");
         return commentDtoConverter.convert(saved, accountRetrieveService);
     }
@@ -44,6 +47,7 @@ public class CommentOperationService {
         String passiveId = passiveService.createUserActionPassive();
         comment.setPassiveId(passiveId);
         commentRepository.save(comment);
+        taskSearchService.refreshTaskFtsMv();
         log.info("Delete comment has completed. commentId: {},passiveId: {}", commentId, passiveId);
         return passiveId;
     }

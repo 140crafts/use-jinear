@@ -2,11 +2,11 @@ package co.jinear.core.manager.task;
 
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.PageDto;
-import co.jinear.core.model.dto.task.TaskSearchResultDto;
+import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.response.task.TaskSearchResponse;
-import co.jinear.core.model.vo.task.TaskSearchVo;
+import co.jinear.core.model.vo.task.TaskFtsSearchVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskSearchService;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 import static co.jinear.core.model.enumtype.team.TeamMemberRoleType.ADMIN;
@@ -31,22 +32,22 @@ public class TaskSearchManager {
     private final WorkspaceValidator workspaceValidator;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
 
-    public TaskSearchResponse searchTask(String title, String workspaceId, String teamId, int page) {
+    public TaskSearchResponse searchTask(String query, String workspaceId, String teamId, int page) {
         String currentAccountId = sessionInfoService.currentAccountId();
         TeamMemberDto teamMemberDto = validateAccess(currentAccountId, workspaceId, teamId);
         log.info("Search task has begun. accountId: {}", currentAccountId);
-        TaskSearchVo taskSearchVo = mapVo(title, workspaceId, teamMemberDto, page);
-        Page<TaskSearchResultDto> taskDtoPage = searchTasks(teamMemberDto, taskSearchVo);
+        TaskFtsSearchVo taskFtsSearchVo = mapVo(query, workspaceId, teamMemberDto, page);
+        Page<TaskDto> taskDtoPage = searchTasks(teamMemberDto, taskFtsSearchVo);
         return mapResponse(taskDtoPage);
     }
 
-    private Page<TaskSearchResultDto> searchTasks(TeamMemberDto teamMemberDto, TaskSearchVo taskSearchVo) {
+    private Page<TaskDto> searchTasks(TeamMemberDto teamMemberDto, TaskFtsSearchVo taskFtsSearchVo) {
         return Optional.of(teamMemberDto)
                 .map(TeamMemberDto::getTeam)
                 .map(TeamDto::getTaskVisibility)
                 .filter(teamTaskVisibilityType -> OWNER_ASSIGNEE_AND_ADMINS.equals(teamTaskVisibilityType) && !ADMIN.equals(teamMemberDto.getRole()))
-                .map(v -> taskSearchService.searchTasksWithAssigneeOrOwner(taskSearchVo))
-                .orElseGet(() -> taskSearchService.searchTasks(taskSearchVo));
+                .map(v -> taskSearchService.searchWithAssigneeOrOwner(taskFtsSearchVo))
+                .orElseGet(() -> taskSearchService.search(taskFtsSearchVo));
     }
 
     private TeamMemberDto validateAccess(String currentAccountId, String workspaceId, String teamId) {
@@ -55,19 +56,19 @@ public class TaskSearchManager {
                 .orElseThrow(NoAccessException::new);
     }
 
-    private TaskSearchVo mapVo(String title, String workspaceId, TeamMemberDto teamMemberDto, int page) {
-        TaskSearchVo taskSearchVo = new TaskSearchVo();
-        taskSearchVo.setTitle(title);
-        taskSearchVo.setWorkspaceId(workspaceId);
-        taskSearchVo.setTeamId(teamMemberDto.getTeamId());
-        taskSearchVo.setAssignedTo(teamMemberDto.getAccountId());
-        taskSearchVo.setOwnerId(teamMemberDto.getAccountId());
-        taskSearchVo.setPage(page);
-        return taskSearchVo;
+    private TaskFtsSearchVo mapVo(String query, String workspaceId, TeamMemberDto teamMemberDto, int page) {
+        TaskFtsSearchVo taskFtsSearchVo = new TaskFtsSearchVo();
+        taskFtsSearchVo.setQuery(query);
+        taskFtsSearchVo.setWorkspaceId(workspaceId);
+        taskFtsSearchVo.setTeamIds(List.of(teamMemberDto.getTeamId()));
+        taskFtsSearchVo.setAssignedTo(teamMemberDto.getAccountId());
+        taskFtsSearchVo.setOwnerId(teamMemberDto.getAccountId());
+        taskFtsSearchVo.setPage(page);
+        return taskFtsSearchVo;
     }
 
-    private TaskSearchResponse mapResponse(Page<TaskSearchResultDto> taskDtoPage) {
-        PageDto<TaskSearchResultDto> data = new PageDto<>(taskDtoPage);
+    private TaskSearchResponse mapResponse(Page<TaskDto> taskDtoPage) {
+        PageDto<TaskDto> data = new PageDto<>(taskDtoPage);
         TaskSearchResponse response = new TaskSearchResponse();
         response.setResult(data);
         return response;

@@ -13,12 +13,12 @@ public class TaskSearchController {
 
     private final TaskSearchManager taskSearchManager;
 
-    @GetMapping("/{workspaceId}/{teamId}/{title}")
+    @GetMapping("/{workspaceId}/{teamId}/{query}")
     @ResponseStatus(HttpStatus.OK)
     public TaskSearchResponse retrieveAllTasks(@PathVariable String workspaceId,
                                                @PathVariable String teamId,
-                                               @PathVariable String title,
+                                               @PathVariable String query,
                                                @RequestParam(required = false, defaultValue = "0") Integer page) {
-        return taskSearchManager.searchTask(title, workspaceId, teamId, page);
+        return taskSearchManager.searchTask(query, workspaceId, teamId, page);
     }
 }
