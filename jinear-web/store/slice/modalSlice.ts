@@ -1,4 +1,4 @@
-import { TaskSearchResultDto } from "@/model/be/jinear-core";
+import { TaskDto } from "@/model/be/jinear-core";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ModalState, {
   AddMemberToTeamModalState,
@@ -328,7 +328,7 @@ const slice = createSlice({
       action: PayloadAction<{
         workspaceId: string;
         teamId: string;
-        onSelect: (task: TaskSearchResultDto) => void;
+        onSelect: (task: TaskDto) => void;
       }>
     ) => {
       state.searchTaskModal = { visible: true, ...action.payload };
