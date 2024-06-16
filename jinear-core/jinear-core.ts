@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-06-02 11:19:18.
+// Generated using typescript-generator version 3.0.1157 on 2024-06-16 13:02:19.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -1393,7 +1393,7 @@ export interface TaskResponse extends BaseResponse {
 }
 
 export interface TaskSearchResponse extends BaseResponse {
-    data: PageDto<TaskSearchResultDto>;
+    data: PageDto<TaskDto>;
 }
 
 export interface TaskSubscribersListingResponse extends BaseRequest {
