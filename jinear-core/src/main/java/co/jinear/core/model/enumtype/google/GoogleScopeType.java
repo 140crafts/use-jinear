@@ -24,8 +24,8 @@ public enum GoogleScopeType {
     CALENDAR_EVENTS(11, List.of("https://www.googleapis.com/auth/calendar.events")),
     CALENDAR_SETTINGS_READONLY(12, List.of("https://www.googleapis.com/auth/calendar.settings.readonly")),
 //    ADMIN_DIRECTORY_RESOURCE_CALENDAR_READONLY(13, List.of("https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly")),
-    CONTACTS(14, List.of("https://www.googleapis.com/auth/contacts")),
-    CONTACTS_OTHER_READONLY(15, List.of("https://www.googleapis.com/auth/contacts.other.readonly")),
+//    CONTACTS(14, List.of("https://www.googleapis.com/auth/contacts")),//missing
+//    CONTACTS_OTHER_READONLY(15, List.of("https://www.googleapis.com/auth/contacts.other.readonly")),
 //    DIRECTORY_READONLY(16, List.of("https://www.googleapis.com/auth/directory.readonly")),
 
     //MAIL
@@ -52,11 +52,10 @@ public enum GoogleScopeType {
         return List.of(
                 CALENDAR,
                 CALENDAR_EVENTS,
-                CALENDAR_SETTINGS_READONLY,
+                CALENDAR_SETTINGS_READONLY
 //                ADMIN_DIRECTORY_RESOURCE_CALENDAR_READONLY,
-                CONTACTS,
-                CONTACTS_OTHER_READONLY
-//                ,
+//                CONTACTS,
+//                CONTACTS_OTHER_READONLY,
 //                DIRECTORY_READONLY
         );
     }
