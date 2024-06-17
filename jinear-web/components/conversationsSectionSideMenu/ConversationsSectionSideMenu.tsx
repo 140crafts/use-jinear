@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./ConversationsSectionSideMenu.module.css";
+import styles from "./ConversationsSectionSideMenu.module.scss";
 import ChannelList from "@/components/conversationsSectionSideMenu/channelList/ChannelList";
 import { useParams } from "next/navigation";
 import { useTypedSelector } from "@/store/store";
