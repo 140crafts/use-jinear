@@ -76,9 +76,11 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
   const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
     if (calendarEvent?.calendarEventSourceType != "TASK") {
       event?.preventDefault();
+      event?.nativeEvent?.stopImmediatePropagation?.();
       openCalendarExternalEventOverviewModal();
     } else if (!isMobile) {
       event?.preventDefault();
+      event?.nativeEvent?.stopImmediatePropagation?.();
       openTaskOverviewModal();
     }
   };
