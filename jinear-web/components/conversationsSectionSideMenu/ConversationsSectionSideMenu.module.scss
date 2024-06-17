@@ -1,0 +1,14 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem;
+  gap: 1rem;
+}
+
+@media (max-width: $tablet) {
+  .container {
+    margin-top: -2rem;
+  }
+}
