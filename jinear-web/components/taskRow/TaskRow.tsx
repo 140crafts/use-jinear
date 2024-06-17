@@ -30,12 +30,14 @@ const TaskRow: React.FC<TaskRowProps> = ({ className, task, withBottomBorderLine
 
   const popChangeDatesModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event?.preventDefault?.();
+    event?.nativeEvent?.stopImmediatePropagation?.();
     dispatch(popChangeTaskDateModal({ visible: true, task }));
   };
 
   const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
     if (!isMobile) {
       event?.preventDefault();
+      event?.nativeEvent?.stopImmediatePropagation?.();
       openTaskOverviewModal();
     }
   };

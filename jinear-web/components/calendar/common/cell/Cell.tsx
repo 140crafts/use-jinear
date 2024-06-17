@@ -12,14 +12,14 @@ import {
   isDateBetween,
   useIsDateBetweenViewingPeriod,
   useIsDateFirstDayOfViewingPeriod,
-  useIsDateLastDayOfViewingPeriod,
+  useIsDateLastDayOfViewingPeriod
 } from "../../calendarUtils";
 import {
   useDraggingEvent,
   useHighlightedEventId,
   useSetDraggingEvent,
   useSetGhostEvent,
-  useSetHighlightedEventId,
+  useSetHighlightedEventId
 } from "../../context/CalendarContext";
 import styles from "./Cell.module.scss";
 
@@ -83,7 +83,7 @@ const Cell: React.FC<CellProps> = ({ id, weight, calendarEvent, weekStart, weekE
     borderLeftStyle: "solid",
     borderLeftWidth: 2.1,
     borderLeftLeftRadius: 0,
-    borderLeftRightRadius: 0,
+    borderLeftRightRadius: 0
   };
 
   const _hoverStart = () => {
@@ -113,9 +113,11 @@ const Cell: React.FC<CellProps> = ({ id, weight, calendarEvent, weekStart, weekE
   const onLinkClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
     if (calendarEvent?.calendarEventSourceType != "TASK") {
       event?.preventDefault();
+      event?.nativeEvent?.stopImmediatePropagation?.();
       openCalendarExternalEventOverviewModal();
     } else if (!isMobile) {
       event?.preventDefault();
+      event?.nativeEvent?.stopImmediatePropagation?.();
       openTaskOverviewModal();
     }
   };
