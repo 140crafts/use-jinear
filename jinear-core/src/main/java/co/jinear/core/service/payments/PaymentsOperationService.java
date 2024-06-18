@@ -10,6 +10,7 @@ import co.jinear.core.service.client.paymentprocessor.model.enumtype.ProductType
 import co.jinear.core.service.client.paymentprocessor.model.enumtype.SubscriptionStatus;
 import co.jinear.core.service.workspace.WorkspaceTierService;
 import co.jinear.core.system.util.payment.PassthroughHelper;
+import com.google.gson.Gson;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +36,7 @@ public class PaymentsOperationService {
     private final ClientSubscriptionDtoToSubscriptionExternalDtoConverter clientSubscriptionDtoToSubscriptionExternalDtoConverter;
     private final SubscriptionOperationService subscriptionOperationService;
     private final WorkspaceTierService workspaceTierService;
+    private final Gson gson;
 
     public void retrieveAndApplyLatestPayments(ZonedDateTime lastSyncDate) {
         log.info("Retrieve and apply latest payments has started.");
@@ -47,7 +49,9 @@ public class PaymentsOperationService {
     private PurchaseListingDto retrievePurchasesAfter(ZonedDateTime lastSyncDate) {
         String formatted = lastSyncDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         log.info("Retrieving purchase updates. lastSyncDate: {}, formatted: {}", lastSyncDate, formatted);
-        return paymentProcessorClient.retrievePurchasesAfter(ProductType.JINEAR, formatted).getPurchaseListingDto();
+        PurchaseListingDto purchaseListingDto = paymentProcessorClient.retrievePurchasesAfter(ProductType.JINEAR, formatted).getPurchaseListingDto();
+        log.info("Purchase updates retrieved. purchaseListingDto: {}", gson.toJson(purchaseListingDto));
+        return purchaseListingDto;
     }
 
     private void initializeOrUpdateSubscription(SubscriptionExternalDto subscriptionExternalDto) {
