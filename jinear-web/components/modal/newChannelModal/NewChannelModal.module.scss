@@ -1,8 +1,8 @@
 @import "/styles/breakpoints.scss";
 
 .modalContainer {
-    align-items: flex-start;
-    padding-top: 12.5%;
+    align-items: flex-start !important;
+    padding-top: 12.5% !important;
 }
 
 .modal {
