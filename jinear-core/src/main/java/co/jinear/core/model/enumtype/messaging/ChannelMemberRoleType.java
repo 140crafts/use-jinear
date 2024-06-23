@@ -9,7 +9,8 @@ public enum ChannelMemberRoleType {
 
     OWNER(0),
     ADMIN(1),
-    MEMBER(2);
+    MEMBER(2),
+    ROBOT(3);
 
     private final int value;
 }

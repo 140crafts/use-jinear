@@ -55,4 +55,62 @@ as
         <!-- @formatter:on-->
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-485-add-robots-support">
+        <createTable tableName="robot">
+            <column name="robot_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="robot_name" type="varchar(255)"/>
+            <column name="hashed_token" type="varchar(255)"/>
+            <column name="robot_type" type="integer"/>
+        </createTable>
+
+        <createIndex indexName="robot_ix_workspace_id" tableName="robot">
+            <column name="workspace_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-485-add-robots-support-channel-member">
+        <addColumn tableName="channel_member">
+            <column name="robot_id" type="char(26)"/>
+        </addColumn>
+
+        <createIndex indexName="channel_member_ix_robot_id" tableName="channel_member">
+            <column name="robot_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-485-removes-not-null-account_id-from-channel_member">
+        <dropNotNullConstraint
+                tableName="channel_member"
+                columnName="account_id"
+                columnDataType="char(26)"
+        />
+    </changeSet>
+
+
+    <changeSet author="cagdas.tunca" id="jinear-485-add-robots-support-message">
+        <addColumn tableName="message">
+            <column name="robot_id" type="char(26)"/>
+        </addColumn>
+
+        <createIndex indexName="message_ix_robot_id" tableName="message">
+            <column name="robot_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-485-removes-not-null-account_id-from-message">
+        <dropNotNullConstraint
+                tableName="message"
+                columnName="account_id"
+                columnDataType="char(26)"
+        />
+    </changeSet>
+
 </databaseChangeLog>

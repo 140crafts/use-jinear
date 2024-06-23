@@ -27,6 +27,15 @@ public class ChannelMemberOperationService {
         channelMemberRepository.save(channelMember);
     }
 
+    public void addRobot(String channelId, String robotId, ChannelMemberRoleType roleType) {
+        log.info("Add robot to channel has started. channelId: {}, robotId: {}", channelId, robotId);
+        ChannelMember channelMember = new ChannelMember();
+        channelMember.setChannelId(channelId);
+        channelMember.setRobotId(robotId);
+        channelMember.setRoleType(roleType);
+        channelMemberRepository.save(channelMember);
+    }
+
     public void removeMember(String passiveId, String channelId, String accountId) {
         log.info("Remove channel member has started. channelId: {}, accountId: {}, passiveId: {}", channelId, accountId, passiveId);
         ChannelMember channelMember = channelMemberRetrieveService.retrieveEntity(channelId, accountId);
@@ -44,6 +53,11 @@ public class ChannelMemberOperationService {
     public boolean checkIsMember(String channelId, String accountId) {
         log.info("Check is member has started. channelId: {}, accountId: {}", channelId, accountId);
         return channelMemberRepository.existsByChannelIdAndAccountIdAndPassiveIdIsNull(channelId, accountId);
+    }
+
+    public boolean checkIsRobotMember(String channelId, String robotId) {
+        log.info("Check is robot member has started. channelId: {}, robotId: {}", channelId, robotId);
+        return channelMemberRepository.existsByChannelIdAndRobotIdAndPassiveIdIsNull(channelId, robotId);
     }
 
     public void updateSilentUntil(String channelMemberId, ZonedDateTime silentUntil) {

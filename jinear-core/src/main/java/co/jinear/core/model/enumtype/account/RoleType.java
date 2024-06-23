@@ -9,15 +9,15 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static co.jinear.core.model.enumtype.account.PermissionType.EXPIRE_TEMP_PUBLIC_MEDIA;
-import static co.jinear.core.model.enumtype.account.PermissionType.PROCESS_REMINDER_JOB;
+import static co.jinear.core.model.enumtype.account.PermissionType.*;
 
 @Getter
 @AllArgsConstructor
 public enum RoleType {
     ADMIN(Stream.of(PermissionType.values()).collect(Collectors.toSet())),
     SERVICE(Set.of(PROCESS_REMINDER_JOB, EXPIRE_TEMP_PUBLIC_MEDIA)),
-    USER(new HashSet<>());
+    USER(new HashSet<>()),
+    ROBOT(Set.of(ROBOT_MESSAGE_INIT));
 
     private final Set<PermissionType> permissions;
 
@@ -25,7 +25,11 @@ public enum RoleType {
         Set<SimpleGrantedAuthority> perms = getPermissions().stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
                 .collect(Collectors.toSet());
-        perms.add(new SimpleGrantedAuthority("ROLE_" + this.name()));
+        perms.add(new SimpleGrantedAuthority(getAuthority()));
         return perms;
+    }
+
+    public String getAuthority() {
+        return "ROLE_" + this.name();
     }
 }

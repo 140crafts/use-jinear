@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/debug")
+@RequestMapping(value = "/v1/debug")
 @RequiredArgsConstructor
 public class DebugController {
 

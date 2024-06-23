@@ -16,6 +16,8 @@ public interface WorkspaceMemberRepository extends JpaRepository<WorkspaceMember
 
     Long countAllByAccountIdAndWorkspaceIdAndPassiveIdIsNull(String accountId, String workspaceId);
 
+    boolean existsByAccountIdAndWorkspaceIdAndPassiveIdIsNull(String accountId, String workspaceId);
+
     Long countAllByWorkspaceIdAndPassiveIdIsNull(String workspaceId);
 
     Long countAllByAccountIdAndWorkspaceIdAndRoleIsInAndPassiveIdIsNull(String accountId, String workspaceId, List<WorkspaceAccountRoleType> roleTypes);

@@ -3,6 +3,7 @@ package co.jinear.core.model.entity.messaging;
 import co.jinear.core.converter.messaging.ChannelMemberRoleTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
+import co.jinear.core.model.entity.robot.Robot;
 import co.jinear.core.model.enumtype.messaging.ChannelMemberRoleType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -44,11 +45,20 @@ public class ChannelMember extends BaseEntity {
     @Column(name = "last_check")
     private ZonedDateTime lastCheck;
 
+    @Column(name = "robot_id")
+    private String robotId;
+
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @Where(clause = "passive_id is null")
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @Where(clause = "passive_id is null")
+    @JoinColumn(name = "robot_id", insertable = false, updatable = false)
+    private Robot robot;
 
     @ManyToOne
     @JoinColumn(name = "channel_id", insertable = false, updatable = false)

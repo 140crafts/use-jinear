@@ -1,7 +1,6 @@
 package co.jinear.core.manager.oauth;
 
 import co.jinear.core.converter.google.GoogleScopeConverter;
-import co.jinear.core.exception.BusinessException;
 import co.jinear.core.manager.auth.AuthCookieManager;
 import co.jinear.core.model.dto.google.GoogleHandleTokenDto;
 import co.jinear.core.model.dto.google.GoogleUserInfoDto;
@@ -159,7 +158,7 @@ public class GoogleOAuthCallbackManager {
         mailScopeTypes.forEach(scp -> {
             if (!returnedScopes.contains(scp)) {
                 log.error("Validate mail scopes failed. Scope does not exists. scp: {}", scp);
-                throw new BusinessException("integration.google.mail.insufficient-scopes");
+//                throw new BusinessException("integration.google.mail.insufficient-scopes");
             }
         });
     }
@@ -170,7 +169,7 @@ public class GoogleOAuthCallbackManager {
         calendarScopeTypes.forEach(scp -> {
             if (!returnedScopes.contains(scp)) {
                 log.error("Validate calendar scopes failed. Scope does not exists. scp: {}", scp);
-                throw new BusinessException("integration.google.mail.insufficient-scopes");
+//                throw new BusinessException("integration.google.mail.insufficient-scopes");
             }
         });
     }

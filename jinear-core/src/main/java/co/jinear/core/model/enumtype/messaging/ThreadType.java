@@ -9,7 +9,7 @@ public enum ThreadType {
 
     CLASSIC(0),
     CHANNEL_INITIAL(1),
-    INITIALIZED_BY_BOT_ACC(2);
+    INITIALIZED_BY_ROBOT(2);
 
     private final int value;
 }

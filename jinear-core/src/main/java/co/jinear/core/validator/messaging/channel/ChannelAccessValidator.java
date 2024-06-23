@@ -32,8 +32,20 @@ public class ChannelAccessValidator {
         }
     }
 
+    public void validateRobotChannelAccess(String channelId, String robotId) {
+        if (Boolean.FALSE.equals(channelMemberOperationService.checkIsRobotMember(channelId, robotId))) {
+            throw new NoAccessException();
+        }
+    }
+
     public void validateIsNotAlreadyMember(String channelId, String currentAccountId) {
         if (channelMemberOperationService.checkIsMember(channelId, currentAccountId)) {
+            throw new BusinessException();
+        }
+    }
+
+    public void validateRobotIsNotAlreadyMember(String channelId, String robotId) {
+        if (channelMemberOperationService.checkIsRobotMember(channelId, robotId)) {
             throw new BusinessException();
         }
     }
@@ -51,12 +63,32 @@ public class ChannelAccessValidator {
         }
     }
 
+    public void validateRobotChannelParticipationAccess(String robotId, String channelId) {
+        log.info("Validate channel new thread access has started. robotId: {}, channelId: {}", robotId, channelId);
+        PlainChannelDto plainChannelDto = channelRetrieveService.retrievePlain(channelId);
+        ChannelParticipationType participationType = plainChannelDto.getParticipationType();
+        switch (participationType) {
+            case EVERYONE -> validateRobotChannelAccess(channelId, robotId);
+            case ADMINS_CAN_START_CONVERSATION_EVERYONE_CAN_REPLY ->
+                    validateRobotChannelAdminAccess(robotId, channelId);
+            case READ_ONLY -> throw new NoAccessException();
+        }
+    }
+
     public void validateChannelAdminAccess(String accountId, String channelId) {
         log.info("Validate channel admin access has started. accountId: {}, channelId: {}", accountId, channelId);
         PlainChannelDto plainChannelDto = channelRetrieveService.retrievePlain(channelId);
         boolean accountHasChannelAdminAccess = channelMemberRetrieveService.doesAccountHaveChannelAdminAccess(accountId, channelId);
         boolean accountHasWorkspaceAdminAccess = workspaceValidator.isWorkspaceAdminOrOwner(accountId, plainChannelDto.getWorkspaceId());
         if (!accountHasChannelAdminAccess && !accountHasWorkspaceAdminAccess) {
+            throw new NoAccessException();
+        }
+    }
+
+    public void validateRobotChannelAdminAccess(String robotId, String channelId) {
+        log.info("Validate channel admin access has started. robotId: {}, channelId: {}", robotId, channelId);
+        boolean robotHasChannelAdminAccess = channelMemberRetrieveService.doesRobotHaveChannelAdminAccess(robotId, channelId);
+        if (!robotHasChannelAdminAccess) {
             throw new NoAccessException();
         }
     }

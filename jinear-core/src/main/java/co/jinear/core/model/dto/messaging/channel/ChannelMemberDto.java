@@ -2,6 +2,7 @@ package co.jinear.core.model.dto.messaging.channel;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.dto.robot.RobotDto;
 import co.jinear.core.model.enumtype.messaging.ChannelMemberRoleType;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,6 +22,10 @@ public class ChannelMemberDto extends BaseDto {
     private ZonedDateTime silentUntil;
     private ZonedDateTime lastCheck;
     @Nullable
+    private String robotId;
+    @Nullable
     private PlainAccountProfileDto account;
+    @Nullable
+    private RobotDto robot;
     private PlainChannelDto channel;
 }
