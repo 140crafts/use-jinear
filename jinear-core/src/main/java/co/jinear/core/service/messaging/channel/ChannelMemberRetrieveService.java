@@ -46,12 +46,6 @@ public class ChannelMemberRetrieveService {
         return !NumberCompareHelper.isEquals(count, 0);
     }
 
-    public boolean doesRobotHaveChannelAdminAccess(String robotId, String channelId) {
-        log.info("Does robot have channel admin access started. robotId: {}, channelId: {}", robotId, channelId);
-        Long count = channelMemberRepository.countAllByChannelIdAndRobotIdAndRoleTypeIsInAndPassiveIdIsNull(channelId, robotId, List.of(ChannelMemberRoleType.ADMIN, ChannelMemberRoleType.OWNER));
-        return !NumberCompareHelper.isEquals(count, 0);
-    }
-
     public Long retrieveChannelAdminAccessMemberCount(String channelId) {
         log.info("Retrieve channel admin access member count has started. channelId: {}", channelId);
         return channelMemberRepository.countAllByChannelIdAndRoleTypeIsInAndPassiveIdIsNullAndAccount_PassiveIdIsNullAndAccount_Ghost(channelId, List.of(ChannelMemberRoleType.ADMIN, ChannelMemberRoleType.OWNER), Boolean.FALSE);

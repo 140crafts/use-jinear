@@ -1,7 +1,7 @@
 package co.jinear.core.controller.messaging.thread;
 
-import co.jinear.core.manager.messaging.ThreadRobotManager;
-import co.jinear.core.model.request.messaging.thread.InitializeThreadRequest;
+import co.jinear.core.manager.messaging.RobotsThreadManager;
+import co.jinear.core.model.request.messaging.thread.RobotsInitializeThreadRequest;
 import co.jinear.core.model.response.BaseResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -13,11 +13,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "v1/robots/messaging/thread")
 public class ThreadRobotsController {
 
-    private final ThreadRobotManager threadRobotManager;
+    private final RobotsThreadManager robotsThreadManager;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse initializeThread(@Valid @RequestBody InitializeThreadRequest initializeThreadRequest) {
-        return threadRobotManager.initializeThread(initializeThreadRequest);
+    public BaseResponse initializeThread(@RequestHeader("X-CHANNEL-ID") String channelId,
+                                         @Valid @RequestBody RobotsInitializeThreadRequest initializeThreadRequest) {
+        return robotsThreadManager.initializeThread(channelId, initializeThreadRequest);
     }
 }

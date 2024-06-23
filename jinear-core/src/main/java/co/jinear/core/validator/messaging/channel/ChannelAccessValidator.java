@@ -69,9 +69,7 @@ public class ChannelAccessValidator {
         ChannelParticipationType participationType = plainChannelDto.getParticipationType();
         switch (participationType) {
             case EVERYONE -> validateRobotChannelAccess(channelId, robotId);
-            case ADMINS_CAN_START_CONVERSATION_EVERYONE_CAN_REPLY ->
-                    validateRobotChannelAdminAccess(robotId, channelId);
-            case READ_ONLY -> throw new NoAccessException();
+            case ADMINS_CAN_START_CONVERSATION_EVERYONE_CAN_REPLY, READ_ONLY -> throw new NoAccessException();
         }
     }
 
@@ -81,14 +79,6 @@ public class ChannelAccessValidator {
         boolean accountHasChannelAdminAccess = channelMemberRetrieveService.doesAccountHaveChannelAdminAccess(accountId, channelId);
         boolean accountHasWorkspaceAdminAccess = workspaceValidator.isWorkspaceAdminOrOwner(accountId, plainChannelDto.getWorkspaceId());
         if (!accountHasChannelAdminAccess && !accountHasWorkspaceAdminAccess) {
-            throw new NoAccessException();
-        }
-    }
-
-    public void validateRobotChannelAdminAccess(String robotId, String channelId) {
-        log.info("Validate channel admin access has started. robotId: {}, channelId: {}", robotId, channelId);
-        boolean robotHasChannelAdminAccess = channelMemberRetrieveService.doesRobotHaveChannelAdminAccess(robotId, channelId);
-        if (!robotHasChannelAdminAccess) {
             throw new NoAccessException();
         }
     }
