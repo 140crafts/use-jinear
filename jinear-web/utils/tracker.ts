@@ -4,7 +4,7 @@ const DEV_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwMWoxMjV2ZmVmbm0yMTk2c3h4YnJn
 const PROD_TOKEN = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIwMWoxM2FjMmtjbmFyZTJhZGhxNjR0NnE5NyIsImlzX3JvYm90Ijp0cnVlLCJleHAiOjQ4NzI3NzIyMDUsImlhdCI6MTcxOTE3MjIwNSwiYXV0aG9yaXRpZXMiOlsiUk9MRV9ST0JPVCJdfQ.Hp4rcSk-D_zgMAKx0GpRaMJhuid-WnIwMiMunVnZ8vJTaSshVJYSkO3kDtTkgb5UDpAkoDznJ8hBDveB386aYQ";
 const token = __DEV__ ? DEV_TOKEN : PROD_TOKEN;
 
-const xThreadId_PROD = "01j12av4c241vtmt5ps6dqw8ch";
+const xThreadId_PROD = "01j13amkhshfacj6z15pcjvnt0";
 const xThreadId_DEV = "01j12av4c241vtmt5ps6dqw8ch";
 const xThreadId = __DEV__ ? xThreadId_DEV : xThreadId_PROD;
 
