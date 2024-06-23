@@ -9,7 +9,7 @@
 
 .heroTitle {
   position: relative;
-  font-size: 3.5rem;
+  font-size: 3rem;
   line-height: 4rem;
   // width: 85%;
   font-weight: 400;
@@ -32,15 +32,15 @@
 
 @media (max-width: $laptop) {
   .heroTitle {
-    font-size: 2.75rem;
-    line-height: 3.75rem;
+    font-size: 2.25rem;
+    line-height: 3rem;
   }
 }
 
 @media (max-width: $tablet) {
   .heroTitle {
-    font-size: 1.75rem;
-    line-height: 2.25rem;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   }
   .heroText {
     font-size: unset;

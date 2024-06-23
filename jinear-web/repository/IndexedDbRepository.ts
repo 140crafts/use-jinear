@@ -32,7 +32,7 @@ export interface ILastCheckInfo {
   channelId?: string;
 }
 
-const VERSION = 5;
+const VERSION = 6;
 const NAME = "messages-db-";
 
 export class IndexedDbRepository extends Dexie {
@@ -45,7 +45,7 @@ export class IndexedDbRepository extends Dexie {
     super(`${NAME}${VERSION}`);
     this.version(VERSION).stores({
       // Primary key and indexed props
-      message: "messageId, accountId, threadId, conversationId",
+      message: "messageId, accountId, robotId, threadId, conversationId",
       thread: "threadId, channelId",
       threadMessageInfo: "threadId",
       lastCheckInfo: "++_id, conversationId, channelId"

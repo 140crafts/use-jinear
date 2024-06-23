@@ -8,6 +8,8 @@ import Link from "next/link";
 import ClientOnly from "@/components/clientOnly/ClientOnly";
 import { useLiveQuery } from "dexie-react-hooks";
 import { getThreadInitialMessage } from "../../../../../repository/IndexedDbRepository";
+import { BsRobot } from "react-icons/bs";
+import ProfilePhotoRobot from "@/components/profilePhotoRobot/ProfilePhotoRobot";
 
 interface MessageProps {
   channelId: string;
@@ -25,14 +27,17 @@ const InitialMessage: React.FC<MessageProps> = ({ channelId, threadId, workspace
       href={`/${workspaceName}/conversations/channel/${channelId}/thread/${message.threadId}`}
       className={styles.container}>
       <div className={styles.profileInfo}>
-        <ProfilePhoto
-          boringAvatarKey={message.account?.accountId || ""}
-          storagePath={message.account?.profilePicture?.storagePath}
-          wrapperClassName={styles.profilePic}
-        />
+        {message.account?.accountId ?
+          <ProfilePhoto
+            boringAvatarKey={message.account?.accountId || ""}
+            storagePath={message.account?.profilePicture?.storagePath}
+            wrapperClassName={styles.profilePic}
+          /> :
+          <ProfilePhotoRobot wrapperClassName={styles.profilePic}/>
+        }
 
         <div className={styles.accountAndMessageInfoContainer}>
-          <b>{message.account.username}</b>
+          <b>{message?.account?.username || message?.robot?.robotName}</b>
           <div>{format(new Date(message.createdDate), t("dateTimeFormat"))}</div>
         </div>
       </div>

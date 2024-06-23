@@ -6,40 +6,53 @@ import { PADDLE_CATALOG } from "@/components/modal/upgradeWorkspaceModal/Upgrade
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import styles from "./index.module.scss";
+import JinearSelfHostedInfo from "@/components/jinearSelfHostedInfo/JinearSelfHostedInfo";
+import { popBasicTextInputModal } from "@/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
+import ThemeToggle from "@/components/themeToggle/ThemeToggle";
+import { IoArrowBack } from "react-icons/io5";
 
-interface PricingPageProps {}
+interface PricingPageProps {
+}
 
 const PricingPage: React.FC<PricingPageProps> = ({}) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+
+  const onSelfHostClick = () => {
+    // dispatch(
+    //   popBasicTextInputModal({
+    //     visible: true,
+    //     title: t("taskTitleChangeModalTitle"),
+    //     infoText: t("taskTitleChangeModalInfoText")
+    //     // initialText: title,
+    //     // onSubmit: changeTitle
+    //   })
+    // );
+  };
 
   return (
     <div className={styles.container}>
       <div className={styles.pageTitleContainer}>
         <div className={styles.actionContainer}>
           <Button href="/" variant={ButtonVariants.filled} heightVariant={ButtonHeight.short}>
-            {/* {t("pricingPageGoBack")} */}
-            <b>{"<-"}</b>
+            <b><IoArrowBack /></b>
           </Button>
         </div>
         <h1>{t("pricingPageTitle")}</h1>
+        <div className={styles.themeContainer}><ThemeToggle /></div>
       </div>
       <div className={styles.plansContainer}>
         <div className={styles.plan}>
-          <JinearFreeInfo />
-          <div className="flex-1" />
-          <div className={styles.priceLabel}>{t("pricePageBasicPlan")}</div>
-        </div>
-
-        <div className={styles.plan}>
           <JinearProInfo hasAdditionalToBasicPlanText={true} />
-          <div className="spacer-h-2" />
-          <span className={styles.subtext}>
+          <div className={styles.subtextContainer}>
+            <span className={styles.subtext}>
             <b>{t("pricesPageProFeature_subscriptionsAppliesOnlySingleWorkspaceText")}</b>
           </span>
-          <span className={styles.subtext}>
+            <span className={styles.subtext}>
             <b>{t("pricesPageProFeature_singleFileSizeLimit")}</b>
           </span>
-          <div className="flex-1" />
+          </div>
           <div className={styles.priceLabel}>
             {t("upgradeWorkspaceTierButtonMonthly").replace("${price}", PADDLE_CATALOG.business_monthly.price)}
           </div>
@@ -47,6 +60,31 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
             {t("upgradeWorkspaceTierButtonYearly").replace("${price}", PADDLE_CATALOG.business_yearly.price)}
           </div>
         </div>
+
+        <div className={styles.plan}>
+          <JinearSelfHostedInfo />
+          <div className={styles.subtextContainer}>
+           <span className={styles.subtext}>
+            <b>{t("pricesPageSelfHostFeature_RequiresExpertise")}</b>
+          </span>
+            <span className={styles.subtext}>
+            <b>{t("pricesPageSelfHostFeature_RenewLicence")}</b>
+          </span>
+          </div>
+          <Button className={styles.priceLabel} variant={ButtonVariants.filled} onClick={onSelfHostClick}>
+            {t("pricesPageSelfHostFeature_Price").replace("${price}", PADDLE_CATALOG.self_host.price)}
+          </Button>
+          <Button className={styles.priceLabel} onClick={onSelfHostClick}>
+            {t("pricesPageSelfHostFeature_RenewLicencePrice").replace("${price}", PADDLE_CATALOG.self_host_renew.price)}
+          </Button>
+        </div>
+
+        <div className={styles.plan}>
+          <JinearFreeInfo />
+          <div className="flex-1" />
+          <div className={styles.priceLabel}>{t("pricePageBasicPlan")}</div>
+        </div>
+
       </div>
     </div>
   );

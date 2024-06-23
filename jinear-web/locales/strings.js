@@ -2316,16 +2316,16 @@ const translations = {
     tr: "Şartlar ve Koşullar"
   },
   homescreenHeroTitleLine1: {
-    en: "Calendar & Task Manager",
+    en: "Calendar, Task Manager & Messaging",
     tr: "Takımlar ve Kişisel kullanım için"
   },
   homescreenHeroTitleLine2: {
     en: "for Individuals and Teams",
-    tr: "Takvim ve Görev Yönetimi"
+    tr: "Takvim, Görev Yönetimi ve Mesajlaşma"
   },
   homescreenHeroText: {
-    en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, manage projects collaboratively.",
-    tr: "İş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, projeleri işbirliğiyle yönetin."
+    en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, manage projects collaboratively. Message with your team mates.",
+    tr: "İş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, projeleri işbirliğiyle yönetin. Takım arkadaşlarınızla mesajlaşın."
   },
   homescreenGoToApp: {
     en: "Go to App",
@@ -2576,8 +2576,8 @@ const translations = {
     tr: "Görev için yeni bir başlık girin."
   },
   pricePageBasicPlan: {
-    en: "Always Free!",
-    tr: "Sonsuza Kadar Ücretsiz!"
+    en: "Free",
+    tr: "Ücretsiz"
   },
   pricesPageBasicFeature_UnlimitedTasks: {
     en: "Create unlimited tasks, labels, checklists, boards",
@@ -2612,8 +2612,8 @@ const translations = {
     tr: "Görevlerinize dosya ekleyin."
   },
   pricesPageProFeature_unlimitedFileStorage: {
-    en: "Unlimited file storage.",
-    tr: "Sınırsız dosya saklama alanı."
+    en: "100 GB file storage.",
+    tr: "100 GB dosya saklama alanı."
   },
   pricesPageProFeature_UnlimitedSupport: {
     en: "7/24 unlimited support.",
@@ -2627,13 +2627,53 @@ const translations = {
     en: "Everything in free plan...",
     tr: "Basic plandaki herşeye ek olarak..."
   },
+  pricesPageSelfHostFeature_additionalToProPlanText: {
+    en: "Everything in pro plan...",
+    tr: "Pro plandaki herşeye ek olarak..."
+  },
   pricesPageProFeature_subscriptionsAppliesOnlySingleWorkspaceText: {
     en: "* Each workspace has it's own plan. Upgrading a workspace to pro plan only affects itself.",
     tr: "* Her bir çalışma alanı kendi planına sahiptir. Bir çalışma alanını 'Pro' plana yükseltmek yanlızca o çalışma alanını etkiler. Diğer çalışma alanlarına belirtilen özellikler gelmez."
   },
   pricesPageProFeature_singleFileSizeLimit: {
-    en: "* While there is no total limit to file storage, currently, the size of each single file can be a maximum of 32MB.",
-    tr: "* Toplam yüklenebilecek dosya limiti bulunmamaktadır. Ancak şu anda her bir dosyanın boyutu maksimum 32MB olabilir."
+    en: "* While there is 100 GB limit to file storage, currently, the size of each single file can be a maximum of 32MB.",
+    tr: "* Toplam yüklenebilecek dosya limiti 100 GB olmasina rağmen şu anda her bir tekil dosyanın boyutu maksimum 32MB olabilir."
+  },
+  pricesPageSelfHostFeature_PayOnce: {
+    en: "Pay once use forever ",
+    tr: "Bir kere ödeyin sonsuza dek kullanın"
+  },
+  pricesPageSelfHostFeature_Own: {
+    en: "Self host your Jinear instance.",
+    tr: "Jinear'ı kendi sunucunuza kurun."
+  },
+  pricesPageSelfHostFeature_Privacy: {
+    en: "Best for regulated fields.",
+    tr: "Regülatif kısıtlamalara takılmayın."
+  },
+  pricesPageSelfHostFeature_EasyInstall: {
+    en: "Easy install. Single docker compose file all you need.",
+    tr: "Kolay kurulum. Tek bir docker compose dosyasını çalıştırmanız yeterli."
+  },
+  pricesPageSelfHostFeature_RequiresExpertise: {
+    en: "* You manage your own server. Requires at least a little technical knowledge.",
+    tr: "* Kendi sunucunuzu yönetirsiniz. En azından biraz teknik bilgi gerektirir."
+  },
+  pricesPageSelfHostFeature_Updates: {
+    en: "You get one year free upgrades.",
+    tr: "Bir yıl boyunca güncellemeler ücretsizdir."
+  },
+  pricesPageSelfHostFeature_Price: {
+    en: "${price} Once",
+    tr: "${price} Bir kez"
+  },
+  pricesPageSelfHostFeature_RenewLicencePrice: {
+    en: "${price} Renewing existing licence",
+    tr: "${price} Lisans yenileme"
+  },
+  pricesPageSelfHostFeature_RenewLicence: {
+    en: "* Renewing licence is to get new updates after 1 year. If you're happy with your latest updates you can keep using your existing version forever without renewing your licence.",
+    tr: "* Lisans yenileme bir yıldan sonra yeni güncellemeleri almaya devam etmek için gerekir. Lisans yenilemeden var olan sürümünüzü sonsuza dek kullanabilirsiniz."
   },
   pricingPageTitle: {
     en: "Pricing & Plans",
@@ -3375,6 +3415,10 @@ const translations = {
     en: "Member",
     tr: "Üye"
   },
+  channelMemberRole_ROBOT: {
+    en: "Robot",
+    tr: "Robot"
+  },
   deleteChannelMemberAreYouSureTitle: {
     en: "Kick Member",
     tr: "Üyeyi Kanaldan At"
@@ -3574,7 +3618,7 @@ const translations = {
   conversationPageEmptyStateText: {
     en: "Please select a conversation from the list or initiate a new one to begin your communication. Streamline your business interactions with seamless messaging.",
     tr: "Lütfen listeden bir konuşma seçin veya yeni bir konuşma başlatarak iletişime geçin."
-  },
+  }
 };
 
 export default translations;

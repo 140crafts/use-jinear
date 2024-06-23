@@ -19,7 +19,6 @@ const JinearProInfo: React.FC<JinearProInfoProps> = ({ hasAdditionalToBasicPlanT
           <div className={styles.proLabel}>PRO</div>
         </div>
       </div>
-      {/* <div className={styles.proFeaturesLabel} dangerouslySetInnerHTML={{ __html: t("upgradeWorkspaceTierModalText") }} /> */}
       {hasAdditionalToBasicPlanText && (
         <>
           <span>

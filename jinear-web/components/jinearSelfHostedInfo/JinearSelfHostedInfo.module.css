@@ -4,14 +4,13 @@
     justify-content: center;
     height: 5rem;
 }
-
 .proLogoContainer {
     display: flex;
     align-items: flex-start;
     justify-content: center;
 }
 
-.proLabel {
+.selfHostedLabel {
     font-weight: 800;
     font-size: 1rem;
     color: black;
