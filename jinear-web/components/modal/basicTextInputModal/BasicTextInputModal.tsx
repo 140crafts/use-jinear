@@ -3,9 +3,9 @@ import {
   closeBasicTextInputModal,
   selectBasicTextInputModalInfoInitialText,
   selectBasicTextInputModalInfoOnSubmit,
-  selectBasicTextInputModalInfoText,
+  selectBasicTextInputModalInfoText, selectBasicTextInputModalInputType,
   selectBasicTextInputModalTitle,
-  selectBasicTextInputModalVisible,
+  selectBasicTextInputModalVisible
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -13,7 +13,8 @@ import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import Modal from "../modal/Modal";
 import styles from "./BasicTextInputModal.module.css";
 
-interface BasicTextInputModalProps {}
+interface BasicTextInputModalProps {
+}
 
 const BasicTextInputModal: React.FC<BasicTextInputModalProps> = ({}) => {
   const { t } = useTranslation();
@@ -24,7 +25,7 @@ const BasicTextInputModal: React.FC<BasicTextInputModalProps> = ({}) => {
   const initialText = useTypedSelector(selectBasicTextInputModalInfoInitialText);
   const onSubmit = useTypedSelector(selectBasicTextInputModalInfoOnSubmit);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const inputType = useTypedSelector(selectBasicTextInputModalInputType) || "text";
   const [text, setText] = useState<string>(initialText || "");
 
   useEffect(() => {
@@ -56,7 +57,7 @@ const BasicTextInputModal: React.FC<BasicTextInputModalProps> = ({}) => {
   return (
     <Modal visible={visible} title={title} bodyClass={styles.container} requestClose={close} width={"default"}>
       <div>{infoText}</div>
-      <input ref={inputRef} type="text" onChange={onTextChange} value={text} />
+      <input ref={inputRef} type={inputType} onChange={onTextChange} value={text} />
       <div className={styles.actionBarContainer}>
         <Button onClick={close}>{t("basicTextInputModalCancelLabel")}</Button>
         <Button variant={ButtonVariants.contrast} onClick={submit}>

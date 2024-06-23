@@ -3618,7 +3618,15 @@ const translations = {
   conversationPageEmptyStateText: {
     en: "Please select a conversation from the list or initiate a new one to begin your communication. Streamline your business interactions with seamless messaging.",
     tr: "Lütfen listeden bir konuşma seçin veya yeni bir konuşma başlatarak iletişime geçin."
-  }
+  },
+  selfHostWaitlistModalTitle: {
+    en: "Let us inform you",
+    tr: "Size haber verelim"
+  },
+  selfHostWaitlistModalInfoText: {
+    en: "We're working on self hosting option. Please provide an email address and we let you know when it's ready.",
+    tr: "Self-hosting seçeneği üzerinde çalışıyoruz. Hazır olduğunda size haber vermemiz için lütfen e-posta adresinizi girin."
+  },
 };
 
 export default translations;

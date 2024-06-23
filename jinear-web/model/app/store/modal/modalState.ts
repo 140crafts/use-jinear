@@ -143,6 +143,7 @@ export interface BasicTextInputModalState extends ModalState {
   title?: string;
   infoText?: string;
   initialText?: string;
+  inputType?: "text" | "number" | "email",
   onSubmit?: (text: string) => void;
 }
 

@@ -799,6 +799,7 @@ export const selectNewTaskBoardModalTeam = (state: RootState) => state.modal.new
 export const selectBasicTextInputModalVisible = (state: RootState) => state.modal.basicTextInputModal?.visible;
 export const selectBasicTextInputModalTitle = (state: RootState) => state.modal.basicTextInputModal?.title;
 export const selectBasicTextInputModalInfoText = (state: RootState) => state.modal.basicTextInputModal?.infoText;
+export const selectBasicTextInputModalInputType = (state: RootState) => state.modal.basicTextInputModal?.inputType;
 export const selectBasicTextInputModalInfoInitialText = (state: RootState) => state.modal.basicTextInputModal?.initialText;
 export const selectBasicTextInputModalInfoOnSubmit = (state: RootState) => state.modal.basicTextInputModal?.onSubmit;
 

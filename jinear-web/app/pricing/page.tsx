@@ -7,10 +7,12 @@ import useTranslation from "locales/useTranslation";
 import React from "react";
 import styles from "./index.module.scss";
 import JinearSelfHostedInfo from "@/components/jinearSelfHostedInfo/JinearSelfHostedInfo";
-import { popBasicTextInputModal } from "@/slice/modalSlice";
-import { useAppDispatch } from "@/store/store";
+import { closeBasicTextInputModal, popBasicTextInputModal } from "@/slice/modalSlice";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
 import { IoArrowBack } from "react-icons/io5";
+import { trackWaitlist } from "@/utils/tracker";
+import { selectCurrentAccountId } from "@/slice/accountSlice";
 
 interface PricingPageProps {
 }
@@ -18,17 +20,23 @@ interface PricingPageProps {
 const PricingPage: React.FC<PricingPageProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const currentAccountId = useTypedSelector(selectCurrentAccountId);
 
   const onSelfHostClick = () => {
-    // dispatch(
-    //   popBasicTextInputModal({
-    //     visible: true,
-    //     title: t("taskTitleChangeModalTitle"),
-    //     infoText: t("taskTitleChangeModalInfoText")
-    //     // initialText: title,
-    //     // onSubmit: changeTitle
-    //   })
-    // );
+    trackWaitlist({ message: `Self host clicked. currentAccountId: ${currentAccountId}` });
+    dispatch(
+      popBasicTextInputModal({
+        visible: true,
+        title: t("selfHostWaitlistModalTitle"),
+        infoText: t("selfHostWaitlistModalInfoText"),
+        onSubmit: onEmailSubmit
+      })
+    );
+  };
+
+  const onEmailSubmit = (email: string) => {
+    dispatch(closeBasicTextInputModal());
+    trackWaitlist({ message: `Added to wait-list. email: ${email}` });
   };
 
   return (
