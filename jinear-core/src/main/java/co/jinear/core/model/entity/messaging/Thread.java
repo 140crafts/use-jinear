@@ -3,6 +3,7 @@ package co.jinear.core.model.entity.messaging;
 import co.jinear.core.converter.messaging.thread.ThreadTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
+import co.jinear.core.model.entity.robot.Robot;
 import co.jinear.core.model.enumtype.messaging.ThreadType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -47,6 +48,11 @@ public class Thread extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "owner_id", referencedColumnName = "account_id", insertable = false, updatable = false)
     private Account account;
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "owner_id", referencedColumnName = "robot_id", insertable = false, updatable = false)
+    private Robot robot;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)

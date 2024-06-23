@@ -18,13 +18,17 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 
+import static co.jinear.core.model.enumtype.account.RoleType.ROBOT;
+
 @Component
 public class JwtHelper {
 
     public static final String JWT_COOKIE = "JWT";
     public static final int JWT_TOKEN_VALIDITY = 180;
+    public static final int JWT_ROBOT_TOKEN_VALIDITY = 36500;
     public static final int MESSAGING_JWT_TOKEN_VALIDITY_IN_SECONDS = 120;
     public static final String AUTHORITIES = "authorities";
+    public static final String IS_ROBOT = "is_robot";
     public static final String SESSION_INFO_ID = "session_info_id";
     public static final String LOCALE = "locale";
 
@@ -42,7 +46,7 @@ public class JwtHelper {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    public String getAccountIdFromToken(String token) {
+    public String getSubjectFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
     }
 
@@ -87,9 +91,22 @@ public class JwtHelper {
                 .compact();
     }
 
-    public Boolean validateToken(String token, String accountId) {
-        final String accountIdFromToken = getAccountIdFromToken(token);
-        return (accountIdFromToken.equals(accountId) && !isTokenExpired(token));
+    public String generateRobotToken(String robotId) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(AUTHORITIES, List.of(ROBOT.getAuthority()));
+        claims.put(IS_ROBOT, Boolean.TRUE);
+
+        return Jwts.builder()
+                .setClaims(claims)
+                .setSubject(robotId)
+                .setIssuedAt(DateHelper.now())
+                .setExpiration(DateHelper.addDays(DateHelper.now(), JWT_ROBOT_TOKEN_VALIDITY))
+                .signWith(SignatureAlgorithm.HS512, secret.getBytes(StandardCharsets.UTF_8))
+                .compact();
+    }
+
+    public Boolean validateToken(String token) {
+        return !isTokenExpired(token);
     }
 
     public Claims getAllClaimsFromToken(String token) {
@@ -115,6 +132,11 @@ public class JwtHelper {
 
     public String getDomain() {
         return domain;
+    }
+
+    public boolean isRobot(String token) {
+        Boolean isRobot = getClaimFromToken(token, claims -> claims.get(IS_ROBOT, Boolean.class));
+        return Boolean.TRUE.equals(isRobot);
     }
 
     private Boolean isTokenExpired(String token) {

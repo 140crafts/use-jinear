@@ -32,4 +32,12 @@ public class ChannelMemberListingService {
                 .map(channelMemberDtoConverter::convert)
                 .toList();
     }
+
+    public List<ChannelMemberDto> retrieveChannelMemberAccounts(String channelId) {
+        log.info("Retrieve channel member accounts has started. channelId: {}", channelId);
+        return channelMemberRepository.findAllByChannelIdAndAccountIdIsNotNullAndPassiveIdIsNull(channelId)
+                .stream()
+                .map(channelMemberDtoConverter::convert)
+                .toList();
+    }
 }

@@ -12,6 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
+
+import static co.jinear.core.model.enumtype.messaging.ThreadType.INITIALIZED_BY_ROBOT;
 
 @Slf4j
 @Service
@@ -35,9 +38,14 @@ public class ThreadOperationService {
 
     private RichMessageDto initializeFirstMessage(String ownerId, String initialMessageBody, Thread saved) {
         InitializeMessageVo initializeMessageVo = new InitializeMessageVo();
-        initializeMessageVo.setAccountId(ownerId);
         initializeMessageVo.setBody(initialMessageBody);
         initializeMessageVo.setThreadId(saved.getThreadId());
+        Optional.of(saved)
+                .map(Thread::getThreadType)
+                .filter(INITIALIZED_BY_ROBOT::equals)
+                .ifPresentOrElse(
+                        threadType -> initializeMessageVo.setRobotId(ownerId),
+                        () -> initializeMessageVo.setAccountId(ownerId));
         return messageOperationService.initialize(initializeMessageVo);
     }
 

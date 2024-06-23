@@ -79,6 +79,15 @@ public class ChannelMemberManager {
         return new BaseResponse();
     }
 
+    public BaseResponse addRobot(String channelId, String robotId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        channelAccessValidator.validateChannelAdminAccess(currentAccountId, channelId);
+        channelAccessValidator.validateRobotIsNotAlreadyMember(channelId, robotId);
+        log.info("Add robot has started. currentAccountId: {}, channelId: {}, robotId: {}", currentAccountId, channelId, robotId);
+        channelMemberOperationService.addRobot(channelId, robotId, ChannelMemberRoleType.ROBOT);
+        return new BaseResponse();
+    }
+
     @Transactional
     public BaseResponse remove(String channelId, String accountId) {
         String currentAccountId = sessionInfoService.currentAccountId();

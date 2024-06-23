@@ -49,7 +49,7 @@ public class ChannelNotifierService {
     public void notifyChannelMembers(String channelId, String messageId) {
         log.info("Notify channel members has started. channelId: {}, firstMessageId: {}", channelId, messageId);
         RichMessageDto firstMessage = messageRetrieveService.retrieveRich(messageId);
-        List<ChannelMemberDto> channelMembers = channelMemberListingService.retrieveChannelMembers(channelId);
+        List<ChannelMemberDto> channelMembers = channelMemberListingService.retrieveChannelMemberAccounts(channelId);
         emitMessage(firstMessage, channelMembers);
         notifyMembers(firstMessage, channelMembers);
     }

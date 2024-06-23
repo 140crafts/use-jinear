@@ -29,7 +29,8 @@ public enum GoogleScopeType {
 //    DIRECTORY_READONLY(16, List.of("https://www.googleapis.com/auth/directory.readonly")),
 
     //MAIL
-    MAIL(20, List.of("https://mail.google.com/")),
+//    MAIL(20, List.of("https://mail.google.com/")),
+
     GMAIL_ADDONS_CURRENT_MESSAGE_ACTION(21, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.action")),
     GMAIL_ADDONS_CURRENT_MESSAGE_METADATA(22, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.metadata")),
     GMAIL_ADDONS_CURRENT_MESSAGE_READONLY(23, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.readonly")),
@@ -62,7 +63,7 @@ public enum GoogleScopeType {
 
     public static List<GoogleScopeType> getMailScopeTypes() {
         return List.of(
-                MAIL,
+//                MAIL,
                 GMAIL_ADDONS_CURRENT_MESSAGE_ACTION,
                 GMAIL_ADDONS_CURRENT_MESSAGE_METADATA,
                 GMAIL_ADDONS_CURRENT_MESSAGE_READONLY,

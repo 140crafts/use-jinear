@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-06-16 13:02:19.
+// Generated using typescript-generator version 3.0.1157 on 2024-06-23 13:33:36.
 
 export interface BaseDto {
     createdDate: Date;
@@ -289,7 +289,9 @@ export interface ChannelMemberDto extends BaseDto {
     roleType: ChannelMemberRoleType;
     silentUntil?: Date | null;
     lastCheck: Date;
+    robotId?: string | null;
     account?: PlainAccountProfileDto | null;
+    robot?: RobotDto | null;
     channel: PlainChannelDto;
 }
 
@@ -365,11 +367,13 @@ export interface MessageDataDto extends BaseDto {
 export interface MessageDto extends BaseDto {
     messageId: string;
     accountId: string;
+    robotId: string;
     richTextId: string;
     messageType: MessageType;
     threadId?: string | null;
     conversationId?: string | null;
     account: PlainAccountProfileDto;
+    robot: RobotDto;
     richText?: RichTextDto | null;
     messageData?: MessageDataDto[] | null;
     messageReactions?: MessageReactionDto[] | null;
@@ -399,7 +403,8 @@ export interface PlainThreadDto extends BaseDto {
 
 export interface ThreadDto extends PlainThreadDto {
     threadMessageInfo: ThreadMessageInfoDto;
-    account: PlainAccountProfileDto;
+    account?: PlainAccountProfileDto | null;
+    robot?: RobotDto | null;
     channel: PlainChannelDto;
 }
 
@@ -514,6 +519,17 @@ export interface RichTextDto {
     value: string;
     type: RichTextType;
     sourceStack: RichTextSourceStack;
+}
+
+export interface RobotDto extends BaseDto {
+    robotId: string;
+    workspaceId: string;
+    robotName: string;
+    robotType: RobotType;
+}
+
+export interface RobotSecretDto extends RobotDto {
+    tokenClearText: string;
 }
 
 export interface ChecklistDto extends BaseDto {
@@ -1012,6 +1028,12 @@ export interface TaskReminderInitializeRequest extends BaseRequest {
     specificRemindDateRepeatType?: RepeatType | null;
 }
 
+export interface RobotInitializeRequest extends BaseRequest {
+    name: string;
+    workspaceId: string;
+    robotType?: RobotType | null;
+}
+
 export interface ChecklistItemLabelRequest extends BaseRequest {
     checklistId: string;
     label: string;
@@ -1330,6 +1352,10 @@ export interface ReminderJobResponse extends BaseResponse {
 
 export interface ReminderResponse extends BaseResponse {
     data: ReminderDto[];
+}
+
+export interface RobotSecretResponse extends BaseResponse {
+    data: RobotSecretDto;
 }
 
 export interface PaginatedTaskCommentResponse extends BaseResponse {
@@ -1654,15 +1680,15 @@ export type FilterSort = "IDATE_DESC" | "IDATE_ASC" | "ASSIGNED_DATE_DESC" | "AS
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
 
-export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXPIRE_TEMP_PUBLIC_MEDIA";
+export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXPIRE_TEMP_PUBLIC_MEDIA" | "ROBOT_MESSAGE_INIT";
 
-export type RoleType = "ADMIN" | "SERVICE" | "USER";
+export type RoleType = "ADMIN" | "SERVICE" | "USER" | "ROBOT";
 
 export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL";
 
 export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
-export type GoogleScopeType = "OPEN_ID" | "USERINFO_PROFILE" | "USERINFO_EMAIL" | "CALENDAR" | "CALENDAR_EVENTS" | "CALENDAR_SETTINGS_READONLY" | "ADMIN_DIRECTORY_RESOURCE_CALENDAR_READONLY" | "CONTACTS" | "CONTACTS_OTHER_READONLY" | "DIRECTORY_READONLY" | "MAIL" | "GMAIL_ADDONS_CURRENT_MESSAGE_ACTION" | "GMAIL_ADDONS_CURRENT_MESSAGE_METADATA" | "GMAIL_ADDONS_CURRENT_MESSAGE_READONLY" | "GMAIL_MODIFY" | "GMAIL_READONLY";
+export type GoogleScopeType = "OPEN_ID" | "USERINFO_PROFILE" | "USERINFO_EMAIL" | "CALENDAR" | "CALENDAR_EVENTS" | "CALENDAR_SETTINGS_READONLY" | "GMAIL_ADDONS_CURRENT_MESSAGE_ACTION" | "GMAIL_ADDONS_CURRENT_MESSAGE_METADATA" | "GMAIL_ADDONS_CURRENT_MESSAGE_READONLY" | "GMAIL_MODIFY" | "GMAIL_READONLY";
 
 export type UserConsentPurposeType = "LOGIN" | "ATTACH_MAIL" | "ATTACH_CALENDAR";
 
@@ -1682,7 +1708,7 @@ export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK";
 
 export type MediaVisibilityType = "PUBLIC" | "PRIVATE" | "TEMP_PUBLIC";
 
-export type ChannelMemberRoleType = "OWNER" | "ADMIN" | "MEMBER";
+export type ChannelMemberRoleType = "OWNER" | "ADMIN" | "MEMBER" | "ROBOT";
 
 export type ChannelParticipationType = "EVERYONE" | "ADMINS_CAN_START_CONVERSATION_EVERYONE_CAN_REPLY" | "READ_ONLY";
 
@@ -1694,7 +1720,7 @@ export type MessageReactionType = "UNICODE_EMOJI";
 
 export type MessageType = "USER_MESSAGE" | "CONVERSATION_INIT";
 
-export type ThreadType = "CLASSIC" | "CHANNEL_INITIAL" | "INITIALIZED_BY_BOT_ACC";
+export type ThreadType = "CLASSIC" | "CHANNEL_INITIAL" | "INITIALIZED_BY_ROBOT";
 
 export type NotificationEventState = "INITIALIZED" | "SENT";
 
@@ -1715,6 +1741,8 @@ export type RepeatType = "NONE" | "HOURLY" | "DAILY" | "WEEKLY" | "BIWEEKLY" | "
 export type RichTextSourceStack = "WYSIWYG" | "RC";
 
 export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT" | "MESSAGE";
+
+export type RobotType = "MESSAGE";
 
 export type TaskBoardStateType = "OPEN" | "CLOSED";
 

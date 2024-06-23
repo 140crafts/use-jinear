@@ -50,6 +50,13 @@ public class ChannelMemberController {
         return channelMemberManager.add(channelId, accountId);
     }
 
+    @PostMapping("/add/{channelId}/robot/{robotId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BaseResponse addRobot(@PathVariable String channelId,
+                                 @PathVariable String robotId) {
+        return channelMemberManager.addRobot(channelId, robotId);
+    }
+
     @PostMapping("/remove/{channelId}/account/{accountId}")
     @ResponseStatus(HttpStatus.OK)
     public BaseResponse remove(@PathVariable String channelId,

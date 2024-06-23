@@ -13,6 +13,7 @@ import java.util.Map;
 public class InitializeMessageVo {
 
     private String accountId;
+    private String robotId;
     private String threadId;
     private String conversationId;
     private String body;

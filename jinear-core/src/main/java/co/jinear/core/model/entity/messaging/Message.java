@@ -4,6 +4,7 @@ import co.jinear.core.converter.messaging.conversation.MessageTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
 import co.jinear.core.model.entity.richtext.RichText;
+import co.jinear.core.model.entity.robot.Robot;
 import co.jinear.core.model.enumtype.messaging.MessageType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -32,6 +33,9 @@ public class Message extends BaseEntity {
     @Column(name = "account_id")
     private String accountId;
 
+    @Column(name = "robot_id")
+    private String robotId;
+
     @Convert(converter = MessageTypeConverter.class)
     @Column(name = "message_type")
     private MessageType messageType;
@@ -49,6 +53,11 @@ public class Message extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "account_id", insertable = false, updatable = false)
     private Account account;
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "robot_id", insertable = false, updatable = false)
+    private Robot robot;
 
     @OneToOne
     @NotFound(action = NotFoundAction.IGNORE)

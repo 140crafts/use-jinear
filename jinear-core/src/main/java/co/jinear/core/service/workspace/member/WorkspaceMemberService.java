@@ -59,7 +59,7 @@ public class WorkspaceMemberService {
     }
 
     public boolean isAccountWorkspaceMember(String accountId, String workspaceId) {
-        return workspaceMemberRepository.countAllByAccountIdAndWorkspaceIdAndPassiveIdIsNull(accountId, workspaceId) > 0L;
+        return workspaceMemberRepository.existsByAccountIdAndWorkspaceIdAndPassiveIdIsNull(accountId, workspaceId);
     }
 
     public void validateAccountWorkspaceMember(String accountId, String workspaceId) {

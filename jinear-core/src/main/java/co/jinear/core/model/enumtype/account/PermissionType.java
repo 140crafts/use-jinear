@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum PermissionType {
     ACCOUNT_ROLE_EDIT("account-role:edit"),
     PROCESS_REMINDER_JOB("reminders:process"),
-    EXPIRE_TEMP_PUBLIC_MEDIA("scheduled-jobs:expire-temporary-public-media");
+    EXPIRE_TEMP_PUBLIC_MEDIA("scheduled-jobs:expire-temporary-public-media"),
+    ROBOT_MESSAGE_INIT("robots:message-init");
 
     private final String permission;
 }

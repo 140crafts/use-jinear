@@ -55,8 +55,6 @@ public class SecurityConfiguration {
 
     private static final List<String> CORS_ALLOWED_DOMAINS = Arrays.asList(
             "http://localhost:3000/*",
-            "https://bets.esvc.co/*",
-            "https://api.esvc.co/*",
             "*"
     );
 
@@ -68,6 +66,8 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers("/v1/robots/**").hasRole("ROBOT")
+                        .requestMatchers("/v1/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -77,8 +77,6 @@ public class SecurityConfiguration {
                 .and()
                 .logout()
                 .clearAuthentication(true)
-//                .logoutRequestMatcher(new AntPathRequestMatcher(LOGOUT_ENDPOINT))
-//                .logoutSuccessHandler(logoutSuccessHandler())
                 .logoutSuccessUrl("/").deleteCookies("JWT", "JSESSIONID", "SESSION", "SESSIONID")
                 .invalidateHttpSession(true)
                 .and()
@@ -89,10 +87,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(new AntPathRequestMatcher("swagger-ui/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("v3/api-docs/**")).permitAll()
-                        .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("swagger-ui/**")).denyAll()
+                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).denyAll()
+                        .requestMatchers(new AntPathRequestMatcher("v3/api-docs/**")).denyAll()
+                        .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).denyAll()
                         .anyRequest().authenticated())
                 .httpBasic();
         return httpSecurity.build();
