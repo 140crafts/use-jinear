@@ -5,6 +5,8 @@ import ProfilePhoto from "@/components/profilePhoto";
 import { format } from "date-fns";
 import Tiptap from "@/components/tiptap/Tiptap";
 import { MessageDto } from "@/be/jinear-core";
+import { BsRobot } from "react-icons/bs";
+import ProfilePhotoRobot from "@/components/profilePhotoRobot/ProfilePhotoRobot";
 
 interface ThreadMessageProps {
   threadMessage: MessageDto;
@@ -16,16 +18,19 @@ const ThreadMessage: React.FC<ThreadMessageProps> = ({ threadMessage }) => {
   return (
     <div className={styles.container}>
       <div className={styles.profileInfo}>
-        <ProfilePhoto
-          boringAvatarKey={threadMessage.account?.accountId || ""}
-          storagePath={threadMessage.account?.profilePicture?.storagePath}
-          wrapperClassName={styles.profilePic}
-        />
+        {threadMessage.account?.accountId ?
+          <ProfilePhoto
+            boringAvatarKey={threadMessage.account?.accountId || ""}
+            storagePath={threadMessage.account?.profilePicture?.storagePath}
+            wrapperClassName={styles.profilePic}
+          /> :
+          <ProfilePhotoRobot wrapperClassName={styles.profilePic} />
+        }
       </div>
 
       <div className={styles.messageBody}>
         <div className={styles.accountAndMessageInfoContainer}>
-          <b>{threadMessage.account.username}</b>
+          <b>{threadMessage?.account?.username || threadMessage?.robot?.robotName}</b>
           <div className={"spacer-w-1"} />
           <div>{format(new Date(threadMessage.createdDate), t("dateTimeFormat"))}</div>
         </div>

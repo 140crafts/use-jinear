@@ -28,7 +28,8 @@ const logger = Logger("MemberRow");
 const AUTHORIZE_TOOLTIP_MAP = {
   "MEMBER": "makeChannelMemberAdmin",
   "ADMIN": "makeChannelMemberMember",
-  "OWNER": "makeChannelMemberMember"
+  "OWNER": "makeChannelMemberMember",
+  "ROBOT": "makeChannelMemberMember"
 };
 
 const MemberRow: React.FC<MemberRowProps> = ({ member, currentUserRole }) => {

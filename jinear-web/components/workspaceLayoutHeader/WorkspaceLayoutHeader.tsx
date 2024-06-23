@@ -9,8 +9,11 @@ import WorkspaceMoreActionsButton from "../sideMenu/workspaceMoreActionsButton/W
 import WorkspaceChangeButton from "../workspaceChangeButton/WorkspaceChangeButton";
 import WorkspaceUpgradeButton from "../workspaceUpgradeButton/WorkspaceUpgradeButton";
 import styles from "./WorkspaceLayoutHeader.module.scss";
+import { IoArrowBack } from "react-icons/io5";
 
-interface WorkspaceLayoutHeaderProps {}
+interface WorkspaceLayoutHeaderProps {
+}
+
 // $tablet: 768px;
 const MOBILE_LAYOUT_BREAKPOINT = 768;
 
@@ -26,13 +29,14 @@ const WorkspaceLayoutHeader: React.FC<WorkspaceLayoutHeaderProps> = ({}) => {
     <div className={styles.container}>
       <div className={styles.headerLeftContent}>
         <Button heightVariant={ButtonHeight.short} onClick={router.back}>
-          <b>{"<-"}</b>
+          <b><IoArrowBack /></b>
         </Button>
         {workspace && (
           <>
             <WorkspaceChangeButton currentWorkspace={workspace} />
             <WorkspaceMoreActionsButton />
-            <WorkspaceUpgradeButton workspace={workspace} variant={upgradeButtonVariant} className={styles.upgradeButton} />
+            <WorkspaceUpgradeButton workspace={workspace} variant={upgradeButtonVariant}
+                                    className={styles.upgradeButton} />
           </>
         )}
       </div>
