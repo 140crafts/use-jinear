@@ -19,8 +19,6 @@ public interface ChannelMemberRepository extends JpaRepository<ChannelMember, St
 
     Long countAllByChannelIdAndAccountIdAndRoleTypeIsInAndPassiveIdIsNull(String channelId, String accountId, List<ChannelMemberRoleType> roleTypes);
 
-    Long countAllByChannelIdAndRobotIdAndRoleTypeIsInAndPassiveIdIsNull(String channelId, String robotId, List<ChannelMemberRoleType> roleTypes);
-
     Long countAllByChannelIdAndRoleTypeIsInAndPassiveIdIsNullAndAccount_PassiveIdIsNullAndAccount_Ghost(String channelId, List<ChannelMemberRoleType> roleTypes, Boolean ghost);
 
     boolean existsByChannelIdAndAccountIdAndPassiveIdIsNull(String channelId, String accountId);

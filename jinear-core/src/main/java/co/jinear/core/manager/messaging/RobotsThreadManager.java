@@ -2,7 +2,7 @@ package co.jinear.core.manager.messaging;
 
 import co.jinear.core.model.dto.messaging.message.RichMessageDto;
 import co.jinear.core.model.enumtype.messaging.ThreadType;
-import co.jinear.core.model.request.messaging.thread.InitializeThreadRequest;
+import co.jinear.core.model.request.messaging.thread.RobotsInitializeThreadRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.messaging.channel.ChannelNotifierService;
@@ -15,16 +15,15 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ThreadRobotManager {
+public class RobotsThreadManager {
 
     private final SessionInfoService sessionInfoService;
     private final ChannelAccessValidator channelAccessValidator;
     private final ThreadOperationService threadOperationService;
     private final ChannelNotifierService channelNotifierService;
 
-    public BaseResponse initializeThread(InitializeThreadRequest initializeThreadRequest) {
+    public BaseResponse initializeThread(String channelId, RobotsInitializeThreadRequest initializeThreadRequest) {
         String robotId = sessionInfoService.currentAccountId();
-        String channelId = initializeThreadRequest.getChannelId();
         String initialMessageBody = initializeThreadRequest.getInitialMessageBody();
         channelAccessValidator.validateRobotChannelParticipationAccess(robotId, channelId);
         log.info("Initialize thread has started. robotId: {}, initializeThreadRequest: {}", robotId, initializeThreadRequest);

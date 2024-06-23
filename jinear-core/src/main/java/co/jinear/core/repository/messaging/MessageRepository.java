@@ -19,6 +19,6 @@ public interface MessageRepository extends JpaRepository<Message, String> {
 
     Page<Message> findAllByConversationIdAndCreatedDateBeforeAndPassiveIdIsNullOrderByCreatedDateDesc(String threadId, Date createdDateBefore, Pageable pageable);
 
-    @Query("select distinct(m.accountId) from Message m where m.threadId = :threadId and m.passiveId is null")
+    @Query("select distinct(m.accountId) from Message m where m.threadId = :threadId and m.accountId is not null and m.passiveId is null")
     List<String> findDistinctThreadParticipantAccounts(@Param("threadId") String threadId);
 }

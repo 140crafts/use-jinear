@@ -20,4 +20,10 @@ public class ThreadAccessValidator {
         PlainThreadDto plainThreadDto = threadRetrieveService.retrievePlain(threadId);
         channelAccessValidator.validateChannelAccess(plainThreadDto.getChannelId(), accountId);
     }
+
+    public void validateRobotThreadAccess(String threadId, String robotId) {
+        log.info("Validate robot thread access has started. threadId: {}, robotId: {}", threadId, robotId);
+        PlainThreadDto plainThreadDto = threadRetrieveService.retrievePlain(threadId);
+        channelAccessValidator.validateRobotChannelAccess(plainThreadDto.getChannelId(), robotId);
+    }
 }

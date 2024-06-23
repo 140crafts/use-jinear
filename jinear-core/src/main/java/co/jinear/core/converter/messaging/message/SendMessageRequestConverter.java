@@ -10,6 +10,8 @@ public interface SendMessageRequestConverter {
 
     InitializeMessageVo convertForThread(String accountId, String threadId, SendMessageRequest sendMessageRequest);
 
+    InitializeMessageVo convertForThreadRobot(String robotId, String threadId, SendMessageRequest sendMessageRequest);
+
     @Mapping(target = "conversationId", source = "conversationId")
     InitializeMessageVo convertForConversation(String accountId, String conversationId, SendMessageRequest sendMessageRequest);
 }
