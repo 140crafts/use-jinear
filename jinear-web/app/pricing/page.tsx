@@ -13,6 +13,7 @@ import ThemeToggle from "@/components/themeToggle/ThemeToggle";
 import { IoArrowBack } from "react-icons/io5";
 import { trackWaitlist } from "@/utils/tracker";
 import { selectCurrentAccountId } from "@/slice/accountSlice";
+import posthog from "posthog-js";
 
 interface PricingPageProps {
 }
@@ -24,6 +25,7 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
 
   const onSelfHostClick = () => {
     trackWaitlist({ message: `Self host clicked. currentAccountId: ${currentAccountId}` });
+    posthog.capture("self-host-click", { currentAccountId });
     dispatch(
       popBasicTextInputModal({
         visible: true,
@@ -37,6 +39,7 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
   const onEmailSubmit = (email: string) => {
     dispatch(closeBasicTextInputModal());
     trackWaitlist({ message: `Added to wait-list. email: ${email}` });
+    posthog.capture("self-host-waitlist", { email, currentAccountId });
   };
 
   return (

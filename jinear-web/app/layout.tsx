@@ -25,6 +25,8 @@ import "../styles/fonts.css";
 import { __DEV__ } from "utils/constants";
 import WebsocketHandler from "@/components/websockerHandler/WebsocketHandler";
 import NextTopLoader from "nextjs-toploader";
+import { CSPostHogProvider } from "@/components/postHogProvider/CSPostHogProvider";
+import PostHogPageView from "@/components/postHogPageView/PostHogPageView";
 
 const logger = Logger("_app");
 
@@ -295,36 +297,39 @@ function MyApp({ children }: { children: React.ReactNode }) {
 
   return (
     <html>
-    <body>
-    <NextTopLoader
-      color="#2299DD"
-      showSpinner={false}
-    />
-    <Root>
-      <ReduxProvider>
-        <DateFnsConfigration />
-        <ThemeProvider>
-          <AuthCheck />
-          <WorkspaceAndTeamChangeListener />
-          <OnboardListener />
-          <WebViewEventListener />
-          <PureClientOnly>
-            <ErrorBoundary message={"Firebase Configration"}>
-              <FirebaseConfigration />
-            </ErrorBoundary>
-            <WebsocketHandler />
-          </PureClientOnly>
-          {!__DEV__ && <AxiomWebVitals />}
-          {children}
-          <ToasterProvider />
-          <BodyFixer />
-          <OfflineListener />
-          <ModalProvider />
-        </ThemeProvider>
-      </ReduxProvider>
-    </Root>
-    <Scripts />
-    </body>
+    <CSPostHogProvider>
+      <body>
+      <NextTopLoader
+        color="#2299DD"
+        showSpinner={false}
+      />
+      <Root>
+        <ReduxProvider>
+          <DateFnsConfigration />
+          <ThemeProvider>
+            <AuthCheck />
+            <WorkspaceAndTeamChangeListener />
+            <OnboardListener />
+            <WebViewEventListener />
+            <PureClientOnly>
+              <ErrorBoundary message={"Firebase Configration"}>
+                <FirebaseConfigration />
+              </ErrorBoundary>
+              <WebsocketHandler />
+            </PureClientOnly>
+            {!__DEV__ && <AxiomWebVitals />}
+            <PostHogPageView />
+            {children}
+            <ToasterProvider />
+            <BodyFixer />
+            <OfflineListener />
+            <ModalProvider />
+          </ThemeProvider>
+        </ReduxProvider>
+      </Root>
+      <Scripts />
+      </body>
+    </CSPostHogProvider>
     </html>
   );
 }
