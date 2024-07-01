@@ -18,6 +18,9 @@ public class GCloudProperties {
     @Value("${gcloud.cloudStorage.bucketName}")
     private String bucketName;
 
+    @Value("${gcloud.cloudStorage.base-path}")
+    private String cloudStorageBasePath;
+
     @Value("${gcloud.oauth.baseUrl}")
     private String oauthBaseUrl;
 

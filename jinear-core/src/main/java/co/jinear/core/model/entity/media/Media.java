@@ -1,8 +1,10 @@
 package co.jinear.core.model.entity.media;
 
+import co.jinear.core.converter.media.MediaFileProviderTypeConverter;
 import co.jinear.core.converter.media.MediaVisibilityTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.enumtype.media.FileType;
+import co.jinear.core.model.enumtype.media.MediaFileProviderType;
 import co.jinear.core.model.enumtype.media.MediaOwnerType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import jakarta.persistence.*;
@@ -61,4 +63,8 @@ public class Media extends BaseEntity {
 
     @Column(name = "public_until")
     private ZonedDateTime publicUntil;
+
+    @Convert(converter = MediaFileProviderTypeConverter.class)
+    @Column(name = "provider_type")
+    private MediaFileProviderType providerType;
 }

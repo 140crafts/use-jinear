@@ -22,7 +22,7 @@ public enum GoogleScopeType {
     //CALENDAR
     CALENDAR(10, List.of("https://www.googleapis.com/auth/calendar")),
     CALENDAR_EVENTS(11, List.of("https://www.googleapis.com/auth/calendar.events")),
-    CALENDAR_SETTINGS_READONLY(12, List.of("https://www.googleapis.com/auth/calendar.settings.readonly")),
+    CALENDAR_SETTINGS_READONLY(12, List.of("https://www.googleapis.com/auth/calendar.settings.readonly"));
 //    ADMIN_DIRECTORY_RESOURCE_CALENDAR_READONLY(13, List.of("https://www.googleapis.com/auth/admin.directory.resource.calendar.readonly")),
 //    CONTACTS(14, List.of("https://www.googleapis.com/auth/contacts")),//missing
 //    CONTACTS_OTHER_READONLY(15, List.of("https://www.googleapis.com/auth/contacts.other.readonly")),
@@ -31,12 +31,12 @@ public enum GoogleScopeType {
     //MAIL
 //    MAIL(20, List.of("https://mail.google.com/")),
 
-    GMAIL_ADDONS_CURRENT_MESSAGE_ACTION(21, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.action")),
-    GMAIL_ADDONS_CURRENT_MESSAGE_METADATA(22, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.metadata")),
-    GMAIL_ADDONS_CURRENT_MESSAGE_READONLY(23, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.readonly")),
+//    GMAIL_ADDONS_CURRENT_MESSAGE_ACTION(21, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.action")),
+//    GMAIL_ADDONS_CURRENT_MESSAGE_METADATA(22, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.metadata")),
+//    GMAIL_ADDONS_CURRENT_MESSAGE_READONLY(23, List.of("https://www.googleapis.com/auth/gmail.addons.current.message.readonly")),
 //    GMAIL_METADATA(24, List.of("https://www.googleapis.com/auth/gmail.metadata")),
-    GMAIL_MODIFY(25, List.of("https://www.googleapis.com/auth/gmail.modify")),
-    GMAIL_READONLY(26, List.of("https://www.googleapis.com/auth/gmail.readonly"));
+//    GMAIL_MODIFY(25, List.of("https://www.googleapis.com/auth/gmail.modify")),
+//    GMAIL_READONLY(26, List.of("https://www.googleapis.com/auth/gmail.readonly"));
 
     private final int value;
     private final List<String> keys;
@@ -64,11 +64,11 @@ public enum GoogleScopeType {
     public static List<GoogleScopeType> getMailScopeTypes() {
         return List.of(
 //                MAIL,
-                GMAIL_ADDONS_CURRENT_MESSAGE_ACTION,
-                GMAIL_ADDONS_CURRENT_MESSAGE_METADATA,
-                GMAIL_ADDONS_CURRENT_MESSAGE_READONLY,
-                GMAIL_READONLY,
-                GMAIL_MODIFY
+//                GMAIL_ADDONS_CURRENT_MESSAGE_ACTION,
+//                GMAIL_ADDONS_CURRENT_MESSAGE_METADATA,
+//                GMAIL_ADDONS_CURRENT_MESSAGE_READONLY,
+//                GMAIL_READONLY,
+//                GMAIL_MODIFY
 //                GMAIL_METADATA
         );
     }
