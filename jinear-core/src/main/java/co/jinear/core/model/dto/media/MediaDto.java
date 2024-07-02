@@ -2,6 +2,7 @@ package co.jinear.core.model.dto.media;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.enumtype.media.FileType;
+import co.jinear.core.model.enumtype.media.MediaFileProviderType;
 import co.jinear.core.model.enumtype.media.MediaOwnerType;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,4 +18,6 @@ public class MediaDto extends BaseDto {
     private String bucketName;
     private String originalName;
     private Long size;
+    private MediaFileProviderType providerType;
+    private String url;
 }

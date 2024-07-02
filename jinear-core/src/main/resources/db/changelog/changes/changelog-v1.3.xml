@@ -113,4 +113,11 @@ as
         />
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-485-add-provider_type">
+        <addColumn tableName="media">
+            <column name="provider_type" type="integer" defaultValueNumeric="0" >
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
