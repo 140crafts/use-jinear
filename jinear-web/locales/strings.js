@@ -2316,16 +2316,16 @@ const translations = {
     tr: "Şartlar ve Koşullar"
   },
   homescreenHeroTitleLine1: {
-    en: "Calendar, Task Manager & Messaging",
+    en: "Calendar & Task Manager",
     tr: "Takımlar ve Kişisel kullanım için"
   },
   homescreenHeroTitleLine2: {
     en: "for Individuals and Teams",
-    tr: "Takvim, Görev Yönetimi ve Mesajlaşma"
+    tr: "Takvim ve Görev Yönetimi"
   },
   homescreenHeroText: {
-    en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, manage projects collaboratively. Message with your team mates.",
-    tr: "İş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, projeleri işbirliğiyle yönetin. Takım arkadaşlarınızla mesajlaşın."
+    en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, manage projects collaboratively.",
+    tr: "İş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, projeleri işbirliğiyle yönetin."
   },
   homescreenGoToApp: {
     en: "Go to App",

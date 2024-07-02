@@ -11,6 +11,7 @@ import Button, { ButtonHeight, ButtonVariants } from "../button";
 import BasicFeedList from "../sideMenu/basicFeedList/BasicFeedList";
 import BasicTeamList from "../sideMenu/basicTeamList/BasicTeamList";
 import styles from "./TasksSectionSideMenu.module.css";
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 
 interface TasksSectionSideMenuProps {}
 
@@ -21,8 +22,8 @@ const TasksSectionSideMenu: React.FC<TasksSectionSideMenuProps> = ({}) => {
   const workspaceName = (params?.workspaceName as string) || "";
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
   const _isWebView = isWebView();
-  // const feedsEnabled = useFeatureFlag("FEEDS");
-  const feedsEnabled = !_isWebView;
+  const feedsEnabled = useFeatureFlag("FEEDS");
+  // const feedsEnabled = !_isWebView;
 
   const { data: teamsResponse } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
     skip: workspace == null,

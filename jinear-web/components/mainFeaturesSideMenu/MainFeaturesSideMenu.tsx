@@ -11,6 +11,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { getUnreadConversationCount } from "../../repository/IndexedDbRepository";
 import { useTypedSelector } from "@/store/store";
 import { selectCurrentAccountId } from "@/slice/accountSlice";
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 
 interface MainFeaturesSideMenuProps {
   workspace: AccountsWorkspacePerspectiveDto;
@@ -18,7 +19,7 @@ interface MainFeaturesSideMenuProps {
 
 const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }) => {
   const { t } = useTranslation();
-
+  const messagingEnabled = useFeatureFlag("MESSAGING");
   const currentPath = usePathname();
   const calendarPath = `/${workspace?.username}/calendar`;
   const tasksPath = `/${workspace?.username}/tasks`;
@@ -40,18 +41,20 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
         iconStyle={styles.icon}
       />
 
-      <Button
-        className={styles.iconButton}
-        href={conversationsPath}
-        variant={currentPath?.indexOf(conversationsPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
-      >
-        <div className={styles.iconContainer}>
-          <LuMessagesSquare className={styles.icon} />
-          {unreadConversationCount != 0 &&
-            <div className={styles.unreadWrapper}> {unreadConversationLabel}</div>}
-        </div>
-        {t("mainFeaturesMenuLabelConversations")}
-      </Button>
+      {messagingEnabled &&
+        <Button
+          className={styles.iconButton}
+          href={conversationsPath}
+          variant={currentPath?.indexOf(conversationsPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        >
+          <div className={styles.iconContainer}>
+            <LuMessagesSquare className={styles.icon} />
+            {unreadConversationCount != 0 &&
+              <div className={styles.unreadWrapper}> {unreadConversationLabel}</div>}
+          </div>
+          {t("mainFeaturesMenuLabelConversations")}
+        </Button>
+      }
 
       <Button
         className={styles.iconButton}

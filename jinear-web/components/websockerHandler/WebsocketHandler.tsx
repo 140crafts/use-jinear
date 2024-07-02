@@ -8,6 +8,7 @@ import { io } from "socket.io-client";
 import Logger from "@/utils/logger";
 import { RichMessageDto } from "@/be/jinear-core";
 import { insertMessage } from "../../repository/IndexedDbRepository";
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 
 interface WebsocketHandlerProps {
 
@@ -17,10 +18,11 @@ const logger = Logger("WebsocketHandler");
 
 const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
   const authState = useTypedSelector(selectAuthState);
+  const messagingEnabled = useFeatureFlag("MESSAGING");
   const { data: retrieveMessagingTokenResponse } = useRetrieveMessagingTokenQuery({}, { skip: authState != "LOGGED_IN" });
 
   useEffect(() => {
-    if (retrieveMessagingTokenResponse) {
+    if (retrieveMessagingTokenResponse && messagingEnabled) {
       const socket = io(SOCKET_ROOT, {
         path: "/ws",
         withCredentials: true,
@@ -63,7 +65,7 @@ const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
       });
 
     }
-  }, [retrieveMessagingTokenResponse]);
+  }, [retrieveMessagingTokenResponse, messagingEnabled]);
 
   return null;
 };

@@ -2,7 +2,7 @@
 
 import Logger from "@/utils/logger";
 
-export type FEATURE_FLAG = "EASTER_EGG_LOADING" | "EASTER_EGG_NETWORK" | "LOGIN_WITH_GOOGLE" | "FEEDS";
+export type FEATURE_FLAG = "EASTER_EGG_LOADING" | "EASTER_EGG_NETWORK" | "LOGIN_WITH_GOOGLE" | "FEEDS"  | "MESSAGING";
 
 const logger = Logger("useFeatureFlag");
 

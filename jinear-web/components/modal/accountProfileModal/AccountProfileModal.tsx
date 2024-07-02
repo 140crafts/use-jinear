@@ -33,6 +33,7 @@ const AccountProfileModal: React.FC<AccountProfileModalProps> = ({}) => {
       <div className="spacer-h-4" />
       <AccountDeleteButton />
       <div className="spacer-h-2" />
+
     </Modal>
   );
 };
