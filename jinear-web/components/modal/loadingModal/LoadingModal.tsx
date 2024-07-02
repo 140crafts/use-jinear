@@ -15,7 +15,7 @@ interface LoadingModalProps {}
 
 export const GIF_LOADING_ACCOUNT_IDS = [
   "01gve1623eberp86fc6ec189jm", //pelom
-  "01gvrf1yn6xp9p1q3yar7pdkc6", //osti
+  // "01gvrf1yn6xp9p1q3yar7pdkc6", //osti
   "01gp94s0sk9q4g8g3m9jpsvd0t", //irgat
 ];
 
