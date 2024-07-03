@@ -52,6 +52,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             The terms used in this Privacy Policy have the same meanings as in our Terms and Conditions, which is accessible at
             Jinear unless otherwise defined in this Privacy Policy.
           </p>
+
+          <br/>
+
           <p>
             <strong>Information Collection and Use</strong>
           </p>{" "}
@@ -89,6 +92,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
               </a>
             </li>
           </ul>
+
+          <br/>
+
           <p>
             <strong>Log Data</strong>
           </p>
@@ -99,6 +105,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             version, the configuration of the app when utilizing our Service, the time and date of your use of the Service, and
             other statistics.
           </p>
+
+          <br/>
+
           <p>
             <strong>Service Providers</strong>
           </p>{" "}
@@ -114,6 +123,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             is to perform the tasks assigned to them on our behalf. However, they are obligated not to disclose or use the
             information for any other purpose.
           </p>
+
+          <br/>
+
           <p>
             <strong>Security</strong>
           </p>{" "}
@@ -122,6 +134,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             means of protecting it. But remember that no method of transmission over the internet, or method of electronic storage
             is 100% secure and reliable, and We cannot guarantee its absolute security.
           </p>
+
+          <br/>
+
           <p>
             <strong>Children’s Privacy</strong>
           </p>{" "}
@@ -131,6 +146,20 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             information, We immediately delete this from our servers. If you are a parent or guardian and you are aware that your
             child has provided us with personal information, please contact us so that we will be able to do necessary actions.
           </p>
+
+          <br/>
+
+          <p>
+            <strong>Limited Use Policy (Google) </strong>
+          </p>{" "}
+          <p>
+            Jinear’s use and transfer to any other app of information received from Google APIs will adhere to
+            <a href="https://developers.google.com/terms/api-services-user-data-policy#additional_requirements_for_specific_api_scopes" target="_blank" rel="noopener noreferrer"> Google API Services User Data Policy</a>,
+            including the Limited Use requirements.
+          </p>
+
+          <br/>
+
           <p>
             <strong>Changes to This Privacy Policy</strong>
           </p>{" "}
@@ -139,6 +168,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             changes. We may or may not notify you of any changes by posting the new Privacy Policy on this page. These changes are
             effective immediately after they are posted on this page.
           </p>
+
+          <br/>
+
           <p>
             <strong>Contact Us</strong>
           </p>{" "}
@@ -149,6 +181,9 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             </a>
             .
           </p>
+
+          <br/>
+
           <p>
             <strong>Refunds & Cancellations</strong>
           </p>{" "}
