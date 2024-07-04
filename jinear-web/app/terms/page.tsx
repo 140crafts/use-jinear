@@ -273,7 +273,7 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
           <br/>
 
           <p>
-            <strong>Limited Use Policy (Google) </strong>
+            <strong>Google API Services User Data Policy For Google Products</strong>
           </p>{" "}
           <p>
             Jinear’s use and transfer to any other app of information received from Google APIs will adhere to
