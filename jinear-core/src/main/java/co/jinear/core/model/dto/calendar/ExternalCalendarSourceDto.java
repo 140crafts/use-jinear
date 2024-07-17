@@ -17,4 +17,6 @@ public class ExternalCalendarSourceDto {
     private String location;
     @Nullable
     private String timeZone;
+    @Nullable
+    private Boolean readOnly;
 }
