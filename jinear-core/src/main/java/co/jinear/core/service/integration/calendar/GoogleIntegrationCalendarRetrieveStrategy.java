@@ -8,6 +8,8 @@ import co.jinear.core.model.dto.google.GoogleTokenDto;
 import co.jinear.core.model.dto.google.GoogleUserInfoDto;
 import co.jinear.core.model.dto.integration.IntegrationInfoDto;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
+import co.jinear.core.model.vo.calendar.InitializeExternalEventVo;
+import co.jinear.core.model.vo.calendar.MoveExternalEventVo;
 import co.jinear.core.model.vo.calendar.UpdateExternalEventDatesVo;
 import co.jinear.core.model.vo.calendar.UpdateExternalEventTitleDescriptionVo;
 import co.jinear.core.service.google.GoogleTokenValidatedRetrieveService;
@@ -87,6 +89,58 @@ public class GoogleIntegrationCalendarRetrieveStrategy implements IntegrationCal
                 .map(token -> googleApisClient.retrieveEvent(token, calendarSourceId, eventId))
                 .map(googleCalendarEventInfo -> googleCalendarEventInfoToCalendarEventDtoConverter.mapCalendarEventToCalendarEventDto(externalCalendarSourceDto, googleCalendarEventInfo))
                 .orElse(null);
+    }
+
+    @Override
+    public void insertCalendarEvent(IntegrationInfoDto integrationInfoDto, InitializeExternalEventVo initializeExternalEventVo) {
+        log.info("Insert calendar event has started. initializeExternalEventVo: {}", initializeExternalEventVo);
+        String accessToken = Optional.of(integrationInfoDto)
+                .map(IntegrationInfoDto::getGoogleUserInfo)
+                .map(GoogleUserInfoDto::getGoogleUserInfoId)
+                .map(googleTokenValidatedRetrieveService::retrieveValidatedToken)
+                .map(GoogleTokenDto::getAccessToken)
+                .orElseThrow();
+
+        GoogleCalendarEventInfo googleCalendarEventInfo = new GoogleCalendarEventInfo();
+        googleCalendarEventInfo.setSummary(initializeExternalEventVo.getSummary());
+        googleCalendarEventInfo.setDescription(initializeExternalEventVo.getDescription());
+        googleCalendarEventInfo.setLocation(initializeExternalEventVo.getLocation());
+
+        GoogleCalendarEventDate eventStart = new GoogleCalendarEventDate();
+        Optional.of(initializeExternalEventVo)
+                .map(InitializeExternalEventVo::getHasPreciseAssignedDate)
+                .filter(Boolean.TRUE::equals)
+                .ifPresentOrElse(
+                        hasPreciseAssignedDate -> eventStart.setDateTime(ZonedDateHelper.formatWithDateTimeFormat5(initializeExternalEventVo.getAssignedDate())),
+                        () -> eventStart.setDate(ZonedDateHelper.formatWithDateTimeFormat4(initializeExternalEventVo.getAssignedDate())));
+        googleCalendarEventInfo.setStart(eventStart);
+
+        GoogleCalendarEventDate eventEnd = new GoogleCalendarEventDate();
+        Optional.of(initializeExternalEventVo)
+                .map(InitializeExternalEventVo::getHasPreciseDueDate)
+                .filter(Boolean.TRUE::equals)
+                .ifPresentOrElse(
+                        hasPreciseDueDate -> eventEnd.setDateTime(ZonedDateHelper.formatWithDateTimeFormat5(initializeExternalEventVo.getDueDate())),
+                        () -> eventEnd.setDate(ZonedDateHelper.formatWithDateTimeFormat4(initializeExternalEventVo.getDueDate())));
+        googleCalendarEventInfo.setEnd(eventEnd);
+
+        googleApisClient.initializeEvent(accessToken, initializeExternalEventVo.getCalendarSourceId(), googleCalendarEventInfo);
+        googleCalendarInMemoryCacheService.clearCalendarEventListCache(initializeExternalEventVo.getCalendarSourceId());
+    }
+
+    @Override
+    public void moveCalendarEvent(IntegrationInfoDto integrationInfoDto, MoveExternalEventVo moveExternalEventVo) {
+        log.info("Move calendar event has started. moveExternalEventVo: {}", moveExternalEventVo);
+        String accessToken = Optional.of(integrationInfoDto)
+                .map(IntegrationInfoDto::getGoogleUserInfo)
+                .map(GoogleUserInfoDto::getGoogleUserInfoId)
+                .map(googleTokenValidatedRetrieveService::retrieveValidatedToken)
+                .map(GoogleTokenDto::getAccessToken)
+                .orElseThrow();
+
+        googleApisClient.moveEvent(accessToken, moveExternalEventVo.getCalendarSourceId(), moveExternalEventVo.getEventId(), moveExternalEventVo.getTargetCalendarSourceId());
+        googleCalendarInMemoryCacheService.clearCalendarEventListCache(moveExternalEventVo.getCalendarSourceId());
+        googleCalendarInMemoryCacheService.clearCalendarEventListCache(moveExternalEventVo.getTargetCalendarSourceId());
     }
 
     @Override

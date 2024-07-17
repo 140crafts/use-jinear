@@ -12,6 +12,7 @@ public class TaskDtoToCalendarEventDtoMapper {
 
     public CalendarEventDto map(TaskDto taskDto) {
         CalendarEventDto calendarEventDto = new CalendarEventDto();
+        calendarEventDto.setWorkspaceId(taskDto.getWorkspaceId());
         calendarEventDto.setCalendarEventId(taskDto.getTaskId());
         calendarEventDto.setTitle(taskDto.getTitle());
         calendarEventDto.setAssignedDate(taskDto.getAssignedDate());
