@@ -2,9 +2,10 @@ import {
   BaseResponse,
   CalendarEventDateUpdateRequest,
   CalendarEventFilterRequest,
-  CalendarEventListingResponse,
+  CalendarEventInitializeRequest,
+  CalendarEventListingResponse, CalendarEventMoveRequest,
   CalendarEventTitleDescriptionUpdateRequest,
-  CalendarShareableKeyResponse,
+  CalendarShareableKeyResponse
 } from "@/model/be/jinear-core";
 import { api } from "./api";
 import { taskListingApi } from "./taskListingApi";
@@ -17,15 +18,50 @@ export const calendarEventApi = api.injectEndpoints({
       providesTags: (_result, _err, req) => [
         {
           type: "v1/calendar/event/filter",
-          id: `${JSON.stringify(req)}`,
-        },
-      ],
+          id: `${JSON.stringify(req)}`
+        }
+      ]
+    }),
+    //
+    insertEvent: build.mutation<BaseResponse, CalendarEventInitializeRequest>({
+      query: (req) => ({ url: `v1/calendar/event/update/from-external`, method: "POST", body: req }),
+      invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
+    }),
+    //
+    moveEvent: build.mutation<BaseResponse, CalendarEventMoveRequest>({
+      query: (req) => ({ url: `v1/calendar/event/update/from-external/move`, method: "POST", body: req }),
+      onQueryStarted(req, { dispatch, queryFulfilled, getState }) {
+        //cgds-448 might need later
+        const invalidatedTaskListFilterCaches = taskListingApi.util.selectInvalidatedBy(getState(), ["v1/task/list/filter"]);
+        const invalidatedEventFilterCaches = calendarEventApi.util.selectInvalidatedBy(getState(), ["v1/calendar/event/filter"]);
+        invalidatedEventFilterCaches
+          .filter((cache) => cache.endpointName == "filterCalendarEvents")
+          .forEach((cache) => {
+            dispatch(
+              calendarEventApi.util.updateQueryData("filterCalendarEvents", cache.originalArgs, (draft) => {
+                draft.data
+                  .filter((calendarEventDto) => calendarEventDto.calendarEventSourceType != "TASK")
+                  .filter(
+                    (calendarEventDto) =>
+                      calendarEventDto.calendarEventId == req.eventId && calendarEventDto.calendarId == req.calendarId
+                  )
+                  .forEach((calendarEventDto) => {
+                    if (req.targetCalendarSourceId && calendarEventDto.externalCalendarSourceDto) {
+                      calendarEventDto.externalCalendarSourceDto.externalCalendarSourceId = req.targetCalendarSourceId;
+                    }
+                  });
+                return draft;
+              })
+            );
+          });
+      },
+      invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
     }),
     //
     updateCalendarEventDates: build.mutation<BaseResponse, CalendarEventDateUpdateRequest>({
       query: (req) => ({ url: `v1/calendar/event/update/from-external/dates`, method: "PUT", body: req }),
       onQueryStarted(req, { dispatch, queryFulfilled, getState }) {
-        //cgds-448 migh need later
+        //cgds-448 might need later
         const invalidatedTaskListFilterCaches = taskListingApi.util.selectInvalidatedBy(getState(), ["v1/task/list/filter"]);
         const invalidatedEventFilterCaches = calendarEventApi.util.selectInvalidatedBy(getState(), ["v1/calendar/event/filter"]);
         invalidatedEventFilterCaches
@@ -58,12 +94,12 @@ export const calendarEventApi = api.injectEndpoints({
             );
           });
       },
-      invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"],
+      invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
     }),
     //
     updateTitleAndDescription: build.mutation<BaseResponse, CalendarEventTitleDescriptionUpdateRequest>({
       query: (req) => ({ url: `v1/calendar/event/update/from-external/title-description`, method: "PUT", body: req }),
-      invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"],
+      invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
     }),
     //
     retrieveShareableKey: build.query<CalendarShareableKeyResponse, { workspaceId: string }>({
@@ -71,36 +107,40 @@ export const calendarEventApi = api.injectEndpoints({
       providesTags: (_result, _err, req) => [
         {
           type: `v1/calendar/event/exports/workspace/{workspaceId}/key`,
-          id: req.workspaceId,
-        },
-      ],
+          id: req.workspaceId
+        }
+      ]
     }),
     //
     refreshShareableKey: build.mutation<BaseResponse, { workspaceId: string }>({
       query: ({ workspaceId }: { workspaceId: string }) => ({
         url: `v1/calendar/event/exports/workspace/${workspaceId}/key/refresh`,
-        method: "POST",
+        method: "POST"
       }),
-      invalidatesTags: [`v1/calendar/event/exports/workspace/{workspaceId}/key`],
-    }),
+      invalidatesTags: [`v1/calendar/event/exports/workspace/{workspaceId}/key`]
+    })
     //
-  }),
+  })
 });
 
 export const {
   useFilterCalendarEventsQuery,
+  useInsertEventMutation,
+  useMoveEventMutation,
   useUpdateCalendarEventDatesMutation,
   useUpdateTitleAndDescriptionMutation,
   useRetrieveShareableKeyQuery,
-  useRefreshShareableKeyMutation,
+  useRefreshShareableKeyMutation
 } = calendarEventApi;
 
 export const {
   endpoints: {
     filterCalendarEvents,
+    insertEvent,
+    moveEvent,
     updateCalendarEventDates,
     updateTitleAndDescription,
     retrieveShareableKey,
-    refreshShareableKey,
-  },
+    refreshShareableKey
+  }
 } = calendarEventApi;

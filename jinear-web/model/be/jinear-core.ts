@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-07-01 13:09:17.
+// Generated using typescript-generator version 3.0.1157 on 2024-07-16 22:58:53.
 
 export interface BaseDto {
   createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
   hasContent: boolean;
   hasNext: boolean;
   hasPrevious: boolean;
-  last: boolean;
   first: boolean;
+  last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
   item: any;
   expiresAt: Date;
-  expired: boolean;
   notExpired: boolean;
+  expired: boolean;
 }
 
 export interface CalendarDto {
@@ -85,6 +85,7 @@ export interface CalendarDto {
 }
 
 export interface CalendarEventDto {
+  workspaceId: string;
   calendarId: string;
   calendarEventId: string;
   title: string;
@@ -123,6 +124,7 @@ export interface ExternalCalendarSourceDto {
   description?: string | null;
   location?: string | null;
   timeZone?: string | null;
+  readOnly?: boolean | null;
 }
 
 export interface TaskExternalCalendarFilterDto {
@@ -158,9 +160,9 @@ export interface GmailMessageDto extends BaseDto {
   subject: string;
   body: string;
   gid: string;
+  ghistoryId: string;
   gthreadId: string;
   ginternalDate: string;
-  ghistoryId: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -970,6 +972,25 @@ export interface CalendarEventFilterRequest extends BaseRequest {
   timespanEnd: Date;
 }
 
+export interface CalendarEventInitializeRequest {
+  calendarId: string;
+  calendarSourceId: string;
+  summary?: string | null;
+  description?: string | null;
+  location?: string | null;
+  assignedDate: Date;
+  dueDate: Date;
+  hasPreciseAssignedDate?: boolean | null;
+  hasPreciseDueDate?: boolean | null;
+}
+
+export interface CalendarEventMoveRequest {
+  calendarId: string;
+  calendarSourceId: string;
+  targetCalendarSourceId: string;
+  eventId: string;
+}
+
 export interface CalendarEventTitleDescriptionUpdateRequest {
   calendarId: string;
   calendarSourceId: string;
@@ -1694,7 +1715,7 @@ export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL";
 
 export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
-export type GoogleScopeType = "OPEN_ID" | "USERINFO_PROFILE" | "USERINFO_EMAIL" | "CALENDAR" | "CALENDAR_EVENTS" | "CALENDAR_SETTINGS_READONLY" | "GMAIL_ADDONS_CURRENT_MESSAGE_ACTION" | "GMAIL_ADDONS_CURRENT_MESSAGE_METADATA" | "GMAIL_ADDONS_CURRENT_MESSAGE_READONLY" | "GMAIL_MODIFY" | "GMAIL_READONLY";
+export type GoogleScopeType = "OPEN_ID" | "USERINFO_PROFILE" | "USERINFO_EMAIL" | "CALENDAR" | "CALENDAR_EVENTS" | "CALENDAR_SETTINGS_READONLY";
 
 export type UserConsentPurposeType = "LOGIN" | "ATTACH_MAIL" | "ATTACH_CALENDAR";
 

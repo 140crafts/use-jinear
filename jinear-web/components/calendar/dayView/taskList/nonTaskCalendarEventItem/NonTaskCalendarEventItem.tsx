@@ -6,6 +6,7 @@ import cn from "classnames";
 import React from "react";
 import { IoCalendarOutline } from "react-icons/io5";
 import styles from "./NonTaskCalendarEventItem.module.scss";
+import useTranslation from "@/locals/useTranslation";
 
 interface NonTaskCalendarEventItemProps {
   calendarEvent: CalendarEventDto;
@@ -14,10 +15,11 @@ interface NonTaskCalendarEventItemProps {
 }
 
 const NonTaskCalendarEventItem: React.FC<NonTaskCalendarEventItemProps> = ({
-  calendarEvent,
-  className,
-  withBottomBorderLine = true,
-}) => {
+                                                                             calendarEvent,
+                                                                             className,
+                                                                             withBottomBorderLine = true
+                                                                           }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
   const openCalendarExternalEventOverviewModal = () => {
@@ -34,7 +36,7 @@ const NonTaskCalendarEventItem: React.FC<NonTaskCalendarEventItemProps> = ({
         </div>
       </div>
       <Button className={styles.button} onClick={openCalendarExternalEventOverviewModal}>
-        {calendarEvent.title}
+        {calendarEvent && (calendarEvent.title ? calendarEvent.title : t("calendarTitleNotProvided"))}
       </Button>
     </div>
   );

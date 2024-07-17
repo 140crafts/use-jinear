@@ -17,8 +17,7 @@ interface DateTimeInputProps {
   value: Date;
   setValue: (date?: Date) => void;
   valuePrecise: boolean;
-  toggleValuePrecise: () => void;
-  setValuePrecise: (next: boolean) => void;
+  toggleValuePrecise?: () => void;
   dateSpanStart?: Date;
   dateSpanEnd?: Date;
   disabledBefore?: Date;
@@ -40,7 +39,6 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
   setValue,
   valuePrecise,
   toggleValuePrecise,
-  setValuePrecise,
   dateSpanStart,
   dateSpanEnd,
   disabledBefore,
@@ -63,7 +61,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
 
   const onUnpickClick = () => {
     if (valuePrecise) {
-      toggleValuePrecise();
+      toggleValuePrecise?.();
       return;
     }
     setValue(undefined);

@@ -1,10 +1,9 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import Line from "@/components/line/Line";
 import useWindowSize from "@/hooks/useWindowSize";
 import {
   closeCalendarExternalEventViewModal,
   selectCalendarExternalEventViewModalCalendarEvent,
-  selectCalendarExternalEventViewModalVisible,
+  selectCalendarExternalEventViewModalVisible
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -12,11 +11,12 @@ import React from "react";
 import { LuExternalLink } from "react-icons/lu";
 import Modal from "../modal/Modal";
 import styles from "./CalendarExternalEventViewModal.module.scss";
-import EventActionBar from "./eventActionBar/EventActionBar";
-import EventDateButtons from "./eventActionBar/eventDateButtons/EventDateButtons";
+import EventSource from "@/components/modal/calendarExternalEventViewModal/eventSource/EventSource";
 import EventBody from "./eventBody/EventBody";
+import ExistingEventDateButtons from "@/components/existingEventDateButtons/ExistingEventDateButtons";
 
-interface CalendarExternalEventViewModalProps {}
+interface CalendarExternalEventViewModalProps {
+}
 
 const CalendarExternalEventViewModal: React.FC<CalendarExternalEventViewModalProps> = ({}) => {
   const { t } = useTranslation();
@@ -41,28 +41,30 @@ const CalendarExternalEventViewModal: React.FC<CalendarExternalEventViewModalPro
       contentContainerClass={styles.modal}
       containerClassName={styles.modalContainer}
     >
-      <div className={styles.actionBar}>
-        {calendarEvent?.externalLink && (
-          <Button
-            heightVariant={ButtonHeight.short}
-            variant={ButtonVariants.filled}
-            className={styles.goToSourceButton}
-            href={calendarEvent.externalLink}
-            target="_blank"
-          >
-            <LuExternalLink />
-            <b>{t("calendarEventModalGoToSourceLink")}</b>
-          </Button>
-        )}
-      </div>
-
       {calendarEvent && (
         <div className={styles.eventContentWrapper}>
           <div className={styles.eventDetailLayout}>
             <EventBody calendarEvent={calendarEvent} />
-            <EventDateButtons calendarEvent={calendarEvent} />
-            <Line />
-            <EventActionBar calendarEvent={calendarEvent} />
+            <div className={styles.eventActionBar}>
+              <EventSource calendarEvent={calendarEvent} />
+              <ExistingEventDateButtons calendarEvent={calendarEvent} />
+              {calendarEvent?.externalLink && (
+                <Button
+                  heightVariant={ButtonHeight.short}
+                  variant={ButtonVariants.filled}
+                  className={styles.goToSourceButton}
+                  href={calendarEvent.externalLink}
+                  target="_blank"
+                >
+                  <LuExternalLink />
+                  <span>{t("calendarEventModalGoToSourceLink")}</span>
+                </Button>
+              )}
+            </div>
+          </div>
+
+          <div className={styles.actionBar}>
+
           </div>
         </div>
       )}
