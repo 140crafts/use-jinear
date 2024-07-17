@@ -22,6 +22,7 @@ import {
   useSetHighlightedEventId
 } from "../../context/CalendarContext";
 import styles from "./Cell.module.scss";
+import useTranslation from "@/locals/useTranslation";
 
 interface CellProps {
   weight: number;
@@ -33,6 +34,7 @@ interface CellProps {
 
 const logger = Logger("Cell");
 const Cell: React.FC<CellProps> = ({ id, weight, calendarEvent, weekStart, weekEnd }) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const { isMobile } = useWindowSize();
 
@@ -170,7 +172,7 @@ const Cell: React.FC<CellProps> = ({ id, weight, calendarEvent, weekStart, weekE
         onMouseEnter={_hoverStart}
         onMouseOut={_hoverEnd}
       >
-        {calendarEvent?.title}
+        {calendarEvent && (calendarEvent.title ? calendarEvent.title : t("calendarTitleNotProvided"))}
       </div>
       {isEndDateNotInViewingPeriodAndTodayIsLastDayOfViewingPeriod && (
         <div className={styles["arrow-right-end-bg"]}>

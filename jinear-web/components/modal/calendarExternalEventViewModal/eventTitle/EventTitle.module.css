@@ -1,17 +1,19 @@
 .container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 1rem;
 }
 
-.container:hover {
-  .editTitleButton {
+.noTitleProvided {
+    opacity: .3;
+}
+
+.container:hover .editTitleButton {
     display: flex !important;
-  }
 }
 
 .editTitleButton {
-  display: none !important;
+    display: none !important;
 }

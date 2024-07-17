@@ -15,7 +15,7 @@ const EventSourceCalendarButton: React.FC<EventSourceCalendarButtonProps> = ({ c
   return (
     <div>
       <Button
-        //   onClick={changeSourceCalendar}
+        //onClick={changeSourceCalendar}
         variant={ButtonVariants.filled}
         heightVariant={ButtonHeight.short}
         className={className}

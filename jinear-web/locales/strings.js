@@ -3208,11 +3208,11 @@ const translations = {
     tr: "Spesifik Tarih"
   },
   calendarEventDateStart: {
-    en: "Starts",
+    en: "Start",
     tr: "Başlangıç"
   },
   calendarEventDateEnds: {
-    en: "Ends",
+    en: "End",
     tr: "Bitiş"
   },
   calendarDescriptionSaving: {
@@ -3222,6 +3222,10 @@ const translations = {
   calendarTitleSaving: {
     en: "Saving",
     tr: "Kayıt ediliyor"
+  },
+  calendarTitleNotProvided: {
+    en: "(No Title)",
+    tr: "(Başlıksız)"
   },
   calendarDatesSaveButton: {
     en: "Save",
@@ -3627,6 +3631,38 @@ const translations = {
     en: "We're working on self hosting option. Please provide an email address and we let you know when it's ready.",
     tr: "Self-hosting seçeneği üzerinde çalışıyoruz. Hazır olduğunda size haber vermemiz için lütfen e-posta adresinizi girin."
   },
+  newTaskEventType_TASK: {
+    en: "Task",
+    tr: "Görev"
+  },
+  newTaskEventType_EVENT: {
+    en: "Event",
+    tr: "Etkinlik"
+  },
+  externalCalendarAndSourcePickerNewEvent: {
+    en: "New Event",
+    tr: "Yeni Etkinlik"
+  },
+  newEventModalEventSummary: {
+    en: "Title",
+    tr: "Başlık"
+  },
+  newEventInsertSuccess: {
+    en: "Event created",
+    tr: "Etkinlik oluşturuldu"
+  },
+  newTaskModalCalendarEventCreate: {
+    en: "Create Event",
+    tr: "Etkinlik Oluştur"
+  },
+  newTaskModalCalendarEventCancel: {
+    en: "Cancel",
+    tr: "Vazgeç"
+  },
+  newTaskModalAddCalendar:{
+    en:"You can easily integrate your Google calendars into Jinear, allowing you to manage and organize all your events and appointments in one convenient place.",
+    tr:"Google takvimlerinizi kolayca Jinear'a entegre edebilir, tüm etkinliklerinizi ve randevularınızı tek bir yerde yönetip düzenleyebilirsiniz."
+  }
 };
 
 export default translations;

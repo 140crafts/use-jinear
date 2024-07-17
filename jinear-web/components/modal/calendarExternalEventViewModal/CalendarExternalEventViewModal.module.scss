@@ -20,7 +20,13 @@
 .eventContentWrapper {
   height: 100%;
   padding: 0 0.75rem;
-  margin-bottom: 1.5rem;
+}
+
+.eventActionBar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: .5rem;
 }
 
 .eventDetailLayout {
@@ -30,16 +36,17 @@
 }
 
 .actionBar {
-  position: sticky;
+  //position: sticky;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   width: 100%;
-  top: 0;
+  //top: 0;
   padding: 0.5rem;
   // padding-bottom: 1ch;
   // backdrop-filter: var(--backdrop-filter-blur);
   z-index: 99;
+  margin-top: 1rem;
 }
 
 .goToSourceButton {

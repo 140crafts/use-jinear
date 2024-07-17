@@ -63,7 +63,6 @@ const globalModals: any = (
     <ShareWorkspaceEventsModal />
     <CalendarExternalEventViewModal />
     <WorkspaceMemberPickerModal />
-    <NewCalendarIntegrationModal />
     <NewMailIntegrationModal />
     <MenuMoreActionModal />
     <WorkspaceSwitchModal />
@@ -84,6 +83,7 @@ const globalModals: any = (
     <WorkflowChangeStatusModal />
     <IntegrationFeedItemDetailModal />
     <NewTaskModal />
+    <NewCalendarIntegrationModal />
     <NewTaskBoardModal />
     <TeamPickerModal />
     <WorkspacePickerModal />

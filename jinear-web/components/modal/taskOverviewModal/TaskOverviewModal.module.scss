@@ -1,14 +1,14 @@
 @import "/styles/breakpoints.scss";
 
 .modalBody {
-  height: 95vh;
-  max-height: unset;
-  padding: 0;
+  height: 95vh !important;
+  max-height: unset !important;
+  padding: 0 !important;
 }
 
 .modal {
-  position: relative;
-  height: 95vh;
+  position: relative !important;
+  height: 95vh !important;
 }
 
 .loadingContainer {

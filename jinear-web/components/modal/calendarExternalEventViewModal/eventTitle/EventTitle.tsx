@@ -31,7 +31,7 @@ const EventTitle: React.FC<EventTitleProps> = ({ calendarEvent }) => {
         calendarId: calendarEvent.calendarId,
         calendarSourceId: calendarEvent.externalCalendarSourceDto.externalCalendarSourceId,
         calendarEventId: calendarEvent.calendarEventId,
-        title,
+        title
       };
       updateTitleAndDescription(req);
       setTaskTitle(title);
@@ -45,7 +45,7 @@ const EventTitle: React.FC<EventTitleProps> = ({ calendarEvent }) => {
         title: t("calendarEventTitleChangeModalTitle"),
         infoText: t("calendarEventTitleChangeModalInfoText"),
         initialText: calendarEvent.title,
-        onSubmit: changeTitle,
+        onSubmit: changeTitle
       })
     );
   };
@@ -53,7 +53,9 @@ const EventTitle: React.FC<EventTitleProps> = ({ calendarEvent }) => {
   return (
     <div className={styles.container}>
       <h1>
-        <b>{taskTitle}</b>
+        {taskTitle && taskTitle.length > 0 ?
+          <b>{taskTitle}</b> :
+          <span className={styles.noTitleProvided}><b>{t("calendarTitleNotProvided")}</b></span>}
       </h1>
       {isUpdateLoading && <CircularProgress size={16} />}
       {isUpdateLoading && <span>{t("calendarTitleSaving")}</span>}

@@ -9,12 +9,14 @@ import { differenceInMinutes } from "date-fns";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styles from "./TaskPositionBasedCell.module.css";
+import useTranslation from "@/locals/useTranslation";
 
 interface TaskPositionBasedCellProps {
   cell: ICalendarDayRowCell;
 }
 
 const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) => {
+  const { t } = useTranslation();
   const calendarEvent = cell.event;
   const dispatch = useAppDispatch();
   const { isMobile } = useWindowSize();
@@ -39,11 +41,11 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
     top: cell.top,
     left: `${cell.left}%`,
     height: cell.height,
-    width: `${cell.width}%`,
+    width: `${cell.width}%`
   };
   const topicColor = calendarEvent?.relatedTask?.topic?.color || "transparent";
   const topicCellStyle = {
-    borderLeftColor: `#${topicColor}`,
+    borderLeftColor: `#${topicColor}`
   };
   const zIndexStyle = highlightedZIndex ? { zIndex: 5 } : { zIndex: undefined };
 
@@ -113,7 +115,7 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
         onMouseEnter={_hoverStart}
         onMouseOut={_hoverEnd}
       >
-        {calendarEvent?.title}
+        {calendarEvent && (calendarEvent.title ? calendarEvent.title : t("calendarTitleNotProvided"))}
       </div>
     </Link>
   );

@@ -11,7 +11,6 @@ import React, { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { IoInformationCircleOutline } from "react-icons/io5";
-import { LuChevronRight } from "react-icons/lu";
 import WorkspaceAndTeamInfo from "../common/workspaceAndTeamInfo/WorkspaceAndTeamInfo";
 import styles from "./NewTaskForm.module.scss";
 import BoardPickerButton from "./boardPickerButton/BoardPickerButton";
@@ -39,19 +38,19 @@ interface NewTaskFormProps {
 const logger = Logger("NewTaskForm");
 
 const NewTaskForm: React.FC<NewTaskFormProps> = ({
-  workspace,
-  initialTeam,
-  subTaskOf,
-  subTaskOfLabel,
-  initialAssignedDate,
-  initialAssignedDateIsPrecise,
-  initialDueDate,
-  initialDueDateIsPrecise,
-  initialRelatedFeedItemData,
-  onClose,
-  className,
-  footerContainerClass,
-}) => {
+                                                   workspace,
+                                                   initialTeam,
+                                                   subTaskOf,
+                                                   subTaskOfLabel,
+                                                   initialAssignedDate,
+                                                   initialAssignedDateIsPrecise,
+                                                   initialDueDate,
+                                                   initialDueDateIsPrecise,
+                                                   initialRelatedFeedItemData,
+                                                   onClose,
+                                                   className,
+                                                   footerContainerClass
+                                                 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const {
@@ -61,7 +60,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
     setValue,
     watch,
     reset,
-    formState: { errors },
+    formState: { errors }
   } = useForm<TaskInitializeRequest>();
   const [selectedTeam, setSelectedTeam] = useState<TeamDto>(initialTeam);
   const workspaceId = workspace.workspaceId;
@@ -72,7 +71,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
 
   const [
     initializeTask,
-    { data: initializeTaskResponse, isLoading: isInitializeTaskLoading, isSuccess: isInitializeTaskSuccess },
+    { data: initializeTaskResponse, isLoading: isInitializeTaskLoading, isSuccess: isInitializeTaskSuccess }
   ] = useInitializeTaskMutation();
 
   useEffect(() => {
@@ -100,7 +99,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
 
   useEffect(() => {
     if (isInitializeTaskSuccess && initializeTaskResponse) {
-      console.log({ NewTaskForm: initializeTaskResponse });
+      logger.log({ NewTaskForm: initializeTaskResponse });
       if (initializeTaskResponse.data.workspace && initializeTaskResponse.data.team) {
         const teamTag = initializeTaskResponse.data.team?.tag;
         const teamTagNo = initializeTaskResponse.data.teamTagNo;
@@ -150,23 +149,6 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
         <input type="hidden" value={selectedTeam?.teamId} {...register("teamId")} />
         {subTaskOf && <input type="hidden" value={subTaskOf} {...register("subTaskOf")} />}
 
-        <div className={styles.workspaceAndTeamInfoContainer}>
-          <WorkspaceAndTeamInfo
-            readOnly={subTaskOf != null}
-            workspace={workspace}
-            team={selectedTeam}
-            onTeamChange={setSelectedTeam}
-            buttonContainerClassName={styles.workspaceAndTeamInfoButtonContainer}
-            heightVariant={ButtonHeight.short}
-          />
-          <div className={styles.newTaskLabelContainer}>
-            <LuChevronRight className={styles.titleChevronIcon} />
-            <div className="single-line">{t("newTaskModalTitle")}</div>
-          </div>
-        </div>
-
-        <TitleInput labelClass={styles.label} register={register} />
-
         {subTaskOfLabel && (
           <>
             <div className={styles.subtaskInfo}>
@@ -188,6 +170,21 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             />
           </div>
         )}
+
+        <TitleInput labelClass={styles.label} register={register} />
+
+        <div className="flex-1" />
+
+        <div className={styles.workspaceAndTeamInfoContainer}>
+          <WorkspaceAndTeamInfo
+            readOnly={subTaskOf != null}
+            workspace={workspace}
+            team={selectedTeam}
+            onTeamChange={setSelectedTeam}
+            buttonContainerClassName={styles.workspaceAndTeamInfoButtonContainer}
+            heightVariant={ButtonHeight.short}
+          />
+        </div>
 
         <div className={styles.actionBar}>
           <TopicPickerButton register={register} setValue={setValue} workspace={workspace} team={selectedTeam} />
