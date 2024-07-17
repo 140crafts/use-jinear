@@ -33,8 +33,8 @@ const CalendarExternalEventViewModal: React.FC<CalendarExternalEventViewModalPro
   return (
     <Modal
       visible={visible}
-      width={isMobile ? "fullscreen" : "large"}
-      title={calendarEvent?.title}
+      // width={isMobile ? "fullscreen" : "large"}
+      title={calendarEvent?.title??t('calendarTitleNotProvided')}
       hasTitleCloseButton={true}
       requestClose={close}
       bodyClass={styles.modalBody}
