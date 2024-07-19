@@ -41,4 +41,12 @@ public class CalendarEventUpdateController {
     public BaseResponse updateTitleAndDescription(@Valid @RequestBody CalendarEventTitleDescriptionUpdateRequest calendarEventTitleDescriptionUpdateRequest) {
         return calendarEventUpdateManager.updateTitleAndDescription(calendarEventTitleDescriptionUpdateRequest);
     }
+
+    @DeleteMapping("/calendar/{calendarId}/source/{sourceId}/event/{eventId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse deleteEvent(@PathVariable String calendarId,
+                                    @PathVariable String sourceId,
+                                    @PathVariable String eventId) {
+        return calendarEventUpdateManager.deleteEvent(calendarId, sourceId, eventId);
+    }
 }

@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.calendar.ExternalCalendarSourceDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.enumtype.calendar.CalendarEventSourceType;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
+import co.jinear.core.system.gcloud.googleapis.model.calendar.enumtype.GoogleCalendarAccessRoleType;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.response.GoogleCalendarEventListResponse;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarEventDate;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarEventInfo;
@@ -54,6 +55,10 @@ public class GoogleCalendarEventInfoToCalendarEventDtoConverter {
         externalCalendarSourceDto.setSummary(googleCalendarEventListResponse.getSummary());
         externalCalendarSourceDto.setDescription(googleCalendarEventListResponse.getDescription());
         externalCalendarSourceDto.setTimeZone(googleCalendarEventListResponse.getTimeZone());
+        Optional.of(googleCalendarEventListResponse)
+                .map(GoogleCalendarEventListResponse::getAccessRole)
+                .map(GoogleCalendarAccessRoleType::isReadOnly)
+                .ifPresent(externalCalendarSourceDto::setReadOnly);
         calendarEventDto.setExternalCalendarSourceDto(externalCalendarSourceDto);
     }
 

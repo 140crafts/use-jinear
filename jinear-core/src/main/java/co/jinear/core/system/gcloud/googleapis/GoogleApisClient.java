@@ -29,5 +29,7 @@ public interface GoogleApisClient {
 
     GoogleCalendarEventInfo updateEvent(String token, String calendarSourceId, GoogleCalendarEventInfo googleCalendarEventInfo);
 
+    void deleteEvent(String token, String calendarSourceId, String eventId);
+
     GoogleCalendarEventInfo moveEvent(String token, String calendarSourceId, String eventId, String targetCalendarSourceId);
 }

@@ -204,6 +204,19 @@ public class GoogleIntegrationCalendarRetrieveStrategy implements IntegrationCal
         googleCalendarInMemoryCacheService.clearCalendarEventListCache(updateExternalEventTitleDescriptionVo.getCalendarSourceId());
     }
 
+    @Override
+    public void deleteCalendarEvent(IntegrationInfoDto integrationInfoDto, String calendarSourceId, String eventId) {
+        Optional.of(integrationInfoDto)
+                .map(IntegrationInfoDto::getGoogleUserInfo)
+                .map(GoogleUserInfoDto::getGoogleUserInfoId)
+                .map(googleTokenValidatedRetrieveService::retrieveValidatedToken)
+                .map(GoogleTokenDto::getAccessToken)
+                .ifPresent(token -> {
+                    googleApisClient.deleteEvent(token, calendarSourceId, eventId);
+                    googleCalendarInMemoryCacheService.clearCalendarEventListCache(calendarSourceId);
+                });
+    }
+
     private ExternalCalendarSourceDto retrieveAndCacheCalendarSource(IntegrationInfoDto integrationInfoDto, String externalCalendarSourceId) {
         log.info("Retrieve calendar source externalCalendarSourceId: {}", externalCalendarSourceId);
         return Optional.of(integrationInfoDto)
