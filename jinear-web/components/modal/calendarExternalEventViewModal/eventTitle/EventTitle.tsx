@@ -16,6 +16,8 @@ interface EventTitleProps {
 const EventTitle: React.FC<EventTitleProps> = ({ calendarEvent }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const readOnly = calendarEvent?.externalCalendarSourceDto?.readOnly;
+
   const [updateTitleAndDescription, { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading }] =
     useUpdateTitleAndDescriptionMutation();
   const [taskTitle, setTaskTitle] = useState(calendarEvent.title);
@@ -59,7 +61,7 @@ const EventTitle: React.FC<EventTitleProps> = ({ calendarEvent }) => {
       </h1>
       {isUpdateLoading && <CircularProgress size={16} />}
       {isUpdateLoading && <span>{t("calendarTitleSaving")}</span>}
-      {!isUpdateLoading && (
+      {!isUpdateLoading && !readOnly && (
         <Button
           disabled={isUpdateLoading}
           heightVariant={ButtonHeight.short}

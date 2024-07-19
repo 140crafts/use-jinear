@@ -29,28 +29,30 @@ interface DateTimeInputProps {
   minuteResolution?: 1 | 5 | 15 | 30 | 60;
   contentContainerClassName?: string;
   dateButtonClassName?: string;
+  disabled?: boolean;
 }
 
 const logger = Logger("DateTimeInput");
 const DateTimeInput: React.FC<DateTimeInputProps> = ({
-  id,
-  type,
-  value,
-  setValue,
-  valuePrecise,
-  toggleValuePrecise,
-  dateSpanStart,
-  dateSpanEnd,
-  disabledBefore,
-  disabledAfter,
-  datePickerModalTitle,
-  dateInputButtonIcon,
-  dateButtonLabel,
-  allowEmptyDate = true,
-  minuteResolution = 1,
-  contentContainerClassName,
-  dateButtonClassName,
-}) => {
+                                                       id,
+                                                       type,
+                                                       value,
+                                                       setValue,
+                                                       valuePrecise,
+                                                       toggleValuePrecise,
+                                                       dateSpanStart,
+                                                       dateSpanEnd,
+                                                       disabledBefore,
+                                                       disabledAfter,
+                                                       datePickerModalTitle,
+                                                       dateInputButtonIcon,
+                                                       dateButtonLabel,
+                                                       allowEmptyDate = true,
+                                                       minuteResolution = 1,
+                                                       contentContainerClassName,
+                                                       dateButtonClassName,
+                                                       disabled = false
+                                                     }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -91,7 +93,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
         dateSpanEnd,
         disabledBefore,
         disabledAfter,
-        title: datePickerModalTitle ? datePickerModalTitle : t("calendarEventCalendarExternalSourceChange"),
+        title: datePickerModalTitle ? datePickerModalTitle : t("calendarEventCalendarExternalSourceChange")
       })
     );
   };
@@ -105,6 +107,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
         variant={ButtonVariants.filled}
         onClick={onPickClick}
         className={dateButtonClassName}
+        disabled={disabled}
       >
         {value ? (
           <div className={styles.labelButton}>
@@ -128,11 +131,12 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
             onMinuteChange={onMinuteChange}
             defaultHours={value ? `${getHours(value)}`.padStart(2, "0") : undefined}
             defaultMinutes={value ? `${getMinutes(value)}`.padStart(2, "0") : undefined}
+            disabled={disabled}
           />
         </>
       )}
 
-      {allowEmptyDate && valuePrecise && (
+      {allowEmptyDate && valuePrecise && !disabled && (
         <Button
           heightVariant={ButtonHeight.short}
           variant={ButtonVariants.filled2}

@@ -19,6 +19,7 @@ const EventSource: React.FC<EventSourceProps> = ({ calendarEvent }) => {
 
   const { data: membershipsResponse } = useRetrieveCalendarMembershipsQuery({ workspaceId: calendarEvent.workspaceId });
   const [moveEvent, {}] = useMoveEventMutation();
+  const calendarReadOnly = calendarEvent?.externalCalendarSourceDto?.readOnly;
 
   const onCalendarSelect = (calendarId: string) => {
     setCalendarId(calendarId);
@@ -48,6 +49,7 @@ const EventSource: React.FC<EventSourceProps> = ({ calendarEvent }) => {
           onCalendarSourceSelect={onCalendarSourceSelect}
           hasNewEventText={false}
           calendarChangeable={false}
+          calendarSourceChangeable={!calendarReadOnly}
         />}
     </div>
   );

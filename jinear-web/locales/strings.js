@@ -3191,6 +3191,10 @@ const translations = {
     en: "Open External Link",
     tr: "Kaynağında Görüntüle"
   },
+  calendarEventModalDeleteEvent: {
+    en: "Delete",
+    tr: "Sil"
+  },
   calendarEventCalendarExternalSourceChange: {
     en: "Change Calendar",
     tr: "Takvimi Değiştir"
@@ -3662,7 +3666,19 @@ const translations = {
   newTaskModalAddCalendar:{
     en:"You can easily integrate your Google calendars into Jinear, allowing you to manage and organize all your events and appointments in one convenient place.",
     tr:"Google takvimlerinizi kolayca Jinear'a entegre edebilir, tüm etkinliklerinizi ve randevularınızı tek bir yerde yönetip düzenleyebilirsiniz."
-  }
+  },
+  deleteCalendarEventAreYouSureTitle: {
+    en: "Delete Event",
+    tr: "Etkinliği Sil"
+  },
+  deleteCalendarEventAreYouSureText: {
+    en: "Are you sure to delete event? This action can not be undone!",
+    tr: "Etkinliği silmek istediğinizden emin misiniz? Bu işlem geri alınamaz!"
+  },
+  deleteCalendarEventAreYouSureConfirmLabel: {
+    en: "Delete",
+    tr: "Sil"
+  },
 };
 
 export default translations;
