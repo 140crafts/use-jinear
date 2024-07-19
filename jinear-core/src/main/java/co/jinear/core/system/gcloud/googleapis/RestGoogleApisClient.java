@@ -168,6 +168,21 @@ public class RestGoogleApisClient implements GoogleApisClient {
     }
 
     @Override
+    public void deleteEvent(String token, String calendarSourceId, String eventId) {
+        log.info("Delete calendar event has started. calendarSourceId: {}, eventId: {}", calendarSourceId, eventId);
+
+        UriTemplateHandler template = googleApisRestTemplate.getUriTemplateHandler();
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put(CALENDAR_ID_PARAM, calendarSourceId);
+        uriVariables.put("eventId", eventId);
+        URI uri = template.expand(CALENDAR_EVENT, uriVariables);
+
+        HttpHeaders headers = retrieveHeaders(token);
+        HttpEntity<GoogleCalendarEventInfo> requestEntity = new HttpEntity<>(headers);
+        googleApisRestTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, String.class);
+    }
+
+    @Override
     public GoogleCalendarEventInfo moveEvent(String token, String calendarSourceId, String eventId, String targetCalendarSourceId) {
         log.info("Move calendar event has started. calendarSourceId: {}, eventId: {}, targetCalendarSourceId: {}", calendarSourceId, eventId, targetCalendarSourceId);
 

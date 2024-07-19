@@ -31,4 +31,6 @@ public interface IntegrationCalendarRetrieveStrategy {
     void updateCalendarEventDates(IntegrationInfoDto integrationInfoDto, UpdateExternalEventDatesVo updateExternalEventDatesVo);
 
     void updateCalendarEventTitleDescription(IntegrationInfoDto integrationInfoDto, UpdateExternalEventTitleDescriptionVo updateExternalEventTitleDescriptionVo);
+
+    void deleteCalendarEvent(IntegrationInfoDto integrationInfoDto, String calendarSourceId, String eventId);
 }

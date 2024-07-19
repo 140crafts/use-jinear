@@ -41,4 +41,10 @@ public class CalendarExternalEventOperationService {
         IntegrationCalendarRetrieveStrategy integrationCalendarRetrieveStrategy = integrationCalendarRetrieveStrategyFactory.getStrategy(integrationInfoDto.getProvider());
         integrationCalendarRetrieveStrategy.updateCalendarEventTitleDescription(integrationInfoDto, updateExternalEventTitleDescriptionVo);
     }
+
+    public void deleteCalendarEvent(IntegrationInfoDto integrationInfoDto, String calendarSourceId, String eventId) {
+        log.info("Delete calendar event has started. calendarSourceId: {}, eventId: {}", calendarSourceId, eventId);
+        IntegrationCalendarRetrieveStrategy integrationCalendarRetrieveStrategy = integrationCalendarRetrieveStrategyFactory.getStrategy(integrationInfoDto.getProvider());
+        integrationCalendarRetrieveStrategy.deleteCalendarEvent(integrationInfoDto, calendarSourceId, eventId);
+    }
 }

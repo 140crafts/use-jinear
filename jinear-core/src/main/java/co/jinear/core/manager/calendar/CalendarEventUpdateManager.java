@@ -44,7 +44,7 @@ public class CalendarEventUpdateManager {
         CalendarDto calendarDto = calendarRetrieveService.retrieveCalendar(calendarEventInitializeRequest.getCalendarId());
         workspaceValidator.validateHasAccess(currentAccountId, calendarDto.getWorkspaceId());
         calendarAccessValidator.validateHasCalendarAccess(currentAccountId, calendarDto.getCalendarId());
-        log.info("Insert event has started.");
+        log.info("Insert event has started. currentAccountId: {}", currentAccountId);
 
         IntegrationInfoDto integrationInfoDto = calendarDto.getIntegrationInfo();
         InitializeExternalEventVo initializeExternalEventVo = calendarEventInitializeRequestToVoConverter.convert(calendarEventInitializeRequest);
@@ -58,7 +58,7 @@ public class CalendarEventUpdateManager {
         CalendarDto calendarDto = calendarRetrieveService.retrieveCalendar(calendarEventMoveRequest.getCalendarId());
         workspaceValidator.validateHasAccess(currentAccountId, calendarDto.getWorkspaceId());
         calendarAccessValidator.validateHasCalendarAccess(currentAccountId, calendarDto.getCalendarId());
-        log.info("Move event has started.");
+        log.info("Move event has started. currentAccountId: {}", currentAccountId);
 
         IntegrationInfoDto integrationInfoDto = calendarDto.getIntegrationInfo();
         MoveExternalEventVo moveExternalEventVo = calendarEventMoveRequestToVoConverter.convert(calendarEventMoveRequest);
@@ -72,7 +72,7 @@ public class CalendarEventUpdateManager {
         CalendarDto calendarDto = calendarRetrieveService.retrieveCalendar(calendarEventDateUpdateRequest.getCalendarId());
         workspaceValidator.validateHasAccess(currentAccountId, calendarDto.getWorkspaceId());
         calendarAccessValidator.validateHasCalendarAccess(currentAccountId, calendarDto.getCalendarId());
-        log.info("Update event dates has started.");
+        log.info("Update event dates has started. currentAccountId: {}", currentAccountId);
 
         IntegrationInfoDto integrationInfoDto = calendarDto.getIntegrationInfo();
         UpdateExternalEventDatesVo updateExternalEventDatesVo = updateExternalEventDatesRequestToVoConverter.convert(calendarEventDateUpdateRequest);
@@ -86,11 +86,24 @@ public class CalendarEventUpdateManager {
         CalendarDto calendarDto = calendarRetrieveService.retrieveCalendar(calendarEventTitleDescriptionUpdateRequest.getCalendarId());
         workspaceValidator.validateHasAccess(currentAccountId, calendarDto.getWorkspaceId());
         calendarAccessValidator.validateHasCalendarAccess(currentAccountId, calendarDto.getCalendarId());
-        log.info("Update event title and description has started.");
+        log.info("Update event title and description has started. currentAccountId: {}", currentAccountId);
 
         IntegrationInfoDto integrationInfoDto = calendarDto.getIntegrationInfo();
         UpdateExternalEventTitleDescriptionVo updateExternalEventTitleDescriptionVo = updateExternalEventTitleDescriptionToVoConverter.converter(calendarEventTitleDescriptionUpdateRequest);
         calendarExternalEventUpdateService.updateCalendarEventTitleDescription(integrationInfoDto, updateExternalEventTitleDescriptionVo);
+
+        return new BaseResponse();
+    }
+
+    public BaseResponse deleteEvent(String calendarId, String sourceId, String eventId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        CalendarDto calendarDto = calendarRetrieveService.retrieveCalendar(calendarId);
+        workspaceValidator.validateHasAccess(currentAccountId, calendarDto.getWorkspaceId());
+        calendarAccessValidator.validateHasCalendarAccess(currentAccountId, calendarDto.getCalendarId());
+        log.info("Delete event has started. currentAccountId: {}", currentAccountId);
+
+        IntegrationInfoDto integrationInfoDto = calendarDto.getIntegrationInfo();
+        calendarExternalEventUpdateService.deleteCalendarEvent(integrationInfoDto, sourceId, eventId);
 
         return new BaseResponse();
     }
