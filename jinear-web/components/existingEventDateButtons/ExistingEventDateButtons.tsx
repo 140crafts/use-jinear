@@ -18,6 +18,7 @@ const logger = Logger("ExistingEventDateButtons");
 
 const ExistingEventDateButtons: React.FC<ExistingEventDateButtonsProps> = ({ calendarEvent }) => {
   const { t } = useTranslation();
+  const calendarReadOnly = calendarEvent?.externalCalendarSourceDto?.readOnly;
   const [initialDates, setInitialDates] = useState({
     assignedDate: (calendarEvent.assignedDate && calendarEvent.dueDate) ? isBefore(new Date(calendarEvent.assignedDate), new Date(calendarEvent.dueDate))
       ? new Date(calendarEvent.assignedDate)
@@ -80,39 +81,6 @@ const ExistingEventDateButtons: React.FC<ExistingEventDateButtonsProps> = ({ cal
     setAllDay(!allDay);
   };
 
-  const changeToInitial = () => {
-    const initialAssignedDate = (calendarEvent.assignedDate && calendarEvent.dueDate) ? isBefore(new Date(calendarEvent.assignedDate), new Date(calendarEvent.dueDate))
-      ? new Date(calendarEvent.assignedDate)
-      : new Date(calendarEvent.dueDate) : new Date();
-    const initialDueDate = (calendarEvent.assignedDate && calendarEvent.dueDate) ? isBefore(new Date(calendarEvent.assignedDate), new Date(calendarEvent.dueDate))
-      ? new Date(calendarEvent.dueDate)
-      : new Date(calendarEvent.assignedDate) : new Date();
-
-    setAssignedDate(initialAssignedDate);
-    setDueDate(initialDueDate);
-    setAllDay(calendarEvent.hasPreciseAssignedDate || calendarEvent.hasPreciseDueDate);
-    setInitialDates({
-      allDay: calendarEvent.hasPreciseAssignedDate || calendarEvent.hasPreciseDueDate,
-      assignedDate: initialAssignedDate,
-      dueDate: initialDueDate
-    });
-  };
-
-  const onSave = () => {
-    if (calendarEvent && calendarEvent?.externalCalendarSourceDto) {
-      updateCalendarEventDates({
-        calendarId: calendarEvent.calendarId,
-        calendarSourceId: calendarEvent.externalCalendarSourceDto.externalCalendarSourceId,
-        calendarEventId: calendarEvent.calendarEventId,
-        assignedDate,
-        dueDate,
-        hasPreciseAssignedDate: allDay,
-        hasPreciseDueDate: allDay
-      });
-      setInitialDates({ allDay, assignedDate, dueDate });
-    }
-  };
-
   return (
     <div className={styles.container}>
       <EventDateButtons
@@ -122,42 +90,8 @@ const ExistingEventDateButtons: React.FC<ExistingEventDateButtonsProps> = ({ cal
         onAssignedDateUpdate={onAssignedDateUpdate}
         onDueDateUpdate={onDueDateUpdate}
         onAllDayUpdate={onAllDayUpdate}
+        disabled={!!calendarReadOnly}
       />
-
-      {/*{isUpdateDatesLoading && (*/}
-      {/*  <div className={styles.loadingContainer}>*/}
-      {/*    <CircularProgress size={14} />*/}
-      {/*    <div>{t("calendarDatesSaving")}</div>*/}
-      {/*  </div>*/}
-      {/*)}*/}
-
-      {/*{(initialDates.assignedDate?.toISOString() != assignedDate?.toISOString() || initialDates.dueDate?.toISOString() != dueDate?.toISOString() || `${initialDates.allDay}` != `${allDay}`)*/}
-      {/*  &&*/}
-      {/*  (<div className={styles.actionsContainer}>*/}
-      {/*      {!isUpdateDatesLoading && (*/}
-      {/*        <>*/}
-      {/*          <Button*/}
-      {/*            onClick={onSave}*/}
-      {/*            disabled={isUpdateDatesLoading}*/}
-      {/*            loading={isUpdateDatesLoading}*/}
-      {/*            heightVariant={ButtonHeight.short}*/}
-      {/*            variant={ButtonVariants.contrast}*/}
-      {/*          >*/}
-      {/*            {t("calendarDatesSaveButton")}*/}
-      {/*          </Button>*/}
-      {/*          <Button*/}
-      {/*            disabled={isUpdateDatesLoading}*/}
-      {/*            onClick={changeToInitial}*/}
-      {/*            heightVariant={ButtonHeight.short}*/}
-      {/*            variant={ButtonVariants.filled2}*/}
-      {/*          >*/}
-      {/*            {t("calendarDatesCancelButton")}*/}
-      {/*          </Button>*/}
-      {/*        </>*/}
-      {/*      )}*/}
-      {/*    </div>*/}
-      {/*  )}*/}
-
     </div>
   );
 };

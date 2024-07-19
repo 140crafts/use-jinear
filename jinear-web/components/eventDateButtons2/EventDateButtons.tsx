@@ -21,7 +21,7 @@ interface EventDateButtonsProps {
   onAssignedDateUpdate: (assignedDate: Date) => void,
   onDueDateUpdate: (dueDate: Date) => void,
   onAllDayUpdate: (allDay: boolean) => void,
-  withLabels?: boolean
+  disabled?: boolean
 }
 
 const logger = Logger("EventDateButtons2");
@@ -33,7 +33,7 @@ const EventDateButtons: React.FC<EventDateButtonsProps> = ({
                                                              onAssignedDateUpdate,
                                                              onDueDateUpdate,
                                                              onAllDayUpdate,
-                                                             withLabels = true
+                                                             disabled = false
                                                            }) => {
   logger.log("EventDateButtons");
   const { t } = useTranslation();
@@ -59,10 +59,11 @@ const EventDateButtons: React.FC<EventDateButtonsProps> = ({
       <div className={styles.datesContainer}>
         <div className={styles.toggleButtonContainer}>
           <input id={"all-day-checkbox"} type="checkbox" checked={allDay} onChange={handleChecked}
+                 disabled={disabled}
                  className={styles.hidden} />
           <label className={cn(styles.toggleLabel, allDay && styles.toggleLabelChecked)}
                  htmlFor={"all-day-checkbox"}>
-            {allDay ? <IoCheckboxOutline size={11} /> : <IoSquareOutline size={11} /> }
+            {allDay ? <IoCheckboxOutline size={11} /> : <IoSquareOutline size={11} />}
             {t("calendarEventAllDayButtonLabel")}
           </label>
         </div>
@@ -77,6 +78,7 @@ const EventDateButtons: React.FC<EventDateButtonsProps> = ({
             contentContainerClassName={styles.contentContainerClassName}
             dateButtonClassName={styles.dateButtonClassName}
             dateInputButtonIcon={IoPlaySkipForwardOutline}
+            disabled={disabled}
           />
         </div>
         <div className={styles.dateInputContainer}>
@@ -90,6 +92,7 @@ const EventDateButtons: React.FC<EventDateButtonsProps> = ({
             contentContainerClassName={styles.contentContainerClassName}
             dateButtonClassName={styles.dateButtonClassName}
             dateInputButtonIcon={IoPlaySkipBackOutline}
+            disabled={disabled}
           />
         </div>
       </div>

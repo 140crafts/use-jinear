@@ -20,6 +20,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ calendarEvent }) =>
   const [updateTitleAndDescription, { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading }] =
     useUpdateTitleAndDescriptionMutation();
   const tiptapRef = useRef<ITiptapRef>(null);
+  const calendarReadOnly = calendarEvent?.externalCalendarSourceDto?.readOnly;
 
   const save = () => {
     const input: HTMLInputElement | null = document.getElementById(
@@ -31,7 +32,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ calendarEvent }) =>
         calendarId: calendarEvent.calendarId,
         calendarSourceId: calendarEvent.externalCalendarSourceDto.externalCalendarSourceId,
         calendarEventId: calendarEvent.calendarEventId,
-        description: value,
+        description: value
       };
       updateTitleAndDescription(req);
       setInitialValue(value);
@@ -65,7 +66,7 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ calendarEvent }) =>
         htmlInputId={`${calendarEvent.description?.richTextId}`}
         actionBarMode={"simple"}
       />
-      {readOnly && (
+      {readOnly && !calendarReadOnly && (
         <Button
           onClick={toggle}
           className={styles.editButton}
@@ -96,7 +97,8 @@ const EventDescription: React.FC<EventDescriptionProps> = ({ calendarEvent }) =>
           </Button>
         )}
         {!readOnly && (
-          <Button disabled={isUpdateLoading} heightVariant={ButtonHeight.short} variant={ButtonVariants.filled2} onClick={cancel}>
+          <Button disabled={isUpdateLoading} heightVariant={ButtonHeight.short} variant={ButtonVariants.filled2}
+                  onClick={cancel}>
             {t("calendarEventDetailDescriptionCancel")}
           </Button>
         )}

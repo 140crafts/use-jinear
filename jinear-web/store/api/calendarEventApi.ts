@@ -102,6 +102,14 @@ export const calendarEventApi = api.injectEndpoints({
       invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
     }),
     //
+    deleteCalendarEvent: build.mutation<BaseResponse, { calendarId: string; sourceId: string, eventId: string, }>({
+      query: ({ calendarId, sourceId, eventId }) => ({
+        url: `v1/calendar/event/update/from-external/calendar/${calendarId}/source/${sourceId}/event/${eventId}`,
+        method: "DELETE"
+      }),
+      invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
+    }),
+    //
     retrieveShareableKey: build.query<CalendarShareableKeyResponse, { workspaceId: string }>({
       query: ({ workspaceId }: { workspaceId: string }) => `v1/calendar/event/exports/workspace/${workspaceId}/key`,
       providesTags: (_result, _err, req) => [
@@ -129,6 +137,7 @@ export const {
   useMoveEventMutation,
   useUpdateCalendarEventDatesMutation,
   useUpdateTitleAndDescriptionMutation,
+  useDeleteCalendarEventMutation,
   useRetrieveShareableKeyQuery,
   useRefreshShareableKeyMutation
 } = calendarEventApi;
@@ -140,6 +149,7 @@ export const {
     moveEvent,
     updateCalendarEventDates,
     updateTitleAndDescription,
+    deleteCalendarEvent,
     retrieveShareableKey,
     refreshShareableKey
   }

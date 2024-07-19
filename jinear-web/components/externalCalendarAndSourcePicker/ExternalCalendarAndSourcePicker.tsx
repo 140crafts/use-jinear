@@ -12,7 +12,8 @@ interface ExternalCalendarAndSourcePickerProps {
   onCalendarSelect: (calendarId: string) => void,
   onCalendarSourceSelect: (calendarSourceId: string) => void,
   hasNewEventText?: boolean,
-  calendarChangeable?: boolean
+  calendarChangeable?: boolean,
+  calendarSourceChangeable?: boolean
 }
 
 const ExternalCalendarAndSourcePicker: React.FC<ExternalCalendarAndSourcePickerProps> = ({
@@ -22,7 +23,8 @@ const ExternalCalendarAndSourcePicker: React.FC<ExternalCalendarAndSourcePickerP
                                                                                            onCalendarSelect,
                                                                                            onCalendarSourceSelect,
                                                                                            hasNewEventText = true,
-                                                                                           calendarChangeable = true
+                                                                                           calendarChangeable = true,
+                                                                                           calendarSourceChangeable = true
                                                                                          }) => {
   const { t } = useTranslation();
   const selectedCalendar = useMemo(() => calendarList.find(calendar => calendar.calendarId == selectedCalendarId), [JSON.stringify(calendarList), selectedCalendarId]);
@@ -65,6 +67,7 @@ const ExternalCalendarAndSourcePicker: React.FC<ExternalCalendarAndSourcePickerP
         <select
           onChange={onChangeCalendarSourceSelect}
           value={selectedCalendarSource?.externalCalendarSourceId}
+          disabled={!calendarSourceChangeable}
         >
           {selectedCalendar?.calendarSources?.map(calendarSource =>
             <option key={selectedCalendar?.calendarId + calendarSource.externalCalendarSourceId}
