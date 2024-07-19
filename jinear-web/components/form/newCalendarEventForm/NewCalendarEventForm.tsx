@@ -157,7 +157,6 @@ const NewCalendarEventForm: React.FC<NewCalendarEventFormProps> = ({
           onAssignedDateUpdate={onAssignedDateUpdate}
           onDueDateUpdate={onDueDateUpdate}
           onAllDayUpdate={onAllDayUpdate}
-          withLabels={false}
         />
       </div>
 
