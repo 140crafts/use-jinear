@@ -7,18 +7,18 @@ import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
 import cn from "classnames";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { IoInformationCircleOutline } from "react-icons/io5";
 import WorkspaceAndTeamInfo from "../common/workspaceAndTeamInfo/WorkspaceAndTeamInfo";
 import styles from "./NewTaskForm.module.scss";
-import BoardPickerButton from "./boardPickerButton/BoardPickerButton";
+import BoardPickerButton, { IBoardPickerButtonRef } from "./boardPickerButton/BoardPickerButton";
 import DatePickerButton from "./datePickerButton/DatePickerButton";
 import RelatedFeedItemButton from "./relatedFeedItemButton/RelatedFeedItemButton";
-import TeamMemberPickerButton from "./teamMemberPickerButton/TeamMemberPickerButton";
+import TeamMemberPickerButton, { ITeamMemberPickerButtonRef } from "./teamMemberPickerButton/TeamMemberPickerButton";
 import TitleInput from "./titleInput/TitleInput";
-import TopicPickerButton from "./topicPickerButton/TopicPickerButton";
+import TopicPickerButton, { ITopicPickerButtonRef } from "./topicPickerButton/TopicPickerButton";
 
 interface NewTaskFormProps {
   workspace: WorkspaceDto;
@@ -58,6 +58,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
     handleSubmit,
     setFocus,
     setValue,
+    getValues,
     watch,
     reset,
     formState: { errors }
@@ -68,6 +69,10 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
   const dueDate = watch("dueDate");
   const feedId = watch("feedId");
   const feedItemId = watch("feedItemId");
+
+  const topicPickerButtonRef = useRef<ITopicPickerButtonRef>(null);
+  const teamMemberPickerButtonRef = useRef<ITeamMemberPickerButtonRef>(null);
+  const boardPickerButtonRef = useRef<IBoardPickerButtonRef>(null);
 
   const [
     initializeTask,
@@ -94,6 +99,12 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
   useEffect(() => {
     if (selectedTeam) {
       setValue("teamId", selectedTeam.teamId);
+      setValue("topicId", "no-topic");
+      setValue("assignedTo", "no-assignee");
+      setValue("boardId", "no-board");
+      topicPickerButtonRef?.current && topicPickerButtonRef?.current.reset?.();
+      teamMemberPickerButtonRef?.current && teamMemberPickerButtonRef?.current.reset?.();
+      boardPickerButtonRef?.current && boardPickerButtonRef?.current.reset?.();
     }
   }, [selectedTeam]);
 
@@ -187,9 +198,26 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
         </div>
 
         <div className={styles.actionBar}>
-          <TopicPickerButton register={register} setValue={setValue} workspace={workspace} team={selectedTeam} />
-          <TeamMemberPickerButton register={register} setValue={setValue} teamId={selectedTeam.teamId} />
-          <BoardPickerButton register={register} setValue={setValue} workspace={workspace} team={selectedTeam} />
+          <TopicPickerButton
+            register={register}
+            setValue={setValue}
+            workspace={workspace}
+            team={selectedTeam}
+            ref={topicPickerButtonRef}
+          />
+          <TeamMemberPickerButton
+            register={register}
+            setValue={setValue}
+            teamId={selectedTeam.teamId}
+            ref={teamMemberPickerButtonRef}
+          />
+          <BoardPickerButton
+            register={register}
+            setValue={setValue}
+            workspace={workspace}
+            team={selectedTeam}
+            ref={boardPickerButtonRef}
+          />
           <DatePickerButton
             register={register}
             setValue={setValue}
