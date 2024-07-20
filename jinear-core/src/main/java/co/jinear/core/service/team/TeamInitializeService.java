@@ -15,6 +15,7 @@ import co.jinear.core.model.vo.team.member.TeamMemberAddVo;
 import co.jinear.core.model.vo.team.workflow.InitializeTeamWorkflowStatusVo;
 import co.jinear.core.repository.TeamRepository;
 import co.jinear.core.service.mail.LocaleStringService;
+import co.jinear.core.service.slack.SlackService;
 import co.jinear.core.service.team.member.TeamMemberService;
 import co.jinear.core.service.team.member.TeamMemberSyncService;
 import co.jinear.core.service.team.workflow.TeamWorkflowStatusService;
@@ -41,6 +42,7 @@ public class TeamInitializeService {
     private final TeamConverter teamConverter;
     private final TeamDtoConverter teamDtoConverter;
     private final TeamMemberService teamMemberService;
+    private final SlackService slackService;
 
     @Transactional
     public TeamDto initializeTeam(TeamInitializeVo teamInitializeVo) {
@@ -54,6 +56,7 @@ public class TeamInitializeService {
         checkAndSyncMembersWithWorkspace(saved);
         initializeDefaultWorkflow(saved.getTeamId(), saved.getWorkspaceId(), teamInitializeVo.getLocale());
         log.info("Initialize team has finished. teamId: {}", saved.getTeamId());
+        slackService.sendEventMessage(String.format("New Team with username: %s", team.getUsername()));
         return teamDtoConverter.map(saved);
     }
 

@@ -11,6 +11,7 @@ import co.jinear.core.model.vo.account.AccountInitializeVo;
 import co.jinear.core.model.vo.account.password.AccountPasswordVo;
 import co.jinear.core.model.vo.username.InitializeUsernameVo;
 import co.jinear.core.repository.AccountRepository;
+import co.jinear.core.service.slack.SlackService;
 import co.jinear.core.service.username.UsernameService;
 import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.system.RandomHelper;
@@ -35,6 +36,7 @@ public class AccountInitializeService {
     private final AccountMailConfirmationService accountMailConfirmationService;
     private final AccountDtoConverter accountDtoConverter;
     private final AccountCommunicationPermissionService accountCommunicationPermissionService;
+    private final SlackService slackService;
 
     @Transactional
     public AccountDto initializeAccount(AccountInitializeVo accountInitializeVo) {
@@ -47,6 +49,7 @@ public class AccountInitializeService {
         initializeAccountPassword(account, accountInitializeVo);
         sendMailConfirmationMail(account, accountInitializeVo);
         log.info("Account initialize has ended.");
+        slackService.sendEventMessage(String.format("New Account with email: %s", accountInitializeVo.getEmail()));
         return accountDtoConverter.map(account);
     }
 
