@@ -5,7 +5,7 @@ import { popTeamMemberPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import styles from "./TeamMemberPickerButton.module.css";
 
@@ -17,7 +17,11 @@ interface TeamMemberPickerButtonProps {
 
 const logger = Logger("TeamMemberPickerButton");
 
-const TeamMemberPickerButton: React.FC<TeamMemberPickerButtonProps> = ({ teamId, register, setValue }) => {
+export interface ITeamMemberPickerButtonRef {
+  reset: () => void;
+}
+
+const TeamMemberPickerButton = ({ teamId, register, setValue }: TeamMemberPickerButtonProps, ref: any) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [selectedTeamMember, setSelectedTeamMember] = useState<TeamMemberDto>();
@@ -26,6 +30,10 @@ const TeamMemberPickerButton: React.FC<TeamMemberPickerButtonProps> = ({ teamId,
     logger.log({ selectedTeamMember });
     setValue("assignedTo", selectedTeamMember ? selectedTeamMember.accountId : "no-assignee");
   }, [selectedTeamMember]);
+
+  useImperativeHandle(ref, () => ({
+    reset: () => setSelectedTeamMember(undefined)
+  }));
 
   const onModalPick = (selection: TeamMemberDto[]) => {
     if (selection.length != 0) {
@@ -64,4 +72,4 @@ const TeamMemberPickerButton: React.FC<TeamMemberPickerButtonProps> = ({ teamId,
   );
 };
 
-export default TeamMemberPickerButton;
+export default forwardRef<ITeamMemberPickerButtonRef, TeamMemberPickerButtonProps>(TeamMemberPickerButton);

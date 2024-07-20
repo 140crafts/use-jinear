@@ -4,10 +4,13 @@ import { popBoardPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { IoReaderOutline } from "react-icons/io5";
 import styles from "./BoardPickerButton.module.css";
+import {
+  ITeamMemberPickerButtonRef
+} from "@/components/form/newTaskForm/teamMemberPickerButton/TeamMemberPickerButton";
 
 interface BoardPickerButtonProps {
   workspace: WorkspaceDto;
@@ -16,8 +19,12 @@ interface BoardPickerButtonProps {
   setValue: UseFormSetValue<TaskInitializeRequest>;
 }
 
+export interface IBoardPickerButtonRef {
+  reset: () => void;
+}
+
 const logger = Logger("BoardPickerButton");
-const BoardPickerButton: React.FC<BoardPickerButtonProps> = ({ workspace, team, register, setValue }) => {
+const BoardPickerButton = ({ workspace, team, register, setValue }: BoardPickerButtonProps, ref: any) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [selectedBoard, setSelectedBoard] = useState<TaskBoardDto>();
@@ -25,6 +32,10 @@ const BoardPickerButton: React.FC<BoardPickerButtonProps> = ({ workspace, team, 
   useEffect(() => {
     setValue("boardId", selectedBoard ? selectedBoard.taskBoardId : "no-board");
   }, [selectedBoard]);
+
+  useImperativeHandle(ref, () => ({
+    reset: () => setSelectedBoard(undefined)
+  }));
 
   const onModalPick = (selection: TaskBoardDto[]) => {
     logger.log({ boardSelection: selection });
@@ -40,7 +51,7 @@ const BoardPickerButton: React.FC<BoardPickerButtonProps> = ({ workspace, team, 
         multiple: false,
         teamId: team.teamId,
         workspaceId: workspace.workspaceId,
-        onPick: onModalPick,
+        onPick: onModalPick
       })
     );
   };
@@ -68,4 +79,4 @@ const BoardPickerButton: React.FC<BoardPickerButtonProps> = ({ workspace, team, 
   );
 };
 
-export default BoardPickerButton;
+export default forwardRef<IBoardPickerButtonRef, BoardPickerButtonProps>(BoardPickerButton);

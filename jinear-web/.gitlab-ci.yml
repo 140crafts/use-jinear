@@ -3,7 +3,7 @@ variables:
 
 stages:
   - build
-  - deploy
+  - deploy-prod
 
 default:
   image: google/cloud-sdk:alpine
@@ -20,8 +20,8 @@ build:
   script:
     - gcloud builds submit --config=cloudbuild.yaml --substitutions=_SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
 
-deploy:
-  stage: deploy
+deploy-prod:
+  stage: deploy-prod
   needs:
     - job: build
   rules:

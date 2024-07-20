@@ -3,7 +3,7 @@ import { TaskInitializeRequest, TeamDto, TopicDto, WorkspaceDto } from "@/model/
 import { popTopicPickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { IoPricetagOutline } from "react-icons/io5";
 import styles from "./TopicPickerButton.module.css";
@@ -15,7 +15,11 @@ interface TopicPickerButtonProps {
   setValue: UseFormSetValue<TaskInitializeRequest>;
 }
 
-const TopicPickerButton: React.FC<TopicPickerButtonProps> = ({ workspace, team, setValue, register }) => {
+export interface ITopicPickerButtonRef {
+  reset: () => void;
+}
+
+const TopicPickerButton = ({ workspace, team, setValue, register }: TopicPickerButtonProps, ref: any) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [selectedTopic, setSelectedTopic] = useState<TopicDto>();
@@ -23,6 +27,10 @@ const TopicPickerButton: React.FC<TopicPickerButtonProps> = ({ workspace, team, 
   useEffect(() => {
     setValue("topicId", selectedTopic ? selectedTopic.topicId : "no-topic");
   }, [selectedTopic]);
+
+  useImperativeHandle(ref, () => ({
+    reset: () => setSelectedTopic(undefined)
+  }));
 
   const onModalPick = (selection: TopicDto[]) => {
     if (selection.length != 0) {
@@ -57,4 +65,4 @@ const TopicPickerButton: React.FC<TopicPickerButtonProps> = ({ workspace, team, 
   );
 };
 
-export default TopicPickerButton;
+export default forwardRef<ITopicPickerButtonRef, TopicPickerButtonProps>(TopicPickerButton);
