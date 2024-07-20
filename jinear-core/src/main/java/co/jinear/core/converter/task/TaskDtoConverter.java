@@ -1,5 +1,6 @@
 package co.jinear.core.converter.task;
 
+import co.jinear.core.converter.media.AccessibleMediaDtoConverter;
 import co.jinear.core.converter.team.TeamDtoConverter;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskRelationDto;
@@ -10,7 +11,7 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = {TeamDtoConverter.class})
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = {TeamDtoConverter.class, AccessibleMediaDtoConverter.class})
 public interface TaskDtoConverter {
 
     UpdateTaskWorkflowDto map(TaskDto taskDto, String remindersPassiveId);
@@ -19,6 +20,8 @@ public interface TaskDtoConverter {
     @Mapping(source = "assignedToAccount.username.username", target = "assignedToAccount.username")
     @Mapping(source = "workspace.username.username", target = "workspace.username")
     @Mapping(source = "team.workspace.username.username", target = "team.workspaceUsername")
+    @Mapping(source = "owner.accountProfileMedia.media", target = "owner.profilePicture")
+    @Mapping(source = "assignedToAccount.accountProfileMedia.media", target = "assignedToAccount.profilePicture")
     TaskDto map(Task task);
 
     @Mapping(source = "task.owner.username.username", target = "task.owner.username")

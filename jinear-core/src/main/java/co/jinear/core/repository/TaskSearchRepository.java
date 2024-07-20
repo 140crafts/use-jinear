@@ -140,6 +140,10 @@ public class TaskSearchRepository {
                         Predicate ownerOrAssigneePredicate = criteriaBuilder.or(ownerIdPredicate, assigneeIdPredicate);
                         teamPredicateList.add(ownerOrAssigneePredicate);
                     }
+                } else {
+                    //if admin add whatever requested
+                    taskSearchCriteriaBuilder.addOwnerIdList(ownerIds, criteriaBuilder, taskRoot, teamPredicateList);
+                    taskSearchCriteriaBuilder.addAssignedToList(assigneeIds, criteriaBuilder, taskRoot, teamPredicateList);
                 }
 
                 taskSearchCriteriaBuilder.addPassiveIdIsNull(criteriaBuilder, taskRoot, teamPredicateList);
