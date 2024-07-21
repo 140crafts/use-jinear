@@ -9,12 +9,14 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 
 import static co.jinear.core.system.JwtHelper.JWT_COOKIE;
 
@@ -22,9 +24,12 @@ import static co.jinear.core.system.JwtHelper.JWT_COOKIE;
 @RequiredArgsConstructor
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
+    private static final String DEV_ENV = "dev";
+
     private final ApiAdviceHelper apiAdviceHelper;
     private final MessageSourceLocalizer messageSourceLocalizer;
     private final Gson gson;
+    private final Environment environment;
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
@@ -42,10 +47,12 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     }
 
     private void setJwtCookieInvalid(HttpServletResponse response) {
-        Cookie cookie = new Cookie(JWT_COOKIE, null);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setMaxAge(0);
-        response.addCookie(cookie);
+        if (!Arrays.stream(environment.getActiveProfiles()).toList().contains(DEV_ENV)) {
+            Cookie cookie = new Cookie(JWT_COOKIE, null);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
+        }
     }
 }
