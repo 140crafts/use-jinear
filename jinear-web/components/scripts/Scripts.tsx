@@ -33,6 +33,7 @@ const Scripts: React.FC<ScriptsProps> = ({}) => {
           });
         }}
       />
+      <Script src="https://player.vimeo.com/api/player.js" />
     </>
   );
 };
