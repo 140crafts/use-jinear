@@ -3323,6 +3323,55 @@ const translations = {
     en: "Manage your or your teams tasks in calendar. You can always integrate Google Calendar and grant access to your teammates.",
     tr: "Sizin veya takımınızın görevlerini takvim üzerinden takip edin. Ayrıca Google Takvim deki takvimlerinizi bağlayıp isterseniz takım arkadaslarınıza da erisim yetkisi verebilirsiniz."
   },
+  homePageFeatureTitle_GoogleCalendar: {
+    en: "Google Calendar Support",
+    tr: "Google Takvim Desteği"
+  },
+  homePageFeatureText_GoogleCalendar: {
+    en: "Manage your Google Calendar events from Jinear. You can also share calendars with your workspace members.",
+    tr: "Google Takvim etkinliklerinizi Jinear üzerinden takip edin. Ayrıca çalışma alanındaki arkadaşlarınıza da erisim yetkisi verebilirsiniz."
+  },
+  homePageFeatureTitle_Share: {
+    en: "Subscribe From Other Calendars",
+    tr: "Diğer Takvimlerden Görevlerinizi Takip Edin"
+  },
+  homePageFeatureText_Share: {
+    en: "You can create a shareable link for your Jinear workspace and track your tasks in your other calendar apps.",
+    tr: "Jinear çalışma alanınız için paylaşılabilir bir bağlantı oluşturabilir ve görevlerinizi diğer takvim uygulamalarınızda takip edebilirsiniz."
+  },
+  homePageFeatureTitle_Reminder: {
+    en: "Create Reminders",
+    tr: "Anımsatıcılar Oluşturun"
+  },
+  homePageFeatureText_Reminder: {
+    en: "You can set reminders for your tasks.",
+    tr: "Görevleriniz için anımsatıcılar oluşturabilirsiniz."
+  },
+  homePageFeatureTitle_FilesAndComments: {
+    en: "Attach Files & Make Comments",
+    tr: "Dosya ve Yorum Ekleyin"
+  },
+  homePageFeatureText_FilesAndComments: {
+    en: "Add relevant files and leave comments on your tasks.",
+    tr: "İlgili dosyaları ekleyin ve görevleriniz hakkında yorum yapın."
+  },
+  homePageFeatureTitle_ListAndFilterYourTasks: {
+    en: "List & Manage",
+    tr: "Listele ve Yönet"
+  },
+  homePageFeatureText_ListAndFilterYourTasks: {
+    en: "Display your tasks in either list view or column view. Update their statuses.",
+    tr: "Görevlerinizi liste görünümü veya sütun görünümü olarak görüntüleyin. Durumlarını güncelleyin."
+  },
+  homePageFeatureTitle_NewTeam: {
+    en: "Create Teams",
+    tr: "Ekipler Oluşturun"
+  },
+  homePageFeatureText_NewTeam: {
+    en: "Create teams, add different people to them and manage your task.",
+    tr: "Takımlar oluşturun, farklı kişileri ekleyin ve görevlerinizi yönetin."
+  },
+
   homePageFeatureTitle_Task: {
     en: "Powerful task management",
     tr: "Zengin görev yönetimi"
