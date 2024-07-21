@@ -3,22 +3,25 @@ import Line from "@/components/line/Line";
 import { CalendarMemberDto } from "@/model/be/jinear-core";
 import { useKickCalendarMemberMutation } from "@/store/api/calendarMemberApi";
 import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
-import { useAppDispatch } from "@/store/store";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import React from "react";
 import { GiHighKick } from "react-icons/gi";
 import styles from "./CalendarMember.module.scss";
+import { selectCurrentAccountId } from "@/slice/accountSlice";
 
 interface CalendarMemberProps {
   data: CalendarMemberDto;
-  isCalendarOwner: boolean;
-  currentAccountId?: string;
 }
 
-const CalendarMember: React.FC<CalendarMemberProps> = ({ data, isCalendarOwner, currentAccountId }) => {
+const CalendarMember: React.FC<CalendarMemberProps> = ({ data }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [kickCalendarMember] = useKickCalendarMemberMutation();
+
+  const currentAccountId = useTypedSelector(selectCurrentAccountId);
+  const isLoggedInUserCalendarOwner = data.calendar.initializedBy == currentAccountId;
+  const isCalendarMemberCalendarOwner = data.calendar.initializedBy == data.accountId;
 
   const kickMember = () => {
     kickCalendarMember({ calendarId: data.calendarId, accountId: data.accountId });
@@ -32,7 +35,7 @@ const CalendarMember: React.FC<CalendarMemberProps> = ({ data, isCalendarOwner, 
         title: t("deleteCalendarMemberAreYouSureTitle"),
         content: t("deleteCalendarMemberAreYouSureText"),
         confirmButtonLabel: t("deleteCalendarMemberAreYouSureConfirmLabel"),
-        onConfirm: kickMember,
+        onConfirm: kickMember
       })
     );
   };
@@ -42,12 +45,12 @@ const CalendarMember: React.FC<CalendarMemberProps> = ({ data, isCalendarOwner, 
       <div className={styles.container}>
         <div className={styles.titleContainer}>
           <div className={styles.role}>
-            {isCalendarOwner ? t("calendarMemberListItemOwner") : t(`calendarMemberListItemUser`)}
+            {isCalendarMemberCalendarOwner ? t("calendarMemberListItemOwner") : t(`calendarMemberListItemUser`)}
           </div>
           <div className={styles.title}>{data.account.email}</div>
         </div>
 
-        {isCalendarOwner && currentAccountId != data.accountId && (
+        {isLoggedInUserCalendarOwner && (currentAccountId != data.accountId) && (
           <div className={styles.rightInfoContainer}>
             <Button
               variant={ButtonVariants.filled}
