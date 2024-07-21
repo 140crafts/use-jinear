@@ -26,7 +26,7 @@ export const calendarMemberApi = api.injectEndpoints({
     //
     addCalendarMember: build.mutation<BaseResponse, { calendarId: string; accountId: string }>({
       query: ({ calendarId, accountId }: { calendarId: string; accountId: string }) => ({
-        url: `v1/calendar/${calendarId}/manage/${accountId}`,
+        url: `v1/calendar/member/${calendarId}/manage/${accountId}`,
         method: "POST",
       }),
       invalidatesTags: (_result, _err, req) => [
@@ -37,7 +37,7 @@ export const calendarMemberApi = api.injectEndpoints({
     //
     kickCalendarMember: build.mutation<BaseResponse, { calendarId: string; accountId: string }>({
       query: ({ calendarId, accountId }: { calendarId: string; accountId: string }) => ({
-        url: `v1/calendar/${calendarId}/manage/${accountId}`,
+        url: `v1/calendar/member/${calendarId}/manage/${accountId}`,
         method: "DELETE",
       }),
       invalidatesTags: (_result, _err, req) => [
