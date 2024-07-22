@@ -2496,8 +2496,8 @@ const translations = {
     tr: "Planı Yükselt"
   },
   upgradeWorkspaceTierModalText: {
-    en: "Upgrade workspace to add <span class='workspace-tier-upgrade-highlight'>unlimited users</span> to to your workspace and <span class='workspace-tier-upgrade-highlight'>share files</span> with <span class='workspace-tier-upgrade-highlight'>unlimited file storage</span>.  First-in-line <span class='workspace-tier-upgrade-highlight'>7/24 priority support</span>. <span class='workspace-tier-upgrade-highlight'>1:1 onboarding</span>  tour with our team.",
-    tr: "Çalışma alanı planını yükseltin, çalışma alanına <span class='workspace-tier-upgrade-highlight'>sınırsız sayıda kullanıcı</span> ekleyin, <span class='workspace-tier-upgrade-highlight'>sınırsız sayıda dosya paylaşımı</span> yapın. <span class='workspace-tier-upgrade-highlight'>7/24 öncelikli destek</span> alın. Onboarding sürecinizi <span class='workspace-tier-upgrade-highlight'>1:1 destek</span> ile yönetelim."
+    en: "Upgrade workspace to add <span class='workspace-tier-upgrade-highlight'>unlimited users</span> to to your workspace and <span class='workspace-tier-upgrade-highlight'>share files</span> with <span class='workspace-tier-upgrade-highlight'>unlimited file storage</span>.  First-in-line <span class='workspace-tier-upgrade-highlight'>Priority support usually within 24 hours</span>.",
+    tr: "Çalışma alanı planını yükseltin, çalışma alanına <span class='workspace-tier-upgrade-highlight'>sınırsız sayıda kullanıcı</span> ekleyin, <span class='workspace-tier-upgrade-highlight'>sınırsız sayıda dosya paylaşımı</span> yapın. <span class='workspace-tier-upgrade-highlight'>Genellikle 24 saat içerisinde Öncelikli destek</span> alın."
   },
   upgradeWorkspaceTierModalAppliesToWorkspaceText: {
     en: "This applies only the workspace above. Features specified will be applied to this workspace and teams under it.",
@@ -2616,8 +2616,8 @@ const translations = {
     tr: "100 GB dosya saklama alanı."
   },
   pricesPageProFeature_UnlimitedSupport: {
-    en: "7/24 unlimited support.",
-    tr: "7/24 sınırsız destek alın."
+    en: "Priority support (Usually within 24 hours)",
+    tr: "Öncelikli destek alın (Genellile 24 saat içerisinde)."
   },
   pricesPageProFeature_1to1Onboarding: {
     en: "1:1 onboarding tour.",

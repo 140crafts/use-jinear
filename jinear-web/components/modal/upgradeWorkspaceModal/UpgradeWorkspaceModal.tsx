@@ -24,11 +24,11 @@ import styles from "./UpgradeWorkspaceModal.module.css";
 interface UpgradeWorkspaceModalProps {}
 
 export const PADDLE_CATALOG = {
-  business_daily: { sandbox: 63817, prod: -1, price: "3.30$" },
-  business_monthly: { sandbox: 63716, prod: 848738, price: "49.90$" },
-  business_yearly: { sandbox: 63717, prod: 848737, price: "499$" },
-  self_host: { sandbox: 63717, prod: 848737, price: "999$" },
-  self_host_renew: { sandbox: 63717, prod: 848737, price: "699$" },
+  business_daily: { sandbox: 63817, prod: -1, price: "$3.30" },
+  business_monthly: { sandbox: 63716, prod: 848738, price: "$49.90" },
+  business_yearly: { sandbox: 63717, prod: 848737, price: "$499" },
+  self_host: { sandbox: 63717, prod: 848737, price: "$999" },
+  self_host_renew: { sandbox: 63717, prod: 848737, price: "$699" },
 };
 
 const logger = Logger("UpgradeWorkspaceModal");
