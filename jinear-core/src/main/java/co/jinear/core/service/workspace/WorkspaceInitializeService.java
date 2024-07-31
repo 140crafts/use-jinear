@@ -17,6 +17,7 @@ import co.jinear.core.model.vo.workspace.InitializeWorkspaceMemberVo;
 import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.model.vo.workspace.WorkspaceSettingsInitializeVo;
 import co.jinear.core.repository.WorkspaceRepository;
+import co.jinear.core.service.slack.SlackService;
 import co.jinear.core.service.team.TeamInitializeService;
 import co.jinear.core.service.username.UsernameService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
@@ -39,6 +40,7 @@ public class WorkspaceInitializeService {
     private final WorkspaceMemberService workspaceMemberService;
     private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
     private final TeamInitializeService teamInitializeService;
+    private final SlackService slackService;
 
     @Transactional
     public WorkspaceDto initializeWorkspace(WorkspaceInitializeVo workspaceInitializeVo) {
@@ -49,6 +51,7 @@ public class WorkspaceInitializeService {
         assignOwner(workspaceInitializeVo, workspace);
         TeamDto initialTeamDto = createInitialTeam(workspace, workspaceInitializeVo);
         setAsDefaultWorkspace(workspaceInitializeVo.getOwnerId(), initialTeamDto);
+        slackService.sendEventMessage(String.format("New Workspace with username: %s", usernameDto.getUsername()));
         return mapValues(workspace, usernameDto, workspaceSettingDto);
     }
 

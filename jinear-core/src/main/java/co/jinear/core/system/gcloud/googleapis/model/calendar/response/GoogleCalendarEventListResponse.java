@@ -1,5 +1,6 @@
 package co.jinear.core.system.gcloud.googleapis.model.calendar.response;
 
+import co.jinear.core.system.gcloud.googleapis.model.calendar.enumtype.GoogleCalendarAccessRoleType;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarEventInfo;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarReminderInfo;
 import lombok.Getter;
@@ -16,7 +17,7 @@ public class GoogleCalendarEventListResponse {
     private String description;
     private String updated;
     private String timeZone;
-    private String accessRole;
+    private GoogleCalendarAccessRoleType accessRole;
     private List<GoogleCalendarReminderInfo> defaultReminders;
     private String nextSyncToken;
     private String nextPageToken;

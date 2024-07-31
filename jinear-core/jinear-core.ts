@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-06-23 13:33:36.
+// Generated using typescript-generator version 3.0.1157 on 2024-07-16 22:58:53.
 
 export interface BaseDto {
     createdDate: Date;
@@ -85,6 +85,7 @@ export interface CalendarDto {
 }
 
 export interface CalendarEventDto {
+    workspaceId: string;
     calendarId: string;
     calendarEventId: string;
     title: string;
@@ -123,6 +124,7 @@ export interface ExternalCalendarSourceDto {
     description?: string | null;
     location?: string | null;
     timeZone?: string | null;
+    readOnly?: boolean | null;
 }
 
 export interface TaskExternalCalendarFilterDto {
@@ -157,10 +159,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gthreadId: string;
-    ghistoryId: string;
-    ginternalDate: string;
     gid: string;
+    ghistoryId: string;
+    gthreadId: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -270,6 +272,8 @@ export interface MediaDto extends BaseDto {
     bucketName: string;
     originalName: string;
     size: number;
+    providerType: MediaFileProviderType;
+    url: string;
 }
 
 export interface ChannelDto extends PlainChannelDto {
@@ -968,6 +972,25 @@ export interface CalendarEventFilterRequest extends BaseRequest {
     timespanEnd: Date;
 }
 
+export interface CalendarEventInitializeRequest {
+    calendarId: string;
+    calendarSourceId: string;
+    summary?: string | null;
+    description?: string | null;
+    location?: string | null;
+    assignedDate: Date;
+    dueDate: Date;
+    hasPreciseAssignedDate?: boolean | null;
+    hasPreciseDueDate?: boolean | null;
+}
+
+export interface CalendarEventMoveRequest {
+    calendarId: string;
+    calendarSourceId: string;
+    targetCalendarSourceId: string;
+    eventId: string;
+}
+
 export interface CalendarEventTitleDescriptionUpdateRequest {
     calendarId: string;
     calendarSourceId: string;
@@ -1009,6 +1032,10 @@ export interface SendMessageRequest extends BaseRequest {
 
 export interface InitializeThreadRequest extends BaseRequest {
     channelId: string;
+    initialMessageBody: string;
+}
+
+export interface RobotsInitializeThreadRequest extends BaseRequest {
     initialMessageBody: string;
 }
 
@@ -1688,7 +1715,7 @@ export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL";
 
 export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
-export type GoogleScopeType = "OPEN_ID" | "USERINFO_PROFILE" | "USERINFO_EMAIL" | "CALENDAR" | "CALENDAR_EVENTS" | "CALENDAR_SETTINGS_READONLY" | "GMAIL_ADDONS_CURRENT_MESSAGE_ACTION" | "GMAIL_ADDONS_CURRENT_MESSAGE_METADATA" | "GMAIL_ADDONS_CURRENT_MESSAGE_READONLY" | "GMAIL_MODIFY" | "GMAIL_READONLY";
+export type GoogleScopeType = "OPEN_ID" | "USERINFO_PROFILE" | "USERINFO_EMAIL" | "CALENDAR" | "CALENDAR_EVENTS" | "CALENDAR_SETTINGS_READONLY";
 
 export type UserConsentPurposeType = "LOGIN" | "ATTACH_MAIL" | "ATTACH_CALENDAR";
 
@@ -1703,6 +1730,8 @@ export type LocaleType = "TR" | "EN";
 export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION";
 
 export type FileType = "PROFILE_PIC" | "TASK_FILE";
+
+export type MediaFileProviderType = "GCLOUD";
 
 export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK";
 

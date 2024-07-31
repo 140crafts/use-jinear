@@ -21,11 +21,14 @@ import co.jinear.core.validator.task.TaskAccessValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceMediaLimitValidator;
 import co.jinear.core.validator.workspace.WorkspaceTierValidator;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Slf4j
@@ -89,13 +92,15 @@ public class TaskMediaManager {
         return new BaseResponse();
     }
 
-    public String downloadTaskMedia(String taskId, String mediaId) {
+    public void downloadTaskMedia(HttpServletResponse response, String taskId, String mediaId) throws IOException {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         AccessibleMediaDto accessibleMediaDto = taskMediaRetrieveService.retrieveAccessible(taskId, mediaId);
         taskMediaOperationService.updateMediaAsTemporaryPublic(mediaId);
-        return taskMediaRetrieveService.retrievePublicDownloadLink(accessibleMediaDto);
+        String redirectUrl = taskMediaRetrieveService.retrievePublicDownloadLink(accessibleMediaDto);
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"%s\"".formatted(accessibleMediaDto.getOriginalName()));
+        response.sendRedirect(redirectUrl);
     }
 
     private TaskMediaResponse mapResponse(List<MediaDto> taskRelatedMedia) {

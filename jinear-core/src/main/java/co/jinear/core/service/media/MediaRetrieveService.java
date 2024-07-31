@@ -9,7 +9,8 @@ import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.model.enumtype.media.FileType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.repository.MediaRepository;
-import co.jinear.core.system.FileStorageUtils;
+import co.jinear.core.service.media.fileoperation.MediaFileOperationServiceFactory;
+import co.jinear.core.service.media.fileoperation.MediaFileOperationStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +27,7 @@ public class MediaRetrieveService {
     private final MediaRepository mediaRepository;
     private final MediaDtoConverter mediaDtoConverter;
     private final AccessibleMediaDtoConverter accessibleMediaDtoConverter;
+    private final MediaFileOperationServiceFactory mediaFileOperationServiceFactory;
 
     public Optional<AccessibleMediaDto> retrieveProfilePictureOptional(String relatedObjectId) {
         log.info("Retrieve profile picture optional has started. relatedObjectId: {}", relatedObjectId);
@@ -57,7 +59,8 @@ public class MediaRetrieveService {
 
     public String retrievePublicDownloadLink(AccessibleMediaDto accessibleMediaDto) {
         log.info("Retrieve public download link for accessible media has started. accessibleMediaDto: {}", accessibleMediaDto);
-        return FileStorageUtils.generateFullPath(accessibleMediaDto.getBucketName(), accessibleMediaDto.getMediaOwnerType(), accessibleMediaDto.getRelatedObjectId(), accessibleMediaDto.getFileType(), accessibleMediaDto.getMediaKey(), accessibleMediaDto.getOriginalName());
+        MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(accessibleMediaDto.getProviderType());
+        return mediaFileOperationStrategy.getFullPath(accessibleMediaDto.getBucketName(), accessibleMediaDto.getMediaOwnerType(), accessibleMediaDto.getRelatedObjectId(), accessibleMediaDto.getFileType(), accessibleMediaDto.getMediaKey(), accessibleMediaDto.getOriginalName());
     }
 
     public List<String> retrieveAllTemporaryPublicAndExpired() {

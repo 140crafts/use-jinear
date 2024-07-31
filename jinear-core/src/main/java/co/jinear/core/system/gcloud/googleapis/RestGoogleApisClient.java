@@ -36,6 +36,8 @@ public class RestGoogleApisClient implements GoogleApisClient {
     private static final String CALENDAR_LIST = "calendar/v3/users/me/calendarList";
     private static final String CALENDAR_EVENT_LIST = "calendar/v3/calendars/{calendarId}/events?timeMin={timeMin}&timeMax={timeMax}&maxResults={maxResults}";
     private static final String CALENDAR_EVENT = "calendar/v3/calendars/{calendarId}/events/{eventId}";
+    private static final String CALENDAR_EVENT_MOVE = "calendar/v3/calendars/{calendarId}/events/{eventId}/move?destination={destination}";
+    private static final String CALENDAR_EVENT_INSERT = "calendar/v3/calendars/{calendarId}/events";
 
     private final RestTemplate googleApisRestTemplate;
     private final BatchRequestConverter batchRequestConverter;
@@ -132,6 +134,22 @@ public class RestGoogleApisClient implements GoogleApisClient {
     }
 
     @Override
+    public GoogleCalendarEventInfo initializeEvent(String token, String calendarSourceId, GoogleCalendarEventInfo googleCalendarEventInfo) {
+        log.info("Initialize calendar event has started. calendarSourceId: {}", calendarSourceId);
+
+        UriTemplateHandler template = googleApisRestTemplate.getUriTemplateHandler();
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put(CALENDAR_ID_PARAM, calendarSourceId);
+        URI uri = template.expand(CALENDAR_EVENT_INSERT, uriVariables);
+
+        HttpHeaders headers = retrieveHeaders(token);
+        HttpEntity<GoogleCalendarEventInfo> requestEntity = new HttpEntity<>(googleCalendarEventInfo, headers);
+        ResponseEntity<GoogleCalendarEventInfo> response = googleApisRestTemplate
+                .exchange(uri, HttpMethod.POST, requestEntity, GoogleCalendarEventInfo.class);
+        return response.getBody();
+    }
+
+    @Override
     public GoogleCalendarEventInfo updateEvent(String token, String calendarSourceId, GoogleCalendarEventInfo googleCalendarEventInfo) {
         String calendarEventId = googleCalendarEventInfo.getId();
         log.info("Update calendar event has started. calendarSourceId: {}, eventId: {}", calendarSourceId, calendarEventId);
@@ -146,6 +164,39 @@ public class RestGoogleApisClient implements GoogleApisClient {
         HttpEntity<GoogleCalendarEventInfo> requestEntity = new HttpEntity<>(googleCalendarEventInfo, headers);
         ResponseEntity<GoogleCalendarEventInfo> response = googleApisRestTemplate
                 .exchange(uri, HttpMethod.PUT, requestEntity, GoogleCalendarEventInfo.class);
+        return response.getBody();
+    }
+
+    @Override
+    public void deleteEvent(String token, String calendarSourceId, String eventId) {
+        log.info("Delete calendar event has started. calendarSourceId: {}, eventId: {}", calendarSourceId, eventId);
+
+        UriTemplateHandler template = googleApisRestTemplate.getUriTemplateHandler();
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put(CALENDAR_ID_PARAM, calendarSourceId);
+        uriVariables.put("eventId", eventId);
+        URI uri = template.expand(CALENDAR_EVENT, uriVariables);
+
+        HttpHeaders headers = retrieveHeaders(token);
+        HttpEntity<GoogleCalendarEventInfo> requestEntity = new HttpEntity<>(headers);
+        googleApisRestTemplate.exchange(uri, HttpMethod.DELETE, requestEntity, String.class);
+    }
+
+    @Override
+    public GoogleCalendarEventInfo moveEvent(String token, String calendarSourceId, String eventId, String targetCalendarSourceId) {
+        log.info("Move calendar event has started. calendarSourceId: {}, eventId: {}, targetCalendarSourceId: {}", calendarSourceId, eventId, targetCalendarSourceId);
+
+        UriTemplateHandler template = googleApisRestTemplate.getUriTemplateHandler();
+        Map<String, String> uriVariables = new HashMap<>();
+        uriVariables.put(CALENDAR_ID_PARAM, calendarSourceId);
+        uriVariables.put("eventId", eventId);
+        uriVariables.put("destination", targetCalendarSourceId);
+        URI uri = template.expand(CALENDAR_EVENT_MOVE, uriVariables);
+
+        HttpHeaders headers = retrieveHeaders(token);
+        HttpEntity<GoogleCalendarEventInfo> requestEntity = new HttpEntity<>(headers);
+        ResponseEntity<GoogleCalendarEventInfo> response = googleApisRestTemplate
+                .exchange(uri, HttpMethod.POST, requestEntity, GoogleCalendarEventInfo.class);
         return response.getBody();
     }
 

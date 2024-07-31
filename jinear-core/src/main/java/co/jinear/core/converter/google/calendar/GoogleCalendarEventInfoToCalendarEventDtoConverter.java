@@ -6,14 +6,18 @@ import co.jinear.core.model.dto.calendar.ExternalCalendarSourceDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.enumtype.calendar.CalendarEventSourceType;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
+import co.jinear.core.system.gcloud.googleapis.model.calendar.enumtype.GoogleCalendarAccessRoleType;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.response.GoogleCalendarEventListResponse;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarEventDate;
 import co.jinear.core.system.gcloud.googleapis.model.calendar.vo.GoogleCalendarEventInfo;
 import co.jinear.core.system.util.ZonedDateHelper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class GoogleCalendarEventInfoToCalendarEventDtoConverter {
 
@@ -51,6 +55,10 @@ public class GoogleCalendarEventInfoToCalendarEventDtoConverter {
         externalCalendarSourceDto.setSummary(googleCalendarEventListResponse.getSummary());
         externalCalendarSourceDto.setDescription(googleCalendarEventListResponse.getDescription());
         externalCalendarSourceDto.setTimeZone(googleCalendarEventListResponse.getTimeZone());
+        Optional.of(googleCalendarEventListResponse)
+                .map(GoogleCalendarEventListResponse::getAccessRole)
+                .map(GoogleCalendarAccessRoleType::isReadOnly)
+                .ifPresent(externalCalendarSourceDto::setReadOnly);
         calendarEventDto.setExternalCalendarSourceDto(externalCalendarSourceDto);
     }
 
@@ -90,12 +98,17 @@ public class GoogleCalendarEventInfoToCalendarEventDtoConverter {
                 .map(GoogleCalendarEventInfo::getEnd)
                 .map(GoogleCalendarEventDate::getDateTime)
                 .map(ZonedDateHelper::parseIsoDateTime)
-                .ifPresentOrElse(
-                        startDateTime -> {
+                .ifPresentOrElse(startDateTime -> {
                             calendarEventDto.setDueDate(startDateTime);
                             calendarEventDto.setHasPreciseDueDate(Boolean.TRUE);
                         },
-                        () -> calendarEventDto.setDueDate(calendarEventDto.getDueDate().minusSeconds(1L))
-                );
+                        () -> {
+                            ZonedDateTime assignedDate = calendarEventDto.getAssignedDate();
+                            ZonedDateTime dueDate = calendarEventDto.getDueDate();
+                            if (dueDate.isAfter(assignedDate)) {
+                                calendarEventDto.setDueDate(dueDate.minusDays(1L));
+                            }
+                        });
+        log.info("Dates mapped: {}", googleCalendarEventInfo);
     }
 }

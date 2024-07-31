@@ -21,7 +21,6 @@ public class CloudStorage {
 
     private static Storage storage;
 
-
     private static Storage getStorage() {
         if (storage == null) {
             storage = StorageOptions.newBuilder().setProjectId(projectId).build().getService();

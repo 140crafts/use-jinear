@@ -54,13 +54,16 @@ public class CalendarExternalEventRetrieveService {
                         .map(sourceDto -> retrieveEventListRequestConverter.convert(calendarEventSearchFilterVo, sourceDto))
                         .map(request -> retrieveExternalSourceEvents(integrationInfoDto, request))
                         .flatMap(List::stream)
-                        .map(calendarEventDto -> {
-                            calendarEventDto.setCalendarId(calendarDto.getCalendarId());
-                            return calendarEventDto;
-                        })
+                        .map(calendarEventDto -> mapCalendarAndWorkspaceId(calendarEventDto, calendarDto, calendarEventSearchFilterVo))
                 )
                 .map(Stream::toList)
                 .orElseGet(Collections::emptyList);
+    }
+
+    private CalendarEventDto mapCalendarAndWorkspaceId(CalendarEventDto calendarEventDto, CalendarDto calendarDto, CalendarEventSearchFilterVo calendarEventSearchFilterVo) {
+        calendarEventDto.setCalendarId(calendarDto.getCalendarId());
+        calendarEventDto.setWorkspaceId(calendarEventSearchFilterVo.getWorkspaceId());
+        return calendarEventDto;
     }
 
     private List<String> mapRequestedCalendarIds(CalendarEventSearchFilterVo calendarEventSearchFilterVo) {

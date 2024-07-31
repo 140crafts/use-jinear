@@ -58,4 +58,19 @@ public class MockGoogleApisClient implements GoogleApisClient {
     public GoogleCalendarEventInfo updateEvent(String token, String calendarSourceId, GoogleCalendarEventInfo googleCalendarEventInfo) {
         return new GoogleCalendarEventInfo();
     }
+
+    @Override
+    public void deleteEvent(String token, String calendarSourceId, String eventId) {
+        log.info("[MOCK] Delete event has started.");
+    }
+
+    @Override
+    public GoogleCalendarEventInfo initializeEvent(String token, String calendarSourceId, GoogleCalendarEventInfo googleCalendarEventInfo) {
+        return new GoogleCalendarEventInfo();
+    }
+
+    @Override
+    public GoogleCalendarEventInfo moveEvent(String token, String calendarSourceId, String eventId, String targetCalendarSourceId) {
+        return new GoogleCalendarEventInfo();
+    }
 }

@@ -1,5 +1,6 @@
 package co.jinear.core.system.gcloud.googleapis.model.calendar.vo;
 
+import co.jinear.core.system.gcloud.googleapis.model.calendar.enumtype.GoogleCalendarAccessRoleType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,7 +23,7 @@ public class GoogleCalendarInfo {
     private String foregroundColor;
     private String hidden;
     private String selected;
-    private String accessRole;
+    private GoogleCalendarAccessRoleType accessRole;
     private List<GoogleCalendarReminderInfo> defaultReminders;
     private GoogleCalendarNotificationSettings googleCalendarNotificationSettings;
     @JsonProperty("private")

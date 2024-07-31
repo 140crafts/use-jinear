@@ -23,6 +23,7 @@ import java.util.Set;
 @Entity
 @Table(name = "project")
 public class Project extends BaseEntity {
+
     @Id
     @GeneratedValue(generator = "ULID")
     @GenericGenerator(
