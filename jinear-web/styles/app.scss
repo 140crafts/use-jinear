@@ -300,8 +300,13 @@ select {
 }
 
 .toast {
-  background-color: var(--c-text-color) !important;
-  color: var(--c-background) !important;
+  color: var(--c-text-color) !important;
+  background-color: var(--c-primary) !important;
+  border-color: var(--c-primary-shade-1) !important;
+  border-radius: var(--border-radius) !important;
+  border-width: thin !important;
+  border-style: solid !important;
+  box-shadow: var(--box-shadow-soft) !important;
 }
 
 .toast-container {

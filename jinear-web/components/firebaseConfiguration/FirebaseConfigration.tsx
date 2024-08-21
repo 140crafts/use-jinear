@@ -14,7 +14,8 @@ import React, { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import ForegroundNotification from "../foregroundNotification/ForegroundNotification";
 
-interface FirebaseConfigrationProps {}
+interface FirebaseConfigrationProps {
+}
 
 const logger = Logger("FirebaseConfigration");
 
@@ -35,6 +36,9 @@ const TASK_UPDATE_NOTIFICATIONS = [
   "CHECKLIST_ITEM_LABEL_CHANGED",
   "CHECKLIST_ITEM_REMOVED",
   "CHECKLIST_ITEM_INITIALIZED",
+  "TASK_NEW_COMMENT",
+  "TASK_ATTACHMENT_ADDED",
+  "TASK_ATTACHMENT_DELETED"
 ];
 
 const firebaseConfig = {
@@ -44,7 +48,7 @@ const firebaseConfig = {
   storageBucket: "jinear-f3ab4.appspot.com",
   messagingSenderId: "72155538781",
   appId: "1:72155538781:web:767cb1558cd358cfacf4b4",
-  measurementId: "G-FMXGQ5XM95",
+  measurementId: "G-FMXGQ5XM95"
 };
 
 export const VAPID_PUBLIC_KEY = "BFO8Qjsa5Y1W32XyMCa8owjYxkCziaKzl8M2TzMZuHKbEPmtSeowuZzPhdot9aMC64qr7zGRpzrCyg6MzN5nkQc";
@@ -143,7 +147,7 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
       if (currentSessionId != senderSessionInfoId) {
         toast((t) => <ForegroundNotification title={title} body={body} launchUrl={launchUrl} />, {
           position: window.innerWidth < 768 ? "top-center" : "top-right",
-          duration: 6000,
+          duration: 6000
         });
         const notification = new Notification(title, { body, icon: "https://jinear.co/icons/notification-icon.png" });
         if (launchUrl) {

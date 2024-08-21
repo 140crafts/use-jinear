@@ -1,15 +1,16 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { changeLoadingModalVisibility } from "@/store/slice/modalSlice";
 import { clearHasUnreadNotification, selectTaskAdditionalData } from "@/store/slice/taskAdditionalDataSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/navigation";
 import React from "react";
-import { IoClose, IoWarning } from "react-icons/io5";
+import { IoWarning } from "react-icons/io5";
 import { useTask } from "../context/TaskDetailContext";
 import styles from "./TaskHasUpdatesInfo.module.css";
+import { api } from "@/api/api";
 
-interface TaskHasUpdatesInfoProps {}
+interface TaskHasUpdatesInfoProps {
+}
 
 const TaskHasUpdatesInfo: React.FC<TaskHasUpdatesInfoProps> = ({}) => {
   const { t } = useTranslation();
@@ -20,9 +21,8 @@ const TaskHasUpdatesInfo: React.FC<TaskHasUpdatesInfoProps> = ({}) => {
   const additionalData = useTypedSelector(selectTaskAdditionalData(task.taskId));
 
   const refreshPage = () => {
-    dispatch(changeLoadingModalVisibility({ visible: true }));
-    // TODO cgds-275 test
-    router.refresh();
+    dispatch(api.util.invalidateTags(["v1/task/from-workspace/{workspaceName}/{taskTag}"]));
+    dispatch(clearHasUnreadNotification({ taskId: task.taskId }));
   };
 
   const clearHasUpdatesOnTask = () => {
@@ -34,12 +34,12 @@ const TaskHasUpdatesInfo: React.FC<TaskHasUpdatesInfoProps> = ({}) => {
       <div className={styles.infoContainer}>
         <IoWarning size={18} />
         {t("taskHasNewUpdates")}
-        <div className="flex-1" />
-        <Button className={styles.dismissButton} heightVariant={ButtonHeight.short} onClick={clearHasUpdatesOnTask}>
-          <IoClose size={14} />
-        </Button>
       </div>
       <div className={styles.actionContainer}>
+        <Button className={styles.dismissButton} heightVariant={ButtonHeight.short} onClick={clearHasUpdatesOnTask}>
+          {t("taskHasNewUpdatesDismiss")}
+        </Button>
+        <div className={"spacer-w-2"} />
         <Button
           className={styles.refreshButton}
           variant={ButtonVariants.filled2}
