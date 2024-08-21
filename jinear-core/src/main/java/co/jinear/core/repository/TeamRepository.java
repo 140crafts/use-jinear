@@ -19,5 +19,7 @@ public interface TeamRepository extends JpaRepository<Team, String> {
 
     Optional<Team> findByUsernameAndWorkspaceIdAndPassiveIdIsNull(String username, String workspaceId);
 
-    boolean existsByTeamIdAndTeamStateAndPassiveIdIsNull(String teamId, TeamStateType teamStateType);
+    boolean existsByWorkspaceIdAndTeamIdAndTeamStateAndPassiveIdIsNull(String workspaceId, String teamId, TeamStateType teamStateType);
+
+    Long countAllByWorkspaceIdAndTeamIdIsInAndTeamStateAndPassiveIdIsNull(String workspaceId, List<String> teamId, TeamStateType teamStateType);
 }

@@ -14,6 +14,7 @@ import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.entity.workspace.WorkspaceActivity;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
 import co.jinear.core.service.account.AccountRetrieveService;
+import co.jinear.core.service.project.ProjectRetrieveService;
 import co.jinear.core.service.richtext.RichTextRetrieveService;
 import co.jinear.core.service.task.checklist.ChecklistItemService;
 import co.jinear.core.service.task.checklist.ChecklistRetrieveService;
@@ -80,7 +81,8 @@ public class WorkspaceActivityDetailRetrieveService {
             TASK_BOARD_ENTRY_INIT,
             TASK_BOARD_ENTRY_REMOVED,
             TASK_BOARD_ENTRY_ORDER_CHANGE,
-            TASK_NEW_COMMENT
+            TASK_NEW_COMMENT,
+            TASK_PROJECT_UPDATE
     );
 
     private final RichTextRetrieveService richTextRetrieveService;
@@ -96,6 +98,7 @@ public class WorkspaceActivityDetailRetrieveService {
     private final WorkspaceRetrieveService workspaceRetrieveService;
     private final TeamRetrieveService teamRetrieveService;
     private final FeProperties feProperties;
+    private final ProjectRetrieveService projectRetrieveService;
 
     public WorkspaceActivityDto retrieveDetailsAndMap(WorkspaceActivity workspaceActivity) {
         return Optional.of(workspaceActivity)
@@ -111,6 +114,7 @@ public class WorkspaceActivityDetailRetrieveService {
                 .map(this::retrieveRelatedChecklist)
                 .map(this::retrieveRelatedChecklistItem)
                 .map(this::retrieveRelatedTaskMedia)
+                .map(this::retrieveProjectInfo)
                 .map(this::decideGroupAttributes)
                 .orElse(null);
     }
@@ -211,6 +215,24 @@ public class WorkspaceActivityDetailRetrieveService {
         if (TASK_MEDIA_RELATED_TYPES.contains(workspaceActivityDto.getType())) {
             MediaDto mediaDto = taskMediaRetrieveService.retrieveInclDeleted(workspaceActivityDto.getTaskId(), workspaceActivityDto.getRelatedObjectId());
             workspaceActivityDto.setRelatedTaskMedia(mediaDto);
+        }
+        return workspaceActivityDto;
+    }
+
+    private WorkspaceActivityDto retrieveProjectInfo(WorkspaceActivityDto workspaceActivityDto) {
+        if (TASK_PROJECT_UPDATE.equals(workspaceActivityDto.getType())) {
+            Optional.of(workspaceActivityDto)
+                    .map(WorkspaceActivityDto::getOldState)
+                    .map(projectRetrieveService::retrieveOptional)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .ifPresent(workspaceActivityDto::setOldProject);
+            Optional.of(workspaceActivityDto)
+                    .map(WorkspaceActivityDto::getNewState)
+                    .map(projectRetrieveService::retrieveOptional)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .ifPresent(workspaceActivityDto::setNewProject);
         }
         return workspaceActivityDto;
     }

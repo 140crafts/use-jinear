@@ -127,6 +127,8 @@ public class TaskInitializeService {
         task.setHasPreciseDueDate(taskInitializeVo.getHasPreciseDueDate());
         task.setDueDate(taskInitializeVo.getDueDate());
         task.setTitle(taskInitializeVo.getTitle());
+        task.setProjectId(taskInitializeVo.getProjectId());
+        task.setMilestoneId(taskInitializeVo.getMilestoneId());
         return task;
     }
 

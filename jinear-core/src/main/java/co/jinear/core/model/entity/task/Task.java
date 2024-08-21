@@ -2,6 +2,8 @@ package co.jinear.core.model.entity.task;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
+import co.jinear.core.model.entity.project.Milestone;
+import co.jinear.core.model.entity.project.Project;
 import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.entity.team.TeamWorkflowStatus;
 import co.jinear.core.model.entity.topic.Topic;
@@ -68,6 +70,12 @@ public class Task extends BaseEntity {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "project_id")
+    private String projectId;
+
+    @Column(name = "milestone_id")
+    private String milestoneId;
+
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "workflow_status_id", insertable = false, updatable = false)
@@ -122,4 +130,14 @@ public class Task extends BaseEntity {
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<TaskFeedItem> feedItems;
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "project_id", insertable = false, updatable = false)
+    private Project project;
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "milestone_id", insertable = false, updatable = false)
+    private Milestone milestone;
 }

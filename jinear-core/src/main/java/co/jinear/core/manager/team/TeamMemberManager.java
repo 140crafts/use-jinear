@@ -43,9 +43,9 @@ public class TeamMemberManager {
 
     public BaseResponse addTeamMember(AddTeamMemberRequest addTeamMemberRequest) {
         String accountId = sessionInfoService.currentAccountId();
-        validateTeamExistenceAndState(addTeamMemberRequest);
         TeamDto teamDto = teamRetrieveService.retrieveTeam(addTeamMemberRequest.getTeamId());
         teamAccessValidator.validateTeamAdminOrWorkspaceAdminOrWorkspaceOwner(accountId, teamDto.getWorkspaceId(), teamDto.getTeamId());
+        validateTeamExistenceAndState(teamDto.getWorkspaceId(), addTeamMemberRequest);
         TeamMemberAddVo teamMemberAddVo = teamMemberConverter.map(addTeamMemberRequest);
         teamMemberService.addTeamMember(teamMemberAddVo);
         //todo workspace activity
@@ -79,8 +79,8 @@ public class TeamMemberManager {
         return mapResponse(teamMemberDtos);
     }
 
-    private void validateTeamExistenceAndState(AddTeamMemberRequest addTeamMemberRequest) {
-        boolean existsAndActive = teamRetrieveService.checkTeamExistenceWithState(addTeamMemberRequest.getTeamId(), TeamStateType.ACTIVE);
+    private void validateTeamExistenceAndState(String workspaceId, AddTeamMemberRequest addTeamMemberRequest) {
+        boolean existsAndActive = teamRetrieveService.checkTeamExistenceWithState(workspaceId, addTeamMemberRequest.getTeamId(), TeamStateType.ACTIVE);
         if (Boolean.FALSE.equals(existsAndActive)) {
             throw new BusinessException();
         }

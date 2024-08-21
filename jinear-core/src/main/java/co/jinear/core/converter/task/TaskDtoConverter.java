@@ -1,6 +1,7 @@
 package co.jinear.core.converter.task;
 
 import co.jinear.core.converter.media.AccessibleMediaDtoConverter;
+import co.jinear.core.converter.project.ProjectDtoConverter;
 import co.jinear.core.converter.team.TeamDtoConverter;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskRelationDto;
@@ -11,7 +12,7 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = {TeamDtoConverter.class, AccessibleMediaDtoConverter.class})
+@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = {TeamDtoConverter.class, AccessibleMediaDtoConverter.class, ProjectDtoConverter.class})
 public interface TaskDtoConverter {
 
     UpdateTaskWorkflowDto map(TaskDto taskDto, String remindersPassiveId);

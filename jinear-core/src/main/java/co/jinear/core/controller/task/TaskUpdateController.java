@@ -1,10 +1,7 @@
 package co.jinear.core.controller.task;
 
 import co.jinear.core.manager.task.TaskUpdateManager;
-import co.jinear.core.model.request.task.TaskAssigneeUpdateRequest;
-import co.jinear.core.model.request.task.TaskDateUpdateRequest;
-import co.jinear.core.model.request.task.TaskUpdateDescriptionRequest;
-import co.jinear.core.model.request.task.TaskUpdateTitleRequest;
+import co.jinear.core.model.request.task.*;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.TaskResponse;
 import jakarta.validation.Valid;
@@ -45,5 +42,19 @@ public class TaskUpdateController {
     public TaskResponse updateTaskAssignee(@PathVariable("taskId") String taskId,
                                            @Valid @RequestBody TaskAssigneeUpdateRequest taskAssigneeUpdateRequest) {
         return taskUpdateManager.updateTaskAssignee(taskId, taskAssigneeUpdateRequest);
+    }
+
+    @PutMapping("/{taskId}/project")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskResponse updateTaskProject(@PathVariable("taskId") String taskId,
+                                          @Valid @RequestBody TaskProjectUpdateRequest taskAssigneeUpdateRequest) {
+        return taskUpdateManager.updateTaskProject(taskId, taskAssigneeUpdateRequest);
+    }
+
+    @PutMapping("/{taskId}/milestone")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskResponse updateTaskMilestone(@PathVariable("taskId") String taskId,
+                                          @Valid @RequestBody TaskMilestoneUpdateRequest taskMilestoneUpdateRequest) {
+        return taskUpdateManager.updateTaskMilestone(taskId, taskMilestoneUpdateRequest);
     }
 }

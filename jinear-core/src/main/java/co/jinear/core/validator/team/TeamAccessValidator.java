@@ -42,6 +42,10 @@ public class TeamAccessValidator {
         }
     }
 
+    public boolean checkTeamAccess(String accountId, String workspaceId, String teamId) {
+        return isWorkspaceAdminOrOwner(accountId, workspaceId) || isAccountTeamMember(accountId, teamId);
+    }
+
     public void validateTeamAdminAccess(String accountId, String teamId) {
         TeamDto teamDto = teamRetrieveService.retrieveTeam(teamId);
         String workspaceId = teamDto.getWorkspaceId();

@@ -52,4 +52,8 @@ public class TaskFilterRequest extends BaseRequest {
     private FilterSort sort = IDATE_DESC;
     @Nullable
     private List<TaskExternalCalendarFilterDto> externalCalendarList;
+    @Nullable
+    private List<String> projectIds;
+    @Nullable
+    private List<String> milestoneIds;
 }

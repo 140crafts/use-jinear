@@ -18,11 +18,14 @@ import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.topic.TopicRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
+import co.jinear.core.validator.project.MilestoneValidator;
+import co.jinear.core.validator.project.ProjectAccessValidator;
 import co.jinear.core.validator.task.TaskBoardAccessValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.internal.util.StringHelper;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -44,6 +47,8 @@ public class TaskInitializeManager {
     private final TaskBoardAccessValidator taskBoardAccessValidator;
     private final TaskRetrieveService taskRetrieveService;
     private final TopicRetrieveService topicRetrieveService;
+    private final ProjectAccessValidator projectAccessValidator;
+    private final MilestoneValidator milestoneValidator;
 
     public TaskResponse initializeTask(TaskInitializeRequest taskInitializeRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -56,6 +61,7 @@ public class TaskInitializeManager {
         validateTaskBoardAccess(taskInitializeRequest, currentAccount);
         validateSubtaskAndNewTaskIsInSameTeamAndWorkspace(taskInitializeRequest);
         validateTopicAndNewTaskIsInSameTeamAndWorkspace(taskInitializeRequest);
+        validateProjectAndMilestoneId(taskInitializeRequest, currentAccount);
 
         log.info("Initialize task has started. currentAccount: {}", currentAccount);
         TaskInitializeVo taskInitializeVo = taskInitializeVoConverter.map(taskInitializeRequest);
@@ -66,6 +72,16 @@ public class TaskInitializeManager {
         taskActivityService.initializeNewTaskActivity(currentAccount, currentAccountSessionId, initializedTask);
         initializeTaskBoardActivity(taskInitializeRequest, currentAccount, currentAccountSessionId, initializedTask);
         return mapResponse(initializedTask);
+    }
+
+    private void validateProjectAndMilestoneId(TaskInitializeRequest taskInitializeRequest, String currentAccount) {
+        if (StringHelper.isNotEmpty(taskInitializeRequest.getProjectId())) {
+            projectAccessValidator.validateHasExplicitAccess(taskInitializeRequest.getProjectId(), currentAccount);
+            projectAccessValidator.validateProjectAndWorkspaceIsInSameWorkspace(taskInitializeRequest.getProjectId(), taskInitializeRequest.getWorkspaceId());
+            if (StringHelper.isNotEmpty(taskInitializeRequest.getMilestoneId())) {
+                milestoneValidator.validateMilestoneIsInProject(taskInitializeRequest.getProjectId(), taskInitializeRequest.getMilestoneId());
+            }
+        }
     }
 
     private void validateTopicAndNewTaskIsInSameTeamAndWorkspace(TaskInitializeRequest taskInitializeRequest) {
@@ -109,7 +125,7 @@ public class TaskInitializeManager {
     }
 
     private void validateTeamExistenceAndState(TaskInitializeRequest taskInitializeRequest) {
-        boolean existsAndActive = teamRetrieveService.checkTeamExistenceWithState(taskInitializeRequest.getTeamId(), TeamStateType.ACTIVE);
+        boolean existsAndActive = teamRetrieveService.checkTeamExistenceWithState(taskInitializeRequest.getWorkspaceId(), taskInitializeRequest.getTeamId(), TeamStateType.ACTIVE);
         if (Boolean.FALSE.equals(existsAndActive)) {
             throw new BusinessException();
         }

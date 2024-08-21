@@ -33,4 +33,6 @@ public class TaskSearchFilterVo {
     private ZonedDateTime timespanStart;
     private ZonedDateTime timespanEnd;
     private FilterSort sort = IDATE_DESC;
+    private List<String> projectIds;
+    private List<String> milestoneIds;
 }

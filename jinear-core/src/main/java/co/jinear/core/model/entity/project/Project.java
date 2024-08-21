@@ -60,17 +60,23 @@ public class Project extends BaseEntity {
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
+    @Where(clause = "passive_id is null")
     @JoinColumn(name = "lead_workspace_member_id", referencedColumnName = "workspace_member_id", insertable = false, updatable = false)
-    private WorkspaceMember workspaceMember;
+    private WorkspaceMember leadWorkspaceMember;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @Where(clause = "passive_id is null")
-    @JoinColumn(name = "description_rich_text_id", referencedColumnName = "related_object_id", insertable = false, updatable = false)
+    @JoinColumn(name = "description_rich_text_id", referencedColumnName = "rich_text_id", insertable = false, updatable = false)
     private RichText description;
 
     @OneToMany(mappedBy = "project")
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<ProjectTeam> projectTeams;
+
+    @OneToMany(mappedBy = "project")
+    @Where(clause = "passive_id is null")
+    @OrderBy("milestoneOrder ASC")
+    private Set<Milestone> milestones;
 }

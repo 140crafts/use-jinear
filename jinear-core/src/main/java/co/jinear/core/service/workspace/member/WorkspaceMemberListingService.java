@@ -1,6 +1,7 @@
 package co.jinear.core.service.workspace.member;
 
 import co.jinear.core.converter.workspace.WorkspaceMemberDtoConverter;
+import co.jinear.core.converter.workspace.WorkspaceMemberDtoDetailedConverter;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
 import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
@@ -24,12 +25,13 @@ public class WorkspaceMemberListingService {
     private final AccountRetrieveService accountRetrieveService;
     private final MediaRetrieveService mediaRetrieveService;
     private final WorkspaceMemberDtoConverter workspaceMemberDtoConverter;
+    private final WorkspaceMemberDtoDetailedConverter workspaceMemberDtoDetailedConverter;
 
     public List<DetailedWorkspaceMemberDto> retrieveAccountsWorkspaceMemberships(String accountId) {
         log.info("Retrieve account workspace members has started. accountId: {}", accountId);
         return workspaceMemberRepository.findAllByAccountIdAndPassiveIdIsNull(accountId)
                 .stream()
-                .map(workspaceMemberDtoConverter::mapToDetailed)
+                .map(workspaceMemberDtoDetailedConverter::mapToDetailed)
                 .toList();
     }
 

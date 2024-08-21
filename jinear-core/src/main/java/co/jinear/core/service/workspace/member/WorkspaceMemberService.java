@@ -115,6 +115,10 @@ public class WorkspaceMemberService {
         }
     }
 
+    public boolean checkWorkspaceMemberExistsInWorkspace(String workspaceMemberId, String workspaceId) {
+        return workspaceMemberRepository.existsByWorkspaceMemberIdAndWorkspaceIdAndPassiveIdIsNull(workspaceMemberId, workspaceId);
+    }
+
     private void createWorkspaceRole(InitializeWorkspaceMemberVo initializeWorkspaceMemberVo) {
         WorkspaceMember workspaceMember = new WorkspaceMember();
         workspaceMember.setWorkspaceId(initializeWorkspaceMemberVo.getWorkspaceId());

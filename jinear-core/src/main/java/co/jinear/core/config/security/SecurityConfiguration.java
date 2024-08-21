@@ -50,7 +50,7 @@ public class SecurityConfiguration {
             "/v1/oauth/google/callback/login",
             "/v1/oauth/google/callback/attach-account",
             "/v1/calendar/event/exports/{shareableKey}",
-            "/debug/**"
+            "/v1/debug/**"
     };
 
     private static final List<String> CORS_ALLOWED_DOMAINS = Arrays.asList(

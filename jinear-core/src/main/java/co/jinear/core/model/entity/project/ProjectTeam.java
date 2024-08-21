@@ -38,5 +38,4 @@ public class ProjectTeam extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "team_id", insertable = false, updatable = false)
     private Team team;
-
 }
