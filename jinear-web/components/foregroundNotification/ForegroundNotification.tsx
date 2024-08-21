@@ -2,8 +2,9 @@ import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "react-hot-toast";
-import Button, { ButtonVariants } from "../button";
+import Button, { ButtonHeight, ButtonVariants } from "../button";
 import styles from "./ForegroundNotification.module.css";
+import { IoArrowForward, IoClose } from "react-icons/io5";
 
 interface ForegroundNotificationProps {
   title: string;
@@ -16,14 +17,14 @@ interface ForegroundNotificationProps {
 }
 
 const ForegroundNotification: React.FC<ForegroundNotificationProps> = ({
-  title,
-  body,
-  launchUrl,
-  buttonLabel,
-  closeable = false,
-  onClick,
-  onClose,
-}) => {
+                                                                         title,
+                                                                         body,
+                                                                         launchUrl,
+                                                                         buttonLabel,
+                                                                         closeable = false,
+                                                                         onClick,
+                                                                         onClose
+                                                                       }) => {
   const { t } = useTranslation();
   const router = useRouter();
 
@@ -41,19 +42,20 @@ const ForegroundNotification: React.FC<ForegroundNotificationProps> = ({
 
   return (
     <div className={styles.container}>
-      <h2>
+      <h3>
         <b>{title}</b>
-      </h2>
+      </h3>
       <div>{body}</div>
       <div className={styles.buttonContainer}>
-        {launchUrl && (
-          <Button variant={ButtonVariants.filled} onClick={_onClick}>
-            {buttonLabel ? buttonLabel : t("foregroundNotificationDefaultButtonLabel")}
+        {closeable && (
+          <Button variant={ButtonVariants.contrast} heightVariant={ButtonHeight.short2x} onClick={closeAll}>
+            {/*{t("foregroundNotificationDefaultCloseButtonLabel")}*/}
+            <IoClose />
           </Button>
         )}
-        {closeable && (
-          <Button variant={ButtonVariants.contrast} onClick={closeAll}>
-            {t("foregroundNotificationDefaultCloseButtonLabel")}
+        {launchUrl && (
+          <Button variant={ButtonVariants.filled} heightVariant={ButtonHeight.short2x} onClick={_onClick}>
+            {buttonLabel ? buttonLabel : <IoArrowForward />}
           </Button>
         )}
       </div>
