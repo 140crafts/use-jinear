@@ -58,4 +58,10 @@ public class TaskInitializeRequest extends BaseRequest {
 
     @Nullable
     private String feedItemId;
+
+    @Nullable
+    private String projectId;
+
+    @Nullable
+    private String milestoneId;
 }

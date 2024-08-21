@@ -17,5 +17,5 @@ public interface TaskRepository extends JpaRepository<Task, String> {
 
     Page<Task> findAllByWorkspaceIdAndTeamIdAndWorkflowStatus_WorkflowStateGroupIsInAndPassiveIdIsNullOrderByCreatedDateAsc(String workspaceId, String teamId, List<TeamWorkflowStateGroup> workflowStateGroups, Pageable pageable);
 
-
+    boolean existsByTeamIdAndProjectIdAndPassiveIdIsNull(String teamId,String projectId);
 }

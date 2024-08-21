@@ -3,6 +3,7 @@ package co.jinear.core.model.dto.workspace;
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.media.MediaDto;
+import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.*;
 import co.jinear.core.model.dto.team.TeamDto;
@@ -71,4 +72,8 @@ public class WorkspaceActivityDto extends BaseDto {
     private TaskBoardDto taskBoard;
     @Nullable
     private MediaDto relatedTaskMedia;
+    @Nullable
+    private ProjectDto oldProject;
+    @Nullable
+    private ProjectDto newProject;
 }

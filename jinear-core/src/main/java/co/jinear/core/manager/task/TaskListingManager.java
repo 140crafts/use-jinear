@@ -4,6 +4,8 @@ import co.jinear.core.converter.task.TaskFilterRequestConverter;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.project.MilestoneDto;
+import co.jinear.core.model.dto.project.ProjectTeamDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
@@ -13,6 +15,8 @@ import co.jinear.core.model.response.task.TaskListingListedResponse;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.project.MilestoneRetrieveService;
+import co.jinear.core.service.project.ProjectTeamListingService;
 import co.jinear.core.service.task.TaskListingService;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
@@ -39,6 +43,8 @@ public class TaskListingManager {
     private final TaskListingService taskListingService;
     private final TeamMemberRetrieveService teamMemberRetrieveService;
     private final TaskFilterRequestConverter taskFilterRequestConverter;
+    private final ProjectTeamListingService projectTeamListingService;
+    private final MilestoneRetrieveService milestoneRetrieveService;
 
     public TaskListingPaginatedResponse filterTasks(TaskFilterRequest taskFilterRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -48,9 +54,47 @@ public class TaskListingManager {
         List<TeamMemberDto> memberships = retrieveMemberships(taskFilterRequest, currentAccount);
         validateAccountMembershipsInRequestedTeams(taskFilterRequest, memberships);
         validateTeamTaskVisibilityAndMemberRoleForAll(memberships);
+        validateProjectAndMilestoneAccess(taskFilterRequest, memberships);
+
         TaskSearchFilterVo taskSearchFilterVo = taskFilterRequestConverter.convert(taskFilterRequest, memberships);
         Page<TaskDto> taskDtoPage = taskListingService.filterTasks(taskSearchFilterVo);
         return mapResponse(taskDtoPage);
+    }
+
+    private void validateProjectAndMilestoneAccess(TaskFilterRequest taskFilterRequest, List<TeamMemberDto> memberships) {
+        List<String> requestedProjectIds = taskFilterRequest.getProjectIds();
+        List<String> requestedMilestoneIds = taskFilterRequest.getMilestoneIds();
+
+        if (Objects.nonNull(requestedProjectIds) || Objects.nonNull(requestedMilestoneIds)){
+            List<String> membershipTeamIds = memberships.stream()
+                    .map(TeamMemberDto::getTeamId)
+                    .toList();
+            List<ProjectTeamDto> teamMembershipsProjects = projectTeamListingService.retrieveAllByTeamIdOrTeamIdEmpty(membershipTeamIds);
+
+            if (Objects.nonNull(requestedProjectIds)) {
+                List<String> teamMembershipsProjectsTeamIds = teamMembershipsProjects.stream()
+                        .map(ProjectTeamDto::getTeamId)
+                        .toList();
+                requestedProjectIds.forEach(requestedProjectId -> {
+                    if (!teamMembershipsProjectsTeamIds.contains(requestedProjectId)) {
+                        throw new NoAccessException();
+                    }
+                });
+            }
+
+            if (Objects.nonNull(requestedMilestoneIds)) {
+                List<String> participatedProjectIds = teamMembershipsProjects.stream().map(ProjectTeamDto::getProjectId).toList();
+                List<MilestoneDto> participatedMilestones = milestoneRetrieveService.retrieveAllByProjectIds(participatedProjectIds);
+                List<String> participatedMilestoneIds = participatedMilestones.stream()
+                        .map(MilestoneDto::getMilestoneId)
+                        .toList();
+                requestedMilestoneIds.forEach(requestedMilestoneId -> {
+                    if (!participatedMilestoneIds.contains(requestedMilestoneId)) {
+                        throw new NoAccessException();
+                    }
+                });
+            }
+        }
     }
 
     private List<TeamMemberDto> retrieveMemberships(TaskFilterRequest taskFilterRequest, String currentAccount) {
@@ -82,8 +126,16 @@ public class TaskListingManager {
 
     private void validateAccountMembershipsInRequestedTeams(TaskFilterRequest taskFilterRequest, List<TeamMemberDto> memberships) {
         List<String> teamIdList = taskFilterRequest.getTeamIdList();
-        if (Objects.nonNull(teamIdList) && memberships.size() != teamIdList.size()) {
-            throw new NoAccessException();
+        if (Objects.nonNull(teamIdList)) {
+            List<String> membershipTeamIds = memberships.stream().map(TeamMemberDto::getTeamId).toList();
+            if (teamIdList.size() > membershipTeamIds.size()) {
+                throw new NoAccessException();
+            }
+            teamIdList.forEach(teamId -> {
+                if (!membershipTeamIds.contains(teamId)) {
+                    throw new NoAccessException();
+                }
+            });
         }
     }
 

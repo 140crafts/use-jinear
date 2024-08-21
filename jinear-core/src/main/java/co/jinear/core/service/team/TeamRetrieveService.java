@@ -11,6 +11,7 @@ import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.repository.TeamRepository;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberRetrieveService;
+import co.jinear.core.system.NumberCompareHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -101,7 +102,12 @@ public class TeamRetrieveService {
                 .map(teamDtoConverter::map);
     }
 
-    public boolean checkTeamExistenceWithState(String teamId, TeamStateType teamStateType){
-        return teamRepository.existsByTeamIdAndTeamStateAndPassiveIdIsNull(teamId,teamStateType);
+    public boolean checkTeamExistenceWithState(String workspaceId, String teamId, TeamStateType teamStateType) {
+        return teamRepository.existsByWorkspaceIdAndTeamIdAndTeamStateAndPassiveIdIsNull(workspaceId, teamId, teamStateType);
+    }
+
+    public boolean checkAllExistsAndActiveWithinSameWorkspace(String workspaceId, List<String> teamIds) {
+        Long count = teamRepository.countAllByWorkspaceIdAndTeamIdIsInAndTeamStateAndPassiveIdIsNull(workspaceId, teamIds, TeamStateType.ACTIVE);
+        return NumberCompareHelper.isEquals(Long.valueOf(teamIds.size()), count);
     }
 }

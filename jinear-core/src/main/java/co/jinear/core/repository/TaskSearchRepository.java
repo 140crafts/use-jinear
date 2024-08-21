@@ -93,6 +93,8 @@ public class TaskSearchRepository {
             taskSearchCriteriaBuilder.addWorkflowStatusIdList(taskSearchFilterVo.getWorkflowStatusIdList(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addWorkflowStateGroupList(taskSearchFilterVo.getWorkflowStateGroups(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addDatePredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, predicateList);
+            taskSearchCriteriaBuilder.addProjectIdList(taskSearchFilterVo.getProjectIds(), criteriaBuilder, taskRoot, predicateList);
+            taskSearchCriteriaBuilder.addMilestoneIdList(taskSearchFilterVo.getMilestoneIds(), criteriaBuilder, taskRoot, predicateList);
             return criteriaBuilder.and(predicateList.toArray(Predicate[]::new));
         }
         return null;
@@ -154,7 +156,8 @@ public class TaskSearchRepository {
                 taskSearchCriteriaBuilder.addWorkflowStatusIdList(taskSearchFilterVo.getWorkflowStatusIdList(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addWorkflowStateGroupList(taskSearchFilterVo.getWorkflowStateGroups(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addDatePredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, teamPredicateList);
-
+                taskSearchCriteriaBuilder.addProjectIdList(taskSearchFilterVo.getProjectIds(), criteriaBuilder, taskRoot, teamPredicateList);
+                taskSearchCriteriaBuilder.addMilestoneIdList(taskSearchFilterVo.getMilestoneIds(), criteriaBuilder, taskRoot, teamPredicateList);
                 Predicate teamPredicate = criteriaBuilder.and(teamPredicateList.toArray(Predicate[]::new));
                 mainPredicateList.add(teamPredicate);
             });

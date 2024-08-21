@@ -2,6 +2,8 @@ package co.jinear.core.model.dto.task;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.dto.project.MilestoneDto;
+import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
@@ -34,6 +36,8 @@ public class TaskDto extends BaseDto {
     private Integer teamTagNo;
     private Integer topicTagNo;
     private String title;
+    private String projectId;
+    private String milestoneId;
     @Nullable
     private RichTextDto description;
     @Nullable
@@ -55,4 +59,8 @@ public class TaskDto extends BaseDto {
     private Set<TaskReminderDto> taskReminders;
     @Nullable
     private Set<ChecklistDto> checklists;
+    @Nullable
+    private ProjectDto project;
+    @Nullable
+    private MilestoneDto milestone;
 }

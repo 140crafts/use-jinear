@@ -26,4 +26,6 @@ public class TaskInitializeVo {
     private String boardId;
     private String feedId;
     private String feedItemId;
+    private String projectId;
+    private String milestoneId;
 }

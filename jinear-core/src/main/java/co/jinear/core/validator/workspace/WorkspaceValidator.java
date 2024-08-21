@@ -1,5 +1,6 @@
 package co.jinear.core.validator.workspace;
 
+import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
@@ -38,5 +39,11 @@ public class WorkspaceValidator {
 
     public boolean isWorkspaceAdminOrOwner(String accountId, String workspaceId) {
         return workspaceMemberService.doesAccountHaveWorkspaceAdminAccess(accountId, workspaceId);
+    }
+
+    public void validateWorkspaceMemberIdIsInWorkspace(String workspaceMemberId, String workspaceId){
+        if (!workspaceMemberService.checkWorkspaceMemberExistsInWorkspace(workspaceMemberId,workspaceId)){
+            throw new NoAccessException();
+        }
     }
 }

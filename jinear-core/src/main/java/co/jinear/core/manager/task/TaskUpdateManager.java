@@ -4,13 +4,12 @@ import co.jinear.core.converter.task.TaskDatesUpdateVoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.dto.project.MilestoneDto;
+import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.UpdateTaskWorkflowDto;
 import co.jinear.core.model.dto.topic.TopicDto;
-import co.jinear.core.model.request.task.TaskAssigneeUpdateRequest;
-import co.jinear.core.model.request.task.TaskDateUpdateRequest;
-import co.jinear.core.model.request.task.TaskUpdateDescriptionRequest;
-import co.jinear.core.model.request.task.TaskUpdateTitleRequest;
+import co.jinear.core.model.request.task.*;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.TaskResponse;
 import co.jinear.core.model.vo.task.TaskAssigneeUpdateVo;
@@ -20,6 +19,8 @@ import co.jinear.core.model.vo.task.TaskTitleUpdateVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.passive.PassiveService;
+import co.jinear.core.service.project.MilestoneRetrieveService;
+import co.jinear.core.service.project.ProjectRetrieveService;
 import co.jinear.core.service.task.TaskActivityService;
 import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.TaskUpdateService;
@@ -29,6 +30,7 @@ import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -51,6 +53,8 @@ public class TaskUpdateManager {
     private final TaskDatesUpdateVoConverter taskDatesUpdateVoConverter;
     private final AccountRetrieveService accountRetrieveService;
     private final PassiveService passiveService;
+    private final ProjectRetrieveService projectRetrieveService;
+    private final MilestoneRetrieveService milestoneRetrieveService;
 
     public BaseResponse updateTaskTitle(String taskId, TaskUpdateTitleRequest taskUpdateTitleRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -123,6 +127,28 @@ public class TaskUpdateManager {
         TaskAssigneeUpdateVo taskAssigneeUpdateVo = taskDatesUpdateVoConverter.map(taskAssigneeUpdateRequest, taskId);
         TaskDto taskDto = taskUpdateService.updateTaskAssignee(taskAssigneeUpdateVo);
         taskActivityService.initializeAssigneeUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
+        return mapResponse(taskDto);
+    }
+
+    public TaskResponse updateTaskProject(String taskId, TaskProjectUpdateRequest taskProjectUpdateRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
+        TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
+        validateProjectAndTaskWorkspaceAndTeams(taskProjectUpdateRequest, taskDtoBeforeUpdate);
+        log.info("Update task project has started. accountId: {}, taskId: {}, taskProjectUpdateRequest: {}", currentAccountId, taskId, taskProjectUpdateRequest);
+        TaskDto taskDto = taskUpdateService.updateTaskProject(taskId, taskProjectUpdateRequest.getProjectId());
+        taskActivityService.initializeTaskProjectUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
+        return mapResponse(taskDto);
+    }
+
+    public TaskResponse updateTaskMilestone(String taskId, TaskMilestoneUpdateRequest taskMilestoneUpdateRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
+        TaskDto taskDtoBeforeUpdate = validateAccess(taskId, currentAccountId);
+        validateMilestoneProjectAndTaskWorkspaceAndTeams(taskMilestoneUpdateRequest, taskDtoBeforeUpdate);
+        log.info("Update task milestone has started. accountId: {}, taskId: {}, taskMilestoneUpdateRequest: {}", currentAccountId, taskId, taskMilestoneUpdateRequest);
+        TaskDto taskDto = taskUpdateService.updateTaskMilestone(taskId, taskMilestoneUpdateRequest.getMilestoneId());
+        taskActivityService.initializeTaskMilestoneUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
         return mapResponse(taskDto);
     }
 
@@ -201,6 +227,53 @@ public class TaskUpdateManager {
     private void assignRemindersPassiveIdOwnershipIfExists(String currentAccountId, UpdateTaskWorkflowDto updateTaskWorkflowDto) {
         if (Objects.nonNull(updateTaskWorkflowDto.getRemindersPassiveId())) {
             passiveService.assignOwnership(updateTaskWorkflowDto.getRemindersPassiveId(), currentAccountId);
+        }
+    }
+
+    private void validateProjectAndTaskWorkspaceAndTeams(TaskProjectUpdateRequest taskProjectUpdateRequest, TaskDto taskDtoBeforeUpdate) {
+        Optional.of(taskProjectUpdateRequest)
+                .map(TaskProjectUpdateRequest::getProjectId)
+                .filter(StringUtils::isNotBlank)
+                .map(projectRetrieveService::retrieve)
+                .ifPresent(projectDto -> {
+                    validateTaskAndProjectWorkspaceIdsAreSame(taskDtoBeforeUpdate.getWorkspaceId(), projectDto);
+                    validateTaskTeamWithinProjectTeams(taskDtoBeforeUpdate.getTeamId(), projectDto);
+                });
+    }
+
+    private void validateMilestoneProjectAndTaskWorkspaceAndTeams(TaskMilestoneUpdateRequest taskMilestoneUpdateRequest, TaskDto taskDtoBeforeUpdate) {
+        Optional.of(taskMilestoneUpdateRequest)
+                .map(TaskMilestoneUpdateRequest::getMilestoneId)
+                .filter(StringUtils::isNotBlank)
+                .map(milestoneRetrieveService::retrieve)
+                .map(MilestoneDto::getProjectId)
+                .map(milestoneProjectId -> {
+                    if (!milestoneProjectId.equalsIgnoreCase(taskDtoBeforeUpdate.getProjectId())) {
+                        throw new BusinessException("project.assign-task.task-project-is-not-same-with-milestone-project");
+                    }
+                    return milestoneProjectId;
+                })
+                .map(projectRetrieveService::retrieve)
+                .ifPresent(projectDto -> {
+                    validateTaskAndProjectWorkspaceIdsAreSame(taskDtoBeforeUpdate.getWorkspaceId(), projectDto);
+                    validateTaskTeamWithinProjectTeams(taskDtoBeforeUpdate.getTeamId(), projectDto);
+                });
+    }
+
+    private void validateTaskAndProjectWorkspaceIdsAreSame(String taskWorkspaceId, ProjectDto projectDto) {
+        if (!taskWorkspaceId.equalsIgnoreCase(projectDto.getWorkspaceId())) {
+            throw new NoAccessException();
+        }
+    }
+
+    private void validateTaskTeamWithinProjectTeams(String taskTeamId, ProjectDto projectDto) {
+        boolean hasTaskTeamIsInProjectTeams = projectDto
+                .getProjectTeams()
+                .stream()
+                .reduce(false, (acc, curr) -> curr.getTeamId().equals(taskTeamId), (b1, b2) -> b1 || b2);
+        log.info("Validate task team within project teams: {}, taskTeamId: {}", hasTaskTeamIsInProjectTeams, taskTeamId);
+        if (!hasTaskTeamIsInProjectTeams) {
+            throw new BusinessException("project.assign-task.task-team-not-in-project-teams");
         }
     }
 }

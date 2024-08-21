@@ -1,6 +1,7 @@
 package co.jinear.core.model.entity.workspace;
 
 import co.jinear.core.model.entity.BaseEntity;
+import co.jinear.core.model.entity.account.Account;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -34,4 +35,8 @@ public class WorkspaceMember extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "workspace_id", insertable = false, updatable = false)
     private Workspace workspace;
+
+    @ManyToOne
+    @JoinColumn(name = "account_id", insertable = false, updatable = false)
+    private Account account;
 }

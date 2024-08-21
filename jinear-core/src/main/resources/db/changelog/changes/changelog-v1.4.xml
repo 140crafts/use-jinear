@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-project-to-task">
+        <addColumn tableName="task">
+            <column name="project_id" type="char(26)"/>
+            <column name="milestone_id" type="char(26)"/>
+        </addColumn>
+        <createIndex indexName="task_ix_project_id" tableName="task">
+            <column name="project_id"/>
+        </createIndex>
+        <createIndex indexName="task_ix_milestone_id" tableName="task">
+            <column name="milestone_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project">
+        <createTable tableName="project">
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description_rich_text_id" type="char(26)"/>
+            <column name="project_state" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_priority" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lead_workspace_member_id" type="char(26)"/>
+            <column name="start_date" type="datetime"/>
+            <column name="target_date" type="datetime"/>
+        </createTable>
+
+        <createIndex indexName="project_ix_workspace_id" tableName="project">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="project_ix_lead_workspace_member_id" tableName="project">
+            <column name="lead_workspace_member_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-milestone">
+        <createTable tableName="milestone">
+            <column name="milestone_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description_rich_text_id" type="char(26)"/>
+            <column name="milestone_order" type="integer"/>
+            <column name="target_date" type="datetime"/>
+        </createTable>
+
+        <createIndex indexName="milestone_ix_project_id" tableName="milestone">
+            <column name="project_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project_guest">
+        <createTable tableName="project_guest">
+            <column name="project_guest_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_member_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="project_guest_ix_project_id" tableName="project_guest">
+            <column name="project_id"/>
+        </createIndex>
+        <createIndex indexName="project_guest_ix_workspace_member_id" tableName="project_guest">
+            <column name="workspace_member_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project_team">
+        <createTable tableName="project_team">
+            <column name="project_team_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="project_team_ix_project_id" tableName="project_team">
+            <column name="project_id"/>
+        </createIndex>
+        <createIndex indexName="project_team_ix_team_id" tableName="project_team">
+            <column name="team_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

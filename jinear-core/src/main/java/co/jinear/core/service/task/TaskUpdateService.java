@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.UpdateTaskWorkflowDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
+import co.jinear.core.model.entity.project.Milestone;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.enumtype.task.TaskReminderType;
@@ -132,6 +133,29 @@ public class TaskUpdateService {
         initializeSubscription(saved);
         taskSearchService.refreshTaskFtsMv();
         log.info("Update task assignee has finished");
+        return taskDtoConverter.map(saved);
+    }
+
+    public TaskDto updateTaskProject(String taskId, String projectId) {
+        log.info("Update task project has started. taskId: {}, projectId: {}", taskId, projectId);
+        Task task = taskRetrieveService.retrieveEntity(taskId);
+        Optional.of(task)
+                .map(Task::getMilestone)
+                .map(Milestone::getProjectId)
+                .filter(milestoneProjectId -> !projectId.equals(milestoneProjectId))
+                .ifPresent(s -> task.setMilestoneId(null));
+        task.setProjectId(projectId);
+        Task saved = taskRepository.save(task);
+        log.info("Update task project has finished");
+        return taskDtoConverter.map(saved);
+    }
+
+    public TaskDto updateTaskMilestone(String taskId, String milestoneId) {
+        log.info("Update task milestoneId has started. taskId: {}, milestoneId: {}", taskId, milestoneId);
+        Task task = taskRetrieveService.retrieveEntity(taskId);
+        task.setMilestoneId(milestoneId);
+        Task saved = taskRepository.save(task);
+        log.info("Update task milestoneId has finished.");
         return taskDtoConverter.map(saved);
     }
 

@@ -206,6 +206,26 @@ public class TaskActivityService {
         notifyTaskSubscribers(before, type, performingAccountSessionId);
     }
 
+    public void initializeTaskProjectUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
+        WorkspaceActivityType type = WorkspaceActivityType.TASK_PROJECT_UPDATE;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
+        Optional.of(before).map(TaskDto::getProjectId).ifPresent(vo::setOldState);
+        Optional.of(after).map(TaskDto::getProjectId).ifPresent(vo::setNewState);
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
+    }
+
+    public void initializeTaskMilestoneUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
+        WorkspaceActivityType type = WorkspaceActivityType.TASK_MILESTONE_UPDATE;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
+        Optional.of(before).map(TaskDto::getMilestoneId).ifPresent(vo::setOldState);
+        Optional.of(after).map(TaskDto::getMilestoneId).ifPresent(vo::setNewState);
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
+    }
+
     private void initializeAssignedDateUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_CHANGE_ASSIGNED_DATE;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);

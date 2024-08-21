@@ -125,6 +125,22 @@ public class TaskSearchCriteriaBuilder {
         }
     }
 
+    public void addProjectIdList(List<String> projectIdList, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
+        if (Objects.nonNull(projectIdList) && !projectIdList.isEmpty()) {
+            CriteriaBuilder.In<String> in = criteriaBuilder.in(root.get("projectId"));
+            projectIdList.forEach(in::value);
+            predicateList.add(in);
+        }
+    }
+
+    public void addMilestoneIdList(List<String> milestoneIdList, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
+        if (Objects.nonNull(milestoneIdList) && !milestoneIdList.isEmpty()) {
+            CriteriaBuilder.In<String> in = criteriaBuilder.in(root.get("milestoneId"));
+            milestoneIdList.forEach(in::value);
+            predicateList.add(in);
+        }
+    }
+
     private void addIntersectingTasksPredicates(ZonedDateTime start, ZonedDateTime end, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
         if (Objects.nonNull(start) && Objects.nonNull(end)) {
             Predicate assignedDateBetweenPredicate = getAssignedDateBetweenPredicate(start, end, criteriaBuilder, root);
