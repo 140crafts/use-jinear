@@ -115,4 +115,15 @@
         <!-- @formatter:on-->
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-504-added-new-locale-strings-attachment_notif">
+    <!-- @formatter:off -->
+    <sql>
+        INSERT INTO locale_string (locale_string_id, idate, udate, passive_id, string_type, locale, value) VALUES (117, '2024-08-21 22:41:48', null, null, 'WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_ATTACHMENT_ADDED', 'TR', 'Yeni Dosya Eklendi');
+        INSERT INTO locale_string (locale_string_id, idate, udate, passive_id, string_type, locale, value) VALUES (118, '2024-08-21 22:41:48', null, null, 'WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_ATTACHMENT_ADDED', 'EN', 'New File Added');
+        INSERT INTO locale_string (locale_string_id, idate, udate, passive_id, string_type, locale, value) VALUES (119, '2024-08-21 22:41:48', null, null, 'WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_ATTACHMENT_DELETED', 'TR', 'Eklenen Dosya Kaldırıldı');
+        INSERT INTO locale_string (locale_string_id, idate, udate, passive_id, string_type, locale, value) VALUES (120, '2024-08-21 22:41:48', null, null, 'WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_ATTACHMENT_DELETED', 'EN', 'File Attachment Removed');
+    </sql>
+        <!-- @formatter:on-->
+    </changeSet>
+
 </databaseChangeLog>
