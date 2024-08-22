@@ -25,9 +25,9 @@
 }
 
 .button {
-  color: var(--c-link-color-inverted) !important;
+  color: var(--c-link-color) !important;
 }
 .button:hover {
-  color: var(--c-link-color-inverted) !important;
+  color: var(--c-link-color) !important;
   background-color: var(--c-secondary-shade-1) !important;
 }
