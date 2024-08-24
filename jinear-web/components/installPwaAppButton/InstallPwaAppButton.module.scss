@@ -1,0 +1,16 @@
+@import "/styles/breakpoints.scss";
+
+.pwaInstallButton {
+  display: flex;
+  gap: .25rem;
+}
+
+.installButtonLabel {
+  display: block;
+}
+
+@media (max-width: $mobile-l) {
+  .installButtonLabel {
+    display: none !important;
+  }
+}

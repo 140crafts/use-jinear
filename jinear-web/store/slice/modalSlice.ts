@@ -187,6 +187,9 @@ const initialState = {
   },
   newConversationModal: {
     visible: false
+  },
+  installPwaInstructionsModal: {
+    visible: false
   }
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
@@ -234,6 +237,7 @@ const initialState = {
   conversationSettingsModal: null | ConversationSettingsModalState;
   channelListModal: null | ChannelListModalState;
   newConversationModal: null | NewConversationModalState;
+  installPwaInstructionsModal: null | ModalState;
 };
 
 const slice = createSlice({
@@ -560,6 +564,13 @@ const slice = createSlice({
       state.newConversationModal = initialState.newConversationModal;
     },
 
+    popInstallPwaInstructionsModal: (state, action: PayloadAction<void>) => {
+      state.installPwaInstructionsModal = { visible: true };
+    },
+    closeInstallPwaInstructionsModal: (state, action: PayloadAction<void>) => {
+      state.installPwaInstructionsModal = initialState.installPwaInstructionsModal;
+    },
+
     resetModals: () => initialState
   },
   extraReducers: (builder) => {
@@ -666,6 +677,8 @@ export const {
   closeChannelListModal,
   popNewConversationModal,
   closeNewConversationModal,
+  popInstallPwaInstructionsModal,
+  closeInstallPwaInstructionsModal,
   resetModals
 } = slice.actions;
 export default slice.reducer;
@@ -904,3 +917,5 @@ export const selectChannelListModalWorkspaceId = (state: RootState) => state.mod
 export const selectNewConversationModalVisible = (state: RootState) => state.modal.newConversationModal?.visible;
 export const selectNewConversationModalWorkspaceId = (state: RootState) => state.modal.newConversationModal?.workspaceId;
 export const selectNewConversationModalWorkspaceName = (state: RootState) => state.modal.newConversationModal?.workspaceName;
+
+export const selectInstallPwaInstructionsModalVisible = (state: RootState) => state.modal.installPwaInstructionsModal?.visible;

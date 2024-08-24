@@ -49,12 +49,14 @@ import NewChannelModal from "@/components/modal/newChannelModal/NewChannelModal"
 import ConversationSettingsModal from "@/components/modal/conversationSettingsModal/ConversationSettingsModal";
 import ChannelListModal from "@/components/modal/channelListModal/ChannelListModal";
 import NewConversationModal from "@/components/modal/newConversationModal/NewConversationModal";
+import InstallPwaInstructionsModal from "@/components/modal/installPwaInstructionsModal/InstallPwaInstructionsModal";
 
 interface ModalProviderProps {
 }
 
 const globalModals: any = (
   <>
+    <InstallPwaInstructionsModal />
     <NewConversationModal />
     <ChannelListModal />
     <ConversationSettingsModal />
