@@ -10,6 +10,8 @@ import WorkspaceChangeButton from "../workspaceChangeButton/WorkspaceChangeButto
 import WorkspaceUpgradeButton from "../workspaceUpgradeButton/WorkspaceUpgradeButton";
 import styles from "./WorkspaceLayoutHeader.module.scss";
 import { IoArrowBack } from "react-icons/io5";
+import isPwa from "@/utils/pwaHelper";
+import InstallPwaAppButton from "@/components/installPwaAppButton/InstallPwaAppButton";
 
 interface WorkspaceLayoutHeaderProps {
 }
@@ -21,6 +23,7 @@ const WorkspaceLayoutHeader: React.FC<WorkspaceLayoutHeaderProps> = ({}) => {
   const router = useRouter();
   const params = useParams();
   const isMobile = useWidthLimit({ limit: MOBILE_LAYOUT_BREAKPOINT });
+  const _isPwa = isPwa();
   const workspaceName = params?.workspaceName as string;
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
   const upgradeButtonVariant = isMobile ? "ICON" : "FULL";
@@ -41,6 +44,7 @@ const WorkspaceLayoutHeader: React.FC<WorkspaceLayoutHeaderProps> = ({}) => {
         )}
       </div>
       <div className={styles.headerRightContent}>
+        {!_isPwa && <InstallPwaAppButton />}
         <SideMenuFooter />
       </div>
     </div>

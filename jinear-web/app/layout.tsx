@@ -27,6 +27,7 @@ import WebsocketHandler from "@/components/websockerHandler/WebsocketHandler";
 import NextTopLoader from "nextjs-toploader";
 import { CSPostHogProvider } from "@/components/postHogProvider/CSPostHogProvider";
 import PostHogPageView from "@/components/postHogPageView/PostHogPageView";
+import OnInstallPromptEventProvider from "@/components/onInstallPromptEventProvider/OnInstallPromptEventProvider";
 
 const logger = Logger("_app");
 
@@ -307,23 +308,25 @@ function MyApp({ children }: { children: React.ReactNode }) {
         <ReduxProvider>
           <DateFnsConfigration />
           <ThemeProvider>
-            <AuthCheck />
-            <WorkspaceAndTeamChangeListener />
-            <OnboardListener />
-            <WebViewEventListener />
-            <PureClientOnly>
-              <ErrorBoundary message={"Firebase Configration"}>
-                <FirebaseConfigration />
-              </ErrorBoundary>
-              <WebsocketHandler />
-            </PureClientOnly>
-            {!__DEV__ && <AxiomWebVitals />}
-            <PostHogPageView />
-            {children}
-            <ToasterProvider />
-            <BodyFixer />
-            <OfflineListener />
-            <ModalProvider />
+            <OnInstallPromptEventProvider>
+              <AuthCheck />
+              <WorkspaceAndTeamChangeListener />
+              <OnboardListener />
+              <WebViewEventListener />
+              <PureClientOnly>
+                <ErrorBoundary message={"Firebase Configration"}>
+                  <FirebaseConfigration />
+                </ErrorBoundary>
+                <WebsocketHandler />
+              </PureClientOnly>
+              {!__DEV__ && <AxiomWebVitals />}
+              <PostHogPageView />
+              {children}
+              <ToasterProvider />
+              <BodyFixer />
+              <OfflineListener />
+              <ModalProvider />
+            </OnInstallPromptEventProvider>
           </ThemeProvider>
         </ReduxProvider>
       </Root>

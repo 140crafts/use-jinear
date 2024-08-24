@@ -3712,9 +3712,9 @@ const translations = {
     en: "Cancel",
     tr: "Vazgeç"
   },
-  newTaskModalAddCalendar:{
-    en:"You can easily integrate your Google calendars into Jinear, allowing you to manage and organize all your events and appointments in one convenient place.",
-    tr:"Google takvimlerinizi kolayca Jinear'a entegre edebilir, tüm etkinliklerinizi ve randevularınızı tek bir yerde yönetip düzenleyebilirsiniz."
+  newTaskModalAddCalendar: {
+    en: "You can easily integrate your Google calendars into Jinear, allowing you to manage and organize all your events and appointments in one convenient place.",
+    tr: "Google takvimlerinizi kolayca Jinear'a entegre edebilir, tüm etkinliklerinizi ve randevularınızı tek bir yerde yönetip düzenleyebilirsiniz."
   },
   deleteCalendarEventAreYouSureTitle: {
     en: "Delete Event",
@@ -3727,6 +3727,54 @@ const translations = {
   deleteCalendarEventAreYouSureConfirmLabel: {
     en: "Delete",
     tr: "Sil"
+  },
+  headerInstallPwaButtonLabel: {
+    en: "Install",
+    tr: "Yükle"
+  },
+  headerInstallPwaButtonTooltip: {
+    en: "Learn how to install Jinear on your device",
+    tr: "Cihazınıza Jinear'ı nasıl yükleyeceğinizi görün"
+  },
+  installPwaInstructionsModalTitle: {
+    en: "Install Application",
+    tr: "Uygulamayı Yükle"
+  },
+  installPwaInstructionsModalIOSTitle: {
+    en: "Install Jinear on your iOS Device ",
+    tr: "Jinear'ı iOS cihazınıza yüklemek için"
+  },
+  installPwaInstructionsModalIOS_step1: {
+    en: "Visit the <a href='https://jinear.co' target='_blank' rel='noopener noreferrer'>jinear.co</a> on Safari.",
+    tr: "Safari kullanarak <a href='https://jinear.co' target='_blank' rel='noopener noreferrer'>jinear.co</a> adresine gidin."
+  },
+  installPwaInstructionsModalIOS_step2: {
+    en: "Tap the 'Share' button.",
+    tr: "Paylaş butonuna basın."
+  },
+  installPwaInstructionsModalIOS_step3: {
+    en: "Select 'Add to Home Screen' from the popup.",
+    tr: "'Ana Ekrana Ekle' seçeneğini seçin."
+  },
+  installPwaInstructionsModalIOS_step4: {
+    en: "Tap 'Add' in the top right corner.",
+    tr: "Sağ üst köşedeki 'Ekle' butonuna basın."
+  },
+  installPwaInstructionsModalAndroidTitle: {
+    en: "Install Jinear on your Android Device ",
+    tr: "Jinear'ı Android cihazınıza yüklemek için"
+  },
+  installPwaInstructionsModalAndroid_step1: {
+    en: "Visit the <a href='https://jinear.co' target='_blank' rel='noopener noreferrer'>jinear.co</a> on Chrome.",
+    tr: "Chrome kullanarak <a href='https://jinear.co' target='_blank' rel='noopener noreferrer'>jinear.co</a> adresine gidin."
+  },
+  installPwaInstructionsModalAndroid_step2: {
+    en: "On the right of the address bar, tap More (Three dots icon)",
+    tr: "Adres çubuğunun yanında, 'Daha Fazla' ya basın. (Üç noktalı ikon)"
+  },
+  installPwaInstructionsModalAndroid_step3: {
+    en: "Select 'Install App' from the popup.",
+    tr: "'Uygulamayı Yükle' seçeneğini seçin."
   },
 };
 
