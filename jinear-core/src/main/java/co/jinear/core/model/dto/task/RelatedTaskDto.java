@@ -31,6 +31,10 @@ public class RelatedTaskDto extends BaseDto {
     private Integer topicTagNo;
     private String title;
     @Nullable
+    private String projectId;
+    @Nullable
+    private String milestoneId;
+    @Nullable
     private TopicDto topic;
     @Nullable
     private PlainAccountProfileDto owner;

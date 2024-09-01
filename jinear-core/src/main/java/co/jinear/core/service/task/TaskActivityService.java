@@ -206,8 +206,8 @@ public class TaskActivityService {
         notifyTaskSubscribers(before, type, performingAccountSessionId);
     }
 
-    public void initializeTaskProjectUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
-        WorkspaceActivityType type = WorkspaceActivityType.TASK_PROJECT_UPDATE;
+    public void initializeTaskProjectAssignmentUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
+        WorkspaceActivityType type = WorkspaceActivityType.TASK_PROJECT_ASSIGNMENT_UPDATE;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before).map(TaskDto::getProjectId).ifPresent(vo::setOldState);
         Optional.of(after).map(TaskDto::getProjectId).ifPresent(vo::setNewState);
@@ -216,8 +216,8 @@ public class TaskActivityService {
         notifyTaskSubscribers(after, type, performingAccountSessionId);
     }
 
-    public void initializeTaskMilestoneUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
-        WorkspaceActivityType type = WorkspaceActivityType.TASK_MILESTONE_UPDATE;
+    public void initializeTaskMilestoneAssignmentUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
+        WorkspaceActivityType type = WorkspaceActivityType.TASK_MILESTONE_ASSIGNMENT_UPDATE;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before).map(TaskDto::getMilestoneId).ifPresent(vo::setOldState);
         Optional.of(after).map(TaskDto::getMilestoneId).ifPresent(vo::setNewState);

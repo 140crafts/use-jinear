@@ -36,7 +36,9 @@ public class TaskDto extends BaseDto {
     private Integer teamTagNo;
     private Integer topicTagNo;
     private String title;
+    @Nullable
     private String projectId;
+    @Nullable
     private String milestoneId;
     @Nullable
     private RichTextDto description;

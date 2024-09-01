@@ -5,7 +5,9 @@ import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
+import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
 import co.jinear.core.model.enumtype.team.TeamStateType;
+import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.model.request.team.AddTeamMemberRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.team.TeamMemberListingResponse;
@@ -25,6 +27,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static co.jinear.core.model.enumtype.team.TeamJoinMethodType.FROM_TEAM_ADMIN;
 
 @Slf4j
 @Service
@@ -48,7 +52,6 @@ public class TeamMemberManager {
         validateTeamExistenceAndState(teamDto.getWorkspaceId(), addTeamMemberRequest);
         TeamMemberAddVo teamMemberAddVo = teamMemberConverter.map(addTeamMemberRequest);
         teamMemberService.addTeamMember(teamMemberAddVo);
-        //todo workspace activity
         return new BaseResponse();
     }
 
@@ -59,7 +62,25 @@ public class TeamMemberManager {
         log.info("Kick team member has started. currentAccountId: {}", accountId);
         String passiveId = teamMemberService.removeTeamMember(teamMemberId);
         passiveService.assignOwnership(passiveId, accountId);
-        //todo workspace activity
+        return new BaseResponse();
+    }
+
+    public BaseResponse joinTeam(String teamId) {
+        String accountId = sessionInfoService.currentAccountId();
+        TeamDto teamDto = teamRetrieveService.retrieveTeam(teamId);
+        workspaceValidator.validateHasAccess(accountId, teamDto.getWorkspaceId());
+        validateJoinMethodAndAccess(accountId, teamDto);
+        TeamMemberAddVo teamMemberAddVo = TeamMemberAddVo.builder().teamId(teamId).accountId(accountId).role(TeamMemberRoleType.MEMBER).build();
+        teamMemberService.addTeamMember(teamMemberAddVo);
+        return new BaseResponse();
+    }
+
+    public BaseResponse leaveTeam(String teamId) {
+        String accountId = sessionInfoService.currentAccountId();
+        TeamMemberDto teamMemberDto = teamMemberRetrieveService.retrieve(accountId, teamId);
+        log.info("Leave team has started. currentAccountId: {}", accountId);
+        String passiveId = teamMemberService.removeTeamMember(teamMemberDto.getTeamMemberId());
+        passiveService.assignOwnership(passiveId, accountId);
         return new BaseResponse();
     }
 
@@ -96,5 +117,11 @@ public class TeamMemberManager {
         TeamMemberListingResponse teamMemberListingResponse = new TeamMemberListingResponse();
         teamMemberListingResponse.setTeamMemberDtoList(new PageDto<>(teamMemberDtoPage));
         return teamMemberListingResponse;
+    }
+
+    private void validateJoinMethodAndAccess(String accountId, TeamDto teamDto) {
+        if (FROM_TEAM_ADMIN.equals(teamDto.getJoinMethod())) {
+            workspaceValidator.validateWorkspaceRoles(accountId, teamDto.getWorkspaceId(), List.of(WorkspaceAccountRoleType.ADMIN, WorkspaceAccountRoleType.OWNER));
+        }
     }
 }

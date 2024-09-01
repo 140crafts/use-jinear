@@ -29,6 +29,18 @@ public class TeamMemberController {
         return teamMemberManager.kickTeamMember(teamMemberId);
     }
 
+    @PostMapping("/join/{teamId}")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BaseResponse joinTeam(@PathVariable String teamId) {
+        return teamMemberManager.joinTeam(teamId);
+    }
+
+    @DeleteMapping("/leave/{teamId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse leaveTeam(@PathVariable String teamId) {
+        return teamMemberManager.leaveTeam(teamId);
+    }
+
     @GetMapping("/list/{teamId}")
     @ResponseStatus(HttpStatus.OK)
     public TeamMemberListingResponse retrieveTeamMembers(@PathVariable String teamId,

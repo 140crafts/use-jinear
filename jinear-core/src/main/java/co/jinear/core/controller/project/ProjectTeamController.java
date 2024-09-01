@@ -19,7 +19,7 @@ public class ProjectTeamController {
 
     @PostMapping("/assign")
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse initialize(@Valid @RequestBody ProjectTeamOperationRequest projectTeamOperationRequest) {
+    public BaseResponse assign(@Valid @RequestBody ProjectTeamOperationRequest projectTeamOperationRequest) {
         return projectTeamManager.assignToTeam(projectTeamOperationRequest.getProjectId(), projectTeamOperationRequest.getTeamId());
     }
 
