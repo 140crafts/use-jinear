@@ -1,53 +1,28 @@
 "use client";
-import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
-import { popNewTaskModal } from "@/store/slice/modalSlice";
-import { useAppDispatch, useTypedSelector } from "@/store/store";
-import { isWebView } from "@/utils/webviewUtils";
-import useTranslation from "locales/useTranslation";
+import { useTypedSelector } from "@/store/store";
 import { useParams } from "next/navigation";
 import React from "react";
-import Button, { ButtonHeight, ButtonVariants } from "../button";
 import BasicFeedList from "../sideMenu/basicFeedList/BasicFeedList";
 import BasicTeamList from "../sideMenu/basicTeamList/BasicTeamList";
 import styles from "./TasksSectionSideMenu.module.css";
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
+import WorkspaceActionButtons from "@/components/sideMenu/workspaceActionButtons/WorkspaceActionButtons";
 
-interface TasksSectionSideMenuProps {}
+interface TasksSectionSideMenuProps {
+}
 
 const TasksSectionSideMenu: React.FC<TasksSectionSideMenuProps> = ({}) => {
-  const { t } = useTranslation();
-  const dispatch = useAppDispatch();
   const params = useParams();
   const workspaceName = (params?.workspaceName as string) || "";
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
-  const _isWebView = isWebView();
   const feedsEnabled = useFeatureFlag("FEEDS");
-  // const feedsEnabled = !_isWebView;
-
-  const { data: teamsResponse } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
-    skip: workspace == null,
-  });
-  const team = teamsResponse?.data?.find((team) => team);
-
-  const _popNewTaskModal = () => {
-    if (workspace) {
-      dispatch(popNewTaskModal({ visible: true, workspace, team }));
-    }
-  };
 
   return (
     <div className={styles.container}>
-      {workspace && team && (
+      {workspace && (
         <>
-          <Button
-            heightVariant={ButtonHeight.short}
-            variant={ButtonVariants.filled}
-            className={styles.newTaskButton}
-            onClick={_popNewTaskModal}
-          >
-            <div>{t("sideMenuNewTask")}</div>
-          </Button>
+          {workspace && <WorkspaceActionButtons workspace={workspace} />}
           {feedsEnabled && workspace && <BasicFeedList workspace={workspace} />}
           {workspace && <BasicTeamList workspace={workspace} />}
         </>

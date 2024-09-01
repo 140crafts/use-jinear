@@ -2,7 +2,14 @@
 
 import Logger from "@/utils/logger";
 
-export type FEATURE_FLAG = "EASTER_EGG_LOADING" | "EASTER_EGG_NETWORK" | "LOGIN_WITH_GOOGLE" | "FEEDS"  | "MESSAGING";
+export type FEATURE_FLAG =
+  "EASTER_EGG_LOADING"
+  | "EASTER_EGG_NETWORK"
+  | "LOGIN_WITH_GOOGLE"
+  | "FEEDS"
+  | "MESSAGING"
+  | "PROJECTS"
+  | "EXTENDED_SIDE_MENU_TEAM_ACTION_BUTTONS_VISIBLE";
 
 const logger = Logger("useFeatureFlag");
 

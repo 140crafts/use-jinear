@@ -1,5 +1,6 @@
 import enUsLocale from "date-fns/locale/en-US";
 import trTrLocale from "date-fns/locale/tr";
+import WorkspaceTeamsListItem from "@/components/workspaceTeamsScreen/workspaceTeamsListItem/WorkspaceTeamsListItem";
 
 const translations = {
   hi: {
@@ -985,6 +986,14 @@ const translations = {
   taskWorkflowActivityInfoLabel_TASK_NEW_COMMENT: {
     en: "added new comment.",
     tr: " yeni bir yorum ekledi."
+  },
+  taskWorkflowActivityInfoLabel_TASK_PROJECT_ASSIGNMENT_UPDATE: {
+    en: "has updated project assignment.",
+    tr: "proje atamasını güncelledi."
+  },
+  taskWorkflowActivityInfoLabel_TASK_MILESTONE_ASSIGNMENT_UPDATE: {
+    en: "has updated project milestone assignment.",
+    tr: "proje hedef noktası atamasını güncelledi."
   },
   dateDiffLabelDateInDays: {
     en: "${num} days ago.",
@@ -2255,7 +2264,7 @@ const translations = {
     en: "Clear",
     tr: "Temizle"
   },
-  sideMenuTeamsTitle: {
+  sideMenuYourTeamsTitle: {
     en: "Your Teams",
     tr: "Ekiplerin"
   },
@@ -3776,6 +3785,38 @@ const translations = {
     en: "Select 'Install App' from the popup.",
     tr: "'Uygulamayı Yükle' seçeneğini seçin."
   },
+  sideMenuProjectsTitle: {
+    en: "Projects",
+    tr: "Projeler"
+  },
+  sideMenuTeamsTitle: {
+    en: "Teams",
+    tr: "Takımlar"
+  },
+  sideMenuYourWorkspaceTitle: {
+    en: "Your Workspace",
+    tr: "Çalışma Alanın"
+  },
+  workspaceTeamListTitle: {
+    en: "Teams",
+    tr: "Ekipler"
+  },
+  workspaceTeamListEmpty: {
+    en: "It seems there is no teams in this workspace.",
+    tr: "Çalışma alanında hiçbir ekip bulunmuyor."
+  },
+  workspaceTeamListNewTeamButton: {
+    en: "New Team",
+    tr: "Yeni Ekip"
+  },
+  workspaceTeamsListItemJoinButton: {
+    en: "Join",
+    tr: "Katıl"
+  },
+  workspaceTeamsListItemLeaveButton: {
+    en: "Leave",
+    tr: "Ayrıl"
+  }
 };
 
 export default translations;

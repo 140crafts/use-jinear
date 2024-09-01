@@ -43,8 +43,7 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({ workspace }) => {
 
   return (
     <div className={styles.container}>
-      <div className="spacer-h-1" />
-      <MenuGroupTitle label={t("sideMenuTeamsTitle")} hasAddButton={true} onAddButtonClick={openNewTeamModal} />
+      <MenuGroupTitle label={t("sideMenuYourTeamsTitle")} hasAddButton={true} onAddButtonClick={openNewTeamModal} />
       {isFetching && <CircularLoading />}
       <div className="spacer-h-1" />
       <div className={styles.teamListContainer}>
