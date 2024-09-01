@@ -68,7 +68,10 @@ export const tagTypes = [
   "v1/messaging/thread/{threadId}",
   `v1/messaging/conversation/participated/{workspaceId}`,
   `v1/messaging/message/conversation/{conversationId}`,
-  `v1/messaging/channel/workspace/{workspaceId}`
+  `v1/messaging/channel/workspace/{workspaceId}`,
+  "v1/project/query/assigned/{workspaceId}",
+  "v1/project/query/all/{workspaceId}",
+  `v1/project/query/{projectId}`
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

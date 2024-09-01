@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: .5rem;
+}
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.newTaskButton {
+    font-weight: 500;
+    justify-content: flex-start !important;
+    gap: 1rem !important;
+}

@@ -7,6 +7,7 @@ import React from "react";
 import styles from "./TopicsMenu.module.css";
 import TopicItemButton from "./topicItemButton/TopicItemButton";
 import TopicsMenuTitle from "./topicsMenuTitle/TopicsMenuTitle";
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 
 interface TopicsMenuProps {
   workspace: WorkspaceDto;
@@ -17,6 +18,8 @@ const VISIBLE_SIZE = 4;
 
 const TopicsMenu: React.FC<TopicsMenuProps> = ({ workspace, team }) => {
   const { t } = useTranslation();
+  const extendedSideMenuTeamActionButtonsVisible = useFeatureFlag("EXTENDED_SIDE_MENU_TEAM_ACTION_BUTTONS_VISIBLE");
+
   const { data: teamTopicListingResponse, isFetching } = useRetrieveTeamTopicsQuery(team.teamId);
 
   const hasMore =
@@ -26,7 +29,7 @@ const TopicsMenu: React.FC<TopicsMenuProps> = ({ workspace, team }) => {
   return (
     <div className={styles.container}>
       <TopicsMenuTitle workspace={workspace} team={team} />
-      <div className={styles.list}>
+      {extendedSideMenuTeamActionButtonsVisible && <div className={styles.list}>
         {isFetching && <CircularLoading />}
         {teamTopicListingResponse?.data?.content?.slice(0, VISIBLE_SIZE).map((topicDto) => (
           <TopicItemButton
@@ -46,7 +49,7 @@ const TopicsMenu: React.FC<TopicsMenuProps> = ({ workspace, team }) => {
             {t("sideMenuTeamTopicListsShowMore").replace("${number}", `${notVisibleSize}`)}
           </Button>
         )}
-      </div>
+      </div>}
     </div>
   );
 };

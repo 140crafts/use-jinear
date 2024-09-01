@@ -12,8 +12,8 @@ interface EndlessScrollListProps<T> {
   renderItem: (data: T, index: number) => ReactElement | null;
   emptyLabel: string;
   hasMore: boolean;
-  loadMore: () => void;
-  loadMoreLabel: string;
+  loadMore?: () => void;
+  loadMoreLabel?: string;
   loadMoreLoading?: boolean;
   containerClassName?: string;
   contentContainerClassName?: string;

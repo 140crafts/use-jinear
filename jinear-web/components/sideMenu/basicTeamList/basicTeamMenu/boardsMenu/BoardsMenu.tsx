@@ -8,6 +8,7 @@ import React from "react";
 import styles from "./BoardsMenu.module.css";
 import BoardItemButton from "./boardItemButton/BoardItemButton";
 import BoardsMenuTitle from "./boardsMenuTitle/BoardsMenuTitle";
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 
 interface BoardsMenuProps {
   workspace: WorkspaceDto;
@@ -18,7 +19,7 @@ const VISIBLE_SIZE = 4;
 
 const BoardsMenu: React.FC<BoardsMenuProps> = ({ workspace, team }) => {
   const { t } = useTranslation();
-
+  const extendedSideMenuTeamActionButtonsVisible = useFeatureFlag("EXTENDED_SIDE_MENU_TEAM_ACTION_BUTTONS_VISIBLE");
   const { data: taskBoardListingResponse, isFetching } = useRetrieveAllTaskBoardsQuery({ ...team });
   const hasMore =
     taskBoardListingResponse?.data.totalElements != null && taskBoardListingResponse?.data.totalElements > VISIBLE_SIZE;
@@ -27,7 +28,7 @@ const BoardsMenu: React.FC<BoardsMenuProps> = ({ workspace, team }) => {
   return (
     <div className={styles.container}>
       <BoardsMenuTitle workspace={workspace} team={team} />
-      <div className={styles.list}>
+      {extendedSideMenuTeamActionButtonsVisible && <div className={styles.list}>
         {isFetching && <CircularLoading />}
         {taskBoardListingResponse?.data?.content?.slice(0, VISIBLE_SIZE).map((taskBoardDto) => (
           <BoardItemButton
@@ -46,11 +47,11 @@ const BoardsMenu: React.FC<BoardsMenuProps> = ({ workspace, team }) => {
           >
             {shortenStringIfMoreThanMaxLength({
               text: t("sideMenuTeamTaskListsShowMore").replace("${number}", `${notVisibleSize}`),
-              maxLength: 34,
+              maxLength: 34
             })}
           </Button>
         )}
-      </div>
+      </div>}
     </div>
   );
 };

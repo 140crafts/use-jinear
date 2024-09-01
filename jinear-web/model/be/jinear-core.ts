@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-07-16 22:58:53.
+
+// Generated using typescript-generator version 3.0.1157 on 2024-09-01 10:08:28.
 
 export interface BaseDto {
   createdDate: Date;
@@ -159,10 +160,10 @@ export interface GmailMessageDto extends BaseDto {
   to: string;
   subject: string;
   body: string;
-  gid: string;
+  ginternalDate: string;
   ghistoryId: string;
   gthreadId: string;
-  ginternalDate: string;
+  gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -499,6 +500,39 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
   parsedNextBillDate: Date;
 }
 
+export interface MilestoneDto extends BaseDto {
+  milestoneId: string;
+  projectId: string;
+  title: string;
+  descriptionRichTextId: string;
+  milestoneOrder: number;
+  targetDate: Date;
+  description: RichTextDto;
+}
+
+export interface ProjectDto extends BaseDto {
+  projectId: string;
+  workspaceId: string;
+  title: string;
+  descriptionRichTextId: string;
+  projectState: ProjectStateType;
+  projectPriority: ProjectPriorityType;
+  leadWorkspaceMemberId: string;
+  startDate: Date;
+  targetDate: Date;
+  leadWorkspaceMember: WorkspaceMemberDto;
+  description: RichTextDto;
+  projectTeams: ProjectTeamDto[];
+  milestones: MilestoneDto[];
+}
+
+export interface ProjectTeamDto extends BaseDto {
+  projectTeamId: string;
+  projectId: string;
+  teamId: string;
+  team: TeamDto;
+}
+
 export interface ReminderDto extends BaseDto {
   reminderId: string;
   ownerId: string;
@@ -583,6 +617,8 @@ export interface RelatedTaskDto extends BaseDto {
   teamTagNo: number;
   topicTagNo: number;
   title: string;
+  projectId?: string | null;
+  milestoneId?: string | null;
   topic?: TopicDto | null;
   owner?: PlainAccountProfileDto | null;
   assignedToAccount?: PlainAccountProfileDto | null;
@@ -646,6 +682,8 @@ export interface TaskDto extends BaseDto {
   teamTagNo: number;
   topicTagNo: number;
   title: string;
+  projectId?: string | null;
+  milestoneId?: string | null;
   description?: RichTextDto | null;
   topic?: TopicDto | null;
   owner?: PlainAccountProfileDto | null;
@@ -657,6 +695,8 @@ export interface TaskDto extends BaseDto {
   relatedIn?: TaskRelationDto[] | null;
   taskReminders?: TaskReminderDto[] | null;
   checklists?: ChecklistDto[] | null;
+  project?: ProjectDto | null;
+  milestone?: MilestoneDto | null;
 }
 
 export interface TaskFeedItemDto extends BaseDto {
@@ -844,6 +884,10 @@ export interface WorkspaceActivityDto extends BaseDto {
   relatedTask?: TaskDto | null;
   taskBoard?: TaskBoardDto | null;
   relatedTaskMedia?: MediaDto | null;
+  oldProject?: ProjectDto | null;
+  newProject?: ProjectDto | null;
+  oldMilestoneDto?: MilestoneDto | null;
+  newMilestoneDto?: MilestoneDto | null;
 }
 
 export interface WorkspaceDisplayPreferenceDto {
@@ -1045,6 +1089,63 @@ export interface NotificationTargetInitializeRequest extends BaseRequest {
   providerType: NotificationProviderType;
 }
 
+export interface InitializeMilestoneRequest extends BaseRequest {
+  projectId: string;
+  title: string;
+  description?: string | null;
+  targetDate?: Date | null;
+}
+
+export interface MilestoneUpdateRequest extends BaseRequest {
+  milestoneId: string;
+  title?: string | null;
+  description?: string | null;
+  targetDate?: Date | null;
+  order?: number | null;
+}
+
+export interface ProjectDatesUpdateRequest extends BaseRequest {
+  startDate?: Date | null;
+  targetDate?: Date | null;
+}
+
+export interface ProjectDescriptionUpdateRequest extends BaseRequest {
+  description?: string | null;
+}
+
+export interface ProjectInitializeRequest extends BaseRequest {
+  workspaceId: string;
+  title: string;
+  description?: string | null;
+  projectState?: ProjectStateType | null;
+  projectPriority?: ProjectPriorityType | null;
+  leadWorkspaceMemberId?: string | null;
+  startDate?: Date | null;
+  targetDate?: Date | null;
+  teamIds: string[];
+}
+
+export interface ProjectPriorityUpdateRequest extends BaseRequest {
+  projectPriority: ProjectPriorityType;
+}
+
+export interface ProjectStateUpdateRequest extends BaseRequest {
+  projectState: ProjectStateType;
+}
+
+export interface ProjectTeamOperationRequest extends BaseRequest {
+  projectId: string;
+  teamId: string;
+}
+
+export interface ProjectTitleUpdateRequest extends BaseRequest {
+  title: string;
+}
+
+export interface ProjectUpdateLeadRequest extends BaseRequest {
+  workspaceMemberId?: string | null;
+}
+
 export interface TaskReminderInitializeRequest extends BaseRequest {
   taskId: string;
   beforeAssignedDate?: boolean | null;
@@ -1078,7 +1179,7 @@ export interface InitializeTaskCommentRequest extends BaseRequest {
   comment: string;
 }
 
-export interface TaskAssigneeUpdateRequest {
+export interface TaskAssigneeUpdateRequest extends BaseRequest {
   assigneeId?: string | null;
 }
 
@@ -1110,7 +1211,7 @@ export interface TaskBoardUpdateTitleRequest extends TaskBoardUpdateRequest {
   title: string;
 }
 
-export interface TaskDateUpdateRequest {
+export interface TaskDateUpdateRequest extends BaseRequest {
   assignedDate?: Date | null;
   dueDate?: Date | null;
   hasPreciseAssignedDate?: boolean | null;
@@ -1132,6 +1233,8 @@ export interface TaskFilterRequest extends BaseRequest {
   timespanEnd?: Date | null;
   sort?: FilterSort | null;
   externalCalendarList?: TaskExternalCalendarFilterDto[] | null;
+  projectIds?: string[] | null;
+  milestoneIds?: string[] | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -1149,6 +1252,16 @@ export interface TaskInitializeRequest extends BaseRequest {
   boardId?: string | null;
   feedId?: string | null;
   feedItemId?: string | null;
+  projectId?: string | null;
+  milestoneId?: string | null;
+}
+
+export interface TaskMilestoneUpdateRequest {
+  milestoneId?: string | null;
+}
+
+export interface TaskProjectUpdateRequest {
+  projectId?: string | null;
 }
 
 export interface TaskRelationInitializeRequest extends BaseRequest {
@@ -1371,6 +1484,14 @@ export interface RetrieveUnreadNotificationEventCountResponse extends BaseRespon
 
 export interface RetrieveSubscriptionInfoResponse extends BaseResponse {
   data: SubscriptionInfoDto;
+}
+
+export interface ProjectListingPaginatedResponse extends BaseResponse {
+  data: PageDto<ProjectDto>;
+}
+
+export interface ProjectRetrieveResponse extends BaseResponse {
+  data: ProjectDto;
 }
 
 export interface ReminderJobResponse extends BaseResponse {
@@ -1707,7 +1828,11 @@ export type FilterSort = "IDATE_DESC" | "IDATE_ASC" | "ASSIGNED_DATE_DESC" | "AS
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
 
-export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXPIRE_TEMP_PUBLIC_MEDIA" | "ROBOT_MESSAGE_INIT";
+export type PermissionType =
+  "ACCOUNT_ROLE_EDIT"
+  | "PROCESS_REMINDER_JOB"
+  | "EXPIRE_TEMP_PUBLIC_MEDIA"
+  | "ROBOT_MESSAGE_INIT";
 
 export type RoleType = "ADMIN" | "SERVICE" | "USER" | "ROBOT";
 
@@ -1715,7 +1840,13 @@ export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL";
 
 export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
-export type GoogleScopeType = "OPEN_ID" | "USERINFO_PROFILE" | "USERINFO_EMAIL" | "CALENDAR" | "CALENDAR_EVENTS" | "CALENDAR_SETTINGS_READONLY";
+export type GoogleScopeType =
+  "OPEN_ID"
+  | "USERINFO_PROFILE"
+  | "USERINFO_EMAIL"
+  | "CALENDAR"
+  | "CALENDAR_EVENTS"
+  | "CALENDAR_SETTINGS_READONLY";
 
 export type UserConsentPurposeType = "LOGIN" | "ATTACH_MAIL" | "ATTACH_CALENDAR";
 
@@ -1723,11 +1854,75 @@ export type IntegrationProvider = "GOOGLE";
 
 export type IntegrationScopeType = "LOGIN" | "EMAIL" | "CALENDAR";
 
-export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MAIL_TEXT" | "MAIL_CONFIRMATION_TITLE" | "MAIL_CONFIRMATION_TEXT" | "MAIL_CONFIRMATION_CTA_LABEL" | "PASSWORD_RESET_TITLE" | "PASSWORD_RESET_TEXT" | "PASSWORD_RESET_CTA_LABEL" | "NEW_PASSWORD_TITLE" | "NEW_PASSWORD_TEXT" | "TEAM_WORKFLOW_STATUS_BACKLOG" | "TEAM_WORKFLOW_STATUS_NOT_STARTED" | "TEAM_WORKFLOW_STATUS_STARTED" | "TEAM_WORKFLOW_STATUS_COMPLETED" | "TEAM_WORKFLOW_STATUS_CANCELLED" | "TASK_REMINDER_TITLE" | "TASK_REMINDER_TEXT" | "TASK_REMINDER_TYPE_ASSIGNED_DATE" | "TASK_REMINDER_TYPE_DUE_DATE" | "TASK_REMINDER_TYPE_SPECIFIC_DATE" | "TASK_REMINDER_GO_TO_TASK" | "WORKSPACE_INVITATION_TITLE_MAIL" | "WORKSPACE_INVITATION_TITLE_BODY" | "WORKSPACE_INVITATION_TEXT" | "WORKSPACE_INVITATION_CTA_LABEL" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_INITIALIZED" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CLOSED" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_EDIT_TASK_TITLE" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_EDIT_TASK_DESC" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_UPDATE_TOPIC" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_UPDATE_WORKFLOW_STATUS" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CHANGE_ASSIGNEE" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CHANGE_ASSIGNED_DATE" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CHANGE_DUE_DATE" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_RELATION_INITIALIZED" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_RELATION_REMOVED" | "WORKSPACE_ACTIVITY_NOTIFICATION_SUBTEXT_VISIT_TASK_PAGE_TO_GET_MORE_DETAIL" | "WORKSPACE_ACTIVITY_NOTIFICATION_CTA_LABEL" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_GENERIC_ACTIVITY" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_INITIALIZED" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_REMOVED" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_TITLE_CHANGED" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_LABEL_CHANGED" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_REMOVED" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_INITIALIZED" | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_NEW_COMMENT" | "ACCOUNT_DELETION_MAIL_TITLE" | "ACCOUNT_DELETION_MAIL_TEXT" | "ACCOUNT_DELETION_MAIL_SUBTEXT" | "ACCOUNT_DELETION_MAIL_CTA_LABEL";
+export type LocaleStringType =
+  "LOGIN_SMS_TEXT"
+  | "LOGIN_MAIL_TITLE"
+  | "LOGIN_MAIL_TEXT"
+  | "MAIL_CONFIRMATION_TITLE"
+  | "MAIL_CONFIRMATION_TEXT"
+  | "MAIL_CONFIRMATION_CTA_LABEL"
+  | "PASSWORD_RESET_TITLE"
+  | "PASSWORD_RESET_TEXT"
+  | "PASSWORD_RESET_CTA_LABEL"
+  | "NEW_PASSWORD_TITLE"
+  | "NEW_PASSWORD_TEXT"
+  | "TEAM_WORKFLOW_STATUS_BACKLOG"
+  | "TEAM_WORKFLOW_STATUS_NOT_STARTED"
+  | "TEAM_WORKFLOW_STATUS_STARTED"
+  | "TEAM_WORKFLOW_STATUS_COMPLETED"
+  | "TEAM_WORKFLOW_STATUS_CANCELLED"
+  | "TASK_REMINDER_TITLE"
+  | "TASK_REMINDER_TEXT"
+  | "TASK_REMINDER_TYPE_ASSIGNED_DATE"
+  | "TASK_REMINDER_TYPE_DUE_DATE"
+  | "TASK_REMINDER_TYPE_SPECIFIC_DATE"
+  | "TASK_REMINDER_GO_TO_TASK"
+  | "WORKSPACE_INVITATION_TITLE_MAIL"
+  | "WORKSPACE_INVITATION_TITLE_BODY"
+  | "WORKSPACE_INVITATION_TEXT"
+  | "WORKSPACE_INVITATION_CTA_LABEL"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_INITIALIZED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CLOSED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_EDIT_TASK_TITLE"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_EDIT_TASK_DESC"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_UPDATE_TOPIC"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_UPDATE_WORKFLOW_STATUS"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CHANGE_ASSIGNEE"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CHANGE_ASSIGNED_DATE"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_TASK_CHANGE_DUE_DATE"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_RELATION_INITIALIZED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_RELATION_REMOVED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_SUBTEXT_VISIT_TASK_PAGE_TO_GET_MORE_DETAIL"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_CTA_LABEL"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_GENERIC_ACTIVITY"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_INITIALIZED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_REMOVED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_TITLE_CHANGED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_CHECKED_STATUS_CHANGED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_LABEL_CHANGED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_REMOVED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_CHECKLIST_ITEM_INITIALIZED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_NEW_COMMENT"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_ATTACHMENT_ADDED"
+  | "WORKSPACE_ACTIVITY_NOTIFICATION_TITLE_ATTACHMENT_DELETED"
+  | "ACCOUNT_DELETION_MAIL_TITLE"
+  | "ACCOUNT_DELETION_MAIL_TEXT"
+  | "ACCOUNT_DELETION_MAIL_SUBTEXT"
+  | "ACCOUNT_DELETION_MAIL_CTA_LABEL";
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION";
+export type LockSourceType =
+  "BALANCE"
+  | "TOPIC_TASK_INIT"
+  | "TEAM_TASK_INIT"
+  | "TEAM_WORKFLOW_STATUS"
+  | "ACCOUNT_PASSWORD_RESET"
+  | "TASK_BOARD_EDIT"
+  | "REMINDER_JOB_PROCESS"
+  | "CONVERSATION_INIT"
+  | "CONVERSATION"
+  | "PROJECT_MILESTONE";
 
 export type FileType = "PROFILE_PIC" | "TASK_FILE";
 
@@ -1757,19 +1952,77 @@ export type NotificationProviderType = "ONE_SIGNAL" | "FIREBASE" | "EXPO";
 
 export type NotificationTargetType = "WEB" | "WEBVIEW";
 
-export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "TASK_NEW_COMMENT" | "MESSAGING_NEW_MESSAGE_THREAD" | "MESSAGING_NEW_MESSAGE_CONVERSATION";
+export type NotificationType =
+  "TASK_REMINDER"
+  | "WORKSPACE_ACTIVITY"
+  | "TASK_INITIALIZED"
+  | "TASK_CLOSED"
+  | "EDIT_TASK_TITLE"
+  | "EDIT_TASK_DESC"
+  | "TASK_UPDATE_TOPIC"
+  | "TASK_UPDATE_WORKFLOW_STATUS"
+  | "TASK_CHANGE_ASSIGNEE"
+  | "TASK_CHANGE_ASSIGNED_DATE"
+  | "TASK_CHANGE_DUE_DATE"
+  | "RELATION_INITIALIZED"
+  | "RELATION_REMOVED"
+  | "CHECKLIST_INITIALIZED"
+  | "CHECKLIST_REMOVED"
+  | "CHECKLIST_TITLE_CHANGED"
+  | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED"
+  | "CHECKLIST_ITEM_LABEL_CHANGED"
+  | "CHECKLIST_ITEM_REMOVED"
+  | "CHECKLIST_ITEM_INITIALIZED"
+  | "TASK_NEW_COMMENT"
+  | "TASK_ATTACHMENT_ADDED"
+  | "TASK_ATTACHMENT_DELETED"
+  | "MESSAGING_NEW_MESSAGE_THREAD"
+  | "MESSAGING_NEW_MESSAGE_CONVERSATION";
 
-export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
+export type PassiveReason =
+  "SYSTEM"
+  | "USER_ACTION"
+  | "FREEZE_ACCOUNT"
+  | "DELETE_ACCOUNT"
+  | "BANNED_ACCOUNT"
+  | "SUSPENDED_ACCOUNT"
+  | "REQUEST_RESPONSE"
+  | "SMS_LOGIN_TOKEN_USED"
+  | "PHONE_CHANGED"
+  | "EMAIL_LOGIN_TOKEN_EXPIRED"
+  | "EMAIL_LOGIN_TOKEN_USED"
+  | "EMAIL_ATTACH_TOKEN_USED"
+  | "REMOVE_FEATURE"
+  | "REPORT_RESOLVE_GUILTY"
+  | "REPORT_RESOLVE_NOT_GUILTY"
+  | "TICKET_RESOLVE"
+  | "WAIT_LIST_PASSCODE_USED"
+  | "PROFILE_PIC_UPDATE"
+  | "UNFOLLOW"
+  | "PAYMENT_ISSUE";
+
+export type ProjectPriorityType = "URGENT" | "HIGH" | "MEDIUM" | "LOW";
+
+export type ProjectStateType = "BACKLOG" | "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
 
 export type ReminderJobStatus = "PENDING" | "COMPLETED" | "CANCELLED" | "FAILED";
 
 export type ReminderType = "TASK";
 
-export type RepeatType = "NONE" | "HOURLY" | "DAILY" | "WEEKLY" | "BIWEEKLY" | "MONTHLY" | "EVERY_3_MONTHS" | "EVERY_6_MONTHS" | "YEARLY";
+export type RepeatType =
+  "NONE"
+  | "HOURLY"
+  | "DAILY"
+  | "WEEKLY"
+  | "BIWEEKLY"
+  | "MONTHLY"
+  | "EVERY_3_MONTHS"
+  | "EVERY_6_MONTHS"
+  | "YEARLY";
 
 export type RichTextSourceStack = "WYSIWYG" | "RC";
 
-export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT" | "MESSAGE";
+export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT" | "MESSAGE" | "PROJECT" | "PROJECT_MILESTONE_DESCRIPTION";
 
 export type RobotType = "MESSAGE";
 
@@ -1795,7 +2048,16 @@ export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
 
 export type TeamWorkflowStateGroup = "BACKLOG" | "NOT_STARTED" | "STARTED" | "COMPLETED" | "CANCELLED";
 
-export type TokenType = "SMS_LOGIN" | "EMAIL_LOGIN" | "WEB_USERNAME_LOGIN" | "BOOKING_EMAIL_VALIDATION" | "CONTINUE_AS_LOGIN_TOKEN" | "CONFIRM_EMAIL" | "RESET_PASSWORD" | "WORKSPACE_INVITATION" | "ACCOUNT_DELETION";
+export type TokenType =
+  "SMS_LOGIN"
+  | "EMAIL_LOGIN"
+  | "WEB_USERNAME_LOGIN"
+  | "BOOKING_EMAIL_VALIDATION"
+  | "CONTINUE_AS_LOGIN_TOKEN"
+  | "CONFIRM_EMAIL"
+  | "RESET_PASSWORD"
+  | "WORKSPACE_INVITATION"
+  | "ACCOUNT_DELETION";
 
 export type TopicVisibility = "SHARED" | "PRIVATE";
 
@@ -1803,7 +2065,37 @@ export type UsernameRelatedObjectType = "ACCOUNT" | "WORKSPACE";
 
 export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER" | "GUEST";
 
-export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "TASK_NEW_COMMENT" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "ATTACHMENT_ADDED" | "ATTACHMENT_DELETED" | "TASK_BOARD_ENTRY_INIT" | "TASK_BOARD_ENTRY_REMOVED" | "TASK_BOARD_ENTRY_ORDER_CHANGE";
+export type WorkspaceActivityType =
+  "MEMBER_JOIN"
+  | "MEMBER_LEFT"
+  | "MEMBER_REMOVED"
+  | "MEMBER_REQUESTED_ACCESS"
+  | "TASK_INITIALIZED"
+  | "TASK_CLOSED"
+  | "EDIT_TASK_TITLE"
+  | "EDIT_TASK_DESC"
+  | "TASK_UPDATE_TOPIC"
+  | "TASK_UPDATE_WORKFLOW_STATUS"
+  | "TASK_CHANGE_ASSIGNEE"
+  | "TASK_CHANGE_ASSIGNED_DATE"
+  | "TASK_CHANGE_DUE_DATE"
+  | "TASK_NEW_COMMENT"
+  | "RELATION_INITIALIZED"
+  | "RELATION_REMOVED"
+  | "CHECKLIST_INITIALIZED"
+  | "CHECKLIST_REMOVED"
+  | "CHECKLIST_TITLE_CHANGED"
+  | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED"
+  | "CHECKLIST_ITEM_LABEL_CHANGED"
+  | "CHECKLIST_ITEM_REMOVED"
+  | "CHECKLIST_ITEM_INITIALIZED"
+  | "ATTACHMENT_ADDED"
+  | "ATTACHMENT_DELETED"
+  | "TASK_PROJECT_ASSIGNMENT_UPDATE"
+  | "TASK_MILESTONE_ASSIGNMENT_UPDATE"
+  | "TASK_BOARD_ENTRY_INIT"
+  | "TASK_BOARD_ENTRY_REMOVED"
+  | "TASK_BOARD_ENTRY_ORDER_CHANGE";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 

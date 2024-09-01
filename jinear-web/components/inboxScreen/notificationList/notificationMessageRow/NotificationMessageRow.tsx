@@ -5,7 +5,13 @@ import Logger from "@/utils/logger";
 import { format } from "date-fns";
 import useTranslation from "locales/useTranslation";
 import React from "react";
-import { IoAlarmOutline, IoChatboxOutline, IoNotificationsOutline, IoReaderOutline } from "react-icons/io5";
+import {
+  IoAlarmOutline,
+  IoChatboxOutline, IoDocumentAttachOutline,
+  IoNotificationsOutline,
+  IoReaderOutline,
+  IoTrashBinOutline
+} from "react-icons/io5";
 import styles from "./NotificationMessageRow.module.scss";
 import { LuMessagesSquare } from "react-icons/lu";
 
@@ -38,6 +44,8 @@ const NOTIFICATION_ICON_MAP = {
   TASK_NEW_COMMENT: IoChatboxOutline,
   MESSAGING_NEW_MESSAGE_THREAD:LuMessagesSquare,
   MESSAGING_NEW_MESSAGE_CONVERSATION:LuMessagesSquare,
+  TASK_ATTACHMENT_ADDED: IoDocumentAttachOutline,
+  TASK_ATTACHMENT_DELETED: IoTrashBinOutline,
   default: IoNotificationsOutline,
 };
 
