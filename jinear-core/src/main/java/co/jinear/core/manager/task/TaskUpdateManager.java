@@ -137,7 +137,7 @@ public class TaskUpdateManager {
         validateProjectAndTaskWorkspaceAndTeams(taskProjectUpdateRequest, taskDtoBeforeUpdate);
         log.info("Update task project has started. accountId: {}, taskId: {}, taskProjectUpdateRequest: {}", currentAccountId, taskId, taskProjectUpdateRequest);
         TaskDto taskDto = taskUpdateService.updateTaskProject(taskId, taskProjectUpdateRequest.getProjectId());
-        taskActivityService.initializeTaskProjectUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
+        taskActivityService.initializeTaskProjectAssignmentUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
         return mapResponse(taskDto);
     }
 
@@ -148,7 +148,7 @@ public class TaskUpdateManager {
         validateMilestoneProjectAndTaskWorkspaceAndTeams(taskMilestoneUpdateRequest, taskDtoBeforeUpdate);
         log.info("Update task milestone has started. accountId: {}, taskId: {}, taskMilestoneUpdateRequest: {}", currentAccountId, taskId, taskMilestoneUpdateRequest);
         TaskDto taskDto = taskUpdateService.updateTaskMilestone(taskId, taskMilestoneUpdateRequest.getMilestoneId());
-        taskActivityService.initializeTaskMilestoneUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
+        taskActivityService.initializeTaskMilestoneAssignmentUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
         return mapResponse(taskDto);
     }
 

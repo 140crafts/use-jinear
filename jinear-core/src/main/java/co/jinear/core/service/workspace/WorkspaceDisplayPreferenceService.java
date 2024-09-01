@@ -103,7 +103,7 @@ public class WorkspaceDisplayPreferenceService {
     }
 
     private WorkspaceDisplayPreferenceDto retrieveAndSetTeamMemberRole(WorkspaceDisplayPreferenceDto workspaceDisplayPreferenceDto) {
-        teamMemberRetrieveService.retrieve(workspaceDisplayPreferenceDto.getAccountId(), workspaceDisplayPreferenceDto.getPreferredTeamId())
+        teamMemberRetrieveService.retrieveOptional(workspaceDisplayPreferenceDto.getAccountId(), workspaceDisplayPreferenceDto.getPreferredTeamId())
                 .map(TeamMemberDto::getRole)
                 .ifPresent(workspaceDisplayPreferenceDto::setTeamRole);
         return workspaceDisplayPreferenceDto;

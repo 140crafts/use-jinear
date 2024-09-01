@@ -4,10 +4,13 @@ import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.response.project.ProjectListingPaginatedResponse;
+import co.jinear.core.model.response.project.ProjectRetrieveResponse;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.project.ProjectListingService;
+import co.jinear.core.service.project.ProjectRetrieveService;
 import co.jinear.core.service.project.ProjectTeamListingService;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
+import co.jinear.core.validator.project.ProjectAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +29,17 @@ public class ProjectQueryManager {
     private final TeamMemberRetrieveService teamMemberRetrieveService;
     private final ProjectTeamListingService projectTeamListingService;
     private final ProjectListingService projectListingService;
+    private final ProjectAccessValidator projectAccessValidator;
+    private final ProjectRetrieveService projectRetrieveService;
+
+    public ProjectRetrieveResponse retrieve(String projectId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        //todo change validator for guest support
+        projectAccessValidator.validateHasExplicitAccess(projectId, currentAccountId);
+        log.info("Retrieve project has started. currentAccountId: {}", currentAccountId);
+        ProjectDto projectDto = projectRetrieveService.retrieve(projectId);
+        return mapResponse(projectDto);
+    }
 
     public ProjectListingPaginatedResponse retrieveAssigned(String workspaceId, int page) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -49,5 +63,11 @@ public class ProjectQueryManager {
         ProjectListingPaginatedResponse projectListingPaginatedResponse = new ProjectListingPaginatedResponse();
         projectListingPaginatedResponse.setProjects(new PageDto<>(projectsPage));
         return projectListingPaginatedResponse;
+    }
+
+    private ProjectRetrieveResponse mapResponse(ProjectDto projectDto) {
+        ProjectRetrieveResponse projectRetrieveResponse = new ProjectRetrieveResponse();
+        projectRetrieveResponse.setProjectDto(projectDto);
+        return projectRetrieveResponse;
     }
 }

@@ -60,8 +60,8 @@ public class ProjectOperationController {
 
     @PutMapping("/{projectId}/lead")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse updateDates(@PathVariable String projectId,
-                                    @Valid ProjectUpdateLeadRequest projectUpdateLeadRequest) {
+    public BaseResponse updateLead(@PathVariable String projectId,
+                                   @Valid ProjectUpdateLeadRequest projectUpdateLeadRequest) {
         return projectManager.updateLead(projectId, projectUpdateLeadRequest);
     }
 }

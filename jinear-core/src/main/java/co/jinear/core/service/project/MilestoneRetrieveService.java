@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -30,6 +31,12 @@ public class MilestoneRetrieveService {
         return milestoneRepository.findByMilestoneIdAndPassiveIdIsNull(milestoneId)
                 .map(milestoneDtoConverter::convert)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public Optional<MilestoneDto> retrieveOptional(String milestoneId) {
+        log.info("Retrieve milestone optional has started. milestoneId: {}", milestoneId);
+        return milestoneRepository.findByMilestoneIdAndPassiveIdIsNull(milestoneId)
+                .map(milestoneDtoConverter::convert);
     }
 
     public List<MilestoneDto> retrieveAllByProjectIds(List<String> projectIds) {

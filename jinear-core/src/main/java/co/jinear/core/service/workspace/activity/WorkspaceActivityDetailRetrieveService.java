@@ -14,6 +14,7 @@ import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.entity.workspace.WorkspaceActivity;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
 import co.jinear.core.service.account.AccountRetrieveService;
+import co.jinear.core.service.project.MilestoneRetrieveService;
 import co.jinear.core.service.project.ProjectRetrieveService;
 import co.jinear.core.service.richtext.RichTextRetrieveService;
 import co.jinear.core.service.task.checklist.ChecklistItemService;
@@ -82,7 +83,8 @@ public class WorkspaceActivityDetailRetrieveService {
             TASK_BOARD_ENTRY_REMOVED,
             TASK_BOARD_ENTRY_ORDER_CHANGE,
             TASK_NEW_COMMENT,
-            TASK_PROJECT_UPDATE
+            TASK_PROJECT_ASSIGNMENT_UPDATE,
+            TASK_MILESTONE_ASSIGNMENT_UPDATE
     );
 
     private final RichTextRetrieveService richTextRetrieveService;
@@ -99,6 +101,7 @@ public class WorkspaceActivityDetailRetrieveService {
     private final TeamRetrieveService teamRetrieveService;
     private final FeProperties feProperties;
     private final ProjectRetrieveService projectRetrieveService;
+    private final MilestoneRetrieveService milestoneRetrieveService;
 
     public WorkspaceActivityDto retrieveDetailsAndMap(WorkspaceActivity workspaceActivity) {
         return Optional.of(workspaceActivity)
@@ -115,6 +118,7 @@ public class WorkspaceActivityDetailRetrieveService {
                 .map(this::retrieveRelatedChecklistItem)
                 .map(this::retrieveRelatedTaskMedia)
                 .map(this::retrieveProjectInfo)
+                .map(this::retrieveMilestoneInfo)
                 .map(this::decideGroupAttributes)
                 .orElse(null);
     }
@@ -220,7 +224,7 @@ public class WorkspaceActivityDetailRetrieveService {
     }
 
     private WorkspaceActivityDto retrieveProjectInfo(WorkspaceActivityDto workspaceActivityDto) {
-        if (TASK_PROJECT_UPDATE.equals(workspaceActivityDto.getType())) {
+        if (TASK_PROJECT_ASSIGNMENT_UPDATE.equals(workspaceActivityDto.getType())) {
             Optional.of(workspaceActivityDto)
                     .map(WorkspaceActivityDto::getOldState)
                     .map(projectRetrieveService::retrieveOptional)
@@ -233,6 +237,24 @@ public class WorkspaceActivityDetailRetrieveService {
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .ifPresent(workspaceActivityDto::setNewProject);
+        }
+        return workspaceActivityDto;
+    }
+
+    private WorkspaceActivityDto retrieveMilestoneInfo(WorkspaceActivityDto workspaceActivityDto) {
+        if (TASK_MILESTONE_ASSIGNMENT_UPDATE.equals(workspaceActivityDto.getType())) {
+            Optional.of(workspaceActivityDto)
+                    .map(WorkspaceActivityDto::getOldState)
+                    .map(milestoneRetrieveService::retrieveOptional)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .ifPresent(workspaceActivityDto::setOldMilestoneDto);
+            Optional.of(workspaceActivityDto)
+                    .map(WorkspaceActivityDto::getNewState)
+                    .map(milestoneRetrieveService::retrieveOptional)
+                    .filter(Optional::isPresent)
+                    .map(Optional::get)
+                    .ifPresent(workspaceActivityDto::setNewMilestoneDto);
         }
         return workspaceActivityDto;
     }

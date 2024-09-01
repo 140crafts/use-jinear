@@ -35,8 +35,15 @@ public class TeamMemberRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
-    public Optional<TeamMemberDto> retrieve(String accountId, String teamId) {
+    public TeamMemberDto retrieve(String accountId, String teamId) {
         log.info("Retrieve team member has started. accountId: {}, teamId: {}", accountId, teamId);
+        return teamMemberRepository.findByAccountIdAndTeamIdAndPassiveIdIsNull(accountId, teamId)
+                .map(teamMemberConverter::map)
+                .orElseThrow(NotFoundException::new);
+    }
+
+    public Optional<TeamMemberDto> retrieveOptional(String accountId, String teamId) {
+        log.info("Retrieve team member optional has started. accountId: {}, teamId: {}", accountId, teamId);
         return teamMemberRepository.findByAccountIdAndTeamIdAndPassiveIdIsNull(accountId, teamId)
                 .map(teamMemberConverter::map);
     }

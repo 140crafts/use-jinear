@@ -2,6 +2,7 @@ package co.jinear.core.controller.project;
 
 import co.jinear.core.manager.project.ProjectQueryManager;
 import co.jinear.core.model.response.project.ProjectListingPaginatedResponse;
+import co.jinear.core.model.response.project.ProjectRetrieveResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,6 +15,12 @@ import org.springframework.web.bind.annotation.*;
 public class ProjectQueryController {
 
     private final ProjectQueryManager projectQueryManager;
+
+    @GetMapping("/{projectId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProjectRetrieveResponse retrieveProject(@PathVariable String projectId) {
+        return projectQueryManager.retrieve(projectId);
+    }
 
     @GetMapping("/assigned/{workspaceId}")
     @ResponseStatus(HttpStatus.OK)
