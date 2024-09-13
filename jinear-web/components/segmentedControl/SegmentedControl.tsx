@@ -11,6 +11,7 @@ export interface Segment {
   value: string;
   inputProps?: any;
   contentContainerClassName?: string;
+  tooltip?: string;
 }
 
 interface SegmentedControlProps {
@@ -24,14 +25,14 @@ interface SegmentedControlProps {
 }
 
 const SegmentedControl: React.FC<SegmentedControlProps> = ({
-  id,
-  name,
-  callback,
-  defaultIndex = 0,
-  segmentLabelClassName,
-  segments,
-  contentContainerClassName,
-}) => {
+                                                             id,
+                                                             name,
+                                                             callback,
+                                                             defaultIndex = 0,
+                                                             segmentLabelClassName,
+                                                             segments,
+                                                             contentContainerClassName
+                                                           }) => {
   const [activeIndex, setActiveIndex] = useState<number>(defaultIndex);
   const onInputChange = (value: string, index: number) => {
     setActiveIndex(index);
@@ -58,7 +59,9 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
                   item?.inputProps?.onChange?.(e);
                 }}
               />
-              <label htmlFor={segmentId} className={cn(styles.label, segmentLabelClassName)}>
+              <label htmlFor={segmentId}
+                     className={cn(styles.label, segmentLabelClassName)}
+                     data-tooltip={item.tooltip}>
                 {item?.icon}
                 {item.label}
               </label>

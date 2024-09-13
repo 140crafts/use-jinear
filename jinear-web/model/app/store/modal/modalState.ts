@@ -1,6 +1,8 @@
 import {
   CalendarEventDto,
   IntegrationProvider,
+  ProjectPriorityType,
+  ProjectStateType,
   TaskBoardDto,
   TaskDto,
   TeamDto,
@@ -85,12 +87,13 @@ export interface NewReminderModalState extends ModalState {
 
 export interface DatePickerModalState extends ModalState {
   title?: string;
-  initialDate?: Date;
-  dateSpanStart?: Date;
-  dateSpanEnd?: Date;
-  disabledBefore?: Date;
-  disabledAfter?: Date;
-  onDateChange?: (date: Date) => void;
+  initialDate?: Date | null;
+  dateSpanStart?: Date | null;
+  dateSpanEnd?: Date | null;
+  disabledBefore?: Date | null;
+  disabledAfter?: Date | null;
+  onDateChange?: (date: Date | null) => void;
+  unpickable?: boolean;
 }
 
 export interface WorkspaceMemberInviteModalState extends ModalState {
@@ -203,6 +206,8 @@ export interface WorkspaceMemberPickerModalState extends ModalState {
   multiple?: boolean;
   initialSelectionOnMultiple?: WorkspaceMemberDto[];
   onPick?: (pickedList: WorkspaceMemberDto[]) => void;
+  deselectable?: boolean;
+  onDeselect?:()=>void;
 }
 
 export interface NewCalendarIntegrationModalState extends ModalState {
@@ -240,4 +245,24 @@ export interface ChannelListModalState extends ModalState {
 export interface NewConversationModalState extends ModalState {
   workspaceId?: string;
   workspaceName?: string;
+}
+
+export interface NewProjectModalState extends ModalState {
+  workspace?: WorkspaceDto;
+}
+
+export interface TeamPickerModalV2State extends ModalState {
+  workspaceId?: string;
+  multiple?: boolean;
+  modalData?: TeamDto[],
+  initialSelectionOnMultiple?: TeamDto[];
+  onPick?: (pickedList: TeamDto[]) => void;
+}
+
+export interface ProjectPrioritySelectModalState extends ModalState {
+  onPick?: (picked: ProjectPriorityType) => void;
+}
+
+export interface ProjectStateSelectModalState extends ModalState {
+  onPick?: (picked: ProjectStateType) => void;
 }

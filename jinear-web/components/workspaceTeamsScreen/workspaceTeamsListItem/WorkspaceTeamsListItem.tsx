@@ -8,6 +8,7 @@ import { useWorkspaceRole } from "@/hooks/useWorkspaceRole";
 import { IoEllipsisHorizontal, IoPeople } from "react-icons/io5";
 import Logger from "@/utils/logger";
 import { useJoinTeamMutation, useLeaveTeamMutation } from "@/api/teamMemberApi";
+import cn from "classnames";
 
 interface WorkspaceTeamsListItemProps {
   workspace: WorkspaceDto;
@@ -46,8 +47,8 @@ const WorkspaceTeamsListItem: React.FC<WorkspaceTeamsListItemProps> = ({ workspa
           href={`/${workspace.username}/tasks/${team.username}`}
           className={styles.homeButtonIcon}
         >
-          <b>{team.name}</b>
-          <div className={styles.tag}>{`(${team.tag})`}</div>
+          <b className={"line-clamp"}>{team.name}</b>
+          <div className={cn(styles.tag, "line-clamp")}>{`(${team.tag})`}</div>
         </Button>
       </div>
 
@@ -65,7 +66,7 @@ const WorkspaceTeamsListItem: React.FC<WorkspaceTeamsListItemProps> = ({ workspa
         heightVariant={ButtonHeight.short}
         href={`/${workspace.username}/tasks/${team.username}/members`}
         data-tooltip-right={t("sideMenuTeamMembers")}>
-        <IoPeople />
+        <IoPeople className={"icon"} />
       </Button>
 
       {(isWorkspaceAdminOrOwner || isTeamAdmin) &&
@@ -74,7 +75,7 @@ const WorkspaceTeamsListItem: React.FC<WorkspaceTeamsListItemProps> = ({ workspa
           href={`/${workspace.username}/tasks/${team.username}/settings`}
           data-tooltip-right={t("sideMenuTeamSettings")}
         >
-          <IoEllipsisHorizontal />
+          <IoEllipsisHorizontal className={"icon"} />
         </Button>
       }
 

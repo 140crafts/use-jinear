@@ -156,6 +156,18 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
       action="#"
     >
       <div className={styles.formContent}>
+
+        <div className={styles.workspaceAndTeamInfoContainer}>
+          <WorkspaceAndTeamInfo
+            readOnly={subTaskOf != null}
+            workspace={workspace}
+            team={selectedTeam}
+            onTeamChange={setSelectedTeam}
+            buttonContainerClassName={styles.workspaceAndTeamInfoButtonContainer}
+            heightVariant={ButtonHeight.short}
+          />
+        </div>
+
         <input type="hidden" value={workspaceId} {...register("workspaceId")} />
         <input type="hidden" value={selectedTeam?.teamId} {...register("teamId")} />
         {subTaskOf && <input type="hidden" value={subTaskOf} {...register("subTaskOf")} />}
@@ -185,17 +197,6 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
         <TitleInput labelClass={styles.label} register={register} />
 
         <div className="flex-1" />
-
-        <div className={styles.workspaceAndTeamInfoContainer}>
-          <WorkspaceAndTeamInfo
-            readOnly={subTaskOf != null}
-            workspace={workspace}
-            team={selectedTeam}
-            onTeamChange={setSelectedTeam}
-            buttonContainerClassName={styles.workspaceAndTeamInfoButtonContainer}
-            heightVariant={ButtonHeight.short}
-          />
-        </div>
 
         <div className={styles.actionBar}>
           <TopicPickerButton

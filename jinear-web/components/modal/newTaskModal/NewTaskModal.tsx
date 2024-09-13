@@ -1,7 +1,8 @@
 import NewTaskForm from "@/components/form/newTaskForm/NewTaskForm";
 import useWindowSize from "@/hooks/useWindowSize";
 import {
-  closeNewTaskModal, popNewCalendarIntegrationModal,
+  closeNewTaskModal,
+  popNewCalendarIntegrationModal,
   selectNewTaskModalInitialAssignedDate,
   selectNewTaskModalInitialAssignedDateIsPrecise,
   selectNewTaskModalInitialDueDate,
@@ -19,14 +20,11 @@ import React, { useState } from "react";
 import Modal from "../modal/Modal";
 import styles from "./NewTaskModal.module.scss";
 import SegmentedControl from "@/components/segmentedControl/SegmentedControl";
-import strings from "@/locals/strings";
 import { useHasExternalCalendars } from "@/hooks/calendar/useHasExternalCalendars";
-import ExternalCalendarAndSourcePicker
-  from "@/components/externalCalendarAndSourcePicker/ExternalCalendarAndSourcePicker";
 import NewCalendarEventForm from "@/components/form/newCalendarEventForm/NewCalendarEventForm";
 import Logger from "@/utils/logger";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { LuCalendarPlus } from "react-icons/lu";
+import { LuCalendarPlus, LuCheck } from "react-icons/lu";
 
 interface NewTaskModalProps {
 }
@@ -51,7 +49,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const initialRelatedFeedItemData = useTypedSelector(selectNewTaskModalInitialRelatedFeedItemData);
   const workspaceId = workspace?.workspaceId;
 
-  const [newInputType, setNewInputType] = useState<IInputType>(INPUT_TYPES[0]);
+  const [newInputType, setNewInputType] = useState<IInputType>("TASK");
   const hasExternalCalendarMembership = useHasExternalCalendars(workspaceId);
   logger.log({ hasExternalCalendarMembership });
   const { isMobile } = useWindowSize();
@@ -73,9 +71,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   return (
     <Modal
       visible={visible}
-      // title={t("newTaskModalTitle")}
       bodyClass={styles.container}
-      // width={isMobile ? "fullscreen" : "large"}
       width={"large"}
       containerClassName={styles.modalContainer}
     >
@@ -87,8 +83,20 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
             name="new-task-modal-new-type-segment-control"
             defaultIndex={INPUT_TYPES.indexOf(newInputType)}
             segments={[
-              { label: t("newTaskEventType_TASK"), value: "TASK" },
-              { label: t("newTaskEventType_EVENT"), value: "EVENT" }
+              {
+                segmentId: "newTaskEventType_TASK",
+                label: "",
+                value: "TASK",
+                icon: <LuCheck className={"icon"} />,
+                tooltip: t("newTaskEventType_TASK")
+              },
+              {
+                segmentId: "newTaskEventType_EVENT",
+                label: "",
+                value: "EVENT",
+                icon: <LuCalendarPlus className={"icon"} />,
+                tooltip: t("newTaskEventType_EVENT")
+              }
             ]}
             segmentLabelClassName={styles.viewTypeSegmentLabel}
             callback={changeViewType}

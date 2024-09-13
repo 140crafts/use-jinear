@@ -68,6 +68,7 @@ interface ProfilePhotoProps {
   objectFit?: string;
   fill?: boolean;
   style?: CSSProperties;
+  dataTooltipRight?: string;
 }
 
 const logger = Logger("ProfilePhoto");
@@ -80,10 +81,11 @@ const ProfilePhoto: React.FC<ProfilePhotoProps> = ({
                                                      imgClassName,
                                                      objectFit,
                                                      fill,
-                                                     style
+                                                     style,
+                                                     dataTooltipRight
                                                    }) => {
   return (
-    <div className={cn(styles.wrapper, wrapperClassName)}>
+    <div className={cn(styles.wrapper, wrapperClassName)} data-tooltip-right={dataTooltipRight}>
       <Image
         alt="User profile photo"
         className={cn(styles.image, imgClassName)}

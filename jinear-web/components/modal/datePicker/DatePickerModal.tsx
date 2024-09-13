@@ -7,19 +7,24 @@ import {
   selectDatePickerModalDisabledBefore,
   selectDatePickerModalInitialDate,
   selectDatePickerModalOnDateChange,
-  selectDatePickerModalTitle,
-  selectDatePickerModalVisible,
+  selectDatePickerModalTitle, selectDatePickerModalUnpickable,
+  selectDatePickerModalVisible
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import React from "react";
 import Modal from "../modal/Modal";
 import styles from "./DatePickerModal.module.css";
+import useTranslation from "@/locals/useTranslation";
+import Button from "@/components/button";
+import { LuX } from "react-icons/lu";
 
-interface DatePickerModalProps {}
+interface DatePickerModalProps {
+}
 
 const logger = Logger("DatePickerModal");
 const DatePickerModal: React.FC<DatePickerModalProps> = ({}) => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectDatePickerModalVisible);
   const initialDate = useTypedSelector(selectDatePickerModalInitialDate);
@@ -30,11 +35,15 @@ const DatePickerModal: React.FC<DatePickerModalProps> = ({}) => {
   const title = useTypedSelector(selectDatePickerModalTitle);
 
   const onDateChange = useTypedSelector(selectDatePickerModalOnDateChange);
+  const unpickable = useTypedSelector(selectDatePickerModalUnpickable);
 
   const setValue = (value?: Date | undefined) => {
     value && onDateChange?.(value);
   };
 
+  const unpick = () => {
+    onDateChange?.(null);
+  };
   const close = () => {
     dispatch(closeDatePickerModal());
   };
@@ -43,19 +52,22 @@ const DatePickerModal: React.FC<DatePickerModalProps> = ({}) => {
     visible,
     initialDate,
     dateSpanStart,
-    dateSpanEnd,
+    dateSpanEnd
   });
 
   return (
     <Modal visible={visible} bodyClass={styles.container} requestClose={close} hasTitleCloseButton={true} title={title}>
       <MiniMonthCalendar
-        value={initialDate}
+        value={initialDate ?? undefined}
         setValue={setValue}
-        dateSpanStart={dateSpanStart}
-        dateSpanEnd={dateSpanEnd}
-        disabledBefore={disabledBefore}
-        disabledAfter={disabledAfter}
+        dateSpanStart={dateSpanStart ?? undefined}
+        dateSpanEnd={dateSpanEnd ?? undefined}
+        disabledBefore={disabledBefore ?? undefined}
+        disabledAfter={disabledAfter ?? undefined}
       />
+      <div className={styles.footerContainer}>
+        {initialDate && unpickable && <Button onClick={unpick}>{t("datePickerModalUnpickButtonLabel")}</Button>}
+      </div>
     </Modal>
   );
 };

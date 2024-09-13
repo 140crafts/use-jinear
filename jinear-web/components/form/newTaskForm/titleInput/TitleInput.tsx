@@ -20,12 +20,20 @@ const TitleInput: React.FC<TitleInputProps> = ({ register, labelClass }) => {
       focusAndOpenKeyboard(inputId);
     }, 250);
   }, []);
+
+  const isEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault?.();
+    }
+  };
+
   return (
     <input
       id={inputId}
       type={"text"}
       placeholder={t("newTaskModalTaskTitle")}
       className={cn(styles.input, labelClass)}
+      onKeyDown={isEnter}
       {...register("title", { required: t("formRequiredField") })}
     />
   );

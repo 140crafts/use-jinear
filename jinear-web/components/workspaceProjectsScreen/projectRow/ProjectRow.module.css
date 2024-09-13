@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.titleContainer {
+    padding: 0.42rem 0.75rem;
+    gap: 1rem;
+    flex: 1;
+    justify-content: flex-start !important;
+    text-align: left !important;
+}
+
+.container:hover {
+    background-color: var(--c-primary-shade-0);
+}
+
+.infoContainer {
+    display: flex;
+    align-items: center;
+    gap: .25rem;
+}

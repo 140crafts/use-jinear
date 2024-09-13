@@ -23,9 +23,12 @@ const logger = Logger("NewTaskBoardForm");
 const NewTaskBoardForm: React.FC<NewTaskBoardFormProps> = ({ workspace, team, onClose }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date | null>();
 
-  const [initializeTaskBoard, { isLoading: isInitializeTaskBoardLoading, isSuccess }] = useInitializeTaskBoardMutation();
+  const [initializeTaskBoard, {
+    isLoading: isInitializeTaskBoardLoading,
+    isSuccess
+  }] = useInitializeTaskBoardMutation();
 
   const { register, handleSubmit, setFocus, setValue, watch } = useForm<TaskBoardInitializeRequest>();
 
@@ -45,7 +48,7 @@ const NewTaskBoardForm: React.FC<NewTaskBoardFormProps> = ({ workspace, team, on
     setDate(undefined);
   };
 
-  const onDateChange = (date: Date) => {
+  const onDateChange = (date: Date | null) => {
     dispatch(closeDatePickerModal());
     setDate(date);
   };
@@ -55,7 +58,8 @@ const NewTaskBoardForm: React.FC<NewTaskBoardFormProps> = ({ workspace, team, on
   };
 
   return (
-    <form autoComplete="off" id={"new-task-board-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
+    <form autoComplete="off" id={"new-task-board-form"} className={styles.form} onSubmit={handleSubmit(submit)}
+          action="#">
       <div className={styles.formContent}>
         <input type="hidden" value={workspace.workspaceId} {...register("workspaceId")} />
         <input type="hidden" value={team.teamId} {...register("teamId")} />
@@ -63,7 +67,8 @@ const NewTaskBoardForm: React.FC<NewTaskBoardFormProps> = ({ workspace, team, on
 
         <label className={styles.label} htmlFor={"new-task-board-title"}>
           <b>{`${t("newTaskListModalTaskListTitle")} *`}</b>
-          <input id={"new-task-board-title"} type={"text"} {...register("title", { required: t("formRequiredField") })} />
+          <input id={"new-task-board-title"}
+                 type={"text"} {...register("title", { required: t("formRequiredField") })} />
         </label>
 
         <div className={styles.dateButtonContainer}>

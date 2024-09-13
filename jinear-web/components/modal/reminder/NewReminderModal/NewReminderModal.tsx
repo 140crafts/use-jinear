@@ -8,7 +8,7 @@ import {
   closeNewReminderModal,
   popDatePickerModal,
   selectNewReminderModalTask,
-  selectNewReminderModalVisible,
+  selectNewReminderModalVisible
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -20,7 +20,8 @@ import toast from "react-hot-toast";
 import Modal from "../../modal/Modal";
 import styles from "./NewReminderModal.module.css";
 
-interface NewReminderModalProps {}
+interface NewReminderModalProps {
+}
 
 interface TaskReminderInitializeForm extends TaskReminderInitializeRequest {
   taskId: string;
@@ -37,7 +38,7 @@ const REPEAT_TYPES = [
   "MONTHLY",
   "EVERY_3_MONTHS",
   "EVERY_6_MONTHS",
-  "YEARLY",
+  "YEARLY"
 ] as RepeatType[];
 
 const logger = Logger("NewReminderModal");
@@ -143,12 +144,12 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
       popDatePickerModal({
         visible: true,
         initialDate: specificRemindDate ? new Date(specificRemindDate) : new Date(),
-        onDateChange: onSpecificDateChange,
+        onDateChange: onSpecificDateChange
       })
     );
   };
 
-  const onSpecificDateChange = (date: Date) => {
+  const onSpecificDateChange = (date: Date | null) => {
     setValue("specificRemindDate", date);
     dispatch(closeDatePickerModal());
   };
@@ -158,12 +159,12 @@ const NewReminderModal: React.FC<NewReminderModalProps> = ({}) => {
       popDatePickerModal({
         visible: true,
         initialDate: specificRemindRepeatEnd ? new Date(specificRemindRepeatEnd) : new Date(),
-        onDateChange: onSpecificRemindRepeatEndDateChange,
+        onDateChange: onSpecificRemindRepeatEndDateChange
       })
     );
   };
 
-  const onSpecificRemindRepeatEndDateChange = (date: Date) => {
+  const onSpecificRemindRepeatEndDateChange = (date: Date | null) => {
     setValue("specificRemindRepeatEnd", date);
     dispatch(closeDatePickerModal());
   };

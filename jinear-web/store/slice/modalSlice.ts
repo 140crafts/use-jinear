@@ -20,20 +20,21 @@ import ModalState, {
   NewChannelModalState,
   NewConversationModalState,
   NewMailIntegrationModalState,
+  NewProjectModalState,
   NewReminderModalState,
   NewTaskBoardModalState,
   NewTaskModalState,
   NewTeamModalState,
   NewTopicModalState,
   NotFoundModalState,
-  NotificationPermissionModalState,
+  NotificationPermissionModalState, ProjectPrioritySelectModalState, ProjectStateSelectModalState,
   ReminderListModalState,
   SearchTaskModalState,
   TaskBoardPickerModalState,
   TaskOverviewModalState,
   TaskTaskBoardAssignModalState,
   TeamMemberPickerModalState,
-  TeamPickerModalState,
+  TeamPickerModalState, TeamPickerModalV2State,
   TeamWorkflowStatusPickerModalState,
   TopicPickerModalState,
   UpgradeWorkspacePlanModalState,
@@ -190,6 +191,18 @@ const initialState = {
   },
   installPwaInstructionsModal: {
     visible: false
+  },
+  newProjectModal: {
+    visible: false
+  },
+  teamPickerModalV2: {
+    visible: false
+  },
+  projectPrioritySelectModal: {
+    visible: false
+  },
+  projectStateSelectModal: {
+    visible: false
   }
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
@@ -238,6 +251,10 @@ const initialState = {
   channelListModal: null | ChannelListModalState;
   newConversationModal: null | NewConversationModalState;
   installPwaInstructionsModal: null | ModalState;
+  newProjectModal: null | NewProjectModalState;
+  teamPickerModalV2: null | TeamPickerModalV2State;
+  projectPrioritySelectModal: null | ProjectPrioritySelectModalState;
+  projectStateSelectModal: null | ProjectStateSelectModalState;
 };
 
 const slice = createSlice({
@@ -571,6 +588,34 @@ const slice = createSlice({
       state.installPwaInstructionsModal = initialState.installPwaInstructionsModal;
     },
 
+    popNewProjectModal: (state, action: PayloadAction<NewProjectModalState>) => {
+      state.newProjectModal = { ...action.payload, visible: true };
+    },
+    closeNewProjectModal: (state, action: PayloadAction<void>) => {
+      state.newProjectModal = initialState.newProjectModal;
+    },
+
+    popTeamPickerModalV2: (state, action: PayloadAction<TeamPickerModalV2State>) => {
+      state.teamPickerModalV2 = { ...action.payload, visible: true };
+    },
+    closeTeamPickerModalV2: (state, action: PayloadAction<void>) => {
+      state.teamPickerModalV2 = initialState.teamPickerModalV2;
+    },
+
+    popProjectPrioritySelectModal: (state, action: PayloadAction<ProjectPrioritySelectModalState>) => {
+      state.projectPrioritySelectModal = { ...action.payload, visible: true };
+    },
+    closeProjectPrioritySelectModal: (state, action: PayloadAction<void>) => {
+      state.projectPrioritySelectModal = initialState.projectPrioritySelectModal;
+    },
+
+    popProjectStateSelectModal: (state, action: PayloadAction<ProjectStateSelectModalState>) => {
+      state.projectStateSelectModal = { ...action.payload, visible: true };
+    },
+    closeProjectStateSelectModal: (state, action: PayloadAction<void>) => {
+      state.projectStateSelectModal = initialState.projectStateSelectModal;
+    },
+
     resetModals: () => initialState
   },
   extraReducers: (builder) => {
@@ -679,6 +724,14 @@ export const {
   closeNewConversationModal,
   popInstallPwaInstructionsModal,
   closeInstallPwaInstructionsModal,
+  popNewProjectModal,
+  closeNewProjectModal,
+  popTeamPickerModalV2,
+  closeTeamPickerModalV2,
+  popProjectPrioritySelectModal,
+  closeProjectPrioritySelectModal,
+  popProjectStateSelectModal,
+  closeProjectStateSelectModal,
   resetModals
 } = slice.actions;
 export default slice.reducer;
@@ -779,6 +832,7 @@ export const selectDatePickerModalDateSpanEnd = (state: RootState) => state.moda
 export const selectDatePickerModalDisabledBefore = (state: RootState) => state.modal.datePickerModal?.disabledBefore;
 export const selectDatePickerModalDisabledAfter = (state: RootState) => state.modal.datePickerModal?.disabledAfter;
 export const selectDatePickerModalOnDateChange = (state: RootState) => state.modal.datePickerModal?.onDateChange;
+export const selectDatePickerModalUnpickable = (state: RootState) => state.modal.datePickerModal?.unpickable;
 
 export const selectWorkspaceMemberInviteModalVisible = (state: RootState) => state.modal.workspaceMemberInviteModal?.visible;
 export const selectWorkspaceMemberInviteModalWorkspaceId = (state: RootState) =>
@@ -886,6 +940,8 @@ export const selectWorkspaceMemberPickerModalMultiple = (state: RootState) => st
 export const selectWorkspaceMemberPickerModalInitialSelectionOnMultiple = (state: RootState) =>
   state.modal.workspaceMemberPickerModal?.initialSelectionOnMultiple;
 export const selectWorkspaceMemberPickerModalOnPick = (state: RootState) => state.modal.workspaceMemberPickerModal?.onPick;
+export const selectWorkspaceMemberPickerModalDeselectable = (state: RootState) => state.modal.workspaceMemberPickerModal?.deselectable;
+export const selectWorkspaceMemberPickerModalOnDeselect = (state: RootState) => state.modal.workspaceMemberPickerModal?.onDeselect;
 
 export const selectNewCalendarIntegrationModalVisible = (state: RootState) => state.modal.newCalendarIntegrationModal?.visible;
 export const selectNewCalendarIntegrationModalWorkspaceId = (state: RootState) =>
@@ -919,3 +975,19 @@ export const selectNewConversationModalWorkspaceId = (state: RootState) => state
 export const selectNewConversationModalWorkspaceName = (state: RootState) => state.modal.newConversationModal?.workspaceName;
 
 export const selectInstallPwaInstructionsModalVisible = (state: RootState) => state.modal.installPwaInstructionsModal?.visible;
+
+export const selectNewProjectModalVisible = (state: RootState) => state.modal.newProjectModal?.visible;
+export const selectNewProjectModalWorkspace = (state: RootState) => state.modal.newProjectModal?.workspace;
+
+export const selectTeamPickerModalV2Visible = (state: RootState) => state.modal.teamPickerModalV2?.visible;
+export const selectTeamPickerModalV2WorkspaceId = (state: RootState) => state.modal.teamPickerModalV2?.workspaceId;
+export const selectTeamPickerModalV2Multiple = (state: RootState) => state.modal.teamPickerModalV2?.multiple;
+export const selectTeamPickerModalV2ModalData = (state: RootState) => state.modal.teamPickerModalV2?.modalData;
+export const selectTeamPickerModalV2InitialSelectionOnMultiple = (state: RootState) => state.modal.teamPickerModalV2?.initialSelectionOnMultiple;
+export const selectTeamPickerModalV2OnPick = (state: RootState) => state.modal.teamPickerModalV2?.onPick;
+
+export const selectProjectPrioritySelectModalVisible = (state: RootState) => state.modal.projectPrioritySelectModal?.visible;
+export const selectProjectPrioritySelectModalOnPick = (state: RootState) => state.modal.projectPrioritySelectModal?.onPick;
+
+export const selectProjectStateSelectModalVisible = (state: RootState) => state.modal.projectStateSelectModal?.visible;
+export const selectProjectStateSelectModalOnPick = (state: RootState) => state.modal.projectStateSelectModal?.onPick;

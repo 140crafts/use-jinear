@@ -15,7 +15,7 @@ interface DateTimeInputProps {
   id?: string;
   type: "date" | "date-time";
   value: Date;
-  setValue: (date?: Date) => void;
+  setValue: (date?: Date | null) => void;
   valuePrecise: boolean;
   toggleValuePrecise?: () => void;
   dateSpanStart?: Date;
@@ -56,7 +56,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
-  const onDateSelect = (day: Date) => {
+  const onDateSelect = (day: Date | null) => {
     setValue(day);
     dispatch(closeDatePickerModal());
   };

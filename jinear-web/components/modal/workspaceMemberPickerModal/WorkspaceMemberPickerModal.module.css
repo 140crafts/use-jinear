@@ -1,106 +1,106 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 0 !important;
 }
 
 .content {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0.5rem;
+    position: relative;
 }
 
 .searchInput {
-  flex: 1;
+    flex: 1;
 }
 
 .list {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  height: min(100%, 16rem);
-  min-height: 6rem;
-  padding: 0.5rem;
-  overflow-y: scroll;
-  gap: 0.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: min(100%, 16rem);
+    min-height: 6rem;
+    padding: 0.5rem;
+    overflow-y: scroll;
+    gap: 0.25rem;
 }
 
 .messageContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4rem;
 }
 
 .listItemButton {
-  text-align: left !important;
-  justify-content: left !important;
-  gap: 0.5rem !important;
+    text-align: left !important;
+    justify-content: left !important;
+    gap: 0.5rem !important;
 }
 
 .listItemIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 22.5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22.5px;
 }
 
 .titleContainer {
-  flex: 1;
-  padding-left: 0.5rem;
+    flex: 1;
+    padding-left: 0.5rem;
 }
 
 .actionBar {
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-end;
-  gap: 1rem;
-  padding: 1rem;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: var(--c-primary-shade-1);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 1rem;
+    padding: 1rem;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: var(--c-primary-shade-1);
 }
 
 .contButton {
-  width: 6rem;
+    width: 6rem;
 }
 
 .selectedTopicListContainer {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  padding: 1rem;
-  border-top-style: solid;
-  border-top-width: 1px;
-  border-top-color: var(--c-primary-shade-1);
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    padding: 1rem;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-top-color: var(--c-primary-shade-1);
 }
 
 .selectedTopicContainer {
-  /* padding: 0.25rem 0.75rem; */
-  background-color: var(--c-primary-shade-0);
-  border-radius: var(--border-radius);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+    /* padding: 0.25rem 0.75rem; */
+    background-color: var(--c-primary-shade-0);
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .selectedTopicName {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.25rem 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 1rem;
 }
 
 .selectedTopicUnselectButton {
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
 }
 
 .profilePic {
-  width: 20px !important;
-  height: 20px !important;
+    width: 20px !important;
+    height: 20px !important;
 }

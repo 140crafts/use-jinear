@@ -4,12 +4,12 @@ import { useDebouncedEffect } from "@/hooks/useDebouncedEffect";
 import { WorkspaceMemberDto } from "@/model/be/jinear-core";
 import { useRetrieveWorkspaceMembersQuery } from "@/store/api/workspaceMemberApi";
 import {
-  closeWorkspaceMemberPickerModal,
+  closeWorkspaceMemberPickerModal, selectWorkspaceMemberPickerModalDeselectable,
   selectWorkspaceMemberPickerModalInitialSelectionOnMultiple,
-  selectWorkspaceMemberPickerModalMultiple,
+  selectWorkspaceMemberPickerModalMultiple, selectWorkspaceMemberPickerModalOnDeselect,
   selectWorkspaceMemberPickerModalOnPick,
   selectWorkspaceMemberPickerModalVisible,
-  selectWorkspaceMemberPickerModalWorkspaceId,
+  selectWorkspaceMemberPickerModalWorkspaceId
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
@@ -19,7 +19,8 @@ import { IoClose } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./WorkspaceMemberPickerModal.module.css";
 
-interface WorkspaceMemberPickerModalProps {}
+interface WorkspaceMemberPickerModalProps {
+}
 
 const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({}) => {
   const { t } = useTranslation();
@@ -29,6 +30,8 @@ const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({
   const workspaceId = useTypedSelector(selectWorkspaceMemberPickerModalWorkspaceId);
   const initialSelectionOnMultiple = useTypedSelector(selectWorkspaceMemberPickerModalInitialSelectionOnMultiple);
   const onPick = useTypedSelector(selectWorkspaceMemberPickerModalOnPick);
+  const deselectable = useTypedSelector(selectWorkspaceMemberPickerModalDeselectable);
+  const onDeselect = useTypedSelector(selectWorkspaceMemberPickerModalOnDeselect);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [input, setInput] = useState<string>("");
@@ -38,7 +41,7 @@ const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({
   const { data: workspaceMemberListResponse, isFetching } = useRetrieveWorkspaceMembersQuery(
     { workspaceId: workspaceId || "" },
     {
-      skip: workspaceId == null,
+      skip: workspaceId == null
     }
   );
 
@@ -97,6 +100,11 @@ const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({
     close?.();
   };
 
+  const deselectAndClose = () => {
+    onDeselect?.();
+    close?.();
+  };
+
   return (
     <Modal
       visible={visible}
@@ -149,7 +157,8 @@ const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({
       {multiple && selectedWorkspaceMembers.length != 0 && (
         <div className={styles.selectedTopicListContainer}>
           {selectedWorkspaceMembers.map((workspaceMember) => (
-            <div key={`selected-workspace-member-${workspaceMember.workspaceMemberId}`} className={styles.selectedTopicContainer}>
+            <div key={`selected-workspace-member-${workspaceMember.workspaceMemberId}`}
+                 className={styles.selectedTopicContainer}>
               <div className={styles.selectedTopicName}>
                 <ProfilePhoto
                   boringAvatarKey={workspaceMember.account.accountId || ""}
@@ -169,12 +178,15 @@ const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({
           ))}
         </div>
       )}
-      {multiple && (
+      {(multiple || deselectable) && (
         <div className={styles.actionBar}>
           <Button heightVariant={ButtonHeight.short} onClick={close}>
             {t("workspaceMemberPickerModalCancelButton")}
           </Button>
-          <Button
+          <Button heightVariant={ButtonHeight.short} onClick={deselectAndClose}>
+            {t("workspaceMemberPickerModalDeselectButton")}
+          </Button>
+          {multiple && <Button
             heightVariant={ButtonHeight.short}
             variant={ButtonVariants.contrast}
             className={styles.contButton}
@@ -182,7 +194,7 @@ const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({
             disabled={selectedWorkspaceMembers?.length == 0 && !multiple}
           >
             {t("workspaceMemberPickerModalSelectButton")}
-          </Button>
+          </Button>}
         </div>
       )}
     </Modal>

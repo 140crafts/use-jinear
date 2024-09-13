@@ -50,12 +50,19 @@ import ConversationSettingsModal from "@/components/modal/conversationSettingsMo
 import ChannelListModal from "@/components/modal/channelListModal/ChannelListModal";
 import NewConversationModal from "@/components/modal/newConversationModal/NewConversationModal";
 import InstallPwaInstructionsModal from "@/components/modal/installPwaInstructionsModal/InstallPwaInstructionsModal";
+import NewProjectModal from "@/components/modal/newProjectModal/NewProjectModal";
+import TeamPickerModalV2 from "@/components/modal/teamPickerModalV2/TeamPickerModalV2";
+import ProjectPrioritySelectModal from "@/components/modal/projectPrioritySelectModal/ProjectPrioritySelectModal";
+import ProjectStateSelectModal from "@/components/modal/projectStateSelectModal/ProjectStateSelectModal";
 
 interface ModalProviderProps {
 }
 
 const globalModals: any = (
   <>
+    <NewProjectModal />
+    <ProjectPrioritySelectModal />
+    <ProjectStateSelectModal />
     <InstallPwaInstructionsModal />
     <NewConversationModal />
     <ChannelListModal />
@@ -88,6 +95,7 @@ const globalModals: any = (
     <NewCalendarIntegrationModal />
     <NewTaskBoardModal />
     <TeamPickerModal />
+    <TeamPickerModalV2 />
     <WorkspacePickerModal />
     <TeamMemberPickerModal />
     <TopicPickerModal />

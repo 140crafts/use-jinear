@@ -6,7 +6,7 @@ import {
   changeLoadingModalVisibility,
   closeTaskTaskBoardAssignModal,
   selectTaskTaskBoardAssignModalTaskId,
-  selectTaskTaskBoardAssignModalVisible,
+  selectTaskTaskBoardAssignModalVisible
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
@@ -15,8 +15,12 @@ import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { IoCheckmarkCircle, IoRadioButtonOffOutline } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./TaskTaskBoardModal.module.css";
+import Logger from "@/utils/logger";
 
-interface TaskTaskBoardModalProps {}
+interface TaskTaskBoardModalProps {
+}
+
+const logger = Logger("TaskTaskBoardModal");
 
 const TaskTaskBoardModal: React.FC<TaskTaskBoardModalProps> = ({}) => {
   const { t } = useTranslation();
@@ -37,6 +41,8 @@ const TaskTaskBoardModal: React.FC<TaskTaskBoardModalProps> = ({}) => {
 
   const alreadyAddedBoards = taskAndTaskBoardRelationResponse?.data.alreadyAddedBoards || [];
   const recentBoards = taskAndTaskBoardRelationResponse?.data.recentBoards;
+
+  logger.log({ alreadyAddedBoards, recentBoards });
 
   useEffect(() => {
     dispatch(changeLoadingModalVisibility({ visible: isInitializeLoading || isDeleteLoading }));
@@ -107,7 +113,7 @@ const TaskTaskBoardModal: React.FC<TaskTaskBoardModalProps> = ({}) => {
                 onClick={() =>
                   removeFromBoard({
                     taskBoardEntryId: taskBoardEntryDetailedDto.taskBoardEntryId,
-                    taskBoardId: taskBoardEntryDetailedDto.taskBoardId,
+                    taskBoardId: taskBoardEntryDetailedDto.taskBoardId
                   })
                 }
               >

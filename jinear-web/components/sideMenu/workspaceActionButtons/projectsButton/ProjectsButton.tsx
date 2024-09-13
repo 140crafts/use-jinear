@@ -3,8 +3,8 @@ import styles from "./ProjectsButton.module.css";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
 import { WorkspaceDto } from "@/be/jinear-core";
-import { LuDiamond } from "react-icons/lu";
-import { usePathname, useRouter } from "next/navigation";
+import { LuBox } from "react-icons/lu";
+import { usePathname } from "next/navigation";
 
 interface ProjectsButtonProps {
   workspace: WorkspaceDto;
@@ -21,7 +21,7 @@ const ProjectsButton: React.FC<ProjectsButtonProps> = ({ workspace }) => {
             variant={pathname == projectsPath ? ButtonVariants.filled : ButtonVariants.default}
             href={projectsPath}
     >
-      <LuDiamond />
+      <LuBox />
       {t("sideMenuProjectsTitle")}
     </Button>
   );

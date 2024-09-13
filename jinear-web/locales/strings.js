@@ -1,6 +1,6 @@
 import enUsLocale from "date-fns/locale/en-US";
 import trTrLocale from "date-fns/locale/tr";
-import WorkspaceTeamsListItem from "@/components/workspaceTeamsScreen/workspaceTeamsListItem/WorkspaceTeamsListItem";
+import MilestoneListItem from "@/components/form/newProjectForm/milestoneListItem/MilestoneListItem";
 
 const translations = {
   hi: {
@@ -22,6 +22,10 @@ const translations = {
   dateFormat: {
     en: "MM.dd.yyyy",
     tr: "dd.MM.yyyy"
+  },
+  dateFormatShortMonthReadable: {
+    en: "LLL dd,yyyy",
+    tr: "LLL dd,yyyy"
   },
   dateTimeFormat: {
     en: "MM.dd.yyyy hh:mm aaa",
@@ -3056,6 +3060,10 @@ const translations = {
     en: "Cancel",
     tr: "Vazgeç"
   },
+  workspaceMemberPickerModalDeselectButton: {
+    en: "Deselect",
+    tr: "Seçimi Kaldır"
+  },
   workspaceMemberPickerModalSelectButton: {
     en: "Select",
     tr: "Seç"
@@ -3816,6 +3824,194 @@ const translations = {
   workspaceTeamsListItemLeaveButton: {
     en: "Leave",
     tr: "Ayrıl"
+  },
+  projectsAssignedListEmptyLabel: {
+    en: "There isn't any projects you're related with.",
+    tr: "Dahil olduğunuz herhangi bir proje bulunamadı."
+  },
+  projectsAssignedTitle: {
+    en: "Assigned Projects",
+    tr: "Dahil Olduğunuz Projeler"
+  },
+  projectsAllListEmptyLabel: {
+    en: "There isn't any projects in this workspace.",
+    tr: "Çalışma alanı altında herhangi bir proje bulunamadı."
+  },
+  projectsAllTitle: {
+    en: "Projects",
+    tr: "Projeler"
+  },
+  projectsNewProjectButtonLabel: {
+    en: "New Project",
+    tr: "Yeni Proje"
+  },
+  genericPickerModalSelectButton: {
+    en: "Select",
+    tr: "Seç"
+  },
+  genericPickerModalCancelButton: {
+    en: "Cancel",
+    tr: "Vazgeç"
+  },
+  genericPickerModalListEmptyLabel: {
+    en: "There's nothing to select",
+    tr: "Seçilebilecek bir şey bulunamadı"
+  },
+  newProjectModalTitle: {
+    en: "New Project",
+    tr: "Yeni Proje"
+  },
+  newProjectTitlePlaceholder: {
+    en: "Project title",
+    tr: "Proje başlığı"
+  },
+  teamPickerButtonLabel: {
+    en: "Select Team",
+    tr: "Takım Seç"
+  },
+  teamPickerButtonMultiplePickedLabel: {
+    en: "${number} teams selected",
+    tr: "${number} takım seçildi"
+  },
+  teamPickerModalV2Title: {
+    en: "Pick Team",
+    tr: "Takım Seç"
+  },
+  teamPickerModalV2SearchBarPlaceholder: {
+    en: "Search a team",
+    tr: "Bir takım ara"
+  },
+  teamPickerModalV2NoTeamFound: {
+    en: "No team found",
+    tr: "Hiç bir takım bulunamadı"
+  },
+  newProjectFormRelatedTeamPickerButtonLabel: {
+    en: "Related Teams",
+    tr: "İlgili Ekipler"
+  },
+  newTaskFormLeadWorkspaceMemberPickerButtonLabel: {
+    en: "Project Lead",
+    tr: "Proje Lideri"
+  },
+  workspaceMemberPickerButtonLabel: {
+    en: "Select Workspace Member",
+    tr: "Çalışma Alanı Üyesi Seç"
+  },
+  workspaceMemberPickerButtonMultiplePickedLabel: {
+    en: "${number} members selected",
+    tr: "${number} üye seçildi"
+  },
+  datePickerButtonLabel: {
+    en: "Pick Date",
+    tr: "Tarih Seç"
+  },
+  newProjectFormStartDate: {
+    en: "Start Date",
+    tr: "Başlangıç Tarihi"
+  },
+  newProjectFormTargetDate: {
+    en: "Target Date",
+    tr: "Hedef Tarih"
+  },
+  projectPrioritySelectModalTitle: {
+    en: "Pick Priority",
+    tr: "Öncelik Seç"
+  },
+  projectPriority_URGENT: {
+    en: "Urgent",
+    tr: "Acil"
+  },
+  projectPriority_HIGH: {
+    en: "High",
+    tr: "Yüksek"
+  },
+  projectPriority_MEDIUM: {
+    en: "Medium",
+    tr: "Orta"
+  },
+  projectPriority_LOW: {
+    en: "Low",
+    tr: "Düşük"
+  },
+  projectPriorityPickerButtonLabel: {
+    en: "Priority",
+    tr: "Öncelik"
+  },
+  projectState_BACKLOG: {
+    en: "Backlog",
+    tr: "Geri Plan"
+  },
+  projectState_PLANNED: {
+    en: "Planned",
+    tr: "Planlanmış"
+  },
+  projectState_IN_PROGRESS: {
+    en: "In Progress",
+    tr: "Devam Ediyor"
+  },
+  projectState_COMPLETED: {
+    en: "Completed",
+    tr: "Tamamlandı"
+  },
+  projectState_CANCELLED: {
+    en: "Cancelled",
+    tr: "Vazgeçildi"
+  },
+  projectStatePickerButtonLabel: {
+    en: "State",
+    tr: "Durum"
+  },
+  newProjectFormToggleMilestoneSectionButton: {
+    en: "Milestones",
+    tr: "Hedef Noktaları"
+  },
+  newProjectFromMilestoneListItemTargetDateButtonLabel: {
+    en: "Target Date",
+    tr: "Hedef Tarihi"
+  },
+  milestoneListItemTitleCanNotBeEmpty: {
+    en: "Please provide a title for this milestone",
+    tr: "Hedef noktası başlığı girin"
+  },
+  newProjectFormMilestonesTitle: {
+    en: "Milestones",
+    tr: "Hedef Noktaları"
+  },
+  newProjectFormMilestonesNewButtonLabel: {
+    en: "New Milestone",
+    tr: "Hedef Noktası Ekle"
+  },
+  newProjectFormDescriptionPlaceholder: {
+    en: "Write a description, a project brief, or collect ideas...",
+    tr: "Bir açıklama yazın, bir proje özeti oluşturun veya fikirler toplayın..."
+  },
+  newProjectModalCancel: {
+    en: "Cancel",
+    tr: "Vazgeç"
+  },
+  newProjectModalCreate: {
+    en: "Create Project",
+    tr: "Proje Oluştur"
+  },
+  datePickerModalUnpickButtonLabel: {
+    en: "Unpick",
+    tr: "Seçimi Kaldır"
+  },
+  projectRowTargetDate: {
+    en: "Target Date",
+    tr: "Hedef Tarihi"
+  },
+  projectRowStartDateDate: {
+    en: "Start Date",
+    tr: "Başlangıç Tarihi"
+  },
+  projectRowProjectLead: {
+    en: "Project Lead ${leadUserName}",
+    tr: "Proje Lideri ${leadUserName}"
+  },
+  projectRowProjectLeadPick: {
+    en: "Project Lead",
+    tr: "Proje Lideri"
   }
 };
 

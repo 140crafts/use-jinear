@@ -23,7 +23,7 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspa
   const team = useWorkspaceFirstTeam(workspace.workspaceId);
 
   const _popNewTaskModal = () => {
-    if (workspace) {
+    if (workspace && team) {
       dispatch(popNewTaskModal({ visible: true, workspace, team }));
     }
   };
@@ -37,6 +37,7 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspa
           variant={ButtonVariants.filled2}
           className={styles.newTaskButton}
           onClick={_popNewTaskModal}
+          disabled={!workspace || !team}
         >
           <LuPen />
           <b>{t("sideMenuNewTask")}</b>

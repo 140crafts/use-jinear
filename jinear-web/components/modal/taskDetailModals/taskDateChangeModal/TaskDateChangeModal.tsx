@@ -142,12 +142,12 @@ const TaskDateChangeModal: React.FC<TaskDateChangeModalProps> = ({}) => {
     );
   };
 
-  const onAssignedDateChangeFromModal = (date: Date) => {
+  const onAssignedDateChangeFromModal = (date: Date | null) => {
     setAssignedDateVal(date);
     dispatch(closeDatePickerModal());
   };
 
-  const onDueDateChangeFromModal = (date: Date) => {
+  const onDueDateChangeFromModal = (date: Date | null) => {
     setDueDateVal(date);
     dispatch(closeDatePickerModal());
   };

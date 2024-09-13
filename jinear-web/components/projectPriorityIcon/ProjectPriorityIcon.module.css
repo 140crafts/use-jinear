@@ -1,0 +1,20 @@
+.icon {
+    width: 12px;
+    min-width: 12px;
+}
+
+.URGENT {
+    color: var(--c-ERROR_RED);
+}
+
+.HIGH {
+    color: var(--c-JINEAR_ORANGE);
+}
+
+.MEDIUM {
+    color: var(--c-WHATIEAT_YELLOW);
+}
+
+.LOW {
+    color: var(--c-SUCCESS_GREEN);
+}
