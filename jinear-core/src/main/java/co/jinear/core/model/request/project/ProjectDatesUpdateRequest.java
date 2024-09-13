@@ -15,6 +15,10 @@ public class ProjectDatesUpdateRequest extends BaseRequest {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime startDate;
     @Nullable
+    private Boolean updateStartDate;
+    @Nullable
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime targetDate;
+    @Nullable
+    private Boolean updateTargetDate;
 }

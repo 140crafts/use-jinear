@@ -20,21 +20,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProjectTeamListingService {
 
-    private static final int PAGE_SIZE = 25;
+    private static final int PAGE_SIZE = 50;
 
     private final ProjectTeamRepository projectTeamRepository;
     private final ProjectDtoConverter projectDtoConverter;
     private final ProjectTeamDtoConverter projectTeamDtoConverter;
 
-    public Page<ProjectDto> retrieveAllByTeamIdOrTeamIdEmpty(List<String> teamIds, int page) {
-        log.info("Retrieve all by team id or team id empty has started. page: {}, teamIds: {}", page, NormalizeHelper.listToString(teamIds));
+    public Page<ProjectDto> retrieveAllByTeamId(List<String> teamIds, int page) {
+        log.info("Retrieve all by team id has started. page: {}, teamIds: {}", page, NormalizeHelper.listToString(teamIds));
         return projectTeamRepository.findAllByTeamIdIsInAndProject_PassiveIdIsNullAndPassiveIdIsNull(teamIds, PageRequest.of(page, PAGE_SIZE))
                 .map(ProjectTeam::getProject)
                 .map(projectDtoConverter::convert);
     }
 
-    public List<ProjectTeamDto> retrieveAllByTeamIdOrTeamIdEmpty(List<String> teamIds) {
-        log.info("Retrieve all by team id has started.teamIds: {}", NormalizeHelper.listToString(teamIds));
+    public List<ProjectTeamDto> retrieveAllByTeamId(List<String> teamIds) {
+        log.info("Retrieve all by team id has started. teamIds: {}", NormalizeHelper.listToString(teamIds));
         return projectTeamRepository.findAllByTeamIdIsInAndProject_PassiveIdIsNullAndPassiveIdIsNull(teamIds)
                 .stream()
                 .map(projectTeamDtoConverter::convert)

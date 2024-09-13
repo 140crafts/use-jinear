@@ -47,7 +47,7 @@ public class ProjectQueryManager {
         log.info("Retrieve assigned projects has started. currentAccountId: {}, workspaceId: {}, page: {}", currentAccountId, workspaceId, page);
         List<TeamMemberDto> teamMemberDtos = teamMemberRetrieveService.retrieveAllTeamMembershipsOfAnAccount(currentAccountId, workspaceId);
         List<String> teamMemberships = teamMemberDtos.stream().map(TeamMemberDto::getTeamId).toList();
-        Page<ProjectDto> projectsPage = projectTeamListingService.retrieveAllByTeamIdOrTeamIdEmpty(teamMemberships, page);
+        Page<ProjectDto> projectsPage = projectTeamListingService.retrieveAllByTeamId(teamMemberships, page);
         return mapResponse(projectsPage);
     }
 

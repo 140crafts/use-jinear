@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-09-01 10:08:28.
+// Generated using typescript-generator version 3.0.1157 on 2024-09-13 20:37:50.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -160,8 +160,8 @@ export interface GmailMessageDto extends BaseDto {
     subject: string;
     body: string;
     ginternalDate: string;
-    ghistoryId: string;
     gthreadId: string;
+    ghistoryId: string;
     gid: string;
 }
 
@@ -507,6 +507,11 @@ export interface MilestoneDto extends BaseDto {
     milestoneOrder: number;
     targetDate: Date;
     description: RichTextDto;
+}
+
+export interface MilestoneInitializeDto {
+    title: string;
+    targetDate?: Date | null;
 }
 
 export interface ProjectDto extends BaseDto {
@@ -1105,7 +1110,9 @@ export interface MilestoneUpdateRequest extends BaseRequest {
 
 export interface ProjectDatesUpdateRequest extends BaseRequest {
     startDate?: Date | null;
+    updateStartDate?: boolean | null;
     targetDate?: Date | null;
+    updateTargetDate?: boolean | null;
 }
 
 export interface ProjectDescriptionUpdateRequest extends BaseRequest {
@@ -1122,6 +1129,7 @@ export interface ProjectInitializeRequest extends BaseRequest {
     startDate?: Date | null;
     targetDate?: Date | null;
     teamIds: string[];
+    milestones?: MilestoneInitializeDto[] | null;
 }
 
 export interface ProjectPriorityUpdateRequest extends BaseRequest {
