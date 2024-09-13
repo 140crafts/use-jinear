@@ -1,10 +1,12 @@
 package co.jinear.core.manager.project;
 
+import co.jinear.core.converter.project.ProjectDatesUpdateRequestToVoConverter;
 import co.jinear.core.converter.project.ProjectInitializeRequestToVoConverter;
 import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.request.project.*;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.vo.project.ProjectInitializeVo;
+import co.jinear.core.model.vo.project.UpdateProjectDatesVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.project.ProjectOperationService;
 import co.jinear.core.service.project.ProjectRetrieveService;
@@ -29,6 +31,7 @@ public class ProjectManager {
     private final TeamValidator teamValidator;
     private final ProjectAccessValidator projectAccessValidator;
     private final ProjectRetrieveService projectRetrieveService;
+    private final ProjectDatesUpdateRequestToVoConverter projectDatesUpdateRequestToVoConverter;
 
     private final ProjectInitializeRequestToVoConverter projectInitializeRequestToVoConverter;
 
@@ -79,7 +82,8 @@ public class ProjectManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         projectAccessValidator.validateHasExplicitAccess(projectId, currentAccountId);
         log.info("Update project dates has started. currentAccountId: {}", currentAccountId);
-        projectOperationService.updateDates(projectId, projectDatesUpdateRequest.getStartDate(), projectDatesUpdateRequest.getTargetDate());
+        UpdateProjectDatesVo updateProjectDatesVo = projectDatesUpdateRequestToVoConverter.convert(projectDatesUpdateRequest);
+        projectOperationService.updateDates(projectId, updateProjectDatesVo);
         return new BaseResponse();
     }
 

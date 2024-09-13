@@ -1,5 +1,6 @@
 package co.jinear.core.service.project;
 
+import co.jinear.core.converter.project.MilestoneInitializeDtoToInitializeMilestoneVoMapper;
 import co.jinear.core.converter.project.ProjectInitializeVoToEntityMapper;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.entity.project.Project;
@@ -7,6 +8,7 @@ import co.jinear.core.model.enumtype.project.ProjectPriorityType;
 import co.jinear.core.model.enumtype.project.ProjectStateType;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.vo.project.ProjectInitializeVo;
+import co.jinear.core.model.vo.project.UpdateProjectDatesVo;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.repository.project.ProjectRepository;
 import co.jinear.core.service.richtext.RichTextInitializeService;
@@ -15,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.Optional;
 
 @Slf4j
@@ -28,6 +30,8 @@ public class ProjectOperationService {
     private final RichTextInitializeService richTextInitializeService;
     private final ProjectTeamOperationService projectTeamOperationService;
     private final ProjectRetrieveService projectRetrieveService;
+    private final MilestoneOperationService milestoneOperationService;
+    private final MilestoneInitializeDtoToInitializeMilestoneVoMapper milestoneInitializeDtoToInitializeMilestoneVoMapper;
 
     @Transactional
     public void initialize(ProjectInitializeVo projectInitializeVo) {
@@ -35,6 +39,7 @@ public class ProjectOperationService {
         Project saved = mapAndInitialize(projectInitializeVo);
         saved = initializeDescription(projectInitializeVo, saved);
         assignTeams(projectInitializeVo, saved);
+        initializeMilestones(projectInitializeVo, saved);
     }
 
     public void updateTitle(String projectId, String title) {
@@ -68,11 +73,17 @@ public class ProjectOperationService {
         projectRepository.save(project);
     }
 
-    public void updateDates(String projectId, ZonedDateTime startDate, ZonedDateTime targetDate) {
-        log.info("Update dates has started. projectId: {}, startDate: {}, targetDate: {}", projectId, startDate, targetDate);
+    public void updateDates(String projectId, UpdateProjectDatesVo updateProjectDatesVo) {
+        log.info("Update dates has started. projectId: {}, updateProjectDatesVo: {}", projectId, updateProjectDatesVo);
         Project project = projectRetrieveService.retrieveEntity(projectId);
-        project.setStartDate(startDate);
-        project.setTargetDate(targetDate);
+        Optional.of(updateProjectDatesVo)
+                .filter(vo -> Boolean.TRUE.equals(vo.getUpdateStartDate()))
+                .map(UpdateProjectDatesVo::getStartDate)
+                .ifPresent(project::setStartDate);
+        Optional.of(updateProjectDatesVo)
+                .filter(vo -> Boolean.TRUE.equals(vo.getUpdateTargetDate()))
+                .map(UpdateProjectDatesVo::getTargetDate)
+                .ifPresent(project::setTargetDate);
         projectRepository.save(project);
     }
 
@@ -105,6 +116,17 @@ public class ProjectOperationService {
         Optional.of(projectInitializeVo)
                 .map(ProjectInitializeVo::getTeamIds)
                 .ifPresent(teamIds -> projectTeamOperationService.initializeAll(saved.getProjectId(), teamIds));
+    }
+
+    private void initializeMilestones(ProjectInitializeVo projectInitializeVo, Project saved) {
+        Optional.of(projectInitializeVo)
+                .map(ProjectInitializeVo::getMilestones)
+                .map(Collection::stream)
+                .ifPresent(milestoneInitializeDtoStream ->
+                        milestoneInitializeDtoStream
+                                .map(milestoneInitializeDto -> milestoneInitializeDtoToInitializeMilestoneVoMapper.map(milestoneInitializeDto, saved.getProjectId()))
+                                .forEach(milestoneOperationService::initialize)
+                );
     }
 
     private InitializeRichTextVo mapDescriptionInitVo(String projectId, String description) {

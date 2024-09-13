@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.dto.project.ProjectTeamDto;
 import co.jinear.core.service.project.ProjectRetrieveService;
 import co.jinear.core.validator.team.TeamAccessValidator;
+import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ public class ProjectAccessValidator {
 
     private final ProjectRetrieveService projectRetrieveService;
     private final TeamAccessValidator teamAccessValidator;
+    private final WorkspaceValidator workspaceValidator;
 
     /*
      * For workspace members. Not for guests!
@@ -27,7 +29,9 @@ public class ProjectAccessValidator {
     public void validateHasExplicitAccess(String projectId, String accountId) {
         log.info("Validate has explicit access has started. projectId: {}, accountId: {}", projectId, accountId);
         ProjectDto projectDto = projectRetrieveService.retrieve(projectId);
-        validateAccountIsProjectTeamsMember(accountId, projectDto);
+        if (!workspaceValidator.isWorkspaceAdminOrOwner(accountId, projectDto.getWorkspaceId())) {
+            validateAccountIsProjectTeamsMember(accountId, projectDto);
+        }
     }
 
     public void validateProjectAndWorkspaceIsInSameWorkspace(String projectId, String workspaceId) {

@@ -77,6 +77,6 @@ public class Project extends BaseEntity {
 
     @OneToMany(mappedBy = "project")
     @Where(clause = "passive_id is null")
-    @OrderBy("milestoneOrder ASC")
+    @OrderBy("createdDate ASC, targetDate ASC, milestoneOrder ASC")
     private Set<Milestone> milestones;
 }

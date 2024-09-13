@@ -69,7 +69,7 @@ public class TaskListingManager {
             List<String> membershipTeamIds = memberships.stream()
                     .map(TeamMemberDto::getTeamId)
                     .toList();
-            List<ProjectTeamDto> teamMembershipsProjects = projectTeamListingService.retrieveAllByTeamIdOrTeamIdEmpty(membershipTeamIds);
+            List<ProjectTeamDto> teamMembershipsProjects = projectTeamListingService.retrieveAllByTeamId(membershipTeamIds);
 
             if (Objects.nonNull(requestedProjectIds)) {
                 List<String> teamMembershipsProjectsTeamIds = teamMembershipsProjects.stream()

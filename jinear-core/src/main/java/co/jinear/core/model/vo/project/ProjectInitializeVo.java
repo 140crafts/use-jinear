@@ -1,5 +1,6 @@
 package co.jinear.core.model.vo.project;
 
+import co.jinear.core.model.dto.project.MilestoneInitializeDto;
 import co.jinear.core.model.enumtype.project.ProjectPriorityType;
 import co.jinear.core.model.enumtype.project.ProjectStateType;
 import lombok.Getter;
@@ -24,4 +25,6 @@ public class ProjectInitializeVo {
     private ZonedDateTime targetDate;
     @ToString.Exclude
     private List<String> teamIds;
+    @ToString.Exclude
+    private List<MilestoneInitializeDto> milestones;
 }
