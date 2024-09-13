@@ -20,10 +20,12 @@ interface TiptapProps {
   content?: string;
   className?: string;
   editorClassName?: string;
+  editorWrapperClassName?: string;
   placeholder?: string;
   editable?: boolean;
   htmlInputId?: string;
   register?: UseFormRegister<any>;
+  registerKey?: string,
   formSetValue?: UseFormSetValue<any>;
   actionBarMode?: TipTapActionBarMode;
   hideActionBarWhenEmpty?: boolean;
@@ -36,10 +38,12 @@ const Tiptap = (
     content,
     className,
     editorClassName,
+    editorWrapperClassName,
     placeholder,
     editable = true,
     htmlInputId,
     register,
+    registerKey,
     formSetValue,
     actionBarMode = "full",
     hideActionBarWhenEmpty = false,
@@ -48,7 +52,7 @@ const Tiptap = (
   }: TiptapProps,
   ref: any
 ) => {
-  const [html, setHtml] = useState<string>();
+  const [html, setHtml] = useState<string>("");
   const editor = useEditor({
     editorProps: {
       attributes: {
@@ -92,8 +96,9 @@ const Tiptap = (
   return (
     <div className={cn(styles.container, className)} onFocus={onFocus}>
       {editor && !shouldHideActionBar && editable && <ActionBar editor={editor} mode={actionBarMode} />}
-      <EditorContent editor={editor} />
-      {htmlInputId && <input id={htmlInputId} type="hidden" {...register?.(htmlInputId)} value={html} />}
+      <EditorContent editor={editor} className={editorWrapperClassName} />
+      {htmlInputId &&
+        <input id={htmlInputId} type="hidden" {...register?.(registerKey ? registerKey : htmlInputId)} value={html} />}
     </div>
   );
 };

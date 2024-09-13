@@ -46,6 +46,6 @@ export const queryStateShortDateParser = (val?: string) => {
   undefined;
 };
 export const queryStateBooleanParser = (val?: string) => (val ? val?.toLowerCase() == "true" : undefined);
-export const queryStateDateToIsoDateConverter = (date?: Date) => (date ? formatISO(date) : undefined);
-export const queryStateDateToShortDateConverter = (date?: Date) => (date ? format(date, URL_DATE_FORMAT) : undefined);
+export const queryStateDateToIsoDateConverter = (date?: Date | null) => (date ? formatISO(date) : undefined);
+export const queryStateDateToShortDateConverter = (date?: Date | null) => (date ? format(date, URL_DATE_FORMAT) : undefined);
 export const queryStateAnyToStringConverter = (obj?: any) => (obj ? obj.toString() : undefined);

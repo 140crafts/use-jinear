@@ -6,7 +6,7 @@ import {
   queryStateDateToIsoDateConverter,
   queryStateIsoDateParser,
   useQueryState,
-  useSetQueryState,
+  useSetQueryState
 } from "@/hooks/useQueryState";
 import { closeDatePickerModal, popDatePickerModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
@@ -16,7 +16,8 @@ import React from "react";
 import { IoAdd, IoClose, IoPlaySkipBackOutline, IoTimeOutline } from "react-icons/io5";
 import styles from "./ToDatePickerButton.module.css";
 
-interface ToDatePickerButtonProps {}
+interface ToDatePickerButtonProps {
+}
 
 const ToDatePickerButton: React.FC<ToDatePickerButtonProps> = ({}) => {
   const { t } = useTranslation();
@@ -25,7 +26,7 @@ const ToDatePickerButton: React.FC<ToDatePickerButtonProps> = ({}) => {
   const toDate = useQueryState<Date>("timespanEnd", queryStateIsoDateParser);
   const hasPreciseToDate = useQueryState<boolean>("hasPreciseToDate", queryStateBooleanParser);
 
-  const setToDate = (day?: Date) => {
+  const setToDate = (day?: Date | null) => {
     setQueryState("timespanEnd", queryStateDateToIsoDateConverter(day));
   };
 
@@ -33,7 +34,7 @@ const ToDatePickerButton: React.FC<ToDatePickerButtonProps> = ({}) => {
     setQueryState("hasPreciseToDate", queryStateAnyToStringConverter(hasPreciseToDate));
   };
 
-  const onDateSelect = (day: Date) => {
+  const onDateSelect = (day: Date | null) => {
     setToDate?.(day);
     dispatch(closeDatePickerModal());
   };
@@ -43,7 +44,7 @@ const ToDatePickerButton: React.FC<ToDatePickerButtonProps> = ({}) => {
       popDatePickerModal({
         visible: true,
         initialDate: toDate ? toDate : new Date(),
-        onDateChange: onDateSelect,
+        onDateChange: onDateSelect
       })
     );
   };
@@ -106,7 +107,8 @@ const ToDatePickerButton: React.FC<ToDatePickerButtonProps> = ({}) => {
             containerClassName={styles.timePickerContainerClassName}
           />
         ) : (
-          <Button variant={ButtonVariants.filled} className={styles.timePickerToggleButton} onClick={toggleHasPreciseDate}>
+          <Button variant={ButtonVariants.filled} className={styles.timePickerToggleButton}
+                  onClick={toggleHasPreciseDate}>
             {hasPreciseToDate ? <IoClose size={11} /> : <IoAdd size={11} />}
             {!hasPreciseToDate && <IoTimeOutline size={14} />}
           </Button>

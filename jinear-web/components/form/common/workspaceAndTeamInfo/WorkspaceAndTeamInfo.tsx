@@ -11,23 +11,27 @@ import styles from "./WorkspaceAndTeamInfo.module.css";
 
 interface WorkspaceAndTeamInfoProps {
   workspace: WorkspaceDto;
-  team: TeamDto;
+  team?: TeamDto;
   workspaceTitle?: string;
   onTeamChange?: (team: TeamDto) => void;
   readOnly?: boolean;
   buttonContainerClassName?: string;
   heightVariant?: string;
+  omitTeamButton?: boolean;
+  additionalLabel?: string;
 }
 
 const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
-  workspace,
-  team,
-  workspaceTitle,
-  onTeamChange,
-  readOnly = false,
-  buttonContainerClassName,
-  heightVariant = ButtonHeight.default,
-}) => {
+                                                                     workspace,
+                                                                     team,
+                                                                     workspaceTitle,
+                                                                     onTeamChange,
+                                                                     readOnly = false,
+                                                                     buttonContainerClassName,
+                                                                     heightVariant = ButtonHeight.default,
+                                                                     omitTeamButton = false,
+                                                                     additionalLabel
+                                                                   }) => {
   const dispatch = useAppDispatch();
 
   const onTeamPick = (team: TeamDto) => {
@@ -36,7 +40,12 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
 
   const popChangeTeamModal = () => {
     dispatch(
-      popTeamPickerModal({ visible: true, workspaceId: workspace.workspaceId, filterActiveTeams: true, onPick: onTeamPick })
+      popTeamPickerModal({
+        visible: true,
+        workspaceId: workspace.workspaceId,
+        filterActiveTeams: true,
+        onPick: onTeamPick
+      })
     );
   };
 
@@ -58,19 +67,30 @@ const WorkspaceAndTeamInfo: React.FC<WorkspaceAndTeamInfoProps> = ({
           data-tooltip={workspace.title}
         >
           <IoHomeOutline className={styles.icon} />
-          <b className="single-line">{shortenStringIfMoreThanMaxLength({ text: workspace.title || "", maxLength: 12 })}</b>
+          <b className="single-line">{shortenStringIfMoreThanMaxLength({
+            text: workspace.title || "",
+            maxLength: 12
+          })}</b>
         </Button>
-        <LuChevronRight className={styles.icon} />
-        <Button
-          disabled={readOnly}
-          className={styles.button}
-          variant={ButtonVariants.filled}
-          heightVariant={heightVariant}
-          onClick={popChangeTeamModal}
-        >
-          <IoPeopleOutline className={styles.icon} />
-          <b className="single-line">{team.name}</b>
-        </Button>
+        {!omitTeamButton && team && <>
+          <LuChevronRight className={styles.icon} />
+          <Button
+            disabled={readOnly}
+            className={styles.button}
+            variant={ButtonVariants.filled}
+            heightVariant={heightVariant}
+            onClick={popChangeTeamModal}
+          >
+            <IoPeopleOutline className={styles.icon} />
+            <b className="single-line">{shortenStringIfMoreThanMaxLength({ text: team?.name || "", maxLength: 24 })}</b>
+          </Button>
+        </>}
+        {additionalLabel && (
+          <>
+            <LuChevronRight className={styles.icon} />
+            <b className="single-line">{additionalLabel}</b>
+          </>
+        )}
       </div>
     </div>
   );

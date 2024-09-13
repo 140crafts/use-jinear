@@ -15,7 +15,7 @@ import { selectCurrentAccountId } from "@/slice/accountSlice";
 interface WorkspaceMemberInputPickerProps {
   workspaceId: string;
   onSelectionChange: (selection: WorkspaceMemberDto[]) => void;
-  disabled: boolean;
+  disabled?: boolean;
 }
 
 const logger = Logger("WorkspaceMemberInputPicker");

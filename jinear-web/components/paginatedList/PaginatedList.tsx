@@ -24,23 +24,23 @@ interface PaginatedListProps<T> {
   paginationPosition?: "top" | "bottom";
 }
 
-const PaginatedList = <T,>({
-  id,
-  listTitle,
-  data,
-  isFetching,
-  isLoading,
-  page,
-  setPage,
-  renderItem,
-  emptyLabel,
-  hidePaginationOnSinglePages = false,
-  containerClassName,
-  contentContainerClassName,
-  listTitleComponent,
-  listTitleClassName,
-  paginationPosition = "top",
-}: PaginatedListProps<T>): ReactElement | null => {
+const PaginatedList = <T, >({
+                              id,
+                              listTitle,
+                              data,
+                              isFetching,
+                              isLoading,
+                              page,
+                              setPage,
+                              renderItem,
+                              emptyLabel,
+                              hidePaginationOnSinglePages = false,
+                              containerClassName,
+                              contentContainerClassName,
+                              listTitleComponent,
+                              listTitleClassName,
+                              paginationPosition = "top"
+                            }: PaginatedListProps<T>): ReactElement | null => {
   const { t } = useTranslation();
 
   const emptyOrSinglePage = data?.totalPages == 0 || data?.totalPages == 1;

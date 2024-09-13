@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: column;
   padding-bottom: 0 !important;
+  //padding-top: 0 !important;
+  position: relative;
 }
 
 .mobileFooterContainerClass {
@@ -24,11 +26,15 @@
 .segmentedControlContainer {
   display: flex;
   flex-direction: column;
-  //align-items: flex-end;
+  align-items: flex-end;
+  position: absolute;
+  right: 1.15rem;
+  top: 1.25rem;
+  z-index: 1001;
 }
 
 .viewTypeSegmentLabel {
-  min-width: 9rem !important;
+  min-width: 2rem !important;
 }
 
 .addNewCalendarContainer {

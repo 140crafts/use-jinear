@@ -82,7 +82,7 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
     updateState({ taskBoardId, state });
   };
 
-  const changeDueDate = (dueDate: Date) => {
+  const changeDueDate = (dueDate: Date | null) => {
     dispatch(closeDatePickerModal());
     updateDueDate({ taskBoardId, dueDate });
   };

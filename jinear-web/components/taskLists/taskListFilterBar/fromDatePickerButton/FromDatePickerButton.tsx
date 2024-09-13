@@ -25,7 +25,7 @@ const FromDatePickerButton: React.FC<FromDatePickerButtonProps> = ({}) => {
   const currentTimespanStart = useQueryState<Date>("timespanStart", queryStateIsoDateParser);
   const currentHasPreciseFromDate = useQueryState<boolean>("hasPreciseFromDate", queryStateBooleanParser);
 
-  const setFromDate = (day?: Date) => {
+  const setFromDate = (day?: Date | null) => {
     setQueryState("timespanStart", queryStateDateToIsoDateConverter(day));
   };
 
@@ -33,7 +33,7 @@ const FromDatePickerButton: React.FC<FromDatePickerButtonProps> = ({}) => {
     setQueryState("hasPreciseFromDate", queryStateAnyToStringConverter(hasPreciseFromDate));
   };
 
-  const onDateSelect = (day: Date) => {
+  const onDateSelect = (day: Date | null) => {
     setFromDate(day);
     dispatch(closeDatePickerModal());
   };

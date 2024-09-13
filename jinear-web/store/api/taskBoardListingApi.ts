@@ -34,7 +34,7 @@ export const taskBoardListingApi = api.injectEndpoints({
       providesTags: (_result, _err, req) => [
         {
           type: "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
-          id: `${req.workspaceId}-${req.teamId}-${req.page}`,
+          id: `${req.workspaceId}-${req.teamId}-${req.page}-${req.name}`,
         },
       ],
     }),
@@ -45,7 +45,7 @@ export const taskBoardListingApi = api.injectEndpoints({
       providesTags: (_result, _err, req) => [
         {
           type: "v1/task-board/list/related-with-task/{taskId}",
-          id: `${req.taskId}`,
+          id: `${req.taskId}-${req.filterRecentsByName}`,
         },
       ],
     }),

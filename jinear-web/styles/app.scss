@@ -215,6 +215,7 @@ textarea:disabled:hover {
   color: var(--c-text-color) !important;
   cursor: not-allowed;
 }
+
 textarea:not([resize="true"]) {
   resize: none !important;
 }
@@ -234,6 +235,11 @@ select {
   text-decoration: none;
   padding: 4px 7.5px;
   min-height: 1rem;
+}
+
+.icon {
+  width: 12px;
+  min-width: 12px;
 }
 
 /* Deprecated use line-clamp */
@@ -318,6 +324,7 @@ select {
 *[data-tooltip] {
   position: relative;
 }
+
 *[data-tooltip]:hover:after {
   content: attr(data-tooltip);
   background-color: var(--c-secondary);
@@ -330,9 +337,11 @@ select {
   white-space: nowrap;
   z-index: 99999;
 }
+
 *[data-tooltip-right] {
   position: relative;
 }
+
 *[data-tooltip-right]:hover:after {
   content: attr(data-tooltip-right);
   background-color: var(--c-secondary);
@@ -351,6 +360,7 @@ select {
   position: relative;
   height: auto;
 }
+
 *[data-tooltip-multiline]:hover:after {
   content: attr(data-tooltip-multiline);
   background-color: var(--c-secondary);
@@ -363,9 +373,11 @@ select {
   white-space: inherit;
   z-index: 99999;
 }
+
 *[data-tooltip-top] {
   position: relative;
 }
+
 *[data-tooltip-top]:hover:after {
   content: attr(data-tooltip-top);
   background-color: var(--c-secondary);
@@ -378,9 +390,11 @@ select {
   white-space: nowrap;
   z-index: 99999;
 }
+
 *[data-tooltip-top-right] {
   position: relative;
 }
+
 *[data-tooltip-top-right]:hover:after {
   content: attr(data-tooltip-top-right);
   background-color: var(--c-secondary);
@@ -393,6 +407,7 @@ select {
   white-space: nowrap;
   z-index: 99999;
 }
+
 /* endregion */
 
 blockquote {
@@ -403,6 +418,7 @@ blockquote {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
 }
+
 pre {
   background-color: var(--c-primary-shade-1) !important;
   color: var(--c-text-color) !important;
@@ -418,12 +434,14 @@ pre {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
 }
+
 .line-clamp-2 {
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
+
 .line-clamp-3 {
   overflow: hidden;
   display: -webkit-box;

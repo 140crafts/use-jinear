@@ -40,7 +40,7 @@
     border-top-color: var(--c-primary-shade-1);
     border-top-width: 1px;
     border-top-style: solid;
-    padding: 0.5rem 0.5rem;
+    padding: 0.5rem 0;
     z-index: 3;
     margin-top: 1rem;
 }

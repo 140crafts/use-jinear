@@ -38,13 +38,13 @@ const EventDateButtons: React.FC<EventDateButtonsProps> = ({
   logger.log("EventDateButtons");
   const { t } = useTranslation();
 
-  const changeAssignedDate = (nextAssignedDate?: Date) => {
+  const changeAssignedDate = (nextAssignedDate?: Date | null) => {
     if (nextAssignedDate) {
       onAssignedDateUpdate(nextAssignedDate);
     }
   };
 
-  const changeDueDate = (nextDueDate?: Date) => {
+  const changeDueDate = (nextDueDate?: Date | null) => {
     if (nextDueDate) {
       onDueDateUpdate(nextDueDate);
     }

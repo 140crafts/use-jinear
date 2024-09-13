@@ -25,20 +25,20 @@ interface DatePickerButtonProps {
 }
 
 const DatePickerButton: React.FC<DatePickerButtonProps> = ({
-  fieldName,
-  isPreciseFieldName,
-  initialDate,
-  initialDateIsPrecise,
-  dateSpanStart,
-  dateSpanEnd,
-  disabledBefore,
-  disabledAfter,
-  register,
-  setValue,
-}) => {
+                                                             fieldName,
+                                                             isPreciseFieldName,
+                                                             initialDate,
+                                                             initialDateIsPrecise,
+                                                             dateSpanStart,
+                                                             dateSpanEnd,
+                                                             disabledBefore,
+                                                             disabledAfter,
+                                                             register,
+                                                             setValue
+                                                           }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [selectedDate, setSelectedDate] = useState<Date>();
+  const [selectedDate, setSelectedDate] = useState<Date | null>();
   const [hasPreciseDate, toggleHasPreciseDate] = useToggle(initialDateIsPrecise);
 
   useEffect(() => {
@@ -53,7 +53,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
     }
   }, [initialDate]);
 
-  const onDateSelect = (day: Date) => {
+  const onDateSelect = (day: Date | null) => {
     setSelectedDate(day);
     dispatch(closeDatePickerModal());
   };
@@ -70,7 +70,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
         dateSpanEnd,
         disabledBefore,
         disabledAfter,
-        title,
+        title
       })
     );
   };
@@ -131,7 +131,8 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
             minuteSelectClassName={styles.minuteSelectClassName}
           />
         ) : (
-          <Button variant={ButtonVariants.filled} className={styles.timePickerToggleButton} onClick={toggleHasPreciseDate}>
+          <Button variant={ButtonVariants.filled} className={styles.timePickerToggleButton}
+                  onClick={toggleHasPreciseDate}>
             {hasPreciseDate ? <IoClose size={11} /> : <IoAdd size={11} />}
             {!hasPreciseDate && <IoTimeOutline size={14} />}
           </Button>

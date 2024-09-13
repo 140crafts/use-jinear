@@ -1,0 +1,17 @@
+.selectedContainer {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    align-items: center;
+    gap: 1ch;
+    min-width: 12ch !important;
+    position: relative;
+    justify-content: center;
+}
+
+.icon {
+    position: static;
+    left: 2ch;
+    width: 12px;
+    min-width: 12px;
+}
