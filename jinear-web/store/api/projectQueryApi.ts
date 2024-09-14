@@ -37,8 +37,8 @@ export const projectQueryApi = api.injectEndpoints({
   })
 });
 
-export const { useRetrieveAssignedProjectsQuery, useAllProjectsQuery } = projectQueryApi;
+export const { useRetrieveProjectQuery, useRetrieveAssignedProjectsQuery, useAllProjectsQuery } = projectQueryApi;
 
 export const {
-  endpoints: { retrieveAssignedProjects, allProjects }
+  endpoints: { retrieveProject, retrieveAssignedProjects, allProjects }
 } = projectQueryApi;

@@ -3917,6 +3917,10 @@ const translations = {
     en: "Pick Priority",
     tr: "Öncelik Seç"
   },
+  projectPriority_NONE: {
+    en: "No Priority",
+    tr: "Öncelik Yok"
+  },
   projectPriority_URGENT: {
     en: "Urgent",
     tr: "Acil"
@@ -4012,6 +4016,62 @@ const translations = {
   projectRowProjectLeadPick: {
     en: "Project Lead",
     tr: "Proje Lideri"
+  },
+  teamsPageArchivedTeamsTitle: {
+    en: "Archived",
+    tr: "Arşivlenmiş"
+  },
+  projectTitleChangeModalTitle: {
+    en: "Update Title",
+    tr: "Başlığı Güncelle"
+  },
+  projectTitleChangeModalInfoText: {
+    en: "Please provide an another title for project.",
+    tr: "Proje için yeni bir başlık girin."
+  },
+  projectDetailPageTaskDescription: {
+    en: "No description",
+    tr: "Açıklama girilmedi"
+  },
+  projectDescriptionEdit: {
+    en: "Edit",
+    tr: "Düzenle"
+  },
+  projectDescriptionSave: {
+    en: "Save",
+    tr: "Kaydet"
+  },
+  projectDescriptionSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor"
+  },
+  projectDescriptionCancel: {
+    en: "Cancel",
+    tr: "Vazgeç"
+  },
+  projectDetailSetStartDate: {
+    en: "Set Start Date",
+    tr: "Başlangıç Tarihi Ata"
+  },
+  projectDetailSetTargetDate: {
+    en: "Set Target Date",
+    tr: "Hedef Tarih Ata"
+  },
+  projectDetailStartDate: {
+    en: "Start Date",
+    tr: "Başlangıç Tarihi"
+  },
+  projectDetailTargetDate: {
+    en: "Target Date",
+    tr: "Hedef Tarih"
+  },
+  projectDetailLead: {
+    en: "Lead",
+    tr: "Lider"
+  },
+  projectDetailRelatedTeams: {
+    en: "Related Teams",
+    tr: "İlgili Ekipler"
   }
 };
 

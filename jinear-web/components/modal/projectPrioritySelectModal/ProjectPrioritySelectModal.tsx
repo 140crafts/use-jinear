@@ -1,5 +1,5 @@
 import React from "react";
-import styles from './ProjectPrioritySelectModal.module.css';
+import styles from "./ProjectPrioritySelectModal.module.css";
 import {
   closeProjectPrioritySelectModal,
   selectProjectPrioritySelectModalOnPick,
@@ -17,7 +17,7 @@ interface ProjectPrioritySelectModalProps {
 
 }
 
-const PRIORITIES: ProjectPriorityType[] = ["URGENT", "HIGH", "MEDIUM", "LOW"];
+const PRIORITIES: ProjectPriorityType[] = ["NONE", "URGENT", "HIGH", "MEDIUM", "LOW"];
 
 const ProjectPrioritySelectModal: React.FC<ProjectPrioritySelectModalProps> = ({}) => {
   const { t } = useTranslation();

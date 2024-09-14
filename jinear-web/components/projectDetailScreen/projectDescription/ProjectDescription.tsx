@@ -1,31 +1,29 @@
-import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
-import { useToggle } from "@/hooks/useToggle";
-import { RichTextDto } from "@/model/be/jinear-core";
-import { useUpdateTaskDescriptionMutation } from "@/store/api/taskUpdateApi";
-import Logger from "@/utils/logger";
-import { CircularProgress } from "@mui/material";
-import cn from "classnames";
-import useTranslation from "locales/useTranslation";
 import React, { useEffect, useRef, useState } from "react";
+import styles from "./ProjectDescription.module.scss";
+import cn from "classnames";
+import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { LuPencil } from "react-icons/lu";
-import styles from "./TaskDescription.module.css";
+import { CircularProgress } from "@mui/material";
+import { RichTextDto } from "@/be/jinear-core";
+import useTranslation from "@/locals/useTranslation";
+import { useToggle } from "@/hooks/useToggle";
+import { useUpdateProjectDescriptionMutation } from "@/api/projectOperationApi";
 
-interface TaskDescriptionProps {
-  taskId: string;
+interface ProjectDescriptionProps {
+  projectId: string;
   description?: RichTextDto | null;
+  isFetching?: boolean;
 }
 
-const logger = Logger("TaskDescription");
-
-const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }) => {
+const ProjectDescription: React.FC<ProjectDescriptionProps> = ({ projectId, description, isFetching }) => {
   const { t } = useTranslation();
   const [readOnly, toggleReadOnly] = useToggle(true);
   const [initialValue, setInitialValue] = useState(description?.value);
-  const [updateTaskDescription, {
+  const [updateProjectDescription, {
     isSuccess: isUpdateSuccess,
     isLoading: isUpdateLoading
-  }] = useUpdateTaskDescriptionMutation();
+  }] = useUpdateProjectDescriptionMutation();
   const tiptapRef = useRef<ITiptapRef>(null);
 
   useEffect(() => {
@@ -39,12 +37,12 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
     if (input) {
       const value = input?.value || "";
       const req = {
-        taskId,
+        projectId,
         body: {
           description: value
         }
       };
-      updateTaskDescription(req);
+      updateProjectDescription(req);
     }
   };
 
@@ -71,15 +69,16 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
         ref={tiptapRef}
         content={initialValue}
         editable={!readOnly}
-        placeholder={t("taskDetalPageTaskDescription")}
+        placeholder={t("projectDetailPageTaskDescription")}
         htmlInputId={`${description?.richTextId}`}
       />
       {readOnly && (
         <Button
+          disabled={isFetching}
           onClick={toggle}
           className={styles.editButton}
           variant={ButtonVariants.contrast}
-          data-tooltip-right={t("taskDescriptionEdit")}
+          data-tooltip-right={t("projectDescriptionEdit")}
         >
           <LuPencil />
         </Button>
@@ -89,25 +88,26 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
         {isUpdateLoading && (
           <div className={styles.loadingContainer}>
             <CircularProgress size={14} />
-            <div>{t("taskDescriptionSaving")}</div>
+            <div>{t("projectDescriptionSaving")}</div>
           </div>
         )}
 
         {!readOnly && (
           <Button
-            disabled={isUpdateLoading}
+            disabled={isUpdateLoading || isFetching}
             loading={isUpdateLoading}
             heightVariant={ButtonHeight.mid}
             variant={readOnly ? ButtonVariants.filled2 : ButtonVariants.contrast}
             onClick={toggle}
           >
-            {t("taskDescriptionSave")}
+            {t("projectDescriptionSave")}
           </Button>
         )}
         {!readOnly && (
-          <Button disabled={isUpdateLoading} heightVariant={ButtonHeight.mid} variant={ButtonVariants.filled2}
+          <Button disabled={isUpdateLoading || isFetching} heightVariant={ButtonHeight.mid}
+                  variant={ButtonVariants.filled2}
                   onClick={cancel}>
-            {t("taskDescriptionCancel")}
+            {t("projectDescriptionCancel")}
           </Button>
         )}
       </div>
@@ -115,4 +115,4 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
   );
 };
 
-export default TaskDescription;
+export default ProjectDescription;

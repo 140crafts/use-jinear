@@ -31,17 +31,33 @@ const TeamsPage: React.FC<ProjectsPageProps> = ({}) => {
   const renderItem = (item: TeamDto) => <WorkspaceTeamsListItem key={`ws-team-${item.teamId}`} team={item}
                                                                 workspace={workspace} />;
 
+  const activeTeams = teamsResponse?.data?.filter(t => t.teamState == "ACTIVE") || [];
+  const archivedTeams = teamsResponse?.data?.filter(t => t.teamState == "ARCHIVED") || [];
+
   return (
     <div className={styles.container}>
       <EndlessScrollList
         id={"teams-page-list"}
-        data={teamsResponse?.data || []}
+        data={activeTeams}
         isFetching={isTeamsFetching}
         renderItem={renderItem}
         emptyLabel={t("workspaceTeamListEmpty")}
         hasMore={false}
         listTitleComponent={<WorkspaceTeamsListTitle workspace={workspace} teamCount={teamsResponse?.data?.length} />}
       />
+      {!isTeamsFetching && archivedTeams?.length != 0 &&
+        <div className={styles.archivedTeamsContainer}>
+          <EndlessScrollList
+            id={"teams-page-list-archived"}
+            data={archivedTeams}
+            isFetching={isTeamsFetching}
+            renderItem={renderItem}
+            emptyLabel={t("teamsPageArchivedTeamsTitle")}
+            hasMore={false}
+            listTitle={"Archived"}
+          />
+        </div>
+      }
     </div>
   );
 };

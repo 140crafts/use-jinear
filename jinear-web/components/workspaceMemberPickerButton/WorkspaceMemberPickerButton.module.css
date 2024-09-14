@@ -6,6 +6,11 @@
     gap: 1ch;
 }
 
+.profilePic {
+    width: 18px !important;
+    height: 18px !important;
+}
+
 .icon {
     width: 12px;
     min-width: 12px;

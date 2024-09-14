@@ -11,9 +11,15 @@ interface ProjectPriorityPickerButtonProps {
   label?: string;
   onPick?: (pick?: ProjectPriorityType | null) => void;
   initialPick?: ProjectPriorityType;
+  withoutUnpickButton?: boolean;
 }
 
-const ProjectPriorityPickerButton: React.FC<ProjectPriorityPickerButtonProps> = ({ label, initialPick, onPick }) => {
+const ProjectPriorityPickerButton: React.FC<ProjectPriorityPickerButtonProps> = ({
+                                                                                   label,
+                                                                                   initialPick,
+                                                                                   onPick,
+                                                                                   withoutUnpickButton
+                                                                                 }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [currentPick, setCurrentPick] = useState<ProjectPriorityType | null>();
@@ -55,6 +61,7 @@ const ProjectPriorityPickerButton: React.FC<ProjectPriorityPickerButtonProps> = 
         }
         emptySelectionLabel={label ?? t("projectPriorityPickerButtonLabel")}
         onUnpickClick={deselect}
+        withoutUnpickButton={withoutUnpickButton}
       />
     </div>
   );

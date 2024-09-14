@@ -7,6 +7,7 @@ import { useAppDispatch } from "@/store/store";
 import { popWorkspaceMemberPickerModal } from "@/slice/modalSlice";
 import SelectDeselectButton from "@/components/selectDeselectButton/SelectDeselectButton";
 import { LuUser } from "react-icons/lu";
+import ProfilePhoto from "@/components/profilePhoto";
 
 interface WorkspaceMemberPickerButtonProps {
   workspaceId?: string;
@@ -15,6 +16,9 @@ interface WorkspaceMemberPickerButtonProps {
   onPick: (picked: WorkspaceMemberDto[]) => void;
   useJoinedNameOnMultiplePick?: boolean;
   label?: string;
+  selectionLabel?: string;
+  deselectableFromModal?: boolean;
+  onDeselect?: () => void;
 }
 
 const logger = Logger("WorkspaceMemberPickerButton");
@@ -25,7 +29,10 @@ const WorkspaceMemberPickerButton: React.FC<WorkspaceMemberPickerButtonProps> = 
                                                                                    multiple,
                                                                                    onPick,
                                                                                    useJoinedNameOnMultiplePick = false,
-                                                                                   label
+                                                                                   label,
+                                                                                   selectionLabel,
+                                                                                   deselectableFromModal,
+                                                                                   onDeselect
                                                                                  }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -53,7 +60,9 @@ const WorkspaceMemberPickerButton: React.FC<WorkspaceMemberPickerButtonProps> = 
       workspaceId,
       multiple,
       initialSelectionOnMultiple: currentPick,
-      onPick: onPickerPicked
+      onPick: onPickerPicked,
+      deselectable: deselectableFromModal,
+      onDeselect
     }));
   };
 
@@ -65,7 +74,14 @@ const WorkspaceMemberPickerButton: React.FC<WorkspaceMemberPickerButtonProps> = 
         onPickClick={popPicker}
         selectedComponent={
           <div className={styles.selectedContainer}>
-            <LuUser className={styles.icon} />
+            {selectionLabel && <span>{selectionLabel}</span>}
+            {currentPick?.length == 1 ?
+              <ProfilePhoto
+                boringAvatarKey={currentPick?.[0].account.accountId || ""}
+                storagePath={currentPick?.[0].account.profilePicture?.storagePath}
+                wrapperClassName={styles.profilePic}
+              /> :
+              <LuUser className={styles.icon} />}
             <span>
               {
                 currentPick?.length == 1 ?
@@ -79,6 +95,7 @@ const WorkspaceMemberPickerButton: React.FC<WorkspaceMemberPickerButtonProps> = 
         }
         emptySelectionLabel={label ?? t("workspaceMemberPickerButtonLabel")}
         onUnpickClick={deselect}
+        withoutUnpickButton={deselectableFromModal}
       />
     </div>
   );

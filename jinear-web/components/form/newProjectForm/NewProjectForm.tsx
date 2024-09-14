@@ -59,8 +59,10 @@ const NewProjectForm: React.FC<NewProjectFormProps> = ({
   const targetDate = watch("targetDate");
   const milestoneList = watch("milestones") as (IMilestoneInitializeDto[] | null);
   const descriptionRef = useRef<ITiptapRef>(null);
+
   const onTeamPick = (pickedList: TeamDto[]) => {
     logger.log({ onTeamPick: pickedList });
+    setValue("teamIds", pickedList?.map(t => t.teamId));
   };
 
   const onLeadPick = (selection: WorkspaceMemberDto[]) => {
@@ -152,10 +154,14 @@ const NewProjectForm: React.FC<NewProjectFormProps> = ({
 
             <ProjectPriorityPickerButton
               onPick={onPriorityPick}
+              initialPick={"NONE"}
+              withoutUnpickButton={true}
             />
 
             <ProjectStatePickerButton
               onPick={onStatePick}
+              initialPick={"BACKLOG"}
+              withoutUnpickButton={true}
             />
           </div>
         </div>

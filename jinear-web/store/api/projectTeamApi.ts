@@ -4,32 +4,22 @@ import { api } from "./api";
 export const projectTeamApi = api.injectEndpoints({
   endpoints: (build) => ({
     //
-    assignProjectToTeam: build.mutation<BaseResponse, ProjectTeamOperationRequest>({
+    updateAsProjectTeams: build.mutation<BaseResponse, ProjectTeamOperationRequest>({
       query: (body) => ({
-        url: "v1/project/team/assign",
-        method: "POST",
+        url: "v1/project/team/update-as",
+        method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}"]
-    }),
-    //
-    removeProjectFromTeam: build.mutation<BaseResponse, ProjectTeamOperationRequest>({
-      query: (body) => ({
-        url: "v1/project/team/remove",
-        method: "DELETE",
-        body: body
-      }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}"]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/{projectId}"]
     })
     //
   })
 });
 
 export const {
-  useAssignProjectToTeamMutation,
-  useRemoveProjectFromTeamMutation
+  useUpdateAsProjectTeamsMutation
 } = projectTeamApi;
 
 export const {
-  endpoints: { assignProjectToTeam, removeProjectFromTeam }
+  endpoints: { updateAsProjectTeams }
 } = projectTeamApi;
