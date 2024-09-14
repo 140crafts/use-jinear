@@ -76,14 +76,12 @@ public class ProjectOperationService {
     public void updateDates(String projectId, UpdateProjectDatesVo updateProjectDatesVo) {
         log.info("Update dates has started. projectId: {}, updateProjectDatesVo: {}", projectId, updateProjectDatesVo);
         Project project = projectRetrieveService.retrieveEntity(projectId);
-        Optional.of(updateProjectDatesVo)
-                .filter(vo -> Boolean.TRUE.equals(vo.getUpdateStartDate()))
-                .map(UpdateProjectDatesVo::getStartDate)
-                .ifPresent(project::setStartDate);
-        Optional.of(updateProjectDatesVo)
-                .filter(vo -> Boolean.TRUE.equals(vo.getUpdateTargetDate()))
-                .map(UpdateProjectDatesVo::getTargetDate)
-                .ifPresent(project::setTargetDate);
+        if (Boolean.TRUE.equals(updateProjectDatesVo.getUpdateStartDate())) {
+            project.setStartDate(updateProjectDatesVo.getStartDate());
+        }
+        if (Boolean.TRUE.equals(updateProjectDatesVo.getUpdateTargetDate())) {
+            project.setTargetDate(updateProjectDatesVo.getTargetDate());
+        }
         projectRepository.save(project);
     }
 

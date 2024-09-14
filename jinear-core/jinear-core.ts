@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-09-13 20:37:50.
+// Generated using typescript-generator version 3.0.1157 on 2024-09-14 12:41:16.
 
 export interface BaseDto {
     createdDate: Date;
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -159,9 +159,9 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
     gthreadId: string;
     ghistoryId: string;
+    ginternalDate: string;
     gid: string;
 }
 
@@ -528,6 +528,7 @@ export interface ProjectDto extends BaseDto {
     description: RichTextDto;
     projectTeams: ProjectTeamDto[];
     milestones: MilestoneDto[];
+    workspace: WorkspaceDto;
 }
 
 export interface ProjectTeamDto extends BaseDto {
@@ -1142,7 +1143,7 @@ export interface ProjectStateUpdateRequest extends BaseRequest {
 
 export interface ProjectTeamOperationRequest extends BaseRequest {
     projectId: string;
-    teamId: string;
+    teamIds: string[];
 }
 
 export interface ProjectTitleUpdateRequest extends BaseRequest {
@@ -1889,7 +1890,7 @@ export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_IN
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
 
-export type ProjectPriorityType = "URGENT" | "HIGH" | "MEDIUM" | "LOW";
+export type ProjectPriorityType = "NONE" | "URGENT" | "HIGH" | "MEDIUM" | "LOW";
 
 export type ProjectStateType = "BACKLOG" | "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
 

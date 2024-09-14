@@ -17,15 +17,9 @@ public class ProjectTeamController {
 
     private final ProjectTeamManager projectTeamManager;
 
-    @PostMapping("/assign")
+    @PutMapping("/update-as")
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse assign(@Valid @RequestBody ProjectTeamOperationRequest projectTeamOperationRequest) {
-        return projectTeamManager.assignToTeam(projectTeamOperationRequest.getProjectId(), projectTeamOperationRequest.getTeamId());
-    }
-
-    @DeleteMapping("/remove")
-    @ResponseStatus(HttpStatus.OK)
-    public BaseResponse remove(@Valid @RequestBody ProjectTeamOperationRequest projectTeamOperationRequest) {
-        return projectTeamManager.removeTeamFromProject(projectTeamOperationRequest.getProjectId(), projectTeamOperationRequest.getTeamId());
+    public BaseResponse updateAs(@Valid @RequestBody ProjectTeamOperationRequest projectTeamOperationRequest) {
+        return projectTeamManager.updateAs(projectTeamOperationRequest);
     }
 }

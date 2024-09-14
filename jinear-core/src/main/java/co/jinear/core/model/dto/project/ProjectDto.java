@@ -2,6 +2,7 @@ package co.jinear.core.model.dto.project;
 
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
+import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
 import co.jinear.core.model.enumtype.project.ProjectPriorityType;
 import co.jinear.core.model.enumtype.project.ProjectStateType;
@@ -28,4 +29,5 @@ public class ProjectDto extends BaseDto {
     private RichTextDto description;
     private Set<ProjectTeamDto> projectTeams;
     private Set<MilestoneDto> milestones;
+    private WorkspaceDto workspace;
 }

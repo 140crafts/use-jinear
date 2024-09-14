@@ -13,6 +13,8 @@ public interface ProjectTeamRepository extends JpaRepository<ProjectTeam, String
 
     Optional<ProjectTeam> findByProjectIdAndTeamIdAndPassiveIdIsNull(String projectId, String teamId);
 
+    boolean existsByProjectIdAndTeamIdAndPassiveIdIsNull(String projectId, String teamId);
+
 //    @Query("""
 //            select pt from ProjectTeam pt, Project p
 //            where
@@ -25,4 +27,8 @@ public interface ProjectTeamRepository extends JpaRepository<ProjectTeam, String
     Page<ProjectTeam> findAllByTeamIdIsInAndProject_PassiveIdIsNullAndPassiveIdIsNull(@Param("teamIds") List<String> teamIds, Pageable pageable);
 
     List<ProjectTeam> findAllByTeamIdIsInAndProject_PassiveIdIsNullAndPassiveIdIsNull(List<String> teamIds);
+
+    List<ProjectTeam> findAllByProjectIdAndTeamIdIsInAndPassiveIdIsNull(String projectId, List<String> teamIds);
+
+    List<ProjectTeam> findAllByProjectIdAndTeamIdIsNotInAndPassiveIdIsNull(String projectId, List<String> teamIds);
 }
