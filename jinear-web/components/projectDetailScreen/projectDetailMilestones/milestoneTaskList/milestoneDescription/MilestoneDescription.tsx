@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styles from "./ProjectDescription.module.scss";
+import styles from "./MilestoneDescription.module.scss";
 import cn from "classnames";
 import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
@@ -8,22 +8,22 @@ import { CircularProgress } from "@mui/material";
 import { RichTextDto } from "@/be/jinear-core";
 import useTranslation from "@/locals/useTranslation";
 import { useToggle } from "@/hooks/useToggle";
-import { useUpdateProjectDescriptionMutation } from "@/api/projectOperationApi";
+import { useUpdateMilestoneDescriptionMutation } from "@/api/projectMilestoneApi";
 
-interface ProjectDescriptionProps {
-  projectId: string;
+interface MilestoneDescriptionProps {
+  milestoneId: string;
   description?: RichTextDto | null;
   isFetching?: boolean;
 }
 
-const ProjectDescription: React.FC<ProjectDescriptionProps> = ({ projectId, description, isFetching }) => {
+const MilestoneDescription: React.FC<MilestoneDescriptionProps> = ({ milestoneId, description, isFetching }) => {
   const { t } = useTranslation();
   const [readOnly, toggleReadOnly] = useToggle(true);
   const [initialValue, setInitialValue] = useState(description?.value);
-  const [updateProjectDescription, {
+  const [updateMilestoneDescription, {
     isSuccess: isUpdateSuccess,
     isLoading: isUpdateLoading
-  }] = useUpdateProjectDescriptionMutation();
+  }] = useUpdateMilestoneDescriptionMutation();
   const tiptapRef = useRef<ITiptapRef>(null);
 
   useEffect(() => {
@@ -37,12 +37,12 @@ const ProjectDescription: React.FC<ProjectDescriptionProps> = ({ projectId, desc
     if (input) {
       const value = input?.value || "";
       const req = {
-        projectId,
+        milestoneId,
         body: {
           description: value
         }
       };
-      updateProjectDescription(req);
+      updateMilestoneDescription(req);
     }
   };
 
@@ -69,7 +69,7 @@ const ProjectDescription: React.FC<ProjectDescriptionProps> = ({ projectId, desc
         ref={tiptapRef}
         content={initialValue}
         editable={!readOnly}
-        placeholder={t("projectDetailPageTaskDescription")}
+        placeholder={t("projectDetailPageMilestoneDescription")}
         htmlInputId={`${description?.richTextId}`}
       />
       {readOnly && (
@@ -77,9 +77,9 @@ const ProjectDescription: React.FC<ProjectDescriptionProps> = ({ projectId, desc
           disabled={isFetching}
           onClick={toggle}
           className={styles.editButton}
-          variant={ButtonVariants.contrast}
           heightVariant={ButtonHeight.short}
-          data-tooltip-right={t("projectDescriptionEdit")}
+          variant={ButtonVariants.contrast}
+          data-tooltip-right={t("projectDetailPageMilestoneDescriptionEdit")}
         >
           <LuPencil />
         </Button>
@@ -89,7 +89,7 @@ const ProjectDescription: React.FC<ProjectDescriptionProps> = ({ projectId, desc
         {isUpdateLoading && (
           <div className={styles.loadingContainer}>
             <CircularProgress size={14} />
-            <div>{t("projectDescriptionSaving")}</div>
+            <div>{t("projectDetailPageDescriptionSaving")}</div>
           </div>
         )}
 
@@ -101,14 +101,14 @@ const ProjectDescription: React.FC<ProjectDescriptionProps> = ({ projectId, desc
             variant={readOnly ? ButtonVariants.filled2 : ButtonVariants.contrast}
             onClick={toggle}
           >
-            {t("projectDescriptionSave")}
+            {t("projectDetailPageMilestoneDescriptionSave")}
           </Button>
         )}
         {!readOnly && (
           <Button disabled={isUpdateLoading || isFetching} heightVariant={ButtonHeight.mid}
                   variant={ButtonVariants.filled2}
                   onClick={cancel}>
-            {t("projectDescriptionCancel")}
+            {t("projectDetailPageMilestoneDescriptionCancel")}
           </Button>
         )}
       </div>
@@ -116,4 +116,4 @@ const ProjectDescription: React.FC<ProjectDescriptionProps> = ({ projectId, desc
   );
 };
 
-export default ProjectDescription;
+export default MilestoneDescription;

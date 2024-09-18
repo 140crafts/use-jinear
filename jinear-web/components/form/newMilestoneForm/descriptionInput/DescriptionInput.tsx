@@ -3,10 +3,10 @@ import styles from "./DescriptionInput.module.css";
 import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
 import useTranslation from "@/locals/useTranslation";
 import { UseFormRegister } from "react-hook-form";
-import { ProjectInitializeRequest } from "@/be/jinear-core";
+import { InitializeMilestoneRequest } from "@/be/jinear-core";
 
 interface DescriptionInputProps {
-  register: UseFormRegister<ProjectInitializeRequest>;
+  register: UseFormRegister<InitializeMilestoneRequest>;
   tiptapRef?: RefObject<ITiptapRef> | null;
 }
 
@@ -15,17 +15,15 @@ const DescriptionInput: React.FC<DescriptionInputProps> = ({ tiptapRef, register
 
   return (
     <div className={styles.container}>
+      <label className={styles.label}>
+        {t("newMilestoneFormDescriptionPlaceholder")}
+      </label>
       <Tiptap
         ref={tiptapRef}
-        htmlInputId={"new-project-form-description"}
-        // htmlInputId={"description"}
+        htmlInputId={"new-milestone-form-description"}
         registerKey={"description"}
-        className={styles.input}
-        editorClassName={styles.input}
-        editorWrapperClassName={styles.editorWrapper}
-        placeholder={t("newProjectFormDescriptionPlaceholder")}
         editable={true}
-        hideActionBarWhenEmpty={true}
+        hideActionBarWhenEmpty={false}
         register={register}
       />
     </div>

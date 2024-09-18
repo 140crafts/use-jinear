@@ -3,7 +3,7 @@ import { ChecklistDto } from "@/model/be/jinear-core";
 import {
   usePassivizeChecklistMutation,
   useRetrieveChecklistQuery,
-  useUpdateChecklistLabelMutation,
+  useUpdateChecklistLabelMutation
 } from "@/store/api/taskChecklistApi";
 import { changeLoadingModalVisibility, closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
@@ -28,7 +28,7 @@ const TaskChecklist: React.FC<TaskChecklistProps> = ({ initialChecklist }) => {
   const {
     data: retrieveChecklistResponse,
     isLoading,
-    isFetching: isRetrieveChecklistFetching,
+    isFetching: isRetrieveChecklistFetching
   } = useRetrieveChecklistQuery({ checklistId: initialChecklist.checklistId });
 
   const [updateChecklistLabel, { isLoading: isUpdateLabelLoading }] = useUpdateChecklistLabelMutation();
@@ -59,7 +59,7 @@ const TaskChecklist: React.FC<TaskChecklistProps> = ({ initialChecklist }) => {
       const titleToSave = title == "" ? t("checklistNewChecklistTitle") : title;
       updateChecklistLabel({
         title: titleToSave,
-        checklistId: checklist.checklistId,
+        checklistId: checklist.checklistId
       });
       setTitle(titleToSave);
     }
@@ -72,6 +72,7 @@ const TaskChecklist: React.FC<TaskChecklistProps> = ({ initialChecklist }) => {
   };
 
   const deleteChecklist = () => {
+    dispatch(closeDialogModal());
     passivizeChecklist({ checklistId: checklist.checklistId });
   };
 
@@ -82,7 +83,7 @@ const TaskChecklist: React.FC<TaskChecklistProps> = ({ initialChecklist }) => {
         title: t("checklistDeleteAreYouSureTitle"),
         content: t("checklistDeleteAreYouSureText"),
         confirmButtonLabel: t("checklistDeleteAreYouSureConfirmText"),
-        onConfirm: deleteChecklist,
+        onConfirm: deleteChecklist
       })
     );
   };

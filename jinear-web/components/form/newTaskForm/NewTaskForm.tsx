@@ -19,6 +19,9 @@ import RelatedFeedItemButton from "./relatedFeedItemButton/RelatedFeedItemButton
 import TeamMemberPickerButton, { ITeamMemberPickerButtonRef } from "./teamMemberPickerButton/TeamMemberPickerButton";
 import TitleInput from "./titleInput/TitleInput";
 import TopicPickerButton, { ITopicPickerButtonRef } from "./topicPickerButton/TopicPickerButton";
+import ProjectAndMilestonePickerButton, {
+  IProjectAndMilestonePickerButtonRef
+} from "@/components/form/newTaskForm/projectAndMilestonePickerButton/ProjectAndMilestonePickerButton";
 
 interface NewTaskFormProps {
   workspace: WorkspaceDto;
@@ -73,6 +76,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
   const topicPickerButtonRef = useRef<ITopicPickerButtonRef>(null);
   const teamMemberPickerButtonRef = useRef<ITeamMemberPickerButtonRef>(null);
   const boardPickerButtonRef = useRef<IBoardPickerButtonRef>(null);
+  const projectPickerButtonRef = useRef<IProjectAndMilestonePickerButtonRef>(null);
 
   const [
     initializeTask,
@@ -105,8 +109,9 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
       topicPickerButtonRef?.current && topicPickerButtonRef?.current.reset?.();
       teamMemberPickerButtonRef?.current && teamMemberPickerButtonRef?.current.reset?.();
       boardPickerButtonRef?.current && boardPickerButtonRef?.current.reset?.();
+      projectPickerButtonRef?.current && projectPickerButtonRef?.current.reset?.();
     }
-  }, [selectedTeam]);
+  }, [selectedTeam, setValue]);
 
   useEffect(() => {
     if (isInitializeTaskSuccess && initializeTaskResponse) {
@@ -212,6 +217,15 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             teamId={selectedTeam.teamId}
             ref={teamMemberPickerButtonRef}
           />
+
+          <ProjectAndMilestonePickerButton
+            register={register}
+            setValue={setValue}
+            workspace={workspace}
+            team={selectedTeam}
+            ref={projectPickerButtonRef}
+          />
+
           <BoardPickerButton
             register={register}
             setValue={setValue}
@@ -219,6 +233,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             team={selectedTeam}
             ref={boardPickerButtonRef}
           />
+
           <DatePickerButton
             register={register}
             setValue={setValue}
@@ -241,6 +256,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             dateSpanEnd={dueDate ? new Date(dueDate) : undefined}
             disabledBefore={assignedDate ? new Date(assignedDate) : undefined}
           />
+
         </div>
 
         {/* <DescriptionInput labelClass={styles.label} inputClass={styles.textAreaInput} register={register} setValue={setValue} /> */}

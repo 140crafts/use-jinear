@@ -1,6 +1,8 @@
 import {
   CalendarEventDto,
   IntegrationProvider,
+  MilestoneDto,
+  ProjectDto,
   ProjectPriorityType,
   ProjectStateType,
   TaskBoardDto,
@@ -207,7 +209,7 @@ export interface WorkspaceMemberPickerModalState extends ModalState {
   initialSelectionOnMultiple?: WorkspaceMemberDto[];
   onPick?: (pickedList: WorkspaceMemberDto[]) => void;
   deselectable?: boolean;
-  onDeselect?:()=>void;
+  onDeselect?: () => void;
 }
 
 export interface NewCalendarIntegrationModalState extends ModalState {
@@ -265,4 +267,16 @@ export interface ProjectPrioritySelectModalState extends ModalState {
 
 export interface ProjectStateSelectModalState extends ModalState {
   onPick?: (picked: ProjectStateType) => void;
+}
+
+export interface ProjectAndMilestonePickerModalState extends ModalState {
+  workspaceId?: string,
+  initialProject?: ProjectDto | null,
+  initialMilestone?: MilestoneDto | null,
+  onPick?: ({ project, milestone }: { project: ProjectDto, milestone: MilestoneDto }) => void;
+  onUnpick?: (projectUnpicked: boolean, milestoneUnpicked: boolean) => void
+}
+
+export interface NewMilestoneModalState extends ModalState {
+  project?: ProjectDto,
 }
