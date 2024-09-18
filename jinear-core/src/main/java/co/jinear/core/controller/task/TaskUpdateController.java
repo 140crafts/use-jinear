@@ -44,17 +44,10 @@ public class TaskUpdateController {
         return taskUpdateManager.updateTaskAssignee(taskId, taskAssigneeUpdateRequest);
     }
 
-    @PutMapping("/{taskId}/project")
+    @PutMapping("/{taskId}/project-milestone")
     @ResponseStatus(HttpStatus.OK)
-    public TaskResponse updateTaskProject(@PathVariable("taskId") String taskId,
-                                          @Valid @RequestBody TaskProjectUpdateRequest taskAssigneeUpdateRequest) {
-        return taskUpdateManager.updateTaskProject(taskId, taskAssigneeUpdateRequest);
-    }
-
-    @PutMapping("/{taskId}/milestone")
-    @ResponseStatus(HttpStatus.OK)
-    public TaskResponse updateTaskMilestone(@PathVariable("taskId") String taskId,
-                                          @Valid @RequestBody TaskMilestoneUpdateRequest taskMilestoneUpdateRequest) {
-        return taskUpdateManager.updateTaskMilestone(taskId, taskMilestoneUpdateRequest);
+    public TaskResponse updateTaskProjectAndMilestone(@PathVariable("taskId") String taskId,
+                                                      @Valid @RequestBody TaskProjectAndMilestoneUpdateRequest taskProjectAndMilestoneUpdateRequest) {
+        return taskUpdateManager.updateTaskProjectAndMilestone(taskId, taskProjectAndMilestoneUpdateRequest);
     }
 }

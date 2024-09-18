@@ -34,4 +34,11 @@ public class TaskListingService {
         log.info("Check any active task exists with given team ids and project has completed. teamId: {}, projectId: {}, exist: {}", NormalizeHelper.listToString(teamIds), projectId, exist);
         return exist;
     }
+
+    public boolean milestoneHasAnyTask(String milestoneId) {
+        log.info("Milestone has any task has started. milestoneId: {}", milestoneId);
+        boolean exists = taskRepository.existsByMilestoneIdAndPassiveIdIsNull(milestoneId);
+        log.info("Milestone has any task has completed. milestoneId: {}, exists: {}", milestoneId, exists);
+        return exists;
+    }
 }

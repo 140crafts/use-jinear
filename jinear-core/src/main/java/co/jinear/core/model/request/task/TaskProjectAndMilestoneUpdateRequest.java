@@ -8,7 +8,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @Getter
 @Setter
 @ToString
-public class TaskProjectUpdateRequest {
+public class TaskProjectAndMilestoneUpdateRequest {
     @Nullable
     private String projectId;
+    @Nullable
+    private String milestoneId;
 }
