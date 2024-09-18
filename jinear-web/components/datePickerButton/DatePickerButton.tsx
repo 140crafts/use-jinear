@@ -25,13 +25,16 @@ interface DatePickerButtonProps {
   disabledAfter?: Date | null;
   onDateChange?: (date?: Date | null) => void;
   icon?: IconType;
+  omitIcon?: boolean;
   label?: string;
+  selectedLabel?: string;
   emptySelectionComponent?: React.ReactNode;
   unpickableFromModal?: boolean;
   dataTooltipRight?: string;
   pickedDateFormat?: string;
   buttonVariant?: string;
-  loading?:boolean
+  loading?: boolean;
+  disabled?: boolean;
 }
 
 const DatePickerButton = ({
@@ -43,13 +46,16 @@ const DatePickerButton = ({
                             disabledAfter,
                             onDateChange,
                             icon,
+                            omitIcon = false,
                             label,
+                            selectedLabel,
                             emptySelectionComponent,
                             unpickableFromModal = false,
                             dataTooltipRight,
                             pickedDateFormat,
                             buttonVariant = ButtonVariants.filled,
-                            loading
+                            loading,
+                            disabled
                           }: DatePickerButtonProps, ref: any) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -100,9 +106,11 @@ const DatePickerButton = ({
         hasSelection={currentPick != null}
         onPickClick={popPicker}
         loading={loading}
+        disabled={disabled}
         selectedComponent={
           <div className={styles.selectedContainer}>
-            <ButtonIcon className={styles.icon} />
+            {selectedLabel && <span>{selectedLabel}</span>}
+            {!omitIcon && <ButtonIcon className={styles.icon} />}
             <span>
               {currentPick ? format(currentPick, pickedDateFormat ?? t("dateFormat")) : ""}
           </span>

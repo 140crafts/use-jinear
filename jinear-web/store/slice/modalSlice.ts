@@ -40,7 +40,9 @@ import ModalState, {
   UpgradeWorkspacePlanModalState,
   WorkspaceMemberInviteModalState,
   WorkspaceMemberPickerModalState,
-  WorkspacePickerModalState
+  WorkspacePickerModalState,
+  ProjectAndMilestonePickerModalState,
+  NewMilestoneModalState
 } from "model/app/store/modal/modalState";
 import { accountApi } from "@/api/accountApi";
 import { RootState } from "../store";
@@ -203,6 +205,12 @@ const initialState = {
   },
   projectStateSelectModal: {
     visible: false
+  },
+  projectAndMilestonePickerModal: {
+    visible: false
+  },
+  newMilestoneModal: {
+    visible: false
   }
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
@@ -255,6 +263,8 @@ const initialState = {
   teamPickerModalV2: null | TeamPickerModalV2State;
   projectPrioritySelectModal: null | ProjectPrioritySelectModalState;
   projectStateSelectModal: null | ProjectStateSelectModalState;
+  projectAndMilestonePickerModal: null | ProjectAndMilestonePickerModalState;
+  newMilestoneModal: null | NewMilestoneModalState
 };
 
 const slice = createSlice({
@@ -616,6 +626,20 @@ const slice = createSlice({
       state.projectStateSelectModal = initialState.projectStateSelectModal;
     },
 
+    popProjectAndMilestonePickerModal: (state, action: PayloadAction<ProjectAndMilestonePickerModalState>) => {
+      state.projectAndMilestonePickerModal = { ...action.payload, visible: true };
+    },
+    closeProjectAndMilestonePickerModal: (state, action: PayloadAction<void>) => {
+      state.projectAndMilestonePickerModal = initialState.projectAndMilestonePickerModal;
+    },
+
+    popNewMilestoneModal: (state, action: PayloadAction<NewMilestoneModalState>) => {
+      state.newMilestoneModal = { ...action.payload, visible: true };
+    },
+    closeNewMilestoneModal: (state, action: PayloadAction<void>) => {
+      state.newMilestoneModal = initialState.newMilestoneModal;
+    },
+
     resetModals: () => initialState
   },
   extraReducers: (builder) => {
@@ -732,6 +756,10 @@ export const {
   closeProjectPrioritySelectModal,
   popProjectStateSelectModal,
   closeProjectStateSelectModal,
+  popProjectAndMilestonePickerModal,
+  closeProjectAndMilestonePickerModal,
+  popNewMilestoneModal,
+  closeNewMilestoneModal,
   resetModals
 } = slice.actions;
 export default slice.reducer;
@@ -991,3 +1019,13 @@ export const selectProjectPrioritySelectModalOnPick = (state: RootState) => stat
 
 export const selectProjectStateSelectModalVisible = (state: RootState) => state.modal.projectStateSelectModal?.visible;
 export const selectProjectStateSelectModalOnPick = (state: RootState) => state.modal.projectStateSelectModal?.onPick;
+
+export const selectProjectAndMilestonePickerModalVisible = (state: RootState) => state.modal.projectAndMilestonePickerModal?.visible;
+export const selectProjectAndMilestonePickerModalWorkspaceId = (state: RootState) => state.modal.projectAndMilestonePickerModal?.workspaceId;
+export const selectProjectAndMilestonePickerModalInitialProject = (state: RootState) => state.modal.projectAndMilestonePickerModal?.initialProject;
+export const selectProjectAndMilestonePickerModalInitialMilestone = (state: RootState) => state.modal.projectAndMilestonePickerModal?.initialMilestone;
+export const selectProjectAndMilestonePickerModalOnPick = (state: RootState) => state.modal.projectAndMilestonePickerModal?.onPick;
+export const selectProjectAndMilestonePickerModalOnUnpick = (state: RootState) => state.modal.projectAndMilestonePickerModal?.onUnpick;
+
+export const selectNewMilestoneModalVisible = (state: RootState) => state.modal.newMilestoneModal?.visible;
+export const selectNewMilestoneModalProject = (state: RootState) => state.modal.newMilestoneModal?.project;

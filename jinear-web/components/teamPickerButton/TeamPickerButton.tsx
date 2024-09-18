@@ -16,6 +16,8 @@ interface TeamPickerButtonProps {
   onPick: (picked: TeamDto[]) => void;
   useJoinedNameOnMultiplePick?: boolean;
   label?: string;
+  withoutUnpickButton?: boolean;
+  selectedLabel?: string;
 }
 
 const logger = Logger("TeamPickerButton");
@@ -26,12 +28,14 @@ const TeamPickerButton: React.FC<TeamPickerButtonProps> = ({
                                                              multiple,
                                                              onPick,
                                                              useJoinedNameOnMultiplePick,
-                                                             label
+                                                             label,
+                                                             withoutUnpickButton = false,
+                                                             selectedLabel
                                                            }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [currentPick, setCurrentPick] = useState<TeamDto[]>([]);
-  const joinedName = currentPick?.map(el => el.name).join(", ");
+  const joinedName = currentPick?.map(el => el.tag).join(", ");
 
   useEffect(() => {
     setCurrentPick(initialSelectedTeams);
@@ -74,6 +78,7 @@ const TeamPickerButton: React.FC<TeamPickerButtonProps> = ({
         onPickClick={popPicker}
         selectedComponent={
           <div className={styles.selectedContainer}>
+            {selectedLabel && <span>{selectedLabel}</span>}
             <LuUsers className={styles.icon} />
             <span>
               {
@@ -89,6 +94,7 @@ const TeamPickerButton: React.FC<TeamPickerButtonProps> = ({
         emptySelectionLabel={label ?? t("teamPickerButtonLabel")}
         onUnpickClick={deselect}
         disabled={isLoading || isFetching}
+        withoutUnpickButton={withoutUnpickButton}
       />
     </div>
   );

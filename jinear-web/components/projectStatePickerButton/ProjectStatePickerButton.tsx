@@ -11,9 +11,15 @@ interface ProjectStatePickerButtonProps {
   label?: string;
   onPick?: (pick?: ProjectStateType | null) => void;
   initialPick?: ProjectStateType;
+  withoutUnpickButton?: boolean;
 }
 
-const ProjectStatePickerButton: React.FC<ProjectStatePickerButtonProps> = ({ label, initialPick, onPick }) => {
+const ProjectStatePickerButton: React.FC<ProjectStatePickerButtonProps> = ({
+                                                                             label,
+                                                                             initialPick,
+                                                                             onPick,
+                                                                             withoutUnpickButton
+                                                                           }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [currentPick, setCurrentPick] = useState<ProjectStateType | null>();
@@ -55,6 +61,7 @@ const ProjectStatePickerButton: React.FC<ProjectStatePickerButtonProps> = ({ lab
         }
         emptySelectionLabel={label ?? t("projectStatePickerButtonLabel")}
         onUnpickClick={deselect}
+        withoutUnpickButton={withoutUnpickButton}
       />
     </div>
   );

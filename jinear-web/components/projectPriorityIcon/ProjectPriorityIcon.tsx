@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ProjectPriorityIcon.module.css";
-import { LuSignal, LuSignalHigh, LuSignalLow, LuSignalMedium } from "react-icons/lu";
+import { LuAlertTriangle, LuBoxSelect, LuSignal, LuSignalHigh, LuSignalLow, LuSignalMedium } from "react-icons/lu";
 import { ProjectPriorityType } from "@/be/jinear-core";
 import cn from "classnames";
 
@@ -12,7 +12,8 @@ interface ProjectPriorityIconProps {
 }
 
 const ICON_MAP = {
-  URGENT: LuSignal,
+  NONE: LuBoxSelect,
+  URGENT: LuAlertTriangle,
   HIGH: LuSignalHigh,
   MEDIUM: LuSignalMedium,
   LOW: LuSignalLow

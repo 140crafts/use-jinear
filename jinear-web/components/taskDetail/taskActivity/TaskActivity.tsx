@@ -21,6 +21,7 @@ import WorkflowStatusDiffInfo from "./workflowStatusDiffInfo/WorkflowStatusDiffI
 interface TaskActivityProps {
   activity: WorkspaceActivityDto;
 }
+
 const TASK_RELATED_ACTIONS_WITH_DIFF = [
   "TASK_CLOSED",
   "EDIT_TASK_TITLE",
@@ -42,6 +43,8 @@ const TASK_RELATED_ACTIONS_WITH_DIFF = [
   "TASK_BOARD_ENTRY_INIT",
   "TASK_BOARD_ENTRY_REMOVED",
   "TASK_BOARD_ENTRY_ORDER_CHANGE",
+  "TASK_PROJECT_ASSIGNMENT_UPDATE",
+  "TASK_MILESTONE_ASSIGNMENT_UPDATE"
 ];
 
 const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
@@ -171,17 +174,25 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
             )}
             {["TASK_BOARD_ENTRY_INIT", "TASK_BOARD_ENTRY_REMOVED", "TASK_BOARD_ENTRY_ORDER_CHANGE"].indexOf(activity.type) !=
               -1 && (
-              <Button
-                heightVariant={ButtonHeight.short}
-                variant={ButtonVariants.filled}
-                href={
-                  activity.workspaceDto && activity.teamDto
-                    ? `/${activity.workspaceDto?.username}/${activity.teamDto?.username}/task-boards/${activity.taskBoard?.taskBoardId}`
-                    : undefined
-                }
-              >
-                {activity.taskBoard?.title}
-              </Button>
+                <Button
+                  heightVariant={ButtonHeight.short}
+                  variant={ButtonVariants.filled}
+                  href={
+                    activity.workspaceDto && activity.teamDto
+                      ? `/${activity.workspaceDto?.username}/${activity.teamDto?.username}/task-boards/${activity.taskBoard?.taskBoardId}`
+                      : undefined
+                  }
+                >
+                  {activity.taskBoard?.title}
+                </Button>
+              )}
+            {activity.type == "TASK_PROJECT_ASSIGNMENT_UPDATE" && (
+              <BasicTextDiff oldState={activity.oldProject?.title || "-"}
+                             newState={activity.newProject?.title || "-"} />
+            )}
+            {activity.type == "TASK_MILESTONE_ASSIGNMENT_UPDATE" && (
+              <BasicTextDiff oldState={activity.oldMilestoneDto?.title || "-"}
+                             newState={activity.newMilestoneDto?.title || "-"} />
             )}
           </>
         )}

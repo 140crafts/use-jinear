@@ -54,6 +54,9 @@ import NewProjectModal from "@/components/modal/newProjectModal/NewProjectModal"
 import TeamPickerModalV2 from "@/components/modal/teamPickerModalV2/TeamPickerModalV2";
 import ProjectPrioritySelectModal from "@/components/modal/projectPrioritySelectModal/ProjectPrioritySelectModal";
 import ProjectStateSelectModal from "@/components/modal/projectStateSelectModal/ProjectStateSelectModal";
+import ProjectAndMilestonePickerModal
+  from "@/components/modal/projectAndMilestonePickerModal/ProjectAndMilestonePickerModal";
+import NewMilestoneModal from "@/components/modal/newMilestoneModal/NewMilestoneModal";
 
 interface ModalProviderProps {
 }
@@ -94,6 +97,8 @@ const globalModals: any = (
     <NewTaskModal />
     <NewCalendarIntegrationModal />
     <NewTaskBoardModal />
+    <ProjectAndMilestonePickerModal />
+    <NewMilestoneModal />
     <TeamPickerModal />
     <TeamPickerModalV2 />
     <WorkspacePickerModal />

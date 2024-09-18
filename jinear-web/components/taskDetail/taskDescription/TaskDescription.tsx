@@ -22,7 +22,10 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
   const { t } = useTranslation();
   const [readOnly, toggleReadOnly] = useToggle(true);
   const [initialValue, setInitialValue] = useState(description?.value);
-  const [updateTaskDescription, { isSuccess: isUpdateSuccess, isLoading: isUpdateLoading }] = useUpdateTaskDescriptionMutation();
+  const [updateTaskDescription, {
+    isSuccess: isUpdateSuccess,
+    isLoading: isUpdateLoading
+  }] = useUpdateTaskDescriptionMutation();
   const tiptapRef = useRef<ITiptapRef>(null);
 
   useEffect(() => {
@@ -38,8 +41,8 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
       const req = {
         taskId,
         body: {
-          description: value,
-        },
+          description: value
+        }
       };
       updateTaskDescription(req);
     }
@@ -75,7 +78,7 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
         <Button
           onClick={toggle}
           className={styles.editButton}
-          variant={ButtonVariants.filled2}
+          variant={ButtonVariants.contrast}
           data-tooltip-right={t("taskDescriptionEdit")}
         >
           <LuPencil />
@@ -102,7 +105,8 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({ taskId, description }
           </Button>
         )}
         {!readOnly && (
-          <Button disabled={isUpdateLoading} heightVariant={ButtonHeight.mid} variant={ButtonVariants.filled2} onClick={cancel}>
+          <Button disabled={isUpdateLoading} heightVariant={ButtonHeight.mid} variant={ButtonVariants.filled2}
+                  onClick={cancel}>
             {t("taskDescriptionCancel")}
           </Button>
         )}

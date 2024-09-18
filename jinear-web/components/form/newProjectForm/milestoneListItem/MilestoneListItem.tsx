@@ -85,7 +85,7 @@ const MilestoneListItem: React.FC<MilestoneListItemProps> = ({
           value={input}
           onChange={onTitleChange}
           onKeyDown={isEnter}
-          placeholder={t("newProjectTitlePlaceholder")}
+          placeholder={t("newMilestoneTitlePlaceholder")}
         />
         : <span className={"flex-1"}>{title}</span>
       }

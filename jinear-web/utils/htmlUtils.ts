@@ -66,16 +66,34 @@ export const decideAndScrollToBottom = ({
                                             timeout?: number;
                                             callBack?: () => void
                                           }
-  ) => {
-    const currentScrollY = window.scrollY;
-    const bottom = document.documentElement.scrollHeight - window.innerHeight;
-    logger.log({ initialShouldScroll, isAboveLimit: (currentScrollY >= (bottom * limitRatio)) });
-    const shouldScroll = (currentScrollY >= (bottom * limitRatio)) || initialShouldScroll;
-    if (shouldScroll) {
-      setTimeout(() => {
-        scrollToBottom();
-        callBack?.();
-      }, timeout);
-    }
+) => {
+  const currentScrollY = window.scrollY;
+  const bottom = document.documentElement.scrollHeight - window.innerHeight;
+  logger.log({ initialShouldScroll, isAboveLimit: (currentScrollY >= (bottom * limitRatio)) });
+  const shouldScroll = (currentScrollY >= (bottom * limitRatio)) || initialShouldScroll;
+  if (shouldScroll) {
+    setTimeout(() => {
+      scrollToBottom();
+      callBack?.();
+    }, timeout);
   }
-;
+};
+
+export const isFullyVisible = ({ elem, tolerance = 0.5 }: { elem: HTMLElement, tolerance?: number }) => {
+  const rect = elem.getBoundingClientRect();
+  const windowHeight = (window.innerHeight || document.documentElement.clientHeight);
+  const windowWidth = (window.innerWidth || document.documentElement.clientWidth);
+
+  // Check with tolerance for being within the viewport
+  const inViewVertically = rect.top <= windowHeight + tolerance && rect.bottom >= -tolerance;
+  const inViewHorizontally = rect.left <= windowWidth + tolerance && rect.right >= -tolerance;
+  const inViewport = inViewVertically && inViewHorizontally;
+
+  // Check for CSS visibility, 'hidden' attribute, and dimensions
+  const style = getComputedStyle(elem);
+  const notHiddenByCSS = style.display !== "none" && style.visibility !== "hidden" && parseFloat(style.opacity) > 0;
+  const notHiddenAttribute = !elem.hidden;
+  const hasDimensions = elem.offsetWidth > 0 || elem.offsetHeight > 0 || elem.getClientRects().length > 0;
+
+  return inViewport && notHiddenByCSS && notHiddenAttribute && hasDimensions;
+};

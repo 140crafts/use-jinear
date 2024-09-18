@@ -1,9 +1,10 @@
 import {
   TaskAssigneeUpdateRequest,
   TaskDateUpdateRequest,
+  TaskProjectAndMilestoneUpdateRequest,
   TaskResponse,
   TaskUpdateDescriptionRequest,
-  TaskUpdateTitleRequest,
+  TaskUpdateTitleRequest
 } from "@/model/be/jinear-core";
 import { api } from "./api";
 import { calendarEventApi } from "./calendarEventApi";
@@ -15,37 +16,37 @@ export const taskUpdateApi = api.injectEndpoints({
       query: (req: { taskId: string; body: TaskUpdateDescriptionRequest }) => ({
         url: `v1/task/update/${req.taskId}/description`,
         method: "PUT",
-        body: req.body,
+        body: req.body
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "v1/task/from-workspace/{workspaceName}/{taskTag}" },
         { type: "v1/workspace/activity/filter" },
         { type: "v1/task/list/filter" },
         { type: "v1/calendar/event/filter" },
-        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" },
-      ],
+        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" }
+      ]
     }),
     //
     updateTaskTitle: build.mutation<TaskResponse, { taskId: string; body: TaskUpdateTitleRequest }>({
       query: (req: { taskId: string; body: TaskUpdateTitleRequest }) => ({
         url: `v1/task/update/${req.taskId}/title`,
         method: "PUT",
-        body: req.body,
+        body: req.body
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "v1/task/from-workspace/{workspaceName}/{taskTag}" },
         { type: "v1/workspace/activity/filter" },
         { type: "v1/task/list/filter" },
         { type: "v1/calendar/event/filter" },
-        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" },
-      ],
+        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" }
+      ]
     }),
     //
     updateTaskDates: build.mutation<TaskResponse, { taskId: string; body: TaskDateUpdateRequest }>({
       query: (req: { taskId: string; body: TaskDateUpdateRequest }) => ({
         url: `v1/task/update/${req.taskId}/dates`,
         method: "PUT",
-        body: req.body,
+        body: req.body
       }),
       onQueryStarted(req, { dispatch, queryFulfilled, getState }) {
         //cgds-448 migh need later
@@ -96,8 +97,8 @@ export const taskUpdateApi = api.injectEndpoints({
         { type: "v1/task/reminder/job/{taskReminderId}/next" },
         { type: "v1/task/list/filter" },
         { type: "v1/calendar/event/filter" },
-        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" },
-      ],
+        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" }
+      ]
     }),
     //
     //
@@ -105,18 +106,33 @@ export const taskUpdateApi = api.injectEndpoints({
       query: (req: { taskId: string; body: TaskAssigneeUpdateRequest }) => ({
         url: `v1/task/update/${req.taskId}/assignee`,
         method: "PUT",
-        body: req.body,
+        body: req.body
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "v1/task/from-workspace/{workspaceName}/{taskTag}" },
         { type: "v1/workspace/activity/filter" },
         { type: "v1/task/list/filter" },
         { type: "v1/calendar/event/filter" },
-        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" },
-      ],
+        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" }
+      ]
     }),
     //
-  }),
+    updateTaskProjectAnMilestone: build.mutation<TaskResponse, { taskId: string; body: TaskProjectAndMilestoneUpdateRequest }>({
+      query: (req: { taskId: string; body: TaskProjectAndMilestoneUpdateRequest }) => ({
+        url: `v1/task/update/${req.taskId}/project-milestone`,
+        method: "PUT",
+        body: req.body
+      }),
+      invalidatesTags: (_result, _err, req) => [
+        { type: "v1/task/from-workspace/{workspaceName}/{taskTag}" },
+        { type: "v1/workspace/activity/filter" },
+        { type: "v1/task/list/filter" },
+        { type: "v1/calendar/event/filter" },
+        { type: "v1/task-analytics/{workspaceId}/team/{teamId}" }
+      ]
+    }),
+    //
+  })
 });
 
 export const {
@@ -124,8 +140,15 @@ export const {
   useUpdateTaskTitleMutation,
   useUpdateTaskDatesMutation,
   useUpdateTaskAssigneeMutation,
+  useUpdateTaskProjectAnMilestoneMutation
 } = taskUpdateApi;
 
 export const {
-  endpoints: { updateTaskDescription, updateTaskTitle, updateTaskDates, updateTaskAssignee },
+  endpoints: {
+    updateTaskDescription,
+    updateTaskTitle,
+    updateTaskDates,
+    updateTaskAssignee,
+    updateTaskProjectAnMilestone
+  }
 } = taskUpdateApi;

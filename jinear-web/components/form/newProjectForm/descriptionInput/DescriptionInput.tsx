@@ -28,7 +28,6 @@ const DescriptionInput: React.FC<DescriptionInputProps> = ({ tiptapRef, register
         hideActionBarWhenEmpty={true}
         register={register}
       />
-
     </div>
   );
 };

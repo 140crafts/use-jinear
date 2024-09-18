@@ -6,7 +6,7 @@ import { CircularProgress } from "@mui/material";
 import useTranslation from "locales/useTranslation";
 import React, { useEffect, useState } from "react";
 import { LuPencil } from "react-icons/lu";
-import styles from "./TaskTitle.module.css";
+import styles from "./TaskTitle.module.scss";
 
 interface TaskTitleProps {
   taskId: string;
@@ -28,7 +28,7 @@ const TaskTitle: React.FC<TaskTitleProps> = ({ taskId, title }) => {
     dispatch(closeBasicTextInputModal());
     const req = {
       taskId,
-      body: { title },
+      body: { title }
     };
     updateTaskTitle(req);
     setTaskTitle(title);
@@ -41,7 +41,7 @@ const TaskTitle: React.FC<TaskTitleProps> = ({ taskId, title }) => {
         title: t("taskTitleChangeModalTitle"),
         infoText: t("taskTitleChangeModalInfoText"),
         initialText: title,
-        onSubmit: changeTitle,
+        onSubmit: changeTitle
       })
     );
   };
@@ -51,13 +51,16 @@ const TaskTitle: React.FC<TaskTitleProps> = ({ taskId, title }) => {
       <h1>
         <b>{taskTitle}</b>
       </h1>
-      {isUpdateTaskTitleLoading && <CircularProgress size={16} />}
-      {isUpdateTaskTitleLoading && <span>{t("taskDescriptionSaving")}</span>}
+      {isUpdateTaskTitleLoading &&
+        <span className={styles.savingLabel}>
+          <CircularProgress size={12} className={styles.loading} />
+          {t("taskDescriptionSaving")}
+      </span>}
       {!isUpdateTaskTitleLoading && (
         <Button
           disabled={isUpdateTaskTitleLoading}
           heightVariant={ButtonHeight.short}
-          variant={ButtonVariants.filled}
+          variant={ButtonVariants.contrast}
           className={styles.editTitleButton}
           onClick={popTitleChangeModal}
         >

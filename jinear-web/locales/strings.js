@@ -1,6 +1,5 @@
 import enUsLocale from "date-fns/locale/en-US";
 import trTrLocale from "date-fns/locale/tr";
-import MilestoneListItem from "@/components/form/newProjectForm/milestoneListItem/MilestoneListItem";
 
 const translations = {
   hi: {
@@ -2112,6 +2111,10 @@ const translations = {
     en: "Add to Board",
     tr: "Panoya Ekle"
   },
+  newTaskFormPickProjectAndMilestoneButtonLabel: {
+    en: "Project",
+    tr: "Proje"
+  },
   teamMemberPickerModalTitle: {
     en: "Team Members",
     tr: "Ekip Üyeleri"
@@ -3865,6 +3868,10 @@ const translations = {
     en: "Project title",
     tr: "Proje başlığı"
   },
+  newMilestoneTitlePlaceholder: {
+    en: "Milestone title",
+    tr: "Hedef noktası başlığı"
+  },
   teamPickerButtonLabel: {
     en: "Select Team",
     tr: "Takım Seç"
@@ -3916,6 +3923,10 @@ const translations = {
   projectPrioritySelectModalTitle: {
     en: "Pick Priority",
     tr: "Öncelik Seç"
+  },
+  projectPriority_NONE: {
+    en: "No Priority",
+    tr: "Öncelik Yok"
   },
   projectPriority_URGENT: {
     en: "Urgent",
@@ -4012,6 +4023,198 @@ const translations = {
   projectRowProjectLeadPick: {
     en: "Project Lead",
     tr: "Proje Lideri"
+  },
+  teamsPageArchivedTeamsTitle: {
+    en: "Archived",
+    tr: "Arşivlenmiş"
+  },
+  projectTitleChangeModalTitle: {
+    en: "Update Title",
+    tr: "Başlığı Güncelle"
+  },
+  projectTitleChangeModalInfoText: {
+    en: "Please provide an another title for project.",
+    tr: "Proje için yeni bir başlık girin."
+  },
+  projectDetailPageTaskDescription: {
+    en: "No description",
+    tr: "Açıklama girilmedi"
+  },
+  projectDescriptionEdit: {
+    en: "Edit",
+    tr: "Düzenle"
+  },
+  projectDescriptionSave: {
+    en: "Save",
+    tr: "Kaydet"
+  },
+  projectDescriptionSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor"
+  },
+  projectDescriptionCancel: {
+    en: "Cancel",
+    tr: "Vazgeç"
+  },
+  projectDetailSetStartDate: {
+    en: "Set Start Date",
+    tr: "Başlangıç Tarihi Ata"
+  },
+  projectDetailSetTargetDate: {
+    en: "Set Target Date",
+    tr: "Hedef Tarih Ata"
+  },
+  projectDetailStartDate: {
+    en: "Start Date",
+    tr: "Başlangıç Tarihi"
+  },
+  projectDetailTargetDate: {
+    en: "Target Date",
+    tr: "Hedef Tarih"
+  },
+  projectDetailLead: {
+    en: "Lead",
+    tr: "Lider"
+  },
+  projectDetailRelatedTeams: {
+    en: "Related Teams",
+    tr: "İlgili Ekipler"
+  },
+  projectDetailMilestones: {
+    en: "Milestones",
+    tr: "Hedef Noktaları"
+  },
+  projectDetailMilestonesNewMilestone: {
+    en: "New Milestone",
+    tr: "Yeni Hedef Noktası"
+  },
+  projectAndMilestonePickerModalTitle: {
+    en: "Pick Project & Milestone",
+    tr: "Proje ve Hedef Noktası Seç"
+  },
+  projectAndMilestonePickerModalSelectProjectLabel: {
+    en: "Select a project",
+    tr: "Bir proje seç"
+  },
+  projectAndMilestonePickerModalSelectedProjectLabel: {
+    en: "Selected project",
+    tr: "Seçili proje"
+  },
+  projectAndMilestonePickerModalSelectMilestoneLabel: {
+    en: "Select a milestone",
+    tr: "Bir hedef noktası seç"
+  },
+  projectAndMilestonePickerModalSelectedMilestoneLabel: {
+    en: "Selected milestone",
+    tr: "Seçili hedef noktası"
+  },
+  projectAndMilestonePickerModalNoMilestoneText: {
+    en: "There isn't any milestone found under this project.",
+    tr: "Bu proje altında hiçbir hedef noktası bulunamadı."
+  },
+  projectAndMilestonePickerModalNoMilestoneButtonLabel: {
+    en: "Create a Milestone",
+    tr: "Hedef Noktası Oluştur"
+  },
+  projectAndMilestonePickerModalUnpickButtonLabel: {
+    en: "Unpick",
+    tr: "Seçimi Kaldır"
+  },
+  projectAndMilestonePickerModalNoProjectText: {
+    en: "There isn't any project found under this workspace.",
+    tr: "Bu çalışma alanı altında hiçbir proje bulunamadı."
+  },
+  projectAndMilestonePickerModalNoProjectButtonLabel: {
+    en: "Create a Project",
+    tr: "Proje Oluştur"
+  },
+  newMilestoneModalTitle: {
+    en: "New Milestone",
+    tr: "Yeni Hedef Noktası"
+  },
+  newMilestoneFormTitle: {
+    en: "Milestone title",
+    tr: "Hedef noktası başlığı"
+  },
+  newMilestoneFormProjectInfo: {
+    en: "Create a milestone under following project",
+    tr: "Aşağıda belirtilen proje altında bir hedef noktası oluşturun"
+  },
+  newMilestoneFormDescriptionPlaceholder: {
+    en: "Write a description",
+    tr: "Bir açıklama yazın"
+  },
+  newMilestoneFormTargetDateLabel: {
+    en: "Select a target date for milestone",
+    tr: "Hedef noktası için bir tarih girin"
+  },
+  newMilestoneFormTargetDate: {
+    en: "Target Date",
+    tr: "Hedef Tarihi"
+  },
+  newMilestoneModalCancel: {
+    en: "Cancel",
+    tr: "Vazgeç"
+  },
+  newMilestoneModalCreate: {
+    en: "Create Milestone",
+    tr: "Hedef Noktası Oluştur"
+  },
+  projectDetailPageMilestoneDescription: {
+    en: "No description",
+    tr: "Açıklama girilmedi"
+  },
+  projectDetailPageMilestoneDescriptionEdit: {
+    en: "Edit",
+    tr: "Düzenle"
+  },
+  projectDetailPageMilestoneDescriptionSave: {
+    en: "Save",
+    tr: "Kaydet"
+  },
+  projectDetailPageDescriptionSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor"
+  },
+  projectDetailPageMilestoneDescriptionCancel: {
+    en: "Cancel",
+    tr: "Vazgeç"
+  },
+  milestoneTitleChangeModalTitle: {
+    en: "Update Title",
+    tr: "Başlığı Güncelle"
+  },
+  milestoneTitleChangeModalInfoText: {
+    en: "Please provide an another title for milestone.",
+    tr: "Hedef noktası için yeni bir başlık girin."
+  },
+  milestoneDescriptionSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor"
+  },
+  milestoneDescriptionCancel: {
+    en: "Cancel",
+    tr: "Vazgeç"
+  },
+  milestoneTasks: {
+    en: "Milestone Tasks",
+    tr: "Hedef Noktası Görevleri"
+  },
+  taskDetailPickProjectAndMilestoneButtonLabel: {
+    en: "Assign To Project",
+    tr: "Projeye Ata"
+  },
+  deleteMilestoneAreYouSureTitle: {
+    en: "Delete Milestone",
+    tr: "Hedef Noktasını Sil"
+  },
+  deleteMilestoneAreYouSureText: {
+    en: "Are you sure to delete milestone <b>(${title})</b>? If you delete this milestone, associated task will no longer have a milestone. This action can not be undone!",
+    tr: "Hedef noktasını <b>(${title})</b> silmek istediğinizden emin misiniz? Bu hedef noktasını silerseniz ilgili görevlerin bir hedef noktası olmayacaktır. Bu işlem geri alınamaz!"
+  },
+  deleteMilestoneAreYouSureConfirmLabel: {
+    en: "Delete",
+    tr: "Sil"
   }
 };
 

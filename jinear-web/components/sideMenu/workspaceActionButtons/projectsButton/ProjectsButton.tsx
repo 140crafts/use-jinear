@@ -18,7 +18,7 @@ const ProjectsButton: React.FC<ProjectsButtonProps> = ({ workspace }) => {
   return (
     <Button className={styles.button}
             heightVariant={ButtonHeight.short}
-            variant={pathname == projectsPath ? ButtonVariants.filled : ButtonVariants.default}
+            variant={pathname.indexOf(projectsPath) != -1 ? ButtonVariants.filled : ButtonVariants.default}
             href={projectsPath}
     >
       <LuBox />

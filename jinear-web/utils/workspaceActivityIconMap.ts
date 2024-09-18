@@ -17,7 +17,7 @@ import {
   IoSparklesOutline,
   IoTrashBinOutline
 } from "react-icons/io5";
-import { LuCircleDot, LuDiamond } from "react-icons/lu";
+import { LuBox, LuDiamond } from "react-icons/lu";
 
 const workspaceIconMap = {
   MEMBER_JOIN: IoPersonAddOutline,
@@ -48,8 +48,8 @@ const workspaceIconMap = {
   TASK_BOARD_ENTRY_REMOVED: IoReaderOutline,
   TASK_BOARD_ENTRY_ORDER_CHANGE: IoReaderOutline,
   TASK_NEW_COMMENT: IoChatboxOutline,
-  TASK_PROJECT_ASSIGNMENT_UPDATE: LuDiamond,
-  TASK_MILESTONE_ASSIGNMENT_UPDATE: LuCircleDot
+  TASK_PROJECT_ASSIGNMENT_UPDATE: LuBox,
+  TASK_MILESTONE_ASSIGNMENT_UPDATE: LuDiamond
 };
 
 const decideWorkspaceActivityIcon = (type: WorkspaceActivityType) => {
