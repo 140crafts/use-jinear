@@ -5,10 +5,13 @@ import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.repository.TaskSearchRepository;
+import co.jinear.core.system.NormalizeHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -25,10 +28,17 @@ public class TaskListingService {
                 .map(taskDtoDetailedConverter::map);
     }
 
-    public boolean checkAnyActiveTaskExistsWithTeamAndProject(String teamId, String projectId) {
-        log.info("Check any active task exists with team and project has started. teamId: {}, projectId: {}", teamId, projectId);
-        boolean exist = taskRepository.existsByTeamIdAndProjectIdAndPassiveIdIsNull(teamId, projectId);
-        log.info("Check any active task exists with team and project has completed. teamId: {}, projectId: {}, exist: {}", teamId, projectId, exist);
+    public boolean checkAnyActiveTaskExistsWithGivenTeamsAndProject(List<String> teamIds, String projectId) {
+        log.info("Check any active task exists with given team ids and project has started. teamIds: {}, projectId: {}", NormalizeHelper.listToString(teamIds), projectId);
+        boolean exist = taskRepository.existsByTeamIdIsInAndProjectIdAndPassiveIdIsNull(teamIds, projectId);
+        log.info("Check any active task exists with given team ids and project has completed. teamId: {}, projectId: {}, exist: {}", NormalizeHelper.listToString(teamIds), projectId, exist);
         return exist;
+    }
+
+    public boolean milestoneHasAnyTask(String milestoneId) {
+        log.info("Milestone has any task has started. milestoneId: {}", milestoneId);
+        boolean exists = taskRepository.existsByMilestoneIdAndPassiveIdIsNull(milestoneId);
+        log.info("Milestone has any task has completed. milestoneId: {}, exists: {}", milestoneId, exists);
+        return exists;
     }
 }

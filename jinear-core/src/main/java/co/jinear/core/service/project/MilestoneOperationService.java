@@ -8,7 +8,9 @@ import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.vo.project.InitializeMilestoneVo;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.repository.project.MilestoneRepository;
+import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.richtext.RichTextInitializeService;
+import co.jinear.core.service.task.TaskUpdateService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,8 @@ public class MilestoneOperationService {
     private final InitializeMilestoneVoToEntityConverter initializeMilestoneVoToEntityConverter;
     private final RichTextInitializeService richTextInitializeService;
     private final MilestoneRetrieveService milestoneRetrieveService;
+    private final PassiveService passiveService;
+    private final TaskUpdateService taskUpdateService;
 
     public void initialize(InitializeMilestoneVo initializeMilestoneVo) {
         log.info("Initialize milestone has started. initializeMilestoneVo: {}", initializeMilestoneVo);
@@ -75,6 +79,17 @@ public class MilestoneOperationService {
         }
         milestone.setMilestoneOrder(nextOrder);
         milestoneRepository.save(milestone);
+    }
+
+    @Transactional
+    public String passivize(String milestoneId) {
+        log.info("Passivize milestone has started. milestoneId: {}", milestoneId);
+        taskUpdateService.updateAllMilestoneIdsAndProjectIdsAsNullWithMilestoneId(milestoneId);
+        Milestone milestone = milestoneRetrieveService.retrieveEntity(milestoneId);
+        String passiveId = passiveService.createUserActionPassive();
+        milestone.setPassiveId(passiveId);
+        log.info("Passivize milestone has completed. milestoneId: {}, passiveId: {}", milestoneId, passiveId);
+        return passiveId;
     }
 
     private Milestone mapAndSaveEntity(InitializeMilestoneVo initializeMilestoneVo) {

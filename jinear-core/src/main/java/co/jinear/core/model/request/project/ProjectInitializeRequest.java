@@ -27,7 +27,7 @@ public class ProjectInitializeRequest extends BaseRequest {
     @Nullable
     private ProjectStateType projectState = ProjectStateType.BACKLOG;
     @Nullable
-    private ProjectPriorityType projectPriority = ProjectPriorityType.LOW;
+    private ProjectPriorityType projectPriority = ProjectPriorityType.NONE;
     @Nullable
     private String leadWorkspaceMemberId;
     @Nullable

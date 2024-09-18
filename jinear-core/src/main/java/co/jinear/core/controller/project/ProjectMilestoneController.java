@@ -20,31 +20,37 @@ public class ProjectMilestoneController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse initialize(@Valid InitializeMilestoneRequest initializeMilestoneRequest) {
+    public BaseResponse initialize(@Valid @RequestBody InitializeMilestoneRequest initializeMilestoneRequest) {
         return projectMilestoneManager.initialize(initializeMilestoneRequest);
+    }
+
+    @DeleteMapping("/{milestoneId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse delete(@PathVariable String milestoneId) {
+        return projectMilestoneManager.deleteMilestone(milestoneId);
     }
 
     @PutMapping("/title")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse updateTitle(@Valid MilestoneUpdateRequest milestoneUpdateRequest) {
+    public BaseResponse updateTitle(@Valid @RequestBody MilestoneUpdateRequest milestoneUpdateRequest) {
         return projectMilestoneManager.updateTitle(milestoneUpdateRequest);
     }
 
     @PutMapping("/description")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse updateDescription(@Valid MilestoneUpdateRequest milestoneUpdateRequest) {
+    public BaseResponse updateDescription(@Valid @RequestBody MilestoneUpdateRequest milestoneUpdateRequest) {
         return projectMilestoneManager.updateDescription(milestoneUpdateRequest);
     }
 
     @PutMapping("/target-date")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse updateTargetDate(@Valid MilestoneUpdateRequest milestoneUpdateRequest) {
+    public BaseResponse updateTargetDate(@Valid @RequestBody MilestoneUpdateRequest milestoneUpdateRequest) {
         return projectMilestoneManager.updateTargetDate(milestoneUpdateRequest);
     }
 
     @PutMapping("/order")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse updateOrder(@Valid MilestoneUpdateRequest milestoneUpdateRequest) {
+    public BaseResponse updateOrder(@Valid @RequestBody MilestoneUpdateRequest milestoneUpdateRequest) {
         return projectMilestoneManager.updateOrder(milestoneUpdateRequest);
     }
 }

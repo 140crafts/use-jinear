@@ -4,6 +4,7 @@ import co.jinear.core.converter.project.ProjectPriorityTypeConverter;
 import co.jinear.core.converter.project.ProjectStateTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.richtext.RichText;
+import co.jinear.core.model.entity.workspace.Workspace;
 import co.jinear.core.model.entity.workspace.WorkspaceMember;
 import co.jinear.core.model.enumtype.project.ProjectPriorityType;
 import co.jinear.core.model.enumtype.project.ProjectStateType;
@@ -77,6 +78,13 @@ public class Project extends BaseEntity {
 
     @OneToMany(mappedBy = "project")
     @Where(clause = "passive_id is null")
-    @OrderBy("createdDate ASC, targetDate ASC, milestoneOrder ASC")
+    @OrderBy("targetDate ASC, createdDate ASC, milestoneOrder ASC")
     private Set<Milestone> milestones;
+
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @Where(clause = "passive_id is null")
+    @JoinColumn(name = "workspace_id", referencedColumnName = "workspace_id", insertable = false, updatable = false)
+    private Workspace workspace;
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ProjectPriorityType {
+    NONE(0),
     URGENT(1),
     HIGH(2),
     MEDIUM(3),

@@ -2,11 +2,11 @@ package co.jinear.core.service.task;
 
 import co.jinear.core.converter.task.TaskDtoConverter;
 import co.jinear.core.converter.task.TaskSubscriptionConverter;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.UpdateTaskWorkflowDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
-import co.jinear.core.model.entity.project.Milestone;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.enumtype.task.TaskReminderType;
@@ -24,6 +24,7 @@ import co.jinear.core.service.topic.TopicSequenceService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -136,27 +137,27 @@ public class TaskUpdateService {
         return taskDtoConverter.map(saved);
     }
 
-    public TaskDto updateTaskProject(String taskId, String projectId) {
-        log.info("Update task project has started. taskId: {}, projectId: {}", taskId, projectId);
+    public TaskDto updateTaskProjectAndMilestone(String taskId, String projectId, String milestoneId) {
+        log.info("Update task project has started. taskId: {}, projectId: {}, milestoneId: {}", taskId, projectId, milestoneId);
+        validateEitherOneIsBlankOrBothFilled(projectId, milestoneId);
         Task task = taskRetrieveService.retrieveEntity(taskId);
-        Optional.of(task)
-                .map(Task::getMilestone)
-                .map(Milestone::getProjectId)
-                .filter(milestoneProjectId -> !projectId.equals(milestoneProjectId))
-                .ifPresent(s -> task.setMilestoneId(null));
         task.setProjectId(projectId);
+        task.setMilestoneId(milestoneId);
         Task saved = taskRepository.save(task);
         log.info("Update task project has finished");
         return taskDtoConverter.map(saved);
     }
 
-    public TaskDto updateTaskMilestone(String taskId, String milestoneId) {
-        log.info("Update task milestoneId has started. taskId: {}, milestoneId: {}", taskId, milestoneId);
-        Task task = taskRetrieveService.retrieveEntity(taskId);
-        task.setMilestoneId(milestoneId);
-        Task saved = taskRepository.save(task);
-        log.info("Update task milestoneId has finished.");
-        return taskDtoConverter.map(saved);
+    public void updateAllMilestoneIdsAndProjectIdsAsNullWithMilestoneId(String milestoneId) {
+        log.info("Update all milestone ids and project ids as null with milestone id has started. milestoneId: {}", milestoneId);
+        taskRepository.updateAllMilestoneIdsAndProjectIdsAsNullWithMilestoneId(milestoneId);
+    }
+
+    private static void validateEitherOneIsBlankOrBothFilled(String projectId, String milestoneId) {
+        if ((StringUtils.isBlank(projectId) && StringUtils.isNotBlank(milestoneId)) ||
+            (StringUtils.isNotBlank(projectId) && StringUtils.isBlank(milestoneId))) {
+            throw new BusinessException();
+        }
     }
 
     private String validateWorkflowStatusAndCancelReminders(String workflowStatusId, String taskId) {
