@@ -19,7 +19,8 @@ interface WorkspaceActionButtonsProps {
 const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const projectsEnabled = useFeatureFlag("PROJECTS");
+  const projectsEnabled = true;
+  // const projectsEnabled = useFeatureFlag("PROJECTS");
   const team = useWorkspaceFirstTeam(workspace.workspaceId);
 
   const _popNewTaskModal = () => {
