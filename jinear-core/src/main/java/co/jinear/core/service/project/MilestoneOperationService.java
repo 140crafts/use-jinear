@@ -4,6 +4,7 @@ import co.jinear.core.converter.project.InitializeMilestoneVoToEntityConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.entity.project.Milestone;
+import co.jinear.core.model.enumtype.project.MilestoneStateType;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.vo.project.InitializeMilestoneVo;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
@@ -90,6 +91,13 @@ public class MilestoneOperationService {
         milestone.setPassiveId(passiveId);
         log.info("Passivize milestone has completed. milestoneId: {}, passiveId: {}", milestoneId, passiveId);
         return passiveId;
+    }
+
+    public void updateState(String milestoneId, MilestoneStateType milestoneState) {
+        log.info("Update state has started. milestoneId: {}, milestoneState: {}", milestoneId, milestoneState);
+        Milestone milestone = milestoneRetrieveService.retrieveEntity(milestoneId);
+        milestone.setMilestoneState(milestoneState);
+        milestoneRepository.save(milestone);
     }
 
     private Milestone mapAndSaveEntity(InitializeMilestoneVo initializeMilestoneVo) {

@@ -1,7 +1,9 @@
 package co.jinear.core.model.entity.project;
 
+import co.jinear.core.converter.project.MilestoneStateTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.richtext.RichText;
+import co.jinear.core.model.enumtype.project.MilestoneStateType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -40,6 +42,10 @@ public class Milestone extends BaseEntity {
 
     @Column(name = "target_date")
     private ZonedDateTime targetDate;
+
+    @Convert(converter = MilestoneStateTypeConverter.class)
+    @Column(name = "milestone_state")
+    private MilestoneStateType milestoneState;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)

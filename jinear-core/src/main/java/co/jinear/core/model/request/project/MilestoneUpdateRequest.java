@@ -1,5 +1,6 @@
 package co.jinear.core.model.request.project;
 
+import co.jinear.core.model.enumtype.project.MilestoneStateType;
 import co.jinear.core.model.request.BaseRequest;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -26,4 +27,6 @@ public class MilestoneUpdateRequest extends BaseRequest {
     @Nullable
     @Min(0)
     private Integer order;
+    @Nullable
+    private MilestoneStateType milestoneState;
 }

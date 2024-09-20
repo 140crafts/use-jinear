@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-09-18 21:14:20.
+// Generated using typescript-generator version 3.0.1157 on 2024-09-20 22:25:37.
 
 export interface BaseDto {
     createdDate: Date;
@@ -159,9 +159,9 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ghistoryId: string;
-    ginternalDate: string;
     gthreadId: string;
+    ginternalDate: string;
+    ghistoryId: string;
     gid: string;
 }
 
@@ -507,6 +507,7 @@ export interface MilestoneDto extends BaseDto {
     milestoneOrder: number;
     targetDate: Date;
     description: RichTextDto;
+    milestoneState: MilestoneStateType;
 }
 
 export interface MilestoneInitializeDto {
@@ -1107,6 +1108,7 @@ export interface MilestoneUpdateRequest extends BaseRequest {
     description?: string | null;
     targetDate?: Date | null;
     order?: number | null;
+    milestoneState?: MilestoneStateType | null;
 }
 
 export interface ProjectDatesUpdateRequest extends BaseRequest {
@@ -1886,6 +1888,8 @@ export type NotificationTargetType = "WEB" | "WEBVIEW";
 export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "TASK_NEW_COMMENT" | "TASK_ATTACHMENT_ADDED" | "TASK_ATTACHMENT_DELETED" | "MESSAGING_NEW_MESSAGE_THREAD" | "MESSAGING_NEW_MESSAGE_CONVERSATION";
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
+
+export type MilestoneStateType = "IN_PROGRESS" | "COMPLETED";
 
 export type ProjectPriorityType = "NONE" | "URGENT" | "HIGH" | "MEDIUM" | "LOW";
 

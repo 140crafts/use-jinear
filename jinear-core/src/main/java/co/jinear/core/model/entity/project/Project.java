@@ -81,7 +81,6 @@ public class Project extends BaseEntity {
     @OrderBy("targetDate ASC, createdDate ASC, milestoneOrder ASC")
     private Set<Milestone> milestones;
 
-
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @Where(clause = "passive_id is null")
