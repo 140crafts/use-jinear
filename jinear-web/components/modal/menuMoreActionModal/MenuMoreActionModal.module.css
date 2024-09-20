@@ -1,15 +1,21 @@
 .contentContainer {
-  padding-top: 1rem !important;
-  padding-bottom: 2rem !important;
-  gap: 1rem;
+    padding-top: 1rem !important;
+    padding-bottom: 2rem !important;
+    gap: 1rem;
 }
 
 .upgradeButton {
-  /* align-self: center; */
-  /* color: var(--c-gradient-gold-0) !important; */
-  background: unset !important;
+    /* align-self: center; */
+    /* color: var(--c-gradient-gold-0) !important; */
+    /*background: unset !important;*/
 }
 
 .upgradeButton:hover {
-  background-color: var(--c-primary-shade-1) !important;
+    /*background-color: var(--c-primary-shade-1) !important;*/
+}
+
+.buttonsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
 }

@@ -26,7 +26,9 @@ const WorkspaceLayoutHeader: React.FC<WorkspaceLayoutHeaderProps> = ({}) => {
   const _isPwa = isPwa();
   const workspaceName = params?.workspaceName as string;
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
+
   const upgradeButtonVariant = isMobile ? "ICON" : "FULL";
+  const pwiButtonWithLabel = !isMobile;
 
   return (
     <div className={styles.container}>
@@ -44,7 +46,7 @@ const WorkspaceLayoutHeader: React.FC<WorkspaceLayoutHeaderProps> = ({}) => {
         )}
       </div>
       <div className={styles.headerRightContent}>
-        {!_isPwa && <InstallPwaAppButton />}
+        {!_isPwa && <InstallPwaAppButton className={styles.pwiButton} withLabel={pwiButtonWithLabel} />}
         <SideMenuFooter />
       </div>
     </div>

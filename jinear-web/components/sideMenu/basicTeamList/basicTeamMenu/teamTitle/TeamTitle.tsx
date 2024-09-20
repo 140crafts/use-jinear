@@ -5,7 +5,7 @@ import cn from "classnames";
 import useTranslation from "locales/useTranslation";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { IoEllipsisHorizontal, IoHome, IoPeopleOutline } from "react-icons/io5";
+import { IoEllipsisHorizontal, IoHome, IoHomeOutline, IoPeopleOutline } from "react-icons/io5";
 import styles from "./TeamTitle.module.css";
 
 interface TeamTitleProps {
@@ -35,7 +35,7 @@ const TeamTitle: React.FC<TeamTitleProps> = ({ workspace, team, role }) => {
         href={homePath}
         data-tooltip-right={t("sideMenuTeamHome")}
       >
-        <IoHome />
+        <IoHomeOutline />
       </Button>
       <Button
         variant={membersPath == currentPath ? ButtonVariants.filled : ButtonVariants.hoverFilled2}

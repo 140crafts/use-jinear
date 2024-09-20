@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
-import styles from "./MilestoneListItem.module.css";
+import styles from "./MilestoneListItem.module.scss";
 import { LuCalendarPlus, LuCheck, LuDiamond, LuX } from "react-icons/lu";
 import DatePickerButton, { IDatePickerButtonRef } from "@/components/datePickerButton/DatePickerButton";
 import useTranslation from "@/locals/useTranslation";
@@ -77,27 +77,32 @@ const MilestoneListItem: React.FC<MilestoneListItemProps> = ({
 
   return (
     <div className={styles.container}>
-      <LuDiamond className={"icon"} />
-      {asInput ?
-        <input
-          type={"text"}
-          className={"flex-1"}
-          value={input}
-          onChange={onTitleChange}
-          onKeyDown={isEnter}
-          placeholder={t("newMilestoneTitlePlaceholder")}
+      <div className={styles.titleContainer}>
+        <LuDiamond className={"icon"} />
+        {asInput ?
+          <input
+            type={"text"}
+            className={"flex-1"}
+            value={input}
+            onChange={onTitleChange}
+            onKeyDown={isEnter}
+            placeholder={t("newMilestoneTitlePlaceholder")}
+          />
+          : <span className={"flex-1"}>{title}</span>
+        }
+      </div>
+
+      <div className={styles.milestoneActionButtonsContainer}>
+        <DatePickerButton
+          ref={datePickerButtonRef}
+          title={t("newProjectFromMilestoneListItemTargetDateButtonLabel")}
+          emptySelectionComponent={<LuCalendarPlus className={"icon"} />}
+          initialDate={date}
+          onDateChange={onDateChange}
         />
-        : <span className={"flex-1"}>{title}</span>
-      }
-      <DatePickerButton
-        ref={datePickerButtonRef}
-        title={t("newProjectFromMilestoneListItemTargetDateButtonLabel")}
-        emptySelectionComponent={<LuCalendarPlus className={"icon"} />}
-        initialDate={date}
-        onDateChange={onDateChange}
-      />
-      {!date && <Button variant={ButtonVariants.hoverFilled2} onClick={onRemoveClick}><LuX /></Button>}
-      {asInput && <Button variant={ButtonVariants.hoverFilled2} onClick={onAddClick}><LuCheck /></Button>}
+        {!date && <Button variant={ButtonVariants.hoverFilled2} onClick={onRemoveClick}><LuX /></Button>}
+        {asInput && <Button variant={ButtonVariants.hoverFilled2} onClick={onAddClick}><LuCheck /></Button>}
+      </div>
     </div>
   );
 };
