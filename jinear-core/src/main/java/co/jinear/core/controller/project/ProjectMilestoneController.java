@@ -53,4 +53,10 @@ public class ProjectMilestoneController {
     public BaseResponse updateOrder(@Valid @RequestBody MilestoneUpdateRequest milestoneUpdateRequest) {
         return projectMilestoneManager.updateOrder(milestoneUpdateRequest);
     }
+
+    @PutMapping("/state")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateState(@Valid @RequestBody MilestoneUpdateRequest milestoneUpdateRequest) {
+        return projectMilestoneManager.updateState(milestoneUpdateRequest);
+    }
 }

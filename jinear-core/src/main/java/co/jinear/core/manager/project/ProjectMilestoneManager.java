@@ -81,6 +81,14 @@ public class ProjectMilestoneManager {
         return new BaseResponse();
     }
 
+    public BaseResponse updateState(MilestoneUpdateRequest milestoneUpdateRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        validateWorkspaceAccess(milestoneUpdateRequest.getMilestoneId(), currentAccountId);
+        log.info("Update milestone state has started. currentAccountId: {}", currentAccountId);
+        milestoneOperationService.updateState(milestoneUpdateRequest.getMilestoneId(), milestoneUpdateRequest.getMilestoneState());
+        return new BaseResponse();
+    }
+
     private void validateWorkspaceAccess(String milestoneId, String currentAccountId) {
         MilestoneDto milestoneDto = milestoneRetrieveService.retrieve(milestoneId);
         ProjectDto projectDto = projectRetrieveService.retrieve(milestoneDto.getProjectId());

@@ -132,4 +132,12 @@
         </createIndex>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-504-add-milestone_state">
+        <addColumn tableName="milestone">
+            <column name="milestone_state" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
