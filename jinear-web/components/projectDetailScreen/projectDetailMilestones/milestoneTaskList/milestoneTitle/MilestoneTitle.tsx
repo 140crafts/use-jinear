@@ -2,19 +2,22 @@ import React, { useEffect, useState } from "react";
 import styles from "./MilestoneTitle.module.scss";
 import { CircularProgress } from "@mui/material";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { LuDiamond, LuPencil } from "react-icons/lu";
+import { LuPencil } from "react-icons/lu";
 import useTranslation from "@/locals/useTranslation";
 import { useAppDispatch } from "@/store/store";
 import { closeBasicTextInputModal, popBasicTextInputModal } from "@/slice/modalSlice";
 import { useUpdateMilestoneTitleMutation } from "@/api/projectMilestoneApi";
+import { MilestoneStateType } from "@/be/jinear-core";
+import cn from "classnames";
 
 interface MilestoneTitleProps {
   milestoneId: string;
   title?: string;
   isFetching?: boolean;
+  milestoneState: MilestoneStateType;
 }
 
-const MilestoneTitle: React.FC<MilestoneTitleProps> = ({ milestoneId, title, isFetching }) => {
+const MilestoneTitle: React.FC<MilestoneTitleProps> = ({ milestoneId, title, isFetching, milestoneState }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [milestoneTitle, setMilestoneTitle] = useState(title);
@@ -48,7 +51,7 @@ const MilestoneTitle: React.FC<MilestoneTitleProps> = ({ milestoneId, title, isF
 
   return (
     <div className={styles.container}>
-      <h2 className={styles.title}>
+      <h2 className={cn(styles.title, milestoneState=='COMPLETED' && styles.completedMilestoneTitle)}>
         <b className={"line-clamp"}>{milestoneTitle}</b>
       </h2>
       {isUpdateMilestoneTitleLoading &&

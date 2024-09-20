@@ -38,6 +38,7 @@ const ProjectDetailMilestones: React.FC<ProjectDetailMilestonesProps> = ({ proje
         <MilestoneTaskList
           isFirst={index == 0}
           isLast={index == project.milestones.length - 1}
+          isOneBeforeLast={index == project.milestones.length - 2}
           key={milestone.milestoneId}
           milestone={milestone}
           workspaceId={project.workspaceId} />)

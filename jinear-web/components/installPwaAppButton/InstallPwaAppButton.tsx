@@ -7,14 +7,16 @@ import { useAppDispatch } from "@/store/store";
 import { popInstallPwaInstructionsModal } from "@/slice/modalSlice";
 import Logger from "@/utils/logger";
 import { useOnInstallPromptEvent } from "@/components/onInstallPromptEventProvider/OnInstallPromptEventProvider";
+import cn from "classnames";
 
 interface InstallPwaAppButtonProps {
-
+  className?: string;
+  withLabel?: boolean;
 }
 
 const logger = Logger("InstallPwaAppButton");
 
-const InstallPwaAppButton: React.FC<InstallPwaAppButtonProps> = ({}) => {
+const InstallPwaAppButton: React.FC<InstallPwaAppButtonProps> = ({ className, withLabel = true }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const onInstallPromptEvent = useOnInstallPromptEvent();
@@ -34,15 +36,16 @@ const InstallPwaAppButton: React.FC<InstallPwaAppButtonProps> = ({}) => {
   return (
     <Button
       onClick={popPwaInstructionModal}
-      className={styles.pwaInstallButton}
+      className={cn(styles.pwaInstallButton, className)}
       heightVariant={ButtonHeight.short}
       variant={ButtonVariants.outline}
       data-tooltip-right={onInstallPromptEvent == null ? t("headerInstallPwaButtonTooltip") : undefined}
     >
       <LuDownload />
-      <p className={styles.installButtonLabel}>
-        <b>{t("headerInstallPwaButtonLabel")}</b>
-      </p>
+      {withLabel &&
+        <p className={styles.installButtonLabel}>
+          <b>{t("headerInstallPwaButtonLabel")}</b>
+        </p>}
     </Button>
   );
 };

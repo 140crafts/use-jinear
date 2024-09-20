@@ -5,7 +5,7 @@
   justify-content: flex-start;
   gap: 1rem;
   position: relative;
-  flex: 1;
+  //flex: 1;
 }
 
 .title {
@@ -13,8 +13,12 @@
   flex-direction: row;
   align-items: center;
   gap: .5rem;
-  text-align: justify;
-  min-width: 8rem;
+  min-width: 4ch;
+}
+
+.completedMilestoneTitle {
+  opacity: .5;
+  text-decoration: line-through;
 }
 
 .savingLabel {
@@ -46,7 +50,7 @@
   .editTitleButton {
     position: absolute;
     top: 0;
-    right: 0;
+    right: calc(-1 * var(--workspace-layout-page-padding));
     display: flex !important;
   }
 }

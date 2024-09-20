@@ -3948,6 +3948,10 @@ const translations = {
     en: "Priority",
     tr: "Öncelik"
   },
+  projectStateSelectModalTitle: {
+    en: "Pick State",
+    tr: "Durum Seç"
+  },
   projectState_BACKLOG: {
     en: "Backlog",
     tr: "Geri Plan"
@@ -4215,7 +4219,15 @@ const translations = {
   deleteMilestoneAreYouSureConfirmLabel: {
     en: "Delete",
     tr: "Sil"
-  }
+  },
+  milestoneStateToggleButtonTooltip_IN_PROGRESS:{
+    en:"Change milestone status to 'Completed'",
+    tr:"Hedef noktasını 'Tamamlandı' olarak güncelle."
+  },
+  milestoneStateToggleButtonTooltip_COMPLETED:{
+    en:"Change milestone status to 'In Progress'",
+    tr:"Hedef noktasını 'Devam Ediyor' şeklinde güncelle."
+  },
 };
 
 export default translations;

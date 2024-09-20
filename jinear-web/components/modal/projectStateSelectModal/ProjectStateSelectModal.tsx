@@ -40,7 +40,7 @@ const ProjectStateSelectModal: React.FC<ProjectStateSelectModalProps> = ({}) => 
   return (
     <GenericSelectModal
       visible={visible}
-      title={t("projectPrioritySelectModalTitle")}
+      title={t("projectStateSelectModalTitle")}
       multiple={false}
       modalData={STATES.map(s => {
         return {

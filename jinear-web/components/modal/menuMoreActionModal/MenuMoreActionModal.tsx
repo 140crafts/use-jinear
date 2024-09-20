@@ -10,14 +10,18 @@ import Modal from "../modal/Modal";
 import styles from "./MenuMoreActionModal.module.css";
 import WorkspaceMembersButton from "./workspaceMembersButton/WorkspaceMembersButton";
 import WorkspaceSettingsButton from "./workspaceSettingsButton/WorkspaceSettingsButton";
+import InstallPwaAppButton from "@/components/installPwaAppButton/InstallPwaAppButton";
+import isPwa from "@/utils/pwaHelper";
 
-interface MenuMoreActionModalProps {}
+interface MenuMoreActionModalProps {
+}
 
 const MenuMoreActionModal: React.FC<MenuMoreActionModalProps> = ({}) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const visible = useTypedSelector(selectMenuMoreActionModalVisible);
   const { isMobile } = useWindowSize();
+  const _isPwa = isPwa();
 
   const params = useParams();
   const workspaceName = params?.workspaceName as string | undefined;
@@ -36,7 +40,10 @@ const MenuMoreActionModal: React.FC<MenuMoreActionModalProps> = ({}) => {
       requestClose={close}
       bodyClass={styles.contentContainer}
     >
-      {workspace && <WorkspaceUpgradeButton workspace={workspace} variant={"FULL"} className={styles.upgradeButton} />}
+      <div className={styles.buttonsContainer}>
+        {workspace && <WorkspaceUpgradeButton workspace={workspace} variant={"FULL"} className={styles.upgradeButton} />}
+        {!_isPwa && <InstallPwaAppButton className={styles.pwiButton} withLabel={true} />}
+      </div>
       <WorkspaceSettingsButton workspaceName={workspaceName} requestClose={close} />
       <WorkspaceMembersButton workspaceName={workspaceName} requestClose={close} />
     </Modal>

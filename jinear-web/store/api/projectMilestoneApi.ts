@@ -49,6 +49,15 @@ export const projectMilestoneApi = api.injectEndpoints({
       invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", `v1/project/query/{projectId}`]
     }),
     //
+    updateMilestoneState: build.mutation<BaseResponse, MilestoneUpdateRequest>({
+      query: (body) => ({
+        url: "v1/project/milestone/state",
+        method: "PUT",
+        body: body
+      }),
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", `v1/project/query/{projectId}`]
+    }),
+    //
     deleteMilestone: build.mutation<BaseResponse, string>({
       query: (milestoneId) => ({
         url: `v1/project/milestone/${milestoneId}`,
@@ -70,6 +79,7 @@ export const {
   useUpdateMilestoneDescriptionMutation,
   useUpdateMilestoneTargetDateMutation,
   useUpdateMilestoneOrderMutation,
+  useUpdateMilestoneStateMutation,
   useDeleteMilestoneMutation
 } = projectMilestoneApi;
 
@@ -80,6 +90,7 @@ export const {
     updateMilestoneDescription,
     updateMilestoneTargetDate,
     updateMilestoneOrder,
+    updateMilestoneState,
     deleteMilestone
   }
 } = projectMilestoneApi;
