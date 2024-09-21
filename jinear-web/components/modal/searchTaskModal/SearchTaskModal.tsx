@@ -5,7 +5,7 @@ import { useSearchTaskQuery } from "@/store/api/taskSearchApi";
 import {
   closeSearchTaskModal,
   selectSearchTaskModalOnSelect,
-  selectSearchTaskModalTeamId,
+  selectSearchTaskModalTeamIds,
   selectSearchTaskModalVisible,
   selectSearchTaskModalWorkspaceId
 } from "@/store/slice/modalSlice";
@@ -35,7 +35,7 @@ const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
   const { isMobile } = useWindowSize();
   const visible = useTypedSelector(selectSearchTaskModalVisible);
   const workspaceId = useTypedSelector(selectSearchTaskModalWorkspaceId);
-  const teamId = useTypedSelector(selectSearchTaskModalTeamId);
+  const teamIds = useTypedSelector(selectSearchTaskModalTeamIds);
   const onSelect = useTypedSelector(selectSearchTaskModalOnSelect);
 
   const inputRef = useRef<HTMLInputElement>(null);
@@ -49,12 +49,14 @@ const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
     isFetching
   } = useSearchTaskQuery(
     {
-      workspaceId: workspaceId || "",
-      teamId: teamId || "",
-      title: searchValue,
+      body: {
+        workspaceId: workspaceId || "",
+        teamIdList: teamIds ?? [],
+        query: searchValue
+      },
       page: 0
     },
-    { skip: workspaceId == null || teamId == null || searchValue == "" }
+    { skip: workspaceId == null || searchValue == "" }
   );
 
   useEffect(() => {

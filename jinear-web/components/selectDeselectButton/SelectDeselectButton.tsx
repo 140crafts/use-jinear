@@ -2,8 +2,10 @@ import React from "react";
 import { IoClose } from "react-icons/io5";
 import Button, { ButtonHeight, ButtonVariants } from "../button";
 import styles from "./SelectDeselectButton.module.css";
+import Logger from "@/utils/logger";
 
 interface SelectDeselectButtonProps {
+  id?: string;
   hasSelection: boolean;
   onPickClick?: () => void;
   onUnpickClick: () => void;
@@ -13,10 +15,13 @@ interface SelectDeselectButtonProps {
   disabled?: boolean;
   withoutUnpickButton?: boolean;
   buttonVariant?: string;
-  loading?:boolean
+  loading?: boolean;
 }
 
+const logger = Logger("SelectDeselectButton");
+
 const SelectDeselectButton: React.FC<SelectDeselectButtonProps> = ({
+                                                                     id,
                                                                      hasSelection,
                                                                      onPickClick,
                                                                      selectedComponent,
@@ -28,8 +33,9 @@ const SelectDeselectButton: React.FC<SelectDeselectButtonProps> = ({
                                                                      disabled = false,
                                                                      loading
                                                                    }) => {
+  logger.log({ id, hasSelection });
   return (
-    <div className={styles.container}>
+    <div id={id} className={styles.container}>
       <Button
         heightVariant={ButtonHeight.short}
         variant={buttonVariant}

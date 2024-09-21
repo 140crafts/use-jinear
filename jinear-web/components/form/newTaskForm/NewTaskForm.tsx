@@ -1,7 +1,7 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import TaskCreatedToast from "@/components/taskCreatedToast/TaskCreatedToast";
 import { IRelatedFeedItemData } from "@/model/app/store/modal/modalState";
-import { TaskInitializeRequest, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import { MilestoneDto, ProjectDto, TaskInitializeRequest, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
 import { useInitializeTaskMutation } from "@/store/api/taskApi";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -33,6 +33,8 @@ interface NewTaskFormProps {
   initialDueDate?: Date;
   initialDueDateIsPrecise?: boolean;
   initialRelatedFeedItemData?: IRelatedFeedItemData;
+  initialProject?: ProjectDto;
+  initialMilestone?: MilestoneDto;
   onClose: () => void;
   className?: string;
   footerContainerClass?: string;
@@ -50,6 +52,8 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
                                                    initialDueDate,
                                                    initialDueDateIsPrecise,
                                                    initialRelatedFeedItemData,
+                                                   initialProject,
+                                                   initialMilestone,
                                                    onClose,
                                                    className,
                                                    footerContainerClass
@@ -93,6 +97,8 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
       setValue("teamId", selectedTeam.teamId);
       setValue("feedId", initialRelatedFeedItemData ? initialRelatedFeedItemData.feedId : undefined);
       setValue("feedItemId", initialRelatedFeedItemData ? initialRelatedFeedItemData.feedItemId : undefined);
+      setValue("projectId", initialProject ? initialProject.projectId : undefined);
+      setValue("milestoneId", initialMilestone ? initialMilestone.milestoneId : undefined);
     }, 200);
   }, []);
 
@@ -224,6 +230,8 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             workspace={workspace}
             team={selectedTeam}
             ref={projectPickerButtonRef}
+            initialProject={initialProject}
+            initialMilestone={initialMilestone}
           />
 
           <BoardPickerButton

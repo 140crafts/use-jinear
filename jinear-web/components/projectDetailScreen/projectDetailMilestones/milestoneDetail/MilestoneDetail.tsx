@@ -1,40 +1,42 @@
 import React, { useEffect, useRef } from "react";
-import styles from "./MilestoneTaskList.module.scss";
-import { MilestoneDto } from "@/be/jinear-core";
-import PrefilteredPaginatedTaskList
-  from "@/components/taskLists/prefilteredPaginatedTaskList/PrefilteredPaginatedTaskList";
+import styles from "./MilestoneDetail.module.scss";
+import { MilestoneDto, ProjectDto } from "@/be/jinear-core";
 import MilestoneDescription
-  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneTaskList/milestoneDescription/MilestoneDescription";
+  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneDetail/milestoneDescription/MilestoneDescription";
 import MilestoneTitle
-  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneTaskList/milestoneTitle/MilestoneTitle";
+  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneDetail/milestoneTitle/MilestoneTitle";
 import MilestoneTargetDate
-  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneTaskList/milestoneTargetDate/MilestoneTargetDate";
+  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneDetail/milestoneTargetDate/MilestoneTargetDate";
 import useTranslation from "@/locals/useTranslation";
-import { LuChevronDown, LuDiamond, LuTrash, LuX } from "react-icons/lu";
+import { LuDiamond } from "react-icons/lu";
 import cn from "classnames";
-import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import Button, { ButtonHeight } from "@/components/button";
 import MilestoneDeleteButton
-  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneTaskList/milestoneDeleteButton/MilestoneDeleteButton";
+  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneDetail/milestoneDeleteButton/MilestoneDeleteButton";
 import { IoCaretDown, IoCaretForward } from "react-icons/io5";
 import { useToggle } from "@/hooks/useToggle";
 import MilestoneStateToggleButton
-  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneTaskList/milestoneStateToggleButton/MilestoneStateToggleButton";
+  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneDetail/milestoneStateToggleButton/MilestoneStateToggleButton";
+import MilestoneTasks
+  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneDetail/milestoneTasks/MilestoneTasks";
 
-interface MilestoneTaskListProps {
+interface MilestoneDetailProps {
   workspaceId: string;
   milestone: MilestoneDto;
+  project: ProjectDto;
   isFirst: boolean;
   isLast: boolean;
   isOneBeforeLast: boolean;
 }
 
-const MilestoneTaskList: React.FC<MilestoneTaskListProps> = ({
-                                                               isFirst,
-                                                               isLast,
-                                                               isOneBeforeLast,
-                                                               workspaceId,
-                                                               milestone
-                                                             }) => {
+const MilestoneDetail: React.FC<MilestoneDetailProps> = ({
+                                                           isFirst,
+                                                           isLast,
+                                                           isOneBeforeLast,
+                                                           workspaceId,
+                                                           milestone,
+                                                           project
+                                                         }) => {
   const { t } = useTranslation();
   const [collapsed, toggleCollapsed, setCollapsed] = useToggle(milestone.milestoneState == "COMPLETED");
   const changedCollapsedStatusAtLeastOnce = useRef<boolean>(false);
@@ -100,16 +102,8 @@ const MilestoneTaskList: React.FC<MilestoneTaskListProps> = ({
             <MilestoneDescription milestoneId={milestone.milestoneId} description={milestone.description} />}
         </div>
 
-        {!collapsed && <div>
-          <h3>{t("milestoneTasks")}</h3>
-          <PrefilteredPaginatedTaskList
-            id={`project-milestone-task-list-${milestone.milestoneId}`}
-            filter={{
-              workspaceId: workspaceId,
-              milestoneIds: [milestone.milestoneId]
-            }}
-          />
-        </div>}
+        {!collapsed &&
+          <MilestoneTasks workspaceId={workspaceId} project={project} milestone={milestone} />}
 
         <div className={"spacer-h-2"} />
       </div>
@@ -117,4 +111,4 @@ const MilestoneTaskList: React.FC<MilestoneTaskListProps> = ({
   );
 };
 
-export default MilestoneTaskList;
+export default MilestoneDetail;

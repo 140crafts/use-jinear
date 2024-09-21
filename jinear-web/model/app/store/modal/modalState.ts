@@ -65,7 +65,7 @@ export interface NewTeamModalState extends ModalState {
 
 export interface SearchTaskModalState extends ModalState {
   workspaceId?: string;
-  teamId?: string;
+  teamIds?: string[];
   onSelect?: (task: TaskDto) => void;
 }
 
@@ -126,6 +126,8 @@ export interface NewTaskModalState extends ModalState {
   initialDueDate?: Date;
   initialDueDateIsPrecise?: boolean;
   initialRelatedFeedItemData?: IRelatedFeedItemData;
+  initialProject?: ProjectDto;
+  initialMilestone?: MilestoneDto;
 }
 
 export interface TeamPickerModalState extends ModalState {

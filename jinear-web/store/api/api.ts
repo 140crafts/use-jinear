@@ -53,7 +53,7 @@ export const tagTypes = [
   "v1/task-analytics/{workspaceId}/team/{teamId}",
   "v1/notification/event/{workspaceId}",
   "v1/notification/event/{workspaceId}/team/{teamId}",
-  "v1/task/search/${workspaceId}/${teamId}/{title}",
+  "v1/task/search/${workspaceId}",
   "v1/calendar/member/memberships/{workspaceId}",
   "v1/calendar/member/list/{calendarId}",
   "v1/calendar/event/filter",

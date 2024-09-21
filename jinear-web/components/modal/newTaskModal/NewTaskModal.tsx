@@ -6,7 +6,7 @@ import {
   selectNewTaskModalInitialAssignedDate,
   selectNewTaskModalInitialAssignedDateIsPrecise,
   selectNewTaskModalInitialDueDate,
-  selectNewTaskModalInitialDueDateIsPrecise,
+  selectNewTaskModalInitialDueDateIsPrecise, selectNewTaskModalInitialMilestone, selectNewTaskModalInitialProject,
   selectNewTaskModalInitialRelatedFeedItemData,
   selectNewTaskModalSubTaskOf,
   selectNewTaskModalSubTaskOfLabel,
@@ -47,6 +47,8 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const initialDueDate = useTypedSelector(selectNewTaskModalInitialDueDate);
   const initialDueDateIsPrecise = useTypedSelector(selectNewTaskModalInitialDueDateIsPrecise);
   const initialRelatedFeedItemData = useTypedSelector(selectNewTaskModalInitialRelatedFeedItemData);
+  const initialProject = useTypedSelector(selectNewTaskModalInitialProject);
+  const initialMilestone = useTypedSelector(selectNewTaskModalInitialMilestone);
   const workspaceId = workspace?.workspaceId;
 
   const [newInputType, setNewInputType] = useState<IInputType>("TASK");
@@ -114,6 +116,8 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
           initialDueDate={initialDueDate}
           initialDueDateIsPrecise={initialDueDateIsPrecise}
           initialRelatedFeedItemData={initialRelatedFeedItemData}
+          initialProject={initialProject}
+          initialMilestone={initialMilestone}
           onClose={close}
         />
       )}
