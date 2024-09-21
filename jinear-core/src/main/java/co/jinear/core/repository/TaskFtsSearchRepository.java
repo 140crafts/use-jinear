@@ -23,64 +23,37 @@ public interface TaskFtsSearchRepository extends JpaRepository<TaskFts, String> 
             where (
                         fts @@ to_tsquery(concat(regexp_replace(trim(:q), '\\W+', ':* & ', 'gm'), ':*')) or
                         fts @@ to_tsquery('simple', concat(regexp_replace(trim(:q), '\\W+', ':* & ', 'gm'), ':*'))
-                )
+                  )
               and ft.workspace_id = :workspaceId
-              and ft.team_id in :teamIds
+              and (
+                    (ft.team_task_visibility = 0 and ft.team_id in :visibleToAllTeamIds) or
+                    (ft.team_task_visibility = 1 and (ft.owner_id = :ownerId or ft.assigned_to = :assignedTo) and ft.team_id in :ownerOrAssigneeTeamIds)
+                  )
               and passive_id is null
             order by search_ranking desc;
                         """,
             countQuery = """
-                        select count(*)
-                        from mv_task_fts ft
-                        where (
+                            select count(*)
+                            from mv_task_fts ft
+                            where (
                             fts @@ to_tsquery(concat(regexp_replace(trim(:q), '\\W+', ':* & ', 'gm'), ':*')) or
                             fts @@ to_tsquery('simple', concat(regexp_replace(trim(:q), '\\W+', ':* & ', 'gm'), ':*'))
-                    )
+                                  )
                         and ft.workspace_id = :workspaceId
-                        and ft.team_id in :teamIds
-                        and passive_id is null;
-                        """,
+                        and (
+                        (ft.team_task_visibility = 0 and ft.team_id in :visibleToAllTeamIds) or
+                        (ft.team_task_visibility = 1 and (ft.owner_id = :ownerId or ft.assigned_to = :assignedTo) and ft.team_id in :ownerOrAssigneeTeamIds)
+                            )
+                        and passive_id is null
+                            """,
             nativeQuery = true)
     Page<TaskFts> search(@Param("q") String query,
                          @Param("workspaceId") String workspaceId,
-                         @Param("teamIds") List<String> teamIds,
+                         @Param("visibleToAllTeamIds") List<String> visibleToAllTeamIds,
+                         @Param("ownerOrAssigneeTeamIds") List<String> ownerOrAssigneeTeamIds,
+                         @Param("assignedTo") String assignedTo,
+                         @Param("ownerId") String ownerId,
                          Pageable pageable);
-
-    @Query(value = """
-            select *
-                 , greatest(ts_rank_cd(fts, to_tsquery(concat(regexp_replace(trim(:q), '\\W+', ':* & ', 'gm'), ':*'))),
-                            ts_rank_cd(fts,
-                                       to_tsquery('simple',
-                                                  concat(regexp_replace(trim(:q), '\\W+', ':* & ', 'gm'), ':*')))) as search_ranking
-            from mv_task_fts ft
-            where (
-                        fts @@ to_tsquery(concat(regexp_replace(trim(:q), '\\W+', ':* & ', 'gm'), ':*')) or
-                        fts @@ to_tsquery('simple', concat(regexp_replace(trim(:q), '\\W+', ':* & ', 'gm'), ':*'))
-                )
-              and ft.workspace_id = :workspaceId
-              and ft.team_id in :teamIds
-              and (ft.owner_id = :ownerId or ft.assigned_to = :assignedTo)
-              and passive_id is null
-            order by search_ranking desc;
-            """,
-            countQuery = """
-                    select count(*)
-                          where (
-                              fts @@ to_tsquery(concat(regexp_replace(trim(:q), '\\W+', ':* & ', 'gm'), ':*')) or
-                              fts @@ to_tsquery('simple', concat(regexp_replace(trim(:q), '\\W+', ':* & ', 'gm'), ':*'))
-                      )
-                    and ft.workspace_id = :workspaceId
-                    and ft.team_id in :teamIds
-                    and (ft.owner_id = :ownerId or ft.assigned_to = :assignedTo)
-                    and passive_id is null;
-                          """,
-            nativeQuery = true)
-    Page<TaskFts> searchWithAssigneeOrOwner(@Param("q") String query,
-                                            @Param("workspaceId") String workspaceId,
-                                            @Param("teamIds") List<String> teamIds,
-                                            @Param("assignedTo") String assignedTo,
-                                            @Param("ownerId") String ownerId,
-                                            Pageable pageable);
 
     @Modifying
     @Transactional

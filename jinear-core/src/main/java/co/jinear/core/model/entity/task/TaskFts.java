@@ -1,5 +1,7 @@
 package co.jinear.core.model.entity.task;
 
+import co.jinear.core.converter.workspace.TeamTaskVisibilityTypeConverter;
+import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,8 +35,15 @@ public class TaskFts {
     @Column(name = "assigned_to")
     private String assignedTo;
 
+    @Column(name = "title")
+    private String taskTitle;
+
     @Column(name = "task_description")
     private String taskDescription;
+
+    @Convert(converter = TeamTaskVisibilityTypeConverter.class)
+    @Column(name = "team_task_visibility")
+    private TeamTaskVisibilityType teamTaskVisibility;
 
     @Column(name = "comments_meta")
     private String commentsMeta;

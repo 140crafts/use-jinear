@@ -25,17 +25,11 @@ public class TaskSearchService {
 
     public Page<TaskDto> search(TaskFtsSearchVo taskFtsSearchVo) {
         Pageable pageable = PageRequest.of(taskFtsSearchVo.getPage(), PAGE_SIZE);
-        return taskFtsSearchRepository.search(taskFtsSearchVo.getQuery(), taskFtsSearchVo.getWorkspaceId(), taskFtsSearchVo.getTeamIds(), pageable)
-                .map(TaskFts::getTask)
-                .map(taskDtoDetailedConverter::map);
-    }
-
-    public Page<TaskDto> searchWithAssigneeOrOwner(TaskFtsSearchVo taskFtsSearchVo) {
-        Pageable pageable = PageRequest.of(taskFtsSearchVo.getPage(), PAGE_SIZE);
-        return taskFtsSearchRepository.searchWithAssigneeOrOwner(
+        return taskFtsSearchRepository.search(
                         taskFtsSearchVo.getQuery(),
                         taskFtsSearchVo.getWorkspaceId(),
-                        taskFtsSearchVo.getTeamIds(),
+                        taskFtsSearchVo.getVisibleToAllTeamIds(),
+                        taskFtsSearchVo.getOwnerOrAssigneeTeamIds(),
                         taskFtsSearchVo.getAssignedTo(),
                         taskFtsSearchVo.getOwnerId(),
                         pageable)

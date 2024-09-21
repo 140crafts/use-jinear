@@ -4,6 +4,7 @@ import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.enumtype.team.TeamStateType;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.repository.TeamRepository;
+import co.jinear.core.service.task.TaskSearchService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,12 +16,14 @@ public class TeamUpdateService {
 
     private final TeamRetrieveService teamRetrieveService;
     private final TeamRepository teamRepository;
+    private final TaskSearchService taskSearchService;
 
     public void updateTeamTaskVisibilityType(String teamId, TeamTaskVisibilityType taskVisibilityType) {
         log.info("Update team task visibility type has started. teamId: {}, taskVisibilityType: {}", teamId, taskVisibilityType);
         Team team = teamRetrieveService.retrieveEntity(teamId);
         team.setTaskVisibility(taskVisibilityType);
         teamRepository.save(team);
+        taskSearchService.refreshTaskFtsMv();
     }
 
     public void updateTeamState(String teamId, TeamStateType teamState) {
