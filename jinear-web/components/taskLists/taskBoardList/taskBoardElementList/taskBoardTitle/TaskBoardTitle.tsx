@@ -63,8 +63,9 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
     dispatch(
       popSearchTaskModal({
         workspaceId: workspace.workspaceId,
-        teamId: team.teamId,
-        onSelect: onExistingTaskSelect
+        teamIds: [team.teamId],
+        onSelect: onExistingTaskSelect,
+        visible: true
       })
     );
   };

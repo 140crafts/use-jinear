@@ -1,4 +1,3 @@
-import { TaskDto } from "@/model/be/jinear-core";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import ModalState, {
   AddMemberToTeamModalState,
@@ -20,6 +19,7 @@ import ModalState, {
   NewChannelModalState,
   NewConversationModalState,
   NewMailIntegrationModalState,
+  NewMilestoneModalState,
   NewProjectModalState,
   NewReminderModalState,
   NewTaskBoardModalState,
@@ -27,22 +27,24 @@ import ModalState, {
   NewTeamModalState,
   NewTopicModalState,
   NotFoundModalState,
-  NotificationPermissionModalState, ProjectPrioritySelectModalState, ProjectStateSelectModalState,
+  NotificationPermissionModalState,
+  ProjectAndMilestonePickerModalState,
+  ProjectPrioritySelectModalState,
+  ProjectStateSelectModalState,
   ReminderListModalState,
   SearchTaskModalState,
   TaskBoardPickerModalState,
   TaskOverviewModalState,
   TaskTaskBoardAssignModalState,
   TeamMemberPickerModalState,
-  TeamPickerModalState, TeamPickerModalV2State,
+  TeamPickerModalState,
+  TeamPickerModalV2State,
   TeamWorkflowStatusPickerModalState,
   TopicPickerModalState,
   UpgradeWorkspacePlanModalState,
   WorkspaceMemberInviteModalState,
   WorkspaceMemberPickerModalState,
-  WorkspacePickerModalState,
-  ProjectAndMilestonePickerModalState,
-  NewMilestoneModalState
+  WorkspacePickerModalState
 } from "model/app/store/modal/modalState";
 import { accountApi } from "@/api/accountApi";
 import { RootState } from "../store";
@@ -354,15 +356,8 @@ const slice = createSlice({
       state.dialogModal = initialState.dialogModal;
     },
 
-    popSearchTaskModal: (
-      state,
-      action: PayloadAction<{
-        workspaceId: string;
-        teamId: string;
-        onSelect: (task: TaskDto) => void;
-      }>
-    ) => {
-      state.searchTaskModal = { visible: true, ...action.payload };
+    popSearchTaskModal: (state, action: PayloadAction<SearchTaskModalState>) => {
+      state.searchTaskModal = { ...action.payload, visible: true };
     },
     closeSearchTaskModal: (state, action: PayloadAction<void>) => {
       state.searchTaskModal = initialState.searchTaskModal;
@@ -796,6 +791,10 @@ export const selectNewTaskModalInitialDueDate = (state: RootState) => state.moda
 export const selectNewTaskModalInitialDueDateIsPrecise = (state: RootState) => state.modal.newTaskModal?.initialDueDateIsPrecise;
 export const selectNewTaskModalInitialRelatedFeedItemData = (state: RootState) =>
   state.modal.newTaskModal?.initialRelatedFeedItemData;
+export const selectNewTaskModalInitialProject = (state: RootState) =>
+  state.modal.newTaskModal?.initialProject;
+export const selectNewTaskModalInitialMilestone = (state: RootState) =>
+  state.modal.newTaskModal?.initialMilestone;
 
 export const selectNewTopicModalVisible = (state: RootState) => state.modal.newTopicModal?.visible;
 export const selectNewTopicModalWorkspace = (state: RootState) => state.modal.newTopicModal?.workspace;
@@ -834,7 +833,7 @@ export const selectNewTeamModalWorkspace = (state: RootState) => state.modal.new
 
 export const selectSearchTaskModalVisible = (state: RootState) => state.modal.searchTaskModal?.visible;
 export const selectSearchTaskModalWorkspaceId = (state: RootState) => state.modal.searchTaskModal?.workspaceId;
-export const selectSearchTaskModalTeamId = (state: RootState) => state.modal.searchTaskModal?.teamId;
+export const selectSearchTaskModalTeamIds = (state: RootState) => state.modal.searchTaskModal?.teamIds;
 export const selectSearchTaskModalOnSelect = (state: RootState) => state.modal.searchTaskModal?.onSelect;
 
 export const selectDialogModalVisible = (state: RootState) => state.modal.dialogModal?.visible;

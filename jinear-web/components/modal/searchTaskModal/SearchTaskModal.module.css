@@ -1,47 +1,47 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  padding: 0;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
 }
 
 .content {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem;
-  position: relative;
+    display: flex !important;
+    align-items: center !important;
+    padding: 0.5rem !important;
+    position: relative !important;
 }
 
 .searchInput {
-  flex: 1;
+    flex: 1;
 }
 
 .searchList {
-  display: flex;
-  flex-direction: column;
-  height: min(100%, 16rem);
-  min-height: 6rem;
-  padding: 0.5rem;
-  overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    height: min(100%, 16rem);
+    min-height: 6rem;
+    padding: 0.5rem;
+    overflow-y: scroll;
 }
 
 .messageContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4rem;
 }
 
 .searchResultItem {
-  text-align: left !important;
-  justify-content: left !important;
-  align-items: flex-start !important;
+    text-align: left !important;
+    justify-content: left !important;
+    align-items: flex-start !important;
 }
 
 .iconContainer {
-  padding-top: 0.1rem;
+    padding-top: 0.1rem;
 }
 
 .titleContainer {
-  flex: 1;
-  padding-left: 0.5rem;
+    flex: 1;
+    padding-left: 0.5rem;
 }

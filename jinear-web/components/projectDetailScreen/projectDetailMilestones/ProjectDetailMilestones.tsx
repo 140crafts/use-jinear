@@ -2,8 +2,8 @@ import React from "react";
 import styles from "./ProjectDetailMilestones.module.css";
 import { ProjectDto } from "@/be/jinear-core";
 import useTranslation from "@/locals/useTranslation";
-import MilestoneTaskList
-  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneTaskList/MilestoneTaskList";
+import MilestoneDetail
+  from "@/components/projectDetailScreen/projectDetailMilestones/milestoneDetail/MilestoneDetail";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { popNewMilestoneModal, popProjectAndMilestonePickerModal } from "@/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
@@ -35,7 +35,8 @@ const ProjectDetailMilestones: React.FC<ProjectDetailMilestonesProps> = ({ proje
       <div className={"spacer-h-3"} />
 
       {project.milestones.map((milestone, index) =>
-        <MilestoneTaskList
+        <MilestoneDetail
+          project={project}
           isFirst={index == 0}
           isLast={index == project.milestones.length - 1}
           isOneBeforeLast={index == project.milestones.length - 2}

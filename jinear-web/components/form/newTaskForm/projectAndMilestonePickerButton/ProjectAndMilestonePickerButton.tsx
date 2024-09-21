@@ -14,34 +14,45 @@ interface ProjectAndMilestonePickerButton {
   team: TeamDto;
   register: UseFormRegister<TaskInitializeRequest>;
   setValue: UseFormSetValue<TaskInitializeRequest>;
+  initialProject?: ProjectDto;
+  initialMilestone?: MilestoneDto;
 }
 
 export interface IProjectAndMilestonePickerButtonRef {
   reset: () => void;
 }
 
-const logger = Logger("BoardPickerButton");
+const logger = Logger("ProjectAndMilestonePickerButton");
 
 const ProjectAndMilestonePickerButton = ({
                                            workspace,
                                            team,
                                            register,
-                                           setValue
+                                           setValue,
+                                           initialProject,
+                                           initialMilestone
                                          }: ProjectAndMilestonePickerButton, ref: any) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [selectedProject, setSelectedProject] = useState<ProjectDto>();
-  const [selectedMilestone, setSelectedMilestone] = useState<MilestoneDto>();
+  const [selectedProject, setSelectedProject] = useState<ProjectDto | undefined>(initialProject);
+  const [selectedMilestone, setSelectedMilestone] = useState<MilestoneDto | undefined>(initialMilestone);
+
+  logger.log({ selectedProject, selectedMilestone, initialProject, initialMilestone });
 
   useEffect(() => {
     setValue("projectId", selectedProject?.projectId);
     setValue("milestoneId", selectedMilestone?.milestoneId);
   }, [selectedProject, selectedMilestone, setValue]);
 
+  useEffect(() => {
+    setSelectedProject(initialProject);
+    setSelectedMilestone(initialMilestone);
+  }, [initialProject, initialMilestone]);
+
   useImperativeHandle(ref, () => ({
     reset: () => {
-      setSelectedProject(undefined);
-      setSelectedMilestone(undefined);
+      setSelectedProject(initialProject);
+      setSelectedMilestone(initialMilestone);
     }
   }));
 
@@ -70,6 +81,7 @@ const ProjectAndMilestonePickerButton = ({
   return (
     <div className={styles.container}>
       <SelectDeselectButton
+        id={"project-and-milestone-picker-button-select-deselect"}
         hasSelection={selectedProject != null && selectedMilestone != null}
         onPickClick={popProjectMilestonePicker}
         selectedComponent={

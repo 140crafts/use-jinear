@@ -6,7 +6,7 @@ import {
   changeLoadingModalVisibility,
   closeSearchTaskModal,
   popNewTaskWithSubtaskRelationModal,
-  popSearchTaskModal,
+  popSearchTaskModal
 } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -15,7 +15,8 @@ import { useShowSubTaskListEvenIfNoSubtasks, useTask } from "../context/TaskDeta
 import styles from "./TaskSubtaskList.module.scss";
 import TaskRelationRow from "./taskRelationRow/TaskRelationRow";
 
-interface TaskSubtaskListProps {}
+interface TaskSubtaskListProps {
+}
 
 const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
   const dispatch = useAppDispatch();
@@ -40,7 +41,7 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
     initializeTaskRelation({
       taskId: selectedTask.taskId,
       relatedTaskId: task.taskId,
-      relation: "SUBTASK",
+      relation: "SUBTASK"
     });
   };
 
@@ -48,8 +49,9 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
     dispatch(
       popSearchTaskModal({
         workspaceId: task.workspaceId,
-        teamId: task.teamId,
+        teamIds: [task.teamId],
         onSelect: onExistingTaskSelect,
+        visible: true
       })
     );
   };
@@ -64,7 +66,7 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
           subTaskOf: task.taskId,
           workspace,
           team,
-          subTaskOfLabel: `[${task.team?.tag}-${task.teamTagNo}] ${task.title}`,
+          subTaskOfLabel: `[${task.team?.tag}-${task.teamTagNo}] ${task.title}`
         })
       );
     }
