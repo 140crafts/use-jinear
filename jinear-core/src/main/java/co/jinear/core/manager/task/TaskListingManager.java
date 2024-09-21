@@ -104,7 +104,6 @@ public class TaskListingManager {
                 .filter(teamIds -> !teamIds.isEmpty())
                 .map(teamIds -> teamMemberRetrieveService.retrieveMemberships(workspaceId, currentAccount, teamIds))
                 .orElseGet(() -> teamMemberRetrieveService.retrieveAllTeamMembershipsOfAnAccount(currentAccount, workspaceId));
-
     }
 
     private void validateWorkspaceAccess(String accountId, String workspaceId) {

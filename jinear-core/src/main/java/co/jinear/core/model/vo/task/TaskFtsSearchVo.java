@@ -13,7 +13,8 @@ public class TaskFtsSearchVo {
 
     private String query;
     private String workspaceId;
-    private List<String> teamIds;
+    private List<String> visibleToAllTeamIds;
+    private List<String> ownerOrAssigneeTeamIds;
     private String assignedTo;
     private String ownerId;
     private int page;

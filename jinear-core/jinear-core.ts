@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-09-20 22:25:37.
+// Generated using typescript-generator version 3.0.1157 on 2024-09-21 12:11:17.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -159,9 +159,9 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gthreadId: string;
     ginternalDate: string;
     ghistoryId: string;
+    gthreadId: string;
     gid: string;
 }
 
@@ -1281,6 +1281,12 @@ export interface TaskRetrieveAllRequest extends BaseRequest {
     workspaceId: string;
     teamId: string;
     page: number;
+}
+
+export interface TaskSearchRequest extends BaseRequest {
+    workspaceId: string;
+    teamIdList?: string[] | null;
+    query: string;
 }
 
 export interface TaskUpdateDescriptionRequest extends BaseRequest {
