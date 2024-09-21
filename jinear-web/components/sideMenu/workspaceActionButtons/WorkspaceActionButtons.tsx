@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./WorkspaceActionButtons.module.css";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { LuPen } from "react-icons/lu";
+import { LuCheckSquare, LuPen, LuPenSquare } from "react-icons/lu";
 import ProjectsButton from "@/components/sideMenu/workspaceActionButtons/projectsButton/ProjectsButton";
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import useTranslation from "@/locals/useTranslation";
@@ -40,7 +40,7 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspa
           onClick={_popNewTaskModal}
           disabled={!workspace || !team}
         >
-          <LuPen />
+          <LuPenSquare />
           <b>{t("sideMenuNewTask")}</b>
         </Button>
         {projectsEnabled && workspace && <ProjectsButton workspace={workspace} />}

@@ -4,7 +4,7 @@ import PrefilteredPaginatedTaskList
   from "@/components/taskLists/prefilteredPaginatedTaskList/PrefilteredPaginatedTaskList";
 import useTranslation from "@/locals/useTranslation";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { LuPlus, LuSearch } from "react-icons/lu";
+import { LuCheckSquare, LuPenSquare, LuSearch } from "react-icons/lu";
 import { useAppDispatch } from "@/store/store";
 import { closeSearchTaskModal, popNewTaskModal, popSearchTaskModal } from "@/slice/modalSlice";
 import { MilestoneDto, ProjectDto, TaskDto } from "@/be/jinear-core";
@@ -72,7 +72,7 @@ const MilestoneTasks: React.FC<MilestoneTasksProps> = ({ workspaceId, project, m
           heightVariant={ButtonHeight.short}
           onClick={onNewTaskClicked}
         >
-          <LuPlus className={"icon"} />
+          <LuPenSquare className={"icon"} />
         </Button>
       </div>
 
