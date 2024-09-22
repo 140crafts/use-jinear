@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-09-21 12:11:17.
+// Generated using typescript-generator version 3.0.1157 on 2024-09-22 13:04:30.
 
 export interface BaseDto {
     createdDate: Date;
@@ -159,10 +159,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
-    ghistoryId: string;
-    gthreadId: string;
     gid: string;
+    gthreadId: string;
+    ghistoryId: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -525,6 +525,7 @@ export interface ProjectDto extends BaseDto {
     leadWorkspaceMemberId: string;
     startDate: Date;
     targetDate: Date;
+    archived: boolean;
     leadWorkspaceMember: WorkspaceMemberDto;
     description: RichTextDto;
     projectTeams: ProjectTeamDto[];
@@ -1150,6 +1151,10 @@ export interface ProjectTeamOperationRequest extends BaseRequest {
 
 export interface ProjectTitleUpdateRequest extends BaseRequest {
     title: string;
+}
+
+export interface ProjectUpdateArchivedRequest extends BaseRequest {
+    archived: boolean;
 }
 
 export interface ProjectUpdateLeadRequest extends BaseRequest {

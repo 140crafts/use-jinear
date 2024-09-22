@@ -1,5 +1,6 @@
 package co.jinear.core.manager.project;
 
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.request.project.ProjectTeamOperationRequest;
 import co.jinear.core.model.response.BaseResponse;
@@ -30,7 +31,7 @@ public class ProjectTeamManager {
     public BaseResponse updateAs(ProjectTeamOperationRequest projectTeamOperationRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         projectAccessValidator.validateHasExplicitAccess(projectTeamOperationRequest.getProjectId(), currentAccountId);
-        validateProjectAndTeamWithinSameWorkspace(projectTeamOperationRequest);
+        validateProjectIsActiveAndTeamWithinSameWorkspace(projectTeamOperationRequest);
         log.info("Update project teams as has started. currentAccountId: {}", currentAccountId);
         String passiveId = projectTeamOperationService.updateAs(projectTeamOperationRequest.getProjectId(), projectTeamOperationRequest.getTeamIds());
         assignPassiveIdOwnershipIfExists(currentAccountId, passiveId);
@@ -43,9 +44,16 @@ public class ProjectTeamManager {
         }
     }
 
-    private void validateProjectAndTeamWithinSameWorkspace(ProjectTeamOperationRequest projectTeamOperationRequest) {
+    private void validateProjectIsActiveAndTeamWithinSameWorkspace(ProjectTeamOperationRequest projectTeamOperationRequest) {
         String projectId = projectTeamOperationRequest.getProjectId();
         ProjectDto projectDto = projectRetrieveService.retrieve(projectId);
+        validateProjectIsNotArchived(projectDto);
         teamRetrieveService.checkAllExistsAndActiveWithinSameWorkspace(projectDto.getWorkspaceId(), projectTeamOperationRequest.getTeamIds());
+    }
+
+    private void validateProjectIsNotArchived(ProjectDto projectDto) {
+        if (Boolean.TRUE.equals(projectDto.getArchived())) {
+            throw new BusinessException("project.archived");
+        }
     }
 }

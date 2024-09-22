@@ -140,4 +140,12 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-504-add-archived-to_project">
+        <addColumn tableName="project">
+            <column name="archived" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

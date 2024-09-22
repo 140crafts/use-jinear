@@ -92,7 +92,16 @@ public class ProjectManager {
         projectAccessValidator.validateHasExplicitAccess(projectId, currentAccountId);
         ProjectDto projectDto = projectRetrieveService.retrieve(projectId);
         validateLeadHasWorkspaceAccess(projectUpdateLeadRequest.getWorkspaceMemberId(), projectDto.getWorkspaceId());
+        log.info("Update project lead has started. currentAccountId: {}", currentAccountId);
         projectOperationService.updateLead(projectId, projectUpdateLeadRequest.getWorkspaceMemberId());
+        return new BaseResponse();
+    }
+
+    public BaseResponse updateArchived(String projectId, ProjectUpdateArchivedRequest projectUpdateArchivedRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        projectAccessValidator.validateWorkspaceAdminOrOwner(projectId, currentAccountId);
+        log.info("Update project archived has started. currentAccountId: {}", currentAccountId);
+        projectOperationService.updateArchived(projectId, projectUpdateArchivedRequest.getArchived());
         return new BaseResponse();
     }
 

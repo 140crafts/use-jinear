@@ -2,6 +2,7 @@ package co.jinear.core.service.project;
 
 import co.jinear.core.converter.project.MilestoneInitializeDtoToInitializeMilestoneVoMapper;
 import co.jinear.core.converter.project.ProjectInitializeVoToEntityMapper;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.entity.project.Project;
 import co.jinear.core.model.enumtype.project.ProjectPriorityType;
@@ -45,6 +46,7 @@ public class ProjectOperationService {
     public void updateTitle(String projectId, String title) {
         log.info("Update title has started. projectId: {}, title: {}", projectId, title);
         Project project = projectRetrieveService.retrieveEntity(projectId);
+        validateProjectIsNotArchived(project);
         project.setTitle(title);
         projectRepository.save(project);
     }
@@ -53,6 +55,7 @@ public class ProjectOperationService {
     public void updateDescription(String projectId, String description) {
         log.info("Update description has started. projectId: {}, description: {}", projectId, description);
         Project project = projectRetrieveService.retrieveEntity(projectId);
+        validateProjectIsNotArchived(project);
         InitializeRichTextVo initializeRichTextVo = mapDescriptionInitVo(projectId, description);
         RichTextDto richTextDto = richTextInitializeService.initializeRichText(initializeRichTextVo);
         project.setDescriptionRichTextId(richTextDto.getRichTextId());
@@ -62,6 +65,7 @@ public class ProjectOperationService {
     public void updateState(String projectId, ProjectStateType projectState) {
         log.info("Update state has started. projectId: {}, projectState: {}", projectId, projectState);
         Project project = projectRetrieveService.retrieveEntity(projectId);
+        validateProjectIsNotArchived(project);
         project.setProjectState(projectState);
         projectRepository.save(project);
     }
@@ -69,6 +73,7 @@ public class ProjectOperationService {
     public void updatePriority(String projectId, ProjectPriorityType projectPriority) {
         log.info("Update priority has started. projectId: {}, projectPriority: {}", projectId, projectPriority);
         Project project = projectRetrieveService.retrieveEntity(projectId);
+        validateProjectIsNotArchived(project);
         project.setProjectPriority(projectPriority);
         projectRepository.save(project);
     }
@@ -76,6 +81,7 @@ public class ProjectOperationService {
     public void updateDates(String projectId, UpdateProjectDatesVo updateProjectDatesVo) {
         log.info("Update dates has started. projectId: {}, updateProjectDatesVo: {}", projectId, updateProjectDatesVo);
         Project project = projectRetrieveService.retrieveEntity(projectId);
+        validateProjectIsNotArchived(project);
         if (Boolean.TRUE.equals(updateProjectDatesVo.getUpdateStartDate())) {
             project.setStartDate(updateProjectDatesVo.getStartDate());
         }
@@ -88,8 +94,22 @@ public class ProjectOperationService {
     public void updateLead(String projectId, String workspaceMemberId) {
         log.info("Update lead has started. projectId: {}, workspaceMemberId: {}", projectId, workspaceMemberId);
         Project project = projectRetrieveService.retrieveEntity(projectId);
+        validateProjectIsNotArchived(project);
         project.setLeadWorkspaceMemberId(workspaceMemberId);
         projectRepository.save(project);
+    }
+
+    public void updateArchived(String projectId, boolean archived) {
+        log.info("Update project archived has started. projectId: {}, archived: {}", projectId, archived);
+        Project project = projectRetrieveService.retrieveEntity(projectId);
+        project.setArchived(archived);
+        projectRepository.save(project);
+    }
+
+    private void validateProjectIsNotArchived(Project project) {
+        if (Boolean.TRUE.equals(project.getArchived())) {
+            throw new BusinessException("project.archived");
+        }
     }
 
     private Project mapAndInitialize(ProjectInitializeVo projectInitializeVo) {
