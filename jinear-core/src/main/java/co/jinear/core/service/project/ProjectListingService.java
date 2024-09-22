@@ -21,7 +21,13 @@ public class ProjectListingService {
 
     public Page<ProjectDto> retrieveWorkspaceProjects(String workspaceId, int page) {
         log.info("Retrieve workspace projects has started. workspaceId: {}, page: {}", workspaceId, page);
-        return projectRepository.findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateDesc(workspaceId, PageRequest.of(page, PAGE_SIZE))
+        return projectRepository.findAllByWorkspaceIdAndArchivedAndPassiveIdIsNullOrderByCreatedDateDesc(workspaceId, Boolean.FALSE, PageRequest.of(page, PAGE_SIZE))
+                .map(projectDtoConverter::convert);
+    }
+
+    public Page<ProjectDto> retrieveArchivedWorkspaceProjects(String workspaceId, int page) {
+        log.info("Retrieve archived workspace projects has started. workspaceId: {}, page: {}", workspaceId, page);
+        return projectRepository.findAllByWorkspaceIdAndArchivedAndPassiveIdIsNullOrderByCreatedDateDesc(workspaceId, Boolean.TRUE, PageRequest.of(page, PAGE_SIZE))
                 .map(projectDtoConverter::convert);
     }
 }

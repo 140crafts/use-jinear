@@ -59,6 +59,9 @@ public class Project extends BaseEntity {
     @Column(name = "target_date")
     private ZonedDateTime targetDate;
 
+    @Column(name = "archived")
+    private Boolean archived;
+
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @Where(clause = "passive_id is null")

@@ -1,6 +1,7 @@
 package co.jinear.core.manager.project;
 
 import co.jinear.core.converter.project.InitializeMilestoneRequestToVoConverter;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.project.MilestoneDto;
 import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.request.project.InitializeMilestoneRequest;
@@ -33,6 +34,7 @@ public class ProjectMilestoneManager {
     public BaseResponse initialize(InitializeMilestoneRequest initializeMilestoneRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         ProjectDto projectDto = projectRetrieveService.retrieve(initializeMilestoneRequest.getProjectId());
+        validateMilestoneProjectIsNotArchived(projectDto);
         workspaceValidator.validateHasAccess(currentAccountId, projectDto.getWorkspaceId());
         log.info("Initialize milestone has started. currentAccountId: {}", currentAccountId);
         InitializeMilestoneVo initializeMilestoneVo = initializeMilestoneRequestToVoConverter.convert(initializeMilestoneRequest);
@@ -43,6 +45,7 @@ public class ProjectMilestoneManager {
     public BaseResponse updateTitle(MilestoneUpdateRequest milestoneUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateWorkspaceAccess(milestoneUpdateRequest.getMilestoneId(), currentAccountId);
+        validateMilestoneProjectIsNotArchived(milestoneUpdateRequest.getMilestoneId());
         log.info("Update milestone title has started. currentAccountId: {}", currentAccountId);
         milestoneOperationService.updateTitle(milestoneUpdateRequest.getMilestoneId(), milestoneUpdateRequest.getTitle());
         return new BaseResponse();
@@ -51,6 +54,7 @@ public class ProjectMilestoneManager {
     public BaseResponse updateDescription(MilestoneUpdateRequest milestoneUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateWorkspaceAccess(milestoneUpdateRequest.getMilestoneId(), currentAccountId);
+        validateMilestoneProjectIsNotArchived(milestoneUpdateRequest.getMilestoneId());
         log.info("Update milestone description has started. currentAccountId: {}", currentAccountId);
         milestoneOperationService.updateDescription(milestoneUpdateRequest.getMilestoneId(), milestoneUpdateRequest.getDescription());
         return new BaseResponse();
@@ -59,6 +63,7 @@ public class ProjectMilestoneManager {
     public BaseResponse updateTargetDate(MilestoneUpdateRequest milestoneUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateWorkspaceAccess(milestoneUpdateRequest.getMilestoneId(), currentAccountId);
+        validateMilestoneProjectIsNotArchived(milestoneUpdateRequest.getMilestoneId());
         log.info("Update milestone target date has started. currentAccountId: {}", currentAccountId);
         milestoneOperationService.updateTargetDate(milestoneUpdateRequest.getMilestoneId(), milestoneUpdateRequest.getTargetDate());
         return new BaseResponse();
@@ -67,6 +72,7 @@ public class ProjectMilestoneManager {
     public BaseResponse updateOrder(MilestoneUpdateRequest milestoneUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateWorkspaceAccess(milestoneUpdateRequest.getMilestoneId(), currentAccountId);
+        validateMilestoneProjectIsNotArchived(milestoneUpdateRequest.getMilestoneId());
         log.info("Update milestone order has started. currentAccountId: {}", currentAccountId);
         milestoneOperationService.updateOrder(milestoneUpdateRequest.getMilestoneId(), milestoneUpdateRequest.getOrder());
         return new BaseResponse();
@@ -75,6 +81,7 @@ public class ProjectMilestoneManager {
     public BaseResponse deleteMilestone(String milestoneId) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateWorkspaceAccess(milestoneId, currentAccountId);
+        validateMilestoneProjectIsNotArchived(milestoneId);
         log.info("Delete milestone has started. currentAccountId: {}", currentAccountId);
         String passiveId = milestoneOperationService.passivize(milestoneId);
         passiveService.assignOwnership(passiveId, currentAccountId);
@@ -84,6 +91,7 @@ public class ProjectMilestoneManager {
     public BaseResponse updateState(MilestoneUpdateRequest milestoneUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateWorkspaceAccess(milestoneUpdateRequest.getMilestoneId(), currentAccountId);
+        validateMilestoneProjectIsNotArchived(milestoneUpdateRequest.getMilestoneId());
         log.info("Update milestone state has started. currentAccountId: {}", currentAccountId);
         milestoneOperationService.updateState(milestoneUpdateRequest.getMilestoneId(), milestoneUpdateRequest.getMilestoneState());
         return new BaseResponse();
@@ -93,5 +101,17 @@ public class ProjectMilestoneManager {
         MilestoneDto milestoneDto = milestoneRetrieveService.retrieve(milestoneId);
         ProjectDto projectDto = projectRetrieveService.retrieve(milestoneDto.getProjectId());
         workspaceValidator.validateHasAccess(currentAccountId, projectDto.getWorkspaceId());
+    }
+
+    private void validateMilestoneProjectIsNotArchived(String milestoneId) {
+        MilestoneDto milestoneDto = milestoneRetrieveService.retrieve(milestoneId);
+        ProjectDto projectDto = projectRetrieveService.retrieve(milestoneDto.getProjectId());
+        validateMilestoneProjectIsNotArchived(projectDto);
+    }
+
+    private void validateMilestoneProjectIsNotArchived(ProjectDto projectDto) {
+        if (Boolean.TRUE.equals(projectDto.getArchived())) {
+            throw new BusinessException("project.archived");
+        }
     }
 }

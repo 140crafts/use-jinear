@@ -12,7 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
+
+import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.ADMIN;
+import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.OWNER;
 
 @Slf4j
 @Component
@@ -32,6 +36,12 @@ public class ProjectAccessValidator {
         if (!workspaceValidator.isWorkspaceAdminOrOwner(accountId, projectDto.getWorkspaceId())) {
             validateAccountIsProjectTeamsMember(accountId, projectDto);
         }
+    }
+
+    public void validateWorkspaceAdminOrOwner(String projectId, String accountId) {
+        log.info("Validate has explicit access has started. projectId: {}, accountId: {}", projectId, accountId);
+        ProjectDto projectDto = projectRetrieveService.retrieve(projectId);
+        workspaceValidator.validateWorkspaceRoles(accountId, projectDto.getWorkspaceId(), List.of(OWNER, ADMIN));
     }
 
     public void validateProjectAndWorkspaceIsInSameWorkspace(String projectId, String workspaceId) {

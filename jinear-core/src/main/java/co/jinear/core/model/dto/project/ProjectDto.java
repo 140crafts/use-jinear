@@ -25,6 +25,7 @@ public class ProjectDto extends BaseDto {
     private String leadWorkspaceMemberId;
     private ZonedDateTime startDate;
     private ZonedDateTime targetDate;
+    private Boolean archived;
     private WorkspaceMemberDto leadWorkspaceMember;
     private RichTextDto description;
     private Set<ProjectTeamDto> projectTeams;

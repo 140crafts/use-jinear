@@ -38,6 +38,9 @@ public class ProjectQueryManager {
         projectAccessValidator.validateHasExplicitAccess(projectId, currentAccountId);
         log.info("Retrieve project has started. currentAccountId: {}", currentAccountId);
         ProjectDto projectDto = projectRetrieveService.retrieve(projectId);
+        if (Boolean.TRUE.equals(projectDto.getArchived())) {
+            workspaceValidator.isWorkspaceAdminOrOwner(currentAccountId, projectDto.getWorkspaceId());
+        }
         return mapResponse(projectDto);
     }
 
@@ -54,8 +57,16 @@ public class ProjectQueryManager {
     public ProjectListingPaginatedResponse retrieveAll(String workspaceId, Integer page) {
         String currentAccountId = sessionInfoService.currentAccountId();
         workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
-        log.info("Retrieve all projects has started. currentAccountId: {}, workspaceId: {}, page: {}", currentAccountId, workspaceId, page);
+        log.info("Retrieve active projects has started. currentAccountId: {}, workspaceId: {}, page: {}", currentAccountId, workspaceId, page);
         Page<ProjectDto> projectsPage = projectListingService.retrieveWorkspaceProjects(workspaceId, page);
+        return mapResponse(projectsPage);
+    }
+
+    public ProjectListingPaginatedResponse retrieveArchived(String workspaceId, Integer page) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        workspaceValidator.isWorkspaceAdminOrOwner(currentAccountId, workspaceId);
+        log.info("Retrieve archived projects has started. currentAccountId: {}, workspaceId: {}, page: {}", currentAccountId, workspaceId, page);
+        Page<ProjectDto> projectsPage = projectListingService.retrieveArchivedWorkspaceProjects(workspaceId, page);
         return mapResponse(projectsPage);
     }
 

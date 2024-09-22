@@ -35,4 +35,11 @@ public class ProjectQueryController {
                                                        @RequestParam(required = false, defaultValue = "0") Integer page) {
         return projectQueryManager.retrieveAll(workspaceId, page);
     }
+
+    @GetMapping("/archived/{workspaceId}")
+    @ResponseStatus(HttpStatus.OK)
+    public ProjectListingPaginatedResponse retrieveArchived(@PathVariable String workspaceId,
+                                                            @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return projectQueryManager.retrieveArchived(workspaceId, page);
+    }
 }

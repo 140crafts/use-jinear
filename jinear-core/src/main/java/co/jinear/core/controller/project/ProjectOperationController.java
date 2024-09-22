@@ -64,4 +64,11 @@ public class ProjectOperationController {
                                    @Valid @RequestBody ProjectUpdateLeadRequest projectUpdateLeadRequest) {
         return projectManager.updateLead(projectId, projectUpdateLeadRequest);
     }
+
+    @PutMapping("/{projectId}/archived")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateArchived(@PathVariable String projectId,
+                                       @Valid @RequestBody ProjectUpdateArchivedRequest projectUpdateArchivedRequest) {
+        return projectManager.updateArchived(projectId, projectUpdateArchivedRequest);
+    }
 }
