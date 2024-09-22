@@ -6,6 +6,7 @@ import TabContext from "./context/TabContext";
 import styles from "./TabbedPanel.module.css";
 import TabNavigator from "./tabNavigator/TabNavigator";
 import { TabViewProps } from "./tabView/TabView";
+
 interface TabbedPanelProps {
   initialTabName?: string;
   children: React.ReactNode;
@@ -32,11 +33,14 @@ const TabbedPanel: React.FC<TabbedPanelProps> = ({ initialTabName, children, con
       changeTab(initialTabName);
     }
   }, [initialTabName]);
+
   logger.log({ tabs, activeTab, initialTabName });
+
   const changeTab = (tabName: string) => {
     const tab = tabs?.find((tab) => tab.name == tabName);
     if (tab) {
       setActiveTab(tab);
+      window.location.hash = tab.name;
     }
   };
 
@@ -45,7 +49,7 @@ const TabbedPanel: React.FC<TabbedPanelProps> = ({ initialTabName, children, con
       <TabContext.Provider
         value={{
           activeTab,
-          changeTab,
+          changeTab
         }}
       >
         <TabNavigator tabs={tabs} />

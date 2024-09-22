@@ -10,7 +10,7 @@ export const projectMilestoneApi = api.injectEndpoints({
         method: "POST",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", `v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}","v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
     }),
     //
     updateMilestoneTitle: build.mutation<BaseResponse, MilestoneUpdateRequest>({
@@ -19,7 +19,7 @@ export const projectMilestoneApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", `v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}","v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
     }),
     //
     updateMilestoneDescription: build.mutation<BaseResponse, MilestoneUpdateRequest>({
@@ -28,7 +28,7 @@ export const projectMilestoneApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", `v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}","v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
     }),
     //
     updateMilestoneTargetDate: build.mutation<BaseResponse, MilestoneUpdateRequest>({
@@ -37,7 +37,7 @@ export const projectMilestoneApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", `v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}","v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
     }),
     //
     updateMilestoneOrder: build.mutation<BaseResponse, MilestoneUpdateRequest>({
@@ -46,7 +46,7 @@ export const projectMilestoneApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", `v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}",`v1/project/query/{projectId}`]
     }),
     //
     updateMilestoneState: build.mutation<BaseResponse, MilestoneUpdateRequest>({
@@ -55,7 +55,7 @@ export const projectMilestoneApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", `v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}",`v1/project/query/{projectId}`]
     }),
     //
     deleteMilestone: build.mutation<BaseResponse, string>({
@@ -66,6 +66,7 @@ export const projectMilestoneApi = api.injectEndpoints({
       invalidatesTags: [
         "v1/project/query/assigned/{workspaceId}",
         "v1/project/query/all/{workspaceId}",
+        "v1/project/query/archived/{workspaceId}",
         `v1/project/query/{projectId}`,
         "v1/task/from-workspace/{workspaceName}/{taskTag}"]
     })

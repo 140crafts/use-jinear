@@ -5,14 +5,20 @@ import useTranslation from "@/locals/useTranslation";
 import { ProjectDto, ProjectPriorityType, ProjectStateType, TeamDto, WorkspaceMemberDto } from "@/be/jinear-core";
 import WorkspaceMemberPickerButton from "@/components/workspaceMemberPickerButton/WorkspaceMemberPickerButton";
 import {
+  useUpdateProjectArchivedMutation,
   useUpdateProjectDatesMutation,
   useUpdateProjectLeadMutation,
-  useUpdateProjectPriorityMutation, useUpdateProjectStateMutation
+  useUpdateProjectPriorityMutation,
+  useUpdateProjectStateMutation
 } from "@/api/projectOperationApi";
 import TeamPickerButton from "@/components/teamPickerButton/TeamPickerButton";
 import { useUpdateAsProjectTeamsMutation } from "@/api/projectTeamApi";
 import ProjectPriorityPickerButton from "@/components/projectPriorityPickerButton/ProjectPriorityPickerButton";
 import ProjectStatePickerButton from "@/components/projectStatePickerButton/ProjectStatePickerButton";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import { closeDialogModal, popDialogModal } from "@/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
+import { LuArchive } from "react-icons/lu";
 
 interface ProjectActionButtonsProps {
   project: ProjectDto;
@@ -21,12 +27,14 @@ interface ProjectActionButtonsProps {
 
 const ProjectActionButtons: React.FC<ProjectActionButtonsProps> = ({ project, isFetching }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   const [updateProjectDates, { isLoading: isUpdateProjectDatesLoading }] = useUpdateProjectDatesMutation();
   const [updateProjectLead, { isLoading: isUpdateProjectLeadLoading }] = useUpdateProjectLeadMutation();
   const [updateAsProjectTeams, { isLoading: isUpdateRelatedTeamsLoading }] = useUpdateAsProjectTeamsMutation();
   const [updateProjectPriority, {}] = useUpdateProjectPriorityMutation();
   const [updateProjectState, {}] = useUpdateProjectStateMutation();
+  const [updateProjectArchived, {}] = useUpdateProjectArchivedMutation();
 
   const onProjectStartDateChange = (date?: Date | null) => {
     updateProjectDates({
@@ -79,6 +87,23 @@ const ProjectActionButtons: React.FC<ProjectActionButtonsProps> = ({ project, is
     if (projectState) {
       updateProjectState({ projectId: project.projectId, body: { projectState } });
     }
+  };
+
+  const popAreYouSureModalForArchiveProject = () => {
+    dispatch(
+      popDialogModal({
+        visible: true,
+        title: t("updateProjectAsArchivedTitle"),
+        content: t("updateProjectAsArchivedText"),
+        confirmButtonLabel: t("updateProjectAsArchivedConfirm"),
+        onConfirm: updateAsArchived
+      })
+    );
+  };
+
+  const updateAsArchived = () => {
+    dispatch(closeDialogModal());
+    updateProjectArchived({ projectId: project.projectId, body: { archived: true } });
   };
 
   return (
@@ -138,6 +163,16 @@ const ProjectActionButtons: React.FC<ProjectActionButtonsProps> = ({ project, is
         initialPick={project.projectState}
         withoutUnpickButton={true}
       />
+
+      {!project.archived &&
+        <Button variant={ButtonVariants.filled}
+                heightVariant={ButtonHeight.short}
+                onClick={popAreYouSureModalForArchiveProject}
+        >
+          <LuArchive className={"icon"} />
+          <div className={"spacer-w-1"} />
+          {t("projectUpdateAsArchived")}
+        </Button>}
     </div>
   );
 };

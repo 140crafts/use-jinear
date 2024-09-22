@@ -26,11 +26,7 @@ const ProjectRow: React.FC<ProjectRowProps> = ({ project }) => {
         <ProjectTargetDate project={project} />
       </div>
       <div className={styles.infoContainer}>
-        <ProjectLeadWorkspaceMember
-          workspaceId={project.workspaceId}
-          projectId={project.projectId}
-          leadWorkspaceMember={project.leadWorkspaceMember}
-        />
+        <ProjectLeadWorkspaceMember project={project} />
       </div>
     </div>
   );

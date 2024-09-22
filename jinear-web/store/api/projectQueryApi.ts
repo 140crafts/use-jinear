@@ -24,11 +24,27 @@ export const projectQueryApi = api.injectEndpoints({
       ]
     }),
     //
-    allProjects: build.query<ProjectListingPaginatedResponse, { workspaceId: string }>({
-      query: ({ workspaceId }: { workspaceId: string }) => `v1/project/query/all/${workspaceId}`,
+    allProjects: build.query<ProjectListingPaginatedResponse, { workspaceId: string, page?: number }>({
+      query: ({ workspaceId, page = 0 }: {
+        workspaceId: string,
+        page?: number
+      }) => `v1/project/query/all/${workspaceId}?page=${page}`,
       providesTags: (_result, _err, req) => [
         {
           type: `v1/project/query/all/{workspaceId}`,
+          id: `${req.workspaceId}`
+        }
+      ]
+    }),
+    //
+    archivedProjects: build.query<ProjectListingPaginatedResponse, { workspaceId: string, page?: number }>({
+      query: ({ workspaceId, page = 0 }: {
+        workspaceId: string,
+        page?: number
+      }) => `v1/project/query/archived/${workspaceId}?page=${page}`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: `v1/project/query/archived/{workspaceId}`,
           id: `${req.workspaceId}`
         }
       ]
@@ -37,8 +53,13 @@ export const projectQueryApi = api.injectEndpoints({
   })
 });
 
-export const { useRetrieveProjectQuery, useRetrieveAssignedProjectsQuery, useAllProjectsQuery } = projectQueryApi;
+export const {
+  useRetrieveProjectQuery,
+  useRetrieveAssignedProjectsQuery,
+  useAllProjectsQuery,
+  useArchivedProjectsQuery
+} = projectQueryApi;
 
 export const {
-  endpoints: { retrieveProject, retrieveAssignedProjects, allProjects }
+  endpoints: { retrieveProject, retrieveAssignedProjects, allProjects, archivedProjects }
 } = projectQueryApi;

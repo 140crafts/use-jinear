@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.archived {
+    opacity: .25;
+    pointer-events: none;
+    cursor: not-allowed;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}

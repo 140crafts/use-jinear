@@ -10,7 +10,7 @@ export const projectTeamApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/{projectId}"]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}", "v1/project/query/{projectId}"]
     })
     //
   })

@@ -1,8 +1,13 @@
 import {
-  BaseResponse, ProjectDatesUpdateRequest,
+  BaseResponse,
+  ProjectDatesUpdateRequest,
   ProjectDescriptionUpdateRequest,
-  ProjectInitializeRequest, ProjectPriorityUpdateRequest, ProjectStateUpdateRequest,
-  ProjectTitleUpdateRequest, ProjectUpdateLeadRequest
+  ProjectInitializeRequest,
+  ProjectPriorityUpdateRequest,
+  ProjectStateUpdateRequest,
+  ProjectTitleUpdateRequest,
+  ProjectUpdateArchivedRequest,
+  ProjectUpdateLeadRequest
 } from "@/model/be/jinear-core";
 import { api } from "./api";
 
@@ -15,7 +20,7 @@ export const projectOperationApi = api.injectEndpoints({
         method: "POST",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}",`v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
     }),
     //
     updateProjectTitle: build.mutation<BaseResponse, { projectId: string, body: ProjectTitleUpdateRequest }>({
@@ -24,7 +29,7 @@ export const projectOperationApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}",`v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
     }),
     //
     updateProjectDescription: build.mutation<BaseResponse, {
@@ -36,7 +41,7 @@ export const projectOperationApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}",`v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
     }),
     //
     updateProjectState: build.mutation<BaseResponse, { projectId: string, body: ProjectStateUpdateRequest }>({
@@ -45,7 +50,7 @@ export const projectOperationApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}",`v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
     }),
     //
     updateProjectPriority: build.mutation<BaseResponse, { projectId: string, body: ProjectPriorityUpdateRequest }>({
@@ -54,7 +59,7 @@ export const projectOperationApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}",`v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
     }),
     //
     updateProjectDates: build.mutation<BaseResponse, { projectId: string, body: ProjectDatesUpdateRequest }>({
@@ -63,7 +68,7 @@ export const projectOperationApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}",`v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
     }),
     //
     updateProjectLead: build.mutation<BaseResponse, { projectId: string, body: ProjectUpdateLeadRequest }>({
@@ -72,7 +77,16 @@ export const projectOperationApi = api.injectEndpoints({
         method: "PUT",
         body: body
       }),
-      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}",`v1/project/query/{projectId}`]
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
+    }),
+    //
+    updateProjectArchived: build.mutation<BaseResponse, { projectId: string, body: ProjectUpdateArchivedRequest }>({
+      query: ({ projectId, body }: { projectId: string, body: ProjectUpdateArchivedRequest }) => ({
+        url: `v1/project/operation/${projectId}/archived`,
+        method: "PUT",
+        body: body
+      }),
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`]
     })
     //
   })
@@ -85,7 +99,8 @@ export const {
   useUpdateProjectStateMutation,
   useUpdateProjectPriorityMutation,
   useUpdateProjectDatesMutation,
-  useUpdateProjectLeadMutation
+  useUpdateProjectLeadMutation,
+  useUpdateProjectArchivedMutation
 } = projectOperationApi;
 
 export const {
@@ -96,6 +111,7 @@ export const {
     updateProjectState,
     updateProjectPriority,
     updateProjectDates,
-    updateProjectLead
+    updateProjectLead,
+    updateProjectArchived
   }
 } = projectOperationApi;
