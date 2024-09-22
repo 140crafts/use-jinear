@@ -8,7 +8,7 @@ import {
   selectDialogModalOnClose,
   selectDialogModalOnConfirm,
   selectDialogModalTitle,
-  selectDialogModalVisible,
+  selectDialogModalVisible
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import useTranslation from "locales/useTranslation";
@@ -16,7 +16,8 @@ import React from "react";
 import Modal from "../modal/Modal";
 import styles from "./DialogModal.module.css";
 
-interface DialogModalProps {}
+interface DialogModalProps {
+}
 
 const DialogModal: React.FC<DialogModalProps> = ({}) => {
   const { t } = useTranslation();
@@ -42,7 +43,9 @@ const DialogModal: React.FC<DialogModalProps> = ({}) => {
       requestClose={onClose ? onClose : close}
       width={"default"}
     >
-      {htmlContent ? <div dangerouslySetInnerHTML={{ __html: htmlContent }}></div> : <div>{content}</div>}
+      {htmlContent ?
+        <div className={styles.content} dangerouslySetInnerHTML={{ __html: htmlContent }}></div> :
+        <div className={styles.content}>{content}</div>}
 
       <div className={styles.actionBar}>
         {onConfirm && (

@@ -2901,7 +2901,7 @@ const translations = {
   },
   teamSettingsScreenTeamStateSectionDescription_ARCHIVED: {
     en: "You can continue to use this team as before by taking it out of the archive.",
-    tr: "Bu takımı arşivden çıkararak eskisi gibi kullanmaya devam edebilirsiniz"
+    tr: "Bu takımı arşivden çıkararak eskisi gibi kullanmaya devam edebilirsiniz."
   },
   teamSettingsScreenTeamStateSectionTitle_ACTIVE: {
     en: "Archive Team",
@@ -3844,6 +3844,10 @@ const translations = {
     en: "Projects",
     tr: "Projeler"
   },
+  projectsArchivedTitle: {
+    en: "Archived Projects (${num})",
+    tr: "Arşivlenmiş Projeler (${num})"
+  },
   projectsNewProjectButtonLabel: {
     en: "New Project",
     tr: "Yeni Proje"
@@ -4220,14 +4224,54 @@ const translations = {
     en: "Delete",
     tr: "Sil"
   },
-  milestoneStateToggleButtonTooltip_IN_PROGRESS:{
-    en:"Change milestone status to 'Completed'",
-    tr:"Hedef noktasını 'Tamamlandı' olarak güncelle."
+  milestoneStateToggleButtonTooltip_IN_PROGRESS: {
+    en: "Change milestone status to 'Completed'",
+    tr: "Hedef noktasını 'Tamamlandı' olarak güncelle."
   },
-  milestoneStateToggleButtonTooltip_COMPLETED:{
-    en:"Change milestone status to 'In Progress'",
-    tr:"Hedef noktasını 'Devam Ediyor' şeklinde güncelle."
+  milestoneStateToggleButtonTooltip_COMPLETED: {
+    en: "Change milestone status to 'In Progress'",
+    tr: "Hedef noktasını 'Devam Ediyor' şeklinde güncelle."
   },
+  projectDetailTabLabel: {
+    en: "Project Detail",
+    tr: "Proje Detayı"
+  },
+  projectPosts: {
+    en: "Posts",
+    tr: "Gönderiler"
+  },
+  projectUpdateAsArchived: {
+    en: "Archive",
+    tr: "Arşivle"
+  },
+  updateProjectAsArchivedTitle: {
+    en: "Archive Project",
+    tr: "Projeyi Arşivle"
+  },
+  updateProjectAsArchivedText: {
+    en: "By archiving the project, you will prevent any changes from being made to it. Only workspace admins can list the project. Are you sure you want to archive the project?",
+    tr: "Projeyi arşivleyerek üzerinde herhangi bir değişiklik yapılmasını engellersiniz. Yanlızca çalışma alanı yöneticileri projeyi listeleyebilir. Projeyi arşivlemek istediğinize emin misiniz?"
+  },
+  updateProjectAsArchivedConfirm: {
+    en: "Archive",
+    tr: "Arşivle"
+  },
+  projectArchivedIntoTitle: {
+    en: "Project is archived",
+    tr: "Proje Arşivlenmiş"
+  },
+  projectArchivedIntoText: {
+    en: "This project has been archived and cannot be modified at the moment.",
+    tr: "Bu proje arşivlenmiş ve şuanda bir değişiklik yapılamaz."
+  },
+  projectArchivedInfoUnarchive: {
+    en: "Unarchive Project",
+    tr: "Projeyi Tekrar Aktifleştir"
+  },
+  projectArchivedInfoUnarchiveDescription: {
+    en: "You can continue to use this project as before by taking it out of the archive.",
+    tr: "Bu projeyi arşivden çıkararak eskisi gibi kullanmaya devam edebilirsiniz."
+  }
 };
 
 export default translations;

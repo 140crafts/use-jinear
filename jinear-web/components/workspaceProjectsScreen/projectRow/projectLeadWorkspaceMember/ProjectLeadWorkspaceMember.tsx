@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./ProjectLeadWorkspaceMember.module.css";
-import { WorkspaceMemberDto } from "@/be/jinear-core";
+import { ProjectDto, WorkspaceMemberDto } from "@/be/jinear-core";
 import Button, { ButtonVariants } from "@/components/button";
 import ProfilePhoto from "@/components/profilePhoto";
 import useTranslation from "@/locals/useTranslation";
@@ -11,20 +11,15 @@ import { useUpdateProjectLeadMutation } from "@/api/projectOperationApi";
 import Logger from "@/utils/logger";
 
 interface ProjectLeadWorkspaceMemberProps {
-  leadWorkspaceMember?: WorkspaceMemberDto;
-  workspaceId: string;
-  projectId: string;
+  project: ProjectDto;
 }
 
 const logger = Logger("ProjectLeadWorkspaceMember");
 
-const ProjectLeadWorkspaceMember: React.FC<ProjectLeadWorkspaceMemberProps> = ({
-                                                                                 workspaceId,
-                                                                                 projectId,
-                                                                                 leadWorkspaceMember
-                                                                               }) => {
+const ProjectLeadWorkspaceMember: React.FC<ProjectLeadWorkspaceMemberProps> = ({ project }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const { workspaceId, projectId, leadWorkspaceMember } = project;
 
   const tooltip = leadWorkspaceMember ?
     t("projectRowProjectLead").replace("${leadUserName}", leadWorkspaceMember?.account?.username ?? "") :
@@ -63,7 +58,7 @@ const ProjectLeadWorkspaceMember: React.FC<ProjectLeadWorkspaceMemberProps> = ({
     <Button className={styles.container}
             data-tooltip-right={tooltip}
             onClick={popWorkspaceMemberPicker}
-            disabled={isLoading}
+            disabled={project.archived || isLoading}
             loading={isLoading}>
       {leadWorkspaceMember ?
         <ProfilePhoto

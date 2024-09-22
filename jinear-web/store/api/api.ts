@@ -71,6 +71,7 @@ export const tagTypes = [
   `v1/messaging/channel/workspace/{workspaceId}`,
   "v1/project/query/assigned/{workspaceId}",
   "v1/project/query/all/{workspaceId}",
+  "v1/project/query/archived/{workspaceId}",
   `v1/project/query/{projectId}`
 ];
 

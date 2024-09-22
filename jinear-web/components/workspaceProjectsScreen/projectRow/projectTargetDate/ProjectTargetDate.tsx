@@ -26,6 +26,7 @@ const ProjectTargetDate: React.FC<ProjectTargetDateProps> = ({ project }) => {
 
   return (
     <DatePickerButton
+      disabled={project.archived}
       emptySelectionComponent={<LuCalendarPlus className={"icon"} />}
       initialDate={project.targetDate ? new Date(project.targetDate) : undefined}
       unpickableFromModal={true}
