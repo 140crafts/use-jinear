@@ -89,4 +89,8 @@ public class Project extends BaseEntity {
     @Where(clause = "passive_id is null")
     @JoinColumn(name = "workspace_id", referencedColumnName = "workspace_id", insertable = false, updatable = false)
     private Workspace workspace;
+
+    @OneToOne(mappedBy = "project")
+    @NotFound(action = NotFoundAction.IGNORE)
+    private ProjectFeedSettings projectFeedSettings;
 }

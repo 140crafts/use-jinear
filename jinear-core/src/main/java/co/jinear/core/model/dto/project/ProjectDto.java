@@ -31,4 +31,5 @@ public class ProjectDto extends BaseDto {
     private Set<ProjectTeamDto> projectTeams;
     private Set<MilestoneDto> milestones;
     private WorkspaceDto workspace;
+    private ProjectFeedSettingsDto projectFeedSettings;
 }
