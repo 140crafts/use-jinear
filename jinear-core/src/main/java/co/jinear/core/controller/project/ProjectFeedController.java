@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "v1/project/feed")
+@RequestMapping(value = "v1/project/public-feed")
 public class ProjectFeedController {
 
     private final ProjectFeedManager projectFeedManager;

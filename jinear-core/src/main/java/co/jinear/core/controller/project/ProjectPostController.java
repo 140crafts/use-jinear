@@ -15,8 +15,8 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "v1/project/feed/post")
-public class ProjectFeedPostController {
+@RequestMapping(value = "v1/project/post")
+public class ProjectPostController {
 
     private final ProjectPostManager projectPostManager;
 
