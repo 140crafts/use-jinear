@@ -3,6 +3,7 @@ package co.jinear.core.service.project;
 import co.jinear.core.converter.project.InitializeProjectPostVoToEntityConverter;
 import co.jinear.core.converter.project.ProjectPostDtoConverter;
 import co.jinear.core.exception.NotFoundException;
+import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.dto.project.ProjectPostDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.entity.project.ProjectPost;
@@ -11,10 +12,12 @@ import co.jinear.core.model.enumtype.media.MediaOwnerType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.vo.media.InitializeMediaVo;
+import co.jinear.core.model.vo.media.RemoveMediaVo;
 import co.jinear.core.model.vo.project.InitializeProjectPostVo;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.repository.project.ProjectPostRepository;
 import co.jinear.core.service.media.MediaOperationService;
+import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.richtext.RichTextInitializeService;
 import jakarta.transaction.Transactional;
@@ -26,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -39,6 +43,7 @@ public class ProjectPostService {
     private final InitializeProjectPostVoToEntityConverter initializeProjectPostVoToEntityConverter;
     private final RichTextInitializeService richTextInitializeService;
     private final MediaOperationService mediaOperationService;
+    private final MediaRetrieveService mediaRetrieveService;
     private final ProjectPostDtoConverter projectPostDtoConverter;
     private final PassiveService passiveService;
 
@@ -72,6 +77,32 @@ public class ProjectPostService {
         projectPost.setPassiveId(passiveId);
         projectPostRepository.save(projectPost);
         return passiveId;
+    }
+
+    @Transactional
+    public void addMedia(String ownerId, String postId, List<MultipartFile> files) {
+        log.info("Add media has started. ownerId: {}, postId: {}", ownerId, postId);
+        files.stream().map(file -> mapInitializeMediaVo(ownerId, postId, file))
+                .forEach(mediaOperationService::initializeMedia);
+    }
+
+    public void validateMediaIdRelatedWithPostAndDelete(String responsibleAccountId, String postId, String mediaId) {
+        log.info("Delete media has started. responsibleAccountId: {}, postId: {}, mediaId: {}", responsibleAccountId, postId, mediaId);
+        MediaDto mediaDto = retrieveMedia(mediaId, postId);
+        deleteMedia(responsibleAccountId, mediaDto);
+    }
+
+    private void deleteMedia(String responsibleAccountId, MediaDto mediaDto) {
+        log.info("Delete media has started.");
+        RemoveMediaVo removeMediaVo = new RemoveMediaVo();
+        removeMediaVo.setMediaId(mediaDto.getMediaId());
+        removeMediaVo.setResponsibleAccountId(responsibleAccountId);
+        mediaOperationService.deleteMedia(removeMediaVo);
+    }
+
+    private MediaDto retrieveMedia(String mediaId, String postId) {
+        log.info("Retrieve media with post id and media id has started. mediaId: {}, postId: {}", mediaId, postId);
+        return mediaRetrieveService.retrieveMediaWithMediaIdAndRelatedObjectId(mediaId, postId);
     }
 
     private void initializeBody(InitializeProjectPostVo initializeProjectPostVo, ProjectPost saved) {

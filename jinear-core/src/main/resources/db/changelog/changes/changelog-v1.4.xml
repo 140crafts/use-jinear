@@ -148,4 +148,66 @@
         </addColumn>
     </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project_feed_settings">
+        <createTable tableName="project_feed_settings">
+            <column name="project_feed_settings_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_feed_access_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_post_initialize_access_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="info_rich_text_id" type="char(26)"/>
+            <column name="info_website_url" type="varchar(512)"/>
+            <column name="access_key" type="varchar(128)"/>
+        </createTable>
+
+        <createIndex indexName="project_feed_settings_ix_project_id" tableName="project_feed_settings">
+            <column name="project_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project_post">
+        <createTable tableName="project_post">
+            <column name="project_post_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_body_rich_text_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="project_post_ix_project_id" tableName="project_post">
+            <column name="project_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-removes-not-null-post_body_rich_text_id-from-project_post">
+        <dropNotNullConstraint
+                tableName="project_post"
+                columnName="post_body_rich_text_id"
+                columnDataType="char(26)"
+        />
+    </changeSet>
 </databaseChangeLog>

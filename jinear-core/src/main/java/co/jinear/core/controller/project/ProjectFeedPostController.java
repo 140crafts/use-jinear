@@ -7,10 +7,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -24,5 +24,28 @@ public class ProjectFeedPostController {
     @ResponseStatus(HttpStatus.CREATED)
     public BaseResponse initialize(@Valid ProjectPostInitializeRequest projectPostInitializeRequest) {
         return projectPostManager.initialize(projectPostInitializeRequest);
+    }
+
+    @DeleteMapping("/{projectId}/{postId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse deletePost(@PathVariable String projectId,
+                                   @PathVariable String postId) {
+        return projectPostManager.delete(projectId, postId);
+    }
+
+    @PostMapping(value = "/{projectId}/{postId}/media", consumes = "multipart/form-data")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BaseResponse addMedia(@PathVariable String projectId,
+                                 @PathVariable String postId,
+                                 List<MultipartFile> files) {
+        return projectPostManager.addMedia(projectId, postId, files);
+    }
+
+    @DeleteMapping(value = "/{projectId}/{postId}/media/{mediaId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse removeMedia(@PathVariable String projectId,
+                                    @PathVariable String postId,
+                                    @PathVariable String mediaId) {
+        return projectPostManager.removeMedia(projectId, postId, mediaId);
     }
 }

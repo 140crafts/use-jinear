@@ -18,7 +18,7 @@ public interface ProjectFeedSettingsRepository extends JpaRepository<ProjectFeed
                 set projectFeedSettings.accessKey=:accessKey
                     where
                         projectFeedSettings.projectId = :projectId and
-                        projectFeedSettings.project.passiveId is null
+                        projectFeedSettings.passiveId is null
                 """)
     void updateAccessKey(@Param("projectId") String projectId, @Param("accessKey") String accessKey);
 

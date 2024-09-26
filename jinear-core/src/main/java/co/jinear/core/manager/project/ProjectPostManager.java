@@ -17,6 +17,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -41,16 +44,29 @@ public class ProjectPostManager {
 
     public BaseResponse delete(String projectId, String projectPostId) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        validateDeleteAccess(projectId, projectPostId, currentAccountId);
+        validatePostOwnerOrHasExplicitAdminAccess(projectId, projectPostId, currentAccountId);
         String passiveId = projectPostService.deletePost(projectId, projectPostId);
         passiveService.assignOwnership(passiveId, currentAccountId);
         return new BaseResponse();
     }
 
-    //add - post media
-    //remove - post media
+    public BaseResponse addMedia(String projectId, String postId, List<MultipartFile> files) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        validatePostOwnerOrHasExplicitAdminAccess(projectId, postId, currentAccountId);
+        log.info("Add media has started. currentAccountId: {}", currentAccountId);
+        projectPostService.addMedia(currentAccountId, postId, files);
+        return new BaseResponse();
+    }
 
-    private void validateDeleteAccess(String projectId, String projectPostId, String currentAccountId) {
+    public BaseResponse removeMedia(String projectId, String postId, String mediaId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        validatePostOwnerOrHasExplicitAdminAccess(projectId, postId, currentAccountId);
+        log.info("Remove media has started. currentAccountId: {}", currentAccountId);
+        projectPostService.validateMediaIdRelatedWithPostAndDelete(currentAccountId, postId, mediaId);
+        return new BaseResponse();
+    }
+
+    private void validatePostOwnerOrHasExplicitAdminAccess(String projectId, String projectPostId, String currentAccountId) {
         ProjectPostDto projectPostDto = projectPostService.retrievePost(projectId, projectPostId);
         if (!StringUtils.equalsIgnoreCase(projectPostDto.getAccountId(), currentAccountId)) {
             log.info("Current account is not post owner. Checking if workspace admin or is team admin any of project teams. projectId: {},projectPostId: {},currentAccountId: {}", projectId, projectPostId, currentAccountId);

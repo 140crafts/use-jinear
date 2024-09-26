@@ -53,7 +53,7 @@ public class ProjectPost extends BaseEntity {
     private RichText postBody;
 
     @OneToMany
-    @JoinColumn(name = "project_post_id", referencedColumnName = "related_object_id", insertable = false, updatable = false)
+    @JoinColumn(name = "related_object_id", referencedColumnName = "project_post_id", insertable = false, updatable = false)
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<Media> files;
