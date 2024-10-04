@@ -7,8 +7,6 @@ import co.jinear.core.model.enumtype.project.ProjectPostInitializeAccessType;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.ZonedDateTime;
-
 @Getter
 @Setter
 public class ProjectFeedSettingsDto extends BaseDto {
@@ -20,6 +18,5 @@ public class ProjectFeedSettingsDto extends BaseDto {
     private String infoRichTextId;
     private String infoWebsiteUrl;
     private String accessKey;
-    private ZonedDateTime passwordExpires;
     private RichTextDto info;
 }

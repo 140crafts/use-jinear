@@ -4,6 +4,7 @@ import co.jinear.core.converter.richtext.RichTextConverter;
 import co.jinear.core.converter.workspace.WorkspaceDtoConverter;
 import co.jinear.core.converter.workspace.WorkspaceMemberDtoConverter;
 import co.jinear.core.model.dto.project.ProjectDto;
+import co.jinear.core.model.dto.project.PublicProjectDto;
 import co.jinear.core.model.entity.project.Project;
 import org.mapstruct.Mapper;
 
@@ -17,4 +18,6 @@ import org.mapstruct.Mapper;
 public interface ProjectDtoConverter {
 
     ProjectDto convert(Project project);
+
+    PublicProjectDto convertToPublic(Project project);
 }

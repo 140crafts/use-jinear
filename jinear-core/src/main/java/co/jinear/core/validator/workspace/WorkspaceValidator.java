@@ -27,6 +27,10 @@ public class WorkspaceValidator {
         workspaceMemberService.validateAccountWorkspaceMember(currentAccountId, workspaceId);
     }
 
+    public boolean isAccountWorkspaceMember(String currentAccountId, String workspaceId) {
+        return workspaceMemberService.isAccountWorkspaceMember(currentAccountId, workspaceId);
+    }
+
     public void validateHasContentAccess(String currentAccountId, WorkspaceDto workspaceDto) {
         if (HIDDEN.equals(workspaceDto.getSettings().getContentVisibility())) {
             workspaceMemberService.validateAccountWorkspaceMember(currentAccountId, workspaceDto.getWorkspaceId());

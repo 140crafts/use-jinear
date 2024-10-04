@@ -6,6 +6,7 @@ import co.jinear.core.model.enumtype.media.MediaFileProviderType;
 import co.jinear.core.model.enumtype.media.MediaOwnerType;
 import lombok.Getter;
 import lombok.Setter;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 @Getter
 @Setter
@@ -18,6 +19,8 @@ public class MediaDto extends BaseDto {
     private String bucketName;
     private String originalName;
     private Long size;
+    @Nullable
+    private String contentType;
     private MediaFileProviderType providerType;
     private String url;
 }

@@ -210,4 +210,10 @@
                 columnDataType="char(26)"
         />
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-content_type-to-media">
+        <addColumn tableName="media">
+            <column name="content_type" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

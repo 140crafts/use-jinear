@@ -23,7 +23,7 @@ public class ProjectFeedSettingsManager {
 
     public BaseResponse update(ProjectFeedSettingsOperationRequest projectFeedSettingsOperationRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        projectAccessValidator.validateHasExplicitAccess(projectFeedSettingsOperationRequest.getProjectId(), currentAccountId);
+        projectAccessValidator.validateHasExplicitAdminAccess(projectFeedSettingsOperationRequest.getProjectId(), currentAccountId);
         log.info("Project feed settings update has started. currentAccountId: {}", currentAccountId);
         ProjectFeedSettingsOperationVo projectFeedSettingsOperationVo = projectFeedSettingsOperationRequestToVoConverter.convert(projectFeedSettingsOperationRequest);
         projectFeedSettingsOperationService.update(projectFeedSettingsOperationVo);

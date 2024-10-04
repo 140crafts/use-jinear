@@ -2,7 +2,9 @@ package co.jinear.core.validator.project;
 
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
+import co.jinear.core.model.dto.project.AccountProjectPermissionFlags;
 import co.jinear.core.model.dto.project.ProjectDto;
+import co.jinear.core.model.dto.project.ProjectFeedSettingsDto;
 import co.jinear.core.model.dto.project.ProjectTeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
 import co.jinear.core.service.project.ProjectRetrieveService;
@@ -83,8 +85,43 @@ public class ProjectAccessValidator {
         workspaceValidator.validateHasAccess(accountId, workspaceId);
     }
 
+    public AccountProjectPermissionFlags retrieveAccountProjectPermissionFlags(String accountId, String projectId) {
+        log.info("Retrieve account project permission flags has started. projectId: {}, accountId: {}", projectId, accountId);
+        ProjectDto projectDto = projectRetrieveService.retrieve(projectId);
+        boolean isAccountWorkspaceAdminOrOwner = workspaceValidator.isWorkspaceAdminOrOwner(accountId, projectDto.getWorkspaceId());
+        boolean isAccountIsProjectTeamsMember = isAccountIsProjectTeamsMember(accountId, projectDto);
+        boolean isAccountIsProjectTeamsAdmin = isAccountIsProjectTeamsAdmin(accountId, projectDto);
+        boolean isAccountProjectLead = Optional.of(projectDto).map(ProjectDto::getLeadWorkspaceMember).map(WorkspaceMemberDto::getAccountId).map(leadAccountId -> StringUtils.equalsIgnoreCase(leadAccountId, accountId)).orElse(Boolean.FALSE);
+        boolean isWorkspaceMember = workspaceValidator.isAccountWorkspaceMember(accountId, projectDto.getWorkspaceId());
+
+        boolean canInitializePost = Optional.of(projectDto)
+                .map(ProjectDto::getProjectFeedSettings)
+                .map(ProjectFeedSettingsDto::getProjectPostInitializeAccessType)
+                .map(projectPostInitializeAccessType -> switch (projectPostInitializeAccessType) {
+                    case WORKSPACE_ADMINS -> isAccountWorkspaceAdminOrOwner;
+                    case PROJECT_LEAD -> isAccountProjectLead;
+                    case PROJECT_TEAM_ADMINS -> isAccountIsProjectTeamsAdmin;
+                    case PROJECT_TEAM_MEMBERS -> isAccountIsProjectTeamsMember;
+                    case WORKSPACE_MEMBERS -> isWorkspaceMember;
+                })
+                .orElse(Boolean.FALSE);
+
+        return AccountProjectPermissionFlags.builder()
+                .isAccountWorkspaceAdminOrOwner(isAccountWorkspaceAdminOrOwner)
+                .isAccountIsProjectTeamsMember(isAccountIsProjectTeamsMember)
+                .isAccountIsProjectTeamsAdmin(isAccountIsProjectTeamsAdmin)
+                .canInitializePost(canInitializePost)
+                .build();
+    }
+
     private void validateAccountIsProjectTeamsMember(String accountId, ProjectDto projectDto) {
-        Optional.of(projectDto)
+        if (!isAccountIsProjectTeamsMember(accountId, projectDto)) {
+            throw new NoAccessException();
+        }
+    }
+
+    private boolean isAccountIsProjectTeamsMember(String accountId, ProjectDto projectDto) {
+        return Optional.of(projectDto)
                 .map(ProjectDto::getProjectTeams)
                 .map(Collection::stream)
                 .map(projectTeamDtoStream -> projectTeamDtoStream
@@ -93,11 +130,17 @@ public class ProjectAccessValidator {
                         .reduce(false, (accumulatedAccess, current) -> accumulatedAccess || current)
                 )
                 .filter(Boolean.TRUE::equals)
-                .orElseThrow(NoAccessException::new);
+                .orElse(Boolean.FALSE);
     }
 
     private void validateAccountIsProjectTeamsAdmin(String accountId, ProjectDto projectDto) {
-        Optional.of(projectDto)
+        if (!isAccountIsProjectTeamsAdmin(accountId, projectDto)) {
+            throw new NoAccessException();
+        }
+    }
+
+    private boolean isAccountIsProjectTeamsAdmin(String accountId, ProjectDto projectDto) {
+        return Optional.of(projectDto)
                 .map(ProjectDto::getProjectTeams)
                 .map(Collection::stream)
                 .map(projectTeamDtoStream -> projectTeamDtoStream
@@ -106,6 +149,6 @@ public class ProjectAccessValidator {
                         .reduce(false, (accumulatedAccess, current) -> accumulatedAccess || current)
                 )
                 .filter(Boolean.TRUE::equals)
-                .orElseThrow(NoAccessException::new);
+                .orElse(Boolean.FALSE);
     }
 }
