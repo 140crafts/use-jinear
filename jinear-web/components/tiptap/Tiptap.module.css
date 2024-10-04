@@ -3,6 +3,7 @@
   flex-direction: column;
   background-color: var(--c-primary-shade-0);
   border-radius: var(--border-radius);
+  word-break: break-word;
   /* gap: 1rem; */
 }
 

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-09-22 13:04:30.
+// Generated using typescript-generator version 3.0.1157 on 2024-10-04 13:01:07.
 
 export interface BaseDto {
     createdDate: Date;
@@ -159,10 +159,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
-    gthreadId: string;
     ghistoryId: string;
     ginternalDate: string;
+    gthreadId: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -272,6 +272,7 @@ export interface MediaDto extends BaseDto {
     bucketName: string;
     originalName: string;
     size: number;
+    contentType: string;
     providerType: MediaFileProviderType;
     url: string;
 }
@@ -499,6 +500,16 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
     parsedNextBillDate: Date;
 }
 
+export interface AccountProjectPermissionFlags {
+    canInitializePost: boolean;
+    accountWorkspaceAdminOrOwner: boolean;
+    accountIsProjectTeamsMember: boolean;
+    accountIsProjectTeamsAdmin: boolean;
+}
+
+export interface AccountProjectPermissionFlagsBuilder {
+}
+
 export interface MilestoneDto extends BaseDto {
     milestoneId: string;
     projectId: string;
@@ -531,6 +542,28 @@ export interface ProjectDto extends BaseDto {
     projectTeams: ProjectTeamDto[];
     milestones: MilestoneDto[];
     workspace: WorkspaceDto;
+    projectFeedSettings: ProjectFeedSettingsDto;
+}
+
+export interface ProjectFeedSettingsDto extends BaseDto {
+    projectFeedSettingsId: string;
+    projectId: string;
+    projectFeedAccessType: ProjectFeedAccessType;
+    projectPostInitializeAccessType: ProjectPostInitializeAccessType;
+    infoRichTextId: string;
+    infoWebsiteUrl: string;
+    accessKey: string;
+    info: RichTextDto;
+}
+
+export interface ProjectPostDto extends BaseDto {
+    projectPostId: string;
+    projectId: string;
+    accountId: string;
+    feedAccessKey: string;
+    account: PlainAccountProfileDto;
+    postBody: RichTextDto;
+    files: AccessibleMediaDto[];
 }
 
 export interface ProjectTeamDto extends BaseDto {
@@ -538,6 +571,13 @@ export interface ProjectTeamDto extends BaseDto {
     projectId: string;
     teamId: string;
     team: TeamDto;
+}
+
+export interface PublicProjectDto extends BaseDto {
+    projectId: string;
+    workspaceId: string;
+    title: string;
+    archived: boolean;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -1123,6 +1163,15 @@ export interface ProjectDescriptionUpdateRequest extends BaseRequest {
     description?: string | null;
 }
 
+export interface ProjectFeedSettingsOperationRequest extends BaseRequest {
+    projectId: string;
+    projectTitle?: string | null;
+    projectFeedAccessType?: ProjectFeedAccessType | null;
+    projectPostInitializeAccessType?: ProjectPostInitializeAccessType | null;
+    info?: string | null;
+    infoWebsiteUrl?: string | null;
+}
+
 export interface ProjectInitializeRequest extends BaseRequest {
     workspaceId: string;
     title: string;
@@ -1134,6 +1183,12 @@ export interface ProjectInitializeRequest extends BaseRequest {
     targetDate?: Date | null;
     teamIds: string[];
     milestones?: MilestoneInitializeDto[] | null;
+}
+
+export interface ProjectPostInitializeRequest extends BaseRequest {
+    projectId: string;
+    body: string;
+    files?: MultipartFile[] | null;
 }
 
 export interface ProjectPriorityUpdateRequest extends BaseRequest {
@@ -1504,12 +1559,28 @@ export interface RetrieveSubscriptionInfoResponse extends BaseResponse {
     data: SubscriptionInfoDto;
 }
 
+export interface AccountProjectPermissionFlagsResponse extends BaseResponse {
+    data: AccountProjectPermissionFlags;
+}
+
+export interface ProjectFeedPaginatedResponse extends BaseResponse {
+    data: PageDto<ProjectPostDto>;
+}
+
+export interface ProjectFeedPostResponse extends BaseResponse {
+    data: ProjectPostDto;
+}
+
 export interface ProjectListingPaginatedResponse extends BaseResponse {
     data: PageDto<ProjectDto>;
 }
 
 export interface ProjectRetrieveResponse extends BaseResponse {
     data: ProjectDto;
+}
+
+export interface PublicProjectRetrieveResponse extends BaseResponse {
+    data: PublicProjectDto;
 }
 
 export interface ReminderJobResponse extends BaseResponse {
@@ -1714,6 +1785,16 @@ export interface PassthroughDetailDto {
     detailValue: string;
 }
 
+export interface MultipartFile extends InputStreamSource {
+    contentType: string;
+    name: string;
+    bytes: any;
+    empty: boolean;
+    resource: Resource;
+    size: number;
+    originalFilename: string;
+}
+
 export interface GoogleCalendarEventAttendee {
     id: string;
     email: string;
@@ -1792,6 +1873,20 @@ export interface GoogleCalendarAttachment {
     fileId: string;
 }
 
+export interface Resource extends InputStreamSource {
+    open: boolean;
+    file: any;
+    readable: boolean;
+    url: URL;
+    uri: URI;
+    description: string;
+    filename: string;
+}
+
+export interface InputStreamSource {
+    inputStream: any;
+}
+
 export interface GoogleCalendarConferenceDataRequest {
     requestId: string;
     conferenceSolutionKey: GoogleCalendarConferenceSolutionKey;
@@ -1832,12 +1927,24 @@ export interface GoogleCalendarOfficeLocation {
     label: string;
 }
 
+export interface URL extends Serializable {
+}
+
+export interface URI extends Comparable<URI>, Serializable {
+}
+
 export interface GoogleCalendarConferenceSolutionKey {
     type: string;
 }
 
 export interface GoogleCalendarConferenceDataStatus {
     statusCode: string;
+}
+
+export interface Serializable {
+}
+
+export interface Comparable<T> {
 }
 
 export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
@@ -1868,11 +1975,11 @@ export type LocaleType = "TR" | "EN";
 
 export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE";
 
-export type FileType = "PROFILE_PIC" | "TASK_FILE";
+export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE";
 
 export type MediaFileProviderType = "GCLOUD";
 
-export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK";
+export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK" | "PROJECT_POST";
 
 export type MediaVisibilityType = "PUBLIC" | "PRIVATE" | "TEMP_PUBLIC";
 
@@ -1902,6 +2009,10 @@ export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELET
 
 export type MilestoneStateType = "IN_PROGRESS" | "COMPLETED";
 
+export type ProjectFeedAccessType = "PRIVATE" | "PUBLIC" | "GUESTS_ONLY";
+
+export type ProjectPostInitializeAccessType = "WORKSPACE_ADMINS" | "PROJECT_LEAD" | "PROJECT_TEAM_ADMINS" | "PROJECT_TEAM_MEMBERS" | "WORKSPACE_MEMBERS";
+
 export type ProjectPriorityType = "NONE" | "URGENT" | "HIGH" | "MEDIUM" | "LOW";
 
 export type ProjectStateType = "BACKLOG" | "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
@@ -1914,7 +2025,7 @@ export type RepeatType = "NONE" | "HOURLY" | "DAILY" | "WEEKLY" | "BIWEEKLY" | "
 
 export type RichTextSourceStack = "WYSIWYG" | "RC";
 
-export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT" | "MESSAGE" | "PROJECT" | "PROJECT_MILESTONE_DESCRIPTION";
+export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT" | "MESSAGE" | "PROJECT" | "PROJECT_MILESTONE_DESCRIPTION" | "PROJECT_FEED_INFO" | "PROJECT_FEED_POST";
 
 export type RobotType = "MESSAGE";
 

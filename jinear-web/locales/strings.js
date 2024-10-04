@@ -4236,9 +4236,9 @@ const translations = {
     en: "Project Detail",
     tr: "Proje Detayı"
   },
-  projectPosts: {
-    en: "Posts",
-    tr: "Gönderiler"
+  projectFeedSettings: {
+    en: "Feed Settings",
+    tr: "Akış Ayarları"
   },
   projectUpdateAsArchived: {
     en: "Archive",
@@ -4271,7 +4271,167 @@ const translations = {
   projectArchivedInfoUnarchiveDescription: {
     en: "You can continue to use this project as before by taking it out of the archive.",
     tr: "Bu projeyi arşivden çıkararak eskisi gibi kullanmaya devam edebilirsiniz."
-  }
+  },
+  projectFeedInfoSectionTitle: {
+    en: "About Project",
+    tr: "Proje Hakkında"
+  },
+  projectFeedInfoSectionText: {
+    en: "You can add additional information about project to show all visitors of project feed.",
+    tr: "Proje akışında tüm ziyaretçilere göstermek için proje hakkında ek bilgiler ekleyebilirsiniz."
+  },
+  projectFeedInfoPlaceholder: {
+    en: "No info provided.",
+    tr: "Açıklama girilmedi."
+  },
+  projectFeedInfoEdit: {
+    en: "Edit",
+    tr: "Düzenle"
+  },
+  projectFeedInfoSave: {
+    en: "Save",
+    tr: "Kaydet"
+  },
+  projectFeedInfoSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor"
+  },
+  projectFeedInfoCancel: {
+    en: "Cancel",
+    tr: "Vazgeç"
+  },
+  projectFeedAccessType_PRIVATE: {
+    en: "Private",
+    tr: "Gizli"
+  },
+  projectFeedAccessType_PUBLIC: {
+    en: "Public",
+    tr: "Herkese Açık"
+  },
+  projectFeedAccessType_GUESTS_ONLY: {
+    en: "Guests Only",
+    tr: "Davetlilere Özel"
+  },
+  projectFeedAccessTypeSectionTitle: {
+    en: "Feed Access",
+    tr: "Akışa Erişim"
+  },
+  projectFeedAccessTypeSectionText: {
+    en: "You can change who can see feed and posts.",
+    tr: "Proje akışına kimin erişebileceğini ayarlayabilirsiniz."
+  },
+  projectFeedAccessType_PRIVATE_info: {
+    en: "Feed only visible to workspace admins or team admins of project.",
+    tr: "Akış yanlızca çalışma alanı yöneticileri veya proje takımlarının yöneticileri tarafından görüntülenebilir."
+  },
+  projectFeedAccessType_PUBLIC_info: {
+    en: "Everyone with link can access feed.",
+    tr: "Linke sahip herkes akışı görüntüleyebilir."
+  },
+  projectFeedAccessType_GUESTS_ONLY_info: {
+    en: "Feed only accessible to guests.",
+    tr: "Akış yanlızca davetliler tarafından görüntülenebilir."
+  },
+  projectPostInitializeAccessTypeSectionTitle: {
+    en: "New Post Access",
+    tr: "Yeni Gönderi Oluşturma"
+  },
+  projectPostInitializeAccessTypeSectionText: {
+    en: "You can change who can create posts.",
+    tr: "Proje akışına kimin yeni gönderi gönderebileceğini ayarlayabilirsiniz."
+  },
+  projectPostInitializeAccessType_WORKSPACE_ADMINS: {
+    en: "Workspace Admins",
+    tr: "Çalışma Alanı Yöneticileri"
+  },
+  projectPostInitializeAccessType_PROJECT_LEAD: {
+    en: "Project Lead",
+    tr: "Proje Lideri"
+  },
+  projectPostInitializeAccessType_PROJECT_TEAM_ADMINS: {
+    en: "Project Team Admins",
+    tr: "Proje Takım Yöneticileri"
+  },
+  projectPostInitializeAccessType_PROJECT_TEAM_MEMBERS: {
+    en: "Project Team Members",
+    tr: "Proje Takım Üyeleri"
+  },
+  projectPostInitializeAccessType_WORKSPACE_MEMBERS: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri"
+  },
+  projectPostInitializeAccessType_WORKSPACE_ADMINS_info: {
+    en: "Only workspace admins can create feed posts.",
+    tr: "Yanlızca çalışma alanı yöneticileri gönderi oluşturabilir."
+  },
+  projectPostInitializeAccessType_PROJECT_LEAD_info: {
+    en: "Only project lead can create feed posts.",
+    tr: "Yanlızca proje lideri göneri oluşturabilir."
+  },
+  projectPostInitializeAccessType_PROJECT_TEAM_ADMINS_info: {
+    en: "Only project team admins can create feed posts",
+    tr: "Yanlızca proje takım yöneticileri gönderi oluşturabilir."
+  },
+  projectPostInitializeAccessType_PROJECT_TEAM_MEMBERS_info: {
+    en: "Only project team members can create feed posts.",
+    tr: "Yanlızca proje proje takım üyeleri gönderi oluşturabilir."
+  },
+  projectPostInitializeAccessType_WORKSPACE_MEMBERS_info: {
+    en: "Workspace Members can create feed posts.",
+    tr: "Yanlızca proje çalışma alanı üyeleri gönderi oluşturabilir."
+  },
+  projectFeedUrlCopy: {
+    en: "Copy Link",
+    tr: "Linki Kopyala"
+  },
+  projectFeedUrlGo: {
+    en: "Go To Link",
+    tr: "Linke Git"
+  },
+  projectFeedUrlTitle: {
+    en: "Feed Link",
+    tr: "Akış Linki"
+  },
+  projectFeedUrlText: {
+    en: "You can add access project feed from here.",
+    tr: "Proje akışında buradan ulaşabilirsiniz."
+  },
+  projectPostNewUpdatePlaceholder: {
+    en: "Post an update about project",
+    tr: "Proje hakkında bir güncelleme gönderin"
+  },
+  projectPostNewUpdateAddFile: {
+    en: "Add attachment",
+    tr: "Dosya ekle"
+  },
+  projectPostNewUpdatePost: {
+    en: "Create a post",
+    tr: "Gönderi oluştur"
+  },
+  projectPostGoBackToFeed: {
+    en: "Back",
+    tr: "Akışa Dön"
+  },
+  projectPostDeleteButton: {
+    en: "Delete",
+    tr: "Sil"
+  },
+  projectPostDeleteAreYouSureTitle: {
+    en: "Delete Post",
+    tr: "Gönderiyi Sil"
+  },
+  projectPostDeleteAreYouSureText: {
+    en: "Are you sure to delete this post? This can not be undone.",
+    tr: "Bu gönderiyi silmek istediğine emin misin? Bu işlem geri alınamaz."
+  },
+  projectPostDeleteAreYouSureConfirmLabel: {
+    en: "Delete",
+    tr: "Sil"
+  },
+  projectFeedPageEmptyLabel: {
+    en: "There isn't any content in this feed",
+    tr: "Bu akışta herhangi bir öge bulunmuyor"
+  },
 };
 
 export default translations;

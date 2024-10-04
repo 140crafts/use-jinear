@@ -1,61 +1,71 @@
 .container {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  gap: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 1rem;
 }
+
 .wrapper {
-  display: flex;
-  flex-direction: row;
-  background-color: var(--c-primary-shade-0);
-  border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: row;
+    background-color: var(--c-primary-shade-0);
+    border-radius: var(--border-radius);
 }
 
 .inputContainer {
-  position: relative;
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  gap: 0.25rem;
-  min-width: 2rem;
+    position: relative;
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    min-width: 2rem;
+}
+
+.labelDisabled {
+    cursor: not-allowed !important;
 }
 
 .label {
-  display: flex;
-  flex: 1;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  position: relative;
-  transition: color 0.5s ease;
-  height: 100%;
-  padding: 0.25rem 1rem;
-  text-align: center;
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.5s ease;
+    height: 100%;
+    padding: 0.25rem 1rem;
+    text-align: center;
+}
+
+.checkedLabel {
+    font-weight: 700;
 }
 
 .longLabelContainer {
-  flex: 1;
-  min-height: 2rem;
-  display: flex;
-  flex-direction: column;
+    flex: 1;
+    min-height: 2rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .longLabel {
-  text-align: end;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 1 !important;
-  cursor: default !important;
-  background-color: unset !important;
+    text-align: end;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1 !important;
+    cursor: default !important;
+    background-color: unset !important;
 }
 
 .longLabel:hover {
-  background-color: unset !important;
+    background-color: unset !important;
 }
+
 .longLabel:disabled:hover {
-  background-color: unset !important;
+    background-color: unset !important;
 }

@@ -2,8 +2,12 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-color: var(--c-primary-shade-1);
+  background-color: var(--c-primary);
   width: 100%;
   height: 100%;
   border-radius: var(--border-radius);
+  border-style: solid;
+  border-width: thin;
+  border-color: var(--c-primary-shade-1);
+  box-shadow: var(--box-shadow-soft);
 }
