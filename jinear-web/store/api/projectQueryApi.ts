@@ -1,4 +1,8 @@
-import { ProjectListingPaginatedResponse, ProjectRetrieveResponse } from "@/model/be/jinear-core";
+import {
+  AccountProjectPermissionFlagsResponse,
+  ProjectListingPaginatedResponse,
+  ProjectRetrieveResponse, PublicProjectRetrieveResponse
+} from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export const projectQueryApi = api.injectEndpoints({
@@ -48,7 +52,27 @@ export const projectQueryApi = api.injectEndpoints({
           id: `${req.workspaceId}`
         }
       ]
-    })
+    }),
+    //
+    retrieveProjectPermissions: build.query<AccountProjectPermissionFlagsResponse, { projectId: string }>({
+      query: ({ projectId }: { projectId: string }) => `v1/project/query/project-permissions/${projectId}`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: `v1/project/query/project-permissions/{projectId}`,
+          id: `${req.projectId}`
+        }
+      ]
+    }),
+    //
+    retrievePublicProject: build.query<PublicProjectRetrieveResponse, { projectId: string }>({
+      query: ({ projectId }: { projectId: string }) => `v1/project/query/${projectId}/info`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: `v1/project/query/{projectId}/info`,
+          id: `${req.projectId}`
+        }
+      ]
+    }),
     //
   })
 });
@@ -57,9 +81,10 @@ export const {
   useRetrieveProjectQuery,
   useRetrieveAssignedProjectsQuery,
   useAllProjectsQuery,
-  useArchivedProjectsQuery
+  useArchivedProjectsQuery,
+  useRetrieveProjectPermissionsQuery
 } = projectQueryApi;
 
 export const {
-  endpoints: { retrieveProject, retrieveAssignedProjects, allProjects, archivedProjects }
+  endpoints: { retrieveProject, retrieveAssignedProjects, allProjects, archivedProjects, retrieveProjectPermissions }
 } = projectQueryApi;

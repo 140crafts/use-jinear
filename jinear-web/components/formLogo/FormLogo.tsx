@@ -21,15 +21,15 @@ const FormLogo: React.FC<FormLogoProps> = ({ withLeftLine = true, contentClassNa
       in: {
         marginRight: 0,
         opacity: 1,
-        transition: { duration: 0.75 },
+        transition: { duration: 0.75 }
       },
       out: {
         marginRight: -35,
-        opacity: 0,
-      },
+        opacity: 0
+      }
     },
     transition: { type: "spring", stiffness: 500, damping: 50, mass: 2 },
-    onAnimationComplete: () => !isPresent && safeToRemove?.(),
+    onAnimationComplete: () => !isPresent && safeToRemove?.()
   };
 
   return (
@@ -41,7 +41,7 @@ const FormLogo: React.FC<FormLogoProps> = ({ withLeftLine = true, contentClassNa
             {...animations}
             className={styles.logoText}
             style={{
-              position: isPresent ? "static" : "absolute",
+              position: isPresent ? "static" : "absolute"
             }}
           >
             <Button href="/" className={styles.logoButton}>

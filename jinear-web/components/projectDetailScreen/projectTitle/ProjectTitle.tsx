@@ -13,9 +13,10 @@ interface ProjectTitleProps {
   projectId: string;
   title?: string;
   isFetching?: boolean;
+  editable?: boolean;
 }
 
-const ProjectTitle: React.FC<ProjectTitleProps> = ({ projectId, title, isFetching }) => {
+const ProjectTitle: React.FC<ProjectTitleProps> = ({ projectId, title, isFetching, editable = true }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [taskTitle, setTaskTitle] = useState(title);
@@ -57,7 +58,7 @@ const ProjectTitle: React.FC<ProjectTitleProps> = ({ projectId, title, isFetchin
           <CircularProgress size={12} className={styles.loading} />
           {t("taskDescriptionSaving")}
       </span>}
-      {!isUpdateProjectTitleLoading && (
+      {!isUpdateProjectTitleLoading && editable && (
         <Button
           disabled={isUpdateProjectTitleLoading || isFetching}
           heightVariant={ButtonHeight.short}

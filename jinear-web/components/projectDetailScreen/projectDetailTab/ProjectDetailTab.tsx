@@ -6,7 +6,6 @@ import Line from "@/components/line/Line";
 import ProjectActionButtons from "@/components/projectDetailScreen/projectActionButtons/ProjectActionButtons";
 import ProjectDescription from "@/components/projectDetailScreen/projectDescription/ProjectDescription";
 import ProjectDetailMilestones from "@/components/projectDetailScreen/projectDetailMilestones/ProjectDetailMilestones";
-import ProjectArchivedInfo from "@/components/projectDetailScreen/projectArchivedInfo/ProjectArchivedInfo";
 import cn from "classnames";
 
 interface ProjectDetailTabProps {
@@ -17,19 +16,14 @@ interface ProjectDetailTabProps {
 const ProjectDetailTab: React.FC<ProjectDetailTabProps> = ({ project, isFetching }) => {
 
   return (
-    <div className={styles.container}>
-
-      <ProjectArchivedInfo project={project} />
-
-      <div className={cn(styles.contentContainer, project.archived && styles.archived)}>
-        <ProjectTitle projectId={project.projectId} title={project.title} isFetching={isFetching} />
-        <Line />
-        <ProjectActionButtons project={project} isFetching={isFetching} />
-        <Line />
-        <ProjectDescription projectId={project.projectId} description={project.description} isFetching={isFetching} />
-        <Line />
-        <ProjectDetailMilestones project={project} />
-      </div>
+    <div className={cn(styles.container, project.archived && styles.archived)}>
+      <ProjectTitle projectId={project.projectId} title={project.title} isFetching={isFetching} />
+      <Line />
+      <ProjectActionButtons project={project} isFetching={isFetching} />
+      <Line />
+      <ProjectDescription projectId={project.projectId} description={project.description} isFetching={isFetching} />
+      <Line />
+      <ProjectDetailMilestones project={project} />
     </div>
   );
 };

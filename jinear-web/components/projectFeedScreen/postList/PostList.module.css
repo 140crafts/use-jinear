@@ -1,0 +1,6 @@
+.contentContainerClassName {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    background: unset !important;
+}

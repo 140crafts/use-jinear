@@ -60,7 +60,7 @@ const SegmentedControl: React.FC<SegmentedControlProps> = ({
                 }}
               />
               <label htmlFor={segmentId}
-                     className={cn(styles.label, segmentLabelClassName)}
+                     className={cn(styles.label, i === activeIndex ? styles.checkedLabel : undefined, item.inputProps?.disabled && styles.labelDisabled, segmentLabelClassName)}
                      data-tooltip={item.tooltip}>
                 {item?.icon}
                 {item.label}

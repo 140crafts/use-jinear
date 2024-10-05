@@ -20,10 +20,17 @@ const PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS = [
   "/engage/workspace-invitation",
   "/pricing",
   "/terms",
-  "/debug"
+  "/debug",
+  "/project-feed/"
 ];
 
 const ONLY_NOT_LOGGED_IN_PATHS = ["/forgot-password", "/register", "/login"];
+
+const checkPathIsIn = (pathname: string, allowed: string[]) => {
+  const result = allowed?.find(allowedPath => allowedPath.indexOf(pathname)) != null;
+  logger.log({ pathname, allowed, checkPathIsIn: result });
+  return result;
+};
 
 const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
   const dispatch = useAppDispatch();
@@ -44,7 +51,7 @@ const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
     } else if (
       authState == "NOT_LOGGED_IN" &&
       ONLY_NOT_LOGGED_IN_PATHS.indexOf(pathname) == -1 &&
-      PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS.indexOf(pathname) == -1
+      !checkPathIsIn(pathname, PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS)
     ) {
       logger.log("This path only for LOGGED IN users.");
       router.replace("/");
