@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-10-04 13:01:07.
+// Generated using typescript-generator version 3.0.1157 on 2024-10-05 11:40:23.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -159,9 +159,9 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ghistoryId: string;
-    ginternalDate: string;
     gthreadId: string;
+    ginternalDate: string;
+    ghistoryId: string;
     gid: string;
 }
 
@@ -272,7 +272,7 @@ export interface MediaDto extends BaseDto {
     bucketName: string;
     originalName: string;
     size: number;
-    contentType: string;
+    contentType?: string | null;
     providerType: MediaFileProviderType;
     url: string;
 }
@@ -578,6 +578,7 @@ export interface PublicProjectDto extends BaseDto {
     workspaceId: string;
     title: string;
     archived: boolean;
+    info?: RichTextDto | null;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -1878,8 +1879,8 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    uri: URI;
     description: string;
+    uri: URI;
     filename: string;
 }
 

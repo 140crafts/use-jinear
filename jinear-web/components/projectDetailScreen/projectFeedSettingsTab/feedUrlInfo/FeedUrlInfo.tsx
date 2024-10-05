@@ -23,7 +23,7 @@ const FeedUrlInfo: React.FC<FeedUrlInfoProps> = ({ accessKey }) => {
         <h3>{t("projectFeedUrlTitle")}</h3>
         <span>{t("projectFeedUrlText")}</span>
       </div>
-      <a className={styles.urlInput} href={url} target={"_blank"}>{url}</a>
+      <a className={styles.urlInput} href={url} target={"_blank"} rel={"noreferrer"}>{url}</a>
       <div className={styles.actionButtonContainer}>
         <Button heightVariant={ButtonHeight.short} variant={ButtonVariants.filled}
                 onClick={copyLink}>{t("projectFeedUrlCopy")}</Button>

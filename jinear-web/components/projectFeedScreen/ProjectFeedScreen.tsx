@@ -8,6 +8,7 @@ import { selectAuthState, selectCurrentAccountId } from "@/slice/accountSlice";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { useRetrieveProjectPermissionsQuery, useRetrieveProjectQuery } from "@/api/projectQueryApi";
 import ProjectInfo from "@/components/projectFeedScreen/projectInfo/ProjectInfo";
+import { useRetrievePublicProjectInfoQuery } from "@/api/projectFeedApi";
 
 interface ProjectFeedScreenProps {
   accessKey: string;
@@ -25,15 +26,15 @@ const ProjectFeedScreen: React.FC<ProjectFeedScreenProps> = ({ accessKey }) => {
   } = useRetrieveProjectPermissionsQuery({ projectId }, { skip: currentAccountId == null });
 
   const {
-    data: retrieveProjectResponse,
-    isFetching: isRetrieveProjectFetching
-  } = useRetrieveProjectQuery({ projectId });
+    data: retrievePublicProjectResponse,
+    isFetching: isRetrievePublicProjectFetching
+  } = useRetrievePublicProjectInfoQuery({ projectId });
 
 
-  return (authState == "NOT_DECIDED" || isAccountProjectPermissionsFetching || isRetrieveProjectFetching) ?
+  return (authState == "NOT_DECIDED" || isAccountProjectPermissionsFetching || isRetrievePublicProjectFetching) ?
     <CircularLoading /> : (
       <div className={styles.container}>
-        {retrieveProjectResponse && <ProjectInfo publicProject={retrieveProjectResponse.data} />}
+        {retrievePublicProjectResponse && <ProjectInfo publicProject={retrievePublicProjectResponse.data} />}
         {(accountProjectPermissions?.data.canInitializePost) && <NewPostInput projectId={projectId} />}
         <PostList projectId={projectId} accessKey={accessKey} />
       </div>

@@ -11,14 +11,14 @@ interface PostFileProps {
 const PostFile: React.FC<PostFileProps> = ({ file }) => {
   const type = file.contentType || "";
 
-  const onClick = (e: Event) => {
+  const onClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e?.preventDefault?.();
     window.open(file.url, "_blank");
   };
 
   return (
     <button className={styles.container} onClick={onClick}>
-      {type.indexOf("image") != -1 || type.indexOf("video") != -1 ?
+      {type.indexOf("image") != -1 ?
         <Image
           alt={`Post file ${file.originalName}`}
           className={styles.img}
@@ -26,8 +26,7 @@ const PostFile: React.FC<PostFileProps> = ({ file }) => {
           src={file.url} /> :
         type.indexOf("video") != -1 ?
           <video
-            className={styles.img}
-            controls
+            className={styles.video}
             src={file.url}>
           </video> :
           <div className={styles.logoContainer}>

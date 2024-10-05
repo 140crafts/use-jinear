@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "./PostList.module.css";
 import { ProjectPostDto } from "@/be/jinear-core";
 import { useRetrieveProjectFeedQuery } from "@/api/projectFeedApi";
-import EndlessScrollList from "@/components/endlessScrollList/EndlessScrollList";
 import useTranslation from "@/locals/useTranslation";
 import ProjectPost from "@/components/projectPost/ProjectPost";
-import ProjectsTitle from "@/components/workspaceProjectsScreen/projectsTitle/ProjectsTitle";
 import PaginatedList from "@/components/paginatedList/PaginatedList";
 
 interface PostListProps {
@@ -24,9 +22,8 @@ const PostList: React.FC<PostListProps> = ({ projectId, accessKey }) => {
     return <ProjectPost key={data.projectPostId} post={data} accessKey={accessKey} />;
   };
 
-  const loadMore = () => {
-    setPage(page + 1);
-  };
+  const totalCountTitle = retrieveProjectFeedResponse ? `(${retrieveProjectFeedResponse.data.totalElements})` : "";
+  const title = `${t("projectFeedPostsTitle")} ${totalCountTitle}`;
 
   return (
     <div className={styles.container}>
@@ -40,6 +37,9 @@ const PostList: React.FC<PostListProps> = ({ projectId, accessKey }) => {
         renderItem={renderContentItem}
         emptyLabel={t("projectFeedPageEmptyLabel")}
         hidePaginationOnSinglePages={true}
+        contentContainerClassName={styles.contentContainerClassName}
+        listTitle={title}
+        paginationPosition={"bottom"}
       />
     </div>
   );

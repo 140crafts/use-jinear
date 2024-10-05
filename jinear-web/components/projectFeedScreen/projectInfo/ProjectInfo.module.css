@@ -4,3 +4,7 @@
     gap: 1rem;
 }
 
+.input {
+    background-color: unset !important;
+    padding: 0 !important;
+}
