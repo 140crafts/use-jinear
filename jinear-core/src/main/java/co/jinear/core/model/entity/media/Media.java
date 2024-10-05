@@ -57,6 +57,9 @@ public class Media extends BaseEntity {
     @Column(name = "size")
     private Long size;
 
+    @Column(name = "content_type")
+    private String contentType;
+
     @Convert(converter = MediaVisibilityTypeConverter.class)
     @Column(name = "visibility")
     private MediaVisibilityType visibility;

@@ -1,8 +1,10 @@
 package co.jinear.core.manager.project;
 
 import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.project.AccountProjectPermissionFlags;
 import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
+import co.jinear.core.model.response.project.AccountProjectPermissionFlagsResponse;
 import co.jinear.core.model.response.project.ProjectListingPaginatedResponse;
 import co.jinear.core.model.response.project.ProjectRetrieveResponse;
 import co.jinear.core.service.SessionInfoService;
@@ -34,7 +36,6 @@ public class ProjectQueryManager {
 
     public ProjectRetrieveResponse retrieve(String projectId) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        //todo change validator for guest support
         projectAccessValidator.validateHasExplicitAccess(projectId, currentAccountId);
         log.info("Retrieve project has started. currentAccountId: {}", currentAccountId);
         ProjectDto projectDto = projectRetrieveService.retrieve(projectId);
@@ -68,6 +69,19 @@ public class ProjectQueryManager {
         log.info("Retrieve archived projects has started. currentAccountId: {}, workspaceId: {}, page: {}", currentAccountId, workspaceId, page);
         Page<ProjectDto> projectsPage = projectListingService.retrieveArchivedWorkspaceProjects(workspaceId, page);
         return mapResponse(projectsPage);
+    }
+
+    public AccountProjectPermissionFlagsResponse retrieveAccountProjectPermissionFlags(String projectId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        log.info("Retrieve project permissions has started. projectId: {}, currentAccountId: {}", projectId, currentAccountId);
+        AccountProjectPermissionFlags accountProjectPermissionFlags = projectAccessValidator.retrieveAccountProjectPermissionFlags(currentAccountId, projectId);
+        return mapResponse(accountProjectPermissionFlags);
+    }
+
+    private AccountProjectPermissionFlagsResponse mapResponse(AccountProjectPermissionFlags accountProjectPermissionFlags) {
+        AccountProjectPermissionFlagsResponse accountProjectPermissionFlagsResponse = new AccountProjectPermissionFlagsResponse();
+        accountProjectPermissionFlagsResponse.setAccountProjectPermissionFlags(accountProjectPermissionFlags);
+        return accountProjectPermissionFlagsResponse;
     }
 
     private ProjectListingPaginatedResponse mapResponse(Page<ProjectDto> projectsPage) {

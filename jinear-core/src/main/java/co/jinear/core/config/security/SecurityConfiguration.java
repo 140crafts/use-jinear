@@ -50,6 +50,7 @@ public class SecurityConfiguration {
             "/v1/oauth/google/callback/login",
             "/v1/oauth/google/callback/attach-account",
             "/v1/calendar/event/exports/{shareableKey}",
+            "/v1/project/public-feed/**",
             "/v1/debug/**"
     };
 

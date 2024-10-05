@@ -129,6 +129,11 @@ public class MediaOperationService {
         media.setStoragePath(path);
         media.setProviderType(activeFileStorageType);
 
+        Optional.of(initializeMediaVo)
+                .map(InitializeMediaVo::getFile)
+                .map(MultipartFile::getContentType)
+                .ifPresent(media::setContentType);
+
         String originalName = Optional.of(initializeMediaVo)
                 .map(InitializeMediaVo::getFile)
                 .map(MultipartFile::getOriginalFilename)

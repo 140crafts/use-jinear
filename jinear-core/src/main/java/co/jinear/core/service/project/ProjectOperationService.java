@@ -5,9 +5,12 @@ import co.jinear.core.converter.project.ProjectInitializeVoToEntityMapper;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.entity.project.Project;
+import co.jinear.core.model.enumtype.project.ProjectFeedAccessType;
+import co.jinear.core.model.enumtype.project.ProjectPostInitializeAccessType;
 import co.jinear.core.model.enumtype.project.ProjectPriorityType;
 import co.jinear.core.model.enumtype.project.ProjectStateType;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
+import co.jinear.core.model.vo.project.ProjectFeedSettingsInitializeVo;
 import co.jinear.core.model.vo.project.ProjectInitializeVo;
 import co.jinear.core.model.vo.project.UpdateProjectDatesVo;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
@@ -33,6 +36,7 @@ public class ProjectOperationService {
     private final ProjectRetrieveService projectRetrieveService;
     private final MilestoneOperationService milestoneOperationService;
     private final MilestoneInitializeDtoToInitializeMilestoneVoMapper milestoneInitializeDtoToInitializeMilestoneVoMapper;
+    private final ProjectFeedSettingsOperationService projectFeedSettingsOperationService;
 
     @Transactional
     public void initialize(ProjectInitializeVo projectInitializeVo) {
@@ -41,14 +45,17 @@ public class ProjectOperationService {
         saved = initializeDescription(projectInitializeVo, saved);
         assignTeams(projectInitializeVo, saved);
         initializeMilestones(projectInitializeVo, saved);
+        initializeProjectFeedSettings(saved);
     }
 
+    @Transactional
     public void updateTitle(String projectId, String title) {
         log.info("Update title has started. projectId: {}, title: {}", projectId, title);
         Project project = projectRetrieveService.retrieveEntity(projectId);
         validateProjectIsNotArchived(project);
         project.setTitle(title);
         projectRepository.save(project);
+        projectFeedSettingsOperationService.updateAccessKey(projectId, title);
     }
 
     @Transactional
@@ -145,6 +152,16 @@ public class ProjectOperationService {
                                 .map(milestoneInitializeDto -> milestoneInitializeDtoToInitializeMilestoneVoMapper.map(milestoneInitializeDto, saved.getProjectId()))
                                 .forEach(milestoneOperationService::initialize)
                 );
+    }
+
+    private void initializeProjectFeedSettings(Project saved) {
+        ProjectFeedSettingsInitializeVo projectFeedSettingsInitializeVo = new ProjectFeedSettingsInitializeVo();
+        projectFeedSettingsInitializeVo.setProjectId(saved.getProjectId());
+        projectFeedSettingsInitializeVo.setProjectTitle(saved.getTitle());
+        projectFeedSettingsInitializeVo.setProjectFeedAccessType(ProjectFeedAccessType.PRIVATE);
+        projectFeedSettingsInitializeVo.setProjectPostInitializeAccessType(ProjectPostInitializeAccessType.PROJECT_TEAM_MEMBERS);
+
+        projectFeedSettingsOperationService.initialize(projectFeedSettingsInitializeVo);
     }
 
     private InitializeRichTextVo mapDescriptionInitVo(String projectId, String description) {

@@ -1,6 +1,7 @@
 package co.jinear.core.controller.project;
 
 import co.jinear.core.manager.project.ProjectQueryManager;
+import co.jinear.core.model.response.project.AccountProjectPermissionFlagsResponse;
 import co.jinear.core.model.response.project.ProjectListingPaginatedResponse;
 import co.jinear.core.model.response.project.ProjectRetrieveResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,12 @@ public class ProjectQueryController {
     @ResponseStatus(HttpStatus.OK)
     public ProjectRetrieveResponse retrieveProject(@PathVariable String projectId) {
         return projectQueryManager.retrieve(projectId);
+    }
+
+    @GetMapping("/project-permissions/{projectId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AccountProjectPermissionFlagsResponse retrieveProjectPermissions(@PathVariable String projectId) {
+        return projectQueryManager.retrieveAccountProjectPermissionFlags(projectId);
     }
 
     @GetMapping("/assigned/{workspaceId}")
