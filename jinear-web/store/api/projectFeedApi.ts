@@ -1,7 +1,7 @@
 import {
   AccountProjectPermissionFlagsResponse, ProjectFeedPaginatedResponse, ProjectFeedPostResponse,
   ProjectListingPaginatedResponse,
-  ProjectRetrieveResponse
+  ProjectRetrieveResponse, PublicProjectRetrieveResponse
 } from "@/model/be/jinear-core";
 import { api } from "./api";
 
@@ -32,6 +32,16 @@ export const projectFeedApi = api.injectEndpoints({
           id: `${req.projectId}-${req.page}`
         }
       ]
+    }),
+    //
+    retrievePublicProjectInfo: build.query<PublicProjectRetrieveResponse, { projectId: string }>({
+      query: ({ projectId }: { projectId: string }) => `v1/project/public-feed/${projectId}/info`,
+      providesTags: (_result, _err, req) => [
+        {
+          type: `v1/project/public-feed/{projectId}/info`,
+          id: `${req.projectId}`
+        }
+      ]
     })
     //
   })
@@ -39,12 +49,14 @@ export const projectFeedApi = api.injectEndpoints({
 
 export const {
   useRetrieveProjectFeedPostQuery,
-  useRetrieveProjectFeedQuery
+  useRetrieveProjectFeedQuery,
+  useRetrievePublicProjectInfoQuery
 } = projectFeedApi;
 
 export const {
   endpoints: {
     retrieveProjectFeedPost,
-    retrieveProjectFeed
+    retrieveProjectFeed,
+    retrievePublicProjectInfo
   }
 } = projectFeedApi;

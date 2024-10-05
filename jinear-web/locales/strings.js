@@ -4432,6 +4432,10 @@ const translations = {
     en: "There isn't any content in this feed",
     tr: "Bu akışta herhangi bir öge bulunmuyor"
   },
+  projectFeedPostsTitle: {
+    en: "Posts",
+    tr: "Gönderiler"
+  }
 };
 
 export default translations;

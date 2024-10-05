@@ -62,46 +62,45 @@ const ProjectPost: React.FC<ProjectPostProps> = ({ post, accessKey, asLink = tru
   const href = asLink ? `/project-feed/${accessKey}/post/${post.projectPostId}` : undefined;
 
   return (
-    <div className={styles.baseContainer}>
-      <div className={styles.container}>
-        <div className={styles.contentContainer}>
-          <div className={styles.profilePicContainer}>
-            <ProfilePhoto
-              boringAvatarKey={post.account?.accountId || ""}
-              storagePath={post.account?.profilePicture?.storagePath}
-              wrapperClassName={styles.profilePic}
+    <div className={styles.container}>
+      <div className={styles.contentContainer}>
+        <div className={styles.profilePicContainer}>
+          <ProfilePhoto
+            boringAvatarKey={post.account?.accountId || ""}
+            storagePath={post.account?.profilePicture?.storagePath}
+            wrapperClassName={styles.profilePic}
+          />
+        </div>
+        <div className={styles.content}>
+          <Wrapper
+            // @ts-ignore
+            href={href}>
+            <Tiptap
+              className={styles.input}
+              editorClassName={styles.input}
+              editorWrapperClassName={styles.editorWrapper}
+              editable={false}
+              hideActionBarWhenEmpty={false}
+              content={post.postBody.value}
             />
-          </div>
-          <div className={styles.content}>
-            <Wrapper
-              // @ts-ignore
-              href={href}>
-              <Tiptap
-                className={styles.input}
-                editorClassName={styles.input}
-                editorWrapperClassName={styles.editorWrapper}
-                editable={false}
-                hideActionBarWhenEmpty={false}
-                content={post.postBody.value}
-              />
-            </Wrapper>
-            <div className={styles.attachments}>
-              {post.files?.map(file => <PostFile key={file.mediaId} file={file} />)}
-            </div>
+          </Wrapper>
+          <div className={styles.attachments}>
+            {post.files?.map(file => <PostFile key={file.mediaId} file={file} />)}
           </div>
         </div>
-
-        <div className={styles.postInfo}>
-          <b>
-            {format(new Date(post.createdDate), t("dateFormatShortMonthReadable"))}
-          </b>
-          {canDelete && <Button className={styles.deleteButton} onClick={popAreYouSureToDeletePostModal}>
-            <LuTrash className={"icon"} />
-          </Button>}
-        </div>
-        <Line />
       </div>
+
+      <div className={styles.postInfo}>
+        <b>
+          {format(new Date(post.createdDate), t("dateFormatShortMonthReadable"))}
+        </b>
+        {canDelete && <Button className={styles.deleteButton} onClick={popAreYouSureToDeletePostModal}>
+          <LuTrash className={"icon"} />
+        </Button>}
+      </div>
+      <Line />
     </div>
+
   );
 };
 
