@@ -7,6 +7,7 @@ import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.dto.project.PublicProjectDto;
 import co.jinear.core.model.entity.project.Project;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring",
         uses = {WorkspaceDtoConverter.class,
@@ -19,5 +20,6 @@ public interface ProjectDtoConverter {
 
     ProjectDto convert(Project project);
 
+    @Mapping(source = "projectFeedSettings.info", target = "info")
     PublicProjectDto convertToPublic(Project project);
 }
