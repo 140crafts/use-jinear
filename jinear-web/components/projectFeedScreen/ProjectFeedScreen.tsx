@@ -35,7 +35,8 @@ const ProjectFeedScreen: React.FC<ProjectFeedScreenProps> = ({ accessKey }) => {
     <CircularLoading /> : (
       <div className={styles.container}>
         {retrievePublicProjectResponse && <ProjectInfo publicProject={retrievePublicProjectResponse.data} />}
-        {(accountProjectPermissions?.data.canInitializePost) && <NewPostInput projectId={projectId} />}
+        {(retrievePublicProjectResponse && accountProjectPermissions?.data.canInitializePost) &&
+          <NewPostInput projectId={projectId} workspaceId={retrievePublicProjectResponse.data.workspaceId} />}
         <PostList projectId={projectId} accessKey={accessKey} />
       </div>
     );

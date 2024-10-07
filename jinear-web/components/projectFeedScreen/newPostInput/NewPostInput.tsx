@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import styles from "./NewPostInput.module.css";
-import { useTypedSelector } from "@/store/store";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { selectCurrentAccount } from "@/slice/accountSlice";
 import ProfilePhoto from "@/components/profilePhoto";
 import cn from "classnames";
@@ -14,17 +14,24 @@ import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
 import Line from "@/components/line/Line";
 import NewPostFile from "@/components/projectFeedScreen/newPostInput/newPostFile/NewPostFile";
 import { useInitializeProjectFeedPostMutation } from "@/api/projectPostApi";
+import { useWorkspace } from "@/hooks/useWorkspace";
+import { popUpgradeWorkspacePlanModal } from "@/slice/modalSlice";
 
 interface NewPostInputProps {
   projectId: string;
+  workspaceId: string;
 }
 
 const logger = Logger("NewPostInput");
 
-const NewPostInput: React.FC<NewPostInputProps> = ({ projectId }) => {
+const NewPostInput: React.FC<NewPostInputProps> = ({ projectId, workspaceId }) => {
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const attachmentPickerRef = useRef<HTMLInputElement>(null);
   const currentAccount = useTypedSelector(selectCurrentAccount);
+  const workspace = useWorkspace(workspaceId);
+  const canAttachFiles = workspace && workspace.tier != "BASIC";
+
   const {
     register,
     handleSubmit,
@@ -58,6 +65,10 @@ const NewPostInput: React.FC<NewPostInputProps> = ({ projectId }) => {
   };
 
   const pickAttachment = () => {
+    if (!canAttachFiles && workspace) {
+      dispatch(popUpgradeWorkspacePlanModal({ workspaceId: workspace.workspaceId, visible: true }));
+      return;
+    }
     if (attachmentPickerRef.current) {
       attachmentPickerRef.current.value = "";
       attachmentPickerRef.current.click();

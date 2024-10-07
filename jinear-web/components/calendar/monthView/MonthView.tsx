@@ -35,7 +35,7 @@ const MonthView: React.FC<MonthViewProps> = ({ workspace }) => {
     {
       workspaceId: workspace?.workspaceId || "",
       timespanStart: periodStart,
-      timespanEnd: periodEnd,
+      timespanEnd: periodEnd
     },
     { skip: workspace == null }
   );
@@ -56,18 +56,18 @@ const MonthView: React.FC<MonthViewProps> = ({ workspace }) => {
       events.unshift(ghostEvent);
     }
 
-    return calculateHitMissTable({ events, days });
+    return calculateHitMissTable({ events, days }) ?? [[], [], [], [], []];
   }, [
     JSON.stringify(days),
     JSON.stringify(filterResponse),
     JSON.stringify(ghostEvent),
     JSON.stringify(hiddenTeams),
-    JSON.stringify(hiddenCalendars),
+    JSON.stringify(hiddenCalendars)
   ]);
 
   return (
     <>
-      {monthTable && <Month monthTable={monthTable} days={days} squeezedView={squeezedView} />}
+      <Month monthTable={monthTable ?? [[], [], [], [], []]} days={days} squeezedView={squeezedView} />
       <OverlayLoading isFetching={isFetching || calendarLoading} />
     </>
   );

@@ -38,7 +38,7 @@ const JinearProInfo: React.FC<JinearProInfoProps> = ({ hasAdditionalToBasicPlanT
         <li>{t("pricesPageProFeature_file")}</li>
         <li>{t("pricesPageProFeature_unlimitedFileStorage")}</li>
         <li>{t("pricesPageProFeature_UnlimitedSupport")}</li>
-        <li>{t("pricesPageProFeature_1to1Onboarding")}</li>
+        {/*<li>{t("pricesPageProFeature_1to1Onboarding")}</li>*/}
       </ul>
     </>
   );

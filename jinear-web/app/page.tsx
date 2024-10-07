@@ -60,10 +60,10 @@ export default function Home() {
       <div className="spacer-h-4" />
 
       <FeatureVideoCard
-        title={t("homePageFeatureTitle_GoogleCalendar")}
-        text={t("homePageFeatureText_GoogleCalendar")}
-        vimeoIdLight={"988098695"}
-        vimeoIdDark={"988098661"}
+        title={t("homePageFeatureTitle_NewTeam")}
+        text={t("homePageFeatureText_NewTeam")}
+        vimeoIdLight={"988098284"}
+        vimeoIdDark={"988098247"}
       />
 
       <div className="spacer-h-4" />
@@ -71,10 +71,10 @@ export default function Home() {
       <div className="spacer-h-4" />
 
       <FeatureVideoCard
-        title={t("homePageFeatureTitle_Share")}
-        text={t("homePageFeatureText_Share")}
-        vimeoIdLight={"988098610"}
-        vimeoIdDark={"988098554"}
+        title={t("homePageFeatureTitle_ListAndFilterYourTasks")}
+        text={t("homePageFeatureText_ListAndFilterYourTasks")}
+        vimeoIdLight={"988098780"}
+        vimeoIdDark={"988098743"}
       />
 
       <div className="spacer-h-4" />
@@ -104,23 +104,21 @@ export default function Home() {
       <div className="spacer-h-4" />
 
       <FeatureVideoCard
-        title={t("homePageFeatureTitle_ListAndFilterYourTasks")}
-        text={t("homePageFeatureText_ListAndFilterYourTasks")}
-        vimeoIdLight={"988098780"}
-        vimeoIdDark={"988098743"}
+        title={t("homePageFeatureTitle_Share")}
+        text={t("homePageFeatureText_Share")}
+        vimeoIdLight={"988098610"}
+        vimeoIdDark={"988098554"}
       />
-
       <div className="spacer-h-4" />
       <Line />
       <div className="spacer-h-4" />
 
       <FeatureVideoCard
-        title={t("homePageFeatureTitle_NewTeam")}
-        text={t("homePageFeatureText_NewTeam")}
-        vimeoIdLight={"988098284"}
-        vimeoIdDark={"988098247"}
+        title={t("homePageFeatureTitle_GoogleCalendar")}
+        text={t("homePageFeatureText_GoogleCalendar")}
+        vimeoIdLight={"988098695"}
+        vimeoIdDark={"988098661"}
       />
-
       <div className="spacer-h-4" />
     </ClientOnly>
   );
