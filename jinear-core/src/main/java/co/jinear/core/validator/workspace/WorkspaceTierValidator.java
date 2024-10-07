@@ -48,6 +48,19 @@ public class WorkspaceTierValidator {
         validateWorkspaceCanAddMember(workspaceDto);
     }
 
+    public void validateWorkspaceHasFileUploadAccess(String workspaceId) {
+        log.info("Validate workspace has file upload access has started. workspaceId: {}", workspaceId);
+        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
+        validateWorkspaceHasFileUploadAccess(workspaceDto);
+    }
+
+    public void validateWorkspaceHasFileUploadAccess(WorkspaceDto workspaceDto) {
+        log.info("Validate workspace has file upload access has started. workspaceDto: {}", workspaceDto);
+        if (WorkspaceTier.BASIC.equals(workspaceDto.getTier())) {
+            throw new WorkspaceExceedsTierLimitsException();
+        }
+    }
+
     public void validateWorkspaceCanAddMember(WorkspaceDto workspaceDto) {
         log.info("Validate workspace can add member has started. workspaceDto: {}", workspaceDto);
         if (WorkspaceTier.BASIC.equals(workspaceDto.getTier())) {

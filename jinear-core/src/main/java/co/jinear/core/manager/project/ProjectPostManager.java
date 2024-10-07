@@ -2,6 +2,7 @@ package co.jinear.core.manager.project;
 
 import co.jinear.core.converter.project.InitializeProjectPostVoConverter;
 import co.jinear.core.exception.NoAccessException;
+import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.dto.project.ProjectFeedSettingsDto;
 import co.jinear.core.model.dto.project.ProjectPostDto;
 import co.jinear.core.model.enumtype.project.ProjectPostInitializeAccessType;
@@ -12,7 +13,9 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.project.ProjectFeedSettingsRetrieveService;
 import co.jinear.core.service.project.ProjectPostService;
+import co.jinear.core.service.project.ProjectRetrieveService;
 import co.jinear.core.validator.project.ProjectAccessValidator;
+import co.jinear.core.validator.workspace.WorkspaceTierValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -32,10 +36,13 @@ public class ProjectPostManager {
     private final ProjectPostService projectPostService;
     private final InitializeProjectPostVoConverter initializeProjectPostVoConverter;
     private final PassiveService passiveService;
+    private final WorkspaceTierValidator workspaceTierValidator;
+    private final ProjectRetrieveService projectRetrieveService;
 
     public BaseResponse initialize(ProjectPostInitializeRequest projectPostInitializeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         ProjectFeedSettingsDto projectFeedSettingsDto = projectFeedSettingsRetrieveService.retrieve(projectPostInitializeRequest.getProjectId());
+        validateTierIfFilesPresent(projectPostInitializeRequest);
         validatePostInitializeAccess(projectPostInitializeRequest, currentAccountId, projectFeedSettingsDto);
         InitializeProjectPostVo initializeProjectPostVo = initializeProjectPostVoConverter.convert(projectPostInitializeRequest, currentAccountId);
         projectPostService.initialize(initializeProjectPostVo);
@@ -53,6 +60,7 @@ public class ProjectPostManager {
     public BaseResponse addMedia(String projectId, String postId, List<MultipartFile> files) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validatePostOwnerOrHasExplicitAdminAccess(projectId, postId, currentAccountId);
+        retrieveProjectAndValidateWorkspaceTier(projectId);
         log.info("Add media has started. currentAccountId: {}", currentAccountId);
         projectPostService.addMedia(currentAccountId, postId, files);
         return new BaseResponse();
@@ -90,5 +98,18 @@ public class ProjectPostManager {
                     projectAccessValidator.validateProjectWorkspaceMember(projectPostInitializeRequest.getProjectId(), currentAccountId);
             default -> throw new NoAccessException();
         }
+    }
+
+    private void validateTierIfFilesPresent(ProjectPostInitializeRequest projectPostInitializeRequest) {
+        Optional.of(projectPostInitializeRequest)
+                .map(ProjectPostInitializeRequest::getFiles)
+                .map(List::isEmpty)
+                .filter(Boolean.FALSE::equals)
+                .ifPresent(filesPresent -> retrieveProjectAndValidateWorkspaceTier(projectPostInitializeRequest.getProjectId()));
+    }
+
+    private void retrieveProjectAndValidateWorkspaceTier(String projectId) {
+        ProjectDto projectDto = projectRetrieveService.retrieve(projectId);
+        workspaceTierValidator.validateWorkspaceHasFileUploadAccess(projectDto.getWorkspaceId());
     }
 }
