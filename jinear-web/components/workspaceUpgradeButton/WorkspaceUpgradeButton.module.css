@@ -13,8 +13,8 @@
 }
 
 .container:hover {
-    /*color: var(--c-BABY_POWDER2) !important;*/
-    color: var(--c-DARKBISI2) !important;
+    color: var(--c-BABY_POWDER2) !important;
+    /*color: var(--c-DARKBISI2) !important;*/
 }
 
 @-webkit-keyframes upgrade {

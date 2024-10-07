@@ -12,6 +12,7 @@
     background-color: unset;
     padding-block: unset;
     padding-inline: unset;
+    cursor: pointer;
 }
 
 .img {
@@ -24,6 +25,16 @@
     border-radius: var(--border-radius);
 }
 
+.videoWrapper {
+    position: relative;
+    pointer-events: none;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .video {
     pointer-events: none;
     position: absolute;
@@ -33,6 +44,11 @@
     object-fit: cover;
     color: transparent;
     border-radius: var(--border-radius);
+}
+
+.videoIcon {
+    z-index: 1;
+    color: var(--c-BABY_POWDER2);
 }
 
 .logoContainer {

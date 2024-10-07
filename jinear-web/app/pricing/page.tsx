@@ -83,11 +83,12 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
           </span>
           </div>
           <Button className={styles.priceLabel} variant={ButtonVariants.filled} onClick={onSelfHostClick}>
-            {t("pricesPageSelfHostFeature_Price").replace("${price}", PADDLE_CATALOG.self_host.price)}
+            {/*{t("pricesPageSelfHostFeature_Price").replace("${price}", PADDLE_CATALOG.self_host.price)}*/}
+            {t("pricesPageSelfHostFeature_JoinWaitlist")}
           </Button>
-          <Button className={styles.priceLabel} onClick={onSelfHostClick}>
-            {t("pricesPageSelfHostFeature_RenewLicencePrice").replace("${price}", PADDLE_CATALOG.self_host_renew.price)}
-          </Button>
+          {/*<Button className={styles.priceLabel} onClick={onSelfHostClick}>*/}
+          {/*  {t("pricesPageSelfHostFeature_RenewLicencePrice").replace("${price}", PADDLE_CATALOG.self_host_renew.price)}*/}
+          {/*</Button>*/}
         </div>
 
         <div className={styles.plan}>

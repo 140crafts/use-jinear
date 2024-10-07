@@ -2332,16 +2332,16 @@ const translations = {
     tr: "Şartlar ve Koşullar"
   },
   homescreenHeroTitleLine1: {
-    en: "Calendar & Task Manager",
-    tr: "Takımlar ve Kişisel kullanım için"
+    en: "Lean project management",
+    tr: "Hızlı aksiyon alan takımlar için"
   },
   homescreenHeroTitleLine2: {
-    en: "for Individuals and Teams",
-    tr: "Takvim ve Görev Yönetimi"
+    en: "for fast pacing teams",
+    tr: "Yalın proje yönetimi"
   },
   homescreenHeroText: {
-    en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, manage projects collaboratively.",
-    tr: "İş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, projeleri işbirliğiyle yönetin."
+    en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, update your clients, manage projects collaboratively.",
+    tr: "İş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, müşterilerinizi bilgilendirin, projeleri işbirliğiyle yönetin."
   },
   homescreenGoToApp: {
     en: "Go to App",
@@ -2690,6 +2690,10 @@ const translations = {
   pricesPageSelfHostFeature_RenewLicence: {
     en: "* Renewing licence is to get new updates after 1 year. If you're happy with your latest updates you can keep using your existing version forever without renewing your licence.",
     tr: "* Lisans yenileme bir yıldan sonra yeni güncellemeleri almaya devam etmek için gerekir. Lisans yenilemeden var olan sürümünüzü sonsuza dek kullanabilirsiniz."
+  },
+  pricesPageSelfHostFeature_JoinWaitlist: {
+    en: "Join Waitlist",
+    tr: "Bekleme Listesine Katıl"
   },
   pricingPageTitle: {
     en: "Pricing & Plans",

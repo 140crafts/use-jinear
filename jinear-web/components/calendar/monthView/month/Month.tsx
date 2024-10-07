@@ -16,7 +16,7 @@ interface MonthProps {
 
 const logger = Logger("Month");
 
-const Month: React.FC<MonthProps> = ({ monthTable, days, squeezedView }) => {
+const Month: React.FC<MonthProps> = ({ monthTable = [[], [], [], [], []], days, squeezedView }) => {
   const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const Month: React.FC<MonthProps> = ({ monthTable, days, squeezedView }) => {
           pageContent?.scrollTo?.({
             left: offset.left + size.width,
             top: offset.top - size.height,
-            behavior: "smooth",
+            behavior: "smooth"
           });
           scroll({ left: offset.left + size.width, top: offset.top - size.height, behavior: "smooth" });
         }
