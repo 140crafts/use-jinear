@@ -22,7 +22,7 @@ public class NotificationTargetRetrieveService {
 
     public Optional<NotificationTarget> retrieveEntityBySessionId(String sessionInfoId) {
         log.info("Retrieve notification target entity has started. sessionInfoId:{}", sessionInfoId);
-        return notificationTargetRepository.findBySessionInfoIdAndPassiveIdIsNull(sessionInfoId);
+        return notificationTargetRepository.findFirstBySessionInfoIdAndPassiveIdIsNullOrderByCreatedDateDesc(sessionInfoId);
     }
 
     public Optional<NotificationTarget> retrieveEntityBySessionIdAndExternalTargetId(String sessionInfoId, String externalTargetId) {

@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface NotificationTargetRepository extends JpaRepository<NotificationTarget, String> {
 
-    Optional<NotificationTarget> findBySessionInfoIdAndPassiveIdIsNull(String sessionInfoId);
+    Optional<NotificationTarget> findFirstBySessionInfoIdAndPassiveIdIsNullOrderByCreatedDateDesc(String sessionInfoId);
 
     Optional<NotificationTarget> findFirstBySessionInfoIdAndExternalTargetIdAndPassiveIdIsNull(String sessionInfoId, String externalTargetId);
 
