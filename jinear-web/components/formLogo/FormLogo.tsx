@@ -8,9 +8,10 @@ import styles from "./FormLogo.module.scss";
 interface FormLogoProps {
   withLeftLine?: boolean;
   contentClassName?: string;
+  textClassName?: string;
 }
 
-const FormLogo: React.FC<FormLogoProps> = ({ withLeftLine = true, contentClassName }) => {
+const FormLogo: React.FC<FormLogoProps> = ({ withLeftLine = true, contentClassName, textClassName }) => {
   const [isPresent, safeToRemove] = usePresence();
 
   const animations = {
@@ -44,7 +45,7 @@ const FormLogo: React.FC<FormLogoProps> = ({ withLeftLine = true, contentClassNa
               position: isPresent ? "static" : "absolute"
             }}
           >
-            <Button href="/" className={styles.logoButton}>
+            <Button href="/" className={cn(styles.logoButton, textClassName)}>
               JINEAR
             </Button>
           </motion.div>

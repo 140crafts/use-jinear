@@ -3,17 +3,18 @@ import styles from "./FeatureVideoCard.module.scss";
 import { useTheme } from "@/components/themeProvider/ThemeProvider";
 
 interface FeatureVideoCardProps {
+  id?: string;
   title: string;
   text: string;
   vimeoIdLight: string;
   vimeoIdDark: string;
 }
 
-const FeatureVideoCard: React.FC<FeatureVideoCardProps> = ({ title, text, vimeoIdLight, vimeoIdDark }) => {
+const FeatureVideoCard: React.FC<FeatureVideoCardProps> = ({ id, title, text, vimeoIdLight, vimeoIdDark }) => {
   const theme = useTheme();
 
   return (
-    <div className={styles.container}>
+    <div id={id} className={styles.container}>
       <h2 className={styles.heroTitle}>{title}</h2>
       <div className={styles.heroText}>{text}</div>
       <div className="spacer-h-2" />

@@ -10,13 +10,16 @@
   top: 0;
   z-index: 99;
   background-color: var(--c-primary);
-  padding: 0.25rem 0;
+  //padding: 0.25rem 0;
   min-width: calc(100% + 1rem);
   margin-left: -1rem;
+  //height: var(--nav-bar-height);
+  height: 2.5rem;
 }
 
 .logo {
-  scale: .65;
+  //scale: .65;
+  font-size: 0.975rem;
 }
 
 .headerActionBar {
