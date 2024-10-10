@@ -13,7 +13,7 @@ const HomePageNavbar: React.FC<HomePageNavbarProps> = ({}) => {
 
   return (
     <div className={styles.header}>
-      <FormLogo contentClassName={styles.logo} withLeftLine={false} />
+      <FormLogo textClassName={styles.logo} withLeftLine={false} />
       <div className={styles.headerActionBar}>
         <Button href="/pricing">
           <b>{t("homescreenActionBarPricing")}</b>

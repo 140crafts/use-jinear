@@ -6,6 +6,24 @@
   width: var(--page-extended);
 }
 
+.featuresNavbar {
+  position: sticky;
+  //top: var(--nav-bar-height);
+  //top: 0;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: .5rem;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--c-primary);
+  //z-index: 100;
+}
+
+.navButton {
+  gap: .5rem;
+}
+
 .heroImageContainer {
   position: relative;
   height: calc(min(120ch, calc(100vw - calc(var(--gap) * 2))) / 1.77);

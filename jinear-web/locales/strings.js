@@ -3395,7 +3395,22 @@ const translations = {
     en: "Create teams, add different people to them and manage your task.",
     tr: "Takımlar oluşturun, farklı kişileri ekleyin ve görevlerinizi yönetin."
   },
-
+  homePageFeatureTitle_NewProject: {
+    en: "Initialize Projects",
+    tr: "Projeler Oluşturun"
+  },
+  homePageFeatureText_NewProject: {
+    en: "Create projects that you can track with multiple teams and set milestones.",
+    tr: "Birden çok ekip ile takip edebileceğiniz projeler oluşturun ve hedef noktaları belirleyin."
+  },
+  homePageFeatureTitle_NewProjectFeedPost: {
+    en: "Update your clients",
+    tr: "Müşterilerinize güncellemeler verin"
+  },
+  homePageFeatureText_NewProjectFeedPost: {
+    en: "Create posts about your project updates that your clients can follow on projects feed.",
+    tr: "Proje güncellemeri hakkında gönderiler oluşturun. Müşterileriniz proje akışından güncellemeri takip etsin."
+  },
   homePageFeatureTitle_Task: {
     en: "Powerful task management",
     tr: "Zengin görev yönetimi"
