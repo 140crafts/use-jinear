@@ -5,6 +5,8 @@ import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.request.workspace.WorkspaceInitializeRequest;
+import co.jinear.core.model.request.workspace.WorkspaceTitleUpdateRequest;
+import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
 import co.jinear.core.model.response.workspace.WorkspaceDisplayPreferenceResponse;
 import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
@@ -12,10 +14,7 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.media.MediaValidator;
 import co.jinear.core.service.team.TeamRetrieveService;
-import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
-import co.jinear.core.service.workspace.WorkspaceInitializeService;
-import co.jinear.core.service.workspace.WorkspaceMediaService;
-import co.jinear.core.service.workspace.WorkspaceRetrieveService;
+import co.jinear.core.service.workspace.*;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import jakarta.persistence.EntityManager;
@@ -44,6 +43,7 @@ public class WorkspaceManager {
     private final MediaValidator mediaValidator;
     private final WorkspaceMediaService workspaceMediaService;
     private final EntityManager entityManager;
+    private final WorkspaceUpdateService workspaceUpdateService;
 
     public WorkspaceBaseResponse initializeWorkspace(MultipartFile logo, WorkspaceInitializeRequest workspaceInitializeRequest) {
         log.info("Initialize workspace has started with request: {}", workspaceInitializeRequest);
@@ -101,6 +101,14 @@ public class WorkspaceManager {
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithUsername(workspaceUsername);
         TeamDto teamDto = teamRetrieveService.retrieveActiveTeamByUsername(teamUsername, workspaceDto.getWorkspaceId());
         return updatePreferredTeam(teamDto.getTeamId());
+    }
+
+    public BaseResponse updateTitle(String workspaceId, WorkspaceTitleUpdateRequest workspaceTitleUpdateRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        workspaceValidator.isWorkspaceAdminOrOwner(currentAccountId, workspaceId);
+        log.info("Update workspace title has started. currentAccountId: {}", currentAccountId);
+        workspaceUpdateService.updateWorkspaceTitle(workspaceId, workspaceTitleUpdateRequest.getTitle());
+        return new BaseResponse();
     }
 
     private WorkspaceDto initializeWorkspace(WorkspaceInitializeRequest workspaceInitializeRequest, String accountId) {
