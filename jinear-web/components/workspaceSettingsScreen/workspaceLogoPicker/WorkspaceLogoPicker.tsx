@@ -6,6 +6,7 @@ import { IoCamera } from "react-icons/io5";
 import styles from "./WorkspaceLogoPicker.module.css";
 
 interface WorkspaceLogoPickerProps {
+  disabled?: boolean;
   currentPhotoPath?: string;
   selectedFile: File | undefined;
   setSelectedFile: React.Dispatch<React.SetStateAction<File | undefined>>;
@@ -16,12 +17,13 @@ interface WorkspaceLogoPickerProps {
 const logger = Logger("WorkspaceLogoPickerPicker");
 
 const WorkspaceLogoPicker: React.FC<WorkspaceLogoPickerProps> = ({
-  currentPhotoPath,
-  selectedFile,
-  setSelectedFile,
-  selectedFilePreview,
-  setSelectedFilePreview,
-}) => {
+                                                                   disabled = false,
+                                                                   currentPhotoPath,
+                                                                   selectedFile,
+                                                                   setSelectedFile,
+                                                                   selectedFilePreview,
+                                                                   setSelectedFilePreview
+                                                                 }) => {
   const photoPickerButtonRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -35,6 +37,9 @@ const WorkspaceLogoPicker: React.FC<WorkspaceLogoPickerProps> = ({
   }, [selectedFile]);
 
   const pickPhoto = () => {
+    if (!disabled) {
+      return;
+    }
     logger.log({ selectedFilePreview });
     setSelectedFile(undefined);
     if (photoPickerButtonRef.current) {
@@ -58,16 +63,18 @@ const WorkspaceLogoPicker: React.FC<WorkspaceLogoPickerProps> = ({
       {selectedFile || currentPhotoPath ? (
         <div className={styles.photoContainer}>
           <img
+            alt={"Workspace logo"}
             src={selectedFilePreview ? selectedFilePreview : currentPhotoPath}
             className={styles.profilePicture}
             onClick={pickPhoto}
           />
-          <Button className={styles.changeLabel} variant={ButtonVariants.filled2} onClick={pickPhoto}>
+          <Button disabled={disabled} className={styles.changeLabel} variant={ButtonVariants.filled2}
+                  onClick={pickPhoto}>
             <FaPen />
           </Button>
         </div>
       ) : (
-        <Button className={styles.profilePicture} onClick={pickPhoto}>
+        <Button disabled={disabled} className={styles.profilePicture} onClick={pickPhoto}>
           <IoCamera size={32} />
         </Button>
       )}

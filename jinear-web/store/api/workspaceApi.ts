@@ -1,4 +1,4 @@
-import { BaseResponse, WorkspaceInitializeRequest } from "@/model/be/jinear-core";
+import { BaseResponse, WorkspaceInitializeRequest, WorkspaceTitleUpdateRequest } from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export interface IWorkspaceInitializeRequest extends WorkspaceInitializeRequest {
@@ -23,25 +23,41 @@ export const workspaceApi = api.injectEndpoints({
       query: (request: IWorkspaceInitializeRequest) => ({
         url: `v1/workspace` + generateQueryParams({ ...request, formData: undefined }),
         method: "POST",
-        body: request.formData,
+        body: request.formData
       }),
       invalidatesTags: (result) =>
         result == null
           ? []
           : [
-              "v1/account",
-              "v1/workspace/member/{workspaceId}/list",
-              "v1/team/from-workspace/{workspaceId}",
-              "v1/team/member/list/{teamId}",
-              "v1/topic/list/{teamId}",
-              "v1/workspace/activity/filter",
-            ],
+            "v1/account",
+            "v1/workspace/member/{workspaceId}/list",
+            "v1/team/from-workspace/{workspaceId}",
+            "v1/team/member/list/{teamId}",
+            "v1/topic/list/{teamId}",
+            "v1/workspace/activity/filter"
+          ]
     }),
-  }),
+    //
+    updateWorkspaceTitle: build.mutation<
+      BaseResponse,
+      { workspaceId: string; body: WorkspaceTitleUpdateRequest }
+    >({
+      query: ({ workspaceId, body }: { workspaceId: string; body: WorkspaceTitleUpdateRequest }) => ({
+        url: `v1/workspace/update/${workspaceId}/title`,
+        method: "PUT",
+        body
+      }),
+      invalidatesTags: [
+        "v1/account",
+        "v1/workspace/member/{workspaceId}/list"
+      ]
+    })
+    //
+  })
 });
 
-export const { useInitializeWorkspaceMutation } = workspaceApi;
+export const { useInitializeWorkspaceMutation, useUpdateWorkspaceTitleMutation } = workspaceApi;
 
 export const {
-  endpoints: { initializeWorkspace },
+  endpoints: { initializeWorkspace, updateWorkspaceTitle }
 } = workspaceApi;

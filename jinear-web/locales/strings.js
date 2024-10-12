@@ -4454,6 +4454,14 @@ const translations = {
   projectFeedPostsTitle: {
     en: "Posts",
     tr: "Gönderiler"
+  },
+  updateWorkspaceTitleModalTitle:{
+    en: "Update Workspace Title",
+    tr: "Çalışma Alanı Adını Güncelle"
+  },
+  updateWorkspaceTextModalText:{
+    en: "Please provide an another title for workspace.",
+    tr: "Çalışma alanı için yeni bir başlık girin."
   }
 };
 
