@@ -7,12 +7,16 @@ import co.jinear.core.model.entity.account.Account;
 import co.jinear.core.model.enumtype.account.RoleType;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.enumtype.username.UsernameRelatedObjectType;
+import co.jinear.core.model.enumtype.workspace.WorkspaceJoinType;
+import co.jinear.core.model.enumtype.workspace.WorkspaceVisibilityType;
 import co.jinear.core.model.vo.account.AccountInitializeVo;
 import co.jinear.core.model.vo.account.password.AccountPasswordVo;
 import co.jinear.core.model.vo.username.InitializeUsernameVo;
+import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.repository.AccountRepository;
 import co.jinear.core.service.slack.SlackService;
 import co.jinear.core.service.username.UsernameService;
+import co.jinear.core.service.workspace.WorkspaceInitializeService;
 import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.system.RandomHelper;
 import jakarta.transaction.Transactional;
@@ -37,6 +41,7 @@ public class AccountInitializeService {
     private final AccountDtoConverter accountDtoConverter;
     private final AccountCommunicationPermissionService accountCommunicationPermissionService;
     private final SlackService slackService;
+    private final WorkspaceInitializeService workspaceInitializeService;
 
     @Transactional
     public AccountDto initializeAccount(AccountInitializeVo accountInitializeVo) {
@@ -48,6 +53,7 @@ public class AccountInitializeService {
         initializeCommunicationPermissions(account);
         initializeAccountPassword(account, accountInitializeVo);
         sendMailConfirmationMail(account, accountInitializeVo);
+        createInitialWorkspace(account, accountInitializeVo.getLocale());
         log.info("Account initialize has ended.");
         slackService.sendEventMessage(String.format("New Account with email: %s", accountInitializeVo.getEmail()));
         return accountDtoConverter.map(account);
@@ -127,5 +133,19 @@ public class AccountInitializeService {
 
     private void initializeCommunicationPermissions(Account account) {
         accountCommunicationPermissionService.initialize(account.getAccountId());
+    }
+
+
+    private void createInitialWorkspace(Account account, LocaleType locale) {
+        String username = getUsernameFromEmail(account);
+        WorkspaceInitializeVo workspaceInitializeVo = new WorkspaceInitializeVo();
+        workspaceInitializeVo.setOwnerId(account.getAccountId());
+        workspaceInitializeVo.setTitle(username);
+        workspaceInitializeVo.setHandle(username);
+        workspaceInitializeVo.setVisibility(WorkspaceVisibilityType.HIDDEN_LISTED);
+        workspaceInitializeVo.setJoinType(WorkspaceJoinType.NEVER);
+        workspaceInitializeVo.setAppendRandomStrOnCollision(Boolean.TRUE);
+        workspaceInitializeVo.setLocale(locale);
+        workspaceInitializeService.initializeWorkspace(workspaceInitializeVo);
     }
 }

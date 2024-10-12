@@ -2,6 +2,8 @@ package co.jinear.core.controller.workspace;
 
 import co.jinear.core.manager.workspace.WorkspaceManager;
 import co.jinear.core.model.request.workspace.WorkspaceInitializeRequest;
+import co.jinear.core.model.request.workspace.WorkspaceTitleUpdateRequest;
+import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,5 +35,12 @@ public class WorkspaceController {
     @ResponseStatus(HttpStatus.OK)
     public WorkspaceBaseResponse retrieveWorkspaceWithId(@PathVariable String workspaceId) {
         return workspaceManager.retrieveWorkspaceWithId(workspaceId);
+    }
+
+    @PutMapping("/update/{workspaceId}/title")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateTitle(@PathVariable String workspaceId,
+                                    @Valid @RequestBody WorkspaceTitleUpdateRequest workspaceTitleUpdateRequest) {
+        return workspaceManager.updateTitle(workspaceId, workspaceTitleUpdateRequest);
     }
 }
