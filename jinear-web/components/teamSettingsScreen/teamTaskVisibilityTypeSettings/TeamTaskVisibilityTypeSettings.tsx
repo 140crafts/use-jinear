@@ -13,9 +13,14 @@ import styles from "./TeamTaskVisibilityTypeSettings.module.scss";
 interface TeamTaskVisibilityTypeSettingsProps {
   team: TeamDto;
   workspace: WorkspaceDto;
+  accountHasEditRole: boolean;
 }
 
-const TeamTaskVisibilityTypeSettings: React.FC<TeamTaskVisibilityTypeSettingsProps> = ({ team, workspace }) => {
+const TeamTaskVisibilityTypeSettings: React.FC<TeamTaskVisibilityTypeSettingsProps> = ({
+                                                                                         team,
+                                                                                         workspace,
+                                                                                         accountHasEditRole
+                                                                                       }) => {
   const { t } = useTranslation();
   const [nextViewType, setNextViewType] = useState<TeamTaskVisibilityType>(team.taskVisibility);
   const [updateTeamTaskVisibilityType, { isLoading }] = useUpdateTeamTaskVisibilityTypeMutation();
@@ -54,8 +59,16 @@ const TeamTaskVisibilityTypeSettings: React.FC<TeamTaskVisibilityTypeSettingsPro
             name="existing-team-task-visibility-type-segment-control"
             defaultIndex={["VISIBLE_TO_ALL_TEAM_MEMBERS", "OWNER_ASSIGNEE_AND_ADMINS"].indexOf(team.taskVisibility)}
             segments={[
-              { label: t("teamTaskVisibility_VISIBLE_TO_ALL_TEAM_MEMBERS"), value: "VISIBLE_TO_ALL_TEAM_MEMBERS" },
-              { label: t("teamTaskVisibility_OWNER_ASSIGNEE_AND_ADMINS"), value: "OWNER_ASSIGNEE_AND_ADMINS" },
+              {
+                label: t("teamTaskVisibility_VISIBLE_TO_ALL_TEAM_MEMBERS"),
+                value: "VISIBLE_TO_ALL_TEAM_MEMBERS",
+                inputProps: { disabled: !accountHasEditRole }
+              },
+              {
+                label: t("teamTaskVisibility_OWNER_ASSIGNEE_AND_ADMINS"),
+                value: "OWNER_ASSIGNEE_AND_ADMINS",
+                inputProps: { disabled: !accountHasEditRole }
+              }
             ]}
             segmentLabelClassName={styles.viewTypeSegmentLabel}
             callback={changeViewType}
@@ -68,7 +81,7 @@ const TeamTaskVisibilityTypeSettings: React.FC<TeamTaskVisibilityTypeSettingsPro
           {nextViewType != team.taskVisibility && (
             <Button
               loading={isLoading}
-              disabled={isLoading || !hasAccess}
+              disabled={isLoading || !hasAccess || !accountHasEditRole}
               heightVariant={ButtonHeight.short}
               variant={ButtonVariants.contrast}
               onClick={saveChanges}
