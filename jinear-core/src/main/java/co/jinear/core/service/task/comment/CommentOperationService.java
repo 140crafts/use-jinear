@@ -41,6 +41,7 @@ public class CommentOperationService {
         return commentDtoConverter.convert(saved, accountRetrieveService);
     }
 
+    @Transactional
     public String deleteComment(String commentId) {
         log.info("Delete comment has started. commentId: {}", commentId);
         Comment comment = commentRetrieveService.retrieveEntity(commentId);

@@ -69,6 +69,13 @@ public class ProjectPostService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    public ProjectPostDto retrievePost(String projectPostId) {
+        log.info("Retrieve feed post has started.projectPostId: {}", projectPostId);
+        return projectPostRepository.findByProjectPostIdAndPassiveIdIsNull(projectPostId)
+                .map(projectPostDtoConverter::convert)
+                .orElseThrow(NotFoundException::new);
+    }
+
     public String deletePost(String projectId, String projectPostId) {
         log.info("Delete feed post has started. projectId: {}, projectPostId: {}", projectId, projectPostId);
         ProjectPost projectPost = projectPostRepository.findByProjectIdAndProjectPostIdAndPassiveIdIsNull(projectId, projectPostId)

@@ -1,10 +1,12 @@
 package co.jinear.core.model.entity.project;
 
 import co.jinear.core.converter.project.ProjectFeedAccessTypeConverter;
+import co.jinear.core.converter.project.ProjectPostCommentPolicyTypeConverter;
 import co.jinear.core.converter.project.ProjectPostInitializeAccessTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.richtext.RichText;
 import co.jinear.core.model.enumtype.project.ProjectFeedAccessType;
+import co.jinear.core.model.enumtype.project.ProjectPostCommentPolicyType;
 import co.jinear.core.model.enumtype.project.ProjectPostInitializeAccessType;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -38,6 +40,10 @@ public class ProjectFeedSettings extends BaseEntity {
     @Convert(converter = ProjectPostInitializeAccessTypeConverter.class)
     @Column(name = "project_post_initialize_access_type")
     private ProjectPostInitializeAccessType projectPostInitializeAccessType;
+
+    @Convert(converter = ProjectPostCommentPolicyTypeConverter.class)
+    @Column(name = "project_post_comment_policy_type")
+    private ProjectPostCommentPolicyType projectPostCommentPolicyType;
 
     @Column(name = "info_rich_text_id")
     private String infoRichTextId;

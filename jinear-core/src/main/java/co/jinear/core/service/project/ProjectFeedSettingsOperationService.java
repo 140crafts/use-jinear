@@ -80,6 +80,10 @@ public class ProjectFeedSettingsOperationService {
                 .ifPresent(projectFeedSettings::setProjectPostInitializeAccessType);
 
         Optional.of(projectFeedSettingsOperationVo)
+                .map(ProjectFeedSettingsOperationVo::getProjectPostCommentPolicyType)
+                .ifPresent(projectFeedSettings::setProjectPostCommentPolicyType);
+
+        Optional.of(projectFeedSettingsOperationVo)
                 .map(ProjectFeedSettingsOperationVo::getInfoWebsiteUrl)
                 .ifPresent(projectFeedSettings::setInfoWebsiteUrl);
 
