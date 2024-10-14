@@ -46,11 +46,11 @@ export const metadata: Metadata = {
   manifest: "/manifest.json",
   title: "Jinear",
   applicationName: "Jinear",
-  description: "Manage your tasks",
+  description: "Lean Project Management",
   twitter: {
     title: "Jinear",
-    description: "Manage Your Tasks",
-    creator: "@cagdastunca"
+    description: "Lean Project Management",
+    creator: "@usejinear"
   },
   formatDetection: {
     email: true,
