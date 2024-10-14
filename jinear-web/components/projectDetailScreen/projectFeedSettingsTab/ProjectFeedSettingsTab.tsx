@@ -10,6 +10,8 @@ import ProjectPostInitializeAccessTypeSelect
   from "@/components/projectDetailScreen/projectFeedSettingsTab/projectPostInitializeAccessTypeSelect/ProjectPostInitializeAccessTypeSelect";
 import FeedUrlInfo from "@/components/projectDetailScreen/projectFeedSettingsTab/feedUrlInfo/FeedUrlInfo";
 import { useRetrieveProjectPermissionsQuery } from "@/api/projectQueryApi";
+import ProjectPostCommentPolicyTypeSelect
+  from "@/components/projectDetailScreen/projectFeedSettingsTab/projectPostCommentPolicyTypeSelect/ProjectPostCommentPolicyTypeSelect";
 
 interface ProjectFeedSettingsTabProps {
   project: ProjectDto;
@@ -35,6 +37,12 @@ const ProjectFeedSettingsTab: React.FC<ProjectFeedSettingsTabProps> = ({ project
         editable={hasExplicitAdminAccess} />
       <Line />
       <ProjectPostInitializeAccessTypeSelect
+        projectFeedSettings={project.projectFeedSettings}
+        isFetching={isFetching}
+        editable={hasExplicitAdminAccess}
+      />
+      <Line />
+      <ProjectPostCommentPolicyTypeSelect
         projectFeedSettings={project.projectFeedSettings}
         isFetching={isFetching}
         editable={hasExplicitAdminAccess}
