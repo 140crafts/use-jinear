@@ -4357,7 +4357,7 @@ const translations = {
   },
   projectPostInitializeAccessTypeSectionText: {
     en: "You can change who can create posts.",
-    tr: "Proje akışına kimin yeni gönderi gönderebileceğini ayarlayabilirsiniz."
+    tr: "Proje akışında kimin gönderileri gönderebileceğini ayarlayabilirsiniz."
   },
   projectPostInitializeAccessType_WORKSPACE_ADMINS: {
     en: "Workspace Admins",
@@ -4462,7 +4462,75 @@ const translations = {
   updateWorkspaceTextModalText:{
     en: "Please provide an another title for workspace.",
     tr: "Çalışma alanı için yeni bir başlık girin."
-  }
+  },
+  projectPostCommentCountLabel:{
+    en: "${number} Comments",
+    tr: "${number} Yorum"
+  },
+  projectPostCommentListEmptyLabel: {
+    en: "No comments found.",
+    tr: "Hiçbir yorum bulunamadı."
+  },
+  projectPostCommentListTitle: {
+    en: "Comments",
+    tr: "Yorumlar"
+  },
+  projectPostCommentPolicyType_WORKSPACE_ADMINS: {
+    en: "Workspace Admins",
+    tr: "Çalışma Alanı Yöneticileri"
+  },
+  projectPostCommentPolicyType_PROJECT_LEAD: {
+    en: "Project Lead",
+    tr: "Proje Lideri"
+  },
+  projectPostCommentPolicyType_PROJECT_TEAM_ADMINS: {
+    en: "Project Team Admins",
+    tr: "Proje Takım Yöneticileri"
+  },
+  projectPostCommentPolicyType_PROJECT_TEAM_MEMBERS: {
+    en: "Project Team Members",
+    tr: "Proje Takım Üyeleri"
+  },
+  projectPostCommentPolicyType_WORKSPACE_MEMBERS: {
+    en: "Workspace Members",
+    tr: "Çalışma Alanı Üyeleri"
+  },
+  projectPostCommentPolicyType_ANY_LOGGED_IN_USER: {
+    en: "Every Jinear Member",
+    tr: "Tüm Jinear Üyeleri"
+  },
+  projectPostCommentPolicyType_WORKSPACE_ADMINS_info: {
+    en: "Only workspace admins can comment feed posts.",
+    tr: "Yanlızca çalışma alanı yöneticileri gönderilere yorum yapabilir."
+  },
+  projectPostCommentPolicyType_PROJECT_LEAD_info: {
+    en: "Only project lead can comment feed posts.",
+    tr: "Yanlızca proje lideri gönderilere yorum yapabilir."
+  },
+  projectPostCommentPolicyType_PROJECT_TEAM_ADMINS_info: {
+    en: "Only project team admins can comment feed posts",
+    tr: "Yanlızca proje takım yöneticileri gönderilere yorum yapabilir."
+  },
+  projectPostCommentPolicyType_PROJECT_TEAM_MEMBERS_info: {
+    en: "Only project team members can comment feed posts.",
+    tr: "Yanlızca proje proje takım üyeleri gönderilere yorum yapabilir."
+  },
+  projectPostCommentPolicyType_WORKSPACE_MEMBERS_info: {
+    en: "Workspace members can comment feed posts.",
+    tr: "Yanlızca proje çalışma alanı üyeleri gönderilere yorum yapabilir."
+  },
+  projectPostCommentPolicyType_ANY_LOGGED_IN_USER_info: {
+    en: "Every Jinear member can comment posts.",
+    tr: "Tüm Jinear üyeleri gönderilere yorum yapabilir"
+  },
+  projectPostCommentPolicyTypeSectionTitle: {
+    en: "Allow Post Comments From",
+    tr: "Gönderi Yorumlarına İzin Ver"
+  },
+  projectPostCommentPolicyTypeSectionText: {
+    en: "You can change who can comment posts.",
+    tr: "Gönderilere kimin yorum yapabileceğini ayarlayabilirsiniz."
+  },
 };
 
 export default translations;

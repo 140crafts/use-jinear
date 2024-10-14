@@ -6,7 +6,7 @@ import NewPostInput from "@/components/projectFeedScreen/newPostInput/NewPostInp
 import { useTypedSelector } from "@/store/store";
 import { selectAuthState, selectCurrentAccountId } from "@/slice/accountSlice";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
-import { useRetrieveProjectPermissionsQuery, useRetrieveProjectQuery } from "@/api/projectQueryApi";
+import { useRetrieveProjectPermissionsQuery } from "@/api/projectQueryApi";
 import ProjectInfo from "@/components/projectFeedScreen/projectInfo/ProjectInfo";
 import { useRetrievePublicProjectInfoQuery } from "@/api/projectFeedApi";
 

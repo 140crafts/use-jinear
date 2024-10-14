@@ -17,7 +17,11 @@ const ProjectPostPage: React.FC<ProjectPostPageProps> = ({}) => {
   return (
     <div className={styles.container}>
       {projectPostId && projectAccessKey &&
-        <ProjectFeedPostDetailScreen accessKey={projectAccessKey} postId={projectPostId} projectId={projectId} />}
+        <ProjectFeedPostDetailScreen
+          accessKey={projectAccessKey}
+          postId={projectPostId}
+          projectId={projectId}
+        />}
     </div>
   );
 };

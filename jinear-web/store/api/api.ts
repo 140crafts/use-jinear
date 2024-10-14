@@ -76,7 +76,8 @@ export const tagTypes = [
   `v1/project/query/project-permissions/{projectId}`,
   `v1/project/query/{projectId}/info`,
   "v1/project/public-feed/{projectId}",
-  "v1/project/public-feed/{projectId}/info"
+  "v1/project/public-feed/{projectId}/info",
+  `v1/project/post/comment/list/project/{projectId}/post/{postId}`
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {
