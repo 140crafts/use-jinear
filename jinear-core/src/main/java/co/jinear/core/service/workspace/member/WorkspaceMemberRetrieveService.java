@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,6 +25,12 @@ public class WorkspaceMemberRetrieveService {
         return workspaceMemberRepository.findByAccountIdAndWorkspaceIdAndPassiveIdIsNull(accountId, workspaceId)
                 .map(WorkspaceMember::getRole)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public Optional<WorkspaceAccountRoleType> retrieveAccountWorkspaceRoleOptional(String accountId, String workspaceId) {
+        log.info("Retrieve account workspace role has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
+        return workspaceMemberRepository.findByAccountIdAndWorkspaceIdAndPassiveIdIsNull(accountId, workspaceId)
+                .map(WorkspaceMember::getRole);
     }
 
     public WorkspaceMemberDto retrieve(String workspaceMemberId, String workspaceId) {

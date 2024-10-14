@@ -3,7 +3,6 @@ package co.jinear.core.validator.team;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
-import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberRetrieveService;
@@ -63,8 +62,9 @@ public class TeamAccessValidator {
     }
 
     private boolean isWorkspaceAdminOrOwner(String accountId, String workspaceId) {
-        WorkspaceAccountRoleType workspaceAccountRoleType = workspaceMemberRetrieveService.retrieveAccountWorkspaceRole(accountId, workspaceId);
-        return Arrays.asList(OWNER, ADMIN).contains(workspaceAccountRoleType);
+        return workspaceMemberRetrieveService.retrieveAccountWorkspaceRoleOptional(accountId, workspaceId)
+                .map(Arrays.asList(OWNER, ADMIN)::contains)
+                .orElse(Boolean.FALSE);
     }
 
     public boolean isAccountTeamMember(String accountId, String teamId) {

@@ -46,6 +46,7 @@ public class ProjectPostService {
     private final MediaRetrieveService mediaRetrieveService;
     private final ProjectPostDtoConverter projectPostDtoConverter;
     private final PassiveService passiveService;
+    private final ProjectPostCommentListingService projectPostCommentListingService;
 
     @Transactional
     public void initialize(InitializeProjectPostVo initializeProjectPostVo) {
@@ -65,6 +66,13 @@ public class ProjectPostService {
     public ProjectPostDto retrievePost(String projectId, String projectPostId) {
         log.info("Retrieve feed post has started. projectId: {}, projectPostId: {}", projectId, projectPostId);
         return projectPostRepository.findByProjectIdAndProjectPostIdAndPassiveIdIsNull(projectId, projectPostId)
+                .map(projectPostDtoConverter::convert)
+                .orElseThrow(NotFoundException::new);
+    }
+
+    public ProjectPostDto retrievePost(String projectPostId) {
+        log.info("Retrieve feed post has started.projectPostId: {}", projectPostId);
+        return projectPostRepository.findByProjectPostIdAndPassiveIdIsNull(projectPostId)
                 .map(projectPostDtoConverter::convert)
                 .orElseThrow(NotFoundException::new);
     }

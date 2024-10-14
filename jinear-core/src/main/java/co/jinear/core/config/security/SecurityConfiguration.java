@@ -51,6 +51,7 @@ public class SecurityConfiguration {
             "/v1/oauth/google/callback/attach-account",
             "/v1/calendar/event/exports/{shareableKey}",
             "/v1/project/public-feed/**",
+            "/v1/project/post/comment/list/project/{projectId}/post/{postId}",
             "/v1/debug/**"
     };
 

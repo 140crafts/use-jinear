@@ -216,4 +216,45 @@
             <column name="content_type" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-project_post_comment_policy_type-to-project_feed_settings">
+        <addColumn tableName="project_feed_settings">
+            <column name="project_post_comment_policy_type" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project_post_comment">
+        <createTable tableName="project_post_comment">
+            <column name="project_post_comment_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_post_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment_body_rich_text_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quote_project_post_comment_id" type="char(26)"/>
+        </createTable>
+
+        <createIndex indexName="project_post_comment_ix_project_post_id" tableName="project_post_comment">
+            <column name="project_post_id"/>
+        </createIndex>
+        <createIndex indexName="project_post_comment_ix_account_id" tableName="project_post_comment">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="project_post_comment_ix_quote_project_post_comment_id" tableName="project_post_comment">
+            <column name="quote_project_post_comment_id"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

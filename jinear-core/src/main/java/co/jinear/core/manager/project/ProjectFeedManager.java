@@ -2,6 +2,7 @@ package co.jinear.core.manager.project;
 
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.project.AccountProjectPermissionFlags;
 import co.jinear.core.model.dto.project.ProjectFeedSettingsDto;
 import co.jinear.core.model.dto.project.ProjectPostDto;
 import co.jinear.core.model.dto.project.PublicProjectDto;
@@ -32,7 +33,8 @@ public class ProjectFeedManager {
 
     public ProjectFeedPaginatedResponse retrieveFeed(String projectId, int page) {
         String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
-        validateAccess(projectId, currentAccountId);
+        ProjectFeedSettingsDto projectFeedSettingsDto = projectFeedSettingsRetrieveService.retrieve(projectId);
+        validateAccess(projectId, currentAccountId, projectFeedSettingsDto);
         log.info("Retrieve feed has started. currentAccountId: {}, page: {}", currentAccountId, page);
         Page<ProjectPostDto> projectPostDtos = projectPostService.retrieveFeedPosts(projectId, page);
         return mapResponse(projectPostDtos);
@@ -40,7 +42,8 @@ public class ProjectFeedManager {
 
     public ProjectFeedPostResponse retrievePost(String projectId, String postId) {
         String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
-        validateAccess(projectId, currentAccountId);
+        ProjectFeedSettingsDto projectFeedSettingsDto = projectFeedSettingsRetrieveService.retrieve(projectId);
+        validateAccess(projectId, currentAccountId, projectFeedSettingsDto);
         log.info("Retrieve post has started. projectId: {}, postId: {}, currentAccountId: {}", projectId, postId, currentAccountId);
         ProjectPostDto projectPostDto = projectPostService.retrievePost(projectId, postId);
         return mapResponse(projectPostDto);
@@ -48,9 +51,12 @@ public class ProjectFeedManager {
 
     public PublicProjectRetrieveResponse retrievePublicProjectInfo(String projectId) {
         String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
-        validateAccess(projectId, currentAccountId);
+        ProjectFeedSettingsDto projectFeedSettingsDto = projectFeedSettingsRetrieveService.retrieve(projectId);
+        validateAccess(projectId, currentAccountId, projectFeedSettingsDto);
         log.info("Retrieve public project info has started. projectId: {}, currentAccountId: {}", projectId, currentAccountId);
         PublicProjectDto publicProjectDto = projectRetrieveService.retrievePublic(projectId);
+        AccountProjectPermissionFlags accountProjectPermissionFlags = projectAccessValidator.retrieveAccountProjectPermissionFlags(currentAccountId, projectId);
+        publicProjectDto.setAccountProjectPermissionFlags(accountProjectPermissionFlags);
         return mapResponse(publicProjectDto);
     }
 
@@ -60,8 +66,7 @@ public class ProjectFeedManager {
         return projectFeedPaginatedResponse;
     }
 
-    private void validateAccess(String projectId, String currentAccountId) {
-        ProjectFeedSettingsDto projectFeedSettingsDto = projectFeedSettingsRetrieveService.retrieve(projectId);
+    private void validateAccess(String projectId, String currentAccountId, ProjectFeedSettingsDto projectFeedSettingsDto) {
         ProjectFeedAccessType projectFeedAccessType = projectFeedSettingsDto.getProjectFeedAccessType();
         switch (projectFeedAccessType) {
             case PRIVATE -> projectAccessValidator.validateHasExplicitAdminAccess(projectId, currentAccountId);

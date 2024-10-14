@@ -12,4 +12,6 @@ public interface ProjectPostRepository extends JpaRepository<ProjectPost, String
     Page<ProjectPost> findAllByProjectIdAndPassiveIdIsNullOrderByCreatedDateDesc(String projectId, Pageable pageable);
 
     Optional<ProjectPost> findByProjectIdAndProjectPostIdAndPassiveIdIsNull(String projectId, String projectPostId);
+
+    Optional<ProjectPost> findByProjectPostIdAndPassiveIdIsNull(String projectPostId);
 }
