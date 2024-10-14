@@ -4462,7 +4462,19 @@ const translations = {
   updateWorkspaceTextModalText:{
     en: "Please provide an another title for workspace.",
     tr: "Çalışma alanı için yeni bir başlık girin."
-  }
+  },
+  projectPostCommentCountLabel:{
+    en: "${number} Comments",
+    tr: "${number} Yorum"
+  },
+  projectPostCommentListEmptyLabel: {
+    en: "No comments found.",
+    tr: "Hiçbir yorum bulunamadı."
+  },
+  projectPostCommentListTitle: {
+    en: "Comments",
+    tr: "Yorumlar"
+  },
 };
 
 export default translations;

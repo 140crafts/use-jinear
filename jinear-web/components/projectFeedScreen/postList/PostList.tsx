@@ -19,7 +19,7 @@ const PostList: React.FC<PostListProps> = ({ projectId, accessKey }) => {
     { projectId, page });
 
   const renderContentItem = (data: ProjectPostDto) => {
-    return <ProjectPost key={data.projectPostId} post={data} accessKey={accessKey} />;
+    return <ProjectPost key={data.projectPostId} post={data} accessKey={accessKey} withCommentCountButton={true} />;
   };
 
   const totalCountTitle = retrieveProjectFeedResponse ? `(${retrieveProjectFeedResponse.data.totalElements})` : "";

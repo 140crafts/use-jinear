@@ -47,6 +47,10 @@
   background-color: unset !important;
 }
 
+.commentButton {
+  gap: .5rem;
+}
+
 .postInfo {
   display: flex;
   justify-content: flex-end;
@@ -56,4 +60,5 @@
 
 .deleteButton {
   display: flex;
+  gap: .5rem;
 }

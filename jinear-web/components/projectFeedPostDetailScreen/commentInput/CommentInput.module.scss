@@ -1,0 +1,107 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  //padding: 0.42rem 0.5rem 0.42rem 0.75rem;
+}
+
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: var(--c-primary-shade-0);
+  padding: 0.42rem 0.75rem;
+  border-radius: var(--border-radius);
+}
+
+.ownerContainer {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profilePicContainer {
+  position: relative;
+}
+
+.profilePic {
+  height: 25px;
+  width: 25px;
+}
+
+.userName {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25ch;
+}
+
+.addedCommentText {
+  color: var(--c-secondary-shade-0-op05);
+}
+
+.createTime {
+  color: var(--c-secondary-shade-0-op05);
+  cursor: default;
+}
+
+.newCommentContainer {
+  display: flex;
+  flex-direction: column;
+  background: var(--c-primary-shade-0);
+  border-width: 1px;
+  border-radius: var(--border-radius);
+  border-style: solid;
+  border-color: transparent;
+}
+
+.input {
+  background: transparent !important;
+}
+
+.input:hover {
+  background: transparent !important;
+}
+
+.input:focus {
+  border-color: transparent !important;
+  outline: none !important;
+}
+
+.inputContainer {
+  position: relative;
+}
+
+.quotedCommentContainer {
+  background-color: var(--c-primary);
+  border-radius: var(--border-radius);
+  margin-top: 1.25rem;
+  // margin-bottom: 1.25rem;
+}
+
+.unquoteCommentButtonContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+}
+
+.unquoteCommentButton {
+  position: absolute;
+  right: 0;
+  top: -0.6rem;
+}
+
+.actionContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: flex-end;
+}

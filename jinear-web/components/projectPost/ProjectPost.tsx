@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import styles from "./ProjectPost.module.scss";
+import styles from "./ProjectPost.module.css";
 import { ProjectPostDto } from "@/be/jinear-core";
 import ProfilePhoto from "@/components/profilePhoto";
 import Tiptap from "@/components/tiptap/Tiptap";
@@ -9,8 +9,8 @@ import { format } from "date-fns";
 import useTranslation from "@/locals/useTranslation";
 import Link from "next/link";
 import ClientOnly from "@/components/clientOnly/ClientOnly";
-import Button from "@/components/button";
-import { LuTrash } from "react-icons/lu";
+import Button, { ButtonHeight } from "@/components/button";
+import { LuMessageCircle, LuTrash } from "react-icons/lu";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { selectCurrentAccountId } from "@/slice/accountSlice";
 import { useRetrieveProjectPermissionsQuery } from "@/api/projectQueryApi";
@@ -22,9 +22,17 @@ interface ProjectPostProps {
   post: ProjectPostDto;
   accessKey: string;
   asLink?: boolean;
+  withCommentCountButton?: boolean;
+  withSeperator?: boolean;
 }
 
-const ProjectPost: React.FC<ProjectPostProps> = ({ post, accessKey, asLink = true }) => {
+const ProjectPost: React.FC<ProjectPostProps> = ({
+                                                   post,
+                                                   accessKey,
+                                                   asLink = true,
+                                                   withCommentCountButton = true,
+                                                   withSeperator = true
+                                                 }) => {
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -91,14 +99,28 @@ const ProjectPost: React.FC<ProjectPostProps> = ({ post, accessKey, asLink = tru
       </div>
 
       <div className={styles.postInfo}>
-        <b>
+        {canDelete &&
+          <Button
+            heightVariant={ButtonHeight.short}
+            className={styles.deleteButton}
+            onClick={popAreYouSureToDeletePostModal}>
+            <LuTrash className={"icon"} />
+            {t('projectPostDeleteButton')}
+          </Button>}
+        {withCommentCountButton &&
+          <Button
+            className={styles.commentButton}
+            heightVariant={ButtonHeight.short}
+            href={href}>
+            <LuMessageCircle className={"icon"} />
+            {t("projectPostCommentCountLabel").replace("${number}", `${post?.commentCount}`)}
+          </Button>}
+        <span>
           {format(new Date(post.createdDate), t("dateFormatShortMonthReadable"))}
-        </b>
-        {canDelete && <Button className={styles.deleteButton} onClick={popAreYouSureToDeletePostModal}>
-          <LuTrash className={"icon"} />
-        </Button>}
+        </span>
+        <b>{post.account?.username || ""}</b>
       </div>
-      <Line />
+      {withSeperator && <Line />}
     </div>
 
   );

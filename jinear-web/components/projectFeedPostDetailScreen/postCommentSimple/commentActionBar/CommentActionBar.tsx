@@ -1,5 +1,5 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { CommentDto } from "@/model/be/jinear-core";
+import { CommentDto, ProjectPostCommentDto } from "@/model/be/jinear-core";
 import { useDeleteTaskCommentMutation } from "@/store/api/taskCommentApi";
 import { selectCurrentAccountId } from "@/store/slice/accountSlice";
 import { closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
@@ -9,21 +9,31 @@ import useTranslation from "locales/useTranslation";
 import React, { Dispatch, SetStateAction } from "react";
 import { IoArrowForward, IoClose } from "react-icons/io5";
 import styles from "./CommentActionBar.module.css";
+import { useDeletePostCommentMutation } from "@/api/projectPostCommentApi";
+import { LuTrash } from "react-icons/lu";
 import Logger from "@/utils/logger";
 
 interface CommentActionBarProps {
-  comment: CommentDto;
+  comment: ProjectPostCommentDto;
   asQuoted?: boolean;
-  setQuotedComment?: Dispatch<SetStateAction<CommentDto | undefined>>;
+  setQuotedComment?: Dispatch<SetStateAction<ProjectPostCommentDto | undefined>>;
+  canComment: boolean;
+  hasExplicitAdminDeleteAccess?: boolean;
 }
 
 const logger = Logger("CommentActionBar");
 
-const CommentActionBar: React.FC<CommentActionBarProps> = ({ comment, asQuoted, setQuotedComment }) => {
+const CommentActionBar: React.FC<CommentActionBarProps> = ({
+                                                             comment,
+                                                             asQuoted,
+                                                             setQuotedComment,
+                                                             canComment,
+                                                             hasExplicitAdminDeleteAccess = false
+                                                           }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
-  const [deleteTaskComment, { isLoading: isDeleteLoading }] = useDeleteTaskCommentMutation();
+  const [deletePostComment, { isLoading: isDeleteLoading }] = useDeletePostCommentMutation();
   logger.log({ comment });
   const popAreYouSureModalForDeleteComment = () => {
     dispatch(
@@ -38,7 +48,7 @@ const CommentActionBar: React.FC<CommentActionBarProps> = ({ comment, asQuoted, 
   };
 
   const deleteComment = () => {
-    deleteTaskComment({ commentId: comment.commentId });
+    deletePostComment({ commentId: comment.projectPostCommentId });
     dispatch(closeDialogModal());
   };
 
@@ -46,7 +56,7 @@ const CommentActionBar: React.FC<CommentActionBarProps> = ({ comment, asQuoted, 
     setQuotedComment?.(comment);
     try {
       const inputElement = document.getElementById("new-task-comment-input");
-      const inputElementContainer = document.getElementById("new-task-comment-input-container");
+      const inputElementContainer = document.getElementById("new-post-comment-input-container");
       const containerOffset = inputElementContainer && getOffset(inputElementContainer);
       window.scrollTo({ left: 0, top: parseInt(`${containerOffset?.top}` || "0"), behavior: "smooth" });
       setTimeout(() => {
@@ -58,7 +68,7 @@ const CommentActionBar: React.FC<CommentActionBarProps> = ({ comment, asQuoted, 
 
   return (
     <div className={styles.actionBar}>
-      {!asQuoted && comment.passiveId == null && (
+      {!asQuoted && comment.passiveId == null && canComment && (
         <Button
           disabled={isDeleteLoading}
           heightVariant={ButtonHeight.short}
@@ -69,7 +79,7 @@ const CommentActionBar: React.FC<CommentActionBarProps> = ({ comment, asQuoted, 
           <IoArrowForward />
         </Button>
       )}
-      {currentAccountId == comment.ownerId && comment.passiveId == null && !asQuoted && (
+      {(currentAccountId == comment.accountId || hasExplicitAdminDeleteAccess) && comment.passiveId == null && !asQuoted && (
         <Button
           disabled={isDeleteLoading}
           loading={isDeleteLoading}
@@ -78,7 +88,7 @@ const CommentActionBar: React.FC<CommentActionBarProps> = ({ comment, asQuoted, 
           onClick={popAreYouSureModalForDeleteComment}
           data-tooltip-right={t("taskCommentDelete")}
         >
-          <IoClose size={11} />
+          <LuTrash size={11} />
         </Button>
       )}
     </div>
