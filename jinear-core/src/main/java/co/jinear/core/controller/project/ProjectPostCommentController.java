@@ -37,6 +37,4 @@ public class ProjectPostCommentController {
                                                             @RequestParam(required = false, defaultValue = "0") Integer page) {
         return projectPostCommentManager.listComments(postId, projectId, page);
     }
-
-
 }

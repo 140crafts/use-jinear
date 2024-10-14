@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-10-12 11:35:56.
+// Generated using typescript-generator version 3.0.1157 on 2024-10-13 23:09:05.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -502,6 +502,7 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
+    canComment: boolean;
     accountWorkspaceAdminOrOwner: boolean;
     accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
@@ -550,10 +551,21 @@ export interface ProjectFeedSettingsDto extends BaseDto {
     projectId: string;
     projectFeedAccessType: ProjectFeedAccessType;
     projectPostInitializeAccessType: ProjectPostInitializeAccessType;
+    projectPostCommentPolicyType: ProjectPostCommentPolicyType;
     infoRichTextId: string;
     infoWebsiteUrl: string;
     accessKey: string;
     info: RichTextDto;
+}
+
+export interface ProjectPostCommentDto extends BaseDto {
+    projectPostCommentId: string;
+    projectPostId: string;
+    accountId: string;
+    commentBodyRichTextId: string;
+    account: PlainAccountProfileDto;
+    commentBody: RichTextDto;
+    quote: ProjectPostCommentDto;
 }
 
 export interface ProjectPostDto extends BaseDto {
@@ -564,6 +576,7 @@ export interface ProjectPostDto extends BaseDto {
     account: PlainAccountProfileDto;
     postBody: RichTextDto;
     files: AccessibleMediaDto[];
+    commentCount: number;
 }
 
 export interface ProjectTeamDto extends BaseDto {
@@ -579,6 +592,7 @@ export interface PublicProjectDto extends BaseDto {
     title: string;
     archived: boolean;
     info?: RichTextDto | null;
+    accountProjectPermissionFlags: AccountProjectPermissionFlags;
 }
 
 export interface ReminderDto extends BaseDto {
@@ -1169,6 +1183,7 @@ export interface ProjectFeedSettingsOperationRequest extends BaseRequest {
     projectTitle?: string | null;
     projectFeedAccessType?: ProjectFeedAccessType | null;
     projectPostInitializeAccessType?: ProjectPostInitializeAccessType | null;
+    projectPostCommentPolicyType?: ProjectPostCommentPolicyType | null;
     info?: string | null;
     infoWebsiteUrl?: string | null;
 }
@@ -1184,6 +1199,13 @@ export interface ProjectInitializeRequest extends BaseRequest {
     targetDate?: Date | null;
     teamIds: string[];
     milestones?: MilestoneInitializeDto[] | null;
+}
+
+export interface ProjectPostAddCommentRequest extends BaseRequest {
+    projectId: string;
+    postId: string;
+    body: string;
+    quoteId?: string | null;
 }
 
 export interface ProjectPostInitializeRequest extends BaseRequest {
@@ -1580,6 +1602,10 @@ export interface ProjectListingPaginatedResponse extends BaseResponse {
     data: PageDto<ProjectDto>;
 }
 
+export interface ProjectPostPaginatedCommentResponse extends BaseResponse {
+    data: PageDto<ProjectPostCommentDto>;
+}
+
 export interface ProjectRetrieveResponse extends BaseResponse {
     data: ProjectDto;
 }
@@ -1883,8 +1909,8 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    description: string;
     uri: URI;
+    description: string;
     filename: string;
 }
 
@@ -2016,6 +2042,8 @@ export type MilestoneStateType = "IN_PROGRESS" | "COMPLETED";
 
 export type ProjectFeedAccessType = "PRIVATE" | "PUBLIC" | "GUESTS_ONLY";
 
+export type ProjectPostCommentPolicyType = "WORKSPACE_ADMINS" | "PROJECT_LEAD" | "PROJECT_TEAM_ADMINS" | "PROJECT_TEAM_MEMBERS" | "WORKSPACE_MEMBERS" | "ANY_LOGGED_IN_USER";
+
 export type ProjectPostInitializeAccessType = "WORKSPACE_ADMINS" | "PROJECT_LEAD" | "PROJECT_TEAM_ADMINS" | "PROJECT_TEAM_MEMBERS" | "WORKSPACE_MEMBERS";
 
 export type ProjectPriorityType = "NONE" | "URGENT" | "HIGH" | "MEDIUM" | "LOW";
@@ -2030,7 +2058,7 @@ export type RepeatType = "NONE" | "HOURLY" | "DAILY" | "WEEKLY" | "BIWEEKLY" | "
 
 export type RichTextSourceStack = "WYSIWYG" | "RC";
 
-export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT" | "MESSAGE" | "PROJECT" | "PROJECT_MILESTONE_DESCRIPTION" | "PROJECT_FEED_INFO" | "PROJECT_FEED_POST";
+export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT" | "MESSAGE" | "PROJECT" | "PROJECT_MILESTONE_DESCRIPTION" | "PROJECT_FEED_INFO" | "PROJECT_FEED_POST" | "PROJECT_FEED_POST_COMMENT";
 
 export type RobotType = "MESSAGE";
 

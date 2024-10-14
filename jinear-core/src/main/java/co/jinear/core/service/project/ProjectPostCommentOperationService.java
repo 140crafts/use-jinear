@@ -40,7 +40,7 @@ public class ProjectPostCommentOperationService {
         if (StringUtils.isNotBlank(projectPostInitializeVo.getQuoteProjectPostCommentId())) {
             ProjectPostCommentDto quotePostComment = projectPostCommentRetrieveService.retrieve(projectPostInitializeVo.getQuoteProjectPostCommentId());
             String quoteCommentsPostId = quotePostComment.getProjectPostId();
-            if (StringUtils.equalsIgnoreCase(quoteCommentsPostId, projectPostInitializeVo.getProjectPostId())) {
+            if (!StringUtils.equalsIgnoreCase(quoteCommentsPostId, projectPostInitializeVo.getProjectPostId())) {
                 throw new BusinessException("project.feed.comment.quote-comments-post-is-different-than-current-comments-post");
             }
         }

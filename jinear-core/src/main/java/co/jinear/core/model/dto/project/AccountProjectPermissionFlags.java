@@ -12,4 +12,5 @@ public class AccountProjectPermissionFlags {
     boolean isAccountIsProjectTeamsMember;
     boolean isAccountIsProjectTeamsAdmin;
     boolean canInitializePost;
+    boolean canComment;
 }

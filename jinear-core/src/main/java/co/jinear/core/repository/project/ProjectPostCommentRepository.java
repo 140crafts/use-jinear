@@ -12,4 +12,6 @@ public interface ProjectPostCommentRepository extends JpaRepository<ProjectPostC
     Optional<ProjectPostComment> findByProjectPostCommentIdAndPassiveIdIsNull(String projectPostCommentId);
 
     Page<ProjectPostComment> findAllByProjectPostIdOrderByCreatedDateAsc(String projectPostId, Pageable pageable);
+
+    Long countAllByProjectPostIdAndPassiveIdIsNull(String projectPostId);
 }

@@ -16,4 +16,5 @@ public class PublicProjectDto extends BaseDto {
     private Boolean archived;
     @Nullable
     private RichTextDto info;
+    private AccountProjectPermissionFlags accountProjectPermissionFlags;
 }

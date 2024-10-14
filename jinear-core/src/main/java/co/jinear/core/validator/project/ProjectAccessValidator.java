@@ -88,13 +88,14 @@ public class ProjectAccessValidator {
     public AccountProjectPermissionFlags retrieveAccountProjectPermissionFlags(String accountId, String projectId) {
         log.info("Retrieve account project permission flags has started. projectId: {}, accountId: {}", projectId, accountId);
         ProjectDto projectDto = projectRetrieveService.retrieve(projectId);
-        boolean isAccountWorkspaceAdminOrOwner = workspaceValidator.isWorkspaceAdminOrOwner(accountId, projectDto.getWorkspaceId());
-        boolean isAccountIsProjectTeamsMember = isAccountIsProjectTeamsMember(accountId, projectDto);
-        boolean isAccountIsProjectTeamsAdmin = isAccountIsProjectTeamsAdmin(accountId, projectDto);
-        boolean isAccountProjectLead = Optional.of(projectDto).map(ProjectDto::getLeadWorkspaceMember).map(WorkspaceMemberDto::getAccountId).map(leadAccountId -> StringUtils.equalsIgnoreCase(leadAccountId, accountId)).orElse(Boolean.FALSE);
-        boolean isWorkspaceMember = workspaceValidator.isAccountWorkspaceMember(accountId, projectDto.getWorkspaceId());
+        boolean isAnonymousUser = StringUtils.equalsIgnoreCase("anonymousUser", accountId);
+        boolean isAccountWorkspaceAdminOrOwner = !isAnonymousUser && workspaceValidator.isWorkspaceAdminOrOwner(accountId, projectDto.getWorkspaceId());
+        boolean isAccountIsProjectTeamsMember = !isAnonymousUser && isAccountIsProjectTeamsMember(accountId, projectDto);
+        boolean isAccountIsProjectTeamsAdmin = !isAnonymousUser && isAccountIsProjectTeamsAdmin(accountId, projectDto);
+        boolean isAccountProjectLead = !isAnonymousUser && Optional.of(projectDto).map(ProjectDto::getLeadWorkspaceMember).map(WorkspaceMemberDto::getAccountId).map(leadAccountId -> StringUtils.equalsIgnoreCase(leadAccountId, accountId)).orElse(Boolean.FALSE);
+        boolean isWorkspaceMember = !isAnonymousUser && workspaceValidator.isAccountWorkspaceMember(accountId, projectDto.getWorkspaceId());
 
-        boolean canInitializePost = Optional.of(projectDto)
+        boolean canInitializePost = !isAnonymousUser && Optional.of(projectDto)
                 .map(ProjectDto::getProjectFeedSettings)
                 .map(ProjectFeedSettingsDto::getProjectPostInitializeAccessType)
                 .map(projectPostInitializeAccessType -> switch (projectPostInitializeAccessType) {
@@ -106,11 +107,25 @@ public class ProjectAccessValidator {
                 })
                 .orElse(Boolean.FALSE);
 
+        boolean canComment = !isAnonymousUser && Optional.of(projectDto)
+                .map(ProjectDto::getProjectFeedSettings)
+                .map(ProjectFeedSettingsDto::getProjectPostCommentPolicyType)
+                .map(projectPostCommentPolicyType -> switch (projectPostCommentPolicyType) {
+                    case WORKSPACE_ADMINS -> isAccountWorkspaceAdminOrOwner;
+                    case PROJECT_LEAD -> isAccountProjectLead;
+                    case PROJECT_TEAM_ADMINS -> isAccountIsProjectTeamsAdmin;
+                    case PROJECT_TEAM_MEMBERS -> isAccountIsProjectTeamsMember;
+                    case WORKSPACE_MEMBERS -> isWorkspaceMember;
+                    case ANY_LOGGED_IN_USER -> Boolean.TRUE;
+                })
+                .orElse(Boolean.FALSE);
+
         return AccountProjectPermissionFlags.builder()
                 .isAccountWorkspaceAdminOrOwner(isAccountWorkspaceAdminOrOwner)
                 .isAccountIsProjectTeamsMember(isAccountIsProjectTeamsMember)
                 .isAccountIsProjectTeamsAdmin(isAccountIsProjectTeamsAdmin)
                 .canInitializePost(canInitializePost)
+                .canComment(canComment)
                 .build();
     }
 

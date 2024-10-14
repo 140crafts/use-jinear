@@ -46,6 +46,7 @@ public class ProjectPostService {
     private final MediaRetrieveService mediaRetrieveService;
     private final ProjectPostDtoConverter projectPostDtoConverter;
     private final PassiveService passiveService;
+    private final ProjectPostCommentListingService projectPostCommentListingService;
 
     @Transactional
     public void initialize(InitializeProjectPostVo initializeProjectPostVo) {

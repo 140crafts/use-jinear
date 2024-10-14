@@ -20,4 +20,5 @@ public class ProjectPostDto extends BaseDto {
     private PlainAccountProfileDto account;
     private RichTextDto postBody;
     private Set<AccessibleMediaDto> files;
+    private Long commentCount;
 }

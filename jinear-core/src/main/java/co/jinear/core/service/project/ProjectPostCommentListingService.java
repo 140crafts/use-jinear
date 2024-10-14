@@ -23,4 +23,9 @@ public class ProjectPostCommentListingService {
         return projectPostCommentRepository.findAllByProjectPostIdOrderByCreatedDateAsc(projectPostId, PageRequest.of(page, PAGE_SIZE))
                 .map(projectPostCommentDtoConverter::convert);
     }
+
+    public Long commentCount(String projectPostId) {
+        log.info("Comment count has started. projectPostId: {}", projectPostId);
+        return projectPostCommentRepository.countAllByProjectPostIdAndPassiveIdIsNull(projectPostId);
+    }
 }
