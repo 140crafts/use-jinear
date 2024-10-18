@@ -5,10 +5,7 @@ import co.jinear.core.converter.project.ProjectInitializeVoToEntityMapper;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.entity.project.Project;
-import co.jinear.core.model.enumtype.project.ProjectFeedAccessType;
-import co.jinear.core.model.enumtype.project.ProjectPostInitializeAccessType;
-import co.jinear.core.model.enumtype.project.ProjectPriorityType;
-import co.jinear.core.model.enumtype.project.ProjectStateType;
+import co.jinear.core.model.enumtype.project.*;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.vo.project.ProjectFeedSettingsInitializeVo;
 import co.jinear.core.model.vo.project.ProjectInitializeVo;
@@ -160,6 +157,7 @@ public class ProjectOperationService {
         projectFeedSettingsInitializeVo.setProjectTitle(saved.getTitle());
         projectFeedSettingsInitializeVo.setProjectFeedAccessType(ProjectFeedAccessType.PRIVATE);
         projectFeedSettingsInitializeVo.setProjectPostInitializeAccessType(ProjectPostInitializeAccessType.PROJECT_TEAM_MEMBERS);
+        projectFeedSettingsInitializeVo.setProjectPostCommentPolicyType(ProjectPostCommentPolicyType.WORKSPACE_MEMBERS);
 
         projectFeedSettingsOperationService.initialize(projectFeedSettingsInitializeVo);
     }
