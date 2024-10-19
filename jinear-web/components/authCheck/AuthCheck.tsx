@@ -22,7 +22,7 @@ const PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS = [
   ["/terms"],
   ["/debug"],
   ["/project-feed/"],
-  ["/public/", "/feed/"]
+  ["/shared/", "/feed/"]
 ];
 
 const ONLY_NOT_LOGGED_IN_PATHS = ["/forgot-password", "/register", "/login"];
