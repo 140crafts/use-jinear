@@ -85,7 +85,7 @@ const ProjectPost: React.FC<ProjectPostProps> = ({
         </div>
         <div className={styles.content}>
           <Wrapper
-            // @ts-ignore
+            // @ts-ignore .
             href={href}>
             <Tiptap
               className={styles.input}
