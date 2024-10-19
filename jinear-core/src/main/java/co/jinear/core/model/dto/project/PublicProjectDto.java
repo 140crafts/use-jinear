@@ -12,6 +12,7 @@ public class PublicProjectDto extends BaseDto {
 
     private String projectId;
     private String workspaceId;
+    private String workspaceUsername;
     private String title;
     private Boolean archived;
     @Nullable

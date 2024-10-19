@@ -100,10 +100,10 @@ public class ProjectAccessValidator {
                 .map(ProjectFeedSettingsDto::getProjectPostInitializeAccessType)
                 .map(projectPostInitializeAccessType -> switch (projectPostInitializeAccessType) {
                     case WORKSPACE_ADMINS -> isAccountWorkspaceAdminOrOwner;
-                    case PROJECT_LEAD -> isAccountProjectLead;
-                    case PROJECT_TEAM_ADMINS -> isAccountIsProjectTeamsAdmin;
-                    case PROJECT_TEAM_MEMBERS -> isAccountIsProjectTeamsMember;
-                    case WORKSPACE_MEMBERS -> isWorkspaceMember;
+                    case PROJECT_LEAD -> isAccountWorkspaceAdminOrOwner || isAccountProjectLead;
+                    case PROJECT_TEAM_ADMINS -> isAccountWorkspaceAdminOrOwner || isAccountIsProjectTeamsAdmin;
+                    case PROJECT_TEAM_MEMBERS -> isAccountWorkspaceAdminOrOwner || isAccountIsProjectTeamsMember;
+                    case WORKSPACE_MEMBERS -> isAccountWorkspaceAdminOrOwner || isWorkspaceMember;
                 })
                 .orElse(Boolean.FALSE);
 
@@ -112,10 +112,10 @@ public class ProjectAccessValidator {
                 .map(ProjectFeedSettingsDto::getProjectPostCommentPolicyType)
                 .map(projectPostCommentPolicyType -> switch (projectPostCommentPolicyType) {
                     case WORKSPACE_ADMINS -> isAccountWorkspaceAdminOrOwner;
-                    case PROJECT_LEAD -> isAccountProjectLead;
-                    case PROJECT_TEAM_ADMINS -> isAccountIsProjectTeamsAdmin;
-                    case PROJECT_TEAM_MEMBERS -> isAccountIsProjectTeamsMember;
-                    case WORKSPACE_MEMBERS -> isWorkspaceMember;
+                    case PROJECT_LEAD -> isAccountWorkspaceAdminOrOwner || isAccountProjectLead;
+                    case PROJECT_TEAM_ADMINS -> isAccountWorkspaceAdminOrOwner || isAccountIsProjectTeamsAdmin;
+                    case PROJECT_TEAM_MEMBERS -> isAccountWorkspaceAdminOrOwner || isAccountIsProjectTeamsMember;
+                    case WORKSPACE_MEMBERS -> isAccountWorkspaceAdminOrOwner || isWorkspaceMember;
                     case ANY_LOGGED_IN_USER -> Boolean.TRUE;
                 })
                 .orElse(Boolean.FALSE);
