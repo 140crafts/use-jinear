@@ -32,7 +32,7 @@ const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
           title={t("tasksScreenBreadcrumbLabel")}
           workspace={workspace}
           team={team}
-          activeDisplayFormat="LIST"
+          activeDisplayFormat="WFS_COLUMN"
           workflowStatusBoardClassName={styles.workflowStatusBoard}
           pathname={pathname}
         />

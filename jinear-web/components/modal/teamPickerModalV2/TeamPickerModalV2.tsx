@@ -1,5 +1,4 @@
-import React, { useMemo } from "react";
-import styles from "./TeamPickerModalV2.module.css";
+import React from "react";
 import GenericSelectModal, {
   IGenericPickerModalElement
 } from "@/components/modal/genericSelectModal/GenericSelectModal";
@@ -7,7 +6,9 @@ import {
   closeTeamPickerModalV2,
   selectTeamPickerModalV2InitialSelectionOnMultiple,
   selectTeamPickerModalV2ModalData,
-  selectTeamPickerModalV2Multiple, selectTeamPickerModalV2OnPick, selectTeamPickerModalV2Visible,
+  selectTeamPickerModalV2Multiple,
+  selectTeamPickerModalV2OnPick,
+  selectTeamPickerModalV2Visible,
   selectTeamPickerModalV2WorkspaceId
 } from "@/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
@@ -64,10 +65,6 @@ const TeamPickerModalV2: React.FC<TeamPickerModalV2Props> = ({}) => {
       searchable={true}
       searchInputPlaceholder={t("teamPickerModalV2SearchBarPlaceholder")}
       emptyLabel={t("teamPickerModalV2NoTeamFound")}
-      // belowSearchButtonLabel
-      // onBelowSearchButtonClick
-      // emptyButtonLabel
-      // onEmptyButtonClick
       requestClose={close}
     />
   );

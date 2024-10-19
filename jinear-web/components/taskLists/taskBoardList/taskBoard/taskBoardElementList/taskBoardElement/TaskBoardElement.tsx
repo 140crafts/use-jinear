@@ -1,10 +1,10 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import TaskRow from "@/components/taskRow/TaskRow";
-import { TaskBoardEntryDto } from "@/model/be/jinear-core";
-import { useDeleteTaskBoardEntryMutation } from "@/store/api/taskBoardEntryApi";
-import { changeLoadingModalVisibility, closeDialogModal, popDialogModal } from "@/store/slice/modalSlice";
+import { TaskBoardEntryDto } from "@/be/jinear-core";
+import { useDeleteTaskBoardEntryMutation } from "@/api/taskBoardEntryApi";
+import { changeLoadingModalVisibility, closeDialogModal, popDialogModal } from "@/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
-import useTranslation from "locales/useTranslation";
+import useTranslation from "@/locals/useTranslation";
 import React, { useEffect } from "react";
 import { IoRemoveCircleOutline } from "react-icons/io5";
 import styles from "./TaskBoardElement.module.scss";

@@ -7,11 +7,15 @@ import { copyTextToClipboard } from "@/utils/clipboard";
 
 interface FeedUrlInfoProps {
   accessKey: string;
+  workspaceUserName: string;
 }
 
-const FeedUrlInfo: React.FC<FeedUrlInfoProps> = ({ accessKey }) => {
+const FeedUrlInfo: React.FC<FeedUrlInfoProps> = ({ accessKey, workspaceUserName }) => {
   const { t } = useTranslation();
-  const url = PROJECT_FEED_URL + accessKey;
+  const url =
+    PROJECT_FEED_URL
+      .replace("[accessKey]", accessKey)
+      .replace("[workspaceUsername]", workspaceUserName);
 
   const copyLink = () => {
     copyTextToClipboard(url);

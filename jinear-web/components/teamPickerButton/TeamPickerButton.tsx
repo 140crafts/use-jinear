@@ -64,7 +64,7 @@ const TeamPickerButton: React.FC<TeamPickerButtonProps> = ({
         visible: true,
         workspaceId,
         multiple,
-        modalData: teamsResponse.data,
+        modalData: teamsResponse.data?.filter(team => team.teamState == "ACTIVE") || [],
         initialSelectionOnMultiple: currentPick,
         onPick: onPickerPicked
       }));

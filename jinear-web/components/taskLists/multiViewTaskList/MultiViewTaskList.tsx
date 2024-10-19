@@ -39,7 +39,7 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
   workspace,
   team,
   title,
-  activeDisplayFormat = "LIST",
+  activeDisplayFormat = "WFS_COLUMN",
   workflowStatusBoardClassName,
 }) => {
   const setQueryState = useSetQueryState();

@@ -4,7 +4,7 @@ import {
   closeTeamPickerModal,
   selectTeamPickerModalFilterActiveTeams,
   selectTeamPickerModalVisible,
-  selectTeamPickerModalWorkspaceId,
+  selectTeamPickerModalWorkspaceId
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
@@ -14,7 +14,8 @@ import Modal from "../modal/Modal";
 import styles from "./TeamPickerModal.module.css";
 import BasicTeamButton from "./basicTeamButton/BasicTeamButton";
 
-interface TeamPickerModalProps {}
+interface TeamPickerModalProps {
+}
 
 const TeamPickerModal: React.FC<TeamPickerModalProps> = ({}) => {
   const { t } = useTranslation();
@@ -22,14 +23,14 @@ const TeamPickerModal: React.FC<TeamPickerModalProps> = ({}) => {
   const { isMobile } = useWindowSize();
   const visible = useTypedSelector(selectTeamPickerModalVisible);
   const workspaceId = useTypedSelector(selectTeamPickerModalWorkspaceId) || "";
-  const filterActiveTeams = useTypedSelector(selectTeamPickerModalFilterActiveTeams) || false;
+  const filterActiveTeams = useTypedSelector(selectTeamPickerModalFilterActiveTeams) ?? true;
 
   const {
     data: teamsResponse,
     isSuccess,
     isError,
     isLoading,
-    isFetching,
+    isFetching
   } = useRetrieveWorkspaceTeamsQuery(workspaceId, { skip: workspaceId == null || workspaceId == "" });
 
   const close = () => {

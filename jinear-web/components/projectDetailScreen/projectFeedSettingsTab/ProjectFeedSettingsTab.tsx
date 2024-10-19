@@ -24,7 +24,7 @@ const ProjectFeedSettingsTab: React.FC<ProjectFeedSettingsTabProps> = ({ project
 
   return (
     <div className={cn(styles.container, project.archived && styles.archived)}>
-      <FeedUrlInfo accessKey={project.projectFeedSettings.accessKey} />
+      <FeedUrlInfo accessKey={project.projectFeedSettings.accessKey} workspaceUserName={project.workspace.username} />
       <Line />
       <ProjectFeedInfo
         projectFeedSettings={project.projectFeedSettings}

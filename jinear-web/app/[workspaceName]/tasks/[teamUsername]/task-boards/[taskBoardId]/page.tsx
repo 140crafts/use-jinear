@@ -1,5 +1,4 @@
 "use client";
-import TaskBoardElementList from "@/components/taskLists/taskBoardList/taskBoardElementList/TaskBoardElementList";
 import { useRetrieveTaskBoardQuery } from "@/store/api/taskBoardRetrieveApi";
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
@@ -8,8 +7,10 @@ import { CircularProgress } from "@mui/material";
 import { useParams } from "next/navigation";
 import React from "react";
 import styles from "./index.module.css";
+import TaskBoard from "@/components/taskLists/taskBoardList/taskBoard/TaskBoard";
 
-interface TaskBoardDetailScreenProps {}
+interface TaskBoardDetailScreenProps {
+}
 
 const TaskBoardDetailScreen: React.FC<TaskBoardDetailScreenProps> = ({}) => {
   const params = useParams();
@@ -18,15 +19,18 @@ const TaskBoardDetailScreen: React.FC<TaskBoardDetailScreenProps> = ({}) => {
   const teamUsername: string = params?.teamUsername as string;
 
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
-  const { data: teamsResponse, isFetching: isTeamsFetching } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
-    skip: workspace == null,
+  const {
+    data: teamsResponse,
+    isFetching: isTeamsFetching
+  } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
+    skip: workspace == null
   });
   const team = teamsResponse?.data.find((teamDto) => teamDto.username == teamUsername);
 
   const {
     data: taskBoardResponse,
     isLoading,
-    isFetching,
+    isFetching
   } = useRetrieveTaskBoardQuery({ taskBoardId }, { skip: taskBoardId == null });
 
   return (
@@ -37,11 +41,8 @@ const TaskBoardDetailScreen: React.FC<TaskBoardDetailScreenProps> = ({}) => {
         </div>
       )}
       {team && workspace && taskBoardResponse && (
-        <TaskBoardElementList
-          title={taskBoardResponse.data.title}
-          taskBoardId={taskBoardResponse.data.taskBoardId}
-          boardState={taskBoardResponse.data.state}
-          dueDate={taskBoardResponse.data.dueDate}
+        <TaskBoard
+          taskBoard={taskBoardResponse.data}
           team={team}
           workspace={workspace}
         />

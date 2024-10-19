@@ -27,11 +27,10 @@ const PostFile: React.FC<PostFileProps> = ({ file }) => {
           src={file.url} /> :
         type.indexOf("video") != -1 ?
           <div className={styles.videoWrapper}>
-            <video
-              className={styles.video}
-              src={file.url}>
+            <video className={styles.video}>
+              <source src={file.url + "#t=0.1"} />
             </video>
-            <IoPlayCircle className={styles.videoIcon} size={55}/>
+            <IoPlayCircle className={styles.videoIcon} size={55} />
           </div> :
           <div className={styles.logoContainer}>
             <LuFile className={styles.logo} />

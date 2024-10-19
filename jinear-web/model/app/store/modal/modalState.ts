@@ -128,6 +128,7 @@ export interface NewTaskModalState extends ModalState {
   initialRelatedFeedItemData?: IRelatedFeedItemData;
   initialProject?: ProjectDto;
   initialMilestone?: MilestoneDto;
+  initialBoard?: TaskBoardDto;
 }
 
 export interface TeamPickerModalState extends ModalState {

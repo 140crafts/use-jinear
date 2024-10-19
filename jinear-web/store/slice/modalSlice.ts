@@ -795,6 +795,8 @@ export const selectNewTaskModalInitialProject = (state: RootState) =>
   state.modal.newTaskModal?.initialProject;
 export const selectNewTaskModalInitialMilestone = (state: RootState) =>
   state.modal.newTaskModal?.initialMilestone;
+export const selectNewTaskModalInitialBoard = (state: RootState) =>
+  state.modal.newTaskModal?.initialBoard;
 
 export const selectNewTopicModalVisible = (state: RootState) => state.modal.newTopicModal?.visible;
 export const selectNewTopicModalWorkspace = (state: RootState) => state.modal.newTopicModal?.workspace;

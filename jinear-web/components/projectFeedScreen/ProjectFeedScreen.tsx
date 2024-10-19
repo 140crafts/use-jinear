@@ -12,9 +12,10 @@ import { useRetrievePublicProjectInfoQuery } from "@/api/projectFeedApi";
 
 interface ProjectFeedScreenProps {
   accessKey: string;
+  workspaceName: string;
 }
 
-const ProjectFeedScreen: React.FC<ProjectFeedScreenProps> = ({ accessKey }) => {
+const ProjectFeedScreen: React.FC<ProjectFeedScreenProps> = ({ accessKey, workspaceName }) => {
   const { t } = useTranslation();
   const authState = useTypedSelector(selectAuthState);
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
@@ -37,7 +38,7 @@ const ProjectFeedScreen: React.FC<ProjectFeedScreenProps> = ({ accessKey }) => {
         {retrievePublicProjectResponse && <ProjectInfo publicProject={retrievePublicProjectResponse.data} />}
         {(retrievePublicProjectResponse && accountProjectPermissions?.data.canInitializePost) &&
           <NewPostInput projectId={projectId} workspaceId={retrievePublicProjectResponse.data.workspaceId} />}
-        <PostList projectId={projectId} accessKey={accessKey} />
+        <PostList projectId={projectId} accessKey={accessKey} workspaceName={workspaceName} />
       </div>
     );
 };
