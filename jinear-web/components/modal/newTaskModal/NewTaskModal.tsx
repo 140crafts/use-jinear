@@ -4,7 +4,7 @@ import {
   closeNewTaskModal,
   popNewCalendarIntegrationModal,
   selectNewTaskModalInitialAssignedDate,
-  selectNewTaskModalInitialAssignedDateIsPrecise,
+  selectNewTaskModalInitialAssignedDateIsPrecise, selectNewTaskModalInitialBoard,
   selectNewTaskModalInitialDueDate,
   selectNewTaskModalInitialDueDateIsPrecise, selectNewTaskModalInitialMilestone, selectNewTaskModalInitialProject,
   selectNewTaskModalInitialRelatedFeedItemData,
@@ -49,6 +49,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const initialRelatedFeedItemData = useTypedSelector(selectNewTaskModalInitialRelatedFeedItemData);
   const initialProject = useTypedSelector(selectNewTaskModalInitialProject);
   const initialMilestone = useTypedSelector(selectNewTaskModalInitialMilestone);
+  const initialBoard = useTypedSelector(selectNewTaskModalInitialBoard);
   const workspaceId = workspace?.workspaceId;
 
   const [newInputType, setNewInputType] = useState<IInputType>("TASK");
@@ -118,6 +119,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
           initialRelatedFeedItemData={initialRelatedFeedItemData}
           initialProject={initialProject}
           initialMilestone={initialMilestone}
+          initialBoard={initialBoard}
           onClose={close}
         />
       )}

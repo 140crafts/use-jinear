@@ -1,0 +1,15 @@
+.statusBoardContainer {
+    overflow-x: scroll;
+    min-height: 8rem;
+    padding-bottom: 2rem;
+}
+
+.workflowStatusBoard {
+    max-width: calc(
+            100vw -
+            calc(
+            calc(var(--tasks-section-sidebar-width) + var(--workspace-side-menu-max-width)) +
+            calc(var(--workspace-layout-page-padding) * 4)
+            )
+    ) !important;
+}

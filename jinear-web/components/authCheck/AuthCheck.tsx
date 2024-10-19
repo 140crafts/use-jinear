@@ -14,20 +14,28 @@ interface AuthCheckProps {
 const logger = Logger("AuthCheck");
 
 const PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS = [
-  "/engage/confirm-email",
-  "/engage/reset-password-complete",
-  "/engage/forgot-password",
-  "/engage/workspace-invitation",
-  "/pricing",
-  "/terms",
-  "/debug",
-  "/project-feed/"
+  ["/engage/confirm-email"],
+  ["/engage/reset-password-complete"],
+  ["/engage/forgot-password"],
+  ["/engage/workspace-invitation"],
+  ["/pricing"],
+  ["/terms"],
+  ["/debug"],
+  ["/project-feed/"],
+  ["/public/", "/feed/"]
 ];
 
 const ONLY_NOT_LOGGED_IN_PATHS = ["/forgot-password", "/register", "/login"];
 
-const checkPathIsIn = (pathname: string, allowed: string[]) => {
-  const result = allowed?.find(allowedPath => pathname.indexOf(allowedPath) != -1) != null;
+const checkPathIsIn = (pathname: string, allowed: string[][]) => {
+  const result = allowed?.find(allowedPathKeys => {
+    const matchesAllKeys =
+      allowedPathKeys
+        .map(allowedPath => pathname.indexOf(allowedPath) != -1)
+        .reduce((prev, next) => prev && next);
+    logger.log({ allowedPathKeys, pathname, matchesAllKeys });
+    return matchesAllKeys;
+  }) != null;
   logger.log({ pathname, allowed, checkPathIsIn: result });
   return result;
 };

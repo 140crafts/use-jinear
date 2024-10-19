@@ -1,7 +1,14 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import TaskCreatedToast from "@/components/taskCreatedToast/TaskCreatedToast";
 import { IRelatedFeedItemData } from "@/model/app/store/modal/modalState";
-import { MilestoneDto, ProjectDto, TaskInitializeRequest, TeamDto, WorkspaceDto } from "@/model/be/jinear-core";
+import {
+  MilestoneDto,
+  ProjectDto,
+  TaskBoardDto,
+  TaskInitializeRequest,
+  TeamDto,
+  WorkspaceDto
+} from "@/model/be/jinear-core";
 import { useInitializeTaskMutation } from "@/store/api/taskApi";
 import { useAppDispatch } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -35,6 +42,7 @@ interface NewTaskFormProps {
   initialRelatedFeedItemData?: IRelatedFeedItemData;
   initialProject?: ProjectDto;
   initialMilestone?: MilestoneDto;
+  initialBoard?: TaskBoardDto;
   onClose: () => void;
   className?: string;
   footerContainerClass?: string;
@@ -54,6 +62,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
                                                    initialRelatedFeedItemData,
                                                    initialProject,
                                                    initialMilestone,
+                                                   initialBoard,
                                                    onClose,
                                                    className,
                                                    footerContainerClass
@@ -93,8 +102,8 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
       setFocus("title");
       setValue("topicId", "no-topic");
       setValue("assignedTo", "no-assignee");
-      setValue("boardId", "no-board");
       setValue("teamId", selectedTeam.teamId);
+      setValue("boardId", initialBoard?.taskBoardId ? initialBoard?.taskBoardId : "no-board");
       setValue("feedId", initialRelatedFeedItemData ? initialRelatedFeedItemData.feedId : undefined);
       setValue("feedItemId", initialRelatedFeedItemData ? initialRelatedFeedItemData.feedItemId : undefined);
       setValue("projectId", initialProject ? initialProject.projectId : undefined);
@@ -240,6 +249,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             workspace={workspace}
             team={selectedTeam}
             ref={boardPickerButtonRef}
+            initialBoard={initialBoard}
           />
 
           <DatePickerButton

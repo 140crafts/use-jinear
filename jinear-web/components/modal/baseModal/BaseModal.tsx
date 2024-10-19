@@ -19,45 +19,49 @@ export interface BaseModalProps {
 }
 
 const BaseModal: React.FC<BaseModalProps> = ({
-  visible = true,
-  requestClose,
-  children,
-  containerClassName,
-  contentContainerClass,
-  contentClassName,
-  closepadClassName,
-  width = "default",
-  height = "default",
-}) => {
-  const avoid = () => {};
+                                               visible = true,
+                                               requestClose,
+                                               children,
+                                               containerClassName,
+                                               contentContainerClass,
+                                               contentClassName,
+                                               closepadClassName,
+                                               width = "default",
+                                               height = "default"
+                                             }) => {
+  const avoid = () => {
+  };
 
   return (
-    <AnimatePresence initial={false} exitBeforeEnter={true}>
-      {visible && (
-        <div className={cn(styles.container, styles[`${width}-container`], containerClassName)}>
+    // <AnimatePresence initial={false} exitBeforeEnter={true}>
+    visible ? (
+      <div className={cn(styles.container, styles[`${width}-container`], containerClassName)}>
+        <div
+          className={cn([styles.content, styles[`${width}-content`], styles[`${height}-content`], contentClassName])}
+          onClick={avoid}
+        >
+          {/*<motion.div*/}
           <div
-            className={cn([styles.content, styles[`${width}-content`], styles[`${height}-content`], contentClassName])}
-            onClick={avoid}
+            className={cn(styles.children, contentContainerClass)}
+            // initial={{ opacity: 0 }}
+            // animate={{ opacity: 1 }}
+            // exit={{ opacity: 0, transition: { duration: 0.15 } }}
           >
-            <motion.div
-              className={cn(styles.children, contentContainerClass)}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0, transition: { duration: 0.15 } }}
-            >
-              {children}
-            </motion.div>
+            {children}
           </div>
-          <motion.div
-            onClick={requestClose}
-            className={cn([styles.closepad, closepadClassName])}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          />
+          {/*</motion.div>*/}
         </div>
-      )}
-    </AnimatePresence>
+        {/*<motion.div*/}
+        <div
+          onClick={requestClose}
+          className={cn([styles.closepad, closepadClassName])}
+          // initial={{ opacity: 0 }}
+          // animate={{ opacity: 1 }}
+          // exit={{ opacity: 0 }}
+        />
+      </div>
+    ) : null
+    // </AnimatePresence>
   );
 };
 

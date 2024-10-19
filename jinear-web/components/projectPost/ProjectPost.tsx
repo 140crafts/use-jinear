@@ -17,9 +17,11 @@ import { useRetrieveProjectPermissionsQuery } from "@/api/projectQueryApi";
 import { closeDialogModal, popDialogModal } from "@/slice/modalSlice";
 import { useDeleteProjectFeedPostMutation } from "@/api/projectPostApi";
 import { useRouter } from "next/navigation";
+import { PROJECT_FEED_URL } from "@/utils/constants";
 
 interface ProjectPostProps {
   post: ProjectPostDto;
+  workspaceName: string;
   accessKey: string;
   asLink?: boolean;
   withCommentCountButton?: boolean;
@@ -28,6 +30,7 @@ interface ProjectPostProps {
 
 const ProjectPost: React.FC<ProjectPostProps> = ({
                                                    post,
+                                                   workspaceName,
                                                    accessKey,
                                                    asLink = true,
                                                    withCommentCountButton = true,
@@ -67,7 +70,8 @@ const ProjectPost: React.FC<ProjectPostProps> = ({
   };
 
   const Wrapper = asLink ? Link : ClientOnly;
-  const href = asLink ? `/project-feed/${accessKey}/post/${post.projectPostId}` : undefined;
+  const projectUrl = PROJECT_FEED_URL.replace("[accessKey]", accessKey).replace("[workspaceUsername]", workspaceName);
+  const href = asLink ? `${projectUrl}/post/${post.projectPostId}` : undefined;
 
   return (
     <div className={styles.container}>
@@ -105,7 +109,7 @@ const ProjectPost: React.FC<ProjectPostProps> = ({
             className={styles.deleteButton}
             onClick={popAreYouSureToDeletePostModal}>
             <LuTrash className={"icon"} />
-            {t('projectPostDeleteButton')}
+            {t("projectPostDeleteButton")}
           </Button>}
         {withCommentCountButton &&
           <Button

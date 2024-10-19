@@ -15,6 +15,7 @@ import {
 interface BoardPickerButtonProps {
   workspace: WorkspaceDto;
   team: TeamDto;
+  initialBoard?: TaskBoardDto;
   register: UseFormRegister<TaskInitializeRequest>;
   setValue: UseFormSetValue<TaskInitializeRequest>;
 }
@@ -24,14 +25,25 @@ export interface IBoardPickerButtonRef {
 }
 
 const logger = Logger("BoardPickerButton");
-const BoardPickerButton = ({ workspace, team, register, setValue }: BoardPickerButtonProps, ref: any) => {
+const BoardPickerButton = ({ workspace, team, initialBoard, register, setValue }: BoardPickerButtonProps, ref: any) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [selectedBoard, setSelectedBoard] = useState<TaskBoardDto>();
 
+  logger.log({ initialBoard, selectedBoard });
+
   useEffect(() => {
     setValue("boardId", selectedBoard ? selectedBoard.taskBoardId : "no-board");
   }, [selectedBoard]);
+
+  useEffect(() => {
+    logger.log({ effect: initialBoard });
+    if (initialBoard) {
+      setTimeout(() => {
+        setSelectedBoard(initialBoard);
+      }, 500);
+    }
+  }, [initialBoard]);
 
   useImperativeHandle(ref, () => ({
     reset: () => setSelectedBoard(undefined)

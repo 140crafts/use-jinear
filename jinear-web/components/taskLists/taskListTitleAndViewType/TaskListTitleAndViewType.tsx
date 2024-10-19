@@ -14,7 +14,7 @@ interface TaskListTitleAndViewTypeProps {
 
 const TaskListTitleAndViewType: React.FC<TaskListTitleAndViewTypeProps> = ({
   title,
-  taskDisplayFormat = "LIST",
+  taskDisplayFormat = "WFS_COLUMN",
   onTaskDisplayFormatChange,
 }) => {
   const { t } = useTranslation();
@@ -25,6 +25,10 @@ const TaskListTitleAndViewType: React.FC<TaskListTitleAndViewTypeProps> = ({
       onTaskDisplayFormatChange?.(displayFormat);
     }
   }, [displayFormat]);
+
+  useEffect(() => {
+   setDisplayFormat(taskDisplayFormat)
+  }, [taskDisplayFormat]);
 
   const changeDisplayFormatToList = () => {
     setDisplayFormat("LIST");

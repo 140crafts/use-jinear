@@ -4,7 +4,7 @@ import { useRetrieveAllTaskBoardsQuery } from "@/store/api/taskBoardListingApi";
 import useTranslation from "locales/useTranslation";
 import React, { useState } from "react";
 import styles from "./TaskBoardList.module.css";
-import TaskBoardElementList from "./taskBoardElementList/TaskBoardElementList";
+import TaskBoard from "@/components/taskLists/taskBoardList/taskBoard/TaskBoard";
 
 interface TaskBoardListProps {
   team: TeamDto;
@@ -18,20 +18,20 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({ team, workspace }) => {
   const {
     data: taskBoardListingResponse,
     isFetching,
-    isLoading,
-  } = useRetrieveAllTaskBoardsQuery({ teamId: team.teamId, workspaceId: workspace.workspaceId });
+    isLoading
+  } = useRetrieveAllTaskBoardsQuery({ teamId: team.teamId, workspaceId: workspace.workspaceId, page });
 
-  const renderItem = (item: TaskBoardDto) => {
+  const renderItem = (item: TaskBoardDto, i: number) => {
     return (
-      <TaskBoardElementList
-        key={item.taskBoardId}
-        title={item.title}
-        taskBoardId={item.taskBoardId}
-        dueDate={item.dueDate}
-        team={team}
-        workspace={workspace}
-        boardState={item.state}
-      />
+      <div key={item.taskBoardId}>
+        <TaskBoard
+          taskBoard={item}
+          team={team}
+          workspace={workspace}
+          staticViewType={"list"}
+        />
+        {((taskBoardListingResponse?.data?.content?.length ?? 0) - 1) != i && <div className={styles.divider} />}
+      </div>
     );
   };
 

@@ -10,15 +10,22 @@ import PostCommentList from "@/components/projectFeedPostDetailScreen/postCommen
 import CommentInput from "@/components/projectFeedPostDetailScreen/commentInput/CommentInput";
 import { ProjectPostCommentDto } from "@/be/jinear-core";
 import Logger from "@/utils/logger";
+import { PROJECT_FEED_URL } from "@/utils/constants";
 
 interface ProjectFeedPostDetailScreenProps {
   projectId: string;
   postId: string;
   accessKey: string;
+  workspaceName: string;
 }
 
 const logger = Logger("ProjectFeedPostDetailScreen");
-const ProjectFeedPostDetailScreen: React.FC<ProjectFeedPostDetailScreenProps> = ({ projectId, postId, accessKey }) => {
+const ProjectFeedPostDetailScreen: React.FC<ProjectFeedPostDetailScreenProps> = ({
+                                                                                   projectId,
+                                                                                   postId,
+                                                                                   accessKey,
+                                                                                   workspaceName
+                                                                                 }) => {
   const { t } = useTranslation();
   const { data: projectFeedPostQueryResponse, isFetching } = useRetrieveProjectFeedPostQuery({ projectId, postId });
   const {
@@ -29,6 +36,8 @@ const ProjectFeedPostDetailScreen: React.FC<ProjectFeedPostDetailScreenProps> = 
   const hasExplicitAdminDeleteAccess = (retrievePublicProjectResponse?.data?.accountProjectPermissionFlags?.accountWorkspaceAdminOrOwner ?? false) || (retrievePublicProjectResponse?.data?.accountProjectPermissionFlags?.accountIsProjectTeamsAdmin ?? false);
   const [quotedComment, setQuotedComment] = useState<ProjectPostCommentDto>();
 
+  const projectUrl = PROJECT_FEED_URL.replace("[accessKey]", accessKey).replace("[workspaceUsername]", workspaceName);
+
   logger.log({ quotedComment });
 
   return (
@@ -38,7 +47,7 @@ const ProjectFeedPostDetailScreen: React.FC<ProjectFeedPostDetailScreenProps> = 
         <>
           <Button
             heightVariant={ButtonHeight.short}
-            href={`/project-feed/${accessKey}`}
+            href={projectUrl}
             className={styles.goBackButton}
           >
             <b><IoArrowBack /></b>
@@ -50,6 +59,7 @@ const ProjectFeedPostDetailScreen: React.FC<ProjectFeedPostDetailScreenProps> = 
             asLink={false}
             withCommentCountButton={false}
             withSeperator={false}
+            workspaceName={workspaceName}
           />
 
           <PostCommentList

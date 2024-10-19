@@ -9,9 +9,10 @@ import PaginatedList from "@/components/paginatedList/PaginatedList";
 interface PostListProps {
   projectId: string;
   accessKey: string;
+  workspaceName: string;
 }
 
-const PostList: React.FC<PostListProps> = ({ projectId, accessKey }) => {
+const PostList: React.FC<PostListProps> = ({ projectId, accessKey, workspaceName }) => {
   const { t } = useTranslation();
   const [page, setPage] = useState<number>(0);
 
@@ -19,7 +20,13 @@ const PostList: React.FC<PostListProps> = ({ projectId, accessKey }) => {
     { projectId, page });
 
   const renderContentItem = (data: ProjectPostDto) => {
-    return <ProjectPost key={data.projectPostId} post={data} accessKey={accessKey} withCommentCountButton={true} />;
+    return <ProjectPost
+      key={data.projectPostId}
+      post={data}
+      accessKey={accessKey}
+      withCommentCountButton={true}
+      workspaceName={workspaceName}
+    />;
   };
 
   const totalCountTitle = retrieveProjectFeedResponse ? `(${retrieveProjectFeedResponse.data.totalElements})` : "";
