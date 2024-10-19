@@ -34,7 +34,7 @@ const TitleInput: React.FC<TitleInputProps> = ({ register, labelClass }) => {
       placeholder={t("newTaskModalTaskTitle")}
       className={cn(styles.input, labelClass)}
       onKeyDown={isEnter}
-      {...register("title", { required: t("formRequiredField") })}
+      {...register("title", { required: t("newTaskFormTitleRequiredField") })}
     />
   );
 };

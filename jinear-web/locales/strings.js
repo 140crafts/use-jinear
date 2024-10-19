@@ -514,6 +514,10 @@ const translations = {
     en: "Cancel",
     tr: "Vazgeç"
   },
+  newTaskFormTitleRequiredField: {
+    en: "Task title can not be empty",
+    tr: "Görev başlığı boş olamaz"
+  },
   teamOptionsMenu: {
     en: "Team Options",
     tr: "Ekip Seçenekleri"

@@ -146,6 +146,13 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
     }
   }, [isInitializeTaskSuccess, initializeTaskResponse]);
 
+  useEffect(() => {
+    logger.log({ errors, titleErrorMessage: errors.title?.message });
+    if (errors.title?.message) {
+      toast(errors.title.message);
+    }
+  }, [errors.title]);
+
   const submit: SubmitHandler<TaskInitializeRequest> = (data) => {
     if (data.assignedTo == "no-assignee") {
       data.assignedTo = undefined;
