@@ -10,4 +10,4 @@ export const SOCKET_ROOT = (!process.env.NODE_ENV || process.env.NODE_ENV === "d
 export const S3_BASE = "https://storage.googleapis.com/jinear-b0/";
 
 export const ROUTE_IF_LOGGED_IN = "/home";
-export const PROJECT_FEED_URL = HOST + "/public/[workspaceUsername]/feed/[accessKey]";
+export const PROJECT_FEED_URL = HOST + "/shared/[workspaceUsername]/feed/[accessKey]";

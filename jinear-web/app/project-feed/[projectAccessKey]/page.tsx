@@ -12,7 +12,7 @@ interface ProjectFeedPageProps {
 /*
 !!!!!!!!!!!!!DEPRECATED!!!!!!!!!!!!
 use following instead
-/public/[workspaceUsername]/feed/
+/shared/[workspaceUsername]/feed/
 * */
 const ProjectFeedPage: React.FC<ProjectFeedPageProps> = ({}) => {
   const params = useParams();
