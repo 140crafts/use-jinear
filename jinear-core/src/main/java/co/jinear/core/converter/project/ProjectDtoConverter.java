@@ -21,5 +21,6 @@ public interface ProjectDtoConverter {
     ProjectDto convert(Project project);
 
     @Mapping(source = "projectFeedSettings.info", target = "info")
+    @Mapping(source = "workspace.username.username", target = "workspaceUsername")
     PublicProjectDto convertToPublic(Project project);
 }
