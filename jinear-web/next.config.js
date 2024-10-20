@@ -1,5 +1,5 @@
 const { withAxiom } = require("next-axiom");
-// const { withSentryConfig } = require("@sentry/nextjs");
+const { withSentryConfig } = require("@sentry/nextjs");
 
 /** @type {import("next").NextConfig} */
 
@@ -21,5 +21,5 @@ const nextConfig = {
 };
 
 
-// module.exports = withAxiom(withSentryConfig(withPWA(nextConfig), { silent: false }, { hideSourceMaps: true }));
-module.exports = withPWA(nextConfig);
+module.exports = withAxiom(withSentryConfig(withPWA(nextConfig), { silent: false }, { hideSourceMaps: true }));
+// module.exports = withPWA(nextConfig);
