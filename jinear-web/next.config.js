@@ -21,5 +21,5 @@ const nextConfig = {
 };
 
 
-module.exports = withAxiom(withSentryConfig(withPWA(nextConfig), { silent: false }, { hideSourceMaps: true }));
-// module.exports = withPWA(nextConfig);
+// module.exports = withAxiom(withSentryConfig(withPWA(nextConfig), { silent: false }, { hideSourceMaps: true }));
+module.exports = withPWA(nextConfig);
