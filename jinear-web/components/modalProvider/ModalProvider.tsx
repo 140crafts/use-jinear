@@ -119,6 +119,7 @@ const globalModals: any = (
 );
 
 const ModalProvider: React.FC<ModalProviderProps> = ({}) => {
+  //@ts-ignore
   return <ErrorBoundary message={"Global Modals"}>{globalModals}</ErrorBoundary>;
 };
 

@@ -3,7 +3,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import Logger from "@/utils/logger";
 
 interface OnInstallPromptEventProviderProps {
-  children: React.ReactNode;
+  children: React.ReactNode | React.ReactNode[];
 }
 
 const OnInstallPromptEventContext = createContext<{

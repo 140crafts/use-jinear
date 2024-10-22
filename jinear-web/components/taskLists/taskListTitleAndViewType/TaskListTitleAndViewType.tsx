@@ -8,15 +8,23 @@ export type TaskDisplayFormat = "LIST" | "WFS_COLUMN";
 
 interface TaskListTitleAndViewTypeProps {
   title: string;
+  teamUsername: string;
   taskDisplayFormat?: TaskDisplayFormat;
   onTaskDisplayFormatChange?: (format: TaskDisplayFormat) => void;
 }
 
+const setTeamDefaultDisplayFormat = (teamUsername: string, format: TaskDisplayFormat) => {
+  if (typeof window === "object") {
+    localStorage.setItem(`df-${teamUsername}`, format);
+  }
+};
+
 const TaskListTitleAndViewType: React.FC<TaskListTitleAndViewTypeProps> = ({
-  title,
-  taskDisplayFormat = "WFS_COLUMN",
-  onTaskDisplayFormatChange,
-}) => {
+                                                                             title,
+                                                                             teamUsername,
+                                                                             taskDisplayFormat = "WFS_COLUMN",
+                                                                             onTaskDisplayFormatChange
+                                                                           }) => {
   const { t } = useTranslation();
   const [displayFormat, setDisplayFormat] = useState<TaskDisplayFormat>(taskDisplayFormat);
 
@@ -27,15 +35,17 @@ const TaskListTitleAndViewType: React.FC<TaskListTitleAndViewTypeProps> = ({
   }, [displayFormat]);
 
   useEffect(() => {
-   setDisplayFormat(taskDisplayFormat)
+    setDisplayFormat(taskDisplayFormat);
   }, [taskDisplayFormat]);
 
   const changeDisplayFormatToList = () => {
     setDisplayFormat("LIST");
+    setTeamDefaultDisplayFormat(teamUsername, "LIST");
   };
 
   const changeDisplayFormatToWfsColumn = () => {
     setDisplayFormat("WFS_COLUMN");
+    setTeamDefaultDisplayFormat(teamUsername, "WFS_COLUMN");
   };
 
   return (

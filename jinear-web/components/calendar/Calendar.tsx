@@ -1,10 +1,9 @@
 "use client";
-import { useLocalStorage } from "@/hooks/useLocalStorage";
 import {
   queryStateDateToShortDateConverter,
   queryStateShortDateParser,
   useQueryState,
-  useSetQueryStateMultiple,
+  useSetQueryStateMultiple
 } from "@/hooks/useQueryState";
 import { useWorkspaceFirstTeam } from "@/hooks/useWorkspaceFirstTeam";
 import { CalendarEventDto, WorkspaceDto } from "@/model/be/jinear-core";
@@ -19,23 +18,17 @@ import CalendarHeader from "./header/CalendarHeader";
 import MonthView from "./monthView/MonthView";
 import TwoDayView from "./twoDayView/TwoDayView";
 import WeekView from "./weekView/WeekView";
+import {
+  CalendarViewType,
+  storeCalendarViewType,
+  useStoredCalendarViewType
+} from "@/components/calendar/calendarUtils";
 
 interface CalendarProps {
   workspace: WorkspaceDto;
   className?: string;
 }
 
-export type CalendarViewType = "m" | "w" | "d" | "2d";
-
-const useStoredCalendarViewType = (): CalendarViewType => {
-  return useLocalStorage({ key: "calendarViewType", defaultValue: "m" }) as CalendarViewType;
-};
-
-const storeCalendarViewType = (value: CalendarViewType) => {
-  if (typeof window === "object") {
-    localStorage.setItem("calendarViewType", value);
-  }
-};
 
 const logger = Logger("Calendar");
 
@@ -63,7 +56,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, className }) => {
       const initialDay = startOfDay(new Date());
       nextQueryState.set("viewingDate", queryStateDateToShortDateConverter(initialDay) as string);
     }
-    logger.log({ nextQueryState });
+    logger.log({ nextQueryState, viewType });
     setQueryStateMultiple(nextQueryState);
   }, [JSON.stringify(viewType), JSON.stringify(viewingDate), defaultCalendarViewType]);
 
@@ -81,7 +74,7 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, className }) => {
         ghostEvent,
         setGhostEvent,
         calenderLoading,
-        setCalenderLoading,
+        setCalenderLoading
       }}
     >
       <div className={cn(styles.container, className)}>

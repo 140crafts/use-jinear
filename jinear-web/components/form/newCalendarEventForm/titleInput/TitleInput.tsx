@@ -27,7 +27,7 @@ const TitleInput: React.FC<TitleInputProps> = ({ register, labelClass }) => {
       type={"text"}
       placeholder={t("newEventModalEventSummary")}
       className={cn(styles.input, labelClass)}
-      {...register("summary", { required: t("formRequiredField") })}
+      {...register("summary", { required: t("newEventFormTitleRequiredField") })}
     />
   );
 };

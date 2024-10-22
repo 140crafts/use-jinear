@@ -28,6 +28,7 @@ import NextTopLoader from "nextjs-toploader";
 import { CSPostHogProvider } from "@/components/postHogProvider/CSPostHogProvider";
 import PostHogPageView from "@/components/postHogPageView/PostHogPageView";
 import OnInstallPromptEventProvider from "@/components/onInstallPromptEventProvider/OnInstallPromptEventProvider";
+import React from "react";
 
 const logger = Logger("_app");
 
@@ -314,7 +315,8 @@ function MyApp({ children }: { children: React.ReactNode }) {
               <OnboardListener />
               <WebViewEventListener />
               <PureClientOnly>
-                <ErrorBoundary message={"Firebase Configration"}>
+                {/*@ts-ignore*/}
+                <ErrorBoundary message={"Firebase Configuration Failed"}>
                   <FirebaseConfigration />
                 </ErrorBoundary>
                 <WebsocketHandler />

@@ -518,6 +518,10 @@ const translations = {
     en: "Task title can not be empty",
     tr: "Görev başlığı boş olamaz"
   },
+  newEventFormTitleRequiredField: {
+    en: "Event title can not be empty",
+    tr: "Etkinlik başlığı boş olamaz"
+  },
   teamOptionsMenu: {
     en: "Team Options",
     tr: "Ekip Seçenekleri"
