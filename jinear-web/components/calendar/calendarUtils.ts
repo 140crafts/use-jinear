@@ -16,7 +16,7 @@ import {
   isSameDay,
   parse,
   startOfDay,
-  startOfWeek,
+  startOfWeek
 } from "date-fns";
 
 const logger = Logger("calendar-utils");
@@ -77,7 +77,7 @@ const canBeMerged = (
   }
   logger.log({ method: "canBeMerged", taskWeekLayoutUpper, taskWeekLayoutLower });
   const result = taskWeekLayoutUpper
-    .map((taskOnDayUpper, index) => {
+    ?.map((taskOnDayUpper, index) => {
       const taskOnDayLower = taskWeekLayoutLower[index];
       return (
         (taskOnDayLower == null && taskOnDayUpper != null) ||
@@ -183,9 +183,9 @@ const flattenWeekRow = (week: (CalendarEventDto | null)[]) => {
 const flattenAllWeeks = (weeks: (CalendarEventDto | null)[][]) => weeks.map(flattenWeekRow);
 
 /**
- *
- * @param tasks Viewing period tasks
- * @param days Viewing period days
+ * @param vo contains following
+ *  events Viewing period calendar events
+ *  days Viewing period days
  * @returns returns 3 dimensional array. First dimension is weeks, second is that weeks rows and third is tasks in that row with day size starts from monday.
  *
  * This method used for generating task-date data to rendering tasks as horizontal sticks without overlapping empty spaces.
@@ -393,7 +393,8 @@ export const mergeWeekDateSpans = (dayTable: (CalendarEventDto | null)[][]) => {
   return resultTable;
 };
 
-export const convertWeekviewDayColumnsToRows = (flatColumns: ICalendarWeekRowCell[][]) => {};
+export const convertWeekviewDayColumnsToRows = (flatColumns: ICalendarWeekRowCell[][]) => {
+};
 
 // const totalRowCount = flatColumns?.[0]?.reduce()
 //totalRowCount kadar don
@@ -515,3 +516,19 @@ export interface ICalculateTaskDayPositions {
   day: Date;
   minuteInPx?: number;
 }
+
+export type CalendarViewType = "m" | "w" | "d" | "2d";
+
+export const useStoredCalendarViewType = (): CalendarViewType => {
+  if (typeof window === "object") {
+    const type = localStorage.getItem("calendarViewType") ?? "m";
+    return type as CalendarViewType;
+  }
+  return "m";
+};
+
+export const storeCalendarViewType = (value: CalendarViewType) => {
+  if (typeof window === "object") {
+    localStorage.setItem("calendarViewType", value);
+  }
+};

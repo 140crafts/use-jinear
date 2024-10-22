@@ -7,7 +7,7 @@ import {
   queryStateIsoDateParser,
   useQueryState,
   useSetQueryState,
-  useSetQueryStateMultiple,
+  useSetQueryStateMultiple
 } from "@/hooks/useQueryState";
 import { TaskFilterRequest, TeamDto, TeamWorkflowStateGroup, WorkspaceDto } from "@/model/be/jinear-core";
 import { useFilterTasksQuery } from "@/store/api/taskListingApi";
@@ -36,12 +36,12 @@ export interface ExtendedTaskFilterRequest extends TaskFilterRequest {
 const logger = Logger("MultiViewTaskList");
 
 const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
-  workspace,
-  team,
-  title,
-  activeDisplayFormat = "WFS_COLUMN",
-  workflowStatusBoardClassName,
-}) => {
+                                                               workspace,
+                                                               team,
+                                                               title,
+                                                               activeDisplayFormat = "WFS_COLUMN",
+                                                               workflowStatusBoardClassName
+                                                             }) => {
   const setQueryState = useSetQueryState();
   const setQueryStateMultiple = useSetQueryStateMultiple();
   const page = useQueryState<number>("page", queryStateIntParser) || 0;
@@ -70,7 +70,7 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
     timespanStart,
     timespanEnd,
     hasPreciseFromDate,
-    hasPreciseToDate,
+    hasPreciseToDate
   };
 
   useEffect(() => {
@@ -79,7 +79,7 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
         new Map([
           ["workspaceId", queryStateAnyToStringConverter(workspace.workspaceId)],
           ["teamIdList", queryStateAnyToStringConverter([team.teamId])],
-          ["displayFormat", activeDisplayFormat],
+          ["displayFormat", activeDisplayFormat]
         ])
       );
     }
@@ -102,15 +102,16 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
   const {
     data: filterResponse,
     isFetching,
-    isLoading,
+    isLoading
   } = useFilterTasksQuery(filter, {
-    skip: filter == null || filter.workspaceId == null || filter.teamIdList == null || filter.teamIdList?.length == 0,
+    skip: filter == null || filter.workspaceId == null || filter.teamIdList == null || filter.teamIdList?.length == 0
   });
 
   return (
     <div className={styles.container}>
       <TaskListTitleAndViewType
         title={title}
+        teamUsername={team.username}
         taskDisplayFormat={displayFormat}
         onTaskDisplayFormatChange={onTaskDisplayFormatChange}
       />

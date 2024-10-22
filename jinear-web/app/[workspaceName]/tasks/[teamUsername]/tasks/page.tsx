@@ -8,8 +8,19 @@ import useTranslation from "locales/useTranslation";
 import { useParams, usePathname } from "next/navigation";
 import React from "react";
 import styles from "./index.module.css";
+import { TaskDisplayFormat } from "@/components/taskLists/taskListTitleAndViewType/TaskListTitleAndViewType";
 
-interface TasksScreenProps {}
+interface TasksScreenProps {
+}
+
+const getTeamDefaultDisplayFormat = (teamUsername: string): TaskDisplayFormat => {
+  const defaultViewFormat = "WFS_COLUMN";
+  if (typeof window === "object") {
+    const viewFormat = localStorage.getItem(`df-${teamUsername}`) || defaultViewFormat;
+    return ["LIST", "WFS_COLUMN"].indexOf(viewFormat) != -1 ? viewFormat as TaskDisplayFormat : defaultViewFormat;
+  }
+  return defaultViewFormat;
+};
 
 const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
   const { t } = useTranslation();
@@ -19,10 +30,14 @@ const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
   const teamUsername: string = params?.teamUsername as string;
 
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
-  const { data: teamsResponse, isFetching: isTeamsFetching } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
-    skip: workspace == null,
+  const {
+    data: teamsResponse,
+    isFetching: isTeamsFetching
+  } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
+    skip: workspace == null
   });
   const team = teamsResponse?.data.find((teamDto) => teamDto.username == teamUsername);
+  const displayFormat = getTeamDefaultDisplayFormat(teamUsername);
 
   return (
     <div className={styles.container}>
@@ -32,7 +47,7 @@ const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
           title={t("tasksScreenBreadcrumbLabel")}
           workspace={workspace}
           team={team}
-          activeDisplayFormat="WFS_COLUMN"
+          activeDisplayFormat={displayFormat}
           workflowStatusBoardClassName={styles.workflowStatusBoard}
           pathname={pathname}
         />

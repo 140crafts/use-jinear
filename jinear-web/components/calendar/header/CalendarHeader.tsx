@@ -13,8 +13,8 @@ import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoCaretBack, IoCaretForward, IoEllipse } from "react-icons/io5";
 import { LuCalendar } from "react-icons/lu";
-import { CalendarViewType } from "../Calendar";
 import styles from "./CalendarHeader.module.scss";
+import { CalendarViewType, storeCalendarViewType } from "@/components/calendar/calendarUtils";
 
 interface CalendarHeaderProps {}
 interface ICalendarViewType {
@@ -43,6 +43,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({}) => {
 
   const setViewType = (viewType: CalendarViewType) => {
     setQueryState("viewType", queryStateAnyToStringConverter(viewType));
+    storeCalendarViewType(queryStateAnyToStringConverter(viewType));
   };
 
   const title =

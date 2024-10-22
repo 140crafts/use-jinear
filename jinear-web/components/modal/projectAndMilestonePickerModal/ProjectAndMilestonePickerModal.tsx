@@ -63,6 +63,13 @@ const ProjectAndMilestonePickerModal: React.FC<ProjectAndMilestonePickerModalPro
     }
   }, [allProjectsResponse, selectedProjectId, setSelectedProject]);
 
+  useEffect(() => {
+    if (!visible) {
+      setSelectedProject(undefined);
+      setSelectedMilestone(undefined);
+    }
+  }, [visible]);
+
   const close = () => {
     dispatch(closeProjectAndMilestonePickerModal());
   };

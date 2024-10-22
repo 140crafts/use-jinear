@@ -147,9 +147,12 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
   }, [isInitializeTaskSuccess, initializeTaskResponse]);
 
   useEffect(() => {
-    logger.log({ errors, titleErrorMessage: errors.title?.message });
+    logger.log({ titleErrorMessage: errors.title?.message });
     if (errors.title?.message) {
-      toast(errors.title.message);
+      toast(errors.title.message, {
+        position: window.innerWidth < 768 ? "top-center" : "bottom-center",
+        duration: 6000
+      });
     }
   }, [errors.title]);
 

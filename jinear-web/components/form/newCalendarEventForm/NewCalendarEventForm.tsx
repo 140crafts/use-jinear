@@ -79,6 +79,16 @@ const NewCalendarEventForm: React.FC<NewCalendarEventFormProps> = ({
     setValue("hasPreciseDueDate", false);
   }, [setValue]);
 
+  useEffect(() => {
+    logger.log({ titleErrorMessage: errors.summary?.message });
+    if (errors.summary?.message) {
+      toast(errors.summary.message, {
+        position: window.innerWidth < 768 ? "top-center" : "bottom-center",
+        duration: 6000
+      });
+    }
+  }, [errors.summary]);
+
   const submit: SubmitHandler<CalendarEventInitializeRequest> = (data) => {
     logger.log({ submit: data });
     const req = {
