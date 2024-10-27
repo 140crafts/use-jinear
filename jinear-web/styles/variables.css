@@ -40,7 +40,8 @@
     --side-menu-main-menu-width: 230px;
     --side-menu-workspace-menu-width: 60px;
     --side-menu-bottom-workspace-menu-height: 56px;
-    --workspace-header-height: 56px;
+    /*--workspace-header-height: 56px;*/
+    --workspace-header-height: 44px;
     --workspace-side-menu-max-width: 75px;
     --workspace-side-menu-mobile-navigator-height: 75px;
     --workspace-layout-content-vertical-padding: 1rem;

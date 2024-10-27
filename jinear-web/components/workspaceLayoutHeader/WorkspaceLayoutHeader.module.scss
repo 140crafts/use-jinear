@@ -7,8 +7,11 @@
   padding: 0 1rem;
   align-items: center;
   justify-content: space-between;
+
+  background-color: var(--c-primary-shade-0);
+  //background-color: var(--c-JINEAR_ORANGE);
   border-bottom-style: solid;
-  border-bottom-color: var(--c-primary-shade-0);
+  border-bottom-color: var(--c-primary-shade-1);
   border-bottom-width: 1px;
 
   min-height: var(--workspace-header-height);
@@ -35,6 +38,7 @@
 
 .upgradeButton:hover {
   background-color: var(--c-primary-shade-1) !important;
+  color: var(--c-gradient-gold-0) !important;
 }
 
 @media (max-width: $mobile-l) {

@@ -3,7 +3,7 @@ import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice
 import { useTypedSelector } from "@/store/store";
 import { useParams, useRouter } from "next/navigation";
 import React from "react";
-import Button, { ButtonHeight } from "../button";
+import Button, { ButtonHeight, ButtonVariants } from "../button";
 import SideMenuFooter from "../sideMenu/sideMenuFooter/SideMenuFooter";
 import WorkspaceMoreActionsButton from "../sideMenu/workspaceMoreActionsButton/WorkspaceMoreActionsButton";
 import WorkspaceChangeButton from "../workspaceChangeButton/WorkspaceChangeButton";
@@ -33,7 +33,7 @@ const WorkspaceLayoutHeader: React.FC<WorkspaceLayoutHeaderProps> = ({}) => {
   return (
     <div className={styles.container}>
       <div className={styles.headerLeftContent}>
-        <Button heightVariant={ButtonHeight.short} onClick={router.back}>
+        <Button variant={ButtonVariants.hoverFilled2} heightVariant={ButtonHeight.short} onClick={router.back}>
           <b><IoArrowBack /></b>
         </Button>
         {workspace && (
