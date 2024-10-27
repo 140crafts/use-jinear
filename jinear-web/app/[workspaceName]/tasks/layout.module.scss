@@ -4,6 +4,7 @@
   position: relative;
   display: flex;
   flex-direction: row;
+  margin-left: calc(-1 * var(--workspace-layout-page-padding));
 }
 
 .contentContainer {
@@ -26,6 +27,7 @@
 @media (max-width: $tablet) {
   .container {
     flex-direction: column-reverse;
+    margin-left: unset;
   }
   .contentContainer {
     padding-left: unset;

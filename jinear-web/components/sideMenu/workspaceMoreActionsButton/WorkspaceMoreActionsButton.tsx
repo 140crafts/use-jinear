@@ -22,7 +22,7 @@ const WorkspaceMoreActionsButton: React.FC<WorkspaceMoreActionsButtonProps> = ({
     <Button
       className={styles.iconButton}
       onClick={popMoreActionMenu}
-      variant={menuMoreActionModalVisible ? ButtonVariants.filled2 : ButtonVariants.filled}
+      variant={ButtonVariants.filled2}
       data-tooltip={t("mainFeaturesMenuLabelMore")}
     >
       <LuSettings2 className={styles.icon} />

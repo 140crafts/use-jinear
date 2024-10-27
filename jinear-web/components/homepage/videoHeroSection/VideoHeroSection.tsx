@@ -107,7 +107,14 @@ const VideoHeroSection: React.FC<VideoHeroSectionProps> = ({}) => {
   return (
     <div className={styles.container}>
       <div id={"feature-projects"} className={styles.heroVideoContainer}>
-        <video className={styles.video} muted={true} autoPlay={true} controls={true} loop={true} ref={videoRef}>
+        <video
+          className={styles.video}
+          muted={true}
+          autoPlay={true}
+          controls={true}
+          loop={true}
+          playsInline
+          ref={videoRef}>
           <source ref={sourceRef} />
         </video>
       </div>

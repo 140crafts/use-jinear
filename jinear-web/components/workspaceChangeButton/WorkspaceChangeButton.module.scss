@@ -8,13 +8,14 @@
 .label {
   display: block;
   max-width: 45px;
+  font-weight: 600;
 }
 
 .iconContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-width: 30px;
+  min-width: 18px;
   margin-right: -0.75rem;
 }
 

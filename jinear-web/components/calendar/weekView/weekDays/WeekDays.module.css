@@ -4,7 +4,7 @@
   height: var(--calendar-weekdays-header-height);
   position: sticky;
   top: var(--workspace-header-height);
-  z-index: 5;
+  z-index: 10;
   background-color: var(--c-primary);
   border-bottom: 1px var(--c-primary-shade-0) solid;
 }

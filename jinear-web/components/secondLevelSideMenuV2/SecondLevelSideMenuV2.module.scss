@@ -5,6 +5,7 @@
   top: 0;
   bottom: 0;
   padding-top: var(--workspace-header-height);
+  padding-left: .25rem;
 
   width: var(--tasks-section-sidebar-width);
   min-width: var(--tasks-section-sidebar-width);
@@ -17,8 +18,10 @@
 
   border-right-style: solid;
   border-right-width: 1px;
-  border-right-color: var(--c-primary-shade-0);
-  background-color: var(--c-primary);
+  //background-color: var(--c-primary);
+  //border-right-color: var(--c-primary-shade-0);
+  border-right-color: var(--c-primary-shade-1);
+  background-color: var(--c-primary-shade-0);
 }
 
 .sideMenuContent {
@@ -66,12 +69,15 @@
     top: unset;
     bottom: var(--workspace-side-menu-mobile-navigator-height);
     padding-top: unset;
+    padding-left: unset;
 
     z-index: 9;
     width: 100vw;
     max-width: 100vw;
     left: 0;
     background-color: var(--c-primary);
+
+    border-right:none;
   }
 
   .mobileMenuButtonContainer {

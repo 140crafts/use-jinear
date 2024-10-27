@@ -6,6 +6,7 @@ import React from "react";
 import { LuChevronDown } from "react-icons/lu";
 import Button, { ButtonHeight, ButtonVariants } from "../button";
 import styles from "./WorkspaceChangeButton.module.scss";
+
 interface WorkspaceChangeButtonProps {
   currentWorkspace: WorkspaceDto;
 }
@@ -19,13 +20,13 @@ const WorkspaceChangeButton: React.FC<WorkspaceChangeButtonProps> = ({ currentWo
   return (
     <Button
       className={styles.button}
-      variant={ButtonVariants.filled}
+      variant={ButtonVariants.filled2}
       heightVariant={ButtonHeight.short}
       onClick={popWorkspacePicker}
     >
       <div className={cn(styles.label, "single-line")}>{currentWorkspace.title}</div>
       <div className={styles.iconContainer}>
-        <LuChevronDown size={14} />
+        <LuChevronDown size={14} className={"icon"} />
       </div>
     </Button>
   );
