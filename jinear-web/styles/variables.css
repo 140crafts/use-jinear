@@ -68,6 +68,8 @@
     --gap: clamp(1rem, 6vw, 3rem);
     --page: min(85ch, 100% - var(--gap) * 2);
     --page-extended: min(120ch, 100% - var(--gap) * 2);
+    --page-extended-2: min(140ch, 100% - var(--gap) * 2);
+    --page-extended-3: min(160ch, 100% - var(--gap) * 2);
     --full: calc(100% - (var(--gap)));
     --content: min(50ch, 100% - var(--gap) * 2);
     --popout: minmax(0, 2rem);

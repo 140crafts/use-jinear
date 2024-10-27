@@ -14,11 +14,15 @@ const WorkspacePage: React.FC<WorkspacePageProps> = ({}) => {
   const workspaceName: string = params?.workspaceName as string;
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
 
+
   useEffect(() => {
     if (workspaceName) {
-      router.replace(`/${workspaceName}/calendar`);
+      const timeout = setTimeout(() => {
+        router.replace(`/${workspaceName}/calendar`);
+      }, 1500);
+      return (() => clearTimeout(timeout));
     }
-  }, [workspaceName]);
+  }, [router, workspaceName]);
 
   return (
     <div className={styles.container}>

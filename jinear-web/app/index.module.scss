@@ -3,21 +3,8 @@
 .container {
   display: flex;
   flex-direction: column;
+  //width: var(--page-extended-3);
   width: var(--page-extended);
-}
-
-.featuresNavbar {
-  position: sticky;
-  //top: var(--nav-bar-height);
-  //top: 0;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: .5rem;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--c-primary);
-  //z-index: 100;
 }
 
 .navButton {
@@ -37,7 +24,8 @@
 
 .heroVideoContainer {
   position: relative;
-  height: calc(min(120ch, 100vw - var(--gap) * 2) / 1.62);
+  //height: calc(min(120ch, 100vw - var(--gap) * 2) / 1.53);
+  height: min(100ch, calc(calc(100vw - var(--gap) * 2) / 1.53));
   overflow: hidden;
 }
 

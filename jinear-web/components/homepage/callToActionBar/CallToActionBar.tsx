@@ -17,14 +17,14 @@ const CallToActionBar: React.FC<CallToActionBarProps> = ({ authState }) => {
     <div className={styles.actionBar}>
       {authState == "LOGGED_IN" && (
         <Button variant={ButtonVariants.contrast} href={ROUTE_IF_LOGGED_IN} className={styles.goToAppButton}>
-          {t("homescreenGoToApp")}
+          <b>{t("homescreenGoToApp")}</b>
           <IoArrowForward />
         </Button>
       )}
       {authState == "NOT_LOGGED_IN" && (
         <>
-          <Button variant={ButtonVariants.contrast} href={"/login"}>
-            {t("homescreenLogin")}
+          <Button variant={ButtonVariants.contrast} href={"/login"} className={styles.loginButton}>
+            <b>{t("homescreenLogin")}</b>
           </Button>
           <Button variant={ButtonVariants.filled} href={"/register"}>
             {t("homescreenRegister")}
