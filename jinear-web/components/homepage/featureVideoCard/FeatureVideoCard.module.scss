@@ -8,7 +8,8 @@
 
 .heroVideoContainer {
   position: relative;
-  height: calc(min(120ch, 100vw - var(--gap) * 2) / 1.62);
+  //height: calc(min(120ch, 100vw - var(--gap) * 2) / 1.53);
+  height: min(100ch, calc(calc(100vw - var(--gap) * 2) / 1.53));
   overflow: hidden;
 }
 
