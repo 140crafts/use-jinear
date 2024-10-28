@@ -24,13 +24,13 @@ interface DayspanTimelyViewProps {
 const logger = Logger("DayspanTimelyView");
 
 const DayspanTimelyView: React.FC<DayspanTimelyViewProps> = ({
-  workspace,
-  ghostEvent,
-  viewingDate,
-  periodStart,
-  periodEnd,
-  days,
-}) => {
+                                                               workspace,
+                                                               ghostEvent,
+                                                               viewingDate,
+                                                               periodStart,
+                                                               periodEnd,
+                                                               days
+                                                             }) => {
   const weekViewContainerRef = useRef<HTMLDivElement>(null);
   const hiddenCalendars = useQueryState<string[]>("hiddenCalendars", queryStateArrayParser) || [];
   const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || [];
@@ -39,7 +39,7 @@ const DayspanTimelyView: React.FC<DayspanTimelyViewProps> = ({
     {
       workspaceId: workspace?.workspaceId || "",
       timespanStart: periodStart,
-      timespanEnd: periodEnd,
+      timespanEnd: periodEnd
     },
     { skip: workspace == null }
   );
@@ -65,14 +65,14 @@ const DayspanTimelyView: React.FC<DayspanTimelyViewProps> = ({
       days,
       excludePreciseAssignedDates: true,
       excludePreciseDueDates: true,
-      rowCount: 1,
+      rowCount: 1
     });
   }, [
     JSON.stringify(days),
     JSON.stringify(filterResponse),
     JSON.stringify(ghostEvent),
     JSON.stringify(hiddenTeams),
-    JSON.stringify(hiddenCalendars),
+    JSON.stringify(hiddenCalendars)
   ]);
 
   const weekTasksWithPreciseDates = useMemo(
@@ -96,24 +96,12 @@ const DayspanTimelyView: React.FC<DayspanTimelyViewProps> = ({
     setTimeout(() => {
       const todayTitle = document.getElementById("calendar-weekday-title-today");
       const currentTimeLine = document.getElementById("calendar-week-view-current-time-line");
+      logger.log({ daySpanTimelyView: "onScroll effect", todayTitle, currentTimeLine, viewingDate });
 
       if (viewingDate && isDateBetween(periodStart, viewingDate, periodEnd)) {
         if (todayTitle && currentTimeLine) {
-          const todayTitleOffset = getOffset(todayTitle);
-          const todayTitleSize = getSize(todayTitle);
           const currentTimeLineOffset = getOffset(currentTimeLine);
-          const currentTimeLineSize = getSize(currentTimeLine);
-          const pageContent = document.getElementById("workspace-layout-page-content");
-
-          pageContent?.scrollTo?.({
-            left: todayTitleOffset.left,
-            behavior: "smooth",
-          });
-          pageContent?.scroll?.({
-            top: currentTimeLineOffset.top - currentTimeLineSize.height - 200,
-            behavior: "smooth",
-          });
-        } else {
+          window.scrollTo(currentTimeLineOffset);
         }
       }
     }, 500);

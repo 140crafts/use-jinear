@@ -1,5 +1,6 @@
 import enUsLocale from "date-fns/locale/en-US";
 import trTrLocale from "date-fns/locale/tr";
+import React from "react";
 
 const translations = {
   hi: {
@@ -3787,9 +3788,17 @@ const translations = {
     en: "Install Application",
     tr: "Uygulamayı Yükle"
   },
+  installPwaInstructionsAsPWAButton: {
+    en: "Install Application As PWA",
+    tr: "Uygulamayı Web App Olarak Yükle"
+  },
+  installFromAppStores: {
+    en: "Install Jinear on your device from applications store below",
+    tr: "Jinear'ı cihazınıza uygulama mağazaları aracılığı ile yükleyin"
+  },
   installPwaInstructionsModalIOSTitle: {
-    en: "Install Jinear on your iOS Device ",
-    tr: "Jinear'ı iOS cihazınıza yüklemek için"
+    en: "Install Jinear on your iOS Device as a Web App",
+    tr: "Jinear'ı iOS cihazınıza web uygulaması şeklinde yüklemek için"
   },
   installPwaInstructionsModalIOS_step1: {
     en: "Visit the <a href='https://jinear.co' target='_blank' rel='noopener noreferrer'>jinear.co</a> on Safari.",
@@ -3808,8 +3817,8 @@ const translations = {
     tr: "Sağ üst köşedeki 'Ekle' butonuna basın."
   },
   installPwaInstructionsModalAndroidTitle: {
-    en: "Install Jinear on your Android Device ",
-    tr: "Jinear'ı Android cihazınıza yüklemek için"
+    en: "Install Jinear on your Android Device as a Web App",
+    tr: "Jinear'ı Android cihazınıza web uygulaması şeklinde yüklemek için"
   },
   installPwaInstructionsModalAndroid_step1: {
     en: "Visit the <a href='https://jinear.co' target='_blank' rel='noopener noreferrer'>jinear.co</a> on Chrome.",
@@ -4463,15 +4472,15 @@ const translations = {
     en: "Posts",
     tr: "Gönderiler"
   },
-  updateWorkspaceTitleModalTitle:{
+  updateWorkspaceTitleModalTitle: {
     en: "Update Workspace Title",
     tr: "Çalışma Alanı Adını Güncelle"
   },
-  updateWorkspaceTextModalText:{
+  updateWorkspaceTextModalText: {
     en: "Please provide an another title for workspace.",
     tr: "Çalışma alanı için yeni bir başlık girin."
   },
-  projectPostCommentCountLabel:{
+  projectPostCommentCountLabel: {
     en: "${number} Comments",
     tr: "${number} Yorum"
   },
@@ -4539,6 +4548,14 @@ const translations = {
     en: "You can change who can comment posts.",
     tr: "Gönderilere kimin yorum yapabileceğini ayarlayabilirsiniz."
   },
+  homePageMobileAppSectionTitle:{
+    en:"Get Started with the Jinear Web App: Easy Access on Browser, Mobile or PWA!",
+    tr:"Jinear'a Başlamak Çok Kolay: Tarayıcınızda, Mobilde veya PWA ile Hemen Erişin!"
+  },
+  homePageMobileAppSectionAbout:{
+    en:`To get started with the Jinear, just log in at <a href={'https://jinear.co'}>jinear.co</a>. It'll open right in your browser! Jinear is also available as native mobile app or as a Progressive Web App (PWA).`,
+    tr:`Jinear'ı kullanmaya başlamak için sadece <a href={'https://jinear.co'}>jinear.co</a> adresinden giriş yapmanız yeterli. Tarayıcınızda kullanabilirsiniz. Jinear ayrıca mobil uygulama veya Progresif Web Uygulaması (PWA) olarak da kullanılabilir.`
+  }
 };
 
 export default translations;

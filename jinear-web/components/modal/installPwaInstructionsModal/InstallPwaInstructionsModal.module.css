@@ -1,4 +1,29 @@
+.appstoreButtonsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+}
+
+.appstoreContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.storeButton {
+    gap: 1rem;
+    flex: 1;
+}
+
 .container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    gap: 2rem;
+}
+
+.pwaContainer {
     display: flex;
     flex-direction: column;
     position: relative;
