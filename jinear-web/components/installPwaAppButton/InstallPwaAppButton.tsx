@@ -22,14 +22,14 @@ const InstallPwaAppButton: React.FC<InstallPwaAppButtonProps> = ({ className, wi
   const onInstallPromptEvent = useOnInstallPromptEvent();
 
   const popPwaInstructionModal = async () => {
-    if (onInstallPromptEvent != null) {
-      // @ts-ignore
-      const result = await onInstallPromptEvent?.prompt?.();
-      logger.log({ popPwaInstructionModal: result });
-      if (result?.outcome == "accepted") {
-        return;
-      }
-    }
+    // if (onInstallPromptEvent != null) {
+    //   // @ts-ignore
+    //   const result = await onInstallPromptEvent?.prompt?.();
+    //   logger.log({ popPwaInstructionModal: result });
+    //   if (result?.outcome == "accepted") {
+    //     return;
+    //   }
+    // }
     dispatch(popInstallPwaInstructionsModal());
   };
 

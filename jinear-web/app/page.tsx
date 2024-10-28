@@ -7,14 +7,18 @@ import HomePageNavbar from "@/components/homepage/navbar/HomePageNavbar";
 import { useTheme } from "@/components/themeProvider/ThemeProvider";
 import { selectAuthState } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
-import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
+import { APP_STORE_URL, PLAY_STORE_URL, ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import isPwa from "@/utils/pwaHelper";
 import { isWebView } from "@/utils/webviewUtils";
 import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 import styles from "./index.module.scss";
 import VideoHeroSection from "@/components/homepage/videoHeroSection/VideoHeroSection";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
+import { IoLogoApple, IoLogoGooglePlaystore } from "react-icons/io5";
+import Line from "@/components/line/Line";
+import MobileAppSection from "@/components/homepage/mobileAppSection/MobileAppSection";
 
 export default function Home() {
   const pwa = isPwa();
@@ -45,8 +49,13 @@ export default function Home() {
       <CallToActionBar authState={authState} />
       <div className="spacer-h-4" />
       <VideoHeroSection />
+
       <div className="spacer-h-4" />
+      <Line />
       <div className="spacer-h-4" />
+
+      <MobileAppSection />
+
     </ClientOnly>
   );
 }
