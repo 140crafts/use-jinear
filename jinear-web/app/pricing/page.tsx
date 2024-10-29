@@ -10,10 +10,11 @@ import JinearSelfHostedInfo from "@/components/jinearSelfHostedInfo/JinearSelfHo
 import { closeBasicTextInputModal, popBasicTextInputModal } from "@/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
-import { IoArrowBack } from "react-icons/io5";
+import { IoArrowBack, IoArrowForward, IoCaretForward } from "react-icons/io5";
 import { trackWaitlist } from "@/utils/tracker";
 import { selectCurrentAccountId } from "@/slice/accountSlice";
 import posthog from "posthog-js";
+import cn from "classnames";
 
 interface PricingPageProps {
 }
@@ -64,12 +65,20 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
             <b>{t("pricesPageProFeature_singleFileSizeLimit")}</b>
           </span>
           </div>
-          <div className={styles.priceLabel}>
+          <div className={cn(styles.priceLabel, styles.strike)}>
             {t("upgradeWorkspaceTierButtonMonthly").replace("${price}", PADDLE_CATALOG.business_monthly.price)}
           </div>
-          <div className={styles.priceLabel}>
+          <div className={cn(styles.priceLabel, styles.strike)}>
             {t("upgradeWorkspaceTierButtonYearly").replace("${price}", PADDLE_CATALOG.business_yearly.price)}
           </div>
+
+          <Button className={styles.freeText} href={"/register"}>
+            <span>
+              Free Forever<br />
+              If You Signup Today
+            </span>
+            <IoCaretForward size={42} className={"icon"} />
+          </Button>
         </div>
 
         <div className={styles.plan}>

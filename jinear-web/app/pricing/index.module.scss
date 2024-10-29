@@ -20,10 +20,12 @@
   position: absolute;
   left: 0;
 }
+
 .themeContainer {
   position: absolute;
   right: 0;
 }
+
 .plansContainer {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -31,6 +33,7 @@
 }
 
 .plan {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 1rem;
@@ -57,6 +60,28 @@
 .subtext {
   font-size: 0.65rem;
   text-align: justify;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.freeText {
+  padding: 0.5rem !important;
+  font-weight: 700 !important;
+  background: linear-gradient(315deg, var(--c-gradient-gold-0) 0%, var(--c-gradient-gold-1) 15%) !important;
+  color: var(--c-DARKBISI) !important;
+  transform: rotate(-10deg) !important;
+  text-align: center !important;
+  align-self: flex-end !important;
+  position: absolute !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  gap: .5rem;
+}
+
+.freeText:hover {
+  background: linear-gradient(315deg, var(--c-gradient-gold-0) 0%, var(--c-gradient-gold-1) 35%) !important;
 }
 
 @media (max-width: $tablet) {
