@@ -12,7 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#2C2929"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "bundleIdentifier": "co.jinear.app",
       "supportsTablet": true,
@@ -27,7 +29,9 @@
       "config": {
         "usesNonExemptEncryption": false
       },
-      "associatedDomains": ["applinks:jinear.co"]
+      "associatedDomains": [
+        "applinks:jinear.co"
+      ]
     },
     "android": {
       "package": "co.jinear.app",
@@ -47,8 +51,14 @@
               "pathPrefix": "/"
             }
           ],
-          "category": ["BROWSABLE", "DEFAULT"]
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
         }
+      ],
+      "permissions": [
+        "com.google.android.gms.permission.AD_ID"
       ]
     },
     "web": {
@@ -59,6 +69,14 @@
         "projectId": "ec4bae47-8364-47c7-ac39-9c41c4de227e"
       }
     },
-    "plugins": ["expo-tracking-transparency"]
+    "plugins": [
+      "expo-tracking-transparency"
+    ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/ec4bae47-8364-47c7-ac39-9c41c4de227e"
+    }
   }
 }

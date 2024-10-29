@@ -16,6 +16,7 @@
     "expo-notifications": "~0.27.6",
     "expo-status-bar": "~1.11.1",
     "expo-tracking-transparency": "~3.3.0",
+    "expo-updates": "~0.24.13",
     "expo-web-browser": "~12.8.2",
     "react": "18.2.0",
     "react-native": "0.73.4",
