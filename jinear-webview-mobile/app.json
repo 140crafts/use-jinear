@@ -3,7 +3,7 @@
     "name": "Jinear",
     "slug": "Jinear",
     "owner": "jinear_co",
-    "version": "1.0.17",
+    "version": "1.0.20",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -18,7 +18,7 @@
     "ios": {
       "bundleIdentifier": "co.jinear.app",
       "supportsTablet": true,
-      "buildNumber": "1.0.17",
+      "buildNumber": "1.0.20",
       "infoPlist": {
         "NSCameraUsageDescription": "To take a profile picture Jinear needs to access your camera.",
         "NSPhotoLibraryUsageDescription": "To upload a profile picture Jinear needs to access your photo library.",
@@ -35,7 +35,7 @@
     },
     "android": {
       "package": "co.jinear.app",
-      "versionCode": 17,
+      "versionCode": 20,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F56E0F"
