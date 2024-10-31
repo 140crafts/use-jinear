@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -105,7 +106,7 @@ public class GoogleCalendarEventInfoToCalendarEventDtoConverter {
                         () -> {
                             ZonedDateTime assignedDate = calendarEventDto.getAssignedDate();
                             ZonedDateTime dueDate = calendarEventDto.getDueDate();
-                            if (dueDate.isAfter(assignedDate)) {
+                            if (Objects.nonNull(dueDate) && dueDate.isAfter(assignedDate)) {
                                 calendarEventDto.setDueDate(dueDate.minusDays(1L));
                             }
                         });
