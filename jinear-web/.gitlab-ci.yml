@@ -5,7 +5,7 @@ stages:
   - docker-build
 
 docker-build:
-  stage: package
+  stage: docker-build
   script:
     - docker build -t registry.gitlab.com/140crafts/jinear/projects/jinear-web .
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
