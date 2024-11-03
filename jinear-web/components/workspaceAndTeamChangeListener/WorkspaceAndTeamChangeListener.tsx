@@ -4,16 +4,18 @@ import { useUpdatePreferredWorkspaceWithUsernameMutation } from "@/store/api/wor
 import { useTypedSelector } from "@/store/store";
 import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import Logger from "@/utils/logger";
-import { useParams, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
-interface WorkspaceAndTeamChangeListenerProps {}
+interface WorkspaceAndTeamChangeListenerProps {
+}
 
 const logger = Logger("WorkspaceAndTeamChangeListener");
 
 const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerProps> = ({}) => {
   const params = useParams();
   const router = useRouter();
+  const pathname = usePathname() || "";
   const workspaceNameFromUrl: string = params?.workspaceName as string;
   const preferedWorkspace = useTypedSelector((state) => state.account.current?.workspaceDisplayPreference?.workspace);
 
@@ -23,13 +25,13 @@ const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerPro
   const [updatePreferredWorkspaceWithUsername, { error }] = useUpdatePreferredWorkspaceWithUsernameMutation();
 
   useEffect(() => {
-    if (currentWorkspaceDifferentFromUrl) {
+    if (currentWorkspaceDifferentFromUrl && pathname.indexOf("shared") == -1) {
       updatePreferredWorkspaceWithUsername({
         workspaceUsername: workspaceNameFromUrl,
-        dontReroute: true,
+        dontReroute: true
       });
     }
-  }, [currentWorkspaceDifferentFromUrl]);
+  }, [currentWorkspaceDifferentFromUrl, pathname]);
 
   useEffect(() => {
     //@ts-ignore

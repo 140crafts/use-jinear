@@ -1,0 +1,33 @@
+variables:
+  PROJECT_NAME: jinear-web
+
+stages:
+  - build
+  - deploy-prod
+
+default:
+  image: google/cloud-sdk:alpine
+  before_script:
+    - gcloud auth activate-service-account --key-file $GCP_SERVICE_CREDS
+    - gcloud config set project selam-255606
+
+build:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
+  script:
+    - gcloud builds submit --config=cloudbuild.yaml --substitutions=_SENTRY_AUTH_TOKEN=$SENTRY_AUTH_TOKEN
+
+deploy-prod:
+  stage: deploy-prod
+  needs:
+    - job: build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
+  script:
+    - gcloud run deploy $PROJECT_NAME --image gcr.io/selam-255606/$PROJECT_NAME --platform managed --region europe-west4 --allow-unauthenticated --port=3000 --memory=2048Mi --max-instances=99 --update-env-vars NEXT_PUBLIC_AXIOM_DATASET=$NEXT_PUBLIC_AXIOM_DATASET,NEXT_PUBLIC_AXIOM_TOKEN=$NEXT_PUBLIC_AXIOM_TOKEN,NEXT_PUBLIC_AXIOM_LOG_LEVEL=info
+    - gcloud run services update-traffic $PROJECT_NAME --to-latest --region europe-west4
