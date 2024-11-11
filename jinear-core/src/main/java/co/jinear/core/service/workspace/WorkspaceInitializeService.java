@@ -114,8 +114,7 @@ public class WorkspaceInitializeService {
         Workspace workspace = new Workspace();
         workspace.setTitle(workspaceInitializeVo.getTitle());
         workspace.setDescription(workspaceInitializeVo.getDescription());
-//        workspace.setTier(WorkspaceTier.BASIC);
-        workspace.setTier(WorkspaceTier.PRO);
+        workspace.setTier(WorkspaceTier.BASIC);
         return workspaceRepository.saveAndFlush(workspace);
     }
 
