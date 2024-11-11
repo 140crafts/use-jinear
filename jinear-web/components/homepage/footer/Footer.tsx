@@ -56,7 +56,7 @@ const Footer: React.FC<FooterProps> = ({}) => {
           rel={"noreferrer"}
           className={styles.link}
         >
-          <SiApple className={"icon"} /> Apple Appstore
+          <SiApple className={"icon"} />Appstore
         </a>
         <a
           href={PLAY_STORE_URL}
@@ -64,7 +64,7 @@ const Footer: React.FC<FooterProps> = ({}) => {
           rel={"noreferrer"}
           className={styles.link}
         >
-          <SiGoogleplay className={"icon"} /> Google Play
+          <SiGoogleplay className={"icon"} />Playstore
         </a>
         <a
           onClick={onPwaButtonClick}
@@ -83,7 +83,7 @@ const Footer: React.FC<FooterProps> = ({}) => {
           rel={"noreferrer"}
           className={styles.link}
         >
-          <span className={cn("jinear-logo", styles.jinearLogo)}>J</span> Jinear Project Feed
+          <span className={cn("jinear-logo", styles.jinearLogo)}>J</span> Project Feed
         </a>
         <a
           href={`https://twitter.com/usejinear`}
@@ -91,7 +91,7 @@ const Footer: React.FC<FooterProps> = ({}) => {
           rel={"noreferrer"}
           className={styles.link}
         >
-          <SiX className={"icon"} /> x.com/usejinear
+          <SiX className={"icon"} /> x/usejinear
         </a>
         <a
           href={`https://www.reddit.com/r/jinear`}

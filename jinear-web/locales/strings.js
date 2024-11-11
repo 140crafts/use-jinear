@@ -4678,15 +4678,15 @@ const translations = {
   },
   landingPageFooterTerms: {
     en: "Terms & Conditions",
-    tr: "Şartlar ve Koşullar"
+    tr: "Şartlar & Koşullar"
   },
   landingPageFooterAccess: {
     en: "Access",
     tr: "Erişim"
   },
   landingPageFooterAccessBrowser: {
-    en: "On Your Browser",
-    tr: "Tarayıcınızdan"
+    en: "Browser",
+    tr: "Tarayıcı"
   },
 };
 
