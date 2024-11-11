@@ -6,6 +6,7 @@ import { IoLogoApple, IoLogoGooglePlaystore, IoLogoPwa } from "react-icons/io5";
 import { useAppDispatch } from "@/store/store";
 import { popInstallPwaInstructionsModal } from "@/slice/modalSlice";
 import useTranslation from "@/locals/useTranslation";
+import SubHero from "@/components/homepage/subHero/SubHero";
 
 interface MobileAppSectionProps {
 
@@ -24,6 +25,7 @@ const MobileAppSection: React.FC<MobileAppSectionProps> = ({}) => {
       <h1>{t("homePageMobileAppSectionTitle")}</h1>
       <span className={styles.about} dangerouslySetInnerHTML={{ __html: t("homePageMobileAppSectionAbout") }}>
         </span>
+
 
       <div className={styles.appstoreButtonsContainer}>
         <Button

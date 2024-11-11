@@ -26,7 +26,7 @@ const CallToActionBar: React.FC<CallToActionBarProps> = ({ authState }) => {
           <Button variant={ButtonVariants.contrast} href={"/login"} className={styles.loginButton}>
             <b>{t("homescreenLogin")}</b>
           </Button>
-          <Button variant={ButtonVariants.filled} href={"/register"}>
+          <Button variant={ButtonVariants.outline} href={"/register"}>
             {t("homescreenRegister")}
           </Button>
         </>

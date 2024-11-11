@@ -289,6 +289,22 @@ select {
   height: 4rem;
 }
 
+.spacer-h-9 {
+  height: 4.5rem;
+}
+
+.spacer-h-10 {
+  height: 5rem;
+}
+
+.spacer-h-11 {
+  height: 5.5rem;
+}
+
+.spacer-h-12 {
+  height: 6rem;
+}
+
 .spacer-w-1 {
   width: 0.5rem;
 }
@@ -307,6 +323,31 @@ select {
 
 .flex-1 {
   flex: 1;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                   supported by Chrome, Edge, Opera and Firefox */
+}
+
+mark {
+  //background-color: var(--c-JINEAR_YELLOW);
+  //color: black;
+  padding: .025ch .5ch;
+  //background: linear-gradient(90deg, transparent -50%, var(--c-gradient-gold-0) 50%, transparent 150%) !important;
+  background: linear-gradient(90deg, #F7E1B9 -50%, var(--c-JINEAR_YELLOW) 50%, #F7E1B9 150%) !important;
+  color: var(--c-WEPRESENT_DARK);
+}
+
+.jinear-logo {
+  font-family: "Rubik", system-ui;
+  font-weight: 700;
+  letter-spacing: 0.25ch;
 }
 
 .toast {

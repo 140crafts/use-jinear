@@ -3,16 +3,105 @@
 .container {
   display: flex;
   flex-direction: column;
-  position: relative;
+  justify-content: flex-start;
 }
 
-.imageContainer {
+.heroContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.heroTextContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex: 1;
+}
+
+.heroIconListContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+
+.iconFeatureContainer {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  flex: 1;
+}
+
+.heroTitle {
   position: relative;
-  height: calc(min(120ch, calc(100vw - calc(var(--gap) * 2))) / 1.77);
-  border: solid;
-  border-radius: var(--border-radius);
-  border-width: thin;
-  border-color: var(--c-primary-shade-0);
-  overflow: hidden;
-  box-shadow: var(--box-shadow-soft);
+  font-size: 36px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.line {
+  display: inline-block;
+}
+
+.heroText {
+  font-size: 17px;
+  text-align: left;
+}
+
+.featureIcon{
+  height: 42px;
+  width: 42px;
+}
+
+.featureIconTitle {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-top: .5rem;
+}
+
+.featureIconText {
+  font-size: 14px;
+  text-align: left;
+}
+
+.alternativeToContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.alternativeToElement {
+  display: flex;
+  flex-direction: row;
+  gap: .25rem;
+  opacity: .75;
+  align-items: center;
+}
+
+.alternativeToName {
+
+}
+
+@media (max-width: $tablet) {
+  .heroContainer {
+    flex-direction: column;
+  }
+
+  .featureIcon{
+    height: 21px;
+    width: 21px;
+  }
+
+  .heroTitle {
+    font-size: 36px;
+  }
 }

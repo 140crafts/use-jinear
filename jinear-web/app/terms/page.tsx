@@ -91,6 +91,11 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
                 Sentry
               </a>
             </li>
+            <li>
+              <a href="https://posthog.com/privacy/" target="_blank" rel="noopener noreferrer">
+                Posthog
+              </a>
+            </li>
           </ul>
 
           <br/>

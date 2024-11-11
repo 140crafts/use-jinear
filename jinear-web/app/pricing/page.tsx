@@ -55,6 +55,13 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
         <div className={styles.themeContainer}><ThemeToggle /></div>
       </div>
       <div className={styles.plansContainer}>
+
+        <div className={styles.plan}>
+          <JinearFreeInfo />
+          <div className="flex-1" />
+          <div className={styles.priceLabel}>{t("pricePageBasicPlan")}</div>
+        </div>
+        
         <div className={styles.plan}>
           <JinearProInfo hasAdditionalToBasicPlanText={true} />
           <div className={styles.subtextContainer}>
@@ -65,46 +72,40 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
             <b>{t("pricesPageProFeature_singleFileSizeLimit")}</b>
           </span>
           </div>
-          <div className={cn(styles.priceLabel, styles.strike)}>
+          <div className={styles.priceLabel}>
             {t("upgradeWorkspaceTierButtonMonthly").replace("${price}", PADDLE_CATALOG.business_monthly.price)}
           </div>
-          <div className={cn(styles.priceLabel, styles.strike)}>
+          <div className={styles.priceLabel}>
             {t("upgradeWorkspaceTierButtonYearly").replace("${price}", PADDLE_CATALOG.business_yearly.price)}
           </div>
 
-          <Button className={styles.freeText} href={"/register"}>
-            <span>
-              Free Forever<br />
-              If You Signup Today
-            </span>
-            <IoCaretForward size={42} className={"icon"} />
-          </Button>
-        </div>
-
-        <div className={styles.plan}>
-          <JinearSelfHostedInfo />
-          <div className={styles.subtextContainer}>
-           <span className={styles.subtext}>
-            <b>{t("pricesPageSelfHostFeature_RequiresExpertise")}</b>
-          </span>
-            <span className={styles.subtext}>
-            <b>{t("pricesPageSelfHostFeature_RenewLicence")}</b>
-          </span>
-          </div>
-          <Button className={styles.priceLabel} variant={ButtonVariants.filled} onClick={onSelfHostClick}>
-            {/*{t("pricesPageSelfHostFeature_Price").replace("${price}", PADDLE_CATALOG.self_host.price)}*/}
-            {t("pricesPageSelfHostFeature_JoinWaitlist")}
-          </Button>
-          {/*<Button className={styles.priceLabel} onClick={onSelfHostClick}>*/}
-          {/*  {t("pricesPageSelfHostFeature_RenewLicencePrice").replace("${price}", PADDLE_CATALOG.self_host_renew.price)}*/}
+          {/*<Button className={styles.freeText} href={"/register"}>*/}
+          {/*  <span>*/}
+          {/*    Free Forever<br />*/}
+          {/*    If You Signup Today*/}
+          {/*  </span>*/}
+          {/*  <IoCaretForward size={42} className={"icon"} />*/}
           {/*</Button>*/}
         </div>
 
-        <div className={styles.plan}>
-          <JinearFreeInfo />
-          <div className="flex-1" />
-          <div className={styles.priceLabel}>{t("pricePageBasicPlan")}</div>
-        </div>
+        {/*<div className={styles.plan}>*/}
+        {/*  <JinearSelfHostedInfo />*/}
+        {/*  <div className={styles.subtextContainer}>*/}
+        {/*   <span className={styles.subtext}>*/}
+        {/*    <b>{t("pricesPageSelfHostFeature_RequiresExpertise")}</b>*/}
+        {/*  </span>*/}
+        {/*    <span className={styles.subtext}>*/}
+        {/*    <b>{t("pricesPageSelfHostFeature_RenewLicence")}</b>*/}
+        {/*  </span>*/}
+        {/*  </div>*/}
+        {/*  <Button className={styles.priceLabel} variant={ButtonVariants.filled} onClick={onSelfHostClick}>*/}
+        {/*    /!*{t("pricesPageSelfHostFeature_Price").replace("${price}", PADDLE_CATALOG.self_host.price)}*!/*/}
+        {/*    {t("pricesPageSelfHostFeature_JoinWaitlist")}*/}
+        {/*  </Button>*/}
+        {/*  /!*<Button className={styles.priceLabel} onClick={onSelfHostClick}>*!/*/}
+        {/*  /!*  {t("pricesPageSelfHostFeature_RenewLicencePrice").replace("${price}", PADDLE_CATALOG.self_host_renew.price)}*!/*/}
+        {/*  /!*</Button>*!/*/}
+        {/*</div>*/}
 
       </div>
     </div>
