@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import styles from "./VideoHeroSection.module.css";
+import styles from "./VideoHeroSection.module.scss";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { LuAlarmClock, LuBox, LuCalendarSearch, LuCheckSquare, LuFile, LuList, LuRss, LuUsers } from "react-icons/lu";
 import { SiGooglecalendar } from "react-icons/si";
@@ -8,7 +8,9 @@ import { useTheme } from "@/components/themeProvider/ThemeProvider";
 import Logger from "@/utils/logger";
 
 interface VideoHeroSectionProps {
-
+  title1: string;
+  title2?: string;
+  text?: string;
 }
 
 const videos = {
@@ -88,7 +90,7 @@ const videos = {
 
 const logger = Logger("VideoHeroSection");
 
-const VideoHeroSection: React.FC<VideoHeroSectionProps> = ({}) => {
+const VideoHeroSection: React.FC<VideoHeroSectionProps> = ({ title1, title2, text }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -106,6 +108,17 @@ const VideoHeroSection: React.FC<VideoHeroSectionProps> = ({}) => {
 
   return (
     <div className={styles.container}>
+
+      <div className={styles.heroTextContainer}>
+        <div className={styles.heroTitle}>
+          <span className={styles.line} dangerouslySetInnerHTML={{ __html: title1 }}></span>
+          {title2 && <br />}
+          <span className={styles.line}>{title2}</span>
+        </div>
+
+        <span className={styles.heroText}>{text}</span>
+      </div>
+
       <div id={"feature-projects"} className={styles.heroVideoContainer}>
         <video
           className={styles.video}

@@ -4548,14 +4548,146 @@ const translations = {
     en: "You can change who can comment posts.",
     tr: "Gönderilere kimin yorum yapabileceğini ayarlayabilirsiniz."
   },
-  homePageMobileAppSectionTitle:{
-    en:"Get Started with the Jinear Web App: Easy Access on Browser, Mobile or PWA!",
-    tr:"Jinear'a Başlamak Çok Kolay: Tarayıcınızda, Mobilde veya PWA ile Hemen Erişin!"
+  homePageMobileAppSectionTitle: {
+    en: "Easy Access on Browser, Mobile or PWA!",
+    tr: "Tarayıcınızda, Mobilde veya PWA ile Hemen Erişin!"
   },
-  homePageMobileAppSectionAbout:{
-    en:`To get started with the Jinear, just log in at <a href={'https://jinear.co'}>jinear.co</a>. It'll open right in your browser! Jinear is also available as native mobile app or as a Progressive Web App (PWA).`,
-    tr:`Jinear'ı kullanmaya başlamak için sadece <a href={'https://jinear.co'}>jinear.co</a> adresinden giriş yapmanız yeterli. Tarayıcınızda kullanabilirsiniz. Jinear ayrıca mobil uygulama veya Progresif Web Uygulaması (PWA) olarak da kullanılabilir.`
-  }
+  homePageMobileAppSectionAbout: {
+    en: `To get started with the Jinear, just log in at <a href={'https://jinear.co'}>jinear.co</a>. It'll open right in your browser! Jinear is also available as native mobile app or as a Progressive Web App (PWA).`,
+    tr: `Jinear'ı kullanmaya başlamak için sadece <a href="{'https://jinear.co'}">jinear.co</a> adresinden giriş yapmanız yeterli. Tarayıcınızda kullanabilirsiniz. Jinear ayrıca mobil uygulama veya Progresif Web Uygulaması (PWA) olarak da kullanılabilir.`
+  },
+  landingPageFeature1: {
+    en: "Build perfect <br> projects, together",
+    tr: "Başarılı projeleri, <br> birlikte oluşturun"
+  },
+  landingPageFeature1Text: {
+    en: "Plan your needs, get feedback from teammates, and update your clients.",
+    tr: "İhtiyaçlarınızı planlayın, ekip arkadaşlarınızdan geri bildirim alın ve müşterilerinizi güncel tutun."
+  },
+  landingPageFeature1Sub1Title: {
+    en: "Tasks & To-Dos",
+    tr: "Görevler ve Yapılacaklar"
+  },
+  landingPageFeature1Sub1Text: {
+    en: "Tackle any project, big or small",
+    tr: "Her ölçekte projeyi başarıyla yönetin"
+  },
+  landingPageFeature1Sub2Title: {
+    en: "Files",
+    tr: "Dosyalar"
+  },
+  landingPageFeature1Sub2Text: {
+    en: "List related files right with task",
+    tr: "İlgili dosyaları görevle birlikte listeleyin"
+  },
+  landingPageFeature1Sub3Title: {
+    en: "Comments",
+    tr: "Yorumlar"
+  },
+  landingPageFeature1Sub3Text: {
+    en: "Eliminate any chance for misunderstandings",
+    tr: "Yanlış anlaşılma ihtimalini ortadan kaldırın"
+  },
+  landingPageFeature1AlternativeTo: {
+    en: "Alternative to: ",
+    tr: "Şunların yerine kullanılabilir: "
+  },
+  landingPageFeature2: {
+    en: "Manage your time <br> and work, combined",
+    tr: "İşinizi ve zamanınızı, <br> birlikte yönetin"
+  },
+  landingPageFeature2Text: {
+    en: "View deadlines and project timelines alongside your calendar events to stay focused on your priorities.",
+    tr: "Takvim etkinliklerinizle birlikte son teslim tarihlerini ve proje zaman çizelgelerini görüntüleyin, böylece önceliklerinize odaklanabilirsiniz."
+  },
+  landingPageFeature2Sub1Title: {
+    en: "Turn to-dos into daily action plans",
+    tr: "Yapılacakları günlük işlere dönüştürün"
+  },
+  landingPageFeature2Sub1Text: {
+    en: "Tasks at your fingertips. See what's next or who's up for the next priority.",
+    tr: "Sırada ne olduğunu veya bir sonraki önceliğe kimin odaklanacağını görün."
+  },
+  landingPageFeature2Sub2Title: {
+    en: "Detailed Calendar Experience",
+    tr: "Detaylı Takvim Deneyimi"
+  },
+  landingPageFeature2Sub2Text: {
+    en: "View tasks and deadlines in a streamlined, detailed calendar for easy planning.",
+    tr: "Kolay planlama için görevleri ve son teslim tarihlerini düzenli, ayrıntılı bir takvimde görüntüleyin."
+  },
+  landingPageFeature2Sub3Title: {
+    en: "Work with your existing tools",
+    tr: "Mevcut araçlarınızla çalışın"
+  },
+  landingPageFeature2Sub3Text: {
+    en: "Sync tasks with Apple or Google Calendar. Everything in one place.",
+    tr: "Apple veya Google Takvimi ile görevleri senkronize edin. Her şey tek bir yerde."
+  },
+  landingPageFeature2AlternativeTo: {
+    en: "Replaces with extra functionality: ",
+    tr: "Ekstra işlevsellikle şunların yerine: "
+  },
+  landingPageStartFreeTitle: {
+    en: "Get started with a <br> <div style='padding: 8px 0'><mark>Free account with no time limit</mark></div>",
+    tr: "Zaman sınırı olmadan <br> <div style='padding: 8px 0'><mark> ücretsiz bir hesapla başlayın </mark></div>"
+  },
+  landingPageStartFreeTitle2: {
+    en: "Upgrade to Pro anytime, Risk Free!",
+    tr: "İstediğiniz zaman Pro'ya yükseltin, Sıfır Risk!"
+  },
+  landingPageStartFreeText: {
+    en: "Jinear is free for up to 3 people with unlimited projects. As your business grows, upgrade the subscription to Pro Plan. <br> <br> <a href='/register'><b>Give It a Try!</b></a>",
+    tr: "Jinear, sınırsız proje ile 3 kişiye kadar ücretsizdir. İşletmeniz büyüdükçe, aboneliğinizi Pro Plan'a yükseltin. <br> <br> <a href='/register'><b>Hemen Deneyin!</b></a>"
+  },
+  landingPageHeroFeature1Title: {
+    en: "Meet Deadlines",
+    tr: "Son Teslim Tarihlerine Uyun"
+  },
+  landingPageHeroFeature1Text: {
+    en: "Reminders, Files and Comments are in one place",
+    tr: "Hatırlatıcılar, Dosyalar ve Yorumlar tek bir yerde"
+  },
+  landingPageHeroFeature2Title: {
+    en: "Actually accomplish things",
+    tr: "Gerçek sonuçlar elde edin"
+  },
+  landingPageHeroFeature2Text: {
+    en: "See what's your team up to at a glance",
+    tr: "Takımınızın ne yaptığını bir bakışta görün."
+  },
+  landingPageHeroFeature3Title: {
+    en: "Change for the better",
+    tr: "Daha iyisi için değişim"
+  },
+  landingPageHeroFeature3Text: {
+    en: "Stay aligned with cross-functional teams with ease",
+    tr: "Farklı departmanlardaki ekiplerle kolayca uyum içinde kalın"
+  },
+  landingPageHeroFeature4Title: {
+    en: "It's a tool, A Good One",
+    tr: "Verimliliği Artıran İyi Bir Çözüm"
+  },
+  landingPageHeroFeature4Text: {
+    en: "All in one solution for your teams",
+    tr: "Ekipleriniz için Hepsi Bir Arada Çözüm"
+  },
+  landingPageFooterPricing: {
+    en: "Pricing",
+    tr: "Fiyatlandırma"
+  },
+  landingPageFooterTerms: {
+    en: "Terms & Conditions",
+    tr: "Şartlar ve Koşullar"
+  },
+  landingPageFooterAccess: {
+    en: "Access",
+    tr: "Erişim"
+  },
+  landingPageFooterAccessBrowser: {
+    en: "On Your Browser",
+    tr: "Tarayıcınızdan"
+  },
 };
 
 export default translations;

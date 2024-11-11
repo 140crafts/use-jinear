@@ -13,11 +13,12 @@ const nextConfig = {
   // swcMinify: false,
   // compress: false,
   images: {
-    domains: ["storage.googleapis.com"]
+    domains: ["storage.googleapis.com", "placehold.co"]
   },
   experimental: {
-    missingSuspenseWithCSRBailout: false,
-  },
+    missingSuspenseWithCSRBailout: false
+  }
+
 };
 
 

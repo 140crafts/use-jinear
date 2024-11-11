@@ -1,21 +1,22 @@
-import useTranslation from "locales/useTranslation";
 import React from "react";
 import styles from "./Hero.module.scss";
 
-interface HeroProps {}
+interface HeroProps {
+  title1: string;
+  title2?: string;
+  text: string;
+}
 
-const Hero: React.FC<HeroProps> = ({}) => {
-  const { t } = useTranslation();
-
+const Hero: React.FC<HeroProps> = ({ title1, title2, text }) => {
   return (
     <div className={styles.heroContainer}>
       <span className={styles.heroTitle}>
-        <span className={styles.heroHighlighted}>{t("homescreenHeroTitleLine1")}</span>
-        <br />
-        {t("homescreenHeroTitleLine2")}
+        <span className={styles.line}>{title1}</span>
+        {title2 && <br />}
+        <span className={styles.line}>{title2}</span>
       </span>
 
-      <span className={styles.heroText}>{t("homescreenHeroText")}</span>
+      <span className={styles.heroText}>{text}</span>
     </div>
   );
 };
