@@ -25,8 +25,11 @@ public class MessageListingService {
 
     public Page<MessageDto> retrieveThreadMessagesBefore(String threadId, Date before) {
         log.info("Retrieve thread messages before has started. threadId: {}, before: {}", threadId, before);
-        return messageRepository.findAllByThreadIdAndCreatedDateBeforeAndPassiveIdIsNullOrderByCreatedDateDesc(threadId, before, PageRequest.of(0, PAGE_SIZE))
+        long startTime = System.currentTimeMillis();
+        Page<MessageDto> result = messageRepository.findAllByThreadIdAndCreatedDateBeforeAndPassiveIdIsNullOrderByCreatedDateDesc(threadId, before, PageRequest.of(0, PAGE_SIZE))
                 .map(messageDtoConverter::convert);
+        log.info("Retrieve thread messages before has completed. Duration: {}ms", System.currentTimeMillis() - startTime);
+        return result;
     }
 
     public Page<MessageDto> retrieveConversationMessagesBefore(String conversationId, Date before) {
