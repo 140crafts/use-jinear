@@ -8,6 +8,7 @@ import NewConversationButton
 import { useParams } from "next/navigation";
 import { useTypedSelector } from "@/store/store";
 import { selectWorkspaceFromWorkspaceUsername } from "@/slice/accountSlice";
+import { ButtonHeight } from "@/components/button";
 
 interface ConversationsPageProps {
 }
@@ -24,7 +25,12 @@ const ConversationsPage: React.FC<ConversationsPageProps> = ({}) => {
       <h1>{t("conversationPageEmptyStateSubTitle")}</h1>
       <span>{t("conversationPageEmptyStateText")}</span>
       <div className={styles.actionButtonsContainer}>
-      {workspace && <NewConversationButton workspaceId={workspace.workspaceId} workspaceName={workspace.username} />}
+        {workspace && <NewConversationButton
+          containerClassName={styles.newConversationButton}
+          workspaceId={workspace.workspaceId}
+          workspaceName={workspace.username}
+          heightVariant={ButtonHeight.default} />
+        }
       </div>
     </div>
   </div>;

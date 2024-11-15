@@ -20,6 +20,7 @@ import { IoLogoGoogle, IoMail } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import FormTitle from "../formTitle/FormTitle";
 import styles from "./LoginWithMailForm.module.css";
+import { setAuthStateAsNotDecided } from "@/slice/accountSlice";
 
 interface LoginWithMailFormProps {
   initialEmail?: string;
@@ -39,7 +40,10 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
   const dispatch = useDispatch();
   const _isWebView = isWebView();
   const [loginWithpassword, { isSuccess, isError, isLoading }] = useLoginWithPasswordMutation();
-  const { data: authRedirectInfoResponse, isLoading: isAuthRedirectRetrieveLoading } = useRetrieveLoginRedirectInfoQuery();
+  const {
+    data: authRedirectInfoResponse,
+    isLoading: isAuthRedirectRetrieveLoading
+  } = useRetrieveLoginRedirectInfoQuery();
   const { register, setValue, handleSubmit, setFocus } = useForm<ILoginWithMailForm>();
 
   useEffect(() => {
@@ -58,13 +62,14 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
   }, [initialEmail]);
 
   const submit: SubmitHandler<ILoginWithMailForm> = (data) => {
+    dispatch(setAuthStateAsNotDecided());
     if (isLoading) {
       return;
     }
     loginWithpassword({
       ...data,
       locale: t("localeType") as LocaleType,
-      timeZone: format(new Date(), "OOOO"),
+      timeZone: format(new Date(), "OOOO")
     });
   };
 
@@ -81,7 +86,8 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
         link={"/register"}
       />
 
-      <form autoComplete="off" id={"login-with-email-form"} className={styles.form} onSubmit={handleSubmit(submit)} action="#">
+      <form autoComplete="off" id={"login-with-email-form"} className={styles.form} onSubmit={handleSubmit(submit)}
+            action="#">
         <label className={styles.label} htmlFor={"login-with-email-email"}>
           {t("loginWithEmailEmailLabel")}
           <input id={"login-with-email-email"} type={"email"} {...register("email")} />

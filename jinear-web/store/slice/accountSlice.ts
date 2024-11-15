@@ -1,7 +1,7 @@
 import { accountApi } from "@/api/accountApi";
 import { AccountDto, AccountsWorkspacePerspectiveDto, WorkspaceDto } from "@/model/be/jinear-core";
 import Logger from "@/utils/logger";
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
 
 export type NavigationStatus = "NOT_DECIDED" | "LOGGED_IN" | "NOT_LOGGED_IN";
@@ -9,7 +9,7 @@ export type NavigationStatus = "NOT_DECIDED" | "LOGGED_IN" | "NOT_LOGGED_IN";
 const initialState = {
   current: null,
   authState: "NOT_DECIDED",
-  sessionId: undefined,
+  sessionId: undefined
 } as {
   current: null | AccountDto;
   authState: NavigationStatus;
@@ -22,7 +22,10 @@ const slice = createSlice({
   name: "account",
   initialState,
   reducers: {
-    logout: () => initialState,
+    setAuthStateAsNotDecided: (state, action: PayloadAction<void>) => {
+      state.authState = "NOT_DECIDED";
+    },
+    logout: () => initialState
   },
   extraReducers: (builder) => {
     builder
@@ -39,10 +42,10 @@ const slice = createSlice({
           state.authState = "NOT_LOGGED_IN";
         }
       });
-  },
+  }
 });
 
-export const { logout } = slice.actions;
+export const { logout, setAuthStateAsNotDecided } = slice.actions;
 export default slice.reducer;
 
 export const selectAuthState = (state: RootState) => state.account.authState;

@@ -6,7 +6,7 @@ import { selectMessaging } from "@/store/slice/firebaseSlice";
 import {
   closeNotificationPermissionModal,
   selectNotificationPermissionModalPlatform,
-  selectNotificationPermissionModalVisible,
+  selectNotificationPermissionModalVisible
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
@@ -18,7 +18,8 @@ import { IoNotifications } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./NotificationPermissionModal.module.css";
 
-interface NotificationPermissionModalProps {}
+interface NotificationPermissionModalProps {
+}
 
 const logger = Logger("NotificationPermissionModal");
 
@@ -57,7 +58,10 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
     logger.log(`Retrieved notification permission. ${notificationPermission}`);
     if (notificationPermission == "granted" && currentAccountId) {
       logger.log(`Attaching account. ${currentAccountId} - ${notificationPermission}`);
-      await attachAccount(currentAccountId);
+      attachAccount(currentAccountId);
+      setTimeout(() => {
+        close();
+      }, 1000);
     }
   };
 
@@ -76,7 +80,13 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
   };
 
   return (
-    <Modal visible={visible} title={title} bodyClass={styles.container} requestClose={close} width={"medium-fixed"}>
+    <Modal
+      visible={visible}
+      // title={title}
+      bodyClass={styles.container}
+      requestClose={close}
+      width={"medium-fixed"}
+    >
       <div className={styles.body}>
         <IoNotifications size={32} />
         {t("notificationPermissionModalInfoText")}

@@ -20,7 +20,6 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspa
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const projectsEnabled = true;
-  // const projectsEnabled = useFeatureFlag("PROJECTS");
   const team = useWorkspaceFirstTeam(workspace.workspaceId);
 
   const _popNewTaskModal = () => {
@@ -35,7 +34,7 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspa
       <div className={styles.buttonsContainer}>
         <Button
           heightVariant={ButtonHeight.short}
-          variant={ButtonVariants.filled2}
+          variant={ButtonVariants.brandColor}
           className={styles.newTaskButton}
           onClick={_popNewTaskModal}
           disabled={!workspace || !team}
