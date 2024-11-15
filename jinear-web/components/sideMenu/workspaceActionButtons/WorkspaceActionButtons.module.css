@@ -12,7 +12,9 @@
 }
 
 .newTaskButton {
-    font-weight: 500;
+    font-weight: 600;
     justify-content: flex-start !important;
     gap: 1rem !important;
+    /*background-color: var(--c-JINEAR_ORANGE) !important;*/
+    /*color: white !important;*/
 }

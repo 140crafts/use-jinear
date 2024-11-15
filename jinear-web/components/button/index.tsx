@@ -13,6 +13,7 @@ export const ButtonVariants = {
   hoverFilled: "hover-filled",
   hoverFilled2: "hover-filled2",
   blur: "blur",
+  brandColor: "brandColor",
 };
 
 export const ButtonHeight = {

@@ -12,22 +12,25 @@ import { getUnreadConversationCount } from "../../repository/IndexedDbRepository
 import { useTypedSelector } from "@/store/store";
 import { selectCurrentAccountId } from "@/slice/accountSlice";
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
+import { isInGodModeWhitelist } from "@/utils/constants";
 
 interface MainFeaturesSideMenuProps {
   workspace: AccountsWorkspacePerspectiveDto;
 }
 
+const feature = "01gp94s0sk9q4g8g3m9jpsvd0t";
+
 const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }) => {
   const { t } = useTranslation();
-  const messagingEnabled = useFeatureFlag("MESSAGING");
+  const currentAccountId = useTypedSelector(selectCurrentAccountId);
+  const messagingEnabled = useFeatureFlag("MESSAGING") || isInGodModeWhitelist(currentAccountId);
   const currentPath = usePathname();
   const calendarPath = `/${workspace?.username}/calendar`;
-  const tasksPath = `/${workspace?.username}/tasks`;
+  const tasksPath = `/${workspace?.username}/tasks/projects`;
   const inboxPath = `/${workspace?.username}/inbox`;
   const assignedToMePath = `/${workspace?.username}/assigned-to-me`;
   const lastActivitiesPath = `/${workspace?.username}/last-activities`;
   const conversationsPath = `/${workspace?.username}/conversations`;
-  const currentAccountId = useTypedSelector(selectCurrentAccountId);
 
   const unreadConversationCount = useLiveQuery(() => getUnreadConversationCount(workspace.workspaceId, currentAccountId)) ?? 0;
   const unreadConversationLabel = unreadConversationCount == 0 ? "" : unreadConversationCount > 99 ? "99+" : `${unreadConversationCount}`;

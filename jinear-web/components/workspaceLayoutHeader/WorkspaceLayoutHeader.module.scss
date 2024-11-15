@@ -18,6 +18,10 @@
   max-height: var(--workspace-header-height);
 }
 
+.goBackButton {
+  padding: 0.25rem 1.25rem !important;
+}
+
 .headerLeftContent {
   display: flex;
   flex-direction: row;
@@ -47,5 +51,8 @@
   }
   .pwiButton {
     display: none !important;
+  }
+  .goBackButton {
+    padding: 0.25rem 0.75rem !important;
   }
 }

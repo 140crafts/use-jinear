@@ -16,6 +16,10 @@
   margin-top: 1rem;
 }
 
+.newConversationButton {
+  padding-left: unset !important;
+}
+
 @media (max-width: $tablet) {
   .menu {
     display: flex !important;

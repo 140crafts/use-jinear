@@ -19,7 +19,7 @@ const TeamsButton: React.FC<TeamsButtonProps> = ({ workspace }) => {
   return (
     <Button className={styles.button}
             heightVariant={ButtonHeight.short}
-            variant={pathname == teamsPath ? ButtonVariants.filled : ButtonVariants.default}
+            variant={pathname == teamsPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             href={teamsPath}>
       <LuUser />
       {t("sideMenuTeamsTitle")}

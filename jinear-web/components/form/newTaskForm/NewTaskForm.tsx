@@ -306,7 +306,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             disabled={isInitializeTaskLoading}
             loading={isInitializeTaskLoading}
             className={styles.footerButton}
-            variant={ButtonVariants.contrast}
+            variant={ButtonVariants.brandColor}
             heightVariant={ButtonHeight.short}
             progessClassname={styles.loadingButton}
           >

@@ -10,9 +10,16 @@ import { popNewConversationModal } from "@/slice/modalSlice";
 interface NewConversationButtonProps {
   workspaceId: string;
   workspaceName: string;
+  heightVariant?: string;
+  containerClassName?: string;
 }
 
-const NewConversationButton: React.FC<NewConversationButtonProps> = ({ workspaceId, workspaceName }) => {
+const NewConversationButton: React.FC<NewConversationButtonProps> = ({
+                                                                       workspaceId,
+                                                                       workspaceName,
+                                                                       heightVariant = ButtonHeight.short2x,
+                                                                       containerClassName
+                                                                     }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -21,7 +28,7 @@ const NewConversationButton: React.FC<NewConversationButtonProps> = ({ workspace
   };
 
   return (
-    <Button className={styles.container} heightVariant={ButtonHeight.short2x} onClick={popModal}>
+    <Button className={cn(styles.container, containerClassName)} heightVariant={heightVariant} onClick={popModal}>
       <LuPlus />
       <span className={cn(styles.conversationName, "single-line")}>
         {t("newConversationButton")}

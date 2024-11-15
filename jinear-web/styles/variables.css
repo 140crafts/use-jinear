@@ -116,6 +116,7 @@
     --c-HIGHLIGHT_YELLOW: #dcff31;
     --c-JINEAR_YELLOW: #fac26d;
     --c-JINEAR_ORANGE: #f56e0f;
+    --c-JINEAR_ORANGE_LIGHT: hsl(25, 92%, 58%);
     --border-radius-xs: 0.15rem;
     --border-radius-s: 0.25rem;
     --border-radius: 0.35rem;
