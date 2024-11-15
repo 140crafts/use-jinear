@@ -5,6 +5,7 @@ import { selectAnyModalVisible } from "@/store/slice/modalSlice";
 import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import React, { useEffect } from "react";
+import isPwa from "@/utils/pwaHelper";
 
 interface BodyFixerProps {
 }
@@ -17,7 +18,7 @@ const BodyFixer: React.FC<BodyFixerProps> = ({}) => {
   const isAnyModalVisible = useTypedSelector(selectAnyModalVisible);
   const isAnyMenuVisible = useTypedSelector(selectAnyMenuVisible);
   const isMobile = useWidthLimit({ limit: MOBILE_LAYOUT_BREAKPOINT });
-
+  const pwa = isPwa();
 
   useEffect(() => {
     if (document && window) {
@@ -33,6 +34,13 @@ const BodyFixer: React.FC<BodyFixerProps> = ({}) => {
       }
     }
   }, [isAnyModalVisible, isAnyMenuVisible, isMobile]);
+
+  useEffect(()=>{
+    if (document && window && pwa){
+      const $html = document.querySelector("html");
+      $html?.classList.add('noselect');
+    }
+  },[pwa])
 
   return null;
 };
