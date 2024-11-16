@@ -38,10 +38,12 @@ public class ConversationParticipantRetrieveService {
     }
 
     public void validateParticipantIsInConversation(String accountId, String conversationId) {
+        long start = System.currentTimeMillis();
         log.info("Validate participant is in conversation has started. accountId: {}, conversationId: {}", accountId, conversationId);
         if (Boolean.FALSE.equals(checkParticipantIsInConversation(conversationId, accountId))) {
             throw new NoAccessException();
         }
+        log.info("Validate participant is in conversation has completed. Duration: {}ms", System.currentTimeMillis() - start);
     }
 
     private boolean checkParticipantIsInConversation(String conversationId, String accountId) {
