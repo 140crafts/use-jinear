@@ -17,7 +17,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class LocaleStringService {
 
-    private static final LocaleType DEFAULT_LOCALE = LocaleType.TR;
+    private static final LocaleType DEFAULT_LOCALE = LocaleType.EN;
 
     private final LocaleStringRepository localeStringRepository;
 
