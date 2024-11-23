@@ -5,6 +5,7 @@ import co.jinear.core.model.enumtype.project.ProjectPriorityType;
 import co.jinear.core.model.enumtype.project.ProjectStateType;
 import co.jinear.core.model.request.BaseRequest;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -37,6 +38,7 @@ public class ProjectInitializeRequest extends BaseRequest {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private ZonedDateTime targetDate;
     @ToString.Exclude
+    @NotEmpty
     private List<String> teamIds;
     @Nullable
     private List<MilestoneInitializeDto> milestones;
