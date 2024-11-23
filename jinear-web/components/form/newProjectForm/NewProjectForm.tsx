@@ -26,6 +26,7 @@ import Line from "@/components/line/Line";
 import DescriptionInput from "@/components/form/newProjectForm/descriptionInput/DescriptionInput";
 import { ITiptapRef } from "@/components/tiptap/Tiptap";
 import { useInitializeProjectMutation } from "@/api/projectOperationApi";
+import toast from "react-hot-toast";
 
 interface NewProjectFormProps {
   workspace: WorkspaceDto;
@@ -93,6 +94,10 @@ const NewProjectForm: React.FC<NewProjectFormProps> = ({
     const description = descriptionRef.current?.getHTML();
     logger.log({ submit: { ...data, description } });
     const req = { ...data };
+    if (data.teamIds == null || data.teamIds.length == 0) {
+      toast(t("newProjectFormSelectAtLeastATeam"));
+      return;
+    }
     initializeProject(req);
     onClose?.();
   };

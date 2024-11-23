@@ -3908,6 +3908,10 @@ const translations = {
     en: "Project title",
     tr: "Proje başlığı"
   },
+  newProjectFormSelectAtLeastATeam: {
+    en: "Please assign project to a team",
+    tr: "Projeyi en az bir takıma atayın"
+  },
   newMilestoneTitlePlaceholder: {
     en: "Milestone title",
     tr: "Hedef noktası başlığı"
