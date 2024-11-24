@@ -11,19 +11,16 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { getUnreadConversationCount } from "../../repository/IndexedDbRepository";
 import { useTypedSelector } from "@/store/store";
 import { selectCurrentAccountId } from "@/slice/accountSlice";
-import { useFeatureFlag } from "@/hooks/useFeatureFlag";
-import { isInGodModeWhitelist } from "@/utils/constants";
 
 interface MainFeaturesSideMenuProps {
   workspace: AccountsWorkspacePerspectiveDto;
 }
 
-const feature = "01gp94s0sk9q4g8g3m9jpsvd0t";
-
 const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
-  const messagingEnabled = useFeatureFlag("MESSAGING") || isInGodModeWhitelist(currentAccountId);
+  // const messagingEnabled = useFeatureFlag("MESSAGING") || isInGodModeWhitelist(currentAccountId);
+  const messagingEnabled = false;
   const currentPath = usePathname();
   const calendarPath = `/${workspace?.username}/calendar`;
   const tasksPath = `/${workspace?.username}/tasks/projects`;

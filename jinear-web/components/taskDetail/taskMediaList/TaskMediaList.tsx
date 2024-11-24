@@ -9,7 +9,8 @@ import { useTask } from "../context/TaskDetailContext";
 import styles from "./TaskMediaList.module.css";
 import TaskMediaItem from "./taskMediaItem/TaskMediaItem";
 
-interface TaskMediaListProps {}
+interface TaskMediaListProps {
+}
 
 const logger = Logger("TaskMediaList");
 const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
@@ -17,7 +18,7 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
   const attachmentPickerRef = useRef<HTMLInputElement>(null);
   const task = useTask();
   const { data: retrieveTaskMediaListResponse, isFetching: isMediaListFetching } = useRetrieveTaskMediaListQuery({
-    taskId: task.taskId,
+    taskId: task.taskId
   });
   const [uploadTaskMedia, { isLoading: isUploadTaskMediaLoading }] = useUploadTaskMediaMutation();
 
@@ -31,18 +32,20 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
   const onSelectFile = (event: ChangeEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
     if (target.files && target.files.length) {
-      const file = event.target?.files?.[0];
-      if (file) {
-        const fileSize = file?.size || 0;
-        if (fileSize / 1000 / 1000 > 32) {
-          toast(t("apiFileTooLargeError"));
-          return;
+      const files = Array.from(target.files);
+      for (const file of files) {
+        if (file) {
+          // disabled for test
+          // const fileSize = file?.size || 0;
+          // if (fileSize / 1000 / 1000 > 32) {
+          //   toast(t("apiFileTooLargeError"));
+          //   return;
+          // }
+          let formData = new FormData();
+          formData.append("file", file);
+          uploadTaskMedia({ taskId: task.taskId, formData });
         }
-        let formData = new FormData();
-        formData.append("file", file);
-        uploadTaskMedia({ taskId: task.taskId, formData });
       }
-      return;
     }
   };
 
@@ -65,10 +68,12 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
           accept="*/*"
           className={styles.attachmentInput}
           onChange={onSelectFile}
+          multiple={true}
         />
       </div>
       <div className={styles.mediaListContainer}>
-        {retrieveTaskMediaListResponse?.data?.length == 0 && !isMediaListFetching && <div>{t("taskDetailMediaListEmpty")}</div>}
+        {retrieveTaskMediaListResponse?.data?.length == 0 && !isMediaListFetching &&
+          <div>{t("taskDetailMediaListEmpty")}</div>}
         {retrieveTaskMediaListResponse?.data?.map?.((taskMedia) => (
           <TaskMediaItem key={`task-media-${task.taskId}-${taskMedia.mediaId}`} media={taskMedia} />
         ))}
