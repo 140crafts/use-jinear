@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskMediaDto;
 import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceTier;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.TaskMediaResponse;
@@ -101,6 +102,20 @@ public class TaskMediaManager {
         String redirectUrl = taskMediaRetrieveService.retrievePublicDownloadLink(accessibleMediaDto);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"%s\"".formatted(accessibleMediaDto.getOriginalName()));
         response.sendRedirect(redirectUrl);
+    }
+
+    public BaseResponse updateTaskMediaVisibility(String taskId, String mediaId, MediaVisibilityType mediaVisibilityType) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
+        taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
+        validateMediaRelatedWithTask(taskId, mediaId);
+        log.info("Update task media visibility has started. currentAccountId: {}", currentAccountId);
+        taskMediaOperationService.updateMediaVisibility(mediaId, mediaVisibilityType);
+        return new BaseResponse();
+    }
+
+    private void validateMediaRelatedWithTask(String taskId, String mediaId) {
+        taskMediaRetrieveService.retrieveAccessible(taskId, mediaId);
     }
 
     private TaskMediaResponse mapResponse(List<MediaDto> taskRelatedMedia) {

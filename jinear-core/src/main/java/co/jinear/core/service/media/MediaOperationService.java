@@ -32,6 +32,8 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class MediaOperationService {
 
+    public static final Long PUBLIC_WINDOW_IN_SECONDS = 10L;
+
     private final MediaRepository mediaRepository;
     private final PassiveService passiveService;
     private final MediaRetrieveService mediaRetrieveService;
@@ -81,7 +83,8 @@ public class MediaOperationService {
     }
 
     @Transactional
-    public void updateMediaAsTemporaryPublic(String mediaId, ZonedDateTime publicUntil) {
+    public void updateMediaAsTemporaryPublic(String mediaId) {
+        ZonedDateTime publicUntil = ZonedDateTime.now().plusSeconds(PUBLIC_WINDOW_IN_SECONDS);
         log.info("Update media as temporary public has started. mediaId: {}, publicUntil: {}", mediaId, publicUntil);
         Media media = retrieveMedia(mediaId);
         media.setVisibility(MediaVisibilityType.TEMP_PUBLIC);
@@ -102,6 +105,21 @@ public class MediaOperationService {
 
         MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(media.getProviderType());
         mediaFileOperationStrategy.makePrivate(media.getBucketName(), media.getStoragePath());
+    }
+
+    @Transactional
+    public void updateMediaVisibility(String mediaId, MediaVisibilityType mediaVisibilityType) {
+        log.info("Update media visibility has started. mediaId: {}, mediaVisibilityType: {}", mediaId, mediaVisibilityType);
+        Media media = retrieveMedia(mediaId);
+        media.setVisibility(mediaVisibilityType);
+        Optional.ofNullable(mediaVisibilityType)
+                .filter(MediaVisibilityType.TEMP_PUBLIC::equals)
+                .map(tempPublic -> ZonedDateTime.now().plusSeconds(PUBLIC_WINDOW_IN_SECONDS))
+                .ifPresentOrElse(media::setPublicUntil, () -> media.setPublicUntil(null));
+        mediaRepository.save(media);
+
+        MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(media.getProviderType());
+        mediaFileOperationStrategy.makePublic(media.getBucketName(), media.getStoragePath());
     }
 
     private void deleteProfilePictureIfExists(InitializeMediaVo initializeMediaVo, Optional<AccessibleMediaDto> mediaDtoOptional) {
