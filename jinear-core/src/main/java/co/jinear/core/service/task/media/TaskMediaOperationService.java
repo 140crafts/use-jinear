@@ -15,14 +15,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.ZonedDateTime;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TaskMediaOperationService {
-
-    private static final Long PUBLIC_WINDOW_IN_SECONDS = 10L;
 
     private final MediaOperationService mediaOperationService;
     private final MediaRetrieveService mediaRetrieveService;
@@ -64,8 +60,12 @@ public class TaskMediaOperationService {
 
     public void updateMediaAsTemporaryPublic(String mediaId) {
         log.info("Update media as public has started.");
-        ZonedDateTime publicUntil = ZonedDateTime.now().plusSeconds(PUBLIC_WINDOW_IN_SECONDS);
-        mediaOperationService.updateMediaAsTemporaryPublic(mediaId, publicUntil);
+        mediaOperationService.updateMediaAsTemporaryPublic(mediaId);
+    }
+
+    public void updateMediaVisibility(String mediaId, MediaVisibilityType mediaVisibilityType) {
+        log.info("Update media visibility has started.");
+        mediaOperationService.updateMediaVisibility(mediaId, mediaVisibilityType);
     }
 
     public void updateMediaAsPrivate(String mediaId) {

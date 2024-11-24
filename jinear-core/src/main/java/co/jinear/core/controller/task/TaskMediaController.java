@@ -1,6 +1,7 @@
 package co.jinear.core.controller.task;
 
 import co.jinear.core.manager.task.TaskMediaManager;
+import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.TaskMediaResponse;
 import co.jinear.core.model.response.task.TaskPaginatedMediaResponse;
@@ -52,5 +53,13 @@ public class TaskMediaController {
                                   @PathVariable String mediaId,
                                   HttpServletResponse response) throws IOException {
         taskMediaManager.downloadTaskMedia(response, taskId, mediaId);
+    }
+
+    @PostMapping(value = "/{taskId}/update-visibility/{mediaId}/{mediaVisibilityType}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateTaskMediaVisibility(@PathVariable String taskId,
+                                                  @PathVariable String mediaId,
+                                                  @PathVariable MediaVisibilityType mediaVisibilityType) {
+        return taskMediaManager.updateTaskMediaVisibility(taskId, mediaId, mediaVisibilityType);
     }
 }
