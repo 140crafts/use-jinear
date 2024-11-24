@@ -2440,6 +2440,30 @@ const translations = {
     en: "Delete",
     tr: "Sil"
   },
+  taskDetailMediaToggleVisibility_PUBLIC: {
+    en: "Make non accessible without login",
+    tr: "Giriş yapmadan erişilemez yap"
+  },
+  taskDetailMediaToggleVisibility_PRIVATE: {
+    en: "Make public to internet",
+    tr: "İnternete açık hale getir"
+  },
+  taskDetailMediaToggleVisibility_TEMP_PUBLIC: {
+    en: "Make non accessible without login",
+    tr: "Giriş yapmadan erişilemez yap"
+  },
+  taskDetailMediaToastUrlCopiedToClipboard: {
+    en: "Link copied to clipboard",
+    tr: "Link panoya kopyalandı"
+  },
+  taskDetailMediaShareTitle: {
+    en: "Here's the file from my Jinear workspace",
+    tr: "İşte Jinear çalışma alanımdan bir dosya"
+  },
+  taskDetailMediaCannotSharePublicly: {
+    en: "File can not be shared publicly",
+    tr: "Dosya herkese açık bir şekilde paylaşılamaz"
+  },
   taskDetailMediaListEmpty: {
     en: "There isn't any attachments.",
     tr: "Herhangi bir ek bulunmuyor."
@@ -4691,7 +4715,7 @@ const translations = {
   landingPageFooterAccessBrowser: {
     en: "Browser",
     tr: "Tarayıcı"
-  },
+  }
 };
 
 export default translations;

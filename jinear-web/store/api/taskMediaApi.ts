@@ -1,4 +1,9 @@
-import { BaseResponse, TaskMediaResponse, TaskPaginatedMediaResponse } from "@/model/be/jinear-core";
+import {
+  BaseResponse,
+  MediaVisibilityType,
+  TaskMediaResponse,
+  TaskPaginatedMediaResponse
+} from "@/model/be/jinear-core";
 import { api } from "./api";
 
 export interface IRetrieveTaskMediaListRequest {
@@ -32,9 +37,9 @@ export const taskMediaApi = api.injectEndpoints({
       providesTags: (_result, _err, req) => [
         {
           type: "v1/task/media/{taskId}",
-          id: `${req.taskId}`,
-        },
-      ],
+          id: `${req.taskId}`
+        }
+      ]
     }),
     //
     retrieveTaskMediaListFromTeam: build.query<TaskPaginatedMediaResponse, IRetrieveTaskMediaListFromTeam>({
@@ -42,45 +47,61 @@ export const taskMediaApi = api.injectEndpoints({
       providesTags: (_result, _err, { teamId, page = 0 }) => [
         {
           type: "v1/task/media/from-team/{teamId}",
-          id: `${teamId}-${page}`,
-        },
-      ],
+          id: `${teamId}-${page}`
+        }
+      ]
     }),
     //
     uploadTaskMedia: build.mutation<BaseResponse, IUploadTaskMediaRequest>({
       query: (req: IUploadTaskMediaRequest) => ({
         url: `v1/task/media/${req.taskId}/upload`,
         method: "POST",
-        body: req.formData,
+        body: req.formData
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "v1/task/media/{taskId}", id: req.taskId },
         "v1/task/media/from-team/{teamId}",
-        "v1/workspace/activity/filter",
-      ],
+        "v1/workspace/activity/filter"
+      ]
     }),
     //
     deleteTaskMedia: build.mutation<BaseResponse, IDeleteTaskMediaRequest>({
       query: (req: IDeleteTaskMediaRequest) => ({
         url: `v1/task/media/${req.taskId}/delete/${req.mediaId}`,
-        method: "DELETE",
+        method: "DELETE"
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "v1/task/media/{taskId}", id: req.taskId },
         "v1/task/media/from-team/{teamId}",
-        "v1/workspace/activity/filter",
-      ],
+        "v1/workspace/activity/filter"
+      ]
     }),
     //
     downloadTaskMedia: build.query<BaseResponse, IDownloadTaskMediaRequest>({
       query: (req: IDownloadTaskMediaRequest) => ({
         url: `v1/task/media/${req.taskId}/download/${req.mediaId}`,
-        method: "GET",
+        method: "GET"
       }),
-      providesTags: (_result, _err, req) => [{ type: "task-media-download", id: `${req.taskId}-${req.mediaId}` }],
+      providesTags: (_result, _err, req) => [{ type: "task-media-download", id: `${req.taskId}-${req.mediaId}` }]
     }),
     //
-  }),
+    updateTaskMediaVisibility: build.mutation<BaseResponse, {
+      taskId: string,
+      mediaId: string,
+      mediaVisibilityType: MediaVisibilityType
+    }>({
+      query: (req) => ({
+        url: `v1/task/media/${req.taskId}/update-visibility/${req.mediaId}/${req.mediaVisibilityType}`,
+        method: "POST",
+      }),
+      invalidatesTags: (_result, _err, req) => [
+        { type: "v1/task/media/{taskId}", id: req.taskId },
+        "v1/task/media/from-team/{teamId}",
+        "v1/workspace/activity/filter"
+      ]
+    })
+    //
+  })
 });
 
 export const {
@@ -89,8 +110,9 @@ export const {
   useUploadTaskMediaMutation,
   useDeleteTaskMediaMutation,
   useDownloadTaskMediaQuery,
+  useUpdateTaskMediaVisibilityMutation
 } = taskMediaApi;
 
 export const {
-  endpoints: { retrieveTaskMediaList, uploadTaskMedia, deleteTaskMedia, downloadTaskMedia },
+  endpoints: { retrieveTaskMediaList, uploadTaskMedia, deleteTaskMedia, downloadTaskMedia, updateTaskMediaVisibility }
 } = taskMediaApi;

@@ -2,7 +2,7 @@ import { useToggle } from "@/hooks/useToggle";
 import { TaskDto } from "@/model/be/jinear-core";
 import { hasWorkspaceFilePermissions } from "@/utils/permissionHelper";
 import useTranslation from "locales/useTranslation";
-import React from "react";
+import React, { useMemo } from "react";
 import LastTaskActivitiesList from "../lastActivitiesScreen/lastTaskActivitiesList/LastTaskActivitiesList";
 import Line from "../line/Line";
 import styles from "./TaskDetail.module.css";
@@ -22,14 +22,15 @@ interface TaskDetailProps {
 const TaskDetail: React.FC<TaskDetailProps> = ({ task }) => {
   const { t } = useTranslation();
   const [showSubTaskListEvenIfNoSubtasks, toggleShowSubTaskListEvenIfNoSubtasks] = useToggle(false);
+  const context = useMemo(() => ({
+    task,
+    showSubTaskListEvenIfNoSubtasks,
+    toggleShowSubTaskListEvenIfNoSubtasks
+  }), [task, showSubTaskListEvenIfNoSubtasks, toggleShowSubTaskListEvenIfNoSubtasks]);
 
   return (
     <TaskDetailContext.Provider
-      value={{
-        task,
-        showSubTaskListEvenIfNoSubtasks,
-        toggleShowSubTaskListEvenIfNoSubtasks,
-      }}
+      value={context}
     >
       <div className={styles.taskLayout}>
         <TaskHasUpdatesInfo />
