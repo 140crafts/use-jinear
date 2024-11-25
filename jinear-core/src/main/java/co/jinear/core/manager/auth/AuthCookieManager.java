@@ -40,7 +40,8 @@ public class AuthCookieManager {
                 .path("/")
                 .domain(jwtHelper.getDomain())
                 .maxAge(0)
-                .sameSite("Lax")
+//                .sameSite("Lax")
+                .sameSite("None")
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
     }
