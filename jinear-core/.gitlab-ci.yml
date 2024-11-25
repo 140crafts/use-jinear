@@ -44,5 +44,5 @@ deploy-prod:
       when: always
     - when: never
   script:
-    - gcloud run deploy $PROJECT_NAME --image gcr.io/selam-255606/$PROJECT_NAME --allow-unauthenticated --platform managed --region europe-west4 --vpc-connector=crafts-generic-vpc-conn --vpc-egress=private-ranges-only --add-cloudsql-instances=selam-255606:europe-west4:crafts-general --port=8008 --use-http2 --memory=4Gi --max-instances=10 --concurrency 140 --set-env-vars=CLOUD_RUN_PROJECT_HASH=2355s6tobq,spring_profiles_active=prod --service-account=fitpath-dev-admin@selam-255606.iam.gserviceaccount.com
+    - gcloud run deploy $PROJECT_NAME --image gcr.io/selam-255606/$PROJECT_NAME --allow-unauthenticated --platform managed --region europe-west4 --vpc-connector=crafts-generic-vpc-conn --vpc-egress=private-ranges-only --add-cloudsql-instances=selam-255606:europe-west4:crafts-general --port=8008 --use-http2 --memory=4Gi --timeout=600 --max-instances=10 --concurrency 140 --set-env-vars=CLOUD_RUN_PROJECT_HASH=2355s6tobq,spring_profiles_active=prod --service-account=fitpath-dev-admin@selam-255606.iam.gserviceaccount.com
     - gcloud run services update-traffic $PROJECT_NAME --to-latest --region europe-west4
