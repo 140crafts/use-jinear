@@ -67,7 +67,7 @@ public class LoginManager {
         AuthResponseVo authResponseVo = retrieveStrategyAndAuth(PASSWORD_MAIL, authVo);
         String token = initializeSessionInfoAndGenerateJwtToken(PASSWORD_MAIL, authResponseVo);
         AuthResponse authResponse = mapResponse(token);
-        authCookieManager.addAuthCookie(token, response);
+        authCookieManager.addAuthCookie(token, loginWithPasswordRequest.getDomain(), response);
         updateAccountLocaleAndTimeZone(authResponseVo.getAccountId(), loginWithPasswordRequest.getLocale(), loginWithPasswordRequest.getTimeZone());
         return authResponse;
     }

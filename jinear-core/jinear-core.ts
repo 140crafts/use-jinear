@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-11-24 20:29:34.
+// Generated using typescript-generator version 3.0.1157 on 2024-11-25 23:29:24.
 
 export interface BaseDto {
     createdDate: Date;
@@ -504,9 +504,9 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
-    accountIsProjectTeamsAdmin: boolean;
-    accountIsProjectTeamsMember: boolean;
     accountWorkspaceAdminOrOwner: boolean;
+    accountIsProjectTeamsMember: boolean;
+    accountIsProjectTeamsAdmin: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -1059,6 +1059,7 @@ export interface LoginWithPasswordRequest extends BaseRequest {
     email: string;
     password: string;
     timeZone?: string | null;
+    domain?: string | null;
 }
 
 export interface CalendarEventDateUpdateRequest {
@@ -1912,8 +1913,8 @@ export interface Resource extends InputStreamSource {
     readable: boolean;
     url: URL;
     filename: string;
-    uri: URI;
     description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {
