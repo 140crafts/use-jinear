@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-11-25 23:29:24.
+// Generated using typescript-generator version 3.0.1157 on 2024-11-26 01:04:18.
 
 export interface BaseDto {
     createdDate: Date;
@@ -159,9 +159,9 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gthreadId: string;
-    ghistoryId: string;
     ginternalDate: string;
+    ghistoryId: string;
+    gthreadId: string;
     gid: string;
 }
 
@@ -1059,7 +1059,6 @@ export interface LoginWithPasswordRequest extends BaseRequest {
     email: string;
     password: string;
     timeZone?: string | null;
-    domain?: string | null;
 }
 
 export interface CalendarEventDateUpdateRequest {
@@ -1913,8 +1912,8 @@ export interface Resource extends InputStreamSource {
     readable: boolean;
     url: URL;
     filename: string;
-    description: string;
     uri: URI;
+    description: string;
 }
 
 export interface InputStreamSource {
