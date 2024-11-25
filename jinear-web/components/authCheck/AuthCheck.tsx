@@ -55,14 +55,14 @@ const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
   useEffect(() => {
     if (authState == "LOGGED_IN" && ONLY_NOT_LOGGED_IN_PATHS.indexOf(pathname) != -1) {
       logger.log("This path only for NOT LOGGED IN users.");
-      router.replace("/");
+      // router.replace("/");
     } else if (
       authState == "NOT_LOGGED_IN" &&
       ONLY_NOT_LOGGED_IN_PATHS.indexOf(pathname) == -1 &&
       !checkPathIsIn(pathname, PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS)
     ) {
       logger.log("This path only for LOGGED IN users.");
-      router.replace("/");
+      // router.replace("/");
     }
     if (authState == "LOGGED_IN") {
       askAppTrackingPermission();
