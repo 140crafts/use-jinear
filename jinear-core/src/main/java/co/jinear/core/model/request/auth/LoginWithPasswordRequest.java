@@ -18,6 +18,4 @@ public class LoginWithPasswordRequest extends BaseRequest {
     private String password;
     @Nullable
     private String timeZone;
-    @Nullable
-    private String domain;
 }

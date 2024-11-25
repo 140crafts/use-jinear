@@ -8,8 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 import static co.jinear.core.system.JwtHelper.JWT_COOKIE;
 import static co.jinear.core.system.JwtHelper.JWT_TOKEN_VALIDITY;
 
@@ -21,21 +19,15 @@ public class AuthCookieManager {
     private final JwtHelper jwtHelper;
 
     public void addAuthCookie(String token, HttpServletResponse response) {
-        String domain = jwtHelper.getDomain();
-        addAuthCookie(token, domain, response);
-    }
-
-    public void addAuthCookie(String token, String domain, HttpServletResponse response) {
-        String domainToUse = Optional.ofNullable(domain)
-                .orElseGet(jwtHelper::getDomain);
         ResponseCookie responseCookie = ResponseCookie
                 .from(JWT_COOKIE, token)
                 .secure(jwtHelper.isSecure())
                 .httpOnly(true)
                 .path("/")
-                .domain(domainToUse)
+                .domain(jwtHelper.getDomain())
                 .maxAge(JWT_TOKEN_VALIDITY * 24 * 60 * 60)
-                .sameSite("Lax")
+//                .sameSite("Lax")
+                .sameSite("None")
                 .build();
         response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
     }
