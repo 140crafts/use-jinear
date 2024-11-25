@@ -69,7 +69,8 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
     loginWithpassword({
       ...data,
       locale: t("localeType") as LocaleType,
-      timeZone: format(new Date(), "OOOO")
+      timeZone: format(new Date(), "OOOO"),
+      domain: window.location.host
     });
   };
 
