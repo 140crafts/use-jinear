@@ -6,6 +6,7 @@ import { useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import React, { useEffect } from "react";
 import isPwa from "@/utils/pwaHelper";
+import { isWebView } from "@/utils/webviewUtils";
 
 interface BodyFixerProps {
 }
@@ -19,6 +20,7 @@ const BodyFixer: React.FC<BodyFixerProps> = ({}) => {
   const isAnyMenuVisible = useTypedSelector(selectAnyMenuVisible);
   const isMobile = useWidthLimit({ limit: MOBILE_LAYOUT_BREAKPOINT });
   const pwa = isPwa();
+  const _isWebView = isWebView();
 
   useEffect(() => {
     if (document && window) {
@@ -35,12 +37,12 @@ const BodyFixer: React.FC<BodyFixerProps> = ({}) => {
     }
   }, [isAnyModalVisible, isAnyMenuVisible, isMobile]);
 
-  useEffect(()=>{
-    if (document && window && pwa){
+  useEffect(() => {
+    if (document && window && (pwa || _isWebView)) {
       const $html = document.querySelector("html");
-      $html?.classList.add('noselect');
+      $html?.classList.add("noselect");
     }
-  },[pwa])
+  }, [pwa, _isWebView]);
 
   return null;
 };
