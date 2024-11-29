@@ -10,7 +10,6 @@ import { Metadata, Viewport } from "next";
 import DateFnsConfigration from "@/components/dateFnsConfigration/DateFnsConfigration";
 import ModalProvider from "@/components/modalProvider/ModalProvider";
 import ReduxProvider from "@/components/reduxProvider/ReduxProvider";
-// import Root from "@/components/root/Root";
 import BodyFixer from "@/components/bodyFixer/BodyFixer";
 import ErrorBoundary from "@/components/errorBoundary/ErrorBoundary";
 import OfflineListener from "@/components/offlineListener/OfflineListener";
