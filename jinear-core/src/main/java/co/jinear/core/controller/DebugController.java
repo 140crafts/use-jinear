@@ -32,6 +32,7 @@ public class DebugController {
 
     @GetMapping
     public Object debug2(HttpServletResponse response) {
+//
         List<Project> projects = projectRepository.findAll();
         projects.forEach(project -> {
             if (Objects.isNull(project.getProjectFeedSettings())) {
