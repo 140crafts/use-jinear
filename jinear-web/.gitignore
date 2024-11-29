@@ -55,3 +55,4 @@ next.config.original.js
 
 # worker
 /public/worker-*.js
+certificates
