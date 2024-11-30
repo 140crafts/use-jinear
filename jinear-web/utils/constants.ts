@@ -7,7 +7,8 @@ export const API_ROOT = __DEV__ ? "http://localhost:8085/" : `https://${SERVER}.
 // : "http://localhost:8085/";
 export const SOCKET_ROOT = (!process.env.NODE_ENV || process.env.NODE_ENV === "development") ? "ws://localhost:3001/" : "https://message.jinear.co/";
 
-export const S3_BASE = "https://storage.googleapis.com/jinear-b0/";
+// export const S3_BASE = "https://storage.googleapis.com/jinear-b0/";
+export const S3_BASE = "https://files.jinear.co/jinear-b0/";
 
 export const ROUTE_IF_LOGGED_IN = "/home";
 export const PROJECT_FEED_URL = HOST + "/shared/[workspaceUsername]/feed/[accessKey]";
