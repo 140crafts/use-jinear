@@ -13,7 +13,7 @@ const nextConfig = {
   // swcMinify: false,
   // compress: false,
   images: {
-    domains: ["storage.googleapis.com", "placehold.co"]
+    domains: ["storage.googleapis.com", "placehold.co", "files.jinear.co"]
   },
   experimental: {
     missingSuspenseWithCSRBailout: false
