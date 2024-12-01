@@ -14,7 +14,7 @@
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/material": "^5.10.15",
-    "@reduxjs/toolkit": "^2.2.2",
+    "@reduxjs/toolkit": "2.2.2",
     "@sentry/nextjs": "^7.47.0",
     "@tiptap/extension-link": "^2.1.13",
     "@tiptap/extension-placeholder": "^2.1.13",
