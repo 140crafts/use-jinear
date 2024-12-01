@@ -1,7 +1,7 @@
 steps:
   # build the container images
   - name: "gcr.io/cloud-builders/docker"
-    args: ["build", "-t", "gcr.io/selam-255606/jinear-web:$COMMIT_SHA", "-t", "gcr.io/selam-255606/jinear-web:latest", "--build-arg=SENTRY_TOKEN=$_SENTRY_AUTH_TOKEN", "."]
+    args: ["build", "-t", "gcr.io/selam-255606/jinear-web", "-t", "gcr.io/selam-255606/jinear-web:latest", "--build-arg=SENTRY_TOKEN=$_SENTRY_AUTH_TOKEN", "."]
     env:
       - "SENTRY_AUTH_TOKEN=${_SENTRY_AUTH_TOKEN}"
 
@@ -12,7 +12,7 @@ steps:
       - "SENTRY_AUTH_TOKEN=${_SENTRY_AUTH_TOKEN}"
 
 images:
-  - gcr.io/selam-255606/jinear-web:$COMMIT_SHA
+  - gcr.io/selam-255606/jinear-web
   - gcr.io/selam-255606/jinear-web:latest
 options:
   machineType: "UNSPECIFIED"
