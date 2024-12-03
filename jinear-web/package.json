@@ -7,7 +7,7 @@
     "dev-turbo": "next dev --turbo",
     "dev-https": "next dev --experimental-https",
     "build": "next build",
-    "start": "next start",
+    "start": "NEXT_PUBLIC_PROJECT_PAGES=$NEXT_PUBLIC_PROJECT_PAGES next start",
     "lint": "next lint"
   },
   "dependencies": {
