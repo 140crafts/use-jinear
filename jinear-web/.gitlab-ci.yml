@@ -29,5 +29,5 @@ deploy-prod:
       when: always
     - when: never
   script:
-    - gcloud run deploy $PROJECT_NAME --image gcr.io/selam-255606/$PROJECT_NAME:latest --platform managed --region europe-west4 --allow-unauthenticated --port=3000 --memory=2048Mi --max-instances=99 --update-env-vars NEXT_PUBLIC_PROJECT_PAGES=pagesprod,NEXT_PUBLIC_AXIOM_DATASET=$NEXT_PUBLIC_AXIOM_DATASET,NEXT_PUBLIC_AXIOM_TOKEN=$NEXT_PUBLIC_AXIOM_TOKEN,NEXT_PUBLIC_AXIOM_LOG_LEVEL=info
+    - gcloud run deploy $PROJECT_NAME --image gcr.io/selam-255606/$PROJECT_NAME:latest --platform managed --region europe-west4 --allow-unauthenticated --port=3000 --memory=2048Mi --max-instances=99 --update-env-vars NODE_ENV=production,NEXT_PUBLIC_PROJECT_PAGES=pagesprod,NEXT_PUBLIC_AXIOM_DATASET=$NEXT_PUBLIC_AXIOM_DATASET,NEXT_PUBLIC_AXIOM_TOKEN=$NEXT_PUBLIC_AXIOM_TOKEN,NEXT_PUBLIC_AXIOM_LOG_LEVEL=info
     - gcloud run services update-traffic $PROJECT_NAME --to-latest --region europe-west4
