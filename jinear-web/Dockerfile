@@ -24,6 +24,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
+ENV NEXT_PUBLIC_PROJECT_PAGES=$NEXT_PUBLIC_PROJECT_PAGES
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
