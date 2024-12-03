@@ -23,12 +23,7 @@ RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-#ENV NODE_ENV production
-CMD ["echo", "$NODE_ENV 1"]
-ARG NODE_ENV
-CMD ["echo", "$NODE_ENV 2"]
-ENV NODE_ENV $NODE_ENV
-CMD ["echo", "$NODE_ENV 3"]
+ENV NODE_ENV production
 
 RUN addgroup -g 1001 -S nodejs
 RUN adduser -S nextjs -u 1001
