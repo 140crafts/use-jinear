@@ -21,6 +21,7 @@ const DebugScreen: React.FC<DebugScreenProps> = ({}) => {
     <Button onClick={pop}>pop</Button>
     <ClientOnly>
       {process.env.NEXT_PUBLIC_POSTHOG_HOST}
+      <br/>
       {process.env.NEXT_PUBLIC_PROJECT_PAGES}
     </ClientOnly>
   </div>;
