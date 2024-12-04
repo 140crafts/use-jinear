@@ -1,11 +1,9 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "./index.module.css";
 import { useAppDispatch } from "@/store/store";
-import { changeLoadingModalVisibility, popProjectAndMilestonePickerModal } from "@/slice/modalSlice";
-import { getUnreadConversationCount } from "../../repository/IndexedDbRepository";
+import { popProjectAndMilestonePickerModal } from "@/slice/modalSlice";
 import Button from "@/components/button";
-import ClientOnly from "@/components/clientOnly/ClientOnly";
 
 interface DebugScreenProps {
 }
@@ -19,11 +17,6 @@ const DebugScreen: React.FC<DebugScreenProps> = ({}) => {
 
   return <div className={styles.container}>
     <Button onClick={pop}>pop</Button>
-    <ClientOnly>
-      {process.env.NEXT_PUBLIC_POSTHOG_HOST}
-      <br/>
-      {process.env.NEXT_PUBLIC_PROJECT_PAGES}
-    </ClientOnly>
   </div>;
 };
 
