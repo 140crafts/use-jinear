@@ -1,4 +1,4 @@
-import express, {Request, Response} from 'express';
+import express, {Request, response, Response} from 'express';
 import {authInterceptor} from "./interceptor/AuthInterceptor";
 import {getConfig} from "./helper/CaddyFileGenerator";
 
@@ -25,6 +25,15 @@ app.put('/config', [
         console.log({hosts})
         const conf = getConfig(hosts);
         // res.status(200).send({message: "ok"});
+
         return res.status(200).send({message: conf});
     }
 ]);
+
+
+const echoConfig = async () => {
+    const resp = await fetch("http://localhost:2019/config/");
+    console.log(resp.status);
+    console.log(resp.body);
+    console.log(await resp.body);
+}
