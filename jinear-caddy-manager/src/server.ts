@@ -22,7 +22,7 @@ app.put('/config', [
     authInterceptor(),
     (req: Request, res: Response) => {
         const {hosts} = req.body;
-        console.log({hosts})
+        echoConfig();
         const conf = getConfig(hosts);
         // res.status(200).send({message: "ok"});
 
