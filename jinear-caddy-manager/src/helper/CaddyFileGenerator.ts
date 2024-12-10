@@ -35,7 +35,7 @@ const generateServerConfig = (hostname: string) => {
     return PROJECT_SERVER_CONFIG.replace("$_{hostname}", hostname);
 }
 
-const getConfig = (hostnameList?: string[]) => {
+export const getConfig = (hostnameList?: string[]) => {
     const hostConfig = hostnameList?.map(h => generateServerConfig(h)).join("") || "";
     return GENERIC_JINEAR_PAGES_CONFIG + hostConfig;
 }

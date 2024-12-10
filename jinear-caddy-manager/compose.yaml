@@ -1,0 +1,44 @@
+services:
+  caddy:
+    container_name: jinear-caddy-custom
+    image: 'registry.gitlab.com/140crafts/jinear/projects/jinear-caddy-custom:latest'
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - $PWD/conf:/etc/caddy
+      - $PWD/site:/srv
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - caddy_network
+
+  caddy-manager:
+    container_name: jinear-caddy-manager
+    image: 'registry.gitlab.com/140crafts/jinear/projects/jinear-caddy-manager:latest'
+    restart: unless-stopped
+    depends_on:
+      - caddy
+    ports:
+      - "3001:3001"
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - caddy_network
+    environment:
+      PORT: ${CADDY_MANAGER_PORT}
+      INTERNAL_KEY: ${INTERNAL_KEY}
+      JINEAR_PAGES_APP_URL: ${JINEAR_PAGES_APP_URL}
+      CF_ACCESS_KEY: ${CF_ACCESS_KEY}
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  caddy_network:

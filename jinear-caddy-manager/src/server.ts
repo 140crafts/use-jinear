@@ -1,5 +1,6 @@
 import express, {Request, Response} from 'express';
 import {authInterceptor} from "./interceptor/AuthInterceptor";
+import {getConfig} from "./helper/CaddyFileGenerator";
 
 const app = express();
 app.use(express.json())
