@@ -9,6 +9,7 @@ services:
       - "80:80"
       - "443:443"
       - "443:443/udp"
+      - "127.0.0.1:1808:2019"
     volumes:
       - $PWD/conf:/etc/caddy
       - $PWD/site:/srv

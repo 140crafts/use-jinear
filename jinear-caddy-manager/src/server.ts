@@ -32,8 +32,16 @@ app.put('/config', [
 
 
 const echoConfig = async () => {
-    const resp = await fetch("http://jinear-caddy-custom:2019/config/");
-    console.log(resp.status);
-    console.log(resp.body);
-    console.log(await resp.body);
+    try {
+        const resp = await fetch("http://jinear-caddy-custom:1808/config/");
+        console.log(resp.status);
+        console.log(resp.body);
+        console.log(await resp.body);
+    }catch (e){
+        console.error(e);
+        const resp = await fetch("http://127.0.0.1:1808/config/");
+        console.log(resp.status);
+        console.log(resp.body);
+        console.log(await resp.body);
+    }
 }
