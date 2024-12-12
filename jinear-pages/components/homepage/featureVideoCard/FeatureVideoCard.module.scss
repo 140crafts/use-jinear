@@ -1,0 +1,67 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.heroVideoContainer {
+  position: relative;
+  //height: calc(min(120ch, 100vw - var(--gap) * 2) / 1.53);
+  height: min(100ch, calc(calc(100vw - var(--gap) * 2) / 1.53));
+  overflow: hidden;
+}
+
+.vimeoIframe {
+  width: 100%;
+  height: 100%;
+}
+
+
+.heroTitle {
+  position: relative;
+  font-size: 2rem;
+  line-height: 2rem;
+  // width: 85%;
+  font-weight: 600;
+  margin: 1rem 0;
+  overflow: visible;
+}
+
+.heroText {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+@media (max-width: $laptop) {
+  .heroTitle {
+    font-size: 1.75rem;
+    line-height: 1.25rem;
+  }
+}
+
+@media (max-width: $tablet) {
+  .heroTitle {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+  .heroText {
+    font-size: unset;
+    line-height: unset;
+  }
+}
+
+@media (max-width: $mobile-l) {
+  .heroTitle {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+@media (max-width: $mobile-s) {
+  .heroTitle {
+    font-size: 1.1rem;
+    line-height: 1.65rem;
+  }
+}

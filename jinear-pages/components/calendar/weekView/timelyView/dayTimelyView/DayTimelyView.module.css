@@ -1,0 +1,17 @@
+.container {
+  flex: 1;
+  min-width: 1px;
+  position: relative;
+  border: 1px var(--c-primary-shade-0) solid;
+}
+
+.today {
+  /* background: linear-gradient(0, var(--c-primary), 40%, var(--c-primary-shade-0)); */
+  background: linear-gradient(
+    0,
+    var(--c-primary) 0%,
+    var(--c-primary-shade-0-op05) 33%,
+    var(--c-primary-shade-0-op05) 66%,
+    var(--c-primary) 100%
+  );
+}

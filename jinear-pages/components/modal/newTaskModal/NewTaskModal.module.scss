@@ -1,0 +1,80 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0 !important;
+  //padding-top: 0 !important;
+  position: relative;
+}
+
+.mobileFooterContainerClass {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.formMobileClassName {
+  margin-bottom: 5rem;
+}
+
+.modalContainer {
+  align-items: flex-start !important;
+  //padding-top: 12.5% !important;
+}
+
+.segmentedControlContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  position: absolute;
+  right: 1.15rem;
+  top: 1.25rem;
+  z-index: 1001;
+}
+
+.viewTypeSegmentLabel {
+  min-width: 2rem !important;
+}
+
+.addNewCalendarContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.addNewCalendarText {
+  text-align: justify;
+  padding-top: 2rem;
+}
+
+.addNewCalendarActionBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1ch;
+
+  background-color: var(--c-primary);
+  border-top-color: var(--c-primary-shade-1);
+  border-top-width: 1px;
+  border-top-style: solid;
+  padding: 0.5rem 0.5rem;
+  margin-top: 1rem;
+}
+
+.addCalendarIntegrationButton {
+  justify-content: flex-start !important;
+  text-align: left !important;
+  gap: 1ch;
+}
+
+@media (max-width: $tablet) {
+  .viewTypeSegmentLabel {
+    min-width: unset !important;
+  }
+  .segmentedControlContainer {
+    align-items: unset;
+  }
+}

@@ -1,0 +1,17 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.externalCalendarListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.addCalendarIntegrationButton {
+  justify-content: flex-start !important;
+  text-align: left !important;
+  gap: 1ch;
+  color: var(--c-secondary-shade-0-op05) !important;
+}

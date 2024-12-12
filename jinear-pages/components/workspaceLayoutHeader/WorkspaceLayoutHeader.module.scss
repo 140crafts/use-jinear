@@ -1,0 +1,58 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex: 1;
+  gap: 1rem;
+  padding: 0 1rem;
+  align-items: center;
+  justify-content: space-between;
+
+  background-color: var(--c-primary-shade-0);
+  //background-color: var(--c-JINEAR_ORANGE);
+  border-bottom-style: solid;
+  border-bottom-color: var(--c-primary-shade-1);
+  border-bottom-width: 1px;
+
+  min-height: var(--workspace-header-height);
+  max-height: var(--workspace-header-height);
+}
+
+.goBackButton {
+  padding: 0.25rem 1.25rem !important;
+}
+
+.headerLeftContent {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.headerRightContent {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.upgradeButton {
+  align-self: center;
+  color: var(--c-gradient-gold-0) !important;
+  background: unset !important;
+}
+
+.upgradeButton:hover {
+  background-color: var(--c-primary-shade-1) !important;
+  color: var(--c-gradient-gold-0) !important;
+}
+
+@media (max-width: $mobile-l) {
+  .upgradeButton {
+    display: none !important;
+  }
+  .pwiButton {
+    display: none !important;
+  }
+  .goBackButton {
+    padding: 0.25rem 0.75rem !important;
+  }
+}

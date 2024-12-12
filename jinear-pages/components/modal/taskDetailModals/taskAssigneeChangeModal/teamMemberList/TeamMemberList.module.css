@@ -1,0 +1,20 @@
+.container {
+  height: 16rem;
+  overflow-y: scroll;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.button {
+  text-align: left !important;
+  justify-content: flex-start !important;
+}
+
+.centeredInfo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 4rem;
+}

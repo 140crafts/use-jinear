@@ -1,0 +1,50 @@
+import { TaskDto } from "@/model/be/jinear-core";
+import { popChangeTaskAssigneeModal } from "@/store/slice/modalSlice";
+import { useAppDispatch } from "@/store/store";
+import cn from "classnames";
+import useTranslation from "locales/useTranslation";
+import React from "react";
+import { IoPersonOutline } from "react-icons/io5";
+import Button, { ButtonVariants } from "../button";
+import styles from "./AssigneeCell.module.css";
+import CurrentAccountInfo from "./currentAccountInfo/CurrentAccountInfo";
+
+interface AssigneeCellProps {
+  task: TaskDto;
+  tooltipPosition?: "left" | "right";
+  className?: string;
+}
+
+const AssigneeCell: React.FC<AssigneeCellProps> = ({ task, tooltipPosition = "right", className }) => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
+
+  const tooltip = task.assignedToAccount
+    ? t("taskWeekCardTaskAssignedToTooltip")?.replace("${to}", task?.assignedToAccount?.username || "")
+    : t("taskWeekCardTaskHasNoAssignedToTooltip");
+
+  const popChangeAssigneeModal = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event?.preventDefault?.();
+    dispatch(popChangeTaskAssigneeModal({ visible: true, task }));
+  };
+
+  return task ? (
+    <Button
+      variant={ButtonVariants.filled}
+      className={cn(styles.container, className)}
+      data-tooltip-right={tooltipPosition == "right" ? tooltip : undefined}
+      data-tooltip={tooltipPosition == "left" ? tooltip : undefined}
+      onClick={popChangeAssigneeModal}
+    >
+      {task.assignedToAccount ? (
+        <CurrentAccountInfo assignedToAccount={task.assignedToAccount} />
+      ) : (
+        <div className={styles.iconContainer}>
+          <IoPersonOutline size={12} className={styles.noAssigneeIcon} />
+        </div>
+      )}
+    </Button>
+  ) : null;
+};
+
+export default AssigneeCell;

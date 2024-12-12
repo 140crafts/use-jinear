@@ -1,0 +1,26 @@
+.autoRenewsText {
+  font-size: 0.6rem;
+  opacity: 0.9;
+  text-align: center;
+}
+
+.appliesOnlyWorkspaceText {
+  font-size: 0.6rem;
+  opacity: 0.9;
+  text-align: left;
+  margin-top: 0.75rem;
+  /* font-style: italic; */
+}
+
+.successContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+}
+
+.successIcon {
+  color: var(--c-SUCCESS_GREEN);
+}

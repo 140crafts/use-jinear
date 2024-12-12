@@ -1,0 +1,11 @@
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1;
+  gap: 0.25ch;
+}
+
+.title {
+  color: var(--c-secondary-shade-0-op05);
+}

@@ -1,0 +1,18 @@
+steps:
+  # build the container images
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["build", "-t", "gcr.io/selam-255606/jinear-pages", "--build-arg=SENTRY_TOKEN=$_SENTRY_AUTH_TOKEN", "."]
+    env:
+      - "SENTRY_AUTH_TOKEN=${_SENTRY_AUTH_TOKEN}"
+
+  # push the container images to Container Registry
+  - name: "gcr.io/cloud-builders/docker"
+    args: ["push", "gcr.io/selam-255606/jinear-pages"]
+    env:
+      - "SENTRY_AUTH_TOKEN=${_SENTRY_AUTH_TOKEN}"
+
+images:
+  - gcr.io/selam-255606/jinear-pages
+options:
+  machineType: "UNSPECIFIED"
+timeout: 1500s

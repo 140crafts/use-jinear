@@ -1,0 +1,22 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: var(--calendar-container-gap);
+  min-height: calc(var(--calendar-header-main-height) + 2rem);
+  //TODO cgds-275
+  // max-width: calc(100vw - var(--side-menu-width));
+}
+
+.weeks {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: $tablet) {
+  .container {
+    max-width: unset;
+  }
+}

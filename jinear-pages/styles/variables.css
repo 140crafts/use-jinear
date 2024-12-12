@@ -1,0 +1,171 @@
+:root {
+    /* main variables */
+    --c-background: #fdfffc;
+    --c-text-color: #16171a;
+    --c-primary: #fdfffc;
+    --c-primary-op05: #fdfffc80;
+    --c-primary-shade-0: #f5f5f5;
+    --c-primary-shade-0-op05: #f5f5f580;
+    --c-primary-shade-1: #e5e5e5;
+    --c-primary-shade-1-op05: #e5e5e580;
+    --c-primary-shade-1-op025: #e5e5e540;
+    --c-secondary: #16171a;
+    --c-secondary-shade-0-op05: #1f212480;
+    --c-secondary-shade-0-op025: #1f212440;
+    --c-secondary-shade-0: #1f2124;
+    --c-secondary-shade-1: #393e41;
+    --c-link-color: #122cc2;
+    --c-link-color-inverted: #5fc9f8;
+    /*  */
+    --c-nav-logo-color: #16171a;
+    --c-nav-logo-shadow: #e5e5e5;
+    --c-nav-logo-light-color: #ffffff;
+    --c-nav-logo-light-shadow: #676869;
+    --c-nav-logo-dark-color: #16171a;
+    --c-nav-logo-dark-shadow: #e5e5e5;
+    /*  */
+    --c-captcha-bg: #f9f9f9;
+    --c-placeholder-color: "rgba(57,62,65,0.35)";
+    /*  */
+    --fade: 120ms;
+    --fade-2: 250ms;
+    --side-menu-footer-height: 45px;
+    --tab-bar-height: 56px;
+    --tab-bar-inner-height: 28px;
+    --nav-bar-height: 56px;
+    --box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
+    --box-shadow-soft: 0px 2px 1px -1px rgba(0, 0, 0, 0.02), 0px 1px 1px 0px rgba(0, 0, 0, 0.014),
+    0px 1px 3px 0px rgba(0, 0, 0, 0.012);
+    --side-menu-width: 290px;
+    --side-menu-main-menu-width: 230px;
+    --side-menu-workspace-menu-width: 60px;
+    --side-menu-bottom-workspace-menu-height: 56px;
+    /*--workspace-header-height: 56px;*/
+    --workspace-header-height: 44px;
+    --workspace-side-menu-max-width: 75px;
+    --workspace-side-menu-mobile-navigator-height: 75px;
+    --workspace-layout-content-vertical-padding: 1rem;
+    --workspace-layout-page-padding: 1rem;
+    --tasks-section-sidebar-width: 230px;
+    --mobile-menu-action-bar-height: 36px;
+    /*  */
+    --user-profile-card-height: 200px;
+    --user-profile-card-height-medium: 150px;
+    --user-profile-card-height-small: 115px;
+    /* CALENDAR */
+    --calendar-event-height: 25px;
+    --calendar-event-gap: 5px;
+    --calendar-event-background: #fdf5da;
+    --calendar-event-background-highlighted: #f7ce46;
+    --calendar-week-view-day-cell-height: 12px;
+    --calendar-week-view-day-minute-pixel-ratio: 1;
+    --calendar-week-view-day-minute-pixel-ratio-in-pixels: 1px;
+    --calendar-week-view-left-hour-label-container-width: 2rem;
+    --calendar-weekdays-header-height: 45px;
+    --calendar-month-week-day-numbers: 35px;
+    --calendar-header-main-height: 76px;
+    --calendar-container-gap: 1rem;
+    /*  */
+    --gap: clamp(1rem, 6vw, 3rem);
+    --page: min(85ch, 100% - var(--gap) * 2);
+    --page-extended: min(120ch, 100% - var(--gap) * 2);
+    --page-extended-2: min(140ch, 100% - var(--gap) * 2);
+    --page-extended-3: min(160ch, 100% - var(--gap) * 2);
+    --full: calc(100% - (var(--gap)));
+    --content: min(50ch, 100% - var(--gap) * 2);
+    --popout: minmax(0, 2rem);
+    --feature: minmax(0, 5rem);
+    --customer-list-grid-template-columns: 0.25fr 1fr 0.25fr;
+    --task-card-width: 175px;
+    --task-card-width-week: 175px;
+    --task-card-width-month: 65px;
+    --team-week-view-day-gap: 1rem;
+    --team-task-status-view-title-gap: 1rem;
+    --status-board-task-card-width: 185px;
+    /*  */
+    --new-task-and-event-form-min-height: 15rem;
+    /*  */
+    --indent-1: 0.5ch;
+    --indent-2: 1ch;
+    --indent-3: 1.5ch;
+    --indent-4: 2ch;
+    --indent-5: 2.5ch;
+    --indent-6: 3ch;
+    --indent-7: 3.5ch;
+    --indent-8: 4ch;
+    /* palette  */
+    --c-WEPRESENT_DARK: #16171a;
+    --c-DARKBISI: #393e41;
+    --c-DARKBISI2: #1f2124;
+    --c-BABY_POWDER: #fdfffc;
+    --c-BABY_POWDER2: #f5f5f5;
+    --c-BABY_POWDER3: #e5e5e5;
+    --c-BABY_POWDER4: #767675;
+    --c-BASE_BACKGROUND: #f2f2f2;
+    --c-BASE_DARK_BACKGROUND: #0e0e0e;
+    --c-APPLE_LIGHT_BLUE: #5fc9f8;
+    --c-FACEBOOK_BLUE: #4152af;
+    --c-LIGHT_BLUE: #5fc9f8;
+    --c-gradient-gold-0: #dca54e;
+    --c-gradient-gold-1: #ecd082;
+    --c-gradient-gold-1-alternative: #efca62;
+    --c-appIcon-shadow: #693430;
+    --c-SUCCESS_GREEN: #4bb543;
+    --c-ERROR_RED: #ff4b3a;
+    --c-WHATIEAT_YELLOW: #fdf074;
+    --c-HIGHLIGHT_YELLOW: #dcff31;
+    --c-JINEAR_YELLOW: #fac26d;
+    --c-JINEAR_ORANGE: #f56e0f;
+    --c-JINEAR_ORANGE_LIGHT: hsl(25, 92%, 58%);
+    --border-radius-xs: 0.15rem;
+    --border-radius-s: 0.25rem;
+    --border-radius: 0.35rem;
+    --border-radius-m: 0.5rem;
+    --border-radius-l: 0.75rem;
+    --border-radius-xl: 0.9rem;
+    --menu-workplace-title-color: #fe0934;
+    --backdrop-filter-blur: saturate(80%) blur(2.5px);
+    --backdrop-filter-blur-2: saturate(80%) blur(5px);
+    --backdrop-filter-blur-3: saturate(180%) blur(15px);
+    /*  */
+    --line-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg width='480' height='42' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-opacity='.1' stroke='%23000' d='M0 41.5h480'/%3E%3C/svg%3E");
+    /* text-editor */
+    --toolbar-icon-filter: unset;
+}
+
+.dark:root {
+    --current: dark;
+    --c-background: #16171a;
+    --c-text-color: #fdfffc;
+    --c-primary: #16171a;
+    --c-primary-op05: #16171a80;
+    --c-primary-shade-0: #1f2124;
+    --c-primary-shade-0-op05: #1f212480;
+    --c-primary-shade-1: #393e41;
+    --c-primary-shade-1-op05: #393e4180;
+    --c-primary-shade-1-op025: #393e4140;
+    --c-secondary: #fdfffc;
+    --c-secondary-shade-0: #f5f5f5;
+    --c-secondary-shade-0-op05: #f5f5f580;
+    --c-secondary-shade-0-op025: #f5f5f540;
+    --c-secondary-shade-1: #e5e5e5;
+    --c-secondary-shade-1-op05: #e5e5e580;
+    --c-link-color: #5fc9f8;
+    --c-link-color-inverted: #122cc2;
+    --c-nav-logo-color: #ffffff;
+    --c-nav-logo-shadow: #676869;
+    --c-captcha-bg: #222323;
+    --c-placeholder-color: "rgba(221,211,217,0.35)";
+    /* --c-navbar-active-route: #5fc9f8; */
+    --box-shadow: 0px 2px 1px -1px rgba(253, 255, 252, 0.2), 0px 1px 1px 0px rgba(253, 255, 252, 0.14),
+    0px 1px 3px 0px rgba(253, 255, 252, 0.12);
+    --box-shadow-soft: 0px 2px 1px -1px rgba(253, 255, 252, 0.02), 0px 1px 1px 0px rgba(253, 255, 252, 0.014),
+    0px 1px 3px 0px rgba(253, 255, 252, 0.012);
+    --menu-workplace-title-color: #ff5270;
+    --line-svg: url("data:image/svg+xml;charset=utf-8,%3Csvg width='480' height='42' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke-opacity='.1' stroke='%23FFF' d='M0 41.5h480'/%3E%3C/svg%3E");
+    /* text-editor */
+    --toolbar-icon-filter: invert(100%);
+    /* CALENDAR */
+    --calendar-event-background: #e3d1ac;
+    --calendar-event-background-highlighted: #f7d149;
+}

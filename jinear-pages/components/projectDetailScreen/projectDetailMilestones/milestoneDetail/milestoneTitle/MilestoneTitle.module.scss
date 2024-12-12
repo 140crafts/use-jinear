@@ -1,0 +1,60 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  position: relative;
+  //flex: 1;
+}
+
+.title {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: .5rem;
+  min-width: 4ch;
+}
+
+.completedMilestoneTitle {
+  opacity: .5;
+  text-decoration: line-through;
+}
+
+.savingLabel {
+  cursor: default;
+  position: absolute;
+  top: 0;
+  right: 0;
+  background-color: var(--c-secondary);
+  color: var(--c-primary);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--border-radius);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+}
+
+.loading {
+  color: var(--c-primary);
+}
+
+.loading > svg {
+  color: var(--c-primary) !important;
+}
+
+
+.container:hover {
+  .editTitleButton {
+    position: absolute;
+    top: 0;
+    right: calc(-1 * var(--workspace-layout-page-padding));
+    display: flex !important;
+  }
+}
+
+.editTitleButton {
+  display: none !important;
+}

@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    flex-direction: row;
+}
+
+.selectedContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.infoContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+}

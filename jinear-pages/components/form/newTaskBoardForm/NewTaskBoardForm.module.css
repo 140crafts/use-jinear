@@ -1,0 +1,49 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  z-index: 999;
+  position: relative;
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow: visible;
+  z-index: 3;
+  position: relative;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 3.4rem;
+}
+
+.dateButtonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.footerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  position: sticky;
+  bottom: 0;
+  background-color: var(--c-primary);
+  border-top-color: var(--c-primary-shade-1);
+  border-top-width: 1px;
+  border-top-style: solid;
+  padding-top: 1rem;
+  z-index: 3;
+}
+
+.footerButton {
+  min-width: 6rem;
+}

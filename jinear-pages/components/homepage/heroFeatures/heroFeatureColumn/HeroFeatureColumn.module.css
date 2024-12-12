@@ -1,0 +1,41 @@
+.container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    min-width: 300px;
+    height: 400px;
+    background-color: var(--c-primary-shade-0);
+    border-radius: var(--border-radius);
+    padding: 1rem;
+    gap: .25rem;
+    transition: all var(--fade-2);
+    overflow: hidden;
+}
+
+/*.container:hover {*/
+/*    background-color: var(--c-primary-shade-1);*/
+/*}*/
+
+.title {
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.45;
+    letter-spacing: -0.002em;
+    height: 44px;
+}
+
+.text {
+    font-size: 17px;
+    line-height: 1.45;
+    letter-spacing: -0.002em;
+}
+
+.image {
+    position: absolute;
+    top: 35%;
+    border-style: solid;
+    border-width: 2px;
+    border-radius: var(--border-radius);
+    border-color: var(--c-primary);
+}

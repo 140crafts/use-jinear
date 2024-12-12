@@ -1,0 +1,80 @@
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toggleButtonContainer {
+    display: flex;
+    /*gap: 0.5rem;*/
+}
+
+.hidden {
+    display: none;
+}
+
+.toggleLabel {
+    cursor: pointer;
+    color: var(--c-text-color);
+    text-decoration: none;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 1px;
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    /* padding: 0.55rem 0.75rem; */
+    padding: 0.25rem 0.5rem;
+    transition: all var(--fade);
+    background-color: var(--c-primary-shade-0);
+    gap: .2rem;
+}
+
+.toggleLabelChecked {
+    background-color: var(--c-primary-shade-1);
+}
+
+.datesContainer {
+    display: flex;
+    flex-direction: row;
+    /* align-items: center; */
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+}
+
+.dateInputContainer {
+    /*flex: 1;*/
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+
+}
+
+.contentContainerClassName {
+    /*flex: 1;*/
+}
+
+.dateButtonClassName {
+    /*flex: 1;*/
+}
+
+.actionsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    z-index: 4;
+    transition: all var(--fade-2);
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+}

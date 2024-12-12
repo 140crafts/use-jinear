@@ -1,0 +1,33 @@
+.container {
+  background-color: var(--c-primary-shade-0);
+  border-radius: var(--border-radius);
+  min-height: 4rem;
+  z-index: 3;
+}
+.contentEditable {
+  color: var(--c-text-color);
+  padding: 1.5ch;
+  min-height: 4rem;
+}
+
+.contentEditableContainer {
+  position: relative;
+}
+
+.placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 1.5ch;
+}
+
+.toolbar {
+  border-bottom-width: thin;
+  border-bottom-color: var(--c-primary);
+  border-bottom-style: solid;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 0.5ch;
+}

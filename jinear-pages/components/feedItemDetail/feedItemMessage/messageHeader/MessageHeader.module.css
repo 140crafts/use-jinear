@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  /* border-bottom-style: solid;
+  border-bottom-color: var(--c-primary-shade-1-op05);
+  border-bottom-width: thin; */
+  padding-bottom: 1ch;
+}
+
+.fromContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1ch;
+}
+
+.name {
+  font-weight: 600;
+}
+
+.address {
+  opacity: 0.5;
+}
+
+.date {
+  opacity: 0.8;
+}

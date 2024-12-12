@@ -1,0 +1,6 @@
+.button {
+  display: flex !important;
+  justify-content: flex-start !important;
+  padding-left: 1.5rem !important;
+  padding-right: 0 !important;
+}

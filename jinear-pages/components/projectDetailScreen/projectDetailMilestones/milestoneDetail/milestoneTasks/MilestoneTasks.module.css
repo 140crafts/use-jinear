@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.titleContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .5rem
+}

@@ -1,0 +1,70 @@
+@import "/styles/breakpoints.scss";
+
+.newThreadInputToggleButton {
+  display: flex;
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  width: unset;
+}
+
+.inputContainer {
+  display: flex;
+  position: fixed;
+  bottom: 1rem;
+  width: unset;
+  border-color: var(--c-primary-shade-1);
+  border-width: 1px;
+  border-radius: var(--border-radius);
+  border-style: solid;
+}
+
+.newThreadButton {
+  display: none;
+}
+
+.newThreadInputContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  background: var(--c-primary-shade-0);
+  border-width: 1px;
+  border-radius: var(--border-radius);
+  border-style: solid;
+  border-color: transparent;
+}
+
+.input {
+  background: transparent !important;
+}
+
+.input:hover {
+  background: transparent !important;
+}
+
+.input:focus {
+  border-color: transparent !important;
+  outline: none !important;
+}
+
+.actionBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+}
+
+.submitButton {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+@media (max-width: $tablet) {
+  .inputContainer {
+    bottom: calc(var(--mobile-menu-action-bar-height) + var(--workspace-side-menu-mobile-navigator-height) + 1rem);
+  }
+
+  .newThreadInputToggleButton {
+    bottom: calc(var(--mobile-menu-action-bar-height) + var(--workspace-side-menu-mobile-navigator-height) + 1rem);
+  }
+}

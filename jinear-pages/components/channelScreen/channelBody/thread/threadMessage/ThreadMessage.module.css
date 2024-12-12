@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    padding: .5rem .5rem .5rem 1.5rem;
+    gap: .5rem;
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.profilePic {
+    height: 25px !important;
+    width: 25px !important;
+}
+
+.accountAndMessageInfoContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.editor {
+    background-color: unset !important;
+    padding: unset !important;
+    min-height: unset !important;
+}

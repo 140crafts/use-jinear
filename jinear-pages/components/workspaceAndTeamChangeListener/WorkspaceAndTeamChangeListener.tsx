@@ -1,0 +1,48 @@
+"use client";
+import { BaseResponse } from "@/model/be/jinear-core";
+import { useUpdatePreferredWorkspaceWithUsernameMutation } from "@/store/api/workspaceDisplayPreferenceApi";
+import { useTypedSelector } from "@/store/store";
+import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
+import Logger from "@/utils/logger";
+import { useParams, usePathname, useRouter } from "next/navigation";
+import React, { useEffect } from "react";
+
+interface WorkspaceAndTeamChangeListenerProps {
+}
+
+const logger = Logger("WorkspaceAndTeamChangeListener");
+
+const WorkspaceAndTeamChangeListener: React.FC<WorkspaceAndTeamChangeListenerProps> = ({}) => {
+  const params = useParams();
+  const router = useRouter();
+  const pathname = usePathname() || "";
+  const workspaceNameFromUrl: string = params?.workspaceName as string;
+  const preferedWorkspace = useTypedSelector((state) => state.account.current?.workspaceDisplayPreference?.workspace);
+
+  const currentWorkspaceDifferentFromUrl =
+    preferedWorkspace && workspaceNameFromUrl && preferedWorkspace.username != workspaceNameFromUrl;
+
+  const [updatePreferredWorkspaceWithUsername, { error }] = useUpdatePreferredWorkspaceWithUsernameMutation();
+
+  useEffect(() => {
+    if (currentWorkspaceDifferentFromUrl && pathname.indexOf("shared") == -1) {
+      updatePreferredWorkspaceWithUsername({
+        workspaceUsername: workspaceNameFromUrl,
+        dontReroute: true
+      });
+    }
+  }, [currentWorkspaceDifferentFromUrl, pathname]);
+
+  useEffect(() => {
+    //@ts-ignore
+    const data = error?.data as BaseResponse;
+    logger.log({ data });
+    if (["14001", "001"].indexOf(data?.errorCode) != -1) {
+      router.push(ROUTE_IF_LOGGED_IN);
+    }
+  }, [error]);
+
+  return null;
+};
+
+export default WorkspaceAndTeamChangeListener;

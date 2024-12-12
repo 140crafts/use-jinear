@@ -1,0 +1,11 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.addMailIntegrationButton {
+  justify-content: flex-start !important;
+  text-align: left !important;
+  gap: 1ch;
+  color: var(--c-secondary-shade-0-op05) !important;
+}
