@@ -1,6 +1,7 @@
 import express, {Request, response, Response} from 'express';
 import {authInterceptor} from "./interceptor/AuthInterceptor";
 import {getConfig} from "./helper/CaddyFileGenerator";
+import fs from 'fs';
 
 const app = express();
 app.use(express.json())
@@ -38,5 +39,16 @@ const loadConfig = async (config: string) => {
         body: config
     };
     const response = await fetch("http://jinear-caddy-custom:2019/load", requestOptions);
+    if (response.status == 200) {
+        console.log("Load config successful writing config to file.")
+        fs.writeFile('/data/Caddyfile', config, err => {
+            if (err) {
+                console.error("Writing config file failed.")
+                console.error(err);
+            } else {
+                console.error("Writing config file has completed.")
+            }
+        });
+    }
     console.log(response.status);
 }
