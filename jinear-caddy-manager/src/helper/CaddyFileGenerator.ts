@@ -5,7 +5,12 @@ const {
 
 const GENERIC_JINEAR_PAGES_CONFIG =
     `
-    https://*.projects.jinear.co {
+{
+    debug
+    admin 0.0.0.0:2019
+}
+    
+https://*.projects.jinear.co {
     tls {
         dns cloudflare ${CF_ACCESS_KEY}
     }
@@ -15,6 +20,15 @@ const GENERIC_JINEAR_PAGES_CONFIG =
         header_up X-Real-IP {http.reverse-proxy.upstream.address}
     }
 }
+
+https://storage.jinear.co {
+    reverse_proxy {
+        to https://storage.googleapis.com
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse-proxy.upstream.address}
+    }
+}
+
 `;
 
 const PROJECT_SERVER_CONFIG =

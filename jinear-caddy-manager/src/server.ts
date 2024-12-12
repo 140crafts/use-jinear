@@ -22,26 +22,21 @@ app.put('/config', [
     authInterceptor(),
     (req: Request, res: Response) => {
         const {hosts} = req.body;
-        echoConfig();
-        const conf = getConfig(hosts);
-        // res.status(200).send({message: "ok"});
-
-        return res.status(200).send({message: conf});
+        const config = getConfig(hosts);
+        const result = loadConfig(config);
+        return res.status(200).send({message: "ok"});
     }
 ]);
 
 
-const echoConfig = async () => {
-    try {
-        const resp = await fetch("http://jinear-caddy-custom:2019/config/");
-        console.log(resp.status);
-        console.log(resp.body);
-        console.log(await resp.body);
-    }catch (e){
-        console.error(e);
-        const resp = await fetch("http://127.0.0.1:2019/config/");
-        console.log(resp.status);
-        console.log(resp.body);
-        console.log(await resp.body);
-    }
+const loadConfig = async (config: string) => {
+    const headers = new Headers();
+    headers.append("Content-Type", "text/caddyfile");
+    const requestOptions = {
+        method: "POST",
+        headers,
+        body: config
+    };
+    const response = await fetch("http://jinear-caddy-custom:2019/load", requestOptions);
+    console.log(response.status);
 }
