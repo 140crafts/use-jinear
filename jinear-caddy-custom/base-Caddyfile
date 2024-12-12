@@ -1,0 +1,46 @@
+{
+    debug
+    admin 0.0.0.0:2019
+}
+
+
+https://*.projects.jinear.co {
+    tls {
+       dns cloudflare ABC
+    }
+    reverse_proxy {
+        to https://jinear-web-11412967519.europe-west4.run.app
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse-proxy.upstream.address}
+    }
+}
+
+https://storage.jinear.co {
+    reverse_proxy {
+        to https://storage.googleapis.com
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse-proxy.upstream.address}
+    }
+}
+
+https://cagdastunca.com {
+    tls {
+        on_demand
+    }
+    reverse_proxy {
+        to https://jinear-web-11412967519.europe-west4.run.app
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse-proxy.upstream.address}
+    }
+}
+
+https://cgdstnc.com {
+    tls {
+        on_demand
+    }
+    reverse_proxy {
+        to https://jinear-web-11412967519.europe-west4.run.app
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse-proxy.upstream.address}
+    }
+}
