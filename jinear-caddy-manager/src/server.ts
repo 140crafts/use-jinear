@@ -41,7 +41,7 @@ const loadConfig = async (config: string) => {
     const response = await fetch("http://jinear-caddy-custom:2019/load", requestOptions);
     if (response.status == 200) {
         console.log("Load config successful writing config to file.")
-        fs.writeFile('/data/Caddyfile', config, err => {
+        fs.writeFile('/conf/Caddyfile', config, err => {
             if (err) {
                 console.error("Writing config file failed.")
                 console.error(err);

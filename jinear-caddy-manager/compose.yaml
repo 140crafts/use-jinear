@@ -26,8 +26,7 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - caddy_data:/data
-      - caddy_config:/config
+      - $PWD/conf
     networks:
       - caddy_network
     environment:
