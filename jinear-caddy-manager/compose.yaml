@@ -26,7 +26,8 @@ services:
     ports:
       - "3001:3001"
     volumes:
-      - $PWD/conf
+      - $PWD/conf:/conf
+    #     chmod -R a+rw . gerekli
     networks:
       - caddy_network
     environment:

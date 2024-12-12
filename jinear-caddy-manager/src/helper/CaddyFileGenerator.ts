@@ -33,7 +33,7 @@ https://storage.jinear.co {
 
 const PROJECT_SERVER_CONFIG =
     `
-    https://$_{hostname} {
+https://$_{hostname} {
     tls {
       on_demand
     }
