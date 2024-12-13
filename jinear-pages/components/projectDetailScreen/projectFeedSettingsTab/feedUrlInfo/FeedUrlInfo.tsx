@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "./FeedUrlInfo.module.css";
-import { PROJECT_FEED_URL } from "@/utils/constants";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
 import { copyTextToClipboard } from "@/utils/clipboard";
@@ -12,10 +11,7 @@ interface FeedUrlInfoProps {
 
 const FeedUrlInfo: React.FC<FeedUrlInfoProps> = ({ accessKey, workspaceUserName }) => {
   const { t } = useTranslation();
-  const url =
-    PROJECT_FEED_URL
-      .replace("[accessKey]", accessKey)
-      .replace("[workspaceUsername]", workspaceUserName);
+  const url ='/';
 
   const copyLink = () => {
     copyTextToClipboard(url);

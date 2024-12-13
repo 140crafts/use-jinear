@@ -17,24 +17,20 @@ import { useRetrieveProjectPermissionsQuery } from "@/api/projectQueryApi";
 import { closeDialogModal, popDialogModal } from "@/slice/modalSlice";
 import { useDeleteProjectFeedPostMutation } from "@/api/projectPostApi";
 import { useRouter } from "next/navigation";
-import { PROJECT_FEED_URL } from "@/utils/constants";
 
 interface ProjectPostProps {
   post: ProjectPostDto;
-  workspaceName: string;
   asLink?: boolean;
   withCommentCountButton?: boolean;
-  withSeperator?: boolean;
+  withSeparator?: boolean;
 }
 
 const ProjectPost: React.FC<ProjectPostProps> = ({
                                                    post,
-                                                   workspaceName,
                                                    asLink = true,
                                                    withCommentCountButton = true,
-                                                   withSeperator = true
+                                                   withSeparator = true
                                                  }) => {
-  const accessKey = "todo";
   const { t } = useTranslation();
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -46,10 +42,10 @@ const ProjectPost: React.FC<ProjectPostProps> = ({
   const [deletePostCall, { data: deletePostResponse }] = useDeleteProjectFeedPostMutation();
 
   useEffect(() => {
-    if (deletePostResponse && accessKey) {
-      router.replace(`/project-feed/${accessKey}`);
+    if (deletePostResponse) {
+      router.replace(`/`);
     }
-  }, [router, accessKey, deletePostResponse]);
+  }, [router, deletePostResponse]);
 
   const popAreYouSureToDeletePostModal = (e: Event) => {
     dispatch(
@@ -69,8 +65,7 @@ const ProjectPost: React.FC<ProjectPostProps> = ({
   };
 
   const Wrapper = asLink ? Link : ClientOnly;
-  const projectUrl = PROJECT_FEED_URL.replace("[accessKey]", accessKey).replace("[workspaceUsername]", workspaceName);
-  const href = asLink ? `${projectUrl}/post/${post.projectPostId}` : undefined;
+  const href = asLink ? `/post/${post.projectPostId}` : undefined;
 
   return (
     <div className={styles.container}>
@@ -123,7 +118,7 @@ const ProjectPost: React.FC<ProjectPostProps> = ({
         </span>
         <b>{post.account?.username || ""}</b>
       </div>
-      {withSeperator && <Line />}
+      {withSeparator && <Line />}
     </div>
 
   );

@@ -23,7 +23,6 @@ const PostList: React.FC<PostListProps> = ({ projectId, workspaceName }) => {
       key={data.projectPostId}
       post={data}
       withCommentCountButton={true}
-      workspaceName={workspaceName}
     />;
   };
 

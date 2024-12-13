@@ -28,7 +28,7 @@ import { CSPostHogProvider } from "@/components/postHogProvider/CSPostHogProvide
 import PostHogPageView from "@/components/postHogPageView/PostHogPageView";
 import OnInstallPromptEventProvider from "@/components/onInstallPromptEventProvider/OnInstallPromptEventProvider";
 import React from "react";
-import styles from "./shared/[workspaceName]/feed/layout.module.scss";
+import styles from "./layout.module.scss";
 import ProjectFeedLayoutHeader from "@/components/projectFeedLayoutHeader/ProjectFeedLayoutHeader";
 
 const logger = Logger("_app");

@@ -10,21 +10,16 @@ import PostCommentList from "@/components/projectFeedPostDetailScreen/postCommen
 import CommentInput from "@/components/projectFeedPostDetailScreen/commentInput/CommentInput";
 import { ProjectPostCommentDto } from "@/be/jinear-core";
 import Logger from "@/utils/logger";
-import { PROJECT_FEED_URL } from "@/utils/constants";
 
 interface ProjectFeedPostDetailScreenProps {
   projectId: string;
   postId: string;
-  accessKey: string;
-  workspaceName: string;
 }
 
 const logger = Logger("ProjectFeedPostDetailScreen");
 const ProjectFeedPostDetailScreen: React.FC<ProjectFeedPostDetailScreenProps> = ({
                                                                                    projectId,
                                                                                    postId,
-                                                                                   accessKey,
-                                                                                   workspaceName
                                                                                  }) => {
   const { t } = useTranslation();
   const { data: projectFeedPostQueryResponse, isFetching } = useRetrieveProjectFeedPostQuery({ projectId, postId });
@@ -36,7 +31,7 @@ const ProjectFeedPostDetailScreen: React.FC<ProjectFeedPostDetailScreenProps> = 
   const hasExplicitAdminDeleteAccess = (retrievePublicProjectResponse?.data?.accountProjectPermissionFlags?.accountWorkspaceAdminOrOwner ?? false) || (retrievePublicProjectResponse?.data?.accountProjectPermissionFlags?.accountIsProjectTeamsAdmin ?? false);
   const [quotedComment, setQuotedComment] = useState<ProjectPostCommentDto>();
 
-  const projectUrl = PROJECT_FEED_URL.replace("[accessKey]", accessKey).replace("[workspaceUsername]", workspaceName);
+  const projectUrl = '/';
 
   logger.log({ quotedComment });
 
@@ -55,11 +50,9 @@ const ProjectFeedPostDetailScreen: React.FC<ProjectFeedPostDetailScreenProps> = 
           </Button>
           <ProjectPost
             post={projectFeedPostQueryResponse.data}
-            accessKey={accessKey}
             asLink={false}
             withCommentCountButton={false}
-            withSeperator={false}
-            workspaceName={workspaceName}
+            withSeparator={false}
           />
 
           <PostCommentList

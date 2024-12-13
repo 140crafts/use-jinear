@@ -11,8 +11,6 @@ export const SOCKET_ROOT = (!process.env.NODE_ENV || process.env.NODE_ENV === "d
 export const S3_BASE = "https://files.jinear.co/jinear-b0/";
 
 export const ROUTE_IF_LOGGED_IN = "/home";
-export const PROJECT_FEED_URL = HOST + "/shared/[workspaceUsername]/feed/[accessKey]";
-
 
 export const APP_STORE_URL = "https://apps.apple.com/us/app/jinear/id6478519984";
 export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=co.jinear.app";
