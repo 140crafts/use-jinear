@@ -21,7 +21,7 @@ build:
       when: always
     - when: manual
   script:
-    - gcloud builds submit --tag gcr.io/selam-255606/$PROJECT_NAME --tag latest
+    - gcloud builds submit --tag gcr.io/selam-255606/$PROJECT_NAME:latest
 
 deploy-staging:
   stage: deploy-stg
