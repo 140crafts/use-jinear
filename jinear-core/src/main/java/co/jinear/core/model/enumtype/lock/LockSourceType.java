@@ -17,7 +17,8 @@ public enum LockSourceType {
     REMINDER_JOB_PROCESS("reminder-job:process", 15, TimeUnit.MINUTES),
     CONVERSATION_INIT("conversation-init", 20, TimeUnit.SECONDS),
     CONVERSATION("conversation", 20, TimeUnit.SECONDS),
-    PROJECT_MILESTONE("project:milestone", 20, TimeUnit.SECONDS);
+    PROJECT_MILESTONE("project:milestone", 20, TimeUnit.SECONDS),
+    PROJECT_DOMAIN("project:domain", 10, TimeUnit.SECONDS);
 
     private final String key;
     private final int ttl;

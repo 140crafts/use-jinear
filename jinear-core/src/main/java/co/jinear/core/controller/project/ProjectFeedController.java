@@ -36,4 +36,10 @@ public class ProjectFeedController {
     public PublicProjectRetrieveResponse retrievePublicProject(@PathVariable String projectId) {
         return projectFeedManager.retrievePublicProjectInfo(projectId);
     }
+
+    @GetMapping("/custom-domain/{domain}/info")
+    @ResponseStatus(HttpStatus.OK)
+    public PublicProjectRetrieveResponse retrievePublicProjectWithDomain(@PathVariable String domain) {
+        return projectFeedManager.retrievePublicProjectInfoWithDomain(domain);
+    }
 }

@@ -2,10 +2,7 @@ package co.jinear.core.manager.project;
 
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.PageDto;
-import co.jinear.core.model.dto.project.AccountProjectPermissionFlags;
-import co.jinear.core.model.dto.project.ProjectFeedSettingsDto;
-import co.jinear.core.model.dto.project.ProjectPostDto;
-import co.jinear.core.model.dto.project.PublicProjectDto;
+import co.jinear.core.model.dto.project.*;
 import co.jinear.core.model.enumtype.project.ProjectFeedAccessType;
 import co.jinear.core.model.response.project.ProjectFeedPaginatedResponse;
 import co.jinear.core.model.response.project.ProjectFeedPostResponse;
@@ -14,6 +11,7 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.project.ProjectFeedSettingsRetrieveService;
 import co.jinear.core.service.project.ProjectPostService;
 import co.jinear.core.service.project.ProjectRetrieveService;
+import co.jinear.core.service.project.domain.ProjectDomainRetrieveService;
 import co.jinear.core.validator.project.ProjectAccessValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +28,7 @@ public class ProjectFeedManager {
     private final ProjectAccessValidator projectAccessValidator;
     private final ProjectPostService projectPostService;
     private final ProjectRetrieveService projectRetrieveService;
+    private final ProjectDomainRetrieveService projectDomainRetrieveService;
 
     public ProjectFeedPaginatedResponse retrieveFeed(String projectId, int page) {
         String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
@@ -47,6 +46,12 @@ public class ProjectFeedManager {
         log.info("Retrieve post has started. projectId: {}, postId: {}, currentAccountId: {}", projectId, postId, currentAccountId);
         ProjectPostDto projectPostDto = projectPostService.retrievePost(projectId, postId);
         return mapResponse(projectPostDto);
+    }
+
+    public PublicProjectRetrieveResponse retrievePublicProjectInfoWithDomain(String domain) {
+        log.info("Retrieve public project info with domain has started. domain: {}", domain);
+        ProjectDomainDto projectDomainDto = projectDomainRetrieveService.retrieveByDomain(domain);
+        return retrievePublicProjectInfo(projectDomainDto.getProjectId());
     }
 
     public PublicProjectRetrieveResponse retrievePublicProjectInfo(String projectId) {

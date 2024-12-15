@@ -93,4 +93,8 @@ public class Project extends BaseEntity {
     @OneToOne(mappedBy = "project")
     @NotFound(action = NotFoundAction.IGNORE)
     private ProjectFeedSettings projectFeedSettings;
+
+    @OneToMany(mappedBy = "project")
+    @Where(clause = "passive_id is null")
+    private Set<ProjectDomain> domains;
 }
