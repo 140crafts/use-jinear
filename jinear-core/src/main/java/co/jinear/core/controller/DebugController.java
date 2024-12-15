@@ -27,7 +27,8 @@ public class DebugController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void debug(HttpEntity<String> httpEntity) {
+    public void debug(HttpEntity<String> httpEntity) throws Exception{
+
     }
 
     @GetMapping

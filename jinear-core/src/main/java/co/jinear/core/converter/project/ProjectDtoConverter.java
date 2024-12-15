@@ -15,7 +15,8 @@ import org.mapstruct.Mapping;
                 RichTextConverter.class,
                 ProjectTeamDtoConverter.class,
                 MilestoneDtoConverter.class,
-                ProjectFeedSettingsDtoConverter.class})
+                ProjectFeedSettingsDtoConverter.class,
+                ProjectDomainDtoConverter.class})
 public interface ProjectDtoConverter {
 
     ProjectDto convert(Project project);

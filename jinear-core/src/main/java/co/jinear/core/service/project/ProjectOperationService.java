@@ -12,6 +12,7 @@ import co.jinear.core.model.vo.project.ProjectInitializeVo;
 import co.jinear.core.model.vo.project.UpdateProjectDatesVo;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.repository.project.ProjectRepository;
+import co.jinear.core.service.project.domain.ProjectDomainOperationService;
 import co.jinear.core.service.richtext.RichTextInitializeService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class ProjectOperationService {
     private final MilestoneOperationService milestoneOperationService;
     private final MilestoneInitializeDtoToInitializeMilestoneVoMapper milestoneInitializeDtoToInitializeMilestoneVoMapper;
     private final ProjectFeedSettingsOperationService projectFeedSettingsOperationService;
+    private final ProjectDomainOperationService projectDomainOperationService;
 
     @Transactional
     public void initialize(ProjectInitializeVo projectInitializeVo) {
@@ -43,6 +45,7 @@ public class ProjectOperationService {
         assignTeams(projectInitializeVo, saved);
         initializeMilestones(projectInitializeVo, saved);
         initializeProjectFeedSettings(saved);
+        initializeProjectDomain(saved);
     }
 
     @Transactional
@@ -160,6 +163,10 @@ public class ProjectOperationService {
         projectFeedSettingsInitializeVo.setProjectPostCommentPolicyType(ProjectPostCommentPolicyType.WORKSPACE_MEMBERS);
 
         projectFeedSettingsOperationService.initialize(projectFeedSettingsInitializeVo);
+    }
+
+    private void initializeProjectDomain(Project saved) {
+        projectDomainOperationService.initializeBaseProjectDomain(saved.getProjectId());
     }
 
     private InitializeRichTextVo mapDescriptionInitVo(String projectId, String description) {

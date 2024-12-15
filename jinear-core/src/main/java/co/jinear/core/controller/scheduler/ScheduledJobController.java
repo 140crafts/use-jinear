@@ -34,4 +34,13 @@ public class ScheduledJobController {
         log.info("Retrieve and apply latest payments has started. userAgent: {}", userAgent);
         return paymentsManager.retrieveAndApplyLatestPayments();
     }
+
+    @GetMapping("/sync-custom-project-domains")
+    @ResponseStatus(HttpStatus.OK)
+    @PreAuthorize("hasRole('ROLE_SERVICE')")
+    public BaseResponse syncCustomProjectDomains(@RequestHeader("User-Agent") String userAgent) {
+        log.info("Sync custom project domains has started. userAgent: {}", userAgent);
+        scheduledJobManager.checkAndSyncCustomDomains();
+        return new BaseResponse();
+    }
 }

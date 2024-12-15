@@ -22,6 +22,8 @@ public abstract class Try<T> {
 
     public abstract Throwable getThrownMessage();
 
+    public abstract void throwIfFailed();
+
     public abstract T get();
 
     public abstract <U> Try<U> map(Function<? super T, ? extends U> fn);
@@ -89,6 +91,13 @@ public abstract class Try<T> {
         public Throwable getThrownMessage() {
             return this.exception;
         }
+
+        @Override
+        public void throwIfFailed() {
+            if (Objects.nonNull(exception)) {
+                throw exception;
+            }
+        }
     }
 
     static class Success<T> extends Try<T> {
@@ -133,6 +142,10 @@ public abstract class Try<T> {
         @Override
         public Throwable getThrownMessage() {
             throw new IllegalStateException("Success never has an exception");
+        }
+
+        @Override
+        public void throwIfFailed() {
         }
     }
 }
