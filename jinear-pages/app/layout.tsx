@@ -288,16 +288,6 @@ export const metadata: Metadata = {
 };
 
 function MyApp({ children }: { children: React.ReactNode }) {
-  // TODO cgds-275
-  // const router = useRouter();
-  // router.events?.on("routeChangeStart", () => {
-  //   logger.log({ routeChangeStart: router.asPath });
-  // });
-  // router.events?.on("routeChangeComplete", () => {
-  //   logger.log({ routeChangeComplete: router.asPath });
-  // });
-  // usePreserveScroll();
-
   return (
     <html>
     <CSPostHogProvider>

@@ -2,7 +2,7 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import ProfilePhoto from "@/components/profilePhoto";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
-import { selectCurrentAccount } from "@/store/slice/accountSlice";
+import { selectAuthState, selectCurrentAccount } from "@/store/slice/accountSlice";
 import { popAccountProfileModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
@@ -19,36 +19,37 @@ interface SideMenuFooterProps {
 const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const authState = useTypedSelector(selectAuthState);
   const currentAccount = useTypedSelector(selectCurrentAccount);
 
   const popAccProfileModal = () => {
-    dispatch(popAccountProfileModal());
+    currentAccount && dispatch(popAccountProfileModal());
   };
 
   return (
     <div className={cn(styles.container, className)}>
-      <Button
-        variant={ButtonVariants.hoverFilled}
-        className={styles.accountButton}
-        heightVariant={ButtonHeight.short}
-        onClick={popAccProfileModal}
-      >
+      {authState != "NOT_DECIDED" &&
+        <Button
+          variant={ButtonVariants.hoverFilled2}
+          className={styles.accountButton}
+          heightVariant={ButtonHeight.short}
+          onClick={popAccProfileModal}
+          href={currentAccount ? undefined : "/login"}
+        >
         <span className={styles.userName}>
-          {shortenStringIfMoreThanMaxLength({ text: currentAccount?.username || "", maxLength: 18 })}
+          {currentAccount ? shortenStringIfMoreThanMaxLength({
+            text: currentAccount?.username || "",
+            maxLength: 18
+          }) : t("loginScreenTitle")}
         </span>
-        <div>
-          {currentAccount ? (
+          {currentAccount &&
             <ProfilePhoto
               boringAvatarKey={currentAccount.accountId}
               storagePath={currentAccount.profilePicture?.storagePath}
               wrapperClassName={styles.profilePic}
-            />
-          ) : (
-            <IoPerson size={14} />
-          )}
-        </div>
-      </Button>
-      <ThemeToggle variant={ButtonVariants.hoverFilled} />
+            />}
+        </Button>
+      }
     </div>
   );
 };
