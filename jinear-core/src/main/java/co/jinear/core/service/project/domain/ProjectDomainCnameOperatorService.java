@@ -39,6 +39,7 @@ public class ProjectDomainCnameOperatorService {
         }
     }
 
+    @Transactional
     public void reCheckFailedDomains() {
         log.info("Re-check failed domains has started.");
         findTimedOutSetupsAndUpdateAsCancelled();
