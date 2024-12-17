@@ -57,12 +57,14 @@ import ProjectStateSelectModal from "@/components/modal/projectStateSelectModal/
 import ProjectAndMilestonePickerModal
   from "@/components/modal/projectAndMilestonePickerModal/ProjectAndMilestonePickerModal";
 import NewMilestoneModal from "@/components/modal/newMilestoneModal/NewMilestoneModal";
+import NewCustomProjectDomainModal from "@/components/modal/newCustomProjectDomainModal/NewCustomProjectDomainModal";
 
 interface ModalProviderProps {
 }
 
 const globalModals: any = (
   <>
+    <NewCustomProjectDomainModal />
     <NewProjectModal />
     <ProjectPrioritySelectModal />
     <ProjectStateSelectModal />

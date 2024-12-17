@@ -283,3 +283,7 @@ export interface ProjectAndMilestonePickerModalState extends ModalState {
 export interface NewMilestoneModalState extends ModalState {
   project?: ProjectDto,
 }
+
+export interface NewCustomProjectDomainModalState extends ModalState {
+  projectId?: string,
+}

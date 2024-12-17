@@ -4448,6 +4448,10 @@ const translations = {
     en: "Copy Link",
     tr: "Linki Kopyala"
   },
+  projectFeedUrlDelete: {
+    en: "Delete",
+    tr: "Sil"
+  },
   projectFeedUrlGo: {
     en: "Go To Link",
     tr: "Linke Git"
@@ -4715,7 +4719,51 @@ const translations = {
   landingPageFooterAccessBrowser: {
     en: "Browser",
     tr: "Tarayıcı"
-  }
+  },
+  deleteProjectCustomDomainAreYouSureTitle: {
+    en: "Delete Custom Project Domain",
+    tr: "Proje Alan Adını Sil"
+  },
+  deleteProjectCustomDomainAreYouSureText: {
+    en: "Are you sure to delete this project custom domain? You can alway re-add this domain. Service distruptions may happen.",
+    tr: "Bu yorumu proje alan adını silmek istediğinize emin misiniz? Alan adını tekrar ekleyebilirsiniz. Servis kesintileri yaşanabilir."
+  },
+  deleteProjectCustomDomainAreYouSureDeleteButton: {
+    en: "Delete",
+    tr: "Sil"
+  },
+  projectAddNewCustomDomainButton:{
+    en: "Add Custom Domain",
+    tr: "Alan Adı Ekle"
+  },
+  newCustomProjectDomainModalTitle: {
+    en: "Add Custom Project Domain",
+    tr: "Proje Alan Adı Ekle"
+  },
+  newCustomProjectDomainModalText: {
+    en: "You can access your project feed from your own domain.",
+    tr: "Proje akışına kendi alan adınız altından ulaşabilirsiniz."
+  },
+  newCustomProjectDomainModalDomainLabel: {
+    en: "Domain",
+    tr: "Alan Adı"
+  },
+  newCustomProjectDomainModalDomainNotValid: {
+    en: "Domain name is not valid",
+    tr: "Alan adı geçersiz"
+  },
+  newCustomProjectDomainModalAddDomain: {
+    en: "Add",
+    tr: "Ekle"
+  },
+  projectFeedUrlCustomDomainWaitingDNS: {
+    en: "Waiting DNS Configuration",
+    tr: "DNS Ayarları Bekleniyor"
+  },
+  projectFeedUrlCustomDomainWaitingDNSInfo: {
+    en: "Jinear checks DNS configurations regularly. This may take a while after you completed your setup.",
+    tr: "Jinear DNS ayarlarını aralıklarla kontrol edecek. Ayarlarınızı yaptıktan sonra etki etmesi biraz vakit alabilir."
+  },
 };
 
 export default translations;
