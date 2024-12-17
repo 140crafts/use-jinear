@@ -8,10 +8,11 @@ import ProjectFeedAccessTypeSelect
   from "@/components/projectDetailScreen/projectFeedSettingsTab/projectFeedAccessTypeSelect/ProjectFeedAccessTypeSelect";
 import ProjectPostInitializeAccessTypeSelect
   from "@/components/projectDetailScreen/projectFeedSettingsTab/projectPostInitializeAccessTypeSelect/ProjectPostInitializeAccessTypeSelect";
-import FeedUrlInfo from "@/components/projectDetailScreen/projectFeedSettingsTab/feedUrlInfo/FeedUrlInfo";
 import { useRetrieveProjectPermissionsQuery } from "@/api/projectQueryApi";
 import ProjectPostCommentPolicyTypeSelect
   from "@/components/projectDetailScreen/projectFeedSettingsTab/projectPostCommentPolicyTypeSelect/ProjectPostCommentPolicyTypeSelect";
+import ProjectDomainList
+  from "@/components/projectDetailScreen/projectFeedSettingsTab/projectDomainList/ProjectDomainList";
 
 interface ProjectFeedSettingsTabProps {
   project: ProjectDto;
@@ -24,7 +25,10 @@ const ProjectFeedSettingsTab: React.FC<ProjectFeedSettingsTabProps> = ({ project
 
   return (
     <div className={cn(styles.container, project.archived && styles.archived)}>
-      <FeedUrlInfo accessKey={project.projectFeedSettings.accessKey} workspaceUserName={project.workspace.username} />
+      <ProjectDomainList
+        project={project}
+        hasExplicitAdminAccess={hasExplicitAdminAccess}
+      />
       <Line />
       <ProjectFeedInfo
         projectFeedSettings={project.projectFeedSettings}

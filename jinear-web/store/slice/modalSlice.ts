@@ -44,10 +44,12 @@ import ModalState, {
   UpgradeWorkspacePlanModalState,
   WorkspaceMemberInviteModalState,
   WorkspaceMemberPickerModalState,
-  WorkspacePickerModalState
+  WorkspacePickerModalState,
+  NewCustomProjectDomainModalState
 } from "model/app/store/modal/modalState";
 import { accountApi } from "@/api/accountApi";
 import { RootState } from "../store";
+import NewCustomProjectDomainModal from "@/components/modal/newCustomProjectDomainModal/NewCustomProjectDomainModal";
 
 const initialState = {
   loginWith2FaMailModal: {
@@ -213,6 +215,9 @@ const initialState = {
   },
   newMilestoneModal: {
     visible: false
+  },
+  newCustomProjectDomainModal: {
+    visible: false
   }
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
@@ -266,7 +271,8 @@ const initialState = {
   projectPrioritySelectModal: null | ProjectPrioritySelectModalState;
   projectStateSelectModal: null | ProjectStateSelectModalState;
   projectAndMilestonePickerModal: null | ProjectAndMilestonePickerModalState;
-  newMilestoneModal: null | NewMilestoneModalState
+  newMilestoneModal: null | NewMilestoneModalState,
+  newCustomProjectDomainModal: null | NewCustomProjectDomainModalState,
 };
 
 const slice = createSlice({
@@ -635,6 +641,13 @@ const slice = createSlice({
       state.newMilestoneModal = initialState.newMilestoneModal;
     },
 
+    popNewCustomProjectDomainModal: (state, action: PayloadAction<NewCustomProjectDomainModalState>) => {
+      state.newCustomProjectDomainModal = { ...action.payload, visible: true };
+    },
+    closeNewCustomProjectDomainModal: (state, action: PayloadAction<void>) => {
+      state.newCustomProjectDomainModal = initialState.newCustomProjectDomainModal;
+    },
+
     resetModals: () => initialState
   },
   extraReducers: (builder) => {
@@ -755,6 +768,8 @@ export const {
   closeProjectAndMilestonePickerModal,
   popNewMilestoneModal,
   closeNewMilestoneModal,
+  popNewCustomProjectDomainModal,
+  closeNewCustomProjectDomainModal,
   resetModals
 } = slice.actions;
 export default slice.reducer;
@@ -1030,3 +1045,6 @@ export const selectProjectAndMilestonePickerModalOnUnpick = (state: RootState) =
 
 export const selectNewMilestoneModalVisible = (state: RootState) => state.modal.newMilestoneModal?.visible;
 export const selectNewMilestoneModalProject = (state: RootState) => state.modal.newMilestoneModal?.project;
+
+export const selectNewCustomProjectDomainModalVisible = (state: RootState) => state.modal.newCustomProjectDomainModal?.visible;
+export const selectNewCustomProjectDomainModalProjectId = (state: RootState) => state.modal.newCustomProjectDomainModal?.projectId;

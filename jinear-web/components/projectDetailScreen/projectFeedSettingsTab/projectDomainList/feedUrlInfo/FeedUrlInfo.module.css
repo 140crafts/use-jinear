@@ -1,13 +1,8 @@
 .container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: .5rem;
-}
-
-.titleContainer {
-    display: flex;
-    flex-direction: column;
-    gap: .25rem;
+    align-items: center;
 }
 
 .urlInput {
@@ -18,5 +13,4 @@
     display: flex;
     flex-direction: row;
     gap: .5rem;
-    align-self: flex-end;
 }

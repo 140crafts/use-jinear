@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-11-26 01:04:18.
+// Generated using typescript-generator version 3.0.1157 on 2024-12-16 21:59:34.
 
 export interface BaseDto {
     createdDate: Date;
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -159,10 +159,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
-    ghistoryId: string;
-    gthreadId: string;
     gid: string;
+    gthreadId: string;
+    ghistoryId: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -505,8 +505,8 @@ export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
     accountWorkspaceAdminOrOwner: boolean;
-    accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
+    accountIsProjectTeamsMember: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -528,6 +528,14 @@ export interface MilestoneInitializeDto {
     targetDate?: Date | null;
 }
 
+export interface ProjectDomainDto extends BaseDto {
+    projectDomainId: string;
+    projectId: string;
+    domain: string;
+    domainType: ProjectDomainType;
+    cnameCheckResult: ProjectDomainCnameCheckResultType;
+}
+
 export interface ProjectDto extends BaseDto {
     projectId: string;
     workspaceId: string;
@@ -545,6 +553,7 @@ export interface ProjectDto extends BaseDto {
     milestones: MilestoneDto[];
     workspace: WorkspaceDto;
     projectFeedSettings: ProjectFeedSettingsDto;
+    domains: ProjectDomainDto[];
 }
 
 export interface ProjectFeedSettingsDto extends BaseDto {
@@ -1178,6 +1187,11 @@ export interface ProjectDatesUpdateRequest extends BaseRequest {
 
 export interface ProjectDescriptionUpdateRequest extends BaseRequest {
     description?: string | null;
+}
+
+export interface ProjectDomainInitializeRequest extends BaseRequest {
+    projectId: string;
+    domain: string;
 }
 
 export interface ProjectFeedSettingsOperationRequest extends BaseRequest {
@@ -1911,9 +1925,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    filename: string;
-    uri: URI;
     description: string;
+    uri: URI;
+    filename: string;
 }
 
 export interface InputStreamSource {
@@ -2006,7 +2020,7 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN";
 
 export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE";
 
@@ -2041,6 +2055,10 @@ export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_IN
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
 
 export type MilestoneStateType = "IN_PROGRESS" | "COMPLETED";
+
+export type ProjectDomainCnameCheckResultType = "CNAME_CHECK_OK_READY_FOR_MANAGER" | "CNAME_CHECK_FAILED" | "SETUP_COMPLETED" | "CANCELLED_CNAME_NOT_SETUP_IN_TIME";
+
+export type ProjectDomainType = "AUTO_GENERATED" | "CUSTOM";
 
 export type ProjectFeedAccessType = "PRIVATE" | "PUBLIC" | "GUESTS_ONLY";
 
