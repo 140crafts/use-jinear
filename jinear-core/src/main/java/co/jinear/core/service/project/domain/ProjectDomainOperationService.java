@@ -68,7 +68,7 @@ public class ProjectDomainOperationService {
         projectDomain.setProjectId(projectId);
         projectDomain.setDomain(domain);
         projectDomain.setDomainType(projectDomainType);
-        projectDomain.setCnameCheckResult(matchesCname ? ProjectDomainCnameCheckResultType.CNAME_CHECK_OK_READY_FOR_CADDY_MANAGER : ProjectDomainCnameCheckResultType.CNAME_CHECK_FAILED);
+        projectDomain.setCnameCheckResult(matchesCname ? ProjectDomainCnameCheckResultType.CNAME_CHECK_OK_READY_FOR_MANAGER : ProjectDomainCnameCheckResultType.CNAME_CHECK_FAILED);
         projectDomainRepository.save(projectDomain);
     }
 

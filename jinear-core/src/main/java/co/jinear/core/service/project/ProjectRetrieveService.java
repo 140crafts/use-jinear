@@ -50,4 +50,9 @@ public class ProjectRetrieveService {
         log.info("Check exists by project id and workspace id has started. projectId: {}, workspaceId: {}", projectId, workspaceId);
         return projectRepository.existsByProjectIdAndWorkspaceIdAndPassiveIdIsNull(projectId, workspaceId);
     }
+
+    public boolean checkIsArchived(String projectId) {
+        log.info("Check is archived has started. projectId: {}", projectId);
+        return projectRepository.existsByProjectIdAndArchivedAndPassiveIdIsNull(projectId, Boolean.TRUE);
+    }
 }
