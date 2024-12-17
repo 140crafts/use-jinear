@@ -14,4 +14,6 @@ public interface ProjectRepository extends JpaRepository<Project, String> {
     boolean existsByProjectIdAndWorkspaceIdAndPassiveIdIsNull(String projectId, String workspaceId);
 
     Page<Project> findAllByWorkspaceIdAndArchivedAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, Boolean archived, Pageable pageable);
+
+    boolean existsByProjectIdAndArchivedAndPassiveIdIsNull(String projectId, Boolean archived);
 }

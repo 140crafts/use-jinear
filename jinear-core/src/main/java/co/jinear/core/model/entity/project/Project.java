@@ -96,5 +96,6 @@ public class Project extends BaseEntity {
 
     @OneToMany(mappedBy = "project")
     @Where(clause = "passive_id is null")
+    @OrderBy("createdDate ASC")
     private Set<ProjectDomain> domains;
 }

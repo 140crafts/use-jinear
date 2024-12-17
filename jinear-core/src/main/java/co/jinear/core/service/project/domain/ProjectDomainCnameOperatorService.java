@@ -31,7 +31,7 @@ public class ProjectDomainCnameOperatorService {
     @Transactional
     public void findAvailableAndSync() {
         log.info("Find available and sync has started.");
-        List<ProjectDomain> newAndReadyDomains = projectDomainRepository.findAvailableForCnameConfigDomains(ProjectDomainType.CUSTOM, ProjectDomainCnameCheckResultType.CNAME_CHECK_OK_READY_FOR_CADDY_MANAGER);
+        List<ProjectDomain> newAndReadyDomains = projectDomainRepository.findAvailableForCnameConfigDomains(ProjectDomainType.CUSTOM, ProjectDomainCnameCheckResultType.CNAME_CHECK_OK_READY_FOR_MANAGER);
         if (!newAndReadyDomains.isEmpty()) {
             log.info("New and ready domains exists. size: {}", newAndReadyDomains.size());
             updateDomainsAsSetupCompleted(newAndReadyDomains);
@@ -48,7 +48,7 @@ public class ProjectDomainCnameOperatorService {
                 .filter(projectDomain -> projectDomainDnsChecker.matchesCname(projectDomain.getDomain()))
                 .forEach(projectDomain -> {
                     log.info("Project domain cname check success. Updating as ready for caddy manager.");
-                    projectDomain.setCnameCheckResult(ProjectDomainCnameCheckResultType.CNAME_CHECK_OK_READY_FOR_CADDY_MANAGER);
+                    projectDomain.setCnameCheckResult(ProjectDomainCnameCheckResultType.CNAME_CHECK_OK_READY_FOR_MANAGER);
                     projectDomainRepository.save(projectDomain);
                 });
     }

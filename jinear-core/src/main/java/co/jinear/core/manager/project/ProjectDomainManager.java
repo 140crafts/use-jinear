@@ -24,6 +24,7 @@ public class ProjectDomainManager {
 
     public BaseResponse initialize(ProjectDomainInitializeRequest projectDomainInitializeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        projectAccessValidator.validateProjectIsNotArchived(projectDomainInitializeRequest.getProjectId());
         projectAccessValidator.validateHasExplicitAdminAccess(projectDomainInitializeRequest.getProjectId(), currentAccountId);
         log.info("Project domain initialize has started. currentAccountId: {}", currentAccountId);
         projectDomainOperationService.initialize(projectDomainInitializeRequest.getProjectId(), projectDomainInitializeRequest.getDomain(), ProjectDomainType.CUSTOM);

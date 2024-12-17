@@ -1,5 +1,6 @@
 package co.jinear.core.validator.project;
 
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.project.AccountProjectPermissionFlags;
@@ -127,6 +128,13 @@ public class ProjectAccessValidator {
                 .canInitializePost(canInitializePost)
                 .canComment(canComment)
                 .build();
+    }
+
+    public void validateProjectIsNotArchived(String projectId) {
+        log.info("Validate project is not archived has started. projectId: {}", projectId);
+        if (projectRetrieveService.checkIsArchived(projectId)) {
+            throw new BusinessException("project.archived");
+        }
     }
 
     private void validateAccountIsProjectTeamsMember(String accountId, ProjectDto projectDto) {
