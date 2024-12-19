@@ -35,14 +35,16 @@ const ProjectFeedScreen: React.FC<ProjectFeedScreenProps> = ({}) => {
 
   return (authState == "NOT_DECIDED" || isAccountProjectPermissionsFetching || isRetrievePublicProjectFetching) ?
     <CircularLoading /> : (
-      <div className={styles.container}>
-        {retrievePublicProjectResponse && <ProjectInfo publicProject={retrievePublicProjectResponse.data} />}
-        {(retrievePublicProjectResponse && accountProjectPermissions?.data.canInitializePost) &&
-          <NewPostInput projectId={projectId} workspaceId={retrievePublicProjectResponse.data.workspaceId} />}
-        {retrievePublicProjectResponse &&
-          <PostList projectId={projectId} workspaceName={retrievePublicProjectResponse.data.workspaceUsername} />
-        }
-      </div>
+      <>
+        <div className={styles.container}>
+          {retrievePublicProjectResponse && <ProjectInfo publicProject={retrievePublicProjectResponse.data} />}
+          {(retrievePublicProjectResponse && accountProjectPermissions?.data.canInitializePost) &&
+            <NewPostInput projectId={projectId} workspaceId={retrievePublicProjectResponse.data.workspaceId} />}
+          {retrievePublicProjectResponse &&
+            <PostList projectId={projectId} workspaceName={retrievePublicProjectResponse.data.workspaceUsername} />
+          }
+        </div>
+      </>
     );
 };
 
