@@ -9,3 +9,9 @@
     pointer-events: none;
     cursor: not-allowed;
 }
+
+.infoContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}

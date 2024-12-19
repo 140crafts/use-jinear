@@ -53,11 +53,6 @@ const NewPostInput: React.FC<NewPostInputProps> = ({ projectId, workspaceId }) =
     if (target.files && target.files.length) {
       const file = event.target?.files?.[0];
       if (file) {
-        const fileSize = file?.size || 0;
-        if (fileSize / 1000 / 1000 > 32) {
-          toast(t("apiFileTooLargeError"));
-          return;
-        }
         setFiles([...files, file]);
       }
       return;

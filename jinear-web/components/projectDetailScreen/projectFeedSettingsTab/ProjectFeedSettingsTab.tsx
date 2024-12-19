@@ -13,6 +13,7 @@ import ProjectPostCommentPolicyTypeSelect
   from "@/components/projectDetailScreen/projectFeedSettingsTab/projectPostCommentPolicyTypeSelect/ProjectPostCommentPolicyTypeSelect";
 import ProjectDomainList
   from "@/components/projectDetailScreen/projectFeedSettingsTab/projectDomainList/ProjectDomainList";
+import ProjectLogoInfo from "@/components/projectDetailScreen/projectFeedSettingsTab/projectLogoInfo/ProjectLogoInfo";
 
 interface ProjectFeedSettingsTabProps {
   project: ProjectDto;
@@ -30,10 +31,17 @@ const ProjectFeedSettingsTab: React.FC<ProjectFeedSettingsTabProps> = ({ project
         hasExplicitAdminAccess={hasExplicitAdminAccess}
       />
       <Line />
-      <ProjectFeedInfo
-        projectFeedSettings={project.projectFeedSettings}
-        isFetching={isFetching}
-        editable={hasExplicitAdminAccess} />
+      <div className={styles.infoContainer}>
+        <ProjectLogoInfo
+          project={project}
+          projectFeedSettings={project.projectFeedSettings}
+          isFetching={isFetching}
+          editable={hasExplicitAdminAccess} />
+        <ProjectFeedInfo
+          projectFeedSettings={project.projectFeedSettings}
+          isFetching={isFetching}
+          editable={hasExplicitAdminAccess} />
+      </div>
       <Line />
       <ProjectFeedAccessTypeSelect
         projectFeedSettings={project.projectFeedSettings}
