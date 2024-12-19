@@ -40,7 +40,7 @@ public class ProjectDomain extends BaseEntity {
     @Column(name = "cname_check_result")
     private ProjectDomainCnameCheckResultType cnameCheckResult;
 
-    @OneToOne
+    @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "project_id", insertable = false, updatable = false)
     private Project project;

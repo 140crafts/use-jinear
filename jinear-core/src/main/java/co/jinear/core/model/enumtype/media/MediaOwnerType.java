@@ -4,5 +4,6 @@ public enum MediaOwnerType {
     USER,
     WORKSPACE,
     TASK,
-    PROJECT_POST;
+    PROJECT_POST,
+    PROJECT;
 }
