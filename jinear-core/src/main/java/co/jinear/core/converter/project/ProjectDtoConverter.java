@@ -1,5 +1,6 @@
 package co.jinear.core.converter.project;
 
+import co.jinear.core.converter.media.AccessibleMediaDtoConverter;
 import co.jinear.core.converter.richtext.RichTextConverter;
 import co.jinear.core.converter.workspace.WorkspaceDtoConverter;
 import co.jinear.core.converter.workspace.WorkspaceMemberDtoConverter;
@@ -16,7 +17,8 @@ import org.mapstruct.Mapping;
                 ProjectTeamDtoConverter.class,
                 MilestoneDtoConverter.class,
                 ProjectFeedSettingsDtoConverter.class,
-                ProjectDomainDtoConverter.class})
+                ProjectDomainDtoConverter.class,
+                AccessibleMediaDtoConverter.class})
 public interface ProjectDtoConverter {
 
     ProjectDto convert(Project project);

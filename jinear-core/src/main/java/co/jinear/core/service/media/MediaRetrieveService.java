@@ -31,7 +31,12 @@ public class MediaRetrieveService {
 
     public Optional<AccessibleMediaDto> retrieveProfilePictureOptional(String relatedObjectId) {
         log.info("Retrieve profile picture optional has started. relatedObjectId: {}", relatedObjectId);
-        return mediaRepository.findFirstByRelatedObjectIdAndFileTypeAndPassiveIdIsNull(relatedObjectId, FileType.PROFILE_PIC)
+        return retrieveAccessibleMediaWithRelatedObjectIdAndFileTypeOptional(relatedObjectId, FileType.PROFILE_PIC);
+    }
+
+    public Optional<AccessibleMediaDto> retrieveAccessibleMediaWithRelatedObjectIdAndFileTypeOptional(String relatedObjectId, FileType fileType) {
+        log.info("Retrieve profile picture optional has started. relatedObjectId: {}, fileType: {}", relatedObjectId, fileType);
+        return mediaRepository.findFirstByRelatedObjectIdAndFileTypeAndPassiveIdIsNullOrderByCreatedDateDesc(relatedObjectId, fileType)
                 .map(accessibleMediaDtoConverter::mapToAccessibleMediaDto);
     }
 

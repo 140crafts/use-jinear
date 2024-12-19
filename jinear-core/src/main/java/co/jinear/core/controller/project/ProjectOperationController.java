@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @RestController
@@ -63,6 +64,13 @@ public class ProjectOperationController {
     public BaseResponse updateLead(@PathVariable String projectId,
                                    @Valid @RequestBody ProjectUpdateLeadRequest projectUpdateLeadRequest) {
         return projectManager.updateLead(projectId, projectUpdateLeadRequest);
+    }
+
+    @PutMapping(value = "/{projectId}/logo", consumes = "multipart/form-data")
+    @ResponseStatus(HttpStatus.CREATED)
+    public BaseResponse updateLogo(@PathVariable String projectId,
+                                   MultipartFile file) {
+        return projectManager.updateLogo(projectId, file);
     }
 
     @PutMapping("/{projectId}/archived")

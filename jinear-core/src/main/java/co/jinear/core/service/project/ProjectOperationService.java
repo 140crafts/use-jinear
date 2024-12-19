@@ -3,21 +3,30 @@ package co.jinear.core.service.project;
 import co.jinear.core.converter.project.MilestoneInitializeDtoToInitializeMilestoneVoMapper;
 import co.jinear.core.converter.project.ProjectInitializeVoToEntityMapper;
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.model.dto.media.MediaDto;
+import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.entity.project.Project;
+import co.jinear.core.model.enumtype.media.FileType;
+import co.jinear.core.model.enumtype.media.MediaOwnerType;
+import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.enumtype.project.*;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
+import co.jinear.core.model.vo.media.InitializeMediaVo;
+import co.jinear.core.model.vo.media.RemoveMediaVo;
 import co.jinear.core.model.vo.project.ProjectFeedSettingsInitializeVo;
 import co.jinear.core.model.vo.project.ProjectInitializeVo;
 import co.jinear.core.model.vo.project.UpdateProjectDatesVo;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.repository.project.ProjectRepository;
+import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.project.domain.ProjectDomainOperationService;
 import co.jinear.core.service.richtext.RichTextInitializeService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -36,6 +45,7 @@ public class ProjectOperationService {
     private final MilestoneInitializeDtoToInitializeMilestoneVoMapper milestoneInitializeDtoToInitializeMilestoneVoMapper;
     private final ProjectFeedSettingsOperationService projectFeedSettingsOperationService;
     private final ProjectDomainOperationService projectDomainOperationService;
+    private final MediaOperationService mediaOperationService;
 
     @Transactional
     public void initialize(ProjectInitializeVo projectInitializeVo) {
@@ -113,6 +123,25 @@ public class ProjectOperationService {
         projectRepository.save(project);
     }
 
+    @Transactional
+    public void updateLogo(String projectId, MultipartFile logo) {
+        log.info("Update logo has started. projectId: {}", projectId);
+
+        Optional<String> oldLogoMediaIdOptional = Optional.of(projectId)
+                .map(projectRetrieveService::retrieve)
+                .map(ProjectDto::getLogo)
+                .map(MediaDto::getMediaId);
+
+        InitializeMediaVo initializeMediaVo = mapLogoInitializeMediaVo(projectId, logo);
+        mediaOperationService.initializeMedia(initializeMediaVo);
+
+        oldLogoMediaIdOptional.ifPresent(mediaId -> {
+            RemoveMediaVo removeMediaVo = new RemoveMediaVo();
+            removeMediaVo.setMediaId(mediaId);
+            mediaOperationService.deleteMedia(removeMediaVo);
+        });
+    }
+
     private void validateProjectIsNotArchived(Project project) {
         if (Boolean.TRUE.equals(project.getArchived())) {
             throw new BusinessException("project.archived");
@@ -175,5 +204,16 @@ public class ProjectOperationService {
         initializeRichTextVo.setValue(description);
         initializeRichTextVo.setType(RichTextType.PROJECT);
         return initializeRichTextVo;
+    }
+
+    private InitializeMediaVo mapLogoInitializeMediaVo(String projectId, MultipartFile logo) {
+        InitializeMediaVo initializeMediaVo = new InitializeMediaVo();
+        initializeMediaVo.setOwnerId(projectId);
+        initializeMediaVo.setRelatedObjectId(projectId);
+        initializeMediaVo.setFile(logo);
+        initializeMediaVo.setFileType(FileType.PROJECT_LOGO);
+        initializeMediaVo.setMediaOwnerType(MediaOwnerType.PROJECT);
+        initializeMediaVo.setVisibility(MediaVisibilityType.PUBLIC);
+        return initializeMediaVo;
     }
 }

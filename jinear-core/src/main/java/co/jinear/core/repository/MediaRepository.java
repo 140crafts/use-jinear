@@ -13,7 +13,7 @@ public interface MediaRepository extends JpaRepository<Media, String> {
 
     Optional<Media> findByMediaIdAndPassiveIdIsNull(String mediaId);
 
-    Optional<Media> findFirstByRelatedObjectIdAndFileTypeAndPassiveIdIsNull(String relatedObjectId, FileType fileType);
+    Optional<Media> findFirstByRelatedObjectIdAndFileTypeAndPassiveIdIsNullOrderByCreatedDateDesc(String relatedObjectId, FileType fileType);
 
     Optional<Media> findFirstByMediaKeyAndRelatedObjectIdAndPassiveIdIsNull(String mediaKey, String relatedObjectId);
 

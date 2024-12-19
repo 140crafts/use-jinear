@@ -12,11 +12,13 @@ import co.jinear.core.service.project.ProjectOperationService;
 import co.jinear.core.service.project.ProjectRetrieveService;
 import co.jinear.core.validator.project.ProjectAccessValidator;
 import co.jinear.core.validator.team.TeamValidator;
+import co.jinear.core.validator.workspace.WorkspaceTierValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.internal.util.StringHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Objects;
 
@@ -32,6 +34,7 @@ public class ProjectManager {
     private final ProjectAccessValidator projectAccessValidator;
     private final ProjectRetrieveService projectRetrieveService;
     private final ProjectDatesUpdateRequestToVoConverter projectDatesUpdateRequestToVoConverter;
+    private final WorkspaceTierValidator workspaceTierValidator;
 
     private final ProjectInitializeRequestToVoConverter projectInitializeRequestToVoConverter;
 
@@ -105,6 +108,14 @@ public class ProjectManager {
         return new BaseResponse();
     }
 
+    public BaseResponse updateLogo(String projectId, MultipartFile file) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        projectAccessValidator.validateHasExplicitAccess(projectId, currentAccountId);
+        retrieveProjectAndValidateWorkspaceTier(projectId);
+        projectOperationService.updateLogo(projectId, file);
+        return new BaseResponse();
+    }
+
     private void validateTeamIds(ProjectInitializeRequest projectInitializeRequest) {
         if (Objects.nonNull(projectInitializeRequest.getTeamIds())) {
             teamValidator.validateAllExistsAndActiveWithinSameWorkspace(projectInitializeRequest.getWorkspaceId(), projectInitializeRequest.getTeamIds());
@@ -116,5 +127,10 @@ public class ProjectManager {
             log.info("Validate lead has workspace access has started. leadWorkspaceMemberId: {}, workspaceId: {}", leadWorkspaceMemberId, workspaceId);
             workspaceValidator.validateWorkspaceMemberIdIsInWorkspace(leadWorkspaceMemberId, workspaceId);
         }
+    }
+
+    private void retrieveProjectAndValidateWorkspaceTier(String projectId) {
+        ProjectDto projectDto = projectRetrieveService.retrieve(projectId);
+        workspaceTierValidator.validateWorkspaceHasFileUploadAccess(projectDto.getWorkspaceId());
     }
 }
