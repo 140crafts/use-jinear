@@ -12,8 +12,16 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ publicProject }) => {
 
   return (
     <div className={styles.container}>
-      <LuBox size={28} />
-      <h2>{publicProject.title}</h2>
+      <div className={styles.logoAndInfoContainer}>
+        {publicProject.logo &&
+          <img
+            alt={"Project logo"}
+            src={publicProject.logo.url}
+            className={styles.profilePicture}
+          />
+        }
+        <h1 className={styles.title}>{publicProject.title}</h1>
+      </div>
       {publicProject.info?.value &&
         <Tiptap
           className={styles.input}

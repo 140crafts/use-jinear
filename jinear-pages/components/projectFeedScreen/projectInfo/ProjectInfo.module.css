@@ -8,3 +8,33 @@
     background-color: unset !important;
     padding: 0 !important;
 }
+
+.logoAndInfoContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.profilePicture {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 125px;
+    height: 125px;
+    border-radius: 50px;
+    border-color: var(--c-primary-shade-1);
+    border-width: thin;
+    /* border-width: 0px; */
+    border-style: solid;
+    object-fit: cover;
+}
+
+.profilePicture:hover {
+    background-color: var(--c-primary-shade-0);
+    cursor: pointer;
+}
+
+.title{
+    padding-top: 1rem;
+}
