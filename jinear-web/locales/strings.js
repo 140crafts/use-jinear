@@ -4580,6 +4580,14 @@ const translations = {
     en: "You can change who can comment posts.",
     tr: "Gönderilere kimin yorum yapabileceğini ayarlayabilirsiniz."
   },
+  projectLogoSectionTitle: {
+    en: "Project Logo",
+    tr: "Proje Logosu"
+  },
+  projectLogoSectionText: {
+    en: "You can set a logo for your project. This logo will shown on feed page header.",
+    tr: "Projenize bir logo atayın. Logo akış sayfasının üst tarafında görünecektir."
+  },
   homePageMobileAppSectionTitle: {
     en: "Easy Access on Browser, Mobile or PWA!",
     tr: "Tarayıcınızda, Mobilde veya PWA ile Hemen Erişin!"

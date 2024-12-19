@@ -87,6 +87,18 @@ export const projectOperationApi = api.injectEndpoints({
         body: body
       }),
       invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`, `v1/project/query/{projectId}/info`]
+    }),
+    //
+    updateProjectLogo: build.mutation<BaseResponse, {
+      projectId: string,
+      formData?: FormData
+    }>({
+      query: ({ projectId, formData }: { projectId: string, formData?: FormData }) => ({
+        url: `v1/project/operation/${projectId}/logo`,
+        method: "PUT",
+        body: formData
+      }),
+      invalidatesTags: ["v1/project/query/assigned/{workspaceId}", "v1/project/query/all/{workspaceId}", "v1/project/query/archived/{workspaceId}", `v1/project/query/{projectId}`, `v1/project/query/{projectId}/info`]
     })
     //
   })
@@ -100,7 +112,8 @@ export const {
   useUpdateProjectPriorityMutation,
   useUpdateProjectDatesMutation,
   useUpdateProjectLeadMutation,
-  useUpdateProjectArchivedMutation
+  useUpdateProjectArchivedMutation,
+  useUpdateProjectLogoMutation
 } = projectOperationApi;
 
 export const {
@@ -112,6 +125,7 @@ export const {
     updateProjectPriority,
     updateProjectDates,
     updateProjectLead,
-    updateProjectArchived
+    updateProjectArchived,
+    updateProjectLogo
   }
 } = projectOperationApi;
