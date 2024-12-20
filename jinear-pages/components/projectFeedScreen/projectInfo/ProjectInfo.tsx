@@ -12,26 +12,26 @@ const ProjectInfo: React.FC<ProjectInfoProps> = ({ publicProject }) => {
 
   return (
     <div className={styles.container}>
-      <div className={styles.logoAndInfoContainer}>
-        {publicProject.logo &&
-          <img
-            alt={"Project logo"}
-            src={publicProject.logo.url}
-            className={styles.profilePicture}
-          />
-        }
-        <h1 className={styles.title}>{publicProject.title}</h1>
-      </div>
-      {publicProject.info?.value &&
-        <Tiptap
-          className={styles.input}
-          editorClassName={styles.input}
-          editorWrapperClassName={styles.editorWrapper}
-          editable={false}
-          hideActionBarWhenEmpty={false}
-          content={publicProject.info?.value}
+      {publicProject.logo &&
+        <img
+          alt={"Project logo"}
+          src={publicProject.logo.url}
+          className={styles.profilePicture}
         />
       }
+      <div className={styles.infoContainer}>
+        <h1 className={styles.title}>{publicProject.title}</h1>
+        {publicProject.info?.value &&
+          <Tiptap
+            className={styles.input}
+            editorClassName={styles.input}
+            editorWrapperClassName={styles.editorWrapper}
+            editable={false}
+            hideActionBarWhenEmpty={false}
+            content={publicProject.info?.value}
+          />
+        }
+      </div>
     </div>
   );
 };

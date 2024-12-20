@@ -1,6 +1,6 @@
 .container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
 }
 
@@ -9,9 +9,9 @@
     padding: 0 !important;
 }
 
-.logoAndInfoContainer {
+.infoContainer {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 1rem;
 }
 
@@ -22,11 +22,11 @@
     position: relative;
     width: 125px;
     height: 125px;
-    border-radius: 50px;
-    border-color: var(--c-primary-shade-1);
-    border-width: thin;
+    border-radius: var(--border-radius);
+    /*border-color: var(--c-primary-shade-1);*/
+    /*border-width: none;*/
     /* border-width: 0px; */
-    border-style: solid;
+    /*border-style: solid;*/
     object-fit: cover;
 }
 
@@ -35,6 +35,6 @@
     cursor: pointer;
 }
 
-.title{
-    padding-top: 1rem;
+.title {
+    padding-top: 0rem;
 }
