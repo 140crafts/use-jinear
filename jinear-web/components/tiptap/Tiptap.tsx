@@ -9,6 +9,7 @@ import { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import styles from "./Tiptap.module.css";
 import ActionBar, { TipTapActionBarMode } from "./actionBar/ActionBar";
 import { Extension } from "@tiptap/core";
+import Image from "@tiptap/extension-image";
 
 export interface ITiptapRef {
   clearContent: () => void;
@@ -31,6 +32,7 @@ interface TiptapProps {
   hideActionBarWhenEmpty?: boolean;
   extensions?: Extension[];
   onFocus?: () => void;
+  workspaceIdForImages?: string
 }
 
 const Tiptap = (
@@ -48,7 +50,8 @@ const Tiptap = (
     actionBarMode = "full",
     hideActionBarWhenEmpty = false,
     extensions = [],
-    onFocus
+    onFocus,
+    workspaceIdForImages
   }: TiptapProps,
   ref: any
 ) => {
@@ -71,6 +74,9 @@ const Tiptap = (
           rel: "noopener noreferrer",
           target: null
         }
+      }),
+      Image.configure({
+        allowBase64: true
       }),
       ...extensions
     ],
@@ -95,7 +101,7 @@ const Tiptap = (
 
   return (
     <div className={cn(styles.container, className)} onFocus={onFocus}>
-      {editor && !shouldHideActionBar && editable && <ActionBar editor={editor} mode={actionBarMode} />}
+      {editor && !shouldHideActionBar && editable && <ActionBar editor={editor} mode={actionBarMode} workspaceIdForImages={workspaceIdForImages}/>}
       <EditorContent editor={editor} className={editorWrapperClassName} />
       {htmlInputId &&
         <input id={htmlInputId} type="hidden" {...register?.(registerKey ? registerKey : htmlInputId)} value={html} />}
