@@ -24,4 +24,6 @@ public interface MediaRepository extends JpaRepository<Media, String> {
     List<Media> findAllByRelatedObjectIdAndFileTypeAndPassiveIdIsNullOrderByCreatedDateAsc(String relatedObjectId, FileType fileType);
 
     List<Media> findAllByVisibilityAndPublicUntilBeforeAndPassiveIdIsNull(MediaVisibilityType visibility, ZonedDateTime publicUntilBefore);
+
+    Optional<Media> findFirstByRelatedObjectIdAndMediaKeyAndPassiveIdIsNull(String relatedObjectId, String mediaKey);
 }

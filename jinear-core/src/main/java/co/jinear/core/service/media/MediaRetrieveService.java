@@ -83,4 +83,8 @@ public class MediaRetrieveService {
                 .map(mediaDtoConverter::map)
                 .orElseThrow(NotFoundException::new);
     }
+
+    public Optional<Media> retrieveEntityWithRelatedObjectIdAndMediaKey(String relatedObjectId, String mediaKey) {
+        return mediaRepository.findFirstByRelatedObjectIdAndMediaKeyAndPassiveIdIsNull(relatedObjectId,mediaKey);
+    }
 }

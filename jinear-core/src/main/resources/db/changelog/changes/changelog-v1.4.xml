@@ -299,4 +299,18 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-ownership_status-to-media">
+        <addColumn tableName="media">
+            <column name="ownership_status" type="integer" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-late_owner_id-to-media">
+        <addColumn tableName="media">
+            <column name="late_owner_id" type="char(26)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

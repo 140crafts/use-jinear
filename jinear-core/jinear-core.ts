@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-12-18 22:42:41.
+// Generated using typescript-generator version 3.0.1157 on 2024-12-21 16:49:32.
 
 export interface BaseDto {
     createdDate: Date;
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -159,10 +159,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
     gthreadId: string;
     ginternalDate: string;
     ghistoryId: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1640,6 +1640,10 @@ export interface ReminderResponse extends BaseResponse {
     data: ReminderDto[];
 }
 
+export interface RichTextTempImageResponse extends BaseResponse {
+    data: AccessibleMediaDto;
+}
+
 export interface RobotSecretResponse extends BaseResponse {
     data: RobotSecretDto;
 }
@@ -1927,9 +1931,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
+    filename: string;
     uri: URI;
     description: string;
-    filename: string;
 }
 
 export interface InputStreamSource {
@@ -2024,11 +2028,11 @@ export type LocaleType = "TR" | "EN";
 
 export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN";
 
-export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO";
+export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO" | "RICH_TEXT_IMAGE_TEMP" | "RICH_TEXT_IMAGE";
 
 export type MediaFileProviderType = "GCLOUD";
 
-export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK" | "PROJECT_POST" | "PROJECT";
+export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK" | "PROJECT_POST" | "PROJECT" | "RICH_TEXT";
 
 export type MediaVisibilityType = "PUBLIC" | "PRIVATE" | "TEMP_PUBLIC";
 

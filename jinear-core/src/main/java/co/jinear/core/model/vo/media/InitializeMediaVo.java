@@ -1,6 +1,7 @@
 package co.jinear.core.model.vo.media;
 
 import co.jinear.core.model.enumtype.media.FileType;
+import co.jinear.core.model.enumtype.media.MediaFileOwnershipStatusType;
 import co.jinear.core.model.enumtype.media.MediaOwnerType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import lombok.Getter;
@@ -18,4 +19,5 @@ public class InitializeMediaVo {
     private FileType fileType;
     private MediaOwnerType mediaOwnerType;
     private MediaVisibilityType visibility;
+    private MediaFileOwnershipStatusType ownershipStatus = MediaFileOwnershipStatusType.OWNED;
 }
