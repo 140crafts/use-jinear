@@ -343,6 +343,14 @@
             <artifactId>biweekly</artifactId>
             <version>0.6.8</version>
         </dependency>
+
+        <dependency>
+            <!-- jsoup HTML parser library @ https://jsoup.org/ -->
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.18.3</version>
+        </dependency>
+
     </dependencies>
 
     <build>

@@ -1,12 +1,10 @@
 package co.jinear.core.model.entity.media;
 
+import co.jinear.core.converter.media.MediaFileOwnershipStatusTypeConverter;
 import co.jinear.core.converter.media.MediaFileProviderTypeConverter;
 import co.jinear.core.converter.media.MediaVisibilityTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
-import co.jinear.core.model.enumtype.media.FileType;
-import co.jinear.core.model.enumtype.media.MediaFileProviderType;
-import co.jinear.core.model.enumtype.media.MediaOwnerType;
-import co.jinear.core.model.enumtype.media.MediaVisibilityType;
+import co.jinear.core.model.enumtype.media.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,6 +58,9 @@ public class Media extends BaseEntity {
     @Column(name = "content_type")
     private String contentType;
 
+    @Column(name = "late_owner_id")
+    private String lateOwnerId;
+
     @Convert(converter = MediaVisibilityTypeConverter.class)
     @Column(name = "visibility")
     private MediaVisibilityType visibility;
@@ -70,4 +71,8 @@ public class Media extends BaseEntity {
     @Convert(converter = MediaFileProviderTypeConverter.class)
     @Column(name = "provider_type")
     private MediaFileProviderType providerType;
+
+    @Convert(converter = MediaFileOwnershipStatusTypeConverter.class)
+    @Column(name = "ownership_status")
+    private MediaFileOwnershipStatusType ownershipStatus;
 }

@@ -56,8 +56,9 @@ public class WebConfig implements WebMvcConfigurer {
                         }
                     }
                     return elementName;
-                }, "h1", "h2", "h3", "h4", "h5", "h6", "p", "b", "i", "em", "strong", "a", "br", "li", "ul", "ol", "blockquote", "hr", "pre", "code")
+                }, "h1", "h2", "h3", "h4", "h5", "h6", "p", "b", "i", "em", "strong", "a", "br", "li", "ul", "ol", "blockquote", "hr", "pre", "code", "img")
                 .allowAttributes("href", TARGET, "rel").onElements("a")
+                .allowAttributes("src").onElements("img")
                 .requireRelNofollowOnLinks()
                 .toFactory();
     }

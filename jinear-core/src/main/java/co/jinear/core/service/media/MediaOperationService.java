@@ -5,6 +5,7 @@ import co.jinear.core.converter.media.AccessibleMediaDtoConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.media.AccessibleMediaDto;
 import co.jinear.core.model.entity.media.Media;
+import co.jinear.core.model.enumtype.media.MediaFileOwnershipStatusType;
 import co.jinear.core.model.enumtype.media.MediaFileProviderType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.vo.media.InitializeMediaVo;
@@ -57,7 +58,7 @@ public class MediaOperationService {
 
         String mediaKey = RandomHelper.generateULID();
         String path = generatePath(initializeMediaVo, mediaKey);
-        Media media = saveMedia(initializeMediaVo, mediaKey, path, activeFileStorageType);
+        Media media = saveMedia(initializeMediaVo, mediaKey, path, activeFileStorageType, initializeMediaVo.getOwnershipStatus());
 
         MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(activeFileStorageType);
         MediaInitializeResultVo mediaInitializeResultVo = mediaFileOperationStrategy.save(initializeMediaVo.getFile(), path);
@@ -125,6 +126,17 @@ public class MediaOperationService {
         mediaFileOperationStrategy.makePublic(media.getBucketName(), media.getStoragePath());
     }
 
+    public void updateLateOwnerIdAndOwnershipStatus(String relatedObjectId, String mediaKey, String lateOwnerId) {
+        log.info("Update late owner id and ownership status has started. relatedObjectId: {}, mediaKey: {}, lateOwnerId: {}", relatedObjectId, mediaKey, lateOwnerId);
+        mediaRetrieveService.retrieveEntityWithRelatedObjectIdAndMediaKey(relatedObjectId, mediaKey)
+                .ifPresent(media -> {
+                    log.info("Media found updating.");
+                    media.setLateOwnerId(lateOwnerId);
+                    media.setOwnershipStatus(MediaFileOwnershipStatusType.OWNED);
+                    mediaRepository.save(media);
+                });
+    }
+
     private void deleteProfilePictureIfExists(InitializeMediaVo initializeMediaVo, Optional<AccessibleMediaDto> mediaDtoOptional) {
         mediaDtoOptional.map(internalMediaDto -> {
                     RemoveMediaVo removeMediaVo = new RemoveMediaVo();
@@ -139,7 +151,7 @@ public class MediaOperationService {
         return mediaRepository.findByMediaIdAndPassiveIdIsNull(mediaId).orElseThrow(NotFoundException::new);
     }
 
-    private Media saveMedia(InitializeMediaVo initializeMediaVo, String mediaKey, String path, MediaFileProviderType activeFileStorageType) {
+    private Media saveMedia(InitializeMediaVo initializeMediaVo, String mediaKey, String path, MediaFileProviderType activeFileStorageType, MediaFileOwnershipStatusType ownershipStatus) {
         Media media = new Media();
         media.setMediaKey(mediaKey);
         media.setOwnerId(initializeMediaVo.getOwnerId());
@@ -149,6 +161,7 @@ public class MediaOperationService {
         media.setVisibility(initializeMediaVo.getVisibility());
         media.setStoragePath(path);
         media.setProviderType(activeFileStorageType);
+        media.setOwnershipStatus(ownershipStatus);
 
         Optional.of(initializeMediaVo)
                 .map(InitializeMediaVo::getFile)
