@@ -1,6 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
 import { Editor } from "@tiptap/react";
-import React from "react";
+import React, { ChangeEvent, useEffect, useRef } from "react";
 import {
   LuBold,
   LuCode2,
@@ -10,6 +10,7 @@ import {
   LuHeading4,
   LuHeading5,
   LuHeading6,
+  LuImage,
   LuItalic,
   LuList,
   LuQuote,
@@ -21,15 +22,61 @@ import {
 import { MdHorizontalRule, MdLayersClear } from "react-icons/md";
 import { PiListNumbers } from "react-icons/pi";
 import styles from "./ActionBar.module.css";
+import { useUploadRichTextImageMutation } from "@/api/richTextImageApi";
+import { useAppDispatch } from "@/store/store";
+import { changeLoadingModalVisibility } from "@/slice/modalSlice";
 
 export type TipTapActionBarMode = "simple" | "full" | "none";
 
 interface ActionBarProps {
   editor: Editor;
   mode?: TipTapActionBarMode;
+  workspaceIdForImages?: string;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full" }) => {
+const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceIdForImages }) => {
+  const dispatch = useAppDispatch();
+  const imagePickerButtonRef = useRef<HTMLInputElement>(null);
+  const [uploadRichTextImage, { data: uploadRichTextImageResponse, isLoading }] = useUploadRichTextImageMutation();
+
+  useEffect(() => {
+    if (uploadRichTextImageResponse?.data && editor) {
+      const url = uploadRichTextImageResponse.data.url;
+      if (url && editor) {
+        editor.chain().focus().setImage({ src: url }).run();
+      }
+    }
+  }, [uploadRichTextImageResponse, editor]);
+
+  useEffect(() => {
+    if (dispatch) {
+      dispatch(changeLoadingModalVisibility({ visible: isLoading }));
+    }
+  }, [dispatch, isLoading]);
+
+  const pickPhoto = () => {
+    if (!editor) {
+      return;
+    }
+    if (imagePickerButtonRef.current) {
+      imagePickerButtonRef.current.value = "";
+      imagePickerButtonRef.current.click();
+    }
+  };
+
+  const onSelectFile = (event: ChangeEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement;
+    if (target.files && target.files.length) {
+      const file = event.target?.files?.[0];
+      if (file && workspaceIdForImages) {
+        const formData = new FormData();
+        formData.append("file", file);
+        uploadRichTextImage({ workspaceId: workspaceIdForImages, formData });
+      }
+      return;
+    }
+  };
+
   return (editor && mode != "none") ? (
     <div className={styles.container}>
       <Button
@@ -179,6 +226,24 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full" }) => {
         >
           <LuRedo2 />
         </Button>
+      )}
+      {mode != "simple" && workspaceIdForImages && (
+        <>
+          <Button
+            onClick={pickPhoto}
+            disabled={isLoading}
+            variant={ButtonVariants.hoverFilled}
+          >
+            <LuImage />
+          </Button>
+          <input
+            ref={imagePickerButtonRef}
+            type="file"
+            accept="image/*"
+            className={styles.photoInput}
+            onChange={onSelectFile}
+          />
+        </>
       )}
     </div>
   ) : null;

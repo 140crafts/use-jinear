@@ -129,6 +129,7 @@ const NewPostInput: React.FC<NewPostInputProps> = ({ projectId, workspaceId }) =
               placeholder={t("projectPostNewUpdatePlaceholder")}
               editable={!isLoading}
               hideActionBarWhenEmpty={false}
+              workspaceIdForImages={workspaceId}
             />
 
             <input
