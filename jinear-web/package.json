@@ -16,6 +16,7 @@
     "@mui/material": "^5.10.15",
     "@reduxjs/toolkit": "2.2.2",
     "@sentry/nextjs": "^7.47.0",
+    "@tiptap/extension-image": "^2.10.4",
     "@tiptap/extension-link": "^2.1.13",
     "@tiptap/extension-placeholder": "^2.1.13",
     "@tiptap/extension-text-style": "^2.8.0",
