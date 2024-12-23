@@ -4756,6 +4756,10 @@ const translations = {
     en: "Domain",
     tr: "Alan Adı"
   },
+  newCustomProjectDomainModalBlogPostCheckOut: {
+    en: "Check out our how you do it on our blog post.",
+    tr: "Bunu nasıl yapacağınızı blog yazımızda inceleyin."
+  },
   newCustomProjectDomainModalDomainNotValid: {
     en: "Domain name is not valid",
     tr: "Alan adı geçersiz"
