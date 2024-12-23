@@ -13,7 +13,7 @@ import { useInitializeProjectDomainMutation } from "@/api/projectDomainApi";
 import { ProjectDomainInitializeRequest } from "@/be/jinear-core";
 import { isValidDomainName } from "@/utils/validator";
 import toast from "react-hot-toast";
-import Button, { ButtonVariants } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 
 interface NewCustomProjectDomainModalProps {
 
@@ -86,6 +86,11 @@ const NewCustomProjectDomainModal: React.FC<NewCustomProjectDomainModalProps> = 
               />
             </div>
           </label>
+
+          <span>
+               <a href={`https://forum.jinear.co/post/01jfn48prw90x0bt86yd4pdyje`}
+                  target={"_blank"} rel={"noopener noreferrer"}>{t("newCustomProjectDomainModalBlogPostCheckOut")}</a>
+            </span>
 
           <Button
             disabled={isInitializeLoading}
