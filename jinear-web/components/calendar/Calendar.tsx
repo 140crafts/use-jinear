@@ -38,9 +38,6 @@ interface CalendarProps {
 const logger = Logger("Calendar");
 
 const Calendar: React.FC<CalendarProps> = ({ workspace, className }) => {
-  const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const workspaceFirstTeam = useWorkspaceFirstTeam(workspace.workspaceId);
   const setQueryStateMultiple = useSetQueryStateMultiple();
   const [highlightedEventId, setHighlightedEventId] = useState<string>("");
   const [squeezedView, setSqueezedView] = useState<boolean>(true);
@@ -68,12 +65,6 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, className }) => {
     setQueryStateMultiple(nextQueryState);
   }, [JSON.stringify(viewType), JSON.stringify(viewingDate), defaultCalendarViewType]);
 
-  const _popNewTaskModal = () => {
-    if (workspace) {
-      dispatch(popNewTaskModal({ visible: true, workspace, team: workspaceFirstTeam }));
-    }
-  };
-
   return (
     <CalendarContext.Provider
       value={{
@@ -97,16 +88,6 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, className }) => {
         {workspace && viewType == "w" && <WeekView workspace={workspace} />}
         {workspace && viewType == "d" && <DayView workspace={workspace} />}
         {workspace && viewType == "2d" && <TwoDayView workspace={workspace} />}
-        {workspace &&
-          <Button
-            variant={ButtonVariants.brandColor}
-            className={styles.newTaskButton}
-            onClick={_popNewTaskModal}
-          >
-            <LuPenSquare className={'icon'}/>
-            <b>{t("sideMenuNewTask")}</b>
-          </Button>
-        }
       </div>
     </CalendarContext.Provider>
   );

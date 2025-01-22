@@ -22,6 +22,8 @@ const BodyFixer: React.FC<BodyFixerProps> = ({}) => {
   const pwa = isPwa();
   const _isWebView = isWebView();
 
+  logger.log({ isAnyModalVisible, isAnyMenuVisible, isMobile });
+
   useEffect(() => {
     if (document && window) {
       if (isAnyModalVisible || (isAnyMenuVisible && isMobile)) {

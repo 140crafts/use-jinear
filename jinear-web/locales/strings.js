@@ -2842,7 +2842,7 @@ const translations = {
   },
   mainFeaturesMenuLabelAssignedToMe: {
     en: "Assignments",
-    tr: "Atananlar"
+    tr: "Bana Atananlar"
   },
   mainFeaturesMenuLabelConversations: {
     en: "Messages",
