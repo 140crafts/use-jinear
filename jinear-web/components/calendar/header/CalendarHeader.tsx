@@ -96,16 +96,20 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({}) => {
   return (
     <>
       <div className={styles.mainCalendarHeader}>
+
         <div className={styles.headerInfoContainer}>
           <div className={styles.headerLabelContainer}>
             <h1 className={styles.monthHeader}>{title}</h1>
           </div>
         </div>
+
         <div className={styles.calendarNavigation}>
+
           <div className={styles.viewTypeContainer}>
             <label htmlFor="calendar-view-type-select" className={styles.viewTypeIconContainer}>
-              <LuCalendar size={11} />
+              <LuCalendar size={11} className={'icon'} />
             </label>
+
             <select
               id="calendar-view-type-select"
               className={styles.viewTypeSelect}
@@ -119,7 +123,9 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({}) => {
               ))}
             </select>
           </div>
+
           <div className="spacer-w-1" />
+
           <Button onClick={prevPeriod}>
             <IoCaretBack />
           </Button>
@@ -131,6 +137,7 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({}) => {
           </Button>
         </div>
       </div>
+
     </>
   );
 };

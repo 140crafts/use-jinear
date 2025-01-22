@@ -25,8 +25,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
   const calendarPath = `/${workspace?.username}/calendar`;
   const tasksPath = `/${workspace?.username}/tasks/projects`;
   const inboxPath = `/${workspace?.username}/inbox`;
-  const assignedToMePath = `/${workspace?.username}/assigned-to-me`;
-  const lastActivitiesPath = `/${workspace?.username}/last-activities`;
+
   const conversationsPath = `/${workspace?.username}/conversations`;
 
   const unreadConversationCount = useLiveQuery(() => getUnreadConversationCount(workspace.workspaceId, currentAccountId)) ?? 0;
@@ -58,36 +57,22 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
 
       <Button
         className={styles.iconButton}
-        href={tasksPath}
-        variant={currentPath?.indexOf(tasksPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
-      >
-        <LuCheckSquare className={styles.icon} />
-        {t("mainFeaturesMenuLabelTasks")}
-      </Button>
-      <Button
-        className={styles.iconButton}
         href={calendarPath}
         variant={currentPath?.indexOf(calendarPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
       >
         <LuCalendarDays className={styles.icon} />
         {t("mainFeaturesMenuLabelCalendar")}
       </Button>
+
       <Button
         className={styles.iconButton}
-        href={lastActivitiesPath}
-        variant={currentPath?.indexOf(lastActivitiesPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        href={tasksPath}
+        variant={currentPath?.indexOf(tasksPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
       >
-        <LuRss className={styles.icon} />
-        {t("mainFeaturesMenuLabelLastActivities")}
+        <LuCheckSquare className={styles.icon} />
+        {t("mainFeaturesMenuLabelTasks")}
       </Button>
-      <Button
-        className={styles.iconButton}
-        href={assignedToMePath}
-        variant={currentPath?.indexOf(assignedToMePath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
-      >
-        <LuClipboardEdit className={styles.icon} />
-        {t("mainFeaturesMenuLabelAssignedToMe")}
-      </Button>
+
     </div>
   );
 };

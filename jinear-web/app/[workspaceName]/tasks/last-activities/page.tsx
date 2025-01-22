@@ -1,6 +1,6 @@
 "use client";
 import LastActivitiesList from "@/components/lastActivitiesScreen/LastActivitiesList";
-import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
+import { selectWorkspaceFromWorkspaceUsername } from "@/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { useParams } from "next/navigation";
 import React from "react";

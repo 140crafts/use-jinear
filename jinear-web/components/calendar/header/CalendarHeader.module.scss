@@ -2,10 +2,10 @@
 
 .mainCalendarHeader {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   /* align-items: center; */
-  padding: 0 0.25rem;
-  height: var(--calendar-header-main-height);
+  //padding: 0 0.25rem;
+  //height: var(--calendar-header-main-height);
 }
 
 .headerInfoContainer {
@@ -75,5 +75,11 @@
 @media (max-width: 1240px) {
   .squeezedViewToggleButton {
     display: flex;
+  }
+}
+
+@media (max-width:  $mobile-l) {
+  .mainCalendarHeader {
+    flex-direction: column;
   }
 }

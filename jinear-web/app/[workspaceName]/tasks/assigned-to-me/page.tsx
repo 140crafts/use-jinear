@@ -3,8 +3,8 @@ import AssignedToMeScreenHeader
   from "@/components/assignedToMeScreen/assignedToMeScreenHeader/AssignedToMeScreenHeader";
 import PrefilteredPaginatedTaskList
   from "@/components/taskLists/prefilteredPaginatedTaskList/PrefilteredPaginatedTaskList";
-import { TeamDto } from "@/model/be/jinear-core";
-import { selectCurrentAccountId, selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
+import { TeamDto } from "@/be/jinear-core";
+import { selectCurrentAccountId, selectWorkspaceFromWorkspaceUsername } from "@/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
 import { useParams } from "next/navigation";
 import React, { useState } from "react";
