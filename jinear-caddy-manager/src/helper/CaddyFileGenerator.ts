@@ -21,7 +21,7 @@ https://*.projects.jinear.co {
     }
 }
 
-https://storage.jinear.co {
+https://files.jinear.co {
     reverse_proxy {
         to https://storage.googleapis.com
         header_up Host {http.reverse_proxy.upstream.host}
