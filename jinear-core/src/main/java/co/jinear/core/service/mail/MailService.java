@@ -55,7 +55,7 @@ public class MailService {
         log.info("Send mail has started. to: {}", sendMailVo.getTo());
         try (ClosableSmtpConnection transport = smtpConnectionPool.borrowObject()) {
             MimeMessage message = new MimeMessage(transport.getSession());
-            message.setFrom(mailProperties.getMailUserName());
+            message.setFrom(mailProperties.getSenderAddress());
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(sendMailVo.getTo()));
             message.setSubject(sendMailVo.getSubject(), "UTF-8");
             message.setContent(sendMailVo.getContext(), "text/html; charset=UTF-8");

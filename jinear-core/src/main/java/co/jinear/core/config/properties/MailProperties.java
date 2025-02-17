@@ -14,4 +14,7 @@ public class MailProperties {
 
     @Value("${spring.mail.username}")
     private String mailUserName;
+
+    @Value("${spring.mail.sender-address}")
+    private String senderAddress;
 }
