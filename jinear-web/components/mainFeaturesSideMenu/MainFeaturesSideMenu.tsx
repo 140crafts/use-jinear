@@ -11,6 +11,8 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { getUnreadConversationCount } from "../../repository/IndexedDbRepository";
 import { useTypedSelector } from "@/store/store";
 import { selectCurrentAccountId } from "@/slice/accountSlice";
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
+import { isInGodModeWhitelist } from "@/utils/constants";
 
 interface MainFeaturesSideMenuProps {
   workspace: AccountsWorkspacePerspectiveDto;
@@ -19,11 +21,12 @@ interface MainFeaturesSideMenuProps {
 const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
-  // const messagingEnabled = useFeatureFlag("MESSAGING") || isInGodModeWhitelist(currentAccountId);
-  const messagingEnabled = false;
+  const messagingEnabled = useFeatureFlag("MESSAGING") || isInGodModeWhitelist(currentAccountId);
+  // const messagingEnabled = false;
   const currentPath = usePathname();
   const calendarPath = `/${workspace?.username}/calendar`;
-  const tasksPath = `/${workspace?.username}/tasks/projects`;
+  const tasksButtonOpensPath = `/${workspace?.username}/tasks/last-activities`;
+  const tasksPath = `/${workspace?.username}/tasks`;
   const inboxPath = `/${workspace?.username}/inbox`;
 
   const conversationsPath = `/${workspace?.username}/conversations`;
@@ -44,7 +47,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
         <Button
           className={styles.iconButton}
           href={conversationsPath}
-          variant={currentPath?.indexOf(conversationsPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+          variant={currentPath?.indexOf(conversationsPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
         >
           <div className={styles.iconContainer}>
             <LuMessagesSquare className={styles.icon} />
@@ -58,7 +61,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
       <Button
         className={styles.iconButton}
         href={calendarPath}
-        variant={currentPath?.indexOf(calendarPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        variant={currentPath?.indexOf(calendarPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
       >
         <LuCalendarDays className={styles.icon} />
         {t("mainFeaturesMenuLabelCalendar")}
@@ -66,8 +69,8 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
 
       <Button
         className={styles.iconButton}
-        href={tasksPath}
-        variant={currentPath?.indexOf(tasksPath) != -1 ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+        href={tasksButtonOpensPath}
+        variant={currentPath?.indexOf(tasksPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
       >
         <LuCheckSquare className={styles.icon} />
         {t("mainFeaturesMenuLabelTasks")}
