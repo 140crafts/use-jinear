@@ -26,7 +26,7 @@ const InboxButton: React.FC<InboxButtonProps> = ({ isActive, workspace, buttonSt
 
   return (
     <Button
-      variant={isActive ? ButtonVariants.filled : ButtonVariants.hoverFilled2}
+      variant={isActive ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
       className={buttonStyle}
       href={`/${workspace?.username}/inbox`}
     >
