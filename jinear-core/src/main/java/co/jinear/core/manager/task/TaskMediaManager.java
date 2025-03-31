@@ -97,8 +97,8 @@ public class TaskMediaManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
-        AccessibleMediaDto accessibleMediaDto = taskMediaRetrieveService.retrieveAccessible(taskId, mediaId);
         taskMediaOperationService.updateMediaAsTemporaryPublic(mediaId);
+        AccessibleMediaDto accessibleMediaDto = taskMediaRetrieveService.retrieveAccessible(taskId, mediaId);
         String redirectUrl = taskMediaRetrieveService.retrievePublicDownloadLink(accessibleMediaDto);
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"%s\"".formatted(accessibleMediaDto.getOriginalName()));
         response.sendRedirect(redirectUrl);

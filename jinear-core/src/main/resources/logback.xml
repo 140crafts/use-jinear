@@ -2,12 +2,34 @@
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
     <include resource="org/springframework/boot/logging/logback/console-appender.xml" />
 
-<!--    <appender name="ASYNC-SLACK" class="ch.qos.logback.classic.AsyncAppender">-->
+    <property name="APP_NAME" value="${spring.application.name:-api}"/>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/application.log</file>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logging.file.path}/app.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %5p [${APP_NAME},%X{traceId:-},%X{spanId:-}] --- %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Async Appender for File Logging -->
+    <appender name="ASYNC_FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="FILE"/>
+    </appender>
+
+    <!--    <appender name="ASYNC-SLACK" class="ch.qos.logback.classic.AsyncAppender">-->
 <!--        <appender name="SLACK" class="co.whatieat.core.config.logback.appender.SlackAppender"/>-->
 <!--    </appender>-->
 
     <root level="info">
         <appender-ref ref="CONSOLE"/>
-<!--        <appender-ref ref="ASYNC-SLACK"/>-->
+        <appender-ref ref="ASYNC_FILE"/>
+        <!--        <appender-ref ref="ASYNC-SLACK"/>-->
     </root>
 </configuration>

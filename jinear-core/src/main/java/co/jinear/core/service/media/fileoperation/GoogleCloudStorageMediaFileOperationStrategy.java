@@ -46,7 +46,7 @@ public class GoogleCloudStorageMediaFileOperationStrategy implements MediaFileOp
     }
 
     @Override
-    public void makePublic(String bucketName, String path) {
+    public String makePublic(String bucketName, String path) {
         log.info("Make media public has started. bucketName: {}, path: {}", bucketName, path);
         try {
             CloudStorage.makeObjectPublic(bucketName, path);
@@ -54,10 +54,11 @@ public class GoogleCloudStorageMediaFileOperationStrategy implements MediaFileOp
             log.info("Make media public has failed.", e);
             throw new BusinessException();
         }
+        return bucketName;
     }
 
     @Override
-    public void makePrivate(String bucketName, String path) {
+    public String makePrivate(String bucketName, String path) {
         log.info("Make media private has started. bucketName: {}, path: {}", bucketName, path);
         try {
             CloudStorage.makeObjectPrivate(bucketName, path);
@@ -65,6 +66,7 @@ public class GoogleCloudStorageMediaFileOperationStrategy implements MediaFileOp
             log.info("Make media private has failed.", e);
             throw new BusinessException();
         }
+        return bucketName;
     }
 
     @Override

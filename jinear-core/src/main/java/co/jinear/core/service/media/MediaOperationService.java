@@ -21,6 +21,7 @@ import co.jinear.core.system.RandomHelper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -63,9 +64,10 @@ public class MediaOperationService {
         MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(activeFileStorageType);
         MediaInitializeResultVo mediaInitializeResultVo = mediaFileOperationStrategy.save(initializeMediaVo.getFile(), path);
 
-        updateBucketName(media, mediaInitializeResultVo);
+        updateBucketName(media, mediaInitializeResultVo.getBucketName());
         if (MediaVisibilityType.PUBLIC.equals(media.getVisibility())) {
-            mediaFileOperationStrategy.makePublic(mediaInitializeResultVo.getBucketName(), path);
+            String newBucketName = mediaFileOperationStrategy.makePublic(mediaInitializeResultVo.getBucketName(), path);
+            updateBucketName(media, newBucketName);
         }
         return accessibleMediaDtoConverter.mapToAccessibleMediaDto(media);
     }
@@ -96,7 +98,8 @@ public class MediaOperationService {
         mediaRepository.save(media);
 
         MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(media.getProviderType());
-        mediaFileOperationStrategy.makePublic(media.getBucketName(), media.getStoragePath());
+        String newBucketName = mediaFileOperationStrategy.makePublic(media.getBucketName(), media.getStoragePath());
+        updateBucketName(media, newBucketName);
     }
 
     @Transactional
@@ -108,7 +111,8 @@ public class MediaOperationService {
         mediaRepository.save(media);
 
         MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(media.getProviderType());
-        mediaFileOperationStrategy.makePrivate(media.getBucketName(), media.getStoragePath());
+        String newBucketName = mediaFileOperationStrategy.makePrivate(media.getBucketName(), media.getStoragePath());
+        updateBucketName(media, newBucketName);
     }
 
     @Transactional
@@ -123,7 +127,8 @@ public class MediaOperationService {
         mediaRepository.save(media);
 
         MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(media.getProviderType());
-        mediaFileOperationStrategy.makePublic(media.getBucketName(), media.getStoragePath());
+        String newBucketName = MediaVisibilityType.PRIVATE.equals(mediaVisibilityType) ? mediaFileOperationStrategy.makePrivate(media.getBucketName(), media.getStoragePath()) : mediaFileOperationStrategy.makePublic(media.getBucketName(), media.getStoragePath());
+        updateBucketName(media, newBucketName);
     }
 
     public void updateLateOwnerIdAndOwnershipStatus(String relatedObjectId, String mediaKey, String lateOwnerId) {
@@ -185,9 +190,11 @@ public class MediaOperationService {
         return saved;
     }
 
-    private void updateBucketName(Media media, MediaInitializeResultVo mediaInitializeResultVo) {
-        media.setBucketName(mediaInitializeResultVo.getBucketName());
-        mediaRepository.save(media);
+    private void updateBucketName(Media media, String bucketName) {
+        if (!StringUtils.equals(bucketName, media.getBucketName())) {
+            media.setBucketName(bucketName);
+            mediaRepository.save(media);
+        }
     }
 
     private String generatePath(InitializeMediaVo initializeMediaVo, String mediaKey) {

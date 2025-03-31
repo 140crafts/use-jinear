@@ -12,9 +12,9 @@ public interface MediaFileOperationStrategy {
 
     void remove(String bucketName, String path);
 
-    void makePublic(String bucketName, String path);
+    String makePublic(String bucketName, String path);
 
-    void makePrivate(String bucketName, String path);
+    String makePrivate(String bucketName, String path);
 
     String getFullPath(String bucketName, MediaOwnerType mediaOwnerType, String relatedObjectId, FileType fileType, String mediaKey, String originalName);
 
