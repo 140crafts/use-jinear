@@ -9,6 +9,7 @@ import co.jinear.core.model.vo.media.MediaInitializeResultVo;
 import io.minio.*;
 import io.minio.errors.MinioException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -21,6 +22,7 @@ import static co.jinear.core.system.FileStorageUtils.generatePath;
 
 @Slf4j
 @Service
+@ConditionalOnProperty(value = "file-storage.minio.enabled", havingValue = "true")
 public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrategy {
 
     private final MinIoProperties minIoProperties;
@@ -128,31 +130,30 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
         if (!bucketExists) {
             log.info("Creating bucket {}", bucketName);
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+            if (isPublic) {
+                log.info("Creating public policy");
+                String policy = String.format("""
+                             {
+                                 "Version": "2012-10-17",
+                                 "Statement": [
+                                     {
+                                         "Effect": "Allow",
+                                         "Principal": {
+                                             "AWS": ["*"]
+                                         },
+                                         "Action": ["s3:GetObject"],
+                                         "Resource": ["arn:aws:s3:::%s/*"]
+                                     }
+                                 ]
+                             }
+                        """, bucketName);
+                minioClient.setBucketPolicy(
+                        SetBucketPolicyArgs.builder()
+                                .bucket(bucketName)
+                                .config(policy)
+                                .build()
+                );
+            }
         }
-        if (isPublic) {
-            log.info("Creating public policy");
-            String policy = String.format("""
-                         {
-                             "Version": "2012-10-17",
-                             "Statement": [
-                                 {
-                                     "Effect": "Allow",
-                                     "Principal": {
-                                         "AWS": ["*"]
-                                     },
-                                     "Action": ["s3:GetObject"],
-                                     "Resource": ["arn:aws:s3:::%s/*"]
-                                 }
-                             ]
-                         }
-                    """, bucketName);
-            minioClient.setBucketPolicy(
-                    SetBucketPolicyArgs.builder()
-                            .bucket(bucketName)
-                            .config(policy)
-                            .build()
-            );
-        }
-
     }
 }
