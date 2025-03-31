@@ -8,7 +8,6 @@ import { io } from "socket.io-client";
 import Logger from "@/utils/logger";
 import { RichMessageDto } from "@/be/jinear-core";
 import { insertMessage } from "../../repository/IndexedDbRepository";
-import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 
 interface WebsocketHandlerProps {
 

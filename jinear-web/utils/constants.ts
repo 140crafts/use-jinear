@@ -1,14 +1,19 @@
 "use client";
+import { env } from "next-runtime-env";
+
 export const __DEV__ = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
-export const HOST = __DEV__ ? "http://localhost:3000" : "https://jinear.co";
+// export const HOST = __DEV__ ? "http://localhost:3000" : "https://jinear.co";
+export const HOST = "http://localhost:3000";
 
 export const SERVER = __DEV__ ? "staging.api" : "api";
-export const API_ROOT = __DEV__ ? "http://localhost:8085/" : `https://${SERVER}.jinear.co/`;
-// : "http://localhost:8085/";
+
+export const API_ROOT = env("NEXT_PUBLIC_API_ROOT") != null ? env("NEXT_PUBLIC_API_ROOT") : __DEV__ ? "http://localhost:8085/" : `https://${SERVER}.jinear.co/`;
+
 export const SOCKET_ROOT = (!process.env.NODE_ENV || process.env.NODE_ENV === "development") ? "ws://localhost:3001/" : "https://message.jinear.co/";
 
-// export const S3_BASE = "https://storage.googleapis.com/jinear-b0/";
-export const S3_BASE = "https://files.jinear.co/jinear-b0/";
+// export const DEFAULT_S3_BASE = "https://storage.googleapis.com/jinear-b0/";
+export const DEFAULT_S3_BASE = "https://files.jinear.co/jinear-b0/";
+export const S3_BASE = env("NEXT_PUBLIC_S3_ROOT") != null ? env("NEXT_PUBLIC_S3_ROOT") : DEFAULT_S3_BASE;
 
 export const ROUTE_IF_LOGGED_IN = "/home";
 export const PROJECT_FEED_URL = HOST + "/shared/[workspaceUsername]/feed/[accessKey]";

@@ -28,6 +28,7 @@ import { CSPostHogProvider } from "@/components/postHogProvider/CSPostHogProvide
 import PostHogPageView from "@/components/postHogPageView/PostHogPageView";
 import OnInstallPromptEventProvider from "@/components/onInstallPromptEventProvider/OnInstallPromptEventProvider";
 import React from "react";
+import { PublicEnvScript } from "next-runtime-env";
 
 const logger = Logger("_app");
 
@@ -305,6 +306,7 @@ function MyApp({ children }: { children: React.ReactNode }) {
         showSpinner={false}
       />
       <Root>
+        <PublicEnvScript />
         <ReduxProvider>
           <DateFnsConfigration />
           <ThemeProvider>
