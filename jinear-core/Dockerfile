@@ -1,4 +1,4 @@
-FROM maven:3.9.9-amazoncorretto-17-alpine as maven_build
+FROM --platform=linux/arm64 maven:3.9.9-amazoncorretto-17-alpine as maven_build
 
 COPY pom.xml /build/
 COPY src /build/src/
@@ -14,7 +14,7 @@ RUN #mvn clean package -Pnative
 #FROM openjdk:8-jre-alpine
 #alpine de gcloud vision ile ilgili native bir seyler yok patliyor
 #FROM openjdk:8-jre
-FROM eclipse-temurin:21-jre-alpine
+FROM --platform=linux/arm64 eclipse-temurin:21-jre-alpine
 
 WORKDIR /app
 
