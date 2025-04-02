@@ -2,7 +2,6 @@ package co.jinear.core.config;
 
 import co.jinear.core.config.interceptor.AcceptLanguageHeaderInterceptor;
 import co.jinear.core.config.interceptor.LogExecutionInterceptor;
-import co.jinear.core.system.gcloud.security.SecretManager;
 import lombok.extern.slf4j.Slf4j;
 import org.jasypt.encryption.StringEncryptor;
 import org.jasypt.encryption.pbe.PooledPBEStringEncryptor;
@@ -23,7 +22,8 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Bean(name = "encryptorBean")
     public StringEncryptor stringEncryptor() throws IOException {
-        String password = SecretManager.getLastSecretVersionValue("jasypt_encryptor_password");
+//        String password = SecretManager.getLastSecretVersionValue("jasypt_encryptor_password");
+        String password = System.getenv("jasypt.encryptor.password");
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
         config.setPassword(password);

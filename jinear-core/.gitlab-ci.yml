@@ -1,48 +1,37 @@
 variables:
   PROJECT_NAME: jinear-core
+  DOCKER_DRIVER: overlay2
+  CONTAINER_IMAGE: registry.gitlab.com/140crafts/jinear/projects/jinear-core:${CI_COMMIT_SHORT_SHA}
+  CONTAINER_IMAGE_LATEST: registry.gitlab.com/140crafts/jinear/projects/jinear-core:latest
 
 stages:
   - build
-  - deploy-stg
-  - deploy-prod
+  - deploy
 
 default:
-  image: google/cloud-sdk:alpine
-  before_script:
-    - gcloud auth activate-service-account --key-file $GCP_SERVICE_CREDS
-    - gcloud config set project selam-255606
+  image: docker:latest
 
 build:
   stage: build
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "staging"'
-      when: always
-    - if: '$CI_COMMIT_BRANCH == "master"'
-      when: always
-    - when: manual
   script:
-    - gcloud builds submit --tag gcr.io/selam-255606/$PROJECT_NAME:latest
-
-deploy-staging:
-  stage: deploy-stg
-  needs:
-    - job: build
+    - docker build -t ${CONTAINER_IMAGE} .
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
+    - docker push ${CONTAINER_IMAGE}
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
     - when: manual
-  script:
-    - gcloud run deploy $PROJECT_NAME-staging --image gcr.io/selam-255606/$PROJECT_NAME:latest --allow-unauthenticated --platform managed --region europe-west4 --vpc-connector=crafts-generic-vpc-conn --vpc-egress=all-traffic --add-cloudsql-instances=selam-255606:europe-west4:crafts-general --port=8008 --use-http2 --memory=1024Mi --max-instances=1 --set-env-vars=CLOUD_RUN_PROJECT_HASH=2355s6tobq,spring_profiles_active=stg --service-account=fitpath-dev-admin@selam-255606.iam.gserviceaccount.com
-    - gcloud run services update-traffic $PROJECT_NAME-staging --to-latest --region europe-west4
 
-deploy-prod:
-  stage: deploy-prod
-  needs:
-    - job: build
+deploy-latest:
+  stage: deploy
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
+    - docker pull ${CONTAINER_IMAGE}
+    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE_LATEST}
+    - docker push ${CONTAINER_IMAGE_LATEST}
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
       when: always
     - when: never
-  script:
-    - gcloud run deploy $PROJECT_NAME --image gcr.io/selam-255606/$PROJECT_NAME:latest --allow-unauthenticated --platform managed --region europe-west4 --vpc-connector=crafts-generic-vpc-conn --vpc-egress=private-ranges-only --add-cloudsql-instances=selam-255606:europe-west4:crafts-general --port=8008 --use-http2 --memory=4Gi --timeout=600 --max-instances=10 --concurrency 140 --set-env-vars=CLOUD_RUN_PROJECT_HASH=2355s6tobq,spring_profiles_active=prod --service-account=fitpath-dev-admin@selam-255606.iam.gserviceaccount.com
-    - gcloud run services update-traffic $PROJECT_NAME --to-latest --region europe-west4
+  needs:
+    - build

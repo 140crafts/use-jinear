@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.Getter;
 import org.apache.commons.lang3.EnumUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,6 +21,7 @@ import java.util.function.Function;
 
 import static co.jinear.core.model.enumtype.account.RoleType.ROBOT;
 
+@Getter
 @Component
 public class JwtHelper {
 
@@ -43,6 +45,15 @@ public class JwtHelper {
 
     @Value("${jwt.domain}")
     private String domain;
+
+    @Value("${jwt.include-domain}")
+    private Boolean includeDomain;
+
+    @Value("${jwt.include-same-site}")
+    private Boolean includeSameSite;
+
+    @Value("${jwt.same-site}")
+    private String sameSite;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 

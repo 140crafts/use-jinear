@@ -19,30 +19,31 @@ public class AuthCookieManager {
     private final JwtHelper jwtHelper;
 
     public void addAuthCookie(String token, HttpServletResponse response) {
-        ResponseCookie responseCookie = ResponseCookie
-                .from(JWT_COOKIE, token)
-                .secure(jwtHelper.isSecure())
-                .httpOnly(true)
-                .path("/")
-                .domain(jwtHelper.getDomain())
-                .maxAge(JWT_TOKEN_VALIDITY * 24 * 60 * 60)
-//                .sameSite("Lax")
-                .sameSite("None")
-                .build();
+        long maxAgeSeconds = JWT_TOKEN_VALIDITY * 24 * 60 * 60;
+        ResponseCookie responseCookie = generateResponseCookie(token, maxAgeSeconds);
         response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
     }
 
     public void invalidateAuthCookie(HttpServletResponse response) {
-        ResponseCookie responseCookie = ResponseCookie
-                .from(JWT_COOKIE, null)
+        ResponseCookie responseCookie = generateResponseCookie(null, 0);
+        response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+    }
+
+    private ResponseCookie generateResponseCookie(String token, long maxAgeSeconds) {
+        ResponseCookie.ResponseCookieBuilder responseCookieBuilder = ResponseCookie
+                .from(JWT_COOKIE, token)
                 .secure(jwtHelper.isSecure())
                 .httpOnly(true)
                 .path("/")
-                .domain(jwtHelper.getDomain())
-                .maxAge(0)
-//                .sameSite("Lax")
-                .sameSite("None")
-                .build();
-        response.addHeader(HttpHeaders.SET_COOKIE, responseCookie.toString());
+                .maxAge(maxAgeSeconds);
+        if (Boolean.TRUE.equals(jwtHelper.getIncludeDomain())) {
+            responseCookieBuilder.domain(jwtHelper.getDomain());
+        }
+        if (Boolean.TRUE.equals(jwtHelper.getIncludeSameSite())) {
+            responseCookieBuilder.sameSite(jwtHelper.getSameSite());
+        }
+
+        ResponseCookie responseCookie = responseCookieBuilder.build();
+        return responseCookie;
     }
 }

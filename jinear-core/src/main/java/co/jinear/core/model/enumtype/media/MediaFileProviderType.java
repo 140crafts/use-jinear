@@ -7,7 +7,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum MediaFileProviderType {
 
-    GCLOUD(0);
+    GCLOUD(0),
+    MINIO(1);
 
     private final int value;
 }

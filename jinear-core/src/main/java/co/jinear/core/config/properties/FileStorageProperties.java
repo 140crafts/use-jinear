@@ -15,4 +15,7 @@ public class FileStorageProperties {
 
     @Value("${file-storage.active}")
     private MediaFileProviderType activeFileStorageType;
+
+    @Value("${file-storage.explicit-content-check-enabled}")
+    private Boolean explicitContentCheckEnabled;
 }

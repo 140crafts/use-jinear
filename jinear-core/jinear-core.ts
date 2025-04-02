@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2024-12-21 16:49:32.
+// Generated using typescript-generator version 3.0.1157 on 2025-03-31 17:38:26.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -159,9 +159,9 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
+    ghistoryId: string;
     gthreadId: string;
     ginternalDate: string;
-    ghistoryId: string;
     gid: string;
 }
 
@@ -1931,9 +1931,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    filename: string;
     uri: URI;
     description: string;
+    filename: string;
 }
 
 export interface InputStreamSource {
@@ -2028,9 +2028,11 @@ export type LocaleType = "TR" | "EN";
 
 export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN";
 
-export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO" | "RICH_TEXT_IMAGE_TEMP" | "RICH_TEXT_IMAGE";
+export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO" | "RICH_TEXT_IMAGE";
 
-export type MediaFileProviderType = "GCLOUD";
+export type MediaFileOwnershipStatusType = "WAITING" | "OWNED";
+
+export type MediaFileProviderType = "GCLOUD" | "MINIO";
 
 export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK" | "PROJECT_POST" | "PROJECT" | "RICH_TEXT";
 
