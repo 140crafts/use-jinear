@@ -3,29 +3,36 @@ services:
   - docker:dind
 
 variables:
+  PROJECT_NAME: jinear-pages
   DOCKER_DRIVER: overlay2
+  CONTAINER_IMAGE: registry.gitlab.com/140crafts/jinear/projects/jinear-pages:${CI_COMMIT_SHORT_SHA}
+  CONTAINER_IMAGE_LATEST: registry.gitlab.com/140crafts/jinear/projects/jinear-pages:latest
 
 stages:
-  - package
+  - build
   - deploy
 
-docker-build:
-  stage: package
+build:
+  stage: build
   script:
-    - docker build -t registry.gitlab.com/140crafts/jinear/projects/jinear-pages .
+    - docker build -t ${CONTAINER_IMAGE} .
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
-    - docker push registry.gitlab.com/140crafts/jinear/projects/jinear-pages
+    - docker push ${CONTAINER_IMAGE}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: manual
 
-#deploy:
-#  stage: deploy
-#  image: alpine:latest
-#  before_script:
-#    - 'command -v ssh-agent >/dev/null || ( apk add --update openssh )'
-#    - eval $(ssh-agent -s)
-#    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-#    - mkdir -p ~/.ssh
-#    - chmod 700 ~/.ssh
-#    - ssh-keyscan $VM_IPADDRESS >> ~/.ssh/known_hosts
-#    - chmod 644 ~/.ssh/known_hosts
-#  script:
-#    - ssh $SSH_USER@$VM_IPADDRESS "cd /root/app/jinear-message-service/ && docker compose pull && docker compose up -d && docker image prune -f"
+deploy-latest:
+  stage: deploy
+  script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
+    - docker pull ${CONTAINER_IMAGE}
+    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE_LATEST}
+    - docker push ${CONTAINER_IMAGE_LATEST}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      when: always
+    - when: never
+  needs:
+    - build
