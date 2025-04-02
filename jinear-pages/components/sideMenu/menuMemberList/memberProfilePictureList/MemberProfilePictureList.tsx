@@ -9,6 +9,7 @@ interface MemberProfilePictureListProps {
   accountList: AccountDto[];
   type: "workspace" | "team";
 }
+
 const SLICE_SIZE = 5;
 
 const MemberProfilePictureList: React.FC<MemberProfilePictureListProps> = ({ accountList, type }) => {
@@ -24,17 +25,17 @@ const MemberProfilePictureList: React.FC<MemberProfilePictureListProps> = ({ acc
       in: {
         scale: 1,
         opacity: 1,
-        zIndex: "unset",
+        zIndex: "unset"
       },
       out: {
         scale: 1,
         opacity: 0,
         zIndex: -1,
-        transition: { duration: 0 },
-      },
+        transition: { duration: 0 }
+      }
     },
     transition: { type: "spring", stiffness: 500, damping: 50, mass: 2 },
-    onAnimationComplete: () => !isPresent && safeToRemove(),
+    onAnimationComplete: () => !isPresent && safeToRemove()
   };
 
   const moreButtonLabel = t("sideMenuWorkspaceMembersMore").replace("${number}", `${remainingCount}`);
@@ -50,12 +51,12 @@ const MemberProfilePictureList: React.FC<MemberProfilePictureListProps> = ({ acc
             display: "flex",
             alignItems: "center",
             marginLeft: index != 0 ? -10 : 0,
-            zIndex: index,
+            zIndex: index
           }}
         >
           <ProfilePhoto
             boringAvatarKey={account.accountId}
-            storagePath={account?.profilePicture?.storagePath}
+            url={account?.profilePicture?.url}
             wrapperClassName={styles.profilePic}
           />
         </div>

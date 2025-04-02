@@ -15,7 +15,7 @@ const InvitationInfo: React.FC<InvitationInfoProps> = ({ invitationInfoResponse 
       <div>
         <ProfilePhoto
           boringAvatarKey={invitationInfoResponse?.data.workspaceDto?.workspaceId || ""}
-          storagePath={invitationInfoResponse?.data.workspaceDto?.profilePicture?.storagePath}
+          url={invitationInfoResponse?.data.workspaceDto?.profilePicture?.url}
           wrapperClassName={styles.profilePic}
         />
       </div>
@@ -23,7 +23,7 @@ const InvitationInfo: React.FC<InvitationInfoProps> = ({ invitationInfoResponse 
         <div className={styles.accountProfilePictureContainer}>
           <ProfilePhoto
             boringAvatarKey={invitationInfoResponse?.data.accountDto?.accountId || ""}
-            storagePath={invitationInfoResponse?.data.accountDto?.profilePicture?.storagePath}
+            url={invitationInfoResponse?.data.accountDto?.profilePicture?.url}
             wrapperClassName={styles.profilePicAccount}
           />
         </div>

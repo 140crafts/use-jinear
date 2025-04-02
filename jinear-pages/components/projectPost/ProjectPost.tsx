@@ -73,7 +73,7 @@ const ProjectPost: React.FC<ProjectPostProps> = ({
         <div className={styles.profilePicContainer}>
           <ProfilePhoto
             boringAvatarKey={post.account?.accountId || ""}
-            storagePath={post.account?.profilePicture?.storagePath}
+            url={post.account?.profilePicture?.url}
             wrapperClassName={styles.profilePic}
           />
         </div>

@@ -69,7 +69,7 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
       <div className={styles.profileContainer}>
         <UserProfilePicturePicker
           currentPhotoPath={
-            currentAccount?.profilePicture?.storagePath ? S3_BASE + currentAccount?.profilePicture?.storagePath : undefined
+            currentAccount?.profilePicture?.url ? currentAccount?.profilePicture?.url : undefined
           }
           selectedFile={selectedFile}
           setSelectedFile={setSelectedFile}

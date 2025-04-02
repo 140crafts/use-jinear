@@ -107,7 +107,7 @@ const NewPostInput: React.FC<NewPostInputProps> = ({ projectId, workspaceId }) =
           <div className={styles.profilePicContainer}>
             <ProfilePhoto
               boringAvatarKey={currentAccount?.accountId || ""}
-              storagePath={currentAccount?.profilePicture?.storagePath}
+              url={currentAccount?.profilePicture?.url}
               wrapperClassName={styles.profilePic}
             />
           </div>

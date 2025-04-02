@@ -57,7 +57,7 @@ const ConversationButton: React.FC<ConversationButtonProps> = ({
         {participantsInfo.shownParticipants.map(participant => <ProfilePhoto
           key={participant.conversationParticipantId}
           boringAvatarKey={participant.accountId}
-          storagePath={participant.account.profilePicture?.storagePath}
+          url={participant.account.profilePicture?.url}
           wrapperClassName={styles.profilePic}
         />)}
       </div>

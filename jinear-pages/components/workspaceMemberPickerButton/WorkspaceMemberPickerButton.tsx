@@ -78,7 +78,7 @@ const WorkspaceMemberPickerButton: React.FC<WorkspaceMemberPickerButtonProps> = 
             {currentPick?.length == 1 ?
               <ProfilePhoto
                 boringAvatarKey={currentPick?.[0].account.accountId || ""}
-                storagePath={currentPick?.[0].account.profilePicture?.storagePath}
+                url={currentPick?.[0].account.profilePicture?.url}
                 wrapperClassName={styles.profilePic}
               /> :
               <LuUser className={styles.icon} />}

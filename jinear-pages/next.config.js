@@ -13,7 +13,21 @@ const nextConfig = {
   // swcMinify: false,
   // compress: false,
   images: {
-    domains: ["storage.googleapis.com", "placehold.co", "files.jinear.co"]
+    // domains: ["storage.googleapis.com", "placehold.co", "files.jinear.co"]
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+        port: "",
+        pathname: "**"
+      },
+      {
+        protocol: "http",
+        hostname: "**",
+        port: "",
+        pathname: "**"
+      }
+    ]
   },
   experimental: {
     missingSuspenseWithCSRBailout: false

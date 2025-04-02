@@ -139,7 +139,7 @@ const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({
               >
                 <ProfilePhoto
                   boringAvatarKey={workspaceMemberDto.account.accountId || ""}
-                  storagePath={workspaceMemberDto.account.profilePicture?.storagePath}
+                  url={workspaceMemberDto.account.profilePicture?.url}
                   wrapperClassName={styles.profilePic}
                 />
                 {workspaceMemberDto.account.username}
@@ -162,7 +162,7 @@ const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({
               <div className={styles.selectedTopicName}>
                 <ProfilePhoto
                   boringAvatarKey={workspaceMember.account.accountId || ""}
-                  storagePath={workspaceMember.account.profilePicture?.storagePath}
+                  url={workspaceMember.account.profilePicture?.url}
                   wrapperClassName={styles.profilePic}
                 />
                 {workspaceMember.account.username}

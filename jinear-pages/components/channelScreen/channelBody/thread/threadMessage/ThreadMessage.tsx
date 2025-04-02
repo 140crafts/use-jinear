@@ -21,7 +21,7 @@ const ThreadMessage: React.FC<ThreadMessageProps> = ({ threadMessage }) => {
         {threadMessage.account?.accountId ?
           <ProfilePhoto
             boringAvatarKey={threadMessage.account?.accountId || ""}
-            storagePath={threadMessage.account?.profilePicture?.storagePath}
+            url={threadMessage.account?.profilePicture?.url}
             wrapperClassName={styles.profilePic}
           /> :
           <ProfilePhotoRobot wrapperClassName={styles.profilePic} />

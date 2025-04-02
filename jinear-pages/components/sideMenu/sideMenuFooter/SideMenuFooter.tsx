@@ -45,7 +45,7 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
           {currentAccount &&
             <ProfilePhoto
               boringAvatarKey={currentAccount.accountId}
-              storagePath={currentAccount.profilePicture?.storagePath}
+              url={currentAccount.profilePicture?.url}
               wrapperClassName={styles.profilePic}
             />}
         </Button>
