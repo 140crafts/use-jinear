@@ -1,6 +1,11 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import ProfilePhoto from "@/components/profilePhoto";
-import { queryStateAnyToStringConverter, queryStateArrayParser, useQueryState, useSetQueryState } from "@/hooks/useQueryState";
+import {
+  queryStateAnyToStringConverter,
+  queryStateArrayParser,
+  useQueryState,
+  useSetQueryState
+} from "@/hooks/useQueryState";
 import { TeamMemberDto } from "@/model/be/jinear-core";
 import { useRetrieveTeamMembersQuery } from "@/store/api/teamMemberApi";
 import { popTeamMemberPickerModal } from "@/store/slice/modalSlice";
@@ -10,7 +15,8 @@ import React from "react";
 import { useTeam } from "../context/TaskListFilterBarContext";
 import styles from "./AssigneeFilterButton.module.css";
 
-interface AssigneeFilterButtonProps {}
+interface AssigneeFilterButtonProps {
+}
 
 const AssigneeFilterButton: React.FC<AssigneeFilterButtonProps> = ({}) => {
   const { t } = useTranslation();
@@ -24,7 +30,7 @@ const AssigneeFilterButton: React.FC<AssigneeFilterButtonProps> = ({}) => {
   const { data: teamMemberListResponse } = useRetrieveTeamMembersQuery(
     { teamId: team?.teamId || "" },
     {
-      skip: team == null,
+      skip: team == null
     }
   );
   const selectedAssignees = teamMemberListResponse?.data.content.filter(
@@ -43,7 +49,7 @@ const AssigneeFilterButton: React.FC<AssigneeFilterButtonProps> = ({}) => {
         teamId: team?.teamId,
         multiple: true,
         initialSelectionOnMultiple: selectedAssignees,
-        onPick,
+        onPick
       })
     );
   };
@@ -63,7 +69,7 @@ const AssigneeFilterButton: React.FC<AssigneeFilterButtonProps> = ({}) => {
               {t("taskFilterAssigneeFilterButtonSingleSelection")}
               <ProfilePhoto
                 boringAvatarKey={selectedAssignees[0]?.account.accountId || ""}
-                storagePath={selectedAssignees[0]?.account.profilePicture?.storagePath}
+                url={selectedAssignees[0]?.account.profilePicture?.url}
                 wrapperClassName={styles.profilePic}
               />
               {selectedAssignees[0]?.account.username}

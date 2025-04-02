@@ -55,7 +55,7 @@ const MemberProfilePictureList: React.FC<MemberProfilePictureListProps> = ({ acc
         >
           <ProfilePhoto
             boringAvatarKey={account.accountId}
-            storagePath={account?.profilePicture?.storagePath}
+            url={account?.profilePicture?.url}
             wrapperClassName={styles.profilePic}
           />
         </div>

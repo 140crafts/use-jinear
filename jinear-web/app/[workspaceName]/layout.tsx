@@ -17,6 +17,7 @@ import {
 } from "@/api/conversationApi";
 import useDetectKeyboardOpen from "@/hooks/useDetectKeyboardOpen";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
+import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 
 interface WorkspaceLayoutProps {
   children: React.ReactNode;
@@ -35,6 +36,7 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   const workspaceName = params?.workspaceName as string;
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
   const pageVisibility = usePageVisibility();
+  const messagingEnabled = useFeatureFlag("MESSAGING");
 
   //so we can calculate unread count
   const [retrieveChannelMembershipsQuery] = useLazyRetrieveChannelMembershipsQuery();
@@ -43,9 +45,9 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   useEffect(() => {
     if (pageVisibility && workspace && pageVisibility) {
       retrieveChannelMembershipsQuery({ workspaceId: workspace.workspaceId });
-      retrieveParticipatedConversationsQuery({ workspaceId: workspace.workspaceId });
+      messagingEnabled && retrieveParticipatedConversationsQuery({ workspaceId: workspace.workspaceId });
     }
-  }, [retrieveChannelMembershipsQuery, retrieveParticipatedConversationsQuery, workspace, pageVisibility]);
+  }, [retrieveChannelMembershipsQuery, retrieveParticipatedConversationsQuery, workspace, pageVisibility, messagingEnabled]);
 
   useEffect(() => {
     if (isMobile) {

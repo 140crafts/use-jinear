@@ -3,7 +3,7 @@ import { AccountsWorkspacePerspectiveDto } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { LuCalendarDays, LuCheckSquare, LuClipboardEdit, LuMessagesSquare, LuRss } from "react-icons/lu";
+import { LuCalendarDays, LuCheckSquare, LuMessagesSquare } from "react-icons/lu";
 import Button, { ButtonVariants } from "../button";
 import styles from "./MainFeaturesSideMenu.module.scss";
 import InboxButton from "./inboxButton/InboxButton";
@@ -11,8 +11,6 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { getUnreadConversationCount } from "../../repository/IndexedDbRepository";
 import { useTypedSelector } from "@/store/store";
 import { selectCurrentAccountId } from "@/slice/accountSlice";
-import { useFeatureFlag } from "@/hooks/useFeatureFlag";
-import { isInGodModeWhitelist } from "@/utils/constants";
 
 interface MainFeaturesSideMenuProps {
   workspace: AccountsWorkspacePerspectiveDto;
@@ -21,8 +19,8 @@ interface MainFeaturesSideMenuProps {
 const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
-  const messagingEnabled = useFeatureFlag("MESSAGING") || isInGodModeWhitelist(currentAccountId);
-  // const messagingEnabled = false;
+  // const messagingEnabled = useFeatureFlag("MESSAGING") || isInGodModeWhitelist(currentAccountId);
+  const messagingEnabled = false;
   const currentPath = usePathname();
   const calendarPath = `/${workspace?.username}/calendar`;
   const tasksButtonOpensPath = `/${workspace?.username}/tasks/last-activities`;

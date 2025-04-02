@@ -11,7 +11,6 @@ import styles from "./PersonalInfoTab.module.css";
 import UserProfilePicturePicker from "./userProfilePicturePicker/UserProfilePicturePicker";
 
 import Button, { ButtonVariants } from "@/components/button";
-import { S3_BASE } from "@/utils/constants";
 
 interface PersonalInfoTabProps {
 }
@@ -69,7 +68,7 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
       <div className={styles.profileContainer}>
         <UserProfilePicturePicker
           currentPhotoPath={
-            currentAccount?.profilePicture?.storagePath ? S3_BASE + currentAccount?.profilePicture?.storagePath : undefined
+            currentAccount?.profilePicture?.url ? currentAccount?.profilePicture?.url : undefined
           }
           selectedFile={selectedFile}
           setSelectedFile={setSelectedFile}

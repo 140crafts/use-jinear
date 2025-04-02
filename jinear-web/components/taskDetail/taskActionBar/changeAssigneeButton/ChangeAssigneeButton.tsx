@@ -32,7 +32,7 @@ const ChangeAssigneeButton: React.FC<ChangeAssigneeButtonProps> = ({ className }
           <div>{t("taskDetailAssignedTo")}</div>
           <ProfilePhoto
             boringAvatarKey={task.assignedToAccount.accountId}
-            storagePath={task.assignedToAccount.profilePicture?.storagePath}
+            url={task.assignedToAccount.profilePicture?.url}
             wrapperClassName={styles.profilePic}
           />
           <b>{task.assignedToAccount.username}</b>

@@ -12,8 +12,8 @@ interface NotLoggedInUserAfterInvitationAcceptedActionsProps {
 }
 
 const NotLoggedInUserAfterInvitationAcceptedActions: React.FC<NotLoggedInUserAfterInvitationAcceptedActionsProps> = ({
-  invitationInfoResponse,
-}) => {
+                                                                                                                       invitationInfoResponse
+                                                                                                                     }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -21,7 +21,7 @@ const NotLoggedInUserAfterInvitationAcceptedActions: React.FC<NotLoggedInUserAft
     dispatch(
       changeLoginWith2FaMailModalVisibility({
         visible: true,
-        autoSubmitEmail: invitationInfoResponse?.data?.invitationDto?.email,
+        autoSubmitEmail: invitationInfoResponse?.data?.invitationDto?.email
       })
     );
   };
@@ -35,7 +35,7 @@ const NotLoggedInUserAfterInvitationAcceptedActions: React.FC<NotLoggedInUserAft
       <div>
         <ProfilePhoto
           boringAvatarKey={invitationInfoResponse?.data.workspaceDto?.workspaceId || ""}
-          storagePath={invitationInfoResponse?.data.workspaceDto?.profilePicture?.storagePath}
+          url={invitationInfoResponse?.data.workspaceDto?.profilePicture?.url}
           wrapperClassName={styles.profilePic}
         />
       </div>
@@ -45,7 +45,7 @@ const NotLoggedInUserAfterInvitationAcceptedActions: React.FC<NotLoggedInUserAft
           __html: t("engageWorkspaceInvitationAccepted")?.replace(
             "${workspaceName}",
             invitationInfoResponse?.data.workspaceDto.title || ""
-          ),
+          )
         }}
       />
 
