@@ -1,3 +1,7 @@
+image: docker:latest
+services:
+  - docker:dind
+
 variables:
   PROJECT_NAME: jinear-core
   DOCKER_DRIVER: overlay2
@@ -8,15 +12,12 @@ stages:
   - build
   - deploy
 
-default:
-  image: docker:latest
-
 build:
   stage: build
   script:
     - unset DOCKER_HOST
     - docker build -t ${CONTAINER_IMAGE} .
-    - docker login $CI_REGISTRY -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
     - docker push ${CONTAINER_IMAGE}
   rules:
     - if: '$CI_COMMIT_BRANCH == "master"'
