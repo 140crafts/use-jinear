@@ -15,7 +15,6 @@ stages:
 build:
   stage: build
   script:
-    - unset DOCKER_HOST
     - docker build -t ${CONTAINER_IMAGE} .
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
     - docker push ${CONTAINER_IMAGE}
