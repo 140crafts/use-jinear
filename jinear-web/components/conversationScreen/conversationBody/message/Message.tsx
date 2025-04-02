@@ -23,7 +23,7 @@ const Message: React.FC<MessageProps> = ({ message, renderMessageFrom }) => {
       <div className={styles.profileInfo}>
         {renderMessageFrom ? <ProfilePhoto
           boringAvatarKey={message.account?.accountId || ""}
-          storagePath={message.account?.profilePicture?.storagePath}
+          url={message.account?.profilePicture?.url}
           wrapperClassName={styles.profilePic}
         /> : <div className={styles.leftTimeText} data-tooltip={messageFullDate}>{messageTime}</div>}
       </div>

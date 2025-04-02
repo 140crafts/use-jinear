@@ -63,7 +63,7 @@ const ProjectLeadWorkspaceMember: React.FC<ProjectLeadWorkspaceMemberProps> = ({
       {leadWorkspaceMember ?
         <ProfilePhoto
           boringAvatarKey={leadWorkspaceMember.account.accountId || ""}
-          storagePath={leadWorkspaceMember.account.profilePicture?.storagePath}
+          url={leadWorkspaceMember.account.profilePicture?.url}
           wrapperClassName={styles.profilePic}
         /> :
         <LuUser className={styles.icon} />

@@ -79,7 +79,7 @@ const WorkspaceMemberInputPicker: React.FC<WorkspaceMemberInputPickerProps> = ({
               <div className={styles.selectedMemberName}>
                 <ProfilePhoto
                   boringAvatarKey={workspaceMember.account.accountId || ""}
-                  storagePath={workspaceMember.account.profilePicture?.storagePath}
+                  url={workspaceMember.account.profilePicture?.url}
                   wrapperClassName={styles.profilePic}
                 />
                 {workspaceMember.account.username}
@@ -122,7 +122,7 @@ const WorkspaceMemberInputPicker: React.FC<WorkspaceMemberInputPickerProps> = ({
                 >
                   <ProfilePhoto
                     boringAvatarKey={workspaceMemberDto.account.accountId || ""}
-                    storagePath={workspaceMemberDto.account.profilePicture?.storagePath}
+                    url={workspaceMemberDto.account.profilePicture?.url}
                     wrapperClassName={styles.profilePic}
                   />
                   <div className={"single-line"}>

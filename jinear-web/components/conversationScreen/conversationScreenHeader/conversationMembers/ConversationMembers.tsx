@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "./ConversationMembers.module.css";
-import { useOtherConversationParticipants } from "@/hooks/messaging/conversationParticipant/useOtherConversationParticipants";
+import {
+  useOtherConversationParticipants
+} from "@/hooks/messaging/conversationParticipant/useOtherConversationParticipants";
 import ProfilePhoto from "@/components/profilePhoto";
 import Logger from "@/utils/logger";
 
@@ -26,7 +28,7 @@ const ConversationMembers: React.FC<ConversationMembersProps> = ({ conversationI
                style={{ marginLeft: i == 0 ? 0 : -10, zIndex: i }}>
             <ProfilePhoto
               boringAvatarKey={participant.accountId}
-              storagePath={participant.account.profilePicture?.storagePath}
+              url={participant.account.profilePicture?.url}
               wrapperClassName={styles.profilePic}
             />
           </div>

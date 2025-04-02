@@ -14,13 +14,13 @@ const WorkspaceInfo: React.FC<WorkspaceInfoProps> = ({ workspace }) => {
       <div
         className={cn(
           styles.profilePicContainer,
-          !workspace?.profilePicture?.storagePath && styles["profilePicContainer-without-profile-pic"]
+          !workspace?.profilePicture?.url && styles["profilePicContainer-without-profile-pic"]
         )}
       >
-        {workspace?.profilePicture?.storagePath ? (
+        {workspace?.profilePicture?.url ? (
           <ProfilePhoto
             boringAvatarKey={workspace.workspaceId}
-            storagePath={workspace?.profilePicture?.storagePath}
+            url={workspace?.profilePicture?.url}
             wrapperClassName={styles.profilePic}
             imgClassName={styles.profilePicImg}
           />

@@ -8,7 +8,7 @@ import {
   popBasicTextInputModal
 } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
-import { HOST, S3_BASE } from "@/utils/constants";
+import { HOST } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { isWorkspaceInPaidTier } from "@/utils/permissionHelper";
 import cn from "classnames";
@@ -82,7 +82,7 @@ const WorkspaceInfoTab: React.FC<WorkspaceInfoTabProps> = ({ workspace }) => {
           setSelectedFile={setSelectedFile}
           selectedFilePreview={selectedFilePreview}
           setSelectedFilePreview={setSelectedFilePreview}
-          currentPhotoPath={workspace?.profilePicture?.storagePath ? S3_BASE + workspace?.profilePicture?.storagePath : undefined}
+          currentPhotoPath={workspace?.profilePicture?.url ? workspace?.profilePicture?.url : undefined}
         />
 
         <div className={styles.infoContainer}>

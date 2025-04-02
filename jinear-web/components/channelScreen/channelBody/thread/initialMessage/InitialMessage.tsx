@@ -30,10 +30,10 @@ const InitialMessage: React.FC<MessageProps> = ({ channelId, threadId, workspace
         {message.account?.accountId ?
           <ProfilePhoto
             boringAvatarKey={message.account?.accountId || ""}
-            storagePath={message.account?.profilePicture?.storagePath}
+            url={message.account?.profilePicture?.url}
             wrapperClassName={styles.profilePic}
           /> :
-          <ProfilePhotoRobot wrapperClassName={styles.profilePic}/>
+          <ProfilePhotoRobot wrapperClassName={styles.profilePic} />
         }
 
         <div className={styles.accountAndMessageInfoContainer}>

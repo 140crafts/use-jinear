@@ -58,7 +58,7 @@ const TeamMemberPickerButton = ({ teamId, register, setValue }: TeamMemberPicker
           <div className={styles.selectedContainer}>
             <ProfilePhoto
               boringAvatarKey={selectedTeamMember?.account.accountId || ""}
-              storagePath={selectedTeamMember?.account.profilePicture?.storagePath}
+              url={selectedTeamMember?.account.profilePicture?.url}
               wrapperClassName={styles.profilePic}
             />
             {selectedTeamMember?.account.username}

@@ -11,7 +11,7 @@ const CurrentAccountInfo: React.FC<CurrentAccountInfoProps> = ({ assignedToAccou
   return assignedToAccount.profilePicture ? (
     <ProfilePhoto
       boringAvatarKey={assignedToAccount.accountId}
-      storagePath={assignedToAccount.profilePicture?.storagePath}
+      url={assignedToAccount.profilePicture?.url}
       wrapperClassName={styles.profilePic}
     />
   ) : (

@@ -9,7 +9,7 @@ import {
   selectTeamMemberPickerModalMultiple,
   selectTeamMemberPickerModalOnPick,
   selectTeamMemberPickerModalTeamId,
-  selectTeamMemberPickerModalVisible,
+  selectTeamMemberPickerModalVisible
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { CircularProgress } from "@mui/material";
@@ -19,7 +19,8 @@ import { IoClose } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./TeamMemberPickerModal.module.css";
 
-interface TeamMemberPickerModalProps {}
+interface TeamMemberPickerModalProps {
+}
 
 const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
   const { t } = useTranslation();
@@ -37,7 +38,7 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
   const { data: teamMemberListResponse, isFetching } = useRetrieveTeamMembersQuery(
     { teamId: teamId || "" },
     {
-      skip: teamId == null,
+      skip: teamId == null
     }
   );
 
@@ -130,7 +131,7 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
               >
                 <ProfilePhoto
                   boringAvatarKey={teamMemberDto.account.accountId || ""}
-                  storagePath={teamMemberDto.account.profilePicture?.storagePath}
+                  url={teamMemberDto.account.profilePicture?.url}
                   wrapperClassName={styles.profilePic}
                 />
                 {teamMemberDto.account.username}
@@ -152,7 +153,7 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
               <div className={styles.selectedTopicName}>
                 <ProfilePhoto
                   boringAvatarKey={teamMember.account.accountId || ""}
-                  storagePath={teamMember.account.profilePicture?.storagePath}
+                  url={teamMember.account.profilePicture?.url}
                   wrapperClassName={styles.profilePic}
                 />
                 {teamMember.account.username}

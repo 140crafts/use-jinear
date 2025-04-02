@@ -55,7 +55,7 @@ const ProjectLogoInfo: React.FC<ProjectLogoInfoProps> = ({
            onClick={editable ? pickPhoto : undefined}>
         {project.logo ? <ProfilePhoto
             boringAvatarKey={project.projectId}
-            storagePath={project.logo?.storagePath}
+            url={project.logo?.url}
             wrapperClassName={styles.profilePic}
             imgClassName={styles.profilePicImg}
           /> :
