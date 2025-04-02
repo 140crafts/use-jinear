@@ -1,5 +1,6 @@
 package co.jinear.core.service.media;
 
+import co.jinear.core.config.properties.FileStorageProperties;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.system.gcloud.vision.CloudVision;
 import co.jinear.core.system.gcloud.vision.GVisionApiResponse;
@@ -13,8 +14,10 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class MediaValidator {
 
+    private final FileStorageProperties fileStorageProperties;
+
     public void validateForSafeImage(MultipartFile file) {
-        if (containsExplicitContent(file)) {
+        if (Boolean.TRUE.equals(fileStorageProperties.getExplicitContentCheckEnabled()) && containsExplicitContent(file)) {
             log.info("File contains explicit content.");
             throw new BusinessException("media.explicit.content");
         }

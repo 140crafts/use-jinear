@@ -7,6 +7,7 @@ import co.jinear.core.system.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class ScheduledJobManager {
     private final ProjectDomainCnameOperatorService projectDomainCnameOperatorService;
 
     @Async
+    @Scheduled(fixedRate = 10000)
     public void updateAllTemporaryPublicMedia() {
         log.info("Update all temporary public media has started.");
         List<String> expiredMedias = mediaRetrieveService.retrieveAllTemporaryPublicAndExpired();
@@ -28,6 +30,7 @@ public class ScheduledJobManager {
     }
 
     @Async
+    @Scheduled(fixedRate = 10000)
     public void checkAndSyncCustomDomains() {
         log.info("Check and sync custom domains has started.");
         Try findAvailableAndSyncTry = Try.of(projectDomainCnameOperatorService::findAvailableAndSync);

@@ -7,7 +7,8 @@ WORKDIR /build/
 
 #-Dactive.profile=dev
 #RUN mvn package -B -DskipTests
-RUN mvn package -B
+RUN #mvn package -B
+RUN mvn clean package -B
 RUN #mvn clean package -Pnative
 
 #FROM openjdk:8-jre-alpine
@@ -23,5 +24,5 @@ EXPOSE 8008
 
 #ENTRYPOINT ["runsd", "--", "java","-Djava.security.egd=file:/dev/./urandom", "-jar","-Dspring.profiles.active=prod","-Duser.timezone=GMT+3", "core.jar"]
 #ENTRYPOINT ["runsd", "--", "java","-Djava.security.egd=file:/dev/./urandom", "-jar","-Duser.timezone=GMT+3", "core.jar"]
-#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-jar","-Dspring.config.location=file:/config/application.properties","-Duser.timezone=GMT+3", "core.jar"]
-ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-jar","-Duser.timezone=GMT+3", "core.jar"]
+ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-jar","-Dspring.config.location=file:/config/application.properties","-Duser.timezone=GMT+3", "core.jar"]
+#ENTRYPOINT ["java","-Djava.security.egd=file:/dev/./urandom", "-jar","-Duser.timezone=GMT+3", "core.jar"]
