@@ -8,7 +8,7 @@ import {
   popBasicTextInputModal
 } from "@/store/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
-import { HOST, S3_BASE } from "@/utils/constants";
+import { HOST } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { isWorkspaceInPaidTier } from "@/utils/permissionHelper";
 import cn from "classnames";

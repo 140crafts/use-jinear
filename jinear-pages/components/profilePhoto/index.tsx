@@ -5,7 +5,6 @@ import cn from "classnames";
 import Image from "next/image";
 import React, { CSSProperties } from "react";
 import styles from "./index.module.css";
-import { S3_BASE } from "@/utils/constants";
 
 const cyrb53 = function(str: string | undefined, seed = 0) {
   if (!str) {

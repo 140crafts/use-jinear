@@ -11,8 +11,6 @@ export const API_ROOT = env("NEXT_PUBLIC_API_ROOT") != null ? env("NEXT_PUBLIC_A
 export const SOCKET_ROOT = (!process.env.NODE_ENV || process.env.NODE_ENV === "development") ? "ws://localhost:3001/" : "https://message.jinear.co/";
 
 // export const S3_BASE = "https://storage.googleapis.com/jinear-b0/";
-export const DEFAULT_S3_BASE = "https://files.jinear.co/jinear-b0/";
-export const S3_BASE = env("NEXT_PUBLIC_S3_ROOT") != null ? env("NEXT_PUBLIC_S3_ROOT") : DEFAULT_S3_BASE;
 
 export const ROUTE_IF_LOGGED_IN = "/";
 

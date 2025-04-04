@@ -11,7 +11,6 @@ import styles from "./PersonalInfoTab.module.css";
 import UserProfilePicturePicker from "./userProfilePicturePicker/UserProfilePicturePicker";
 
 import Button, { ButtonVariants } from "@/components/button";
-import { S3_BASE } from "@/utils/constants";
 
 interface PersonalInfoTabProps {
 }
