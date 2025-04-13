@@ -9,6 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -18,7 +19,7 @@ public class PaymentsManager {
     private final PaymentsOperationService paymentsOperationService;
     private final PaymentSettingsService paymentSettingsService;
 
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
     public BaseResponse retrieveAndApplyLatestPayments() {
         log.info("Retrieve and apply latest payments has started.");
         ZonedDateTime lastSyncDate = paymentSettingsService.retrieveLastSyncDate();

@@ -11,6 +11,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -22,7 +23,7 @@ public class ScheduledJobManager {
     private final ProjectDomainCnameOperatorService projectDomainCnameOperatorService;
 
     @Async
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
     public void updateAllTemporaryPublicMedia() {
         log.info("Update all temporary public media has started.");
         List<String> expiredMedias = mediaRetrieveService.retrieveAllTemporaryPublicAndExpired();
@@ -30,7 +31,7 @@ public class ScheduledJobManager {
     }
 
     @Async
-    @Scheduled(fixedRate = 10000)
+    @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
     public void checkAndSyncCustomDomains() {
         log.info("Check and sync custom domains has started.");
         Try findAvailableAndSyncTry = Try.of(projectDomainCnameOperatorService::findAvailableAndSync);
