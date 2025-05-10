@@ -1,5 +1,6 @@
 package co.jinear.core.manager.payments;
 
+import co.jinear.core.config.properties.GenericJinearProperties;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.service.payments.PaymentSettingsService;
 import co.jinear.core.service.payments.PaymentsOperationService;
@@ -18,13 +19,16 @@ public class PaymentsManager {
 
     private final PaymentsOperationService paymentsOperationService;
     private final PaymentSettingsService paymentSettingsService;
+    private final GenericJinearProperties genericJinearProperties;
 
     @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
     public BaseResponse retrieveAndApplyLatestPayments() {
-        log.info("Retrieve and apply latest payments has started.");
-        ZonedDateTime lastSyncDate = paymentSettingsService.retrieveLastSyncDate();
-        paymentsOperationService.retrieveAndApplyLatestPayments(lastSyncDate.minusHours(1));
-        paymentSettingsService.updateLastSyncDate(ZonedDateTime.now());
+        if (Boolean.FALSE.equals(genericJinearProperties.getRemovePricing())) {
+            log.info("Retrieve and apply latest payments has started.");
+            ZonedDateTime lastSyncDate = paymentSettingsService.retrieveLastSyncDate();
+            paymentsOperationService.retrieveAndApplyLatestPayments(lastSyncDate.minusHours(1));
+            paymentSettingsService.updateLastSyncDate(ZonedDateTime.now());
+        }
         return new BaseResponse();
     }
 }

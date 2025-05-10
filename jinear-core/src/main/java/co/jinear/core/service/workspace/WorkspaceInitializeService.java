@@ -1,5 +1,6 @@
 package co.jinear.core.service.workspace;
 
+import co.jinear.core.config.properties.GenericJinearProperties;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.username.UsernameDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
@@ -41,6 +42,7 @@ public class WorkspaceInitializeService {
     private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
     private final TeamInitializeService teamInitializeService;
     private final SlackService slackService;
+    private final GenericJinearProperties genericJinearProperties;
 
     @Transactional
     public WorkspaceDto initializeWorkspace(WorkspaceInitializeVo workspaceInitializeVo) {
@@ -111,10 +113,11 @@ public class WorkspaceInitializeService {
     }
 
     private Workspace saveWorkspace(WorkspaceInitializeVo workspaceInitializeVo) {
+        WorkspaceTier tier = Boolean.TRUE.equals(genericJinearProperties.getRemovePricing()) ? WorkspaceTier.PRO : WorkspaceTier.BASIC;
         Workspace workspace = new Workspace();
         workspace.setTitle(workspaceInitializeVo.getTitle());
         workspace.setDescription(workspaceInitializeVo.getDescription());
-        workspace.setTier(WorkspaceTier.BASIC);
+        workspace.setTier(tier);
         return workspaceRepository.saveAndFlush(workspace);
     }
 

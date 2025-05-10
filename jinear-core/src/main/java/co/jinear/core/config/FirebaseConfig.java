@@ -18,13 +18,18 @@ public class FirebaseConfig {
     @Value("${notification.firebase.auth}")
     private String firebaseAuth;
 
+    @Value("${notification.firebase.enabled}")
+    private Boolean enabled;
+
     @PostConstruct
     public void initializeFirebase() throws IOException {
-        byte[] decoded = Base64.getDecoder().decode(firebaseAuth);
-        InputStream tokenStream = new ByteArrayInputStream(decoded);
-        FirebaseOptions options = FirebaseOptions.builder()
-                .setCredentials(GoogleCredentials.fromStream(tokenStream))
-                .build();
-        FirebaseApp.initializeApp(options);
+        if (Boolean.TRUE.equals(enabled)) {
+            byte[] decoded = Base64.getDecoder().decode(firebaseAuth);
+            InputStream tokenStream = new ByteArrayInputStream(decoded);
+            FirebaseOptions options = FirebaseOptions.builder()
+                    .setCredentials(GoogleCredentials.fromStream(tokenStream))
+                    .build();
+            FirebaseApp.initializeApp(options);
+        }
     }
 }
