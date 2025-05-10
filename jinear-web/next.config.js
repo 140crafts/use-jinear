@@ -16,16 +16,12 @@ const nextConfig = {
     // domains: ["storage.googleapis.com", "placehold.co", "files.jinear.co"]
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "**",
-        port: '',
-        pathname: '**'
+        protocol: "http",
+        hostname: "**"
       },
       {
-        protocol: "http",
-        hostname: "**",
-        port: '',
-        pathname: '**'
+        protocol: "https",
+        hostname: "**"
       }
     ]
 
