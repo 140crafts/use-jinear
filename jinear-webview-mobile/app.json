@@ -1,0 +1,82 @@
+{
+  "expo": {
+    "name": "Jinear",
+    "slug": "Jinear",
+    "owner": "jinear_co",
+    "version": "1.0.20",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#2C2929"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "bundleIdentifier": "co.jinear.app",
+      "supportsTablet": true,
+      "buildNumber": "1.0.20",
+      "infoPlist": {
+        "NSCameraUsageDescription": "To take a profile picture Jinear needs to access your camera.",
+        "NSPhotoLibraryUsageDescription": "To upload a profile picture Jinear needs to access your photo library.",
+        "NSPhotoLibraryAddUsageDescription": "To save media Jinear needs to access your photo library.",
+        "NSMicrophoneUsageDescription": "To take voice memo Jinear needs to access your microphone.",
+        "NSUserTrackingUsageDescription": "This identifier will be used to collect in-app activity in order to improve functionalities, user engagement, help us understand crash and analytics data."
+      },
+      "config": {
+        "usesNonExemptEncryption": false
+      },
+      "associatedDomains": [
+        "applinks:jinear.co"
+      ]
+    },
+    "android": {
+      "package": "co.jinear.app",
+      "versionCode": 20,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F56E0F"
+      },
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "autoVerify": true,
+          "data": [
+            {
+              "scheme": "https",
+              "host": "*.jinear.co",
+              "pathPrefix": "/"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ],
+      "permissions": [
+        "com.google.android.gms.permission.AD_ID"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "ec4bae47-8364-47c7-ac39-9c41c4de227e"
+      }
+    },
+    "plugins": [
+      "expo-tracking-transparency"
+    ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/ec4bae47-8364-47c7-ac39-9c41c4de227e"
+    }
+  }
+}
