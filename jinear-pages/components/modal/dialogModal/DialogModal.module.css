@@ -1,0 +1,11 @@
+.actionBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 0.85rem;
+    margin-top: 1.5rem;
+}
+
+.content {
+    text-align: justify;
+}

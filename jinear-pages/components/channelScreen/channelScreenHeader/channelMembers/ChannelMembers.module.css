@@ -1,0 +1,18 @@
+.memberProfilePicList {
+    display: flex;
+    flex-direction: row;
+}
+
+.profilePic {
+    height: 25px !important;
+    width: 25px !important;
+}
+
+.moreButton {
+    flex: 1;
+    color: var(--c-secondary-shade-0-op05);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 0.25rem 0.75rem;
+}

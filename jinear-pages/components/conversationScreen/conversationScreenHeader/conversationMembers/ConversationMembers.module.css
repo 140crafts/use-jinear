@@ -1,0 +1,41 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    flex: 1;
+}
+
+.profilePicContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.profilePic {
+    height: 25px !important;
+    width: 25px !important;
+}
+
+.unshownAvatarCount {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px !important;
+    width: 25px !important;
+    border-radius: 70px;
+    border-color: var(--c-primary-shade-1);
+    border-width: thin;
+    background-color: var(--c-primary-shade-0);
+    text-align: center;
+    font-size: .6rem;
+    margin-left: -10px;
+    z-index: 9;
+    font-weight: bold;
+}
+
+.participantNamesContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    align-items: center;
+}

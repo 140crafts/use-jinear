@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.labelButton {
+  gap: 1rem !important;
+  flex: 1 !important;
+  justify-content: flex-start !important;
+}
+
+.actionButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}

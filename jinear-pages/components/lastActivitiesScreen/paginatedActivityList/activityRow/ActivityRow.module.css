@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  /* margin: 0.75rem 0 0.25rem 0; */
+}
+
+.groupTitle {
+  font-size: 0.8rem;
+}
+
+.iconContainer {
+  min-width: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

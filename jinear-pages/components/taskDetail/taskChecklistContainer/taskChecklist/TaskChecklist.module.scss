@@ -1,0 +1,29 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.headerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.itemsContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.titleInput {
+  // like h3
+  font-size: 0.85rem;
+  font-weight: 600;
+  background-color: unset !important;
+  padding: 0.25ch;
+  flex: 1;
+}
+
+.titleInput:hover {
+  background-color: var(--c-primary-shade-0) !important;
+}

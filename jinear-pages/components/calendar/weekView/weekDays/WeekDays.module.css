@@ -1,0 +1,25 @@
+.weekViewWeekdayHeaderContainer {
+  display: flex;
+  flex-direction: row;
+  height: var(--calendar-weekdays-header-height);
+  position: sticky;
+  top: var(--workspace-header-height);
+  z-index: 10;
+  background-color: var(--c-primary);
+  border-bottom: 1px var(--c-primary-shade-0) solid;
+}
+
+.weekdayHeader {
+  flex: 1;
+  padding: 0.25rem 0.5rem;
+  font-weight: 700;
+}
+
+.sideHourLabelSpacer {
+  width: var(--calendar-week-view-left-hour-label-container-width);
+}
+
+.today {
+  background-color: var(--c-primary-shade-1);
+  border-radius: 0;
+}

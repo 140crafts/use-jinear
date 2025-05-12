@@ -1,0 +1,31 @@
+.container {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex: 1 !important;
+    padding-left: 1.25rem !important;
+    text-align: left !important;
+    opacity: 0.8;
+    gap: .5rem;
+}
+
+.conversationName {
+    flex: 1;
+    font-size: 0.75rem;
+}
+
+.profilePicContainer {
+    display: flex;
+    flex-direction: row;
+
+}
+
+.profilePic {
+    height: 21px !important;
+    width: 21px !important;
+}
+
+.unread {
+    font-weight: bold;
+}

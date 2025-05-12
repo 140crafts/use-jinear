@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    border: solid var(--c-primary-shade-1) thin;
+    border-radius: var(--border-radius);
+}
+
+.unarchiveButton {
+    align-self: flex-end;
+}

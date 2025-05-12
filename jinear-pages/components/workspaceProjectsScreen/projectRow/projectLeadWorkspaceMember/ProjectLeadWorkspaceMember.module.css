@@ -1,0 +1,9 @@
+.profilePic {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.icon {
+    min-width: 20px !important;
+    width: 20px !important;
+}

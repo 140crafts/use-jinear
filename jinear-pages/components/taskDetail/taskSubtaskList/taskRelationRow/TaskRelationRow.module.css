@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: var(--border-radius);
+}
+
+.container:hover {
+  background-color: var(--c-primary-shade-0);
+}
+
+.linkButton {
+  flex: 1;
+  justify-content: flex-start;
+  text-align: left;
+  color: var(--c-text-color);
+}
+
+.noAccessLabel {
+  flex: 1;
+  justify-content: flex-start;
+}
+
+.workflowStatusButton {
+  width: 32px !important;
+  height: 32px !important;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+}
+
+.deleteButton {
+  display: none !important;
+}
+
+.container:hover .deleteButton {
+  display: flex !important;
+}
+
+.disabled {
+  opacity: 0.85 !important;
+  cursor: not-allowed !important;
+}

@@ -1,0 +1,49 @@
+@import "/styles/breakpoints.scss";
+
+.modalBody {
+  height: 95vh !important;
+  max-height: unset !important;
+  padding: 0 !important;
+}
+
+.modal {
+  position: relative !important;
+  height: 95vh !important;
+}
+
+.loadingContainer {
+  align-self: center;
+  margin: 4rem 0;
+}
+
+.actionBar {
+  position: sticky;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  flex: 1;
+  top: 0;
+  padding: 0.5rem;
+  // padding-bottom: 1ch;
+  // backdrop-filter: var(--backdrop-filter-blur);
+  z-index: 99;
+}
+
+.goToTaskButton {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.taskContentWrapper {
+  height: 100%;
+  padding: 0 1rem;
+  margin-bottom: 3rem;
+}
+
+@media (max-width: $mobile-l) {
+  .taskContentWrapper {
+    padding: 0 0.5rem;
+  }
+}

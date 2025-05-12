@@ -1,0 +1,25 @@
+.calendarLine {
+  border-style: solid;
+  border-color: var(--c-primary-shade-0-op05);
+  border-width: 1px;
+  border-bottom-color: var(--c-primary-shade-1);
+  /* border-bottom-width: 2px; */
+  flex: 1 1;
+  height: 100%;
+}
+
+.calendarLine:hover {
+  background: linear-gradient(0, var(--c-primary), 40%, var(--c-primary-shade-0-op05));
+}
+
+.todayCalendarLine {
+  background: linear-gradient(0, var(--c-primary), 10%, var(--c-primary-shade-0-op05));
+}
+
+.todayCalendarLine:hover {
+  background: linear-gradient(0, var(--c-primary), 1%, var(--c-primary-shade-0-op05));
+}
+
+.dragOver {
+  background: linear-gradient(0, var(--c-primary), 1%, var(--c-primary-shade-0-op05)) !important;
+}

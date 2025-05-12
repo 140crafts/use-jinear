@@ -1,0 +1,38 @@
+@import "/styles/breakpoints.scss";
+
+.button {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.label {
+  display: block;
+  max-width: 45px;
+  font-weight: 600;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  margin-right: -0.75rem;
+}
+
+@media (min-width: $mobile-s) {
+  .label {
+    max-width: 35px;
+  }
+}
+
+@media (min-width: $mobile-m) {
+  .label {
+    max-width: 90px;
+  }
+}
+
+@media (min-width: $tablet) {
+  .label {
+    max-width: 230px;
+  }
+}

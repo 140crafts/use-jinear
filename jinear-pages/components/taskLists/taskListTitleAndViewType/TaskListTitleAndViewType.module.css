@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.viewTypeButtonContainer {
+  align-self: flex-end;
+  display: flex;
+  flex-direction: row;
+  background-color: var(--c-primary-shade-0);
+  border-radius: var(--border-radius);
+}
+
+.wfsColumnIcon {
+  rotate: 180deg;
+}
+
+.button {
+  display: flex;
+  gap: 0.5rem;
+}

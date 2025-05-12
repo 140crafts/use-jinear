@@ -1,0 +1,22 @@
+.actionBar {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.goToAppButton {
+  display: flex;
+  flex-direction: row;
+  min-width: 8rem;
+  gap: 0.5rem;
+  background-color: var(--c-JINEAR_ORANGE) !important;
+  color: var(--c-BABY_POWDER) !important;
+}
+
+.loginButton {
+  background-color: var(--c-JINEAR_ORANGE) !important;
+  color: var(--c-BABY_POWDER) !important;
+}

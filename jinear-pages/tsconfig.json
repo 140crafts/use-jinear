@@ -1,0 +1,47 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/components/*": ["components/*"],
+      "@/hooks/*": ["hooks/*"],
+      "@/store/*": ["store/*"],
+      "@/api/*": ["store/api/*"],
+      "@/slice/*": ["store/slice/*"],
+      "@/utils/*": ["utils/*"],
+      "@/model/*": ["model/*"],
+      "@/be/*": ["model/be/*"],
+      "@/locals/*": ["locales/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "utils/debounce.js",
+    "utils/clipboard.js",
+    "utils/colorHelper.js",
+    "utils/gtag.js",
+    "public/firebase-messaging-sw.js",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": ["node_modules"]
+}

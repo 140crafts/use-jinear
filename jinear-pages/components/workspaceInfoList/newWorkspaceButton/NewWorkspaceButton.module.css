@@ -1,0 +1,45 @@
+.infoContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.profilePicContainer {
+  min-width: 32.5px;
+  width: 32.5px;
+  height: 32.5px;
+  border-radius: 14.4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.profilePicContainer:hover {
+  background-color: var(--c-primary);
+}
+
+.profilePicContainer-without-profile-pic {
+  background-color: var(--c-primary-shade-1);
+}
+
+.firstLetter {
+  text-align: center;
+  color: var(--c-secondary-shade-0);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.nameContainer {
+  display: flex !important;
+  flex-direction: row !important;
+  flex: 1 !important;
+  justify-content: flex-start !important;
+}
+
+.title {
+  font-weight: 600;
+  text-align: left;
+}

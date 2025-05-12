@@ -1,0 +1,22 @@
+.appstoreContainer {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.appstoreButtonsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: .5rem;
+    margin-top: 1rem;
+}
+
+.storeButton {
+    gap: 1rem;
+}
+
+.about {
+    text-align: justify;
+}

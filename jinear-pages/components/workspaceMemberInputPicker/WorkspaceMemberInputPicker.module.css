@@ -1,0 +1,93 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.searchInputContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*overflow-x: scroll;*/
+    background: var(--c-primary-shade-0) !important;
+    color: var(--c-text-color) !important;
+    caret-color: var(--c-text-color) !important;
+    border-color: transparent;
+    border-width: 1px;
+    border-radius: var(--border-radius);
+    border-style: solid;
+    align-items: center;
+    /*justify-content: center;*/
+    transition: var(--fade);
+    text-decoration: none;
+    /*padding: 7.5px;*/
+    margin: 0 0.5rem;
+    min-height: 1rem;
+}
+
+.searchInput {
+    flex: 1;
+    min-width: 40px;
+}
+
+.searchInput:hover {
+    background-color: transparent !important;
+}
+
+.searchInput:focus {
+    border-color: transparent !important;
+}
+
+.list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    height: min(100%, 16rem);
+    min-height: 12rem;
+    padding: 0.5rem;
+    overflow-y: scroll;
+    gap: 0.25rem;
+}
+
+.messageContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.listItemButton {
+    text-align: left !important;
+    justify-content: left !important;
+    gap: 0.5rem !important;
+}
+
+.profilePic {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+.selectedMemberListContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.selectedMemberContainer {
+    /* padding: 0.25rem 0.75rem; */
+    background-color: var(--c-primary-shade-0);
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.selectedMemberName {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 1rem;
+}
+
+.selectedTopicUnselectButton {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+}

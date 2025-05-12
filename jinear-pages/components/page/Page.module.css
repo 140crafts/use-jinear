@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    width: 728px;
+    margin: 0 auto;
+  }
+}
+
+.marginVertically {
+  margin-top: 4rem;
+}

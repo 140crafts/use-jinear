@@ -1,0 +1,68 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+}
+
+.profilePicContainer {
+    position: relative;
+    padding-top: .25rem;
+}
+
+.profilePic {
+    height: 35px !important;
+    width: 35px !important;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: .25rem;
+}
+
+
+.editorWrapper {
+    display: flex;
+    flex: 1;
+    min-height: 4rem;
+}
+
+.input {
+    flex: 1;
+    background-color: unset !important;
+    /*border: none transparent !important;*/
+    border-color: var(--c-primary-shade-0) !important;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+
+.input:focus {
+    outline: transparent none !important;
+}
+
+.attachmentInput {
+    display: none;
+}
+
+.buttonContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: .5rem;
+}
+
+.fileListContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 100%;
+    gap: .25rem;
+    margin-top: .5rem;
+}

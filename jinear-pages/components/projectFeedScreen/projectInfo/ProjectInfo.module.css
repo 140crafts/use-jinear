@@ -1,0 +1,40 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+.input {
+    background-color: unset !important;
+    padding: 0 !important;
+}
+
+.infoContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.profilePicture {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 125px;
+    height: 125px;
+    border-radius: var(--border-radius);
+    /*border-color: var(--c-primary-shade-1);*/
+    /*border-width: none;*/
+    /* border-width: 0px; */
+    /*border-style: solid;*/
+    object-fit: cover;
+}
+
+.profilePicture:hover {
+    background-color: var(--c-primary-shade-0);
+    cursor: pointer;
+}
+
+.title {
+    padding-top: 0rem;
+}

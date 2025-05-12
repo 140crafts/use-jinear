@@ -1,0 +1,102 @@
+import Pagination from "@/components/pagination/Pagination";
+import { TaskListingPaginatedResponse } from "@/model/be/jinear-core";
+import { CircularProgress } from "@mui/material";
+import cn from "classnames";
+import useTranslation from "locales/useTranslation";
+import React from "react";
+import TaskRow from "../../taskRow/TaskRow";
+import styles from "./BaseTaskList.module.scss";
+
+export type PaginationPosition = "TOP" | "BOTTOM";
+
+interface BaseTaskListProps {
+  id: string;
+  name: string;
+  response?: TaskListingPaginatedResponse;
+  isFetching: boolean;
+  isLoading: boolean;
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>> | ((nextPage?: number) => void);
+  paginationPosition?: PaginationPosition;
+  hidePaginationOnSinglePages?: boolean;
+  containerClassName?: string;
+  contentContainerClassName?: string;
+}
+
+const BaseTaskList: React.FC<BaseTaskListProps> = ({
+  id,
+  name,
+  response,
+  isFetching,
+  isLoading,
+  page,
+  setPage,
+  paginationPosition = "TOP",
+  hidePaginationOnSinglePages = true,
+  containerClassName,
+  contentContainerClassName,
+}) => {
+  const { t } = useTranslation();
+
+  const emptyOrSinglePage = response?.data?.totalPages == 0 || response?.data?.totalPages == 1;
+
+  return (
+    <div id={id} className={cn(styles.container, containerClassName)}>
+      <div className={styles.header}>
+        <h2>{name}</h2>
+        {!(hidePaginationOnSinglePages && emptyOrSinglePage) && response && paginationPosition == "TOP" && (
+          <Pagination
+            id={`${id}-paginator`}
+            className={styles.pagination}
+            pageNumber={response.data.number}
+            pageSize={response.data.size}
+            totalPages={response.data.totalPages}
+            totalElements={response.data.totalElements}
+            hasPrevious={response.data.hasPrevious}
+            hasNext={response.data.hasNext}
+            isLoading={isLoading || isFetching}
+            page={page}
+            setPage={setPage}
+          />
+        )}
+      </div>
+
+      <div className={cn(styles.content, styles.gradientBg, contentContainerClassName)}>
+        {response?.data.content.map((taskDto) => (
+          <TaskRow key={`${id}-list-task-${taskDto.taskId}`} task={taskDto} />
+        ))}
+
+        {!response?.data.hasContent && (
+          <div className={styles.emptyStateContainer}>
+            <div className={styles.emptyLabel}>{t("workflowTaskListEmpty")}</div>
+          </div>
+        )}
+      </div>
+
+      {isFetching && (
+        <div className={styles.loading}>
+          <CircularProgress />
+        </div>
+      )}
+      <div className={styles.footer}>
+        {!(hidePaginationOnSinglePages && emptyOrSinglePage) && response && paginationPosition == "BOTTOM" && (
+          <Pagination
+            id={`${id}-paginator`}
+            className={styles.pagination}
+            pageNumber={response.data.number}
+            pageSize={response.data.size}
+            totalPages={response.data.totalPages}
+            totalElements={response.data.totalElements}
+            hasPrevious={response.data.hasPrevious}
+            hasNext={response.data.hasNext}
+            isLoading={isLoading || isFetching}
+            page={page}
+            setPage={setPage}
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default BaseTaskList;

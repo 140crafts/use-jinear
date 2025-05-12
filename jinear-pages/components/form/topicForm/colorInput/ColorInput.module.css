@@ -1,0 +1,5 @@
+.container {
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: space-between;
+}

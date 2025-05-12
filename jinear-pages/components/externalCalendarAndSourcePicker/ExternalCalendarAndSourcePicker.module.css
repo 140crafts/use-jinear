@@ -1,0 +1,27 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.selectContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .25rem;
+    background: var(--c-primary-shade-0) !important;
+    padding-left: 7.5px;
+    border-radius: var(--border-radius);
+}
+
+.calendarSelect {
+    font-weight: 600;
+    flex: unset !important;
+}
+
+.icon {
+    width: 12px;
+    min-width: 12px;
+}
