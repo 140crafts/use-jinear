@@ -1,0 +1,14 @@
+version: '3'
+services:
+
+  jinear-messaging-service:
+    container_name: jinear-messaging-service
+    image: 'registry.gitlab.com/140crafts/jinear/projects/jinear-message-service:latest'
+    ports:
+      - '3001:3001'
+    restart: always
+    environment:
+      PORT: 3001
+      AXIOM_TOKEN: ${AXIOM_TOKEN}
+      AXIOM_ORG_ID: ${AXIOM_ORG_ID}
+      CORE_ENDPOINT: https://message.jinear.co
