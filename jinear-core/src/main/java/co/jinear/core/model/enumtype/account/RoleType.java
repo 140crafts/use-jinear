@@ -1,0 +1,35 @@
+package co.jinear.core.model.enumtype.account;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static co.jinear.core.model.enumtype.account.PermissionType.*;
+
+@Getter
+@AllArgsConstructor
+public enum RoleType {
+    ADMIN(Stream.of(PermissionType.values()).collect(Collectors.toSet())),
+    SERVICE(Set.of(PROCESS_REMINDER_JOB, EXPIRE_TEMP_PUBLIC_MEDIA)),
+    USER(new HashSet<>()),
+    ROBOT(Set.of(ROBOT_MESSAGE_INIT));
+
+    private final Set<PermissionType> permissions;
+
+    public Set<SimpleGrantedAuthority> getGrantedAuthorities() {
+        Set<SimpleGrantedAuthority> perms = getPermissions().stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.getPermission()))
+                .collect(Collectors.toSet());
+        perms.add(new SimpleGrantedAuthority(getAuthority()));
+        return perms;
+    }
+
+    public String getAuthority() {
+        return "ROLE_" + this.name();
+    }
+}

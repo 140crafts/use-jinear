@@ -1,0 +1,19 @@
+package co.jinear.core.model.request.project;
+
+import co.jinear.core.model.request.BaseRequest;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
+public class ProjectTeamOperationRequest extends BaseRequest {
+
+    @NotBlank
+    private String projectId;
+    @NotEmpty
+    private List<String> teamIds;
+}

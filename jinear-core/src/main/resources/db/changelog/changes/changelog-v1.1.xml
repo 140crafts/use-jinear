@@ -1,0 +1,2039 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team">
+        <createTable tableName="team">
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="tag" type="varchar(255)"/>
+            <column name="visibility" type="varchar(255)"/>
+            <column name="join_method" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="team_ix_workspace_id" tableName="team">
+            <column name="workspace_id"/>
+        </createIndex>
+
+        <createIndex indexName="team_ix_tag" tableName="team">
+            <column name="tag"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team_member">
+        <createTable tableName="team_member">
+            <column name="team_member_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="team_id" type="char(26)"/>
+        </createTable>
+
+        <createIndex indexName="team_member_ix_account_id" tableName="team_member">
+            <column name="account_id"/>
+        </createIndex>
+
+        <createIndex indexName="team_member_ix_workspace_id" tableName="team_member">
+            <column name="workspace_id"/>
+        </createIndex>
+
+        <createIndex indexName="team_member_ix_team_id" tableName="team_member">
+            <column name="team_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-topic">
+        <createTable tableName="topic">
+            <column name="topic_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="team_id" type="char(26)"/>
+            <column name="owner_id" type="char(26)"/>
+            <column name="color" type="char(6)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="tag" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="topic_ix_owner_id" tableName="topic">
+            <column name="owner_id"/>
+        </createIndex>
+
+        <createIndex indexName="topic_ix_tag" tableName="topic">
+            <column name="tag"/>
+        </createIndex>
+
+        <createIndex indexName="topic_ix_workspace_id" tableName="topic">
+            <column name="workspace_id"/>
+        </createIndex>
+
+        <createIndex indexName="topic_ix_team_id" tableName="topic">
+            <column name="team_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task">
+        <createTable tableName="task">
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="team_id" type="char(26)"/>
+            <column name="topic_id" type="char(26)"/>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="assigned_date" type="datetime"/>
+            <column name="due_date" type="datetime"/>
+            <column name="topic_tag_no" type="int"/>
+            <column name="team_tag_no" type="int"/>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="text"/>
+        </createTable>
+
+        <createIndex indexName="task_ix_workspace_id" tableName="task">
+            <column name="workspace_id"/>
+        </createIndex>
+
+        <createIndex indexName="task_ix_topic_id" tableName="task">
+            <column name="topic_id"/>
+        </createIndex>
+
+        <createIndex indexName="task_ix_owner_id" tableName="task">
+            <column name="owner_id"/>
+        </createIndex>
+        <createIndex indexName="task_ix_team_id" tableName="task">
+            <column name="team_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-topic_seq">
+        <createTable tableName="topic_seq">
+            <column name="topic_seq_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="topic_id" type="char(26)"/>
+            <column name="seq" type="int"/>
+        </createTable>
+
+        <createIndex indexName="topic_seq_ix_topic_id" tableName="topic_seq">
+            <column name="topic_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace_display_preference">
+        <createTable tableName="workspace_display_preference">
+            <column name="workspace_display_preference_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)"/>
+            <column name="preferred_workspace_id" type="char(26)"/>
+        </createTable>
+
+        <createIndex indexName="workspace_display_preference_ix_account_id" tableName="workspace_display_preference">
+            <column name="account_id"/>
+        </createIndex>
+
+        <createIndex indexName="workspace_display_preference_ix_preferred_workspace_id"
+                     tableName="workspace_display_preference">
+            <column name="preferred_workspace_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-task-assigned_to">
+        <addColumn tableName="task">
+            <column name="assigned_to" type="char(26)"/>
+        </addColumn>
+
+        <createIndex indexName="task_ix_assigned_to" tableName="task">
+            <column name="assigned_to"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-workspace_display_preference-preferred_team_id">
+        <addColumn tableName="workspace_display_preference">
+            <column name="preferred_team_id" type="char(26)"/>
+        </addColumn>
+
+        <createIndex indexName="workspace_display_preference_ix_preferred_team_id"
+                     tableName="workspace_display_preference">
+            <column name="preferred_team_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-team_workflow_status">
+        <createTable tableName="team_workflow_status">
+            <column name="team_workflow_status_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="team_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="workflow_state_group" type="varchar(255)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="order" type="int"/>
+        </createTable>
+
+        <createIndex indexName="team_workflow_status_ix_team_id" tableName="team_workflow_status">
+            <column name="team_id"/>
+        </createIndex>
+
+        <createIndex indexName="team_workflow_status_ix_workspace_id" tableName="team_workflow_status">
+            <column name="workspace_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-task-workflow_status_id">
+        <addColumn tableName="task">
+            <column name="workflow_status_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="task_ix_workflow_status_id" tableName="task">
+            <column name="workflow_status_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-rich_text">
+        <createTable tableName="rich_text">
+            <column name="rich_text_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="related_object_id" type="char(26)"/>
+            <column name="value" type="text"/>
+            <column name="type" type="varchar(255)"/>
+            <column name="source_stack" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="rich_text_ix_related_object_id" tableName="rich_text">
+            <column name="related_object_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace_activity">
+        <createTable tableName="workspace_activity">
+            <column name="workspace_activity_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_id" type="char(26)"/>
+            <column name="activity_type" type="varchar(255)"/>
+            <column name="performed_by" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_object_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="old_state" type="text"/>
+            <column name="new_state" type="text"/>
+        </createTable>
+
+        <createIndex indexName="workspace_activity_ix_workspace_id" tableName="workspace_activity">
+            <column name="workspace_id"/>
+        </createIndex>
+
+        <createIndex indexName="workspace_activity_ix_team_id" tableName="workspace_activity">
+            <column name="team_id"/>
+        </createIndex>
+
+        <createIndex indexName="workspace_activity_ix_task_id" tableName="workspace_activity">
+            <column name="task_id"/>
+        </createIndex>
+
+        <createIndex indexName="workspace_activity_ix_performed_by" tableName="workspace_activity">
+            <column name="performed_by"/>
+        </createIndex>
+
+        <createIndex indexName="workspace_activity_ix_related_object_id" tableName="workspace_activity">
+            <column name="related_object_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-team-initialized_by">
+        <addColumn tableName="team">
+            <column name="initialized_by" type="char(26)" defaultValue="-">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-drop-default-value-from-team-initialized_by">
+        <dropDefaultValue columnDataType="char(26)"
+                          columnName="initialized_by"
+                          tableName="team"/>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task-relation">
+        <createTable tableName="task_relation">
+            <column name="task_relation_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="relation_type" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <!--    <changeSet author="cagdas.tunca" id="jinear-1-add-fts-index">-->
+    <!--        <sql>-->
+    <!--            alter table task-->
+    <!--                add fulltext(title)-->
+    <!--        </sql>-->
+    <!--    </changeSet>-->
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task-subscription">
+        <createTable tableName="task_subscription">
+            <column name="task_subscription_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-reminder">
+        <createTable tableName="reminder">
+            <column name="reminder_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_object_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="type" type="int" remarks="TASK(0);">
+                <constraints nullable="false"/>
+            </column>
+            <column name="repeat_type" type="int" defaultValueNumeric="0"
+                    remarks="NONE(0),HOURLY(1),DAILY(2),WEEKLY(3),BIWEEKLY(4),MONTHLY(5),EVERY_3_MONTHS(6),EVERY_6_MONTHS(7),YEARLY(8);">
+                <constraints nullable="false"/>
+            </column>
+            <column name="repeat_start" type="datetime"/>
+            <column name="repeat_end" type="datetime"/>
+        </createTable>
+
+        <createIndex indexName="reminder_ix_owner_id" tableName="reminder">
+            <column name="owner_id"/>
+        </createIndex>
+
+        <createIndex indexName="reminder_ix_related_object_id" tableName="reminder">
+            <column name="related_object_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-reminder-job">
+        <createTable tableName="reminder_job">
+            <column name="reminder_job_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="reminder_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="int" remarks="PENDING(0),COMPLETED(1),CANCELLED(-1);">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="reminder_job_ix_reminder_id" tableName="reminder_job">
+            <column name="reminder_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task-reminder">
+        <createTable tableName="task_reminder">
+            <column name="task_reminder_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reminder_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_reminder_type" type="int" remarks="ASSIGNED_DATE(0),DUE_DATE(1),SPECIFIC_DATE(2);">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="task_reminder_ix_task_id" tableName="task_reminder">
+            <column name="task_id"/>
+        </createIndex>
+        <createIndex indexName="task_reminder_ix_reminder_id" tableName="task_reminder">
+            <column name="reminder_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-locale_type-column-to-account">
+        <addColumn tableName="account">
+            <column name="locale_type" type="char(3)" defaultValue="EN"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-time_zone-column-to-account">
+        <addColumn tableName="account">
+            <column name="time_zone" type="varchar(10)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-precise-date-columns-to-task">
+        <addColumn tableName="task">
+            <column name="has_precise_assigned_date" type="boolean" defaultValueBoolean="false"/>
+        </addColumn>
+        <addColumn tableName="task">
+            <column name="has_precise_due_date" type="boolean"
+                    defaultValueBoolean="false"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-workspace_invitation">
+        <createTable tableName="workspace_invitation">
+            <column name="workspace_invitation_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="invited_by" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)"/>
+            <column name="email" type="varchar(255)"/>
+            <column name="for_role" type="int"/>
+            <column name="status" type="int"/>
+        </createTable>
+
+        <createIndex indexName="workspace_invitation_ix_workspace_id" tableName="workspace_invitation">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="workspace_invitation_ix_invited_by" tableName="workspace_invitation">
+            <column name="invited_by"/>
+        </createIndex>
+        <createIndex indexName="workspace_invitation_ix_account_id" tableName="workspace_invitation">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-initial_team_id-column-to-workspace_invitation">
+        <addColumn tableName="workspace_invitation">
+            <column name="initial_team_id" type="char(26)">
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-username-column-to-team">
+        <addColumn tableName="team">
+            <column name="username" type="varchar(255)">
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-update-team#username-with-team#tag">
+        <sql>
+            update team
+            set username = tag
+            where username is null
+        </sql>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-not-null-constrait-team#username-">
+        <addNotNullConstraint tableName="team" columnName="username" columnDataType="varchar(255)"/>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-role-column-to-team_member">
+        <addColumn tableName="team_member">
+            <column name="role" type="int" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-notification_target">
+        <createTable tableName="notification_target">
+            <column name="notification_target_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="external_target_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="session_info_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="target_type" type="int"/>
+        </createTable>
+
+        <createIndex indexName="notification_target_ix_account_id" tableName="notification_target">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="notification_target_ix_external_target_id" tableName="notification_target">
+            <column name="external_target_id"/>
+        </createIndex>
+        <createIndex indexName="notification_target_ix_session_info_id" tableName="notification_target">
+            <column name="session_info_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-notification_event">
+        <createTable tableName="notification_event">
+            <column name="notification_event_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="notification_template_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_read" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="event_state" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="notification_event_ix_account_id" tableName="notification_event">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="notification_event_ix_notification_template_id" tableName="notification_event">
+            <column name="notification_template_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-notification_event_param">
+        <createTable tableName="notification_event_param">
+            <column name="notification_event_param_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="notification_event_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="param_key" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="param_value" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="notification_event_param_ix_notification_event_id" tableName="notification_event_param">
+            <column name="notification_event_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-notification_template">
+        <createTable tableName="notification_template">
+            <column name="notification_template_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="template_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="locale" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="template_title" type="text"/>
+            <column name="template_text" type="text"/>
+            <column name="launch_url" type="text"/>
+        </createTable>
+
+        <createIndex indexName="notification_template_ix_template_type" tableName="notification_template">
+            <column name="template_type"/>
+        </createIndex>
+        <createIndex indexName="notification_template_ix_locale" tableName="notification_template">
+            <column name="locale"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-account_communication_permission">
+        <createTable tableName="account_communication_permission">
+            <column name="account_communication_permission_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="push_notification" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="account_communication_permission_ix_account_id"
+                     tableName="account_communication_permission">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-workspace_id-and-team_id-column-to-notification_event">
+        <addColumn tableName="notification_event">
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="notification_event">
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="notification_event_ix_workspace_id" tableName="notification_event">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="notification_event_ix_team_id" tableName="notification_event">
+            <column name="team_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-is_silent-column-to-notification_event">
+        <addColumn tableName="notification_event">
+            <column name="is_silent" type="boolean" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-checklist">
+        <createTable tableName="checklist">
+            <column name="checklist_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="checklist_ix_task_id" tableName="checklist">
+            <column name="task_id"/>
+        </createIndex>
+        <createIndex indexName="checklist_ix_owner_id" tableName="checklist">
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-checklist_item">
+        <createTable tableName="checklist_item">
+            <column name="checklist_item_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="checklist_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="label" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="is_checked" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="checklist_item_ix_checklist_id" tableName="checklist_item">
+            <column name="checklist_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-notification_event">
+        <addColumn tableName="notification_event">
+            <column name="type" type="int"/>
+        </addColumn>
+
+        <addColumn tableName="notification_event">
+            <column name="locale" type="varchar(255)"/>
+        </addColumn>
+
+        <addColumn tableName="notification_event">
+            <column name="title" type="varchar(255)"/>
+        </addColumn>
+
+        <addColumn tableName="notification_event">
+            <column name="text" type="text"/>
+        </addColumn>
+
+        <addColumn tableName="notification_event">
+            <column name="launch_url" type="varchar(512)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-drop-notification-tables">
+        <dropTable tableName="notification_event_param"/>
+        <dropTable tableName="notification_template"/>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-drop-column-notification-template">
+        <dropColumn tableName="notification_event" columnName="notification_template_id"/>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-task_id-column-to-notification_event">
+        <addColumn tableName="notification_event">
+            <column name="task_id" type="char(26)"/>
+        </addColumn>
+
+        <createIndex indexName="notification_event_ix_task_id" tableName="notification_event">
+            <column name="task_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task_board">
+        <createTable tableName="task_board">
+            <column name="task_board_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="due_date" type="datetime"/>
+            <column name="state" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="task_board_ix_workspace_id" tableName="task_board">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="task_board_ix_team_id" tableName="task_board">
+            <column name="team_id"/>
+        </createIndex>
+        <createIndex indexName="task_board_ix_owner_id" tableName="task_board">
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-task_board_entry">
+        <createTable tableName="task_board_entry">
+            <column name="task_board_entry_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_board_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="order" type="int" defaultValueNumeric="0"/>
+        </createTable>
+
+        <createIndex indexName="task_board_entry_ix_task_board_id" tableName="task_board_entry">
+            <column name="task_board_id"/>
+        </createIndex>
+        <createIndex indexName="task_board_entry_ix_task_id" tableName="task_board_entry">
+            <column name="task_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-tier-column">
+        <addColumn tableName="workspace">
+            <column name="tier" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-visibility-column-to-media">
+        <addColumn tableName="media">
+            <column name="visibility" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-media_key-column-to-media">
+        <addColumn tableName="media">
+            <column name="media_key" type="char(26)"/>
+        </addColumn>
+    </changeSet>
+
+
+    <changeSet author="cagdas.tunca" id="jinear-208-update-media_key-column-with-media-id">
+        <sql>
+            update media
+            set media_key = media_id
+            where media_key is null
+        </sql>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-media_key-column-not-null-constraint">
+        <addNotNullConstraint tableName="media" columnName="media_key" columnDataType="char(26)"/>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-public_until-column-to-media">
+        <addColumn tableName="media">
+            <column name="public_until" type="datetime"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-208-add-size-column-to-media">
+        <addColumn tableName="media">
+            <column name="size" type="bigint"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-171-add-board_id-columnt-to-workspace_activity">
+        <addColumn tableName="workspace_activity">
+            <column name="board_id" type="char(26)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-216-add-provider-column-to-notification_target">
+        <addColumn tableName="notification_target">
+            <column name="provider" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-216-add-sender_session_id-column-to-notification_event">
+        <addColumn tableName="notification_event">
+            <column name="sender_session_id" type="char(26)"/>
+        </addColumn>
+    </changeSet>
+
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-payment_settings">
+        <createTable tableName="payment_settings">
+            <column name="payment_settings_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="last_sync" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-initialize-subscription">
+        <createTable tableName="subscription">
+            <column name="subscription_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="payments_service_subscription_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="status" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_object_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="subscription_ix_payments_service_subscription_id" tableName="subscription">
+            <column name="payments_service_subscription_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-223-add-passthrough-columns-to-subscription">
+        <addColumn tableName="subscription">
+            <column name="workspace_id" type="char(26)"/>
+        </addColumn>
+        <addColumn tableName="subscription">
+            <column name="account_id" type="char(26)"/>
+        </addColumn>
+        <dropColumn tableName="subscription" columnName="related_object_id"/>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-259-initialize-comment">
+        <createTable tableName="comment">
+            <column name="comment_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rich_text_id" type="char(26)"/>
+            <column name="quote_comment_id" type="char(26)"/>
+        </createTable>
+
+        <createIndex indexName="comment_ix_task_id" tableName="comment">
+            <column name="task_id"/>
+        </createIndex>
+        <createIndex indexName="comment_ix_owner_id" tableName="comment">
+            <column name="owner_id"/>
+        </createIndex>
+        <createIndex indexName="comment_ix_rich_text_id" tableName="comment">
+            <column name="rich_text_id"/>
+        </createIndex>
+        <createIndex indexName="comment_ix_quote_comment_id" tableName="comment">
+            <column name="quote_comment_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-1-add-column-to-team-team_task_visibility_type">
+        <addColumn tableName="team">
+            <column name="task_visibility" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-service_log">
+        <createTable tableName="service_log">
+            <column name="service_log_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="direction" type="varchar(255)"/>
+            <column name="client_ip" type="varchar(255)"/>
+            <column name="uri" type="text"/>
+            <column name="request_headers" type="text"/>
+            <column name="request_time" type="datetime"/>
+            <column name="request_payload" type="text"/>
+            <column name="response_headers" type="text"/>
+            <column name="response_time" type="datetime"/>
+            <column name="response_payload" type="text"/>
+            <column name="status_code" type="int"/>
+            <column name="status_text" type="text"/>
+            <column name="method" type="varchar(255)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-google_token">
+        <createTable tableName="google_token">
+            <column name="google_token_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="expires_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="access_token" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="refresh_token" type="text"/>
+            <column name="id_token" type="text">
+                <constraints nullable="false"/>
+            </column>
+            <column name="token_type" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="google_user_info_id" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="google_token_ix_gui_id" tableName="google_token">
+            <column name="google_user_info_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-google_token_scope">
+        <createTable tableName="google_token_scope">
+            <column name="google_token_scope_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="google_token_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scope" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="google_token_scope_ix_google_token_id" tableName="google_token_scope">
+            <column name="google_token_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-google_user_info">
+        <createTable tableName="google_user_info">
+            <column name="google_user_info_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="sub" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email_verified" type="varchar(255)"/>
+            <column name="name" type="varchar(512)"/>
+            <column name="picture" type="text"/>
+            <column name="given_name" type="varchar(512)"/>
+            <column name="family_name" type="varchar(512)"/>
+            <column name="locale" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="google_user_info_ix_sub" tableName="google_user_info">
+            <column name="sub"/>
+        </createIndex>
+        <createIndex indexName="google_user_info_ix_email" tableName="google_user_info">
+            <column name="email"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-integration_info">
+        <createTable tableName="integration_info">
+            <column name="integration_info_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="provider" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="related_object_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="integration_info_ix_related_object_id" tableName="integration_info">
+            <column name="related_object_id"/>
+        </createIndex>
+        <createIndex indexName="integration_info_ix_account_id" tableName="integration_info">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-integration_scope">
+        <createTable tableName="integration_scope">
+            <column name="integration_scope_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="integration_info_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scope" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="integration_scope_ix_integration_info_id" tableName="integration_scope">
+            <column name="integration_info_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-increase-column-size-service_log-response_payload">
+        <modifyDataType tableName="service_log" columnName="response_payload" newDataType="mediumtext"/>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-add-column-to-google_token-last_mail_check">
+        <addColumn tableName="google_token">
+            <column name="last_mail_check" type="datetime"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-gmail_thread">
+        <createTable tableName="gmail_thread">
+            <column name="gmail_thread_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="google_token_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_history_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="gmail_thread_ix_google_token_id" tableName="gmail_thread">
+            <column name="google_token_id"/>
+        </createIndex>
+        <createIndex indexName="gmail_thread_ix_g_id" tableName="gmail_thread">
+            <column name="g_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-gmail_message">
+        <createTable tableName="gmail_message">
+            <column name="gmail_message_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="gmail_thread_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_thread_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_history_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="g_internal_date" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="snippet" type="text"/>
+            <column name="from" type="varchar(255)"/>
+            <column name="to" type="varchar(255)"/>
+            <column name="subject" type="text"/>
+            <column name="body" type="mediumtext"/>
+        </createTable>
+
+        <createIndex indexName="gmail_message_ix_g_id" tableName="gmail_message">
+            <column name="g_id"/>
+        </createIndex>
+        <createIndex indexName="gmail_message_ix_g_thread_id" tableName="gmail_message">
+            <column name="g_thread_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-add-index-to-gmail_message-ix_gmail_thread_id">
+        <createIndex indexName="gmail_message_ix_gmail_thread_id" tableName="gmail_message">
+            <column name="gmail_thread_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-add-columns-to-gmail_thread-snippet">
+        <addColumn tableName="gmail_thread">
+            <column name="snippet" type="text"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-add-columns-to-team-team_state">
+        <addColumn tableName="team">
+            <column name="team_state" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-feed">
+        <createTable tableName="feed">
+            <column name="feed_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initialized_by" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="integration_info_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="feed_ix_workspace_id" tableName="feed">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="feed_ix_initialized_by" tableName="feed">
+            <column name="initialized_by"/>
+        </createIndex>
+        <createIndex indexName="feed_ix_integration_info_id" tableName="feed">
+            <column name="integration_info_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-feed_member">
+        <createTable tableName="feed_member">
+            <column name="feed_member_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feed_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="feed_member_ix_workspace_id" tableName="feed_member">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="feed_member_ix_account_id" tableName="feed_member">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="feed_member_ix_feed_id" tableName="feed_member">
+            <column name="feed_id"/>
+        </createIndex>
+    </changeSet>
+
+
+    <changeSet author="cagdas.tunca" id="jinear-302-initialize-task_feed_item">
+        <createTable tableName="task_feed_item">
+            <column name="task_feed_item_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feed_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feed_item_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="task_feed_item_ix_task_id" tableName="task_feed_item">
+            <column name="task_id"/>
+        </createIndex>
+        <createIndex indexName="task_feed_item_ix_feed_id" tableName="task_feed_item">
+            <column name="feed_id"/>
+        </createIndex>
+        <createIndex indexName="task_feed_item_ix_feed_item_id" tableName="task_feed_item">
+            <column name="feed_item_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-304-initialize-calendar">
+        <createTable tableName="calendar">
+            <column name="calendar_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initialized_by" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="integration_info_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="calendar_ix_workspace_id" tableName="calendar">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="calendar_ix_initialized_by" tableName="calendar">
+            <column name="initialized_by"/>
+        </createIndex>
+        <createIndex indexName="calendar_ix_integration_info_id" tableName="calendar">
+            <column name="integration_info_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-304-initialize-calendar_member">
+        <createTable tableName="calendar_member">
+            <column name="calendar_member_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="calendar_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="calendar_member_ix_workspace_id" tableName="calendar_member">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="calendar_member_ix_account_id" tableName="calendar_member">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="calendar_member_ix_calendar_id" tableName="calendar_member">
+            <column name="calendar_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-439-calendar_share_key">
+        <createTable tableName="calendar_share_key">
+            <column name="calendar_share_key_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="shareable_key" type="char(36)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="calendar_share_key_ix_workspace_id" tableName="calendar_share_key">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="calendar_share_key_ix_account_id" tableName="calendar_share_key">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="calendar_share_key_ix_shareable_key" tableName="calendar_share_key">
+            <column name="shareable_key"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-444-add-columns-to-account">
+        <addColumn tableName="account">
+            <column name="ghost" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-channel">
+        <createTable tableName="channel">
+            <column name="channel_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="participation_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="channel_visibility_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="channel_ix_workspace_id" tableName="channel">
+            <column name="workspace_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-channel_member">
+        <createTable tableName="channel_member">
+            <column name="channel_member_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="channel_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="channel_member_ix_channel_id" tableName="channel_member">
+            <column name="channel_id"/>
+        </createIndex>
+        <createIndex indexName="channel_member_ix_account_id" tableName="channel_member">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-channel_settings">
+        <createTable tableName="channel_settings">
+            <column name="channel_settings_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="channel_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="settings_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="settings_value" type="text">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex indexName="channel_settings_ix_channel_id" tableName="channel_settings">
+            <column name="channel_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-conversation">
+        <createTable tableName="conversation">
+            <column name="conversation_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="last_activity_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-conversation_participant">
+        <createTable tableName="conversation_participant">
+            <column name="conversation_participant_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="conversation_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="left_at" type="datetime"/>
+        </createTable>
+
+        <createIndex indexName="conversation_participant_ix_conversation_id" tableName="conversation_participant">
+            <column name="conversation_id"/>
+        </createIndex>
+        <createIndex indexName="conversation_participant_ix_account_id" tableName="conversation_participant">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-message">
+        <createTable tableName="message">
+            <column name="message_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="rich_text_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="thread_id" type="char(26)"/>
+            <column name="conversation_id" type="char(26)"/>
+        </createTable>
+
+        <createIndex indexName="message_ix_account_id" tableName="message">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="message_ix_thread_id" tableName="message">
+            <column name="thread_id"/>
+        </createIndex>
+        <createIndex indexName="message_ix_conversation_id" tableName="message">
+            <column name="conversation_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-message_data">
+        <createTable tableName="message_data">
+            <column name="message_data_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="message_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_key" type="int"/>
+            <column name="data_value" type="text"/>
+        </createTable>
+
+        <createIndex indexName="message_data_ix_message_id" tableName="message_data">
+            <column name="message_id"/>
+        </createIndex>
+        <createIndex indexName="message_data_ix_data_key" tableName="message_data">
+            <column name="data_key"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-message_reaction">
+        <createTable tableName="message_reaction">
+            <column name="message_reaction_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="message_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reaction_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unicode" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="message_reaction_ix_message_id" tableName="message_reaction">
+            <column name="message_id"/>
+        </createIndex>
+        <createIndex indexName="message_reaction_ix_account_id" tableName="message_reaction">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-tables-thread">
+        <createTable tableName="thread">
+            <column name="thread_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="channel_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_activity_time" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="thread_ix_owner_id" tableName="thread">
+            <column name="owner_id"/>
+        </createIndex>
+        <createIndex indexName="thread_ix_channel_id" tableName="thread">
+            <column name="channel_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-view-v_thread_message_info">
+        <createView
+                viewName="v_thread_message_info"
+                replaceIfExists="true">
+            select t.thread_id,
+                   (select m.message_id from message m where m.thread_id = t.thread_id order by m.idate asc limit 1) as initial_message_id, (select m.message_id from message m where m.thread_id = t.thread_id order by m.idate desc limit 1) as latest_message_id
+            from thread t;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-channel_member_role_type">
+        <addColumn tableName="channel_member">
+            <column name="role_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-update-chat-view-v_thread_message_info-add-message_count">
+        <createView
+                viewName="v_thread_message_info"
+                replaceIfExists="true">
+            select t.thread_id,
+                   (select m.message_id
+                    from message m
+                    where m.thread_id = t.thread_id
+                    order by m.idate asc
+                       limit 1) as initial_message_id,
+       (select m.message_id
+        from message m
+        where m.thread_id = t.thread_id
+        order by m.idate desc
+        limit 1) as latest_message_id,
+       (select count(*)
+        from message m
+        where m.thread_id = t.thread_id) as message_count
+            from thread t;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-workspace_id-to-conversation">
+        <addColumn tableName="conversation">
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="conversation_ix_workspace_id" tableName="conversation">
+            <column name="workspace_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-chat-view-v_conversation_message_info">
+        <createView
+                viewName="v_conversation_message_info"
+                replaceIfExists="true">
+            select c.conversation_id,
+                   (select m.message_id
+                    from message m
+                    where m.message_id = c.conversation_id
+                    order by c.idate desc
+                       limit 1) as last_message_id
+            from conversation c;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-last_check-to-conversation_participant">
+        <addColumn tableName="conversation_participant">
+            <column name="last_check" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-remove-not-null-on-conversation_participant-last_check">
+        <dropNotNullConstraint
+                tableName="conversation_participant"
+                columnName="last_check"
+                columnDataType="datetime"
+        />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-update-chat-view-v_conversation_message_info">
+        <createView
+                viewName="v_conversation_message_info"
+                replaceIfExists="true">
+            select c.conversation_id,
+                   (select m.message_id
+                    from message m
+                    where m.conversation_id = c.conversation_id
+                    order by c.idate desc
+                       limit 1) as last_message_id
+            from conversation c;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-change-data-type-on-message_data">
+        <modifyDataType
+                tableName="message_data"
+                columnName="data_key"
+                newDataType="varchar(512)"
+        />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-silent_until-conversation_participant-channel_member">
+        <addColumn tableName="channel_member">
+            <column name="silent_until" type="datetime"/>
+        </addColumn>
+        <addColumn tableName="conversation_participant">
+            <column name="silent_until" type="datetime"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-thread_id-notification_event">
+        <dropNotNullConstraint
+                tableName="notification_event"
+                columnName="team_id"
+                columnDataType="char(26)"
+        />
+        <addColumn tableName="notification_event">
+            <column name="thread_id" type="char(26)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-participants_key-conversation">
+        <addColumn tableName="conversation">
+            <column name="participants_key" type="char(128)">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+
+        <createIndex indexName="conversation_ix_participants_key" tableName="conversation">
+            <column name="participants_key"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-last_check-channel_member">
+        <addColumn tableName="channel_member">
+            <column name="last_check" type="datetime"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds_default_value-last_check-conversation_participant">
+        <addDefaultValue
+                tableName="conversation_participant"
+                columnName="last_check"
+                defaultValueComputed="CURRENT_TIMESTAMP"
+                columnDataType="datetime"
+        />
+        <update tableName="conversation_participant">
+            <column name="last_check" valueComputed="CURRENT_TIMESTAMP"/>
+            <where>last_check is null</where>
+        </update>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-addNotNullConstraint-last_check-conversation_participant">
+        <addNotNullConstraint
+                tableName="conversation_participant"
+                columnName="last_check"
+                columnDataType="datetime"
+        />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-fix-view-v_conversation_message_info">
+        <createView
+                viewName="v_conversation_message_info"
+                replaceIfExists="true">
+            select c.conversation_id,
+                   (select m.message_id
+                    from message m
+                    where m.conversation_id = c.conversation_id
+                    order by m.idate desc
+                       limit 1) as last_message_id
+            from conversation c;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-initial-message-v_conversation_message_info">
+        <createView
+                viewName="v_conversation_message_info"
+                replaceIfExists="true">
+            select c.conversation_id,
+                   (select m.message_id
+                    from message m
+                    where m.conversation_id = c.conversation_id
+                    order by m.idate desc
+                       limit 1) as last_message_id,
+                   (select m.message_id
+                    from message m
+                    where m.conversation_id = c.conversation_id
+                    order by m.idate asc
+                    limit 1) as initial_message_id
+            from conversation c;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-create-conversation-participant-info-view">
+        <createView
+                viewName="v_conversation_participant_info"
+                replaceIfExists="true">
+            select cp.conversation_participant_id,
+                   cp.conversation_id,
+                   (select count(*)
+                    from message m
+                    where m.conversation_id = cp.conversation_id
+                      and m.idate > cp.last_check) as unread_count
+            from conversation_participant cp
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-create-channel_info_view">
+        <createView
+                viewName="v_channel_info"
+                replaceIfExists="true">
+            select c.channel_id,
+                   (select m.idate
+                    from message m
+                             inner join thread t on m.thread_id = t.thread_id
+                    where t.channel_id = c.channel_id
+                    order by m.idate desc
+                       limit 1) as last_channel_activity
+            from channel c
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-remove-not-null-on-channel_member-last_check">
+        <dropNotNullConstraint
+                tableName="channel_member"
+                columnName="last_check"
+                columnDataType="datetime"
+        />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-remove-not-null-on-conversation_participant-last_check-2">
+        <dropNotNullConstraint
+                tableName="conversation_participant"
+                columnName="last_check"
+                columnDataType="datetime"
+        />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-initialize-view-v_account_profile_media">
+        <createView
+                viewName="v_account_profile_media"
+                replaceIfExists="true">
+            select distinct(a.account_id) as account_id,
+                           m.media_id     as media_id
+            from media m
+                     inner join account a on m.related_object_id = a.account_id
+            where m.media_owner_type = 'USER'
+              and m.file_type = 'PROFILE_PIC'
+              and m.passive_id is null;
+        </createView>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-remove-not-null-on-message-rich_text_id">
+        <dropNotNullConstraint
+                tableName="message"
+                columnName="rich_text_id"
+                columnDataType="char(26)"
+        />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-message-message_type">
+        <addColumn tableName="message">
+            <column name="message_type" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-461-adds-column-thread-thread_type">
+        <addColumn tableName="thread">
+            <column name="thread_type" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>

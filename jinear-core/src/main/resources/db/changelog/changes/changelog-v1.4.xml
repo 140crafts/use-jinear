@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-project-to-task">
+        <addColumn tableName="task">
+            <column name="project_id" type="char(26)"/>
+            <column name="milestone_id" type="char(26)"/>
+        </addColumn>
+        <createIndex indexName="task_ix_project_id" tableName="task">
+            <column name="project_id"/>
+        </createIndex>
+        <createIndex indexName="task_ix_milestone_id" tableName="task">
+            <column name="milestone_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project">
+        <createTable tableName="project">
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description_rich_text_id" type="char(26)"/>
+            <column name="project_state" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_priority" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lead_workspace_member_id" type="char(26)"/>
+            <column name="start_date" type="datetime"/>
+            <column name="target_date" type="datetime"/>
+        </createTable>
+
+        <createIndex indexName="project_ix_workspace_id" tableName="project">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex indexName="project_ix_lead_workspace_member_id" tableName="project">
+            <column name="lead_workspace_member_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-milestone">
+        <createTable tableName="milestone">
+            <column name="milestone_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description_rich_text_id" type="char(26)"/>
+            <column name="milestone_order" type="integer"/>
+            <column name="target_date" type="datetime"/>
+        </createTable>
+
+        <createIndex indexName="milestone_ix_project_id" tableName="milestone">
+            <column name="project_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project_guest">
+        <createTable tableName="project_guest">
+            <column name="project_guest_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_member_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="project_guest_ix_project_id" tableName="project_guest">
+            <column name="project_id"/>
+        </createIndex>
+        <createIndex indexName="project_guest_ix_workspace_member_id" tableName="project_guest">
+            <column name="workspace_member_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project_team">
+        <createTable tableName="project_team">
+            <column name="project_team_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="team_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="project_team_ix_project_id" tableName="project_team">
+            <column name="project_id"/>
+        </createIndex>
+        <createIndex indexName="project_team_ix_team_id" tableName="project_team">
+            <column name="team_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-milestone_state">
+        <addColumn tableName="milestone">
+            <column name="milestone_state" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-archived-to_project">
+        <addColumn tableName="project">
+            <column name="archived" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project_feed_settings">
+        <createTable tableName="project_feed_settings">
+            <column name="project_feed_settings_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_feed_access_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="project_post_initialize_access_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="info_rich_text_id" type="char(26)"/>
+            <column name="info_website_url" type="varchar(512)"/>
+            <column name="access_key" type="varchar(128)"/>
+        </createTable>
+
+        <createIndex indexName="project_feed_settings_ix_project_id" tableName="project_feed_settings">
+            <column name="project_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project_post">
+        <createTable tableName="project_post">
+            <column name="project_post_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="post_body_rich_text_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="project_post_ix_project_id" tableName="project_post">
+            <column name="project_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-removes-not-null-post_body_rich_text_id-from-project_post">
+        <dropNotNullConstraint
+                tableName="project_post"
+                columnName="post_body_rich_text_id"
+                columnDataType="char(26)"
+        />
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-content_type-to-media">
+        <addColumn tableName="media">
+            <column name="content_type" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-project_post_comment_policy_type-to-project_feed_settings">
+        <addColumn tableName="project_feed_settings">
+            <column name="project_post_comment_policy_type" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project_post_comment">
+        <createTable tableName="project_post_comment">
+            <column name="project_post_comment_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_post_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="comment_body_rich_text_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="quote_project_post_comment_id" type="char(26)"/>
+        </createTable>
+
+        <createIndex indexName="project_post_comment_ix_project_post_id" tableName="project_post_comment">
+            <column name="project_post_id"/>
+        </createIndex>
+        <createIndex indexName="project_post_comment_ix_account_id" tableName="project_post_comment">
+            <column name="account_id"/>
+        </createIndex>
+        <createIndex indexName="project_post_comment_ix_quote_project_post_comment_id" tableName="project_post_comment">
+            <column name="quote_project_post_comment_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-initialize-project_domain">
+        <createTable tableName="project_domain">
+            <column name="project_domain_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="project_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="domain" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="project_domain_ix_project_id" tableName="project_domain">
+            <column name="project_id"/>
+        </createIndex>
+        <createIndex indexName="project_domain_ix_domain" tableName="project_domain">
+            <column name="domain"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-domain_type-to-project_domain">
+        <addColumn tableName="project_domain">
+            <column name="domain_type" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-domain_cname_check_result-to-project_domain">
+        <addColumn tableName="project_domain">
+            <column name="cname_check_result" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-ownership_status-to-media">
+        <addColumn tableName="media">
+            <column name="ownership_status" type="integer" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-late_owner_id-to-media">
+        <addColumn tableName="media">
+            <column name="late_owner_id" type="char(26)"/>
+        </addColumn>
+    </changeSet>
+</databaseChangeLog>
