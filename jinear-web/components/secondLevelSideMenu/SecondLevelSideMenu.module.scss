@@ -1,0 +1,141 @@
+@import "/styles/breakpoints.scss";
+
+.sideMenu {
+  position: fixed;
+  top: 0;
+  padding-top: var(--workspace-header-height);
+
+  z-index: 9;
+  width: 85px;
+  min-width: 85px;
+  max-width: 85px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  transition: all var(--fade);
+}
+
+.sideMenuVisible {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+
+  border-right-style: solid;
+  border-right-width: 1px;
+  border-right-color: var(--c-primary-shade-0);
+
+  width: var(--tasks-section-sidebar-width);
+  min-width: var(--tasks-section-sidebar-width);
+  max-width: var(--tasks-section-sidebar-width);
+  background-color: var(--c-primary);
+}
+
+.sideMenuActionBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 0.25rem;
+  padding: 0.25rem;
+}
+
+.sideMenuCollapsedLabel {
+  display: none;
+}
+
+.sideMenuCollapsedLabelClosed {
+  display: flex;
+}
+
+.sideMenuContent {
+  display: none;
+}
+
+.sideMenuContentVisible {
+  display: block;
+}
+
+@media (max-width: $tablet) {
+  .sideMenu {
+    position: fixed;
+    top: unset;
+    bottom: var(--workspace-side-menu-mobile-navigator-height);
+    padding-top: unset;
+
+    z-index: 9;
+    width: 100vw;
+    max-width: 100vw;
+    left: 0;
+    background-color: var(--c-primary);
+
+    // width: calc(100vw - calc(var(--workspace-layout-page-padding) * 2));
+    // min-width: calc(100vw - calc(var(--workspace-layout-page-padding) * 2));
+    // max-width: calc(100vw - calc(var(--workspace-layout-page-padding) * 2));
+
+    overflow-x: hidden;
+    overflow-y: scroll;
+
+    will-change: top;
+  }
+
+  .sideMenuVisible {
+    position: fixed;
+    top: var(--mobile-menu-action-bar-height);
+    bottom: 0;
+    padding-top: 1rem;
+    border-right-style: none;
+  }
+
+  .sideMenuActionBar {
+    height: var(--mobile-menu-action-bar-height);
+    justify-content: center;
+    position: sticky;
+    top: 0;
+    background-color: var(--c-primary) !important;
+    z-index: 1;
+  }
+
+  .menuToggleButton {
+    flex: 1;
+    height: var(--mobile-menu-action-bar-height);
+    border-bottom-left-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    // background-color: var(--c-primary) !important;
+    // background: linear-gradient(0, var(--c-primary), 20%, var(--c-primary-shade-0-op05)) !important;
+    background-color: var(--c-primary-shade-1-op025) !important;
+    background: linear-gradient(0, var(--c-primary-shade-0-op05), 50%, var(--c-primary-shade-1-op05)) !important;
+    border-top-color: var(--c-primary-shade-1) !important;
+    border-top-style: solid !important;
+    border-top-width: 1px !important;
+    gap: 0.25rem;
+    flex-direction: row-reverse !important;
+  }
+
+  .menuToggleButton:focus {
+    outline-style: solid;
+    outline-color: transparent !important;
+    z-index: 99;
+  }
+
+  .menuToggleIcon {
+    transition: all var(--fade-2);
+    transform: rotate(-90deg);
+    color: var(--c-secondary) !important;
+  }
+
+  .sideMenuCollapsedLabelClosed {
+    display: flex;
+  }
+
+  .sideMenuCollapsedLabel {
+    display: flex;
+  }
+
+  .sideMenuContent {
+    display: none;
+  }
+
+  .sideMenuContentVisible {
+    display: block;
+    padding-bottom: calc(var(--workspace-side-menu-mobile-navigator-height) + 1rem);
+  }
+}

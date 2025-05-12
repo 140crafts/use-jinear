@@ -1,0 +1,27 @@
+.container {
+  height: calc(var(--calendar-week-view-day-minute-pixel-ratio-in-pixels) * 60);
+  border-bottom: 1px var(--c-primary-shade-0-op05) solid;
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+}
+
+.clickable:hover {
+  background: var(--c-primary-shade-0);
+  cursor: pointer;
+}
+
+.label {
+  position: absolute;
+  text-align: left;
+  font-size: 0.5rem;
+  font-weight: 500;
+}
+
+.top {
+  top: -0.5rem;
+}
+
+.bottom {
+  bottom: -0.4rem;
+}

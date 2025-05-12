@@ -1,0 +1,45 @@
+.headerContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 5rem;
+}
+.proLogoContainer {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.selfHostedLabel {
+    font-weight: 800;
+    font-size: 1rem;
+    color: black;
+    background-color: var(--c-JINEAR_YELLOW);
+    border-radius: 0.25rem;
+    padding: 0.0125rem 1rem;
+    margin-top: 0.35rem;
+    margin-left: -0.5rem;
+}
+
+.proFeaturesLabel {
+    text-align: justify;
+    /* font-weight: 500; */
+    font-size: 0.75rem;
+    line-height: 1.5rem;
+}
+
+.featureList {
+    font-size: 0.8rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 18rem;
+}
+
+.featureListItemContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1ch;
+}

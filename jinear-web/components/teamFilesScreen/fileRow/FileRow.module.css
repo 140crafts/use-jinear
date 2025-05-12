@@ -1,0 +1,20 @@
+.fileRow {
+  display: flex;
+  flex-direction: column;
+}
+
+.fileInfoContainer {
+  padding-left: 1rem;
+}
+
+.fileTaskButton {
+  justify-content: flex-start;
+  text-align: left;
+  font-size: 0.8rem;
+}
+.iconContainer {
+  min-width: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

@@ -1,0 +1,19 @@
+.input {
+  color: var(--c-secondary) !important;
+  background-color: var(--c-primary) !important;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.input:focus {
+  /* border: none !important; */
+  color: var(--c-secondary) !important;
+  background-color: var(--c-primary) !important;
+  border-color: transparent !important;
+}
+
+.input:hover {
+  color: var(--c-secondary) !important;
+  background-color: var(--c-primary) !important;
+  border-color: transparent !important;
+}

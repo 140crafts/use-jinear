@@ -1,0 +1,41 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.bottomBorderLine {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--c-primary-shade-1-op025);
+}
+
+.button {
+  display: flex !important;
+  flex: 1 !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 21px;
+  height: 21px;
+  padding-left: 1px;
+}
+
+.leftContainer {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.1ch 1ch !important;
+}

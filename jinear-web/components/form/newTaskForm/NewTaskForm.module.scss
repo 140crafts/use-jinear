@@ -1,0 +1,125 @@
+@import "/styles/breakpoints.scss";
+
+.form {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  z-index: 999;
+  position: relative;
+  min-height: var(--new-task-and-event-form-min-height);
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  z-index: 3;
+  position: relative;
+  flex: 1;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 5rem;
+}
+
+.select {
+  font-weight: 600;
+}
+
+.loadingContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dateInputContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.textAreaInput {
+  height: 6rem;
+}
+
+.footerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1ch;
+  position: sticky;
+  bottom: 0;
+  background-color: var(--c-primary);
+  border-top-color: var(--c-primary-shade-1);
+  border-top-width: 1px;
+  border-top-style: solid;
+  padding: 0.5rem 0;
+  z-index: 3;
+  margin-top: 1rem;
+}
+
+.footerButton {
+  min-width: 6rem;
+}
+
+.actionBar {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.workspaceAndTeamInfoButtonContainer {
+  margin-top: unset !important;
+  justify-content: flex-start;
+  // flex-direction: row-reverse;
+}
+
+.footerActionButtonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1ch;
+}
+
+.subtaskInfo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1ch;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: var(--c-primary-shade-0);
+  border-radius: var(--border-radius);
+  text-align: justify;
+}
+
+.workspaceAndTeamInfoContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  gap: 0.25rem;
+}
+
+.titleChevronIcon {
+  width: 12px;
+  min-width: 12px;
+}
+
+.newTaskLabelContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.loadingButton {
+  color: var(--c-primary-shade-1) !important;
+}

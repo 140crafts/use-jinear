@@ -1,0 +1,73 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  // align-items: flex-start;
+  gap: 1ch;
+  // width: 100%;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 1ch;
+}
+
+.icon {
+  color: var(--c-secondary-shade-0);
+  opacity: 0.9;
+  margin-top: 3px;
+  margin-right: 10px;
+}
+
+.infoText {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1ch;
+  color: var(--c-secondary-shade-0-op05);
+  width: 100%;
+}
+
+.userName {
+  color: var(--c-text-color);
+}
+
+.diffContainer {
+  display: none;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1ch;
+  margin-left: 1.7rem;
+  margin-right: 1.7rem;
+}
+
+.diffContainerVisible {
+  display: flex;
+}
+
+.diffContainer-fullWidth {
+  // width: 100%;
+}
+
+.diffStateCell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1ch;
+}
+
+.checklistItemRemovedDiffCell {
+  text-decoration: line-through;
+  text-decoration-color: var(--c-secondary-shade-0-op05);
+  text-decoration-thickness: 1px;
+  opacity: 0.9;
+}
+
+@media (max-width: $mobile-l) {
+}

@@ -1,0 +1,45 @@
+.weekViewWeekdayHeaderContainer {
+  display: flex;
+  flex-direction: row;
+
+  position: sticky;
+  top: var(--workspace-header-height);
+  z-index: 5;
+  background-color: var(--c-primary);
+  border-bottom: 1px var(--c-primary-shade-0) solid;
+}
+
+.weekdayHeader {
+  flex: 1;
+  flex-direction: column !important;
+  padding: 0.25rem 0.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.dayOfWeek {
+  font-weight: 400;
+  opacity: 0.5;
+}
+
+.dayNumber {
+  font-size: 0.9rem;
+}
+
+.sideHourLabelSpacer {
+  width: var(--calendar-week-view-left-hour-label-container-width);
+}
+
+.today {
+  background-color: var(--c-primary-shade-1);
+  /* border-radius: 0; */
+}
+
+.viewingDate {
+  color: var(--c-primary) !important;
+  background-color: var(--c-secondary) !important;
+}
+.viewingDate:hover {
+  color: var(--c-primary-shade-1) !important;
+  background-color: var(--c-secondary-shade-1) !important;
+}

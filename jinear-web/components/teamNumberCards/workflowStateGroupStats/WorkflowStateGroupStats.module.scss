@@ -1,0 +1,68 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  background: linear-gradient(0, var(--c-primary), 40%, var(--c-primary-shade-0-op05));
+  gap: 1rem;
+}
+
+.graphContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  color: var(--text-color) !important;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.number {
+  text-align: center;
+  font-weight: 600;
+}
+
+.barContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 8rem;
+}
+
+.bar {
+  width: 0.5ch;
+  background: linear-gradient(0, var(--c-secondary-shade-0), 1%, var(--c-secondary-shade-0-op05));
+  /* background-color: red; */
+}
+
+@media (max-width: $tablet) {
+  // .label {
+  //   font-size: 0.6rem;
+  // }
+
+  .number {
+    font-size: 0.6rem;
+  }
+}
+
+@media (max-width: $mobile-m) {
+  // .label {
+  //   font-size: 0.5rem;
+  // }
+
+  .number {
+    font-size: 0.5rem;
+  }
+}

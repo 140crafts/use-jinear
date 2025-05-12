@@ -1,0 +1,33 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": [
+          "GV8NX64YJL.co.jinear.app"
+        ],
+        "components": [
+          {
+            "/": "/*",
+            "comment": "Matches any URL"
+          },
+          {
+            "/": "/pricing/*",
+            "exclude": true,
+            "comment": "Matches any URL whose path starts with /pricing/ and instructs the system not to open it as a universal link"
+          }
+        ]
+      }
+    ]
+  },
+  "activitycontinuation": {
+    "apps": [
+      "GV8NX64YJL.co.jinear.app"
+    ]
+  },
+  "webcredentials": {
+    "apps": [
+      "GV8NX64YJL.co.jinear.app"
+    ]
+  }
+}

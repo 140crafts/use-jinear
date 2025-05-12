@@ -1,0 +1,6 @@
+.container {
+  font-size: 0.75rem;
+  padding: 0.2rem 0.75rem;
+  border-radius: var(--border-radius);
+  min-width: 8ch;
+}

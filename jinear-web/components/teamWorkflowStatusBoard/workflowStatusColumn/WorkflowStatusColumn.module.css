@@ -1,0 +1,18 @@
+.container {
+  flex: 1;
+  min-width: var(--status-board-task-card-width);
+}
+
+.gradientBg {
+  background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-0-op05));
+  border-radius: var(--border-radius);
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-top: 0.25rem;
+  height: 95%;
+  min-height: 60vh;
+}

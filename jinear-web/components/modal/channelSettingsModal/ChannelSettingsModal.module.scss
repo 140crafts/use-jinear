@@ -1,0 +1,19 @@
+@import "/styles/breakpoints.scss";
+
+.modalContainer {
+  //align-items: flex-start !important;
+  //padding-top: 12.5% !important;
+}
+
+.modalBody {
+  height: 95vh;
+  max-height: unset;
+  padding: .25rem;
+  //padding: 0;
+  padding-bottom: 1rem;
+}
+
+.modal {
+  position: relative;
+  // height: 95vh;
+}

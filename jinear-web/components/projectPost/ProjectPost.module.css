@@ -1,0 +1,64 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  border-radius: var(--border-radius);
+  padding: 0 1rem;
+}
+
+.container:hover {
+  background: linear-gradient(0, var(--c-primary), 40%, var(--c-primary-shade-0-op05));
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: row;
+  gap: .5rem;
+  color: var(--c-text-color);
+}
+
+.profilePicContainer {
+  position: relative;
+  padding-top: 1rem;
+}
+
+.profilePic {
+  height: 35px !important;
+  width: 35px !important;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: .25rem;
+}
+
+.attachments {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-width: 100%;
+  gap: .25rem;
+  margin-top: .5rem;
+}
+
+.input {
+  background-color: unset !important;
+}
+
+.commentButton {
+  gap: .5rem;
+}
+
+.postInfo {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: .5rem;
+}
+
+.deleteButton {
+  display: flex;
+  gap: .5rem;
+}

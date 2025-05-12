@@ -1,0 +1,50 @@
+import cn from "classnames";
+import { AnimatePresence, motion } from "framer-motion";
+import { usePathname, useRouter } from "next/navigation";
+import React from "react";
+import styles from "./Transition.module.css";
+
+interface TransitionProps {
+  initial?: boolean;
+  className?: string;
+  children: React.ReactNode;
+  outDuration?: number;
+  inDuration?: number;
+}
+
+const Transition: React.FC<TransitionProps> = ({ initial = false, className, children, outDuration = 0, inDuration = 0.25 }) => {
+  const router = useRouter();
+  const pathName = usePathname();
+  const currPath = pathName?.split("#")[0]?.split("?")?.[0];
+
+  const variants = {
+    out: {
+      opacity: 0,
+      transition: {
+        duration: outDuration,
+      },
+    },
+    in: {
+      opacity: 1,
+      transition: {
+        duration: inDuration,
+      },
+    },
+  };
+  return (
+    <AnimatePresence initial={initial} exitBeforeEnter>
+      <motion.div
+        key={currPath}
+        variants={variants}
+        animate="in"
+        initial="out"
+        exit="out"
+        className={cn(styles.contaniner, className)}
+      >
+        {children}
+      </motion.div>
+    </AnimatePresence>
+  );
+};
+
+export default Transition;

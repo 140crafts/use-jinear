@@ -1,0 +1,39 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  margin-left: calc(-1 * var(--workspace-layout-page-padding));
+}
+
+.contentContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: all var(--fade);
+  padding: var(--workspace-layout-page-padding);
+}
+
+.contentContainerWithSideMenu {
+  padding-left: calc(var(--tasks-section-sidebar-width) + var(--workspace-layout-page-padding));
+}
+
+.secondLevelSideMenu {
+  margin-left: calc(-1 * var(--workspace-layout-page-padding)) !important;
+}
+
+@media (max-width: $tablet) {
+  .container {
+    flex-direction: column-reverse;
+    margin-left: unset;
+  }
+  .contentContainer {
+    padding-left: unset;
+    padding-right: unset;
+  }
+  .secondLevelSideMenu {
+    margin-left: unset !important;
+  }
+}

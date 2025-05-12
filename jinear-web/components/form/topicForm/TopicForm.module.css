@@ -1,0 +1,54 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  position: relative;
+}
+
+.formContent {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  overflow: visible;
+  z-index: 1;
+  position: relative;
+  padding: 1.15rem;
+  padding-top: 0;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 3.4rem;
+}
+
+.footerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  position: sticky;
+  bottom: 0;
+  padding: 1rem 1.15rem;
+  z-index: 1;
+  background-color: var(--c-primary);
+}
+
+.footerButton {
+  min-width: 6rem;
+}
+
+.footerButtonDelete {
+  min-width: 6rem;
+  background-color: var(--c-ERROR_RED);
+  color: var(--c-BABY_POWDER);
+}
+
+.footerButtonDelete:hover {
+  min-width: 6rem;
+  background-color: var(--c-ERROR_RED);
+  color: var(--c-BABY_POWDER);
+  opacity: 0.9;
+}

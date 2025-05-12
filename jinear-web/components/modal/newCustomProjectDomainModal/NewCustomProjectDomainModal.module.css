@@ -1,0 +1,57 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-height: 3.4rem;
+    overflow: visible;
+    font-weight: 600;
+}
+
+.urlInputsContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.schemeLabel {
+    background: var(--c-primary-shade-0) !important;
+    color: var(--c-text-color) !important;
+    opacity: 0.85;
+    font-weight: 600;
+    caret-color: var(--c-text-color) !important;
+    border-color: transparent;
+    border-width: 1px;
+    border-radius: var(--border-radius);
+    border-style: solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: var(--fade);
+    text-decoration: none;
+    padding: 7.5px;
+    padding-right: 0;
+    min-height: 1rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.domainInput {
+    flex: 1;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background: var(--c-primary-shade-0) !important;
+    padding-left: .25rem;
+    min-width: 1rem;
+}

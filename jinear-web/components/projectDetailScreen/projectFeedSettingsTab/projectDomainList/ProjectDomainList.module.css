@@ -1,0 +1,24 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.titleContainer {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.actionAndInfoContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.domainListContainer {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}

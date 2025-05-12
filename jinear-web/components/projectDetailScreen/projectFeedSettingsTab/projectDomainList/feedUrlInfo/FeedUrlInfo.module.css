@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+    align-items: center;
+}
+
+.urlInput {
+    flex: 1;
+}
+
+.actionButtonContainer {
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+}

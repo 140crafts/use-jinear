@@ -1,0 +1,97 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 0.5rem;
+}
+
+.archivedButton {
+  opacity: 0.35 !important;
+}
+
+.bottomBorderLine {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--c-primary-shade-1-op025);
+}
+
+.button {
+  display: flex !important;
+  flex: 1 !important;
+  flex-direction: row !important;
+  justify-content: flex-start !important;
+  text-align: left !important;
+  gap: 0.5rem !important;
+  width: 100% !important;
+}
+
+.line {
+  opacity: 0.25;
+}
+
+.leftInfoContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  min-width: 5rem;
+}
+
+.rightInfoContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.title {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
+.archivedTitle {
+  text-decoration: line-through;
+}
+
+.iconButton {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 0.5rem !important;
+  padding: 0.1ch 1ch !important;
+}
+
+.iconContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+.mainInfoContainer {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+@media (max-width: $tablet) {
+  .container {
+    flex-direction: column;
+  }
+  .button {
+    align-items: flex-start !important;
+  }
+  .title {
+    -webkit-line-clamp: 3;
+  }
+  .rightInfoContainer {
+    align-self: flex-end;
+    margin-bottom: 0.5rem;
+  }
+}

@@ -1,0 +1,10 @@
+.list {
+    background: unset !important;
+    gap: 1rem;
+}
+
+.divider {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--c-primary-shade-1) 0%, var(--c-primary) 100%);
+}

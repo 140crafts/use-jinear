@@ -1,0 +1,36 @@
+@import "/styles/breakpoints.scss";
+
+.heroContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroTitle {
+  position: relative;
+  font-size: 60px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.02em;
+ margin: 1rem 0;
+  text-align: center;
+}
+
+.line {
+  display: inline-block;
+}
+
+.heroText {
+  font-size: 20px;
+  //font-size: 1.125rem;
+  //line-height: 1.75rem;
+  text-align: center;
+}
+
+
+@media (max-width: $tablet) {
+  .heroTitle {
+    font-size: 40px;
+  }
+}

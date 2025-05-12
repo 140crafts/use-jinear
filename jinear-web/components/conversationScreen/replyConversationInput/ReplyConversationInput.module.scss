@@ -1,0 +1,50 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  bottom: 1rem;
+  width: unset;
+}
+
+.inputContainer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  background: var(--c-primary-shade-0);
+  border-width: 1px;
+  border-radius: var(--border-radius);
+  border-style: solid;
+  border-color: transparent;
+}
+
+.input {
+  background: transparent !important;
+}
+
+.input:hover {
+  background: transparent !important;
+}
+
+.input:focus {
+  border-color: transparent !important;
+  outline: none !important;
+}
+
+.inputActionBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: .25rem
+}
+
+@media (max-width: $tablet) {
+  .container {
+    bottom: calc(var(--workspace-side-menu-mobile-navigator-height) + 1rem);
+  }
+
+  .input:focus #workspace-layout-page-side-menu-container, #conversations-second-level-menu {
+    display: none !important;
+  }
+}

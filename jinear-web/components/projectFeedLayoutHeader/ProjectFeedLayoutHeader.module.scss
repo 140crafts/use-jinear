@@ -1,0 +1,32 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex: 1;
+  gap: 1rem;
+  padding: 0 1rem;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom-style: solid;
+  border-bottom-color: var(--c-primary-shade-0);
+  border-bottom-width: 1px;
+
+  min-height: var(--workspace-header-height);
+  max-height: var(--workspace-header-height);
+}
+
+.headerLeftContent {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.headerRightContent {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.logo {
+  scale: .65;
+}

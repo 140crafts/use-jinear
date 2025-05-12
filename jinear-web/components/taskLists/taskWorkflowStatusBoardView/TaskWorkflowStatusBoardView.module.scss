@@ -1,0 +1,28 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.actionBarContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.statusBoardContainer {
+  overflow-x: scroll;
+  min-height: 8rem;
+  padding-bottom: 2rem;
+  // max-width: calc(100vw - calc(var(--workspace-layout-page-padding) * 2));
+}
+
+// @media (max-width: $tablet) {
+//   .statusBoardContainer {
+//     // max-width: 100%;
+//     overflow-x: scroll;
+//   }
+// }

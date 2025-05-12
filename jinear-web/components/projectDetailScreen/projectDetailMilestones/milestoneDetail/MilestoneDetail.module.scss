@@ -1,0 +1,105 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: .5rem;
+}
+
+.lastContainer {
+  margin-top: -.45rem;
+  z-index: 1;
+}
+
+.iconContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  min-width: 12px;
+  width: 12px;
+}
+
+.line {
+  width: 1px;
+  background-color: var(--c-secondary-shade-0-op025);
+  flex: 1;
+}
+
+.hoveredLine {
+  display: none;
+  width: 1px;
+  background-color: var(--c-secondary-shade-0-op025);
+}
+
+.initialHoveredLine {
+  bottom: -.5rem !important;
+}
+
+.container:hover .hoveredLine {
+  display: unset;
+  //background-color: var(--c-secondary-shade-0);
+  width: 2px;
+  position: absolute;
+  z-index: 2;
+  //background-color: red;
+  bottom: 0;
+  top: 1.1rem;
+}
+
+.icon {
+  position: absolute;
+  background-color: var(--c-primary);
+  top: .45rem;
+}
+
+.firstIcon {
+  position: unset !important;
+  margin-top: .45rem !important;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.milestoneInfoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+}
+
+.toggleViewButton {
+  justify-content: flex-start !important;
+}
+
+.milestoneTitleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.milestoneActionsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: .5rem;
+}
+
+
+@media (max-width: $tablet) {
+  .milestoneTitleContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .milestoneActionsContainer {
+    align-self: flex-end;
+  }
+
+  .toggleViewButton {
+    align-self: flex-end;
+    margin-bottom: 1rem;
+  }
+}

@@ -1,0 +1,11 @@
+.autoCompleteContainer {
+  display: none;
+  background-color: var(--c-primary-shade-1);
+  max-height: 8rem;
+  width: 100%;
+  overflow-x: scroll;
+  padding: 0 0 0.15rem 0;
+  border-bottom-left-radius: var(--border-radius);
+  border-bottom-right-radius: var(--border-radius);
+  box-shadow: var(--box-shadow-soft);
+}

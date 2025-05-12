@@ -1,0 +1,21 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.teamName {
+    flex: 1;
+}
+
+.teamActionButtonContainer {
+    display: flex;
+    flex-direction: column;
+    /*gap: 0.25rem;*/
+}
+
+.teamActionButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
