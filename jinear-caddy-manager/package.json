@@ -1,0 +1,27 @@
+{
+  "engines": {
+    "node": ">=20.6.0"
+  },
+  "author": "Cagdas Tunca <cgdstnc@gmail.com>",
+  "license": "MIT",
+  "name": "jinear-caddy-manager",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node dist/server.js",
+    "build": "tsc",
+    "dev": "node --env-file=.env --watch -r ts-node/register src/server.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/jsonwebtoken": "^9.0.7",
+    "@types/node": "^22.10.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
