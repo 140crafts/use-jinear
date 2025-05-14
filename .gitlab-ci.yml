@@ -1,0 +1,81 @@
+stages:
+  - package
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+
+  JINEAR_CORE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:${CI_COMMIT_SHORT_SHA}
+  JINEAR_CORE_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:latest
+
+  JINEAR_WEB_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:${CI_COMMIT_SHORT_SHA}
+  JINEAR_WEB_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:latest
+
+.core_changes: &core_changes
+  changes:
+    - jinear-core/**/*
+    - .gitlab-ci.yml
+
+.web_changes: &web_changes
+  changes:
+    - jinear-web/**/*
+    - .gitlab-ci.yml
+
+.docker_setup: &docker_setup
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
+
+core:build:
+  <<: *docker_setup
+  stage: build
+  script:
+    - cd jinear-core
+    - docker build -t ${JINEAR_CORE_IMAGE} .
+    - docker push ${JINEAR_CORE_IMAGE}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *core_changes
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      <<: *core_changes
+
+core:deploy:
+  <<: *docker_setup
+  stage: deploy
+  script:
+    - docker pull ${JINEAR_CORE_IMAGE}
+    - docker tag ${JINEAR_CORE_IMAGE} ${JINEAR_CORE_IMAGE_LATEST}
+    - docker push ${JINEAR_CORE_IMAGE_LATEST}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *core_changes
+  needs:
+    - backend:build
+
+web:build:
+  <<: *docker_setup
+  stage: build
+  script:
+    - cd jinear-web
+    - docker build -t ${JINEAR_WEB_IMAGE} .
+    - docker push ${JINEAR_WEB_IMAGE}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *web_changes
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      <<: *web_changes
+
+web:deploy:
+  <<: *docker_setup
+  stage: deploy
+  script:
+    - docker pull ${JINEAR_WEB_IMAGE}
+    - docker tag ${JINEAR_WEB_IMAGE} ${JINEAR_WEB_IMAGE_LATEST}
+    - docker push ${JINEAR_WEB_IMAGE_LATEST}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *web_changes
+  needs:
+    - web:build

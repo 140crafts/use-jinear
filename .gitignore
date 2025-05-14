@@ -1,0 +1,99 @@
+# Merged .gitignore file for monorepo
+
+### Dependencies ###
+node_modules/
+/node_modules
+/.pnp
+.pnp.js
+
+### Build and Distribution ###
+/dist/
+dist/
+/build
+build/
+/out/
+web-build/
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+!**/.mvn/wrapper/maven-wrapper.jar
+
+### Debug ###
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+.pnpm-debug.log*
+
+### Local Environment Files ###
+.env
+.env*.local
+.env.example
+.env.staging
+
+### OS Files ###
+.DS_Store
+*.pem
+
+### IDEs and Editors ###
+# IntelliJ IDEA
+.idea
+*.iws
+*.iml
+*.ipr
+
+# VS Code
+.vscode/
+
+# Eclipse/STS
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+
+### Expo ###
+.expo/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+.metro-health-check*
+
+### Next.js ###
+/.next/
+next-env.d.ts
+next.config.original.js
+public/sw.js
+public/sw.js.map
+public/workbox-*.js
+public/workbox-*.js.map
+public/worker-*.js
+
+### TypeScript ###
+*.tsbuildinfo
+
+### Testing ###
+/coverage
+
+### Vercel ###
+.vercel
+
+### Sentry ###
+.sentryclirc
+
+### Logs ###
+/logs/app.log
+/logs/app.log*
+
+### Help Files ###
+HELP.md
