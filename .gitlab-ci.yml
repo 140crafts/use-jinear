@@ -1,5 +1,5 @@
 stages:
-  - package
+  - build
   - deploy
 
 variables:
@@ -52,7 +52,7 @@ core:deploy:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *core_changes
   needs:
-    - backend:build
+    - core:build
 
 web:build:
   <<: *docker_setup
