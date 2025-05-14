@@ -1,5 +1,5 @@
 stages:
-  - package
+  - build
   - deploy
 
 variables:
