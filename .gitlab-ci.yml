@@ -11,6 +11,9 @@ variables:
   JINEAR_WEB_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:${CI_COMMIT_SHORT_SHA}
   JINEAR_WEB_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:latest
 
+  JINEAR_CADDY_CUSTOM_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:${CI_COMMIT_SHORT_SHA}
+  JINEAR_CADDY_CUSTOM_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:latest
+
 .core_changes: &core_changes
   changes:
     - jinear-core/**/*
@@ -19,6 +22,11 @@ variables:
 .web_changes: &web_changes
   changes:
     - jinear-web/**/*
+    - .gitlab-ci.yml
+
+.caddy_custom_changes: &caddy_custom_changes
+  changes:
+    - jinear-caddy-custom/**/*
     - .gitlab-ci.yml
 
 .docker_setup: &docker_setup
@@ -79,3 +87,30 @@ web:deploy:
       <<: *web_changes
   needs:
     - web:build
+
+
+caddy-custom:build:
+  <<: *docker_setup
+  stage: build
+  script:
+    - cd jinear-caddy-custom
+    - docker build -t ${JINEAR_CADDY_CUSTOM_IMAGE} .
+    - docker push ${JINEAR_CADDY_CUSTOM_IMAGE}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *caddy_custom_changes
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      <<: *caddy_custom_changes
+
+caddy-custom:deploy:
+  <<: *docker_setup
+  stage: deploy
+  script:
+    - docker pull ${JINEAR_CADDY_CUSTOM_IMAGE}
+    - docker tag ${JINEAR_CADDY_CUSTOM_IMAGE} ${JINEAR_CADDY_CUSTOM_IMAGE_LATEST}
+    - docker push ${JINEAR_CADDY_CUSTOM_IMAGE_LATEST}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *caddy_custom_changes
+  needs:
+    - caddy-custom:build
