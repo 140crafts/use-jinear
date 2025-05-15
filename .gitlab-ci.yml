@@ -14,6 +14,15 @@ variables:
   JINEAR_CADDY_CUSTOM_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:${CI_COMMIT_SHORT_SHA}
   JINEAR_CADDY_CUSTOM_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:latest
 
+  JINEAR_CADDY_MANAGER_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-manager:${CI_COMMIT_SHORT_SHA}
+  JINEAR_CADDY_MANAGER_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-manager:latest
+
+  JINEAR_MESSAGE_SERVICE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:${CI_COMMIT_SHORT_SHA}
+  JINEAR_MESSAGE_SERVICE_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:latest
+
+  JINEAR_PAGES_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-pages:${CI_COMMIT_SHORT_SHA}
+  JINEAR_PAGES_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-pages:latest
+
 .core_changes: &core_changes
   changes:
     - jinear-core/**/*
@@ -27,6 +36,21 @@ variables:
 .caddy_custom_changes: &caddy_custom_changes
   changes:
     - jinear-caddy-custom/**/*
+    - .gitlab-ci.yml
+
+.caddy_manager_changes: &caddy_manager_changes
+  changes:
+    - jinear-caddy-manager/**/*
+    - .gitlab-ci.yml
+
+.message_service_changes: &message_service_changes
+  changes:
+    - jinear-message-service/**/*
+    - .gitlab-ci.yml
+
+.pages_changes: &pages_changes
+  changes:
+    - jinear-pages/**/*
     - .gitlab-ci.yml
 
 .docker_setup: &docker_setup
@@ -114,3 +138,83 @@ caddy-custom:deploy:
       <<: *caddy_custom_changes
   needs:
     - caddy-custom:build
+
+
+caddy-manager:build:
+  <<: *docker_setup
+  stage: build
+  script:
+    - cd jinear-caddy-manager
+    - docker build -t ${JINEAR_CADDY_MANAGER_IMAGE} .
+    - docker push ${JINEAR_CADDY_MANAGER_IMAGE}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *caddy_manager_changes
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      <<: *caddy_manager_changes
+
+caddy-manager:deploy:
+  <<: *docker_setup
+  stage: deploy
+  script:
+    - docker pull ${JINEAR_CADDY_MANAGER_IMAGE}
+    - docker tag ${JINEAR_CADDY_MANAGER_IMAGE} ${JINEAR_CADDY_MANAGER_IMAGE_LATEST}
+    - docker push ${JINEAR_CADDY_MANAGER_IMAGE_LATEST}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *caddy_manager_changes
+  needs:
+    - caddy-manager:build
+
+
+message-service:build:
+  <<: *docker_setup
+  stage: build
+  script:
+    - cd jinear-message-service
+    - docker build -t ${JINEAR_MESSAGE_SERVICE_IMAGE} .
+    - docker push ${JINEAR_MESSAGE_SERVICE_IMAGE}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *message_service_changes
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      <<: *message_service_changes
+
+message-service:deploy:
+  <<: *docker_setup
+  stage: deploy
+  script:
+    - docker pull ${JINEAR_MESSAGE_SERVICE_IMAGE}
+    - docker tag ${JINEAR_MESSAGE_SERVICE_IMAGE} ${JINEAR_MESSAGE_SERVICE_IMAGE_LATEST}
+    - docker push ${JINEAR_MESSAGE_SERVICE_IMAGE_LATEST}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *message_service_changes
+  needs:
+    - message-service:build
+
+pages:build:
+  <<: *docker_setup
+  stage: build
+  script:
+    - cd jinear-pages
+    - docker build -t ${JINEAR_PAGES_IMAGE} .
+    - docker push ${JINEAR_PAGES_IMAGE}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *pages_changes
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      <<: *pages_changes
+
+pages:deploy:
+  <<: *docker_setup
+  stage: deploy
+  script:
+    - docker pull ${JINEAR_PAGES_IMAGE}
+    - docker tag ${JINEAR_PAGES_IMAGE} ${JINEAR_PAGES_IMAGE_LATEST}
+    - docker push ${JINEAR_PAGES_IMAGE_LATEST}
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+      <<: *pages_changes
+  needs:
+    - pages:build
