@@ -59,14 +59,19 @@ variables:
     - docker:dind
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
+    - apk add --no-cache curl
+    - mkdir -p ~/.docker/cli-plugins/
+    - curl -SL https://github.com/docker/buildx/releases/download/v0.10.5/buildx-v0.10.5.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
+    - chmod +x ~/.docker/cli-plugins/docker-buildx
+    - docker buildx create --use --name multi-arch-builder
+    - docker buildx inspect --bootstrap
 
 core:build:
   <<: *docker_setup
   stage: build
   script:
     - cd jinear-core
-    - docker build -t ${JINEAR_CORE_IMAGE} .
-    - docker push ${JINEAR_CORE_IMAGE}
+    - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CORE_IMAGE} --push .
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *core_changes
@@ -77,9 +82,7 @@ core:deploy:
   <<: *docker_setup
   stage: deploy
   script:
-    - docker pull ${JINEAR_CORE_IMAGE}
-    - docker tag ${JINEAR_CORE_IMAGE} ${JINEAR_CORE_IMAGE_LATEST}
-    - docker push ${JINEAR_CORE_IMAGE_LATEST}
+    - docker buildx imagetools create -t ${JINEAR_CORE_IMAGE_LATEST} ${JINEAR_CORE_IMAGE}
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *core_changes
@@ -91,8 +94,7 @@ web:build:
   stage: build
   script:
     - cd jinear-web
-    - docker build -t ${JINEAR_WEB_IMAGE} .
-    - docker push ${JINEAR_WEB_IMAGE}
+    - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_WEB_IMAGE} --push .
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *web_changes
@@ -103,23 +105,19 @@ web:deploy:
   <<: *docker_setup
   stage: deploy
   script:
-    - docker pull ${JINEAR_WEB_IMAGE}
-    - docker tag ${JINEAR_WEB_IMAGE} ${JINEAR_WEB_IMAGE_LATEST}
-    - docker push ${JINEAR_WEB_IMAGE_LATEST}
+    - docker buildx imagetools create -t ${JINEAR_WEB_IMAGE_LATEST} ${JINEAR_WEB_IMAGE}
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *web_changes
   needs:
     - web:build
 
-
 caddy-custom:build:
   <<: *docker_setup
   stage: build
   script:
     - cd jinear-caddy-custom
-    - docker build -t ${JINEAR_CADDY_CUSTOM_IMAGE} .
-    - docker push ${JINEAR_CADDY_CUSTOM_IMAGE}
+    - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CADDY_CUSTOM_IMAGE} --push .
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *caddy_custom_changes
@@ -130,23 +128,19 @@ caddy-custom:deploy:
   <<: *docker_setup
   stage: deploy
   script:
-    - docker pull ${JINEAR_CADDY_CUSTOM_IMAGE}
-    - docker tag ${JINEAR_CADDY_CUSTOM_IMAGE} ${JINEAR_CADDY_CUSTOM_IMAGE_LATEST}
-    - docker push ${JINEAR_CADDY_CUSTOM_IMAGE_LATEST}
+    - docker buildx imagetools create -t ${JINEAR_CADDY_CUSTOM_IMAGE_LATEST} ${JINEAR_CADDY_CUSTOM_IMAGE}
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *caddy_custom_changes
   needs:
     - caddy-custom:build
 
-
 caddy-manager:build:
   <<: *docker_setup
   stage: build
   script:
     - cd jinear-caddy-manager
-    - docker build -t ${JINEAR_CADDY_MANAGER_IMAGE} .
-    - docker push ${JINEAR_CADDY_MANAGER_IMAGE}
+    - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CADDY_MANAGER_IMAGE} --push .
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *caddy_manager_changes
@@ -157,23 +151,19 @@ caddy-manager:deploy:
   <<: *docker_setup
   stage: deploy
   script:
-    - docker pull ${JINEAR_CADDY_MANAGER_IMAGE}
-    - docker tag ${JINEAR_CADDY_MANAGER_IMAGE} ${JINEAR_CADDY_MANAGER_IMAGE_LATEST}
-    - docker push ${JINEAR_CADDY_MANAGER_IMAGE_LATEST}
+    - docker buildx imagetools create -t ${JINEAR_CADDY_MANAGER_IMAGE_LATEST} ${JINEAR_CADDY_MANAGER_IMAGE}
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *caddy_manager_changes
   needs:
     - caddy-manager:build
 
-
 message-service:build:
   <<: *docker_setup
   stage: build
   script:
     - cd jinear-message-service
-    - docker build -t ${JINEAR_MESSAGE_SERVICE_IMAGE} .
-    - docker push ${JINEAR_MESSAGE_SERVICE_IMAGE}
+    - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_MESSAGE_SERVICE_IMAGE} --push .
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *message_service_changes
@@ -184,9 +174,7 @@ message-service:deploy:
   <<: *docker_setup
   stage: deploy
   script:
-    - docker pull ${JINEAR_MESSAGE_SERVICE_IMAGE}
-    - docker tag ${JINEAR_MESSAGE_SERVICE_IMAGE} ${JINEAR_MESSAGE_SERVICE_IMAGE_LATEST}
-    - docker push ${JINEAR_MESSAGE_SERVICE_IMAGE_LATEST}
+    - docker buildx imagetools create -t ${JINEAR_MESSAGE_SERVICE_IMAGE_LATEST} ${JINEAR_MESSAGE_SERVICE_IMAGE}
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *message_service_changes
@@ -198,8 +186,7 @@ pages:build:
   stage: build
   script:
     - cd jinear-pages
-    - docker build -t ${JINEAR_PAGES_IMAGE} .
-    - docker push ${JINEAR_PAGES_IMAGE}
+    - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_PAGES_IMAGE} --push .
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *pages_changes
@@ -210,9 +197,7 @@ pages:deploy:
   <<: *docker_setup
   stage: deploy
   script:
-    - docker pull ${JINEAR_PAGES_IMAGE}
-    - docker tag ${JINEAR_PAGES_IMAGE} ${JINEAR_PAGES_IMAGE_LATEST}
-    - docker push ${JINEAR_PAGES_IMAGE_LATEST}
+    - docker buildx imagetools create -t ${JINEAR_PAGES_IMAGE_LATEST} ${JINEAR_PAGES_IMAGE}
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *pages_changes

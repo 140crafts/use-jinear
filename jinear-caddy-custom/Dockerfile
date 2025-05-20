@@ -1,5 +1,5 @@
-FROM --platform=linux/arm64 caddy:2.10.0-builder AS builder
+FROM caddy:2.10.0-builder AS builder
 RUN xcaddy build v2.10.0 \
     --with github.com/caddy-dns/cloudflare
-FROM --platform=linux/arm64 caddy:2.10.0
+FROM caddy:2.10.0
 COPY --from=builder /usr/bin/caddy /usr/bin/caddy
