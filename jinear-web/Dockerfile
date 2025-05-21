@@ -4,7 +4,8 @@ FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 COPY package.json yarn.lock ./
-RUN yarn install --frozen-lockfile --network-timeout 1000000
+RUN npm cache clean --force
+RUN yarn install --frozen-lockfile --network-timeout 1000000 --no-cache
 
 # Rebuild the source code only when needed
 FROM node:20-alpine AS builder
@@ -17,7 +18,11 @@ ENV SENTRY_AUTH_TOKEN=$SENTRY_TOKEN
 
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
+RUN yarn build && \
+        yarn install --production --ignore-scripts --prefer-offline && \
+        yarn cache clean && \
+        npm cache clean --force && \
+        rm -rf /tmp/*
 
 # Production image, copy all the files and run next
 FROM node:20-alpine AS runner
