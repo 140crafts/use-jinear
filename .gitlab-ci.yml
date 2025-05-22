@@ -64,6 +64,7 @@ variables:
     - docker:dind
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
+    - docker login -u $CI_HUB_USER -p $CI_HUB_PASSWORD
     - apk add --no-cache curl
     - mkdir -p ~/.docker/cli-plugins/
     - curl -SL https://github.com/docker/buildx/releases/download/v0.10.5/buildx-v0.10.5.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
