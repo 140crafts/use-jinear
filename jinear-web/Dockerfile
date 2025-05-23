@@ -19,7 +19,7 @@ ENV SENTRY_AUTH_TOKEN=$SENTRY_TOKEN
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
 RUN yarn build && \
-        yarn install --production --ignore-scripts --prefer-offline && \
+        yarn install --production --ignore-scripts --prefer-offline --network-timeout 1000000 && \
         yarn cache clean && \
         npm cache clean --force && \
         rm -rf /tmp/*
