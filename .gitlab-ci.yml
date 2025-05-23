@@ -77,6 +77,7 @@ core:build:
   script:
     - cd jinear-core
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CORE_IMAGE} --push .
+  timeout: 90m
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *core_changes
@@ -99,7 +100,7 @@ core:deploy:
   stage: build
   script:
     - cd jinear-web
-  timeout: 60m
+  timeout: 90m
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *web_changes
@@ -126,7 +127,7 @@ web:deploy:
     - docker manifest push ${JINEAR_WEB_IMAGE}
     - docker manifest create ${JINEAR_WEB_IMAGE_LATEST} ${JINEAR_WEB_IMAGE}-amd64 ${JINEAR_WEB_IMAGE}-arm64
     - docker manifest push ${JINEAR_WEB_IMAGE_LATEST}
-  timeout: 60m
+  timeout: 90m
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *web_changes

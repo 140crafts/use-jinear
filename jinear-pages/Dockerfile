@@ -17,7 +17,7 @@ ENV SENTRY_AUTH_TOKEN=$SENTRY_TOKEN
 
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
-RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
+RUN yarn build && yarn install --production --ignore-scripts --prefer-offline --network-timeout 1000000
 
 # Production image, copy all the files and run next
 FROM node:20-alpine AS runner
