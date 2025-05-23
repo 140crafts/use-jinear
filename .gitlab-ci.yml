@@ -4,11 +4,10 @@ stages:
 
 variables:
   DOCKER_DRIVER: overlay2
-
-  DOCKER_TLS_CERTDIR: ""
-  DOCKER_HOST: tcp://docker:2375
-  DOCKER_TLS_VERIFY: ""
-  DOCKER_CERT_PATH: ""
+#  DOCKER_TLS_CERTDIR: ""
+#  DOCKER_HOST: tcp://docker:2375
+#  DOCKER_TLS_VERIFY: ""
+#  DOCKER_CERT_PATH: ""
 
   JINEAR_CORE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:${CI_COMMIT_SHORT_SHA}
   JINEAR_CORE_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:latest
