@@ -118,18 +118,21 @@ web:build:arm64:
     - cd jinear-web
     - docker buildx build --platform linux/arm64 -t ${JINEAR_WEB_IMAGE}-arm64 --push .
 
-
 web:deploy:
   <<: *docker_setup
   stage: deploy
   script:
-    - docker buildx imagetools create -t ${JINEAR_WEB_IMAGE_LATEST} ${JINEAR_WEB_IMAGE}
+    - docker manifest create ${JINEAR_WEB_IMAGE} ${JINEAR_WEB_IMAGE}-amd64 ${JINEAR_WEB_IMAGE}-arm64
+    - docker manifest push ${JINEAR_WEB_IMAGE}
+    - docker manifest create ${JINEAR_WEB_IMAGE_LATEST} ${JINEAR_WEB_IMAGE}-amd64 ${JINEAR_WEB_IMAGE}-arm64
+    - docker manifest push ${JINEAR_WEB_IMAGE_LATEST}
   timeout: 60m
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *web_changes
   needs:
-    - web:build
+    - web:build:amd64
+    - web:build:arm64
 
 caddy-custom:build:
   <<: *docker_setup
