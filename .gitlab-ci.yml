@@ -94,18 +94,30 @@ core:deploy:
   needs:
     - core:build
 
-web:build:
+.web_build_template: &web_build_template
   <<: *docker_setup
   stage: build
   script:
     - cd jinear-web
-    - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_WEB_IMAGE} --push .
   timeout: 60m
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *web_changes
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       <<: *web_changes
+
+web:build:amd64:
+  <<: *web_build_template
+  script:
+    - cd jinear-web
+    - docker buildx build --platform linux/amd64 -t ${JINEAR_WEB_IMAGE}-amd64 --push .
+
+web:build:arm64:
+  <<: *web_build_template
+  script:
+    - cd jinear-web
+    - docker buildx build --platform linux/arm64 -t ${JINEAR_WEB_IMAGE}-arm64 --push .
+
 
 web:deploy:
   <<: *docker_setup
