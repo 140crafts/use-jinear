@@ -101,6 +101,7 @@ web:build:
   script:
     - cd jinear-web
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_WEB_IMAGE} --push .
+  timeout: 60m
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *web_changes
@@ -112,6 +113,7 @@ web:deploy:
   stage: deploy
   script:
     - docker buildx imagetools create -t ${JINEAR_WEB_IMAGE_LATEST} ${JINEAR_WEB_IMAGE}
+  timeout: 60m
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *web_changes
