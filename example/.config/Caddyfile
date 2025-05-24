@@ -36,6 +36,7 @@ https://files.jinear.cagdastunca.com {
     }
 }
 
+# uncomment following if you want to use project pages. Your domain should be on cloudflare and you need a cloudflare token
 #https://*.projects.jinear.cagdastunca.com {
 #    tls {
 #        dns cloudflare yourcloudflaretoken
