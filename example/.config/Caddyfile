@@ -1,0 +1,49 @@
+{
+    debug
+    admin 0.0.0.0:2019
+}
+
+https://jinear.cagdastunca.com {
+    tls {
+      on_demand
+    }
+    reverse_proxy {
+        to http://jinear-web:3000
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse_proxy.upstream.address}
+    }
+}
+
+https://api.jinear.cagdastunca.com {
+    tls {
+      on_demand
+    }
+    reverse_proxy {
+        to http://jinear-core:8008
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse_proxy.upstream.address}
+    }
+}
+
+https://files.jinear.cagdastunca.com {
+    tls {
+      on_demand
+    }
+    reverse_proxy {
+        to http://jinear-minio:9000
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse_proxy.upstream.address}
+    }
+}
+
+#https://*.projects.jinear.cagdastunca.com {
+#    tls {
+#        dns cloudflare yourcloudflaretoken
+#        resolvers 1.1.1.1
+#    }
+#    reverse_proxy {
+#        to http://jinear-pages:3000
+#        header_up Host {http.reverse_proxy.upstream.host}
+#        header_up X-Real-IP {http.reverse_proxy.upstream.address}
+#    }
+#}

@@ -1,0 +1,203 @@
+version: "3"
+
+services:
+  jinear-db:
+    container_name: jinear-db
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: jinear
+      POSTGRES_USER: db-user
+      POSTGRES_PASSWORD: db-pass
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ".data/postgres:/var/lib/postgresql/data"
+    ports:
+      - "5432:5432"
+    networks:
+      - jinear-default
+
+  jinear-db-backup:
+    container_name: jinear-db-backup
+    image: postgres:15
+    restart: always
+    depends_on:
+      - jinear-db
+    environment:
+      TZ: "Asia/Istanbul"  # You can choose the appropriate timezone. It's for GMT+3
+    volumes:
+      - ".backups:/backups"
+      - ".config:/config"
+    entrypoint: /bin/bash
+    command: /config/db-backup.sh
+    networks:
+      - jinear-default
+
+  jinear-redis:
+    image: redis:6.2-alpine
+    restart: always
+    ports:
+      - "6379:6379"
+      - "18020:6379"
+    command: redis-server --requirepass redis-pass
+    volumes:
+      - ".data/redis:/data"
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    networks:
+      - jinear-default
+
+  jinear-minio:
+    container_name: jinear-minio
+    image: docker.io/bitnami/minio:2025.3.12
+    restart: always
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - ".data/minio:/bitnami/minio/data"
+    privileged: true
+    environment:
+      MINIO_ROOT_USER: minio-user
+      MINIO_ROOT_PASSWORD: minio-pass
+    networks:
+      - jinear-default
+
+  jinear-core:
+    container_name: jinear-core
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-core:latest
+    depends_on:
+      - jinear-db
+      - jinear-redis
+      - jinear-minio
+    volumes:
+      - ".logs/jinear-core:/app/logs"
+      - ".config:/config"
+    environment:
+      jasypt.encryptor.password: encryptor-pass
+      jasypt.encryptor.algorithm: PBEWithMD5AndDES
+      #      GOOGLE_APPLICATION_CREDENTIALS: /config/gcloud-serviceaccount.json
+      JWT_SECRET: change-me
+      JWT_DOMAIN: company.com
+      FE_PATH: https://your-instance.company.com
+      MINIO_KEY: minio-api-key
+      MINIO_SECRET: minio-api-secret
+      MINIO_ROOT: http://jinear-minio:9000
+      MINIO_BASE_PATH: https://files.your-instance.company.com/
+    restart: always
+    privileged: true
+    ports:
+      - 19010:8008
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8008" ]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+    networks:
+      - jinear-default
+
+  jinear-web:
+    container_name: jinear-web
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-web:latest
+    depends_on:
+      - jinear-core
+    volumes:
+      - ".logs/jinear-web:/logs"
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_ROOT=https://api.your-instance.company.com
+      - NEXT_PUBLIC_POSTHOG_KEY=posthog-key
+      - NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+    privileged: true
+    ports:
+      - 19020:3000
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+    networks:
+      - jinear-default
+
+  jinear-pages:
+    container_name: jinear-pages
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-pages:latest
+    depends_on:
+      - jinear-core
+    volumes:
+      - ".logs/jinear-pages:/logs"
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_ROOT=https://api.your-instance.company.com
+      - NEXT_PUBLIC_POSTHOG_KEY=posthog-key
+      - NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+    privileged: true
+    ports:
+      - 19030:3000
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+    networks:
+      - jinear-default
+
+  jinear-caddy:
+    container_name: jinear-caddy
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-caddy-custom:latest
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "18080:80"
+      - "18443:443"
+      - "18443:443/udp"
+      - "2019:2019"
+    volumes:
+      - $PWD/.data/caddy/conf:/etc/caddy
+      - $PWD/.data/caddy/site:/srv
+      - .data/caddy/data:/data
+      - .data/caddy/config:/config
+    networks:
+      - jinear-default
+
+  jinear-caddy-manager:
+    container_name: jinear-caddy-manager
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-caddy-manager:latest
+    depends_on:
+      - jinear-core
+    volumes:
+      - ".logs/jinear-caddy-manager:/logs"
+      - ".data/caddy/conf:/conf"
+    restart: always
+    environment:
+      PORT: 3000
+      INTERNAL_KEY: caddy-manager-token
+      JINEAR_PAGES_APP_URL: http://jinear-pages:3000
+      CF_ACCESS_KEY: YOUR-CLOUDFLARE-TOKEN
+      BASE_PAGES_URL_PATTERN: https://*.projects.your-instance.company.com
+      BASE_PAGES_TLS_IS_CLOUDFLARE: true
+      BASE_S3_PATH: https://files.your-instance.company.com
+      BASE_S3_PATH_REVERSE_PROXY_TO: https://storage.googleapis.com
+      BASE_UI_PATH: https://your-instance.company.com
+      BASE_UI_PATH_REVERSE_PROXY_TO: http://jinear-web:3000
+      BASE_API_PATH: https://api.your-instance.company.com
+      BASE_API_PATH_REVERSE_PROXY_TO: http://jinear-core:8008
+    privileged: true
+    ports:
+      - 19040:3000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+    networks:
+      - jinear-default
+
+
+networks:
+  jinear-default:
+    driver: bridge
