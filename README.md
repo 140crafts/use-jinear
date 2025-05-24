@@ -26,7 +26,7 @@ Jinear is a comprehensive solution that combines task management with calendar f
 
 1. **Create the project directory:**
    ```bash
-   mkdir jinear
+   mkdir jinear &&
    cd jinear
    ```
 
@@ -42,9 +42,9 @@ Jinear is a comprehensive solution that combines task management with calendar f
 
 4. **Download configuration files:**
    ```bash
-   sudo curl --output .config/Caddyfile "https://gitlab.com/140crafts/use-jinear/-/raw/main/example/.config/Caddyfile?ref_type=heads"
-   sudo curl --output .config/application.properties "https://gitlab.com/140crafts/use-jinear/-/raw/main/example/.config/application.properties?ref_type=heads"
-   sudo curl --output .config/db-backup.sh "https://gitlab.com/140crafts/use-jinear/-/raw/main/example/.config/db-backup.sh?ref_type=heads"
+   sudo curl --output .config/Caddyfile "https://gitlab.com/140crafts/use-jinear/-/raw/main/example/.config/Caddyfile?ref_type=heads" &&
+   sudo curl --output .config/application.properties "https://gitlab.com/140crafts/use-jinear/-/raw/main/example/.config/application.properties?ref_type=heads" &&
+   sudo curl --output .config/db-backup.sh "https://gitlab.com/140crafts/use-jinear/-/raw/main/example/.config/db-backup.sh?ref_type=heads" 
    ```
 
 5. **Copy Caddy configuration:**
@@ -62,6 +62,8 @@ Jinear is a comprehensive solution that combines task management with calendar f
 7. **Set proper permissions and start the application:**
    ```bash
    sudo chown -R 1001:1001 .data/
+   ```
+      ```bash
    docker-compose up -d
    ```
 
