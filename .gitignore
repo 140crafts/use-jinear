@@ -97,3 +97,7 @@ public/worker-*.js
 
 ### Help Files ###
 HELP.md
+
+jinear-core/src/main/resources/application-dev.properties
+jinear-core/src/main/resources/application-prod.properties
+jinear-core/src/main/resources/application-stg.properties
