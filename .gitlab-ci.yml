@@ -95,11 +95,12 @@ core:deploy:
   needs:
     - core:build
 
-.web_build_template: &web_build_template
+web:build:
   <<: *docker_setup
   stage: build
   script:
     - cd jinear-web
+    - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_WEB_IMAGE} --push .
   timeout: 90m
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
@@ -107,33 +108,17 @@ core:deploy:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       <<: *web_changes
 
-web:build:amd64:
-  <<: *web_build_template
-  script:
-    - cd jinear-web
-    - docker buildx build --platform linux/amd64 -t ${JINEAR_WEB_IMAGE}-amd64 --push .
-
-web:build:arm64:
-  <<: *web_build_template
-  script:
-    - cd jinear-web
-    - docker buildx build --platform linux/arm64 -t ${JINEAR_WEB_IMAGE}-arm64 --push .
-
 web:deploy:
   <<: *docker_setup
   stage: deploy
   script:
-    - docker manifest create ${JINEAR_WEB_IMAGE} ${JINEAR_WEB_IMAGE}-amd64 ${JINEAR_WEB_IMAGE}-arm64
-    - docker manifest push ${JINEAR_WEB_IMAGE}
-    - docker manifest create ${JINEAR_WEB_IMAGE_LATEST} ${JINEAR_WEB_IMAGE}-amd64 ${JINEAR_WEB_IMAGE}-arm64
-    - docker manifest push ${JINEAR_WEB_IMAGE_LATEST}
+    - docker buildx imagetools create -t ${JINEAR_WEB_IMAGE_LATEST} ${JINEAR_WEB_IMAGE}
   timeout: 90m
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *web_changes
   needs:
-    - web:build:amd64
-    - web:build:arm64
+    - web:build
 
 caddy-custom:build:
   <<: *docker_setup
@@ -141,6 +126,7 @@ caddy-custom:build:
   script:
     - cd jinear-caddy-custom
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CADDY_CUSTOM_IMAGE} --push .
+  timeout: 90m
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
       <<: *caddy_custom_changes
@@ -150,6 +136,7 @@ caddy-custom:build:
 caddy-custom:deploy:
   <<: *docker_setup
   stage: deploy
+  timeout: 90m
   script:
     - docker buildx imagetools create -t ${JINEAR_CADDY_CUSTOM_IMAGE_LATEST} ${JINEAR_CADDY_CUSTOM_IMAGE}
   rules:
