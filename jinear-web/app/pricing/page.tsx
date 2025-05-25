@@ -24,18 +24,18 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
   const dispatch = useAppDispatch();
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
 
-  const onSelfHostClick = () => {
-    trackWaitlist({ message: `Self host clicked. currentAccountId: ${currentAccountId}` });
-    posthog.capture("self-host-click", { currentAccountId });
-    dispatch(
-      popBasicTextInputModal({
-        visible: true,
-        title: t("selfHostWaitlistModalTitle"),
-        infoText: t("selfHostWaitlistModalInfoText"),
-        onSubmit: onEmailSubmit
-      })
-    );
-  };
+  // const onSelfHostClick = () => {
+  //   trackWaitlist({ message: `Self host clicked. currentAccountId: ${currentAccountId}` });
+  //   posthog.capture("self-host-click", { currentAccountId });
+  //   dispatch(
+  //     popBasicTextInputModal({
+  //       visible: true,
+  //       title: t("selfHostWaitlistModalTitle"),
+  //       infoText: t("selfHostWaitlistModalInfoText"),
+  //       onSubmit: onEmailSubmit
+  //     })
+  //   );
+  // };
 
   const onEmailSubmit = (email: string) => {
     dispatch(closeBasicTextInputModal());
@@ -61,7 +61,19 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
           <div className="flex-1" />
           <div className={styles.priceLabel}>{t("pricePageBasicPlan")}</div>
         </div>
-        
+
+          <div className={styles.plan}>
+              <JinearSelfHostedInfo />
+              <div className={styles.subtextContainer}>
+           <span className={styles.subtext}>
+            <b>{t("pricesPageSelfHostFeature_RequiresExpertise")}</b>
+          </span>
+              </div>
+              <Button className={styles.priceLabel} variant={ButtonVariants.filled} href={'https://gitlab.com/140crafts/use-jinear'} target={'_blank' }>
+                  {t("pricesPageSelfHostFeature_GoToRepo")}
+              </Button>
+          </div>
+
         <div className={styles.plan}>
           <JinearProInfo hasAdditionalToBasicPlanText={true} />
           <div className={styles.subtextContainer}>
@@ -87,25 +99,6 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
           {/*  <IoCaretForward size={42} className={"icon"} />*/}
           {/*</Button>*/}
         </div>
-
-        {/*<div className={styles.plan}>*/}
-        {/*  <JinearSelfHostedInfo />*/}
-        {/*  <div className={styles.subtextContainer}>*/}
-        {/*   <span className={styles.subtext}>*/}
-        {/*    <b>{t("pricesPageSelfHostFeature_RequiresExpertise")}</b>*/}
-        {/*  </span>*/}
-        {/*    <span className={styles.subtext}>*/}
-        {/*    <b>{t("pricesPageSelfHostFeature_RenewLicence")}</b>*/}
-        {/*  </span>*/}
-        {/*  </div>*/}
-        {/*  <Button className={styles.priceLabel} variant={ButtonVariants.filled} onClick={onSelfHostClick}>*/}
-        {/*    /!*{t("pricesPageSelfHostFeature_Price").replace("${price}", PADDLE_CATALOG.self_host.price)}*!/*/}
-        {/*    {t("pricesPageSelfHostFeature_JoinWaitlist")}*/}
-        {/*  </Button>*/}
-        {/*  /!*<Button className={styles.priceLabel} onClick={onSelfHostClick}>*!/*/}
-        {/*  /!*  {t("pricesPageSelfHostFeature_RenewLicencePrice").replace("${price}", PADDLE_CATALOG.self_host_renew.price)}*!/*/}
-        {/*  /!*</Button>*!/*/}
-        {/*</div>*/}
 
       </div>
     </div>

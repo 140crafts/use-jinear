@@ -2340,6 +2340,10 @@ const translations = {
     en: "Terms & Conditions",
     tr: "Şartlar ve Koşullar"
   },
+  homescreenActionBarSource: {
+    en: "Self Host",
+    tr: "Self Host"
+  },
   homescreenHeroTitleLine1: {
     en: "Lean project management",
     tr: "Hızlı aksiyon alan takımlar için"
@@ -2688,10 +2692,6 @@ const translations = {
     en: "* While there is 100 GB limit to file storage, currently, the size of each single file can be a maximum of 32MB.",
     tr: "* Toplam yüklenebilecek dosya limiti 100 GB olmasina rağmen şu anda her bir tekil dosyanın boyutu maksimum 32MB olabilir."
   },
-  pricesPageSelfHostFeature_PayOnce: {
-    en: "Pay once use forever ",
-    tr: "Bir kere ödeyin sonsuza dek kullanın"
-  },
   pricesPageSelfHostFeature_Own: {
     en: "Self host your Jinear instance.",
     tr: "Jinear'ı kendi sunucunuza kurun."
@@ -2701,32 +2701,20 @@ const translations = {
     tr: "Regülatif kısıtlamalara takılmayın."
   },
   pricesPageSelfHostFeature_EasyInstall: {
-    en: "Easy install. Single docker compose file all you need.",
+    en: "Easy install. Single docker compose file and couple of config files all you need.",
     tr: "Kolay kurulum. Tek bir docker compose dosyasını çalıştırmanız yeterli."
   },
   pricesPageSelfHostFeature_RequiresExpertise: {
     en: "* You manage your own server. Requires at least a little technical knowledge.",
     tr: "* Kendi sunucunuzu yönetirsiniz. En azından biraz teknik bilgi gerektirir."
   },
-  pricesPageSelfHostFeature_Updates: {
-    en: "You get one year free upgrades.",
-    tr: "Bir yıl boyunca güncellemeler ücretsizdir."
-  },
-  pricesPageSelfHostFeature_Price: {
-    en: "${price} Once",
-    tr: "${price} Bir kez"
-  },
   pricesPageSelfHostFeature_RenewLicencePrice: {
     en: "${price} Renewing existing licence",
     tr: "${price} Lisans yenileme"
   },
-  pricesPageSelfHostFeature_RenewLicence: {
-    en: "* Renewing licence is to get new updates after 1 year. If you're happy with your latest updates you can keep using your existing version forever without renewing your licence.",
-    tr: "* Lisans yenileme bir yıldan sonra yeni güncellemeleri almaya devam etmek için gerekir. Lisans yenilemeden var olan sürümünüzü sonsuza dek kullanabilirsiniz."
-  },
-  pricesPageSelfHostFeature_JoinWaitlist: {
-    en: "Join Waitlist",
-    tr: "Bekleme Listesine Katıl"
+  pricesPageSelfHostFeature_GoToRepo: {
+    en: "Go to repo",
+    tr: "Repo'ya Git"
   },
   pricingPageTitle: {
     en: "Pricing & Plans",

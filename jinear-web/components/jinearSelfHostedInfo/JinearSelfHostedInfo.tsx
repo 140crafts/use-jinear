@@ -26,8 +26,6 @@ const JinearSelfHostedInfo: React.FC<JinearSelfHostedInfoProps> = ({}) => {
         <li>{t("pricesPageSelfHostFeature_Own")}</li>
         <li>{t("pricesPageSelfHostFeature_Privacy")}</li>
         <li>{t("pricesPageSelfHostFeature_EasyInstall")}</li>
-        <li>{t("pricesPageSelfHostFeature_Updates")}</li>
-        <li>{t("pricesPageSelfHostFeature_PayOnce")}</li>
       </ul>
     </>
   );
