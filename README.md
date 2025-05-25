@@ -81,6 +81,9 @@ Once your Jinear instance is running, access it through your configured domain.
 
 ## Support
 
+> **⚠️ Note** \
+I didn’t start this project with the intention of open-sourcing it or making it self-hostable. Most of it was built in my spare time, before or after work. As a result, the configuration process isn’t as seamless as it could be. I may improve it over time.
+
 For questions, issues, or contributions, please visit our [GitLab repository](https://gitlab.com/140crafts/use-jinear).
 
 ## License
