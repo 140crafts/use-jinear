@@ -1,103 +1,111 @@
-import { useRetrieveSubscriptionInfoQuery } from "@/store/api/paymentInfoApi";
-import { format } from "date-fns";
+import {useRetrieveSubscriptionInfoQuery} from "@/store/api/paymentInfoApi";
+import {format} from "date-fns";
 import useTranslation from "locales/useTranslation";
-import React, { useMemo } from "react";
-import Button, { ButtonHeight, ButtonVariants } from "../button";
+import React, {useMemo} from "react";
+import Button, {ButtonHeight, ButtonVariants} from "../button";
 import CircularLoading from "../circularLoading/CircularLoading";
 import styles from "./WorkspaceSubscriptionInfo.module.css";
 import PaymentInfoDetail from "./paymentInfoDetail/PaymentInfoDetail";
+import Logger from "@/utils/logger";
 
 interface WorkspaceSubscriptionInfoProps {
-  workspaceId: string;
+    workspaceId: string;
 }
 
-const WorkspaceSubscriptionInfo: React.FC<WorkspaceSubscriptionInfoProps> = ({ workspaceId }) => {
-  const { t } = useTranslation();
-  const { data: retrieveSubscriptionInfoResponse, isFetching, isError } = useRetrieveSubscriptionInfoQuery({ workspaceId });
+const logger = Logger("WorkspaceSubscriptionInfo");
+const WorkspaceSubscriptionInfo: React.FC<WorkspaceSubscriptionInfoProps> = ({workspaceId}) => {
+    const {t} = useTranslation();
+    const {
+        data: retrieveSubscriptionInfoResponse,
+        isFetching,
+        isError,
+        error
+    } = useRetrieveSubscriptionInfoQuery({workspaceId});
+    // @ts-expect-error quick fix for making everyone on pro tier.
+    const isServerFailed = isError && error?.status != 404;
 
-  const cancelsAfter = useMemo(() => {
-    try {
-      const cancelsAfter = retrieveSubscriptionInfoResponse?.data.cancelsAfter;
-      if (cancelsAfter) {
-        return format(new Date(cancelsAfter), t("dateFormat"));
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    return "";
-  }, [retrieveSubscriptionInfoResponse]);
+    const cancelsAfter = useMemo(() => {
+        try {
+            const cancelsAfter = retrieveSubscriptionInfoResponse?.data.cancelsAfter;
+            if (cancelsAfter) {
+                return format(new Date(cancelsAfter), t("dateFormat"));
+            }
+        } catch (error) {
+            console.error(error);
+        }
+        return "";
+    }, [retrieveSubscriptionInfoResponse]);
 
-  const nextBillingDate = useMemo(() => {
-    try {
-      const latestPayment = retrieveSubscriptionInfoResponse?.data.subscriptionPaymentInfoList?.[0];
-      const parsedNextBillDate = latestPayment?.parsedNextBillDate;
-      if (parsedNextBillDate) {
-        return format(new Date(parsedNextBillDate), t("dateFormat"));
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    return "";
-  }, [retrieveSubscriptionInfoResponse]);
+    const nextBillingDate = useMemo(() => {
+        try {
+            const latestPayment = retrieveSubscriptionInfoResponse?.data.subscriptionPaymentInfoList?.[0];
+            const parsedNextBillDate = latestPayment?.parsedNextBillDate;
+            if (parsedNextBillDate) {
+                return format(new Date(parsedNextBillDate), t("dateFormat"));
+            }
+        } catch (error) {
+            console.error(error);
+        }
+        return "";
+    }, [retrieveSubscriptionInfoResponse]);
 
-  return (
-    <div className={styles.container}>
-      {isFetching ? (
-        <CircularLoading />
-      ) : isError ? (
-        <>{t("genericError")}</>
-      ) : (
-        <>
-          <h2>{t("billingTitle")}</h2>
-          <div className={styles.subscriptionDetail}>
-            {cancelsAfter ? (
-              <>{t("subscriptionCancelsAfter")?.replace("${date}", cancelsAfter)}</>
-            ) : (
-              <>
-                <div className={styles.nextBillingDate}>
-                  {t("subscriptionNextBillingDate").replace("${date}", nextBillingDate)}
-                </div>
-                <div className="spacer-h-2" />
-                <div className={styles.subscriptionActionButtonsContainer}>
-                  {retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.updateUrl && (
-                    <Button
-                      variant={ButtonVariants.filled}
-                      heightVariant={ButtonHeight.short}
-                      href={retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.updateUrl}
-                      target="_blank"
-                    >
-                      {t("subscriptionUpdate")}
-                    </Button>
-                  )}
-                  {retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.cancelUrl && (
-                    <Button
-                      variant={ButtonVariants.filled}
-                      heightVariant={ButtonHeight.short}
-                      href={retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.cancelUrl}
-                      target="_blank"
-                    >
-                      {t("subscriptionCancel")}
-                    </Button>
-                  )}
-                </div>
-                <div className="spacer-h-2" />
-              </>
-            )}
-          </div>
 
-          <div className={styles.receiptList}>
-            <h3>{t("subscriptionPastPayments")}</h3>
-            {retrieveSubscriptionInfoResponse?.data?.subscriptionPaymentInfoList?.map((subscriptionPaymentInfo) => (
-              <PaymentInfoDetail
-                key={`${subscriptionPaymentInfo.relatedEntityId}`}
-                subscriptionPaymentInfo={subscriptionPaymentInfo}
-              />
-            ))}
-          </div>
-        </>
-      )}
-    </div>
-  );
+    return (
+        <div className={styles.container}>
+            {isFetching && <CircularLoading/>}
+            {isServerFailed && <>{t("genericError")}</>}
+            {retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo
+                && <>
+                    <h2>{t("billingTitle")}</h2>
+                    <div className={styles.subscriptionDetail}>
+                        {cancelsAfter ? (
+                            <>{t("subscriptionCancelsAfter")?.replace("${date}", cancelsAfter)}</>
+                        ) : (
+                            <>
+                                <div className={styles.nextBillingDate}>
+                                    {t("subscriptionNextBillingDate").replace("${date}", nextBillingDate)}
+                                </div>
+                                <div className="spacer-h-2"/>
+                                <div className={styles.subscriptionActionButtonsContainer}>
+                                    {retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.updateUrl && (
+                                        <Button
+                                            variant={ButtonVariants.filled}
+                                            heightVariant={ButtonHeight.short}
+                                            href={retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.updateUrl}
+                                            target="_blank"
+                                        >
+                                            {t("subscriptionUpdate")}
+                                        </Button>
+                                    )}
+                                    {retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.cancelUrl && (
+                                        <Button
+                                            variant={ButtonVariants.filled}
+                                            heightVariant={ButtonHeight.short}
+                                            href={retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo.cancelUrl}
+                                            target="_blank"
+                                        >
+                                            {t("subscriptionCancel")}
+                                        </Button>
+                                    )}
+                                </div>
+                                <div className="spacer-h-2"/>
+                            </>
+                        )}
+                    </div>
+
+                    <div className={styles.receiptList}>
+                        <h3>{t("subscriptionPastPayments")}</h3>
+                        {retrieveSubscriptionInfoResponse?.data?.subscriptionPaymentInfoList?.map((subscriptionPaymentInfo) => (
+                            <PaymentInfoDetail
+                                key={`${subscriptionPaymentInfo.relatedEntityId}`}
+                                subscriptionPaymentInfo={subscriptionPaymentInfo}
+                            />
+                        ))}
+                    </div>
+                </>
+            }
+        </div>
+    );
 };
 
 export default WorkspaceSubscriptionInfo;

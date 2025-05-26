@@ -2,8 +2,9 @@
 import { env } from "next-runtime-env";
 
 export const __DEV__ = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
-// export const HOST = __DEV__ ? "http://localhost:3000" : "https://jinear.co";
-export const HOST = "http://localhost:3000";
+//todo move following to env
+export const HOST = __DEV__ ? "http://localhost:3000" : "https://jinear.co";
+// export const HOST = "http://localhost:3000";
 
 export const SERVER = __DEV__ ? "staging.api" : "api";
 
