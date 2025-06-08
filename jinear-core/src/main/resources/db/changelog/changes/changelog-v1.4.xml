@@ -313,4 +313,10 @@
             <column name="late_owner_id" type="char(26)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-533-add-slug-to-project_post">
+        <addColumn tableName="project_post">
+            <column name="slug" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -14,6 +14,7 @@ import Image from "@tiptap/extension-image";
 export interface ITiptapRef {
   clearContent: () => void;
   getHTML: () => string;
+  getText: () => string;
   focus: (position?: "start" | "end" | "all" | number | boolean | null, options?: { scrollIntoView?: boolean }) => void;
 }
 
@@ -91,6 +92,7 @@ const Tiptap = (
   useImperativeHandle(ref, () => ({
     clearContent: () => editor?.commands.clearContent(true),
     getHTML: () => editor?.getHTML(),
+    getText: () => editor?.getText(),
     focus: (position?: "start" | "end" | "all" | number | boolean | null, options?: { scrollIntoView?: boolean }) =>
       editor?.commands.focus(position, options)
   }));
