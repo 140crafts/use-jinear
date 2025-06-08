@@ -13,5 +13,6 @@ public class InitializeProjectPostVo {
     private String projectId;
     private String accountId;
     private String body;
+    private String slug;
     private List<MultipartFile> files;
 }

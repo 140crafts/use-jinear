@@ -11,7 +11,8 @@ interface ProjectPostPageProps {
 
 const ProjectPostPage: React.FC<ProjectPostPageProps> = ({}) => {
   const params = useParams();
-  const projectPostId: string = params?.projectPostId as string;
+  const projectPostIdWithSlug: string = params?.projectPostId as string;
+  const projectPostId: string = projectPostIdWithSlug ? projectPostIdWithSlug.substring(projectPostIdWithSlug.length - 26, projectPostIdWithSlug.length) : projectPostIdWithSlug;
   const domain = typeof window == "object" && window?.location?.hostname || "";
 
   const {

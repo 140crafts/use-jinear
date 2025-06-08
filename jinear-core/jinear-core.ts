@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2025-03-31 17:38:26.
+// Generated using typescript-generator version 3.0.1157 on 2025-06-08 21:30:24.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -159,8 +159,8 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ghistoryId: string;
     gthreadId: string;
+    ghistoryId: string;
     ginternalDate: string;
     gid: string;
 }
@@ -588,6 +588,7 @@ export interface ProjectPostDto extends BaseDto {
     postBody: RichTextDto;
     files: AccessibleMediaDto[];
     commentCount: number;
+    slug: string;
 }
 
 export interface ProjectTeamDto extends BaseDto {
@@ -1229,6 +1230,7 @@ export interface ProjectPostAddCommentRequest extends BaseRequest {
 export interface ProjectPostInitializeRequest extends BaseRequest {
     projectId: string;
     body: string;
+    slug: string;
     files?: MultipartFile[] | null;
 }
 
@@ -1931,9 +1933,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    uri: URI;
-    description: string;
     filename: string;
+    description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {

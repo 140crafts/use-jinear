@@ -37,6 +37,9 @@ public class ProjectPost extends BaseEntity {
     @Column(name = "post_body_rich_text_id")
     private String postBodyRichTextId;
 
+    @Column(name = "slug")
+    private String slug;
+
     @OneToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "project_id", insertable = false, updatable = false)

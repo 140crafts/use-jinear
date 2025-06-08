@@ -17,6 +17,7 @@ public class ProjectPostInitializeRequest extends BaseRequest {
     private String projectId;
     @NotBlank
     private String body;
+    private String slug;
     @Nullable
     private List<MultipartFile> files;
 }
