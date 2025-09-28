@@ -98,6 +98,8 @@ core:deploy:
 web:build:
   <<: *docker_setup
   stage: build
+  tags:
+    - saas-linux-medium-amd64
   script:
     - cd jinear-web
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_WEB_IMAGE} --push .
@@ -194,6 +196,8 @@ message-service:deploy:
 pages:build:
   <<: *docker_setup
   stage: build
+  tags:
+    - saas-linux-medium-amd64
   script:
     - cd jinear-pages
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_PAGES_IMAGE} --push .
