@@ -35,7 +35,14 @@ public class TaskBoardListingService {
                 .map(taskBoardDtoConverter::convert);
     }
 
-    public Page<TaskBoardDto> retrieveTaskBoardsFilterByName(String workspaceId, String teamId, String filterRecentsByName, int page) {
+    public Page<TaskBoardDto> retrieveTaskBoardsFilterByName(String workspaceId, String filterRecentsByName, int page) {
+        log.info("Retrieve filtered task boards from workspace has started. workspaceId: {}, filterRecentsByName: {}, page: {}", workspaceId, filterRecentsByName, page);
+        String filterLike = "%" + filterRecentsByName + "%";
+        return taskBoardRepository.findAllByWorkspaceIdAndTitleLikeIgnoreCaseAndPassiveIdIsNullOrderByCreatedDateDesc(workspaceId, filterLike, PageRequest.of(page, SEARCH_PAGE_SIZE))
+                .map(taskBoardDtoConverter::convert);
+    }
+
+    public Page<TaskBoardDto> retrieveTaskBoardsFilterByTeamAndName(String workspaceId, String teamId, String filterRecentsByName, int page) {
         log.info("Retrieve filtered task boards from workspace and team has started. workspaceId: {}, teamId: {}, filterRecentsByName: {}, page: {}", workspaceId, teamId, filterRecentsByName, page);
         String filterLike = "%" + filterRecentsByName + "%";
         return taskBoardRepository.findAllByWorkspaceIdAndTeamIdAndTitleLikeIgnoreCaseAndPassiveIdIsNullOrderByCreatedDateDesc(workspaceId, teamId, filterLike, PageRequest.of(page, SEARCH_PAGE_SIZE))
@@ -47,5 +54,10 @@ public class TaskBoardListingService {
         String filterLike = "%" + filterRecentsByName + "%";
         return taskBoardRepository.findAllByTaskBoardIdNotInAndWorkspaceIdAndTeamIdAndTitleLikeIgnoreCaseAndPassiveIdIsNullOrderByCreatedDateDesc(excludingBoardIds, workspaceId, teamId, filterLike, PageRequest.of(page, SEARCH_PAGE_SIZE))
                 .map(taskBoardDtoConverter::convert);
+    }
+
+    public long countAllByWorkspaceIdAndTeamIdInAndTaskBoardIdInAndPassiveIdIsNull(String workspaceId, List<String> teamIds, List<String> taskBoardId) {
+        log.info("Count all by workspace id and team id in and task board id in and passive id is null has started. workspaceId: {}, teamIds: [{}], taskBoardId: [{}]", workspaceId, NormalizeHelper.listToString(teamIds), NormalizeHelper.listToString(taskBoardId));
+        return taskBoardRepository.countAllByWorkspaceIdAndTeamIdInAndTaskBoardIdInAndPassiveIdIsNull(workspaceId, teamIds, taskBoardId);
     }
 }

@@ -24,6 +24,8 @@ public class CalendarEventFilterRequest extends BaseRequest {
     private List<String> excludingTeamIdList;
     @Nullable
     private List<String> calendarIdList;
+    @Nullable
+    private List<String> taskboardIds;
     @NotNull
     private ZonedDateTime timespanStart;
     @NotNull

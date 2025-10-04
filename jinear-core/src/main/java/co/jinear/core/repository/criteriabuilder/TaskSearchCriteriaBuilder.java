@@ -1,8 +1,10 @@
 package co.jinear.core.repository.criteriabuilder;
 
 import co.jinear.core.model.entity.task.Task;
+import co.jinear.core.model.entity.task.TaskBoardEntry;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.extern.slf4j.Slf4j;
@@ -138,6 +140,13 @@ public class TaskSearchCriteriaBuilder {
             CriteriaBuilder.In<String> in = criteriaBuilder.in(root.get("milestoneId"));
             milestoneIdList.forEach(in::value);
             predicateList.add(in);
+        }
+    }
+
+    public void addTaskBoardIdList(List<String> taskBoardIds, Root<Task> root, List<Predicate> predicateList) {
+        if (Objects.nonNull(taskBoardIds) && !taskBoardIds.isEmpty()) {
+            Join<Task, TaskBoardEntry> boardEntryJoin = root.join("taskBoardEntries");
+            predicateList.add(boardEntryJoin.get("taskBoardId").in(taskBoardIds));
         }
     }
 

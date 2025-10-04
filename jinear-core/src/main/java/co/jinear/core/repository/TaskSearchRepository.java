@@ -52,7 +52,7 @@ public class TaskSearchRepository {
 
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         Root<Task> countRoot = countQuery.from(Task.class);
-        countQuery.select(criteriaBuilder.count(countRoot));
+        countQuery.select(criteriaBuilder.countDistinct(countRoot));
 
         Predicate countPredicateForTeamsWithTaskVisibilityAllTeamMember = retrieveFilterPredicateListForTeamsWithTaskVisibilityVisibleToAllTeamMembers(taskSearchFilterVo, criteriaBuilder, countRoot);
         Predicate countPredicateForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins = retrieveFilterPredicateListForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins(taskSearchFilterVo, criteriaBuilder, countRoot);
@@ -95,6 +95,7 @@ public class TaskSearchRepository {
             taskSearchCriteriaBuilder.addDatePredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addProjectIdList(taskSearchFilterVo.getProjectIds(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addMilestoneIdList(taskSearchFilterVo.getMilestoneIds(), criteriaBuilder, taskRoot, predicateList);
+            taskSearchCriteriaBuilder.addTaskBoardIdList(taskSearchFilterVo.getTaskboardIds(), taskRoot, predicateList);
             return criteriaBuilder.and(predicateList.toArray(Predicate[]::new));
         }
         return null;
@@ -158,6 +159,7 @@ public class TaskSearchRepository {
                 taskSearchCriteriaBuilder.addDatePredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addProjectIdList(taskSearchFilterVo.getProjectIds(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addMilestoneIdList(taskSearchFilterVo.getMilestoneIds(), criteriaBuilder, taskRoot, teamPredicateList);
+                taskSearchCriteriaBuilder.addTaskBoardIdList(taskSearchFilterVo.getTaskboardIds(), taskRoot, teamPredicateList);
                 Predicate teamPredicate = criteriaBuilder.and(teamPredicateList.toArray(Predicate[]::new));
                 mainPredicateList.add(teamPredicate);
             });
@@ -176,7 +178,7 @@ public class TaskSearchRepository {
                                                          FilterSort filterSort,
                                                          Pageable pageable) {
 
-        taskCriteriaQuery.where(searchPredicate);
+        taskCriteriaQuery.where(searchPredicate).distinct(true);
         setOrder(criteriaBuilder, taskCriteriaQuery, taskRoot, filterSort);
 
         List<Task> result = entityManager.createQuery(taskCriteriaQuery)

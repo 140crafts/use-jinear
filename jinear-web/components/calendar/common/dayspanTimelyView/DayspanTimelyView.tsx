@@ -34,10 +34,12 @@ const DayspanTimelyView: React.FC<DayspanTimelyViewProps> = ({
   const weekViewContainerRef = useRef<HTMLDivElement>(null);
   const hiddenCalendars = useQueryState<string[]>("hiddenCalendars", queryStateArrayParser) || [];
   const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || [];
+  const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || [];
 
   const { data: filterResponse, isFetching } = useFilterCalendarEventsQuery(
     {
       workspaceId: workspace?.workspaceId || "",
+      taskboardIds: taskBoards,
       timespanStart: periodStart,
       timespanEnd: periodEnd
     },

@@ -19,6 +19,7 @@ const MonthView: React.FC<MonthViewProps> = ({ workspace }) => {
   const squeezedView = useSqueezedView();
   const hiddenCalendars = useQueryState<string[]>("hiddenCalendars", queryStateArrayParser) || [];
   const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || [];
+  const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || [];
 
   const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
 
@@ -34,6 +35,7 @@ const MonthView: React.FC<MonthViewProps> = ({ workspace }) => {
   const { data: filterResponse, isFetching } = useFilterCalendarEventsQuery(
     {
       workspaceId: workspace?.workspaceId || "",
+      taskboardIds: taskBoards,
       timespanStart: periodStart,
       timespanEnd: periodEnd
     },

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2025-06-08 21:30:24.
+// Generated using typescript-generator version 3.0.1157 on 2025-10-04 16:01:11.
 
 export interface BaseDto {
     createdDate: Date;
@@ -68,8 +68,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -1088,6 +1088,7 @@ export interface CalendarEventFilterRequest extends BaseRequest {
     teamIdList?: string[] | null;
     excludingTeamIdList?: string[] | null;
     calendarIdList?: string[] | null;
+    taskboardIds?: string[] | null;
     timespanStart: Date;
     timespanEnd: Date;
 }
@@ -1934,8 +1935,8 @@ export interface Resource extends InputStreamSource {
     readable: boolean;
     url: URL;
     filename: string;
-    description: string;
     uri: URI;
+    description: string;
 }
 
 export interface InputStreamSource {
