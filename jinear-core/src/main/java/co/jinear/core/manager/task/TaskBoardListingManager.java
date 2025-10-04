@@ -13,6 +13,7 @@ import co.jinear.core.service.task.board.TaskBoardRetrieveService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryListingService;
 import co.jinear.core.validator.task.TaskAccessValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
+import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +28,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TaskBoardListingManager {
 
+    private final WorkspaceValidator workspaceValidator;
     private final TeamAccessValidator teamAccessValidator;
     private final SessionInfoService sessionInfoService;
     private final TaskBoardListingService taskBoardListingService;
@@ -43,7 +45,7 @@ public class TaskBoardListingManager {
         return mapResponse(taskBoardDto);
     }
 
-    public TaskBoardListingPaginatedResponse retrieveAll(String workspaceId, String teamId, Integer page) {
+    public TaskBoardListingPaginatedResponse retrieveAllByTeam(String workspaceId, String teamId, Integer page) {
         String currentAccountId = sessionInfoService.currentAccountId();
         teamAccessValidator.validateTeamAccess(currentAccountId, teamId);
         log.info("Retrieve all task boards has started. currentAccountId: {}", currentAccountId);
@@ -51,11 +53,19 @@ public class TaskBoardListingManager {
         return mapResponse(results);
     }
 
-    public TaskBoardListingPaginatedResponse filter(String workspaceId, String teamId, String filterRecentsByName, Integer page) {
+    public TaskBoardListingPaginatedResponse filterAllByName(String workspaceId, String filterRecentsByName, Integer page) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
+        log.info("Retrieve all task boards has started. currentAccountId: {}", currentAccountId);
+        Page<TaskBoardDto> results = taskBoardListingService.retrieveTaskBoardsFilterByName(workspaceId, filterRecentsByName, page);
+        return mapResponse(results);
+    }
+
+    public TaskBoardListingPaginatedResponse filterAllByTeamAndName(String workspaceId, String teamId, String filterRecentsByName, Integer page) {
         String currentAccountId = sessionInfoService.currentAccountId();
         teamAccessValidator.validateTeamAccess(currentAccountId, teamId);
         log.info("Retrieve all task boards has started. currentAccountId: {}", currentAccountId);
-        Page<TaskBoardDto> results = taskBoardListingService.retrieveTaskBoardsFilterByName(workspaceId, teamId, filterRecentsByName, page);
+        Page<TaskBoardDto> results = taskBoardListingService.retrieveTaskBoardsFilterByTeamAndName(workspaceId, teamId, filterRecentsByName, page);
         return mapResponse(results);
     }
 

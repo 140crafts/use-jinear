@@ -21,6 +21,7 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.calendar.CalendarExternalEventRetrieveService;
 import co.jinear.core.service.calendar.CalendarShareKeyService;
 import co.jinear.core.service.task.TaskListingService;
+import co.jinear.core.service.task.board.TaskBoardListingService;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
@@ -50,6 +51,7 @@ public class CalendarEventManager {
     private final CalendarExternalEventRetrieveService calendarExternalEventRetrieveService;
     private final CalendarShareKeyService calendarShareKeyService;
     private final CalendarEventsToICalConverter calendarEventsToICalConverter;
+    private final TaskBoardListingService taskBoardListingService;
 
     public CalendarEventListingResponse filterCalendarEvents(CalendarEventFilterRequest calendarEventFilterRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
@@ -59,6 +61,7 @@ public class CalendarEventManager {
         List<TeamMemberDto> memberships = retrieveMemberships(calendarEventFilterRequest, currentAccount);
         validateAccountMembershipsInRequestedTeams(calendarEventFilterRequest, memberships);
         validateTeamTaskVisibilityAndMemberRoleForAll(memberships);
+        validateAccountMembershipsInRequestedBoardIds(calendarEventFilterRequest, memberships);
 
         CalendarEventSearchFilterVo calendarEventSearchFilterVo = calendarEventFilterRequestToTaskSearchFilterVoConverter.convert(calendarEventFilterRequest, memberships);
 
@@ -158,6 +161,17 @@ public class CalendarEventManager {
 
         if (OWNER_ASSIGNEE_AND_ADMINS.equals(teamDto.getTaskVisibility()) && !List.of(TeamMemberRoleType.ADMIN, TeamMemberRoleType.MEMBER).contains(role)) {
             throw new NoAccessException();
+        }
+    }
+
+    private void validateAccountMembershipsInRequestedBoardIds(CalendarEventFilterRequest calendarEventFilterRequest, List<TeamMemberDto> memberships) {
+        List<String> taskboardIds = calendarEventFilterRequest.getTaskboardIds();
+        if (Objects.nonNull(taskboardIds) && !taskboardIds.isEmpty()){
+            List<String> accountsTeamIds = memberships.stream().map(TeamMemberDto::getTeamId).toList();
+            long taskBoardsMatchesWithWorkspaceIdAndTeamIdCount = taskBoardListingService.countAllByWorkspaceIdAndTeamIdInAndTaskBoardIdInAndPassiveIdIsNull(calendarEventFilterRequest.getWorkspaceId(), accountsTeamIds, taskboardIds);
+            if (taskBoardsMatchesWithWorkspaceIdAndTeamIdCount != Long.valueOf(taskboardIds.size())) {
+                throw new NoAccessException();
+            }
         }
     }
 

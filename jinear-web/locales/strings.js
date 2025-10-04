@@ -3316,6 +3316,14 @@ const translations = {
     en: "No calendar member found.",
     tr: "Hiçbir üye bulunamadı."
   },
+  calendarFilterByPropertyLabel: {
+    en: "Filter with",
+    tr: "Şununla filtrele"
+  },
+  calendarFilterByBoardButton: {
+    en: "Related Board(s)",
+    tr: "İlgili Pano"
+  },
   deleteCalendarMemberAreYouSureTitle: {
     en: "Kick Member",
     tr: "Üyeyi Takvim Üyelerinden At"

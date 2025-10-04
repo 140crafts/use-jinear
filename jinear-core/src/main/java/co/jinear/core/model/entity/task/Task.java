@@ -131,6 +131,11 @@ public class Task extends BaseEntity {
     @OrderBy("createdDate ASC")
     private Set<TaskFeedItem> feedItems;
 
+    @OneToMany(mappedBy = "task")
+    @Where(clause = "passive_id is null")
+    @OrderBy("createdDate ASC")
+    private Set<TaskBoardEntry> taskBoardEntries;
+
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "project_id", insertable = false, updatable = false)

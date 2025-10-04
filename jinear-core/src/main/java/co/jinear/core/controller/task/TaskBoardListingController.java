@@ -16,19 +16,27 @@ public class TaskBoardListingController {
 
     @GetMapping("/{workspaceId}/team/{teamId}")
     @ResponseStatus(HttpStatus.OK)
-    public TaskBoardListingPaginatedResponse retrieveAll(@PathVariable String workspaceId,
-                                                         @PathVariable String teamId,
-                                                         @RequestParam(required = false, defaultValue = "0") Integer page) {
-        return taskBoardListingManager.retrieveAll(workspaceId, teamId, page);
+    public TaskBoardListingPaginatedResponse retrieveAllByTeam(@PathVariable String workspaceId,
+                                                               @PathVariable String teamId,
+                                                               @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return taskBoardListingManager.retrieveAllByTeam(workspaceId, teamId, page);
+    }
+
+    @GetMapping("/{workspaceId}/filter")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskBoardListingPaginatedResponse filterAllByName(@PathVariable String workspaceId,
+                                                             @RequestParam(required = false, defaultValue = "") String name,
+                                                             @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return taskBoardListingManager.filterAllByName(workspaceId, name, page);
     }
 
     @GetMapping("/{workspaceId}/team/{teamId}/filter")
     @ResponseStatus(HttpStatus.OK)
-    public TaskBoardListingPaginatedResponse retrieveAll(@PathVariable String workspaceId,
-                                                         @PathVariable String teamId,
-                                                         @RequestParam(required = false, defaultValue = "") String name,
-                                                         @RequestParam(required = false, defaultValue = "0") Integer page) {
-        return taskBoardListingManager.filter(workspaceId, teamId, name, page);
+    public TaskBoardListingPaginatedResponse filterAllByTeamAndName(@PathVariable String workspaceId,
+                                                                    @PathVariable String teamId,
+                                                                    @RequestParam(required = false, defaultValue = "") String name,
+                                                                    @RequestParam(required = false, defaultValue = "0") Integer page) {
+        return taskBoardListingManager.filterAllByTeamAndName(workspaceId, teamId, name, page);
     }
 
     @GetMapping("/related-with-task/{taskId}")

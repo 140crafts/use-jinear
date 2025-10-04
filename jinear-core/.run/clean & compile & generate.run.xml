@@ -25,7 +25,7 @@
             <list />
           </option>
           <option name="resolveToWorkspace" value="false" />
-          <option name="workingDirPath" value="~/projects/jinear/jinear-core" />
+          <option name="workingDirPath" value="$PROJECT_DIR$/jinear-core" />
         </MavenRunnerParameters>
       </option>
     </MavenSettings>

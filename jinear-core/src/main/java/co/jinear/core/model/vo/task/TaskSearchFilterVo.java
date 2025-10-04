@@ -35,4 +35,5 @@ public class TaskSearchFilterVo {
     private FilterSort sort = IDATE_DESC;
     private List<String> projectIds;
     private List<String> milestoneIds;
+    private List<String> taskboardIds;
 }

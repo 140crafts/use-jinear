@@ -14,6 +14,7 @@ import OrLine from "../orLine/OrLine";
 import styles from "./CalendarSectionSideMenu.module.css";
 import CalendarTeamsList from "./calendarTeamsList/CalendarTeamsList";
 import ExternalCalendarsList from "./externalCalendarsList/ExternalCalendarsList";
+import CalendarBoardsList from "@/components/calendarSectionSideMenu/calendarBoardsList/CalendarBoardsList";
 
 interface CalendarSectionSideMenuProps {}
 
@@ -44,6 +45,7 @@ const CalendarSectionSideMenu: React.FC<CalendarSectionSideMenuProps> = ({}) => 
             headerContainerClassName={styles.miniMonthCalendarHeader}
           />
           <CalendarTeamsList workspace={workspace} />
+          <CalendarBoardsList workspace={workspace} />
           {!_isWebView && (
             <>
               <OrLine omitText={true} />

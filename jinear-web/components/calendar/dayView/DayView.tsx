@@ -24,6 +24,7 @@ const DayView: React.FC<DayViewProps> = ({ workspace }) => {
   const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
   const hiddenCalendars = useQueryState<string[]>("hiddenCalendars", queryStateArrayParser) || [];
   const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || [];
+  const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || [];
 
   const periodStart = startOfWeek(viewingDate, { weekStartsOn: 1 });
   const periodEnd = endOfWeek(viewingDate, { weekStartsOn: 1 });
@@ -34,6 +35,7 @@ const DayView: React.FC<DayViewProps> = ({ workspace }) => {
   const { data: filterResponse, isFetching } = useFilterCalendarEventsQuery(
     {
       workspaceId: workspace?.workspaceId || "",
+      taskboardIds: taskBoards,
       timespanStart: periodStart,
       timespanEnd: periodEnd,
     },
