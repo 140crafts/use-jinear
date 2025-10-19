@@ -49,6 +49,8 @@ const MessageList: React.FC<MessageListProps> = ({
   const hasMore = threadMessageInfo ? (threadMessageInfo.messageCount > threadMessagesSorted.length) : false;
   const [retrieveThreadMessages, { isFetching: isRetrieveThreadMessagesFetching }] = useLazyRetrieveThreadMessagesQuery();
 
+  logger.log({threadMessageInfo})
+
   useEffect(() => {
     if (threadId && workspaceId && pageVisibility) {
       retrieveThreadMessages({ channelId, workspaceId, threadId });
