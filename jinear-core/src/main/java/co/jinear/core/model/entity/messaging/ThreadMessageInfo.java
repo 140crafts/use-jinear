@@ -37,7 +37,7 @@ public class ThreadMessageInfo {
     @JoinColumn(name = "latest_message_id", referencedColumnName = "message_id", insertable = false, updatable = false)
     private Message latestMessage;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "thread_id", insertable = false, updatable = false)
     private Thread thread;

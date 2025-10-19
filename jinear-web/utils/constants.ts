@@ -10,7 +10,8 @@ export const SERVER = __DEV__ ? "staging.api" : "api";
 
 export const API_ROOT = env("NEXT_PUBLIC_API_ROOT") != null ? env("NEXT_PUBLIC_API_ROOT") : __DEV__ ? "http://localhost:8085/" : `https://${SERVER}.jinear.co/`;
 
-export const SOCKET_ROOT = (!process.env.NODE_ENV || process.env.NODE_ENV === "development") ? "ws://localhost:3001/" : "https://message.jinear.co/";
+// export const SOCKET_ROOT = (!process.env.NODE_ENV || process.env.NODE_ENV === "development") ? "ws://localhost:3001/" : "https://message.jinear.co/";
+export const SOCKET_ROOT = env("NEXT_PUBLIC_SOCKET_ROOT") != null ? env("NEXT_PUBLIC_SOCKET_ROOT") : __DEV__ ? "ws://localhost:3001/" : "https://message.jinear.co/";
 
 export const ROUTE_IF_LOGGED_IN = "/home";
 export const PROJECT_FEED_URL = HOST + "/shared/[workspaceUsername]/feed/[accessKey]";

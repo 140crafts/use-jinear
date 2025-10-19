@@ -252,6 +252,11 @@ export const checkAndUpdateChannelLastCheck = async ({ workspaceId, channelId, d
   const kind = "channel-last-check";
   const lastCheckInfo = await getDb().lastCheckInfo.filter(lastCheckInfo => lastCheckInfo.kind == kind && lastCheckInfo.channelId == channelId).first();
   const lastCheckTs = compareAndRetrieveLatest(lastCheckInfo, date);
+  logger.log({
+    checkAndUpdateChannelLastCheck_lastCheckInfo: new Date(lastCheckInfo?._timestamp ?? 0),
+    date,
+    lastCheckTs: new Date(lastCheckTs)
+  });
   getDb().lastCheckInfo.put({
     ...lastCheckInfo,
     workspaceId,
@@ -269,6 +274,12 @@ export const checkAndUpdateChannelLastActivity = async ({ workspaceId, channelId
   const kind = "channel-last-activity";
   const lastCheckInfo = await getDb().lastCheckInfo.filter(lastCheckInfo => lastCheckInfo.kind == kind && lastCheckInfo.channelId == channelId).first();
   const lastCheckTs = compareAndRetrieveLatest(lastCheckInfo, date);
+  logger.log({
+    checkAndUpdateChannelLastActivity_lastCheckInfo: new Date(lastCheckInfo?._timestamp ?? 0),
+    date,
+    lastCheckTs: new Date(lastCheckTs),
+    lastCheckInfo
+  });
   getDb().lastCheckInfo.put({
     ...lastCheckInfo,
     workspaceId,

@@ -8,7 +8,11 @@ import Button, { ButtonHeight } from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
 import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { useLiveQuery } from "dexie-react-hooks";
-import { checkAndUpdateChannelLastActivity, getThreadsWithMessages } from "../../../repository/IndexedDbRepository";
+import {
+  checkAndUpdateChannelLastActivity,
+  checkAndUpdateChannelLastCheck,
+  getThreadsWithMessages
+} from "../../../repository/IndexedDbRepository";
 import { decideAndScrollToBottom } from "@/utils/htmlUtils";
 
 interface ChannelBodyProps {
@@ -29,9 +33,10 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
   const threads = useLiveQuery(() => getThreadsWithMessages(channelId)) ?? [];
   const hasMore = threads?.[threads?.length - 1]?.threadType != "CHANNEL_INITIAL";
   logger.log({ threads });
+
   useEffect(() => {
     if (channelId && pageVisibility) {
-      checkAndUpdateChannelLastActivity({ workspaceId, channelId, date: new Date() });
+      checkAndUpdateChannelLastCheck({ workspaceId, channelId, date: new Date() });
     }
   }, [channelId, workspaceId, pageVisibility]);
 
