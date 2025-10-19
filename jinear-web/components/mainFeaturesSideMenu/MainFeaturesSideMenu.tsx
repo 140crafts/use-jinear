@@ -13,16 +13,18 @@ import { useTypedSelector } from "@/store/store";
 import { selectCurrentAccountId } from "@/slice/accountSlice";
 import {isInGodModeWhitelist} from "@/utils/constants";
 import {useFeatureFlag} from "@/hooks/useFeatureFlag";
+import Logger from "@/utils/logger";
 
 interface MainFeaturesSideMenuProps {
   workspace: AccountsWorkspacePerspectiveDto;
 }
 
+const logger = Logger("MainFeaturesSideMenu");
+
 const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
-  const messagingEnabled = useFeatureFlag("MESSAGING") || isInGodModeWhitelist(currentAccountId);
-  // const messagingEnabled = false;
+  const messagingEnabled = useFeatureFlag("MESSAGING");
   const currentPath = usePathname();
   const calendarPath = `/${workspace?.username}/calendar`;
   const tasksButtonOpensPath = `/${workspace?.username}/tasks/last-activities`;
@@ -33,6 +35,8 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
 
   const unreadConversationCount = useLiveQuery(() => getUnreadConversationCount(workspace.workspaceId, currentAccountId)) ?? 0;
   const unreadConversationLabel = unreadConversationCount == 0 ? "" : unreadConversationCount > 99 ? "99+" : `${unreadConversationCount}`;
+
+  logger.log({messagingEnabled})
 
   return !workspace ? null : (
     <div className={styles.container}>
