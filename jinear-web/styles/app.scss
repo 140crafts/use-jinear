@@ -89,8 +89,9 @@ b {
   -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Old versions of Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
-                                  supported by Chrome, Edge, Opera and Firefox */
+  user-select: none;
+  /* Non-prefixed version, currently
+                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
 .MuiLinearProgress-root {
@@ -419,6 +420,24 @@ mark {
   content: attr(data-tooltip-multiline);
   background-color: var(--c-secondary);
   color: var(--c-primary);
+  right: 0;
+  top: 2.25rem;
+  padding: 0.5em;
+  border-radius: var(--border-radius);
+  position: absolute;
+  white-space: inherit;
+  z-index: 99999;
+}
+
+*[data-tooltip-multiline-contrast] {
+  position: relative;
+  height: auto;
+}
+
+*[data-tooltip-multiline-contrast]:hover:after {
+  content: attr(data-tooltip-multiline-contrast);
+  background-color: var(--c-primary);
+  color: var(--c-secondary);
   right: 0;
   top: 2.25rem;
   padding: 0.5em;

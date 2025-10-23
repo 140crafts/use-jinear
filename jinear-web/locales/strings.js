@@ -2356,6 +2356,22 @@ const translations = {
     en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, update your clients, manage projects collaboratively.",
     tr: "İş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, müşterilerinizi bilgilendirin, projeleri işbirliğiyle yönetin."
   },
+  pricingScreenHeroTitleLine1: {
+    en: "The one tool",
+    tr: "İşletmenizi yönetmek için"
+  },
+  pricingScreenHeroTitleLine2: {
+    en: "To run your entire business",
+    tr: "ihtiyacınız olan tek çözüm"
+  },
+  pricingScreenHeroText: {
+    en: "From initial planning to final delivery, Jinear provides the tools your team needs to collaborate and succeed. Powerful features, radically simple pricing.",
+    tr: "Planlamadan teslimata kadar, Jinear ekibinizin birlikte çalışması ve başarılı olması için gereken tüm araçları sunar. Güçlü özellikler, radikal bir şekilde basit fiyatlandırma."
+  },
+  homescreenSelfHostText: {
+    en: "Host Your Own Jinear Instance!",
+    tr: "Kendi sunucunuz üzerinde Jinear'ı kullanın!"
+  },
   homescreenGoToApp: {
     en: "Go to App",
     tr: "Uygulamaya Git"
@@ -2633,16 +2649,60 @@ const translations = {
     tr: "Ücretsiz"
   },
   pricesPageBasicFeature_UnlimitedTasks: {
-    en: "Create unlimited tasks, labels, checklists, boards",
-    tr: "Sınırsız görev, etiket, kontrol listesi, pano oluşturun"
+    en: "Unlimited tasks",
+    tr: "Sınırsız görev"
+  },
+  pricesPageBasicFeature_UnlimitedLabels: {
+    en: "Unlimited labels",
+    tr: "Sınırsız etiket"
+  },
+  pricesPageBasicFeature_UnlimitedChecklist: {
+    en: "Unlimited checklists",
+    tr: "Sınırsız kontrol listesi"
+  },
+  pricesPageBasicFeature_UnlimitedBoards: {
+    en: "Unlimited boards",
+    tr: "Sınırsız pano"
+  },
+  pricesPageBasicFeature_Calendar: {
+    en: "Built in calendar",
+    tr: "Entegre takvim"
   },
   pricesPageBasicFeature_Reminders: {
-    en: "Reminders! Set up reminders about your tasks.",
+    en: "Set up reminders about your tasks",
     tr: "Görevleriniz için anımsatıcılar oluşturun"
+  },
+  pricesPageBasicFeature_GoogleCalendar: {
+    en: "Google calendar integration.",
+    tr: "Google takvim entegrasyonu"
+  },
+  pricesPageBasicFeature_ProjectManagement: {
+    en: "Unlimited projects ",
+    tr: "Sınırsız proje"
   },
   pricesPageBasicFeature_collaborative: {
     en: "Create collaborative workspaces and work with up to 3 people.",
     tr: "Kolektif çalışma alanları yaratarak 3 Kişiye kadar birlikte çalışın."
+  },
+  pricesPageBasicFeature_Features: {
+    en: "Features included: ",
+    tr: "Dahili özellikler: "
+  },
+  pricesPageBasicPrice: {
+    en: "Free",
+    tr: "Ücretsiz"
+  },
+  pricesPageBasicDescription: {
+    en: "For individuals and small teams just getting started.",
+    tr: "Yeni başlayan bireyler ve küçük takımlar için."
+  },
+  pricesPageProDescription: {
+    en: "For growing teams that need more power and collaboration.",
+    tr: "Gelişmiş özelliklere ve iş birliği araçlarına ihtiyaç duyan büyüyen takımlar için."
+  },
+  pricesPageProFeature_AnythingFromFree: {
+    en: "Every feature from free plan, and: ",
+    tr: "Başlangıç paketindeki herşey ve ek olarak: "
   },
   pricesPageProFeature_collaborative: {
     en: "Add as many people as you need to your collaborative workspace.",
@@ -2654,7 +2714,7 @@ const translations = {
   },
   pricesPageProFeature_team_task_visibility: {
     en: "Increased task visibility settings.",
-    tr: "Arttırılmış görev görüntüleme izinleri."
+    tr: "Arttırılmış görev görüntüleme izinlerine erişin."
   },
   pricesPageProFeature_team_task_visibility_description: {
     en: "You can set task visiblity to only task owners & assignees on teams that handles sensitive jobs.",
@@ -2671,6 +2731,14 @@ const translations = {
   pricesPageProFeature_UnlimitedSupport: {
     en: "Priority support (Usually within 24 hours)",
     tr: "Öncelikli destek alın (Genellile 24 saat içerisinde)."
+  },
+  pricesPageProFeature_ProjectBoards: {
+    en: "Unlimited project feeds that you can host under your own domain.",
+    tr: "Sınırsız proje akışı oluşturun. Proje akışlarınızı kendi alan adınız altında yayınlayın."
+  },
+  pricesPageProFeature_ProjectBoards_Example: {
+    en: "Checkout <a href='https://forum.jinear.co' target='_blank'>Jinear Updates</a> or <a href='https://cgdstnc.com' target='_blank'>an example personal blog</a> for example.",
+    tr: "Örnek olması için şu iki bağlantıyı ziyaret edebilirsiniz. <a href='https://forum.jinear.co' target='_blank'>Jinear Güncellemeleri</a> veya <a href='https://cgdstnc.com' target='_blank'>örnek bir kişisel blog</a>"
   },
   pricesPageProFeature_1to1Onboarding: {
     en: "1:1 onboarding tour.",
@@ -2692,6 +2760,10 @@ const translations = {
     en: "* While there is 100 GB limit to file storage, currently, the size of each single file can be a maximum of 32MB.",
     tr: "* Toplam yüklenebilecek dosya limiti 100 GB olmasina rağmen şu anda her bir tekil dosyanın boyutu maksimum 32MB olabilir."
   },
+  pricesPageSelfHostDescription: {
+    en: "For teams that want maximum control and privacy.",
+    tr: "Maksimum kontrol ve gizlilik isteyen ekipler için."
+  },
   pricesPageSelfHostFeature_Own: {
     en: "Self host your Jinear instance.",
     tr: "Jinear'ı kendi sunucunuza kurun."
@@ -2701,8 +2773,8 @@ const translations = {
     tr: "Regülatif kısıtlamalara takılmayın."
   },
   pricesPageSelfHostFeature_EasyInstall: {
-    en: "Easy install. Single docker compose file and couple of config files all you need.",
-    tr: "Kolay kurulum. Tek bir docker compose dosyasını çalıştırmanız yeterli."
+    en: "Easy install. Follow instructions, edit couple of config files and run docker compose file.",
+    tr: "Kolay kurulum. Yönergeleri izleyin ve docker compose dosyasını çalıştırın."
   },
   pricesPageSelfHostFeature_RequiresExpertise: {
     en: "* You manage your own server. Requires at least a little technical knowledge.",
@@ -4736,7 +4808,7 @@ const translations = {
     en: "Delete",
     tr: "Sil"
   },
-  projectAddNewCustomDomainButton:{
+  projectAddNewCustomDomainButton: {
     en: "Add Custom Domain",
     tr: "Alan Adı Ekle"
   },
@@ -4771,7 +4843,7 @@ const translations = {
   projectFeedUrlCustomDomainWaitingDNSInfo: {
     en: "Jinear checks DNS configurations regularly. This may take a while after you completed your setup.",
     tr: "Jinear DNS ayarlarını aralıklarla kontrol edecek. Ayarlarınızı yaptıktan sonra etki etmesi biraz vakit alabilir."
-  },
+  }
 };
 
 export default translations;

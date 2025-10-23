@@ -25,6 +25,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
   const { t } = useTranslation();
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
   const messagingEnabled = useFeatureFlag("MESSAGING");
+  // const messagingEnabled = true;
   const currentPath = usePathname();
   const calendarPath = `/${workspace?.username}/calendar`;
   const tasksButtonOpensPath = `/${workspace?.username}/tasks/last-activities`;

@@ -6,6 +6,7 @@ import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoArrowForward } from "react-icons/io5";
 import styles from "./CallToActionBar.module.scss";
+import { useAccountsPreferredWorkspaceIfLoggedIn } from "@/hooks/useAccountsPreferredWorkspaceIfLoggedIn";
 
 interface CallToActionBarProps {
   authState: NavigationStatus;
@@ -13,10 +14,13 @@ interface CallToActionBarProps {
 
 const CallToActionBar: React.FC<CallToActionBarProps> = ({ authState }) => {
   const { t } = useTranslation();
+  const preferredWorkspace = useAccountsPreferredWorkspaceIfLoggedIn();
+  const preferredRedirectRoute = preferredWorkspace ? `/${preferredWorkspace?.username}` : ROUTE_IF_LOGGED_IN;
+
   return (
     <div className={styles.actionBar}>
       {authState == "LOGGED_IN" && (
-        <Button variant={ButtonVariants.contrast} href={ROUTE_IF_LOGGED_IN} className={styles.goToAppButton}>
+        <Button variant={ButtonVariants.contrast} href={preferredRedirectRoute} className={styles.goToAppButton}>
           <b>{t("homescreenGoToApp")}</b>
           <IoArrowForward />
         </Button>

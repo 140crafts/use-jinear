@@ -11,7 +11,7 @@ import {
   selectUpgradeWorkspacePlanModalWorkspaceId,
 } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
-import { __DEV__ } from "@/utils/constants";
+import { __DEV__, PADDLE_CATALOG } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import { isWorkspaceInPaidTier } from "@/utils/permissionHelper";
 import useTranslation from "locales/useTranslation";
@@ -21,13 +21,8 @@ import { IoCheckmarkCircle } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./UpgradeWorkspaceModal.module.css";
 
-interface UpgradeWorkspaceModalProps {}
-
-export const PADDLE_CATALOG = {
-  business_daily: { sandbox: 63817, prod: -1, price: "$3.30" },
-  business_monthly: { sandbox: 63716, prod: 848738, price: "$4.90" },
-  business_yearly: { sandbox: 63717, prod: 848737, price: "$49" }
-};
+interface UpgradeWorkspaceModalProps {
+}
 
 const logger = Logger("UpgradeWorkspaceModal");
 

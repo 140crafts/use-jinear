@@ -37,6 +37,7 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
   const pageVisibility = usePageVisibility();
   const messagingEnabled = useFeatureFlag("MESSAGING");
+  // const messagingEnabled = true;
 
   //so we can calculate unread count
   const [retrieveChannelMembershipsQuery] = useLazyRetrieveChannelMembershipsQuery();
