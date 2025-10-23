@@ -23,17 +23,22 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
   const { t } = useTranslation();
   const authState = useTypedSelector(selectAuthState);
   const preferredWorkspace = useAccountsPreferredWorkspaceIfLoggedIn();
+  const tier = preferredWorkspace?.tier;
   const preferredRedirectRoute = preferredWorkspace ? `/${preferredWorkspace?.username}` : undefined;
+
   const dispatch = useAppDispatch();
   const router = useRouter();
 
   const onProPlanCtaClick = (event: React.MouseEvent<HTMLAnchorElement> | undefined) => {
     if (event && authState == "LOGGED_IN" && preferredWorkspace && preferredRedirectRoute) {
       event?.preventDefault();
-      dispatch(popUpgradeWorkspacePlanModal({ workspaceId: preferredWorkspace.workspaceId, visible: true }));
+      tier == "BASIC" && dispatch(popUpgradeWorkspacePlanModal({
+        workspaceId: preferredWorkspace.workspaceId,
+        visible: true
+      }));
       setTimeout(() => {
         router.push(preferredRedirectRoute);
-      }, 1500);
+      }, 1000);
     }
   };
 
