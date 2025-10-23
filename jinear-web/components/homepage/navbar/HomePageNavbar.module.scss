@@ -40,6 +40,10 @@
   display: none;
 }
 
+.button {
+  gap: .5rem;
+}
+
 @media (max-width: $tablet) {
   .termsLabel {
     display: none;

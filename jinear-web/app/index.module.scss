@@ -40,7 +40,17 @@
   gap: 2rem;
 }
 
-.selfHostContainer{
+.selfHostContainer {
   display: flex;
+  flex-direction: column;
+  gap: .5rem;
   justify-content: center;
+  align-items: center;
+  font-size: .85rem;
+}
+
+.selfHostButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: .5rem;
 }

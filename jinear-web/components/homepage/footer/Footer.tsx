@@ -78,7 +78,7 @@ const Footer: React.FC<FooterProps> = ({}) => {
         <b>Contact</b>
         <div className={"spacer-h-1"} />
         <a
-          href={`https://jinear.co/shared/cgdstnc-personal/feed/jinear-01j862vw8t9mt1zar7vgw14y5t`}
+          href={`https://forum.jinear.co`}
           target={"_blank"}
           rel={"noreferrer"}
           className={styles.link}

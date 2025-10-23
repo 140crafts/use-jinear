@@ -1,0 +1,64 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    border-radius: var(--border-radius);
+    border-style: solid;
+    border-color: var(--c-primary-shade-1-op05);
+    border-width: thin;
+    padding: .5rem;
+    color: var(--c-secondary-shade-1);
+    box-shadow: var(--box-shadow-soft);
+    background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-0));
+    font-size: .85rem;
+}
+
+.defaultCta {
+    color: var(--c-secondary-shade-1);
+}
+
+.contrast {
+    border-color: var(--c-secondary-shade-1-op05);
+    color: var(--c-primary-shade-1);
+    background: linear-gradient(0, var(--c-secondary), var(--c-secondary-shade-1));
+}
+
+.title {
+    min-height: 48px;
+}
+
+.price {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.description {
+    font-size: .85rem;
+}
+
+.dash {
+    border: thin dashed var(--c-secondary-shade-0-op05);
+    border-style: none none dashed;
+    margin: 1.25rem 0;
+}
+
+.dashContrast {
+    border: thin dashed var(--c-primary-shade-0-op05);
+}
+
+.children {
+    flex: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.children ul {
+    font-size: 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.childrenContrast ul a {
+    color: var(--c-link-color-inverted);
+}

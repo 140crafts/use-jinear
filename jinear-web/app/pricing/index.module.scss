@@ -3,10 +3,8 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 4rem;
-  height: 100vh;
   width: var(--page-extended);
-  margin: 2rem 0;
+  padding-bottom: 6rem;
 }
 
 .pageTitleContainer {
@@ -28,8 +26,8 @@
 
 .plansContainer {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: .25rem;
 }
 
 .plan {
@@ -82,6 +80,22 @@
 
 .freeText:hover {
   background: linear-gradient(315deg, var(--c-gradient-gold-0) 0%, var(--c-gradient-gold-1) 35%) !important;
+}
+
+.selfHostButtonsContainer {
+  display: flex;
+  flex-direction: row;
+  gap: .5rem;
+}
+
+@media (max-width: $laptop) {
+  .plansContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .plan {
+    padding: 1ch;
+  }
 }
 
 @media (max-width: $tablet) {
