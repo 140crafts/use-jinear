@@ -117,6 +117,7 @@ const WeekTile: React.FC<WeekTileProps> = ({ day }) => {
       }
     }
     setDragHovering(false);
+    event.preventDefault();
   };
 
   return (

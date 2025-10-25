@@ -1,6 +1,6 @@
 .container {
   height: calc(var(--calendar-week-view-day-minute-pixel-ratio-in-pixels) * 60);
-  border-bottom: 1px var(--c-primary-shade-0-op05) solid;
+  border-bottom: 1px var(--c-primary-shade-1) solid;
   display: flex;
   align-items: flex-end;
   position: relative;

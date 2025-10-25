@@ -1,6 +1,6 @@
 .calendarLine {
   border-style: solid;
-  border-color: var(--c-primary-shade-0-op05);
+  border-color: var(--c-primary-shade-0);
   border-width: 1px;
   border-bottom-color: var(--c-primary-shade-1);
   /* border-bottom-width: 2px; */
