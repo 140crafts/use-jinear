@@ -64,10 +64,7 @@ interface ModalProviderProps {
 
 const globalModals: any = (
   <>
-    <NewCustomProjectDomainModal />
-    <NewProjectModal />
-    <ProjectPrioritySelectModal />
-    <ProjectStateSelectModal />
+
     <InstallPwaInstructionsModal />
     <NewConversationModal />
     <ChannelListModal />
@@ -76,7 +73,6 @@ const globalModals: any = (
     <ChannelSettingsModal />
     <ShareWorkspaceEventsModal />
     <CalendarExternalEventViewModal />
-    <WorkspaceMemberPickerModal />
     <NewMailIntegrationModal />
     <MenuMoreActionModal />
     <WorkspaceSwitchModal />
@@ -97,6 +93,11 @@ const globalModals: any = (
     <WorkflowChangeStatusModal />
     <IntegrationFeedItemDetailModal />
     <NewTaskModal />
+    <NewCustomProjectDomainModal />
+    <NewProjectModal />
+    <ProjectPrioritySelectModal />
+    <ProjectStateSelectModal />
+    <WorkspaceMemberPickerModal />
     <NewCalendarIntegrationModal />
     <NewTaskBoardModal />
     <ProjectAndMilestonePickerModal />
