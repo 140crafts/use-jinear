@@ -20,7 +20,7 @@
     transition: var(--fade);
     text-decoration: none;
     /*padding: 7.5px;*/
-    margin: 0 0.5rem;
+    /*margin: 0 0.5rem;*/
     min-height: 1rem;
 }
 
@@ -43,7 +43,7 @@
     flex-direction: column;
     height: min(100%, 16rem);
     min-height: 12rem;
-    padding: 0.5rem;
+    padding: 0.85rem 0;
     overflow-y: scroll;
     gap: 0.25rem;
 }

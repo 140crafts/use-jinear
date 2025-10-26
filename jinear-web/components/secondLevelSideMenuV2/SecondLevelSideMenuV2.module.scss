@@ -25,7 +25,8 @@
 }
 
 .sideMenuContent {
-  display: block;
+  display: flex;
+  flex: 1;
 }
 
 .mobileMenuButton {
@@ -77,7 +78,7 @@
     left: 0;
     background-color: var(--c-primary);
 
-    border-right:none;
+    border-right: none;
   }
 
   .mobileMenuButtonContainer {

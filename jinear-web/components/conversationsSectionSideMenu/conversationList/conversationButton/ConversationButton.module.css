@@ -28,4 +28,6 @@
 
 .unread {
     font-weight: bold;
+    opacity: 1;
+    font-style: italic;
 }

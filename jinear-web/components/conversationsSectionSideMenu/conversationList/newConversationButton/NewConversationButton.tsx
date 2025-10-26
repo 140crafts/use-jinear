@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./NewConversationButton.module.css";
 import useTranslation from "@/locals/useTranslation";
 import { useAppDispatch } from "@/store/store";
-import Button, { ButtonHeight } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { LuPlus } from "react-icons/lu";
 import cn from "classnames";
 import { popNewConversationModal } from "@/slice/modalSlice";
@@ -12,13 +12,15 @@ interface NewConversationButtonProps {
   workspaceName: string;
   heightVariant?: string;
   containerClassName?: string;
+  buttonVariant?: string;
 }
 
 const NewConversationButton: React.FC<NewConversationButtonProps> = ({
                                                                        workspaceId,
                                                                        workspaceName,
                                                                        heightVariant = ButtonHeight.short2x,
-                                                                       containerClassName
+                                                                       containerClassName,
+                                                                       buttonVariant
                                                                      }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -28,7 +30,11 @@ const NewConversationButton: React.FC<NewConversationButtonProps> = ({
   };
 
   return (
-    <Button className={cn(styles.container, containerClassName)} heightVariant={heightVariant} onClick={popModal}>
+    <Button
+      className={cn(styles.container, containerClassName)}
+      heightVariant={heightVariant}
+      onClick={popModal}
+      variant={buttonVariant}>
       <LuPlus />
       <span className={cn(styles.conversationName, "single-line")}>
         {t("newConversationButton")}

@@ -2,6 +2,7 @@ package co.jinear.core.service.messaging.message;
 
 import co.jinear.core.converter.messaging.message.MessageDtoConverter;
 import co.jinear.core.model.dto.messaging.message.MessageDto;
+import co.jinear.core.model.dto.messaging.message.RichMessageDto;
 import co.jinear.core.repository.messaging.MessageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,5 +42,12 @@ public class MessageListingService {
     public List<String> retrieveAccountIdsParticipatedInThread(String threadId) {
         log.info("Retrieve account ids participated in thread has started. threadId: {}", threadId);
         return messageRepository.findDistinctThreadParticipantAccounts(threadId);
+    }
+
+    public List<RichMessageDto> retrieveConversationMessages(String conversationId) {
+        log.info("Retrieve conversation messages has startedm for conversationId: {}", conversationId);
+        return messageRepository.findAllByConversationIdAndPassiveIdIsNullOrderByCreatedDateDesc(conversationId).stream()
+                .map(messageDtoConverter::convertRich)
+                .toList();
     }
 }

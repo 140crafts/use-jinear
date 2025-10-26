@@ -1,6 +1,7 @@
 package co.jinear.core.service.messaging.conversation;
 
 import co.jinear.core.model.dto.messaging.conversation.ConversationDto;
+import co.jinear.core.model.dto.messaging.message.RichMessageDto;
 import co.jinear.core.model.entity.messaging.Conversation;
 import co.jinear.core.model.enumtype.messaging.MessageType;
 import co.jinear.core.model.vo.messaging.conversation.InitializeConversationVo;
@@ -16,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 

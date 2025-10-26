@@ -2,16 +2,21 @@ package co.jinear.core.manager.messaging;
 
 import co.jinear.core.converter.messaging.conversation.InitializeConversationRequestConverter;
 import co.jinear.core.model.dto.messaging.conversation.ConversationParticipantDto;
+import co.jinear.core.model.dto.messaging.message.MessageDto;
+import co.jinear.core.model.dto.messaging.message.RichMessageDto;
+import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.request.messaging.conversation.InitializeConversationRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.messaging.ConversationInitializeResponse;
 import co.jinear.core.model.response.messaging.ConversationParticipantListingResponse;
 import co.jinear.core.model.vo.messaging.conversation.InitializeConversationVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.messaging.conversation.ConversationNotifierService;
 import co.jinear.core.service.messaging.conversation.ConversationOperationService;
 import co.jinear.core.service.messaging.conversation.participant.ConversationParticipantListingService;
 import co.jinear.core.service.messaging.conversation.participant.ConversationParticipantOperationService;
 import co.jinear.core.service.messaging.conversation.participant.ConversationParticipantRetrieveService;
+import co.jinear.core.service.messaging.message.MessageListingService;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +41,7 @@ public class ConversationManager {
     private final ConversationParticipantListingService conversationParticipantListingService;
     private final ConversationParticipantRetrieveService conversationParticipantRetrieveService;
     private final ConversationParticipantOperationService conversationParticipantOperationService;
+    private final ConversationNotifierService conversationNotifierService;
 
     public ConversationInitializeResponse initialize(InitializeConversationRequest initializeConversationRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -43,6 +49,7 @@ public class ConversationManager {
         log.info("Initialize conversation has started. currentAccountId: {}", currentAccountId);
         InitializeConversationVo initializeConversationVo = initializeConversationRequestConverter.convert(currentAccountId, initializeConversationRequest);
         String conversationId = conversationOperationService.initializeAndRetrieveConversationId(initializeConversationVo);
+        conversationNotifierService.notifyConversationInit(conversationId);
         return new ConversationInitializeResponse(conversationId);
     }
 

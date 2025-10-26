@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 import styles from "./ConversationList.module.css";
 import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
@@ -26,9 +26,12 @@ const ConversationList: React.FC<ConversationListProps> = ({ workspace }) => {
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
   const {
     data: participatedConversationsResponse,
-    isLoading
+    isLoading,
+    refetch: refetchRetrieveParticipatedConversations
   } = useRetrieveParticipatedConversationsQuery({ workspaceId: workspace.workspaceId });
   const distinctSortedConversationIds = useLiveQuery(() => getSortedConversationIds());
+
+  logger.log({ distinctSortedConversationIds });
 
   const sortedParticipatedConversations = useMemo(() => {
     const participatedConversations = participatedConversationsResponse?.data;
@@ -40,6 +43,12 @@ const ConversationList: React.FC<ConversationListProps> = ({ workspace }) => {
     }
     return [];
   }, [participatedConversationsResponse, distinctSortedConversationIds]);
+
+  useEffect(() => {
+    if (distinctSortedConversationIds && refetchRetrieveParticipatedConversations) {
+      refetchRetrieveParticipatedConversations();
+    }
+  }, [refetchRetrieveParticipatedConversations, JSON.stringify(distinctSortedConversationIds)]);
 
   logger.log({ sortedParticipatedConversations, participatedConversationsResponse, distinctSortedConversationIds });
 

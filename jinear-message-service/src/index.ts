@@ -51,7 +51,7 @@ let http = require("http").Server(app);
 let io = require("socket.io")(http, {
     path: '/ws',
     cors: {
-        origin: "https://jinear.co",
+        // origin: "https://jinear.co",
         methods: ["GET", "POST"],
         allowedHeaders: ["X-Token","Cookie"],
         credentials: true
@@ -115,6 +115,7 @@ app.get('/info', (req, resp) => {
 
 app.post('/emit', (req, resp) => {
     const authToken = req.headers.authorization?.split("Bearer ")?.[1];
+    console.log({authToken});
     let {channel, topic, message} = req.body;
     const tokenValid = authToken == INTERNAL_AUTH_TOKEN;
     logger.info({tokenValid, channel, topic, message});
