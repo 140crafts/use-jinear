@@ -15,7 +15,8 @@ const {
     INTERNAL_AUTH_TOKEN = 'debug',
     AXIOM_TOKEN = '',
     AXIOM_ORG_ID = '',
-    CORE_ENDPOINT = 'http://localhost:8085'
+    CORE_ENDPOINT = 'http://localhost:8085',
+    ALLOWED_ORIGIN = "https://jinear.co",
 } = process.env;
 
 const logger = winston.createLogger({
@@ -51,7 +52,7 @@ let http = require("http").Server(app);
 let io = require("socket.io")(http, {
     path: '/ws',
     cors: {
-        // origin: "https://jinear.co",
+        origin: ALLOWED_ORIGIN,
         methods: ["GET", "POST"],
         allowedHeaders: ["X-Token","Cookie"],
         credentials: true
