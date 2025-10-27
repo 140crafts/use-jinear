@@ -14,6 +14,7 @@ import co.jinear.core.service.account.AccountCommunicationPermissionService;
 import co.jinear.core.service.client.messageapi.model.request.EmitRequest;
 import co.jinear.core.service.messaging.conversation.participant.ConversationParticipantListingService;
 import co.jinear.core.service.messaging.emit.EmitterService;
+import co.jinear.core.service.messaging.message.MessageListingService;
 import co.jinear.core.service.notification.NotificationCreateService;
 import co.jinear.core.service.richtext.HtmlSanitizeService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
@@ -42,6 +43,7 @@ public class ConversationNotifierService {
     private final EmitterService emitterService;
     private final ObjectMapper objectMapper;
     private final WorkspaceRetrieveService workspaceRetrieveService;
+    private final MessageListingService messageListingService;
 
     @Async
     public void notify(RichMessageDto richMessageDto) {
@@ -49,6 +51,11 @@ public class ConversationNotifierService {
         List<ConversationParticipantDto> conversationParticipantDtos = conversationParticipantListingService.retrieveActiveParticipants(conversationId);
         emitMessage(richMessageDto, conversationParticipantDtos);
         sendNotification(richMessageDto, conversationParticipantDtos);
+    }
+
+    public void notifyConversationInit(String conversationId){
+        log.info("Notify conversation init has started. conversationId: {}", conversationId);
+        messageListingService.retrieveConversationMessages(conversationId).forEach(this::notify);
     }
 
     private void emitMessage(RichMessageDto richMessageDto, List<ConversationParticipantDto> conversationParticipantDtos) {

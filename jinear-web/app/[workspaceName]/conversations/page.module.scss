@@ -1,5 +1,10 @@
 @import "/styles/breakpoints.scss";
 
+.container {
+  display: flex;
+  justify-content: center;
+}
+
 .menu {
   display: none !important;
 }
@@ -8,6 +13,7 @@
   display: flex !important;
   flex-direction: column;
   gap: .75rem;
+  width: var(--page);
 }
 
 .actionButtonsContainer {
@@ -21,6 +27,11 @@
 }
 
 @media (max-width: $tablet) {
+  .container{
+  display: unset;
+    justify-content: unset;
+  }
+
   .menu {
     display: flex !important;
   }

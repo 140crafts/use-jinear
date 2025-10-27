@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import styles from "./ConversationButton.module.css";
-import Button, { ButtonHeight } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import cn from "classnames";
 import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import { ConversationDto, PlainConversationParticipantDto } from "@/be/jinear-core";
@@ -8,6 +8,7 @@ import ProfilePhoto from "@/components/profilePhoto";
 import { useLiveQuery } from "dexie-react-hooks";
 import { getConversationLastCheck, getConversationLastMessage } from "../../../../repository/IndexedDbRepository";
 import { isBefore } from "date-fns";
+import Logger from "@/utils/logger";
 
 interface ConversationButtonProps {
   conversation: ConversationDto;
@@ -17,6 +18,8 @@ interface ConversationButtonProps {
 
 const MAX_CHAR = 25;
 const JOIN_CHAR = ",";
+
+const logger = Logger("ConversationButton");
 
 const ConversationButton: React.FC<ConversationButtonProps> = ({
                                                                  workspaceUsername,
@@ -48,11 +51,17 @@ const ConversationButton: React.FC<ConversationButtonProps> = ({
 
   const conversationLastMessage = useLiveQuery(() => getConversationLastMessage(conversation.conversationId));
   const conversationLastCheck = useLiveQuery(() => getConversationLastCheck(conversation.conversationId));
-  const isUnread = conversationLastMessage && conversationLastCheck && currentAccountId != null && conversationLastMessage.accountId != currentAccountId && isBefore(new Date(conversationLastCheck._timestamp), new Date(conversationLastMessage._timestamp));
-
+  const isUnread =
+    (!conversationLastCheck || !conversationLastCheck?._timestamp || Number.isNaN(conversationLastCheck?._timestamp)) ||
+    (conversationLastMessage && conversationLastCheck && currentAccountId != null && conversationLastMessage.accountId != currentAccountId && isBefore(new Date(conversationLastCheck._timestamp), new Date(conversationLastMessage._timestamp)));
+  logger.log({ conversationLastCheck, conversationLastMessage, isUnread });
   return (
-    <Button className={styles.container} heightVariant={ButtonHeight.short2x}
-            href={`/${workspaceUsername}/conversations/${conversation.conversationId}`}>
+    <Button
+      className={styles.container}
+      heightVariant={ButtonHeight.short2x}
+      href={`/${workspaceUsername}/conversations/${conversation.conversationId}`}
+      variant={isUnread ? ButtonVariants.filled2 : undefined}
+    >
       <div className={styles.profilePicContainer}>
         {participantsInfo.shownParticipants.map(participant => <ProfilePhoto
           key={participant.conversationParticipantId}

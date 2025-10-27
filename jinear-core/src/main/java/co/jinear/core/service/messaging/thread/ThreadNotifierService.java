@@ -3,6 +3,7 @@ package co.jinear.core.service.messaging.thread;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.account.AccountCommunicationPermissionDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.dto.messaging.channel.ChannelMemberDto;
 import co.jinear.core.model.dto.messaging.channel.PlainChannelDto;
 import co.jinear.core.model.dto.messaging.message.MessageDto;
 import co.jinear.core.model.dto.messaging.message.RichMessageDto;
@@ -12,6 +13,7 @@ import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.vo.notification.NotificationSendVo;
 import co.jinear.core.service.account.AccountCommunicationPermissionService;
 import co.jinear.core.service.client.messageapi.model.request.EmitRequest;
+import co.jinear.core.service.messaging.channel.ChannelMemberListingService;
 import co.jinear.core.service.messaging.emit.EmitterService;
 import co.jinear.core.service.messaging.message.MessageListingService;
 import co.jinear.core.service.notification.NotificationCreateService;
@@ -41,6 +43,7 @@ public class ThreadNotifierService {
     private final EmitterService emitterService;
     private final ObjectMapper objectMapper;
     private final WorkspaceRetrieveService workspaceRetrieveService;
+    private final ChannelMemberListingService channelMemberListingService;
 
     @Async
     public void notifyThreadParticipants(RichMessageDto richMessageDto) {
@@ -48,6 +51,14 @@ public class ThreadNotifierService {
         List<String> accountIds = messageListingService.retrieveAccountIdsParticipatedInThread(richMessageDto.getThreadId());
         emitMessage(richMessageDto, accountIds);
         mapAndSendNotification(richMessageDto, accountIds);
+    }
+
+    @Async
+    public void notifyChannelMembers(RichMessageDto richMessageDto) {
+        String channelId = richMessageDto.getThread().getChannelId();
+        List<ChannelMemberDto> channelMemberDtos = channelMemberListingService.retrieveChannelMembers(channelId);
+        List<String> channelMemberAccountIds = channelMemberDtos.stream().map(ChannelMemberDto::getAccountId).toList();
+        emitMessage(richMessageDto, channelMemberAccountIds);
     }
 
     private void emitMessage(RichMessageDto richMessageDto, List<String> accountIds) {

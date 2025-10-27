@@ -38,6 +38,7 @@ public class MessageOperationManager {
         RichMessageDto saved = messageOperationService.initialize(initializeMessageVo);
         RichMessageDto richMessageDto = messageRetrieveService.retrieveRich(saved.getMessageId());
         threadNotifierService.notifyThreadParticipants(richMessageDto);
+        threadNotifierService.notifyChannelMembers(richMessageDto);
         return mapResponse(richMessageDto);
     }
 
