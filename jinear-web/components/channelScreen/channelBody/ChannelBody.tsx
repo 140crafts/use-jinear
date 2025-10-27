@@ -32,7 +32,8 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
   const initialScroll = useRef<boolean>(false);
   const threads = useLiveQuery(() => getThreadsWithMessages(channelId)) ?? [];
   const hasMore = threads?.[threads?.length - 1]?.threadType != "CHANNEL_INITIAL";
-  logger.log({ threads });
+  const hasAnyOtherThanInitial = threads?.find(t=>t.threadType != "CHANNEL_INITIAL") != null;
+  logger.log({ threads, hasAnyOtherThanInitial });
 
   useEffect(() => {
     if (channelId && pageVisibility) {
@@ -78,8 +79,11 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
       }
       {isListThreadsFetching && !hasMore && <CircularLoading />}
       <div className={styles.contentContainer}>
-        {threads?.length == 0 && !isListThreadsFetching &&
-          <div className={styles.emptyStateContainer}>{t("threadsEmpty")}</div>}
+        {!hasAnyOtherThanInitial && !isListThreadsFetching &&
+          <div className={styles.emptyStateContainer}>
+            <h1>{t("threadsEmpty")}</h1>
+            <span>{t("threadsEmptyText")}</span>
+          </div>}
         {threads
           ?.filter(thread => thread.threadType != "CHANNEL_INITIAL")
           .map?.(threadDto =>

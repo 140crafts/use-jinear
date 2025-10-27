@@ -34,7 +34,7 @@ const ConversationBody: React.FC<ConversationBodyProps> = ({ conversationId, wor
   const hasMore = useConversationHasMoreMessages({ conversationId, workspaceId });
   const messages = useLiveQuery(() => getConversationMessages(conversationId));
   const initialScroll = useRef<boolean>(false);
-
+logger.log({pageVisibility})
   useEffect(() => {
     if (pageVisibility) {
       retrieveConversationMessages({ workspaceId, conversationId });

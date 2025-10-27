@@ -3744,6 +3744,10 @@ const translations = {
     en: "There isn't any threads yet.",
     tr: "Herhangi bir gönderi bulunamadı."
   },
+  threadsEmptyText: {
+    en: "This channel is ready for discussion! Be the first to start a new thread to organize a conversation around a specific topic.",
+    tr: "LBu kanal sohbete hazır! Belirli bir konu etrafında bir sohbet düzenlemek için ilk başlığı siz başlatın."
+  },
   newChannelButton: {
     en: "Create Channel",
     tr: "Kanal Oluştur"

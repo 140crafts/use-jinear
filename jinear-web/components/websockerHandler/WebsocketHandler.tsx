@@ -7,7 +7,7 @@ import { SOCKET_ROOT } from "@/utils/constants";
 import { io } from "socket.io-client";
 import Logger from "@/utils/logger";
 import { RichMessageDto } from "@/be/jinear-core";
-import { insertMessage } from "../../repository/IndexedDbRepository";
+import { insertMessage, insertThread } from "../../repository/IndexedDbRepository";
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 
 interface WebsocketHandlerProps {
@@ -44,6 +44,7 @@ const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
           logger.log({ SocketIoService: "thread-message", data });
           if (data) {
             insertMessage(data.thread.channel.workspaceId, { ...data });
+            insertThread(data.thread.channel.workspaceId, { ...data.thread });
             logger.log({ SocketIoService: "thread-message", data });
           }
         }

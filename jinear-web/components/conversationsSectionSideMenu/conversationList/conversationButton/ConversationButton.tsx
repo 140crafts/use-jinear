@@ -51,7 +51,9 @@ const ConversationButton: React.FC<ConversationButtonProps> = ({
 
   const conversationLastMessage = useLiveQuery(() => getConversationLastMessage(conversation.conversationId));
   const conversationLastCheck = useLiveQuery(() => getConversationLastCheck(conversation.conversationId));
-  const isUnread = (!conversationLastCheck || !conversationLastCheck?._timestamp || Number.isNaN(conversationLastCheck?._timestamp)) || (conversationLastMessage && conversationLastCheck && currentAccountId != null && conversationLastMessage.accountId != currentAccountId && isBefore(new Date(conversationLastCheck._timestamp), new Date(conversationLastMessage._timestamp)));
+  const isUnread =
+    (!conversationLastCheck || !conversationLastCheck?._timestamp || Number.isNaN(conversationLastCheck?._timestamp)) ||
+    (conversationLastMessage && conversationLastCheck && currentAccountId != null && conversationLastMessage.accountId != currentAccountId && isBefore(new Date(conversationLastCheck._timestamp), new Date(conversationLastMessage._timestamp)));
   logger.log({ conversationLastCheck, conversationLastMessage, isUnread });
   return (
     <Button

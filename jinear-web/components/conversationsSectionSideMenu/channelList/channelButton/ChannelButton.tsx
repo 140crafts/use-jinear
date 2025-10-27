@@ -27,7 +27,9 @@ const ChannelButton: React.FC<ChannelButtonProps> = ({ channel, workspaceUsernam
   const Icon = CHANNEL_VISIBILITY_ICON_MAP[channel.channelVisibilityType];
   const channelLastCheck = useLiveQuery(() => getChannelLastCheck(channel.channelId));
   const channelLastActivity = useLiveQuery(() => getChannelLastActivity(channel.channelId));
-  const unread = channelLastCheck && channelLastActivity && isAfter(new Date(channelLastActivity._timestamp), new Date(channelLastCheck._timestamp));
+  const unread =
+    (!channelLastCheck || !channelLastCheck?._timestamp || Number.isNaN(channelLastCheck?._timestamp)) ||
+    (channelLastCheck && channelLastActivity && isAfter(new Date(channelLastActivity._timestamp), new Date(channelLastCheck._timestamp)));
 
   logger.log({
     channelLastCheck: channelLastCheck?._timestamp,

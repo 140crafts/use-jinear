@@ -14,5 +14,7 @@
 }
 
 .emptyStateContainer {
-    text-align: center;
+    height: 8rem;
+    width: var(--page);
+    align-self: center;
 }
