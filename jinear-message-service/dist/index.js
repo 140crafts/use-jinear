@@ -46,6 +46,7 @@ let http = require("http").Server(app);
 let io = require("socket.io")(http, {
     path: '/ws',
     cors: {
+        origin: "https://jinear.co",
         methods: ["GET", "POST"],
         allowedHeaders: ["X-Token", "Cookie"],
         credentials: true
