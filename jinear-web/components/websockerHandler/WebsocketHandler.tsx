@@ -18,8 +18,8 @@ const logger = Logger("WebsocketHandler");
 
 const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
   const authState = useTypedSelector(selectAuthState);
-  const messagingEnabled = useFeatureFlag("MESSAGING");
-  // const messagingEnabled = true;
+  // const messagingEnabled = useFeatureFlag("MESSAGING");
+  const messagingEnabled = true;
   const { data: retrieveMessagingTokenResponse } = useRetrieveMessagingTokenQuery({}, { skip: authState != "LOGGED_IN" });
 
   useEffect(() => {
