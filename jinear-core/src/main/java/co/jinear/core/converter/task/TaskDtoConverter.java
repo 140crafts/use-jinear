@@ -12,7 +12,14 @@ import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", injectionStrategy = InjectionStrategy.CONSTRUCTOR, uses = {TeamDtoConverter.class, AccessibleMediaDtoConverter.class, ProjectDtoConverter.class})
+@Mapper(componentModel = "spring",
+        injectionStrategy = InjectionStrategy.CONSTRUCTOR,
+        uses = {
+                TeamDtoConverter.class,
+                AccessibleMediaDtoConverter.class,
+                ProjectDtoConverter.class,
+                PlainTaskBoardEntryDtoConverter.class
+        })
 public interface TaskDtoConverter {
 
     UpdateTaskWorkflowDto map(TaskDto taskDto, String remindersPassiveId);

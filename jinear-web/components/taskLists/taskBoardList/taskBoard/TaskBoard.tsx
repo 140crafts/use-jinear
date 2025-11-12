@@ -32,11 +32,15 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         displayFormat={displayFormat}
         noDisplayFormatChange={staticViewType != null}
       />
-      <TaskBoardElementList taskBoardId={taskBoard.taskBoardId}
-                            className={(staticViewType == "list" || (staticViewType == undefined && displayFormat == "list")) ? styles.visible : styles.hidden} />
-      <TaskBoardColumnView taskBoardId={taskBoard.taskBoardId}
-                           teamId={team.teamId}
-                           className={(staticViewType == "column" || (staticViewType == undefined && displayFormat == "column")) ? styles.visible : styles.hidden} />
+      <TaskBoardElementList
+        taskBoardId={taskBoard.taskBoardId}
+        className={(staticViewType == "list" || (staticViewType == undefined && displayFormat == "list")) ? styles.visible : styles.hidden}
+      />
+      <TaskBoardColumnView
+        taskBoardId={taskBoard.taskBoardId}
+        teamId={team.teamId}
+        className={(staticViewType == "column" || (staticViewType == undefined && displayFormat == "column")) ? styles.visible : styles.hidden}
+      />
     </div>
   );
 };

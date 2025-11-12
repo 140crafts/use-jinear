@@ -24,7 +24,7 @@
 .emptyStateContainer {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 1rem;
   align-items: center;
   justify-content: center;
 }

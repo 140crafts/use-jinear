@@ -3,7 +3,7 @@
     flex-wrap: wrap;
     flex-direction: row;
     justify-content: flex-end;
-    /* gap: 0.5rem; */
+    gap: 0.1rem !important
 }
 
 .button {

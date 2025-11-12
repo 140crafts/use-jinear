@@ -1,10 +1,10 @@
 import {
   BaseResponse,
   TaskBoardInitializeRequest,
-  TaskBoardResponse,
+  TaskBoardResponse, TaskBoardUpdateColorRequest,
   TaskBoardUpdateDueDateRequest,
   TaskBoardUpdateStateRequest,
-  TaskBoardUpdateTitleRequest,
+  TaskBoardUpdateTitleRequest
 } from "@/model/be/jinear-core";
 import { api } from "./api";
 
@@ -14,66 +14,86 @@ export const taskBoardApi = api.injectEndpoints({
       query: (body: TaskBoardInitializeRequest) => ({
         url: `v1/task-board`,
         method: "POST",
-        body,
+        body
       }),
       invalidatesTags: [
         "v1/task-board/list/{workspaceId}/team/{teamId}",
         "v1/task-board",
         "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
         "v1/task-board/list/related-with-task/{taskId}",
-        "v1/workspace/activity/filter",
-      ],
+        "v1/workspace/activity/filter"
+      ]
     }),
     //
     updateDueDate: build.mutation<BaseResponse, TaskBoardUpdateDueDateRequest>({
       query: (body: TaskBoardUpdateDueDateRequest) => ({
         url: `v1/task-board/update/due-date`,
         method: "PUT",
-        body,
+        body
       }),
       invalidatesTags: [
         "v1/task-board/list/{workspaceId}/team/{teamId}",
         "v1/task-board",
         "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
-        "v1/workspace/activity/filter",
-      ],
+        "v1/workspace/activity/filter"
+      ]
     }),
     //
     updateTitle: build.mutation<BaseResponse, TaskBoardUpdateTitleRequest>({
       query: (body: TaskBoardUpdateTitleRequest) => ({
         url: `v1/task-board/update/title`,
         method: "PUT",
-        body,
+        body
       }),
       invalidatesTags: [
         "v1/task-board/list/{workspaceId}/team/{teamId}",
         "v1/task-board",
         "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
         "v1/task-board/list/related-with-task/{taskId}",
-        "v1/workspace/activity/filter",
-      ],
+        "v1/workspace/activity/filter"
+      ]
     }),
     //
     updateState: build.mutation<BaseResponse, TaskBoardUpdateStateRequest>({
       query: (body: TaskBoardUpdateStateRequest) => ({
         url: `v1/task-board/update/state`,
         method: "PUT",
-        body,
+        body
       }),
       invalidatesTags: [
         "v1/task-board/list/{workspaceId}/team/{teamId}",
         "v1/task-board",
         "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
-        "v1/workspace/activity/filter",
-      ],
+        "v1/workspace/activity/filter"
+      ]
     }),
     //
-  }),
+    updateColor: build.mutation<BaseResponse, TaskBoardUpdateColorRequest>({
+      query: (body: TaskBoardUpdateColorRequest) => ({
+        url: `v1/task-board/update/color`,
+        method: "PUT",
+        body
+      }),
+      invalidatesTags: [
+        "v1/task-board/list/{workspaceId}/team/{teamId}",
+        "v1/task-board",
+        "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
+        "v1/workspace/activity/filter"
+      ]
+    })
+    //
+  })
 });
 
-export const { useInitializeTaskBoardMutation, useUpdateDueDateMutation, useUpdateTitleMutation, useUpdateStateMutation } =
+export const {
+  useInitializeTaskBoardMutation,
+  useUpdateDueDateMutation,
+  useUpdateTitleMutation,
+  useUpdateStateMutation,
+  useUpdateColorMutation
+} =
   taskBoardApi;
 
 export const {
-  endpoints: { initializeTaskBoard, updateDueDate, updateTitle, updateState },
+  endpoints: { initializeTaskBoard, updateDueDate, updateTitle, updateState, updateColor }
 } = taskBoardApi;

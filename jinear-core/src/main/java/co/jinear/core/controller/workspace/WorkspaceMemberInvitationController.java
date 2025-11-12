@@ -7,8 +7,10 @@ import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.workspace.WorkspaceInvitationInfoResponse;
 import co.jinear.core.model.response.workspace.WorkspaceInvitationListingResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -39,7 +41,8 @@ public class WorkspaceMemberInvitationController {
 
     @GetMapping("/info/{token}")
     @ResponseStatus(HttpStatus.OK)
-    public WorkspaceInvitationInfoResponse retrieveInvitationInfo(@PathVariable String token) {
+    @Validated
+    public WorkspaceInvitationInfoResponse retrieveInvitationInfo(@PathVariable @Size(max = 64) String token) {
         return workspaceMemberInvitationManager.retrieveInvitationInfo(token);
     }
 

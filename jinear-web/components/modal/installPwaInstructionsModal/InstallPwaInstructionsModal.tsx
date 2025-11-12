@@ -46,33 +46,33 @@ const InstallPwaInstructionsModal: React.FC<InstallPwaInstructionsModalProps> = 
     >
       <div className={styles.container}>
 
-        <div className={styles.appstoreContainer}>
+        {/*<div className={styles.appstoreContainer}>*/}
 
-          <h3>{t("installFromAppStores")}</h3>
+        {/*  /!*<h3>{t("installFromAppStores")}</h3>*!/*/}
 
-          <div className={styles.appstoreButtonsContainer}>
-            <Button
-              variant={ButtonVariants.outline}
-              heightVariant={ButtonHeight.short}
-              href={APP_STORE_URL}
-              target={"_blank"}
-              className={styles.storeButton}>
-              <IoLogoApple className={"icon"} />
-              App Store
-            </Button>
-            <Button
-              variant={ButtonVariants.outline}
-              heightVariant={ButtonHeight.short}
-              href={PLAY_STORE_URL}
-              target={"_blank"}
-              className={styles.storeButton}>
-              <IoLogoGooglePlaystore className={"icon"} />
-              Play Store
-            </Button>
-          </div>
-        </div>
+        {/*  /!*<div className={styles.appstoreButtonsContainer}>*!/*/}
+        {/*  /!*  <Button*!/*/}
+        {/*  /!*    variant={ButtonVariants.outline}*!/*/}
+        {/*  /!*    heightVariant={ButtonHeight.short}*!/*/}
+        {/*  /!*    href={APP_STORE_URL}*!/*/}
+        {/*  /!*    target={"_blank"}*!/*/}
+        {/*  /!*    className={styles.storeButton}>*!/*/}
+        {/*  /!*    <IoLogoApple className={"icon"} />*!/*/}
+        {/*  /!*    App Store*!/*/}
+        {/*  /!*  </Button>*!/*/}
+        {/*  /!*  <Button*!/*/}
+        {/*  /!*    variant={ButtonVariants.outline}*!/*/}
+        {/*  /!*    heightVariant={ButtonHeight.short}*!/*/}
+        {/*  /!*    href={PLAY_STORE_URL}*!/*/}
+        {/*  /!*    target={"_blank"}*!/*/}
+        {/*  /!*    className={styles.storeButton}>*!/*/}
+        {/*  /!*    <IoLogoGooglePlaystore className={"icon"} />*!/*/}
+        {/*  /!*    Play Store*!/*/}
+        {/*  /!*  </Button>*!/*/}
+        {/*  /!*</div>*!/*/}
+        {/*</div>*/}
 
-        <OrLine />
+        {/*<OrLine />*/}
 
         {onInstallPromptEvent != null &&
           <Button

@@ -1,5 +1,6 @@
 package co.jinear.core.converter.task;
 
+import co.jinear.core.model.dto.task.PlainTaskBoardEntryDto;
 import co.jinear.core.model.dto.task.TaskBoardEntryDetailedDto;
 import co.jinear.core.model.dto.task.TaskBoardEntryDto;
 import co.jinear.core.model.entity.task.TaskBoardEntry;
@@ -10,6 +11,8 @@ import org.mapstruct.Mapper;
 public interface TaskBoardEntryDtoConverter {
 
     TaskBoardEntryDto map(TaskBoardEntry taskBoardEntry);
+
+    PlainTaskBoardEntryDto mapPlain(TaskBoardEntry taskBoardEntry);
 
     TaskBoardEntryDetailedDto mapDetailed(TaskBoardEntry taskBoardEntry);
 }

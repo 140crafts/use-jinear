@@ -1,9 +1,12 @@
 package co.jinear.core.repository.criteriabuilder;
 
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.entity.task.TaskBoardEntry;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
+import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -148,6 +151,16 @@ public class TaskSearchCriteriaBuilder {
             Join<Task, TaskBoardEntry> boardEntryJoin = root.join("taskBoardEntries");
             predicateList.add(boardEntryJoin.get("taskBoardId").in(taskBoardIds));
         }
+    }
+
+    public void addOrderByTaskBoardEntryOrder(CriteriaBuilder criteriaBuilder, CriteriaQuery<Task> taskCriteriaQuery, Root<Task> taskRoot, TaskSearchFilterVo taskSearchFilterVo) {
+        if (Objects.isNull(taskSearchFilterVo.getTaskboardIds()) || taskSearchFilterVo.getTaskboardIds().size() != 1) {
+            log.error("Order by task board entry order can be only used with single task board");
+            throw new BusinessException();
+        }
+        Join<Task, TaskBoardEntry> boardEntryJoin = taskRoot.join("taskBoardEntries");
+        taskCriteriaQuery.multiselect(taskRoot, boardEntryJoin.get("order"));
+        taskCriteriaQuery.orderBy(criteriaBuilder.asc(boardEntryJoin.get("order")));
     }
 
     private void addIntersectingTasksPredicates(ZonedDateTime start, ZonedDateTime end, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {

@@ -15,7 +15,8 @@ interface PaginatedListProps<T> {
   page: number;
   setPage: React.Dispatch<React.SetStateAction<number>>;
   renderItem: (data: T, index: number) => ReactElement;
-  emptyLabel: string;
+  emptyLabel?: string;
+  emptyComponent?: ReactElement;
   hidePaginationOnSinglePages?: boolean;
   containerClassName?: string;
   contentContainerClassName?: string;
@@ -34,6 +35,7 @@ const PaginatedList = <T, >({
                               setPage,
                               renderItem,
                               emptyLabel,
+                              emptyComponent,
                               hidePaginationOnSinglePages = false,
                               containerClassName,
                               contentContainerClassName,
@@ -69,9 +71,10 @@ const PaginatedList = <T, >({
       <div className={cn(styles.content, styles.gradientBg, contentContainerClassName)}>
         {data?.content.map(renderItem)}
 
-        {!data?.hasContent && emptyLabel && (
+        {!data?.hasContent && (emptyComponent || emptyLabel) && (
           <div className={styles.emptyStateContainer}>
-            <div className={styles.emptyLabel}>{emptyLabel}</div>
+            {emptyComponent}
+            {emptyLabel && <div className={styles.emptyLabel}>{emptyLabel}</div>}
           </div>
         )}
       </div>

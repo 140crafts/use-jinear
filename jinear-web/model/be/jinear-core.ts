@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2025-10-19 16:16:02.
+// Generated using typescript-generator version 3.0.1157 on 2025-11-12 22:33:08.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -159,10 +159,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
+    ginternalDate: string;
     gthreadId: string;
     ghistoryId: string;
-    ginternalDate: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -678,6 +678,13 @@ export interface DetailedTaskSubscriptionDto extends BaseDto {
     accountDto: AccountDto;
 }
 
+export interface PlainTaskBoardEntryDto extends BaseDto {
+    taskBoardEntryId: string;
+    taskBoardId: string;
+    taskId: string;
+    order: number;
+}
+
 export interface RelatedTaskDto extends BaseDto {
     taskId: string;
     topicId: string;
@@ -729,6 +736,7 @@ export interface TaskBoardDto extends BaseDto {
     title: string;
     dueDate: Date;
     state: TaskBoardStateType;
+    color?: string | null;
 }
 
 export interface TaskBoardEntryDetailedDto extends TaskBoardEntryDto {
@@ -771,6 +779,7 @@ export interface TaskDto extends BaseDto {
     relatedIn?: TaskRelationDto[] | null;
     taskReminders?: TaskReminderDto[] | null;
     checklists?: ChecklistDto[] | null;
+    taskBoardEntries?: PlainTaskBoardEntryDto[] | null;
     project?: ProjectDto | null;
     milestone?: MilestoneDto | null;
 }
@@ -1297,6 +1306,16 @@ export interface TaskAssigneeUpdateRequest extends BaseRequest {
     assigneeId?: string | null;
 }
 
+export interface TaskBoardEntryFilterRequest extends BaseRequest {
+    topicIds?: string[] | null;
+    ownerIds?: string[] | null;
+    assigneeIds?: string[] | null;
+    workflowStatusIdList?: string[] | null;
+    workflowStateGroups?: TeamWorkflowStateGroup[] | null;
+    timespanStart?: Date | null;
+    timespanEnd?: Date | null;
+}
+
 export interface TaskBoardEntryInitializeRequest extends BaseRequest {
     taskBoardId: string;
     taskId: string;
@@ -1307,6 +1326,11 @@ export interface TaskBoardInitializeRequest extends BaseRequest {
     teamId: string;
     title: string;
     dueDate?: Date | null;
+    color?: string | null;
+}
+
+export interface TaskBoardUpdateColorRequest extends TaskBoardUpdateRequest {
+    color: string;
 }
 
 export interface TaskBoardUpdateDueDateRequest extends TaskBoardUpdateRequest {
@@ -1349,6 +1373,7 @@ export interface TaskFilterRequest extends BaseRequest {
     externalCalendarList?: TaskExternalCalendarFilterDto[] | null;
     projectIds?: string[] | null;
     milestoneIds?: string[] | null;
+    taskboardIds?: string[] | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -1934,9 +1959,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    uri: URI;
-    description: string;
     filename: string;
+    description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -2005,7 +2030,7 @@ export interface Comparable<T> {
 
 export type DayType = "MONDAY" | "TUESDAY" | "WEDNESDAY" | "THURSDAY" | "FRIDAY" | "SATURDAY" | "SUNDAY";
 
-export type FilterSort = "IDATE_DESC" | "IDATE_ASC" | "ASSIGNED_DATE_DESC" | "ASSIGNED_DATE_ASC";
+export type FilterSort = "IDATE_DESC" | "IDATE_ASC" | "ASSIGNED_DATE_DESC" | "ASSIGNED_DATE_ASC" | "TASK_BOARD_ORDER";
 
 export type ResponseStatusType = "SUCCESS" | "FAILURE";
 

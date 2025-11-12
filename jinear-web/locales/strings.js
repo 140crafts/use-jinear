@@ -2005,8 +2005,12 @@ const translations = {
     tr: "Panolar"
   },
   taskBoardsListEmptyLabel: {
-    en: "There isn't any task board.",
-    tr: "Herhangi bir görev panosu bulunamadı."
+    en: "There isn't any task board. You can group your tasks, assign deadlines and order them in boards.",
+    tr: "Herhangi bir görev panosu bulunamadı. Panolar ile görevlerinizi gruplandırabilir, son tarih atayabilir ve sıralandırabilirsiniz."
+  },
+  taskBoardsListEmptyButton: {
+    en: "Create New Board",
+    tr: "Yeni Pano Oluştur"
   },
   taskBoardEmptyLabel: {
     en: "There isn't any task in this board.",
@@ -3746,7 +3750,7 @@ const translations = {
   },
   threadsEmptyText: {
     en: "This channel is ready for discussion! Be the first to start a new thread to organize a conversation around a specific topic.",
-    tr: "LBu kanal sohbete hazır! Belirli bir konu etrafında bir sohbet düzenlemek için ilk başlığı siz başlatın."
+    tr: "Bu kanal sohbete hazır! Belirli bir konu etrafında bir sohbet düzenlemek için ilk başlığı siz başlatın."
   },
   newChannelButton: {
     en: "Create Channel",

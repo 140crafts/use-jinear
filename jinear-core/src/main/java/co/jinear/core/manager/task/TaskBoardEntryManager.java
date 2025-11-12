@@ -1,29 +1,40 @@
 package co.jinear.core.manager.task;
 
+import co.jinear.core.converter.task.TaskBoardEntryFilterRequestToTaskSearchFilterVoConverter;
 import co.jinear.core.converter.task.TaskBoardEntryInitializeRequestConverter;
+import co.jinear.core.converter.task.TaskDtoToTaskBoardEntryDtoConverter;
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.task.TaskBoardDto;
 import co.jinear.core.model.dto.task.TaskBoardEntryDto;
 import co.jinear.core.model.dto.task.TaskDto;
+import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.enumtype.task.TaskBoardStateType;
+import co.jinear.core.model.request.task.TaskBoardEntryFilterRequest;
 import co.jinear.core.model.request.task.TaskBoardEntryInitializeRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.TaskBoardEntryPaginatedResponse;
 import co.jinear.core.model.vo.task.InitializeTaskBoardEntryVo;
+import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.task.TaskActivityService;
+import co.jinear.core.service.task.TaskListingService;
 import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.board.TaskBoardRetrieveService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryListingService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryOperationService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryRetrieveService;
+import co.jinear.core.service.team.member.TeamMemberRetrieveService;
 import co.jinear.core.validator.task.TaskBoardAccessValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -40,6 +51,10 @@ public class TaskBoardEntryManager {
     private final TaskBoardRetrieveService taskBoardRetrieveService;
     private final TaskActivityService taskActivityService;
     private final TaskRetrieveService taskRetrieveService;
+    private final TaskBoardEntryFilterRequestToTaskSearchFilterVoConverter taskBoardEntryFilterRequestToTaskSearchFilterVoConverter;
+    private final TeamMemberRetrieveService teamMemberRetrieveService;
+    private final TaskListingService taskListingService;
+    private final TaskDtoToTaskBoardEntryDtoConverter taskDtoToTaskBoardEntryDtoConverter;
 
     public BaseResponse initializeTaskBoardEntry(TaskBoardEntryInitializeRequest taskBoardInitializeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -74,11 +89,34 @@ public class TaskBoardEntryManager {
         return new BaseResponse();
     }
 
+    public BaseResponse changeFilteredOrder(String taskBoardEntryId, String taskBoardEntryIdBefore, String taskBoardEntryIdAfter) {
+        validateRequest(taskBoardEntryIdBefore, taskBoardEntryIdAfter);
+        String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
+        validateAccess(taskBoardEntryId, currentAccountId);
+        log.info("Change task board entry order has started. currentAccountId: {}", currentAccountId);
+        TaskBoardEntryDto boardEntryDto = taskBoardEntryOperationService.changeFilteredOrder(taskBoardEntryId, taskBoardEntryIdBefore, taskBoardEntryIdAfter);
+        taskActivityService.initializeTaskOrderChangedOnTaskBoardActivity(currentAccountId, currentAccountSessionId, boardEntryDto);
+        return new BaseResponse();
+    }
+
     public TaskBoardEntryPaginatedResponse retrieveFromTaskBoard(String taskBoardId, Integer page) {
         String currentAccountId = sessionInfoService.currentAccountId();
         taskBoardAccessValidator.validateHasTaskBoardAccess(taskBoardId, currentAccountId);
         log.info("Retrieve task board entries from task board has started. currentAccountId: {}", currentAccountId);
         Page<TaskBoardEntryDto> results = taskBoardEntryListingService.retrieveTaskBoardEntries(taskBoardId, page);
+        return mapResults(results);
+    }
+
+    public TaskBoardEntryPaginatedResponse filterFromTaskBoard(String taskBoardId, TaskBoardEntryFilterRequest taskBoardEntryFilterRequest, Integer page) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        TaskBoardDto taskBoardDto = taskBoardRetrieveService.retrieve(taskBoardId);
+        taskBoardAccessValidator.validateHasTaskBoardAccess(taskBoardDto, currentAccountId);
+        log.info("Filter task board entries from task board has started. currentAccountId: {}", currentAccountId);
+        TeamMemberDto teamMemberDto = teamMemberRetrieveService.retrieveMembership(taskBoardDto.getWorkspaceId(), taskBoardDto.getTeamId(), currentAccountId).orElseThrow();
+        TaskSearchFilterVo taskSearchFilterVo = taskBoardEntryFilterRequestToTaskSearchFilterVoConverter.convert(taskBoardId, taskBoardEntryFilterRequest, page, List.of(teamMemberDto));
+        Page<TaskDto> taskDtoPage = taskListingService.filterTasks(taskSearchFilterVo);
+        Page<TaskBoardEntryDto> results = taskDtoToTaskBoardEntryDtoConverter.convert(taskDtoPage, taskBoardId);
         return mapResults(results);
     }
 
@@ -103,5 +141,11 @@ public class TaskBoardEntryManager {
         TaskBoardEntryPaginatedResponse taskBoardEntryPaginatedResponse = new TaskBoardEntryPaginatedResponse();
         taskBoardEntryPaginatedResponse.setTaskListEntryDtoPageDto(pageDto);
         return taskBoardEntryPaginatedResponse;
+    }
+
+    private void validateRequest(String taskBoardEntryIdBefore, String taskBoardEntryIdAfter) {
+        if (StringUtils.isBlank(taskBoardEntryIdBefore) && StringUtils.isBlank(taskBoardEntryIdAfter)) {
+            throw new NotValidException();
+        }
     }
 }

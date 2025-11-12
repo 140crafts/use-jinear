@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useRetrieveMessagingTokenQuery } from "@/api/messageTokenApi";
 import { useTypedSelector } from "@/store/store";
 import { selectAuthState } from "@/slice/accountSlice";
-import { SOCKET_ROOT } from "@/utils/constants";
+import { __DEV__, SOCKET_ROOT } from "@/utils/constants";
 import { io } from "socket.io-client";
 import Logger from "@/utils/logger";
 import { RichMessageDto } from "@/be/jinear-core";
@@ -19,7 +19,7 @@ const logger = Logger("WebsocketHandler");
 const WebsocketHandler: React.FC<WebsocketHandlerProps> = () => {
   const authState = useTypedSelector(selectAuthState);
   // const messagingEnabled = useFeatureFlag("MESSAGING");
-  const messagingEnabled = true;
+  const messagingEnabled = !__DEV__;
   const { data: retrieveMessagingTokenResponse } = useRetrieveMessagingTokenQuery({}, { skip: authState != "LOGGED_IN" });
 
   useEffect(() => {

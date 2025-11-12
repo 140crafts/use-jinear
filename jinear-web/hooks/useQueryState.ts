@@ -46,6 +46,19 @@ export const queryStateShortDateParser = (val?: string) => {
   undefined;
 };
 export const queryStateBooleanParser = (val?: string) => (val ? val?.toLowerCase() == "true" : undefined);
+export const queryStateJsonObjectParser = <T>(val?: string) => {
+  if (val) {
+    try {
+      return (JSON.parse(val) as T);
+    } catch (e) {
+      console.error(e);
+      return undefined;
+    }
+  }
+  return undefined;
+};
+
 export const queryStateDateToIsoDateConverter = (date?: Date | null) => (date ? formatISO(date) : undefined);
 export const queryStateDateToShortDateConverter = (date?: Date | null) => (date ? format(date, URL_DATE_FORMAT) : undefined);
 export const queryStateAnyToStringConverter = (obj?: any) => (obj ? obj.toString() : undefined);
+export const queryStateObjectToJsonStringConverter = (obj?: any) => (obj ? JSON.stringify(obj) : undefined);

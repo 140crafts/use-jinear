@@ -4,10 +4,7 @@ import co.jinear.core.converter.task.InitializeTaskListVoToEntityConverter;
 import co.jinear.core.converter.task.TaskBoardDtoConverter;
 import co.jinear.core.model.dto.task.TaskBoardDto;
 import co.jinear.core.model.entity.task.TaskBoard;
-import co.jinear.core.model.vo.task.InitializeTaskBoardVo;
-import co.jinear.core.model.vo.task.UpdateTaskBoardDueDateVo;
-import co.jinear.core.model.vo.task.UpdateTaskBoardStateVo;
-import co.jinear.core.model.vo.task.UpdateTaskBoardTitleVo;
+import co.jinear.core.model.vo.task.*;
 import co.jinear.core.repository.TaskBoardRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +47,14 @@ public class TaskBoardOperationService {
         log.info("Update task board state has started. updateTaskListStateVo: {}", updateTaskBoardStateVo);
         TaskBoard taskBoard = taskBoardRetrieveService.retrieveEntity(updateTaskBoardStateVo.getTaskBoardId());
         taskBoard.setState(updateTaskBoardStateVo.getState());
+        TaskBoard saved = taskBoardRepository.save(taskBoard);
+        return taskBoardDtoConverter.convert(saved);
+    }
+
+    public TaskBoardDto updateColor(UpdateTaskBoardColorVo updateTaskBoardColorVo) {
+        log.info("Update task board color has started. updateTaskBoardColorVo: {}", updateTaskBoardColorVo);
+        TaskBoard taskBoard = taskBoardRetrieveService.retrieveEntity(updateTaskBoardColorVo.getTaskBoardId());
+        taskBoard.setColor(updateTaskBoardColorVo.getColor());
         TaskBoard saved = taskBoardRepository.save(taskBoard);
         return taskBoardDtoConverter.convert(saved);
     }

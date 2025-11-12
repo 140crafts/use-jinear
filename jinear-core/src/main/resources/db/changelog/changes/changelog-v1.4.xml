@@ -319,4 +319,10 @@
             <column name="slug" type="varchar(255)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-535-add-color-to-task-boards">
+        <addColumn tableName="task_board">
+            <column name="color" type="char(6)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

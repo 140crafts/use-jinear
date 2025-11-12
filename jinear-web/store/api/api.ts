@@ -28,6 +28,7 @@ export const tagTypes = [
     "v1/task/{taskId}/subscription",
     "v1/task/{taskId}/subscription/list",
     "v1/task-board/entry/from-task-board/{taskBoardId}",
+    "v1/task-board/entry/from-task-board/{taskBoardId}/filter",
     "v1/task-board/list/related-with-task/{taskId}",
     "v1/task/list/filter",
     "v1/topic/list/{teamId}/search",

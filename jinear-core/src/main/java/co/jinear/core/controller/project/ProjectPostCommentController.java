@@ -5,9 +5,11 @@ import co.jinear.core.model.request.project.ProjectPostAddCommentRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.project.ProjectPostPaginatedCommentResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -30,10 +32,11 @@ public class ProjectPostCommentController {
         return projectPostCommentManager.deleteComment(commentId);
     }
 
+    @Validated
     @GetMapping("/list/project/{projectId}/post/{postId}")
     @ResponseStatus(HttpStatus.OK)
-    public ProjectPostPaginatedCommentResponse listComments(@PathVariable String postId,
-                                                            @PathVariable String projectId,
+    public ProjectPostPaginatedCommentResponse listComments(@PathVariable @Size(max = 26) String postId,
+                                                            @PathVariable @Size(max = 26) String projectId,
                                                             @RequestParam(required = false, defaultValue = "0") Integer page) {
         return projectPostCommentManager.listComments(postId, projectId, page);
     }

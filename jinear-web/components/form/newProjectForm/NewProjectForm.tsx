@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./NewProjectForm.module.scss";
 import useTranslation from "@/locals/useTranslation";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -15,7 +15,7 @@ import Logger from "@/utils/logger";
 import TitleInput from "@/components/form/newProjectForm/titleInput/TitleInput";
 import WorkspaceAndTeamInfo from "@/components/form/common/workspaceAndTeamInfo/WorkspaceAndTeamInfo";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import TeamPickerButton from "@/components/teamPickerButton/TeamPickerButton";
+import TeamPickerButton, { ITeamPickerButtonRef } from "@/components/teamPickerButton/TeamPickerButton";
 import WorkspaceMemberPickerButton from "@/components/workspaceMemberPickerButton/WorkspaceMemberPickerButton";
 import DatePickerButton from "@/components/datePickerButton/DatePickerButton";
 import { IoPlaySkipBackOutline, IoPlaySkipForwardOutline } from "react-icons/io5";
@@ -27,6 +27,7 @@ import DescriptionInput from "@/components/form/newProjectForm/descriptionInput/
 import { ITiptapRef } from "@/components/tiptap/Tiptap";
 import { useInitializeProjectMutation } from "@/api/projectOperationApi";
 import toast from "react-hot-toast";
+import { useWorkspaceTeamMemberships } from "@/hooks/useWorkspaceTeamMemberships";
 
 interface NewProjectFormProps {
   workspace: WorkspaceDto;
@@ -60,6 +61,15 @@ const NewProjectForm: React.FC<NewProjectFormProps> = ({
   const targetDate = watch("targetDate");
   const milestoneList = watch("milestones") as (IMilestoneInitializeDto[] | null);
   const descriptionRef = useRef<ITiptapRef>(null);
+  const teamPickerButtonRef = useRef<ITeamPickerButtonRef>(null);
+  const currentAccountsTeamMemberships = useWorkspaceTeamMemberships(workspace.workspaceId);
+  const initialProjectTeamsIfCurrentAccountHasOnlyOneTeam = currentAccountsTeamMemberships && currentAccountsTeamMemberships?.length == 1 ? [currentAccountsTeamMemberships[0]] : undefined;
+
+  useEffect(() => {
+    if (initialProjectTeamsIfCurrentAccountHasOnlyOneTeam) {
+      onTeamPick(initialProjectTeamsIfCurrentAccountHasOnlyOneTeam);
+    }
+  }, [initialProjectTeamsIfCurrentAccountHasOnlyOneTeam]);
 
   const onTeamPick = (pickedList: TeamDto[]) => {
     logger.log({ onTeamPick: pickedList });
@@ -96,6 +106,7 @@ const NewProjectForm: React.FC<NewProjectFormProps> = ({
     const req = { ...data };
     if (data.teamIds == null || data.teamIds.length == 0) {
       toast(t("newProjectFormSelectAtLeastATeam"));
+      teamPickerButtonRef.current?.popPicker();
       return;
     }
     initializeProject(req);
@@ -150,10 +161,12 @@ const NewProjectForm: React.FC<NewProjectFormProps> = ({
             />
 
             <TeamPickerButton
+              ref={teamPickerButtonRef}
               workspaceId={workspace.workspaceId}
               multiple={true}
               onPick={onTeamPick}
               useJoinedNameOnMultiplePick={true}
+              initialSelectedTeams={initialProjectTeamsIfCurrentAccountHasOnlyOneTeam}
               label={t("newProjectFormRelatedTeamPickerButtonLabel")}
             />
 

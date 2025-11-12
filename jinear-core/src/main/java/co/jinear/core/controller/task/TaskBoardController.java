@@ -1,10 +1,7 @@
 package co.jinear.core.controller.task;
 
 import co.jinear.core.manager.task.TaskBoardManager;
-import co.jinear.core.model.request.task.TaskBoardInitializeRequest;
-import co.jinear.core.model.request.task.TaskBoardUpdateDueDateRequest;
-import co.jinear.core.model.request.task.TaskBoardUpdateStateRequest;
-import co.jinear.core.model.request.task.TaskBoardUpdateTitleRequest;
+import co.jinear.core.model.request.task.*;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.TaskBoardResponse;
 import jakarta.validation.Valid;
@@ -41,5 +38,11 @@ public class TaskBoardController {
     @ResponseStatus(HttpStatus.OK)
     public BaseResponse updateState(@Valid @RequestBody TaskBoardUpdateStateRequest taskListUpdateStateRequest) {
         return taskBoardManager.updateState(taskListUpdateStateRequest);
+    }
+
+    @PutMapping("/update/color")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateColor(@Valid @RequestBody TaskBoardUpdateColorRequest taskBoardUpdateColorRequest) {
+        return taskBoardManager.updateColor(taskBoardUpdateColorRequest);
     }
 }

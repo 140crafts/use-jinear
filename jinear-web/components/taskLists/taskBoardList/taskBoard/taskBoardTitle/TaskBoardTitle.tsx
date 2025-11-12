@@ -3,7 +3,12 @@ import { useInitializeTaskBoardEntryMutation } from "@/api/taskBoardEntryApi";
 
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { useCurrentAccountsTeamRoleIsAdmin } from "@/hooks/useCurrentAccountsTeamRole";
-import { useUpdateDueDateMutation, useUpdateStateMutation, useUpdateTitleMutation } from "@/api/taskBoardApi";
+import {
+  useUpdateColorMutation,
+  useUpdateDueDateMutation,
+  useUpdateStateMutation,
+  useUpdateTitleMutation
+} from "@/api/taskBoardApi";
 import {
   changeLoadingModalVisibility,
   closeBasicTextInputModal,
@@ -17,7 +22,7 @@ import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import { differenceInDays, format, isToday, startOfToday } from "date-fns";
 import useTranslation from "@/locals/useTranslation";
-import React, { useEffect, useMemo } from "react";
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import {
   IoArrowForward,
   IoList,
@@ -29,6 +34,10 @@ import {
 import styles from "./TaskBoardTitle.module.scss";
 import { useSetQueryState } from "@/hooks/useQueryState";
 import { LuPenSquare, LuSearch } from "react-icons/lu";
+import TaskBoardQuickFilterBar
+  from "@/components/taskLists/taskBoardList/taskBoard/taskBoardQuickFilterBar/TaskBoardQuickFilterBar";
+import getCssVariable from "@/utils/cssHelper";
+import { useDebouncedEffect } from "@/hooks/useDebouncedEffect";
 
 interface TaskBoardTitleProps {
   taskBoard: TaskBoardDto;
@@ -63,6 +72,11 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
   const [updateState, { isLoading: isUpdateStateLoading }] = useUpdateStateMutation();
   const [updateDueDate, { isLoading: isUpdateDueDateLoading }] = useUpdateDueDateMutation();
   const [updateTitle, { isLoading: isUpdateTitleLoading }] = useUpdateTitleMutation();
+  const [updateColor, { isLoading: isUpdateColorLoading }] = useUpdateColorMutation();
+
+  const [boardColor, setBoardColor] = useState<string | null | undefined>(taskBoard?.color);
+
+  useDebouncedEffect(() => boardColor && updateColor({ taskBoardId, color: boardColor }), [boardColor], 500);
 
   useEffect(() => {
     dispatch(
@@ -167,9 +181,17 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
   const changeDisplayFormatToWfsColumn = () => {
     setQueryState("displayFormat", "column");
   };
+
+  const onColorChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const color = event.target.value;
+    setBoardColor(color.replace("#", ""));
+  };
+
   return (
     <div className={cn(styles.listTitle, boardState == "CLOSED" && styles.closedListTitle)}>
       <div className={styles.titleLabelContainer}>
+        <input type={"color"} value={boardColor ? `#${boardColor}` : getCssVariable("--c-primary-shade-1")}
+               onChangeCapture={onColorChange} />
         <Button
           className={styles.listTitleButton}
           key={`board-title-${taskBoardId}`}
@@ -197,7 +219,7 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
               <Button
                 onClick={changeDisplayFormatToList}
                 variant={displayFormat == "list" ? ButtonVariants.filled2 : ButtonVariants.filled}
-                className={styles.button}
+                className={styles.displayFormatButton}
                 data-tooltip-right={t("taskListTitleAndViewTypeListTooltip")}
                 heightVariant={ButtonHeight.short}
               >
@@ -207,7 +229,7 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
               <Button
                 onClick={changeDisplayFormatToWfsColumn}
                 variant={displayFormat == "column" ? ButtonVariants.filled2 : ButtonVariants.filled}
-                className={styles.button}
+                className={styles.displayFormatButton}
                 data-tooltip-right={t("taskListTitleAndViewTypeStatusColumnsTooltip")}
                 heightVariant={ButtonHeight.short}
               >
@@ -255,6 +277,9 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
           </Button>
         </div>
 
+        <div className={styles.actionBarRow}>
+          <TaskBoardQuickFilterBar team={team} taskBoardId={taskBoard.taskBoardId} />
+        </div>
 
       </div>
     </div>

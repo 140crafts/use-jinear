@@ -62,6 +62,8 @@ public class TaskDto extends BaseDto {
     @Nullable
     private Set<ChecklistDto> checklists;
     @Nullable
+    private Set<PlainTaskBoardEntryDto> taskBoardEntries;
+    @Nullable
     private ProjectDto project;
     @Nullable
     private MilestoneDto milestone;

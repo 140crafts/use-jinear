@@ -9,6 +9,7 @@ import co.jinear.core.model.dto.project.ProjectTeamDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
+import co.jinear.core.model.enumtype.FilterSort;
 import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
 import co.jinear.core.model.request.task.TaskFilterRequest;
 import co.jinear.core.model.response.task.TaskListingListedResponse;
@@ -25,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,9 +50,9 @@ public class TaskListingManager {
 
     public TaskListingPaginatedResponse filterTasks(TaskFilterRequest taskFilterRequest) {
         String currentAccount = sessionInfoService.currentAccountId();
-        validateWorkspaceAccess(currentAccount, taskFilterRequest.getWorkspaceId());
-
+        validateTaskBoardOrder(taskFilterRequest);
         validateTeamIdListHasNoBlankElement(taskFilterRequest);
+        validateWorkspaceAccess(currentAccount, taskFilterRequest.getWorkspaceId());
         List<TeamMemberDto> memberships = retrieveMemberships(taskFilterRequest, currentAccount);
         validateAccountMembershipsInRequestedTeams(taskFilterRequest, memberships);
         validateTeamTaskVisibilityAndMemberRoleForAll(memberships);
@@ -61,11 +63,17 @@ public class TaskListingManager {
         return mapResponse(taskDtoPage);
     }
 
+    private void validateTaskBoardOrder(TaskFilterRequest taskFilterRequest) {
+        if (FilterSort.TASK_BOARD_ORDER.equals(taskFilterRequest.getSort()) && (CollectionUtils.isEmpty(taskFilterRequest.getTaskboardIds()) || taskFilterRequest.getTaskboardIds().size() != 1)) {
+            throw new NotValidException();
+        }
+    }
+
     private void validateProjectAndMilestoneAccess(TaskFilterRequest taskFilterRequest, List<TeamMemberDto> memberships) {
         List<String> requestedProjectIds = taskFilterRequest.getProjectIds();
         List<String> requestedMilestoneIds = taskFilterRequest.getMilestoneIds();
 
-        if (Objects.nonNull(requestedProjectIds) || Objects.nonNull(requestedMilestoneIds)){
+        if (Objects.nonNull(requestedProjectIds) || Objects.nonNull(requestedMilestoneIds)) {
             List<String> membershipTeamIds = memberships.stream()
                     .map(TeamMemberDto::getTeamId)
                     .toList();

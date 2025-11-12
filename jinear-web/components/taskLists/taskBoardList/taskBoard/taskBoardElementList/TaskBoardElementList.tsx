@@ -1,6 +1,10 @@
 import PaginatedList from "@/components/paginatedList/PaginatedList";
 import { TaskBoardEntryDto } from "@/be/jinear-core";
-import { useChangeBoardEntryOrderMutation, useRetrieveFromTaskBoardQuery } from "@/api/taskBoardEntryApi";
+import {
+  useChangeBoardEntryOrderMutation, useChangeFilteredBoardEntryOrderMutation,
+  useFilterFromTaskBoardQuery,
+  useRetrieveFromTaskBoardQuery
+} from "@/api/taskBoardEntryApi";
 
 import { changeLoadingModalVisibility } from "@/slice/modalSlice";
 import { useAppDispatch } from "@/store/store";
@@ -20,6 +24,10 @@ import {
 import styles from "./TaskBoardElementList.module.scss";
 import TaskBoardElement from "./taskBoardElement/TaskBoardElement";
 import cn from "classnames";
+import { queryStateJsonObjectParser, useQueryState } from "@/hooks/useQueryState";
+import {
+  ITaskBoardUrlStateMap
+} from "@/components/taskLists/taskBoardList/taskBoard/taskBoardQuickFilterBar/TaskBoardQuickFilterBar";
 
 interface TaskBoardElementListProps {
   taskBoardId: string;
@@ -36,17 +44,22 @@ const TaskBoardElementList: React.FC<TaskBoardElementListProps> = ({
   const dispatch = useAppDispatch();
   const [page, setPage] = useState<number>(0);
 
-  const { data: taskBoardElementsResponse, isFetching, isLoading } = useRetrieveFromTaskBoardQuery({
+  const taskBoardFilterMap = useQueryState<ITaskBoardUrlStateMap>("board-filter-map", queryStateJsonObjectParser) ?? {};
+  const thisBoardsFilter = taskBoardFilterMap[taskBoardId] ?? {};
+
+  const { data: taskBoardElementsResponse, isFetching, isLoading } = useFilterFromTaskBoardQuery({
     taskBoardId,
-    page
+    page,
+    body: thisBoardsFilter
   });
-  const [changeBoardEntryOrder, { isLoading: isChangeBoardEntryOrderLoading }] = useChangeBoardEntryOrderMutation();
+  const [changeFilteredBoardEntryOrder, { isLoading: isChangeBoardFilteredEntryOrderLoading }] = useChangeFilteredBoardEntryOrderMutation();
 
   useEffect(() => {
-    dispatch(changeLoadingModalVisibility({ visible: isChangeBoardEntryOrderLoading }));
-  }, [isChangeBoardEntryOrderLoading]);
+    dispatch(changeLoadingModalVisibility({ visible: isChangeBoardFilteredEntryOrderLoading }));
+  }, [isChangeBoardFilteredEntryOrderLoading]);
 
   const renderItem = (item: TaskBoardEntryDto, index: number) => {
+    logger.log({ renderItem: item, index });
     return (
       <Draggable key={item.taskBoardEntryId} draggableId={item.taskBoardEntryId} index={index}>
         {(providedDraggable: DraggableProvided, snapshotDraggable: DraggableStateSnapshot) => (
@@ -68,14 +81,18 @@ const TaskBoardElementList: React.FC<TaskBoardElementListProps> = ({
     if (!destination) {
       return;
     }
+    const oldOrder = source?.index;
     const newOrder = destination?.index;
     const taskBoardEntryId = draggableId;
-    logger.log({ newOrder, taskBoardEntryId, result });
-    changeItemOrder({ newOrder, taskBoardEntryId });
-  };
-
-  const changeItemOrder = (vo: { newOrder: number; taskBoardEntryId: string }) => {
-    changeBoardEntryOrder({ taskBoardId, ...vo });
+    if (taskBoardElementsResponse?.data.content) {
+      const orderedArray = [...taskBoardElementsResponse?.data.content];
+      const [removedElement] = orderedArray.splice(oldOrder, 1);
+      orderedArray.splice(newOrder, 0, removedElement);
+      const taskBoardEntryIdBefore = newOrder > 0 ? orderedArray[newOrder - 1].taskBoardEntryId : undefined;
+      const taskBoardEntryIdAfter = newOrder + 1 < orderedArray.length ? orderedArray[newOrder + 1].taskBoardEntryId : undefined;
+      logger.log({ orderedArray, taskBoardEntryIdBefore, taskBoardEntryIdAfter, newOrder, taskBoardEntryId, result });
+      changeFilteredBoardEntryOrder({ taskBoardEntryId, taskBoardEntryIdBefore, taskBoardEntryIdAfter });
+    }
   };
 
   return (

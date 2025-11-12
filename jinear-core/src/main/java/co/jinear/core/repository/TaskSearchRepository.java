@@ -9,17 +9,17 @@ import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import co.jinear.core.repository.criteriabuilder.TaskSearchCriteriaBuilder;
 import com.google.common.collect.Lists;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -38,33 +38,13 @@ public class TaskSearchRepository {
         CriteriaQuery<Task> taskCriteriaQuery = criteriaBuilder.createQuery(Task.class);
         Root<Task> taskRoot = taskCriteriaQuery.from(Task.class);
 
-        Predicate predicateForTeamsWithTaskVisibilityAllTeamMember = retrieveFilterPredicateListForTeamsWithTaskVisibilityVisibleToAllTeamMembers(taskSearchFilterVo, criteriaBuilder, taskRoot);
-        Predicate predicateForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins = retrieveFilterPredicateListForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins(taskSearchFilterVo, criteriaBuilder, taskRoot);
-
-        Predicate searchPredicate = null;
-        if (Objects.nonNull(predicateForTeamsWithTaskVisibilityAllTeamMember) && Objects.nonNull(predicateForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins)) {
-            searchPredicate = criteriaBuilder.or(predicateForTeamsWithTaskVisibilityAllTeamMember, predicateForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins);
-        } else if (Objects.nonNull(predicateForTeamsWithTaskVisibilityAllTeamMember)) {
-            searchPredicate = predicateForTeamsWithTaskVisibilityAllTeamMember;
-        } else if (Objects.nonNull(predicateForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins)) {
-            searchPredicate = predicateForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins;
-        }
+        Predicate searchPredicate = createSearchPredicate(taskSearchFilterVo, criteriaBuilder, taskRoot);
 
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         Root<Task> countRoot = countQuery.from(Task.class);
         countQuery.select(criteriaBuilder.countDistinct(countRoot));
 
-        Predicate countPredicateForTeamsWithTaskVisibilityAllTeamMember = retrieveFilterPredicateListForTeamsWithTaskVisibilityVisibleToAllTeamMembers(taskSearchFilterVo, criteriaBuilder, countRoot);
-        Predicate countPredicateForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins = retrieveFilterPredicateListForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins(taskSearchFilterVo, criteriaBuilder, countRoot);
-
-        Predicate countPredicate = null;
-        if (Objects.nonNull(countPredicateForTeamsWithTaskVisibilityAllTeamMember) && Objects.nonNull(countPredicateForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins)) {
-            countPredicate = criteriaBuilder.or(countPredicateForTeamsWithTaskVisibilityAllTeamMember, countPredicateForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins);
-        } else if (Objects.nonNull(countPredicateForTeamsWithTaskVisibilityAllTeamMember)) {
-            countPredicate = countPredicateForTeamsWithTaskVisibilityAllTeamMember;
-        } else if (Objects.nonNull(countPredicateForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins)) {
-            countPredicate = countPredicateForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins;
-        }
+        Predicate countPredicate = createSearchPredicate(taskSearchFilterVo, criteriaBuilder, countRoot);
 
         return executeAndRetrievePageableResults(
                 criteriaBuilder,
@@ -73,8 +53,21 @@ public class TaskSearchRepository {
                 taskRoot,
                 searchPredicate,
                 countPredicate,
-                taskSearchFilterVo.getSort(),
+                taskSearchFilterVo,
                 PageRequest.of(taskSearchFilterVo.getPage(), taskSearchFilterVo.getSize()));
+    }
+
+    private Predicate createSearchPredicate(TaskSearchFilterVo taskSearchFilterVo, CriteriaBuilder criteriaBuilder, Root<Task> taskRoot) {
+        Predicate predicateForAllTeamMembers = retrieveFilterPredicateListForTeamsWithTaskVisibilityVisibleToAllTeamMembers(taskSearchFilterVo, criteriaBuilder, taskRoot);
+        Predicate predicateForOwnerAssigneeAndAdmins = retrieveFilterPredicateListForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins(taskSearchFilterVo, criteriaBuilder, taskRoot);
+
+        if (Objects.nonNull(predicateForAllTeamMembers) && Objects.nonNull(predicateForOwnerAssigneeAndAdmins)) {
+            return criteriaBuilder.or(predicateForAllTeamMembers, predicateForOwnerAssigneeAndAdmins);
+        } else if (Objects.nonNull(predicateForAllTeamMembers)) {
+            return predicateForAllTeamMembers;
+        } else {
+            return predicateForOwnerAssigneeAndAdmins;
+        }
     }
 
     private Predicate retrieveFilterPredicateListForTeamsWithTaskVisibilityVisibleToAllTeamMembers(TaskSearchFilterVo taskSearchFilterVo, CriteriaBuilder criteriaBuilder, Root<Task> taskRoot) {
@@ -175,16 +168,47 @@ public class TaskSearchRepository {
                                                          Root<Task> taskRoot,
                                                          Predicate searchPredicate,
                                                          Predicate countPredicate,
-                                                         FilterSort filterSort,
+                                                         TaskSearchFilterVo taskSearchFilterVo,
                                                          Pageable pageable) {
-
         taskCriteriaQuery.where(searchPredicate).distinct(true);
-        setOrder(criteriaBuilder, taskCriteriaQuery, taskRoot, filterSort);
+        setOrder(criteriaBuilder, taskCriteriaQuery, taskRoot, taskSearchFilterVo);
 
-        List<Task> result = entityManager.createQuery(taskCriteriaQuery)
-                .setFirstResult((int) pageable.getOffset())
-                .setMaxResults(pageable.getPageSize())
-                .getResultList();
+//        List<Task> result = entityManager.createQuery(taskCriteriaQuery)
+//                .setFirstResult((int) pageable.getOffset())
+//                .setMaxResults(pageable.getPageSize())
+//                .getResultList();
+
+        List<Task> result;
+        if (FilterSort.TASK_BOARD_ORDER.equals(taskSearchFilterVo.getSort())) {
+            // Create a new query for the tuple result to be type-safe
+            CriteriaQuery<Object[]> tupleQuery = criteriaBuilder.createQuery(Object[].class);
+            Root<Task> tupleRoot = tupleQuery.from(Task.class);
+            Join<Object, Object> boardEntryJoin = tupleRoot.join("taskBoardEntries");
+
+            // Re-create the predicate for the new root and set distinct
+            Predicate tupleSearchPredicate = createSearchPredicate(taskSearchFilterVo, criteriaBuilder, tupleRoot);
+            Assert.notNull(tupleSearchPredicate, "Search predicate cannot be null for tuple query");
+            tupleQuery.where(tupleSearchPredicate).distinct(true);
+
+            // Set the multiselect and order
+            tupleQuery.multiselect(tupleRoot, boardEntryJoin.get("order"));
+            tupleQuery.orderBy(criteriaBuilder.asc(boardEntryJoin.get("order")));
+
+            List<Object[]> tuples = entityManager.createQuery(tupleQuery)
+                    .setFirstResult((int) pageable.getOffset())
+                    .setMaxResults(pageable.getPageSize())
+                    .getResultList();
+            result = new ArrayList<>();
+            tuples.forEach(tuple -> result.add((Task) tuple[0]));
+        } else {
+            Assert.notNull(searchPredicate, "Search predicate cannot be null");
+            taskCriteriaQuery.where(searchPredicate).distinct(true);
+            setOrder(criteriaBuilder, taskCriteriaQuery, taskRoot, taskSearchFilterVo);
+            result = entityManager.createQuery(taskCriteriaQuery)
+                    .setFirstResult((int) pageable.getOffset())
+                    .setMaxResults(pageable.getPageSize())
+                    .getResultList();
+        }
 
 
         countQuery.where(countPredicate);
@@ -193,7 +217,8 @@ public class TaskSearchRepository {
         return new PageImpl<>(result, pageable, count);
     }
 
-    private void setOrder(CriteriaBuilder criteriaBuilder, CriteriaQuery<Task> taskCriteriaQuery, Root<Task> taskRoot, FilterSort filterSort) {
+    private void setOrder(CriteriaBuilder criteriaBuilder, CriteriaQuery<Task> taskCriteriaQuery, Root<Task> taskRoot, TaskSearchFilterVo taskSearchFilterVo) {
+        FilterSort filterSort = taskSearchFilterVo.getSort();
         if (FilterSort.IDATE_ASC.equals(filterSort)) {
             taskCriteriaQuery.orderBy(criteriaBuilder.asc(taskRoot.get("createdDate")));
         } else if (FilterSort.IDATE_DESC.equals(filterSort)) {
@@ -202,6 +227,8 @@ public class TaskSearchRepository {
             taskCriteriaQuery.orderBy(criteriaBuilder.desc(taskRoot.get("assignedDate")));
         } else if (FilterSort.ASSIGNED_DATE_ASC.equals(filterSort)) {
             taskCriteriaQuery.orderBy(criteriaBuilder.asc(taskRoot.get("assignedDate")));
+        } else if (FilterSort.TASK_BOARD_ORDER.equals(filterSort) && !CollectionUtils.isEmpty(taskSearchFilterVo.getTaskboardIds())) {
+            taskSearchCriteriaBuilder.addOrderByTaskBoardEntryOrder(criteriaBuilder, taskCriteriaQuery, taskRoot, taskSearchFilterVo);
         }
     }
 }
