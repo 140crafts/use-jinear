@@ -31,7 +31,7 @@ public class AccountPasswordController {
 
     @PostMapping("/reset/complete")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse completeResetPassword(@RequestBody CompleteResetPasswordRequest completeResetPasswordRequest) {
+    public BaseResponse completeResetPassword(@Valid @RequestBody CompleteResetPasswordRequest completeResetPasswordRequest) {
         return accountPasswordManager.validateAndResetPassword(completeResetPasswordRequest);
     }
 }

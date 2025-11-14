@@ -9,7 +9,8 @@ public enum FilterSort {
     IDATE_DESC(0),
     IDATE_ASC(1),
     ASSIGNED_DATE_DESC(2),
-    ASSIGNED_DATE_ASC(3);
+    ASSIGNED_DATE_ASC(3),
+    TASK_BOARD_ORDER(4);
 
     private final int value;
 }

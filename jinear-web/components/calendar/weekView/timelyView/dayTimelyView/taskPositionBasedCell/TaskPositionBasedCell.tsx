@@ -43,10 +43,16 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
     height: cell.height,
     width: `${cell.width}%`
   };
-  const topicColor = calendarEvent?.relatedTask?.topic?.color || "transparent";
+
+  const topicColor = calendarEvent?.relatedTask?.topic?.color ? `#${calendarEvent?.relatedTask?.topic?.color}` : undefined;
+  const relatedBoardColors = calendarEvent?.relatedTask?.taskBoardEntries?.map(taskBoardEntry => `#${taskBoardEntry.taskBoard.color}`) ?? [];
+  const limitedBoardColors = relatedBoardColors?.length > 3 ? relatedBoardColors.slice(0, 3) : relatedBoardColors;
+  const cellColorTags = topicColor ? [...limitedBoardColors, topicColor] : limitedBoardColors;
+
   const topicCellStyle = {
-    borderLeftColor: `#${topicColor}`
+    // borderLeftColor: `#${topicColor}`
   };
+
   const zIndexStyle = highlightedZIndex ? { zIndex: 5 } : { zIndex: undefined };
 
   useDebouncedEffect(
@@ -110,6 +116,15 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({ cell }) =
       onMouseEnter={_hoverStart}
       onMouseOut={_hoverEnd}
     >
+      <div className={styles.colorLineContainer}>
+        {cellColorTags.map((color, i) =>
+          <div
+            key={`${calendarEvent?.calendarEventId}-color-tag-${color}-${i}`}
+            className={styles.colorLine}
+            style={{ backgroundColor: color }} />
+        )}
+      </div>
+
       <div
         className={cn(styles.title, isCompleted && styles["title-line-through"])}
         onMouseEnter={_hoverStart}

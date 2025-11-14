@@ -78,14 +78,18 @@ const Cell: React.FC<CellProps> = ({ id, weight, calendarEvent, weekStart, weekE
     (calendarEvent.relatedTask?.workflowStatus.workflowStateGroup == "COMPLETED" ||
       calendarEvent.relatedTask?.workflowStatus.workflowStateGroup == "CANCELLED");
 
-  const topicColor = calendarEvent?.relatedTask?.topic?.color ? `#${calendarEvent?.relatedTask?.topic?.color}` : "transparent";
+  const topicColor = calendarEvent?.relatedTask?.topic?.color ? `#${calendarEvent?.relatedTask?.topic?.color}` : undefined;
+  const relatedBoardColors = calendarEvent?.relatedTask?.taskBoardEntries?.map(taskBoardEntry => `#${taskBoardEntry.taskBoard.color}`) ?? [];
+  const limitedBoardColors = relatedBoardColors?.length > 3 ? relatedBoardColors.slice(0, 3) : relatedBoardColors;
+  const cellColorTags = topicColor ? [...limitedBoardColors, topicColor] : limitedBoardColors;
+
   const topicCellStyle = {
-    flex: weight,
-    borderLeftColor: topicColor,
-    borderLeftStyle: "solid",
-    borderLeftWidth: 2.1,
-    borderLeftLeftRadius: 0,
-    borderLeftRightRadius: 0
+    flex: weight
+    // borderLeftColor: topicColor,
+    // borderLeftStyle: "solid",
+    // borderLeftWidth: 2.1,
+    // borderLeftLeftRadius: 0,
+    // borderLeftRightRadius: 0
   };
 
   const _hoverStart = () => {
@@ -164,6 +168,15 @@ const Cell: React.FC<CellProps> = ({ id, weight, calendarEvent, weekStart, weekE
       {isStartDateNotInViewingPeriodAndTodayIsFirstDayOfViewingPeriod && (
         <div className={cn(styles["arrow-right"], isGhostEvent && styles["ghost-arrow-right"])}></div>
       )}
+
+      <div className={styles.colorLineContainer}>
+        {cellColorTags.map((color, i) =>
+          <div
+            key={`${id}-color-tag-${color}-${i}`}
+            className={styles.colorLine}
+            style={{ backgroundColor: color }} />
+        )}
+      </div>
 
       {calendarEvent && <div className={styles.iconContainer}>{<Icon className={styles.icon} size={iconSize} />}</div>}
 

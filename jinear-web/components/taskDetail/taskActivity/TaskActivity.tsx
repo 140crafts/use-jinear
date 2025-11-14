@@ -179,7 +179,7 @@ const TaskActivity: React.FC<TaskActivityProps> = ({ activity }) => {
                   variant={ButtonVariants.filled}
                   href={
                     activity.workspaceDto && activity.teamDto
-                      ? `/${activity.workspaceDto?.username}/${activity.teamDto?.username}/task-boards/${activity.taskBoard?.taskBoardId}`
+                      ? `/${activity.workspaceDto?.username}/tasks/${activity.teamDto?.username}/task-boards/${activity.taskBoard?.taskBoardId}`
                       : undefined
                   }
                 >

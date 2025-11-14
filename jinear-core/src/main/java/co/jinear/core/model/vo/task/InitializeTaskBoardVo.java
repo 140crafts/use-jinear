@@ -16,4 +16,5 @@ public class InitializeTaskBoardVo {
     private String ownerId;
     private String title;
     private ZonedDateTime dueDate;
+    private String color;
 }

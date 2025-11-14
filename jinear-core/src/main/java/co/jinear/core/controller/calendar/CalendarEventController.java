@@ -6,8 +6,10 @@ import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.calendar.CalendarEventListingResponse;
 import co.jinear.core.model.response.calendar.CalendarShareableKeyResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -35,9 +37,10 @@ public class CalendarEventController {
         return calendarEventManager.refreshShareableKey(workspaceId);
     }
 
+    @Validated
     @GetMapping("/exports/{shareableKey}")
     @ResponseStatus(HttpStatus.OK)
-    public String exportWorkspaceCalendarEvents(@PathVariable String shareableKey) {
+    public String exportWorkspaceCalendarEvents(@PathVariable @Size(max = 64) String shareableKey) {
         return calendarEventManager.exportWorkspaceCalendarEvents(shareableKey);
     }
 }

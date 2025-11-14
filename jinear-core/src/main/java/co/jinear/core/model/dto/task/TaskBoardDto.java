@@ -5,6 +5,7 @@ import co.jinear.core.model.enumtype.task.TaskBoardStateType;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.time.ZonedDateTime;
 
@@ -20,4 +21,6 @@ public class TaskBoardDto extends BaseDto {
     private String title;
     private ZonedDateTime dueDate;
     private TaskBoardStateType state;
+    @Nullable
+    private String color;
 }

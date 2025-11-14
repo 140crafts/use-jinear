@@ -22,4 +22,6 @@ public class TaskBoardInitializeRequest extends BaseRequest {
     private String title;
     @Nullable
     private ZonedDateTime dueDate;
+    @Nullable
+    private String color;
 }

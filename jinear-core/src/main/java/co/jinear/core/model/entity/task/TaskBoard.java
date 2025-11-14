@@ -43,6 +43,9 @@ public class TaskBoard extends BaseEntity {
     @Convert(converter = TaskBoardStateTypeConverter.class)
     private TaskBoardStateType state;
 
+    @Column(name = "color")
+    private String color;
+
     @OneToMany(mappedBy = "taskBoard")
     @Where(clause = "passive_id is null")
     @OrderBy("order asc")

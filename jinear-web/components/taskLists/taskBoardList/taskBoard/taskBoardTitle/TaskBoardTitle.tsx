@@ -3,7 +3,12 @@ import { useInitializeTaskBoardEntryMutation } from "@/api/taskBoardEntryApi";
 
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { useCurrentAccountsTeamRoleIsAdmin } from "@/hooks/useCurrentAccountsTeamRole";
-import { useUpdateDueDateMutation, useUpdateStateMutation, useUpdateTitleMutation } from "@/api/taskBoardApi";
+import {
+  useUpdateColorMutation,
+  useUpdateDueDateMutation,
+  useUpdateStateMutation,
+  useUpdateTitleMutation
+} from "@/api/taskBoardApi";
 import {
   changeLoadingModalVisibility,
   closeBasicTextInputModal,
@@ -17,10 +22,10 @@ import { useAppDispatch } from "@/store/store";
 import cn from "classnames";
 import { differenceInDays, format, isToday, startOfToday } from "date-fns";
 import useTranslation from "@/locals/useTranslation";
-import React, { useEffect, useMemo } from "react";
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import {
   IoArrowForward,
-  IoList,
+  IoList, IoLockClosed,
   IoLockClosedOutline,
   IoLockOpenOutline,
   IoPencil,
@@ -29,6 +34,11 @@ import {
 import styles from "./TaskBoardTitle.module.scss";
 import { useSetQueryState } from "@/hooks/useQueryState";
 import { LuPenSquare, LuSearch } from "react-icons/lu";
+import TaskBoardQuickFilterBar
+  from "@/components/taskLists/taskBoardList/taskBoard/taskBoardQuickFilterBar/TaskBoardQuickFilterBar";
+import getCssVariable from "@/utils/cssHelper";
+import { useDebouncedEffect } from "@/hooks/useDebouncedEffect";
+import { setTaskBoardDefaultDisplayFormat } from "@/components/taskLists/taskBoardList/taskBoard/TaskBoard";
 
 interface TaskBoardTitleProps {
   taskBoard: TaskBoardDto;
@@ -63,6 +73,11 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
   const [updateState, { isLoading: isUpdateStateLoading }] = useUpdateStateMutation();
   const [updateDueDate, { isLoading: isUpdateDueDateLoading }] = useUpdateDueDateMutation();
   const [updateTitle, { isLoading: isUpdateTitleLoading }] = useUpdateTitleMutation();
+  const [updateColor, { isLoading: isUpdateColorLoading }] = useUpdateColorMutation();
+
+  const [boardColor, setBoardColor] = useState<string | null | undefined>(taskBoard?.color);
+
+  useDebouncedEffect(() => boardColor && updateColor({ taskBoardId, color: boardColor }), [boardColor], 500);
 
   useEffect(() => {
     dispatch(
@@ -162,14 +177,30 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
 
   const changeDisplayFormatToList = () => {
     setQueryState("displayFormat", "list");
+    setTaskBoardDefaultDisplayFormat(taskBoardId, "list");
   };
 
   const changeDisplayFormatToWfsColumn = () => {
     setQueryState("displayFormat", "column");
+    setTaskBoardDefaultDisplayFormat(taskBoardId, "column");
   };
+
+  const onColorChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const color = event.target.value;
+    setBoardColor(color.replace("#", ""));
+  };
+
   return (
     <div className={cn(styles.listTitle, boardState == "CLOSED" && styles.closedListTitle)}>
       <div className={styles.titleLabelContainer}>
+        <div data-tooltip={t(`taskBoardPickColorButtonTooltip`)}>
+          <input
+            type={"color"}
+            value={boardColor ? `#${boardColor}` : getCssVariable("--c-primary-shade-1")}
+            onChange={onColorChange}
+            disabled={boardState == "CLOSED"}
+          />
+        </div>
         <Button
           className={styles.listTitleButton}
           key={`board-title-${taskBoardId}`}
@@ -197,7 +228,7 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
               <Button
                 onClick={changeDisplayFormatToList}
                 variant={displayFormat == "list" ? ButtonVariants.filled2 : ButtonVariants.filled}
-                className={styles.button}
+                className={styles.displayFormatButton}
                 data-tooltip-right={t("taskListTitleAndViewTypeListTooltip")}
                 heightVariant={ButtonHeight.short}
               >
@@ -207,7 +238,7 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
               <Button
                 onClick={changeDisplayFormatToWfsColumn}
                 variant={displayFormat == "column" ? ButtonVariants.filled2 : ButtonVariants.filled}
-                className={styles.button}
+                className={styles.displayFormatButton}
                 data-tooltip-right={t("taskListTitleAndViewTypeStatusColumnsTooltip")}
                 heightVariant={ButtonHeight.short}
               >
@@ -228,15 +259,21 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
           >
             {dateDiff ? dateDiff : t("taskBoardAssignDueDate")}
           </Button>
-          <Button variant={ButtonVariants.filled} onClick={toggleBoardState} disabled={!isTeamAdmin}>
-            {boardState == "OPEN" ? <IoLockOpenOutline className={"icon"} /> :
-              <IoLockClosedOutline className={"icon"} />}
+          <Button
+            variant={ButtonVariants.filled}
+            onClick={toggleBoardState}
+            disabled={!isTeamAdmin}
+            data-tooltip-right={t(`taskBoardLockButtonTooltip_${boardState}`)}
+          >
+            {boardState == "OPEN" ? <IoLockClosedOutline className={"icon"} /> :
+              <IoLockClosed className={"icon"} />}
           </Button>
           <Button
             disabled={boardState != "OPEN"}
             variant={ButtonVariants.filled}
             heightVariant={ButtonHeight.short}
             onClick={openSearchTaskModal}
+            data-tooltip-right={t(`taskBoardSearchTaskButtonTooltip`)}
           >
             {/*{t("taskBoardAddTaskButtonLabel")}*/}
             <LuSearch className={"icon"} />
@@ -246,15 +283,23 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
             variant={ButtonVariants.filled}
             heightVariant={ButtonHeight.short}
             onClick={openNewTaskModal}
+            data-tooltip-right={t(`taskBoardCreateTaskButtonTooltip`)}
           >
             {/*{t("taskBoardAddTaskButtonLabel")}*/}
             <LuPenSquare className={"icon"} />
           </Button>
-          <Button variant={ButtonVariants.filled} href={boardLink}>
+          <Button
+            variant={ButtonVariants.filled}
+            href={boardLink}
+            data-tooltip-right={t(`taskBoardGoToButtonTooltip`)}
+          >
             <IoArrowForward className={"icon"} />
           </Button>
         </div>
 
+        <div className={styles.actionBarRow}>
+          <TaskBoardQuickFilterBar team={team} taskBoardId={taskBoard.taskBoardId} />
+        </div>
 
       </div>
     </div>

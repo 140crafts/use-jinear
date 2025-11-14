@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { forwardRef, useEffect, useImperativeHandle, useState } from "react";
 import styles from "./TeamPickerButton.module.css";
 import useTranslation from "@/locals/useTranslation";
 import { useAppDispatch } from "@/store/store";
@@ -8,6 +8,13 @@ import { popTeamPickerModalV2 } from "@/slice/modalSlice";
 import Logger from "@/utils/logger";
 import SelectDeselectButton from "@/components/selectDeselectButton/SelectDeselectButton";
 import { LuUsers } from "react-icons/lu";
+import {
+  ITeamMemberPickerButtonRef
+} from "@/components/form/newTaskForm/teamMemberPickerButton/TeamMemberPickerButton";
+
+export interface ITeamPickerButtonRef {
+  popPicker: () => void;
+}
 
 interface TeamPickerButtonProps {
   workspaceId?: string;
@@ -22,20 +29,25 @@ interface TeamPickerButtonProps {
 
 const logger = Logger("TeamPickerButton");
 
-const TeamPickerButton: React.FC<TeamPickerButtonProps> = ({
-                                                             workspaceId,
-                                                             initialSelectedTeams = [],
-                                                             multiple,
-                                                             onPick,
-                                                             useJoinedNameOnMultiplePick,
-                                                             label,
-                                                             withoutUnpickButton = false,
-                                                             selectedLabel
-                                                           }) => {
+
+const TeamPickerButton = ({
+                            workspaceId,
+                            initialSelectedTeams = [],
+                            multiple,
+                            onPick,
+                            useJoinedNameOnMultiplePick,
+                            label,
+                            withoutUnpickButton = false,
+                            selectedLabel
+                          }: TeamPickerButtonProps, ref: any) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [currentPick, setCurrentPick] = useState<TeamDto[]>([]);
   const joinedName = currentPick?.map(el => el.tag).join(", ");
+
+  useImperativeHandle(ref, () => ({
+    popPicker
+  }));
 
   useEffect(() => {
     setCurrentPick(initialSelectedTeams);
@@ -99,5 +111,5 @@ const TeamPickerButton: React.FC<TeamPickerButtonProps> = ({
     </div>
   );
 };
-
-export default TeamPickerButton;
+export default forwardRef<ITeamPickerButtonRef, TeamPickerButtonProps>(TeamPickerButton);
+// export default TeamPickerButton;

@@ -1,5 +1,6 @@
 package co.jinear.core.config.security;
 
+import co.jinear.core.config.properties.CorsProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,9 +19,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -29,6 +27,7 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtRequestFilter jwtRequestFilter;
+    private final CorsProperties corsProperties;
 
     private static final String LOGOUT_ENDPOINT = "/v1/auth/logout";
     private static final String[] PUBLIC_ENDPOINTS = new String[]{
@@ -41,7 +40,6 @@ public class SecurityConfiguration {
             "/v1/account/register/email",
             "/v1/account/password/reset/initialize",
             "/v1/account/password/reset/complete",
-            "/v1/service-record/with-handle/{handle}",
             "/v1/workspace/member/invitation/respond",
             "/v1/workspace/member/invitation/info/{token}",
             "/v1/oauth/google/redirect-info/login",
@@ -54,11 +52,6 @@ public class SecurityConfiguration {
             "/v1/project/post/comment/list/project/{projectId}/post/{postId}",
             "/v1/debug/**"
     };
-
-    private static final List<String> CORS_ALLOWED_DOMAINS = Arrays.asList(
-            "http://localhost:3000/*",
-            "*"
-    );
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -102,9 +95,9 @@ public class SecurityConfiguration {
     CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
-        corsConfiguration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE"));
-        corsConfiguration.setAllowCredentials(true);
-        corsConfiguration.setAllowedOriginPatterns(CORS_ALLOWED_DOMAINS);
+        corsConfiguration.setAllowedMethods(corsProperties.getAllowedMethods());
+        corsConfiguration.setAllowCredentials(corsProperties.getAllowCredentials());
+        corsConfiguration.setAllowedOriginPatterns(corsProperties.getAllowedOriginPatterns());
         source.registerCorsConfiguration("/**", corsConfiguration);
         return source;
     }

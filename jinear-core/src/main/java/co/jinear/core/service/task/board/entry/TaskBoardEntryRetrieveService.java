@@ -1,8 +1,10 @@
 package co.jinear.core.service.task.board.entry;
 
+import co.jinear.core.converter.task.PlainTaskBoardEntryDtoConverter;
 import co.jinear.core.converter.task.TaskBoardEntryDtoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
+import co.jinear.core.model.dto.task.PlainTaskBoardEntryDto;
 import co.jinear.core.model.dto.task.TaskBoardEntryDto;
 import co.jinear.core.model.entity.task.TaskBoardEntry;
 import co.jinear.core.repository.TaskBoardEntryRepository;
@@ -17,6 +19,7 @@ public class TaskBoardEntryRetrieveService {
 
     private final TaskBoardEntryRepository taskBoardEntryRepository;
     private final TaskBoardEntryDtoConverter taskBoardEntryDtoConverter;
+    private final PlainTaskBoardEntryDtoConverter plainTaskBoardEntryDtoConverter;
 
     public TaskBoardEntry retrieveEntity(String taskBoardEntryId) {
         log.info("Retrieve task board entry entity has started. taskBoardEntryId: {}", taskBoardEntryId);
@@ -28,6 +31,13 @@ public class TaskBoardEntryRetrieveService {
         log.info("Retrieve task board entry has started. taskBoardEntryId: {}", taskBoardEntryId);
         return taskBoardEntryRepository.findByTaskBoardEntryIdAndPassiveIdIsNull(taskBoardEntryId)
                 .map(taskBoardEntryDtoConverter::map)
+                .orElseThrow(NotFoundException::new);
+    }
+
+    public PlainTaskBoardEntryDto retrievePlain(String taskBoardEntryId) {
+        log.info("Retrieve task board entry has started. taskBoardEntryId: {}", taskBoardEntryId);
+        return taskBoardEntryRepository.findByTaskBoardEntryIdAndPassiveIdIsNull(taskBoardEntryId)
+                .map(plainTaskBoardEntryDtoConverter::mapPlain)
                 .orElseThrow(NotFoundException::new);
     }
 

@@ -4,7 +4,7 @@
     align-items: center !important;
     justify-content: space-between !important;
     flex: 1 !important;
-    padding-left: 1.25rem !important;
+    /*padding-left: 1.25rem !important;*/
     text-align: left !important;
     gap: .5rem;
 }

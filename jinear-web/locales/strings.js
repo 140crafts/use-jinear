@@ -2005,12 +2005,20 @@ const translations = {
     tr: "Panolar"
   },
   taskBoardsListEmptyLabel: {
-    en: "There isn't any task board.",
-    tr: "Herhangi bir görev panosu bulunamadı."
+    en: "There isn't any task board. You can group your tasks, assign deadlines and order them in boards.",
+    tr: "Herhangi bir görev panosu bulunamadı. Panolar ile görevlerinizi gruplandırabilir, son tarih atayabilir ve sıralandırabilirsiniz."
+  },
+  taskBoardsListEmptyButton: {
+    en: "Create New Board",
+    tr: "Yeni Pano Oluştur"
   },
   taskBoardEmptyLabel: {
     en: "There isn't any task in this board.",
     tr: "Bu panoda herhangi bir görev bulunamadı."
+  },
+  taskBoardIsClosed: {
+    en: "This task board is closed.",
+    tr: "Pano kapalı."
   },
   taskBoardAddTaskButtonLabel: {
     en: "Add Task",
@@ -2239,6 +2247,30 @@ const translations = {
   taskListTitleAndViewTypeStatusColumnsLabel: {
     en: "Status Columns",
     tr: "Durum"
+  },
+  taskBoardLockButtonTooltip_OPEN: {
+    en: "Lock board to changes",
+    tr: "Panoyu düzenlemeye kapat"
+  },
+  taskBoardLockButtonTooltip_CLOSED: {
+    en: "Unlock board to changes",
+    tr: "Panoyu düzenlemeye aç"
+  },
+  taskBoardSearchTaskButtonTooltip: {
+    en: "Search & add tasks",
+    tr: "Görev ara ve panoya ekle"
+  },
+  taskBoardCreateTaskButtonTooltip: {
+    en: "Create & add tasks",
+    tr: "Görev oluştur ve panoya ekle"
+  },
+  taskBoardGoToButtonTooltip: {
+    en: "Go to board",
+    tr: "Panoya git"
+  },
+  taskBoardPickColorButtonTooltip: {
+    en: "Pick color for board",
+    tr: "Renk Seç"
   },
   activeTasksPageTitle: {
     en: "Active Tasks",
@@ -3746,7 +3778,7 @@ const translations = {
   },
   threadsEmptyText: {
     en: "This channel is ready for discussion! Be the first to start a new thread to organize a conversation around a specific topic.",
-    tr: "LBu kanal sohbete hazır! Belirli bir konu etrafında bir sohbet düzenlemek için ilk başlığı siz başlatın."
+    tr: "Bu kanal sohbete hazır! Belirli bir konu etrafında bir sohbet düzenlemek için ilk başlığı siz başlatın."
   },
   newChannelButton: {
     en: "Create Channel",

@@ -10,7 +10,8 @@
   pointer-events: none;
   transition: background-color var(--fade);
   z-index: 1;
-  gap: 0.125rem;
+  //gap: 0.125rem;
+  overflow: hidden;
 }
 
 .fill {
@@ -136,6 +137,17 @@
   display: block;
 }
 
+.colorLineContainer {
+  display: flex;
+  flex-direction: row;
+  height: var(--calendar-event-height)
+}
+
+.colorLine {
+  min-width: .25rem;
+  height: 100%;
+}
+
 @media (max-width: $tablet) {
   .iconContainer {
     min-width: 3px;
@@ -143,5 +155,9 @@
 
   .icon {
     display: none;
+  }
+
+  .colorLine {
+    min-width: .125rem;
   }
 }

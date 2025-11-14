@@ -12,6 +12,7 @@ import co.jinear.core.service.task.board.TaskBoardLockService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -72,6 +73,20 @@ public class TaskBoardEntryOperationService {
         taskBoardEntry.setOrder(newOrder);
         TaskBoardEntry saved = taskBoardEntryRepository.save(taskBoardEntry);
         return taskBoardEntryDtoConverter.map(saved);
+    }
+
+    @Transactional
+    public TaskBoardEntryDto changeFilteredOrder(String taskBoardEntryId, String taskBoardEntryIdBefore, String taskBoardEntryIdAfter) {
+        if (StringUtils.isNotBlank(taskBoardEntryIdBefore)) {
+            TaskBoardEntry taskBoardEntryOneBefore = taskBoardEntryRetrieveService.retrieveEntity(taskBoardEntryIdBefore);
+            Integer desiredNextOrder = taskBoardEntryOneBefore.getOrder() + 1;
+            return changeOrder(taskBoardEntryId, desiredNextOrder);
+        } else if (StringUtils.isNotBlank(taskBoardEntryIdAfter)) {
+            TaskBoardEntry taskBoardEntryOneAfter = taskBoardEntryRetrieveService.retrieveEntity(taskBoardEntryIdAfter);
+            Integer desiredNextOrder = taskBoardEntryOneAfter.getOrder() - 1;
+            return changeOrder(taskBoardEntryId, desiredNextOrder);
+        }
+        throw new IllegalArgumentException("TaskBoardEntryIdBefore or TaskBoardEntryIdAfter is null.");
     }
 
     private TaskBoardEntryDto initializeEntry(InitializeTaskBoardEntryVo initializeTaskBoardEntryVo) {

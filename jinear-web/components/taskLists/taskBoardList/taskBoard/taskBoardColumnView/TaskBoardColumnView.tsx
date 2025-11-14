@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import styles from "./TaskBoardColumnView.module.css";
 import TeamWorkflowStatusBoard from "@/components/teamWorkflowStatusBoard/TeamWorkflowStatusBoard";
-import { useRetrieveFromTaskBoardQuery } from "@/api/taskBoardEntryApi";
+import { useFilterFromTaskBoardQuery, useRetrieveFromTaskBoardQuery } from "@/api/taskBoardEntryApi";
 import cn from "classnames";
+import { queryStateJsonObjectParser, useQueryState } from "@/hooks/useQueryState";
+import {
+  ITaskBoardUrlStateMap
+} from "@/components/taskLists/taskBoardList/taskBoard/taskBoardQuickFilterBar/TaskBoardQuickFilterBar";
 
 interface TaskBoardColumnViewProps {
   taskBoardId: string;
@@ -16,9 +20,13 @@ const TaskBoardColumnView: React.FC<TaskBoardColumnViewProps> = ({
                                                                    className
                                                                  }) => {
   const [page, setPage] = useState<number>(0);
-  const { data: taskBoardElementsResponse, isFetching, isLoading } = useRetrieveFromTaskBoardQuery({
+  const taskBoardFilterMap = useQueryState<ITaskBoardUrlStateMap>("board-filter-map", queryStateJsonObjectParser) ?? {};
+  const thisBoardsFilter = taskBoardFilterMap[taskBoardId] ?? {};
+
+  const { data: taskBoardElementsResponse, isFetching, isLoading } = useFilterFromTaskBoardQuery({
     taskBoardId,
-    page
+    page,
+    body: thisBoardsFilter
   });
 
   return (

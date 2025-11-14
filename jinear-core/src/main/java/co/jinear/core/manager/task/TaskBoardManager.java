@@ -6,14 +6,12 @@ import co.jinear.core.model.dto.task.TaskBoardDto;
 import co.jinear.core.model.request.task.*;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.TaskBoardResponse;
-import co.jinear.core.model.vo.task.InitializeTaskBoardVo;
-import co.jinear.core.model.vo.task.UpdateTaskBoardDueDateVo;
-import co.jinear.core.model.vo.task.UpdateTaskBoardStateVo;
-import co.jinear.core.model.vo.task.UpdateTaskBoardTitleVo;
+import co.jinear.core.model.vo.task.*;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.board.TaskBoardOperationService;
 import co.jinear.core.validator.task.TaskBoardAccessValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -63,6 +61,15 @@ public class TaskBoardManager {
         log.info("Update task board state has started. currentAccountId: {}", currentAccountId);
         UpdateTaskBoardStateVo updateTaskBoardStateVo = taskBoardUpdateRequestConverter.convert(taskBoardUpdateStateRequest);
         taskBoardOperationService.updateState(updateTaskBoardStateVo);
+        return new BaseResponse();
+    }
+
+    public BaseResponse updateColor(TaskBoardUpdateColorRequest taskBoardUpdateColorRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        validateHasTaskBoardStateChangeAccess(taskBoardUpdateColorRequest, currentAccountId);
+        log.info("Update task board color has started. currentAccountId: {}", currentAccountId);
+        UpdateTaskBoardColorVo updateTaskBoardColorVo = taskBoardUpdateRequestConverter.convert(taskBoardUpdateColorRequest);
+        taskBoardOperationService.updateColor(updateTaskBoardColorVo);
         return new BaseResponse();
     }
 

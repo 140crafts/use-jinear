@@ -3,6 +3,7 @@ package co.jinear.core.controller.account;
 import co.jinear.core.manager.account.AccountRegisterManager;
 import co.jinear.core.model.request.account.register.RegisterViaMailRequest;
 import co.jinear.core.model.response.BaseResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class AccountRegisterController {
 
     @PostMapping("/email")
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse registerViaMail(@RequestBody RegisterViaMailRequest registerViaMailRequest) {
+    public BaseResponse registerViaMail(@Valid @RequestBody RegisterViaMailRequest registerViaMailRequest) {
         return accountRegisterManager.registerViaMail(registerViaMailRequest);
     }
 }

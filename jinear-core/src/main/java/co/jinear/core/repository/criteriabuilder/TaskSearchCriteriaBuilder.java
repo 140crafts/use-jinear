@@ -1,9 +1,12 @@
 package co.jinear.core.repository.criteriabuilder;
 
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.entity.task.TaskBoardEntry;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
+import co.jinear.core.model.vo.task.TaskSearchFilterVo;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -143,11 +146,22 @@ public class TaskSearchCriteriaBuilder {
         }
     }
 
-    public void addTaskBoardIdList(List<String> taskBoardIds, Root<Task> root, List<Predicate> predicateList) {
+    public Join<Task, TaskBoardEntry> addTaskBoardIdList(List<String> taskBoardIds, Root<Task> root, List<Predicate> predicateList) {
         if (Objects.nonNull(taskBoardIds) && !taskBoardIds.isEmpty()) {
             Join<Task, TaskBoardEntry> boardEntryJoin = root.join("taskBoardEntries");
             predicateList.add(boardEntryJoin.get("taskBoardId").in(taskBoardIds));
+            return boardEntryJoin;
         }
+        return null;
+    }
+
+    public void addOrderByTaskBoardEntryOrder(CriteriaBuilder criteriaBuilder, CriteriaQuery<?> taskCriteriaQuery, Join<Task, TaskBoardEntry> boardEntryJoin, TaskSearchFilterVo taskSearchFilterVo) {
+        if (Objects.isNull(taskSearchFilterVo.getTaskboardIds()) || taskSearchFilterVo.getTaskboardIds().size() != 1) {
+            log.error("Order by task board entry order can be only used with single task board");
+            throw new BusinessException();
+        }
+        // The multiselect is handled in the repository for the tuple query
+        taskCriteriaQuery.orderBy(criteriaBuilder.asc(boardEntryJoin.get("order")));
     }
 
     private void addIntersectingTasksPredicates(ZonedDateTime start, ZonedDateTime end, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {

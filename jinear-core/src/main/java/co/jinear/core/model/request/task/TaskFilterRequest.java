@@ -56,4 +56,6 @@ public class TaskFilterRequest extends BaseRequest {
     private List<String> projectIds;
     @Nullable
     private List<String> milestoneIds;
+    @Nullable
+    private List<String> taskboardIds;
 }
