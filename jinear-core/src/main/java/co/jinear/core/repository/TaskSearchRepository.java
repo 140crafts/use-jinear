@@ -2,6 +2,7 @@ package co.jinear.core.repository;
 
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.entity.task.Task;
+import co.jinear.core.model.entity.task.TaskBoardEntry;
 import co.jinear.core.model.enumtype.FilterSort;
 import co.jinear.core.model.enumtype.team.TeamMemberRoleType;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
@@ -88,7 +89,7 @@ public class TaskSearchRepository {
             taskSearchCriteriaBuilder.addDatePredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addProjectIdList(taskSearchFilterVo.getProjectIds(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addMilestoneIdList(taskSearchFilterVo.getMilestoneIds(), criteriaBuilder, taskRoot, predicateList);
-            taskSearchCriteriaBuilder.addTaskBoardIdList(taskSearchFilterVo.getTaskboardIds(), taskRoot, predicateList);
+            addTaskBoardIdListWithJoin(taskSearchFilterVo.getTaskboardIds(), taskRoot, predicateList);
             return criteriaBuilder.and(predicateList.toArray(Predicate[]::new));
         }
         return null;
@@ -152,13 +153,20 @@ public class TaskSearchRepository {
                 taskSearchCriteriaBuilder.addDatePredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addProjectIdList(taskSearchFilterVo.getProjectIds(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addMilestoneIdList(taskSearchFilterVo.getMilestoneIds(), criteriaBuilder, taskRoot, teamPredicateList);
-                taskSearchCriteriaBuilder.addTaskBoardIdList(taskSearchFilterVo.getTaskboardIds(), taskRoot, teamPredicateList);
+                addTaskBoardIdListWithJoin(taskSearchFilterVo.getTaskboardIds(), taskRoot, teamPredicateList);
                 Predicate teamPredicate = criteriaBuilder.and(teamPredicateList.toArray(Predicate[]::new));
                 mainPredicateList.add(teamPredicate);
             });
             return criteriaBuilder.or(mainPredicateList.toArray(Predicate[]::new));
         }
         return null;
+    }
+
+    private void addTaskBoardIdListWithJoin(List<String> taskBoardIds, Root<Task> root, List<Predicate> predicateList) {
+        if (Objects.nonNull(taskBoardIds) && !taskBoardIds.isEmpty()) {
+            Join<Task, TaskBoardEntry> boardEntryJoin = root.join("taskBoardEntries");
+            predicateList.add(boardEntryJoin.get("taskBoardId").in(taskBoardIds));
+        }
     }
 
     @SuppressWarnings("java:S107")
@@ -170,40 +178,35 @@ public class TaskSearchRepository {
                                                          Predicate countPredicate,
                                                          TaskSearchFilterVo taskSearchFilterVo,
                                                          Pageable pageable) {
-        taskCriteriaQuery.where(searchPredicate).distinct(true);
-        setOrder(criteriaBuilder, taskCriteriaQuery, taskRoot, taskSearchFilterVo);
-
-//        List<Task> result = entityManager.createQuery(taskCriteriaQuery)
-//                .setFirstResult((int) pageable.getOffset())
-//                .setMaxResults(pageable.getPageSize())
-//                .getResultList();
-
         List<Task> result;
         if (FilterSort.TASK_BOARD_ORDER.equals(taskSearchFilterVo.getSort())) {
             // Create a new query for the tuple result to be type-safe
             CriteriaQuery<Object[]> tupleQuery = criteriaBuilder.createQuery(Object[].class);
             Root<Task> tupleRoot = tupleQuery.from(Task.class);
-            Join<Object, Object> boardEntryJoin = tupleRoot.join("taskBoardEntries");
 
             // Re-create the predicate for the new root and set distinct
             Predicate tupleSearchPredicate = createSearchPredicate(taskSearchFilterVo, criteriaBuilder, tupleRoot);
             Assert.notNull(tupleSearchPredicate, "Search predicate cannot be null for tuple query");
             tupleQuery.where(tupleSearchPredicate).distinct(true);
 
+            // This join is implicitly created inside createSearchPredicate, but we need a reference to it for ordering.
+            // A more robust way is to ensure the join is made on the specific taskboard.
+            Join<Task, TaskBoardEntry> boardEntryJoin = tupleRoot.join("taskBoardEntries");
+            boardEntryJoin.on(boardEntryJoin.get("taskBoardId").in(taskSearchFilterVo.getTaskboardIds()));
+
             // Set the multiselect and order
             tupleQuery.multiselect(tupleRoot, boardEntryJoin.get("order"));
-            tupleQuery.orderBy(criteriaBuilder.asc(boardEntryJoin.get("order")));
+            taskSearchCriteriaBuilder.addOrderByTaskBoardEntryOrder(criteriaBuilder, tupleQuery, boardEntryJoin, taskSearchFilterVo);
 
             List<Object[]> tuples = entityManager.createQuery(tupleQuery)
                     .setFirstResult((int) pageable.getOffset())
                     .setMaxResults(pageable.getPageSize())
                     .getResultList();
-            result = new ArrayList<>();
-            tuples.forEach(tuple -> result.add((Task) tuple[0]));
+            result = tuples.stream().map(tuple -> (Task) tuple[0]).toList();
         } else {
             Assert.notNull(searchPredicate, "Search predicate cannot be null");
             taskCriteriaQuery.where(searchPredicate).distinct(true);
-            setOrder(criteriaBuilder, taskCriteriaQuery, taskRoot, taskSearchFilterVo);
+            setOrder(criteriaBuilder, taskCriteriaQuery, taskRoot, null, taskSearchFilterVo);
             result = entityManager.createQuery(taskCriteriaQuery)
                     .setFirstResult((int) pageable.getOffset())
                     .setMaxResults(pageable.getPageSize())
@@ -217,7 +220,7 @@ public class TaskSearchRepository {
         return new PageImpl<>(result, pageable, count);
     }
 
-    private void setOrder(CriteriaBuilder criteriaBuilder, CriteriaQuery<Task> taskCriteriaQuery, Root<Task> taskRoot, TaskSearchFilterVo taskSearchFilterVo) {
+    private void setOrder(CriteriaBuilder criteriaBuilder, CriteriaQuery<Task> taskCriteriaQuery, Root<Task> taskRoot, Join<Task, TaskBoardEntry> boardEntryJoin, TaskSearchFilterVo taskSearchFilterVo) {
         FilterSort filterSort = taskSearchFilterVo.getSort();
         if (FilterSort.IDATE_ASC.equals(filterSort)) {
             taskCriteriaQuery.orderBy(criteriaBuilder.asc(taskRoot.get("createdDate")));
@@ -228,7 +231,7 @@ public class TaskSearchRepository {
         } else if (FilterSort.ASSIGNED_DATE_ASC.equals(filterSort)) {
             taskCriteriaQuery.orderBy(criteriaBuilder.asc(taskRoot.get("assignedDate")));
         } else if (FilterSort.TASK_BOARD_ORDER.equals(filterSort) && !CollectionUtils.isEmpty(taskSearchFilterVo.getTaskboardIds())) {
-            taskSearchCriteriaBuilder.addOrderByTaskBoardEntryOrder(criteriaBuilder, taskCriteriaQuery, taskRoot, taskSearchFilterVo);
+            taskSearchCriteriaBuilder.addOrderByTaskBoardEntryOrder(criteriaBuilder, taskCriteriaQuery, boardEntryJoin, taskSearchFilterVo);
         }
     }
 }

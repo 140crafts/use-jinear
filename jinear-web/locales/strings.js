@@ -2016,6 +2016,10 @@ const translations = {
     en: "There isn't any task in this board.",
     tr: "Bu panoda herhangi bir görev bulunamadı."
   },
+  taskBoardIsClosed: {
+    en: "This task board is closed.",
+    tr: "Pano kapalı."
+  },
   taskBoardAddTaskButtonLabel: {
     en: "Add Task",
     tr: "Görev Ekle"
@@ -2243,6 +2247,30 @@ const translations = {
   taskListTitleAndViewTypeStatusColumnsLabel: {
     en: "Status Columns",
     tr: "Durum"
+  },
+  taskBoardLockButtonTooltip_OPEN: {
+    en: "Lock board to changes",
+    tr: "Panoyu düzenlemeye kapat"
+  },
+  taskBoardLockButtonTooltip_CLOSED: {
+    en: "Unlock board to changes",
+    tr: "Panoyu düzenlemeye aç"
+  },
+  taskBoardSearchTaskButtonTooltip: {
+    en: "Search & add tasks",
+    tr: "Görev ara ve panoya ekle"
+  },
+  taskBoardCreateTaskButtonTooltip: {
+    en: "Create & add tasks",
+    tr: "Görev oluştur ve panoya ekle"
+  },
+  taskBoardGoToButtonTooltip: {
+    en: "Go to board",
+    tr: "Panoya git"
+  },
+  taskBoardPickColorButtonTooltip: {
+    en: "Pick color for board",
+    tr: "Renk Seç"
   },
   activeTasksPageTitle: {
     en: "Active Tasks",

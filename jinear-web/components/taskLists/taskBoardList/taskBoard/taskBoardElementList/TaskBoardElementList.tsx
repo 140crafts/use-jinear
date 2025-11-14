@@ -1,5 +1,5 @@
 import PaginatedList from "@/components/paginatedList/PaginatedList";
-import { TaskBoardEntryDto } from "@/be/jinear-core";
+import { TaskBoardEntryDto, TaskBoardStateType } from "@/be/jinear-core";
 import {
   useChangeBoardEntryOrderMutation, useChangeFilteredBoardEntryOrderMutation,
   useFilterFromTaskBoardQuery,
@@ -28,16 +28,19 @@ import { queryStateJsonObjectParser, useQueryState } from "@/hooks/useQueryState
 import {
   ITaskBoardUrlStateMap
 } from "@/components/taskLists/taskBoardList/taskBoard/taskBoardQuickFilterBar/TaskBoardQuickFilterBar";
+import { toast } from "react-hot-toast";
 
 interface TaskBoardElementListProps {
   taskBoardId: string;
   className?: string;
+  boardState: TaskBoardStateType;
 }
 
 const logger = Logger("TaskBoardElementList");
 
 const TaskBoardElementList: React.FC<TaskBoardElementListProps> = ({
                                                                      taskBoardId,
+                                                                     boardState,
                                                                      className
                                                                    }) => {
   const { t } = useTranslation();
@@ -61,7 +64,7 @@ const TaskBoardElementList: React.FC<TaskBoardElementListProps> = ({
   const renderItem = (item: TaskBoardEntryDto, index: number) => {
     logger.log({ renderItem: item, index });
     return (
-      <Draggable key={item.taskBoardEntryId} draggableId={item.taskBoardEntryId} index={index}>
+      <Draggable key={`${item.taskBoardEntryId}-${index}`} draggableId={item.taskBoardEntryId} index={index}>
         {(providedDraggable: DraggableProvided, snapshotDraggable: DraggableStateSnapshot) => (
           <div
             className={styles.draggableBoardElementContainer}
@@ -81,11 +84,16 @@ const TaskBoardElementList: React.FC<TaskBoardElementListProps> = ({
     if (!destination) {
       return;
     }
+    if (boardState == "CLOSED") {
+      toast(t("taskBoardIsClosed"));
+      return;
+    }
     const oldOrder = source?.index;
     const newOrder = destination?.index;
     const taskBoardEntryId = draggableId;
-    if (taskBoardElementsResponse?.data.content) {
-      const orderedArray = [...taskBoardElementsResponse?.data.content];
+
+    if (taskBoardElementsResponse?.data?.content) {
+      const orderedArray = [...taskBoardElementsResponse.data.content];
       const [removedElement] = orderedArray.splice(oldOrder, 1);
       orderedArray.splice(newOrder, 0, removedElement);
       const taskBoardEntryIdBefore = newOrder > 0 ? orderedArray[newOrder - 1].taskBoardEntryId : undefined;

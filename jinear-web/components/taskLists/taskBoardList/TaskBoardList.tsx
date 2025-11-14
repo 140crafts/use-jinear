@@ -34,7 +34,7 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({ team, workspace }) => {
           workspace={workspace}
           staticViewType={"list"}
         />
-        {((taskBoardListingResponse?.data?.content?.length ?? 0) - 1) != i && <div className={styles.divider} />}
+        {/*{((taskBoardListingResponse?.data?.content?.length ?? 0) - 1) != i && <div className={styles.divider} />}*/}
       </div>
     );
   };

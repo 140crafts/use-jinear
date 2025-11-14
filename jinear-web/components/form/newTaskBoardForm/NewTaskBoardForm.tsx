@@ -40,8 +40,9 @@ const NewTaskBoardForm: React.FC<NewTaskBoardFormProps> = ({ workspace, team, on
   }, [isInitializeTaskBoardLoading, isSuccess]);
 
   const submit: SubmitHandler<TaskBoardInitializeRequest> = (data) => {
-    logger.log({ data });
-    initializeTaskBoard(data);
+    const req = { ...data, color: data?.color?.replace("#", "") ?? undefined };
+    logger.log(req);
+    initializeTaskBoard(req);
   };
 
   const clearDueDate = () => {
@@ -71,15 +72,19 @@ const NewTaskBoardForm: React.FC<NewTaskBoardFormProps> = ({ workspace, team, on
                  type={"text"} {...register("title", { required: t("formRequiredField") })} />
         </label>
 
-        <div className={styles.dateButtonContainer}>
-          {date && (
-            <Button onClick={clearDueDate}>
-              <IoClose />
+        <div className={styles.propertiesContainer}>
+          <input id={"new-task-board-color"} type={"color"} {...register("color")} />
+          <div className={styles.dateButtonContainer}>
+            {date && (
+              <Button onClick={clearDueDate}>
+                <IoClose />
+              </Button>
+            )}
+            <Button variant={ButtonVariants.filled} onClick={popDatePickerForDueDate}
+                    heightVariant={ButtonHeight.short}>
+              {date ? format(date, t("dateFormat")) : t("newTaskListModalTaskListDueDate")}
             </Button>
-          )}
-          <Button variant={ButtonVariants.filled} onClick={popDatePickerForDueDate} heightVariant={ButtonHeight.short}>
-            {date ? format(date, t("dateFormat")) : t("newTaskListModalTaskListDueDate")}
-          </Button>
+          </div>
         </div>
         <WorkspaceAndTeamInfo
           readOnly

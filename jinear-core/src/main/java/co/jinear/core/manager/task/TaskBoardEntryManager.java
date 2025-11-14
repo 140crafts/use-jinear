@@ -6,6 +6,7 @@ import co.jinear.core.converter.task.TaskDtoToTaskBoardEntryDtoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.task.PlainTaskBoardEntryDto;
 import co.jinear.core.model.dto.task.TaskBoardDto;
 import co.jinear.core.model.dto.task.TaskBoardEntryDto;
 import co.jinear.core.model.dto.task.TaskDto;
@@ -60,7 +61,7 @@ public class TaskBoardEntryManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskBoardDto taskBoardDto = taskBoardRetrieveService.retrieve(taskBoardInitializeRequest.getTaskBoardId());
-        validateBoardStatus(taskBoardDto);
+        validateBoardStatus(taskBoardDto.getState());
         taskBoardAccessValidator.validateHasTaskBoardAccess(taskBoardDto, currentAccountId);
         InitializeTaskBoardEntryVo initializeTaskBoardEntryVo = taskBoardEntryInitializeRequestConverter.convert(taskBoardInitializeRequest);
         TaskBoardEntryDto boardEntryDto = taskBoardEntryOperationService.initialize(initializeTaskBoardEntryVo);
@@ -72,6 +73,7 @@ public class TaskBoardEntryManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         validateAccess(taskBoardEntryId, currentAccountId);
+        validateBoardStatus(taskBoardEntryId);
         log.info("Delete task board entry has started. currentAccountId: {}", currentAccountId);
         TaskBoardEntryDto entryDto = taskBoardEntryOperationService.deleteEntry(taskBoardEntryId);
         passiveService.assignOwnership(entryDto.getPassiveId(), currentAccountId);
@@ -83,6 +85,7 @@ public class TaskBoardEntryManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         validateAccess(taskBoardEntryId, currentAccountId);
+        validateBoardStatus(taskBoardEntryId);
         log.info("Change task board entry order has started. currentAccountId: {}", currentAccountId);
         TaskBoardEntryDto boardEntryDto = taskBoardEntryOperationService.changeOrder(taskBoardEntryId, newOrder);
         taskActivityService.initializeTaskOrderChangedOnTaskBoardActivity(currentAccountId, currentAccountSessionId, boardEntryDto);
@@ -94,6 +97,7 @@ public class TaskBoardEntryManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         validateAccess(taskBoardEntryId, currentAccountId);
+        validateBoardStatus(taskBoardEntryId);
         log.info("Change task board entry order has started. currentAccountId: {}", currentAccountId);
         TaskBoardEntryDto boardEntryDto = taskBoardEntryOperationService.changeFilteredOrder(taskBoardEntryId, taskBoardEntryIdBefore, taskBoardEntryIdAfter);
         taskActivityService.initializeTaskOrderChangedOnTaskBoardActivity(currentAccountId, currentAccountSessionId, boardEntryDto);
@@ -125,8 +129,13 @@ public class TaskBoardEntryManager {
         taskActivityService.initializeTaskAddedToTaskBoardActivity(currentAccountId, currentAccountSessionId, taskDto, boardEntryDto.getTaskBoardId());
     }
 
-    private void validateBoardStatus(TaskBoardDto taskBoardDto) {
-        if (TaskBoardStateType.CLOSED.equals(taskBoardDto.getState())) {
+    private void validateBoardStatus(String taskBoardEntryId) {
+        PlainTaskBoardEntryDto plainTaskBoardEntryDto = taskBoardEntryRetrieveService.retrievePlain(taskBoardEntryId);
+        validateBoardStatus(plainTaskBoardEntryDto.getTaskBoard().getState());
+    }
+
+    private void validateBoardStatus(TaskBoardStateType state) {
+        if (TaskBoardStateType.CLOSED.equals(state)) {
             throw new BusinessException("task-board.entry.board-closed");
         }
     }

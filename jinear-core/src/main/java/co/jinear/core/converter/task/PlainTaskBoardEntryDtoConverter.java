@@ -4,7 +4,7 @@ import co.jinear.core.model.dto.task.PlainTaskBoardEntryDto;
 import co.jinear.core.model.entity.task.TaskBoardEntry;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {TaskBoardDtoConverter.class})
 public interface PlainTaskBoardEntryDtoConverter {
 
     PlainTaskBoardEntryDto mapPlain(TaskBoardEntry taskBoardEntry);

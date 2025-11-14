@@ -14,4 +14,5 @@ public class PlainTaskBoardEntryDto extends BaseDto {
     private String taskBoardId;
     private String taskId;
     private Integer order;
+    private TaskBoardDto taskBoard;
 }
