@@ -78,7 +78,9 @@ export const taskBoardApi = api.injectEndpoints({
         "v1/task-board/list/{workspaceId}/team/{teamId}",
         "v1/task-board",
         "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
-        "v1/workspace/activity/filter"
+        "v1/workspace/activity/filter",
+        "v1/calendar/event/filter",
+        "v1/task/list/filter"
       ]
     })
     //

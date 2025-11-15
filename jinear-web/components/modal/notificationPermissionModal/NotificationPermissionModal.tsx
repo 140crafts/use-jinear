@@ -17,11 +17,14 @@ import React, { useEffect, useState } from "react";
 import { IoNotifications } from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./NotificationPermissionModal.module.css";
+import { setLocalStorage } from "@/hooks/useLocalStorage";
 
 interface NotificationPermissionModalProps {
 }
 
 const logger = Logger("NotificationPermissionModal");
+
+export const NOTIFICATIONS_REJECT_KEY = "do-not-ask-notifications";
 
 const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = ({}) => {
   const { t } = useTranslation();
@@ -36,16 +39,30 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
   const messaging = useTypedSelector(selectMessaging);
 
+  const close = () => {
+    setInitializing(false);
+    dispatch(closeNotificationPermissionModal());
+  };
+
   useEffect(() => {
     if (!isInitNotifTargetLoading && isInitNotifTargetSuccess) {
       close();
     }
     setInitializing(isInitNotifTargetLoading);
-  }, [isInitNotifTargetSuccess, isInitNotifTargetLoading]);
+  }, [isInitNotifTargetSuccess, isInitNotifTargetLoading, close]);
 
-  const close = () => {
-    setInitializing(false);
-    dispatch(closeNotificationPermissionModal());
+  const rejectAndClose = () => {
+    setLocalStorage({ key: NOTIFICATIONS_REJECT_KEY, value: true });
+    close();
+  };
+
+  const requestPermissionWithTimeout = (timeoutMs: number): Promise<NotificationPermission> => {
+    return Promise.race([
+      Notification.requestPermission(),
+      new Promise<never>((_, reject) =>
+        setTimeout(() => reject(new Error("Notification permission request timed out.")), timeoutMs)
+      )
+    ]);
   };
 
   const askPermissions = async () => {
@@ -54,20 +71,24 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
       return;
     }
     logger.log(`Ask permission has started. Showing native prompt.`);
-    const notificationPermission = await Notification.requestPermission();
-    logger.log(`Retrieved notification permission. ${notificationPermission}`);
-    if (notificationPermission == "granted" && currentAccountId) {
-      logger.log(`Attaching account. ${currentAccountId} - ${notificationPermission}`);
-      attachAccount(currentAccountId);
-      setTimeout(() => {
+    try {
+      setInitializing(true);
+      const notificationPermission = await requestPermissionWithTimeout(30000);
+      logger.log(`Retrieved notification permission. ${notificationPermission}`);
+      if (notificationPermission == "granted" && currentAccountId) {
+        logger.log(`Attaching account. ${currentAccountId} - ${notificationPermission}`);
+        await attachAccount(currentAccountId);
+      } else {
         close();
-      }, 1000);
+      }
+    } catch (error) {
+      logger.log(`Failed to get notification permission. ${error}`);
+      close();
     }
   };
 
   const attachAccount = async (accountId: string) => {
     if (messaging) {
-      setInitializing(true);
       const currentFirebaseToken = await getToken(messaging, { vapidKey: VAPID_PUBLIC_KEY });
       logger.log(
         `Firebase token retrieved attaching now. accountId: ${accountId}, currentFirebaseToken: ${currentFirebaseToken}`
@@ -94,6 +115,24 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
       <div className={styles.actionBar}>
         <Button
+          disabled={isInitNotifTargetLoading}
+          heightVariant={ButtonHeight.mid}
+          variant={ButtonVariants.default}
+          onClick={rejectAndClose}
+        >
+          {t("notificationPermissionModalDismissAndDoNotAskAgain")}
+        </Button>
+
+        <Button
+          disabled={isInitNotifTargetLoading}
+          heightVariant={ButtonHeight.mid}
+          variant={ButtonVariants.filled}
+          onClick={close}
+        >
+          {t("notificationPermissionModalLater")}
+        </Button>
+
+        <Button
           disabled={initializing}
           loading={initializing}
           heightVariant={ButtonHeight.mid}
@@ -101,15 +140,6 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
           onClick={askPermissions}
         >
           {t("notificationPermissionModalAllowPermissions")}
-        </Button>
-
-        <Button
-          disabled={isInitNotifTargetLoading}
-          heightVariant={ButtonHeight.mid}
-          variant={ButtonVariants.default}
-          onClick={close}
-        >
-          {t("notificationPermissionModalDismiss")}
         </Button>
       </div>
     </Modal>

@@ -20,6 +20,6 @@ public class AuthCompleteRequest extends BaseRequest {
     private String csrf;
     @Size(max = 64)
     private String code;
-    @Size(max = 5)
+    @Size(max = 15)
     private String timeZone;
 }

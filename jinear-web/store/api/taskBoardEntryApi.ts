@@ -27,7 +27,9 @@ export const taskBoardEntryApi = api.injectEndpoints({
         "v1/task-board/entry/from-task-board/{taskBoardId}",
         "v1/task-board/entry/from-task-board/{taskBoardId}/filter",
         "v1/task-board/list/related-with-task/{taskId}",
-        "v1/workspace/activity/filter"
+        "v1/workspace/activity/filter",
+        "v1/calendar/event/filter",
+        "v1/task/list/filter"
       ]
     }),
     //
@@ -40,7 +42,9 @@ export const taskBoardEntryApi = api.injectEndpoints({
         "v1/task-board/entry/from-task-board/{taskBoardId}",
         "v1/task-board/entry/from-task-board/{taskBoardId}/filter",
         "v1/task-board/list/related-with-task/{taskId}",
-        "v1/workspace/activity/filter"
+        "v1/workspace/activity/filter",
+        "v1/calendar/event/filter",
+        "v1/task/list/filter"
       ]
     }),
     //

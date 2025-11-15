@@ -8,11 +8,13 @@ import { markHasUnreadNotification } from "@/store/slice/taskAdditionalDataSlice
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import { initializeApp } from "firebase/app";
-import { MessagePayload, deleteToken, getMessaging, getToken, isSupported, onMessage } from "firebase/messaging";
+import { deleteToken, getMessaging, getToken, isSupported, MessagePayload, onMessage } from "firebase/messaging";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import { toast } from "react-hot-toast";
 import ForegroundNotification from "../foregroundNotification/ForegroundNotification";
+import { localStorageItemBooleanParser, useLocalStorage } from "@/hooks/useLocalStorage";
+import { NOTIFICATIONS_REJECT_KEY } from "@/components/modal/notificationPermissionModal/NotificationPermissionModal";
 
 interface FirebaseConfigrationProps {
 }
@@ -64,6 +66,10 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
   const messaging = useTypedSelector(selectMessaging);
 
   const [initializeNotificationTarget, {}] = useInitializeNotificationTargetMutation();
+  const doNotAskNotifications = useLocalStorage({
+    key: NOTIFICATIONS_REJECT_KEY,
+    parser: localStorageItemBooleanParser
+  }) ?? false;
 
   useEffect(() => {
     initializeFirebase();
@@ -99,7 +105,7 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
 
   const checkAndPrompt = async (currentAccountId: string) => {
     const notificationPermission = Notification.permission;
-    if (notificationPermission == "default") {
+    if (notificationPermission == "default" && !doNotAskNotifications) {
       dispatch(popNotificationPermissionModal({ visible: true, platform: "web" }));
       return;
     } else if (notificationPermission == "granted" && currentAccountId) {

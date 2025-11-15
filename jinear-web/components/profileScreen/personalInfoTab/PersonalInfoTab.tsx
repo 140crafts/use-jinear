@@ -1,3 +1,5 @@
+"use client";
+
 import { useUpdateProfilePictureMutation } from "@/store/api/accountMediaApi";
 import { useLogoutMutation } from "@/store/api/authApi";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
@@ -11,11 +13,30 @@ import styles from "./PersonalInfoTab.module.css";
 import UserProfilePicturePicker from "./userProfilePicturePicker/UserProfilePicturePicker";
 
 import Button, { ButtonVariants } from "@/components/button";
+import { deleteAllEntries } from "../../../repository/IndexedDbRepository";
 
 interface PersonalInfoTabProps {
 }
 
 const logger = Logger("PersonalInfoTab");
+
+const resetLocalStorage = () => {
+  try {
+    if (typeof window === "object") {
+      window.localStorage.clear();
+    }
+  } catch (error) {
+    console.error("Error on logout clear. local storage", error);
+  }
+};
+
+const clearIndexedDb = () => {
+  try {
+    deleteAllEntries();
+  } catch (error) {
+    console.error("Error on logout clear. indexed db", error);
+  }
+};
 
 const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
   const { t } = useTranslation();
@@ -35,6 +56,8 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
 
   const logout = () => {
     logoutCall();
+    clearIndexedDb();
+    resetLocalStorage();
     dispatch(resetModals());
   };
 

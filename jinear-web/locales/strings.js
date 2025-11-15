@@ -319,6 +319,10 @@ const translations = {
     en: "New Password",
     tr: "Yeni Şifre"
   },
+  changePasswordFormNewPasswordTooShort: {
+    en: "Your password needs ${needs_char} more character(s)",
+    tr: "Şifren en az ${max_char} karakter olmalı"
+  },
   changePasswordFormNewPasswordConfirm: {
     en: "Password Confirmation",
     tr: "Şifre Doğrulama"
@@ -1731,9 +1735,13 @@ const translations = {
     en: "Enable",
     tr: "Etkinleştir"
   },
-  notificationPermissionModalDismiss: {
-    en: "Dismiss",
-    tr: "Kapat"
+  notificationPermissionModalLater: {
+    en: "Ask Later",
+    tr: "Daha Sonra"
+  },
+  notificationPermissionModalDismissAndDoNotAskAgain: {
+    en: "Reject",
+    tr: "Reddet"
   },
   notificationPermissionModalInfoText: {
     en: "To receive updates from tasks you subscribe enable notifications.",
@@ -4879,6 +4887,14 @@ const translations = {
   projectFeedUrlCustomDomainWaitingDNSInfo: {
     en: "Jinear checks DNS configurations regularly. This may take a while after you completed your setup.",
     tr: "Jinear DNS ayarlarını aralıklarla kontrol edecek. Ayarlarınızı yaptıktan sonra etki etmesi biraz vakit alabilir."
+  },
+  passwordChangeModalTitle: {
+    en: "Change Password",
+    tr: "Şifreni Değiştir"
+  },
+  passwordChangeModalTitleForced: {
+    en: "Set Password",
+    tr: "Şifreni Belirle"
   }
 };
 

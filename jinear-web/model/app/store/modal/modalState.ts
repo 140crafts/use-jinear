@@ -287,3 +287,7 @@ export interface NewMilestoneModalState extends ModalState {
 export interface NewCustomProjectDomainModalState extends ModalState {
   projectId?: string,
 }
+
+export interface PasswordChangeModalState extends ModalState {
+  forced?: boolean,
+}

@@ -15,7 +15,7 @@ export const useLocalStorage = ({
   }
 };
 
-export const useSetLocalStorage = ({
+export const setLocalStorage = ({
   key,
   value,
   converter,
@@ -28,3 +28,5 @@ export const useSetLocalStorage = ({
     localStorage.setItem(key, converter ? converter(value) : value);
   }
 };
+
+export const localStorageItemBooleanParser = (val?: string|null) => (val ? val?.toLowerCase() == "true" : undefined);

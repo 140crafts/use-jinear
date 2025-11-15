@@ -94,6 +94,7 @@ public/worker-*.js
 ### Logs ###
 /logs/app.log
 /logs/app.log*
+jinear-core/logs/
 
 ### Help Files ###
 HELP.md

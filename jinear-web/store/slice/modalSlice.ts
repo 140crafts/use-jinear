@@ -45,7 +45,7 @@ import ModalState, {
   WorkspaceMemberInviteModalState,
   WorkspaceMemberPickerModalState,
   WorkspacePickerModalState,
-  NewCustomProjectDomainModalState
+  NewCustomProjectDomainModalState, PasswordChangeModalState
 } from "model/app/store/modal/modalState";
 import { accountApi } from "@/api/accountApi";
 import { RootState } from "../store";
@@ -218,6 +218,9 @@ const initialState = {
   },
   newCustomProjectDomainModal: {
     visible: false
+  },
+  passwordChangeModal: {
+    visible: false
   }
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
@@ -273,6 +276,7 @@ const initialState = {
   projectAndMilestonePickerModal: null | ProjectAndMilestonePickerModalState;
   newMilestoneModal: null | NewMilestoneModalState,
   newCustomProjectDomainModal: null | NewCustomProjectDomainModalState,
+  passwordChangeModal: null | PasswordChangeModalState,
 };
 
 const slice = createSlice({
@@ -648,6 +652,13 @@ const slice = createSlice({
       state.newCustomProjectDomainModal = initialState.newCustomProjectDomainModal;
     },
 
+    popPasswordChangeModal: (state, action: PayloadAction<PasswordChangeModalState>) => {
+      state.passwordChangeModal = { ...action.payload, visible: true };
+    },
+    closePasswordChangeModal: (state, action: PayloadAction<void>) => {
+      state.passwordChangeModal = initialState.passwordChangeModal;
+    },
+
     resetModals: () => initialState
   },
   extraReducers: (builder) => {
@@ -770,6 +781,8 @@ export const {
   closeNewMilestoneModal,
   popNewCustomProjectDomainModal,
   closeNewCustomProjectDomainModal,
+  popPasswordChangeModal,
+  closePasswordChangeModal,
   resetModals
 } = slice.actions;
 export default slice.reducer;
@@ -1048,3 +1061,6 @@ export const selectNewMilestoneModalProject = (state: RootState) => state.modal.
 
 export const selectNewCustomProjectDomainModalVisible = (state: RootState) => state.modal.newCustomProjectDomainModal?.visible;
 export const selectNewCustomProjectDomainModalProjectId = (state: RootState) => state.modal.newCustomProjectDomainModal?.projectId;
+
+export const selectPasswordChangeModalVisible = (state: RootState) => state.modal.passwordChangeModal?.visible;
+export const selectPasswordChangeModalForced = (state: RootState) => state.modal.passwordChangeModal?.forced;

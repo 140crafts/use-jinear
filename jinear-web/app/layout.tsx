@@ -29,6 +29,7 @@ import PostHogPageView from "@/components/postHogPageView/PostHogPageView";
 import OnInstallPromptEventProvider from "@/components/onInstallPromptEventProvider/OnInstallPromptEventProvider";
 import React from "react";
 import { PublicEnvScript } from "next-runtime-env";
+import ForcePasswordChangeChecker from "@/components/forcePasswordChangeChecker/ForcePasswordChangeChecker";
 
 const logger = Logger("_app");
 
@@ -312,6 +313,7 @@ function MyApp({ children }: { children: React.ReactNode }) {
           <ThemeProvider>
             <OnInstallPromptEventProvider>
               <AuthCheck />
+              <ForcePasswordChangeChecker />
               <WorkspaceAndTeamChangeListener />
               <OnboardListener />
               <WebViewEventListener />

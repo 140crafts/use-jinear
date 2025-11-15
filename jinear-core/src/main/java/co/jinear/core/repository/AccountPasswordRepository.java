@@ -7,5 +7,5 @@ import java.util.Optional;
 
 public interface AccountPasswordRepository extends JpaRepository<AccountPassword, String> {
 
-    Optional<AccountPassword> findByAccountIdAndPassiveIdIsNull(String accountId);
+Optional<AccountPassword> findByAccountIdAndPassiveIdIsNull(String accountId);
 }

@@ -197,6 +197,29 @@ services:
     networks:
       - jinear-default
 
+  jinear-message:
+    container_name: jinear-message
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-message-service:latest
+    depends_on:
+      - jinear-core
+    volumes:
+      - ".logs/jinear-message:/logs"
+    restart: always
+    environment:
+      - PORT=3001
+      - CORE_ENDPOINT=http://jinear-core:8008
+      - INTERNAL_AUTH_TOKEN=your-messaging-api-token
+      - ALLOWED_ORIGIN=https://your-instance.company.com
+    privileged: true
+    ports:
+      - 19050:3001
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+    networks:
+      - jinear-default
 
 networks:
   jinear-default:

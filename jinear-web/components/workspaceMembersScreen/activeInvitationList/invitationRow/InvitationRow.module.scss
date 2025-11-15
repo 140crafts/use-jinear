@@ -19,9 +19,9 @@
   background-color: var(--c-primary-shade-1) !important;
 }
 
-.container:hover .rightInfoContainer {
-  display: flex;
-}
+//.container:hover .rightInfoContainer {
+//  display: flex;
+//}
 
 .titleContainer {
   display: flex;
@@ -44,7 +44,8 @@
 }
 
 .rightInfoContainer {
-  display: none;
+  //display: none;
+  display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;
