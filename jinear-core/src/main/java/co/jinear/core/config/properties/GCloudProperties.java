@@ -21,6 +21,9 @@ public class GCloudProperties {
     @Value("${gcloud.cloudStorage.base-path}")
     private String cloudStorageBasePath;
 
+    @Value("${gcloud.cloudStorage.signed-url-duration}")
+    private Long signedUrlDuration;
+
     @Value("${gcloud.oauth.baseUrl}")
     private String oauthBaseUrl;
 

@@ -2,11 +2,13 @@ package co.jinear.core.service.task.media;
 
 import co.jinear.core.model.dto.media.AccessibleMediaDto;
 import co.jinear.core.model.dto.media.MediaDto;
+import co.jinear.core.model.dto.media.WaitingMediaResultDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.enumtype.media.FileType;
 import co.jinear.core.model.enumtype.media.MediaOwnerType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.vo.media.InitializeMediaVo;
+import co.jinear.core.model.vo.media.InitializeWaitingMediaVo;
 import co.jinear.core.model.vo.media.RemoveMediaVo;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaRetrieveService;
@@ -35,6 +37,17 @@ public class TaskMediaOperationService {
         return delete(responsibleAccountId, mediaDto);
     }
 
+    public WaitingMediaResultDto retrieveUploadUrl(String ownerId, TaskDto taskDto, String originalName, String contentType, long fileSize) {
+        log.info("Retrieve upload url has started. ownerId: {}, taskId: {}, originalName: {}", ownerId, taskDto.getTaskId(), originalName);
+        InitializeWaitingMediaVo initializeWaitingMediaVo = mapInitializeWaitingMediaVo(ownerId, taskDto.getTaskId(), originalName, contentType, fileSize);
+        return mediaOperationService.initializeWaitingMediaAndGetPresignedUploadUrl(initializeWaitingMediaVo);
+    }
+
+    public void updateTaskMediaAsCompleted(String mediaId){
+        log.info("Update task media as completed has started. mediaId: {}", mediaId);
+        mediaOperationService.updateAsUploadCompleted(mediaId);
+    }
+
     private AccessibleMediaDto delete(String responsibleAccountId, MediaDto mediaDto) {
         RemoveMediaVo removeMediaVo = new RemoveMediaVo();
         removeMediaVo.setMediaId(mediaDto.getMediaId());
@@ -56,6 +69,19 @@ public class TaskMediaOperationService {
         initializeMediaVo.setMediaOwnerType(MediaOwnerType.TASK);
         initializeMediaVo.setVisibility(MediaVisibilityType.PRIVATE);
         return initializeMediaVo;
+    }
+
+    private InitializeWaitingMediaVo mapInitializeWaitingMediaVo(String ownerId, String taskId, String originalName, String contentType, long fileSize) {
+        InitializeWaitingMediaVo initializeWaitingMediaVo = new InitializeWaitingMediaVo();
+        initializeWaitingMediaVo.setOwnerId(ownerId);
+        initializeWaitingMediaVo.setRelatedObjectId(taskId);
+        initializeWaitingMediaVo.setFileType(FileType.TASK_FILE);
+        initializeWaitingMediaVo.setMediaOwnerType(MediaOwnerType.TASK);
+        initializeWaitingMediaVo.setVisibility(MediaVisibilityType.PRIVATE);
+        initializeWaitingMediaVo.setOriginalName(originalName);
+        initializeWaitingMediaVo.setContentType(contentType);
+        initializeWaitingMediaVo.setFileSize(fileSize);
+        return initializeWaitingMediaVo;
     }
 
     public void updateMediaAsTemporaryPublic(String mediaId) {

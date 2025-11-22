@@ -5,18 +5,27 @@ import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.enumtype.media.FileType;
 import co.jinear.core.model.enumtype.media.MediaFileProviderType;
 import co.jinear.core.model.enumtype.media.MediaOwnerType;
+import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.vo.media.MediaInitializeResultVo;
+import co.jinear.core.model.vo.media.WaitingMediaResultVo;
 import io.minio.*;
+import io.minio.errors.ErrorResponseException;
 import io.minio.errors.MinioException;
+import io.minio.http.Method;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import static co.jinear.core.system.FileStorageUtils.generatePath;
 
@@ -24,6 +33,8 @@ import static co.jinear.core.system.FileStorageUtils.generatePath;
 @Service
 @ConditionalOnProperty(value = "file-storage.minio.enabled", havingValue = "true")
 public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrategy {
+
+    private static final String NO_SUCH_KEY = "NoSuchKey";
 
     private final MinIoProperties minIoProperties;
     private final MinioClient minioClient;
@@ -39,8 +50,44 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
     }
 
     @Override
-    public MediaInitializeResultVo save(MultipartFile file, String path) {
-        String bucketName = minIoProperties.getPrivateBucketName();
+    public WaitingMediaResultVo presignUrl(String path, String contentType, MediaVisibilityType visibility, long fileSizeInBytes) {
+        try {
+            String bucketName = MediaVisibilityType.PRIVATE.equals(visibility) ? minIoProperties.getPrivateBucketName() : minIoProperties.getPublicBucketName();
+            Integer signedUrlDuration = minIoProperties.getSignedUrlDuration();
+            GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
+                    .method(Method.PUT)
+                    .bucket(bucketName)
+                    .object(path)
+                    .expiry(signedUrlDuration, TimeUnit.MINUTES)
+                    .extraHeaders(Map.of("Content-Type", contentType, "Content-Length", String.valueOf(fileSizeInBytes)))
+                    .build();
+            WaitingMediaResultVo waitingMediaResultVo = new WaitingMediaResultVo(new URL(minioClient.getPresignedObjectUrl(args)), ZonedDateTime.now().plus(minIoProperties.getSignedUrlDuration(), ChronoUnit.MILLIS));
+            waitingMediaResultVo.setBucketName(bucketName);
+            return waitingMediaResultVo;
+        } catch (Exception e) {
+            log.error("Error generating url", e);
+            throw new BusinessException();
+        }
+
+    }
+
+    @Override
+    public boolean doesObjectExists(String bucketName, String path) {
+        try {
+            log.info("Does object exists has started. bucketName: {}, path: {}", bucketName, path);
+            minioClient.statObject(StatObjectArgs.builder().bucket(bucketName).object(path).build());
+            return Boolean.TRUE;
+        } catch (ErrorResponseException e) {
+            return !NO_SUCH_KEY.equals(e.errorResponse().code());
+        } catch (Exception e) {
+            log.error("Does object exists has failed.", e);
+            throw new BusinessException();
+        }
+    }
+
+    @Override
+    public MediaInitializeResultVo save(MultipartFile file, MediaVisibilityType visibility, String path) {
+        String bucketName = MediaVisibilityType.PRIVATE.equals(visibility) ? minIoProperties.getPrivateBucketName() : minIoProperties.getPublicBucketName();
         try {
             PutObjectArgs.Builder putObjectArgsBuilder = PutObjectArgs.builder()
                     .bucket(bucketName)
@@ -101,6 +148,23 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
         return MediaFileProviderType.MINIO;
     }
 
+    @Override
+    public URL generatePresignedDownloadUrl(String bucketName, String path) {
+        log.info("Generating presigned GET URL for object [{}] in bucket [{}]", path, bucketName);
+        try {
+            GetPresignedObjectUrlArgs args = GetPresignedObjectUrlArgs.builder()
+                    .method(Method.GET)
+                    .bucket(bucketName)
+                    .object(path)
+                    .expiry(minIoProperties.getSignedUrlDuration(), TimeUnit.MINUTES)
+                    .build();
+            return new URL(minioClient.getPresignedObjectUrl(args));
+        } catch (Exception e) {
+            log.error("Error generating download url for path: {}", path, e);
+            throw new BusinessException("Could not generate download URL.");
+        }
+    }
+
     private boolean moveObject(String sourceBucket, String destBucket, String object) {
         try {
             minioClient.copyObject(
@@ -123,7 +187,6 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
             return false;
         }
     }
-
 
     private void checkAndInitializeBucket(MinioClient minioClient, String bucketName, boolean isPublic) throws Exception {
         boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());

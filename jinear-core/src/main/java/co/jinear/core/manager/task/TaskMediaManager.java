@@ -1,17 +1,23 @@
 package co.jinear.core.manager.task;
 
+import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.media.AccessibleMediaDto;
 import co.jinear.core.model.dto.media.MediaDto;
+import co.jinear.core.model.dto.media.WaitingMediaResultDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskMediaDto;
 import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.enumtype.media.MediaFileUploadStatusType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceTier;
+import co.jinear.core.model.request.media.MediaUploadUrlRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.media.MediaUploadUrlResponse;
 import co.jinear.core.model.response.task.TaskMediaResponse;
 import co.jinear.core.model.response.task.TaskPaginatedMediaResponse;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.task.TaskActivityService;
 import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.TaskSearchService;
@@ -48,6 +54,7 @@ public class TaskMediaManager {
     private final TeamAccessValidator teamAccessValidator;
     private final TeamRetrieveService teamRetrieveService;
     private final TaskSearchService taskSearchService;
+    private final MediaRetrieveService mediaRetrieveService;
 
     public TaskMediaResponse retrieveTaskMediaList(String taskId) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -63,7 +70,7 @@ public class TaskMediaManager {
         TeamDto teamDto = teamRetrieveService.retrieveTeam(teamId);
         teamAccessValidator.validateTeamAccess(currentAccountId, teamDto);
         log.info("Retrieve task media list from team has started. accountId: {}, page: {}", currentAccountId, page);
-        PageDto<TaskMediaDto> data = taskMediaRetrieveService.retrieveAllFromWorkspaceAndTeam(teamDto.getWorkspaceId(), teamDto.getTeamId(), page);
+        PageDto<TaskMediaDto> data = taskMediaRetrieveService.retrieveAllFromWorkspaceAndTeam(teamDto.getWorkspaceId(), teamDto.getTeamId(), MediaFileUploadStatusType.COMPLETED, page);
         return mapResponse(data);
     }
 
@@ -76,7 +83,7 @@ public class TaskMediaManager {
         workspaceMediaLimitValidator.validateWorkspaceStorageLimitNotExceeded(taskDto.getWorkspaceId(), file.getSize());
         log.info("Upload task media has started. currentAccountId: {}", currentAccountId);
         AccessibleMediaDto accessibleMediaDto = taskMediaOperationService.upload(currentAccountId, taskDto, file);
-        taskActivityService.initializeTaskAttachmentAddedActivity(currentAccountId, currentAccountSessionId, taskDto, accessibleMediaDto);
+        taskActivityService.initializeTaskAttachmentAddedActivity(currentAccountId, currentAccountSessionId, taskDto, accessibleMediaDto.getMediaId());
         taskSearchService.refreshTaskFtsMv();
         return new BaseResponse();
     }
@@ -97,9 +104,8 @@ public class TaskMediaManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
-        taskMediaOperationService.updateMediaAsTemporaryPublic(mediaId);
-        AccessibleMediaDto accessibleMediaDto = taskMediaRetrieveService.retrieveAccessible(taskId, mediaId);
-        String redirectUrl = taskMediaRetrieveService.retrievePublicDownloadLink(accessibleMediaDto);
+        AccessibleMediaDto accessibleMediaDto = taskMediaRetrieveService.retrieveAccessible(taskId, mediaId, MediaFileUploadStatusType.COMPLETED);
+        String redirectUrl = MediaVisibilityType.PRIVATE.equals(accessibleMediaDto.getVisibility()) ? taskMediaRetrieveService.retrievePublicDownloadLink(accessibleMediaDto) : accessibleMediaDto.getUrl();
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"%s\"".formatted(accessibleMediaDto.getOriginalName()));
         response.sendRedirect(redirectUrl);
     }
@@ -114,8 +120,35 @@ public class TaskMediaManager {
         return new BaseResponse();
     }
 
+    public MediaUploadUrlResponse retrieveTaskMediaUploadUrl(String taskId, MediaUploadUrlRequest mediaUploadUrlRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
+        TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
+        taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
+        workspaceTierValidator.validateWorkspaceTier(taskDto.getWorkspaceId(), WorkspaceTier.PRO);
+        workspaceMediaLimitValidator.validateWorkspaceStorageLimitNotExceeded(taskDto.getWorkspaceId(), mediaUploadUrlRequest.getFileSize());
+        log.info("Retrieve task media upload url has started. currentAccountId: {}", currentAccountId);
+        WaitingMediaResultDto waitingMediaResultDto = taskMediaOperationService.retrieveUploadUrl(taskId, taskDto, mediaUploadUrlRequest.getOriginalName(), mediaUploadUrlRequest.getContentType(), mediaUploadUrlRequest.getFileSize());
+        return mapResponse(waitingMediaResultDto);
+    }
+
+    public BaseResponse notifyUploadCompleted(String taskId, String mediaId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
+        TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
+        taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
+        validateMediaRelatedWithTask(taskId, mediaId);
+        taskMediaOperationService.updateTaskMediaAsCompleted(mediaId);
+        taskActivityService.initializeTaskAttachmentAddedActivity(currentAccountId, currentAccountSessionId, taskDto, mediaId);
+        taskSearchService.refreshTaskFtsMv();
+        return new BaseResponse();
+    }
+
     private void validateMediaRelatedWithTask(String taskId, String mediaId) {
-        taskMediaRetrieveService.retrieveAccessible(taskId, mediaId);
+        boolean isRelated = mediaRetrieveService.checkMediaRelatedWithRelatedObjectId(mediaId, taskId);
+        if (!isRelated) {
+            throw new NoAccessException();
+        }
     }
 
     private TaskMediaResponse mapResponse(List<MediaDto> taskRelatedMedia) {
@@ -128,5 +161,11 @@ public class TaskMediaManager {
         TaskPaginatedMediaResponse taskPaginatedMediaResponse = new TaskPaginatedMediaResponse();
         taskPaginatedMediaResponse.setData(data);
         return taskPaginatedMediaResponse;
+    }
+
+    private MediaUploadUrlResponse mapResponse(WaitingMediaResultDto waitingMediaResultDto) {
+        MediaUploadUrlResponse mediaUploadUrlResponse = new MediaUploadUrlResponse();
+        mediaUploadUrlResponse.setWaitingMediaResultDto(waitingMediaResultDto);
+        return mediaUploadUrlResponse;
     }
 }

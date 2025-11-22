@@ -36,6 +36,12 @@
     gap: .5rem;
 }
 
+.projectListTitleContaienr {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .milestoneListContainer {
     display: flex;
     flex-direction: column;
@@ -64,8 +70,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 4rem;
-    gap: 1rem;
+    min-height: 8rem;
+    gap: 1.5rem;
 }
 
 .unpickButtonContainer {

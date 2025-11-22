@@ -181,9 +181,9 @@ public class TaskActivityService {
         notifyTaskSubscribers(boardEntryDto.getTask(), type, performingAccountSessionId);
     }
 
-    public void initializeTaskAttachmentAddedActivity(String performedBy, String performingAccountSessionId, TaskDto taskDto, AccessibleMediaDto accessibleMediaDto) {
+    public void initializeTaskAttachmentAddedActivity(String performedBy, String performingAccountSessionId, TaskDto taskDto, String mediaId) {
         WorkspaceActivityType type = WorkspaceActivityType.ATTACHMENT_ADDED;
-        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, taskDto, accessibleMediaDto.getMediaId());
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, taskDto, mediaId);
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
         notifyTaskSubscribers(taskDto, type, performingAccountSessionId);

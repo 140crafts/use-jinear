@@ -1,6 +1,7 @@
 package co.jinear.core.repository;
 
 import co.jinear.core.model.entity.media.Media;
+import co.jinear.core.model.enumtype.media.MediaFileUploadStatusType;
 import co.jinear.core.model.vo.task.TaskMediaVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,8 +26,12 @@ public interface TaskMediaRepository extends JpaRepository<Media, String> {
              task.workspaceId = :workspaceId and
              task.teamId = :teamId and
              task.passiveId is null and
-             media.passiveId is null
+             media.passiveId is null and
+             media.uploadStatus = :uploadStatus
              order by media.createdDate
             """)
-    Page<TaskMediaVo> retrieveAllFromWorkspaceAndTeam(@Param("workspaceId") String workspaceId, @Param("teamId") String teamId, Pageable pageable);
+    Page<TaskMediaVo> retrieveAllFromWorkspaceAndTeam(@Param("workspaceId") String workspaceId,
+                                                      @Param("teamId") String teamId,
+                                                      @Param("uploadStatus") MediaFileUploadStatusType uploadStatus,
+                                                      Pageable pageable);
 }

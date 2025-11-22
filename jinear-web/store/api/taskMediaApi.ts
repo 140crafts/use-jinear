@@ -1,5 +1,5 @@
 import {
-  BaseResponse,
+  BaseResponse, MediaUploadUrlRequest, MediaUploadUrlResponse,
   MediaVisibilityType,
   TaskMediaResponse,
   TaskPaginatedMediaResponse
@@ -28,6 +28,11 @@ export interface IDeleteTaskMediaRequest {
 export interface IDownloadTaskMediaRequest {
   taskId: string;
   mediaId: string;
+}
+
+export interface IMediaUploadUrlRequest {
+  taskId: string;
+  mediaUploadUrlRequest: MediaUploadUrlRequest;
 }
 
 export const taskMediaApi = api.injectEndpoints({
@@ -92,7 +97,27 @@ export const taskMediaApi = api.injectEndpoints({
     }>({
       query: (req) => ({
         url: `v1/task/media/${req.taskId}/update-visibility/${req.mediaId}/${req.mediaVisibilityType}`,
+        method: "POST"
+      }),
+      invalidatesTags: (_result, _err, req) => [
+        { type: "v1/task/media/{taskId}", id: req.taskId },
+        "v1/task/media/from-team/{teamId}",
+        "v1/workspace/activity/filter"
+      ]
+    }),
+    //
+    retrieveTaskMediaUploadUrl: build.mutation<MediaUploadUrlResponse, IMediaUploadUrlRequest>({
+      query: (req: IMediaUploadUrlRequest) => ({
+        url: `v1/task/media/${req.taskId}/upload-url`,
         method: "POST",
+        body: req.mediaUploadUrlRequest
+      })
+    }),
+    //
+    notifyUploadCompleted: build.mutation<MediaUploadUrlResponse, { taskId: string, mediaId: string }>({
+      query: (req: { taskId: string, mediaId: string }) => ({
+        url: `v1/task/media/${req.taskId}/upload-url/notify/${req.mediaId}`,
+        method: "POST"
       }),
       invalidatesTags: (_result, _err, req) => [
         { type: "v1/task/media/{taskId}", id: req.taskId },
@@ -110,9 +135,19 @@ export const {
   useUploadTaskMediaMutation,
   useDeleteTaskMediaMutation,
   useDownloadTaskMediaQuery,
-  useUpdateTaskMediaVisibilityMutation
+  useUpdateTaskMediaVisibilityMutation,
+  useRetrieveTaskMediaUploadUrlMutation,
+  useNotifyUploadCompletedMutation
 } = taskMediaApi;
 
 export const {
-  endpoints: { retrieveTaskMediaList, uploadTaskMedia, deleteTaskMedia, downloadTaskMedia, updateTaskMediaVisibility }
+  endpoints: {
+    retrieveTaskMediaList,
+    uploadTaskMedia,
+    deleteTaskMedia,
+    downloadTaskMedia,
+    updateTaskMediaVisibility,
+    retrieveTaskMediaUploadUrl,
+    notifyUploadCompleted
+  }
 } = taskMediaApi;

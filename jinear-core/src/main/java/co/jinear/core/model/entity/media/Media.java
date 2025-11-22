@@ -1,8 +1,6 @@
 package co.jinear.core.model.entity.media;
 
-import co.jinear.core.converter.media.MediaFileOwnershipStatusTypeConverter;
-import co.jinear.core.converter.media.MediaFileProviderTypeConverter;
-import co.jinear.core.converter.media.MediaVisibilityTypeConverter;
+import co.jinear.core.converter.media.*;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.enumtype.media.*;
 import jakarta.persistence.*;
@@ -75,4 +73,15 @@ public class Media extends BaseEntity {
     @Convert(converter = MediaFileOwnershipStatusTypeConverter.class)
     @Column(name = "ownership_status")
     private MediaFileOwnershipStatusType ownershipStatus;
+
+    @Convert(converter = MediaFileUploadMethodTypeConverter.class)
+    @Column(name = "upload_method")
+    private MediaFileUploadMethodType uploadMethod;
+
+    @Convert(converter = MediaFileUploadStatusTypeConverter.class)
+    @Column(name = "upload_status")
+    private MediaFileUploadStatusType uploadStatus;
+
+    @Column(name = "upload_window_expires_at")
+    private ZonedDateTime uploadWindowExpiresAt;
 }
