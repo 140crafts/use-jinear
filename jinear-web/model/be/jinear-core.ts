@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2025-11-15 13:12:24.
+// Generated using typescript-generator version 3.0.1157 on 2025-11-22 12:41:52.
 
 export interface BaseDto {
     createdDate: Date;
@@ -160,10 +160,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
     gthreadId: string;
     ghistoryId: string;
     gid: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -277,6 +277,15 @@ export interface MediaDto extends BaseDto {
     providerType: MediaFileProviderType;
     url: string;
     visibility: MediaVisibilityType;
+}
+
+export interface WaitingMediaResultDto {
+    presignedUrl: string;
+    mediaId: string;
+    uploadWindowExpiresAt: Date;
+}
+
+export interface WaitingMediaResultDtoBuilder {
 }
 
 export interface ChannelDto extends PlainChannelDto {
@@ -505,9 +514,9 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
-    accountWorkspaceAdminOrOwner: boolean;
     accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
+    accountWorkspaceAdminOrOwner: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -1131,6 +1140,12 @@ export interface CalendarEventTitleDescriptionUpdateRequest {
     description?: string | null;
 }
 
+export interface MediaUploadUrlRequest extends BaseRequest {
+    originalName: string;
+    fileSize: number;
+    contentType: string;
+}
+
 export interface InitializeChannelRequest extends BaseRequest {
     workspaceId: string;
     title: string;
@@ -1582,6 +1597,10 @@ export interface FeedMemberPaginatedResponse extends BaseResponse {
     data: PageDto<FeedMemberDto>;
 }
 
+export interface MediaUploadUrlResponse extends BaseResponse {
+    data: WaitingMediaResultDto;
+}
+
 export interface ChannelListingResponse extends BaseResponse {
     data: PlainChannelDto[];
 }
@@ -1961,8 +1980,8 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    description: string;
     filename: string;
+    description: string;
     uri: URI;
 }
 
@@ -2063,6 +2082,10 @@ export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJ
 export type MediaFileOwnershipStatusType = "WAITING" | "OWNED";
 
 export type MediaFileProviderType = "GCLOUD" | "MINIO";
+
+export type MediaFileUploadMethodType = "LEGACY" | "PRESIGNED_URL";
+
+export type MediaFileUploadStatusType = "WAITING" | "COMPLETED" | "FAILED";
 
 export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK" | "PROJECT_POST" | "PROJECT" | "RICH_TEXT";
 

@@ -29,4 +29,7 @@ public class MinIoProperties {
 
     @Value("${minio.secret}")
     private String secret;
+
+    @Value("${minio.signed-url-duration}")
+    private Integer signedUrlDuration;
 }

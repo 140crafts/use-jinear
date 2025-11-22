@@ -1,9 +1,14 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
-import { useRetrieveTaskMediaListQuery, useUploadTaskMediaMutation } from "@/store/api/taskMediaApi";
+import {
+  useNotifyUploadCompletedMutation,
+  useRetrieveTaskMediaListQuery,
+  useRetrieveTaskMediaUploadUrlMutation,
+  useUploadTaskMediaMutation
+} from "@/store/api/taskMediaApi";
 import Logger from "@/utils/logger";
 import useTranslation from "locales/useTranslation";
-import React, { ChangeEvent, useRef } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { toast } from "react-hot-toast";
 import { useTask } from "../context/TaskDetailContext";
 import styles from "./TaskMediaList.module.css";
@@ -20,7 +25,10 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
   const { data: retrieveTaskMediaListResponse, isFetching: isMediaListFetching } = useRetrieveTaskMediaListQuery({
     taskId: task.taskId
   });
-  const [uploadTaskMedia, { isLoading: isUploadTaskMediaLoading }] = useUploadTaskMediaMutation();
+  // const [uploadTaskMedia, { isLoading: isUploadTaskMediaLoading }] = useUploadTaskMediaMutation();
+  const [retrieveTaskMediaUploadUrl, { isLoading: isRetrieveTaskMediaUploadUrlLoading }] = useRetrieveTaskMediaUploadUrlMutation();
+  const [notifyUploadCompleted, { isLoading: isNotifyUploadCompletedLoading }] = useNotifyUploadCompletedMutation();
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
   const pickAttachment = () => {
     if (attachmentPickerRef.current) {
@@ -31,21 +39,40 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
 
   const onSelectFile = (event: ChangeEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
-    if (target.files && target.files.length) {
+    if (target?.files?.length) {
       const files = Array.from(target.files);
+      handleUpload({ files });
+    }
+  };
+
+  const handleUpload = async ({ files = [] }: { files: File[] }) => {
+    setIsUploading(true);
+    try {
       for (const file of files) {
-        if (file) {
-          // disabled for test
-          // const fileSize = file?.size || 0;
-          // if (fileSize / 1000 / 1000 > 32) {
-          //   toast(t("apiFileTooLargeError"));
-          //   return;
-          // }
-          let formData = new FormData();
-          formData.append("file", file);
-          uploadTaskMedia({ taskId: task.taskId, formData });
+        const mediaUploadUrlRequest = {
+          originalName: file.name ?? "file",
+          fileSize: file.size,
+          contentType: file.type ?? "application/octet-stream"
+        };
+        const { data: presignedUrlResponse } = await retrieveTaskMediaUploadUrl({
+          taskId: task.taskId,
+          mediaUploadUrlRequest
+        }).unwrap();
+        const uploadResponse = await fetch(presignedUrlResponse.presignedUrl, {
+          method: "PUT",
+          body: file,
+          headers: { "Content-Type": file.type }
+        });
+        if (!uploadResponse.ok) {
+          throw new Error("File upload failed.");
         }
+        notifyUploadCompleted({ taskId: task.taskId, mediaId: presignedUrlResponse.mediaId });
       }
+    } catch (error) {
+      console.error(error);
+      toast(t("genericError"));
+    } finally {
+      setIsUploading(false);
     }
   };
 
@@ -54,7 +81,7 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
       <div className={styles.actionBar}>
         <h3>{t("taskDetailMediaTitle")}</h3>
         <Button
-          disabled={isUploadTaskMediaLoading}
+          disabled={isUploading}
           variant={ButtonVariants.filled}
           heightVariant={ButtonHeight.short}
           onClick={pickAttachment}
@@ -77,7 +104,7 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
         {retrieveTaskMediaListResponse?.data?.map?.((taskMedia) => (
           <TaskMediaItem key={`task-media-${task.taskId}-${taskMedia.mediaId}`} media={taskMedia} />
         ))}
-        {isUploadTaskMediaLoading && <TaskMediaItem key={`task-media-new-upload`} mock={true} />}
+        {isUploading && <TaskMediaItem key={`task-media-new-upload`} mock={true} />}
         {isMediaListFetching && <CircularLoading />}
       </div>
     </div>

@@ -54,10 +54,14 @@ public class ProjectDomainCnameOperatorService {
     }
 
     private void findTimedOutSetupsAndUpdateAsCancelled() {
-        String passiveId = passiveService.createSystemActionPassive();
         Date createdDateBefore = DateHelper.substractMinutes(DateHelper.now(), CNAME_SETUP_ALLOWED_WAIT_DURATION);
-        log.info("Find timed out setups and update as cancelled has started. passiveId: {}, createdDateBefore: {}", passiveId, DateHelper.toMySQLDateFormat(createdDateBefore));
-        projectDomainRepository.updateTimedOutDomains(ProjectDomainCnameCheckResultType.CNAME_CHECK_FAILED, ProjectDomainType.CUSTOM, createdDateBefore, passiveId, ProjectDomainCnameCheckResultType.CANCELLED_CNAME_NOT_SETUP_IN_TIME);
+        boolean anyTimedOutDomainExists = projectDomainRepository.existsByCnameCheckResultAndDomainTypeAndCreatedDateBeforeAndPassiveIdIsNull(ProjectDomainCnameCheckResultType.CNAME_CHECK_FAILED, ProjectDomainType.CUSTOM, createdDateBefore);
+        if (anyTimedOutDomainExists) {
+            log.info("Timed out domains found.");
+            String passiveId = passiveService.createSystemActionPassive();
+            log.info("Find timed out setups and update as cancelled has started. passiveId: {}, createdDateBefore: {}", passiveId, DateHelper.toMySQLDateFormat(createdDateBefore));
+            projectDomainRepository.updateTimedOutDomains(ProjectDomainCnameCheckResultType.CNAME_CHECK_FAILED, ProjectDomainType.CUSTOM, createdDateBefore, passiveId, ProjectDomainCnameCheckResultType.CANCELLED_CNAME_NOT_SETUP_IN_TIME);
+        }
     }
 
     public void syncAll() {

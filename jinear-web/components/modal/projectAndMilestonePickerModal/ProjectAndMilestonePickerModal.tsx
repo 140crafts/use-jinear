@@ -17,7 +17,7 @@ import {
 import { useAllProjectsQuery } from "@/api/projectQueryApi";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
 import { MilestoneDto, ProjectDto } from "@/be/jinear-core";
-import { LuBox, LuDiamond, LuX } from "react-icons/lu";
+import { LuBox, LuDiamond, LuPlus, LuX } from "react-icons/lu";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import Line from "@/components/line/Line";
 import { selectCurrentAccountsWorkspace } from "@/slice/accountSlice";
@@ -99,7 +99,7 @@ const ProjectAndMilestonePickerModal: React.FC<ProjectAndMilestonePickerModalPro
 
   const openNewProjectModal = () => {
     dispatch(popNewProjectModal({ workspace, visible: true }));
-    close();
+    // close();
   };
 
   const unpickClick = () => {
@@ -143,7 +143,16 @@ const ProjectAndMilestonePickerModal: React.FC<ProjectAndMilestonePickerModalPro
 
           {!selectedProject &&
             <div className={styles.projectListContainer}>
-              <h3>{t("projectAndMilestonePickerModalSelectProjectLabel")}</h3>
+              <div className={styles.projectListTitleContaienr}>
+                <h3>{t("projectAndMilestonePickerModalSelectProjectLabel")}</h3>
+                <Button
+                  heightVariant={ButtonHeight.short}
+                  variant={ButtonVariants.filled}
+                  onClick={openNewProjectModal}
+                >
+                  <LuPlus className={"icon"} />
+                </Button>
+              </div>
               {allProjectsResponse?.data?.content?.map(project =>
                 <Button key={`project-picker-project-${project.projectId}`}
                         className={styles.projectListProjectButton}
@@ -178,10 +187,11 @@ const ProjectAndMilestonePickerModal: React.FC<ProjectAndMilestonePickerModalPro
                 {!selectedMilestone &&
                   <div className={styles.milestoneListContainer}>
                     <h3>{t("projectAndMilestonePickerModalSelectMilestoneLabel")}</h3>
+                    <span>{t("projectAndMilestonePickerModalSelectMilestoneSubTitleLabel")}</span>
+                    <div className={"spacer-h-1"} />
 
                     {selectedProject?.milestones?.length == 0 &&
                       <div className={styles.emptyContainer}>
-                        <div className={"spacer-h-2"} />
                         <span>{t("projectAndMilestonePickerModalNoMilestoneText")}</span>
                         <Button variant={ButtonVariants.filled}
                                 heightVariant={ButtonHeight.short}

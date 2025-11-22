@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.media.AccessibleMediaDto;
 import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.dto.task.TaskMediaDto;
 import co.jinear.core.model.enumtype.media.FileType;
+import co.jinear.core.model.enumtype.media.MediaFileUploadStatusType;
 import co.jinear.core.repository.TaskMediaRepository;
 import co.jinear.core.service.media.MediaRetrieveService;
 import lombok.RequiredArgsConstructor;
@@ -37,16 +38,16 @@ public class TaskMediaRetrieveService {
         return mediaRetrieveService.retrieveMediaWithMediaIdAndRelatedObjectIdIncludingPassive(mediaId, taskId);
     }
 
-    public PageDto<TaskMediaDto> retrieveAllFromWorkspaceAndTeam(String workspaceId, String teamId, int page) {
+    public PageDto<TaskMediaDto> retrieveAllFromWorkspaceAndTeam(String workspaceId, String teamId, MediaFileUploadStatusType mediaFileUploadStatusType, int page) {
         log.info("Retrieve all media from workspace and team has started. workspaceId: {}, teamId: {}, page: {}", workspaceId, teamId, page);
-        Page<TaskMediaDto> result = taskMediaRepository.retrieveAllFromWorkspaceAndTeam(workspaceId, teamId, PageRequest.of(page, PAGE_SIZE))
+        Page<TaskMediaDto> result = taskMediaRepository.retrieveAllFromWorkspaceAndTeam(workspaceId, teamId, mediaFileUploadStatusType, PageRequest.of(page, PAGE_SIZE))
                 .map(taskMediaDtoConverter::convert);
         return new PageDto<>(result);
     }
 
-    public AccessibleMediaDto retrieveAccessible(String taskId, String mediaId) {
-        log.info("Retrieve task media has started. taskId: {}, mediaId: {}", taskId, mediaId);
-        return mediaRetrieveService.retrieveAccessibleMediaWithMediaIdAndRelatedObjectId(mediaId, taskId);
+    public AccessibleMediaDto retrieveAccessible(String taskId, String mediaId, MediaFileUploadStatusType uploadStatus) {
+        log.info("Retrieve task media has started. taskId: {}, mediaId: {}, uploadStatus: {}", taskId, mediaId, uploadStatus);
+        return mediaRetrieveService.retrieveAccessibleMediaWithMediaIdAndRelatedObjectId(mediaId, taskId, uploadStatus);
     }
 
     public List<MediaDto> retrieveTaskRelatedMedia(String taskId) {
@@ -56,6 +57,6 @@ public class TaskMediaRetrieveService {
 
     public String retrievePublicDownloadLink(AccessibleMediaDto accessibleMediaDto) {
         log.info("Retrieve public link for task media has started.");
-        return mediaRetrieveService.retrievePublicDownloadLink(accessibleMediaDto);
+        return mediaRetrieveService.retrievePresignedPublicDownloadLink(accessibleMediaDto).toString();
     }
 }

@@ -94,13 +94,13 @@ const globalModals: any = (
     <IntegrationFeedItemDetailModal />
     <NewTaskModal />
     <NewCustomProjectDomainModal />
+    <ProjectAndMilestonePickerModal />
     <NewProjectModal />
     <ProjectPrioritySelectModal />
     <ProjectStateSelectModal />
     <WorkspaceMemberPickerModal />
     <NewCalendarIntegrationModal />
     <NewTaskBoardModal />
-    <ProjectAndMilestonePickerModal />
     <NewMilestoneModal />
     <TeamPickerModal />
     <TeamPickerModalV2 />

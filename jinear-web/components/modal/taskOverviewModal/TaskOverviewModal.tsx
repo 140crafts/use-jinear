@@ -64,7 +64,7 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
         <div className={styles.actionBar}>
           <Button
             heightVariant={ButtonHeight.short}
-            variant={ButtonVariants.filled}
+            variant={ButtonVariants.blur}
             className={styles.goToTaskButton}
             onClick={onGoToTaskClick}
             href={`/${taskResponse.data?.workspace?.username}/task/${taskResponse.data?.team?.tag}-${taskResponse.data?.teamTagNo}`}

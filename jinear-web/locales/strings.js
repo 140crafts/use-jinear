@@ -4288,6 +4288,10 @@ const translations = {
     en: "Select a milestone",
     tr: "Bir hedef noktası seç"
   },
+  projectAndMilestonePickerModalSelectMilestoneSubTitleLabel: {
+    en: "Each task must be assigned to a milestone.",
+    tr: "Her görev bir hedef noktasına bağlı olmalıdır."
+  },
   projectAndMilestonePickerModalSelectedMilestoneLabel: {
     en: "Selected milestone",
     tr: "Seçili hedef noktası"

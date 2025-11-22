@@ -2,15 +2,16 @@ package co.jinear.core.service.media;
 
 import co.jinear.core.config.properties.FileStorageProperties;
 import co.jinear.core.converter.media.AccessibleMediaDtoConverter;
+import co.jinear.core.converter.media.MediaEntityConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.media.AccessibleMediaDto;
+import co.jinear.core.model.dto.media.WaitingMediaResultDto;
 import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.model.enumtype.media.MediaFileOwnershipStatusType;
 import co.jinear.core.model.enumtype.media.MediaFileProviderType;
+import co.jinear.core.model.enumtype.media.MediaFileUploadStatusType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
-import co.jinear.core.model.vo.media.InitializeMediaVo;
-import co.jinear.core.model.vo.media.MediaInitializeResultVo;
-import co.jinear.core.model.vo.media.RemoveMediaVo;
+import co.jinear.core.model.vo.media.*;
 import co.jinear.core.repository.MediaRepository;
 import co.jinear.core.service.media.fileoperation.MediaFileOperationServiceFactory;
 import co.jinear.core.service.media.fileoperation.MediaFileOperationStrategy;
@@ -42,6 +43,7 @@ public class MediaOperationService {
     private final AccessibleMediaDtoConverter accessibleMediaDtoConverter;
     private final FileStorageProperties fileStorageProperties;
     private final MediaFileOperationServiceFactory mediaFileOperationServiceFactory;
+    private final MediaEntityConverter mediaEntityConverter;
 
     @Transactional
     public AccessibleMediaDto changeProfilePicture(InitializeMediaVo initializeMediaVo) {
@@ -56,20 +58,35 @@ public class MediaOperationService {
     public AccessibleMediaDto initializeMedia(InitializeMediaVo initializeMediaVo) {
         log.info("Initialize media has started. initializeMediaVo: {}", initializeMediaVo);
         MediaFileProviderType activeFileStorageType = fileStorageProperties.getActiveFileStorageType();
-
         String mediaKey = RandomHelper.generateULID();
         String path = generatePath(initializeMediaVo, mediaKey);
-        Media media = saveMedia(initializeMediaVo, mediaKey, path, activeFileStorageType, initializeMediaVo.getOwnershipStatus());
+        Media media = mediaEntityConverter.mapToEntity(initializeMediaVo, mediaKey, path, activeFileStorageType, initializeMediaVo.getOwnershipStatus());
+        MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(activeFileStorageType);
+        MediaInitializeResultVo mediaInitializeResultVo = mediaFileOperationStrategy.save(initializeMediaVo.getFile(), initializeMediaVo.getVisibility(), path);
+        updateBucketName(media, mediaInitializeResultVo.getBucketName());
+        return accessibleMediaDtoConverter.mapToAccessibleMediaDto(media);
+    }
+
+    public WaitingMediaResultDto initializeWaitingMediaAndGetPresignedUploadUrl(InitializeWaitingMediaVo initializeWaitingMediaVo) {
+        log.info("Initialize waiting media has started. initializeWaitingMediaVo: {}", initializeWaitingMediaVo);
+        MediaFileProviderType activeFileStorageType = fileStorageProperties.getActiveFileStorageType();
+
+        String mediaKey = RandomHelper.generateULID();
+        String path = generatePath(initializeWaitingMediaVo, mediaKey, initializeWaitingMediaVo.getOriginalName());
+        Media media = mediaEntityConverter.mapToEntity(initializeWaitingMediaVo, mediaKey, path, activeFileStorageType, initializeWaitingMediaVo.getOwnershipStatus());
 
         MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(activeFileStorageType);
-        MediaInitializeResultVo mediaInitializeResultVo = mediaFileOperationStrategy.save(initializeMediaVo.getFile(), path);
+        WaitingMediaResultVo waitingMediaResultVo = mediaFileOperationStrategy.presignUrl(path, media.getContentType(), initializeWaitingMediaVo.getVisibility(), initializeWaitingMediaVo.getFileSize());
 
-        updateBucketName(media, mediaInitializeResultVo.getBucketName());
-        if (MediaVisibilityType.PUBLIC.equals(media.getVisibility())) {
-            String newBucketName = mediaFileOperationStrategy.makePublic(mediaInitializeResultVo.getBucketName(), path);
-            updateBucketName(media, newBucketName);
-        }
-        return accessibleMediaDtoConverter.mapToAccessibleMediaDto(media);
+        updateUploadWindowExpiresAt(media, waitingMediaResultVo.getUploadWindowExpiresAt());
+        updateBucketName(media, waitingMediaResultVo.getBucketName());
+
+        return WaitingMediaResultDto
+                .builder()
+                .presignedUrl(waitingMediaResultVo.getPresignedUrl().toString())
+                .mediaId(media.getMediaId())
+                .uploadWindowExpiresAt(waitingMediaResultVo.getUploadWindowExpiresAt())
+                .build();
     }
 
     @Transactional
@@ -142,6 +159,32 @@ public class MediaOperationService {
                 });
     }
 
+    public void updateAsUploadCompleted(String mediaId) {
+        log.info("Update as upload completed has started. mediaId: {}", mediaId);
+        Media media = retrieveMedia(mediaId);
+        if (!MediaFileUploadStatusType.COMPLETED.equals(media.getUploadStatus())) {
+            media.setUploadStatus(MediaFileUploadStatusType.COMPLETED);
+            mediaRepository.save(media);
+        }
+    }
+
+    public void checkExistenceAndUpdateStatus(Media media) {
+        log.info("Check existence and update status has started. mediaId: {}", media.getMediaId());
+        MediaFileProviderType activeFileStorageType = fileStorageProperties.getActiveFileStorageType();
+        MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(activeFileStorageType);
+        boolean mediaExists = mediaFileOperationStrategy.doesObjectExists(media.getBucketName(), media.getStoragePath());
+        ZonedDateTime uploadWindowExpiresAt = media.getUploadWindowExpiresAt();
+        log.info("mediaExists: {}, uploadWindowExpiresAt: {}", mediaExists, uploadWindowExpiresAt);
+        if (!mediaExists && ZonedDateTime.now().isAfter(uploadWindowExpiresAt)) {
+            log.info("Updating upload status as failed.");
+            media.setUploadStatus(MediaFileUploadStatusType.FAILED);
+        } else if (mediaExists) {
+            log.info("Updating upload status as completed.");
+            media.setUploadStatus(MediaFileUploadStatusType.COMPLETED);
+        }
+        mediaRepository.save(media);
+    }
+
     private void deleteProfilePictureIfExists(InitializeMediaVo initializeMediaVo, Optional<AccessibleMediaDto> mediaDtoOptional) {
         mediaDtoOptional.map(internalMediaDto -> {
                     RemoveMediaVo removeMediaVo = new RemoveMediaVo();
@@ -156,45 +199,16 @@ public class MediaOperationService {
         return mediaRepository.findByMediaIdAndPassiveIdIsNull(mediaId).orElseThrow(NotFoundException::new);
     }
 
-    private Media saveMedia(InitializeMediaVo initializeMediaVo, String mediaKey, String path, MediaFileProviderType activeFileStorageType, MediaFileOwnershipStatusType ownershipStatus) {
-        Media media = new Media();
-        media.setMediaKey(mediaKey);
-        media.setOwnerId(initializeMediaVo.getOwnerId());
-        media.setRelatedObjectId(initializeMediaVo.getRelatedObjectId());
-        media.setMediaOwnerType(initializeMediaVo.getMediaOwnerType());
-        media.setFileType(initializeMediaVo.getFileType());
-        media.setVisibility(initializeMediaVo.getVisibility());
-        media.setStoragePath(path);
-        media.setProviderType(activeFileStorageType);
-        media.setOwnershipStatus(ownershipStatus);
-
-        Optional.of(initializeMediaVo)
-                .map(InitializeMediaVo::getFile)
-                .map(MultipartFile::getContentType)
-                .ifPresent(media::setContentType);
-
-        String originalName = Optional.of(initializeMediaVo)
-                .map(InitializeMediaVo::getFile)
-                .map(MultipartFile::getOriginalFilename)
-                .map(NormalizeHelper::normalizeUsernameReplaceSpaces)
-                .orElse(UUID.randomUUID().toString());
-        media.setOriginalName(originalName);
-
-        Optional.of(initializeMediaVo)
-                .map(InitializeMediaVo::getFile)
-                .map(MultipartFile::getSize)
-                .ifPresent(media::setSize);
-
-        Media saved = mediaRepository.save(media);
-        log.info("Media saved. mediaId: {}", saved.getMediaId());
-        return saved;
-    }
-
     private void updateBucketName(Media media, String bucketName) {
         if (!StringUtils.equals(bucketName, media.getBucketName())) {
             media.setBucketName(bucketName);
             mediaRepository.save(media);
         }
+    }
+
+    private void updateUploadWindowExpiresAt(Media media, ZonedDateTime uploadWindowExpiresAt) {
+        media.setUploadWindowExpiresAt(uploadWindowExpiresAt);
+        mediaRepository.save(media);
     }
 
     private String generatePath(InitializeMediaVo initializeMediaVo, String mediaKey) {
@@ -203,6 +217,10 @@ public class MediaOperationService {
                 .map(MultipartFile::getOriginalFilename)
                 .map(NormalizeHelper::normalizeUsernameReplaceSpaces)
                 .orElse(UUID.randomUUID().toString());
-        return FileStorageUtils.generatePath(initializeMediaVo.getMediaOwnerType(), initializeMediaVo.getRelatedObjectId(), initializeMediaVo.getFileType(), mediaKey, originalName);
+        return generatePath(initializeMediaVo, mediaKey, originalName);
+    }
+
+    private String generatePath(BaseInitializeMediaVo baseInitializeMediaVo, String mediaKey, String originalName) {
+        return FileStorageUtils.generatePath(baseInitializeMediaVo.getMediaOwnerType(), baseInitializeMediaVo.getRelatedObjectId(), baseInitializeMediaVo.getFileType(), mediaKey, originalName);
     }
 }

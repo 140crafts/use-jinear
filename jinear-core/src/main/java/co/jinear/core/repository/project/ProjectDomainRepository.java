@@ -39,6 +39,7 @@ public interface ProjectDomainRepository extends JpaRepository<ProjectDomain, St
                                @Param("passiveId") String passiveId,
                                @Param("toCnameCheckResult") ProjectDomainCnameCheckResultType toCnameCheckResult);
 
+    boolean existsByCnameCheckResultAndDomainTypeAndCreatedDateBeforeAndPassiveIdIsNull(ProjectDomainCnameCheckResultType whichCnameCheckResult, ProjectDomainType projectDomainType, Date createdDateBefore);
 
     @Query("""
             from ProjectDomain pd where

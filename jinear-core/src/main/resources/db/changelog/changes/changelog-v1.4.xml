@@ -325,4 +325,23 @@
             <column name="color" type="char(6)"/>
         </addColumn>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-537-add-upload-type-and-method ">
+        <addColumn tableName="media">
+            <column name="upload_method" type="integer" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="media">
+            <column name="upload_status" type="integer" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-537-add-upload_window_expires_at">
+        <addColumn tableName="media">
+            <column name="upload_window_expires_at" type="datetime"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

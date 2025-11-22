@@ -1,11 +1,13 @@
 package co.jinear.core.manager.scheduledjob;
 
+import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.project.domain.ProjectDomainCnameOperatorService;
 import co.jinear.core.system.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -38,6 +40,21 @@ public class ScheduledJobManager {
         Try reCheckFailedDomainsTry = Try.of(projectDomainCnameOperatorService::reCheckFailedDomains);
         findAvailableAndSyncTry.throwIfFailed();
         reCheckFailedDomainsTry.throwIfFailed();
+    }
+
+    @Async
+    @Scheduled(fixedRate = 15, timeUnit = TimeUnit.MINUTES)
+    public void checkAndUpdateWaitingForUploadMedia() {
+        log.info("Retrieve waiting for upload media has started.");
+        Page<Media> mediaPage = mediaRetrieveService.retrieveWaitingForUploadMedia();
+        log.info("Waiting for upload medias retrieved. Total waiting: {}, Currently processing size: {}", mediaPage.getTotalElements(), mediaPage.getSize());
+        mediaPage.forEach(media -> {
+            try {
+                mediaOperationService.checkExistenceAndUpdateStatus(media);
+            } catch (Exception e) {
+                log.error("Check existence and update status has failed.", e);
+            }
+        });
     }
 
     private void updateMediaAsPrivate(String mediaId) {

@@ -2,10 +2,13 @@ package co.jinear.core.controller.task;
 
 import co.jinear.core.manager.task.TaskMediaManager;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
+import co.jinear.core.model.request.media.MediaUploadUrlRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.media.MediaUploadUrlResponse;
 import co.jinear.core.model.response.task.TaskMediaResponse;
 import co.jinear.core.model.response.task.TaskPaginatedMediaResponse;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -61,5 +64,19 @@ public class TaskMediaController {
                                                   @PathVariable String mediaId,
                                                   @PathVariable MediaVisibilityType mediaVisibilityType) {
         return taskMediaManager.updateTaskMediaVisibility(taskId, mediaId, mediaVisibilityType);
+    }
+
+    @PostMapping(value = "/{taskId}/upload-url")
+    @ResponseStatus(HttpStatus.OK)
+    public MediaUploadUrlResponse retrieveTaskMediaUploadUrl(@PathVariable String taskId,
+                                                             @Valid @RequestBody MediaUploadUrlRequest mediaUploadUrlRequest) {
+        return taskMediaManager.retrieveTaskMediaUploadUrl(taskId, mediaUploadUrlRequest);
+    }
+
+    @PostMapping(value = "/{taskId}/upload-url/notify/{mediaId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse notifyUploadCompleted(@PathVariable String taskId,
+                                              @PathVariable String mediaId) {
+        return taskMediaManager.notifyUploadCompleted(taskId, mediaId);
     }
 }
