@@ -1,6 +1,5 @@
 package co.jinear.core.config.security;
 
-import co.jinear.core.config.properties.CorsProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,9 +14,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -27,7 +23,7 @@ public class SecurityConfiguration {
 
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtRequestFilter jwtRequestFilter;
-    private final CorsProperties corsProperties;
+    private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
 
     private static final String LOGOUT_ENDPOINT = "/v1/auth/logout";
     private static final String[] PUBLIC_ENDPOINTS = new String[]{
@@ -57,7 +53,7 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors().configurationSource(corsConfigurationSource())
+                .cors().configurationSource(dynamicCorsConfigurationSource)
                 .and()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
@@ -90,17 +86,17 @@ public class SecurityConfiguration {
                 .httpBasic();
         return httpSecurity.build();
     }
-
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
-        corsConfiguration.setAllowedMethods(corsProperties.getAllowedMethods());
-        corsConfiguration.setAllowCredentials(corsProperties.getAllowCredentials());
-        corsConfiguration.setAllowedOriginPatterns(corsProperties.getAllowedOriginPatterns());
-        source.registerCorsConfiguration("/**", corsConfiguration);
-        return source;
-    }
+//
+//    @Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
+//        corsConfiguration.setAllowedMethods(corsProperties.getAllowedMethods());
+//        corsConfiguration.setAllowCredentials(corsProperties.getAllowCredentials());
+//        corsConfiguration.setAllowedOriginPatterns(corsProperties.getAllowedOriginPatterns());
+//        source.registerCorsConfiguration("/**", corsConfiguration);
+//        return source;
+//    }
 
     @Bean
     SessionRegistry sessionRegistry() {

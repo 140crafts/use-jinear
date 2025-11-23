@@ -20,6 +20,8 @@ public interface ProjectDomainRepository extends JpaRepository<ProjectDomain, St
 
     boolean existsByDomainAndPassiveIdIsNull(String domain);
 
+    boolean existsByDomainAndCnameCheckResultAndDomainTypeAndPassiveIdIsNull(String domain, ProjectDomainCnameCheckResultType projectDomainCnameCheckResultType);
+
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
             update ProjectDomain pd

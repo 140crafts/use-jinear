@@ -73,7 +73,7 @@ public class MediaOperationService {
 
         String mediaKey = RandomHelper.generateULID();
         String path = generatePath(initializeWaitingMediaVo, mediaKey, initializeWaitingMediaVo.getOriginalName());
-        Media media = mediaEntityConverter.mapToEntity(initializeWaitingMediaVo, mediaKey, path, activeFileStorageType, initializeWaitingMediaVo.getOwnershipStatus());
+        Media media = mediaEntityConverter.mapToEntity(initializeWaitingMediaVo, mediaKey, path, activeFileStorageType);
 
         MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(activeFileStorageType);
         WaitingMediaResultVo waitingMediaResultVo = mediaFileOperationStrategy.presignUrl(path, media.getContentType(), initializeWaitingMediaVo.getVisibility(), initializeWaitingMediaVo.getFileSize());
