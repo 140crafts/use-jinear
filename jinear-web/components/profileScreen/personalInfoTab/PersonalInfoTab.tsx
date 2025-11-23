@@ -3,7 +3,12 @@
 import { useUpdateProfilePictureMutation } from "@/store/api/accountMediaApi";
 import { useLogoutMutation } from "@/store/api/authApi";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
-import { changeLoadingModalVisibility, popDialogModal, resetModals } from "@/store/slice/modalSlice";
+import {
+  changeLoadingModalVisibility,
+  popDialogModal,
+  popPasswordChangeModal,
+  resetModals
+} from "@/store/slice/modalSlice";
 import { resetAllStates, useAppDispatch, useTypedSelector } from "@/store/store";
 import Logger from "@/utils/logger";
 import cn from "classnames";
@@ -73,6 +78,10 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
     );
   };
 
+  const popChangePasswordModal = () => {
+    dispatch(popPasswordChangeModal({ forced: false, visible: true }));
+  };
+
   useEffect(() => {
     if (selectedFile && currentAccount) {
       logger.log({ selectedFile });
@@ -101,15 +110,23 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
         <div className={styles.infoContainer}>
           <h2 className={cn(styles.title, "single-line")}>{currentAccount?.username}</h2>
           <label className={cn(styles.title, "single-line")}>{currentAccount?.email}</label>
-          <Button
-            className={styles.logoutButton}
-            loading={isLogoutLoading}
-            variant={ButtonVariants.filled}
-            onClick={popAreYouSureModalForLogout}
-          >
-            {t("sideMenuFooterLogout")}
-          </Button>
         </div>
+      </div>
+      <div className={styles.actionButtonContainer}>
+        <Button
+          variant={ButtonVariants.filled}
+          onClick={popChangePasswordModal}
+        >
+          {t("sideMenuFooterChangePassword")}
+        </Button>
+
+        <Button
+          loading={isLogoutLoading}
+          variant={ButtonVariants.filled}
+          onClick={popAreYouSureModalForLogout}
+        >
+          {t("sideMenuFooterLogout")}
+        </Button>
       </div>
     </div>
   );
