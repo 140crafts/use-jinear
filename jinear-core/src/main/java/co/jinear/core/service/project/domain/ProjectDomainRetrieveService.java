@@ -5,6 +5,7 @@ import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.project.ProjectDomainDto;
 import co.jinear.core.model.entity.project.ProjectDomain;
+import co.jinear.core.model.enumtype.project.ProjectDomainCnameCheckResultType;
 import co.jinear.core.repository.project.ProjectDomainRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,8 +41,18 @@ public class ProjectDomainRetrieveService {
 
     public void validateDomainIsNotInUse(String domain) {
         log.info("Validate domain is not in use has started. domain: {}", domain);
-        if (projectDomainRepository.existsByDomainAndPassiveIdIsNull(domain)) {
+        if (checkIfDomainIsExists(domain)) {
             throw new BusinessException("project.domain.already-in-use");
         }
+    }
+
+    public boolean checkIfDomainIsExists(String domain) {
+        log.info("Check if domain is exists has started. domain: {}", domain);
+        return projectDomainRepository.existsByDomainAndPassiveIdIsNull(domain);
+    }
+
+    public boolean checkIfDomainIsExistsAndSetupCompleted(String domain) {
+        log.info("Check if domain is exists has started. domain: {}", domain);
+        return projectDomainRepository.existsByDomainAndCnameCheckResultAndDomainTypeAndPassiveIdIsNull(domain, ProjectDomainCnameCheckResultType.SETUP_COMPLETED);
     }
 }

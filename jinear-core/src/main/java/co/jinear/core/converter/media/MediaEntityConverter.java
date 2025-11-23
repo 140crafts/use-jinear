@@ -53,9 +53,8 @@ public class MediaEntityConverter {
     public Media mapToEntity(InitializeWaitingMediaVo initializeWaitingMediaVo,
                              String mediaKey,
                              String path,
-                             MediaFileProviderType activeFileStorageType,
-                             MediaFileOwnershipStatusType ownershipStatus) {
-        Media media = mapBaseInitializeMediaVoToEntity(initializeWaitingMediaVo, mediaKey, path, activeFileStorageType, ownershipStatus);
+                             MediaFileProviderType activeFileStorageType) {
+        Media media = mapBaseInitializeMediaVoToEntity(initializeWaitingMediaVo, mediaKey, path, activeFileStorageType, initializeWaitingMediaVo.getOwnershipStatus());
 
         String originalName = Optional.of(initializeWaitingMediaVo)
                 .map(InitializeWaitingMediaVo::getOriginalName)
@@ -66,6 +65,8 @@ public class MediaEntityConverter {
         media.setUploadMethod(MediaFileUploadMethodType.PRESIGNED_URL);
         media.setUploadStatus(MediaFileUploadStatusType.WAITING);
         media.setUploadWindowExpiresAt(ZonedDateTime.now().plusMinutes(DEFAULT_EXPIRE_TIME));
+        media.setSize(initializeWaitingMediaVo.getFileSize());
+
         return media;
     }
 
