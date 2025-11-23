@@ -6,6 +6,7 @@ import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.project.ProjectDomainDto;
 import co.jinear.core.model.entity.project.ProjectDomain;
 import co.jinear.core.model.enumtype.project.ProjectDomainCnameCheckResultType;
+import co.jinear.core.model.enumtype.project.ProjectDomainType;
 import co.jinear.core.repository.project.ProjectDomainRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -53,6 +54,6 @@ public class ProjectDomainRetrieveService {
 
     public boolean checkIfDomainIsExistsAndSetupCompleted(String domain) {
         log.info("Check if domain is exists has started. domain: {}", domain);
-        return projectDomainRepository.existsByDomainAndCnameCheckResultAndDomainTypeAndPassiveIdIsNull(domain, ProjectDomainCnameCheckResultType.SETUP_COMPLETED);
+        return projectDomainRepository.existsByDomainAndCnameCheckResultAndDomainTypeAndPassiveIdIsNull(domain, ProjectDomainCnameCheckResultType.SETUP_COMPLETED, ProjectDomainType.CUSTOM);
     }
 }
