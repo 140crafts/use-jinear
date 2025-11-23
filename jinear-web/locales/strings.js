@@ -1455,6 +1455,10 @@ const translations = {
     en: "Logout",
     tr: "Çıkış Yap"
   },
+  sideMenuFooterChangePassword: {
+    en: "Change Password",
+    tr: "Şifreni Değiştir"
+  },
   workspaceMemberInviteModalTitle: {
     en: "Invite Someone to Workspace",
     tr: "Çalışma Alanına Birini Davet Et"
