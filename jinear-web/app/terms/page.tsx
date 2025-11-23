@@ -304,8 +304,8 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
           </p>{" "}
           <p>
             If you have any questions or suggestions about our Terms and Privacy Policy, do not hesitate to contact us at{" "}
-            <a href="mailto://cgdstnc@gmail.com" target="_blank" rel="noopener noreferrer">
-              cgdstnc@gmail.com
+            <a href="mailto://info@jinear.co" target="_blank" rel="noopener noreferrer">
+              info@jinear.co
             </a>
             .
           </p>
@@ -341,8 +341,8 @@ const TermsScreen: React.FC<TermsScreenProps> = ({}) => {
             </ul>
             <br />
             For refunds and any other issue please contact us at{" "}
-            <a href="mailto://cgdstnc@gmail.com" target="_blank" rel="noopener noreferrer">
-              cgdstnc@gmail.com
+            <a href="mailto://info@jinear.co" target="_blank" rel="noopener noreferrer">
+              info@jinear.co
             </a>
           </p>
         </div>

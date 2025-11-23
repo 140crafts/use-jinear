@@ -110,7 +110,7 @@ const Footer: React.FC<FooterProps> = ({}) => {
           <SiTelegram className={"icon"} /> Telegram
         </a>
         <a
-          href={`mailto:cgdstnc@gmail.com`}
+          href={`mailto:info@jinear.co`}
           target={"_blank"}
           rel={"noreferrer"}
           className={styles.link}
