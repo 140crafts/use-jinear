@@ -57,6 +57,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
+                        .requestMatchers("/v1/domain/validate").hasRole("DOMAINSERVER")
                         .requestMatchers("/v1/robots/**").hasRole("ROBOT")
                         .requestMatchers("/v1/**").hasRole("USER")
                         .anyRequest().authenticated()

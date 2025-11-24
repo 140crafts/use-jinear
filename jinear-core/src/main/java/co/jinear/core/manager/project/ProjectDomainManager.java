@@ -1,5 +1,6 @@
 package co.jinear.core.manager.project;
 
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.project.ProjectDomainDto;
 import co.jinear.core.model.enumtype.project.ProjectDomainType;
 import co.jinear.core.model.request.project.ProjectDomainInitializeRequest;
@@ -37,6 +38,16 @@ public class ProjectDomainManager {
         projectAccessValidator.validateHasExplicitAdminAccess(projectDomainDto.getProjectId(), currentAccountId);
         log.info("Project domain remove has started. currentAccountId: {}", currentAccountId);
         projectDomainOperationService.remove(projectDomainId);
+        return new BaseResponse();
+    }
+
+    public BaseResponse validateIsActive(String domain) {
+        log.info("Validate is active has started. domain: {}", domain);
+        boolean isDomainExistAndSetupCompleted = projectDomainRetrieveService.checkIfDomainIsExistsAndSetupCompleted(domain);
+        if (!isDomainExistAndSetupCompleted) {
+            log.info("Is domain exist and setup completed: {}", isDomainExistAndSetupCompleted);
+            throw new BusinessException();
+        }
         return new BaseResponse();
     }
 }
