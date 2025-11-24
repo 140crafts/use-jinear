@@ -16,6 +16,7 @@ public class ProjectDomainDnsChecker {
 
     public boolean matchesCname(String domainName) {
         try {
+            log.info("Cname check has started. domainName: {}", domainName);
             InetAddress enquired = InetAddress.getByName(domainName);
             InetAddress cname = InetAddress.getByName(JINEAR_CNAME_ADDR);
             return Arrays.equals(cname.getAddress(), enquired.getAddress());
