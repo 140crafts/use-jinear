@@ -7,6 +7,7 @@ import com.google.common.cache.CacheBuilder;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.PatternMatchUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
@@ -64,10 +65,26 @@ public class DynamicCorsConfigurationSource implements CorsConfigurationSource {
 
     private boolean isValidInternalDomain(String origin) {
         List<String> allowedOriginPatterns = corsProperties.getAllowedOriginPatterns();
-        return allowedOriginPatterns.contains(origin);
+        if (allowedOriginPatterns == null) {
+            return false;
+        }
+        for (String pattern : allowedOriginPatterns) {
+            if (PatternMatchUtils.simpleMatch(pattern, origin)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private String removeProtocol(String url) {
-        return url.replace("https://", "").replace("http://", "");
+        String http = "http://";
+        String https = "https://";
+        if (url.startsWith(https)) {
+            return url.substring(https.length());
+        }
+        if (url.startsWith(http)) {
+            return url.substring(http.length());
+        }
+        return url;
     }
 }
