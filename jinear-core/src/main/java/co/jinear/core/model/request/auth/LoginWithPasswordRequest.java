@@ -16,7 +16,6 @@ public class LoginWithPasswordRequest extends BaseRequest {
     @NotBlank
     @Size(max = 255)
     private String email;
-
     @NotBlank
     @ToString.Exclude
     @Size(max = 255)

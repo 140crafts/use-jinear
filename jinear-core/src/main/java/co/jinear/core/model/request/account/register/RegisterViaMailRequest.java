@@ -20,7 +20,5 @@ public class RegisterViaMailRequest extends BaseRequest {
     @ToString.Exclude
     @Size(max = 255)
     private String password;
-    @NotNull
-    @Size(max = 5)
     private LocaleType locale;
 }
