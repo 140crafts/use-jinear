@@ -1,6 +1,8 @@
 {
-    debug
-    admin 0.0.0.0:2019
+debug
+on_demand_tls {
+        ask http://localhost:1100/v1/domain/validate
+    }
 }
 
 https://jinear.cagdastunca.com {
@@ -36,15 +38,36 @@ https://files.jinear.cagdastunca.com {
     }
 }
 
+http://localhost:1100 {
+    bind 127.0.0.1
+
+    route /v1/domain/validate {
+        reverse_proxy https://api.jinear.co {
+            header_up Host api.jinear.co
+            #Spin up your jinear instance. Login get your jwt from devtools.
+            #go to jwt.io change ROLE_USER with ROLE_DOMAINSERVER and sign
+            #with your signin key and put here
+            header_up Authorization "Bearer EDITED_TOKEN_HERE"
+        }
+    }
+}
+
 # uncomment following if you want to use project pages. Your domain should be on cloudflare and you need a cloudflare token
 #https://*.projects.jinear.cagdastunca.com {
 #    tls {
-#        dns cloudflare yourcloudflaretoken
-#        resolvers 1.1.1.1
+#        dns cloudflare YOUR_CLOUDFLARE_TOKEN
 #    }
-#    reverse_proxy {
-#        to http://jinear-pages:3000
-#        header_up Host {http.reverse_proxy.upstream.host}
-#        header_up X-Real-IP {http.reverse_proxy.upstream.address}
+#
+#    reverse_proxy https://pages.jinear.cagdastunca.com {
+#        header_up Host pages.jinear.cagdastunca.com
 #    }
 #}
+
+:443 {
+    tls {
+        on_demand
+    }
+    reverse_proxy https://pages.jinear.cagdastunca.com {
+        header_up Host pages.jinear.cagdastunca.com
+    }
+}
