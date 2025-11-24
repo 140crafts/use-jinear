@@ -4,7 +4,6 @@ import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.project.domain.ProjectDomainCnameOperatorService;
-import co.jinear.core.system.Try;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -33,13 +32,14 @@ public class ScheduledJobManager {
     }
 
     @Async
-    @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
     public void checkAndSyncCustomDomains() {
         log.info("Check and sync custom domains has started.");
-        Try findAvailableAndSyncTry = Try.of(projectDomainCnameOperatorService::findAvailableAndSync);
-        Try reCheckFailedDomainsTry = Try.of(projectDomainCnameOperatorService::reCheckFailedDomains);
-        findAvailableAndSyncTry.throwIfFailed();
-        reCheckFailedDomainsTry.throwIfFailed();
+        try {
+            projectDomainCnameOperatorService.reCheckFailedDomains();
+        } catch (Exception e) {
+            log.error("Check and sync custom domains has failed.", e);
+        }
     }
 
     @Async
