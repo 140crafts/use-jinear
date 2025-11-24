@@ -55,8 +55,8 @@ Jinear is a comprehensive solution that combines task management with calendar f
 6. **Configure your installation:**
 
    Edit the following files according to your requirements:
-    - `.config/application.properties`
     - `docker-compose.yaml`
+    - `.config/application.properties`
     - `.data/caddy/conf/Caddyfile`
 
 7. **Set proper permissions and start the application:**

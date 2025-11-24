@@ -152,48 +152,15 @@ services:
     cap_add:
       - NET_ADMIN
     ports:
-      - "18080:80"
-      - "18443:443"
-      - "18443:443/udp"
-      - "2019:2019"
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+      - "127.0.0.1:2019:2019"
     volumes:
       - $PWD/.data/caddy/conf:/etc/caddy
       - $PWD/.data/caddy/site:/srv
       - .data/caddy/data:/data
       - .data/caddy/config:/config
-    networks:
-      - jinear-default
-
-  jinear-caddy-manager:
-    container_name: jinear-caddy-manager
-    image: registry.gitlab.com/140crafts/use-jinear/jinear-caddy-manager:latest
-    depends_on:
-      - jinear-core
-    volumes:
-      - ".logs/jinear-caddy-manager:/logs"
-      - ".data/caddy/conf:/conf"
-    restart: always
-    environment:
-      PORT: 3000
-      INTERNAL_KEY: caddy-manager-token
-      JINEAR_PAGES_APP_URL: http://jinear-pages:3000
-      CF_ACCESS_KEY: YOUR-CLOUDFLARE-TOKEN
-      BASE_PAGES_URL_PATTERN: https://*.projects.your-instance.company.com
-      BASE_PAGES_TLS_IS_CLOUDFLARE: true
-      BASE_S3_PATH: https://files.your-instance.company.com
-      BASE_S3_PATH_REVERSE_PROXY_TO: https://storage.googleapis.com
-      BASE_UI_PATH: https://your-instance.company.com
-      BASE_UI_PATH_REVERSE_PROXY_TO: http://jinear-web:3000
-      BASE_API_PATH: https://api.your-instance.company.com
-      BASE_API_PATH_REVERSE_PROXY_TO: http://jinear-core:8008
-    privileged: true
-    ports:
-      - 19040:3000
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 30s
-      timeout: 15s
-      retries: 5
     networks:
       - jinear-default
 
