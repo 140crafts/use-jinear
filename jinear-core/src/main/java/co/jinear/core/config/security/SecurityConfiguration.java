@@ -1,5 +1,6 @@
 package co.jinear.core.config.security;
 
+import co.jinear.core.config.properties.FeProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,6 +23,7 @@ public class SecurityConfiguration {
     private final JwtRequestFilter jwtRequestFilter;
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
     private final RateLimitingFilter rateLimitingFilter;
+    private final FeProperties feProperties;
 
     private static final String LOGOUT_ENDPOINT = "/v1/auth/logout";
     private static final String[] SWAGGER_ENDPOINTS = new String[]{
@@ -69,6 +71,7 @@ public class SecurityConfiguration {
                 .logout(logout -> logout
                         .clearAuthentication(Boolean.TRUE)
                         .invalidateHttpSession(Boolean.TRUE)
+                        .logoutSuccessUrl(feProperties.getHomeUrl())
                         .logoutUrl(LOGOUT_ENDPOINT)
                         .logoutSuccessHandler(logoutSuccessHandler())
                         .deleteCookies("JWT", "JSESSIONID", "SESSION", "SESSIONID")
