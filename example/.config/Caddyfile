@@ -5,6 +5,20 @@ on_demand_tls {
     }
 }
 
+http://localhost:1100 {
+    bind 127.0.0.1
+
+    route /v1/domain/validate {
+        reverse_proxy http://jinear-core:8008 {
+            header_up Host api.jinear.co
+            #Spin up your jinear instance. Login get your jwt from devtools.
+            #go to jwt.io change ROLE_USER with ROLE_DOMAINSERVER and sign
+            #with your signin key and put here
+            header_up Authorization "Bearer EDITED_TOKEN_HERE"
+        }
+    }
+}
+
 https://jinear.cagdastunca.com {
     tls {
       on_demand
@@ -35,20 +49,6 @@ https://files.jinear.cagdastunca.com {
         to http://jinear-minio:9000
         header_up Host {http.reverse_proxy.upstream.host}
         header_up X-Real-IP {http.reverse_proxy.upstream.address}
-    }
-}
-
-http://localhost:1100 {
-    bind 127.0.0.1
-
-    route /v1/domain/validate {
-        reverse_proxy https://api.jinear.co {
-            header_up Host api.jinear.co
-            #Spin up your jinear instance. Login get your jwt from devtools.
-            #go to jwt.io change ROLE_USER with ROLE_DOMAINSERVER and sign
-            #with your signin key and put here
-            header_up Authorization "Bearer EDITED_TOKEN_HERE"
-        }
     }
 }
 
