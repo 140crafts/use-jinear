@@ -66,11 +66,6 @@ public class Message extends BaseEntity {
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
-    @JoinColumn(name = "thread_id", insertable = false, updatable = false)
-    private Thread thread;
-
-    @ManyToOne
-    @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "conversation_id", insertable = false, updatable = false)
     private Conversation conversation;
 

@@ -68,9 +68,12 @@ public class SecurityConfiguration {
                         .anyRequest().authenticated()
                 )
                 .logout(logout -> logout
+                        .clearAuthentication(Boolean.TRUE)
+                        .invalidateHttpSession(Boolean.TRUE)
+                        .logoutSuccessUrl("/")
                         .logoutUrl(LOGOUT_ENDPOINT)
                         .logoutSuccessHandler(logoutSuccessHandler)
-                        .deleteCookies("JWT")
+                        .deleteCookies("JWT", "JSESSIONID", "SESSION", "SESSIONID")
                 );
 
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

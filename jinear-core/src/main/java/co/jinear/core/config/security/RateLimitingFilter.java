@@ -38,11 +38,9 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
             rateLimitKey = authentication.getName();
             bucket = rateLimitService.resolveBucket(rateLimitKey, RateLimitPlan.AUTHENTICATED);
-            log.info("Rate limiting by user: {}", rateLimitKey);
         } else {
             rateLimitKey = getClientIp(request);
             bucket = rateLimitService.resolveBucket(rateLimitKey, RateLimitPlan.PUBLIC);
-            log.info("Rate limiting by IP: {}", rateLimitKey);
         }
 
         ConsumptionProbe probe = bucket.tryConsumeAndReturnRemaining(1);
@@ -64,12 +62,12 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         if (customHeaderName != null && !customHeaderName.isEmpty()) {
             String ipFromHeader = request.getHeader(customHeaderName);
             if (ipFromHeader != null && !ipFromHeader.isEmpty()) {
-                log.info("RateLimit customHeaderName: {}", ipFromHeader);
+                log.debug("RateLimit customHeaderName: {}", ipFromHeader);
                 return ipFromHeader;
             }
         }
         String remoteAddr = request.getRemoteAddr();
-        log.info("RateLimit remoteAddr: {}", remoteAddr);
+        log.debug("RateLimit remoteAddr: {}", remoteAddr);
         return remoteAddr;
     }
 }
