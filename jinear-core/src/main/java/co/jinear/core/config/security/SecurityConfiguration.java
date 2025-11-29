@@ -22,7 +22,6 @@ public class SecurityConfiguration {
     private final JwtRequestFilter jwtRequestFilter;
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
     private final RateLimitingFilter rateLimitingFilter;
-    private final LogoutSuccessHandler logoutSuccessHandler;
 
     private static final String LOGOUT_ENDPOINT = "/v1/auth/logout";
     private static final String[] SWAGGER_ENDPOINTS = new String[]{
@@ -72,7 +71,7 @@ public class SecurityConfiguration {
                         .invalidateHttpSession(Boolean.TRUE)
                         .logoutSuccessUrl("/")
                         .logoutUrl(LOGOUT_ENDPOINT)
-                        .logoutSuccessHandler(logoutSuccessHandler)
+                        .logoutSuccessHandler(logoutSuccessHandler())
                         .deleteCookies("JWT", "JSESSIONID", "SESSION", "SESSIONID")
                 );
 
@@ -82,7 +81,7 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public static LogoutSuccessHandler logoutSuccessHandler() {
+    public LogoutSuccessHandler logoutSuccessHandler() {
         return new CustomLogoutSuccessHandler();
     }
 }
