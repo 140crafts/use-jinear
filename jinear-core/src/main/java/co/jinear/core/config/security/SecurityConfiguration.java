@@ -8,12 +8,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.session.SessionRegistry;
-import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -24,8 +21,14 @@ public class SecurityConfiguration {
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtRequestFilter jwtRequestFilter;
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
+    private final RateLimitingFilter rateLimitingFilter;
+    private final LogoutSuccessHandler logoutSuccessHandler;
 
     private static final String LOGOUT_ENDPOINT = "/v1/auth/logout";
+    private static final String[] SWAGGER_ENDPOINTS = new String[]{
+            "/swagger-ui/**",
+            "/v3/api-docs/**"
+    };
     private static final String[] PUBLIC_ENDPOINTS = new String[]{
             "/",
             "/v1/auth/otp/email/initialize",
@@ -51,61 +54,32 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity
+        httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors().configurationSource(dynamicCorsConfigurationSource)
-                .and()
+                .cors(cors -> cors.configurationSource(dynamicCorsConfigurationSource))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(exceptions -> exceptions.authenticationEntryPoint(jwtAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(SWAGGER_ENDPOINTS).denyAll()
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers("/v1/domain/validate").hasRole("DOMAINSERVER")
                         .requestMatchers("/v1/robots/**").hasRole("ROBOT")
                         .requestMatchers("/v1/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
-                .exceptionHandling()
-                .authenticationEntryPoint(jwtAuthenticationEntryPoint)
-                .and()
-                .logout()
-                .clearAuthentication(true)
-                .logoutSuccessUrl("/").deleteCookies("JWT", "JSESSIONID", "SESSION", "SESSIONID")
-                .invalidateHttpSession(true)
-                .and()
-                .build();
-    }
+                .logout(logout -> logout
+                        .logoutUrl(LOGOUT_ENDPOINT)
+                        .logoutSuccessHandler(logoutSuccessHandler)
+                        .deleteCookies("JWT")
+                );
 
-    @Bean
-    public SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(new AntPathRequestMatcher("swagger-ui/**")).denyAll()
-                        .requestMatchers(new AntPathRequestMatcher("/swagger-ui/**")).denyAll()
-                        .requestMatchers(new AntPathRequestMatcher("v3/api-docs/**")).denyAll()
-                        .requestMatchers(new AntPathRequestMatcher("/v3/api-docs/**")).denyAll()
-                        .anyRequest().authenticated())
-                .httpBasic();
+        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterAfter(rateLimitingFilter, JwtRequestFilter.class);
         return httpSecurity.build();
     }
-//
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        CorsConfiguration corsConfiguration = new CorsConfiguration().applyPermitDefaultValues();
-//        corsConfiguration.setAllowedMethods(corsProperties.getAllowedMethods());
-//        corsConfiguration.setAllowCredentials(corsProperties.getAllowCredentials());
-//        corsConfiguration.setAllowedOriginPatterns(corsProperties.getAllowedOriginPatterns());
-//        source.registerCorsConfiguration("/**", corsConfiguration);
-//        return source;
-//    }
 
     @Bean
-    SessionRegistry sessionRegistry() {
-        return new SessionRegistryImpl();
-    }
-
-    @Bean
-    public LogoutSuccessHandler logoutSuccessHandler() {
+    public static LogoutSuccessHandler logoutSuccessHandler() {
         return new CustomLogoutSuccessHandler();
     }
 }

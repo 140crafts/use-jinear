@@ -1,6 +1,5 @@
 package co.jinear.core.controller;
 
-import co.jinear.core.service.media.MediaOperationService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,8 +14,6 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class DebugController {
 
-    private final MediaOperationService mediaOperationService;
-
 
     @PostMapping(consumes = "multipart/form-data")
     @ResponseStatus(HttpStatus.OK)
@@ -27,17 +24,5 @@ public class DebugController {
     @GetMapping
     public Object debug2(HttpServletResponse response) {
         return null;
-//        InitializeWaitingMediaVo initializeWaitingMediaVo = new InitializeWaitingMediaVo();
-//        initializeWaitingMediaVo.setOwnerId("ownerId");
-//        initializeWaitingMediaVo.setRelatedObjectId("relatedObjectId");
-//        initializeWaitingMediaVo.setFileType(FileType.TASK_FILE);
-//        initializeWaitingMediaVo.setMediaOwnerType(MediaOwnerType.TASK);
-//        initializeWaitingMediaVo.setVisibility(MediaVisibilityType.PUBLIC);
-//        initializeWaitingMediaVo.setOwnershipStatus(MediaFileOwnershipStatusType.OWNED);
-//        initializeWaitingMediaVo.setOriginalName("originalName");
-//        initializeWaitingMediaVo.setContentType("image/jpeg");
-//        WaitingMediaResultDto waitingMediaResultDto = mediaOperationService.initializeWaitingMediaAndGetPresignedUploadUrl(initializeWaitingMediaVo);
-//        log.info("WaitingMediaResultDto: {}", waitingMediaResultDto);
-//        return waitingMediaResultDto;
     }
 }
