@@ -71,7 +71,6 @@ public class SecurityConfiguration {
                 .logout(logout -> logout
                         .clearAuthentication(Boolean.TRUE)
                         .invalidateHttpSession(Boolean.TRUE)
-                        .logoutUrl(LOGOUT_ENDPOINT)
                         .deleteCookies("JWT", "JSESSIONID", "SESSION", "SESSIONID")
                 );
 
