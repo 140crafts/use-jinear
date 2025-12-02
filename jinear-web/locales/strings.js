@@ -4903,6 +4903,26 @@ const translations = {
   passwordChangeModalTitleForced: {
     en: "Set Password",
     tr: "Şifreni Belirle"
+  },
+  feedbackModalTitle: {
+    en: "Feedback & Suggestion",
+    tr: "Geri Bildirim & Öneriler"
+  },
+  feedbackModalSubTitle: {
+    en: "Your feedback shapes Jinear. What’s on your mind?",
+    tr: "Görüşleriniz Jinear'a yön veriyor. Aklınızdakileri bizimle paylaşın."
+  },
+  feedbackModalContactMail: {
+    en: "How can we reach you?",
+    tr: "Size nasıl ulaşabiliriz?"
+  },
+  feedbackModalSubmit: {
+    en: "Submit",
+    tr: "Gönder"
+  },
+  feedbackModalPleaseProvideDetail: {
+    en: "Please provide details",
+    tr: "Lütfen bir açıklama girin"
   }
 };
 

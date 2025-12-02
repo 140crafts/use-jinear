@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2025-11-22 12:41:52.
+// Generated using typescript-generator version 3.0.1157 on 2025-11-30 19:36:34.
 
 export interface BaseDto {
     createdDate: Date;
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -133,6 +133,11 @@ export interface TaskExternalCalendarFilterDto {
     calendarSourceId: string;
 }
 
+export interface CaptchaChallengeDto {
+    prefixes: string[];
+    difficulty: number;
+}
+
 export interface FeedDto extends BaseDto {
     feedId: string;
     workspaceId: string;
@@ -160,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
+    ginternalDate: string;
     gthreadId: string;
     ghistoryId: string;
     gid: string;
-    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -514,9 +519,9 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
+    accountWorkspaceAdminOrOwner: boolean;
     accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
-    accountWorkspaceAdminOrOwner: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -1175,6 +1180,7 @@ export interface InitializeConversationRequest extends BaseRequest {
 export interface SendMessageRequest extends BaseRequest {
     body: string;
     data?: { [index: string]: string } | null;
+    captchaResolveVos?: CaptchaResolveVo[] | null;
 }
 
 export interface InitializeThreadRequest extends BaseRequest {
@@ -1184,6 +1190,7 @@ export interface InitializeThreadRequest extends BaseRequest {
 
 export interface RobotsInitializeThreadRequest extends BaseRequest {
     initialMessageBody: string;
+    captchaResolveVos: CaptchaResolveVo[];
 }
 
 export interface NotificationTargetInitializeRequest extends BaseRequest {
@@ -1589,6 +1596,10 @@ export interface CalendarShareableKeyResponse extends BaseResponse {
     data: CalendarShareKeyDto;
 }
 
+export interface CaptchaChallengeResponse extends BaseResponse {
+    data: CaptchaChallengeDto;
+}
+
 export interface FeedMemberListingResponse extends BaseResponse {
     data: FeedMemberDto[];
 }
@@ -1887,6 +1898,11 @@ export interface PassthroughDetailDto {
     detailValue: string;
 }
 
+export interface CaptchaResolveVo {
+    prefix: string;
+    nonce: number;
+}
+
 export interface MultipartFile extends InputStreamSource {
     contentType: string;
     name: string;
@@ -2130,6 +2146,8 @@ export type ProjectPostInitializeAccessType = "WORKSPACE_ADMINS" | "PROJECT_LEAD
 export type ProjectPriorityType = "NONE" | "URGENT" | "HIGH" | "MEDIUM" | "LOW";
 
 export type ProjectStateType = "BACKLOG" | "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
+
+export type RateLimitPlan = "PUBLIC" | "AUTHENTICATED";
 
 export type ReminderJobStatus = "PENDING" | "COMPLETED" | "CANCELLED" | "FAILED";
 

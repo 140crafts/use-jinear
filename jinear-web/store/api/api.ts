@@ -81,7 +81,8 @@ export const tagTypes = [
   "v1/project/public-feed/{projectId}/info",
   `v1/project/post/comment/list/project/{projectId}/post/{postId}`,
   "v1/task-board/list/{workspaceId}/filter",
-  "v1/messaging/token"
+  "v1/messaging/token",
+  "v1/captcha/generate"
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

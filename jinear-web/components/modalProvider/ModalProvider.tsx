@@ -59,12 +59,14 @@ import ProjectAndMilestonePickerModal
 import NewMilestoneModal from "@/components/modal/newMilestoneModal/NewMilestoneModal";
 import NewCustomProjectDomainModal from "@/components/modal/newCustomProjectDomainModal/NewCustomProjectDomainModal";
 import PasswordChangeModal from "@/components/modal/passwordChangeModal/PasswordChangeModal";
+import FeedbackModal from "@/components/modal/feedbackModal/FeedbackModal";
 
 interface ModalProviderProps {
 }
 
 const globalModals: any = (
   <>
+    <FeedbackModal />
     <InstallPwaInstructionsModal />
     <NewConversationModal />
     <ChannelListModal />

@@ -23,9 +23,7 @@ public class SecurityConfiguration {
     private final JwtRequestFilter jwtRequestFilter;
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
     private final RateLimitingFilter rateLimitingFilter;
-    private final FeProperties feProperties;
 
-    private static final String LOGOUT_ENDPOINT = "/v1/auth/logout";
     private static final String[] SWAGGER_ENDPOINTS = new String[]{
             "/swagger-ui/**",
             "/v3/api-docs/**"
@@ -50,6 +48,7 @@ public class SecurityConfiguration {
             "/v1/calendar/event/exports/{shareableKey}",
             "/v1/project/public-feed/**",
             "/v1/project/post/comment/list/project/{projectId}/post/{postId}",
+            "/v1/captcha/generate",
             "/v1/debug/**"
     };
 

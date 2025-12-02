@@ -3,6 +3,7 @@ package co.jinear.core.config.security;
 import co.jinear.core.config.properties.RateLimitProperties;
 import co.jinear.core.model.enumtype.ratelimit.RateLimitPlan;
 import co.jinear.core.service.ratelimit.RateLimitService;
+import co.jinear.core.system.IpResolver;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.ConsumptionProbe;
 import jakarta.servlet.FilterChain;
@@ -25,12 +26,11 @@ import java.io.IOException;
 public class RateLimitingFilter extends OncePerRequestFilter {
 
     private final RateLimitService rateLimitService;
-    private final RateLimitProperties rateLimitProperties;
+    private final IpResolver ipResolver;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Bucket bucket;
         String rateLimitKey;
@@ -39,7 +39,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             rateLimitKey = authentication.getName();
             bucket = rateLimitService.resolveBucket(rateLimitKey, RateLimitPlan.AUTHENTICATED);
         } else {
-            rateLimitKey = getClientIp(request);
+            rateLimitKey = ipResolver.getClientIp(request);
             bucket = rateLimitService.resolveBucket(rateLimitKey, RateLimitPlan.PUBLIC);
         }
 
@@ -55,19 +55,5 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             response.addHeader("Retry-After", String.valueOf(waitForRefill));
             response.getWriter().flush();
         }
-    }
-
-    private String getClientIp(HttpServletRequest request) {
-        String customHeaderName = rateLimitProperties.getClientIpHeader();
-        if (customHeaderName != null && !customHeaderName.isEmpty()) {
-            String ipFromHeader = request.getHeader(customHeaderName);
-            if (ipFromHeader != null && !ipFromHeader.isEmpty()) {
-                log.debug("RateLimit customHeaderName: {}", ipFromHeader);
-                return ipFromHeader;
-            }
-        }
-        String remoteAddr = request.getRemoteAddr();
-        log.debug("RateLimit remoteAddr: {}", remoteAddr);
-        return remoteAddr;
     }
 }

@@ -18,6 +18,7 @@ import ModalState, {
   NewCalendarIntegrationModalState,
   NewChannelModalState,
   NewConversationModalState,
+  NewCustomProjectDomainModalState,
   NewMailIntegrationModalState,
   NewMilestoneModalState,
   NewProjectModalState,
@@ -28,6 +29,7 @@ import ModalState, {
   NewTopicModalState,
   NotFoundModalState,
   NotificationPermissionModalState,
+  PasswordChangeModalState,
   ProjectAndMilestonePickerModalState,
   ProjectPrioritySelectModalState,
   ProjectStateSelectModalState,
@@ -44,12 +46,10 @@ import ModalState, {
   UpgradeWorkspacePlanModalState,
   WorkspaceMemberInviteModalState,
   WorkspaceMemberPickerModalState,
-  WorkspacePickerModalState,
-  NewCustomProjectDomainModalState, PasswordChangeModalState
+  WorkspacePickerModalState
 } from "model/app/store/modal/modalState";
 import { accountApi } from "@/api/accountApi";
 import { RootState } from "../store";
-import NewCustomProjectDomainModal from "@/components/modal/newCustomProjectDomainModal/NewCustomProjectDomainModal";
 
 const initialState = {
   loginWith2FaMailModal: {
@@ -221,6 +221,9 @@ const initialState = {
   },
   passwordChangeModal: {
     visible: false
+  },
+  feedbackModal: {
+    visible: false
   }
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
@@ -277,6 +280,7 @@ const initialState = {
   newMilestoneModal: null | NewMilestoneModalState,
   newCustomProjectDomainModal: null | NewCustomProjectDomainModalState,
   passwordChangeModal: null | PasswordChangeModalState,
+  feedbackModal: null | ModalState,
 };
 
 const slice = createSlice({
@@ -659,6 +663,13 @@ const slice = createSlice({
       state.passwordChangeModal = initialState.passwordChangeModal;
     },
 
+    popFeedbackModal: (state, action: PayloadAction<ModalState>) => {
+      state.feedbackModal = { ...action.payload, visible: true };
+    },
+    closeFeedbackModal: (state, action: PayloadAction<void>) => {
+      state.feedbackModal = initialState.passwordChangeModal;
+    },
+
     resetModals: () => initialState
   },
   extraReducers: (builder) => {
@@ -783,6 +794,8 @@ export const {
   closeNewCustomProjectDomainModal,
   popPasswordChangeModal,
   closePasswordChangeModal,
+  popFeedbackModal,
+  closeFeedbackModal,
   resetModals
 } = slice.actions;
 export default slice.reducer;
@@ -1064,3 +1077,5 @@ export const selectNewCustomProjectDomainModalProjectId = (state: RootState) => 
 
 export const selectPasswordChangeModalVisible = (state: RootState) => state.modal.passwordChangeModal?.visible;
 export const selectPasswordChangeModalForced = (state: RootState) => state.modal.passwordChangeModal?.forced;
+
+export const selectFeedbackModalVisible = (state: RootState) => state.modal.feedbackModal?.visible;
