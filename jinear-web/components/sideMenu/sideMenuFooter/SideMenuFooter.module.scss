@@ -24,6 +24,10 @@
   font-weight: 600;
 }
 
+.iconButton {
+  min-height: 29px !important;
+}
+
 @media (max-width: $tablet) {
   .userName {
     display: none;

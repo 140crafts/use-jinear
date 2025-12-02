@@ -5,9 +5,11 @@ import co.jinear.core.model.enumtype.messaging.ThreadType;
 import co.jinear.core.model.request.messaging.thread.RobotsInitializeThreadRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.captcha.CaptchaChallengeService;
 import co.jinear.core.service.messaging.channel.ChannelNotifierService;
 import co.jinear.core.service.messaging.thread.ThreadOperationService;
 import co.jinear.core.validator.messaging.channel.ChannelAccessValidator;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,8 +23,10 @@ public class RobotsThreadManager {
     private final ChannelAccessValidator channelAccessValidator;
     private final ThreadOperationService threadOperationService;
     private final ChannelNotifierService channelNotifierService;
+    private final CaptchaChallengeService captchaChallengeService;
 
-    public BaseResponse initializeThread(String channelId, RobotsInitializeThreadRequest initializeThreadRequest) {
+    public BaseResponse initializeThread(String channelId, RobotsInitializeThreadRequest initializeThreadRequest, HttpServletRequest httpServletRequest) {
+        captchaChallengeService.verifySolution(httpServletRequest, initializeThreadRequest.getCaptchaResolveVos());
         String robotId = sessionInfoService.currentAccountId();
         String initialMessageBody = initializeThreadRequest.getInitialMessageBody();
         channelAccessValidator.validateRobotChannelParticipationAccess(robotId, channelId);
