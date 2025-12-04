@@ -66,17 +66,19 @@ const ReplyInput: React.FC<ReplyInputProps> = ({ workspaceId, channelId, threadI
             editable={!isSendToThreadLoading}
           />
           <div className={styles.inputActionBar}>
+            {/*<Button*/}
+            {/*  variant={ButtonVariants.hoverFilled2}*/}
+            {/*  onClick={toggleReplyVisible}*/}
+            {/*  disabled={isSendToThreadLoading}*/}
+            {/*>*/}
+            {/*  <LuX />*/}
+            {/*</Button>*/}
+            {/*<div className={"spacer-w-1"} />*/}
             <Button
-              variant={ButtonVariants.hoverFilled2}
-              onClick={toggleReplyVisible}
-              disabled={isSendToThreadLoading}
-            >
-              <LuX />
-            </Button>
-            <Button
-              variant={ButtonVariants.hoverFilled2}
+              variant={ButtonVariants.brandColor}
               disabled={isSendToThreadLoading}
               loading={isSendToThreadLoading}
+              className={styles.replyButton}
               onClick={send}
             >
               <LuSendHorizonal />

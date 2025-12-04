@@ -39,6 +39,7 @@ import TaskBoardQuickFilterBar
 import getCssVariable from "@/utils/cssHelper";
 import { useDebouncedEffect } from "@/hooks/useDebouncedEffect";
 import { setTaskBoardDefaultDisplayFormat } from "@/components/taskLists/taskBoardList/taskBoard/TaskBoard";
+import Line from "@/components/line/Line";
 
 interface TaskBoardTitleProps {
   taskBoard: TaskBoardDto;
@@ -218,10 +219,7 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
         )}
       </div>
 
-      <div className="flex-1" />
-
       <div className={styles.titleActionBar}>
-
         {!noDisplayFormatChange &&
           <div className={styles.actionBarRow}>
             <div className={styles.viewTypeButtonContainer}>
@@ -302,6 +300,8 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
         </div>
 
       </div>
+      <div className={'spacer-h-1'} />
+      <Line />
     </div>
   );
 };

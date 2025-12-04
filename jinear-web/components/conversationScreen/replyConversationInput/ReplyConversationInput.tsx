@@ -73,10 +73,11 @@ const ReplyConversationInput: React.FC<ReplyConversationInputProps> = ({ workspa
             <LuPencilLine />
           </Button>
           <Button
-            variant={ButtonVariants.hoverFilled2}
+            variant={ButtonVariants.brandColor}
             disabled={isSendToConversationLoading}
             loading={isSendToConversationLoading}
             onClick={send}
+            className={styles.sendButton}
           >
             <LuSendHorizonal />
           </Button>

@@ -9,3 +9,11 @@
     display: flex;
     flex-direction: column-reverse;
 }
+
+.infiniteLineLoadingContainer {
+    min-height: 2px;
+}
+
+.infiniteLineLoading {
+    background-color: transparent !important;
+}

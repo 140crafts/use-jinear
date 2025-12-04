@@ -5,14 +5,13 @@ import ThemeToggle from "@/components/themeToggle/ThemeToggle";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
 import { popAccountProfileModal, popFeedbackModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
-import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
-import useTranslation from "locales/useTranslation";
 import React from "react";
 import { IoBulbOutline, IoPerson } from "react-icons/io5";
 import styles from "./SideMenuFooter.module.scss";
 import { env } from "next-runtime-env";
 import { __DEV__ } from "@/utils/constants";
+import { PureClientOnly } from "@/components/clientOnly/ClientOnly";
 
 interface SideMenuFooterProps {
   className?: string;
@@ -37,14 +36,16 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
   return (
     <div className={cn(styles.container, className)}>
       {suggestEnabled &&
-        <Button
-          variant={ButtonVariants.outline}
-          onClick={popSuggestionModal}
-          heightVariant={ButtonHeight.short}
-          className={styles.iconButton}
-        >
-          <IoBulbOutline size={14} />
-        </Button>}
+        <PureClientOnly>
+          <Button
+            variant={ButtonVariants.outline}
+            onClick={popSuggestionModal}
+            heightVariant={ButtonHeight.short}
+            className={styles.iconButton}
+          >
+            <IoBulbOutline size={14} />
+          </Button>
+        </PureClientOnly>}
 
       <ThemeToggle
         variant={ButtonVariants.hoverFilled}

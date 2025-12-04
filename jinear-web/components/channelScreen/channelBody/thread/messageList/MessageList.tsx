@@ -15,6 +15,7 @@ import {
   getThreadMessageInfo,
   getThreadMessages, IMessageDto
 } from "../../../../../repository/IndexedDbRepository";
+import InfiniteLineLoading from "@/components/infiniteLineLoading/InfiniteLineLoading";
 
 interface MessageListProps {
   channelId: string;
@@ -45,11 +46,11 @@ const MessageList: React.FC<MessageListProps> = ({
   const threadEarliestMessageAfterInitialMessage = useLiveQuery(() => getThreadFirstReplyMessage(threadId));
 
   const hasMoreThanOneMessage = initialMessage?.messageId != lastMessage?.messageId;
-  const remainingMessageCount = threadMessageInfo ? (threadMessageInfo.messageCount - (hasMoreThanOneMessage ? 2 : 1)) : 0;
+  const remainingMessageCount = threadMessageInfo ? (threadMessageInfo.messageCount - (hasMoreThanOneMessage ? 3 : 1)) : 0;
   const hasMore = threadMessageInfo ? (threadMessageInfo.messageCount > threadMessagesSorted.length) : false;
   const [retrieveThreadMessages, { isFetching: isRetrieveThreadMessagesFetching }] = useLazyRetrieveThreadMessagesQuery();
 
-  logger.log({threadMessageInfo})
+  logger.log({ threadMessageInfo, remainingMessageCount, hasMoreThanOneMessage });
 
   useEffect(() => {
     if (threadId && workspaceId && pageVisibility) {
@@ -89,7 +90,10 @@ const MessageList: React.FC<MessageListProps> = ({
           {t("threadMessageListLoadMore")}
         </Button>
       }
-      {isRetrieveThreadMessagesFetching && viewingAsDetail && <CircularLoading />}
+      <div className={styles.infiniteLineLoadingContainer}>
+        {isRetrieveThreadMessagesFetching && viewingAsDetail &&
+          <InfiniteLineLoading className={styles.infiniteLineLoading} />}
+      </div>
       <div className={styles.messageListContainer}>
         {messages?.filter(message => message.messageId != initialMessage?.messageId)
           .slice(0, viewingAsDetail ? threadMessagesSorted.length : 2)

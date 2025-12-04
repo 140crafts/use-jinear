@@ -17,12 +17,17 @@
   overflow-x: scroll;
   min-height: 8rem;
   padding-bottom: 2rem;
-  // max-width: calc(100vw - calc(var(--workspace-layout-page-padding) * 2));
 }
 
-// @media (max-width: $tablet) {
-//   .statusBoardContainer {
-//     // max-width: 100%;
-//     overflow-x: scroll;
-//   }
-// }
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media (max-width: $tablet) {
+  .pagination {
+    align-self: flex-end;
+  }
+}

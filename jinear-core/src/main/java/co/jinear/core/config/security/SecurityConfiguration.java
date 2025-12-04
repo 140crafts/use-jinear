@@ -1,6 +1,5 @@
 package co.jinear.core.config.security;
 
-import co.jinear.core.config.properties.FeProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

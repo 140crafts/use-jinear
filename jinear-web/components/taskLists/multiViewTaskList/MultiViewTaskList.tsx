@@ -126,15 +126,22 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
           isLoading={isLoading}
           page={page}
           setPage={setPage}
-          paginationPosition="BOTTOM"
+          paginationPosition="TOP"
         />
       )}
       {displayFormat == "WFS_COLUMN" && (
         <TaskWorkflowStatusBoardView
+          id={`filtered-tasks-wfs-column-view-${workspace?.workspaceId}-${team?.teamId}`}
           teamId={team.teamId}
           taskList={filterResponse?.data?.content || []}
           isTaskListingLoading={isFetching}
           workflowStatusBoardClassName={workflowStatusBoardClassName}
+          isFetching={isFetching}
+          isLoading={isLoading}
+          page={page}
+          setPage={setPage}
+          response={filterResponse}
+          paginationPosition="TOP"
         />
       )}
     </div>

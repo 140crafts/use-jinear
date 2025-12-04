@@ -13,6 +13,7 @@ import { usePageVisibility } from "@/hooks/usePageVisibility";
 import { decideAndScrollToBottom } from "@/utils/htmlUtils";
 import { useLiveQuery } from "dexie-react-hooks";
 import { checkAndUpdateConversationLastCheck, getConversationMessages } from "../../../repository/IndexedDbRepository";
+import InfiniteLineLoading from "@/components/infiniteLineLoading/InfiniteLineLoading";
 
 interface ConversationBodyProps {
   conversationId: string,
@@ -73,7 +74,7 @@ logger.log({pageVisibility})
         </Button>
       }
       <div className={styles.loadingContainer}>
-        {isRetrieveConversationLoading && !hasMore && <CircularLoading />}
+        {isRetrieveConversationLoading && !hasMore && <InfiniteLineLoading />}
       </div>
       <div className={styles.contentContainer}>
         {messages && messages?.length == 0 && !isRetrieveConversationLoading &&
