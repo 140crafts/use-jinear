@@ -6,8 +6,16 @@ import TaskBoardElementList
   from "@/components/taskLists/taskBoardList/taskBoard/taskBoardElementList/TaskBoardElementList";
 import TaskBoardColumnView
   from "@/components/taskLists/taskBoardList/taskBoard/taskBoardColumnView/TaskBoardColumnView";
-import { useQueryState } from "@/hooks/useQueryState";
+import {
+  queryStateJsonObjectParser,
+  queryStateObjectToJsonStringConverter,
+  useQueryState,
+  useSetQueryState
+} from "@/hooks/useQueryState";
 import { TaskDisplayFormat } from "@/components/taskLists/taskListTitleAndViewType/TaskListTitleAndViewType";
+import {
+  ITaskBoardUrlStateMap
+} from "@/components/taskLists/taskBoardList/taskBoard/taskBoardQuickFilterBar/TaskBoardQuickFilterBar";
 
 interface TaskBoardProps {
   taskBoard: TaskBoardDto;
@@ -39,6 +47,19 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                                              }) => {
   const displayFormat = useQueryState<"list" | "column">("displayFormat") || getTaskBoardDefaultDisplayFormat(taskBoard.taskBoardId);
 
+  const taskBoardFilterMap = useQueryState<ITaskBoardUrlStateMap>("board-filter-map", queryStateJsonObjectParser) ?? {};
+  const currentPage = taskBoardFilterMap?.[taskBoard.taskBoardId]?.page ?? 0;
+  const setQueryState = useSetQueryState();
+
+  const setPage = (nextPage?: number) => {
+    const page = nextPage ?? 0;
+    const finalTaskBoardFilterMap = taskBoardFilterMap ?? {};
+    finalTaskBoardFilterMap[taskBoard.taskBoardId] = finalTaskBoardFilterMap[taskBoard.taskBoardId] ?? {};
+    // @ts-expect-error check upper line
+    finalTaskBoardFilterMap[taskBoard.taskBoardId].page = page;
+    setQueryState("board-filter-map", queryStateObjectToJsonStringConverter(finalTaskBoardFilterMap));
+  };
+
   return (
     <div className={styles.container}>
       <TaskBoardTitle
@@ -52,11 +73,15 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         taskBoardId={taskBoard.taskBoardId}
         boardState={taskBoard.state}
         className={(staticViewType == "list" || (staticViewType == undefined && displayFormat == "list")) ? styles.visible : styles.hidden}
+        page={currentPage}
+        setPage={setPage}
       />
       <TaskBoardColumnView
         taskBoardId={taskBoard.taskBoardId}
         teamId={team.teamId}
         className={(staticViewType == "column" || (staticViewType == undefined && displayFormat == "column")) ? styles.visible : styles.hidden}
+        page={currentPage}
+        setPage={setPage}
       />
     </div>
   );

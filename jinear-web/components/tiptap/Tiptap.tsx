@@ -21,6 +21,7 @@ interface TiptapProps {
   content?: string;
   className?: string;
   editorClassName?: string;
+  overwriteEditorClassName?: string;
   editorWrapperClassName?: string;
   placeholder?: string;
   editable?: boolean;
@@ -40,6 +41,7 @@ const Tiptap = (
     content,
     className,
     editorClassName,
+    overwriteEditorClassName,
     editorWrapperClassName,
     placeholder,
     editable = true,

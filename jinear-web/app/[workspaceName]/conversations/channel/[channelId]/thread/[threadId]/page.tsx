@@ -11,6 +11,7 @@ import CircularLoading from "@/components/circularLoading/CircularLoading";
 import Thread from "@/components/channelScreen/channelBody/thread/Thread";
 import { getThreadWithMessages } from "../../../../../../../repository/IndexedDbRepository";
 import { useLiveQuery } from "dexie-react-hooks";
+import InfiniteLineLoading from "@/components/infiniteLineLoading/InfiniteLineLoading";
 
 interface ThreadDetailScreenProps {
 
@@ -37,11 +38,12 @@ const ThreadDetailScreen: React.FC<ThreadDetailScreenProps> = ({}) => {
       <div id={`channel-page-container`} className={styles.container}>
         {workspace &&
           <>
-            <ChannelScreenHeader channelId={channelId}
-                                 workspaceName={workspaceName}
-                                 workspaceId={workspace.workspaceId}
+            <ChannelScreenHeader
+              channelId={channelId}
+              workspaceName={workspaceName}
+              workspaceId={workspace.workspaceId}
             />
-            {isFetching && <CircularLoading />}
+            {isFetching && <InfiniteLineLoading />}
             <div className={"spacer-h-2"} />
             {threadWithMessages &&
               <Thread

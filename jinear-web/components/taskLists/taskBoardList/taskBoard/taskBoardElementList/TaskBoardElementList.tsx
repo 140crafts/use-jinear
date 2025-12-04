@@ -34,6 +34,8 @@ interface TaskBoardElementListProps {
   taskBoardId: string;
   className?: string;
   boardState: TaskBoardStateType;
+  page: number;
+  setPage: (nextPage?: number) => void;
 }
 
 const logger = Logger("TaskBoardElementList");
@@ -41,11 +43,12 @@ const logger = Logger("TaskBoardElementList");
 const TaskBoardElementList: React.FC<TaskBoardElementListProps> = ({
                                                                      taskBoardId,
                                                                      boardState,
-                                                                     className
+                                                                     className,
+                                                                     page = 0,
+                                                                     setPage
                                                                    }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const [page, setPage] = useState<number>(0);
 
   const taskBoardFilterMap = useQueryState<ITaskBoardUrlStateMap>("board-filter-map", queryStateJsonObjectParser) ?? {};
   const thisBoardsFilter = taskBoardFilterMap[taskBoardId] ?? {};

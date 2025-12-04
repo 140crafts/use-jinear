@@ -13,7 +13,7 @@ interface PaginatedListProps<T> {
   isFetching: boolean;
   isLoading: boolean;
   page: number;
-  setPage: React.Dispatch<React.SetStateAction<number>>;
+  setPage: React.Dispatch<React.SetStateAction<number>> | ((nextPage?: number) => void);
   renderItem: (data: T, index: number) => ReactElement;
   emptyLabel?: string;
   emptyComponent?: ReactElement;

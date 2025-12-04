@@ -14,6 +14,7 @@ import {
   getThreadsWithMessages
 } from "../../../repository/IndexedDbRepository";
 import { decideAndScrollToBottom } from "@/utils/htmlUtils";
+import InfiniteLineLoading from "@/components/infiniteLineLoading/InfiniteLineLoading";
 
 interface ChannelBodyProps {
   workspaceName: string;
@@ -32,7 +33,7 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
   const initialScroll = useRef<boolean>(false);
   const threads = useLiveQuery(() => getThreadsWithMessages(channelId)) ?? [];
   const hasMore = threads?.[threads?.length - 1]?.threadType != "CHANNEL_INITIAL";
-  const hasAnyOtherThanInitial = threads?.find(t=>t.threadType != "CHANNEL_INITIAL") != null;
+  const hasAnyOtherThanInitial = threads?.find(t => t.threadType != "CHANNEL_INITIAL") != null;
   logger.log({ threads, hasAnyOtherThanInitial });
 
   useEffect(() => {
@@ -77,7 +78,9 @@ const ChannelBody: React.FC<ChannelBodyProps> = ({ channelId, canReplyThreads, w
           {t("threadsLoadMore")}
         </Button>
       }
-      {isListThreadsFetching && !hasMore && <CircularLoading />}
+      <div className={styles.loadingContainer}>
+        {isListThreadsFetching && !hasMore && <InfiniteLineLoading />}
+      </div>
       <div className={styles.contentContainer}>
         {!hasAnyOtherThanInitial && !isListThreadsFetching &&
           <div className={styles.emptyStateContainer}>

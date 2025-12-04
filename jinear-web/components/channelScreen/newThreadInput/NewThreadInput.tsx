@@ -77,26 +77,25 @@ const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelI
           editorClassName={styles.input}
           placeholder={t("newThreadInputPlaceholder")}
           editable={!isInitializeThreadLoading}
-          hideActionBarWhenEmpty={true}
+          hideActionBarWhenEmpty={false}
           extensions={[KeyboardEventHandler]}
           onFocus={scrollToBottom}
         />
         <div className={styles.actionBar}>
-          <Button
-            variant={ButtonVariants.hoverFilled2}
-            heightVariant={ButtonHeight.short}
-            onClick={toggleInputVisible}
-          >
-            <LuX />
-          </Button>
+          {/*<Button*/}
+          {/*  variant={ButtonVariants.hoverFilled2}*/}
+          {/*  heightVariant={ButtonHeight.short}*/}
+          {/*  onClick={toggleInputVisible}*/}
+          {/*>*/}
+          {/*  <LuX />*/}
+          {/*</Button>*/}
           <Button
             loading={isInitializeThreadLoading}
             disabled={isInitializeThreadLoading}
-            variant={ButtonVariants.hoverFilled2}
-            heightVariant={ButtonHeight.short}
+            variant={ButtonVariants.brandColor}
             className={styles.submitButton}
             onClick={submit}
-            data-tooltip-right={t("newThreadButtonLabel")}
+            // data-tooltip-top={t("newThreadButtonLabel")}
           >
             <LuSendHorizonal />
           </Button>
