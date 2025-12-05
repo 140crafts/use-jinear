@@ -5,22 +5,6 @@ stages:
 
 variables:
   DOCKER_DRIVER: overlay2
-  TAG: ${CI_COMMIT_TAG:-${CI_COMMIT_SHORT_SHA}}
-
-  JINEAR_CORE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:${TAG}
-  JINEAR_CORE_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:latest
-
-  JINEAR_WEB_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:${TAG}
-  JINEAR_WEB_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:latest
-
-  JINEAR_CADDY_CUSTOM_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:${TAG}
-  JINEAR_CADDY_CUSTOM_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:latest
-
-  JINEAR_MESSAGE_SERVICE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:${TAG}
-  JINEAR_MESSAGE_SERVICE_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:latest
-
-  JINEAR_PAGES_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-pages:${TAG}
-  JINEAR_PAGES_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-pages:latest
 
 workflow:
   rules:
@@ -65,6 +49,25 @@ workflow:
     - docker buildx version
     - docker buildx create --use --name multi-arch-builder
     - docker buildx inspect --bootstrap
+    - |
+      # Set TAG variable - prefer CI_COMMIT_TAG, fallback to CI_COMMIT_SHORT_SHA
+      if [ -n "$CI_COMMIT_TAG" ]; then
+        export TAG="$CI_COMMIT_TAG"
+      else
+        export TAG="$CI_COMMIT_SHORT_SHA"
+      fi
+      echo "Using TAG=${TAG}"
+      # Set image variables
+      export JINEAR_CORE_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:${TAG}"
+      export JINEAR_CORE_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:latest"
+      export JINEAR_WEB_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:${TAG}"
+      export JINEAR_WEB_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:latest"
+      export JINEAR_CADDY_CUSTOM_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:${TAG}"
+      export JINEAR_CADDY_CUSTOM_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:latest"
+      export JINEAR_MESSAGE_SERVICE_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:${TAG}"
+      export JINEAR_MESSAGE_SERVICE_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:latest"
+      export JINEAR_PAGES_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-pages:${TAG}"
+      export JINEAR_PAGES_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-pages:latest"
 
 bump_version:
   stage: version
@@ -98,9 +101,6 @@ core:build:
   <<: *docker_setup
   stage: build
   script:
-    - echo "Building with TAG=${TAG}"
-    - echo "CI_COMMIT_TAG=${CI_COMMIT_TAG}"
-    - echo "CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}"
     - cd jinear-core
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CORE_IMAGE} --push .
   timeout: 90m
@@ -127,9 +127,6 @@ web:build:
   <<: *docker_setup
   stage: build
   script:
-    - echo "Building with TAG=${TAG}"
-    - echo "CI_COMMIT_TAG=${CI_COMMIT_TAG}"
-    - echo "CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}"
     - cd jinear-web
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_WEB_IMAGE} --push .
   timeout: 90m
@@ -157,9 +154,6 @@ caddy-custom:build:
   <<: *docker_setup
   stage: build
   script:
-    - echo "Building with TAG=${TAG}"
-    - echo "CI_COMMIT_TAG=${CI_COMMIT_TAG}"
-    - echo "CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}"
     - cd jinear-caddy-custom
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CADDY_CUSTOM_IMAGE} --push .
   timeout: 90m
@@ -187,9 +181,6 @@ message-service:build:
   <<: *docker_setup
   stage: build
   script:
-    - echo "Building with TAG=${TAG}"
-    - echo "CI_COMMIT_TAG=${CI_COMMIT_TAG}"
-    - echo "CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}"
     - cd jinear-message-service
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_MESSAGE_SERVICE_IMAGE} --push .
   rules:
@@ -215,9 +206,6 @@ pages:build:
   <<: *docker_setup
   stage: build
   script:
-    - echo "Building with TAG=${TAG}"
-    - echo "CI_COMMIT_TAG=${CI_COMMIT_TAG}"
-    - echo "CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}"
     - cd jinear-pages
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_PAGES_IMAGE} --push .
   rules:
