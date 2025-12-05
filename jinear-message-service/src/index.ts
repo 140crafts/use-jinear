@@ -53,8 +53,8 @@ let io = require("socket.io")(http, {
     path: '/ws',
     cors: {
         origin: ALLOWED_ORIGIN,
-        methods: ["GET", "POST"],
-        allowedHeaders: ["X-Token","Cookie"],
+        methods: ["GET", "POST", "OPTIONS"],
+        allowedHeaders: ["X-Token", "Cookie"],
         credentials: true
     }
 });
@@ -126,7 +126,7 @@ app.post('/emit', (req, resp) => {
     try {
         io.to(channel).emit(topic, message);
     } catch (error) {
-        logger.error(error);
+        logger.error(`emit failed. io.to failed. ${error}`);
     }
     return resp.status(200).send("ok");
 })
@@ -138,7 +138,11 @@ io.on('connection', async (socket: any) => {
         try {
             const accountId = await getAccountId(JWT.value);
             logger.info({newConnection: accountId});
-            socket.join(accountId);
+            try {
+                socket.join(accountId);
+            } catch (err) {
+                logger.error(`socker.join has failed. ${err}`);
+            }
             return;
         } catch (e) {
             logger.error(e)
