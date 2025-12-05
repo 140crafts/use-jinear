@@ -73,13 +73,14 @@ bump_version:
     - apk add --no-cache git
     - git config --global user.email "gitlab-ci@gitlab.com"
     - git config --global user.name "GitLab CI"
-    - git remote set-url origin "https://gitlab-ci-token:${JINEAR_CI_TAG_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+    - git remote set-url origin "https://${GITLAB_USER_LOGIN}:${JINEAR_CI_TAG_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
     - git fetch --tags
   script:
     - |
       latest_tag=$(git tag --list 'v*' --sort=-v:refname | head -n 1)
       if [ -z "$latest_tag" ]; then
-        new_tag="v0.1.1637"
+        echo "No tags found. Starting at v0.1.1638"
+        new_tag="v0.1.1638"
       else
         new_tag=$(echo "$latest_tag" | awk -F. -v OFS=. '{$NF++;print}')
       fi
@@ -87,6 +88,8 @@ bump_version:
       git tag -a "${new_tag}" -m "Release ${new_tag}"
       git push origin "${new_tag}"
   rules:
+    - if: '$CI_COMMIT_TAG'
+      when: never
     - if: '$CI_COMMIT_BRANCH == "main"'
 
 core:build:
