@@ -1,24 +1,32 @@
 stages:
+  - version
   - build
   - deploy
 
 variables:
   DOCKER_DRIVER: overlay2
+  TAG: ${CI_COMMIT_TAG:-${CI_COMMIT_SHORT_SHA}}
 
-  JINEAR_CORE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:${CI_COMMIT_SHORT_SHA}
+  JINEAR_CORE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:${TAG}
   JINEAR_CORE_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:latest
 
-  JINEAR_WEB_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:${CI_COMMIT_SHORT_SHA}
+  JINEAR_WEB_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:${TAG}
   JINEAR_WEB_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:latest
 
-  JINEAR_CADDY_CUSTOM_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:${CI_COMMIT_SHORT_SHA}
+  JINEAR_CADDY_CUSTOM_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:${TAG}
   JINEAR_CADDY_CUSTOM_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:latest
 
-  JINEAR_MESSAGE_SERVICE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:${CI_COMMIT_SHORT_SHA}
+  JINEAR_MESSAGE_SERVICE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:${TAG}
   JINEAR_MESSAGE_SERVICE_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:latest
 
-  JINEAR_PAGES_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-pages:${CI_COMMIT_SHORT_SHA}
+  JINEAR_PAGES_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-pages:${TAG}
   JINEAR_PAGES_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-pages:latest
+
+workflow:
+  rules:
+    - if: '$CI_COMMIT_TAG'
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
 
 .core_changes: &core_changes
   changes:
@@ -47,19 +55,39 @@ variables:
 
 .docker_setup: &docker_setup
   image: docker:latest
-#  services:
-#    - docker:dind
   before_script:
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD registry.gitlab.com
     - docker login -u $CI_HUB_USER -p $CI_HUB_PASSWORD
     - apk add --no-cache curl
     - mkdir -p ~/.docker/cli-plugins/
-#    - curl -SL curl -SL https://github.com/docker/buildx/releases/download/v0.16.2/buildx-v0.16.2.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
     - curl -sSL https://github.com/docker/buildx/releases/download/v0.16.2/buildx-v0.16.2.linux-arm64 -o ~/.docker/cli-plugins/docker-buildx
     - chmod +x ~/.docker/cli-plugins/docker-buildx
     - docker buildx version
     - docker buildx create --use --name multi-arch-builder
     - docker buildx inspect --bootstrap
+
+bump_version:
+  stage: version
+  image: alpine:latest
+  before_script:
+    - apk add --no-cache git
+    - git config --global user.email "gitlab-ci@gitlab.com"
+    - git config --global user.name "GitLab CI"
+    - git remote set-url origin "https://gitlab-ci-token:${CI_JOB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git"
+    - git fetch --tags
+  script:
+    - |
+      latest_tag=$(git tag --list 'v*' --sort=-v:refname | head -n 1)
+      if [ -z "$latest_tag" ]; then
+        new_tag="v0.1.1637"
+      else
+        new_tag=$(echo "$latest_tag" | awk -F. -v OFS=. '{$NF++;print}')
+      fi
+      echo "Bumping version to ${new_tag}"
+      git tag -a "${new_tag}" -m "Release ${new_tag}"
+      git push origin "${new_tag}"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
 
 core:build:
   <<: *docker_setup
@@ -69,10 +97,12 @@ core:build:
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CORE_IMAGE} --push .
   timeout: 90m
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
       <<: *core_changes
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       <<: *core_changes
+      when: manual
+      allow_failure: true
 
 core:deploy:
   <<: *docker_setup
@@ -80,7 +110,7 @@ core:deploy:
   script:
     - docker buildx imagetools create -t ${JINEAR_CORE_IMAGE_LATEST} ${JINEAR_CORE_IMAGE}
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
       <<: *core_changes
   needs:
     - core:build
@@ -88,17 +118,17 @@ core:deploy:
 web:build:
   <<: *docker_setup
   stage: build
-#  tags:
-#    - saas-linux-medium-amd64
   script:
     - cd jinear-web
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_WEB_IMAGE} --push .
   timeout: 90m
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
       <<: *web_changes
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       <<: *web_changes
+      when: manual
+      allow_failure: true
 
 web:deploy:
   <<: *docker_setup
@@ -107,7 +137,7 @@ web:deploy:
     - docker buildx imagetools create -t ${JINEAR_WEB_IMAGE_LATEST} ${JINEAR_WEB_IMAGE}
   timeout: 90m
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
       <<: *web_changes
   needs:
     - web:build
@@ -120,10 +150,12 @@ caddy-custom:build:
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CADDY_CUSTOM_IMAGE} --push .
   timeout: 90m
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
       <<: *caddy_custom_changes
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       <<: *caddy_custom_changes
+      when: manual
+      allow_failure: true
 
 caddy-custom:deploy:
   <<: *docker_setup
@@ -132,7 +164,7 @@ caddy-custom:deploy:
   script:
     - docker buildx imagetools create -t ${JINEAR_CADDY_CUSTOM_IMAGE_LATEST} ${JINEAR_CADDY_CUSTOM_IMAGE}
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
       <<: *caddy_custom_changes
   needs:
     - caddy-custom:build
@@ -144,10 +176,12 @@ message-service:build:
     - cd jinear-message-service
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_MESSAGE_SERVICE_IMAGE} --push .
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
       <<: *message_service_changes
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       <<: *message_service_changes
+      when: manual
+      allow_failure: true
 
 message-service:deploy:
   <<: *docker_setup
@@ -155,7 +189,7 @@ message-service:deploy:
   script:
     - docker buildx imagetools create -t ${JINEAR_MESSAGE_SERVICE_IMAGE_LATEST} ${JINEAR_MESSAGE_SERVICE_IMAGE}
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
       <<: *message_service_changes
   needs:
     - message-service:build
@@ -163,16 +197,16 @@ message-service:deploy:
 pages:build:
   <<: *docker_setup
   stage: build
-#  tags:
-#    - saas-linux-medium-amd64
   script:
     - cd jinear-pages
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_PAGES_IMAGE} --push .
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
       <<: *pages_changes
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       <<: *pages_changes
+      when: manual
+      allow_failure: true
 
 pages:deploy:
   <<: *docker_setup
@@ -180,7 +214,7 @@ pages:deploy:
   script:
     - docker buildx imagetools create -t ${JINEAR_PAGES_IMAGE_LATEST} ${JINEAR_PAGES_IMAGE}
   rules:
-    - if: '$CI_COMMIT_BRANCH == "main" || $CI_COMMIT_BRANCH == "master"'
+    - if: '$CI_COMMIT_TAG'
       <<: *pages_changes
   needs:
     - pages:build
