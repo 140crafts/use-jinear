@@ -5,7 +5,7 @@ stages:
 
 variables:
   DOCKER_DRIVER: overlay2
-  TAG: ${CI_COMMIT_TAG:-${CI_COMMIT_SHORT_SHA}}
+  TAG: ${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
 
   JINEAR_CORE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:${TAG}
   JINEAR_CORE_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:latest
