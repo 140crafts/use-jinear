@@ -5,7 +5,7 @@ stages:
 
 variables:
   DOCKER_DRIVER: overlay2
-  TAG: ${NEW_TAG:-${CI_COMMIT_TAG:-${CI_COMMIT_SHORT_SHA}}}
+  TAG: ${CI_COMMIT_TAG:-${CI_COMMIT_SHORT_SHA}}
 
   JINEAR_CORE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:${TAG}
   JINEAR_CORE_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:latest
@@ -87,11 +87,8 @@ bump_version:
       echo "Bumping version to ${new_tag}"
       git tag -a "${new_tag}" -m "Release ${new_tag}"
       git push origin "${new_tag}"
-      echo "NEW_TAG=${new_tag}" >> build.env
       echo "Created and pushed tag: ${new_tag}"
-  artifacts:
-    reports:
-      dotenv: build.env
+      echo "A new pipeline will be triggered automatically for this tag"
   rules:
     - if: '$CI_COMMIT_TAG'
       when: never
@@ -101,6 +98,9 @@ core:build:
   <<: *docker_setup
   stage: build
   script:
+    - echo "Building with TAG=${TAG}"
+    - echo "CI_COMMIT_TAG=${CI_COMMIT_TAG}"
+    - echo "CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}"
     - cd jinear-core
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CORE_IMAGE} --push .
   timeout: 90m
@@ -111,9 +111,6 @@ core:build:
       <<: *core_changes
       when: manual
       allow_failure: true
-  needs:
-    - job: bump_version
-      optional: true
 
 core:deploy:
   <<: *docker_setup
@@ -130,6 +127,9 @@ web:build:
   <<: *docker_setup
   stage: build
   script:
+    - echo "Building with TAG=${TAG}"
+    - echo "CI_COMMIT_TAG=${CI_COMMIT_TAG}"
+    - echo "CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}"
     - cd jinear-web
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_WEB_IMAGE} --push .
   timeout: 90m
@@ -140,9 +140,6 @@ web:build:
       <<: *web_changes
       when: manual
       allow_failure: true
-  needs:
-    - job: bump_version
-      optional: true
 
 web:deploy:
   <<: *docker_setup
@@ -160,6 +157,9 @@ caddy-custom:build:
   <<: *docker_setup
   stage: build
   script:
+    - echo "Building with TAG=${TAG}"
+    - echo "CI_COMMIT_TAG=${CI_COMMIT_TAG}"
+    - echo "CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}"
     - cd jinear-caddy-custom
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CADDY_CUSTOM_IMAGE} --push .
   timeout: 90m
@@ -170,9 +170,6 @@ caddy-custom:build:
       <<: *caddy_custom_changes
       when: manual
       allow_failure: true
-  needs:
-    - job: bump_version
-      optional: true
 
 caddy-custom:deploy:
   <<: *docker_setup
@@ -190,6 +187,9 @@ message-service:build:
   <<: *docker_setup
   stage: build
   script:
+    - echo "Building with TAG=${TAG}"
+    - echo "CI_COMMIT_TAG=${CI_COMMIT_TAG}"
+    - echo "CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}"
     - cd jinear-message-service
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_MESSAGE_SERVICE_IMAGE} --push .
   rules:
@@ -199,9 +199,6 @@ message-service:build:
       <<: *message_service_changes
       when: manual
       allow_failure: true
-  needs:
-    - job: bump_version
-      optional: true
 
 message-service:deploy:
   <<: *docker_setup
@@ -218,6 +215,9 @@ pages:build:
   <<: *docker_setup
   stage: build
   script:
+    - echo "Building with TAG=${TAG}"
+    - echo "CI_COMMIT_TAG=${CI_COMMIT_TAG}"
+    - echo "CI_COMMIT_SHORT_SHA=${CI_COMMIT_SHORT_SHA}"
     - cd jinear-pages
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_PAGES_IMAGE} --push .
   rules:
@@ -227,9 +227,6 @@ pages:build:
       <<: *pages_changes
       when: manual
       allow_failure: true
-  needs:
-    - job: bump_version
-      optional: true
 
 pages:deploy:
   <<: *docker_setup
