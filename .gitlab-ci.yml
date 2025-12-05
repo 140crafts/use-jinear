@@ -5,7 +5,7 @@ stages:
 
 variables:
   DOCKER_DRIVER: overlay2
-  TAG: ${CI_COMMIT_TAG:-$CI_COMMIT_SHORT_SHA}
+  TAG: ${NEW_TAG:-${CI_COMMIT_TAG:-${CI_COMMIT_SHORT_SHA}}}
 
   JINEAR_CORE_IMAGE: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:${TAG}
   JINEAR_CORE_IMAGE_LATEST: registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:latest
@@ -87,6 +87,11 @@ bump_version:
       echo "Bumping version to ${new_tag}"
       git tag -a "${new_tag}" -m "Release ${new_tag}"
       git push origin "${new_tag}"
+      echo "NEW_TAG=${new_tag}" >> build.env
+      echo "Created and pushed tag: ${new_tag}"
+  artifacts:
+    reports:
+      dotenv: build.env
   rules:
     - if: '$CI_COMMIT_TAG'
       when: never
@@ -106,6 +111,9 @@ core:build:
       <<: *core_changes
       when: manual
       allow_failure: true
+  needs:
+    - job: bump_version
+      optional: true
 
 core:deploy:
   <<: *docker_setup
@@ -132,6 +140,9 @@ web:build:
       <<: *web_changes
       when: manual
       allow_failure: true
+  needs:
+    - job: bump_version
+      optional: true
 
 web:deploy:
   <<: *docker_setup
@@ -159,6 +170,9 @@ caddy-custom:build:
       <<: *caddy_custom_changes
       when: manual
       allow_failure: true
+  needs:
+    - job: bump_version
+      optional: true
 
 caddy-custom:deploy:
   <<: *docker_setup
@@ -185,6 +199,9 @@ message-service:build:
       <<: *message_service_changes
       when: manual
       allow_failure: true
+  needs:
+    - job: bump_version
+      optional: true
 
 message-service:deploy:
   <<: *docker_setup
@@ -210,6 +227,9 @@ pages:build:
       <<: *pages_changes
       when: manual
       allow_failure: true
+  needs:
+    - job: bump_version
+      optional: true
 
 pages:deploy:
   <<: *docker_setup
