@@ -6,5 +6,6 @@ public enum MediaOwnerType {
     TASK,
     PROJECT_POST,
     PROJECT,
-    RICH_TEXT;
+    RICH_TEXT,
+    MATERIAL;
 }
