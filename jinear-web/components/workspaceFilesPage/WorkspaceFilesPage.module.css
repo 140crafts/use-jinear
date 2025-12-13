@@ -1,0 +1,13 @@
+.materialButton {
+    outline-style: none !important;
+    outline-color: transparent !important;
+}
+
+.loadingContainer {
+    min-height: 3px;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: row;
+}

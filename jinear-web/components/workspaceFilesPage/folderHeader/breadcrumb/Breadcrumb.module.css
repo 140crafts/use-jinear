@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    min-height: 2rem;
+}
+
+.breadcrumb {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.button {
+    outline-style: none !important;
+    outline-color: transparent !important;
+    padding: 0.15rem !important;
+    gap: .25rem;
+}

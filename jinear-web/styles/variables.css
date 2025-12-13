@@ -65,6 +65,8 @@
     --calendar-month-week-day-numbers: 35px;
     --calendar-header-main-height: 76px;
     --calendar-container-gap: 1rem;
+    /* MATERIAL */
+    --material-row-view-row-height: 1.75rem;
     /*  */
     --gap: clamp(1rem, 6vw, 3rem);
     --page: min(85ch, 100% - var(--gap) * 2);

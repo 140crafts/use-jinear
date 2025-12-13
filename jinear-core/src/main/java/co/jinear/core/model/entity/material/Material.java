@@ -3,22 +3,21 @@ package co.jinear.core.model.entity.material;
 import co.jinear.core.converter.material.MaterialTypeConverter;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.media.Media;
-import co.jinear.core.model.entity.richtext.RichText;
 import co.jinear.core.model.enumtype.material.MaterialType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 import org.hibernate.annotations.Where;
 
-import java.util.Set;
-
 @Getter
 @Setter
 @Entity
 @Table(name = "material")
+@FieldNameConstants
 public class Material extends BaseEntity {
 
     @Id
@@ -57,15 +56,9 @@ public class Material extends BaseEntity {
     @JoinColumn(name = "media_id", insertable = false, updatable = false)
     private Media media;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @NotFound(action = NotFoundAction.IGNORE)
     @Where(clause = "passive_id is null")
     @JoinColumn(name = "parent_material_id", referencedColumnName = "material_id", insertable = false, updatable = false)
     private Material parent;
-
-    @OneToMany
-    @NotFound(action = NotFoundAction.IGNORE)
-    @Where(clause = "passive_id is null")
-    @JoinColumn(name = "parent_material_id", referencedColumnName = "material_id", insertable = false, updatable = false)
-    private Set<Material> children;
 }

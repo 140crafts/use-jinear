@@ -1,0 +1,22 @@
+.materialName {
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+}
+
+.infoColumn {
+    min-width: 12ch;
+}
+
+.container {
+    position: relative;
+    cursor: pointer;
+}
+
+.container:hover {
+    background-color: var(--c-primary-shade-1) !important;
+}
+
+.icon {
+    min-width: 16px !important;
+}

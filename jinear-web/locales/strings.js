@@ -2932,6 +2932,10 @@ const translations = {
     en: "Tasks",
     tr: "Görevler"
   },
+  mainFeaturesMenuLabelFiles: {
+    en: "Files",
+    tr: "Dosyalar"
+  },
   mainFeaturesMenuLabelCalendar: {
     en: "Calendar",
     tr: "Takvim"
@@ -4923,6 +4927,62 @@ const translations = {
   feedbackModalPleaseProvideDetail: {
     en: "Please provide details",
     tr: "Lütfen bir açıklama girin"
+  },
+  sideMenuFilesTitle: {
+    en: "Workspace Files",
+    tr: "Çalışma Alanı Dosyaları"
+  },
+  sideMenuFilesUpload: {
+    en: "Upload",
+    tr: "Yükle"
+  },
+  sideMenuFilesCreateFolder: {
+    en: "New Folder",
+    tr: "Yeni Klasör"
+  },
+  sideMenuFilesAllFiles: {
+    en: "All Files",
+    tr: "Tüm Dosyalar"
+  },
+  sideMenuFilesRecentFiles: {
+    en: "Recent",
+    tr: "En Yeni"
+  },
+  sideMenuFilesImageFiles: {
+    en: "Images",
+    tr: "Görseller"
+  },
+  sideMenuSharedFiles: {
+    en: "Shared",
+    tr: "Paylaşımlar"
+  },
+  sideMenuDeletedFiles: {
+    en: "Deleted",
+    tr: "Silinenler"
+  },
+  sideMenuTaskFilesTitle: {
+    en: "Task Attachments",
+    tr: "Görev Ekleri"
+  },
+  sideMenuTaskFilesFavorites: {
+    en: "Favorites",
+    tr: "Favoriler"
+  },
+  folderHeaderActionButtonUpload: {
+    en: "Upload",
+    tr: "Yükle"
+  },
+  folderHeaderActionButtonNewFolder: {
+    en: "New Folder",
+    tr: "Yeni Klasör"
+  },
+  folderHeaderActionButtonShare: {
+    en: "Share Folder",
+    tr: "Klasörü Paylaş"
+  },
+  folderBreadcrumbHome: {
+    en: "Workspace",
+    tr: "Çalışma Alanı"
   }
 };
 

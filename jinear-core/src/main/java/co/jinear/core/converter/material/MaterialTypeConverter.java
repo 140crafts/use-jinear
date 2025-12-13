@@ -1,14 +1,15 @@
 package co.jinear.core.converter.material;
 
 import co.jinear.core.model.enumtype.material.MaterialType;
-import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Optional;
 
 @Converter
+@Component
 public class MaterialTypeConverter implements AttributeConverter<MaterialType, Integer> {
 
     @Override

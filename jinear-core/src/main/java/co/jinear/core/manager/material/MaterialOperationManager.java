@@ -10,8 +10,8 @@ import co.jinear.core.model.response.material.MaterialInitializeFileUploadRespon
 import co.jinear.core.model.vo.material.MaterialFileInitializeVo;
 import co.jinear.core.model.vo.material.MaterialFolderInitializeVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.material.MaterialAccessValidationService;
 import co.jinear.core.service.material.MaterialOperationService;
-import co.jinear.core.service.material.MaterialRetrieveService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class MaterialOperationManager {
     private final SessionInfoService sessionInfoService;
     private final WorkspaceValidator workspaceValidator;
     private final MaterialOperationService materialOperationService;
-    private final MaterialRetrieveService materialRetrieveService;
+    private final MaterialAccessValidationService materialAccessValidationService;
     private final MaterialInitializeFolderRequestToVoConverter materialInitializeFolderRequestToVoConverter;
     private final MaterialInitializeFileUploadRequestToVoConverter materialInitializeFileUploadRequestToVoConverter;
 
@@ -50,7 +50,7 @@ public class MaterialOperationManager {
     public BaseResponse notifyFileUploadComplete(String workspaceId, String materialId) {
         String currentAccountId = sessionInfoService.currentAccountId();
         workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
-        materialRetrieveService.validateOwnership(workspaceId, materialId, currentAccountId);
+        materialAccessValidationService.validateOwnership(workspaceId, materialId, currentAccountId);
         log.info("Notify file upload complete has started. currentAccountId: {}", currentAccountId);
         materialOperationService.notifyUploadComplete(materialId);
         return new BaseResponse();
