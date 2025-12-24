@@ -1,6 +1,7 @@
 import Logger from "@/utils/logger";
 
 const logger = Logger("htmlUtils");
+
 export const getOffset = (el: HTMLElement) => {
   const rect = el.getBoundingClientRect();
   return {

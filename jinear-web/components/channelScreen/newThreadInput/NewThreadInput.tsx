@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import styles from "./NewThreadInput.module.scss";
-import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { LuSendHorizonal, LuX } from "react-icons/lu";
+import Button, { ButtonVariants } from "@/components/button";
+import { LuSendHorizonal as LuSendHorizontal } from "react-icons/lu";
 import useTranslation from "@/locals/useTranslation";
 import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
 import { useChannelFromChannelMemberships } from "@/hooks/messaging/useChannelFromChannelMemberships";
@@ -97,7 +97,7 @@ const NewThreadInput: React.FC<NewThreadInputProps> = ({ workspaceName, channelI
             onClick={submit}
             // data-tooltip-top={t("newThreadButtonLabel")}
           >
-            <LuSendHorizonal />
+            <LuSendHorizontal />
           </Button>
         </div>
       </div>

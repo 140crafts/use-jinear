@@ -60,12 +60,16 @@ import NewMilestoneModal from "@/components/modal/newMilestoneModal/NewMilestone
 import NewCustomProjectDomainModal from "@/components/modal/newCustomProjectDomainModal/NewCustomProjectDomainModal";
 import PasswordChangeModal from "@/components/modal/passwordChangeModal/PasswordChangeModal";
 import FeedbackModal from "@/components/modal/feedbackModal/FeedbackModal";
+import MaterialFolderPickerModal from "@/components/modal/materialFolderPickerModal/MaterialFolderPickerModal";
+import UploadStatusModal from "@/components/modal/uploadStatusModal/UploadStatusModal";
 
 interface ModalProviderProps {
 }
 
 const globalModals: any = (
   <>
+    <UploadStatusModal />
+    <MaterialFolderPickerModal />
     <FeedbackModal />
     <InstallPwaInstructionsModal />
     <NewConversationModal />

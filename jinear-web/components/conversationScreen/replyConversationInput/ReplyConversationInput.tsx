@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import styles from "./ReplyConversationInput.module.scss";
 import Button, { ButtonVariants } from "@/components/button";
 import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
-import { LuPencilLine, LuSendHorizonal } from "react-icons/lu";
+import { LuPencilLine, LuSendHorizonal as LuSendHorizontal } from "react-icons/lu";
 import CustomKeyboardEventHandler from "@/components/tiptap/keyboardEventHandler/KeyboardEventHandler";
 import useTranslation from "@/locals/useTranslation";
 import { useSendToConversationMutation } from "@/api/messageOperationApi";
@@ -79,7 +79,7 @@ const ReplyConversationInput: React.FC<ReplyConversationInputProps> = ({ workspa
             onClick={send}
             className={styles.sendButton}
           >
-            <LuSendHorizonal />
+            <LuSendHorizontal />
           </Button>
         </div>
       </div>

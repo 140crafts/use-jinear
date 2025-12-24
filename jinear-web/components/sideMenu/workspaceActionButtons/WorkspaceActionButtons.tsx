@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./WorkspaceActionButtons.module.css";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { LuClipboardEdit, LuPenSquare, LuRss } from "react-icons/lu";
+import { LuClipboardEdit as LuClipboardPen, LuPenSquare as LuSquarePen, LuRss } from "react-icons/lu";
 import ProjectsButton from "@/components/sideMenu/workspaceActionButtons/projectsButton/ProjectsButton";
 import useTranslation from "@/locals/useTranslation";
 import { popNewTaskModal } from "@/slice/modalSlice";
@@ -16,6 +16,7 @@ import Logger from "@/utils/logger";
 interface WorkspaceActionButtonsProps {
   workspace: WorkspaceDto;
 }
+
 const logger = Logger("WorkspaceActionButtons");
 const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspace }) => {
   const { t } = useTranslation();
@@ -32,7 +33,7 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspa
     }
   };
 
-  logger.log({pathname, assignedToMePath, lastActivitiesPath});
+  logger.log({ pathname, assignedToMePath, lastActivitiesPath });
 
   return (
     <div className={styles.container}>
@@ -46,7 +47,7 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspa
           onClick={_popNewTaskModal}
           disabled={!workspace || !team}
         >
-          <LuPenSquare />
+          <LuSquarePen />
           <b>{t("sideMenuNewTask")}</b>
         </Button>
 
@@ -63,7 +64,7 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspa
           href={assignedToMePath}
           variant={pathname?.indexOf(assignedToMePath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
         >
-          <LuClipboardEdit className={styles.icon} />
+          <LuClipboardPen className={styles.icon} />
           {t("mainFeaturesMenuLabelAssignedToMe")}
         </Button>
 

@@ -19,8 +19,12 @@ interface TaskBoardQuickFilterBarProps {
   taskBoardId: string;
 }
 
+export interface ITaskBoardEntryFilterRequest extends TaskBoardEntryFilterRequest {
+  page?: number;
+}
+
 export interface ITaskBoardUrlStateMap {
-  [key: string]: TaskBoardEntryFilterRequest | undefined;
+  [key: string]: ITaskBoardEntryFilterRequest | undefined;
 }
 
 const logger = Logger("TaskBoardQuickFilterBar");

@@ -13,11 +13,13 @@ interface ModalProps extends BaseModalProps {
   containerClassName?: string;
   contentContainerClass?: string;
   contentClassName?: string;
+  closepadClassName?: string;
   bodyClass?: string;
   width?: ModalWidth;
   height?: ModalHeight;
   title?: string;
   hasTitleCloseButton?: boolean;
+  closeButtonIcon?: React.ReactNode;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -27,13 +29,16 @@ const Modal: React.FC<ModalProps> = ({
                                        containerClassName,
                                        contentContainerClass,
                                        contentClassName,
+                                       closepadClassName,
                                        bodyClass,
                                        width = "medium-fixed",
                                        height = "default",
                                        title,
                                        hasTitleCloseButton = false,
-                                       onTitleCloeButtonClick
+                                       onTitleCloeButtonClick,
+                                       closeButtonIcon
                                      }) => {
+
   const titleCloseClick = () => {
     if (onTitleCloeButtonClick) {
       onTitleCloeButtonClick?.();
@@ -49,6 +54,7 @@ const Modal: React.FC<ModalProps> = ({
       contentContainerClass={cn(styles.container, contentContainerClass)}
       containerClassName={containerClassName}
       contentClassName={contentClassName}
+      closepadClassName={closepadClassName}
       width={width}
       height={height}
     >
@@ -57,7 +63,7 @@ const Modal: React.FC<ModalProps> = ({
           {hasTitleCloseButton && (
             <div className={styles.titleBarIconButtonContainer}>
               <Button onClick={titleCloseClick}>
-                <IoClose size={18} />
+                {closeButtonIcon ?? <IoClose size={18} />}
               </Button>
             </div>
           )}

@@ -10,6 +10,10 @@
   * {
     transition: unset !important;
   }
+
+  .hidden-mobile {
+    display: none !important;
+  }
 }
 
 html {
@@ -480,6 +484,28 @@ mark {
   position: absolute;
   white-space: nowrap;
   z-index: 99999;
+}
+
+@media (max-width: $tablet) {
+
+  *[data-tooltip-right-mobile] {
+    position: relative;
+  }
+
+  *[data-tooltip-right-mobile]:hover:after {
+    content: attr(data-tooltip-right-mobile);
+    background-color: var(--c-secondary);
+    color: var(--c-primary);
+    bottom: -2.5em;
+    right: 0;
+    padding: 0.5em;
+    border-radius: var(--border-radius);
+    position: absolute;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 99;
+  }
+
 }
 
 /* endregion */

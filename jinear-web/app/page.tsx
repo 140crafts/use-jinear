@@ -20,7 +20,7 @@ import SubHero from "@/components/homepage/subHero/SubHero";
 import FeatureCard from "@/components/homepage/featureCard/FeatureCard";
 import {
   LuCalendarCheck2,
-  LuCheckCircle,
+  LuCheckCircle as LuCircleCheck,
   LuClipboardList,
   LuFile,
   LuLayoutDashboard,
@@ -30,7 +30,7 @@ import { SiApple, SiAsana, SiBasecamp, SiGooglecalendar, SiJira } from "react-ic
 import Footer from "@/components/homepage/footer/Footer";
 import OrLine from "@/components/orLine/OrLine";
 import { FaGithub, FaGitlab } from "react-icons/fa6";
-import { IoBalloon, IoBalloonOutline, IoRocket, IoRocketOutline, IoSparkles } from "react-icons/io5";
+import { IoBalloon } from "react-icons/io5";
 
 export default function Home() {
   const pwa = isPwa();
@@ -98,7 +98,7 @@ export default function Home() {
         featureCardIconInfoList={[
           {
             id: "task-todos",
-            Icon: LuCheckCircle,
+            Icon: LuCircleCheck,
             title: t("landingPageFeature1Sub1Title"),
             text: t("landingPageFeature1Sub1Text")
           },

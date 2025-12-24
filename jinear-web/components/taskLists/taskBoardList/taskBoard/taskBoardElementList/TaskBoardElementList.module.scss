@@ -8,3 +8,22 @@
 .draggableBoardElementContainer:active {
   background-color: var(--c-primary);
 }
+
+.draggableBoardElementContainer {
+  cursor: grab;
+  transition: opacity 0.2s, transform 0.2s;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.dragging {
+  opacity: 0.5;
+}
+
+.dragOver {
+  border-top: 2px solid var(--c-secondary-shade-0-op05);
+  // Or use transform for visual feedback
+   transform: translateY(4px);
+}

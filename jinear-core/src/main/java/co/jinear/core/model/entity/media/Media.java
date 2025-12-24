@@ -6,6 +6,7 @@ import co.jinear.core.model.enumtype.media.*;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.ZonedDateTime;
@@ -13,6 +14,7 @@ import java.time.ZonedDateTime;
 @Getter
 @Setter
 @Entity
+@FieldNameConstants
 @Table(name = "media")
 public class Media extends BaseEntity {
 

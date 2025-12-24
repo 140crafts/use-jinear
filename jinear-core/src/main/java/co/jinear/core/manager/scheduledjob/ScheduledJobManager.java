@@ -1,6 +1,9 @@
 package co.jinear.core.manager.scheduledjob;
 
+import co.jinear.core.model.entity.material.Material;
 import co.jinear.core.model.entity.media.Media;
+import co.jinear.core.model.vo.media.RemoveMediaVo;
+import co.jinear.core.service.material.MaterialRetrieveService;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.project.domain.ProjectDomainCnameOperatorService;
@@ -22,6 +25,7 @@ public class ScheduledJobManager {
     private final MediaRetrieveService mediaRetrieveService;
     private final MediaOperationService mediaOperationService;
     private final ProjectDomainCnameOperatorService projectDomainCnameOperatorService;
+    private final MaterialRetrieveService materialRetrieveService;
 
     @Async
     @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
@@ -55,6 +59,22 @@ public class ScheduledJobManager {
                 log.error("Check existence and update status has failed.", e);
             }
         });
+    }
+
+    @Async
+    @Scheduled(fixedRate = 15, timeUnit = TimeUnit.MINUTES)
+    public void retrieveDeletedMaterialWithMediaPendingForDeletionAndDeleteTheirMedia() {
+        log.info("Retrieve deleted material with media pending for deletion and delete their media has started.");
+        Page<Material> materials = materialRetrieveService.retrieveDeletedMaterialWithMediaPendingForDeletion(0);
+        if (materials.hasContent()) {
+            log.info("Found materials to delete. total: {}, processing: {}", materials.getTotalElements(), materials.getSize());
+            materials.forEach(material -> {
+                RemoveMediaVo removeMediaVo = new RemoveMediaVo();
+                removeMediaVo.setMediaId(material.getMediaId());
+                removeMediaVo.setExistingPassiveId(material.getPassiveId());
+                mediaOperationService.deleteMedia(removeMediaVo);
+            });
+        }
     }
 
     private void updateMediaAsPrivate(String mediaId) {

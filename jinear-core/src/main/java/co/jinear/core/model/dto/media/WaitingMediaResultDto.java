@@ -1,16 +1,15 @@
 package co.jinear.core.model.dto.media;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.time.ZonedDateTime;
 
 @Getter
 @Setter
-@Builder
 @ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class WaitingMediaResultDto {
 
     private String presignedUrl;

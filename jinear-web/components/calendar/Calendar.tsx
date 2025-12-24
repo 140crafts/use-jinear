@@ -23,11 +23,6 @@ import {
   storeCalendarViewType,
   useStoredCalendarViewType
 } from "@/components/calendar/calendarUtils";
-import Button, { ButtonVariants } from "@/components/button";
-import { LuPenSquare } from "react-icons/lu";
-import useTranslation from "@/locals/useTranslation";
-import { popNewTaskModal } from "@/slice/modalSlice";
-import { useAppDispatch } from "@/store/store";
 
 interface CalendarProps {
   workspace: WorkspaceDto;

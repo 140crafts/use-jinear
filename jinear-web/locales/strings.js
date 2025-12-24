@@ -2932,6 +2932,10 @@ const translations = {
     en: "Tasks",
     tr: "Görevler"
   },
+  mainFeaturesMenuLabelFiles: {
+    en: "Files",
+    tr: "Dosyalar"
+  },
   mainFeaturesMenuLabelCalendar: {
     en: "Calendar",
     tr: "Takvim"
@@ -4923,6 +4927,186 @@ const translations = {
   feedbackModalPleaseProvideDetail: {
     en: "Please provide details",
     tr: "Lütfen bir açıklama girin"
+  },
+  sideMenuFilesTitle: {
+    en: "Workspace Files",
+    tr: "Çalışma Alanı Dosyaları"
+  },
+  sideMenuFilesUpload: {
+    en: "Upload",
+    tr: "Yükle"
+  },
+  sideMenuFilesCreateFolder: {
+    en: "New Folder",
+    tr: "Yeni Klasör"
+  },
+  sideMenuFilesAllFiles: {
+    en: "All Files",
+    tr: "Tüm Dosyalar"
+  },
+  sideMenuFilesRecentFiles: {
+    en: "Recent",
+    tr: "En Yeni"
+  },
+  sideMenuFilesImageFiles: {
+    en: "Images",
+    tr: "Görseller"
+  },
+  sideMenuFilesDocumentFiles: {
+    en: "Documents",
+    tr: "Doküman"
+  },
+  sideMenuSharedFiles: {
+    en: "Shared",
+    tr: "Paylaşımlar"
+  },
+  sideMenuDeletedFiles: {
+    en: "Deleted",
+    tr: "Silinenler"
+  },
+  sideMenuTaskFilesTitle: {
+    en: "Task Attachments",
+    tr: "Görev Ekleri"
+  },
+  sideMenuTaskFilesFavorites: {
+    en: "Favorites",
+    tr: "Favoriler"
+  },
+  folderHeaderActionButtonUpload: {
+    en: "Upload",
+    tr: "Yükle"
+  },
+  folderHeaderActionButtonNewFolder: {
+    en: "New Folder",
+    tr: "Yeni Klasör"
+  },
+  folderHeaderActionButtonShare: {
+    en: "Share Folder",
+    tr: "Klasörü Paylaş"
+  },
+  folderBreadcrumbHome: {
+    en: "Home",
+    tr: "Ana Dizin"
+  },
+  materialListRowTitleName: {
+    en: "Name",
+    tr: "İsim"
+  },
+  materialListRowTitleSize: {
+    en: "Size",
+    tr: "Boyut"
+  },
+  materialListRowAccess: {
+    en: "Access",
+    tr: "Erişim"
+  },
+  materialListRowTitleCreated: {
+    en: "Date Created",
+    tr: "Oluşturma"
+  },
+  materialListRowTitleLastUpdate: {
+    en: "Date Modified",
+    tr: "Son Değiştirme"
+  },
+  newMaterialFolderModalTitle: {
+    en: "New Folder",
+    tr: "Yeni Klasör"
+  },
+  newMaterialFolderModalText: {
+    en: "Please provide a name for folder",
+    tr: "Klasör için yeni bir isim gir"
+  },
+  materialFolderPickerModalTitle: {
+    en: "Pick Folder",
+    tr: "Klasör Seç"
+  },
+  materialFolderPickerModalCancel: {
+    en: "Cancel",
+    tr: "Vazgeç"
+  },
+  materialFolderPickerModalSelect: {
+    en: "Select Current Folder",
+    tr: "Şu Anki Dosyayı Seç"
+  },
+  materialFolderPickerModalFolderEmpty: {
+    en: "Current folder doesn't contain any folder.",
+    tr: "Şu anki klasör başka klasör içermiyor."
+  },
+  materialFolderPickerModalMoveTitle: {
+    en: "Move Item",
+    tr: "Dosyayı Taşımak için Klasör seç"
+  },
+  materialRowMoveButtonTooltip: {
+    en: "Move Item",
+    tr: "Taşı"
+  },
+  materialRowChangeNameButtonTooltip: {
+    en: "Rename",
+    tr: "Yeniden Adlandır"
+  },
+  materialRowChangeMediaAccessToPrivateButtonTooltip: {
+    en: "Make Workspace Only",
+    tr: "Çalışma Alanı Üyelerine Özel Yap"
+  },
+  materialRowChangeMediaAccessToPublicButtonTooltip: {
+    en: "Make Public",
+    tr: "Herkese Açık Yap"
+  },
+  renameMaterialModalTitle: {
+    en: "Rename File",
+    tr: "Yeniden Adlandır"
+  },
+  renameMaterialModalText: {
+    en: "Please provide a name new name for file.",
+    tr: "Dosya için yeni bir isim girin."
+  },
+  materialRowDeleteButtonTooltip: {
+    en: "Delete",
+    tr: "Sil"
+  },
+  uploadStatusModalTitle: {
+    en: "Upload Statuses",
+    tr: "Yükleme Durumları"
+  },
+  uploadStatusModalCancelAll: {
+    en: "Cancel All",
+    tr: "Tümünü i̇ptal et"
+  },
+  uploadStatusModalClose: {
+    en: "Close",
+    tr: "Kapat"
+  },
+  materialPermanentlyDeleteAreYouSureTitle: {
+    en: "Permanently Delete",
+    tr: "Kalıcı Olarak Sil"
+  },
+  materialPermanentlyDeleteAreYouSureText: {
+    en: "Are you sure to permanently delete this file? You can not recover this file later.",
+    tr: "Bu dosyayı kalıcı olarak silmek istediğine emin misin? Daha sonra geri getiremeyeceksiniz."
+  },
+  materialPermanentlyDeleteAreYouSureConfirmLabel: {
+    en: "Delete Permanently",
+    tr: "Kalıcı Olarak Sil"
+  },
+  materialListRowAccessWorkspaceMembersTooltip: {
+    en: "All Workspace Members",
+    tr: "Tüm Çalışma Alanı Üyeleri"
+  },
+  materialListRowAccessAnyoneWithTheLinkTooltip: {
+    en: "Anyone With Link",
+    tr: "Linke Erişen Herkes"
+  },
+  materialDropToUploadText: {
+    en: "Drop files to upload",
+    tr: "Yüklemek için dosyaları bırak"
+  },
+  folderHeaderTitleHome: {
+    en: "Main Directory",
+    tr: "Ana Dizin"
+  },
+  folderHeaderTitleDefault: {
+    en: "Directory",
+    tr: "Dizin"
   }
 };
 
