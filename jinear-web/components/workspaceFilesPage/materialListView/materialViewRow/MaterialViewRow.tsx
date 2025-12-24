@@ -119,12 +119,6 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
 
   const FileIcon = material.materialType == "FOLDER" ? LuFolder : getIcon(material.media?.contentType ?? "default");
 
-  const onDoubleClick = () => {
-    if (material.materialType == "FOLDER") {
-      cdFolder(material.materialId);
-    }
-  };
-
   const handleTap = () => {
     const now = Date.now();
     const DOUBLE_TAP_DELAY = 300;
@@ -232,7 +226,6 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
       key={material.materialId}
       className={cn(styles.container, isSelected && styles.selected, isDragOver && styles.dragOver)}
       onPointerDown={handleTap}
-      onDoubleClick={onDoubleClick}
       onDragOver={(event) => event.preventDefault()}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
@@ -302,7 +295,7 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
       </td>
 
 
-      <td>
+      <td style={{ position: "relative" }}>
         <div className={cn(styles.moreButtonContainer, isSelected && styles.moreButtonContainerSelected)}>
 
           {material.materialType == "FILE" &&

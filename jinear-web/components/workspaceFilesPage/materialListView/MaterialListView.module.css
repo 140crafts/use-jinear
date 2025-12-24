@@ -1,16 +1,18 @@
 .container {
     flex: 1;
     border-collapse: collapse !important;
+    position: relative;
 }
 
 .container tbody {
-    position: relative;
+    /*position: relative;*/
 }
 
 .container tbody::after {
     content: "";
     position: absolute;
-    top: 0;
+    /*top: 0;*/
+    top: var(--material-row-view-row-height);
     left: 0;
     right: 0;
     bottom: 0;
