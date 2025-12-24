@@ -1,51 +1,79 @@
-import React from "react";
+import React, { DragEvent } from "react";
 import styles from "./Breadcrumb.module.css";
 import { PathAwareMaterialDto } from "@/be/jinear-core";
 import Button, { ButtonHeight } from "@/components/button";
 import Logger from "@/utils/logger";
-import { IoHome } from "react-icons/io5";
 import useTranslation from "@/locals/useTranslation";
+import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
+import { LuHome as LuHouse } from "react-icons/lu";
 
 interface BreadcrumbProps {
   container?: PathAwareMaterialDto;
-  cdFolder: (materialId?: string) => void;
+  onClick: (materialId?: string) => void;
+  onBreadcrumbDrop?: (breadCrumbMaterialId?: string) => void;
+  hideBreadcrumbs?: boolean;
 }
 
 const logger = Logger("Breadcrumb");
 
-const Breadcrumb: React.FC<BreadcrumbProps> = ({ container, cdFolder }) => {
+const Breadcrumb: React.FC<BreadcrumbProps> = ({ container, onClick, onBreadcrumbDrop, hideBreadcrumbs = false }) => {
   const { t } = useTranslation();
   const materialPath = container?.materialPath;
 
+  const onDragOver = (e: DragEvent<HTMLDivElement>) => e.preventDefault();
+  const onDragEnter = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.currentTarget.dataset.dragover = "true";
+  };
+  const onDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      delete e.currentTarget.dataset.dragover;
+    }
+  };
+  const onDrop = (e: DragEvent<HTMLDivElement>, materialId?: string) => {
+    delete e.currentTarget.dataset.dragover;
+    onBreadcrumbDrop?.(materialId);
+  };
+
   return (
     <div className={styles.container}>
-      <div className={styles.breadcrumb}>
-        <Button
-          heightVariant={ButtonHeight.short2x}
-          onClick={() => cdFolder()}
-          className={styles.button}
-        >
-          <IoHome className={"icon"} />
-          <span>{t('folderBreadcrumbHome')}</span>
-        </Button>
-        {<span>/</span>}
-      </div>
+      {!hideBreadcrumbs &&
+        <>
+          <div className={styles.breadcrumb}
+               onDragOver={onDragOver}
+               onDragEnter={onDragEnter}
+               onDragLeave={onDragLeave}
+               onDrop={onDrop}>
+            <Button
+              heightVariant={ButtonHeight.short}
+              onClick={() => onClick()}
+              className={styles.button}>
+              <LuHouse className={"icon"} />
+              <span>{t("folderBreadcrumbHome")}</span>
+            </Button>
+            {(materialPath?.path?.length ?? 0) > 0 && <span>/</span>}
+          </div>
 
-      {materialPath?.path?.map((path, index) =>
-        <div
-          key={`breadcrumb-button-${path.materialId}`}
-          className={styles.breadcrumb}
-        >
-          <Button
-            heightVariant={ButtonHeight.short2x}
-            onClick={() => cdFolder(path.materialId)}
-            className={styles.button}
-          >
-            {path.name}
-          </Button>
-          {materialPath?.path?.[index + 1] && <span>/</span>}
-        </div>
-      )}
+          {materialPath?.path?.map((path, index) =>
+            <div
+              key={`breadcrumb-button-${path.materialId}`}
+              className={styles.breadcrumb}
+              onDragOver={onDragOver}
+              onDragEnter={onDragEnter}
+              onDragLeave={onDragLeave}
+              onDrop={(e) => onDrop(e, path.materialId)}
+            >
+              <Button
+                heightVariant={ButtonHeight.short2x}
+                onClick={() => onClick(path.materialId)}
+                className={styles.button}
+              >
+                {shortenStringIfMoreThanMaxLength({ text: path.name, maxLength: 16 })}
+              </Button>
+              {materialPath?.path?.[index + 1] && <span>/</span>}
+            </div>
+          )}
+        </>}
     </div>
   );
 };

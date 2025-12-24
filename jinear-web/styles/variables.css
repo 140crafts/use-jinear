@@ -67,6 +67,7 @@
     --calendar-container-gap: 1rem;
     /* MATERIAL */
     --material-row-view-row-height: 1.75rem;
+    --material-row-view-row-selection-color: #2863D9;
     /*  */
     --gap: clamp(1rem, 6vw, 3rem);
     --page: min(85ch, 100% - var(--gap) * 2);
@@ -170,4 +171,6 @@
     /* CALENDAR */
     --calendar-event-background: #e3d1ac;
     --calendar-event-background-highlighted: #f7d149;
+    /* MATERIAL   */
+    --material-row-view-row-selection-color: #2358C9;
 }

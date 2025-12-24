@@ -3,20 +3,21 @@ package co.jinear.core.service.material;
 import co.jinear.core.converter.material.MaterialDtoConverter;
 import co.jinear.core.converter.material.MaterialTypeConverter;
 import co.jinear.core.exception.NotFoundException;
-import co.jinear.core.model.dto.material.PathAwareMaterialDto;
 import co.jinear.core.model.dto.material.MaterialDto;
 import co.jinear.core.model.dto.material.MaterialPathDto;
 import co.jinear.core.model.dto.material.MaterialPathItemDto;
+import co.jinear.core.model.dto.material.PathAwareMaterialDto;
 import co.jinear.core.model.entity.material.Material;
 import co.jinear.core.model.enumtype.material.MaterialType;
 import co.jinear.core.repository.material.MaterialRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -47,9 +48,22 @@ public class MaterialRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    public Optional<Material> retrieveEntityOptional(String materialId) {
+        return materialRepository.findByMaterialIdAndPassiveIdIsNull(materialId);
+    }
+
     public boolean existsByMaterialIdAndWorkspaceId(String materialId, String workspaceId) {
         log.info("Exists by material id and workspace id has started. materialId: {}, workspaceId: {}", materialId, workspaceId);
         return materialRepository.existsByMaterialIdAndWorkspaceIdAndPassiveIdIsNull(materialId, workspaceId);
+    }
+
+    public void validateMaterialType(String materialId, MaterialType materialType) {
+        log.info("Validate material type has started. materialId: {}, materialType: {}", materialId, materialType);
+        boolean exists = materialRepository.existsByMaterialIdAndMaterialTypeAndPassiveIdIsNull(materialId, materialType);
+        if (!exists) {
+            log.info("Material not found. materialId: {}, materialType: {}", materialId, materialType);
+            throw new NotFoundException();
+        }
     }
 
     public PathAwareMaterialDto retrievePathAware(String materialId) {
@@ -57,6 +71,11 @@ public class MaterialRetrieveService {
         MaterialDto materialDto = retrieve(materialId);
         MaterialPathDto materialPath = getMaterialPath(materialId);
         return materialDtoConverter.convert(materialDto, materialPath);
+    }
+
+    public Page<Material> retrieveDeletedMaterialWithMediaPendingForDeletion(int page) {
+        log.info("Retrieve deleted material with media pending for deletion has started. page: {}", page);
+        return materialRepository.findAllByMaterialTypeAndPassiveIdIsNotNullAndMedia_PassiveIdIsNull(MaterialType.FILE, PageRequest.of(page, 100));
     }
 
     private MaterialPathDto getMaterialPath(String materialId) {

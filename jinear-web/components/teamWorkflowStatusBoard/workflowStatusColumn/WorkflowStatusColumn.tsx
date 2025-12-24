@@ -1,7 +1,7 @@
 import { TaskDto, TeamWorkflowStatusDto } from "@/model/be/jinear-core";
 import Logger from "@/utils/logger";
 import cn from "classnames";
-import React from "react";
+import React, { useState } from "react";
 import { Droppable, DroppableProvided, DroppableStateSnapshot } from "react-beautiful-dnd";
 import { IWorkflowStatusUpdatePendingTask } from "../TeamWorkflowStatusBoard";
 import ColumnTitle from "./columnTitle/ColumnTitle";
@@ -12,7 +12,12 @@ interface WorkflowStatusColumnProps {
   workflowStatusDto: TeamWorkflowStatusDto;
   tasks?: TaskDto[];
   workflowStatusUpdatePendingTask?: IWorkflowStatusUpdatePendingTask;
+  onTaskDrop?: (taskId: string, newWorkflowStatusId: string, dropIndex?: number) => void;
+  draggingTaskId?: string | null;
+  onDragStart?: (taskId: string) => void;
+  onDragEnd?: () => void;
 }
+
 const filterByGroup = (
   taskDto: TaskDto,
   workflowStatusDto: TeamWorkflowStatusDto,
@@ -25,7 +30,7 @@ const filterByGroup = (
       msg: "STATUS UPDATE PENDING TASK",
       taskDto,
       workflowStatusDto,
-      workflowStatusUpdatePendingTask,
+      workflowStatusUpdatePendingTask
     });
     return workflowStatusDto.teamWorkflowStatusId == workflowStatusUpdatePendingTask.newWorkflowStatusId;
   }
@@ -35,30 +40,96 @@ const filterByGroup = (
 const logger = Logger("WorkflowStatusColumn");
 
 const WorkflowStatusColumn: React.FC<WorkflowStatusColumnProps> = ({
-  workflowStatusDto,
-  tasks,
-  workflowStatusUpdatePendingTask,
-}) => {
+                                                                     workflowStatusDto,
+                                                                     tasks,
+                                                                     workflowStatusUpdatePendingTask,
+                                                                     onTaskDrop,
+                                                                     draggingTaskId,
+                                                                     onDragStart,
+                                                                     onDragEnd
+                                                                   }) => {
+  const [isDragOver, setIsDragOver] = useState(false);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+
   const filteredTasks =
     tasks?.filter((taskDto) => filterByGroup(taskDto, workflowStatusDto, workflowStatusUpdatePendingTask)) || [];
+
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
+    // Only reset if leaving the container entirely
+    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+      setIsDragOver(false);
+      setDragOverIndex(null);
+    }
+  };
+
+  const handleCardDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragOverIndex(index);
+  };
+
+  const handleCardDragLeave = () => {
+  };
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("text/plain");
+    setIsDragOver(false);
+    setDragOverIndex(null);
+    onTaskDrop?.(taskId, workflowStatusDto.teamWorkflowStatusId, dragOverIndex ?? undefined);
+  };
+
+  const handleContainerDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("text/plain");
+    setIsDragOver(false);
+    setDragOverIndex(null);
+    onTaskDrop?.(taskId, workflowStatusDto.teamWorkflowStatusId, filteredTasks.length);
+  };
 
   return (
     <div className={styles.container}>
       <ColumnTitle workflowStatusDto={workflowStatusDto} />
-      <Droppable key={workflowStatusDto.teamWorkflowStatusId} droppableId={workflowStatusDto.teamWorkflowStatusId}>
-        {(provided: DroppableProvided, snapshot: DroppableStateSnapshot): JSX.Element => (
-          <div
-            ref={provided.innerRef}
-            {...provided.droppableProps}
-            className={cn(styles.contentContainer, filteredTasks?.length == 0 ? styles.gradientBg : undefined)}
-          >
-            {filteredTasks.map((taskDto, index) => (
-              <StatusBoardTaskCard key={`status-board-task-card-${taskDto.taskId}`} task={taskDto} index={index} />
-            ))}
-            {provided.placeholder}
-          </div>
+      <div
+        className={cn(
+          styles.contentContainer,
+          filteredTasks?.length === 0 ? styles.gradientBg : undefined,
+          { [styles.dragOver]: isDragOver }
         )}
-      </Droppable>
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleContainerDrop}
+      >
+        {filteredTasks.map((taskDto, index) => {
+          const isDragging = draggingTaskId === taskDto.taskId;
+          const isBeforeDropTarget = dragOverIndex !== null && index >= dragOverIndex && !isDragging;
+          return (
+            <div
+              key={`card-wrapper-${taskDto.taskId}`}
+              className={cn(styles.cardWrapper, {
+                [styles.shiftDown]: isBeforeDropTarget
+              })}
+              onDragOver={(e) => handleCardDragOver(e, index)}
+              onDragLeave={handleCardDragLeave}
+              onDrop={handleDrop}
+            >
+              <StatusBoardTaskCard
+                task={taskDto}
+                index={index}
+                isDragging={isDragging}
+                onDragStart={() => onDragStart?.(taskDto.taskId)}
+                onDragEnd={onDragEnd}
+              />
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

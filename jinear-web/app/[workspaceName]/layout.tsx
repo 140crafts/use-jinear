@@ -1,7 +1,7 @@
 "use client";
 import MainFeaturesSideMenu from "@/components/mainFeaturesSideMenu/MainFeaturesSideMenu";
 import WorkspaceLayoutHeader from "@/components/workspaceLayoutHeader/WorkspaceLayoutHeader";
-import useWidthLimit from "@/hooks/useWidthLimit";
+import useWidthLimit, { MOBILE_LAYOUT_BREAKPOINT } from "@/hooks/useWidthLimit";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { closeAllMenus } from "@/store/slice/displayPreferenceSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
@@ -22,9 +22,6 @@ import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 interface WorkspaceLayoutProps {
   children: React.ReactNode;
 }
-
-// $tablet: 768px;
-const MOBILE_LAYOUT_BREAKPOINT = 768;
 
 const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   const dispatch = useAppDispatch();

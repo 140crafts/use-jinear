@@ -2,6 +2,8 @@ package co.jinear.core.repository.material;
 
 import co.jinear.core.model.entity.material.Material;
 import co.jinear.core.model.enumtype.material.MaterialType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +18,8 @@ public interface MaterialRepository extends JpaRepository<Material, String> {
     boolean existsByMaterialIdAndWorkspaceIdAndPassiveIdIsNull(String materialId, String workspaceId);
 
     Optional<Material> findByMaterialIdAndMaterialTypeAndPassiveIdIsNull(String materialId, MaterialType materialType);
+
+    boolean existsByMaterialIdAndMaterialTypeAndPassiveIdIsNull(String materialId, MaterialType materialType);
 
     boolean existsByMaterialIdAndMaterialTypeAndWorkspaceIdAndPassiveIdIsNull(String materialId, MaterialType materialType, String workspaceId);
 
@@ -51,4 +55,6 @@ public interface MaterialRepository extends JpaRepository<Material, String> {
             ORDER BY depth DESC
             """, nativeQuery = true)
     List<Object[]> findMaterialPath(@Param("materialId") String materialId);
+
+    Page<Material> findAllByMaterialTypeAndPassiveIdIsNotNullAndMedia_PassiveIdIsNull(MaterialType materialType, Pageable pageable);
 }

@@ -7,7 +7,7 @@ import styles from "./TabView.module.css";
 export interface TabViewProps {
   name: string;
   label: string;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   containerClassName?: string;
   containerRef?: React.Ref<HTMLDivElement>;
 }

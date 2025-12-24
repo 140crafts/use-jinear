@@ -2,6 +2,7 @@ package co.jinear.core.model.request.material;
 
 import co.jinear.core.model.enumtype.material.MaterialSearchContentFilterType;
 import co.jinear.core.model.enumtype.material.MaterialSearchSortType;
+import co.jinear.core.model.enumtype.material.MaterialType;
 import co.jinear.core.model.request.BaseRequest;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -24,7 +25,5 @@ public class MaterialSearchRequest extends BaseRequest {
     @Nullable
     private MaterialSearchContentFilterType materialSearchContentFilterType;
     @Nullable
-    private Boolean shared;
-    @Nullable
-    private Boolean deleted;
+    private MaterialType materialType;
 }

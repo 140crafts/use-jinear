@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2025-12-12 08:40:49.
+// Generated using typescript-generator version 3.0.1157 on 2025-12-21 12:41:29.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
-    gid: string;
     gthreadId: string;
     ghistoryId: string;
+    gid: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1206,14 +1206,23 @@ export interface MaterialInitializeFolderRequest extends BaseRequest {
     parentMaterialId?: string | null;
 }
 
+export interface MaterialMoveRequest extends BaseRequest {
+    materialId: string;
+    parentMaterialId?: string | null;
+}
+
+export interface MaterialRenameRequest extends BaseRequest {
+    materialId: string;
+    newName: string;
+}
+
 export interface MaterialSearchRequest extends BaseRequest {
     page: number;
     workspaceId: string;
     parentMaterialId?: string | null;
     materialSearchSortType?: MaterialSearchSortType | null;
     materialSearchContentFilterType?: MaterialSearchContentFilterType | null;
-    shared?: boolean | null;
-    deleted?: boolean | null;
+    materialType?: MaterialType | null;
 }
 
 export interface MediaUploadUrlRequest extends BaseRequest {
@@ -2075,9 +2084,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    uri: URI;
-    description: string;
     filename: string;
+    description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -2172,7 +2181,7 @@ export type LocaleType = "TR" | "EN";
 
 export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN";
 
-export type MaterialSearchContentFilterType = "IMAGE" | "DOC";
+export type MaterialSearchContentFilterType = "IMAGE" | "DOC" | "SHARED" | "RECENTLY_DELETED";
 
 export type MaterialSearchSortType = "IDATE_DESC" | "IDATE_ASC" | "UDATE_DESC" | "UDATE_ASC" | "NAME_ASC" | "NAME_DESC" | "SIZE_ASC" | "SIZE_DESC";
 

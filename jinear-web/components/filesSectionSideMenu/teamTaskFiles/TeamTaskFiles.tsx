@@ -1,19 +1,21 @@
 import React, { useMemo } from "react";
 import styles from "./TeamTaskFiles.module.css";
-import Button, { ButtonHeight } from "@/components/button";
+import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { LuChevronDown, LuChevronRight, LuUsers } from "react-icons/lu";
 import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle";
 import useTranslation from "@/locals/useTranslation";
 import { useRetrieveMembershipsQuery } from "@/api/teamMemberApi";
 import { useToggle } from "@/hooks/useToggle";
+import { useQueryState } from "@/hooks/useQueryState";
 
 interface TeamTaskFilesProps {
   workspaceId: string;
-  onTeamClick?: () => void;
+  onTeamClick: (teamId: string) => void;
 }
 
 const TeamTaskFiles: React.FC<TeamTaskFilesProps> = ({ workspaceId, onTeamClick }) => {
   const { t } = useTranslation();
+  const taskFilesTeamId = useQueryState<string>("taskFilesTeamId");
   const [archivedVisible, toggleArchivedVisible] = useToggle(false);
   const {
     data: membershipsResponse,
@@ -41,9 +43,8 @@ const TeamTaskFiles: React.FC<TeamTaskFilesProps> = ({ workspaceId, onTeamClick 
             <Button
               key={teamMemberDto.teamId}
               className={styles.button}
-              onClick={onTeamClick}
-              // href={lastActivitiesPath}
-              // variant={pathname?.indexOf(lastActivitiesPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+              onClick={() => onTeamClick(teamMemberDto.teamId)}
+              variant={teamMemberDto.teamId==taskFilesTeamId ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             >
               <LuUsers className={"icon"} />
               <span className={"single-line"}>
@@ -70,9 +71,8 @@ const TeamTaskFiles: React.FC<TeamTaskFilesProps> = ({ workspaceId, onTeamClick 
                     <Button
                       key={teamMemberDto.teamId}
                       className={styles.button}
-                      onClick={onTeamClick}
-                      // href={lastActivitiesPath}
-                      // variant={pathname?.indexOf(lastActivitiesPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+                      onClick={() => onTeamClick(teamMemberDto.teamId)}
+                      variant={teamMemberDto.teamId==taskFilesTeamId ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
                     >
                       <LuUsers className={"icon"} />
                       <span className={"single-line"}>

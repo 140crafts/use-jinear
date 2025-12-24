@@ -1,7 +1,15 @@
 .materialName {
     display: flex;
     flex-direction: row;
+    align-items: center;
     gap: .5rem;
+    padding-left: .25rem;
+}
+
+.accessIconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .infoColumn {
@@ -17,6 +25,65 @@
     background-color: var(--c-primary-shade-1) !important;
 }
 
-.icon {
-    min-width: 16px !important;
+.selected {
+    background-color: var(--material-row-view-row-selection-color) !important;
+    color: var(--c-BABY_POWDER) !important;
 }
+
+.selected:hover {
+    background-color: hsl(from var(--material-row-view-row-selection-color) h s calc(l * 1.05)) !important;
+}
+
+.dragOver {
+    background-color: hsl(from var(--material-row-view-row-selection-color) h s calc(l * 1.5)) !important;
+    color: var(--c-BABY_POWDER) !important;
+}
+
+.name {
+    word-break: break-all;
+    color: var(--c-secondary) !important;
+}
+
+.nameSelected {
+    word-break: break-all;
+    color: var(--c-BABY_POWDER) !important;
+}
+
+.icon {
+    min-width: 14px !important;
+}
+
+.moreButtonContainer {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    padding-left: 1.5rem;
+    background: linear-gradient(90deg, transparent 0%, var(--c-primary) 25%);
+}
+
+.container:hover .moreButtonContainer {
+    display: flex;
+}
+
+.moreButtonContainerSelected {
+    display: flex;
+    /*background-color: hsl(from var(--material-row-view-row-selection-color) h s calc(l * 1.05)) !important;*/
+    background: linear-gradient(90deg, transparent 0%, hsl(from var(--material-row-view-row-selection-color) h s calc(l * 1.05)) 25%);
+}
+
+.moreButtonSelected {
+    color: var(--c-BABY_POWDER) !important;
+}
+
+.moreButtonSelected:hover {
+    background-color: hsl(from var(--material-row-view-row-selection-color) h s calc(l * 1.05)) !important;
+}
+
+.moreButtonSelected:hover {
+    background-color: hsl(from var(--material-row-view-row-selection-color) h s calc(l * 1.15)) !important;
+}
+

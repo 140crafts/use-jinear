@@ -6,15 +6,10 @@ import { useTypedSelector } from "@/store/store";
 import { selectWorkspaceFromWorkspaceUsername } from "@/slice/accountSlice";
 import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle";
 import useTranslation from "@/locals/useTranslation";
-import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { LuCamera, LuHaze, LuHome, LuSendToBack, LuTrash, LuUpload } from "react-icons/lu";
+import Button, { ButtonVariants } from "@/components/button";
+import { LuCamera, LuFileText, LuHaze, LuHome as LuHouse, LuSendToBack, LuTrash } from "react-icons/lu";
 import TeamTaskFiles from "@/components/filesSectionSideMenu/teamTaskFiles/TeamTaskFiles";
-import {
-  queryStateBooleanParser,
-  useQueryState,
-  useSetQueryState,
-  useSetQueryStateMultiple
-} from "@/hooks/useQueryState";
+import { useQueryState, useSetQueryStateMultiple } from "@/hooks/useQueryState";
 import Logger from "@/utils/logger";
 import { MaterialSearchContentFilterType, MaterialSearchSortType } from "@/be/jinear-core";
 
@@ -34,14 +29,13 @@ const FilesSectionSideMenu: React.FC<FilesSectionSideMenuProps> = ({ containerCl
   const parentMaterialId = useQueryState<string>("parentMaterialId");
   const materialSearchSortType = useQueryState<MaterialSearchSortType | null>("materialSearchSortType");
   const materialSearchContentFilterType = useQueryState<MaterialSearchContentFilterType | null>("materialSearchContentFilterType");
-  const shared = useQueryState<boolean | null>("shared", queryStateBooleanParser) ?? false;
-  const deleted = useQueryState<boolean | null>("deleted", queryStateBooleanParser) ?? false;
 
   const isInRoot = parentMaterialId == null && materialSearchSortType == null;
-  const isInRecent = parentMaterialId == null && materialSearchSortType == "IDATE_DESC" && materialSearchContentFilterType == null && !shared && !deleted;
+  const isInRecent = parentMaterialId == null && materialSearchSortType == "IDATE_DESC" && materialSearchContentFilterType == null;
   const isInImages = parentMaterialId == null && materialSearchContentFilterType == "IMAGE";
-  const isInShared = parentMaterialId == null && shared;
-  const isInDeleted = parentMaterialId == null && deleted;
+  const isInDocuments = parentMaterialId == null && materialSearchContentFilterType == "DOC";
+  const isInShared = parentMaterialId == null && materialSearchContentFilterType == "SHARED";
+  const isInDeleted = parentMaterialId == null && materialSearchContentFilterType == "RECENTLY_DELETED";
 
   logger.log({ parentMaterialId, materialSearchSortType });
 
@@ -49,41 +43,47 @@ const FilesSectionSideMenu: React.FC<FilesSectionSideMenuProps> = ({ containerCl
     parentMaterialId?: string,
     materialSearchSortType?: MaterialSearchSortType,
     materialSearchContentFilterType?: MaterialSearchContentFilterType,
-    shared?: boolean,
-    deleted?: boolean) => {
+    taskFilesTeamId?: string) => {
     setQueryStateMultiple(
       new Map([
         ["parentMaterialId", parentMaterialId],
         ["materialSearchSortType", materialSearchSortType],
         ["materialSearchContentFilterType", materialSearchContentFilterType],
-        ["shared", shared?.toString()],
-        ["deleted", deleted?.toString()]
+        ["taskFilesTeamId", taskFilesTeamId]
       ])
     );
   };
 
   const cdRoot = () => {
-    cd(undefined, undefined, undefined, undefined, undefined);
+    cd(undefined, undefined, undefined, undefined);
   };
 
   const cdRecent = () => {
-    cd(undefined, "IDATE_DESC", undefined, undefined, undefined);
+    cd(undefined, "IDATE_DESC", undefined, undefined);
   };
 
   const cdImages = () => {
-    cd(undefined, "IDATE_DESC", "IMAGE", undefined, undefined);
+    cd(undefined, "IDATE_DESC", "IMAGE", undefined);
+  };
+
+  const cdDocuments = () => {
+    cd(undefined, "IDATE_DESC", "DOC", undefined);
   };
 
   const cdShared = () => {
-    cd(undefined, "IDATE_DESC", undefined, true, undefined);
+    cd(undefined, "IDATE_DESC", "SHARED", undefined);
   };
 
   const cdDeleted = () => {
-    cd(undefined, "IDATE_DESC", undefined, undefined, true);
+    cd(undefined, "IDATE_DESC", "RECENTLY_DELETED", undefined);
+  };
+
+  const cdTeamTaskFiles = (teamId: string) => {
+    cd(undefined, undefined, undefined, teamId);
   };
 
   const clearFilters = () => {
-    cd(undefined, undefined, undefined, undefined, undefined);
+    cd(undefined, undefined, undefined, undefined);
   };
 
   return (
@@ -93,21 +93,21 @@ const FilesSectionSideMenu: React.FC<FilesSectionSideMenuProps> = ({ containerCl
           <MenuGroupTitle label={t("sideMenuFilesTitle")} />
           <div className={styles.buttonsContainer}>
 
-            <Button
-              heightVariant={ButtonHeight.short}
-              variant={ButtonVariants.brandColor}
-              className={styles.newTaskButton}
-            >
-              <LuUpload className={"icon"} />
-              <b>{t("sideMenuFilesUpload")}</b>
-            </Button>
+            {/*<Button*/}
+            {/*  heightVariant={ButtonHeight.short}*/}
+            {/*  variant={ButtonVariants.brandColor}*/}
+            {/*  className={styles.newTaskButton}*/}
+            {/*>*/}
+            {/*  <LuPlus className={"icon"} />*/}
+            {/*  <b>{t("sideMenuFilesUpload")}</b>*/}
+            {/*</Button>*/}
 
             <Button
               className={styles.button}
               onClick={cdRoot}
               variant={isInRoot ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             >
-              <LuHome className={"icon"} />
+              <LuHouse className={"icon"} />
               {t("sideMenuFilesAllFiles")}
             </Button>
 
@@ -131,6 +131,15 @@ const FilesSectionSideMenu: React.FC<FilesSectionSideMenuProps> = ({ containerCl
 
             <Button
               className={styles.button}
+              onClick={cdDocuments}
+              variant={isInDocuments ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+            >
+              <LuFileText className={"icon"} />
+              {t("sideMenuFilesDocumentFiles")}
+            </Button>
+
+            <Button
+              className={styles.button}
               onClick={cdShared}
               variant={isInShared ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             >
@@ -138,17 +147,17 @@ const FilesSectionSideMenu: React.FC<FilesSectionSideMenuProps> = ({ containerCl
               {t("sideMenuSharedFiles")}
             </Button>
 
-            <Button
-              className={styles.button}
-              onClick={cdDeleted}
-              variant={isInDeleted ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
-            >
-              <LuTrash className={"icon"} />
-              {t("sideMenuDeletedFiles")}
-            </Button>
+            {/*<Button*/}
+            {/*  className={styles.button}*/}
+            {/*  onClick={cdDeleted}*/}
+            {/*  variant={isInDeleted ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}*/}
+            {/*>*/}
+            {/*  <LuTrash className={"icon"} />*/}
+            {/*  {t("sideMenuDeletedFiles")}*/}
+            {/*</Button>*/}
           </div>
 
-          <TeamTaskFiles workspaceId={workspace.workspaceId} onTeamClick={clearFilters} />
+          <TeamTaskFiles workspaceId={workspace.workspaceId} onTeamClick={cdTeamTaskFiles} />
 
         </>
       )}

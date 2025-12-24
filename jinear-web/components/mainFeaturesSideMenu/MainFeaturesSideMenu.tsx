@@ -3,7 +3,7 @@ import { AccountsWorkspacePerspectiveDto } from "@/model/be/jinear-core";
 import useTranslation from "locales/useTranslation";
 import { usePathname } from "next/navigation";
 import React from "react";
-import { LuCalendarDays, LuCheckSquare, LuFolder, LuMessagesSquare } from "react-icons/lu";
+import { LuCalendarDays, LuFolder, LuMessagesSquare, LuCheckSquare as LuSquareCheckBig } from "react-icons/lu";
 import Button, { ButtonVariants } from "../button";
 import styles from "./MainFeaturesSideMenu.module.scss";
 import InboxButton from "./inboxButton/InboxButton";
@@ -11,7 +11,6 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { getUnreadConversationCount } from "../../repository/IndexedDbRepository";
 import { useTypedSelector } from "@/store/store";
 import { selectCurrentAccountId } from "@/slice/accountSlice";
-import { isInGodModeWhitelist } from "@/utils/constants";
 import { useFeatureFlag } from "@/hooks/useFeatureFlag";
 import Logger from "@/utils/logger";
 
@@ -62,7 +61,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
         href={tasksButtonOpensPath}
         variant={currentPath?.indexOf(tasksPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
       >
-        <LuCheckSquare className={styles.icon} />
+        <LuSquareCheckBig className={styles.icon} />
         {t("mainFeaturesMenuLabelTasks")}
       </Button>
 

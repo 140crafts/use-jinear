@@ -7,7 +7,8 @@ import WorkspaceFilesPage, { IFilesPageFilter } from "@/components/workspaceFile
 import { useTypedSelector } from "@/store/store";
 import { selectWorkspaceFromWorkspaceUsername } from "@/slice/accountSlice";
 import { MaterialSearchContentFilterType, MaterialSearchSortType, WorkspaceDto } from "@/be/jinear-core";
-import { queryStateBooleanParser, useQueryState } from "@/hooks/useQueryState";
+import { useQueryState } from "@/hooks/useQueryState";
+import TeamFileList from "@/components/teamFilesScreen/TeamFileList";
 
 interface FilesPageProps {
 
@@ -21,20 +22,21 @@ const FilesPage: React.FC<FilesPageProps> = ({}) => {
   const parentMaterialId = useQueryState<string>("parentMaterialId");
   const materialSearchSortType = useQueryState<MaterialSearchSortType | null>("materialSearchSortType");
   const materialSearchContentFilterType = useQueryState<MaterialSearchContentFilterType | null>("materialSearchContentFilterType");
-  const shared = useQueryState<boolean | null>("shared", queryStateBooleanParser) ?? false;
-  const deleted = useQueryState<boolean | null>("deleted", queryStateBooleanParser) ?? false;
+  const taskFilesTeamId = useQueryState<string>("taskFilesTeamId");
 
   const filter: IFilesPageFilter = useMemo(() => ({
     parentMaterialId,
     materialSearchSortType,
-    materialSearchContentFilterType,
-    shared,
-    deleted
-  }), [parentMaterialId, materialSearchSortType, materialSearchContentFilterType, shared, deleted]);
+    materialSearchContentFilterType
+  }), [parentMaterialId, materialSearchSortType, materialSearchContentFilterType]);
 
   return (
     <div className={styles.container}>
-      {workspace && <WorkspaceFilesPage workspace={workspace} filter={filter} />}
+      {workspace && (
+        taskFilesTeamId ?
+          <TeamFileList teamId={taskFilesTeamId} /> :
+          <WorkspaceFilesPage workspace={workspace} filter={filter} />
+      )}
     </div>
   );
 };

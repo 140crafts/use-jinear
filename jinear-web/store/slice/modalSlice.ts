@@ -13,8 +13,8 @@ import ModalState, {
   ConversationSettingsModalState,
   DatePickerModalState,
   DialogModalState,
-  IntegrationFeedItemDetailModalState,
-  LoginWith2FaMailModalState,
+  IntegrationFeedItemDetailModalState, IPresignedUploadData,
+  LoginWith2FaMailModalState, MaterialFolderPickerModalState,
   NewCalendarIntegrationModalState,
   NewChannelModalState,
   NewConversationModalState,
@@ -44,6 +44,7 @@ import ModalState, {
   TeamWorkflowStatusPickerModalState,
   TopicPickerModalState,
   UpgradeWorkspacePlanModalState,
+  UploadStatusModalState,
   WorkspaceMemberInviteModalState,
   WorkspaceMemberPickerModalState,
   WorkspacePickerModalState
@@ -224,6 +225,12 @@ const initialState = {
   },
   feedbackModal: {
     visible: false
+  },
+  materialFolderPickerModal: {
+    visible: false
+  },
+  uploadStatusModal: {
+    visible: false
   }
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
@@ -281,6 +288,8 @@ const initialState = {
   newCustomProjectDomainModal: null | NewCustomProjectDomainModalState,
   passwordChangeModal: null | PasswordChangeModalState,
   feedbackModal: null | ModalState,
+  materialFolderPickerModal: null | MaterialFolderPickerModalState,
+  uploadStatusModal: null | UploadStatusModalState;
 };
 
 const slice = createSlice({
@@ -670,6 +679,51 @@ const slice = createSlice({
       state.feedbackModal = initialState.passwordChangeModal;
     },
 
+    popMaterialFolderPickerModal: (state, action: PayloadAction<MaterialFolderPickerModalState>) => {
+      state.materialFolderPickerModal = { ...action.payload, visible: true };
+    },
+    closeMaterialFolderPickerModal: (state, action: PayloadAction<void>) => {
+      state.materialFolderPickerModal = initialState.materialFolderPickerModal;
+    },
+
+    pushDataToUploadStatusModalQueue: (state, action: PayloadAction<UploadStatusModalState>) => {
+      state.uploadStatusModal ??= { visible: true, presignedUploadData: [], workspaceId: action.payload.workspaceId };
+      const existingData = state.uploadStatusModal.presignedUploadData ?? [];
+      existingData.push(...(action.payload.presignedUploadData ?? []));
+      state.uploadStatusModal.presignedUploadData = existingData;
+      state.uploadStatusModal.workspaceId = action.payload.workspaceId;
+      state.uploadStatusModal.visible = true;
+      state.uploadStatusModal.minimized = false;
+    },
+    resetUploadStatusModalQueue: (state, action: PayloadAction<void>) => {
+      if (state.uploadStatusModal) {
+        state.uploadStatusModal.presignedUploadData = [];
+      }
+    },
+    toggleUploadStatusModalMinimized: (state, action: PayloadAction<void>) => {
+      if (state.uploadStatusModal) {
+        state.uploadStatusModal.minimized = !state.uploadStatusModal.minimized;
+      }
+    },
+    setUploadStatusModalMouseOver: (state, action: PayloadAction<boolean>) => {
+      if (state.uploadStatusModal) {
+        state.uploadStatusModal.mouseOver = action.payload;
+      }
+    },
+    removeFromUploadStatusModalQueue: (state, action: PayloadAction<string>) => {
+      if (state.uploadStatusModal?.presignedUploadData) {
+        state.uploadStatusModal.presignedUploadData = state.uploadStatusModal.presignedUploadData.filter(
+          (item) => item.relatedObjectId !== action.payload
+        );
+      }
+    },
+    popUploadStatusModal: (state, action: PayloadAction<void>) => {
+      state.uploadStatusModal = { ...state.uploadStatusModal, visible: true };
+    },
+    closeUploadStatusModal: (state, action: PayloadAction<void>) => {
+      state.uploadStatusModal = initialState.uploadStatusModal;
+    },
+
     resetModals: () => initialState
   },
   extraReducers: (builder) => {
@@ -796,6 +850,15 @@ export const {
   closePasswordChangeModal,
   popFeedbackModal,
   closeFeedbackModal,
+  popMaterialFolderPickerModal,
+  closeMaterialFolderPickerModal,
+  popUploadStatusModal,
+  closeUploadStatusModal,
+  pushDataToUploadStatusModalQueue,
+  resetUploadStatusModalQueue,
+  toggleUploadStatusModalMinimized,
+  setUploadStatusModalMouseOver,
+  removeFromUploadStatusModalQueue,
   resetModals
 } = slice.actions;
 export default slice.reducer;
@@ -803,9 +866,16 @@ export default slice.reducer;
 export const selectAnyModalVisible = (state: RootState) => {
   const modalState = state.modal || {};
 
-  return Object.values(modalState)
-    ?.map((modalState) => modalState?.visible || false)
-    ?.reduce((prev, curr) => prev || curr);
+  return Object.entries(modalState)
+    .map(([key, value]) => {
+      if (key == "uploadStatusModal") {
+        // const uploadStatusModal = value as UploadStatusModalState;
+        // return (uploadStatusModal?.presignedUploadData ?? [])?.length > 0;
+        return false;
+      }
+      return (value?.visible || false);
+    })
+    .reduce((prev, curr) => prev || curr, false);
 };
 
 export const selectLoginWith2FaMailModalVisible = (state: RootState) => state.modal.loginWith2FaMailModal?.visible;
@@ -1079,3 +1149,14 @@ export const selectPasswordChangeModalVisible = (state: RootState) => state.moda
 export const selectPasswordChangeModalForced = (state: RootState) => state.modal.passwordChangeModal?.forced;
 
 export const selectFeedbackModalVisible = (state: RootState) => state.modal.feedbackModal?.visible;
+
+export const selectMaterialFolderPickerModalVisible = (state: RootState) => state.modal.materialFolderPickerModal?.visible;
+export const selectMaterialFolderPickerModalWorkspaceId = (state: RootState) => state.modal.materialFolderPickerModal?.workspaceId;
+export const selectMaterialFolderPickerModalOnPick = (state: RootState) => state.modal.materialFolderPickerModal?.onPick;
+export const selectMaterialFolderPickerModalTitle = (state: RootState) => state.modal.materialFolderPickerModal?.title;
+
+export const selectUploadStatusModalVisible = (state: RootState) => state.modal.uploadStatusModal?.visible;
+export const selectUploadStatusModalWorkspaceId = (state: RootState) => state.modal.uploadStatusModal?.workspaceId;
+export const selectUploadStatusModalPresignedUploadData = (state: RootState) => state.modal.uploadStatusModal?.presignedUploadData;
+export const selectUploadStatusModalMinimized = (state: RootState) => state.modal.uploadStatusModal?.minimized;
+export const selectUploadStatusModalMouseOver = (state: RootState) => state.modal.uploadStatusModal?.mouseOver;

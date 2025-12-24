@@ -1,11 +1,13 @@
 package co.jinear.core.controller;
 
+import co.jinear.core.model.enumtype.material.MaterialType;
 import co.jinear.core.model.vo.captcha.CaptchaResolveVo;
 import co.jinear.core.repository.material.MaterialRepository;
 import co.jinear.core.service.captcha.CaptchaChallengeService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +31,6 @@ public class DebugController {
 
     @GetMapping
     public Object debug2(HttpServletResponse response) {
-        materialRepository.findAll();
-
         return null;
     }
 }

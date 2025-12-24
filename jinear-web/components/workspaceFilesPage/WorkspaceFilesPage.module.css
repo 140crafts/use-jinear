@@ -1,3 +1,7 @@
+.container {
+    position: relative;
+}
+
 .materialButton {
     outline-style: none !important;
     outline-color: transparent !important;
@@ -10,4 +14,19 @@
 .contentContainer {
     display: flex;
     flex-direction: row;
+}
+
+
+.dropOverlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background-color: var(--c-secondary-shade-0-op05);
+    border: thin dashed var(--c-secondary-shade-1);
+    z-index: 100;
+    pointer-events: none;
+}
+
+.container[data-dragover] .dropOverlay {
+    display: block;
 }

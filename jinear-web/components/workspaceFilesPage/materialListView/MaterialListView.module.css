@@ -27,7 +27,7 @@
 
 
 .container td {
-    vertical-align:middle
+    vertical-align: middle
 }
 
 .container th {
@@ -44,6 +44,12 @@
 
 .header {
     margin-bottom: .5rem;
+    border-bottom: solid;
+    border-bottom-color: var(--c-primary-shade-1);
+}
+
+.accessLabel {
+    text-align: center;
 }
 
 .container tr:nth-child(even) {

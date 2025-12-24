@@ -291,3 +291,23 @@ export interface NewCustomProjectDomainModalState extends ModalState {
 export interface PasswordChangeModalState extends ModalState {
   forced?: boolean,
 }
+
+export interface MaterialFolderPickerModalState extends ModalState {
+  workspaceId?: string,
+  onPick?: (pickedMaterialId?: string) => void,
+  title?: string
+}
+
+export interface IPresignedUploadData {
+  relatedObjectId: string,
+  presignedUrl: string,
+  file: File,
+  onComplete: () => void
+}
+
+export interface UploadStatusModalState extends ModalState {
+  workspaceId?: string,
+  minimized?: boolean,
+  mouseOver?: boolean,
+  presignedUploadData?: IPresignedUploadData[]
+}

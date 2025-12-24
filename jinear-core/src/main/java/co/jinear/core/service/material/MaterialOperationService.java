@@ -2,6 +2,7 @@ package co.jinear.core.service.material;
 
 import co.jinear.core.converter.material.MaterialEntityConverter;
 import co.jinear.core.exception.NotValidException;
+import co.jinear.core.model.dto.material.MaterialDto;
 import co.jinear.core.model.dto.material.WaitingForUploadMaterialResultDto;
 import co.jinear.core.model.dto.media.WaitingMediaResultDto;
 import co.jinear.core.model.entity.material.Material;
@@ -12,14 +13,19 @@ import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.vo.material.MaterialFileInitializeVo;
 import co.jinear.core.model.vo.material.MaterialFolderInitializeVo;
 import co.jinear.core.model.vo.material.MaterialInitializeVo;
+import co.jinear.core.model.vo.material.MaterialSearchVo;
 import co.jinear.core.model.vo.media.InitializeWaitingMediaVo;
+import co.jinear.core.model.vo.media.RemoveMediaVo;
 import co.jinear.core.repository.material.MaterialRepository;
 import co.jinear.core.service.media.MediaOperationService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Objects;
 
 @Slf4j
@@ -31,6 +37,7 @@ public class MaterialOperationService {
     private final MaterialRepository materialRepository;
     private final MaterialEntityConverter materialEntityConverter;
     private final MaterialRetrieveService materialRetrieveService;
+    private final MaterialSearchService materialSearchService;
 
     public void initialize(MaterialFolderInitializeVo materialFolderInitializeVo) {
         log.info("Initialize folder has started. materialFolderInitializeVo: {}", materialFolderInitializeVo);
@@ -54,6 +61,57 @@ public class MaterialOperationService {
         log.info("Notify upload complete has started. materialId: {}", materialId);
         Material material = materialRetrieveService.retrieveEntity(materialId);
         mediaOperationService.updateAsUploadCompleted(material.getMediaId());
+    }
+
+    public void moveTo(String materialId, String parentMaterialId) {
+        log.info("Move material has started. materialId: {}, parentMaterialId: {}", materialId, parentMaterialId);
+        if (Objects.nonNull(parentMaterialId)) {
+            materialRetrieveService.validateMaterialType(parentMaterialId, MaterialType.FOLDER);
+        }
+        Material material = materialRetrieveService.retrieveEntity(materialId);
+        material.setParentMaterialId(parentMaterialId);
+        materialRepository.save(material);
+    }
+
+    public void rename(String materialId, String newName) {
+        log.info("Rename material has started. materialId: {}, newName: {}", materialId, newName);
+        Material material = materialRetrieveService.retrieveEntity(materialId);
+        material.setName(newName);
+        materialRepository.save(material);
+    }
+
+    @Transactional
+    public void delete(String materialId, String passiveId) {
+        log.info("Delete material has started. materialId: {}, passiveId: {}", materialId, passiveId);
+        Deque<String> queue = new ArrayDeque<>();
+        queue.add(materialId);
+        while (!queue.isEmpty()) {
+            String currentId = queue.poll();
+            materialRetrieveService.retrieveEntityOptional(currentId)
+                    .ifPresent(material -> {
+                        material.setPassiveId(passiveId);
+                        materialRepository.save(material);
+                        if (MaterialType.FOLDER.equals(material.getMaterialType())) {
+                            collectChildIds(material, queue);
+                        }
+                    });
+        }
+    }
+
+    private void collectChildIds(Material parent, Deque<String> queue) {
+        int page = 0;
+        Page<MaterialDto> children;
+        do {
+            MaterialSearchVo searchVo = new MaterialSearchVo();
+            searchVo.setPage(page);
+            searchVo.setParentMaterialId(parent.getMaterialId());
+            searchVo.setWorkspaceId(parent.getWorkspaceId());
+            children = materialSearchService.search(searchVo);
+            for (MaterialDto child : children.getContent()) {
+                queue.add(child.getMaterialId());
+            }
+            page++;
+        } while (children.hasNext());
     }
 
     private InitializeWaitingMediaVo mapInitializeWaitingMediaVo(Material saved, MaterialFileInitializeVo materialFileInitializeVo) {

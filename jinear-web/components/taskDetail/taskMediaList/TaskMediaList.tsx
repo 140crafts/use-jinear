@@ -50,7 +50,7 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({}) => {
     try {
       for (const file of files) {
         const mediaUploadUrlRequest = {
-          originalName: file.name ?? "file",
+          originalName: file.name ?? "Task-File",
           fileSize: file.size,
           contentType: file.type ?? "application/octet-stream"
         };

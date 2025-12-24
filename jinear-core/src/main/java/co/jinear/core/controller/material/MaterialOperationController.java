@@ -3,6 +3,8 @@ package co.jinear.core.controller.material;
 import co.jinear.core.manager.material.MaterialOperationManager;
 import co.jinear.core.model.request.material.MaterialInitializeFileUploadRequest;
 import co.jinear.core.model.request.material.MaterialInitializeFolderRequest;
+import co.jinear.core.model.request.material.MaterialMoveRequest;
+import co.jinear.core.model.request.material.MaterialRenameRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.material.MaterialInitializeFileUploadResponse;
 import jakarta.validation.Valid;
@@ -24,8 +26,26 @@ public class MaterialOperationController {
         return materialOperationManager.initializeFolder(materialInitializeFolderRequest, workspaceId);
     }
 
+    @PutMapping("/move")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse moveTo(@Valid @RequestBody MaterialMoveRequest materialMoveRequest) {
+        return materialOperationManager.moveTo(materialMoveRequest);
+    }
+
+    @PutMapping("/rename")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse rename(@Valid @RequestBody MaterialRenameRequest materialRenameRequest) {
+        return materialOperationManager.rename(materialRenameRequest);
+    }
+
+    @DeleteMapping("/{materialId}/permanent")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse deletePermanent(@PathVariable String materialId) {
+        return materialOperationManager.deletePermanent(materialId);
+    }
+
     @PostMapping("/workspace/{workspaceId}/file/upload-url")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public MaterialInitializeFileUploadResponse initializeFileUpload(@PathVariable String workspaceId,
                                                                      @Valid @RequestBody MaterialInitializeFileUploadRequest materialInitializeFileUploadRequest) {
         return materialOperationManager.initializeFileUpload(materialInitializeFileUploadRequest, workspaceId);

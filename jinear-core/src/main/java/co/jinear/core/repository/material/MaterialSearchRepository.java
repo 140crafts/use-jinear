@@ -2,7 +2,9 @@ package co.jinear.core.repository.material;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.material.Material;
+import co.jinear.core.model.enumtype.material.MaterialSearchContentFilterType;
 import co.jinear.core.model.enumtype.material.MaterialSearchSortType;
+import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.vo.material.MaterialSearchVo;
 import co.jinear.core.repository.criteriabuilder.MaterialSearchCriteriaBuilder;
 import com.google.common.collect.Lists;
@@ -16,7 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.Objects;
 
 @Repository
 @RequiredArgsConstructor
@@ -52,9 +54,28 @@ public class MaterialSearchRepository {
     private List<Predicate> retrievePredicates(MaterialSearchVo materialSearchVo, CriteriaBuilder criteriaBuilder, Root<Material> root) {
         List<Predicate> predicateList = Lists.newArrayList();
         materialSearchCriteriaBuilder.addPassiveIdIsNull(criteriaBuilder, root, predicateList);
+        materialSearchCriteriaBuilder.addMediaStatusAsCompleted(criteriaBuilder, root, predicateList);
         materialSearchCriteriaBuilder.addWorkspaceId(materialSearchVo.getWorkspaceId(), criteriaBuilder, root, predicateList);
-        materialSearchCriteriaBuilder.addParentMaterialId(materialSearchVo.getParentMaterialId(), criteriaBuilder, root, predicateList);
+        materialSearchCriteriaBuilder.addMaterialType(materialSearchVo.getMaterialType(), criteriaBuilder, root, predicateList);
+        addParentIdFilterIfNoContentFilterSelected(materialSearchVo, criteriaBuilder, root, predicateList);
+        addContentFilter(materialSearchVo, criteriaBuilder, root, predicateList);
         return predicateList;
+    }
+
+    private void addParentIdFilterIfNoContentFilterSelected(MaterialSearchVo materialSearchVo, CriteriaBuilder criteriaBuilder, Root<Material> root, List<Predicate> predicateList) {
+        if (Objects.isNull(materialSearchVo.getMaterialSearchContentFilterType())) {
+            materialSearchCriteriaBuilder.addParentMaterialId(materialSearchVo.getParentMaterialId(), criteriaBuilder, root, predicateList);
+        }
+    }
+
+    private void addContentFilter(MaterialSearchVo materialSearchVo, CriteriaBuilder criteriaBuilder, Root<Material> root, List<Predicate> predicateList) {
+        if (MaterialSearchContentFilterType.DOC.equals(materialSearchVo.getMaterialSearchContentFilterType())) {
+            materialSearchCriteriaBuilder.addMediaContentTypeDocument(criteriaBuilder, root, predicateList);
+        } else if (MaterialSearchContentFilterType.IMAGE.equals(materialSearchVo.getMaterialSearchContentFilterType())) {
+            materialSearchCriteriaBuilder.addMediaContentTypeImageOrVideo(criteriaBuilder, root, predicateList);
+        } else if (MaterialSearchContentFilterType.SHARED.equals(materialSearchVo.getMaterialSearchContentFilterType())) {
+            materialSearchCriteriaBuilder.addFolderOrMediaVisibilityType(MediaVisibilityType.PUBLIC, criteriaBuilder, root, predicateList);
+        }
     }
 
     @SuppressWarnings("java:S107")
@@ -83,8 +104,9 @@ public class MaterialSearchRepository {
     }
 
     private void setOrder(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteriaQuery, Root<Material> root, MaterialSearchSortType searchSortType) {
+        Order materialTypeOrder = criteriaBuilder.desc(root.get(Material.Fields.materialType));
         if (searchSortType != null) {
-            Order order = switch (searchSortType) {
+            Order secondaryOrder = switch (searchSortType) {
                 case IDATE_ASC -> criteriaBuilder.asc(root.get(BaseEntity.Fields.createdDate));
                 case IDATE_DESC -> criteriaBuilder.desc(root.get(BaseEntity.Fields.createdDate));
                 case UDATE_ASC -> criteriaBuilder.asc(root.get(BaseEntity.Fields.lastUpdatedDate));
@@ -93,9 +115,14 @@ public class MaterialSearchRepository {
                 case NAME_DESC -> criteriaBuilder.desc(root.get(Material.Fields.name));
                 case SIZE_ASC, SIZE_DESC -> null;
             };
-            Optional.ofNullable(order).ifPresent(criteriaQuery::orderBy);
-        }
 
-        criteriaQuery.orderBy(criteriaBuilder.desc(root.get(Material.Fields.materialType)));
+            if (secondaryOrder != null) {
+                criteriaQuery.orderBy(materialTypeOrder, secondaryOrder);
+            } else {
+                criteriaQuery.orderBy(materialTypeOrder);
+            }
+        } else {
+            criteriaQuery.orderBy(materialTypeOrder);
+        }
     }
 }

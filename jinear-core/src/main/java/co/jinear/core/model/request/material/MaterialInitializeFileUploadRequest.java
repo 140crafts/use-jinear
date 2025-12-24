@@ -11,6 +11,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @Setter
 public class MaterialInitializeFileUploadRequest extends BaseRequest {
 
+    private static final String DEFAULT_CONTENT_TYPE = "application/octet-stream";
+
     @NotBlank
     private String name;
     @Nullable
@@ -19,8 +21,14 @@ public class MaterialInitializeFileUploadRequest extends BaseRequest {
     private String color;
     @Nullable
     private String parentMaterialId;
-    @NotBlank
+    @Nullable
     private String contentType;
     @NotNull
     private Long fileSize;
+
+    public String getContentType() {
+        return (contentType == null || contentType.isBlank())
+                ? DEFAULT_CONTENT_TYPE
+                : contentType;
+    }
 }

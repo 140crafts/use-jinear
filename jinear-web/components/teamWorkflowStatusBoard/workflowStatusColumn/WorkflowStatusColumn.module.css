@@ -16,3 +16,15 @@
   height: 95%;
   min-height: 60vh;
 }
+
+.cardWrapper {
+  transition: transform 0.2s ease;
+}
+
+.shiftDown {
+  transform: translateY(60px);
+}
+
+.dragOver {
+  background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-1-op05));
+}

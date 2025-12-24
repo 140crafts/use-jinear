@@ -16,9 +16,16 @@ import styles from "./StatusBoardTaskCard.module.css";
 interface StatusBoardTaskCardProps {
   task: TaskDto;
   index?: number;
+  onDragStart?: (e: React.DragEvent<HTMLAnchorElement>, taskId: string) => void;
+  onDragEnd?: () => void;
+  isDragging?: boolean;
 }
 
-const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({ task, index = 0 }) => {
+const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({ task,
+                                                                   index = 0,
+                                                                   onDragStart,
+                                                                   onDragEnd,
+                                                                   isDragging = false }) => {
   const dispatch = useAppDispatch();
   const { isMobile } = useWindowSize();
 
@@ -40,34 +47,35 @@ const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({ task, index =
     dispatch(popTaskOverviewModal({ taskTag, workspaceName, visible: true }));
   };
 
+  const handleDragStart = (e: React.DragEvent<HTMLAnchorElement>) => {
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", task.taskId);
+    onDragStart?.(e, task.taskId);
+  };
+
   return (
-    <Draggable key={task.taskId} draggableId={task.taskId} index={index}>
-      {(providedDraggable: DraggableProvided, snapshotDraggable: DraggableStateSnapshot) => (
-        <Link
-          href={`/${task.workspace?.username}/task/${task.team?.tag}-${task.teamTagNo}`}
-          className={styles.container}
-          onClick={onLinkClick}
-          ref={providedDraggable.innerRef}
-          {...providedDraggable.draggableProps}
-          {...providedDraggable.dragHandleProps}
-        >
-          <div className={cn(styles.title)}>{task.title}</div>
-          <div className={styles.infoContainer}>
-            {task.topic && <TopicInfo topic={task.topic} />}
-            {/* <div className="flex-1" /> */}
-            <Button className={styles.taskIconButton} onClick={popChangeDatesModal}>
-              <IoTime size={12} />
-            </Button>
-            <AssigneeCell
-              task={task}
-              tooltipPosition={task.workflowStatus.workflowStateGroup == "BACKLOG" ? "left" : "right"}
-              className={styles.taskIconButton}
-            />
-            <TeamTagCell task={task} className={styles.taskTagCell} />
-          </div>
-        </Link>
-      )}
-    </Draggable>
+    <Link
+      href={`/${task.workspace?.username}/task/${task.team?.tag}-${task.teamTagNo}`}
+      className={cn(styles.container, { [styles.dragging]: isDragging })}
+      onClick={onLinkClick}
+      draggable
+      onDragStart={handleDragStart}
+      onDragEnd={onDragEnd}
+    >
+      <div className={cn(styles.title)}>{task.title}</div>
+      <div className={styles.infoContainer}>
+        {task.topic && <TopicInfo topic={task.topic} />}
+        <Button className={styles.taskIconButton} onClick={popChangeDatesModal}>
+          <IoTime size={12} />
+        </Button>
+        <AssigneeCell
+          task={task}
+          tooltipPosition={task.workflowStatus.workflowStateGroup == "BACKLOG" ? "left" : "right"}
+          className={styles.taskIconButton}
+        />
+        <TeamTagCell task={task} className={styles.taskTagCell} />
+      </div>
+    </Link>
   );
 };
 

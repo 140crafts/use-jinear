@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "./VideoHeroSection.module.scss";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { LuAlarmClock, LuBox, LuCalendarSearch, LuCheckSquare, LuFile, LuList, LuRss, LuUsers } from "react-icons/lu";
+import { LuAlarmClock, LuBox, LuCalendarSearch, LuCheckSquare as LuSquareCheck, LuFile, LuList, LuRss, LuUsers } from "react-icons/lu";
 import { SiGooglecalendar } from "react-icons/si";
 import useTranslation from "@/locals/useTranslation";
 import { useTheme } from "@/components/themeProvider/ThemeProvider";
@@ -41,7 +41,7 @@ const videos = {
   "feature-tasks": {
     light: "988098899",
     dark: "988098825",
-    Icon: LuCheckSquare,
+    Icon: LuSquareCheck,
     label: "homePageFeatureTitle_Task",
     srcDark: "https://storage.googleapis.com/jinear-b0/web-assets/videos/home-page/task-olusturma-kaydirma/dark.mov",
     srcLight: "https://storage.googleapis.com/jinear-b0/web-assets/videos/home-page/task-olusturma-kaydirma/light.mov"
