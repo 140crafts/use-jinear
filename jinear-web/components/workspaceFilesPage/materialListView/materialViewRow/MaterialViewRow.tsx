@@ -127,7 +127,7 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
       if (material.materialType == "FOLDER") {
         cdFolder(material.materialId);
       } else if (material.materialType == "FILE") {
-        window.open(`${API_ROOT}v1/material/media/${material.materialId}`, "_blank");
+        window.open(`${API_ROOT}v1/material/media/${material.materialId}`, isMobile ? undefined : "_blank");
       }
       lastTapRef.current = 0;
     } else {
@@ -225,7 +225,7 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
       draggable={true}
       key={material.materialId}
       className={cn(styles.container, isSelected && styles.selected, isDragOver && styles.dragOver)}
-      onPointerDown={handleTap}
+      onPointerDown={material.materialType == "FILE" && isMobile ? undefined : handleTap}
       onDragOver={(event) => event.preventDefault()}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
