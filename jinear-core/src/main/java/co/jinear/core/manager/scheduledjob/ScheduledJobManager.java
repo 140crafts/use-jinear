@@ -1,5 +1,6 @@
 package co.jinear.core.manager.scheduledjob;
 
+import co.jinear.core.manager.reminder.ReminderProcessManager;
 import co.jinear.core.model.entity.material.Material;
 import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.model.vo.media.RemoveMediaVo;
@@ -26,6 +27,7 @@ public class ScheduledJobManager {
     private final MediaOperationService mediaOperationService;
     private final ProjectDomainCnameOperatorService projectDomainCnameOperatorService;
     private final MaterialRetrieveService materialRetrieveService;
+    private final ReminderProcessManager reminderProcessManager;
 
     @Async
     @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
@@ -75,6 +77,13 @@ public class ScheduledJobManager {
                 mediaOperationService.deleteMedia(removeMediaVo);
             });
         }
+    }
+
+    @Async
+    @Scheduled(fixedRate = 3, timeUnit = TimeUnit.MINUTES)
+    public void processUpcomingReminders() {
+        log.info("Process upcoming reminders has started.");
+        reminderProcessManager.remindUpcomingJobs();
     }
 
     private void updateMediaAsPrivate(String mediaId) {
