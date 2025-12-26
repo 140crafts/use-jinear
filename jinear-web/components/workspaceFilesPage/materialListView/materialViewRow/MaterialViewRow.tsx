@@ -118,6 +118,7 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
   }, [material.lastUpdatedDate, material.createdDate]);
 
   const FileIcon = material.materialType == "FOLDER" ? LuFolder : getIcon(material.media?.contentType ?? "default");
+  const shouldOmitDoubleClick = material.materialType == "FILE" && isMobile;
 
   const handleTap = () => {
     const now = Date.now();
@@ -225,7 +226,7 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
       draggable={true}
       key={material.materialId}
       className={cn(styles.container, isSelected && styles.selected, isDragOver && styles.dragOver)}
-      onPointerDown={material.materialType == "FILE" && isMobile ? undefined : handleTap}
+      onPointerDown={shouldOmitDoubleClick ? undefined : handleTap}
       onDragOver={(event) => event.preventDefault()}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
@@ -242,7 +243,7 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
               className={cn(isSelected ? styles.nameSelected : styles.name, "line-clamp", "flex-1")}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={(e) => e.preventDefault()}
+              onClick={shouldOmitDoubleClick ? undefined : (e) => e.preventDefault()}
             >
               {material.name}
             </a>
