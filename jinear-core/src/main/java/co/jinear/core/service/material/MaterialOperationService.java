@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.material.MaterialDto;
 import co.jinear.core.model.dto.material.WaitingForUploadMaterialResultDto;
 import co.jinear.core.model.dto.media.WaitingMediaResultDto;
 import co.jinear.core.model.entity.material.Material;
+import co.jinear.core.model.enumtype.material.MaterialAccessType;
 import co.jinear.core.model.enumtype.material.MaterialType;
 import co.jinear.core.model.enumtype.media.FileType;
 import co.jinear.core.model.enumtype.media.MediaOwnerType;
@@ -15,9 +16,9 @@ import co.jinear.core.model.vo.material.MaterialFolderInitializeVo;
 import co.jinear.core.model.vo.material.MaterialInitializeVo;
 import co.jinear.core.model.vo.material.MaterialSearchVo;
 import co.jinear.core.model.vo.media.InitializeWaitingMediaVo;
-import co.jinear.core.model.vo.media.RemoveMediaVo;
 import co.jinear.core.repository.material.MaterialRepository;
 import co.jinear.core.service.media.MediaOperationService;
+import co.jinear.core.service.passive.PassiveService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +27,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.List;
 import java.util.Objects;
+
+import static co.jinear.core.model.enumtype.material.MaterialAccessType.ANYONE_WITH_LINK;
 
 @Slf4j
 @Service
@@ -38,6 +42,8 @@ public class MaterialOperationService {
     private final MaterialEntityConverter materialEntityConverter;
     private final MaterialRetrieveService materialRetrieveService;
     private final MaterialSearchService materialSearchService;
+    private final MaterialAccessService materialAccessService;
+    private final PassiveService passiveService;
 
     public void initialize(MaterialFolderInitializeVo materialFolderInitializeVo) {
         log.info("Initialize folder has started. materialFolderInitializeVo: {}", materialFolderInitializeVo);
@@ -98,6 +104,17 @@ public class MaterialOperationService {
         }
     }
 
+    @Transactional
+    public void updateAccessType(String materialId, MaterialAccessType nextMaterialAccessType, String currentAccountId) {
+        log.info("Update access has started. materialId: {}, nextMaterialAccessType: {}", materialId, nextMaterialAccessType);
+        Material material = materialRetrieveService.retrieveEntity(materialId);
+        MaterialAccessType existingMaterialAccessType = material.getMaterialAccessType();
+        compareCurrentAndNextAccessTypeAndRevokeAccess(materialId, nextMaterialAccessType, existingMaterialAccessType, currentAccountId);
+        compareCurrentAndNextAccessTypeAndRevokeMediaAccess(nextMaterialAccessType, existingMaterialAccessType, material);
+        material.setMaterialAccessType(nextMaterialAccessType);
+        materialRepository.save(material);
+    }
+
     private void collectChildIds(Material parent, Deque<String> queue) {
         int page = 0;
         Page<MaterialDto> children;
@@ -141,6 +158,22 @@ public class MaterialOperationService {
             if (!isFolderAndSameWorkspace) {
                 throw new NotValidException();
             }
+        }
+    }
+
+    private void compareCurrentAndNextAccessTypeAndRevokeAccess(String materialId, MaterialAccessType nextMaterialAccessType, MaterialAccessType existingMaterialAccessType, String currentAccountId) {
+        if (!existingMaterialAccessType.equals(nextMaterialAccessType) && List.of(existingMaterialAccessType, nextMaterialAccessType).contains(MaterialAccessType.GRAINED)) {
+            String userActionPassiveId = passiveService.createUserActionPassive(currentAccountId);
+            log.info("Access type changed. Old or new access type is grained. Revoking every access. existingMaterialAccessType: {}, next: {}, userActionPassiveId: {}", nextMaterialAccessType, userActionPassiveId);
+            materialAccessService.revokeEveryAccess(materialId, userActionPassiveId);
+        }
+    }
+
+    private void compareCurrentAndNextAccessTypeAndRevokeMediaAccess(MaterialAccessType nextMaterialAccessType, MaterialAccessType existingMaterialAccessType, Material material) {
+        if (ANYONE_WITH_LINK.equals(existingMaterialAccessType) && !ANYONE_WITH_LINK.equals(nextMaterialAccessType)) {
+            mediaOperationService.updateMediaVisibility(material.getMediaId(), MediaVisibilityType.PRIVATE);
+        } else if (ANYONE_WITH_LINK.equals(nextMaterialAccessType)) {
+            mediaOperationService.updateMediaVisibility(material.getMediaId(), MediaVisibilityType.PUBLIC);
         }
     }
 }

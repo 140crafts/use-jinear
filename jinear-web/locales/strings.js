@@ -4996,6 +4996,10 @@ const translations = {
     en: "Size",
     tr: "Boyut"
   },
+  materialListRowOwner: {
+    en: "Owner",
+    tr: "Oluşturan"
+  },
   materialListRowAccess: {
     en: "Access",
     tr: "Erişim"
@@ -5044,13 +5048,9 @@ const translations = {
     en: "Rename",
     tr: "Yeniden Adlandır"
   },
-  materialRowChangeMediaAccessToPrivateButtonTooltip: {
-    en: "Make Workspace Only",
-    tr: "Çalışma Alanı Üyelerine Özel Yap"
-  },
-  materialRowChangeMediaAccessToPublicButtonTooltip: {
-    en: "Make Public",
-    tr: "Herkese Açık Yap"
+  materialRowChangeAccessButtonTooltip: {
+    en: "Change Access",
+    tr: "Erişim Ayarları"
   },
   renameMaterialModalTitle: {
     en: "Rename File",
@@ -5096,6 +5096,18 @@ const translations = {
     en: "Anyone With Link",
     tr: "Linke Erişen Herkes"
   },
+  materialListRowAccessGrainedTooltip: {
+    en: "Selected People With Access",
+    tr: "Belirli Kişiler"
+  },
+  materialListRowAccessOnlyYouTooltip: {
+    en: "Only You",
+    tr: "Yanlızca Siz"
+  },
+  materialListRowGrainedAccessAccountCount: {
+    en: "{number} User(s)",
+    tr: "{number} Kişi"
+  },
   materialDropToUploadText: {
     en: "Drop files to upload",
     tr: "Yüklemek için dosyaları bırak"
@@ -5107,7 +5119,52 @@ const translations = {
   folderHeaderTitleDefault: {
     en: "Directory",
     tr: "Dizin"
-  }
+  },
+  materialAccessChangeModalTitle: {
+    en: "Change Material Access",
+    tr: "Dosya Erişimini Değiştir"
+  },
+
+  materialAccessType_WORKSPACE_MEMBERS_info: {
+    en: "All workspace members can access this file.",
+    tr: "Tüm çalışma alanı üyeleri bu dosyaya erişebilir."
+  },
+  materialAccessType_ANYONE_WITH_LINK_info: {
+    en: "Anyone with the link can access this file.",
+    tr: "Bağlantıya sahip herkes bu dosyaya erişebilir."
+  },
+  materialAccessType_GRAINED_info: {
+    en: "Only selected people can access this file.",
+    tr: "Yalnızca belirli kişiler bu dosyaya erişebilir."
+  },
+  materialAccessType_OWNER_ONLY_info: {
+    en: "Only you can access this file.",
+    tr: "Bu dosyaya yalnızca siz erişebilirsiniz."
+  },
+  materialAccessType_OWNER_ONLY_info_SpesificUser: {
+    en: "Only {user} can access this file.",
+    tr: "Bu dosyaya yalnızca {user} erişebilir."
+  },
+  materialAccessSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor"
+  },
+  materialAccessListMembersTitle: {
+    en: "Workspace members that can access file",
+    tr: "Dosyaya erişebilecek alışma alanı üyeleri"
+  },
+  materialAccessListAdd: {
+    en: "Add",
+    tr: "Ekle"
+  },
+  materialAccessListRevoke: {
+    en: "Revoke",
+    tr: "Sil"
+  },
+  materialAccessUpdated: {
+    en: "File access updated successfully.",
+    tr: "Dosya erişimi başarıyla güncellendi."
+  },
 };
 
 export default translations;

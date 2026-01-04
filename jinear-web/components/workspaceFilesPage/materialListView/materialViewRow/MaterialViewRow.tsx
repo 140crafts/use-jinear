@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import styles from "./MaterialViewRow.module.css";
-import { MaterialDto } from "@/be/jinear-core";
+import { MaterialAccessType, MaterialDto } from "@/be/jinear-core";
 import { format } from "date-fns";
 import useTranslation from "@/locals/useTranslation";
 import { humanReadibleFileSize } from "@/utils/FileSizeFormatter";
@@ -21,6 +21,8 @@ import {
   LuMinus,
   LuTextCursorInput,
   LuTrash,
+  LuUserCheck,
+  LuUserPlus,
   LuUsers
 } from "react-icons/lu";
 import { calculateDateDiff } from "@/utils/DateHelper";
@@ -40,17 +42,21 @@ import {
   useMoveToFolderMutation,
   useRenameMaterialMutation
 } from "@/api/materialOperationApi";
-import { useAppDispatch } from "@/store/store";
+import { useAppDispatch, useTypedSelector } from "@/store/store";
 import {
   closeBasicTextInputModal,
   closeDialogModal,
   popBasicTextInputModal,
   popDialogModal,
+  popMaterialAccessModal,
   popMaterialFolderPickerModal
 } from "@/slice/modalSlice";
 import { API_ROOT } from "@/utils/constants";
-import { useChangeMaterialRelatedMediaAccessMutation } from "@/api/materialMediaApi";
 import useWidthLimit, { MOBILE_LAYOUT_BREAKPOINT } from "@/hooks/useWidthLimit";
+import strings from "@/locals/strings";
+import ProfilePhoto from "@/components/profilePhoto";
+import { selectCurrentAccountId } from "@/slice/accountSlice";
+import { useWorkspaceRoleIsAdminOrOwner } from "@/hooks/useWorkspaceRoleIsAdminOrOwner";
 
 interface MaterialViewRowProps {
   material: MaterialDto;
@@ -74,7 +80,7 @@ export const ICON_MAP = {
   "presentation": LuFileChartPie
 };
 
-export const getIcon = (contentType: string) => {
+export const getMaterialIcon = (contentType?: string) => {
   const parts = contentType?.split("/");
   const type = parts?.find(part => Object.keys(ICON_MAP).find(value => value.indexOf(part) != -1)) ?? "default";
   // @ts-expect-error
@@ -83,16 +89,33 @@ export const getIcon = (contentType: string) => {
 
 const logger = Logger("MaterialViewRow");
 
+const ACCESS_TYPE_TOOLTIP_MAP: Record<MaterialAccessType, keyof typeof strings> = {
+  OWNER_ONLY: "materialListRowAccessOnlyYouTooltip",
+  WORKSPACE_MEMBERS: "materialListRowAccessWorkspaceMembersTooltip",
+  GRAINED: "materialListRowAccessGrainedTooltip",
+  ANYONE_WITH_LINK: "materialListRowAccessAnyoneWithTheLinkTooltip"
+};
+
+export const ACCESS_TYPE_ICON_MAP = {
+  OWNER_ONLY: LuLock,
+  WORKSPACE_MEMBERS: LuUsers,
+  GRAINED: LuUserCheck,
+  ANYONE_WITH_LINK: LuEarth
+};
+
 const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
+  const currentAccountId = useTypedSelector(selectCurrentAccountId);
+  const isCurrAccWorkspaceAdminOrOwner = useWorkspaceRoleIsAdminOrOwner({ workspaceId: material.workspaceId });
+  const hasUpdatePermission = material.ownerId == currentAccountId || isCurrAccWorkspaceAdminOrOwner;
+
   const isMobile = useWidthLimit({ limit: MOBILE_LAYOUT_BREAKPOINT });
 
   const resetList = useResetList();
   const [moveToFolder, {}] = useMoveToFolderMutation();
   const [renameMaterial, {}] = useRenameMaterialMutation();
   const [permanentlyDeleteMaterial, {}] = useDeleteMaterialPermanentlyMutation();
-  const [changeMaterialRelatedMediaAccess, {}] = useChangeMaterialRelatedMediaAccessMutation();
 
   const lastTapRef = React.useRef<number>(0);
   const dragCounter = React.useRef(0);
@@ -107,7 +130,7 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
   const selectedMaterialId = selectedMaterial?.materialId;
 
   const isSelected = selectedMaterialId == material.materialId;
-  const materialMediaAccessType = material.media?.visibility;
+
   const createdFullDate = format(new Date(material.createdDate), t("dateTimeFormat"));
   const updateFullDate = material.lastUpdatedDate ? format(new Date(material.lastUpdatedDate), t("dateTimeFormat")) : undefined;
 
@@ -117,8 +140,13 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
     return { diffInDaysLastUpdate, diffInDaysCreate };
   }, [material.lastUpdatedDate, material.createdDate]);
 
-  const FileIcon = material.materialType == "FOLDER" ? LuFolder : getIcon(material.media?.contentType ?? "default");
+  const FileIcon = material.materialType == "FOLDER" ? LuFolder : getMaterialIcon(material.media?.contentType ?? "default");
   const shouldOmitDoubleClick = material.materialType == "FILE" && isMobile;
+
+  const accessUserUserNames = material.materialAccesses?.map(access => access.account?.username);
+  let accessTypeTooltip = t(ACCESS_TYPE_TOOLTIP_MAP[material.materialAccessType]);
+  accessTypeTooltip = material.materialAccessType == "GRAINED" && accessUserUserNames?.length > 0 ? `${accessTypeTooltip} (${accessUserUserNames?.join(",")})` : accessTypeTooltip;
+  const AccessTypeIcon = ACCESS_TYPE_ICON_MAP[material.materialAccessType];
 
   const handleTap = () => {
     const now = Date.now();
@@ -190,7 +218,7 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
         title: t("renameMaterialModalTitle"),
         infoText: t("renameMaterialModalText"),
         onSubmit: rename,
-        initialText: ""
+        initialText: material.name
       })
     );
   };
@@ -213,12 +241,8 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
     );
   };
 
-  const toggleAccess = () => {
-    resetList();
-    changeMaterialRelatedMediaAccess({
-      materialId: material.materialId,
-      mediaVisibilityType: materialMediaAccessType == "PRIVATE" ? "PUBLIC" : "PRIVATE"
-    });
+  const popAccessModal = () => {
+    dispatch(popMaterialAccessModal({ materialId: material.materialId, visible: true, resetList }));
   };
 
   return (
@@ -237,9 +261,7 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
           <FileIcon size={16} className={styles.icon} />
           {material.materialType === "FILE" ? (
             <a
-              href={materialMediaAccessType == "PRIVATE" ?
-                `${API_ROOT}v1/material/media/${material.materialId}` :
-                material.media?.url}
+              href={`${API_ROOT}v1/material/media/${material.materialId}`}
               className={cn(isSelected ? styles.nameSelected : styles.name, "line-clamp", "flex-1")}
               target="_blank"
               rel="noopener noreferrer"
@@ -254,19 +276,21 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
           )}
         </div>
       </td>
-
+      <td data-tooltip-right={material.owner?.username}>
+        <div className={styles.accessIconContainer}>
+          <ProfilePhoto
+            boringAvatarKey={material.ownerId}
+            url={material.owner?.profilePicture?.url}
+            wrapperClassName={styles.accessUserProfilePic}
+          />
+        </div>
+      </td>
       <td
-        data-tooltip-right={material.materialType == "FILE" ?
-          (materialMediaAccessType == "PRIVATE" ?
-            t("materialListRowAccessWorkspaceMembersTooltip") :
-            t("materialListRowAccessAnyoneWithTheLinkTooltip")) :
-          undefined}
+        data-tooltip-right={material.materialAccessType == "GRAINED" ? undefined : accessTypeTooltip}
+        data-tooltip-multiline={material.materialAccessType == "GRAINED" ? accessTypeTooltip : undefined}
       >
         <div className={styles.accessIconContainer}>
-          {material.materialType == "FILE" ?
-            materialMediaAccessType == "PRIVATE" ? <LuUsers className={"icon"} /> : <LuEarth className={"icon"} /> :
-            <LuMinus className={"icon"} />
-          }
+          <AccessTypeIcon className={"icon"} />
         </div>
       </td>
 
@@ -297,21 +321,17 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
 
 
       <td style={{ position: "relative" }}>
-        <div className={cn(styles.moreButtonContainer, isSelected && styles.moreButtonContainerSelected)}>
+        <div
+          className={cn(styles.moreButtonContainer, hasUpdatePermission && isSelected && styles.moreButtonContainerSelected)}>
 
-          {material.materialType == "FILE" &&
-            <Button
-              heightVariant={ButtonHeight.short2x}
-              className={isSelected ? styles.moreButtonSelected : undefined}
-              onClick={toggleAccess}
-              data-tooltip-right={materialMediaAccessType == "PRIVATE" ?
-                t("materialRowChangeMediaAccessToPublicButtonTooltip") :
-                t("materialRowChangeMediaAccessToPrivateButtonTooltip")}
-            >
-              {materialMediaAccessType == "PRIVATE" ?
-                <LuEarth size={11} className={styles.icon} /> :
-                <LuLock size={11} className={styles.icon} />}
-            </Button>}
+          <Button
+            heightVariant={ButtonHeight.short2x}
+            className={isSelected ? styles.moreButtonSelected : undefined}
+            onClick={popAccessModal}
+            data-tooltip-right={t("materialRowChangeAccessButtonTooltip")}
+          >
+            <LuUserPlus size={14} className={styles.icon} />
+          </Button>
 
           <Button
             heightVariant={ButtonHeight.short2x}

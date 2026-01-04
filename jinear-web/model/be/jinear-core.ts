@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2025-12-21 12:41:29.
+// Generated using typescript-generator version 3.0.1157 on 2026-01-01 16:04:14.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -165,9 +165,9 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
+    gid: string;
     gthreadId: string;
     ghistoryId: string;
-    gid: string;
     ginternalDate: string;
 }
 
@@ -264,6 +264,13 @@ export interface IntegrationScopeDto extends BaseDto {
     integrationInfo: IntegrationInfoDto;
 }
 
+export interface MaterialAccessDto extends BaseDto {
+    materialAccessId: string;
+    materialId: string;
+    accountId: string;
+    account: PlainAccountProfileDto;
+}
+
 export interface MaterialDto extends BaseDto {
     materialId: string;
     workspaceId: string;
@@ -275,6 +282,9 @@ export interface MaterialDto extends BaseDto {
     icon: string;
     color: string;
     media: AccessibleMediaDto;
+    materialAccessType: MaterialAccessType;
+    materialAccesses: MaterialAccessDto[];
+    owner?: PlainAccountProfileDto | null;
 }
 
 export interface MaterialHierarchyDto {
@@ -1190,6 +1200,10 @@ export interface CalendarEventTitleDescriptionUpdateRequest {
     description?: string | null;
 }
 
+export interface MaterialAccessUpdateRequest extends BaseRequest {
+    accountIds: string[];
+}
+
 export interface MaterialInitializeFileUploadRequest extends BaseRequest {
     name: string;
     icon?: string | null;
@@ -1197,6 +1211,7 @@ export interface MaterialInitializeFileUploadRequest extends BaseRequest {
     parentMaterialId?: string | null;
     contentType: string;
     fileSize: number;
+    materialAccessType?: MaterialAccessType | null;
 }
 
 export interface MaterialInitializeFolderRequest extends BaseRequest {
@@ -1204,6 +1219,7 @@ export interface MaterialInitializeFolderRequest extends BaseRequest {
     icon?: string | null;
     color?: string | null;
     parentMaterialId?: string | null;
+    materialAccessType?: MaterialAccessType | null;
 }
 
 export interface MaterialMoveRequest extends BaseRequest {
@@ -1688,8 +1704,16 @@ export interface FeedMemberPaginatedResponse extends BaseResponse {
     data: PageDto<FeedMemberDto>;
 }
 
+export interface MaterialAccessPaginatedResponse extends BaseResponse {
+    data: PageDto<MaterialAccessDto>;
+}
+
 export interface MaterialInitializeFileUploadResponse extends BaseResponse {
     data: WaitingForUploadMaterialResultDto;
+}
+
+export interface MaterialRetrieveResponse extends BaseResponse {
+    data: MaterialDto;
 }
 
 export interface ParentMaterialDtoResponse extends BaseResponse {
@@ -2084,9 +2108,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
+    uri: URI;
     filename: string;
     description: string;
-    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -2179,7 +2203,9 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE";
+
+export type MaterialAccessType = "OWNER_ONLY" | "WORKSPACE_MEMBERS" | "GRAINED" | "ANYONE_WITH_LINK";
 
 export type MaterialSearchContentFilterType = "IMAGE" | "DOC" | "SHARED" | "RECENTLY_DELETED";
 

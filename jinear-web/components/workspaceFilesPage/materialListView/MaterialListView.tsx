@@ -46,6 +46,7 @@ const MaterialListView: React.FC<MaterialListViewProps> = ({ content }) => {
     >
       <colgroup>
         <col span={1} style={{ width: "80%" }} />
+        <col span={1} />
         <col span={1} style={{ minWidth: "11ch" }} />
         {!isMobile && <col span={1} />}
         <col span={1} />
@@ -53,6 +54,7 @@ const MaterialListView: React.FC<MaterialListViewProps> = ({ content }) => {
       <thead>
       <tr className={styles.header}>
         <th><span className={"line-clamp"}>{t("materialListRowTitleName")}</span></th>
+        <th><span className={cn("line-clamp", styles.accessLabel)}>{t("materialListRowOwner")}</span></th>
         <th><span className={cn("line-clamp", styles.accessLabel)}>{t("materialListRowAccess")}</span></th>
         {!isMobile && <th><span className={"line-clamp"}>{t("materialListRowTitleSize")}</span></th>}
         {/*{!isMobile && <th><span className={"line-clamp"}>{t("materialListRowTitleLastUpdate")}</span></th>}*/}

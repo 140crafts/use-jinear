@@ -83,7 +83,9 @@ export const tagTypes = [
   "v1/task-board/list/{workspaceId}/filter",
   "v1/messaging/token",
   "v1/captcha/generate",
-  "v1/material/list/search"
+  "v1/material/list/search",
+  "v1/material/{materialId}",
+  "v1/material/access/{materialId}"
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

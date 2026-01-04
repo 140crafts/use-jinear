@@ -14,7 +14,7 @@ import ModalState, {
   DatePickerModalState,
   DialogModalState,
   IntegrationFeedItemDetailModalState, IPresignedUploadData,
-  LoginWith2FaMailModalState, MaterialFolderPickerModalState,
+  LoginWith2FaMailModalState, MaterialAccessModalState, MaterialFolderPickerModalState,
   NewCalendarIntegrationModalState,
   NewChannelModalState,
   NewConversationModalState,
@@ -231,6 +231,11 @@ const initialState = {
   },
   uploadStatusModal: {
     visible: false
+  },
+  materialAccessModal: {
+    visible: false,
+    resetList: () => {
+    }
   }
 } as {
   loginWith2FaMailModal: null | LoginWith2FaMailModalState;
@@ -290,6 +295,7 @@ const initialState = {
   feedbackModal: null | ModalState,
   materialFolderPickerModal: null | MaterialFolderPickerModalState,
   uploadStatusModal: null | UploadStatusModalState;
+  materialAccessModal: null | MaterialAccessModalState;
 };
 
 const slice = createSlice({
@@ -717,11 +723,19 @@ const slice = createSlice({
         );
       }
     },
+
     popUploadStatusModal: (state, action: PayloadAction<void>) => {
       state.uploadStatusModal = { ...state.uploadStatusModal, visible: true };
     },
     closeUploadStatusModal: (state, action: PayloadAction<void>) => {
       state.uploadStatusModal = initialState.uploadStatusModal;
+    },
+
+    popMaterialAccessModal: (state, action: PayloadAction<MaterialAccessModalState>) => {
+      state.materialAccessModal = { ...action.payload, visible: true };
+    },
+    closeMaterialAccessModal: (state, action: PayloadAction<void>) => {
+      state.materialAccessModal = initialState.materialAccessModal;
     },
 
     resetModals: () => initialState
@@ -859,6 +873,8 @@ export const {
   toggleUploadStatusModalMinimized,
   setUploadStatusModalMouseOver,
   removeFromUploadStatusModalQueue,
+  popMaterialAccessModal,
+  closeMaterialAccessModal,
   resetModals
 } = slice.actions;
 export default slice.reducer;
@@ -1160,3 +1176,7 @@ export const selectUploadStatusModalWorkspaceId = (state: RootState) => state.mo
 export const selectUploadStatusModalPresignedUploadData = (state: RootState) => state.modal.uploadStatusModal?.presignedUploadData;
 export const selectUploadStatusModalMinimized = (state: RootState) => state.modal.uploadStatusModal?.minimized;
 export const selectUploadStatusModalMouseOver = (state: RootState) => state.modal.uploadStatusModal?.mouseOver;
+
+export const selectMaterialAccessModalVisible = (state: RootState) => state.modal.materialAccessModal?.visible;
+export const selectMaterialAccessModalMaterialId = (state: RootState) => state.modal.materialAccessModal?.materialId;
+export const selectMaterialAccessModalResetList = (state: RootState) => state.modal.materialAccessModal?.resetList;

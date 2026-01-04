@@ -62,13 +62,14 @@ import PasswordChangeModal from "@/components/modal/passwordChangeModal/Password
 import FeedbackModal from "@/components/modal/feedbackModal/FeedbackModal";
 import MaterialFolderPickerModal from "@/components/modal/materialFolderPickerModal/MaterialFolderPickerModal";
 import UploadStatusModal from "@/components/modal/uploadStatusModal/UploadStatusModal";
+import MaterialAccessModal from "@/components/modal/materialAccessModal/MaterialAccessModal";
 
 interface ModalProviderProps {
 }
 
 const globalModals: any = (
   <>
-    <UploadStatusModal />
+    <MaterialAccessModal />
     <MaterialFolderPickerModal />
     <FeedbackModal />
     <InstallPwaInstructionsModal />
@@ -119,6 +120,7 @@ const globalModals: any = (
     <UpgradeWorkspaceModal />
     <LoginWith2FaMailModal />
     <PasswordChangeModal />
+    <UploadStatusModal />
     <DatePickerModal />
     <BasicTextInputModal />
     <DialogModal />

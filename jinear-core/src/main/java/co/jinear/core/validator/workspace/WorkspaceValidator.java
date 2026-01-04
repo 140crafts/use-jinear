@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
 
 import static co.jinear.core.model.enumtype.workspace.WorkspaceContentVisibilityType.HIDDEN;
@@ -45,9 +46,13 @@ public class WorkspaceValidator {
         return workspaceMemberService.doesAccountHaveWorkspaceAdminAccess(accountId, workspaceId);
     }
 
-    public void validateWorkspaceMemberIdIsInWorkspace(String workspaceMemberId, String workspaceId){
-        if (!workspaceMemberService.checkWorkspaceMemberExistsInWorkspace(workspaceMemberId,workspaceId)){
+    public void validateWorkspaceMemberIdIsInWorkspace(String workspaceMemberId, String workspaceId) {
+        if (!workspaceMemberService.checkWorkspaceMemberExistsInWorkspace(workspaceMemberId, workspaceId)) {
             throw new NoAccessException();
         }
+    }
+
+    public void validateAllHasAccess(List<String> accountIds, String workspaceId) {
+        workspaceMemberService.validateAllHasAccess(workspaceId, new HashSet<>(accountIds));
     }
 }

@@ -72,7 +72,6 @@ const MaterialFolderPickerModal: React.FC<MaterialMoveModalProps> = ({}) => {
         }, index * DELAY_MS)
       );
 
-      // Cleanup pending timeouts if component unmounts or filter changes
       return () => {
         timeoutIds.forEach(clearTimeout);
       };

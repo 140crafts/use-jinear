@@ -4,6 +4,7 @@ import co.jinear.core.converter.material.MaterialInitializeFileUploadRequestToVo
 import co.jinear.core.converter.material.MaterialInitializeFolderRequestToVoConverter;
 import co.jinear.core.model.dto.material.MaterialDto;
 import co.jinear.core.model.dto.material.WaitingForUploadMaterialResultDto;
+import co.jinear.core.model.enumtype.material.MaterialAccessType;
 import co.jinear.core.model.request.material.MaterialInitializeFileUploadRequest;
 import co.jinear.core.model.request.material.MaterialInitializeFolderRequest;
 import co.jinear.core.model.request.material.MaterialMoveRequest;
@@ -49,6 +50,7 @@ public class MaterialOperationManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         MaterialDto materialDto = materialRetrieveService.retrieve(materialMoveRequest.getMaterialId());
         workspaceValidator.validateHasAccess(currentAccountId, materialDto.getWorkspaceId());
+        materialAccessValidationService.validateMaterialChangeAccess(currentAccountId, materialDto);
         log.info("Move material has started. currentAccountId: {}", currentAccountId);
         materialOperationService.moveTo(materialMoveRequest.getMaterialId(), materialMoveRequest.getParentMaterialId());
         return new BaseResponse();
@@ -58,6 +60,7 @@ public class MaterialOperationManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         MaterialDto materialDto = materialRetrieveService.retrieve(materialRenameRequest.getMaterialId());
         workspaceValidator.validateHasAccess(currentAccountId, materialDto.getWorkspaceId());
+        materialAccessValidationService.validateMaterialChangeAccess(currentAccountId, materialDto);
         log.info("Rename material has started. currentAccountId: {}", currentAccountId);
         materialOperationService.rename(materialRenameRequest.getMaterialId(), materialRenameRequest.getNewName());
         return new BaseResponse();
@@ -66,6 +69,9 @@ public class MaterialOperationManager {
     public MaterialInitializeFileUploadResponse initializeFileUpload(MaterialInitializeFileUploadRequest materialInitializeFileUploadRequest, String workspaceId) {
         String currentAccountId = sessionInfoService.currentAccountId();
         workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
+        if (materialInitializeFileUploadRequest.getParentMaterialId() != null) {
+            materialAccessValidationService.validateMaterialReadAccess(currentAccountId, materialInitializeFileUploadRequest.getParentMaterialId());
+        }
         log.info("Initialize file upload has started. currentAccountId: {}", currentAccountId);
         MaterialFileInitializeVo materialFileInitializeVo = materialInitializeFileUploadRequestToVoConverter.convert(materialInitializeFileUploadRequest, workspaceId, currentAccountId);
         WaitingForUploadMaterialResultDto waitingForUploadMaterialResultDto = materialOperationService.initialize(materialFileInitializeVo);
@@ -85,9 +91,20 @@ public class MaterialOperationManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         MaterialDto materialDto = materialRetrieveService.retrieve(materialId);
         workspaceValidator.validateHasAccess(currentAccountId, materialDto.getWorkspaceId());
+        materialAccessValidationService.validateMaterialChangeAccess(currentAccountId, materialDto);
         log.info("Delete material has started. currentAccountId: {}", currentAccountId);
         String passiveId = passiveService.createUserActionPassive(currentAccountId);
         materialOperationService.delete(materialId, passiveId);
+        return new BaseResponse();
+    }
+
+    public BaseResponse updateAccessType(String materialId, MaterialAccessType materialAccessType) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        MaterialDto materialDto = materialRetrieveService.retrieve(materialId);
+        workspaceValidator.validateHasAccess(currentAccountId, materialDto.getWorkspaceId());
+        materialAccessValidationService.validateMaterialChangeAccess(currentAccountId, materialDto);
+        log.info("Update access type has started. currentAccountId: {}", currentAccountId);
+        materialOperationService.updateAccessType(materialId, materialAccessType, currentAccountId);
         return new BaseResponse();
     }
 

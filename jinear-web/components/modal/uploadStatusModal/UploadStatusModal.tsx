@@ -14,7 +14,7 @@ import {
 } from "@/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
 import { LuChevronDown, LuFolder, LuX } from "react-icons/lu";
-import { getIcon } from "@/components/workspaceFilesPage/materialListView/materialViewRow/MaterialViewRow";
+import { getMaterialIcon } from "@/components/workspaceFilesPage/materialListView/materialViewRow/MaterialViewRow";
 import useTranslation from "@/locals/useTranslation";
 import cn from "classnames";
 import Logger from "@/utils/logger";
@@ -204,7 +204,7 @@ const UploadStatusModal: React.FC<UploadStatusModalProps> = ({}) => {
             onMouseLeave={onMouseLeave}
           >
             {presignedUploadData?.map((item) => {
-              const Icon = getIcon(item.file.type) ?? LuFolder;
+              const Icon = getMaterialIcon(item.file.type) ?? LuFolder;
               return (
                 <div key={item.relatedObjectId} className={styles.uploadItemContainer}>
                   <div className={styles.uploadItemNameContainer}>
