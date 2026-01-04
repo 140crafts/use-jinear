@@ -5064,6 +5064,10 @@ const translations = {
     en: "Delete",
     tr: "Sil"
   },
+  materialRowCopyLinkButtonTooltip: {
+    en: "Copy Link",
+    tr: "Linki Kopyala"
+  },
   uploadStatusModalTitle: {
     en: "Upload Statuses",
     tr: "Yükleme Durumları"
@@ -5164,6 +5168,10 @@ const translations = {
   materialAccessUpdated: {
     en: "File access updated successfully.",
     tr: "Dosya erişimi başarıyla güncellendi."
+  },
+  materialRowCopyLinkCopiedToast: {
+    en: "Link copied",
+    tr: "Link kopyalandı"
   },
 };
 

@@ -16,7 +16,7 @@ import {
   LuFileVideo2,
   LuFolder,
   LuFolderInput,
-  LuGlobe as LuEarth,
+  LuGlobe as LuEarth, LuLink,
   LuLock,
   LuMinus,
   LuTextCursorInput,
@@ -57,6 +57,8 @@ import strings from "@/locals/strings";
 import ProfilePhoto from "@/components/profilePhoto";
 import { selectCurrentAccountId } from "@/slice/accountSlice";
 import { useWorkspaceRoleIsAdminOrOwner } from "@/hooks/useWorkspaceRoleIsAdminOrOwner";
+import { copyTextToClipboard } from "@/utils/clipboard";
+import toast from "react-hot-toast";
 
 interface MaterialViewRowProps {
   material: MaterialDto;
@@ -245,6 +247,11 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
     dispatch(popMaterialAccessModal({ materialId: material.materialId, visible: true, resetList }));
   };
 
+  const copyMediaLink = () => {
+    copyTextToClipboard(`${API_ROOT}v1/material/media/${material.materialId}`);
+    toast(t("materialRowCopyLinkCopiedToast"));
+  };
+
   return (
     <tr
       draggable={true}
@@ -321,42 +328,54 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
 
 
       <td style={{ position: "relative" }}>
+
         <div
-          className={cn(styles.moreButtonContainer, hasUpdatePermission && isSelected && styles.moreButtonContainerSelected)}>
+          className={cn(styles.moreButtonContainer, isSelected && styles.moreButtonContainerSelected)}>
+          <Button
+            heightVariant={ButtonHeight.short2x}
+            className={isSelected ? styles.moreButtonSelected : undefined}
+            onClick={copyMediaLink}
+            data-tooltip-right={t("materialRowCopyLinkButtonTooltip")}
+          >
+            <LuLink size={14} className={styles.icon} />
+          </Button>
+          {hasUpdatePermission &&
+            <>
+              <Button
+                heightVariant={ButtonHeight.short2x}
+                className={isSelected ? styles.moreButtonSelected : undefined}
+                onClick={popAccessModal}
+                data-tooltip-right={t("materialRowChangeAccessButtonTooltip")}
+              >
+                <LuUserPlus size={14} className={styles.icon} />
+              </Button>
 
-          <Button
-            heightVariant={ButtonHeight.short2x}
-            className={isSelected ? styles.moreButtonSelected : undefined}
-            onClick={popAccessModal}
-            data-tooltip-right={t("materialRowChangeAccessButtonTooltip")}
-          >
-            <LuUserPlus size={14} className={styles.icon} />
-          </Button>
-
-          <Button
-            heightVariant={ButtonHeight.short2x}
-            className={isSelected ? styles.moreButtonSelected : undefined}
-            onClick={popChangeNameModal}
-            data-tooltip-right={t("materialRowChangeNameButtonTooltip")}
-          >
-            <LuTextCursorInput size={14} className={styles.icon} />
-          </Button>
-          <Button
-            heightVariant={ButtonHeight.short2x}
-            className={isSelected ? styles.moreButtonSelected : undefined}
-            onClick={popFolderPicker}
-            data-tooltip-right={t("materialRowMoveButtonTooltip")}
-          >
-            <LuFolderInput size={14} className={styles.icon} />
-          </Button>
-          <Button
-            heightVariant={ButtonHeight.short2x}
-            className={isSelected ? styles.moreButtonSelected : undefined}
-            onClick={popAreYouSureModalForPermanentlyDelete}
-            data-tooltip-right={t("materialRowDeleteButtonTooltip")}
-          >
-            <LuTrash size={14} className={styles.icon} />
-          </Button>
+              <Button
+                heightVariant={ButtonHeight.short2x}
+                className={isSelected ? styles.moreButtonSelected : undefined}
+                onClick={popChangeNameModal}
+                data-tooltip-right={t("materialRowChangeNameButtonTooltip")}
+              >
+                <LuTextCursorInput size={14} className={styles.icon} />
+              </Button>
+              <Button
+                heightVariant={ButtonHeight.short2x}
+                className={isSelected ? styles.moreButtonSelected : undefined}
+                onClick={popFolderPicker}
+                data-tooltip-right={t("materialRowMoveButtonTooltip")}
+              >
+                <LuFolderInput size={14} className={styles.icon} />
+              </Button>
+              <Button
+                heightVariant={ButtonHeight.short2x}
+                className={isSelected ? styles.moreButtonSelected : undefined}
+                onClick={popAreYouSureModalForPermanentlyDelete}
+                data-tooltip-right={t("materialRowDeleteButtonTooltip")}
+              >
+                <LuTrash size={14} className={styles.icon} />
+              </Button>
+            </>
+          }
         </div>
       </td>
 
