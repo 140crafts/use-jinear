@@ -24,6 +24,6 @@ export const isInGodModeWhitelist = (accountId?: string) => accountId != undefin
 
 export const PADDLE_CATALOG = {
   business_daily: { sandbox: 63817, prod: -1, price: "$3.30" },
-  business_monthly: { sandbox: 63716, prod: 848738, price: "$4.90" },
-  business_yearly: { sandbox: 63717, prod: 848737, price: "$49" }
+  business_monthly: { sandbox: 63716, prod: 848738, price: "$24.90" },
+  business_yearly: { sandbox: 63717, prod: 848737, price: "$249" }
 };

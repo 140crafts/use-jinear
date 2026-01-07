@@ -18,6 +18,7 @@ import co.jinear.core.service.material.MaterialAccessValidationService;
 import co.jinear.core.service.material.MaterialOperationService;
 import co.jinear.core.service.material.MaterialRetrieveService;
 import co.jinear.core.service.passive.PassiveService;
+import co.jinear.core.validator.workspace.WorkspaceMediaLimitQueryService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ public class MaterialOperationManager {
     private final MaterialInitializeFileUploadRequestToVoConverter materialInitializeFileUploadRequestToVoConverter;
     private final MaterialRetrieveService materialRetrieveService;
     private final PassiveService passiveService;
+    private final WorkspaceMediaLimitQueryService workspaceMediaLimitQueryService;
 
     public BaseResponse initializeFolder(MaterialInitializeFolderRequest materialInitializeFolderRequest, String workspaceId) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -69,6 +71,7 @@ public class MaterialOperationManager {
     public MaterialInitializeFileUploadResponse initializeFileUpload(MaterialInitializeFileUploadRequest materialInitializeFileUploadRequest, String workspaceId) {
         String currentAccountId = sessionInfoService.currentAccountId();
         workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
+        workspaceMediaLimitQueryService.validateWorkspaceStorageLimitNotExceeded(workspaceId, materialInitializeFileUploadRequest.getFileSize());
         if (materialInitializeFileUploadRequest.getParentMaterialId() != null) {
             materialAccessValidationService.validateMaterialReadAccess(currentAccountId, materialInitializeFileUploadRequest.getParentMaterialId());
         }

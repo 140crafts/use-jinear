@@ -1,16 +1,20 @@
 package co.jinear.core.manager.workspace;
 
+import co.jinear.core.model.dto.workspace.WorkspaceMediaUsageDto;
 import co.jinear.core.model.enumtype.media.FileType;
 import co.jinear.core.model.enumtype.media.MediaOwnerType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.workspace.WorkspaceMediaLimitResponse;
 import co.jinear.core.model.vo.media.InitializeMediaVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaValidator;
 import co.jinear.core.service.workspace.member.WorkspaceMemberService;
+import co.jinear.core.validator.workspace.WorkspaceMediaLimitQueryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,16 +32,25 @@ public class WorkspaceMediaManager {
     private final WorkspaceMemberService workspaceMemberService;
     private final SessionInfoService sessionInfoService;
     private final MediaValidator mediaValidator;
+    private final WorkspaceMediaLimitQueryService workspaceMediaLimitQueryService;
 
     public BaseResponse changeWorkspaceProfilePicture(MultipartFile file, String workspaceId) {
         String currentAccountId = sessionInfoService.currentAccountId();
         log.info("Change workspace picture has started. accountId: {}, workspaceId: {}", currentAccountId, workspaceId);
+        workspaceMemberService.validateAccountHasRoleInWorkspace(currentAccountId, workspaceId, List.of(OWNER, ADMIN));
         mediaValidator.validateForSafeImage(file);
         InitializeMediaVo initializeMediaVo = mapInitializeVo(file, currentAccountId, workspaceId, MediaOwnerType.WORKSPACE);
-        workspaceMemberService.validateAccountHasRoleInWorkspace(currentAccountId, workspaceId, List.of(OWNER, ADMIN));
         mediaOperationService.changeProfilePicture(initializeMediaVo);
         log.info("Change workspace picture has finished. accountId: {}, workspaceId: {}", currentAccountId, workspaceId);
         return new BaseResponse();
+    }
+
+    public WorkspaceMediaLimitResponse retrieveLimits(String workspaceId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        workspaceMemberService.isAccountWorkspaceMember(currentAccountId, workspaceId);
+        log.info("Retrieve limits has started. workspaceId: {}, currentAccountId: {}", workspaceId, currentAccountId);
+        WorkspaceMediaUsageDto workspaceMediaUsageDto = workspaceMediaLimitQueryService.retrieveWorkspaceMediaUsage(workspaceId);
+        return mapResponse(workspaceMediaUsageDto);
     }
 
     private InitializeMediaVo mapInitializeVo(MultipartFile file, String ownerId, String relatedObjectId, MediaOwnerType mediaOwnerType) {
@@ -49,5 +62,11 @@ public class WorkspaceMediaManager {
         initializeMediaVo.setMediaOwnerType(mediaOwnerType);
         initializeMediaVo.setVisibility(MediaVisibilityType.PUBLIC);
         return initializeMediaVo;
+    }
+
+    private WorkspaceMediaLimitResponse mapResponse(WorkspaceMediaUsageDto workspaceMediaUsageDto) {
+        WorkspaceMediaLimitResponse workspaceMediaLimitResponse = new WorkspaceMediaLimitResponse();
+        workspaceMediaLimitResponse.setWorkspaceMediaUsageDto(workspaceMediaUsageDto);
+        return workspaceMediaLimitResponse;
     }
 }

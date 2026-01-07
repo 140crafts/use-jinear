@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-01-01 16:04:14.
+// Generated using typescript-generator version 3.0.1157 on 2026-01-05 19:07:33.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -165,9 +165,9 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
     gthreadId: string;
     ghistoryId: string;
+    gid: string;
     ginternalDate: string;
 }
 
@@ -1081,6 +1081,13 @@ export interface WorkspaceInvitationInfoDto extends BaseDto {
     invitationDto: WorkspaceInvitationDto;
 }
 
+export interface WorkspaceMediaUsageDto {
+    storageLimit: number;
+    currentTotal: number;
+    nextTier: WorkspaceTier;
+    nextTierStorageLimit: number;
+}
+
 export interface WorkspaceMemberDto extends BaseDto {
     workspaceMemberId: string;
     workspaceId: string;
@@ -1956,6 +1963,10 @@ export interface WorkspaceInvitationListingResponse extends BaseResponse {
     data: PageDto<WorkspaceInvitationDto>;
 }
 
+export interface WorkspaceMediaLimitResponse extends BaseResponse {
+    data: WorkspaceMediaUsageDto;
+}
+
 export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
     data: PageDto<WorkspaceMemberDto>;
 }
@@ -2108,9 +2119,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    uri: URI;
     filename: string;
     description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {

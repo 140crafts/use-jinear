@@ -85,7 +85,8 @@ export const tagTypes = [
   "v1/captcha/generate",
   "v1/material/list/search",
   "v1/material/{materialId}",
-  "v1/material/access/{materialId}"
+  "v1/material/access/{materialId}",
+  "v1/workspace/media/{workspaceId}/limits"
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

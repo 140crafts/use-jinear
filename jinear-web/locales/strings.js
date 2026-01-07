@@ -2769,8 +2769,8 @@ const translations = {
     tr: "Görevlerinize dosya ekleyin."
   },
   pricesPageProFeature_unlimitedFileStorage: {
-    en: "100 GB file storage.",
-    tr: "100 GB dosya saklama alanı."
+    en: "200 GB file storage.",
+    tr: "200 GB dosya saklama alanı."
   },
   pricesPageProFeature_UnlimitedSupport: {
     en: "Priority support (Usually within 24 hours)",
@@ -5172,6 +5172,10 @@ const translations = {
   materialRowCopyLinkCopiedToast: {
     en: "Link copied",
     tr: "Link kopyalandı"
+  },
+  workspaceLimitQuotaText: {
+    en: "Using {usage} ({percentage}) of {limit}",
+    tr: "{usage} ({percentage}) / {limit} kullanılıyor."
   },
 };
 
