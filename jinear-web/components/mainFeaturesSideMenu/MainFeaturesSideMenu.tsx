@@ -30,7 +30,8 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({ workspace }
   const inboxPath = `/${workspace?.username}/inbox`;
   const filesPath = `/${workspace?.username}/files`;
 
-  const filesFeatureEnabled = useFeatureFlag("FILES");
+  // const filesFeatureEnabled = useFeatureFlag("FILES");
+  const filesFeatureEnabled = true;
 
   const conversationsPath = `/${workspace?.username}/conversations`;
 

@@ -38,7 +38,9 @@ public class MaterialListingManager {
         workspaceValidator.validateHasAccess(currentAccountId, request.getWorkspaceId());
         validateParentMaterialIsInGivenWorkspace(request);
         log.info("Retrieve folder content has started. currentAccountId: {}, request: {}", currentAccountId, request);
-        MaterialSearchVo materialSearchVo = materialSearchRequestToVoConverter.convert(request);
+        boolean workspaceAdminOrOwner = workspaceValidator.isWorkspaceAdminOrOwner(currentAccountId, request.getWorkspaceId());
+        String accountIdPerspective = workspaceAdminOrOwner ? null : currentAccountId;
+        MaterialSearchVo materialSearchVo = materialSearchRequestToVoConverter.convert(request, accountIdPerspective);
         Page<MaterialDto> searchResult = materialSearchService.search(materialSearchVo);
         Optional<PathAwareMaterialDto> pathAwareMaterialDto = Optional.of(materialSearchVo)
                 .map(MaterialSearchVo::getParentMaterialId)

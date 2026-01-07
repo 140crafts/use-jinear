@@ -12,6 +12,7 @@ import TeamTaskFiles from "@/components/filesSectionSideMenu/teamTaskFiles/TeamT
 import { useQueryState, useSetQueryStateMultiple } from "@/hooks/useQueryState";
 import Logger from "@/utils/logger";
 import { MaterialSearchContentFilterType, MaterialSearchSortType } from "@/be/jinear-core";
+import MediaLimitUsage from "@/components/filesSectionSideMenu/mediaLimitUsage/MediaLimitUsage";
 
 interface FilesSectionSideMenuProps {
   containerClassName?: string;
@@ -159,6 +160,7 @@ const FilesSectionSideMenu: React.FC<FilesSectionSideMenuProps> = ({ containerCl
 
           <TeamTaskFiles workspaceId={workspace.workspaceId} onTeamClick={cdTeamTaskFiles} />
 
+          <MediaLimitUsage workspace={workspace} />
         </>
       )}
     </div>);

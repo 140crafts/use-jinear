@@ -12,9 +12,23 @@ import org.springframework.data.repository.query.Param;
 public interface TaskMediaRepository extends JpaRepository<Media, String> {
 
     @Query("""
-            select sum(media.size)
-            from Task task, Media media
-            where media.relatedObjectId = task.taskId and task.workspaceId = :workspaceId and task.passiveId is null and media.passiveId is null
+            select coalesce(
+            (select sum(media.size)
+             from Task task, Media media
+             where media.relatedObjectId = task.taskId 
+               and task.workspaceId = :workspaceId 
+               and task.passiveId is null
+               and media.uploadStatus = 1  
+               and media.passiveId is null), 0)
+        +
+        coalesce(
+            (select sum(media.size)
+             from Material material, Media media
+             where media.mediaId = material.mediaId 
+               and material.workspaceId = :workspaceId 
+               and material.passiveId is null
+               and media.uploadStatus = 1 
+               and media.passiveId is null), 0)
             """)
     Long sumAllMediaSizeForWorkspace(@Param("workspaceId") String workspaceId);
 

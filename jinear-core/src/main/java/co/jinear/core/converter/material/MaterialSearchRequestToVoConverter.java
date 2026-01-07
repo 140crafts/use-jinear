@@ -7,5 +7,5 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface MaterialSearchRequestToVoConverter {
 
-    MaterialSearchVo convert(MaterialSearchRequest materialSearchRequest);
+    MaterialSearchVo convert(MaterialSearchRequest materialSearchRequest, String accountIdPerspective);
 }

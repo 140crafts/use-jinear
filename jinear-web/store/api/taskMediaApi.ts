@@ -66,7 +66,8 @@ export const taskMediaApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         { type: "v1/task/media/{taskId}", id: req.taskId },
         "v1/task/media/from-team/{teamId}",
-        "v1/workspace/activity/filter"
+        "v1/workspace/activity/filter",
+        `v1/workspace/media/{workspaceId}/limits`
       ]
     }),
     //
@@ -78,7 +79,8 @@ export const taskMediaApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         { type: "v1/task/media/{taskId}", id: req.taskId },
         "v1/task/media/from-team/{teamId}",
-        "v1/workspace/activity/filter"
+        "v1/workspace/activity/filter",
+        `v1/workspace/media/{workspaceId}/limits`
       ]
     }),
     //
@@ -111,7 +113,8 @@ export const taskMediaApi = api.injectEndpoints({
         url: `v1/task/media/${req.taskId}/upload-url`,
         method: "POST",
         body: req.mediaUploadUrlRequest
-      })
+      }),
+      invalidatesTags: [`v1/workspace/media/{workspaceId}/limits`]
     }),
     //
     notifyUploadCompleted: build.mutation<MediaUploadUrlResponse, { taskId: string, mediaId: string }>({
@@ -122,7 +125,8 @@ export const taskMediaApi = api.injectEndpoints({
       invalidatesTags: (_result, _err, req) => [
         { type: "v1/task/media/{taskId}", id: req.taskId },
         "v1/task/media/from-team/{teamId}",
-        "v1/workspace/activity/filter"
+        "v1/workspace/activity/filter",
+        `v1/workspace/media/{workspaceId}/limits`
       ]
     })
     //

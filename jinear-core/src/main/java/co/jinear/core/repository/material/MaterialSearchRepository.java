@@ -57,6 +57,7 @@ public class MaterialSearchRepository {
         materialSearchCriteriaBuilder.addMediaStatusAsCompleted(criteriaBuilder, root, predicateList);
         materialSearchCriteriaBuilder.addWorkspaceId(materialSearchVo.getWorkspaceId(), criteriaBuilder, root, predicateList);
         materialSearchCriteriaBuilder.addMaterialType(materialSearchVo.getMaterialType(), criteriaBuilder, root, predicateList);
+        materialSearchCriteriaBuilder.addAccessFilters(materialSearchVo, criteriaBuilder, root, predicateList);
         addParentIdFilterIfNoContentFilterSelected(materialSearchVo, criteriaBuilder, root, predicateList);
         addContentFilter(materialSearchVo, criteriaBuilder, root, predicateList);
         return predicateList;

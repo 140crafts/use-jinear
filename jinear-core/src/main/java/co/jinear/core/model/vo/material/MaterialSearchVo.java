@@ -18,4 +18,5 @@ public class MaterialSearchVo {
     private MaterialSearchSortType materialSearchSortType = MaterialSearchSortType.IDATE_DESC;
     private MaterialType materialType;
     private MaterialSearchContentFilterType materialSearchContentFilterType;
+    private String accountIdPerspective;
 }

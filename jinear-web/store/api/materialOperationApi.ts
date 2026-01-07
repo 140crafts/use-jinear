@@ -1,5 +1,5 @@
 import {
-  BaseResponse,
+  BaseResponse, MaterialAccessType,
   MaterialInitializeFileUploadRequest,
   MaterialInitializeFileUploadResponse,
   MaterialInitializeFolderRequest,
@@ -30,7 +30,10 @@ export const materialOperationApi = api.injectEndpoints({
         body
       }),
       async onQueryStarted(props, { dispatch, queryFulfilled }) {
-        await queryFulfilled;
+        try {
+          await queryFulfilled;
+        } catch (e) {
+        }
         props?.onFulfilled?.();
       },
       invalidatesTags: ["v1/material/list/search"]
@@ -61,7 +64,7 @@ export const materialOperationApi = api.injectEndpoints({
         method: "POST",
         body: body
       }),
-      invalidatesTags: []
+      invalidatesTags: [`v1/workspace/media/{workspaceId}/limits`]
     }),
     //
     notifyMaterialUploaded: build.mutation<BaseResponse, { workspaceId: string, materialId: string }>({
@@ -69,7 +72,7 @@ export const materialOperationApi = api.injectEndpoints({
         url: `v1/material/operation/workspace/${workspaceId}/file/upload-url/notify/${materialId}`,
         method: "POST"
       }),
-      invalidatesTags: ["v1/material/list/search"]
+      invalidatesTags: ["v1/material/list/search", `v1/workspace/media/{workspaceId}/limits`]
     }),
     //
     deleteMaterialPermanently: build.mutation<BaseResponse, { materialId: string }>({
@@ -77,7 +80,15 @@ export const materialOperationApi = api.injectEndpoints({
         url: `v1/material/operation/${materialId}/permanent`,
         method: "DELETE"
       }),
-      invalidatesTags: ["v1/material/list/search"]
+      invalidatesTags: ["v1/material/list/search", `v1/material/{materialId}`, `v1/workspace/media/{workspaceId}/limits`]
+    }),
+    //
+    updateMaterialAccessType: build.mutation<BaseResponse, { materialId: string, accessType: MaterialAccessType }>({
+      query: ({ materialId, accessType }) => ({
+        url: `v1/material/operation/${materialId}/access-type/${accessType}`,
+        method: "PUT"
+      }),
+      invalidatesTags: ["v1/material/list/search", `v1/material/{materialId}`]
     })
     //
   })
@@ -89,7 +100,8 @@ export const {
   useRenameMaterialMutation,
   useInitializeMaterialFileUploadMutation,
   useNotifyMaterialUploadedMutation,
-  useDeleteMaterialPermanentlyMutation
+  useDeleteMaterialPermanentlyMutation,
+  useUpdateMaterialAccessTypeMutation
 } = materialOperationApi;
 
 export const {
@@ -99,6 +111,7 @@ export const {
     renameMaterial,
     initializeMaterialFileUpload,
     notifyMaterialUploaded,
-    deleteMaterialPermanently
+    deleteMaterialPermanently,
+    updateMaterialAccessType
   }
 } = materialOperationApi;

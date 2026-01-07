@@ -1,5 +1,6 @@
 package co.jinear.core.model.request.material;
 
+import co.jinear.core.model.enumtype.material.MaterialAccessType;
 import co.jinear.core.model.request.BaseRequest;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -25,6 +26,8 @@ public class MaterialInitializeFileUploadRequest extends BaseRequest {
     private String contentType;
     @NotNull
     private Long fileSize;
+    @Nullable
+    private MaterialAccessType materialAccessType = MaterialAccessType.OWNER_ONLY;
 
     public String getContentType() {
         return (contentType == null || contentType.isBlank())

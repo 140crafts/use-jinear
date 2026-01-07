@@ -10,6 +10,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: .15rem;
 }
 
 .infoColumn {
@@ -61,8 +62,8 @@
     right: 0;
     top: 0;
     bottom: 0;
-    padding-left: 1.5rem;
-    background: linear-gradient(90deg, transparent 0%, var(--c-primary) 25%);
+    padding-left: 3.5rem;
+    background: linear-gradient(90deg, transparent 0%, var(--c-primary) 15%);
 }
 
 .container:hover .moreButtonContainer {
@@ -87,3 +88,7 @@
     background-color: hsl(from var(--material-row-view-row-selection-color) h s calc(l * 1.15)) !important;
 }
 
+.accessUserProfilePic{
+    height: 20px !important;
+    width: 20px !important;
+}

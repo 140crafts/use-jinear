@@ -26,7 +26,7 @@ import co.jinear.core.service.task.media.TaskMediaRetrieveService;
 import co.jinear.core.service.team.TeamRetrieveService;
 import co.jinear.core.validator.task.TaskAccessValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
-import co.jinear.core.validator.workspace.WorkspaceMediaLimitValidator;
+import co.jinear.core.validator.workspace.WorkspaceMediaLimitQueryService;
 import co.jinear.core.validator.workspace.WorkspaceTierValidator;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +49,7 @@ public class TaskMediaManager {
     private final TaskRetrieveService taskRetrieveService;
     private final TaskAccessValidator taskAccessValidator;
     private final WorkspaceTierValidator workspaceTierValidator;
-    private final WorkspaceMediaLimitValidator workspaceMediaLimitValidator;
+    private final WorkspaceMediaLimitQueryService workspaceMediaLimitQueryService;
     private final TaskActivityService taskActivityService;
     private final TeamAccessValidator teamAccessValidator;
     private final TeamRetrieveService teamRetrieveService;
@@ -80,7 +80,7 @@ public class TaskMediaManager {
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         workspaceTierValidator.validateWorkspaceTier(taskDto.getWorkspaceId(), WorkspaceTier.PRO);
-        workspaceMediaLimitValidator.validateWorkspaceStorageLimitNotExceeded(taskDto.getWorkspaceId(), file.getSize());
+        workspaceMediaLimitQueryService.validateWorkspaceStorageLimitNotExceeded(taskDto.getWorkspaceId(), file.getSize(), WorkspaceTier.PRO);
         log.info("Upload task media has started. currentAccountId: {}", currentAccountId);
         AccessibleMediaDto accessibleMediaDto = taskMediaOperationService.upload(currentAccountId, taskDto, file);
         taskActivityService.initializeTaskAttachmentAddedActivity(currentAccountId, currentAccountSessionId, taskDto, accessibleMediaDto.getMediaId());
@@ -126,7 +126,7 @@ public class TaskMediaManager {
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
         taskAccessValidator.validateTaskAccess(currentAccountId, taskDto);
         workspaceTierValidator.validateWorkspaceTier(taskDto.getWorkspaceId(), WorkspaceTier.PRO);
-        workspaceMediaLimitValidator.validateWorkspaceStorageLimitNotExceeded(taskDto.getWorkspaceId(), mediaUploadUrlRequest.getFileSize());
+        workspaceMediaLimitQueryService.validateWorkspaceStorageLimitNotExceeded(taskDto.getWorkspaceId(), mediaUploadUrlRequest.getFileSize(), WorkspaceTier.PRO);
         log.info("Retrieve task media upload url has started. currentAccountId: {}", currentAccountId);
         WaitingMediaResultDto waitingMediaResultDto = taskMediaOperationService.retrieveUploadUrl(taskId, taskDto, mediaUploadUrlRequest.getOriginalName(), mediaUploadUrlRequest.getContentType(), mediaUploadUrlRequest.getFileSize());
         return mapResponse(waitingMediaResultDto);

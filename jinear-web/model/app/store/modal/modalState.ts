@@ -311,3 +311,8 @@ export interface UploadStatusModalState extends ModalState {
   mouseOver?: boolean,
   presignedUploadData?: IPresignedUploadData[]
 }
+
+export interface MaterialAccessModalState extends ModalState {
+  materialId?: string,
+  resetList: () => void
+}

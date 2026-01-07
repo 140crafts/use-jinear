@@ -2,14 +2,18 @@ package co.jinear.core.repository.criteriabuilder;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.material.Material;
+import co.jinear.core.model.entity.material.MaterialAccess;
 import co.jinear.core.model.entity.media.Media;
+import co.jinear.core.model.entity.workspace.Workspace;
+import co.jinear.core.model.entity.workspace.WorkspaceMember;
+import co.jinear.core.model.enumtype.material.MaterialAccessType;
 import co.jinear.core.model.enumtype.material.MaterialType;
 import co.jinear.core.model.enumtype.media.MediaFileUploadStatusType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
+import co.jinear.core.model.vo.material.MaterialSearchVo;
+import io.micrometer.common.util.StringUtils;
+import jakarta.persistence.criteria.*;
+import liquibase.util.StringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -62,6 +66,35 @@ public class MaterialSearchCriteriaBuilder {
         predicateList.add(criteriaBuilder.or(
                 isPdf, isWord, isExcel, isPowerpoint, isText, isRtf, isJson, isOpenDocument, isAppleDoc
         ));
+    }
+
+    public void addAccessFilters(MaterialSearchVo materialSearchVo, CriteriaBuilder criteriaBuilder, Root<Material> root, List<Predicate> predicateList) {
+        String accountId = materialSearchVo.getAccountIdPerspective();
+        if (StringUtils.isNotBlank(accountId)) {
+            Predicate ownerIdPredicate = criteriaBuilder.equal(root.<String>get(Material.Fields.ownerId), accountId);
+            Predicate accessTypeOwnerPredicate = criteriaBuilder.equal(root.<String>get(Material.Fields.materialAccessType), MaterialAccessType.OWNER_ONLY);
+            Predicate ownerOnlyPredicate = criteriaBuilder.and(ownerIdPredicate, accessTypeOwnerPredicate);
+
+            Join<Material, Workspace> workspaceJoin = root.join(Material.Fields.workspace, JoinType.LEFT);
+            Join<Workspace, WorkspaceMember> workspaceMemberJoin = workspaceJoin.join(Workspace.Fields.workspaceMembers, JoinType.LEFT);
+            Predicate workspaceMemberPassiveIdIsNull = criteriaBuilder.isNull(workspaceMemberJoin.get(BaseEntity.Fields.passiveId));
+            Predicate workspaceMemberGivenAccountIdPredicate = criteriaBuilder.equal(workspaceMemberJoin.get(WorkspaceMember.Fields.accountId), accountId);
+            Predicate accessTypeWorkspaceMembersPredicate = criteriaBuilder.equal(root.<String>get(Material.Fields.materialAccessType), MaterialAccessType.WORKSPACE_MEMBERS);
+            Predicate workspaceMembersOnlyPredicate = criteriaBuilder.and(workspaceMemberPassiveIdIsNull, workspaceMemberGivenAccountIdPredicate, accessTypeWorkspaceMembersPredicate);
+
+            Join<Material, MaterialAccess> materialAccessJoin = root.join(Material.Fields.materialAccesses, jakarta.persistence.criteria.JoinType.LEFT);
+            Predicate accessTypeGrainedPredicate = criteriaBuilder.equal(root.<String>get(Material.Fields.materialAccessType), MaterialAccessType.GRAINED);
+            Predicate materialAccessPassiveIdIsNull = criteriaBuilder.isNull(materialAccessJoin.get(BaseEntity.Fields.passiveId));
+            Predicate materialAccessGivenAccountIdPredicate = criteriaBuilder.equal(materialAccessJoin.get(MaterialAccess.Fields.accountId), accountId);
+            Predicate grainedAccessPredicate = criteriaBuilder.and(accessTypeGrainedPredicate, materialAccessPassiveIdIsNull, materialAccessGivenAccountIdPredicate);
+            Predicate materialOwnerIsGivenAccountIdPredicate = criteriaBuilder.equal(root.get(Material.Fields.ownerId), accountId);
+            Predicate grainedAccessOrOwnerIsGivenAccountIdPredicate = criteriaBuilder.or(grainedAccessPredicate, materialOwnerIsGivenAccountIdPredicate);
+
+            Predicate anyoneWithLinkPredicate = criteriaBuilder.equal(root.<String>get(Material.Fields.materialAccessType), MaterialAccessType.ANYONE_WITH_LINK);
+
+            Predicate accessPredicate = criteriaBuilder.or(ownerOnlyPredicate, workspaceMembersOnlyPredicate, grainedAccessOrOwnerIsGivenAccountIdPredicate, anyoneWithLinkPredicate);
+            predicateList.add(accessPredicate);
+        }
     }
 
     public void addFolderOrMediaVisibilityType(MediaVisibilityType visibilityType, CriteriaBuilder criteriaBuilder, Root<Material> root, List<Predicate> predicateList) {

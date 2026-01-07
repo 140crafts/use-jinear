@@ -1,22 +1,25 @@
 .unreadWrapper {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--border-radius);
-  width: 32.5px;
-  height: 22.5px;
-  background-color: var(--c-primary-shade-1);
-  border-color: var(--c-primary-shade-0);
-  border-width: thin;
-  border-style: solid;
-  /* color: var(--c-primary); */
-  font-weight: 700;
-  font-size: 0.6rem;
-  right: -2rem;
-  top: -0.75rem;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius);
+    width: 32.5px;
+    height: 22.5px;
+    border-color: var(--c-primary-shade-0);
+    border-width: thin;
+    border-style: solid;
+    /*background-color: var(--c-primary-shade-1);*/
+    /* color: var(--c-primary); */
+    /*background-color: var(--c-ERROR_RED);*/
+    background: linear-gradient(315deg, var(--c-JINEAR_ORANGE_LIGHT_X2) 0%, var(--c-JINEAR_ORANGE) 35%) !important;
+    color: var(--c-BABY_POWDER);
+    font-weight: 700;
+    font-size: 0.6rem;
+    right: -2rem;
+    top: -0.75rem;
 }
 
 .iconContainer {
-  position: relative;
+    position: relative;
 }

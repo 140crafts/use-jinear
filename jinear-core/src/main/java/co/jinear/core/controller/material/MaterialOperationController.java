@@ -1,6 +1,7 @@
 package co.jinear.core.controller.material;
 
 import co.jinear.core.manager.material.MaterialOperationManager;
+import co.jinear.core.model.enumtype.material.MaterialAccessType;
 import co.jinear.core.model.request.material.MaterialInitializeFileUploadRequest;
 import co.jinear.core.model.request.material.MaterialInitializeFolderRequest;
 import co.jinear.core.model.request.material.MaterialMoveRequest;
@@ -44,6 +45,13 @@ public class MaterialOperationController {
         return materialOperationManager.deletePermanent(materialId);
     }
 
+    @PutMapping("/{materialId}/access-type/{accessType}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateAccessType(@PathVariable String materialId,
+                                         @PathVariable MaterialAccessType accessType) {
+        return materialOperationManager.updateAccessType(materialId, accessType);
+    }
+
     @PostMapping("/workspace/{workspaceId}/file/upload-url")
     @ResponseStatus(HttpStatus.OK)
     public MaterialInitializeFileUploadResponse initializeFileUpload(@PathVariable String workspaceId,
@@ -57,5 +65,4 @@ public class MaterialOperationController {
                                                @PathVariable String materialId) {
         return materialOperationManager.notifyFileUploadComplete(workspaceId, materialId);
     }
-
 }

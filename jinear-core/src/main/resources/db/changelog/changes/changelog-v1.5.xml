@@ -46,4 +46,32 @@
             <column name="media_id"/>
         </createIndex>
     </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-504-add-material_access_type-to-material">
+        <addColumn tableName="material">
+            <column name="material_access_type" type="int" defaultValueNumeric="1">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jinear-538-initialize-material_access">
+        <createTable tableName="material_access">
+            <column name="material_access_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="material_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
