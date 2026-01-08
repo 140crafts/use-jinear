@@ -33,9 +33,9 @@ const WorkspaceLayoutHeader: React.FC<WorkspaceLayoutHeaderProps> = ({}) => {
   return (
     <div className={styles.container}>
       <div className={styles.headerLeftContent}>
-        <Button className={styles.goBackButton} variant={ButtonVariants.hoverFilled2} heightVariant={ButtonHeight.short} onClick={router.back}>
-          <b><IoArrowBack /></b>
-        </Button>
+        {/*<Button className={styles.goBackButton} variant={ButtonVariants.hoverFilled2} heightVariant={ButtonHeight.short} onClick={router.back}>*/}
+        {/*  <b><IoArrowBack /></b>*/}
+        {/*</Button>*/}
         {workspace && (
           <>
             <WorkspaceChangeButton currentWorkspace={workspace} />

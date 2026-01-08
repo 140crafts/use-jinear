@@ -7,7 +7,6 @@ import HomePageNavbar from "@/components/homepage/navbar/HomePageNavbar";
 import { useTheme } from "@/components/themeProvider/ThemeProvider";
 import { selectAuthState } from "@/store/slice/accountSlice";
 import { useTypedSelector } from "@/store/store";
-import { ROUTE_IF_LOGGED_IN } from "@/utils/constants";
 import isPwa from "@/utils/pwaHelper";
 import { isWebView } from "@/utils/webviewUtils";
 import useTranslation from "locales/useTranslation";
@@ -31,6 +30,7 @@ import Footer from "@/components/homepage/footer/Footer";
 import OrLine from "@/components/orLine/OrLine";
 import { FaGithub, FaGitlab } from "react-icons/fa6";
 import { IoBalloon } from "react-icons/io5";
+import { useRouteIfLoggedIn } from "@/hooks/useRouteIfLoggedIn";
 
 export default function Home() {
   const pwa = isPwa();
@@ -43,15 +43,17 @@ export default function Home() {
   const heroImageSrcType = theme == "light" ? "light" : "dark";
   const { t } = useTranslation();
 
+  const routeIfLoggedIn = useRouteIfLoggedIn();
+
   useEffect(() => {
     if (isMobileApp) {
       if (authState == "NOT_LOGGED_IN") {
         router.replace("/login");
       } else if (authState == "LOGGED_IN") {
-        router.replace(ROUTE_IF_LOGGED_IN);
+        router.replace(routeIfLoggedIn);
       }
     }
-  }, [isMobileApp, authState]);
+  }, [isMobileApp, authState, routeIfLoggedIn]);
 
   return isMobileApp ? (
     <CircularLoading />
