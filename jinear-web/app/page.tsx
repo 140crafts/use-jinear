@@ -20,12 +20,22 @@ import FeatureCard from "@/components/homepage/featureCard/FeatureCard";
 import {
   LuCalendarCheck2,
   LuCheckCircle as LuCircleCheck,
-  LuClipboardList,
-  LuFile,
+  LuClipboardList, LuDatabase,
+  LuFile, LuHash,
   LuLayoutDashboard,
-  LuMessageSquare
+  LuMessageSquare, LuPin, LuSend, LuShieldCheck, LuTarget, LuUsers
 } from "react-icons/lu";
-import { SiApple, SiAsana, SiBasecamp, SiGooglecalendar, SiJira } from "react-icons/si";
+import {
+  SiApple,
+  SiAsana,
+  SiBasecamp, SiBox,
+  SiDiscord, SiDropbox,
+  SiGooglecalendar, SiGoogledrive,
+  SiJira,
+  SiMessenger,
+  SiSlack,
+  SiWhatsapp
+} from "react-icons/si";
 import Footer from "@/components/homepage/footer/Footer";
 import OrLine from "@/components/orLine/OrLine";
 import { FaGithub, FaGitlab } from "react-icons/fa6";
@@ -129,6 +139,76 @@ export default function Home() {
       <div className="spacer-h-12" />
 
       <FeatureCard
+        title1={t("landingPageFeatureChat")}
+        text={t("landingPageFeatureChatText")}
+        imageUrl={`https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/chat-${heroImageSrcType}.png`}
+        featureCardIconInfoList={[
+          {
+            id: "feature-chat",
+            Icon: LuHash,
+            title: t("landingPageFeatureChatSub1Title"),
+            text: t("landingPageFeatureChatSub1Text")
+          },
+          {
+            id: "feature-chat-2",
+            Icon: LuSend,
+            title: t("landingPageFeatureChatSub2Title"),
+            text: t("landingPageFeatureChatSub2Text")
+          },
+          {
+            id: "feature-chat-3",
+            Icon: LuPin,
+            title: t("landingPageFeatureChatSub3Title"),
+            text: t("landingPageFeatureChatSub3Text")
+          }
+        ]}
+        alternativeToLabel={t("landingPageFeatureChatAlternativeTo")}
+        alternativeToInfoList={[
+          { id: "chat-alternative-to-1", Icon: SiSlack, name: "Slack" },
+          { id: "chat-alternative-to-2", Icon: SiDiscord, name: "Discord" },
+          { id: "chat-alternative-to-3", Icon: SiWhatsapp, name: "Whatsapp" }
+        ]}
+      />
+
+      <div className="spacer-h-12" />
+      <div className="spacer-h-12" />
+
+      <FeatureCard
+        title1={t("landingPageFeatureStorage")}
+        text={t("landingPageFeatureStorageText")}
+        imageUrl={`https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/files-2-${heroImageSrcType}.png`}
+        featureCardIconInfoList={[
+          {
+            id: "feature-storage",
+            Icon: LuUsers,
+            title: t("landingPageFeatureStorageSub1Title"),
+            text: t("landingPageFeatureStorageSub1Text")
+          },
+          {
+            id: "feature-storage-2",
+            Icon: LuDatabase,
+            title: t("landingPageFeatureStorageSub2Title"),
+            text: t("landingPageFeatureStorageSub2Text")
+          },
+          {
+            id: "feature-storage-3",
+            Icon: LuShieldCheck,
+            title: t("landingPageFeatureStorageSub3Title"),
+            text: t("landingPageFeatureStorageSub3Text")
+          }
+        ]}
+        alternativeToLabel={t("landingPageFeatureStorageAlternativeTo")}
+        alternativeToInfoList={[
+          { id: "storage-alternative-to-1", Icon: SiDropbox, name: "Dropbox" },
+          { id: "storage-alternative-to-2", Icon: SiGoogledrive, name: "Google Drive" },
+          { id: "storage-alternative-to-3", Icon: SiBox, name: "Box" }
+        ]}
+      />
+
+      <div className="spacer-h-12" />
+      <div className="spacer-h-12" />
+
+      <FeatureCard
         title1={t("landingPageFeature2")}
         text={t("landingPageFeature2Text")}
         imageUrl={`https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/calendar-${heroImageSrcType}.png`}
@@ -158,6 +238,7 @@ export default function Home() {
           { id: "calendar-alternative-to-2", Icon: SiApple, name: "Apple Calendar" }
         ]}
       />
+
 
       <div className="spacer-h-12" />
       <div className="spacer-h-12" />
