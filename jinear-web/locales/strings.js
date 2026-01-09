@@ -2389,28 +2389,28 @@ const translations = {
     tr: "Self Host"
   },
   homescreenHeroTitleLine1: {
-    en: "Lean project management",
-    tr: "Hızlı aksiyon alan takımlar için"
-  },
-  homescreenHeroTitleLine2: {
-    en: "for fast pacing teams",
-    tr: "Yalın proje yönetimi"
-  },
-  homescreenHeroText: {
-    en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, update your clients, manage projects collaboratively.",
-    tr: "İş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, müşterilerinizi bilgilendirin, projeleri işbirliğiyle yönetin."
-  },
-  pricingScreenHeroTitleLine1: {
     en: "The one tool",
     tr: "İşletmenizi yönetmek için"
   },
-  pricingScreenHeroTitleLine2: {
+  homescreenHeroTitleLine2: {
     en: "To run your entire business",
     tr: "ihtiyacınız olan tek çözüm"
   },
+  homescreenHeroText: {
+    en: "From initial planning to final delivery, Jinear provides the tools your team needs to collaborate and succeed. Tasks, calendar, team chat, and file storage. Powerful features, radically simple pricing.",
+    tr: "Planlamadan teslimata kadar, Jinear ekibinizin birlikte çalışması ve başarılı olması için gereken tüm araçları sunar. Görevler, takvim, takım mesajlaşması ve dosya paylaşımı. Güçlü özellikler, radikal bir şekilde basit fiyatlandırma."
+  },
+  pricingScreenHeroTitleLine1: {
+    en: "Powerful features,",
+    tr: "Güçlü özellikler,"
+  },
+  pricingScreenHeroTitleLine2: {
+    en: "radically simple pricing",
+    tr: "radikal derecede basit fiyatlandırma"
+  },
   pricingScreenHeroText: {
-    en: "From initial planning to final delivery, Jinear provides the tools your team needs to collaborate and succeed. Powerful features, radically simple pricing.",
-    tr: "Planlamadan teslimata kadar, Jinear ekibinizin birlikte çalışması ve başarılı olması için gereken tüm araçları sunar. Güçlü özellikler, radikal bir şekilde basit fiyatlandırma."
+    en: "Stop the per-user tax. Get unlimited projects and collaborative workspaces for a single flat fee. Scale your team without scaling your bill.",
+    tr: "Kullanıcı başına ödenen ek maliyetlere son verin. Tek bir sabit fiyatla sınırsız proje ve iş birliği alanına sahip olun. Faturanızın değil, ekibinizin büyümesine odaklanın."
   },
   homescreenSelfHostText: {
     en: "Host Your Own Jinear Instance!",
@@ -2835,6 +2835,22 @@ const translations = {
   pricingPageTitle: {
     en: "Pricing & Plans",
     tr: "Planlar ve Fiyatlandırma"
+  },
+  pricingPageCompareJinearText:{
+    en:"Everything you need for your entire business. Just <mark style={{ wordBreak: \"keep-all\", whiteSpace: \"nowrap\" }}> $24.90 flat.</mark> Unlimited Users.",
+    tr:"İşinizin ihtiyacı olan herşey. Yanlızca <mark style={{ wordBreak: \"keep-all\", whiteSpace: \"nowrap\" }}> $24.90</mark> Sabit fiyat. Sınırsız kullanıcı.",
+  },
+  pricingPageComparePerMonthPerUserText:{
+    en:"${price}+/month per user",
+    tr:"Kullanıcı başına her ay ${price}",
+  },
+  pricingPageCompareTotalText:{
+    en:"Total",
+    tr:"Toplam",
+  },
+  pricingPageCompareTenUsersText:{
+    en:"For a team of 10, that’s $330/mo",
+    tr:"10 Kişilik bir takım için aylık yaklaşık $330.",
   },
   calendarViewTypeSegment_Month: {
     en: "Month",
@@ -4791,6 +4807,78 @@ const translations = {
   landingPageFeature2AlternativeTo: {
     en: "Replaces with extra functionality: ",
     tr: "Ekstra işlevsellikle şunların yerine: "
+  },
+  landingPageFeatureChat: {
+    en: "Chat <br> without the noise",
+    tr: "Gerçek zamanlı iletişim, <br> işin tam olarak gerçekleştiği yerde"
+  },
+  landingPageFeatureChatText: {
+    en: "Discuss projects in real-time with dedicated channels and private DMs. Stay focused on the work without jumping between apps.",
+    tr: "Özel kanallar ve DM'ler aracılığıyla projeleri gerçek zamanlı tartışın. Uygulamalar arasında geçiş yapmadan işinize odaklanın."
+  },
+  landingPageFeatureChatSub1Title: {
+    en: "Organized Channels",
+    tr: "Düzenli <br> Kanallar"
+  },
+  landingPageFeatureChatSub1Text: {
+    en: "Keep project discussions focused",
+    tr: "Proje tartışmalarını odaklı tutun"
+  },
+  landingPageFeatureChatSub2Title: {
+    en: "Direct <br> Messaging",
+    tr: "Doğrudan <br> Mesajlaşma"
+  },
+  landingPageFeatureChatSub2Text: {
+    en: "Quick 1:1s for fast decision making",
+    tr: "Hızlı karar alma için seri 1:1 görüşmeler"
+  },
+  landingPageFeatureChatSub3Title: {
+    en: "Context <br> First",
+    tr: "Önce <br> Bağlam"
+  },
+  landingPageFeatureChatSub3Text: {
+    en: "Link tasks directly into the chat",
+    tr: "Görevleri doğrudan sohbete bağlayın"
+  },
+  landingPageFeatureChatAlternativeTo: {
+    en: "Replaces: ",
+    tr: "Şunların yerine: "
+  },
+  landingPageFeatureStorage: {
+    en: "Your Team’s <br>Secure Asset Vault",
+    tr: "Gelişmiş Dosya Depolama ve İzinler"
+  },
+  landingPageFeatureStorageText: {
+    en: "Centralize your team’s documents and assets in one secure place. Set granular access permissions for workspace members and keep project files organized and easy to find. Completely separate from the noise of chat threads.",
+    tr: "Ekibinizin dökümanlarını ve dosyalarınızı güvenli, merkezi bir alanda toplayın. Çalışma alanı üyeleri için ayrıntılı erişim izinleri belirleyin ve proje dosyalarını düzenli tutun; dosyalarınız artık sohbet kalabalığında kaybolmasın."
+  },
+  landingPageFeatureStorageSub1Title: {
+    en: "Granular <br> Access",
+    tr: "Ayrıntılı Erişim Kontrolü"
+  },
+  landingPageFeatureStorageSub1Text: {
+    en: "Control exactly who can view, edit, or download.",
+    tr: "Özelleştirilebilir üye izinleri sayesinde kimlerin dosyaları görüntüleyebileceğini hassas bir şekilde yönetin."
+  },
+  landingPageFeatureStorageSub2Title: {
+    en: "Centralized Assets",
+    tr: "Merkezi Dosya Deposu"
+  },
+  landingPageFeatureStorageSub2Text: {
+    en: "No more \"Where is that PDF?\". It's in the project folder.",
+    tr: "\"O PDF nerede?\" diye sormaya son. Proje klasöründe."
+  },
+  landingPageFeatureStorageSub3Title: {
+    en: "Secure & Accessible",
+    tr: "Güvenli ve Erişilebilir"
+  },
+  landingPageFeatureStorageSub3Text: {
+    en: "High-speed storage that’s available across all your devices.",
+    tr: "Tüm cihazlarınızda kullanılabilen yüksek hızlı depolama."
+  },
+  landingPageFeatureStorageAlternativeTo: {
+    en: "Replaces: ",
+    tr: "Şunların yerine: "
   },
   landingPageStartFreeTitle: {
     en: "Get started with a <br> <div style='padding: 8px 0'><mark>Free account with no time limit</mark></div>",

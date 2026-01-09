@@ -88,6 +88,58 @@
   gap: .5rem;
 }
 
+.comparePricingContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.jinearCompareBox {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: .5rem;
+  background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-0));
+  justify-content: space-between;
+  box-shadow: var(--box-shadow-soft);
+  border-radius: var(--border-radius);
+  border-style: solid;
+  border-color: var(--c-primary-shade-1-op05);
+  border-width: thin;
+  padding: 0 0.5rem;
+}
+
+.jinearCompareBoxTitle {
+  text-align: right;
+}
+
+.compareBox {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: .75rem;
+  align-items: center;
+}
+
+.compareBoxOtherProduct {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.compareBoxOtherProductName {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  font-size: 1rem;
+}
+
+.othersForTenUsers{
+  text-align: right;
+  width: 100%;
+}
+
 @media (max-width: $laptop) {
   .plansContainer {
     grid-template-columns: repeat(2, 1fr);

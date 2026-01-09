@@ -50,22 +50,22 @@ const Footer: React.FC<FooterProps> = ({}) => {
         >
           <LuGlobe className={"icon"} /> {t("landingPageFooterAccessBrowser")}
         </a>
-        <a
-          href={APP_STORE_URL}
-          target={"_blank"}
-          rel={"noreferrer"}
-          className={styles.link}
-        >
-          <SiApple className={"icon"} />Appstore
-        </a>
-        <a
-          href={PLAY_STORE_URL}
-          target={"_blank"}
-          rel={"noreferrer"}
-          className={styles.link}
-        >
-          <SiGoogleplay className={"icon"} />Playstore
-        </a>
+        {/*<a*/}
+        {/*  href={APP_STORE_URL}*/}
+        {/*  target={"_blank"}*/}
+        {/*  rel={"noreferrer"}*/}
+        {/*  className={styles.link}*/}
+        {/*>*/}
+        {/*  <SiApple className={"icon"} />Appstore*/}
+        {/*</a>*/}
+        {/*<a*/}
+        {/*  href={PLAY_STORE_URL}*/}
+        {/*  target={"_blank"}*/}
+        {/*  rel={"noreferrer"}*/}
+        {/*  className={styles.link}*/}
+        {/*>*/}
+        {/*  <SiGoogleplay className={"icon"} />Playstore*/}
+        {/*</a>*/}
         <a
           onClick={onPwaButtonClick}
           className={styles.link}
