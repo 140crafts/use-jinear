@@ -92,7 +92,8 @@ jinear.security.rate-limit.plans.public.refillType=intervally
 jinear.security.rate-limit.plans.authenticated.capacity=${RATE_LIMIT_AUTH_CAPACITY:100}
 jinear.security.rate-limit.plans.authenticated.duration-in-minutes=1
 jinear.security.rate-limit.plans.authenticated.refillType=greedy
-
+jinear.storage.limit.basic=1024
+jinear.storage.limit.pro=204800
 # ==============================================================
 # = GCloud (Optional - leave as-is if not using Google services)
 # ==============================================================
