@@ -1,0 +1,204 @@
+version: "3"
+
+services:
+  jinear-db:
+    container_name: jinear-db
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data
+    volumes:
+      - ".data/postgres:/var/lib/postgresql/data"
+    networks:
+      - jinear-default
+
+  jinear-db-backup:
+    container_name: jinear-db-backup
+    image: postgres:15
+    restart: always
+    depends_on:
+      - jinear-db
+    environment:
+      TZ: "${TIMEZONE}"
+      POSTGRES_HOST: jinear-db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-7}
+    volumes:
+      - ".backups:/backups"
+      - ".config:/config"
+    entrypoint: /bin/bash
+    command: /config/db-backup.sh
+    networks:
+      - jinear-default
+
+  jinear-redis:
+    container_name: jinear-redis
+    image: redis:6.2-alpine
+    restart: always
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - ".data/redis:/data"
+    healthcheck:
+      test: [ "CMD-SHELL", "redis-cli -a ${REDIS_PASSWORD} ping | grep PONG" ]
+      interval: 1s
+      timeout: 3s
+      retries: 5
+    networks:
+      - jinear-default
+
+  jinear-minio:
+    container_name: jinear-minio
+    image: docker.io/bitnami/minio:2025.3.12
+    restart: always
+    volumes:
+      - ".data/minio:/bitnami/minio/data"
+    privileged: true
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    networks:
+      - jinear-default
+
+  jinear-core:
+    container_name: jinear-core
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-core:latest
+    depends_on:
+      - jinear-db
+      - jinear-redis
+      - jinear-minio
+    volumes:
+      - ".logs/jinear-core:/app/logs"
+      - ".config:/config"
+    environment:
+      # Jasypt encryption
+      jasypt.encryptor.password: ${ENCRYPTOR_PASSWORD}
+      jasypt.encryptor.algorithm: PBEWithMD5AndDES
+      # JWT
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_DOMAIN: ${DOMAIN}
+      # Frontend
+      FE_PATH: https://${DOMAIN}
+      CORS_ORIGINS: https://${DOMAIN},https://${PAGES_DOMAIN}
+      # MinIO
+      MINIO_KEY: ${MINIO_API_KEY}
+      MINIO_SECRET: ${MINIO_API_SECRET}
+      MINIO_ROOT: http://jinear-minio:9000
+      MINIO_BASE_PATH: https://${FILES_DOMAIN}/
+      # Database (passed to application.properties)
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # Redis
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      # Email
+      MAIL_HOST: ${MAIL_HOST:-localhost}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_SENDER_ADDRESS: ${MAIL_SENDER_ADDRESS:-noreply@example.com}
+      # Internal auth
+      INTERNAL_AUTH_TOKEN: ${INTERNAL_AUTH_TOKEN}
+      # Rate limiting
+      RATE_LIMIT_PUBLIC_CAPACITY: ${RATE_LIMIT_PUBLIC_CAPACITY:-25}
+      RATE_LIMIT_AUTH_CAPACITY: ${RATE_LIMIT_AUTH_CAPACITY:-100}
+    restart: always
+    privileged: true
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8008" ]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+    networks:
+      - jinear-default
+
+  jinear-web:
+    container_name: jinear-web
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-web:latest
+    depends_on:
+      - jinear-core
+    volumes:
+      - ".logs/jinear-web:/logs"
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_ROOT=https://${API_DOMAIN}
+      - NEXT_PUBLIC_POSTHOG_KEY=${POSTHOG_KEY:-}
+      - NEXT_PUBLIC_POSTHOG_HOST=${POSTHOG_HOST:-https://us.i.posthog.com}
+    privileged: true
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+    networks:
+      - jinear-default
+
+  jinear-pages:
+    container_name: jinear-pages
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-pages:latest
+    depends_on:
+      - jinear-core
+    volumes:
+      - ".logs/jinear-pages:/logs"
+    restart: always
+    environment:
+      - NEXT_PUBLIC_API_ROOT=https://${API_DOMAIN}
+      - NEXT_PUBLIC_POSTHOG_KEY=${POSTHOG_KEY:-}
+      - NEXT_PUBLIC_POSTHOG_HOST=${POSTHOG_HOST:-https://us.i.posthog.com}
+    privileged: true
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+    networks:
+      - jinear-default
+
+  jinear-caddy:
+    container_name: jinear-caddy
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-caddy-custom:latest
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./.data/caddy/conf:/etc/caddy
+      - ./.data/caddy/site:/srv
+      - ./.data/caddy/data:/data
+      - ./.data/caddy/config:/config
+    networks:
+      - jinear-default
+
+  jinear-message:
+    container_name: jinear-message
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-message-service:latest
+    depends_on:
+      - jinear-core
+    volumes:
+      - ".logs/jinear-message:/logs"
+    restart: always
+    environment:
+      - PORT=3001
+      - CORE_ENDPOINT=http://jinear-core:8008
+      - INTERNAL_AUTH_TOKEN=${INTERNAL_AUTH_TOKEN}
+      - ALLOWED_ORIGIN=https://${DOMAIN}
+    privileged: true
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+    networks:
+      - jinear-default
+
+networks:
+  jinear-default:
+    driver: bridge
+
