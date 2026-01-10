@@ -1,0 +1,35 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    border-style: solid;
+    border-radius: var(--border-radius);
+    border-color: var(--c-primary-shade-1-op05);
+    flex: 1;
+}
+
+.accessListItemContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    justify-content: flex-start !important;
+    border-radius: var(--border-radius);
+}
+
+.accessListItemContainer:hover {
+    background-color: var(--c-primary-shade-0);
+}
+
+.profilePic {
+    height: 25px !important;
+    width: 25px !important;
+}

@@ -1,10 +1,13 @@
 package co.jinear.core.controller;
 
+import co.jinear.core.model.enumtype.material.MaterialType;
 import co.jinear.core.model.vo.captcha.CaptchaResolveVo;
+import co.jinear.core.repository.material.MaterialRepository;
 import co.jinear.core.service.captcha.CaptchaChallengeService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class DebugController {
 
-    private final CaptchaChallengeService captchaChallengeService;
+    private final MaterialRepository materialRepository;
 
     @PostMapping(consumes = "multipart/form-data")
     @ResponseStatus(HttpStatus.OK)
@@ -28,11 +31,6 @@ public class DebugController {
 
     @GetMapping
     public Object debug2(HttpServletResponse response) {
-        try {
-            System.out.println(captchaChallengeService.verifySolution("test", List.of(new CaptchaResolveVo("a912004578",4049), new CaptchaResolveVo("60d633af8f",34757))));
-        } catch (Exception e) {
-
-        }
-        return captchaChallengeService.initialize("test");
+        return null;
     }
 }

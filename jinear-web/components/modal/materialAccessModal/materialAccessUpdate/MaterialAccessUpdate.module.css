@@ -1,0 +1,51 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.titleContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    align-items: center;
+}
+
+.infoContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.loadingContainer {
+    /*min-height: 19px;*/
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+    justify-content: flex-end;
+}
+
+.accessTypeSelectContainer {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.accessTypeButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    border-style: solid;
+    border-radius: var(--border-radius);
+    border-color: var(--c-primary-shade-1-op05);
+}
+
+.accessTypeButton {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    justify-content: flex-start !important;
+}

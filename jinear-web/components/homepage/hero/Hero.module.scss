@@ -3,7 +3,7 @@
 .heroContainer {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 }
 
@@ -13,8 +13,8 @@
   font-weight: 600;
   line-height: 1;
   letter-spacing: -0.02em;
- margin: 1rem 0;
-  text-align: center;
+  margin: 1rem 0;
+  text-align: left;
 }
 
 .line {
@@ -25,7 +25,7 @@
   font-size: 20px;
   //font-size: 1.125rem;
   //line-height: 1.75rem;
-  text-align: center;
+  text-align: left;
 }
 
 

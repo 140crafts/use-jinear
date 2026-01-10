@@ -15,6 +15,11 @@ import { FaGithub, FaGitlab } from "react-icons/fa6";
 import HomePageNavbar from "@/components/homepage/navbar/HomePageNavbar";
 import Hero from "@/components/homepage/hero/Hero";
 import Footer from "@/components/homepage/footer/Footer";
+import FormLogo from "@/components/formLogo/FormLogo";
+import { SiAsana, SiDropbox, SiGoogle, SiSlack } from "react-icons/si";
+import cn from "classnames";
+import { LuEqual, LuPlus } from "react-icons/lu";
+import OrLine from "@/components/orLine/OrLine";
 
 interface PricingPageProps {
 }
@@ -108,6 +113,53 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
           </div>
           <div className={"spacer-h-2"} />
         </JinearPricingPlan>
+      </div>
+
+      <div className={"spacer-h-12"} />
+
+      <div className={styles.comparePricingContainer}>
+        <div className={styles.jinearCompareBox}>
+          <div><FormLogo /></div>
+          <h1 className={styles.jinearCompareBoxTitle}
+              dangerouslySetInnerHTML={{ __html: t("pricingPageCompareJinearText") }}></h1>
+        </div>
+
+        <div className={styles.compareBox}>
+          <div className={styles.compareBoxOtherProduct}>
+            <SiSlack size={26} />
+            <div className={styles.compareBoxOtherProductName}>
+              <h2>Slack</h2>
+              <span>{t("pricingPageComparePerMonthPerUserText").replace("{price}", "8")}</span>
+            </div>
+          </div>
+
+          <div className={styles.compareBoxOtherProduct}>
+            <SiDropbox size={26} />
+            <div className={styles.compareBoxOtherProductName}>
+              <h2>Dropbox</h2>
+              <span>{t("pricingPageComparePerMonthPerUserText").replace("{price}", "15")}</span>
+            </div>
+          </div>
+
+          <div className={styles.compareBoxOtherProduct}>
+            <SiAsana size={26} />
+            <div className={styles.compareBoxOtherProductName}>
+              <h2>Asana</h2>
+              <span>{t("pricingPageComparePerMonthPerUserText").replace("{price}", "10")}</span>
+            </div>
+          </div>
+
+          <div className={styles.compareBoxOtherProduct} style={{ width: "100%" }}>
+            <LuEqual size={26} />
+            <div className={styles.compareBoxOtherProductName}>
+              <h2>{t("pricingPageCompareTotalText")}</h2>
+              <span>{t("pricingPageComparePerMonthPerUserText").replace("{price}", "33")}</span>
+            </div>
+          </div>
+
+          <h1 className={styles.othersForTenUsers}>{t("pricingPageCompareTenUsersText")}</h1>
+        </div>
+
       </div>
 
       <div className="spacer-h-12" />

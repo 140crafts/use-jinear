@@ -4,7 +4,7 @@ import { PlainChannelDto } from "@/be/jinear-core";
 import { shortenStringIfMoreThanMaxLength } from "@/utils/textUtil";
 import cn from "classnames";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
-import { LuGlobe2, LuHash, LuLock } from "react-icons/lu";
+import { LuGlobe, LuHash, LuLock } from "react-icons/lu";
 import { useLiveQuery } from "dexie-react-hooks";
 import { getChannelLastActivity, getChannelLastCheck } from "../../../../repository/IndexedDbRepository";
 import { isAfter } from "date-fns";
@@ -18,7 +18,7 @@ interface ChannelButtonProps {
 const CHANNEL_VISIBILITY_ICON_MAP = {
   EVERYONE: LuHash,
   MEMBERS_ONLY: LuLock,
-  PUBLIC_WITH_GUESTS: LuGlobe2
+  PUBLIC_WITH_GUESTS: LuGlobe
 };
 
 const logger = Logger("ChannelButton");

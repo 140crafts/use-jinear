@@ -6,11 +6,13 @@ import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.GenericGenerator;
 
 @Getter
 @Setter
 @Entity
+@FieldNameConstants
 @Table(name = "workspace_member")
 public class WorkspaceMember extends BaseEntity {
 

@@ -3,7 +3,7 @@ import { Editor } from "@tiptap/react";
 import React, { ChangeEvent, useEffect, useRef } from "react";
 import {
   LuBold,
-  LuCode2,
+  LuCode2 as LuCodeXml,
   LuHeading1,
   LuHeading2,
   LuHeading3,
@@ -188,7 +188,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
           disabled={!editor.can().chain().focus().toggleCodeBlock().run()}
           variant={editor.isActive("codeBlock") ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
         >
-          <LuCode2 />
+          <LuCodeXml />
         </Button>
       )}
       {mode != "simple" && (

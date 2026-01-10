@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2025-11-30 19:36:34.
+// Generated using typescript-generator version 3.0.1157 on 2026-01-05 19:07:33.
 
 export interface BaseDto {
     createdDate: Date;
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
     gthreadId: string;
     ghistoryId: string;
     gid: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -262,6 +262,61 @@ export interface IntegrationScopeDto extends BaseDto {
     integrationInfoId: string;
     scope: IntegrationScopeType;
     integrationInfo: IntegrationInfoDto;
+}
+
+export interface MaterialAccessDto extends BaseDto {
+    materialAccessId: string;
+    materialId: string;
+    accountId: string;
+    account: PlainAccountProfileDto;
+}
+
+export interface MaterialDto extends BaseDto {
+    materialId: string;
+    workspaceId: string;
+    ownerId: string;
+    parentMaterialId: string;
+    mediaId: string;
+    materialType: MaterialType;
+    name: string;
+    icon: string;
+    color: string;
+    media: AccessibleMediaDto;
+    materialAccessType: MaterialAccessType;
+    materialAccesses: MaterialAccessDto[];
+    owner?: PlainAccountProfileDto | null;
+}
+
+export interface MaterialHierarchyDto {
+    container: PathAwareMaterialDto;
+    content: PageDto<MaterialDto>;
+}
+
+export interface MaterialPathDto {
+    materialId: string;
+    path: MaterialPathItemDto[];
+    fullPath: string;
+}
+
+export interface MaterialPathDtoBuilder {
+}
+
+export interface MaterialPathItemDto {
+    materialId: string;
+    parentMaterialId: string;
+    name: string;
+    materialType: MaterialType;
+}
+
+export interface MaterialPathItemDtoBuilder {
+}
+
+export interface PathAwareMaterialDto extends MaterialDto {
+    materialPath: MaterialPathDto;
+}
+
+export interface WaitingForUploadMaterialResultDto extends WaitingMediaResultDto {
+    materialId: string;
 }
 
 export interface AccessibleMediaDto extends MediaDto {
@@ -1026,6 +1081,13 @@ export interface WorkspaceInvitationInfoDto extends BaseDto {
     invitationDto: WorkspaceInvitationDto;
 }
 
+export interface WorkspaceMediaUsageDto {
+    storageLimit: number;
+    currentTotal: number;
+    nextTier: WorkspaceTier;
+    nextTierStorageLimit: number;
+}
+
 export interface WorkspaceMemberDto extends BaseDto {
     workspaceMemberId: string;
     workspaceId: string;
@@ -1143,6 +1205,47 @@ export interface CalendarEventTitleDescriptionUpdateRequest {
     calendarEventId: string;
     title?: string | null;
     description?: string | null;
+}
+
+export interface MaterialAccessUpdateRequest extends BaseRequest {
+    accountIds: string[];
+}
+
+export interface MaterialInitializeFileUploadRequest extends BaseRequest {
+    name: string;
+    icon?: string | null;
+    color?: string | null;
+    parentMaterialId?: string | null;
+    contentType: string;
+    fileSize: number;
+    materialAccessType?: MaterialAccessType | null;
+}
+
+export interface MaterialInitializeFolderRequest extends BaseRequest {
+    name: string;
+    icon?: string | null;
+    color?: string | null;
+    parentMaterialId?: string | null;
+    materialAccessType?: MaterialAccessType | null;
+}
+
+export interface MaterialMoveRequest extends BaseRequest {
+    materialId: string;
+    parentMaterialId?: string | null;
+}
+
+export interface MaterialRenameRequest extends BaseRequest {
+    materialId: string;
+    newName: string;
+}
+
+export interface MaterialSearchRequest extends BaseRequest {
+    page: number;
+    workspaceId: string;
+    parentMaterialId?: string | null;
+    materialSearchSortType?: MaterialSearchSortType | null;
+    materialSearchContentFilterType?: MaterialSearchContentFilterType | null;
+    materialType?: MaterialType | null;
 }
 
 export interface MediaUploadUrlRequest extends BaseRequest {
@@ -1608,6 +1711,22 @@ export interface FeedMemberPaginatedResponse extends BaseResponse {
     data: PageDto<FeedMemberDto>;
 }
 
+export interface MaterialAccessPaginatedResponse extends BaseResponse {
+    data: PageDto<MaterialAccessDto>;
+}
+
+export interface MaterialInitializeFileUploadResponse extends BaseResponse {
+    data: WaitingForUploadMaterialResultDto;
+}
+
+export interface MaterialRetrieveResponse extends BaseResponse {
+    data: MaterialDto;
+}
+
+export interface ParentMaterialDtoResponse extends BaseResponse {
+    data: MaterialHierarchyDto;
+}
+
 export interface MediaUploadUrlResponse extends BaseResponse {
     data: WaitingMediaResultDto;
 }
@@ -1842,6 +1961,10 @@ export interface WorkspaceInvitationInfoResponse extends BaseResponse {
 
 export interface WorkspaceInvitationListingResponse extends BaseResponse {
     data: PageDto<WorkspaceInvitationDto>;
+}
+
+export interface WorkspaceMediaLimitResponse extends BaseResponse {
+    data: WorkspaceMediaUsageDto;
 }
 
 export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
@@ -2091,9 +2214,17 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE";
 
-export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO" | "RICH_TEXT_IMAGE";
+export type MaterialAccessType = "OWNER_ONLY" | "WORKSPACE_MEMBERS" | "GRAINED" | "ANYONE_WITH_LINK";
+
+export type MaterialSearchContentFilterType = "IMAGE" | "DOC" | "SHARED" | "RECENTLY_DELETED";
+
+export type MaterialSearchSortType = "IDATE_DESC" | "IDATE_ASC" | "UDATE_DESC" | "UDATE_ASC" | "NAME_ASC" | "NAME_DESC" | "SIZE_ASC" | "SIZE_DESC";
+
+export type MaterialType = "FILE" | "FOLDER";
+
+export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO" | "RICH_TEXT_IMAGE" | "MATERIAL_MEDIA";
 
 export type MediaFileOwnershipStatusType = "WAITING" | "OWNED";
 
@@ -2103,7 +2234,7 @@ export type MediaFileUploadMethodType = "LEGACY" | "PRESIGNED_URL";
 
 export type MediaFileUploadStatusType = "WAITING" | "COMPLETED" | "FAILED";
 
-export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK" | "PROJECT_POST" | "PROJECT" | "RICH_TEXT";
+export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK" | "PROJECT_POST" | "PROJECT" | "RICH_TEXT" | "MATERIAL";
 
 export type MediaVisibilityType = "PUBLIC" | "PRIVATE" | "TEMP_PUBLIC";
 

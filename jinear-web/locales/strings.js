@@ -2389,28 +2389,28 @@ const translations = {
     tr: "Self Host"
   },
   homescreenHeroTitleLine1: {
-    en: "Lean project management",
-    tr: "Hızlı aksiyon alan takımlar için"
-  },
-  homescreenHeroTitleLine2: {
-    en: "for fast pacing teams",
-    tr: "Yalın proje yönetimi"
-  },
-  homescreenHeroText: {
-    en: "Track your workflow without all the hustle. Organize your calendar, create reminders for your tasks, update your clients, manage projects collaboratively.",
-    tr: "İş akışınızı takip edin. Takviminizi düzenleyin, görevleriniz için hatırlatıcılar oluşturun, müşterilerinizi bilgilendirin, projeleri işbirliğiyle yönetin."
-  },
-  pricingScreenHeroTitleLine1: {
     en: "The one tool",
     tr: "İşletmenizi yönetmek için"
   },
-  pricingScreenHeroTitleLine2: {
+  homescreenHeroTitleLine2: {
     en: "To run your entire business",
     tr: "ihtiyacınız olan tek çözüm"
   },
+  homescreenHeroText: {
+    en: "From initial planning to final delivery, Jinear provides the tools your team needs to collaborate and succeed. Tasks, calendar, team chat, and file storage. Powerful features, radically simple pricing.",
+    tr: "Planlamadan teslimata kadar, Jinear ekibinizin birlikte çalışması ve başarılı olması için gereken tüm araçları sunar. Görevler, takvim, takım mesajlaşması ve dosya paylaşımı. Güçlü özellikler, radikal bir şekilde basit fiyatlandırma."
+  },
+  pricingScreenHeroTitleLine1: {
+    en: "Powerful features,",
+    tr: "Güçlü özellikler,"
+  },
+  pricingScreenHeroTitleLine2: {
+    en: "radically simple pricing",
+    tr: "radikal derecede basit fiyatlandırma"
+  },
   pricingScreenHeroText: {
-    en: "From initial planning to final delivery, Jinear provides the tools your team needs to collaborate and succeed. Powerful features, radically simple pricing.",
-    tr: "Planlamadan teslimata kadar, Jinear ekibinizin birlikte çalışması ve başarılı olması için gereken tüm araçları sunar. Güçlü özellikler, radikal bir şekilde basit fiyatlandırma."
+    en: "Stop the per-user tax. Get unlimited projects and collaborative workspaces for a single flat fee. Scale your team without scaling your bill.",
+    tr: "Kullanıcı başına ödenen ek maliyetlere son verin. Tek bir sabit fiyatla sınırsız proje ve iş birliği alanına sahip olun. Faturanızın değil, ekibinizin büyümesine odaklanın."
   },
   homescreenSelfHostText: {
     en: "Host Your Own Jinear Instance!",
@@ -2769,8 +2769,8 @@ const translations = {
     tr: "Görevlerinize dosya ekleyin."
   },
   pricesPageProFeature_unlimitedFileStorage: {
-    en: "100 GB file storage.",
-    tr: "100 GB dosya saklama alanı."
+    en: "200 GB file storage.",
+    tr: "200 GB dosya saklama alanı."
   },
   pricesPageProFeature_UnlimitedSupport: {
     en: "Priority support (Usually within 24 hours)",
@@ -2835,6 +2835,22 @@ const translations = {
   pricingPageTitle: {
     en: "Pricing & Plans",
     tr: "Planlar ve Fiyatlandırma"
+  },
+  pricingPageCompareJinearText:{
+    en:"Everything you need for your entire business. Just <mark style={{ wordBreak: \"keep-all\", whiteSpace: \"nowrap\" }}> $24.90 flat.</mark> Unlimited Users.",
+    tr:"İşinizin ihtiyacı olan herşey. Yanlızca <mark style={{ wordBreak: \"keep-all\", whiteSpace: \"nowrap\" }}> $24.90</mark> Sabit fiyat. Sınırsız kullanıcı.",
+  },
+  pricingPageComparePerMonthPerUserText:{
+    en:"${price}+/month per user",
+    tr:"Kullanıcı başına her ay ${price}",
+  },
+  pricingPageCompareTotalText:{
+    en:"Total",
+    tr:"Toplam",
+  },
+  pricingPageCompareTenUsersText:{
+    en:"For a team of 10, that’s $330/mo",
+    tr:"10 Kişilik bir takım için aylık yaklaşık $330.",
   },
   calendarViewTypeSegment_Month: {
     en: "Month",
@@ -2931,6 +2947,10 @@ const translations = {
   mainFeaturesMenuLabelTasks: {
     en: "Tasks",
     tr: "Görevler"
+  },
+  mainFeaturesMenuLabelFiles: {
+    en: "Files",
+    tr: "Dosyalar"
   },
   mainFeaturesMenuLabelCalendar: {
     en: "Calendar",
@@ -4788,6 +4808,78 @@ const translations = {
     en: "Replaces with extra functionality: ",
     tr: "Ekstra işlevsellikle şunların yerine: "
   },
+  landingPageFeatureChat: {
+    en: "Chat <br> without the noise",
+    tr: "Gerçek zamanlı iletişim, <br> işin tam olarak gerçekleştiği yerde"
+  },
+  landingPageFeatureChatText: {
+    en: "Discuss projects in real-time with dedicated channels and private DMs. Stay focused on the work without jumping between apps.",
+    tr: "Özel kanallar ve DM'ler aracılığıyla projeleri gerçek zamanlı tartışın. Uygulamalar arasında geçiş yapmadan işinize odaklanın."
+  },
+  landingPageFeatureChatSub1Title: {
+    en: "Organized Channels",
+    tr: "Düzenli <br> Kanallar"
+  },
+  landingPageFeatureChatSub1Text: {
+    en: "Keep project discussions focused",
+    tr: "Proje tartışmalarını odaklı tutun"
+  },
+  landingPageFeatureChatSub2Title: {
+    en: "Direct <br> Messaging",
+    tr: "Doğrudan <br> Mesajlaşma"
+  },
+  landingPageFeatureChatSub2Text: {
+    en: "Quick 1:1s for fast decision making",
+    tr: "Hızlı karar alma için seri 1:1 görüşmeler"
+  },
+  landingPageFeatureChatSub3Title: {
+    en: "Context <br> First",
+    tr: "Önce <br> Bağlam"
+  },
+  landingPageFeatureChatSub3Text: {
+    en: "Link tasks directly into the chat",
+    tr: "Görevleri doğrudan sohbete bağlayın"
+  },
+  landingPageFeatureChatAlternativeTo: {
+    en: "Replaces: ",
+    tr: "Şunların yerine: "
+  },
+  landingPageFeatureStorage: {
+    en: "Your Team’s <br>Secure Asset Vault",
+    tr: "Gelişmiş Dosya Depolama ve İzinler"
+  },
+  landingPageFeatureStorageText: {
+    en: "Centralize your team’s documents and assets in one secure place. Set granular access permissions for workspace members and keep project files organized and easy to find. Completely separate from the noise of chat threads.",
+    tr: "Ekibinizin dökümanlarını ve dosyalarınızı güvenli, merkezi bir alanda toplayın. Çalışma alanı üyeleri için ayrıntılı erişim izinleri belirleyin ve proje dosyalarını düzenli tutun; dosyalarınız artık sohbet kalabalığında kaybolmasın."
+  },
+  landingPageFeatureStorageSub1Title: {
+    en: "Granular <br> Access",
+    tr: "Ayrıntılı Erişim Kontrolü"
+  },
+  landingPageFeatureStorageSub1Text: {
+    en: "Control exactly who can view, edit, or download.",
+    tr: "Özelleştirilebilir üye izinleri sayesinde kimlerin dosyaları görüntüleyebileceğini hassas bir şekilde yönetin."
+  },
+  landingPageFeatureStorageSub2Title: {
+    en: "Centralized Assets",
+    tr: "Merkezi Dosya Deposu"
+  },
+  landingPageFeatureStorageSub2Text: {
+    en: "No more \"Where is that PDF?\". It's in the project folder.",
+    tr: "\"O PDF nerede?\" diye sormaya son. Proje klasöründe."
+  },
+  landingPageFeatureStorageSub3Title: {
+    en: "Secure & Accessible",
+    tr: "Güvenli ve Erişilebilir"
+  },
+  landingPageFeatureStorageSub3Text: {
+    en: "High-speed storage that’s available across all your devices.",
+    tr: "Tüm cihazlarınızda kullanılabilen yüksek hızlı depolama."
+  },
+  landingPageFeatureStorageAlternativeTo: {
+    en: "Replaces: ",
+    tr: "Şunların yerine: "
+  },
   landingPageStartFreeTitle: {
     en: "Get started with a <br> <div style='padding: 8px 0'><mark>Free account with no time limit</mark></div>",
     tr: "Zaman sınırı olmadan <br> <div style='padding: 8px 0'><mark> ücretsiz bir hesapla başlayın </mark></div>"
@@ -4923,7 +5015,256 @@ const translations = {
   feedbackModalPleaseProvideDetail: {
     en: "Please provide details",
     tr: "Lütfen bir açıklama girin"
-  }
+  },
+  sideMenuFilesTitle: {
+    en: "Workspace Files",
+    tr: "Çalışma Alanı Dosyaları"
+  },
+  sideMenuFilesUpload: {
+    en: "Upload",
+    tr: "Yükle"
+  },
+  sideMenuFilesCreateFolder: {
+    en: "New Folder",
+    tr: "Yeni Klasör"
+  },
+  sideMenuFilesAllFiles: {
+    en: "All Files",
+    tr: "Tüm Dosyalar"
+  },
+  sideMenuFilesRecentFiles: {
+    en: "Recent",
+    tr: "En Yeni"
+  },
+  sideMenuFilesImageFiles: {
+    en: "Images",
+    tr: "Görseller"
+  },
+  sideMenuFilesDocumentFiles: {
+    en: "Documents",
+    tr: "Doküman"
+  },
+  sideMenuSharedFiles: {
+    en: "Shared",
+    tr: "Paylaşımlar"
+  },
+  sideMenuDeletedFiles: {
+    en: "Deleted",
+    tr: "Silinenler"
+  },
+  sideMenuTaskFilesTitle: {
+    en: "Task Attachments",
+    tr: "Görev Ekleri"
+  },
+  sideMenuTaskFilesFavorites: {
+    en: "Favorites",
+    tr: "Favoriler"
+  },
+  folderHeaderActionButtonUpload: {
+    en: "Upload",
+    tr: "Yükle"
+  },
+  folderHeaderActionButtonNewFolder: {
+    en: "New Folder",
+    tr: "Yeni Klasör"
+  },
+  folderHeaderActionButtonShare: {
+    en: "Share Folder",
+    tr: "Klasörü Paylaş"
+  },
+  folderBreadcrumbHome: {
+    en: "Home",
+    tr: "Ana Dizin"
+  },
+  materialListRowTitleName: {
+    en: "Name",
+    tr: "İsim"
+  },
+  materialListRowTitleSize: {
+    en: "Size",
+    tr: "Boyut"
+  },
+  materialListRowOwner: {
+    en: "Owner",
+    tr: "Oluşturan"
+  },
+  materialListRowAccess: {
+    en: "Access",
+    tr: "Erişim"
+  },
+  materialListRowTitleCreated: {
+    en: "Date Created",
+    tr: "Oluşturma"
+  },
+  materialListRowTitleLastUpdate: {
+    en: "Date Modified",
+    tr: "Son Değiştirme"
+  },
+  newMaterialFolderModalTitle: {
+    en: "New Folder",
+    tr: "Yeni Klasör"
+  },
+  newMaterialFolderModalText: {
+    en: "Please provide a name for folder",
+    tr: "Klasör için yeni bir isim gir"
+  },
+  materialFolderPickerModalTitle: {
+    en: "Pick Folder",
+    tr: "Klasör Seç"
+  },
+  materialFolderPickerModalCancel: {
+    en: "Cancel",
+    tr: "Vazgeç"
+  },
+  materialFolderPickerModalSelect: {
+    en: "Select Current Folder",
+    tr: "Şu Anki Dosyayı Seç"
+  },
+  materialFolderPickerModalFolderEmpty: {
+    en: "Current folder doesn't contain any folder.",
+    tr: "Şu anki klasör başka klasör içermiyor."
+  },
+  materialFolderPickerModalMoveTitle: {
+    en: "Move Item",
+    tr: "Dosyayı Taşımak için Klasör seç"
+  },
+  materialRowMoveButtonTooltip: {
+    en: "Move Item",
+    tr: "Taşı"
+  },
+  materialRowChangeNameButtonTooltip: {
+    en: "Rename",
+    tr: "Yeniden Adlandır"
+  },
+  materialRowChangeAccessButtonTooltip: {
+    en: "Change Access",
+    tr: "Erişim Ayarları"
+  },
+  renameMaterialModalTitle: {
+    en: "Rename File",
+    tr: "Yeniden Adlandır"
+  },
+  renameMaterialModalText: {
+    en: "Please provide a name new name for file.",
+    tr: "Dosya için yeni bir isim girin."
+  },
+  materialRowDeleteButtonTooltip: {
+    en: "Delete",
+    tr: "Sil"
+  },
+  materialRowCopyLinkButtonTooltip: {
+    en: "Copy Link",
+    tr: "Linki Kopyala"
+  },
+  uploadStatusModalTitle: {
+    en: "Upload Statuses",
+    tr: "Yükleme Durumları"
+  },
+  uploadStatusModalCancelAll: {
+    en: "Cancel All",
+    tr: "Tümünü i̇ptal et"
+  },
+  uploadStatusModalClose: {
+    en: "Close",
+    tr: "Kapat"
+  },
+  materialPermanentlyDeleteAreYouSureTitle: {
+    en: "Permanently Delete",
+    tr: "Kalıcı Olarak Sil"
+  },
+  materialPermanentlyDeleteAreYouSureText: {
+    en: "Are you sure to permanently delete this file? You can not recover this file later.",
+    tr: "Bu dosyayı kalıcı olarak silmek istediğine emin misin? Daha sonra geri getiremeyeceksiniz."
+  },
+  materialPermanentlyDeleteAreYouSureConfirmLabel: {
+    en: "Delete Permanently",
+    tr: "Kalıcı Olarak Sil"
+  },
+  materialListRowAccessWorkspaceMembersTooltip: {
+    en: "All Workspace Members",
+    tr: "Tüm Çalışma Alanı Üyeleri"
+  },
+  materialListRowAccessAnyoneWithTheLinkTooltip: {
+    en: "Anyone With Link",
+    tr: "Linke Erişen Herkes"
+  },
+  materialListRowAccessGrainedTooltip: {
+    en: "Selected People With Access",
+    tr: "Belirli Kişiler"
+  },
+  materialListRowAccessOnlyYouTooltip: {
+    en: "Only You",
+    tr: "Yanlızca Siz"
+  },
+  materialListRowGrainedAccessAccountCount: {
+    en: "{number} User(s)",
+    tr: "{number} Kişi"
+  },
+  materialDropToUploadText: {
+    en: "Drop files to upload",
+    tr: "Yüklemek için dosyaları bırak"
+  },
+  folderHeaderTitleHome: {
+    en: "Main Directory",
+    tr: "Ana Dizin"
+  },
+  folderHeaderTitleDefault: {
+    en: "Directory",
+    tr: "Dizin"
+  },
+  materialAccessChangeModalTitle: {
+    en: "Change Material Access",
+    tr: "Dosya Erişimini Değiştir"
+  },
+
+  materialAccessType_WORKSPACE_MEMBERS_info: {
+    en: "All workspace members can access this file.",
+    tr: "Tüm çalışma alanı üyeleri bu dosyaya erişebilir."
+  },
+  materialAccessType_ANYONE_WITH_LINK_info: {
+    en: "Anyone with the link can access this file.",
+    tr: "Bağlantıya sahip herkes bu dosyaya erişebilir."
+  },
+  materialAccessType_GRAINED_info: {
+    en: "Only selected people can access this file.",
+    tr: "Yalnızca belirli kişiler bu dosyaya erişebilir."
+  },
+  materialAccessType_OWNER_ONLY_info: {
+    en: "Only you can access this file.",
+    tr: "Bu dosyaya yalnızca siz erişebilirsiniz."
+  },
+  materialAccessType_OWNER_ONLY_info_SpesificUser: {
+    en: "Only {user} can access this file.",
+    tr: "Bu dosyaya yalnızca {user} erişebilir."
+  },
+  materialAccessSaving: {
+    en: "Saving",
+    tr: "Kayıt ediliyor"
+  },
+  materialAccessListMembersTitle: {
+    en: "Workspace members that can access file",
+    tr: "Dosyaya erişebilecek alışma alanı üyeleri"
+  },
+  materialAccessListAdd: {
+    en: "Add",
+    tr: "Ekle"
+  },
+  materialAccessListRevoke: {
+    en: "Revoke",
+    tr: "Sil"
+  },
+  materialAccessUpdated: {
+    en: "File access updated successfully.",
+    tr: "Dosya erişimi başarıyla güncellendi."
+  },
+  materialRowCopyLinkCopiedToast: {
+    en: "Link copied",
+    tr: "Link kopyalandı"
+  },
+  workspaceLimitQuotaText: {
+    en: "Using {usage} ({percentage}) of {limit}",
+    tr: "{usage} ({percentage}) / {limit} kullanılıyor."
+  },
 };
 
 export default translations;

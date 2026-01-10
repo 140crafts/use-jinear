@@ -4,6 +4,10 @@ import { useCallback, useEffect, useState } from "react";
 interface IWindowSizeVo {
   limit?: number;
 }
+
+// $tablet: 768px;
+export const MOBILE_LAYOUT_BREAKPOINT = 768;
+
 function useWidthLimit({ limit = 460 }: IWindowSizeVo): boolean {
   const [state, setState] = useState<boolean>(false);
 

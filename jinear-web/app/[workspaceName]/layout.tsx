@@ -1,7 +1,7 @@
 "use client";
 import MainFeaturesSideMenu from "@/components/mainFeaturesSideMenu/MainFeaturesSideMenu";
 import WorkspaceLayoutHeader from "@/components/workspaceLayoutHeader/WorkspaceLayoutHeader";
-import useWidthLimit from "@/hooks/useWidthLimit";
+import useWidthLimit, { MOBILE_LAYOUT_BREAKPOINT } from "@/hooks/useWidthLimit";
 import { selectWorkspaceFromWorkspaceUsername } from "@/store/slice/accountSlice";
 import { closeAllMenus } from "@/store/slice/displayPreferenceSlice";
 import { useAppDispatch, useTypedSelector } from "@/store/store";
@@ -23,9 +23,6 @@ interface WorkspaceLayoutProps {
   children: React.ReactNode;
 }
 
-// $tablet: 768px;
-const MOBILE_LAYOUT_BREAKPOINT = 768;
-
 const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   const dispatch = useAppDispatch();
   const params = useParams();
@@ -36,8 +33,6 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   const workspaceName = params?.workspaceName as string;
   const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
   const pageVisibility = usePageVisibility();
-  // const messagingEnabled = useFeatureFlag("MESSAGING");
-  const messagingEnabled = true;
 
   //so we can calculate unread count
   const [retrieveChannelMembershipsQuery] = useLazyRetrieveChannelMembershipsQuery();
@@ -46,9 +41,9 @@ const WorkspaceLayout: React.FC<WorkspaceLayoutProps> = ({ children }) => {
   useEffect(() => {
     if (pageVisibility && workspace && pageVisibility) {
       retrieveChannelMembershipsQuery({ workspaceId: workspace.workspaceId });
-      messagingEnabled && retrieveParticipatedConversationsQuery({ workspaceId: workspace.workspaceId });
+      retrieveParticipatedConversationsQuery({ workspaceId: workspace.workspaceId });
     }
-  }, [retrieveChannelMembershipsQuery, retrieveParticipatedConversationsQuery, workspace, pageVisibility, messagingEnabled]);
+  }, [retrieveChannelMembershipsQuery, retrieveParticipatedConversationsQuery, workspace, pageVisibility]);
 
   useEffect(() => {
     if (isMobile) {

@@ -9,6 +9,7 @@ import co.jinear.core.model.enumtype.workspace.WorkspaceTier;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.FieldNameConstants;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Where;
 
@@ -17,6 +18,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
+@FieldNameConstants
 @Table(name = "workspace")
 public class Workspace extends BaseEntity {
 
@@ -53,4 +55,9 @@ public class Workspace extends BaseEntity {
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
     private Set<Feed> feeds;
+
+    @OneToMany(mappedBy = "workspace")
+    @Where(clause = "passive_id is null")
+    @OrderBy("createdDate ASC")
+    private Set<WorkspaceMember> workspaceMembers;
 }

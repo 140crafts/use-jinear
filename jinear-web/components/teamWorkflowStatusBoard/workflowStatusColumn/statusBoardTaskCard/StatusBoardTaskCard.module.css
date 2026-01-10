@@ -70,3 +70,7 @@
 .taskIconButton:hover {
   background-color: var(--c-primary-shade-0) !important;
 }
+
+.dragging {
+  opacity: 0.5;
+}

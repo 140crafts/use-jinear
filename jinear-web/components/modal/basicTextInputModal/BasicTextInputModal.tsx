@@ -39,6 +39,8 @@ const BasicTextInputModal: React.FC<BasicTextInputModalProps> = ({}) => {
       setTimeout(() => {
         inputRef?.current?.focus();
       }, 250);
+    } else {
+      setText("");
     }
   }, [visible]);
 

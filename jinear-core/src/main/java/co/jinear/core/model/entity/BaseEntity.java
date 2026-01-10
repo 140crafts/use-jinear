@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.FieldNameConstants;
 
 import java.util.Date;
 
@@ -12,6 +13,7 @@ import java.util.Date;
 @Setter
 @ToString
 @MappedSuperclass
+@FieldNameConstants
 public class BaseEntity {
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -29,7 +31,7 @@ public class BaseEntity {
     void preInsert() {
         if (createdDate == null) {
             createdDate = DateHelper.now();
-        }else{
+        } else {
             lastUpdatedDate = DateHelper.now();
         }
     }
@@ -38,7 +40,7 @@ public class BaseEntity {
     void preUpdate() {
         if (createdDate == null) {
             createdDate = DateHelper.now();
-        }else{
+        } else {
             lastUpdatedDate = DateHelper.now();
         }
     }

@@ -94,9 +94,12 @@ public class MediaOperationService {
         log.info("Delete media has started for removeMediaVo: {}", removeMediaVo);
         Media media = retrieveMedia(removeMediaVo.getMediaId());
         String passiveId = Optional.of(removeMediaVo)
-                .map(RemoveMediaVo::getResponsibleAccountId)
-                .map(passiveService::createSystemActionPassive)
-                .orElseGet(passiveService::createSystemActionPassive);
+                .map(RemoveMediaVo::getExistingPassiveId)
+                .orElseGet(() ->
+                        Optional.of(removeMediaVo)
+                                .map(RemoveMediaVo::getResponsibleAccountId)
+                                .map(passiveService::createSystemActionPassive)
+                                .orElseGet(passiveService::createSystemActionPassive));
         media.setPassiveId(passiveId);
         Media saved = mediaRepository.save(media);
         log.info("Delete media entity saved. passiveId: {}, mediaId: {}", passiveId, saved.getMediaId());

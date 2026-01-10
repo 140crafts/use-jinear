@@ -3,7 +3,7 @@ import styles from "./ChannelButton.module.css";
 import { ChannelMembershipInfoDto } from "@/be/jinear-core";
 import Button, { ButtonHeight } from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
-import { LuGlobe2, LuHash, LuLock } from "react-icons/lu";
+import { LuGlobe, LuHash, LuLock } from "react-icons/lu";
 import { useJoinChannelMutation } from "@/api/channelMemberApi";
 import { useAppDispatch } from "@/store/store";
 import { closeChannelListModal } from "@/slice/modalSlice";
@@ -15,7 +15,7 @@ interface ChannelButtonProps {
 const CHANNEL_VISIBILITY_ICON_MAP = {
   EVERYONE: LuHash,
   MEMBERS_ONLY: LuLock,
-  PUBLIC_WITH_GUESTS: LuGlobe2
+  PUBLIC_WITH_GUESTS: LuGlobe
 };
 
 const ChannelButton: React.FC<ChannelButtonProps> = ({ channelMembershipInfoDto }) => {

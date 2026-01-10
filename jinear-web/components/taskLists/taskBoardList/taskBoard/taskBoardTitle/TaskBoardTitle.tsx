@@ -33,7 +33,7 @@ import {
 } from "react-icons/io5";
 import styles from "./TaskBoardTitle.module.scss";
 import { useSetQueryState } from "@/hooks/useQueryState";
-import { LuPenSquare, LuSearch } from "react-icons/lu";
+import { LuPenSquare as LuSquarePen, LuSearch } from "react-icons/lu";
 import TaskBoardQuickFilterBar
   from "@/components/taskLists/taskBoardList/taskBoard/taskBoardQuickFilterBar/TaskBoardQuickFilterBar";
 import getCssVariable from "@/utils/cssHelper";
@@ -284,7 +284,7 @@ const TaskBoardTitle: React.FC<TaskBoardTitleProps> = ({
             data-tooltip-right={t(`taskBoardCreateTaskButtonTooltip`)}
           >
             {/*{t("taskBoardAddTaskButtonLabel")}*/}
-            <LuPenSquare className={"icon"} />
+            <LuSquarePen className={"icon"} />
           </Button>
           <Button
             variant={ButtonVariants.filled}

@@ -28,7 +28,8 @@ const ConversationSettingsModal: React.FC<ConversationSettingsModalProps> = ({})
   const close = () => {
   };
 
-  return (<Modal
+  return (
+    <Modal
       visible={visible}
       width={isMobile ? "fullscreen" : "xxlarge"}
       title={t("conversationsScreenTitle")}

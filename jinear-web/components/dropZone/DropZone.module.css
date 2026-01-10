@@ -1,0 +1,29 @@
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.overlayContent {
+    background-color: var(--c-primary-shade-1-op025);
+    border: thin dashed var(--c-primary-shade-1);
+    border-radius: var(--border-radius);
+    padding: 48px 64px;
+}
+
+.overlayText {
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: var(--c-text-color);
+}

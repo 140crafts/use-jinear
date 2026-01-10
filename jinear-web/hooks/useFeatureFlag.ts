@@ -9,7 +9,8 @@ export type FEATURE_FLAG =
   | "FEEDS"
   | "MESSAGING"
   | "PROJECTS"
-  | "EXTENDED_SIDE_MENU_TEAM_ACTION_BUTTONS_VISIBLE";
+  | "EXTENDED_SIDE_MENU_TEAM_ACTION_BUTTONS_VISIBLE"
+  | "FILES";
 
 const logger = Logger("useFeatureFlag");
 

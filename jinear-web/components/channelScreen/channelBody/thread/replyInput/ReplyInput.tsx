@@ -5,7 +5,7 @@ import Tiptap, { ITiptapRef } from "@/components/tiptap/Tiptap";
 import useTranslation from "@/locals/useTranslation";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { useToggle } from "@/hooks/useToggle";
-import { LuSendHorizonal, LuX } from "react-icons/lu";
+import { LuSendHorizonal as LuSendHorizontal } from "react-icons/lu";
 import { useSendToThreadMutation } from "@/api/messageOperationApi";
 
 interface ReplyInputProps {
@@ -81,7 +81,7 @@ const ReplyInput: React.FC<ReplyInputProps> = ({ workspaceId, channelId, threadI
               className={styles.replyButton}
               onClick={send}
             >
-              <LuSendHorizonal />
+              <LuSendHorizontal />
             </Button>
           </div>
         </div>

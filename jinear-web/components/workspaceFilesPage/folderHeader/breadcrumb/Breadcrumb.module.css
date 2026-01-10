@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    min-height: 2rem;
+    flex-wrap: wrap;
+}
+
+.breadcrumb {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.button {
+    /*outline-style: none !important;*/
+    /*outline-color: transparent !important;*/
+    padding: 0.15rem 0.5rem !important;
+    gap: .5rem;
+}
+
+.breadcrumb[data-dragover] {
+    background-color: var(--c-primary-shade-0) !important;
+    border-radius: var(--border-radius) !important;
+    outline: 1px solid var(--c-primary-shade-1) !important;
+}

@@ -48,6 +48,7 @@ public class SecurityConfiguration {
             "/v1/project/public-feed/**",
             "/v1/project/post/comment/list/project/{projectId}/post/{postId}",
             "/v1/captcha/generate",
+            "/v1/material/media/{materialId}",
             "/v1/debug/**"
     };
 

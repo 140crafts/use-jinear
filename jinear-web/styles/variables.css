@@ -65,6 +65,9 @@
     --calendar-month-week-day-numbers: 35px;
     --calendar-header-main-height: 76px;
     --calendar-container-gap: 1rem;
+    /* MATERIAL */
+    --material-row-view-row-height: 1.75rem;
+    --material-row-view-row-selection-color: #2863D9;
     /*  */
     --gap: clamp(1rem, 6vw, 3rem);
     --page: min(85ch, 100% - var(--gap) * 2);
@@ -117,6 +120,7 @@
     --c-JINEAR_YELLOW: #fac26d;
     --c-JINEAR_ORANGE: #f56e0f;
     --c-JINEAR_ORANGE_LIGHT: hsl(25, 92%, 58%);
+    --c-JINEAR_ORANGE_LIGHT_X2: hsl(25, 92%, 68%);
     --border-radius-xs: 0.15rem;
     --border-radius-s: 0.25rem;
     --border-radius: 0.35rem;
@@ -168,4 +172,6 @@
     /* CALENDAR */
     --calendar-event-background: #e3d1ac;
     --calendar-event-background-highlighted: #f7d149;
+    /* MATERIAL   */
+    --material-row-view-row-selection-color: #2358C9;
 }
