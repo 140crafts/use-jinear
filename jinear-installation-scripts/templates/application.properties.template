@@ -100,6 +100,7 @@ jinear.storage.limit.pro=204800
 gcloud.projectId=not-configured
 gcloud.cloudStorage.bucketName=not-configured
 gcloud.cloudStorage.base-path=not-configured
+gcloud.cloudStorage.signed-url-duration=30
 gcloud.oauth.baseUrl=https://oauth2.googleapis.com
 gcloud.oauth.clientId=not-configured
 gcloud.oauth.clientSecret=not-configured
@@ -108,7 +109,6 @@ gcloud.oauth.redirect-url.attach-mail=${FE_PATH}/v1/oauth/google/callback/attach
 gcloud.oauth.redirect-url.attach-calendar=${FE_PATH}/v1/oauth/google/callback/attach-calendar
 google.apis.baseUrl=https://www.googleapis.com/
 google.apis.gmail.baseUrl=https://gmail.googleapis.com/gmail/
-
 # ==============================================================
 # = MinIO
 # ==============================================================
