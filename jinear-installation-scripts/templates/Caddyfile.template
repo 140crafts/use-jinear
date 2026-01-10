@@ -18,7 +18,7 @@ http://localhost:1100 {
 
 https://__DOMAIN__ {
     tls {
-        on_demand
+        issuer acme
     }
     reverse_proxy {
         to http://jinear-web:3000
@@ -29,7 +29,7 @@ https://__DOMAIN__ {
 
 https://__API_DOMAIN__ {
     tls {
-        on_demand
+        issuer acme
     }
     reverse_proxy {
         to http://jinear-core:8008
@@ -40,7 +40,7 @@ https://__API_DOMAIN__ {
 
 https://__FILES_DOMAIN__ {
     tls {
-        on_demand
+        issuer acme
     }
     reverse_proxy {
         to http://jinear-minio:9000
@@ -51,7 +51,7 @@ https://__FILES_DOMAIN__ {
 
 https://__PAGES_DOMAIN__ {
     tls {
-        on_demand
+        issuer acme
     }
     reverse_proxy {
         to http://jinear-pages:3000
@@ -60,6 +60,7 @@ https://__PAGES_DOMAIN__ {
     }
 }
 
+# Catch-all for custom project domains - these WILL be validated via /v1/domain/validate
 :443 {
     tls {
         on_demand

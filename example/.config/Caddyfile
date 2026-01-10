@@ -21,7 +21,7 @@ http://localhost:1100 {
 
 https://jinear.cagdastunca.com {
     tls {
-      on_demand
+        issuer acme
     }
     reverse_proxy {
         to http://jinear-web:3000
@@ -32,7 +32,7 @@ https://jinear.cagdastunca.com {
 
 https://api.jinear.cagdastunca.com {
     tls {
-      on_demand
+        issuer acme
     }
     reverse_proxy {
         to http://jinear-core:8008
@@ -43,7 +43,7 @@ https://api.jinear.cagdastunca.com {
 
 https://files.jinear.cagdastunca.com {
     tls {
-      on_demand
+        issuer acme
     }
     reverse_proxy {
         to http://jinear-minio:9000
@@ -63,6 +63,7 @@ https://files.jinear.cagdastunca.com {
 #    }
 #}
 
+# Catch-all for custom project domains - these WILL be validated via /v1/domain/validate
 :443 {
     tls {
         on_demand
