@@ -61,7 +61,11 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
                     .expiry(signedUrlDuration, TimeUnit.MINUTES)
                     .extraHeaders(Map.of("Content-Type", contentType, "Content-Length", String.valueOf(fileSizeInBytes)))
                     .build();
-            WaitingMediaResultVo waitingMediaResultVo = new WaitingMediaResultVo(new URL(minioClient.getPresignedObjectUrl(args)), ZonedDateTime.now().plus(minIoProperties.getSignedUrlDuration(), ChronoUnit.MILLIS));
+
+            String presignedUrl = minioClient.getPresignedObjectUrl(args);
+            String publicUrl = replaceInternalEndpoint(presignedUrl);
+
+            WaitingMediaResultVo waitingMediaResultVo = new WaitingMediaResultVo(new URL(publicUrl), ZonedDateTime.now().plus(minIoProperties.getSignedUrlDuration(), ChronoUnit.MILLIS));
             waitingMediaResultVo.setBucketName(bucketName);
             return waitingMediaResultVo;
         } catch (Exception e) {
@@ -158,7 +162,10 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
                     .object(path)
                     .expiry(minIoProperties.getSignedUrlDuration(), TimeUnit.MINUTES)
                     .build();
-            return new URL(minioClient.getPresignedObjectUrl(args));
+            String presignedUrl = minioClient.getPresignedObjectUrl(args);
+            String publicUrl = replaceInternalEndpoint(presignedUrl);
+
+            return new URL(publicUrl);
         } catch (Exception e) {
             log.error("Error generating download url for path: {}", path, e);
             throw new BusinessException("Could not generate download URL.");
@@ -186,6 +193,13 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
             log.error("Error moving object", e);
             return false;
         }
+    }
+
+    private String replaceInternalEndpoint(String url) {
+        if (minIoProperties.getBasePath() != null && !minIoProperties.getBasePath().isEmpty()) {
+            return url.replace(minIoProperties.getEndpoint() + "/", minIoProperties.getBasePath());
+        }
+        return url;
     }
 
     private void checkAndInitializeBucket(MinioClient minioClient, String bucketName, boolean isPublic) throws Exception {
