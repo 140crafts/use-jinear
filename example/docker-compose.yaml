@@ -83,8 +83,9 @@ services:
       JWT_SECRET: change-me
       JWT_DOMAIN: company.com
       FE_PATH: https://your-instance.company.com
-      MINIO_KEY: minio-api-key
-      MINIO_SECRET: minio-api-secret
+      # MinIO - use same credentials as jinear-minio service above
+      MINIO_KEY: minio-user
+      MINIO_SECRET: minio-pass
       MINIO_ROOT: http://jinear-minio:9000
       MINIO_BASE_PATH: https://files.your-instance.company.com/
     restart: always

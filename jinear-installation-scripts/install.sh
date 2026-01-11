@@ -343,12 +343,9 @@ generate_secrets() {
     JWT_SECRET=$(generate_secret)
     print_success "JWT secret generated"
 
+    MINIO_ROOT_USER="jinear_minio_$(generate_password 8)"
     MINIO_ROOT_PASSWORD=$(generate_password 32)
-    print_success "MinIO password generated"
-
-    MINIO_API_KEY=$(generate_password 20)
-    MINIO_API_SECRET=$(generate_password 40)
-    print_success "MinIO API credentials generated"
+    print_success "MinIO credentials generated"
 
     ENCRYPTOR_PASSWORD=$(generate_password 32)
     print_success "Encryptor password generated"
@@ -422,10 +419,8 @@ POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 REDIS_PASSWORD=${REDIS_PASSWORD}
 
 # MinIO
-MINIO_ROOT_USER=jinear_minio
+MINIO_ROOT_USER=${MINIO_ROOT_USER}
 MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
-MINIO_API_KEY=${MINIO_API_KEY}
-MINIO_API_SECRET=${MINIO_API_SECRET}
 
 # Security
 JWT_SECRET=${JWT_SECRET}
@@ -544,10 +539,8 @@ Password: ${REDIS_PASSWORD}
 MINIO (S3-Compatible Storage)
 -----------------------------
 Console: http://localhost:9001
-Root User: jinear_minio
-Root Password: ${MINIO_ROOT_PASSWORD}
-API Key: ${MINIO_API_KEY}
-API Secret: ${MINIO_API_SECRET}
+Username: ${MINIO_ROOT_USER}
+Password: ${MINIO_ROOT_PASSWORD}
 
 SECURITY SECRETS
 ----------------

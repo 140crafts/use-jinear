@@ -84,9 +84,9 @@ services:
       # Frontend
       FE_PATH: https://${DOMAIN}
       CORS_ORIGINS: https://${DOMAIN},https://${PAGES_DOMAIN}
-      # MinIO
-      MINIO_KEY: ${MINIO_API_KEY}
-      MINIO_SECRET: ${MINIO_API_SECRET}
+      # MinIO - uses same credentials as minio service
+      MINIO_KEY: ${MINIO_ROOT_USER}
+      MINIO_SECRET: ${MINIO_ROOT_PASSWORD}
       MINIO_ROOT: http://jinear-minio:9000
       MINIO_BASE_PATH: https://${FILES_DOMAIN}/
       # Database (passed to application.properties)
