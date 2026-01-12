@@ -115,6 +115,7 @@ Point these DNS records to your server's IP address:
 | A | api.jinear.yourdomain.com | YOUR_SERVER_IP |
 | A | files.jinear.yourdomain.com | YOUR_SERVER_IP |
 | A | pages.jinear.yourdomain.com | YOUR_SERVER_IP |
+| A | message.jinear.yourdomain.com | YOUR_SERVER_IP |
 
 SSL certificates are automatically issued via Let's Encrypt.
 

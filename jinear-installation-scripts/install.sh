@@ -270,10 +270,11 @@ prompt_configuration() {
     done
 
     # Auto-suggest subdomains
-
+    # Auto-suggest subdomains
     API_DOMAIN_DEFAULT="api.${DOMAIN}"
     FILES_DOMAIN_DEFAULT="files.${DOMAIN}"
     PAGES_DOMAIN_DEFAULT="pages.${DOMAIN}"
+    MESSAGE_DOMAIN_DEFAULT="message.${DOMAIN}"
 
     echo ""
     read -p "  API domain [${API_DOMAIN_DEFAULT}]: " API_DOMAIN
@@ -284,6 +285,9 @@ prompt_configuration() {
 
     read -p "  Pages domain [${PAGES_DOMAIN_DEFAULT}]: " PAGES_DOMAIN
     PAGES_DOMAIN=${PAGES_DOMAIN:-$PAGES_DOMAIN_DEFAULT}
+
+    read -p "  Message domain [${MESSAGE_DOMAIN_DEFAULT}]: " MESSAGE_DOMAIN
+    MESSAGE_DOMAIN=${MESSAGE_DOMAIN:-$MESSAGE_DOMAIN_DEFAULT}
 
     # Timezone
     echo ""
@@ -406,6 +410,7 @@ DOMAIN=${DOMAIN}
 API_DOMAIN=${API_DOMAIN}
 FILES_DOMAIN=${FILES_DOMAIN}
 PAGES_DOMAIN=${PAGES_DOMAIN}
+MESSAGE_DOMAIN=${MESSAGE_DOMAIN}
 
 # Timezone
 TIMEZONE=${TIMEZONE}
@@ -477,6 +482,7 @@ EOF
         sed "s/__API_DOMAIN__/${API_DOMAIN}/g" | \
         sed "s/__FILES_DOMAIN__/${FILES_DOMAIN}/g" | \
         sed "s/__PAGES_DOMAIN__/${PAGES_DOMAIN}/g" | \
+        sed "s/__MESSAGE_DOMAIN__/${MESSAGE_DOMAIN}/g" | \
         sed "s/__CADDY_VALIDATION_TOKEN__/${CADDY_VALIDATION_TOKEN}/g" \
         > "$INSTALL_DIR/.data/caddy/conf/Caddyfile"
     print_success "Generated Caddyfile"
@@ -554,6 +560,7 @@ Application: https://${DOMAIN}
 API: https://${API_DOMAIN}
 Files: https://${FILES_DOMAIN}
 Pages: https://${PAGES_DOMAIN}
+Message (WebSocket): https://${MESSAGE_DOMAIN}
 EOF
     chmod 600 "$INSTALL_DIR/.secrets"
     print_success "Credentials saved to ${INSTALL_DIR}/.secrets"
@@ -618,6 +625,7 @@ print_summary() {
     echo -e "  🔧 API:          ${BOLD}https://${API_DOMAIN}${NC}"
     echo -e "  📁 Files:        ${BOLD}https://${FILES_DOMAIN}${NC}"
     echo -e "  📄 Pages:        ${BOLD}https://${PAGES_DOMAIN}${NC}"
+    echo -e "  💬 Message:      ${BOLD}https://${MESSAGE_DOMAIN}${NC}"
     echo ""
 
     echo -e "  ${BOLD}Important Files${NC}"
@@ -635,6 +643,7 @@ print_summary() {
     echo -e "     - ${API_DOMAIN}"
     echo -e "     - ${FILES_DOMAIN}"
     echo -e "     - ${PAGES_DOMAIN}"
+    echo -e "     - ${MESSAGE_DOMAIN}"
     echo ""
     echo -e "  2. Wait a few minutes for SSL certificates to be issued"
     echo ""

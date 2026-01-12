@@ -125,7 +125,7 @@ services:
       - ".logs/jinear-web:/logs"
     restart: always
     environment:
-      - NEXT_PUBLIC_API_ROOT=https://${API_DOMAIN}
+      - NEXT_PUBLIC_API_ROOT=https://${API_DOMAIN}/
       - NEXT_PUBLIC_POSTHOG_KEY=${POSTHOG_KEY:-}
       - NEXT_PUBLIC_POSTHOG_HOST=${POSTHOG_HOST:-https://us.i.posthog.com}
     privileged: true
@@ -146,7 +146,7 @@ services:
       - ".logs/jinear-pages:/logs"
     restart: always
     environment:
-      - NEXT_PUBLIC_API_ROOT=https://${API_DOMAIN}
+      - NEXT_PUBLIC_API_ROOT=https://${API_DOMAIN}/
       - NEXT_PUBLIC_POSTHOG_KEY=${POSTHOG_KEY:-}
       - NEXT_PUBLIC_POSTHOG_HOST=${POSTHOG_HOST:-https://us.i.posthog.com}
     privileged: true

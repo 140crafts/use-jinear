@@ -45,10 +45,38 @@ https://files.jinear.cagdastunca.com {
     tls {
         issuer acme
     }
-    reverse_proxy {
+
+    # Handle all methods
+    @all {
+        method GET POST PUT DELETE HEAD OPTIONS
+    }
+
+    reverse_proxy @all {
         to http://jinear-minio:9000
+        header_up Host {upstream_hostport}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+
+        # Preserve original headers
+        header_up -X-Forwarded-Host
+    }
+}
+
+https://message.jinear.cagdastunca.com {
+    tls {
+        issuer acme
+    }
+    reverse_proxy {
+        to http://jinear-message:3001
         header_up Host {http.reverse_proxy.upstream.host}
         header_up X-Real-IP {http.reverse_proxy.upstream.address}
+        header_up X-Forwarded-For {http.reverse_proxy.upstream.address}
+        header_up X-Forwarded-Proto {scheme}
+
+        # WebSocket support
+        header_up Connection {>Connection}
+        header_up Upgrade {>Upgrade}
     }
 }
 
