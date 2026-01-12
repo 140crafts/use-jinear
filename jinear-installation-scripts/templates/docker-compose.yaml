@@ -202,4 +202,3 @@ services:
 networks:
   jinear-default:
     driver: bridge
-
