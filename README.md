@@ -46,6 +46,7 @@ Your Jinear instance will be available at:
 - 🌐 **Application**: `https://your-domain.com`
 - 🔧 **API**: `https://api.your-domain.com`
 - 📁 **Files**: `https://files.your-domain.com`
+- 💬 **Message/WebSocket**: `https://message.your-domain.com`
 
 ### Manual Installation
 
