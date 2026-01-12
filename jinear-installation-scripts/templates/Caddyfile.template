@@ -4,11 +4,13 @@
     # Use Let's Encrypt production server (not staging)
     acme_ca https://acme-v02.api.letsencrypt.org/directory
 
+    # On-demand TLS validation - only applies to sites using "tls { on_demand }"
     on_demand_tls {
         ask http://localhost:1100/v1/domain/validate
     }
 }
 
+# Internal endpoint for on-demand TLS validation (custom domains only)
 http://localhost:1100 {
     bind 127.0.0.1
 
@@ -20,10 +22,9 @@ http://localhost:1100 {
     }
 }
 
+# Known domains - explicit hostnames take precedence over catch-all :443
+# These use standard ACME (automatic) and do NOT trigger on_demand_tls validation
 https://__DOMAIN__ {
-    tls {
-        issuer acme
-    }
     reverse_proxy {
         to http://jinear-web:3000
         header_up Host {http.reverse_proxy.upstream.host}
@@ -32,9 +33,6 @@ https://__DOMAIN__ {
 }
 
 https://__API_DOMAIN__ {
-    tls {
-        issuer acme
-    }
     reverse_proxy {
         to http://jinear-core:8008
         header_up Host {http.reverse_proxy.upstream.host}
@@ -43,10 +41,6 @@ https://__API_DOMAIN__ {
 }
 
 https://__FILES_DOMAIN__ {
-    tls {
-        issuer acme
-    }
-
     # Handle all methods
     @all {
         method GET POST PUT DELETE HEAD OPTIONS
@@ -65,9 +59,6 @@ https://__FILES_DOMAIN__ {
 }
 
 https://__PAGES_DOMAIN__ {
-    tls {
-        issuer acme
-    }
     reverse_proxy {
         to http://jinear-pages:3000
         header_up Host {http.reverse_proxy.upstream.host}
@@ -76,23 +67,19 @@ https://__PAGES_DOMAIN__ {
 }
 
 https://__MESSAGE_DOMAIN__ {
-    tls {
-        issuer acme
-    }
-    reverse_proxy {
-        to http://jinear-message:3001
+    # WebSocket and HTTP reverse proxy
+    reverse_proxy http://jinear-message:3001 {
+        # Preserve headers for WebSocket upgrade
         header_up Host {http.reverse_proxy.upstream.host}
         header_up X-Real-IP {http.reverse_proxy.upstream.address}
         header_up X-Forwarded-For {http.reverse_proxy.upstream.address}
         header_up X-Forwarded-Proto {scheme}
-
-        # WebSocket support
-        header_up Connection {>Connection}
-        header_up Upgrade {>Upgrade}
     }
 }
 
-# Catch-all for custom project domains - these WILL be validated via /v1/domain/validate
+# Catch-all for custom project domains
+# This ONLY matches domains not explicitly defined above
+# The "on_demand" here triggers the global on_demand_tls validation
 :443 {
     tls {
         on_demand

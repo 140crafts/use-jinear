@@ -180,6 +180,46 @@ docker compose ps jinear-db
 docker compose logs jinear-db
 ```
 
+### WebSocket/Message service issues
+
+If messages are using polling instead of WebSocket:
+
+1. **Check the message service logs:**
+   ```bash
+   docker compose logs jinear-message
+   ```
+
+2. **Verify WebSocket connection in browser:**
+   - Open browser DevTools → Network tab → Filter "WS" (WebSocket)
+   - Try to connect and check if WebSocket connection is established
+   - Look for failed upgrades or 101 Switching Protocols responses
+
+3. **Common issues:**
+   - **Trailing slashes in NEXT_PUBLIC_SOCKET_ROOT** - Should be `https://message.domain.com` NOT `https://message.domain.com/`
+   - **SSL certificate issues** - WebSocket requires valid HTTPS
+   - **CORS misconfiguration** - Check jinear-message `ALLOWED_ORIGIN` environment variable
+   - **Firewall blocking WebSocket** - Ensure nothing blocks the upgrade request
+
+4. **Test WebSocket directly:**
+   ```bash
+   # Check if message service is responding
+   curl -I https://message.your-domain.com
+   ```
+
+5. **Restart services:**
+   ```bash
+   docker compose restart jinear-caddy jinear-message jinear-web
+   ```
+
+### Database connection issues
+```bash
+# Check if database is running
+docker compose ps jinear-db
+
+# View database logs
+docker compose logs jinear-db
+```
+
 ### Reset installation
 ```bash
 # Stop and remove everything
