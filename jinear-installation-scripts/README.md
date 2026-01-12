@@ -195,7 +195,7 @@ If messages are using polling instead of WebSocket:
    - Look for failed upgrades or 101 Switching Protocols responses
 
 3. **Common issues:**
-   - **Trailing slashes in NEXT_PUBLIC_SOCKET_ROOT** - Should be `https://message.domain.com` NOT `https://message.domain.com/`
+   - **Trailing slashes required in NEXT_PUBLIC_SOCKET_ROOT** - Should be `https://message.domain.com/` NOT `https://message.domain.com`
    - **SSL certificate issues** - WebSocket requires valid HTTPS
    - **CORS misconfiguration** - Check jinear-message `ALLOWED_ORIGIN` environment variable
    - **Firewall blocking WebSocket** - Ensure nothing blocks the upgrade request
