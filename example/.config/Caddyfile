@@ -11,10 +11,11 @@ http://localhost:1100 {
     route /v1/domain/validate {
         reverse_proxy http://jinear-core:8008 {
             header_up Host api.jinear.co
-            #Spin up your jinear instance. Login get your jwt from devtools.
-            #go to jwt.io change ROLE_USER with ROLE_DOMAINSERVER and sign
-            #with your signin key and put here
-            header_up Authorization "Bearer EDITED_TOKEN_HERE"
+            # This should be a JWT signed with your JWT_SECRET using HS512 algorithm
+            # with "authorities": ["ROLE_DOMAINSERVER"] in the payload.
+            # The install script generates this automatically.
+            # For manual setup: create JWT at jwt.io with your JWT_SECRET
+            header_up Authorization "Bearer YOUR_JWT_TOKEN_HERE"
         }
     }
 }

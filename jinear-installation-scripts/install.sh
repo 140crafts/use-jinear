@@ -108,6 +108,30 @@ generate_secret() {
     openssl rand -base64 64 | tr -dc 'a-zA-Z0-9' | head -c 64
 }
 
+# Generate JWT token signed with HS512 for Caddy domain validation
+# Creates a token with ROLE_DOMAINSERVER authority, valid for 100 years
+generate_caddy_jwt() {
+    local secret=$1
+
+    # JWT Header (HS512)
+    local header='{"alg":"HS512","typ":"JWT"}'
+    local header_base64=$(printf '%s' "$header" | openssl base64 -A | tr '+/' '-_' | tr -d '=')
+
+    # JWT Payload with ROLE_DOMAINSERVER authority
+    # Expiration set to 100 years from now
+    local iat=$(date +%s)
+    local exp=$((iat + 3153600000))
+    local payload="{\"sub\":\"caddy-domain-validator\",\"session_info_id\":\"install-script-generated\",\"locale\":\"EN\",\"exp\":${exp},\"iat\":${iat},\"authorities\":[\"ROLE_DOMAINSERVER\"]}"
+    local payload_base64=$(printf '%s' "$payload" | openssl base64 -A | tr '+/' '-_' | tr -d '=')
+
+    # Create signature using HMAC-SHA512
+    local signing_input="${header_base64}.${payload_base64}"
+    local signature=$(printf '%s' "$signing_input" | openssl dgst -sha512 -hmac "$secret" -binary | openssl base64 -A | tr '+/' '-_' | tr -d '=')
+
+    # Return complete JWT
+    printf '%s.%s' "$signing_input" "$signature"
+}
+
 # Validate domain format
 validate_domain() {
     local domain=$1
@@ -357,8 +381,9 @@ generate_secrets() {
     INTERNAL_AUTH_TOKEN=$(generate_password 32)
     print_success "Internal auth token generated"
 
-    CADDY_VALIDATION_TOKEN=$(generate_secret)
-    print_success "Caddy validation token generated"
+    # Generate Caddy validation token as a proper JWT signed with JWT_SECRET
+    CADDY_VALIDATION_TOKEN=$(generate_caddy_jwt "$JWT_SECRET")
+    print_success "Caddy validation JWT generated"
 }
 
 # =============================================================================
