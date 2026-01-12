@@ -675,6 +675,12 @@ print_summary() {
     echo -e "  3. Visit ${BOLD}https://${DOMAIN}${NC} to get started!"
     echo ""
 
+    echo -e "  ${WARN} ${YELLOW}SSL Certificate Notes:${NC}"
+    echo -e "     - Using Let's Encrypt production server"
+    echo -e "     - Rate limit: 50 certificates per domain per week"
+    echo -e "     - If testing, consider using staging server (see docs)"
+    echo ""
+
     echo -e "  ${BOLD}Useful Commands${NC}"
     echo -e "  ${CYAN}─────────────────────────────────────────────────────────────${NC}"
     echo -e "  View logs:       cd ${INSTALL_DIR} && docker compose logs -f"

@@ -132,9 +132,44 @@ sudo lsof -i :443
 ```
 
 ### SSL certificate issues
+
+**Staging certificates (untrusted by browsers):**
+If you see warnings about untrusted certificates, Caddy might be using the staging server. Fix:
+```bash
+# Edit Caddyfile to ensure production server is used
+# It should have: acme_ca https://acme-v02.api.letsencrypt.org/directory
+
+# Restart Caddy
+cd <install-dir>
+docker compose restart jinear-caddy
+```
+
+**Let's Encrypt rate limits:**
+If you've been testing multiple times, you may hit rate limits:
+- **50 certificates per domain per week**
+- **5 duplicate certificates per week** (same set of domains)
+
+Solutions:
+1. **Wait it out** - Rate limits reset after 7 days
+2. **Use staging for testing** - Edit Caddyfile global config:
+   ```
+   {
+       acme_ca https://acme-staging-v02.api.letsencrypt.org/directory
+   }
+   ```
+   Then switch back to production when ready:
+   ```
+   {
+       acme_ca https://acme-v02.api.letsencrypt.org/directory
+   }
+   ```
+3. **Check your rate limit status**: https://crt.sh (search your domain)
+
+**Other SSL issues:**
 - Ensure DNS is properly configured and propagated
 - Check Caddy logs: `docker compose logs jinear-caddy`
 - Certificates are stored in `.data/caddy/data/`
+- Delete certificates to force renewal: `rm -rf .data/caddy/data/`
 
 ### Database connection issues
 ```bash

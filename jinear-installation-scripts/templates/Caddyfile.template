@@ -1,5 +1,9 @@
 {
     debug
+
+    # Use Let's Encrypt production server (not staging)
+    acme_ca https://acme-v02.api.letsencrypt.org/directory
+
     on_demand_tls {
         ask http://localhost:1100/v1/domain/validate
     }

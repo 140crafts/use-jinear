@@ -60,6 +60,20 @@ After installation, you can customize your instance by modifying:
 - **`.config/application.properties`**: Application-specific settings
 - **`.data/caddy/conf/Caddyfile`**: Reverse proxy and SSL configuration
 
+### Troubleshooting
+
+**SSL Certificate Issues:**
+- If you see staging/untrusted certificates, ensure your Caddyfile has: `acme_ca https://acme-v02.api.letsencrypt.org/directory`
+- If you hit Let's Encrypt rate limits (50 certs/week), either wait 7 days or temporarily use staging server
+- Check detailed troubleshooting: [jinear-installation-scripts/README.md](./jinear-installation-scripts/README.md#troubleshooting)
+
+**View Logs:**
+```bash
+cd <install-dir>
+docker compose logs -f jinear-caddy  # SSL/proxy logs
+docker compose logs -f jinear-core    # Backend logs
+```
+
 ## Getting Started
 
 Once your Jinear instance is running, access it through your configured domain.
