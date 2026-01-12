@@ -1,7 +1,5 @@
 jasypt.encryptor.bean=encryptorBean
 
-#java -cp ~/.m2/repository/org/jasypt/jasypt/1.9.3/jasypt-1.9.3.jar  org.jasypt.intf.cli.JasyptPBEStringEncryptionCLI input="contactspassword" password=encryptor-pass algorithm=PBEWithMD5AndDES
-#java -cp ~/.m2/repository/org/jasypt/jasypt/1.9.3/jasypt-1.9.3.jar  org.jasypt.intf.cli.JasyptPBEStringDecryptionCLI input="h2WRARA3Sb+ADQi+LYbUej35bY5Bqfq7pW95uYuH0lE=" password=encryptor-pass algorithm=PBEWithMD5AndDES
 spring.application.name=jinear-core
 server.port=8008
 server.http2.enabled=true
@@ -9,11 +7,9 @@ server.http2.enabled=true
 spring.jackson.default-property-inclusion=non_null
 
 logging.level.*=INFO
-#logging.level.*=debug
 logging.file.path=./logs/
 logging.file.name=./logs/app.log
 logging.pattern.level=%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]
-#logging.level.org.springframework.web.servlet.mvc.method.annotation=debug
 
 server.servlet.encoding.charset=UTF-8
 server.servlet.encoding.enabled=true
@@ -35,14 +31,13 @@ spring.servlet.multipart.maxRequestSize=1999MB
 # ===================================================================
 cors.allow-credentials=true
 cors.allowed-methods=GET,POST,PUT,DELETE
-#cors.allowed-origin-patterns=https://*.your-instance.company.com, https://your-instance.company.com
-cors.allowed-origin-patterns=http://localhost:3000,*
+cors.allowed-origin-patterns=${CORS_ORIGINS:*}
 
 # ===============================
 # = DATA SOURCE REDIS
 # ===============================
 spring.data.redis.host=jinear-redis
-spring.data.redis.password=redis-pass
+spring.data.redis.password=${REDIS_PASSWORD}
 spring.data.redis.timeout=60000
 spring.data.redis.ssl=false
 spring.data.redis.port=6379
@@ -50,9 +45,9 @@ spring.data.redis.port=6379
 # ===============================
 # = DATA SOURCE
 # ===============================
-spring.datasource.url=jdbc:postgresql://jinear-db:5432/jinear
-spring.datasource.username=db-user
-spring.datasource.password=db-pass
+spring.datasource.url=jdbc:postgresql://jinear-db:5432/${POSTGRES_DB:jinear}
+spring.datasource.username=${POSTGRES_USER}
+spring.datasource.password=${POSTGRES_PASSWORD}
 spring.datasource.driverClassName=org.postgresql.Driver
 spring.datasource.tomcat.validation-query=SELECT 1
 spring.datasource.tomcat.test-on-borrow=true
@@ -72,11 +67,11 @@ spring.liquibase.defaultSchema=public
 # ==============================================================
 # = Spring-boot-starter-mail
 # ==============================================================
-spring.mail.host=email-smtp.eu-central-1.amazonaws.com
-spring.mail.port=587
-spring.mail.username=change-me
-spring.mail.password=also-change-me
-spring.mail.sender-address=info@change-me.com
+spring.mail.host=${MAIL_HOST:localhost}
+spring.mail.port=${MAIL_PORT:587}
+spring.mail.username=${MAIL_USERNAME:}
+spring.mail.password=${MAIL_PASSWORD:}
+spring.mail.sender-address=${MAIL_SENDER_ADDRESS:noreply@example.com}
 spring.mail.properties.mail.smtp.starttls.enable=true
 spring.mail.properties.mail.smtp.starttls.required=true
 spring.mail.properties.mail.smtp.auth=true
@@ -90,25 +85,25 @@ spring.mail.properties.mail.smtp.socketFactory.class=javax.net.ssl.SSLSocketFact
 # = Generic
 # ==============================================================
 jinear.remove-pricing=true
-jinear.security.rate-limit.client-ip-header= X-Forwarded-For
-jinear.security.rate-limit.plans.public.capacity= 25
-jinear.security.rate-limit.plans.public.duration-in-minutes= 1
-jinear.security.rate-limit.plans.public.refillType= intervally
-jinear.security.rate-limit.plans.authenticated.capacity= 100
-jinear.security.rate-limit.plans.authenticated.duration-in-minutes= 1
-jinear.security.rate-limit.plans.authenticated.refillType= greedy
+jinear.security.rate-limit.client-ip-header=X-Forwarded-For
+jinear.security.rate-limit.plans.public.capacity=${RATE_LIMIT_PUBLIC_CAPACITY:25}
+jinear.security.rate-limit.plans.public.duration-in-minutes=1
+jinear.security.rate-limit.plans.public.refillType=intervally
+jinear.security.rate-limit.plans.authenticated.capacity=${RATE_LIMIT_AUTH_CAPACITY:100}
+jinear.security.rate-limit.plans.authenticated.duration-in-minutes=1
+jinear.security.rate-limit.plans.authenticated.refillType=greedy
 jinear.storage.limit.basic=1024
 jinear.storage.limit.pro=204800
 # ==============================================================
-# = GCloud
+# = GCloud (Optional - leave as-is if not using Google services)
 # ==============================================================
-gcloud.projectId=gcloud-projectid
-gcloud.cloudStorage.bucketName=gcloud-bucket-name
-gcloud.cloudStorage.base-path=gcloud-base-path
+gcloud.projectId=not-configured
+gcloud.cloudStorage.bucketName=not-configured
+gcloud.cloudStorage.base-path=not-configured
 gcloud.cloudStorage.signed-url-duration=30
 gcloud.oauth.baseUrl=https://oauth2.googleapis.com
-gcloud.oauth.clientId=gcloud-oauth-client-id
-gcloud.oauth.clientSecret=gcloud-oauth-client-secret
+gcloud.oauth.clientId=not-configured
+gcloud.oauth.clientSecret=not-configured
 gcloud.oauth.redirect-url.login=${FE_PATH}/v1/oauth/google/callback/login
 gcloud.oauth.redirect-url.attach-mail=${FE_PATH}/v1/oauth/google/callback/attach-mail
 gcloud.oauth.redirect-url.attach-calendar=${FE_PATH}/v1/oauth/google/callback/attach-calendar
@@ -124,12 +119,10 @@ minio.endpoint=${MINIO_ROOT}
 minio.key=${MINIO_KEY}
 minio.secret=${MINIO_SECRET}
 minio.signed-url-duration=30
-
 # ==============================================================
-# = SLACK
+# = SLACK (Optional)
 # ==============================================================
 slack.token=ignore-me
-#slack.monitoring.impl=prod
 slack.monitoring.impl=mock
 
 # ===============================
@@ -146,8 +139,8 @@ fe.account-delete-url=${FE_PATH}/engage/delete-account-complete?token={token}
 # ===============================
 # = NOTIFICATIONS
 # ===============================
-notification.onesignal.appId=onesignal-app-id
-notification.onesignal.userKeyToken=onesignal-token
+notification.onesignal.appId=not-configured
+notification.onesignal.userKeyToken=not-configured
 notification.firebase.enabled=false
 notification.firebase.auth=d2hhdHVw
 
@@ -175,15 +168,15 @@ mock.axiom=true
 mock.message-api-client.enabled=false
 
 # ===============================
-# = EXPO
+# = EXPO (Optional)
 # ===============================
-expo.token=expo-token
+expo.token=not-configured
 expo.push-notification.url=https://exp.host/--/api
 
 # ===============================
-# = AXIOM
+# = AXIOM (Optional)
 # ===============================
-axiom.token=axiom-token
+axiom.token=not-configured
 axiom.dataset=jinear_be
 axiom.url=https://api.axiom.co/v1
 
@@ -191,7 +184,7 @@ axiom.url=https://api.axiom.co/v1
 # = MESSAGE-API
 # ===============================
 message-api.endpoint=http://jinear-message-api
-message-api.token=your-messaging-api-token
+message-api.token=${INTERNAL_AUTH_TOKEN}
 
 # ===============================
 # = FILE-STORAGE
@@ -199,3 +192,4 @@ message-api.token=your-messaging-api-token
 file-storage.active=MINIO
 file-storage.minio.enabled=true
 file-storage.explicit-content-check-enabled=false
+

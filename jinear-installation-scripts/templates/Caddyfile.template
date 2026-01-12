@@ -1,0 +1,81 @@
+{
+    debug
+
+    acme_ca https://acme-v02.api.letsencrypt.org/directory
+
+    on_demand_tls {
+        ask http://localhost:1100/v1/domain/validate
+    }
+}
+
+http://localhost:1100 {
+    bind 127.0.0.1
+
+    route /v1/domain/validate {
+        reverse_proxy http://jinear-core:8008 {
+            header_up Host api.__DOMAIN__
+            header_up Authorization "Bearer __CADDY_VALIDATION_TOKEN__"
+        }
+    }
+}
+
+https://__DOMAIN__ {
+    reverse_proxy {
+        to http://jinear-web:3000
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse_proxy.upstream.address}
+    }
+}
+
+https://__API_DOMAIN__ {
+    reverse_proxy {
+        to http://jinear-core:8008
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse_proxy.upstream.address}
+    }
+}
+
+https://__FILES_DOMAIN__ {
+    @all {
+        method GET POST PUT DELETE HEAD OPTIONS
+    }
+
+    reverse_proxy @all {
+        to http://jinear-minio:9000
+        header_up Host {upstream_hostport}
+        header_up X-Real-IP {remote_host}
+        header_up X-Forwarded-For {remote_host}
+        header_up X-Forwarded-Proto {scheme}
+
+        # Preserve original headers
+        header_up -X-Forwarded-Host
+    }
+}
+
+https://__PAGES_DOMAIN__ {
+    reverse_proxy {
+        to http://jinear-pages:3000
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse_proxy.upstream.address}
+    }
+}
+
+https://__MESSAGE_DOMAIN__ {
+    reverse_proxy http://jinear-message:3001 {
+        # Preserve headers for WebSocket upgrade
+        header_up Host {http.reverse_proxy.upstream.host}
+        header_up X-Real-IP {http.reverse_proxy.upstream.address}
+        header_up X-Forwarded-For {http.reverse_proxy.upstream.address}
+        header_up X-Forwarded-Proto {scheme}
+    }
+}
+
+:443 {
+    tls {
+        on_demand
+    }
+    reverse_proxy https://__PAGES_DOMAIN__ {
+        header_up Host __PAGES_DOMAIN__
+    }
+}
+

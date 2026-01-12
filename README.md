@@ -17,63 +17,62 @@ Jinear is a comprehensive solution that combines task management with calendar f
 
 ## Self-Hosting
 
-### Prerequisites
+### Quick Install (Recommended)
 
-- Docker
-- Docker Compose
+Run this one-liner on your server to start the interactive installer:
 
-### Installation
+```bash
+curl -sSL https://gitlab.com/140crafts/use-jinear/-/raw/main/jinear-installation-scripts/install.sh | bash
+```
 
-1. **Create the project directory:**
-   ```bash
-   mkdir jinear &&
-   cd jinear
-   ```
+The installer will:
+- ✅ Check prerequisites (Docker, Docker Compose, etc.)
+- ✅ Prompt for your domain and configuration
+- ✅ Generate secure passwords and secrets automatically
+- ✅ Create all necessary files and directories
+- ✅ Start all services
 
-2. **Download the Docker Compose configuration:**
-   ```bash
-   sudo curl --output docker-compose.yaml "https://gitlab.com/140crafts/use-jinear/-/raw/main/example/docker-compose.yaml?ref_type=heads"
-   ```
+### Requirements
 
-3. **Create necessary directories:**
-   ```bash
-   mkdir .config && mkdir .data && mkdir .data/caddy && mkdir .data/caddy/conf
-   ```
+- **Docker** 20.10+ and **Docker Compose** 2.0+
+- **5GB+ disk space** (10GB+ recommended)
+- **2GB+ RAM** (4GB+ recommended)
+- **Ports 80 & 443** available
+- A domain name pointed to your server
 
-4. **Download configuration files:**
-   ```bash
-   sudo curl --output .config/Caddyfile "https://gitlab.com/140crafts/use-jinear/-/raw/main/example/.config/Caddyfile?ref_type=heads" &&
-   sudo curl --output .config/application.properties "https://gitlab.com/140crafts/use-jinear/-/raw/main/example/.config/application.properties?ref_type=heads" &&
-   sudo curl --output .config/db-backup.sh "https://gitlab.com/140crafts/use-jinear/-/raw/main/example/.config/db-backup.sh?ref_type=heads" 
-   ```
+### After Installation
 
-5. **Copy Caddy configuration:**
-   ```bash
-   cp .config/Caddyfile .data/caddy/conf
-   ```
+Your Jinear instance will be available at:
+- 🌐 **Application**: `https://your-domain.com`
+- 🔧 **API**: `https://api.your-domain.com`
+- 📁 **Files**: `https://files.your-domain.com`
+- 💬 **Message/WebSocket**: `https://message.your-domain.com`
 
-6. **Configure your installation:**
+### Manual Installation
 
-   Edit the following files according to your requirements:
-    - `docker-compose.yaml`
-    - `.config/application.properties`
-    - `.data/caddy/conf/Caddyfile`
-
-7. **Set proper permissions and start the application:**
-   ```bash
-   sudo chown -R 1001:1001 .data/
-   ```
-      ```bash
-   docker-compose up -d
-   ```
+For advanced users who prefer manual setup, see the [example](./example/) folder or the detailed guide in [jinear-installation-scripts](./jinear-installation-scripts/).
 
 ### Configuration
 
-After installation, customize your Jinear instance by modifying:
+After installation, you can customize your instance by modifying:
 
-- **Application Properties**: Database connections, API keys, and application-specific settings
-- **Docker Compose**: Service configurations, ports, and environment variables
-- **Caddy Configuration**: Reverse proxy settings, SSL certificates, and domain routing
+- **`.env`**: Domain, passwords, and environment settings
+- **`.config/application.properties`**: Application-specific settings
+- **`.data/caddy/conf/Caddyfile`**: Reverse proxy and SSL configuration
+
+### Troubleshooting
+
+**SSL Certificate Issues:**
+- If you see staging/untrusted certificates, ensure your Caddyfile has: `acme_ca https://acme-v02.api.letsencrypt.org/directory`
+- If you hit Let's Encrypt rate limits (50 certs/week), either wait 7 days or temporarily use staging server
+- Check detailed troubleshooting: [jinear-installation-scripts/README.md](./jinear-installation-scripts/README.md#troubleshooting)
+
+**View Logs:**
+```bash
+cd <install-dir>
+docker compose logs -f jinear-caddy  # SSL/proxy logs
+docker compose logs -f jinear-core    # Backend logs
+```
 
 ## Getting Started
 

@@ -6,14 +6,12 @@ services:
     image: postgres:15
     restart: always
     environment:
-      POSTGRES_DB: jinear
-      POSTGRES_USER: db-user
-      POSTGRES_PASSWORD: db-pass
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: /var/lib/postgresql/data
     volumes:
       - ".data/postgres:/var/lib/postgresql/data"
-    ports:
-      - "5432:5432"
     networks:
       - jinear-default
 
@@ -24,7 +22,12 @@ services:
     depends_on:
       - jinear-db
     environment:
-      TZ: "Asia/Istanbul"  # You can choose the appropriate timezone. It's for GMT+3
+      TZ: "${TIMEZONE}"
+      POSTGRES_HOST: jinear-db
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-7}
     volumes:
       - ".backups:/backups"
       - ".config:/config"
@@ -34,16 +37,14 @@ services:
       - jinear-default
 
   jinear-redis:
+    container_name: jinear-redis
     image: redis:6.2-alpine
     restart: always
-    ports:
-      - "6379:6379"
-      - "18020:6379"
-    command: redis-server --requirepass redis-pass
+    command: redis-server --requirepass ${REDIS_PASSWORD}
     volumes:
       - ".data/redis:/data"
     healthcheck:
-      test: [ "CMD-SHELL", "redis-cli ping | grep PONG" ]
+      test: [ "CMD-SHELL", "redis-cli -a ${REDIS_PASSWORD} ping | grep PONG" ]
       interval: 1s
       timeout: 3s
       retries: 5
@@ -54,15 +55,12 @@ services:
     container_name: jinear-minio
     image: minio/minio:RELEASE.2025-03-12T18-04-18Z
     restart: always
-    ports:
-      - "9000:9000"
-      - "9001:9001"
     volumes:
       - ".data/minio:/data"
     command: server /data --console-address ":9001"
     environment:
-      MINIO_ROOT_USER: minio-user
-      MINIO_ROOT_PASSWORD: minio-pass
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
     networks:
       - jinear-default
 
@@ -77,21 +75,39 @@ services:
       - ".logs/jinear-core:/app/logs"
       - ".config:/config"
     environment:
-      jasypt.encryptor.password: encryptor-pass
+      # Jasypt encryption
+      jasypt.encryptor.password: ${ENCRYPTOR_PASSWORD}
       jasypt.encryptor.algorithm: PBEWithMD5AndDES
-      #      GOOGLE_APPLICATION_CREDENTIALS: /config/gcloud-serviceaccount.json
-      JWT_SECRET: change-me
-      JWT_DOMAIN: company.com
-      FE_PATH: https://your-instance.company.com
-      # MinIO - use same credentials as jinear-minio service above
-      MINIO_KEY: minio-user
-      MINIO_SECRET: minio-pass
+      # JWT
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_DOMAIN: ${DOMAIN}
+      # Frontend
+      FE_PATH: https://${DOMAIN}
+      CORS_ORIGINS: https://${DOMAIN},https://${PAGES_DOMAIN}
+      # MinIO - uses same credentials as minio service
+      MINIO_KEY: ${MINIO_ROOT_USER}
+      MINIO_SECRET: ${MINIO_ROOT_PASSWORD}
       MINIO_ROOT: http://jinear-minio:9000
-      MINIO_BASE_PATH: https://files.your-instance.company.com/
+      MINIO_BASE_PATH: https://${FILES_DOMAIN}/
+      # Database (passed to application.properties)
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      # Redis
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      # Email
+      MAIL_HOST: ${MAIL_HOST:-localhost}
+      MAIL_PORT: ${MAIL_PORT:-587}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_SENDER_ADDRESS: ${MAIL_SENDER_ADDRESS:-noreply@example.com}
+      # Internal auth
+      INTERNAL_AUTH_TOKEN: ${INTERNAL_AUTH_TOKEN}
+      # Rate limiting
+      RATE_LIMIT_PUBLIC_CAPACITY: ${RATE_LIMIT_PUBLIC_CAPACITY:-25}
+      RATE_LIMIT_AUTH_CAPACITY: ${RATE_LIMIT_AUTH_CAPACITY:-100}
     restart: always
     privileged: true
-    ports:
-      - 19010:8008
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:8008" ]
       interval: 30s
@@ -109,13 +125,11 @@ services:
       - ".logs/jinear-web:/logs"
     restart: always
     environment:
-      - NEXT_PUBLIC_API_ROOT=https://api.your-instance.company.com/
-      - NEXT_PUBLIC_SOCKET_ROOT=https://message.your-instance.company.com/
-      - NEXT_PUBLIC_POSTHOG_KEY=posthog-key
-      - NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+      - NEXT_PUBLIC_API_ROOT=https://${API_DOMAIN}/
+      - NEXT_PUBLIC_SOCKET_ROOT=https://${MESSAGE_DOMAIN}/
+      - NEXT_PUBLIC_POSTHOG_KEY=${POSTHOG_KEY:-}
+      - NEXT_PUBLIC_POSTHOG_HOST=${POSTHOG_HOST:-https://us.i.posthog.com}
     privileged: true
-    ports:
-      - 19020:3000
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
       interval: 30s
@@ -133,12 +147,10 @@ services:
       - ".logs/jinear-pages:/logs"
     restart: always
     environment:
-      - NEXT_PUBLIC_API_ROOT=https://api.your-instance.company.com/
-      - NEXT_PUBLIC_POSTHOG_KEY=posthog-key
-      - NEXT_PUBLIC_POSTHOG_HOST=https://us.i.posthog.com
+      - NEXT_PUBLIC_API_ROOT=https://${API_DOMAIN}/
+      - NEXT_PUBLIC_POSTHOG_KEY=${POSTHOG_KEY:-}
+      - NEXT_PUBLIC_POSTHOG_HOST=${POSTHOG_HOST:-https://us.i.posthog.com}
     privileged: true
-    ports:
-      - 19030:3000
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
       interval: 30s
@@ -157,12 +169,11 @@ services:
       - "80:80"
       - "443:443"
       - "443:443/udp"
-      - "127.0.0.1:2019:2019"
     volumes:
-      - $PWD/.data/caddy/conf:/etc/caddy
-      - $PWD/.data/caddy/site:/srv
-      - .data/caddy/data:/data
-      - .data/caddy/config:/config
+      - ./.data/caddy/conf:/etc/caddy
+      - ./.data/caddy/site:/srv
+      - ./.data/caddy/data:/data
+      - ./.data/caddy/config:/config
     networks:
       - jinear-default
 
@@ -177,13 +188,11 @@ services:
     environment:
       - PORT=3001
       - CORE_ENDPOINT=http://jinear-core:8008
-      - INTERNAL_AUTH_TOKEN=your-messaging-api-token
-      - ALLOWED_ORIGIN=https://your-instance.company.com
+      - INTERNAL_AUTH_TOKEN=${INTERNAL_AUTH_TOKEN}
+      - ALLOWED_ORIGIN=https://${DOMAIN}
     privileged: true
-    ports:
-      - 19050:3001
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      test: ["CMD", "curl", "-f", "http://localhost:3001"]
       interval: 30s
       timeout: 15s
       retries: 5
