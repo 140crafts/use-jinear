@@ -268,13 +268,31 @@ check_prerequisites() {
     fi
 
     # Check ports 80 and 443
-    if ! lsof -i :80 >/dev/null 2>&1; then
+    # Use multiple methods to check port availability
+    check_port() {
+        local port=$1
+        # Method 1: Try to bind to the port briefly using nc (most reliable)
+        if command_exists nc; then
+            if nc -z localhost $port 2>/dev/null; then
+                return 1  # Port is in use
+            else
+                return 0  # Port is available
+            fi
+        fi
+        # Method 2: Check with lsof (may need sudo for full visibility)
+        if lsof -i :$port 2>/dev/null | grep -q LISTEN; then
+            return 1  # Port is in use
+        fi
+        return 0  # Port is available
+    }
+
+    if check_port 80; then
         print_success "Port 80 is available"
     else
         print_warning "Port 80 is in use (may conflict with Caddy)"
     fi
 
-    if ! lsof -i :443 >/dev/null 2>&1; then
+    if check_port 443; then
         print_success "Port 443 is available"
     else
         print_warning "Port 443 is in use (may conflict with Caddy)"
