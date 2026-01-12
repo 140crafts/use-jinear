@@ -152,6 +152,39 @@ validate_email() {
     fi
 }
 
+# Validate timezone format (IANA/Olson format: Region/City)
+# Returns 0 if valid, 1 if invalid
+validate_timezone() {
+    local tz=$1
+
+    # Check basic format: Region/City or Region/Sub/City
+    if [[ ! $tz =~ ^[A-Za-z_]+/[A-Za-z_]+(/[A-Za-z_]+)?$ ]]; then
+        # Also allow simple formats like UTC, GMT
+        if [[ ! $tz =~ ^(UTC|GMT)$ ]]; then
+            return 1
+        fi
+    fi
+
+    # Check if timezone exists in the system
+    if [ -f "/usr/share/zoneinfo/$tz" ]; then
+        return 0
+    fi
+
+    # On macOS, check differently
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        if [ -f "/var/db/timezone/zoneinfo/$tz" ] || [ -f "/usr/share/zoneinfo/$tz" ]; then
+            return 0
+        fi
+    fi
+
+    # If we can't verify, accept it if format looks right
+    if [[ $tz =~ ^[A-Za-z_]+/[A-Za-z_]+(/[A-Za-z_]+)?$ ]] || [[ $tz =~ ^(UTC|GMT)$ ]]; then
+        return 0
+    fi
+
+    return 1
+}
+
 # Check if command exists
 command_exists() {
     command -v "$1" >/dev/null 2>&1
@@ -316,8 +349,19 @@ prompt_configuration() {
     # Timezone
     echo ""
     echo -e "  ${BOLD}Timezone${NC}"
-    read -p "  Enter your timezone [${DEFAULT_TIMEZONE}]: " TIMEZONE
-    TIMEZONE=${TIMEZONE:-$DEFAULT_TIMEZONE}
+    echo -e "  ${INFO} Format: Region/City (e.g., Europe/Istanbul, America/New_York, Asia/Tokyo)"
+
+    while true; do
+        read -p "  Enter your timezone [${DEFAULT_TIMEZONE}]: " TIMEZONE
+        TIMEZONE=${TIMEZONE:-$DEFAULT_TIMEZONE}
+
+        if validate_timezone "$TIMEZONE"; then
+            break
+        else
+            print_error "Invalid timezone format. Use IANA format like 'Europe/Istanbul' or 'America/New_York'"
+            print_info "See: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"
+        fi
+    done
 
     # Email configuration (optional)
     echo ""
