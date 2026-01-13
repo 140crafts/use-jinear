@@ -4,10 +4,10 @@ This folder contains everything needed to easily self-host Jinear on your own se
 
 ## Quick Start
 
-Run this one-liner on your server:
+Download and run the installer on your server:
 
 ```bash
-curl -sSL https://gitlab.com/140crafts/use-jinear/-/raw/main/jinear-installation-scripts/install.sh | bash
+curl -sSL https://gitlab.com/140crafts/use-jinear/-/raw/main/jinear-installation-scripts/install.sh -o install.sh && chmod +x install.sh && ./install.sh
 ```
 
 Or download and run manually:
