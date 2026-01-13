@@ -19,10 +19,23 @@ Jinear is a comprehensive solution that combines task management with calendar f
 
 ### Quick Install (Recommended)
 
-Run this one-liner on your server to start the interactive installer:
+Download and run the installer on your server:
 
 ```bash
-curl -sSL https://gitlab.com/140crafts/use-jinear/-/raw/main/jinear-installation-scripts/install.sh | bash
+curl -sSL https://gitlab.com/140crafts/use-jinear/-/raw/main/jinear-installation-scripts/install.sh -o install.sh && chmod +x install.sh && ./install.sh
+```
+
+Or as separate steps:
+
+```bash
+# Download
+curl -sSL https://gitlab.com/140crafts/use-jinear/-/raw/main/jinear-installation-scripts/install.sh -o install.sh
+
+# Make executable
+chmod +x install.sh
+
+# Run
+./install.sh
 ```
 
 The installer will:

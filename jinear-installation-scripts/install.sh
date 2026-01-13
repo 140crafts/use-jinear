@@ -13,6 +13,22 @@
 
 set -e
 
+# Check if we can read from TTY (required for interactive prompts)
+if ! exec 3</dev/tty 2>/dev/null; then
+    echo "Error: This installer requires an interactive terminal."
+    echo ""
+    echo "Please run it one of these ways:"
+    echo "  1. Download and run:"
+    echo "     curl -sSL https://gitlab.com/140crafts/use-jinear/-/raw/main/jinear-installation-scripts/install.sh -o install.sh"
+    echo "     chmod +x install.sh"
+    echo "     ./install.sh"
+    echo ""
+    echo "  2. Or use bash with TTY:"
+    echo "     bash -c \"\$(curl -sSL https://gitlab.com/140crafts/use-jinear/-/raw/main/jinear-installation-scripts/install.sh)\""
+    exit 1
+fi
+exec 3<&-
+
 # Version
 INSTALLER_VERSION="1.0.0"
 SCRIPT_URL="https://gitlab.com/140crafts/use-jinear/-/raw/main/jinear-installation-scripts"
@@ -309,20 +325,52 @@ check_prerequisites() {
 # CONFIGURATION PROMPTS
 # =============================================================================
 
+# Helper function to read input from TTY with prompt
+prompt_input() {
+    local prompt="$1"
+    local default="$2"
+    local result=""
+
+    if [ -n "$default" ]; then
+        printf "%s [%s]: " "$prompt" "$default" > /dev/tty
+    else
+        printf "%s: " "$prompt" > /dev/tty
+    fi
+
+    read -r result < /dev/tty
+
+    if [ -z "$result" ] && [ -n "$default" ]; then
+        result="$default"
+    fi
+
+    echo "$result"
+}
+
+# Helper function to read password (hidden input)
+prompt_password() {
+    local prompt="$1"
+    local result=""
+
+    printf "%s: " "$prompt" > /dev/tty
+    read -rs result < /dev/tty
+    echo "" > /dev/tty
+
+    echo "$result"
+}
+
 prompt_configuration() {
     print_section "📝 Configuration"
 
     # Installation directory
     echo ""
     echo -e "  ${BOLD}Installation Directory${NC}"
-    read -p "  Where should Jinear be installed? [${DEFAULT_INSTALL_DIR}]: " INSTALL_DIR
-    INSTALL_DIR=${INSTALL_DIR:-$DEFAULT_INSTALL_DIR}
+    INSTALL_DIR=$(prompt_input "  Where should Jinear be installed?" "${DEFAULT_INSTALL_DIR}")
 
     # Check if directory exists
     if [ -d "$INSTALL_DIR" ]; then
         echo ""
         print_warning "Directory '$INSTALL_DIR' already exists!"
-        read -p "  Continue and overwrite configuration? [y/N]: " confirm
+        local confirm=$(prompt_input "  Continue and overwrite configuration? [y/N]" "")
         if [[ ! $confirm =~ ^[Yy]$ ]]; then
             echo "Installation cancelled."
             exit 0
@@ -336,8 +384,8 @@ prompt_configuration() {
     echo ""
 
     while true; do
-        read -p "  Enter your main domain (e.g., jinear.company.com): " DOMAIN
-        if validate_domain "$DOMAIN"; then
+        DOMAIN=$(prompt_input "  Enter your main domain (e.g., jinear.company.com)" "")
+        if [ -n "$DOMAIN" ] && validate_domain "$DOMAIN"; then
             break
         else
             print_error "Invalid domain format. Please try again."
@@ -345,24 +393,16 @@ prompt_configuration() {
     done
 
     # Auto-suggest subdomains
-    # Auto-suggest subdomains
     API_DOMAIN_DEFAULT="api.${DOMAIN}"
     FILES_DOMAIN_DEFAULT="files.${DOMAIN}"
     PAGES_DOMAIN_DEFAULT="pages.${DOMAIN}"
     MESSAGE_DOMAIN_DEFAULT="message.${DOMAIN}"
 
     echo ""
-    read -p "  API domain [${API_DOMAIN_DEFAULT}]: " API_DOMAIN
-    API_DOMAIN=${API_DOMAIN:-$API_DOMAIN_DEFAULT}
-
-    read -p "  Files domain [${FILES_DOMAIN_DEFAULT}]: " FILES_DOMAIN
-    FILES_DOMAIN=${FILES_DOMAIN:-$FILES_DOMAIN_DEFAULT}
-
-    read -p "  Pages domain [${PAGES_DOMAIN_DEFAULT}]: " PAGES_DOMAIN
-    PAGES_DOMAIN=${PAGES_DOMAIN:-$PAGES_DOMAIN_DEFAULT}
-
-    read -p "  Message domain [${MESSAGE_DOMAIN_DEFAULT}]: " MESSAGE_DOMAIN
-    MESSAGE_DOMAIN=${MESSAGE_DOMAIN:-$MESSAGE_DOMAIN_DEFAULT}
+    API_DOMAIN=$(prompt_input "  API domain" "${API_DOMAIN_DEFAULT}")
+    FILES_DOMAIN=$(prompt_input "  Files domain" "${FILES_DOMAIN_DEFAULT}")
+    PAGES_DOMAIN=$(prompt_input "  Pages domain" "${PAGES_DOMAIN_DEFAULT}")
+    MESSAGE_DOMAIN=$(prompt_input "  Message domain" "${MESSAGE_DOMAIN_DEFAULT}")
 
     # Timezone
     echo ""
@@ -370,8 +410,7 @@ prompt_configuration() {
     echo -e "  ${INFO} Format: Region/City (e.g., Europe/Istanbul, America/New_York, Asia/Tokyo)"
 
     while true; do
-        read -p "  Enter your timezone [${DEFAULT_TIMEZONE}]: " TIMEZONE
-        TIMEZONE=${TIMEZONE:-$DEFAULT_TIMEZONE}
+        TIMEZONE=$(prompt_input "  Enter your timezone" "${DEFAULT_TIMEZONE}")
 
         if validate_timezone "$TIMEZONE"; then
             break
@@ -385,16 +424,14 @@ prompt_configuration() {
     echo ""
     echo -e "  ${BOLD}Email Configuration (Optional)${NC}"
     echo -e "  ${INFO} Configure SMTP to enable email notifications"
-    read -p "  Configure email now? [y/N]: " configure_email
+    local configure_email=$(prompt_input "  Configure email now? [y/N]" "")
 
     if [[ $configure_email =~ ^[Yy]$ ]]; then
-        read -p "  SMTP Host: " MAIL_HOST
-        read -p "  SMTP Port [587]: " MAIL_PORT
-        MAIL_PORT=${MAIL_PORT:-587}
-        read -p "  SMTP Username: " MAIL_USERNAME
-        read -sp "  SMTP Password: " MAIL_PASSWORD
-        echo ""
-        read -p "  Sender Email Address: " MAIL_SENDER_ADDRESS
+        MAIL_HOST=$(prompt_input "  SMTP Host" "")
+        MAIL_PORT=$(prompt_input "  SMTP Port" "587")
+        MAIL_USERNAME=$(prompt_input "  SMTP Username" "")
+        MAIL_PASSWORD=$(prompt_password "  SMTP Password")
+        MAIL_SENDER_ADDRESS=$(prompt_input "  Sender Email Address" "")
     else
         MAIL_HOST="smtp.example.com"
         MAIL_PORT="587"
@@ -406,14 +443,13 @@ prompt_configuration() {
     # Backup configuration
     echo ""
     echo -e "  ${BOLD}Backup Configuration${NC}"
-    read -p "  Enable daily database backups? [Y/n]: " enable_backups
+    local enable_backups=$(prompt_input "  Enable daily database backups? [Y/n]" "")
     if [[ $enable_backups =~ ^[Nn]$ ]]; then
         BACKUP_ENABLED="false"
         BACKUP_RETENTION_DAYS=7
     else
         BACKUP_ENABLED="true"
-        read -p "  Backup retention days [${DEFAULT_BACKUP_RETENTION}]: " BACKUP_RETENTION_DAYS
-        BACKUP_RETENTION_DAYS=${BACKUP_RETENTION_DAYS:-$DEFAULT_BACKUP_RETENTION}
+        BACKUP_RETENTION_DAYS=$(prompt_input "  Backup retention days" "${DEFAULT_BACKUP_RETENTION}")
     fi
 }
 
