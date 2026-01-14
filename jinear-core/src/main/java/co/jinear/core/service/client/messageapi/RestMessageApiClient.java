@@ -34,6 +34,7 @@ public class RestMessageApiClient implements MessageApiClient {
     private HttpHeaders retrieveHeaders(String token) {
         HttpHeaders headers = new HttpHeaders();
         headers.set(HttpHeaders.AUTHORIZATION, AUTH_HEADER.formatted(token));
+        headers.set(HttpHeaders.CONTENT_TYPE, "application/json");
         return headers;
     }
 }

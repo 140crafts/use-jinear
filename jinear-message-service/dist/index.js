@@ -14,22 +14,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const winston_1 = __importDefault(require("winston"));
-const winston_2 = require("@axiomhq/winston");
 const dotenv = require('dotenv');
 dotenv.config();
 const morgan = require('morgan');
 const { combine, timestamp, json, errors } = winston_1.default.format;
-const { PORT = 3001, INTERNAL_AUTH_TOKEN = 'debug', AXIOM_TOKEN = '', AXIOM_ORG_ID = '', CORE_ENDPOINT = 'http://localhost:8085' } = process.env;
+const { PORT = 3001, INTERNAL_AUTH_TOKEN = 'debug', CORE_ENDPOINT = 'http://localhost:8085', ALLOWED_ORIGIN = "https://jinear.co", } = process.env;
 const logger = winston_1.default.createLogger({
     level: 'debug',
     format: combine(errors({ stack: true }), timestamp(), json()),
     defaultMeta: { service: 'jinear-message-service' },
     transports: [
-        new winston_2.WinstonTransport({
-            dataset: 'jinear_be',
-            token: AXIOM_TOKEN,
-            orgId: AXIOM_ORG_ID,
-        }),
         new winston_1.default.transports.Console(),
     ],
 });
@@ -46,8 +40,8 @@ let http = require("http").Server(app);
 let io = require("socket.io")(http, {
     path: '/ws',
     cors: {
-        origin: "https://jinear.co",
-        methods: ["GET", "POST"],
+        origin: ALLOWED_ORIGIN,
+        methods: ["GET", "POST", "OPTIONS"],
         allowedHeaders: ["X-Token", "Cookie"],
         credentials: true
     }
@@ -111,7 +105,7 @@ app.post('/emit', (req, resp) => {
         io.to(channel).emit(topic, message);
     }
     catch (error) {
-        logger.error(error);
+        logger.error(`emit failed. io.to failed. ${error}`);
     }
     return resp.status(200).send("ok");
 });
@@ -123,7 +117,12 @@ io.on('connection', (socket) => __awaiter(void 0, void 0, void 0, function* () {
         try {
             const accountId = yield getAccountId(JWT.value);
             logger.info({ newConnection: accountId });
-            socket.join(accountId);
+            try {
+                socket.join(accountId);
+            }
+            catch (err) {
+                logger.error(`socker.join has failed. ${err}`);
+            }
             return;
         }
         catch (e) {

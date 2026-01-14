@@ -1,6 +1,5 @@
 import express from "express";
 import winston from "winston";
-import {WinstonTransport as AxiomTransport} from '@axiomhq/winston';
 
 const dotenv = require('dotenv');
 dotenv.config();
@@ -13,8 +12,8 @@ const {combine, timestamp, json, errors} = winston.format;
 const {
     PORT = 3001,
     INTERNAL_AUTH_TOKEN = 'debug',
-    AXIOM_TOKEN = '',
-    AXIOM_ORG_ID = '',
+    // AXIOM_TOKEN = '',
+    // AXIOM_ORG_ID = '',
     CORE_ENDPOINT = 'http://localhost:8085',
     ALLOWED_ORIGIN = "https://jinear.co",
 } = process.env;
@@ -24,11 +23,11 @@ const logger = winston.createLogger({
     format: combine(errors({stack: true}), timestamp(), json()),
     defaultMeta: {service: 'jinear-message-service'},
     transports: [
-        new AxiomTransport({
-            dataset: 'jinear_be',
-            token: AXIOM_TOKEN,
-            orgId: AXIOM_ORG_ID,
-        }),
+        // new AxiomTransport({
+        //     dataset: 'jinear_be',
+        //     token: AXIOM_TOKEN,
+        //     orgId: AXIOM_ORG_ID,
+        // }),
         new winston.transports.Console(),
     ],
 });
