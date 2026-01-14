@@ -36,6 +36,15 @@ const app = (0, express_1.default)();
 app.disable('etag');
 app.set("port", PORT);
 app.use(express_1.default.json(), morganMiddleware);
+app.use((req, _res, next) => {
+    logger.debug({
+        method: req.method,
+        path: req.path,
+        traceId: req.headers['x-b3-traceid'],
+        spanId: req.headers['x-b3-spanid']
+    });
+    next();
+});
 let http = require("http").Server(app);
 let io = require("socket.io")(http, {
     path: '/ws',
@@ -94,7 +103,7 @@ app.get('/info', (req, resp) => {
 app.post('/emit', (req, resp) => {
     var _a, _b;
     const authToken = (_b = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split("Bearer ")) === null || _b === void 0 ? void 0 : _b[1];
-    console.log({ authToken });
+    console.log({ authToken, headers: req.headers });
     let { channel, topic, message } = req.body;
     const tokenValid = authToken == INTERNAL_AUTH_TOKEN;
     logger.info({ tokenValid, channel, topic, message });

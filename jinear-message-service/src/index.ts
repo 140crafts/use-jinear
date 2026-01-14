@@ -1,6 +1,14 @@
 import express from "express";
 import winston from "winston";
 
+declare global {
+    namespace Express {
+        interface Request {
+            logger: winston.Logger;
+        }
+    }
+}
+
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -46,6 +54,19 @@ const app = express();
 app.disable('etag');
 app.set("port", PORT);
 app.use(express.json(), morganMiddleware)
+
+app.use((req, _res, next) => {
+    const traceId = req.headers['x-b3-traceid'];
+    const spanId = req.headers['x-b3-spanid'];
+
+    // Create a child logger with trace context for this request
+    req.logger = logger.child({
+        ...(traceId && { traceId }),
+        ...(spanId && { spanId })
+    });
+
+    next();
+});
 
 let http = require("http").Server(app);
 let io = require("socket.io")(http, {
@@ -102,30 +123,30 @@ const getAccountId = async (jwt: string): Promise<string> => {
 
 app.get('/', (req, resp) => {
     const cookie = req.headers.cookie;
-    logger.log({level: 'info', message: `cookie: ${cookie}`});
+    req.logger.log({level: 'info', message: `cookie: ${cookie}`});
 
     return resp.status(200).send("up");
 })
 
 app.get('/info', (req, resp) => {
     let rooms = io.sockets.adapter.rooms;
-    logger.info({reqIp: req.ip, rooms: Array.from(rooms.entries())});
+    req.logger.info({reqIp: req.ip, rooms: Array.from(rooms.entries())});
     return resp.status(200).send('logs sent');
 })
 
 app.post('/emit', (req, resp) => {
     const authToken = req.headers.authorization?.split("Bearer ")?.[1];
-    console.log({authToken});
+    req.logger.info({authToken});
     let {channel, topic, message} = req.body;
     const tokenValid = authToken == INTERNAL_AUTH_TOKEN;
-    logger.info({tokenValid, channel, topic, message});
+    req.logger.info({tokenValid, channel, topic, message});
     if (!tokenValid) {
         return resp.status(401).send('Access denied');
     }
     try {
         io.to(channel).emit(topic, message);
     } catch (error) {
-        logger.error(`emit failed. io.to failed. ${error}`);
+        req.logger.error(`emit failed. io.to failed. ${error}`);
     }
     return resp.status(200).send("ok");
 })
