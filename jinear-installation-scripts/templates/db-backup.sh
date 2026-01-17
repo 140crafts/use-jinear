@@ -1,96 +1,79 @@
 #!/bin/bash
 
-# =============================================================================
-# Jinear Database Backup Script
-# =============================================================================
-# This script runs inside the backup container and performs daily backups
-# of all PostgreSQL databases.
-# =============================================================================
-
+# Database backup script for Jinear
 set -e
 
-# Configuration from environment variables
 BACKUP_DIR="/backups"
-POSTGRES_HOST="${POSTGRES_HOST:-jinear-db}"
-POSTGRES_USER="${POSTGRES_USER:-jinear_user}"
-POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
-POSTGRES_DB="${POSTGRES_DB:-jinear}"
 RETENTION_DAYS="${BACKUP_RETENTION_DAYS:-7}"
+TIMESTAMP=$(date +%Y%m%d_%H%M%S)
 
-# Install required packages
-apt-get update && apt-get -y install cron tzdata > /dev/null 2>&1
+log() {
+    echo "[$(date '+%a %b %d %I:%M:%S %p %Z %Y')] $1"
+}
 
-# Set timezone from environment
-if [ -n "$TZ" ]; then
-    ln -fs /usr/share/zoneinfo/$TZ /etc/localtime
-    dpkg-reconfigure --frontend noninteractive tzdata > /dev/null 2>&1
-fi
+do_backup() {
+    log "Starting backup process..."
 
-# Create backup script
-cat > /backup.sh << 'BACKUP_SCRIPT'
-#!/bin/bash
-set -e
+    # Export password for pg_dump
+    export PGPASSWORD="${POSTGRES_PASSWORD}"
 
-TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
-BACKUP_DIR="/backups"
-POSTGRES_HOST="${POSTGRES_HOST:-jinear-db}"
-POSTGRES_USER="${POSTGRES_USER:-jinear_user}"
-POSTGRES_PASSWORD="${POSTGRES_PASSWORD}"
-POSTGRES_DB="${POSTGRES_DB:-jinear}"
-RETENTION_DAYS="${BACKUP_RETENTION_DAYS:-7}"
+    # Get list of databases (excluding templates)
+    DATABASES=$(psql -h jinear-db -U "${POSTGRES_USER:-jinear_user}" -d postgres -t -c "SELECT datname FROM pg_database WHERE datistemplate = false AND datname != 'postgres';" 2>/dev/null | tr -d ' ')
 
-# Create backup directory
-mkdir -p "${BACKUP_DIR}/${TIMESTAMP}"
+    for DB in $DATABASES; do
+        if [ -n "$DB" ]; then
+            log "Backing up database: $DB"
+            pg_dump -h jinear-db -U "${POSTGRES_USER:-jinear_user}" -d "$DB" -Fc -f "${BACKUP_DIR}/${DB}_${TIMESTAMP}.dump"
+            log "Completed backup of $DB"
+        fi
+    done
 
-# Set PGPASSWORD
-export PGPASSWORD="${POSTGRES_PASSWORD}"
+    log "Creating full backup..."
+    pg_dumpall -h jinear-db -U "${POSTGRES_USER:-jinear_user}" --globals-only -f "${BACKUP_DIR}/globals_${TIMESTAMP}.sql"
 
-echo "[$(date)] Starting backup process..."
+    log "Removing backups older than ${RETENTION_DAYS} days..."
+    find "${BACKUP_DIR}" -name "*.dump" -type f -mtime +${RETENTION_DAYS} -delete
+    find "${BACKUP_DIR}" -name "*.sql" -type f -mtime +${RETENTION_DAYS} -delete
 
-# Get list of databases
-DATABASES=$(psql -h ${POSTGRES_HOST} -U ${POSTGRES_USER} -d ${POSTGRES_DB} -t -c \
-    "SELECT datname FROM pg_database WHERE datname NOT IN ('template0', 'template1', 'postgres') AND datistemplate = false;")
+    log "Backup completed successfully!"
+    echo "---"
+}
 
-# Backup each database
-for DB in $DATABASES; do
-    DB_NAME=$(echo $DB | tr -d ' ')
-    echo "[$(date)] Backing up database: $DB_NAME"
+# Write environment variables to a file for cron
+setup_cron_env() {
+    echo "POSTGRES_PASSWORD=${POSTGRES_PASSWORD}" > /etc/backup.env
+    echo "POSTGRES_USER=${POSTGRES_USER:-jinear_user}" >> /etc/backup.env
+    echo "BACKUP_RETENTION_DAYS=${RETENTION_DAYS}" >> /etc/backup.env
+    chmod 600 /etc/backup.env
+}
 
-    pg_dump -h ${POSTGRES_HOST} -U ${POSTGRES_USER} -d $DB_NAME > "${BACKUP_DIR}/${TIMESTAMP}/${DB_NAME}.sql"
-    gzip "${BACKUP_DIR}/${TIMESTAMP}/${DB_NAME}.sql"
+# Main entrypoint
+log "Starting backup scheduler..."
 
-    echo "[$(date)] Completed backup of $DB_NAME"
-done
+# Install PostgreSQL client if not present
+apt-get update && apt-get install -y postgresql-client -qq
 
-# Create full backup
-echo "[$(date)] Creating full backup..."
-pg_dumpall -h ${POSTGRES_HOST} -U ${POSTGRES_USER} > "${BACKUP_DIR}/${TIMESTAMP}/full_backup.sql"
-gzip "${BACKUP_DIR}/${TIMESTAMP}/full_backup.sql"
+# Setup environment for cron
+setup_cron_env
 
-# Remove old backups
-echo "[$(date)] Removing backups older than ${RETENTION_DAYS} days..."
-find ${BACKUP_DIR} -type d -mtime +${RETENTION_DAYS} -exec rm -rf {} \; 2>/dev/null || true
-
-echo "[$(date)] Backup completed successfully!"
-echo "---"
-BACKUP_SCRIPT
-
-# Make backup script executable
-chmod +x /backup.sh
-
-# Add cron job to run backup daily at 3:00 AM
-echo "0 3 * * * /backup.sh >> /var/log/backup.log 2>&1" > /etc/cron.d/postgres-backup
-chmod 0644 /etc/cron.d/postgres-backup
-crontab /etc/cron.d/postgres-backup
-
-# Create log file
-touch /var/log/backup.log
+# Create cron job that sources the environment file
+echo "0 3 * * * . /etc/backup.env && /backup.sh run >> /var/log/backup.log 2>&1" | crontab -
 
 # Run initial backup
-echo "[$(date)] Running initial backup..."
-/backup.sh
+log "Running initial backup..."
+do_backup
 
-# Start cron in foreground
-echo "[$(date)] Starting backup scheduler..."
-cron && tail -f /var/log/backup.log
-
+# Handle script arguments
+case "${1:-}" in
+    run)
+        # Source environment if running from cron
+        if [ -f /etc/backup.env ]; then
+            source /etc/backup.env
+        fi
+        do_backup
+        ;;
+    *)
+        # Start cron in foreground
+        cron -f
+        ;;
+esac

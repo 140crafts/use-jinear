@@ -109,6 +109,7 @@ services:
       - ".logs/jinear-web:/logs"
     restart: always
     environment:
+      - NEXT_PUBLIC_HOST=https://your-instance.company.com/
       - NEXT_PUBLIC_API_ROOT=https://api.your-instance.company.com/
       - NEXT_PUBLIC_SOCKET_ROOT=https://message.your-instance.company.com/
       - NEXT_PUBLIC_POSTHOG_KEY=posthog-key

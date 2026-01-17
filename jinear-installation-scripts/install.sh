@@ -738,7 +738,7 @@ start_services() {
 print_summary() {
     echo ""
     echo -e "${GREEN}╔═══════════════════════════════════════════════════════════════╗${NC}"
-    echo -e "${GREEN}║${NC}              ${BOLD}${WHITE}✅ Installation Complete!${NC}                         ${GREEN}║${NC}"
+    echo -e "${GREEN}║${NC}              ${BOLD}${WHITE}✅ Installation Complete!${NC}                        ${GREEN}║${NC}"
     echo -e "${GREEN}╚═══════════════════════════════════════════════════════════════╝${NC}"
     echo ""
 

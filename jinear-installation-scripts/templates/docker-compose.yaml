@@ -125,6 +125,7 @@ services:
       - ".logs/jinear-web:/logs"
     restart: always
     environment:
+      - NEXT_PUBLIC_HOST=https://${DOMAIN}/
       - NEXT_PUBLIC_API_ROOT=https://${API_DOMAIN}/
       - NEXT_PUBLIC_SOCKET_ROOT=https://${MESSAGE_DOMAIN}/
       - NEXT_PUBLIC_POSTHOG_KEY=${POSTHOG_KEY:-}

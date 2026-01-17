@@ -440,7 +440,7 @@ export const convertTaskToCell = (event: CalendarEventDto, day: Date, minuteInPx
       : endOfDay(day)
     : addMinutes(new Date(event.assignedDate), 15);
 
-  const top = differenceInMinutes(startTime, day) * minuteInPx;
+  const top = differenceInMinutes(startTime, startOfDay(day)) * minuteInPx;
   const height = differenceInMinutes(endTime, startTime) * minuteInPx;
   const width = 90;
   const left = 0; //10

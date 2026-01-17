@@ -187,7 +187,7 @@ const WorkspaceFilesPage: React.FC<WorkspaceFilesPageProps> = ({ workspace, filt
           </div>
           <div className={styles.contentContainer}>
             {viewType == "list" &&
-              <MaterialListView content={materialList} />}
+              <MaterialListView content={materialList} workspace={workspace}/>}
           </div>
         </div>
       </DropZone>
