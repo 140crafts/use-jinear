@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import styles from "./MaterialViewRow.module.css";
-import { MaterialAccessType, MaterialDto } from "@/be/jinear-core";
+import { MaterialAccessType, MaterialDto, WorkspaceDto } from "@/be/jinear-core";
 import { format } from "date-fns";
 import useTranslation from "@/locals/useTranslation";
 import { humanReadibleFileSize } from "@/utils/FileSizeFormatter";
@@ -51,7 +51,7 @@ import {
   popMaterialAccessModal,
   popMaterialFolderPickerModal
 } from "@/slice/modalSlice";
-import { API_ROOT } from "@/utils/constants";
+import { API_ROOT, HOST } from "@/utils/constants";
 import useWidthLimit, { MOBILE_LAYOUT_BREAKPOINT } from "@/hooks/useWidthLimit";
 import strings from "@/locals/strings";
 import ProfilePhoto from "@/components/profilePhoto";
@@ -62,6 +62,7 @@ import toast from "react-hot-toast";
 
 interface MaterialViewRowProps {
   material: MaterialDto;
+  workspace: WorkspaceDto;
 }
 
 export const ICON_MAP = {
@@ -105,7 +106,7 @@ export const ACCESS_TYPE_ICON_MAP = {
   ANYONE_WITH_LINK: LuEarth
 };
 
-const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
+const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material, workspace }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const currentAccountId = useTypedSelector(selectCurrentAccountId);
@@ -248,7 +249,11 @@ const MaterialViewRow: React.FC<MaterialViewRowProps> = ({ material }) => {
   };
 
   const copyMediaLink = () => {
-    copyTextToClipboard(`${API_ROOT}v1/material/media/${material.materialId}`);
+    if (material.materialType == "FILE") {
+      copyTextToClipboard(`${API_ROOT}v1/material/media/${material.materialId}`);
+    } else if (material.materialType == "FOLDER") {
+      copyTextToClipboard(`${HOST}/${workspace.username}/files?parentMaterialId=${material.materialId}`);
+    }
     toast(t("materialRowCopyLinkCopiedToast"));
   };
 

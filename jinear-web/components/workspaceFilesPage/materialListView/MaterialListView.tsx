@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 import styles from "./MaterialListView.module.css";
-import { MaterialDto } from "@/be/jinear-core";
+import { MaterialDto, WorkspaceDto } from "@/be/jinear-core";
 import MaterialViewRow from "@/components/workspaceFilesPage/materialListView/materialViewRow/MaterialViewRow";
 import useElementSize from "@/hooks/useElementSize";
 import useTranslation from "@/locals/useTranslation";
@@ -10,9 +10,10 @@ import useWidthLimit, { MOBILE_LAYOUT_BREAKPOINT } from "@/hooks/useWidthLimit";
 
 interface MaterialListViewProps {
   content: MaterialDto[];
+  workspace: WorkspaceDto;
 }
 
-const MaterialListView: React.FC<MaterialListViewProps> = ({ content }) => {
+const MaterialListView: React.FC<MaterialListViewProps> = ({ content, workspace }) => {
   const { t } = useTranslation();
   const isMobile = useWidthLimit({ limit: MOBILE_LAYOUT_BREAKPOINT });
   const setSelectedMaterial = useSetSelectedMaterial();
@@ -66,6 +67,7 @@ const MaterialListView: React.FC<MaterialListViewProps> = ({ content }) => {
         <MaterialViewRow
           key={material.materialId}
           material={material}
+          workspace={workspace}
         />
       )}
       </tbody>

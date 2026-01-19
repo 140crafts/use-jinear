@@ -18,6 +18,9 @@ export const taskApi = api.injectEndpoints({
         "v1/workspace/activity/filter",
         "v1/task-analytics/{workspaceId}/team/{teamId}",
         "v1/task/search/${workspaceId}",
+        "v1/notification/event/{workspaceId}",
+        "v1/notification/event/{workspaceId}/team/{teamId}",
+        "v1/notification/event/{workspaceId}/unread-count",
       ],
     }),
     //

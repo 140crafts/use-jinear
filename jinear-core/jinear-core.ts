@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-01-05 19:07:33.
+// Generated using typescript-generator version 3.0.1157 on 2026-01-17 14:01:26.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
+    ginternalDate: string;
+    gid: string;
     gthreadId: string;
     ghistoryId: string;
-    gid: string;
-    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -2119,9 +2119,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    filename: string;
-    description: string;
     uri: URI;
+    description: string;
+    filename: string;
 }
 
 export interface InputStreamSource {

@@ -14,15 +14,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.io.IOException;
-
 @Slf4j
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Bean(name = "encryptorBean")
-    public StringEncryptor stringEncryptor() throws IOException {
-//        String password = SecretManager.getLastSecretVersionValue("jasypt_encryptor_password");
+    public StringEncryptor stringEncryptor() {
         String password = System.getenv("jasypt.encryptor.password");
         PooledPBEStringEncryptor encryptor = new PooledPBEStringEncryptor();
         SimpleStringPBEConfig config = new SimpleStringPBEConfig();
@@ -36,7 +33,6 @@ public class WebConfig implements WebMvcConfigurer {
         encryptor.setConfig(config);
         return encryptor;
     }
-
 
     @Bean(name = "htmlSanitizerPolicy")
     PolicyFactory htmlSanitizerPolicy() {
