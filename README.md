@@ -70,6 +70,10 @@ Your Jinear instance will be available at:
 For advanced users who prefer manual setup, see the [docs/manual-setup](docs/manual-setup/) folder or the detailed guide
 in [jinear-installation-scripts](./jinear-installation-scripts/).
 
+### Running Behind Traefik
+
+Check out the docs [docs/behind-traefik](docs/behind-traefik/)
+
 ### Configuration
 
 After installation, you can customize your instance by modifying:
