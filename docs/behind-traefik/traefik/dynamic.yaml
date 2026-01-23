@@ -1,0 +1,43 @@
+http:
+  routers:
+    jinear-main:
+      rule: "Host(`jinear.example.com`)"
+      entryPoints:
+        - websecure
+      service: jinear-caddy
+      tls:
+        certResolver: letsencrypt
+    jinear-api:
+      rule: "Host(`api.jinear.example.com`)"
+      entryPoints:
+        - websecure
+      service: jinear-caddy
+      tls:
+        certResolver: letsencrypt
+    jinear-files:
+      rule: "Host(`files.jinear.example.com`)"
+      entryPoints:
+        - websecure
+      service: jinear-caddy
+      tls:
+        certResolver: letsencrypt
+    jinear-pages:
+      rule: "Host(`pages.jinear.example.com`)"
+      entryPoints:
+        - websecure
+      service: jinear-caddy
+      tls:
+        certResolver: letsencrypt
+    jinear-message:
+      rule: "Host(`message.jinear.example.com`)"
+      entryPoints:
+        - websecure
+      service: jinear-caddy
+      tls:
+        certResolver: letsencrypt
+
+  services:
+    jinear-caddy:
+      loadBalancer:
+        servers:
+          - url: "http://jinear-caddy:80"
