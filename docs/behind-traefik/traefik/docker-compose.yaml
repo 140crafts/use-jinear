@@ -2,7 +2,7 @@ services:
   traefik:
     image: traefik:v3.6
     command:
-      - "--api.insecure=true"
+#      - "--api.insecure=true" # Enable Traefik dashboard and API without authentication (remove for production; for testing/debugging only)
       - "--providers.docker=true"
       - "--providers.file.filename=/etc/traefik/dynamic.yaml"
       - "--providers.file.watch=true"
