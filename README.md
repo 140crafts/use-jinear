@@ -67,7 +67,7 @@ Your Jinear instance will be available at:
 
 ### Manual Installation
 
-For advanced users who prefer manual setup, see the [example](docs/example/) folder or the detailed guide
+For advanced users who prefer manual setup, see the [docs/manual-setup](docs/manual-setup/) folder or the detailed guide
 in [jinear-installation-scripts](./jinear-installation-scripts/).
 
 ### Configuration
