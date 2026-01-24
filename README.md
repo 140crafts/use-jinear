@@ -1,6 +1,12 @@
-# Jinear - Task Manager & Calendar
+# Jinear - Task Manager, Calendar, Messaging & File Sharing
 
-A collaborative task management and calendar application designed to streamline productivity and team coordination.
+A collaborative task management and calendar application designed to streamline productivity and team coordination, now enhanced with features like real-time messaging and file sharing.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/projects-dark.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/projects-light.png">
+  <img alt="Jinear Feature Image" src="https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/projects-light.png" height="550" width="795">
+</picture>
 
 ## Overview
 
