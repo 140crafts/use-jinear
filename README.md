@@ -27,6 +27,8 @@ needs, it has evolved into a versatile platform suitable for both individual and
 
 ### Quick Install (Recommended)
 
+You can follow along the steps below. There's also a video walkthrough [you can watch here](https://youtu.be/a8DNaoWvK7I).
+
 Download and run the installer on your server:
 
 ```bash
