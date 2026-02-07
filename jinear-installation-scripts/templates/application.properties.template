@@ -1,10 +1,12 @@
 jasypt.encryptor.bean=encryptorBean
 
+jinear.instance.id=${JINEAR_INSTANCE_ID:jc0}
 spring.application.name=jinear-core
 server.port=8008
 server.http2.enabled=true
 
 spring.jackson.default-property-inclusion=non_null
+spring.main.allow-bean-definition-overriding=true
 
 logging.level.*=INFO
 logging.file.path=./logs/
@@ -41,6 +43,7 @@ spring.data.redis.password=${REDIS_PASSWORD}
 spring.data.redis.timeout=60000
 spring.data.redis.ssl=false
 spring.data.redis.port=6379
+spring.data.redis.key-prefix=${spring.application.name}:${jinear.instance.id}
 
 # ===============================
 # = DATA SOURCE

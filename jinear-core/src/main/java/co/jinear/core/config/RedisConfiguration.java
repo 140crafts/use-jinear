@@ -16,6 +16,7 @@ import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceClientConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.RedisSerializer;
 
 import java.time.Duration;
 
@@ -37,6 +38,9 @@ public class RedisConfiguration {
 
     @Value("${spring.data.redis.ssl}")
     private Boolean redisUseSsl;
+
+    @Value("${spring.data.redis.key-prefix}")
+    private String keyPrefix;
 
     @Bean
     @Primary
@@ -62,6 +66,33 @@ public class RedisConfiguration {
     public RedisTemplate<String, Object> redisTemplate() {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(redisConnectionFactory());
+
+        RedisPrefixedKeySerializer prefixSerializer = new RedisPrefixedKeySerializer(keyPrefix);
+
+        template.setKeySerializer(prefixSerializer);
+        template.setHashKeySerializer(prefixSerializer);
+        template.setValueSerializer(RedisSerializer.json());
+        template.setHashValueSerializer(RedisSerializer.json());
+
+        template.afterPropertiesSet();
+
+        return template;
+    }
+
+    @Primary
+    @Bean(name = "stringRedisTemplate")
+    public RedisTemplate<String, String> stringRedisTemplate() {
+        RedisTemplate<String, String> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory());
+
+        RedisPrefixedKeySerializer prefixSerializer = new RedisPrefixedKeySerializer(keyPrefix);
+
+        template.setKeySerializer(prefixSerializer);
+        template.setHashKeySerializer(prefixSerializer);
+        template.setValueSerializer(RedisSerializer.string());
+        template.setHashValueSerializer(RedisSerializer.string());
+
+        template.afterPropertiesSet();
         return template;
     }
 
@@ -83,5 +114,9 @@ public class RedisConfiguration {
         RedisClient redisClient = RedisClient.create(uriBuilder.build());
         RedisCodec<String, byte[]> codec = RedisCodec.of(StringCodec.UTF8, ByteArrayCodec.INSTANCE);
         return redisClient.connect(codec);
+    }
+
+    public String getKeyPrefix() {
+        return keyPrefix;
     }
 }
