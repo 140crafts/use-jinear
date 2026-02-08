@@ -365,7 +365,7 @@
         <dependency>
             <groupId>co.jinear</groupId>
             <artifactId>jinear-rate-limiter</artifactId>
-            <version>1.0.0</version>
+            <version>0.1.1658</version>
         </dependency>
 
 <!--        <dependency>-->
