@@ -1,4 +1,4 @@
-FROM maven:3.9.9-amazoncorretto-17-alpine as maven_build
+FROM maven:3.9.9-amazoncorretto-17-alpine AS maven_build
 
 COPY pom.xml /build/
 COPY src /build/src/
