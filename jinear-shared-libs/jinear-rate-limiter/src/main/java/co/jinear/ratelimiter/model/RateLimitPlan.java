@@ -1,6 +1,7 @@
-package co.jinear.core.model.enumtype.ratelimit;
+package co.jinear.ratelimiter.model;
 
 public enum RateLimitPlan {
     PUBLIC,
     AUTHENTICATED
 }
+

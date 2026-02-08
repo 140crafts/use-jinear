@@ -1,18 +1,17 @@
-package co.jinear.core.config.properties;
+package co.jinear.ratelimiter.config;
 
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Data
-@Component
 @ConfigurationProperties(prefix = "jinear.security.rate-limit")
 public class RateLimitProperties {
 
+    private boolean enabled = true;
     private String clientIpHeader;
     private Map<String, Plan> plans;
 
@@ -29,3 +28,4 @@ public class RateLimitProperties {
         INTERVALLY
     }
 }
+
