@@ -52,6 +52,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>gitlab-maven</id>
+            <url>https://gitlab.com/api/v4/projects/69789063/packages/maven</url>
+        </repository>
     </repositories>
 
     <dependencyManagement>
@@ -357,16 +361,11 @@
             <version>8.5.17</version>
         </dependency>
 
+        <!-- Jinear Rate Limiter (shared library) -->
         <dependency>
-            <groupId>com.bucket4j</groupId>
-            <artifactId>bucket4j-core</artifactId>
-            <version>8.10.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.bucket4j</groupId>
-            <artifactId>bucket4j-redis</artifactId>
-            <version>8.10.1</version>
+            <groupId>co.jinear</groupId>
+            <artifactId>jinear-rate-limiter</artifactId>
+            <version>1.0.0</version>
         </dependency>
 
 <!--        <dependency>-->

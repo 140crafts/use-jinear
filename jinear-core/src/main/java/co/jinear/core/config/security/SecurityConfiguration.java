@@ -1,5 +1,6 @@
 package co.jinear.core.config.security;
 
+import co.jinear.ratelimiter.filter.RateLimitingFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

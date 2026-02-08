@@ -37,6 +37,35 @@ workflow:
     - jinear-pages/**/*
     - .gitlab-ci.yml
 
+.rate_limiter_changes: &rate_limiter_changes
+  changes:
+    - jinear-shared-libs/jinear-rate-limiter/**/*
+    - .gitlab-ci.yml
+
+.maven_setup: &maven_setup
+  image: maven:3.9-eclipse-temurin-17
+  before_script:
+    - |
+      # Create Maven settings.xml for GitLab Package Registry authentication
+      mkdir -p ~/.m2
+      cat > ~/.m2/settings.xml << EOF
+      <settings>
+        <servers>
+          <server>
+            <id>gitlab-maven</id>
+            <configuration>
+              <httpHeaders>
+                <property>
+                  <name>Job-Token</name>
+                  <value>${CI_JOB_TOKEN}</value>
+                </property>
+              </httpHeaders>
+            </configuration>
+          </server>
+        </servers>
+      </settings>
+      EOF
+
 .docker_setup: &docker_setup
   image: docker:latest
   before_script:
@@ -98,6 +127,30 @@ bump_version:
     - if: '$CI_COMMIT_BRANCH == "main"'
       when: manual
 
+rate-limiter:build:
+  <<: *maven_setup
+  stage: build
+  script:
+    - cd jinear-shared-libs/jinear-rate-limiter
+    # Use git tag version (e.g., v0.1.1234 -> 0.1.1234) or fallback to pipeline ID
+    - |
+      if [ -n "$CI_COMMIT_TAG" ]; then
+        VERSION=$(echo $CI_COMMIT_TAG | sed 's/^v//')
+      else
+        VERSION="1.0.${CI_PIPELINE_IID}-SNAPSHOT"
+      fi
+      echo "Building version: $VERSION"
+    - mvn deploy -DskipTests -Drevision=$VERSION
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      <<: *rate_limiter_changes
+    - if: '$CI_COMMIT_TAG'
+      <<: *core_changes
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      <<: *rate_limiter_changes
+      when: manual
+      allow_failure: true
+
 core:build:
   <<: *docker_setup
   stage: build
@@ -105,6 +158,9 @@ core:build:
     - cd jinear-core
     - docker buildx build --platform linux/amd64,linux/arm64 -t ${JINEAR_CORE_IMAGE} --push .
   timeout: 90m
+  needs:
+    - job: rate-limiter:build
+      optional: true
   rules:
     - if: '$CI_COMMIT_TAG'
       <<: *core_changes

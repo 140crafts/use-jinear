@@ -1,9 +1,8 @@
-package co.jinear.core.config.security;
+package co.jinear.ratelimiter.filter;
 
-import co.jinear.core.config.properties.RateLimitProperties;
-import co.jinear.core.model.enumtype.ratelimit.RateLimitPlan;
-import co.jinear.core.service.ratelimit.RateLimitService;
-import co.jinear.core.system.IpResolver;
+import co.jinear.ratelimiter.model.RateLimitPlan;
+import co.jinear.ratelimiter.resolver.ClientIpResolver;
+import co.jinear.ratelimiter.service.RateLimitService;
 import io.github.bucket4j.Bucket;
 import io.github.bucket4j.ConsumptionProbe;
 import jakarta.servlet.FilterChain;
@@ -15,18 +14,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 public class RateLimitingFilter extends OncePerRequestFilter {
 
     private final RateLimitService rateLimitService;
-    private final IpResolver ipResolver;
+    private final ClientIpResolver clientIpResolver;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -39,7 +36,7 @@ public class RateLimitingFilter extends OncePerRequestFilter {
             rateLimitKey = authentication.getName();
             bucket = rateLimitService.resolveBucket(rateLimitKey, RateLimitPlan.AUTHENTICATED);
         } else {
-            rateLimitKey = ipResolver.getClientIp(request);
+            rateLimitKey = clientIpResolver.resolveClientIp(request);
             bucket = rateLimitService.resolveBucket(rateLimitKey, RateLimitPlan.PUBLIC);
         }
 
@@ -57,3 +54,4 @@ public class RateLimitingFilter extends OncePerRequestFilter {
         }
     }
 }
+

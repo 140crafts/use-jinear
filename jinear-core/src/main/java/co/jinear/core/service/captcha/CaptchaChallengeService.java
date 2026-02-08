@@ -4,7 +4,7 @@ import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.captcha.CaptchaChallengeDto;
 import co.jinear.core.model.vo.captcha.CaptchaResolveVo;
 import co.jinear.core.repository.captcha.CaptchaRepository;
-import co.jinear.core.system.IpResolver;
+import co.jinear.ratelimiter.resolver.ClientIpResolver;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ import java.util.stream.IntStream;
 public class CaptchaChallengeService {
 
     private final CaptchaRepository captchaRepository;
-    private final IpResolver ipResolver;
+    private final ClientIpResolver clientIpResolver;
 
     private static final int PREFIX_COUNT = 2;
     private static final NavigableMap<Integer, Integer> DIFFICULTY_MAP;
@@ -37,7 +37,7 @@ public class CaptchaChallengeService {
     }
 
     public CaptchaChallengeDto initialize(HttpServletRequest httpServletRequest) {
-        String key = ipResolver.getClientIp(httpServletRequest);
+        String key = clientIpResolver.resolveClientIp(httpServletRequest);
         return initialize(key);
     }
 
@@ -54,7 +54,7 @@ public class CaptchaChallengeService {
         if (Objects.isNull(resolveVos) || resolveVos.isEmpty()) {
             throw new NotValidException();
         }
-        String key = ipResolver.getClientIp(httpServletRequest);
+        String key = clientIpResolver.resolveClientIp(httpServletRequest);
         return verifySolution(key, resolveVos);
     }
 
