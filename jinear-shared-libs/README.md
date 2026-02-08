@@ -25,23 +25,17 @@ A reusable rate limiting library for Spring Boot applications using Redis and Bu
 </dependency>
 ```
 
-2. Configure in `application.properties` or `application.yml`:
+2. Configure in `application.properties`:
 
-```yaml
-jinear:
-  security:
-    rate-limit:
-      enabled: true
-      client-ip-header: X-Forwarded-For
-      plans:
-        public:
-          capacity: 25
-          duration-in-minutes: 1
-          refill-type: GREEDY
-        authenticated:
-          capacity: 100
-          duration-in-minutes: 1
-          refill-type: GREEDY
+```properties
+jinear.security.rate-limit.enabled=true
+jinear.security.rate-limit.client-ip-header=X-Forwarded-For
+jinear.security.rate-limit.plans.public.capacity=25
+jinear.security.rate-limit.plans.public.duration-in-minutes=1
+jinear.security.rate-limit.plans.public.refill-type=GREEDY
+jinear.security.rate-limit.plans.authenticated.capacity=100
+jinear.security.rate-limit.plans.authenticated.duration-in-minutes=1
+jinear.security.rate-limit.plans.authenticated.refill-type=GREEDY
 ```
 
 3. The `RateLimitingFilter` is auto-configured and added to your Spring Security filter chain.
