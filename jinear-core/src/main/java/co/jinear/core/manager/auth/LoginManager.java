@@ -3,9 +3,7 @@ package co.jinear.core.manager.auth;
 import co.jinear.core.converter.auth.AuthVoConverter;
 import co.jinear.core.model.enumtype.auth.ProviderType;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
-import co.jinear.core.model.request.auth.AuthCompleteRequest;
-import co.jinear.core.model.request.auth.AuthInitializeRequest;
-import co.jinear.core.model.request.auth.LoginWithPasswordRequest;
+import co.jinear.core.model.request.auth.*;
 import co.jinear.core.model.response.auth.AuthInitializeResponse;
 import co.jinear.core.model.response.auth.AuthResponse;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
@@ -18,14 +16,14 @@ import co.jinear.core.service.auth.AuthenticationStrategyFactory;
 import co.jinear.core.system.JwtHelper;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-import static co.jinear.core.model.enumtype.auth.ProviderType.OTP_MAIL;
-import static co.jinear.core.model.enumtype.auth.ProviderType.PASSWORD_MAIL;
+import static co.jinear.core.model.enumtype.auth.ProviderType.*;
 
 @Slf4j
 @Service
@@ -72,6 +70,28 @@ public class LoginManager {
         return authResponse;
     }
 
+    public AuthResponse loginWithApple(LoginWithAppleRequest loginWithAppleRequest, HttpServletResponse response) {
+        log.info("Login with apple has started. code: {}", loginWithAppleRequest.getCode());
+        AuthVo authVo = mapRequest(loginWithAppleRequest);
+        AuthResponseVo authResponseVo = retrieveStrategyAndAuth(SIGN_IN_WITH_APPLE, authVo);
+        String token = initializeSessionInfoAndGenerateJwtToken(SIGN_IN_WITH_APPLE, authResponseVo);
+        AuthResponse authResponse = mapResponse(token);
+        authCookieManager.addAuthCookie(token, response);
+        updateAccountLocaleAndTimeZone(authResponseVo.getAccountId(), loginWithAppleRequest.getLocale(), loginWithAppleRequest.getTimeZone());
+        return authResponse;
+    }
+
+    public AuthResponse loginWithSingleUseToken(@Valid SingleUseTokenLoginRequest singleUseTokenLoginRequest, HttpServletResponse response) {
+        log.info("Login with single use token has started. singleUseTokenLoginRequest: {}", singleUseTokenLoginRequest);
+        AuthVo authVo = mapRequest(singleUseTokenLoginRequest);
+        AuthResponseVo authResponseVo = retrieveStrategyAndAuth(SINGLE_USE_LOGIN_TOKEN, authVo);
+        String token = initializeSessionInfoAndGenerateJwtToken(SINGLE_USE_LOGIN_TOKEN, authResponseVo);
+        AuthResponse authResponse = mapResponse(token);
+        authCookieManager.addAuthCookie(token, response);
+        updateAccountLocaleAndTimeZone(authResponseVo.getAccountId(), singleUseTokenLoginRequest.getLocale(), singleUseTokenLoginRequest.getTimeZone());
+        return authResponse;
+    }
+
     private AuthResponseVo retrieveStrategyAndAuth(ProviderType providerType, AuthVo authVo) {
         log.info("Retrieve strategy and auth has started for providerType: {}", providerType);
         AuthenticationStrategy authenticationStrategy = authenticationStrategyFactory.getStrategy(providerType);
@@ -103,6 +123,21 @@ public class LoginManager {
         authVo.setEmail(loginWithPasswordRequest.getEmail());
         authVo.setCode(loginWithPasswordRequest.getPassword());
         authVo.setLocale(loginWithPasswordRequest.getLocale());
+        return authVo;
+    }
+
+    private AuthVo mapRequest(LoginWithAppleRequest loginWithAppleRequest) {
+        AuthVo authVo = new AuthVo();
+        authVo.setCode(loginWithAppleRequest.getCode());
+        authVo.setLocale(loginWithAppleRequest.getLocale());
+        return authVo;
+    }
+
+    private AuthVo mapRequest(SingleUseTokenLoginRequest singleUseTokenLoginRequest) {
+        AuthVo authVo = new AuthVo();
+        authVo.setCode(singleUseTokenLoginRequest.getUniqueToken());
+        authVo.setCsrf(singleUseTokenLoginRequest.getCommonToken());
+        authVo.setLocale(singleUseTokenLoginRequest.getLocale());
         return authVo;
     }
 }

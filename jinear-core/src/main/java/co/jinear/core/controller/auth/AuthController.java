@@ -2,9 +2,7 @@ package co.jinear.core.controller.auth;
 
 import co.jinear.core.manager.auth.LoginManager;
 import co.jinear.core.manager.auth.LogoutManager;
-import co.jinear.core.model.request.auth.AuthCompleteRequest;
-import co.jinear.core.model.request.auth.AuthInitializeRequest;
-import co.jinear.core.model.request.auth.LoginWithPasswordRequest;
+import co.jinear.core.model.request.auth.*;
 import co.jinear.core.model.response.auth.AuthInitializeResponse;
 import co.jinear.core.model.response.auth.AuthResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +23,7 @@ public class AuthController {
     @PostMapping("/logout")
     @ResponseStatus(HttpStatus.OK)
     public void logout(HttpServletRequest request, HttpServletResponse response) {
-        logoutManager.logout(request,response);
+        logoutManager.logout(request, response);
     }
 
     @PostMapping("/otp/email/initialize")
@@ -44,5 +42,17 @@ public class AuthController {
     @ResponseStatus(HttpStatus.OK)
     public AuthResponse loginWithPassword(@Valid @RequestBody LoginWithPasswordRequest loginWithPasswordRequest, HttpServletResponse response) {
         return loginManager.loginWithPassword(loginWithPasswordRequest, response);
+    }
+
+    @PostMapping("/sign-in-with-apple")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthResponse loginWithApple(@Valid @RequestBody LoginWithAppleRequest loginWithAppleRequest, HttpServletResponse response) {
+        return loginManager.loginWithApple(loginWithAppleRequest, response);
+    }
+
+    @PostMapping("/single-use-token")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthResponse loginWithSingleUseToken(@Valid @RequestBody SingleUseTokenLoginRequest singleUseTokenLoginRequest, HttpServletResponse response) {
+        return loginManager.loginWithSingleUseToken(singleUseTokenLoginRequest, response);
     }
 }

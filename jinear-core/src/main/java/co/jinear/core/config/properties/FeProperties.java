@@ -32,4 +32,7 @@ public class FeProperties {
 
     @Value("${fe.account-delete-url}")
     private String accountDeleteUrl;
+
+    @Value("${fe.mobile-login-redirect}")
+    private String mobileLoginRedirect;
 }
