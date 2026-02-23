@@ -3,7 +3,7 @@ import { env } from "next-runtime-env";
 
 export const __DEV__ = !process.env.NODE_ENV || process.env.NODE_ENV === "development";
 
-export const HOST =env("NEXT_PUBLIC_HOST") != null ? env("NEXT_PUBLIC_HOST") :  __DEV__ ? "http://localhost:3000" : "https://jinear.co";
+export const HOST = env("NEXT_PUBLIC_HOST") != null ? env("NEXT_PUBLIC_HOST") : __DEV__ ? "http://localhost:3000" : "https://jinear.co";
 // export const HOST = "http://localhost:3000";
 
 export const SERVER = __DEV__ ? "staging.api" : "api";
@@ -27,3 +27,9 @@ export const PADDLE_CATALOG = {
   business_monthly: { sandbox: 63716, prod: 848738, price: "$24.90" },
   business_yearly: { sandbox: 63717, prod: 848737, price: "$249" }
 };
+
+// Apple Sign In Configuration
+export const APPLE_CLIENT_ID = env("NEXT_PUBLIC_APPLE_CLIENT_ID") || "co.jinear.app.web";
+export const APPLE_REDIRECT_URI = env("NEXT_PUBLIC_APPLE_REDIRECT_URI") != null ?
+  env("NEXT_PUBLIC_APPLE_REDIRECT_URI") :
+  __DEV__ ? "https://local.jinear.co" : "https://jinear.co";

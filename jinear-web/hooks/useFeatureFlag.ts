@@ -10,7 +10,8 @@ export type FEATURE_FLAG =
   | "MESSAGING"
   | "PROJECTS"
   | "EXTENDED_SIDE_MENU_TEAM_ACTION_BUTTONS_VISIBLE"
-  | "FILES";
+  | "FILES"
+  | "SIGN_IN_WITH_APPLE";
 
 const logger = Logger("useFeatureFlag");
 
