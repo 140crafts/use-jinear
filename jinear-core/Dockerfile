@@ -1,4 +1,6 @@
-FROM maven:3.9.9-amazoncorretto-17-alpine AS maven_build
+ARG MAVEN_IMAGE=maven:3.9.9-amazoncorretto-17-alpine
+ARG RUNTIME_IMAGE=eclipse-temurin:21-jre-alpine
+FROM ${MAVEN_IMAGE} AS maven_build
 
 COPY pom.xml /build/
 COPY src /build/src/
@@ -7,7 +9,7 @@ WORKDIR /build/
 
 RUN mvn clean package -B
 
-FROM eclipse-temurin:21-jre-alpine
+FROM ${RUNTIME_IMAGE}
 
 WORKDIR /app
 
