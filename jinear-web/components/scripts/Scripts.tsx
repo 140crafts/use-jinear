@@ -13,7 +13,7 @@ const Scripts: React.FC<ScriptsProps> = ({}) => {
   const initAppleSignIn = () => {
     try {
       // @ts-ignore
-      if (typeof window !== "undefined" && window.AppleID) {
+      if (typeof window !== "undefined" && window.AppleID && APPLE_REDIRECT_URI) {
         // @ts-ignore
         window.AppleID.auth.init({
           clientId: APPLE_CLIENT_ID,
