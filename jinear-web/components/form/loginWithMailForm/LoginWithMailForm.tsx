@@ -119,8 +119,8 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
       <div className="spacer-h-1" />
 
       <div className={styles.otherMethodsContainer}>
-        {!_isWebView && (
-          <>
+        {/*{!_isWebView && (*/}
+        {/*  <>*/}
             <Button
               disabled={isLoading}
               href={authRedirectInfoResponse?.redirectUrl}
@@ -135,8 +135,8 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
               className={styles.iconButton}
               iconClassName={styles.icon}
             />
-          </>
-        )}
+        {/*  </>*/}
+        {/*)}*/}
         <Button onClick={pop2FaMailModal} variant={ButtonVariants.outline} className={styles.iconButton}>
           <IoMail className={styles.icon} />
           <div>{t("loginWith2FaMail")}</div>

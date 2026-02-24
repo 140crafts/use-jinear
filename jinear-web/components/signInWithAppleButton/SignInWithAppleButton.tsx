@@ -60,20 +60,18 @@ const SignInWithAppleButton: React.FC<SignInWithAppleButtonProps> = ({
                                                                        disabled
                                                                      }) => {
   const { t } = useTranslation();
-  const router = useRouter();
   const [loginWithApple, { isLoading, isSuccess, isError, error }] = useLoginWithAppleMutation();
-  const signInWithAppleEnabled= useFeatureFlag("SIGN_IN_WITH_APPLE");
 
   useEffect(() => {
     if (isError) {
       logger.log({ m: "Login with Apple failed", error });
-      toast.error(t("loginErrorToast"));
+      toast(t("loginErrorToast"));
     }
   }, [isError, error, t]);
 
   const handleAppleSignIn = async () => {
     if (!window.AppleID) {
-      toast.error("Apple Sign In is not available");
+      toast("Apple Sign In is not available");
       logger.log("Apple Sign In SDK not loaded");
       return;
     }
@@ -95,7 +93,7 @@ const SignInWithAppleButton: React.FC<SignInWithAppleButtonProps> = ({
       // User cancelled or error occurred
       if (err?.error !== "popup_closed_by_user") {
         logger.log({ m: "Apple Sign In error", err });
-        toast.error(t("loginErrorToast"));
+        toast(t("loginErrorToast"));
       } else {
         logger.log("User closed Apple Sign In popup");
       }

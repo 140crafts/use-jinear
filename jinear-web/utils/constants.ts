@@ -29,7 +29,5 @@ export const PADDLE_CATALOG = {
 };
 
 // Apple Sign In Configuration
-export const APPLE_CLIENT_ID = env("NEXT_PUBLIC_APPLE_CLIENT_ID") || "co.jinear.app.web";
-export const APPLE_REDIRECT_URI = env("NEXT_PUBLIC_APPLE_REDIRECT_URI") != null ?
-  env("NEXT_PUBLIC_APPLE_REDIRECT_URI") :
-  __DEV__ ? "https://local.jinear.co" : "https://jinear.co";
+export const APPLE_CLIENT_ID = env("NEXT_PUBLIC_APPLE_CLIENT_ID");//"co.jinear.app.web"
+export const APPLE_REDIRECT_URI = env("NEXT_PUBLIC_APPLE_REDIRECT_URI");//"https://jinear.co"

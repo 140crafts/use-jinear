@@ -12,9 +12,7 @@ const Scripts: React.FC<ScriptsProps> = ({}) => {
 
   const initAppleSignIn = () => {
     try {
-      // @ts-ignore
-      if (typeof window !== "undefined" && window.AppleID && APPLE_REDIRECT_URI) {
-        // @ts-ignore
+      if (typeof window !== "undefined" && window.AppleID && APPLE_REDIRECT_URI && APPLE_CLIENT_ID) {
         window.AppleID.auth.init({
           clientId: APPLE_CLIENT_ID,
           scope: "name email",
@@ -30,18 +28,6 @@ const Scripts: React.FC<ScriptsProps> = ({}) => {
 
   return (
     <>
-      {/*{!__DEV__ && (*/}
-      {/*  <>*/}
-      {/*    <Script*/}
-      {/*      defer*/}
-      {/*      type="text/javascript"*/}
-      {/*      src="https://datapulse.app/datapulse.min.js"*/}
-      {/*      id="datapulse"*/}
-      {/*      data-endpoint="https://datapulse.app/api/v1/event"*/}
-      {/*      data-workspace="clkammqdb2jf8e937nd3n2ow7"*/}
-      {/*    ></Script>*/}
-      {/*  </>*/}
-      {/*)}*/}
       <Script
         src="https://cdn.paddle.com/paddle/paddle.js"
         onLoad={() => {
