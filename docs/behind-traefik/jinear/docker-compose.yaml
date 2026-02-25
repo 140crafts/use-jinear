@@ -106,6 +106,13 @@ services:
       # Rate limiting
       RATE_LIMIT_PUBLIC_CAPACITY: ${RATE_LIMIT_PUBLIC_CAPACITY:-25}
       RATE_LIMIT_AUTH_CAPACITY: ${RATE_LIMIT_AUTH_CAPACITY:-100}
+      # Apple Sign In (optional)
+      APPLE_TEAM_ID: ${APPLE_TEAM_ID:-not-configured}
+      APPLE_KEY_ID: ${APPLE_KEY_ID:-not-configured}
+      APPLE_KEY_PATH: ${APPLE_KEY_PATH:-/config/AuthKey.p8}
+      APPLE_CLIENT_ID: ${APPLE_CLIENT_ID:-not-configured}
+      APPLE_WEB_CLIENT_ID: ${APPLE_WEB_CLIENT_ID:-not-configured}
+      APPLE_WEB_REDIRECT_URL: ${APPLE_WEB_REDIRECT_URL:-not-configured}
     restart: always
     privileged: true
     healthcheck:
@@ -129,6 +136,8 @@ services:
       - NEXT_PUBLIC_SOCKET_ROOT=https://${MESSAGE_DOMAIN}/
       - NEXT_PUBLIC_POSTHOG_KEY=${POSTHOG_KEY:-}
       - NEXT_PUBLIC_POSTHOG_HOST=${POSTHOG_HOST:-https://us.i.posthog.com}
+      - NEXT_PUBLIC_APPLE_CLIENT_ID=${NEXT_PUBLIC_APPLE_CLIENT_ID:-}
+      - NEXT_PUBLIC_APPLE_REDIRECT_URI=${NEXT_PUBLIC_APPLE_REDIRECT_URI:-}
     privileged: true
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
