@@ -1,4 +1,5 @@
-FROM node:20.11.1
+ARG BASE_IMAGE=node:20.11.1
+FROM ${BASE_IMAGE}
 
 WORKDIR /usr/src/app
 

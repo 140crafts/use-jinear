@@ -21,6 +21,7 @@ import { useDispatch } from "react-redux";
 import FormTitle from "../formTitle/FormTitle";
 import styles from "./LoginWithMailForm.module.css";
 import { setAuthStateAsNotDecided } from "@/slice/accountSlice";
+import SignInWithAppleButton from "@/components/signInWithAppleButton/SignInWithAppleButton";
 
 interface LoginWithMailFormProps {
   initialEmail?: string;
@@ -118,17 +119,24 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({ className, initia
       <div className="spacer-h-1" />
 
       <div className={styles.otherMethodsContainer}>
-        {!_isWebView && (
-          <Button
-            disabled={isLoading}
-            href={authRedirectInfoResponse?.redirectUrl}
-            variant={ButtonVariants.outline}
-            className={styles.iconButton}
-          >
-            <IoLogoGoogle className={styles.icon} />
-            <div>{t("loginScreenLoginWithGoogle")}</div>
-          </Button>
-        )}
+        {/*{!_isWebView && (*/}
+        {/*  <>*/}
+            <Button
+              disabled={isLoading}
+              href={authRedirectInfoResponse?.redirectUrl}
+              variant={ButtonVariants.outline}
+              className={styles.iconButton}
+            >
+              <IoLogoGoogle className={styles.icon} />
+              <div>{t("loginScreenLoginWithGoogle")}</div>
+            </Button>
+            <SignInWithAppleButton
+              disabled={isLoading}
+              className={styles.iconButton}
+              iconClassName={styles.icon}
+            />
+        {/*  </>*/}
+        {/*)}*/}
         <Button onClick={pop2FaMailModal} variant={ButtonVariants.outline} className={styles.iconButton}>
           <IoMail className={styles.icon} />
           <div>{t("loginWith2FaMail")}</div>

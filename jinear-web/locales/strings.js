@@ -167,6 +167,10 @@ const translations = {
     en: "Login success",
     tr: "Giriş Başarılı"
   },
+  loginErrorToast: {
+    en: "Login failed",
+    tr: "Giriş başarısız"
+  },
   registerWithMailFormTitle: {
     en: "Sign Up",
     tr: "Kayıt ol"
@@ -3055,6 +3059,10 @@ const translations = {
   loginScreenLoginWithGoogle: {
     en: "Login With Google",
     tr: "Google ile Giriş Yap"
+  },
+  loginScreenLoginWithApple: {
+    en: "Sign in with Apple",
+    tr: "Apple ile Giriş Yap"
   },
   teamSettingsScreenTeamStateSectionTitle_ARCHIVED: {
     en: "Unarchive Team",

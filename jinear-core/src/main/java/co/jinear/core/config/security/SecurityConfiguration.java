@@ -33,6 +33,8 @@ public class SecurityConfiguration {
             "/v1/auth/otp/email/initialize",
             "/v1/auth/otp/email/complete",
             "/v1/auth/password/email",
+            "/v1/auth/sign-in-with-apple",
+            "/v1/auth/single-use-token",
             "/v1/account/confirm-email",
             "/v1/account/resend-confirm-email",
             "/v1/account/register/email",

@@ -97,6 +97,7 @@ jinear.security.rate-limit.plans.authenticated.duration-in-minutes=1
 jinear.security.rate-limit.plans.authenticated.refillType=greedy
 jinear.storage.limit.basic=1024
 jinear.storage.limit.pro=204800
+
 # ==============================================================
 # = GCloud (Optional - leave as-is if not using Google services)
 # ==============================================================
@@ -138,6 +139,7 @@ fe.workspace-invitation-url=${FE_PATH}/engage/workspace-invitation?token={token}
 fe.home-url=${FE_PATH}/home
 fe.workspace-calendar-url=${FE_PATH}/{workspaceUsername}/calendar
 fe.account-delete-url=${FE_PATH}/engage/delete-account-complete?token={token}
+fe.mobile-login-redirect=${FE_PATH}/mobile-redirect
 
 # ===============================
 # = NOTIFICATIONS
@@ -196,3 +198,13 @@ file-storage.active=MINIO
 file-storage.minio.enabled=true
 file-storage.explicit-content-check-enabled=false
 
+# ==============================================================
+# = Sign In with Apple (Optional)
+# ==============================================================
+signinwithapple.appleAuthBase=https://appleid.apple.com
+signinwithapple.keyId=${APPLE_KEY_ID:not-configured}
+signinwithapple.keyPath=${APPLE_KEY_PATH:/config/AuthKey.p8}
+signinwithapple.teamId=${APPLE_TEAM_ID:not-configured}
+signinwithapple.clientId=${APPLE_CLIENT_ID:not-configured}
+signinwithapple.webClientId=${APPLE_WEB_CLIENT_ID:not-configured}
+signinwithapple.webRedirectUrl=${APPLE_WEB_REDIRECT_URL:not-configured}

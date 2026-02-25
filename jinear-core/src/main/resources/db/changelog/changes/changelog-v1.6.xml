@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+<changeSet author="cagdas.tunca" id="jinear-546-sign-in-with-apple">
+    <preConditions onFail="MARK_RAN">
+        <not>
+            <tableExists tableName="apple_user"/>
+        </not>
+    </preConditions>
+    <createTable tableName="apple_user">
+        <column name="apple_user_id" type="char(26)">
+            <constraints nullable="false" primaryKey="true" unique="true"/>
+        </column>
+        <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+            <constraints nullable="false"/>
+        </column>
+        <column name="udate" type="datetime"/>
+        <column name="passive_id" type="char(26)"/>
+        <column name="account_id" type="char(26)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="external_apple_id" type="varchar(255)">
+            <constraints nullable="false"/>
+        </column>
+        <column name="apple_mail" type="varchar(512)">
+        </column>
+        <column name="apple_name" type="varchar(512)">
+        </column>
+    </createTable>
+</changeSet>
+
+</databaseChangeLog>

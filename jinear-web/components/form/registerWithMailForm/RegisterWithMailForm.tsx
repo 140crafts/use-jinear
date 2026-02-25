@@ -15,6 +15,7 @@ import OrLine from "@/components/orLine/OrLine";
 import { IoLogoGoogle, IoMail } from "react-icons/io5";
 import { isWebView } from "@/utils/webviewUtils";
 import { useRetrieveLoginRedirectInfoQuery } from "@/api/googleOAuthApi";
+import SignInWithAppleButton from "@/components/signInWithAppleButton/SignInWithAppleButton";
 
 interface RegisterWithMailFormProps {
   className?: string;
@@ -141,15 +142,22 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({ className }
 
       <div className={styles.otherMethodsContainer}>
         {!_isWebView && (
-          <Button
-            disabled={isLoading}
-            href={authRedirectInfoResponse?.redirectUrl}
-            variant={ButtonVariants.outline}
-            className={styles.iconButton}
-          >
-            <IoLogoGoogle className={styles.icon} />
-            <div>{t("loginScreenLoginWithGoogle")}</div>
-          </Button>
+          <>
+            <Button
+              disabled={isLoading}
+              href={authRedirectInfoResponse?.redirectUrl}
+              variant={ButtonVariants.outline}
+              className={styles.iconButton}
+            >
+              <IoLogoGoogle className={styles.icon} />
+              <div>{t("loginScreenLoginWithGoogle")}</div>
+            </Button>
+            <SignInWithAppleButton
+              disabled={isLoading}
+              className={styles.iconButton}
+              iconClassName={styles.icon}
+            />
+          </>
         )}
       </div>
 

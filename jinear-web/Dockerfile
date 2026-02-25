@@ -1,5 +1,6 @@
 # Install dependencies only when needed
-FROM node:20-alpine AS deps
+ARG BASE_IMAGE=node:20-alpine
+FROM ${BASE_IMAGE} AS deps
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
@@ -8,7 +9,7 @@ RUN npm cache clean --force
 RUN yarn install --frozen-lockfile --network-timeout 1000000
 
 # Rebuild the source code only when needed
-FROM node:20-alpine AS builder
+FROM ${BASE_IMAGE} AS builder
 WORKDIR /app
 
 # https://github.com/webpack/webpack/issues/14532
@@ -25,7 +26,7 @@ RUN yarn build && \
         rm -rf /tmp/*
 
 # Production image, copy all the files and run next
-FROM node:20-alpine AS runner
+FROM ${BASE_IMAGE} AS runner
 WORKDIR /app
 
 ENV NODE_ENV production

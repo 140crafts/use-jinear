@@ -1,5 +1,6 @@
 package co.jinear.core.manager.oauth;
 
+import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.converter.google.GoogleScopeConverter;
 import co.jinear.core.manager.auth.AuthCookieManager;
 import co.jinear.core.model.dto.google.GoogleHandleTokenDto;
@@ -9,12 +10,14 @@ import co.jinear.core.model.enumtype.google.GoogleScopeType;
 import co.jinear.core.model.enumtype.google.UserConsentPurposeType;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
 import co.jinear.core.model.enumtype.integration.IntegrationScopeType;
+import co.jinear.core.model.enumtype.token.TokenType;
 import co.jinear.core.model.response.auth.AuthResponse;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
 import co.jinear.core.model.vo.calendar.InitializeCalendarVo;
 import co.jinear.core.model.vo.feed.InitializeFeedVo;
 import co.jinear.core.model.vo.google.AttachAccountStateParameters;
+import co.jinear.core.model.vo.token.GenerateTokenVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.auth.AuthenticationStrategy;
 import co.jinear.core.service.auth.AuthenticationStrategyFactory;
@@ -25,16 +28,21 @@ import co.jinear.core.service.feed.FeedRetrieveService;
 import co.jinear.core.service.google.GoogleCallbackHandlerService;
 import co.jinear.core.service.integration.IntegrationHandleService;
 import co.jinear.core.service.passive.PassiveService;
+import co.jinear.core.service.token.TokenService;
 import co.jinear.core.system.JwtHelper;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 import static co.jinear.core.model.enumtype.auth.ProviderType.OAUTH_MAIL;
 
@@ -42,6 +50,8 @@ import static co.jinear.core.model.enumtype.auth.ProviderType.OAUTH_MAIL;
 @Service
 @RequiredArgsConstructor
 public class GoogleOAuthCallbackManager {
+
+    private static final Long OAUTH_CALLBACK_TOKEN_TTL = (long) (1000 * 60 * 5);
 
     private final AuthenticationStrategyFactory authenticationStrategyFactory;
     private final PassiveService passiveService;
@@ -57,16 +67,19 @@ public class GoogleOAuthCallbackManager {
     private final FeedRetrieveService feedRetrieveService;
     private final CalendarRetrieveService calendarRetrieveService;
     private final CalendarOperationService calendarOperationService;
+    private final FeProperties feProperties;
+    private final TokenService tokenService;
 
-    public AuthResponse login(String code, String scopes, HttpServletResponse response) {
+    public AuthResponse login(String code, String scopes, String state, HttpServletResponse response) throws IOException {
         log.info("Login with google has started.");
+        AttachAccountStateParameters parameters = gson.fromJson(state, AttachAccountStateParameters.class);
         GoogleHandleTokenDto googleHandleTokenDto = googleCallbackHandlerService.handleToken(code, scopes, UserConsentPurposeType.LOGIN);
         AuthResponseVo authResponseVo = authenticateWithGoogleUserInfo(googleHandleTokenDto);
         assignExistingTokenDeletionOwnership(googleHandleTokenDto, authResponseVo.getAccountId());
-        String token = initializeSessionInfoAndGenerateJwtToken(authResponseVo);
         initializeIntegration(googleHandleTokenDto, IntegrationScopeType.LOGIN, authResponseVo.getAccountId());
-        authCookieManager.addAuthCookie(token, response);
-        return mapResponse(token);
+        return Boolean.TRUE.equals(parameters.getAppLogin()) ?
+                generateSingleUseTokenAndRedirectToWebContinue(response, authResponseVo, parameters) :
+                addAuthCookieAndRedirectToWebHome(response, authResponseVo);
     }
 
     public void attachMail(String code, String scopes, String state) {
@@ -142,7 +155,6 @@ public class GoogleOAuthCallbackManager {
         return authenticationStrategy.auth(authVo);
     }
 
-
     private String initializeSessionInfoAndGenerateJwtToken(AuthResponseVo authResponseVo) {
         String sessionInfoId = initializeSessionInfo(authResponseVo);
         return jwtHelper.generateToken(authResponseVo, sessionInfoId);
@@ -178,5 +190,25 @@ public class GoogleOAuthCallbackManager {
         AuthResponse authResponse = new AuthResponse();
         authResponse.setToken(token);
         return authResponse;
+    }
+
+    private AuthResponse generateSingleUseTokenAndRedirectToWebContinue(HttpServletResponse response, AuthResponseVo authResponseVo, AttachAccountStateParameters parameters) throws IOException {
+        GenerateTokenVo generateTokenVo = GenerateTokenVo.builder()
+                .relatedObject(authResponseVo.getAccountId())
+                .tokenType(TokenType.SINGLE_USE_LOGIN_TOKEN)
+                .uniqueToken(UUID.randomUUID().toString())
+                .commonToken(parameters.getCsrf())
+                .ttl(OAUTH_CALLBACK_TOKEN_TTL)
+                .build();
+        tokenService.generateToken(generateTokenVo);
+        response.sendRedirect(feProperties.getMobileLoginRedirect() + "&u=" + generateTokenVo.getUniqueToken());
+        return null;
+    }
+
+    private AuthResponse addAuthCookieAndRedirectToWebHome(HttpServletResponse response, AuthResponseVo authResponseVo) throws IOException {
+        String token = initializeSessionInfoAndGenerateJwtToken(authResponseVo);
+        authCookieManager.addAuthCookie(token, response);
+        response.sendRedirect(feProperties.getHomeUrl());
+        return mapResponse(token);
     }
 }

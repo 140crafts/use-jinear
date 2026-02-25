@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-01-17 14:01:26.
+// Generated using typescript-generator version 3.0.1157 on 2026-02-22 23:13:56.
 
 export interface BaseDto {
     createdDate: Date;
@@ -1154,9 +1154,20 @@ export interface AuthInitializeRequest extends BaseRequest {
     email: string;
 }
 
+export interface LoginWithAppleRequest extends BaseRequest {
+    code: string;
+    timeZone?: string | null;
+}
+
 export interface LoginWithPasswordRequest extends BaseRequest {
     email: string;
     password: string;
+    timeZone?: string | null;
+}
+
+export interface SingleUseTokenLoginRequest extends BaseRequest {
+    uniqueToken: string;
+    commonToken: string;
     timeZone?: string | null;
 }
 
@@ -2120,8 +2131,8 @@ export interface Resource extends InputStreamSource {
     readable: boolean;
     url: URL;
     uri: URI;
-    description: string;
     filename: string;
+    description: string;
 }
 
 export interface InputStreamSource {
@@ -2198,7 +2209,7 @@ export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXP
 
 export type RoleType = "ADMIN" | "SERVICE" | "USER" | "ROBOT";
 
-export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL";
+export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL" | "SIGN_IN_WITH_APPLE" | "SINGLE_USE_LOGIN_TOKEN";
 
 export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
@@ -2260,7 +2271,7 @@ export type NotificationTargetType = "WEB" | "WEBVIEW";
 
 export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "TASK_NEW_COMMENT" | "TASK_ATTACHMENT_ADDED" | "TASK_ATTACHMENT_DELETED" | "MESSAGING_NEW_MESSAGE_THREAD" | "MESSAGING_NEW_MESSAGE_CONVERSATION";
 
-export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "UNFOLLOW" | "PAYMENT_ISSUE";
+export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "UNFOLLOW" | "SINGLE_LOGIN_TOKEN_USED" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "PAYMENT_ISSUE";
 
 export type MilestoneStateType = "IN_PROGRESS" | "COMPLETED";
 
@@ -2277,8 +2288,6 @@ export type ProjectPostInitializeAccessType = "WORKSPACE_ADMINS" | "PROJECT_LEAD
 export type ProjectPriorityType = "NONE" | "URGENT" | "HIGH" | "MEDIUM" | "LOW";
 
 export type ProjectStateType = "BACKLOG" | "PLANNED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
-
-export type RateLimitPlan = "PUBLIC" | "AUTHENTICATED";
 
 export type ReminderJobStatus = "PENDING" | "COMPLETED" | "CANCELLED" | "FAILED";
 
@@ -2314,7 +2323,7 @@ export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
 
 export type TeamWorkflowStateGroup = "BACKLOG" | "NOT_STARTED" | "STARTED" | "COMPLETED" | "CANCELLED";
 
-export type TokenType = "SMS_LOGIN" | "EMAIL_LOGIN" | "WEB_USERNAME_LOGIN" | "BOOKING_EMAIL_VALIDATION" | "CONTINUE_AS_LOGIN_TOKEN" | "CONFIRM_EMAIL" | "RESET_PASSWORD" | "WORKSPACE_INVITATION" | "ACCOUNT_DELETION";
+export type TokenType = "SMS_LOGIN" | "EMAIL_LOGIN" | "WEB_USERNAME_LOGIN" | "BOOKING_EMAIL_VALIDATION" | "CONTINUE_AS_LOGIN_TOKEN" | "CONFIRM_EMAIL" | "RESET_PASSWORD" | "WORKSPACE_INVITATION" | "ACCOUNT_DELETION" | "SINGLE_USE_LOGIN_TOKEN";
 
 export type TopicVisibility = "SHARED" | "PRIVATE";
 

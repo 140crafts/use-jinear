@@ -24,15 +24,21 @@ public class GoogleOAuthCallbackController {
     @Validated
     @GetMapping("/login")
     @ResponseStatus(HttpStatus.OK)
-    public void login(@RequestParam @Size(max = 4048) String code, @RequestParam String scope, HttpServletResponse response) throws IOException {
-        googleOAuthCallbackManager.login(code, scope, response);
+    public void login(@RequestParam @Size(max = 4048) String code,
+                      @Size(max = 4048) @RequestParam String scope,
+                      @Size(max = 4048) @RequestParam String state,
+                      HttpServletResponse response) throws IOException {
+        googleOAuthCallbackManager.login(code, scope, state, response);
         response.sendRedirect(feProperties.getHomeUrl());
     }
 
     @Validated
     @GetMapping("/attach-mail")
     @ResponseStatus(HttpStatus.OK)
-    public void attachMail(@RequestParam @Size(max = 4048) String code, @RequestParam String scope, @RequestParam String state, HttpServletResponse response) throws IOException {
+    public void attachMail(@RequestParam @Size(max = 4048) String code,
+                           @Size(max = 4048) @RequestParam String scope,
+                           @Size(max = 4048) @RequestParam String state,
+                           HttpServletResponse response) throws IOException {
         googleOAuthCallbackManager.attachMail(code, scope, state);
         response.sendRedirect(feProperties.getHomeUrl());
     }
@@ -40,7 +46,10 @@ public class GoogleOAuthCallbackController {
     @Validated
     @GetMapping("/attach-calendar")
     @ResponseStatus(HttpStatus.OK)
-    public void attachCalendar(@RequestParam @Size(max = 4048) String code, @RequestParam String scope, @RequestParam String state, HttpServletResponse response) throws IOException {
+    public void attachCalendar(@RequestParam @Size(max = 4048) String code,
+                               @Size(max = 4048) @RequestParam String scope,
+                               @Size(max = 4048) @RequestParam String state,
+                               HttpServletResponse response) throws IOException {
         googleOAuthCallbackManager.attachCalendar(code, scope, state);
         response.sendRedirect(feProperties.getHomeUrl());
     }
