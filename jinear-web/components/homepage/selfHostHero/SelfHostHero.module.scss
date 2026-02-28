@@ -1,0 +1,92 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  font-family: "SF Mono", "Fira Code", monospace;
+  color: var(--c-JINEAR_ORANGE);
+  opacity: 0.9;
+  margin-bottom: 1.25rem;
+}
+
+.title {
+  font-size: clamp(2.5rem, 7vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  margin-bottom: 1.5rem;
+}
+
+.text {
+  font-size: 1.0625rem;
+  opacity: 0.65;
+  line-height: 1.75;
+  max-width: 40rem;
+  margin-bottom: 2.5rem;
+}
+
+.terminalBlock {
+  margin-bottom: 3.5rem;
+}
+
+.featureGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  width: 100%;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius-m);
+  overflow: hidden;
+}
+
+.featureCard {
+  background-color: var(--c-primary-shade-0);
+  padding: 2rem;
+  border-right: 1px solid var(--c-primary-shade-1);
+
+  &:last-child {
+    border-right: none;
+  }
+}
+
+.featureIcon {
+  font-size: 1.25rem;
+  color: var(--c-JINEAR_ORANGE);
+  margin-bottom: 1.25rem;
+  opacity: 0.9;
+}
+
+.featureTitle {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6rem;
+  line-height: 1.3;
+}
+
+.featureText {
+  font-size: 0.875rem;
+  opacity: 0.6;
+  line-height: 1.7;
+}
+
+@media (max-width: $tablet) {
+  .featureGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .featureCard {
+    border-right: none;
+    border-bottom: 1px solid var(--c-primary-shade-1);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}

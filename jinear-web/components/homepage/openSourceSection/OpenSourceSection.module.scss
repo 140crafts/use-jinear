@@ -1,0 +1,149 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-bottom: 1rem;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+
+.title {
+  font-size: 1.625rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.text {
+  font-size: 0.9375rem;
+  opacity: 0.6;
+  line-height: 1.75;
+  max-width: 42rem;
+  margin-bottom: 2.5rem;
+}
+
+// Repo cards
+.repoGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  width: 100%;
+  max-width: 42rem;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius-m);
+  overflow: hidden;
+}
+
+.repoCard {
+  background-color: var(--c-primary-shade-0);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--c-primary-shade-1);
+  }
+
+  &:first-child {
+    border-right: 1px solid var(--c-primary-shade-1);
+  }
+}
+
+.repoHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.25rem;
+}
+
+.platformIcon {
+  font-size: 1.125rem;
+  opacity: 0.8;
+}
+
+.platformName {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  opacity: 0.7;
+}
+
+.repoPath {
+  font-size: 0.9375rem;
+  font-family: "SF Mono", "Fira Code", monospace;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+}
+
+.repoOrg {
+  opacity: 0.45;
+}
+
+.repoSep {
+  opacity: 0.25;
+  margin: 0 0.2em;
+}
+
+.repoName {
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.repoFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--c-primary-shade-1);
+}
+
+.license {
+  font-size: 0.6875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.3;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+
+.starCta {
+  display: flex;
+  align-items: center;
+  opacity: 0.35;
+  transition: opacity 0.15s ease, color 0.15s ease;
+
+  .repoCard:hover & {
+    opacity: 0.85;
+    color: var(--c-JINEAR_ORANGE);
+  }
+}
+
+.starIcon {
+  font-size: 0.75rem;
+}
+
+@media (max-width: $mobile-l) {
+  .repoGrid {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  .repoCard:first-child {
+    border-right: none;
+    border-bottom: 1px solid var(--c-primary-shade-1);
+  }
+}

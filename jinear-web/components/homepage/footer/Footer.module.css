@@ -1,11 +1,13 @@
 .container {
-    height: 14rem;
+    min-height: 14rem;
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap;
     border-top-style: solid;
     border-top-color: var(--c-primary-shade-0);
     border-top-width: thin;
     padding: 1rem 0;
+    gap: 1rem;
 }
 
 .column {

@@ -13,17 +13,23 @@ import useTranslation from "locales/useTranslation";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 import styles from "./index.module.scss";
-import Button, { ButtonVariants } from "@/components/button";
 import HeroFeatures from "@/components/homepage/heroFeatures/HeroFeatures";
-import SubHero from "@/components/homepage/subHero/SubHero";
 import FeatureCard from "@/components/homepage/featureCard/FeatureCard";
+import SocialProofBar from "@/components/homepage/socialProofBar/SocialProofBar";
+import ProblemBar from "@/components/homepage/problemBar/ProblemBar";
+import SelfHostHero from "@/components/homepage/selfHostHero/SelfHostHero";
+import ComplianceSection from "@/components/homepage/complianceSection/ComplianceSection";
+import ComparisonSection from "@/components/homepage/comparisonSection/ComparisonSection";
+import OpenSourceSection from "@/components/homepage/openSourceSection/OpenSourceSection";
+import BottomCta from "@/components/homepage/bottomCta/BottomCta";
+import Footer from "@/components/homepage/footer/Footer";
 import {
   LuCalendarCheck2,
   LuCheckCircle as LuCircleCheck,
   LuClipboardList, LuDatabase,
   LuFile, LuHash,
   LuLayoutDashboard,
-  LuMessageSquare, LuPin, LuSend, LuShieldCheck, LuTarget, LuUsers
+  LuMessageSquare, LuPin, LuSend, LuShieldCheck, LuUsers
 } from "react-icons/lu";
 import {
   SiApple,
@@ -32,14 +38,9 @@ import {
   SiDiscord, SiDropbox,
   SiGooglecalendar, SiGoogledrive,
   SiJira,
-  SiMessenger,
   SiSlack,
   SiWhatsapp
 } from "react-icons/si";
-import Footer from "@/components/homepage/footer/Footer";
-import OrLine from "@/components/orLine/OrLine";
-import { FaGithub, FaGitlab } from "react-icons/fa6";
-import { IoBalloon } from "react-icons/io5";
 import { useRouteIfLoggedIn } from "@/hooks/useRouteIfLoggedIn";
 
 export default function Home() {
@@ -72,35 +73,43 @@ export default function Home() {
       <HomePageNavbar />
 
       <div className="spacer-h-12" />
-      <Hero title1={t("homescreenHeroTitleLine1")} title2={t("homescreenHeroTitleLine2")}
-            text={t("homescreenHeroText")} />
-      <div className="spacer-h-2" />
+      <div className="spacer-h-6" />
+
+      <Hero
+        title1={t("homescreenHeroTitleLine1")}
+        text={t("homescreenHeroText")}
+      />
+
+      <div className="spacer-h-4" />
       <CallToActionBar authState={authState} />
-      <div className="spacer-h-2" />
-      <OrLine />
-      <div className="spacer-h-2" />
-      <div className={styles.selfHostContainer}>
-        <span>
-          {t("homescreenSelfHostText")}
-          <IoBalloon
-            className={"icon"}
-            style={{ display: "inline-block", marginInlineStart: ".25rem" }}
-          />
-        </span>
-        <div className={styles.selfHostButtonsContainer}>
-          <Button variant={ButtonVariants.outline} href={"https://github.com/140crafts/use-jinear"} target={"_blank"}>
-            <FaGithub />&nbsp;<span>GitHub</span>
-          </Button>
-          <Button variant={ButtonVariants.outline} href={"https://gitlab.com/140crafts/use-jinear"} target={"_blank"}>
-            <FaGitlab />&nbsp;<span>GitLab</span>
-          </Button>
-        </div>
-      </div>
+      <div className="spacer-h-6" />
+
+      <SocialProofBar />
+
+      <div className="spacer-h-12" />
+      <hr className={styles.divider} />
       <div className="spacer-h-12" />
 
+      {/*<ProblemBar />*/}
+
+      {/*<div className="spacer-h-12" />*/}
+      {/*<hr className={styles.divider} />*/}
+      {/*<div className="spacer-h-12" />*/}
+
+      <SelfHostHero />
+
+      <div className="spacer-h-12" />
+      <hr className={styles.divider} />
+      <div className="spacer-h-12" />
+
+      <p className={styles.eyebrow}>{t("landingPageHeroFeaturesEyebrow")}</p>
+      <h2 className={styles.sectionTitle}>{t("landingPageHeroFeaturesTitle")}</h2>
+
+      <div className="spacer-h-6" />
       <HeroFeatures />
 
       <div className="spacer-h-12" />
+      <hr className={styles.divider} />
       <div className="spacer-h-12" />
 
       <FeatureCard
@@ -108,24 +117,9 @@ export default function Home() {
         text={t("landingPageFeature1Text")}
         imageUrl={`https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/projects-${heroImageSrcType}.png`}
         featureCardIconInfoList={[
-          {
-            id: "task-todos",
-            Icon: LuCircleCheck,
-            title: t("landingPageFeature1Sub1Title"),
-            text: t("landingPageFeature1Sub1Text")
-          },
-          {
-            id: "task-todos2",
-            Icon: LuFile,
-            title: t("landingPageFeature1Sub2Title"),
-            text: t("landingPageFeature1Sub2Text")
-          },
-          {
-            id: "task-todos3",
-            Icon: LuMessageSquare,
-            title: t("landingPageFeature1Sub3Title"),
-            text: t("landingPageFeature1Sub3Text")
-          }
+          { id: "task-todos", Icon: LuCircleCheck, title: t("landingPageFeature1Sub1Title"), text: t("landingPageFeature1Sub1Text") },
+          { id: "task-todos2", Icon: LuFile, title: t("landingPageFeature1Sub2Title"), text: t("landingPageFeature1Sub2Text") },
+          { id: "task-todos3", Icon: LuMessageSquare, title: t("landingPageFeature1Sub3Title"), text: t("landingPageFeature1Sub3Text") }
         ]}
         alternativeToLabel={t("landingPageFeature1AlternativeTo")}
         alternativeToInfoList={[
@@ -136,6 +130,7 @@ export default function Home() {
       />
 
       <div className="spacer-h-12" />
+      <hr className={styles.divider} />
       <div className="spacer-h-12" />
 
       <FeatureCard
@@ -143,24 +138,9 @@ export default function Home() {
         text={t("landingPageFeatureChatText")}
         imageUrl={`https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/chat-${heroImageSrcType}.png`}
         featureCardIconInfoList={[
-          {
-            id: "feature-chat",
-            Icon: LuHash,
-            title: t("landingPageFeatureChatSub1Title"),
-            text: t("landingPageFeatureChatSub1Text")
-          },
-          {
-            id: "feature-chat-2",
-            Icon: LuSend,
-            title: t("landingPageFeatureChatSub2Title"),
-            text: t("landingPageFeatureChatSub2Text")
-          },
-          {
-            id: "feature-chat-3",
-            Icon: LuPin,
-            title: t("landingPageFeatureChatSub3Title"),
-            text: t("landingPageFeatureChatSub3Text")
-          }
+          { id: "feature-chat", Icon: LuHash, title: t("landingPageFeatureChatSub1Title"), text: t("landingPageFeatureChatSub1Text") },
+          { id: "feature-chat-2", Icon: LuSend, title: t("landingPageFeatureChatSub2Title"), text: t("landingPageFeatureChatSub2Text") },
+          { id: "feature-chat-3", Icon: LuPin, title: t("landingPageFeatureChatSub3Title"), text: t("landingPageFeatureChatSub3Text") }
         ]}
         alternativeToLabel={t("landingPageFeatureChatAlternativeTo")}
         alternativeToInfoList={[
@@ -171,6 +151,7 @@ export default function Home() {
       />
 
       <div className="spacer-h-12" />
+      <hr className={styles.divider} />
       <div className="spacer-h-12" />
 
       <FeatureCard
@@ -178,24 +159,9 @@ export default function Home() {
         text={t("landingPageFeatureStorageText")}
         imageUrl={`https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/files-2-${heroImageSrcType}.png`}
         featureCardIconInfoList={[
-          {
-            id: "feature-storage",
-            Icon: LuUsers,
-            title: t("landingPageFeatureStorageSub1Title"),
-            text: t("landingPageFeatureStorageSub1Text")
-          },
-          {
-            id: "feature-storage-2",
-            Icon: LuDatabase,
-            title: t("landingPageFeatureStorageSub2Title"),
-            text: t("landingPageFeatureStorageSub2Text")
-          },
-          {
-            id: "feature-storage-3",
-            Icon: LuShieldCheck,
-            title: t("landingPageFeatureStorageSub3Title"),
-            text: t("landingPageFeatureStorageSub3Text")
-          }
+          { id: "feature-storage", Icon: LuUsers, title: t("landingPageFeatureStorageSub1Title"), text: t("landingPageFeatureStorageSub1Text") },
+          { id: "feature-storage-2", Icon: LuDatabase, title: t("landingPageFeatureStorageSub2Title"), text: t("landingPageFeatureStorageSub2Text") },
+          { id: "feature-storage-3", Icon: LuShieldCheck, title: t("landingPageFeatureStorageSub3Title"), text: t("landingPageFeatureStorageSub3Text") }
         ]}
         alternativeToLabel={t("landingPageFeatureStorageAlternativeTo")}
         alternativeToInfoList={[
@@ -206,6 +172,7 @@ export default function Home() {
       />
 
       <div className="spacer-h-12" />
+      <hr className={styles.divider} />
       <div className="spacer-h-12" />
 
       <FeatureCard
@@ -213,24 +180,9 @@ export default function Home() {
         text={t("landingPageFeature2Text")}
         imageUrl={`https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/calendar-${heroImageSrcType}.png`}
         featureCardIconInfoList={[
-          {
-            id: "feature-calendar",
-            Icon: LuCalendarCheck2,
-            title: t("landingPageFeature2Sub1Title"),
-            text: t("landingPageFeature2Sub1Text")
-          },
-          {
-            id: "feature-calendar-2",
-            Icon: LuClipboardList,
-            title: t("landingPageFeature2Sub2Title"),
-            text: t("landingPageFeature2Sub2Text")
-          },
-          {
-            id: "feature-calendar-3",
-            Icon: LuLayoutDashboard,
-            title: t("landingPageFeature2Sub3Title"),
-            text: t("landingPageFeature2Sub3Text")
-          }
+          { id: "feature-calendar", Icon: LuCalendarCheck2, title: t("landingPageFeature2Sub1Title"), text: t("landingPageFeature2Sub1Text") },
+          { id: "feature-calendar-2", Icon: LuClipboardList, title: t("landingPageFeature2Sub2Title"), text: t("landingPageFeature2Sub2Text") },
+          { id: "feature-calendar-3", Icon: LuLayoutDashboard, title: t("landingPageFeature2Sub3Title"), text: t("landingPageFeature2Sub3Text") }
         ]}
         alternativeToLabel={t("landingPageFeature2AlternativeTo")}
         alternativeToInfoList={[
@@ -239,22 +191,29 @@ export default function Home() {
         ]}
       />
 
-
       <div className="spacer-h-12" />
-      <div className="spacer-h-12" />
-
-      <SubHero
-        className={styles.startFree}
-        title1={t("landingPageStartFreeTitle")}
-        title2={t("landingPageStartFreeTitle2")}
-        text={t("landingPageStartFreeText")}
-      />
-
-
+      <hr className={styles.divider} />
       <div className="spacer-h-12" />
 
-      {/*<VideoHeroSection title1={"title1"} text={"text"}/>*/}
-      {/*<MobileAppSection />*/}
+      <ComplianceSection />
+
+      <div className="spacer-h-12" />
+      <hr className={styles.divider} />
+      <div className="spacer-h-12" />
+
+      <ComparisonSection />
+
+      <div className="spacer-h-12" />
+      <hr className={styles.divider} />
+      <div className="spacer-h-12" />
+
+      <OpenSourceSection />
+
+      <div className="spacer-h-12" />
+      <hr className={styles.divider} />
+      <div className="spacer-h-12" />
+
+      <BottomCta />
 
       <div className="spacer-h-12" />
 

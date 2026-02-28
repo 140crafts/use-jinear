@@ -55,8 +55,10 @@ const FeatureCard: React.FC<FeatureCardProps> = ({
           {featureCardIconInfoList.map(iconInfo =>
             <div key={iconInfo.id} className={styles.iconFeatureContainer}>
               <iconInfo.Icon className={styles.featureIcon} color={iconInfo.iconColor} />
-              <span className={styles.featureIconTitle} dangerouslySetInnerHTML={{ __html: iconInfo.title }}></span>
-              <span className={styles.featureIconText}>{iconInfo.text}</span>
+              <div className={styles.iconFeatureTextBlock}>
+                <span className={styles.featureIconTitle} dangerouslySetInnerHTML={{ __html: iconInfo.title }}></span>
+                <span className={styles.featureIconText}>{iconInfo.text}</span>
+              </div>
             </div>
           )}
         </div>}

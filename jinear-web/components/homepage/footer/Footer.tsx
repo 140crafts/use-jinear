@@ -9,6 +9,7 @@ import { APP_STORE_URL, PLAY_STORE_URL } from "@/utils/constants";
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import { IoLogoPwa } from "react-icons/io5";
 import useTranslation from "@/locals/useTranslation";
+import { FaGithub, FaGitlab } from "react-icons/fa6";
 
 interface FooterProps {
 
@@ -38,6 +39,43 @@ const Footer: React.FC<FooterProps> = ({}) => {
           className={styles.link}
         >
           {t("landingPageFooterTerms")}
+        </a>
+      </div>
+
+      <div className={styles.column}>
+        <b>{t("landingPageFooterSelfHosting")}</b>
+        <div className={"spacer-h-1"} />
+        <a
+          href={"https://github.com/140crafts/use-jinear/blob/main/jinear-installation-scripts/README.md"}
+          target={"_blank"}
+          rel={"noreferrer"}
+          className={styles.link}
+        >
+          {t("landingPageFooterInstallGuide")}
+        </a>
+        <a
+          href={"https://github.com/140crafts/use-jinear/blob/main/jinear-installation-scripts/README.md"}
+          target={"_blank"}
+          rel={"noreferrer"}
+          className={styles.link}
+        >
+          {t("landingPageFooterDocs")}
+        </a>
+        <a
+          href={"https://github.com/140crafts/use-jinear"}
+          target={"_blank"}
+          rel={"noreferrer"}
+          className={styles.link}
+        >
+          <FaGithub className={"icon"} /> GitHub
+        </a>
+        <a
+          href={"https://gitlab.com/140crafts/use-jinear"}
+          target={"_blank"}
+          rel={"noreferrer"}
+          className={styles.link}
+        >
+          <FaGitlab className={"icon"} /> GitLab
         </a>
       </div>
 

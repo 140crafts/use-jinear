@@ -1,0 +1,73 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.eyebrow {
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.45;
+  margin-bottom: 1.25rem;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+
+.title {
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.97;
+  margin-bottom: 0.75rem;
+}
+
+.items {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3rem;
+  width: 100%;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+}
+
+.icon {
+  font-size: 1.25rem;
+  color: var(--c-JINEAR_ORANGE);
+  margin-bottom: 1.25rem;
+  opacity: 0.9;
+}
+
+.itemTitle {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.6rem;
+  line-height: 1.3;
+}
+
+.note {
+  font-size: 0.75rem;
+  opacity: 0.35;
+  line-height: 1.6;
+  margin-top: 1rem;
+  margin-bottom: 3.5rem;
+  font-style: italic;
+}
+
+.itemText {
+  font-size: 0.875rem;
+  opacity: 0.6;
+  line-height: 1.7;
+}
+
+@media (max-width: $tablet) {
+  .items {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}

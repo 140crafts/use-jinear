@@ -53,8 +53,7 @@ const PricingPage: React.FC<PricingPageProps> = ({}) => {
 
       <div className="spacer-h-12" />
       <Hero
-        title1={t("pricingScreenHeroTitleLine1")}
-        title2={t("pricingScreenHeroTitleLine2")}
+        title1={`${t("pricingScreenHeroTitleLine1")} ${t("pricingScreenHeroTitleLine2")}`}
         text={t("pricingScreenHeroText")}
       />
       <div className="spacer-h-12" />
