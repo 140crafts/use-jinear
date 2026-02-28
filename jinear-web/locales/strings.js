@@ -5486,16 +5486,16 @@ const translations = {
 
     // OpenSourceSection
     landingPageOpenSourceEyebrow: {
-        en: "Open Source",
-        tr: "Açık Kaynak"
+        en: "Fully transparent",
+        tr: "Şeffaf"
     },
     landingPageOpenSourceTitle: {
         en: "Homemade. Open source.",
-        tr: "Dışarıda içine ne koydukları belli değil, bizimki ev yapımı ve açık kaynak."
+        tr: "Ev yapımı. Açık kaynak."
     },
     landingPageOpenSourceText: {
-        en: "Hi, I'm Çağdaş. I built this for friends and family. We actively use it. Every feature in jinear is developed because we needed them. I open source it so it might help you too. Run it, modify it, do whatever you need with it. I'd be happy if it helps anyone out there. Feel free to contact me at info@jinear.co your mail redirects to my personal email and i'll return to you.",
-        tr: "Ben Çağdaş. Jinear’ı kendim, ailem ve yakın dostlarım için tasarladım; her gün aktif olarak kullanıyoruz. Bu emeği, işine yarayacak herkesle paylaşmak istedim. Faydasını görürseniz ne mutlu bana. Bir sorunuz olursa info@jinear.co adresinden bana ulaşabilirsiniz. Mailleriniz doğrudan bana düşüyor, en kısa sürede bizzat dönüş yaparım."
+        en: "I'm Çağdaş. I built this for friends and family. We actively use it. Every feature in jinear is developed because we needed them. I open source it so it might help you too. Run it, modify it, do whatever you need with it.",
+        tr: "Ben Çağdaş. Jinear'ı kendim, eşim ve dostlarım için yaptım ve aktif olarak kullanıyoruz. Açık kaynak yaptım işinize yarıyorsa sizde istediğiniz gibi kullanabilirsiniz."
     },
     landingPageOpenSourceStar: {
         en: "Drop a star on GitHub or GitLab.",
