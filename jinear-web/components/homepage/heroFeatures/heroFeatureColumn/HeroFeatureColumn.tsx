@@ -5,20 +5,16 @@ import cn from "classnames";
 interface HeroFeatureColumnProps {
   title: string;
   text: string;
+  index: number;
   className?: string;
-  imgSrc: string;
 }
 
-const HeroFeatureColumn: React.FC<HeroFeatureColumnProps> = ({ title, text, imgSrc, className }) => {
-
+const HeroFeatureColumn: React.FC<HeroFeatureColumnProps> = ({ title, text, index, className }) => {
   return (
     <div className={cn(styles.container, className)}>
-      <h2 className={styles.title} dangerouslySetInnerHTML={{ __html: title }}>
-      </h2>
-      <span className={styles.text}>
-        {text}
-      </span>
-      <img src={imgSrc} className={styles.image} />
+      <span className={styles.index}>0{index}</span>
+      <h3 className={styles.title} dangerouslySetInnerHTML={{ __html: title }} />
+      <p className={styles.text}>{text}</p>
     </div>
   );
 };

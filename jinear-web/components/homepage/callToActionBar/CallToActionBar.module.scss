@@ -1,10 +1,42 @@
+@import "/styles/breakpoints.scss";
+
 .actionBar {
-  margin-top: 1rem;
   display: flex;
   flex-direction: row;
-  gap: 0.5rem;
+  gap: 1.25rem;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.groupLabel {
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.35;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+
+.cloudButtons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.divider {
+  width: 1px;
+  height: 2.5rem;
+  background-color: var(--c-primary-shade-1);
+  opacity: 0.6;
+  margin: 0 0.25rem;
+  align-self: flex-end;
+  margin-bottom: 0.25rem;
 }
 
 .goToAppButton {
@@ -16,7 +48,19 @@
   color: var(--c-BABY_POWDER) !important;
 }
 
-.loginButton {
+.loginLink {
   background-color: var(--c-JINEAR_ORANGE) !important;
   color: var(--c-BABY_POWDER) !important;
+}
+
+@media (max-width: $mobile-l) {
+  .actionBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .divider {
+    display: none;
+  }
 }

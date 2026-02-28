@@ -27,12 +27,26 @@ const CallToActionBar: React.FC<CallToActionBarProps> = ({ authState }) => {
       )}
       {authState == "NOT_LOGGED_IN" && (
         <>
-          <Button variant={ButtonVariants.contrast} href={"/login"} className={styles.loginButton}>
-            <b>{t("homescreenLogin")}</b>
-          </Button>
-          <Button variant={ButtonVariants.outline} href={"/register"}>
-            {t("homescreenRegister")}
-          </Button>
+          <div className={styles.group}>
+            <span className={styles.groupLabel}>{t("homescreenCtaSelfHostLabel")}</span>
+            <Button variant={ButtonVariants.outline} href={"https://github.com/140crafts/use-jinear/blob/main/jinear-installation-scripts/README.md"} target={"_blank"}>
+              <b>{t("homescreenDeployFree")}</b>
+            </Button>
+          </div>
+
+          <div className={styles.divider} />
+
+          <div className={styles.group}>
+            <span className={styles.groupLabel}>{t("homescreenCtaCloudLabel")}</span>
+            <div className={styles.cloudButtons}>
+              <Button variant={ButtonVariants.outline} href={"/register"}>
+                {t("homescreenTryCloud")}
+              </Button>
+              <Button variant={ButtonVariants.contrast} href={"/login"} className={styles.loginLink}>
+                {t("homescreenLogin")}
+              </Button>
+            </div>
+          </div>
         </>
       )}
       {authState == "NOT_DECIDED" && <CircularLoading />}
