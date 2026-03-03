@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -43,7 +44,14 @@ public class AccountManager {
         String currentSessionId = sessionInfoService.currentAccountSessionId();
         AccountDto accountDto = accountRetrieveService.retrieveWithBasicInfo(accountId);
         setWorkspaces(accountId, accountDto);
-        return mapAccountRetrieveResponse(accountDto, currentSessionId);
+        return mapAccountRetrieveResponse(accountDto, Optional.of(currentSessionId));
+    }
+
+    public AccountRetrieveResponse retrieveAccount(String accountId) {
+        log.info("Retrieve account has started. accountId: {}", accountId);
+        AccountDto accountDto = accountRetrieveService.retrieveWithBasicInfo(accountId);
+        setWorkspaces(accountId, accountDto);
+        return mapAccountRetrieveResponse(accountDto, Optional.empty());
     }
 
     public BaseResponse confirmEmail(ConfirmEmailRequest confirmEmailRequest) {
@@ -58,10 +66,10 @@ public class AccountManager {
         return new BaseResponse();
     }
 
-    private AccountRetrieveResponse mapAccountRetrieveResponse(AccountDto accountDto, String currentSessionId) {
+    private AccountRetrieveResponse mapAccountRetrieveResponse(AccountDto accountDto, Optional<String> currentSessionIdOptional) {
         AccountRetrieveResponse accountRetrieveResponse = new AccountRetrieveResponse();
         accountRetrieveResponse.setAccountDto(accountDto);
-        accountRetrieveResponse.setSessionId(currentSessionId);
+        currentSessionIdOptional.ifPresent(accountRetrieveResponse::setSessionId);
         return accountRetrieveResponse;
     }
 
