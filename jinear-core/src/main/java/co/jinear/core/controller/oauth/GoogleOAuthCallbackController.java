@@ -26,7 +26,7 @@ public class GoogleOAuthCallbackController {
     @ResponseStatus(HttpStatus.OK)
     public void login(@RequestParam @Size(max = 4048) String code,
                       @Size(max = 4048) @RequestParam String scope,
-                      @Size(max = 4048) @RequestParam String state,
+                      @Size(max = 4048) @RequestParam(required = false) String state,
                       HttpServletResponse response) throws IOException {
         googleOAuthCallbackManager.login(code, scope, state, response);
         response.sendRedirect(feProperties.getHomeUrl());
