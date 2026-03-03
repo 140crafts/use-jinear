@@ -12,7 +12,7 @@ public class AttachAccountStateParameters {
 
     private String workspaceId;
     @JsonProperty("a")
-    private Boolean appLogin;
+    private Boolean appLogin = Boolean.FALSE;
     @JsonProperty("c")
     private String csrf;
 }

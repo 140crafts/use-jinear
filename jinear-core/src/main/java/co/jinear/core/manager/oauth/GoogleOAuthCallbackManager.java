@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 
 import static co.jinear.core.model.enumtype.auth.ProviderType.OAUTH_MAIL;
@@ -70,16 +71,17 @@ public class GoogleOAuthCallbackManager {
     private final FeProperties feProperties;
     private final TokenService tokenService;
 
-    public AuthResponse login(String code, String scopes, String state, HttpServletResponse response) throws IOException {
+    public AuthResponse login(String code, String scopes, String state, HttpServletResponse response) {
         log.info("Login with google has started.");
-        AttachAccountStateParameters parameters = gson.fromJson(state, AttachAccountStateParameters.class);
         GoogleHandleTokenDto googleHandleTokenDto = googleCallbackHandlerService.handleToken(code, scopes, UserConsentPurposeType.LOGIN);
         AuthResponseVo authResponseVo = authenticateWithGoogleUserInfo(googleHandleTokenDto);
         assignExistingTokenDeletionOwnership(googleHandleTokenDto, authResponseVo.getAccountId());
         initializeIntegration(googleHandleTokenDto, IntegrationScopeType.LOGIN, authResponseVo.getAccountId());
-        return Boolean.TRUE.equals(parameters.getAppLogin()) ?
-                generateSingleUseTokenAndRedirectToWebContinue(response, authResponseVo, parameters) :
-                addAuthCookieAndRedirectToWebHome(response, authResponseVo);
+        return Optional.ofNullable(state)
+                .map(s -> gson.fromJson(state, AttachAccountStateParameters.class))
+                .filter(AttachAccountStateParameters::getAppLogin)
+                .map(params -> generateSingleUseTokenAndRedirectToWebContinue(response, authResponseVo, params))
+                .orElseGet(() -> addAuthCookieAndRedirectToWebHome(response, authResponseVo));
     }
 
     public void attachMail(String code, String scopes, String state) {
@@ -192,23 +194,31 @@ public class GoogleOAuthCallbackManager {
         return authResponse;
     }
 
-    private AuthResponse generateSingleUseTokenAndRedirectToWebContinue(HttpServletResponse response, AuthResponseVo authResponseVo, AttachAccountStateParameters parameters) throws IOException {
-        GenerateTokenVo generateTokenVo = GenerateTokenVo.builder()
-                .relatedObject(authResponseVo.getAccountId())
-                .tokenType(TokenType.SINGLE_USE_LOGIN_TOKEN)
-                .uniqueToken(UUID.randomUUID().toString())
-                .commonToken(parameters.getCsrf())
-                .ttl(OAUTH_CALLBACK_TOKEN_TTL)
-                .build();
-        tokenService.generateToken(generateTokenVo);
-        response.sendRedirect(feProperties.getMobileLoginRedirect() + "&u=" + generateTokenVo.getUniqueToken());
+    private AuthResponse generateSingleUseTokenAndRedirectToWebContinue(HttpServletResponse response, AuthResponseVo authResponseVo, AttachAccountStateParameters parameters) {
+        try {
+            GenerateTokenVo generateTokenVo = GenerateTokenVo.builder()
+                    .relatedObject(authResponseVo.getAccountId())
+                    .tokenType(TokenType.SINGLE_USE_LOGIN_TOKEN)
+                    .uniqueToken(UUID.randomUUID().toString())
+                    .commonToken(parameters.getCsrf())
+                    .ttl(OAUTH_CALLBACK_TOKEN_TTL)
+                    .build();
+            tokenService.generateToken(generateTokenVo);
+            response.sendRedirect(feProperties.getMobileLoginRedirect() + "&u=" + generateTokenVo.getUniqueToken());
+        } catch (IOException e) {
+            log.error("Generate single use token and redirect to web continue has failed.", e);
+        }
         return null;
     }
 
-    private AuthResponse addAuthCookieAndRedirectToWebHome(HttpServletResponse response, AuthResponseVo authResponseVo) throws IOException {
+    private AuthResponse addAuthCookieAndRedirectToWebHome(HttpServletResponse response, AuthResponseVo authResponseVo) {
         String token = initializeSessionInfoAndGenerateJwtToken(authResponseVo);
         authCookieManager.addAuthCookie(token, response);
-        response.sendRedirect(feProperties.getHomeUrl());
+        try {
+            response.sendRedirect(feProperties.getHomeUrl());
+        } catch (IOException e) {
+            log.error("Add auth cookie and redirect to web home has failed.", e);
+        }
         return mapResponse(token);
     }
 }
