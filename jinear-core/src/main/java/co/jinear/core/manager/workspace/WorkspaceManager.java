@@ -63,11 +63,25 @@ public class WorkspaceManager {
         return mapValues(workspaceDto);
     }
 
+    public WorkspaceBaseResponse retrieveWorkspaceWithUsernameInternal(String workspaceUsername) {
+        log.info("Retrieve workspace by username has started. workspaceUsername: {}", workspaceUsername);
+        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithUsername(workspaceUsername);
+        mediaRetrieveService.retrieveProfilePictureOptional(workspaceDto.getWorkspaceId()).ifPresent(workspaceDto::setProfilePicture);
+        return mapValues(workspaceDto);
+    }
+
     public WorkspaceBaseResponse retrieveWorkspaceWithId(String workspaceId) {
         String currentAccountId = sessionInfoService.currentAccountIdInclAnonymous();
         log.info("Retrieve workspace by id has started. workspaceId: {}, currentAccountId: {}", workspaceId, currentAccountId);
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
         workspaceValidator.validateHasAccess(currentAccountId, workspaceDto);
+        mediaRetrieveService.retrieveProfilePictureOptional(workspaceDto.getWorkspaceId()).ifPresent(workspaceDto::setProfilePicture);
+        return mapValues(workspaceDto);
+    }
+
+    public WorkspaceBaseResponse retrieveWorkspaceWithIdInternal(String workspaceId) {
+        log.info("Retrieve workspace by id has started. workspaceId: {}", workspaceId);
+        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
         mediaRetrieveService.retrieveProfilePictureOptional(workspaceDto.getWorkspaceId()).ifPresent(workspaceDto::setProfilePicture);
         return mapValues(workspaceDto);
     }

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-03-03 13:03:16.
+// Generated using typescript-generator version 3.0.1157 on 2026-03-03 13:47:23.
 
 export interface BaseDto {
     createdDate: Date;
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gthreadId: string;
-    ghistoryId: string;
-    gid: string;
     ginternalDate: string;
+    ghistoryId: string;
+    gthreadId: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -574,9 +574,9 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
-    accountWorkspaceAdminOrOwner: boolean;
     accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
+    accountWorkspaceAdminOrOwner: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -2130,8 +2130,8 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    description: string;
     filename: string;
+    description: string;
     uri: URI;
 }
 

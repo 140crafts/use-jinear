@@ -67,6 +67,7 @@ public class SecurityConfiguration {
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers("/v1/domain/validate").hasRole("DOMAINSERVER")
                         .requestMatchers("/v1/robots/**").hasRole("ROBOT")
+                        .requestMatchers("/v1/internal/**").hasRole("INTERNAL")
                         .requestMatchers("/v1/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )
