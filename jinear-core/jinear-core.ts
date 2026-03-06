@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-03-03 13:47:23.
+// Generated using typescript-generator version 3.0.1157 on 2026-03-05 23:07:52.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -166,9 +166,9 @@ export interface GmailMessageDto extends BaseDto {
     subject: string;
     body: string;
     ginternalDate: string;
-    ghistoryId: string;
-    gthreadId: string;
     gid: string;
+    gthreadId: string;
+    ghistoryId: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -574,9 +574,9 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
+    accountWorkspaceAdminOrOwner: boolean;
     accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
-    accountWorkspaceAdminOrOwner: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -1259,6 +1259,19 @@ export interface MaterialSearchRequest extends BaseRequest {
     materialType?: MaterialType | null;
 }
 
+export interface InternalMediaInitializeFromUrlRequest extends InternalMediaInitializeRequest {
+    url: string;
+}
+
+export interface InternalMediaInitializeRequest {
+    ownerId: string;
+    relatedObjectId: string;
+    fileType: FileType;
+    mediaOwnerType: MediaOwnerType;
+    visibility: MediaVisibilityType;
+    ownershipStatus: MediaFileOwnershipStatusType;
+}
+
 export interface MediaUploadUrlRequest extends BaseRequest {
     originalName: string;
     fileSize: number;
@@ -1738,6 +1751,10 @@ export interface ParentMaterialDtoResponse extends BaseResponse {
     data: MaterialHierarchyDto;
 }
 
+export interface InternalMediaInitializeResponse extends BaseResponse {
+    data: AccessibleMediaDto;
+}
+
 export interface MediaUploadUrlResponse extends BaseResponse {
     data: WaitingMediaResultDto;
 }
@@ -1950,6 +1967,10 @@ export interface TopicSearchResponse extends BaseResponse {
     data: TopicDto[];
 }
 
+export interface AccountWorkspacesResponse extends BaseResponse {
+    data: DetailedWorkspaceMemberDto[];
+}
+
 export interface WorkspaceActivityListResponse extends BaseResponse {
     data: PageDto<WorkspaceActivityDto>;
 }
@@ -2130,9 +2151,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    filename: string;
-    description: string;
     uri: URI;
+    description: string;
+    filename: string;
 }
 
 export interface InputStreamSource {

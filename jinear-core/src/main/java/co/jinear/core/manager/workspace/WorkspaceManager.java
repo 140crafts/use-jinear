@@ -4,9 +4,11 @@ import co.jinear.core.converter.workspace.WorkspaceInitializeVoConverter;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
+import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
 import co.jinear.core.model.request.workspace.WorkspaceInitializeRequest;
 import co.jinear.core.model.request.workspace.WorkspaceTitleUpdateRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.workspace.AccountWorkspacesResponse;
 import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
 import co.jinear.core.model.response.workspace.WorkspaceDisplayPreferenceResponse;
 import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
@@ -23,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -84,6 +87,14 @@ public class WorkspaceManager {
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(workspaceId);
         mediaRetrieveService.retrieveProfilePictureOptional(workspaceDto.getWorkspaceId()).ifPresent(workspaceDto::setProfilePicture);
         return mapValues(workspaceDto);
+    }
+
+    public AccountWorkspacesResponse retrieveAccountWorkspacesInternal(String accountId) {
+        log.info("Retrieve account workspaces has started. accountId: {}", accountId);
+        List<DetailedWorkspaceMemberDto> workspaces = workspaceRetrieveService.retrieveAccountWorkspaces(accountId);
+        AccountWorkspacesResponse response = new AccountWorkspacesResponse();
+        response.setWorkspaces(workspaces);
+        return response;
     }
 
     public WorkspaceDisplayPreferenceResponse updatePreferredWorkspace(String workspaceId) {

@@ -1,6 +1,7 @@
 package co.jinear.core.controller.workspace;
 
 import co.jinear.core.manager.workspace.WorkspaceManager;
+import co.jinear.core.model.response.workspace.AccountWorkspacesResponse;
 import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,5 +24,11 @@ public class InternalWorkspaceController {
     @ResponseStatus(HttpStatus.OK)
     public WorkspaceBaseResponse retrieveWorkspaceWithId(@PathVariable String workspaceId) {
         return workspaceManager.retrieveWorkspaceWithIdInternal(workspaceId);
+    }
+
+    @GetMapping("/by-account/{accountId}")
+    @ResponseStatus(HttpStatus.OK)
+    public AccountWorkspacesResponse retrieveAccountWorkspaces(@PathVariable String accountId) {
+        return workspaceManager.retrieveAccountWorkspacesInternal(accountId);
     }
 }

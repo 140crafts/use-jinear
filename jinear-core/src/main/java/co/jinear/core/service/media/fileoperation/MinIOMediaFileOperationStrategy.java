@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -107,6 +109,31 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
             log.error("Save media to storage has failed.", e);
             throw new BusinessException();
         }
+    }
+
+    @Override
+    public MediaInitializeResultVo save(URL url, String path, String contentType) {
+        String bucketName = minIoProperties.getPrivateBucketName();
+        try {
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            long contentLength = connection.getContentLengthLong();
+
+            try (InputStream inputStream = url.openStream()) {
+                PutObjectArgs putObjectArgs = PutObjectArgs.builder()
+                        .bucket(bucketName)
+                        .object(path)
+                        .stream(inputStream, contentLength, -1)
+                        .contentType(contentType)
+                        .build();
+
+                minioClient.putObject(putObjectArgs);
+                return new MediaInitializeResultVo(bucketName);
+            }
+        } catch (Exception e) {
+            log.error("Save media to storage from URL has failed.", e);
+            throw new BusinessException();
+        }
+
     }
 
     @Override

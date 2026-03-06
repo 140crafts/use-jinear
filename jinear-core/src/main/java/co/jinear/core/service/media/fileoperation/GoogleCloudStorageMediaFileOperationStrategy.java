@@ -44,6 +44,19 @@ public class GoogleCloudStorageMediaFileOperationStrategy implements MediaFileOp
     }
 
     @Override
+    public MediaInitializeResultVo save(URL url, String path, String contentType) {
+        String bucketName = gCloudProperties.getBucketName();
+        log.info("Save media to storage from URL has started. bucketName: {}, path: {}", bucketName, path);
+        try {
+            CloudStorage.uploadFromUrl(bucketName, path, url, contentType);
+            return new MediaInitializeResultVo(bucketName);
+        } catch (Exception e) {
+            log.error("Save media to storage has failed.", e);
+            throw new BusinessException();
+        }
+    }
+
+    @Override
     public WaitingMediaResultVo presignUrl(String path, String contentType, MediaVisibilityType visibility, long fileSizeInBytes) {
         String bucketName = gCloudProperties.getBucketName();
         log.info("Presign url has started. path: {}, contentType: {}", path, contentType);
