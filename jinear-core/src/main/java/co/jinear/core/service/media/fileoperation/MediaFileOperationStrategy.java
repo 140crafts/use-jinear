@@ -14,7 +14,7 @@ public interface MediaFileOperationStrategy {
 
     MediaInitializeResultVo save(MultipartFile file, MediaVisibilityType visibility, String path);
 
-    MediaInitializeResultVo save(URL url, String path, String contentType);
+    MediaInitializeResultVo save(URL url, MediaVisibilityType visibility, String path, String contentType);
 
     WaitingMediaResultVo presignUrl(String path, String contentType, MediaVisibilityType visibility, long fileSizeInBytes);
 

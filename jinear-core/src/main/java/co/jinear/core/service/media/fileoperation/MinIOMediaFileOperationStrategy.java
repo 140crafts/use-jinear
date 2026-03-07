@@ -112,8 +112,8 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
     }
 
     @Override
-    public MediaInitializeResultVo save(URL url, String path, String contentType) {
-        String bucketName = minIoProperties.getPrivateBucketName();
+    public MediaInitializeResultVo save(URL url, MediaVisibilityType visibility, String path, String contentType) {
+        String bucketName = MediaVisibilityType.PRIVATE.equals(visibility) ? minIoProperties.getPrivateBucketName() : minIoProperties.getPublicBucketName();
         try {
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             long contentLength = connection.getContentLengthLong();

@@ -6,5 +6,7 @@ public enum FileType {
     PROJECT_POST_FILE,
     PROJECT_LOGO,
     RICH_TEXT_IMAGE,
-    MATERIAL_MEDIA;
+    MATERIAL_MEDIA,
+    MEME_MEDIA,
+    MEME_THUMB;
 }

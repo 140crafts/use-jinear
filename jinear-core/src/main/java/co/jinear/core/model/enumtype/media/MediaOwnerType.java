@@ -7,5 +7,6 @@ public enum MediaOwnerType {
     PROJECT_POST,
     PROJECT,
     RICH_TEXT,
-    MATERIAL;
+    MATERIAL,
+    MEME;
 }

@@ -85,7 +85,7 @@ public class MediaOperationService {
         String path = generatePath(baseVo, mediaKey, originalName);
         Media media = mediaEntityConverter.mapToEntity(baseVo, mediaKey, path, activeFileStorageType, baseVo.getOwnershipStatus(), contentType, originalName);
         MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(activeFileStorageType);
-        MediaInitializeResultVo mediaInitializeResultVo = mediaFileOperationStrategy.save(url, path, contentType);
+        MediaInitializeResultVo mediaInitializeResultVo = mediaFileOperationStrategy.save(url, baseVo.getVisibility(), path, contentType);
         updateBucketName(media, mediaInitializeResultVo.getBucketName());
         return accessibleMediaDtoConverter.mapToAccessibleMediaDto(media);
     }
