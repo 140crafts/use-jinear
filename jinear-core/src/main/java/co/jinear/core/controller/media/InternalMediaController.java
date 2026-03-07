@@ -1,9 +1,11 @@
 package co.jinear.core.controller.media;
 
 import co.jinear.core.manager.media.InternalMediaManager;
+import co.jinear.core.model.request.media.InternalBatchMediaRetrieveRequest;
 import co.jinear.core.model.request.media.InternalMediaInitializeFromUrlRequest;
 import co.jinear.core.model.request.media.InternalMediaInitializeRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.media.InternalBatchMediaRetrieveResponse;
 import co.jinear.core.model.response.media.InternalMediaInitializeResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -38,6 +40,13 @@ public class InternalMediaController {
             @PathVariable String mediaId,
             @RequestParam String relatedObjectId) {
         return internalMediaManager.retrieveMedia(mediaId, relatedObjectId);
+    }
+
+    @PostMapping("/batch")
+    @ResponseStatus(HttpStatus.OK)
+    public InternalBatchMediaRetrieveResponse retrieveMediaBatch(
+            @RequestBody InternalBatchMediaRetrieveRequest request) {
+        return internalMediaManager.retrieveMediaBatch(request);
     }
 
     @DeleteMapping("/{mediaId}")

@@ -1,9 +1,11 @@
 package co.jinear.core.manager.media;
 
 import co.jinear.core.model.dto.media.AccessibleMediaDto;
+import co.jinear.core.model.request.media.InternalBatchMediaRetrieveRequest;
 import co.jinear.core.model.request.media.InternalMediaInitializeFromUrlRequest;
 import co.jinear.core.model.request.media.InternalMediaInitializeRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.media.InternalBatchMediaRetrieveResponse;
 import co.jinear.core.model.response.media.InternalMediaInitializeResponse;
 import co.jinear.core.model.vo.media.BaseInitializeMediaVo;
 import co.jinear.core.model.vo.media.InitializeMediaVo;
@@ -17,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -52,6 +55,14 @@ public class InternalMediaManager {
         AccessibleMediaDto result = mediaRetrieveService.retrieveAccessibleMediaWithRelatedObjectIdAndFileTypeOptional(relatedObjectId, null)
                 .orElse(null);
         return mapResponse(result);
+    }
+
+    public InternalBatchMediaRetrieveResponse retrieveMediaBatch(InternalBatchMediaRetrieveRequest request) {
+        log.info("Internal retrieve media batch has started. request: {}", request);
+        List<AccessibleMediaDto> result = mediaRetrieveService.retrieveAllByRelatedObjectIds(request.getRelatedObjectIds(), request.getFileTypes());
+        InternalBatchMediaRetrieveResponse response = new InternalBatchMediaRetrieveResponse();
+        response.setData(result);
+        return response;
     }
 
     public BaseResponse deleteMedia(String mediaId, String responsibleAccountId) {
