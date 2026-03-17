@@ -12,6 +12,8 @@ import co.jinear.core.model.vo.media.InitializeMediaVo;
 import co.jinear.core.model.vo.media.RemoveMediaVo;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaRetrieveService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,10 +30,12 @@ public class InternalMediaManager {
 
     private final MediaOperationService mediaOperationService;
     private final MediaRetrieveService mediaRetrieveService;
+    private final ObjectMapper objectMapper;
 
-    public InternalMediaInitializeResponse initializeMedia(MultipartFile file, InternalMediaInitializeRequest request) {
-        log.info("Internal initialize media has started. request: {}", request);
-        InitializeMediaVo vo = mapToInitializeMediaVo(request);
+    public InternalMediaInitializeResponse initializeMedia(MultipartFile file, String request) throws JsonProcessingException {
+        InternalMediaInitializeRequest internalMediaInitializeRequest = objectMapper.readValue(request, InternalMediaInitializeRequest.class);
+        log.info("Internal initialize media has started. request: {}", internalMediaInitializeRequest);
+        InitializeMediaVo vo = mapToInitializeMediaVo(internalMediaInitializeRequest);
         vo.setFile(file);
         AccessibleMediaDto result = mediaOperationService.initializeMedia(vo);
         return mapResponse(result);

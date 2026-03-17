@@ -20,8 +20,8 @@ public class GoogleRedirectInfoService {
     public String retrieveLoginUrl() {
         GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
         generateUserConsentUrlVo.setUserConsentPurposeType(UserConsentPurposeType.LOGIN);
-        generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.TRUE);
-        generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.TRUE);
+        generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.FALSE);
+        generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.FALSE);
         return generateUserConsentUrlVoToUrlConverter.convert(generateUserConsentUrlVo);
     }
 
