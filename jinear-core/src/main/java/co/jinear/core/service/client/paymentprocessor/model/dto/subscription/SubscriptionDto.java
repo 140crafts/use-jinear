@@ -19,7 +19,6 @@ public class SubscriptionDto extends BaseDto {
     private String subscriptionId;
     private String externalId;
     private PaymentProviderType provider;
-    private ProductType product;
     private SubscriptionStatus subscriptionStatus;
     private Set<PassthroughDetailDto> passthroughDetails;
 }

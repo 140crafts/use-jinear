@@ -18,7 +18,7 @@ import java.util.Collections;
 public class PaymentProcessorMockClient implements PaymentProcessorClient {
 
     @Override
-    public PurchaseListingResponse retrievePurchasesAfter(ProductType product, String afterIsoDate) {
+    public PurchaseListingResponse retrievePurchasesAfter(String product, String afterIsoDate) {
         log.info("[MOCK] Retrieve purchases after has started. product: {}, after: {}", product, afterIsoDate);
         PurchaseListingDto purchaseListingDto = new PurchaseListingDto();
 

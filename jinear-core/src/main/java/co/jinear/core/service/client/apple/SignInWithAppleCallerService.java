@@ -38,10 +38,6 @@ public class SignInWithAppleCallerService {
 
     private final RestTemplate signInWithAppleRestTemplate;
 
-    public IdTokenPayload appleAuth(String authorizationCode) {
-        return appleAuth(authorizationCode, Boolean.FALSE);
-    }
-
     public IdTokenPayload appleAuth(String authorizationCode, boolean forWeb) {
         String clientId = forWeb ? signInWithAppleProperties.getWebClientId() : signInWithAppleProperties.getClientId();
         String clientSecret = generateClientSecret(clientId);

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface PaymentProcessorFeignClient extends PaymentProcessorClient {
 
     @GetMapping("/purchase-listing/{product}/{after}")
-    PurchaseListingResponse retrievePurchasesAfter(@PathVariable ProductType product,
+    PurchaseListingResponse retrievePurchasesAfter(@PathVariable String product,
                                                    @PathVariable String after);
 
     @GetMapping("/subscription/info/{subscriptionId}")

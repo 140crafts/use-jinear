@@ -11,6 +11,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @Setter
 @ToString
 public class LoginWithAppleRequest extends BaseRequest {
+
+    @Nullable
+    private Boolean webClient = Boolean.FALSE;
     @NotBlank
     private String code;
     @Nullable
