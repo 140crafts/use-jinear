@@ -19,6 +19,8 @@ import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.system.FileStorageUtils;
 import co.jinear.core.system.NormalizeHelper;
 import co.jinear.core.system.RandomHelper;
+import co.jinear.core.system.util.ContentTypeFinder;
+import co.jinear.core.system.util.UrlContentInfo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -63,6 +66,26 @@ public class MediaOperationService {
         Media media = mediaEntityConverter.mapToEntity(initializeMediaVo, mediaKey, path, activeFileStorageType, initializeMediaVo.getOwnershipStatus());
         MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(activeFileStorageType);
         MediaInitializeResultVo mediaInitializeResultVo = mediaFileOperationStrategy.save(initializeMediaVo.getFile(), initializeMediaVo.getVisibility(), path);
+        updateBucketName(media, mediaInitializeResultVo.getBucketName());
+        return accessibleMediaDtoConverter.mapToAccessibleMediaDto(media);
+    }
+
+    @Transactional
+    public AccessibleMediaDto initializeMediaFromUrl(BaseInitializeMediaVo baseVo, URL url) {
+        log.info("Initialize media from URL has started. url: {}, baseVo: {}", url, baseVo);
+        MediaFileProviderType activeFileStorageType = fileStorageProperties.getActiveFileStorageType();
+        String mediaKey = RandomHelper.generateULID();
+        String originalName = extractFileNameFromUrl(url);
+
+        String contentType = Optional.of(url)
+                .map(ContentTypeFinder::findUrlContentInfo)
+                .map(UrlContentInfo::getContentType)
+                .orElse(null);
+
+        String path = generatePath(baseVo, mediaKey, originalName);
+        Media media = mediaEntityConverter.mapToEntity(baseVo, mediaKey, path, activeFileStorageType, baseVo.getOwnershipStatus(), contentType, originalName);
+        MediaFileOperationStrategy mediaFileOperationStrategy = mediaFileOperationServiceFactory.getStrategy(activeFileStorageType);
+        MediaInitializeResultVo mediaInitializeResultVo = mediaFileOperationStrategy.save(url, baseVo.getVisibility(), path, contentType);
         updateBucketName(media, mediaInitializeResultVo.getBucketName());
         return accessibleMediaDtoConverter.mapToAccessibleMediaDto(media);
     }
@@ -225,5 +248,12 @@ public class MediaOperationService {
 
     private String generatePath(BaseInitializeMediaVo baseInitializeMediaVo, String mediaKey, String originalName) {
         return FileStorageUtils.generatePath(baseInitializeMediaVo.getMediaOwnerType(), baseInitializeMediaVo.getRelatedObjectId(), baseInitializeMediaVo.getFileType(), mediaKey, originalName);
+    }
+
+    private String extractFileNameFromUrl(URL url) {
+        String path = url.getPath();
+        int lastSlash = path.lastIndexOf("/");
+        String name = lastSlash >= 0 ? path.substring(lastSlash + 1) : path;
+        return name.isEmpty() ? UUID.randomUUID().toString() : NormalizeHelper.normalizeUsernameReplaceSpaces(name);
     }
 }

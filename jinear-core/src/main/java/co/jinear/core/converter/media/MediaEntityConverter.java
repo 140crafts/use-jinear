@@ -70,6 +70,21 @@ public class MediaEntityConverter {
         return media;
     }
 
+    public Media mapToEntity(BaseInitializeMediaVo baseVo,
+                             String mediaKey,
+                             String path,
+                             MediaFileProviderType activeFileStorageType,
+                             MediaFileOwnershipStatusType ownershipStatus,
+                             String contentType,
+                             String originalName) {
+        Media media = mapBaseInitializeMediaVoToEntity(baseVo, mediaKey, path, activeFileStorageType, ownershipStatus);
+        media.setContentType(contentType);
+        media.setOriginalName(originalName);
+        media.setUploadMethod(MediaFileUploadMethodType.LEGACY);
+        media.setUploadStatus(MediaFileUploadStatusType.COMPLETED);
+        return media;
+    }
+
     private Media mapBaseInitializeMediaVoToEntity(BaseInitializeMediaVo baseInitializeMediaVo,
                                                    String mediaKey,
                                                    String path,

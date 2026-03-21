@@ -1,5 +1,6 @@
 package co.jinear.core.service.payments;
 
+import co.jinear.core.config.properties.GenericJinearProperties;
 import co.jinear.core.converter.payments.ClientSubscriptionDtoToSubscriptionExternalDtoConverter;
 import co.jinear.core.model.dto.payments.SubscriptionExternalDto;
 import co.jinear.core.model.entity.payments.Subscription;
@@ -37,6 +38,7 @@ public class PaymentsOperationService {
     private final SubscriptionOperationService subscriptionOperationService;
     private final WorkspaceTierService workspaceTierService;
     private final Gson gson;
+    private final GenericJinearProperties genericJinearProperties;
 
     public void retrieveAndApplyLatestPayments(ZonedDateTime lastSyncDate) {
         log.info("Retrieve and apply latest payments has started.");
@@ -49,7 +51,7 @@ public class PaymentsOperationService {
     private PurchaseListingDto retrievePurchasesAfter(ZonedDateTime lastSyncDate) {
         String formatted = lastSyncDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         log.info("Retrieving purchase updates. lastSyncDate: {}, formatted: {}", lastSyncDate, formatted);
-        PurchaseListingDto purchaseListingDto = paymentProcessorClient.retrievePurchasesAfter(ProductType.JINEAR, formatted).getPurchaseListingDto();
+        PurchaseListingDto purchaseListingDto = paymentProcessorClient.retrievePurchasesAfter(genericJinearProperties.getPaymentProcessorProductName(), formatted).getPurchaseListingDto();
         log.info("Purchase updates retrieved. purchaseListingDto: {}", gson.toJson(purchaseListingDto));
         return purchaseListingDto;
     }

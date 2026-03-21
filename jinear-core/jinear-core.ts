@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-03-03 13:03:16.
+// Generated using typescript-generator version 3.0.1157 on 2026-03-08 20:03:28.
 
 export interface BaseDto {
     createdDate: Date;
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
+    ginternalDate: string;
     gthreadId: string;
     ghistoryId: string;
     gid: string;
-    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1259,6 +1259,24 @@ export interface MaterialSearchRequest extends BaseRequest {
     materialType?: MaterialType | null;
 }
 
+export interface InternalBatchMediaRetrieveRequest {
+    relatedObjectIds: string[];
+    fileTypes: FileType[];
+}
+
+export interface InternalMediaInitializeFromUrlRequest extends InternalMediaInitializeRequest {
+    url: string;
+}
+
+export interface InternalMediaInitializeRequest {
+    ownerId: string;
+    relatedObjectId: string;
+    fileType: FileType;
+    mediaOwnerType: MediaOwnerType;
+    visibility: MediaVisibilityType;
+    ownershipStatus: MediaFileOwnershipStatusType;
+}
+
 export interface MediaUploadUrlRequest extends BaseRequest {
     originalName: string;
     fileSize: number;
@@ -1311,6 +1329,10 @@ export interface NotificationTargetInitializeRequest extends BaseRequest {
     externalTargetId: string;
     targetType?: NotificationTargetType | null;
     providerType: NotificationProviderType;
+}
+
+export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
+    csrf: string;
 }
 
 export interface InitializeMilestoneRequest extends BaseRequest {
@@ -1738,6 +1760,14 @@ export interface ParentMaterialDtoResponse extends BaseResponse {
     data: MaterialHierarchyDto;
 }
 
+export interface InternalBatchMediaRetrieveResponse extends BaseResponse {
+    data: AccessibleMediaDto[];
+}
+
+export interface InternalMediaInitializeResponse extends BaseResponse {
+    data: AccessibleMediaDto;
+}
+
 export interface MediaUploadUrlResponse extends BaseResponse {
     data: WaitingMediaResultDto;
 }
@@ -1950,6 +1980,10 @@ export interface TopicSearchResponse extends BaseResponse {
     data: TopicDto[];
 }
 
+export interface AccountWorkspacesResponse extends BaseResponse {
+    data: DetailedWorkspaceMemberDto[];
+}
+
 export interface WorkspaceActivityListResponse extends BaseResponse {
     data: PageDto<WorkspaceActivityDto>;
 }
@@ -2130,8 +2164,8 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    description: string;
     filename: string;
+    description: string;
     uri: URI;
 }
 
@@ -2235,7 +2269,7 @@ export type MaterialSearchSortType = "IDATE_DESC" | "IDATE_ASC" | "UDATE_DESC" |
 
 export type MaterialType = "FILE" | "FOLDER";
 
-export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO" | "RICH_TEXT_IMAGE" | "MATERIAL_MEDIA";
+export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO" | "RICH_TEXT_IMAGE" | "MATERIAL_MEDIA" | "MEME_MEDIA" | "MEME_THUMB";
 
 export type MediaFileOwnershipStatusType = "WAITING" | "OWNED";
 
@@ -2245,7 +2279,7 @@ export type MediaFileUploadMethodType = "LEGACY" | "PRESIGNED_URL";
 
 export type MediaFileUploadStatusType = "WAITING" | "COMPLETED" | "FAILED";
 
-export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK" | "PROJECT_POST" | "PROJECT" | "RICH_TEXT" | "MATERIAL";
+export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK" | "PROJECT_POST" | "PROJECT" | "RICH_TEXT" | "MATERIAL" | "MEME";
 
 export type MediaVisibilityType = "PUBLIC" | "PRIVATE" | "TEMP_PUBLIC";
 

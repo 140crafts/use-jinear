@@ -33,7 +33,7 @@ public class AppleAuthenticationStrategy implements AuthenticationStrategy {
 
     @Override
     public AuthResponseVo auth(AuthVo authVo) {
-        IdTokenPayload idTokenPayload = signInWithAppleCallerService.appleAuth(authVo.getCode());
+        IdTokenPayload idTokenPayload = signInWithAppleCallerService.appleAuth(authVo.getCode(), authVo.getWebClient());
         AccountDto accountDto = retrieveAccount(idTokenPayload, authVo.getLocale());
         Collection<GrantedAuthority> grantedAuthorities = retrieveAuthorities(accountDto.getAccountId());
         return new AuthResponseVo(accountDto.getAccountId(), authVo.getLocale(), grantedAuthorities);

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.net.URL;
 import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,16 +97,24 @@ public class MediaRetrieveService {
     }
 
     public Optional<Media> retrieveEntityWithRelatedObjectIdAndMediaKey(String relatedObjectId, String mediaKey) {
-        return mediaRepository.findFirstByRelatedObjectIdAndMediaKeyAndPassiveIdIsNull(relatedObjectId,mediaKey);
+        return mediaRepository.findFirstByRelatedObjectIdAndMediaKeyAndPassiveIdIsNull(relatedObjectId, mediaKey);
     }
 
-    public boolean checkMediaRelatedWithRelatedObjectId(String mediaId, String relatedObjectId){
+    public boolean checkMediaRelatedWithRelatedObjectId(String mediaId, String relatedObjectId) {
         log.info("Check media related with related object has started. mediaId: {}, relatedObjectId: {}", mediaId, relatedObjectId);
         return mediaRepository.existsByMediaIdAndRelatedObjectIdAndPassiveIdIsNull(mediaId, relatedObjectId);
     }
 
-    public Page<Media> retrieveWaitingForUploadMedia(){
+    public Page<Media> retrieveWaitingForUploadMedia() {
         log.info("Retrieve waiting for upload media has started.");
         return mediaRepository.findAllByUploadMethodAndUploadStatusAndPassiveIdIsNullOrderByCreatedDateDesc(MediaFileUploadMethodType.PRESIGNED_URL, MediaFileUploadStatusType.WAITING, PageRequest.of(0, 100));
+    }
+
+    public List<AccessibleMediaDto> retrieveAllByRelatedObjectIds(Collection<String> relatedObjectIds, Collection<FileType> fileTypes) {
+        log.info("Retrieve all by related object ids has started. relatedObjectIds: {}, fileTypes: {}", relatedObjectIds, fileTypes);
+        return mediaRepository.findAllByRelatedObjectIdInAndFileTypeInAndUploadStatusAndPassiveIdIsNullOrderByCreatedDateAsc(relatedObjectIds, fileTypes, MediaFileUploadStatusType.COMPLETED)
+                .stream()
+                .map(accessibleMediaDtoConverter::mapToAccessibleMediaDto)
+                .toList();
     }
 }

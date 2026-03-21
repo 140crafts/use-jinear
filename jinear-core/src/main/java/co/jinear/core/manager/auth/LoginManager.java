@@ -130,6 +130,7 @@ public class LoginManager {
         AuthVo authVo = new AuthVo();
         authVo.setCode(loginWithAppleRequest.getCode());
         authVo.setLocale(loginWithAppleRequest.getLocale());
+        authVo.setWebClient(loginWithAppleRequest.getWebClient());
         return authVo;
     }
 

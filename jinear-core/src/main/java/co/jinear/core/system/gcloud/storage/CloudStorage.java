@@ -7,6 +7,7 @@ import lombok.experimental.UtilityClass;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Objects;
@@ -22,7 +23,6 @@ public class CloudStorage {
     @Getter
     @Setter
     private static String projectId;
-
     private static Storage __storage;
 
     private static Storage getStorage() {
@@ -43,6 +43,19 @@ public class CloudStorage {
                 .setContentType(contentType)
                 .build();
         storage.create(blobInfo, file.getBytes());
+    }
+
+    public static void uploadFromUrl(String bucketName, String objectName, URL url, String contentType) throws IOException {
+        Storage storage = getStorage();
+        BlobId blobId = BlobId.of(bucketName, objectName);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
+                .setCacheControl(CACHE_CONTROL)
+                .setContentType(contentType != null ? contentType : DEFAULT_CONTENT_TYPE)
+                .build();
+
+        try (InputStream inputStream = url.openStream()) {
+            storage.create(blobInfo, inputStream.readAllBytes());
+        }
     }
 
     public URL generateV4PutSignedUrl(String bucketName, String objectName, String contentType, Long signedUrlDuration, long fileSizeInBytes) {

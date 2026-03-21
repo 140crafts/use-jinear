@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.ZonedDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,4 +35,6 @@ public interface MediaRepository extends JpaRepository<Media, String> {
     boolean existsByMediaIdAndRelatedObjectIdAndPassiveIdIsNull(String mediaId, String relatedObjectId);
 
     Page<Media> findAllByUploadMethodAndUploadStatusAndPassiveIdIsNullOrderByCreatedDateDesc(MediaFileUploadMethodType uploadMethod, MediaFileUploadStatusType uploadStatus, Pageable pageable);
+
+    List<Media> findAllByRelatedObjectIdInAndFileTypeInAndUploadStatusAndPassiveIdIsNullOrderByCreatedDateAsc(Collection<String> relatedObjectIds, Collection<FileType> fileTypes, MediaFileUploadStatusType uploadStatus);
 }

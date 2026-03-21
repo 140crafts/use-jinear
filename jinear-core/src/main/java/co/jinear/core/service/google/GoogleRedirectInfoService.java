@@ -20,8 +20,21 @@ public class GoogleRedirectInfoService {
     public String retrieveLoginUrl() {
         GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
         generateUserConsentUrlVo.setUserConsentPurposeType(UserConsentPurposeType.LOGIN);
-        generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.TRUE);
-        generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.TRUE);
+        generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.FALSE);
+        generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.FALSE);
+        return generateUserConsentUrlVoToUrlConverter.convert(generateUserConsentUrlVo);
+    }
+
+    public String retrieveMobileLoginUrl(String csrf) {
+        AttachAccountStateParameters attachAccountStateParameters = new AttachAccountStateParameters();
+        attachAccountStateParameters.setAppLogin(Boolean.TRUE);
+        attachAccountStateParameters.setCsrf(csrf);
+
+        GenerateUserConsentUrlVo generateUserConsentUrlVo = new GenerateUserConsentUrlVo();
+        generateUserConsentUrlVo.setUserConsentPurposeType(UserConsentPurposeType.LOGIN);
+        generateUserConsentUrlVo.setIncludeEmailScopes(Boolean.FALSE);
+        generateUserConsentUrlVo.setIncludeCalendarScopes(Boolean.FALSE);
+        generateUserConsentUrlVo.setState(gson.toJson(attachAccountStateParameters));
         return generateUserConsentUrlVoToUrlConverter.convert(generateUserConsentUrlVo);
     }
 

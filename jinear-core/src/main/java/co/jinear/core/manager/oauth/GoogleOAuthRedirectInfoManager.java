@@ -1,5 +1,6 @@
 package co.jinear.core.manager.oauth;
 
+import co.jinear.core.model.request.oauth.RetrieveMobileLoginRedirectInfoRequest;
 import co.jinear.core.model.response.auth.AuthRedirectInfoResponse;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.google.GoogleRedirectInfoService;
@@ -20,6 +21,12 @@ public class GoogleOAuthRedirectInfoManager {
     public AuthRedirectInfoResponse retrieveLoginRedirectUrl() {
         log.info("Retrieve login redirect url has started.");
         String redirectUrl = googleRedirectInfoService.retrieveLoginUrl();
+        return new AuthRedirectInfoResponse(redirectUrl);
+    }
+
+    public AuthRedirectInfoResponse retrieveMobileLoginRedirectUrl(RetrieveMobileLoginRedirectInfoRequest retrieveMobileLoginRedirectInfoRequest) {
+        log.info("Retrieve mobile login redirect url has started.");
+        String redirectUrl = googleRedirectInfoService.retrieveMobileLoginUrl(retrieveMobileLoginRedirectInfoRequest.getCsrf());
         return new AuthRedirectInfoResponse(redirectUrl);
     }
 

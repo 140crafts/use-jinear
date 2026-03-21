@@ -43,6 +43,7 @@ public class SecurityConfiguration {
             "/v1/workspace/member/invitation/respond",
             "/v1/workspace/member/invitation/info/{token}",
             "/v1/oauth/google/redirect-info/login",
+            "/v1/oauth/google/redirect-info/mobile-login",
             "/v1/oauth/google/redirect-info/attach-mail",
             "/v1/oauth/google/redirect-info/attach-calendar",
             "/v1/oauth/google/callback/login",
@@ -67,6 +68,7 @@ public class SecurityConfiguration {
                         .requestMatchers(PUBLIC_ENDPOINTS).permitAll()
                         .requestMatchers("/v1/domain/validate").hasRole("DOMAINSERVER")
                         .requestMatchers("/v1/robots/**").hasRole("ROBOT")
+                        .requestMatchers("/v1/internal/**").hasRole("INTERNAL")
                         .requestMatchers("/v1/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )

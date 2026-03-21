@@ -1,7 +1,9 @@
 package co.jinear.core.controller.oauth;
 
 import co.jinear.core.manager.oauth.GoogleOAuthRedirectInfoManager;
+import co.jinear.core.model.request.oauth.RetrieveMobileLoginRedirectInfoRequest;
 import co.jinear.core.model.response.auth.AuthRedirectInfoResponse;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +23,12 @@ public class GoogleOAuthRedirectInfoController {
     @ResponseStatus(HttpStatus.OK)
     public AuthRedirectInfoResponse retrieveLoginRedirectInfo() {
         return googleOAuthRedirectInfoManager.retrieveLoginRedirectUrl();
+    }
+
+    @PostMapping("/mobile-login")
+    @ResponseStatus(HttpStatus.OK)
+    public AuthRedirectInfoResponse retrieveMobileLoginRedirectInfo(@Valid @RequestBody RetrieveMobileLoginRedirectInfoRequest retrieveMobileLoginRedirectInfoRequest) {
+        return googleOAuthRedirectInfoManager.retrieveMobileLoginRedirectUrl(retrieveMobileLoginRedirectInfoRequest);
     }
 
     @Validated

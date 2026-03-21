@@ -13,4 +13,5 @@ public class AuthVo {
     private String csrf;
     private LocaleType locale;
     private String code;
+    private Boolean webClient = Boolean.FALSE;
 }
