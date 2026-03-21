@@ -26,6 +26,11 @@ public class RateLimitingFilter extends OncePerRequestFilter {
     private final ClientIpResolver clientIpResolver;
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return request.getRequestURI().startsWith("/v1/internal/");
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
