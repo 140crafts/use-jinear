@@ -22,6 +22,7 @@ export const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=co.
 export const GOD_MODE_WHITELIST = ["01gp94s0sk9q4g8g3m9jpsvd0t"];
 export const isInGodModeWhitelist = (accountId?: string) => accountId != undefined && GOD_MODE_WHITELIST.indexOf(accountId) != -1;
 
+export const PADDLE_VENDOR_ID = __DEV__ ? 5713 : 145466;
 export const PADDLE_CATALOG = {
   business_daily: { sandbox: 63817, prod: -1, price: "$3.30" },
   business_monthly: { sandbox: 63716, prod: 848738, price: "$24.90" },
