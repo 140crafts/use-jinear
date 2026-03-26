@@ -38,7 +38,6 @@ import static co.jinear.core.system.NormalizeHelper.EMPTY_STRING;
 @RequiredArgsConstructor
 public class MailService {
 
-    private static final String S3_BUCKET_URL = "https://storage.googleapis.com/bittit-b0/";
     private static final Map<TaskReminderType, LocaleStringType> taskReminderLocaleStringMap =
             Map.of(
                     TaskReminderType.ASSIGNED_DATE, LocaleStringType.TASK_REMINDER_TYPE_ASSIGNED_DATE,
@@ -53,12 +52,13 @@ public class MailService {
 
     private void sendMail(SendMailVo sendMailVo) throws Exception {
         log.info("Send mail has started. to: {}", sendMailVo.getTo());
+        String content = applyBrandingPlaceholders(sendMailVo.getContext());
         try (ClosableSmtpConnection transport = smtpConnectionPool.borrowObject()) {
             MimeMessage message = new MimeMessage(transport.getSession());
             message.setFrom(mailProperties.getSenderAddress());
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(sendMailVo.getTo()));
             message.setSubject(sendMailVo.getSubject(), "UTF-8");
-            message.setContent(sendMailVo.getContext(), "text/html; charset=UTF-8");
+            message.setContent(content, "text/html; charset=UTF-8");
             transport.sendMessage(message);
         }
         log.info("Send mail has finished. to: {}", sendMailVo.getTo());
@@ -215,6 +215,14 @@ public class MailService {
         return mailBody.replaceAll(Pattern.quote("${title}"), title)
                 .replaceAll(Pattern.quote("${text}"), text)
                 .replaceAll(Pattern.quote("${token}"), loginMailVo.getEmailCode());
+    }
+
+    private String applyBrandingPlaceholders(String content) {
+        return content
+                .replaceAll(Pattern.quote("${logoUrl}"), mailProperties.getLogoUrl())
+                .replaceAll(Pattern.quote("${footerUrl}"), mailProperties.getFooterUrl())
+                .replaceAll(Pattern.quote("${footerText}"), mailProperties.getFooterText())
+                .replaceAll(Pattern.quote("${appName}"), mailProperties.getAppName());
     }
 
     private String retrieveMailTemplate(String fileName) throws IOException {

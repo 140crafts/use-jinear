@@ -33,4 +33,17 @@
     </createTable>
 </changeSet>
 
+    <changeSet author="cagdas.tunca" id="jinear-547-dynamic-email-branding">
+        <!-- @formatter:off -->
+        <sql>
+            UPDATE locale_string SET value = '${fromName} seni ${appName}''daki ${workspaceName} çalışma alanına davet etti.' WHERE locale_string_id = 57;
+            UPDATE locale_string SET value = '${fromName} has invited you to join the ${workspaceName} workspace on ${appName}.' WHERE locale_string_id = 58;
+            UPDATE locale_string SET value = '${appName}, görevlerinizi çalışma arkadaşlarınızla birlikte takip etmenize yardımcı olur.' WHERE locale_string_id = 59;
+            UPDATE locale_string SET value = '${appName} helps you track your tasks collaboratively.' WHERE locale_string_id = 60;
+            UPDATE locale_string SET value = '${appName} Hesabını Sil' WHERE locale_string_id = 109;
+            UPDATE locale_string SET value = 'Delete Your ${appName} Account' WHERE locale_string_id = 110;
+        </sql>
+        <!-- @formatter:on -->
+    </changeSet>
+
 </databaseChangeLog>
