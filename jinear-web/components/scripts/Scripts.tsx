@@ -1,5 +1,5 @@
 "use client";
-import { __DEV__, APPLE_CLIENT_ID, APPLE_REDIRECT_URI } from "@/utils/constants";
+import { __DEV__, APPLE_CLIENT_ID, APPLE_REDIRECT_URI, PADDLE_VENDOR_ID } from "@/utils/constants";
 import Logger from "@/utils/logger";
 import Script from "next/script";
 import React from "react";
@@ -37,7 +37,7 @@ const Scripts: React.FC<ScriptsProps> = ({}) => {
           }
           // @ts-ignore
           Paddle.Setup({
-            vendor: 5713,
+            vendor: PADDLE_VENDOR_ID,
           });
         }}
       />

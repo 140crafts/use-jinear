@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-03-08 20:03:28.
+// Generated using typescript-generator version 3.0.1157 on 2026-03-21 11:41:53.
 
 export interface BaseDto {
     createdDate: Date;
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
+    gid: string;
     gthreadId: string;
     ghistoryId: string;
-    gid: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -575,8 +575,8 @@ export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
     accountWorkspaceAdminOrOwner: boolean;
-    accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
+    accountIsProjectTeamsMember: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -1155,6 +1155,7 @@ export interface AuthInitializeRequest extends BaseRequest {
 }
 
 export interface LoginWithAppleRequest extends BaseRequest {
+    webClient?: boolean | null;
     code: string;
     timeZone?: string | null;
 }
@@ -2072,12 +2073,12 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
+    contentType: string;
     originalFilename: string;
 }
 
@@ -2164,9 +2165,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    filename: string;
     description: string;
     uri: URI;
+    filename: string;
 }
 
 export interface InputStreamSource {

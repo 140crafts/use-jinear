@@ -17,4 +17,16 @@ public class MailProperties {
 
     @Value("${spring.mail.sender-address}")
     private String senderAddress;
+
+    @Value("${jinear.mail.app-name:Jinear}")
+    private String appName;
+
+    @Value("${jinear.mail.logo-url:https://jinear.co/images/icon/icon-96x96-mail.png}")
+    private String logoUrl;
+
+    @Value("${jinear.mail.footer-url:https://jinear.co}")
+    private String footerUrl;
+
+    @Value("${jinear.mail.footer-text:jinear.co}")
+    private String footerText;
 }

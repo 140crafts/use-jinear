@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-02-22 23:13:56.
+// Generated using typescript-generator version 3.0.1157 on 2026-03-21 11:41:53.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
     gid: string;
     gthreadId: string;
     ghistoryId: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -575,8 +575,8 @@ export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
     accountWorkspaceAdminOrOwner: boolean;
-    accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
+    accountIsProjectTeamsMember: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -1155,6 +1155,7 @@ export interface AuthInitializeRequest extends BaseRequest {
 }
 
 export interface LoginWithAppleRequest extends BaseRequest {
+    webClient?: boolean | null;
     code: string;
     timeZone?: string | null;
 }
@@ -1259,6 +1260,24 @@ export interface MaterialSearchRequest extends BaseRequest {
     materialType?: MaterialType | null;
 }
 
+export interface InternalBatchMediaRetrieveRequest {
+    relatedObjectIds: string[];
+    fileTypes: FileType[];
+}
+
+export interface InternalMediaInitializeFromUrlRequest extends InternalMediaInitializeRequest {
+    url: string;
+}
+
+export interface InternalMediaInitializeRequest {
+    ownerId: string;
+    relatedObjectId: string;
+    fileType: FileType;
+    mediaOwnerType: MediaOwnerType;
+    visibility: MediaVisibilityType;
+    ownershipStatus: MediaFileOwnershipStatusType;
+}
+
 export interface MediaUploadUrlRequest extends BaseRequest {
     originalName: string;
     fileSize: number;
@@ -1311,6 +1330,10 @@ export interface NotificationTargetInitializeRequest extends BaseRequest {
     externalTargetId: string;
     targetType?: NotificationTargetType | null;
     providerType: NotificationProviderType;
+}
+
+export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
+    csrf: string;
 }
 
 export interface InitializeMilestoneRequest extends BaseRequest {
@@ -1738,6 +1761,14 @@ export interface ParentMaterialDtoResponse extends BaseResponse {
     data: MaterialHierarchyDto;
 }
 
+export interface InternalBatchMediaRetrieveResponse extends BaseResponse {
+    data: AccessibleMediaDto[];
+}
+
+export interface InternalMediaInitializeResponse extends BaseResponse {
+    data: AccessibleMediaDto;
+}
+
 export interface MediaUploadUrlResponse extends BaseResponse {
     data: WaitingMediaResultDto;
 }
@@ -1950,6 +1981,10 @@ export interface TopicSearchResponse extends BaseResponse {
     data: TopicDto[];
 }
 
+export interface AccountWorkspacesResponse extends BaseResponse {
+    data: DetailedWorkspaceMemberDto[];
+}
+
 export interface WorkspaceActivityListResponse extends BaseResponse {
     data: PageDto<WorkspaceActivityDto>;
 }
@@ -2038,12 +2073,12 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
+    contentType: string;
     originalFilename: string;
 }
 
@@ -2130,9 +2165,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
+    description: string;
     uri: URI;
     filename: string;
-    description: string;
 }
 
 export interface InputStreamSource {
@@ -2235,7 +2270,7 @@ export type MaterialSearchSortType = "IDATE_DESC" | "IDATE_ASC" | "UDATE_DESC" |
 
 export type MaterialType = "FILE" | "FOLDER";
 
-export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO" | "RICH_TEXT_IMAGE" | "MATERIAL_MEDIA";
+export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO" | "RICH_TEXT_IMAGE" | "MATERIAL_MEDIA" | "MEME_MEDIA" | "MEME_THUMB";
 
 export type MediaFileOwnershipStatusType = "WAITING" | "OWNED";
 
@@ -2245,7 +2280,7 @@ export type MediaFileUploadMethodType = "LEGACY" | "PRESIGNED_URL";
 
 export type MediaFileUploadStatusType = "WAITING" | "COMPLETED" | "FAILED";
 
-export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK" | "PROJECT_POST" | "PROJECT" | "RICH_TEXT" | "MATERIAL";
+export type MediaOwnerType = "USER" | "WORKSPACE" | "TASK" | "PROJECT_POST" | "PROJECT" | "RICH_TEXT" | "MATERIAL" | "MEME";
 
 export type MediaVisibilityType = "PUBLIC" | "PRIVATE" | "TEMP_PUBLIC";
 
