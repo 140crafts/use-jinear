@@ -48,15 +48,56 @@ export async function generateMetadata({
 }
 
 async function ProjectPostPage({ params }: ProjectPostPageProps) {
-  const { post, projectId, postId } = await loadPost(
-    getHost(),
+  const host = getHost();
+  const { project, post, projectId, postId } = await loadPost(
+    host,
     params.projectPostId
   );
   const postData = post?.data;
   const body = extractRichTextPlain(postData?.postBody?.value);
 
+  const slug = postData?.slug ? `${postData.slug}-` : "";
+  const canonicalUrl = host && postId ? `https://${host}/post/${slug}${postId}` : undefined;
+
+  const jsonLd = postData
+    ? {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: body.slice(0, 110) || project?.data?.title || "Post",
+        articleBody: body,
+        datePublished: postData.createdDate,
+        dateModified: postData.updatedDate ?? postData.createdDate,
+        author: postData.account?.email
+          ? { "@type": "Person", name: postData.account.email }
+          : undefined,
+        ...(canonicalUrl
+          ? {
+              url: canonicalUrl,
+              mainEntityOfPage: {
+                "@type": "WebPage",
+                "@id": canonicalUrl,
+              },
+            }
+          : {}),
+        ...(project?.data?.title
+          ? {
+              isPartOf: {
+                "@type": "Blog",
+                name: project.data.title,
+              },
+            }
+          : {}),
+      }
+    : null;
+
   return (
     <div className={styles.container}>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
       {postData && (
         <noscript>
           <article>
