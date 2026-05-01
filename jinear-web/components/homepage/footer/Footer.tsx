@@ -116,12 +116,12 @@ const Footer: React.FC<FooterProps> = ({}) => {
         <b>Contact</b>
         <div className={"spacer-h-1"} />
         <a
-          href={`https://forum.jinear.co`}
+          href={`https://blog.jinear.co`}
           target={"_blank"}
           rel={"noreferrer"}
           className={styles.link}
         >
-          <span className={cn("jinear-logo", styles.jinearLogo)}>J</span> Project Feed
+          <span className={cn("jinear-logo", styles.jinearLogo)}>J</span> Blog
         </a>
         <a
           href={`https://twitter.com/usejinear`}
