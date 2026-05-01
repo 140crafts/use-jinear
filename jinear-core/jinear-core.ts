@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-03-21 11:41:53.
+// Generated using typescript-generator version 3.0.1157 on 2026-04-15 22:06:01.
 
 export interface BaseDto {
     createdDate: Date;
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
     gthreadId: string;
     ghistoryId: string;
     ginternalDate: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -575,8 +575,8 @@ export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
     accountWorkspaceAdminOrOwner: boolean;
-    accountIsProjectTeamsAdmin: boolean;
     accountIsProjectTeamsMember: boolean;
+    accountIsProjectTeamsAdmin: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -2073,13 +2073,13 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
+    originalFilename: string;
+    contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
-    contentType: string;
-    originalFilename: string;
 }
 
 export interface GoogleCalendarEventAttendee {
@@ -2161,13 +2161,13 @@ export interface GoogleCalendarAttachment {
 }
 
 export interface Resource extends InputStreamSource {
+    filename: string;
+    description: string;
+    uri: URI;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
-    description: string;
-    uri: URI;
-    filename: string;
 }
 
 export interface InputStreamSource {
@@ -2214,10 +2214,10 @@ export interface GoogleCalendarOfficeLocation {
     label: string;
 }
 
-export interface URL extends Serializable {
+export interface URI extends Comparable<URI>, Serializable {
 }
 
-export interface URI extends Comparable<URI>, Serializable {
+export interface URL extends Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {

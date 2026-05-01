@@ -1,6 +1,4 @@
 "use client";
-import CircularLoading from "@/components/circularLoading/CircularLoading";
-import ClientOnly from "@/components/clientOnly/ClientOnly";
 import CallToActionBar from "@/components/homepage/callToActionBar/CallToActionBar";
 import Hero from "@/components/homepage/hero/Hero";
 import HomePageNavbar from "@/components/homepage/navbar/HomePageNavbar";
@@ -44,10 +42,6 @@ import {
 import { useRouteIfLoggedIn } from "@/hooks/useRouteIfLoggedIn";
 
 export default function Home() {
-  const pwa = isPwa();
-  const isWebApp = isWebView();
-  const isMobileApp = pwa || isWebApp;
-
   const router = useRouter();
   const authState = useTypedSelector(selectAuthState);
   const theme = useTheme();
@@ -57,6 +51,7 @@ export default function Home() {
   const routeIfLoggedIn = useRouteIfLoggedIn();
 
   useEffect(() => {
+    const isMobileApp = isPwa() || isWebView();
     if (isMobileApp) {
       if (authState == "NOT_LOGGED_IN") {
         router.replace("/login");
@@ -64,12 +59,10 @@ export default function Home() {
         router.replace(routeIfLoggedIn);
       }
     }
-  }, [isMobileApp, authState, routeIfLoggedIn]);
+  }, [authState, routeIfLoggedIn, router]);
 
-  return isMobileApp ? (
-    <CircularLoading />
-  ) : (
-    <ClientOnly className={styles.container}>
+  return (
+    <div className={styles.container}>
       <HomePageNavbar />
 
       <div className="spacer-h-12" />
@@ -218,6 +211,6 @@ export default function Home() {
       <div className="spacer-h-12" />
 
       <Footer />
-    </ClientOnly>
+    </div>
   );
 }

@@ -1,14 +1,15 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+"use client";
+import React, {useState} from "react";
 import styles from "./ProjectFeedPostDetailScreen.module.css";
 import ProjectPost from "@/components/projectPost/ProjectPost";
-import { useRetrieveProjectFeedPostQuery, useRetrievePublicProjectInfoQuery } from "@/api/projectFeedApi";
+import {useRetrieveProjectFeedPostQuery, useRetrievePublicProjectInfoQuery} from "@/api/projectFeedApi";
 import CircularLoading from "@/components/circularLoading/CircularLoading";
-import Button, { ButtonHeight } from "@/components/button";
-import { IoArrowBack } from "react-icons/io5";
+import Button, {ButtonHeight} from "@/components/button";
+import {IoArrowBack} from "react-icons/io5";
 import useTranslation from "@/locals/useTranslation";
 import PostCommentList from "@/components/projectFeedPostDetailScreen/postCommentList/PostCommentList";
 import CommentInput from "@/components/projectFeedPostDetailScreen/commentInput/CommentInput";
-import { ProjectPostCommentDto } from "@/be/jinear-core";
+import {ProjectPostCommentDto} from "@/be/jinear-core";
 import Logger from "@/utils/logger";
 
 interface ProjectFeedPostDetailScreenProps {
