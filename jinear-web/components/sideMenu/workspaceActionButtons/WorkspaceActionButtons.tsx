@@ -18,10 +18,10 @@ interface WorkspaceActionButtonsProps {
 }
 
 const logger = Logger("WorkspaceActionButtons");
+
 const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const projectsEnabled = true;
   const team = useWorkspaceFirstTeam(workspace.workspaceId);
   const pathname = usePathname();
   const assignedToMePath = `/${workspace?.username}/tasks/assigned-to-me`;
@@ -67,8 +67,6 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({ workspa
           <LuClipboardPen className={styles.icon} />
           {t("mainFeaturesMenuLabelAssignedToMe")}
         </Button>
-
-        {projectsEnabled && workspace && <ProjectsButton workspace={workspace} />}
 
         <TeamsButton workspace={workspace} />
 

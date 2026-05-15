@@ -243,16 +243,6 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             ref={teamMemberPickerButtonRef}
           />
 
-          <ProjectAndMilestonePickerButton
-            register={register}
-            setValue={setValue}
-            workspace={workspace}
-            team={selectedTeam}
-            ref={projectPickerButtonRef}
-            initialProject={initialProject}
-            initialMilestone={initialMilestone}
-          />
-
           <BoardPickerButton
             register={register}
             setValue={setValue}
