@@ -3,8 +3,14 @@ const { withSentryConfig } = require("@sentry/nextjs");
 
 /** @type {import("next").NextConfig} */
 
-const withPWA = require("next-pwa")({
-  dest: "public"
+const withSerwist = require("@serwist/next").default({
+  swSrc: "app/sw.ts",
+  swDest: "public/sw.js",
+  // Keep dev untouched: no caching while developing.
+  disable: process.env.NODE_ENV === "development",
+  // Force a reload when the connection comes back so users get fresh assets.
+  reloadOnOnline: true
+  // `register` defaults to true → /sw.js is auto-registered on the client.
 });
 
 const nextConfig = {
@@ -33,5 +39,5 @@ const nextConfig = {
 };
 
 
-// module.exports = withAxiom(withSentryConfig(withPWA(nextConfig), { silent: false }, { hideSourceMaps: true }));
-module.exports = withPWA(nextConfig);
+// module.exports = withAxiom(withSentryConfig(withSerwist(nextConfig), { silent: false }, { hideSourceMaps: true }));
+module.exports = withSerwist(nextConfig);
