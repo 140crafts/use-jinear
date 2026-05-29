@@ -1,6 +1,7 @@
 "use client";
 import { configureStore, ConfigureStoreOptions } from "@reduxjs/toolkit";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { setupListeners } from "@reduxjs/toolkit/query";
 
 import account, { logout } from "@/slice/accountSlice";
 import displayPreference, { resetDisplayPreferences } from "@/slice/displayPreferenceSlice";
@@ -13,7 +14,24 @@ import { combineReducers } from "redux";
 import { api } from "./api/api";
 import { rtkQueryErrorLogger } from "./api/errorMiddleware";
 import messagingSlice, { resetMessagingData } from "@/slice/messagingSlice";
-import { deleteAllEntries } from "../repository/IndexedDbRepository";
+
+import { persistReducer, persistStore } from "redux-persist";
+import createWebStorageImport from "redux-persist/lib/storage/createWebStorage";
+
+const createWebStorage =
+  (createWebStorageImport as unknown as { default?: typeof createWebStorageImport })
+    .default ?? createWebStorageImport;
+
+const createNoopStorage = () => ({
+  getItem: () => Promise.resolve(null),
+  setItem: (_key: string, value: unknown) => Promise.resolve(value),
+  removeItem: () => Promise.resolve()
+});
+
+const storage =
+  globalThis.window === undefined
+    ? createNoopStorage()
+    : createWebStorage("local");
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
@@ -26,9 +44,21 @@ const rootReducer = combineReducers({
   messagingSlice
 });
 
+const persistConfig = {
+  key: "jinear-app",
+  storage,
+  // Persist auth state plus the RTK Query cache (api.reducerPath) so previously
+  // fetched data is available immediately on reload and while offline.
+  // `modal` and the other UI/transient slices are intentionally NOT persisted
+  // (modal stores callback functions in state, which are non-serializable).
+  whitelist: ["account", api.reducerPath]
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
+
 export const createStore = (options?: ConfigureStoreOptions["preloadedState"] | undefined) =>
   configureStore({
-    reducer: rootReducer,
+    reducer: persistedReducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({
         serializableCheck: false
@@ -39,6 +69,10 @@ export const createStore = (options?: ConfigureStoreOptions["preloadedState"] | 
   });
 
 export const store = createStore();
+
+export const persistor = persistStore(store);
+
+setupListeners(store.dispatch);
 
 export type AppDispatch = typeof store.dispatch;
 export const useAppDispatch: () => AppDispatch = useDispatch;

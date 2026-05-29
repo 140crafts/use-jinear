@@ -1,5 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import type { Action } from "@reduxjs/toolkit";
+import { REHYDRATE } from "redux-persist";
 import { API_ROOT } from "@/utils/constants";
+
+function isRehydrateAction(action: Action): action is Action<typeof REHYDRATE> & { payload: any } {
+  return action.type === REHYDRATE;
+}
 
 
 const baseQuery = fetchBaseQuery({
@@ -96,5 +102,13 @@ export const tagTypesToInvalidateOnNewBackgroundActivity = () => {
 export const api = createApi({
   baseQuery: baseQuery,
   tagTypes,
+  extractRehydrationInfo(action, { reducerPath }) {
+    if (isRehydrateAction(action)) {
+      return action.payload?.[reducerPath];
+    }
+  },
+  keepUnusedDataFor: 60 * 60 * 24,
+  refetchOnReconnect: true,
+  refetchOnMountOrArgChange: true,
   endpoints: () => ({})
 });
