@@ -1,0 +1,102 @@
+@use "../../../styles/breakpoints.scss" as *;
+
+.modalContentContainer {
+  //background: linear-gradient(0, var(--c-primary), 30%, var(--c-primary-shade-0)) !important;
+  background-color: var(--c-primary) !important;
+}
+
+.modalContent {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  pointer-events: all;
+  border-radius: var(--border-radius);
+  border-style: solid;
+  border-color: var(--c-primary-shade-0);
+  border-bottom-color: var(--c-primary-shade-0-op05);
+  box-shadow: var(--box-shadow);
+}
+
+.modalContainer {
+  pointer-events: none;
+}
+
+.body {
+  //background: linear-gradient(0, var(--c-primary), 30%, var(--c-primary-shade-0));
+  //background-color: unset !important;
+}
+
+.uploadItemList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-bottom: 3rem;
+}
+
+.uploadItemContainer {
+  display: flex;
+  flex-direction: column;
+  height: 2rem;
+  gap: .5rem;
+}
+
+.uploadItemNameContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: .5rem;
+}
+
+.progressContainer {
+  display: flex;
+  flex-direction: row;
+  min-height: 2px;
+  background-color: var(--c-BABY_POWDER);
+}
+
+.progressFilled {
+  background-color: var(--c-APPLE_LIGHT_BLUE);
+}
+
+.minimizedBodyClass {
+  padding: unset !important;
+}
+
+.chevronIconUp {
+  rotate: 180deg;
+}
+
+.closepadWithoutBackdropClassName {
+  background-color: unset !important;
+  -webkit-backdrop-filter: unset !important;
+  backdrop-filter: unset !important;
+  pointer-events: none;
+}
+
+.closepadWithBackdropClassName {
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  -webkit-backdrop-filter: saturate(80%) blur(2.5px) !important;
+  backdrop-filter: saturate(80%) blur(2.5px) !important;
+}
+
+@media (min-width: $tablet) {
+  .closepadWithBackdropClassName {
+    background-color: unset !important;
+    -webkit-backdrop-filter: unset !important;
+    backdrop-filter: unset !important;
+    pointer-events: none;
+  }
+}
+
+@media (max-width: $tablet) {
+  .modalContent {
+    right: 0;
+    width: 100% !important;
+    top: var(--workspace-header-height);
+    bottom: unset;
+  }
+
+  .chevronIconUp {
+    rotate: -180deg;
+  }
+}

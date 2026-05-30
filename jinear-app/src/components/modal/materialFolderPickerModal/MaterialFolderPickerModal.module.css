@@ -1,0 +1,60 @@
+.contentContainer {
+    padding: 0rem !important;
+    /*padding-bottom: 2rem !important;*/
+    position: relative;
+}
+
+.breadcrumbContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    position: sticky;
+    background-color: var(--c-primary);
+    top: 0;
+    padding: .5rem;
+    padding-bottom: 0;
+    z-index: 9;
+}
+
+.foldersContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem .25rem;
+    min-height: 24ch;
+    overflow-y: scroll;
+}
+
+.button {
+    justify-content: flex-start !important;
+    align-items: center;
+    gap: .5rem;
+}
+
+.name {
+    word-break: break-all;
+}
+
+.icon {
+    min-width: 16px !important;
+}
+
+.emptyContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 4rem;
+    opacity: .5;
+}
+
+.footerContainer {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    position: sticky;
+    background-color: var(--c-primary);
+    bottom: 0;
+    padding: .5rem;
+    padding-top: 0;
+    z-index: 9;
+    justify-content: flex-end;
+}

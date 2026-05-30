@@ -1,0 +1,30 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.inputSubtext {
+  margin-top: 0.125rem;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  font-weight: 600;
+}
+.label-horizontal {
+  flex-direction: row;
+}
+.label-justify-end {
+  justify-content: flex-end;
+}
+
+.checkboxContainer {
+  margin-top: 0.5rem;
+}
+
+.inputRoleText {
+  min-height: 3rem;
+}

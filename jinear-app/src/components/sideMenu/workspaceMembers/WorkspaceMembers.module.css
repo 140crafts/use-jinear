@@ -1,0 +1,10 @@
+.membersTitleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.membersTitle {
+  color: var(--c-secondary-shade-0-op05);
+  font-weight: 500;
+}

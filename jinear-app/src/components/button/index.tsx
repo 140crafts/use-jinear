@@ -2,6 +2,7 @@ import cn from "classnames";
 import React, {type FC} from "react";
 import styles from "./index.module.css";
 import {LuLoaderCircle} from "react-icons/lu";
+import {Link} from "react-router-dom";
 
 export const ButtonVariants = {
     default: "default",
@@ -28,15 +29,28 @@ interface LinkButtonProps {
     href: string;
     target: string;
     className?: string;
+    download?: string;
 }
 
-const LinkButton: FC<LinkButtonProps> = ({href, children, ...props}) => {
+const isExternal = (href: string) =>
+    /^https?:\/\//.test(href) || href.startsWith("mailto:") || href.startsWith("tel:");
+
+const LinkButton: FC<LinkButtonProps> = ({href, children, target, download, ...props}) => {
+    // Use a plain <a> for external links, downloads, or new-tab targets
+    if (download || target === "_blank" || isExternal(href)) {
+        return (
+            <a href={href} target={target} download={download} {...props}>
+                {children}
+            </a>
+        );
+    }
     return (
-        <a href={href} {...props}>
+        <Link to={href} {...props}>
             {children}
-        </a>
+        </Link>
     );
 };
+
 
 interface BaseButtonProps {
     children?: React.ReactNode;

@@ -1,0 +1,37 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.inputContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.dateInput {
+  flex: 1;
+}
+
+.dateActionContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* justify-content: flex-end; */
+  margin: 0.25rem 0;
+  gap: 0.5rem;
+}
+
+.actionButton {
+  color: var(--c-link-color);
+}
+.actionButton:hover {
+  color: var(--c-link-color);
+  background-color: unset;
+}

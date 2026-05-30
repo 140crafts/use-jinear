@@ -18,6 +18,7 @@
       "@/model/*": ["./src/model/*"],
       "@/be/*": ["./src/model/be/*"],
       "@/locals/*": ["./src/locales/*"],
+      "@/locales/*": ["./src/locales/*"],
       "@/styles/*": ["./src/styles/*"]
     },
 

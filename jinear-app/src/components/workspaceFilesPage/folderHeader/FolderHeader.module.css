@@ -1,0 +1,49 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    position: sticky;
+    top: var(--workspace-header-height);
+    background-color: var(--c-primary);
+    z-index: 1;
+}
+
+.titleContainer {
+    display: flex;
+    flex-direction: row;
+    gap: .5rem;
+    align-items: center;
+    min-height: 2rem;
+}
+
+.title {
+    width: 0;
+    flex: 1;
+}
+
+.actionBarContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: .5rem;
+    padding-bottom: .5rem;
+    /*border-bottom-style: solid;*/
+    border-bottom-width: thin;
+    border-bottom-color: var(--c-primary-shade-1);
+}
+
+.viewTypeChangeButtonContainer {
+    display: flex;
+    flex-direction: row;
+    background-color: var(--c-primary-shade-0);
+    border-radius: var(--border-radius);
+}
+
+.button {
+    gap: .5rem;
+}
+
+.attachmentInput {
+    display: none;
+}

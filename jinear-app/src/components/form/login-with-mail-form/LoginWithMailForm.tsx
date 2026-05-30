@@ -13,12 +13,13 @@ import {IoLogoGoogle, IoMail} from "react-icons/io5";
 import {useDispatch} from "react-redux";
 import styles from "./LoginWithMailForm.module.css";
 import {setAuthStateAsNotDecided} from "@/slice/accountSlice";
-// import SignInWithAppleButton from "@/components/signInWithAppleButton/SignInWithAppleButton";
+import SignInWithAppleButton from "@/components/sign-in-with-apple-button/SignInWithAppleButton";
 import FormTitle from "@/components/form/form-title/FormTitle.tsx";
 import {useNavigate} from "react-router-dom";
 import {ROUTE_IF_LOGGED_IN} from "@/util/constants.ts";
 import {useLoginWithPasswordMutation} from "@/store/api/authApi.ts";
 import {useRetrieveLoginRedirectInfoQuery} from "@/store/api/googleOAuthApi.ts";
+import {changeLoginWith2FaMailModalVisibility} from "@/slice/modalSlice.ts";
 
 
 interface LoginWithMailFormProps {
@@ -72,7 +73,7 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({className, initial
     };
 
     const pop2FaMailModal = () => {
-        // dispatch(changeLoginWith2FaMailModalVisibility({visible: true}));
+        dispatch(changeLoginWith2FaMailModalVisibility({visible: true}));
     };
 
     return (
@@ -126,11 +127,11 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({className, initial
                     <IoLogoGoogle className={styles.icon}/>
                     <div>{t("loginScreenLoginWithGoogle")}</div>
                 </Button>
-                {/*<SignInWithAppleButton*/}
-                {/*    disabled={isLoading}*/}
-                {/*    className={styles.iconButton}*/}
-                {/*    iconClassName={styles.icon}*/}
-                {/*/>*/}
+                <SignInWithAppleButton
+                    disabled={isLoading}
+                    className={styles.iconButton}
+                    iconClassName={styles.icon}
+                />
                 <Button onClick={pop2FaMailModal} variant={ButtonVariants.outline} className={styles.iconButton}>
                     <IoMail className={styles.icon}/>
                     <div>{t("loginWith2FaMail")}</div>

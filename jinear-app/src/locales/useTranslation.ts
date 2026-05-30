@@ -6,7 +6,7 @@ const DEFAULT_LOCALE: Language = "en";
 
 type Language = typeof LOCALES[number];
 
-type StringKeys = {
+export type StringKeys = {
     [K in keyof typeof strings]: typeof strings[K] extends Record<Language, string> ? K : never
 }[keyof typeof strings];
 

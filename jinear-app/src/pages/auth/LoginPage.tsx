@@ -1,5 +1,5 @@
 import {useSearchParams} from 'react-router-dom'
-import styles from './AuthPage.module.css'
+import styles from './LoginPage.module.scss'
 import LoginWithMailForm from "@/components/form/login-with-mail-form/LoginWithMailForm.tsx";
 import FormLogo from "@/components/form-logo/FormLogo.tsx";
 

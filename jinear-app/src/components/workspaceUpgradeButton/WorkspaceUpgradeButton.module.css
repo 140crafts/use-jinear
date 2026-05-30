@@ -1,0 +1,54 @@
+.container {
+    /*color: var(--c-BABY_POWDER) !important;*/
+    color: var(--c-DARKBISI) !important;
+    font-weight: 600;
+    /* background-image: linear-gradient(to right, var(--c-gradient-gold-0), var(--c-gradient-gold-1)); */
+    background: linear-gradient(315deg, var(--c-gradient-gold-0), var(--c-gradient-gold-1-alternative)) !important;
+    background-size: 400% 400% !important;
+
+    -webkit-animation: upgrade 8s ease infinite !important;
+    -moz-animation: upgrade 8s ease infinite !important;
+    animation: upgrade 8s ease infinite !important;
+    min-height: 1.75rem !important;
+}
+
+.container:hover {
+    color: var(--c-BABY_POWDER2) !important;
+    /*color: var(--c-DARKBISI2) !important;*/
+}
+
+@-webkit-keyframes upgrade {
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+@-moz-keyframes upgrade {
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+@keyframes upgrade {
+    0% {
+        background-position: 0 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}

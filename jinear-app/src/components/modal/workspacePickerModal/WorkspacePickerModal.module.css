@@ -1,0 +1,12 @@
+.loadingContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 8rem;
+}
+
+.title {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}

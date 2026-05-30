@@ -13,7 +13,6 @@ import { combineReducers } from "redux";
 import { api } from "./api/api";
 import { rtkQueryErrorLogger } from "./api/errorMiddleware";
 import messagingSlice, { resetMessagingData } from "@/slice/messagingSlice";
-import { deleteAllEntries } from "../repository/IndexedDbRepository";
 
 const rootReducer = combineReducers({
   [api.reducerPath]: api.reducer,
