@@ -30,19 +30,19 @@ const storage =
         : createWebStorage('local')
 
 const rootReducer = combineReducers({
+    [api.reducerPath]: api.reducer,
     account,
     modal,
     displayPreference,
     taskAdditionalData,
     firebase,
     sseSlice,
-    [api.reducerPath]: api.reducer,
 })
 
 const persistConfig = {
     key: 'jinear-app',
     storage,
-    whitelist: ['auth', api.reducerPath],
+    whitelist: ['account', api.reducerPath],
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

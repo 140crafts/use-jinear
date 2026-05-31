@@ -1,4 +1,4 @@
-@import "../../styles/breakpoints";
+@use "../../styles/breakpoints.scss" as *;
 
 .container {
   display: flex;

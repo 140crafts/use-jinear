@@ -1,14 +1,26 @@
-import styles from './AppPage.module.css'
+import {selectAuthState} from "@/slice/accountSlice.ts";
+import {useTypedSelector} from "@/store";
+import {useRouteIfLoggedIn} from "@/hooks/useRouteIfLoggedIn.ts";
+import {useEffect} from "react";
+import {useNavigate} from "react-router-dom";
 import {useMeQuery} from "@/api/accountApi.ts";
 
 export default function AppPage() {
+    const navigate = useNavigate();
+    const authState = useTypedSelector(selectAuthState);
+    const routeIfLoggedIn = useRouteIfLoggedIn();
     const {data, error, isLoading} = useMeQuery();
 
-    return (
-        <main className={styles.container}>
-            <h1 className={styles.title}>Jinear</h1>
-            <p className={styles.subtitle}>App shell — empty for now.</p>
-            <p>{JSON.stringify(data)}</p>
-        </main>
-    )
+    // useEffect(() => {
+    //     if (authState == "NOT_LOGGED_IN") {
+    //         navigate("/login", {replace: true});
+    //     } else if (authState == "LOGGED_IN") {
+    //         navigate(routeIfLoggedIn, {replace: true});
+    //     }
+    //
+    // }, [authState, routeIfLoggedIn, navigate]);
+
+    return <div>
+        <p style={{lineBreak:'anywhere'}}>{JSON.stringify(data)}</p>
+    </div>;
 }

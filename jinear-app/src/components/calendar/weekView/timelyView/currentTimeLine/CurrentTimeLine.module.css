@@ -1,0 +1,31 @@
+.currentTimeLine {
+  display: flex;
+  position: absolute;
+  width: 100%;
+  border-top-width: 1px;
+  z-index: 4;
+  height: 1px;
+  pointer-events: none;
+}
+
+.dashed {
+  border-top: solid;
+  border-top-color: var(--c-primary-shade-1);
+}
+
+.solid {
+  border-top: solid;
+  border-top-width: 3px;
+}
+
+.label {
+  background-color: var(--c-primary);
+  width: unset;
+  position: sticky;
+  left: 0;
+  padding: 0.1rem 0.5rem;
+  border-radius: var(--border-radius);
+  border-color: var(--c-primary-shade-0);
+  border-style: solid;
+  height: 1.5rem;
+}

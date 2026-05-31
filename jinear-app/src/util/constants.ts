@@ -6,7 +6,7 @@ export const TERMS = "https://jinear.co/terms";
 // Runtime-configurable via env. The unplugin replaces this at build time with
 // a placeholder; `import-meta-env -x .env.production` substitutes the real value
 // at container start. Trailing slash is normalized so callers don't have to.
-export const HOST = import.meta.env.VITE_HOST ?? (__DEV__ ? "http://localhost:3000" : "https://jinear.co");
+export const HOST = import.meta.env.VITE_HOST ?? (__DEV__ ? "http://localhost:5173" : "https://jinear.co");
 export const API_ROOT = (import.meta.env.VITE_API_URL ?? "").replace(/\/+$/, "") + "/";
 
 export const PADDLE_VENDOR_ID = __DEV__ ? 5713 : 145466;

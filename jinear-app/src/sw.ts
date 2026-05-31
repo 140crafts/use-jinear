@@ -24,19 +24,19 @@ registerRoute(
     }),
 );
 
-if (API_ORIGIN) {
-    registerRoute(
-        ({url, request}) => request.method === "GET" && url.origin === API_ORIGIN,
-        new NetworkFirst({
-            cacheName: "api-cache",
-            networkTimeoutSeconds: 5,
-            plugins: [
-                new CacheableResponsePlugin({statuses: [0, 200]}),
-                new ExpirationPlugin({maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 7}),
-            ],
-        }),
-    );
-}
+// if (API_ORIGIN) {
+//     registerRoute(
+//         ({url, request}) => request.method === "GET" && url.origin === API_ORIGIN,
+//         new NetworkFirst({
+//             cacheName: "api-cache",
+//             networkTimeoutSeconds: 5,
+//             plugins: [
+//                 new CacheableResponsePlugin({statuses: [0, 200]}),
+//                 new ExpirationPlugin({maxEntries: 200, maxAgeSeconds: 60 * 60 * 24 * 7}),
+//             ],
+//         }),
+//     );
+// }
 
 registerRoute(
     ({request}) => request.destination === "image" || request.destination === "font",

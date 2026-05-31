@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+.calendarTeamListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.menuActionButton {
+  justify-content: flex-start !important;
+  text-align: left !important;
+  gap: 1ch;
+  padding-left: 0.1rem !important;
+}
+
+.archivedListContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.archivedList {
+  display: flex;
+  flex-direction: column;
+  opacity: 0.5;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

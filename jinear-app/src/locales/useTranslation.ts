@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import strings from "./strings";
+import type {Locale} from "date-fns";
 
 const LOCALES = ["tr", "en"] as const;
 const DEFAULT_LOCALE: Language = "en";
@@ -31,12 +32,13 @@ const useTranslation = () => {
     const [locale] = useState<string>(detectInitialLocale);
     const language = resolveLanguage(locale);
     const t = (key: StringKeys): string => strings[key]?.[language];
+    const dateFnsLocale: Locale = strings.dateFnsLocale[language];
 
     useEffect(() => {
         setHtmlLang(language);
     }, [language]);
 
-    return {t, language};
+    return {t, language, dateFnsLocale};
 };
 
 export const getTranslatedMessage = (key: StringKeys): string => {

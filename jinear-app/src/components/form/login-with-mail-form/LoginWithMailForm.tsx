@@ -15,7 +15,7 @@ import styles from "./LoginWithMailForm.module.css";
 import {setAuthStateAsNotDecided} from "@/slice/accountSlice";
 import SignInWithAppleButton from "@/components/sign-in-with-apple-button/SignInWithAppleButton";
 import FormTitle from "@/components/form/form-title/FormTitle.tsx";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {ROUTE_IF_LOGGED_IN} from "@/util/constants.ts";
 import {useLoginWithPasswordMutation} from "@/store/api/authApi.ts";
 import {useRetrieveLoginRedirectInfoQuery} from "@/store/api/googleOAuthApi.ts";
@@ -98,9 +98,9 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({className, initial
                     <input id={"login-with-email-password"} type={"password"} {...register("password")} />
                 </label>
 
-                <a className={styles.forgotPasswordLink} href={"/forgot-password"}>
+                <Link className={styles.forgotPasswordLink} to={"/forgot-password"}>
                     {t("forgotPasswordLinkLabel")}
-                </a>
+                </Link>
 
                 <Button
                     disabled={isLoading}

@@ -101,4 +101,5 @@ export const api = createApi({
     endpoints: () => ({}),
     keepUnusedDataFor: 60 * 60 * 24,
     refetchOnReconnect: true,
+    refetchOnMountOrArgChange: true
 });

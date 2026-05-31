@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./FormTitle.module.scss";
+import {Link} from "react-router-dom";
 
 interface FormTitleProps {
     title: string;
@@ -16,7 +17,7 @@ const FormTitle: React.FC<FormTitleProps> = ({title, subTitle, linkLabel, link})
                 <div className={styles.subTitle}>
                     {subTitle}
                     {link && linkLabel &&
-                        <a style={{paddingLeft: 3.5, wordBreak: "break-word"}} href={link}>{` ${linkLabel}`}</a>}
+                        <Link style={{paddingLeft: 3.5, wordBreak: "break-word"}} to={link}>{` ${linkLabel}`}</Link>}
                 </div>
             </div>
         </div>
