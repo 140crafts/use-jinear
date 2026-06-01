@@ -15,35 +15,43 @@ interface MonthViewProps {
 
 const logger = Logger("MonthView");
 
+const EMPTY_ARRAY: string[] = [];
+const EMPTY_MONTH_TABLE: ICalendarWeekRowCell[][][] = [[], [], [], [], []];
+
 const MonthView: React.FC<MonthViewProps> = ({workspace}) => {
     const squeezedView = useSqueezedView();
-    const hiddenCalendars = useQueryState<string[]>("hiddenCalendars", queryStateArrayParser) || [];
-    const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || [];
-    const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || [];
+    const hiddenCalendars = useQueryState<string[]>("hiddenCalendars", queryStateArrayParser) || EMPTY_ARRAY;
+    const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || EMPTY_ARRAY;
+    const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || EMPTY_ARRAY;
 
-    const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
+    const defaultDate = useMemo(() => startOfDay(new Date()), []);
+    const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || defaultDate;
 
-    const currentMonth = format(viewingDate, "MMM-yyyy");
-    const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
-    const periodStart = startOfWeek(firstDayCurrentMonth, {weekStartsOn: 1});
-    const periodEnd = endOfWeek(endOfMonth(firstDayCurrentMonth), {weekStartsOn: 1});
-    const days = eachDayOfInterval({start: periodStart, end: periodEnd});
+    const {periodStart, periodEnd, days} = useMemo(() => {
+        const currentMonthStr = format(viewingDate, "MMM-yyyy");
+        const firstDay = parse(currentMonthStr, "MMM-yyyy", new Date());
+        const start = startOfWeek(firstDay, {weekStartsOn: 1});
+        const end = endOfWeek(endOfMonth(firstDay), {weekStartsOn: 1});
+
+        return {
+            periodStart: start,
+            periodEnd: end,
+            days: eachDayOfInterval({start, end})
+        };
+    }, [viewingDate]);
 
     const ghostEvent = useGhostEvent();
     const calendarLoading = useCalenderLoading();
 
-    const {data: filterResponse, isFetching} = useFilterCalendarEventsQuery(
-        {
-            workspaceId: workspace?.workspaceId || "",
-            taskboardIds: taskBoards,
-            timespanStart: periodStart,
-            timespanEnd: periodEnd
-        },
-        {skip: workspace == null}
-    );
+    const {data: filterResponse, isFetching} = useFilterCalendarEventsQuery({
+        workspaceId: workspace?.workspaceId || "",
+        taskboardIds: taskBoards,
+        timespanStart: periodStart,
+        timespanEnd: periodEnd
+    });
 
     const monthTable: ICalendarWeekRowCell[][][] | undefined = useMemo(() => {
-        if (!filterResponse || !filterResponse.data) {
+        if (!filterResponse?.data) {
             return;
         }
         const responseEvents = filterResponse.data.filter((val) => {
@@ -58,18 +66,12 @@ const MonthView: React.FC<MonthViewProps> = ({workspace}) => {
             events.unshift(ghostEvent);
         }
 
-        return calculateHitMissTable({events, days}) ?? [[], [], [], [], []];
-    }, [
-        JSON.stringify(days),
-        JSON.stringify(filterResponse),
-        JSON.stringify(ghostEvent),
-        JSON.stringify(hiddenTeams),
-        JSON.stringify(hiddenCalendars)
-    ]);
+        return calculateHitMissTable({events, days}) ?? EMPTY_MONTH_TABLE;
+    }, [days, filterResponse, ghostEvent, hiddenTeams, hiddenCalendars]);
 
     return (
         <>
-            <Month monthTable={monthTable ?? [[], [], [], [], []]} days={days} squeezedView={squeezedView}/>
+            <Month monthTable={monthTable ?? EMPTY_MONTH_TABLE} days={days} squeezedView={squeezedView}/>
             <OverlayLoading isFetching={isFetching || calendarLoading}/>
         </>
     );

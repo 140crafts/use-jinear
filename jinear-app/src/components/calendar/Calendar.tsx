@@ -45,19 +45,19 @@ const Calendar: React.FC<CalendarProps> = ({ workspace, className }) => {
 
   const workspacesFirstTeam = useWorkspaceFirstTeam(workspace.workspaceId);
 
-  useEffect(() => {
-    const nextQueryState = new Map<string, string>([]);
-    if (!viewType) {
-      storeCalendarViewType(defaultCalendarViewType);
-      nextQueryState.set("viewType", defaultCalendarViewType);
-    }
-    if (!viewingDate) {
-      const initialDay = startOfDay(new Date());
-      nextQueryState.set("viewingDate", queryStateDateToShortDateConverter(initialDay) as string);
-    }
-    logger.log({ nextQueryState, viewType });
-    setQueryStateMultiple(nextQueryState);
-  }, [JSON.stringify(viewType), JSON.stringify(viewingDate), defaultCalendarViewType]);
+ useEffect(() => {
+   const nextQueryState = new Map<string, string>([]);
+   if (!viewType) {
+     storeCalendarViewType(defaultCalendarViewType);
+     nextQueryState.set("viewType", defaultCalendarViewType);
+   }
+   if (!viewingDate) {
+     const initialDay = startOfDay(new Date());
+     nextQueryState.set("viewingDate", queryStateDateToShortDateConverter(initialDay) as string);
+   }
+   logger.log({ nextQueryState, viewType });
+   setQueryStateMultiple(nextQueryState);
+ }, [JSON.stringify(viewType), JSON.stringify(viewingDate), defaultCalendarViewType]);
 
   return (
     <CalendarContext.Provider

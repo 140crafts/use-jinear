@@ -18,17 +18,23 @@ interface DayViewProps {
     workspace: WorkspaceDto;
 }
 
+const EMPTY_ARRAY: string[] = [];
+
 const DayView: React.FC<DayViewProps> = ({workspace}) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
-    const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
-    const hiddenCalendars = useQueryState<string[]>("hiddenCalendars", queryStateArrayParser) || [];
-    const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || [];
-    const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || [];
+    const defaultDate = useMemo(() => startOfDay(new Date()), []);
+    const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || defaultDate;
+    const hiddenCalendars = useQueryState<string[]>("hiddenCalendars", queryStateArrayParser) || EMPTY_ARRAY;
+    const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || EMPTY_ARRAY;
+    const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || EMPTY_ARRAY;
 
-    const periodStart = startOfWeek(viewingDate, {weekStartsOn: 1});
-    const periodEnd = endOfWeek(viewingDate, {weekStartsOn: 1});
-    const days = eachDayOfInterval({start: periodStart, end: periodEnd});
+    const {periodStart, periodEnd, days} = useMemo(() => {
+        const periodStart = startOfWeek(viewingDate, {weekStartsOn: 1});
+        const periodEnd = endOfWeek(viewingDate, {weekStartsOn: 1});
+        const days = eachDayOfInterval({start: periodStart, end: periodEnd});
+        return {periodStart, periodEnd, days};
+    }, [viewingDate]);
 
     const workspacesFirstTeam = useWorkspaceFirstTeam(workspace?.workspaceId || "");
 
@@ -38,8 +44,7 @@ const DayView: React.FC<DayViewProps> = ({workspace}) => {
             taskboardIds: taskBoards,
             timespanStart: periodStart,
             timespanEnd: periodEnd,
-        },
-        {skip: workspace == null}
+        }
     );
 
     const viewingDayEvents = useMemo(() => {
@@ -54,7 +59,7 @@ const DayView: React.FC<DayViewProps> = ({workspace}) => {
                 return lookUpSource.findIndex((value) => value == lookUpValue) == -1;
             })
             .filter((event) => isTaskDatesIntersect(event, dateSpan));
-    }, [JSON.stringify(filterResponse), JSON.stringify(viewingDate), JSON.stringify(hiddenTeams), JSON.stringify(hiddenCalendars)]);
+    }, [filterResponse, viewingDate, hiddenTeams, hiddenCalendars]);
 
     const popNewTaskModalWithAssignedDatePreSelected = () => {
         dispatch(popNewTaskModal({

@@ -42,7 +42,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
     key: 'jinear-app',
     storage,
-    whitelist: ['account', api.reducerPath],
+    whitelist: ['account', 'displayPreference', 'taskAdditionalData', api.reducerPath]
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

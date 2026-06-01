@@ -32,7 +32,7 @@ import CalendarSettingsPage from "@/pages/workspace/calendar/calendar-id/setting
 export default function App() {
     return (
         <BrowserRouter>
-            <OfflineBanner/>
+            {/*<OfflineBanner/>*/}
             <DateFnsConfigration/>
             <FirebaseProvider/>
             <AuthCheck/>
@@ -46,10 +46,9 @@ export default function App() {
             <ModalProvider/>
             <Routes>
 
-                <Route path="/app" element={<AppPage/>}/>
-                <Route path="*" element={<Navigate to="/app" replace/>}/>
+                <Route path="*" element={<Navigate to="/" replace/>}/>
+                <Route path="/" element={<AppPage/>}/>
 
-                <Route path="/" element={<Navigate to="/app" replace/>}/>
                 <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
                 <Route path="/profile" element={<ProfileScreen/>}/>
