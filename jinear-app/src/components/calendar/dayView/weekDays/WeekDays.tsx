@@ -7,7 +7,7 @@ import {
 } from "@/hooks/useQueryState";
 import cn from "classnames";
 import { format, isSameDay, startOfDay, startOfToday } from "date-fns";
-import React from "react";
+import React, {useMemo} from "react";
 import styles from "./WeekDays.module.css";
 
 interface WeekDaysProps {
@@ -16,7 +16,8 @@ interface WeekDaysProps {
 
 const WeekDays: React.FC<WeekDaysProps> = ({ days }) => {
   const setQueryState = useSetQueryState();
-  const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());
+  const defaultDate = useMemo(() => startOfDay(new Date()), []);
+  const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || defaultDate;
 
   const setViewingDate = (viewingDate: Date) => {
     setQueryState("viewingDate", queryStateDateToShortDateConverter(viewingDate));
