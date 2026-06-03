@@ -1,0 +1,19 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  background: linear-gradient(0, var(--c-primary), 40%, var(--c-primary-shade-0-op05));
+  color: var(--text-color) !important;
+}
+
+.number {
+  font-weight: 600;
+  font-size: 1.5rem;
+}
+
+.text {
+  align-self: flex-start;
+}

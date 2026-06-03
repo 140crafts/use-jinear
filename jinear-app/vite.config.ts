@@ -2,18 +2,21 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 import ImportMetaEnvPlugin from '@import-meta-env/unplugin'
-import tsconfigPaths from 'vite-tsconfig-paths'
+// import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
+  resolve:{
+    tsconfigPaths: true
+  },
   css: {
     modules: {
-      localsConvention: 'camelCaseOnly',
+      localsConvention: 'camelCase',
       generateScopedName: '[name]__[local]__[hash:base64:5]',
     },
   },
   plugins: [
     react(),
-    tsconfigPaths(),
+    // tsconfigPaths(),
     // Replaces `import.meta.env.VITE_*` with placeholders at build time.
     // At container start, `import-meta-env -x .env.production` rewrites those
     // placeholders in dist/ using the real process env. Same image, any domain.

@@ -12,7 +12,7 @@ interface CircularLoadingProps {
 const CircularLoading: React.FC<CircularLoadingProps> = ({containerClassName, progressClassName, size = 14}) => {
     return (
         <div className={cn(styles.container, containerClassName)}>
-            <LuLoaderCircle className={cn(styles['animate-spin'], progressClassName)} size={size}/>
+            <LuLoaderCircle className={cn(styles['animateSpin'], progressClassName)} size={size}/>
         </div>
     );
 };

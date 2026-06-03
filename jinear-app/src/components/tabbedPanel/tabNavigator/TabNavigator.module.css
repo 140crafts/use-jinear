@@ -1,0 +1,13 @@
+.container {
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: var(--c-primary-shade-1);
+  display: flex;
+  flex-direction: row;
+}
+
+.activeTabButton {
+  border-bottom-color: var(--c-secondary-shade-1);
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}

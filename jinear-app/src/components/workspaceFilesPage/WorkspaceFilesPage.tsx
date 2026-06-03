@@ -18,6 +18,7 @@ import useTranslation from "@/locals/useTranslation";
 import {useAppDispatch} from "@/store";
 import {useInitializeMaterialFileUploadMutation, useNotifyMaterialUploadedMutation} from "@/api/materialOperationApi";
 import {pushDataToUploadStatusModalQueue} from "@/slice/modalSlice";
+import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
 
 export interface IFilesPageFilter {
     parentMaterialId?: string | null;
@@ -81,7 +82,11 @@ const WorkspaceFilesPage: React.FC<WorkspaceFilesPageProps> = ({workspace, filte
     useEffect(() => {
         const children = paginatedMaterialSearchResponse?.data?.content;
         if (children?.hasContent) {
-            setMaterialList(current => [...current, ...children.content]);
+            setMaterialList(current => {
+                const map = new Map(current.map(m => [m.materialId, m]));
+                children.content.forEach(m => map.set(m.materialId, m));
+                return Array.from(map.values());
+            });
             children.hasNext && setPage(page => page + 1);
 
             const MAX_PREFETCH = 10;

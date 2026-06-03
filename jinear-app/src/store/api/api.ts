@@ -112,6 +112,6 @@ export const api = createApi({
     },
     keepUnusedDataFor: 60 * 60 * 24,
     refetchOnReconnect: true,
-    refetchOnMountOrArgChange: 2,
+    refetchOnMountOrArgChange: 180,
     // refetchOnMountOrArgChange: 60,
 });

@@ -1,6 +1,6 @@
 import { useRetrieveWorkspaceTeamsQuery } from "@/store/api/teamApi";
 
-export const useTeamFromName = (teamUsername: string, workspaceId?: string) => {
+export const useTeamFromName = (teamUsername?: string, workspaceId?: string) => {
   const { data: teamsResponse } = useRetrieveWorkspaceTeamsQuery(workspaceId || "", {
     skip: workspaceId == null,
   });

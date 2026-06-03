@@ -112,7 +112,7 @@ const Button: React.FC<ButtonProps> = ({
         >
             {loading ? (
                 <LuLoaderCircle
-                    className={cn([variant == "contrast" ? styles.progessContrast : styles.progess, styles['animate-spin'], progessClassname])}
+                    className={cn([variant == "contrast" ? styles.progessContrast : styles.progess, styles['animateSpin'], progessClassname])}
                     size={progessSize}
                 />
             ) : (

@@ -153,7 +153,7 @@
     padding: 0.15rem 0.75rem;
 }
 
-.animate-spin {
+.animateSpin {
     animation: spin 1s linear infinite !important;
 }
 

@@ -5,7 +5,7 @@
   padding: 0.25rem 0.75rem;
 }
 
-.animate-spin {
+.animateSpin {
   animation: spin 1s linear infinite !important;
 }
 
