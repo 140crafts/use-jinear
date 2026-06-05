@@ -89,7 +89,11 @@ const NotificationPermissionModal: React.FC<NotificationPermissionModalProps> = 
 
     const attachAccount = async (accountId: string) => {
         if (messaging) {
-            const currentFirebaseToken = await getToken(messaging, {vapidKey: VAPID_PUBLIC_KEY});
+            const serviceWorkerRegistration = await navigator.serviceWorker.ready;
+            const currentFirebaseToken = await getToken(messaging, {
+                vapidKey: VAPID_PUBLIC_KEY,
+                serviceWorkerRegistration
+            });
             logger.log(
                 `Firebase token retrieved attaching now. accountId: ${accountId}, currentFirebaseToken: ${currentFirebaseToken}`
             );
