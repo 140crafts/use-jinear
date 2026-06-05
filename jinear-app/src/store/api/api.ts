@@ -1,12 +1,11 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import {API_ROOT} from "@/util/constants";
 import type {Action} from "@reduxjs/toolkit";
 import {REHYDRATE} from "redux-persist";
+import {API_ROOT} from "@/util/constants.ts";
 
 
 const baseQuery = fetchBaseQuery({
-    // baseUrl: API_ROOT,
-    baseUrl: 'http://localhost:8085',
+    baseUrl: API_ROOT,
     prepareHeaders: (headers, {}) => {
         return headers;
     },
@@ -112,6 +111,5 @@ export const api = createApi({
     },
     keepUnusedDataFor: 60 * 60 * 24,
     refetchOnReconnect: true,
-    refetchOnMountOrArgChange: 180,
-    // refetchOnMountOrArgChange: 60,
+    refetchOnMountOrArgChange: 180
 });

@@ -7,7 +7,12 @@ export const TERMS = "https://jinear.co/terms";
 // a placeholder; `import-meta-env -x .env.production` substitutes the real value
 // at container start. Trailing slash is normalized so callers don't have to.
 export const HOST = import.meta.env.VITE_HOST ?? (__DEV__ ? "http://localhost:5173" : "https://jinear.co");
-export const API_ROOT = (import.meta.env.VITE_API_URL ?? "").replace(/\/+$/, "") + "/";
+
+const DEV_API_ROOT = 'http://localhost:8085';
+const PROD_API_ROOT = 'https://api.jinear.co';
+const EXTERNAL_API_ROOT = import.meta.env.VITE_API_URL;
+export const API_ROOT = (EXTERNAL_API_ROOT || (__DEV__ ? DEV_API_ROOT : PROD_API_ROOT))
+    .replace(/\/+$/, "") + "/";
 
 export const PADDLE_VENDOR_ID = __DEV__ ? 5713 : 145466;
 export const PADDLE_CATALOG = {
