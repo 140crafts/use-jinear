@@ -57,8 +57,10 @@ container start (empty string is allowed) or the container won't boot** —
 | `VITE_FIREBASE_APP_ID` | optional | Firebase web app config |
 | `VITE_FIREBASE_MEASUREMENT_ID` | optional | Firebase web app config |
 | `VITE_FIREBASE_VAPID_KEY` | optional | Web Push certificate key pair (Firebase Console → Cloud Messaging) |
+| `VITE_POSTHOG_KEY` | optional | PostHog project API key (blank disables analytics) |
+| `VITE_POSTHOG_HOST` | optional | PostHog API host, e.g. `https://us.i.posthog.com` |
 
-"Optional" means push / Apple Sign In are disabled when left blank — but the
+"Optional" means push / Apple Sign In / analytics are disabled when left blank — but the
 **key must still be present** in the environment (compose uses `${VAR:-}` to pass
 an empty string). Web push requires a self-hoster's *own* Firebase project; the
 service worker only initializes messaging when the Firebase config is non-empty,
@@ -76,6 +78,7 @@ docker run -p 8080:80 \
   -e VITE_FIREBASE_PROJECT_ID= -e VITE_FIREBASE_STORAGE_BUCKET= \
   -e VITE_FIREBASE_MESSAGING_SENDER_ID= -e VITE_FIREBASE_APP_ID= \
   -e VITE_FIREBASE_MEASUREMENT_ID= -e VITE_FIREBASE_VAPID_KEY= \
+  -e VITE_POSTHOG_KEY= -e VITE_POSTHOG_HOST=https://us.i.posthog.com \
   jinear-app
 ```
 

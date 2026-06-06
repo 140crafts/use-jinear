@@ -5,6 +5,7 @@ import Logger from "@/util/logger";
 import {askAppTrackingPermission} from "@/util/webviewUtils";
 import React, {useEffect} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
+import {usePostHog} from "posthog-js/react";
 
 interface AuthCheckProps {
 }
@@ -44,11 +45,20 @@ const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
     const navigate = useNavigate();
     const {pathname} = useLocation();
     const authState = useTypedSelector(selectAuthState);
+    const posthog = usePostHog();
+
     logger.log({
         authState,
         pathname,
         activeAccount: {data, error, isLoading}
     });
+
+    useEffect(() => {
+        if (data && posthog) {
+            const account = data.data;
+            posthog.identify(account.accountId, {email: account.email})
+        }
+    }, [posthog, data]);
 
     useEffect(() => {
         if (authState == "LOGGED_IN" && ONLY_NOT_LOGGED_IN_PATHS.indexOf(pathname) != -1) {

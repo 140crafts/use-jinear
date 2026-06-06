@@ -1646,6 +1646,11 @@
   dependencies:
     "@posthog/types" "1.376.4"
 
+"@posthog/react@^1.10.0":
+  version "1.10.0"
+  resolved "https://registry.yarnpkg.com/@posthog/react/-/react-1.10.0.tgz#73168b43698279a7b42d4ed5b060d20e21a7b6f9"
+  integrity sha512-H9XW1hEOCKDdR3fovT1wiLxfWndWzzL8FT3KWpKYbZYLUDl/HIa5ClZ/J5skqErGF1DT69sDpVUOAMha+gV4kQ==
+
 "@posthog/types@1.376.4":
   version "1.376.4"
   resolved "https://registry.yarnpkg.com/@posthog/types/-/types-1.376.4.tgz#a84df993a8f02d5c17c0af4f36d3f2208c3c4086"
