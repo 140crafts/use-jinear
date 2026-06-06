@@ -22,6 +22,11 @@ workflow:
     - jinear-web/**/*
     - .gitlab-ci.yml
 
+.app_changes: &app_changes
+  changes:
+    - jinear-app/**/*
+    - .gitlab-ci.yml
+
 .caddy_custom_changes: &caddy_custom_changes
   changes:
     - jinear-caddy-custom/**/*
@@ -91,6 +96,8 @@ workflow:
       export JINEAR_CORE_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:latest"
       export JINEAR_WEB_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:${TAG}"
       export JINEAR_WEB_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:latest"
+      export JINEAR_APP_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-app:${TAG}"
+      export JINEAR_APP_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-app:latest"
       export JINEAR_CADDY_CUSTOM_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:${TAG}"
       export JINEAR_CADDY_CUSTOM_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:latest"
       export JINEAR_MESSAGE_SERVICE_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:${TAG}"
@@ -211,6 +218,36 @@ web:deploy:
       <<: *web_changes
   needs:
     - web:build
+
+app:build:
+  <<: *docker_setup
+  stage: build
+  script:
+    - cd jinear-app
+    - docker buildx build --platform linux/amd64,linux/arm64
+        --build-arg BUILDER_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/node:22-alpine
+        --build-arg RUNTIME_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/caddy:2-alpine
+        -t ${JINEAR_APP_IMAGE} --push .
+  timeout: 90m
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      <<: *app_changes
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      <<: *app_changes
+      when: manual
+      allow_failure: true
+
+app:deploy:
+  <<: *docker_setup
+  stage: deploy
+  script:
+    - docker buildx imagetools create -t ${JINEAR_APP_IMAGE_LATEST} ${JINEAR_APP_IMAGE}
+  timeout: 90m
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      <<: *app_changes
+  needs:
+    - app:build
 
 caddy-custom:build:
   <<: *docker_setup

@@ -1,7 +1,12 @@
 # syntax=docker/dockerfile:1.7
 
+# Base images are overridable so CI can route them through the GitLab dependency
+# proxy (avoids Docker Hub rate limits). Defaults work for local `docker build`.
+ARG BUILDER_IMAGE=node:22-alpine
+ARG RUNTIME_IMAGE=caddy:2-alpine
+
 # ─── Build the static bundle ─────────────────────────────────────────────────
-FROM node:22-alpine AS builder
+FROM ${BUILDER_IMAGE} AS builder
 WORKDIR /app
 
 COPY package.json yarn.lock ./
@@ -15,7 +20,7 @@ RUN yarn build
 
 
 # ─── Serve via Caddy, with a Node-powered entrypoint ─────────────────────────
-FROM caddy:2-alpine AS runtime
+FROM ${RUNTIME_IMAGE} AS runtime
 
 # @import-meta-env/cli rewrites placeholders in dist/ at container start using
 # the real process env, so the same image works on any self-hoster's domain.
