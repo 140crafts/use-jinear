@@ -71,7 +71,6 @@ jinear/
 │   └── caddy/               # SSL certificates & config
 ├── .logs/
 │   ├── jinear-core/
-│   ├── jinear-web/
 │   ├── jinear-pages/
 │   └── jinear-message/
 └── .backups/                # Database backups
@@ -208,7 +207,7 @@ If messages are using polling instead of WebSocket:
 
 5. **Restart services:**
    ```bash
-   docker compose restart jinear-caddy jinear-message jinear-web
+   docker compose restart jinear-caddy jinear-message jinear-app
    ```
 
 ### Database connection issues

@@ -123,24 +123,30 @@ services:
     networks:
       - jinear-default
 
-  jinear-web:
-    container_name: jinear-web
-    image: registry.gitlab.com/140crafts/use-jinear/jinear-web:latest
+  jinear-app:
+    container_name: jinear-app
+    image: registry.gitlab.com/140crafts/use-jinear/jinear-app:latest
     depends_on:
       - jinear-core
-    volumes:
-      - ".logs/jinear-web:/logs"
     restart: always
+    # Every VITE_* key must be present (empty is fine) or the container won't
+    # boot; the image substitutes them into its static bundle at start.
+    # Firebase (web push) and Apple Sign In are optional — leave blank to disable.
     environment:
-      - NEXT_PUBLIC_API_ROOT=https://${API_DOMAIN}/
-      - NEXT_PUBLIC_SOCKET_ROOT=https://${MESSAGE_DOMAIN}/
-      - NEXT_PUBLIC_POSTHOG_KEY=${POSTHOG_KEY:-}
-      - NEXT_PUBLIC_POSTHOG_HOST=${POSTHOG_HOST:-https://us.i.posthog.com}
-      - NEXT_PUBLIC_APPLE_CLIENT_ID=${NEXT_PUBLIC_APPLE_CLIENT_ID:-}
-      - NEXT_PUBLIC_APPLE_REDIRECT_URI=${NEXT_PUBLIC_APPLE_REDIRECT_URI:-}
-    privileged: true
+      - VITE_API_URL=https://${API_DOMAIN}/
+      - VITE_HOST=https://${DOMAIN}/
+      - VITE_APPLE_CLIENT_ID=${VITE_APPLE_CLIENT_ID:-}
+      - VITE_APPLE_REDIRECT_URI=${VITE_APPLE_REDIRECT_URI:-}
+      - VITE_FIREBASE_API_KEY=${VITE_FIREBASE_API_KEY:-}
+      - VITE_FIREBASE_AUTH_DOMAIN=${VITE_FIREBASE_AUTH_DOMAIN:-}
+      - VITE_FIREBASE_PROJECT_ID=${VITE_FIREBASE_PROJECT_ID:-}
+      - VITE_FIREBASE_STORAGE_BUCKET=${VITE_FIREBASE_STORAGE_BUCKET:-}
+      - VITE_FIREBASE_MESSAGING_SENDER_ID=${VITE_FIREBASE_MESSAGING_SENDER_ID:-}
+      - VITE_FIREBASE_APP_ID=${VITE_FIREBASE_APP_ID:-}
+      - VITE_FIREBASE_MEASUREMENT_ID=${VITE_FIREBASE_MEASUREMENT_ID:-}
+      - VITE_FIREBASE_VAPID_KEY=${VITE_FIREBASE_VAPID_KEY:-}
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:80/" ]
       interval: 30s
       timeout: 15s
       retries: 5

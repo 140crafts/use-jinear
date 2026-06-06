@@ -15,7 +15,7 @@ http://localhost:1100 {
 }
 
 http://jinear.example.com {
-    reverse_proxy http://jinear-web:3000
+    reverse_proxy http://jinear-app:80
 }
 
 http://api.jinear.example.com {

@@ -28,7 +28,7 @@ http://localhost:1100 {
 
 https://jinear.cagdastunca.com {
     reverse_proxy {
-        to http://jinear-web:3000
+        to http://jinear-app:80
         header_up Host {http.reverse_proxy.upstream.host}
         header_up X-Real-IP {http.reverse_proxy.upstream.address}
     }

@@ -505,7 +505,6 @@ create_directories() {
     print_success "Created data directories"
 
     mkdir -p "$INSTALL_DIR/.logs/jinear-core"
-    mkdir -p "$INSTALL_DIR/.logs/jinear-web"
     mkdir -p "$INSTALL_DIR/.logs/jinear-pages"
     mkdir -p "$INSTALL_DIR/.logs/jinear-message"
     print_success "Created log directories"
@@ -569,6 +568,22 @@ BACKUP_RETENTION_DAYS=${BACKUP_RETENTION_DAYS}
 # Analytics (Optional)
 POSTHOG_KEY=
 POSTHOG_HOST=https://us.i.posthog.com
+
+# Web App (jinear-app) — Optional
+# Apple Sign In: fill with your Apple Service ID and its return URL to enable it.
+VITE_APPLE_CLIENT_ID=
+VITE_APPLE_REDIRECT_URI=
+# Firebase Cloud Messaging (web push): fill from your own Firebase project to
+# enable browser/PWA notifications. Leave blank to disable push entirely.
+# VAPID key = Firebase Console > Project settings > Cloud Messaging > Web Push certificates.
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+VITE_FIREBASE_MEASUREMENT_ID=
+VITE_FIREBASE_VAPID_KEY=
 
 # Rate Limiting
 RATE_LIMIT_PUBLIC_CAPACITY=25
