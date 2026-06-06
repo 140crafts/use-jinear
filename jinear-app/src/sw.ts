@@ -38,32 +38,54 @@ registerRoute(
 // Lives in this single SW (instead of a separate public/firebase-messaging-sw.js)
 // so there is one registration. The app passes this SW's registration to
 // getToken(..., {serviceWorkerRegistration}) so FCM binds push to it.
+//
+// Runtime-configurable Firebase config. The SW can't read the app bundle's
+// `globalThis.import_meta_env` (that's bootstrapped in index.html, which a
+// service worker never loads), so it carries its own copy of the import-meta-env
+// placeholder. The docker entrypoint's `import-meta-env` pass scans dist/**/*.js
+// — this compiled sw.js included — and rewrites the placeholder into the real
+// process env at container start, so self-hosters point push at their own
+// Firebase project without rebuilding. Keys are declared in .env.example.
+//
+// In dev there is no substitution step, so we read import.meta.env directly
+// (Vite resolves it for the SW). The `import.meta.env.DEV` gate is statically
+// false in a production build, so that whole branch — and the build-time env it
+// would otherwise bake into sw.js — is dropped, leaving only the placeholder.
+const runtimeEnv: Record<string, string | undefined> = import.meta.env.DEV
+    ? (import.meta.env as unknown as Record<string, string | undefined>)
+    : (JSON.parse('"import_meta_env_placeholder"') as Record<string, string | undefined>);
+
 const firebaseConfig = {
-    apiKey: "AIzaSyBZq8Pg2pDDweDSNqTwdrCR-xBe1mJGBco",
-    authDomain: "jinear-f3ab4.firebaseapp.com",
-    projectId: "jinear-f3ab4",
-    storageBucket: "jinear-f3ab4.appspot.com",
-    messagingSenderId: "72155538781",
-    appId: "1:72155538781:web:767cb1558cd358cfacf4b4",
-    measurementId: "G-FMXGQ5XM95",
+    apiKey: runtimeEnv.VITE_FIREBASE_API_KEY,
+    authDomain: runtimeEnv.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: runtimeEnv.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: runtimeEnv.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: runtimeEnv.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: runtimeEnv.VITE_FIREBASE_APP_ID,
+    measurementId: runtimeEnv.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-const messaging = getMessaging(initializeApp(firebaseConfig));
+// Only wire up push when Firebase is actually configured. Self-hosters who don't
+// set the VITE_FIREBASE_* env vars still get a working SW (offline shell, asset
+// caching); they just don't get web push.
+if (firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.messagingSenderId) {
+    const messaging = getMessaging(initializeApp(firebaseConfig));
 
-// Combined (notification + data) payloads are auto-displayed by the FCM SDK while
-// the page is backgrounded, so we only render manually for data-only messages —
-// otherwise the user would see two notifications.
-onBackgroundMessage(messaging, (payload) => {
-    if (payload.notification) {
-        return;
-    }
-    const title = payload.data?.title ?? "Jinear";
-    self.registration.showNotification(title, {
-        body: payload.data?.body,
-        icon: "https://jinear.co/icons/notification-icon.png",
-        data: {launchUrl: payload.data?.launchUrl},
+    // Combined (notification + data) payloads are auto-displayed by the FCM SDK while
+    // the page is backgrounded, so we only render manually for data-only messages —
+    // otherwise the user would see two notifications.
+    onBackgroundMessage(messaging, (payload) => {
+        if (payload.notification) {
+            return;
+        }
+        const title = payload.data?.title ?? "Jinear";
+        self.registration.showNotification(title, {
+            body: payload.data?.body,
+            icon: "https://jinear.co/icons/notification-icon.png",
+            data: {launchUrl: payload.data?.launchUrl},
+        });
     });
-});
+}
 
 // Clicking a notification focuses an existing tab (and routes it to launchUrl) or
 // opens a new one. Auto-displayed FCM notifications nest data under FCM_MSG.

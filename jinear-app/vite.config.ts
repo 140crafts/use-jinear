@@ -30,6 +30,12 @@ export default defineConfig({
       filename: 'sw.ts',
       injectManifest: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}'],
+        // Minify the SW with terser instead of the default esbuild: esbuild
+        // rewrites the import-meta-env placeholder's outer quote to a backtick
+        // (`JSON.parse(`"..."`)`), which the `import-meta-env` CLI doesn't match,
+        // so the runtime substitution of sw.js (see src/sw.ts) would silently
+        // no-op. Terser keeps a quote style the CLI recognizes.
+        minify: 'terser',
       },
       includeAssets: ['favicon.ico', 'robots.txt', 'offline.html'],
       devOptions: {

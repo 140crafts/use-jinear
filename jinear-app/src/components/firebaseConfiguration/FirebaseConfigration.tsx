@@ -42,17 +42,20 @@ const TASK_UPDATE_NOTIFICATIONS = [
     "TASK_ATTACHMENT_DELETED"
 ];
 
+// Runtime-configurable via env (see .env.example). The same values must be used
+// by the service worker (src/sw.ts) so app and background push bind to one
+// Firebase project. Self-hosters override these without rebuilding the image.
 const firebaseConfig = {
-    apiKey: "AIzaSyBZq8Pg2pDDweDSNqTwdrCR-xBe1mJGBco",
-    authDomain: "jinear-f3ab4.firebaseapp.com",
-    projectId: "jinear-f3ab4",
-    storageBucket: "jinear-f3ab4.appspot.com",
-    messagingSenderId: "72155538781",
-    appId: "1:72155538781:web:767cb1558cd358cfacf4b4",
-    measurementId: "G-FMXGQ5XM95"
+    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+    appId: import.meta.env.VITE_FIREBASE_APP_ID,
+    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
-export const VAPID_PUBLIC_KEY = "BFO8Qjsa5Y1W32XyMCa8owjYxkCziaKzl8M2TzMZuHKbEPmtSeowuZzPhdot9aMC64qr7zGRpzrCyg6MzN5nkQc";
+export const VAPID_PUBLIC_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
 
 const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
     const dispatch = useAppDispatch();
