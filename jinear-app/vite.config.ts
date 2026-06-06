@@ -31,7 +31,7 @@ export default defineConfig({
       injectManifest: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}'],
       },
-      includeAssets: ['favicon.svg', 'robots.txt', 'offline.html'],
+      includeAssets: ['favicon.ico', 'robots.txt', 'offline.html'],
       devOptions: {
         enabled: true,
         type: 'module',
@@ -56,7 +56,6 @@ export default defineConfig({
           {src: '/images/icon/icon-384x384.png', sizes: '384x384', type: 'image/png', purpose: 'any'},
           {src: '/images/icon/icon-512x512.png', sizes: '512x512', type: 'image/png', purpose: 'any'},
           {src: '/images/icon/maskable-icon.png', sizes: '512x512', type: 'image/png', purpose: 'maskable'},
-          {src: '/favicon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any'},
         ],
       },
     }),
