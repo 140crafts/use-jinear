@@ -25,8 +25,25 @@ Jinear consists of several projects that work together. Projects lives within si
 - If user wants to create an another service to live within existing stack anything might be shared goes here.
 - jinear-rate-limiter: Adds rate limiting with given config. 
 
-### jinear-web (main frontend)
-- Jinear's main frontend.
+### jinear-app (main frontend)
+- Jinear's current main frontend — a Vite + React (React 19) single-page app
+  served as an installable PWA (vite-plugin-pwa / Workbox, app splash screens +
+  manifest). Replaces `jinear-web`, and the PWA install also supersedes the old
+  WebView mobile wrapper.
+- Routing via react-router-dom; state via Redux Toolkit + redux-persist; rich
+  text via TipTap; forms via react-hook-form.
+- Push notifications via Firebase (FCM); product analytics via PostHog.
+- Runtime env injected with `@import-meta-env` (env values resolved at container
+  start, not baked at build). Deployed as a static site behind its own
+  `Caddyfile` (see `jinear-app/Dockerfile`).
+- Scope vs the old `jinear-web`: chat and project Pages features are intentionally
+  dropped (their backing services are archived).
+
+### jinear-web (legacy frontend — being phased out)
+- The original Next.js (React) frontend. Still in the repo and currently the
+  service wired into the default deployment, but slated for removal once
+  `jinear-app` (and a separate web/marketing pages project) fully replace it.
+  Prefer `jinear-app` for new frontend work.
 
 ## Archived / Deprecated Projects (`archive/`)
 
@@ -57,14 +74,16 @@ on them; use them as reference when building their replacements.
 
 ## Tech Stack
 
-| Layer            | Tech                          |
-|------------------|-------------------------------|
-| Backend services | Java, Spring Boot             |
-| jinear-web       | Next.js (React)               |
-| jinear-mobile    | Expo (React Native)           |
-| Gateway          | Caddy                         |
-| Storage          | Google Cloud Storage or MinIO |
-| Payments         | Paddle (web)                  |
+| Layer                     | Tech                                          |
+|---------------------------|-----------------------------------------------|
+| Backend services          | Java, Spring Boot                             |
+| jinear-app (main frontend)| Vite + React 19 (PWA), react-router, Redux Toolkit |
+| jinear-web (legacy)       | Next.js (React) — being phased out            |
+| Gateway                   | Caddy                                         |
+| Storage                   | Google Cloud Storage or MinIO                 |
+| Payments                  | Paddle (web)                                  |
+| Push notifications        | Firebase (FCM)                                |
+| Product analytics         | PostHog                                       |
 
 ## Dev Configuration
 
@@ -78,4 +97,4 @@ on them; use them as reference when building their replacements.
 
 ## How To Use This Context
 
-Pair this file with a task-specific prompt structured like:
+Pair this file with a task-specific prompt structured like PROMPT_TEMPLATE.md
