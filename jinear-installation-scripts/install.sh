@@ -124,30 +124,6 @@ generate_secret() {
     openssl rand -base64 64 | tr -dc 'a-zA-Z0-9' | head -c 64
 }
 
-# Generate JWT token signed with HS512 for Caddy domain validation
-# Creates a token with ROLE_DOMAINSERVER authority, valid for 100 years
-generate_caddy_jwt() {
-    local secret=$1
-
-    # JWT Header (HS512)
-    local header='{"alg":"HS512","typ":"JWT"}'
-    local header_base64=$(printf '%s' "$header" | openssl base64 -A | tr '+/' '-_' | tr -d '=')
-
-    # JWT Payload with ROLE_DOMAINSERVER authority
-    # Expiration set to 100 years from now
-    local iat=$(date +%s)
-    local exp=$((iat + 3153600000))
-    local payload="{\"sub\":\"caddy-domain-validator\",\"session_info_id\":\"install-script-generated\",\"locale\":\"EN\",\"exp\":${exp},\"iat\":${iat},\"authorities\":[\"ROLE_DOMAINSERVER\"]}"
-    local payload_base64=$(printf '%s' "$payload" | openssl base64 -A | tr '+/' '-_' | tr -d '=')
-
-    # Create signature using HMAC-SHA512
-    local signing_input="${header_base64}.${payload_base64}"
-    local signature=$(printf '%s' "$signing_input" | openssl dgst -sha512 -hmac "$secret" -binary | openssl base64 -A | tr '+/' '-_' | tr -d '=')
-
-    # Return complete JWT
-    printf '%s.%s' "$signing_input" "$signature"
-}
-
 # Validate domain format
 validate_domain() {
     local domain=$1
@@ -395,14 +371,10 @@ prompt_configuration() {
     # Auto-suggest subdomains
     API_DOMAIN_DEFAULT="api.${DOMAIN}"
     FILES_DOMAIN_DEFAULT="files.${DOMAIN}"
-    PAGES_DOMAIN_DEFAULT="pages.${DOMAIN}"
-    MESSAGE_DOMAIN_DEFAULT="message.${DOMAIN}"
 
     echo ""
     API_DOMAIN=$(prompt_input "  API domain" "${API_DOMAIN_DEFAULT}")
     FILES_DOMAIN=$(prompt_input "  Files domain" "${FILES_DOMAIN_DEFAULT}")
-    PAGES_DOMAIN=$(prompt_input "  Pages domain" "${PAGES_DOMAIN_DEFAULT}")
-    MESSAGE_DOMAIN=$(prompt_input "  Message domain" "${MESSAGE_DOMAIN_DEFAULT}")
 
     # Timezone
     echo ""
@@ -478,10 +450,6 @@ generate_secrets() {
 
     INTERNAL_AUTH_TOKEN=$(generate_password 32)
     print_success "Internal auth token generated"
-
-    # Generate Caddy validation token as a proper JWT signed with JWT_SECRET
-    CADDY_VALIDATION_TOKEN=$(generate_caddy_jwt "$JWT_SECRET")
-    print_success "Caddy validation JWT generated"
 }
 
 # =============================================================================
@@ -505,8 +473,6 @@ create_directories() {
     print_success "Created data directories"
 
     mkdir -p "$INSTALL_DIR/.logs/jinear-core"
-    mkdir -p "$INSTALL_DIR/.logs/jinear-pages"
-    mkdir -p "$INSTALL_DIR/.logs/jinear-message"
     print_success "Created log directories"
 
     mkdir -p "$INSTALL_DIR/.backups"
@@ -531,8 +497,6 @@ generate_config_files() {
 DOMAIN=${DOMAIN}
 API_DOMAIN=${API_DOMAIN}
 FILES_DOMAIN=${FILES_DOMAIN}
-PAGES_DOMAIN=${PAGES_DOMAIN}
-MESSAGE_DOMAIN=${MESSAGE_DOMAIN}
 
 # Timezone
 TIMEZONE=${TIMEZONE}
@@ -588,9 +552,6 @@ VITE_FIREBASE_VAPID_KEY=
 # Rate Limiting
 RATE_LIMIT_PUBLIC_CAPACITY=25
 RATE_LIMIT_AUTH_CAPACITY=100
-
-# Internal
-CADDY_VALIDATION_TOKEN=${CADDY_VALIDATION_TOKEN}
 EOF
     chmod 600 "$INSTALL_DIR/.env"
     print_success "Generated .env file"
@@ -618,10 +579,7 @@ EOF
     get_template "Caddyfile.template" | \
         sed "s/__DOMAIN__/${DOMAIN}/g" | \
         sed "s/__API_DOMAIN__/${API_DOMAIN}/g" | \
-        sed "s/__FILES_DOMAIN__/${FILES_DOMAIN}/g" | \
-        sed "s/__PAGES_DOMAIN__/${PAGES_DOMAIN}/g" | \
-        sed "s/__MESSAGE_DOMAIN__/${MESSAGE_DOMAIN}/g" | \
-        sed "s/__CADDY_VALIDATION_TOKEN__/${CADDY_VALIDATION_TOKEN}/g" \
+        sed "s/__FILES_DOMAIN__/${FILES_DOMAIN}/g" \
         > "$INSTALL_DIR/.data/caddy/conf/Caddyfile"
     print_success "Generated Caddyfile"
 
@@ -697,8 +655,6 @@ URLS
 Application: https://${DOMAIN}
 API: https://${API_DOMAIN}
 Files: https://${FILES_DOMAIN}
-Pages: https://${PAGES_DOMAIN}
-Message (WebSocket): https://${MESSAGE_DOMAIN}
 EOF
     chmod 600 "$INSTALL_DIR/.secrets"
     print_success "Credentials saved to ${INSTALL_DIR}/.secrets"
@@ -762,8 +718,6 @@ print_summary() {
     echo -e "  🌐 Application:  ${BOLD}https://${DOMAIN}${NC}"
     echo -e "  🔧 API:          ${BOLD}https://${API_DOMAIN}${NC}"
     echo -e "  📁 Files:        ${BOLD}https://${FILES_DOMAIN}${NC}"
-    echo -e "  📄 Pages:        ${BOLD}https://${PAGES_DOMAIN}${NC}"
-    echo -e "  💬 Message:      ${BOLD}https://${MESSAGE_DOMAIN}${NC}"
     echo ""
 
     echo -e "  ${BOLD}Important Files${NC}"
@@ -780,8 +734,6 @@ print_summary() {
     echo -e "     - ${DOMAIN}"
     echo -e "     - ${API_DOMAIN}"
     echo -e "     - ${FILES_DOMAIN}"
-    echo -e "     - ${PAGES_DOMAIN}"
-    echo -e "     - ${MESSAGE_DOMAIN}"
     echo ""
     echo -e "  2. Wait a few minutes for SSL certificates to be issued"
     echo ""

@@ -13,6 +13,10 @@ Jinear consists of several projects that work together. Projects lives within si
 ### jinear-caddy-custom
 - caddy with module: dns.providers.cloudflare
 - handles traffic and reroutes it. Manages ssl certificates etc.
+- NOTE: No longer used in the default deployment. Chat and project Pages were
+  removed, so the gateway now runs stock `caddy` (the cloudflare DNS module /
+  on-demand TLS existed only to serve Pages' custom project domains). This
+  folder remains in the repo but is not built or deployed.
 
 ### jinear-core (main backend)
 - Auth (login, registration, sessions)
@@ -25,12 +29,16 @@ Jinear consists of several projects that work together. Projects lives within si
 - Helps user to fill config files easyly 
 
 ### jinear-message-service
-- Handles websockets for real time messaging.
+- DEPRECATED / removed from deployment (chat feature removed). Folder remains in
+  the repo but is not built (no CI job) or run (no compose service).
+- Previously: handled websockets for real time messaging.
 - account ids are rooms, jinear-core sends messages through internal endpoint to here and then message send to related account's room.
 - Users trigger jinear-core's restfull api, that api stores message then calls message-service to send message to receiving account. 
 
 ### jinear-pages
-- Each project on jinear gets project feed which can be public or restricted to project members only. It's like projects twitter profile. Can also be used for blogs etc. 
+- DEPRECATED / removed from deployment (project Pages feature removed). Folder
+  remains in the repo but is not built (no CI job) or run (no compose service).
+- Previously: each project on jinear gets project feed which can be public or restricted to project members only. It's like projects twitter profile. Can also be used for blogs etc. 
 
 ### jinear-shared-libs
 - Contains shared libraries that can be used across Jinear applications.

@@ -71,7 +71,6 @@ Your Jinear instance will be available at:
 - 🌐 **Application**: `https://your-domain.com`
 - 🔧 **API**: `https://api.your-domain.com`
 - 📁 **Files**: `https://files.your-domain.com`
-- 💬 **Message/WebSocket**: `https://message.your-domain.com`
 
 ### Manual Installation
 
@@ -118,8 +117,6 @@ can create your own compose file and configure from scratch.
 |----------------------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|--------------------|
 | **jinear-core**      | Required                                                                           | Main backend API handling authentication, task management, calendar, and business logic | 8008 Internal      |
 | **jinear-web**       | Required                                                                           | Frontend application providing the main user interface                                  | 3000 Internal      |
-| **jinear-pages**     | Required                                                                           | Pages service for public-facing content and documentation                               | 3000 Internal      |
-| **jinear-message**   | Required                                                                           | WebSocket server for real-time notifications and live updates                           | 3001 Internal      |
 | **jinear-db**        | Can be replaced with external PostgreSQL (Needs config change).                    | PostgreSQL database storing all application data                                        | 5432 Internal      |
 | **jinear-redis**     | Can be replaced with external Redis (Needs config change).                         | Redis cache for session management and real-time data                                   | 6379 Internal      |
 | **jinear-minio**     | Can be replaced with external MinIO or Google Cloud Storage (Needs config change). | MinIO object storage for file uploads and attachments                                   | 9000/9001 Internal |

@@ -83,7 +83,7 @@ services:
       JWT_DOMAIN: ${DOMAIN}
       # Frontend
       FE_PATH: https://${DOMAIN}
-      CORS_ORIGINS: https://${DOMAIN},https://${PAGES_DOMAIN}
+      CORS_ORIGINS: https://${DOMAIN}
       # MinIO - uses same credentials as minio service
       MINIO_KEY: ${MINIO_ROOT_USER}
       MINIO_SECRET: ${MINIO_ROOT_PASSWORD}
@@ -155,30 +155,9 @@ services:
     networks:
       - jinear-default
 
-  jinear-pages:
-    container_name: jinear-pages
-    image: registry.gitlab.com/140crafts/use-jinear/jinear-pages:latest
-    depends_on:
-      - jinear-core
-    volumes:
-      - ".logs/jinear-pages:/logs"
-    restart: always
-    environment:
-      - NEXT_PUBLIC_API_ROOT=https://${API_DOMAIN}/
-      - NEXT_PUBLIC_POSTHOG_KEY=${POSTHOG_KEY:-}
-      - NEXT_PUBLIC_POSTHOG_HOST=${POSTHOG_HOST:-https://us.i.posthog.com}
-    privileged: true
-    healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:3000" ]
-      interval: 30s
-      timeout: 15s
-      retries: 5
-    networks:
-      - jinear-default
-
   jinear-caddy:
     container_name: jinear-caddy
-    image: registry.gitlab.com/140crafts/use-jinear/jinear-caddy-custom:latest
+    image: caddy:2.10.0
     restart: unless-stopped
     cap_add:
       - NET_ADMIN
@@ -207,40 +186,8 @@ services:
       - "traefik.http.routers.jinear-files.entrypoints=websecure"
       - "traefik.http.routers.jinear-files.tls.certresolver=letsencrypt"
       - "traefik.http.routers.jinear-files.service=jinear-caddy"
-      # Pages domain
-      - "traefik.http.routers.jinear-pages.rule=Host(`pages.jinear.cagdastunca.com`)"
-      - "traefik.http.routers.jinear-pages.entrypoints=websecure"
-      - "traefik.http.routers.jinear-pages.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.jinear-pages.service=jinear-caddy"
-      # Message domain
-      - "traefik.http.routers.jinear-message.rule=Host(`message.jinear.cagdastunca.com`)"
-      - "traefik.http.routers.jinear-message.entrypoints=websecure"
-      - "traefik.http.routers.jinear-message.tls.certresolver=letsencrypt"
-      - "traefik.http.routers.jinear-message.service=jinear-caddy"
       # Service definition
       - "traefik.http.services.jinear-caddy.loadbalancer.server.port=80"
-
-  jinear-message:
-    container_name: jinear-message
-    image: registry.gitlab.com/140crafts/use-jinear/jinear-message-service:latest
-    depends_on:
-      - jinear-core
-    volumes:
-      - ".logs/jinear-message:/logs"
-    restart: always
-    environment:
-      - PORT=3001
-      - CORE_ENDPOINT=http://jinear-core:8008
-      - INTERNAL_AUTH_TOKEN=${INTERNAL_AUTH_TOKEN}
-      - ALLOWED_ORIGIN=https://${DOMAIN}
-    privileged: true
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3001"]
-      interval: 30s
-      timeout: 15s
-      retries: 5
-    networks:
-      - jinear-default
 
 networks:
   jinear-default:

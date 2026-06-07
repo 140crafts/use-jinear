@@ -83,8 +83,8 @@ docker run -p 8080:80 \
 ```
 
 The container serves the static bundle via Caddy on port `80`. In the full
-Jinear stack it sits behind the gateway (`jinear-caddy-custom`), which
-reverse-proxies the main domain to `jinear-app:80`.
+Jinear stack it sits behind the Caddy gateway, which reverse-proxies the main
+domain to `jinear-app:80`.
 
 ## Adding a new runtime variable
 

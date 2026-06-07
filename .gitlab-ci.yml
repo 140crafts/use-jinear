@@ -27,21 +27,6 @@ workflow:
     - jinear-app/**/*
     - .gitlab-ci.yml
 
-.caddy_custom_changes: &caddy_custom_changes
-  changes:
-    - jinear-caddy-custom/**/*
-    - .gitlab-ci.yml
-
-.message_service_changes: &message_service_changes
-  changes:
-    - jinear-message-service/**/*
-    - .gitlab-ci.yml
-
-.pages_changes: &pages_changes
-  changes:
-    - jinear-pages/**/*
-    - .gitlab-ci.yml
-
 .rate_limiter_changes: &rate_limiter_changes
   changes:
     - jinear-shared-libs/jinear-rate-limiter/**/*
@@ -98,12 +83,6 @@ workflow:
       export JINEAR_WEB_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:latest"
       export JINEAR_APP_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-app:${TAG}"
       export JINEAR_APP_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-app:latest"
-      export JINEAR_CADDY_CUSTOM_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:${TAG}"
-      export JINEAR_CADDY_CUSTOM_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-caddy-custom:latest"
-      export JINEAR_MESSAGE_SERVICE_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:${TAG}"
-      export JINEAR_MESSAGE_SERVICE_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-message-service:latest"
-      export JINEAR_PAGES_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-pages:${TAG}"
-      export JINEAR_PAGES_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-pages:latest"
 
 bump_version:
   stage: version
@@ -248,87 +227,3 @@ app:deploy:
       <<: *app_changes
   needs:
     - app:build
-
-caddy-custom:build:
-  <<: *docker_setup
-  stage: build
-  script:
-    - cd jinear-caddy-custom
-    - docker buildx build --platform linux/amd64,linux/arm64
-        --build-arg BUILDER_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/caddy:2.10.0-builder
-        --build-arg BASE_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/caddy:2.10.0
-        -t ${JINEAR_CADDY_CUSTOM_IMAGE} --push .
-  timeout: 90m
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      <<: *caddy_custom_changes
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      <<: *caddy_custom_changes
-      when: manual
-      allow_failure: true
-
-caddy-custom:deploy:
-  <<: *docker_setup
-  stage: deploy
-  timeout: 90m
-  script:
-    - docker buildx imagetools create -t ${JINEAR_CADDY_CUSTOM_IMAGE_LATEST} ${JINEAR_CADDY_CUSTOM_IMAGE}
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      <<: *caddy_custom_changes
-  needs:
-    - caddy-custom:build
-
-message-service:build:
-  <<: *docker_setup
-  stage: build
-  script:
-    - cd jinear-message-service
-    - docker buildx build --platform linux/amd64,linux/arm64
-        --build-arg BASE_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/node:20.11.1
-        -t ${JINEAR_MESSAGE_SERVICE_IMAGE} --push .
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      <<: *message_service_changes
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      <<: *message_service_changes
-      when: manual
-      allow_failure: true
-
-message-service:deploy:
-  <<: *docker_setup
-  stage: deploy
-  script:
-    - docker buildx imagetools create -t ${JINEAR_MESSAGE_SERVICE_IMAGE_LATEST} ${JINEAR_MESSAGE_SERVICE_IMAGE}
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      <<: *message_service_changes
-  needs:
-    - message-service:build
-
-pages:build:
-  <<: *docker_setup
-  stage: build
-  script:
-    - cd jinear-pages
-    - docker buildx build --platform linux/amd64,linux/arm64
-        --build-arg BASE_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/node:20-alpine
-        -t ${JINEAR_PAGES_IMAGE} --push .
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      <<: *pages_changes
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      <<: *pages_changes
-      when: manual
-      allow_failure: true
-
-pages:deploy:
-  <<: *docker_setup
-  stage: deploy
-  script:
-    - docker buildx imagetools create -t ${JINEAR_PAGES_IMAGE_LATEST} ${JINEAR_PAGES_IMAGE}
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      <<: *pages_changes
-  needs:
-    - pages:build

@@ -3,17 +3,6 @@
     auto_https off
 }
 
-http://localhost:1100 {
-    bind 127.0.0.1
-
-    route /v1/domain/validate {
-        reverse_proxy http://jinear-core:8008 {
-            header_up Host api.jinear.example.com
-            header_up Authorization "Bearer YOUR_CADDY_VALIDATION_TOKEN"
-        }
-    }
-}
-
 http://jinear.example.com {
     reverse_proxy http://jinear-app:80
 }
@@ -25,18 +14,3 @@ http://api.jinear.example.com {
 http://files.jinear.example.com {
     reverse_proxy http://jinear-minio:9000
 }
-
-http://pages.jinear.example.com {
-    reverse_proxy http://jinear-pages:3000
-}
-
-http://message.jinear.example.com {
-    reverse_proxy http://jinear-message:3001
-}
-
-:80 {
-    reverse_proxy http://jinear-pages:3000 {
-        header_up Host {host}
-    }
-}
-
