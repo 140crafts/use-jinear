@@ -9,7 +9,9 @@ interface ReloadQueryRefecthHandlerProps {
 const ReloadQueryRefetchHandler: React.FC<ReloadQueryRefecthHandlerProps> = ({}) => {
     const dispatch = useAppDispatch();
     useEffect(() => {
-        dispatch(api.util.invalidateTags(tagTypes));
+        if (navigator.onLine) {
+            dispatch(api.util.invalidateTags(tagTypes));
+        }
     }, []);
     return (null);
 }

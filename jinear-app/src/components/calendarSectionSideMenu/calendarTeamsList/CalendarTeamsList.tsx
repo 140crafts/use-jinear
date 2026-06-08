@@ -25,7 +25,7 @@ const CalendarTeamsList: React.FC<CalendarTeamsListProps> = ({ workspace }) => {
   const {
     data: membershipsResponse,
     isSuccess,
-    isFetching,
+    isLoading,
   } = useRetrieveMembershipsQuery({ workspaceId: workspace.workspaceId });
 
   const activeTeamMembershipList = useMemo(
@@ -52,10 +52,10 @@ const CalendarTeamsList: React.FC<CalendarTeamsListProps> = ({ workspace }) => {
         </Button>
       </div>
 
-      {isFetching && <CircularLoading />}
+      {isLoading && <CircularLoading />}
       <div className="spacer-h-1" />
       <div className={styles.calendarTeamListContainer}>
-        {!isFetching && isSuccess && (
+        {!isLoading && isSuccess && (
           <>
             {activeTeamMembershipList?.map((teamMemberDto) => (
               <CalendarSourceButton

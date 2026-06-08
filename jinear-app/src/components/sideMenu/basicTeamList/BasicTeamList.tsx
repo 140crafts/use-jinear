@@ -24,7 +24,7 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({workspace}) => {
     const {
         data: membershipsResponse,
         isSuccess,
-        isFetching,
+        isLoading,
     } = useRetrieveMembershipsQuery({workspaceId: workspace.workspaceId});
 
     const activeTeamMembershipList = useMemo(
@@ -45,10 +45,10 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({workspace}) => {
         <div className={styles.container}>
             <MenuGroupTitle label={t("sideMenuYourTeamsTitle")} hasAddButton={true}
                             onAddButtonClick={openNewTeamModal}/>
-            {isFetching && <CircularLoading/>}
+            {isLoading && <CircularLoading/>}
             <div className="spacer-h-1"/>
             <div className={styles.teamListContainer}>
-                {!isFetching && isSuccess && (
+                {!isLoading && isSuccess && (
                     <>
                         {activeTeamMembershipList?.map((teamMemberDto) => (
                             <BasicTeamMenu

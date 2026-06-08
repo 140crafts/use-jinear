@@ -68,8 +68,6 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({workspac
                     {t("mainFeaturesMenuLabelAssignedToMe")}
                 </Button>
 
-                {projectsEnabled && workspace && <ProjectsButton workspace={workspace}/>}
-
                 <TeamsButton workspace={workspace}/>
 
             </div>
