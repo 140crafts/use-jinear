@@ -48,6 +48,7 @@ import NewTopicPage from "@/pages/workspace/tasks/team-username/topic/new/page.t
 import AssignedToMePage from "@/pages/workspace/tasks/assigned-to-me/page.tsx";
 import LastActivitiesScreen from "@/pages/workspace/tasks/last-activities/page.tsx";
 import TeamsPage from "@/pages/workspace/tasks/teams/page.tsx";
+import ReloadQueryRefetchHandler from "@/components/reloadQueryRefetchHandler/ReloadQueryRefetchHandler.tsx";
 
 export default function App() {
     return (
@@ -64,6 +65,7 @@ export default function App() {
             <ToasterProvider/>
             <BodyFixer/>
             <ModalProvider/>
+            <ReloadQueryRefetchHandler/>
             <Routes>
 
                 <Route path="*" element={<Navigate to="/" replace/>}/>
