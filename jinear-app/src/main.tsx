@@ -17,9 +17,8 @@ const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST;
 if (POSTHOG_KEY && POSTHOG_HOST) {
     posthog.init(POSTHOG_KEY, {
         api_host: POSTHOG_HOST,
-        person_profiles: "identified_only",
-        capture_pageview: false,
-        capture_pageleave: true
+        defaults: '2026-01-30',
+        capture_pageview: 'history_change',
     });
 }
 

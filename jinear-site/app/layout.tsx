@@ -4,6 +4,7 @@ import {SITE_URL} from "@/utils/constants";
 import "../styles/app.scss";
 import "../styles/fonts.css";
 import Root from "@/components/root/Root";
+import {CSPostHogProvider} from "@/components/postHogProvider/CSPostHogProvider";
 
 export const viewport: Viewport = {
     themeColor: "#fbfaf7",
@@ -72,9 +73,11 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
             />
         </head>
         <body>
-        <Root>
-            {children}
-        </Root>
+        <CSPostHogProvider>
+            <Root>
+                {children}
+            </Root>
+        </CSPostHogProvider>
         </body>
         </html>
     );
