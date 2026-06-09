@@ -1,16 +1,24 @@
 import { Metadata } from "next";
+import type { FC } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MDXRemote } from "next-mdx-remote/rsc";
-import HomePageNavbar from "@/components/homepage/navbar/HomePageNavbar";
-import Footer from "@/components/homepage/footer/Footer";
+import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
+import BareNav from "@/components/homepage/bareNav/BareNav";
+import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { SITE_URL } from "@/utils/constants";
-import { getPost, getPublishedSlugs } from "@/lib/posts";
+import { getAllPosts, getPost, getPublishedSlugs } from "@/lib/posts";
 import styles from "../blog.module.scss";
+
+const AVATAR = "https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v3/ben.jpg";
 
 interface Params {
   params: { slug: string };
 }
+
+// `next-mdx-remote/rsc`'s MDXRemote is an async Server Component (returns a
+// Promise), which React 18's JSX types reject (TS2786). It renders correctly at
+// runtime — RSC awaits it — so alias it to a plain component type for the editor.
+const Mdx = MDXRemote as unknown as FC<MDXRemoteProps>;
 
 // Fully enumerate posts at build time; reject anything not generated.
 export const dynamicParams = false;
@@ -48,7 +56,7 @@ export function generateMetadata({ params }: Params): Metadata {
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", {
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
   });
 }
@@ -58,6 +66,13 @@ export default function BlogPostPage({ params }: Params) {
   if (!post || post.draft) notFound();
 
   const url = `${SITE_URL}/blog/${post.slug}`;
+  const author = post.author || "Jin";
+
+  // Newest-first list → "Previous" is the newer neighbour, "Next" the older one.
+  const all = getAllPosts();
+  const idx = all.findIndex((p) => p.slug === post.slug);
+  const prev = idx > 0 ? all[idx - 1] : null;
+  const next = idx >= 0 && idx < all.length - 1 ? all[idx + 1] : null;
 
   const blogPostingJsonLd = {
     "@context": "https://schema.org",
@@ -97,25 +112,78 @@ export default function BlogPostPage({ params }: Params) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <div className={styles.page}>
-        <HomePageNavbar />
-        <article className={styles.article}>
-          <Link href="/blog" className={styles.backLink}>
+        <div className={styles.wrap}>
+          <BareNav active="blog" />
+
+          <Link className={styles.back} href="/blog">
             ← All posts
           </Link>
-          <header className={styles.articleHeader}>
-            <p className={styles.postMeta}>
+
+          <header className={styles.ahead}>
+            <div className={styles.postMeta}>
+              {post.tags?.length ? <span className={styles.k}>{post.tags[0]}</span> : null}
+              <span className={styles.dotS}></span>
               <time dateTime={post.pubDate}>{formatDate(post.pubDate)}</time>
-              {post.author ? <span>{post.author}</span> : null}
-              {post.tags?.length ? <span className={styles.tag}>{post.tags.join(", ")}</span> : null}
-            </p>
-            <h1 className={styles.articleTitle}>{post.title}</h1>
+              <span className={styles.dotS}></span>
+              <span className={styles.rt}>{post.readingMinutes} min read</span>
+            </div>
+            <h1 className={styles.title}>{post.title}</h1>
+            <div className={styles.by}>
+              <img className={styles.av} src={AVATAR} alt={author} />
+              <span className={styles.who}>
+                <b>{author}</b> <span></span>
+              </span>
+            </div>
           </header>
-          <div className={styles.prose}>
-            <MDXRemote source={post.content} />
+
+          <article className={styles.body}>
+            <Mdx source={post.content} />
+          </article>
+
+          {post.tags?.length ? (
+            <div className={styles.endmatter}>
+              <div className={styles.ptags}>
+                {post.tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+            </div>
+          ) : null}
+
+          <div className={styles.authcard}>
+            <img className={styles.av} src={AVATAR} alt={author} />
+            <div>
+              <h4>Written by {author}</h4>
+              <p>
+                I build and maintain Jinear in the open. Mostly I write here when something ships, or
+                when I&apos;ve changed my mind about how the product should work.
+              </p>
+            </div>
           </div>
-          <div className="spacer-h-12" />
-        </article>
-        <Footer />
+
+          {prev || next ? (
+            <nav className={styles.pager}>
+              {prev ? (
+                <Link className={styles.prev} href={`/blog/${prev.slug}`}>
+                  <div className={styles.dir}>← Previous</div>
+                  <div className={styles.pt}>{prev.title}</div>
+                </Link>
+              ) : (
+                <span />
+              )}
+              {next ? (
+                <Link className={styles.next} href={`/blog/${next.slug}`}>
+                  <div className={styles.dir}>Next →</div>
+                  <div className={styles.pt}>{next.title}</div>
+                </Link>
+              ) : (
+                <span />
+              )}
+            </nav>
+          ) : null}
+
+          <BareFooter />
+        </div>
       </div>
     </>
   );

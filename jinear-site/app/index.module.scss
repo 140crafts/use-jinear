@@ -1,51 +1,273 @@
-@use "../styles/breakpoints.scss" as *;
+/* Home — Design A "Bare & Minimal" */
 
-.container {
+.page {
+  width: 100%;
+  padding: 38px 0 80px;
+}
+
+.wrap {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.hero {
+  font-size: 38px;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  margin: 54px 0 0;
+  max-width: 18ch;
+  color: var(--ink);
+}
+
+.lede {
+  font-size: 18px;
+  color: var(--ink-2);
+  margin-top: 18px;
+  max-width: 54ch;
+
+  a {
+    color: var(--ink);
+  }
+}
+
+.actions {
   display: flex;
-  flex-direction: column;
-  width: var(--page-extended);
-  padding-bottom: 8rem;
+  gap: 12px;
+  align-items: center;
+  margin-top: 26px;
+  flex-wrap: wrap;
 }
 
-.navButton {
-  gap: .5rem;
+.hint {
+  font-size: 13px;
+  color: var(--ink-3);
 }
 
-.heroImageContainer {
-  position: relative;
-  height: calc(min(120ch, calc(100vw - calc(var(--gap) * 2))) / 1.77);
-  border: 1px solid var(--c-primary-shade-1);
-  border-radius: var(--border-radius-m);
+.blk {
+  margin-top: 54px;
+
+  h2 {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  h2::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+}
+
+.does {
+  list-style: none;
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+
+  li {
+    display: flex;
+    gap: 12px;
+    align-items: baseline;
+    padding: 9px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 16px;
+  }
+
+  li span:last-child {
+    color: var(--ink-2);
+  }
+}
+
+.k {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--acc-deep);
+  min-width: 96px;
+}
+
+.note {
+  background: var(--acc-tint);
+  border: 1px solid var(--acc-soft);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  font-size: 15px;
+  color: var(--ink-2);
+  margin-top: 14px;
+
+  b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+}
+
+.priceline {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 16px;
+  color: var(--ink-2);
+
+  strong {
+    color: var(--ink);
+    font-weight: 700;
+  }
+}
+
+.priceSep {
+  font-family: var(--mono);
+  color: var(--border-2);
+}
+
+.priceMore {
+  margin-top: 14px;
+}
+
+.signoff {
+  margin-top: 56px;
+  font-size: 15px;
+  color: var(--ink-2);
+
+  .by {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+}
+
+.av {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--acc-soft);
+  display: grid;
+  place-items: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--acc-deep);
+  flex: none;
+  object-fit: cover;
+}
+
+/* a quick look */
+.look {
+  margin: 4px 0 0;
+
+  .appwin {
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02), 0 18px 44px -30px rgba(40, 30, 10, 0.32);
+  }
+
+  figcaption {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-top: 12px;
+    text-align: center;
+  }
+}
+
+.appwin {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
   overflow: hidden;
 }
 
-.sectionHeader {
+.appwinBar {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  text-align: center;
-  gap: 0.75rem;
+  gap: 8px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  background: #fcfbf9;
+
+  i {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #e2ddd2;
+    display: block;
+  }
+
+  .url {
+    margin-left: 10px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: var(--ink-3);
+  }
 }
 
-.eyebrow {
-  font-size: 0.6875rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  opacity: 0.45;
-  font-family: "SF Mono", "Fira Code", "Fira Mono", monospace;
-}
-
-.sectionTitle {
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 0.97;
-}
-
-.divider {
+.lookMedia {
+  display: block;
   width: 100%;
-  height: 1px;
-  background-color: var(--c-primary-shade-1);
-  border: none;
-  margin: 0;
+  height: auto;
+}
+
+/* shared atoms */
+.linkU {
+  text-decoration: underline;
+  text-decoration-color: var(--acc);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+  transition: color 0.15s ease;
+  word-break: keep-all;
+  &:hover {
+    color: var(--acc-deep);
+  }
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
+  padding: 11px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.btnAccent {
+  background: var(--acc);
+  color: #fff;
+
+  &:hover {
+    background: var(--acc-deep);
+  }
+}
+
+.btnGhost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--border-2);
+
+  &:hover {
+    border-color: var(--ink);
+    background: #fff;
+  }
+}
+
+.btnSm {
+  padding: 8px 14px;
+  font-size: 14px;
 }

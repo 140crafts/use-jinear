@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import HomePageNavbar from "@/components/homepage/navbar/HomePageNavbar";
-import Footer from "@/components/homepage/footer/Footer";
+import BareNav from "@/components/homepage/bareNav/BareNav";
+import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { SITE_URL } from "@/utils/constants";
 import { getAllPosts } from "@/lib/posts";
 import styles from "./blog.module.scss";
@@ -9,13 +9,13 @@ import styles from "./blog.module.scss";
 export const metadata: Metadata = {
   title: "Blog",
   description:
-    "Updates, guides, and thoughts on self-hosted project management, open source, and building Jinear.",
+    "Changelogs, build notes and the occasional opinion on self-hosted project management, open source, and building Jinear.",
   alternates: { canonical: "/blog" },
   openGraph: {
     type: "website",
     title: "Jinear Blog",
     description:
-      "Updates, guides, and thoughts on self-hosted project management, open source, and building Jinear.",
+      "Changelogs, build notes and the occasional opinion on self-hosted project management, open source, and building Jinear.",
     url: `${SITE_URL}/blog`,
   },
 };
@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", {
     year: "numeric",
-    month: "long",
+    month: "short",
     day: "numeric",
   });
 }
@@ -52,35 +52,38 @@ export default function BlogIndexPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(blogJsonLd) }}
       />
       <div className={styles.page}>
-        <HomePageNavbar />
-        <main className={styles.container}>
-          <header className={styles.header}>
-            <p className={styles.eyebrow}>Blog</p>
-            <h1 className={styles.pageTitle}>Notes from the Jinear team</h1>
-            <p className={styles.pageSubtitle}>
-              Guides and updates on self-hosted project management, open source, and how we build Jinear.
-            </p>
-            <div className="spacer-h-6" />
-          </header>
+        <div className={styles.wrap}>
+          <BareNav active="blog" />
 
-          <ul className={styles.postList}>
-            {posts.map((post) => (
-              <li key={post.slug} className={styles.postItem}>
-                <Link href={`/blog/${post.slug}`} className={styles.postLink}>
-                  <p className={styles.postMeta}>
+          <h1 className={styles.hero}>Notes from the workshop.</h1>
+          <p className={styles.lede}>
+            Changelogs, build notes and the occasional opinion — written in the open by the person who
+            makes Jinear.
+          </p>
+
+          <section className={styles.blk}>
+            <h2>Writing</h2>
+            <ul className={styles.posts}>
+              {posts.map((post) => (
+                <li key={post.slug}>
+                  <div className={styles.postMeta}>
+                    {post.tags?.length ? <span className={styles.k}>{post.tags[0]}</span> : null}
+                    <span className={styles.dotS}></span>
                     <time dateTime={post.pubDate}>{formatDate(post.pubDate)}</time>
-                    {post.tags?.length ? <span className={styles.tag}>{post.tags.join(", ")}</span> : null}
-                  </p>
-                  <h2 className={styles.postTitle}>{post.title}</h2>
-                  <p className={styles.postDescription}>{post.description}</p>
-                </Link>
-              </li>
-            ))}
-          </ul>
+                    <span className={styles.dotS}></span>
+                    <span className={styles.rt}>{post.readingMinutes} min</span>
+                  </div>
+                  <h3 className={styles.postTitle}>
+                    <Link href={`/blog/${post.slug}`}>{post.title}</Link>
+                  </h3>
+                  <p className={styles.excerpt}>{post.description}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
 
-          <div className="spacer-h-12" />
-        </main>
-        <Footer />
+          <BareFooter />
+        </div>
       </div>
     </>
   );

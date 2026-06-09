@@ -1,196 +1,162 @@
-"use client";
-import BottomCta from "@/components/homepage/bottomCta/BottomCta";
-import CallToActionBar from "@/components/homepage/callToActionBar/CallToActionBar";
-import ComparisonSection from "@/components/homepage/comparisonSection/ComparisonSection";
-import ComplianceSection from "@/components/homepage/complianceSection/ComplianceSection";
-import FeatureCard from "@/components/homepage/featureCard/FeatureCard";
-import Footer from "@/components/homepage/footer/Footer";
-import Hero from "@/components/homepage/hero/Hero";
-import HeroFeatures from "@/components/homepage/heroFeatures/HeroFeatures";
-import HomePageNavbar from "@/components/homepage/navbar/HomePageNavbar";
-import OpenSourceSection from "@/components/homepage/openSourceSection/OpenSourceSection";
-import SelfHostHero from "@/components/homepage/selfHostHero/SelfHostHero";
-import SocialProofBar from "@/components/homepage/socialProofBar/SocialProofBar";
-import { useTheme } from "@/components/themeProvider/ThemeProvider";
-import useTranslation from "locales/useTranslation";
 import React from "react";
-import {
-  LuCalendarCheck2,
-  LuCheckCircle as LuCircleCheck,
-  LuClipboardList,
-  LuDatabase,
-  LuFile,
-  LuHash,
-  LuLayoutDashboard,
-  LuMessageSquare,
-  LuPin,
-  LuSend,
-  LuShieldCheck,
-  LuUsers,
-} from "react-icons/lu";
-import {
-  SiApple,
-  SiAsana,
-  SiBasecamp,
-  SiBox,
-  SiDiscord,
-  SiDropbox,
-  SiGooglecalendar,
-  SiGoogledrive,
-  SiJira,
-  SiSlack,
-  SiWhatsapp,
-} from "react-icons/si";
+import Link from "next/link";
+import BareNav from "@/components/homepage/bareNav/BareNav";
+import BareFooter from "@/components/homepage/bareFooter/BareFooter";
+import { APP_URL, GITHUB_URL, GITLAB_URL, SELF_HOSTING_DOCS_URL } from "@/utils/constants";
 import styles from "./index.module.scss";
 
-const IMG_BASE = "https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2";
+const IMG_BASE = "https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v3";
+
+/** A screenshot inside Design A's browser-chrome frame, with a caption. */
+function Shot({ src, alt, url, caption }: { src: string; alt: string; url: string; caption: string }) {
+  return (
+    <figure className={styles.look}>
+      <div className={styles.appwin}>
+        <div className={styles.appwinBar}>
+          <i></i>
+          <i></i>
+          <i></i>
+          <span className={styles.url}>{url}</span>
+        </div>
+        <img className={styles.lookMedia} src={src} alt={alt} />
+      </div>
+      <figcaption>{caption}</figcaption>
+    </figure>
+  );
+}
 
 export default function HomeClient() {
-  const theme = useTheme();
-  const heroImageSrcType = theme == "light" ? "light" : "dark";
-  const { t } = useTranslation();
-
   return (
-    <div className={styles.container}>
-      <HomePageNavbar />
+    <div className={styles.page}>
+      <div className={styles.wrap}>
+        <BareNav />
 
-      <div className="spacer-h-12" />
-      <div className="spacer-h-6" />
+        <h1 className={styles.hero}>An open-source project manager you can actually own.</h1>
+        <p className={styles.lede}>
+          Jinear keeps tasks, boards, a calendar and files in one place. Use the hosted version, or{" "}
+          <a className={styles.linkU} href={SELF_HOSTING_DOCS_URL} target="_blank" rel="noreferrer">
+            run it yourself
+          </a>{" "}
+          with Docker.
+        </p>
 
-      <Hero title1={t("homescreenHeroTitleLine1")} text={t("homescreenHeroText")} />
+        <div className={styles.actions}>
+          <a className={`${styles.btn} ${styles.btnAccent}`} href={`${APP_URL}/register`} target="_blank" rel="noreferrer">
+            Start for free
+          </a>
+          <a
+            className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}
+            href={SELF_HOSTING_DOCS_URL}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Read the docs
+          </a>
+          <span className={styles.hint}>No card. Free for up to 3 people.</span>
+        </div>
 
-      <div className="spacer-h-4" />
-      <CallToActionBar />
-      <div className="spacer-h-6" />
+        <section className={styles.blk}>
+          <h2>What it does</h2>
+          <ul className={styles.does}>
+            <li>
+              <span className={styles.k}>tasks</span>
+              <span>Lists, labels, checklists and reminders that don&apos;t get in your way.</span>
+            </li>
+            <li>
+              <span className={styles.k}>boards</span>
+              <span>Unlimited boards and projects. Drag things where they belong.</span>
+            </li>
+            <li>
+              <span className={styles.k}>calendar</span>
+              <span>A built-in calendar, plus Google Calendar sync.</span>
+            </li>
+            <li>
+              <span className={styles.k}>files</span>
+              <span>Attach files to tasks, create folders, upload data, and define fine-grained access controls.</span>
+            </li>
+          </ul>
+        </section>
 
-      <SocialProofBar />
+        <section className={styles.blk}>
+          <h2>A quick look</h2>
+          <Shot
+            src={`${IMG_BASE}/tasks.png`}
+            alt="Tasks and boards in Jinear"
+            url="jinear.co / cagdas / tasks / jinear"
+            caption="Tasks, lists and boards — all in one place."
+          />
+        </section>
 
-      <div className="spacer-h-12" />
-      <hr className={styles.divider} />
-      <div className="spacer-h-12" />
+        <section className={styles.blk}>
+          <h2>Your week at a glance</h2>
+          <Shot
+            src={`${IMG_BASE}/calendar.png`}
+            alt="The calendar in Jinear"
+            url="jinear.co / cagdas / calendar"
+            caption="A built-in calendar with Google Calendar sync."
+          />
+        </section>
 
-      <SelfHostHero />
+        <section className={styles.blk}>
+          <h2>Your files, your storage</h2>
+          <Shot
+            src={`${IMG_BASE}/files.png`}
+            alt="File storage in Jinear"
+            url="jinear.co / cagdas /files"
+            caption="Attach files to tasks — kept on your own storage."
+          />
+          <div className={styles.note}>
+            A self hosted Jinear instance runs as a single Docker Compose stack on your own server.{" "}
+            <b>No per-user tax, no lock-in, no vendor reading your tasks.</b> The source is on{" "}
+            <a className={styles.linkU} href={GITHUB_URL} target="_blank" rel="noreferrer">
+              GitHub
+            </a>{" "}
+            and{" "}
+            <a className={styles.linkU} href={GITLAB_URL} target="_blank" rel="noreferrer">
+              GitLab
+            </a>{" "}
+            (AGPL-3.0) — fork it, audit it, change it.
+          </div>
+        </section>
 
-      <div className="spacer-h-12" />
-      <hr className={styles.divider} />
-      <div className="spacer-h-12" />
+        <section className={styles.blk}>
+          <h2>Pricing, briefly</h2>
+          <div className={styles.priceline}>
+            <span>
+              <strong>Free</strong> for individuals &amp; up to 3 people
+            </span>
+            <span className={styles.priceSep}>/</span>
+            <span>
+              <strong>$24.90/mo flat</strong> for unlimited people
+            </span>
+            <span className={styles.priceSep}>/</span>
+            <span>
+              <strong>Free</strong> self-hosted, forever
+            </span>
+          </div>
+          <p className={styles.priceMore}>
+            <Link className={styles.linkU} href="/pricing">
+              See the full pricing →
+            </Link>
+          </p>
+        </section>
 
-      <p className={styles.eyebrow}>{t("landingPageHeroFeaturesEyebrow")}</p>
-      <h2 className={styles.sectionTitle}>{t("landingPageHeroFeaturesTitle")}</h2>
+        <div className={styles.signoff}>
+          Built and maintained by one developer, in the open.
+          <div className={styles.by}>
+            <img className={styles.av} src={`${IMG_BASE}/ben.jpg`} alt="Çağdaş, maker of Jinear" />
+            <span>
+              Questions?{" "}
+              <a className={styles.linkU} href="mailto:info@jinear.co">
+                Email me
+              </a>{" "}
+              or open an issue.
+            </span>
+          </div>
+        </div>
 
-      <div className="spacer-h-6" />
-      <HeroFeatures />
-
-      <div className="spacer-h-12" />
-      <hr className={styles.divider} />
-      <div className="spacer-h-12" />
-
-      <FeatureCard
-        title1={t("landingPageFeature1")}
-        text={t("landingPageFeature1Text")}
-        imageUrl={`${IMG_BASE}/projects-${heroImageSrcType}.png`}
-        featureCardIconInfoList={[
-          { id: "task-todos", Icon: LuCircleCheck, title: t("landingPageFeature1Sub1Title"), text: t("landingPageFeature1Sub1Text") },
-          { id: "task-todos2", Icon: LuFile, title: t("landingPageFeature1Sub2Title"), text: t("landingPageFeature1Sub2Text") },
-          { id: "task-todos3", Icon: LuMessageSquare, title: t("landingPageFeature1Sub3Title"), text: t("landingPageFeature1Sub3Text") },
-        ]}
-        alternativeToLabel={t("landingPageFeature1AlternativeTo")}
-        alternativeToInfoList={[
-          { id: "alternative-to-3", Icon: SiBasecamp, name: "Basecamp" },
-          { id: "alternative-to-1", Icon: SiAsana, name: "Asana" },
-          { id: "alternative-to-2", Icon: SiJira, name: "Jira" },
-        ]}
-      />
-
-      <div className="spacer-h-12" />
-      <hr className={styles.divider} />
-      <div className="spacer-h-12" />
-
-      <FeatureCard
-        title1={t("landingPageFeatureChat")}
-        text={t("landingPageFeatureChatText")}
-        imageUrl={`${IMG_BASE}/chat-${heroImageSrcType}.png`}
-        featureCardIconInfoList={[
-          { id: "feature-chat", Icon: LuHash, title: t("landingPageFeatureChatSub1Title"), text: t("landingPageFeatureChatSub1Text") },
-          { id: "feature-chat-2", Icon: LuSend, title: t("landingPageFeatureChatSub2Title"), text: t("landingPageFeatureChatSub2Text") },
-          { id: "feature-chat-3", Icon: LuPin, title: t("landingPageFeatureChatSub3Title"), text: t("landingPageFeatureChatSub3Text") },
-        ]}
-        alternativeToLabel={t("landingPageFeatureChatAlternativeTo")}
-        alternativeToInfoList={[
-          { id: "chat-alternative-to-1", Icon: SiSlack, name: "Slack" },
-          { id: "chat-alternative-to-2", Icon: SiDiscord, name: "Discord" },
-          { id: "chat-alternative-to-3", Icon: SiWhatsapp, name: "Whatsapp" },
-        ]}
-      />
-
-      <div className="spacer-h-12" />
-      <hr className={styles.divider} />
-      <div className="spacer-h-12" />
-
-      <FeatureCard
-        title1={t("landingPageFeatureStorage")}
-        text={t("landingPageFeatureStorageText")}
-        imageUrl={`${IMG_BASE}/files-2-${heroImageSrcType}.png`}
-        featureCardIconInfoList={[
-          { id: "feature-storage", Icon: LuUsers, title: t("landingPageFeatureStorageSub1Title"), text: t("landingPageFeatureStorageSub1Text") },
-          { id: "feature-storage-2", Icon: LuDatabase, title: t("landingPageFeatureStorageSub2Title"), text: t("landingPageFeatureStorageSub2Text") },
-          { id: "feature-storage-3", Icon: LuShieldCheck, title: t("landingPageFeatureStorageSub3Title"), text: t("landingPageFeatureStorageSub3Text") },
-        ]}
-        alternativeToLabel={t("landingPageFeatureStorageAlternativeTo")}
-        alternativeToInfoList={[
-          { id: "storage-alternative-to-1", Icon: SiDropbox, name: "Dropbox" },
-          { id: "storage-alternative-to-2", Icon: SiGoogledrive, name: "Google Drive" },
-          { id: "storage-alternative-to-3", Icon: SiBox, name: "Box" },
-        ]}
-      />
-
-      <div className="spacer-h-12" />
-      <hr className={styles.divider} />
-      <div className="spacer-h-12" />
-
-      <FeatureCard
-        title1={t("landingPageFeature2")}
-        text={t("landingPageFeature2Text")}
-        imageUrl={`${IMG_BASE}/calendar-${heroImageSrcType}.png`}
-        featureCardIconInfoList={[
-          { id: "feature-calendar", Icon: LuCalendarCheck2, title: t("landingPageFeature2Sub1Title"), text: t("landingPageFeature2Sub1Text") },
-          { id: "feature-calendar-2", Icon: LuClipboardList, title: t("landingPageFeature2Sub2Title"), text: t("landingPageFeature2Sub2Text") },
-          { id: "feature-calendar-3", Icon: LuLayoutDashboard, title: t("landingPageFeature2Sub3Title"), text: t("landingPageFeature2Sub3Text") },
-        ]}
-        alternativeToLabel={t("landingPageFeature2AlternativeTo")}
-        alternativeToInfoList={[
-          { id: "calendar-alternative-to-1", Icon: SiGooglecalendar, name: "Google Calendar" },
-          { id: "calendar-alternative-to-2", Icon: SiApple, name: "Apple Calendar" },
-        ]}
-      />
-
-      <div className="spacer-h-12" />
-      <hr className={styles.divider} />
-      <div className="spacer-h-12" />
-
-      <ComplianceSection />
-
-      <div className="spacer-h-12" />
-      <hr className={styles.divider} />
-      <div className="spacer-h-12" />
-
-      <ComparisonSection />
-
-      <div className="spacer-h-12" />
-      <hr className={styles.divider} />
-      <div className="spacer-h-12" />
-
-      <OpenSourceSection />
-
-      <div className="spacer-h-12" />
-      <hr className={styles.divider} />
-      <div className="spacer-h-12" />
-
-      <BottomCta />
-
-      <div className="spacer-h-12" />
-
-      <Footer />
+        <BareFooter />
+      </div>
     </div>
   );
 }

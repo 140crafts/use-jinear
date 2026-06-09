@@ -1,13 +1,12 @@
 import type {Metadata, Viewport} from "next";
 import React from "react";
-import ThemeProvider from "@/components/themeProvider/ThemeProvider";
 import {SITE_URL} from "@/utils/constants";
 import "../styles/app.scss";
 import "../styles/fonts.css";
 import Root from "@/components/root/Root";
 
 export const viewport: Viewport = {
-    themeColor: "#16171a",
+    themeColor: "#fbfaf7",
     width: "device-width",
     initialScale: 1,
 };
@@ -61,7 +60,7 @@ const organizationJsonLd = {
 
 export default function RootLayout({children}: { children: React.ReactNode }) {
     return (
-        <html lang="en" className="dark">
+        <html lang="en" className="light">
         <head>
             <script
                 type="application/ld+json"
@@ -69,11 +68,9 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
             />
         </head>
         <body>
-        <ThemeProvider>
-            <Root>
-                {children}
-            </Root>
-        </ThemeProvider>
+        <Root>
+            {children}
+        </Root>
         </body>
         </html>
     );

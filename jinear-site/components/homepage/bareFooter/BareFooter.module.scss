@@ -1,0 +1,39 @@
+.mini {
+  margin-top: 60px;
+  padding-top: 22px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  font-size: 13px;
+  color: var(--ink-3);
+
+  a {
+    color: var(--ink-3);
+    transition: color 0.15s ease;
+  }
+
+  a:hover {
+    color: var(--acc-deep);
+  }
+}
+
+.wordmark {
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  font-size: 12px;
+  color: var(--ink);
+  // Keep the tracked wordmark from breaking mid-word on narrow screens.
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.sep {
+  color: var(--border-2);
+}
+
+// Don't let an individual link's separator detach awkwardly; links wrap as
+// whole units while the dot-separated row stays readable down to mobile-s.
+.mini a {
+  white-space: nowrap;
+}

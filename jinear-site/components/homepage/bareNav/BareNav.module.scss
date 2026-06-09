@@ -1,0 +1,51 @@
+@use "breakpoints.scss" as *;
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+
+  nav {
+    display: flex;
+    gap: 18px;
+    font-size: 14px;
+    color: var(--ink-2);
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    color: var(--ink-2);
+    transition: color 0.15s ease;
+  }
+
+  nav a:hover {
+    color: var(--acc-deep);
+  }
+
+  // On narrow screens the wide-tracked wordmark and the 4 nav links can't share
+  // one row — stack them so the wordmark stays intact above the wrapping nav.
+  @media (max-width: $mobile-l) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+}
+
+.wordmark {
+  font-weight: 800;
+  letter-spacing: 0.34em;
+  font-size: 15px;
+  color: var(--ink);
+  // Never let the tracked letters break mid-word.
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.dot {
+  color: var(--acc);
+}
+
+.here {
+  color: var(--ink) !important;
+}

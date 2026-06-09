@@ -1,4 +1,29 @@
 :root {
+    /* ===========================================================
+       Design A — Bare & Minimal (marketing site)
+       Warm off-white, soft orange accent, friendly + tidy.
+       =========================================================== */
+    /* surfaces */
+    --bg: #fbfaf7;
+    --bg-sunk: #f5f3ee;
+    --surface: #ffffff;
+    --border: #e8e4db;
+    --border-2: #ddd8cd;
+    /* ink */
+    --ink: #1c1a16;
+    --ink-2: #4f4b43;
+    --ink-3: #8b857a;
+    /* accent — warm orange */
+    --acc: #d96a1a;
+    --acc-deep: #b8550e;
+    --acc-soft: #fbe7cf;
+    --acc-tint: #fff4e7;
+    /* misc */
+    --radius: 12px;
+    --radius-sm: 8px;
+    --sans: "Hanken Grotesk", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
     /* main variables */
     --c-background: #fdfffc;
     --c-text-color: #16171a;

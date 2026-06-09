@@ -30,11 +30,19 @@ body {
   margin: 0;
   padding: 0;
   border: 0;
-  font-size: 0.75rem;
-  font-family: "Inter", sans-serif;
-  background-color: var(--c-background);
-  color: var(--c-text-color);
+  font-size: 17px;
+  line-height: 1.55;
+  font-family: var(--sans);
+  background-color: var(--bg);
+  color: var(--ink);
   overscroll-behavior: none;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--acc-soft);
+  color: var(--acc-deep);
 }
 
 div::-webkit-scrollbar {
@@ -517,21 +525,20 @@ mark {
 /* endregion */
 
 blockquote {
-  background-color: var(--c-primary-shade-1);
-  border-left: 2px solid var(--c-secondary-shade-1) !important;
-  padding: 2ch;
-  /* margin: 0 !important;*/
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+  border-left: 2px solid var(--acc);
+  padding: 4px 0 4px 20px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 pre {
-  background-color: var(--c-primary-shade-1) !important;
-  color: var(--c-text-color) !important;
-  border-radius: 0 !important;
-  padding: 1px 10px;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+  background-color: var(--bg-sunk);
+  color: var(--ink-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 16px 18px;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .line-clamp {
@@ -605,5 +612,6 @@ pre {
 /*  */
 
 pre {
-  white-space: normal;
+  white-space: pre;
+  overflow-x: auto;
 }
