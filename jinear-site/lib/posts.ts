@@ -22,18 +22,10 @@ export interface PostFrontmatter {
 
 export interface PostMeta extends PostFrontmatter {
   slug: string;
-  /** Estimated read time in whole minutes (>= 1). */
-  readingMinutes: number;
 }
 
 export interface Post extends PostMeta {
   content: string;
-}
-
-/** Rough read-time estimate from raw markdown body (~200 wpm). */
-function readingTime(content: string): number {
-  const words = content.trim().split(/\s+/).filter(Boolean).length;
-  return Math.max(1, Math.round(words / 200));
 }
 
 export function getPostSlugs(): string[] {
@@ -53,7 +45,7 @@ export function getPost(slug: string): Post | null {
   const raw = fs.readFileSync(filePath, "utf8");
   const { data, content } = matter(raw);
   const fm = data as PostFrontmatter;
-  return { ...fm, slug, content, readingMinutes: readingTime(content) };
+  return { ...fm, slug, content };
 }
 
 /** All published posts (drafts hidden in production), newest first. */

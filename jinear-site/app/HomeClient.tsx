@@ -83,7 +83,7 @@ export default function HomeClient() {
             src={`${IMG_BASE}/tasks.png`}
             alt="Tasks and boards in Jinear"
             url="jinear.co / cagdas / tasks / jinear"
-            caption="Tasks, lists and boards — all in one place."
+            caption="Tasks, lists and boards, all in one place."
           />
         </section>
 
@@ -103,7 +103,7 @@ export default function HomeClient() {
             src={`${IMG_BASE}/files.png`}
             alt="File storage in Jinear"
             url="jinear.co / cagdas /files"
-            caption="Attach files to tasks — kept on your own storage."
+            caption="Attach files to tasks, kept on your own storage."
           />
           <div className={styles.note}>
             A self hosted Jinear instance runs as a single Docker Compose stack on your own server.{" "}
@@ -115,7 +115,7 @@ export default function HomeClient() {
             <a className={styles.linkU} href={GITLAB_URL} target="_blank" rel="noreferrer">
               GitLab
             </a>{" "}
-            (AGPL-3.0) — fork it, audit it, change it.
+            (AGPL-3.0) Fork it, audit it, change it.
           </div>
         </section>
 

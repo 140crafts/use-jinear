@@ -57,8 +57,7 @@ export default function BlogIndexPage() {
 
           <h1 className={styles.hero}>Notes from the workshop.</h1>
           <p className={styles.lede}>
-            Changelogs, build notes and the occasional opinion — written in the open by the person who
-            makes Jinear.
+            Changelogs, build notes and the occasional opinion by me
           </p>
 
           <section className={styles.blk}>
@@ -70,8 +69,6 @@ export default function BlogIndexPage() {
                     {post.tags?.length ? <span className={styles.k}>{post.tags[0]}</span> : null}
                     <span className={styles.dotS}></span>
                     <time dateTime={post.pubDate}>{formatDate(post.pubDate)}</time>
-                    <span className={styles.dotS}></span>
-                    <span className={styles.rt}>{post.readingMinutes} min</span>
                   </div>
                   <h3 className={styles.postTitle}>
                     <Link href={`/blog/${post.slug}`}>{post.title}</Link>

@@ -124,8 +124,6 @@ export default function BlogPostPage({ params }: Params) {
               {post.tags?.length ? <span className={styles.k}>{post.tags[0]}</span> : null}
               <span className={styles.dotS}></span>
               <time dateTime={post.pubDate}>{formatDate(post.pubDate)}</time>
-              <span className={styles.dotS}></span>
-              <span className={styles.rt}>{post.readingMinutes} min read</span>
             </div>
             <h1 className={styles.title}>{post.title}</h1>
             <div className={styles.by}>
