@@ -20,6 +20,10 @@ export const metadata: Metadata = {
     description:
         "Jinear is an open-source, self-hostable project management and calendar suite for indie developers and small teams. AGPL-3.0, Docker Compose install, no per-user pricing.",
     applicationName: "Jinear",
+    icons: {
+        icon: "/favicon.ico",
+        shortcut: "/favicon.ico",
+    },
     alternates: {
         canonical: "/",
     },

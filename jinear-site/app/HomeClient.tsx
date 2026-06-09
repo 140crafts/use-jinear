@@ -88,7 +88,7 @@ export default function HomeClient() {
         </section>
 
         <section className={styles.blk}>
-          <h2>Your week at a glance</h2>
+          <h2>Your month at a glance</h2>
           <Shot
             src={`${IMG_BASE}/calendar.png`}
             alt="The calendar in Jinear"
