@@ -27,6 +27,11 @@ workflow:
     - jinear-app/**/*
     - .gitlab-ci.yml
 
+.site_changes: &site_changes
+  changes:
+    - jinear-site/**/*
+    - .gitlab-ci.yml
+
 .rate_limiter_changes: &rate_limiter_changes
   changes:
     - jinear-shared-libs/jinear-rate-limiter/**/*
@@ -83,6 +88,8 @@ workflow:
       export JINEAR_WEB_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:latest"
       export JINEAR_APP_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-app:${TAG}"
       export JINEAR_APP_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-app:latest"
+      export JINEAR_SITE_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-site:${TAG}"
+      export JINEAR_SITE_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-site:latest"
 
 bump_version:
   stage: version
@@ -227,3 +234,35 @@ app:deploy:
       <<: *app_changes
   needs:
     - app:build
+
+site:build:
+  <<: *docker_setup
+  stage: build
+  script:
+    - cd jinear-site
+    - docker buildx build --platform linux/amd64,linux/arm64
+        --build-arg BUILDER_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/node:20-alpine
+        --build-arg RUNTIME_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/caddy:2-alpine
+        --build-arg NEXT_PUBLIC_SITE_URL=https://jinear.co
+        --build-arg NEXT_PUBLIC_APP_URL=https://app.jinear.co
+        -t ${JINEAR_SITE_IMAGE} --push .
+  timeout: 90m
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      <<: *site_changes
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      <<: *site_changes
+      when: manual
+      allow_failure: true
+
+site:deploy:
+  <<: *docker_setup
+  stage: deploy
+  script:
+    - docker buildx imagetools create -t ${JINEAR_SITE_IMAGE_LATEST} ${JINEAR_SITE_IMAGE}
+  timeout: 90m
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      <<: *site_changes
+  needs:
+    - site:build

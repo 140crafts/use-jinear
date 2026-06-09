@@ -1,0 +1,196 @@
+@import "/styles/breakpoints.scss";
+
+/* Single centered column, like the homepage .container. The page layout wraps
+   everything (navbar + content + footer) in one flex child so the global
+   <Root> (display:flex; justify-content:center) centers the whole page instead
+   of laying the siblings out in a row. */
+.page {
+  display: flex;
+  flex-direction: column;
+  width: var(--page-extended);
+  padding-bottom: 8rem;
+}
+
+.container {
+  width: 100%;
+}
+
+.header {
+  padding: 48px 0 8px;
+}
+
+.eyebrow {
+  font-family: "SF Mono", ui-monospace, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.6875rem;
+  opacity: 0.45;
+  margin: 0 0 12px;
+}
+
+.pageTitle {
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.97;
+  margin: 0;
+}
+
+.pageSubtitle {
+  margin: 16px 0 0;
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  opacity: 0.65;
+  max-width: 60ch;
+}
+
+.postList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+}
+
+.postItem {
+  border-bottom: 1px solid var(--c-primary-shade-1);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.postLink {
+  display: block;
+  padding: 24px;
+  background: var(--c-primary-shade-0);
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: var(--c-primary-shade-1);
+  }
+}
+
+.postMeta {
+  font-family: "SF Mono", ui-monospace, monospace;
+  font-size: 0.75rem;
+  opacity: 0.45;
+  margin: 0 0 8px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.postTitle {
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+
+.postDescription {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.65;
+  opacity: 0.65;
+}
+
+.tag {
+  color: var(--c-JINEAR_ORANGE);
+}
+
+/* ── Single post ── */
+.article {
+  width: min(72ch, 100%);
+}
+
+.backLink {
+  display: inline-block;
+  margin: 32px 0 24px;
+  font-size: 0.875rem;
+  opacity: 0.6;
+  text-decoration: none;
+  color: inherit;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.articleHeader {
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--c-primary-shade-1);
+}
+
+.articleTitle {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+  margin: 12px 0;
+}
+
+.prose {
+  font-size: 1.0625rem;
+  line-height: 1.8;
+
+  h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 2em 0 0.6em;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 1.6em 0 0.5em;
+  }
+
+  p {
+    margin: 1em 0;
+    opacity: 0.85;
+  }
+
+  ul,
+  ol {
+    margin: 1em 0;
+    padding-left: 1.4em;
+    opacity: 0.85;
+  }
+
+  li {
+    margin: 0.4em 0;
+  }
+
+  a {
+    color: var(--c-JINEAR_ORANGE);
+  }
+
+  code {
+    font-family: "SF Mono", ui-monospace, monospace;
+    font-size: 0.9em;
+    background: var(--c-primary-shade-1);
+    padding: 0.15em 0.4em;
+    border-radius: 4px;
+  }
+
+  pre {
+    background: var(--c-primary-shade-0);
+    border: 1px solid var(--c-primary-shade-1);
+    border-left: 2px solid var(--c-JINEAR_ORANGE);
+    border-radius: var(--border-radius);
+    padding: 16px;
+    overflow-x: auto;
+    margin: 1.5em 0;
+
+    code {
+      background: none;
+      padding: 0;
+    }
+  }
+}

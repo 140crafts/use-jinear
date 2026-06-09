@@ -123,6 +123,13 @@ can create your own compose file and configure from scratch.
 | **jinear-caddy**     | Can be changed with other web servers. Replacing needs custom configuration.       | Caddy reverse proxy handling SSL/TLS termination and routing                            | 80/443 External    |
 | **jinear-db-backup** | Optional (Recommended)                                                             | Automated database backup service with configurable retention                           | -                  |
 
+> **Note on the marketing site & blog:** the public marketing pages, pricing
+> page, and blog (at `jinear.co/blog`) are a separate statically-exported
+> Next.js project, [`jinear-site`](./jinear-site/). It is used for the hosted
+> jinear.co deployment and is **not** part of the default self-host stack — a
+> self-hosted instance just serves the app on your domain. See
+> [jinear-site/README.md](./jinear-site/README.md) to run it yourself.
+
 ## Getting Started
 
 Once your Jinear instance is running, access it through your configured domain.

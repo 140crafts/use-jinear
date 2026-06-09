@@ -1,0 +1,80 @@
+import type {Metadata, Viewport} from "next";
+import React from "react";
+import ThemeProvider from "@/components/themeProvider/ThemeProvider";
+import {SITE_URL} from "@/utils/constants";
+import "../styles/app.scss";
+import "../styles/fonts.css";
+import Root from "@/components/root/Root";
+
+export const viewport: Viewport = {
+    themeColor: "#16171a",
+    width: "device-width",
+    initialScale: 1,
+};
+
+export const metadata: Metadata = {
+    metadataBase: new URL(SITE_URL),
+    title: {
+        default: "Jinear — Open-Source, Self-Hostable Project Management",
+        template: "%s — Jinear",
+    },
+    description:
+        "Jinear is an open-source, self-hostable project management and calendar suite for indie developers and small teams. AGPL-3.0, Docker Compose install, no per-user pricing.",
+    applicationName: "Jinear",
+    alternates: {
+        canonical: "/",
+    },
+    openGraph: {
+        type: "website",
+        siteName: "Jinear",
+        url: SITE_URL,
+        title: "Jinear — Open-Source, Self-Hostable Project Management",
+        description:
+            "Open-source, self-hostable project management & calendar. AGPL-3.0, Docker Compose install, no per-user pricing.",
+    },
+    twitter: {
+        card: "summary_large_image",
+        site: "@usejinear",
+        creator: "@usejinear",
+        title: "Jinear — Open-Source, Self-Hostable Project Management",
+        description:
+            "Open-source, self-hostable project management & calendar. AGPL-3.0, Docker Compose install, no per-user pricing.",
+    },
+    robots: {
+        index: true,
+        follow: true,
+    },
+};
+
+const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Jinear",
+    url: SITE_URL,
+    logo: `${SITE_URL}/icon.png`,
+    sameAs: [
+        "https://github.com/140crafts/use-jinear",
+        "https://gitlab.com/140crafts/use-jinear",
+        "https://twitter.com/usejinear",
+    ],
+};
+
+export default function RootLayout({children}: { children: React.ReactNode }) {
+    return (
+        <html lang="en" className="dark">
+        <head>
+            <script
+                type="application/ld+json"
+                dangerouslySetInnerHTML={{__html: JSON.stringify(organizationJsonLd)}}
+            />
+        </head>
+        <body>
+        <ThemeProvider>
+            <Root>
+                {children}
+            </Root>
+        </ThemeProvider>
+        </body>
+        </html>
+    );
+}

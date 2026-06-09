@@ -39,11 +39,30 @@ Jinear consists of several projects that work together. Projects lives within si
 - Scope vs the old `jinear-web`: chat and project Pages features are intentionally
   dropped (their backing services are archived).
 
+### jinear-site (marketing site + blog)
+- Public-facing content site: marketing pages, the pricing page, and the blog
+  (the blog moved here from the old `blog.jinear.co` subdomain to `/blog`).
+- Next.js 14 App Router with `output: "export"` → a fully static site (real
+  pre-rendered HTML per route, for SEO + AI-bot friendliness). Served behind
+  its own `Caddyfile` like `jinear-app` (no SPA fallback).
+- Blog is file-based (no CMS): one Markdown/MDX file per post under
+  `jinear-site/content/blog/`, frontmatter parsed with `gray-matter`, rendered
+  with `next-mdx-remote`. Add a file → commit → CI rebuilds.
+- SEO/AI-bot infra: per-route metadata, JSON-LD (Organization / Product /
+  BlogPosting), `app/sitemap.ts`, `app/robots.ts` (allows AI crawlers),
+  `/llms.txt`, and `/blog/rss.xml`.
+- Reuses jinear-web's design system (`styles/*`) and homepage/pricing components,
+  with the Redux/auth coupling stripped; English-only for now. CTAs link to the
+  app via `NEXT_PUBLIC_APP_URL`.
+- Hosted topology: apex `jinear.co` → jinear-site, `app.jinear.co` → jinear-app.
+  Self-host default is unchanged (app stays on the apex); the marketing site is
+  an optional, hosted-oriented add-on.
+
 ### jinear-web (legacy frontend — being phased out)
 - The original Next.js (React) frontend. Still in the repo and currently the
   service wired into the default deployment, but slated for removal once
-  `jinear-app` (and a separate web/marketing pages project) fully replace it.
-  Prefer `jinear-app` for new frontend work.
+  `jinear-app` and `jinear-site` fully replace it. Prefer `jinear-app` for new
+  app work and `jinear-site` for new marketing/blog content.
 
 ## Archived / Deprecated Projects (`archive/`)
 
@@ -74,16 +93,17 @@ on them; use them as reference when building their replacements.
 
 ## Tech Stack
 
-| Layer                     | Tech                                          |
-|---------------------------|-----------------------------------------------|
-| Backend services          | Java, Spring Boot                             |
-| jinear-app (main frontend)| Vite + React 19 (PWA), react-router, Redux Toolkit |
-| jinear-web (legacy)       | Next.js (React) — being phased out            |
-| Gateway                   | Caddy                                         |
-| Storage                   | Google Cloud Storage or MinIO                 |
-| Payments                  | Paddle (web)                                  |
-| Push notifications        | Firebase (FCM)                                |
-| Product analytics         | PostHog                                       |
+| Layer                       | Tech                                                  |
+|-----------------------------|-------------------------------------------------------|
+| Backend services            | Java, Spring Boot                                     |
+| jinear-app (main frontend)  | Vite + React 19 (PWA), react-router, Redux Toolkit    |
+| jinear-site (marketing/blog)| Next.js 14 static export (`output: export`) + MDX     |
+| jinear-web (legacy)         | Next.js (React) — being phased out                    |
+| Gateway                     | Caddy                                                 |
+| Storage                     | Google Cloud Storage or MinIO                         |
+| Payments                    | Paddle (web)                                          |
+| Push notifications          | Firebase (FCM)                                         |
+| Product analytics           | PostHog                                                |
 
 ## Dev Configuration
 

@@ -1,0 +1,34 @@
+---
+title: "Introducing Self-Hosted Jinear"
+description: "Run the entire Jinear project management suite on your own server with a single Docker Compose command — no per-user pricing, AGPL-3.0 licensed."
+pubDate: "2026-06-01"
+tags: ["self-hosting", "announcement"]
+author: "Jinear Team"
+---
+
+Jinear is now fully self-hostable. You can run the whole suite — tasks,
+projects, calendar, and file storage — on your own infrastructure with a single
+Docker Compose stack.
+
+## Why self-hosting
+
+Most project management tools charge per user and keep your data on their
+servers. Jinear flips that: install it once, invite your whole team, and your
+data never leaves your machine.
+
+- **No per-user pricing.** Invite as many teammates as you want.
+- **Your data, your server.** Postgres, Redis, and object storage all run locally.
+- **Open source (AGPL-3.0).** Read, audit, and extend the code.
+
+## Getting started
+
+```bash
+curl -sSL https://gitlab.com/140crafts/use-jinear/-/raw/main/jinear-installation-scripts/install.sh -o install.sh \
+  && chmod +x install.sh && ./install.sh
+```
+
+The installer checks prerequisites, generates secrets, and starts every service
+behind a Caddy reverse proxy with automatic HTTPS.
+
+That's it — point a domain at your server and you're running your own project
+management suite.
