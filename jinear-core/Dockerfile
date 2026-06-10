@@ -2,12 +2,15 @@ ARG MAVEN_IMAGE=maven:3.9.9-amazoncorretto-17-alpine
 ARG RUNTIME_IMAGE=eclipse-temurin:21-jre-alpine
 FROM ${MAVEN_IMAGE} AS maven_build
 
-COPY pom.xml /build/
-COPY src /build/src/
-
 WORKDIR /build/
 
-RUN mvn clean package -B
+# Resolve dependencies first so this layer is cached unless pom.xml changes
+COPY pom.xml /build/
+RUN --mount=type=cache,target=/root/.m2 mvn dependency:go-offline -B
+
+# Build sources; only re-runs when src changes
+COPY src /build/src/
+RUN --mount=type=cache,target=/root/.m2 mvn clean package -B
 
 FROM ${RUNTIME_IMAGE}
 
