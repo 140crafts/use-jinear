@@ -1,4 +1,5 @@
-import { __DEV__, APPLE_CLIENT_ID, APPLE_REDIRECT_URI, PADDLE_VENDOR_ID } from "@/util/constants";
+import { APPLE_CLIENT_ID, APPLE_REDIRECT_URI } from "@/util/constants";
+import { initPaddle } from "@/util/paddle";
 import Logger from "@/util/logger";
 import React, { useEffect } from "react";
 
@@ -31,14 +32,7 @@ function loadScript(src: string, onLoad: () => void): () => void {
 
 const Scripts: React.FC = () => {
     useEffect(() => {
-        return loadScript("https://cdn.paddle.com/paddle/paddle.js", () => {
-            if (__DEV__) {
-                // @ts-ignore
-                Paddle.Environment.set("sandbox");
-            }
-            // @ts-ignore
-            Paddle.Setup({ vendor: PADDLE_VENDOR_ID });
-        });
+        initPaddle();
     }, []);
 
     useEffect(() => {

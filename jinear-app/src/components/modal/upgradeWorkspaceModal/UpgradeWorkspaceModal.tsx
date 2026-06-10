@@ -12,6 +12,7 @@ import {
 } from "@/store/slice/modalSlice";
 import {useAppDispatch, useTypedSelector} from "@/store";
 import {__DEV__, PADDLE_CATALOG} from "@/util/constants";
+import {getPaddle} from "@/util/paddle";
 import Logger from "@/util/logger";
 import {isWorkspaceInPaidTier} from "@/util/permissionHelper";
 import useTranslation from "@/locales/useTranslation";
@@ -20,6 +21,12 @@ import {IoCheckmarkCircle} from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./UpgradeWorkspaceModal.module.css";
 import {useNavigate} from "react-router-dom";
+
+declare global {
+    interface Window {
+        upgradeWorkspaceSuccess?: () => void;
+    }
+}
 
 interface UpgradeWorkspaceModalProps {
 }
@@ -40,8 +47,7 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
 
     useEffect(() => {
         if (visible && workspaceId) {
-            // @ts-ignore
-            global.upgradeWorkspaceSuccess = () => {
+            window.upgradeWorkspaceSuccess = () => {
                 logger.log({paymentSuccessForWorkspaceId: workspaceId});
                 refreshPayments();
             };
@@ -70,8 +76,7 @@ const UpgradeWorkspaceModal: React.FC<UpgradeWorkspaceModalProps> = ({}) => {
         if (account) {
             const {accountId, email, emailConfirmed} = account;
             const passthrough = {accountId, workspaceId, email, emailConfirmed};
-            // @ts-ignore
-            Paddle.Checkout.open({
+            getPaddle()?.Checkout.open({
                 product: vo.productId,
                 email: email,
                 passthrough: JSON.stringify(passthrough),
