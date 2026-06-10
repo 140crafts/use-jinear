@@ -49,6 +49,7 @@ import AssignedToMePage from "@/pages/workspace/tasks/assigned-to-me/page.tsx";
 import LastActivitiesScreen from "@/pages/workspace/tasks/last-activities/page.tsx";
 import TeamsPage from "@/pages/workspace/tasks/teams/page.tsx";
 import ReloadQueryRefetchHandler from "@/components/reloadQueryRefetchHandler/ReloadQueryRefetchHandler.tsx";
+import WorkspaceModalProvider from "@/components/modal-provider/WorkspaceModalProvider.tsx";
 
 export default function App() {
     return (
@@ -64,7 +65,7 @@ export default function App() {
             <PostHogPageView/>
             <ToasterProvider/>
             <BodyFixer/>
-            <ModalProvider/>
+
             {/*<ReloadQueryRefetchHandler/>*/}
             <Routes>
 
@@ -84,7 +85,13 @@ export default function App() {
                     <Route path={'workspace-invitation'} element={<WorkspaceInvitationResponseScreen/>}/>
                 </Route>
 
-                <Route path="/:workspaceName" element={<WorkspaceLayout/>}>
+                <Route path="/:workspaceName"
+                       element={
+                           <>
+                               <WorkspaceModalProvider/>
+                               <WorkspaceLayout/>
+                           </>}
+                >
                     <Route index element={<WorkspacePage/>}/>
 
                     <Route path="inbox" element={<InboxScreen/>}/>
@@ -133,6 +140,8 @@ export default function App() {
                 </Route>
 
             </Routes>
+
+            <ModalProvider/>
         </BrowserRouter>
     )
 }

@@ -12,9 +12,12 @@ import WorkspaceMembersButton from "./workspaceMembersButton/WorkspaceMembersBut
 import WorkspaceSettingsButton from "./workspaceSettingsButton/WorkspaceSettingsButton";
 import InstallPwaAppButton from "@/components/installPwaAppButton/InstallPwaAppButton";
 import isPwa from "@/util/pwaHelper";
+import Logger from "@/util/logger.ts";
 
 interface MenuMoreActionModalProps {
 }
+
+const logger = Logger("MenuMoreActionModal");
 
 const MenuMoreActionModal: React.FC<MenuMoreActionModalProps> = ({}) => {
     const {t} = useTranslation();
@@ -25,7 +28,7 @@ const MenuMoreActionModal: React.FC<MenuMoreActionModalProps> = ({}) => {
 
     const {workspaceName} = useParams();
     const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName || ""));
-
+    logger.log({workspaceName})
     const close = () => {
         dispatch(closeMenuMoreActionModal());
     };

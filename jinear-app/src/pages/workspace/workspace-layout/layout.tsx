@@ -1,4 +1,5 @@
 import MainFeaturesSideMenu from "@/components/mainFeaturesSideMenu/MainFeaturesSideMenu";
+import WorkspaceModalProvider from "@/components/modal-provider/WorkspaceModalProvider";
 import WorkspaceLayoutHeader from "@/components/workspaceLayoutHeader/WorkspaceLayoutHeader";
 import useWidthLimit, {MOBILE_LAYOUT_BREAKPOINT} from "@/hooks/useWidthLimit";
 import {selectWorkspaceFromWorkspaceUsername} from "@/store/slice/accountSlice";

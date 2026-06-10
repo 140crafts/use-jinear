@@ -268,19 +268,21 @@ export default function TermsPage() {
 
           <h2>Refunds &amp; Cancellations</h2>
           <p>
-            When cancelling a monthly subscription, all future charges associated with future months of your
-            subscription will be cancelled. You may notify us of your intent to cancel at any time; your
-            cancellation will become effective at the end of your current monthly billing period. You will
-            not receive a refund; however your subscription access and/or delivery and accompanying
-            subscriber benefits will continue for the remainder of the current monthly billing period.
+            You may request a refund within 14 days of your most recent payment by contacting us at{" "}
+            <a href="mailto:info@jinear.co" target="_blank" rel="noopener noreferrer">
+              info@jinear.co
+            </a>
+            . We will refund that payment in full.
           </p>
           <p>
-            When cancelling an annual subscription, all future charges associated with future years of your
-            subscription will be cancelled. You may notify us of your intent to cancel at any time; your
-            cancellation will become effective at the end of your current annual billing period. You will
-            not receive a refund, prorated or otherwise, for the remainder of the annual term. However, your
-            subscription access and/or delivery and accompanying subscriber benefits will continue for the
-            remainder of the current annual billing period.
+            For monthly subscriptions, this covers the current month of your subscription. For annual
+            subscriptions, you may request a refund of your current payment within 14 days, and all future
+            renewals will be cancelled.
+          </p>
+          <p>
+            You may cancel your subscription at any time. After cancellation, your subscription access and
+            accompanying benefits continue until the end of your current billing period, and you will not be
+            charged again.
           </p>
           <p>In order to cancel your subscription please</p>
           <ul>
