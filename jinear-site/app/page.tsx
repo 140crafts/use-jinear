@@ -25,8 +25,9 @@ const softwareApplicationJsonLd = {
     `${IMG_BASE}/calendar-dark.png`,
   ],
   offers: [
+    { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Self Hosted" },
     { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
-    { "@type": "Offer", price: "24.90", priceCurrency: "USD", name: "Smarter" },
+    { "@type": "Offer", price: "24.90", priceCurrency: "USD", name: "Team" },
   ],
 };
 

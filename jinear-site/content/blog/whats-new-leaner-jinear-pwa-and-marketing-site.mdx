@@ -1,6 +1,6 @@
 ---
 title: "A Leaner Jinear: Dropped Features, a New PWA, and a Dedicated Site"
-description: "I trimmed Jinear down to its core — removing projects, project Pages, custom domains, and chat, and split the old web app into an offline-capable PWA and a static marketing site."
+description: "I trimmed Jinear down to its core. Removing projects, project Pages, custom domains, and chat, and split the old web app into an offline-capable PWA and a static marketing site."
 pubDate: "2026-06-10"
 tags: ["changelog", "architecture"]
 author: "Çağdaş"
@@ -36,7 +36,7 @@ design, until they feel right.
 The old `jinear-web` was a single Next.js app doing two very different jobs:
 serving the logged-in product *and* the public marketing pages. I split it.
 
-- **jinear-app** is the product — a Vite + React 19 single-page app, served as
+- **jinear-app** is the product, a Vite + React 19 single-page app, served as
   an installable **PWA**. It works offline, installs to your home screen, and
   ships its own manifest. The PWA install also replaces the
   old WebView mobile wrapper, so there's one less thing to maintain.
@@ -54,7 +54,7 @@ or [my X](https://x.com/cagdasplus).
 Splitting the apps lets each one do its job well. The product app can lean into
 offline-first PWA behavior without dragging marketing SEO concerns along; the
 marketing site can be pure static HTML without bundling the app's auth and state
-machinery. Self-hosters get a smaller, simpler stack — fewer services, stock
+machinery. Self-hosters get a smaller, simpler stack, fewer services, stock
 Caddy, no archived dependencies.
 
 `jinear-web` is still around during the transition, but new work happens in
