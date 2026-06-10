@@ -145,6 +145,8 @@ core:build:
     - docker buildx build --platform linux/amd64,linux/arm64
         --build-arg MAVEN_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/maven:3.9.9-amazoncorretto-17-alpine
         --build-arg RUNTIME_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/eclipse-temurin:21-jre-alpine
+        --cache-from type=registry,ref=${JINEAR_CORE_IMAGE_LATEST}-buildcache
+        --cache-to type=registry,ref=${JINEAR_CORE_IMAGE_LATEST}-buildcache,mode=max
         -t ${JINEAR_CORE_IMAGE} --push .
   timeout: 90m
   needs:

@@ -48,7 +48,7 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({workspace}) => {
             {isLoading && <CircularLoading/>}
             <div className="spacer-h-1"/>
             <div className={styles.teamListContainer}>
-                {!isLoading && isSuccess && (
+                {!isLoading && (
                     <>
                         {activeTeamMembershipList?.map((teamMemberDto) => (
                             <BasicTeamMenu
