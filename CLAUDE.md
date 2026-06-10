@@ -58,12 +58,6 @@ Jinear consists of several projects that work together. Projects lives within si
   Self-host default is unchanged (app stays on the apex); the marketing site is
   an optional, hosted-oriented add-on.
 
-### jinear-web (legacy frontend — being phased out)
-- The original Next.js (React) frontend. Still in the repo and currently the
-  service wired into the default deployment, but slated for removal once
-  `jinear-app` and `jinear-site` fully replace it. Prefer `jinear-app` for new
-  app work and `jinear-site` for new marketing/blog content.
-
 ## Archived / Deprecated Projects (`archive/`)
 
 These projects have been removed from the active build and deployment. They are
@@ -91,6 +85,12 @@ on them; use them as reference when building their replacements.
 ### archive/jinear-webview-mobile
 - Jinear's WebView mobile wrapper. Used app ↔ web postMessage patterns.
 
+### archive/jinear-web
+- The original Next.js (React) frontend.
+- Replaced by `jinear-app` (Vite + React 19 PWA, the main frontend) and
+  `jinear-site` (marketing site + blog). Prefer `jinear-app` for new app work and
+  `jinear-site` for new marketing/blog content; use this folder as reference only.
+
 ## Tech Stack
 
 | Layer                       | Tech                                                  |
@@ -98,7 +98,6 @@ on them; use them as reference when building their replacements.
 | Backend services            | Java, Spring Boot                                     |
 | jinear-app (main frontend)  | Vite + React 19 (PWA), react-router, Redux Toolkit    |
 | jinear-site (marketing/blog)| Next.js 14 static export (`output: export`) + MDX     |
-| jinear-web (legacy)         | Next.js (React) — being phased out                    |
 | Gateway                     | Caddy                                                 |
 | Storage                     | Google Cloud Storage or MinIO                         |
 | Payments                    | Paddle (web)                                          |

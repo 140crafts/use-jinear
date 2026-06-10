@@ -20,6 +20,7 @@ original top-level path.
 | `jinear-message-service` | WebSocket service for real-time chat (account ids as rooms)                | Chat feature removed.                                                                         |
 | `jinear-pages`         | Per-project public/restricted feed ("project's twitter profile" / blogs)     | Project Pages feature removed.                                                                |
 | `jinear-webview-mobile` | WebView mobile wrapper using app ↔ web `postMessage`                        | Superseded; the frontend is being replaced by `jinear-app`.                                  |
+| `jinear-web`           | Original Next.js (React) frontend                                            | Replaced by `jinear-app` (Vite + React 19 PWA) and `jinear-site` (marketing/blog).           |
 
-Live projects remain at the repository root (`jinear-core`, `jinear-web`,
-`jinear-app`, `jinear-shared-libs`, `jinear-installation-scripts`, `docs`).
+Live projects remain at the repository root (`jinear-core`, `jinear-app`,
+`jinear-site`, `jinear-shared-libs`, `jinear-installation-scripts`, `docs`).

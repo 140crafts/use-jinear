@@ -1,6 +1,6 @@
-# Jinear - Task Manager, Calendar, Messaging & File Sharing
+# Jinear - Task Manager, Calendar & File Sharing
 
-A collaborative task management and calendar application designed to streamline productivity and team coordination, now enhanced with features like real-time messaging and file sharing.
+A collaborative task management and calendar application designed to streamline productivity and team coordination, enhanced with file sharing.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/projects-dark.png">
@@ -116,7 +116,7 @@ can create your own compose file and configure from scratch.
 | Service              | Required                                                                           | Description                                                                             | Default Port       |
 |----------------------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|--------------------|
 | **jinear-core**      | Required                                                                           | Main backend API handling authentication, task management, calendar, and business logic | 8008 Internal      |
-| **jinear-web**       | Required                                                                           | Frontend application providing the main user interface                                  | 3000 Internal      |
+| **jinear-app**       | Required                                                                           | Installable PWA (Vite + React 19) serving the main user interface                       | 80 Internal        |
 | **jinear-db**        | Can be replaced with external PostgreSQL (Needs config change).                    | PostgreSQL database storing all application data                                        | 5432 Internal      |
 | **jinear-redis**     | Can be replaced with external Redis (Needs config change).                         | Redis cache for session management and real-time data                                   | 6379 Internal      |
 | **jinear-minio**     | Can be replaced with external MinIO or Google Cloud Storage (Needs config change). | MinIO object storage for file uploads and attachments                                   | 9000/9001 Internal |

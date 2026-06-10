@@ -17,11 +17,6 @@ workflow:
     - jinear-core/**/*
     - .gitlab-ci.yml
 
-.web_changes: &web_changes
-  changes:
-    - jinear-web/**/*
-    - .gitlab-ci.yml
-
 .app_changes: &app_changes
   changes:
     - jinear-app/**/*
@@ -84,8 +79,6 @@ workflow:
       # Set image variables
       export JINEAR_CORE_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:${TAG}"
       export JINEAR_CORE_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-core:latest"
-      export JINEAR_WEB_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:${TAG}"
-      export JINEAR_WEB_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-web:latest"
       export JINEAR_APP_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-app:${TAG}"
       export JINEAR_APP_IMAGE_LATEST="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-app:latest"
       export JINEAR_SITE_IMAGE="registry.gitlab.com/${CI_PROJECT_PATH}/jinear-site:${TAG}"
@@ -175,35 +168,6 @@ core:deploy:
       <<: *core_changes
   needs:
     - core:build
-
-web:build:
-  <<: *docker_setup
-  stage: build
-  script:
-    - cd jinear-web
-    - docker buildx build --platform linux/amd64,linux/arm64
-        --build-arg BASE_IMAGE=$CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/node:20-alpine
-        -t ${JINEAR_WEB_IMAGE} --push .
-  timeout: 90m
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      <<: *web_changes
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      <<: *web_changes
-      when: manual
-      allow_failure: true
-
-web:deploy:
-  <<: *docker_setup
-  stage: deploy
-  script:
-    - docker buildx imagetools create -t ${JINEAR_WEB_IMAGE_LATEST} ${JINEAR_WEB_IMAGE}
-  timeout: 90m
-  rules:
-    - if: '$CI_COMMIT_TAG'
-      <<: *web_changes
-  needs:
-    - web:build
 
 app:build:
   <<: *docker_setup
