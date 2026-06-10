@@ -18,8 +18,8 @@ const CommunicationPreferences: React.FC<CommunicationPreferencesProps> = ({ tit
   const [setPermissions, { isLoading: isSetPermissionsLoading }] = useSetPermissionsMutation();
 
   useEffect(() => {
-    dispatch(changeLoadingModalVisibility({ visible: isFetching || isSetPermissionsLoading }));
-  }, [isFetching, isSetPermissionsLoading]);
+    dispatch(changeLoadingModalVisibility({ visible: isSetPermissionsLoading }));
+  }, [isSetPermissionsLoading]);
 
   const onEmailPrefChange = (permitted: boolean) => {
     if (permissionsResponse) {

@@ -21,8 +21,7 @@ const ExternalCalendarsList: React.FC<ExternalCalendarsListProps> = ({ workspace
 
   const {
     data: membershipsResponse,
-    isSuccess,
-    isFetching,
+    isLoading,
   } = useRetrieveCalendarMembershipsQuery({ workspaceId: workspace.workspaceId });
 
   const popCalendarIntegrationModal = () => {
@@ -33,12 +32,11 @@ const ExternalCalendarsList: React.FC<ExternalCalendarsListProps> = ({ workspace
     <div className={styles.container}>
       <div className="spacer-h-1" />
       <MenuGroupTitle label={t("sideMenuExternalCalendarsTitle")} hasAddButton={false} />
-      {isFetching && <CircularLoading />}
+      {isLoading && <CircularLoading />}
       <div className="spacer-h-1" />
       <div className={styles.externalCalendarListContainer}>
-        {!isFetching &&
-          isSuccess &&
-          membershipsResponse.data
+        {!isLoading &&
+          membershipsResponse?.data
             .map((calendarMembership) => calendarMembership.calendar)
             .map((calendar) => (
               <ExternalCalendar
@@ -47,7 +45,7 @@ const ExternalCalendarsList: React.FC<ExternalCalendarsListProps> = ({ workspace
                 calendar={calendar}
               />
             ))}
-        {!isFetching && isSuccess && membershipsResponse.data?.length == 0 && <div></div>}
+        {!isLoading && membershipsResponse?.data?.length == 0 && <div></div>}
       </div>
       <div className="spacer-h-1" />
       <Button

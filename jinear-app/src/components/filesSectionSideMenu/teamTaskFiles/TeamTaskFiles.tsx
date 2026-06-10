@@ -19,8 +19,7 @@ const TeamTaskFiles: React.FC<TeamTaskFilesProps> = ({ workspaceId, onTeamClick 
   const [archivedVisible, toggleArchivedVisible] = useToggle(false);
   const {
     data: membershipsResponse,
-    isSuccess,
-    isFetching
+    isLoading
   } = useRetrieveMembershipsQuery({ workspaceId });
 
   const activeTeamMembershipList = useMemo(
@@ -37,7 +36,7 @@ const TeamTaskFiles: React.FC<TeamTaskFilesProps> = ({ workspaceId, onTeamClick 
     <div className={styles.teamListContainer}>
       <MenuGroupTitle label={t("sideMenuTaskFilesTitle")} />
 
-      {!isFetching && isSuccess && (
+      {!isLoading && (
         <>
           {activeTeamMembershipList?.map((teamMemberDto) => (
             <Button

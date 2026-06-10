@@ -55,7 +55,7 @@ const CalendarTeamsList: React.FC<CalendarTeamsListProps> = ({ workspace }) => {
       {isLoading && <CircularLoading />}
       <div className="spacer-h-1" />
       <div className={styles.calendarTeamListContainer}>
-        {!isLoading && isSuccess && (
+        {!isLoading && (
           <>
             {activeTeamMembershipList?.map((teamMemberDto) => (
               <CalendarSourceButton

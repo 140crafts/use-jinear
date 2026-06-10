@@ -749,13 +749,13 @@ const slice = createSlice({
     extraReducers: (builder) => {
         builder
             .addMatcher(accountApi.endpoints.me.matchPending, (state, action) => {
-                state.loadingModal = {visible: true};
+                // state.loadingModal = {visible: true};
             })
             .addMatcher(accountApi.endpoints.me.matchFulfilled, (state, action) => {
-                state.loadingModal = {visible: false};
+                // state.loadingModal = {visible: false};
             })
             .addMatcher(accountApi.endpoints.me.matchRejected, (state, action) => {
-                state.loadingModal = {visible: false};
+                // state.loadingModal = {visible: false};
             });
     }
 });
