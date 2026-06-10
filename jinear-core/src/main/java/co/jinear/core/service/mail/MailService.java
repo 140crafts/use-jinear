@@ -29,6 +29,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static co.jinear.core.system.NormalizeHelper.EMPTY_STRING;
@@ -159,12 +160,13 @@ public class MailService {
         LocaleType preferredLocale = Optional.ofNullable(workspaceInvitationMailVo.getPreferredLocale()).orElse(LocaleType.EN);
 
         String titleMail = localeStringService.retrieveLocalString(LocaleStringType.WORKSPACE_INVITATION_TITLE_MAIL, preferredLocale);
-        titleMail = titleMail.replaceAll(Pattern.quote("${fromName}"), workspaceInvitationMailVo.getSenderName())
-                .replaceAll(Pattern.quote("${workspaceName}"), workspaceInvitationMailVo.getWorkspaceName());
+        titleMail = titleMail.replaceAll(Pattern.quote("${fromName}"), Matcher.quoteReplacement(workspaceInvitationMailVo.getSenderName()))
+                .replaceAll(Pattern.quote("${workspaceName}"), Matcher.quoteReplacement(workspaceInvitationMailVo.getWorkspaceName()));
+        titleMail = applyBrandingPlaceholders(titleMail);
 
         String titleBody = localeStringService.retrieveLocalString(LocaleStringType.WORKSPACE_INVITATION_TITLE_BODY, preferredLocale);
-        titleBody = titleBody.replaceAll(Pattern.quote("${fromName}"), workspaceInvitationMailVo.getSenderName())
-                .replaceAll(Pattern.quote("${workspaceName}"), workspaceInvitationMailVo.getWorkspaceName());
+        titleBody = titleBody.replaceAll(Pattern.quote("${fromName}"), Matcher.quoteReplacement(workspaceInvitationMailVo.getSenderName()))
+                .replaceAll(Pattern.quote("${workspaceName}"), Matcher.quoteReplacement(workspaceInvitationMailVo.getWorkspaceName()));
 
         String text = localeStringService.retrieveLocalString(LocaleStringType.WORKSPACE_INVITATION_TEXT, preferredLocale);
         String ctaLabel = localeStringService.retrieveLocalString(LocaleStringType.WORKSPACE_INVITATION_CTA_LABEL, preferredLocale);
@@ -172,12 +174,12 @@ public class MailService {
 
         String mailBody = retrieveMailTemplate("email-workspace-invitation-mail.html");
 
-        String href = feProperties.getWorkspaceInvitationUrl().replaceAll(Pattern.quote("{token}"), workspaceInvitationMailVo.getToken());
+        String href = feProperties.getWorkspaceInvitationUrl().replaceAll(Pattern.quote("{token}"), Matcher.quoteReplacement(workspaceInvitationMailVo.getToken()));
 
-        mailBody = mailBody.replaceAll(Pattern.quote("${title}"), titleBody)
-                .replaceAll(Pattern.quote("${text}"), text)
-                .replaceAll(Pattern.quote("${confirm}"), ctaLabel)
-                .replaceAll(Pattern.quote("${href}"), href);
+        mailBody = mailBody.replaceAll(Pattern.quote("${title}"), Matcher.quoteReplacement(titleBody))
+                .replaceAll(Pattern.quote("${text}"), Matcher.quoteReplacement(text))
+                .replaceAll(Pattern.quote("${confirm}"), Matcher.quoteReplacement(ctaLabel))
+                .replaceAll(Pattern.quote("${href}"), Matcher.quoteReplacement(href));
         sendMail(new SendMailVo(workspaceInvitationMailVo.getEmail(), titleMail, mailBody));
     }
 

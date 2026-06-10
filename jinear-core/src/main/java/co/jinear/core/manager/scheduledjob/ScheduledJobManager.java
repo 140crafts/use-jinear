@@ -37,8 +37,8 @@ public class ScheduledJobManager {
         expiredMedias.forEach(this::updateMediaAsPrivate);
     }
 
-    @Async
-    @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
+//    @Async
+//    @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
     public void checkAndSyncCustomDomains() {
         log.info("Check and sync custom domains has started.");
         try {
