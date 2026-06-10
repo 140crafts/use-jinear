@@ -66,7 +66,7 @@ export default function App() {
             <ToasterProvider/>
             <BodyFixer/>
 
-            {/*<ReloadQueryRefetchHandler/>*/}
+            <ReloadQueryRefetchHandler/>
             <Routes>
 
                 <Route path="*" element={<Navigate to="/" replace/>}/>
