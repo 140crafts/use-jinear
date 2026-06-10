@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import type { FC } from "react";
+import type { FC, AnchorHTMLAttributes } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
@@ -19,6 +19,20 @@ interface Params {
 // Promise), which React 18's JSX types reject (TS2786). It renders correctly at
 // runtime — RSC awaits it — so alias it to a plain component type for the editor.
 const Mdx = MDXRemote as unknown as FC<MDXRemoteProps>;
+
+// Render external links (http/https) in a new tab; keep in-site links in-tab.
+const mdxComponents = {
+  a: ({ href, children, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) =>
+    href?.startsWith("http") ? (
+      <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
+        {children}
+      </a>
+    ) : (
+      <a href={href} {...props}>
+        {children}
+      </a>
+    ),
+};
 
 // Fully enumerate posts at build time; reject anything not generated.
 export const dynamicParams = false;
@@ -135,7 +149,7 @@ export default function BlogPostPage({ params }: Params) {
           </header>
 
           <article className={styles.body}>
-            <Mdx source={post.content} />
+            <Mdx source={post.content} components={mdxComponents} />
           </article>
 
           {post.tags?.length ? (

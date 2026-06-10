@@ -1,0 +1,64 @@
+---
+title: "A Leaner Jinear: Dropped Features, a New PWA, and a Dedicated Site"
+description: "I trimmed Jinear down to its core — removing projects, project Pages, custom domains, and chat, and split the old web app into an offline-capable PWA and a static marketing site."
+pubDate: "2026-06-10"
+tags: ["changelog", "architecture"]
+author: "Çağdaş"
+---
+
+I've made some big changes to Jinear's shape. The short version: I cut features
+that pulled focus away from the core, and I split the old web app into two
+purpose-built frontends. Here's what changed and why.
+
+## What I removed
+
+To keep Jinear focused on tasks, calendar, and file storage, I retired these
+features:
+
+- **Projects.** The project layer is gone altogether. Jinear now centers on
+  tasks, calendar, and files without the extra project grouping on top.
+- **Project Pages.** Each project used to get a public/restricted feed, like a
+  project's own profile or blog. The backing service is archived.
+- **Custom domains on project feeds.** With Pages gone, the on-demand TLS and
+  Cloudflare DNS machinery that served custom project domains went with it. The
+  gateway now runs stock Caddy.
+- **Chat.** Real-time messaging and its websocket service have been removed.
+
+They were the wrong fit. Self-hosted small teams tend
+to already live in an existing messaging platform, and expecting 3 to 5 people
+to move to another one just isn't realistic, so chat had to go. The same logic
+applied across the board: I'd rather do less, well. Instead of piling on more
+features, I want to polish the ones that are left, the core flows and the
+design, until they feel right.
+
+## Two frontends instead of one
+
+The old `jinear-web` was a single Next.js app doing two very different jobs:
+serving the logged-in product *and* the public marketing pages. I split it.
+
+- **jinear-app** is the product — a Vite + React 19 single-page app, served as
+  an installable **PWA**. It works offline, installs to your home screen, and
+  ships its own manifest. The PWA install also replaces the
+  old WebView mobile wrapper, so there's one less thing to maintain.
+- **jinear-site** (this site) is the public face, marketing pages, pricing, and
+  the blog, built as a fully static Next.js export. Real pre-rendered HTML per
+  route means better SEO and friendlier crawling for AI bots.
+
+The blog also moved here, from the old `blog.jinear.co` subdomain to `/blog`.
+I didn't find moving old blog posts here helpful since they are mostly about
+features that are gone, but they can still be accessed on [Jinear's X page](https://x.com/usejinear)
+or [my X](https://x.com/cagdasplus).
+
+## Why it's better this way
+
+Splitting the apps lets each one do its job well. The product app can lean into
+offline-first PWA behavior without dragging marketing SEO concerns along; the
+marketing site can be pure static HTML without bundling the app's auth and state
+machinery. Self-hosters get a smaller, simpler stack — fewer services, stock
+Caddy, no archived dependencies.
+
+`jinear-web` is still around during the transition, but new work happens in
+`jinear-app` and `jinear-site`. Leaner, faster, and easier to run yourself.
+
+You can always check out whole repo at [Gitlab](https://gitlab.com/140crafts/use-jinear) and
+[GitHub](https://github.com/140crafts/use-jinear).
