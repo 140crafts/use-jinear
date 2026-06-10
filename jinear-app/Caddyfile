@@ -1,0 +1,27 @@
+# Plain HTTP on :80. TLS is expected to be terminated by an upstream
+# reverse proxy / load balancer / ingress, not by this container.
+
+:80 {
+    root * /srv
+    encode zstd gzip
+
+    # Hashed assets (Vite emits /assets/<name>-<hash>.<ext>) — safe to cache forever.
+    @assets path /assets/*
+    header @assets Cache-Control "public, max-age=31536000, immutable"
+
+    # index.html references the current bundle hashes and MUST refresh every deploy.
+    @html {
+        path /
+        path *.html
+    }
+    header @html Cache-Control "no-cache"
+
+    # Service worker + PWA manifest must not be cached, or env-var changes after
+    # a redeploy never reach already-installed clients.
+    @sw path /sw.js /registerSW.js /manifest.webmanifest
+    header @sw Cache-Control "no-cache"
+
+    # SPA fallback — any unknown path serves index.html so the React router can handle it.
+    try_files {path} /index.html
+    file_server
+}

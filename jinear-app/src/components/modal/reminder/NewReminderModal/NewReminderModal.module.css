@@ -1,0 +1,64 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.form {
+  display: flex;
+  justify-content: flex-start;
+  flex-direction: column;
+  align-self: center;
+  width: 100%;
+  min-height: 35rem;
+  gap: 1.5rem;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.labelRow {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.input {
+  text-align: end;
+}
+
+.repeatContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.formattedDateLabel {
+  flex: 1;
+  text-align: right;
+  opacity: 0.6;
+}
+
+.specificDateContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  position: sticky;
+  bottom: 0;
+  background-color: var(--c-primary);
+}
+
+.dateTimePickerContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}

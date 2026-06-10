@@ -1,0 +1,42 @@
+.photoInput {
+  display: none;
+}
+
+.profilePicture {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 125px;
+  height: 125px;
+  border-radius: 50px;
+  border-color: var(--c-primary-shade-1);
+  border-width: thin;
+  /* border-width: 0px; */
+  border-style: solid;
+  object-fit: cover;
+}
+
+.profilePicture:hover {
+  background-color: var(--c-primary-shade-0);
+  cursor: pointer;
+}
+
+.photoContainer {
+  position: relative;
+  width: 125px;
+  height: 125px;
+  border-radius: 50px;
+  /* overflow: hidden; */
+}
+
+.changeLabel {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  height: 1.5rem;
+  width: 2.5rem;
+  text-align: center;
+  font-weight: 600;
+  cursor: default;
+}

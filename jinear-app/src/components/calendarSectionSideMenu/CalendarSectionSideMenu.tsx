@@ -1,0 +1,61 @@
+import {
+    queryStateDateToShortDateConverter,
+    queryStateShortDateParser,
+    useQueryState,
+    useSetQueryState,
+} from "@/hooks/useQueryState";
+import {selectWorkspaceFromWorkspaceUsername} from "@/store/slice/accountSlice";
+import {useTypedSelector} from "@/store";
+import {isWebView} from "@/util/webviewUtils";
+import React from "react";
+import MiniMonthCalendar from "../miniMonthCalendar/MiniMonthCalendar";
+import OrLine from "../or-line/or-line";
+import styles from "./CalendarSectionSideMenu.module.css";
+import CalendarTeamsList from "./calendarTeamsList/CalendarTeamsList";
+import ExternalCalendarsList from "./externalCalendarsList/ExternalCalendarsList";
+import CalendarBoardsList from "@/components/calendarSectionSideMenu/calendarBoardsList/CalendarBoardsList";
+import {useParams} from "react-router-dom";
+
+interface CalendarSectionSideMenuProps {
+}
+
+const CalendarSectionSideMenu: React.FC<CalendarSectionSideMenuProps> = ({}) => {
+    const setQueryState = useSetQueryState();
+    const {workspaceName} = useParams();
+    const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
+    const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser);
+    const _isWebView = isWebView();
+
+    const changeViewingDate = (day?: Date) => {
+        if (day) {
+            setQueryState("viewingDate", queryStateDateToShortDateConverter(day));
+        }
+    };
+
+    return (
+        <div className={styles.container}>
+            {workspace && (
+                <>
+                    <MiniMonthCalendar
+                        value={viewingDate || undefined}
+                        setValue={changeViewingDate}
+                        dayButtonClassName={styles.dayButtonClassName}
+                        showYearPicker={true}
+                        showLabel={true}
+                        headerContainerClassName={styles.miniMonthCalendarHeader}
+                    />
+                    <CalendarTeamsList workspace={workspace}/>
+                    <CalendarBoardsList workspace={workspace}/>
+                    {!_isWebView && (
+                        <>
+                            <OrLine omitText={true}/>
+                            <ExternalCalendarsList workspace={workspace}/>
+                        </>
+                    )}
+                </>
+            )}
+        </div>
+    );
+};
+
+export default CalendarSectionSideMenu;

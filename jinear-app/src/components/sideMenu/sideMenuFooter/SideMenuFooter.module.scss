@@ -1,0 +1,35 @@
+@use "../../../styles/breakpoints.scss" as *;
+
+.container {
+  display: flex;
+  align-items: center;
+}
+
+.accountButton {
+  flex: 1;
+  text-align: left;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  padding-top: 0 !important;;
+  padding-bottom: 0 !important;;
+}
+
+.profilePic {
+  height: 25px !important;
+  width: 25px !important;
+}
+
+.userName {
+  display: flex;
+  font-weight: 600;
+}
+
+.iconButton {
+  min-height: 29px !important;
+}
+
+@media (max-width: $tablet) {
+  .userName {
+    display: none;
+  }
+}

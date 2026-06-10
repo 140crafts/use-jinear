@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: var(--c-primary-shade-0);
+  border-radius: var(--border-radius);
+  height: 28px;
+}
+
+.select {
+  background-color: var(--c-primary-shade-0);
+}
+
+.select:hover {
+  background-color: var(--c-primary-shade-1) !important;
+}

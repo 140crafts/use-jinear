@@ -1,0 +1,33 @@
+@use "../../../styles/breakpoints.scss" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.actionBarContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.statusBoardContainer {
+  overflow-x: scroll;
+  min-height: 8rem;
+  padding-bottom: 2rem;
+}
+
+.footer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+@media (max-width: $tablet) {
+  .pagination {
+    align-self: flex-end;
+  }
+}

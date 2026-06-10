@@ -1,0 +1,34 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1ch;
+  margin-left: 0.55rem;
+}
+.title {
+  font-weight: 500;
+}
+
+.actionButtonContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 1rem;
+  min-width: min(100vw, 320px);
+}
+
+.button {
+  color: var(--c-link-color) !important;
+}
+
+.button:hover {
+  color: var(--c-link-color) !important;
+  background-color: var(--c-primary-shade-1) !important;
+}

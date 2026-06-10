@@ -70,10 +70,7 @@ jinear/
 │   ├── minio/               # File storage
 │   └── caddy/               # SSL certificates & config
 ├── .logs/
-│   ├── jinear-core/
-│   ├── jinear-web/
-│   ├── jinear-pages/
-│   └── jinear-message/
+│   └── jinear-core/
 └── .backups/                # Database backups
 ```
 
@@ -114,8 +111,6 @@ Point these DNS records to your server's IP address:
 | A | jinear.yourdomain.com | YOUR_SERVER_IP |
 | A | api.jinear.yourdomain.com | YOUR_SERVER_IP |
 | A | files.jinear.yourdomain.com | YOUR_SERVER_IP |
-| A | pages.jinear.yourdomain.com | YOUR_SERVER_IP |
-| A | message.jinear.yourdomain.com | YOUR_SERVER_IP |
 
 SSL certificates are automatically issued via Let's Encrypt.
 
@@ -170,46 +165,6 @@ Solutions:
 - Check Caddy logs: `docker compose logs jinear-caddy`
 - Certificates are stored in `.data/caddy/data/`
 - Delete certificates to force renewal: `rm -rf .data/caddy/data/`
-
-### Database connection issues
-```bash
-# Check if database is running
-docker compose ps jinear-db
-
-# View database logs
-docker compose logs jinear-db
-```
-
-### WebSocket/Message service issues
-
-If messages are using polling instead of WebSocket:
-
-1. **Check the message service logs:**
-   ```bash
-   docker compose logs jinear-message
-   ```
-
-2. **Verify WebSocket connection in browser:**
-   - Open browser DevTools → Network tab → Filter "WS" (WebSocket)
-   - Try to connect and check if WebSocket connection is established
-   - Look for failed upgrades or 101 Switching Protocols responses
-
-3. **Common issues:**
-   - **Trailing slashes required in NEXT_PUBLIC_SOCKET_ROOT** - Should be `https://message.domain.com/` NOT `https://message.domain.com`
-   - **SSL certificate issues** - WebSocket requires valid HTTPS
-   - **CORS misconfiguration** - Check jinear-message `ALLOWED_ORIGIN` environment variable
-   - **Firewall blocking WebSocket** - Ensure nothing blocks the upgrade request
-
-4. **Test WebSocket directly:**
-   ```bash
-   # Check if message service is responding
-   curl -I https://message.your-domain.com
-   ```
-
-5. **Restart services:**
-   ```bash
-   docker compose restart jinear-caddy jinear-message jinear-web
-   ```
 
 ### Database connection issues
 ```bash

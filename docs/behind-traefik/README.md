@@ -10,7 +10,7 @@ There are two approaches to run Jinear behind Traefik:
 
 ### Option 1: Direct Service Connection
 
-Connect Traefik directly to each Jinear service (web, api, files, pages, message). This requires configuring individual routes for each service.
+Connect Traefik directly to each Jinear service (web, api, files). This requires configuring individual routes for each service.
 
 See the [main architecture documentation](../../README.md#architecture) for service details and ports.
 
@@ -94,20 +94,6 @@ http:
       service: jinear-caddy
       tls:
         certResolver: letsencrypt
-    jinear-pages:
-      rule: "Host(`pages.jinear.example.com`)"
-      entryPoints:
-        - websecure
-      service: jinear-caddy
-      tls:
-        certResolver: letsencrypt
-    jinear-message:
-      rule: "Host(`message.jinear.example.com`)"
-      entryPoints:
-        - websecure
-      service: jinear-caddy
-      tls:
-        certResolver: letsencrypt
 
   services:
     jinear-caddy:
@@ -123,7 +109,7 @@ Add `traefik-net` network to the Caddy container in your Jinear `docker-compose.
 ```yaml
 jinear-caddy:
   container_name: jinear-caddy
-  image: registry.gitlab.com/140crafts/use-jinear/jinear-caddy-custom:latest
+  image: caddy:2.10.0
   restart: unless-stopped
   cap_add:
     - NET_ADMIN
@@ -152,8 +138,6 @@ Since Traefik handles TLS termination, Caddy must listen on HTTP only.
 **Key changes:**
 - Add `auto_https off` to disable Caddy's automatic HTTPS
 - Change all `https://` site blocks to `http://`
-- Change the catch-all from `:443` to `:80`
-- Remove `tls { on_demand }` blocks
 
 Example `Caddyfile`:
 
@@ -163,19 +147,8 @@ Example `Caddyfile`:
     auto_https off
 }
 
-http://localhost:1100 {
-    bind 127.0.0.1
-
-    route /v1/domain/validate {
-        reverse_proxy http://jinear-core:8008 {
-            header_up Host api.jinear.example.com
-            header_up Authorization "Bearer YOUR_CADDY_VALIDATION_TOKEN"
-        }
-    }
-}
-
 http://jinear.example.com {
-    reverse_proxy http://jinear-web:3000
+    reverse_proxy http://jinear-app:80
 }
 
 http://api.jinear.example.com {
@@ -184,20 +157,6 @@ http://api.jinear.example.com {
 
 http://files.jinear.example.com {
     reverse_proxy http://jinear-minio:9000
-}
-
-http://pages.jinear.example.com {
-    reverse_proxy http://jinear-pages:3000
-}
-
-http://message.jinear.example.com {
-    reverse_proxy http://jinear-message:3001
-}
-
-:80 {
-    reverse_proxy http://jinear-pages:3000 {
-        header_up Host {host}
-    }
 }
 ```
 

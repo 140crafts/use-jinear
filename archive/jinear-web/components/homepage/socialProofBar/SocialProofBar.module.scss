@@ -1,0 +1,24 @@
+@import "/styles/breakpoints.scss";
+
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  opacity: 0.45;
+  padding: 1rem 0;
+}
+
+.item {
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-family: "SF Mono", "Fira Code", monospace;
+}
+
+.divider {
+  font-size: 0.75rem;
+  opacity: 0.4;
+}

@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1ch;
+}
+
+.emptyNewItem {
+  opacity: 0.5;
+}
+
+.contentContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
+
+.input {
+  height: 1.75rem;
+  width: 100%;
+  background-color: unset !important;
+  padding-left: 2.5px;
+}
+
+.input:hover {
+  background-color: var(--c-primary-shade-0) !important;
+}
+
+.inputChecked {
+  opacity: 0.8;
+}

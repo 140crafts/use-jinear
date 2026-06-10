@@ -1,0 +1,38 @@
+.infinite-loader {
+    height: 2px;
+    width: 100%;
+    background-color: var(--c-primary);
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+}
+
+.infinite-loader::before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+
+    background: linear-gradient(
+            90deg,
+            transparent 0%,
+            var(--c-secondary-shade-1) 50%,
+            transparent 100%
+    );
+
+    /*animation: load-infinite 1.25s cubic-bezier(0.4, 0.0, 0.2, 1) infinite;*/
+    animation: load-infinite 1.35s ease-in-out infinite alternate;
+}
+
+@keyframes load-infinite {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}

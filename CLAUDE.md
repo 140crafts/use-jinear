@@ -4,15 +4,11 @@ Use this as background context. Do not implement anything from this section — 
 
 ## Project Responsibilities
 
-**Jinear** is a project management suite, tasks, calendar, team chat, and file storage. It is open source.
+**Jinear** is a project management suite, tasks, calendar, and file storage. It is open source.
 Jinear consists of several projects that work together. Projects lives within single monorepo.
 
 ### docs
 - Documents and tutorials about jinear setup
-
-### jinear-caddy-custom
-- caddy with module: dns.providers.cloudflare
-- handles traffic and reroutes it. Manages ssl certificates etc.
 
 ### jinear-core (main backend)
 - Auth (login, registration, sessions)
@@ -24,36 +20,89 @@ Jinear consists of several projects that work together. Projects lives within si
 - Installation script for self hosted option.
 - Helps user to fill config files easyly 
 
-### jinear-message-service
-- Handles websockets for real time messaging.
-- account ids are rooms, jinear-core sends messages through internal endpoint to here and then message send to related account's room.
-- Users trigger jinear-core's restfull api, that api stores message then calls message-service to send message to receiving account. 
-
-### jinear-pages
-- Each project on jinear gets project feed which can be public or restricted to project members only. It's like projects twitter profile. Can also be used for blogs etc. 
-
 ### jinear-shared-libs
 - Contains shared libraries that can be used across Jinear applications.
 - If user wants to create an another service to live within existing stack anything might be shared goes here.
 - jinear-rate-limiter: Adds rate limiting with given config. 
 
-### jinear-web (main frontend)
-- Jinear's main frontend.
+### jinear-app (main frontend)
+- Jinear's current main frontend — a Vite + React (React 19) single-page app
+  served as an installable PWA (vite-plugin-pwa / Workbox, app splash screens +
+  manifest). Replaces `jinear-web`, and the PWA install also supersedes the old
+  WebView mobile wrapper.
+- Routing via react-router-dom; state via Redux Toolkit + redux-persist; rich
+  text via TipTap; forms via react-hook-form.
+- Push notifications via Firebase (FCM); product analytics via PostHog.
+- Runtime env injected with `@import-meta-env` (env values resolved at container
+  start, not baked at build). Deployed as a static site behind its own
+  `Caddyfile` (see `jinear-app/Dockerfile`).
+- Scope vs the old `jinear-web`: chat and project Pages features are intentionally
+  dropped (their backing services are archived).
 
-### jinear-webview-mobile
-- Jinear's WebView mobile wrapper
-- Uses app ↔ web postMessage patterns
+### jinear-site (marketing site + blog)
+- Public-facing content site: marketing pages, the pricing page, and the blog
+  (the blog moved here from the old `blog.jinear.co` subdomain to `/blog`).
+- Next.js 14 App Router with `output: "export"` → a fully static site (real
+  pre-rendered HTML per route, for SEO + AI-bot friendliness). Served behind
+  its own `Caddyfile` like `jinear-app` (no SPA fallback).
+- Blog is file-based (no CMS): one Markdown/MDX file per post under
+  `jinear-site/content/blog/`, frontmatter parsed with `gray-matter`, rendered
+  with `next-mdx-remote`. Add a file → commit → CI rebuilds.
+- SEO/AI-bot infra: per-route metadata, JSON-LD (Organization / Product /
+  BlogPosting), `app/sitemap.ts`, `app/robots.ts` (allows AI crawlers),
+  `/llms.txt`, and `/blog/rss.xml`.
+- Reuses jinear-web's design system (`styles/*`) and homepage/pricing components,
+  with the Redux/auth coupling stripped; English-only for now. CTAs link to the
+  app via `NEXT_PUBLIC_APP_URL`.
+- Hosted topology: apex `jinear.co` → jinear-site, `app.jinear.co` → jinear-app.
+  Self-host default is unchanged (app stays on the apex); the marketing site is
+  an optional, hosted-oriented add-on.
+
+## Archived / Deprecated Projects (`archive/`)
+
+These projects have been removed from the active build and deployment. They are
+kept under `archive/` for git history and future code reference only — they are
+**not** built (no CI job) or run (no compose service). Do not modify or depend
+on them; use them as reference when building their replacements.
+
+### archive/jinear-caddy-custom
+- caddy with module: dns.providers.cloudflare; handled traffic, rerouting, ssl certificates.
+- Removed because chat and project Pages were removed, so the gateway now runs
+  stock `caddy` (the cloudflare DNS module / on-demand TLS existed only to serve
+  Pages' custom project domains).
+
+### archive/jinear-message-service
+- Removed with the chat feature.
+- Previously: handled websockets for real time messaging. Account ids are rooms;
+  jinear-core stored messages then called this service's internal endpoint to
+  deliver them to the receiving account's room.
+
+### archive/jinear-pages
+- Removed with the project Pages feature.
+- Previously: each project got a public/restricted project feed (like a project's
+  twitter profile, also usable for blogs).
+
+### archive/jinear-webview-mobile
+- Jinear's WebView mobile wrapper. Used app ↔ web postMessage patterns.
+
+### archive/jinear-web
+- The original Next.js (React) frontend.
+- Replaced by `jinear-app` (Vite + React 19 PWA, the main frontend) and
+  `jinear-site` (marketing site + blog). Prefer `jinear-app` for new app work and
+  `jinear-site` for new marketing/blog content; use this folder as reference only.
 
 ## Tech Stack
 
-| Layer            | Tech                          |
-|------------------|-------------------------------|
-| Backend services | Java, Spring Boot             |
-| jinear-web       | Next.js (React)               |
-| jinear-mobile    | Expo (React Native)           |
-| Gateway          | Caddy                         |
-| Storage          | Google Cloud Storage or MinIO |
-| Payments         | Paddle (web)                  |
+| Layer                       | Tech                                                  |
+|-----------------------------|-------------------------------------------------------|
+| Backend services            | Java, Spring Boot                                     |
+| jinear-app (main frontend)  | Vite + React 19 (PWA), react-router, Redux Toolkit    |
+| jinear-site (marketing/blog)| Next.js 14 static export (`output: export`) + MDX     |
+| Gateway                     | Caddy                                                 |
+| Storage                     | Google Cloud Storage or MinIO                         |
+| Payments                    | Paddle (web)                                          |
+| Push notifications          | Firebase (FCM)                                         |
+| Product analytics           | PostHog                                                |
 
 ## Dev Configuration
 
@@ -67,4 +116,4 @@ Jinear consists of several projects that work together. Projects lives within si
 
 ## How To Use This Context
 
-Pair this file with a task-specific prompt structured like:
+Pair this file with a task-specific prompt structured like PROMPT_TEMPLATE.md

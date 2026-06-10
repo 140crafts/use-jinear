@@ -1,0 +1,28 @@
+.infoContainer {
+  display: flex;
+  /* align-items: center;
+  justify-content: center; */
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: block;
+}
+
+.profilePic {
+  height: 85px;
+  width: 85px;
+}
+
+.accountProfilePictureContainer {
+  height: 25px;
+  width: 25px;
+}
+
+.profilePicAccount {
+  height: 25px !important;
+  width: 25px !important;
+}

@@ -1,0 +1,12 @@
+.infoText {
+  text-align: justify;
+}
+
+.addButton {
+  gap: 1ch;
+}
+
+.subInfoText {
+  opacity: 0.8;
+  font-size: 0.6rem;
+}

@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 1rem;
+}
+
+.button {
+  background-color: var(--c-ERROR_RED);
+  color: var(--c-BABY_POWDER);
+}
+.button:hover {
+  background-color: var(--c-ERROR_RED);
+  color: var(--c-BABY_POWDER);
+  opacity: 0.8;
+}

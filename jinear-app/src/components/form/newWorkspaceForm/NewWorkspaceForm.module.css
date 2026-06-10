@@ -1,0 +1,125 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  z-index: 999;
+  position: relative;
+  gap: 1rem;
+}
+
+.label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-height: 3.4rem;
+  overflow: visible;
+}
+
+.titleContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.label[data-tooltip-new-workspace-handle] {
+  position: relative;
+  height: auto;
+}
+.label[data-tooltip-new-workspace-handle]:hover:after {
+  content: attr(data-tooltip-new-workspace-handle);
+  background-color: var(--c-secondary);
+  color: var(--c-primary);
+  right: 0;
+  bottom: -6.5rem;
+  padding: 0.5em;
+  border-radius: var(--border-radius);
+  position: absolute;
+  white-space: inherit;
+  z-index: 99;
+}
+
+.handleInput {
+  text-transform: uppercase;
+  width: 6rem;
+}
+
+.footerContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  position: sticky;
+  bottom: 0;
+  padding: 1rem 0;
+  z-index: 3;
+}
+
+.footerButton {
+  min-width: 6rem;
+}
+
+.link {
+  opacity: 0.8;
+  font-size: 0.7rem;
+  color: var(--c-link-color);
+}
+
+.urlInputsContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.hostInput {
+  background: var(--c-primary-shade-0) !important;
+  color: var(--c-text-color) !important;
+  opacity: 0.85;
+  font-weight: 600;
+  caret-color: var(--c-text-color) !important;
+  border-color: transparent;
+  border-width: 1px;
+  border-radius: var(--border-radius);
+  border-style: solid;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--fade);
+  text-decoration: none;
+  padding: 7.5px;
+  padding-right: 0;
+  min-height: 1rem;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.usernameInput {
+  flex: 1;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  background: var(--c-primary-shade-0) !important;
+  padding-left: 0;
+  min-width: 1rem;
+}
+
+.unsetWorkspaceTypeButton {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 1rem;
+  font-weight: 600;
+}
+
+.photoTitleContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.usernameSuggestionsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}

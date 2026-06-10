@@ -1,0 +1,17 @@
+.taskLayout {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.taskBody {
+  flex: 1;
+}
+
+.taskInfo {
+  background-color: unset;
+}
+
+.taskActivitiesTitle {
+  font-size: 0.8rem;
+}

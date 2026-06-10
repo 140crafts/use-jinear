@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--border-radius);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding-left: 2rem;
+  padding-right: 0.5rem;
+  padding-bottom: 0.25rem;
+  gap: 0.125rem;
+}
+
+.hasMoreButton {
+  justify-content: flex-start !important;
+  padding-left: 1.5rem !important;
+}

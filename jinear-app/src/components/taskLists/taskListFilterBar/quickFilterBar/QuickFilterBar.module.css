@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-end;
+    /* gap: 0.5rem; */
+}
+
+.button {
+    color: var(--c-link-color) !important;
+    padding: 0.25rem 0.75rem !important;
+}
+
+.button:hover {
+    color: var(--c-link-color);
+}
+
+.selected {
+    font-weight: bold;
+    border-style: solid;
+    border-color: var(--c-link-color);
+}

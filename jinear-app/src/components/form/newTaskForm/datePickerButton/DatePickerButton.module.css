@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  flex-direction: row;
+}
+
+.deselectButton {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+.selectedButton {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}
+
+.timePickerToggleButton {
+  border-radius: 0 !important;
+  border-left-width: 1px !important;
+  border-left-style: solid !important;
+  border-left-color: var(--c-primary-shade-1) !important;
+}
+
+.hourSelectClassName {
+  border-radius: 0 !important;
+  border-left-width: 1px !important;
+  border-left-style: solid !important;
+  border-left-color: var(--c-primary-shade-1) !important;
+  padding: 0.25rem 0.75rem !important;
+}
+
+.minuteSelectClassName {
+  border-radius: 0 !important;
+  border-right-width: 1px !important;
+  border-right-style: solid !important;
+  border-right-color: var(--c-primary-shade-1) !important;
+  padding: 0.25rem 0.75rem !important;
+}
+
+.labelButton {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0.5rem !important;
+}

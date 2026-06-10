@@ -1,0 +1,14 @@
+.button {
+  display: flex !important;
+  flex-direction: row !important;
+  gap: 2ch !important;
+  justify-content: flex-start !important;
+}
+
+.iconContainer {
+  min-width: 20px;
+}
+
+.label {
+  text-align: left;
+}

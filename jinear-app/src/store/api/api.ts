@@ -1,0 +1,115 @@
+import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import type {Action} from "@reduxjs/toolkit";
+import {REHYDRATE} from "redux-persist";
+import {API_ROOT} from "@/util/constants.ts";
+
+
+const baseQuery = fetchBaseQuery({
+    baseUrl: API_ROOT,
+    prepareHeaders: (headers, {}) => {
+        return headers;
+    },
+    credentials: "include",
+});
+
+export const tagTypes = [
+    "v1/account",
+    "v1/workspace/member/{workspaceId}/list",
+    "v1/team/from-workspace/{workspaceId}",
+    "v1/team/member/list/{teamId}",
+    "v1/topic/list/{teamId}",
+    "v1/task/from-workspace/{workspaceName}/{taskTag}",
+    "v1/team/workflow-status/{teamId}/list",
+    "v1/topic/{topicId}",
+    "v1/task/reminder/job/{taskReminderId}/next",
+    "v1/workspace/member/invitation/list/{workspaceId}",
+    "v1/workspace/member/invitation/info/{token}",
+    "v1/account/communication-permission",
+    "v1/notification/event/{workspaceId}/unread-count",
+    "v1/task/checklist",
+    "v1/task/{taskId}/subscription",
+    "v1/task/{taskId}/subscription/list",
+    "v1/task-board/entry/from-task-board/{taskBoardId}",
+    "v1/task-board/entry/from-task-board/{taskBoardId}/filter",
+    "v1/task-board/list/related-with-task/{taskId}",
+    "v1/task/list/filter",
+    "v1/topic/list/{teamId}/search",
+    "v1/task-board/list/${workspaceId}/team/${teamId}",
+    "v1/topic/list/{teamId}/retrieve-exact",
+    "v1/topic/tag/{topicTag}/workspace/{workspaceId}/team/{teamId}",
+    "v1/task-board/list/{workspaceId}/team/{teamId}",
+    "v1/task-board/list/{workspaceId}/team/{teamId}/filter",
+    "v1/task/media/{taskId}",
+    "v1/task/media/from-team/{teamId}",
+    "v1/payments/info/workspace/{workspaceId}/subscription",
+    "v1/task/comment/from-task/{taskId}",
+    "v1/team/member/memberships/{workspaceId}",
+    "v1/workspace/activity/filter",
+    "v1/oauth/google/redirect-info/login",
+    "v1/feed/content/workspace/{workspaceId}/{feedId}",
+    "v1/feed/content/workspace/{workspaceId}/{feedId}/item/{itemId}",
+    "v1/team/{teamId}/team-state/{teamState}",
+    "v1/oauth/google/redirect-info/attach-mail",
+    "v1/oauth/google/redirect-info/attach-calendar",
+    "v1/feed/member/memberships/{workspaceId}",
+    "v1/task/feed-item/from-task/req.taskId",
+    "v1/feed/member/list/{feedId}",
+    "v1/task-analytics/{workspaceId}/team/{teamId}",
+    "v1/notification/event/{workspaceId}",
+    "v1/notification/event/{workspaceId}/team/{teamId}",
+    "v1/task/search/${workspaceId}",
+    "v1/calendar/member/memberships/{workspaceId}",
+    "v1/calendar/member/list/{calendarId}",
+    "v1/calendar/event/filter",
+    "v1/calendar/event/exports/workspace/{workspaceId}/key",
+    "v1/account/delete",
+    "v1/account/delete/eligibility",
+    "v1/account/delete/confirm/{token}",
+    "v1/messaging/channel/member/memberships/{workspaceId}",
+    "v1/messaging/channel/member/list/{channelId}",
+    "v1/messaging/thread/channel/{channelId}",
+    "v1/messaging/message/thread/{threadId}",
+    "v1/messaging/thread/{threadId}",
+    `v1/messaging/conversation/participated/{workspaceId}`,
+    `v1/messaging/message/conversation/{conversationId}`,
+    `v1/messaging/channel/workspace/{workspaceId}`,
+    "v1/project/query/assigned/{workspaceId}",
+    "v1/project/query/all/{workspaceId}",
+    "v1/project/query/archived/{workspaceId}",
+    `v1/project/query/{projectId}`,
+    `v1/project/query/project-permissions/{projectId}`,
+    `v1/project/query/{projectId}/info`,
+    "v1/project/public-feed/{projectId}",
+    "v1/project/public-feed/{projectId}/info",
+    `v1/project/post/comment/list/project/{projectId}/post/{postId}`,
+    "v1/task-board/list/{workspaceId}/filter",
+    "v1/messaging/token",
+    "v1/captcha/generate",
+    "v1/material/list/search",
+    "v1/material/{materialId}",
+    "v1/material/access/{materialId}",
+    "v1/workspace/media/{workspaceId}/limits"
+];
+
+export const tagTypesToInvalidateOnNewBackgroundActivity = () => {
+    return tagTypes.filter((tag) => tag != "v1/account");
+};
+
+function isRehydrateAction(action: Action): action is Action<typeof REHYDRATE> & { payload: any } {
+    return action.type === REHYDRATE;
+}
+
+export const api = createApi({
+    reducerPath: 'api',
+    baseQuery: baseQuery,
+    tagTypes,
+    endpoints: () => ({}),
+    extractRehydrationInfo(action, {reducerPath}) {
+        if (isRehydrateAction(action)) {
+            return action.payload?.[reducerPath];
+        }
+    },
+    keepUnusedDataFor: 60 * 60 * 24,
+    refetchOnReconnect: true,
+    refetchOnMountOrArgChange: 180
+});

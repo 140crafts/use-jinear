@@ -1,0 +1,28 @@
+.container {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.profilePic {
+  height: 35px !important;
+  width: 35px !important;
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  text-align: right;
+}
+.username {
+  font-weight: 500;
+}
+
+.email {
+  font-size: 0.75rem;
+}
+
+.profilePicContainer {
+  position: relative;
+}

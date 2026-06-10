@@ -1,6 +1,6 @@
-# Jinear - Task Manager, Calendar, Messaging & File Sharing
+# Jinear - Task Manager, Calendar & File Sharing
 
-A collaborative task management and calendar application designed to streamline productivity and team coordination, now enhanced with features like real-time messaging and file sharing.
+A collaborative task management and calendar application designed to streamline productivity and team coordination, enhanced with file sharing.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/projects-dark.png">
@@ -71,7 +71,6 @@ Your Jinear instance will be available at:
 - 🌐 **Application**: `https://your-domain.com`
 - 🔧 **API**: `https://api.your-domain.com`
 - 📁 **Files**: `https://files.your-domain.com`
-- 💬 **Message/WebSocket**: `https://message.your-domain.com`
 
 ### Manual Installation
 
@@ -117,14 +116,19 @@ can create your own compose file and configure from scratch.
 | Service              | Required                                                                           | Description                                                                             | Default Port       |
 |----------------------|------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|--------------------|
 | **jinear-core**      | Required                                                                           | Main backend API handling authentication, task management, calendar, and business logic | 8008 Internal      |
-| **jinear-web**       | Required                                                                           | Frontend application providing the main user interface                                  | 3000 Internal      |
-| **jinear-pages**     | Required                                                                           | Pages service for public-facing content and documentation                               | 3000 Internal      |
-| **jinear-message**   | Required                                                                           | WebSocket server for real-time notifications and live updates                           | 3001 Internal      |
+| **jinear-app**       | Required                                                                           | Installable PWA (Vite + React 19) serving the main user interface                       | 80 Internal        |
 | **jinear-db**        | Can be replaced with external PostgreSQL (Needs config change).                    | PostgreSQL database storing all application data                                        | 5432 Internal      |
 | **jinear-redis**     | Can be replaced with external Redis (Needs config change).                         | Redis cache for session management and real-time data                                   | 6379 Internal      |
 | **jinear-minio**     | Can be replaced with external MinIO or Google Cloud Storage (Needs config change). | MinIO object storage for file uploads and attachments                                   | 9000/9001 Internal |
 | **jinear-caddy**     | Can be changed with other web servers. Replacing needs custom configuration.       | Caddy reverse proxy handling SSL/TLS termination and routing                            | 80/443 External    |
 | **jinear-db-backup** | Optional (Recommended)                                                             | Automated database backup service with configurable retention                           | -                  |
+
+> **Note on the marketing site & blog:** the public marketing pages, pricing
+> page, and blog (at `jinear.co/blog`) are a separate statically-exported
+> Next.js project, [`jinear-site`](./jinear-site/). It is used for the hosted
+> jinear.co deployment and is **not** part of the default self-host stack — a
+> self-hosted instance just serves the app on your domain. See
+> [jinear-site/README.md](./jinear-site/README.md) to run it yourself.
 
 ## Getting Started
 

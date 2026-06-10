@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  /* align-items: center; */
+  /* justify-content: center; */
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.successTitle {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.infoText {
+  text-align: justify;
+}
+
+.profilePic {
+  height: 85px;
+  width: 85px;
+}
+
+.actionButtonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}

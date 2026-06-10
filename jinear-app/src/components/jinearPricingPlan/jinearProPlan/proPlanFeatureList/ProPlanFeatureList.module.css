@@ -1,0 +1,15 @@
+.infoIcon {
+    display: inline-block;
+    margin-left: 0.4em;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    font-size: 0.85rem;
+}
+
+.list a {
+    word-break: break-word !important;
+}

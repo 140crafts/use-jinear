@@ -1,0 +1,59 @@
+.container {
+    flex: 1;
+    border-collapse: collapse !important;
+    position: relative;
+}
+
+.container tbody {
+    /*position: relative;*/
+}
+
+.container tbody::after {
+    content: "";
+    position: absolute;
+    /*top: 0;*/
+    top: var(--material-row-view-row-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    background: repeating-linear-gradient(
+            to bottom,
+            transparent 0,
+            transparent var(--material-row-view-row-height),
+            var(--c-primary-shade-0) var(--material-row-view-row-height),
+            var(--c-primary-shade-0) calc(var(--material-row-view-row-height) * 2)
+    );
+    z-index: -1;
+}
+
+
+.container td {
+    vertical-align: middle
+}
+
+.container th {
+    border: none;
+    text-align: left;
+}
+
+.container tr {
+    align-items: center;
+    height: var(--material-row-view-row-height) !important;
+    min-height: var(--material-row-view-row-height) !important;
+    max-height: var(--material-row-view-row-height) !important;
+}
+
+.header {
+    margin-bottom: .5rem;
+    border-bottom: solid;
+    border-bottom-color: var(--c-primary-shade-1);
+}
+
+.accessLabel {
+    text-align: center;
+}
+
+.container tr:nth-child(even) {
+    background-color: var(--c-primary-shade-0);
+}

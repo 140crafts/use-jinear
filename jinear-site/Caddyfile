@@ -1,0 +1,30 @@
+# Plain HTTP on :80. TLS is expected to be terminated by an upstream
+# reverse proxy / load balancer / ingress, not by this container.
+#
+# Unlike jinear-app (a client-rendered SPA), this is a statically exported site:
+# every route has its own pre-rendered HTML, so there is NO SPA fallback to
+# index.html — unknown paths return the real 404 page.
+
+:80 {
+    root * /srv
+    encode zstd gzip
+
+    # Next emits content-hashed assets under /_next/static — cache forever.
+    @assets path /_next/static/*
+    header @assets Cache-Control "public, max-age=31536000, immutable"
+
+    # HTML must revalidate so a redeploy is picked up immediately.
+    @html path / *.html */
+    header @html Cache-Control "no-cache"
+
+    # `trailingSlash: true` means routes are exported as <path>/index.html.
+    try_files {path} {path}/index.html {path}.html
+    file_server
+
+    # Serve the static 404 page with a real 404 status (avoids SEO soft-404s)
+    # instead of falling back to index.html like an SPA would.
+    handle_errors {
+        rewrite * /404.html
+        file_server
+    }
+}

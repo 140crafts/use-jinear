@@ -1,0 +1,21 @@
+.listTitle {
+    font-size: 1.15rem;
+}
+
+.list {
+    background: unset !important;
+    gap: 2.5rem;
+}
+
+.divider {
+    height: 1px;
+    width: 100%;
+    background: linear-gradient(90deg, var(--c-primary-shade-1) 0%, var(--c-primary) 100%);
+}
+
+.emptyStateContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+}

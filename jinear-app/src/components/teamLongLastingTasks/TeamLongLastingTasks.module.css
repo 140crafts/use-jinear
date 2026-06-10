@@ -1,0 +1,13 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  background: linear-gradient(0, var(--c-primary), 40%, var(--c-primary-shade-0-op05));
+  flex: 1;
+}
+
+.taskListContent {
+  background: unset !important;
+}

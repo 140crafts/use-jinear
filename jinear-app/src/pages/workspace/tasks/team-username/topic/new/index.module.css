@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: var(--full);
+}
+
+.formContainer {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  width: var(--content);
+  margin-top: 2rem;
+}
