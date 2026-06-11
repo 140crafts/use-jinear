@@ -17,6 +17,11 @@
     @html path / *.html */
     header @html Cache-Control "no-cache"
 
+    # Legacy bookmark: the old jinear.co/home was the app's entry point, which now
+    # lives at app.jinear.co. 301 so bookmarks/search engines update permanently.
+    @home path /home /home/
+    redir @home https://app.jinear.co 301
+
     # `trailingSlash: true` means routes are exported as <path>/index.html.
     try_files {path} {path}/index.html {path}.html
     file_server
