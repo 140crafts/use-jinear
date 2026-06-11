@@ -3,6 +3,7 @@ import {useAccountsPreferredWorkspaceIfLoggedIn} from "@/hooks/useAccountsPrefer
 import {selectCurrentAccountId, selectWorkspaceFromWorkspaceUsername} from "@/store/slice/accountSlice";
 import {useAppDispatch, useTypedSelector} from "@/store";
 import {teamApi} from "@/store/api/teamApi";
+import {getDeviceProfile, type DeviceTier} from "@/util/deviceProfile";
 import Logger from "@/util/logger";
 import React, {useEffect} from "react";
 import {useLocation} from "react-router-dom";
@@ -15,7 +16,19 @@ import {
 
 const logger = Logger("OfflinePrefetchManager");
 
-const STAGGER_MS = 150;
+const STAGGER_MS: Record<DeviceTier, number> = {high: 150, low: 600};
+// Keeps the prefetch burst clear of first paint and the initial route's own queries.
+const START_DELAY_MS: Record<DeviceTier, number> = {high: 4_000, low: 8_000};
+
+// Safari has no requestIdleCallback; fall back to a short timeout there.
+const scheduleIdle = (fn: () => void): (() => void) => {
+    if (typeof requestIdleCallback === "function") {
+        const id = requestIdleCallback(fn, {timeout: 10_000});
+        return () => cancelIdleCallback(id);
+    }
+    const id = setTimeout(fn, 200);
+    return () => clearTimeout(id);
+};
 
 // Warms the persisted RTK Query cache with the canonical query set of the active
 // workspace (tasks, calendar spans, files, inbox, activities) so default routes render
@@ -35,41 +48,59 @@ const OfflinePrefetchManager: React.FC = () => {
         if (!accountId || !workspaceId || !online) {
             return;
         }
+        const {tier, saveData, slowNetwork} = getDeviceProfile();
+        if (saveData || slowNetwork) {
+            // Prefetch is pure offline warmth; on metered/2g connections the page-level
+            // queries alone are the right amount of traffic.
+            logger.log({message: "Skipping offline prefetch", saveData, slowNetwork});
+            return;
+        }
         let cancelled = false;
         const subscriptions: PrefetchSubscription[] = [];
-        const timeoutIds: ReturnType<typeof setTimeout>[] = [];
+        const cancelFns: (() => void)[] = [];
 
         const subscribeStaggered = (entries: PrefetchEntry[]) => {
             entries.forEach((prefetchEntry, index) => {
-                timeoutIds.push(
-                    setTimeout(() => {
-                        if (!cancelled) {
-                            subscriptions.push(prefetchEntry(dispatch));
-                        }
-                    }, index * STAGGER_MS)
-                );
+                const timeoutId = setTimeout(() => {
+                    cancelFns.push(
+                        scheduleIdle(() => {
+                            if (!cancelled) {
+                                subscriptions.push(prefetchEntry(dispatch));
+                            }
+                        })
+                    );
+                }, index * STAGGER_MS[tier]);
+                cancelFns.push(() => clearTimeout(timeoutId));
             });
         };
 
-        logger.log({message: "Prefetching offline query set", workspaceId});
-        subscribeStaggered(buildWorkspaceEntries({workspaceId, accountId}));
+        const start = () => {
+            if (cancelled) {
+                return;
+            }
+            logger.log({message: "Prefetching offline query set", workspaceId, tier});
+            subscribeStaggered(buildWorkspaceEntries({workspaceId, accountId, tier}));
 
-        const teamsSubscription = dispatch(teamApi.endpoints.retrieveWorkspaceTeams.initiate(workspaceId));
-        subscriptions.push(teamsSubscription);
-        teamsSubscription
-            .unwrap()
-            .then((teamsResponse) => {
-                if (!cancelled) {
-                    subscribeStaggered(buildTeamEntries({workspaceId, teams: teamsResponse.data ?? []}));
-                }
-            })
-            .catch(() => {
-                // Failed or went offline mid-flight; page hooks and refetchOnReconnect recover.
-            });
+            const teamsSubscription = dispatch(teamApi.endpoints.retrieveWorkspaceTeams.initiate(workspaceId));
+            subscriptions.push(teamsSubscription);
+            teamsSubscription
+                .unwrap()
+                .then((teamsResponse) => {
+                    if (!cancelled) {
+                        subscribeStaggered(buildTeamEntries({workspaceId, teams: teamsResponse.data ?? [], tier}));
+                    }
+                })
+                .catch(() => {
+                    // Failed or went offline mid-flight; page hooks and refetchOnReconnect recover.
+                });
+        };
+
+        const startTimeoutId = setTimeout(start, START_DELAY_MS[tier]);
 
         return () => {
             cancelled = true;
-            timeoutIds.forEach(clearTimeout);
+            clearTimeout(startTimeoutId);
+            cancelFns.forEach((cancel) => cancel());
             subscriptions.forEach((subscription) => subscription.unsubscribe());
         };
     }, [accountId, workspaceId, online, dispatch]);

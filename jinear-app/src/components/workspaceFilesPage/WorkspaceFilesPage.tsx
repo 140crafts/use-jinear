@@ -13,6 +13,7 @@ import {useQueryState, useSetQueryStateMultiple} from "@/hooks/useQueryState";
 import MaterialListView from "@/components/workspaceFilesPage/materialListView/MaterialListView";
 import MaterialViewContext from "@/components/workspaceFilesPage/context/MaterialViewContext";
 import Logger from "@/util/logger";
+import {getDeviceProfile} from "@/util/deviceProfile";
 import DropZone from "@/components/dropZone/DropZone";
 import useTranslation from "@/locals/useTranslation";
 import {useAppDispatch} from "@/store";
@@ -88,6 +89,11 @@ const WorkspaceFilesPage: React.FC<WorkspaceFilesPageProps> = ({workspace, filte
                 return Array.from(map.values());
             });
             children.hasNext && setPage(page => page + 1);
+
+            const {tier, saveData, slowNetwork} = getDeviceProfile();
+            if (tier === "low" || saveData || slowNetwork) {
+                return;
+            }
 
             const MAX_PREFETCH = 10;
             const DELAY_MS = 150;

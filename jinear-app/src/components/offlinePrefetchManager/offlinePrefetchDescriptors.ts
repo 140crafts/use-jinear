@@ -12,6 +12,7 @@ import type {
     TeamDto
 } from "@/model/be/jinear-core";
 import type {AppDispatch} from "@/store";
+import type {DeviceTier} from "@/util/deviceProfile";
 import {calendarEventApi} from "@/store/api/calendarEventApi";
 import {calendarMemberApi} from "@/store/api/calendarMemberApi";
 import {materialListingApi} from "@/store/api/materialListingApi";
@@ -46,13 +47,15 @@ const calendarViewingDates = (today: Date) => ({
     twoDay: [addDays(today, -2), today, addDays(today, 2)]
 });
 
-const calendarEntries = (workspaceId: string): PrefetchEntry[] => {
+const calendarEntries = (workspaceId: string, tier: DeviceTier): PrefetchEntry[] => {
     const today = startOfDay(new Date());
     const viewingDates = calendarViewingDates(today);
+    // Low tier keeps only the period each view opens on; prev/next warmth is skipped.
+    const pick = (dates: Date[]) => (tier === "low" ? [today] : dates);
     const periods: ICalendarViewPeriod[] = [
-        ...viewingDates.month.map(computeMonthViewPeriod),
-        ...viewingDates.week.map(computeWeekViewPeriod),
-        ...viewingDates.twoDay.map(computeTwoDayViewPeriod)
+        ...pick(viewingDates.month).map(computeMonthViewPeriod),
+        ...pick(viewingDates.week).map(computeWeekViewPeriod),
+        ...pick(viewingDates.twoDay).map(computeTwoDayViewPeriod)
     ];
     return periods.map(({periodStart, periodEnd}) =>
         entry(calendarEventApi.endpoints.filterCalendarEvents, {
@@ -76,9 +79,10 @@ const materialSearchFilterVariants: Array<{
     {materialSearchSortType: "IDATE_DESC", materialSearchContentFilterType: "SHARED"}
 ];
 
-export const buildWorkspaceEntries = ({workspaceId, accountId}: {
+export const buildWorkspaceEntries = ({workspaceId, accountId, tier = "high"}: {
     workspaceId: string;
     accountId: string;
+    tier?: DeviceTier;
 }): PrefetchEntry[] => [
     entry(teamMemberApi.endpoints.retrieveMemberships, {workspaceId}),
     // /tasks/last-activities (LastWorkspaceActivitiesList)
@@ -96,9 +100,10 @@ export const buildWorkspaceEntries = ({workspaceId, accountId}: {
     // calendar + files side menus
     entry(calendarMemberApi.endpoints.retrieveCalendarMemberships, {workspaceId}),
     entry(workspaceMediaApi.endpoints.retrieveWorkspaceMediaLimits, {workspaceId}),
-    ...calendarEntries(workspaceId),
-    // /files root + quick filters (FilesPage -> WorkspaceFilesPage)
-    ...materialSearchFilterVariants.map((variant) =>
+    ...calendarEntries(workspaceId, tier),
+    // /files root + quick filters (FilesPage -> WorkspaceFilesPage); low tier warms
+    // only the root folder, the quick filters load on demand.
+    ...(tier === "low" ? materialSearchFilterVariants.slice(0, 1) : materialSearchFilterVariants).map((variant) =>
         entry(materialListingApi.endpoints.searchMaterial, {
             workspaceId,
             page: 0,
@@ -108,11 +113,16 @@ export const buildWorkspaceEntries = ({workspaceId, accountId}: {
     )
 ];
 
-export const buildTeamEntries = ({workspaceId, teams}: {
+// Low tier warms only the first few teams and skips their file listings; the team
+// task list and workflow statuses stay because they back the default team route.
+const LOW_TIER_TEAM_LIMIT = 3;
+
+export const buildTeamEntries = ({workspaceId, teams, tier = "high"}: {
     workspaceId: string;
     teams: TeamDto[];
+    tier?: DeviceTier;
 }): PrefetchEntry[] =>
-    teams.flatMap((team) => [
+    (tier === "low" ? teams.slice(0, LOW_TIER_TEAM_LIMIT) : teams).flatMap((team) => [
         // /tasks/:teamUsername/tasks (MultiViewTaskList) — nulls mirror useQueryState defaults
         entry<ExtendedTaskFilterRequest>(taskListingApi.endpoints.filterTasks, {
             page: 0,
@@ -130,5 +140,7 @@ export const buildTeamEntries = ({workspaceId, teams}: {
         }),
         entry(teamWorkflowStatusApi.endpoints.retrieveAllFromTeam, {teamId: team.teamId}),
         // /tasks/:teamUsername/files (TeamFileList)
-        entry(taskMediaApi.endpoints.retrieveTaskMediaListFromTeam, {teamId: team.teamId, page: 0})
+        ...(tier === "low"
+            ? []
+            : [entry(taskMediaApi.endpoints.retrieveTaskMediaListFromTeam, {teamId: team.teamId, page: 0})])
     ]);

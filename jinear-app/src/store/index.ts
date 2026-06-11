@@ -13,6 +13,9 @@ import taskAdditionalData, {resetTaskAdditionalData} from "@/slice/taskAdditiona
 import {type TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {makeStoreAccessibleFromWindow} from "@/util/webviewUtils.ts";
 import {rtkQueryErrorLogger} from "@/api/errorMiddleware.ts";
+import Logger from "@/util/logger";
+
+const logger = Logger("Store");
 
 const createWebStorage =
     (createWebStorageImport as unknown as { default?: typeof createWebStorageImport })
@@ -42,7 +45,9 @@ const rootReducer = combineReducers({
 const persistConfig = {
     key: 'jinear-app',
     storage,
-    whitelist: ['account', 'displayPreference', 'taskAdditionalData', api.reducerPath]
+    whitelist: ['account', 'displayPreference', 'taskAdditionalData', api.reducerPath],
+    throttle: 2000,
+    writeFailHandler: (error: Error) => logger.error({message: "Persist write failed", error})
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -62,6 +67,14 @@ export const createStore = (options?: ConfigureStoreOptions["preloadedState"] | 
 export const store = createStore();
 export const persistor = persistStore(store)
 setupListeners(store.dispatch)
+
+// Throttled writes can lag behind by up to 2s; drain them when the tab is
+// backgrounded or closed (pagehide also covers mobile/PWA bfcache cases).
+if (globalThis.window !== undefined) {
+    window.addEventListener('pagehide', () => {
+        persistor.flush();
+    });
+}
 
 export type RootState = ReturnType<typeof rootReducer>
 export type AppDispatch = typeof store.dispatch
