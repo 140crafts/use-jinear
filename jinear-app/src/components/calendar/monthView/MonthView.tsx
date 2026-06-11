@@ -2,9 +2,9 @@ import {queryStateArrayParser, queryStateShortDateParser, useQueryState} from "@
 import type {WorkspaceDto} from "@/model/be/jinear-core";
 import {useFilterCalendarEventsQuery} from "@/store/api/calendarEventApi";
 import Logger from "@/util/logger";
-import {eachDayOfInterval, endOfMonth, endOfWeek, format, parse, startOfDay, startOfWeek} from "date-fns";
+import {startOfDay} from "date-fns";
 import React, {useMemo} from "react";
-import {calculateHitMissTable, type ICalendarWeekRowCell} from "../calendarUtils";
+import {calculateHitMissTable, computeMonthViewPeriod, type ICalendarWeekRowCell} from "../calendarUtils";
 import OverlayLoading from "../common/overlayLoading/OverlayLoading";
 import {useCalenderLoading, useGhostEvent, useSqueezedView} from "../context/CalendarContext";
 import Month from "./month/Month";
@@ -27,18 +27,7 @@ const MonthView: React.FC<MonthViewProps> = ({workspace}) => {
     const defaultDate = useMemo(() => startOfDay(new Date()), []);
     const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || defaultDate;
 
-    const {periodStart, periodEnd, days} = useMemo(() => {
-        const currentMonthStr = format(viewingDate, "MMM-yyyy");
-        const firstDay = parse(currentMonthStr, "MMM-yyyy", new Date());
-        const start = startOfWeek(firstDay, {weekStartsOn: 1});
-        const end = endOfWeek(endOfMonth(firstDay), {weekStartsOn: 1});
-
-        return {
-            periodStart: start,
-            periodEnd: end,
-            days: eachDayOfInterval({start, end})
-        };
-    }, [viewingDate]);
+    const {periodStart, periodEnd, days} = useMemo(() => computeMonthViewPeriod(viewingDate), [viewingDate]);
 
     const ghostEvent = useGhostEvent();
     const calendarLoading = useCalenderLoading();

@@ -29,8 +29,8 @@ interface MultiViewTaskListProps {
 }
 
 export interface ExtendedTaskFilterRequest extends TaskFilterRequest {
-  hasPreciseFromDate?: boolean;
-  hasPreciseToDate?: boolean;
+  hasPreciseFromDate?: boolean | null;
+  hasPreciseToDate?: boolean | null;
 }
 
 const logger = Logger("MultiViewTaskList");

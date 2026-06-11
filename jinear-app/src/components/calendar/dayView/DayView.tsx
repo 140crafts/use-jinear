@@ -6,10 +6,10 @@ import type {WorkspaceDto} from "@/model/be/jinear-core";
 import {useFilterCalendarEventsQuery} from "@/store/api/calendarEventApi";
 import {popNewTaskModal} from "@/store/slice/modalSlice";
 import {useAppDispatch} from "@/store";
-import {eachDayOfInterval, endOfDay, endOfWeek, startOfDay, startOfWeek} from "date-fns";
+import {endOfDay, startOfDay} from "date-fns";
 import useTranslation from "@/locales/useTranslation";
 import React, {useMemo} from "react";
-import {isTaskDatesIntersect} from "../calendarUtils";
+import {computeWeekViewPeriod, isTaskDatesIntersect} from "../calendarUtils";
 import styles from "./DayView.module.css";
 import TaskList from "./taskList/TaskList";
 import WeekDays from "./weekDays/WeekDays";
@@ -29,12 +29,7 @@ const DayView: React.FC<DayViewProps> = ({workspace}) => {
     const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || EMPTY_ARRAY;
     const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || EMPTY_ARRAY;
 
-    const {periodStart, periodEnd, days} = useMemo(() => {
-        const periodStart = startOfWeek(viewingDate, {weekStartsOn: 1});
-        const periodEnd = endOfWeek(viewingDate, {weekStartsOn: 1});
-        const days = eachDayOfInterval({start: periodStart, end: periodEnd});
-        return {periodStart, periodEnd, days};
-    }, [viewingDate]);
+    const {periodStart, periodEnd, days} = useMemo(() => computeWeekViewPeriod(viewingDate), [viewingDate]);
 
     const workspacesFirstTeam = useWorkspaceFirstTeam(workspace?.workspaceId || "");
 

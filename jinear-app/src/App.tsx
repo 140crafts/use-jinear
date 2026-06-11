@@ -49,6 +49,7 @@ import AssignedToMePage from "@/pages/workspace/tasks/assigned-to-me/page.tsx";
 import LastActivitiesScreen from "@/pages/workspace/tasks/last-activities/page.tsx";
 import TeamsPage from "@/pages/workspace/tasks/teams/page.tsx";
 import ReloadQueryRefetchHandler from "@/components/reloadQueryRefetchHandler/ReloadQueryRefetchHandler.tsx";
+import OfflinePrefetchManager from "@/components/offlinePrefetchManager/OfflinePrefetchManager.tsx";
 import WorkspaceModalProvider from "@/components/modal-provider/WorkspaceModalProvider.tsx";
 
 export default function App() {
@@ -67,6 +68,7 @@ export default function App() {
             <BodyFixer/>
 
             <ReloadQueryRefetchHandler/>
+            <OfflinePrefetchManager/>
             <Routes>
 
                 <Route path="*" element={<Navigate to="/" replace/>}/>
