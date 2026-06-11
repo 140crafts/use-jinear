@@ -68,7 +68,7 @@ export default function App() {
             <BodyFixer/>
 
             <ReloadQueryRefetchHandler/>
-            <OfflinePrefetchManager/>
+            {/*<OfflinePrefetchManager/>*/}
             <Routes>
 
                 <Route path="*" element={<Navigate to="/" replace/>}/>
