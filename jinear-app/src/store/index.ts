@@ -1,7 +1,7 @@
 import {combineReducers, configureStore, type ConfigureStoreOptions} from '@reduxjs/toolkit'
 import {setupListeners} from '@reduxjs/toolkit/query'
 import {persistReducer, persistStore,} from 'redux-persist'
-import createWebStorageImport from 'redux-persist/lib/storage/createWebStorage'
+import localforage from 'localforage'
 
 import {api} from './api/api.ts'
 import account, {logout} from "@/slice/accountSlice";
@@ -17,20 +17,23 @@ import Logger from "@/util/logger";
 
 const logger = Logger("Store");
 
-const createWebStorage =
-    (createWebStorageImport as unknown as { default?: typeof createWebStorageImport })
-        .default ?? createWebStorageImport
-
 const createNoopStorage = () => ({
     getItem: () => Promise.resolve(null),
     setItem: (_key: string, value: unknown) => Promise.resolve(value),
     removeItem: () => Promise.resolve(),
 })
 
+const createLocalforageStorage = () => {
+    const store = localforage.createInstance({name: 'jinear-app', storeName: 'redux-persist'})
+    // Old storage backend; clear it so the stale multi-MB payload doesn't linger.
+    window.localStorage.removeItem('persist:jinear-app')
+    return store
+}
+
 const storage =
     globalThis.window === undefined
         ? createNoopStorage()
-        : createWebStorage('local')
+        : createLocalforageStorage()
 
 const rootReducer = combineReducers({
     [api.reducerPath]: api.reducer,
@@ -47,6 +50,8 @@ const persistConfig = {
     storage,
     whitelist: ['account', 'displayPreference', 'taskAdditionalData', api.reducerPath],
     throttle: 2000,
+    serialize: false,
+    deserialize: false,
     writeFailHandler: (error: Error) => logger.error({message: "Persist write failed", error})
 }
 

@@ -24,6 +24,7 @@
     "classnames": "^2.5.1",
     "date-fns": "^4.3.0",
     "firebase": "^12.14.0",
+    "localforage": "^1.10.0",
     "posthog-js": "^1.376.4",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
