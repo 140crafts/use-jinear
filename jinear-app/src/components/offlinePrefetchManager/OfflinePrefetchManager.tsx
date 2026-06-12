@@ -19,7 +19,7 @@ const logger = Logger("OfflinePrefetchManager");
 
 const STAGGER_MS: Record<DeviceTier, number> = {high: 150, low: 600};
 // Keeps the prefetch burst clear of first paint and the initial route's own queries.
-const START_DELAY_MS: Record<DeviceTier, number> = {high: 750, low: 4_000};
+const START_DELAY_MS: Record<DeviceTier, number> = {high: 500, low: 4_000};
 
 // Safari has no requestIdleCallback; fall back to a short timeout there.
 const scheduleIdle = (fn: () => void): (() => void) => {
