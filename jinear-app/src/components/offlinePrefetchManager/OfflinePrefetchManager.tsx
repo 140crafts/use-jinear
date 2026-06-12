@@ -13,6 +13,7 @@ import {
     type PrefetchEntry,
     type PrefetchSubscription
 } from "./offlinePrefetchDescriptors";
+import {teamMemberApi} from "@/api/teamMemberApi.ts";
 
 const logger = Logger("OfflinePrefetchManager");
 
@@ -75,13 +76,14 @@ const OfflinePrefetchManager: React.FC = () => {
             logger.log({message: "Prefetching offline query set", workspaceId, tier});
             subscribeStaggered(buildWorkspaceEntries({workspaceId, accountId, tier}));
 
-            const teamsSubscription = dispatch(teamApi.endpoints.retrieveWorkspaceTeams.initiate(workspaceId));
-            subscriptions.push(teamsSubscription);
-            teamsSubscription
+            const teamMembershipSubscription = dispatch(teamMemberApi.endpoints.retrieveMemberships.initiate({workspaceId}));
+            subscriptions.push(teamMembershipSubscription);
+            teamMembershipSubscription
                 .unwrap()
-                .then((teamsResponse) => {
+                .then((teamMembershipResponse) => {
+                    const teams = teamMembershipResponse.data.map(membership => membership.team) ?? [];
                     if (!cancelled) {
-                        subscribeStaggered(buildTeamEntries({workspaceId, teams: teamsResponse.data ?? [], tier}));
+                        subscribeStaggered(buildTeamEntries({workspaceId, teams, tier}));
                     }
                 })
                 .catch(() => {
