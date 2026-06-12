@@ -27,7 +27,7 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({
                                                                              isTaskListingLoading = false,
                                                                              className
                                                                          }) => {
-    const {data: teamWorkflowListData, isFetching: isTeamWorkflowListFetching} = useRetrieveAllFromTeamQuery(
+    const {currentData: teamWorkflowListData, isFetching: isTeamWorkflowListFetching} = useRetrieveAllFromTeamQuery(
         {teamId},
         {skip: teamId == null}
     );
@@ -53,7 +53,7 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({
         updateTaskWorkflowStatus({taskId, workflowStatusId: newWorkflowStatusId});
     };
 
-    const _isLoading = isTaskListingLoading || isTeamWorkflowListFetching || workflowStatusUpdatePendingTask;
+    const _isLoading = (isTeamWorkflowListFetching && teamWorkflowListData == null) || workflowStatusUpdatePendingTask;
 
     const columnProps = {
         tasks: taskList,

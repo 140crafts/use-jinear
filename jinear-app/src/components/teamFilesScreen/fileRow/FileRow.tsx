@@ -28,7 +28,7 @@ const FileRow: React.FC<FileRowProps> = ({index, relatedTaskDifferentFromOneBefo
     const openTaskOverviewModal = (data: TaskMediaDto) => {
         const workspaceName = data.task?.workspace?.username;
         const taskTag = `${data.task?.team?.tag}-${data.task?.teamTagNo}`;
-        dispatch(popTaskOverviewModal({taskTag, workspaceName, visible: true}));
+        dispatch(popTaskOverviewModal({taskTag, workspaceName, task: data.task ?? undefined, visible: true}));
     };
     return (
         <div className={styles.fileRow}>

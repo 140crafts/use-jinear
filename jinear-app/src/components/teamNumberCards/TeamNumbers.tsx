@@ -21,11 +21,11 @@ const SIGHT = 3;
 
 const TeamNumbers: React.FC<TeamNumbersProps> = ({ workspace, team, className }) => {
   const { t } = useTranslation();
-  const { data: retrieveTaskNumbersResponse, isFetching } = useRetrieveTaskNumbersQuery({
+  const { currentData: retrieveTaskNumbersResponse, isFetching } = useRetrieveTaskNumbersQuery({
     workspaceId: workspace.workspaceId,
     teamId: team.teamId,
   });
-  const { data: teamWorkflowStatusListResponse } = useRetrieveAllFromTeamQuery(
+  const { currentData: teamWorkflowStatusListResponse } = useRetrieveAllFromTeamQuery(
     { teamId: team?.teamId || "" },
     { skip: team == null }
   );
@@ -67,7 +67,7 @@ const TeamNumbers: React.FC<TeamNumbersProps> = ({ workspace, team, className })
 
   return (
     <div className={cn(styles.container, className)}>
-      {isFetching && <CircularLoading />}
+      {isFetching && retrieveTaskNumbersResponse == null && <CircularLoading />}
       {retrieveTaskNumbersResponse && (
         <div className={styles.numbersContainer}>
           <OverviewTaskNumbers

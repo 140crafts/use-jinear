@@ -36,7 +36,7 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
   const initialSelectionOnMultiple = useTypedSelector(selectTeamMemberPickerModalInitialSelectionOnMultiple);
   const onPick = useTypedSelector(selectTeamMemberPickerModalOnPick);
 
-  const { data: teamMemberListResponse, isFetching } = useRetrieveTeamMembersQuery(
+  const { currentData: teamMemberListResponse, isFetching } = useRetrieveTeamMembersQuery(
     { teamId: teamId || "" },
     {
       skip: teamId == null
@@ -119,31 +119,27 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
       </div>
 
       <div className={styles.list}>
-        {!isFetching && (
-          <>
-            {filteredList.map((teamMemberDto) => (
-              <Button
-                key={`team-member-search-result-list-${teamMemberDto.teamMemberId}`}
-                variant={ButtonVariants.default}
-                className={styles.listItemButton}
-                onClick={() => {
-                  multiple ? addToSelected(teamMemberDto) : pickAndClose(teamMemberDto);
-                }}
-              >
-                <ProfilePhoto
-                  boringAvatarKey={teamMemberDto.account.accountId || ""}
-                  url={teamMemberDto.account.profilePicture?.url}
-                  wrapperClassName={styles.profilePic}
-                />
-                {teamMemberDto.account.username}
-              </Button>
-            ))}
-          </>
-        )}
+        {filteredList.map((teamMemberDto) => (
+          <Button
+            key={`team-member-search-result-list-${teamMemberDto.teamMemberId}`}
+            variant={ButtonVariants.default}
+            className={styles.listItemButton}
+            onClick={() => {
+              multiple ? addToSelected(teamMemberDto) : pickAndClose(teamMemberDto);
+            }}
+          >
+            <ProfilePhoto
+              boringAvatarKey={teamMemberDto.account.accountId || ""}
+              url={teamMemberDto.account.profilePicture?.url}
+              wrapperClassName={styles.profilePic}
+            />
+            {teamMemberDto.account.username}
+          </Button>
+        ))}
 
         <div className={styles.messageContainer}>
-          {!isFetching && filteredList?.length == 0 && <div>{t("teamMemberPickerModalEmptyState")}</div>}
-          {isFetching && <CircularLoading size={17} />}
+          {teamMemberListResponse && filteredList?.length == 0 && <div>{t("teamMemberPickerModalEmptyState")}</div>}
+          {isFetching && teamMemberListResponse == null && <CircularLoading size={17} />}
         </div>
       </div>
 

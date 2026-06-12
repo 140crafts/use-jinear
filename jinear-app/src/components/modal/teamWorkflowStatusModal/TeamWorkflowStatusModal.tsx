@@ -46,7 +46,7 @@ const TeamWorkflowStatusModal: React.FC<TeamWorkflowStatusModalProps> = ({}) => 
     const initialSelectionOnMultiple = useTypedSelector(selectTeamWorkflowStatusPickerModalInitialSelectionOnMultiple);
     const onPick = useTypedSelector(selectTeamWorkflowStatusPickerModalOnPick);
 
-    const {data: teamWorkflowStatusListResponse, isFetching} = useRetrieveAllFromTeamQuery(
+    const {currentData: teamWorkflowStatusListResponse, isFetching} = useRetrieveAllFromTeamQuery(
         {teamId: teamId || ""},
         {
             skip: teamId == null,
@@ -156,28 +156,24 @@ const TeamWorkflowStatusModal: React.FC<TeamWorkflowStatusModalProps> = ({}) => 
                 />
             </div>
             <div className={styles.list}>
-                {!isFetching && (
-                    <>
-                        {filteredListAll.map((teamWorkflowStatusDto) => (
-                            <Button
-                                key={`team-workflow-status-search-result-list-${teamWorkflowStatusDto.teamWorkflowStatusId}`}
-                                variant={ButtonVariants.default}
-                                className={styles.listItemButton}
-                                onClick={() => {
-                                    multiple ? addToSelected(teamWorkflowStatusDto) : pickAndClose(teamWorkflowStatusDto);
-                                }}
-                            >
-                                {groupIconMap?.[teamWorkflowStatusDto.workflowStateGroup]}
-                                {teamWorkflowStatusDto.name}
-                            </Button>
-                        ))}
-                    </>
-                )}
+                {filteredListAll.map((teamWorkflowStatusDto) => (
+                    <Button
+                        key={`team-workflow-status-search-result-list-${teamWorkflowStatusDto.teamWorkflowStatusId}`}
+                        variant={ButtonVariants.default}
+                        className={styles.listItemButton}
+                        onClick={() => {
+                            multiple ? addToSelected(teamWorkflowStatusDto) : pickAndClose(teamWorkflowStatusDto);
+                        }}
+                    >
+                        {groupIconMap?.[teamWorkflowStatusDto.workflowStateGroup]}
+                        {teamWorkflowStatusDto.name}
+                    </Button>
+                ))}
 
                 <div className={styles.messageContainer}>
-                    {!isFetching && filteredListAll?.length == 0 &&
+                    {teamWorkflowStatusListResponse && filteredListAll?.length == 0 &&
                         <div>{t("teamWorkflowStatusPickerModalEmptyState")}</div>}
-                    {isFetching && <CircularLoading size={17}/>}
+                    {isFetching && teamWorkflowStatusListResponse == null && <CircularLoading size={17}/>}
                 </div>
             </div>
 

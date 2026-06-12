@@ -7,6 +7,7 @@ import {
     addDays,
     addMinutes,
     differenceInMinutes,
+    eachDayOfInterval,
     endOfDay,
     endOfMonth,
     endOfWeek,
@@ -27,6 +28,32 @@ export interface ICalendarWeekRowCell {
     weight: number;
     calendarEvent: CalendarEventDto | null;
 }
+
+export interface ICalendarViewPeriod {
+    periodStart: Date;
+    periodEnd: Date;
+    days: Date[];
+}
+
+export const computeMonthViewPeriod = (viewingDate: Date): ICalendarViewPeriod => {
+    const currentMonthStr = format(viewingDate, "MMM-yyyy");
+    const firstDay = parse(currentMonthStr, "MMM-yyyy", new Date());
+    const periodStart = startOfWeek(firstDay, {weekStartsOn: 1});
+    const periodEnd = endOfWeek(endOfMonth(firstDay), {weekStartsOn: 1});
+    return {periodStart, periodEnd, days: eachDayOfInterval({start: periodStart, end: periodEnd})};
+};
+
+export const computeWeekViewPeriod = (viewingDate: Date): ICalendarViewPeriod => {
+    const periodStart = startOfWeek(viewingDate, {weekStartsOn: 1});
+    const periodEnd = endOfWeek(viewingDate, {weekStartsOn: 1});
+    return {periodStart, periodEnd, days: eachDayOfInterval({start: periodStart, end: periodEnd})};
+};
+
+export const computeTwoDayViewPeriod = (viewingDate: Date): ICalendarViewPeriod => {
+    const periodStart = viewingDate;
+    const periodEnd = endOfDay(addDays(viewingDate, 1));
+    return {periodStart, periodEnd, days: [periodStart, periodEnd]};
+};
 
 export function useIsDateFirstDayOfViewingPeriod(day: Date) {
     const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || startOfDay(new Date());

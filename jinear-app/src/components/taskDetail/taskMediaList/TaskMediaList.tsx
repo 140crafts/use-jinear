@@ -21,7 +21,7 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({handleAttachmentUpload}) =
     const {t} = useTranslation();
     const attachmentPickerRef = useRef<HTMLInputElement>(null);
     const task = useTask();
-    const {data: retrieveTaskMediaListResponse, isFetching: isMediaListFetching} = useRetrieveTaskMediaListQuery({
+    const {currentData: retrieveTaskMediaListResponse, isFetching: isMediaListFetching} = useRetrieveTaskMediaListQuery({
         taskId: task.taskId
     });
 
@@ -67,13 +67,13 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({handleAttachmentUpload}) =
                 />
             </div>
             <div className={styles.mediaListContainer}>
-                {retrieveTaskMediaListResponse?.data?.length == 0 && !isMediaListFetching &&
+                {retrieveTaskMediaListResponse?.data?.length == 0 &&
                     <div>{t("taskDetailMediaListEmpty")}</div>}
                 {retrieveTaskMediaListResponse?.data?.map?.((taskMedia) => (
                     <TaskMediaItem key={`task-media-${task.taskId}-${taskMedia.mediaId}`} media={taskMedia}/>
                 ))}
                 {isUploading && <TaskMediaItem key={`task-media-new-upload`} mock={true}/>}
-                {isMediaListFetching && <CircularLoading/>}
+                {isMediaListFetching && retrieveTaskMediaListResponse == null && <CircularLoading/>}
             </div>
         </div>
     );

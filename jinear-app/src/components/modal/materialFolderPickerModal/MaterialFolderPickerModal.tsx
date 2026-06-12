@@ -18,6 +18,7 @@ import GradientLine from "@/components/gradientLine/GradientLine";
 import InfiniteLineLoading from "@/components/infiniteLineLoading/InfiniteLineLoading";
 import { LuFolder } from "react-icons/lu";
 import cn from "classnames";
+import { getDeviceProfile } from "@/util/deviceProfile";
 
 interface MaterialMoveModalProps {
 
@@ -53,6 +54,11 @@ const MaterialFolderPickerModal: React.FC<MaterialMoveModalProps> = ({}) => {
     if (children?.hasContent && workspaceId != "") {
       setMaterialList(current => [...current, ...children.content]);
       children.hasNext && setPage(page => page + 1);
+
+      const {tier, saveData, slowNetwork} = getDeviceProfile();
+      if (tier === "low" || saveData || slowNetwork) {
+        return;
+      }
 
       const MAX_PREFETCH = 10;
       const DELAY_MS = 150;

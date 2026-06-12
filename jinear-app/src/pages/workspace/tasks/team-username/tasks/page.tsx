@@ -30,7 +30,7 @@ const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
 
     const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
     const {
-        data: teamsResponse,
+        currentData: teamsResponse,
         isFetching: isTeamsFetching
     } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
         skip: workspace == null
@@ -40,9 +40,10 @@ const TasksScreen: React.FC<TasksScreenProps> = ({}) => {
 
     return (
         <div className={styles.container}>
-            {isTeamsFetching && <CircularLoading/>}
-            {workspace && team && !isTeamsFetching && (
+            {isTeamsFetching && teamsResponse == null && <CircularLoading/>}
+            {workspace && team && (
                 <MultiViewTaskList
+                    key={team.teamId}
                     title={t("tasksScreenBreadcrumbLabel")}
                     workspace={workspace}
                     team={team}

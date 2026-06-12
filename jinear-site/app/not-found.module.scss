@@ -1,0 +1,88 @@
+.page {
+  width: 100%;
+  padding: 38px 0 80px;
+}
+
+.wrap {
+  max-width: 660px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.body {
+  margin: 80px 0 90px;
+}
+
+.code {
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--acc);
+  text-transform: uppercase;
+}
+
+.title {
+  font-size: 38px;
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  font-weight: 800;
+  margin: 14px 0 0;
+  max-width: 18ch;
+  color: var(--ink);
+}
+
+.lede {
+  font-size: 18px;
+  color: var(--ink-2);
+  margin-top: 18px;
+  max-width: 54ch;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 30px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--sans);
+  font-weight: 600;
+  font-size: 15px;
+  line-height: 1;
+  padding: 11px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+.btnAccent {
+  background: var(--acc);
+  color: #fff;
+
+  &:hover {
+    background: var(--acc-deep);
+  }
+}
+
+.btnGhost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--border-2);
+
+  &:hover {
+    border-color: var(--ink);
+    background: #fff;
+  }
+}

@@ -26,7 +26,7 @@ const TeamPickerModal: React.FC<TeamPickerModalProps> = ({}) => {
     const filterActiveTeams = useTypedSelector(selectTeamPickerModalFilterActiveTeams) ?? true;
 
     const {
-        data: teamsResponse,
+        currentData: teamsResponse,
         isSuccess,
         isError,
         isLoading,
@@ -46,7 +46,7 @@ const TeamPickerModal: React.FC<TeamPickerModalProps> = ({}) => {
             hasTitleCloseButton={true}
             requestClose={close}
         >
-            {isFetching && (
+            {isFetching && teamsResponse == null && (
                 <div className={styles.loadingContainer}>
                     <CircularLoading size={17}/>
                 </div>

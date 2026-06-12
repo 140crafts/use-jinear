@@ -52,7 +52,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({teamId}) => {
                 )}
             </div>
 
-            {isFetching && (
+            {isFetching && !teamMembersResponse && (
                 <div className={styles.loading}>
                     <CircularLoading/>
                 </div>

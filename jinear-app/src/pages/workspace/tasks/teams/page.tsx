@@ -21,7 +21,7 @@ const TeamsPage: React.FC<ProjectsPageProps> = ({}) => {
 
     const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName)) as WorkspaceDto;
     const {
-        data: teamsResponse,
+        currentData: teamsResponse,
         isFetching: isTeamsFetching
     } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
         skip: workspace == null
@@ -45,7 +45,7 @@ const TeamsPage: React.FC<ProjectsPageProps> = ({}) => {
                 listTitleComponent={<WorkspaceTeamsListTitle workspace={workspace}
                                                              teamCount={teamsResponse?.data?.length}/>}
             />
-            {!isTeamsFetching && archivedTeams?.length != 0 &&
+            {archivedTeams?.length != 0 &&
                 <div className={styles.archivedTeamsContainer}>
                     <EndlessScrollList
                         id={"teams-page-list-archived"}

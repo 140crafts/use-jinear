@@ -66,14 +66,14 @@ const BaseTaskList: React.FC<BaseTaskListProps> = ({
           <TaskRow key={`${id}-list-task-${taskDto.taskId}`} task={taskDto} />
         ))}
 
-        {!response?.data.hasContent && (
+        {response && !response.data.hasContent && (
           <div className={styles.emptyStateContainer}>
             <div className={styles.emptyLabel}>{t("workflowTaskListEmpty")}</div>
           </div>
         )}
       </div>
 
-      {isFetching && (
+      {isFetching && !response && (
         <div className={styles.loading}>
           <CircularLoading />
         </div>

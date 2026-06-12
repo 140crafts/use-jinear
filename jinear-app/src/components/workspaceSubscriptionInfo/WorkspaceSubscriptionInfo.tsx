@@ -52,7 +52,7 @@ const WorkspaceSubscriptionInfo: React.FC<WorkspaceSubscriptionInfoProps> = ({wo
 
     return (
         <div className={styles.container}>
-            {isFetching && <CircularLoading/>}
+            {isFetching && retrieveSubscriptionInfoResponse == null && <CircularLoading/>}
             {isServerFailed && <>{t("genericError")}</>}
             {retrieveSubscriptionInfoResponse?.data.retrieveSubscriptionEditInfo
                 && <>

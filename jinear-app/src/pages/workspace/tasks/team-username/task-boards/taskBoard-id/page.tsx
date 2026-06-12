@@ -19,22 +19,20 @@ const TaskBoardDetailScreen: React.FC<TaskBoardDetailScreenProps> = ({}) => {
 
     const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
     const {
-        data: teamsResponse,
-        isFetching: isTeamsFetching
+        currentData: teamsResponse
     } = useRetrieveWorkspaceTeamsQuery(workspace?.workspaceId || "", {
         skip: workspace == null
     });
     const team = teamsResponse?.data.find((teamDto) => teamDto.username == teamUsername);
 
     const {
-        data: taskBoardResponse,
-        isLoading,
+        currentData: taskBoardResponse,
         isFetching
     } = useRetrieveTaskBoardQuery({taskBoardId}, {skip: taskBoardId == null});
 
     return (
         <div className={styles.container}>
-            {(isLoading || isFetching) && (
+            {isFetching && taskBoardResponse == null && (
                 <div className={styles.loadingContainer}>
                     <CircularLoading size={14}/>
                 </div>

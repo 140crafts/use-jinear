@@ -31,7 +31,7 @@ const TaskTaskBoardModal: React.FC<TaskTaskBoardModalProps> = ({}) => {
     const [input, setInput] = useState<string>("");
     const [searchValue, setSearchValue] = useState<string>("");
 
-    const {data: taskAndTaskBoardRelationResponse, isFetching} = useRetrieveTaskAndTaskBoardsRelationQuery(
+    const {currentData: taskAndTaskBoardRelationResponse, isFetching} = useRetrieveTaskAndTaskBoardsRelationQuery(
         {taskId: taskId || "", filterRecentsByName: searchValue},
         {skip: taskId == null}
     );
@@ -97,7 +97,7 @@ const TaskTaskBoardModal: React.FC<TaskTaskBoardModalProps> = ({}) => {
                     onChange={onTextChange}
                 />
             </div>
-            {!isFetching && (
+            {taskAndTaskBoardRelationResponse && (
                 <div className={styles.boardList}>
                     {alreadyAddedBoards
                         .filter(
@@ -142,9 +142,8 @@ const TaskTaskBoardModal: React.FC<TaskTaskBoardModalProps> = ({}) => {
                 {alreadyAddedBoards.length == 0 &&
                     recentBoards &&
                     !recentBoards.hasContent &&
-                    searchValue?.length != 0 &&
-                    !isFetching && <div>{t("taskTaskBoardModalEmptyState")}</div>}
-                {isFetching && <CircularLoading size={17}/>}
+                    searchValue?.length != 0 && <div>{t("taskTaskBoardModalEmptyState")}</div>}
+                {isFetching && taskAndTaskBoardRelationResponse == null && <CircularLoading size={17}/>}
             </div>
         </Modal>
     );

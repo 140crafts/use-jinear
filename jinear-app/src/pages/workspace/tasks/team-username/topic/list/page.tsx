@@ -29,9 +29,8 @@ const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
     const team = teamsResponse?.data.find((teamDto) => teamDto.username == teamUsername);
 
     const {
-        data: teamTopicListingResponse,
-        isSuccess,
-        isLoading,
+        currentData: teamTopicListingResponse,
+        isFetching,
     } = useRetrieveTeamTopicsQuery(team?.teamId || "", {
         skip: team == null,
     });
@@ -41,13 +40,13 @@ const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
             <h1>{t("topicListScreenTitle")}</h1>
             <div className="spacer-h-4"/>
 
-            {isLoading && (
+            {isFetching && teamTopicListingResponse == null && (
                 <div className={styles.loadingContainer}>
                     <CircularLoading size={21}/>
                 </div>
             )}
 
-            {!isLoading && isSuccess && workspace && team && (
+            {teamTopicListingResponse && workspace && team && (
                 <div className={styles.content}>
                     {teamTopicListingResponse.data.content.map((topicDto) => (
                         <TopicCard key={topicDto.topicId} topic={topicDto} workspaceName={workspace.username}

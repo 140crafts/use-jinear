@@ -23,7 +23,7 @@ const TopicList: React.FC<TopicListProps> = ({teamId, filter, close}) => {
     const dispatch = useAppDispatch();
     const taskId = useTypedSelector(selectChangeTaskTopicModalTaskId);
     const taskCurrentTopicId = useTypedSelector(selectChangeTaskTopicModalTaskCurrentTopicId);
-    const {data: retrieveTeamTopicListResponse, isFetching} = useRetrieveTeamTopicsQuery(teamId, {
+    const {currentData: retrieveTeamTopicListResponse, isFetching} = useRetrieveTeamTopicsQuery(teamId, {
         skip: teamId == null,
     });
 
@@ -54,7 +54,7 @@ const TopicList: React.FC<TopicListProps> = ({teamId, filter, close}) => {
 
     return (
         <div className={styles.container}>
-            {isFetching && (
+            {isFetching && retrieveTeamTopicListResponse == null && (
                 <div className={styles.centeredInfo}>
                     <CircularLoading size={17}/>
                 </div>
@@ -71,7 +71,7 @@ const TopicList: React.FC<TopicListProps> = ({teamId, filter, close}) => {
                 </Button>
             ))}
 
-            {filteredList.length == 0 && !isFetching && (
+            {filteredList.length == 0 && retrieveTeamTopicListResponse && (
                 <div className={styles.centeredInfo}>{t("changeTaskTopicModalFilteredListEmpty")}</div>
             )}
         </div>

@@ -3,7 +3,7 @@ import TaskDetail from "@/components/taskDetail/TaskDetail";
 import useWindowSize from "@/hooks/useWindowSize";
 import {useRetrieveWithWorkspaceNameAndTeamTagNoQuery} from "@/store/api/taskApi";
 import {
-    closeTaskOverviewModal,
+    closeTaskOverviewModal, selectTaskOverviewModalTask,
     selectTaskOverviewModalTaskTag,
     selectTaskOverviewModalVisible,
     selectTaskOverviewModalWorkspaceName,
@@ -26,16 +26,17 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
     const {isMobile} = useWindowSize();
     const taskTag = useTypedSelector(selectTaskOverviewModalTaskTag);
     const workspaceName = useTypedSelector(selectTaskOverviewModalWorkspaceName);
+    const task = useTypedSelector(selectTaskOverviewModalTask);
 
     const {
-        data: taskResponse,
-        isLoading: isTaskResponseLoading,
-        isSuccess: isTaskResponseSuccess,
+        currentData: taskResponse,
         isFetching: isTaskResponseFetching,
     } = useRetrieveWithWorkspaceNameAndTeamTagNoQuery(
         {workspaceName: workspaceName || "", taskTag: taskTag || ""},
-        {skip: workspaceName == null || taskTag == null}
+        {skip: workspaceName == null || taskTag == null || task != null}
     );
+
+    const taskToView = task ? task : taskResponse?.data;
 
     const close = () => {
         dispatch(closeTaskOverviewModal());
@@ -55,20 +56,20 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
             bodyClass={styles.modalBody}
             contentContainerClass={styles.modal}
         >
-            {isTaskResponseFetching && (
+            {isTaskResponseFetching && taskToView == null && (
                 <div className={styles.loadingContainer}>
                     <CircularLoading size={21}/>
                 </div>
             )}
 
-            {isTaskResponseSuccess && !isTaskResponseFetching && (
+            {taskToView  && (
                 <div className={styles.actionBar}>
                     <Button
                         heightVariant={ButtonHeight.short}
                         variant={ButtonVariants.blur}
                         className={styles.goToTaskButton}
                         onClick={onGoToTaskClick}
-                        href={`/${taskResponse.data?.workspace?.username}/task/${taskResponse.data?.team?.tag}-${taskResponse.data?.teamTagNo}`}
+                        href={`/${taskToView?.workspace?.username}/task/${taskToView?.team?.tag}-${taskToView?.teamTagNo}`}
                     >
                         <IoResize/>
                         <b>{t("taskOverviewModalGoToTask")}</b>
@@ -76,10 +77,10 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
                 </div>
             )}
 
-            {isTaskResponseSuccess && !isTaskResponseFetching && (
+            {taskToView && (
                 <div className={styles.taskContentWrapper}>
                     {/* <TaskDetailHeader task={taskResponse.data} /> */}
-                    <TaskDetail task={taskResponse.data}/>
+                    <TaskDetail task={taskToView}/>
                 </div>
             )}
         </Modal>

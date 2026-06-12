@@ -38,7 +38,7 @@ const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({
     const [searchValue, setSearchValue] = useState<string>("");
     const [selectedWorkspaceMembers, setSelectedWorkspaceMembers] = useState<WorkspaceMemberDto[]>([]);
 
-    const {data: workspaceMemberListResponse, isFetching} = useRetrieveWorkspaceMembersQuery(
+    const {currentData: workspaceMemberListResponse, isFetching} = useRetrieveWorkspaceMembersQuery(
         {workspaceId: workspaceId || ""},
         {
             skip: workspaceId == null
@@ -126,31 +126,28 @@ const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({
             </div>
 
             <div className={styles.list}>
-                {!isFetching && (
-                    <>
-                        {filteredList.map((workspaceMemberDto) => (
-                            <Button
-                                key={`workspace-member-search-result-list-${workspaceMemberDto.workspaceMemberId}`}
-                                variant={ButtonVariants.default}
-                                className={styles.listItemButton}
-                                onClick={() => {
-                                    multiple ? addToSelected(workspaceMemberDto) : pickAndClose(workspaceMemberDto);
-                                }}
-                            >
-                                <ProfilePhoto
-                                    boringAvatarKey={workspaceMemberDto.account.accountId || ""}
-                                    url={workspaceMemberDto.account.profilePicture?.url}
-                                    wrapperClassName={styles.profilePic}
-                                />
-                                {workspaceMemberDto.account.username}
-                            </Button>
-                        ))}
-                    </>
-                )}
+                {filteredList.map((workspaceMemberDto) => (
+                    <Button
+                        key={`workspace-member-search-result-list-${workspaceMemberDto.workspaceMemberId}`}
+                        variant={ButtonVariants.default}
+                        className={styles.listItemButton}
+                        onClick={() => {
+                            multiple ? addToSelected(workspaceMemberDto) : pickAndClose(workspaceMemberDto);
+                        }}
+                    >
+                        <ProfilePhoto
+                            boringAvatarKey={workspaceMemberDto.account.accountId || ""}
+                            url={workspaceMemberDto.account.profilePicture?.url}
+                            wrapperClassName={styles.profilePic}
+                        />
+                        {workspaceMemberDto.account.username}
+                    </Button>
+                ))}
 
                 <div className={styles.messageContainer}>
-                    {!isFetching && filteredList?.length == 0 && <div>{t("workspaceMemberPickerModalEmptyState")}</div>}
-                    {isFetching && <CircularLoading size={17}/>}
+                    {workspaceMemberListResponse && filteredList?.length == 0 &&
+                        <div>{t("workspaceMemberPickerModalEmptyState")}</div>}
+                    {isFetching && workspaceMemberListResponse == null && <CircularLoading size={17}/>}
                 </div>
             </div>
 

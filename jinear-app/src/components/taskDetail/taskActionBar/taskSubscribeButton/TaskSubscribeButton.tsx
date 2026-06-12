@@ -17,7 +17,7 @@ interface TaskSubscribeButtonProps {
 const TaskSubscribeButton: React.FC<TaskSubscribeButtonProps> = ({ className }) => {
   const { t } = useTranslation();
   const task = useTask();
-  const { data: taskSubscriptionResponse, isFetching: isRetrieveFetching } = useRetrieveSubscriptionQuery({
+  const { currentData: taskSubscriptionResponse, isFetching: isRetrieveFetching } = useRetrieveSubscriptionQuery({
     taskId: task.taskId,
   });
   const isSubscribed = taskSubscriptionResponse?.data != null;
@@ -25,7 +25,8 @@ const TaskSubscribeButton: React.FC<TaskSubscribeButtonProps> = ({ className }) 
   const [initializeTaskSubscription, { isLoading: isInitializeSubscriptionLoading }] = useInitializeTaskSubscriptionMutation();
   const [removeTaskSubscription, { isLoading: isRemoveTaskSubscriptionLoading }] = useRemoveTaskSubscriptionMutation();
 
-  const anyRequestLoading = isRetrieveFetching || isInitializeSubscriptionLoading || isRemoveTaskSubscriptionLoading;
+  const anyRequestLoading =
+    (isRetrieveFetching && taskSubscriptionResponse == null) || isInitializeSubscriptionLoading || isRemoveTaskSubscriptionLoading;
 
   const toggleSubscription = () => {
     const req = { taskId: task.taskId };

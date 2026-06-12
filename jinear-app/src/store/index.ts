@@ -1,7 +1,7 @@
 import {combineReducers, configureStore, type ConfigureStoreOptions} from '@reduxjs/toolkit'
 import {setupListeners} from '@reduxjs/toolkit/query'
 import {persistReducer, persistStore,} from 'redux-persist'
-import createWebStorageImport from 'redux-persist/lib/storage/createWebStorage'
+import localforage from 'localforage'
 
 import {api} from './api/api.ts'
 import account, {logout} from "@/slice/accountSlice";
@@ -13,10 +13,9 @@ import taskAdditionalData, {resetTaskAdditionalData} from "@/slice/taskAdditiona
 import {type TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {makeStoreAccessibleFromWindow} from "@/util/webviewUtils.ts";
 import {rtkQueryErrorLogger} from "@/api/errorMiddleware.ts";
+import Logger from "@/util/logger";
 
-const createWebStorage =
-    (createWebStorageImport as unknown as { default?: typeof createWebStorageImport })
-        .default ?? createWebStorageImport
+const logger = Logger("Store");
 
 const createNoopStorage = () => ({
     getItem: () => Promise.resolve(null),
@@ -24,10 +23,17 @@ const createNoopStorage = () => ({
     removeItem: () => Promise.resolve(),
 })
 
+const createLocalforageStorage = () => {
+    const store = localforage.createInstance({name: 'jinear-app', storeName: 'redux-persist'})
+    // Old storage backend; clear it so the stale multi-MB payload doesn't linger.
+    window.localStorage.removeItem('persist:jinear-app')
+    return store
+}
+
 const storage =
     globalThis.window === undefined
         ? createNoopStorage()
-        : createWebStorage('local')
+        : createLocalforageStorage()
 
 const rootReducer = combineReducers({
     [api.reducerPath]: api.reducer,
@@ -42,7 +48,11 @@ const rootReducer = combineReducers({
 const persistConfig = {
     key: 'jinear-app',
     storage,
-    whitelist: ['account', 'displayPreference', 'taskAdditionalData', api.reducerPath]
+    whitelist: ['account', 'displayPreference', 'taskAdditionalData', api.reducerPath],
+    throttle: 2000,
+    serialize: false,
+    deserialize: false,
+    writeFailHandler: (error: Error) => logger.error({message: "Persist write failed", error})
 }
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
@@ -62,6 +72,14 @@ export const createStore = (options?: ConfigureStoreOptions["preloadedState"] | 
 export const store = createStore();
 export const persistor = persistStore(store)
 setupListeners(store.dispatch)
+
+// Throttled writes can lag behind by up to 2s; drain them when the tab is
+// backgrounded or closed (pagehide also covers mobile/PWA bfcache cases).
+if (globalThis.window !== undefined) {
+    window.addEventListener('pagehide', () => {
+        persistor.flush();
+    });
+}
 
 export type RootState = ReturnType<typeof rootReducer>
 export type AppDispatch = typeof store.dispatch

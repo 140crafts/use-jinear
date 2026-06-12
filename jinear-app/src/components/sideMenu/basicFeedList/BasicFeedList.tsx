@@ -19,7 +19,7 @@ const BasicFeedList: React.FC<BasicFeedListProps> = ({workspace}) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
     const {
-        data: feedMembershipsResponse,
+        currentData: feedMembershipsResponse,
         isFetching
     } = useRetrieveFeedMembershipsQuery({workspaceId: workspace.workspaceId});
 
@@ -31,7 +31,7 @@ const BasicFeedList: React.FC<BasicFeedListProps> = ({workspace}) => {
         <div className={styles.container}>
             <div className="spacer-h-1"/>
             <MenuGroupTitle label={t("sideMenuFeedsTitle")} hasAddButton={false}/>
-            {isFetching && <CircularLoading/>}
+            {isFetching && feedMembershipsResponse == null && <CircularLoading/>}
             <div className="spacer-h-1"/>
             {feedMembershipsResponse?.data.map((feedMember) => (
                 <FeedMenu key={feedMember.feedMemberId} feedMember={feedMember} workspace={workspace}/>

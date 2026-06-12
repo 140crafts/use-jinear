@@ -41,7 +41,7 @@ const BoardPickerModal: React.FC<BoardPickerModalProps> = ({}) => {
 
     const searchMethod = teamId ? useFilterTaskBoardsQuery : useFilterWorkspaceTaskBoardsQuery;
 
-    const {data: taskBoardListingResponse, isFetching} = searchMethod(
+    const {currentData: taskBoardListingResponse, isFetching} = searchMethod(
         {workspaceId: workspaceId ?? "", teamId: teamId ?? "", name: searchValue},
         {skip: workspaceId == null}
     );
@@ -113,7 +113,7 @@ const BoardPickerModal: React.FC<BoardPickerModalProps> = ({}) => {
                     onChange={onTextChange}
                 />
             </div>
-            {!isFetching && (
+            {taskBoardListingResponse && (
                 <div className={styles.boardList}>
                     {taskBoardListingResponse?.data.content.map((board) => (
                         <Button
@@ -129,10 +129,10 @@ const BoardPickerModal: React.FC<BoardPickerModalProps> = ({}) => {
                 </div>
             )}
             <div className={styles.messageContainer}>
-                {!taskBoardListingResponse?.data?.hasContent && searchValue?.length != 0 && !isFetching && (
+                {taskBoardListingResponse && !taskBoardListingResponse.data?.hasContent && searchValue?.length != 0 && (
                     <div>{t("boardPickerModalEmptyState")}</div>
                 )}
-                {isFetching && <CircularLoading/>}
+                {isFetching && taskBoardListingResponse == null && <CircularLoading/>}
             </div>
 
             {multiple && selectedBoards.length != 0 && (

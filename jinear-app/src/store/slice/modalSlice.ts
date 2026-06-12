@@ -1006,6 +1006,7 @@ export const selectNotificationPermissionModalPlatform = (state: RootState) => s
 export const selectTaskOverviewModalVisible = (state: RootState) => state.modal.taskOverviewModal?.visible;
 export const selectTaskOverviewModalTaskTag = (state: RootState) => state.modal.taskOverviewModal?.taskTag;
 export const selectTaskOverviewModalWorkspaceName = (state: RootState) => state.modal.taskOverviewModal?.workspaceName;
+export const selectTaskOverviewModalTask = (state: RootState) => state.modal.taskOverviewModal?.task;
 
 export const selectTeamPickerModalVisible = (state: RootState) => state.modal.teamPickerModal?.visible;
 export const selectTeamPickerModalWorkspaceId = (state: RootState) => state.modal.teamPickerModal?.workspaceId;

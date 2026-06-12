@@ -92,7 +92,7 @@ const TaskChecklist: React.FC<TaskChecklistProps> = ({initialChecklist}) => {
         <div className={styles.container}>
             <div className={styles.headerContainer}>
                 <input
-                    disabled={isRetrieveChecklistFetching || isUpdateLabelLoading}
+                    disabled={(isRetrieveChecklistFetching && retrieveChecklistResponse == null) || isUpdateLabelLoading}
                     type="text"
                     value={title}
                     className={styles.titleInput}

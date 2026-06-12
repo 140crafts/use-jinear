@@ -45,7 +45,7 @@ const TaskRow: React.FC<TaskRowProps> = ({className, task, withBottomBorderLine 
     const openTaskOverviewModal = () => {
         const workspaceName = task?.workspace?.username;
         const taskTag = `${task?.team?.tag}-${task?.teamTagNo}`;
-        dispatch(popTaskOverviewModal({taskTag, workspaceName, visible: true}));
+        dispatch(popTaskOverviewModal({taskTag, workspaceName, task: task ?? undefined, visible: true}));
     };
 
     const popBoardsModal = () => {

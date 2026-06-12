@@ -75,14 +75,14 @@ const PaginatedActivityList: React.FC<PaginatedActivityListProps> = ({
                     );
                 })}
 
-                {!response?.data.hasContent && (
+                {response && !response.data.hasContent && (
                     <div className={styles.emptyStateContainer}>
                         <div className={styles.emptyLabel}>{t("activityListEmpty")}</div>
                     </div>
                 )}
             </div>
 
-            {isFetching && (
+            {isFetching && !response && (
                 <div className={styles.loading}>
                     <CircularLoading size={12}/>
                 </div>

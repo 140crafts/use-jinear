@@ -131,7 +131,12 @@ const Cell: React.FC<CellProps> = ({id, weight, calendarEvent, weekStart, weekEn
     const openTaskOverviewModal = () => {
         const workspaceName = calendarEvent?.relatedTask?.workspace?.username;
         const taskTag = `${calendarEvent?.relatedTask?.team?.tag}-${calendarEvent?.relatedTask?.teamTagNo}`;
-        dispatch(popTaskOverviewModal({taskTag, workspaceName, visible: true}));
+        dispatch(popTaskOverviewModal({
+            taskTag,
+            workspaceName,
+            task: calendarEvent?.relatedTask ?? undefined,
+            visible: true
+        }));
     };
 
     const openCalendarExternalEventOverviewModal = () => {

@@ -45,14 +45,14 @@ const EndlessScrollList = <T, >({
             <div className={cn(styles.content, styles.gradientBg, contentContainerClassName)}>
                 {data?.map(renderItem)}
 
-                {data?.length == 0 && emptyLabel && (
+                {data?.length == 0 && !isFetching && emptyLabel && (
                     <div className={styles.emptyStateContainer}>
                         <div className={styles.emptyLabel}>{emptyLabel}</div>
                     </div>
                 )}
             </div>
 
-            {isFetching && (
+            {isFetching && data?.length == 0 && (
                 <div className={styles.loading}>
                     <CircularLoading size={12}/>
                 </div>

@@ -37,7 +37,7 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
     const initialSelectionOnMultiple = useTypedSelector(selectTopicPickerModalInitialSelectionOnMultiple);
     const onPick = useTypedSelector(selectTopicPickerModalOnPick);
 
-    const {data: searchResponse, isFetching} = useSearchTeamTopicsQuery(
+    const {currentData: searchResponse, isFetching} = useSearchTeamTopicsQuery(
         {teamId: team?.teamId || "", nameOrTag: searchValue},
         {skip: team == null}
     );
@@ -115,32 +115,28 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
             </div>
 
             <div className={styles.list}>
-                {!isFetching && (
-                    <>
-                        <Button variant={ButtonVariants.outline} heightVariant={ButtonHeight.short}
-                                onClick={popCreateNewTopicModal}>
-                            {t("newTaskModalNewTopicButton")}
-                        </Button>
+                <Button variant={ButtonVariants.outline} heightVariant={ButtonHeight.short}
+                        onClick={popCreateNewTopicModal}>
+                    {t("newTaskModalNewTopicButton")}
+                </Button>
 
-                        {searchResponse?.data.map((topicDto) => (
-                            <Button
-                                key={`topic-search-result-list-${topicDto.topicId}`}
-                                variant={ButtonVariants.default}
-                                className={styles.listItemButton}
-                                onClick={() => {
-                                    multiple ? addTaskToSelected(topicDto) : pickAndClose(topicDto);
-                                }}
-                            >
-                                {topicDto.name}
-                            </Button>
-                        ))}
-                    </>
-                )}
+                {searchResponse?.data.map((topicDto) => (
+                    <Button
+                        key={`topic-search-result-list-${topicDto.topicId}`}
+                        variant={ButtonVariants.default}
+                        className={styles.listItemButton}
+                        onClick={() => {
+                            multiple ? addTaskToSelected(topicDto) : pickAndClose(topicDto);
+                        }}
+                    >
+                        {topicDto.name}
+                    </Button>
+                ))}
                 <div className={styles.messageContainer}>
-                    {searchValue?.length != 0 && !isFetching && searchResponse?.data?.length == 0 && (
+                    {searchValue?.length != 0 && searchResponse?.data?.length == 0 && (
                         <div>{t("topicPickerModalEmptyState")}</div>
                     )}
-                    {isFetching && <CircularLoading size={17}/>}
+                    {isFetching && searchResponse == null && <CircularLoading size={17}/>}
                 </div>
             </div>
             {multiple && selectedTopics.length != 0 && (

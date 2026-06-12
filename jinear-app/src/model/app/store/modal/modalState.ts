@@ -114,6 +114,7 @@ export interface NotificationPermissionModalState extends ModalState {
 export interface TaskOverviewModalState extends ModalState {
     workspaceName?: string;
     taskTag?: string;
+    task?: TaskDto
 }
 
 export interface NewTaskModalState extends ModalState {

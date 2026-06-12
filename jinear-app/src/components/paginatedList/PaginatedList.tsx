@@ -71,7 +71,7 @@ const PaginatedList = <T, >({
             <div className={cn(styles.content, styles.gradientBg, contentContainerClassName)}>
                 {data?.content.map(renderItem)}
 
-                {!data?.hasContent && (emptyComponent || emptyLabel) && (
+                {data && !data.hasContent && (emptyComponent || emptyLabel) && (
                     <div className={styles.emptyStateContainer}>
                         {emptyComponent}
                         {emptyLabel && <div className={styles.emptyLabel}>{emptyLabel}</div>}
@@ -97,7 +97,7 @@ const PaginatedList = <T, >({
                     />
                 )}
             </div>
-            {isFetching && (
+            {isFetching && !data && (
                 <div className={styles.loading}>
                     <CircularLoading size={12}/>
                 </div>
