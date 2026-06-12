@@ -60,7 +60,7 @@ const ActiveInvitationList: React.FC<ActiveInvitationListProps> = ({workspace}) 
                 )}
             </div>
 
-            {isFetching && (
+            {isFetching && !invitationListResponse && (
                 <div className={styles.loading}>
                     <CircularLoading/>
                 </div>

@@ -33,7 +33,7 @@ const DayView: React.FC<DayViewProps> = ({workspace}) => {
 
     const workspacesFirstTeam = useWorkspaceFirstTeam(workspace?.workspaceId || "");
 
-    const {data: filterResponse, isFetching} = useFilterCalendarEventsQuery(
+    const {currentData: filterResponse, isFetching} = useFilterCalendarEventsQuery(
         {
             workspaceId: workspace?.workspaceId || "",
             taskboardIds: taskBoards,
@@ -78,8 +78,8 @@ const DayView: React.FC<DayViewProps> = ({workspace}) => {
                 </Button>
             </div>
             <div className={styles.listContainer}>
-                {isFetching && <CircularLoading/>}
-                {viewingDayEvents && !isFetching &&
+                {isFetching && filterResponse == null && <CircularLoading/>}
+                {viewingDayEvents &&
                     <TaskList viewingDayEvents={viewingDayEvents} className={styles.taskList}/>}
             </div>
         </div>

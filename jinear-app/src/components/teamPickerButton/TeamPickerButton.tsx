@@ -51,8 +51,7 @@ const TeamPickerButton = ({
     }, [JSON.stringify(initialSelectedTeams)]);
 
     const {
-        data: teamsResponse,
-        isLoading,
+        currentData: teamsResponse,
         isFetching
     } = useRetrieveWorkspaceTeamsQuery(workspaceId || "", {skip: workspaceId == null || workspaceId == ""});
 
@@ -102,7 +101,7 @@ const TeamPickerButton = ({
                 }
                 emptySelectionLabel={label ?? t("teamPickerButtonLabel")}
                 onUnpickClick={deselect}
-                disabled={isLoading || isFetching}
+                disabled={isFetching && teamsResponse == null}
                 withoutUnpickButton={withoutUnpickButton}
             />
         </div>

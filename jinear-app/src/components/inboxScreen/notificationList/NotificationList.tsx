@@ -52,14 +52,14 @@ const NotificationList: React.FC<NotificationListProps> = ({data, isFetching, is
                     );
                 })}
 
-                {!data?.hasContent && (
+                {data && !data.hasContent && (
                     <div className={styles.emptyStateContainer}>
                         <div className={styles.emptyLabel}>{t("notificationEventListEmpty")}</div>
                     </div>
                 )}
             </div>
 
-            {isFetching && (
+            {isFetching && !data && (
                 <div className={styles.loading}>
                     <CircularLoading/>
                 </div>

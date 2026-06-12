@@ -21,7 +21,7 @@ interface TeamMemberListProps {
 const TeamMemberList: React.FC<TeamMemberListProps> = ({teamId, filter, close}) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
-    const {data: teamMemberListResponse, isFetching} = useRetrieveTeamMembersQuery(
+    const {currentData: teamMemberListResponse, isFetching} = useRetrieveTeamMembersQuery(
         {teamId},
         {
             skip: teamId == null,
@@ -59,7 +59,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({teamId, filter, close}) 
 
     return (
         <div className={styles.container}>
-            {isFetching && (
+            {isFetching && teamMemberListResponse == null && (
                 <div className={styles.centeredInfo}>
                     <CircularLoading size={17}/>
                 </div>
@@ -75,7 +75,7 @@ const TeamMemberList: React.FC<TeamMemberListProps> = ({teamId, filter, close}) 
                 </Button>
             ))}
 
-            {filteredList.length == 0 && !isFetching && (
+            {filteredList.length == 0 && teamMemberListResponse && (
                 <div className={styles.centeredInfo}>
                     {t("changeTaskAssigneeModalFilteredListEmpty")}
                 </div>

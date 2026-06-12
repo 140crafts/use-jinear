@@ -29,7 +29,7 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
     const task = useTypedSelector(selectTaskOverviewModalTask);
 
     const {
-        data: taskResponse,
+        currentData: taskResponse,
         isFetching: isTaskResponseFetching,
     } = useRetrieveWithWorkspaceNameAndTeamTagNoQuery(
         {workspaceName: workspaceName || "", taskTag: taskTag || ""},
@@ -56,7 +56,7 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
             bodyClass={styles.modalBody}
             contentContainerClass={styles.modal}
         >
-            {isTaskResponseFetching && (
+            {isTaskResponseFetching && taskToView == null && (
                 <div className={styles.loadingContainer}>
                     <CircularLoading size={21}/>
                 </div>

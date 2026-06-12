@@ -100,12 +100,16 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
   };
 
   const {
-    data: filterResponse,
+    currentData: currentFilterResponse,
+    data: retainedFilterResponse,
     isFetching,
     isLoading
   } = useFilterTasksQuery(filter, {
     skip: filter == null || filter.workspaceId == null || filter.teamIdList == null || filter.teamIdList?.length == 0
   });
+  // Keep previous page/filter results visible while the next ones load.
+  // Team switches reset retained data via key={team.teamId} at the usage site.
+  const filterResponse = currentFilterResponse ?? retainedFilterResponse;
 
   return (
     <div className={styles.container}>

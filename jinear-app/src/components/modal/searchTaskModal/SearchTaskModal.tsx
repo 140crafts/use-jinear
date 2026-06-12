@@ -43,7 +43,7 @@ const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
     const [searchValue, setSearchValue] = useState<string>("");
 
     const {
-        data: searchResponse,
+        currentData: searchResponse,
         isSuccess,
         isError,
         isFetching
@@ -97,7 +97,7 @@ const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
                 />
             </div>
             <div className={styles.searchList}>
-                {!isFetching && searchValue != "" && searchResponse?.data.content?.map((taskDto) => (
+                {searchValue != "" && searchResponse?.data.content?.map((taskDto) => (
                     <Button
                         key={`search-result-${taskDto.taskId}`}
                         className={styles.searchResultItem}
@@ -114,12 +114,12 @@ const SearchTaskModal: React.FC<SearchTaskModalProps> = ({}) => {
                     </Button>
                 ))}
                 <div className={styles.messageContainer}>
-                    {!searchResponse?.data.hasContent && searchValue?.length != 0 && !isFetching && (
+                    {searchResponse && !searchResponse.data.hasContent && searchValue?.length != 0 && (
                         <div>{t("searchTaskModalEmptyState")}</div>
                     )}
-                    {searchValue?.length == 0 && !isFetching && <div>{t("searchTaskModalInitialState")}</div>}
+                    {searchValue?.length == 0 && <div>{t("searchTaskModalInitialState")}</div>}
 
-                    {isFetching && <CircularLoading size={17}/>}
+                    {isFetching && searchResponse == null && <CircularLoading size={17}/>}
                 </div>
             </div>
         </Modal>

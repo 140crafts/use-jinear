@@ -24,14 +24,18 @@ const InboxScreen: React.FC<InboxScreenProps> = ({}) => {
     const [page, setPage] = useState<number>(0);
 
     const {
-        data: workspaceNotificationsResponse,
+        currentData: currentWorkspaceNotificationsResponse,
+        data: retainedWorkspaceNotificationsResponse,
         isSuccess: isWorkspaceNotificationsSuccess,
         isLoading: isWorkspaceNotificationsLoading,
         isFetching: isWorkspaceNotificationsFetching,
     } = useRetrieveNotificationsQuery({workspaceId: workspace?.workspaceId || "", page}, {skip: workspace == null});
+    // Args only change by page here, so keeping the previous page visible while the next loads is safe.
+    const workspaceNotificationsResponse = currentWorkspaceNotificationsResponse ?? retainedWorkspaceNotificationsResponse;
 
     const {
-        data: teamNotificationsResponse,
+        // Strict currentData: retained data could belong to another team after a filter switch.
+        currentData: teamNotificationsResponse,
         isSuccess: isTeamNotificationsSuccess,
         isLoading: isTeamNotificationsLoading,
         isFetching: isTeamNotificationsFetching,
@@ -39,6 +43,11 @@ const InboxScreen: React.FC<InboxScreenProps> = ({}) => {
         {workspaceId: workspace?.workspaceId || "", teamId: filterBy?.teamId || "", page},
         {skip: workspace == null || filterBy == null}
     );
+
+    const changeFilterBy: typeof setFilterBy = (value) => {
+        setFilterBy(value);
+        setPage(0);
+    };
 
     const isSuccess = filterBy ? isTeamNotificationsSuccess : isWorkspaceNotificationsSuccess;
     const isLoading = filterBy ? isTeamNotificationsLoading : isWorkspaceNotificationsLoading;
@@ -56,7 +65,7 @@ const InboxScreen: React.FC<InboxScreenProps> = ({}) => {
 
     return (
         <div className={styles.container}>
-            <InboxScreenHeader filterBy={filterBy} setFilterBy={setFilterBy} workspace={workspace}/>
+            <InboxScreenHeader filterBy={filterBy} setFilterBy={changeFilterBy} workspace={workspace}/>
             <NotificationList data={response?.data} isFetching={isFetching} isLoading={isLoading} page={page}
                               setPage={setPage}/>
         </div>

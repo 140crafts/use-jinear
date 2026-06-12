@@ -14,7 +14,7 @@ const logger = Logger("TeamWorkflowStatusList");
 
 const TeamWorkflowStatusList: React.FC<TeamWorkflowStatusListProps> = ({teamId}) => {
     const {
-        data: teamWorkflowStatusResponse,
+        currentData: teamWorkflowStatusResponse,
         isFetching: isTeamWorkflowStatusListFetching
     } = useRetrieveAllFromTeamQuery({
         teamId,
@@ -22,7 +22,7 @@ const TeamWorkflowStatusList: React.FC<TeamWorkflowStatusListProps> = ({teamId})
 
     return (
         <div className={styles.container}>
-            {isTeamWorkflowStatusListFetching ? (
+            {isTeamWorkflowStatusListFetching && teamWorkflowStatusResponse == null ? (
                 <div className={styles.loadingContainer}>
                     <CircularLoading size={21}/>
                 </div>

@@ -20,7 +20,7 @@ const VISIBLE_SIZE = 4;
 const BoardsMenu: React.FC<BoardsMenuProps> = ({ workspace, team }) => {
   const { t } = useTranslation();
   const extendedSideMenuTeamActionButtonsVisible = useFeatureFlag("EXTENDED_SIDE_MENU_TEAM_ACTION_BUTTONS_VISIBLE");
-  const { data: taskBoardListingResponse, isFetching } = useRetrieveAllTaskBoardsQuery({ ...team });
+  const { currentData: taskBoardListingResponse, isFetching } = useRetrieveAllTaskBoardsQuery({ ...team });
   const hasMore =
     taskBoardListingResponse?.data.totalElements != null && taskBoardListingResponse?.data.totalElements > VISIBLE_SIZE;
   const notVisibleSize = hasMore ? taskBoardListingResponse?.data.totalElements - VISIBLE_SIZE : 0;
@@ -29,7 +29,7 @@ const BoardsMenu: React.FC<BoardsMenuProps> = ({ workspace, team }) => {
     <div className={styles.container}>
       <BoardsMenuTitle workspace={workspace} team={team} />
       {extendedSideMenuTeamActionButtonsVisible && <div className={styles.list}>
-        {isFetching && <CircularLoading />}
+        {isFetching && taskBoardListingResponse == null && <CircularLoading />}
         {taskBoardListingResponse?.data?.content?.slice(0, VISIBLE_SIZE).map((taskBoardDto) => (
           <BoardItemButton
             key={`side-menu-board-list-board-${taskBoardDto.taskBoardId}`}

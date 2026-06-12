@@ -20,7 +20,7 @@ const TopicsMenu: React.FC<TopicsMenuProps> = ({workspace, team}) => {
     const {t} = useTranslation();
     const extendedSideMenuTeamActionButtonsVisible = useFeatureFlag("EXTENDED_SIDE_MENU_TEAM_ACTION_BUTTONS_VISIBLE");
 
-    const {data: teamTopicListingResponse, isFetching} = useRetrieveTeamTopicsQuery(team.teamId);
+    const {currentData: teamTopicListingResponse, isFetching} = useRetrieveTeamTopicsQuery(team.teamId);
 
     const hasMore =
         teamTopicListingResponse?.data.totalElements != null && teamTopicListingResponse?.data.totalElements > VISIBLE_SIZE;
@@ -30,7 +30,7 @@ const TopicsMenu: React.FC<TopicsMenuProps> = ({workspace, team}) => {
         <div className={styles.container}>
             <TopicsMenuTitle workspace={workspace} team={team}/>
             {extendedSideMenuTeamActionButtonsVisible && <div className={styles.list}>
-                {isFetching && <CircularLoading/>}
+                {isFetching && teamTopicListingResponse == null && <CircularLoading/>}
                 {teamTopicListingResponse?.data?.content?.slice(0, VISIBLE_SIZE).map((topicDto) => (
                     <TopicItemButton
                         key={`side-menu-topic-list-topic-${topicDto.topicId}`}

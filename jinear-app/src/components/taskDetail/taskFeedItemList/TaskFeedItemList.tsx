@@ -12,7 +12,7 @@ const TaskFeedItemList: React.FC<TaskFeedItemListProps> = ({}) => {
   const { t } = useTranslation();
   const task = useTask();
   const taskId = task.taskId;
-  const { data: taskFeedItemResponse, isFetching } = useRetrieveTaskFeedItemsQuery({ taskId });
+  const { currentData: taskFeedItemResponse, isFetching } = useRetrieveTaskFeedItemsQuery({ taskId });
   const feedContentItemList = taskFeedItemResponse?.data.feedContentItemList;
   const totalItemCount = taskFeedItemResponse?.data.totalItemCount;
   const hiddenItemExists = (feedContentItemList?.length || 0) != totalItemCount;
@@ -20,7 +20,7 @@ const TaskFeedItemList: React.FC<TaskFeedItemListProps> = ({}) => {
   return feedContentItemList?.length != 0 ? (
     <div className={styles.container}>
       {/* <h2 className={styles.title}>{t("taskDetailFeedsTitle")}</h2> */}
-      {isFetching && <CircularLoading />}
+      {isFetching && taskFeedItemResponse == null && <CircularLoading />}
       {feedContentItemList?.map?.((feedContentItem) => (
         <FeedContentItem
           key={`task-detail-${feedContentItem.externalId}`}

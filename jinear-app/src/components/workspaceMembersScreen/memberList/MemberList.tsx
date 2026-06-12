@@ -59,7 +59,7 @@ const MemberList: React.FC<MemberListProps> = ({workspace}) => {
                 )}
             </div>
 
-            {isFetching && (
+            {isFetching && !workplaceMembersResponse && (
                 <div className={styles.loading}>
                     <CircularLoading/>
                 </div>
