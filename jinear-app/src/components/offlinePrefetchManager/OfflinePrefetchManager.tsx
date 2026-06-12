@@ -18,7 +18,7 @@ const logger = Logger("OfflinePrefetchManager");
 
 const STAGGER_MS: Record<DeviceTier, number> = {high: 150, low: 600};
 // Keeps the prefetch burst clear of first paint and the initial route's own queries.
-const START_DELAY_MS: Record<DeviceTier, number> = {high: 4_000, low: 8_000};
+const START_DELAY_MS: Record<DeviceTier, number> = {high: 750, low: 4_000};
 
 // Safari has no requestIdleCallback; fall back to a short timeout there.
 const scheduleIdle = (fn: () => void): (() => void) => {
@@ -30,10 +30,6 @@ const scheduleIdle = (fn: () => void): (() => void) => {
     return () => clearTimeout(id);
 };
 
-// Warms the persisted RTK Query cache with the canonical query set of the active
-// workspace (tasks, calendar spans, files, inbox, activities) so default routes render
-// offline even if they were never visited. Subscriptions are kept alive while the app
-// runs: tag invalidations then refetch these entries instead of removing them.
 const OfflinePrefetchManager: React.FC = () => {
     const dispatch = useAppDispatch();
     const {pathname} = useLocation();
@@ -50,8 +46,6 @@ const OfflinePrefetchManager: React.FC = () => {
         }
         const {tier, saveData, slowNetwork} = getDeviceProfile();
         if (saveData || slowNetwork) {
-            // Prefetch is pure offline warmth; on metered/2g connections the page-level
-            // queries alone are the right amount of traffic.
             logger.log({message: "Skipping offline prefetch", saveData, slowNetwork});
             return;
         }

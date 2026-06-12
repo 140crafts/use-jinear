@@ -12,10 +12,7 @@ const WorkspacePage: React.FC<WorkspacePageProps> = ({}) => {
 
     useEffect(() => {
         if (workspaceName) {
-            const timeout = setTimeout(() => {
-                navigate(`/${workspaceName}/calendar`, {replace: true});
-            }, 1500);
-            return (() => clearTimeout(timeout));
+            navigate(`/${workspaceName}/calendar`, {replace: true});
         }
     }, [navigate, workspaceName]);
 
