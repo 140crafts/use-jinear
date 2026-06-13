@@ -106,7 +106,8 @@ services:
       # Rate limiting
       RATE_LIMIT_PUBLIC_CAPACITY: ${RATE_LIMIT_PUBLIC_CAPACITY:-25}
       RATE_LIMIT_AUTH_CAPACITY: ${RATE_LIMIT_AUTH_CAPACITY:-100}
-      # Apple Sign In (optional)
+      # Apple Sign In (optional) - keep false to boot without an AuthKey.p8
+      APPLE_ENABLED: ${APPLE_ENABLED:-false}
       APPLE_TEAM_ID: ${APPLE_TEAM_ID:-not-configured}
       APPLE_KEY_ID: ${APPLE_KEY_ID:-not-configured}
       APPLE_KEY_PATH: ${APPLE_KEY_PATH:-/config/AuthKey.p8}

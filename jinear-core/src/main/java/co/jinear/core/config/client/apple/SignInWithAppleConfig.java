@@ -8,6 +8,7 @@ import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.openssl.PEMParser;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -25,6 +26,7 @@ import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
+@ConditionalOnProperty(value = "signinwithapple.enabled", havingValue = "true")
 @PropertySource("classpath:application.properties")
 public class SignInWithAppleConfig {
 
