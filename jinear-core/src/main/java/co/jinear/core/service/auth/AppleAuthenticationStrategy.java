@@ -14,6 +14,7 @@ import co.jinear.core.service.client.apple.SignInWithAppleCallerService;
 import co.jinear.core.service.client.apple.model.IdTokenPayload;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ import java.util.UUID;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@ConditionalOnProperty(value = "signinwithapple.enabled", havingValue = "true")
 public class AppleAuthenticationStrategy implements AuthenticationStrategy {
 
     private final AppleUserOperationService appleUserOperationService;
