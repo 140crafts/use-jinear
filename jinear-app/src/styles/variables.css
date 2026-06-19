@@ -83,7 +83,7 @@
     --task-card-width-week: 175px;
     --task-card-width-month: 65px;
     --team-week-view-day-gap: 1rem;
-    --team-task-status-view-title-gap: 1rem;
+    --team-task-status-view-title-gap: .25rem;
     --status-board-task-card-width: 185px;
     /*  */
     --new-task-and-event-form-min-height: 15rem;

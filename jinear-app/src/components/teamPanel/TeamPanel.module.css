@@ -1,0 +1,11 @@
+.container {
+    display: flex;
+    flex: 1;
+}
+
+.tabButton {
+    gap: .35rem !important;
+    font-size: .85rem;
+    font-weight: bold;
+    align-items: center;
+}

@@ -20,10 +20,10 @@ const WorkspaceTasksPage: React.FC<WorkspaceTasksPageProps> = ({}) => {
     const team = teamsResponse?.data?.find((team) => team);
 
     useEffect(() => {
-        if (team) {
-            navigate(`tasks/${team.username}`, {replace: true});
+        if (team && workspace) {
+            navigate(`/${workspace.username}/tasks/${team.username}`, {replace: true});
         }
-    }, [team]);
+    }, [team, workspace]);
 
     return (
         <div className={styles.container}>

@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./TaskBoardQuickFilterBar.module.css";
+import styles from "./TaskBoardQuickFilterBar.module.scss";
 import type { TaskBoardEntryFilterRequest, TeamDto } from "@/be/jinear-core";
 import {
   queryStateJsonObjectParser,
@@ -20,7 +20,8 @@ interface TaskBoardQuickFilterBarProps {
 }
 
 export interface ITaskBoardEntryFilterRequest extends TaskBoardEntryFilterRequest {
-  page?: number;
+    page?: number;
+    viewType?: 'list' | 'column'
 }
 
 export interface ITaskBoardUrlStateMap {

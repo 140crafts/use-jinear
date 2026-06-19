@@ -1,0 +1,40 @@
+@use "../../../styles/breakpoints.scss" as *;
+
+.filterContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: .5rem
+}
+
+.containerRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.quickFilters {
+  align-items: flex-start;
+}
+
+@media (max-width: $mobile-l) {
+  .containerRow {
+    flex-direction: column-reverse;
+    gap: .25rem;
+  }
+
+  .filterContainer {
+    justify-content: flex-end;
+    gap: .25rem;
+  }
+
+  .quickFilters {
+    justify-content: flex-end;
+  }
+}

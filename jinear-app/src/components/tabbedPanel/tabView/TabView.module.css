@@ -1,9 +1,11 @@
 .container {
-  display: none;
+    display: none;
 }
 
 .active {
-  display: flex !important;
-  flex: 1;
-  flex-direction: column;
+    display: flex !important;
+    flex: 1;
+    flex-direction: column;
+    overflow: scroll;
+    padding: .5ch;
 }

@@ -66,41 +66,43 @@ const TeamWorkflowStatusBoard: React.FC<TeamWorkflowStatusBoardProps> = ({
 
     return (
         <div className={cn(styles.container, className, _isLoading ? styles["container-disabled"] : undefined)}>
-            {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.BACKLOG?.map((workflowDto) => (
-                <WorkflowStatusColumn
-                    key={workflowDto.teamWorkflowStatusId}
-                    workflowStatusDto={workflowDto}
-                    {...columnProps}
-                />
-            ))}
-            {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.NOT_STARTED?.map((workflowDto) => (
-                <WorkflowStatusColumn
-                    key={workflowDto.teamWorkflowStatusId}
-                    workflowStatusDto={workflowDto}
-                    {...columnProps}
-                />
-            ))}
-            {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.STARTED?.map((workflowDto) => (
-                <WorkflowStatusColumn
-                    key={workflowDto.teamWorkflowStatusId}
-                    workflowStatusDto={workflowDto}
-                    {...columnProps}
-                />
-            ))}
-            {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.COMPLETED?.map((workflowDto) => (
-                <WorkflowStatusColumn
-                    key={workflowDto.teamWorkflowStatusId}
-                    workflowStatusDto={workflowDto}
-                    {...columnProps}
-                />
-            ))}
-            {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.CANCELLED?.map((workflowDto) => (
-                <WorkflowStatusColumn
-                    key={workflowDto.teamWorkflowStatusId}
-                    workflowStatusDto={workflowDto}
-                    {...columnProps}
-                />
-            ))}
+            <div className={cn(styles.contentContainer)}>
+                {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.BACKLOG?.map((workflowDto) => (
+                    <WorkflowStatusColumn
+                        key={workflowDto.teamWorkflowStatusId}
+                        workflowStatusDto={workflowDto}
+                        {...columnProps}
+                    />
+                ))}
+                {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.NOT_STARTED?.map((workflowDto) => (
+                    <WorkflowStatusColumn
+                        key={workflowDto.teamWorkflowStatusId}
+                        workflowStatusDto={workflowDto}
+                        {...columnProps}
+                    />
+                ))}
+                {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.STARTED?.map((workflowDto) => (
+                    <WorkflowStatusColumn
+                        key={workflowDto.teamWorkflowStatusId}
+                        workflowStatusDto={workflowDto}
+                        {...columnProps}
+                    />
+                ))}
+                {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.COMPLETED?.map((workflowDto) => (
+                    <WorkflowStatusColumn
+                        key={workflowDto.teamWorkflowStatusId}
+                        workflowStatusDto={workflowDto}
+                        {...columnProps}
+                    />
+                ))}
+                {teamWorkflowListData?.data.groupedTeamWorkflowStatuses.CANCELLED?.map((workflowDto) => (
+                    <WorkflowStatusColumn
+                        key={workflowDto.teamWorkflowStatusId}
+                        workflowStatusDto={workflowDto}
+                        {...columnProps}
+                    />
+                ))}
+            </div>
         </div>
     );
 };

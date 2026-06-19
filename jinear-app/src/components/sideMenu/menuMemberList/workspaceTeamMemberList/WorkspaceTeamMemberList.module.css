@@ -1,7 +1,10 @@
 .container {
-  min-height: 2.5rem;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.button {
+    padding-top: .15rem;
+    padding-bottom: .15rem;
 }

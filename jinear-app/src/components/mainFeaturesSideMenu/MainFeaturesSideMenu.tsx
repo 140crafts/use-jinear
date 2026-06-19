@@ -18,7 +18,6 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
     const {t} = useTranslation();
     const {pathname} = useLocation();
     const calendarPath = `/${workspace?.username}/calendar`;
-    const tasksButtonOpensPath = `/${workspace?.username}/tasks/last-activities`;
     const tasksPath = `/${workspace?.username}/tasks`;
     const inboxPath = `/${workspace?.username}/inbox`;
     const filesPath = `/${workspace?.username}/files`;
@@ -43,7 +42,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
 
             <Button
                 className={styles.iconButton}
-                href={tasksButtonOpensPath}
+                href={tasksPath}
                 variant={pathname?.indexOf(tasksPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             >
                 <LuSquareCheckBig className={styles.icon}/>
