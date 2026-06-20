@@ -12,6 +12,13 @@ import ThemeProvider from "@/components/themeProvider/ThemeProvider.tsx";
 import posthog from 'posthog-js';
 import {PostHogErrorBoundary, PostHogProvider} from '@posthog/react'
 
+
+if (navigator.storage?.persist) {
+    navigator.storage.persist().catch(() => {
+        // ignore — persistence is an optimization, not a requirement
+    });
+}
+
 const POSTHOG_KEY = import.meta.env.VITE_POSTHOG_KEY;
 const POSTHOG_HOST = import.meta.env.VITE_POSTHOG_HOST;
 if (POSTHOG_KEY && POSTHOG_HOST) {

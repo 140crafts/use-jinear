@@ -3031,6 +3031,18 @@ const translations = {
         en: "Unable to connect internet",
         tr: "İnternet bağlantınız yok"
     },
+    bootOfflineTitle: {
+        en: "You're offline",
+        tr: "Çevrimdışısınız"
+    },
+    bootOfflineDescription: {
+        en: "Couldn't reach the server. Check your connection and try again.",
+        tr: "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin."
+    },
+    bootOfflineRetryButton: {
+        en: "Retry",
+        tr: "Tekrar dene"
+    },
     taskRelatedTaskNoAccess: {
         en: "You don't have access to this task.",
         tr: "Bu göreve erişim yetkiniz bulunmamaktadır."
