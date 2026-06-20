@@ -51,7 +51,7 @@ public class TaskUpdateService {
     private final TaskSubscriptionOperationService taskSubscriptionOperationService;
     private final TaskReminderDateUpdateService taskReminderDateUpdateService;
     private final TaskReminderOperationService taskReminderOperationService;
-    private final TaskSearchService taskSearchService;
+    private final TaskFtsRefreshService taskFtsRefreshService;
 
     private final TaskDtoConverter taskDtoConverter;
 
@@ -60,7 +60,7 @@ public class TaskUpdateService {
         Task task = taskRetrieveService.retrieveEntity(taskTitleUpdateVo.getTaskId());
         task.setTitle(taskTitleUpdateVo.getTitle());
         Task saved = taskRepository.save(task);
-        taskSearchService.refreshTaskFtsMv();
+        taskFtsRefreshService.markDirty();
         log.info("Update task title has finished. taskId: {}", saved.getTaskId());
         return taskDtoConverter.map(saved);
     }
@@ -82,7 +82,7 @@ public class TaskUpdateService {
             return richTextInitializeService.initializeRichText(initializeRichTextVo);
         });
         taskDto.setDescription(richTextDto);
-        taskSearchService.refreshTaskFtsMv();
+        taskFtsRefreshService.markDirty();
         return taskDto;
     }
 
@@ -132,7 +132,7 @@ public class TaskUpdateService {
         task.setAssignedTo(taskAssigneeUpdateVo.getAssigneeId());
         Task saved = taskRepository.save(task);
         initializeSubscription(saved);
-        taskSearchService.refreshTaskFtsMv();
+        taskFtsRefreshService.markDirty();
         log.info("Update task assignee has finished");
         return taskDtoConverter.map(saved);
     }

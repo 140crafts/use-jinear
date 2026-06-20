@@ -19,7 +19,8 @@ public enum LockSourceType {
     CONVERSATION("conversation", 20, TimeUnit.SECONDS),
     PROJECT_MILESTONE("project:milestone", 20, TimeUnit.SECONDS),
     PROJECT_DOMAIN("project:domain", 10, TimeUnit.SECONDS),
-    MATERIAL_ACCESS_UPDATE("material:access-update", 30, TimeUnit.SECONDS);
+    MATERIAL_ACCESS_UPDATE("material:access-update", 30, TimeUnit.SECONDS),
+    TASK_FTS_REFRESH("task-fts:refresh", 10, TimeUnit.MINUTES);
 
     private final String key;
     private final int ttl;
