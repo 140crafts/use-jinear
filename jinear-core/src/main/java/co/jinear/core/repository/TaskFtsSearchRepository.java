@@ -24,8 +24,8 @@ public interface TaskFtsSearchRepository extends JpaRepository<TaskFts, String> 
                        where tok <> ''))
               and ft.workspace_id = :workspaceId
               and (
-                    (ft.team_task_visibility = 0 and ft.team_id in :visibleToAllTeamIds) or
-                    (ft.team_task_visibility = 1 and (ft.owner_id = :ownerId or ft.assigned_to = :assignedTo) and ft.team_id in :ownerOrAssigneeTeamIds)
+                    ft.team_id in :visibleToAllTeamIds or
+                    ((ft.owner_id = :ownerId or ft.assigned_to = :assignedTo) and ft.team_id in :ownerOrAssigneeTeamIds)
                   )
               and passive_id is null
             order by search_ranking desc
@@ -39,8 +39,8 @@ public interface TaskFtsSearchRepository extends JpaRepository<TaskFts, String> 
                                where tok <> ''))
                       and ft.workspace_id = :workspaceId
                       and (
-                            (ft.team_task_visibility = 0 and ft.team_id in :visibleToAllTeamIds) or
-                            (ft.team_task_visibility = 1 and (ft.owner_id = :ownerId or ft.assigned_to = :assignedTo) and ft.team_id in :ownerOrAssigneeTeamIds)
+                            ft.team_id in :visibleToAllTeamIds or
+                            ((ft.owner_id = :ownerId or ft.assigned_to = :assignedTo) and ft.team_id in :ownerOrAssigneeTeamIds)
                           )
                       and passive_id is null
                     """,
