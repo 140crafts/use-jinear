@@ -26,7 +26,7 @@ const resolveLanguage = (locale: string | undefined): Language =>
         : DEFAULT_LOCALE;
 
 const detectInitialLocale = (): string =>
-    getHtmlLang() || navigator.language?.split("-")[0] || DEFAULT_LOCALE;
+    navigator.language?.split("-")[0] || DEFAULT_LOCALE;
 
 const useTranslation = () => {
     const [locale] = useState<string>(detectInitialLocale);

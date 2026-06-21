@@ -2548,8 +2548,8 @@ const translations = {
         tr: "Ekip Dosyaları"
     },
     teamFilesListTitle: {
-        en: "Files",
-        tr: "Dosyalar"
+        en: "Attachments",
+        tr: "Ekler"
     },
     teamFilesListEmptyLabel: {
         en: "There isn't any files.",
