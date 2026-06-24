@@ -54,7 +54,6 @@ const TaskBoardColumnView: React.FC<TaskBoardColumnViewProps> = ({
         teamId={teamId}
         taskList={taskBoardElementsResponse?.data?.content?.map(a => a.task) || []}
         isTaskListingLoading={isFetching}
-        className={styles.workflowStatusBoard}
       />
     </div>
   );

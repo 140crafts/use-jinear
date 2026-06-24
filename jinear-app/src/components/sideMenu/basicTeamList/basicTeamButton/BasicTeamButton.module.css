@@ -1,0 +1,8 @@
+.teamButton {
+    text-align: start;
+}
+
+.teamName {
+    flex: 1;
+    font-size: 0.75rem;
+}

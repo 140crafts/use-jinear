@@ -16,11 +16,12 @@ import Logger from "@/util/logger";
 import cn from "classnames";
 
 interface QuickFilterBarProps {
+    className?: string
 }
 
 const logger = Logger("QuickFilterBar");
 
-const QuickFilterBar: React.FC<QuickFilterBarProps> = ({}) => {
+const QuickFilterBar: React.FC<QuickFilterBarProps> = ({className}) => {
     const {t} = useTranslation();
     const team = useTeam();
     const setQueryState = useSetQueryState();
@@ -146,7 +147,7 @@ const QuickFilterBar: React.FC<QuickFilterBarProps> = ({}) => {
     };
 
     return (
-        <div className={styles.container}>
+        <div className={cn(styles.container, className)}>
             <Button
                 className={cn(styles.button, isThisWeekSelected && styles.selected)}
                 heightVariant={ButtonHeight.short}

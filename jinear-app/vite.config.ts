@@ -23,6 +23,13 @@ export default defineConfig({
     ImportMetaEnvPlugin.vite({ example: '.env.example' }),
     VitePWA({
       registerType: 'autoUpdate',
+      // Inline the SW registration into index.html instead of emitting a separate
+      // /registerSW.js. That file is a render-blocking classic <script> in <head>
+      // served `no-cache`; during the cold-start window (after a process kill,
+      // before the SW controls the navigation) it is fetched from the network and,
+      // on "lie-fi" (connected but stalled), it hangs and blocks first paint → white
+      // screen. Inlining removes that network request from the boot critical path.
+      injectRegister: 'inline',
       // injectManifest lets us author the SW ourselves (src/sw.ts) so it can
       // read import.meta.env.* the same way the app bundle does.
       strategies: 'injectManifest',

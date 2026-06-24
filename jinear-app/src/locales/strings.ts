@@ -2056,12 +2056,12 @@ const translations = {
         tr: "Son tarih bugün"
     },
     taskBoardAssignDueDate: {
-        en: "Assign Due Date",
-        tr: "Son Tarih Ata"
+        en: "Due Date",
+        tr: "Son Tarih"
     },
     taskBoardChangeTitleModalTitle: {
         en: "Update Title",
-        tr: "Başlık Güncelle"
+        tr: "Başlığı Güncelle"
     },
     taskBoardChangeTitleModalInfoText: {
         en: "Please provide an another title for task board.",
@@ -2256,28 +2256,28 @@ const translations = {
         tr: "Liste"
     },
     taskListTitleAndViewTypeStatusColumnsTooltip: {
-        en: "Status Columns View",
-        tr: "Durum Görünümü"
+        en: "Status",
+        tr: "Durum"
     },
     taskListTitleAndViewTypeStatusColumnsLabel: {
-        en: "Status Columns",
+        en: "Status",
         tr: "Durum"
     },
     taskBoardLockButtonTooltip_OPEN: {
-        en: "Lock board to changes",
-        tr: "Panoyu düzenlemeye kapat"
+        en: "Lock board",
+        tr: "Panoyu kapat"
     },
     taskBoardLockButtonTooltip_CLOSED: {
-        en: "Unlock board to changes",
-        tr: "Panoyu düzenlemeye aç"
+        en: "Unlock board",
+        tr: "Panoyu aç"
     },
     taskBoardSearchTaskButtonTooltip: {
-        en: "Search & add tasks",
-        tr: "Görev ara ve panoya ekle"
+        en: "Add Task",
+        tr: "Görev Ekle"
     },
     taskBoardCreateTaskButtonTooltip: {
-        en: "Create & add tasks",
-        tr: "Görev oluştur ve panoya ekle"
+        en: "Create Task",
+        tr: "Görev Oluştur"
     },
     taskBoardGoToButtonTooltip: {
         en: "Go to board",
@@ -2286,6 +2286,10 @@ const translations = {
     taskBoardPickColorButtonTooltip: {
         en: "Pick color for board",
         tr: "Renk Seç"
+    },
+    taskBoardColorLabel: {
+        en: "Color Code",
+        tr: "Renk Kodu"
     },
     activeTasksPageTitle: {
         en: "Active Tasks",
@@ -2544,8 +2548,8 @@ const translations = {
         tr: "Ekip Dosyaları"
     },
     teamFilesListTitle: {
-        en: "Files",
-        tr: "Dosyalar"
+        en: "Attachments",
+        tr: "Ekler"
     },
     teamFilesListEmptyLabel: {
         en: "There isn't any files.",
@@ -2967,6 +2971,14 @@ const translations = {
         en: "Updates",
         tr: "Son Aktiviteler"
     },
+    mainFeaturesMenuLabelThisWeek: {
+        en: "This Week",
+        tr: "Bu Hafta"
+    },
+    mainFeaturesMenuLabelSearch: {
+        en: "Search",
+        tr: "Ara"
+    },
     mainFeaturesMenuLabelAssignedToMe: {
         en: "Assignments",
         tr: "Bana Atananlar"
@@ -3018,6 +3030,18 @@ const translations = {
     deviceOfflineModalText: {
         en: "Unable to connect internet",
         tr: "İnternet bağlantınız yok"
+    },
+    bootOfflineTitle: {
+        en: "You're offline",
+        tr: "Çevrimdışısınız"
+    },
+    bootOfflineDescription: {
+        en: "Couldn't reach the server. Check your connection and try again.",
+        tr: "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin."
+    },
+    bootOfflineRetryButton: {
+        en: "Retry",
+        tr: "Tekrar dene"
     },
     taskRelatedTaskNoAccess: {
         en: "You don't have access to this task.",
@@ -5544,6 +5568,11 @@ const translations = {
         en: "Documentation",
         tr: "Dokümantasyon"
     },
+
+    teamHomeTeamSettings: {
+        en: "Team settings",
+        tr: "Ekip ayarları"
+    }
 };
 
 export default translations;

@@ -41,12 +41,11 @@ export const setTaskBoardDefaultDisplayFormat = (taskBoardId: string, format: "l
 const TaskBoard: React.FC<TaskBoardProps> = ({
                                                  taskBoard,
                                                  workspace,
-                                                 team,
-                                                 staticViewType
+                                                 team
                                              }) => {
-    const displayFormat = useQueryState<"list" | "column">("displayFormat") || getTaskBoardDefaultDisplayFormat(taskBoard.taskBoardId);
-
     const taskBoardFilterMap = useQueryState<ITaskBoardUrlStateMap>("board-filter-map", queryStateJsonObjectParser) ?? {};
+
+    const displayFormat = taskBoardFilterMap?.[taskBoard.taskBoardId]?.viewType || getTaskBoardDefaultDisplayFormat(taskBoard.taskBoardId);
     const currentPage = taskBoardFilterMap?.[taskBoard.taskBoardId]?.page ?? 0;
     const setQueryState = useSetQueryState();
 
@@ -59,6 +58,14 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
         setQueryState("board-filter-map", queryStateObjectToJsonStringConverter(finalTaskBoardFilterMap));
     };
 
+    const setViewtype = (nextViewType: 'column' | 'list') => {
+        const finalTaskBoardFilterMap = taskBoardFilterMap ?? {};
+        finalTaskBoardFilterMap[taskBoard.taskBoardId] = finalTaskBoardFilterMap[taskBoard.taskBoardId] ?? {};
+        // @ts-expect-error ignore
+        finalTaskBoardFilterMap[taskBoard.taskBoardId].viewType = nextViewType;
+        setQueryState("board-filter-map", queryStateObjectToJsonStringConverter(finalTaskBoardFilterMap));
+    }
+
     return (
         <div className={styles.container}>
             <TaskBoardTitle
@@ -66,19 +73,19 @@ const TaskBoard: React.FC<TaskBoardProps> = ({
                 team={team}
                 workspace={workspace}
                 displayFormat={displayFormat}
-                noDisplayFormatChange={staticViewType != null}
+                onViewTypeChange={setViewtype}
             />
             <TaskBoardElementList
                 taskBoardId={taskBoard.taskBoardId}
                 boardState={taskBoard.state}
-                className={(staticViewType == "list" || (staticViewType == undefined && displayFormat == "list")) ? styles.visible : styles.hidden}
+                className={displayFormat == "list" ? styles.visible : styles.hidden}
                 page={currentPage}
                 setPage={setPage}
             />
             <TaskBoardColumnView
                 taskBoardId={taskBoard.taskBoardId}
                 teamId={team.teamId}
-                className={(staticViewType == "column" || (staticViewType == undefined && displayFormat == "column")) ? styles.visible : styles.hidden}
+                className={displayFormat == "column" ? styles.visible : styles.hidden}
                 page={currentPage}
                 setPage={setPage}
             />

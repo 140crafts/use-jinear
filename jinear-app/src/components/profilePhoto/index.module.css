@@ -36,6 +36,8 @@
   /* border-width: 0px; */
   border-style: solid;
   border-radius: 70px;
+  height: 100%;
+  width: 100%;
 }
 
 @media screen and (max-width: 760px) {

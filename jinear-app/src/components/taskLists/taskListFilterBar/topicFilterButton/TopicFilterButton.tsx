@@ -15,6 +15,7 @@ import React from "react";
 import {IoPricetag} from "react-icons/io5";
 import {useTeam, useWorkspace} from "../context/TaskListFilterBarContext";
 import styles from "./TopicFilterButton.module.css";
+import {LuTag} from "react-icons/lu";
 
 interface TopicFilterButtonProps {
 }
@@ -59,16 +60,19 @@ const TopicFilterButton: React.FC<TopicFilterButtonProps> = ({}) => {
     return (
         <Button
             heightVariant={ButtonHeight.short}
-            variant={isEmpty ? ButtonVariants.filled : ButtonVariants.filled2}
+            variant={isEmpty ? ButtonVariants.default : ButtonVariants.filled2}
             onClick={popPicker}
         >
             {isEmpty ? (
-                t("taskFilterTopicFilterButtonEmpty")
+                <div className={styles.singleItem}>
+                    <LuTag/>
+                    {t("taskFilterTopicFilterButtonEmpty")}
+                </div>
             ) : (
                 <b>
                     {selectedTopics?.length == 1 ? (
                         <div className={styles.singleItem}>
-                            <IoPricetag/>
+                            <LuTag/>
                             {selectedTopics[0]?.name}
                         </div>
                     ) : (

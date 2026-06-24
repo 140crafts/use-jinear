@@ -14,6 +14,7 @@ import useTranslation from "@/locales/useTranslation";
 import React from "react";
 import {useTeam} from "../context/TaskListFilterBarContext";
 import styles from "./OwnerFilterButton.module.css";
+import {LuUser} from "react-icons/lu";
 
 interface OwnerFilterButtonProps {
 }
@@ -57,11 +58,14 @@ const OwnerFilterButton: React.FC<OwnerFilterButtonProps> = ({}) => {
     return (
         <Button
             heightVariant={ButtonHeight.short}
-            variant={isEmpty ? ButtonVariants.filled : ButtonVariants.filled2}
+            variant={isEmpty ? ButtonVariants.default : ButtonVariants.filled2}
             onClick={popPicker}
         >
             {isEmpty ? (
-                t("taskFilterOwnerFilterButtonEmpty")
+                <div className={styles.singleItem}>
+                    <LuUser/>
+                    {t("taskFilterOwnerFilterButtonEmpty")}
+                </div>
             ) : (
                 <b>
                     {selectedOwners?.length == 1 ? (

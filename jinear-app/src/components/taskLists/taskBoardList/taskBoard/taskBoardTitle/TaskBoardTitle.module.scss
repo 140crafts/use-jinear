@@ -5,8 +5,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: flex-start;
   z-index: 1;
+  gap: .5rem
 }
 
 .closedListTitle {
@@ -26,31 +26,43 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-}
-
-.titleLabelContainer:hover {
-  .editTitleButton {
-    display: flex;
-  }
+  gap: .5rem;
 }
 
 .titleActionBar {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  align-items: flex-end;
-  align-self: flex-end;
+  //align-items: flex-end;
+  //align-self: flex-end;
   gap: 0.5rem;
+  margin-top: .5rem;
 }
 
 .actionBarRow {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.actionButton {
   gap: .5rem;
 }
 
-.editTitleButton {
-  display: none;
+.boardColorIcon {
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+}
+
+.colorInput {
+  visibility: hidden !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 !important;
+  min-height: 0 !important;
+  position: absolute;
+  z-index: -1;
 }
 
 .viewTypeButtonContainer {
@@ -67,4 +79,10 @@
 
 .wfsColumnIcon {
   rotate: 180deg;
+}
+
+@media (max-width: $mobile-l) {
+  .actionBarRow {
+    justify-content: flex-end;
+  }
 }

@@ -11,7 +11,7 @@ const TabNavigator: React.FC<TabNavigatorProps> = ({tabs}) => {
     return (
         <div className={styles.container}>
             {tabs?.map((tab) => (
-                <NavigatorButton key={tab.name} name={tab.name} label={tab.label}/>
+                <NavigatorButton key={tab.name} {...tab}/>
             ))}
         </div>
     );

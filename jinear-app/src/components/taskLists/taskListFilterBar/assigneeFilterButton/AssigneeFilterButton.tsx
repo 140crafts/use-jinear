@@ -14,6 +14,7 @@ import useTranslation from "@/locales/useTranslation";
 import React from "react";
 import {useTeam} from "../context/TaskListFilterBarContext";
 import styles from "./AssigneeFilterButton.module.css";
+import {LuUser} from "react-icons/lu";
 
 interface AssigneeFilterButtonProps {
 }
@@ -57,11 +58,14 @@ const AssigneeFilterButton: React.FC<AssigneeFilterButtonProps> = ({}) => {
     return (
         <Button
             heightVariant={ButtonHeight.short}
-            variant={isEmpty ? ButtonVariants.filled : ButtonVariants.filled2}
+            variant={isEmpty ? ButtonVariants.default : ButtonVariants.filled2}
             onClick={popPicker}
         >
             {isEmpty ? (
-                t("taskFilterAssigneeFilterButtonEmpty")
+                <div className={styles.singleItem}>
+                    <LuUser/>
+                    {t("taskFilterAssigneeFilterButtonEmpty")}
+                </div>
             ) : (
                 <b>
                     {selectedAssignees?.length == 1 ? (

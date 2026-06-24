@@ -68,21 +68,35 @@ const firebaseConfig = {
 // Only wire up push when Firebase is actually configured. Self-hosters who don't
 // set the VITE_FIREBASE_* env vars still get a working SW (offline shell, asset
 // caching); they just don't get web push.
-if (firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.messagingSenderId) {
-    const messaging = getMessaging(initializeApp(firebaseConfig));
+//
+// Initialization is deferred out of top-level script evaluation: initializeApp +
+// getMessaging pull in and run the (large) Firebase bundle, and the browser must
+// finish evaluating this script before the fetch/navigation routes above can serve
+// requests. Deferring lets precacheAndRoute + the NavigationRoute take control of a
+// cold-start navigation sooner — important on "lie-fi", where any window in which
+// the SW isn't yet controlling exposes the boot path to a stalled network. Firebase
+// itself isn't needed until a push actually arrives.
+const firebaseConfigured = Boolean(
+    firebaseConfig.apiKey && firebaseConfig.projectId && firebaseConfig.messagingSenderId,
+);
 
-    // Combined (notification + data) payloads are auto-displayed by the FCM SDK while
-    // the page is backgrounded, so we only render manually for data-only messages —
-    // otherwise the user would see two notifications.
-    onBackgroundMessage(messaging, (payload) => {
-        if (payload.notification) {
-            return;
-        }
-        const title = payload.data?.title ?? "Jinear";
-        self.registration.showNotification(title, {
-            body: payload.data?.body,
-            icon: "https://jinear.co/icons/notification-icon.png",
-            data: {launchUrl: payload.data?.launchUrl},
+if (firebaseConfigured) {
+    Promise.resolve().then(() => {
+        const messaging = getMessaging(initializeApp(firebaseConfig));
+
+        // Combined (notification + data) payloads are auto-displayed by the FCM SDK while
+        // the page is backgrounded, so we only render manually for data-only messages —
+        // otherwise the user would see two notifications.
+        onBackgroundMessage(messaging, (payload) => {
+            if (payload.notification) {
+                return;
+            }
+            const title = payload.data?.title ?? "Jinear";
+            self.registration.showNotification(title, {
+                body: payload.data?.body,
+                icon: "https://jinear.co/icons/notification-icon.png",
+                data: {launchUrl: payload.data?.launchUrl},
+            });
         });
     });
 }

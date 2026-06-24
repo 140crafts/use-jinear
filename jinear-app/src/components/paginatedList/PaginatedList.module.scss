@@ -3,7 +3,7 @@
 .container {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  //gap: 0.5rem;
   position: relative;
 }
 
@@ -12,7 +12,6 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding-top: .25rem;
 }
 
 .content {

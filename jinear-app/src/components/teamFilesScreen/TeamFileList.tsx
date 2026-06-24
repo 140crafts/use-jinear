@@ -41,7 +41,6 @@ const TeamFileList: React.FC<TeamFileListProps> = ({ teamId }) => {
         setPage={setPage}
         renderItem={renderItem}
         emptyLabel={t("teamFilesListEmptyLabel")}
-        listTitle={t("teamFilesListTitle")}
         hidePaginationOnSinglePages={true}
         contentContainerClassName={styles.list}
       />

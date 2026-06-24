@@ -17,8 +17,9 @@
     header @html Cache-Control "no-cache"
 
     # Service worker + PWA manifest must not be cached, or env-var changes after
-    # a redeploy never reach already-installed clients.
-    @sw path /sw.js /registerSW.js /manifest.webmanifest
+    # a redeploy never reach already-installed clients. (The SW registration is
+    # inlined into index.html via vite-plugin-pwa, so there is no /registerSW.js.)
+    @sw path /sw.js /manifest.webmanifest
     header @sw Cache-Control "no-cache"
 
     # SPA fallback — any unknown path serves index.html so the React router can handle it.

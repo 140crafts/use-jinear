@@ -16,6 +16,7 @@ import Modal from "../modal/Modal";
 import styles from "./TaskTaskBoardModal.module.css";
 import Logger from "@/util/logger";
 import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
+import cn from "classnames";
 
 interface TaskTaskBoardModalProps {
 }
@@ -120,7 +121,7 @@ const TaskTaskBoardModal: React.FC<TaskTaskBoardModalProps> = ({}) => {
                                 <div className={styles.listItemIcon}>
                                     <IoCheckmarkCircle size={18}/>
                                 </div>
-                                {taskBoardEntryDetailedDto?.taskBoard?.title}
+                                <span className={'line-clamp'}>{taskBoardEntryDetailedDto?.taskBoard?.title}</span>
                             </Button>
                         ))}
                     {recentBoards?.content.map((taskBoardDto) => (
@@ -133,7 +134,7 @@ const TaskTaskBoardModal: React.FC<TaskTaskBoardModalProps> = ({}) => {
                             <div className={styles.listItemIcon}>
                                 <IoRadioButtonOffOutline size={18}/>
                             </div>
-                            {taskBoardDto.title}
+                            <span className={'line-clamp'}>{taskBoardDto.title}</span>
                         </Button>
                     ))}
                 </div>

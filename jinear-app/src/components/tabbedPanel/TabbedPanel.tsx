@@ -41,14 +41,12 @@ const TabbedPanel: React.FC<TabbedPanelProps> = ({initialTabName, children, cont
     const [searchParams, setSearchParams] = useSearchParams();
     const [activeTab, setActiveTab] = useState<TabViewProps | undefined>(resolveInitial);
 
-    // Sync active tab when the URL ?tab= param changes (back/forward, deep link)
-    useEffect(() => {
-        const fromUrl = searchParams.get("tab");
-        const tab = tabs.find((t) => t.name == fromUrl);
-        if (tab && tab.name != activeTab?.name) {
-            setActiveTab(tab);
-        }
-    }, [searchParams, tabs, activeTab?.name]);
+    // The active tab is owned by local state and changed only through changeTab
+    // (user clicks). We intentionally do NOT sync it back from ?tab= on every
+    // searchParams change: tab content (e.g. MultiViewTaskList) writes unrelated
+    // query params via navigate(), and re-deriving the active tab from the URL on
+    // that churn caused the tab to flicker/ping-pong. The initial ?tab= is still
+    // honored once via resolveInitial for deep-linking.
 
     // Fallback if initialTabName changes and no URL param is set
     useEffect(() => {
@@ -65,8 +63,9 @@ const TabbedPanel: React.FC<TabbedPanelProps> = ({initialTabName, children, cont
             setActiveTab(tab);
             setSearchParams(
                 (prev) => {
-                    prev.set("tab", tab.name);
-                    return prev;
+                    const next = new URLSearchParams(prev);
+                    next.set("tab", tab.name);
+                    return next;
                 },
                 {replace: true}
             );

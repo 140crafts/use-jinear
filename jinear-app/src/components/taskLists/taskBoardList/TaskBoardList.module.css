@@ -2,9 +2,13 @@
     font-size: 1.15rem;
 }
 
+.listContainer {
+    gap: unset !important;
+}
+
 .list {
     background: unset !important;
-    gap: 2.5rem;
+    gap: .5rem;
 }
 
 .divider {

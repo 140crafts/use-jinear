@@ -8,6 +8,7 @@ import TaskBoard from "@/components/taskLists/taskBoardList/taskBoard/TaskBoard"
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import {useAppDispatch} from "@/store";
 import {popNewTaskBoardModal} from "@/slice/modalSlice";
+import GradientLine from "@/components/gradientLine/GradientLine.tsx";
 
 interface TaskBoardListProps {
     team: TeamDto;
@@ -28,13 +29,9 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({team, workspace}) => {
     const renderItem = (item: TaskBoardDto, i: number) => {
         return (
             <div key={item.taskBoardId}>
-                <TaskBoard
-                    taskBoard={item}
-                    team={team}
-                    workspace={workspace}
-                    staticViewType={"list"}
-                />
-                {/*{((taskBoardListingResponse?.data?.content?.length ?? 0) - 1) != i && <div className={styles.divider} />}*/}
+                <TaskBoard taskBoard={item} team={team} workspace={workspace}/>
+                <GradientLine/>
+                <div className={'spacer-h-2'}/>
             </div>
         );
     };
@@ -65,11 +62,9 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({team, workspace}) => {
                 setPage={setPage}
                 renderItem={renderItem}
                 emptyComponent={emptyComponent}
-                // emptyLabel={t("taskBoardsListEmptyLabel")}
-                listTitle={t("taskBoardsListTitle")}
-                listTitleClassName={styles.listTitle}
                 hidePaginationOnSinglePages={true}
                 contentContainerClassName={styles.list}
+                containerClassName={styles.listContainer}
             />
         </div>
     );

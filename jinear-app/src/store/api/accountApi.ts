@@ -9,7 +9,7 @@ import {api, tagTypes} from "./api";
 export const accountApi = api.injectEndpoints({
     endpoints: (build) => ({
         me: build.query<AccountRetrieveResponse, void>({
-            query: () => "v1/account",
+            query: () => ({url: "v1/account", timeout: 8000}),
             providesTags: ["v1/account"],
         }),
         confirmEmail: build.mutation<BaseResponse, ConfirmEmailRequest>({

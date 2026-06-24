@@ -1,28 +1,38 @@
 .container {
-  display: flex;
-  flex-direction: row;
-  gap: var(--team-task-status-view-title-gap);
-  position: relative;
-  /* background-image: var(--line-svg); */
+    overflow-x: scroll;
+    overflow-y: hidden;
+    padding-bottom: 2rem;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: row;
+    gap: var(--team-task-status-view-title-gap);
+    position: relative;
+    max-width: calc(
+            100vw -
+            calc(calc(var(--tasks-section-sidebar-width) + var(--workspace-side-menu-max-width)) +
+            calc(var(--workspace-layout-page-padding) * 4))
+    ) !important;
 }
 
 .container-disabled {
-  opacity: 0.25;
-  pointer-events: none;
+    opacity: 0.25;
+    pointer-events: none;
 }
 
 .loading {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  /* background-color: rgba(0, 0, 0, 0.1); */
-  /* backdrop-filter: var(--backdrop-filter-blur); */
-  display: flex;
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-  min-height: 55px;
-  z-index: 1;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    /* background-color: rgba(0, 0, 0, 0.1); */
+    /* backdrop-filter: var(--backdrop-filter-blur); */
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    min-height: 55px;
+    z-index: 1;
 }

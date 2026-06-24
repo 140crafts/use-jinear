@@ -10,7 +10,7 @@ import React, {useMemo} from "react";
 import {LuChevronDown, LuChevronRight} from "react-icons/lu";
 import MenuGroupTitle from "../menuGroupTitle/MenuGroupTitle";
 import styles from "./BasicTeamList.module.css";
-import BasicTeamMenu from "./basicTeamMenu/BasicTeamMenu";
+import BasicTeamButton from "@/components/sideMenu/basicTeamList/basicTeamButton/BasicTeamButton.tsx";
 
 interface BasicTeamListProps {
     workspace: WorkspaceDto;
@@ -43,45 +43,47 @@ const BasicTeamList: React.FC<BasicTeamListProps> = ({workspace}) => {
 
     return (
         <div className={styles.container}>
-            <MenuGroupTitle label={t("sideMenuYourTeamsTitle")} hasAddButton={true}
-                            onAddButtonClick={openNewTeamModal}/>
+            <MenuGroupTitle
+                label={t("sideMenuYourTeamsTitle")}
+                hasAddButton={true}
+                onAddButtonClick={openNewTeamModal}
+            />
             {isLoading && <CircularLoading/>}
             <div className="spacer-h-1"/>
             <div className={styles.teamListContainer}>
                 {!isLoading && (
                     <>
                         {activeTeamMembershipList?.map((teamMemberDto) => (
-                            <BasicTeamMenu
-                                key={`basic-team-menu-${teamMemberDto.team.teamId}`}
-                                team={teamMemberDto.team}
+                            <BasicTeamButton
+                                key={`team-button-${teamMemberDto.teamId}`}
                                 workspace={workspace}
-                                role={teamMemberDto.role}
+                                team={teamMemberDto.team}
                             />
                         ))}
-                        {archivedTeamMembershipList && archivedTeamMembershipList.length != 0 && (
-                            <div className={styles.archivedListContainer}>
-                                <Button heightVariant={ButtonHeight.short} className={styles.menuActionButton}
-                                        onClick={toggleArchivedVisible}>
-                                    {archivedVisible ? <LuChevronDown/> : <LuChevronRight/>}
-                                    {t("sideMenuArchivedTeamsTitle").replace(
-                                        "${n}",
-                                        archivedTeamMembershipList.length > 99 ? "99+" : archivedTeamMembershipList.length + ""
+
+                            {archivedTeamMembershipList && archivedTeamMembershipList.length != 0 && (
+                                <div className={styles.archivedListContainer}>
+                                    <Button heightVariant={ButtonHeight.short} className={styles.menuActionButton}
+                                            onClick={toggleArchivedVisible}>
+                                        {archivedVisible ? <LuChevronDown/> : <LuChevronRight/>}
+                                        {t("sideMenuArchivedTeamsTitle").replace(
+                                            "${n}",
+                                            archivedTeamMembershipList.length > 99 ? "99+" : archivedTeamMembershipList.length + ""
+                                        )}
+                                    </Button>
+                                    {archivedVisible && (
+                                        <div className={styles.archivedList}>
+                                            {archivedTeamMembershipList.map((teamMemberDto) => (
+                                                <BasicTeamButton
+                                                    key={`team-button-${teamMemberDto.teamId}`}
+                                                    workspace={workspace}
+                                                    team={teamMemberDto.team}
+                                                />
+                                            ))}
+                                        </div>
                                     )}
-                                </Button>
-                                {archivedVisible && (
-                                    <div className={styles.archivedList}>
-                                        {archivedTeamMembershipList.map((teamMemberDto) => (
-                                            <BasicTeamMenu
-                                                key={`basic-team-menu-${teamMemberDto.team.teamId}`}
-                                                team={teamMemberDto.team}
-                                                workspace={workspace}
-                                                role={teamMemberDto.role}
-                                            />
-                                        ))}
-                                    </div>
-                                )}
-                            </div>
-                        )}
+                                </div>
+                            )}
                     </>
                 )}
             </div>

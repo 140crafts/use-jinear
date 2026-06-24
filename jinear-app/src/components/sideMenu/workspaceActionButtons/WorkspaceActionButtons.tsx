@@ -1,17 +1,15 @@
 import React from "react";
 import styles from "./WorkspaceActionButtons.module.css";
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
-import {LuClipboardPen, LuRss, LuSquarePen} from "react-icons/lu";
-import ProjectsButton from "@/components/sideMenu/workspaceActionButtons/projectsButton/ProjectsButton";
+import {LuClipboardPen, LuSearch, LuSparkles, LuSquarePen} from "react-icons/lu";
 import useTranslation from "@/locals/useTranslation";
-import {popNewTaskModal} from "@/slice/modalSlice";
+import {closeSearchTaskModal, popNewTaskModal, popSearchTaskModal} from "@/slice/modalSlice";
 import {useAppDispatch} from "@/store";
-import type {WorkspaceDto} from "@/be/jinear-core";
+import type {TaskDto, WorkspaceDto} from "@/be/jinear-core";
 import {useWorkspaceFirstTeam} from "@/hooks/useWorkspaceFirstTeam";
-import TeamsButton from "@/components/sideMenu/workspaceActionButtons/teamsButton/TeamsButton";
 import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle";
 import Logger from "@/util/logger";
-import {useLocation} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 interface WorkspaceActionButtonsProps {
     workspace: WorkspaceDto;
@@ -21,11 +19,11 @@ const logger = Logger("WorkspaceActionButtons");
 const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({workspace}) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
-    const projectsEnabled = true;
     const team = useWorkspaceFirstTeam(workspace.workspaceId);
     const {pathname} = useLocation();
     const assignedToMePath = `/${workspace?.username}/tasks/assigned-to-me`;
     const lastActivitiesPath = `/${workspace?.username}/tasks/last-activities`;
+    const navigate = useNavigate();
 
     const _popNewTaskModal = () => {
         if (workspace && team) {
@@ -33,7 +31,21 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({workspac
         }
     };
 
-    logger.log({pathname, assignedToMePath, lastActivitiesPath});
+    const navigateToTask = (task: TaskDto) => {
+        if (task) {
+            navigate(`/${workspace.username}/task/${task?.team?.tag}-${task.teamTagNo}`);
+            dispatch(closeSearchTaskModal());
+        }
+    }
+
+    const searchTask = () => {
+        dispatch(popSearchTaskModal({
+            workspaceId: workspace.workspaceId,
+            teamIds: [],
+            onSelect: navigateToTask,
+            visible: true
+        }))
+    }
 
     return (
         <div className={styles.container}>
@@ -53,12 +65,22 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({workspac
 
                 <Button
                     className={styles.button}
+                    variant={ButtonVariants.hoverFilled2}
+                    onClick={searchTask}
+                >
+                    <LuSearch className={styles.icon}/>
+                    {t("mainFeaturesMenuLabelSearch")}
+                </Button>
+
+                <Button
+                    className={styles.button}
                     href={lastActivitiesPath}
                     variant={pathname?.indexOf(lastActivitiesPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
                 >
-                    <LuRss className={styles.icon}/>
+                    <LuSparkles className={styles.icon}/>
                     {t("mainFeaturesMenuLabelLastActivities")}
                 </Button>
+
                 <Button
                     className={styles.button}
                     href={assignedToMePath}
@@ -67,8 +89,6 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({workspac
                     <LuClipboardPen className={styles.icon}/>
                     {t("mainFeaturesMenuLabelAssignedToMe")}
                 </Button>
-
-                <TeamsButton workspace={workspace}/>
 
             </div>
         </div>

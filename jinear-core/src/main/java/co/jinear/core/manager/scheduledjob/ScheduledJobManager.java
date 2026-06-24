@@ -8,6 +8,7 @@ import co.jinear.core.service.material.MaterialRetrieveService;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.project.domain.ProjectDomainCnameOperatorService;
+import co.jinear.core.service.task.TaskFtsRefreshService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -28,6 +29,7 @@ public class ScheduledJobManager {
     private final ProjectDomainCnameOperatorService projectDomainCnameOperatorService;
     private final MaterialRetrieveService materialRetrieveService;
     private final ReminderProcessManager reminderProcessManager;
+    private final TaskFtsRefreshService taskFtsRefreshService;
 
     @Async
     @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
@@ -84,6 +86,12 @@ public class ScheduledJobManager {
     public void processUpcomingReminders() {
         log.info("Process upcoming reminders has started.");
         reminderProcessManager.remindUpcomingJobs();
+    }
+
+    @Async
+    @Scheduled(fixedRate = 2, timeUnit = TimeUnit.MINUTES)
+    public void refreshTaskFtsMaterializedView() {
+        taskFtsRefreshService.refreshIfDirty();
     }
 
     private void updateMediaAsPrivate(String mediaId) {

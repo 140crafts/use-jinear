@@ -20,7 +20,7 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.task.TaskActivityService;
 import co.jinear.core.service.task.TaskRetrieveService;
-import co.jinear.core.service.task.TaskSearchService;
+import co.jinear.core.service.task.TaskFtsRefreshService;
 import co.jinear.core.service.task.media.TaskMediaOperationService;
 import co.jinear.core.service.task.media.TaskMediaRetrieveService;
 import co.jinear.core.service.team.TeamRetrieveService;
@@ -53,7 +53,7 @@ public class TaskMediaManager {
     private final TaskActivityService taskActivityService;
     private final TeamAccessValidator teamAccessValidator;
     private final TeamRetrieveService teamRetrieveService;
-    private final TaskSearchService taskSearchService;
+    private final TaskFtsRefreshService taskFtsRefreshService;
     private final MediaRetrieveService mediaRetrieveService;
 
     public TaskMediaResponse retrieveTaskMediaList(String taskId) {
@@ -84,7 +84,7 @@ public class TaskMediaManager {
         log.info("Upload task media has started. currentAccountId: {}", currentAccountId);
         AccessibleMediaDto accessibleMediaDto = taskMediaOperationService.upload(currentAccountId, taskDto, file);
         taskActivityService.initializeTaskAttachmentAddedActivity(currentAccountId, currentAccountSessionId, taskDto, accessibleMediaDto.getMediaId());
-        taskSearchService.refreshTaskFtsMv();
+        taskFtsRefreshService.markDirty();
         return new BaseResponse();
     }
 
@@ -96,7 +96,7 @@ public class TaskMediaManager {
         log.info("Delete task media has started. currentAccountId: {}", currentAccountId);
         AccessibleMediaDto accessibleMediaDto = taskMediaOperationService.delete(currentAccountId, mediaId, taskId);
         taskActivityService.initializeTaskAttachmentDeletedActivity(currentAccountId, currentAccountSessionId, taskDto, accessibleMediaDto);
-        taskSearchService.refreshTaskFtsMv();
+        taskFtsRefreshService.markDirty();
         return new BaseResponse();
     }
 
@@ -140,7 +140,7 @@ public class TaskMediaManager {
         validateMediaRelatedWithTask(taskId, mediaId);
         taskMediaOperationService.updateTaskMediaAsCompleted(mediaId);
         taskActivityService.initializeTaskAttachmentAddedActivity(currentAccountId, currentAccountSessionId, taskDto, mediaId);
-        taskSearchService.refreshTaskFtsMv();
+        taskFtsRefreshService.markDirty();
         return new BaseResponse();
     }
 
