@@ -48,6 +48,9 @@ public class TaskInitializeRequest extends BaseRequest {
     private String description;
 
     @Nullable
+    private String descriptionState;
+
+    @Nullable
     private String subTaskOf;
 
     @Nullable

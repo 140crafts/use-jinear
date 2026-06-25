@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="jin-552-add-crdt-columns-to-rich_text">
+        <addColumn tableName="rich_text">
+            <column name="format" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="yjs_state" type="bytea"/>
+            <column name="yjs_state_seq" type="bigint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_seq" type="bigint" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-552-create-rich_text_update-table">
+        <createTable tableName="rich_text_update">
+            <column name="rich_text_update_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="rich_text_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="seq" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="update_bytes" type="bytea">
+                <constraints nullable="false"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint
+                baseTableName="rich_text_update"
+                baseColumnNames="rich_text_id"
+                constraintName="rich_text_update_fk_rich_text_id"
+                referencedTableName="rich_text"
+                referencedColumnNames="rich_text_id"
+                onDelete="CASCADE"/>
+
+        <createIndex indexName="rich_text_update_ix_rich_text_id_seq" tableName="rich_text_update" unique="true">
+            <column name="rich_text_id"/>
+            <column name="seq"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

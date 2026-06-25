@@ -3,6 +3,7 @@ package co.jinear.core.service.richtext;
 import co.jinear.core.converter.richtext.RichTextConverter;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.entity.richtext.RichText;
+import co.jinear.core.model.enumtype.richtext.RichTextFormat;
 import co.jinear.core.model.enumtype.richtext.RichTextSourceStack;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.model.vo.richtext.UpdateRichTextVo;
@@ -18,9 +19,11 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
+import java.util.Objects;
 import java.util.regex.Pattern;
 
-import static co.jinear.core.model.enumtype.richtext.RichTextSourceStack.RC;
+import static co.jinear.core.model.enumtype.richtext.RichTextSourceStack.TIPTAP;
 
 @Slf4j
 @Service
@@ -28,7 +31,7 @@ import static co.jinear.core.model.enumtype.richtext.RichTextSourceStack.RC;
 public class RichTextInitializeService {
 
     private static final String RICH_TEXT_URL_PATTERN = "/FILE_STORAGE/RICH_TEXT/";
-    private static final RichTextSourceStack ACTIVE_STACK = RC;
+    private static final RichTextSourceStack ACTIVE_STACK = TIPTAP;
 
     private final RichTextRepository richTextRepository;
     private final RichTextRetrieveService richTextRetrieveService;
@@ -42,6 +45,7 @@ public class RichTextInitializeService {
         RichText richText = richTextConverter.map(initializeRichTextVo);
         sanitizeValue(richText);
         richText.setSourceStack(ACTIVE_STACK);
+        applyCrdtStateIfPresent(richText, initializeRichTextVo.getCrdtState());
         RichText saved = richTextRepository.save(richText);
         extractImagesAndAssignRichTextOwnership(saved.getValue(), saved.getRichTextId());
         return richTextConverter.map(saved);
@@ -82,6 +86,15 @@ public class RichTextInitializeService {
 
     private void sanitizeValue(RichText richText) {
         richText.setValue(htmlSanitizeService.sanitizeHTML(richText.getValue()));
+    }
+
+    private void applyCrdtStateIfPresent(RichText richText, String crdtState) {
+        if (Objects.isNull(crdtState) || crdtState.isBlank()) {
+            return;
+        }
+        log.info("Initialize rich text directly in CRDT format. richTextId: {}", richText.getRichTextId());
+        richText.setYjsState(Base64.getDecoder().decode(crdtState));
+        richText.setFormat(RichTextFormat.CRDT);
     }
 
     private void extractImagesAndAssignRichTextOwnership(String html, String richTextId) {
