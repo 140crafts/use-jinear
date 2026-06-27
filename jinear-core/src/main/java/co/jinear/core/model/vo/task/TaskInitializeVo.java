@@ -22,7 +22,6 @@ public class TaskInitializeVo {
     private Boolean hasPreciseDueDate;
     private String title;
     private String description;
-    private String descriptionState;
     private String subTaskOf;
     private String boardId;
     private String feedId;

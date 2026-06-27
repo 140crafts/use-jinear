@@ -110,7 +110,6 @@ public class TaskInitializeService {
                     initializeRichTextVo.setRelatedObjectId(taskDto.getTaskId());
                     initializeRichTextVo.setValue(taskInitializeVo.getDescription());
                     initializeRichTextVo.setType(RichTextType.TASK_DETAIL);
-                    initializeRichTextVo.setCrdtState(taskInitializeVo.getDescriptionState());
                     return richTextInitializeService.initializeRichText(initializeRichTextVo);
                 })
                 .ifPresent(taskDto::setDescription);
