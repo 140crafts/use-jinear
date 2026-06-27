@@ -2026,6 +2026,11 @@
   resolved "https://registry.yarnpkg.com/@tiptap/extension-code/-/extension-code-3.23.6.tgz#1f7c8e9520c092c318d2842892afa7a1b56bf8cd"
   integrity sha512-KG8KXFYyLrtYvT7AZ1WGV61ofx8pDe5g9pH658MERxqQGii+Pyfc6xkz04l7XeBts/7+571UQp/0O7i/z560TA==
 
+"@tiptap/extension-collaboration@^3.23.6":
+  version "3.27.1"
+  resolved "https://registry.yarnpkg.com/@tiptap/extension-collaboration/-/extension-collaboration-3.27.1.tgz#98fd039bbcad65fc4ac5b985cb0dc3f303f3bca7"
+  integrity sha512-Da7WeKNIaLsbcHBWlgexMgm5ygoA1mhRroFND1vweLNsWIPxvyjci7jrq/uDN1tSnpqMlJsdyW0tXzbVGYTpMw==
+
 "@tiptap/extension-document@^3.23.6":
   version "3.23.6"
   resolved "https://registry.yarnpkg.com/@tiptap/extension-document/-/extension-document-3.23.6.tgz#a3b3d20edb0670cf1230d64ebb340541fd89b46e"
@@ -2192,6 +2197,13 @@
     "@tiptap/extension-underline" "^3.23.6"
     "@tiptap/extensions" "^3.23.6"
     "@tiptap/pm" "^3.23.6"
+
+"@tiptap/y-tiptap@^3.0.5":
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/@tiptap/y-tiptap/-/y-tiptap-3.0.5.tgz#771644c5b058f58bf27bf864cb18be85a8923564"
+  integrity sha512-WoK5z3jMW+9nzumcWAxEDRCSC7yQmdq4NN0157MaxQBl9dGWwjxJx3+11mb+WAqR37oDeAMKMmSNy+/hm2XGlA==
+  dependencies:
+    lib0 "^0.2.100"
 
 "@trickfilm400/rollup-plugin-off-main-thread@^3.0.0-pre1":
   version "3.0.0-pre1"
@@ -3595,6 +3607,11 @@ isexe@^2.0.0:
   resolved "https://registry.yarnpkg.com/isexe/-/isexe-2.0.0.tgz#e8fbf374dc556ff8947a10dcb0572d633f2cfa10"
   integrity sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==
 
+isomorphic.js@^0.2.4:
+  version "0.2.5"
+  resolved "https://registry.yarnpkg.com/isomorphic.js/-/isomorphic.js-0.2.5.tgz#13eecf36f2dba53e85d355e11bf9d4208c6f7f88"
+  integrity sha512-PIeMbHqMt4DnUP3MA/Flc0HElYjMXArsw1qwJZcm9sqR8mq3l8NYizFMty0pWwE/tzIGH3EKK5+jes5mAr85yw==
+
 jackspeak@^4.0.1, jackspeak@^4.1.1:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/jackspeak/-/jackspeak-4.2.3.tgz#27ef80f33b93412037c3bea4f8eddf80e1931483"
@@ -3679,6 +3696,13 @@ levn@^0.4.1:
   dependencies:
     prelude-ls "^1.2.1"
     type-check "~0.4.0"
+
+lib0@^0.2.100, lib0@^0.2.109, lib0@^0.2.85, lib0@^0.2.99:
+  version "0.2.117"
+  resolved "https://registry.yarnpkg.com/lib0/-/lib0-0.2.117.tgz#6c3f926475d28904af05b590703cbbbc29475716"
+  integrity sha512-DeXj9X5xDCjgKLU/7RR+/HQEVzuuEUiwldwOGsHK/sfAfELGWEyTcf0x+uOvCvK3O2zPmZePXWL85vtia6GyZw==
+  dependencies:
+    isomorphic.js "^0.2.4"
 
 lie@3.1.1:
   version "3.1.1"
@@ -5379,6 +5403,20 @@ wrap-ansi@^7.0.0:
     string-width "^4.1.0"
     strip-ansi "^6.0.0"
 
+y-prosemirror@^1.3.7:
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/y-prosemirror/-/y-prosemirror-1.3.7.tgz#f88e553da4ea33278b114cf0b6a0ea978b154e84"
+  integrity sha512-NpM99WSdD4Fx4if5xOMDpPtU3oAmTSjlzh5U4353ABbRHl1HtAFUx6HlebLZfyFxXN9jzKMDkVbcRjqOZVkYQg==
+  dependencies:
+    lib0 "^0.2.109"
+
+y-protocols@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/y-protocols/-/y-protocols-1.0.7.tgz#6631c492e75b78b3a61353a60067e6f8a4c38d5f"
+  integrity sha512-YSVsLoXxO67J6eE/nV4AtFtT3QEotZf5sK5BHxFBXso7VDUT3Tx07IfA6hsu5Q5OmBdMkQVmFZ9QOA7fikWvnw==
+  dependencies:
+    lib0 "^0.2.85"
+
 y18n@^5.0.5:
   version "5.0.8"
   resolved "https://registry.yarnpkg.com/y18n/-/y18n-5.0.8.tgz#7f4934d0f7ca8c56f95314939ddcd2dd91ce1d55"
@@ -5406,6 +5444,13 @@ yargs@^17.7.2:
     string-width "^4.2.3"
     y18n "^5.0.5"
     yargs-parser "^21.1.1"
+
+yjs@^13.6.31:
+  version "13.6.31"
+  resolved "https://registry.yarnpkg.com/yjs/-/yjs-13.6.31.tgz#3a9ddfe6d0c5d788521b70dfdd7b907148610418"
+  integrity sha512-Eq+5BRfbeGyqGVrTJL3bEcr8gKkxPuyuoHmAwpk52fDb8kOVMrfVSTRPd6yiGgX5Fskb96qCRjzjbRjrL4YEnw==
+  dependencies:
+    lib0 "^0.2.99"
 
 yocto-queue@^0.1.0:
   version "0.1.0"

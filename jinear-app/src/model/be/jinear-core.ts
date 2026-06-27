@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-04-15 22:06:01.
+// Generated using typescript-generator version 3.0.1157 on 2026-06-25 22:58:35.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gthreadId: string;
     ghistoryId: string;
-    ginternalDate: string;
+    gthreadId: string;
     gid: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -697,12 +697,29 @@ export interface ReminderJobDto extends BaseDto {
     reminder: ReminderDto;
 }
 
+export interface RichTextAppendDto {
+    seq: number;
+}
+
 export interface RichTextDto {
     richTextId: string;
     relatedObjectId: string;
     value: string;
     type: RichTextType;
     sourceStack: RichTextSourceStack;
+    format: RichTextFormat;
+}
+
+export interface RichTextStateDto {
+    format: RichTextFormat;
+    snapshot: string;
+    snapshotSeq: number;
+    headSeq: number;
+}
+
+export interface RichTextUpdatesDto {
+    headSeq: number;
+    updates: string[];
 }
 
 export interface RobotDto extends BaseDto {
@@ -1440,6 +1457,20 @@ export interface TaskReminderInitializeRequest extends BaseRequest {
     specificRemindDateRepeatType?: RepeatType | null;
 }
 
+export interface AppendRichTextUpdateRequest extends BaseRequest {
+    update: string;
+    html?: string | null;
+}
+
+export interface SeedRichTextRequest extends BaseRequest {
+    state: string;
+}
+
+export interface SnapshotRichTextRequest extends BaseRequest {
+    state: string;
+    upToSeq: number;
+}
+
 export interface RobotInitializeRequest extends BaseRequest {
     name: string;
     workspaceId: string;
@@ -1548,6 +1579,7 @@ export interface TaskInitializeRequest extends BaseRequest {
     hasPreciseDueDate?: boolean | null;
     title: string;
     description?: string | null;
+    descriptionState?: string | null;
     subTaskOf?: string | null;
     boardId?: string | null;
     feedId?: string | null;
@@ -1861,8 +1893,20 @@ export interface ReminderResponse extends BaseResponse {
     data: ReminderDto[];
 }
 
+export interface RichTextAppendResponse extends BaseResponse {
+    data: RichTextAppendDto;
+}
+
+export interface RichTextStateResponse extends BaseResponse {
+    data: RichTextStateDto;
+}
+
 export interface RichTextTempImageResponse extends BaseResponse {
     data: AccessibleMediaDto;
+}
+
+export interface RichTextUpdatesResponse extends BaseResponse {
+    data: RichTextUpdatesDto;
 }
 
 export interface RobotSecretResponse extends BaseResponse {
@@ -2073,8 +2117,8 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    originalFilename: string;
     contentType: string;
+    originalFilename: string;
     name: string;
     bytes: any;
     empty: boolean;
@@ -2162,8 +2206,8 @@ export interface GoogleCalendarAttachment {
 
 export interface Resource extends InputStreamSource {
     filename: string;
-    description: string;
     uri: URI;
+    description: string;
     open: boolean;
     file: any;
     readable: boolean;
@@ -2260,7 +2304,7 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "RICH_TEXT_SYNC";
 
 export type MaterialAccessType = "OWNER_ONLY" | "WORKSPACE_MEMBERS" | "GRAINED" | "ANYONE_WITH_LINK";
 
@@ -2330,7 +2374,9 @@ export type ReminderType = "TASK";
 
 export type RepeatType = "NONE" | "HOURLY" | "DAILY" | "WEEKLY" | "BIWEEKLY" | "MONTHLY" | "EVERY_3_MONTHS" | "EVERY_6_MONTHS" | "YEARLY";
 
-export type RichTextSourceStack = "WYSIWYG" | "RC";
+export type RichTextFormat = "LEGACY" | "CRDT";
+
+export type RichTextSourceStack = "WYSIWYG" | "RC" | "TIPTAP";
 
 export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT" | "MESSAGE" | "PROJECT" | "PROJECT_MILESTONE_DESCRIPTION" | "PROJECT_FEED_INFO" | "PROJECT_FEED_POST" | "PROJECT_FEED_POST_COMMENT";
 

@@ -1,14 +1,11 @@
-import Link from "@tiptap/extension-link";
-import Placeholder from "@tiptap/extension-placeholder";
 import {EditorContent, useEditor} from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
 import cn from "classnames";
 import {forwardRef, useEffect, useImperativeHandle, useState} from "react";
 import type {UseFormRegister, UseFormSetValue} from "react-hook-form";
 import styles from "./Tiptap.module.css";
 import ActionBar, {type TipTapActionBarMode} from "./actionBar/ActionBar";
 import {Extension} from "@tiptap/core";
-import Image from "@tiptap/extension-image";
+import {buildEditorExtensions} from "./editorExtensions";
 
 export interface ITiptapRef {
     clearContent: () => void;
@@ -65,24 +62,11 @@ const Tiptap = (
                 class: cn(styles.tiptap, editorClassName)
             }
         },
-        extensions: [
-            StarterKit,
-            Placeholder.configure({
-                placeholder,
-                showOnlyWhenEditable: false,
-                emptyEditorClass: styles["is-editor-empty"]
-            }),
-            Link.configure({
-                HTMLAttributes: {
-                    rel: "noopener noreferrer",
-                    target: null
-                }
-            }),
-            Image.configure({
-                allowBase64: true
-            }),
-            ...extensions
-        ],
+        extensions: buildEditorExtensions({
+            placeholder,
+            emptyEditorClass: styles["is-editor-empty"],
+            extra: extensions
+        }),
         content,
         editable,
         onUpdate({editor}) {
