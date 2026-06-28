@@ -48,10 +48,6 @@ public class RichText extends BaseEntity {
     @Column(name = "yjs_state_seq", nullable = false)
     private long yjsStateSeq;
 
-    /**
-     * Per-rich-text high-water mark of assigned {@code rich_text_update.seq} values. Monotonic, never
-     * decremented (survives compaction), so the next append seq is always {@code updateSeq + 1}.
-     */
     @Column(name = "update_seq", nullable = false)
     private long updateSeq;
 }

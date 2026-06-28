@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-06-25 22:58:35.
+// Generated using typescript-generator version 3.0.1157 on 2026-06-28 12:37:45.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -165,8 +165,8 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ghistoryId: string;
     gthreadId: string;
+    ghistoryId: string;
     gid: string;
     ginternalDate: string;
 }
@@ -495,6 +495,71 @@ export interface ThreadMessageInfoDto {
 
 export interface MessagingTokenDto {
     token: string;
+}
+
+export interface NoteDto extends BaseDto {
+    noteId: string;
+    notebookId: string;
+    workspaceId: string;
+    ownerId: string;
+    parentNoteId: string;
+    title: string;
+    richTextId: string;
+    tags?: NoteTagDto[] | null;
+    owner?: PlainAccountProfileDto | null;
+}
+
+export interface NoteHierarchyDto {
+    note: PathAwareNoteDto;
+    children: PageDto<NoteDto>;
+}
+
+export interface NotePathDto {
+    noteId: string;
+    path: NotePathItemDto[];
+    fullPath: string;
+}
+
+export interface NotePathDtoBuilder {
+}
+
+export interface NotePathItemDto {
+    noteId: string;
+    parentNoteId: string;
+    title: string;
+}
+
+export interface NotePathItemDtoBuilder {
+}
+
+export interface PathAwareNoteDto extends NoteDto {
+    notePath: NotePathDto;
+}
+
+export interface NotebookDto extends BaseDto {
+    notebookId: string;
+    workspaceId: string;
+    ownerId: string;
+    title: string;
+    description: string;
+    visibility: NotebookVisibilityType;
+    owner?: PlainAccountProfileDto | null;
+}
+
+export interface NotebookMemberDto extends BaseDto {
+    notebookMemberId: string;
+    notebookId: string;
+    accountId: string;
+    workspaceId: string;
+    account?: PlainAccountProfileDto | null;
+}
+
+export interface NoteTagDto extends BaseDto {
+    noteTagId: string;
+    notebookId: string;
+    workspaceId: string;
+    name: string;
+    color: string;
 }
 
 export interface NotificationEventDto extends BaseDto {
@@ -1343,6 +1408,53 @@ export interface RobotsInitializeThreadRequest extends BaseRequest {
     captchaResolveVos: CaptchaResolveVo[];
 }
 
+export interface NoteInitializeRequest extends BaseRequest {
+    notebookId: string;
+    parentNoteId?: string | null;
+    title: string;
+    bodyState: string;
+}
+
+export interface NoteMoveRequest extends BaseRequest {
+    noteId: string;
+    parentNoteId?: string | null;
+}
+
+export interface NoteUpdateRequest extends BaseRequest {
+    noteId: string;
+    title: string;
+}
+
+export interface NotebookInitializeRequest extends BaseRequest {
+    title: string;
+    description?: string | null;
+    visibility: NotebookVisibilityType;
+}
+
+export interface NotebookUpdateRequest extends BaseRequest {
+    notebookId: string;
+    title: string;
+    description?: string | null;
+    visibility?: NotebookVisibilityType | null;
+}
+
+export interface AssignNoteTagRequest extends BaseRequest {
+    noteId: string;
+    noteTagId: string;
+}
+
+export interface NoteTagInitializeRequest extends BaseRequest {
+    notebookId: string;
+    name: string;
+    color?: string | null;
+}
+
+export interface NoteTagUpdateRequest extends BaseRequest {
+    noteTagId: string;
+    name: string;
+    color?: string | null;
+}
+
 export interface NotificationTargetInitializeRequest extends BaseRequest {
     externalTargetId: string;
     targetType?: NotificationTargetType | null;
@@ -1579,7 +1691,6 @@ export interface TaskInitializeRequest extends BaseRequest {
     hasPreciseDueDate?: boolean | null;
     title: string;
     description?: string | null;
-    descriptionState?: string | null;
     subTaskOf?: string | null;
     boardId?: string | null;
     feedId?: string | null;
@@ -1843,6 +1954,42 @@ export interface ThreadListingResponse extends BaseResponse {
 
 export interface ThreadResponse extends BaseResponse {
     data: ThreadDto;
+}
+
+export interface NoteInitializeResponse extends BaseResponse {
+    data: string;
+}
+
+export interface NotePathAwareResponse extends BaseResponse {
+    data: NoteHierarchyDto;
+}
+
+export interface NotebookInitializeResponse extends BaseResponse {
+    data: string;
+}
+
+export interface NotebookListingResponse extends BaseResponse {
+    data: PageDto<NotebookDto>;
+}
+
+export interface NotebookMemberPaginatedResponse extends BaseResponse {
+    data: PageDto<NotebookMemberDto>;
+}
+
+export interface NotebookResponse extends BaseResponse {
+    data: NotebookDto;
+}
+
+export interface NoteTagInitializeResponse extends BaseResponse {
+    data: string;
+}
+
+export interface NoteTagListingResponse extends BaseResponse {
+    data: NoteTagDto[];
+}
+
+export interface NoteTagResponse extends BaseResponse {
+    data: NoteTagDto;
 }
 
 export interface NotificationEventListingResponse extends BaseResponse {
@@ -2117,13 +2264,13 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    contentType: string;
-    originalFilename: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
+    contentType: string;
+    originalFilename: string;
 }
 
 export interface GoogleCalendarEventAttendee {
@@ -2205,13 +2352,13 @@ export interface GoogleCalendarAttachment {
 }
 
 export interface Resource extends InputStreamSource {
-    filename: string;
-    uri: URI;
-    description: string;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
+    filename: string;
+    description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -2258,10 +2405,10 @@ export interface GoogleCalendarOfficeLocation {
     label: string;
 }
 
-export interface URI extends Comparable<URI>, Serializable {
+export interface URL extends Serializable {
 }
 
-export interface URL extends Serializable {
+export interface URI extends Comparable<URI>, Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {
@@ -2342,6 +2489,8 @@ export type MessageType = "USER_MESSAGE" | "CONVERSATION_INIT";
 
 export type ThreadType = "CLASSIC" | "CHANNEL_INITIAL" | "INITIALIZED_BY_ROBOT";
 
+export type NotebookVisibilityType = "PRIVATE" | "SHARED";
+
 export type NotificationEventState = "INITIALIZED" | "SENT";
 
 export type NotificationProviderType = "ONE_SIGNAL" | "FIREBASE" | "EXPO";
@@ -2378,7 +2527,7 @@ export type RichTextFormat = "LEGACY" | "CRDT";
 
 export type RichTextSourceStack = "WYSIWYG" | "RC" | "TIPTAP";
 
-export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT" | "MESSAGE" | "PROJECT" | "PROJECT_MILESTONE_DESCRIPTION" | "PROJECT_FEED_INFO" | "PROJECT_FEED_POST" | "PROJECT_FEED_POST_COMMENT";
+export type RichTextType = "TASK_DETAIL" | "TASK_COMMENT" | "MESSAGE" | "PROJECT" | "PROJECT_MILESTONE_DESCRIPTION" | "PROJECT_FEED_INFO" | "PROJECT_FEED_POST" | "PROJECT_FEED_POST_COMMENT" | "NOTE";
 
 export type RobotType = "MESSAGE";
 
