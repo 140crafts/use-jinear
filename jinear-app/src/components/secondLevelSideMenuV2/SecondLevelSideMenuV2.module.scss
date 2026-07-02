@@ -83,21 +83,20 @@
 
   .mobileMenuButtonContainer {
     display: flex;
-    width: 100%;
+    position: fixed;
+    align-content: center;
+    bottom: calc(1rem + var(--workspace-side-menu-mobile-navigator-height));
+    right: 1.5rem;
+    min-width: 4rem;
   }
 
   .mobileMenuButton {
     display: flex;
     flex: 1;
     height: var(--mobile-menu-action-bar-height);
-    border-bottom-left-radius: 0 !important;
-    border-bottom-right-radius: 0 !important;
-    background-color: var(--c-primary-shade-1-op025) !important;
-    background: linear-gradient(0, var(--c-primary-shade-0-op05), 50%, var(--c-primary-shade-1-op05)) !important;
-    border-top-color: var(--c-primary-shade-1) !important;
-    border-top-style: solid !important;
-    border-top-width: 1px !important;
     gap: 0.25rem;
+    box-shadow: var(--box-shadow);
+    padding: 0.42rem 1.75rem;
   }
 
   .modalMenuButton {

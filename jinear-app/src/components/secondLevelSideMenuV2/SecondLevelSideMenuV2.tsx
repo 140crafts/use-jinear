@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./SecondLevelSideMenuV2.module.scss";
 import cn from "classnames";
-import Button from "@/components/button";
+import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
 import Modal from "@/components/modal/modal/Modal";
 import {useAppDispatch, useTypedSelector} from "@/store";
@@ -32,7 +32,8 @@ const SecondLevelSideMenuV2: React.FC<SecondLevelSideMenuV2Props> = ({className,
                 {children}
             </div>
             <div id="second-level-side-menu-mobile-menu-button-container" className={styles.mobileMenuButtonContainer}>
-                <Button className={styles.mobileMenuButton} onClick={popMenu}>
+                <Button heightVariant={ButtonHeight.mid} variant={ButtonVariants.brandColor}
+                        className={styles.mobileMenuButton} onClick={popMenu}>
                     <b>{t("tasksLayoutSideMenuCollapsedLabel")}</b>
                 </Button>
             </div>
