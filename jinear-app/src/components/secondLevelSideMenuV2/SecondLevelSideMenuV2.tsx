@@ -40,6 +40,7 @@ const SecondLevelSideMenuV2: React.FC<SecondLevelSideMenuV2Props> = ({className,
             <div>
                 <Modal
                     visible={menuModalVisible}
+                    bottomSheet
                     bodyClass={styles.modalBody}
                     containerClassName={styles.modalContainer}
                     contentClassName={styles.modalContent}

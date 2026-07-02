@@ -20,6 +20,7 @@ interface ModalProps extends BaseModalProps {
     title?: string;
     hasTitleCloseButton?: boolean;
     closeButtonIcon?: React.ReactNode;
+    bottomSheet?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -36,7 +37,8 @@ const Modal: React.FC<ModalProps> = ({
                                          title,
                                          hasTitleCloseButton = false,
                                          onTitleCloeButtonClick,
-                                         closeButtonIcon
+                                         closeButtonIcon,
+                                         bottomSheet = false
                                      }) => {
 
     const titleCloseClick = () => {
@@ -57,6 +59,7 @@ const Modal: React.FC<ModalProps> = ({
             closepadClassName={closepadClassName}
             width={width}
             height={height}
+            bottomSheet={bottomSheet}
         >
             {title && (
                 <div className={styles.titleBar}>

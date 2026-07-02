@@ -77,3 +77,16 @@
 .height-full-content {
     height: 98%;
 }
+
+.bottomSheet {
+    animation: modalSlideUp var(--fade, 0.2s) ease-out;
+}
+
+@keyframes modalSlideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}

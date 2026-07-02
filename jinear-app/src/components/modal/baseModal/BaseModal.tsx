@@ -15,6 +15,7 @@ export interface BaseModalProps {
   closepadClassName?: string;
   width?: ModalWidth;
   height?: ModalHeight;
+  bottomSheet?: boolean;
 }
 
 const BaseModal: React.FC<BaseModalProps> = ({
@@ -26,7 +27,8 @@ const BaseModal: React.FC<BaseModalProps> = ({
                                                contentClassName,
                                                closepadClassName,
                                                width = "default",
-                                               height = "default"
+                                               height = "default",
+                                               bottomSheet = false
                                              }) => {
   const avoid = () => {
   };
@@ -35,7 +37,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
     visible ? (
       <div className={cn(styles.container, styles[`${width}-container`], containerClassName)}>
         <div
-          className={cn([styles.content, styles[`${width}-content`], styles[`${height}-content`], contentClassName])}
+          className={cn([styles.content, styles[`${width}-content`], styles[`${height}-content`], bottomSheet && styles.bottomSheet, contentClassName])}
           onClick={avoid}
         >
           <div
