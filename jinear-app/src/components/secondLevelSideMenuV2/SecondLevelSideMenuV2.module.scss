@@ -41,6 +41,8 @@
   display: flex !important;
   flex-direction: column !important;
   padding: 0 !important;
+  //padding-bottom: 4rem !important;
+  min-height: 75vh !important;
 }
 
 .modalContainer {
@@ -51,9 +53,6 @@
 
 .modalContent {
   width: 100% !important;
-  overflow: scroll;
-  height: 75%;
-  max-height: 75%;
 }
 
 .modalMenuButton {

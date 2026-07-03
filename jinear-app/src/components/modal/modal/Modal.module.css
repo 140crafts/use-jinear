@@ -91,6 +91,7 @@
   max-height: min(880px, 60vh);
   overflow-y: scroll;
   z-index: 999;
+  overscroll-behavior: none;
 }
 
 .fullHeightBody {
