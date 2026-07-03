@@ -22,7 +22,7 @@ const ChangeAssigneeButton: React.FC<ChangeAssigneeButtonProps> = ({ className }
 
   return (
     <Button
-      variant={ButtonVariants.filled}
+      variant={ButtonVariants.outline}
       heightVariant={ButtonHeight.short}
       className={className}
       onClick={popChangeAssigneeModal}

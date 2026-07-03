@@ -106,6 +106,18 @@
     color: var(--c-BABY_POWDER) !important;
 }
 
+.link {
+    color: var(--c-link-color);
+}
+
+.link:disabled {
+    color: var(--c-link-color);
+}
+
+.link:hover {
+    color: var(--c-link-color);
+}
+
 .indicator {
     color: var(--c-secondary);
 }

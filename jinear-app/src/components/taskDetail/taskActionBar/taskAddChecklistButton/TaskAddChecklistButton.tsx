@@ -31,7 +31,7 @@ const TaskAddChecklistButton: React.FC<TaskAddChecklistButtonProps> = ({ classNa
   };
 
   return (
-    <Button className={className} variant={ButtonVariants.filled} heightVariant={ButtonHeight.short} onClick={addChecklist}>
+    <Button className={className} variant={ButtonVariants.outline} heightVariant={ButtonHeight.short} onClick={addChecklist}>
       {t("taskDetailAddChecklistButtonLabel")}
     </Button>
   );

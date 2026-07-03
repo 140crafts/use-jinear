@@ -21,6 +21,7 @@ interface ModalProps extends BaseModalProps {
     hasTitleCloseButton?: boolean;
     closeButtonIcon?: React.ReactNode;
     bottomSheet?: boolean;
+    rightButton?: React.ReactNode;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -38,7 +39,8 @@ const Modal: React.FC<ModalProps> = ({
                                          hasTitleCloseButton = false,
                                          onTitleCloeButtonClick,
                                          closeButtonIcon,
-                                         bottomSheet = false
+                                         bottomSheet = false,
+                                         rightButton,
                                      }) => {
 
     const titleCloseClick = () => {
@@ -63,15 +65,18 @@ const Modal: React.FC<ModalProps> = ({
         >
             {title && (
                 <div className={styles.titleBar}>
-                    {hasTitleCloseButton && (
+                    {(hasTitleCloseButton || rightButton) && (
                         <div className={styles.titleBarIconButtonContainer}>
-                            <Button onClick={titleCloseClick}>
-                                {closeButtonIcon ?? <IoClose size={18}/>}
-                            </Button>
+                            {hasTitleCloseButton &&
+                                <Button onClick={titleCloseClick}>
+                                    {closeButtonIcon ?? <IoClose size={18}/>}
+                                </Button>
+                            }
                         </div>
                     )}
                     <h3 className={cn(styles.title, "single-line")}>{title}</h3>
-                    {hasTitleCloseButton && <div className={styles.titleBarIconButtonContainer}/>}
+                    {(hasTitleCloseButton || rightButton) &&
+                        <div className={styles.titleBarIconButtonContainer}>{rightButton}</div>}
                 </div>
             )}
             <div

@@ -42,7 +42,6 @@ const BaseModal: React.FC<BaseModalProps> = ({
       setClosing(false);
       setRendered(true);
     } else if (bottomSheet) {
-      // Defer unmount until the slide-down animation ends (see handleAnimationEnd).
       setClosing(true);
     } else {
       setRendered(false);

@@ -74,7 +74,6 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
 
   return showSubTaskListEvenIfNoSubtasks || hasSubTasks ? (
     <>
-      <Line />
       <div className={styles.container}>
         <div className={styles.headerContainer}>
           <h3>{t("taskSubtaskList")}</h3>
@@ -82,7 +81,7 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
           <div className={styles.newTaskInputButtonContainer}>
             <Button
               onClick={popNewTaskModalWithRelation}
-              variant={ButtonVariants.filled}
+              variant={ButtonVariants.outline}
               heightVariant={ButtonHeight.short}
               data-tooltip-right={t("taskSubtaskListAddNewTaskButtonTooltip")}
             >
@@ -90,7 +89,7 @@ const TaskSubtaskList: React.FC<TaskSubtaskListProps> = ({}) => {
             </Button>
             <Button
               onClick={openSearchTaskModal}
-              variant={ButtonVariants.filled}
+              variant={ButtonVariants.outline}
               heightVariant={ButtonHeight.short}
               data-tooltip-right={t("taskSubtaskListAddExistingTaskButtonTooltip")}
             >

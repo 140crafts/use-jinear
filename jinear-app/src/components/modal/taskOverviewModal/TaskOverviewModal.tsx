@@ -20,7 +20,6 @@ interface TaskOverviewModalProps {
 }
 
 const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
-    const {t} = useTranslation();
     const dispatch = useAppDispatch();
     const visible = useTypedSelector(selectTaskOverviewModalVisible);
     const {isMobile} = useWindowSize();
@@ -42,15 +41,11 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
         dispatch(closeTaskOverviewModal());
     };
 
-    const onGoToTaskClick = () => {
-        close();
-    };
-
     return (
         <Modal
             visible={visible}
             width={isMobile ? "fullscreen" : "xxlarge"}
-            title={taskTag ? `[${taskTag}] ${taskResponse?.data.title || ""}` : ""}
+            title={taskTag ? `[${taskTag}] ${taskToView?.title || ""}` : ""}
             hasTitleCloseButton={true}
             requestClose={close}
             bodyClass={styles.modalBody}
@@ -62,25 +57,10 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
                 </div>
             )}
 
-            {taskToView  && (
-                <div className={styles.actionBar}>
-                    <Button
-                        heightVariant={ButtonHeight.short}
-                        variant={ButtonVariants.blur}
-                        className={styles.goToTaskButton}
-                        onClick={onGoToTaskClick}
-                        href={`/${taskToView?.workspace?.username}/task/${taskToView?.team?.tag}-${taskToView?.teamTagNo}`}
-                    >
-                        <IoResize/>
-                        <b>{t("taskOverviewModalGoToTask")}</b>
-                    </Button>
-                </div>
-            )}
-
             {taskToView && (
                 <div className={styles.taskContentWrapper}>
                     {/* <TaskDetailHeader task={taskResponse.data} /> */}
-                    <TaskDetail task={taskToView}/>
+                    <TaskDetail task={taskToView} withGoToTaskButton={true} onGoToTaskButtonClick={close}/>
                 </div>
             )}
         </Modal>
