@@ -4,12 +4,13 @@ import {
     useSendAccountDeleteEmailMutation,
 } from "@/store/api/accountDeleteApi";
 import {closeDialogModal, popDialogModal, resetModals} from "@/store/slice/modalSlice";
-import {useAppDispatch} from "@/store";
+import {clearLocalforageStorage, useAppDispatch} from "@/store";
 import useTranslation from "@/locales/useTranslation";
 import React, {useEffect} from "react";
 import toast from "react-hot-toast";
 import styles from "./AccountDeleteButton.module.css";
 import Button from "@/components/button";
+import {resetLocalStorage} from "@/components/profileScreen/personalInfoTab/PersonalInfoTab.tsx";
 
 interface AccountDeleteButtonProps {
 }
@@ -54,6 +55,8 @@ const AccountDeleteButton: React.FC<AccountDeleteButtonProps> = ({}) => {
 
     const deleteAccount = () => {
         deleteWithoutConfirmation();
+        resetLocalStorage();
+        clearLocalforageStorage();
         dispatch(resetModals());
     };
 

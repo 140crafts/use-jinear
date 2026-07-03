@@ -45,6 +45,13 @@ public class TaskMediaRetrieveService {
         return new PageDto<>(result);
     }
 
+    public PageDto<TaskMediaDto> retrieveAllFromWorkspaceAndTeamAndOwnerOrAssignee(String workspaceId, String teamId, String ownerOrAssigneeId, MediaFileUploadStatusType mediaFileUploadStatusType, int page) {
+        log.info("Retrieve all media from workspace and team has started. workspaceId: {}, teamId: {}, ownerOrAssigneeId: {}, page: {}", workspaceId, teamId, ownerOrAssigneeId, page);
+        Page<TaskMediaDto> result = taskMediaRepository.retrieveAllFromWorkspaceAndTeamAndOwnerOrAssignee(workspaceId, teamId, ownerOrAssigneeId, mediaFileUploadStatusType, PageRequest.of(page, PAGE_SIZE))
+                .map(taskMediaDtoConverter::convert);
+        return new PageDto<>(result);
+    }
+
     public AccessibleMediaDto retrieveAccessible(String taskId, String mediaId, MediaFileUploadStatusType uploadStatus) {
         log.info("Retrieve task media has started. taskId: {}, mediaId: {}, uploadStatus: {}", taskId, mediaId, uploadStatus);
         return mediaRetrieveService.retrieveAccessibleMediaWithMediaIdAndRelatedObjectId(mediaId, taskId, uploadStatus);

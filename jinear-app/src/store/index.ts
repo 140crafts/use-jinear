@@ -30,6 +30,14 @@ const createLocalforageStorage = () => {
     return store
 }
 
+export const clearLocalforageStorage = () => {
+    localforage.clear().then(function () {
+        logger.log({message: "Database is now empty."});
+    }).catch(function (err) {
+        logger.error({message: "Persist clear failed", err});
+    });
+}
+
 const storage =
     globalThis.window === undefined
         ? createNoopStorage()

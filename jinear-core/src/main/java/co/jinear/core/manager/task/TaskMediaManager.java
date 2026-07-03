@@ -10,6 +10,7 @@ import co.jinear.core.model.dto.task.TaskMediaDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.enumtype.media.MediaFileUploadStatusType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
+import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceTier;
 import co.jinear.core.model.request.media.MediaUploadUrlRequest;
 import co.jinear.core.model.response.BaseResponse;
@@ -70,7 +71,10 @@ public class TaskMediaManager {
         TeamDto teamDto = teamRetrieveService.retrieveTeam(teamId);
         teamAccessValidator.validateTeamAccess(currentAccountId, teamDto);
         log.info("Retrieve task media list from team has started. accountId: {}, page: {}", currentAccountId, page);
-        PageDto<TaskMediaDto> data = taskMediaRetrieveService.retrieveAllFromWorkspaceAndTeam(teamDto.getWorkspaceId(), teamDto.getTeamId(), MediaFileUploadStatusType.COMPLETED, page);
+        TeamTaskVisibilityType taskVisibility = teamDto.getTaskVisibility();
+        PageDto<TaskMediaDto> data = TeamTaskVisibilityType.VISIBLE_TO_ALL_TEAM_MEMBERS.equals(taskVisibility) ?
+                taskMediaRetrieveService.retrieveAllFromWorkspaceAndTeam(teamDto.getWorkspaceId(), teamDto.getTeamId(), MediaFileUploadStatusType.COMPLETED, page) :
+                taskMediaRetrieveService.retrieveAllFromWorkspaceAndTeamAndOwnerOrAssignee(teamDto.getWorkspaceId(), teamDto.getTeamId(), currentAccountId, MediaFileUploadStatusType.COMPLETED, page);
         return mapResponse(data);
     }
 
