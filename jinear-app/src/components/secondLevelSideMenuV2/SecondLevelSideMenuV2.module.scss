@@ -46,7 +46,7 @@
 .modalContainer {
   align-items: flex-end !important;
   padding-top: 12.5%;
-  padding-bottom: var(--workspace-side-menu-mobile-navigator-height);
+  //padding-bottom: var(--workspace-side-menu-mobile-navigator-height);
 }
 
 .modalContent {
@@ -72,7 +72,7 @@
     padding-top: unset;
     padding-left: unset;
 
-    z-index: 11;
+    z-index: 99;
     width: 100vw;
     max-width: 100vw;
     left: 0;
@@ -94,9 +94,10 @@
     display: flex;
     flex: 1;
     height: var(--mobile-menu-action-bar-height);
-    gap: 0.25rem;
+    gap: 0.5rem;
     box-shadow: var(--box-shadow);
     padding: 0.42rem 1.75rem;
+    font-size: .8rem;
   }
 
   .modalMenuButton {

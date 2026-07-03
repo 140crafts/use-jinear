@@ -5572,7 +5572,20 @@ const translations = {
     teamHomeTeamSettings: {
         en: "Team settings",
         tr: "Ekip ayarları"
-    }
+    },
+
+    mobileFabButtonCalendar:{
+        en: "Calendars",
+        tr: "Takvimler"
+    },
+    mobileFabButtonTasks:{
+        en: "Teams",
+        tr: "Ekipler"
+    },
+    mobileFabButtonFiles:{
+        en: "Filters",
+        tr: "Filtreler"
+    },
 };
 
 export default translations;

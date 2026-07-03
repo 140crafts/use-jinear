@@ -82,11 +82,37 @@
     animation: modalSlideUp var(--fade, 0.2s) ease-out;
 }
 
+.bottomSheetClosing {
+    animation: modalSlideDown var(--fade, 0.2s) ease-in forwards;
+}
+
+.closepadClosing {
+    animation: closepadFadeOut var(--fade, 0.2s) ease-in forwards;
+}
+
 @keyframes modalSlideUp {
     from {
         transform: translateY(100%);
     }
     to {
         transform: translateY(0);
+    }
+}
+
+@keyframes modalSlideDown {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(100%);
+    }
+}
+
+@keyframes closepadFadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
     }
 }
