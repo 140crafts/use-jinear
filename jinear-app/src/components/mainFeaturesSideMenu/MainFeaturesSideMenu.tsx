@@ -1,10 +1,9 @@
 import type {AccountsWorkspacePerspectiveDto} from "@/model/be/jinear-core";
 import useTranslation from "@/locales/useTranslation";
 import React from "react";
-import {LuCalendarDays, LuFolder, LuSquareCheckBig} from "react-icons/lu";
+import {LuCalendarDays, LuFileText, LuFolder, LuNotebook, LuSquareCheckBig} from "react-icons/lu";
 import Button, {ButtonVariants} from "../button";
 import styles from "./MainFeaturesSideMenu.module.scss";
-import InboxButton from "./inboxButton/InboxButton";
 import Logger from "@/util/logger";
 import {useLocation} from "react-router-dom";
 
@@ -19,17 +18,11 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
     const {pathname} = useLocation();
     const calendarPath = `/${workspace?.username}/calendar`;
     const tasksPath = `/${workspace?.username}/tasks`;
-    const inboxPath = `/${workspace?.username}/inbox`;
     const filesPath = `/${workspace?.username}/files`;
+    const notesPath = `/${workspace?.username}/notes`;
 
     return (
         <div className={styles.container}>
-            <InboxButton
-                isActive={inboxPath == pathname}
-                workspace={workspace}
-                buttonStyle={styles.iconButton}
-                iconStyle={styles.icon}
-            />
 
             <Button
                 className={styles.iconButton}
@@ -51,13 +44,21 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
 
             <Button
                 className={styles.iconButton}
+                href={notesPath}
+                variant={pathname?.indexOf(notesPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+            >
+                <LuNotebook className={styles.icon}/>
+                {t("mainFeaturesMenuLabelNotes")}
+            </Button>
+
+            <Button
+                className={styles.iconButton}
                 href={filesPath}
                 variant={pathname?.indexOf(filesPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             >
                 <LuFolder className={styles.icon}/>
                 {t("mainFeaturesMenuLabelFiles")}
             </Button>
-
         </div>
     )
         ;

@@ -8,7 +8,8 @@ import java.util.Arrays;
 public enum NotebookVisibilityType {
 
     PRIVATE(0),
-    SHARED(1);
+    SHARED(1),
+    PUBLIC_WITHIN_WORKSPACE(2);
 
     private final int value;
 

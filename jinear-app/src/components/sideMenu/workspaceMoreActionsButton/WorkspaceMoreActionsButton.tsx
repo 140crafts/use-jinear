@@ -1,4 +1,4 @@
-import Button, {ButtonVariants} from "@/components/button";
+import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import {popMenuMoreActionModal, selectMenuMoreActionModalVisible} from "@/store/slice/modalSlice";
 import {useTypedSelector} from "@/store";
 import useTranslation from "@/locales/useTranslation";
@@ -23,7 +23,8 @@ const WorkspaceMoreActionsButton: React.FC<WorkspaceMoreActionsButtonProps> = ({
         <Button
             className={styles.iconButton}
             onClick={popMoreActionMenu}
-            variant={ButtonVariants.filled2}
+            variant={ButtonVariants.outline}
+            heightVariant={ButtonHeight.short}
             data-tooltip={t("mainFeaturesMenuLabelMore")}
         >
             <LuSettings2 className={styles.icon}/>

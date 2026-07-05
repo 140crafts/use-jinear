@@ -17,5 +17,5 @@ public class NotebookInitializeRequest extends BaseRequest {
     @Nullable
     private String description;
     @NotNull
-    private NotebookVisibilityType visibility = NotebookVisibilityType.PRIVATE;
+    private NotebookVisibilityType visibility = NotebookVisibilityType.PUBLIC_WITHIN_WORKSPACE;
 }

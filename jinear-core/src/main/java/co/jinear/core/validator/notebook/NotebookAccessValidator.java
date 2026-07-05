@@ -40,6 +40,10 @@ public class NotebookAccessValidator {
                 && notebookMemberRetrieveService.isNotebookMember(accountId, notebookDto.getNotebookId())) {
             return true;
         }
+        if (NotebookVisibilityType.PUBLIC_WITHIN_WORKSPACE.equals(notebookDto.getVisibility())
+                && workspaceValidator.isAccountWorkspaceMember(accountId, notebookDto.getWorkspaceId())) {
+            return true;
+        }
         return workspaceValidator.isWorkspaceAdminOrOwner(accountId, notebookDto.getWorkspaceId());
     }
 

@@ -20,7 +20,7 @@ const WorkspaceChangeButton: React.FC<WorkspaceChangeButtonProps> = ({currentWor
     return (
         <Button
             className={styles.button}
-            variant={ButtonVariants.filled2}
+            variant={ButtonVariants.outline}
             heightVariant={ButtonHeight.short}
             onClick={popWorkspacePicker}
         >

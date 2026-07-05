@@ -2959,6 +2959,10 @@ const translations = {
         en: "Files",
         tr: "Dosyalar"
     },
+    mainFeaturesMenuLabelNotes: {
+        en: "Notes",
+        tr: "Notlar"
+    },
     mainFeaturesMenuLabelCalendar: {
         en: "Calendar",
         tr: "Takvim"
@@ -4032,8 +4036,8 @@ const translations = {
         tr: "Takımlar"
     },
     sideMenuYourWorkspaceTitle: {
-        en: "Your Workspace",
-        tr: "Çalışma Alanın"
+        en: "Your Workspace Tasks",
+        tr: "Çalışma Alanı Görevleri"
     },
     workspaceTeamListTitle: {
         en: "Teams",
@@ -5574,17 +5578,42 @@ const translations = {
         tr: "Ekip ayarları"
     },
 
-    mobileFabButtonCalendar:{
+    mobileFabButtonCalendar: {
         en: "Calendars",
         tr: "Takvimler"
     },
-    mobileFabButtonTasks:{
+    mobileFabButtonTasks: {
         en: "Teams",
         tr: "Ekipler"
     },
-    mobileFabButtonFiles:{
+    mobileFabButtonFiles: {
         en: "Filters",
         tr: "Filtreler"
+    },
+    mobileFabButtonNotes: {
+        en: "Notebooks",
+        tr: "Notlar"
+    },
+
+    sideMenuYourWorkspaceNotes: {
+        en: "Your Workspace Notes",
+        tr: "Çalışma Alanı Notları"
+    },
+    sideMenuNewNote: {
+        en: "New Note",
+        tr: "Yeni Not"
+    },
+    sideMenuNewNotebook: {
+        en: "New Notebook",
+        tr: "Yeni Defter"
+    },
+    sideMenuYourNotebooksTitle: {
+        en: "Notebooks",
+        tr: "Defterler"
+    },
+    sideMenuNoNotebook:{
+        en: "There isn't any notebooks in this workspace.",
+        tr: "Bu çalışma alanında hiçbir defter bulunmuyor."
     },
 };
 

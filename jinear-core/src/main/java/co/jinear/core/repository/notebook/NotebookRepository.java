@@ -1,6 +1,7 @@
 package co.jinear.core.repository.notebook;
 
 import co.jinear.core.model.entity.note.Notebook;
+import co.jinear.core.model.enumtype.notebook.NotebookVisibilityType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,6 +24,7 @@ public interface NotebookRepository extends JpaRepository<Notebook, String> {
                     and notebook.passiveId is null
                     and (
                         notebook.ownerId = :accountId
+                        or notebook.visibility = :publicVisibility
                         or exists (
                             select 1 from NotebookMember member
                                 where member.notebookId = notebook.notebookId
@@ -34,5 +36,6 @@ public interface NotebookRepository extends JpaRepository<Notebook, String> {
             """)
     Page<Notebook> findAccessibleNotebooks(@Param("workspaceId") String workspaceId,
                                            @Param("accountId") String accountId,
+                                           @Param("publicVisibility") NotebookVisibilityType publicVisibility,
                                            Pageable pageable);
 }
