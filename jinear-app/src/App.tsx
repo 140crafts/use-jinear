@@ -52,6 +52,7 @@ import ReloadQueryRefetchHandler from "@/components/reloadQueryRefetchHandler/Re
 import OfflinePrefetchManager from "@/components/offlinePrefetchManager/OfflinePrefetchManager.tsx";
 import WorkspaceModalProvider from "@/components/modal-provider/WorkspaceModalProvider.tsx";
 import NotesLayout from "@/pages/workspace/notes/notes-layout/layout.tsx";
+import NewNotePage from "@/pages/workspace/notes/new-note";
 
 export default function App() {
     return (
@@ -129,7 +130,7 @@ export default function App() {
                     </Route>
 
                     <Route path="notes" element={<NotesLayout/>}>
-
+                        <Route index path="new" element={<NewNotePage/>}/>
                     </Route>
 
                     <Route path="calendar" element={<CalendarLayout/>}>

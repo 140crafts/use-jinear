@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-06-28 16:52:51.
+// Generated using typescript-generator version 3.0.1157 on 2026-07-05 14:17:05.
 
 export interface BaseDto {
     createdDate: Date;
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
+    gid: string;
     gthreadId: string;
     ghistoryId: string;
     ginternalDate: string;
-    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -2264,13 +2264,13 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
+    contentType: string;
+    originalFilename: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
-    originalFilename: string;
-    contentType: string;
 }
 
 export interface GoogleCalendarEventAttendee {
@@ -2352,13 +2352,13 @@ export interface GoogleCalendarAttachment {
 }
 
 export interface Resource extends InputStreamSource {
+    description: string;
+    uri: URI;
+    filename: string;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
-    filename: string;
-    description: string;
-    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -2405,10 +2405,10 @@ export interface GoogleCalendarOfficeLocation {
     label: string;
 }
 
-export interface URL extends Serializable {
+export interface URI extends Comparable<URI>, Serializable {
 }
 
-export interface URI extends Comparable<URI>, Serializable {
+export interface URL extends Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {
@@ -2489,7 +2489,7 @@ export type MessageType = "USER_MESSAGE" | "CONVERSATION_INIT";
 
 export type ThreadType = "CLASSIC" | "CHANNEL_INITIAL" | "INITIALIZED_BY_ROBOT";
 
-export type NotebookVisibilityType = "PRIVATE" | "SHARED";
+export type NotebookVisibilityType = "PRIVATE" | "SHARED" | "PUBLIC_WITHIN_WORKSPACE";
 
 export type NotificationEventState = "INITIALIZED" | "SENT";
 

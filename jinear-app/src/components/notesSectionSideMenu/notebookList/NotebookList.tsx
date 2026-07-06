@@ -7,6 +7,8 @@ import {useListWorkspaceNotebooksQuery} from "@/api/notebookListingApi.ts";
 import type {WorkspaceDto} from "@/be/jinear-core.ts";
 import Notebook from "@/components/notesSectionSideMenu/notebookList/notebook/Notebook.tsx";
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
+import {useAppDispatch} from "@/store";
+import {popNotebookInitializeModal} from "@/store/slice/modalSlice";
 
 interface NotebookListProps {
     workspace: WorkspaceDto;
@@ -14,6 +16,7 @@ interface NotebookListProps {
 
 const NotebookList: React.FC<NotebookListProps> = ({workspace}) => {
     const {t} = useTranslation();
+    const dispatch = useAppDispatch();
     const [page, setPage] = useState<number>(0);
 
     const {
@@ -22,6 +25,7 @@ const NotebookList: React.FC<NotebookListProps> = ({workspace}) => {
     } = useListWorkspaceNotebooksQuery({workspaceId: workspace.workspaceId, page});
 
     const openNewNotebookModal = () => {
+        dispatch(popNotebookInitializeModal({visible: true, workspace}));
     }
 
     return (
@@ -34,18 +38,20 @@ const NotebookList: React.FC<NotebookListProps> = ({workspace}) => {
             {isLoading && <CircularLoading/>}
             <div className="spacer-h-1"/>
             <div className={styles.notebookListContainer}>
-                {listWorkspaceNotebooksResponse?.data?.content?.map(notebook =>
+                {listWorkspaceNotebooksResponse?.data?.content?.map((notebook, index) =>
                     <Notebook
                         key={notebook.notebookId}
                         notebook={notebook}
                         workspace={workspace}
+                        initiallyOpen={index == 0}
                     />)}
                 {!listWorkspaceNotebooksResponse?.data?.hasContent &&
                     <div className={styles.noNotebookContainer}>
                         <span>{t('sideMenuNoNotebook')}</span>
                         <Button
                             heightVariant={ButtonHeight.short}
-                            variant={ButtonVariants.contrast}>
+                            variant={ButtonVariants.contrast}
+                            onClick={openNewNotebookModal}>
                             {t('sideMenuNewNotebook')}
                         </Button>
                     </div>

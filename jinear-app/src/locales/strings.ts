@@ -5611,9 +5611,62 @@ const translations = {
         en: "Notebooks",
         tr: "Defterler"
     },
-    sideMenuNoNotebook:{
+    sideMenuNoNotebook: {
         en: "There isn't any notebooks in this workspace.",
         tr: "Bu çalışma alanında hiçbir defter bulunmuyor."
+    },
+    notebookInitializeModalTitle: {
+        en: "New Notebook",
+        tr: "Yeni Defter"
+    },
+    notebookInitializeFormTitle: {
+        en: "Title",
+        tr: "Başlık"
+    },
+    notebookInitializeFormVisibility: {
+        en: "Visibility",
+        tr: "Görünürlük"
+    },
+    notebookInitializeFormCreate: {
+        en: "Create",
+        tr: "Oluştur"
+    },
+    notebookInitializeFormCancel: {
+        en: "Cancel",
+        tr: "İptal"
+    },
+    notebookVisibility_PRIVATE: {
+        en: "Private",
+        tr: "Gizli"
+    },
+    notebookVisibility_SHARED: {
+        en: "Shared",
+        tr: "Paylaşılan"
+    },
+    notebookVisibility_PUBLIC_WITHIN_WORKSPACE: {
+        en: "Workspace Members",
+        tr: "Çalışma Alanı Üyeleri"
+    },
+    notebookVisibilityDetail_PRIVATE: {
+        en: "Only you can see this notebook and it's contents.",
+        tr: "Bu defteri ve içeriğini yalnızca siz görebilirsiniz."
+    },
+    notebookVisibilityDetail_SHARED: {
+        en: "Only invited members can see this notebook and it's contents.",
+        tr: "Bu defteri ve içeriğini yalnızca davet edilen üyeler görebilir."
+    },
+    notebookVisibilityDetail_PUBLIC_WITHIN_WORKSPACE: {
+        en: "Everyone in the workspace can see this notebook and it's contents.",
+        tr: "Çalışma alanındaki herkes bu defteri ve içeriğini görebilir."
+    },
+
+    newNoteTitle:{
+        en:'Title',
+        tr:'Başlık'
+    },
+    newNoteTitlePlaceholder:{
+        en:'New note',
+        tr:'Yeni not'
     },
 };
 

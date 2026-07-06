@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,7 +36,7 @@ public class NoteListingManager {
         NotebookDto notebookDto = notebookRetrieveService.retrieve(notebookId);
         validateNotebookAccess(currentAccountId, notebookDto);
         log.info("List notes has started. currentAccountId: {}, notebookId: {}, noteId: {}", currentAccountId, notebookId, noteId);
-        PathAwareNoteDto pathAwareNoteDto = noteRetrieveService.retrievePathAware(noteId);
+        PathAwareNoteDto pathAwareNoteDto = Optional.ofNullable(noteId).map(noteRetrieveService::retrievePathAware).orElse(null);
         Page<NoteDto> childNotes = noteSearchService.search(notebookId, noteId, page);
         return mapResponse(pathAwareNoteDto, childNotes);
     }

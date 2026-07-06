@@ -22,7 +22,7 @@ const NotesActionButtons: React.FC<NotesActionButtonsProps> = ({workspace}) => {
                     heightVariant={ButtonHeight.short}
                     variant={ButtonVariants.brandColor}
                     className={styles.newTaskButton}
-                    href={'/notes/new'}
+                    href={`/${workspace.username}/notes/new`}
                 >
                     <LuFilePen className={'icon'}/>
                     <b>{t("sideMenuNewNote")}</b>

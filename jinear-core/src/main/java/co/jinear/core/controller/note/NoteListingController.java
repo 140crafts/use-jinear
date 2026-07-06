@@ -13,10 +13,10 @@ public class NoteListingController {
 
     private final NoteListingManager noteListingManager;
 
-    @GetMapping("/notebook/{notebookId}/{noteId}")
+    @GetMapping("/notebook/{notebookId}")
     @ResponseStatus(HttpStatus.OK)
     public NotePathAwareResponse list(@PathVariable String notebookId,
-                                      @PathVariable String noteId,
+                                      @RequestParam(required = false) String noteId,
                                       @RequestParam(required = false, defaultValue = "0") Integer page) {
         return noteListingManager.list(notebookId, noteId, page);
     }

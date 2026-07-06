@@ -17,7 +17,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class NoteSearchService {
 
-    private static final int PAGE_SIZE = 50;
+    private static final int PAGE_SIZE = 250;
 
     private final NoteRepository noteRepository;
     private final NoteDtoConverter noteDtoConverter;

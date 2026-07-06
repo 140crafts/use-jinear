@@ -63,6 +63,10 @@ export interface NewTeamModalState extends ModalState {
     workspace?: WorkspaceDto;
 }
 
+export interface NotebookInitializeModalState extends ModalState {
+    workspace?: WorkspaceDto;
+}
+
 export interface SearchTaskModalState extends ModalState {
     workspaceId?: string;
     teamIds?: string[];

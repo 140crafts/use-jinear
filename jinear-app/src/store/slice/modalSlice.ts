@@ -28,6 +28,7 @@ import type {
     NewTaskModalState,
     NewTeamModalState,
     NewTopicModalState,
+    NotebookInitializeModalState,
     NotFoundModalState,
     NotificationPermissionModalState,
     PasswordChangeModalState,
@@ -92,6 +93,10 @@ const initialState = {
         visible: false
     },
     newTeamModal: {
+        visible: false,
+        workspace: undefined
+    },
+    notebookInitializeModal: {
         visible: false,
         workspace: undefined
     },
@@ -251,6 +256,7 @@ const initialState = {
     changeTaskAssigneeModal: null | ChangeTaskAssigneeModalState;
     newWorkspaceModal: null | ModalState;
     newTeamModal: null | NewTeamModalState;
+    notebookInitializeModal: null | NotebookInitializeModalState;
     searchTaskModal: null | SearchTaskModalState;
     dialogModal: null | DialogModalState;
     reminderListModal: null | ReminderListModalState;
@@ -378,6 +384,12 @@ const slice = createSlice({
         },
         closeNewTeamModal: (state, action: PayloadAction<void>) => {
             state.newTeamModal = initialState.newTeamModal;
+        },
+        popNotebookInitializeModal: (state, action: PayloadAction<NotebookInitializeModalState>) => {
+            state.notebookInitializeModal = {visible: true, workspace: action.payload.workspace};
+        },
+        closeNotebookInitializeModal: (state, action: PayloadAction<void>) => {
+            state.notebookInitializeModal = initialState.notebookInitializeModal;
         },
 
         popDialogModal: (state, action: PayloadAction<DialogModalState>) => {
@@ -782,6 +794,8 @@ export const {
     closeNewWorkspaceModal,
     popNewTeamModal,
     closeNewTeamModal,
+    popNotebookInitializeModal,
+    closeNotebookInitializeModal,
     popSearchTaskModal,
     closeSearchTaskModal,
     popDialogModal,
@@ -961,6 +975,8 @@ export const selectNewWorkspaceModalVisible = (state: RootState) => state.modal.
 
 export const selectNewTeamModalVisible = (state: RootState) => state.modal.newTeamModal?.visible;
 export const selectNewTeamModalWorkspace = (state: RootState) => state.modal.newTeamModal?.workspace;
+export const selectNotebookInitializeModalVisible = (state: RootState) => state.modal.notebookInitializeModal?.visible;
+export const selectNotebookInitializeModalWorkspace = (state: RootState) => state.modal.notebookInitializeModal?.workspace;
 
 export const selectSearchTaskModalVisible = (state: RootState) => state.modal.searchTaskModal?.visible;
 export const selectSearchTaskModalWorkspaceId = (state: RootState) => state.modal.searchTaskModal?.workspaceId;
