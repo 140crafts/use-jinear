@@ -5660,14 +5660,22 @@ const translations = {
         tr: "Çalışma alanındaki herkes bu defteri ve içeriğini görebilir."
     },
 
-    newNoteTitle:{
-        en:'Title',
-        tr:'Başlık'
+    newNoteTitle: {
+        en: 'Title',
+        tr: 'Başlık'
     },
-    newNoteTitlePlaceholder:{
-        en:'New note',
-        tr:'Yeni not'
+    newNoteTitlePlaceholder: {
+        en: 'New note',
+        tr: 'Yeni not'
     },
+    noteEditorActionBarPublish: {
+        en: 'Publish',
+        tr: 'Yayınla'
+    },
+    noteEditorActionBarSave: {
+        en: 'Save',
+        tr: 'Kaydet'
+    }
 };
 
 export default translations;

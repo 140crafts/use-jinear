@@ -9,5 +9,5 @@ import lombok.Setter;
 public class NoteHierarchyDto {
 
     private PathAwareNoteDto note;
-    private PageDto<NoteDto> children;
+    private PageDto<PathAwareNoteDto> children;
 }

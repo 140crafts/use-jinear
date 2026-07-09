@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-07-05 14:17:05.
+// Generated using typescript-generator version 3.0.1157 on 2026-07-09 22:00:21.
 
 export interface BaseDto {
     createdDate: Date;
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,9 +165,9 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
-    gthreadId: string;
     ghistoryId: string;
+    gthreadId: string;
+    gid: string;
     ginternalDate: string;
 }
 
@@ -505,13 +505,14 @@ export interface NoteDto extends BaseDto {
     parentNoteId: string;
     title: string;
     richTextId: string;
+    richText: RichTextDto;
     tags?: NoteTagDto[] | null;
     owner?: PlainAccountProfileDto | null;
 }
 
 export interface NoteHierarchyDto {
     note: PathAwareNoteDto;
-    children: PageDto<NoteDto>;
+    children: PageDto<PathAwareNoteDto>;
 }
 
 export interface NotePathDto {
@@ -533,7 +534,7 @@ export interface NotePathItemDtoBuilder {
 }
 
 export interface PathAwareNoteDto extends NoteDto {
-    notePath: NotePathDto;
+    notePath?: NotePathDto | null;
 }
 
 export interface NotebookDto extends BaseDto {
@@ -773,6 +774,9 @@ export interface RichTextDto {
     type: RichTextType;
     sourceStack: RichTextSourceStack;
     format: RichTextFormat;
+    yjsState: any;
+    yjsStateSeq: number;
+    updateSeq: number;
 }
 
 export interface RichTextStateDto {
@@ -2352,9 +2356,9 @@ export interface GoogleCalendarAttachment {
 }
 
 export interface Resource extends InputStreamSource {
+    filename: string;
     description: string;
     uri: URI;
-    filename: string;
     open: boolean;
     file: any;
     readable: boolean;

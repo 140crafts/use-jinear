@@ -45,9 +45,13 @@ export interface RichTextCrdtHandle {
  * Custom Yjs provider over the polling relay (no WebSocket). Bootstraps from `/state` + `/updates`,
  * pushes debounced local deltas, polls for remote deltas, and compacts via `/snapshot`. All CRDT
  * logic is client-side; the backend only stores and orders opaque blobs.
+ *
+ * Without a `richTextId` the hook runs in draft mode: a fresh local doc, no network. The caller
+ * persists the draft via {@link encodeDocState} on whatever create endpoint owns the document,
+ * then re-renders with the real `richTextId` (or navigates to a route that has it).
  */
 export const useRichTextCrdt = (
-    richTextId: string,
+    richTextId: string | null | undefined,
     {format, legacyHtml, enabled = true}: UseRichTextCrdtOptions
 ): RichTextCrdtHandle => {
     const [doc, setDoc] = useState<Y.Doc | null>(null);
@@ -75,6 +79,19 @@ export const useRichTextCrdt = (
     useEffect(() => {
         if (!enabled) {
             return;
+        }
+        if (!richTextId) {
+            const liveDoc = new Y.Doc();
+            docRef.current = liveDoc;
+            editedRef.current = false;
+            setDoc(liveDoc);
+            setStatus("ready");
+            return () => {
+                liveDoc.destroy();
+                if (docRef.current === liveDoc) docRef.current = null;
+                setDoc(null);
+                setStatus("connecting");
+            };
         }
         cancelledRef.current = false;
         bufferRef.current = [];
