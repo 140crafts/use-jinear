@@ -22,6 +22,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,20 +39,21 @@ public class NoteOperationManager {
     private final NoteUpdateRequestToVoConverter noteUpdateRequestToVoConverter;
     private final PassiveService passiveService;
 
-    public NoteInitializeResponse initialize(NoteInitializeRequest request) {
+    public NoteInitializeResponse initialize(String workspaceId, NoteInitializeRequest request) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        NotebookDto notebookDto = notebookRetrieveService.retrieve(request.getNotebookId());
-        validateNotebookAccess(currentAccountId, notebookDto);
+        workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
+        validateNotebookAccess(currentAccountId, request.getNotebookId());
         log.info("Initialize note has started. currentAccountId: {}", currentAccountId);
-        NoteInitializeVo noteInitializeVo = noteInitializeRequestToVoConverter.convert(request, notebookDto.getWorkspaceId(), currentAccountId);
+        NoteInitializeVo noteInitializeVo = noteInitializeRequestToVoConverter.convert(request, workspaceId, currentAccountId);
         String noteId = noteOperationService.initialize(noteInitializeVo);
         NoteInitializeResponse response = new NoteInitializeResponse();
         response.setNoteId(noteId);
         return response;
     }
 
-    public BaseResponse update(NoteUpdateRequest request) {
+    public BaseResponse update(String workspaceId, NoteUpdateRequest request) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
         validateNoteAccess(currentAccountId, request.getNoteId());
         log.info("Update note has started. currentAccountId: {}", currentAccountId);
         NoteUpdateVo noteUpdateVo = noteUpdateRequestToVoConverter.convert(request);
@@ -58,16 +61,18 @@ public class NoteOperationManager {
         return new BaseResponse();
     }
 
-    public BaseResponse move(NoteMoveRequest request) {
+    public BaseResponse move(String workspaceId, NoteMoveRequest request) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
         validateNoteAccess(currentAccountId, request.getNoteId());
         log.info("Move note has started. currentAccountId: {}", currentAccountId);
         noteOperationService.moveTo(request.getNoteId(), request.getParentNoteId());
         return new BaseResponse();
     }
 
-    public BaseResponse delete(String noteId) {
+    public BaseResponse delete(String workspaceId, String noteId) {
         String currentAccountId = sessionInfoService.currentAccountId();
+        workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
         validateNoteAccess(currentAccountId, noteId);
         log.info("Delete note has started. currentAccountId: {}", currentAccountId);
         String passiveId = passiveService.createUserActionPassive(currentAccountId);
@@ -77,12 +82,16 @@ public class NoteOperationManager {
 
     private void validateNoteAccess(String currentAccountId, String noteId) {
         NoteDto noteDto = noteRetrieveService.retrieve(noteId);
-        NotebookDto notebookDto = notebookRetrieveService.retrieve(noteDto.getNotebookId());
-        validateNotebookAccess(currentAccountId, notebookDto);
+        boolean isOwner = noteDto.getOwnerId().equalsIgnoreCase(currentAccountId);
+        if (!isOwner) {
+            validateNotebookAccess(currentAccountId, noteDto.getNotebookId());
+        }
     }
 
-    private void validateNotebookAccess(String currentAccountId, NotebookDto notebookDto) {
-        workspaceValidator.validateHasAccess(currentAccountId, notebookDto.getWorkspaceId());
-        notebookAccessValidator.validateHasAccess(currentAccountId, notebookDto);
+    private void validateNotebookAccess(String currentAccountId, String notebookId) {
+        if (Objects.nonNull(notebookId)) {
+            NotebookDto notebookDto = notebookRetrieveService.retrieve(notebookId);
+            notebookAccessValidator.validateHasAccess(currentAccountId, notebookDto);
+        }
     }
 }

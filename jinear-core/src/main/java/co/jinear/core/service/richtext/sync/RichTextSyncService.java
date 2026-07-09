@@ -44,7 +44,7 @@ public class RichTextSyncService {
                 .map(RichTextUpdate::getUpdateBytes)
                 .map(this::encode)
                 .toList();
-        long headSeq = headSeq(richText);
+        long headSeq = richText.getHeadSeq();
         RichTextUpdatesDto dto = new RichTextUpdatesDto();
         dto.setHeadSeq(headSeq);
         dto.setUpdates(updates);
@@ -98,7 +98,7 @@ public class RichTextSyncService {
             log.info("Snapshot rejected on non-CRDT rich text. richTextId: {}, format: {}", richTextId, richText.getFormat());
             throw new NotValidException();
         }
-        long target = Math.min(upToSeq, headSeq(richText));
+        long target = Math.min(upToSeq, richText.getHeadSeq());
         if (target <= richText.getYjsStateSeq()) {
             log.info("Snapshot is stale or no-op, skipping. richTextId: {}, target: {}, currentSeq: {}", richTextId, target, richText.getYjsStateSeq());
             return;
@@ -119,7 +119,7 @@ public class RichTextSyncService {
     }
 
     private RichTextStateDto toStateDto(RichText richText) {
-        long headSeq = headSeq(richText);
+        long headSeq = richText.getHeadSeq();
         RichTextStateDto dto = new RichTextStateDto();
         dto.setFormat(richText.getFormat());
         dto.setSnapshotSeq(richText.getYjsStateSeq());
@@ -129,10 +129,6 @@ public class RichTextSyncService {
                 .map(this::encode)
                 .ifPresent(dto::setSnapshot);
         return dto;
-    }
-
-    private long headSeq(RichText richText) {
-        return Math.max(richText.getYjsStateSeq(), richText.getUpdateSeq());
     }
 
     private RichText retrieve(String richTextId) {

@@ -50,4 +50,8 @@ public class RichText extends BaseEntity {
 
     @Column(name = "update_seq", nullable = false)
     private long updateSeq;
+
+    public long getHeadSeq(){
+        return Math.max(yjsStateSeq, updateSeq);
+    }
 }

@@ -16,4 +16,7 @@ public class RichTextDto {
     private RichTextType type;
     private RichTextSourceStack sourceStack;
     private RichTextFormat format;
+    private byte[] yjsState;
+    private long yjsStateSeq;
+    private long updateSeq;
 }

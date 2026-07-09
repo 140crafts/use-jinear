@@ -3,6 +3,7 @@ package co.jinear.core.model.dto.note;
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.notetag.NoteTagDto;
+import co.jinear.core.model.dto.richtext.RichTextDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -22,6 +23,7 @@ public class NoteDto extends BaseDto {
     private String parentNoteId;
     private String title;
     private String richTextId;
+    private RichTextDto richText;
     @Nullable
     private Set<NoteTagDto> tags;
     @Nullable
