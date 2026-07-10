@@ -27,7 +27,7 @@ public class Note extends BaseEntity {
     @Column(name = "note_id")
     private String noteId;
 
-    @Column(name = "notebook_id", nullable = false)
+    @Column(name = "notebook_id")
     private String notebookId;
 
     @Column(name = "workspace_id", nullable = false)

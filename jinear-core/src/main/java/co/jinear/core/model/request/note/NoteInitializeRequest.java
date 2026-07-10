@@ -11,7 +11,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 @Setter
 public class NoteInitializeRequest extends BaseRequest {
 
-    @NotBlank
+    @Nullable
     private String notebookId;
     @Nullable
     private String parentNoteId;

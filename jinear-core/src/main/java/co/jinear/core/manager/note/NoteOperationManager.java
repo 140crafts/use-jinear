@@ -2,6 +2,8 @@ package co.jinear.core.manager.note;
 
 import co.jinear.core.converter.note.NoteInitializeRequestToVoConverter;
 import co.jinear.core.converter.note.NoteUpdateRequestToVoConverter;
+import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
 import co.jinear.core.model.request.note.NoteInitializeRequest;
@@ -45,10 +47,26 @@ public class NoteOperationManager {
         validateNotebookAccess(currentAccountId, request.getNotebookId());
         log.info("Initialize note has started. currentAccountId: {}", currentAccountId);
         NoteInitializeVo noteInitializeVo = noteInitializeRequestToVoConverter.convert(request, workspaceId, currentAccountId);
-        String noteId = noteOperationService.initialize(noteInitializeVo);
+        NoteDto note = noteOperationService.initialize(noteInitializeVo);
         NoteInitializeResponse response = new NoteInitializeResponse();
-        response.setNoteId(noteId);
+        response.setNote(note);
         return response;
+    }
+
+    public BaseResponse publish(String workspaceId, String noteId, String notebookId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        NoteDto note = noteRetrieveService.retrieve(noteId);
+        validateNotPublishedBefore(notebookId, note);
+        String noteWorkspaceId = note.getWorkspaceId();
+        validateWorkspaceAccessAndMatchPath(workspaceId, currentAccountId, noteWorkspaceId);
+        validateNotebookAccess(currentAccountId, notebookId);
+        NoteUpdateVo noteUpdateVo = NoteUpdateVo
+                .builder()
+                .noteId(noteId)
+                .notebookId(notebookId)
+                .build();
+        noteOperationService.update(noteUpdateVo);
+        return new BaseResponse();
     }
 
     public BaseResponse update(String workspaceId, NoteUpdateRequest request) {
@@ -92,6 +110,20 @@ public class NoteOperationManager {
         if (Objects.nonNull(notebookId)) {
             NotebookDto notebookDto = notebookRetrieveService.retrieve(notebookId);
             notebookAccessValidator.validateHasAccess(currentAccountId, notebookDto);
+        }
+    }
+
+    private void validateWorkspaceAccessAndMatchPath(String workspaceId, String currentAccountId, String noteWorkspaceId) {
+        if (!workspaceId.equalsIgnoreCase(noteWorkspaceId)) {
+            throw new NoAccessException();
+        }
+        workspaceValidator.validateHasAccess(currentAccountId, noteWorkspaceId);
+    }
+
+    private void validateNotPublishedBefore(String notebookId, NoteDto note) {
+        String existingNotebookId = note.getNotebookId();
+        if (Objects.nonNull(existingNotebookId) && !notebookId.equalsIgnoreCase(existingNotebookId)) {
+            throw new BusinessException("note.published-before");
         }
     }
 }

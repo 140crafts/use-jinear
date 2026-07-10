@@ -25,6 +25,14 @@ public class NoteOperationController {
         return noteOperationManager.initialize(workspaceId, request);
     }
 
+    @PutMapping("/{noteId}/publish/{notebookId}")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse publish(@PathVariable String workspaceId,
+                                @PathVariable String noteId,
+                                @PathVariable String notebookId) {
+        return noteOperationManager.publish(workspaceId, noteId, notebookId);
+    }
+
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     public BaseResponse update(@PathVariable String workspaceId,

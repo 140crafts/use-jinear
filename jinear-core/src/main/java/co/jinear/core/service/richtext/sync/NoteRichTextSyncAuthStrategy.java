@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -39,8 +41,11 @@ public class NoteRichTextSyncAuthStrategy implements RichTextSyncAuthStrategy {
 
     private void validateNotebookAccess(String accountId, RichText richText) {
         NoteDto noteDto = noteRetrieveService.retrieve(richText.getRelatedObjectId());
-        NotebookDto notebookDto = notebookRetrieveService.retrieve(noteDto.getNotebookId());
-        workspaceValidator.validateHasAccess(accountId, notebookDto.getWorkspaceId());
-        notebookAccessValidator.validateHasAccess(accountId, notebookDto);
+        workspaceValidator.validateHasAccess(accountId, noteDto.getWorkspaceId());
+        String notebookId = noteDto.getNotebookId();
+        if (Objects.nonNull(notebookId)) {
+            NotebookDto notebookDto = notebookRetrieveService.retrieve(notebookId);
+            notebookAccessValidator.validateHasAccess(accountId, notebookDto);
+        }
     }
 }

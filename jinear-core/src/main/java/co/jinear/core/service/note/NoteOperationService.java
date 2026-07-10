@@ -1,7 +1,9 @@
 package co.jinear.core.service.note;
 
+import co.jinear.core.converter.note.NoteDtoConverter;
 import co.jinear.core.converter.note.NoteEntityConverter;
 import co.jinear.core.exception.NotValidException;
+import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.entity.note.Note;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
@@ -16,10 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -31,23 +30,25 @@ public class NoteOperationService {
     private final NoteRetrieveService noteRetrieveService;
     private final RichTextInitializeService richTextInitializeService;
     private final NoteTagAssignmentOperationService noteTagAssignmentOperationService;
+    private final NoteDtoConverter noteDtoConverter;
 
     @Transactional
-    public String initialize(NoteInitializeVo noteInitializeVo) {
+    public NoteDto initialize(NoteInitializeVo noteInitializeVo) {
         log.info("Initialize note has started. noteInitializeVo: {}", noteInitializeVo);
         validateParentNoteIsWithinSameNotebook(noteInitializeVo.getParentNoteId(), noteInitializeVo.getNotebookId());
         Note note = noteEntityConverter.convert(noteInitializeVo);
-        Note saved = noteRepository.save(note);
-        String richTextId = initializeRichTextBody(saved.getNoteId(), noteInitializeVo.getBodyState());
-        saved.setRichTextId(richTextId);
-        noteRepository.save(saved);
-        return saved.getNoteId();
+        Note initialized = noteRepository.save(note);
+        String richTextId = initializeRichTextBody(initialized.getNoteId(), noteInitializeVo.getBodyState());
+        initialized.setRichTextId(richTextId);
+        Note saved = noteRepository.save(initialized);
+        return noteDtoConverter.convert(saved);
     }
 
     public void update(NoteUpdateVo noteUpdateVo) {
         log.info("Update note has started. noteUpdateVo: {}", noteUpdateVo);
         Note note = noteRetrieveService.retrieveEntity(noteUpdateVo.getNoteId());
-        note.setTitle(noteUpdateVo.getTitle());
+        Optional.of(noteUpdateVo).map(NoteUpdateVo::getTitle).ifPresent(note::setTitle);
+        Optional.of(noteUpdateVo).map(NoteUpdateVo::getNotebookId).ifPresent(note::setNotebookId);
         noteRepository.save(note);
     }
 
