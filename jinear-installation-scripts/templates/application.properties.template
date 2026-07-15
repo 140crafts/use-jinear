@@ -21,8 +21,8 @@ jwt.secret=${JWT_SECRET}
 jwt.include-domain=true
 jwt.domain=${JWT_DOMAIN}
 jwt.include-same-site=true
-jwt.same-site=None
-jwt.is-secure=true
+jwt.same-site=${JWT_SAME_SITE:None}
+jwt.is-secure=${JWT_IS_SECURE:true}
 jwt.messaging.secret=ignore-me
 
 spring.servlet.multipart.maxFileSize=1999MB

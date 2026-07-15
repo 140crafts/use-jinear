@@ -26,7 +26,7 @@ chmod +x install.sh
 ## What the Installer Does
 
 1. **Checks prerequisites** - Verifies Docker, Docker Compose, and other requirements
-2. **Prompts for configuration** - Asks for your domain, timezone, and optional email settings
+2. **Prompts for configuration** - Asks for your domain, HTTP/HTTPS ports, HTTPS mode (automatic Let's Encrypt, behind your own TLS proxy, or plain HTTP), timezone, and optional email settings
 3. **Generates secure credentials** - Automatically creates strong passwords and secrets
 4. **Creates directory structure** - Sets up all necessary folders
 5. **Generates configuration files** - Creates all config files from templates
@@ -39,7 +39,7 @@ chmod +x install.sh
 - **Docker Compose**: Version 2.0 or higher (or docker-compose v1.29+)
 - **Disk Space**: Minimum 5GB free (10GB+ recommended)
 - **Memory**: Minimum 2GB RAM (4GB+ recommended)
-- **Ports**: 80 and 443 must be available
+- **Ports**: 80 and 443 by default (configurable via `HTTP_PORT` / `HTTPS_PORT` — see [Running behind your own reverse proxy](#running-behind-your-own-reverse-proxy))
 
 ## Configuration
 
@@ -51,6 +51,37 @@ After installation, you can modify the configuration:
 | `.config/application.properties` | Spring Boot application settings |
 | `.data/caddy/conf/Caddyfile` | Reverse proxy and SSL configuration |
 | `.secrets` | Generated credentials (keep secure!) |
+
+## Running Behind Your Own Reverse Proxy
+
+By default the installer lets Caddy bind ports **80/443** and issue Let's Encrypt
+certificates automatically. If you already run your own reverse proxy (nginx,
+Traefik, another Caddy, a load balancer, …), answer **No** to *"Enable automatic
+HTTPS via Let's Encrypt?"* and Caddy will serve **plain HTTP** instead. You then
+pick the HTTP port your proxy forwards to (e.g. `8080`), and the `443` mapping is
+dropped so Caddy never competes for it.
+
+When automatic HTTPS is disabled you choose between two topologies:
+
+| Topology | You pick | Effect |
+|----------|----------|--------|
+| **Behind a TLS-terminating proxy** | *Yes* to "runs behind a proxy that terminates HTTPS?" | External URLs stay `https://`; secure cookies unchanged. Your proxy handles certificates and forwards HTTP to Caddy. |
+| **Plain HTTP (no TLS)** | *No* | External URLs become `http://` and secure/`SameSite=None` cookies are relaxed to `Lax` so login works over http. Intended for internal/LAN use only. |
+
+These map to the following `.env` values (also editable by hand afterwards):
+
+```bash
+HTTP_PORT=8080          # port your proxy forwards to
+HTTPS_PORT=443          # ignored when AUTO_HTTPS=false (443 not published)
+AUTO_HTTPS=false        # Caddy serves plain HTTP, no Let's Encrypt
+EXTERNAL_SCHEME=https   # https behind a TLS proxy, http for plain HTTP
+JWT_IS_SECURE=true      # false for plain HTTP
+JWT_SAME_SITE=None      # Lax for plain HTTP
+```
+
+Point your proxy's virtual hosts for the main, `api.` and `files.` domains at
+`http://<this-host>:${HTTP_PORT}`. For a worked Traefik example, see
+[`docs/behind-traefik`](../docs/behind-traefik/README.md).
 
 ## Directory Structure
 
@@ -166,6 +197,26 @@ Solutions:
 - Certificates are stored in `.data/caddy/data/`
 - Delete certificates to force renewal: `rm -rf .data/caddy/data/`
 
+### Files subdomain redirects to `jinear-minio:9001`
+
+If opening `https://files.<your-domain>/` redirects your browser to
+`http://jinear-minio:9001/` (an unreachable internal address), MinIO's console
+redirect is enabled. The `jinear-minio` service must set:
+
+```yaml
+    environment:
+      MINIO_BROWSER_REDIRECT: "off"
+```
+
+This is already in the current template. If you're upgrading an older install,
+add the line to `docker-compose.yaml` (keep the quotes — unquoted `off` is a YAML
+boolean and MinIO ignores it) and apply it:
+
+```bash
+cd <install-dir>
+docker compose up -d jinear-minio
+```
+
 ### Database connection issues
 ```bash
 # Check if database is running
@@ -194,7 +245,8 @@ rm -rf .data .logs .backups
 | `install.sh` | Main interactive installation script |
 | `.env.template` | Template for environment variables |
 | `templates/docker-compose.yaml` | Docker Compose configuration |
-| `templates/Caddyfile.template` | Caddy reverse proxy template |
+| `templates/Caddyfile.template` | Caddy reverse proxy template (automatic HTTPS) |
+| `templates/Caddyfile.http.template` | Caddy reverse proxy template (plain HTTP / behind your own proxy) |
 | `templates/application.properties.template` | Spring Boot config template |
 | `templates/db-backup.sh` | Database backup script |
 
