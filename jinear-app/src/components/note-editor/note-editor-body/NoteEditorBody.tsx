@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import styles from './NoteEditorBody.module.css';
 import CollaborativeRichText from "@/components/tiptap/CollaborativeRichText.tsx";
 import Logger from "@/util/logger.ts";
@@ -18,24 +18,31 @@ const NoteEditorBody: React.FC<NoteEditorBodyProps> = ({}) => {
     const {workspace, noteId, note} = useNoteEditorContext();
     const richText = note?.richText
     const isUnsubmittedDraft = noteId?.indexOf(DRAFT_ID_PREFIX) != -1
+    const submittedRef = useRef(false);
 
     const [initializeNote, {isLoading}] = useInitializeNoteMutation();
 
-    const {doc, status, getState} = useLiveText({
+    const {doc, status, getState, onPromoted} = useLiveText({
         richTextId: richText?.richTextId ?? noteId ?? "",
         initialRichText: richText
     });
 
     useEffect(() => {
         const bodyState = getState();
-        if (isUnsubmittedDraft && workspace && bodyState && doc) {
+        if (!submittedRef.current && isUnsubmittedDraft && workspace && bodyState && doc) {
+            submittedRef.current = true;
             const {workspaceId, username} = workspace;
             initializeNote({workspaceId, bodyState}).then(response => {
                 if (response?.data) {
                     const newNoteDto = response?.data?.data;
                     const notebookId = newNoteDto?.notebookId ?? DRAFTS_NOTEBOOK_ID;
                     const noteId = newNoteDto?.noteId;
-                    navigate(`/${username}/notebook/${notebookId}/note/${noteId}`);
+                    const realRichTextId = newNoteDto?.richTextId;
+                    const realRichText = newNoteDto?.richText;
+                    onPromoted(realRichTextId, realRichText).then(() => {
+                        // navigate(`/${username}/notebook/${notebookId}/note/${noteId}`, {replace: true});
+                        window.history.replaceState(null, "", `/${username}/notebook/${notebookId}/note/${noteId}`);
+                    });
                 }
             });
         }

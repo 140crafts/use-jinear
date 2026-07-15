@@ -36,11 +36,12 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
             noteId,
             note: retrieveNoteResponse?.data?.content?.[0]
         }}>
-            <div className={styles.container}>
-                <NoteActionBar/>
-                <NoteHeader/>
-                <NoteEditorBody/>
-            </div>
+            {!isLoading &&
+                <div className={styles.container}>
+                    <NoteActionBar/>
+                    <NoteHeader/>
+                    <NoteEditorBody/>
+                </div>}
         </NoteEditorContext.Provider>
     );
 }
