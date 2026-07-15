@@ -1,3 +1,9 @@
+
+export const DRAFTS_NOTEBOOK_ID = "drafts";
+export const DRAFT_ID_PREFIX = "80085";
+export const REMOTE_ORIGIN = "remote-crdt-sync";
+export const POLL_INTERVAL_MS = 2500;
+
 /**
  * Tunable cadence constants for the CRDT polling transport. Sane defaults — the backend is an opaque
  * ordered relay, so these only trade off latency vs. request volume, never correctness.
@@ -10,7 +16,7 @@ export const PUSH_DEBOUNCE_MS = 400;
 export const PUSH_MAX_INTERVAL_MS = 2000;
 
 /** How often we poll the relay for remote updates while editing and the tab is visible. */
-export const POLL_INTERVAL_MS = 2500;
+
 
 /**
  * Compact (snapshot) once the update log grows this far past the last snapshot. Snapshotting folds the
@@ -18,8 +24,6 @@ export const POLL_INTERVAL_MS = 2500;
  */
 export const SNAPSHOT_UPDATE_THRESHOLD = 75;
 
-/** Origin tag used when applying remote updates, so the local update handler can skip echoing them. */
-export const REMOTE_ORIGIN = "remote-crdt-sync";
 
 /** Yjs fragment name shared by the transport, the seed helper and the Collaboration extension. */
 export const CRDT_FIELD = "default";

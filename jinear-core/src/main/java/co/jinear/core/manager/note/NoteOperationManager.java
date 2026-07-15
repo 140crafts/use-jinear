@@ -48,9 +48,7 @@ public class NoteOperationManager {
         log.info("Initialize note has started. currentAccountId: {}", currentAccountId);
         NoteInitializeVo noteInitializeVo = noteInitializeRequestToVoConverter.convert(request, workspaceId, currentAccountId);
         NoteDto note = noteOperationService.initialize(noteInitializeVo);
-        NoteInitializeResponse response = new NoteInitializeResponse();
-        response.setNote(note);
-        return response;
+        return mapResponse(note);
     }
 
     public BaseResponse publish(String workspaceId, String noteId, String notebookId) {
@@ -125,5 +123,11 @@ public class NoteOperationManager {
         if (Objects.nonNull(existingNotebookId) && !notebookId.equalsIgnoreCase(existingNotebookId)) {
             throw new BusinessException("note.published-before");
         }
+    }
+
+    private NoteInitializeResponse mapResponse(NoteDto noteDto) {
+        NoteInitializeResponse response = new NoteInitializeResponse();
+        response.setNoteDto(noteDto);
+        return response;
     }
 }

@@ -6,9 +6,10 @@ import cn from "classnames";
 import {shortenStringIfMoreThanMaxLength} from "@/util/textUtil.ts";
 import {useLocation} from "react-router-dom";
 import {useToggle} from "@/hooks/useToggle.ts";
-import {LuChevronDown, LuChevronUp} from "react-icons/lu";
+import {LuFolder, LuFolderOpen} from "react-icons/lu";
 import NoteHierarchyList
-    from "@/components/notesSectionSideMenu/notebookList/notebook/noteHierarchy/NoteHierarchyList.tsx";
+    from "@/components/notebookSectionSideMenu/notebookList/notebook/noteHierarchy/NoteHierarchyList.tsx";
+import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 
 interface NotebookProps {
     workspace: WorkspaceDto,
@@ -18,7 +19,8 @@ interface NotebookProps {
 
 const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen = false}) => {
     const {pathname} = useLocation()
-    const notebookPath = `/${workspace?.username}/notes/${notebook?.notebookId}`;
+    const notebookIdForPath = notebook?.notebookId ?? DRAFTS_NOTEBOOK_ID;
+    const notebookPath = `/${workspace?.username}/notebook/${notebookIdForPath}`;
     const atPath = pathname?.indexOf(notebookPath) != -1;
     const [open, toggle] = useToggle(initiallyOpen);
 
@@ -29,15 +31,18 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
                 variant={atPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
                 onClick={toggle}
             >
-                {open ? <LuChevronDown className={'icon'}/> : <LuChevronUp className={'icon'}/>}
+                {open ? <LuFolderOpen className={'icon'}/> : <LuFolder className={'icon'}/>}
 
                 <span className={cn(styles.notebookName, 'bold', "single-line")}>
                     {shortenStringIfMoreThanMaxLength({text: notebook.title, maxLength: 29,})}
                 </span>
             </Button>
-            <div className={styles.notebookNotesContainer}>
-                <NoteHierarchyList notebookId={notebook.notebookId}/>
-            </div>
+            {open && <div className={styles.notebookNotesContainer}>
+                <NoteHierarchyList
+                    workspace={workspace}
+                    notebookId={notebook?.notebookId}
+                />
+            </div>}
         </div>
     );
 }

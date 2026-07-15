@@ -122,12 +122,12 @@ public class RichTextSyncService {
         long headSeq = richText.getHeadSeq();
         RichTextStateDto dto = new RichTextStateDto();
         dto.setFormat(richText.getFormat());
-        dto.setSnapshotSeq(richText.getYjsStateSeq());
+        dto.setYjsStateSeq(richText.getYjsStateSeq());
         dto.setHeadSeq(headSeq);
         Optional.of(richText)
                 .map(RichText::getYjsState)
                 .map(this::encode)
-                .ifPresent(dto::setSnapshot);
+                .ifPresent(dto::setYjsState);
         return dto;
     }
 

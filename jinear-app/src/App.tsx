@@ -51,8 +51,8 @@ import TeamsPage from "@/pages/workspace/tasks/teams/page.tsx";
 import ReloadQueryRefetchHandler from "@/components/reloadQueryRefetchHandler/ReloadQueryRefetchHandler.tsx";
 import OfflinePrefetchManager from "@/components/offlinePrefetchManager/OfflinePrefetchManager.tsx";
 import WorkspaceModalProvider from "@/components/modal-provider/WorkspaceModalProvider.tsx";
-import NotesLayout from "@/pages/workspace/notes/notes-layout/layout.tsx";
-import NewNotePage from "@/pages/workspace/notes/new-note";
+import NotesLayout from "@/pages/workspace/notebook/notebook-layout/layout.tsx";
+import NotePage from "@/pages/workspace/notebook/note";
 
 export default function App() {
     return (
@@ -129,8 +129,8 @@ export default function App() {
                         </Route>
                     </Route>
 
-                    <Route path="notes" element={<NotesLayout/>}>
-                        <Route index path="new" element={<NewNotePage/>}/>
+                    <Route path="notebook" element={<NotesLayout/>}>
+                        <Route index path=":notebookId/note/:noteId" element={<NotePage/>}/>
                     </Route>
 
                     <Route path="calendar" element={<CalendarLayout/>}>

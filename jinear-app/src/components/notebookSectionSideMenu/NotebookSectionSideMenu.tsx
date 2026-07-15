@@ -4,13 +4,13 @@ import React from "react";
 import styles from "./NotesSectionSideMenu.module.css";
 import {useParams} from "react-router-dom";
 import useTranslation from "@/locals/useTranslation.ts";
-import NotesActionButtons from "@/components/notesSectionSideMenu/notesActionButtons/NotesActionButtons.tsx";
-import NotebookList from "@/components/notesSectionSideMenu/notebookList/NotebookList.tsx";
+import NotesActionButtons from "@/components/notebookSectionSideMenu/notesActionButtons/NotesActionButtons.tsx";
+import NotebookList from "@/components/notebookSectionSideMenu/notebookList/NotebookList.tsx";
 
 interface NotesSectionSideMenuProps {
 }
 
-const NotesSectionSideMenu: React.FC<NotesSectionSideMenuProps> = ({}) => {
+const NotebookSectionSideMenu: React.FC<NotesSectionSideMenuProps> = ({}) => {
     const {t} = useTranslation();
     const {workspaceName} = useParams();
     const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
@@ -27,4 +27,4 @@ const NotesSectionSideMenu: React.FC<NotesSectionSideMenuProps> = ({}) => {
     );
 };
 
-export default NotesSectionSideMenu;
+export default NotebookSectionSideMenu;

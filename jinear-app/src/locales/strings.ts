@@ -5659,7 +5659,14 @@ const translations = {
         en: "Everyone in the workspace can see this notebook and it's contents.",
         tr: "Çalışma alanındaki herkes bu defteri ve içeriğini görebilir."
     },
-
+    noteListLoadMore: {
+        en: 'Load More',
+        tr: 'Daha Fazla Getir'
+    },
+    noteListNoChildNotes: {
+        en: 'No Notes',
+        tr: 'Alt Not Bulunmuyor'
+    },
     newNoteTitle: {
         en: 'Title',
         tr: 'Başlık'

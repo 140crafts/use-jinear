@@ -5,7 +5,7 @@ import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
 import useTranslation from "@/locals/useTranslation.ts";
 import {useListWorkspaceNotebooksQuery} from "@/api/notebookListingApi.ts";
 import type {WorkspaceDto} from "@/be/jinear-core.ts";
-import Notebook from "@/components/notesSectionSideMenu/notebookList/notebook/Notebook.tsx";
+import Notebook from "@/components/notebookSectionSideMenu/notebookList/notebook/Notebook.tsx";
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import {useAppDispatch} from "@/store";
 import {popNotebookInitializeModal} from "@/store/slice/modalSlice";

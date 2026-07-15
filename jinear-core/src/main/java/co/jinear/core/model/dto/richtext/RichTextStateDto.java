@@ -12,7 +12,7 @@ public class RichTextStateDto {
 
     private RichTextFormat format;
     @ToString.Exclude
-    private String snapshot;
-    private long snapshotSeq;
+    private String yjsState;
+    private long yjsStateSeq;
     private long headSeq;
 }

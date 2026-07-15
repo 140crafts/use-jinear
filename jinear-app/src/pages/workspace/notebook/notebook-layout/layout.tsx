@@ -5,7 +5,7 @@ import SecondLevelSideMenuV2 from "@/components/secondLevelSideMenuV2/SecondLeve
 import {Outlet} from "react-router-dom";
 import {LuFileText} from "react-icons/lu";
 import useTranslation from "@/locals/useTranslation.ts";
-import NotesSectionSideMenu from "@/components/notesSectionSideMenu/NotesSectionSideMenu.tsx";
+import NotebookSectionSideMenu from "@/components/notebookSectionSideMenu/NotebookSectionSideMenu.tsx";
 
 interface NotesLayoutProps {
 }
@@ -19,7 +19,7 @@ const NotesLayout: React.FC<NotesLayoutProps> = ({}) => {
                 mobileFabButtonIcon={<LuFileText className={"icon"} size={18}/>}
                 mobileFabButtonText={t('mobileFabButtonNotes')}
             >
-                <NotesSectionSideMenu/>
+                <NotebookSectionSideMenu/>
             </SecondLevelSideMenuV2>
             <div
                 id="notes-layout-content"

@@ -11,5 +11,5 @@ import lombok.Setter;
 public class NoteInitializeResponse extends BaseResponse {
 
     @JsonProperty("data")
-    private NoteDto note;
+    private NoteDto noteDto;
 }

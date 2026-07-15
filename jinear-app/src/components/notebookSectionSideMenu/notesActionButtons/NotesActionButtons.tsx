@@ -4,7 +4,10 @@ import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle.
 import type {WorkspaceDto} from "@/be/jinear-core.ts";
 import useTranslation from "@/locals/useTranslation.ts";
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
-import {LuFilePen, LuSquarePen} from "react-icons/lu";
+import {LuFilePen} from "react-icons/lu";
+import {UUID} from "@/util/UUID.ts";
+import {useNavigate} from "react-router-dom";
+import {DRAFT_ID_PREFIX, DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 
 interface NotesActionButtonsProps {
     workspace: WorkspaceDto;
@@ -12,6 +15,13 @@ interface NotesActionButtonsProps {
 
 const NotesActionButtons: React.FC<NotesActionButtonsProps> = ({workspace}) => {
     const {t} = useTranslation();
+    const navigate = useNavigate();
+
+    const onNewNote = () => {
+        const draftId = UUID();
+        const newNoteRoute = `/${workspace.username}/notebook/${DRAFTS_NOTEBOOK_ID}/note/${DRAFT_ID_PREFIX}-${draftId}`
+        navigate(newNoteRoute);
+    }
 
     return (
         <div className={styles.container}>
@@ -22,7 +32,7 @@ const NotesActionButtons: React.FC<NotesActionButtonsProps> = ({workspace}) => {
                     heightVariant={ButtonHeight.short}
                     variant={ButtonVariants.brandColor}
                     className={styles.newTaskButton}
-                    href={`/${workspace.username}/notes/new`}
+                    onClick={onNewNote}
                 >
                     <LuFilePen className={'icon'}/>
                     <b>{t("sideMenuNewNote")}</b>

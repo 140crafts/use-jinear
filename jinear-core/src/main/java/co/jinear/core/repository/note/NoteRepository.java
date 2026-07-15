@@ -17,10 +17,6 @@ public interface NoteRepository extends JpaRepository<Note, String> {
 
     boolean existsByNoteIdAndNotebookIdAndPassiveIdIsNull(String noteId, String notebookId);
 
-    Page<Note> findAllByNotebookIdAndParentNoteIdIsNullAndPassiveIdIsNullOrderByCreatedDateDesc(String notebookId, Pageable pageable);
-
-    Page<Note> findAllByNotebookIdAndParentNoteIdAndPassiveIdIsNullOrderByCreatedDateDesc(String notebookId, String parentNoteId, Pageable pageable);
-
     List<Note> findAllByParentNoteIdAndPassiveIdIsNull(String parentNoteId);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)

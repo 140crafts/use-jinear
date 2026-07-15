@@ -5,7 +5,6 @@ import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.note.NotePathDto;
 import co.jinear.core.model.dto.note.NotePathItemDto;
-import co.jinear.core.model.dto.note.PathAwareNoteDto;
 import co.jinear.core.model.entity.note.Note;
 import co.jinear.core.repository.note.NoteRepository;
 import lombok.RequiredArgsConstructor;
@@ -39,17 +38,9 @@ public class NoteRetrieveService {
         return noteRepository.existsByNoteIdAndNotebookIdAndPassiveIdIsNull(noteId, notebookId);
     }
 
-    public PathAwareNoteDto retrievePathAware(String noteId) {
-        log.info("Retrieve path aware note has started. noteId: {}", noteId);
-        NoteDto noteDto = retrieve(noteId);
-        NotePathDto notePath = getNotePath(noteId);
-        return noteDtoConverter.convert(noteDto, notePath);
-    }
-
-    private NotePathDto getNotePath(String noteId) {
-        log.info("Get note path has started. noteId: {}", noteId);
+    public NotePathDto retrieveNotePath(String noteId) {
+        log.info("Retrieve note path has started. noteId: {}", noteId);
         List<Object[]> pathData = noteRepository.findNotePath(noteId);
-
         List<NotePathItemDto> path = pathData.stream()
                 .map(row -> NotePathItemDto.builder()
                         .noteId((String) row[0])

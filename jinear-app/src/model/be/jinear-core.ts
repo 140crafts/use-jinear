@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-07-09 22:00:21.
+// Generated using typescript-generator version 3.0.1157 on 2026-07-12 14:51:27.
 
 export interface BaseDto {
     createdDate: Date;
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ghistoryId: string;
     gthreadId: string;
-    gid: string;
+    ghistoryId: string;
     ginternalDate: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -510,11 +510,6 @@ export interface NoteDto extends BaseDto {
     owner?: PlainAccountProfileDto | null;
 }
 
-export interface NoteHierarchyDto {
-    note: PathAwareNoteDto;
-    children: PageDto<PathAwareNoteDto>;
-}
-
 export interface NotePathDto {
     noteId: string;
     path: NotePathItemDto[];
@@ -531,10 +526,6 @@ export interface NotePathItemDto {
 }
 
 export interface NotePathItemDtoBuilder {
-}
-
-export interface PathAwareNoteDto extends NoteDto {
-    notePath?: NotePathDto | null;
 }
 
 export interface NotebookDto extends BaseDto {
@@ -781,8 +772,8 @@ export interface RichTextDto {
 
 export interface RichTextStateDto {
     format: RichTextFormat;
-    snapshot: string;
-    snapshotSeq: number;
+    yjsState: string;
+    yjsStateSeq: number;
     headSeq: number;
 }
 
@@ -1412,10 +1403,18 @@ export interface RobotsInitializeThreadRequest extends BaseRequest {
     captchaResolveVos: CaptchaResolveVo[];
 }
 
-export interface NoteInitializeRequest extends BaseRequest {
-    notebookId: string;
+export interface NoteFilterRequest extends BaseRequest {
+    page: number;
+    workspaceId: string;
+    notebookId?: string | null;
     parentNoteId?: string | null;
-    title: string;
+    noteId?: string | null;
+}
+
+export interface NoteInitializeRequest extends BaseRequest {
+    notebookId?: string | null;
+    parentNoteId?: string | null;
+    title?: string | null;
     bodyState: string;
 }
 
@@ -1961,11 +1960,11 @@ export interface ThreadResponse extends BaseResponse {
 }
 
 export interface NoteInitializeResponse extends BaseResponse {
-    data: string;
+    data: NoteDto;
 }
 
-export interface NotePathAwareResponse extends BaseResponse {
-    data: NoteHierarchyDto;
+export interface NotePaginatedResponse extends BaseResponse {
+    data: PageDto<NoteDto>;
 }
 
 export interface NotebookInitializeResponse extends BaseResponse {

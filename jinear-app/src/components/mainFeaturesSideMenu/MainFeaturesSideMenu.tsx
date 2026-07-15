@@ -1,7 +1,7 @@
 import type {AccountsWorkspacePerspectiveDto} from "@/model/be/jinear-core";
 import useTranslation from "@/locales/useTranslation";
 import React from "react";
-import {LuCalendarDays, LuFileText, LuFolder, LuNotebook, LuSquareCheckBig} from "react-icons/lu";
+import {LuCalendarDays, LuFolder, LuNotebook, LuSquareCheckBig} from "react-icons/lu";
 import Button, {ButtonVariants} from "../button";
 import styles from "./MainFeaturesSideMenu.module.scss";
 import Logger from "@/util/logger";
@@ -19,7 +19,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
     const calendarPath = `/${workspace?.username}/calendar`;
     const tasksPath = `/${workspace?.username}/tasks`;
     const filesPath = `/${workspace?.username}/files`;
-    const notesPath = `/${workspace?.username}/notes`;
+    const notesPath = `/${workspace?.username}/notebook`;
 
     return (
         <div className={styles.container}>

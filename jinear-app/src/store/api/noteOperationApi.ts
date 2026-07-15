@@ -7,41 +7,51 @@ import type {
 } from "@/model/be/jinear-core";
 import {api} from "./api";
 
+const OPERATION_TAG = "v1/note/notebook/{notebookId}/{noteId}" as const;
+
 export const noteOperationApi = api.injectEndpoints({
     endpoints: (build) => ({
-        initializeNote: build.mutation<NoteInitializeResponse, NoteInitializeRequest>({
-            query: (body: NoteInitializeRequest) => ({
-                url: `v1/note/operation`,
+        initializeNote: build.mutation<NoteInitializeResponse, { workspaceId: string } & NoteInitializeRequest>({
+            query: ({workspaceId, ...body}) => ({
+                url: `v1/note/workspace/${workspaceId}/operation`,
                 method: "POST",
                 body
             }),
-            invalidatesTags: ["v1/note/notebook/{notebookId}/{noteId}"]
+            invalidatesTags: [OPERATION_TAG]
         }),
         //
-        updateNote: build.mutation<BaseResponse, NoteUpdateRequest>({
-            query: (body: NoteUpdateRequest) => ({
-                url: `v1/note/operation`,
+        updateNote: build.mutation<BaseResponse, { workspaceId: string } & NoteUpdateRequest>({
+            query: ({workspaceId, ...body}) => ({
+                url: `v1/note/workspace/${workspaceId}/operation`,
                 method: "PUT",
                 body
             }),
-            invalidatesTags: ["v1/note/notebook/{notebookId}/{noteId}"]
+            invalidatesTags: [OPERATION_TAG]
         }),
         //
-        moveNote: build.mutation<BaseResponse, NoteMoveRequest>({
-            query: (body: NoteMoveRequest) => ({
-                url: `v1/note/operation/move`,
+        publishNote: build.mutation<BaseResponse, { workspaceId: string; noteId: string; notebookId: string }>({
+            query: ({workspaceId, noteId, notebookId}) => ({
+                url: `v1/note/workspace/${workspaceId}/operation/${noteId}/publish/${notebookId}`,
+                method: "PUT"
+            }),
+            invalidatesTags: [OPERATION_TAG]
+        }),
+        //
+        moveNote: build.mutation<BaseResponse, { workspaceId: string } & NoteMoveRequest>({
+            query: ({workspaceId, ...body}) => ({
+                url: `v1/note/workspace/${workspaceId}/operation/move`,
                 method: "PUT",
                 body
             }),
-            invalidatesTags: ["v1/note/notebook/{notebookId}/{noteId}"]
+            invalidatesTags: [OPERATION_TAG]
         }),
         //
-        deleteNote: build.mutation<BaseResponse, { noteId: string }>({
-            query: (req: { noteId: string }) => ({
-                url: `v1/note/operation/${req.noteId}`,
+        deleteNote: build.mutation<BaseResponse, { workspaceId: string; noteId: string }>({
+            query: ({workspaceId, noteId}) => ({
+                url: `v1/note/workspace/${workspaceId}/operation/${noteId}`,
                 method: "DELETE"
             }),
-            invalidatesTags: ["v1/note/notebook/{notebookId}/{noteId}"]
+            invalidatesTags: [OPERATION_TAG]
         })
     })
 });
@@ -49,10 +59,11 @@ export const noteOperationApi = api.injectEndpoints({
 export const {
     useInitializeNoteMutation,
     useUpdateNoteMutation,
+    usePublishNoteMutation,
     useMoveNoteMutation,
     useDeleteNoteMutation
 } = noteOperationApi;
 
 export const {
-    endpoints: {initializeNote, updateNote, moveNote, deleteNote}
+    endpoints: {initializeNote, updateNote, publishNote, moveNote, deleteNote}
 } = noteOperationApi;

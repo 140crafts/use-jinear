@@ -92,7 +92,7 @@ export const tagTypes = [
     "v1/notebook/{notebookId}",
     "v1/notebook/workspace/{workspaceId}",
     "v1/notebook/member/{notebookId}",
-    "v1/note/notebook/{notebookId}/{noteId}",
+    "v1/note/filter",
     "v1/note/tag/notebook/{notebookId}"
 ];
 
