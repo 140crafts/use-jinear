@@ -6,7 +6,6 @@ import {useLiveText} from "@/components/tiptap/crdt/useLiveText.ts";
 import {useNoteEditorContext} from "@/components/note-editor/note-editor-context.ts";
 import {DRAFT_ID_PREFIX, DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 import {useInitializeNoteMutation} from "@/api/noteOperationApi.ts";
-import type {Editor} from "@tiptap/react";
 
 interface NoteEditorBodyProps {
 }
