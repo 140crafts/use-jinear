@@ -8,6 +8,7 @@ import type {WorkspaceDto} from "@/be/jinear-core.ts";
 import {DRAFT_ID_PREFIX, DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 import {useFilterNotesQuery} from "@/api/noteFilterApi.ts";
 import Logger from "@/util/logger.ts";
+import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
 
 interface NoteEditorProps {
     workspace: WorkspaceDto;
@@ -27,7 +28,8 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
         page: 0
     }, {skip: isUnsubmittedDraft});
 
-    logger.log({retrieveNoteResponse})
+    const note = retrieveNoteResponse?.data?.content?.[0];
+    const isReady = isUnsubmittedDraft || (!isLoading && !!note);
 
     return (
         <NoteEditorContext.Provider value={{
@@ -36,12 +38,12 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
             noteId,
             note: retrieveNoteResponse?.data?.content?.[0]
         }}>
-            {!isLoading &&
-                <div className={styles.container}>
-                    <NoteActionBar/>
-                    <NoteHeader/>
-                    <NoteEditorBody/>
-                </div>}
+
+            <div className={styles.container}>
+                <NoteActionBar/>
+                <NoteHeader/>
+                {isReady ? <NoteEditorBody key={noteId}/> : <CircularLoading/>}
+            </div>
         </NoteEditorContext.Provider>
     );
 }

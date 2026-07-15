@@ -18,14 +18,20 @@ export type LiveTextStatus = "booting" | "saving" | "saved_locally" | "syncing" 
 interface IUseLiveTextProps {
     richTextId: string;
     initialRichText?: RichTextDto;
+    getHtml?: () => string | null;
 }
 
 const logger = Logger('useLiveText');
 
-export const useLiveText = ({richTextId, initialRichText}: IUseLiveTextProps) => {
+export const useLiveText = ({richTextId, initialRichText, getHtml}: IUseLiveTextProps) => {
     const dispatch = useAppDispatch();
     const [doc, setDoc] = useState<Y.Doc | null>(null);
     const [status, setStatus] = useState<LiveTextStatus>("booting");
+
+    const getHtmlRef = useRef(getHtml);
+    useEffect(() => {
+        getHtmlRef.current = getHtml;
+    });   // mirror latest, post-commit
 
     const [syncId, setSyncId] = useState<string>(richTextId);  // starts as draft id
     const promotedBaselineRef = useRef<RichTextDto | undefined>(undefined);
@@ -73,7 +79,11 @@ export const useLiveText = ({richTextId, initialRichText}: IUseLiveTextProps) =>
         if (delta.length > 2) {
             await dispatch(
                 richTextSyncApi.endpoints.appendRichTextUpdate.initiate(
-                    {richTextId: realId, update: toBase64(delta)}
+                    {
+                        richTextId: realId,
+                        update: toBase64(delta),
+                        html: getHtmlRef.current?.() ?? null
+                    }
                 )
             ).unwrap();
             Y.applyUpdate(serverDoc, delta);
@@ -147,24 +157,13 @@ export const useLiveText = ({richTextId, initialRichText}: IUseLiveTextProps) =>
             }
             serverDocRef.current = serverDoc;
         }
+        // Arm the delta only when we DIDN'T just promote — onPromoted already
+        // shipped its delta. On a direct real mount, liveDoc may be ahead of
+        // the server baseline (offline edits from IndexedDB) → flush them.
         if (!freshlyPromoted) {
             const delta = Y.encodeStateAsUpdate(liveDoc, Y.encodeStateVector(serverDoc));
             if (delta.length > 2) isDirtyRef.current = true;
         }
-
-        // Baseline = what the server holds. On promotion, the initialize response;
-        // on direct real mount, initialRichText. Fallback to empty is SAFE:
-        // a too-empty baseline just re-sends known bytes, which are idempotent.
-        const baseline = promotedBaselineRef.current ?? initialRichText;
-        if (baseline) {
-            Y.applyUpdate(serverDoc, fromBase64(baseline.yjsState));
-            lastFetchedUpdateSeq.current = baseline.yjsStateSeq;
-        }
-        serverDocRef.current = serverDoc;
-
-        // The lie-fi paragraph: liveDoc is ahead of the server baseline.
-        const delta = Y.encodeStateAsUpdate(liveDoc, Y.encodeStateVector(serverDoc));
-        if (delta.length > 2) isDirtyRef.current = true;
 
         let cancelled = false;
 
@@ -188,12 +187,17 @@ export const useLiveText = ({richTextId, initialRichText}: IUseLiveTextProps) =>
             if (!isDirtyRef.current || inFlightRef.current) return;
             inFlightRef.current = true;
             const update = Y.encodeStateAsUpdate(liveDoc, Y.encodeStateVector(serverDoc));
+            const html = getHtmlRef.current?.() ?? null;   // capture BEFORE await, matches `update`
             isDirtyRef.current = false;
             try {
                 setStatus("syncing");
                 await dispatch(
                     richTextSyncApi.endpoints.appendRichTextUpdate.initiate(
-                        {richTextId: syncId, update: toBase64(update)}
+                        {
+                            richTextId: syncId,
+                            update: toBase64(update),
+                            html
+                        }
                     )
                 ).unwrap();
                 if (!cancelled) Y.applyUpdate(serverDoc, update);
