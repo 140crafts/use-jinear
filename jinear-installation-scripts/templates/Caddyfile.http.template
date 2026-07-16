@@ -25,7 +25,8 @@ http://__FILES_DOMAIN__ {
 
     reverse_proxy @all {
         to http://jinear-minio:9000
-        header_up Host {upstream_hostport}
+        # Preserve the original Host (files domain) so it matches the SigV4-signed host on
+        # presigned URLs. Rewriting Host to the upstream service name breaks uploads/downloads (403).
         header_up X-Real-IP {remote_host}
         header_up X-Forwarded-For {remote_host}
         header_up X-Forwarded-Proto {scheme}

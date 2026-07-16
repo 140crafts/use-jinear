@@ -102,7 +102,7 @@ services:
     ports:
       - 19010:8008
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8008" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8008/" ]
       interval: 30s
       timeout: 15s
       retries: 5

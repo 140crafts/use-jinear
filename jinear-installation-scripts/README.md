@@ -83,6 +83,22 @@ Point your proxy's virtual hosts for the main, `api.` and `files.` domains at
 `http://<this-host>:${HTTP_PORT}`. For a worked Traefik example, see
 [`docs/behind-traefik`](../docs/behind-traefik/README.md).
 
+> **Recommended: proxy to the bundled Caddy, not to individual services.** Point your
+> reverse proxy at the bundled Caddy as a single upstream for the main, `api.` and
+> `files.` domains. Caddy is already configured to talk to MinIO correctly, so you
+> configure nothing storage-specific — this is the topology used in the
+> [Traefik example](../docs/behind-traefik/README.md).
+>
+> This matters because file storage uses S3 presigned URLs, whose signature is bound to
+> the host the browser connects to (`files.<domain>`). The proxy must forward that
+> original `Host` header to MinIO unchanged; rewriting it to an internal service name
+> makes MinIO reject uploads **and** downloads with **403 Forbidden**. Caddy and Traefik
+> preserve `Host` by default. **nginx does not** — its default `proxy_pass` rewrites the
+> Host, and because the app and API are largely Host-insensitive they can still appear to
+> work, so "the app loads" is not proof the files domain is configured right. For a
+> copy-paste-correct nginx config (with the `Host` header and upload body size already
+> handled), see [docs/behind-nginx](../docs/behind-nginx/README.md).
+
 ## Directory Structure
 
 After installation, your Jinear directory will look like:
@@ -216,6 +232,22 @@ boolean and MinIO ignores it) and apply it:
 cd <install-dir>
 docker compose up -d jinear-minio
 ```
+
+### File uploads fail with 403 (progress bar stuck)
+
+If picking a file starts an upload that never completes and the browser's network
+tab shows a **403 Forbidden** on the `PUT https://files.<your-domain>/...` request,
+something between the browser and MinIO is changing the `Host` header — presigned
+URLs are signed for the public files host, and the request must reach MinIO with that
+host intact.
+
+The bundled Caddy handles this for you, so the simplest fix is to proxy the `files.`
+domain to the bundled Caddy rather than straight to MinIO (see
+[Running Behind Your Own Reverse Proxy](#running-behind-your-own-reverse-proxy)). On
+nginx, make sure the `files.` server block sets `proxy_set_header Host $host;` — its
+default `proxy_pass` rewrites the Host and causes this exact 403. A copy-paste-correct
+nginx config is in [docs/behind-nginx](../docs/behind-nginx/README.md). The same
+mismatch also breaks image/attachment **downloads**, so fixing it restores both.
 
 ### Database connection issues
 ```bash

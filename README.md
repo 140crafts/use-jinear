@@ -86,9 +86,23 @@ choose (`HTTP_PORT`) and skips certificate issuance, letting your proxy terminat
 TLS. See [jinear-installation-scripts/README.md](./jinear-installation-scripts/README.md#running-behind-your-own-reverse-proxy)
 for the port / scheme / cookie options.
 
+Point your proxy at the bundled Caddy (one upstream for all three domains) rather than
+at individual services — Caddy is preconfigured to talk to MinIO correctly, so file
+storage needs no special setup. Your proxy must forward the original `Host` header for
+the `files.` domain (Caddy/Traefik do this by default; nginx needs
+`proxy_set_header Host $host;`), otherwise presigned uploads/downloads return 403. Note
+the app and API are Host-insensitive, so they can work even when this is wrong — don't
+treat "the app loads" as proof. For a ready-made nginx config, see
+[docs/behind-nginx](docs/behind-nginx/README.md).
+
 ### Running Behind Traefik
 
 Check out the docs [docs/behind-traefik](docs/behind-traefik/)
+
+### Running Behind nginx
+
+Check out the docs [docs/behind-nginx](docs/behind-nginx/) — includes a copy-paste
+nginx config with the `Host` header and upload body size already handled.
 
 ### Configuration
 
