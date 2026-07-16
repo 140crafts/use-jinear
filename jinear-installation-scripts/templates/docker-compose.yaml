@@ -86,13 +86,13 @@ services:
       JWT_IS_SECURE: ${JWT_IS_SECURE:-true}
       JWT_SAME_SITE: ${JWT_SAME_SITE:-None}
       # Frontend
-      FE_PATH: ${EXTERNAL_SCHEME:-https}://${DOMAIN}
-      CORS_ORIGINS: ${EXTERNAL_SCHEME:-https}://${DOMAIN}
+      FE_PATH: ${EXTERNAL_SCHEME:-https}://${DOMAIN}${PUBLIC_PORT_SUFFIX:-}
+      CORS_ORIGINS: ${EXTERNAL_SCHEME:-https}://${DOMAIN}${PUBLIC_PORT_SUFFIX:-}
       # MinIO - uses same credentials as minio service
       MINIO_KEY: ${MINIO_ROOT_USER}
       MINIO_SECRET: ${MINIO_ROOT_PASSWORD}
       MINIO_ROOT: http://jinear-minio:9000
-      MINIO_BASE_PATH: ${EXTERNAL_SCHEME:-https}://${FILES_DOMAIN}/
+      MINIO_BASE_PATH: ${EXTERNAL_SCHEME:-https}://${FILES_DOMAIN}${PUBLIC_PORT_SUFFIX:-}/
       # Database (passed to application.properties)
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -139,8 +139,8 @@ services:
     # VITE_* key must be present (empty is fine) or the container won't boot.
     # Firebase (web push) and Apple Sign In are optional — leave blank to disable.
     environment:
-      - VITE_API_URL=${EXTERNAL_SCHEME:-https}://${API_DOMAIN}/
-      - VITE_HOST=${EXTERNAL_SCHEME:-https}://${DOMAIN}/
+      - VITE_API_URL=${EXTERNAL_SCHEME:-https}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX:-}/
+      - VITE_HOST=${EXTERNAL_SCHEME:-https}://${DOMAIN}${PUBLIC_PORT_SUFFIX:-}/
       - VITE_APPLE_CLIENT_ID=${VITE_APPLE_CLIENT_ID:-}
       - VITE_APPLE_REDIRECT_URI=${VITE_APPLE_REDIRECT_URI:-}
       - VITE_FIREBASE_API_KEY=${VITE_FIREBASE_API_KEY:-}

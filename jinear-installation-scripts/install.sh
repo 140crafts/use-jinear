@@ -406,6 +406,27 @@ prompt_configuration() {
         JWT_SAME_SITE="None"
     fi
 
+    # Derive the browser-facing port suffix embedded in all public URLs.
+    # Standard ports (80 for http, 443 for https) are omitted, exactly as browsers
+    # drop them from the Origin header, so the generated CORS origin matches and
+    # default-port installs stay unchanged. Non-standard ports (e.g. 8080) are kept.
+    #  - auto-HTTPS: browser hits Caddy on HTTPS_PORT
+    #  - plain HTTP: browser hits Caddy on HTTP_PORT
+    #  - behind a TLS proxy: the external proxy owns the public port (HTTP_PORT is
+    #    internal only), so we assume standard 443 and leave the suffix empty.
+    if [ "$AUTO_HTTPS" = "true" ]; then
+        _public_port="$HTTPS_PORT"; _standard_port=443
+    elif [ "$EXTERNAL_SCHEME" = "http" ]; then
+        _public_port="$HTTP_PORT"; _standard_port=80
+    else
+        _public_port=""; _standard_port=""
+    fi
+    if [ -n "$_public_port" ] && [ "$_public_port" != "$_standard_port" ]; then
+        PUBLIC_PORT_SUFFIX=":${_public_port}"
+    else
+        PUBLIC_PORT_SUFFIX=""
+    fi
+
     # Warn if the chosen host ports are already in use
     if ! check_port "$HTTP_PORT"; then
         print_warning "Port ${HTTP_PORT} is in use (may conflict with Caddy)"
@@ -547,6 +568,9 @@ AUTO_HTTPS=${AUTO_HTTPS}
 EXTERNAL_SCHEME=${EXTERNAL_SCHEME}
 JWT_IS_SECURE=${JWT_IS_SECURE}
 JWT_SAME_SITE=${JWT_SAME_SITE}
+# PUBLIC_PORT_SUFFIX: auto-derived browser-facing port (e.g. :8080), empty for
+# standard ports. Appended to every public URL so custom-port setups match CORS.
+PUBLIC_PORT_SUFFIX=${PUBLIC_PORT_SUFFIX}
 
 # Timezone
 TIMEZONE=${TIMEZONE}
@@ -720,9 +744,9 @@ Internal Auth Token: ${INTERNAL_AUTH_TOKEN}
 
 URLS
 ----
-Application: ${EXTERNAL_SCHEME}://${DOMAIN}
-API: ${EXTERNAL_SCHEME}://${API_DOMAIN}
-Files: ${EXTERNAL_SCHEME}://${FILES_DOMAIN}
+Application: ${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}
+API: ${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}
+Files: ${EXTERNAL_SCHEME}://${FILES_DOMAIN}${PUBLIC_PORT_SUFFIX}
 EOF
     chmod 600 "$INSTALL_DIR/.secrets"
     print_success "Credentials saved to ${INSTALL_DIR}/.secrets"
@@ -783,9 +807,9 @@ print_summary() {
 
     echo -e "  ${BOLD}Your Jinear Instance${NC}"
     echo -e "  ${CYAN}─────────────────────────────────────────────────────────────${NC}"
-    echo -e "  🌐 Application:  ${BOLD}${EXTERNAL_SCHEME}://${DOMAIN}${NC}"
-    echo -e "  🔧 API:          ${BOLD}${EXTERNAL_SCHEME}://${API_DOMAIN}${NC}"
-    echo -e "  📁 Files:        ${BOLD}${EXTERNAL_SCHEME}://${FILES_DOMAIN}${NC}"
+    echo -e "  🌐 Application:  ${BOLD}${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}${NC}"
+    echo -e "  🔧 API:          ${BOLD}${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}${NC}"
+    echo -e "  📁 Files:        ${BOLD}${EXTERNAL_SCHEME}://${FILES_DOMAIN}${PUBLIC_PORT_SUFFIX}${NC}"
     echo ""
 
     echo -e "  ${BOLD}Important Files${NC}"
@@ -806,12 +830,12 @@ print_summary() {
     if [ "$AUTO_HTTPS" = "true" ]; then
         echo -e "  2. Wait a few minutes for SSL certificates to be issued"
         echo ""
-        echo -e "  3. Visit ${BOLD}${EXTERNAL_SCHEME}://${DOMAIN}${NC} to get started!"
+        echo -e "  3. Visit ${BOLD}${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}${NC} to get started!"
     else
         echo -e "  2. Point your reverse proxy at this host on HTTP port ${BOLD}${HTTP_PORT}${NC}"
         echo -e "     (Caddy serves plain HTTP; TLS is handled by your proxy)"
         echo ""
-        echo -e "  3. Visit ${BOLD}${EXTERNAL_SCHEME}://${DOMAIN}${NC} to get started!"
+        echo -e "  3. Visit ${BOLD}${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}${NC} to get started!"
     fi
     echo ""
 

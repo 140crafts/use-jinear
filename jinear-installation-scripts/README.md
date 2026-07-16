@@ -77,7 +77,15 @@ AUTO_HTTPS=false        # Caddy serves plain HTTP, no Let's Encrypt
 EXTERNAL_SCHEME=https   # https behind a TLS proxy, http for plain HTTP
 JWT_IS_SECURE=true      # false for plain HTTP
 JWT_SAME_SITE=None      # Lax for plain HTTP
+PUBLIC_PORT_SUFFIX=     # auto-set (e.g. :8080); empty for standard ports 80/443
 ```
+
+If you serve Jinear directly on a **non-standard port** (e.g. plain HTTP on `8080`),
+the installer derives `PUBLIC_PORT_SUFFIX` and embeds it in every generated URL
+(`VITE_API_URL`, `CORS_ORIGINS`, `MINIO_BASE_PATH`, …) so the browser origin matches
+CORS automatically — no manual URL edits needed. It stays empty for standard ports, so
+default installs are unaffected. Hand-set it only if a TLS proxy in front of Jinear
+listens on a non-standard port.
 
 Point your proxy's virtual hosts for the main, `api.` and `files.` domains at
 `http://<this-host>:${HTTP_PORT}`. For a worked Traefik example, see
@@ -248,6 +256,24 @@ nginx, make sure the `files.` server block sets `proxy_set_header Host $host;` �
 default `proxy_pass` rewrites the Host and causes this exact 403. A copy-paste-correct
 nginx config is in [docs/behind-nginx](../docs/behind-nginx/README.md). The same
 mismatch also breaks image/attachment **downloads**, so fixing it restores both.
+
+### "You're offline" page and CORS `No 'Access-Control-Allow-Origin'` errors
+
+If the app shows the **"You're offline"** page and devtools reports a CORS error like
+`Access to fetch at 'http://api.<domain>:8080/v1/account' from origin
+'http://<domain>:8080' has been blocked by CORS policy: No 'Access-Control-Allow-Origin'
+header`, your generated URLs are missing the port. This is fixed for new installs (the
+installer now sets `PUBLIC_PORT_SUFFIX`). For an `.env` generated before the fix, add it
+and re-create the containers:
+
+```bash
+cd <install-dir>
+echo 'PUBLIC_PORT_SUFFIX=:8080' >> .env   # use your actual public port
+docker compose up -d
+```
+
+(The offline page is a side effect: the blocked `/v1/account` request makes the app
+think it is offline. Fixing CORS clears both.)
 
 ### Database connection issues
 ```bash
