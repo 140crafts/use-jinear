@@ -13,27 +13,27 @@ interface NoteEditorBodyProps {
 const logger = Logger("NoteEditorBody");
 
 const NoteEditorBody: React.FC<NoteEditorBodyProps> = ({}) => {
-    const {workspace, noteId, note, title} = useNoteEditorContext();
+    const {workspace, note, editingNoteId, setEditingNoteId, titleTextAreaRef} = useNoteEditorContext();
+
     const richText = note?.richText
-    const isUnsubmittedDraft = noteId?.indexOf(DRAFT_ID_PREFIX) != -1
+    const isUnsubmittedDraft = editingNoteId?.indexOf(DRAFT_ID_PREFIX) != -1
     const submittedRef = useRef(false);
     const editorRef = useRef<ICollaborativeRichTextRef | null>(null);
 
     const [initializeNote, {isLoading}] = useInitializeNoteMutation();
 
     const {doc, status, getState, onPromoted} = useLiveText({
-        richTextId: richText?.richTextId ?? noteId ?? "",
+        richTextId: richText?.richTextId ?? editingNoteId ?? "",
         initialRichText: richText,
         getHtml: () => editorRef.current?.getHTML() ?? null
     });
-
-    logger.log({title})
 
     useEffect(() => {
         const bodyState = getState();
         if (!submittedRef.current && isUnsubmittedDraft && workspace && bodyState && doc) {
             submittedRef.current = true;
             const {workspaceId, username} = workspace;
+            const title = titleTextAreaRef?.current?.value;
             logger.log({workspaceId, bodyState, title})
             initializeNote({workspaceId, bodyState, title}).then(response => {
                 if (response?.data) {
@@ -44,11 +44,12 @@ const NoteEditorBody: React.FC<NoteEditorBodyProps> = ({}) => {
                     const realRichText = newNoteDto?.richText;
                     onPromoted(realRichTextId, realRichText).then(() => {
                         window.history.replaceState(null, "", `/${username}/notebook/${notebookId}/note/${noteId}`);
+                        setEditingNoteId?.(noteId)
                     });
                 }
             });
         }
-    }, [isUnsubmittedDraft, getState, doc, workspace, title]);
+    }, [isUnsubmittedDraft, getState, doc, workspace, titleTextAreaRef, setEditingNoteId]);
 
     return (doc ?
         <CollaborativeRichText
