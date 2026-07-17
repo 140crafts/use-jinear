@@ -61,7 +61,7 @@ The installer will:
 - **Docker** 20.10+ and **Docker Compose** 2.0+
 - **5GB+ disk space** (10GB+ recommended)
 - **2GB+ RAM** (4GB+ recommended)
-- **Ports 80 & 443** available
+- **Ports 80 & 443** available (configurable — automatic HTTPS can be disabled to run behind your own reverse proxy)
 - A domain name pointed to your server
 
 ### After Installation
@@ -77,9 +77,32 @@ Your Jinear instance will be available at:
 For advanced users who prefer manual setup, see the [docs/manual-setup](docs/manual-setup/) folder or the detailed guide
 in [jinear-installation-scripts](./jinear-installation-scripts/).
 
+### Running Behind Your Own Reverse Proxy
+
+Caddy's host ports default to **80/443** with automatic Let's Encrypt HTTPS. To
+run Jinear behind an existing reverse proxy, answer **No** to the installer's
+*"Enable automatic HTTPS?"* prompt: Caddy then serves plain HTTP on a port you
+choose (`HTTP_PORT`) and skips certificate issuance, letting your proxy terminate
+TLS. See [jinear-installation-scripts/README.md](./jinear-installation-scripts/README.md#running-behind-your-own-reverse-proxy)
+for the port / scheme / cookie options.
+
+Point your proxy at the bundled Caddy (one upstream for all three domains) rather than
+at individual services — Caddy is preconfigured to talk to MinIO correctly, so file
+storage needs no special setup. Your proxy must forward the original `Host` header for
+the `files.` domain (Caddy/Traefik do this by default; nginx needs
+`proxy_set_header Host $host;`), otherwise presigned uploads/downloads return 403. Note
+the app and API are Host-insensitive, so they can work even when this is wrong — don't
+treat "the app loads" as proof. For a ready-made nginx config, see
+[docs/behind-nginx](docs/behind-nginx/README.md).
+
 ### Running Behind Traefik
 
 Check out the docs [docs/behind-traefik](docs/behind-traefik/)
+
+### Running Behind nginx
+
+Check out the docs [docs/behind-nginx](docs/behind-nginx/) — includes a copy-paste
+nginx config with the `Host` header and upload body size already handled.
 
 ### Configuration
 
@@ -120,7 +143,7 @@ can create your own compose file and configure from scratch.
 | **jinear-db**        | Can be replaced with external PostgreSQL (Needs config change).                    | PostgreSQL database storing all application data                                        | 5432 Internal      |
 | **jinear-redis**     | Can be replaced with external Redis (Needs config change).                         | Redis cache for session management and real-time data                                   | 6379 Internal      |
 | **jinear-minio**     | Can be replaced with external MinIO or Google Cloud Storage (Needs config change). | MinIO object storage for file uploads and attachments                                   | 9000/9001 Internal |
-| **jinear-caddy**     | Can be changed with other web servers. Replacing needs custom configuration.       | Caddy reverse proxy handling SSL/TLS termination and routing                            | 80/443 External    |
+| **jinear-caddy**     | Can be changed with other web servers. Replacing needs custom configuration.       | Caddy reverse proxy handling SSL/TLS termination and routing                            | 80/443 External (configurable) |
 | **jinear-db-backup** | Optional (Recommended)                                                             | Automated database backup service with configurable retention                           | -                  |
 
 > **Note on the marketing site & blog:** the public marketing pages, pricing

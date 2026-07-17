@@ -10,6 +10,7 @@ import co.jinear.core.model.vo.richtext.UpdateRichTextVo;
 import co.jinear.core.repository.RichTextRepository;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.passive.PassiveService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -51,6 +52,7 @@ public class RichTextInitializeService {
         return richTextConverter.map(saved);
     }
 
+    @Transactional
     public RichTextDto historicallyUpdateRichTextBody(UpdateRichTextVo updateRichTextVo) {
         log.info("Historically update rich text has started. updateRichTextVo: {}", updateRichTextVo);
         RichText richText = richTextRetrieveService.retrieveEntity(updateRichTextVo.getRichTextId());

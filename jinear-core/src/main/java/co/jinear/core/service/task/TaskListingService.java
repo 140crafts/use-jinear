@@ -25,7 +25,7 @@ public class TaskListingService {
     public Page<TaskDto> filterTasks(TaskSearchFilterVo taskSearchFilterVo) {
         log.info("Filter tasks has started. taskSearchFilterVo: {}", taskSearchFilterVo);
         return taskSearchRepository.filterBy(taskSearchFilterVo)
-                .map(taskDtoDetailedConverter::map);
+                .map(taskDtoDetailedConverter::mapAndRetrieveProfilePicturesAndTaskDetail);
     }
 
     public boolean checkAnyActiveTaskExistsWithGivenTeamsAndProject(List<String> teamIds, String projectId) {
