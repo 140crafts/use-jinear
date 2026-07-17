@@ -182,6 +182,25 @@ command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
+# Check if a TCP port is available on localhost.
+# Returns 0 if available, 1 if already in use.
+check_port() {
+    local port=$1
+    # Method 1: Try to reach the port using nc (most reliable)
+    if command_exists nc; then
+        if nc -z localhost "$port" 2>/dev/null; then
+            return 1  # Port is in use
+        else
+            return 0  # Port is available
+        fi
+    fi
+    # Method 2: Check with lsof (may need sudo for full visibility)
+    if lsof -i :"$port" 2>/dev/null | grep -q LISTEN; then
+        return 1  # Port is in use
+    fi
+    return 0  # Port is available
+}
+
 # =============================================================================
 # PREREQUISITES CHECK
 # =============================================================================
@@ -259,36 +278,8 @@ check_prerequisites() {
         print_warning "Could not determine available disk space"
     fi
 
-    # Check ports 80 and 443
-    # Use multiple methods to check port availability
-    check_port() {
-        local port=$1
-        # Method 1: Try to bind to the port briefly using nc (most reliable)
-        if command_exists nc; then
-            if nc -z localhost $port 2>/dev/null; then
-                return 1  # Port is in use
-            else
-                return 0  # Port is available
-            fi
-        fi
-        # Method 2: Check with lsof (may need sudo for full visibility)
-        if lsof -i :$port 2>/dev/null | grep -q LISTEN; then
-            return 1  # Port is in use
-        fi
-        return 0  # Port is available
-    }
-
-    if check_port 80; then
-        print_success "Port 80 is available"
-    else
-        print_warning "Port 80 is in use (may conflict with Caddy)"
-    fi
-
-    if check_port 443; then
-        print_success "Port 443 is available"
-    else
-        print_warning "Port 443 is in use (may conflict with Caddy)"
-    fi
+    # Note: host port availability is checked after configuration, once the
+    # user has chosen HTTP_PORT / HTTPS_PORT (see prompt_configuration).
 
     if [ "$all_passed" = false ]; then
         echo ""
@@ -375,6 +366,74 @@ prompt_configuration() {
     echo ""
     API_DOMAIN=$(prompt_input "  API domain" "${API_DOMAIN_DEFAULT}")
     FILES_DOMAIN=$(prompt_input "  Files domain" "${FILES_DOMAIN_DEFAULT}")
+
+    # Networking & HTTPS
+    echo ""
+    echo -e "  ${BOLD}Networking & HTTPS${NC}"
+    echo -e "  ${INFO} Caddy binds these host ports. Change them to run Jinear behind"
+    echo -e "  ${INFO} another reverse proxy (e.g. HTTP port 8080)."
+    echo ""
+
+    HTTP_PORT=$(prompt_input "  HTTP port" "80")
+
+    echo ""
+    echo -e "  ${INFO} Automatic HTTPS lets Caddy obtain free Let's Encrypt certificates."
+    echo -e "  ${INFO} Disable it if TLS is terminated by your own proxy, or for plain HTTP."
+    local enable_auto_https=$(prompt_input "  Enable automatic HTTPS via Let's Encrypt? [Y/n]" "")
+
+    if [[ $enable_auto_https =~ ^[Nn]$ ]]; then
+        AUTO_HTTPS="false"
+        HTTPS_PORT=443  # unused; the 443 mapping is removed from docker-compose
+        echo ""
+        echo -e "  ${INFO} Caddy will serve plain HTTP. Choose your topology:"
+        local behind_tls_proxy=$(prompt_input "  Will Jinear run behind a proxy that terminates HTTPS? [Y/n]" "")
+        if [[ $behind_tls_proxy =~ ^[Nn]$ ]]; then
+            # Plain HTTP everywhere (no TLS) - relax secure cookies so login works.
+            EXTERNAL_SCHEME="http"
+            JWT_IS_SECURE="false"
+            JWT_SAME_SITE="Lax"
+        else
+            # Behind an upstream TLS-terminating proxy - external URLs stay https.
+            EXTERNAL_SCHEME="https"
+            JWT_IS_SECURE="true"
+            JWT_SAME_SITE="None"
+        fi
+    else
+        AUTO_HTTPS="true"
+        HTTPS_PORT=$(prompt_input "  HTTPS port" "443")
+        EXTERNAL_SCHEME="https"
+        JWT_IS_SECURE="true"
+        JWT_SAME_SITE="None"
+    fi
+
+    # Derive the browser-facing port suffix embedded in all public URLs.
+    # Standard ports (80 for http, 443 for https) are omitted, exactly as browsers
+    # drop them from the Origin header, so the generated CORS origin matches and
+    # default-port installs stay unchanged. Non-standard ports (e.g. 8080) are kept.
+    #  - auto-HTTPS: browser hits Caddy on HTTPS_PORT
+    #  - plain HTTP: browser hits Caddy on HTTP_PORT
+    #  - behind a TLS proxy: the external proxy owns the public port (HTTP_PORT is
+    #    internal only), so we assume standard 443 and leave the suffix empty.
+    if [ "$AUTO_HTTPS" = "true" ]; then
+        _public_port="$HTTPS_PORT"; _standard_port=443
+    elif [ "$EXTERNAL_SCHEME" = "http" ]; then
+        _public_port="$HTTP_PORT"; _standard_port=80
+    else
+        _public_port=""; _standard_port=""
+    fi
+    if [ -n "$_public_port" ] && [ "$_public_port" != "$_standard_port" ]; then
+        PUBLIC_PORT_SUFFIX=":${_public_port}"
+    else
+        PUBLIC_PORT_SUFFIX=""
+    fi
+
+    # Warn if the chosen host ports are already in use
+    if ! check_port "$HTTP_PORT"; then
+        print_warning "Port ${HTTP_PORT} is in use (may conflict with Caddy)"
+    fi
+    if [ "$AUTO_HTTPS" = "true" ] && ! check_port "$HTTPS_PORT"; then
+        print_warning "Port ${HTTPS_PORT} is in use (may conflict with Caddy)"
+    fi
 
     # Timezone
     echo ""
@@ -498,6 +557,21 @@ DOMAIN=${DOMAIN}
 API_DOMAIN=${API_DOMAIN}
 FILES_DOMAIN=${FILES_DOMAIN}
 
+# Networking / HTTPS
+# HTTP_PORT / HTTPS_PORT: host ports Caddy binds (change to run behind another proxy).
+# AUTO_HTTPS: true = Caddy issues Let's Encrypt certs (443 published);
+#             false = Caddy serves plain HTTP only (443 not published).
+# EXTERNAL_SCHEME + JWT_*: https/secure cookies for TLS setups; http/relaxed for plain HTTP.
+HTTP_PORT=${HTTP_PORT}
+HTTPS_PORT=${HTTPS_PORT}
+AUTO_HTTPS=${AUTO_HTTPS}
+EXTERNAL_SCHEME=${EXTERNAL_SCHEME}
+JWT_IS_SECURE=${JWT_IS_SECURE}
+JWT_SAME_SITE=${JWT_SAME_SITE}
+# PUBLIC_PORT_SUFFIX: auto-derived browser-facing port (e.g. :8080), empty for
+# standard ports. Appended to every public URL so custom-port setups match CORS.
+PUBLIC_PORT_SUFFIX=${PUBLIC_PORT_SUFFIX}
+
 # Timezone
 TIMEZONE=${TIMEZONE}
 
@@ -580,8 +654,21 @@ EOF
         print_success "Generated docker-compose.yaml"
     fi
 
-    # Generate Caddyfile
-    get_template "Caddyfile.template" | \
+    # When automatic HTTPS is off, don't publish the 443 host ports (Caddy serves
+    # plain HTTP only, and something upstream — the user's proxy — owns 443).
+    if [ "$AUTO_HTTPS" != "true" ]; then
+        sed -i.bak '/jinear-https-ports/,+2d' "$INSTALL_DIR/docker-compose.yaml"
+        rm -f "$INSTALL_DIR/docker-compose.yaml.bak"
+        print_success "Configured Caddy to publish HTTP port ${HTTP_PORT} only (HTTPS disabled)"
+    fi
+
+    # Generate Caddyfile — https/ACME template for auto-HTTPS, http-only otherwise
+    if [ "$AUTO_HTTPS" = "true" ]; then
+        CADDY_TEMPLATE="Caddyfile.template"
+    else
+        CADDY_TEMPLATE="Caddyfile.http.template"
+    fi
+    get_template "$CADDY_TEMPLATE" | \
         sed "s/__DOMAIN__/${DOMAIN}/g" | \
         sed "s/__API_DOMAIN__/${API_DOMAIN}/g" | \
         sed "s/__FILES_DOMAIN__/${FILES_DOMAIN}/g" \
@@ -657,9 +744,9 @@ Internal Auth Token: ${INTERNAL_AUTH_TOKEN}
 
 URLS
 ----
-Application: https://${DOMAIN}
-API: https://${API_DOMAIN}
-Files: https://${FILES_DOMAIN}
+Application: ${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}
+API: ${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}
+Files: ${EXTERNAL_SCHEME}://${FILES_DOMAIN}${PUBLIC_PORT_SUFFIX}
 EOF
     chmod 600 "$INSTALL_DIR/.secrets"
     print_success "Credentials saved to ${INSTALL_DIR}/.secrets"
@@ -720,9 +807,9 @@ print_summary() {
 
     echo -e "  ${BOLD}Your Jinear Instance${NC}"
     echo -e "  ${CYAN}─────────────────────────────────────────────────────────────${NC}"
-    echo -e "  🌐 Application:  ${BOLD}https://${DOMAIN}${NC}"
-    echo -e "  🔧 API:          ${BOLD}https://${API_DOMAIN}${NC}"
-    echo -e "  📁 Files:        ${BOLD}https://${FILES_DOMAIN}${NC}"
+    echo -e "  🌐 Application:  ${BOLD}${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}${NC}"
+    echo -e "  🔧 API:          ${BOLD}${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}${NC}"
+    echo -e "  📁 Files:        ${BOLD}${EXTERNAL_SCHEME}://${FILES_DOMAIN}${PUBLIC_PORT_SUFFIX}${NC}"
     echo ""
 
     echo -e "  ${BOLD}Important Files${NC}"
@@ -740,15 +827,29 @@ print_summary() {
     echo -e "     - ${API_DOMAIN}"
     echo -e "     - ${FILES_DOMAIN}"
     echo ""
-    echo -e "  2. Wait a few minutes for SSL certificates to be issued"
-    echo ""
-    echo -e "  3. Visit ${BOLD}https://${DOMAIN}${NC} to get started!"
+    if [ "$AUTO_HTTPS" = "true" ]; then
+        echo -e "  2. Wait a few minutes for SSL certificates to be issued"
+        echo ""
+        echo -e "  3. Visit ${BOLD}${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}${NC} to get started!"
+    else
+        echo -e "  2. Point your reverse proxy at this host on HTTP port ${BOLD}${HTTP_PORT}${NC}"
+        echo -e "     (Caddy serves plain HTTP; TLS is handled by your proxy)"
+        echo ""
+        echo -e "  3. Visit ${BOLD}${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}${NC} to get started!"
+    fi
     echo ""
 
-    echo -e "  ${WARN} ${YELLOW}SSL Certificate Notes:${NC}"
-    echo -e "     - Using Let's Encrypt production server"
-    echo -e "     - Rate limit: 50 certificates per domain per week"
-    echo -e "     - If testing, consider using staging server (see docs)"
+    if [ "$AUTO_HTTPS" = "true" ]; then
+        echo -e "  ${WARN} ${YELLOW}SSL Certificate Notes:${NC}"
+        echo -e "     - Using Let's Encrypt production server"
+        echo -e "     - Rate limit: 50 certificates per domain per week"
+        echo -e "     - If testing, consider using staging server (see docs)"
+    else
+        echo -e "  ${WARN} ${YELLOW}Reverse Proxy Notes:${NC}"
+        echo -e "     - Automatic HTTPS is disabled; Caddy listens on HTTP port ${HTTP_PORT}"
+        echo -e "     - Forward ${DOMAIN}, ${API_DOMAIN} and ${FILES_DOMAIN} to it"
+        echo -e "     - Terminate TLS on your own proxy (see docs: behind your own proxy)"
+    fi
     echo ""
 
     echo -e "  ${BOLD}Useful Commands${NC}"

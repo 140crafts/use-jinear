@@ -40,12 +40,23 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
 
     private final MinIoProperties minIoProperties;
     private final MinioClient minioClient;
+    private final MinioClient presignClient;
 
     public MinIOMediaFileOperationStrategy(MinIoProperties minIoProperties) throws Exception {
         this.minIoProperties = minIoProperties;
         this.minioClient = MinioClient.builder()
                 .endpoint(minIoProperties.getEndpoint())
                 .credentials(minIoProperties.getKey(), minIoProperties.getSecret())
+                .build();
+        // Presigned URLs must be signed against the public host the browser actually connects to.
+        // SigV4 signs the Host header, so signing against the internal endpoint and rewriting the
+        // host afterwards produces a signature the browser's request can never match (403). Building
+        // presigned URLs is a local operation (no network round-trip) once a region is pinned, so this
+        // client never needs to reach — or trust the TLS certificate of — the public files host.
+        this.presignClient = MinioClient.builder()
+                .endpoint(stripTrailingSlash(minIoProperties.getBasePath()))
+                .credentials(minIoProperties.getKey(), minIoProperties.getSecret())
+                .region("us-east-1")
                 .build();
         checkAndInitializeBucket(minioClient, minIoProperties.getPublicBucketName(), Boolean.TRUE);
         checkAndInitializeBucket(minioClient, minIoProperties.getPrivateBucketName(), Boolean.FALSE);
@@ -64,10 +75,9 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
                     .extraHeaders(Map.of("Content-Type", contentType, "Content-Length", String.valueOf(fileSizeInBytes)))
                     .build();
 
-            String presignedUrl = minioClient.getPresignedObjectUrl(args);
-            String publicUrl = replaceInternalEndpoint(presignedUrl);
+            String presignedUrl = presignClient.getPresignedObjectUrl(args);
 
-            WaitingMediaResultVo waitingMediaResultVo = new WaitingMediaResultVo(new URL(publicUrl), ZonedDateTime.now().plus(minIoProperties.getSignedUrlDuration(), ChronoUnit.MILLIS));
+            WaitingMediaResultVo waitingMediaResultVo = new WaitingMediaResultVo(new URL(presignedUrl), ZonedDateTime.now().plus(minIoProperties.getSignedUrlDuration(), ChronoUnit.MILLIS));
             waitingMediaResultVo.setBucketName(bucketName);
             return waitingMediaResultVo;
         } catch (Exception e) {
@@ -189,10 +199,9 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
                     .object(path)
                     .expiry(minIoProperties.getSignedUrlDuration(), TimeUnit.MINUTES)
                     .build();
-            String presignedUrl = minioClient.getPresignedObjectUrl(args);
-            String publicUrl = replaceInternalEndpoint(presignedUrl);
+            String presignedUrl = presignClient.getPresignedObjectUrl(args);
 
-            return new URL(publicUrl);
+            return new URL(presignedUrl);
         } catch (Exception e) {
             log.error("Error generating download url for path: {}", path, e);
             throw new BusinessException("Could not generate download URL.");
@@ -222,11 +231,11 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
         }
     }
 
-    private String replaceInternalEndpoint(String url) {
-        if (minIoProperties.getBasePath() != null && !minIoProperties.getBasePath().isEmpty()) {
-            return url.replace(minIoProperties.getEndpoint() + "/", minIoProperties.getBasePath());
+    private static String stripTrailingSlash(String url) {
+        if (url == null) {
+            return null;
         }
-        return url;
+        return url.endsWith("/") ? url.substring(0, url.length() - 1) : url;
     }
 
     private void checkAndInitializeBucket(MinioClient minioClient, String bucketName, boolean isPublic) throws Exception {

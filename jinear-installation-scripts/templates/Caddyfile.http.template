@@ -1,10 +1,8 @@
 {
-    debug
-
-    acme_ca https://acme-v02.api.letsencrypt.org/directory
+    auto_https off
 }
 
-https://__DOMAIN__ {
+http://__DOMAIN__ {
     reverse_proxy {
         to http://jinear-app:80
         header_up Host {http.reverse_proxy.upstream.host}
@@ -12,7 +10,7 @@ https://__DOMAIN__ {
     }
 }
 
-https://__API_DOMAIN__ {
+http://__API_DOMAIN__ {
     reverse_proxy {
         to http://jinear-core:8008
         header_up Host {http.reverse_proxy.upstream.host}
@@ -20,7 +18,7 @@ https://__API_DOMAIN__ {
     }
 }
 
-https://__FILES_DOMAIN__ {
+http://__FILES_DOMAIN__ {
     @all {
         method GET POST PUT DELETE HEAD OPTIONS
     }

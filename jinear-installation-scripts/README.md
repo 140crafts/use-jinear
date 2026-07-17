@@ -26,7 +26,7 @@ chmod +x install.sh
 ## What the Installer Does
 
 1. **Checks prerequisites** - Verifies Docker, Docker Compose, and other requirements
-2. **Prompts for configuration** - Asks for your domain, timezone, and optional email settings
+2. **Prompts for configuration** - Asks for your domain, HTTP/HTTPS ports, HTTPS mode (automatic Let's Encrypt, behind your own TLS proxy, or plain HTTP), timezone, and optional email settings
 3. **Generates secure credentials** - Automatically creates strong passwords and secrets
 4. **Creates directory structure** - Sets up all necessary folders
 5. **Generates configuration files** - Creates all config files from templates
@@ -39,7 +39,7 @@ chmod +x install.sh
 - **Docker Compose**: Version 2.0 or higher (or docker-compose v1.29+)
 - **Disk Space**: Minimum 5GB free (10GB+ recommended)
 - **Memory**: Minimum 2GB RAM (4GB+ recommended)
-- **Ports**: 80 and 443 must be available
+- **Ports**: 80 and 443 by default (configurable via `HTTP_PORT` / `HTTPS_PORT` — see [Running behind your own reverse proxy](#running-behind-your-own-reverse-proxy))
 
 ## Configuration
 
@@ -51,6 +51,61 @@ After installation, you can modify the configuration:
 | `.config/application.properties` | Spring Boot application settings |
 | `.data/caddy/conf/Caddyfile` | Reverse proxy and SSL configuration |
 | `.secrets` | Generated credentials (keep secure!) |
+
+## Running Behind Your Own Reverse Proxy
+
+By default the installer lets Caddy bind ports **80/443** and issue Let's Encrypt
+certificates automatically. If you already run your own reverse proxy (nginx,
+Traefik, another Caddy, a load balancer, …), answer **No** to *"Enable automatic
+HTTPS via Let's Encrypt?"* and Caddy will serve **plain HTTP** instead. You then
+pick the HTTP port your proxy forwards to (e.g. `8080`), and the `443` mapping is
+dropped so Caddy never competes for it.
+
+When automatic HTTPS is disabled you choose between two topologies:
+
+| Topology | You pick | Effect |
+|----------|----------|--------|
+| **Behind a TLS-terminating proxy** | *Yes* to "runs behind a proxy that terminates HTTPS?" | External URLs stay `https://`; secure cookies unchanged. Your proxy handles certificates and forwards HTTP to Caddy. |
+| **Plain HTTP (no TLS)** | *No* | External URLs become `http://` and secure/`SameSite=None` cookies are relaxed to `Lax` so login works over http. Intended for internal/LAN use only. |
+
+These map to the following `.env` values (also editable by hand afterwards):
+
+```bash
+HTTP_PORT=8080          # port your proxy forwards to
+HTTPS_PORT=443          # ignored when AUTO_HTTPS=false (443 not published)
+AUTO_HTTPS=false        # Caddy serves plain HTTP, no Let's Encrypt
+EXTERNAL_SCHEME=https   # https behind a TLS proxy, http for plain HTTP
+JWT_IS_SECURE=true      # false for plain HTTP
+JWT_SAME_SITE=None      # Lax for plain HTTP
+PUBLIC_PORT_SUFFIX=     # auto-set (e.g. :8080); empty for standard ports 80/443
+```
+
+If you serve Jinear directly on a **non-standard port** (e.g. plain HTTP on `8080`),
+the installer derives `PUBLIC_PORT_SUFFIX` and embeds it in every generated URL
+(`VITE_API_URL`, `CORS_ORIGINS`, `MINIO_BASE_PATH`, …) so the browser origin matches
+CORS automatically — no manual URL edits needed. It stays empty for standard ports, so
+default installs are unaffected. Hand-set it only if a TLS proxy in front of Jinear
+listens on a non-standard port.
+
+Point your proxy's virtual hosts for the main, `api.` and `files.` domains at
+`http://<this-host>:${HTTP_PORT}`. For a worked Traefik example, see
+[`docs/behind-traefik`](../docs/behind-traefik/README.md).
+
+> **Recommended: proxy to the bundled Caddy, not to individual services.** Point your
+> reverse proxy at the bundled Caddy as a single upstream for the main, `api.` and
+> `files.` domains. Caddy is already configured to talk to MinIO correctly, so you
+> configure nothing storage-specific — this is the topology used in the
+> [Traefik example](../docs/behind-traefik/README.md).
+>
+> This matters because file storage uses S3 presigned URLs, whose signature is bound to
+> the host the browser connects to (`files.<domain>`). The proxy must forward that
+> original `Host` header to MinIO unchanged; rewriting it to an internal service name
+> makes MinIO reject uploads **and** downloads with **403 Forbidden**. Caddy and Traefik
+> preserve `Host` by default. **nginx does not** — its default `proxy_pass` rewrites the
+> Host, and because the app and API are largely Host-insensitive they can still appear to
+> work, so "the app loads" is not proof the files domain is configured right. For a
+> copy-paste-correct nginx config (with the `Host` header and upload body size already
+> handled), see [docs/behind-nginx](../docs/behind-nginx/README.md).
 
 ## Directory Structure
 
@@ -166,6 +221,60 @@ Solutions:
 - Certificates are stored in `.data/caddy/data/`
 - Delete certificates to force renewal: `rm -rf .data/caddy/data/`
 
+### Files subdomain redirects to `jinear-minio:9001`
+
+If opening `https://files.<your-domain>/` redirects your browser to
+`http://jinear-minio:9001/` (an unreachable internal address), MinIO's console
+redirect is enabled. The `jinear-minio` service must set:
+
+```yaml
+    environment:
+      MINIO_BROWSER_REDIRECT: "off"
+```
+
+This is already in the current template. If you're upgrading an older install,
+add the line to `docker-compose.yaml` (keep the quotes — unquoted `off` is a YAML
+boolean and MinIO ignores it) and apply it:
+
+```bash
+cd <install-dir>
+docker compose up -d jinear-minio
+```
+
+### File uploads fail with 403 (progress bar stuck)
+
+If picking a file starts an upload that never completes and the browser's network
+tab shows a **403 Forbidden** on the `PUT https://files.<your-domain>/...` request,
+something between the browser and MinIO is changing the `Host` header — presigned
+URLs are signed for the public files host, and the request must reach MinIO with that
+host intact.
+
+The bundled Caddy handles this for you, so the simplest fix is to proxy the `files.`
+domain to the bundled Caddy rather than straight to MinIO (see
+[Running Behind Your Own Reverse Proxy](#running-behind-your-own-reverse-proxy)). On
+nginx, make sure the `files.` server block sets `proxy_set_header Host $host;` — its
+default `proxy_pass` rewrites the Host and causes this exact 403. A copy-paste-correct
+nginx config is in [docs/behind-nginx](../docs/behind-nginx/README.md). The same
+mismatch also breaks image/attachment **downloads**, so fixing it restores both.
+
+### "You're offline" page and CORS `No 'Access-Control-Allow-Origin'` errors
+
+If the app shows the **"You're offline"** page and devtools reports a CORS error like
+`Access to fetch at 'http://api.<domain>:8080/v1/account' from origin
+'http://<domain>:8080' has been blocked by CORS policy: No 'Access-Control-Allow-Origin'
+header`, your generated URLs are missing the port. This is fixed for new installs (the
+installer now sets `PUBLIC_PORT_SUFFIX`). For an `.env` generated before the fix, add it
+and re-create the containers:
+
+```bash
+cd <install-dir>
+echo 'PUBLIC_PORT_SUFFIX=:8080' >> .env   # use your actual public port
+docker compose up -d
+```
+
+(The offline page is a side effect: the blocked `/v1/account` request makes the app
+think it is offline. Fixing CORS clears both.)
+
 ### Database connection issues
 ```bash
 # Check if database is running
@@ -194,7 +303,8 @@ rm -rf .data .logs .backups
 | `install.sh` | Main interactive installation script |
 | `.env.template` | Template for environment variables |
 | `templates/docker-compose.yaml` | Docker Compose configuration |
-| `templates/Caddyfile.template` | Caddy reverse proxy template |
+| `templates/Caddyfile.template` | Caddy reverse proxy template (automatic HTTPS) |
+| `templates/Caddyfile.http.template` | Caddy reverse proxy template (plain HTTP / behind your own proxy) |
 | `templates/application.properties.template` | Spring Boot config template |
 | `templates/db-backup.sh` | Database backup script |
 

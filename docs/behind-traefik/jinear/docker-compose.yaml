@@ -61,6 +61,7 @@ services:
     environment:
       MINIO_ROOT_USER: ${MINIO_ROOT_USER}
       MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+      MINIO_BROWSER_REDIRECT: "off"
     networks:
       - jinear-default
 
@@ -117,7 +118,7 @@ services:
     restart: always
     privileged: true
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:8008" ]
+      test: [ "CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8008/" ]
       interval: 30s
       timeout: 15s
       retries: 5
