@@ -16,7 +16,7 @@ const NotePage: React.FC<NotePageProps> = ({}) => {
     return (
         <div className={styles.container}>
             {workspace && noteId && notebookId &&
-                <NoteEditor workspace={workspace} notebookId={notebookId} noteId={noteId}/>}
+                <NoteEditor key={noteId} workspace={workspace} notebookId={notebookId} noteId={noteId}/>}
         </div>
     );
 }

@@ -5682,6 +5682,14 @@ const translations = {
     noteEditorActionBarSave: {
         en: 'Save',
         tr: 'Kaydet'
+    },
+    notebookDraftsTitle: {
+        en: 'Drafts',
+        tr: 'Tasklaklar'
+    },
+    untitledNote: {
+        en: 'Untitled',
+        tr: 'Başlıksız'
     }
 };
 

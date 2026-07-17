@@ -7,7 +7,7 @@ import type {
 } from "@/model/be/jinear-core";
 import {api} from "./api";
 
-const OPERATION_TAG = "v1/note/notebook/{notebookId}/{noteId}" as const;
+const OPERATION_TAG = ["v1/note/notebook/{notebookId}/{noteId}", "v1/note/filter"];
 
 export const noteOperationApi = api.injectEndpoints({
     endpoints: (build) => ({
@@ -17,7 +17,7 @@ export const noteOperationApi = api.injectEndpoints({
                 method: "POST",
                 body
             }),
-            invalidatesTags: [OPERATION_TAG]
+            invalidatesTags: OPERATION_TAG
         }),
         //
         updateNote: build.mutation<BaseResponse, { workspaceId: string } & NoteUpdateRequest>({
@@ -26,7 +26,7 @@ export const noteOperationApi = api.injectEndpoints({
                 method: "PUT",
                 body
             }),
-            invalidatesTags: [OPERATION_TAG]
+            invalidatesTags: OPERATION_TAG
         }),
         //
         publishNote: build.mutation<BaseResponse, { workspaceId: string; noteId: string; notebookId: string }>({
@@ -34,7 +34,7 @@ export const noteOperationApi = api.injectEndpoints({
                 url: `v1/note/workspace/${workspaceId}/operation/${noteId}/publish/${notebookId}`,
                 method: "PUT"
             }),
-            invalidatesTags: [OPERATION_TAG]
+            invalidatesTags: OPERATION_TAG
         }),
         //
         moveNote: build.mutation<BaseResponse, { workspaceId: string } & NoteMoveRequest>({
@@ -43,7 +43,7 @@ export const noteOperationApi = api.injectEndpoints({
                 method: "PUT",
                 body
             }),
-            invalidatesTags: [OPERATION_TAG]
+            invalidatesTags: OPERATION_TAG
         }),
         //
         deleteNote: build.mutation<BaseResponse, { workspaceId: string; noteId: string }>({
@@ -51,7 +51,7 @@ export const noteOperationApi = api.injectEndpoints({
                 url: `v1/note/workspace/${workspaceId}/operation/${noteId}`,
                 method: "DELETE"
             }),
-            invalidatesTags: [OPERATION_TAG]
+            invalidatesTags: OPERATION_TAG
         })
     })
 });

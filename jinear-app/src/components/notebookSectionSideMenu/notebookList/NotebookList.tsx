@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import styles from './NotebookList.module.css';
 import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle.tsx";
-import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
 import useTranslation from "@/locals/useTranslation.ts";
 import {useListWorkspaceNotebooksQuery} from "@/api/notebookListingApi.ts";
 import type {WorkspaceDto} from "@/be/jinear-core.ts";
@@ -9,6 +8,8 @@ import Notebook from "@/components/notebookSectionSideMenu/notebookList/notebook
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import {useAppDispatch} from "@/store";
 import {popNotebookInitializeModal} from "@/store/slice/modalSlice";
+import InfiniteLineLoading from "@/components/infiniteLineLoading/InfiniteLineLoading.tsx";
+import Drafts from "@/components/notebookSectionSideMenu/notebookList/drafts/Drafts.tsx";
 
 interface NotebookListProps {
     workspace: WorkspaceDto;
@@ -35,9 +36,10 @@ const NotebookList: React.FC<NotebookListProps> = ({workspace}) => {
                 hasAddButton={true}
                 onAddButtonClick={openNewNotebookModal}
             />
-            {isLoading && <CircularLoading/>}
+            {isLoading && <InfiniteLineLoading/>}
             <div className="spacer-h-1"/>
             <div className={styles.notebookListContainer}>
+                <Drafts workspace={workspace}/>
                 {listWorkspaceNotebooksResponse?.data?.content?.map((notebook, index) =>
                     <Notebook
                         key={notebook.notebookId}
@@ -45,7 +47,7 @@ const NotebookList: React.FC<NotebookListProps> = ({workspace}) => {
                         workspace={workspace}
                         initiallyOpen={index == 0}
                     />)}
-                {!listWorkspaceNotebooksResponse?.data?.hasContent &&
+                {!listWorkspaceNotebooksResponse?.data?.hasContent && !isLoading &&
                     <div className={styles.noNotebookContainer}>
                         <span>{t('sideMenuNoNotebook')}</span>
                         <Button

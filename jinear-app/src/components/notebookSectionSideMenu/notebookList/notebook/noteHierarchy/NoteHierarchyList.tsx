@@ -4,24 +4,32 @@ import {useFilterNotesQuery} from "@/api/noteFilterApi.ts";
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import {useToggle} from "@/hooks/useToggle.ts";
 import type {NoteDto, WorkspaceDto} from "@/be/jinear-core.ts";
-import {LuChevronDown, LuChevronRight} from "react-icons/lu";
+import {LuChevronDown, LuChevronRight, LuFileText} from "react-icons/lu";
 import useTranslation from "@/locals/useTranslation.ts";
 import InfiniteLineLoading from "@/components/infiniteLineLoading/InfiniteLineLoading.tsx";
 import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
+import {shortenStringIfMoreThanMaxLength} from "@/util/textUtil.ts";
 
 interface NoteHierarchyListProps {
     workspace: WorkspaceDto,
-    notebookId: string;
+    notebookId?: string;
     parentNote?: NoteDto;
+    forDrafts?: boolean
 }
 
-const NoteHierarchyList: React.FC<NoteHierarchyListProps> = ({workspace, notebookId, parentNote}) => {
+const NoteHierarchyList: React.FC<NoteHierarchyListProps> = ({
+                                                                 workspace,
+                                                                 notebookId,
+                                                                 parentNote,
+                                                                 forDrafts = false
+                                                             }) => {
     const {t} = useTranslation();
     const [page, setPage] = useState<number>(0);
     const [notes, setNotes] = useState<NoteDto[]>([]);
     const [hasMore, setHasMore] = useState<boolean>(false);
 
-    const [open, toggle] = useToggle(parentNote == null);
+    const [open, toggle] = useToggle(false);
+
     const {data: filterNotesResponse, isLoading} = useFilterNotesQuery({
         workspaceId: workspace.workspaceId,
         notebookId,
@@ -59,10 +67,11 @@ const NoteHierarchyList: React.FC<NoteHierarchyListProps> = ({workspace, noteboo
                         onClick={onNoteButtonClick}
                         className={styles.noteButton}
                     >
-                        {open ? <LuChevronDown className={'icon'}/> : <LuChevronRight className={'icon'}/>}
-                        {note.title}
+                        {forDrafts ? <LuFileText className={'icon'}/> :
+                            (open ? <LuChevronDown className={'icon'}/> : <LuFileText className={'icon'}/>)}
+                        {shortenStringIfMoreThanMaxLength({text: note.title ?? t('untitledNote'), maxLength: 29})}
                     </Button>
-                    {open &&
+                    {!forDrafts && open &&
                         <div className={styles.childContainer}>
                             <NoteHierarchyList
                                 workspace={workspace}

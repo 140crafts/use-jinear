@@ -13,7 +13,7 @@ interface NoteEditorBodyProps {
 const logger = Logger("NoteEditorBody");
 
 const NoteEditorBody: React.FC<NoteEditorBodyProps> = ({}) => {
-    const {workspace, noteId, note} = useNoteEditorContext();
+    const {workspace, noteId, note, title} = useNoteEditorContext();
     const richText = note?.richText
     const isUnsubmittedDraft = noteId?.indexOf(DRAFT_ID_PREFIX) != -1
     const submittedRef = useRef(false);
@@ -27,12 +27,15 @@ const NoteEditorBody: React.FC<NoteEditorBodyProps> = ({}) => {
         getHtml: () => editorRef.current?.getHTML() ?? null
     });
 
+    logger.log({title})
+
     useEffect(() => {
         const bodyState = getState();
         if (!submittedRef.current && isUnsubmittedDraft && workspace && bodyState && doc) {
             submittedRef.current = true;
             const {workspaceId, username} = workspace;
-            initializeNote({workspaceId, bodyState}).then(response => {
+            logger.log({workspaceId, bodyState, title})
+            initializeNote({workspaceId, bodyState, title}).then(response => {
                 if (response?.data) {
                     const newNoteDto = response?.data?.data;
                     const notebookId = newNoteDto?.notebookId ?? DRAFTS_NOTEBOOK_ID;
@@ -45,7 +48,7 @@ const NoteEditorBody: React.FC<NoteEditorBodyProps> = ({}) => {
                 }
             });
         }
-    }, [isUnsubmittedDraft, getState, doc, workspace]);
+    }, [isUnsubmittedDraft, getState, doc, workspace, title]);
 
     return (doc ?
         <CollaborativeRichText

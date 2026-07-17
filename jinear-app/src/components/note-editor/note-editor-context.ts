@@ -1,4 +1,4 @@
-import {createContext, useContext} from "react";
+import {createContext, type Dispatch, type SetStateAction, useContext} from "react";
 import type {NoteDto, WorkspaceDto} from "@/be/jinear-core.ts";
 
 export interface INoteEditorContext {
@@ -6,6 +6,8 @@ export interface INoteEditorContext {
     note?: NoteDto;
     notebookId?: string,
     noteId?: string,
+    title?: string,
+    setTitle?: Dispatch<SetStateAction<string>>,
 }
 
 const noop = () => {

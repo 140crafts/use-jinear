@@ -1,13 +1,15 @@
-import React, {type ChangeEvent} from 'react';
+import React, {type ChangeEvent, useState} from 'react';
 import styles from './NoteHeader.module.css';
 import useTranslation from "@/locals/useTranslation.ts";
 import {useNoteEditorContext} from "@/components/note-editor/note-editor-context.ts";
 
 const NoteHeader: React.FC = () => {
     const {t} = useTranslation();
+    const {title, setTitle} = useNoteEditorContext();
 
     const onTitleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-        // event.target.value
+        const nextTitle = event.target.value;
+        setTitle?.(nextTitle);
     }
 
     return (
@@ -19,7 +21,7 @@ const NoteHeader: React.FC = () => {
                 id={'noteTitle'}
                 className={styles.titleTextArea}
                 placeholder={t('newNoteTitlePlaceholder')}
-                // value={title}
+                value={title}
                 onChange={onTitleChange}
             />
         </div>
