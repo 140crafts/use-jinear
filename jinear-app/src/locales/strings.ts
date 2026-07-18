@@ -5675,6 +5675,30 @@ const translations = {
         en: 'New note',
         tr: 'Yeni not'
     },
+    noteSyncStatusOffline: {
+        en: 'Saved on this device. Will sync when online',
+        tr: 'Bu cihazda kaydedildi. Bağlantı gelince eşitlenecek'
+    },
+    noteSyncStatusSavedLocally: {
+        en: 'Saved on this device',
+        tr: 'Bu cihazda kaydedildi'
+    },
+    noteSyncStatusSyncing: {
+        en: 'Syncing…',
+        tr: 'Eşitleniyor…'
+    },
+    noteSyncStatusSynced: {
+        en: 'Synced',
+        tr: 'Eşitlendi'
+    },
+    noteSyncStatusError: {
+        en: 'Sync issue. Retrying',
+        tr: 'Eşitleme sorunu. Yeniden deneniyor'
+    },
+    noteEditorNoteNotFound: {
+        en: 'This note doesn\'t exist or you don\'t have access to it.',
+        tr: 'Bu not bulunamadı ya da erişim yetkiniz yok.'
+    },
     noteEditorActionBarPublish: {
         en: 'Publish',
         tr: 'Yayınla'

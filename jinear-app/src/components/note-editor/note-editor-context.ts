@@ -1,18 +1,20 @@
-import {createContext, type Dispatch, type RefObject, type SetStateAction, useContext} from "react";
+import {createContext, useContext} from "react";
+import type * as Y from "yjs";
 import type {NoteDto, WorkspaceDto} from "@/be/jinear-core.ts";
+import type {LiveTextStatus} from "@/components/tiptap/crdt/useLiveText.ts";
+import type {ICollaborativeRichTextRef} from "@/components/tiptap/CollaborativeRichText.tsx";
 
 export interface INoteEditorContext {
-    workspace?: WorkspaceDto,
+    workspace?: WorkspaceDto;
     note?: NoteDto;
-    notebookId?: string,
-    editingNoteId?: string,
-    setEditingNoteId?: Dispatch<SetStateAction<string>>,
-    titleTextAreaRef?: RefObject<HTMLTextAreaElement | null>,
-    setTitleTextAreaRef?: Dispatch<SetStateAction<RefObject<HTMLTextAreaElement | null> | undefined>>
+    notebookId?: string;
+    noteId?: string;
+    isPendingCreate?: boolean;
+    doc?: Y.Doc | null;
+    status?: LiveTextStatus;
+    flushNow?: () => void;
+    registerEditor?: (editor: ICollaborativeRichTextRef | null) => void;
 }
-
-const noop = () => {
-};
 
 export const NoteEditorContext = createContext<INoteEditorContext>({});
 

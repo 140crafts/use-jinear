@@ -1,0 +1,18 @@
+.container {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    min-height: 1.5rem;
+}
+
+.syncStatus {
+    font-size: 0.75rem;
+    color: var(--c-secondary-shade-0);
+    opacity: 0.8;
+    user-select: none;
+}
+
+.syncStatusError {
+    color: var(--c-JINEAR_ORANGE);
+    opacity: 1;
+}

@@ -1,8 +1,14 @@
 
 export const DRAFTS_NOTEBOOK_ID = "drafts";
-export const DRAFT_ID_PREFIX = "80085";
 export const REMOTE_ORIGIN = "remote-crdt-sync";
 export const POLL_INTERVAL_MS = 2500;
+
+/**
+ * Base64 of Y.encodeStateAsUpdate(new Y.Doc()) — the empty-doc update (bytes [0,0]).
+ * Sent as bodyState on note creation so the server baseline is empty and ALL content
+ * (title layer + body) flows through the one normal append path.
+ */
+export const EMPTY_YDOC_STATE = "AAA=";
 
 /**
  * Tunable cadence constants for the CRDT polling transport. Sane defaults — the backend is an opaque
@@ -27,3 +33,6 @@ export const SNAPSHOT_UPDATE_THRESHOLD = 75;
 
 /** Yjs fragment name shared by the transport, the seed helper and the Collaboration extension. */
 export const CRDT_FIELD = "default";
+
+/** Y.Text field holding the note title — lives in the same doc as the body so it shares the sync path. */
+export const TITLE_FIELD = "title";

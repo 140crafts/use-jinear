@@ -1,43 +1,45 @@
 import {useCallback, useEffect, useRef, useState} from "react";
 import * as Y from "yjs";
-import {
-    richTextSyncApi,
-    useAppendRichTextUpdateMutation,
-    useLazyGetRichTextStateQuery,
-    useLazyGetRichTextUpdatesQuery
-} from "@/api/richTextSyncApi.ts";
+import {richTextSyncApi} from "@/api/richTextSyncApi.ts";
 import type {RichTextDto} from "@/be/jinear-core.ts";
 import {fromBase64, toBase64} from "@/components/tiptap/crdt/base64.ts";
-import {DRAFT_ID_PREFIX, POLL_INTERVAL_MS, REMOTE_ORIGIN} from "@/components/tiptap/crdt/constants.ts";
+import {POLL_INTERVAL_MS, REMOTE_ORIGIN, TITLE_FIELD} from "@/components/tiptap/crdt/constants.ts";
 import Logger from "@/util/logger.ts";
 import {IndexeddbPersistence} from "y-indexeddb";
 import {useAppDispatch} from "@/store";
 
-export type LiveTextStatus = "booting" | "saving" | "saved_locally" | "syncing" | "synced" | "error";
+export type LiveTextStatus = "booting" | "saved_locally" | "syncing" | "synced" | "error";
 
 interface IUseLiveTextProps {
-    richTextId: string;
+    /** Stable local identity of the doc — the IndexedDB key. Never changes for the life of a note. */
+    docKey: string;
+    /** Gates doc creation so junk IndexedDB entries aren't created for URLs that resolve to nothing. */
+    enabled: boolean;
+    /** Server identity of the body. Undefined while the note isn't created server-side — no syncing then. */
+    richTextId?: string;
+    /** Server baseline snapshot for richTextId. Applied idempotently to both docs when syncing starts. */
     initialRichText?: RichTextDto;
+    /** Seed for the in-doc title when the server baseline has none (notes born before title-in-doc). */
+    seedTitle?: string;
     getHtml?: () => string | null;
 }
 
 const logger = Logger('useLiveText');
 
-export const useLiveText = ({richTextId, initialRichText, getHtml}: IUseLiveTextProps) => {
+export const useLiveText = ({docKey, enabled, richTextId, initialRichText, seedTitle, getHtml}: IUseLiveTextProps) => {
     const dispatch = useAppDispatch();
     const [doc, setDoc] = useState<Y.Doc | null>(null);
     const [status, setStatus] = useState<LiveTextStatus>("booting");
 
+    // Mirrored each render so async work always reads the latest values without re-running effects.
     const getHtmlRef = useRef(getHtml);
+    const initialRichTextRef = useRef(initialRichText);
+    const seedTitleRef = useRef(seedTitle);
     useEffect(() => {
         getHtmlRef.current = getHtml;
-    });   // mirror latest, post-commit
-
-    const [syncId, setSyncId] = useState<string>(richTextId);  // starts as draft id
-    const promotedBaselineRef = useRef<RichTextDto | undefined>(undefined);
-
-    const isUnsubmittedDraft = richTextId?.indexOf(DRAFT_ID_PREFIX) != -1;
-    const isReady = isUnsubmittedDraft || !!initialRichText;
+        initialRichTextRef.current = initialRichText;
+        seedTitleRef.current = seedTitle;
+    });
 
     const docRef = useRef<Y.Doc | null>(null);
     /*
@@ -49,67 +51,23 @@ export const useLiveText = ({richTextId, initialRichText, getHtml}: IUseLiveText
     const persistenceRef = useRef<IndexeddbPersistence | null>(null);
     const isDirtyRef = useRef<boolean>(false);
     const inFlightRef = useRef(false);
-
-    const fetchIntervalRef = useRef<number>(undefined);
     const lastFetchedUpdateSeq = useRef<number>(0);
+    const flushNowRef = useRef<(() => void) | null>(null);
 
-    logger.log({doc, syncId, richTextId, initialRichText, isUnsubmittedDraft, isReady});
-
-    const getState = useCallback((): string | null => {
-        const d = docRef.current;
-        if (!d) return null;
-        return toBase64(Y.encodeStateAsUpdate(d));
+    /** Settle-flush (e.g. editor blur). No-op while there's no server side to flush to. */
+    const flushNow = useCallback(() => {
+        flushNowRef.current?.();
     }, []);
 
-    const onPromoted = useCallback(async (realId: string, serverRichText?: RichTextDto) => {
-        const liveDoc = docRef.current;
-        if (!liveDoc) return;
-
-        // Build the server baseline inline — don't wait for the sync effect.
-        const serverDoc = new Y.Doc();
-        if (serverRichText) {
-            Y.applyUpdate(serverDoc, fromBase64(serverRichText.yjsState));
-            lastFetchedUpdateSeq.current = serverRichText.yjsStateSeq;
-        }
-
-        // The delta = everything typed since the initializeNote snapshot.
-        const delta = Y.encodeStateAsUpdate(liveDoc, Y.encodeStateVector(serverDoc));
-
-        // Ship it NOW, before anyone navigates. Await it.
-        if (delta.length > 2) {
-            await dispatch(
-                richTextSyncApi.endpoints.appendRichTextUpdate.initiate(
-                    {
-                        richTextId: realId,
-                        update: toBase64(delta),
-                        html: getHtmlRef.current?.() ?? null
-                    }
-                )
-            ).unwrap();
-            Y.applyUpdate(serverDoc, delta);
-        }
-
-        serverDocRef.current = serverDoc;
-        promotedBaselineRef.current = serverRichText;
-        setSyncId(realId);   // now the interval takes over for subsequent edits
-    }, [dispatch]);
-
-    // ── DOC effect: mount-stable. Keyed on isReady ONLY, never on richTextId.
-    //    Runs once when ready; survives the draft→real promotion untouched.
+    // ── DOC effect: purely local. Live doc + IndexedDB persistence for docKey — no server knowledge.
     useEffect(() => {
-        if (!isReady) return;
+        if (!enabled) return;
 
-        const docKey = richTextId;// captured once; stays the draft key
         const liveDoc = new Y.Doc();
         const persistence = new IndexeddbPersistence(`doc:${docKey}`, liveDoc);
         persistenceRef.current = persistence;
 
-        // Present only on a direct real-id mount (opening an existing note).
-        if (initialRichText) {
-            Y.applyUpdate(liveDoc, fromBase64(initialRichText.yjsState), REMOTE_ORIGIN);
-        }
-
-        const onUpdate = (update: Uint8Array, origin: unknown) => {
+        const onUpdate = (_update: Uint8Array, origin: unknown) => {
             if (origin === REMOTE_ORIGIN || origin === persistence) return;
             isDirtyRef.current = true;
         };
@@ -118,13 +76,7 @@ export const useLiveText = ({richTextId, initialRichText, getHtml}: IUseLiveText
         setDoc(liveDoc);
         liveDoc.on("update", onUpdate);
 
-        persistence.whenSynced.then(() => {
-            const s = serverDocRef.current;
-            const base = s ? Y.encodeStateVector(s) : Y.encodeStateVector(new Y.Doc());
-            const diff = Y.encodeStateAsUpdate(liveDoc, base);
-            if (diff.length > 2) isDirtyRef.current = true;
-            setStatus("saved_locally");
-        });
+        persistence.whenSynced.then(() => setStatus("saved_locally"));
 
         return () => {
             liveDoc.off("update", onUpdate);
@@ -132,45 +84,42 @@ export const useLiveText = ({richTextId, initialRichText, getHtml}: IUseLiveText
             liveDoc.destroy();
             persistenceRef.current = null;
             docRef.current = null;
+            setDoc(null);
+            setStatus("booting");
         };
-        // richTextId intentionally omitted — the doc's identity is the MOUNT,
-        // not the id. Depending on it rebuilds the doc on promotion (paragraph loss).
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isReady]);
+    }, [docKey, enabled]);
 
-    // ── SYNC effect: keyed on syncId. Owns the shadow doc, the delta arm,
-    //    and the ONLY poll interval. Methods live here so they close over syncId.
+    // ── SYNC effect: keyed on richTextId. No richTextId → local-only draft, nothing to do.
+    //    Applies the server baseline to both docs (CRDT merge — idempotent), arms the initial
+    //    delta (drafts / offline edits from IndexedDB), and runs the only poll interval.
     useEffect(() => {
-        if (!isReady) return;
-        if (syncId.indexOf(DRAFT_ID_PREFIX) !== -1) return;   // drafts don't sync
-        const liveDoc = docRef.current;
-        if (!liveDoc) return;
+        const liveDoc = doc;
+        if (!richTextId || !liveDoc) return;
 
-        let serverDoc = serverDocRef.current;
-        const freshlyPromoted = !!serverDoc;   // onPromoted already built + flushed
-        if (!serverDoc) {
-            serverDoc = new Y.Doc();
-            const baseline = promotedBaselineRef.current ?? initialRichText;
-            if (baseline) {
-                Y.applyUpdate(serverDoc, fromBase64(baseline.yjsState));
-                lastFetchedUpdateSeq.current = baseline.yjsStateSeq;
-            }
-            serverDocRef.current = serverDoc;
+        const serverDoc = new Y.Doc();
+        serverDocRef.current = serverDoc;
+        const baseline = initialRichTextRef.current;
+        if (baseline?.yjsState) {
+            const baselineBytes = fromBase64(baseline.yjsState);
+            Y.applyUpdate(liveDoc, baselineBytes, REMOTE_ORIGIN);
+            Y.applyUpdate(serverDoc, baselineBytes);
+            lastFetchedUpdateSeq.current = baseline.yjsStateSeq;
+        } else {
+            lastFetchedUpdateSeq.current = 0;
         }
-        // Arm the delta only when we DIDN'T just promote — onPromoted already
-        // shipped its delta. On a direct real mount, liveDoc may be ahead of
-        // the server baseline (offline edits from IndexedDB) → flush them.
-        if (!freshlyPromoted) {
+
+        const armDelta = () => {
             const delta = Y.encodeStateAsUpdate(liveDoc, Y.encodeStateVector(serverDoc));
             if (delta.length > 2) isDirtyRef.current = true;
-        }
+        };
+        armDelta();
 
         let cancelled = false;
 
         const fetchUpdates = async (since: number) => {
             const result = await dispatch(
                 richTextSyncApi.endpoints.getRichTextUpdates.initiate(
-                    {richTextId: syncId, since}, {forceRefetch: true}
+                    {richTextId, since}, {forceRefetch: true}
                 )
             );
             if (cancelled || !result.data) return;
@@ -194,7 +143,7 @@ export const useLiveText = ({richTextId, initialRichText, getHtml}: IUseLiveText
                 await dispatch(
                     richTextSyncApi.endpoints.appendRichTextUpdate.initiate(
                         {
-                            richTextId: syncId,
+                            richTextId,
                             update: toBase64(update),
                             html
                         }
@@ -217,14 +166,32 @@ export const useLiveText = ({richTextId, initialRichText, getHtml}: IUseLiveText
             await flush();
         };
 
+        // Title seeding for notes whose title predates the title-in-doc layer: wait for both the
+        // baseline (applied above) and IndexedDB hydration, then seed only if still absent.
+        persistenceRef.current?.whenSynced.then(() => {
+            const seed = seedTitleRef.current;
+            if (cancelled || !seed) return;
+            const titleText = liveDoc.getText(TITLE_FIELD);
+            if (titleText.length === 0) {
+                titleText.insert(0, seed);
+                armDelta();
+            }
+        });
+
+        flushNowRef.current = () => {
+            void flush();   // self-guards on dirty + in-flight
+        };
+
+        void tick();
         const interval = setInterval(tick, POLL_INTERVAL_MS);
         return () => {
             cancelled = true;
             clearInterval(interval);
+            flushNowRef.current = null;
             serverDoc.destroy();
             serverDocRef.current = null;
         };
-    }, [syncId, isReady, dispatch, initialRichText]);
+    }, [richTextId, doc, dispatch]);
 
-    return {doc, status, getState, onPromoted};
+    return {doc, status, flushNow};
 }

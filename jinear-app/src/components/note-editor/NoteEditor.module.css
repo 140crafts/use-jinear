@@ -1,0 +1,5 @@
+.notFound {
+    padding: 2rem 1rem;
+    text-align: center;
+    color: var(--c-secondary-shade-0, inherit);
+}

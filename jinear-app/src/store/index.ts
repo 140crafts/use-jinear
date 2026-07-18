@@ -8,6 +8,7 @@ import account, {logout} from "@/slice/accountSlice";
 import displayPreference, {resetDisplayPreferences} from "@/slice/displayPreferenceSlice";
 import firebase, {resetFirebaseSlice} from "@/slice/firebaseSlice";
 import modal, {resetModals} from "@/slice/modalSlice";
+import noteDrafts, {resetNoteDrafts} from "@/slice/noteDraftsSlice";
 import sseSlice, {resetSseSlice} from "@/slice/sseSlice";
 import taskAdditionalData, {resetTaskAdditionalData} from "@/slice/taskAdditionalDataSlice";
 import {type TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
@@ -51,12 +52,13 @@ const rootReducer = combineReducers({
     taskAdditionalData,
     firebase,
     sseSlice,
+    noteDrafts,
 })
 
 const persistConfig = {
     key: 'jinear-app',
     storage,
-    whitelist: ['account', 'displayPreference', 'taskAdditionalData', api.reducerPath],
+    whitelist: ['account', 'displayPreference', 'taskAdditionalData', 'noteDrafts', api.reducerPath],
     throttle: 2000,
     serialize: false,
     deserialize: false,
@@ -101,6 +103,7 @@ export const resetAllStates = (dispatch: typeof store.dispatch) => {
     dispatch(resetModals());
     dispatch(resetDisplayPreferences());
     dispatch(resetTaskAdditionalData());
+    dispatch(resetNoteDrafts());
     dispatch(resetFirebaseSlice());
     dispatch(resetSseSlice());
     dispatch(api.util.resetApiState());
