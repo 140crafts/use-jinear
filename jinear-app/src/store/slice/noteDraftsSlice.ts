@@ -12,11 +12,14 @@ interface PendingNoteDraft {
 const initialState = {
     pending: {},
     docKeyAliases: {},
+    submittedNoteIdByDraftId: {},
 } as {
     /** Local drafts whose create hasn't been acked by the server yet, keyed by the draft's URL id. */
     pending: Record<string, PendingNoteDraft>;
     /** Real noteId → original draft id, so the y-indexeddb doc key stays stable after URL canonicalization. */
     docKeyAliases: Record<string, string>;
+    /** Draft id → created noteId, so an open editor learns its draft was submitted by PendingDraftSubmitter. */
+    submittedNoteIdByDraftId: Record<string, string>;
 };
 
 const slice = createSlice({
@@ -34,8 +37,18 @@ const slice = createSlice({
             const entry = state.pending[action.payload.draftId];
             if (entry) entry.title = action.payload.title;
         },
-        addDocKeyAlias: (state, action: PayloadAction<{ noteId: string; draftId: string }>) => {
-            state.docKeyAliases[action.payload.noteId] = action.payload.draftId;
+        /** A pending draft was created server-side (by PendingDraftSubmitter). One atomic transition. */
+        draftSubmitted: (state, action: PayloadAction<{ draftId: string; noteId: string }>) => {
+            const {draftId, noteId} = action.payload;
+            delete state.pending[draftId];
+            state.docKeyAliases[noteId] = draftId;
+            // ??= guards state persisted before this field existed (redux-persist merges per-slice).
+            state.submittedNoteIdByDraftId ??= {};
+            state.submittedNoteIdByDraftId[draftId] = noteId;
+        },
+        /** Called by the editor's ack-watcher after it canonicalized the URL. */
+        clearSubmittedDraft: (state, action: PayloadAction<{ draftId: string }>) => {
+            delete state.submittedNoteIdByDraftId?.[action.payload.draftId];
         },
         resetNoteDrafts: () => initialState,
     },
@@ -45,13 +58,16 @@ export const {
     addPendingDraft,
     removePendingDraft,
     setPendingDraftTitle,
-    addDocKeyAlias,
+    draftSubmitted,
+    clearSubmittedDraft,
     resetNoteDrafts
 } = slice.actions;
 export default slice.reducer;
 
 export const selectPendingDraft = (id: string) => (state: RootState) => state.noteDrafts.pending[id];
 export const selectDocKey = (id: string) => (state: RootState) => state.noteDrafts.docKeyAliases[id] ?? id;
+export const selectSubmittedNoteId = (draftId: string) => (state: RootState) =>
+    state.noteDrafts.submittedNoteIdByDraftId?.[draftId];
 
 export const selectPendingDraftsOrdered = (workspaceId: string) => ((state: RootState) => {
     const pending = state.noteDrafts.pending;

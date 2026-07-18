@@ -9,6 +9,7 @@ import lombok.ToString;
 @ToString
 public class NoteInitializeVo {
 
+    private String conversationId;
     private String notebookId;
     private String workspaceId;
     private String ownerId;

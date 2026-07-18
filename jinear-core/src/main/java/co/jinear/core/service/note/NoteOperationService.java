@@ -6,13 +6,11 @@ import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.entity.note.Note;
-import co.jinear.core.model.enumtype.lock.LockSourceType;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.vo.note.NoteInitializeVo;
 import co.jinear.core.model.vo.note.NoteUpdateVo;
 import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.repository.note.NoteRepository;
-import co.jinear.core.service.lock.LockService;
 import co.jinear.core.service.note.notetag.NoteTagAssignmentOperationService;
 import co.jinear.core.service.richtext.RichTextInitializeService;
 import jakarta.transaction.Transactional;
@@ -33,7 +31,7 @@ public class NoteOperationService {
     private final RichTextInitializeService richTextInitializeService;
     private final NoteTagAssignmentOperationService noteTagAssignmentOperationService;
     private final NoteDtoConverter noteDtoConverter;
-    private final LockService lockService;
+    private final NoteLockService noteLockService;
 
     @Transactional
     public NoteDto initialize(NoteInitializeVo noteInitializeVo) {
@@ -49,21 +47,21 @@ public class NoteOperationService {
 
     public void update(NoteUpdateVo noteUpdateVo) {
         log.info("Update note has started. noteUpdateVo: {}", noteUpdateVo);
+        noteLockService.lockForUpdate(noteUpdateVo.getNoteId());
         try {
-            lockService.lock(noteUpdateVo.getNoteId(), LockSourceType.NOTE_UPDATE);
             Note note = noteRetrieveService.retrieveEntity(noteUpdateVo.getNoteId());
             Optional.of(noteUpdateVo).map(NoteUpdateVo::getTitle).ifPresent(note::setTitle);
             Optional.of(noteUpdateVo).map(NoteUpdateVo::getNotebookId).ifPresent(note::setNotebookId);
             noteRepository.save(note);
         } finally {
-            lockService.unlock(noteUpdateVo.getNoteId(), LockSourceType.NOTE_UPDATE);
+            noteLockService.unLockForUpdate(noteUpdateVo.getNoteId());
         }
     }
 
     public void moveTo(String noteId, String parentNoteId) {
         log.info("Move note has started. noteId: {}, parentNoteId: {}", noteId, parentNoteId);
+        noteLockService.lockForUpdate(noteId);
         try {
-            lockService.lock(noteId, LockSourceType.NOTE_UPDATE);
             Note note = noteRetrieveService.retrieveEntity(noteId);
             if (Objects.nonNull(parentNoteId)) {
                 validateParentNoteIsWithinSameNotebook(parentNoteId, note.getNotebookId());
@@ -72,7 +70,7 @@ public class NoteOperationService {
             note.setParentNoteId(parentNoteId);
             noteRepository.save(note);
         } finally {
-            lockService.unlock(noteId, LockSourceType.NOTE_UPDATE);
+            noteLockService.unLockForUpdate(noteId);
         }
     }
 

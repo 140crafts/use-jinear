@@ -14,6 +14,7 @@ import co.jinear.core.model.response.note.NoteInitializeResponse;
 import co.jinear.core.model.vo.note.NoteInitializeVo;
 import co.jinear.core.model.vo.note.NoteUpdateVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.note.IdempotentNoteCreateService;
 import co.jinear.core.service.note.NoteOperationService;
 import co.jinear.core.service.note.NoteRetrieveService;
 import co.jinear.core.service.note.notebook.NotebookRetrieveService;
@@ -37,6 +38,7 @@ public class NoteOperationManager {
     private final NotebookRetrieveService notebookRetrieveService;
     private final NoteRetrieveService noteRetrieveService;
     private final NoteOperationService noteOperationService;
+    private final IdempotentNoteCreateService idempotentNoteCreateService;
     private final NoteInitializeRequestToVoConverter noteInitializeRequestToVoConverter;
     private final NoteUpdateRequestToVoConverter noteUpdateRequestToVoConverter;
     private final PassiveService passiveService;
@@ -47,7 +49,7 @@ public class NoteOperationManager {
         validateNotebookAccess(currentAccountId, request.getNotebookId());
         log.info("Initialize note has started. currentAccountId: {}", currentAccountId);
         NoteInitializeVo noteInitializeVo = noteInitializeRequestToVoConverter.convert(request, workspaceId, currentAccountId);
-        NoteDto note = noteOperationService.initialize(noteInitializeVo);
+        NoteDto note = idempotentNoteCreateService.initialize(noteInitializeVo);
         return mapResponse(note);
     }
 

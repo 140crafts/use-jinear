@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-07-17 21:14:28.
+// Generated using typescript-generator version 3.0.1157 on 2026-07-18 15:32:19.
 
 export interface BaseDto {
     createdDate: Date;
@@ -632,8 +632,8 @@ export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
     accountWorkspaceAdminOrOwner: boolean;
-    accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
+    accountIsProjectTeamsMember: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -2454,7 +2454,7 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "RICH_TEXT_SYNC";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE";
 
 export type MaterialAccessType = "OWNER_ONLY" | "WORKSPACE_MEMBERS" | "GRAINED" | "ANYONE_WITH_LINK";
 

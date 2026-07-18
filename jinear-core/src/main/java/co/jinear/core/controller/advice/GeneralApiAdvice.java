@@ -6,6 +6,7 @@ import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.exception.NotValidException;
+import co.jinear.core.exception.lock.LockedException;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.system.NormalizeHelper;
 import jakarta.validation.ConstraintViolation;
@@ -27,6 +28,19 @@ public class GeneralApiAdvice {
 
     private final ApiAdviceHelper apiAdviceHelper;
     private final MessageSourceLocalizer messageSourceLocalizer;
+
+    @ExceptionHandler(value = LockedException.class)
+    protected ResponseEntity<BaseResponse> handleLockedException(BusinessException ex) {
+        LocaleMessage localeMessage = messageSourceLocalizer.getLocaleMessage(ex.getMessage(), ex.getArguments());
+        log.error(ex.getMessage(), ex);
+        try {
+            BaseResponse baseResponse = apiAdviceHelper.createErrorResponse(localeMessage);
+            baseResponse.setAdditionalInfo(ex.getAdditionalInfo());
+            return new ResponseEntity<>(baseResponse, HttpStatus.LOCKED);
+        } catch (Exception e) {
+            return apiAdviceHelper.getUnknownExceptionResponse(ex);
+        }
+    }
 
     @ExceptionHandler(value = BusinessException.class)
     protected ResponseEntity<BaseResponse> handleBusinessException(BusinessException ex) {

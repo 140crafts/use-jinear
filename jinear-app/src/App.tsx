@@ -50,6 +50,7 @@ import LastActivitiesScreen from "@/pages/workspace/tasks/last-activities/page.t
 import TeamsPage from "@/pages/workspace/tasks/teams/page.tsx";
 import ReloadQueryRefetchHandler from "@/components/reloadQueryRefetchHandler/ReloadQueryRefetchHandler.tsx";
 import OfflinePrefetchManager from "@/components/offlinePrefetchManager/OfflinePrefetchManager.tsx";
+import PendingDraftSubmitter from "@/components/pendingDraftSubmitter/PendingDraftSubmitter.tsx";
 import WorkspaceModalProvider from "@/components/modal-provider/WorkspaceModalProvider.tsx";
 import NotesLayout from "@/pages/workspace/notebook/notebook-layout/layout.tsx";
 import NotePage from "@/pages/workspace/notebook/note";
@@ -71,6 +72,7 @@ export default function App() {
 
             <ReloadQueryRefetchHandler/>
             <OfflinePrefetchManager/>
+            <PendingDraftSubmitter/>
             <Routes>
 
                 <Route path="*" element={<Navigate to="/" replace/>}/>
