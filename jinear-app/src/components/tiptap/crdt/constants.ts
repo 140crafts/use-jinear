@@ -28,7 +28,11 @@ export const PUSH_MAX_INTERVAL_MS = 2000;
  * Compact (snapshot) once the update log grows this far past the last snapshot. Snapshotting folds the
  * log into a single full-state blob and lets the server prune superseded updates. Never debounced.
  */
-export const SNAPSHOT_UPDATE_THRESHOLD = 75;
+// export const SNAPSHOT_UPDATE_THRESHOLD = 75;
+export const SNAPSHOT_UPDATE_THRESHOLD = 3;
+
+/** Wait this long before re-attempting a failed snapshot, so a server issue isn't hammered every tick. */
+export const SNAPSHOT_RETRY_COOLDOWN_MS = 30_000;
 
 
 /** Yjs fragment name shared by the transport, the seed helper and the Collaboration extension. */

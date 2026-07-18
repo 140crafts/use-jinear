@@ -69,6 +69,7 @@ public class NoteFilterRepository {
 
         criteriaQuery.where(searchPredicate.toArray(new Predicate[searchPredicate.size()]));
         criteriaBuilder.asc(root.get(BaseEntity.Fields.createdDate));
+        criteriaQuery.orderBy(criteriaBuilder.desc(root.get(BaseEntity.Fields.createdDate)));
 
         List<Note> result = entityManager.createQuery(criteriaQuery)
                 .setFirstResult((int) pageable.getOffset())

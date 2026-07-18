@@ -5665,7 +5665,7 @@ const translations = {
     },
     noteListNoChildNotes: {
         en: 'No Notes',
-        tr: 'Alt Not Bulunmuyor'
+        tr: 'Not Bulunmuyor'
     },
     newNoteTitle: {
         en: 'Title',

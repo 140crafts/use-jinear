@@ -5,6 +5,8 @@ interface PendingNoteDraft {
     draftId: string;
     workspaceId: string;
     createdAt: number;
+    /** Mirrored from the in-doc Y.Text title so lists can label the draft without opening IndexedDB. */
+    title?: string;
 }
 
 const initialState = {
@@ -28,6 +30,10 @@ const slice = createSlice({
         removePendingDraft: (state, action: PayloadAction<{ draftId: string }>) => {
             delete state.pending[action.payload.draftId];
         },
+        setPendingDraftTitle: (state, action: PayloadAction<{ draftId: string; title: string }>) => {
+            const entry = state.pending[action.payload.draftId];
+            if (entry) entry.title = action.payload.title;
+        },
         addDocKeyAlias: (state, action: PayloadAction<{ noteId: string; draftId: string }>) => {
             state.docKeyAliases[action.payload.noteId] = action.payload.draftId;
         },
@@ -35,8 +41,21 @@ const slice = createSlice({
     },
 });
 
-export const {addPendingDraft, removePendingDraft, addDocKeyAlias, resetNoteDrafts} = slice.actions;
+export const {
+    addPendingDraft,
+    removePendingDraft,
+    setPendingDraftTitle,
+    addDocKeyAlias,
+    resetNoteDrafts
+} = slice.actions;
 export default slice.reducer;
 
 export const selectPendingDraft = (id: string) => (state: RootState) => state.noteDrafts.pending[id];
 export const selectDocKey = (id: string) => (state: RootState) => state.noteDrafts.docKeyAliases[id] ?? id;
+
+export const selectPendingDraftsOrdered = (workspaceId: string) => ((state: RootState) => {
+    const pending = state.noteDrafts.pending;
+    return Object.values(pending)
+        .filter(entry => entry.workspaceId === workspaceId)
+        .sort((a, b) => b.createdAt - a.createdAt);
+})

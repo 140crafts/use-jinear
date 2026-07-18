@@ -10,6 +10,7 @@ import {LuFolder, LuFolderOpen} from "react-icons/lu";
 import cn from "classnames";
 import NoteHierarchyList
     from "@/components/notebookSectionSideMenu/notebookList/notebook/noteHierarchy/NoteHierarchyList.tsx";
+import PendingDraftList from "@/components/notebookSectionSideMenu/notebookList/drafts/PendingDraftList.tsx";
 
 interface DraftsProps {
     workspace: WorkspaceDto
@@ -37,6 +38,7 @@ const Drafts: React.FC<DraftsProps> = ({workspace}) => {
             </Button>
             {open &&
                 <div className={styles.notebookNotesContainer}>
+                <PendingDraftList workspace={workspace}/>
                 <NoteHierarchyList
                     workspace={workspace}
                     forDrafts={true}

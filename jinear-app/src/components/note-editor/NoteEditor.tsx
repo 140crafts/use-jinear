@@ -62,7 +62,12 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
         docHolderRef.current = doc;
     }, [doc]);
 
-    useNoteTitleMirror({doc, note, workspaceId: workspace.workspaceId});
+    useNoteTitleMirror({
+        doc,
+        note,
+        workspaceId: workspace.workspaceId,
+        pendingDraftId: isPendingCreate ? noteId : undefined
+    });
 
     const registerEditor = useCallback((editor: ICollaborativeRichTextRef | null) => {
         editorRef.current = editor;
