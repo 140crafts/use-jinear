@@ -243,17 +243,11 @@
 }
 
 .av {
-  width: 30px;
-  height: 30px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
-  background: var(--acc-soft);
-  display: grid;
-  place-items: center;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--acc-deep);
-  flex: none;
   object-fit: cover;
+  flex: none;
 }
 
 /* shared atoms */

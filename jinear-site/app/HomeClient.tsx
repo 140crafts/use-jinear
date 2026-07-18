@@ -141,19 +141,31 @@ export default function HomeClient() {
           </p>
         </section>
 
-        <div className={styles.signoff}>
-          Built and maintained by one developer, in the open.
-          <div className={styles.by}>
-            <img className={styles.av} src={`${IMG_BASE}/ben.jpg`} alt="Çağdaş, maker of Jinear" />
-            <span>
-              Questions?{" "}
-              <a className={styles.linkU} href="mailto:info@jinear.co">
-                Email me
-              </a>{" "}
-              or open an issue.
-            </span>
+        <section className={styles.letter} aria-label="A note from the maker">
+          <p className={styles.letterHi}>Hey, I&apos;m Çağdaş.</p>
+          <p className={styles.letterP}>
+            I build and maintain Jinear on my own, no team, no company behind it. I use
+            it every day for my own work, which is why it exists and why it keeps getting worked on.
+          </p>
+          <p className={styles.letterP}>
+            If you run into trouble self-hosting, have a question, or want to suggest something, just email me. I read
+            and reply to everything myself.
+          </p>
+          <p className={styles.letterP}>
+            And if you&apos;ve already got Jinear running somewhere, say hello. I don&apos;t track anything on
+            self-hosted instances, not even installs, so I genuinely have no idea whether anyone out there is using it.
+            Hearing that someone found it useful makes my day.
+          </p>
+          <p className={styles.letterP}>
+            I don&apos;t use your email for marketing or auto reply using AI. I&apos;d love to hear from you.
+          </p>
+          <div className={styles.letterEmailLine}>
+            <img className={styles.letterAvatar} src={`${IMG_BASE}/ben.jpg`} alt="Çağdaş, maker of Jinear" />
+            <a className={styles.letterEmail} href="mailto:cagdas@jinear.co">
+              cagdas@jinear.co
+            </a>
           </div>
-        </div>
+        </section>
 
         <BareFooter />
       </div>

@@ -133,31 +133,64 @@
   margin-top: 14px;
 }
 
-.signoff {
-  margin-top: 56px;
-  font-size: 15px;
-  color: var(--ink-2);
+/* personal letter — a subtle paper panel */
+.letter {
+  margin-top: 64px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02), 0 18px 44px -30px rgba(40, 30, 10, 0.28);
+  padding: 34px 32px;
+  font-family: var(--sans);
+  text-align: justify;
+}
 
-  .by {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 8px;
+.letterHi {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 0 0 16px;
+}
+
+.letterP {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink-2);
+  margin: 0 0 14px;
+}
+
+.letterEmailLine {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0 0;
+}
+
+.letterAvatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+}
+
+.letterEmail {
+  color: var(--ink-3);
+  font-size: 16px;
+  text-decoration: none;
+  transition: color 0.15s ease;
+
+  &:hover {
+    color: var(--ink-2);
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 }
 
-.av {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  background: var(--acc-soft);
-  display: grid;
-  place-items: center;
-  font-family: var(--mono);
-  font-size: 12px;
-  color: var(--acc-deep);
-  flex: none;
-  object-fit: cover;
+@media (max-width: 520px) {
+  .letter {
+    padding: 26px 22px;
+  }
 }
 
 /* a quick look */

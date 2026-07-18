@@ -155,11 +155,10 @@ const PricingClient: React.FC = () => {
           <div className={styles.by}>
             <img className={styles.av} src={AVATAR} alt="Çağdaş, maker of Jinear" />
             <span>
-              Or{" "}
-              <a className={styles.linkU} href="mailto:info@jinear.co">
-                email me
-              </a>{" "}
-              with a question.
+              Or email me with a question at{" "}
+              <a className={styles.linkU} href="mailto:cagdas@jinear.co">
+                cagdas@jinear.co
+              </a>
             </span>
           </div>
         </div>
