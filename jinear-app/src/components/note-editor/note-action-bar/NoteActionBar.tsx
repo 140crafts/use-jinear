@@ -4,13 +4,13 @@ import cn from "classnames";
 import {useNoteEditorContext} from "@/components/note-editor/note-editor-context.ts";
 import useTranslation from "@/locals/useTranslation.ts";
 import {useOnlineStatus} from "@/hooks/useOnlineStatus.ts";
+import NotePath from "@/components/note-editor/note-action-bar/note-path/NotePath.tsx";
 
 const NoteActionBar: React.FC = () => {
     const {t} = useTranslation();
     const {status, isPendingCreate} = useNoteEditorContext();
     const online = useOnlineStatus();
 
-    // Display-only projection of the sync state — first match wins.
     const statusLabel = !online ? t('noteSyncStatusOffline')
         : isPendingCreate || status === "saved_locally" ? t('noteSyncStatusSavedLocally')
             : status === "syncing" ? t('noteSyncStatusSyncing')
@@ -22,7 +22,10 @@ const NoteActionBar: React.FC = () => {
 
     return (
         <div className={styles.container}>
-            {/*{t('noteEditorActionBarPublish' : 'noteEditorActionBarSave')}*/}
+            <NotePath/>
+
+            <div className={'flex-1'}/>
+
             {statusLabel &&
                 <span className={cn(styles.syncStatus, isError && styles.syncStatusError)}>
                     {statusLabel}

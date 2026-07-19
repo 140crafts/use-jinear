@@ -25,12 +25,12 @@ public class NoteOperationController {
         return noteOperationManager.initialize(workspaceId, request);
     }
 
-    @PutMapping("/{noteId}/publish/{notebookId}")
+    @PutMapping("/{noteId}/change-notebook/{notebookId}")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse publish(@PathVariable String workspaceId,
-                                @PathVariable String noteId,
-                                @PathVariable String notebookId) {
-        return noteOperationManager.publish(workspaceId, noteId, notebookId);
+    public BaseResponse changeNotebook(@PathVariable String workspaceId,
+                                       @PathVariable String noteId,
+                                       @PathVariable String notebookId) {
+        return noteOperationManager.changeNotebook(workspaceId, noteId, notebookId);
     }
 
     @PutMapping

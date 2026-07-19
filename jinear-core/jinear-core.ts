@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-07-18 15:32:19.
+// Generated using typescript-generator version 3.0.1157 on 2026-07-19 12:57:38.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
-    ginternalDate: string;
     gthreadId: string;
     ghistoryId: string;
+    gid: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -508,6 +508,7 @@ export interface NoteDto extends BaseDto {
     richText: RichTextDto;
     tags?: NoteTagDto[] | null;
     owner?: PlainAccountProfileDto | null;
+    path?: NotePathDto | null;
 }
 
 export interface NotePathDto {
@@ -632,8 +633,8 @@ export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
     accountWorkspaceAdminOrOwner: boolean;
-    accountIsProjectTeamsAdmin: boolean;
     accountIsProjectTeamsMember: boolean;
+    accountIsProjectTeamsAdmin: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -1409,6 +1410,7 @@ export interface NoteFilterRequest extends BaseRequest {
     notebookId?: string | null;
     parentNoteId?: string | null;
     noteId?: string | null;
+    includePath?: boolean | null;
 }
 
 export interface NoteInitializeRequest extends BaseRequest {
@@ -2355,9 +2357,9 @@ export interface GoogleCalendarAttachment {
 }
 
 export interface Resource extends InputStreamSource {
-    uri: URI;
-    description: string;
     filename: string;
+    description: string;
+    uri: URI;
     open: boolean;
     file: any;
     readable: boolean;

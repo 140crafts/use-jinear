@@ -8,6 +8,8 @@ import {useTypedSelector} from "@/store";
 import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 import {shortenStringIfMoreThanMaxLength} from "@/util/textUtil.ts";
 import {selectPendingDraftsOrdered} from "@/slice/noteDraftsSlice.ts";
+import {useToggle} from "@/hooks/useToggle.ts";
+import {useLocation} from "react-router-dom";
 
 interface PendingDraftListProps {
     workspace: WorkspaceDto;
@@ -18,32 +20,28 @@ interface PendingDraftListProps {
  * is the recovery path: without it a draft whose tab closed before ack has no reachable URL.
  */
 const PendingDraftList: React.FC<PendingDraftListProps> = ({workspace}) => {
+    const {pathname} = useLocation()
     const {t} = useTranslation();
     const entries = useTypedSelector(selectPendingDraftsOrdered(workspace.workspaceId));
-    // const pending = useTypedSelector(state => state.noteDrafts.pending);
-    //
-    // const entries = useMemo(() =>
-    //         Object.values(pending)
-    //             .filter(entry => entry.workspaceId === workspace.workspaceId)
-    //             .sort((a, b) => b.createdAt - a.createdAt),
-    //     [pending, workspace.workspaceId]);
-    //
-    // if (entries.length === 0) return null;
 
     return (
         <div className={styles.container}>
-            {entries.map(entry =>
-                <div key={`sidebar-pending-draft-${entry.draftId}`} className={styles.noteButtonGroup}>
-                    <Button
-                        heightVariant={ButtonHeight.short2x}
-                        variant={ButtonVariants.hoverFilled2}
-                        href={`/${workspace.username}/notebook/${DRAFTS_NOTEBOOK_ID}/note/${entry.draftId}`}
-                        className={styles.noteButton}
-                    >
-                        <LuFileClock className={'icon'}/>
-                        {shortenStringIfMoreThanMaxLength({text: entry.title || t('untitledNote'), maxLength: 29})}
-                    </Button>
-                </div>
+            {entries.map(entry => {
+                    const path = `/${workspace.username}/notebook/${DRAFTS_NOTEBOOK_ID}/note/${entry.draftId}`;
+                    const atPath = pathname?.indexOf(path) != -1;
+                    return (
+                        <div key={`sidebar-pending-draft-${entry.draftId}`} className={styles.noteButtonGroup}>
+                            <Button
+                                heightVariant={ButtonHeight.short}
+                                variant={atPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+                                href={path}
+                                className={styles.noteButton}
+                            >
+                                <LuFileClock className={'icon'}/>
+                                {shortenStringIfMoreThanMaxLength({text: entry.title || t('untitledNote'), maxLength: 29})}
+                            </Button>
+                        </div>);
+                }
             )}
         </div>
     );

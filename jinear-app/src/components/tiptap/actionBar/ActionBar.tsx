@@ -25,6 +25,7 @@ import styles from "./ActionBar.module.css";
 import { useUploadRichTextImageMutation } from "@/api/richTextImageApi";
 import { useAppDispatch } from "@/store";
 import { changeLoadingModalVisibility } from "@/slice/modalSlice";
+import cn from "classnames";
 
 export type TipTapActionBarMode = "simple" | "full" | "none";
 
@@ -32,9 +33,10 @@ interface ActionBarProps {
   editor: Editor;
   mode?: TipTapActionBarMode;
   workspaceIdForImages?: string;
+  className?: string;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceIdForImages }) => {
+const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceIdForImages, className }) => {
   const dispatch = useAppDispatch();
   const imagePickerButtonRef = useRef<HTMLInputElement>(null);
   const [uploadRichTextImage, { data: uploadRichTextImageResponse, isLoading }] = useUploadRichTextImageMutation();
@@ -78,7 +80,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
   };
 
   return (editor && mode != "none") ? (
-    <div className={styles.container}>
+    <div className={cn(styles.container, className)}>
       <Button
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}

@@ -14,6 +14,7 @@
     font-weight: 600;
     background: var(--c-primary) !important;
     border: unset !important;
+    word-break: break-all;
 }
 
 .titleTextArea::placeholder {

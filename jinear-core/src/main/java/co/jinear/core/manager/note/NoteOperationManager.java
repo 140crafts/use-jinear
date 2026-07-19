@@ -53,12 +53,12 @@ public class NoteOperationManager {
         return mapResponse(note);
     }
 
-    public BaseResponse publish(String workspaceId, String noteId, String notebookId) {
+    public BaseResponse changeNotebook(String workspaceId, String noteId, String notebookId) {
         String currentAccountId = sessionInfoService.currentAccountId();
         NoteDto note = noteRetrieveService.retrieve(noteId);
-        validateNotPublishedBefore(notebookId, note);
         String noteWorkspaceId = note.getWorkspaceId();
         validateWorkspaceAccessAndMatchPath(workspaceId, currentAccountId, noteWorkspaceId);
+        validateNotebookAccess(currentAccountId, note.getNotebookId());
         validateNotebookAccess(currentAccountId, notebookId);
         NoteUpdateVo noteUpdateVo = NoteUpdateVo
                 .builder()
@@ -113,18 +113,11 @@ public class NoteOperationManager {
         }
     }
 
-    private void validateWorkspaceAccessAndMatchPath(String workspaceId, String currentAccountId, String noteWorkspaceId) {
-        if (!workspaceId.equalsIgnoreCase(noteWorkspaceId)) {
+    private void validateWorkspaceAccessAndMatchPath(String workspaceIdFromPath, String currentAccountId, String noteWorkspaceId) {
+        if (!workspaceIdFromPath.equalsIgnoreCase(noteWorkspaceId)) {
             throw new NoAccessException();
         }
         workspaceValidator.validateHasAccess(currentAccountId, noteWorkspaceId);
-    }
-
-    private void validateNotPublishedBefore(String notebookId, NoteDto note) {
-        String existingNotebookId = note.getNotebookId();
-        if (Objects.nonNull(existingNotebookId) && !notebookId.equalsIgnoreCase(existingNotebookId)) {
-            throw new BusinessException("note.published-before");
-        }
     }
 
     private NoteInitializeResponse mapResponse(NoteDto noteDto) {

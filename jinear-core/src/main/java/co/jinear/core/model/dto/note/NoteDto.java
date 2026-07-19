@@ -28,4 +28,6 @@ public class NoteDto extends BaseDto {
     private Set<NoteTagDto> tags;
     @Nullable
     private PlainAccountProfileDto owner;
+    @Nullable
+    private NotePathDto path;
 }

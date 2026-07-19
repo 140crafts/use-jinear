@@ -21,13 +21,20 @@
   min-height: 3.25rem;
 }
 
-.tiptap:focus {
+.withOutlineOnFocus{}
+
+.withOutlineOnFocus:focus {
   outline: solid !important;
   outline-color: var(--c-primary-shade-1) !important;
 }
 
+/*.tiptap:focus {*/
+/*  outline: solid !important;*/
+/*  outline-color: var(--c-primary-shade-1) !important;*/
+/*}*/
+
 .tiptap p.is-editor-empty:first-child::before {
-  color: var(--c-secondary-shade-1-op05);
+  color: var(--c-secondary-shade-0-op025);
   content: attr(data-placeholder);
   float: left;
   height: 0;
@@ -37,7 +44,8 @@
 .is-editor-empty {
   color: var(--c-secondary-shade-1-op05);
   content: attr(data-placeholder);
-  float: left;
+  /*following line breaking caret on empty editor. This was added to fix something long long time ago but i couldn't find what it is.*/
+  /*float: left;*/
   height: 0;
   pointer-events: none;
 }

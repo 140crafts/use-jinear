@@ -27,6 +27,8 @@ interface CollaborativeRichTextProps {
     onHtml?: (html: string) => void;
     /** Called on blur so the transport can force a settle flush (HTML included). */
     onSettle?: () => void;
+    actionBarClassName?: string;
+    withOutlineOnFocus?: boolean
 }
 
 const CollaborativeRichText = (
@@ -40,7 +42,9 @@ const CollaborativeRichText = (
         actionBarMode = "full",
         workspaceIdForImages,
         onHtml,
-        onSettle
+        onSettle,
+        actionBarClassName,
+        withOutlineOnFocus = true
     }: CollaborativeRichTextProps,
     ref: any
 ) => {
@@ -48,7 +52,7 @@ const CollaborativeRichText = (
         {
             editorProps: {
                 attributes: {
-                    class: cn(styles.tiptap, editorClassName)
+                    class: cn(editorClassName, styles.tiptap, withOutlineOnFocus && styles.withOutlineOnFocus)
                 }
             },
             extensions: [
@@ -82,7 +86,12 @@ const CollaborativeRichText = (
     return (
         <div className={cn(styles.container, className)}>
             {editor && editable && actionBarMode !== "none" && (
-                <ActionBar editor={editor} mode={actionBarMode} workspaceIdForImages={workspaceIdForImages}/>
+                <ActionBar
+                    editor={editor}
+                    mode={actionBarMode}
+                    workspaceIdForImages={workspaceIdForImages}
+                    className={actionBarClassName}
+                />
             )}
             <EditorContent editor={editor} className={editorWrapperClassName}/>
         </div>

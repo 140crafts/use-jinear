@@ -37,6 +37,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
         workspaceId: workspace.workspaceId,
         notebookId: isDraftsNotebook ? undefined : notebookId,
         noteId: ackedNoteId ?? noteId,
+        includePath: true,
         page: 0
     }, {skip: isPendingCreate});
 

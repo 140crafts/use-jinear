@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-07-12 14:51:27.
+// Generated using typescript-generator version 3.0.1157 on 2026-07-19 12:57:38.
 
 export interface BaseDto {
     createdDate: Date;
@@ -167,8 +167,8 @@ export interface GmailMessageDto extends BaseDto {
     body: string;
     gthreadId: string;
     ghistoryId: string;
-    ginternalDate: string;
     gid: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -508,6 +508,7 @@ export interface NoteDto extends BaseDto {
     richText: RichTextDto;
     tags?: NoteTagDto[] | null;
     owner?: PlainAccountProfileDto | null;
+    path?: NotePathDto | null;
 }
 
 export interface NotePathDto {
@@ -1409,6 +1410,7 @@ export interface NoteFilterRequest extends BaseRequest {
     notebookId?: string | null;
     parentNoteId?: string | null;
     noteId?: string | null;
+    includePath?: boolean | null;
 }
 
 export interface NoteInitializeRequest extends BaseRequest {
@@ -2454,7 +2456,7 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "RICH_TEXT_SYNC";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE";
 
 export type MaterialAccessType = "OWNER_ONLY" | "WORKSPACE_MEMBERS" | "GRAINED" | "ANYONE_WITH_LINK";
 

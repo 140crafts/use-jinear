@@ -1,0 +1,25 @@
+.container {
+    flex: 1;
+    background-color: var(--c-primary) !important;
+}
+
+.editorWrapperClassName {
+    flex: 1;
+}
+
+.editorClassName {
+    height: 100%;
+    outline: none !important;
+    outline-color: transparent !important;
+    background-color: var(--c-primary) !important;
+}
+
+.actionBarClassName {
+    border: thin solid var(--c-primary-shade-1);
+    border-radius: var(--border-radius);
+
+    background-color: var(--c-primary) !important;
+    position: sticky;
+    top: calc(var(--nav-bar-height) - .5rem);
+    z-index: 1;
+}

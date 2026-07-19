@@ -1,8 +1,12 @@
 .container {
     display: flex;
-    justify-content: flex-end;
     align-items: center;
+
     min-height: 1.5rem;
+    border-bottom-style: solid;
+    border-bottom-width: thin;
+    border-bottom-color: var(--c-primary-shade-1);
+    padding-bottom: 0.5rem;
 }
 
 .syncStatus {

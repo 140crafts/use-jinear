@@ -19,4 +19,6 @@ public class NoteFilterRequest extends BaseRequest {
     private String parentNoteId;
     @Nullable
     private String noteId;
+    @Nullable
+    private Boolean includePath = Boolean.FALSE;
 }

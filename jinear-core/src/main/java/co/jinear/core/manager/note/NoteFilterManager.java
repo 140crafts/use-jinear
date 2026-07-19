@@ -3,12 +3,14 @@ package co.jinear.core.manager.note;
 import co.jinear.core.converter.note.NoteFilterRequestToVoConverter;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.note.NoteDto;
+import co.jinear.core.model.dto.note.NotePathDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
 import co.jinear.core.model.request.note.NoteFilterRequest;
 import co.jinear.core.model.response.note.NotePaginatedResponse;
 import co.jinear.core.model.vo.note.NoteFilterVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.note.NoteFilterService;
+import co.jinear.core.service.note.NoteRetrieveService;
 import co.jinear.core.service.note.notebook.NotebookRetrieveService;
 import co.jinear.core.validator.notebook.NotebookAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
@@ -30,6 +32,7 @@ public class NoteFilterManager {
     private final NotebookAccessValidator notebookAccessValidator;
     private final NoteFilterRequestToVoConverter noteFilterRequestToVoConverter;
     private final NoteFilterService noteFilterService;
+    private final NoteRetrieveService noteRetrieveService;
 
     public NotePaginatedResponse filter(NoteFilterRequest noteFilterRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -37,7 +40,7 @@ public class NoteFilterManager {
         validateNotebookAccess(currentAccountId, noteFilterRequest.getNotebookId());
         NoteFilterVo noteFilterVo = noteFilterRequestToVoConverter.map(noteFilterRequest, currentAccountId);
         Page<NoteDto> noteDtos = noteFilterService.filter(noteFilterVo);
-
+        retrieveAndMapPath(noteFilterRequest, noteDtos);
         return mapResponse(noteDtos);
     }
 
@@ -52,5 +55,15 @@ public class NoteFilterManager {
         NotePaginatedResponse notePaginatedResponse = new NotePaginatedResponse();
         notePaginatedResponse.setNoteDtoPageDto(new PageDto<>(noteDtos));
         return notePaginatedResponse;
+    }
+
+    private void retrieveAndMapPath(NoteFilterRequest request, Page<NoteDto> noteDtos) {
+        if (!Boolean.TRUE.equals(request.getIncludePath())) {
+            return;
+        }
+        noteDtos.forEach(noteDto -> {
+            NotePathDto notePathDto = noteRetrieveService.retrieveNotePath(noteDto.getNoteId());
+            noteDto.setPath(notePathDto);
+        });
     }
 }
