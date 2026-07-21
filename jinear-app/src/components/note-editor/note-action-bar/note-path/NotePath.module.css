@@ -5,36 +5,14 @@
     align-items: center;
 }
 
-.selectWrapper {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    border-width: 1px;
-    border-radius: var(--border-radius);
-    border-style: solid;
-    border-color: transparent;
-    background-color: var(--c-primary-shade-0) !important;
-    padding-left: .25rem;
-    height: 28px !important;
-}
-
 .separator {
     margin: 0 4px;
     color: var(--c-secondary-shade-1);
     pointer-events: none;
 }
 
-.notebookSelect {
-    max-width: 12ch;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    text-align: center;
-}
-
 .breadcrumbButton {
     padding-left: 0.15rem !important;
     padding-right: 0.15rem !important;
-    overflow: visible;
+    overflow: visible !important;
 }

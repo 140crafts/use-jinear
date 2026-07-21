@@ -29,9 +29,9 @@ export const noteOperationApi = api.injectEndpoints({
             invalidatesTags: OPERATION_TAG
         }),
         //
-        publishNote: build.mutation<BaseResponse, { workspaceId: string; noteId: string; notebookId: string }>({
+        changeNotebook: build.mutation<BaseResponse, { workspaceId: string; noteId: string; notebookId: string }>({
             query: ({workspaceId, noteId, notebookId}) => ({
-                url: `v1/note/workspace/${workspaceId}/operation/${noteId}/publish/${notebookId}`,
+                url: `v1/note/workspace/${workspaceId}/operation/${noteId}/change-notebook/${notebookId}`,
                 method: "PUT"
             }),
             invalidatesTags: OPERATION_TAG
@@ -59,11 +59,11 @@ export const noteOperationApi = api.injectEndpoints({
 export const {
     useInitializeNoteMutation,
     useUpdateNoteMutation,
-    usePublishNoteMutation,
+    useChangeNotebookMutation,
     useMoveNoteMutation,
     useDeleteNoteMutation
 } = noteOperationApi;
 
 export const {
-    endpoints: {initializeNote, updateNote, publishNote, moveNote, deleteNote}
+    endpoints: {initializeNote, updateNote, changeNotebook, moveNote, deleteNote}
 } = noteOperationApi;

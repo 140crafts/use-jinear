@@ -1,14 +1,15 @@
 import React from 'react';
-import styles from './NoteActionBar.module.css';
+import styles from './NoteActionBar.module.scss';
 import cn from "classnames";
 import {useNoteEditorContext} from "@/components/note-editor/note-editor-context.ts";
 import useTranslation from "@/locals/useTranslation.ts";
 import {useOnlineStatus} from "@/hooks/useOnlineStatus.ts";
 import NotePath from "@/components/note-editor/note-action-bar/note-path/NotePath.tsx";
+import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 
 const NoteActionBar: React.FC = () => {
     const {t} = useTranslation();
-    const {status, isPendingCreate} = useNoteEditorContext();
+    const {workspace, note, status, isPendingCreate} = useNoteEditorContext();
     const online = useOnlineStatus();
 
     const statusLabel = !online ? t('noteSyncStatusOffline')
@@ -26,10 +27,25 @@ const NoteActionBar: React.FC = () => {
 
             <div className={'flex-1'}/>
 
-            {statusLabel &&
-                <span className={cn(styles.syncStatus, isError && styles.syncStatusError)}>
-                    {statusLabel}
-                </span>}
+            <div className={styles.actionButtonContainer}>
+                {statusLabel &&
+                    <Button
+                        disabled={true}
+                        variant={ButtonVariants.outline}
+                        heightVariant={ButtonHeight.short}
+                        className={cn(styles.syncStatus, isError && styles.syncStatusError)}
+                    >
+                        {statusLabel}
+                    </Button>
+                }
+                <Button
+                    variant={ButtonVariants.outline}
+                    heightVariant={ButtonHeight.short}
+                >
+                    {t('publishNote')}
+                </Button>
+            </div>
+
         </div>
     );
 }

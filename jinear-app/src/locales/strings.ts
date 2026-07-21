@@ -5715,9 +5715,13 @@ const translations = {
         en: 'Untitled',
         tr: 'Başlıksız'
     },
-    emptyNotePlaceholder:{
-        en:"Start typing. Use the toolbar above to format your text.",
-        tr:"Yazmaya başla, biçimlendirmek için yukarıdaki araç çubuğunu kullan."
+    emptyNotePlaceholder: {
+        en: "Start typing. Use the toolbar above to format your text.",
+        tr: "Yazmaya başla, biçimlendirmek için yukarıdaki araç çubuğunu kullan."
+    },
+    publishNote: {
+        en: "Change Notebook",
+        tr: "Defteri Değiştir"
     }
 };
 

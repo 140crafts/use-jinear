@@ -1,0 +1,39 @@
+@use "../../../styles/breakpoints.scss" as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+
+  min-height: 1.5rem;
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+  border-bottom-color: var(--c-primary-shade-1);
+  padding-bottom: 0.5rem;
+}
+
+.syncStatus {
+  font-size: 0.75rem;
+  color: var(--c-secondary-shade-0);
+  opacity: 0.8;
+  user-select: none;
+  cursor: default !important;
+}
+
+.syncStatusError {
+  color: var(--c-JINEAR_ORANGE);
+  opacity: 1;
+}
+
+.actionButtonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: .25rem;
+}
+
+@media (max-width: $tablet) {
+  .container {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

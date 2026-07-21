@@ -2,8 +2,8 @@ package co.jinear.core.manager.note;
 
 import co.jinear.core.converter.note.NoteInitializeRequestToVoConverter;
 import co.jinear.core.converter.note.NoteUpdateRequestToVoConverter;
-import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
+import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
 import co.jinear.core.model.request.note.NoteInitializeRequest;
@@ -59,13 +59,10 @@ public class NoteOperationManager {
         String noteWorkspaceId = note.getWorkspaceId();
         validateWorkspaceAccessAndMatchPath(workspaceId, currentAccountId, noteWorkspaceId);
         validateNotebookAccess(currentAccountId, note.getNotebookId());
-        validateNotebookAccess(currentAccountId, notebookId);
-        NoteUpdateVo noteUpdateVo = NoteUpdateVo
-                .builder()
-                .noteId(noteId)
-                .notebookId(notebookId)
-                .build();
-        noteOperationService.update(noteUpdateVo);
+        NotebookDto targetNotebook = validateNotebookAccess(currentAccountId, notebookId);
+        validateNotebookIsWithinWorkspace(targetNotebook, noteWorkspaceId);
+        log.info("Change note notebook has started. currentAccountId: {}", currentAccountId);
+        noteOperationService.changeNotebook(noteId, notebookId);
         return new BaseResponse();
     }
 
@@ -106,10 +103,18 @@ public class NoteOperationManager {
         }
     }
 
-    private void validateNotebookAccess(String currentAccountId, String notebookId) {
+    private NotebookDto validateNotebookAccess(String currentAccountId, String notebookId) {
         if (Objects.nonNull(notebookId)) {
             NotebookDto notebookDto = notebookRetrieveService.retrieve(notebookId);
             notebookAccessValidator.validateHasAccess(currentAccountId, notebookDto);
+            return notebookDto;
+        }
+        return null;
+    }
+
+    private void validateNotebookIsWithinWorkspace(NotebookDto notebookDto, String workspaceId) {
+        if (Objects.isNull(notebookDto) || !workspaceId.equalsIgnoreCase(notebookDto.getWorkspaceId())) {
+            throw new NotValidException();
         }
     }
 

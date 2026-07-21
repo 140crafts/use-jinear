@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-07-19 12:57:38.
+// Generated using typescript-generator version 3.0.1157 on 2026-07-21 20:32:09.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gthreadId: string;
-    ghistoryId: string;
     gid: string;
     ginternalDate: string;
+    gthreadId: string;
+    ghistoryId: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -509,6 +509,7 @@ export interface NoteDto extends BaseDto {
     tags?: NoteTagDto[] | null;
     owner?: PlainAccountProfileDto | null;
     path?: NotePathDto | null;
+    notebook?: NotebookDto | null;
 }
 
 export interface NotePathDto {
@@ -2269,8 +2270,8 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    contentType: string;
     originalFilename: string;
+    contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
@@ -2357,9 +2358,9 @@ export interface GoogleCalendarAttachment {
 }
 
 export interface Resource extends InputStreamSource {
-    filename: string;
-    description: string;
     uri: URI;
+    description: string;
+    filename: string;
     open: boolean;
     file: any;
     readable: boolean;

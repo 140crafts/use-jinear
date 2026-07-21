@@ -51,10 +51,31 @@ public class NoteOperationService {
         try {
             Note note = noteRetrieveService.retrieveEntity(noteUpdateVo.getNoteId());
             Optional.of(noteUpdateVo).map(NoteUpdateVo::getTitle).ifPresent(note::setTitle);
-            Optional.of(noteUpdateVo).map(NoteUpdateVo::getNotebookId).ifPresent(note::setNotebookId);
             noteRepository.save(note);
         } finally {
             noteLockService.unLockForUpdate(noteUpdateVo.getNoteId());
+        }
+    }
+
+    @Transactional
+    public void changeNotebook(String noteId, String notebookId) {
+        log.info("Change note notebook has started. noteId: {}, notebookId: {}", noteId, notebookId);
+        Note note = noteRetrieveService.retrieveEntity(noteId);
+        if (notebookId.equals(note.getNotebookId())) {
+            return;
+        }
+        note.setParentNoteId(null);
+        Deque<String> queue = new ArrayDeque<>();
+        queue.add(noteId);
+        while (!queue.isEmpty()) {
+            String currentId = queue.poll();
+            noteRepository.findByNoteIdAndPassiveIdIsNull(currentId)
+                    .ifPresent(current -> {
+                        current.setNotebookId(notebookId);
+                        noteRepository.save(current);
+                        noteRepository.findAllByParentNoteIdAndPassiveIdIsNull(current.getNoteId())
+                                .forEach(child -> queue.add(child.getNoteId()));
+                    });
         }
     }
 

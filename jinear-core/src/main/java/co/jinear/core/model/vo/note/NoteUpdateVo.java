@@ -11,6 +11,5 @@ import lombok.*;
 public class NoteUpdateVo {
 
     private String noteId;
-    private String notebookId;
     private String title;
 }
