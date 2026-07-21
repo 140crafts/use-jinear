@@ -15,6 +15,7 @@ import {useTypedSelector} from "@/store";
 import {selectDocKey} from "@/slice/noteDraftsSlice.ts";
 import useTranslation from "@/locals/useTranslation.ts";
 import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
+import NotePropertyBar from "@/components/note-editor/note-property-bar/NotePropertyBar.tsx";
 
 interface NoteEditorProps {
     workspace: WorkspaceDto;
@@ -85,6 +86,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
                     ? <div className={styles.notFound}>{t("noteEditorNoteNotFound")}</div>
                     : <>
                         <NoteHeader/>
+                        <NotePropertyBar/>
                         {doc ? <NoteEditorBody/> : <CircularLoading/>}
                     </>}
             </div>

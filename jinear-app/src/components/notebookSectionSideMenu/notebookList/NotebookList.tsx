@@ -39,7 +39,9 @@ const NotebookList: React.FC<NotebookListProps> = ({workspace}) => {
             {isLoading && <InfiniteLineLoading/>}
             <div className="spacer-h-1"/>
             <div className={styles.notebookListContainer}>
+
                 <Drafts workspace={workspace}/>
+
                 {listWorkspaceNotebooksResponse?.data?.content?.map((notebook, index) =>
                     <Notebook
                         key={notebook.notebookId}

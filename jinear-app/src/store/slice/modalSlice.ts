@@ -29,6 +29,7 @@ import type {
     NewTeamModalState,
     NewTopicModalState,
     NotebookInitializeModalState,
+    NotebookPickerModalState,
     NotFoundModalState,
     NotificationPermissionModalState,
     PasswordChangeModalState,
@@ -236,6 +237,9 @@ const initialState = {
     materialFolderPickerModal: {
         visible: false
     },
+    notebookPickerModal: {
+        visible: false
+    },
     uploadStatusModal: {
         visible: false
     },
@@ -302,6 +306,7 @@ const initialState = {
     passwordChangeModal: null | PasswordChangeModalState,
     feedbackModal: null | ModalState,
     materialFolderPickerModal: null | MaterialFolderPickerModalState,
+    notebookPickerModal: null | NotebookPickerModalState,
     uploadStatusModal: null | UploadStatusModalState;
     materialAccessModal: null | MaterialAccessModalState;
 };
@@ -706,6 +711,13 @@ const slice = createSlice({
             state.materialFolderPickerModal = initialState.materialFolderPickerModal;
         },
 
+        popNotebookPickerModal: (state, action: PayloadAction<NotebookPickerModalState>) => {
+            state.notebookPickerModal = {...action.payload, visible: true};
+        },
+        closeNotebookPickerModal: (state, action: PayloadAction<void>) => {
+            state.notebookPickerModal = initialState.notebookPickerModal;
+        },
+
         pushDataToUploadStatusModalQueue: (state, action: PayloadAction<UploadStatusModalState>) => {
             state.uploadStatusModal ??= {
                 visible: true,
@@ -886,6 +898,8 @@ export const {
     closeFeedbackModal,
     popMaterialFolderPickerModal,
     closeMaterialFolderPickerModal,
+    popNotebookPickerModal,
+    closeNotebookPickerModal,
     popUploadStatusModal,
     closeUploadStatusModal,
     pushDataToUploadStatusModalQueue,
@@ -1189,6 +1203,10 @@ export const selectMaterialFolderPickerModalVisible = (state: RootState) => stat
 export const selectMaterialFolderPickerModalWorkspaceId = (state: RootState) => state.modal.materialFolderPickerModal?.workspaceId;
 export const selectMaterialFolderPickerModalOnPick = (state: RootState) => state.modal.materialFolderPickerModal?.onPick;
 export const selectMaterialFolderPickerModalTitle = (state: RootState) => state.modal.materialFolderPickerModal?.title;
+
+export const selectNotebookPickerModalVisible = (state: RootState) => state.modal.notebookPickerModal?.visible;
+export const selectNotebookPickerModalWorkspaceId = (state: RootState) => state.modal.notebookPickerModal?.workspaceId;
+export const selectNotebookPickerModalOnPick = (state: RootState) => state.modal.notebookPickerModal?.onPick;
 
 export const selectUploadStatusModalVisible = (state: RootState) => state.modal.uploadStatusModal?.visible;
 export const selectUploadStatusModalWorkspaceId = (state: RootState) => state.modal.uploadStatusModal?.workspaceId;

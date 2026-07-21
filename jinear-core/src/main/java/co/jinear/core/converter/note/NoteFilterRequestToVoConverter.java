@@ -13,13 +13,15 @@ import java.util.Objects;
 public interface NoteFilterRequestToVoConverter {
 
     @Mapping(target = "ownerId", ignore = true)
+    @Mapping(target = "notebookIdIsNull", ignore = true)
     NoteFilterVo map(NoteFilterRequest noteFilterRequest, String currentAccountId);
 
     @AfterMapping
     default void afterMap(@MappingTarget NoteFilterVo noteFilterVo, String currentAccountId) {
-        boolean isListingDrafts = Objects.isNull(noteFilterVo.getNotebookId());
-        if (isListingDrafts){
+        boolean isListingDrafts = Objects.isNull(noteFilterVo.getNotebookId()) && Objects.isNull(noteFilterVo.getNoteId());
+        if (isListingDrafts) {
             noteFilterVo.setOwnerId(currentAccountId);
+            noteFilterVo.setNotebookIdIsNull(true);
         }
     }
 }

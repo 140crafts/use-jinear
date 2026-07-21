@@ -6,6 +6,8 @@
 .notebookButton {
     text-align: start;
     gap: .5rem;
+    padding-left: .25rem;
+    padding-right: .25rem;
 }
 
 .notebookName {
@@ -14,7 +16,16 @@
 }
 
 
+.notebookNotesGreaterContainer {
+    display: flex;
+    flex-direction: row;
+    gap: .2rem;
+}
+
 .notebookNotesContainer {
     display: flex;
     flex-direction: column;
+
+    padding-left: .25rem;
+    border-left: 1px solid var(--c-primary-shade-1);
 }

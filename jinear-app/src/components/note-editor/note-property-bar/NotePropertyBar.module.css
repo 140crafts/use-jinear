@@ -1,0 +1,9 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: .25rem;
+}
+
+.button {
+    gap: .5rem;
+}

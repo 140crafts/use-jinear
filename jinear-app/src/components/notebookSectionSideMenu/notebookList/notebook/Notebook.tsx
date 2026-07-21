@@ -20,7 +20,7 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
     const {pathname} = useLocation()
     const notebookIdForPath = notebook?.notebookId ?? DRAFTS_NOTEBOOK_ID;
     const notebookPath = `/${workspace?.username}/notebook/${notebookIdForPath}`;
-    const atPath = pathname?.indexOf(notebookPath) != -1;
+    const atPath = pathname == notebookPath;
     const [open, toggle] = useToggle(initiallyOpen);
 
     return (
@@ -36,12 +36,17 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
                     {notebook.title}
                 </span>
             </Button>
-            {open && <div className={styles.notebookNotesContainer}>
-                <NoteHierarchyList
-                    workspace={workspace}
-                    notebookId={notebook?.notebookId}
-                />
-            </div>}
+            {open &&
+                <div className={styles.notebookNotesGreaterContainer}>
+                    <div className={'spacer-w-1'}/>
+                    <div className={styles.notebookNotesContainer}>
+                        <NoteHierarchyList
+                            workspace={workspace}
+                            notebookId={notebook?.notebookId}
+                        />
+                    </div>
+                </div>
+            }
         </div>
     );
 }

@@ -34,6 +34,13 @@ public class NoteFilterCriteriaBuilder {
         }
     }
 
+    public void addNotebookIdIsNull(boolean notebookIdIsNull, CriteriaBuilder criteriaBuilder, Root<Note> root, List<Predicate> predicateList) {
+        if (notebookIdIsNull) {
+            Predicate predicate = criteriaBuilder.isNull(root.<String>get(Note.Fields.notebookId));
+            predicateList.add(predicate);
+        }
+    }
+
     public void addParentNoteId(String parentNoteId, CriteriaBuilder criteriaBuilder, Root<Note> root, List<Predicate> predicateList) {
         if (Objects.nonNull(parentNoteId)) {
             Predicate predicate = criteriaBuilder.equal(root.<String>get(Note.Fields.parentNoteId), parentNoteId);

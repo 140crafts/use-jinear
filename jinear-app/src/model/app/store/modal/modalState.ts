@@ -2,6 +2,7 @@ import type {
     CalendarEventDto,
     IntegrationProvider,
     MilestoneDto,
+    NotebookDto,
     ProjectDto,
     ProjectPriorityType,
     ProjectStateType,
@@ -293,6 +294,11 @@ export interface NewCustomProjectDomainModalState extends ModalState {
 
 export interface PasswordChangeModalState extends ModalState {
     forced?: boolean,
+}
+
+export interface NotebookPickerModalState extends ModalState {
+    workspaceId?: string,
+    onPick?: (notebook: NotebookDto) => void
 }
 
 export interface MaterialFolderPickerModalState extends ModalState {

@@ -5719,10 +5719,32 @@ const translations = {
         en: "Start typing. Use the toolbar above to format your text.",
         tr: "Yazmaya başla, biçimlendirmek için yukarıdaki araç çubuğunu kullan."
     },
-    publishNote: {
+    changeNoteNotebook: {
         en: "Change Notebook",
         tr: "Defteri Değiştir"
-    }
+    },
+    notebookPickerModalTitle: {
+        en: "Select Notebook",
+        tr: "Defter Seç"
+    },
+    notebookPickerModalEmpty: {
+        en: "There isn't any notebooks in this workspace.",
+        tr: "Bu çalışma alanında hiçbir defter bulunmuyor."
+    },
+
+    moveNoteToNotebookAreYouSureTitle: {
+        en: "Move Note",
+        tr: "Notu Taşı"
+    },
+    moveNoteToNotebookAreYouSureText: {
+        en: "Are you sure move note to notebook \"{notebookTitle}\"? If there are any note under this note thoose will be moved too.",
+        tr: "Bu notu \"{notebookTitle}\" defterine taşımak istediğinize emin misiniz? Notun altında herhangi bir not bulunuyorsa onlar da taşınacaktır."
+    },
+    moveNoteToNotebookAreYouSureConfirmLabel: {
+        en: "Move",
+        tr: "Taşı"
+    },
+
 };
 
 export default translations;

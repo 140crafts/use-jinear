@@ -38,12 +38,6 @@ const NoteActionBar: React.FC = () => {
                         {statusLabel}
                     </Button>
                 }
-                <Button
-                    variant={ButtonVariants.outline}
-                    heightVariant={ButtonHeight.short}
-                >
-                    {t('publishNote')}
-                </Button>
             </div>
 
         </div>

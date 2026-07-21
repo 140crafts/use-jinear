@@ -15,4 +15,5 @@ public class NoteFilterVo {
     private String parentNoteId;
     private String noteId;
     private String ownerId;
+    private boolean notebookIdIsNull;
 }

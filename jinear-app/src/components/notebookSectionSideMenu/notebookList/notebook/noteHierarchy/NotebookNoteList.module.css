@@ -9,23 +9,7 @@
     border-left-width: thin;
 }
 
-.noteButtonGroup {
-    display: flex;
-    flex-direction: column;
-}
-
-.childContainer {
-    display: flex;
-    flex-direction: column;
-    padding: 0.25rem 0 0.25rem .5rem;
-}
-
-.noteButton {
-    flex: 1;
-    justify-content: flex-start;
-    gap: .5rem;
-}
-
 .noChild {
     text-align: center;
+    opacity: .5;
 }
