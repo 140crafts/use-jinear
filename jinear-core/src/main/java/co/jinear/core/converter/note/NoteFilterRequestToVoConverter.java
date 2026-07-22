@@ -23,5 +23,10 @@ public interface NoteFilterRequestToVoConverter {
             noteFilterVo.setOwnerId(currentAccountId);
             noteFilterVo.setNotebookIdIsNull(true);
         }
+        boolean retrievingExactNote = Objects.nonNull(noteFilterVo.getNoteId());
+        if (!retrievingExactNote) {
+            boolean parentIdIncludedInSearch = Objects.isNull(noteFilterVo.getParentNoteId());
+            noteFilterVo.setIncludeNullParentIds(!parentIdIncludedInSearch);
+        }
     }
 }

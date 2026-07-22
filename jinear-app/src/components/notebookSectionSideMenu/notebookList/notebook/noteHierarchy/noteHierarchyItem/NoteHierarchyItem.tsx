@@ -10,6 +10,8 @@ import {shortenStringIfMoreThanMaxLength} from "@/util/textUtil.ts";
 import NoteHierarchyList
     from "@/components/notebookSectionSideMenu/notebookList/notebook/noteHierarchy/NoteHierarchyList.tsx";
 import cn from "classnames";
+import Logger from "@/util/logger.ts";
+import {useMoveNoteMutation} from "@/api/noteOperationApi.ts";
 
 interface NoteHierarchyItemProps {
     workspace: WorkspaceDto,
@@ -19,6 +21,8 @@ interface NoteHierarchyItemProps {
     pathname: string;
 }
 
+const logger = Logger('NoteHierarchyItem');
+
 const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
                                                                  workspace,
                                                                  note,
@@ -27,19 +31,53 @@ const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
                                                                  pathname
                                                              }) => {
     const {t} = useTranslation();
-    const [open, toggle] = useToggle(false);
+    const [open, toggle, setToggle] = useToggle(false);
+
+    const [moveNote] = useMoveNoteMutation();
 
     const path = `/${workspace.username}/notebook/${note?.notebookId ?? DRAFTS_NOTEBOOK_ID}/note/${note?.noteId}`;
     const atPath = pathname?.indexOf(path) != -1;
 
+    const _onDragStart = (event: React.DragEvent) => {
+        logger.log({_onDragStart: note?.noteId, event});
+        event.dataTransfer.setData("text", `${note?.noteId}`);
+        setToggle(false);
+    };
+
+    const _onDragOver = (event: React.DragEvent) => {
+        event.preventDefault();
+        const draggedNoteId = event.dataTransfer.getData("text/plain");
+        const currentNoteId = note?.noteId;
+        if (currentNoteId != draggedNoteId) {
+            // setToggle(true);
+        }
+    }
+
+    const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+        e.preventDefault();
+        const draggedNoteId = e.dataTransfer.getData("text/plain");
+        const currentNoteId = note?.noteId;
+        logger.log({draggedNoteId, currentNoteId})
+        currentNoteId != draggedNoteId && workspace && draggedNoteId && currentNoteId && moveNote({
+            workspaceId: workspace.workspaceId,
+            noteId: draggedNoteId,
+            parentNoteId: currentNoteId
+        })
+    }
+
     return (
         <div className={styles.noteButtonGroup}>
-            <div className={cn(styles.noteRow, atPath && styles.noteAtPath)}>
+            <div className={cn(styles.noteRow, atPath && styles.noteAtPath)}
+                 draggable={true}
+                 onDragStart={_onDragStart}
+                 onDragOver={_onDragOver}
+                 onDrop={handleDrop}
+            >
                 <Button
                     heightVariant={ButtonHeight.mid}
                     variant={ButtonVariants.hoverFilled2}
                     onClick={toggle}
-                    className={cn(styles.iconButton,forDrafts && styles.hoverBgNone)}
+                    className={cn(styles.iconButton, forDrafts && styles.hoverBgNone)}
                 >
                     <LuFileText className={cn('icon', styles.fileIcon, forDrafts && styles.shown)}/>
                     {(open ? <LuChevronDown className={cn('icon', styles.dropButton, forDrafts && styles.hidden)}/> :
@@ -50,6 +88,7 @@ const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
                     heightVariant={ButtonHeight.mid}
                     href={path}
                     className={cn(styles.noteButton)}
+                    draggable={false}
                 >
                 <span className={'line-clamp'}>
                     {shortenStringIfMoreThanMaxLength({
@@ -60,22 +99,6 @@ const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
                 </Button>
 
             </div>
-
-            {/*<Button*/}
-            {/*    heightVariant={ButtonHeight.short}*/}
-            {/*    variant={atPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}*/}
-            {/*    href={path}*/}
-            {/*    onClick={toggle}*/}
-            {/*    className={styles.noteButton}*/}
-            {/*>*/}
-
-            {/*    <span className={'line-clamp'}>*/}
-            {/*        {shortenStringIfMoreThanMaxLength({*/}
-            {/*            text: (note.title == null || note.title == '') ? t('untitledNote') : note.title,*/}
-            {/*            maxLength: 29*/}
-            {/*        })}*/}
-            {/*    </span>*/}
-            {/*</Button>*/}
 
             {!forDrafts && open &&
                 <div className={styles.childContainer}>

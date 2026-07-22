@@ -55,6 +55,7 @@ public class NoteFilterRepository {
         noteFilterCriteriaBuilder.addNotebookId(noteFilterVo.getNotebookId(), criteriaBuilder, noteRoot, predicateList);
         noteFilterCriteriaBuilder.addNotebookIdIsNull(noteFilterVo.isNotebookIdIsNull(), criteriaBuilder, noteRoot, predicateList);
         noteFilterCriteriaBuilder.addParentNoteId(noteFilterVo.getParentNoteId(), criteriaBuilder, noteRoot, predicateList);
+        noteFilterCriteriaBuilder.addParentNoteIdIsNull(noteFilterVo.getIncludeNullParentIds(), criteriaBuilder, noteRoot, predicateList);
         noteFilterCriteriaBuilder.addNoteId(noteFilterVo.getNoteId(), criteriaBuilder, noteRoot, predicateList);
         noteFilterCriteriaBuilder.addOwnerId(noteFilterVo.getOwnerId(), criteriaBuilder, noteRoot, predicateList);
         return predicateList;
