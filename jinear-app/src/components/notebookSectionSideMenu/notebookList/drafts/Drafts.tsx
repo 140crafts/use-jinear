@@ -33,12 +33,13 @@ const Drafts: React.FC<DraftsProps> = ({workspace}) => {
             </Button>
             {open &&
                 <div className={styles.notebookNotesContainer}>
-                <PendingDraftList workspace={workspace}/>
-                <NoteHierarchyList
-                    workspace={workspace}
-                    forDrafts={true}
-                />
-            </div>}
+                    <PendingDraftList workspace={workspace}/>
+                    <NoteHierarchyList
+                        workspace={workspace}
+                        forDrafts={true}
+                    />
+                </div>
+            }
         </div>
     );
 }

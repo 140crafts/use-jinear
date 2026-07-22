@@ -14,6 +14,7 @@ public interface NoteFilterRequestToVoConverter {
 
     @Mapping(target = "ownerId", ignore = true)
     @Mapping(target = "notebookIdIsNull", ignore = true)
+    @Mapping(target = "parentNoteIdIsNull", ignore = true)
     NoteFilterVo map(NoteFilterRequest noteFilterRequest, String currentAccountId);
 
     @AfterMapping
@@ -24,9 +25,7 @@ public interface NoteFilterRequestToVoConverter {
             noteFilterVo.setNotebookIdIsNull(true);
         }
         boolean retrievingExactNote = Objects.nonNull(noteFilterVo.getNoteId());
-        if (!retrievingExactNote) {
-            boolean parentIdIncludedInSearch = Objects.isNull(noteFilterVo.getParentNoteId());
-            noteFilterVo.setIncludeNullParentIds(!parentIdIncludedInSearch);
-        }
+        boolean parentNoteIdProvided = Objects.nonNull(noteFilterVo.getParentNoteId());
+        noteFilterVo.setParentNoteIdIsNull(!retrievingExactNote && !parentNoteIdProvided);
     }
 }

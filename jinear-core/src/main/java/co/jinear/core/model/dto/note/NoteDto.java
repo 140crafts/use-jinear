@@ -3,6 +3,7 @@ package co.jinear.core.model.dto.note;
 import co.jinear.core.model.dto.BaseDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
+import co.jinear.core.model.dto.notetag.NoteTagAssignmentDto;
 import co.jinear.core.model.dto.notetag.NoteTagDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import lombok.Getter;
@@ -33,4 +34,6 @@ public class NoteDto extends BaseDto {
     private NotePathDto path;
     @Nullable
     private NotebookDto notebook;
+    @Nullable
+    private Set<NoteTagAssignmentDto> noteTagAssignments;
 }

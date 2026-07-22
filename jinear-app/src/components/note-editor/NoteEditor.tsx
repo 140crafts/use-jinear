@@ -1,4 +1,4 @@
-import React, {useCallback, useRef} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import styles from './NoteEditor.module.css';
 import NoteHeader from "@/components/note-editor/note-header/NoteHeader.tsx";
 import NoteActionBar from "@/components/note-editor/note-action-bar/NoteActionBar.tsx";

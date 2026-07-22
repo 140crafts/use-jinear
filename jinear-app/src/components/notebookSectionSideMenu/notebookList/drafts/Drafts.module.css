@@ -6,6 +6,9 @@
 .notebookButton {
     text-align: start;
     gap: .5rem;
+
+    padding-left: .25rem;
+    padding-right: .25rem;
 }
 
 .notebookName {
@@ -13,3 +16,8 @@
     font-size: 0.75rem;
 }
 
+.notebookNotesContainer{
+    padding-left: .25rem;
+    margin-left: 0.75rem;
+    border-left: 1px solid var(--c-primary-shade-1);
+}

@@ -34,6 +34,7 @@ const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
     const [open, toggle, setToggle] = useToggle(false);
 
     const [moveNote] = useMoveNoteMutation();
+    const isNoteDraft = note?.notebookId == null;
 
     const path = `/${workspace.username}/notebook/${note?.notebookId ?? DRAFTS_NOTEBOOK_ID}/note/${note?.noteId}`;
     const atPath = pathname?.indexOf(path) != -1;
@@ -68,7 +69,7 @@ const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
     return (
         <div className={styles.noteButtonGroup}>
             <div className={cn(styles.noteRow, atPath && styles.noteAtPath)}
-                 draggable={true}
+                 draggable={!isNoteDraft}
                  onDragStart={_onDragStart}
                  onDragOver={_onDragOver}
                  onDrop={handleDrop}

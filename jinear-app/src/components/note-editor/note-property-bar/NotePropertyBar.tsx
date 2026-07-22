@@ -29,7 +29,9 @@ const NotePropertyBar: React.FC<NotePropertyBarProps> = ({}) => {
         text: note?.notebook?.title ?? '',
         maxLength: 12,
         shortenFromMiddle: true
-    })
+    });
+    
+    const notebookTooltip = isDraft ? undefined : originalNotebookTitleTooLong ? originalNotebookTitle : t('changeNoteNotebook');
 
     const popAreYouSureToMoveToNotebookModal = (notebook: NotebookDto) => {
         dispatch(
@@ -66,7 +68,7 @@ const NotePropertyBar: React.FC<NotePropertyBarProps> = ({}) => {
                 heightVariant={ButtonHeight.short}
                 onClick={popNotebookPicker}
                 className={styles.button}
-                data-tooltip-multiline={isDraft ? t('changeNoteNotebook') : originalNotebookTitleTooLong ? originalNotebookTitle : undefined}
+                data-tooltip-multiline={notebookTooltip}
             >
                 <LuNotebook className={styles.icon}/>
                 <span>{changeNotebookButtonLabel}</span>
