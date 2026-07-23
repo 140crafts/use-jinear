@@ -6,7 +6,16 @@
 .notebookButtonContainer {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: stretch;
+    border-radius: var(--border-radius);
+}
+
+.atPath {
+    background-color: var(--c-primary-shade-1);
+}
+
+.atPath:hover{
+    background-color: var(--c-primary-shade-1-op05);
 }
 
 .notebookButton {
@@ -17,8 +26,8 @@
     padding-right: .25rem;
 }
 
-.notebookDetailsButton{
-padding: 0.42rem 0.25rem;
+.notebookDetailsButton {
+    padding: 0.42rem 0.25rem;
 }
 
 .notebookName {

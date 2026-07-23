@@ -26,9 +26,11 @@ const Drafts: React.FC<DraftsProps> = ({workspace}) => {
                 onClick={toggle}
             >
                 {open ? <LuFolderOpen className={'icon'}/> : <LuFolder className={'icon'}/>}
-
                 <span className={cn(styles.notebookName, 'bold', "single-line")}>
                     {t('notebookDraftsTitle')}
+                </span>
+                <span data-tooltip-multiline={t('notebookDraftsPrivateTooltip')}>
+                    {t('notebookDraftsPrivate')}
                 </span>
             </Button>
             {open &&

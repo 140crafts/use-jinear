@@ -12,6 +12,7 @@ import NoteHierarchyList
 import cn from "classnames";
 import Logger from "@/util/logger.ts";
 import {useMoveNoteMutation} from "@/api/noteOperationApi.ts";
+import toast from "react-hot-toast";
 
 interface NoteHierarchyItemProps {
     workspace: WorkspaceDto,
@@ -22,6 +23,8 @@ interface NoteHierarchyItemProps {
 }
 
 const logger = Logger('NoteHierarchyItem');
+
+export const NOTE_DRAG_TYPE = "application/x-jinear-note";
 
 const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
                                                                  workspace,
@@ -41,31 +44,44 @@ const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
 
     const _onDragStart = (event: React.DragEvent) => {
         logger.log({_onDragStart: note?.noteId, event});
-        event.dataTransfer.setData("application/json", JSON.stringify(note ?? {}));
+        event.dataTransfer.setData(NOTE_DRAG_TYPE, JSON.stringify(note));
+        event.dataTransfer.setData("text/plain", note?.title ?? "");
+        event.dataTransfer.effectAllowed = "move";
         setToggle(false);
     };
 
     const _onDragOver = (event: React.DragEvent) => {
+        if (!event.dataTransfer.types.includes(NOTE_DRAG_TYPE)) return;
         event.preventDefault();
-        const note = JSON.parse(event.dataTransfer.getData("application/json")) as NoteDto;
-        const draggedNoteId = note?.noteId;
-        const currentNoteId = note?.noteId;
-        if (currentNoteId != draggedNoteId) {
-            // setToggle(true);
-        }
+        event.dataTransfer.dropEffect = "move";
+
     }
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
-        const note = JSON.parse(e.dataTransfer.getData("application/json")) as NoteDto;
-        const draggedNoteId = note?.noteId;
-        const currentNoteId = note?.noteId;
-        logger.log({draggedNoteId, currentNoteId})
-        currentNoteId != draggedNoteId && workspace && draggedNoteId && currentNoteId && moveNote({
-            workspaceId: workspace.workspaceId,
-            noteId: draggedNoteId,
-            parentNoteId: currentNoteId
-        })
+        if (isNoteDraft) {
+            toast(t("youCanNotMoveNotesUnderDrafts"))
+            return;
+        }
+        try {
+            const raw = e.dataTransfer.getData(NOTE_DRAG_TYPE);
+            const dragged = JSON.parse(raw);
+
+            const draggedNoteId = dragged?.noteId;
+            const currentNoteId = note?.noteId;
+            logger.log({draggedNoteId, currentNoteId})
+
+            if (!draggedNoteId || !currentNoteId || !workspace) return;
+            if (draggedNoteId === currentNoteId) return;
+
+            moveNote({
+                workspaceId: workspace.workspaceId,
+                noteId: draggedNoteId,
+                parentNoteId: currentNoteId
+            })
+        } catch {
+            return;
+        }
     }
 
     return (

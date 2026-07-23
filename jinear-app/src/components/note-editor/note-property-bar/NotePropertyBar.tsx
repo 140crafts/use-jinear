@@ -19,7 +19,7 @@ interface NotePropertyBarProps {
 const NotePropertyBar: React.FC<NotePropertyBarProps> = ({}) => {
     const navigate = useNavigate();
     const {t} = useTranslation();
-    const {workspace, note} = useNoteEditorContext();
+    const {workspace, note, isPendingCreate} = useNoteEditorContext();
     const dispatch = useAppDispatch();
     const [changeNotebook, {isLoading: isChangeNotebookLoading}] = useChangeNotebookMutation();
 
@@ -70,12 +70,13 @@ const NotePropertyBar: React.FC<NotePropertyBarProps> = ({}) => {
                 onClick={popNotebookPicker}
                 className={styles.button}
                 data-tooltip-multiline={notebookTooltip}
+                disabled={isPendingCreate}
             >
                 <LuNotebook className={styles.icon}/>
                 <span>{changeNotebookButtonLabel}</span>
             </Button>
 
-            <div className={styles.seperator} />
+            <div className={styles.seperator}/>
 
             <NoteTags/>
 

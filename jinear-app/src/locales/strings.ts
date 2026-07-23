@@ -5711,6 +5711,18 @@ const translations = {
         en: 'Drafts',
         tr: 'Tasklaklar'
     },
+    notebookDraftsPrivate: {
+        en: 'Private',
+        tr: 'Gizli'
+    },
+    notebookDraftsPrivateTooltip: {
+        en: 'Only you can see your drafts',
+        tr: 'Taslaklarınızı yanlızca siz görüntüleyebilirsiniz'
+    },
+    youCanNotMoveNotesUnderDrafts:{
+        en: 'You can not move notes under drafts.',
+        tr: 'Notları taslakların altına atamazsınız.'
+    },
     untitledNote: {
         en: 'Untitled',
         tr: 'Başlıksız'

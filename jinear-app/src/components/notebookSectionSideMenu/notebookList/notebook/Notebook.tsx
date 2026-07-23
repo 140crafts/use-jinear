@@ -14,6 +14,9 @@ import {useChangeNotebookMutation, useMoveNoteMutation} from "@/api/noteOperatio
 import {closeDialogModal, popDialogModal} from "@/slice/modalSlice.ts";
 import {useAppDispatch} from "@/store";
 import useTranslation from "@/locals/useTranslation.ts";
+import {
+    NOTE_DRAG_TYPE
+} from "@/components/notebookSectionSideMenu/notebookList/notebook/noteHierarchy/noteHierarchyItem/NoteHierarchyItem.tsx";
 
 interface NotebookProps {
     workspace: WorkspaceDto,
@@ -67,11 +70,19 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
-        const note = JSON.parse(e.dataTransfer.getData("application/json")) as NoteDto;
-        const draggedNoteId = note?.noteId;
+        const raw = e.dataTransfer.getData(NOTE_DRAG_TYPE);
+        if (!raw) return;
+
+        let dragged: NoteDto;
+        try {
+            dragged = JSON.parse(raw);
+        } catch {
+            return;
+        }
+        const draggedNoteId = dragged?.noteId;
         logger.log({draggedNoteId})
-        if (note?.notebookId != notebook.notebookId) {
-            popAreYouSureToMoveToNotebookModal(note);
+        if (dragged?.notebookId != notebook.notebookId) {
+            popAreYouSureToMoveToNotebookModal(dragged);
             return;
         }
         workspace && draggedNoteId && moveNote({
@@ -84,10 +95,10 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
     return (
         <div className={styles.container}>
 
-            <div className={styles.notebookButtonContainer}>
+            <div className={cn(styles.notebookButtonContainer, atPath && styles.atPath)}>
                 <Button
                     className={styles.notebookButton}
-                    variant={atPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+                    variant={ButtonVariants.hoverFilled2}
                     onClick={toggle}
                     onDragOver={e => e.preventDefault()}
                     onDrop={handleDrop}
@@ -99,7 +110,7 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
                     <Icon className={'icon'}/>
                 </Button>
                 <Button
-                    variant={atPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+                    variant={ButtonVariants.hoverFilled2}
                     className={styles.notebookDetailsButton}
                     href={`/${workspace.username}/notebook/${notebook.notebookId}`}
                 >

@@ -44,7 +44,7 @@ const NotePath: React.FC<NotePathProps> = ({}) => {
                         data-tooltip-multiline={notePath.title?.length > 24 ? notePath.title : undefined}
                     >
                         {shortenStringIfMoreThanMaxLength({
-                            text: notePath.title,
+                            text: notePath.title == '' || notePath.title == null ? t('untitledNote') : notePath.title,
                             maxLength: 24,
                             shortenFromMiddle: true
                         })}
