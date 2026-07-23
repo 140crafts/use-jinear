@@ -27,13 +27,11 @@ public class NoteDto extends BaseDto {
     private String richTextId;
     private RichTextDto richText;
     @Nullable
-    private Set<NoteTagDto> tags;
+    private Set<NoteTagAssignmentDto> noteTagAssignments;
     @Nullable
     private PlainAccountProfileDto owner;
     @Nullable
     private NotePathDto path;
     @Nullable
     private NotebookDto notebook;
-    @Nullable
-    private Set<NoteTagAssignmentDto> noteTagAssignments;
 }

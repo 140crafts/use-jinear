@@ -4,6 +4,7 @@ import co.jinear.core.manager.notetag.NoteTagManager;
 import co.jinear.core.model.request.notetag.AssignNoteTagRequest;
 import co.jinear.core.model.request.notetag.NoteTagInitializeRequest;
 import co.jinear.core.model.request.notetag.NoteTagUpdateRequest;
+import co.jinear.core.model.request.notetag.UpdateNoteTagAssignmentsRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.notetag.NoteTagInitializeResponse;
 import co.jinear.core.model.response.notetag.NoteTagListingResponse;
@@ -47,6 +48,12 @@ public class NoteTagController {
     @ResponseStatus(HttpStatus.OK)
     public BaseResponse assign(@Valid @RequestBody AssignNoteTagRequest request) {
         return noteTagManager.assign(request);
+    }
+
+    @PostMapping("/assignments")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse updateAssignments(@Valid @RequestBody UpdateNoteTagAssignmentsRequest request) {
+        return noteTagManager.updateAssignments(request);
     }
 
     @PostMapping("/unassign")

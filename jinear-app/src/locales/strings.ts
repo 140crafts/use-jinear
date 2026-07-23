@@ -5744,6 +5744,51 @@ const translations = {
         en: "Move",
         tr: "Taşı"
     },
+    addNoteTag: {
+        en: "Add Tag",
+        tr: "Etiket Ekle"
+    },
+    noteTagPickerModalTitle: {
+        en: "Select Tags",
+        tr: "Etiket Seç"
+    },
+    noteTagPickerModalSearchOrCreatePlaceholder: {
+        en: "Search or create tag...",
+        tr: "Etiket ara veya oluştur..."
+    },
+    noteTagPickerModalEmptyState: {
+        en: "There aren't any tags in this notebook yet. Type a name above to create one.",
+        tr: "Bu defterde henüz hiç etiket yok. Oluşturmak için yukarıya bir isim yazın."
+    },
+    noteTagPickerModalNoMatch: {
+        en: "No tags found",
+        tr: "Hiçbir etiket bulunamadı"
+    },
+    noteTagPickerModalCreateTag: {
+        en: "Create tag",
+        tr: "Etiket oluştur"
+    },
+    noteTagPickerModalSelectButton: {
+        en: "Select",
+        tr: "Seç"
+    },
+    noteTagPickerModalCancelButton: {
+        en: "Cancel",
+        tr: "Vazgeç"
+    },
+
+    deleteNoteAreYouSureTitle: {
+        en: "Delete Note",
+        tr: "Notu Sil"
+    },
+    deleteNoteAreYouSureText: {
+        en: "Are you sure to delete this note? Any notes under this will also be deleted. This action can not undone.",
+        tr: "Bu notu silmek istediginize emin misiniz? Eğer bu notun altında başka notlar bulunuyorsa onlar da silinecektir. Bu işlem geri alınamaz. "
+    },
+    deleteNoteAreYouSureConfirmLabel: {
+        en: "Delete Note",
+        tr: "Notu Sil"
+    },
 
 };
 

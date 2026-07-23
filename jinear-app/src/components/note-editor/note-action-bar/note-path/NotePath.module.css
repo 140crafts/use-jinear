@@ -9,10 +9,28 @@
     margin: 0 4px;
     color: var(--c-secondary-shade-1);
     pointer-events: none;
+    opacity: 0.5;
 }
 
 .breadcrumbButton {
     padding-left: 0.15rem !important;
     padding-right: 0.15rem !important;
     overflow: visible !important;
+    opacity: 0.5;
+}
+
+.bold {
+    opacity: 1;
+    font-weight: bold;
+}
+
+.breadcrumbButton:hover {
+    opacity: 1;
+}
+
+.buttonContent {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .25rem;
 }

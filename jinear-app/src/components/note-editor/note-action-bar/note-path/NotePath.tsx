@@ -6,6 +6,7 @@ import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 import useTranslation from "@/locals/useTranslation.ts";
 import cn from "classnames";
 import {shortenStringIfMoreThanMaxLength} from "@/util/textUtil.ts";
+import {LuNotebook} from "react-icons/lu";
 
 interface NotePathProps {
 
@@ -27,16 +28,19 @@ const NotePath: React.FC<NotePathProps> = ({}) => {
                 className={cn(styles.breadcrumbButton, 'line-clamp')}
                 data-tooltip-multiline={notebookTitle?.length > 12 ? notebookTitle : undefined}
             >
-                {shortenStringIfMoreThanMaxLength({text: notebookTitle, maxLength: 12})}
+                <div className={styles.buttonContent}>
+                    <LuNotebook className={'icon'}/>
+                    {shortenStringIfMoreThanMaxLength({text: notebookTitle, maxLength: 12})}
+                </div>
             </Button>
-            <span className={styles.separator}>{">"}</span>
+            <span className={styles.separator}>{"/"}</span>
 
             {path?.path?.map((notePath, index) =>
                 <React.Fragment key={`note-path-${notePath.noteId}`}>
                     <Button
                         href={`/${workspace?.username}/notebook/${notebookId}/note/${notePath.noteId}`}
                         heightVariant={ButtonHeight.short}
-                        className={cn(styles.breadcrumbButton, 'line-clamp')}
+                        className={cn(styles.breadcrumbButton, 'line-clamp', index == path.path.length - 1 && styles.bold)}
                         data-tooltip-multiline={notePath.title?.length > 24 ? notePath.title : undefined}
                     >
                         {shortenStringIfMoreThanMaxLength({
@@ -45,7 +49,7 @@ const NotePath: React.FC<NotePathProps> = ({}) => {
                             shortenFromMiddle: true
                         })}
                     </Button>
-                    {index < path.path.length - 1 && <span className={styles.separator}>{">"}</span>}
+                    {index < path.path.length - 1 && <span className={styles.separator}>{"/"}</span>}
                 </React.Fragment>
             )}
         </div>

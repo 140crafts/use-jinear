@@ -13,3 +13,7 @@
     text-align: center;
     opacity: .5;
 }
+
+.lineLoading{
+    background-color: var(--c-primary-shade-0);
+}

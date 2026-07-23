@@ -64,16 +64,11 @@ public class Note extends BaseEntity {
     @OneToMany(mappedBy = "note", fetch = FetchType.EAGER)
     @Where(clause = "passive_id is null")
     @OrderBy("createdDate ASC")
-    private Set<NoteTagAssignment> tags;
+    private Set<NoteTagAssignment> noteTagAssignments;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @Where(clause = "passive_id is null")
     @JoinColumn(name = "owner_id", referencedColumnName = "account_id", insertable = false, updatable = false)
     private Account owner;
-
-    @OneToMany(mappedBy = "note")
-    @Where(clause = "passive_id is null")
-    @OrderBy("createdDate ASC")
-    private Set<NoteTagAssignment> noteTagAssignments;
 }

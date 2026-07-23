@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: .5rem;
+}
+
+.noteTag {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: 0.25rem 0.75rem;
+    border-style: solid;
+    border-width: thin;
+    border-color: var(--c-primary-shade-1);
+    border-radius: var(--border-radius);
+    background-color: var(--c-primary-shade-0-op05);
+}
+
+.circle {
+    width: 10px;
+    height: 10px;
+    border-radius: 5px;
+}
+
+.addNoteTagButton {
+    border-style: dashed;
+}

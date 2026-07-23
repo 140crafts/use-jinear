@@ -4,7 +4,8 @@ import type {
     NoteTagInitializeRequest,
     NoteTagInitializeResponse,
     NoteTagListingResponse,
-    NoteTagUpdateRequest
+    NoteTagUpdateRequest,
+    UpdateNoteTagAssignmentsRequest
 } from "@/model/be/jinear-core";
 import {api} from "./api";
 
@@ -52,6 +53,15 @@ export const noteTagApi = api.injectEndpoints({
             invalidatesTags: ["v1/note/notebook/{notebookId}/{noteId}"]
         }),
         //
+        updateNoteTagAssignments: build.mutation<BaseResponse, UpdateNoteTagAssignmentsRequest>({
+            query: (body: UpdateNoteTagAssignmentsRequest) => ({
+                url: `v1/note/tag/assignments`,
+                method: "POST",
+                body
+            }),
+            invalidatesTags: ["v1/note/notebook/{notebookId}/{noteId}", "v1/note/filter"]
+        }),
+        //
         unassignNoteTag: build.mutation<BaseResponse, AssignNoteTagRequest>({
             query: (body: AssignNoteTagRequest) => ({
                 url: `v1/note/tag/unassign`,
@@ -69,6 +79,7 @@ export const {
     useUpdateNoteTagMutation,
     useDeleteNoteTagMutation,
     useAssignNoteTagMutation,
+    useUpdateNoteTagAssignmentsMutation,
     useUnassignNoteTagMutation
 } = noteTagApi;
 
@@ -79,6 +90,7 @@ export const {
         updateNoteTag,
         deleteNoteTag,
         assignNoteTag,
+        updateNoteTagAssignments,
         unassignNoteTag
     }
 } = noteTagApi;

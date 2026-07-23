@@ -41,13 +41,14 @@ const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
 
     const _onDragStart = (event: React.DragEvent) => {
         logger.log({_onDragStart: note?.noteId, event});
-        event.dataTransfer.setData("text", `${note?.noteId}`);
+        event.dataTransfer.setData("application/json", JSON.stringify(note ?? {}));
         setToggle(false);
     };
 
     const _onDragOver = (event: React.DragEvent) => {
         event.preventDefault();
-        const draggedNoteId = event.dataTransfer.getData("text/plain");
+        const note = JSON.parse(event.dataTransfer.getData("application/json")) as NoteDto;
+        const draggedNoteId = note?.noteId;
         const currentNoteId = note?.noteId;
         if (currentNoteId != draggedNoteId) {
             // setToggle(true);
@@ -56,7 +57,8 @@ const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
-        const draggedNoteId = e.dataTransfer.getData("text/plain");
+        const note = JSON.parse(e.dataTransfer.getData("application/json")) as NoteDto;
+        const draggedNoteId = note?.noteId;
         const currentNoteId = note?.noteId;
         logger.log({draggedNoteId, currentNoteId})
         currentNoteId != draggedNoteId && workspace && draggedNoteId && currentNoteId && moveNote({

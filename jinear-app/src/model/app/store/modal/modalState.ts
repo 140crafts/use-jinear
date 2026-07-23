@@ -3,6 +3,7 @@ import type {
     IntegrationProvider,
     MilestoneDto,
     NotebookDto,
+    NoteTagDto,
     ProjectDto,
     ProjectPriorityType,
     ProjectStateType,
@@ -299,6 +300,12 @@ export interface PasswordChangeModalState extends ModalState {
 export interface NotebookPickerModalState extends ModalState {
     workspaceId?: string,
     onPick?: (notebook: NotebookDto) => void
+}
+
+export interface NoteTagPickerModalState extends ModalState {
+    notebookId?: string,
+    initialSelection?: NoteTagDto[],
+    onPick?: (pickedList: NoteTagDto[]) => void
 }
 
 export interface MaterialFolderPickerModalState extends ModalState {

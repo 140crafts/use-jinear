@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-07-22 22:49:56.
+// Generated using typescript-generator version 3.0.1157 on 2026-07-23 00:10:16.
 
 export interface BaseDto {
     createdDate: Date;
@@ -506,11 +506,10 @@ export interface NoteDto extends BaseDto {
     title: string;
     richTextId: string;
     richText: RichTextDto;
-    tags?: NoteTagDto[] | null;
+    noteTagAssignments?: NoteTagAssignmentDto[] | null;
     owner?: PlainAccountProfileDto | null;
     path?: NotePathDto | null;
     notebook?: NotebookDto | null;
-    noteTagAssignments?: NoteTagAssignmentDto[] | null;
 }
 
 export interface NotePathDto {
@@ -1470,6 +1469,11 @@ export interface NoteTagUpdateRequest extends BaseRequest {
     color?: string | null;
 }
 
+export interface UpdateNoteTagAssignmentsRequest extends BaseRequest {
+    noteId: string;
+    noteTagIds: string[];
+}
+
 export interface NotificationTargetInitializeRequest extends BaseRequest {
     externalTargetId: string;
     targetType?: NotificationTargetType | null;
@@ -2394,9 +2398,8 @@ export interface Note extends BaseEntity {
     parent: Note;
     notebook: Notebook;
     richText: RichText;
-    tags: NoteTagAssignment[];
-    owner: Account;
     noteTagAssignments: NoteTagAssignment[];
+    owner: Account;
 }
 
 export interface BaseEntity {

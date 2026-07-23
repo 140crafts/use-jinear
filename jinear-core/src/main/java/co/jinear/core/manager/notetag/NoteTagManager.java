@@ -9,6 +9,7 @@ import co.jinear.core.model.dto.notetag.NoteTagDto;
 import co.jinear.core.model.request.notetag.AssignNoteTagRequest;
 import co.jinear.core.model.request.notetag.NoteTagInitializeRequest;
 import co.jinear.core.model.request.notetag.NoteTagUpdateRequest;
+import co.jinear.core.model.request.notetag.UpdateNoteTagAssignmentsRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.notetag.NoteTagInitializeResponse;
 import co.jinear.core.model.response.notetag.NoteTagListingResponse;
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @Service
@@ -96,6 +98,17 @@ public class NoteTagManager {
         return new BaseResponse();
     }
 
+    public BaseResponse updateAssignments(UpdateNoteTagAssignmentsRequest request) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        NoteDto noteDto = noteRetrieveService.retrieve(request.getNoteId());
+        validateNotebookAccessById(currentAccountId, noteDto.getNotebookId());
+        request.getNoteTagIds().forEach(noteTagId -> validateTagIsWithinNotebook(noteTagId, noteDto.getNotebookId()));
+        log.info("Update note tag assignments has started. currentAccountId: {}", currentAccountId);
+        String passiveId = noteTagAssignmentOperationService.updateAs(request.getNoteId(), request.getNoteTagIds());
+        assignPassiveIdOwnershipIfExists(currentAccountId, passiveId);
+        return new BaseResponse();
+    }
+
     public BaseResponse unassign(AssignNoteTagRequest request) {
         String currentAccountId = sessionInfoService.currentAccountId();
         NoteDto noteDto = noteRetrieveService.retrieve(request.getNoteId());
@@ -104,6 +117,12 @@ public class NoteTagManager {
         String passiveId = passiveService.createUserActionPassive(currentAccountId);
         noteTagAssignmentOperationService.unassign(request.getNoteId(), request.getNoteTagId(), passiveId);
         return new BaseResponse();
+    }
+
+    private void assignPassiveIdOwnershipIfExists(String currentAccountId, String passiveId) {
+        if (Objects.nonNull(passiveId)) {
+            passiveService.assignOwnership(passiveId, currentAccountId);
+        }
     }
 
     private NotebookDto validateNotebookAccessById(String currentAccountId, String notebookId) {

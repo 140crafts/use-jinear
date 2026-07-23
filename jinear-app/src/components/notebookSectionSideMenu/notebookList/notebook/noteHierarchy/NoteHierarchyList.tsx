@@ -50,7 +50,7 @@ const NoteHierarchyList: React.FC<NoteHierarchyListProps> = ({
 
     return (
         <div className={styles.container}>
-            {isLoading && <InfiniteLineLoading/>}
+            {isLoading && <InfiniteLineLoading className={styles.lineLoading}/>}
             {notes?.length == 0 && <span className={styles.noChild}>{t('noteListNoChildNotes')}</span>}
             {notes?.map(note =>
                 <NoteHierarchyItem

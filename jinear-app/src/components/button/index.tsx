@@ -14,7 +14,7 @@ export const ButtonVariants = {
     hoverFilled2: "hover-filled2",
     blur: "blur",
     brandColor: "brandColor",
-    link:'link'
+    link: 'link'
 };
 
 export const ButtonHeight = {
@@ -88,6 +88,8 @@ interface ButtonProps {
     style?: any;
     download?: string;
     draggable?: boolean;
+    onDragOver?: (event: React.DragEvent<HTMLButtonElement>) => void;
+    onDrop?: (event: React.DragEvent<any>) => void;
 }
 
 const Button: React.FC<ButtonProps> = ({

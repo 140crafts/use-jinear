@@ -46,6 +46,7 @@ import UploadStatusModal from "@/components/modal/uploadStatusModal/UploadStatus
 import PasswordChangeModal from "@/components/modal/passwordChangeModal/PasswordChangeModal.tsx";
 import NotebookInitializeModal from "@/components/modal/notebookInitializeModal/NotebookInitializeModal.tsx";
 import NotebookPickerModal from "@/components/modal/notebookPickerModal/NotebookPickerModal.tsx";
+import NoteTagPickerModal from "@/components/modal/noteTagPickerModal/NoteTagPickerModal.tsx";
 
 interface WorkspaceModalProviderProps {
 }
@@ -92,6 +93,7 @@ const workspaceModals: any = (
         <UpgradeWorkspaceModal/>
         <NotebookInitializeModal/>
         <NotebookPickerModal/>
+        <NoteTagPickerModal/>
 
         <PasswordChangeModal/>
         <UploadStatusModal/>

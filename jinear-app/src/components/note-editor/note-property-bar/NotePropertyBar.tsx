@@ -10,6 +10,7 @@ import type {NotebookDto} from "@/be/jinear-core.ts";
 import {useNavigate} from "react-router-dom";
 import {LuNotebook} from "react-icons/lu";
 import {shortenStringIfMoreThanMaxLength} from "@/util/textUtil.ts";
+import NoteTags from "@/components/note-editor/note-property-bar/note-tags/NoteTags.tsx";
 
 interface NotePropertyBarProps {
 
@@ -30,7 +31,7 @@ const NotePropertyBar: React.FC<NotePropertyBarProps> = ({}) => {
         maxLength: 12,
         shortenFromMiddle: true
     });
-    
+
     const notebookTooltip = isDraft ? undefined : originalNotebookTitleTooLong ? originalNotebookTitle : t('changeNoteNotebook');
 
     const popAreYouSureToMoveToNotebookModal = (notebook: NotebookDto) => {
@@ -73,6 +74,10 @@ const NotePropertyBar: React.FC<NotePropertyBarProps> = ({}) => {
                 <LuNotebook className={styles.icon}/>
                 <span>{changeNotebookButtonLabel}</span>
             </Button>
+
+            <div className={styles.seperator} />
+
+            <NoteTags/>
 
         </div>
     );
