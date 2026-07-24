@@ -118,7 +118,7 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
                 </Button>
                 <Button
                     disabled={true}
-                    className={styles.notebookDetailsButton}
+                    className={styles.iconOnlyButton}
                     data-tooltip-multiline={t(tooltipKey)}>
                     <Icon className={'icon'}/>
                 </Button>

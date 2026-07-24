@@ -14,7 +14,7 @@
     background-color: var(--c-primary-shade-1);
 }
 
-.atPath:hover{
+.atPath:hover {
     background-color: var(--c-primary-shade-1-op05);
 }
 
@@ -28,6 +28,12 @@
 
 .notebookDetailsButton {
     padding: 0.42rem 0.25rem;
+}
+
+.iconOnlyButton {
+    padding: 0.42rem 0.25rem;
+    opacity: 1 !important;
+    cursor: default !important;
 }
 
 .notebookName {

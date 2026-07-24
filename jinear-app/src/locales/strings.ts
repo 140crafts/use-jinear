@@ -5659,6 +5659,50 @@ const translations = {
         en: "Everyone in the workspace can see this notebook and it's contents.",
         tr: "Çalışma alanındaki herkes bu defteri ve içeriğini görebilir."
     },
+    notebookSettingsGeneralSectionTitle: {
+        en: "Notebook settings",
+        tr: "Defter ayarları"
+    },
+    notebookSettingsGeneralSectionDescription: {
+        en: "Update this notebook's title and who can see it.",
+        tr: "Bu defterin başlığını ve kimlerin görebileceğini güncelleyin."
+    },
+    notebookSettingsTitleLabel: {
+        en: "Title",
+        tr: "Başlık"
+    },
+    notebookSettingsSaveButton: {
+        en: "Save",
+        tr: "Kaydet"
+    },
+    notebookSettingsSavedToast: {
+        en: "Notebook settings saved.",
+        tr: "Defter ayarları kaydedildi."
+    },
+    notebookSettingsMembersSectionTitle: {
+        en: "Members",
+        tr: "Üyeler"
+    },
+    notebookSettingsMembersSectionDescription: {
+        en: "Manage who can access this shared notebook.",
+        tr: "Bu paylaşılan deftere kimlerin erişebileceğini yönetin."
+    },
+    notebookSettingsMembersEmpty: {
+        en: "No members added yet.",
+        tr: "Henüz üye eklenmedi."
+    },
+    notebookSettingsAddMemberButton: {
+        en: "Add",
+        tr: "Ekle"
+    },
+    notebookSettingsMemberRemoveButton: {
+        en: "Remove",
+        tr: "Çıkar"
+    },
+    notebookSettingsMemberOwnerLabel: {
+        en: "Owner",
+        tr: "Sahip"
+    },
     noteListLoadMore: {
         en: 'Load More',
         tr: 'Daha Fazla Getir'
