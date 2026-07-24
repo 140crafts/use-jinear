@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './Notebook.module.css';
-import type {NotebookDto, NoteDto, WorkspaceDto} from "@/be/jinear-core.ts";
+import type {NotebookDto, NotebookVisibilityType, NoteDto, WorkspaceDto} from "@/be/jinear-core.ts";
 import Button, {ButtonVariants} from "@/components/button";
 import cn from "classnames";
 import {useLocation, useNavigate} from "react-router-dom";
@@ -13,10 +13,11 @@ import Logger from "@/util/logger.ts";
 import {useChangeNotebookMutation, useMoveNoteMutation} from "@/api/noteOperationApi.ts";
 import {closeDialogModal, popDialogModal} from "@/slice/modalSlice.ts";
 import {useAppDispatch} from "@/store";
-import useTranslation from "@/locals/useTranslation.ts";
+import useTranslation, {type StringKeys} from "@/locals/useTranslation.ts";
 import {
     NOTE_DRAG_TYPE
 } from "@/components/notebookSectionSideMenu/notebookList/notebook/noteHierarchy/noteHierarchyItem/NoteHierarchyItem.tsx";
+import type {IconType} from "react-icons/lib";
 
 interface NotebookProps {
     workspace: WorkspaceDto,
@@ -27,10 +28,16 @@ interface NotebookProps {
 const logger = Logger("Notebook")
 
 
-export const ACCESS_TYPE_ICON_MAP = {
+export const ACCESS_TYPE_ICON_MAP: Record<NotebookVisibilityType, IconType> = {
     PRIVATE: LuLock,
     SHARED: LuUsers,
     PUBLIC_WITHIN_WORKSPACE: LuUserCheck
+};
+
+export const ACCESS_TYPE_TOOLTIP_MAP: Record<NotebookVisibilityType, StringKeys> = {
+    PRIVATE: 'notebookVisibilityDetail_PRIVATE',
+    SHARED: 'notebookVisibilityDetail_SHARED',
+    PUBLIC_WITHIN_WORKSPACE: 'notebookVisibilityDetail_PUBLIC_WITHIN_WORKSPACE'
 };
 
 const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen = false}) => {
@@ -43,6 +50,7 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
     const atPath = pathname == notebookPath;
     const [open, toggle] = useToggle(initiallyOpen);
     const Icon = ACCESS_TYPE_ICON_MAP[notebook.visibility];
+    const tooltipKey = ACCESS_TYPE_TOOLTIP_MAP[notebook.visibility];
 
     const [moveNote] = useMoveNoteMutation();
     const [changeNotebook] = useChangeNotebookMutation();
@@ -107,6 +115,11 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
                     <span className={cn(styles.notebookName, 'bold', "line-clamp")}>
                     {notebook.title}
                     </span>
+                </Button>
+                <Button
+                    disabled={true}
+                    className={styles.notebookDetailsButton}
+                    data-tooltip-multiline={t(tooltipKey)}>
                     <Icon className={'icon'}/>
                 </Button>
                 <Button

@@ -9,6 +9,7 @@ import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 import {shortenStringIfMoreThanMaxLength} from "@/util/textUtil.ts";
 import {selectPendingDraftsOrdered} from "@/slice/noteDraftsSlice.ts";
 import {useLocation} from "react-router-dom";
+import cn from "classnames";
 
 interface PendingDraftListProps {
     workspace: WorkspaceDto;
@@ -41,7 +42,7 @@ const PendingDraftList: React.FC<PendingDraftListProps> = ({workspace}) => {
                                 heightVariant={ButtonHeight.short}
                                 variant={atPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
                                 href={path}
-                                className={`${styles.noteButton}${failed ? ` ${styles.failed}` : ''}`}
+                                className={cn(styles.noteButton, failed && styles.failed, 'line-clamp')}
                             >
                                 {shortenStringIfMoreThanMaxLength({text: entry.title || t('untitledNote'), maxLength: 29})}
                             </Button>

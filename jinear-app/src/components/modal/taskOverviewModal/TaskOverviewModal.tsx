@@ -32,10 +32,10 @@ const TaskOverviewModal: React.FC<TaskOverviewModalProps> = ({}) => {
         isFetching: isTaskResponseFetching,
     } = useRetrieveWithWorkspaceNameAndTeamTagNoQuery(
         {workspaceName: workspaceName || "", taskTag: taskTag || ""},
-        {skip: workspaceName == null || taskTag == null || task != null}
+        {skip: workspaceName == null || taskTag == null}
     );
 
-    const taskToView = task ? task : taskResponse?.data;
+    const taskToView = taskResponse?.data ? taskResponse?.data : task;
 
     const close = () => {
         dispatch(closeTaskOverviewModal());
