@@ -68,6 +68,7 @@ const BaseButton: FC<BaseButtonProps> = ({children, ...props}) => {
 
 interface ButtonProps {
     id?: string;
+    title?: string;
     children?: React.ReactNode;
     variant?: string;
     heightVariant?: string;

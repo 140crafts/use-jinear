@@ -4,7 +4,7 @@ import useTranslation from "@/locals/useTranslation.ts";
 import type {WorkspaceDto} from "@/be/jinear-core.ts";
 import {useToggle} from "@/hooks/useToggle.ts";
 import Button, {ButtonVariants} from "@/components/button";
-import {LuFolder, LuFolderOpen} from "react-icons/lu";
+import {LuEyeOff, LuFolder, LuFolderOpen} from "react-icons/lu";
 import cn from "classnames";
 import NoteHierarchyList
     from "@/components/notebookSectionSideMenu/notebookList/notebook/noteHierarchy/NoteHierarchyList.tsx";
@@ -30,7 +30,7 @@ const Drafts: React.FC<DraftsProps> = ({workspace}) => {
                     {t('notebookDraftsTitle')}
                 </span>
                 <span data-tooltip-multiline={t('notebookDraftsPrivateTooltip')}>
-                    {t('notebookDraftsPrivate')}
+                    <LuEyeOff className={'icon'}/>
                 </span>
             </Button>
             {open &&

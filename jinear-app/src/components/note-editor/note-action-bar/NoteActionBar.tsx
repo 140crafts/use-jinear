@@ -13,6 +13,9 @@ import {closeDialogModal, popDialogModal} from "@/slice/modalSlice.ts";
 import {useDeleteNoteMutation} from "@/api/noteOperationApi.ts";
 import {useNavigate} from "react-router-dom";
 import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
+import {removePendingDraft} from "@/slice/noteDraftsSlice.ts";
+import {deleteLocalDoc} from "@/components/tiptap/crdt/deleteLocalDoc.ts";
+import {store} from "@/store";
 
 type SyncState = "offline" | "saved_locally" | "syncing" | "synced" | "error";
 type SyncUi = { Icon: IconType; key: StringKeys; spin?: boolean };
@@ -28,7 +31,7 @@ const SYNC_UI: Record<SyncState, SyncUi> = {
 const NoteActionBar: React.FC = () => {
     const {t} = useTranslation();
     const navigate = useNavigate();
-    const {workspace, note, status, isPendingCreate} = useNoteEditorContext();
+    const {workspace, note, noteId, docKey, status, isPendingCreate} = useNoteEditorContext();
     const online = useOnlineStatus();
     const dispatch = useAppDispatch();
     const [deleteNote] = useDeleteNoteMutation();
@@ -44,20 +47,37 @@ const NoteActionBar: React.FC = () => {
     const isError = online && status === "error";
 
     const deleteCurrentNote = () => {
-        if (workspace && note) {
-            deleteNote({workspaceId: workspace.workspaceId, noteId: note.noteId});
+        if (!workspace || !noteId) return;
+        const draftsState = store.getState().noteDrafts;
+        if (draftsState.pending[noteId]) {
+            dispatch(removePendingDraft({draftId: noteId}));
+            void deleteLocalDoc(noteId);
             dispatch(closeDialogModal());
-            const notebookIdToNavigate = note.notebookId ? note.notebookId : DRAFTS_NOTEBOOK_ID;
-            navigate(`/${workspace?.username}/notebook/${notebookIdToNavigate}`)
+            navigate(`/${workspace.username}/notebook`);
+            return;
         }
+        // Real note. If it was acked while the modal was open, note is still undefined here and
+        // the created id is only recoverable through the alias map (submittedNoteIdByDraftId is
+        // cleared right after ack, docKeyAliases is permanent).
+        const realNoteId = note?.noteId
+            ?? Object.keys(draftsState.docKeyAliases).find(id => draftsState.docKeyAliases[id] === noteId);
+        if (!realNoteId) {
+            dispatch(closeDialogModal());
+            return;
+        }
+        deleteNote({workspaceId: workspace.workspaceId, noteId: realNoteId});
+        void deleteLocalDoc(docKey ?? noteId);
+        dispatch(closeDialogModal());
+        const notebookIdToNavigate = note?.notebookId ? note.notebookId : '';
+        navigate(`/${workspace.username}/notebook/${notebookIdToNavigate}`);
     }
 
     const popAreYouSureToDeleteModal = () => {
         dispatch(popDialogModal({
             visible: true,
-            title: t("deleteNoteAreYouSureTitle"),
-            content: t("deleteNoteAreYouSureText"),
-            confirmButtonLabel: t("deleteNoteAreYouSureConfirmLabel"),
+            title: t(isPendingCreate ? "discardDraftNoteAreYouSureTitle" : "deleteNoteAreYouSureTitle"),
+            content: t(isPendingCreate ? "discardDraftNoteAreYouSureText" : "deleteNoteAreYouSureText"),
+            confirmButtonLabel: t(isPendingCreate ? "discardDraftNoteAreYouSureConfirmLabel" : "deleteNoteAreYouSureConfirmLabel"),
             onConfirm: deleteCurrentNote
         }));
     }

@@ -1,14 +1,13 @@
-import React, {useMemo} from 'react';
-import styles from "../notebook/noteHierarchy/NotebookNoteList.module.css";
+import React from 'react';
+import styles from './PendingDraftList.module.css';
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
-import {LuFileClock} from "react-icons/lu";
+import {LuFileClock, LuFileWarning} from "react-icons/lu";
 import type {WorkspaceDto} from "@/be/jinear-core.ts";
 import useTranslation from "@/locals/useTranslation.ts";
 import {useTypedSelector} from "@/store";
 import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 import {shortenStringIfMoreThanMaxLength} from "@/util/textUtil.ts";
 import {selectPendingDraftsOrdered} from "@/slice/noteDraftsSlice.ts";
-import {useToggle} from "@/hooks/useToggle.ts";
 import {useLocation} from "react-router-dom";
 
 interface PendingDraftListProps {
@@ -29,15 +28,21 @@ const PendingDraftList: React.FC<PendingDraftListProps> = ({workspace}) => {
             {entries.map(entry => {
                     const path = `/${workspace.username}/notebook/${DRAFTS_NOTEBOOK_ID}/note/${entry.draftId}`;
                     const atPath = pathname?.indexOf(path) != -1;
+                    const failed = !!entry.failedAt;
                     return (
                         <div key={`sidebar-pending-draft-${entry.draftId}`} className={styles.noteButtonGroup}>
+                            <Button>
+                                {failed
+                                    ? <LuFileWarning className={`icon ${styles.failedIcon}`}
+                                                     data-tooltip={t('draftCouldNotBeSaved')}/>
+                                    : <LuFileClock className={'icon'}/>}
+                            </Button>
                             <Button
                                 heightVariant={ButtonHeight.short}
                                 variant={atPath ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
                                 href={path}
-                                className={styles.noteButton}
+                                className={`${styles.noteButton}${failed ? ` ${styles.failed}` : ''}`}
                             >
-                                <LuFileClock className={'icon'}/>
                                 {shortenStringIfMoreThanMaxLength({text: entry.title || t('untitledNote'), maxLength: 29})}
                             </Button>
                         </div>);

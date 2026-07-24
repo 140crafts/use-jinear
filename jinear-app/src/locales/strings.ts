@@ -5727,6 +5727,10 @@ const translations = {
         en: 'Untitled',
         tr: 'Başlıksız'
     },
+    draftCouldNotBeSaved: {
+        en: "Couldn't be saved, open to recover",
+        tr: 'Kaydedilemedi, kurtarmak için aç'
+    },
     emptyNotePlaceholder: {
         en: "Start typing. Use the toolbar above to format your text.",
         tr: "Yazmaya başla, biçimlendirmek için yukarıdaki araç çubuğunu kullan."
@@ -5800,6 +5804,19 @@ const translations = {
     deleteNoteAreYouSureConfirmLabel: {
         en: "Delete Note",
         tr: "Notu Sil"
+    },
+
+    discardDraftNoteAreYouSureTitle: {
+        en: "Discard Draft",
+        tr: "Taslağı Sil"
+    },
+    discardDraftNoteAreYouSureText: {
+        en: "Are you sure you want to discard this draft? It only exists on this device and cannot be recovered.",
+        tr: "Bu taslağı silmek istediğinize emin misiniz? Taslak yalnızca bu cihazda bulunuyor ve geri alınamaz."
+    },
+    discardDraftNoteAreYouSureConfirmLabel: {
+        en: "Discard Draft",
+        tr: "Taslağı Sil"
     },
 
 };

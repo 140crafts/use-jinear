@@ -7,6 +7,14 @@ interface PendingNoteDraft {
     createdAt: number;
     /** Mirrored from the in-doc Y.Text title so lists can label the draft without opening IndexedDB. */
     title?: string;
+    /**
+     * Set when the server rejected the create with an unretryable error. The draft stays in
+     * `pending` (its local doc is kept) but PendingDraftSubmitter skips it — the user recovers
+     * the content by opening it, and discards it deliberately. Undefined ⇒ still being retried.
+     */
+    failedAt?: number;
+    /** HTTP status that caused the failure (diagnostics). */
+    failStatus?: number;
 }
 
 const initialState = {
@@ -37,6 +45,17 @@ const slice = createSlice({
             const entry = state.pending[action.payload.draftId];
             if (entry) entry.title = action.payload.title;
         },
+        /**
+         * The server rejected the create with an unretryable error. Keep the draft (and its local
+         * doc) but stop auto-retrying it, so the user never loses content to a transient lie-fi 4xx.
+         */
+        markDraftFailed: (state, action: PayloadAction<{ draftId: string; status?: number }>) => {
+            const entry = state.pending[action.payload.draftId];
+            if (entry) {
+                entry.failedAt = Date.now();
+                entry.failStatus = action.payload.status;
+            }
+        },
         /** A pending draft was created server-side (by PendingDraftSubmitter). One atomic transition. */
         draftSubmitted: (state, action: PayloadAction<{ draftId: string; noteId: string }>) => {
             const {draftId, noteId} = action.payload;
@@ -58,6 +77,7 @@ export const {
     addPendingDraft,
     removePendingDraft,
     setPendingDraftTitle,
+    markDraftFailed,
     draftSubmitted,
     clearSubmittedDraft,
     resetNoteDrafts

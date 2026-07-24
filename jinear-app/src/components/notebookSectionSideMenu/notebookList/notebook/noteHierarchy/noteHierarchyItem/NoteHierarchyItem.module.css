@@ -22,6 +22,8 @@
     justify-content: flex-start;
     gap: .5rem;
     background-color: unset !important;
+    padding-left: 0.15rem !important;
+    padding-right: 0.15rem !important;
 }
 
 .noteButton:hover {

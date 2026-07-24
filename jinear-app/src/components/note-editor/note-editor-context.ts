@@ -9,6 +9,8 @@ export interface INoteEditorContext {
     note?: NoteDto;
     notebookId?: string;
     noteId?: string;
+    /** Local doc identity — the original draft id for draft-born notes (see selectDocKey). */
+    docKey?: string;
     isPendingCreate?: boolean;
     doc?: Y.Doc | null;
     status?: LiveTextStatus;

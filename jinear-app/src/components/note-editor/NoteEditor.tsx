@@ -73,6 +73,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
             workspace,
             notebookId,
             noteId,
+            docKey,
             note,
             isPendingCreate,
             doc,
