@@ -11,7 +11,11 @@ export const rtkQueryErrorLogger: Middleware = (api: MiddlewareAPI) => (next) =>
         logger.log({rtkQueryErrorLogger: action});
         //@ts-expect-error ignore
         const status = action?.payload?.status;
-
+        //@ts-expect-error ignore
+        const endpointName = action?.meta?.arg?.endpointName
+        if (status == 404 && endpointName == "getRichTextUpdates") {
+            return next(action);
+        }
         if (status === "FETCH_ERROR" || !navigator.onLine) {
             return next(action); // stay quiet offline
         } else if (status == 413) {

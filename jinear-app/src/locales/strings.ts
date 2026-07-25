@@ -5755,6 +5755,14 @@ const translations = {
         en: 'Drafts',
         tr: 'Tasklaklar'
     },
+    notebookEmptyStateTitle: {
+        en: 'No notes yet',
+        tr: 'Henüz not yok'
+    },
+    notebookEmptyStateText: {
+        en: 'Create your first note to get started.',
+        tr: 'Başlamak için ilk notunu oluştur.'
+    },
     notebookDraftsPrivate: {
         en: 'Private',
         tr: 'Gizli'

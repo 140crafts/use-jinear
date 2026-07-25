@@ -55,6 +55,7 @@ import WorkspaceModalProvider from "@/components/modal-provider/WorkspaceModalPr
 import NotesLayout from "@/pages/workspace/notebook/notebook-layout/layout.tsx";
 import NotePage from "@/pages/workspace/notebook/note";
 import NotebookDetailPage from "@/pages/workspace/notebook/notebook-detail/NotebookDetailPage.tsx";
+import NotebookFirstNoteNavigator from "@/pages/workspace/notebook/page.tsx";
 
 export default function App() {
     return (
@@ -133,8 +134,9 @@ export default function App() {
                     </Route>
 
                     <Route path="notebook" element={<NotesLayout/>}>
-                        <Route index path=":notebookId" element={<NotebookDetailPage/>}/>
-                        <Route index path=":notebookId/note/:noteId" element={<NotePage/>}/>
+                        <Route index element={<NotebookFirstNoteNavigator/>}/>
+                        <Route path=":notebookId" element={<NotebookDetailPage/>}/>
+                        <Route path=":notebookId/note/:noteId" element={<NotePage/>}/>
                     </Route>
 
                     <Route path="calendar" element={<CalendarLayout/>}>

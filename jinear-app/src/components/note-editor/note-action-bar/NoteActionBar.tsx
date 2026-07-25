@@ -65,11 +65,12 @@ const NoteActionBar: React.FC = () => {
             dispatch(closeDialogModal());
             return;
         }
-        deleteNote({workspaceId: workspace.workspaceId, noteId: realNoteId});
+        deleteNote({workspaceId: workspace.workspaceId, noteId: realNoteId}).then(() => {
+            // The navigator picks the next note (or shows the empty state) from the now-patched lists.
+            navigate(`/${workspace.username}/notebook`);
+        });
         void deleteLocalDoc(docKey ?? noteId);
         dispatch(closeDialogModal());
-        const notebookIdToNavigate = note?.notebookId ? note.notebookId : '';
-        navigate(`/${workspace.username}/notebook/${notebookIdToNavigate}`);
     }
 
     const popAreYouSureToDeleteModal = () => {
