@@ -14,10 +14,16 @@ interface NotePathProps {
 
 const NotePath: React.FC<NotePathProps> = ({}) => {
     const {t} = useTranslation();
-    const {workspace, note} = useNoteEditorContext();
+    const {workspace, note, notebook, notebookId: urlNotebookId} = useNoteEditorContext();
     const path = note?.path;
-    const notebookId = note?.notebookId ?? DRAFTS_NOTEBOOK_ID;
-    const notebookTitle = note?.notebook?.title ?? t('notebookDraftsTitle');
+    // The url segment is already the drafts sentinel for workspace-level drafts, so this one
+    // expression covers created notes, notebook-born drafts and plain drafts alike.
+    const notebookId = note?.notebookId ?? urlNotebookId ?? DRAFTS_NOTEBOOK_ID;
+    const isDraftsNotebook = notebookId === DRAFTS_NOTEBOOK_ID;
+    // Only unresolved when the notebook listing hasn't loaded — labelling it "Drafts" there would
+    // claim something false, so fall back to a neutral label instead.
+    const notebookTitle = notebook?.title
+        ?? (isDraftsNotebook ? t('notebookDraftsTitle') : t('notePathNotebookFallback'));
 
     return (
         <div className={styles.container}>

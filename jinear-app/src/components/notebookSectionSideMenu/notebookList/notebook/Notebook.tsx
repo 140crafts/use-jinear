@@ -5,9 +5,11 @@ import Button, {ButtonVariants} from "@/components/button";
 import cn from "classnames";
 import {useLocation, useNavigate} from "react-router-dom";
 import {useToggle} from "@/hooks/useToggle.ts";
-import {LuEllipsisVertical, LuFolder, LuFolderOpen, LuLock, LuUserCheck, LuUsers} from "react-icons/lu";
+import {LuEllipsisVertical, LuFilePen, LuFolder, LuFolderOpen, LuLock, LuUserCheck, LuUsers} from "react-icons/lu";
 import NoteHierarchyList
     from "@/components/notebookSectionSideMenu/notebookList/notebook/noteHierarchy/NoteHierarchyList.tsx";
+import PendingDraftList from "@/components/notebookSectionSideMenu/notebookList/drafts/PendingDraftList.tsx";
+import {useCreateNoteDraft} from "@/hooks/useCreateNoteDraft.ts";
 import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 import Logger from "@/util/logger.ts";
 import {useChangeNotebookMutation, useMoveNoteMutation} from "@/api/noteOperationApi.ts";
@@ -48,12 +50,13 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
     const notebookIdForPath = notebook?.notebookId ?? DRAFTS_NOTEBOOK_ID;
     const notebookPath = `/${workspace?.username}/notebook/${notebookIdForPath}`;
     const atPath = pathname == notebookPath;
-    const [open, toggle] = useToggle(initiallyOpen);
+    const [open, toggle, setOpen] = useToggle(initiallyOpen);
     const Icon = ACCESS_TYPE_ICON_MAP[notebook.visibility];
     const tooltipKey = ACCESS_TYPE_TOOLTIP_MAP[notebook.visibility];
 
     const [moveNote] = useMoveNoteMutation();
     const [changeNotebook] = useChangeNotebookMutation();
+    const createNoteInNotebook = useCreateNoteDraft(workspace, notebook.notebookId);
 
     const popAreYouSureToMoveToNotebookModal = (note: NoteDto) => {
         dispatch(
@@ -125,6 +128,18 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
                 <Button
                     variant={ButtonVariants.hoverFilled2}
                     className={styles.notebookDetailsButton}
+                    data-tooltip-multiline={t('notebookNewNoteInNotebook')}
+                    onClick={() => {
+                        // Expand first, so the draft it creates is visible in the list behind the editor.
+                        setOpen(true);
+                        createNoteInNotebook();
+                    }}
+                >
+                    <LuFilePen className={cn('icon')}/>
+                </Button>
+                <Button
+                    variant={ButtonVariants.hoverFilled2}
+                    className={styles.notebookDetailsButton}
                     href={`/${workspace.username}/notebook/${notebook.notebookId}`}
                 >
                     <LuEllipsisVertical className={cn('icon')}/>
@@ -135,6 +150,10 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
                 <div className={styles.notebookNotesGreaterContainer}>
                     <div className={'spacer-w-1'}/>
                     <div className={styles.notebookNotesContainer}>
+                        <PendingDraftList
+                            workspace={workspace}
+                            notebookId={notebook.notebookId}
+                        />
                         <NoteHierarchyList
                             workspace={workspace}
                             notebookId={notebook?.notebookId}

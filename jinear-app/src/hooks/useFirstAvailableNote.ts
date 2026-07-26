@@ -72,7 +72,13 @@ export const useFirstAvailableNote = (workspace?: WorkspaceDto): FirstAvailableN
       (!!scannedNotebook && notebookNotesSettled && !notebookNote && notebookIndex < notebooks.length - 1));
 
   const resolved: Pick<FirstAvailableNote, "notebookId" | "noteId" | "isDraft"> = pendingDraft
-    ? { notebookId: DRAFTS_NOTEBOOK_ID, noteId: pendingDraft.draftId, isDraft: true }
+    ? {
+        // A draft started inside a notebook belongs to it already; only workspace-level ones
+        // resolve to the drafts sentinel.
+        notebookId: pendingDraft.notebookId ?? DRAFTS_NOTEBOOK_ID,
+        noteId: pendingDraft.draftId,
+        isDraft: true
+      }
     : draftNote
       ? { notebookId: DRAFTS_NOTEBOOK_ID, noteId: draftNote.noteId, isDraft: true }
       : notebookNote

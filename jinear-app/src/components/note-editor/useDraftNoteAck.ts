@@ -7,6 +7,8 @@ import {clearSubmittedDraft, selectPendingDraft, selectSubmittedNoteId} from "@/
 interface IUseDraftNoteAckProps {
     workspace: WorkspaceDto;
     urlNoteId: string;
+    /** Notebook segment currently in the url — a real notebook id, or the drafts sentinel. */
+    notebookId: string;
 }
 
 /**
@@ -15,7 +17,7 @@ interface IUseDraftNoteAckProps {
  * then canonicalizes the URL (cosmetic replaceState, no remount) and hands back the real
  * noteId so NoteEditor can fetch the created note.
  */
-export const useDraftNoteAck = ({workspace, urlNoteId}: IUseDraftNoteAckProps) => {
+export const useDraftNoteAck = ({workspace, urlNoteId, notebookId}: IUseDraftNoteAckProps) => {
     const dispatch = useAppDispatch();
     const pendingDraft = useTypedSelector(selectPendingDraft(urlNoteId));
     const submittedNoteId = useTypedSelector(selectSubmittedNoteId(urlNoteId));
@@ -24,11 +26,12 @@ export const useDraftNoteAck = ({workspace, urlNoteId}: IUseDraftNoteAckProps) =
     useEffect(() => {
         if (!submittedNoteId) return;
         setAckedNoteId(submittedNoteId);
-        // New notes are always notebook-less drafts, so the sentinel notebook stays in the URL.
+        // Keep whichever notebook segment the draft was opened under — a notebook-born note stays in
+        // its notebook, a workspace-level one keeps the sentinel. Only the note id becomes canonical.
         window.history.replaceState(null, "",
-            `/${workspace.username}/notebook/${DRAFTS_NOTEBOOK_ID}/note/${submittedNoteId}`);
+            `/${workspace.username}/notebook/${notebookId || DRAFTS_NOTEBOOK_ID}/note/${submittedNoteId}`);
         dispatch(clearSubmittedDraft({draftId: urlNoteId}));
-    }, [submittedNoteId, urlNoteId, workspace.username, dispatch]);
+    }, [submittedNoteId, urlNoteId, notebookId, workspace.username, dispatch]);
 
     return {isPendingCreate: !!pendingDraft, ackedNoteId};
 };

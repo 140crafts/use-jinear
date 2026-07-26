@@ -5607,6 +5607,14 @@ const translations = {
         en: "New Notebook",
         tr: "Yeni Defter"
     },
+    notebookNewNoteInNotebook: {
+        en: "New note in this notebook",
+        tr: "Bu defterde yeni not"
+    },
+    notePathNotebookFallback: {
+        en: "Notebook",
+        tr: "Defter"
+    },
     sideMenuYourNotebooksTitle: {
         en: "Notebooks",
         tr: "Defterler"

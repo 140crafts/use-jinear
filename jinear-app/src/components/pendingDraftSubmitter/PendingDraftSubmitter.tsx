@@ -43,6 +43,10 @@ const PendingDraftSubmitter: React.FC = () => {
                             .catch(() => ({bodyState: EMPTY_YDOC_STATE, title: entry.title ?? ""}));
                         const response = await initializeNote({
                             workspaceId: entry.workspaceId,
+                            // Undefined for workspace-level drafts, which is what the backend reads as
+                            // "no notebook" — so the note is created straight into the notebook it was
+                            // started in, never passing through the drafts pool first.
+                            notebookId: entry.notebookId,
                             title,
                             bodyState,
                             // Idempotency key: the dormant BaseRequest.conversationId carries the draft id,

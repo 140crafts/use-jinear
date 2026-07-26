@@ -19,20 +19,21 @@ interface NotePropertyBarProps {
 const NotePropertyBar: React.FC<NotePropertyBarProps> = ({}) => {
     const navigate = useNavigate();
     const {t} = useTranslation();
-    const {workspace, note, isPendingCreate} = useNoteEditorContext();
+    const {workspace, note, notebook, isPendingCreate} = useNoteEditorContext();
     const dispatch = useAppDispatch();
     const [changeNotebook, {isLoading: isChangeNotebookLoading}] = useChangeNotebookMutation();
 
-    const isDraft = note?.notebookId == null;
-    const originalNotebookTitle = note?.notebook?.title;
+    // Sourced from the resolved notebook, not the note: a draft created inside a notebook belongs to
+    // it from the first keystroke, well before the server has a note to read a notebookId off.
+    const originalNotebookTitle = notebook?.title;
     const originalNotebookTitleTooLong = (originalNotebookTitle ?? '').length > 12;
-    const changeNotebookButtonLabel = isDraft ? t('changeNoteNotebook') : shortenStringIfMoreThanMaxLength({
-        text: note?.notebook?.title ?? '',
-        maxLength: 12,
+    const changeNotebookButtonLabel = notebook ? shortenStringIfMoreThanMaxLength({
+        text: originalNotebookTitle ?? '',
+        maxLength: 24,
         shortenFromMiddle: true
-    });
+    }) : t('changeNoteNotebook');
 
-    const notebookTooltip = isDraft ? undefined : originalNotebookTitleTooLong ? originalNotebookTitle : t('changeNoteNotebook');
+    const notebookTooltip = !notebook ? undefined : originalNotebookTitleTooLong ? originalNotebookTitle : t('changeNoteNotebook');
 
     const popAreYouSureToMoveToNotebookModal = (notebook: NotebookDto) => {
         dispatch(

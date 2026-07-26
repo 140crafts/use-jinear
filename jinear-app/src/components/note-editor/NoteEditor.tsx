@@ -11,6 +11,7 @@ import {useDraftNoteAck} from "@/components/note-editor/useDraftNoteAck.ts";
 import {useNoteTitleMirror} from "@/components/note-editor/useNoteTitleMirror.ts";
 import type {ICollaborativeRichTextRef} from "@/components/tiptap/CollaborativeRichText.tsx";
 import {useFilterNotesQuery} from "@/api/noteFilterApi.ts";
+import {useNotebookById} from "@/hooks/useNotebookById.ts";
 import {useTypedSelector} from "@/store";
 import {selectDocKey} from "@/slice/noteDraftsSlice.ts";
 import useTranslation from "@/locals/useTranslation.ts";
@@ -31,7 +32,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
     // (aliased from the real noteId after creation), so IndexedDB content survives URL canonicalization.
     const docKey = useTypedSelector(selectDocKey(noteId));
 
-    const {isPendingCreate, ackedNoteId} = useDraftNoteAck({workspace, urlNoteId: noteId});
+    const {isPendingCreate, ackedNoteId} = useDraftNoteAck({workspace, urlNoteId: noteId, notebookId});
 
     const isDraftsNotebook = notebookId === DRAFTS_NOTEBOOK_ID;
     const {currentData: retrieveNoteResponse, isLoading} = useFilterNotesQuery({
@@ -43,6 +44,10 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
     }, {skip: isPendingCreate});
 
     const note = retrieveNoteResponse?.data?.content?.[0];
+    const notebookFromUrl = useNotebookById(workspace.workspaceId, notebookId);
+    // Server truth once the note exists; until then the notebook the draft was started in, which is
+    // the only source while a create is still pending (offline, that's the whole session).
+    const notebook = note?.notebook ?? notebookFromUrl;
     // ackedNoteId bridges the ack → fetch gap so the doc/editor stays alive (no flash mid-typing).
     const shouldEdit = isPendingCreate || !!ackedNoteId || !!note;
 
@@ -75,6 +80,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
             noteId,
             docKey,
             note,
+            notebook,
             isPendingCreate,
             doc,
             status,

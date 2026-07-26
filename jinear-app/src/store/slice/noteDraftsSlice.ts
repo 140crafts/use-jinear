@@ -5,6 +5,12 @@ interface PendingNoteDraft {
     draftId: string;
     workspaceId: string;
     createdAt: number;
+    /**
+     * Notebook the draft was started in, submitted with the create so the note is born inside it.
+     * Undefined ⇒ a workspace-level draft (the "drafts" section), which is how every draft behaved
+     * before notebook-aware creation — persisted entries from then still deserialize correctly.
+     */
+    notebookId?: string;
     /** Mirrored from the in-doc Y.Text title so lists can label the draft without opening IndexedDB. */
     title?: string;
     /**
@@ -34,9 +40,9 @@ const slice = createSlice({
     name: "noteDrafts",
     initialState,
     reducers: {
-        addPendingDraft: (state, action: PayloadAction<{ draftId: string; workspaceId: string }>) => {
-            const {draftId, workspaceId} = action.payload;
-            state.pending[draftId] = {draftId, workspaceId, createdAt: Date.now()};
+        addPendingDraft: (state, action: PayloadAction<{ draftId: string; workspaceId: string; notebookId?: string }>) => {
+            const {draftId, workspaceId, notebookId} = action.payload;
+            state.pending[draftId] = {draftId, workspaceId, notebookId, createdAt: Date.now()};
         },
         removePendingDraft: (state, action: PayloadAction<{ draftId: string }>) => {
             delete state.pending[action.payload.draftId];
@@ -95,3 +101,22 @@ export const selectPendingDraftsOrdered = (workspaceId: string) => ((state: Root
         .filter(entry => entry.workspaceId === workspaceId)
         .sort((a, b) => b.createdAt - a.createdAt);
 })
+
+export const selectPendingDraftsMap = (state: RootState) => state.noteDrafts.pending;
+
+/**
+ * Drafts belonging to one notebook, or — with notebookId omitted — the workspace-level ones that
+ * live in the drafts section. Each draft is listed in exactly one place, so a draft started inside
+ * a notebook is recoverable from that notebook rather than disappearing into the drafts list.
+ *
+ * Takes the pending map rather than being a selector: one of these renders per notebook in the side
+ * menu, so callers memoize on `selectPendingDraftsMap` instead of rebuilding an array — and
+ * re-rendering every notebook — on each dispatch.
+ */
+export const pendingDraftsForNotebook = (
+    pending: Record<string, PendingNoteDraft>,
+    workspaceId: string,
+    notebookId?: string
+) => Object.values(pending)
+    .filter(entry => entry.workspaceId === workspaceId && entry.notebookId === notebookId)
+    .sort((a, b) => b.createdAt - a.createdAt);

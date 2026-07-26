@@ -7,6 +7,7 @@
 
 .button {
     gap: .5rem;
+    z-index: 3;
 }
 
 .seperator {
