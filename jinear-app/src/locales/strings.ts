@@ -1606,6 +1606,10 @@ const translations = {
         en: "Are you sure to logout?",
         tr: "Çıkış yapmak istediğinize emin misiniz?"
     },
+    logoutPendingDraftsWarning: {
+        en: "You have ${count} unsent note(s) stored only on this device. They will be permanently deleted.",
+        tr: "Bu cihazda yalnızca yerel olarak duran ${count} gönderilmemiş notunuz var. Bunlar kalıcı olarak silinecek."
+    },
     logoutAreYouSureConfirmLabel: {
         en: "Logout",
         tr: "Çık"

@@ -4,13 +4,12 @@ import {
     useSendAccountDeleteEmailMutation,
 } from "@/store/api/accountDeleteApi";
 import {closeDialogModal, popDialogModal, resetModals} from "@/store/slice/modalSlice";
-import {clearLocalforageStorage, useAppDispatch} from "@/store";
+import {performLogoutCleanup, useAppDispatch} from "@/store";
 import useTranslation from "@/locales/useTranslation";
 import React, {useEffect} from "react";
 import toast from "react-hot-toast";
 import styles from "./AccountDeleteButton.module.css";
 import Button from "@/components/button";
-import {resetLocalStorage} from "@/components/profileScreen/personalInfoTab/PersonalInfoTab.tsx";
 
 interface AccountDeleteButtonProps {
 }
@@ -26,7 +25,7 @@ const AccountDeleteButton: React.FC<AccountDeleteButtonProps> = ({}) => {
         useSendAccountDeleteEmailMutation();
     const [
         deleteWithoutConfirmation,
-        {isLoading: isDeleteWithoutConfirmationLoading, isSuccess: isDeleteWithoutConfirmationSuccess},
+        {isLoading: isDeleteWithoutConfirmationLoading},
     ] = useDeleteWithoutConfirmationMutation();
 
     useEffect(() => {
@@ -34,12 +33,6 @@ const AccountDeleteButton: React.FC<AccountDeleteButtonProps> = ({}) => {
             toast(t("accountDeletionMailSendSuccessfully"));
         }
     }, [isSendAccountDeleteEmailSuccess]);
-
-    useEffect(() => {
-        if (isDeleteWithoutConfirmationSuccess) {
-            toast(t("accountDeletedSuccessfully"));
-        }
-    }, [isDeleteWithoutConfirmationSuccess]);
 
     const popAreYouSureModalForDeleteAccount = () => {
         dispatch(
@@ -53,11 +46,15 @@ const AccountDeleteButton: React.FC<AccountDeleteButtonProps> = ({}) => {
         );
     };
 
-    const deleteAccount = () => {
-        deleteWithoutConfirmation();
-        resetLocalStorage();
-        clearLocalforageStorage();
+    const deleteAccount = async () => {
         dispatch(resetModals());
+        try {
+            await deleteWithoutConfirmation().unwrap();
+            toast(t("accountDeletedSuccessfully"));
+        } catch {
+            // The account may already be gone server-side; local data goes either way.
+        }
+        await performLogoutCleanup(dispatch);
     };
 
     const sendEmail = () => {

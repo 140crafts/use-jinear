@@ -4,6 +4,7 @@ import {richTextSyncApi} from "@/api/richTextSyncApi.ts";
 import type {RichTextDto} from "@/be/jinear-core.ts";
 import {fromBase64, toBase64} from "@/components/tiptap/crdt/base64.ts";
 import {
+    DOC_DB_PREFIX,
     POLL_INTERVAL_MS,
     REMOTE_ORIGIN,
     SNAPSHOT_RETRY_COOLDOWN_MS,
@@ -77,7 +78,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, seedT
         if (!enabled) return;
 
         const liveDoc = new Y.Doc();
-        const persistence = new IndexeddbPersistence(`doc:${docKey}`, liveDoc);
+        const persistence = new IndexeddbPersistence(`${DOC_DB_PREFIX}${docKey}`, liveDoc);
         persistenceRef.current = persistence;
 
         const onUpdate = (_update: Uint8Array, origin: unknown) => {

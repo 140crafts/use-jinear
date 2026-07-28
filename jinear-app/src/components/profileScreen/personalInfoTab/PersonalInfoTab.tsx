@@ -7,7 +7,8 @@ import {
     popPasswordChangeModal,
     resetModals
 } from "@/store/slice/modalSlice";
-import {clearLocalforageStorage, resetAllStates, useAppDispatch, useTypedSelector} from "@/store";
+import {selectPendingDraftsMap} from "@/store/slice/noteDraftsSlice";
+import {performLogoutCleanup, useAppDispatch, useTypedSelector} from "@/store";
 import Logger from "@/util/logger";
 import cn from "classnames";
 import useTranslation from "@/locales/useTranslation";
@@ -22,45 +23,40 @@ interface PersonalInfoTabProps {
 
 const logger = Logger("PersonalInfoTab");
 
-export const resetLocalStorage = () => {
-    try {
-        if (typeof window === "object") {
-            window.localStorage.clear();
-        }
-    } catch (error) {
-        console.error("Error on logout clear. local storage", error);
-    }
-};
-
 const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
     const currentAccount = useTypedSelector(selectCurrentAccount);
+    const pendingDrafts = useTypedSelector(selectPendingDraftsMap);
     const [selectedFile, setSelectedFile] = useState<File | undefined>();
     const [selectedFilePreview, setSelectedFilePreview] = useState<string | undefined>();
 
     const [updateProfilePicture, {isSuccess, isLoading, isError}] = useUpdateProfilePictureMutation();
-    const [logoutCall, {isLoading: isLogoutLoading, isSuccess: isLogoutSuccess}] = useLogoutMutation();
+    const [logoutCall, {isLoading: isLogoutLoading}] = useLogoutMutation();
 
-    useEffect(() => {
-        if (isLogoutSuccess) {
-            resetAllStates(dispatch);
-        }
-    }, [dispatch, isLogoutSuccess]);
-
-    const logout = () => {
-        logoutCall();
-        resetLocalStorage();
-        clearLocalforageStorage();
+    const logout = async () => {
         dispatch(resetModals());
+        try {
+            await logoutCall().unwrap();
+        } catch (error) {
+            // Server-side logout failed (offline, dead session) — still drop everything local.
+            logger.error({message: "Logout call failed", error});
+        }
+        await performLogoutCleanup(dispatch);
     };
 
     const popAreYouSureModalForLogout = () => {
+        // Pending drafts live only in this device's IndexedDB, so logging out destroys them.
+        const pendingCount = Object.keys(pendingDrafts).length;
+        const warning = pendingCount == 0
+            ? undefined
+            : `${t("logoutAreYouSureText")}<br/><br/>${t("logoutPendingDraftsWarning").replace("${count}", `${pendingCount}`)}`;
         dispatch(
             popDialogModal({
                 visible: true,
                 title: t("logoutAreYouSureTitle"),
                 content: t("logoutAreYouSureText"),
+                htmlContent: warning,
                 confirmButtonLabel: t("logoutAreYouSureConfirmLabel"),
                 onConfirm: logout
             })
@@ -74,7 +70,7 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
     useEffect(() => {
         if (selectedFile && currentAccount) {
             logger.log({selectedFile});
-            let formData = new FormData();
+            const formData = new FormData();
             if (selectedFile) {
                 formData.append("file", selectedFile);
             }

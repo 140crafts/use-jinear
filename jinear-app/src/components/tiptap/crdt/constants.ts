@@ -1,5 +1,12 @@
 
 export const DRAFTS_NOTEBOOK_ID = "drafts";
+
+/**
+ * Prefix of the IndexedDB database backing one note's local doc — the full name is
+ * `doc:<docKey>`. Also the marker that lets a logout wipe tell our note databases apart
+ * from everything else living in indexedDB (redux-persist, workbox, firebase).
+ */
+export const DOC_DB_PREFIX = "doc:";
 export const REMOTE_ORIGIN = "remote-crdt-sync";
 export const POLL_INTERVAL_MS = 2500;
 

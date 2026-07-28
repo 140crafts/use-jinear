@@ -2,9 +2,12 @@ import Button, { ButtonVariants } from "@/components/button";
 import type { WorkspaceInvitationInfoResponse } from "@/model/be/jinear-core";
 import { useLogoutMutation } from "@/store/api/authApi";
 import useTranslation from "@/locales/useTranslation";
-import React, { useEffect } from "react";
+import React from "react";
 import styles from "./InvitationActionContainer.module.css";
-import { resetAllStates, useAppDispatch } from "@/store";
+import { performLogoutCleanup, useAppDispatch } from "@/store";
+import Logger from "@/util/logger";
+
+const logger = Logger("InvitationActionContainer");
 
 interface InvitationActionContainerProps {
   isRespondLoading: boolean;
@@ -29,13 +32,17 @@ const InvitationActionContainer: React.FC<InvitationActionContainerProps> = ({
     .replace("${currentAccountEmail}", currentAccountEmail || "")
     .replace("${invitationToEmail}", invitationInfoResponse?.data?.invitationDto?.email || "");
 
-  const [logout, { isLoading, isError, isSuccess }] = useLogoutMutation();
+  const [logoutCall] = useLogoutMutation();
 
-  useEffect(() => {
-    if (isSuccess) {
-      resetAllStates(dispatch);
+  const logout = async () => {
+    try {
+      await logoutCall().unwrap();
+    } catch (error) {
+      // Server-side logout failed (offline, dead session) — still drop everything local.
+      logger.error({ message: "Logout call failed", error });
     }
-  }, [dispatch, isSuccess]);
+    await performLogoutCleanup(dispatch);
+  };
 
   return (
     <div className={styles.container}>
