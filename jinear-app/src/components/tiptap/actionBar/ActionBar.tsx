@@ -1,5 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
-import { Editor } from "@tiptap/react";
+import useTranslation from "@/locals/useTranslation";
+import { Editor, useEditorState } from "@tiptap/react";
 import React, {type ChangeEvent, useEffect, useRef } from "react";
 import {
   LuBold,
@@ -13,6 +14,8 @@ import {
   LuImage,
   LuItalic,
   LuList,
+  LuListChecks,
+  LuListTodo,
   LuQuote,
   LuRedo2,
   LuRemoveFormatting,
@@ -39,8 +42,20 @@ interface ActionBarProps {
 
 const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceIdForImages, className }) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const imagePickerButtonRef = useRef<HTMLInputElement>(null);
   const [uploadRichTextImage, { data: uploadRichTextImageResponse, isLoading }] = useUploadRichTextImageMutation();
+
+  // The buttons below read `isActive`/`can` straight off the editor, which under Tiptap v3 only
+  // refreshes when this component happens to re-render. Subscribe the task list button explicitly
+  // so its toggled state tracks the caret — same reason TableControls does this.
+  const taskListState = useEditorState({
+    editor,
+    selector: ({ editor }) => ({
+      isActive: editor.isActive("taskList"),
+      canToggle: editor.can().chain().focus().toggleTaskList().run()
+    })
+  });
 
   useEffect(() => {
     if (uploadRichTextImageResponse?.data && editor) {
@@ -183,6 +198,16 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
           variant={editor.isActive("orderedList") ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
         >
           <PiListNumbers />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
+          onClick={() => editor.chain().focus().toggleTaskList().run()}
+          disabled={!taskListState?.canToggle}
+          variant={taskListState?.isActive ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+          data-tooltip-top={t("textEditorTaskList")}
+        >
+          <LuListChecks />
         </Button>
       )}
       {mode != "simple" && (

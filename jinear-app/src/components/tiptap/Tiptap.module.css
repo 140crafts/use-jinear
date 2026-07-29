@@ -93,6 +93,99 @@
 
 /* endregion */
 
+/* region task lists */
+
+/*
+ * Selectors target the DOM TaskItem's node view builds — li > label > (input + span) and li > div.
+ * Items are matched through the parent ul, not by data-type: the node view bypasses renderHTML, so
+ * it only ever puts data-checked on the li. The ul has no node view and does carry its data-type.
+ * Direct children only, so a checklist sitting inside a plain bullet list still styles correctly.
+ */
+
+.tiptap ul[data-type="taskList"] {
+  list-style: none;
+  padding: 0;
+  gap: .5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tiptap ul[data-type="taskList"] > li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tiptap ul[data-type="taskList"] > li > label {
+  flex: 0 0 auto;
+  /* Positioning context for the invisible input laid over the styled box. */
+  position: relative;
+  display: flex;
+  align-items: center;
+  /* The node view marks this contenteditable=false; keep the caret out of it entirely. */
+  user-select: none;
+  line-height: inherit;
+}
+
+/*
+ * The native control is made transparent and stretched over the box rather than removed. Every
+ * behaviour the node view attaches stays intact that way — the change handler, the mousedown
+ * preventDefault that stops the caret jumping, the isEditable guard and the aria-label — and
+ * keyboard toggling still works. Only the painting moves to the sibling span.
+ */
+.tiptap ul[data-type="taskList"] > li > label input[type="checkbox"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* The node view already emits this span beside the input purely as a styling hook. */
+.tiptap ul[data-type="taskList"] > li > label > span {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  box-sizing: border-box;
+  border: 1.5px solid var(--c-secondary-shade-0-op05);
+  border-radius: var(--border-radius);
+  transition: var(--fade);
+}
+
+.tiptap ul[data-type="taskList"] > li > label input[type="checkbox"]:checked + span {
+  border-color: var(--c-JINEAR_ORANGE);
+  background-color: var(--c-JINEAR_ORANGE);
+  background-image: var(--checkbox-tick-svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 78%;
+}
+
+/* The real control is invisible now, so focus has to be drawn on the span instead. */
+.tiptap ul[data-type="taskList"] > li > label input[type="checkbox"]:focus-visible + span {
+  outline: 2px solid var(--c-JINEAR_ORANGE);
+  outline-offset: 2px;
+}
+
+.tiptap ul[data-type="taskList"] > li > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.tiptap ul[data-type="taskList"] > li > div p {
+  margin: 0;
+}
+
+/* The node view keeps this attribute in sync on every update. */
+.tiptap ul[data-type="taskList"] > li[data-checked="true"] > div {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+/* endregion */
+
 .tiptap p.is-editor-empty:first-child::before {
   color: var(--c-secondary-shade-0-op025);
   content: attr(data-placeholder);

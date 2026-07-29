@@ -1,6 +1,7 @@
-import {Extension} from "@tiptap/core";
+import {Extension, mergeAttributes} from "@tiptap/core";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
+import {TaskItem, TaskList} from "@tiptap/extension-list";
 import Placeholder from "@tiptap/extension-placeholder";
 import {TableKit} from "@tiptap/extension-table";
 import StarterKit from "@tiptap/starter-kit";
@@ -50,6 +51,28 @@ export const buildEditorExtensions = ({
             lastColumnResizable: false
         }
     }),
+    // Task lists serialize their state into data attributes only. Tiptap's stock renderHTML emits
+    // <label><input type="checkbox"><span></span></label>, none of which survives jinear-core's
+    // OWASP allowlist — the sanitized value would come back as a plain bullet list. The interactive
+    // checkbox in the editor comes from TaskItem's node view, which never goes through renderHTML,
+    // so dropping it here costs nothing. parseHTML is inherited and already reads both attributes,
+    // which is what lets this markup round-trip back out of the backend and through the CRDT seed.
+    TaskList.extend({
+        renderHTML({HTMLAttributes}) {
+            return ["ul", mergeAttributes(HTMLAttributes, {"data-type": "taskList"}), 0];
+        }
+    }),
+    TaskItem.extend({
+        renderHTML({node, HTMLAttributes}) {
+            return ["li", mergeAttributes(HTMLAttributes, {
+                "data-type": "taskItem",
+                "data-checked": node.attrs.checked
+            }), ["div", 0]];
+        }
+        // Checklists stay flat: this restricts a task item's content to paragraphs only, so the
+        // schema itself rejects a nested list rather than relying on the Tab shortcut being absent.
+        // Pasted or legacy nested markup gets normalised on the way in.
+    }).configure({nested: false}),
     NoNestedTables,
     ...extra
 ];

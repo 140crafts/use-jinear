@@ -1238,6 +1238,10 @@ const translations = {
         en: "Ordered List",
         tr: "Sıralı Liste"
     },
+    textEditorTaskList: {
+        en: "Checklist",
+        tr: "Kontrol Listesi"
+    },
     textEditorInsertTable: {
         en: "Insert Table",
         tr: "Tablo Ekle"

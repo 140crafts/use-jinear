@@ -26,6 +26,53 @@
   color: var(--c-secondary-shade-0-op05);
 }
 
+/*
+ * Stored description HTML is injected raw here, outside the editor's .tiptap scope, so task lists
+ * arrive as the slim markup renderHTML emits — no checkbox element to style. Draw the box instead.
+ */
+
+.cell ul[data-type="taskList"] {
+  list-style: none;
+  padding: 0;
+}
+
+.cell ul[data-type="taskList"] > li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.cell ul[data-type="taskList"] > li::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 0.875rem;
+  height: 0.875rem;
+  /* Sits on the first text line rather than the block top, matching the editor. */
+  margin-top: 0.25rem;
+  box-sizing: border-box;
+  border: 1.5px solid var(--c-secondary-shade-0-op05);
+  border-radius: var(--border-radius);
+}
+
+/* No input survives sanitising here, so the tick is painted straight onto the box itself. */
+.cell ul[data-type="taskList"] > li[data-checked="true"]::before {
+  border-color: var(--c-JINEAR_ORANGE);
+  background-color: var(--c-JINEAR_ORANGE);
+  background-image: var(--checkbox-tick-svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 78%;
+}
+
+.cell ul[data-type="taskList"] > li[data-checked="true"] > div {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+.cell ul[data-type="taskList"] > li > div p {
+  margin: 0;
+}
+
 .toggleButton {
   width: 7rem;
   color: var(--c-secondary-shade-0);

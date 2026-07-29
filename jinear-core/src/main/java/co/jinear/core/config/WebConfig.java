@@ -33,6 +33,13 @@ public class WebConfig implements WebMvcConfigurer {
     /** Editor's own scroll container around a table — the only class the sanitizer lets through. */
     private static final Pattern TABLE_WRAPPER_CLASS = Pattern.compile("^tableWrapper$");
     private static final Pattern POSITIVE_INT = Pattern.compile("^\\d+$");
+    /**
+     * Task lists are the only nodes allowed to carry a data attribute. The editor serializes them
+     * without the checkbox element it renders on screen, so these two attributes are all that
+     * distinguishes a checklist from a plain bullet list once the value is stored.
+     */
+    private static final Pattern TASK_LIST_TYPE = Pattern.compile("^task(?:List|Item)$");
+    private static final Pattern BOOLEAN = Pattern.compile("^(?:true|false)$");
     /** Tiptap stores resized column widths as a comma separated list of pixel values. */
     private static final Pattern COLWIDTH = Pattern.compile("^\\d+(?:,\\d+)*$");
 
@@ -78,6 +85,8 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowAttributes("colwidth").matching(COLWIDTH).onElements("td", "th")
                 .allowAttributes("style").matching(TABLE_STYLE).onElements("table", "col", "td", "th")
                 .allowAttributes("class").matching(TABLE_WRAPPER_CLASS).onElements("div")
+                .allowAttributes("data-type").matching(TASK_LIST_TYPE).onElements("ul", "li")
+                .allowAttributes("data-checked").matching(BOOLEAN).onElements("li")
                 .requireRelNofollowOnLinks()
                 .toFactory();
     }
