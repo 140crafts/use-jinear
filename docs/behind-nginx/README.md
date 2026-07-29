@@ -52,7 +52,9 @@ Copy [`nginx/jinear.conf`](./nginx/jinear.conf) into your nginx config (e.g.
 - Set the `ssl_certificate` / `ssl_certificate_key` paths to your certs (self-signed is
   fine — only browsers need to trust them; the Jinear core never connects to these names).
 - Set the `upstream jinear_caddy` address to wherever Caddy's HTTP port is reachable from
-  nginx (e.g. `127.0.0.1:8080` if nginx runs on the same host as the Jinear stack).
+  nginx (e.g. `127.0.0.1:8080` if nginx runs on the same host as the Jinear stack). If
+  nginx is itself a container sharing a Docker network with Jinear, use `jinear-caddy:80`
+  instead — see [If your proxy is another container](#if-your-proxy-is-another-container).
 
 ### Step 3: Reload nginx and start Jinear
 
@@ -62,6 +64,34 @@ sudo nginx -t && sudo systemctl reload nginx
 cd /path/to/jinear
 docker compose up -d
 ```
+
+## Nginx Proxy Manager and other GUI proxies
+
+If you run Nginx Proxy Manager (or any other UI-driven proxy) there is no config file to
+copy — and you don't need one. Create **three proxy hosts**, for your main, `api.` and
+`files.` domains, and forward all three to the same bundled Caddy endpoint (scheme
+`http`, the host and port from Step 2). That's the whole setup; the `files.` host needs
+no special treatment.
+
+This works because these proxies forward the original `Host` header by default, which is
+the one thing that has to be right. The hand-written `proxy_set_header Host $host;` above
+exists only to undo plain nginx's `proxy_pass` default.
+
+Two things to know:
+
+- If uploads of larger files fail with **413**, raise the body size limit for the `files.`
+  host. In Nginx Proxy Manager that's the *Advanced* tab of that proxy host:
+  `client_max_body_size 0;`.
+- Enable TLS per host in the UI as usual. Self-signed certificates are fine — only the
+  browser needs to trust them, `jinear-core` never connects to these names.
+
+## If your proxy is another container
+
+If your proxy runs as a container on the same Docker host, it can reach Caddy over a
+shared network and Jinear doesn't need to publish any port. Remove the `ports:` block
+from `jinear-caddy`, attach it to your proxy's network, and forward to `jinear-caddy:80`.
+Full recipe in
+[jinear-installation-scripts/README.md](../../jinear-installation-scripts/README.md#if-your-proxy-is-another-container-on-the-same-host).
 
 ## Troubleshooting
 

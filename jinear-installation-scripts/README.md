@@ -91,6 +91,37 @@ Point your proxy's virtual hosts for the main, `api.` and `files.` domains at
 `http://<this-host>:${HTTP_PORT}`. For a worked Traefik example, see
 [`docs/behind-traefik`](../docs/behind-traefik/README.md).
 
+### If your proxy is another container on the same host
+
+`HTTP_PORT` only matters when the proxy reaches Caddy over a **published host port**. If
+your reverse proxy is itself a container on the same Docker host, it can talk to Caddy
+directly over a shared network and Jinear doesn't need to publish anything at all.
+
+In the generated `docker-compose.yaml`, remove the whole `ports:` block from
+`jinear-caddy` and attach the service to your proxy's existing network:
+
+```yaml
+services:
+  jinear-caddy:
+    # ports: block deleted — nothing is exposed to the host
+    networks:
+      - jinear-default
+      - proxy
+
+networks:
+  jinear-default:
+    driver: bridge
+  proxy:
+    external: true          # the network your proxy already runs on
+```
+
+Then point your proxy's three virtual hosts at `http://jinear-caddy:80` — the
+**container** port, which is always `80` regardless of `HTTP_PORT`.
+
+Leave `PUBLIC_PORT_SUFFIX` empty in this topology: your proxy owns the public port, so it
+is the one that decides whether a port shows up in the browser's `Origin`. Set it only if
+that proxy listens on a non-standard port.
+
 > **Recommended: proxy to the bundled Caddy, not to individual services.** Point your
 > reverse proxy at the bundled Caddy as a single upstream for the main, `api.` and
 > `files.` domains. Caddy is already configured to talk to MinIO correctly, so you

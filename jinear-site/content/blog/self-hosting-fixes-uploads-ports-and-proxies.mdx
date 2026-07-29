@@ -1,0 +1,64 @@
+---
+title: "Release v0.1.1675. Self-Hosting Fixes: Uploads, Ports, and Reverse Proxies."
+description: "File uploads that never finished, an installer that insisted on owning the standard web ports, and a service that always reported itself unhealthy. All three are fixed, and there are new docs for running Jinear behind your own proxy."
+pubDate: "2026-07-26"
+tags: ["changelog", "self-hosting"]
+author: "Çağdaş"
+---
+
+This release is all self-hosting. Three bugs in the install path, and better
+documentation for putting Jinear behind a reverse proxy you already run.
+
+## File uploads never finished
+
+Uploads could sit at zero forever and never complete.
+
+When you upload a file, Jinear hands your browser a temporary, permission-carrying link
+so the file goes straight to storage. That permission is tied to the exact address the
+file is sent to, and Jinear was issuing it for the address it uses internally while
+handing your browser a link to the public one. Storage refused every upload. The same
+mismatch quietly broke image and attachment downloads too.
+
+Jinear now issues that permission for the public address from the start. A side effect:
+it no longer contacts your files domain itself, so it doesn't need to trust the
+certificate on it. Self-signed certificates on internal networks work now.
+
+## Ports and HTTPS are configurable
+
+The installer used to claim the standard web ports and always fetch certificates
+automatically, which made it impossible to install alongside an existing reverse proxy.
+
+It now asks which port to listen on, and whether it should handle certificates for you.
+Say no and it asks whether something in front of it already handles HTTPS, then
+configures everything else to match, including the details that used to break sign-in on
+plain-HTTP internal setups. Running on a non-standard port used to make the app show its
+"You're offline" page even when everything was running; that's handled automatically now
+too.
+
+## Healthchecks work
+
+Jinear's main service reported itself unhealthy forever on a perfectly working
+installation, because its periodic self-check used a tool that isn't installed in that
+container. It checks itself with something that's actually there now.
+
+## Better docs for reverse proxies
+
+- **A guide for running behind nginx**, with a config you can copy. nginx has two
+  defaults that break file storage and the guide calls out both. One is worth repeating:
+  the app and API will appear to work even when the files domain is misconfigured, so
+  "the app loads" isn't proof that uploads will.
+- **What to do when your proxy is another container.** The older docs assumed your proxy
+  reaches Jinear through a published port on the host. If it's a container on the same
+  machine, it doesn't need to. That's documented now.
+- **What to do when your proxy has a UI instead of a config file.** If you run something
+  like Nginx Proxy Manager there's no file to copy, so there's now a short section on
+  what to actually click: three entries, all pointing at the same place, nothing else.
+
+---
+
+All three bugs came from someone running Jinear on a real network, with their own proxy
+and their own certificates. I could have found them myself. I just hadn't tested far
+enough. If you're self-hosting and something is broken, or just confusing, email me.
+
+The whole thing is on [GitLab](https://gitlab.com/140crafts/use-jinear) and
+[GitHub](https://github.com/140crafts/use-jinear).
