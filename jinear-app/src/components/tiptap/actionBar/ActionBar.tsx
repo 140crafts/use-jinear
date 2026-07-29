@@ -22,6 +22,7 @@ import {
 import { MdHorizontalRule, MdLayersClear } from "react-icons/md";
 import { PiListNumbers } from "react-icons/pi";
 import styles from "./ActionBar.module.css";
+import TableControls from "./tableControls/TableControls";
 import { useUploadRichTextImageMutation } from "@/api/richTextImageApi";
 import { useAppDispatch } from "@/store";
 import { changeLoadingModalVisibility } from "@/slice/modalSlice";
@@ -247,6 +248,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
           />
         </>
       )}
+      {mode != "simple" && <TableControls editor={editor} />}
     </div>
   ) : null;
 };

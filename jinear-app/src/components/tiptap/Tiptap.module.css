@@ -33,6 +33,66 @@
 /*  outline-color: var(--c-primary-shade-1) !important;*/
 /*}*/
 
+/* region tables */
+
+.tiptap :global(.tableWrapper) {
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+.tiptap table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0;
+}
+
+.tiptap table td,
+.tiptap table th {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 4rem;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid var(--c-primary-shade-1);
+  vertical-align: top;
+}
+
+.tiptap table th {
+  background-color: var(--c-primary-shade-1);
+  font-weight: 600;
+  text-align: left;
+}
+
+.tiptap table p {
+  margin: 0;
+}
+
+.tiptap table :global(.selectedCell)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Local to the cell's stacking context — must not paint over the sticky action bar. */
+  z-index: 2;
+  background-color: var(--c-secondary-shade-1-op05);
+  pointer-events: none;
+}
+
+.tiptap :global(.column-resize-handle) {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  bottom: -2px;
+  width: 4px;
+  background-color: var(--c-JINEAR_ORANGE);
+  pointer-events: none;
+}
+
+.tiptap:global(.resize-cursor) {
+  cursor: col-resize;
+}
+
+/* endregion */
+
 .tiptap p.is-editor-empty:first-child::before {
   color: var(--c-secondary-shade-0-op025);
   content: attr(data-placeholder);

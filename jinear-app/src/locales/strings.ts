@@ -1238,6 +1238,54 @@ const translations = {
         en: "Ordered List",
         tr: "Sıralı Liste"
     },
+    textEditorInsertTable: {
+        en: "Insert Table",
+        tr: "Tablo Ekle"
+    },
+    textEditorAddColumnBefore: {
+        en: "Add Column Before",
+        tr: "Sola Sütun Ekle"
+    },
+    textEditorAddColumnAfter: {
+        en: "Add Column After",
+        tr: "Sağa Sütun Ekle"
+    },
+    textEditorDeleteColumn: {
+        en: "Delete Column",
+        tr: "Sütunu Sil"
+    },
+    textEditorAddRowBefore: {
+        en: "Add Row Above",
+        tr: "Üste Satır Ekle"
+    },
+    textEditorAddRowAfter: {
+        en: "Add Row Below",
+        tr: "Alta Satır Ekle"
+    },
+    textEditorDeleteRow: {
+        en: "Delete Row",
+        tr: "Satırı Sil"
+    },
+    textEditorMergeCells: {
+        en: "Merge Cells",
+        tr: "Hücreleri Birleştir"
+    },
+    textEditorSplitCell: {
+        en: "Split Cell",
+        tr: "Hücreyi Böl"
+    },
+    textEditorToggleHeaderRow: {
+        en: "Toggle Header Row",
+        tr: "Başlık Satırı"
+    },
+    textEditorToggleHeaderColumn: {
+        en: "Toggle Header Column",
+        tr: "Başlık Sütunu"
+    },
+    textEditorDeleteTable: {
+        en: "Delete Table",
+        tr: "Tabloyu Sil"
+    },
     taskRowChangeTaskDates: {
         en: "Change Dates",
         tr: "Tarihleri Değiştir"

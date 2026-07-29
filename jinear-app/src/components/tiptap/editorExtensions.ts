@@ -2,7 +2,9 @@ import {Extension} from "@tiptap/core";
 import Image from "@tiptap/extension-image";
 import Link from "@tiptap/extension-link";
 import Placeholder from "@tiptap/extension-placeholder";
+import {TableKit} from "@tiptap/extension-table";
 import StarterKit from "@tiptap/starter-kit";
+import {NoNestedTables} from "./noNestedTables/NoNestedTables";
 
 interface BuildEditorExtensionsOptions {
     placeholder?: string;
@@ -39,5 +41,15 @@ export const buildEditorExtensions = ({
     Image.configure({
         allowBase64: true
     }),
+    TableKit.configure({
+        table: {
+            resizable: true,
+            // Emit the .tableWrapper div from renderHTML too, not just from the editable TableView,
+            // so read-only renders get the horizontal scroll container as well.
+            renderWrapper: true,
+            lastColumnResizable: false
+        }
+    }),
+    NoNestedTables,
     ...extra
 ];
