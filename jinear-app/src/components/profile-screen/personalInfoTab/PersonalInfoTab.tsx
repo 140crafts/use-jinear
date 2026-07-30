@@ -39,7 +39,6 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
     try {
       await logoutCall().unwrap();
     } catch (error) {
-      // Server-side logout failed (offline, dead session) — still drop everything local.
       logger.error({ message: "Logout call failed", error });
     }
     await performLogoutCleanup(dispatch);

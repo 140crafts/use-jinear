@@ -31,7 +31,11 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
     const [selectedFile, setSelectedFile] = useState<File | undefined>();
     const [selectedFilePreview, setSelectedFilePreview] = useState<string | undefined>();
 
-    const [updateProfilePicture, {isSuccess, isLoading, isError}] = useUpdateProfilePictureMutation();
+    const [updateProfilePicture, {
+        isSuccess,
+        isLoading: isUpdateProfilePictureLoading,
+        isError
+    }] = useUpdateProfilePictureMutation();
     const [logoutCall, {isLoading: isLogoutLoading}] = useLogoutMutation();
 
     const logout = async () => {
@@ -78,6 +82,11 @@ const PersonalInfoTab: React.FC<PersonalInfoTabProps> = ({}) => {
             updateProfilePicture({formData});
         }
     }, [selectedFile]);
+
+    useEffect(() => {
+        logger.log({isUpdateProfilePictureLoading});
+        dispatch(changeLoadingModalVisibility({visible: isUpdateProfilePictureLoading}));
+    }, [isUpdateProfilePictureLoading]);
 
     return (
         <div className={styles.container}>

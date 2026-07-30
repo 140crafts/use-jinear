@@ -21,16 +21,15 @@ const TitleInput: React.FC<TitleInputProps> = ({ register, labelClass }) => {
     }, 250);
   }, []);
 
-  const isEnter = (event: React.KeyboardEvent<HTMLDivElement>) => {
+  const isEnter = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter") {
       event.preventDefault?.();
     }
   };
 
   return (
-    <input
+    <textarea
       id={inputId}
-      type={"text"}
       placeholder={t("newTaskModalTaskTitle")}
       className={cn(styles.input, labelClass)}
       onKeyDown={isEnter}
