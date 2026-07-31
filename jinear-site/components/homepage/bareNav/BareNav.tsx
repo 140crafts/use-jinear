@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { GITHUB_URL, SELF_HOSTING_DOCS_URL } from "@/utils/constants";
+import { GITHUB_URL, GITLAB_URL, SELF_HOSTING_DOCS_URL } from "@/utils/constants";
 import styles from "./BareNav.module.scss";
 
 interface BareNavProps {
@@ -26,6 +26,9 @@ const BareNav: React.FC<BareNavProps> = ({ active }) => {
         <Link className={active === "blog" ? styles.here : undefined} href="/blog">
           Blog
         </Link>
+        <a href={GITLAB_URL} target="_blank" rel="noreferrer">
+          GitLab
+        </a>
         <a href={GITHUB_URL} target="_blank" rel="noreferrer">
           GitHub
         </a>
