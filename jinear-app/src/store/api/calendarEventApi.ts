@@ -8,7 +8,6 @@ import type {
     CalendarShareableKeyResponse
 } from "@/model/be/jinear-core";
 import {api} from "./api";
-import {taskListingApi} from "./taskListingApi";
 
 export const calendarEventApi = api.injectEndpoints({
     endpoints: (build) => ({
@@ -31,29 +30,31 @@ export const calendarEventApi = api.injectEndpoints({
         moveEvent: build.mutation<BaseResponse, CalendarEventMoveRequest>({
             query: (req) => ({url: `v1/calendar/event/update/from-external/move`, method: "POST", body: req}),
             onQueryStarted(req, {dispatch, queryFulfilled, getState}) {
-                //cgds-448 might need later
-                const invalidatedTaskListFilterCaches = taskListingApi.util.selectInvalidatedBy(getState(), ["v1/task/list/filter"]);
+                const patches: { undo: () => void }[] = [];
                 const invalidatedEventFilterCaches = calendarEventApi.util.selectInvalidatedBy(getState(), ["v1/calendar/event/filter"]);
                 invalidatedEventFilterCaches
                     .filter((cache) => cache.endpointName == "filterCalendarEvents")
                     .forEach((cache) => {
-                        dispatch(
-                            calendarEventApi.util.updateQueryData("filterCalendarEvents", cache.originalArgs, (draft) => {
-                                draft.data
-                                    .filter((calendarEventDto) => calendarEventDto.calendarEventSourceType != "TASK")
-                                    .filter(
-                                        (calendarEventDto) =>
-                                            calendarEventDto.calendarEventId == req.eventId && calendarEventDto.calendarId == req.calendarId
-                                    )
-                                    .forEach((calendarEventDto) => {
-                                        if (req.targetCalendarSourceId && calendarEventDto.externalCalendarSourceDto) {
-                                            calendarEventDto.externalCalendarSourceDto.externalCalendarSourceId = req.targetCalendarSourceId;
-                                        }
-                                    });
-                                return draft;
-                            })
+                        patches.push(
+                            dispatch(
+                                calendarEventApi.util.updateQueryData("filterCalendarEvents", cache.originalArgs, (draft) => {
+                                    draft.data
+                                        .filter((calendarEventDto) => calendarEventDto.calendarEventSourceType != "TASK")
+                                        .filter(
+                                            (calendarEventDto) =>
+                                                calendarEventDto.calendarEventId == req.eventId && calendarEventDto.calendarId == req.calendarId
+                                        )
+                                        .forEach((calendarEventDto) => {
+                                            if (req.targetCalendarSourceId && calendarEventDto.externalCalendarSourceDto) {
+                                                calendarEventDto.externalCalendarSourceDto.externalCalendarSourceId = req.targetCalendarSourceId;
+                                            }
+                                        });
+                                    return draft;
+                                })
+                            )
                         );
                     });
+                queryFulfilled.catch(() => patches.forEach((patch) => patch.undo()));
             },
             invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
         }),
@@ -61,38 +62,42 @@ export const calendarEventApi = api.injectEndpoints({
         updateCalendarEventDates: build.mutation<BaseResponse, CalendarEventDateUpdateRequest>({
             query: (req) => ({url: `v1/calendar/event/update/from-external/dates`, method: "PUT", body: req}),
             onQueryStarted(req, {dispatch, queryFulfilled, getState}) {
-                //cgds-448 might need later
-                const invalidatedTaskListFilterCaches = taskListingApi.util.selectInvalidatedBy(getState(), ["v1/task/list/filter"]);
+                const patches: { undo: () => void }[] = [];
                 const invalidatedEventFilterCaches = calendarEventApi.util.selectInvalidatedBy(getState(), ["v1/calendar/event/filter"]);
                 invalidatedEventFilterCaches
                     .filter((cache) => cache.endpointName == "filterCalendarEvents")
                     .forEach((cache) => {
-                        dispatch(
-                            calendarEventApi.util.updateQueryData("filterCalendarEvents", cache.originalArgs, (draft) => {
-                                draft.data
-                                    .filter((calendarEventDto) => calendarEventDto.calendarEventSourceType != "TASK")
-                                    .filter(
-                                        (calendarEventDto) =>
-                                            calendarEventDto.calendarEventId == req.calendarEventId && calendarEventDto.calendarId == req.calendarId
-                                    )
-                                    .forEach((calendarEventDto) => {
-                                        if (req.assignedDate) {
-                                            calendarEventDto.assignedDate = req.assignedDate;
-                                        }
-                                        if (req.dueDate) {
-                                            calendarEventDto.dueDate = req.dueDate;
-                                        }
-                                        if (req.hasPreciseAssignedDate) {
-                                            calendarEventDto.hasPreciseAssignedDate = req.hasPreciseAssignedDate;
-                                        }
-                                        if (req.hasPreciseDueDate) {
-                                            calendarEventDto.hasPreciseDueDate = req.hasPreciseDueDate;
-                                        }
-                                    });
-                                return draft;
-                            })
+                        patches.push(
+                            dispatch(
+                                calendarEventApi.util.updateQueryData("filterCalendarEvents", cache.originalArgs, (draft) => {
+                                    draft.data
+                                        .filter((calendarEventDto) => calendarEventDto.calendarEventSourceType != "TASK")
+                                        .filter(
+                                            (calendarEventDto) =>
+                                                calendarEventDto.calendarEventId == req.calendarEventId &&
+                                                calendarEventDto.calendarId == req.calendarId
+                                        )
+                                        .forEach((calendarEventDto) => {
+                                            if (req.assignedDate) {
+                                                calendarEventDto.assignedDate = req.assignedDate;
+                                            }
+                                            if (req.dueDate) {
+                                                calendarEventDto.dueDate = req.dueDate;
+                                            }
+                                            if (req.hasPreciseAssignedDate) {
+                                                calendarEventDto.hasPreciseAssignedDate = req.hasPreciseAssignedDate;
+                                            }
+                                            if (req.hasPreciseDueDate) {
+                                                calendarEventDto.hasPreciseDueDate = req.hasPreciseDueDate;
+                                            }
+                                        });
+                                    return draft;
+                                })
+                            )
                         );
                     });
+                // Without this a failed move leaves the event sitting on the day it was dropped on.
+                queryFulfilled.catch(() => patches.forEach((patch) => patch.undo()));
             },
             invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
         }),

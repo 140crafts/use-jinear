@@ -4,6 +4,7 @@ import {
     useDraggingEvent,
     useGhostEvent,
     useSetCalenderLoading,
+    useSetDraggingEvent,
     useSetGhostEvent,
 } from "@/components/calendar/context/CalendarContext";
 import {useUpdateCalendarEventDatesMutation} from "@/store/api/calendarEventApi";
@@ -26,6 +27,7 @@ const WeekTile: React.FC<WeekTileProps> = ({day}) => {
     const workspace = useCalendarWorkspace();
     const team = useCalendarNewTaskFromTeam();
     const draggingEvent = useDraggingEvent();
+    const setDraggingEvent = useSetDraggingEvent();
     const ghostEvent = useGhostEvent();
     const setGhostEvent = useSetGhostEvent();
     const setCalendarLoading = useSetCalenderLoading();
@@ -72,6 +74,12 @@ const WeekTile: React.FC<WeekTileProps> = ({day}) => {
         setCalendarLoading?.(isLoading);
     }, [isLoading, setCalendarLoading]);
 
+    useEffect(() => {
+        if (!draggingEvent) {
+            setDragHovering(false);
+        }
+    }, [draggingEvent]);
+
     const _onDragEnter = (event: React.DragEvent) => {
         setDragHovering(true);
     };
@@ -116,6 +124,10 @@ const WeekTile: React.FC<WeekTileProps> = ({day}) => {
                 }
             }
         }
+        // The optimistic cache patch above re-lays out the calendar, which can unmount the
+        // drag source before its dragend reaches react. Clear here instead of relying on it.
+        setDraggingEvent?.(undefined);
+        setGhostEvent?.(undefined);
         setDragHovering(false);
         event.preventDefault();
     };
