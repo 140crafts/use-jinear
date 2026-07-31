@@ -95,6 +95,18 @@
   min-width: 96px;
 }
 
+.newBadge {
+  font-style: normal;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--acc-deep);
+  background: var(--acc-tint);
+  border: 1px solid var(--acc-soft);
+  border-radius: 999px;
+  padding: 1px 5px;
+  margin-left: 6px;
+}
+
 .note {
   background: var(--acc-tint);
   border: 1px solid var(--acc-soft);

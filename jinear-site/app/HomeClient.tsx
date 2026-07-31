@@ -71,6 +71,12 @@ export default function HomeClient() {
               <span>A built-in calendar, plus Google Calendar sync.</span>
             </li>
             <li>
+              <span className={styles.k}>
+                notes<em className={styles.newBadge}>new</em>
+              </span>
+              <span>Rich-text notes in shared notebooks, with tags and offline drafts.</span>
+            </li>
+            <li>
               <span className={styles.k}>files</span>
               <span>Attach files to tasks, create folders, upload data, and define fine-grained access controls.</span>
             </li>
