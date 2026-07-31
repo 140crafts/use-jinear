@@ -21,7 +21,6 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
     const tasksPath = `/${workspace?.username}/tasks`;
     const filesPath = `/${workspace?.username}/files`;
     const notesPath = `/${workspace?.username}/notebook`;
-    const notesEnabled = useFeatureFlag("NOTES");
 
     return (
         <div className={styles.container}>
@@ -44,15 +43,14 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
                 {t("mainFeaturesMenuLabelTasks")}
             </Button>
 
-            {notesEnabled &&
-                <Button
+            <Button
                 className={styles.iconButton}
                 href={notesPath}
                 variant={pathname?.indexOf(notesPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             >
                 <LuNotebook className={styles.icon}/>
                 {t("mainFeaturesMenuLabelNotes")}
-            </Button>}
+            </Button>
 
             <Button
                 className={styles.iconButton}
