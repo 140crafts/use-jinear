@@ -15,6 +15,7 @@ export interface BaseModalProps {
   closepadClassName?: string;
   width?: ModalWidth;
   height?: ModalHeight;
+  bottomSheet?: boolean;
 }
 
 const BaseModal: React.FC<BaseModalProps> = ({
@@ -26,17 +27,42 @@ const BaseModal: React.FC<BaseModalProps> = ({
                                                contentClassName,
                                                closepadClassName,
                                                width = "default",
-                                               height = "default"
+                                               height = "default",
+                                               bottomSheet = false
                                              }) => {
   const avoid = () => {
   };
 
+  // Keep the modal mounted while the bottom-sheet exit animation plays.
+  const [rendered, setRendered] = React.useState(visible);
+  const [closing, setClosing] = React.useState(false);
+
+  React.useEffect(() => {
+    if (visible) {
+      setClosing(false);
+      setRendered(true);
+    } else if (bottomSheet) {
+      setClosing(true);
+    } else {
+      setRendered(false);
+    }
+  }, [visible, bottomSheet]);
+
+  const handleAnimationEnd = (event: React.AnimationEvent<HTMLDivElement>) => {
+    // Ignore animation events bubbling up from child content.
+    if (closing && event.target === event.currentTarget) {
+      setClosing(false);
+      setRendered(false);
+    }
+  };
+
   return (
-    visible ? (
+    rendered ? (
       <div className={cn(styles.container, styles[`${width}-container`], containerClassName)}>
         <div
-          className={cn([styles.content, styles[`${width}-content`], styles[`${height}-content`], contentClassName])}
+          className={cn([styles.content, styles[`${width}-content`], styles[`${height}-content`], bottomSheet && (closing ? styles.bottomSheetClosing : styles.bottomSheet), contentClassName])}
           onClick={avoid}
+          onAnimationEnd={handleAnimationEnd}
         >
           <div
             className={cn(styles.children, contentContainerClass)}
@@ -46,7 +72,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
         </div>
         <div
           onClick={requestClose}
-          className={cn([styles.closepad, closepadClassName])}
+          className={cn([styles.closepad, closing && styles.closepadClosing, closepadClassName])}
         />
       </div>
     ) : null

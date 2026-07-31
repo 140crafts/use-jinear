@@ -108,7 +108,7 @@ const TaskRelationRow: React.FC<TaskRelationRowProps> = ({
                 disabled={!task}
                 onClick={popChangeWorkflowStatusModal}
                 heightVariant={ButtonHeight.short}
-                variant={ButtonVariants.filled}
+                variant={ButtonVariants.outline}
                 className={styles.workflowStatusButton}
             >
                 {task ? groupIconMap?.[task?.workflowStatus.workflowStateGroup] : <IoRemove size={ICON_SIZE}/>}
@@ -135,7 +135,8 @@ const TaskRelationRow: React.FC<TaskRelationRowProps> = ({
             )}
 
             <div className="spacer-w-1"/>
-            {task && <AssigneeCell task={task} tooltipPosition={"right"} className={styles.workflowStatusButton}/>}
+            {task && <AssigneeCell task={task} tooltipPosition={"right"} className={styles.workflowStatusButton}
+                                   buttonVariant={ButtonVariants.outline}/>}
         </div>
     );
 };

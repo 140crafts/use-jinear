@@ -50,7 +50,12 @@ import LastActivitiesScreen from "@/pages/workspace/tasks/last-activities/page.t
 import TeamsPage from "@/pages/workspace/tasks/teams/page.tsx";
 import ReloadQueryRefetchHandler from "@/components/reloadQueryRefetchHandler/ReloadQueryRefetchHandler.tsx";
 import OfflinePrefetchManager from "@/components/offlinePrefetchManager/OfflinePrefetchManager.tsx";
+import PendingDraftSubmitter from "@/components/pendingDraftSubmitter/PendingDraftSubmitter.tsx";
 import WorkspaceModalProvider from "@/components/modal-provider/WorkspaceModalProvider.tsx";
+import NotesLayout from "@/pages/workspace/notebook/notebook-layout/layout.tsx";
+import NotePage from "@/pages/workspace/notebook/note";
+import NotebookDetailPage from "@/pages/workspace/notebook/notebook-detail/NotebookDetailPage.tsx";
+import NotebookFirstNoteNavigator from "@/pages/workspace/notebook/page.tsx";
 
 export default function App() {
     return (
@@ -69,6 +74,7 @@ export default function App() {
 
             <ReloadQueryRefetchHandler/>
             <OfflinePrefetchManager/>
+            <PendingDraftSubmitter/>
             <Routes>
 
                 <Route path="*" element={<Navigate to="/" replace/>}/>
@@ -125,6 +131,12 @@ export default function App() {
                             </Route>
 
                         </Route>
+                    </Route>
+
+                    <Route path="notebook" element={<NotesLayout/>}>
+                        <Route index element={<NotebookFirstNoteNavigator/>}/>
+                        <Route path=":notebookId" element={<NotebookDetailPage/>}/>
+                        <Route path=":notebookId/note/:noteId" element={<NotePage/>}/>
                     </Route>
 
                     <Route path="calendar" element={<CalendarLayout/>}>

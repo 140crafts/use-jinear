@@ -44,6 +44,9 @@ import DatePickerModal from "@/components/modal/datePicker/DatePickerModal.tsx";
 import BasicTextInputModal from "@/components/modal/basicTextInputModal/BasicTextInputModal.tsx";
 import UploadStatusModal from "@/components/modal/uploadStatusModal/UploadStatusModal.tsx";
 import PasswordChangeModal from "@/components/modal/passwordChangeModal/PasswordChangeModal.tsx";
+import NotebookInitializeModal from "@/components/modal/notebookInitializeModal/NotebookInitializeModal.tsx";
+import NotebookPickerModal from "@/components/modal/notebookPickerModal/NotebookPickerModal.tsx";
+import NoteTagPickerModal from "@/components/modal/noteTagPickerModal/NoteTagPickerModal.tsx";
 
 interface WorkspaceModalProviderProps {
 }
@@ -88,6 +91,9 @@ const workspaceModals: any = (
         <BoardPickerModal/>
         <NewTopicModal/>
         <UpgradeWorkspaceModal/>
+        <NotebookInitializeModal/>
+        <NotebookPickerModal/>
+        <NoteTagPickerModal/>
 
         <PasswordChangeModal/>
         <UploadStatusModal/>

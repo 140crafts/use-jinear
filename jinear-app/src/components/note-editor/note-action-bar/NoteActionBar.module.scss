@@ -1,0 +1,77 @@
+@use "../../../styles/breakpoints.scss" as *;
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: .25rem;
+
+  min-height: 1.5rem;
+  border-bottom-style: solid;
+  border-bottom-width: thin;
+  border-bottom-color: var(--c-primary-shade-1);
+  padding-bottom: 0.5rem;
+}
+
+.actionButtonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+}
+
+.syncStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+
+  font-size: 0.75rem;
+  line-height: 1;
+  white-space: nowrap;
+  color: var(--c-secondary-shade-0);
+  opacity: 0.8;
+  user-select: none;
+  cursor: default;
+}
+
+.syncStatusIcon {
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+}
+
+.syncStatusError {
+  color: var(--c-JINEAR_ORANGE);
+  opacity: 1;
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+.deleteButton {
+  color: var(--c-ERROR_RED);
+  border-color: rgb(from var(--c-ERROR_RED) r g b / 35%);
+}
+
+.deleteButton:hover {
+  color: var(--c-ERROR_RED);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin {
+    animation-duration: 3s;
+  }
+}
+
+@media (max-width: $tablet) {
+  .container {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

@@ -20,6 +20,8 @@ interface ModalProps extends BaseModalProps {
     title?: string;
     hasTitleCloseButton?: boolean;
     closeButtonIcon?: React.ReactNode;
+    bottomSheet?: boolean;
+    rightButton?: React.ReactNode;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -36,7 +38,9 @@ const Modal: React.FC<ModalProps> = ({
                                          title,
                                          hasTitleCloseButton = false,
                                          onTitleCloeButtonClick,
-                                         closeButtonIcon
+                                         closeButtonIcon,
+                                         bottomSheet = false,
+                                         rightButton,
                                      }) => {
 
     const titleCloseClick = () => {
@@ -57,18 +61,22 @@ const Modal: React.FC<ModalProps> = ({
             closepadClassName={closepadClassName}
             width={width}
             height={height}
+            bottomSheet={bottomSheet}
         >
             {title && (
                 <div className={styles.titleBar}>
-                    {hasTitleCloseButton && (
+                    {(hasTitleCloseButton || rightButton) && (
                         <div className={styles.titleBarIconButtonContainer}>
-                            <Button onClick={titleCloseClick}>
-                                {closeButtonIcon ?? <IoClose size={18}/>}
-                            </Button>
+                            {hasTitleCloseButton &&
+                                <Button onClick={titleCloseClick}>
+                                    {closeButtonIcon ?? <IoClose size={18}/>}
+                                </Button>
+                            }
                         </div>
                     )}
                     <h3 className={cn(styles.title, "single-line")}>{title}</h3>
-                    {hasTitleCloseButton && <div className={styles.titleBarIconButtonContainer}/>}
+                    {(hasTitleCloseButton || rightButton) &&
+                        <div className={styles.titleBarIconButtonContainer}>{rightButton}</div>}
                 </div>
             )}
             <div

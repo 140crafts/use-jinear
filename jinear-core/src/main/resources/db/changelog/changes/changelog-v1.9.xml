@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="jin-553-initialize-notebook">
+        <createTable tableName="notebook">
+            <column name="notebook_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="title" type="varchar(512)"/>
+            <column name="description" type="text"/>
+            <column name="visibility" type="int" defaultValueNumeric="0">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="notebook_ix_workspace_id" tableName="notebook">
+            <column name="workspace_id"/>
+        </createIndex>
+
+        <createIndex indexName="notebook_ix_owner_id" tableName="notebook">
+            <column name="owner_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-553-initialize-notebook_member">
+        <createTable tableName="notebook_member">
+            <column name="notebook_member_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="notebook_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="notebook_member_ix_notebook_id" tableName="notebook_member">
+            <column name="notebook_id"/>
+        </createIndex>
+
+        <createIndex indexName="notebook_member_ix_account_id" tableName="notebook_member">
+            <column name="account_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-553-initialize-note">
+        <createTable tableName="note">
+            <column name="note_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="notebook_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="owner_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="parent_note_id" type="char(26)"/>
+            <column name="title" type="varchar(512)"/>
+            <column name="rich_text_id" type="char(26)"/>
+        </createTable>
+
+        <createIndex indexName="note_ix_notebook_id" tableName="note">
+            <column name="notebook_id"/>
+        </createIndex>
+
+        <createIndex indexName="note_ix_parent_note_id" tableName="note">
+            <column name="parent_note_id"/>
+        </createIndex>
+
+        <createIndex indexName="note_ix_rich_text_id" tableName="note">
+            <column name="rich_text_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-553-initialize-note_tag">
+        <createTable tableName="note_tag">
+            <column name="note_tag_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="notebook_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="name" type="varchar(255)"/>
+            <column name="color" type="varchar(255)"/>
+        </createTable>
+
+        <createIndex indexName="note_tag_ix_notebook_id" tableName="note_tag">
+            <column name="notebook_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-553-initialize-note_tag_assignment">
+        <createTable tableName="note_tag_assignment">
+            <column name="note_tag_assignment_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="note_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="note_tag_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex indexName="note_tag_assignment_ix_note_id" tableName="note_tag_assignment">
+            <column name="note_id"/>
+        </createIndex>
+
+        <createIndex indexName="note_tag_assignment_ix_note_tag_id" tableName="note_tag_assignment">
+            <column name="note_tag_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

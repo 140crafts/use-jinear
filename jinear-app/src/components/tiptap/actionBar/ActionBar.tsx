@@ -1,5 +1,6 @@
 import Button, { ButtonVariants } from "@/components/button";
-import { Editor } from "@tiptap/react";
+import useTranslation from "@/locals/useTranslation";
+import { Editor, useEditorState } from "@tiptap/react";
 import React, {type ChangeEvent, useEffect, useRef } from "react";
 import {
   LuBold,
@@ -13,6 +14,8 @@ import {
   LuImage,
   LuItalic,
   LuList,
+  LuListChecks,
+  LuListTodo,
   LuQuote,
   LuRedo2,
   LuRemoveFormatting,
@@ -22,9 +25,11 @@ import {
 import { MdHorizontalRule, MdLayersClear } from "react-icons/md";
 import { PiListNumbers } from "react-icons/pi";
 import styles from "./ActionBar.module.css";
+import TableControls from "./tableControls/TableControls";
 import { useUploadRichTextImageMutation } from "@/api/richTextImageApi";
 import { useAppDispatch } from "@/store";
 import { changeLoadingModalVisibility } from "@/slice/modalSlice";
+import cn from "classnames";
 
 export type TipTapActionBarMode = "simple" | "full" | "none";
 
@@ -32,12 +37,25 @@ interface ActionBarProps {
   editor: Editor;
   mode?: TipTapActionBarMode;
   workspaceIdForImages?: string;
+  className?: string;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceIdForImages }) => {
+const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceIdForImages, className }) => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const imagePickerButtonRef = useRef<HTMLInputElement>(null);
   const [uploadRichTextImage, { data: uploadRichTextImageResponse, isLoading }] = useUploadRichTextImageMutation();
+
+  // The buttons below read `isActive`/`can` straight off the editor, which under Tiptap v3 only
+  // refreshes when this component happens to re-render. Subscribe the task list button explicitly
+  // so its toggled state tracks the caret — same reason TableControls does this.
+  const taskListState = useEditorState({
+    editor,
+    selector: ({ editor }) => ({
+      isActive: editor.isActive("taskList"),
+      canToggle: editor.can().chain().focus().toggleTaskList().run()
+    })
+  });
 
   useEffect(() => {
     if (uploadRichTextImageResponse?.data && editor) {
@@ -78,7 +96,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
   };
 
   return (editor && mode != "none") ? (
-    <div className={styles.container}>
+    <div className={cn(styles.container, className)}>
       <Button
         onClick={() => editor.chain().focus().toggleBold().run()}
         disabled={!editor.can().chain().focus().toggleBold().run()}
@@ -184,6 +202,16 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
       )}
       {mode != "simple" && (
         <Button
+          onClick={() => editor.chain().focus().toggleTaskList().run()}
+          disabled={!taskListState?.canToggle}
+          variant={taskListState?.isActive ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
+          data-tooltip-top={t("textEditorTaskList")}
+        >
+          <LuListChecks />
+        </Button>
+      )}
+      {mode != "simple" && (
+        <Button
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           disabled={!editor.can().chain().focus().toggleCodeBlock().run()}
           variant={editor.isActive("codeBlock") ? ButtonVariants.contrast : ButtonVariants.hoverFilled}
@@ -245,6 +273,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
           />
         </>
       )}
+      {mode != "simple" && <TableControls editor={editor} />}
     </div>
   ) : null;
 };

@@ -1,21 +1,30 @@
 import React from "react";
 import styles from "./SecondLevelSideMenuV2.module.scss";
 import cn from "classnames";
-import Button from "@/components/button";
+import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
 import Modal from "@/components/modal/modal/Modal";
 import {useAppDispatch, useTypedSelector} from "@/store";
 import {closeSecondLevelMenu, popSecondLevelMenu, selectSecondLevelMenuVisible} from "@/slice/displayPreferenceSlice";
+import useWindowSize from "@/hooks/useWindowSize.ts";
 
 interface SecondLevelSideMenuV2Props {
     className?: string;
     children: React.ReactNode;
+    mobileFabButtonText: string;
+    mobileFabButtonIcon: React.ReactNode;
 }
 
-const SecondLevelSideMenuV2: React.FC<SecondLevelSideMenuV2Props> = ({className, children}) => {
+const SecondLevelSideMenuV2: React.FC<SecondLevelSideMenuV2Props> = ({
+                                                                         className,
+                                                                         mobileFabButtonText,
+                                                                         mobileFabButtonIcon,
+                                                                         children
+                                                                     }) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
     const menuModalVisible = useTypedSelector(selectSecondLevelMenuVisible);
+    const {isTablet} = useWindowSize();
 
     const popMenu = () => {
         dispatch(popSecondLevelMenu());
@@ -32,13 +41,16 @@ const SecondLevelSideMenuV2: React.FC<SecondLevelSideMenuV2Props> = ({className,
                 {children}
             </div>
             <div id="second-level-side-menu-mobile-menu-button-container" className={styles.mobileMenuButtonContainer}>
-                <Button className={styles.mobileMenuButton} onClick={popMenu}>
-                    <b>{t("tasksLayoutSideMenuCollapsedLabel")}</b>
+                <Button heightVariant={ButtonHeight.mid} variant={ButtonVariants.brandColor}
+                        className={styles.mobileMenuButton} onClick={popMenu}>
+                    {mobileFabButtonIcon}
+                    <b>{mobileFabButtonText ?? t("tasksLayoutSideMenuCollapsedLabel")}</b>
                 </Button>
             </div>
             <div>
                 <Modal
-                    visible={menuModalVisible}
+                    visible={isTablet && menuModalVisible}
+                    bottomSheet
                     bodyClass={styles.modalBody}
                     containerClassName={styles.modalContainer}
                     contentClassName={styles.modalContent}

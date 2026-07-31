@@ -28,6 +28,9 @@ import type {
     NewTaskModalState,
     NewTeamModalState,
     NewTopicModalState,
+    NotebookInitializeModalState,
+    NotebookPickerModalState,
+    NoteTagPickerModalState,
     NotFoundModalState,
     NotificationPermissionModalState,
     PasswordChangeModalState,
@@ -92,6 +95,10 @@ const initialState = {
         visible: false
     },
     newTeamModal: {
+        visible: false,
+        workspace: undefined
+    },
+    notebookInitializeModal: {
         visible: false,
         workspace: undefined
     },
@@ -231,6 +238,12 @@ const initialState = {
     materialFolderPickerModal: {
         visible: false
     },
+    notebookPickerModal: {
+        visible: false
+    },
+    noteTagPickerModal: {
+        visible: false
+    },
     uploadStatusModal: {
         visible: false
     },
@@ -251,6 +264,7 @@ const initialState = {
     changeTaskAssigneeModal: null | ChangeTaskAssigneeModalState;
     newWorkspaceModal: null | ModalState;
     newTeamModal: null | NewTeamModalState;
+    notebookInitializeModal: null | NotebookInitializeModalState;
     searchTaskModal: null | SearchTaskModalState;
     dialogModal: null | DialogModalState;
     reminderListModal: null | ReminderListModalState;
@@ -296,6 +310,8 @@ const initialState = {
     passwordChangeModal: null | PasswordChangeModalState,
     feedbackModal: null | ModalState,
     materialFolderPickerModal: null | MaterialFolderPickerModalState,
+    notebookPickerModal: null | NotebookPickerModalState,
+    noteTagPickerModal: null | NoteTagPickerModalState,
     uploadStatusModal: null | UploadStatusModalState;
     materialAccessModal: null | MaterialAccessModalState;
 };
@@ -378,6 +394,12 @@ const slice = createSlice({
         },
         closeNewTeamModal: (state, action: PayloadAction<void>) => {
             state.newTeamModal = initialState.newTeamModal;
+        },
+        popNotebookInitializeModal: (state, action: PayloadAction<NotebookInitializeModalState>) => {
+            state.notebookInitializeModal = {visible: true, workspace: action.payload.workspace};
+        },
+        closeNotebookInitializeModal: (state, action: PayloadAction<void>) => {
+            state.notebookInitializeModal = initialState.notebookInitializeModal;
         },
 
         popDialogModal: (state, action: PayloadAction<DialogModalState>) => {
@@ -694,6 +716,19 @@ const slice = createSlice({
             state.materialFolderPickerModal = initialState.materialFolderPickerModal;
         },
 
+        popNotebookPickerModal: (state, action: PayloadAction<NotebookPickerModalState>) => {
+            state.notebookPickerModal = {...action.payload, visible: true};
+        },
+        closeNotebookPickerModal: (state, action: PayloadAction<void>) => {
+            state.notebookPickerModal = initialState.notebookPickerModal;
+        },
+        popNoteTagPickerModal: (state, action: PayloadAction<NoteTagPickerModalState>) => {
+            state.noteTagPickerModal = {...action.payload, visible: true};
+        },
+        closeNoteTagPickerModal: (state, action: PayloadAction<void>) => {
+            state.noteTagPickerModal = initialState.noteTagPickerModal;
+        },
+
         pushDataToUploadStatusModalQueue: (state, action: PayloadAction<UploadStatusModalState>) => {
             state.uploadStatusModal ??= {
                 visible: true,
@@ -782,6 +817,8 @@ export const {
     closeNewWorkspaceModal,
     popNewTeamModal,
     closeNewTeamModal,
+    popNotebookInitializeModal,
+    closeNotebookInitializeModal,
     popSearchTaskModal,
     closeSearchTaskModal,
     popDialogModal,
@@ -872,6 +909,10 @@ export const {
     closeFeedbackModal,
     popMaterialFolderPickerModal,
     closeMaterialFolderPickerModal,
+    popNotebookPickerModal,
+    closeNotebookPickerModal,
+    popNoteTagPickerModal,
+    closeNoteTagPickerModal,
     popUploadStatusModal,
     closeUploadStatusModal,
     pushDataToUploadStatusModalQueue,
@@ -961,6 +1002,8 @@ export const selectNewWorkspaceModalVisible = (state: RootState) => state.modal.
 
 export const selectNewTeamModalVisible = (state: RootState) => state.modal.newTeamModal?.visible;
 export const selectNewTeamModalWorkspace = (state: RootState) => state.modal.newTeamModal?.workspace;
+export const selectNotebookInitializeModalVisible = (state: RootState) => state.modal.notebookInitializeModal?.visible;
+export const selectNotebookInitializeModalWorkspace = (state: RootState) => state.modal.notebookInitializeModal?.workspace;
 
 export const selectSearchTaskModalVisible = (state: RootState) => state.modal.searchTaskModal?.visible;
 export const selectSearchTaskModalWorkspaceId = (state: RootState) => state.modal.searchTaskModal?.workspaceId;
@@ -1173,6 +1216,15 @@ export const selectMaterialFolderPickerModalVisible = (state: RootState) => stat
 export const selectMaterialFolderPickerModalWorkspaceId = (state: RootState) => state.modal.materialFolderPickerModal?.workspaceId;
 export const selectMaterialFolderPickerModalOnPick = (state: RootState) => state.modal.materialFolderPickerModal?.onPick;
 export const selectMaterialFolderPickerModalTitle = (state: RootState) => state.modal.materialFolderPickerModal?.title;
+
+export const selectNotebookPickerModalVisible = (state: RootState) => state.modal.notebookPickerModal?.visible;
+export const selectNotebookPickerModalWorkspaceId = (state: RootState) => state.modal.notebookPickerModal?.workspaceId;
+export const selectNotebookPickerModalOnPick = (state: RootState) => state.modal.notebookPickerModal?.onPick;
+
+export const selectNoteTagPickerModalVisible = (state: RootState) => state.modal.noteTagPickerModal?.visible;
+export const selectNoteTagPickerModalNotebookId = (state: RootState) => state.modal.noteTagPickerModal?.notebookId;
+export const selectNoteTagPickerModalInitialSelection = (state: RootState) => state.modal.noteTagPickerModal?.initialSelection;
+export const selectNoteTagPickerModalOnPick = (state: RootState) => state.modal.noteTagPickerModal?.onPick;
 
 export const selectUploadStatusModalVisible = (state: RootState) => state.modal.uploadStatusModal?.visible;
 export const selectUploadStatusModalWorkspaceId = (state: RootState) => state.modal.uploadStatusModal?.workspaceId;

@@ -1,18 +1,21 @@
 import React, { useRef, useState } from "react";
 import styles from "./DropZone.module.css";
+import cn from "classnames";
 
 interface DropZoneProps {
   children: React.ReactNode;
   onDrop: ({ files }: { files: File[] }) => void;
   disabled?: boolean;
   overlayText?: string;
+  containerClassName?: string;
 }
 
 const DropZone: React.FC<DropZoneProps> = ({
                                              children,
                                              onDrop,
                                              disabled = false,
-                                             overlayText = "Drop files to upload"
+                                             overlayText = "Drop files to upload",
+                                             containerClassName
                                            }) => {
   const [isDragging, setIsDragging] = useState(false);
   const dragCounter = useRef(0);
@@ -54,7 +57,7 @@ const DropZone: React.FC<DropZoneProps> = ({
 
   return (
     <div
-      className={styles.container}
+      className={cn(styles.container, containerClassName)}
       onDragEnter={handleDragEnter}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}

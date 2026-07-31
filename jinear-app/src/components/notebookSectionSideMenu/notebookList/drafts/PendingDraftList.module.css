@@ -1,0 +1,23 @@
+.noteButtonGroup {
+    display: flex;
+    flex-direction: row;
+    gap: .25rem;
+}
+
+.noteButton {
+    flex: 1;
+    justify-content: flex-start;
+    gap: .5rem;
+    background-color: unset !important;
+    padding-left: 0.15rem !important;
+    padding-right: 0.15rem !important;
+}
+
+/* Draft the server rejected as unretryable: content is kept locally, surfaced as a warning. */
+.failedIcon {
+    color: var(--c-ERROR_RED);
+}
+
+.failed {
+    color: var(--c-ERROR_RED);
+}

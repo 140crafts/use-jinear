@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="jin-552-fix-mv-task-fts-tag-delimiter">
+        <!-- @formatter:off -->
+        <sql>
+            drop materialized view mv_task_fts;
+
+            create materialized view mv_task_fts
+as
+            with task_description_agg as (
+                select rt.related_object_id                    as task_id,
+                       string_agg(rt.value::text, ', '::text)  as description
+                from rich_text rt
+                where rt.passive_id is null
+                  and rt.related_object_id is not null
+                group by rt.related_object_id
+            ),
+                 task_comments_agg as (
+                     select c.task_id                              as task_id,
+                            string_agg(rt.value::text, ', '::text) as comments
+                     from comment c
+                              inner join rich_text rt on c.rich_text_id = rt.rich_text_id
+                     where rt.passive_id is null
+                       and c.passive_id is null
+                     group by c.task_id
+                 ),
+                 task_attachments_agg as (
+                     select m.related_object_id as task_id,
+                            string_agg(regexp_replace(m.original_name, '[^\w]+', ' ', 'g')::text, ', '::text) as attachments
+                     from media m
+                     where m.passive_id is null
+                       and m.related_object_id is not null
+                     group by m.related_object_id
+                 )
+            select t.task_id,
+                   t.workspace_id,
+                   t.team_id,
+                   t.passive_id,
+                   t.owner_id,
+                   t.assigned_to,
+                   t.title,
+                   coalesce(td.description, ''::text)  as task_description,
+                   tm.task_visibility                  as team_task_visibility,
+                   coalesce(tc.comments, ''::text)     as comments_meta,
+                   coalesce(ta.attachments, ''::text)  as attachments_meta,
+                   setweight(to_tsvector('simple', concat_ws(' ', tm.tag, t.team_tag_no)), 'A')
+                       || setweight(to_tsvector('simple', coalesce(t.title, ''::text)), 'A')
+                       || setweight(to_tsvector('simple', coalesce(td.description, ''::text)), 'B')
+                       || setweight(to_tsvector('simple', coalesce(tc.comments, ''::text)), 'B')
+                       || setweight(to_tsvector('simple', coalesce(ta.attachments, ''::text)), 'B') as fts
+            from task t
+                     inner join team tm on tm.team_id = t.team_id
+                     left join task_description_agg td on td.task_id = t.task_id
+                     left join task_comments_agg tc on tc.task_id = t.task_id
+                     left join task_attachments_agg ta on ta.task_id = t.task_id
+            where t.passive_id is null;
+
+            create index idx_mv_task_fts_fts_search on mv_task_fts using gin (fts);
+            create unique index idx_mv_task_fts_task_id on mv_task_fts (task_id);
+        </sql>
+        <!-- @formatter:on-->
+    </changeSet>
+
+</databaseChangeLog>

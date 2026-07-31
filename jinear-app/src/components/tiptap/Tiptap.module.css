@@ -21,13 +21,173 @@
   min-height: 3.25rem;
 }
 
-.tiptap:focus {
+.withOutlineOnFocus{}
+
+.withOutlineOnFocus:focus {
   outline: solid !important;
   outline-color: var(--c-primary-shade-1) !important;
 }
 
+/*.tiptap:focus {*/
+/*  outline: solid !important;*/
+/*  outline-color: var(--c-primary-shade-1) !important;*/
+/*}*/
+
+/* region tables */
+
+.tiptap :global(.tableWrapper) {
+  overflow-x: auto;
+  margin: 0.75rem 0;
+}
+
+.tiptap table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0;
+}
+
+.tiptap table td,
+.tiptap table th {
+  position: relative;
+  box-sizing: border-box;
+  min-width: 4rem;
+  padding: 0.375rem 0.5rem;
+  border: 1px solid var(--c-primary-shade-1);
+  vertical-align: top;
+}
+
+.tiptap table th {
+  background-color: var(--c-primary-shade-1);
+  font-weight: 600;
+  text-align: left;
+}
+
+.tiptap table p {
+  margin: 0;
+}
+
+.tiptap table :global(.selectedCell)::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Local to the cell's stacking context — must not paint over the sticky action bar. */
+  z-index: 2;
+  background-color: var(--c-secondary-shade-1-op05);
+  pointer-events: none;
+}
+
+.tiptap :global(.column-resize-handle) {
+  position: absolute;
+  top: 0;
+  right: -2px;
+  bottom: -2px;
+  width: 4px;
+  background-color: var(--c-JINEAR_ORANGE);
+  pointer-events: none;
+}
+
+.tiptap:global(.resize-cursor) {
+  cursor: col-resize;
+}
+
+/* endregion */
+
+/* region task lists */
+
+/*
+ * Selectors target the DOM TaskItem's node view builds — li > label > (input + span) and li > div.
+ * Items are matched through the parent ul, not by data-type: the node view bypasses renderHTML, so
+ * it only ever puts data-checked on the li. The ul has no node view and does carry its data-type.
+ * Direct children only, so a checklist sitting inside a plain bullet list still styles correctly.
+ */
+
+.tiptap ul[data-type="taskList"] {
+  list-style: none;
+  padding: 0;
+  gap: .5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tiptap ul[data-type="taskList"] > li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tiptap ul[data-type="taskList"] > li > label {
+  flex: 0 0 auto;
+  /* Positioning context for the invisible input laid over the styled box. */
+  position: relative;
+  display: flex;
+  align-items: center;
+  /* The node view marks this contenteditable=false; keep the caret out of it entirely. */
+  user-select: none;
+  line-height: inherit;
+}
+
+/*
+ * The native control is made transparent and stretched over the box rather than removed. Every
+ * behaviour the node view attaches stays intact that way — the change handler, the mousedown
+ * preventDefault that stops the caret jumping, the isEditable guard and the aria-label — and
+ * keyboard toggling still works. Only the painting moves to the sibling span.
+ */
+.tiptap ul[data-type="taskList"] > li > label input[type="checkbox"] {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+/* The node view already emits this span beside the input purely as a styling hook. */
+.tiptap ul[data-type="taskList"] > li > label > span {
+  display: block;
+  width: 1rem;
+  height: 1rem;
+  box-sizing: border-box;
+  border: 1.5px solid var(--c-secondary-shade-0-op05);
+  border-radius: var(--border-radius);
+  transition: var(--fade);
+}
+
+.tiptap ul[data-type="taskList"] > li > label input[type="checkbox"]:checked + span {
+  border-color: var(--c-JINEAR_ORANGE);
+  background-color: var(--c-JINEAR_ORANGE);
+  background-image: var(--checkbox-tick-svg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 78%;
+}
+
+/* The real control is invisible now, so focus has to be drawn on the span instead. */
+.tiptap ul[data-type="taskList"] > li > label input[type="checkbox"]:focus-visible + span {
+  outline: 2px solid var(--c-JINEAR_ORANGE);
+  outline-offset: 2px;
+}
+
+.tiptap ul[data-type="taskList"] > li > div {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.tiptap ul[data-type="taskList"] > li > div p {
+  margin: 0;
+}
+
+/* The node view keeps this attribute in sync on every update. */
+.tiptap ul[data-type="taskList"] > li[data-checked="true"] > div {
+  opacity: 0.55;
+  text-decoration: line-through;
+}
+
+/* endregion */
+
 .tiptap p.is-editor-empty:first-child::before {
-  color: var(--c-secondary-shade-1-op05);
+  color: var(--c-secondary-shade-0-op025);
   content: attr(data-placeholder);
   float: left;
   height: 0;
@@ -37,7 +197,8 @@
 .is-editor-empty {
   color: var(--c-secondary-shade-1-op05);
   content: attr(data-placeholder);
-  float: left;
+  /*following line breaking caret on empty editor. This was added to fix something long long time ago but i couldn't find what it is.*/
+  /*float: left;*/
   height: 0;
   pointer-events: none;
 }

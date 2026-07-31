@@ -1,0 +1,36 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 12rem;
+}
+
+.loadingContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 8rem;
+}
+
+.button {
+    justify-content: flex-start !important;
+    align-items: center;
+    gap: .5rem;
+}
+
+.name {
+    word-break: break-all;
+}
+
+.icon {
+    min-width: 16px !important;
+}
+
+.emptyContainer {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    min-height: 4rem;
+    opacity: .5;
+}

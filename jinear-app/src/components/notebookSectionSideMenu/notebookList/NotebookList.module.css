@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.notebookListContainer {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.noNotebookContainer {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}

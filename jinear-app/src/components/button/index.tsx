@@ -14,6 +14,7 @@ export const ButtonVariants = {
     hoverFilled2: "hover-filled2",
     blur: "blur",
     brandColor: "brandColor",
+    link: 'link'
 };
 
 export const ButtonHeight = {
@@ -67,6 +68,7 @@ const BaseButton: FC<BaseButtonProps> = ({children, ...props}) => {
 
 interface ButtonProps {
     id?: string;
+    title?: string;
     children?: React.ReactNode;
     variant?: string;
     heightVariant?: string;
@@ -86,6 +88,9 @@ interface ButtonProps {
     form?: string;
     style?: any;
     download?: string;
+    draggable?: boolean;
+    onDragOver?: (event: React.DragEvent<HTMLButtonElement>) => void;
+    onDrop?: (event: React.DragEvent<any>) => void;
 }
 
 const Button: React.FC<ButtonProps> = ({

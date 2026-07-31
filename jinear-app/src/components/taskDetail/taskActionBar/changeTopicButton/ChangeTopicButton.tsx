@@ -19,7 +19,7 @@ const ChangeTopicButton: React.FC<ChangeTopicButtonProps> = ({}) => {
 
   return (
     <Button
-      variant={ButtonVariants.filled}
+      variant={ButtonVariants.outline}
       heightVariant={ButtonHeight.short}
       data-tooltip-right={t("taskDetailChangeTopicTooltip")}
       onClick={popChangeTopicModal}

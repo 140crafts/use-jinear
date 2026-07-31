@@ -30,7 +30,7 @@ const ChangeWorkflowStatusButton: React.FC<ChangeWorkflowStatusButtonProps> = ({
   return (
     <Button
       onClick={popChangeWorkflowStatusModal}
-      variant={ButtonVariants.filled}
+      variant={ButtonVariants.outline}
       heightVariant={ButtonHeight.short}
       className={className}
       data-tooltip-right={t("taskDetailChangeWorkflowStatusTooltip")}

@@ -1,0 +1,85 @@
+
+.noteButtonGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.childContainer {
+    display: flex;
+    flex-direction: column;
+    padding: 0.25rem 0 0.25rem .5rem;
+
+    border-left: 1px solid var(--c-primary-shade-1);
+    margin-left: 1.15rem;
+}
+
+/*.childContainer:hover{*/
+/*    background-color: var(--c-primary-shade-1-op025);*/
+/*}*/
+
+.noteButton {
+    flex: 1;
+    justify-content: flex-start;
+    gap: .5rem;
+    background-color: unset !important;
+    padding-left: 0.15rem !important;
+    padding-right: 0.15rem !important;
+}
+
+.noteButton:hover {
+    background-color: unset !important;
+}
+
+.noteButton:focus {
+    outline-style: none !important;
+}
+
+.iconButton:focus {
+    outline-style: none !important;
+}
+
+
+.noteRow {
+    display: flex;
+    flex-direction: row;
+    gap: .25rem;
+    border-radius: var(--border-radius);
+    /*padding: 0.25rem 0.75rem;*/
+}
+
+.noteAtPath {
+    background-color: var(--c-primary-shade-1-op05);
+}
+
+.fileIcon {
+    display: flex;
+}
+
+.dropButton {
+    display: none;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.shown {
+    display: flex !important;
+}
+
+.hoverBgNone:hover {
+    background-color: unset !important;
+    opacity: 1;
+}
+
+.noteRow:hover {
+    background-color: var(--c-primary-shade-1-op025);
+}
+
+.noteRow:hover .fileIcon {
+    display: none;
+}
+
+.noteRow:hover .dropButton {
+    display: flex;
+}

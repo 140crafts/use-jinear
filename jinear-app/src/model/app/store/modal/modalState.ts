@@ -2,6 +2,8 @@ import type {
     CalendarEventDto,
     IntegrationProvider,
     MilestoneDto,
+    NotebookDto,
+    NoteTagDto,
     ProjectDto,
     ProjectPriorityType,
     ProjectStateType,
@@ -60,6 +62,10 @@ export interface ChangeTaskAssigneeModalState extends ModalState {
 }
 
 export interface NewTeamModalState extends ModalState {
+    workspace?: WorkspaceDto;
+}
+
+export interface NotebookInitializeModalState extends ModalState {
     workspace?: WorkspaceDto;
 }
 
@@ -289,6 +295,17 @@ export interface NewCustomProjectDomainModalState extends ModalState {
 
 export interface PasswordChangeModalState extends ModalState {
     forced?: boolean,
+}
+
+export interface NotebookPickerModalState extends ModalState {
+    workspaceId?: string,
+    onPick?: (notebook: NotebookDto) => void
+}
+
+export interface NoteTagPickerModalState extends ModalState {
+    notebookId?: string,
+    initialSelection?: NoteTagDto[],
+    onPick?: (pickedList: NoteTagDto[]) => void
 }
 
 export interface MaterialFolderPickerModalState extends ModalState {

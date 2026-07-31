@@ -23,7 +23,7 @@
     color: var(--acc-deep);
   }
 
-  // On narrow screens the wide-tracked wordmark and the 4 nav links can't share
+  // On narrow screens the wide-tracked wordmark and the 5 nav links can't share
   // one row — stack them so the wordmark stays intact above the wrapping nav.
   @media (max-width: $mobile-l) {
     flex-direction: column;

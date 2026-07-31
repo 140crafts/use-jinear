@@ -5,4 +5,5 @@ public enum RichTextSourceStack {
     WYSIWYG,
     //react-contenteditable: "^3.2.0",
     RC,
+    TIPTAP
 }

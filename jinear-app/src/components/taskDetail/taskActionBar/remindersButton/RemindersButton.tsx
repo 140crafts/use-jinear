@@ -21,7 +21,7 @@ const RemindersButton: React.FC<RemindersButtonProps> = ({ className }) => {
   };
 
   return (
-    <Button className={className} variant={ButtonVariants.filled} heightVariant={ButtonHeight.short} onClick={popRemindersModal}>
+    <Button className={className} variant={ButtonVariants.outline} heightVariant={ButtonHeight.short} onClick={popRemindersModal}>
       {t("taskDetailRemindersButtonLabel") + additionalLabel}
     </Button>
   );

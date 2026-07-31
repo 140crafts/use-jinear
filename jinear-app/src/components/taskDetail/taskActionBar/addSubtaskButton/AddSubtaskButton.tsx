@@ -17,7 +17,7 @@ const AddSubtaskButton: React.FC<AddSubtaskButtonProps> = ({ className }) => {
   return !taskHasNoActiveSubtasks ? null : (
     <Button
       onClick={toggleShowSubTaskListEvenIfNoSubtasks}
-      variant={ButtonVariants.filled}
+      variant={ButtonVariants.outline}
       heightVariant={ButtonHeight.short}
       className={className}
       data-tooltip-multiline={t("taskDetailCreateRelatedTasklist")}

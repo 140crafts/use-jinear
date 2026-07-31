@@ -1,0 +1,16 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    gap: .25rem;
+    align-items: center;
+    color: var(--c-secondary-shade-1)
+}
+
+.workspaceButton {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.tagButton {
+    font-family: monospace;
+}

@@ -9,15 +9,18 @@ import co.jinear.core.model.entity.workspace.Workspace;
 import co.jinear.core.model.enumtype.team.TeamJoinMethodType;
 import co.jinear.core.model.enumtype.team.TeamTaskVisibilityType;
 import co.jinear.core.model.enumtype.team.TeamVisibilityType;
+import co.jinear.core.model.enumtype.notebook.NotebookVisibilityType;
 import co.jinear.core.model.enumtype.username.UsernameRelatedObjectType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.model.enumtype.workspace.WorkspaceTier;
+import co.jinear.core.model.vo.notebook.NotebookInitializeVo;
 import co.jinear.core.model.vo.team.TeamInitializeVo;
 import co.jinear.core.model.vo.username.InitializeUsernameVo;
 import co.jinear.core.model.vo.workspace.InitializeWorkspaceMemberVo;
 import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.model.vo.workspace.WorkspaceSettingsInitializeVo;
 import co.jinear.core.repository.WorkspaceRepository;
+import co.jinear.core.service.note.notebook.NotebookOperationService;
 import co.jinear.core.service.slack.SlackService;
 import co.jinear.core.service.team.TeamInitializeService;
 import co.jinear.core.service.username.UsernameService;
@@ -41,6 +44,7 @@ public class WorkspaceInitializeService {
     private final WorkspaceMemberService workspaceMemberService;
     private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
     private final TeamInitializeService teamInitializeService;
+    private final NotebookOperationService notebookOperationService;
     private final SlackService slackService;
     private final GenericJinearProperties genericJinearProperties;
 
@@ -52,6 +56,7 @@ public class WorkspaceInitializeService {
         WorkspaceSettingDto workspaceSettingDto = initializeSettings(workspaceInitializeVo, workspace);
         assignOwner(workspaceInitializeVo, workspace);
         TeamDto initialTeamDto = createInitialTeam(workspace, workspaceInitializeVo);
+        createInitialNotebook(workspace, usernameDto, workspaceInitializeVo);
         setAsDefaultWorkspace(workspaceInitializeVo.getOwnerId(), initialTeamDto);
         slackService.sendEventMessage(String.format("New Workspace with username: %s", usernameDto.getUsername()));
         return mapValues(workspace, usernameDto, workspaceSettingDto);
@@ -82,6 +87,16 @@ public class WorkspaceInitializeService {
         teamInitializeVo.setLocale(workspaceInitializeVo.getLocale());
         teamInitializeVo.setInitializedBy(workspaceInitializeVo.getOwnerId());
         return teamInitializeService.initializeTeam(teamInitializeVo);
+    }
+
+    private void createInitialNotebook(Workspace workspace, UsernameDto usernameDto, WorkspaceInitializeVo workspaceInitializeVo) {
+        log.info("Create initial notebook has started for workspaceId: {}", workspace.getWorkspaceId());
+        NotebookInitializeVo notebookInitializeVo = new NotebookInitializeVo();
+        notebookInitializeVo.setWorkspaceId(workspace.getWorkspaceId());
+        notebookInitializeVo.setOwnerId(workspaceInitializeVo.getOwnerId());
+        notebookInitializeVo.setTitle(usernameDto.getUsername());
+        notebookInitializeVo.setVisibility(NotebookVisibilityType.PUBLIC_WITHIN_WORKSPACE);
+        notebookOperationService.initialize(notebookInitializeVo);
     }
 
     private void assignOwner(WorkspaceInitializeVo workspaceInitializeVo, Workspace workspace) {

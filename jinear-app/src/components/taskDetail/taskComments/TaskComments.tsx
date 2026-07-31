@@ -67,7 +67,7 @@ const TaskComments: React.FC<TaskCommentsProps> = ({}) => {
             ) : (
                 <Button
                     className={styles.newCommentButton}
-                    variant={ButtonVariants.filled}
+                    variant={ButtonVariants.outline}
                     heightVariant={ButtonHeight.short}
                     onClick={toggleNewCommentInputVisible}
                 >

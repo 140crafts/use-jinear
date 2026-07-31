@@ -23,7 +23,7 @@ const TaskBoardsButton: React.FC<TaskBoardsButtonProps> = ({ className }) => {
   return (
     <Button
       className={cn(styles.subscribeButton, className)}
-      variant={ButtonVariants.filled}
+      variant={ButtonVariants.outline}
       heightVariant={ButtonHeight.short}
       onClick={popBoardsModal}
       data-tooltip-right={t("taskBoardsActionButtonTooltip")}

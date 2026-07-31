@@ -13,4 +13,6 @@ public class InitializeRichTextVo {
     @ToString.Exclude
     private String value;
     private RichTextType type;
+    @ToString.Exclude
+    private String crdtState;
 }

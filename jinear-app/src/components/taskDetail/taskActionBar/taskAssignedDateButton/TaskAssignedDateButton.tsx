@@ -21,7 +21,7 @@ const TaskAssignedDateButton: React.FC<TaskAssignedDateButtonProps> = ({}) => {
 
   return (
     <Button
-      variant={ButtonVariants.filled}
+      variant={ButtonVariants.outline}
       heightVariant={ButtonHeight.short}
       className={styles.button}
       onClick={popChangeAssignedDateModal}

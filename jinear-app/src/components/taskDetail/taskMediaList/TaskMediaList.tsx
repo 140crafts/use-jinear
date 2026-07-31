@@ -50,7 +50,7 @@ const TaskMediaList: React.FC<TaskMediaListProps> = ({handleAttachmentUpload}) =
                 <h3>{t("taskDetailMediaTitle")}</h3>
                 <Button
                     disabled={isUploading}
-                    variant={ButtonVariants.filled}
+                    variant={ButtonVariants.outline}
                     heightVariant={ButtonHeight.short}
                     onClick={pickAttachment}
                 >

@@ -1238,6 +1238,58 @@ const translations = {
         en: "Ordered List",
         tr: "Sıralı Liste"
     },
+    textEditorTaskList: {
+        en: "Checklist",
+        tr: "Kontrol Listesi"
+    },
+    textEditorInsertTable: {
+        en: "Insert Table",
+        tr: "Tablo Ekle"
+    },
+    textEditorAddColumnBefore: {
+        en: "Add Column Before",
+        tr: "Sola Sütun Ekle"
+    },
+    textEditorAddColumnAfter: {
+        en: "Add Column After",
+        tr: "Sağa Sütun Ekle"
+    },
+    textEditorDeleteColumn: {
+        en: "Delete Column",
+        tr: "Sütunu Sil"
+    },
+    textEditorAddRowBefore: {
+        en: "Add Row Above",
+        tr: "Üste Satır Ekle"
+    },
+    textEditorAddRowAfter: {
+        en: "Add Row Below",
+        tr: "Alta Satır Ekle"
+    },
+    textEditorDeleteRow: {
+        en: "Delete Row",
+        tr: "Satırı Sil"
+    },
+    textEditorMergeCells: {
+        en: "Merge Cells",
+        tr: "Hücreleri Birleştir"
+    },
+    textEditorSplitCell: {
+        en: "Split Cell",
+        tr: "Hücreyi Böl"
+    },
+    textEditorToggleHeaderRow: {
+        en: "Toggle Header Row",
+        tr: "Başlık Satırı"
+    },
+    textEditorToggleHeaderColumn: {
+        en: "Toggle Header Column",
+        tr: "Başlık Sütunu"
+    },
+    textEditorDeleteTable: {
+        en: "Delete Table",
+        tr: "Tabloyu Sil"
+    },
     taskRowChangeTaskDates: {
         en: "Change Dates",
         tr: "Tarihleri Değiştir"
@@ -1605,6 +1657,10 @@ const translations = {
     logoutAreYouSureText: {
         en: "Are you sure to logout?",
         tr: "Çıkış yapmak istediğinize emin misiniz?"
+    },
+    logoutPendingDraftsWarning: {
+        en: "You have ${count} unsent note(s) stored only on this device. They will be permanently deleted.",
+        tr: "Bu cihazda yalnızca yerel olarak duran ${count} gönderilmemiş notunuz var. Bunlar kalıcı olarak silinecek."
     },
     logoutAreYouSureConfirmLabel: {
         en: "Logout",
@@ -2959,6 +3015,10 @@ const translations = {
         en: "Files",
         tr: "Dosyalar"
     },
+    mainFeaturesMenuLabelNotes: {
+        en: "Notes",
+        tr: "Notlar"
+    },
     mainFeaturesMenuLabelCalendar: {
         en: "Calendar",
         tr: "Takvim"
@@ -4032,8 +4092,8 @@ const translations = {
         tr: "Takımlar"
     },
     sideMenuYourWorkspaceTitle: {
-        en: "Your Workspace",
-        tr: "Çalışma Alanın"
+        en: "Your Workspace Tasks",
+        tr: "Çalışma Alanı Görevleri"
     },
     workspaceTeamListTitle: {
         en: "Teams",
@@ -5572,7 +5632,309 @@ const translations = {
     teamHomeTeamSettings: {
         en: "Team settings",
         tr: "Ekip ayarları"
-    }
+    },
+
+    mobileFabButtonCalendar: {
+        en: "Calendars",
+        tr: "Takvimler"
+    },
+    mobileFabButtonTasks: {
+        en: "Teams",
+        tr: "Ekipler"
+    },
+    mobileFabButtonFiles: {
+        en: "Filters",
+        tr: "Filtreler"
+    },
+    mobileFabButtonNotes: {
+        en: "Notebooks",
+        tr: "Notlar"
+    },
+
+    sideMenuYourWorkspaceNotes: {
+        en: "Your Workspace Notes",
+        tr: "Çalışma Alanı Notları"
+    },
+    sideMenuNewNote: {
+        en: "New Note",
+        tr: "Yeni Not"
+    },
+    sideMenuNewNotebook: {
+        en: "New Notebook",
+        tr: "Yeni Defter"
+    },
+    notebookNewNoteInNotebook: {
+        en: "New note in this notebook",
+        tr: "Bu defterde yeni not"
+    },
+    notePathNotebookFallback: {
+        en: "Notebook",
+        tr: "Defter"
+    },
+    sideMenuYourNotebooksTitle: {
+        en: "Notebooks",
+        tr: "Defterler"
+    },
+    sideMenuNoNotebook: {
+        en: "There isn't any notebooks in this workspace.",
+        tr: "Bu çalışma alanında hiçbir defter bulunmuyor."
+    },
+    notebookInitializeModalTitle: {
+        en: "New Notebook",
+        tr: "Yeni Defter"
+    },
+    notebookInitializeFormTitle: {
+        en: "Title",
+        tr: "Başlık"
+    },
+    notebookInitializeFormVisibility: {
+        en: "Visibility",
+        tr: "Görünürlük"
+    },
+    notebookInitializeFormCreate: {
+        en: "Create",
+        tr: "Oluştur"
+    },
+    notebookInitializeFormCancel: {
+        en: "Cancel",
+        tr: "İptal"
+    },
+    notebookVisibility_PRIVATE: {
+        en: "Private",
+        tr: "Gizli"
+    },
+    notebookVisibility_SHARED: {
+        en: "Shared",
+        tr: "Paylaşılan"
+    },
+    notebookVisibility_PUBLIC_WITHIN_WORKSPACE: {
+        en: "Workspace Members",
+        tr: "Çalışma Alanı Üyeleri"
+    },
+    notebookVisibilityDetail_PRIVATE: {
+        en: "Only you can see this notebook and it's contents.",
+        tr: "Bu defteri ve içeriğini yalnızca siz görebilirsiniz."
+    },
+    notebookVisibilityDetail_SHARED: {
+        en: "Only invited members can see this notebook and it's contents.",
+        tr: "Bu defteri ve içeriğini yalnızca davet edilen üyeler görebilir."
+    },
+    notebookVisibilityDetail_PUBLIC_WITHIN_WORKSPACE: {
+        en: "Everyone in the workspace can see this notebook and it's contents.",
+        tr: "Çalışma alanındaki herkes bu defteri ve içeriğini görebilir."
+    },
+    notebookSettingsGeneralSectionTitle: {
+        en: "Notebook settings",
+        tr: "Defter ayarları"
+    },
+    notebookSettingsGeneralSectionDescription: {
+        en: "Update this notebook's title and who can see it.",
+        tr: "Bu defterin başlığını ve kimlerin görebileceğini güncelleyin."
+    },
+    notebookSettingsTitleLabel: {
+        en: "Title",
+        tr: "Başlık"
+    },
+    notebookSettingsSaveButton: {
+        en: "Save",
+        tr: "Kaydet"
+    },
+    notebookSettingsSavedToast: {
+        en: "Notebook settings saved.",
+        tr: "Defter ayarları kaydedildi."
+    },
+    notebookSettingsMembersSectionTitle: {
+        en: "Members",
+        tr: "Üyeler"
+    },
+    notebookSettingsMembersSectionDescription: {
+        en: "Manage who can access this shared notebook.",
+        tr: "Bu paylaşılan deftere kimlerin erişebileceğini yönetin."
+    },
+    notebookSettingsMembersEmpty: {
+        en: "No members added yet.",
+        tr: "Henüz üye eklenmedi."
+    },
+    notebookSettingsAddMemberButton: {
+        en: "Add",
+        tr: "Ekle"
+    },
+    notebookSettingsMemberRemoveButton: {
+        en: "Remove",
+        tr: "Çıkar"
+    },
+    notebookSettingsMemberOwnerLabel: {
+        en: "Owner",
+        tr: "Sahip"
+    },
+    noteListLoadMore: {
+        en: 'Load More',
+        tr: 'Daha Fazla Getir'
+    },
+    noteListNoChildNotes: {
+        en: 'No Notes',
+        tr: 'Not Bulunmuyor'
+    },
+    newNoteTitle: {
+        en: 'Title',
+        tr: 'Başlık'
+    },
+    newNoteTitlePlaceholder: {
+        en: 'New note',
+        tr: 'Yeni not'
+    },
+    noteSyncStatusOffline: {
+        en: 'Saved on this device. Will sync when online',
+        tr: 'Bu cihazda kaydedildi. Bağlantı gelince eşitlenecek'
+    },
+    noteSyncStatusSavedLocally: {
+        en: 'Saved on this device',
+        tr: 'Bu cihazda kaydedildi'
+    },
+    noteSyncStatusSyncing: {
+        en: 'Syncing…',
+        tr: 'Eşitleniyor…'
+    },
+    noteSyncStatusSynced: {
+        en: 'Synced',
+        tr: 'Eşitlendi'
+    },
+    noteSyncStatusError: {
+        en: 'Sync issue. Retrying',
+        tr: 'Eşitleme sorunu. Yeniden deneniyor'
+    },
+    noteEditorNoteNotFound: {
+        en: 'This note doesn\'t exist or you don\'t have access to it.',
+        tr: 'Bu not bulunamadı ya da erişim yetkiniz yok.'
+    },
+    noteEditorActionBarPublish: {
+        en: 'Publish',
+        tr: 'Yayınla'
+    },
+    noteEditorActionBarSave: {
+        en: 'Save',
+        tr: 'Kaydet'
+    },
+    notebookDraftsTitle: {
+        en: 'Drafts',
+        tr: 'Tasklaklar'
+    },
+    notebookEmptyStateTitle: {
+        en: 'No notes yet',
+        tr: 'Henüz not yok'
+    },
+    notebookEmptyStateText: {
+        en: 'Create your first note to get started.',
+        tr: 'Başlamak için ilk notunu oluştur.'
+    },
+    notebookDraftsPrivate: {
+        en: 'Private',
+        tr: 'Gizli'
+    },
+    notebookDraftsPrivateTooltip: {
+        en: 'Only you can see your drafts',
+        tr: 'Taslaklarınızı yanlızca siz görüntüleyebilirsiniz'
+    },
+    youCanNotMoveNotesUnderDrafts:{
+        en: 'You can not move notes under drafts.',
+        tr: 'Notları taslakların altına atamazsınız.'
+    },
+    untitledNote: {
+        en: 'Untitled',
+        tr: 'Başlıksız'
+    },
+    draftCouldNotBeSaved: {
+        en: "Couldn't be saved, open to recover",
+        tr: 'Kaydedilemedi, kurtarmak için aç'
+    },
+    emptyNotePlaceholder: {
+        en: "Start typing. Use the toolbar above to format your text.",
+        tr: "Yazmaya başla, biçimlendirmek için yukarıdaki araç çubuğunu kullan."
+    },
+    changeNoteNotebook: {
+        en: "Change Notebook",
+        tr: "Defteri Değiştir"
+    },
+    notebookPickerModalTitle: {
+        en: "Select Notebook",
+        tr: "Defter Seç"
+    },
+    notebookPickerModalEmpty: {
+        en: "There isn't any notebooks in this workspace.",
+        tr: "Bu çalışma alanında hiçbir defter bulunmuyor."
+    },
+
+    moveNoteToNotebookAreYouSureTitle: {
+        en: "Move Note",
+        tr: "Notu Taşı"
+    },
+    moveNoteToNotebookAreYouSureText: {
+        en: "Are you sure move note to notebook \"{notebookTitle}\"? If there are any note under this note thoose will be moved too.",
+        tr: "Bu notu \"{notebookTitle}\" defterine taşımak istediğinize emin misiniz? Notun altında herhangi bir not bulunuyorsa onlar da taşınacaktır."
+    },
+    moveNoteToNotebookAreYouSureConfirmLabel: {
+        en: "Move",
+        tr: "Taşı"
+    },
+    addNoteTag: {
+        en: "Add Tag",
+        tr: "Etiket Ekle"
+    },
+    noteTagPickerModalTitle: {
+        en: "Select Tags",
+        tr: "Etiket Seç"
+    },
+    noteTagPickerModalSearchOrCreatePlaceholder: {
+        en: "Search or create tag...",
+        tr: "Etiket ara veya oluştur..."
+    },
+    noteTagPickerModalEmptyState: {
+        en: "There aren't any tags in this notebook yet. Type a name above to create one.",
+        tr: "Bu defterde henüz hiç etiket yok. Oluşturmak için yukarıya bir isim yazın."
+    },
+    noteTagPickerModalNoMatch: {
+        en: "No tags found",
+        tr: "Hiçbir etiket bulunamadı"
+    },
+    noteTagPickerModalCreateTag: {
+        en: "Create tag",
+        tr: "Etiket oluştur"
+    },
+    noteTagPickerModalSelectButton: {
+        en: "Select",
+        tr: "Seç"
+    },
+    noteTagPickerModalCancelButton: {
+        en: "Cancel",
+        tr: "Vazgeç"
+    },
+
+    deleteNoteAreYouSureTitle: {
+        en: "Delete Note",
+        tr: "Notu Sil"
+    },
+    deleteNoteAreYouSureText: {
+        en: "Are you sure to delete this note? Any notes under this will also be deleted. This action can not undone.",
+        tr: "Bu notu silmek istediginize emin misiniz? Eğer bu notun altında başka notlar bulunuyorsa onlar da silinecektir. Bu işlem geri alınamaz. "
+    },
+    deleteNoteAreYouSureConfirmLabel: {
+        en: "Delete Note",
+        tr: "Notu Sil"
+    },
+
+    discardDraftNoteAreYouSureTitle: {
+        en: "Discard Draft",
+        tr: "Taslağı Sil"
+    },
+    discardDraftNoteAreYouSureText: {
+        en: "Are you sure you want to discard this draft? It only exists on this device and cannot be recovered.",
+        tr: "Bu taslağı silmek istediğinize emin misiniz? Taslak yalnızca bu cihazda bulunuyor ve geri alınamaz."
+    },
+    discardDraftNoteAreYouSureConfirmLabel: {
+        en: "Discard Draft",
+        tr: "Taslağı Sil"
+    },
+
 };
 
 export default translations;

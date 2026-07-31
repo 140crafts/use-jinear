@@ -262,7 +262,7 @@ select {
   min-width: 12px;
 }
 
-/* Deprecated use line-clamp */
+/* if not work try line-clamp */
 .single-line {
   text-overflow: ellipsis;
   overflow: hidden;

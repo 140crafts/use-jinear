@@ -88,7 +88,12 @@ export const tagTypes = [
     "v1/material/list/search",
     "v1/material/{materialId}",
     "v1/material/access/{materialId}",
-    "v1/workspace/media/{workspaceId}/limits"
+    "v1/workspace/media/{workspaceId}/limits",
+    "v1/notebook/{notebookId}",
+    "v1/notebook/workspace/{workspaceId}",
+    "v1/notebook/member/{notebookId}",
+    "v1/note/filter",
+    "v1/note/tag/notebook/{notebookId}"
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

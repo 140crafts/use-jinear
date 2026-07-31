@@ -1,0 +1,51 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contentContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: var(--border-radius);
+    border-color: var(--c-primary-shade-1-op05);
+    padding: 4px;
+    flex: 1;
+}
+
+.memberItemContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    justify-content: flex-start !important;
+    border-radius: var(--border-radius);
+}
+
+.memberItemContainer:hover {
+    background-color: var(--c-primary-shade-0);
+}
+
+.profilePic {
+    height: 25px !important;
+    width: 25px !important;
+}
+
+.ownerLabel {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.emptyStateContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 0.5rem;
+    opacity: 0.7;
+    font-size: 0.9rem;
+}

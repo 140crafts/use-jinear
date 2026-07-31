@@ -1,0 +1,33 @@
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.titleLabel {
+    color: var(--c-secondary-shade-0-op025);
+    font-size: .85rem;
+    padding: 0 7.5px;
+}
+
+.titleTextArea {
+    font-size: 1.15rem;
+    font-weight: 600;
+    background: var(--c-primary) !important;
+    border: unset !important;
+    word-break: break-all;
+}
+
+.titleTextArea::placeholder {
+    color: var(--c-secondary-shade-0-op025);
+}
+
+.titleTextArea:hover {
+    background: unset !important;
+    /*border-color: var(--c-primary-shade-1) !important;*/
+    border: unset !important;
+}
+
+.titleTextArea:focus {
+    background: unset !important;
+    border: unset !important;
+}

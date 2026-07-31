@@ -1,0 +1,33 @@
+@use "../../styles/breakpoints.scss" as *;
+
+.dropZone {
+    display: flex;
+    justify-content: center;
+    container-type: inline-size;
+    container-name: task;
+}
+
+.taskLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: var(--page)
+}
+
+.taskBody {
+    //flex: 1;
+}
+
+.taskInfo {
+    background-color: unset;
+}
+
+.taskActivitiesTitle {
+    font-size: 0.8rem;
+}
+
+@container task (max-width: #{$tablet}) {
+    .taskLayout {
+        flex: 1;
+    }
+}

@@ -12,7 +12,7 @@
         100vh -
           calc(
             var(--calendar-header-main-height) + var(--calendar-container-gap) + var(--workspace-layout-page-padding) +
-              var(--workspace-layout-content-vertical-padding) + var(--workspace-header-height) + 4.4rem
+              var(--workspace-layout-content-vertical-padding) + var(--workspace-header-height) /*+ 2.75rem*/
           )
       ) / 5
   );

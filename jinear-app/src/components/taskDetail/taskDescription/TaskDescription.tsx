@@ -85,6 +85,8 @@ const TaskDescription: React.FC<TaskDescriptionProps> = ({taskId, description}) 
                 </Button>
             )}
 
+            {!readOnly && <div className={'spacer-h-2'}/>}
+
             <div className={styles.actionContainer}>
                 {isUpdateLoading && (
                     <div className={styles.loadingContainer}>
