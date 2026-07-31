@@ -149,15 +149,12 @@ export default function HomeClient() {
           </p>
           <p className={styles.letterP}>
             If you run into trouble self-hosting, have a question, or want to suggest something, just email me. I read
-            and reply to everything myself.
+            and reply to everything myself. I don&apos;t use your email for marketing or auto reply using AI. I&apos;d love to hear from you.
           </p>
           <p className={styles.letterP}>
-            And if you&apos;ve already got Jinear running somewhere, say hello. I don&apos;t track anything on
-            self-hosted instances, not even installs, so I genuinely have no idea whether anyone out there is using it.
-            Hearing that someone found it useful makes my day.
-          </p>
-          <p className={styles.letterP}>
-            I don&apos;t use your email for marketing or auto reply using AI. I&apos;d love to hear from you.
+            And if you&apos;ve already got Jinear running somewhere, say hello. Self-hosted instances phone nothing home, not
+            even install counts, so there&apos;s no dashboard on my end lighting up when you spin one up. Hearing that
+            someone found it useful makes my day.
           </p>
           <div className={styles.letterEmailLine}>
             <img className={styles.letterAvatar} src={`${IMG_BASE}/ben.jpg`} alt="Çağdaş, maker of Jinear" />
