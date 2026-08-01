@@ -1,0 +1,47 @@
+---
+title: "Notes. The Last Missing Piece."
+description: "Jinear had calendar, tasks, and files. Documentation had nowhere to live, so it squatted on tasks or ended up as a text file in storage. Notes fixes that, and I think it's the last main feature Jinear needs."
+pubDate: "2026-08-01"
+tags: ["changelog", "notes"]
+author: "Çağdaş Tunca"
+---
+
+I'm not eager to add more main features to Jinear. A couple of months ago I cut
+projects, Pages, and chat precisely to stop doing that. So adding one now needs a
+reason.
+
+The reason is that documentation never had a home. It lived rent free on tasks: a
+description that was really a spec, a comment thread that was really a decision
+record, a task nobody would ever close because it was actually a document. Or it
+ended up as a `.txt` or `.md` file in file storage, which is fine for keeping a file
+and miserable for reading or editing one.
+
+Calendar, tasks, files, notes. Those four are the pillars, in my opinion. There is a
+long list of things left to work on in this product, but I don't think there's a fifth
+pillar on it.
+
+## What's in it
+
+- **Notebooks**, private, invite-only, or open to everyone in the workspace.
+- **Nested notes.** Drag a note onto another to file it underneath, or onto a
+  notebook to move it there. Moving a note takes its children along.
+- **Tags** per notebook, with colors.
+- **Rich text.** Headings, lists, checklists, tables, code, images.
+- **Offline drafts.** A new note gets a local document from the first keystroke. It
+  saves to your device immediately and syncs when there's a connection, so a flaky
+  network costs you nothing. The editor tells you which of those two it's doing.
+
+## What's not in it yet
+
+There's no search. You can browse the tree and use tags, but you can't search notes by
+title or content. That bothers me more than it probably bothers you, and it's next.
+
+Notes also don't link to tasks or calendar events yet. They will.
+
+---
+
+If you use it and something feels wrong, email me. That's how the last three
+self-hosting bugs got found.
+
+The whole thing is on [GitLab](https://gitlab.com/140crafts/use-jinear) and
+[GitHub](https://github.com/140crafts/use-jinear).
