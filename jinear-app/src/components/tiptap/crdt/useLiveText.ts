@@ -8,8 +8,7 @@ import {
     POLL_INTERVAL_MS,
     REMOTE_ORIGIN,
     SNAPSHOT_RETRY_COOLDOWN_MS,
-    SNAPSHOT_UPDATE_THRESHOLD,
-    TITLE_FIELD
+    SNAPSHOT_UPDATE_THRESHOLD
 } from "@/components/tiptap/crdt/constants.ts";
 import Logger from "@/util/logger.ts";
 import {IndexeddbPersistence} from "y-indexeddb";
@@ -26,26 +25,28 @@ interface IUseLiveTextProps {
     richTextId?: string;
     /** Server baseline snapshot for richTextId. Applied idempotently to both docs when syncing starts. */
     initialRichText?: RichTextDto;
-    /** Seed for the in-doc title when the server baseline has none (notes born before title-in-doc). */
-    seedTitle?: string;
     getHtml?: () => string | null;
 }
 
 const logger = Logger('useLiveText');
 
-export const useLiveText = ({docKey, enabled, richTextId, initialRichText, seedTitle, getHtml}: IUseLiveTextProps) => {
+export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHtml}: IUseLiveTextProps) => {
     const dispatch = useAppDispatch();
     const [doc, setDoc] = useState<Y.Doc | null>(null);
     const [status, setStatus] = useState<LiveTextStatus>("booting");
+    /**
+     * True once the doc has both been created and hydrated from IndexedDB — i.e. its contents are
+     * the real ones, not the empty doc we start with. Consumers that project doc state outwards
+     * (the title mirror) must wait for this, or they'd publish "" over a perfectly good value.
+     */
+    const [hydrated, setHydrated] = useState(false);
 
     // Mirrored each render so async work always reads the latest values without re-running effects.
     const getHtmlRef = useRef(getHtml);
     const initialRichTextRef = useRef(initialRichText);
-    const seedTitleRef = useRef(seedTitle);
     useEffect(() => {
         getHtmlRef.current = getHtml;
         initialRichTextRef.current = initialRichText;
-        seedTitleRef.current = seedTitle;
     });
 
     const docRef = useRef<Y.Doc | null>(null);
@@ -94,6 +95,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, seedT
         persistence.whenSynced.then(() => {
             if (docRef.current !== liveDoc) return;   // stale mount
             hydratedRef.current = true;
+            setHydrated(true);
             // Hydrated updates carry origin === persistence, so the dirty listener skipped them.
             // Diff against the server-confirmed shadow doc to catch unflushed local edits
             // (offline typing + reload) — without this they'd never upload again.
@@ -116,6 +118,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, seedT
             hydratedRef.current = false;
             docRef.current = null;
             setDoc(null);
+            setHydrated(false);
             setStatus("booting");
         };
     }, [docKey, enabled]);
@@ -243,18 +246,6 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, seedT
             await maybeSnapshot();
         };
 
-        // Title seeding for notes whose title predates the title-in-doc layer: wait for both the
-        // baseline (applied above) and IndexedDB hydration, then seed only if still absent.
-        persistenceRef.current?.whenSynced.then(() => {
-            const seed = seedTitleRef.current;
-            if (cancelled || !seed) return;
-            const titleText = liveDoc.getText(TITLE_FIELD);
-            if (titleText.length === 0) {
-                titleText.insert(0, seed);
-                armDelta();
-            }
-        });
-
         flushNowRef.current = () => {
             void flush();   // self-guards on dirty + in-flight
         };
@@ -270,5 +261,5 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, seedT
         };
     }, [richTextId, doc, dispatch]);
 
-    return {doc, status, flushNow};
+    return {doc, hydrated, status, flushNow};
 }

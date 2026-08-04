@@ -51,17 +51,17 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
     // ackedNoteId bridges the ack → fetch gap so the doc/editor stays alive (no flash mid-typing).
     const shouldEdit = isPendingCreate || !!ackedNoteId || !!note;
 
-    const {doc, status, flushNow} = useLiveText({
+    const {doc, hydrated, status, flushNow} = useLiveText({
         docKey,
         enabled: shouldEdit,
         richTextId: note?.richText?.richTextId,
         initialRichText: note?.richText,
-        seedTitle: note?.title,
         getHtml: () => editorRef.current?.getHTML() ?? null
     });
 
     useNoteTitleMirror({
         doc,
+        hydrated,
         note,
         workspaceId: workspace.workspaceId,
         pendingDraftId: isPendingCreate ? noteId : undefined
