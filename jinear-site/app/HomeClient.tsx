@@ -33,7 +33,7 @@ export default function HomeClient() {
 
         <h1 className={styles.hero}>An open-source project manager you can actually own.</h1>
         <p className={styles.lede}>
-          Jinear keeps tasks, boards, a calendar and files in one place. Use the hosted version, or{" "}
+          Jinear keeps tasks, boards, a calendar, notes and files in one place. Use the hosted version, or{" "}
           <a className={styles.linkU} href={SELF_HOSTING_DOCS_URL} target="_blank" rel="noreferrer">
             run it yourself
           </a>{" "}
