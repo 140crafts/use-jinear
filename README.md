@@ -1,11 +1,13 @@
-# Jinear - Task Manager, Calendar & File Sharing
+# Jinear - Task Manager, Calendar, Notes & File Sharing
 
 A collaborative task management and calendar application designed to streamline productivity and team coordination, enhanced with file sharing.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/projects-dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/projects-light.png">
-  <img alt="Jinear Feature Image" src="https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v2/projects-light.png" height="550" width="795">
+
+[//]: # (  <source media="&#40;prefers-color-scheme: dark&#41;" srcset="https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v3/v2.1-calendar.png">)
+
+[//]: # (  <source media="&#40;prefers-color-scheme: light&#41;" srcset="https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v3/v2.1-calendar.png">)
+  <img alt="Jinear Feature Image" src="https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v3/v2.1-features.gif" height="550" width="795">
 </picture>
 
 ## Overview
@@ -20,6 +22,8 @@ needs, it has evolved into a versatile platform suitable for both individual and
 
 - **Task Management**: Create, organize, and track tasks with ease
 - **Integrated Calendar**: Seamlessly manage events and deadlines
+- **Notes**: Create notebooks & notes with access control and improved offline functionality
+- **Files**: Add folders & files with access control
 - **Collaboration Tools**: Work together with team members
 - **Additional Productivity Features**: Enhanced workflow capabilities
 

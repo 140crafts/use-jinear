@@ -18,7 +18,7 @@ function Shot({ src, alt, url, caption }: { src: string; alt: string; url: strin
           <i></i>
           <span className={styles.url}>{url}</span>
         </div>
-        <img className={styles.lookMedia} src={src} alt={alt} />
+        <img className={styles.lookMedia} src={src} alt={alt} loading="lazy" decoding="async" />
       </div>
       <figcaption>{caption}</figcaption>
     </figure>
@@ -86,7 +86,7 @@ export default function HomeClient() {
         <section className={styles.blk}>
           <h2>A quick look</h2>
           <Shot
-            src={`${IMG_BASE}/tasks.png`}
+            src={`${IMG_BASE}/v2.1-tasks.png`}
             alt="Tasks and boards in Jinear"
             url="jinear.co / cagdas / tasks / jinear"
             caption="Tasks, lists and boards, all in one place."
@@ -96,7 +96,7 @@ export default function HomeClient() {
         <section className={styles.blk}>
           <h2>Your month at a glance</h2>
           <Shot
-            src={`${IMG_BASE}/calendar.png`}
+            src={`${IMG_BASE}/v2.1-calendar.png`}
             alt="The calendar in Jinear"
             url="jinear.co / cagdas / calendar"
             caption="A built-in calendar with Google Calendar sync."
@@ -104,11 +104,21 @@ export default function HomeClient() {
         </section>
 
         <section className={styles.blk}>
+          <h2>Notes, next to the work</h2>
+          <Shot
+            src={`${IMG_BASE}/v2.1-notes.png`}
+            alt="Notes and notebooks in Jinear"
+            url="jinear.co / cagdas / notes"
+            caption="Rich-text notes in shared notebooks, with tags and offline drafts."
+          />
+        </section>
+
+        <section className={styles.blk}>
           <h2>Your files, your storage</h2>
           <Shot
-            src={`${IMG_BASE}/files.png`}
+            src={`${IMG_BASE}/v2.1-files.png`}
             alt="File storage in Jinear"
-            url="jinear.co / cagdas /files"
+            url="jinear.co / cagdas / files"
             caption="Attach files to tasks, kept on your own storage."
           />
           <div className={styles.note}>

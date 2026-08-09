@@ -98,12 +98,12 @@
 .newBadge {
   font-style: normal;
   font-size: 10px;
-  letter-spacing: 0.04em;
-  color: var(--acc-deep);
-  background: var(--acc-tint);
-  border: 1px solid var(--acc-soft);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--surface);
+  background: var(--acc-deep);
   border-radius: 999px;
-  padding: 1px 5px;
+  padding: 2px 6px;
   margin-left: 6px;
 }
 
