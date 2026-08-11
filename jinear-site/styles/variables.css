@@ -1,6 +1,6 @@
 :root {
     /* ===========================================================
-       Design A — Bare & Minimal (marketing site)
+       Design A: Bare & Minimal (marketing site)
        Warm off-white, soft orange accent, friendly + tidy.
        =========================================================== */
     /* surfaces */
@@ -13,7 +13,7 @@
     --ink: #1c1a16;
     --ink-2: #4f4b43;
     --ink-3: #8b857a;
-    /* accent — warm orange */
+    /* accent: warm orange */
     --acc: #d96a1a;
     --acc-deep: #b8550e;
     --acc-soft: #fbe7cf;

@@ -2,7 +2,7 @@
 import posthog from "posthog-js";
 import { PostHogProvider } from "posthog-js/react";
 
-// Marketing site analytics. Key/host are hardcoded (public, build-time) — this
+// Marketing site analytics. Key/host are hardcoded (public, build-time) because this
 // is a static export so there's no runtime env injection. `defaults` opts into
 // PostHog's current behaviour, which auto-captures pageviews on SPA history
 // changes, so no manual pageview component is needed.

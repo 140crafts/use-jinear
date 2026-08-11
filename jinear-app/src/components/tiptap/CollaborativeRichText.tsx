@@ -14,7 +14,7 @@ export interface ICollaborativeRichTextRef {
 }
 
 interface CollaborativeRichTextProps {
-    /** The Yjs document this editor binds to. Yjs is the source of truth — no `content` prop. */
+    /** The Yjs document this editor binds to. Yjs is the source of truth, no `content` prop. */
     doc: Y.Doc;
     placeholder?: string;
     editable?: boolean;
@@ -56,7 +56,7 @@ const CollaborativeRichText = (
                 }
             },
             extensions: [
-                // StarterKit history is OFF — Yjs/y-prosemirror own undo/redo via the Collaboration ext.
+                // StarterKit history is OFF; Yjs/y-prosemirror own undo/redo via the Collaboration ext.
                 ...buildEditorExtensions({
                     placeholder,
                     emptyEditorClass: styles["is-editor-empty"],

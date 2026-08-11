@@ -2,7 +2,7 @@
 export const DRAFTS_NOTEBOOK_ID = "drafts";
 
 /**
- * Prefix of the IndexedDB database backing one note's local doc — the full name is
+ * Prefix of the IndexedDB database backing one note's local doc; the full name is
  * `doc:<docKey>`. Also the marker that lets a logout wipe tell our note databases apart
  * from everything else living in indexedDB (redux-persist, workbox, firebase).
  */
@@ -11,14 +11,14 @@ export const REMOTE_ORIGIN = "remote-crdt-sync";
 export const POLL_INTERVAL_MS = 2500;
 
 /**
- * Base64 of Y.encodeStateAsUpdate(new Y.Doc()) — the empty-doc update (bytes [0,0]).
+ * Base64 of Y.encodeStateAsUpdate(new Y.Doc()), the empty-doc update (bytes [0,0]).
  * Sent as bodyState on note creation so the server baseline is empty and ALL content
  * (title layer + body) flows through the one normal append path.
  */
 export const EMPTY_YDOC_STATE = "AAA=";
 
 /**
- * Tunable cadence constants for the CRDT polling transport. Sane defaults — the backend is an opaque
+ * Tunable cadence constants for the CRDT polling transport. Sane defaults; the backend is an opaque
  * ordered relay, so these only trade off latency vs. request volume, never correctness.
  */
 
@@ -42,5 +42,5 @@ export const SNAPSHOT_RETRY_COOLDOWN_MS = 30_000;
 /** Yjs fragment name shared by the transport, the seed helper and the Collaboration extension. */
 export const CRDT_FIELD = "default";
 
-/** Y.Text field holding the note title — lives in the same doc as the body so it shares the sync path. */
+/** Y.Text field holding the note title, lives in the same doc as the body so it shares the sync path. */
 export const TITLE_FIELD = "title";

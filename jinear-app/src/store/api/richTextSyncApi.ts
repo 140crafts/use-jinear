@@ -20,7 +20,7 @@ export const richTextSyncApi = api.injectEndpoints({
         getRichTextState: build.query<RichTextStateDto, { richTextId: string }>({
             query: ({richTextId}) => `v1/rich-text/${richTextId}/state`,
             transformResponse: (response: RichTextStateResponse) => response.data,
-            // Consumed once by the sync loop and applied into the Yjs docs — never re-read from
+            // Consumed once by the sync loop and applied into the Yjs docs, never re-read from
             // the RTK cache, so drop entries immediately (each distinct arg is a new cache key).
             keepUnusedDataFor: 0
         }),

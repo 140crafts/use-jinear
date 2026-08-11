@@ -5,7 +5,7 @@
       import-meta-env "special expression". At build time the @import-meta-env
       plugin rewrites this into a placeholder object; at container start the
       docker entrypoint substitutes the real process-env values into it. This is
-      what makes runtime config (docker-compose env) the source of truth — every
+      what makes runtime config (docker-compose env) the source of truth, every
       `import.meta.env.VITE_*` in the app reads from this global.
     -->
     <script>globalThis.import_meta_env = JSON.parse('"import_meta_env_placeholder"');</script>
@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, interactive-widget=resizes-content"/>
     <meta name="theme-color" content="#16171a" />
     <meta name="description" content="Jinear project management suite" />
+    <meta name="robots" content="noindex, nofollow" />
     <title>Jinear</title>
   </head>
   <body>

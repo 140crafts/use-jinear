@@ -232,3 +232,17 @@ site:deploy:
       <<: *site_changes
   needs:
     - site:build
+
+site:indexnow:
+  image: $CI_DEPENDENCY_PROXY_GROUP_IMAGE_PREFIX/node:20-alpine
+  stage: deploy
+  script:
+    - cd jinear-site
+    - node scripts/indexnow.mjs
+  rules:
+    - if: '$CI_COMMIT_TAG'
+      <<: *site_changes
+      when: manual
+      allow_failure: true
+  needs:
+    - site:deploy

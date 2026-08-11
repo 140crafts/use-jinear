@@ -30,7 +30,7 @@ public class WebConfig implements WebMvcConfigurer {
     private static final Pattern TABLE_STYLE = Pattern.compile(
             "^\\s*(?:" + TABLE_STYLE_DECLARATION + ")(?:\\s*;\\s*(?:" + TABLE_STYLE_DECLARATION + "))*\\s*;?\\s*$",
             Pattern.CASE_INSENSITIVE);
-    /** Editor's own scroll container around a table — the only class the sanitizer lets through. */
+    /** Editor's own scroll container around a table: the only class the sanitizer lets through. */
     private static final Pattern TABLE_WRAPPER_CLASS = Pattern.compile("^tableWrapper$");
     private static final Pattern POSITIVE_INT = Pattern.compile("^\\d+$");
     /**

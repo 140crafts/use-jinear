@@ -1,6 +1,6 @@
-# Jinear — Project Context
+# Jinear: Project Context
 
-Use this as background context. Do not implement anything from this section — it only describes the existing system. The actual task is described separately after this context block.
+Use this as background context. Do not implement anything from this section; it only describes the existing system. The actual task is described separately after this context block.
 
 ## Project Responsibilities
 
@@ -26,7 +26,7 @@ Jinear consists of several projects that work together. Projects lives within si
 - jinear-rate-limiter: Adds rate limiting with given config. 
 
 ### jinear-app (main frontend)
-- Jinear's current main frontend — a Vite + React (React 19) single-page app
+- Jinear's current main frontend: a Vite + React (React 19) single-page app
   served as an installable PWA (vite-plugin-pwa / Workbox, app splash screens +
   manifest). Replaces `jinear-web`, and the PWA install also supersedes the old
   WebView mobile wrapper.
@@ -61,7 +61,7 @@ Jinear consists of several projects that work together. Projects lives within si
 ## Archived / Deprecated Projects (`archive/`)
 
 These projects have been removed from the active build and deployment. They are
-kept under `archive/` for git history and future code reference only — they are
+kept under `archive/` for git history and future code reference only. They are
 **not** built (no CI job) or run (no compose service). Do not modify or depend
 on them; use them as reference when building their replacements.
 
@@ -108,6 +108,21 @@ on them; use them as reference when building their replacements.
 
 - jinear-core uses `application-dev.properties` (per-project dev config)
 - On prod, properties files are provided externally
+
+## Writing Style
+
+- No em-dashes (—) or en-dashes (–) in anything we write: marketing copy, blog
+  posts, code comments, docs, commit messages. ASCII punctuation only.
+- Replace by grammatical role, never by blanket comma substitution (that produces
+  comma splices):
+  - trailing afterthought -> comma
+  - explanatory clause or definition -> colon
+  - two independent clauses -> semicolon or a full stop
+  - parenthetical aside -> parentheses, rewriting both halves together
+- Do not touch: third-party code (TipTap's `/^(?:---|—-)$/` input-rule regex is a
+  functional em-dash), and box-drawing characters (─ ├ └, U+2500 family) used in
+  install.sh terminal output and README tree diagrams. Target U+2014/U+2013
+  specifically, never "dash-like characters".
 
 ## Constraints
 

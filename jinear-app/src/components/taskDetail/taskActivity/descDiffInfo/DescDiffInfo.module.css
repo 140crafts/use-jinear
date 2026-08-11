@@ -28,7 +28,7 @@
 
 /*
  * Stored description HTML is injected raw here, outside the editor's .tiptap scope, so task lists
- * arrive as the slim markup renderHTML emits — no checkbox element to style. Draw the box instead.
+ * arrive as the slim markup renderHTML emits, no checkbox element to style. Draw the box instead.
  */
 
 .cell ul[data-type="taskList"] {

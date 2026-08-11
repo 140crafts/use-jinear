@@ -24,7 +24,7 @@ FROM ${RUNTIME_IMAGE} AS runtime
 
 # @import-meta-env/cli rewrites placeholders in dist/ at container start using
 # the real process env, so the same image works on any self-hoster's domain.
-# It needs Node — add it once, keep the layer small.
+# It needs Node; add it once and keep the layer small.
 RUN apk add --no-cache nodejs npm \
     && npm install -g @import-meta-env/cli@0.7.4 \
     && npm cache clean --force

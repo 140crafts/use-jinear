@@ -6,7 +6,7 @@ export default function OfflineBanner() {
   if (online) return null
   return (
     <div className={styles.banner} role="status" aria-live="polite">
-      You&apos;re offline — showing cached data.
+      You&apos;re offline, showing cached data.
     </div>
   )
 }

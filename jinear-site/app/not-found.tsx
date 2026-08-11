@@ -7,6 +7,8 @@ import styles from "./not-found.module.scss";
 
 export const metadata: Metadata = {
   title: "Page not found",
+  description:
+    "This page does not exist. Head back to the Jinear homepage, the pricing page, or the blog to find what you were looking for.",
   robots: { index: false, follow: true },
 };
 
@@ -17,7 +19,7 @@ export default function NotFound() {
         <BareNav />
 
         <div className={styles.body}>
-          <span className={styles.code}>404 — Not found</span>
+          <span className={styles.code}>404 Not found</span>
           <h1 className={styles.title}>We couldn&apos;t find that page.</h1>
           <p className={styles.lede}>
             The link may be broken, or the page may have moved. Let&apos;s get you back on track.

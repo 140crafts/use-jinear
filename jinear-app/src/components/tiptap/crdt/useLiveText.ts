@@ -17,11 +17,11 @@ import {useAppDispatch} from "@/store";
 export type LiveTextStatus = "booting" | "saved_locally" | "syncing" | "synced" | "error";
 
 interface IUseLiveTextProps {
-    /** Stable local identity of the doc — the IndexedDB key. Never changes for the life of a note. */
+    /** Stable local identity of the doc, the IndexedDB key. Never changes for the life of a note. */
     docKey: string;
     /** Gates doc creation so junk IndexedDB entries aren't created for URLs that resolve to nothing. */
     enabled: boolean;
-    /** Server identity of the body. Undefined while the note isn't created server-side — no syncing then. */
+    /** Server identity of the body. Undefined while the note isn't created server-side, no syncing then. */
     richTextId?: string;
     /** Server baseline snapshot for richTextId. Applied idempotently to both docs when syncing starts. */
     initialRichText?: RichTextDto;
@@ -35,7 +35,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
     const [doc, setDoc] = useState<Y.Doc | null>(null);
     const [status, setStatus] = useState<LiveTextStatus>("booting");
     /**
-     * True once the doc has both been created and hydrated from IndexedDB — i.e. its contents are
+     * True once the doc has both been created and hydrated from IndexedDB, i.e. its contents are
      * the real ones, not the empty doc we start with. Consumers that project doc state outwards
      * (the title mirror) must wait for this, or they'd publish "" over a perfectly good value.
      */
@@ -52,7 +52,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
     const docRef = useRef<Y.Doc | null>(null);
     /*
     * Shadow doc: holds ONLY bytes we've confirmed the server has (boot snapshot + every fetched delta + our own acked flushes).
-    * Its state vector IS the upload cursor — always exact.
+    * Its state vector IS the upload cursor, always exact.
     * */
     const serverDocRef = useRef<Y.Doc | null>(null);
 
@@ -74,7 +74,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
         flushNowRef.current?.();
     }, []);
 
-    // ── DOC effect: purely local. Live doc + IndexedDB persistence for docKey — no server knowledge.
+    // ── DOC effect: purely local. Live doc + IndexedDB persistence for docKey, no server knowledge.
     useEffect(() => {
         if (!enabled) return;
 
@@ -98,7 +98,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
             setHydrated(true);
             // Hydrated updates carry origin === persistence, so the dirty listener skipped them.
             // Diff against the server-confirmed shadow doc to catch unflushed local edits
-            // (offline typing + reload) — without this they'd never upload again.
+            // (offline typing + reload), without this they'd never upload again.
             const serverDoc = serverDocRef.current;
             const base = serverDoc ? Y.encodeStateVector(serverDoc) : Y.encodeStateVector(new Y.Doc());
             const diff = Y.encodeStateAsUpdate(liveDoc, base);
@@ -124,7 +124,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
     }, [docKey, enabled]);
 
     // ── SYNC effect: keyed on richTextId. No richTextId → local-only draft, nothing to do.
-    //    Applies the server baseline to both docs (CRDT merge — idempotent), arms the initial
+    //    Applies the server baseline to both docs (CRDT merge, idempotent), arms the initial
     //    delta (drafts / offline edits from IndexedDB), and runs the only poll interval.
     useEffect(() => {
         const liveDoc = doc;
@@ -196,7 +196,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
                 setStatus("syncing");
                 await mutation.unwrap();
                 if (!cancelled) Y.applyUpdate(serverDoc, update);
-                // A keystroke may have landed while the append was in flight — don't claim synced.
+                // A keystroke may have landed while the append was in flight, don't claim synced.
                 setStatus(isDirtyRef.current ? "saved_locally" : "synced");
             } catch (e) {
                 logger.error({e});
@@ -210,7 +210,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
 
         /*
         * Compaction: fold the update log into a fresh yjsState snapshot once it grows past the
-        * threshold, letting the server prune superseded rows. Built from serverDoc — confirmed
+        * threshold, letting the server prune superseded rows. Built from serverDoc, confirmed
         * bytes only, so un-acked local edits can never end up in a snapshot without a log row.
         * upToSeq = lastFetchedUpdateSeq: everything ≤ it is guaranteed applied to serverDoc;
         * newer acked appends riding along in the state are fine (updates > upToSeq survive

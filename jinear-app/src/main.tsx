@@ -15,7 +15,7 @@ import {PostHogErrorBoundary, PostHogProvider} from '@posthog/react'
 
 if (navigator.storage?.persist) {
     navigator.storage.persist().catch(() => {
-        // ignore — persistence is an optimization, not a requirement
+        // ignore; persistence is an optimization, not a requirement
     });
 }
 

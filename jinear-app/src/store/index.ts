@@ -26,7 +26,7 @@ const createNoopStorage = () => ({
 })
 
 // Kept module-level so clearLocalforageStorage empties the instance persistence actually
-// writes to — localforage.clear() would hit the global default instance instead.
+// writes to; localforage.clear() would hit the global default instance instead.
 let localforageStore: LocalForage | null = null
 
 const createLocalforageStorage = () => {
@@ -127,7 +127,7 @@ export const resetAllStates = (dispatch: typeof store.dispatch) => {
 };
 
 /**
- * The one local-cleanup path for leaving an account — explicit logout and account deletion alike.
+ * The one local-cleanup path for leaving an account, explicit logout and account deletion alike.
  * Every entry point must call this, otherwise the previous user's notes stay readable on disk.
  *
  * Order is deliberate: doc keys are read before the reset wipes them, and the reset itself runs

@@ -2,17 +2,23 @@ import {api} from "@/store/api/api";
 import {useInitializeNotificationTargetMutation} from "@/store/api/notificationTargetApi";
 import {selectAuthState, selectCurrentAccountId, selectCurrentSessionId} from "@/store/slice/accountSlice";
 import {selectFirebase, selectMessaging, setFirebase, setMessaging} from "@/store/slice/firebaseSlice";
-import {popNotificationPermissionModal} from "@/store/slice/modalSlice";
+import {closeNotificationPermissionModal, popNotificationPermissionModal} from "@/store/slice/modalSlice";
 import {markHasUnreadNotification} from "@/store/slice/taskAdditionalDataSlice";
 import {useAppDispatch, useTypedSelector} from "@/store";
 import Logger from "@/util/logger";
 import {initializeApp} from "firebase/app";
-import {deleteToken, getMessaging, getToken, isSupported, type MessagePayload, onMessage} from "firebase/messaging";
-import React, {useEffect} from "react";
+import {deleteToken, getMessaging, isSupported, type MessagePayload, onMessage} from "firebase/messaging";
+import React, {useEffect, useRef} from "react";
 import {toast} from "react-hot-toast";
 import ForegroundNotification from "../foregroundNotification/ForegroundNotification";
 import {localStorageItemBooleanParser, useLocalStorage} from "@/hooks/useLocalStorage";
-import {NOTIFICATIONS_REJECT_KEY} from "@/components/modal/notificationPermissionModal/NotificationPermissionModal";
+import {
+    NOTIFICATIONS_REJECT_KEY,
+    onNotificationPermissionChange,
+    readNotificationPermission
+} from "@/util/notificationPermission";
+import {getFirebaseNotificationToken} from "@/util/attachNotificationTarget";
+import {firebaseConfig} from "@/util/firebaseConfig";
 import {useNavigate} from "react-router-dom";
 
 interface FirebaseConfigrationProps {
@@ -42,20 +48,11 @@ const TASK_UPDATE_NOTIFICATIONS = [
     "TASK_ATTACHMENT_DELETED"
 ];
 
-// Runtime-configurable via env (see .env.example). The same values must be used
-// by the service worker (src/sw.ts) so app and background push bind to one
-// Firebase project. Self-hosters override these without rebuilding the image.
-const firebaseConfig = {
-    apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-    authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-    projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-    storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-    appId: import.meta.env.VITE_FIREBASE_APP_ID,
-    measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
-};
-
-export const VAPID_PUBLIC_KEY = import.meta.env.VITE_FIREBASE_VAPID_KEY;
+// getToken can fail transiently (service worker not ready yet, network). Retry a
+// few times, then stop; a missing VAPID key or a blocked project would otherwise
+// spin forever.
+const ATTACH_MAX_ATTEMPTS = 4;
+const ATTACH_RETRY_DELAY_MS = 2500;
 
 const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
     const dispatch = useAppDispatch();
@@ -67,11 +64,42 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
     const firebaseApp = useTypedSelector(selectFirebase);
     const messaging = useTypedSelector(selectMessaging);
 
+    const attachRetryTimeout = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+
     const [initializeNotificationTarget, {}] = useInitializeNotificationTargetMutation();
     const doNotAskNotifications = useLocalStorage({
         key: NOTIFICATIONS_REJECT_KEY,
         parser: localStorageItemBooleanParser
     }) ?? false;
+
+    const attachAccount = async (accountId: string, attempt: number = 1) => {
+        if (!messaging) {
+            logger.log(`Messaging is not ready yet, skipping attach.`);
+            return;
+        }
+        try {
+            const currentFirebaseToken = await getFirebaseNotificationToken(messaging);
+            logger.log(
+                `Firebase token retrieved attaching now. accountId: ${accountId}, currentFirebaseToken: ${currentFirebaseToken}`
+            );
+            if (currentFirebaseToken) {
+                logger.log(`Attach notification target api call has started.`);
+                initializeNotificationTarget({externalTargetId: currentFirebaseToken, providerType: "FIREBASE"});
+            }
+        } catch (error) {
+            logger.error({message: `Attaching notification target failed. attempt: ${attempt}`, error});
+            if (attempt >= ATTACH_MAX_ATTEMPTS) {
+                logger.error(`Giving up on attaching notification target after ${attempt} attempts.`);
+                return;
+            }
+            if (attachRetryTimeout.current) {
+                clearTimeout(attachRetryTimeout.current);
+            }
+            attachRetryTimeout.current = setTimeout(() => {
+                attachAccount(accountId, attempt + 1);
+            }, ATTACH_RETRY_DELAY_MS * attempt);
+        }
+    };
 
     useEffect(() => {
         initializeFirebase();
@@ -93,49 +121,49 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
         }
     }, [currentAccountId, authState, firebaseApp, messaging]);
 
+    // React to permission changes made outside the modal: browser UI, another
+    // tab, or a browser auto-revoke. Without this the app only learns about a
+    // grant on the next reload, and a modal opened off a stale read would sit
+    // there after the user has already allowed notifications.
+    useEffect(() => {
+        return onNotificationPermissionChange((permission) => {
+            logger.log(`Notification permission changed to ${permission}.`);
+            if (permission != "default") {
+                dispatch(closeNotificationPermissionModal());
+            }
+            if (permission == "granted" && currentAccountId && authState == "LOGGED_IN") {
+                attachAccount(currentAccountId);
+            }
+        });
+    }, [currentAccountId, authState, messaging]);
+
+    useEffect(() => {
+        return () => {
+            if (attachRetryTimeout.current) {
+                clearTimeout(attachRetryTimeout.current);
+            }
+        };
+    }, []);
+
     const initializeFirebase = async () => {
-        console.log(`initializeFirebase has started.`);
+        logger.log(`initializeFirebase has started.`);
         const isSupportedBrowser = await isSupported();
-        console.log(`isSupportedBrowser: ${isSupportedBrowser}`);
+        logger.log(`isSupportedBrowser: ${isSupportedBrowser}`);
         if (isSupportedBrowser) {
             const app = initializeApp(firebaseConfig);
-            const messaging = getMessaging(firebaseApp);
+            const messaging = getMessaging(app);
             dispatch(setFirebase(app));
             dispatch(setMessaging(messaging));
         }
     };
 
     const checkAndPrompt = async (currentAccountId: string) => {
-        const notificationPermission = Notification.permission;
-        if (notificationPermission == "default" && !doNotAskNotifications) {
-            dispatch(popNotificationPermissionModal({visible: true, platform: "web"}));
-            return;
-        } else if (notificationPermission == "granted" && currentAccountId) {
+        const notificationPermission = await readNotificationPermission();
+        logger.log(`Resolved notification permission: ${notificationPermission}`);
+        if (notificationPermission == "granted") {
             attachAccount(currentAccountId);
-        }
-    };
-
-    const attachAccount = async (accountId: string) => {
-        try {
-            if (messaging) {
-                const serviceWorkerRegistration = await navigator.serviceWorker.ready;
-                const currentFirebaseToken = await getToken(messaging, {
-                    vapidKey: VAPID_PUBLIC_KEY,
-                    serviceWorkerRegistration
-                });
-                logger.log(
-                    `Firebase token retrieved attaching now. accountId: ${accountId}, currentFirebaseToken: ${currentFirebaseToken}`
-                );
-                if (currentFirebaseToken) {
-                    logger.log(`Attach notification target api call has started.`);
-                    initializeNotificationTarget({externalTargetId: currentFirebaseToken, providerType: "FIREBASE"});
-                }
-            }
-        } catch (e) {
-            console.error(e);
-            setTimeout(() => {
-                attachAccount(accountId);
-            }, 2500);
+        } else if (notificationPermission == "default" && !doNotAskNotifications) {
+            dispatch(popNotificationPermissionModal({visible: true, platform: "web"}));
         }
     };
 

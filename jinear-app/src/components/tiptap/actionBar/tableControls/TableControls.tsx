@@ -22,14 +22,14 @@ interface TableControlsProps {
 const NEW_TABLE = {rows: 3, cols: 3, withHeaderRow: true};
 
 /**
- * Table buttons for the editor {@link ActionBar}. The insert button shows only outside a table —
- * prosemirror-tables does not support nested tables — and the editing group only inside one.
+ * Table buttons for the editor {@link ActionBar}. The insert button shows only outside a table
+ * (prosemirror-tables does not support nested tables), and the editing group only inside one.
  */
 const TableControls: React.FC<TableControlsProps> = ({editor}) => {
     const {t} = useTranslation();
 
     // `useEditor` does not re-render on transactions in TipTap v3, so caret-dependent state has to
-    // be subscribed to explicitly — otherwise `isActive`/`can` here would be whatever they were on
+    // be subscribed to explicitly, otherwise `isActive`/`can` here would be whatever they were on
     // the last parent render. Outside a table the `&&` short-circuits every `can()` but one.
     const tableState = useEditorState({
         editor,

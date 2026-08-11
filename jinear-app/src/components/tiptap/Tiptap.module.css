@@ -71,7 +71,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  /* Local to the cell's stacking context — must not paint over the sticky action bar. */
+  /* Local to the cell's stacking context, must not paint over the sticky action bar. */
   z-index: 2;
   background-color: var(--c-secondary-shade-1-op05);
   pointer-events: none;
@@ -96,7 +96,7 @@
 /* region task lists */
 
 /*
- * Selectors target the DOM TaskItem's node view builds — li > label > (input + span) and li > div.
+ * Selectors target the DOM TaskItem's node view builds: li > label > (input + span) and li > div.
  * Items are matched through the parent ul, not by data-type: the node view bypasses renderHTML, so
  * it only ever puts data-checked on the li. The ul has no node view and does carry its data-type.
  * Direct children only, so a checklist sitting inside a plain bullet list still styles correctly.
@@ -129,8 +129,8 @@
 
 /*
  * The native control is made transparent and stretched over the box rather than removed. Every
- * behaviour the node view attaches stays intact that way — the change handler, the mousedown
- * preventDefault that stops the caret jumping, the isEditable guard and the aria-label — and
+ * behaviour the node view attaches stays intact that way (the change handler, the mousedown
+ * preventDefault that stops the caret jumping, the isEditable guard and the aria-label), and
  * keyboard toggling still works. Only the painting moves to the sibling span.
  */
 .tiptap ul[data-type="taskList"] > li > label input[type="checkbox"] {

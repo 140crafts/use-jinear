@@ -36,7 +36,7 @@ const slice = createSlice({
             })
             .addMatcher(accountApi.endpoints.me.matchRejected, (state, action) => {
                 logger.log({ rejected: action });
-                // Skipped due to `condition` — not a real attempt, ignore entirely.
+                // Skipped due to `condition`: not a real attempt, ignore entirely.
                 if (action.meta.condition) {
                     return;
                 }
@@ -48,7 +48,7 @@ const slice = createSlice({
                     state.sessionId = undefined;
                     state.authState = "NOT_LOGGED_IN";
                 }
-                // else: network error, timeout, parse error, 5xx — keep current auth + stale data.
+                // else: network error, timeout, parse error, 5xx: keep current auth + stale data.
             });
     }
 });

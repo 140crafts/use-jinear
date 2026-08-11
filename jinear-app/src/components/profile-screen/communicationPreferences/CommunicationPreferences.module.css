@@ -3,3 +3,21 @@
   flex-direction: column;
   gap: 1rem;
 }
+
+/* Mirrors SettingsCheckbox's row layout so it reads as part of the same list,
+   with the action button trailing instead of a leading checkbox. */
+.browserNotifications {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-weight: 600;
+}
+
+.browserNotificationsText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-weight: 400;
+}

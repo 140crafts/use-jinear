@@ -11,7 +11,7 @@ import type { WorkspaceDto } from "@/model/be/jinear-core";
  * editor has a url and an offline-capable doc key from the first keystroke; PendingDraftSubmitter creates
  * it server-side once it can.
  *
- * With a notebookId the note is born inside that notebook — the draft carries it through to the create,
+ * With a notebookId the note is born inside that notebook; the draft carries it through to the create,
  * so the content never has to enter the workspace-level drafts pool on its way in. Without one the draft
  * is workspace-level and lands in the drafts section, which is the behaviour every draft used to have.
  */

@@ -32,7 +32,7 @@ const docHasNestedTable = (doc: ProseMirrorNode): boolean => {
                 return false;
             }
         }
-        // Keep descending — the nesting may be deeper in.
+        // Keep descending; the nesting may be deeper in.
         return true;
     });
     return nested;
@@ -43,13 +43,13 @@ const docHasNestedTable = (doc: ProseMirrorNode): boolean => {
  *
  * prosemirror-tables does not support nested tables: its row/column commands operate on the
  * innermost table but rewrite structure as if it were top-level, which can produce a node that no
- * longer satisfies the schema. Under Yjs that is destructive rather than cosmetic — y-prosemirror
+ * longer satisfies the schema. Under Yjs that is destructive rather than cosmetic; y-prosemirror
  * deletes any Y element it cannot turn back into a ProseMirror node (see the catch in
  * `createNodeFromYElement`), so the table is dropped from the doc, from IndexedDB and from the
  * server. Blocking the nesting up front is the only way to keep that from happening.
  *
- * Plugin-only: registers no nodes or marks, so the ProseMirror schema — and therefore the CRDT
- * seed — is unchanged. Docs that already contain a nested table still load; this only stops new
+ * Plugin-only: registers no nodes or marks, so the ProseMirror schema, and therefore the CRDT
+ * seed, is unchanged. Docs that already contain a nested table still load; this only stops new
  * ones being created.
  */
 export const NoNestedTables = Extension.create({
@@ -61,7 +61,7 @@ export const NoNestedTables = Extension.create({
                 key: new PluginKey("noNestedTables"),
                 filterTransaction(transaction) {
                     if (!transaction.docChanged) return true;
-                    // Never veto a Yjs sync transaction — the editor has to stay a faithful view of
+                    // Never veto a Yjs sync transaction; the editor has to stay a faithful view of
                     // the Y.Doc, or local and remote state silently diverge.
                     if (transaction.getMeta(ySyncPluginKey)) return true;
 

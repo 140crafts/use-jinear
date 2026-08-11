@@ -38,7 +38,7 @@ const InvitationActionContainer: React.FC<InvitationActionContainerProps> = ({
     try {
       await logoutCall().unwrap();
     } catch (error) {
-      // Server-side logout failed (offline, dead session) — still drop everything local.
+      // Server-side logout failed (offline, dead session), still drop everything local.
       logger.error({ message: "Logout call failed", error });
     }
     await performLogoutCleanup(dispatch);

@@ -20,7 +20,7 @@ const NotePath: React.FC<NotePathProps> = ({}) => {
     // expression covers created notes, notebook-born drafts and plain drafts alike.
     const notebookId = note?.notebookId ?? urlNotebookId ?? DRAFTS_NOTEBOOK_ID;
     const isDraftsNotebook = notebookId === DRAFTS_NOTEBOOK_ID;
-    // Only unresolved when the notebook listing hasn't loaded — labelling it "Drafts" there would
+    // Only unresolved when the notebook listing hasn't loaded, labelling it "Drafts" there would
     // claim something false, so fall back to a neutral label instead.
     const notebookTitle = notebook?.title
         ?? (isDraftsNotebook ? t('notebookDraftsTitle') : t('notePathNotebookFallback'));

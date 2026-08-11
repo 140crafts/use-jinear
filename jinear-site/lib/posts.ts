@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 
-// File-based blog: one Markdown/MDX file per post under content/blog/. No CMS —
+// File-based blog: one Markdown/MDX file per post under content/blog/. No CMS:
 // add or edit a file, commit, and CI rebuilds the static site.
 
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
