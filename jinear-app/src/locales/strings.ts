@@ -1790,6 +1790,30 @@ const translations = {
         en: "Receive push notifications from your devices related to tasks and etc.",
         tr: "Görevlerinizle ilgili cihazlarınızdan anlık bildirimler alın."
     },
+    communicationPrefrencesBrowserNotifications: {
+        en: "Browser Notifications",
+        tr: "Tarayıcı Bildirimleri"
+    },
+    communicationPrefrencesBrowserNotificationsEnabled: {
+        en: "Notifications are enabled on this device.",
+        tr: "Bu cihazda bildirimler etkin."
+    },
+    communicationPrefrencesBrowserNotificationsBlocked: {
+        en: "Notifications are blocked for Jinear in this browser. Allow them from your browser's site settings to receive them again.",
+        tr: "Bu tarayıcıda Jinear bildirimleri engellenmiş. Tekrar bildirim almak için tarayıcının site ayarlarından izin ver."
+    },
+    communicationPrefrencesBrowserNotificationsDisabled: {
+        en: "Allow notifications in this browser to receive updates from tasks you subscribe.",
+        tr: "Takip ettiğin görevlerden güncelleme almak için bu tarayıcıda bildirimlere izin ver."
+    },
+    communicationPrefrencesBrowserNotificationsEnableButton: {
+        en: "Enable",
+        tr: "Etkinleştir"
+    },
+    communicationPrefrencesBrowserNotificationsUnsupported: {
+        en: "This browser does not support notifications.",
+        tr: "Bu tarayıcı bildirimleri desteklemiyor."
+    },
     notificationPermissionModalTitle: {
         en: "Enable Notifications",
         tr: "Anlık Bildirimleri Etkinleştir"

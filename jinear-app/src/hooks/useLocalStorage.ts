@@ -27,4 +27,10 @@ export const setLocalStorage = ({
   }
 };
 
+export const removeLocalStorage = ({ key }: { key: string }) => {
+  if (typeof window === "object") {
+    localStorage.removeItem(key);
+  }
+};
+
 export const localStorageItemBooleanParser = (val?: string|null) => (val ? val?.toLowerCase() == "true" : undefined);
