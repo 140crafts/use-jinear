@@ -4,7 +4,7 @@ import type * as Y from "yjs";
 /**
  * Binds a named Y.Text field of a doc to React state. Remote and local edits both land through
  * the observer. Writes are applied as a minimal prefix/suffix diff, so a keystroke touches only the
- * characters that actually changed — a whole-value replace would make two concurrent replicas each
+ * characters that actually changed; a whole-value replace would make two concurrent replicas each
  * re-insert the entire string, and Yjs would keep both halves (a doubled title).
  */
 export const useYText = (doc: Y.Doc | null | undefined, field: string): [string, (next: string) => void] => {
@@ -28,7 +28,7 @@ export const useYText = (doc: Y.Doc | null | undefined, field: string): [string,
         doc.transact(() => {
             const prev = text.toString();
             if (prev === next) return;
-            // Longest common prefix, then longest common suffix of what's left — the changed span
+            // Longest common prefix, then longest common suffix of what's left: the changed span
             // is everything between them.
             let start = 0;
             while (start < prev.length && start < next.length && prev[start] === next[start]) start++;

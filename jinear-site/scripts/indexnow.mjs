@@ -2,7 +2,7 @@
 /**
  * Submit the live sitemap's URLs to IndexNow (Bing, Yandex, Seznam, Naver).
  *
- * Run this AFTER the new build is actually serving on the site — IndexNow tells
+ * Run this AFTER the new build is actually serving on the site. IndexNow tells
  * search engines "recrawl these now", so pinging before the server has pulled the
  * new image just makes them recrawl the old content.
  *
@@ -102,7 +102,7 @@ async function main() {
   if (res.status !== 200 && res.status !== 202) {
     fail(`IndexNow returned HTTP ${res.status}${body ? `: ${body}` : ""}`);
   }
-  console.log(`\n✓ submitted ${urlList.length} URL(s) — IndexNow returned HTTP ${res.status}`);
+  console.log(`\n✓ submitted ${urlList.length} URL(s), IndexNow returned HTTP ${res.status}`);
 }
 
 main().catch((err) => fail(err.stack || err.message));

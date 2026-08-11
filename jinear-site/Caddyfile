@@ -3,13 +3,13 @@
 #
 # Unlike jinear-app (a client-rendered SPA), this is a statically exported site:
 # every route has its own pre-rendered HTML, so there is NO SPA fallback to
-# index.html — unknown paths return the real 404 page.
+# index.html; unknown paths return the real 404 page.
 
 :80 {
     root * /srv
     encode zstd gzip
 
-    # Next emits content-hashed assets under /_next/static — cache forever.
+    # Next emits content-hashed assets under /_next/static, so cache forever.
     @assets path /_next/static/*
     header @assets Cache-Control "public, max-age=31536000, immutable"
 
@@ -30,7 +30,7 @@
     redir @www https://jinear.co{uri} 301
 
     # `trailingSlash: true` makes /pricing/ the canonical URL, but try_files below
-    # would also serve /pricing directly (200, not a redirect) — the same page at
+    # would also serve /pricing directly (200, not a redirect), i.e. the same page at
     # two URLs. Redirect the bare form to the slashed one. `not path *.*` keeps
     # static files (/og.png, /sitemap.xml, /llms.txt, ...) out of this.
     @needs_slash {

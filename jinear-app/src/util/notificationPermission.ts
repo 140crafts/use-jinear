@@ -32,7 +32,7 @@ const fromPermissionState = (state: PermissionState): NotificationPermission =>
  * Authoritative read of the browser's notification permission.
  *
  * `Notification.permission` is a synchronous snapshot that browsers can serve
- * stale on a freshly loaded document — that stale "default" is what made the
+ * stale on a freshly loaded document; that stale "default" is what made the
  * permission modal reappear on every app open for users who had already granted.
  * The Permissions API is the spec's canonical source, so prefer it and only fall
  * back to the snapshot where the API is unavailable.
@@ -48,7 +48,7 @@ export const readNotificationPermission = async (): Promise<NotificationPermissi
 /**
  * Subscribes to permission changes and returns an unsubscribe. Fires when the
  * user grants/blocks from browser UI, from another tab, or when the browser
- * auto-revokes — so the app can react without waiting for the next reload.
+ * auto-revokes, so the app can react without waiting for the next reload.
  * A no-op unsubscribe is returned where the Permissions API is unavailable.
  */
 export const onNotificationPermissionChange = (

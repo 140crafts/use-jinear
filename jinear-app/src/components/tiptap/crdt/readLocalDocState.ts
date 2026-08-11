@@ -4,7 +4,7 @@ import {toBase64} from "@/components/tiptap/crdt/base64.ts";
 import {DOC_DB_PREFIX, TITLE_FIELD} from "@/components/tiptap/crdt/constants.ts";
 
 /**
- * Loads a note's locally persisted Yjs doc without mounting an editor — used by
+ * Loads a note's locally persisted Yjs doc without mounting an editor, used by
  * PendingDraftSubmitter so a draft submitted in the background carries its full
  * content (title layer + body), not just metadata. An absent/empty doc encodes
  * to the empty state ("AAA="), which the backend accepts as a valid CRDT seed.

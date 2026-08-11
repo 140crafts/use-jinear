@@ -8,14 +8,14 @@ interface PendingNoteDraft {
     /**
      * Notebook the draft was started in, submitted with the create so the note is born inside it.
      * Undefined ⇒ a workspace-level draft (the "drafts" section), which is how every draft behaved
-     * before notebook-aware creation — persisted entries from then still deserialize correctly.
+     * before notebook-aware creation, persisted entries from then still deserialize correctly.
      */
     notebookId?: string;
     /** Mirrored from the in-doc Y.Text title so lists can label the draft without opening IndexedDB. */
     title?: string;
     /**
      * Set when the server rejected the create with an unretryable error. The draft stays in
-     * `pending` (its local doc is kept) but PendingDraftSubmitter skips it — the user recovers
+     * `pending` (its local doc is kept) but PendingDraftSubmitter skips it, the user recovers
      * the content by opening it, and discards it deliberately. Undefined ⇒ still being retried.
      */
     failedAt?: number;
@@ -105,13 +105,13 @@ export const selectPendingDraftsOrdered = (workspaceId: string) => ((state: Root
 export const selectPendingDraftsMap = (state: RootState) => state.noteDrafts.pending;
 
 /**
- * Drafts belonging to one notebook, or — with notebookId omitted — the workspace-level ones that
+ * Drafts belonging to one notebook, or (with notebookId omitted) the workspace-level ones that
  * live in the drafts section. Each draft is listed in exactly one place, so a draft started inside
  * a notebook is recoverable from that notebook rather than disappearing into the drafts list.
  *
  * Takes the pending map rather than being a selector: one of these renders per notebook in the side
- * menu, so callers memoize on `selectPendingDraftsMap` instead of rebuilding an array — and
- * re-rendering every notebook — on each dispatch.
+ * menu, so callers memoize on `selectPendingDraftsMap` instead of rebuilding an array (and
+ * re-rendering every notebook) on each dispatch.
  */
 export const pendingDraftsForNotebook = (
     pending: Record<string, PendingNoteDraft>,

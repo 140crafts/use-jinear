@@ -10,7 +10,7 @@ import {NoNestedTables} from "./noNestedTables/NoNestedTables";
 interface BuildEditorExtensionsOptions {
     placeholder?: string;
     emptyEditorClass?: string;
-    /** Set false to disable StarterKit undo/redo — required when Yjs/y-prosemirror owns history. */
+    /** Set false to disable StarterKit undo/redo, required when Yjs/y-prosemirror owns history. */
     history?: boolean;
     extra?: Extension[];
 }
@@ -53,7 +53,7 @@ export const buildEditorExtensions = ({
     }),
     // Task lists serialize their state into data attributes only. Tiptap's stock renderHTML emits
     // <label><input type="checkbox"><span></span></label>, none of which survives jinear-core's
-    // OWASP allowlist — the sanitized value would come back as a plain bullet list. The interactive
+    // OWASP allowlist; the sanitized value would come back as a plain bullet list. The interactive
     // checkbox in the editor comes from TaskItem's node view, which never goes through renderHTML,
     // so dropping it here costs nothing. parseHTML is inherited and already reads both attributes,
     // which is what lets this markup round-trip back out of the backend and through the CRDT seed.

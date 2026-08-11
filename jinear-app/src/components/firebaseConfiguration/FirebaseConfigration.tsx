@@ -49,7 +49,7 @@ const TASK_UPDATE_NOTIFICATIONS = [
 ];
 
 // getToken can fail transiently (service worker not ready yet, network). Retry a
-// few times, then stop — a missing VAPID key or a blocked project would otherwise
+// few times, then stop; a missing VAPID key or a blocked project would otherwise
 // spin forever.
 const ATTACH_MAX_ATTEMPTS = 4;
 const ATTACH_RETRY_DELAY_MS = 2500;
@@ -121,7 +121,7 @@ const FirebaseConfigration: React.FC<FirebaseConfigrationProps> = ({}) => {
         }
     }, [currentAccountId, authState, firebaseApp, messaging]);
 
-    // React to permission changes made outside the modal — browser UI, another
+    // React to permission changes made outside the modal: browser UI, another
     // tab, or a browser auto-revoke. Without this the app only learns about a
     // grant on the next reload, and a modal opened off a stale read would sit
     // there after the user has already allowed notifications.

@@ -1,6 +1,6 @@
 # Running Jinear Behind nginx
 
-This guide explains how to deploy Jinear behind an existing nginx reverse proxy — the
+This guide explains how to deploy Jinear behind an existing nginx reverse proxy: the
 common case where nginx already terminates TLS on your server (with real or self-signed
 certificates) and you don't want the bundled Caddy binding ports 80/443.
 
@@ -18,14 +18,14 @@ configure anything storage-specific.
 ## Two directives that matter
 
 nginx's defaults break file storage in two ways. The provided example already handles
-both — if you copy it, you don't need to think about them, but here's why they're there:
+both. If you copy it you don't need to think about them, but here's why they're there:
 
-- **`proxy_set_header Host $host;`** — Caddy routes by the Host header, and MinIO
+- **`proxy_set_header Host $host;`**: Caddy routes by the Host header, and MinIO
   validates S3 presigned-URL signatures against it. nginx's default `proxy_pass`
   rewrites Host to the upstream name, which makes file uploads and downloads fail with
   **403 Forbidden**. (The app and API are largely Host-insensitive, so they can appear to
-  work even when this is wrong — don't use "the app loads" as proof it's set correctly.)
-- **`client_max_body_size 0;`** — nginx rejects request bodies over **1 MB** by default,
+  work even when this is wrong; don't use "the app loads" as proof it's set correctly.)
+- **`client_max_body_size 0;`**: nginx rejects request bodies over **1 MB** by default,
   so without this, uploading anything larger fails with **413 Request Entity Too Large**.
   `0` means unlimited; set an explicit cap (e.g. `512m`) if you prefer.
 
@@ -50,11 +50,11 @@ Copy [`nginx/jinear.conf`](./nginx/jinear.conf) into your nginx config (e.g.
 
 - Replace `jinear.example.com` with your domain across all three server blocks.
 - Set the `ssl_certificate` / `ssl_certificate_key` paths to your certs (self-signed is
-  fine — only browsers need to trust them; the Jinear core never connects to these names).
+  fine: only browsers need to trust them, and the Jinear core never connects to these names).
 - Set the `upstream jinear_caddy` address to wherever Caddy's HTTP port is reachable from
   nginx (e.g. `127.0.0.1:8080` if nginx runs on the same host as the Jinear stack). If
   nginx is itself a container sharing a Docker network with Jinear, use `jinear-caddy:80`
-  instead — see [If your proxy is another container](#if-your-proxy-is-another-container).
+  instead. See [If your proxy is another container](#if-your-proxy-is-another-container).
 
 ### Step 3: Reload nginx and start Jinear
 
@@ -68,7 +68,7 @@ docker compose up -d
 ## Nginx Proxy Manager and other GUI proxies
 
 If you run Nginx Proxy Manager (or any other UI-driven proxy) there is no config file to
-copy — and you don't need one. Create **three proxy hosts**, for your main, `api.` and
+copy, and you don't need one. Create **three proxy hosts**, for your main, `api.` and
 `files.` domains, and forward all three to the same bundled Caddy endpoint (scheme
 `http`, the host and port from Step 2). That's the whole setup; the `files.` host needs
 no special treatment.
@@ -82,8 +82,8 @@ Two things to know:
 - If uploads of larger files fail with **413**, raise the body size limit for the `files.`
   host. In Nginx Proxy Manager that's the *Advanced* tab of that proxy host:
   `client_max_body_size 0;`.
-- Enable TLS per host in the UI as usual. Self-signed certificates are fine — only the
-  browser needs to trust them, `jinear-core` never connects to these names.
+- Enable TLS per host in the UI as usual. Self-signed certificates are fine; only the
+  browser needs to trust them, and `jinear-core` never connects to these names.
 
 ## If your proxy is another container
 
@@ -98,7 +98,7 @@ Full recipe in
 ### File uploads fail with 403 (progress bar stuck)
 
 The browser's `PUT https://files.<your-domain>/...` returns **403**. The `Host` header is
-being changed before it reaches MinIO — confirm the `files.` server block has
+being changed before it reaches MinIO. Confirm the `files.` server block has
 `proxy_set_header Host $host;` (present in the example) and that no other proxy in front
 of nginx is rewriting it. The same mismatch also breaks image/attachment **downloads**,
 so fixing it restores both.
@@ -117,5 +117,5 @@ keeps MinIO's Host handling inside Jinear's own config.
 
 ## Example Files
 
-- [`nginx/jinear.conf`](./nginx/jinear.conf) — complete nginx server blocks for the
+- [`nginx/jinear.conf`](./nginx/jinear.conf): complete nginx server blocks for the
   recommended nginx → Caddy topology.

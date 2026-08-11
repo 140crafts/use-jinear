@@ -137,7 +137,7 @@ services:
     # Runtime config: the image substitutes these into its static bundle at
     # container start (import-meta-env), so one image serves any domain. Every
     # VITE_* key must be present (empty is fine) or the container won't boot.
-    # Firebase (web push) and Apple Sign In are optional — leave blank to disable.
+    # Firebase (web push) and Apple Sign In are optional; leave blank to disable.
     environment:
       - VITE_API_URL=${EXTERNAL_SCHEME:-https}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX:-}/
       - VITE_HOST=${EXTERNAL_SCHEME:-https}://${DOMAIN}${PUBLIC_PORT_SUFFIX:-}/

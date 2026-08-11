@@ -5,7 +5,7 @@
       import-meta-env "special expression". At build time the @import-meta-env
       plugin rewrites this into a placeholder object; at container start the
       docker entrypoint substitutes the real process-env values into it. This is
-      what makes runtime config (docker-compose env) the source of truth — every
+      what makes runtime config (docker-compose env) the source of truth, every
       `import.meta.env.VITE_*` in the app reads from this global.
     -->
     <script>globalThis.import_meta_env = JSON.parse('"import_meta_env_placeholder"');</script>

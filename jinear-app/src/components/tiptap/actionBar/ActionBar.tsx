@@ -48,7 +48,7 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
 
   // The buttons below read `isActive`/`can` straight off the editor, which under Tiptap v3 only
   // refreshes when this component happens to re-render. Subscribe the task list button explicitly
-  // so its toggled state tracks the caret — same reason TableControls does this.
+  // so its toggled state tracks the caret, same reason TableControls does this.
   const taskListState = useEditorState({
     editor,
     selector: ({ editor }) => ({

@@ -1,6 +1,6 @@
 # jinear-app
 
-Jinear's web client — a Vite + React PWA (with an offline service worker and
+Jinear's web client: a Vite + React PWA (with an offline service worker and
 Firebase Cloud Messaging push). It is packaged as a single Docker image and
 distributed to self-hosters, who point it at their own API/host and (optionally)
 their own Firebase project **without rebuilding**.
@@ -14,18 +14,18 @@ yarn build    # tsc -b && vite build -> dist/
 ```
 
 Local dev values live in `.env` (gitignored). Only the **keys** in `.env.example`
-are part of the public config contract — see below.
+are part of the public config contract; see below.
 
 ## Runtime configuration
 
 The same built image serves any domain. Configuration is injected **at container
 start**, not at build time, via [`import-meta-env`](https://github.com/iendeavor/import-meta-env):
 
-1. **Build time** — `@import-meta-env/unplugin` (in `vite.config.ts`) rewrites
+1. **Build time**: `@import-meta-env/unplugin` (in `vite.config.ts`) rewrites
    every `import.meta.env.VITE_*` reference into a placeholder. `index.html`
    carries the bootstrap expression
    `globalThis.import_meta_env = JSON.parse('"import_meta_env_placeholder"')`.
-2. **Container start** — `docker-entrypoint.sh` runs `import-meta-env`, which
+2. **Container start**: `docker-entrypoint.sh` runs `import-meta-env`, which
    scans `dist/**/*.{js,html}` and substitutes the placeholders with the real
    process env (from docker-compose), then hands off to Caddy.
 
@@ -40,7 +40,7 @@ So **docker-compose `environment:` is the source of truth.**
 ### Environment variables
 
 Every key below is declared in `.env.example`. **All of them must be present at
-container start (empty string is allowed) or the container won't boot** —
+container start (empty string is allowed) or the container won't boot**.
 `import-meta-env` treats any listed-but-undefined key as a fatal error.
 
 | Variable | Required | Description |
@@ -60,7 +60,7 @@ container start (empty string is allowed) or the container won't boot** —
 | `VITE_POSTHOG_KEY` | optional | PostHog project API key (blank disables analytics) |
 | `VITE_POSTHOG_HOST` | optional | PostHog API host, e.g. `https://us.i.posthog.com` |
 
-"Optional" means push / Apple Sign In / analytics are disabled when left blank — but the
+"Optional" means push / Apple Sign In / analytics are disabled when left blank, but the
 **key must still be present** in the environment (compose uses `${VAR:-}` to pass
 an empty string). Web push requires a self-hoster's *own* Firebase project; the
 service worker only initializes messaging when the Firebase config is non-empty,

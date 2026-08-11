@@ -133,7 +133,7 @@ services:
     restart: always
     # Every VITE_* key must be present (empty is fine) or the container won't
     # boot; the image substitutes them into its static bundle at start.
-    # Firebase (web push) and Apple Sign In are optional — leave blank to disable.
+    # Firebase (web push) and Apple Sign In are optional; leave blank to disable.
     environment:
       - VITE_API_URL=https://${API_DOMAIN}/
       - VITE_HOST=https://${DOMAIN}/

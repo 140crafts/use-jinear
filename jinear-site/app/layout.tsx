@@ -16,8 +16,8 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
     metadataBase: new URL(SITE_URL),
     title: {
-        default: "Jinear — Open-Source, Self-Hostable Project Management",
-        template: "%s — Jinear",
+        default: "Jinear, Open-Source, Self-Hostable Project Management",
+        template: "%s, Jinear",
     },
     description:
         "Jinear is an open-source, self-hostable project management and calendar suite for indie developers and small teams. AGPL-3.0, Docker Compose install, no per-user pricing.",

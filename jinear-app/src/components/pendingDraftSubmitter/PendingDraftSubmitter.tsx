@@ -13,7 +13,7 @@ const logger = Logger("PendingDraftSubmitter");
 
 /**
  * The ONLY place that creates notes on the server. Watches the persisted pending-drafts map and
- * submits each draft (with its locally persisted title + body) whenever the app is online — no
+ * submits each draft (with its locally persisted title + body) whenever the app is online, no
  * matter where in the app the user is, or whether the draft's editor was ever reopened. An open
  * note editor merely reacts to the ack (see useDraftNoteAck) and canonicalizes its URL.
  */
@@ -35,7 +35,7 @@ const PendingDraftSubmitter: React.FC = () => {
             inFlightRef.current = true;
             try {
                 for (const entry of Object.values(pending)) {
-                    // Marked unretryable on an earlier tick — keep the draft (and its local doc)
+                    // Marked unretryable on an earlier tick, keep the draft (and its local doc)
                     // for the user to recover, but never re-submit it.
                     if (entry.failedAt) continue;
                     try {
@@ -44,13 +44,13 @@ const PendingDraftSubmitter: React.FC = () => {
                         const response = await initializeNote({
                             workspaceId: entry.workspaceId,
                             // Undefined for workspace-level drafts, which is what the backend reads as
-                            // "no notebook" — so the note is created straight into the notebook it was
+                            // "no notebook", so the note is created straight into the notebook it was
                             // started in, never passing through the drafts pool first.
                             notebookId: entry.notebookId,
                             title,
                             bodyState,
                             // Idempotency key: the dormant BaseRequest.conversationId carries the draft id,
-                            // stable across retries and tabs — jinear-core dedupes creates on it via Redis.
+                            // stable across retries and tabs; jinear-core dedupes creates on it via Redis.
                             conversationId: entry.draftId
                         }).unwrap();
                         const noteId = response?.data?.noteId;
@@ -70,7 +70,7 @@ const PendingDraftSubmitter: React.FC = () => {
                     } catch (error) {
                         const status = (error as { status?: number | string })?.status;
                         logger.error({message: "Draft submit attempt failed", draftId: entry.draftId, status, error});
-                        // Unretryable rejection — except 401 (expired session) and 423 (create lock
+                        // Unretryable rejection, except for 401 (expired session) and 423 (create lock
                         // contention, e.g. another tab mid-submit), which must keep retrying. Mark the
                         // draft failed instead of deleting it: a transient lie-fi 4xx (e.g. a truncated
                         // body → 400) must never cost the user their content. The local doc is kept so

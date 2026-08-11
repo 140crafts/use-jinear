@@ -52,7 +52,7 @@ public class MinIOMediaFileOperationStrategy implements MediaFileOperationStrate
         // SigV4 signs the Host header, so signing against the internal endpoint and rewriting the
         // host afterwards produces a signature the browser's request can never match (403). Building
         // presigned URLs is a local operation (no network round-trip) once a region is pinned, so this
-        // client never needs to reach — or trust the TLS certificate of — the public files host.
+        // client never needs to reach (or trust the TLS certificate of) the public files host.
         this.presignClient = MinioClient.builder()
                 .endpoint(stripTrailingSlash(minIoProperties.getBasePath()))
                 .credentials(minIoProperties.getKey(), minIoProperties.getSecret())

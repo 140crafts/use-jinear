@@ -17,11 +17,11 @@ export const OG_IMAGE = {
 const TWITTER_HANDLE = "@usejinear";
 
 interface BuildMetadataInput {
-  /** Raw title. `title.template` in app/layout.tsx appends " — Jinear" everywhere
+  /** Raw title. `title.template` in app/layout.tsx appends ", Jinear" everywhere
    *  except app/page.tsx (Next skips the segment declaring the template), so aim
-   *  for 50–60 chars once that suffix is accounted for. */
+   *  for 50-60 chars once that suffix (8 chars) is accounted for. */
   title: string;
-  /** 120–160 chars. Shorter gets flagged as thin, longer gets truncated. */
+  /** 120-160 chars. Shorter gets flagged as thin, longer gets truncated. */
   description: string;
   /** Site-relative path WITH a trailing slash, so the canonical matches the
    *  sitemap and the trailing-slash redirect in the Caddyfile. */
@@ -41,11 +41,15 @@ export function buildMetadata({
   ogDescription,
   openGraph,
 }: BuildMetadataInput): Metadata {
-  const socialTitle = ogTitle ?? title;
+  // `title.template` appends ", Jinear", which would read as "Some Title., Jinear"
+  // for the blog posts whose titles end in a period. Strip that period from the
+  // metadata title only; the post's <h1> still renders `post.title` verbatim.
+  const metaTitle = title.replace(/\.$/, "");
+  const socialTitle = ogTitle ?? metaTitle;
   const socialDescription = ogDescription ?? description;
 
   return {
-    title,
+    title: metaTitle,
     description,
     alternates: {
       canonical: path,

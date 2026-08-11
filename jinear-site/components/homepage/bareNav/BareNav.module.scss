@@ -24,7 +24,7 @@
   }
 
   // On narrow screens the wide-tracked wordmark and the 5 nav links can't share
-  // one row — stack them so the wordmark stays intact above the wrapping nav.
+  // one row, so stack them and the wordmark stays intact above the wrapping nav.
   @media (max-width: $mobile-l) {
     flex-direction: column;
     align-items: flex-start;

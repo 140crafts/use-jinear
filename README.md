@@ -65,7 +65,7 @@ The installer will:
 - **Docker** 20.10+ and **Docker Compose** 2.0+
 - **5GB+ disk space** (10GB+ recommended)
 - **2GB+ RAM** (4GB+ recommended)
-- **Ports 80 & 443** available (configurable — automatic HTTPS can be disabled to run behind your own reverse proxy)
+- **Ports 80 & 443** available (configurable; automatic HTTPS can be disabled to run behind your own reverse proxy)
 - A domain name pointed to your server
 
 ### After Installation
@@ -91,11 +91,11 @@ TLS. See [jinear-installation-scripts/README.md](./jinear-installation-scripts/R
 for the port / scheme / cookie options.
 
 Point your proxy at the bundled Caddy (one upstream for all three domains) rather than
-at individual services — Caddy is preconfigured to talk to MinIO correctly, so file
+at individual services; Caddy is preconfigured to talk to MinIO correctly, so file
 storage needs no special setup. Your proxy must forward the original `Host` header for
 the `files.` domain (Caddy/Traefik do this by default; nginx needs
 `proxy_set_header Host $host;`), otherwise presigned uploads/downloads return 403. Note
-the app and API are Host-insensitive, so they can work even when this is wrong — don't
+the app and API are Host-insensitive, so they can work even when this is wrong; don't
 treat "the app loads" as proof. For a ready-made nginx config, see
 [docs/behind-nginx](docs/behind-nginx/README.md).
 
@@ -105,7 +105,7 @@ Check out the docs [docs/behind-traefik](docs/behind-traefik/)
 
 ### Running Behind nginx
 
-Check out the docs [docs/behind-nginx](docs/behind-nginx/) — includes a copy-paste
+Check out the docs [docs/behind-nginx](docs/behind-nginx/), which include a copy-paste
 nginx config with the `Host` header and upload body size already handled.
 
 ### Configuration
@@ -153,7 +153,7 @@ can create your own compose file and configure from scratch.
 > **Note on the marketing site & blog:** the public marketing pages, pricing
 > page, and blog (at `jinear.co/blog`) are a separate statically-exported
 > Next.js project, [`jinear-site`](./jinear-site/). It is used for the hosted
-> jinear.co deployment and is **not** part of the default self-host stack — a
+> jinear.co deployment and is **not** part of the default self-host stack; a
 > self-hosted instance just serves the app on your domain. See
 > [jinear-site/README.md](./jinear-site/README.md) to run it yourself.
 

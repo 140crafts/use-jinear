@@ -4,7 +4,7 @@ import { buildMetadata } from "@/utils/seo";
 import HomeClient from "./HomeClient";
 
 export const metadata: Metadata = buildMetadata({
-  title: "Jinear — Open-Source Self-Hosted Task Manager & Calendar",
+  title: "Jinear, Open-Source Self-Hosted Task Manager & Calendar",
   description:
     "Open-source, self-hostable tasks, calendar, notes and file sharing for indie devs and small teams. Install with Docker Compose. No per-user pricing.",
   path: "/",

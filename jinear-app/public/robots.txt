@@ -3,7 +3,7 @@ Allow: /
 
 # The app is login-gated and nothing in it belongs in a search index. De-indexing
 # is driven by the X-Robots-Tag response header (Caddyfile) and the
-# <meta name="robots"> tag in index.html — deliberately NOT by "Disallow: /".
+# <meta name="robots"> tag in index.html, deliberately NOT by "Disallow: /".
 # A Disallow would block recrawl, so search engines could never see the noindex
 # and already-indexed URLs would stay frozen in the index forever.
 #

@@ -6,7 +6,7 @@ const logger = Logger("deleteAllLocalDocs");
 
 /**
  * Every `doc:*` database currently on disk, or null where indexedDB.databases() isn't
- * available (Baseline 2024 — older Firefox/Safari). Null rather than an empty array so
+ * available (Baseline 2024, so older Firefox/Safari). Null rather than an empty array so
  * the caller can tell "nothing to delete" apart from "can't enumerate".
  */
 const enumerateDocDbNames = async (): Promise<string[] | null> => {
@@ -23,7 +23,7 @@ const enumerateDocDbNames = async (): Promise<string[] | null> => {
 };
 
 /**
- * Deletes the local doc database of EVERY note — the whole `doc:*` family. Used on logout and
+ * Deletes the local doc database of EVERY note, the whole `doc:*` family. Used on logout and
  * account deletion so note content typed on this device doesn't outlive the session that made it.
  *
  * Enumeration is the source of truth: it also catches orphans no redux state remembers (notes
@@ -32,7 +32,7 @@ const enumerateDocDbNames = async (): Promise<string[] | null> => {
  *
  * Safe while editors are still mounted: lib0's openDB closes connections on versionchange, so a
  * live IndexeddbPersistence never blocks the delete (same reasoning as deleteLocalDoc).
- * Never throws — a failed cleanup must not strand the user in a half-logged-out state.
+ * Never throws; a failed cleanup must not strand the user in a half-logged-out state.
  */
 export const deleteAllLocalDocs = async (knownDocKeys: string[] = []): Promise<void> => {
     const enumerated = await enumerateDocDbNames();

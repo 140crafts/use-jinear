@@ -6,7 +6,7 @@ import PricingClient from "./PricingClient";
 export const metadata: Metadata = buildMetadata({
   title: "Pricing: Free Self-Hosting or Flat Hosted Plans",
   description:
-    "Self-host Jinear for free (AGPL-3.0), or use the hosted plan at $24.90/month — flat, no per-user pricing. Compare against Slack, Dropbox, and Asana.",
+    "Self-host Jinear for free (AGPL-3.0), or use the hosted plan at $24.90/month, flat, with no per-user pricing. Compare against Slack, Dropbox, and Asana.",
   path: "/pricing/",
   ogTitle: "Jinear Pricing",
   ogDescription:
@@ -34,7 +34,7 @@ const productJsonLd = {
       name: "Smarter (Hosted)",
       price: "24.90",
       priceCurrency: "USD",
-      description: "Hosted plan with flat monthly pricing — no per-user fees.",
+      description: "Hosted plan with flat monthly pricing and no per-user fees.",
       url: `${SITE_URL}/pricing`,
     },
   ],

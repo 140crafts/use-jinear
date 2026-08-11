@@ -10,7 +10,7 @@ export const metadata: Metadata = buildMetadata({
   description:
     "How Jinear handles your data, plus the terms of service and refund policy for the hosted plan. Self-hosted installs keep all data on your own server.",
   path: "/terms/",
-  ogTitle: "Jinear — Privacy Policy, Terms & Conditions",
+  ogTitle: "Jinear, Privacy Policy, Terms & Conditions",
   ogDescription:
     "How Jinear handles your data, plus the terms of service and refund policy for the hosted plan.",
 });

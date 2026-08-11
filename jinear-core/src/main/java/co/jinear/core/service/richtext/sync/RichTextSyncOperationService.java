@@ -12,8 +12,8 @@ import org.springframework.stereotype.Service;
  * transactional {@link RichTextSyncService}. Append is locked too so per-rich-text update seqs are
  * assigned serially (contiguous, no reuse) and appends never interleave with a snapshot. Keeping the
  * {@code lock -> transaction -> unlock} sequencing here (rather than in the manager) yields the
- * correct ordering — the transactional core runs on a separate bean, so its proxy still opens a
- * transaction — and keeps locking concerns out of the request/auth layer.
+ * correct ordering (the transactional core runs on a separate bean, so its proxy still opens a
+ * transaction) and keeps locking concerns out of the request/auth layer.
  */
 @Slf4j
 @Service

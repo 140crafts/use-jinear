@@ -39,7 +39,7 @@ chmod +x install.sh
 - **Docker Compose**: Version 2.0 or higher (or docker-compose v1.29+)
 - **Disk Space**: Minimum 5GB free (10GB+ recommended)
 - **Memory**: Minimum 2GB RAM (4GB+ recommended)
-- **Ports**: 80 and 443 by default (configurable via `HTTP_PORT` / `HTTPS_PORT` — see [Running behind your own reverse proxy](#running-behind-your-own-reverse-proxy))
+- **Ports**: 80 and 443 by default (configurable via `HTTP_PORT` / `HTTPS_PORT`; see [Running behind your own reverse proxy](#running-behind-your-own-reverse-proxy))
 
 ## Configuration
 
@@ -83,7 +83,7 @@ PUBLIC_PORT_SUFFIX=     # auto-set (e.g. :8080); empty for standard ports 80/443
 If you serve Jinear directly on a **non-standard port** (e.g. plain HTTP on `8080`),
 the installer derives `PUBLIC_PORT_SUFFIX` and embeds it in every generated URL
 (`VITE_API_URL`, `CORS_ORIGINS`, `MINIO_BASE_PATH`, …) so the browser origin matches
-CORS automatically — no manual URL edits needed. It stays empty for standard ports, so
+CORS automatically, no manual URL edits needed. It stays empty for standard ports, so
 default installs are unaffected. Hand-set it only if a TLS proxy in front of Jinear
 listens on a non-standard port.
 
@@ -103,7 +103,7 @@ In the generated `docker-compose.yaml`, remove the whole `ports:` block from
 ```yaml
 services:
   jinear-caddy:
-    # ports: block deleted — nothing is exposed to the host
+    # ports: block deleted, nothing is exposed to the host
     networks:
       - jinear-default
       - proxy
@@ -115,7 +115,7 @@ networks:
     external: true          # the network your proxy already runs on
 ```
 
-Then point your proxy's three virtual hosts at `http://jinear-caddy:80` — the
+Then point your proxy's three virtual hosts at `http://jinear-caddy:80`, i.e. the
 **container** port, which is always `80` regardless of `HTTP_PORT`.
 
 Leave `PUBLIC_PORT_SUFFIX` empty in this topology: your proxy owns the public port, so it
@@ -125,14 +125,14 @@ that proxy listens on a non-standard port.
 > **Recommended: proxy to the bundled Caddy, not to individual services.** Point your
 > reverse proxy at the bundled Caddy as a single upstream for the main, `api.` and
 > `files.` domains. Caddy is already configured to talk to MinIO correctly, so you
-> configure nothing storage-specific — this is the topology used in the
+> configure nothing storage-specific; this is the topology used in the
 > [Traefik example](../docs/behind-traefik/README.md).
 >
 > This matters because file storage uses S3 presigned URLs, whose signature is bound to
 > the host the browser connects to (`files.<domain>`). The proxy must forward that
 > original `Host` header to MinIO unchanged; rewriting it to an internal service name
 > makes MinIO reject uploads **and** downloads with **403 Forbidden**. Caddy and Traefik
-> preserve `Host` by default. **nginx does not** — its default `proxy_pass` rewrites the
+> preserve `Host` by default. **nginx does not**; its default `proxy_pass` rewrites the
 > Host, and because the app and API are largely Host-insensitive they can still appear to
 > work, so "the app loads" is not proof the files domain is configured right. For a
 > copy-paste-correct nginx config (with the `Host` header and upload body size already
@@ -264,7 +264,7 @@ redirect is enabled. The `jinear-minio` service must set:
 ```
 
 This is already in the current template. If you're upgrading an older install,
-add the line to `docker-compose.yaml` (keep the quotes — unquoted `off` is a YAML
+add the line to `docker-compose.yaml` (keep the quotes; unquoted `off` is a YAML
 boolean and MinIO ignores it) and apply it:
 
 ```bash
@@ -276,14 +276,14 @@ docker compose up -d jinear-minio
 
 If picking a file starts an upload that never completes and the browser's network
 tab shows a **403 Forbidden** on the `PUT https://files.<your-domain>/...` request,
-something between the browser and MinIO is changing the `Host` header — presigned
+something between the browser and MinIO is changing the `Host` header. Presigned
 URLs are signed for the public files host, and the request must reach MinIO with that
 host intact.
 
 The bundled Caddy handles this for you, so the simplest fix is to proxy the `files.`
 domain to the bundled Caddy rather than straight to MinIO (see
 [Running Behind Your Own Reverse Proxy](#running-behind-your-own-reverse-proxy)). On
-nginx, make sure the `files.` server block sets `proxy_set_header Host $host;` — its
+nginx, make sure the `files.` server block sets `proxy_set_header Host $host;`; its
 default `proxy_pass` rewrites the Host and causes this exact 403. A copy-paste-correct
 nginx config is in [docs/behind-nginx](../docs/behind-nginx/README.md). The same
 mismatch also breaks image/attachment **downloads**, so fixing it restores both.

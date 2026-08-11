@@ -18,7 +18,7 @@ interface Params {
 
 // `next-mdx-remote/rsc`'s MDXRemote is an async Server Component (returns a
 // Promise), which React 18's JSX types reject (TS2786). It renders correctly at
-// runtime — RSC awaits it — so alias it to a plain component type for the editor.
+// runtime (RSC awaits it), so alias it to a plain component type for the editor.
 const Mdx = MDXRemote as unknown as FC<MDXRemoteProps>;
 
 // Render external links (http/https) in a new tab; keep in-site links in-tab.

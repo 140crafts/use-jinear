@@ -123,7 +123,7 @@ export const buildTeamEntries = ({workspaceId, teams, tier = "high"}: {
     tier?: DeviceTier;
 }): PrefetchEntry[] =>
     (tier === "low" ? teams.slice(0, LOW_TIER_TEAM_LIMIT) : teams).flatMap((team) => [
-        // /tasks/:teamUsername/tasks (MultiViewTaskList) — nulls mirror useQueryState defaults
+        // /tasks/:teamUsername/tasks (MultiViewTaskList); nulls mirror useQueryState defaults
         entry<ExtendedTaskFilterRequest>(taskListingApi.endpoints.filterTasks, {
             page: 0,
             workspaceId,

@@ -55,7 +55,7 @@ export const noteOperationApi = api.injectEndpoints({
             }),
             invalidatesTags: OPERATION_TAG,
             /**
-             * Invalidation only schedules refetches — until they land, every cached list still contains the
+             * Invalidation only schedules refetches; until they land, every cached list still contains the
              * deleted note. NotebookFirstNoteNavigator reads those lists to decide where to redirect, so a
              * stale entry sends the user straight back into the note they just deleted. Rewriting the cache
              * makes the deletion true for every reader at once (the sidebar included), and the refetch that

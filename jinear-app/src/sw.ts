@@ -43,14 +43,14 @@ registerRoute(
 // `globalThis.import_meta_env` (that's bootstrapped in index.html, which a
 // service worker never loads), so it carries its own copy of the import-meta-env
 // placeholder. The docker entrypoint's `import-meta-env` pass scans dist/**/*.js
-// — this compiled sw.js included — and rewrites the placeholder into the real
+// (this compiled sw.js included) and rewrites the placeholder into the real
 // process env at container start, so self-hosters point push at their own
 // Firebase project without rebuilding. Keys are declared in .env.example.
 //
 // In dev there is no substitution step, so we read import.meta.env directly
 // (Vite resolves it for the SW). The `import.meta.env.DEV` gate is statically
-// false in a production build, so that whole branch — and the build-time env it
-// would otherwise bake into sw.js — is dropped, leaving only the placeholder.
+// false in a production build, so that whole branch (and the build-time env it
+// would otherwise bake into sw.js) is dropped, leaving only the placeholder.
 const runtimeEnv: Record<string, string | undefined> = import.meta.env.DEV
     ? (import.meta.env as unknown as Record<string, string | undefined>)
     : (JSON.parse('"import_meta_env_placeholder"') as Record<string, string | undefined>);
@@ -73,7 +73,7 @@ const firebaseConfig = {
 // getMessaging pull in and run the (large) Firebase bundle, and the browser must
 // finish evaluating this script before the fetch/navigation routes above can serve
 // requests. Deferring lets precacheAndRoute + the NavigationRoute take control of a
-// cold-start navigation sooner — important on "lie-fi", where any window in which
+// cold-start navigation sooner, important on "lie-fi", where any window in which
 // the SW isn't yet controlling exposes the boot path to a stalled network. Firebase
 // itself isn't needed until a push actually arrives.
 const firebaseConfigured = Boolean(
@@ -85,7 +85,7 @@ if (firebaseConfigured) {
         const messaging = getMessaging(initializeApp(firebaseConfig));
 
         // Combined (notification + data) payloads are auto-displayed by the FCM SDK while
-        // the page is backgrounded, so we only render manually for data-only messages —
+        // the page is backgrounded, so we only render manually for data-only messages;
         // otherwise the user would see two notifications.
         onBackgroundMessage(messaging, (payload) => {
             if (payload.notification) {
@@ -117,7 +117,7 @@ self.addEventListener("notificationclick", (event) => {
                         try {
                             await (client as WindowClient).navigate(launchUrl);
                         } catch {
-                            // cross-origin / disallowed navigation — ignore
+                            // cross-origin / disallowed navigation, ignore
                         }
                     }
                     return;

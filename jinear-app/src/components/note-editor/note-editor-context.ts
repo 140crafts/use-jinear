@@ -10,12 +10,12 @@ export interface INoteEditorContext {
     notebookId?: string;
     /**
      * The note's notebook. Server truth once the note exists, falling back to the notebook the url
-     * points at — so a draft still being created renders in the notebook it was started in rather
+     * points at, so a draft still being created renders in the notebook it was started in rather
      * than looking like a workspace-level draft. Undefined ⇒ genuinely not in a notebook.
      */
     notebook?: NotebookDto;
     noteId?: string;
-    /** Local doc identity — the original draft id for draft-born notes (see selectDocKey). */
+    /** Local doc identity, the original draft id for draft-born notes (see selectDocKey). */
     docKey?: string;
     isPendingCreate?: boolean;
     doc?: Y.Doc | null;

@@ -15,7 +15,7 @@ export interface FirstAvailableNote {
   isDraft: boolean;
   /** Ready-to-navigate path, undefined until a note is found. */
   path?: string;
-  /** Nothing resolved yet and something is still in flight — show a loader, not the empty state. */
+  /** Nothing resolved yet and something is still in flight, show a loader, not the empty state. */
   isLoading: boolean;
   /** Any underlying request in flight (incl. background refetches). Rarely needed; prefer isLoading. */
   isFetching: boolean;
@@ -68,7 +68,7 @@ export const useFirstAvailableNote = (workspace?: WorkspaceDto): FirstAvailableN
     !!workspaceId &&
     (notebooksLoading ||
       (!!scannedNotebook && !notebookNotesSettled) ||
-      // settled but empty, with notebooks left to walk — the effect above is about to advance
+      // settled but empty, with notebooks left to walk; the effect above is about to advance
       (!!scannedNotebook && notebookNotesSettled && !notebookNote && notebookIndex < notebooks.length - 1));
 
   const resolved: Pick<FirstAvailableNote, "notebookId" | "noteId" | "isDraft"> = pendingDraft

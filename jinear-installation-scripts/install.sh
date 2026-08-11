@@ -607,12 +607,12 @@ BACKUP_RETENTION_DAYS=${BACKUP_RETENTION_DAYS}
 POSTHOG_KEY=
 POSTHOG_HOST=https://us.i.posthog.com
 
-# Sign In with Apple (backend) — Optional, disabled by default.
+# Sign In with Apple (backend): Optional, disabled by default.
 # Set APPLE_ENABLED=true (and fill the APPLE_* values + mount AuthKey.p8 into
 # .config/) to enable it. When false, jinear-core boots without the key file.
 APPLE_ENABLED=false
 
-# Web App (jinear-app) — Optional
+# Web App (jinear-app): Optional
 # Apple Sign In: fill with your Apple Service ID and its return URL to enable it.
 VITE_APPLE_CLIENT_ID=
 VITE_APPLE_REDIRECT_URI=
@@ -655,14 +655,14 @@ EOF
     fi
 
     # When automatic HTTPS is off, don't publish the 443 host ports (Caddy serves
-    # plain HTTP only, and something upstream — the user's proxy — owns 443).
+    # plain HTTP only, and something upstream, the user's proxy, owns 443).
     if [ "$AUTO_HTTPS" != "true" ]; then
         sed -i.bak '/jinear-https-ports/,+2d' "$INSTALL_DIR/docker-compose.yaml"
         rm -f "$INSTALL_DIR/docker-compose.yaml.bak"
         print_success "Configured Caddy to publish HTTP port ${HTTP_PORT} only (HTTPS disabled)"
     fi
 
-    # Generate Caddyfile — https/ACME template for auto-HTTPS, http-only otherwise
+    # Generate Caddyfile: https/ACME template for auto-HTTPS, http-only otherwise
     if [ "$AUTO_HTTPS" = "true" ]; then
         CADDY_TEMPLATE="Caddyfile.template"
     else

@@ -14,12 +14,12 @@ interface IUseNoteTitleMirrorProps {
     hydrated: boolean;
     note?: NoteDto;
     workspaceId?: string;
-    /** Set while the note is a pending local draft — title mirrors into its slice entry instead. */
+    /** Set while the note is a pending local draft, title mirrors into its slice entry instead. */
     pendingDraftId?: string;
 }
 
 /**
- * Mirrors the in-doc title into the note.title column — the projection lists, filters and search
+ * Mirrors the in-doc title into the note.title column, the projection lists, filters and search
  * read. The doc is the source of truth; this is display denormalization, the column's only writer.
  *
  * The flow is one-way by design. Nothing seeds the column back into the doc: doing so reintroduces

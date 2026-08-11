@@ -7,13 +7,13 @@ import {clearSubmittedDraft, selectPendingDraft, selectSubmittedNoteId} from "@/
 interface IUseDraftNoteAckProps {
     workspace: WorkspaceDto;
     urlNoteId: string;
-    /** Notebook segment currently in the url — a real notebook id, or the drafts sentinel. */
+    /** Notebook segment currently in the url: a real notebook id, or the drafts sentinel. */
     notebookId: string;
 }
 
 /**
  * The editor-side half of draft submission. Creation itself happens in one global place
- * (PendingDraftSubmitter); this hook only watches for the ack of the draft currently open —
+ * (PendingDraftSubmitter); this hook only watches for the ack of the draft currently open,
  * then canonicalizes the URL (cosmetic replaceState, no remount) and hands back the real
  * noteId so NoteEditor can fetch the created note.
  */
@@ -26,7 +26,7 @@ export const useDraftNoteAck = ({workspace, urlNoteId, notebookId}: IUseDraftNot
     useEffect(() => {
         if (!submittedNoteId) return;
         setAckedNoteId(submittedNoteId);
-        // Keep whichever notebook segment the draft was opened under — a notebook-born note stays in
+        // Keep whichever notebook segment the draft was opened under; a notebook-born note stays in
         // its notebook, a workspace-level one keeps the sentinel. Only the note id becomes canonical.
         window.history.replaceState(null, "",
             `/${workspace.username}/notebook/${notebookId || DRAFTS_NOTEBOOK_ID}/note/${submittedNoteId}`);
