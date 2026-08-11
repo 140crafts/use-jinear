@@ -53,6 +53,49 @@ The file name (without extension) becomes the URL slug: `my-post.mdx` →
   (explicitly allows GPTBot, ClaudeBot, PerplexityBot, etc.).
 - `/llms.txt` — a link-rich index for AI agents.
 - `/blog/rss.xml` — RSS feed.
+- `public/og.png` — the site-wide social card, inherited by every route.
+  Regenerate it from its source after editing the copy:
+
+  ```bash
+  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" \
+    --headless --disable-gpu --hide-scrollbars --force-device-scale-factor=1 \
+    --virtual-time-budget=8000 --window-size=1200,630 \
+    --screenshot=public/og.png "file://$PWD/scripts/og-image.html"
+  ```
+
+### Writing titles and descriptions
+
+Search consoles flag both ends of the range, so when adding a route or a post:
+
+- **Title** 50–60 characters *as rendered*. `app/layout.tsx` appends `" — Jinear"`
+  (9 chars) via `title.template` to every route **except** `app/page.tsx` — Next
+  skips the segment that declares the template, so the homepage title has to
+  carry the brand itself.
+- **Description** 120–160 characters. Under ~70 gets flagged as too short; over
+  ~160 is truncated in results.
+- Every route needs its **own** title and description. Omitting one makes the page
+  inherit the root layout's, which then shows up as a duplicate.
+
+### IndexNow
+
+[IndexNow](https://www.indexnow.org) pushes changed URLs to Bing, Yandex, Seznam
+and Naver instead of waiting for a crawl.
+
+- The key lives at [`public/a8ee1f955b4c4073b45836d8b598e619.txt`](./public) and is
+  served at `https://jinear.co/a8ee1f955b4c4073b45836d8b598e619.txt`. It is public
+  by design — that file *is* the ownership proof — so it is committed.
+- [`scripts/indexnow.mjs`](./scripts/indexnow.mjs) verifies the key file, reads the
+  **live** `/sitemap.xml`, and submits every URL.
+
+```bash
+npm run indexnow -- --dry-run   # show what would be submitted
+npm run indexnow                # submit
+```
+
+**Run it only after the server has pulled the new image and the new HTML is
+actually being served.** IndexNow means "recrawl these now"; firing it early just
+gets the old content recrawled. In CI this is the manual `site:indexnow` job,
+which runs after `site:deploy` — click it once the deploy has landed.
 
 ## Configuration
 

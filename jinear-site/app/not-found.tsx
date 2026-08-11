@@ -7,6 +7,8 @@ import styles from "./not-found.module.scss";
 
 export const metadata: Metadata = {
   title: "Page not found",
+  description:
+    "This page does not exist. Head back to the Jinear homepage, the pricing page, or the blog to find what you were looking for.",
   robots: { index: false, follow: true },
 };
 

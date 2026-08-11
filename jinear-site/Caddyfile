@@ -22,6 +22,25 @@
     @home path /home /home/
     redir @home https://app.jinear.co 301
 
+    # www → apex. Both hosts served identical HTML with 200s, which inflates the
+    # "pages with identical titles" count in search consoles even though every page
+    # already declares a canonical pointing at the apex.
+    # NOTE: only fires if the upstream TLS terminator preserves the Host header.
+    @www host www.jinear.co
+    redir @www https://jinear.co{uri} 301
+
+    # `trailingSlash: true` makes /pricing/ the canonical URL, but try_files below
+    # would also serve /pricing directly (200, not a redirect) — the same page at
+    # two URLs. Redirect the bare form to the slashed one. `not path *.*` keeps
+    # static files (/og.png, /sitemap.xml, /llms.txt, ...) out of this.
+    @needs_slash {
+        not path /
+        not path */
+        not path *.*
+        file {path}/index.html
+    }
+    redir @needs_slash {path}/ 301
+
     # `trailingSlash: true` means routes are exported as <path>/index.html.
     try_files {path} {path}/index.html {path}.html
     file_server

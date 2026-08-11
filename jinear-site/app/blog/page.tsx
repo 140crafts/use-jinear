@@ -3,22 +3,19 @@ import Link from "next/link";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { SITE_URL } from "@/utils/constants";
+import { buildMetadata } from "@/utils/seo";
 import { getAllPosts } from "@/lib/posts";
 import styles from "./blog.module.scss";
 
-export const metadata: Metadata = {
-  title: "Blog",
+export const metadata: Metadata = buildMetadata({
+  title: "Blog: Open-Source & Self-Hosting Development Notes",
   description:
+    "Changelogs, build notes and the occasional opinion on self-hosted project management, open source, and building Jinear. New posts as features ship.",
+  path: "/blog/",
+  ogTitle: "Jinear Blog",
+  ogDescription:
     "Changelogs, build notes and the occasional opinion on self-hosted project management, open source, and building Jinear.",
-  alternates: { canonical: "/blog" },
-  openGraph: {
-    type: "website",
-    title: "Jinear Blog",
-    description:
-      "Changelogs, build notes and the occasional opinion on self-hosted project management, open source, and building Jinear.",
-    url: `${SITE_URL}/blog`,
-  },
-};
+});
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", {
@@ -35,13 +32,13 @@ export default function BlogIndexPage() {
     "@context": "https://schema.org",
     "@type": "Blog",
     name: "Jinear Blog",
-    url: `${SITE_URL}/blog`,
+    url: `${SITE_URL}/blog/`,
     blogPost: posts.map((post) => ({
       "@type": "BlogPosting",
       headline: post.title,
       description: post.description,
       datePublished: post.pubDate,
-      url: `${SITE_URL}/blog/${post.slug}`,
+      url: `${SITE_URL}/blog/${post.slug}/`,
     })),
   };
 

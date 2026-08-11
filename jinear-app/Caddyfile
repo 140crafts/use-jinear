@@ -22,6 +22,13 @@
     @sw path /sw.js /manifest.webmanifest
     header @sw Cache-Control "no-cache"
 
+    # The app is authenticated and nothing here should be indexed. The SPA fallback
+    # below returns index.html for EVERY path, which otherwise exposes an unbounded
+    # set of identical pages (same title, same description) to crawlers. Sent as a
+    # header rather than relying on the <meta> tag alone so it also covers crawlers
+    # that don't execute JS and non-HTML responses.
+    header X-Robots-Tag "noindex, nofollow"
+
     # SPA fallback — any unknown path serves index.html so the React router can handle it.
     try_files {path} /index.html
     file_server

@@ -1,6 +1,7 @@
 import type {Metadata, Viewport} from "next";
 import React from "react";
 import {SITE_URL} from "@/utils/constants";
+import {OG_IMAGE} from "@/utils/seo";
 import "../styles/app.scss";
 import "../styles/fonts.css";
 import Root from "@/components/root/Root";
@@ -27,22 +28,27 @@ export const metadata: Metadata = {
     },
     alternates: {
         canonical: "/",
+        types: {
+            "application/rss+xml": "/blog/rss.xml",
+        },
     },
     openGraph: {
         type: "website",
         siteName: "Jinear",
         url: SITE_URL,
-        title: "Jinear — Open-Source, Self-Hostable Project Management",
+        title: "Jinear, Open-Source, Self-Hostable Project Management",
         description:
             "Open-source, self-hostable project management & calendar. AGPL-3.0, Docker Compose install, no per-user pricing.",
+        images: [OG_IMAGE],
     },
     twitter: {
         card: "summary_large_image",
         site: "@usejinear",
         creator: "@usejinear",
-        title: "Jinear — Open-Source, Self-Hostable Project Management",
+        title: "Jinear, Open-Source, Self-Hostable Project Management",
         description:
             "Open-source, self-hostable project management & calendar. AGPL-3.0, Docker Compose install, no per-user pricing.",
+        images: [OG_IMAGE.url],
     },
     robots: {
         index: true,
@@ -55,7 +61,7 @@ const organizationJsonLd = {
     "@type": "Organization",
     name: "Jinear",
     url: SITE_URL,
-    logo: `${SITE_URL}/icon.png`,
+    logo: `${SITE_URL}/images/icon/icon-512x512.png`,
     sameAs: [
         "https://github.com/140crafts/use-jinear",
         "https://gitlab.com/140crafts/use-jinear",

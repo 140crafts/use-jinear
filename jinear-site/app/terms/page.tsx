@@ -2,20 +2,18 @@ import { Metadata } from "next";
 import Link from "next/link";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
-import { SITE_URL } from "@/utils/constants";
+import { buildMetadata } from "@/utils/seo";
 import styles from "./index.module.scss";
 
-export const metadata: Metadata = {
-  title: "Terms & Conditions",
-  description: "Privacy policy, terms & conditions for Jinear, the open-source, self-hostable project management tool.",
-  alternates: { canonical: "/terms" },
-  openGraph: {
-    type: "website",
-    title: "Jinear — Terms & Conditions",
-    description: "Privacy policy, terms & conditions for Jinear.",
-    url: `${SITE_URL}/terms`,
-  },
-};
+export const metadata: Metadata = buildMetadata({
+  title: "Privacy Policy, Terms & Conditions",
+  description:
+    "How Jinear handles your data, plus the terms of service and refund policy for the hosted plan. Self-hosted installs keep all data on your own server.",
+  path: "/terms/",
+  ogTitle: "Jinear — Privacy Policy, Terms & Conditions",
+  ogDescription:
+    "How Jinear handles your data, plus the terms of service and refund policy for the hosted plan.",
+});
 
 export default function TermsPage() {
   return (

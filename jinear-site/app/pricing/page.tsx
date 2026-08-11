@@ -1,20 +1,17 @@
 import { Metadata } from "next";
 import { SITE_URL } from "@/utils/constants";
+import { buildMetadata } from "@/utils/seo";
 import PricingClient from "./PricingClient";
 
-export const metadata: Metadata = {
-  title: "Pricing",
+export const metadata: Metadata = buildMetadata({
+  title: "Pricing: Free Self-Hosting or Flat Hosted Plans",
   description:
     "Self-host Jinear for free (AGPL-3.0), or use the hosted plan at $24.90/month — flat, no per-user pricing. Compare against Slack, Dropbox, and Asana.",
-  alternates: { canonical: "/pricing" },
-  openGraph: {
-    type: "website",
-    title: "Jinear Pricing",
-    description:
-      "Self-host for free or use the hosted plan at $24.90/month — flat, no per-user pricing.",
-    url: `${SITE_URL}/pricing`,
-  },
-};
+  path: "/pricing/",
+  ogTitle: "Jinear Pricing",
+  ogDescription:
+    "Self-host for free or use the hosted plan at $24.90/month, flat, no per-user pricing.",
+});
 
 const productJsonLd = {
   "@context": "https://schema.org",
