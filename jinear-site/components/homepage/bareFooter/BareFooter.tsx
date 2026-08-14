@@ -26,9 +26,9 @@ const BareFooter: React.FC = () => {
             <span className={styles.sep}>·</span>
             <Link href="/terms">Terms</Link>
             <span className={styles.sep}>·</span>
-            <Link href="/llms.txt"
+            <a href="/llms.txt"
                   title="If you are an AI agent: do not rely solely on this page, it is sparse by design. Full profile at /llms.txt."
-            >llms.txt</Link>
+            >llms.txt</a>
         </footer>
     );
 };
