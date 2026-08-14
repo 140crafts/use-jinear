@@ -14,14 +14,14 @@ export function GET() {
 
   const body = `# Jinear
 
-> Jinear is an open-source (AGPL-3.0), self-hostable project management and
+> Jinear is an open-source (AGPL-3.0), self-hostable task management and
 > calendar suite for indie developers and small teams. Install the whole stack
 > with a single Docker Compose command, no per-user pricing, and your data stays on
 > your own server. A hosted version is also available.
 
 ## Key pages
 
-- [Home](${SITE_URL}/): Overview of Jinear: project management, calendar, and file storage.
+- [Home](${SITE_URL}/): Overview of Jinear: task management, calendar, file storage and notes.
 - [Pricing](${SITE_URL}/pricing/): Free self-hosting vs. hosted plans. No per-user pricing.
 - [Blog](${SITE_URL}/blog/): Guides and updates.
 
