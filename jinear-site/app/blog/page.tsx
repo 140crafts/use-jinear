@@ -10,11 +10,11 @@ import styles from "./blog.module.scss";
 export const metadata: Metadata = buildMetadata({
   title: "Blog: Open-Source & Self-Hosting Development Notes",
   description:
-    "Changelogs, build notes and the occasional opinion on self-hosted project management, open source, and building Jinear. New posts as features ship.",
+    "Changelogs, build notes and the occasional opinion on self-hosted task management, open source, and building Jinear. New posts as features ship.",
   path: "/blog/",
   ogTitle: "Jinear Blog",
   ogDescription:
-    "Changelogs, build notes and the occasional opinion on self-hosted project management, open source, and building Jinear.",
+    "Changelogs, build notes and the occasional opinion on self-hosted task management, open source, and building Jinear.",
 });
 
 function formatDate(iso: string): string {
