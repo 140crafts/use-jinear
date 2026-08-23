@@ -48,6 +48,19 @@ public class AccountRoleService {
         return grantedAuthorities;
     }
 
+    public List<AccountRole> retrieveAllWithRole(RoleType roleType) {
+        log.info("Retrieve all with role has started. roleType: {}", roleType);
+        return accountRoleRepository.findAllByRoleAndPassiveIdIsNullAndAccount_PassiveIdIsNull(roleType);
+    }
+
+    public void retainRole(AccountRole accountRole) {
+        log.info("Retain role has started. roleType: {}, accountId: {}", accountRole.getRole(), accountRole.getAccountId());
+        String passiveId = passiveService.createSystemActionPassive(accountRole.getAccountId());
+        accountRole.setPassiveId(passiveId);
+        AccountRole saved = accountRoleRepository.save(accountRole);
+        log.info("Retain role has ended. accountRoleId: {}", saved.getAccountRoleId());
+    }
+
     private AccountRoleDto assignRole(String accountId, RoleType roleType) {
         log.info("Assigning roleType: {} to accountId: {}", roleType, accountId);
         AccountRole accountRole = new AccountRole();
@@ -56,14 +69,6 @@ public class AccountRoleService {
         AccountRole saved = accountRoleRepository.save(accountRole);
         log.info("Assigned roleType: {} to accountId: {} with accountRoleId: {}", roleType, accountId, saved.getAccountRoleId());
         return accountRoleDtoConverter.map(accountRole);
-    }
-
-    private void retainRole(AccountRole accountRole) {
-        log.info("Retain role has started.");
-        String passiveId = passiveService.createSystemActionPassive(accountRole.getAccountId());
-        accountRole.setPassiveId(passiveId);
-        AccountRole saved = accountRoleRepository.save(accountRole);
-        log.info("Retain role has ended. accountRoleId: {}", saved.getAccountRoleId());
     }
 
     private Optional<AccountRole> findByAccountIdAndRole(String accountId, RoleType roleType) {

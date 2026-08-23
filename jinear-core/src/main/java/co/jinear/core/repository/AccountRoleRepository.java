@@ -12,4 +12,6 @@ public interface AccountRoleRepository extends JpaRepository<AccountRole, Long> 
     List<AccountRole> findAllByAccountIdAndPassiveIdIsNull(String accountId);
 
     Optional<AccountRole> findByAccountIdAndRoleAndPassiveIdIsNull(String accountId, RoleType role);
+
+    List<AccountRole> findAllByRoleAndPassiveIdIsNullAndAccount_PassiveIdIsNull(RoleType role);
 }

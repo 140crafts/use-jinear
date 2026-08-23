@@ -2,9 +2,10 @@ package co.jinear.core.manager.workspace;
 
 import co.jinear.core.converter.workspace.WorkspaceInitializeVoConverter;
 import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDisplayPreferenceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
-import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
+import co.jinear.core.model.enumtype.management.InstanceFlagType;
 import co.jinear.core.model.request.workspace.WorkspaceInitializeRequest;
 import co.jinear.core.model.request.workspace.WorkspaceTitleUpdateRequest;
 import co.jinear.core.model.response.BaseResponse;
@@ -13,6 +14,7 @@ import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
 import co.jinear.core.model.response.workspace.WorkspaceDisplayPreferenceResponse;
 import co.jinear.core.model.vo.workspace.WorkspaceInitializeVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.management.InstanceFlagService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.media.MediaValidator;
 import co.jinear.core.service.team.TeamRetrieveService;
@@ -47,8 +49,10 @@ public class WorkspaceManager {
     private final WorkspaceMediaService workspaceMediaService;
     private final EntityManager entityManager;
     private final WorkspaceUpdateService workspaceUpdateService;
+    private final InstanceFlagService instanceFlagService;
 
     public WorkspaceBaseResponse initializeWorkspace(MultipartFile logo, WorkspaceInitializeRequest workspaceInitializeRequest) {
+        instanceFlagService.validateFlagValueMatches(InstanceFlagType.WORKSPACE_INIT, Boolean.TRUE);
         log.info("Initialize workspace has started with request: {}", workspaceInitializeRequest);
         String accountId = sessionInfoService.currentAccountId();
         Optional.ofNullable(logo).ifPresent(mediaValidator::validateForSafeImage);

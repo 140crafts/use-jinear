@@ -23,7 +23,8 @@ public enum LockSourceType {
     TASK_FTS_REFRESH("task-fts:refresh", 10, TimeUnit.MINUTES),
     RICH_TEXT_SYNC("rich-text:sync", 30, TimeUnit.SECONDS),
     NOTE_INIT("note:init", 30, TimeUnit.SECONDS),
-    NOTE_UPDATE("note:update", 30, TimeUnit.SECONDS);
+    NOTE_UPDATE("note:update", 30, TimeUnit.SECONDS),
+    MANAGEMENT_ADMIN_ACCOUNT_SYNC("management:admin-account:sync", 30, TimeUnit.SECONDS),;
 
     private final String key;
     private final int ttl;

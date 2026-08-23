@@ -10,6 +10,7 @@ import co.jinear.core.model.enumtype.google.GoogleScopeType;
 import co.jinear.core.model.enumtype.google.UserConsentPurposeType;
 import co.jinear.core.model.enumtype.integration.IntegrationProvider;
 import co.jinear.core.model.enumtype.integration.IntegrationScopeType;
+import co.jinear.core.model.enumtype.management.InstanceFlagType;
 import co.jinear.core.model.enumtype.token.TokenType;
 import co.jinear.core.model.response.auth.AuthResponse;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
@@ -27,6 +28,7 @@ import co.jinear.core.service.feed.FeedOperationService;
 import co.jinear.core.service.feed.FeedRetrieveService;
 import co.jinear.core.service.google.GoogleCallbackHandlerService;
 import co.jinear.core.service.integration.IntegrationHandleService;
+import co.jinear.core.service.management.InstanceFlagService;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.service.token.TokenService;
 import co.jinear.core.system.JwtHelper;
@@ -35,8 +37,6 @@ import com.google.gson.Gson;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -70,8 +70,10 @@ public class GoogleOAuthCallbackManager {
     private final CalendarOperationService calendarOperationService;
     private final FeProperties feProperties;
     private final TokenService tokenService;
+    private final InstanceFlagService instanceFlagService;
 
     public AuthResponse login(String code, String scopes, String state, HttpServletResponse response) {
+        instanceFlagService.validateFlagValueMatches(InstanceFlagType.SIGN_IN_WITH_GOOGLE, Boolean.TRUE);
         log.info("Login with google has started.");
         GoogleHandleTokenDto googleHandleTokenDto = googleCallbackHandlerService.handleToken(code, scopes, UserConsentPurposeType.LOGIN);
         AuthResponseVo authResponseVo = authenticateWithGoogleUserInfo(googleHandleTokenDto);
@@ -85,6 +87,7 @@ public class GoogleOAuthCallbackManager {
     }
 
     public void attachMail(String code, String scopes, String state) {
+        instanceFlagService.validateFlagValueMatches(InstanceFlagType.ATTACH_GOOGLE_CALENDAR, Boolean.TRUE);
         String currentAccountId = sessionInfoService.currentAccountId();
         AttachAccountStateParameters parameters = gson.fromJson(state, AttachAccountStateParameters.class);
         String workspaceId = parameters.getWorkspaceId();

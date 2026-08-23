@@ -53,6 +53,7 @@ public class SecurityConfiguration {
             "/v1/project/post/comment/list/project/{projectId}/post/{postId}",
             "/v1/captcha/generate",
             "/v1/material/media/{materialId}",
+            "/v1/instance-flag/list",
             "/v1/debug/**"
     };
 
@@ -69,6 +70,7 @@ public class SecurityConfiguration {
                         .requestMatchers("/v1/domain/validate").hasRole("DOMAINSERVER")
                         .requestMatchers("/v1/robots/**").hasRole("ROBOT")
                         .requestMatchers("/v1/internal/**").hasRole("INTERNAL")
+                        .requestMatchers("/v1/admin/**").hasRole("ADMIN")
                         .requestMatchers("/v1/**").hasRole("USER")
                         .anyRequest().authenticated()
                 )

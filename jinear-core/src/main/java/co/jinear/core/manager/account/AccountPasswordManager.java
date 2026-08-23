@@ -1,6 +1,7 @@
 package co.jinear.core.manager.account;
 
 import co.jinear.core.converter.account.InitializeResetPasswordVoConverter;
+import co.jinear.core.model.enumtype.management.InstanceFlagType;
 import co.jinear.core.model.request.account.CompleteResetPasswordRequest;
 import co.jinear.core.model.request.account.InitializeResetPasswordRequest;
 import co.jinear.core.model.request.account.UpdatePasswordRequest;
@@ -11,6 +12,7 @@ import co.jinear.core.model.vo.account.password.ValidatePasswordVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.account.AccountPasswordResetService;
 import co.jinear.core.service.account.AccountPasswordService;
+import co.jinear.core.service.management.InstanceFlagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ public class AccountPasswordManager {
     private final AccountPasswordResetService accountPasswordResetService;
     private final InitializeResetPasswordVoConverter initializeResetPasswordVoConverter;
     private final SessionInfoService sessionInfoService;
+    private final InstanceFlagService instanceFlagService;
 
     public BaseResponse updateAccountPassword(UpdatePasswordRequest updatePasswordRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -34,6 +37,7 @@ public class AccountPasswordManager {
     }
 
     public BaseResponse initializeResetAccountPassword(InitializeResetPasswordRequest initializeResetPasswordRequest) {
+        instanceFlagService.validateFlagValueMatches(InstanceFlagType.FORGOT_PASSWORD, Boolean.TRUE);
         log.info("Reset account password has started. initializeResetPasswordRequest: {}", initializeResetPasswordRequest);
         InitializeResetPasswordVo initializeResetPasswordVo = initializeResetPasswordVoConverter.map(initializeResetPasswordRequest);
         accountPasswordResetService.sendResetPasswordMail(initializeResetPasswordVo);

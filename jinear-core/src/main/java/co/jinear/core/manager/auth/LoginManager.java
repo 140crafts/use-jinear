@@ -3,6 +3,7 @@ package co.jinear.core.manager.auth;
 import co.jinear.core.converter.auth.AuthVoConverter;
 import co.jinear.core.model.enumtype.auth.ProviderType;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
+import co.jinear.core.model.enumtype.management.InstanceFlagType;
 import co.jinear.core.model.request.auth.*;
 import co.jinear.core.model.response.auth.AuthInitializeResponse;
 import co.jinear.core.model.response.auth.AuthResponse;
@@ -13,6 +14,7 @@ import co.jinear.core.service.account.AccountLoginInitializeService;
 import co.jinear.core.service.account.AccountUpdateService;
 import co.jinear.core.service.auth.AuthenticationStrategy;
 import co.jinear.core.service.auth.AuthenticationStrategyFactory;
+import co.jinear.core.service.management.InstanceFlagService;
 import co.jinear.core.system.JwtHelper;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.transaction.Transactional;
@@ -37,8 +39,10 @@ public class LoginManager {
     private final JwtHelper jwtHelper;
     private final AuthVoConverter authVoConverter;
     private final AccountUpdateService accountUpdateService;
+    private final InstanceFlagService instanceFlagService;
 
     public AuthInitializeResponse loginWithEmailOtpInitialize(AuthInitializeRequest authInitializeRequest) {
+        instanceFlagService.validateFlagValueMatches(InstanceFlagType.SIGN_IN_WITH_EMAIL_CODE, Boolean.TRUE);
         log.info("Login with email has started.");
         AuthVo authVo = authVoConverter.map(authInitializeRequest);
         AuthVo initializedAuthVo = accountLoginInitializeService.emailLoginTokenRequest(authVo);
@@ -71,6 +75,7 @@ public class LoginManager {
     }
 
     public AuthResponse loginWithApple(LoginWithAppleRequest loginWithAppleRequest, HttpServletResponse response) {
+        instanceFlagService.validateFlagValueMatches(InstanceFlagType.SIGN_IN_WITH_APPLE, Boolean.TRUE);
         log.info("Login with apple has started. code: {}", loginWithAppleRequest.getCode());
         AuthVo authVo = mapRequest(loginWithAppleRequest);
         AuthResponseVo authResponseVo = retrieveStrategyAndAuth(SIGN_IN_WITH_APPLE, authVo);
@@ -82,6 +87,7 @@ public class LoginManager {
     }
 
     public AuthResponse loginWithSingleUseToken(@Valid SingleUseTokenLoginRequest singleUseTokenLoginRequest, HttpServletResponse response) {
+        instanceFlagService.validateFlagValueMatches(InstanceFlagType.SIGN_IN_WITH_EMAIL_CODE, Boolean.TRUE);
         log.info("Login with single use token has started. singleUseTokenLoginRequest: {}", singleUseTokenLoginRequest);
         AuthVo authVo = mapRequest(singleUseTokenLoginRequest);
         AuthResponseVo authResponseVo = retrieveStrategyAndAuth(SINGLE_USE_LOGIN_TOKEN, authVo);

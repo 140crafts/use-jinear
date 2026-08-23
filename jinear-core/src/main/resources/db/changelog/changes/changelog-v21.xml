@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="jin-561-initialize-instance_flag">
+        <createTable tableName="instance_flag">
+            <column name="instance_flag_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="flag_type" type="int">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="flag_value" type="text"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-561-insert-initial-instance_flag-values">
+        <insert tableName="instance_flag">
+            <column name="instance_flag_id" value="01kaz8qn4tb7x2m9dkghvwq3zr"/>
+            <column name="flag_type" valueNumeric="0"/>
+            <column name="flag_value" value="true"/>
+        </insert>
+        <insert tableName="instance_flag">
+            <column name="instance_flag_id" value="01kaz8qn4tc5n8p2xj7wdqm4tz"/>
+            <column name="flag_type" valueNumeric="1"/>
+            <column name="flag_value" value="true"/>
+        </insert>
+        <insert tableName="instance_flag">
+            <column name="instance_flag_id" value="01kaz8qn4td3w6r9bkq5hxnm2v"/>
+            <column name="flag_type" valueNumeric="2"/>
+            <column name="flag_value" value="false"/>
+        </insert>
+        <insert tableName="instance_flag">
+            <column name="instance_flag_id" value="01kaz8qn4te9z4t7cmr8jvpx5n"/>
+            <column name="flag_type" valueNumeric="3"/>
+            <column name="flag_value" value="false"/>
+        </insert>
+        <insert tableName="instance_flag">
+            <column name="instance_flag_id" value="01kaz8qn4tf2q7v5dns9kwxb3h"/>
+            <column name="flag_type" valueNumeric="4"/>
+            <column name="flag_value" value="true"/>
+        </insert>
+        <insert tableName="instance_flag">
+            <column name="instance_flag_id" value="01kaz8qn4tg8m3x6ent2pvrq7d"/>
+            <column name="flag_type" valueNumeric="5"/>
+            <column name="flag_value" value="true"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="instance_flag">
+                <where>flag_type IN (0, 1, 2, 3, 4, 5)</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-561-insert-initial-instance_flag-values-2">
+        <insert tableName="instance_flag">
+            <column name="instance_flag_id" value="01m0qcmm17qvkazp7ezdtqtaes"/>
+            <column name="flag_type" valueNumeric="6"/>
+            <column name="flag_value" value="false"/>
+        </insert>
+
+        <rollback>
+            <delete tableName="instance_flag">
+                <where>flag_type IN (6)</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
