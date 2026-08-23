@@ -5,6 +5,7 @@ import OrLine from "../or-line/or-line";
 import styles from "./WorkspaceInfoList.module.css";
 import NewWorkspaceButton from "./newWorkspaceButton/NewWorkspaceButton";
 import WorkspaceInfoListItem from "./workspaceInfoListItem/WorkspaceInfoListItem";
+import { useInstanceFlag } from "@/hooks/useInstanceFlag";
 
 interface WorkspaceInfoListProps {
   onWorkspaceChangeComplete?: () => void;
@@ -12,6 +13,7 @@ interface WorkspaceInfoListProps {
 
 const WorkspaceInfoList: React.FC<WorkspaceInfoListProps> = ({ onWorkspaceChangeComplete }) => {
   const workspaces = useTypedSelector(selectCurrentAccountsWorkspaces);
+  const workspaceInitEnabled = useInstanceFlag("WORKSPACE_INIT");
 
   return (
     <div className={styles.container}>
@@ -22,8 +24,12 @@ const WorkspaceInfoList: React.FC<WorkspaceInfoListProps> = ({ onWorkspaceChange
           onWorkspaceChangeComplete={onWorkspaceChangeComplete}
         />
       ))}
-      <OrLine />
-      <NewWorkspaceButton />
+      {workspaceInitEnabled && (
+        <>
+          <OrLine />
+          <NewWorkspaceButton />
+        </>
+      )}
     </div>
   );
 };

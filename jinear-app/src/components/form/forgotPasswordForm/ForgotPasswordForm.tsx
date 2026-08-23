@@ -12,6 +12,7 @@ import {useDispatch} from "react-redux";
 import styles from "./ForgotPasswordForm.module.css";
 import {useNavigate} from "react-router-dom";
 import FormTitle from "@/components/form/form-title/FormTitle.tsx";
+import {useInstanceFlag} from "@/hooks/useInstanceFlag";
 
 interface ForgotPasswordFormProps {
     className?: string;
@@ -24,6 +25,7 @@ export interface IForgotPasswordForm {
 const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({className}) => {
     const {t} = useTranslation();
     const navigate = useNavigate();
+    const emailCodeEnabled = useInstanceFlag("SIGN_IN_WITH_EMAIL_CODE");
     const {register, setValue, handleSubmit} = useForm<IForgotPasswordForm>();
     const dispatch = useDispatch();
     const [initializeResetPassword, {isSuccess, isError, isLoading}] = useInitializeResetPasswordMutation();
@@ -71,11 +73,14 @@ const ForgotPasswordForm: React.FC<ForgotPasswordFormProps> = ({className}) => {
                     <div>{t("forgotPasswordFormResetButton")}</div>
                 </Button>
 
-                <OrLine/>
+                {emailCodeEnabled &&
+                    <>
+                        <OrLine/>
 
-                <Button onClick={pop2FaMailModal} variant={ButtonVariants.outline}>
-                    {t("loginWith2FaMail")}
-                </Button>
+                        <Button onClick={pop2FaMailModal} variant={ButtonVariants.outline}>
+                            {t("loginWith2FaMail")}
+                        </Button>
+                    </>}
 
                 <Button href="/login" variant={ButtonVariants.outline}>
                     {t("forgotPasswordScreenBackToLogin")}

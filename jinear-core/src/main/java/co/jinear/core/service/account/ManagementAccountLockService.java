@@ -21,7 +21,7 @@ public class ManagementAccountLockService {
 
     public void unlockForManagementAccountRoleSync() {
         log.info("Unlock for management account role sync has started.");
-        lockService.lock("", LockSourceType.MANAGEMENT_ADMIN_ACCOUNT_SYNC);
+        lockService.unlock("", LockSourceType.MANAGEMENT_ADMIN_ACCOUNT_SYNC);
         log.info("Unlock for management account role sync has completed.");
     }
 }

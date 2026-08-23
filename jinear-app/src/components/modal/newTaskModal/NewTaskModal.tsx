@@ -26,6 +26,7 @@ import NewCalendarEventForm from "@/components/form/newCalendarEventForm/NewCale
 import Logger from "@/util/logger";
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import {LuCalendarPlus, LuCheck} from "react-icons/lu";
+import {useInstanceFlag} from "@/hooks/useInstanceFlag";
 
 interface NewTaskModalProps {
 }
@@ -52,6 +53,8 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
   const workspaceId = workspace?.workspaceId;
 
   const [newInputType, setNewInputType] = useState<IInputType>("TASK");
+  const attachCalendarEnabled = useInstanceFlag("ATTACH_GOOGLE_CALENDAR");
+  const inputType: IInputType = attachCalendarEnabled ? newInputType : "TASK";
   const hasExternalCalendarMembership = useHasExternalCalendars(workspaceId);
   logger.log({ hasExternalCalendarMembership });
   const { isMobile } = useWindowSize();
@@ -78,12 +81,12 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
       containerClassName={styles.modalContainer}
     >
 
-      {!(subTaskOf != null || initialRelatedFeedItemData != null) &&
+      {attachCalendarEnabled && !(subTaskOf != null || initialRelatedFeedItemData != null) &&
         <div className={styles.segmentedControlContainer}>
           <SegmentedControl
             id="new-task-modal-new-type-segment-control"
             name="new-task-modal-new-type-segment-control"
-            defaultIndex={INPUT_TYPES.indexOf(newInputType)}
+            defaultIndex={INPUT_TYPES.indexOf(inputType)}
             segments={[
               {
                 segmentId: "newTaskEventType_TASK",
@@ -105,7 +108,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
           />
         </div>}
 
-      {workspaceId && team?.teamId && newInputType == "TASK" && (
+      {workspaceId && team?.teamId && inputType == "TASK" && (
         <NewTaskForm
           workspace={workspace}
           initialTeam={team}
@@ -120,7 +123,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
           onClose={close}
         />
       )}
-      {workspaceId && newInputType == "EVENT" && (
+      {workspaceId && inputType == "EVENT" && (
         hasExternalCalendarMembership ?
           <NewCalendarEventForm
             workspaceId={workspaceId}

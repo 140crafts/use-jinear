@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/store";
 import useTranslation from "@/locales/useTranslation";
 import React, { useEffect } from "react";
 import styles from "./NotLoggedInUserAfterInvitationAcceptedActions.module.css";
+import { useInstanceFlag } from "@/hooks/useInstanceFlag";
 
 interface NotLoggedInUserAfterInvitationAcceptedActionsProps {
   invitationInfoResponse?: WorkspaceInvitationInfoResponse;
@@ -16,6 +17,7 @@ const NotLoggedInUserAfterInvitationAcceptedActions: React.FC<NotLoggedInUserAft
                                                                                                                      }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const emailCodeEnabled = useInstanceFlag("SIGN_IN_WITH_EMAIL_CODE");
 
   const loginWithEmailCode = () => {
     dispatch(
@@ -27,8 +29,11 @@ const NotLoggedInUserAfterInvitationAcceptedActions: React.FC<NotLoggedInUserAft
   };
 
   useEffect(() => {
+    if (!emailCodeEnabled) {
+      return;
+    }
     loginWithEmailCode();
-  }, [invitationInfoResponse]);
+  }, [invitationInfoResponse, emailCodeEnabled]);
 
   return (
     <div className={styles.container}>
@@ -52,9 +57,11 @@ const NotLoggedInUserAfterInvitationAcceptedActions: React.FC<NotLoggedInUserAft
       <div className={styles.infoText}>{t("engageWorkspaceInvitationAcceptedLoginInfoText")}</div>
 
       <div className={styles.actionButtonContainer}>
-        <Button variant={ButtonVariants.filled2} onClick={loginWithEmailCode}>
-          <b>{t("engageWorkspaceInvitationAcceptedLoginWithEmailCode")}</b>
-        </Button>
+        {emailCodeEnabled && (
+          <Button variant={ButtonVariants.filled2} onClick={loginWithEmailCode}>
+            <b>{t("engageWorkspaceInvitationAcceptedLoginWithEmailCode")}</b>
+          </Button>
+        )}
         {/* <Button variant={ButtonVariants.filled} href={"/login"}>
           {t("engageWorkspaceInvitationAcceptedLoginWithPassword")}
         </Button>

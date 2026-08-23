@@ -15,6 +15,8 @@ import CalendarTeamsList from "./calendarTeamsList/CalendarTeamsList";
 import ExternalCalendarsList from "./externalCalendarsList/ExternalCalendarsList";
 import CalendarBoardsList from "@/components/calendarSectionSideMenu/calendarBoardsList/CalendarBoardsList";
 import {useParams} from "react-router-dom";
+import {useInstanceFlag} from "@/hooks/useInstanceFlag";
+import {useHasExternalCalendars} from "@/hooks/calendar/useHasExternalCalendars";
 
 interface CalendarSectionSideMenuProps {
 }
@@ -25,6 +27,9 @@ const CalendarSectionSideMenu: React.FC<CalendarSectionSideMenuProps> = ({}) => 
     const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName));
     const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser);
     const _isWebView = isWebView();
+    const attachCalendarEnabled = useInstanceFlag("ATTACH_GOOGLE_CALENDAR");
+    const hasExternalCalendars = useHasExternalCalendars(workspace?.workspaceId);
+    const showExternalCalendars = attachCalendarEnabled || hasExternalCalendars;
 
     const changeViewingDate = (day?: Date) => {
         if (day) {
@@ -46,7 +51,7 @@ const CalendarSectionSideMenu: React.FC<CalendarSectionSideMenuProps> = ({}) => 
                     />
                     <CalendarTeamsList workspace={workspace}/>
                     <CalendarBoardsList workspace={workspace}/>
-                    {!_isWebView && (
+                    {!_isWebView && showExternalCalendars && (
                         <>
                             <OrLine omitText={true}/>
                             <ExternalCalendarsList workspace={workspace}/>

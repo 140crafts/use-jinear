@@ -17,6 +17,7 @@ import {useRetrieveLoginRedirectInfoQuery} from "@/api/googleOAuthApi";
 import SignInWithAppleButton from "@/components/sign-in-with-apple-button/SignInWithAppleButton";
 import {Link, useNavigate} from "react-router-dom";
 import {TERMS} from "@/util/constants.ts";
+import {useInstanceFlag} from "@/hooks/useInstanceFlag";
 
 interface RegisterWithMailFormProps {
     className?: string;
@@ -37,10 +38,13 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({className}) 
     const navigate = useNavigate();
     const [registerViaMail, {isSuccess, isError, isLoading}] = useRegisterViaMailMutation();
     const _isWebView = isWebView();
+    const googleEnabled = useInstanceFlag("SIGN_IN_WITH_GOOGLE") && !_isWebView;
+    const appleEnabled = useInstanceFlag("SIGN_IN_WITH_APPLE") && !_isWebView;
+    const hasOtherMethods = googleEnabled || appleEnabled;
     const {
         data: authRedirectInfoResponse,
         isLoading: isAuthRedirectRetrieveLoading
-    } = useRetrieveLoginRedirectInfoQuery();
+    } = useRetrieveLoginRedirectInfoQuery(undefined, {skip: !googleEnabled});
 
     const {
         register,
@@ -138,30 +142,34 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({className}) 
 
             </form>
 
-            <div className="spacer-h-3"/>
-            <OrLine/>
-            <div className="spacer-h-3"/>
+            {hasOtherMethods && (
+                <>
+                    <div className="spacer-h-3"/>
+                    <OrLine/>
+                    <div className="spacer-h-3"/>
 
-            <div className={styles.otherMethodsContainer}>
-                {!_isWebView && (
-                    <>
-                        <Button
-                            disabled={isLoading}
-                            href={authRedirectInfoResponse?.redirectUrl}
-                            variant={ButtonVariants.outline}
-                            className={styles.iconButton}
-                        >
-                            <IoLogoGoogle className={styles.icon}/>
-                            <div>{t("loginScreenLoginWithGoogle")}</div>
-                        </Button>
-                        <SignInWithAppleButton
-                            disabled={isLoading}
-                            className={styles.iconButton}
-                            iconClassName={styles.icon}
-                        />
-                    </>
-                )}
-            </div>
+                    <div className={styles.otherMethodsContainer}>
+                        {googleEnabled && (
+                            <Button
+                                disabled={isLoading}
+                                href={authRedirectInfoResponse?.redirectUrl}
+                                variant={ButtonVariants.outline}
+                                className={styles.iconButton}
+                            >
+                                <IoLogoGoogle className={styles.icon}/>
+                                <div>{t("loginScreenLoginWithGoogle")}</div>
+                            </Button>
+                        )}
+                        {appleEnabled && (
+                            <SignInWithAppleButton
+                                disabled={isLoading}
+                                className={styles.iconButton}
+                                iconClassName={styles.icon}
+                            />
+                        )}
+                    </div>
+                </>
+            )}
 
             <div className="spacer-h-3"/>
 

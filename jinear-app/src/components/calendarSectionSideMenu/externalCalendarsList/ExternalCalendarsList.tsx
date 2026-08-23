@@ -10,6 +10,7 @@ import React from "react";
 import { LuCalendarPlus } from "react-icons/lu";
 import styles from "./ExternalCalendarsList.module.css";
 import ExternalCalendar from "./externalCalendar/ExternalCalendar";
+import { useInstanceFlag } from "@/hooks/useInstanceFlag";
 
 interface ExternalCalendarsListProps {
   workspace: WorkspaceDto;
@@ -18,6 +19,8 @@ interface ExternalCalendarsListProps {
 const ExternalCalendarsList: React.FC<ExternalCalendarsListProps> = ({ workspace }) => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+
+  const attachCalendarEnabled = useInstanceFlag("ATTACH_GOOGLE_CALENDAR");
 
   const {
     data: membershipsResponse,
@@ -47,16 +50,20 @@ const ExternalCalendarsList: React.FC<ExternalCalendarsListProps> = ({ workspace
             ))}
         {!isLoading && membershipsResponse?.data?.length == 0 && <div></div>}
       </div>
-      <div className="spacer-h-1" />
-      <Button
-        heightVariant={ButtonHeight.short}
-        variant={ButtonVariants.hoverFilled2}
-        className={styles.addCalendarIntegrationButton}
-        onClick={popCalendarIntegrationModal}
-      >
-        <LuCalendarPlus />
-        {t("sideMenuAddCalendarIntegrationLabel")}
-      </Button>
+      {attachCalendarEnabled && (
+        <>
+          <div className="spacer-h-1" />
+          <Button
+            heightVariant={ButtonHeight.short}
+            variant={ButtonVariants.hoverFilled2}
+            className={styles.addCalendarIntegrationButton}
+            onClick={popCalendarIntegrationModal}
+          >
+            <LuCalendarPlus />
+            {t("sideMenuAddCalendarIntegrationLabel")}
+          </Button>
+        </>
+      )}
     </div>
   );
 };
