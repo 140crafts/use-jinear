@@ -56,6 +56,8 @@ import NotesLayout from "@/pages/workspace/notebook/notebook-layout/layout.tsx";
 import NotePage from "@/pages/workspace/notebook/note";
 import NotebookDetailPage from "@/pages/workspace/notebook/notebook-detail/NotebookDetailPage.tsx";
 import NotebookFirstNoteNavigator from "@/pages/workspace/notebook/page.tsx";
+import AdminLayout from "@/pages/admin/admin-layout/layout.tsx";
+import InstanceGeneralSettingsPage from "@/pages/admin/instance-settings/general/page.tsx";
 
 export default function App() {
     return (
@@ -91,6 +93,14 @@ export default function App() {
                     <Route path={'delete-account-complete'} element={<DeleteAccountCompletePage/>}/>
                     <Route path={'reset-password-complete'} element={<ResetPasswordCompletePage/>}/>
                     <Route path={'workspace-invitation'} element={<WorkspaceInvitationResponseScreen/>}/>
+                </Route>
+
+                <Route path="/admin" element={<AdminLayout/>}>
+                    <Route index element={<Navigate to="instance-settings/general" replace/>}/>
+                    <Route path="instance-settings">
+                        <Route index element={<Navigate to="general" replace/>}/>
+                        <Route path="general" element={<InstanceGeneralSettingsPage/>}/>
+                    </Route>
                 </Route>
 
                 <Route path="/:workspaceName"

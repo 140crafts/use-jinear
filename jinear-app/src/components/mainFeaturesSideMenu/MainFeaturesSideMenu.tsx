@@ -1,12 +1,12 @@
 import type {AccountsWorkspacePerspectiveDto} from "@/model/be/jinear-core";
 import useTranslation from "@/locales/useTranslation";
 import React from "react";
-import {LuCalendarDays, LuFolder, LuNotebook, LuSquareCheckBig} from "react-icons/lu";
+import {LuCalendarDays, LuFolder, LuNotebook, LuShieldCheck, LuSquareCheckBig} from "react-icons/lu";
 import Button, {ButtonVariants} from "../button";
 import styles from "./MainFeaturesSideMenu.module.scss";
 import Logger from "@/util/logger";
 import {useLocation} from "react-router-dom";
-import {useFeatureFlag} from "@/hooks/useFeatureFlag.ts";
+import useIsInstanceAdmin from "@/hooks/useIsInstanceAdmin";
 
 interface MainFeaturesSideMenuProps {
     workspace: AccountsWorkspacePerspectiveDto;
@@ -21,6 +21,9 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
     const tasksPath = `/${workspace?.username}/tasks`;
     const filesPath = `/${workspace?.username}/files`;
     const notesPath = `/${workspace?.username}/notebook`;
+    const instanceSettingsPath = `/admin/instance-settings`;
+
+    const isInstanceAdmin = useIsInstanceAdmin();
 
     return (
         <div className={styles.container}>
@@ -60,6 +63,17 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
                 <LuFolder className={styles.icon}/>
                 {t("mainFeaturesMenuLabelFiles")}
             </Button>
+
+            {isInstanceAdmin && (
+                <Button
+                    className={styles.iconButton}
+                    href={instanceSettingsPath}
+                    variant={pathname?.indexOf(instanceSettingsPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+                >
+                    <LuShieldCheck className={styles.icon}/>
+                    {t("mainFeaturesMenuLabelInstanceSettings")}
+                </Button>
+            )}
         </div>
     )
         ;

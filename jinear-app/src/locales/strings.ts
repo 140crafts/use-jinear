@@ -5959,6 +5959,95 @@ const translations = {
         tr: "Taslağı Sil"
     },
 
+    adminLayoutBackToApp: {
+        en: "Back to App",
+        tr: "Uygulamaya Dön"
+    },
+    mainFeaturesMenuLabelInstanceSettings: {
+        en: "Instance Settings",
+        tr: "Instance Ayarları"
+    },
+    instanceSettingsSideMenuTitle: {
+        en: "Instance Settings",
+        tr: "Instance Ayarları"
+    },
+    instanceSettingsSideMenuGeneral: {
+        en: "General Settings",
+        tr: "Genel Ayarlar"
+    },
+    instanceSettingsGeneralTitle: {
+        en: "General Settings",
+        tr: "Genel Ayarlar"
+    },
+    instanceSettingsFlagGroupAuth: {
+        en: "Authentication",
+        tr: "Kimlik Doğrulama"
+    },
+    instanceSettingsFlagGroupWorkspace: {
+        en: "Workspaces",
+        tr: "Çalışma Alanları"
+    },
+    instanceSettingsFlagGroupIntegration: {
+        en: "Integrations",
+        tr: "Entegrasyonlar"
+    },
+    instanceFlagRegisterWithMail: {
+        en: "Register with Email",
+        tr: "Email ile Kayıt"
+    },
+    instanceFlagRegisterWithMailText: {
+        en: "Lets anyone create an account with an email address and a password. Turn this off to close registration on this instance and add people only manually.",
+        tr: "Herkesin email adresi ve şifre ile hesap oluşturmasına izin verir. Bu instance üzerinde kayıtları kapatmak ve kişileri yalnızca manuel eklemek için bunu kapatın."
+    },
+    instanceFlagForgotPassword: {
+        en: "Forgot Password",
+        tr: "Şifremi Unuttum"
+    },
+    instanceFlagForgotPasswordText: {
+        en: "Shows the password reset flow on the login screen and lets accounts request a reset link by email.",
+        tr: "Giriş ekranında şifre sıfırlama akışını gösterir ve hesapların email ile sıfırlama bağlantısı istemesine izin verir."
+    },
+    instanceFlagSignInWithEmailCode: {
+        en: "Sign in with Email Code",
+        tr: "Email Kodu ile Giriş"
+    },
+    instanceFlagSignInWithEmailCodeText: {
+        en: "Lets accounts sign in with a single use code sent to their email address instead of typing a password.",
+        tr: "Hesapların şifre girmek yerine email adreslerine gönderilen tek kullanımlık kod ile giriş yapmasına izin verir."
+    },
+    instanceFlagSignInWithGoogle: {
+        en: "Sign in with Google",
+        tr: "Google ile Giriş"
+    },
+    instanceFlagSignInWithGoogleText: {
+        en: "Shows the Google button on the login and register screens. This instance needs Google OAuth credentials configured for it to work.",
+        tr: "Giriş ve kayıt ekranlarında Google butonunu gösterir. Çalışması için bu instance üzerinde Google OAuth bilgilerinin tanımlı olması gerekir."
+    },
+    instanceFlagSignInWithApple: {
+        en: "Sign in with Apple",
+        tr: "Apple ile Giriş"
+    },
+    instanceFlagSignInWithAppleText: {
+        en: "Shows the Apple button on the login screen. This instance needs Apple sign in credentials configured for it to work.",
+        tr: "Giriş ekranında Apple butonunu gösterir. Çalışması için bu instance üzerinde Apple ile giriş bilgilerinin tanımlı olması gerekir."
+    },
+    instanceFlagWorkspaceInit: {
+        en: "Workspace Creation",
+        tr: "Çalışma Alanı Oluşturma"
+    },
+    instanceFlagWorkspaceInitText: {
+        en: "Lets members create new workspaces. Turn this off to keep a single workspace on this instance and let people join it by invitation.",
+        tr: "Üyelerin yeni çalışma alanı oluşturmasına izin verir. Bu instance üzerinde tek bir çalışma alanı tutmak ve kişilerin davet ile katılmasını sağlamak için bunu kapatın."
+    },
+    instanceFlagAttachGoogleCalendar: {
+        en: "Google Calendar Integration",
+        tr: "Google Takvim Entegrasyonu"
+    },
+    instanceFlagAttachGoogleCalendarText: {
+        en: "Lets members connect a Google Calendar and see its events inside Jinear. Calendars that are already connected keep syncing when this is turned off.",
+        tr: "Üyelerin Google Takvim bağlamasına ve etkinliklerini Jinear içinde görmesine izin verir. Bu kapatıldığında halihazırda bağlı olan takvimler eşleşmeye devam eder."
+    },
+
 };
 
 export default translations;

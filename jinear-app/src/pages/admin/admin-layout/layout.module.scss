@@ -1,0 +1,89 @@
+@use "../../../styles/breakpoints.scss" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  flex: 1;
+
+  /* This shell has no bottom navigator, unlike the workspace one. SecondLevelSideMenuV2
+     expresses every mobile offset through this variable, and custom properties inherit into
+     its fixed positioned box, so zeroing it here drops the menu bar and its floating button
+     flush to the bottom edge instead of leaving a 75px dead gap under them. */
+  --workspace-side-menu-mobile-navigator-height: 0px;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  height: var(--workspace-header-height);
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+
+  background-color: var(--c-primary-shade-0);
+  border-bottom-style: solid;
+  border-bottom-color: var(--c-primary-shade-1);
+  border-bottom-width: 1px;
+}
+
+.backButton {
+  gap: 0.5rem !important;
+}
+
+.title {
+  flex: 1;
+  font-size: 0.875rem;
+}
+
+.headerRightContent {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  min-height: 100dvh;
+  padding-top: var(--workspace-header-height);
+  /* No negative margin here, unlike the workspace section layouts. Theirs exists only to
+     cancel WorkspaceLayout's page padding back down to the main features rail width;
+     SecondLevelSideMenuV2 declares no `left`, so in this rail free shell it already lands
+     at x = 0 and pulling it further would drag it off the left edge. */
+}
+
+.pageContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all var(--fade);
+  padding: var(--workspace-layout-page-padding);
+}
+
+.pageContentWithSideMenu {
+  padding-left: calc(var(--tasks-section-sidebar-width) + var(--workspace-layout-page-padding));
+}
+
+@media (max-width: $tablet) {
+  .content {
+    flex-direction: column-reverse;
+    /* Only the floating menu button has to be cleared here; the workspace shell also adds
+       its navigator height, which this shell does not have. */
+    padding-bottom: calc(1rem + var(--mobile-menu-action-bar-height));
+  }
+
+  .pageContent {
+    padding-left: unset;
+    padding-right: unset;
+  }
+}
