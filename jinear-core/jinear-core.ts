@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-08-24 22:29:43.
+// Generated using typescript-generator version 3.0.1157 on 2026-08-25 14:02:19.
 
 export interface BaseDto {
     createdDate: Date;
@@ -167,8 +167,8 @@ export interface GmailMessageDto extends BaseDto {
     body: string;
     gthreadId: string;
     ghistoryId: string;
-    ginternalDate: string;
     gid: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -2335,12 +2335,12 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
+    contentType: string;
     originalFilename: string;
 }
 
@@ -2457,9 +2457,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    description: string;
     filename: string;
     uri: URI;
+    description: string;
 }
 
 export interface InputStreamSource {
