@@ -13,6 +13,7 @@ public class AccountInitializeVo {
     private String email;
     private Boolean emailConfirmed = Boolean.FALSE;
     private String password;
+    private Boolean initialWorkspaceCreationSkipped = Boolean.FALSE;
     @Nullable
     private LocaleType locale;
 }

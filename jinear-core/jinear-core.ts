@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-08-23 16:27:59.
+// Generated using typescript-generator version 3.0.1157 on 2026-08-24 22:29:43.
 
 export interface BaseDto {
     createdDate: Date;
@@ -167,8 +167,8 @@ export interface GmailMessageDto extends BaseDto {
     body: string;
     gthreadId: string;
     ghistoryId: string;
-    gid: string;
     ginternalDate: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1306,6 +1306,33 @@ export interface CalendarEventTitleDescriptionUpdateRequest {
     description?: string | null;
 }
 
+export interface AdminAccountCreateRequest extends BaseRequest {
+    email: string;
+    password: string;
+}
+
+export interface AdminAccountPasswordUpdateRequest extends BaseRequest {
+    newPassword: string;
+}
+
+export interface AdminTeamMemberAddRequest extends BaseRequest {
+    accountId: string;
+    role: TeamMemberRoleType;
+}
+
+export interface AdminTeamRenameRequest extends BaseRequest {
+    name: string;
+}
+
+export interface AdminWorkspaceInitializeRequest extends WorkspaceInitializeRequest {
+    ownerAccountId: string;
+}
+
+export interface AdminWorkspaceMemberAddRequest extends BaseRequest {
+    accountId: string;
+    role: WorkspaceAccountRoleType;
+}
+
 export interface InstanceFlagOperationRequest extends BaseRequest {
     instanceFlagType: InstanceFlagType;
     value: any;
@@ -1912,6 +1939,14 @@ export interface FeedMemberPaginatedResponse extends BaseResponse {
     data: PageDto<FeedMemberDto>;
 }
 
+export interface AdminAccountListingResponse extends BaseResponse {
+    data: PageDto<AccountDto>;
+}
+
+export interface AdminWorkspaceListingResponse extends BaseResponse {
+    data: PageDto<WorkspaceDto>;
+}
+
 export interface InstanceFlagListingResponse extends BaseResponse {
     data: { [P in InstanceFlagType]?: any };
 }
@@ -2301,12 +2336,12 @@ export interface CaptchaResolveVo {
 
 export interface MultipartFile extends InputStreamSource {
     contentType: string;
-    originalFilename: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
+    originalFilename: string;
 }
 
 export interface GoogleCalendarEventAttendee {
@@ -2418,13 +2453,13 @@ export interface BaseEntity {
 }
 
 export interface Resource extends InputStreamSource {
-    filename: string;
-    uri: URI;
-    description: string;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
+    description: string;
+    filename: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -2508,10 +2543,10 @@ export interface Account extends BaseEntity {
     accountProfileMedia: AccountProfileMedia;
 }
 
-export interface URI extends Comparable<URI>, Serializable {
+export interface URL extends Serializable {
 }
 
-export interface URL extends Serializable {
+export interface URI extends Comparable<URI>, Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {

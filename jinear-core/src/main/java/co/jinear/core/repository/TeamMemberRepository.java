@@ -28,4 +28,10 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, String> 
     List<TeamMember> findAllByWorkspaceIdAndAccountIdAndTeamIdInAndPassiveIdIsNull(String workspaceId, String accountId, List<String> teamId);
 
     List<TeamMember> findAllByAccountIdAndPassiveIdIsNull(String accountId);
+
+    List<TeamMember> findAllByAccountIdAndPassiveIdIsNullAndTeam_PassiveIdIsNullOrderByCreatedDateAsc(String accountId);
+
+    List<TeamMember> findAllByTeamIdAndPassiveIdIsNull(String teamId);
+
+    List<TeamMember> findAllByWorkspaceIdAndPassiveIdIsNull(String workspaceId);
 }

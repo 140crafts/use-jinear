@@ -33,6 +33,13 @@ public class WorkspaceMemberRetrieveService {
                 .map(WorkspaceMember::getRole);
     }
 
+    public String retrieveWorkspaceOwnerAccountId(String workspaceId) {
+        log.info("Retrieve workspace owner account id has started. workspaceId: {}", workspaceId);
+        return workspaceMemberRepository.findFirstByWorkspaceIdAndRoleAndPassiveIdIsNullOrderByCreatedDateAsc(workspaceId, WorkspaceAccountRoleType.OWNER)
+                .map(WorkspaceMember::getAccountId)
+                .orElseThrow(NotFoundException::new);
+    }
+
     public WorkspaceMemberDto retrieve(String workspaceMemberId, String workspaceId) {
         log.info("Retrieve workspace member has started. workspaceMemberId: {}", workspaceMemberId);
         return workspaceMemberRepository.findByWorkspaceMemberIdAndWorkspaceIdAndPassiveIdIsNull(workspaceMemberId, workspaceId)

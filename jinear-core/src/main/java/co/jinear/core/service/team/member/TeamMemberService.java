@@ -70,6 +70,20 @@ public class TeamMemberService {
         teamMemberRepository.saveAll(teamMemberships);
     }
 
+    public void removeAllTeamMembersOfATeam(String teamId, String passiveId) {
+        log.info("Remove all team members of a team has started. teamId: {}, passiveId: {}", teamId, passiveId);
+        List<TeamMember> teamMembers = teamMemberRepository.findAllByTeamIdAndPassiveIdIsNull(teamId);
+        teamMembers.forEach(teamMember -> teamMember.setPassiveId(passiveId));
+        teamMemberRepository.saveAll(teamMembers);
+    }
+
+    public void removeAllTeamMembershipsOfAWorkspace(String workspaceId, String passiveId) {
+        log.info("Remove all team memberships of a workspace has started. workspaceId: {}, passiveId: {}", workspaceId, passiveId);
+        List<TeamMember> teamMembers = teamMemberRepository.findAllByWorkspaceIdAndPassiveIdIsNull(workspaceId);
+        teamMembers.forEach(teamMember -> teamMember.setPassiveId(passiveId));
+        teamMemberRepository.saveAll(teamMembers);
+    }
+
     private void assignWorkspaceId(TeamMemberAddVo teamMemberAddVo, TeamMember teamMember) {
         String workspaceId = retrieveWorkspaceIdFromTeamId(teamMemberAddVo.getTeamId());
         teamMember.setWorkspaceId(workspaceId);
