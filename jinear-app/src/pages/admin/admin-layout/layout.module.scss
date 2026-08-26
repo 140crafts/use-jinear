@@ -5,11 +5,9 @@
   flex-direction: column;
   justify-content: flex-start;
   flex: 1;
+  max-width: 100vw;
+  overflow-x: clip;
 
-  /* This shell has no bottom navigator, unlike the workspace one. SecondLevelSideMenuV2
-     expresses every mobile offset through this variable, and custom properties inherit into
-     its fixed positioned box, so zeroing it here drops the menu bar and its floating button
-     flush to the bottom edge instead of leaving a 75px dead gap under them. */
   --workspace-side-menu-mobile-navigator-height: 0px;
 }
 
@@ -55,14 +53,12 @@
   flex: 1;
   min-height: 100dvh;
   padding-top: var(--workspace-header-height);
-  /* No negative margin here, unlike the workspace section layouts. Theirs exists only to
-     cancel WorkspaceLayout's page padding back down to the main features rail width;
-     SecondLevelSideMenuV2 declares no `left`, so in this rail free shell it already lands
-     at x = 0 and pulling it further would drag it off the left edge. */
 }
 
 .pageContent {
   flex: 1;
+  min-width: 0;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -77,8 +73,6 @@
 @media (max-width: $tablet) {
   .content {
     flex-direction: column-reverse;
-    /* Only the floating menu button has to be cleared here; the workspace shell also adds
-       its navigator height, which this shell does not have. */
     padding-bottom: calc(1rem + var(--mobile-menu-action-bar-height));
   }
 

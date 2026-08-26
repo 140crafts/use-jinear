@@ -37,6 +37,8 @@ export default defineConfig({
       filename: 'sw.ts',
       injectManifest: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}'],
+        // The main chunk crossed workbox's default 2 MiB precache cap.
+        maximumFileSizeToCacheInBytes: 3 * 1024 * 1024,
         // Minify the SW with terser instead of the default esbuild: esbuild
         // rewrites the import-meta-env placeholder's outer quote to a backtick
         // (`JSON.parse(`"..."`)`), which the `import-meta-env` CLI doesn't match,

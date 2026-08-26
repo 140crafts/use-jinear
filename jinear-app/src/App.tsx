@@ -58,6 +58,9 @@ import NotebookDetailPage from "@/pages/workspace/notebook/notebook-detail/Noteb
 import NotebookFirstNoteNavigator from "@/pages/workspace/notebook/page.tsx";
 import AdminLayout from "@/pages/admin/admin-layout/layout.tsx";
 import InstanceGeneralSettingsPage from "@/pages/admin/instance-settings/general/page.tsx";
+import AdminWorkspacesPage from "@/pages/admin/workspaces/page.tsx";
+import AdminTeamsPage from "@/pages/admin/teams/page.tsx";
+import AdminAccountsPage from "@/pages/admin/accounts/page.tsx";
 
 export default function App() {
     return (
@@ -101,6 +104,9 @@ export default function App() {
                         <Route index element={<Navigate to="general" replace/>}/>
                         <Route path="general" element={<InstanceGeneralSettingsPage/>}/>
                     </Route>
+                    <Route path="workspaces" element={<AdminWorkspacesPage/>}/>
+                    <Route path="teams" element={<AdminTeamsPage/>}/>
+                    <Route path="accounts" element={<AdminAccountsPage/>}/>
                 </Route>
 
                 <Route path="/:workspaceName"

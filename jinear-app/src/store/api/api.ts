@@ -94,7 +94,14 @@ export const tagTypes = [
     "v1/notebook/member/{notebookId}",
     "v1/note/filter",
     "v1/note/tag/notebook/{notebookId}",
-    "v1/instance-flag/list"
+    "v1/instance-flag/list",
+    "v1/admin/account/list",
+    "v1/admin/account/{accountId}/workspaces",
+    "v1/admin/account/{accountId}/teams",
+    "v1/admin/workspace/list",
+    "v1/admin/workspace/{workspaceId}/member/list",
+    "v1/admin/team/list/{workspaceId}",
+    "v1/admin/team/{teamId}/member/list"
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

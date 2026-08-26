@@ -5,6 +5,7 @@ import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import ThemeToggle from "@/components/themeToggle/ThemeToggle";
 import SecondLevelSideMenuV2 from "@/components/secondLevelSideMenuV2/SecondLevelSideMenuV2";
 import InstanceSettingsSideMenu from "@/components/instanceSettingsSideMenu/InstanceSettingsSideMenu";
+import AdminModalProvider from "@/components/modal-provider/AdminModalProvider.tsx";
 import useTranslation from "@/locals/useTranslation.ts";
 import {selectAuthState} from "@/store/slice/accountSlice";
 import {useTypedSelector} from "@/store";
@@ -21,8 +22,6 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({}) => {
     const authState = useTypedSelector(selectAuthState);
     const isInstanceAdmin = useIsInstanceAdmin();
 
-    // AuthCheck owns the not logged in redirect. Until the account lands the roles are not
-    // known yet, so hold instead of bouncing an admin who opened this url directly.
     if (authState == "NOT_DECIDED") {
         return null;
     }
@@ -33,9 +32,9 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({}) => {
 
     return (
         <div id="admin-layout-container" className={styles.container}>
+            <AdminModalProvider/>
+
             <div id="admin-layout-header" className={styles.header}>
-                {/* AppPage routes a logged in account on to its preferred workspace, so "/"
-                    is the whole way back and this shell never needs a workspace of its own. */}
                 <Button
                     className={styles.backButton}
                     heightVariant={ButtonHeight.short}

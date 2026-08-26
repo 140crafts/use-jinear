@@ -6047,6 +6047,354 @@ const translations = {
         en: "Lets members connect a Google Calendar and see its events inside Jinear. Calendars that are already connected keep syncing when this is turned off.",
         tr: "Üyelerin Google Takvim bağlamasına ve etkinliklerini Jinear içinde görmesine izin verir. Bu kapatıldığında halihazırda bağlı olan takvimler eşleşmeye devam eder."
     },
+    instanceSettingsSideMenuWorkspaces: {
+        en: "Workspaces",
+        tr: "Çalışma Alanları"
+    },
+    instanceSettingsSideMenuTeams: {
+        en: "Teams",
+        tr: "Takımlar"
+    },
+    instanceSettingsSideMenuAccounts: {
+        en: "Accounts",
+        tr: "Hesaplar"
+    },
+    adminWorkspacesTitle: {
+        en: "Workspaces",
+        tr: "Çalışma Alanları"
+    },
+    adminTeamsTitle: {
+        en: "Teams",
+        tr: "Takımlar"
+    },
+    adminAccountsTitle: {
+        en: "Accounts",
+        tr: "Hesaplar"
+    },
+    adminWorkspacesCreateButtonLabel: {
+        en: "Create Workspace",
+        tr: "Çalışma Alanı Oluştur"
+    },
+    adminWorkspacesEmptyLabel: {
+        en: "No workspaces found on this instance.",
+        tr: "Bu instance üzerinde çalışma alanı bulunamadı."
+    },
+    adminWorkspaceRowRename: {
+        en: "Rename",
+        tr: "Yeniden Adlandır"
+    },
+    adminWorkspaceRowTier: {
+        en: "Update Tier",
+        tr: "Paketi Güncelle"
+    },
+    adminWorkspaceRowTeams: {
+        en: "Teams",
+        tr: "Takımlar"
+    },
+    adminWorkspaceRowMembers: {
+        en: "Members",
+        tr: "Üyeler"
+    },
+    adminWorkspaceRowDelete: {
+        en: "Delete",
+        tr: "Sil"
+    },
+    adminWorkspaceTier_BASIC: {
+        en: "Basic",
+        tr: "Basic"
+    },
+    adminWorkspaceTier_PRO: {
+        en: "Pro",
+        tr: "Pro"
+    },
+    adminWorkspaceRenameModalTitle: {
+        en: "Rename Workspace",
+        tr: "Çalışma Alanını Yeniden Adlandır"
+    },
+    adminWorkspaceRenameModalInfoText: {
+        en: "Enter a new title for this workspace.",
+        tr: "Bu çalışma alanı için yeni bir başlık girin."
+    },
+    adminWorkspaceTierModalTitle: {
+        en: "Update Workspace Tier",
+        tr: "Çalışma Alanı Paketini Güncelle"
+    },
+    adminWorkspaceDeleteDialogTitle: {
+        en: "Delete Workspace",
+        tr: "Çalışma Alanını Sil"
+    },
+    adminWorkspaceDeleteDialogContent: {
+        en: "Are you sure you want to delete this workspace? This cannot be undone.",
+        tr: "Bu çalışma alanını silmek istediğinize emin misiniz? Bu işlem geri alınamaz."
+    },
+    adminWorkspaceDeleteDialogConfirmLabel: {
+        en: "Delete",
+        tr: "Sil"
+    },
+    adminNewWorkspaceModalTitle: {
+        en: "New Workspace",
+        tr: "Yeni Çalışma Alanı"
+    },
+    adminNewWorkspaceFormTitleLabel: {
+        en: "Title",
+        tr: "Başlık"
+    },
+    adminNewWorkspaceFormHandleLabel: {
+        en: "Handle",
+        tr: "Kısa Ad"
+    },
+    adminNewWorkspaceFormOwnerLabel: {
+        en: "Owner",
+        tr: "Sahip"
+    },
+    adminNewWorkspaceFormPickOwnerLabel: {
+        en: "Pick an account",
+        tr: "Hesap seçin"
+    },
+    adminNewWorkspaceFormSubmitLabel: {
+        en: "Create",
+        tr: "Oluştur"
+    },
+    adminWorkspaceCreatedToast: {
+        en: "Workspace created.",
+        tr: "Çalışma alanı oluşturuldu."
+    },
+    adminWorkspaceMembersModalTitle: {
+        en: "Workspace Members",
+        tr: "Çalışma Alanı Üyeleri"
+    },
+    adminTeamMembersModalTitle: {
+        en: "Team Members",
+        tr: "Takım Üyeleri"
+    },
+    adminMembersModalEmptyLabel: {
+        en: "No members found.",
+        tr: "Üye bulunamadı."
+    },
+    adminMembersModalAddSectionTitle: {
+        en: "Add Member",
+        tr: "Üye Ekle"
+    },
+    adminMembersModalPickAccountLabel: {
+        en: "Pick an account",
+        tr: "Hesap seçin"
+    },
+    adminMembersModalAddButtonLabel: {
+        en: "Add",
+        tr: "Ekle"
+    },
+    adminMembersModalRemoveButtonLabel: {
+        en: "Remove",
+        tr: "Çıkar"
+    },
+    adminMemberRemoveDialogTitle: {
+        en: "Remove Member",
+        tr: "Üyeyi Çıkar"
+    },
+    adminMemberRemoveDialogContent: {
+        en: "Are you sure you want to remove this member?",
+        tr: "Bu üyeyi çıkarmak istediğinize emin misiniz?"
+    },
+    adminMemberRemoveDialogConfirmLabel: {
+        en: "Remove",
+        tr: "Çıkar"
+    },
+    adminMemberAddedToast: {
+        en: "Member added.",
+        tr: "Üye eklendi."
+    },
+    adminMemberRemovedToast: {
+        en: "Member removed.",
+        tr: "Üye çıkarıldı."
+    },
+    adminTeamsCreateButtonLabel: {
+        en: "Create Team",
+        tr: "Takım Oluştur"
+    },
+    adminTeamsGroupTitleSuffix: {
+        en: "Teams",
+        tr: "Takımları"
+    },
+    adminTeamsGroupEmptyLabel: {
+        en: "No teams in this workspace.",
+        tr: "Bu çalışma alanında takım yok."
+    },
+    adminTeamRowRename: {
+        en: "Rename",
+        tr: "Yeniden Adlandır"
+    },
+    adminTeamRowMembers: {
+        en: "Members",
+        tr: "Üyeler"
+    },
+    adminTeamRowDelete: {
+        en: "Delete",
+        tr: "Sil"
+    },
+    adminTeamRenameModalTitle: {
+        en: "Rename Team",
+        tr: "Takımı Yeniden Adlandır"
+    },
+    adminTeamRenameModalInfoText: {
+        en: "Enter a new name for this team.",
+        tr: "Bu takım için yeni bir isim girin."
+    },
+    adminTeamDeleteDialogTitle: {
+        en: "Delete Team",
+        tr: "Takımı Sil"
+    },
+    adminTeamDeleteDialogContent: {
+        en: "Are you sure you want to delete this team? This cannot be undone.",
+        tr: "Bu takımı silmek istediğinize emin misiniz? Bu işlem geri alınamaz."
+    },
+    adminTeamDeleteDialogConfirmLabel: {
+        en: "Delete",
+        tr: "Sil"
+    },
+    adminNewTeamModalTitle: {
+        en: "New Team",
+        tr: "Yeni Takım"
+    },
+    adminNewTeamFormWorkspaceLabel: {
+        en: "Workspace",
+        tr: "Çalışma Alanı"
+    },
+    adminNewTeamFormPickWorkspaceLabel: {
+        en: "Pick a workspace",
+        tr: "Çalışma alanı seçin"
+    },
+    adminNewTeamFormNameLabel: {
+        en: "Name",
+        tr: "İsim"
+    },
+    adminNewTeamFormTagLabel: {
+        en: "Tag",
+        tr: "Etiket"
+    },
+    adminNewTeamFormSubmitLabel: {
+        en: "Create",
+        tr: "Oluştur"
+    },
+    adminTeamCreatedToast: {
+        en: "Team created.",
+        tr: "Takım oluşturuldu."
+    },
+    adminAccountsCreateButtonLabel: {
+        en: "Create Account",
+        tr: "Hesap Oluştur"
+    },
+    adminAccountsEmptyLabel: {
+        en: "No accounts found.",
+        tr: "Hesap bulunamadı."
+    },
+    adminAccountRowUpdatePassword: {
+        en: "Update Password",
+        tr: "Şifreyi Güncelle"
+    },
+    adminAccountRowWorkspaces: {
+        en: "Workspaces",
+        tr: "Çalışma Alanları"
+    },
+    adminAccountRowTeams: {
+        en: "Teams",
+        tr: "Takımlar"
+    },
+    adminAccountPasswordModalTitle: {
+        en: "Update Password",
+        tr: "Şifreyi Güncelle"
+    },
+    adminAccountPasswordModalInfoText: {
+        en: "Enter a new password for this account. The account will be asked to change it on next sign in.",
+        tr: "Bu hesap için yeni bir şifre girin. Hesaptan bir sonraki girişte şifresini değiştirmesi istenecek."
+    },
+    adminAccountPasswordUpdatedToast: {
+        en: "Password updated.",
+        tr: "Şifre güncellendi."
+    },
+    adminAccountWorkspacesModalTitle: {
+        en: "Workspace Memberships",
+        tr: "Çalışma Alanı Üyelikleri"
+    },
+    adminAccountWorkspacesModalEmptyLabel: {
+        en: "This account is not a member of any workspace.",
+        tr: "Bu hesap herhangi bir çalışma alanının üyesi değil."
+    },
+    adminAccountTeamsModalTitle: {
+        en: "Team Memberships",
+        tr: "Takım Üyelikleri"
+    },
+    adminAccountTeamsModalEmptyLabel: {
+        en: "This account is not a member of any team.",
+        tr: "Bu hesap herhangi bir takımın üyesi değil."
+    },
+    adminNewAccountModalTitle: {
+        en: "New Account",
+        tr: "Yeni Hesap"
+    },
+    adminNewAccountFormEmailLabel: {
+        en: "Email",
+        tr: "Email"
+    },
+    adminNewAccountFormPasswordLabel: {
+        en: "Password",
+        tr: "Şifre"
+    },
+    adminNewAccountFormSubmitLabel: {
+        en: "Create",
+        tr: "Oluştur"
+    },
+    adminAccountCreatedToast: {
+        en: "Account created.",
+        tr: "Hesap oluşturuldu."
+    },
+    adminTableHeaderTitle: {
+        en: "Title",
+        tr: "Başlık"
+    },
+    adminTableHeaderHandle: {
+        en: "Handle",
+        tr: "Kısa Ad"
+    },
+    adminTableHeaderTier: {
+        en: "Tier",
+        tr: "Paket"
+    },
+    adminTableHeaderName: {
+        en: "Name",
+        tr: "İsim"
+    },
+    adminTableHeaderTag: {
+        en: "Tag",
+        tr: "Etiket"
+    },
+    adminTableHeaderEmail: {
+        en: "Email",
+        tr: "Email"
+    },
+    adminTableHeaderCreatedDate: {
+        en: "Created",
+        tr: "Oluşturulma"
+    },
+    adminTableHeaderActions: {
+        en: "Actions",
+        tr: "İşlemler"
+    },
+    adminTableHeaderRole: {
+        en: "Role",
+        tr: "Rol"
+    },
+    adminTableHeaderWorkspace: {
+        en: "Workspace",
+        tr: "Çalışma Alanı"
+    },
+    adminAccountPickerModalTitle: {
+        en: "Pick Account",
+        tr: "Hesap Seç"
+    },
+    adminWorkspacePickerModalTitle: {
+        en: "Pick Workspace",
+        tr: "Çalışma Alanı Seç"
+    },
 
 };
 
