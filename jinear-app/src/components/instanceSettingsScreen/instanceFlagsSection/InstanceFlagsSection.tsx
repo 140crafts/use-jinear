@@ -61,6 +61,9 @@ const InstanceFlagsSection: React.FC<InstanceFlagsSectionProps> = ({title}) => {
     return (
         <div className={styles.container}>
             {title && <h2>{title}</h2>}
+            <span>
+                {t('instanceFlagManagementDocsInfo')}
+            </span>
             {FLAG_GROUPS.map((group) => (
                 <div key={group.titleKey} className={styles.group}>
                     <h3 className={styles.groupTitle}>{t(group.titleKey)}</h3>

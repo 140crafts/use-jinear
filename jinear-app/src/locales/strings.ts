@@ -5991,6 +5991,10 @@ const translations = {
         en: "Integrations",
         tr: "Entegrasyonlar"
     },
+    instanceFlagManagementDocsInfo: {
+        en: "Most of the following features require additional config (Social sign in methods, email server configuration etc.). Check out docs for details.",
+        tr: "Aşağıdaki özelliklerin çoğu ek yapılandırma gerektirir (Sosyal giriş yöntemleri, e-posta sunucusu yapılandırması vb.). Ayrıntılar için kurulum dökümanlarına göz atın."
+    },
     instanceFlagRegisterWithMail: {
         en: "Register with Email",
         tr: "Email ile Kayıt"
