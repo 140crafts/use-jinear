@@ -107,6 +107,10 @@ services:
       # Rate limiting
       RATE_LIMIT_PUBLIC_CAPACITY: ${RATE_LIMIT_PUBLIC_CAPACITY:-25}
       RATE_LIMIT_AUTH_CAPACITY: ${RATE_LIMIT_AUTH_CAPACITY:-100}
+      # Instance management (optional) - admin account for the /admin panel
+      MANAGEMENT_ENABLED: ${MANAGEMENT_ENABLED:-false}
+      MANAGEMENT_ADMIN_EMAIL: ${MANAGEMENT_ADMIN_EMAIL:-}
+      MANAGEMENT_ADMIN_PASSWORD: ${MANAGEMENT_ADMIN_PASSWORD:-}
       # Apple Sign In (optional) - keep false to boot without an AuthKey.p8
       APPLE_ENABLED: ${APPLE_ENABLED:-false}
       APPLE_TEAM_ID: ${APPLE_TEAM_ID:-not-configured}

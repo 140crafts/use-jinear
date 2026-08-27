@@ -89,6 +89,13 @@ services:
       MINIO_SECRET: minio-pass
       MINIO_ROOT: http://jinear-minio:9000
       MINIO_BASE_PATH: https://files.your-instance.company.com/
+      # Instance management (optional) - admin account for the /admin panel.
+      # Set to "true" and fill both values below to get an admin for /admin.
+      # jinear-core re-applies the password on every restart, and only one
+      # admin exists: any other account holding the role loses it.
+      MANAGEMENT_ENABLED: "false"
+      MANAGEMENT_ADMIN_EMAIL: ""
+      MANAGEMENT_ADMIN_PASSWORD: ""
       # Apple Sign In (optional) - keep false to boot without an AuthKey.p8
       APPLE_ENABLED: "false"
       APPLE_TEAM_ID: not-configured
