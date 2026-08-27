@@ -16,11 +16,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
     metadataBase: new URL(SITE_URL),
     title: {
-        default: "Jinear, Open-Source, Self-Hostable Project Management",
+        default: "Jinear, Open-Source Self-Hosted Task Manager & Calendar",
         template: "%s, Jinear",
     },
     description:
-        "Jinear is an open-source, self-hostable project management and calendar suite for indie developers and small teams. AGPL-3.0, Docker Compose install, no per-user pricing.",
+        "Jinear is an open-source, self-hostable tasks, calendar, notes and file sharing suite for indie developers and small teams. AGPL-3.0, Docker Compose install, no per-user pricing.",
     applicationName: "Jinear",
     icons: {
         icon: "/favicon.ico",
@@ -36,18 +36,18 @@ export const metadata: Metadata = {
         type: "website",
         siteName: "Jinear",
         url: SITE_URL,
-        title: "Jinear, Open-Source, Self-Hostable Project Management",
+        title: "Jinear, Open-Source Self-Hosted Task Manager & Calendar",
         description:
-            "Open-source, self-hostable project management & calendar. AGPL-3.0, Docker Compose install, no per-user pricing.",
+            "Open-source, self-hostable tasks, calendar, notes and file sharing. AGPL-3.0, Docker Compose install, no per-user pricing.",
         images: [OG_IMAGE],
     },
     twitter: {
         card: "summary_large_image",
         site: "@usejinear",
         creator: "@usejinear",
-        title: "Jinear, Open-Source, Self-Hostable Project Management",
+        title: "Jinear, Open-Source Self-Hosted Task Manager & Calendar",
         description:
-            "Open-source, self-hostable project management & calendar. AGPL-3.0, Docker Compose install, no per-user pricing.",
+            "Open-source, self-hostable tasks, calendar, notes and file sharing. AGPL-3.0, Docker Compose install, no per-user pricing.",
         images: [OG_IMAGE.url],
     },
     robots: {

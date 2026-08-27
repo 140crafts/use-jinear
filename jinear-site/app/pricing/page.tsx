@@ -18,7 +18,7 @@ const productJsonLd = {
   "@type": "Product",
   name: "Jinear",
   description:
-    "Open-source, self-hostable project management and calendar suite. Self-host for free or use the hosted plan.",
+    "Open-source, self-hostable tasks, calendar, notes and file sharing suite. Self-host for free or use the hosted plan.",
   brand: { "@type": "Brand", name: "Jinear" },
   offers: [
     {

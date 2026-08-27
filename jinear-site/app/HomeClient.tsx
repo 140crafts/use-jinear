@@ -64,7 +64,7 @@ export default function HomeClient() {
             </li>
             <li>
               <span className={styles.k}>boards</span>
-              <span>Unlimited boards and projects. Drag things where they belong.</span>
+              <span>Unlimited boards. Drag things where they belong.</span>
             </li>
             <li>
               <span className={styles.k}>calendar</span>
