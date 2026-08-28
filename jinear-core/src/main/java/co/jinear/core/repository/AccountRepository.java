@@ -2,6 +2,8 @@ package co.jinear.core.repository;
 
 import co.jinear.core.model.entity.account.Account;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,6 +19,8 @@ public interface AccountRepository extends JpaRepository<Account, String> {
     Optional<Account> findByEmailAndPassiveIdIsNull(@Param("email") String email);
 
     Long countAllByAccountIdAndPassiveIdIsNull(String accountId);
+
+    Page<Account> findAllByGhostFalseAndPassiveIdIsNullOrderByCreatedDateDesc(Pageable pageable);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""

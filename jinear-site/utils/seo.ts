@@ -11,7 +11,7 @@ export const OG_IMAGE = {
   url: "/og.png",
   width: 1200,
   height: 630,
-  alt: "Jinear, open-source, self-hostable project management",
+  alt: "Jinear, open-source, self-hostable task management and calendar",
 };
 
 const TWITTER_HANDLE = "@usejinear";

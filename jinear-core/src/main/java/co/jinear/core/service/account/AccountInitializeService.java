@@ -54,7 +54,9 @@ public class AccountInitializeService {
         initializeCommunicationPermissions(account);
         initializeAccountPassword(account, accountInitializeVo);
         sendMailConfirmationMail(account, accountInitializeVo);
-        createInitialWorkspace(account, accountInitializeVo.getLocale());
+        if (!Boolean.TRUE.equals(accountInitializeVo.getInitialWorkspaceCreationSkipped())) {
+            createInitialWorkspace(account, accountInitializeVo.getLocale());
+        }
         log.info("Account initialize has ended.");
         slackService.sendEventMessage(String.format("New Account with email: %s", accountInitializeVo.getEmail()));
         return accountDtoConverter.map(account);

@@ -12,6 +12,7 @@ import React from "react";
 import {IoLogoGoogle} from "react-icons/io5";
 import Modal from "../modal/Modal";
 import styles from "./NewCalendarIntegrationModal.module.css";
+import {useInstanceFlag} from "@/hooks/useInstanceFlag";
 
 interface NewCalendarIntegrationModalProps {
 }
@@ -22,9 +23,10 @@ const NewCalendarIntegrationModal: React.FC<NewCalendarIntegrationModalProps> = 
     const visible = useTypedSelector(selectNewCalendarIntegrationModalVisible);
     const workspaceId = useTypedSelector(selectNewCalendarIntegrationModalWorkspaceId);
     const {isMobile} = useWindowSize();
+    const attachCalendarEnabled = useInstanceFlag("ATTACH_GOOGLE_CALENDAR");
     const {data: retrieveAttachCalendarRedirectInfoResponse, isLoading} = useRetrieveAttachCalendarRedirectInfoQuery(
         {workspaceId: workspaceId || ""},
-        {skip: !workspaceId}
+        {skip: !workspaceId || !attachCalendarEnabled}
     );
     const close = () => {
         dispatch(closeNewCalendarIntegrationModal());

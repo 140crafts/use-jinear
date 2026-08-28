@@ -75,6 +75,8 @@ Your Jinear instance will be available at:
 - 🌐 **Application**: `https://your-domain.com`
 - 🔧 **API**: `https://api.your-domain.com`
 - 📁 **Files**: `https://files.your-domain.com`
+- 🛠 **Admin panel**: `https://your-domain.com/admin` (only if you enabled instance
+  management during install; the login is saved to `.secrets`)
 
 ### Manual Installation
 
@@ -115,6 +117,10 @@ After installation, you can customize your instance by modifying:
 - **`.env`**: Domain, passwords, and environment settings
 - **`.config/application.properties`**: Application-specific settings
 - **`.data/caddy/conf/Caddyfile`**: Reverse proxy and SSL configuration
+
+To enable, disable or change the instance admin (the `/admin` panel) after installation,
+edit the `MANAGEMENT_*` values in `.env` and restart. See
+[jinear-installation-scripts/README.md](./jinear-installation-scripts/README.md#instance-management-admin-panel).
 
 ### Troubleshooting
 

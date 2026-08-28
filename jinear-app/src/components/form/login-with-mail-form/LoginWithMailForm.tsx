@@ -20,6 +20,7 @@ import {ROUTE_IF_LOGGED_IN} from "@/util/constants.ts";
 import {useLoginWithPasswordMutation} from "@/store/api/authApi.ts";
 import {useRetrieveLoginRedirectInfoQuery} from "@/store/api/googleOAuthApi.ts";
 import {changeLoginWith2FaMailModalVisibility} from "@/slice/modalSlice.ts";
+import {useInstanceFlag} from "@/hooks/useInstanceFlag.ts";
 
 
 interface LoginWithMailFormProps {
@@ -39,10 +40,17 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({className, initial
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
+    const registerEnabled = useInstanceFlag("REGISTER_WITH_MAIL");
+    const forgotPasswordEnabled = useInstanceFlag("FORGOT_PASSWORD");
+    const googleEnabled = useInstanceFlag("SIGN_IN_WITH_GOOGLE");
+    const appleEnabled = useInstanceFlag("SIGN_IN_WITH_APPLE");
+    const emailCodeEnabled = useInstanceFlag("SIGN_IN_WITH_EMAIL_CODE");
+    const hasOtherMethods = googleEnabled || appleEnabled || emailCodeEnabled;
+
     const [loginWithPassword, {isSuccess, isError, isLoading}] = useLoginWithPasswordMutation();
     const {
         data: authRedirectInfoResponse,
-    } = useRetrieveLoginRedirectInfoQuery();
+    } = useRetrieveLoginRedirectInfoQuery(undefined, {skip: !googleEnabled});
     const {register, setValue, handleSubmit, setFocus} = useForm<ILoginWithMailForm>();
 
     useEffect(() => {
@@ -81,8 +89,8 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({className, initial
             <FormTitle
                 title={t("loginWithEmailFormTitle")}
                 subTitle={t("loginWithEmailFormSubTitle")}
-                linkLabel={t("loginWithEmailFormTitleLink")}
-                link={"/register"}
+                linkLabel={registerEnabled ? t("loginWithEmailFormTitleLink") : undefined}
+                link={registerEnabled ? "/register" : undefined}
             />
 
             <form autoComplete="off" id={"login-with-email-form"} className={styles.form}
@@ -98,9 +106,10 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({className, initial
                     <input id={"login-with-email-password"} type={"password"} {...register("password")} />
                 </label>
 
-                <Link className={styles.forgotPasswordLink} to={"/forgot-password"}>
-                    {t("forgotPasswordLinkLabel")}
-                </Link>
+                {forgotPasswordEnabled &&
+                    <Link className={styles.forgotPasswordLink} to={"/forgot-password"}>
+                        {t("forgotPasswordLinkLabel")}
+                    </Link>}
 
                 <Button
                     disabled={isLoading}
@@ -113,30 +122,37 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({className, initial
                 </Button>
             </form>
 
-            <div className="spacer-h-1"/>
-            <OrLine/>
-            <div className="spacer-h-1"/>
+            {hasOtherMethods &&
+                <>
+                    <div className="spacer-h-1"/>
+                    <OrLine/>
+                    <div className="spacer-h-1"/>
 
-            <div className={styles.otherMethodsContainer}>
-                <Button
-                    disabled={isLoading}
-                    href={authRedirectInfoResponse?.redirectUrl}
-                    variant={ButtonVariants.outline}
-                    className={styles.iconButton}
-                >
-                    <IoLogoGoogle className={styles.icon}/>
-                    <div>{t("loginScreenLoginWithGoogle")}</div>
-                </Button>
-                <SignInWithAppleButton
-                    disabled={isLoading}
-                    className={styles.iconButton}
-                    iconClassName={styles.icon}
-                />
-                <Button onClick={pop2FaMailModal} variant={ButtonVariants.outline} className={styles.iconButton}>
-                    <IoMail className={styles.icon}/>
-                    <div>{t("loginWith2FaMail")}</div>
-                </Button>
-            </div>
+                    <div className={styles.otherMethodsContainer}>
+                        {googleEnabled &&
+                            <Button
+                                disabled={isLoading}
+                                href={authRedirectInfoResponse?.redirectUrl}
+                                variant={ButtonVariants.outline}
+                                className={styles.iconButton}
+                            >
+                                <IoLogoGoogle className={styles.icon}/>
+                                <div>{t("loginScreenLoginWithGoogle")}</div>
+                            </Button>}
+                        {appleEnabled &&
+                            <SignInWithAppleButton
+                                disabled={isLoading}
+                                className={styles.iconButton}
+                                iconClassName={styles.icon}
+                            />}
+                        {emailCodeEnabled &&
+                            <Button onClick={pop2FaMailModal} variant={ButtonVariants.outline}
+                                    className={styles.iconButton}>
+                                <IoMail className={styles.icon}/>
+                                <div>{t("loginWith2FaMail")}</div>
+                            </Button>}
+                    </div>
+                </>}
         </div>
     );
 };

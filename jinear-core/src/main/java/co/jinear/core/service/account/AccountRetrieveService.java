@@ -10,6 +10,8 @@ import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -18,6 +20,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class AccountRetrieveService {
+
+    private static final int ALL_ACCOUNTS_PAGE_SIZE = 50;
 
     private final AccountRepository accountRepository;
     private final MediaRetrieveService mediaRetrieveService;
@@ -84,6 +88,12 @@ public class AccountRetrieveService {
 
     public Boolean exist(String accountId) {
         return accountRepository.countAllByAccountIdAndPassiveIdIsNull(accountId) > 0L;
+    }
+
+    public Page<AccountDto> retrieveAllAccounts(int page) {
+        log.info("Retrieve all accounts has started. page: {}", page);
+        return accountRepository.findAllByGhostFalseAndPassiveIdIsNullOrderByCreatedDateDesc(PageRequest.of(page, ALL_ACCOUNTS_PAGE_SIZE))
+                .map(accountDtoConverter::map);
     }
 
     private void setProfilePicture(String accountId, AccountDto accountDto) {

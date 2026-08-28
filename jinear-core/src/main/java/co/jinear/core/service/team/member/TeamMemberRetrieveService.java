@@ -48,6 +48,13 @@ public class TeamMemberRetrieveService {
                 .map(teamMemberConverter::map);
     }
 
+    public List<TeamMemberDto> retrieveAllTeamMembershipsOfAnAccount(String accountId) {
+        log.info("Retrieve all team memberships of an account has started. accountId: {}", accountId);
+        return teamMemberRepository.findAllByAccountIdAndPassiveIdIsNullAndTeam_PassiveIdIsNullOrderByCreatedDateAsc(accountId).stream()
+                .map(teamMemberConverter::map)
+                .toList();
+    }
+
     public List<TeamMemberDto> retrieveAllTeamMembershipsOfAnAccount(String accountId, String workspaceId) {
         log.info("Retrieve all team memberships of an account has started. accountId: {}, workspaceId: {}", accountId, workspaceId);
         return teamMemberRepository.findAllByAccountIdAndWorkspaceIdAndPassiveIdIsNullAndTeam_PassiveIdIsNullOrderByCreatedDateAsc(accountId, workspaceId).stream()

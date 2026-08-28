@@ -48,14 +48,18 @@ export function getPost(slug: string): Post | null {
   return { ...fm, slug, content };
 }
 
-/** All published posts (drafts hidden in production), newest first. */
-export function getAllPosts(): PostMeta[] {
+/** All published posts including body content (drafts hidden in production), newest first. */
+export function getAllPostsWithContent(): Post[] {
   return getPostSlugs()
     .map((slug) => getPost(slug))
     .filter((post): post is Post => post !== null)
     .filter((post) => !(isProd && post.draft))
-    .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime())
-    .map(({ content, ...meta }) => meta);
+    .sort((a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime());
+}
+
+/** All published posts (drafts hidden in production), newest first. */
+export function getAllPosts(): PostMeta[] {
+  return getAllPostsWithContent().map(({ content, ...meta }) => meta);
 }
 
 /** Slugs to statically generate (drafts excluded in production). */

@@ -144,6 +144,21 @@ validate_email() {
     fi
 }
 
+# Validate a password that will be written to .env unquoted.
+# The value passes through .env, docker compose interpolation and a Spring
+# ${...} placeholder, so shell/compose/placeholder metacharacters are rejected.
+# Minimum length matches the 6 char rule the API enforces on password updates.
+validate_env_safe_password() {
+    local password=$1
+    if [ ${#password} -lt 6 ]; then
+        return 1
+    fi
+    if [[ $password =~ [\$\#\{\}\\\"\'\`[:space:]] ]]; then
+        return 1
+    fi
+    return 0
+}
+
 # Validate timezone format (IANA/Olson format: Region/City)
 # Returns 0 if valid, 1 if invalid
 validate_timezone() {
@@ -471,6 +486,45 @@ prompt_configuration() {
         MAIL_SENDER_ADDRESS="noreply@example.com"
     fi
 
+    # Instance management (optional)
+    echo ""
+    echo -e "  ${BOLD}Instance Management (Optional)${NC}"
+    echo -e "  ${INFO} Creates an instance admin account that can open the /admin panel"
+    echo -e "  ${INFO} to manage workspaces, teams, accounts and instance flags."
+    local configure_management=$(prompt_input "  Enable instance management now? [y/N]" "")
+
+    if [[ $configure_management =~ ^[Yy]$ ]]; then
+        MANAGEMENT_ENABLED="true"
+
+        while true; do
+            MANAGEMENT_ADMIN_EMAIL=$(prompt_input "  Instance admin email" "admin@${DOMAIN}")
+            if validate_email "$MANAGEMENT_ADMIN_EMAIL"; then
+                break
+            else
+                print_error "Invalid email format. Please try again."
+            fi
+        done
+
+        echo -e "  ${INFO} Leave blank to auto-generate a strong password (saved to .secrets)."
+        while true; do
+            MANAGEMENT_ADMIN_PASSWORD=$(prompt_password "  Instance admin password")
+            if [ -z "$MANAGEMENT_ADMIN_PASSWORD" ]; then
+                MANAGEMENT_ADMIN_PASSWORD=$(generate_password 24)
+                print_success "Instance admin password generated"
+                break
+            fi
+            if validate_env_safe_password "$MANAGEMENT_ADMIN_PASSWORD"; then
+                break
+            else
+                print_error "Use at least 6 characters, and avoid spaces and these characters: \$ # { } \\ \" ' \`"
+            fi
+        done
+    else
+        MANAGEMENT_ENABLED="false"
+        MANAGEMENT_ADMIN_EMAIL=""
+        MANAGEMENT_ADMIN_PASSWORD=""
+    fi
+
     # Backup configuration
     echo ""
     echo -e "  ${BOLD}Backup Configuration${NC}"
@@ -598,6 +652,17 @@ MAIL_PORT=${MAIL_PORT}
 MAIL_USERNAME=${MAIL_USERNAME}
 MAIL_PASSWORD=${MAIL_PASSWORD}
 MAIL_SENDER_ADDRESS=${MAIL_SENDER_ADDRESS}
+
+# Instance Management (Optional): the /admin panel and its instance admin account.
+# When MANAGEMENT_ENABLED=true, jinear-core creates (or promotes) the account for
+# MANAGEMENT_ADMIN_EMAIL on every startup, grants it the admin role, and re-applies
+# MANAGEMENT_ADMIN_PASSWORD, so this file stays the source of truth.
+# To rotate the password: change it here and run 'docker compose up -d'.
+# Setting MANAGEMENT_ENABLED=false revokes the admin role on the next restart.
+# Only one admin exists: any other account holding the role loses it.
+MANAGEMENT_ENABLED=${MANAGEMENT_ENABLED}
+MANAGEMENT_ADMIN_EMAIL=${MANAGEMENT_ADMIN_EMAIL}
+MANAGEMENT_ADMIN_PASSWORD=${MANAGEMENT_ADMIN_PASSWORD}
 
 # Backup
 BACKUP_ENABLED=${BACKUP_ENABLED}
@@ -748,6 +813,19 @@ Application: ${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}
 API: ${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}
 Files: ${EXTERNAL_SCHEME}://${FILES_DOMAIN}${PUBLIC_PORT_SUFFIX}
 EOF
+
+    if [ "$MANAGEMENT_ENABLED" = "true" ]; then
+        cat >> "$INSTALL_DIR/.secrets" << EOF
+
+INSTANCE ADMIN (/admin panel)
+-----------------------------
+URL: ${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}/admin
+Email: ${MANAGEMENT_ADMIN_EMAIL}
+Password: ${MANAGEMENT_ADMIN_PASSWORD}
+Note: jinear-core re-applies this password from .env on every restart.
+EOF
+    fi
+
     chmod 600 "$INSTALL_DIR/.secrets"
     print_success "Credentials saved to ${INSTALL_DIR}/.secrets"
     print_warning "Keep this file secure and backed up!"
@@ -810,6 +888,10 @@ print_summary() {
     echo -e "  🌐 Application:  ${BOLD}${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}${NC}"
     echo -e "  🔧 API:          ${BOLD}${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}${NC}"
     echo -e "  📁 Files:        ${BOLD}${EXTERNAL_SCHEME}://${FILES_DOMAIN}${PUBLIC_PORT_SUFFIX}${NC}"
+    if [ "$MANAGEMENT_ENABLED" = "true" ]; then
+        echo -e "  🛠  Admin panel:  ${BOLD}${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}/admin${NC}"
+        echo -e "     Sign in as ${BOLD}${MANAGEMENT_ADMIN_EMAIL}${NC} (password in ${INSTALL_DIR}/.secrets)"
+    fi
     echo ""
 
     echo -e "  ${BOLD}Important Files${NC}"

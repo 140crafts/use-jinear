@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-07-23 00:10:16.
+// Generated using typescript-generator version 3.0.1157 on 2026-08-25 14:02:19.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
-    gid: string;
     gthreadId: string;
     ghistoryId: string;
+    gid: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1306,6 +1306,38 @@ export interface CalendarEventTitleDescriptionUpdateRequest {
     description?: string | null;
 }
 
+export interface AdminAccountCreateRequest extends BaseRequest {
+    email: string;
+    password: string;
+}
+
+export interface AdminAccountPasswordUpdateRequest extends BaseRequest {
+    newPassword: string;
+}
+
+export interface AdminTeamMemberAddRequest extends BaseRequest {
+    accountId: string;
+    role: TeamMemberRoleType;
+}
+
+export interface AdminTeamRenameRequest extends BaseRequest {
+    name: string;
+}
+
+export interface AdminWorkspaceInitializeRequest extends WorkspaceInitializeRequest {
+    ownerAccountId: string;
+}
+
+export interface AdminWorkspaceMemberAddRequest extends BaseRequest {
+    accountId: string;
+    role: WorkspaceAccountRoleType;
+}
+
+export interface InstanceFlagOperationRequest extends BaseRequest {
+    instanceFlagType: InstanceFlagType;
+    value: any;
+}
+
 export interface MaterialAccessUpdateRequest extends BaseRequest {
     accountIds: string[];
 }
@@ -1907,6 +1939,18 @@ export interface FeedMemberPaginatedResponse extends BaseResponse {
     data: PageDto<FeedMemberDto>;
 }
 
+export interface AdminAccountListingResponse extends BaseResponse {
+    data: PageDto<AccountDto>;
+}
+
+export interface AdminWorkspaceListingResponse extends BaseResponse {
+    data: PageDto<WorkspaceDto>;
+}
+
+export interface InstanceFlagListingResponse extends BaseResponse {
+    data: { [P in InstanceFlagType]?: any };
+}
+
 export interface MaterialAccessPaginatedResponse extends BaseResponse {
     data: PageDto<MaterialAccessDto>;
 }
@@ -2291,13 +2335,13 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    originalFilename: string;
-    contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
+    contentType: string;
+    originalFilename: string;
 }
 
 export interface GoogleCalendarEventAttendee {
@@ -2409,13 +2453,13 @@ export interface BaseEntity {
 }
 
 export interface Resource extends InputStreamSource {
-    uri: URI;
-    description: string;
-    filename: string;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
+    filename: string;
+    uri: URI;
+    description: string;
 }
 
 export interface InputStreamSource {
@@ -2499,10 +2543,10 @@ export interface Account extends BaseEntity {
     accountProfileMedia: AccountProfileMedia;
 }
 
-export interface URI extends Comparable<URI>, Serializable {
+export interface URL extends Serializable {
 }
 
-export interface URL extends Serializable {
+export interface URI extends Comparable<URI>, Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {
@@ -2712,7 +2756,9 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE" | "MANAGEMENT_ADMIN_ACCOUNT_SYNC";
+
+export type InstanceFlagType = "REGISTER_WITH_MAIL" | "FORGOT_PASSWORD" | "SIGN_IN_WITH_APPLE" | "SIGN_IN_WITH_GOOGLE" | "SIGN_IN_WITH_EMAIL_CODE" | "WORKSPACE_INIT" | "ATTACH_GOOGLE_CALENDAR";
 
 export type MaterialAccessType = "OWNER_ONLY" | "WORKSPACE_MEMBERS" | "GRAINED" | "ANYONE_WITH_LINK";
 

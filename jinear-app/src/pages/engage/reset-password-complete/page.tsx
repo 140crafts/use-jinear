@@ -7,6 +7,7 @@ import React, {useEffect} from "react";
 import styles from "./index.module.css";
 import {useSearchParams} from "react-router-dom";
 import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
+import {useInstanceFlag} from "@/hooks/useInstanceFlag";
 
 interface ResetPasswordCompletePageProps {
 }
@@ -14,6 +15,7 @@ interface ResetPasswordCompletePageProps {
 const ResetPasswordCompletePage: React.FC<ResetPasswordCompletePageProps> = ({}) => {
     const {t} = useTranslation();
     const [params] = useSearchParams();
+    const forgotPasswordEnabled = useInstanceFlag("FORGOT_PASSWORD");
     const firstRender = useFirstRender();
     const [completeResetPassword, {data, isSuccess, isError, isLoading}] = useCompleteResetPasswordMutation();
 
@@ -48,8 +50,10 @@ const ResetPasswordCompletePage: React.FC<ResetPasswordCompletePageProps> = ({})
                         <div>{t("engageCompletePasswordResetErrorText")}</div>
                         <div className="spacer-h-2"/>
                         <div className={styles.actionButtonContainer}>
-                            <Button
-                                href={"/forgot-password"}>{t("engageCompletePasswordResetForgotPasswordPage")}</Button>
+                            {forgotPasswordEnabled ?
+                                <Button
+                                    href={"/forgot-password"}>{t("engageCompletePasswordResetForgotPasswordPage")}</Button> :
+                                <Button href={"/login"}>{t("engageCompletePasswordResetLoginPage")}</Button>}
                         </div>
                     </>
                 )}

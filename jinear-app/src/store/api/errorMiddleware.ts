@@ -16,6 +16,9 @@ export const rtkQueryErrorLogger: Middleware = (api: MiddlewareAPI) => (next) =>
         if (status == 404 && endpointName == "getRichTextUpdates") {
             return next(action);
         }
+        if (endpointName == "retrieveInstanceFlags") {
+            return next(action);
+        }
         if (status === "FETCH_ERROR" || !navigator.onLine) {
             return next(action); // stay quiet offline
         } else if (status == 413) {

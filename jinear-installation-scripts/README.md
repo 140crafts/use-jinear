@@ -26,7 +26,7 @@ chmod +x install.sh
 ## What the Installer Does
 
 1. **Checks prerequisites** - Verifies Docker, Docker Compose, and other requirements
-2. **Prompts for configuration** - Asks for your domain, HTTP/HTTPS ports, HTTPS mode (automatic Let's Encrypt, behind your own TLS proxy, or plain HTTP), timezone, and optional email settings
+2. **Prompts for configuration** - Asks for your domain, HTTP/HTTPS ports, HTTPS mode (automatic Let's Encrypt, behind your own TLS proxy, or plain HTTP), timezone, optional email settings, and optional instance management (the admin panel)
 3. **Generates secure credentials** - Automatically creates strong passwords and secrets
 4. **Creates directory structure** - Sets up all necessary folders
 5. **Generates configuration files** - Creates all config files from templates
@@ -51,6 +51,44 @@ After installation, you can modify the configuration:
 | `.config/application.properties` | Spring Boot application settings |
 | `.data/caddy/conf/Caddyfile` | Reverse proxy and SSL configuration |
 | `.secrets` | Generated credentials (keep secure!) |
+
+## Instance Management (Admin Panel)
+
+Jinear can expose an instance admin panel at `https://your-domain.com/admin`, where a
+single admin account manages workspaces, teams, accounts and instance flags. It is
+optional and disabled by default; the installer offers to set it up.
+
+If you enabled it during install, the login is written to `.secrets` under
+**INSTANCE ADMIN**. To enable, disable or change it afterwards, edit `.env` and restart:
+
+```bash
+cd ~/jinear
+nano .env          # set MANAGEMENT_ENABLED / MANAGEMENT_ADMIN_EMAIL / MANAGEMENT_ADMIN_PASSWORD
+docker compose up -d
+```
+
+| Variable | Purpose |
+|----------|---------|
+| `MANAGEMENT_ENABLED` | `true` enables the admin account, `false` disables it |
+| `MANAGEMENT_ADMIN_EMAIL` | Email of the admin account (created if it does not exist) |
+| `MANAGEMENT_ADMIN_PASSWORD` | Password for that account |
+
+Things worth knowing:
+
+- **`.env` is the source of truth.** On every startup jinear-core creates or promotes the
+  account for `MANAGEMENT_ADMIN_EMAIL` and re-applies `MANAGEMENT_ADMIN_PASSWORD`. To
+  rotate the password, change it in `.env` and run `docker compose up -d`; changing it
+  from inside the app will not survive the next restart.
+- **There is exactly one admin.** Any other account holding the admin role has it revoked
+  on the next startup. Point `MANAGEMENT_ADMIN_EMAIL` at an existing account to promote it
+  instead of creating a new one.
+- **Disabling revokes access.** Setting `MANAGEMENT_ENABLED=false` and restarting strips
+  the admin role from every account; the account itself and its data stay intact.
+- **Keep all three keys present** in `.env`, even when disabled. Leave the email and
+  password blank rather than deleting the lines, otherwise jinear-core fails to start.
+- The password is written to `.env` unquoted and passed through Docker Compose, so avoid
+  spaces, dollar signs, hash signs, curly braces, backslashes, quotes and backticks in it.
+  The installer rejects those and can generate a safe password for you.
 
 ## Running Behind Your Own Reverse Proxy
 

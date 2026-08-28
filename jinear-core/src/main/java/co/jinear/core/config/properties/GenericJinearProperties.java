@@ -24,4 +24,13 @@ public class GenericJinearProperties {
 
     @Value("${jinear.storage.limit.pro}")
     private Long storageLimitPro;
+
+    @Value("${jinear.management.enabled:false}")
+    private Boolean managementEnabled = Boolean.FALSE;
+
+    @Value("${jinear.management.admin.email}")
+    private String adminEmail;
+
+    @Value("${jinear.management.admin.password}")
+    private String adminPassword;
 }

@@ -1,0 +1,20 @@
+@use "../../styles/breakpoints.scss" as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: .5rem;
+  padding: 0.25rem;
+}
+
+.buttonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.button {
+  justify-content: flex-start !important;
+  gap: 1rem !important;
+}

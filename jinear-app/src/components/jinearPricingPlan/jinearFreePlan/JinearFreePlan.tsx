@@ -2,6 +2,7 @@ import React from "react";
 import JinearPricingPlan from "@/components/jinearPricingPlan/JinearPricingPlan";
 import Button, {ButtonVariants} from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
+import {useInstanceFlag} from "@/hooks/useInstanceFlag";
 
 interface JinearFreePlanProps {
 
@@ -9,6 +10,7 @@ interface JinearFreePlanProps {
 
 const JinearFreePlan: React.FC<JinearFreePlanProps> = ({}) => {
   const { t } = useTranslation();
+  const registerEnabled = useInstanceFlag("REGISTER_WITH_MAIL");
 
   return (
     <JinearPricingPlan
@@ -32,11 +34,15 @@ const JinearFreePlan: React.FC<JinearFreePlanProps> = ({}) => {
       <div className={"spacer-h-4"} />
       <div className={"flex-1"} />
 
-      <Button href={"/register"} variant={ButtonVariants.contrast}>
-        <span>{t("registerWithMailFormTitle")}</span>
-      </Button>
+      {registerEnabled && (
+        <>
+          <Button href={"/register"} variant={ButtonVariants.contrast}>
+            <span>{t("registerWithMailFormTitle")}</span>
+          </Button>
 
-      <div className={"spacer-h-2"} />
+          <div className={"spacer-h-2"} />
+        </>
+      )}
     </JinearPricingPlan>
 
   );

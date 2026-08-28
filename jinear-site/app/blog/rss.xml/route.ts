@@ -34,7 +34,7 @@ export function GET() {
   <channel>
     <title>Jinear Blog</title>
     <link>${SITE_URL}/blog/</link>
-    <description>Updates, guides, and thoughts on self-hosted project management and open source.</description>
+    <description>Updates, guides, and thoughts on self-hosted task management and open source.</description>
     <language>en</language>
 ${items}
   </channel>

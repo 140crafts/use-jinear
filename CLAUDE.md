@@ -123,6 +123,7 @@ on them; use them as reference when building their replacements.
   functional em-dash), and box-drawing characters (─ ├ └, U+2500 family) used in
   install.sh terminal output and README tree diagrams. Target U+2014/U+2013
   specifically, never "dash-like characters".
+- When reporting to user use ASD-STE100 Simplified Technical English.
 
 ## Constraints
 

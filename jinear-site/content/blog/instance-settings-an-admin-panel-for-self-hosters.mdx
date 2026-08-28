@@ -1,0 +1,111 @@
+---
+title: "Instance Settings. An Admin Panel for Self-Hosters."
+description: "Jinear had no way to close registration, no way to reset someone's password without a mail server, and no way to see what was on the instance. There's an admin panel now, at /admin, off by default, with one admin account defined in your .env."
+pubDate: "2026-08-27"
+tags: ["changelog", "self-hosting"]
+author: "Çağdaş Tunca"
+---
+
+If you self-hosted Jinear until now, you ran it as a normal member. That was fine
+until you needed something a member can't do. Someone forgot their password and the
+instance had no mail server, so there was no reset link to send. You put Jinear on a
+public address and had no way to stop strangers from registering. You wanted to know
+which workspaces existed on your own server, and the honest answer was to open the
+database.
+
+There's an admin panel now, at `/admin`. It's optional, off by default, and there is
+exactly one admin.
+
+## Turning it on
+
+The admin account is defined in `.env`, not in the app. The installer asks about it
+during setup, and writes the login to `.secrets` if you say yes. To change it later:
+
+```bash
+cd ~/jinear
+nano .env          # MANAGEMENT_ENABLED / MANAGEMENT_ADMIN_EMAIL / MANAGEMENT_ADMIN_PASSWORD
+docker compose up -d
+```
+
+A few things follow from doing it this way:
+
+- **`.env` is the source of truth.** On every startup, Jinear creates or promotes the
+  account for that email and re-applies that password. To rotate the password, change
+  it in `.env` and restart. Changing it inside the app will not survive the next
+  restart.
+- **There is exactly one admin.** Any other account holding the role loses it on the
+  next startup. Point the email at an account you already use and it gets promoted
+  instead of a second account being created.
+- **Disabling revokes access.** Set `MANAGEMENT_ENABLED=false`, restart, and the role
+  is stripped from every account. The account and its data stay.
+- **Keep all three keys in the file**, even when disabled. Leave the values blank
+  rather than deleting the lines.
+
+I picked the config file over an in-app setting on purpose. If someone gets into the
+app, I don't want them to be one click away from making themselves an admin. Getting
+that role means getting shell access to the machine first.
+
+## Instance flags
+
+The first screen in the panel is a list of switches for features that not every
+instance wants. Most of them exist because the answer for a company server and the
+answer for a five person server are different.
+
+**Authentication**
+
+- **Register with Email**, on by default. Turn it off to close registration and add
+  people yourself.
+- **Forgot Password**, on by default. Needs a mail server. Turn it off if you don't
+  have one, so nobody is left waiting for a mail that will never arrive.
+- **Sign in with Email Code**, on by default. Also needs a mail server.
+- **Sign in with Google** and **Sign in with Apple**, both off by default, because
+  both need credentials you have to set up yourself.
+
+**Workspaces**
+
+- **Workspace Creation**, on by default. Turn it off to keep workspace creation on
+  the instance for yourself, where people join workspaces only by you instead of starting their own.
+
+**Integrations**
+
+- **Google Calendar**, off by default, and it needs Google OAuth credentials.
+  Calendars that are already connected keep syncing when you turn it off.
+
+A flag hides the feature in the app and the API refuses it. Turning off registration
+doesn't just remove the button.
+
+## Workspaces, teams, accounts
+
+The other three screens are for the things I used to open the database for.
+
+- **Workspaces.** Everything on the instance, with its owner and tier. Create one and
+  pick any account as owner, rename it, change its tier, add and remove members,
+  delete it.
+- **Teams.** Grouped under the workspace they belong to. Create, rename, manage
+  members, delete.
+- **Accounts.** Every account on the instance. Create one with an email and a
+  password, which is the manual path when registration is closed. Set a new password
+  for someone who lost theirs, and they're asked to change it at their next sign in.
+  Open an account to see which workspaces and teams it belongs to.
+
+An account you create here starts with no workspace of its own, on purpose. You add it
+to an existing workspace from that workspace's members list.
+
+## What's not in it yet
+
+The account list is paginated but has no search, which is fine at twenty accounts and
+annoying past a few hundred. There's no audit log, so the panel doesn't record who did
+what. Every flag is a simple on or off, with nothing per workspace. And one admin is
+one admin: no second role, no read-only view for someone who should see the instance
+without changing it.
+
+None of that blocks the thing the panel was for, so it shipped without them.
+
+---
+
+This panel exists because someone asked for it in an email. If you self-host and
+something is broken, or you need something that isn't here, don't hesitate to write to
+me. Problems and suggestions are both welcome, and this is where they end up.
+
+The whole thing is on [GitLab](https://gitlab.com/140crafts/use-jinear) and
+[GitHub](https://github.com/140crafts/use-jinear).

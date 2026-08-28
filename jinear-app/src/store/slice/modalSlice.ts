@@ -2,6 +2,13 @@ import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import type ModalState from "@/model/app/store/modal/modalState";
 import type {
     AddMemberToTeamModalState,
+    AdminAccountPickerModalState,
+    AdminAccountTeamsModalState,
+    AdminAccountWorkspacesModalState,
+    AdminTeamMembersModalState,
+    AdminWorkspaceMembersModalState,
+    AdminWorkspacePickerModalState,
+    AdminWorkspaceTierModalState,
     BasicTextInputModalState,
     CalendarExternalEventViewModalState,
     CalendarShareEventsModalState,
@@ -251,6 +258,36 @@ const initialState = {
         visible: false,
         resetList: () => {
         }
+    },
+    adminAccountPickerModal: {
+        visible: false
+    },
+    adminWorkspacePickerModal: {
+        visible: false
+    },
+    adminCreateWorkspaceModal: {
+        visible: false
+    },
+    adminWorkspaceMembersModal: {
+        visible: false
+    },
+    adminWorkspaceTierModal: {
+        visible: false
+    },
+    adminCreateTeamModal: {
+        visible: false
+    },
+    adminTeamMembersModal: {
+        visible: false
+    },
+    adminCreateAccountModal: {
+        visible: false
+    },
+    adminAccountWorkspacesModal: {
+        visible: false
+    },
+    adminAccountTeamsModal: {
+        visible: false
     }
 } as {
     loginWith2FaMailModal: null | LoginWith2FaMailModalState;
@@ -314,6 +351,16 @@ const initialState = {
     noteTagPickerModal: null | NoteTagPickerModalState,
     uploadStatusModal: null | UploadStatusModalState;
     materialAccessModal: null | MaterialAccessModalState;
+    adminAccountPickerModal: null | AdminAccountPickerModalState;
+    adminWorkspacePickerModal: null | AdminWorkspacePickerModalState;
+    adminCreateWorkspaceModal: null | ModalState;
+    adminWorkspaceMembersModal: null | AdminWorkspaceMembersModalState;
+    adminWorkspaceTierModal: null | AdminWorkspaceTierModalState;
+    adminCreateTeamModal: null | ModalState;
+    adminTeamMembersModal: null | AdminTeamMembersModalState;
+    adminCreateAccountModal: null | ModalState;
+    adminAccountWorkspacesModal: null | AdminAccountWorkspacesModalState;
+    adminAccountTeamsModal: null | AdminAccountTeamsModalState;
 };
 
 const slice = createSlice({
@@ -779,6 +826,76 @@ const slice = createSlice({
             state.materialAccessModal = initialState.materialAccessModal;
         },
 
+        popAdminAccountPickerModal: (state, action: PayloadAction<AdminAccountPickerModalState>) => {
+            state.adminAccountPickerModal = {...action.payload, visible: true};
+        },
+        closeAdminAccountPickerModal: (state, action: PayloadAction<void>) => {
+            state.adminAccountPickerModal = initialState.adminAccountPickerModal;
+        },
+
+        popAdminWorkspacePickerModal: (state, action: PayloadAction<AdminWorkspacePickerModalState>) => {
+            state.adminWorkspacePickerModal = {...action.payload, visible: true};
+        },
+        closeAdminWorkspacePickerModal: (state, action: PayloadAction<void>) => {
+            state.adminWorkspacePickerModal = initialState.adminWorkspacePickerModal;
+        },
+
+        popAdminCreateWorkspaceModal: (state, action: PayloadAction<ModalState>) => {
+            state.adminCreateWorkspaceModal = {...action.payload, visible: true};
+        },
+        closeAdminCreateWorkspaceModal: (state, action: PayloadAction<void>) => {
+            state.adminCreateWorkspaceModal = initialState.adminCreateWorkspaceModal;
+        },
+
+        popAdminWorkspaceMembersModal: (state, action: PayloadAction<AdminWorkspaceMembersModalState>) => {
+            state.adminWorkspaceMembersModal = {...action.payload, visible: true};
+        },
+        closeAdminWorkspaceMembersModal: (state, action: PayloadAction<void>) => {
+            state.adminWorkspaceMembersModal = initialState.adminWorkspaceMembersModal;
+        },
+
+        popAdminWorkspaceTierModal: (state, action: PayloadAction<AdminWorkspaceTierModalState>) => {
+            state.adminWorkspaceTierModal = {...action.payload, visible: true};
+        },
+        closeAdminWorkspaceTierModal: (state, action: PayloadAction<void>) => {
+            state.adminWorkspaceTierModal = initialState.adminWorkspaceTierModal;
+        },
+
+        popAdminCreateTeamModal: (state, action: PayloadAction<ModalState>) => {
+            state.adminCreateTeamModal = {...action.payload, visible: true};
+        },
+        closeAdminCreateTeamModal: (state, action: PayloadAction<void>) => {
+            state.adminCreateTeamModal = initialState.adminCreateTeamModal;
+        },
+
+        popAdminTeamMembersModal: (state, action: PayloadAction<AdminTeamMembersModalState>) => {
+            state.adminTeamMembersModal = {...action.payload, visible: true};
+        },
+        closeAdminTeamMembersModal: (state, action: PayloadAction<void>) => {
+            state.adminTeamMembersModal = initialState.adminTeamMembersModal;
+        },
+
+        popAdminCreateAccountModal: (state, action: PayloadAction<ModalState>) => {
+            state.adminCreateAccountModal = {...action.payload, visible: true};
+        },
+        closeAdminCreateAccountModal: (state, action: PayloadAction<void>) => {
+            state.adminCreateAccountModal = initialState.adminCreateAccountModal;
+        },
+
+        popAdminAccountWorkspacesModal: (state, action: PayloadAction<AdminAccountWorkspacesModalState>) => {
+            state.adminAccountWorkspacesModal = {...action.payload, visible: true};
+        },
+        closeAdminAccountWorkspacesModal: (state, action: PayloadAction<void>) => {
+            state.adminAccountWorkspacesModal = initialState.adminAccountWorkspacesModal;
+        },
+
+        popAdminAccountTeamsModal: (state, action: PayloadAction<AdminAccountTeamsModalState>) => {
+            state.adminAccountTeamsModal = {...action.payload, visible: true};
+        },
+        closeAdminAccountTeamsModal: (state, action: PayloadAction<void>) => {
+            state.adminAccountTeamsModal = initialState.adminAccountTeamsModal;
+        },
+
         resetModals: () => initialState
     },
     extraReducers: (builder) => {
@@ -922,6 +1039,26 @@ export const {
     removeFromUploadStatusModalQueue,
     popMaterialAccessModal,
     closeMaterialAccessModal,
+    popAdminAccountPickerModal,
+    closeAdminAccountPickerModal,
+    popAdminWorkspacePickerModal,
+    closeAdminWorkspacePickerModal,
+    popAdminCreateWorkspaceModal,
+    closeAdminCreateWorkspaceModal,
+    popAdminWorkspaceMembersModal,
+    closeAdminWorkspaceMembersModal,
+    popAdminWorkspaceTierModal,
+    closeAdminWorkspaceTierModal,
+    popAdminCreateTeamModal,
+    closeAdminCreateTeamModal,
+    popAdminTeamMembersModal,
+    closeAdminTeamMembersModal,
+    popAdminCreateAccountModal,
+    closeAdminCreateAccountModal,
+    popAdminAccountWorkspacesModal,
+    closeAdminAccountWorkspacesModal,
+    popAdminAccountTeamsModal,
+    closeAdminAccountTeamsModal,
     resetModals
 } = slice.actions;
 export default slice.reducer;
@@ -1235,3 +1372,40 @@ export const selectUploadStatusModalMouseOver = (state: RootState) => state.moda
 export const selectMaterialAccessModalVisible = (state: RootState) => state.modal.materialAccessModal?.visible;
 export const selectMaterialAccessModalMaterialId = (state: RootState) => state.modal.materialAccessModal?.materialId;
 export const selectMaterialAccessModalResetList = (state: RootState) => state.modal.materialAccessModal?.resetList;
+
+export const selectAdminAccountPickerModalVisible = (state: RootState) => state.modal.adminAccountPickerModal?.visible;
+export const selectAdminAccountPickerModalWorkspaceId = (state: RootState) =>
+    state.modal.adminAccountPickerModal?.workspaceId;
+export const selectAdminAccountPickerModalOnPick = (state: RootState) => state.modal.adminAccountPickerModal?.onPick;
+
+export const selectAdminWorkspacePickerModalVisible = (state: RootState) =>
+    state.modal.adminWorkspacePickerModal?.visible;
+export const selectAdminWorkspacePickerModalOnPick = (state: RootState) =>
+    state.modal.adminWorkspacePickerModal?.onPick;
+
+export const selectAdminCreateWorkspaceModalVisible = (state: RootState) =>
+    state.modal.adminCreateWorkspaceModal?.visible;
+
+export const selectAdminWorkspaceMembersModalVisible = (state: RootState) =>
+    state.modal.adminWorkspaceMembersModal?.visible;
+export const selectAdminWorkspaceMembersModalWorkspace = (state: RootState) =>
+    state.modal.adminWorkspaceMembersModal?.workspace;
+
+export const selectAdminWorkspaceTierModalVisible = (state: RootState) => state.modal.adminWorkspaceTierModal?.visible;
+export const selectAdminWorkspaceTierModalWorkspace = (state: RootState) =>
+    state.modal.adminWorkspaceTierModal?.workspace;
+
+export const selectAdminCreateTeamModalVisible = (state: RootState) => state.modal.adminCreateTeamModal?.visible;
+
+export const selectAdminTeamMembersModalVisible = (state: RootState) => state.modal.adminTeamMembersModal?.visible;
+export const selectAdminTeamMembersModalTeam = (state: RootState) => state.modal.adminTeamMembersModal?.team;
+
+export const selectAdminCreateAccountModalVisible = (state: RootState) => state.modal.adminCreateAccountModal?.visible;
+
+export const selectAdminAccountWorkspacesModalVisible = (state: RootState) =>
+    state.modal.adminAccountWorkspacesModal?.visible;
+export const selectAdminAccountWorkspacesModalAccount = (state: RootState) =>
+    state.modal.adminAccountWorkspacesModal?.account;
+
+export const selectAdminAccountTeamsModalVisible = (state: RootState) => state.modal.adminAccountTeamsModal?.visible;
+export const selectAdminAccountTeamsModalAccount = (state: RootState) => state.modal.adminAccountTeamsModal?.account;

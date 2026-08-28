@@ -97,3 +97,6 @@ export const selectCurrentAccountsWorkspaceRoleIsAdminOrOwnerWithWorkspaceUserna
 
 export const selectWorkspaceFromWorkspaceUsername = (workspaceUsername?: string) => (state: RootState) =>
     state.account.current?.workspaces.find((workspace: WorkspaceDto) => workspace.username == workspaceUsername);
+
+export const selectCurrentAccountIsInstanceAdmin = (state: RootState) =>
+    state.account.current?.roles?.some((accountRole) => accountRole.role == "ADMIN") == true;

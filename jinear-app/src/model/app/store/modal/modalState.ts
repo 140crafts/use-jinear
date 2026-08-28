@@ -1,4 +1,5 @@
 import type {
+    AccountDto,
     CalendarEventDto,
     IntegrationProvider,
     MilestoneDto,
@@ -156,7 +157,7 @@ export interface BasicTextInputModalState extends ModalState {
     title?: string;
     infoText?: string;
     initialText?: string;
-    inputType?: "text" | "number" | "email",
+    inputType?: "text" | "number" | "email" | "password",
     onSubmit?: (text: string) => void;
 }
 
@@ -331,4 +332,33 @@ export interface UploadStatusModalState extends ModalState {
 export interface MaterialAccessModalState extends ModalState {
     materialId?: string,
     resetList: () => void
+}
+
+export interface AdminAccountPickerModalState extends ModalState {
+    workspaceId?: string;
+    onPick?: (account: AccountDto) => void;
+}
+
+export interface AdminWorkspacePickerModalState extends ModalState {
+    onPick?: (workspace: WorkspaceDto) => void;
+}
+
+export interface AdminWorkspaceMembersModalState extends ModalState {
+    workspace?: WorkspaceDto;
+}
+
+export interface AdminWorkspaceTierModalState extends ModalState {
+    workspace?: WorkspaceDto;
+}
+
+export interface AdminTeamMembersModalState extends ModalState {
+    team?: TeamDto;
+}
+
+export interface AdminAccountWorkspacesModalState extends ModalState {
+    account?: AccountDto;
+}
+
+export interface AdminAccountTeamsModalState extends ModalState {
+    account?: AccountDto;
 }

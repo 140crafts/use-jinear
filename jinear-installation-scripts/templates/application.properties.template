@@ -97,6 +97,12 @@ jinear.security.rate-limit.plans.authenticated.duration-in-minutes=1
 jinear.security.rate-limit.plans.authenticated.refillType=greedy
 jinear.storage.limit.basic=1024
 jinear.storage.limit.pro=204800
+# Instance management: admin account for the /admin panel.
+# When enabled, jinear-core creates or promotes the account for the configured
+# email on every startup and resets its password to the configured value.
+jinear.management.enabled=${MANAGEMENT_ENABLED:false}
+jinear.management.admin.email=${MANAGEMENT_ADMIN_EMAIL:}
+jinear.management.admin.password=${MANAGEMENT_ADMIN_PASSWORD:}
 
 # ==============================================================
 # = GCloud (Optional - leave as-is if not using Google services)

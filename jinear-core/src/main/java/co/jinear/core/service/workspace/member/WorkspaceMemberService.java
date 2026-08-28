@@ -107,6 +107,12 @@ public class WorkspaceMemberService {
                 .forEach(workspaceMember -> deleteMember(workspaceMember, passiveId));
     }
 
+    public void removeAllMembershipsOfAWorkspace(String workspaceId, String passiveId) {
+        log.info("Remove all memberships of a workspace has started. workspaceId: {}, passiveId: {}", workspaceId, passiveId);
+        workspaceMemberRepository.findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateAsc(workspaceId)
+                .forEach(workspaceMember -> deleteMember(workspaceMember, passiveId));
+    }
+
     public void validateAllHasAccess(String workspaceId, Set<String> accountIds) {
         log.info("Validate all has access has started. workspaceId: {}, accountIds: {}", workspaceId, StringUtils.join(accountIds, ","));
         Long existingCount = workspaceMemberRepository.countAllByWorkspaceIdAndAccountIdIsInAndPassiveIdIsNull(workspaceId, accountIds);
@@ -117,6 +123,10 @@ public class WorkspaceMemberService {
 
     public boolean checkWorkspaceMemberExistsInWorkspace(String workspaceMemberId, String workspaceId) {
         return workspaceMemberRepository.existsByWorkspaceMemberIdAndWorkspaceIdAndPassiveIdIsNull(workspaceMemberId, workspaceId);
+    }
+
+    public Long countWorkspaceMembersWithRole(String workspaceId, WorkspaceAccountRoleType role) {
+        return workspaceMemberRepository.countAllByWorkspaceIdAndRoleAndPassiveIdIsNull(workspaceId, role);
     }
 
     private void createWorkspaceRole(InitializeWorkspaceMemberVo initializeWorkspaceMemberVo) {
