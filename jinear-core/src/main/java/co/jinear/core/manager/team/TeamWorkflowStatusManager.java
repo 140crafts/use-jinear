@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.team.workflow.GroupedTeamWorkflowStatusListDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.request.team.InitializeTeamWorkflowStatusRequest;
 import co.jinear.core.model.request.team.TeamWorkflowStatusNameChangeRequest;
+import co.jinear.core.model.request.team.TeamWorkflowStatusReorderRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.team.TeamWorkflowStatusListingResponse;
 import co.jinear.core.model.vo.team.workflow.InitializeTeamWorkflowStatusVo;
@@ -71,6 +72,18 @@ public class TeamWorkflowStatusManager {
         validateTeamWorkflowStatusesInSameTeamAndBothAreInGivenTeam(teamId, teamWorkflowStatusId, replaceWithTeamWorkflowStatusId);
         log.info("Change team workflow status order has started. currentAccountId: {}", currentAccountId);
         teamWorkflowStatusService.changeTeamWorkflowStatusOrder(teamWorkflowStatusId, replaceWithTeamWorkflowStatusId);
+        return new BaseResponse();
+    }
+
+    public BaseResponse reorder(String teamId, TeamWorkflowStatusReorderRequest teamWorkflowStatusReorderRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        teamAccessValidator.validateTeamAdminAccess(currentAccountId, teamId);
+        log.info("Reorder team workflow statuses has started. currentAccountId: {}, teamId: {}", currentAccountId, teamId);
+        TeamDto teamDto = teamRetrieveService.retrieveTeam(teamId);
+        teamWorkflowStatusService.reorderTeamWorkflowStatuses(teamDto.getWorkspaceId(),
+                teamDto.getTeamId(),
+                teamWorkflowStatusReorderRequest.getWorkflowStateGroup(),
+                teamWorkflowStatusReorderRequest.getOrderedTeamWorkflowStatusIds());
         return new BaseResponse();
     }
 

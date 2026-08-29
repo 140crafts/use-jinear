@@ -1,39 +1,51 @@
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import type {TeamWorkflowStatusDto} from "@/model/be/jinear-core";
-import {useChangeTeamWorkflowStatusNameMutation} from "@/store/api/teamWorkflowStatusApi";
+import {useAppDispatch} from "@/store";
+import {
+    useChangeTeamWorkflowStatusNameMutation,
+    useRemoveTeamWorkflowStatusMutation,
+} from "@/store/api/teamWorkflowStatusApi";
+import {closeDialogModal, popDialogModal} from "@/store/slice/modalSlice";
+import {retrieveTaskStatusIcon} from "@/util/taskIconFactory";
 import cn from "classnames";
 import useTranslation from "@/locales/useTranslation";
-import React, {type ChangeEvent, useEffect, useRef, useState} from "react";
-import {
-    IoCaretDown,
-    IoCaretUp,
-    IoCheckmarkCircle,
-    IoClose,
-    IoCloseCircle,
-    IoContrast,
-    IoEllipseOutline,
-    IoPauseCircleOutline,
-    IoPencil,
-} from "react-icons/io5";
+import React, {type ChangeEvent, type KeyboardEvent, useEffect, useRef, useState} from "react";
+import {toast} from "react-hot-toast";
+import {IoCaretDown, IoCaretUp, IoClose, IoPencil, IoReorderThreeOutline} from "react-icons/io5";
 import styles from "./WorkflowStatus.module.scss";
+
+type DragHandlers = Pick<
+    React.HTMLAttributes<HTMLDivElement>,
+    "onDragStart" | "onDragOver" | "onDragLeave" | "onDragEnd" | "onDrop"
+>;
 
 interface WorkflowStatusProps {
     editable: boolean;
     deletable: boolean;
     orderChangable: boolean;
+    className?: string;
+    dragHandlers: DragHandlers;
+    canMoveUp: boolean;
+    canMoveDown: boolean;
+    onMoveUp: () => void;
+    onMoveDown: () => void;
     workflowDto: TeamWorkflowStatusDto;
 }
 
-const groupIconMap = {
-    BACKLOG: <IoPauseCircleOutline size={20}/>,
-    NOT_STARTED: <IoEllipseOutline size={20}/>,
-    STARTED: <IoContrast size={20}/>,
-    COMPLETED: <IoCheckmarkCircle size={20}/>,
-    CANCELLED: <IoCloseCircle size={20}/>,
-};
-
-const WorkflowStatus: React.FC<WorkflowStatusProps> = ({workflowDto, deletable, orderChangable, editable}) => {
+const WorkflowStatus: React.FC<WorkflowStatusProps> = ({
+                                                           workflowDto,
+                                                           deletable,
+                                                           orderChangable,
+                                                           editable,
+                                                           className,
+                                                           dragHandlers,
+                                                           canMoveUp,
+                                                           canMoveDown,
+                                                           onMoveUp,
+                                                           onMoveDown,
+                                                       }) => {
     const {t} = useTranslation();
+    const dispatch = useAppDispatch();
     const [isEditing, setIsEditing] = useState<boolean>(false);
 
     const [name, setName] = useState<string>(workflowDto.name);
@@ -41,6 +53,9 @@ const WorkflowStatus: React.FC<WorkflowStatusProps> = ({workflowDto, deletable, 
 
     const [changeTeamWorkflowStatusName, {isLoading: isNameChangeLoading, isSuccess: isNameChangeSuccess}] =
         useChangeTeamWorkflowStatusNameMutation();
+    const [removeTeamWorkflowStatus, {isLoading: isRemoveLoading}] = useRemoveTeamWorkflowStatusMutation();
+
+    const StatusIcon = retrieveTaskStatusIcon(workflowDto.workflowStateGroup);
 
     useEffect(() => {
         if (isEditing) {
@@ -67,33 +82,88 @@ const WorkflowStatus: React.FC<WorkflowStatusProps> = ({workflowDto, deletable, 
         });
     };
 
+    const cancelEditing = () => {
+        setName(workflowDto.name);
+        setIsEditing(false);
+    };
+
+    const onNameInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+        if (e.key == "Enter") {
+            e.preventDefault();
+            submitNewName();
+        }
+        if (e.key == "Escape") {
+            e.preventDefault();
+            cancelEditing();
+        }
+    };
+
+    const deleteWorkflowStatus = () => {
+        removeTeamWorkflowStatus({
+            teamId: workflowDto.teamId,
+            teamWorkflowStatusId: workflowDto.teamWorkflowStatusId,
+        })
+            .unwrap()
+            .catch(() => {
+                toast(t("workflowStatusDeleteFailed"));
+            });
+        dispatch(closeDialogModal());
+    };
+
+    const popAreYouSureModalForDeleteWorkflowStatus = () => {
+        dispatch(
+            popDialogModal({
+                visible: true,
+                title: t("workflowStatusDeleteAreYouSureTitle"),
+                content: t("workflowStatusDeleteAreYouSureText"),
+                confirmButtonLabel: t("workflowStatusDeleteAreYouSureConfirmLabel"),
+                onConfirm: deleteWorkflowStatus,
+            })
+        );
+    };
+
+    // Dragging the row while its name is being edited would fight with text selection.
+    const draggable = orderChangable && !isEditing;
+
     return (
-        <div className={styles.container} data-tooltip={workflowDto.name?.length > 36 ? workflowDto.name : undefined}>
-            <div className={styles.icon}>{groupIconMap[workflowDto.workflowStateGroup]}</div>
+        <div
+            className={cn(styles.container, className, draggable && styles.draggable)}
+            data-tooltip={workflowDto.name?.length > 36 ? workflowDto.name : undefined}
+            draggable={draggable}
+            {...dragHandlers}
+        >
+            {draggable && (
+                <div className={styles.dragHandle} data-tooltip-right={t("workflowStatusDragTooltip")}>
+                    <IoReorderThreeOutline size={18}/>
+                </div>
+            )}
+            <div className={styles.icon}><StatusIcon size={20}/></div>
 
             {!isEditing && <div className={cn(styles.name, "single-line")}>{workflowDto.name}</div>}
             {isEditing && editable && (
                 <input ref={nameInputRef} type="text" value={name} onChange={onNameChange}
-                       className={styles.nameInput}/>
+                       onKeyDown={onNameInputKeyDown} className={styles.nameInput}/>
             )}
 
             {!isEditing && <div className="flex-1"/>}
             {!isEditing && (
                 <div className={styles.actionContainer}>
-                    {orderChangable && (
+                    {orderChangable && canMoveDown && (
                         <Button
                             heightVariant={ButtonHeight.short}
                             variant={ButtonVariants.hoverFilled2}
                             data-tooltip-right={t("workflowStatusOrderDownTooltip")}
+                            onClick={onMoveDown}
                         >
                             <IoCaretDown/>
                         </Button>
                     )}
-                    {orderChangable && workflowDto.order != 0 && (
+                    {orderChangable && canMoveUp && (
                         <Button
                             heightVariant={ButtonHeight.short}
                             variant={ButtonVariants.hoverFilled2}
                             data-tooltip-right={t("workflowStatusOrderUpTooltip")}
+                            onClick={onMoveUp}
                         >
                             <IoCaretUp/>
                         </Button>
@@ -113,9 +183,12 @@ const WorkflowStatus: React.FC<WorkflowStatusProps> = ({workflowDto, deletable, 
                     )}
                     {deletable && editable && (
                         <Button
+                            disabled={isRemoveLoading}
+                            loading={isRemoveLoading}
                             heightVariant={ButtonHeight.short}
                             variant={ButtonVariants.hoverFilled2}
                             data-tooltip-right={t("workflowStatusDeleteTooltip")}
+                            onClick={popAreYouSureModalForDeleteWorkflowStatus}
                         >
                             <IoClose/>
                         </Button>
@@ -128,9 +201,7 @@ const WorkflowStatus: React.FC<WorkflowStatusProps> = ({workflowDto, deletable, 
                         disabled={isNameChangeLoading}
                         heightVariant={ButtonHeight.short}
                         variant={ButtonVariants.hoverFilled2}
-                        onClick={() => {
-                            setIsEditing(false);
-                        }}
+                        onClick={cancelEditing}
                     >
                         {t("workflowStatusNameEditCancel")}
                     </Button>

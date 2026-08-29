@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-08-25 14:02:19.
+// Generated using typescript-generator version 3.0.1157 on 2026-08-29 16:43:23.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
+    ginternalDate: string;
+    gid: string;
     gthreadId: string;
     ghistoryId: string;
-    gid: string;
-    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1820,6 +1820,11 @@ export interface TeamWorkflowStatusNameChangeRequest extends BaseRequest {
     name: string;
 }
 
+export interface TeamWorkflowStatusReorderRequest extends BaseRequest {
+    workflowStateGroup: TeamWorkflowStateGroup;
+    orderedTeamWorkflowStatusIds: string[];
+}
+
 export interface RetrieveTopicListRequest extends BaseRequest {
     topicIds: string[];
 }
@@ -2335,13 +2340,13 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
+    originalFilename: string;
+    contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
-    contentType: string;
-    originalFilename: string;
 }
 
 export interface GoogleCalendarEventAttendee {
@@ -2453,13 +2458,13 @@ export interface BaseEntity {
 }
 
 export interface Resource extends InputStreamSource {
+    filename: string;
+    uri: URI;
+    description: string;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
-    filename: string;
-    uri: URI;
-    description: string;
 }
 
 export interface InputStreamSource {
@@ -2543,10 +2548,10 @@ export interface Account extends BaseEntity {
     accountProfileMedia: AccountProfileMedia;
 }
 
-export interface URL extends Serializable {
+export interface URI extends Comparable<URI>, Serializable {
 }
 
-export interface URI extends Comparable<URI>, Serializable {
+export interface URL extends Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {

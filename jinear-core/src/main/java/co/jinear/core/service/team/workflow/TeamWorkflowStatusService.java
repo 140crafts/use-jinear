@@ -13,12 +13,21 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TeamWorkflowStatusService {
+
+    private static final String CANNOT_REMOVE_LAST_MESSAGE_KEY = "workspace.team.workflow-status.cannot-remove-last";
+    private static final String MAX_COUNT_EXCEEDED_MESSAGE_KEY = "workspace.team.workflow-status.max-count-exceeded";
+    private static final String REORDER_LIST_MISMATCH_MESSAGE_KEY = "workspace.team.workflow-status.reorder-list-mismatch";
 
     private final int MAX_SAME_GROUP_STATUS_COUNT = 100;
 
@@ -78,6 +87,27 @@ public class TeamWorkflowStatusService {
         log.info("Orders replaced.");
     }
 
+    @Transactional
+    public void reorderTeamWorkflowStatuses(String workspaceId, String teamId, TeamWorkflowStateGroup workflowStateGroup, List<String> orderedTeamWorkflowStatusIds) {
+        log.info("Reorder team workflow statuses has started. teamId: {}, workflowStateGroup: {}", teamId, workflowStateGroup);
+        teamWorkflowStatusLockService.lockTeamWorkflow(teamId);
+        try {
+            List<TeamWorkflowStatus> teamWorkflowStatuses = teamWorkflowStatusRetrieveService.retrieveAllFromSameStateGroup(workspaceId, teamId, workflowStateGroup);
+            validateOrderedIdsMatchesStateGroup(teamWorkflowStatuses, orderedTeamWorkflowStatusIds);
+            Map<String, TeamWorkflowStatus> teamWorkflowStatusMap = teamWorkflowStatuses.stream()
+                    .collect(Collectors.toMap(TeamWorkflowStatus::getTeamWorkflowStatusId, Function.identity()));
+            for (int i = 0; i < orderedTeamWorkflowStatusIds.size(); i++) {
+                TeamWorkflowStatus teamWorkflowStatus = teamWorkflowStatusMap.get(orderedTeamWorkflowStatusIds.get(i));
+                teamWorkflowStatus.setOrder(i);
+                log.info("Reordered team workflow status. teamWorkflowStatusId: {}, order: {}", teamWorkflowStatus.getTeamWorkflowStatusId(), i);
+            }
+            teamWorkflowStatusRepository.saveAll(teamWorkflowStatuses);
+            log.info("Reorder team workflow statuses has finished.");
+        } finally {
+            teamWorkflowStatusLockService.unlockTeamWorkflow(teamId);
+        }
+    }
+
     public void changeTeamWorkflowStatusName(String teamWorkflowStatusId, String newName) {
         log.info("Change team workflow status name has started. teamWorkflowStatusId: {}, newName: {}", teamWorkflowStatusId, newName);
         TeamWorkflowStatus teamWorkflowStatus = teamWorkflowStatusRetrieveService.retrieveEntity(teamWorkflowStatusId);
@@ -101,17 +131,28 @@ public class TeamWorkflowStatusService {
         teamWorkflowStatusRepository.saveAll(teamWorkflowStatuses);
     }
 
+    private void validateOrderedIdsMatchesStateGroup(List<TeamWorkflowStatus> teamWorkflowStatuses, List<String> orderedTeamWorkflowStatusIds) {
+        Set<String> existingIds = teamWorkflowStatuses.stream()
+                .map(TeamWorkflowStatus::getTeamWorkflowStatusId)
+                .collect(Collectors.toSet());
+        Set<String> submittedIds = new HashSet<>(orderedTeamWorkflowStatusIds);
+        if (submittedIds.size() != orderedTeamWorkflowStatusIds.size() || !existingIds.equals(submittedIds)) {
+            log.info("Submitted workflow status order does not match the state group. existingIds: {}, orderedTeamWorkflowStatusIds: {}", existingIds, orderedTeamWorkflowStatusIds);
+            throw new BusinessException(REORDER_LIST_MISMATCH_MESSAGE_KEY);
+        }
+    }
+
     private void validateStateGroupHasMoreThanOneElement(String workspaceId, String teamId, TeamWorkflowStateGroup workflowStateGroup) {
         long count = teamWorkflowStatusRetrieveService.teamWorkflowStatusStateGroupCount(workspaceId, teamId, workflowStateGroup);
         if (count <= 1) {
-            throw new BusinessException();
+            throw new BusinessException(CANNOT_REMOVE_LAST_MESSAGE_KEY);
         }
     }
 
     private void validateStateGroupElementCount(String workspaceId, String teamId, TeamWorkflowStateGroup workflowStateGroup) {
         long count = teamWorkflowStatusRetrieveService.teamWorkflowStatusStateGroupCount(workspaceId, teamId, workflowStateGroup);
         if (count > MAX_SAME_GROUP_STATUS_COUNT) {
-            throw new BusinessException();
+            throw new BusinessException(MAX_COUNT_EXCEEDED_MESSAGE_KEY);
         }
     }
 }

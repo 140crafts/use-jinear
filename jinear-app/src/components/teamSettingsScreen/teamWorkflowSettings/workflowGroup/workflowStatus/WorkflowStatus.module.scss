@@ -57,3 +57,25 @@
   //   max-width: 80vw;
   // }
 }
+
+.container.draggable {
+  cursor: grab;
+}
+
+.container.draggable:active {
+  cursor: grabbing;
+}
+
+.dragHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--c-secondary-shade-0-op05);
+}
+
+// Touch devices never fire :hover, so the row actions stay reachable there.
+@media (hover: none) {
+  .actionContainer {
+    display: flex;
+  }
+}

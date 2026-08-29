@@ -62,6 +62,7 @@ const StatusBoardTaskCard: React.FC<StatusBoardTaskCardProps> = ({
             draggable
             onDragStart={handleDragStart}
             onDragEnd={onDragEnd}
+            onDragLeave={onDragEnd}
         >
             <div className={cn(styles.title)}>{task.title}</div>
             <div className={styles.infoContainer}>

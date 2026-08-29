@@ -3,6 +3,7 @@ package co.jinear.core.controller.team;
 import co.jinear.core.manager.team.TeamWorkflowStatusManager;
 import co.jinear.core.model.request.team.InitializeTeamWorkflowStatusRequest;
 import co.jinear.core.model.request.team.TeamWorkflowStatusNameChangeRequest;
+import co.jinear.core.model.request.team.TeamWorkflowStatusReorderRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.team.TeamWorkflowStatusListingResponse;
 import jakarta.validation.Valid;
@@ -51,5 +52,12 @@ public class TeamWorkflowStatusController {
                                     @PathVariable String teamWorkflowStatusId,
                                     @PathVariable String replaceWithTeamWorkflowStatusId) {
         return teamWorkflowStatusManager.changeOrder(teamId, teamWorkflowStatusId, replaceWithTeamWorkflowStatusId);
+    }
+
+    @PutMapping("/{teamId}/reorder")
+    @ResponseStatus(HttpStatus.OK)
+    public BaseResponse reorder(@PathVariable String teamId,
+                                @Valid @RequestBody TeamWorkflowStatusReorderRequest teamWorkflowStatusReorderRequest) {
+        return teamWorkflowStatusManager.reorder(teamId, teamWorkflowStatusReorderRequest);
     }
 }

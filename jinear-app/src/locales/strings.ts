@@ -674,6 +674,50 @@ const translations = {
         en: "Cancel",
         tr: "Vazgeç"
     },
+    workflowStatusDragTooltip: {
+        en: "Drag to reorder",
+        tr: "Sıralamak için sürükleyin"
+    },
+    workflowStatusAddButton: {
+        en: "Add status",
+        tr: "Durum ekle"
+    },
+    workflowStatusAddPlaceholder: {
+        en: "New status name",
+        tr: "Yeni durum adı"
+    },
+    workflowStatusAddSave: {
+        en: "Add",
+        tr: "Ekle"
+    },
+    workflowStatusAddCancel: {
+        en: "Cancel",
+        tr: "Vazgeç"
+    },
+    workflowStatusDeleteAreYouSureTitle: {
+        en: "Delete workflow status",
+        tr: "İş akışı durumunu sil"
+    },
+    workflowStatusDeleteAreYouSureText: {
+        en: "This workflow status will be deleted. Tasks that use it keep their history, but the status is no longer selectable.",
+        tr: "Bu iş akışı durumu silinecek. Durumu kullanan görevlerin geçmişi korunur, ancak durum artık seçilemez."
+    },
+    workflowStatusDeleteAreYouSureConfirmLabel: {
+        en: "Delete",
+        tr: "Sil"
+    },
+    workflowStatusAddFailed: {
+        en: "Workflow status could not be added.",
+        tr: "İş akışı durumu eklenemedi."
+    },
+    workflowStatusDeleteFailed: {
+        en: "Workflow status could not be deleted.",
+        tr: "İş akışı durumu silinemedi."
+    },
+    workflowStatusReorderFailed: {
+        en: "Workflow status order could not be changed.",
+        tr: "İş akışı durum sıralaması değiştirilemedi."
+    },
     teamMonthlyScreenBreadcrumbLabel: {
         en: "Monthly Tasks",
         tr: "Aylık Görevler"
