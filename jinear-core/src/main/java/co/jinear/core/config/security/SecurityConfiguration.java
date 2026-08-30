@@ -23,6 +23,7 @@ public class SecurityConfiguration {
     private final JwtRequestFilter jwtRequestFilter;
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
     private final RateLimitingFilter rateLimitingFilter;
+    private final McpBearerAuthenticationFilter mcpBearerAuthenticationFilter;
 
     private static final String[] SWAGGER_ENDPOINTS = new String[]{
             "/swagger-ui/**",
@@ -54,7 +55,16 @@ public class SecurityConfiguration {
             "/v1/captcha/generate",
             "/v1/material/media/{materialId}",
             "/v1/instance-flag/list",
-            "/v1/debug/**"
+            "/v1/debug/**",
+            // MCP transport plus the OAuth endpoints an unauthenticated client must reach
+            // before it has any credential. The tool call itself is still gated: McpController
+            // answers 401 with a WWW-Authenticate challenge rather than letting the call through.
+            "/mcp",
+            "/.well-known/**",
+            "/v1/oauth/authorize",
+            "/v1/oauth/token",
+            "/v1/oauth/register",
+            "/v1/oauth/revoke"
     };
 
     @Bean
@@ -80,7 +90,11 @@ public class SecurityConfiguration {
                         .deleteCookies("JWT", "JSESSIONID", "SESSION", "SESSIONID")
                 );
 
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        // Order matters. The MCP filter has to run before the rate limiter so that an
+        // authenticated tool call is bucketed per account rather than falling into the
+        // shared public allowance keyed on the gateway's IP.
+        httpSecurity.addFilterBefore(mcpBearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterAfter(jwtRequestFilter, McpBearerAuthenticationFilter.class);
         httpSecurity.addFilterAfter(rateLimitingFilter, JwtRequestFilter.class);
         return httpSecurity.build();
     }

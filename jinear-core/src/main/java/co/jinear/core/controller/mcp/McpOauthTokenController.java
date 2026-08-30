@@ -1,0 +1,110 @@
+package co.jinear.core.controller.mcp;
+
+import co.jinear.core.exception.BusinessException;
+import co.jinear.core.manager.mcp.McpTokenManager;
+import co.jinear.core.model.vo.mcp.McpClientMetadataVo;
+import co.jinear.core.service.mcp.oauth.McpOauthErrorMapper;
+import com.fasterxml.jackson.databind.JsonNode;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
+/**
+ * Token, dynamic registration and revocation.
+ * <p>
+ * Note the two different content types. RFC 6749 requires the token endpoint to accept
+ * form encoding, and RFC 7591 requires the registration endpoint to accept JSON, so a
+ * single body parser will not serve both. Getting this wrong shows up as a 415 during
+ * the very first connection attempt.
+ */
+@Slf4j
+@RestController
+@RequestMapping(value = "v1/oauth")
+@RequiredArgsConstructor
+public class McpOauthTokenController {
+
+    private final McpTokenManager mcpTokenManager;
+    private final McpOauthErrorMapper mcpOauthErrorMapper;
+
+    @PostMapping(value = "/token",
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> token(@RequestParam Map<String, String> form) {
+        try {
+            return ResponseEntity.ok()
+                    .header("Cache-Control", "no-store")
+                    .header("Pragma", "no-cache")
+                    .body(mcpTokenManager.token(form));
+        } catch (BusinessException exception) {
+            return oauthError(exception);
+        }
+    }
+
+    @PostMapping(value = "/register",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> register(@RequestBody JsonNode body) {
+        try {
+            return ResponseEntity.status(HttpStatus.CREATED).body(mcpTokenManager.register(toMetadata(body)));
+        } catch (BusinessException exception) {
+            return oauthError(exception);
+        }
+    }
+
+    @PostMapping(value = "/revoke", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    public ResponseEntity<Void> revoke(@RequestParam Map<String, String> form) {
+        mcpTokenManager.revoke(form.get("token"));
+        return ResponseEntity.ok().build();
+    }
+
+    private ResponseEntity<Map<String, Object>> oauthError(BusinessException exception) {
+        String errorCode = mcpOauthErrorMapper.errorCodeFor(exception.getMessage());
+        HttpStatus status = mcpOauthErrorMapper.statusFor(errorCode);
+        log.warn("[MCP] OAuth endpoint returning {} {}", status.value(), errorCode);
+        return ResponseEntity.status(status)
+                .header("Cache-Control", "no-store")
+                .body(mcpOauthErrorMapper.body(errorCode, null));
+    }
+
+    private McpClientMetadataVo toMetadata(JsonNode body) {
+        McpClientMetadataVo vo = new McpClientMetadataVo();
+        vo.setClientName(text(body, "client_name"));
+        vo.setClientUri(text(body, "client_uri"));
+        vo.setLogoUri(text(body, "logo_uri"));
+        vo.setPolicyUri(text(body, "policy_uri"));
+        vo.setTosUri(text(body, "tos_uri"));
+        vo.setRedirectUris(textList(body, "redirect_uris"));
+        vo.setGrantTypes(textList(body, "grant_types"));
+        vo.setTokenEndpointAuthMethod(text(body, "token_endpoint_auth_method"));
+        vo.setSoftwareId(text(body, "software_id"));
+        vo.setSoftwareVersion(text(body, "software_version"));
+        return vo;
+    }
+
+    private String text(JsonNode node, String field) {
+        JsonNode value = Objects.isNull(node) ? null : node.get(field);
+        return Objects.nonNull(value) && value.isTextual() ? value.asText() : null;
+    }
+
+    private List<String> textList(JsonNode node, String field) {
+        List<String> values = new ArrayList<>();
+        JsonNode value = Objects.isNull(node) ? null : node.get(field);
+        if (Objects.nonNull(value) && value.isArray()) {
+            value.forEach(item -> {
+                if (item.isTextual()) {
+                    values.add(item.asText());
+                }
+            });
+        }
+        return values;
+    }
+
+}

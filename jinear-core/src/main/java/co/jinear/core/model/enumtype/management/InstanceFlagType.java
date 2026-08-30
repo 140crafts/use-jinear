@@ -14,7 +14,8 @@ public enum InstanceFlagType {
     SIGN_IN_WITH_GOOGLE(3, Boolean.class),
     SIGN_IN_WITH_EMAIL_CODE(4, Boolean.class),
     WORKSPACE_INIT(5, Boolean.class),
-    ATTACH_GOOGLE_CALENDAR(6, Boolean.class);
+    ATTACH_GOOGLE_CALENDAR(6, Boolean.class),
+    MCP_SERVER(7, Boolean.class);
 
     private final int value;
     private final Class<?> valueType;

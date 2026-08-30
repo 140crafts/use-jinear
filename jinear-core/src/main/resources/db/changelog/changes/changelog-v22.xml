@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="jin-565-initialize-mcp_oauth_client">
+        <createTable tableName="mcp_oauth_client">
+            <column name="mcp_oauth_client_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="client_id" type="varchar(512)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="client_name" type="varchar(255)"/>
+            <column name="client_uri" type="varchar(512)"/>
+            <column name="logo_uri" type="varchar(512)"/>
+            <column name="policy_uri" type="varchar(512)"/>
+            <column name="tos_uri" type="varchar(512)"/>
+            <column name="redirect_uris" type="text"/>
+            <column name="grant_types" type="varchar(255)"/>
+            <column name="token_endpoint_auth_method" type="varchar(64)"/>
+            <column name="registration_type" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="software_id" type="varchar(255)"/>
+            <column name="software_version" type="varchar(64)"/>
+            <column name="client_id_issued_at" type="datetime"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="mcp_oauth_client"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-565-initialize-mcp_authorization_request">
+        <createTable tableName="mcp_authorization_request">
+            <column name="mcp_authorization_request_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="client_id" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="redirect_uri" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scope" type="varchar(1024)"/>
+            <column name="state" type="varchar(1024)"/>
+            <column name="code_challenge" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code_challenge_method" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource" type="varchar(512)"/>
+            <column name="expires_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="completed_at" type="datetime"/>
+        </createTable>
+        <createIndex tableName="mcp_authorization_request" indexName="idx_mcp_auth_request_expires_at">
+            <column name="expires_at"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="mcp_authorization_request"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-565-initialize-mcp_connection">
+        <createTable tableName="mcp_connection">
+            <column name="mcp_connection_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client_id" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client_name" type="varchar(255)"/>
+            <column name="granted_scopes" type="varchar(1024)"/>
+            <column name="session_info_id" type="char(26)"/>
+            <column name="last_used_at" type="datetime"/>
+        </createTable>
+        <createIndex tableName="mcp_connection" indexName="idx_mcp_connection_account_id">
+            <column name="account_id"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="mcp_connection"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-565-initialize-mcp_authorization_code">
+        <createTable tableName="mcp_authorization_code">
+            <column name="mcp_authorization_code_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="hashed_code" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="client_id" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mcp_connection_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="redirect_uri" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scope" type="varchar(1024)"/>
+            <column name="code_challenge" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="code_challenge_method" type="varchar(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="resource" type="varchar(512)"/>
+            <column name="expires_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="consumed_at" type="datetime"/>
+        </createTable>
+        <createIndex tableName="mcp_authorization_code" indexName="idx_mcp_auth_code_expires_at">
+            <column name="expires_at"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="mcp_authorization_code"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-565-initialize-mcp_refresh_token">
+        <createTable tableName="mcp_refresh_token">
+            <column name="mcp_refresh_token_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="hashed_token" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mcp_connection_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="expires_at" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="consumed_at" type="datetime"/>
+            <column name="rotated_to" type="char(26)"/>
+        </createTable>
+        <createIndex tableName="mcp_refresh_token" indexName="idx_mcp_refresh_token_connection_id">
+            <column name="mcp_connection_id"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="mcp_refresh_token"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-565-initialize-mcp_tool_call_log">
+        <createTable tableName="mcp_tool_call_log">
+            <column name="mcp_tool_call_log_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="mcp_connection_id" type="char(26)"/>
+            <column name="account_id" type="char(26)"/>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="client_id" type="varchar(512)"/>
+            <column name="tool_name" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="call_status" type="int">
+                <constraints nullable="false"/>
+            </column>
+            <column name="error_code" type="varchar(128)"/>
+            <column name="duration_ms" type="bigint"/>
+            <column name="response_bytes" type="int"/>
+        </createTable>
+        <createIndex tableName="mcp_tool_call_log" indexName="idx_mcp_tool_call_log_idate">
+            <column name="idate"/>
+        </createIndex>
+        <createIndex tableName="mcp_tool_call_log" indexName="idx_mcp_tool_call_log_workspace_id">
+            <column name="workspace_id"/>
+        </createIndex>
+        <createIndex tableName="mcp_tool_call_log" indexName="idx_mcp_tool_call_log_connection_id">
+            <column name="mcp_connection_id"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="mcp_tool_call_log"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-565-initialize-mcp_usage_daily">
+        <createTable tableName="mcp_usage_daily">
+            <column name="mcp_usage_daily_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="usage_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="workspace_id" type="char(26)"/>
+            <column name="tool_name" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="call_count" type="bigint" defaultValueNumeric="0"/>
+            <column name="error_count" type="bigint" defaultValueNumeric="0"/>
+            <column name="total_duration_ms" type="bigint" defaultValueNumeric="0"/>
+        </createTable>
+        <createIndex tableName="mcp_usage_daily" indexName="idx_mcp_usage_daily_date">
+            <column name="usage_date"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="mcp_usage_daily"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="jin-565-insert-mcp_server-instance_flag">
+        <insert tableName="instance_flag">
+            <column name="instance_flag_id" value="01m6qh2c7kwfnbz3adye8tpr5x"/>
+            <column name="flag_type" valueNumeric="7"/>
+            <column name="flag_value" value="false"/>
+        </insert>
+        <rollback>
+            <delete tableName="instance_flag">
+                <where>flag_type IN (7)</where>
+            </delete>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

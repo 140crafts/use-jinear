@@ -8,6 +8,7 @@ import co.jinear.core.service.material.MaterialRetrieveService;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.project.domain.ProjectDomainCnameOperatorService;
+import co.jinear.core.service.mcp.analytics.McpRetentionService;
 import co.jinear.core.service.task.TaskFtsRefreshService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,23 @@ public class ScheduledJobManager {
     private final MaterialRetrieveService materialRetrieveService;
     private final ReminderProcessManager reminderProcessManager;
     private final TaskFtsRefreshService taskFtsRefreshService;
+    private final McpRetentionService mcpRetentionService;
+
+    /**
+     * Keeps the MCP call log inside its retention window, rolling each day into the
+     * summary table first so the usage charts outlive the rows behind them.
+     */
+    @Async
+    @Scheduled(fixedRate = 6, timeUnit = TimeUnit.HOURS)
+    public void rollUpAndPruneMcpUsage() {
+        log.info("Roll up and prune mcp usage has started.");
+        try {
+            mcpRetentionService.rollUpYesterday();
+            mcpRetentionService.pruneExpired();
+        } catch (Exception exception) {
+            log.error("Roll up and prune mcp usage has failed.", exception);
+        }
+    }
 
     @Async
     @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
