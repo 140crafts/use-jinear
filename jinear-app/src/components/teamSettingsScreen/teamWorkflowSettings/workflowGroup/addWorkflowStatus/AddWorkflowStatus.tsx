@@ -44,7 +44,6 @@ const AddWorkflowStatus: React.FC<AddWorkflowStatusProps> = ({teamId, groupType}
 
     const submitNewStatus = () => {
         const trimmedName = name.trim();
-        // Backend marks the name as not blank, so an empty submit would fail with an unexplained 400.
         if (trimmedName.length == 0) {
             return;
         }
