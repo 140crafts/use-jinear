@@ -53,6 +53,11 @@ const TaskBoardList: React.FC<TaskBoardListProps> = ({team, workspace}) => {
 
     return (
         <div className={styles.container}>
+            <div className={styles.panelNavContainer}>
+                <Button variant={ButtonVariants.filled} heightVariant={ButtonHeight.short} onClick={popNewTaskBoard}>
+                    {t("taskBoardsListEmptyButton")}
+                </Button>
+            </div>
             <PaginatedList
                 id={"task-board-list-paginated"}
                 data={taskBoardListingResponse?.data}
