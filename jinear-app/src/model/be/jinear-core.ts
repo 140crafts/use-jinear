@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-08-29 16:43:23.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-01 19:26:20.
 
 export interface BaseDto {
     createdDate: Date;
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
-    gid: string;
     gthreadId: string;
     ghistoryId: string;
+    ginternalDate: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -317,6 +317,83 @@ export interface PathAwareMaterialDto extends MaterialDto {
 
 export interface WaitingForUploadMaterialResultDto extends WaitingMediaResultDto {
     materialId: string;
+}
+
+export interface McpAnalyticsDto {
+    windowDays: number;
+    totalCalls: number;
+    errorCalls: number;
+    activeConnections: number;
+    topTools: McpToolUsageDto[];
+    daily: McpDailyUsageDto[];
+}
+
+export interface McpConnectionDto {
+    mcpConnectionId: string;
+    accountId: string;
+    clientId: string;
+    clientName: string;
+    clientDisplayHost: string;
+    grantedScopes: string[];
+    createdDate: Date;
+    lastUsedAt: Date;
+    callCountLast30Days: number;
+}
+
+export interface McpConsentInfoDto {
+    requestId: string;
+    clientDisplayHost: string;
+    clientName: string;
+    clientUri: string;
+    logoUri: string;
+    policyUri: string;
+    tosUri: string;
+    redirectHost: string;
+    loopbackOnly: boolean;
+    requestedScopes: string[];
+}
+
+export interface McpDailyUsageDto {
+    date: string;
+    callCount: number;
+    errorCount: number;
+}
+
+export interface McpOauthClientDto {
+    clientId: string;
+    clientName: string;
+    clientUri: string;
+    logoUri: string;
+    redirectUris: string[];
+    registrationType: McpClientRegistrationType;
+    clientIdIssuedAt: Date;
+}
+
+export interface McpServerInfoDto {
+    enabled: boolean;
+    serverUrl: string;
+    documentationUrl: string;
+}
+
+export interface McpToolCallLogDto {
+    mcpToolCallLogId: string;
+    mcpConnectionId: string;
+    accountId: string;
+    workspaceId: string;
+    clientId: string;
+    toolName: string;
+    callStatus: McpToolCallStatus;
+    errorCode: string;
+    durationMs: number;
+    responseBytes: number;
+    createdDate: Date;
+}
+
+export interface McpToolUsageDto {
+    toolName: string;
+    callCount: number;
+    errorCount: number;
+    averageDurationMs: number;
 }
 
 export interface AccessibleMediaDto extends MediaDto {
@@ -1379,6 +1456,11 @@ export interface MaterialSearchRequest extends BaseRequest {
     materialType?: MaterialType | null;
 }
 
+export interface McpConsentRequest {
+    requestId: string;
+    approved: boolean;
+}
+
 export interface InternalBatchMediaRetrieveRequest {
     relatedObjectIds: string[];
     fileTypes: FileType[];
@@ -1972,6 +2054,34 @@ export interface ParentMaterialDtoResponse extends BaseResponse {
     data: MaterialHierarchyDto;
 }
 
+export interface McpAnalyticsResponse extends BaseResponse {
+    data: McpAnalyticsDto;
+}
+
+export interface McpConnectionListingResponse extends BaseResponse {
+    data: McpConnectionDto[];
+}
+
+export interface McpConsentInfoResponse extends BaseResponse {
+    data: McpConsentInfoDto;
+}
+
+export interface McpConsentResponse extends BaseResponse {
+    data: string;
+}
+
+export interface McpOauthClientListingResponse extends BaseResponse {
+    data: PageDto<McpOauthClientDto>;
+}
+
+export interface McpServerInfoResponse extends BaseResponse {
+    data: McpServerInfoDto;
+}
+
+export interface McpToolCallLogListingResponse extends BaseResponse {
+    data: PageDto<McpToolCallLogDto>;
+}
+
 export interface InternalBatchMediaRetrieveResponse extends BaseResponse {
     data: AccessibleMediaDto[];
 }
@@ -2340,13 +2450,13 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    originalFilename: string;
     contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
+    originalFilename: string;
 }
 
 export interface GoogleCalendarEventAttendee {
@@ -2458,13 +2568,13 @@ export interface BaseEntity {
 }
 
 export interface Resource extends InputStreamSource {
-    filename: string;
-    uri: URI;
-    description: string;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
+    description: string;
+    filename: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -2548,10 +2658,10 @@ export interface Account extends BaseEntity {
     accountProfileMedia: AccountProfileMedia;
 }
 
-export interface URI extends Comparable<URI>, Serializable {
+export interface URL extends Serializable {
 }
 
-export interface URL extends Serializable {
+export interface URI extends Comparable<URI>, Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {
@@ -2745,7 +2855,7 @@ export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXP
 
 export type RoleType = "ADMIN" | "SERVICE" | "USER" | "ROBOT";
 
-export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL" | "SIGN_IN_WITH_APPLE" | "SINGLE_USE_LOGIN_TOKEN";
+export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL" | "SIGN_IN_WITH_APPLE" | "SINGLE_USE_LOGIN_TOKEN" | "MCP";
 
 export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
@@ -2763,7 +2873,7 @@ export type LocaleType = "TR" | "EN";
 
 export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE" | "MANAGEMENT_ADMIN_ACCOUNT_SYNC";
 
-export type InstanceFlagType = "REGISTER_WITH_MAIL" | "FORGOT_PASSWORD" | "SIGN_IN_WITH_APPLE" | "SIGN_IN_WITH_GOOGLE" | "SIGN_IN_WITH_EMAIL_CODE" | "WORKSPACE_INIT" | "ATTACH_GOOGLE_CALENDAR";
+export type InstanceFlagType = "REGISTER_WITH_MAIL" | "FORGOT_PASSWORD" | "SIGN_IN_WITH_APPLE" | "SIGN_IN_WITH_GOOGLE" | "SIGN_IN_WITH_EMAIL_CODE" | "WORKSPACE_INIT" | "ATTACH_GOOGLE_CALENDAR" | "MCP_SERVER";
 
 export type MaterialAccessType = "OWNER_ONLY" | "WORKSPACE_MEMBERS" | "GRAINED" | "ANYONE_WITH_LINK";
 
@@ -2772,6 +2882,12 @@ export type MaterialSearchContentFilterType = "IMAGE" | "DOC" | "SHARED" | "RECE
 export type MaterialSearchSortType = "IDATE_DESC" | "IDATE_ASC" | "UDATE_DESC" | "UDATE_ASC" | "NAME_ASC" | "NAME_DESC" | "SIZE_ASC" | "SIZE_DESC";
 
 export type MaterialType = "FILE" | "FOLDER";
+
+export type McpClientRegistrationType = "DCR" | "CIMD" | "STATIC";
+
+export type McpScope = "WORKSPACE_READ" | "TASKS_READ" | "TASKS_WRITE" | "PROJECTS_READ" | "PROJECTS_WRITE" | "CALENDAR_READ" | "NOTES_READ" | "FILES_READ" | "OFFLINE_ACCESS";
+
+export type McpToolCallStatus = "OK" | "TOOL_ERROR" | "PROTOCOL_ERROR" | "UNAUTHORIZED" | "FORBIDDEN" | "RATE_LIMITED" | "SERVER_ERROR";
 
 export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO" | "RICH_TEXT_IMAGE" | "MATERIAL_MEDIA" | "MEME_MEDIA" | "MEME_THUMB";
 

@@ -23,3 +23,6 @@ export const GITHUB_URL = "https://github.com/140crafts/use-jinear";
 export const GITLAB_URL = "https://gitlab.com/140crafts/use-jinear";
 export const SELF_HOSTING_DOCS_URL =
   "https://github.com/140crafts/use-jinear/blob/main/jinear-installation-scripts/README.md";
+
+export const MCP_DOCS_URL =
+  "https://github.com/140crafts/use-jinear/blob/main/docs/mcp/README.md";

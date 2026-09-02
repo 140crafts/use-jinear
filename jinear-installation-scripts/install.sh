@@ -525,6 +525,23 @@ prompt_configuration() {
         MANAGEMENT_ADMIN_PASSWORD=""
     fi
 
+    # MCP server (AI assistant connections)
+    echo ""
+    echo -e "  ${BOLD}AI Assistant Connections (Optional)${NC}"
+    echo -e "  ${INFO} Lets members connect Claude or ChatGPT to this instance."
+    echo -e "  ${INFO} Claude and ChatGPT connect from their own servers, so this needs"
+    echo -e "  ${INFO} your instance to be reachable from the internet over HTTPS."
+    local configure_mcp=$(prompt_input "  Enable the MCP server now? [y/N]" "")
+
+    if [[ $configure_mcp =~ ^[Yy]$ ]]; then
+        MCP_ENABLED="true"
+        if [ "$EXTERNAL_SCHEME" != "https" ]; then
+            print_warning "This install serves plain HTTP. Claude and ChatGPT refuse to connect over http, so the MCP server will only be reachable through a TLS proxy in front of it."
+        fi
+    else
+        MCP_ENABLED="false"
+    fi
+
     # Backup configuration
     echo ""
     echo -e "  ${BOLD}Backup Configuration${NC}"
@@ -563,6 +580,11 @@ generate_secrets() {
 
     INTERNAL_AUTH_TOKEN=$(generate_password 32)
     print_success "Internal auth token generated"
+
+    # Generated whether or not MCP is on, so turning it on later needs no new secret.
+    # It is deliberately not JWT_SECRET: an MCP token must never open a browser session.
+    MCP_JWT_SECRET=$(generate_secret)
+    print_success "MCP token secret generated"
 }
 
 # =============================================================================
@@ -663,6 +685,25 @@ MAIL_SENDER_ADDRESS=${MAIL_SENDER_ADDRESS}
 MANAGEMENT_ENABLED=${MANAGEMENT_ENABLED}
 MANAGEMENT_ADMIN_EMAIL=${MANAGEMENT_ADMIN_EMAIL}
 MANAGEMENT_ADMIN_PASSWORD=${MANAGEMENT_ADMIN_PASSWORD}
+
+# AI Assistant Connections (MCP): lets members connect Claude or ChatGPT.
+# The four URLs behind this are derived in docker-compose.yaml from DOMAIN and
+# API_DOMAIN, because a mismatch between them is what breaks a connection: the
+# issuer must be the API origin that serves /.well-known, the resource must be
+# exactly the address a member pastes into their client, and the consent screen
+# lives on the app. Change DOMAIN or API_DOMAIN and all four follow.
+# MCP_JWT_SECRET signs MCP access tokens. It is deliberately not JWT_SECRET, so
+# an assistant's token can never open a browser session.
+# Turning this off stops new connections; assistants already connected keep
+# working until a member disconnects them.
+MCP_ENABLED=${MCP_ENABLED}
+MCP_JWT_SECRET=${MCP_JWT_SECRET}
+# Dynamic client registration. Leave on unless you pin specific clients.
+MCP_DCR_ENABLED=true
+# Comma separated hosts allowed to describe a client. Empty accepts any public
+# https host, which is the open policy the specification describes.
+MCP_CIMD_ALLOWED_HOSTS=
+MCP_LOG_RETENTION_DAYS=30
 
 # Backup
 BACKUP_ENABLED=${BACKUP_ENABLED}
@@ -893,6 +934,16 @@ print_summary() {
         echo -e "     Sign in as ${BOLD}${MANAGEMENT_ADMIN_EMAIL}${NC} (password in ${INSTALL_DIR}/.secrets)"
     fi
     echo ""
+
+    if [ "$MCP_ENABLED" = "true" ]; then
+        echo -e "  ${BOLD}AI Assistant Connections${NC}"
+        echo -e "  ${CYAN}─────────────────────────────────────────────────────────────${NC}"
+        echo -e "  🤖 Server address: ${BOLD}${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}/mcp${NC}"
+        echo -e "     Turn on ${BOLD}AI Assistants${NC} in the admin panel, then members paste"
+        echo -e "     that address into Claude or ChatGPT as a custom connector."
+        echo -e "     Each member finds it again on their profile page."
+        echo ""
+    fi
 
     echo -e "  ${BOLD}Important Files${NC}"
     echo -e "  ${CYAN}─────────────────────────────────────────────────────────────${NC}"

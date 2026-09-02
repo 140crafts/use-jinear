@@ -146,6 +146,30 @@ fe.home-url=${FE_PATH}/home
 fe.workspace-calendar-url=${FE_PATH}/{workspaceUsername}/calendar
 fe.account-delete-url=${FE_PATH}/engage/delete-account-complete?token={token}
 fe.mobile-login-redirect=${FE_PATH}/mobile-redirect
+fe.mcp-consent-url=${MCP_CONSENT_URL:not-configured}
+
+# ===============================
+# = MCP (AI assistant connections)
+# ===============================
+# jinear.mcp.issuer-url must be the API origin that serves /.well-known/*.
+# jinear.mcp.resource-url must be exactly the address a member pastes into their
+# client, path included: the specification compares the two character for character.
+jinear.mcp.enabled=${MCP_ENABLED:false}
+jinear.mcp.issuer-url=${MCP_ISSUER_URL:not-configured}
+jinear.mcp.resource-url=${MCP_RESOURCE_URL:not-configured}
+jinear.mcp.documentation-url=${MCP_DOCUMENTATION_URL:https://jinear.co/mcp/}
+jinear.mcp.access-token-validity-minutes=60
+jinear.mcp.refresh-token-validity-days=30
+jinear.mcp.authorization-code-validity-seconds=60
+jinear.mcp.authorization-request-validity-minutes=10
+jinear.mcp.log-retention-days=${MCP_LOG_RETENTION_DAYS:30}
+jinear.mcp.dcr-enabled=${MCP_DCR_ENABLED:true}
+jinear.mcp.cimd-allowed-hosts=${MCP_CIMD_ALLOWED_HOSTS:}
+jinear.mcp.cimd-fetch-timeout-millis=4000
+jinear.mcp.max-page-size=50
+# Signs MCP access tokens. Deliberately a different key from jwt.secret, so an
+# assistant's token can never authenticate a browser session.
+jwt.mcp.secret=${MCP_JWT_SECRET:}
 
 # ===============================
 # = NOTIFICATIONS

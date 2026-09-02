@@ -35,6 +35,16 @@ public class InstanceFlagService {
         instanceFlagRepository.save(instanceFlag);
     }
 
+    /**
+     * A non throwing read for callers that want to describe the instance rather than
+     * refuse a request. A missing row reads as off.
+     */
+    public boolean isEnabled(InstanceFlagType instanceFlagType) {
+        return instanceFlagRepository.findFirstByFlagType(instanceFlagType)
+                .map(instanceFlag -> Boolean.TRUE.equals(instanceFlagType.parse(instanceFlag.getFlagValue())))
+                .orElse(Boolean.FALSE);
+    }
+
     public void validateFlagValueMatches(InstanceFlagType instanceFlagType, Object value) {
         log.info("Validate flag value matches has started. instanceFlagType: {}, checking agains value: {}", instanceFlagType, value);
         InstanceFlag instanceFlag = retrieve(instanceFlagType);

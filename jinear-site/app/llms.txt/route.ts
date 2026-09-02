@@ -42,6 +42,7 @@ export function GET() {
 - Calendar: a built-in calendar, plus Google Calendar sync.
 - Notes: rich-text notes in shared notebooks, with tags and offline drafts.
 - Files: attach files to tasks, create folders, upload data, and define fine-grained access controls.
+- AI assistants: connect Claude or ChatGPT over MCP and work with all of the above from inside the assistant.
 
 ## Pricing
 
@@ -65,6 +66,7 @@ counts.
 
 - [Home](${SITE_URL}/): Overview of Jinear: task management, calendar, file storage and notes.
 - [Pricing](${SITE_URL}/pricing/): Free self-hosting vs. hosted plans. No per-user pricing.
+- [MCP](${SITE_URL}/mcp/): Connect Claude or ChatGPT to Jinear. Setup steps and the full tool list.
 - [Blog](${SITE_URL}/blog/): Guides and updates.
 - [Terms](${SITE_URL}/terms/): Terms of service and privacy.
 

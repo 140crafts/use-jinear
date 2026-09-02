@@ -62,6 +62,11 @@ public class SecurityConfiguration {
             "/mcp",
             "/.well-known/**",
             "/v1/oauth/authorize",
+            // The consent screen names the client before the user has signed in, so the
+            // read side is public. It carries client metadata only, it is reachable only
+            // with an unguessable short lived request id, and the consent submission
+            // behind it still needs a session because it acts as the account.
+            "/v1/oauth/authorize/info/{requestId}",
             "/v1/oauth/token",
             "/v1/oauth/register",
             "/v1/oauth/revoke"

@@ -3,7 +3,7 @@ import styles from "./InstanceSettingsSideMenu.module.scss";
 import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle";
 import useTranslation from "@/locals/useTranslation";
 import Button, {ButtonVariants} from "@/components/button";
-import {LuBuilding2, LuSettings, LuUserCog, LuUsers} from "react-icons/lu";
+import {LuBot, LuBuilding2, LuSettings, LuUserCog, LuUsers} from "react-icons/lu";
 import {useLocation} from "react-router-dom";
 
 interface InstanceSettingsSideMenuProps {
@@ -17,6 +17,7 @@ const InstanceSettingsSideMenu: React.FC<InstanceSettingsSideMenuProps> = ({}) =
     const workspacesPath = `/admin/workspaces`;
     const teamsPath = `/admin/teams`;
     const accountsPath = `/admin/accounts`;
+    const mcpPath = `/admin/mcp`;
 
     return (
         <div className={styles.container}>
@@ -53,6 +54,14 @@ const InstanceSettingsSideMenu: React.FC<InstanceSettingsSideMenuProps> = ({}) =
                 >
                     <LuUserCog className={"icon"}/>
                     {t("instanceSettingsSideMenuAccounts")}
+                </Button>
+                <Button
+                    className={styles.button}
+                    href={mcpPath}
+                    variant={pathname?.indexOf(mcpPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
+                >
+                    <LuBot className={"icon"}/>
+                    {t("instanceSettingsSideMenuMcp")}
                 </Button>
             </div>
         </div>

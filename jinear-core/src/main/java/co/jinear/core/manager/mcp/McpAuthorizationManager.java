@@ -6,12 +6,14 @@ import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.mcp.McpConsentInfoDto;
 import co.jinear.core.model.entity.mcp.McpAuthorizationRequest;
 import co.jinear.core.model.entity.mcp.McpConnection;
+import co.jinear.core.model.enumtype.management.InstanceFlagType;
 import co.jinear.core.model.request.mcp.McpConsentRequest;
 import co.jinear.core.model.response.mcp.McpConsentInfoResponse;
 import co.jinear.core.model.response.mcp.McpConsentResponse;
 import co.jinear.core.model.vo.mcp.McpAuthorizeRequestVo;
 import co.jinear.core.model.vo.mcp.McpClientMetadataVo;
 import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.management.InstanceFlagService;
 import co.jinear.core.service.mcp.oauth.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,6 +53,7 @@ public class McpAuthorizationManager {
     private final SessionInfoService sessionInfoService;
     private final McpProperties mcpProperties;
     private final FeProperties feProperties;
+    private final InstanceFlagService instanceFlagService;
 
     /**
      * Validates an /authorize call and returns where to send the browser.
@@ -152,8 +155,17 @@ public class McpAuthorizationManager {
         return response;
     }
 
+    /**
+     * Two switches, checked only here on the authorization path. The property is the hard
+     * one: with it off nothing MCP answers at all. The instance flag is the administrator's
+     * switch, and it gates new connections only, so turning it off stops anybody granting
+     * fresh access while the connections people already made keep working until they
+     * disconnect them. The transport itself does not read the flag, because that would put
+     * a database read in front of every tool call.
+     */
     private void assertEnabled() {
-        if (!Boolean.TRUE.equals(mcpProperties.getEnabled())) {
+        if (!Boolean.TRUE.equals(mcpProperties.getEnabled())
+                || !instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER)) {
             throw new BusinessException("mcp.error.disabled");
         }
     }

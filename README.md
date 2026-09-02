@@ -25,6 +25,7 @@ needs, it has evolved into a versatile platform suitable for both individual and
 - **Notes**: Create notebooks & notes with access control and improved offline functionality
 - **Files**: Add folders & files with access control
 - **Collaboration Tools**: Work together with team members
+- **AI Assistants**: Connect Claude or ChatGPT to your instance over MCP
 - **Additional Productivity Features**: Enhanced workflow capabilities
 
 ## Self-Hosting
@@ -110,6 +111,16 @@ Check out the docs [docs/behind-traefik](docs/behind-traefik/)
 Check out the docs [docs/behind-nginx](docs/behind-nginx/), which include a copy-paste
 nginx config with the `Host` header and upload body size already handled.
 
+### Connecting Claude or ChatGPT
+
+Jinear can run an MCP server, so a member can connect Claude or ChatGPT to the instance and
+work with their tasks, projects, notes and files from inside the assistant. It is optional
+and off by default. Your instance must be reachable over HTTPS from the internet, because
+those assistants connect from their own servers; instances on a private network use Claude
+Desktop with the `mcp-remote` proxy instead.
+
+Check out the docs [docs/mcp](docs/mcp/).
+
 ### Configuration
 
 After installation, you can customize your instance by modifying:
@@ -121,6 +132,9 @@ After installation, you can customize your instance by modifying:
 To enable, disable or change the instance admin (the `/admin` panel) after installation,
 edit the `MANAGEMENT_*` values in `.env` and restart. See
 [jinear-installation-scripts/README.md](./jinear-installation-scripts/README.md#instance-management-admin-panel).
+
+To turn the MCP server on or off after installation, edit `MCP_ENABLED` in `.env`, restart,
+and turn on **AI Assistant Connections** in the admin panel. See [docs/mcp](docs/mcp/).
 
 ### Troubleshooting
 

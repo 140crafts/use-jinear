@@ -1,0 +1,105 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
+
+.titleBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text {
+  color: var(--c-secondary-shade-0);
+  line-height: 1.6;
+}
+
+.statRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1px;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--c-primary-shade-1);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1 1 8rem;
+  padding: 0.85rem;
+  background-color: var(--c-primary-shade-0);
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.statLabel {
+  font-size: 0.8125rem;
+  color: var(--c-secondary-shade-0);
+}
+
+.pagination {
+  width: 100%;
+}
+
+.rowList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+}
+
+.rowText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.rowTitle {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.rowMeta {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--c-secondary-shade-0);
+}
+
+.mono {
+  font-family: "SF Mono", ui-monospace, monospace;
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+
+.statusOk {
+  color: var(--c-secondary-shade-0);
+}
+
+.statusBad {
+  color: var(--c-JINEAR_ORANGE);
+  font-weight: 600;
+}

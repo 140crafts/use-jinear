@@ -1,0 +1,122 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.text {
+  color: var(--c-secondary-shade-0);
+  line-height: 1.6;
+}
+
+.urlBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+  background-color: var(--c-primary-shade-0);
+}
+
+.urlLabel {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--c-secondary-shade-0);
+}
+
+.urlRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.url {
+  font-family: "SF Mono", ui-monospace, monospace;
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.buttonIcon {
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.4rem;
+}
+
+.steps {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.steps > div {
+  flex: 1 1 16rem;
+  min-width: 0;
+}
+
+.stepTitle {
+  margin-bottom: 0.5rem;
+}
+
+.stepList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin: 0;
+  padding-left: 1.25rem;
+  line-height: 1.5;
+  color: var(--c-secondary-shade-0);
+}
+
+.note {
+  font-size: 0.875rem;
+  color: var(--c-secondary-shade-0);
+  line-height: 1.6;
+}
+
+.docsLink {
+  font-size: 0.875rem;
+  text-decoration: underline;
+  width: fit-content;
+}
+
+.connectionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.connectionRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+}
+
+.connectionText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.connectionHost {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.connectionName,
+.connectionMeta {
+  font-size: 0.875rem;
+  color: var(--c-secondary-shade-0);
+  overflow-wrap: anywhere;
+}

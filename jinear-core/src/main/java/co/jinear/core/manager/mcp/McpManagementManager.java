@@ -4,16 +4,21 @@ import co.jinear.core.converter.mcp.McpDtoConverter;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.mcp.McpConnectionDto;
+import co.jinear.core.model.dto.mcp.McpServerInfoDto;
 import co.jinear.core.model.dto.mcp.McpToolCallLogDto;
 import co.jinear.core.model.entity.mcp.McpConnection;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.mcp.McpAnalyticsResponse;
 import co.jinear.core.model.response.mcp.McpConnectionListingResponse;
+import co.jinear.core.model.response.mcp.McpServerInfoResponse;
 import co.jinear.core.model.response.mcp.McpToolCallLogListingResponse;
+import co.jinear.core.config.properties.McpProperties;
+import co.jinear.core.model.enumtype.management.InstanceFlagType;
 import co.jinear.core.repository.mcp.McpToolCallLogRepository;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.mcp.analytics.McpAnalyticsService;
 import co.jinear.core.service.mcp.oauth.McpConnectionService;
+import co.jinear.core.service.management.InstanceFlagService;
 import co.jinear.core.service.mcp.oauth.McpRefreshTokenService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
@@ -42,6 +47,25 @@ public class McpManagementManager {
     private final McpDtoConverter mcpDtoConverter;
     private final SessionInfoService sessionInfoService;
     private final WorkspaceValidator workspaceValidator;
+    private final InstanceFlagService instanceFlagService;
+    private final McpProperties mcpProperties;
+
+    /**
+     * Both switches have to agree. The property decides whether the server exists at all,
+     * and the instance flag is what an administrator turns on afterwards, so reporting
+     * either one alone would offer a member a URL that cannot be connected.
+     */
+    public McpServerInfoResponse retrieveServerInfo() {
+        boolean enabled = Boolean.TRUE.equals(mcpProperties.getEnabled())
+                && instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER);
+        McpServerInfoDto dto = new McpServerInfoDto();
+        dto.setEnabled(enabled);
+        dto.setServerUrl(enabled ? mcpProperties.getResourceUrl() : null);
+        dto.setDocumentationUrl(mcpProperties.getDocumentationUrl());
+        McpServerInfoResponse response = new McpServerInfoResponse();
+        response.setMcpServerInfoDto(dto);
+        return response;
+    }
 
     public McpConnectionListingResponse listMyConnections() {
         String accountId = sessionInfoService.currentAccountId();

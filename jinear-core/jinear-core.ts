@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-08-29 21:21:43.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-01 19:42:41.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -166,9 +166,9 @@ export interface GmailMessageDto extends BaseDto {
     subject: string;
     body: string;
     gid: string;
-    gthreadId: string;
-    ghistoryId: string;
     ginternalDate: string;
+    ghistoryId: string;
+    gthreadId: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -367,6 +367,12 @@ export interface McpOauthClientDto {
     redirectUris: string[];
     registrationType: McpClientRegistrationType;
     clientIdIssuedAt: Date;
+}
+
+export interface McpServerInfoDto {
+    enabled: boolean;
+    serverUrl: string;
+    documentationUrl: string;
 }
 
 export interface McpToolCallLogDto {
@@ -2066,6 +2072,10 @@ export interface McpConsentResponse extends BaseResponse {
 
 export interface McpOauthClientListingResponse extends BaseResponse {
     data: PageDto<McpOauthClientDto>;
+}
+
+export interface McpServerInfoResponse extends BaseResponse {
+    data: McpServerInfoDto;
 }
 
 export interface McpToolCallLogListingResponse extends BaseResponse {

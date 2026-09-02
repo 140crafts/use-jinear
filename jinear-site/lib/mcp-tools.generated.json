@@ -2479,5 +2479,38 @@
       "idempotentHint" : false,
       "openWorldHint" : false
     }
-  } ]
+  } ],
+  "scopes" : {
+    "add_task_comment" : [ "tasks:write" ],
+    "add_task_to_board" : [ "tasks:write" ],
+    "create_project" : [ "projects:write" ],
+    "create_project_milestone" : [ "projects:write" ],
+    "create_task" : [ "tasks:write" ],
+    "create_task_board" : [ "tasks:write" ],
+    "fetch" : [ "notes:read", "tasks:read", "workspace:read" ],
+    "get_file_link" : [ "files:read" ],
+    "get_note" : [ "notes:read" ],
+    "get_project" : [ "projects:read" ],
+    "get_task" : [ "tasks:read" ],
+    "get_workspace" : [ "workspace:read" ],
+    "list_calendar_events" : [ "calendar:read" ],
+    "list_files" : [ "files:read" ],
+    "list_notebooks" : [ "notes:read" ],
+    "list_project_milestones" : [ "projects:read" ],
+    "list_projects" : [ "projects:read" ],
+    "list_task_boards" : [ "tasks:read" ],
+    "list_task_comments" : [ "tasks:read" ],
+    "list_tasks" : [ "tasks:read" ],
+    "list_teams" : [ "workspace:read" ],
+    "list_topics" : [ "workspace:read" ],
+    "list_workflow_statuses" : [ "workspace:read" ],
+    "list_workspace_members" : [ "workspace:read" ],
+    "list_workspaces" : [ "workspace:read" ],
+    "search" : [ "notes:read", "tasks:read", "workspace:read" ],
+    "search_notes" : [ "notes:read" ],
+    "search_tasks" : [ "tasks:read" ],
+    "set_task_status" : [ "tasks:write" ],
+    "update_project" : [ "projects:write" ],
+    "update_task" : [ "tasks:write" ]
+  }
 }

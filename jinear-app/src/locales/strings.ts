@@ -6095,6 +6095,14 @@ const translations = {
         en: "Lets members connect a Google Calendar and see its events inside Jinear. Calendars that are already connected keep syncing when this is turned off.",
         tr: "Üyelerin Google Takvim bağlamasına ve etkinliklerini Jinear içinde görmesine izin verir. Bu kapatıldığında halihazırda bağlı olan takvimler eşleşmeye devam eder."
     },
+    instanceFlagMcpServer: {
+        en: "AI Assistant Connections",
+        tr: "Yapay Zeka Asistanı Bağlantıları"
+    },
+    instanceFlagMcpServerText: {
+        en: "Lets members connect an AI assistant such as Claude or ChatGPT to this instance. The server must also be turned on in the instance configuration. Assistants that are already connected keep working when this is turned off, until a member disconnects them.",
+        tr: "Üyelerin bu sunucuya Claude veya ChatGPT gibi bir yapay zeka asistanı bağlamasına izin verir. Sunucunun yapılandırmada da açık olması gerekir. Bu kapatıldığında halihazırda bağlı olan asistanlar, bir üye bağlantıyı kesene kadar çalışmaya devam eder."
+    },
     instanceSettingsSideMenuWorkspaces: {
         en: "Workspaces",
         tr: "Çalışma Alanları"
@@ -6442,6 +6450,255 @@ const translations = {
     adminWorkspacePickerModalTitle: {
         en: "Pick Workspace",
         tr: "Çalışma Alanı Seç"
+    },
+
+    instanceSettingsSideMenuMcp: {
+        en: "AI Assistants",
+        tr: "Yapay Zeka Asistanları"
+    },
+    adminMcpTitle: {
+        en: "AI Assistant Connections",
+        tr: "Yapay Zeka Asistanı Bağlantıları"
+    },
+    adminMcpIntro: {
+        en: "How much the MCP server is used on this instance, which client applications registered themselves, and the recent calls. Turn the server on or off under General.",
+        tr: "Bu sunucuda MCP sunucusunun ne kadar kullanıldığı, hangi istemci uygulamalarının kaydolduğu ve son çağrılar. Sunucuyu Genel bölümünden açıp kapatabilirsiniz."
+    },
+    adminMcpStatTotalCalls: {
+        en: "Tool calls",
+        tr: "Araç çağrısı"
+    },
+    adminMcpStatErrorCalls: {
+        en: "Failed calls",
+        tr: "Başarısız çağrı"
+    },
+    adminMcpStatActiveConnections: {
+        en: "Active connections",
+        tr: "Etkin bağlantı"
+    },
+    adminMcpStatWindowDays: {
+        en: "Days counted",
+        tr: "Sayılan gün"
+    },
+    adminMcpTopToolsTitle: {
+        en: "Most used tools",
+        tr: "En çok kullanılan araçlar"
+    },
+    adminMcpTopToolsEmpty: {
+        en: "No tool has been called yet.",
+        tr: "Henüz hiçbir araç çağrılmadı."
+    },
+    adminMcpToolCallsLabel: {
+        en: "calls:",
+        tr: "çağrı:"
+    },
+    adminMcpToolErrorsLabel: {
+        en: "errors:",
+        tr: "hata:"
+    },
+    adminMcpToolAverageLabel: {
+        en: "average:",
+        tr: "ortalama:"
+    },
+    adminMcpClientsTitle: {
+        en: "Registered client applications",
+        tr: "Kayıtlı istemci uygulamaları"
+    },
+    adminMcpClientsText: {
+        en: "Revoking a client cuts every connection made through it, for every account on this instance.",
+        tr: "Bir istemciyi iptal etmek, bu sunucudaki her hesap için o istemci üzerinden yapılan tüm bağlantıları keser."
+    },
+    adminMcpClientsEmpty: {
+        en: "No client application has registered yet.",
+        tr: "Henüz hiçbir istemci uygulaması kaydolmadı."
+    },
+    adminMcpClientRegisteredLabel: {
+        en: "registered",
+        tr: "kaydoldu"
+    },
+    adminMcpClientRevokeButton: {
+        en: "Revoke",
+        tr: "İptal et"
+    },
+    adminMcpLogTitle: {
+        en: "Recent calls",
+        tr: "Son çağrılar"
+    },
+    adminMcpLogEmpty: {
+        en: "There are no calls in the log.",
+        tr: "Kayıtta hiç çağrı yok."
+    },
+    mcpConnectionsTitle: {
+        en: "AI Assistants",
+        tr: "Yapay Zeka Asistanları"
+    },
+    mcpConnectionsIntro: {
+        en: "Connect Claude or ChatGPT to this Jinear instance. The assistant can then read and change your work through the permissions you allow, and you can disconnect it here at any time.",
+        tr: "Claude veya ChatGPT uygulamasını bu Jinear sunucusuna bağlayın. Asistan, izin verdiğiniz yetkilerle işinizi okuyabilir ve değiştirebilir. Bağlantıyı istediğiniz zaman buradan kesebilirsiniz."
+    },
+    mcpConnectionsServerUrlLabel: {
+        en: "Server address for your assistant",
+        tr: "Asistanınız için sunucu adresi"
+    },
+    mcpConnectionsCopyLabel: {
+        en: "Copy",
+        tr: "Kopyala"
+    },
+    mcpConnectionsCopiedLabel: {
+        en: "Copied",
+        tr: "Kopyalandı"
+    },
+    mcpConnectionsCopyFailed: {
+        en: "The address could not be copied. Select it and copy it by hand.",
+        tr: "Adres kopyalanamadı. Adresi seçip elle kopyalayın."
+    },
+    mcpConnectionsClaudeStepsTitle: {
+        en: "In Claude",
+        tr: "Claude içinde"
+    },
+    mcpConnectionsClaudeStep1: {
+        en: "Open Settings, then Connectors.",
+        tr: "Ayarlar bölümünü, sonra Bağlayıcılar bölümünü açın."
+    },
+    mcpConnectionsClaudeStep2: {
+        en: "Choose Add custom connector and paste the address above.",
+        tr: "Özel bağlayıcı ekle seçeneğini seçin ve yukarıdaki adresi yapıştırın."
+    },
+    mcpConnectionsClaudeStep3: {
+        en: "Sign in when Jinear asks, then allow the permissions you want to give.",
+        tr: "Jinear sorduğunda giriş yapın, sonra vermek istediğiniz izinleri onaylayın."
+    },
+    mcpConnectionsChatgptStepsTitle: {
+        en: "In ChatGPT",
+        tr: "ChatGPT içinde"
+    },
+    mcpConnectionsChatgptStep1: {
+        en: "Turn on Developer Mode in Settings.",
+        tr: "Ayarlar bölümünden Geliştirici Modunu açın."
+    },
+    mcpConnectionsChatgptStep2: {
+        en: "Add a connector and paste the address above.",
+        tr: "Bir bağlayıcı ekleyin ve yukarıdaki adresi yapıştırın."
+    },
+    mcpConnectionsChatgptStep3: {
+        en: "Sign in when Jinear asks, then allow the permissions you want to give.",
+        tr: "Jinear sorduğunda giriş yapın, sonra vermek istediğiniz izinleri onaylayın."
+    },
+    mcpConnectionsPrivateNetworkNote: {
+        en: "Claude and ChatGPT connect from their own servers, so this address must be reachable from the internet over HTTPS. If this instance runs on a private network, use Claude Desktop with the mcp-remote proxy instead.",
+        tr: "Claude ve ChatGPT kendi sunucularından bağlanır, bu nedenle bu adrese internet üzerinden HTTPS ile erişilebilmelidir. Bu sunucu özel bir ağda çalışıyorsa bunun yerine Claude Desktop uygulamasını mcp-remote ara sunucusu ile kullanın."
+    },
+    mcpConnectionsDocsLink: {
+        en: "Read the setup guide",
+        tr: "Kurulum kılavuzunu okuyun"
+    },
+    mcpConnectionsListTitle: {
+        en: "Connected assistants",
+        tr: "Bağlı asistanlar"
+    },
+    mcpConnectionsListEmpty: {
+        en: "You have not connected an assistant yet.",
+        tr: "Henüz bir asistan bağlamadınız."
+    },
+    mcpConnectionsLastUsedLabel: {
+        en: "Last used",
+        tr: "Son kullanım"
+    },
+    mcpConnectionsNeverUsedLabel: {
+        en: "Not used yet",
+        tr: "Henüz kullanılmadı"
+    },
+    mcpConnectionsDisconnectButton: {
+        en: "Disconnect",
+        tr: "Bağlantıyı kes"
+    },
+    mcpConsentTitle: {
+        en: "Connect an AI assistant",
+        tr: "Bir yapay zeka asistanı bağlayın"
+    },
+    mcpConsentSubtitle: {
+        en: "This application is asking to use your Jinear account. It can only do what you allow below, and you can disconnect it at any time.",
+        tr: "Bu uygulama Jinear hesabınızı kullanmak istiyor. Yalnızca aşağıda izin verdiğiniz işlemleri yapabilir ve bağlantıyı istediğiniz zaman kesebilirsiniz."
+    },
+    mcpConsentScopesTitle: {
+        en: "It will be able to:",
+        tr: "Şunları yapabilecek:"
+    },
+    mcpConsentScopeWorkspaceRead: {
+        en: "Read your workspaces, teams and members",
+        tr: "Çalışma alanlarınızı, takımlarınızı ve üyeleri görüntüleyebilir"
+    },
+    mcpConsentScopeTasksRead: {
+        en: "Read your tasks, boards and comments",
+        tr: "Görevlerinizi, panolarınızı ve yorumları görüntüleyebilir"
+    },
+    mcpConsentScopeTasksWrite: {
+        en: "Create and update tasks, boards and comments",
+        tr: "Görev, pano ve yorum oluşturabilir ve güncelleyebilir"
+    },
+    mcpConsentScopeProjectsRead: {
+        en: "Read your projects and milestones",
+        tr: "Projelerinizi ve kilometre taşlarınızı görüntüleyebilir"
+    },
+    mcpConsentScopeProjectsWrite: {
+        en: "Create and update projects and milestones",
+        tr: "Proje ve kilometre taşı oluşturabilir ve güncelleyebilir"
+    },
+    mcpConsentScopeCalendarRead: {
+        en: "Read your calendar events",
+        tr: "Takvim etkinliklerinizi görüntüleyebilir"
+    },
+    mcpConsentScopeNotesRead: {
+        en: "Read your notebooks and notes",
+        tr: "Not defterlerinizi ve notlarınızı görüntüleyebilir"
+    },
+    mcpConsentScopeFilesRead: {
+        en: "Read your files and get links to them",
+        tr: "Dosyalarınızı görüntüleyebilir ve bağlantılarını alabilir"
+    },
+    mcpConsentScopeOfflineAccess: {
+        en: "Stay connected until you disconnect it",
+        tr: "Siz bağlantıyı kesene kadar bağlı kalabilir"
+    },
+    mcpConsentLoopbackNote: {
+        en: "This application runs on your own computer.",
+        tr: "Bu uygulama kendi bilgisayarınızda çalışıyor."
+    },
+    mcpConsentRedirectNote: {
+        en: "After you allow this, you go back to:",
+        tr: "İzin verdikten sonra şu adrese dönersiniz:"
+    },
+    mcpConsentClientSiteLink: {
+        en: "Application website",
+        tr: "Uygulama web sitesi"
+    },
+    mcpConsentPrivacyLink: {
+        en: "Privacy policy",
+        tr: "Gizlilik politikası"
+    },
+    mcpConsentTermsLink: {
+        en: "Terms of service",
+        tr: "Kullanım koşulları"
+    },
+    mcpConsentAllowButton: {
+        en: "Allow",
+        tr: "İzin ver"
+    },
+    mcpConsentDenyButton: {
+        en: "Deny",
+        tr: "Reddet"
+    },
+    mcpConsentSignInFirst: {
+        en: "Sign in to answer this request. You come straight back here afterwards.",
+        tr: "Bu isteği yanıtlamak için giriş yapın. Sonrasında doğrudan buraya dönersiniz."
+    },
+    mcpConsentUnavailableTitle: {
+        en: "This connection request is not available",
+        tr: "Bu bağlantı isteği kullanılamıyor"
+    },
+    mcpConsentUnavailableText: {
+        en: "It expired, it was already answered, or the link is incomplete. Start the connection again from your application.",
+        tr: "Süresi doldu, zaten yanıtlandı veya bağlantı eksik. Bağlantıyı uygulamanızdan yeniden başlatın."
     },
 
 };

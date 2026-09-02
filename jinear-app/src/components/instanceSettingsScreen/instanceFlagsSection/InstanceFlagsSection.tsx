@@ -25,7 +25,8 @@ const FLAG_COPY: Record<InstanceFlagType, FlagCopy> = {
     SIGN_IN_WITH_GOOGLE: {labelKey: "instanceFlagSignInWithGoogle", textKey: "instanceFlagSignInWithGoogleText"},
     SIGN_IN_WITH_APPLE: {labelKey: "instanceFlagSignInWithApple", textKey: "instanceFlagSignInWithAppleText"},
     WORKSPACE_INIT: {labelKey: "instanceFlagWorkspaceInit", textKey: "instanceFlagWorkspaceInitText"},
-    ATTACH_GOOGLE_CALENDAR: {labelKey: "instanceFlagAttachGoogleCalendar", textKey: "instanceFlagAttachGoogleCalendarText"}
+    ATTACH_GOOGLE_CALENDAR: {labelKey: "instanceFlagAttachGoogleCalendar", textKey: "instanceFlagAttachGoogleCalendarText"},
+    MCP_SERVER: {labelKey: "instanceFlagMcpServer", textKey: "instanceFlagMcpServerText"}
 };
 
 const FLAG_GROUPS: { titleKey: StringKeys; flags: InstanceFlagType[] }[] = [
@@ -39,7 +40,7 @@ const FLAG_GROUPS: { titleKey: StringKeys; flags: InstanceFlagType[] }[] = [
     },
     {
         titleKey: "instanceSettingsFlagGroupIntegration",
-        flags: ["ATTACH_GOOGLE_CALENDAR"]
+        flags: ["ATTACH_GOOGLE_CALENDAR", "MCP_SERVER"]
     }
 ];
 

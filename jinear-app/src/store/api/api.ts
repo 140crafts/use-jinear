@@ -101,7 +101,13 @@ export const tagTypes = [
     "v1/admin/workspace/list",
     "v1/admin/workspace/{workspaceId}/member/list",
     "v1/admin/team/list/{workspaceId}",
-    "v1/admin/team/{teamId}/member/list"
+    "v1/admin/team/{teamId}/member/list",
+    "v1/oauth/authorize/info/{requestId}",
+    "v1/mcp/connection/list",
+    "v1/mcp/info",
+    "v1/admin/mcp/analytics",
+    "v1/admin/mcp/client/list",
+    "v1/admin/mcp/log/list"
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {
