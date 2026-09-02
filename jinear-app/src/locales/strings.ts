@@ -630,6 +630,22 @@ const translations = {
         en: "Workflows define the type and order of statuses that tasks go through from start to completion Here you can customize and re-order the workflow statuses.",
         tr: "İş akışları görevlerin başlangıçtan bitişe dek geçeceği durumları belirtir. Buradan iş akış durumlarını kişiselleştirebilirsiniz."
     },
+    teamSettingsScreenTopicSectionTitle: {
+        en: "Team Topics",
+        tr: "Takım Konuları"
+    },
+    teamSettingsScreenTopicSectionDescription: {
+        en: "Topics are labels that group this team's tasks. Create a new topic or review the existing ones.",
+        tr: "Konular, bu takımın görevlerini gruplayan etiketlerdir. Yeni bir konu oluşturabilir veya mevcut konuları inceleyebilirsiniz."
+    },
+    teamSettingsScreenTopicSectionNewTopicButton: {
+        en: "Create New Topic",
+        tr: "Yeni Konu Oluştur"
+    },
+    teamSettingsScreenTopicSectionListTopicsButton: {
+        en: "List Topics",
+        tr: "Konuları Listele"
+    },
     workflowGroupTitle_BACKLOG: {
         en: "Backlog",
         tr: "Bekleyen"
