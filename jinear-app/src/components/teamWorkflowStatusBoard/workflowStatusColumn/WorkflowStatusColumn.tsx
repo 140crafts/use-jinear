@@ -17,13 +17,13 @@ interface WorkflowStatusColumnProps {
   onDragEnd?: () => void;
 }
 
-const filterByGroup = (
+const filterByWorkflowStatus = (
   taskDto: TaskDto,
   workflowStatusDto: TeamWorkflowStatusDto,
   workflowStatusUpdatePendingTask?: IWorkflowStatusUpdatePendingTask
 ) => {
   const isThisTaskStatusUpdatePendingTask = workflowStatusUpdatePendingTask?.taskId == taskDto.taskId;
-  const taskIsInThisGroup = taskDto.workflowStatus.workflowStateGroup == workflowStatusDto.workflowStateGroup;
+  const taskIsInThisStatus = taskDto.workflowStatusId == workflowStatusDto.teamWorkflowStatusId;
   if (isThisTaskStatusUpdatePendingTask) {
     logger.log({
       msg: "STATUS UPDATE PENDING TASK",
@@ -33,7 +33,7 @@ const filterByGroup = (
     });
     return workflowStatusDto.teamWorkflowStatusId == workflowStatusUpdatePendingTask.newWorkflowStatusId;
   }
-  return taskIsInThisGroup;
+  return taskIsInThisStatus;
 };
 
 const logger = Logger("WorkflowStatusColumn");
@@ -51,7 +51,7 @@ const WorkflowStatusColumn: React.FC<WorkflowStatusColumnProps> = ({
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const filteredTasks =
-    tasks?.filter((taskDto) => filterByGroup(taskDto, workflowStatusDto, workflowStatusUpdatePendingTask)) || [];
+    tasks?.filter((taskDto) => filterByWorkflowStatus(taskDto, workflowStatusDto, workflowStatusUpdatePendingTask)) || [];
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();

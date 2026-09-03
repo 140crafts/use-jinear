@@ -1,4 +1,4 @@
-import type {TeamMemberRoleType} from "@/model/be/jinear-core";
+import type {TeamMemberRoleType, TeamWorkflowStateGroup} from "@/model/be/jinear-core";
 import {useRetrieveAllFromTeamQuery} from "@/store/api/teamWorkflowStatusApi";
 import useTranslation from "@/locales/useTranslation";
 import React from "react";
@@ -11,6 +11,8 @@ interface TeamWorkflowSettingsProps {
     teamId: string;
     teamRole?: TeamMemberRoleType;
 }
+
+const WORKFLOW_GROUPS: TeamWorkflowStateGroup[] = ["BACKLOG", "NOT_STARTED", "STARTED", "COMPLETED", "CANCELLED"];
 
 const TeamWorkflowSettings: React.FC<TeamWorkflowSettingsProps> = ({teamId, teamRole}) => {
     const {t} = useTranslation();
@@ -33,31 +35,15 @@ const TeamWorkflowSettings: React.FC<TeamWorkflowSettingsProps> = ({teamId, team
 
             {!isTeamWorkflowListLoading && teamWorkflowListData && (
                 <div className={styles.content}>
-                    <WorkflowGroup
-                        editable={editable}
-                        groupType={"BACKLOG"}
-                        statuses={teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["BACKLOG"]}
-                    />
-                    <WorkflowGroup
-                        editable={editable}
-                        groupType={"NOT_STARTED"}
-                        statuses={teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["NOT_STARTED"]}
-                    />
-                    <WorkflowGroup
-                        editable={editable}
-                        groupType={"STARTED"}
-                        statuses={teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["STARTED"]}
-                    />
-                    <WorkflowGroup
-                        editable={editable}
-                        groupType={"COMPLETED"}
-                        statuses={teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["COMPLETED"]}
-                    />
-                    <WorkflowGroup
-                        editable={editable}
-                        groupType={"CANCELLED"}
-                        statuses={teamWorkflowListData.data.groupedTeamWorkflowStatuses?.["CANCELLED"]}
-                    />
+                    {WORKFLOW_GROUPS.map((groupType) => (
+                        <WorkflowGroup
+                            key={groupType}
+                            teamId={teamId}
+                            editable={editable}
+                            groupType={groupType}
+                            statuses={teamWorkflowListData.data.groupedTeamWorkflowStatuses?.[groupType]}
+                        />
+                    ))}
                 </div>
             )}
         </div>

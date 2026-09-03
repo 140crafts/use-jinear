@@ -8,3 +8,11 @@
   font-size: 0.9rem;
   color: var(--c-secondary-shade-0-op05);
 }
+
+.dragging {
+  opacity: 0.4;
+}
+
+.dragOver {
+  box-shadow: inset 0 -2px 0 0 var(--c-JINEAR_ORANGE);
+}

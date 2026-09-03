@@ -630,6 +630,22 @@ const translations = {
         en: "Workflows define the type and order of statuses that tasks go through from start to completion Here you can customize and re-order the workflow statuses.",
         tr: "İş akışları görevlerin başlangıçtan bitişe dek geçeceği durumları belirtir. Buradan iş akış durumlarını kişiselleştirebilirsiniz."
     },
+    teamSettingsScreenTopicSectionTitle: {
+        en: "Team Topics",
+        tr: "Takım Konuları"
+    },
+    teamSettingsScreenTopicSectionDescription: {
+        en: "Topics are labels that group this team's tasks. Create a new topic or review the existing ones.",
+        tr: "Konular, bu takımın görevlerini gruplayan etiketlerdir. Yeni bir konu oluşturabilir veya mevcut konuları inceleyebilirsiniz."
+    },
+    teamSettingsScreenTopicSectionNewTopicButton: {
+        en: "Create New Topic",
+        tr: "Yeni Konu Oluştur"
+    },
+    teamSettingsScreenTopicSectionListTopicsButton: {
+        en: "List Topics",
+        tr: "Konuları Listele"
+    },
     workflowGroupTitle_BACKLOG: {
         en: "Backlog",
         tr: "Bekleyen"
@@ -674,6 +690,50 @@ const translations = {
         en: "Cancel",
         tr: "Vazgeç"
     },
+    workflowStatusDragTooltip: {
+        en: "Drag to reorder",
+        tr: "Sıralamak için sürükleyin"
+    },
+    workflowStatusAddButton: {
+        en: "Add status",
+        tr: "Durum ekle"
+    },
+    workflowStatusAddPlaceholder: {
+        en: "New status name",
+        tr: "Yeni durum adı"
+    },
+    workflowStatusAddSave: {
+        en: "Add",
+        tr: "Ekle"
+    },
+    workflowStatusAddCancel: {
+        en: "Cancel",
+        tr: "Vazgeç"
+    },
+    workflowStatusDeleteAreYouSureTitle: {
+        en: "Delete workflow status",
+        tr: "İş akışı durumunu sil"
+    },
+    workflowStatusDeleteAreYouSureText: {
+        en: "This workflow status will be deleted. Tasks that use it keep their history, but the status is no longer selectable.",
+        tr: "Bu iş akışı durumu silinecek. Durumu kullanan görevlerin geçmişi korunur, ancak durum artık seçilemez."
+    },
+    workflowStatusDeleteAreYouSureConfirmLabel: {
+        en: "Delete",
+        tr: "Sil"
+    },
+    workflowStatusAddFailed: {
+        en: "Workflow status could not be added.",
+        tr: "İş akışı durumu eklenemedi."
+    },
+    workflowStatusDeleteFailed: {
+        en: "Workflow status could not be deleted.",
+        tr: "İş akışı durumu silinemedi."
+    },
+    workflowStatusReorderFailed: {
+        en: "Workflow status order could not be changed.",
+        tr: "İş akışı durum sıralaması değiştirilemedi."
+    },
     teamMonthlyScreenBreadcrumbLabel: {
         en: "Monthly Tasks",
         tr: "Aylık Görevler"
@@ -689,6 +749,10 @@ const translations = {
     newTopicScreenTitle: {
         en: "New Topic",
         tr: "Yeni Konu"
+    },
+    newTopicScreenDescription: {
+        en: "Give the topic a name, a tag and a color, then use it to label this team's tasks.",
+        tr: "Konuya bir ad, etiket ve renk verin, sonra bu takımın görevlerini onunla etiketleyin."
     },
     topicFormName: {
         en: "Name",
@@ -718,6 +782,10 @@ const translations = {
         en: "Topics",
         tr: "Konular"
     },
+    topicListScreenDescription: {
+        en: "Topics are labels that group this team's tasks. Select a topic to edit it.",
+        tr: "Konular, bu takımın görevlerini gruplayan etiketlerdir. Düzenlemek için bir konu seçin."
+    },
     topicListScreenNoContentLabel: {
         en: "No topic found. Create a topic and label your tasks.",
         tr: "Hiçbir konu bulunamadı. Bir konu oluştur ve görevleri konular ile etiketle."
@@ -741,6 +809,10 @@ const translations = {
     topicEditScreenTitle: {
         en: "Edit Topic",
         tr: "Konuyu Düzenle"
+    },
+    topicEditScreenDescription: {
+        en: "Change this topic's name, tag or color. Tasks already labeled with it keep the label.",
+        tr: "Bu konunun adını, etiketini veya rengini değiştirin. Bu konuyla etiketlenmiş görevler etiketini korur."
     },
     taskDetalPageTaskDescription: {
         en: "No description",
