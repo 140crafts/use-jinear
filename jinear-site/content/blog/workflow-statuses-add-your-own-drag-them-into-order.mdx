@@ -1,0 +1,88 @@
+---
+title: "Workflow Statuses. Add Your Own, Drag Them Into Order."
+description: "Adding, reordering, and deleting workflow statuses have worked on the server for a long time. The screen for them was never built, so none of it was reachable. Now you can add statuses, drag them into the order you want, and delete the ones you don't use."
+pubDate: "2026-09-03"
+tags: ["changelog", "tasks"]
+author: "Çağdaş Tunca"
+---
+
+Every team in Jinear has a set of statuses its tasks move through, sorted into five
+groups: Backlog, Not started, Started, Completed, Cancelled. Team settings has always
+had a screen for them. What that screen actually let you do was rename one.
+
+Adding a status, removing one, and changing the order have all worked on the server
+side for a long time. I wrote those endpoints and then never built the screen that uses
+them, so from inside the app there was no way to reach any of it. This release is the
+half that was missing.
+
+## What you can do now
+
+- **Add a status.** Each group has an add field at the bottom. Type a name, and it
+  joins that group. A team that wants "In review" between "In progress" and "Done" can
+  have it.
+- **Drag them into order.** Grab a status and drop it where you want it inside its
+  group. If dragging isn't your thing, the up and down arrows move it one step at a
+  time. The list rearranges as soon as you let go and puts itself back if the save
+  fails, so you always see the order you actually have.
+- **Rename anything.** This one worked before and still does.
+- **Delete what you don't use.** Jinear asks first, and tells you plainly what happens:
+  tasks that passed through the status keep their history, the status just stops being
+  something you can pick.
+
+Two rules stay out of your way but are worth knowing. Only team admins can change any
+of this, and every group has to keep at least one status. You can't empty out
+"Started" and leave your team with nowhere to put work in progress.
+
+## The order follows your tasks around
+
+The order you set in settings isn't only for that screen. It's the order of the columns
+on your team's board, the order of the list when you change a task's status, and the
+order in the status filters. Put the status your team reaches for most at the top of
+its group and it stays at the top everywhere.
+
+## Topics have a home now
+
+Topics are the labels you put on tasks, and until now the only way to reach them was
+the side menu. If you went looking for them in team settings, which is where you'd
+reasonably look, there was nothing.
+
+Team settings has a **Team Topics** section now, between the workflow section and the
+team state section, with a short explanation and two buttons: one lists the team's
+topics, the other creates one. Archived teams get the list button only, the same way
+the side menu behaves.
+
+The three topic screens picked up matching headers while I was in there. The list,
+create, and edit screens now open with a title and a line explaining what the screen is
+for, instead of a bare heading, and they line up at the same width. Small thing, but
+moving between settings and topics stopped feeling like moving between two apps.
+
+## Two smaller fixes
+
+- **The new task board button is always there.** It used to appear only when you had no
+  boards at all, which meant creating your second board sent you looking for a button
+  that had disappeared. It sits at the top of the list now.
+- **One unrecognized flag no longer takes down the whole list.** For self-hosters: if
+  your database held an instance flag this version of Jinear didn't know about, the
+  entire flag list failed to load rather than skipping that one entry. Unknown flags
+  are ignored now and the rest load normally.
+
+## What's not in it yet
+
+A status belongs to the group it was created in and can't move to another one. If you
+add "In review" to Not started and decide it belongs in Started, you delete it and add
+it again on the other side. That's clumsy and I know it.
+
+The five groups themselves are fixed. They're what Jinear uses to tell waiting work
+from work in progress from finished work, so they're not a list you edit.
+
+Statuses also don't have their own color. Each one takes the icon and color of its
+group, so every status in Started looks like every other status in Started. Names carry
+the difference for now.
+
+---
+
+If you self-host and something is broken, or you need something that isn't here, write
+to me. That's where most of this comes from.
+
+The whole thing is on [GitLab](https://gitlab.com/140crafts/use-jinear) and
+[GitHub](https://github.com/140crafts/use-jinear).
