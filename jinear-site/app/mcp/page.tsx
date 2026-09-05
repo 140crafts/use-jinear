@@ -24,7 +24,6 @@ interface Tool {
   annotations: { readOnlyHint: boolean };
 }
 
-// The scope each permission covers, in the order the consent screen lists them.
 const SCOPE_COPY: { scope: string; label: string; text: string }[] = [
   { scope: "workspace:read", label: "Workspaces", text: "Workspaces, teams, members, topics and workflow statuses." },
   { scope: "tasks:read", label: "Read tasks", text: "Tasks, boards and comments." },

@@ -22,18 +22,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * Mints and validates the access tokens this authorization server issues.
- * <p>
- * These are deliberately signed with a different secret from the session JWT that
- * {@code JwtHelper} issues. A third party app's bearer must never authenticate a browser
- * session, and a session cookie must never authenticate a tool call, so the two key
- * spaces are kept apart rather than relying on a claim to tell them apart.
- * <p>
- * The audience is MCP's resource URL because MCP is the only resource. That is seam 1 of
- * the three listed on
- * {@link co.jinear.core.manager.oauth.provider.OauthAuthorizationManager}.
- */
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -65,13 +53,6 @@ public class OauthTokenHelper {
                 .compact();
     }
 
-    /**
-     * Returns the token's claims, or empty when the token is unparseable, expired,
-     * signed with another key, or was not issued for this resource server.
-     * <p>
-     * The audience check is the one the MCP specification calls out as mandatory:
-     * without it a token minted for a different resource would be accepted here.
-     */
     public Optional<OauthAccessTokenVo> parseAccessToken(String token) {
         if (Objects.isNull(token) || token.isBlank()) {
             return Optional.empty();

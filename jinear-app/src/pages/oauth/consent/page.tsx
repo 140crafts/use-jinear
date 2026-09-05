@@ -17,17 +17,6 @@ interface OauthConsentPageProps {
 
 const logger = Logger("OauthConsentPage");
 
-/**
- * The consent screen an MCP client sends the user to.
- * <p>
- * The user arrives here from Claude or ChatGPT, so they may have no session yet. In that
- * case the sign in form is shown in place and the request id is parked, because the sign
- * in methods that leave the app cannot carry it back in a query parameter.
- * <p>
- * The identity shown in the heading is the host of the client_id, never client_name. A
- * Client ID Metadata Document is written by whoever hosts it, so the name in it is a
- * claim, and the host is the only part we verified.
- */
 const SCOPE_LABEL_KEYS: Record<string, StringKeys> = {
     "workspace:read": "oauthConsentScopeWorkspaceRead",
     "tasks:read": "oauthConsentScopeTasksRead",
@@ -68,7 +57,6 @@ const OauthConsentPage: React.FC<OauthConsentPageProps> = ({}) => {
             const response = await submitConsent({requestId, approved}).unwrap();
             forgetPendingConsentRequestId();
             logger.log({approved, redirecting: true});
-            // The destination belongs to the client, so this leaves the app entirely.
             window.location.href = response.data;
         } catch (error) {
             logger.log({consentSubmitFailed: error});

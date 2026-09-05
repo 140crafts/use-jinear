@@ -8,10 +8,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDate;
 
-/**
- * Daily rollup of mcp_tool_call_log, written before the raw log is pruned so the
- * usage charts keep a longer history than the 30 day log retention.
- */
 @Getter
 @Setter
 @Entity

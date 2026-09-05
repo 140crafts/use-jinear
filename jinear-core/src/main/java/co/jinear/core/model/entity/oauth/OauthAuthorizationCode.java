@@ -8,11 +8,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
 
-/**
- * Single use authorization code. The code handed to the client is
- * "{oauth_authorization_code_id}.{secret}", so we can look the row up by id and then
- * BCrypt match the secret, the same shape the robot token uses.
- */
 @Getter
 @Setter
 @Entity

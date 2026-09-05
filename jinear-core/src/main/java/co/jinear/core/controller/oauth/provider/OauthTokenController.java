@@ -17,14 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * Token, dynamic registration and revocation.
- * <p>
- * Note the two different content types. RFC 6749 requires the token endpoint to accept
- * form encoding, and RFC 7591 requires the registration endpoint to accept JSON, so a
- * single body parser will not serve both. Getting this wrong shows up as a 415 during
- * the very first connection attempt.
- */
 @Slf4j
 @RestController
 @RequestMapping(value = "v1/oauth")

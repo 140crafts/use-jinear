@@ -13,13 +13,6 @@ import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * Turns a bearer string into a usable caller identity, or nothing.
- * <p>
- * Signature and audience come from the token itself, but revocation cannot: a user who
- * disconnects a client expects that to take effect now, not when the access token
- * expires an hour later. So every call also confirms the connection is still live.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -38,10 +31,6 @@ public class OauthAccessTokenResolver {
         return token.isEmpty() ? Optional.empty() : Optional.of(token);
     }
 
-    /**
-     * "Last used" only needs to be roughly right, and a write on every tool call would put
-     * a row update in front of every read. Anything older than five minutes is refreshed.
-     */
     private void touchIfStale(OauthConnection connection) {
         Date lastUsedAt = connection.getLastUsedAt();
         if (Objects.isNull(lastUsedAt) || lastUsedAt.before(DateHelper.substractMinutes(DateHelper.now(), 5))) {

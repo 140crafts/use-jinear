@@ -18,10 +18,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * An authorization code is the one bearer credential that travels through a browser
- * redirect, so single use and short lived are the properties that matter.
- */
 class OauthAuthorizationCodeServiceTest {
 
     private OauthAuthorizationCodeRepository repository;
@@ -32,7 +28,6 @@ class OauthAuthorizationCodeServiceTest {
         repository = Mockito.mock(OauthAuthorizationCodeRepository.class);
         OauthProperties properties = new OauthProperties();
         properties.setAuthorizationCodeValiditySeconds(60);
-        // Cost 4 keeps the suite fast; production uses the encoder's default.
         service = new OauthAuthorizationCodeService(repository, properties, new BCryptPasswordEncoder(4));
     }
 
@@ -49,7 +44,6 @@ class OauthAuthorizationCodeServiceTest {
         assertThat(code).startsWith("code-row-1.");
         ArgumentCaptor<OauthAuthorizationCode> captor = ArgumentCaptor.forClass(OauthAuthorizationCode.class);
         Mockito.verify(repository).save(captor.capture());
-        // Only the hash is persisted, exactly as the robot token does it.
         assertThat(captor.getValue().getHashedCode()).doesNotContain(code.substring(code.indexOf('.') + 1));
         assertThat(captor.getValue().getCodeChallenge()).isEqualTo("challenge-value");
     }

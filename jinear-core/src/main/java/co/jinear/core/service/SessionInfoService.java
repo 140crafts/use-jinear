@@ -119,12 +119,6 @@ public class SessionInfoService {
                 .map(jwtHelper::getLocaleFromToken);
     }
 
-    /**
-     * A browser session carries its id inside the JWT credential. A caller that
-     * authenticated some other way, such as an MCP client holding an access token
-     * signed with a different key, attaches a SessionCarrier as the authentication
-     * details instead, and it wins over the credential when present.
-     */
     public String currentAccountSessionId() {
         AbstractAuthenticationToken auth = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         Optional<String> carried = sessionCarrier(auth).map(SessionCarrier::sessionInfoId);

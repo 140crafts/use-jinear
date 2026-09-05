@@ -17,11 +17,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Audience validation is the requirement the MCP specification is most explicit about: a
- * server must only accept tokens minted for itself, or a token issued for one resource
- * becomes a key to another.
- */
 class OauthTokenHelperTest {
 
     private static final String SECRET = "oauth-secret-used-only-in-tests-0123456789";
@@ -84,8 +79,6 @@ class OauthTokenHelperTest {
 
     @Test
     void rejectsATokenSignedWithTheSessionSecret() {
-        // The whole point of the separate key: a browser session JWT must not open the
-        // MCP endpoint, and an MCP token must not open a browser session.
         String sessionToken = Jwts.builder()
                 .setSubject("account-1")
                 .setAudience(RESOURCE)

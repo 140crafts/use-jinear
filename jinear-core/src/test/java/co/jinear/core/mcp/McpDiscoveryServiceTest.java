@@ -11,12 +11,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Half the handshake. Every field asserted here is one a client reads before it will
- * attempt an authorization, and a missing one shows up as an unexplained connection
- * failure rather than an error. The other half is
- * {@link co.jinear.core.oauth.OauthDiscoveryServiceTest}.
- */
 @SuppressWarnings("unchecked")
 class McpDiscoveryServiceTest {
 

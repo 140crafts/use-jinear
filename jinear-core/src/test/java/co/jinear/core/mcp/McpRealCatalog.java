@@ -22,13 +22,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Builds the real tool catalog with every manager mocked.
- * <p>
- * The definitions are what the directory reviews and what the published documentation is
- * generated from, and none of them depend on a live manager, so they can be inspected
- * without a Spring context or a database.
- */
 final class McpRealCatalog {
 
     private McpRealCatalog() {

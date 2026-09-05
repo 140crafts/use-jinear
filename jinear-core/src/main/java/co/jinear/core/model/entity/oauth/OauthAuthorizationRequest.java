@@ -8,11 +8,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
 
-/**
- * A validated /authorize call parked while the user decides on the consent screen.
- * The row id is the request_id handed to the frontend, so nothing about the client
- * or the redirect target is carried in a query string the user could tamper with.
- */
 @Getter
 @Setter
 @Entity

@@ -11,16 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
-/**
- * Records what an MCP client did, without recording what it said.
- * <p>
- * Arguments and response bodies are never stored. They come from the user's conversation,
- * and both directory policies limit a connector to the data its function needs. Tool name,
- * outcome, duration and size answer the operational questions on their own.
- * <p>
- * Writes are async so a slow log never becomes a slow tool call, and every failure is
- * swallowed for the same reason.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor

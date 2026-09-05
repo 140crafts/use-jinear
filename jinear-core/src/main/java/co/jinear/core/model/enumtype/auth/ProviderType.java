@@ -11,6 +11,5 @@ public enum ProviderType {
     PASSWORD_MAIL,
     SIGN_IN_WITH_APPLE,
     SINGLE_USE_LOGIN_TOKEN,
-    /** A session opened by a third party app through the OAuth consent flow. */
     OAUTH_CONNECTION;
 }

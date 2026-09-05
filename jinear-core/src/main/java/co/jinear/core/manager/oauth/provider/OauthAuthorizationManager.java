@@ -29,38 +29,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * The authorization endpoint and the consent exchange behind it.
- * <p>
- * The endpoint never renders anything itself. It validates, parks the request, and
- * redirects to the consent screen in jinear-app, which is where the user is already
- * signed in and where the sign in redirect already works.
- *
- * <h2>Where this server is still bound to MCP</h2>
- * Everything under {@code service.oauth.provider} is plain OAuth 2.1, and the endpoints
- * are mounted at {@code /v1/oauth}. That is naming and packaging only. The server issues
- * tokens for exactly one resource, and three places encode that. A second resource, a
- * public REST API for third party apps being the likely one, means changing these and
- * nothing else:
- * <ol>
- *   <li><b>The audience is fixed.</b>
- *       {@link co.jinear.core.system.oauth.OauthTokenHelper#generateAccessToken} sets
- *       {@code aud} from {@code jinear.mcp.resource-url}, and {@link #isResourceAcceptable}
- *       compares the RFC 8707 {@code resource} parameter against that one value. Multi
- *       resource means deriving the audience per request from what the client asked for.</li>
- *   <li><b>The resource server filter is path bound.</b>
- *       {@link co.jinear.core.config.security.OauthBearerAuthenticationFilter} skips every
- *       path except {@link co.jinear.core.system.mcp.McpPaths#MCP_ENDPOINT}, so a bearer
- *       authenticates nothing else. Multi resource means widening that predicate.</li>
- *   <li><b>The kill switch belongs to MCP.</b> {@link #assertEnabled} reads
- *       {@code jinear.mcp.enabled} and {@link InstanceFlagType#MCP_SERVER}, which is why
- *       the refusal still carries the {@code mcp.error.disabled} key. Multi resource means
- *       a per resource enablement check.</li>
- * </ol>
- * One more thing follows from the same fact: {@code scopes_supported} in both discovery
- * documents is a single flat {@link co.jinear.core.model.enumtype.oauth.OauthScope} set.
- * It becomes per resource on the same day.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -80,14 +48,6 @@ public class OauthAuthorizationManager {
     private final FeProperties feProperties;
     private final InstanceFlagService instanceFlagService;
 
-    /**
-     * Validates an /authorize call and returns where to send the browser.
-     * <p>
-     * Errors split in two. Anything wrong with the client or the redirect URI cannot
-     * be reported back to the client, because we have no address we trust: those throw
-     * and the controller renders them. Everything after that is reported as an OAuth
-     * error redirect to the validated redirect URI, which is what the RFC requires.
-     */
     public String authorize(OauthAuthorizeRequestVo vo) {
         assertEnabled();
 
@@ -180,14 +140,6 @@ public class OauthAuthorizationManager {
         return response;
     }
 
-    /**
-     * Two switches, checked only here on the authorization path. The property is the hard
-     * one: with it off nothing MCP answers at all. The instance flag is the administrator's
-     * switch, and it gates new connections only, so turning it off stops anybody granting
-     * fresh access while the connections people already made keep working until they
-     * disconnect them. The transport itself does not read the flag, because that would put
-     * a database read in front of every tool call.
-     */
     private void assertEnabled() {
         if (!Boolean.TRUE.equals(mcpProperties.getEnabled())
                 || !instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER)) {
@@ -195,10 +147,6 @@ public class OauthAuthorizationManager {
         }
     }
 
-    /**
-     * RFC 8707 resource indicators. Clients must send this, but a few still do not, so
-     * an absent value is accepted and only a mismatched one is refused.
-     */
     private boolean isResourceAcceptable(String resource) {
         if (Objects.isNull(resource) || resource.isBlank()) {
             return true;

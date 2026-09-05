@@ -24,7 +24,6 @@ public class OauthClient extends BaseEntity {
     @Column(name = "oauth_client_id")
     private String oauthClientId;
 
-    /** For DCR and STATIC this is a ULID. For CIMD it is the https metadata document URL. */
     @Column(name = "client_id")
     private String clientId;
 
@@ -43,7 +42,6 @@ public class OauthClient extends BaseEntity {
     @Column(name = "tos_uri")
     private String tosUri;
 
-    /** Newline separated. Loopback entries are matched with the port ignored. */
     @Column(name = "redirect_uris")
     private String redirectUris;
 

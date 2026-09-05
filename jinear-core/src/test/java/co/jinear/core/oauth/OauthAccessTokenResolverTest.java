@@ -14,13 +14,6 @@ import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * A valid signature is not enough on its own.
- * <p>
- * Access tokens live for an hour, so if the only check were the signature, revoking a
- * connection would leave it working for up to an hour afterwards. Checking the connection
- * on every call is what makes the revoke button in the settings screen mean something.
- */
 class OauthAccessTokenResolverTest {
 
     private OauthTokenHelper tokenHelper;
@@ -58,15 +51,12 @@ class OauthAccessTokenResolverTest {
 
         assertThat(resolved).isPresent();
         assertThat(resolved.get().getAccountId()).isEqualTo("account-1");
-        // Write managers stamp this onto every activity row they emit.
         assertThat(resolved.get().sessionInfoId()).isEqualTo("session-1");
     }
 
     @Test
     void refusesATokenWhoseConnectionWasRevoked() {
         Mockito.when(tokenHelper.parseAccessToken("token")).thenReturn(Optional.of(parsedToken()));
-        // A revoked connection is soft deleted, so the lookup that filters on passive_id
-        // finds nothing.
         Mockito.when(connectionService.retrieveOptional("connection-1")).thenReturn(Optional.empty());
 
         assertThat(resolver.resolve("token")).isEmpty();
@@ -90,7 +80,6 @@ class OauthAccessTokenResolverTest {
 
         resolver.resolve("token");
 
-        // Just used, so no write in front of the read.
         Mockito.verify(connectionService, Mockito.never()).touch(Mockito.any());
     }
 

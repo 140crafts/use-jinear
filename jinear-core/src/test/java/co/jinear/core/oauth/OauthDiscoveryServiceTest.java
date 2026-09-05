@@ -10,11 +10,6 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * The authorization server half of the handshake. Every field asserted here is one a
- * client reads before it will attempt an authorization, and a missing one shows up as an
- * unexplained connection failure rather than an error.
- */
 @SuppressWarnings("unchecked")
 class OauthDiscoveryServiceTest {
 
@@ -32,7 +27,6 @@ class OauthDiscoveryServiceTest {
 
     @Test
     void authorizationServerMetadataAdvertisesS256() {
-        // A client that cannot confirm S256 support is required to refuse to proceed.
         assertThat(service.authorizationServerMetadata().get("code_challenge_methods_supported"))
                 .isEqualTo(List.of("S256"));
     }
@@ -41,8 +35,6 @@ class OauthDiscoveryServiceTest {
     void authorizationServerMetadataEnablesClientIdMetadataDocuments() {
         Map<String, Object> document = service.authorizationServerMetadata();
 
-        // Both of these are required together. With either missing, a client falls back to
-        // dynamic registration and registers a fresh row on every single connection.
         assertThat(document.get("client_id_metadata_document_supported")).isEqualTo(Boolean.TRUE);
         assertThat(document.get("token_endpoint_auth_methods_supported")).isEqualTo(List.of("none"));
     }

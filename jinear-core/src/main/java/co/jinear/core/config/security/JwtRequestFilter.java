@@ -40,14 +40,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtHelper jwtHelper;
     private final RobotTokenValidator robotTokenValidator;
 
-    /**
-     * The MCP endpoint and the OAuth discovery documents are skipped entirely.
-     * <p>
-     * An OAuth bearer is signed with a different key, so handing it to this filter would
-     * only produce a signature failure, and letting it through would be worse: it would
-     * turn a scoped tool credential into a full browser session. OauthBearerAuthenticationFilter
-     * runs ahead of this one and owns those paths.
-     */
     @Override
     protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
         String path = request.getServletPath();
@@ -101,9 +93,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             checkAndValidateRobotToken(token);
             setAuthentication(token);
         } catch (SignatureException | MalformedJwtException | UnsupportedJwtException exception) {
-            // A credential this filter cannot read is simply not an authentication.
-            // Leaving the context empty lets the entry point answer 401 instead of the
-            // 500 an escaping parse failure would produce.
             log.warn("[JWT] Ignoring an unreadable token: {}", exception.getClass().getSimpleName());
         }
     }

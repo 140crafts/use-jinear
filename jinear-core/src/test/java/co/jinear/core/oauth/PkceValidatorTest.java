@@ -5,10 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * PKCE is the only thing standing between a leaked authorization code and an access
- * token, because MCP clients are public clients with no secret.
- */
 class PkceValidatorTest {
 
     private final PkceValidator validator = new PkceValidator();
@@ -43,7 +39,6 @@ class PkceValidatorTest {
 
     @Test
     void producesTheChallengeFromTheRfcExample() {
-        // RFC 7636 appendix B.
         assertThat(validator.derive("dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"))
                 .isEqualTo("E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM");
     }

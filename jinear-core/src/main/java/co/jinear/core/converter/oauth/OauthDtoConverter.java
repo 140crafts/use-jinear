@@ -40,10 +40,6 @@ public class OauthDtoConverter {
         return dto;
     }
 
-    /**
-     * A client identified by a metadata document is displayed by the host of that
-     * document, never by the name inside it, because the document is self asserted.
-     */
     private String hostOf(String clientId) {
         if (Objects.isNull(clientId) || !clientId.startsWith("https://")) {
             return clientId;

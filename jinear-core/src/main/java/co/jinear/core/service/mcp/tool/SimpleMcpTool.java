@@ -12,13 +12,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.function.BiFunction;
 
-/**
- * A tool assembled from a definition and a handler.
- * <p>
- * Tools are declared as beans in grouped configuration classes rather than as one class
- * each. Thirty six single method classes would bury the part that matters, which is the
- * description and the schema the model actually reads.
- */
 public final class SimpleMcpTool implements McpTool {
 
     private final McpToolDefinition definition;
@@ -80,21 +73,18 @@ public final class SimpleMcpTool implements McpTool {
             return this;
         }
 
-        /** Reads nothing but existing state. Clients may run these without prompting. */
         public Builder readOnly() {
             this.readOnly = true;
             this.idempotent = true;
             return this;
         }
 
-        /** Creates or changes data. Not destructive, but still worth a prompt. */
         public Builder write() {
             this.readOnly = false;
             this.destructive = false;
             return this;
         }
 
-        /** Removes data, or changes it in a way that cannot be undone. Always prompts. */
         public Builder destructive() {
             this.readOnly = false;
             this.destructive = true;

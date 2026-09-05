@@ -22,16 +22,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * The task surface: the tools an agent reaches for most.
- * <p>
- * Read and write are separate tools rather than one call with a mode, and the writes are
- * split by what they change, so a client can auto approve a search while still confirming
- * an edit.
- * <p>
- * There is no delete_task, because Jinear does not delete tasks. A task is retired by
- * moving it to a status in the CANCELLED group, which set_task_status already does.
- */
 @Configuration
 @RequiredArgsConstructor
 public class TaskMcpTools {

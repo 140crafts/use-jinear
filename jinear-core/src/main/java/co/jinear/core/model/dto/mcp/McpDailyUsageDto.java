@@ -9,7 +9,6 @@ import lombok.ToString;
 @ToString
 public class McpDailyUsageDto {
 
-    /** ISO date, yyyy-MM-dd. */
     private String date;
     private Long callCount;
     private Long errorCount;

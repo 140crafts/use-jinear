@@ -17,9 +17,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Boards group tasks for a sprint or a piece of work, and topics label them.
- */
 @Configuration
 @RequiredArgsConstructor
 public class BoardMcpTools {

@@ -11,10 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-/**
- * The instance wide view of registered clients. Reached only through /v1/admin, which
- * the security chain already restricts to ROLE_ADMIN.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor

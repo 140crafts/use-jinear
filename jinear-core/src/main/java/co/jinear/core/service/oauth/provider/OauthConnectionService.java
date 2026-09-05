@@ -26,11 +26,6 @@ public class OauthConnectionService {
     private final SessionInfoService sessionInfoService;
     private final PassiveService passiveService;
 
-    /**
-     * One connection per account and client. Re-consenting widens the existing grant
-     * rather than piling up rows, so the management screen shows one entry per client
-     * and revoking it really does end that client's access.
-     */
     public OauthConnection grant(String accountId, String clientId, String clientName, Set<String> scopes) {
         OauthConnection connection = oauthConnectionRepository
                 .findFirstByAccountIdAndClientIdAndPassiveIdIsNull(accountId, clientId)
@@ -40,8 +35,6 @@ public class OauthConnectionService {
         connection.setClientName(clientName);
         connection.setGrantedScopes(oauthScopeService.format(scopes));
         if (Objects.isNull(connection.getSessionInfoId())) {
-            // Write managers stamp the session id onto every workspace activity row, so a
-            // connection opens a real session exactly as a browser login does.
             connection.setSessionInfoId(sessionInfoService.initialize(ProviderType.OAUTH_CONNECTION, accountId));
         }
         OauthConnection saved = oauthConnectionRepository.save(connection);

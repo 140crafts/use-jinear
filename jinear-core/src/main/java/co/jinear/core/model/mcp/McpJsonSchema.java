@@ -6,14 +6,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import java.util.List;
 
-/**
- * A small builder for the JSON Schema documents that describe tool inputs and outputs.
- * <p>
- * Written by hand rather than generated from a Java type, because the description on
- * each property is what the model reads to decide how to fill it in, and generated
- * schemas do not carry that. Defaults to draft 2020-12, which is what the specification
- * assumes when no $schema is present.
- */
 public final class McpJsonSchema {
 
     private static final JsonNodeFactory FACTORY = JsonNodeFactory.instance;
@@ -34,7 +26,6 @@ public final class McpJsonSchema {
         return new McpJsonSchema();
     }
 
-    /** The recommended shape for a tool that takes nothing at all. */
     public static ObjectNode noArguments() {
         ObjectNode node = FACTORY.objectNode();
         node.put("type", "object");
@@ -121,7 +112,6 @@ public final class McpJsonSchema {
         return this;
     }
 
-    /** Adds a paging window with the bounds the server actually enforces. */
     public McpJsonSchema withPaging(int maxPageSize) {
         ObjectNode page = properties.putObject("page");
         page.put("type", "integer");
@@ -147,7 +137,6 @@ public final class McpJsonSchema {
         return this;
     }
 
-    /** Loosens the schema so unknown keys are ignored instead of rejected. */
     public McpJsonSchema allowAdditional() {
         schema.put("additionalProperties", true);
         return this;

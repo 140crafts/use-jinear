@@ -8,13 +8,6 @@ import lombok.ToString;
 import java.util.Date;
 import java.util.Set;
 
-/**
- * The identity behind one request authenticated by an OAuth bearer token.
- * <p>
- * Carried as the Authentication details rather than as the credential, because the
- * credential slot is where SessionInfoService expects a parseable session JWT and an
- * this token is signed with a different key.
- */
 @Getter
 @Setter
 @ToString

@@ -30,18 +30,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
-/**
- * The MCP endpoint. Streamable HTTP, stateless.
- * <p>
- * No session id is issued. Every tool here answers in a single response, so there is
- * nothing to stream back out of band, and a stateless server has no session table to
- * lose when an instance restarts behind the gateway.
- * <p>
- * The important behaviour is the refusal. An unauthenticated tool call must fail the HTTP
- * request with 401 and a WWW-Authenticate challenge. Returning 200 with a tool error that
- * says "please sign in" reads to a client as a tool that failed, and the user is never
- * offered the chance to connect.
- */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -76,7 +64,6 @@ public class McpController {
         messages.forEach(message -> mcpProtocolService.handle(message, context).ifPresent(responses::add));
 
         if (responses.isEmpty()) {
-            // Every message was a notification, so there is nothing to answer with.
             return ResponseEntity.accepted().build();
         }
         if (!body.isArray()) {
@@ -87,10 +74,6 @@ public class McpController {
         return ResponseEntity.ok(array);
     }
 
-    /**
-     * There is no server initiated stream to open, so the GET that would subscribe to one
-     * is refused with the status the specification reserves for exactly this case.
-     */
     @GetMapping("/mcp")
     public ResponseEntity<Void> noStream() {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED)
@@ -98,19 +81,11 @@ public class McpController {
                 .build();
     }
 
-    /** Session teardown. This server keeps no session, so there is nothing to tear down. */
     @DeleteMapping("/mcp")
     public ResponseEntity<Void> endSession() {
         return ResponseEntity.noContent().build();
     }
 
-    /**
-     * Walks the batch looking for the first tool call the caller may not make.
-     * <p>
-     * initialize, ping, notifications and tools/list are deliberately left open, so a
-     * client can connect and read the whole catalog before anyone signs in. That is also
-     * what lets a directory reviewer inspect every tool without an account.
-     */
     private Optional<ResponseEntity<JsonNode>> challengeFor(List<JsonNode> messages, Optional<OauthAccessTokenVo> token) {
         for (JsonNode message : messages) {
             if (!mcpProtocolService.isToolCall(message)) {
@@ -119,8 +94,6 @@ public class McpController {
             String toolName = mcpProtocolService.toolNameOf(message);
             Optional<McpTool> tool = Objects.isNull(toolName) ? Optional.empty() : mcpToolRegistry.find(toolName);
             if (tool.isEmpty()) {
-                // An unknown tool is a protocol error, not an authorization one. Let the
-                // dispatcher answer so the model learns the name was wrong.
                 continue;
             }
             Set<OauthScope> required = tool.get().definition().getRequiredScopes();
@@ -159,11 +132,6 @@ public class McpController {
                 .body(body);
     }
 
-    /**
-     * The challenge names the scopes already granted alongside the missing ones. Naming
-     * only what is missing would have the user re-consent to a narrower set than they
-     * already had, silently dropping permissions they were relying on.
-     */
     private ResponseEntity<JsonNode> insufficientScope(Set<String> granted, Set<OauthScope> required) {
         Set<String> union = new LinkedHashSet<>(granted);
         required.forEach(scope -> union.add(scope.getValue()));

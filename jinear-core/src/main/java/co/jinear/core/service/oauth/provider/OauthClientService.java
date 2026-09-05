@@ -20,13 +20,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-/**
- * Resolution and registration of OAuth clients.
- * <p>
- * Three registration paths are supported: a client_id that is an https URL is
- * resolved as a Client ID Metadata Document, anything else is looked up as a
- * previously registered dynamic or static client.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -39,13 +32,6 @@ public class OauthClientService {
     private final OauthProperties oauthProperties;
     private final PassiveService passiveService;
 
-    /**
-     * Returns the client's effective metadata for an authorization request.
-     * <p>
-     * A CIMD document is re-fetched on every authorization rather than trusting the
-     * stored copy, so a client that changes its redirect URIs cannot be authorized
-     * against a stale registration.
-     */
     public OauthClientMetadataVo resolveForAuthorization(String clientId) {
         if (cimdResolver.looksLikeCimdClientId(clientId)) {
             OauthClientMetadataVo metadata = cimdResolver.resolve(clientId);
@@ -71,11 +57,6 @@ public class OauthClientService {
                 .orElse(clientId);
     }
 
-    /**
-     * The consent screen must name the client by the host of its client_id URL rather
-     * than by the self asserted client_name, because a metadata document is written by
-     * whoever hosts it.
-     */
     public String hostOf(String uri) {
         try {
             return URI.create(uri).getHost();
@@ -154,10 +135,6 @@ public class OauthClientService {
         return requested;
     }
 
-    /**
-     * Keeps a shadow row for a CIMD client so the management screens and the tool call
-     * log have a name to show. The row is never the source of truth for authorization.
-     */
     private void upsertCimdClient(OauthClientMetadataVo metadata) {
         OauthClient client = oauthClientRepository.findByClientIdAndPassiveIdIsNull(metadata.getClientId())
                 .orElseGet(OauthClient::new);

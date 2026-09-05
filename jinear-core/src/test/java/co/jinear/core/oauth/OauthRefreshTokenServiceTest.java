@@ -19,11 +19,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * OAuth 2.1 requires refresh token rotation for public clients, and every MCP client is
- * a public client. Rotation without reuse detection is only half the protection: a
- * stolen token is only harmless if presenting a spent one ends the grant.
- */
 class OauthRefreshTokenServiceTest {
 
     private OauthRefreshTokenRepository repository;
@@ -105,7 +100,6 @@ class OauthRefreshTokenServiceTest {
         assertThatThrownBy(() -> service.redeem("row-1.wrong"))
                 .isInstanceOf(BusinessException.class)
                 .hasMessage("oauth.error.invalid-grant");
-        // A wrong secret is a guess, not a leak, so the connection survives.
         Mockito.verify(connectionService, Mockito.never()).revoke(Mockito.anyString());
     }
 

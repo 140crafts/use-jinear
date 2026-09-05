@@ -15,12 +15,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * What a person can see and change about the apps they have connected to their account.
- * <p>
- * This is grant management, not MCP: an app the user consented to is the same record
- * whichever resource it later calls.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -41,11 +35,6 @@ public class OauthConnectionManager {
         return response;
     }
 
-    /**
-     * Revoking is deliberately owner only, not admin only: a connection is a grant one
-     * person made from their own account, and nobody else's role should let them speak
-     * for it.
-     */
     public BaseResponse revokeConnection(String oauthConnectionId) {
         String accountId = sessionInfoService.currentAccountId();
         OauthConnection connection = oauthConnectionService.retrieve(oauthConnectionId);

@@ -15,13 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Rotating refresh tokens with reuse detection.
- * <p>
- * OAuth 2.1 requires rotation for public clients, and both DCR and CIMD register a
- * client as public. Presenting a token that has already been rotated means a copy
- * leaked, so the whole connection is revoked instead of just refusing that one token.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -73,7 +66,6 @@ public class OauthRefreshTokenService {
         return token;
     }
 
-    /** Marks the presented token spent and returns its successor, in one step. */
     public String rotate(OauthRefreshToken current) {
         String replacement = issue(current.getOauthConnectionId());
         String replacementId = replacement.substring(0, replacement.indexOf(SEPARATOR));

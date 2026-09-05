@@ -9,29 +9,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * RFC 8414 Authorization Server Metadata: what a client reads before it can authorize.
- * <p>
- * A plain map rather than a typed response so it serializes exactly as the RFC specifies,
- * and so it stays out of the generated frontend type file.
- */
 @Service
 @RequiredArgsConstructor
 public class OauthDiscoveryService {
 
     private final OauthProperties oauthProperties;
 
-    /**
-     * Two fields decide how Claude registers itself: a client identified by a metadata
-     * document is only used when {@code client_id_metadata_document_supported} is true
-     * AND {@code "none"} appears in the token endpoint auth methods, because that
-     * client authenticates as a public client with PKCE and no secret. Drop either and
-     * every connection falls back to dynamic registration.
-     * <p>
-     * {@code scopes_supported} is one flat {@link OauthScope} set because MCP is the only
-     * resource this server protects. A second resource makes the advertised set depend on
-     * which resource the client asked about.
-     */
     public Map<String, Object> authorizationServerMetadata() {
         String issuer = oauthProperties.getIssuerUrl();
         Map<String, Object> document = new LinkedHashMap<>();

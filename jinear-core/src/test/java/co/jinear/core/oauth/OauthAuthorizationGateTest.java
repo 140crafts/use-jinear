@@ -19,14 +19,6 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * The two switches in front of the authorization endpoint.
- * <p>
- * The instance flag is checked here and not on the transport, so turning it off stops
- * anybody granting fresh access while the connections people already made keep working.
- * That is the behaviour the admin screen promises, and it only holds if this refusal
- * happens before a request is parked.
- */
 class OauthAuthorizationGateTest {
 
     private McpProperties properties;
@@ -103,10 +95,6 @@ class OauthAuthorizationGateTest {
         Mockito.verifyNoInteractions(requestService);
     }
 
-    /**
-     * The happy path is here only to prove the two refusals above are caused by the
-     * switches and not by the rest of the request being unusable.
-     */
     @Test
     void sendsTheUserToTheConsentScreenWhenBothSwitchesAgree() {
         properties.setEnabled(Boolean.TRUE);

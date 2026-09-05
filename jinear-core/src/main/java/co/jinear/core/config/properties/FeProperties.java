@@ -36,7 +36,6 @@ public class FeProperties {
     @Value("${fe.mobile-login-redirect}")
     private String mobileLoginRedirect;
 
-    /** Consent screen a third party app's user is sent to. Carries a {requestId} placeholder. */
     @Value("${fe.oauth-consent-url}")
     private String oauthConsentUrl;
 }

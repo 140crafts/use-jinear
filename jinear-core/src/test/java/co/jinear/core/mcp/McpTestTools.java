@@ -8,11 +8,6 @@ import co.jinear.core.service.mcp.tool.McpShapes;
 import co.jinear.core.service.mcp.tool.McpTool;
 import co.jinear.core.service.mcp.tool.SimpleMcpTool;
 
-/**
- * Stand in tools for the protocol tests. Using fakes here keeps the transport tests
- * independent of any manager, so a failure points at the protocol rather than at the
- * domain underneath it.
- */
 final class McpTestTools {
 
     private McpTestTools() {

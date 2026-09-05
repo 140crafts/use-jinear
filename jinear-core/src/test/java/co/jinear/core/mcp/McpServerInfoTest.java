@@ -16,14 +16,6 @@ import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * What a member is told about their instance's MCP server.
- * <p>
- * Two switches decide this: the property, which says whether the server exists at all,
- * and the instance flag, which is the administrator's. Reporting either one alone would
- * hand a member a server address that cannot be connected, and the resulting failure
- * happens inside Claude where there is nothing to read.
- */
 class McpServerInfoTest {
 
     private InstanceFlagService instanceFlagService;
@@ -77,10 +69,6 @@ class McpServerInfoTest {
         assertThat(info.getServerUrl()).isNull();
     }
 
-    /**
-     * The documentation link is useful precisely when the feature is off, because that is
-     * when somebody wants to know how to turn it on.
-     */
     @Test
     void alwaysReportsTheDocumentationUrl() {
         assertThat(infoWith(false, false).getDocumentationUrl()).isEqualTo("https://jinear.test/mcp/");

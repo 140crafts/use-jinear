@@ -15,13 +15,6 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.Objects;
 
-/**
- * Issues and redeems authorization codes.
- * <p>
- * The code handed to the client is "{rowId}.{secret}". Storing only a BCrypt hash of
- * the secret follows the same shape as the robot token: a database leak does not
- * yield usable codes, and the row id keeps the lookup indexable.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -51,10 +44,6 @@ public class OauthAuthorizationCodeService {
         return saved.getOauthAuthorizationCodeId() + SEPARATOR + secret;
     }
 
-    /**
-     * Consumes a code exactly once. A replay marks the row consumed already, which is
-     * treated as invalid_grant rather than silently reissuing a token.
-     */
     public OauthAuthorizationCode redeem(String presentedCode) {
         if (Objects.isNull(presentedCode) || !presentedCode.contains(SEPARATOR)) {
             throw new BusinessException("oauth.error.invalid-grant");

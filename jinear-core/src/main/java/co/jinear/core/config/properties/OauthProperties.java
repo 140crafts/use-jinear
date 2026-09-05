@@ -11,24 +11,15 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-/**
- * The authorization server's own settings. Nothing here knows about MCP.
- * <p>
- * There is deliberately no enabled flag. MCP is the only resource this server protects,
- * so {@code jinear.mcp.enabled} is the single switch for both halves. When a second
- * resource arrives, enablement becomes per resource and this class gains nothing.
- */
 @Getter
 @Setter
 @Configuration
 @PropertySource("classpath:application.properties")
 public class OauthProperties {
 
-    /** Issuer. Must be the origin that serves /.well-known/oauth-authorization-server. */
     @Value("${jinear.oauth.issuer-url}")
     private String issuerUrl;
 
-    /** Public documentation URL, advertised as service_documentation. */
     @Value("${jinear.oauth.documentation-url:https://jinear.co/mcp/}")
     private String documentationUrl;
 
@@ -44,16 +35,9 @@ public class OauthProperties {
     @Value("${jinear.oauth.authorization-request-validity-minutes:10}")
     private Integer authorizationRequestValidityMinutes = 10;
 
-    /** RFC 7591 dynamic client registration. Kept for clients that cannot do CIMD. */
     @Value("${jinear.oauth.dcr-enabled:true}")
     private Boolean dcrEnabled = Boolean.TRUE;
 
-    /**
-     * Comma separated allowlist of hosts permitted to serve a Client ID Metadata
-     * Document. Empty means any public https host is accepted, which is the open
-     * policy the spec describes. Private and link local addresses are refused either
-     * way by the SSRF guard.
-     */
     @Value("${jinear.oauth.cimd-allowed-hosts:}")
     private String cimdAllowedHosts;
 

@@ -13,18 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-/**
- * OAuth discovery documents, served from the root rather than under /v1 because the
- * RFCs pin them to well known paths on the origin.
- * <p>
- * Both the protected resource document and its path suffixed twin are served: a client
- * whose resource URL has a path component tries the suffixed form first, and falls back
- * to the root form. Serving both removes a round trip and one class of misconfiguration.
- * <p>
- * The authorization server describes itself; the resource describes itself. MCP is the
- * only resource today, so the two protected resource paths both answer for it. A second
- * resource gets its own suffixed path and its own service, and nothing else here moves.
- */
 @Slf4j
 @RestController
 @RequiredArgsConstructor

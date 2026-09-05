@@ -17,12 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-/**
- * Rolls yesterday's call log into the daily table, then prunes the log.
- * <p>
- * The order matters: the rollup has to be written before the rows it summarizes are
- * deleted, or a chart loses the day it was about to gain.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor

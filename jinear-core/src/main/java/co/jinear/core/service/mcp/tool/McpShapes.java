@@ -27,23 +27,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-/**
- * How a Jinear record looks on the wire, and the schema that describes it.
- * <p>
- * Each record is projected down to the fields an agent can act on. Returning the full
- * DTO would drag in rich text state, nested workspaces and media descriptors, which
- * costs the model context it cannot use and is one of the things a directory review
- * flags as an oversized response.
- * <p>
- * Mapper and schema live next to each other on purpose: they are the same contract seen
- * twice, and the published documentation is generated from the schema half.
- */
 @UtilityClass
 public class McpShapes {
 
     private static final JsonNodeFactory FACTORY = JsonNodeFactory.instance;
-
-    // --- workspace -------------------------------------------------------------
 
     public static ObjectNode workspace(WorkspaceDto dto) {
         ObjectNode node = FACTORY.objectNode();
@@ -93,8 +80,6 @@ public class McpShapes {
                 .string("email", "Account email.")
                 .build();
     }
-
-    // --- team ------------------------------------------------------------------
 
     public static ObjectNode team(TeamDto dto) {
         ObjectNode node = FACTORY.objectNode();
@@ -150,8 +135,6 @@ public class McpShapes {
         return node;
     }
 
-    // --- task ------------------------------------------------------------------
-
     public static ObjectNode task(TaskDto dto) {
         ObjectNode node = FACTORY.objectNode();
         node.put("taskId", dto.getTaskId());
@@ -172,7 +155,6 @@ public class McpShapes {
         return node;
     }
 
-    /** The detail view adds the body, which is too large to include in a list. */
     public static ObjectNode taskDetail(TaskDto dto) {
         ObjectNode node = task(dto);
         node.put("description", richText(dto.getDescription()));
@@ -226,8 +208,6 @@ public class McpShapes {
                 .build();
     }
 
-    // --- notes -----------------------------------------------------------------
-
     public static ObjectNode note(NoteDto dto) {
         ObjectNode node = FACTORY.objectNode();
         node.put("noteId", dto.getNoteId());
@@ -276,8 +256,6 @@ public class McpShapes {
                 .build();
     }
 
-    // --- calendar --------------------------------------------------------------
-
     public static ObjectNode calendarEvent(CalendarEventDto dto) {
         ObjectNode node = FACTORY.objectNode();
         node.put("calendarEventId", dto.getCalendarEventId());
@@ -306,8 +284,6 @@ public class McpShapes {
                 .build();
     }
 
-    // --- files -----------------------------------------------------------------
-
     public static ObjectNode file(MaterialDto dto) {
         ObjectNode node = FACTORY.objectNode();
         node.put("materialId", dto.getMaterialId());
@@ -331,8 +307,6 @@ public class McpShapes {
                 .string("accessType", "Who can reach this item.")
                 .build();
     }
-
-    // --- envelopes -------------------------------------------------------------
 
     public static <T> ObjectNode page(PageDto<T> pageDto, Function<T, ObjectNode> mapper) {
         ObjectNode node = FACTORY.objectNode();
@@ -410,13 +384,6 @@ public class McpShapes {
         return List.of();
     }
 
-    // --- helpers ---------------------------------------------------------------
-
-    /**
-     * Rich text is stored as an HTML fragment. It is passed through rather than stripped:
-     * a model reads the markup fine, and stripping would lose links and structure a user
-     * asked about.
-     */
     private static String richText(RichTextDto dto) {
         return Objects.isNull(dto) ? null : dto.getValue();
     }

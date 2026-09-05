@@ -29,14 +29,6 @@ import java.util.Set;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-/**
- * The transport contract.
- * <p>
- * The refusal shape is the part that matters most. A client only offers the user a
- * connect prompt when the HTTP request itself fails with 401 and a WWW-Authenticate
- * header; a 200 carrying a tool error reads as a tool that failed, and the user is never
- * asked to sign in.
- */
 class McpControllerTest {
 
     private static final String RESOURCE_METADATA =
@@ -75,8 +67,6 @@ class McpControllerTest {
         SecurityContextHolder.clearContext();
     }
 
-    // --- handshake -------------------------------------------------------------
-
     @Test
     void initializeEchoesTheClientsProtocolVersionWhenWeSpeakIt() throws Exception {
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON).content("""
@@ -114,11 +104,8 @@ class McpControllerTest {
                 .andExpect(jsonPath("$.result").isMap());
     }
 
-    // --- catalog ---------------------------------------------------------------
-
     @Test
     void toolsListWorksWithoutAnyCredential() throws Exception {
-        // A reviewer, and any client before sign in, must be able to read the whole catalog.
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\"}"))
                 .andExpect(status().isOk())
@@ -135,8 +122,6 @@ class McpControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.isError").value(false));
     }
-
-    // --- refusals --------------------------------------------------------------
 
     @Test
     void anUnauthenticatedProtectedCallFailsTheHttpRequestWithAChallenge() throws Exception {
@@ -162,8 +147,6 @@ class McpControllerTest {
                 .andExpect(status().isForbidden())
                 .andExpect(header().string("WWW-Authenticate",
                         org.hamcrest.Matchers.containsString("error=\"insufficient_scope\"")))
-                // Both the granted and the newly required scope, so re-consent does not
-                // silently drop a permission the client was already relying on.
                 .andExpect(header().string("WWW-Authenticate",
                         org.hamcrest.Matchers.containsString("tasks:read")))
                 .andExpect(header().string("WWW-Authenticate",
@@ -181,8 +164,6 @@ class McpControllerTest {
                 .andExpect(jsonPath("$.result.isError").value(false))
                 .andExpect(jsonPath("$.result.structuredContent.accountId").value("account-1"));
     }
-
-    // --- errors ----------------------------------------------------------------
 
     @Test
     void anUnknownMethodIsAProtocolError() throws Exception {
@@ -226,14 +207,11 @@ class McpControllerTest {
                         """))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.result.isError").value(true))
-                // Never the raw exception, and never a bare "Internal Server Error".
                 .andExpect(jsonPath("$.result.content[0].text",
                         org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("database is on fire"))))
                 .andExpect(jsonPath("$.result.content[0].text",
                         org.hamcrest.Matchers.containsString("could not be completed")));
     }
-
-    // --- batching and notifications --------------------------------------------
 
     @Test
     void aBatchAnswersWithAnArray() throws Exception {
@@ -263,8 +241,6 @@ class McpControllerTest {
                         """))
                 .andExpect(status().isUnauthorized());
     }
-
-    // --- other verbs -----------------------------------------------------------
 
     @Test
     void getIsRefusedBecauseThereIsNoServerInitiatedStream() throws Exception {

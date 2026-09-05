@@ -19,10 +19,6 @@ import org.springframework.context.annotation.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Orientation tools. An agent starts here, because almost every other tool needs a
- * workspaceId and the task tools also need a teamId.
- */
 @Configuration
 @RequiredArgsConstructor
 public class WorkspaceMcpTools {
@@ -118,8 +114,6 @@ public class WorkspaceMcpTools {
                     var grouped = teamWorkflowStatusManager.retrieveAllFromTeam(teamId)
                             .getGroupedTeamWorkflowStatusListDto()
                             .getGroupedTeamWorkflowStatuses();
-                    // Flattened back into one ordered list. The grouping is a board layout
-                    // concern, and a model only needs the id and what the status means.
                     var statuses = new ArrayList<>(grouped.values().stream().flatMap(List::stream).toList());
                     statuses.sort((first, second) -> {
                         int firstOrder = first.getOrder() == null ? Integer.MAX_VALUE : first.getOrder();

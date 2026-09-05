@@ -457,6 +457,14 @@ The response is built by `OauthTokenHelper.generateAccessToken`: an HS512 JWT wi
 `client_id` and `oauth_connection_id` claims. A refresh token is included **only if
 `offline_access` is among the granted scopes**.
 
+Every failure at this endpoint is mapped to an RFC 6749 error shape by
+`OauthErrorMapper`, and the exact code matters operationally. Claude only treats a refresh
+failure as "this grant is gone, start over" when the response says `invalid_grant`.
+Returning `invalid_request` or a custom code there leaves users stuck on a connection that
+can never recover. `invalid_client` is the only code answered with 401; everything else is
+400. Both the success and the error response carry `Cache-Control: no-store`, so a token
+never lands in an intermediary cache.
+
 **The signing key is `jwt.oauth.secret`, deliberately different from `jwt.secret`.** An MCP
 bearer must never authenticate a browser session, and a session cookie must never
 authenticate a tool call, so the two key spaces are kept apart rather than relying on a

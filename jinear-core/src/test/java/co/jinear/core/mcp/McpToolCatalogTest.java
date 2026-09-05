@@ -15,23 +15,10 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Invariants every tool has to hold, checked across the whole catalog.
- * <p>
- * These are not style rules. Each one corresponds to a documented reason a connector is
- * rejected from a directory: a missing title or hint, a name over the length limit, a
- * description that instructs the model instead of describing the tool, or a read only
- * tool that quietly asks for write permission.
- */
 class McpToolCatalogTest {
 
     private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_.-]{1,64}$");
 
-    /**
-     * Phrases that read as instructions to the model rather than as a description of what
-     * the tool does. Reviewers treat these as prompt injection whether or not they were
-     * meant that way.
-     */
     private static final List<String> INSTRUCTION_SHAPED = List.of(
             "ignore previous",
             "ignore all previous",
@@ -123,8 +110,6 @@ class McpToolCatalogTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("catalog")
     void everyToolIsExplicitlyClosedWorld(McpTool tool) {
-        // Every tool reaches only this Jinear instance, so openWorldHint stays false and
-        // is stated rather than left to a default.
         assertThat(tool.definition().getAnnotations().isOpenWorldHint())
                 .as("tool %s only touches this instance", tool.name())
                 .isFalse();
@@ -138,8 +123,6 @@ class McpToolCatalogTest {
 
     @Test
     void readAndWriteAreSeparateTools() {
-        // A single tool that both reads and writes is an automatic rejection, so no tool
-        // may hold a read and a write scope for the same resource at once.
         McpRealCatalog.tools().forEach(tool -> {
             var scopes = tool.definition().getRequiredScopes();
             boolean reads = scopes.stream().anyMatch(scope -> scope.getValue().endsWith(":read"));
@@ -154,8 +137,6 @@ class McpToolCatalogTest {
 
     @Test
     void everyScopeThisServerAdvertisesIsActuallyUsed() {
-        // An unused scope on the consent screen asks the user for a permission nothing
-        // will ever exercise.
         var used = McpRealCatalog.tools().stream()
                 .flatMap(tool -> tool.definition().getRequiredScopes().stream())
                 .distinct()
@@ -170,8 +151,6 @@ class McpToolCatalogTest {
 
     @Test
     void theCatalogStaysSmallEnoughForRealClients() {
-        // Some hosts cap the number of tools they will expose at forty across every
-        // connected server, so a single connector needs to stay well under that.
         assertThat(McpRealCatalog.tools()).hasSizeLessThanOrEqualTo(36);
     }
 

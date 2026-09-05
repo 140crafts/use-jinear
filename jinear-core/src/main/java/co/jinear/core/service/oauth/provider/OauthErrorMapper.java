@@ -7,14 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
-/**
- * Turns an internal message key into the RFC 6749 error shape.
- * <p>
- * The codes matter operationally: Claude only treats a refresh failure as "this grant
- * is gone, start over" when the response says {@code invalid_grant}. Returning
- * {@code invalid_request} or a custom code there leaves users stuck on a dead
- * connection.
- */
 @Component
 public class OauthErrorMapper {
 

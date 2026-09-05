@@ -18,13 +18,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
-/**
- * Every tool this server exposes, keyed by name.
- * <p>
- * The startup validation is not defensive coding for its own sake. A missing title, a
- * name over 64 characters, or a hint that contradicts the tool's scopes is a directory
- * rejection, and it is far cheaper to fail the boot than to find out during review.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -58,7 +51,6 @@ public class McpToolRegistry {
         return List.copyOf(byName.values());
     }
 
-    /** The tools array as it appears in a tools/list result. */
     public ArrayNode toolsArray() {
         ArrayNode array = FACTORY.arrayNode();
         byName.values().forEach(tool -> array.add(describe(tool.definition())));

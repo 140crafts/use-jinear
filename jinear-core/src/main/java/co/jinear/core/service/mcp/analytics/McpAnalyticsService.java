@@ -21,13 +21,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
-/**
- * Usage figures for the management screens.
- * <p>
- * Per tool totals come from the raw log, which only reaches back as far as the retention
- * window. The daily series comes from the rollup table, which survives pruning, so a chart
- * keeps its history after the rows behind it are gone.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor

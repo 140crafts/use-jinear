@@ -15,15 +15,6 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-/**
- * Calendar reads.
- * <p>
- * There is no calendar write tool. Jinear has no calendar events of its own: what the
- * calendar shows is tasks that carry dates, plus events synced from a Google Calendar the
- * user attached. Writing an event would mean writing into Google on the user's behalf,
- * which is a third party API this connector does not proxy. Putting work on the calendar
- * is create_task with a dueDate.
- */
 @Configuration
 @RequiredArgsConstructor
 public class CalendarMcpTools {

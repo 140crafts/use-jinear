@@ -20,18 +20,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-/**
- * File browsing.
- * <p>
- * Read only. Uploading a file needs multipart or a presigned URL round trip, neither of
- * which maps onto a tool call, so files are listed and linked rather than transferred.
- */
 @Configuration
 @RequiredArgsConstructor
 public class FileMcpTools {
 
     private final MaterialListingManager materialListingManager;
-    /** Only for its origin: the issuer is served by the same host as the media endpoint. */
     private final OauthProperties oauthProperties;
 
     @Bean

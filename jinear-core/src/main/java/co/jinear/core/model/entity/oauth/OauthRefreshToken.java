@@ -8,13 +8,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
 
-/**
- * Rotating refresh token. OAuth 2.1 requires rotation for public clients, and both
- * DCR and CIMD register Claude as a public client.
- * <p>
- * consumed_at plus rotated_to give reuse detection: presenting a token that already
- * has a successor means the token leaked, so the whole connection is revoked.
- */
 @Getter
 @Setter
 @Entity

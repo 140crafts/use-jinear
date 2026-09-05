@@ -10,14 +10,6 @@ import {calculateDateDiff} from "@/util/DateHelper";
 import React, {useEffect, useState} from "react";
 import styles from "./AdminMcpScreen.module.css";
 
-/**
- * The instance wide view of the MCP server: how much it is used, which client
- * applications registered themselves, and the recent call log.
- * <p>
- * Revoking a client here is heavier than a member disconnecting their own assistant. It
- * cuts every connection made through that client, for every account, which is the control
- * an administrator needs when a client turns out to be untrustworthy.
- */
 const AdminMcpScreen: React.FC = () => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();

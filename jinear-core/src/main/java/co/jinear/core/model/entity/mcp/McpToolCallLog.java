@@ -8,14 +8,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-/**
- * One row per tools/call.
- * <p>
- * Deliberately holds no arguments and no response payload. Tool arguments are
- * derived from the user's conversation, and both directory policies require a
- * connector to collect only what its function needs. Sizes and timings are enough
- * to answer "what is this connection doing" without storing anyone's content.
- */
 @Getter
 @Setter
 @Entity

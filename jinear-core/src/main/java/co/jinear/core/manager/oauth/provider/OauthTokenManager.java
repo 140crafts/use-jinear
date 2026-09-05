@@ -23,9 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-/**
- * Token, registration and revocation endpoints.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -67,16 +64,10 @@ public class OauthTokenManager {
         body.put("redirect_uris", registered.getRedirectUris());
         body.put("grant_types", registered.getGrantTypes());
         body.put("response_types", List.of("code"));
-        // Public client: no secret is issued, PKCE is what protects the exchange.
         body.put("token_endpoint_auth_method", "none");
         return body;
     }
 
-    /**
-     * RFC 7009. Revoking a refresh token ends the whole connection, which is what a
-     * user disconnecting from their client expects. The RFC requires a 200 whether or
-     * not the token was valid, so unknown tokens are swallowed.
-     */
     public void revoke(String token) {
         assertEnabled();
         if (Objects.isNull(token) || token.isBlank()) {
@@ -123,7 +114,6 @@ public class OauthTokenManager {
         assertResourceMatches(form.get("resource"));
 
         Set<String> granted = oauthScopeService.parse(connection.getGrantedScopes());
-        // A refresh may narrow the scope set but never widen it.
         Set<String> requested = oauthScopeService.parse(form.get("scope"));
         Set<String> effective = requested.isEmpty() ? granted : requested;
         if (!oauthScopeService.grants(granted, effective)) {

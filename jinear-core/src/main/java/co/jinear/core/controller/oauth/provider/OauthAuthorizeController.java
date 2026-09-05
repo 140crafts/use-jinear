@@ -26,14 +26,6 @@ public class OauthAuthorizeController {
 
     private final OauthAuthorizationManager oauthAuthorizationManager;
 
-    /**
-     * Starts the flow. Always answers with a redirect: to the consent screen when the
-     * request is usable, or back to the client with an OAuth error when it is not.
-     * <p>
-     * A bad client_id or an unregistered redirect_uri is the exception. There is no
-     * address we trust to send the user to, so the error is rendered here instead of
-     * being bounced to an attacker controlled URL.
-     */
     @GetMapping("/authorize")
     public ResponseEntity<String> authorize(@RequestParam Map<String, String> params) {
         try {
@@ -52,6 +44,7 @@ public class OauthAuthorizeController {
 
     @GetMapping("/authorize/info/{requestId}")
     public OauthConsentInfoResponse retrieveConsentInfo(@PathVariable String requestId) {
+        //TODO: check fe, use redirect instead of session storage !
         return oauthAuthorizationManager.retrieveConsentInfo(requestId);
     }
 
@@ -60,10 +53,6 @@ public class OauthAuthorizeController {
         return oauthAuthorizationManager.submitConsent(oauthConsentRequest);
     }
 
-    /**
-     * A deliberately plain page. It is only reached when a client is misconfigured, and
-     * it must not leak anything about the account or link anywhere the caller supplied.
-     */
     private String errorPage(String messageKey) {
         String detail = switch (messageKey) {
             case "oauth.error.invalid-client" -> "The application requesting access could not be verified.";

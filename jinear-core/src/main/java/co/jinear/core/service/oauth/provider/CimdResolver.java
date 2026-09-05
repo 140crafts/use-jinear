@@ -20,18 +20,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
-/**
- * Resolves an https client_id into the client's own OAuth metadata, per the OAuth
- * Client ID Metadata Document draft.
- * <p>
- * CIMD is the registration path the MCP specification prefers and the one Claude
- * picks when our authorization server metadata advertises it, because it avoids a
- * fresh dynamic registration row for every connection.
- * <p>
- * The document is self asserted, so this class only establishes that the document
- * lives where the client_id says it does. Everything a user is shown about the
- * client is derived from the client_id host, never from client_name.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -103,12 +91,6 @@ public class CimdResolver {
         return uri;
     }
 
-    /**
-     * Non loopback redirects must be same origin with the metadata document. Without
-     * this an attacker could point a legitimate looking client_id at their own
-     * callback. Loopback redirects are exempt because a native client cannot be
-     * same origin with an https document.
-     */
     private void assertRedirectUrisAreAcceptable(URI documentUri, List<String> redirectUris) {
         for (String redirectUri : redirectUris) {
             URI parsed;
@@ -134,11 +116,6 @@ public class CimdResolver {
         }
     }
 
-    /**
-     * The authorization server takes a URL from an unauthenticated caller and fetches
-     * it, so an unguarded implementation is a server side request forgery primitive
-     * against anything the backend can reach.
-     */
     private void assertHostIsFetchable(String host) {
         List<String> allowedHosts = oauthProperties.cimdAllowedHostList();
         if (!allowedHosts.isEmpty() && !allowedHosts.contains(host.toLowerCase(Locale.ROOT))) {
@@ -169,8 +146,6 @@ public class CimdResolver {
     }
 
     private String fetch(URI uri) {
-        // HttpClient is only AutoCloseable from Java 21 and this module compiles at 17,
-        // so the client is built per call and left to the garbage collector.
         HttpClient client = HttpClient.newBuilder()
                 .followRedirects(HttpClient.Redirect.NEVER)
                 .connectTimeout(Duration.ofMillis(oauthProperties.getCimdFetchTimeoutMillis()))

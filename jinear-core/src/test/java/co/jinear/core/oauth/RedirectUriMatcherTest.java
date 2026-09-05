@@ -7,11 +7,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * Redirect matching is exact everywhere except loopback, where a native client binds a
- * port at runtime. Claude Code declares both localhost and 127.0.0.1 and then listens on
- * a random port, so both have to match with the port ignored.
- */
 class RedirectUriMatcherTest {
 
     private final RedirectUriMatcher matcher = new RedirectUriMatcher();

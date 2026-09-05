@@ -25,18 +25,6 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Locale;
 import java.util.Objects;
 
-/**
- * The generic {@code search} and {@code fetch} pair.
- * <p>
- * These are not a second way to do what the task tools already do. They are the standard
- * retrieval contract a host uses when it wants to cite sources: search returns
- * identifiers with user-openable URLs, and fetch returns the full text behind one of
- * them. A host that knows this contract can pull Jinear into an answer without knowing
- * anything about workspaces or teams.
- * <p>
- * Both are read only and cover every workspace the account belongs to, because a citing
- * host has no workspace to pass in.
- */
 @Slf4j
 @Configuration
 @RequiredArgsConstructor
@@ -138,7 +126,6 @@ public class CompatibilityMcpTools {
                 node.put("url", taskUrl(workspaceUsername, task));
             }
         } catch (RuntimeException exception) {
-            // One workspace failing must not empty the whole result set.
             log.debug("[MCP] search skipped workspace {}: {}", workspaceId, exception.getMessage());
         }
     }

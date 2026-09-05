@@ -17,8 +17,6 @@ const PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS = [
     ["/engage/reset-password-complete"],
     ["/engage/forgot-password"],
     ["/engage/workspace-invitation"],
-    // An MCP client sends the user here before they have a session. The page shows the
-    // sign in form itself and returns here afterwards.
     ["/oauth/consent"],
     ["/pricing"],
     ["/terms"],

@@ -9,13 +9,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.Objects;
 
-/**
- * PKCE, S256 only.
- * <p>
- * OAuth 2.1 requires S256 where the client can do it, and every client we accept can, so
- * the "plain" method is not accepted at all. Our authorization server metadata
- * advertises only S256 in code_challenge_methods_supported to match.
- */
 @Slf4j
 @Component
 public class PkceValidator {

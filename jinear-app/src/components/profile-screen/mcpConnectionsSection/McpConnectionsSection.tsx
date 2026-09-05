@@ -17,17 +17,6 @@ interface McpConnectionsSectionProps {
 
 const logger = Logger("McpConnectionsSection");
 
-/**
- * Everything a member needs to connect an AI assistant to this instance, and the list of
- * assistants they already connected.
- * <p>
- * The server URL is shown rather than left for the member to work out. It has to be typed
- * into the client exactly, path included, and on a self hosted instance nobody but the
- * server knows what it is.
- * <p>
- * The whole section hides itself when the instance says MCP is off, so a member never sees
- * setup steps for something they cannot connect to.
- */
 const McpConnectionsSection: React.FC<McpConnectionsSectionProps> = ({title}) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();

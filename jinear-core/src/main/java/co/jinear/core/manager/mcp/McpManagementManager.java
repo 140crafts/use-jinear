@@ -20,12 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-/**
- * What a member can learn about the MCP server itself, plus the workspace scoped tool
- * call view a workspace owner gets. The connections a person has granted are managed
- * one layer down, in
- * {@link co.jinear.core.manager.oauth.provider.OauthConnectionManager}.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -42,11 +36,6 @@ public class McpManagementManager {
     private final InstanceFlagService instanceFlagService;
     private final McpProperties mcpProperties;
 
-    /**
-     * Both switches have to agree. The property decides whether the server exists at all,
-     * and the instance flag is what an administrator turns on afterwards, so reporting
-     * either one alone would offer a member a URL that cannot be connected.
-     */
     public McpServerInfoResponse retrieveServerInfo() {
         boolean enabled = Boolean.TRUE.equals(mcpProperties.getEnabled())
                 && instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER);

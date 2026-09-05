@@ -17,14 +17,6 @@ import org.springframework.context.annotation.Configuration;
 import java.util.Locale;
 import java.util.Objects;
 
-/**
- * Notebook and note reads.
- * <p>
- * Notes are read only over MCP. A note's body is a collaborative CRDT document whose title
- * lives inside the document and is mirrored out to the title column, so a note created
- * from plain text would lose its title the moment somebody opened it in the editor.
- * Writing notes correctly needs the editor's document format, not a text field.
- */
 @Configuration
 @RequiredArgsConstructor
 public class NoteMcpTools {
@@ -87,10 +79,6 @@ public class NoteMcpTools {
                     if (Objects.isNull(titleContains) || titleContains.isBlank()) {
                         return McpToolResult.of(McpShapes.page(page, McpShapes::note));
                     }
-                    // The note filter has no text predicate of its own, so the phrase is applied
-                    // to the page that came back. The page counts stay as the backend reported
-                    // them rather than being restated to match the trimmed list, which would
-                    // make paging inconsistent.
                     String needle = titleContains.toLowerCase(Locale.ROOT);
                     var matched = page.getContent().stream()
                             .filter(note -> Objects.nonNull(note.getTitle())

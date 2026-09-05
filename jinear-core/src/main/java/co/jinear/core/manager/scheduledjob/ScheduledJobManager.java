@@ -33,10 +33,6 @@ public class ScheduledJobManager {
     private final TaskFtsRefreshService taskFtsRefreshService;
     private final McpRetentionService mcpRetentionService;
 
-    /**
-     * Keeps the MCP call log inside its retention window, rolling each day into the
-     * summary table first so the usage charts outlive the rows behind them.
-     */
     @Async
     @Scheduled(fixedRate = 6, timeUnit = TimeUnit.HOURS)
     public void rollUpAndPruneMcpUsage() {

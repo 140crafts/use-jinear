@@ -14,13 +14,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.TimeZone;
 
-/**
- * Typed access to a tool's arguments, with error text a model can act on.
- * <p>
- * Every failure names the field, says what was expected, and says what was received.
- * A model that gets "Invalid request" has nothing to retry with; one that gets
- * "taskId is required" fixes the call on the next turn.
- */
 @RequiredArgsConstructor
 public class McpToolArguments {
 
@@ -101,7 +94,6 @@ public class McpToolArguments {
         return values;
     }
 
-    /** Accepts either a full ISO instant or a bare date, both interpreted as UTC. */
     public Date optionalDate(String field) {
         String raw = optionalString(field, null);
         if (Objects.isNull(raw) || raw.isBlank()) {
@@ -127,7 +119,6 @@ public class McpToolArguments {
         return value;
     }
 
-    /** Managers take ZonedDateTime, so parsing lands there rather than on java.util.Date. */
     public ZonedDateTime optionalZonedDateTime(String field) {
         Date parsed = optionalDate(field);
         return Objects.isNull(parsed) ? null : ZonedDateTime.ofInstant(parsed.toInstant(), ZoneOffset.UTC);
