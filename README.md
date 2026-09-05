@@ -114,7 +114,7 @@ nginx config with the `Host` header and upload body size already handled.
 ### Connecting Claude or ChatGPT
 
 Jinear can run an MCP server, so a member can connect Claude or ChatGPT to the instance and
-work with their tasks, projects, notes and files from inside the assistant. It is optional
+work with their tasks, notes and files from inside the assistant. It is optional
 and off by default. Your instance must be reachable over HTTPS from the internet, because
 those assistants connect from their own servers; instances on a private network use Claude
 Desktop with the `mcp-remote` proxy instead.

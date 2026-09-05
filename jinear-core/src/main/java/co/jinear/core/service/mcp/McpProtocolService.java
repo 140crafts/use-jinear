@@ -51,7 +51,7 @@ public class McpProtocolService {
      * directories applies to this field.
      */
     private static final String INSTRUCTIONS = """
-            Jinear holds a person's tasks, boards, projects, calendar, notes and files. \
+            Jinear holds a person's tasks, boards, calendar, notes and files. \
             Call list_workspaces first: nearly every other tool needs a workspaceId, and \
             task tools also need a teamId from list_teams. Before changing a task's status, \
             read list_workflow_statuses for that team, since statuses are per team and are \

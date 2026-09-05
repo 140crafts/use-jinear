@@ -1,6 +1,6 @@
 package co.jinear.core.mcp;
 
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolDefinition;
 import co.jinear.core.service.mcp.tool.McpTool;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -160,8 +160,8 @@ class McpToolCatalogTest {
                 .flatMap(tool -> tool.definition().getRequiredScopes().stream())
                 .distinct()
                 .toList();
-        for (McpScope scope : McpScope.values()) {
-            if (scope == McpScope.OFFLINE_ACCESS) {
+        for (OauthScope scope : OauthScope.values()) {
+            if (scope == OauthScope.OFFLINE_ACCESS) {
                 continue;
             }
             assertThat(used).as("scope %s is advertised but no tool requires it", scope.getValue()).contains(scope);

@@ -1,10 +1,7 @@
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import useTranslation from "@/locales/useTranslation";
-import {
-    useRetrieveMcpConnectionsQuery,
-    useRetrieveMcpServerInfoQuery,
-    useRevokeMcpConnectionMutation,
-} from "@/store/api/mcpApi";
+import {useRetrieveMcpServerInfoQuery} from "@/store/api/mcpApi";
+import {useRetrieveOauthConnectionsQuery, useRevokeOauthConnectionMutation} from "@/store/api/oauthApi";
 import {changeLoadingModalVisibility} from "@/store/slice/modalSlice";
 import {useAppDispatch} from "@/store";
 import {calculateDateDiff} from "@/util/DateHelper";
@@ -41,8 +38,8 @@ const McpConnectionsSection: React.FC<McpConnectionsSectionProps> = ({title}) =>
     const serverUrl = serverInfoResponse?.data?.serverUrl;
     const documentationUrl = serverInfoResponse?.data?.documentationUrl;
 
-    const {currentData: connectionsResponse} = useRetrieveMcpConnectionsQuery(undefined, {skip: !enabled});
-    const [revokeConnection, {isLoading: isRevokeLoading}] = useRevokeMcpConnectionMutation();
+    const {currentData: connectionsResponse} = useRetrieveOauthConnectionsQuery(undefined, {skip: !enabled});
+    const [revokeConnection, {isLoading: isRevokeLoading}] = useRevokeOauthConnectionMutation();
 
     useEffect(() => {
         dispatch(changeLoadingModalVisibility({visible: isRevokeLoading}));
@@ -70,8 +67,8 @@ const McpConnectionsSection: React.FC<McpConnectionsSectionProps> = ({title}) =>
         }
     };
 
-    const disconnect = (mcpConnectionId: string) => () => {
-        revokeConnection({mcpConnectionId});
+    const disconnect = (oauthConnectionId: string) => () => {
+        revokeConnection({oauthConnectionId});
     };
 
     const connections = connectionsResponse?.data ?? [];
@@ -126,7 +123,7 @@ const McpConnectionsSection: React.FC<McpConnectionsSectionProps> = ({title}) =>
             {connections.length == 0 && <span className={styles.text}>{t("mcpConnectionsListEmpty")}</span>}
             <div className={styles.connectionList}>
                 {connections.map((connection) => (
-                    <div key={connection.mcpConnectionId} className={styles.connectionRow}>
+                    <div key={connection.oauthConnectionId} className={styles.connectionRow}>
                         <div className={styles.connectionText}>
                             <div className={styles.connectionHost}>{connection.clientDisplayHost}</div>
                             {connection.clientName && (
@@ -142,7 +139,7 @@ const McpConnectionsSection: React.FC<McpConnectionsSectionProps> = ({title}) =>
                             heightVariant={ButtonHeight.short}
                             variant={ButtonVariants.outline}
                             disabled={isRevokeLoading}
-                            onClick={disconnect(connection.mcpConnectionId)}
+                            onClick={disconnect(connection.oauthConnectionId)}
                         >
                             {t("mcpConnectionsDisconnectButton")}
                         </Button>

@@ -3,7 +3,7 @@ package co.jinear.core.service.mcp.tool.config;
 import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.manager.task.*;
 import co.jinear.core.model.dto.task.CommentDto;
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
@@ -61,7 +61,7 @@ public class TaskMcpTools {
                         .build())
                 .output(McpShapes.pageSchema("Matching tasks, best match first.", McpShapes.taskSchema()))
                 .readOnly()
-                .scopes(McpScope.TASKS_READ)
+                .scopes(OauthScope.TASKS_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     TaskSearchRequest request = new TaskSearchRequest();
@@ -81,7 +81,7 @@ public class TaskMcpTools {
         return SimpleMcpTool.named("list_tasks")
                 .title("List tasks with filters")
                 .description("Lists tasks in a workspace, optionally narrowed by team, assignee, workflow status, "
-                        + "state group, project, milestone or a date range. "
+                        + "state group or a date range. "
                         + "This is the tool for questions like what is in progress, what is assigned to someone, "
                         + "or what is due this week.")
                 .input(McpJsonSchema.object()
@@ -90,15 +90,13 @@ public class TaskMcpTools {
                         .stringArray("assigneeIds", "Restrict to tasks assigned to these account ids, from list_workspace_members.", false)
                         .stringArray("workflowStatusIds", "Restrict to these status ids, from list_workflow_statuses.", false)
                         .stringArray("stateGroups", "Restrict by state group. Any of BACKLOG, NOT_STARTED, STARTED, COMPLETED, CANCELLED.", false)
-                        .stringArray("projectIds", "Restrict to tasks in these projects.", false)
-                        .stringArray("milestoneIds", "Restrict to tasks on these milestones.", false)
                         .string("from", "Only tasks whose dates fall on or after this ISO 8601 instant.")
                         .string("to", "Only tasks whose dates fall on or before this ISO 8601 instant.")
                         .withPaging(50)
                         .build())
                 .output(McpShapes.pageSchema("Matching tasks, newest first.", McpShapes.taskSchema()))
                 .readOnly()
-                .scopes(McpScope.TASKS_READ)
+                .scopes(OauthScope.TASKS_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     TaskFilterRequest request = new TaskFilterRequest();
@@ -108,8 +106,6 @@ public class TaskMcpTools {
                     request.setTeamIdList(nullIfEmpty(args.optionalStringList("teamIds")));
                     request.setAssigneeIds(nullIfEmpty(args.optionalStringList("assigneeIds")));
                     request.setWorkflowStatusIdList(nullIfEmpty(args.optionalStringList("workflowStatusIds")));
-                    request.setProjectIds(nullIfEmpty(args.optionalStringList("projectIds")));
-                    request.setMilestoneIds(nullIfEmpty(args.optionalStringList("milestoneIds")));
                     request.setWorkflowStateGroups(parseStateGroups(args.optionalStringList("stateGroups")));
                     request.setTimespanStart(args.optionalZonedDateTime("from"));
                     request.setTimespanEnd(args.optionalZonedDateTime("to"));
@@ -133,7 +129,7 @@ public class TaskMcpTools {
                         .build())
                 .output(McpShapes.singleSchema("task", "The task, with its body.", McpShapes.taskSchema()))
                 .readOnly()
-                .scopes(McpScope.TASKS_READ)
+                .scopes(OauthScope.TASKS_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     var response = taskRetrieveManager.retrieveWithWorkspaceNameAndTeamTagNo(
@@ -161,14 +157,12 @@ public class TaskMcpTools {
                         .string("assignedTo", "Account id of the assignee, from list_workspace_members.")
                         .string("startDate", "ISO 8601 instant the work should start.")
                         .string("dueDate", "ISO 8601 instant the work is due.")
-                        .string("projectId", "Project to file this task under.")
-                        .string("milestoneId", "Milestone within that project.")
                         .string("topicId", "Label to apply, from list_topics on the team.")
                         .string("boardId", "Board to add the task to on creation.")
                         .build())
                 .output(McpShapes.singleSchema("task", "The created task.", McpShapes.taskSchema()))
                 .write()
-                .scopes(McpScope.TASKS_WRITE)
+                .scopes(OauthScope.TASKS_WRITE)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     TaskInitializeRequest request = new TaskInitializeRequest();
@@ -181,8 +175,6 @@ public class TaskMcpTools {
                     request.setDueDate(args.optionalZonedDateTime("dueDate"));
                     request.setHasPreciseAssignedDate(args.has("startDate"));
                     request.setHasPreciseDueDate(args.has("dueDate"));
-                    request.setProjectId(args.optionalString("projectId", null));
-                    request.setMilestoneId(args.optionalString("milestoneId", null));
                     request.setTopicId(args.optionalString("topicId", null));
                     request.setBoardId(args.optionalString("boardId", null));
                     context.setWorkspaceId(request.getWorkspaceId());
@@ -196,7 +188,7 @@ public class TaskMcpTools {
     public McpTool updateTaskTool() {
         return SimpleMcpTool.named("update_task")
                 .title("Update a task")
-                .description("Changes a task's title, body, dates, assignee, project or milestone. "
+                .description("Changes a task's title, body, dates or assignee. "
                         + "Supply only the fields to change; anything omitted is left alone. "
                         + "Use set_task_status to move a task between workflow statuses.")
                 .input(McpJsonSchema.object()
@@ -206,12 +198,10 @@ public class TaskMcpTools {
                         .string("assignedTo", "Account id of the new assignee. Pass an empty string to unassign.")
                         .string("startDate", "New ISO 8601 start. Pass an empty string to clear it.")
                         .string("dueDate", "New ISO 8601 due date. Pass an empty string to clear it.")
-                        .string("projectId", "Move the task into this project.")
-                        .string("milestoneId", "Move the task onto this milestone.")
                         .build())
                 .output(McpShapes.acknowledgementSchema("taskId", "The task that was updated."))
                 .write()
-                .scopes(McpScope.TASKS_WRITE)
+                .scopes(OauthScope.TASKS_WRITE)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     String taskId = args.requiredString("taskId");
@@ -245,16 +235,9 @@ public class TaskMcpTools {
                         taskUpdateManager.updateTaskDates(taskId, request);
                         changed = true;
                     }
-                    if (args.has("projectId") || args.has("milestoneId")) {
-                        TaskProjectAndMilestoneUpdateRequest request = new TaskProjectAndMilestoneUpdateRequest();
-                        request.setProjectId(args.optionalString("projectId", null));
-                        request.setMilestoneId(args.optionalString("milestoneId", null));
-                        taskUpdateManager.updateTaskProjectAndMilestone(taskId, request);
-                        changed = true;
-                    }
                     if (!changed) {
                         return McpToolResult.error("Nothing to update. Supply at least one of title, description, "
-                                + "assignedTo, startDate, dueDate, projectId or milestoneId.");
+                                + "assignedTo, startDate or dueDate.");
                     }
                     return McpToolResult.of(McpShapes.acknowledgement("taskId", taskId));
                 })
@@ -275,7 +258,7 @@ public class TaskMcpTools {
                 .output(McpShapes.singleSchema("task", "The task in its new status.", McpShapes.taskSchema()))
                 .write()
                 .idempotent()
-                .scopes(McpScope.TASKS_WRITE)
+                .scopes(OauthScope.TASKS_WRITE)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     var response = taskUpdateManager.updateTaskWorkflowStatus(
@@ -299,7 +282,7 @@ public class TaskMcpTools {
                         .build())
                 .output(McpShapes.pageSchema("Comments on this task.", commentSchema()))
                 .readOnly()
-                .scopes(McpScope.TASKS_READ)
+                .scopes(OauthScope.TASKS_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     var page = taskCommentManager.retrieveTaskComments(args.requiredString("taskId"), args.page())
@@ -322,7 +305,7 @@ public class TaskMcpTools {
                         .build())
                 .output(McpShapes.acknowledgementSchema("taskId", "The task the comment was added to."))
                 .write()
-                .scopes(McpScope.TASKS_WRITE)
+                .scopes(OauthScope.TASKS_WRITE)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     InitializeTaskCommentRequest request = new InitializeTaskCommentRequest();

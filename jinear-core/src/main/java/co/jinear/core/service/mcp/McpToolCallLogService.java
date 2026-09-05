@@ -45,7 +45,7 @@ public class McpToolCallLogService {
                                 String toolName, McpToolCallStatus status) {
         McpToolCallLog entity = new McpToolCallLog();
         entity.setAccountId(accountId);
-        entity.setMcpConnectionId(connectionId);
+        entity.setOauthConnectionId(connectionId);
         entity.setClientId(clientId);
         entity.setToolName(toolName);
         entity.setCallStatus(status);
@@ -58,7 +58,7 @@ public class McpToolCallLogService {
         McpToolCallLog entity = new McpToolCallLog();
         if (Objects.nonNull(context)) {
             entity.setAccountId(context.getAccountId());
-            entity.setMcpConnectionId(context.getConnectionId());
+            entity.setOauthConnectionId(context.getConnectionId());
             entity.setClientId(context.getClientId());
             entity.setWorkspaceId(context.getWorkspaceId());
         }

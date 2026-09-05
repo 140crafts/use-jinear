@@ -6,7 +6,7 @@ import co.jinear.core.manager.task.TaskSearchManager;
 import co.jinear.core.manager.workspace.WorkspaceManager;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.task.TaskDto;
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.request.note.NoteFilterRequest;
@@ -70,7 +70,7 @@ public class CompatibilityMcpTools {
                                 .build(), true)
                         .build())
                 .readOnly()
-                .scopes(McpScope.TASKS_READ, McpScope.NOTES_READ, McpScope.WORKSPACE_READ)
+                .scopes(OauthScope.TASKS_READ, OauthScope.NOTES_READ, OauthScope.WORKSPACE_READ)
                 .handler((context, arguments) -> {
                     String query = McpToolArguments.of(arguments).requiredString("query");
                     ObjectNode result = McpShapes.object();
@@ -107,7 +107,7 @@ public class CompatibilityMcpTools {
                         .string("url", "Absolute Jinear URL a person can open.")
                         .build())
                 .readOnly()
-                .scopes(McpScope.TASKS_READ, McpScope.NOTES_READ, McpScope.WORKSPACE_READ)
+                .scopes(OauthScope.TASKS_READ, OauthScope.NOTES_READ, OauthScope.WORKSPACE_READ)
                 .handler((context, arguments) -> {
                     String id = McpToolArguments.of(arguments).requiredString("id");
                     if (id.startsWith(NOTE_PREFIX)) {

@@ -1,7 +1,7 @@
 # Connecting Claude or ChatGPT to Jinear
 
 Jinear can run an MCP server. An AI assistant that speaks MCP, such as Claude or ChatGPT,
-connects to it and then works with your tasks, projects, boards, notes, files and calendar
+connects to it and then works with your tasks, boards, notes, files and calendar
 inside the assistant, using your own account and only the permissions you allow.
 
 This page covers a self-hosted instance. On the hosted version at `jinear.co` the server
@@ -38,14 +38,14 @@ nano .env          # set MCP_ENABLED=true
 docker compose up -d
 ```
 
-Check that `MCP_JWT_SECRET` in `.env` is not empty. The installer generates it. If you are
+Check that `OAUTH_JWT_SECRET` in `.env` is not empty. The installer generates it. If you are
 configuring by hand, generate one:
 
 ```bash
 openssl rand -base64 64 | tr -dc 'a-zA-Z0-9' | head -c 64
 ```
 
-### The four URLs
+### The three URLs
 
 You do not set these yourself. `docker-compose.yaml` derives them from `DOMAIN` and
 `API_DOMAIN`, because a mismatch between them is the failure that produces every support
@@ -54,10 +54,14 @@ question. For a domain of `jinear.example.com` with an API domain of
 
 | Variable | Value | Why it must be this |
 |----------|-------|---------------------|
-| `MCP_ISSUER_URL` | `https://api.jinear.example.com` | The origin that serves `/.well-known/*`. The API origin, not the app origin |
+| `OAUTH_ISSUER_URL` | `https://api.jinear.example.com` | The origin that serves `/.well-known/*`. The API origin, not the app origin |
 | `MCP_RESOURCE_URL` | `https://api.jinear.example.com/mcp` | Exactly what you paste into your client, path included. The specification compares the two character for character |
-| `MCP_CONSENT_URL` | `https://jinear.example.com/oauth/consent?request_id={requestId}` | The consent screen, which is on the app where you sign in. Keep the `{requestId}` placeholder |
-| `MCP_JWT_SECRET` | generated | Signs MCP access tokens. Deliberately not `JWT_SECRET` |
+| `OAUTH_CONSENT_URL` | `https://jinear.example.com/oauth/consent?request_id={requestId}` | The consent screen, which is on the app where you sign in. Keep the `{requestId}` placeholder |
+| `OAUTH_JWT_SECRET` | generated | Signs the access tokens the OAuth server issues. Deliberately not `JWT_SECRET` |
+
+The `OAUTH_` half configures the authorization server that issues tokens; the `MCP_` half
+configures the resource those tokens open. There is one enabled flag, `MCP_ENABLED`,
+because MCP is the only resource today.
 
 If you run your own reverse proxy, two paths must reach `jinear-core` on the API domain:
 
@@ -150,8 +154,6 @@ consent screen, and the assistant gets nothing you did not allow.
 | `workspace:read` | Workspaces, teams, members, topics, workflow statuses |
 | `tasks:read` | Tasks, boards, comments |
 | `tasks:write` | Creating and updating tasks, boards and comments |
-| `projects:read` | Projects and milestones |
-| `projects:write` | Creating and updating projects and milestones |
 | `calendar:read` | Calendar events |
 | `notes:read` | Notebooks and notes |
 | `files:read` | Files, folders and links to them |
@@ -159,12 +161,13 @@ consent screen, and the assistant gets nothing you did not allow.
 
 Some deliberate limits:
 
-- **There are no delete tools.** An assistant cannot remove a task, a project, a note or a
-  file.
+- **There are no delete tools.** An assistant cannot remove a task, a note or a file.
 - **Notes and the calendar are read only.** A note body is a collaborative document owned
   by the editor, and a calendar write would mean writing to Google on your behalf.
 - **Every tool works inside one workspace**, which the assistant passes in and which is
   checked against your account on every call.
+- **Projects are not covered.** Projects are a deprecated feature, so no tool reads or
+  writes them.
 
 ---
 
@@ -195,7 +198,7 @@ The connection request expired, which happens after ten minutes. Start the conne
 again from your client.
 
 **The consent page does not load.**
-`MCP_CONSENT_URL` must point at the app domain, not the API domain, and must keep the
+`OAUTH_CONSENT_URL` must point at the app domain, not the API domain, and must keep the
 `{requestId}` placeholder.
 
 **Everything refuses with "The MCP server is turned off on this instance."**

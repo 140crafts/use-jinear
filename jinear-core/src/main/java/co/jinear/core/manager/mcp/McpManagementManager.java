@@ -1,36 +1,30 @@
 package co.jinear.core.manager.mcp;
 
+import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.converter.mcp.McpDtoConverter;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.PageDto;
-import co.jinear.core.model.dto.mcp.McpConnectionDto;
 import co.jinear.core.model.dto.mcp.McpServerInfoDto;
 import co.jinear.core.model.dto.mcp.McpToolCallLogDto;
-import co.jinear.core.model.entity.mcp.McpConnection;
-import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.enumtype.management.InstanceFlagType;
 import co.jinear.core.model.response.mcp.McpAnalyticsResponse;
-import co.jinear.core.model.response.mcp.McpConnectionListingResponse;
 import co.jinear.core.model.response.mcp.McpServerInfoResponse;
 import co.jinear.core.model.response.mcp.McpToolCallLogListingResponse;
-import co.jinear.core.config.properties.McpProperties;
-import co.jinear.core.model.enumtype.management.InstanceFlagType;
 import co.jinear.core.repository.mcp.McpToolCallLogRepository;
 import co.jinear.core.service.SessionInfoService;
-import co.jinear.core.service.mcp.analytics.McpAnalyticsService;
-import co.jinear.core.service.mcp.oauth.McpConnectionService;
 import co.jinear.core.service.management.InstanceFlagService;
-import co.jinear.core.service.mcp.oauth.McpRefreshTokenService;
+import co.jinear.core.service.mcp.analytics.McpAnalyticsService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 /**
- * What a person can see and change about their own MCP connections, plus the workspace
- * scoped view a workspace owner gets.
+ * What a member can learn about the MCP server itself, plus the workspace scoped tool
+ * call view a workspace owner gets. The connections a person has granted are managed
+ * one layer down, in
+ * {@link co.jinear.core.manager.oauth.provider.OauthConnectionManager}.
  */
 @Slf4j
 @Service
@@ -40,8 +34,6 @@ public class McpManagementManager {
     private static final int DEFAULT_WINDOW_DAYS = 30;
     private static final int PAGE_SIZE = 25;
 
-    private final McpConnectionService mcpConnectionService;
-    private final McpRefreshTokenService mcpRefreshTokenService;
     private final McpToolCallLogRepository mcpToolCallLogRepository;
     private final McpAnalyticsService mcpAnalyticsService;
     private final McpDtoConverter mcpDtoConverter;
@@ -65,33 +57,6 @@ public class McpManagementManager {
         McpServerInfoResponse response = new McpServerInfoResponse();
         response.setMcpServerInfoDto(dto);
         return response;
-    }
-
-    public McpConnectionListingResponse listMyConnections() {
-        String accountId = sessionInfoService.currentAccountId();
-        List<McpConnectionDto> connections = mcpConnectionService.listForAccount(accountId).stream()
-                .map(connection -> mcpDtoConverter.convert(connection, null))
-                .toList();
-        McpConnectionListingResponse response = new McpConnectionListingResponse();
-        response.setMcpConnectionDtoList(connections);
-        return response;
-    }
-
-    /**
-     * Revoking is deliberately owner only, not admin only: a connection is a grant one
-     * person made from their own account, and nobody else's role should let them speak
-     * for it.
-     */
-    public BaseResponse revokeConnection(String mcpConnectionId) {
-        String accountId = sessionInfoService.currentAccountId();
-        McpConnection connection = mcpConnectionService.retrieve(mcpConnectionId);
-        if (!accountId.equalsIgnoreCase(connection.getAccountId())) {
-            log.warn("[MCP] Refusing to revoke a connection belonging to another account. accountId: {}", accountId);
-            throw new NoAccessException();
-        }
-        mcpRefreshTokenService.revokeAllForConnection(mcpConnectionId);
-        mcpConnectionService.revoke(mcpConnectionId);
-        return new BaseResponse();
     }
 
     public McpToolCallLogListingResponse listWorkspaceLogs(String workspaceId, int page) {

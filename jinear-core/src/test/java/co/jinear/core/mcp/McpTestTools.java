@@ -1,6 +1,6 @@
 package co.jinear.core.mcp;
 
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
@@ -34,7 +34,7 @@ final class McpTestTools {
                 .description("Reads a record. Requires the task read scope.")
                 .input(McpJsonSchema.noArguments())
                 .readOnly()
-                .scopes(McpScope.TASKS_READ)
+                .scopes(OauthScope.TASKS_READ)
                 .handler((context, arguments) -> McpToolResult.of(McpShapes.acknowledgement("accountId", context.getAccountId())))
                 .build();
     }
@@ -45,7 +45,7 @@ final class McpTestTools {
                 .description("Writes a record. Requires the task write scope.")
                 .input(McpJsonSchema.object().requiredString("title", "What to write.").build())
                 .write()
-                .scopes(McpScope.TASKS_WRITE)
+                .scopes(OauthScope.TASKS_WRITE)
                 .handler((context, arguments) -> McpToolResult.of(McpShapes.acknowledgement("ok", "written")))
                 .build();
     }
@@ -56,7 +56,7 @@ final class McpTestTools {
                 .description("Always reports an argument problem. Used to prove a tool error is not a protocol error.")
                 .input(McpJsonSchema.noArguments())
                 .readOnly()
-                .scopes(McpScope.TASKS_READ)
+                .scopes(OauthScope.TASKS_READ)
                 .handler((context, arguments) -> {
                     throw new McpToolException("invalid_argument", "taskId must look like a ULID. Received: banana");
                 })
@@ -69,7 +69,7 @@ final class McpTestTools {
                 .description("Throws an unexpected failure. Used to prove the caller still gets an actionable message.")
                 .input(McpJsonSchema.noArguments())
                 .readOnly()
-                .scopes(McpScope.TASKS_READ)
+                .scopes(OauthScope.TASKS_READ)
                 .handler((context, arguments) -> {
                     throw new IllegalStateException("database is on fire");
                 })

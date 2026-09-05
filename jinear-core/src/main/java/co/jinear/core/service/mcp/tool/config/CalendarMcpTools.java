@@ -1,7 +1,7 @@
 package co.jinear.core.service.mcp.tool.config;
 
 import co.jinear.core.manager.calendar.CalendarEventManager;
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.request.calendar.CalendarEventFilterRequest;
@@ -46,7 +46,7 @@ public class CalendarMcpTools {
                         .build())
                 .output(McpShapes.listSchema("Events and dated tasks in the window.", McpShapes.calendarEventSchema()))
                 .readOnly()
-                .scopes(McpScope.CALENDAR_READ)
+                .scopes(OauthScope.CALENDAR_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     CalendarEventFilterRequest request = new CalendarEventFilterRequest();

@@ -2,13 +2,11 @@ package co.jinear.core.mcp;
 
 import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.config.properties.McpProperties;
+import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.manager.calendar.CalendarEventManager;
 import co.jinear.core.manager.material.MaterialListingManager;
 import co.jinear.core.manager.note.NoteFilterManager;
 import co.jinear.core.manager.notebook.NotebookListingManager;
-import co.jinear.core.manager.project.ProjectManager;
-import co.jinear.core.manager.project.ProjectMilestoneManager;
-import co.jinear.core.manager.project.ProjectQueryManager;
 import co.jinear.core.manager.task.*;
 import co.jinear.core.manager.team.TeamRetrieveManager;
 import co.jinear.core.manager.team.TeamWorkflowStatusManager;
@@ -39,10 +37,15 @@ final class McpRealCatalog {
     static McpProperties properties() {
         McpProperties properties = new McpProperties();
         properties.setEnabled(Boolean.TRUE);
-        properties.setIssuerUrl("https://api.jinear.co");
         properties.setResourceUrl("https://api.jinear.co/mcp");
         properties.setDocumentationUrl("https://jinear.co/mcp/");
         properties.setMaxPageSize(50);
+        return properties;
+    }
+
+    static OauthProperties oauthProperties() {
+        OauthProperties properties = new OauthProperties();
+        properties.setIssuerUrl("https://api.jinear.co");
         return properties;
     }
 
@@ -72,18 +75,13 @@ final class McpRealCatalog {
                 Mockito.mock(TaskBoardEntryManager.class),
                 Mockito.mock(TopicListingManager.class));
 
-        ProjectMcpTools projectTools = new ProjectMcpTools(
-                Mockito.mock(ProjectManager.class),
-                Mockito.mock(ProjectQueryManager.class),
-                Mockito.mock(ProjectMilestoneManager.class));
-
         CalendarMcpTools calendarTools = new CalendarMcpTools(Mockito.mock(CalendarEventManager.class));
 
         NoteMcpTools noteTools = new NoteMcpTools(
                 Mockito.mock(NotebookListingManager.class),
                 Mockito.mock(NoteFilterManager.class));
 
-        FileMcpTools fileTools = new FileMcpTools(Mockito.mock(MaterialListingManager.class), properties);
+        FileMcpTools fileTools = new FileMcpTools(Mockito.mock(MaterialListingManager.class), oauthProperties());
 
         CompatibilityMcpTools compatibilityTools = new CompatibilityMcpTools(
                 Mockito.mock(WorkspaceManager.class),
@@ -112,13 +110,6 @@ final class McpRealCatalog {
                 boardTools.createTaskBoardTool(),
                 boardTools.addTaskToBoardTool(),
                 boardTools.listTopicsTool(),
-
-                projectTools.listProjectsTool(),
-                projectTools.getProjectTool(),
-                projectTools.createProjectTool(),
-                projectTools.updateProjectTool(),
-                projectTools.listProjectMilestonesTool(),
-                projectTools.createProjectMilestoneTool(),
 
                 calendarTools.listCalendarEventsTool(),
 

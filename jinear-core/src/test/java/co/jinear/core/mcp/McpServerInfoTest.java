@@ -9,8 +9,6 @@ import co.jinear.core.repository.mcp.McpToolCallLogRepository;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.management.InstanceFlagService;
 import co.jinear.core.service.mcp.analytics.McpAnalyticsService;
-import co.jinear.core.service.mcp.oauth.McpConnectionService;
-import co.jinear.core.service.mcp.oauth.McpRefreshTokenService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,8 +38,6 @@ class McpServerInfoTest {
         properties.setDocumentationUrl("https://jinear.test/mcp/");
 
         manager = new McpManagementManager(
-                Mockito.mock(McpConnectionService.class),
-                Mockito.mock(McpRefreshTokenService.class),
                 Mockito.mock(McpToolCallLogRepository.class),
                 Mockito.mock(McpAnalyticsService.class),
                 Mockito.mock(McpDtoConverter.class),

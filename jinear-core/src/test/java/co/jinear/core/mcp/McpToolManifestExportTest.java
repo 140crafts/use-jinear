@@ -2,7 +2,7 @@ package co.jinear.core.mcp;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.service.mcp.tool.McpTool;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -36,7 +36,7 @@ class McpToolManifestExportTest {
             // Sorted, because Set.of has a per run iteration order. Without this the
             // manifest would differ between runs and the comparison below would flap.
             tool.definition().getRequiredScopes().stream()
-                    .map(McpScope::getValue)
+                    .map(OauthScope::getValue)
                     .sorted()
                     .forEach(required::add);
         }

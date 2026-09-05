@@ -1,8 +1,8 @@
 package co.jinear.core.service.mcp.tool.config;
 
-import co.jinear.core.config.properties.McpProperties;
+import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.manager.material.MaterialListingManager;
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.enumtype.material.MaterialType;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolException;
@@ -31,7 +31,8 @@ import java.util.Objects;
 public class FileMcpTools {
 
     private final MaterialListingManager materialListingManager;
-    private final McpProperties mcpProperties;
+    /** Only for its origin: the issuer is served by the same host as the media endpoint. */
+    private final OauthProperties oauthProperties;
 
     @Bean
     public McpTool listFilesTool() {
@@ -49,7 +50,7 @@ public class FileMcpTools {
                         .build())
                 .output(McpShapes.pageSchema("Files and folders in this location.", McpShapes.fileSchema()))
                 .readOnly()
-                .scopes(McpScope.FILES_READ)
+                .scopes(OauthScope.FILES_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     MaterialSearchRequest request = new MaterialSearchRequest();
@@ -83,12 +84,12 @@ public class FileMcpTools {
                         .string("url", "Absolute Jinear URL that downloads the file.")
                         .build())
                 .readOnly()
-                .scopes(McpScope.FILES_READ)
+                .scopes(OauthScope.FILES_READ)
                 .handler((context, arguments) -> {
                     String materialId = McpToolArguments.of(arguments).requiredString("materialId");
                     var node = McpShapes.object();
                     node.put("materialId", materialId);
-                    node.put("url", mcpProperties.getIssuerUrl() + "/v1/material/media/" + materialId);
+                    node.put("url", oauthProperties.getIssuerUrl() + "/v1/material/media/" + materialId);
                     return McpToolResult.of(node);
                 })
                 .build();

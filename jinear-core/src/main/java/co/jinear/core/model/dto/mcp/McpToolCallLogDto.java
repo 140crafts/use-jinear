@@ -13,7 +13,7 @@ import java.util.Date;
 public class McpToolCallLogDto {
 
     private String mcpToolCallLogId;
-    private String mcpConnectionId;
+    private String oauthConnectionId;
     private String accountId;
     private String workspaceId;
     private String clientId;

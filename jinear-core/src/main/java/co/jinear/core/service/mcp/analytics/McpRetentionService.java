@@ -4,8 +4,8 @@ import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.model.entity.mcp.McpUsageDaily;
 import co.jinear.core.repository.mcp.McpToolCallLogRepository;
 import co.jinear.core.repository.mcp.McpUsageDailyRepository;
-import co.jinear.core.service.mcp.oauth.McpAuthorizationCodeService;
-import co.jinear.core.service.mcp.oauth.McpAuthorizationRequestService;
+import co.jinear.core.service.oauth.provider.OauthAuthorizationCodeService;
+import co.jinear.core.service.oauth.provider.OauthAuthorizationRequestService;
 import co.jinear.core.system.util.DateHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +30,8 @@ public class McpRetentionService {
 
     private final McpToolCallLogRepository mcpToolCallLogRepository;
     private final McpUsageDailyRepository mcpUsageDailyRepository;
-    private final McpAuthorizationCodeService mcpAuthorizationCodeService;
-    private final McpAuthorizationRequestService mcpAuthorizationRequestService;
+    private final OauthAuthorizationCodeService oauthAuthorizationCodeService;
+    private final OauthAuthorizationRequestService oauthAuthorizationRequestService;
     private final McpProperties mcpProperties;
 
     @Transactional
@@ -61,8 +61,8 @@ public class McpRetentionService {
         int prunedLogs = mcpToolCallLogRepository.deleteAllOlderThan(logCutoff);
 
         Date oauthCutoff = DateHelper.substractDays(DateHelper.now(), 1);
-        int prunedCodes = mcpAuthorizationCodeService.purgeExpiredBefore(oauthCutoff);
-        int prunedRequests = mcpAuthorizationRequestService.purgeExpiredBefore(oauthCutoff);
+        int prunedCodes = oauthAuthorizationCodeService.purgeExpiredBefore(oauthCutoff);
+        int prunedRequests = oauthAuthorizationRequestService.purgeExpiredBefore(oauthCutoff);
 
         if (prunedLogs + prunedCodes + prunedRequests > 0) {
             log.info("[MCP] Pruned {} call logs, {} authorization codes and {} pending authorization requests.",

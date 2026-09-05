@@ -1,9 +1,7 @@
 package co.jinear.core.controller.mcp;
 
 import co.jinear.core.manager.mcp.McpManagementManager;
-import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.mcp.McpAnalyticsResponse;
-import co.jinear.core.model.response.mcp.McpConnectionListingResponse;
 import co.jinear.core.model.response.mcp.McpServerInfoResponse;
 import co.jinear.core.model.response.mcp.McpToolCallLogListingResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,16 +19,6 @@ public class McpManagementController {
     @GetMapping("/info")
     public McpServerInfoResponse retrieveServerInfo() {
         return mcpManagementManager.retrieveServerInfo();
-    }
-
-    @GetMapping("/connection/list")
-    public McpConnectionListingResponse listMyConnections() {
-        return mcpManagementManager.listMyConnections();
-    }
-
-    @DeleteMapping("/connection/{mcpConnectionId}")
-    public BaseResponse revokeConnection(@PathVariable String mcpConnectionId) {
-        return mcpManagementManager.revokeConnection(mcpConnectionId);
     }
 
     @GetMapping("/log/list/workspace/{workspaceId}")

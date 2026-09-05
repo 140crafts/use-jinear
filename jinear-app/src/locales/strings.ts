@@ -6612,91 +6612,83 @@ const translations = {
         en: "Disconnect",
         tr: "Bağlantıyı kes"
     },
-    mcpConsentTitle: {
+    oauthConsentTitle: {
         en: "Connect an AI assistant",
         tr: "Bir yapay zeka asistanı bağlayın"
     },
-    mcpConsentSubtitle: {
+    oauthConsentSubtitle: {
         en: "This application is asking to use your Jinear account. It can only do what you allow below, and you can disconnect it at any time.",
         tr: "Bu uygulama Jinear hesabınızı kullanmak istiyor. Yalnızca aşağıda izin verdiğiniz işlemleri yapabilir ve bağlantıyı istediğiniz zaman kesebilirsiniz."
     },
-    mcpConsentScopesTitle: {
+    oauthConsentScopesTitle: {
         en: "It will be able to:",
         tr: "Şunları yapabilecek:"
     },
-    mcpConsentScopeWorkspaceRead: {
+    oauthConsentScopeWorkspaceRead: {
         en: "Read your workspaces, teams and members",
         tr: "Çalışma alanlarınızı, takımlarınızı ve üyeleri görüntüleyebilir"
     },
-    mcpConsentScopeTasksRead: {
+    oauthConsentScopeTasksRead: {
         en: "Read your tasks, boards and comments",
         tr: "Görevlerinizi, panolarınızı ve yorumları görüntüleyebilir"
     },
-    mcpConsentScopeTasksWrite: {
+    oauthConsentScopeTasksWrite: {
         en: "Create and update tasks, boards and comments",
         tr: "Görev, pano ve yorum oluşturabilir ve güncelleyebilir"
     },
-    mcpConsentScopeProjectsRead: {
-        en: "Read your projects and milestones",
-        tr: "Projelerinizi ve kilometre taşlarınızı görüntüleyebilir"
-    },
-    mcpConsentScopeProjectsWrite: {
-        en: "Create and update projects and milestones",
-        tr: "Proje ve kilometre taşı oluşturabilir ve güncelleyebilir"
-    },
-    mcpConsentScopeCalendarRead: {
+    oauthConsentScopeCalendarRead: {
         en: "Read your calendar events",
         tr: "Takvim etkinliklerinizi görüntüleyebilir"
     },
-    mcpConsentScopeNotesRead: {
+    oauthConsentScopeNotesRead: {
         en: "Read your notebooks and notes",
         tr: "Not defterlerinizi ve notlarınızı görüntüleyebilir"
     },
-    mcpConsentScopeFilesRead: {
+    oauthConsentScopeFilesRead: {
         en: "Read your files and get links to them",
         tr: "Dosyalarınızı görüntüleyebilir ve bağlantılarını alabilir"
     },
-    mcpConsentScopeOfflineAccess: {
+    oauthConsentScopeOfflineAccess: {
         en: "Stay connected until you disconnect it",
         tr: "Siz bağlantıyı kesene kadar bağlı kalabilir"
     },
-    mcpConsentLoopbackNote: {
+    oauthConsentLoopbackNote: {
         en: "This application runs on your own computer.",
         tr: "Bu uygulama kendi bilgisayarınızda çalışıyor."
     },
-    mcpConsentRedirectNote: {
+    oauthConsentRedirectNote: {
         en: "After you allow this, you go back to:",
         tr: "İzin verdikten sonra şu adrese dönersiniz:"
     },
-    mcpConsentClientSiteLink: {
+    oauthConsentClientSiteLink: {
         en: "Application website",
         tr: "Uygulama web sitesi"
     },
-    mcpConsentPrivacyLink: {
+    oauthConsentPrivacyLink: {
         en: "Privacy policy",
         tr: "Gizlilik politikası"
     },
-    mcpConsentTermsLink: {
+    oauthConsentTermsLink: {
         en: "Terms of service",
         tr: "Kullanım koşulları"
     },
-    mcpConsentAllowButton: {
+    oauthConsentAllowButton: {
         en: "Allow",
         tr: "İzin ver"
     },
-    mcpConsentDenyButton: {
+    oauthConsentDenyButton: {
         en: "Deny",
         tr: "Reddet"
     },
-    mcpConsentSignInFirst: {
+    oauthConsentSignInFirst: {
         en: "Sign in to answer this request. You come straight back here afterwards.",
         tr: "Bu isteği yanıtlamak için giriş yapın. Sonrasında doğrudan buraya dönersiniz."
     },
-    mcpConsentUnavailableTitle: {
+    oauthConsentUnavailableTitle: {
         en: "This connection request is not available",
         tr: "Bu bağlantı isteği kullanılamıyor"
     },
-    mcpConsentUnavailableText: {
+    oauthConsentUnavailableText: {
         en: "It expired, it was already answered, or the link is incomplete. Start the connection again from your application.",
         tr: "Süresi doldu, zaten yanıtlandı veya bağlantı eksik. Bağlantıyı uygulamanızdan yeniden başlatın."
     },

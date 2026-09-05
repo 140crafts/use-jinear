@@ -152,60 +152,98 @@ handling, and the result envelope.
 
 ### 2.2 Package layout
 
+Two layers, kept apart by package. Everything under `oauth` is a plain OAuth 2.1
+authorization server with no MCP protocol knowledge; everything under `mcp` is the
+resource it protects. The names say which is which, but the split is naming and packaging
+only: the server still issues tokens for exactly one resource. Section 2.2.1 names the
+three places that encode that.
+
+Note the `provider` segment. `controller/oauth` and `manager/oauth` already held Google
+OAuth **client** code, where Jinear is the client of somebody else's server. This is the
+**server** side, so it lives one level deeper and the Google classes did not move.
+
 ```
 co.jinear.core
 ├── config
+│   ├── properties/OauthProperties.java        all jinear.oauth.* settings
 │   ├── properties/McpProperties.java          all jinear.mcp.* settings
-│   └── security/McpBearerAuthenticationFilter turns bearer -> Authentication, /mcp only
+│   └── security/OauthBearerAuthenticationFilter turns bearer -> Authentication, /mcp only
+├── controller/oauth/provider
+│   ├── OauthAuthorizeController               /v1/oauth/authorize + consent
+│   ├── OauthTokenController                   /v1/oauth/token, /register, /revoke
+│   ├── OauthConnectionController              /v1/oauth/connection/*  (member facing)
+│   ├── OauthAdminController                   /v1/admin/oauth/*       (instance admin)
+│   └── OauthDiscoveryController               /.well-known/*
 ├── controller/mcp
 │   ├── McpController                          POST/GET/DELETE /mcp
-│   ├── McpDiscoveryController                 /.well-known/*
-│   ├── McpOauthAuthorizeController            /v1/oauth/authorize + consent
-│   ├── McpOauthTokenController                /v1/oauth/token, /register, /revoke
-│   ├── McpManagementController                /v1/mcp/*      (member facing)
+│   ├── McpManagementController                /v1/mcp/*       (member facing)
 │   └── McpAdminController                     /v1/admin/mcp/* (instance admin)
+├── manager/oauth/provider
+│   ├── OauthAuthorizationManager              authorize + consent business logic
+│   ├── OauthTokenManager                      token, register, revoke
+│   ├── OauthConnectionManager                 a member's granted apps, and disconnect
+│   └── OauthAdminManager                      instance wide client list and revoke
 ├── manager/mcp
-│   ├── McpAuthorizationManager                authorize + consent business logic
-│   ├── McpTokenManager                        token, register, revoke
-│   ├── McpManagementManager                   member facing reads and disconnect
-│   └── McpAdminManager                        instance wide reads and client revoke
+│   ├── McpManagementManager                   server info, workspace tool call reads
+│   └── McpAdminManager                        instance wide tool call reads
+├── service/oauth/provider                     client, code, request, refresh, PKCE,
+│                                              redirect matching, CIMD, scopes,
+│                                              bearer resolution, AS metadata
 ├── service/mcp
 │   ├── McpProtocolService                     JSON-RPC dispatch
-│   ├── McpDiscoveryService                    the two metadata documents
-│   ├── McpAccessTokenResolver                 bearer -> caller identity
+│   ├── McpDiscoveryService                    protected resource metadata
 │   ├── McpToolCallLogService                  async audit writes
 │   ├── analytics/                             usage rollup, retention
-│   ├── oauth/                                 client, code, request, refresh, PKCE,
-│   │                                          redirect matching, CIMD, scopes
 │   └── tool/                                  registry, builder, schema, argument access
-│       └── config/                            the 31 tool definitions, 8 classes
-├── system/mcp
-│   ├── McpTokenHelper                         mints and validates MCP JWTs
-│   └── McpPaths                               the two path constants used in 3 places
-└── model/{dto,entity,enumtype,mcp,request,response,vo}/mcp
+│       └── config/                            the tool definitions, grouped by resource
+├── system/oauth/OauthTokenHelper              mints and validates access tokens
+├── system/mcp/McpPaths                        the two path constants used in 3 places
+├── model/{dto,entity,enumtype,request,response,vo}/oauth
+└── model/{dto,entity,enumtype,mcp,response}/mcp
 ```
+
+#### 2.2.1 Where the server is still bound to MCP
+
+Three places, all documented in the `OauthAuthorizationManager` class javadoc. A second
+resource, a public REST API for third party apps being the likely one, means changing
+these and nothing else.
+
+1. **The audience is fixed.** `OauthTokenHelper.generateAccessToken` sets `aud` from
+   `jinear.mcp.resource-url`, and `OauthAuthorizationManager.isResourceAcceptable` compares
+   the RFC 8707 `resource` parameter against that one value. Multi resource means deriving
+   the audience per request.
+2. **The resource server filter is path bound.** `OauthBearerAuthenticationFilter` skips
+   every path except `McpPaths.MCP_ENDPOINT`, so a bearer authenticates nothing else.
+3. **The kill switch belongs to MCP.** `assertEnabled` reads `jinear.mcp.enabled` and the
+   `MCP_SERVER` instance flag, which is why that refusal keeps the `mcp.error.disabled`
+   message key while every other OAuth failure moved to `oauth.error.*`.
+
+`scopes_supported` in both discovery documents follows from the same fact: it is one flat
+`OauthScope` set today, and becomes per resource on the same day.
 
 ### 2.3 Request routing
 
 Three paths sit outside the usual `/v1` API surface, and each is handled differently.
 
-| Path | Security | JwtRequestFilter | McpBearerAuthenticationFilter |
+| Path | Security | JwtRequestFilter | OauthBearerAuthenticationFilter |
 |------|----------|------------------|-------------------------------|
 | `/mcp` | `permitAll`, controller refuses | **skipped** | **runs** |
 | `/.well-known/**` | `permitAll` | **skipped** | skipped |
 | `/v1/oauth/authorize`, `/token`, `/register`, `/revoke` | `permitAll` | runs | skipped |
 | `/v1/oauth/authorize/info/{requestId}` | `permitAll` (layer 2) | runs | skipped |
 | `/v1/oauth/authorize/consent` | `ROLE_USER` | runs | skipped |
+| `/v1/oauth/connection/**` | `ROLE_USER` | runs | skipped |
 | `/v1/mcp/**` | `ROLE_USER` | runs | skipped |
+| `/v1/admin/oauth/**` | `ROLE_ADMIN` | runs | skipped |
 | `/v1/admin/mcp/**` | `ROLE_ADMIN` | runs | skipped |
 
 Filter order in `SecurityConfiguration` is deliberate:
 
 ```
-McpBearerAuthenticationFilter -> JwtRequestFilter -> RateLimitingFilter
+OauthBearerAuthenticationFilter -> JwtRequestFilter -> RateLimitingFilter
 ```
 
-The MCP filter runs first so that an authenticated tool call is rate limited per account
+The bearer filter runs first so that an authenticated tool call is rate limited per account
 rather than falling into the shared public allowance keyed on the gateway IP.
 
 `JwtRequestFilter` gained a `shouldNotFilter` that skips `/mcp` and `/.well-known/`. This
@@ -225,7 +263,10 @@ before the controller could parse it.
 
 ### 3.1 Discovery
 
-**Entry point.** `McpDiscoveryController` -> `McpDiscoveryService`.
+**Entry point.** `OauthDiscoveryController`, which delegates to `OauthDiscoveryService`
+for the authorization server document and to `McpDiscoveryService` for the protected
+resource document. The authorization server describes itself; the resource describes
+itself.
 
 Two documents, both plain `Map` so they serialize exactly as the RFCs specify and stay out
 of the generated frontend type file.
@@ -269,7 +310,7 @@ form. Serving both removes a round trip and one class of misconfiguration.
 client with PKCE and no secret. Drop either and every connection falls back to dynamic
 registration.
 
-`registration_endpoint` is omitted entirely when `jinear.mcp.dcr-enabled` is false.
+`registration_endpoint` is omitted entirely when `jinear.oauth.dcr-enabled` is false.
 
 Note the paths: the endpoints live under `/v1/oauth/...`, not `/oauth/...`. That differs
 from the original plan but is not a defect, because the metadata advertises the real paths
@@ -279,30 +320,30 @@ Both documents are cached for five minutes.
 
 ### 3.2 Client registration
 
-**Entry point.** `McpOauthClientService.resolveForAuthorization(clientId)`.
+**Entry point.** `OauthClientService.resolveForAuthorization(clientId)`.
 
-Three registration types exist, modelled as `McpClientRegistrationType`: `CIMD`, `DCR`,
+Three registration types exist, modelled as `OauthClientRegistrationType`: `CIMD`, `DCR`,
 `STATIC`.
 
 **CIMD.** If the `client_id` starts with `https://`, it is treated as a metadata document
-URL and fetched by `McpCimdResolver`. This is the path Claude takes.
+URL and fetched by `CimdResolver`. This is the path Claude takes.
 
 The document is **re-fetched on every authorization** rather than trusting a stored copy,
 so a client that changes its redirect URIs cannot be authorized against a stale
 registration. A shadow row is still upserted so the management screens and the call log
 have a name to show, but that row is never the source of truth for authorization.
 
-`McpCimdResolver` is the most security-sensitive class on the branch, because it takes a
+`CimdResolver` is the most security-sensitive class on the branch, because it takes a
 URL from an unauthenticated caller and fetches it. Its guards, in order:
 
 1. The `client_id` must be `https`, have a host, have a non-empty path that is not `/`, and
    have no fragment.
-2. **Host allowlist**, if `jinear.mcp.cimd-allowed-hosts` is set. Empty means any public
+2. **Host allowlist**, if `jinear.oauth.cimd-allowed-hosts` is set. Empty means any public
    https host, which is the open policy the draft describes.
 3. **SSRF guard.** Every resolved address of the host is checked, and loopback, site-local,
    link-local, any-local, multicast and IPv6 unique-local addresses are refused.
 4. Redirects are **not** followed (`Redirect.NEVER`).
-5. Connect and request timeouts from `jinear.mcp.cimd-fetch-timeout-millis`.
+5. Connect and request timeouts from `jinear.oauth.cimd-fetch-timeout-millis`.
 6. Non-`200` is refused. The body is capped at 64 KB.
 7. The document must be **self-referential**: its `client_id` must equal the URL it was
    fetched from.
@@ -311,7 +352,7 @@ URL from an unauthenticated caller and fetches it. Its guards, in order:
    looking `client_id` and point its callback at their own server.
 
 **DCR.** `POST /v1/oauth/register`, RFC 7591, JSON body. Gated by
-`jinear.mcp.dcr-enabled`. Redirect URIs must be `https` or loopback, and must have no
+`jinear.oauth.dcr-enabled`. Redirect URIs must be `https` or loopback, and must have no
 fragment. The issued client is public: `token_endpoint_auth_method` is `none`, and no
 secret is returned. PKCE is what protects the exchange.
 
@@ -322,8 +363,8 @@ one.
 
 This is the flow that needed frontend work, so it is worth reading closely.
 
-**Step 1, `GET /v1/oauth/authorize`.** `McpOauthAuthorizeController` ->
-`McpAuthorizationManager.authorize`.
+**Step 1, `GET /v1/oauth/authorize`.** `OauthAuthorizeController` ->
+`OauthAuthorizationManager.authorize`.
 
 Validation happens in two groups, and the split is the interesting part:
 
@@ -340,20 +381,20 @@ Validation happens in two groups, and the split is the interesting part:
 `resource` is accepted, because a few clients still do not send it; only a **mismatched**
 one is refused.
 
-Scopes are parsed with `McpScopeService.parse`, which silently drops anything this server
+Scopes are parsed with `OauthScopeService.parse`, which silently drops anything this server
 does not define. Failing the whole authorization would be worse, because a generic client
 may ask for scopes it read from another server's metadata. An empty result falls back to
 every scope.
 
-The request is then **parked** as an `mcp_authorization_request` row with a 10 minute
+The request is then **parked** as an `oauth_authorization_request` row with a 10 minute
 expiry, and the endpoint returns a redirect to
-`fe.mcp-consent-url` with `{requestId}` substituted. The endpoint never renders the consent
+`fe.oauth-consent-url` with `{requestId}` substituted. The endpoint never renders the consent
 screen itself. It redirects to `jinear-app`, which is where the user is already signed in
 and where the sign-in redirect already works.
 
 **Step 2, the consent screen.** Implemented in `jinear-app`, see [section 7.1](#71-the-consent-screen).
 
-It reads `GET /v1/oauth/authorize/info/{requestId}`, which returns `McpConsentInfoDto`:
+It reads `GET /v1/oauth/authorize/info/{requestId}`, which returns `OauthConsentInfoDto`:
 
 ```
 requestId, clientDisplayHost, clientName, clientUri, logoUri,
@@ -374,7 +415,7 @@ consent submission behind it still requires a session.
 
 - **Denied**: the request is completed and the user is redirected back to the client with
   `error=access_denied`.
-- **Allowed**: `McpConnectionService.grant` creates or widens the connection, an
+- **Allowed**: `OauthConnectionService.grant` creates or widens the connection, an
   authorization code is issued, the request is completed, and the user is redirected back
   with `code=...` plus the original `state`.
 
@@ -389,7 +430,7 @@ added for this.
 
 ### 3.4 Token issue
 
-**Entry point.** `POST /v1/oauth/token`, form encoded, `McpTokenManager.token`.
+**Entry point.** `POST /v1/oauth/token`, form encoded, `OauthTokenManager.token`.
 
 The content types matter and are easy to get wrong: RFC 6749 requires the **token**
 endpoint to accept `application/x-www-form-urlencoded`, and RFC 7591 requires the
@@ -398,32 +439,32 @@ both, and getting it wrong shows up as a `415` on the very first connection atte
 
 For `grant_type=authorization_code`:
 
-1. `McpAuthorizationCodeService.redeem` consumes the code **exactly once**. The code handed
+1. `OauthAuthorizationCodeService.redeem` consumes the code **exactly once**. The code handed
    to the client is `{rowId}.{secret}`; only a BCrypt hash of the secret is stored, so a
    database leak yields no usable codes, and the row id keeps the lookup indexable. A
    replay finds `consumedAt` set and is refused as `invalid_grant`. Codes expire in 60
    seconds by default.
 2. `client_id`, if sent, must match the code's.
 3. `redirect_uri` must match the authorization request's **exactly**.
-4. PKCE: `McpPkceValidator.verify` recomputes `BASE64URL(SHA256(verifier))` and compares
+4. PKCE: `PkceValidator.verify` recomputes `BASE64URL(SHA256(verifier))` and compares
    with `MessageDigest.isEqual`, a constant-time comparison. The verifier length is checked
    against the RFC's 43 to 128 characters. `plain` is not accepted at all.
 5. `resource`, if sent, must match.
 6. The connection must still exist.
 
-The response is built by `McpTokenHelper.generateAccessToken`: an HS512 JWT with
+The response is built by `OauthTokenHelper.generateAccessToken`: an HS512 JWT with
 `sub` = account id, `aud` = the resource URL, `iss` = the issuer URL, plus `scope`,
-`client_id` and `mcp_connection_id` claims. A refresh token is included **only if
+`client_id` and `oauth_connection_id` claims. A refresh token is included **only if
 `offline_access` is among the granted scopes**.
 
-**The signing key is `jwt.mcp.secret`, deliberately different from `jwt.secret`.** An MCP
+**The signing key is `jwt.oauth.secret`, deliberately different from `jwt.secret`.** An MCP
 bearer must never authenticate a browser session, and a session cookie must never
 authenticate a tool call, so the two key spaces are kept apart rather than relying on a
 claim to tell them apart.
 
 ### 3.5 Refresh and rotation
 
-`grant_type=refresh_token`, `McpRefreshTokenService`.
+`grant_type=refresh_token`, `OauthRefreshTokenService`.
 
 A refresh token is also `{rowId}.{secret}` with only a BCrypt hash stored. Default validity
 is 30 days.
@@ -446,17 +487,17 @@ subset of what the connection was granted.
 
 This is the hot path.
 
-1. **`McpBearerAuthenticationFilter`** (only on `/mcp`) reads `Authorization`, and if it
+1. **`OauthBearerAuthenticationFilter`** (only on `/mcp`) reads `Authorization`, and if it
    resolves, puts a `UsernamePasswordAuthenticationToken` in the security context with the
-   account id as principal, `ROLE_USER` as authority, and the `McpAccessTokenVo` as
+   account id as principal, `ROLE_USER` as authority, and the `OauthAccessTokenVo` as
    **details**. The credential slot is left empty on purpose: that is where a browser
    session keeps its parseable JWT, and an MCP token is not one.
    The filter **never refuses** a request. It only authenticates.
 
-2. **`McpAccessTokenResolver.resolve`** does the checking:
-   - `McpTokenHelper.parseAccessToken` verifies the HS512 signature and expiry, then checks
+2. **`OauthAccessTokenResolver.resolve`** does the checking:
+   - `OauthTokenHelper.parseAccessToken` verifies the HS512 signature and expiry, then checks
      the **audience** equals `jinear.mcp.resource-url` and the **issuer** equals
-     `jinear.mcp.issuer-url`. The audience check is the one the MCP specification calls out
+     `jinear.oauth.issuer-url`. The audience check is the one the MCP specification calls out
      as mandatory: without it a token minted for a different resource would be accepted.
    - The **connection row must still exist**. Revocation cannot be carried in the token, and
      a user who disconnects a client expects that to take effect now, not when the access
@@ -535,13 +576,17 @@ cheaper to fail the boot than to find out during review.
 | `workspace:read` | `get_workspace`, `list_workspaces`, `list_teams`, `list_topics`, `list_workflow_statuses`, `list_workspace_members`, `search`, `fetch` |
 | `tasks:read` | `get_task`, `list_tasks`, `search_tasks`, `list_task_boards`, `list_task_comments`, `search`, `fetch` |
 | `tasks:write` | `create_task`, `update_task`, `set_task_status`, `add_task_comment`, `create_task_board`, `add_task_to_board` |
-| `projects:read` | `get_project`, `list_projects`, `list_project_milestones` |
-| `projects:write` | `create_project`, `update_project`, `create_project_milestone` |
 | `calendar:read` | `list_calendar_events` |
 | `notes:read` | `get_note`, `list_notebooks`, `search_notes`, `search`, `fetch` |
 | `files:read` | `list_files`, `get_file_link` |
 
-31 tools, 22 of them read only, **0 destructive**.
+25 tools, 19 of them read only, **0 destructive**.
+
+There is no projects scope and there are no project tools. Projects are a deprecated
+feature, so the connector leaves them out entirely, down to the `projectId` and
+`milestoneId` fields on the task tools. A token issued before the removal may still carry
+`projects:read` or `projects:write`; nothing requires them, and `OauthScopeService.parse`
+drops any scope `OauthScope` does not define.
 
 `search` and `fetch` are the generic retrieval pair a host uses when it wants to cite
 sources: `search` returns identifiers with user-openable URLs, `fetch` returns the full
@@ -549,7 +594,7 @@ text behind one of them. They cover every workspace the account belongs to, beca
 citing host has no workspace to pass in. They are what makes the connector usable in
 ChatGPT.
 
-**Deliberate absences**, documented in `McpScope`:
+**Deliberate absences**, documented in `OauthScope`:
 
 - **No delete tools at all.**
 - **Notes are read only.** A note body is a CRDT document authored by the editor, and
@@ -567,11 +612,11 @@ Three different scopes of revocation exist, and they are not interchangeable.
 | Who | Endpoint | Effect |
 |-----|----------|--------|
 | The client itself | `POST /v1/oauth/revoke` (RFC 7009) | Redeems the refresh token, passivates every refresh token for the connection, passivates the connection. Answers `200` even for an unknown token, as the RFC requires. |
-| The member | `DELETE /v1/mcp/connection/{id}` | Same, for one of their own connections. **Owner only, not admin**: a connection is a grant one person made from their own account, and nobody else's role should let them speak for it. |
-| The instance admin | `DELETE /v1/admin/mcp/client?clientId=` | Passivates the client registration, which cuts every connection made through it for every account. |
+| The member | `DELETE /v1/oauth/connection/{id}` | Same, for one of their own connections. **Owner only, not admin**: a connection is a grant one person made from their own account, and nobody else's role should let them speak for it. |
+| The instance admin | `DELETE /v1/admin/oauth/client?clientId=` | Passivates the client registration, which cuts every connection made through it for every account. |
 
 In all cases the effect on a live access token is immediate, because
-`McpAccessTokenResolver` re-checks the connection row on every call.
+`OauthAccessTokenResolver` re-checks the connection row on every call.
 
 ### 3.9 Logging, analytics, retention
 
@@ -605,7 +650,7 @@ JWT cookie, so `SessionInfoService` reads it back out of the token. A machine ca
 authenticated some other way has no such token to parse, so it attaches a `SessionCarrier`
 as the authentication **details** instead, and that wins over the credential when present.
 
-`McpAccessTokenVo` implements it. The result is that every existing manager which calls
+`OauthAccessTokenVo` implements it. The result is that every existing manager which calls
 `sessionInfoService.currentAccountId()` or reads the session id works unchanged under an
 MCP call, and workspace activity rows are attributed correctly.
 
@@ -617,11 +662,11 @@ Seven tables, all in `changelog-v22.xml`, plus one seeded flag row.
 
 | Table | Holds | Notable columns |
 |-------|-------|-----------------|
-| `mcp_oauth_client` | One row per registered or seen client | `client_id`, `redirect_uris` (newline joined), `registration_type` (DCR/CIMD/STATIC), `client_id_issued_at` |
-| `mcp_authorization_request` | A parked `/authorize` call awaiting consent | `scope`, `state`, `code_challenge`, `resource`, `expires_at`, `completed_at`. Indexed on `expires_at` |
-| `mcp_connection` | One grant, per account per client | `account_id`, `client_id`, `granted_scopes`, `session_info_id`, `last_used_at`. Indexed on `account_id` |
-| `mcp_authorization_code` | A one-time code | `hashed_code` (BCrypt), `consumed_at`, `expires_at`. Indexed on `expires_at` |
-| `mcp_refresh_token` | A rotating refresh token | `hashed_token` (BCrypt), `consumed_at`, `rotated_to`. Indexed on connection id |
+| `oauth_client` | One row per registered or seen client | `client_id`, `redirect_uris` (newline joined), `registration_type` (DCR/CIMD/STATIC), `client_id_issued_at` |
+| `oauth_authorization_request` | A parked `/authorize` call awaiting consent | `scope`, `state`, `code_challenge`, `resource`, `expires_at`, `completed_at`. Indexed on `expires_at` |
+| `oauth_connection` | One grant, per account per client | `account_id`, `client_id`, `granted_scopes`, `session_info_id`, `last_used_at`. Indexed on `account_id` |
+| `oauth_authorization_code` | A one-time code | `hashed_code` (BCrypt), `consumed_at`, `expires_at`. Indexed on `expires_at` |
+| `oauth_refresh_token` | A rotating refresh token | `hashed_token` (BCrypt), `consumed_at`, `rotated_to`. Indexed on connection id |
 | `mcp_tool_call_log` | One row per tool call or rejection | `tool_name`, `call_status`, `error_code`, `duration_ms`, `response_bytes`. **No arguments, no responses.** Indexed on date, workspace, connection |
 | `mcp_usage_daily` | Rolled-up per-day per-tool totals | `usage_date`, `tool_name`, `call_count`, `error_count`, `total_duration_ms` |
 
@@ -634,32 +679,41 @@ being deleted, except in the retention job which really does delete.
 
 ## 5. Configuration
 
-All under `McpProperties`, prefix `jinear.mcp`.
+Split in two, the same way the code is.
+
+`OauthProperties`, prefix `jinear.oauth`. No `enabled` flag: MCP is the only resource
+these tokens open, so `jinear.mcp.enabled` turns both halves on and off together.
 
 | Property | Default | Notes |
 |----------|---------|-------|
-| `enabled` | `false` | Hard switch. With it off, `/mcp` returns 404 and every OAuth endpoint refuses |
 | `issuer-url` | none, **required** | Must be the origin that serves `/.well-known/*`, that is the API origin |
-| `resource-url` | none, **required** | The RFC 8707 audience **and** the string a user types into their client. RFC 9728 requires the two to match exactly, so it is configured rather than derived |
-| `documentation-url` | `https://jinear.co/mcp/` | Advertised in the protected resource metadata |
+| `documentation-url` | `https://jinear.co/mcp/` | Advertised as `service_documentation` |
 | `access-token-validity-minutes` | 60 | |
 | `refresh-token-validity-days` | 30 | |
 | `authorization-code-validity-seconds` | 60 | |
 | `authorization-request-validity-minutes` | 10 | How long a consent screen stays answerable |
-| `log-retention-days` | 30 | |
 | `dcr-enabled` | `true` | When false, `registration_endpoint` is omitted from the metadata too |
 | `cimd-allowed-hosts` | empty | Empty means any public https host. The SSRF guard applies either way |
 | `cimd-fetch-timeout-millis` | 4000 | |
+
+`McpProperties`, prefix `jinear.mcp`.
+
+| Property | Default | Notes |
+|----------|---------|-------|
+| `enabled` | `false` | Hard switch for both halves. With it off, `/mcp` returns 404 and every OAuth endpoint refuses |
+| `resource-url` | none, **required** | The RFC 8707 audience **and** the string a user types into their client. RFC 9728 requires the two to match exactly, so it is configured rather than derived |
+| `documentation-url` | `https://jinear.co/mcp/` | Advertised in the protected resource metadata |
+| `log-retention-days` | 30 | |
 | `max-page-size` | 50 | Cap on any list tool |
 
-Plus `jwt.mcp.secret` (no default, required) and `fe.mcp-consent-url` (no default,
+Plus `jwt.oauth.secret` (no default, required) and `fe.oauth-consent-url` (no default,
 required, must contain `{requestId}`).
 
 **Two switches gate the feature**, and the split is deliberate:
 
 - `jinear.mcp.enabled` is the property. With it off nothing MCP answers at all.
 - `InstanceFlagType.MCP_SERVER` is the administrator's switch, checked **only on the
-  authorization path** (`McpAuthorizationManager.assertEnabled`). Turning it off stops
+  authorization path** (`OauthAuthorizationManager.assertEnabled`). Turning it off stops
   anybody granting fresh access while the connections people already made keep working
   until they disconnect them. It is not checked on the transport, because that would put a
   database read in front of every tool call.
@@ -671,16 +725,16 @@ required, must contain `{requestId}`).
 These are the places where a mistake would be expensive. Each is deliberate, and each is
 worth challenging.
 
-1. **Separate signing key** (`jwt.mcp.secret` vs `jwt.secret`), with `JwtRequestFilter`
+1. **Separate signing key** (`jwt.oauth.secret` vs `jwt.secret`), with `JwtRequestFilter`
    skipping `/mcp`. This is the main isolation between an agent credential and a browser
    session.
 2. **Audience and issuer are both checked** on every token parse, not just the signature.
 3. **Revocation is checked per call** by re-reading the connection row, so disconnect is
    immediate rather than eventual.
-4. **CIMD SSRF guard** in `McpCimdResolver`: allowlist, address family checks, no redirect
+4. **CIMD SSRF guard** in `CimdResolver`: allowlist, address family checks, no redirect
    following, timeouts, size cap, self-reference check, and the same-origin rule on redirect
    URIs. The same-origin rule is the one that stops a hostile metadata document.
-5. **Loopback redirect matching** in `McpRedirectUriMatcher`. RFC 8252 section 7.3 says a
+5. **Loopback redirect matching** in `RedirectUriMatcher`. RFC 8252 section 7.3 says a
    loopback redirect is compared with the **port ignored**, because a native client binds an
    ephemeral port. This implementation extends that to the `localhost` name and not only the
    IP literal, because Claude Code declares both and listens on a random port.
@@ -731,8 +785,8 @@ session. Three pieces make that work:
    `PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS`, so it is not bounced to `/`.
 2. The page renders `LoginWithMailForm` in place, under the client and scope information,
    so the user knows what they are signing in for.
-3. `src/util/mcpConsent.ts` parks the request id in `sessionStorage`, and
-   `src/components/mcpConsentReturnListener/McpConsentReturnListener.tsx` (mounted at the
+3. `src/util/oauthConsent.ts` parks the request id in `sessionStorage`, and
+   `src/components/oauthConsentReturnListener/OauthConsentReturnListener.tsx` (mounted at the
    top of `App.tsx`) navigates back to the consent screen once `authState` becomes
    `LOGGED_IN`.
 
@@ -754,7 +808,7 @@ Two jobs in one section:
   step lists and the `mcp-remote` note for a private-network instance. The URL comes from
   the new `GET /v1/mcp/info`, so nobody has to work out their own address.
 - **Management.** The connection list with last-used time and a Disconnect action, backed
-  by `GET /v1/mcp/connection/list` and `DELETE /v1/mcp/connection/{id}`.
+  by `GET /v1/oauth/connection/list` and `DELETE /v1/oauth/connection/{id}`.
 
 The whole section returns `null` when the instance says MCP is off, so a member never sees
 setup steps for something they cannot connect to.
@@ -782,13 +836,15 @@ paginated with the existing `Pagination` component.
 
 ### 7.5 API layer
 
-**New slices**: `src/store/api/mcpApi.ts` (server info, connections, revoke, consent info,
-consent submit) and `src/store/api/adminMcpApi.ts` (analytics, clients, logs, revoke
+**New slices**, split the same way the backend is: `src/store/api/oauthApi.ts` (consent
+info, consent submit, connection list, revoke), `src/store/api/mcpApi.ts` (server info),
+`src/store/api/adminOauthApi.ts` (client list, revoke) and
+`src/store/api/adminMcpApi.ts` (analytics, logs
 client).
 
 **New tag types** in `api.ts`: `v1/oauth/authorize/info/{requestId}`,
-`v1/mcp/connection/list`, `v1/mcp/info`, `v1/admin/mcp/analytics`,
-`v1/admin/mcp/client/list`, `v1/admin/mcp/log/list`.
+`v1/oauth/connection/list`, `v1/mcp/info`, `v1/admin/mcp/analytics`,
+`v1/admin/oauth/client/list`, `v1/admin/mcp/log/list`.
 
 **`src/model/be/jinear-core.ts` was regenerated** from `jinear-core/jinear-core.ts`. The
 app's copy was stale and had no MCP types at all. Apart from the MCP additions the diff is
@@ -832,7 +888,7 @@ and the key pages index), and a footer link in `BareFooter.tsx`. `MCP_DOCS_URL` 
 It warns when `EXTERNAL_SCHEME` is not `https`, because Claude and ChatGPT refuse to
 connect over plain HTTP.
 
-**`MCP_JWT_SECRET` is generated unconditionally**, whether or not MCP is turned on, so
+**`OAUTH_JWT_SECRET` is generated unconditionally**, whether or not MCP is turned on, so
 enabling it later needs no new secret. It uses `generate_secret`, the same 64 character
 generator as `JWT_SECRET`, and is deliberately a different value.
 
@@ -840,9 +896,9 @@ generator as `JWT_SECRET`, and is deliberately a different value.
 from `DOMAIN` and `API_DOMAIN`, which the script already collects:
 
 ```yaml
-MCP_ISSUER_URL:   ${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}
+OAUTH_ISSUER_URL:   ${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}
 MCP_RESOURCE_URL: ${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}/mcp
-MCP_CONSENT_URL:  ${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}/oauth/consent?request_id={requestId}
+OAUTH_CONSENT_URL:  ${EXTERNAL_SCHEME}://${DOMAIN}${PUBLIC_PORT_SUFFIX}/oauth/consent?request_id={requestId}
 ```
 
 A mismatch between these three is the failure that would generate every support question,
@@ -850,7 +906,7 @@ and it fails inside Claude where there is nothing to read. Deriving them removes
 possibility.
 
 `templates/application.properties.template` gained the `jinear.mcp.*` block,
-`jwt.mcp.secret` and `fe.mcp-consent-url`. `.env.template` and the installation `README.md`
+`jwt.oauth.secret` and `fe.oauth-consent-url`. `.env.template` and the installation `README.md`
 gained an MCP section. The completion summary prints the server address when MCP is on.
 
 **No gateway change was needed.** Both sample Caddyfiles proxy the whole `api.*` host to
@@ -891,7 +947,7 @@ Be aware of these before signing off.
 5. **No workspace-scoped MCP screens in the app.** `McpManagementController` exposes
    `/v1/mcp/log/list/workspace/{id}` and `/v1/mcp/analytics/workspace/{id}` for workspace
    owners, and nothing in `jinear-app` calls them yet.
-6. **`McpClientRegistrationType.STATIC`** exists in the enum and nothing creates one.
+6. **`OauthClientRegistrationType.STATIC`** exists in the enum and nothing creates one.
 
 ---
 
@@ -902,17 +958,17 @@ If you read the code in this order it should make sense without jumping around.
 1. `McpProperties`, `McpPaths`, `SecurityConfiguration`, `JwtRequestFilter` -> how requests
    are routed and what is open.
 2. `McpDiscoveryService` -> what we advertise.
-3. `McpCimdResolver`, `McpRedirectUriMatcher`, `McpPkceValidator` -> the three classes where
+3. `CimdResolver`, `RedirectUriMatcher`, `PkceValidator` -> the three classes where
    a mistake is a vulnerability.
-4. `McpAuthorizationManager`, `McpAuthorizationCodeService`, `McpTokenManager`,
-   `McpRefreshTokenService` -> the OAuth flow end to end.
-5. `McpTokenHelper`, `McpAccessTokenResolver`, `McpBearerAuthenticationFilter` -> the
+4. `OauthAuthorizationManager`, `OauthAuthorizationCodeService`, `OauthTokenManager`,
+   `OauthRefreshTokenService` -> the OAuth flow end to end.
+5. `OauthTokenHelper`, `OauthAccessTokenResolver`, `OauthBearerAuthenticationFilter` -> the
    resource server.
 6. `McpController`, `McpProtocolService` -> the transport and the refusal shape.
 7. `McpToolRegistry`, `SimpleMcpTool`, `McpToolArguments`, then one config class such as
    `TaskMcpTools` -> the tool pattern.
-8. `jinear-app`: `pages/oauth/consent/page.tsx`, then `McpConsentReturnListener` and
-   `util/mcpConsent.ts`, then the two profile and admin components.
+8. `jinear-app`: `pages/oauth/consent/page.tsx`, then `OauthConsentReturnListener` and
+   `util/oauthConsent.ts`, then the two profile and admin components.
 9. `jinear-installation-scripts`: the derived URLs in `templates/docker-compose.yaml`.
 
 ### Test map
@@ -923,14 +979,14 @@ If you read the code in this order it should make sense without jumping around.
 |-------|--------|
 | `McpControllerTest` (19) | Handshake, batching, notifications, the 401 and 403 challenge shapes |
 | `McpToolCatalogTest` (284) | Every tool's name, title, description, schema and annotation consistency |
-| `McpRedirectUriMatcherTest` (10) | Loopback port-agnostic matching, exact matching otherwise |
-| `McpRefreshTokenServiceTest` (7) | Issue, rotate, reuse detection |
-| `McpTokenHelperTest` (6) | Signature, expiry, audience, issuer |
-| `McpAccessTokenResolverTest` (6) | Bearer extraction, revoked connection, last-used throttle |
-| `McpAuthorizationCodeServiceTest` (6) | Single use, expiry, hash mismatch |
-| `McpPkceValidatorTest` (6) | S256 only, length bounds |
+| `RedirectUriMatcherTest` (10) | Loopback port-agnostic matching, exact matching otherwise |
+| `OauthRefreshTokenServiceTest` (7) | Issue, rotate, reuse detection |
+| `OauthTokenHelperTest` (6) | Signature, expiry, audience, issuer |
+| `OauthAccessTokenResolverTest` (6) | Bearer extraction, revoked connection, last-used throttle |
+| `OauthAuthorizationCodeServiceTest` (6) | Single use, expiry, hash mismatch |
+| `PkceValidatorTest` (6) | S256 only, length bounds |
 | `McpDiscoveryServiceTest` (6) | Both metadata documents |
-| `McpOauthTokenControllerTest` (5) | OAuth error bodies and status codes |
+| `OauthTokenControllerTest` (5) | OAuth error bodies and status codes |
 | `McpServerInfoTest` (4) | **Layer 2.** Both switches, and that the URL is withheld when off |
 | `McpAuthorizationGateTest` (3) | **Layer 2.** The instance flag refusal happens before a request is parked |
 | `McpToolManifestExportTest` (1) | The published manifest matches the live catalog |

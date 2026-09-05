@@ -5,7 +5,7 @@ import co.jinear.core.manager.team.TeamRetrieveManager;
 import co.jinear.core.manager.team.TeamWorkflowStatusManager;
 import co.jinear.core.manager.workspace.WorkspaceManager;
 import co.jinear.core.manager.workspace.WorkspaceMemberRetrieveManager;
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.service.mcp.tool.McpShapes;
@@ -42,7 +42,7 @@ public class WorkspaceMcpTools {
                 .input(McpJsonSchema.noArguments())
                 .output(McpShapes.listSchema("The workspaces this account belongs to.", McpShapes.workspaceSchema()))
                 .readOnly()
-                .scopes(McpScope.WORKSPACE_READ)
+                .scopes(OauthScope.WORKSPACE_READ)
                 .handler((context, arguments) -> {
                     var workspaces = workspaceManager.retrieveAccountWorkspacesInternal(context.getAccountId()).getWorkspaces();
                     return McpToolResult.of(McpShapes.list(workspaces, McpShapes::workspaceMembership));
@@ -62,7 +62,7 @@ public class WorkspaceMcpTools {
                         .build())
                 .output(McpShapes.singleSchema("workspace", "The workspace.", McpShapes.workspaceSchema()))
                 .readOnly()
-                .scopes(McpScope.WORKSPACE_READ)
+                .scopes(OauthScope.WORKSPACE_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     String workspaceId = args.optionalString("workspaceId", null);
@@ -90,7 +90,7 @@ public class WorkspaceMcpTools {
                         .build())
                 .output(McpShapes.listSchema("Teams in this workspace.", McpShapes.teamSchema()))
                 .readOnly()
-                .scopes(McpScope.WORKSPACE_READ)
+                .scopes(OauthScope.WORKSPACE_READ)
                 .handler((context, arguments) -> {
                     String workspaceId = McpToolArguments.of(arguments).requiredString("workspaceId");
                     context.setWorkspaceId(workspaceId);
@@ -112,7 +112,7 @@ public class WorkspaceMcpTools {
                 .output(McpShapes.listSchema("Statuses this team's tasks can be in, in board order.",
                         McpShapes.workflowStatusSchema()))
                 .readOnly()
-                .scopes(McpScope.WORKSPACE_READ)
+                .scopes(OauthScope.WORKSPACE_READ)
                 .handler((context, arguments) -> {
                     String teamId = McpToolArguments.of(arguments).requiredString("teamId");
                     var grouped = teamWorkflowStatusManager.retrieveAllFromTeam(teamId)
@@ -143,7 +143,7 @@ public class WorkspaceMcpTools {
                         .build())
                 .output(McpShapes.pageSchema("People in this workspace.", McpShapes.memberSchema()))
                 .readOnly()
-                .scopes(McpScope.WORKSPACE_READ)
+                .scopes(OauthScope.WORKSPACE_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     String workspaceId = args.requiredString("workspaceId");

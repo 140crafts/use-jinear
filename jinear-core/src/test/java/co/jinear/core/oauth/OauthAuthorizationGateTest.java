@@ -1,0 +1,125 @@
+package co.jinear.core.oauth;
+
+import co.jinear.core.config.properties.FeProperties;
+import co.jinear.core.config.properties.McpProperties;
+import co.jinear.core.exception.BusinessException;
+import co.jinear.core.manager.oauth.provider.OauthAuthorizationManager;
+import co.jinear.core.model.enumtype.management.InstanceFlagType;
+import co.jinear.core.model.vo.oauth.OauthAuthorizeRequestVo;
+import co.jinear.core.model.vo.oauth.OauthClientMetadataVo;
+import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.management.InstanceFlagService;
+import co.jinear.core.service.oauth.provider.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+/**
+ * The two switches in front of the authorization endpoint.
+ * <p>
+ * The instance flag is checked here and not on the transport, so turning it off stops
+ * anybody granting fresh access while the connections people already made keep working.
+ * That is the behaviour the admin screen promises, and it only holds if this refusal
+ * happens before a request is parked.
+ */
+class OauthAuthorizationGateTest {
+
+    private McpProperties properties;
+    private InstanceFlagService instanceFlagService;
+    private OauthAuthorizationRequestService requestService;
+    private OauthAuthorizationManager manager;
+
+    @BeforeEach
+    void setUp() {
+        properties = new McpProperties();
+        properties.setResourceUrl("https://api.jinear.test/mcp");
+
+        instanceFlagService = Mockito.mock(InstanceFlagService.class);
+        requestService = Mockito.mock(OauthAuthorizationRequestService.class);
+
+        OauthClientService clientService = Mockito.mock(OauthClientService.class);
+        OauthClientMetadataVo client = new OauthClientMetadataVo();
+        Mockito.lenient().when(clientService.resolveForAuthorization(Mockito.any())).thenReturn(client);
+        Mockito.lenient().when(clientService.redirectUrisOf(Mockito.any()))
+                .thenReturn(List.of("https://claude.test/callback"));
+
+        RedirectUriMatcher redirectUriMatcher = Mockito.mock(RedirectUriMatcher.class);
+        Mockito.lenient().when(redirectUriMatcher.matchesAny(Mockito.any(), Mockito.any())).thenReturn(true);
+
+        FeProperties feProperties = new FeProperties();
+        feProperties.setOauthConsentUrl("https://jinear.test/oauth/consent?request_id={requestId}");
+
+        manager = new OauthAuthorizationManager(
+                clientService,
+                redirectUriMatcher,
+                new PkceValidator(),
+                new OauthScopeService(),
+                requestService,
+                Mockito.mock(OauthAuthorizationCodeService.class),
+                Mockito.mock(OauthConnectionService.class),
+                Mockito.mock(SessionInfoService.class),
+                properties,
+                feProperties,
+                instanceFlagService);
+    }
+
+    private OauthAuthorizeRequestVo request() {
+        return OauthAuthorizeRequestVo.builder()
+                .responseType("code")
+                .clientId("https://claude.test/client")
+                .redirectUri("https://claude.test/callback")
+                .scope("tasks:read")
+                .state("state-1")
+                .codeChallenge("a-challenge")
+                .codeChallengeMethod("S256")
+                .resource("https://api.jinear.test/mcp")
+                .build();
+    }
+
+    @Test
+    void refusesWhenTheAdministratorHasTurnedTheFlagOff() {
+        properties.setEnabled(Boolean.TRUE);
+        Mockito.when(instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER)).thenReturn(false);
+
+        assertThatThrownBy(() -> manager.authorize(request()))
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("mcp.error.disabled");
+        Mockito.verifyNoInteractions(requestService);
+    }
+
+    @Test
+    void refusesWhenTheServerIsNotConfigured() {
+        properties.setEnabled(Boolean.FALSE);
+        Mockito.lenient().when(instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER)).thenReturn(true);
+
+        assertThatThrownBy(() -> manager.authorize(request()))
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("mcp.error.disabled");
+        Mockito.verifyNoInteractions(requestService);
+    }
+
+    /**
+     * The happy path is here only to prove the two refusals above are caused by the
+     * switches and not by the rest of the request being unusable.
+     */
+    @Test
+    void sendsTheUserToTheConsentScreenWhenBothSwitchesAgree() {
+        properties.setEnabled(Boolean.TRUE);
+        Mockito.when(instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER)).thenReturn(true);
+        Mockito.when(requestService.initialize(Mockito.any(), Mockito.any(), Mockito.any(),
+                        Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenAnswer(invocation -> {
+                    var parked = new co.jinear.core.model.entity.oauth.OauthAuthorizationRequest();
+                    parked.setOauthAuthorizationRequestId("req-1");
+                    return parked;
+                });
+
+        assertThat(manager.authorize(request()))
+                .isEqualTo("https://jinear.test/oauth/consent?request_id=req-1");
+    }
+}

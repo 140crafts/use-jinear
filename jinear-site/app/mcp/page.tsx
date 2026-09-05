@@ -10,11 +10,11 @@ import styles from "./index.module.scss";
 export const metadata: Metadata = buildMetadata({
   title: "Connect Claude or ChatGPT",
   description:
-    "Connect Claude or ChatGPT to Jinear over MCP and work with your tasks, projects, notes and files from inside the assistant. Works on the hosted version and on your own server.",
+    "Connect Claude or ChatGPT to Jinear over MCP and work with your tasks, notes and files from inside the assistant. Works on the hosted version and on your own server.",
   path: "/mcp/",
   ogTitle: "Jinear for Claude and ChatGPT",
   ogDescription:
-    "Connect an AI assistant to Jinear over MCP. 31 tools, per-resource permissions, no delete tools.",
+    `Connect an AI assistant to Jinear over MCP. ${manifest.tools.length} tools, per-resource permissions, no delete tools.`,
 });
 
 interface Tool {
@@ -29,8 +29,6 @@ const SCOPE_COPY: { scope: string; label: string; text: string }[] = [
   { scope: "workspace:read", label: "Workspaces", text: "Workspaces, teams, members, topics and workflow statuses." },
   { scope: "tasks:read", label: "Read tasks", text: "Tasks, boards and comments." },
   { scope: "tasks:write", label: "Write tasks", text: "Creating and updating tasks, boards and comments." },
-  { scope: "projects:read", label: "Read projects", text: "Projects and milestones." },
-  { scope: "projects:write", label: "Write projects", text: "Creating and updating projects and milestones." },
   { scope: "calendar:read", label: "Read calendar", text: "Calendar events, including any synced from Google Calendar." },
   { scope: "notes:read", label: "Read notes", text: "Notebooks and notes." },
   { scope: "files:read", label: "Read files", text: "Files, folders and links to them." },
@@ -104,8 +102,8 @@ export default function McpPage() {
           </p>
           <ul>
             <li>
-              <strong>There are no delete tools.</strong> An assistant cannot remove a task, a project, a
-              note or a file.
+              <strong>There are no delete tools.</strong> An assistant cannot remove a task, a note or a
+              file.
             </li>
             <li>
               <strong>Notes and the calendar are read only.</strong> A note body is a collaborative

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-09-01 19:26:20.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-04 23:36:20.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
+    gid: string;
     gthreadId: string;
     ghistoryId: string;
     ginternalDate: string;
-    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -328,45 +328,10 @@ export interface McpAnalyticsDto {
     daily: McpDailyUsageDto[];
 }
 
-export interface McpConnectionDto {
-    mcpConnectionId: string;
-    accountId: string;
-    clientId: string;
-    clientName: string;
-    clientDisplayHost: string;
-    grantedScopes: string[];
-    createdDate: Date;
-    lastUsedAt: Date;
-    callCountLast30Days: number;
-}
-
-export interface McpConsentInfoDto {
-    requestId: string;
-    clientDisplayHost: string;
-    clientName: string;
-    clientUri: string;
-    logoUri: string;
-    policyUri: string;
-    tosUri: string;
-    redirectHost: string;
-    loopbackOnly: boolean;
-    requestedScopes: string[];
-}
-
 export interface McpDailyUsageDto {
     date: string;
     callCount: number;
     errorCount: number;
-}
-
-export interface McpOauthClientDto {
-    clientId: string;
-    clientName: string;
-    clientUri: string;
-    logoUri: string;
-    redirectUris: string[];
-    registrationType: McpClientRegistrationType;
-    clientIdIssuedAt: Date;
 }
 
 export interface McpServerInfoDto {
@@ -377,7 +342,7 @@ export interface McpServerInfoDto {
 
 export interface McpToolCallLogDto {
     mcpToolCallLogId: string;
-    mcpConnectionId: string;
+    oauthConnectionId: string;
     accountId: string;
     workspaceId: string;
     clientId: string;
@@ -675,6 +640,41 @@ export interface NotificationTargetDto extends BaseDto {
     sessionInfoId: string;
     targetType: NotificationTargetType;
     providerType: NotificationProviderType;
+}
+
+export interface OauthClientDto {
+    clientId: string;
+    clientName: string;
+    clientUri: string;
+    logoUri: string;
+    redirectUris: string[];
+    registrationType: OauthClientRegistrationType;
+    clientIdIssuedAt: Date;
+}
+
+export interface OauthConnectionDto {
+    oauthConnectionId: string;
+    accountId: string;
+    clientId: string;
+    clientName: string;
+    clientDisplayHost: string;
+    grantedScopes: string[];
+    createdDate: Date;
+    lastUsedAt: Date;
+    callCountLast30Days: number;
+}
+
+export interface OauthConsentInfoDto {
+    requestId: string;
+    clientDisplayHost: string;
+    clientName: string;
+    clientUri: string;
+    logoUri: string;
+    policyUri: string;
+    tosUri: string;
+    redirectHost: string;
+    loopbackOnly: boolean;
+    requestedScopes: string[];
 }
 
 export interface SubscriptionDto extends BaseDto {
@@ -1456,11 +1456,6 @@ export interface MaterialSearchRequest extends BaseRequest {
     materialType?: MaterialType | null;
 }
 
-export interface McpConsentRequest {
-    requestId: string;
-    approved: boolean;
-}
-
 export interface InternalBatchMediaRetrieveRequest {
     relatedObjectIds: string[];
     fileTypes: FileType[];
@@ -1592,6 +1587,11 @@ export interface NotificationTargetInitializeRequest extends BaseRequest {
     externalTargetId: string;
     targetType?: NotificationTargetType | null;
     providerType: NotificationProviderType;
+}
+
+export interface OauthConsentRequest {
+    requestId: string;
+    approved: boolean;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2058,22 +2058,6 @@ export interface McpAnalyticsResponse extends BaseResponse {
     data: McpAnalyticsDto;
 }
 
-export interface McpConnectionListingResponse extends BaseResponse {
-    data: McpConnectionDto[];
-}
-
-export interface McpConsentInfoResponse extends BaseResponse {
-    data: McpConsentInfoDto;
-}
-
-export interface McpConsentResponse extends BaseResponse {
-    data: string;
-}
-
-export interface McpOauthClientListingResponse extends BaseResponse {
-    data: PageDto<McpOauthClientDto>;
-}
-
 export interface McpServerInfoResponse extends BaseResponse {
     data: McpServerInfoDto;
 }
@@ -2176,6 +2160,22 @@ export interface NotificationEventListingResponse extends BaseResponse {
 
 export interface RetrieveUnreadNotificationEventCountResponse extends BaseResponse {
     unreadNotificationCount: number;
+}
+
+export interface OauthClientListingResponse extends BaseResponse {
+    data: PageDto<OauthClientDto>;
+}
+
+export interface OauthConnectionListingResponse extends BaseResponse {
+    data: OauthConnectionDto[];
+}
+
+export interface OauthConsentInfoResponse extends BaseResponse {
+    data: OauthConsentInfoDto;
+}
+
+export interface OauthConsentResponse extends BaseResponse {
+    data: string;
 }
 
 export interface RetrieveSubscriptionInfoResponse extends BaseResponse {
@@ -2572,9 +2572,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
+    uri: URI;
     description: string;
     filename: string;
-    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -2855,7 +2855,7 @@ export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXP
 
 export type RoleType = "ADMIN" | "SERVICE" | "USER" | "ROBOT";
 
-export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL" | "SIGN_IN_WITH_APPLE" | "SINGLE_USE_LOGIN_TOKEN" | "MCP";
+export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL" | "SIGN_IN_WITH_APPLE" | "SINGLE_USE_LOGIN_TOKEN" | "OAUTH_CONNECTION";
 
 export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
@@ -2882,10 +2882,6 @@ export type MaterialSearchContentFilterType = "IMAGE" | "DOC" | "SHARED" | "RECE
 export type MaterialSearchSortType = "IDATE_DESC" | "IDATE_ASC" | "UDATE_DESC" | "UDATE_ASC" | "NAME_ASC" | "NAME_DESC" | "SIZE_ASC" | "SIZE_DESC";
 
 export type MaterialType = "FILE" | "FOLDER";
-
-export type McpClientRegistrationType = "DCR" | "CIMD" | "STATIC";
-
-export type McpScope = "WORKSPACE_READ" | "TASKS_READ" | "TASKS_WRITE" | "PROJECTS_READ" | "PROJECTS_WRITE" | "CALENDAR_READ" | "NOTES_READ" | "FILES_READ" | "OFFLINE_ACCESS";
 
 export type McpToolCallStatus = "OK" | "TOOL_ERROR" | "PROTOCOL_ERROR" | "UNAUTHORIZED" | "FORBIDDEN" | "RATE_LIMITED" | "SERVER_ERROR";
 
@@ -2926,6 +2922,10 @@ export type NotificationProviderType = "ONE_SIGNAL" | "FIREBASE" | "EXPO";
 export type NotificationTargetType = "WEB" | "WEBVIEW";
 
 export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "TASK_NEW_COMMENT" | "TASK_ATTACHMENT_ADDED" | "TASK_ATTACHMENT_DELETED" | "MESSAGING_NEW_MESSAGE_THREAD" | "MESSAGING_NEW_MESSAGE_CONVERSATION";
+
+export type OauthClientRegistrationType = "DCR" | "CIMD" | "STATIC";
+
+export type OauthScope = "WORKSPACE_READ" | "TASKS_READ" | "TASKS_WRITE" | "CALENDAR_READ" | "NOTES_READ" | "FILES_READ" | "OFFLINE_ACCESS";
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "UNFOLLOW" | "SINGLE_LOGIN_TOKEN_USED" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "PAYMENT_ISSUE";
 

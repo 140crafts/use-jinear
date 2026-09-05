@@ -62,8 +62,8 @@ import AdminWorkspacesPage from "@/pages/admin/workspaces/page.tsx";
 import AdminTeamsPage from "@/pages/admin/teams/page.tsx";
 import AdminAccountsPage from "@/pages/admin/accounts/page.tsx";
 import AdminMcpPage from "@/pages/admin/mcp/page.tsx";
-import McpConsentPage from "@/pages/oauth/consent/page.tsx";
-import McpConsentReturnListener from "@/components/mcpConsentReturnListener/McpConsentReturnListener.tsx";
+import OauthConsentPage from "@/pages/oauth/consent/page.tsx";
+import OauthConsentReturnListener from "@/components/oauthConsentReturnListener/OauthConsentReturnListener.tsx";
 
 export default function App() {
     return (
@@ -83,7 +83,7 @@ export default function App() {
             <ReloadQueryRefetchHandler/>
             <OfflinePrefetchManager/>
             <PendingDraftSubmitter/>
-            <McpConsentReturnListener/>
+            <OauthConsentReturnListener/>
             <Routes>
 
                 <Route path="*" element={<Navigate to="/" replace/>}/>
@@ -94,7 +94,7 @@ export default function App() {
                 <Route path="/profile" element={<ProfileScreen/>}/>
                 <Route path="/register" element={<RegisterPage/>}/>
                 <Route path="/new-workspace" element={<NewWorkspaceScreen/>}/>
-                <Route path="/oauth/consent" element={<McpConsentPage/>}/>
+                <Route path="/oauth/consent" element={<OauthConsentPage/>}/>
 
                 <Route path={'/engage'}>
                     <Route path={'confirm-email'} element={<ConfirmEmailPage/>}/>

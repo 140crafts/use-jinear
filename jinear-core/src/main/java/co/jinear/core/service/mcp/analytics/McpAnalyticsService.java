@@ -6,7 +6,7 @@ import co.jinear.core.model.dto.mcp.McpToolUsageDto;
 import co.jinear.core.model.entity.mcp.McpUsageDaily;
 import co.jinear.core.repository.mcp.McpToolCallLogRepository;
 import co.jinear.core.repository.mcp.McpUsageDailyRepository;
-import co.jinear.core.service.mcp.oauth.McpConnectionService;
+import co.jinear.core.service.oauth.provider.OauthConnectionService;
 import co.jinear.core.system.util.DateHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class McpAnalyticsService {
 
     private final McpToolCallLogRepository mcpToolCallLogRepository;
     private final McpUsageDailyRepository mcpUsageDailyRepository;
-    private final McpConnectionService mcpConnectionService;
+    private final OauthConnectionService oauthConnectionService;
 
     public McpAnalyticsDto summarize(String workspaceId, int windowDays) {
         Date from = DateHelper.substractDays(DateHelper.now(), windowDays);
@@ -57,7 +57,7 @@ public class McpAnalyticsService {
         dto.setWindowDays(windowDays);
         dto.setTotalCalls(totalCalls);
         dto.setErrorCalls(errorCalls);
-        dto.setActiveConnections(Objects.isNull(workspaceId) ? mcpConnectionService.countActive() : null);
+        dto.setActiveConnections(Objects.isNull(workspaceId) ? oauthConnectionService.countActive() : null);
         dto.setTopTools(topTools);
         dto.setDaily(daily(workspaceId, windowDays));
         return dto;

@@ -2,12 +2,8 @@ import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
 import Pagination from "@/components/pagination/Pagination";
 import useTranslation from "@/locales/useTranslation";
-import {
-    useAdminRetrieveMcpAnalyticsQuery,
-    useAdminRetrieveMcpClientsQuery,
-    useAdminRetrieveMcpLogsQuery,
-    useAdminRevokeMcpClientMutation,
-} from "@/store/api/adminMcpApi";
+import {useAdminRetrieveMcpAnalyticsQuery, useAdminRetrieveMcpLogsQuery} from "@/store/api/adminMcpApi";
+import {useAdminRetrieveOauthClientsQuery, useAdminRevokeOauthClientMutation} from "@/store/api/adminOauthApi";
 import {changeLoadingModalVisibility} from "@/store/slice/modalSlice";
 import {useAppDispatch} from "@/store";
 import {calculateDateDiff} from "@/util/DateHelper";
@@ -32,12 +28,12 @@ const AdminMcpScreen: React.FC = () => {
     const {
         currentData: clientsResponse,
         isFetching: isClientsFetching,
-    } = useAdminRetrieveMcpClientsQuery({page: clientPage});
+    } = useAdminRetrieveOauthClientsQuery({page: clientPage});
     const {
         currentData: logsResponse,
         isFetching: isLogsFetching,
     } = useAdminRetrieveMcpLogsQuery({page: logPage});
-    const [revokeClient, {isLoading: isRevokeLoading}] = useAdminRevokeMcpClientMutation();
+    const [revokeClient, {isLoading: isRevokeLoading}] = useAdminRevokeOauthClientMutation();
 
     useEffect(() => {
         dispatch(changeLoadingModalVisibility({visible: isRevokeLoading}));

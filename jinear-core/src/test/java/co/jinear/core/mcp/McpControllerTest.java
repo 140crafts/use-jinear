@@ -1,9 +1,11 @@
 package co.jinear.core.mcp;
 
 import co.jinear.core.config.properties.McpProperties;
+import co.jinear.core.config.properties.OauthProperties;
+import co.jinear.core.service.mcp.McpDiscoveryService;
 import co.jinear.core.controller.mcp.McpController;
 import co.jinear.core.model.enumtype.account.RoleType;
-import co.jinear.core.model.vo.mcp.McpAccessTokenVo;
+import co.jinear.core.model.vo.oauth.OauthAccessTokenVo;
 import co.jinear.core.service.mcp.McpProtocolService;
 import co.jinear.core.service.mcp.McpToolCallLogService;
 import co.jinear.core.service.mcp.tool.McpTool;
@@ -47,7 +49,6 @@ class McpControllerTest {
     void setUp() {
         properties = new McpProperties();
         properties.setEnabled(Boolean.TRUE);
-        properties.setIssuerUrl("https://api.jinear.test");
         properties.setResourceUrl("https://api.jinear.test/mcp");
 
         List<McpTool> tools = List.of(
@@ -61,7 +62,10 @@ class McpControllerTest {
 
         McpToolCallLogService logService = Mockito.mock(McpToolCallLogService.class);
         McpProtocolService protocolService = new McpProtocolService(registry, logService, new ObjectMapper());
-        McpController controller = new McpController(protocolService, registry, logService, properties);
+        OauthProperties oauthProperties = new OauthProperties();
+        oauthProperties.setIssuerUrl("https://api.jinear.test");
+        McpDiscoveryService discoveryService = new McpDiscoveryService(properties, oauthProperties);
+        McpController controller = new McpController(protocolService, registry, logService, properties, discoveryService);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
@@ -284,7 +288,7 @@ class McpControllerTest {
     }
 
     private void authenticateWith(Set<String> scopes) {
-        McpAccessTokenVo vo = new McpAccessTokenVo();
+        OauthAccessTokenVo vo = new OauthAccessTokenVo();
         vo.setAccountId("account-1");
         vo.setConnectionId("connection-1");
         vo.setClientId("https://claude.ai/client.json");

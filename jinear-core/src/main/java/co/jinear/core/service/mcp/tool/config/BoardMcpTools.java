@@ -4,7 +4,7 @@ import co.jinear.core.manager.task.TaskBoardEntryManager;
 import co.jinear.core.manager.task.TaskBoardListingManager;
 import co.jinear.core.manager.task.TaskBoardManager;
 import co.jinear.core.manager.topic.TopicListingManager;
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.request.task.TaskBoardEntryInitializeRequest;
@@ -42,7 +42,7 @@ public class BoardMcpTools {
                         .build())
                 .output(McpShapes.pageSchema("Boards in this team.", McpShapes.boardSchema()))
                 .readOnly()
-                .scopes(McpScope.TASKS_READ)
+                .scopes(OauthScope.TASKS_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     String workspaceId = args.requiredString("workspaceId");
@@ -68,7 +68,7 @@ public class BoardMcpTools {
                         .build())
                 .output(McpShapes.singleSchema("board", "The created board.", McpShapes.boardSchema()))
                 .write()
-                .scopes(McpScope.TASKS_WRITE)
+                .scopes(OauthScope.TASKS_WRITE)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     TaskBoardInitializeRequest request = new TaskBoardInitializeRequest();
@@ -96,7 +96,7 @@ public class BoardMcpTools {
                 .output(McpShapes.acknowledgementSchema("taskBoardId", "The board the task was added to."))
                 .write()
                 .idempotent()
-                .scopes(McpScope.TASKS_WRITE)
+                .scopes(OauthScope.TASKS_WRITE)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     TaskBoardEntryInitializeRequest request = new TaskBoardEntryInitializeRequest();
@@ -126,7 +126,7 @@ public class BoardMcpTools {
                         .string("color", "Display colour.")
                         .build()))
                 .readOnly()
-                .scopes(McpScope.WORKSPACE_READ)
+                .scopes(OauthScope.WORKSPACE_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     var page = topicListingManager

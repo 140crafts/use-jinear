@@ -43,9 +43,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     /**
      * The MCP endpoint and the OAuth discovery documents are skipped entirely.
      * <p>
-     * An MCP bearer is signed with a different key, so handing it to this filter would
+     * An OAuth bearer is signed with a different key, so handing it to this filter would
      * only produce a signature failure, and letting it through would be worse: it would
-     * turn a scoped tool credential into a full browser session. McpBearerAuthenticationFilter
+     * turn a scoped tool credential into a full browser session. OauthBearerAuthenticationFilter
      * runs ahead of this one and owns those paths.
      */
     @Override

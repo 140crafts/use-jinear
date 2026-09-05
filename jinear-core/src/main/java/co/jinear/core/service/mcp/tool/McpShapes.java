@@ -5,8 +5,6 @@ import co.jinear.core.model.dto.calendar.CalendarEventDto;
 import co.jinear.core.model.dto.material.MaterialDto;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
-import co.jinear.core.model.dto.project.MilestoneDto;
-import co.jinear.core.model.dto.project.ProjectDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.TaskBoardDto;
 import co.jinear.core.model.dto.task.TaskDto;
@@ -170,8 +168,6 @@ public class McpShapes {
         node.put("ownerId", dto.getOwnerId());
         putDate(node, "assignedDate", dto.getAssignedDate());
         putDate(node, "dueDate", dto.getDueDate());
-        node.put("projectId", dto.getProjectId());
-        node.put("milestoneId", dto.getMilestoneId());
         node.put("topicId", dto.getTopicId());
         return node;
     }
@@ -197,8 +193,6 @@ public class McpShapes {
                 .string("ownerId", "Account id of whoever created the task.")
                 .string("assignedDate", "ISO 8601 start date, or null.")
                 .string("dueDate", "ISO 8601 due date, or null.")
-                .string("projectId", "Project this task belongs to, or null.")
-                .string("milestoneId", "Milestone this task belongs to, or null.")
                 .string("topicId", "Label applied to this task, or null.")
                 .build();
     }
@@ -229,58 +223,6 @@ public class McpShapes {
                 .string("title", "Board name.")
                 .string("state", "Board lifecycle state.")
                 .string("dueDate", "ISO 8601 due date, or null.")
-                .build();
-    }
-
-    // --- project ---------------------------------------------------------------
-
-    public static ObjectNode project(ProjectDto dto) {
-        ObjectNode node = FACTORY.objectNode();
-        node.put("projectId", dto.getProjectId());
-        node.put("workspaceId", dto.getWorkspaceId());
-        node.put("title", dto.getTitle());
-        putEnum(node, "state", dto.getProjectState());
-        putEnum(node, "priority", dto.getProjectPriority());
-        putDate(node, "startDate", dto.getStartDate());
-        putDate(node, "targetDate", dto.getTargetDate());
-        node.put("archived", Boolean.TRUE.equals(dto.getArchived()));
-        node.put("leadWorkspaceMemberId", dto.getLeadWorkspaceMemberId());
-        return node;
-    }
-
-    public static ObjectNode projectSchema() {
-        return McpJsonSchema.object()
-                .string("projectId", "Project id.")
-                .string("workspaceId", "Workspace this project belongs to.")
-                .string("title", "Project name.")
-                .string("state", "Lifecycle state, for example IN_PROGRESS.")
-                .string("priority", "Priority band, for example HIGH.")
-                .string("startDate", "ISO 8601 start date, or null.")
-                .string("targetDate", "ISO 8601 target date, or null.")
-                .bool("archived", "True when the project is archived.")
-                .string("leadWorkspaceMemberId", "Membership id of the project lead, or null.")
-                .build();
-    }
-
-    public static ObjectNode milestone(MilestoneDto dto) {
-        ObjectNode node = FACTORY.objectNode();
-        node.put("milestoneId", dto.getMilestoneId());
-        node.put("projectId", dto.getProjectId());
-        node.put("title", dto.getTitle());
-        putEnum(node, "state", dto.getMilestoneState());
-        putDate(node, "targetDate", dto.getTargetDate());
-        node.put("order", dto.getMilestoneOrder());
-        return node;
-    }
-
-    public static ObjectNode milestoneSchema() {
-        return McpJsonSchema.object()
-                .string("milestoneId", "Milestone id.")
-                .string("projectId", "Project this milestone belongs to.")
-                .string("title", "Milestone name.")
-                .string("state", "Milestone state.")
-                .string("targetDate", "ISO 8601 target date, or null.")
-                .integer("order", "Position within the project.")
                 .build();
     }
 

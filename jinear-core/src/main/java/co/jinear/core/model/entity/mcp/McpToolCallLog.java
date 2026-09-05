@@ -30,8 +30,8 @@ public class McpToolCallLog extends BaseEntity {
     @Column(name = "mcp_tool_call_log_id")
     private String mcpToolCallLogId;
 
-    @Column(name = "mcp_connection_id")
-    private String mcpConnectionId;
+    @Column(name = "oauth_connection_id")
+    private String oauthConnectionId;
 
     @Column(name = "account_id")
     private String accountId;

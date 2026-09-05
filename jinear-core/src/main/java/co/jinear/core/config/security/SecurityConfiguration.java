@@ -23,7 +23,7 @@ public class SecurityConfiguration {
     private final JwtRequestFilter jwtRequestFilter;
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
     private final RateLimitingFilter rateLimitingFilter;
-    private final McpBearerAuthenticationFilter mcpBearerAuthenticationFilter;
+    private final OauthBearerAuthenticationFilter oauthBearerAuthenticationFilter;
 
     private static final String[] SWAGGER_ENDPOINTS = new String[]{
             "/swagger-ui/**",
@@ -95,11 +95,11 @@ public class SecurityConfiguration {
                         .deleteCookies("JWT", "JSESSIONID", "SESSION", "SESSIONID")
                 );
 
-        // Order matters. The MCP filter has to run before the rate limiter so that an
+        // Order matters. The bearer filter has to run before the rate limiter so that an
         // authenticated tool call is bucketed per account rather than falling into the
         // shared public allowance keyed on the gateway's IP.
-        httpSecurity.addFilterBefore(mcpBearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.addFilterAfter(jwtRequestFilter, McpBearerAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(oauthBearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterAfter(jwtRequestFilter, OauthBearerAuthenticationFilter.class);
         httpSecurity.addFilterAfter(rateLimitingFilter, JwtRequestFilter.class);
         return httpSecurity.build();
     }

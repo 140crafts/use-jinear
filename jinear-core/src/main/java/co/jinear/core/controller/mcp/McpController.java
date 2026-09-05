@@ -1,11 +1,12 @@
 package co.jinear.core.controller.mcp;
 
 import co.jinear.core.config.properties.McpProperties;
-import co.jinear.core.config.security.McpBearerAuthenticationFilter;
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.service.mcp.McpDiscoveryService;
+import co.jinear.core.config.security.OauthBearerAuthenticationFilter;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.enumtype.mcp.McpToolCallStatus;
 import co.jinear.core.model.mcp.McpToolContext;
-import co.jinear.core.model.vo.mcp.McpAccessTokenVo;
+import co.jinear.core.model.vo.oauth.OauthAccessTokenVo;
 import co.jinear.core.service.mcp.McpProtocolService;
 import co.jinear.core.service.mcp.McpToolCallLogService;
 import co.jinear.core.service.mcp.tool.McpTool;
@@ -52,6 +53,7 @@ public class McpController {
     private final McpToolRegistry mcpToolRegistry;
     private final McpToolCallLogService mcpToolCallLogService;
     private final McpProperties mcpProperties;
+    private final McpDiscoveryService mcpDiscoveryService;
 
     @PostMapping(value = "/mcp", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JsonNode> handle(@RequestBody JsonNode body) {
@@ -63,7 +65,7 @@ public class McpController {
                 ? toList((ArrayNode) body)
                 : List.of(body);
 
-        Optional<McpAccessTokenVo> token = McpBearerAuthenticationFilter.currentAccessToken();
+        Optional<OauthAccessTokenVo> token = OauthBearerAuthenticationFilter.currentAccessToken();
         Optional<ResponseEntity<JsonNode>> challenge = challengeFor(messages, token);
         if (challenge.isPresent()) {
             return challenge.get();
@@ -109,7 +111,7 @@ public class McpController {
      * client can connect and read the whole catalog before anyone signs in. That is also
      * what lets a directory reviewer inspect every tool without an account.
      */
-    private Optional<ResponseEntity<JsonNode>> challengeFor(List<JsonNode> messages, Optional<McpAccessTokenVo> token) {
+    private Optional<ResponseEntity<JsonNode>> challengeFor(List<JsonNode> messages, Optional<OauthAccessTokenVo> token) {
         for (JsonNode message : messages) {
             if (!mcpProtocolService.isToolCall(message)) {
                 continue;
@@ -121,7 +123,7 @@ public class McpController {
                 // dispatcher answer so the model learns the name was wrong.
                 continue;
             }
-            Set<McpScope> required = tool.get().definition().getRequiredScopes();
+            Set<OauthScope> required = tool.get().definition().getRequiredScopes();
             if (required.isEmpty()) {
                 continue;
             }
@@ -131,7 +133,7 @@ public class McpController {
             }
             Set<String> granted = token.get().getScopes();
             Set<String> missing = required.stream()
-                    .map(McpScope::getValue)
+                    .map(OauthScope::getValue)
                     .filter(scope -> !granted.contains(scope))
                     .collect(LinkedHashSet::new, Set::add, Set::addAll);
             if (!missing.isEmpty()) {
@@ -143,11 +145,11 @@ public class McpController {
         return Optional.empty();
     }
 
-    private ResponseEntity<JsonNode> unauthorized(Set<McpScope> required) {
-        String scope = required.stream().map(McpScope::getValue).reduce((a, b) -> a + " " + b).orElse("");
+    private ResponseEntity<JsonNode> unauthorized(Set<OauthScope> required) {
+        String scope = required.stream().map(OauthScope::getValue).reduce((a, b) -> a + " " + b).orElse("");
         String challenge = "Bearer error=\"invalid_token\", "
                 + "error_description=\"Authentication is required for this tool.\", "
-                + "resource_metadata=\"" + mcpProperties.protectedResourceMetadataUrl() + "\", "
+                + "resource_metadata=\"" + mcpDiscoveryService.protectedResourceMetadataUrl() + "\", "
                 + "scope=\"" + scope + "\"";
         ObjectNode body = FACTORY.objectNode();
         body.put("error", "invalid_token");
@@ -162,13 +164,13 @@ public class McpController {
      * only what is missing would have the user re-consent to a narrower set than they
      * already had, silently dropping permissions they were relying on.
      */
-    private ResponseEntity<JsonNode> insufficientScope(Set<String> granted, Set<McpScope> required) {
+    private ResponseEntity<JsonNode> insufficientScope(Set<String> granted, Set<OauthScope> required) {
         Set<String> union = new LinkedHashSet<>(granted);
         required.forEach(scope -> union.add(scope.getValue()));
         String scope = String.join(" ", union);
         String challenge = "Bearer error=\"insufficient_scope\", "
                 + "scope=\"" + scope + "\", "
-                + "resource_metadata=\"" + mcpProperties.protectedResourceMetadataUrl() + "\", "
+                + "resource_metadata=\"" + mcpDiscoveryService.protectedResourceMetadataUrl() + "\", "
                 + "error_description=\"This tool needs a permission that was not granted.\"";
         ObjectNode body = FACTORY.objectNode();
         body.put("error", "insufficient_scope");
@@ -178,7 +180,7 @@ public class McpController {
                 .body(body);
     }
 
-    private McpToolContext contextFor(Optional<McpAccessTokenVo> token) {
+    private McpToolContext contextFor(Optional<OauthAccessTokenVo> token) {
         return token.map(vo -> McpToolContext.builder()
                         .accountId(vo.getAccountId())
                         .connectionId(vo.getConnectionId())

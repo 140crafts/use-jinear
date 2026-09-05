@@ -15,7 +15,7 @@ public interface McpToolCallLogRepository extends JpaRepository<McpToolCallLog, 
 
     Page<McpToolCallLog> findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateDesc(String workspaceId, Pageable pageable);
 
-    Page<McpToolCallLog> findAllByMcpConnectionIdAndPassiveIdIsNullOrderByCreatedDateDesc(String mcpConnectionId, Pageable pageable);
+    Page<McpToolCallLog> findAllByOauthConnectionIdAndPassiveIdIsNullOrderByCreatedDateDesc(String oauthConnectionId, Pageable pageable);
 
     Page<McpToolCallLog> findAllByPassiveIdIsNullOrderByCreatedDateDesc(Pageable pageable);
 

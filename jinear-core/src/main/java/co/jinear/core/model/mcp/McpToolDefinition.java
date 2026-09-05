@@ -1,6 +1,6 @@
 package co.jinear.core.model.mcp;
 
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +20,7 @@ public class McpToolDefinition {
     private final ObjectNode outputSchema;
     private final McpToolAnnotations annotations;
     /** Every scope the caller must already hold. An empty set means the tool is public. */
-    private final Set<McpScope> requiredScopes;
+    private final Set<OauthScope> requiredScopes;
 
     public String title() {
         return annotations.getTitle();

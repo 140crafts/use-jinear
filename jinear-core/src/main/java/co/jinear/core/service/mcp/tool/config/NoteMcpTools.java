@@ -2,7 +2,7 @@ package co.jinear.core.service.mcp.tool.config;
 
 import co.jinear.core.manager.note.NoteFilterManager;
 import co.jinear.core.manager.notebook.NotebookListingManager;
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.request.note.NoteFilterRequest;
@@ -44,7 +44,7 @@ public class NoteMcpTools {
                         .build())
                 .output(McpShapes.pageSchema("Notebooks in this workspace.", McpShapes.notebookSchema()))
                 .readOnly()
-                .scopes(McpScope.NOTES_READ)
+                .scopes(OauthScope.NOTES_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     String workspaceId = args.requiredString("workspaceId");
@@ -72,7 +72,7 @@ public class NoteMcpTools {
                         .build())
                 .output(McpShapes.pageSchema("Matching notes.", McpShapes.noteSchema()))
                 .readOnly()
-                .scopes(McpScope.NOTES_READ)
+                .scopes(OauthScope.NOTES_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     NoteFilterRequest request = new NoteFilterRequest();
@@ -116,7 +116,7 @@ public class NoteMcpTools {
                         .build())
                 .output(McpShapes.singleSchema("note", "The note, with its body.", McpShapes.noteSchema()))
                 .readOnly()
-                .scopes(McpScope.NOTES_READ)
+                .scopes(OauthScope.NOTES_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     NoteFilterRequest request = new NoteFilterRequest();

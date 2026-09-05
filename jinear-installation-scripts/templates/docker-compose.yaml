@@ -114,17 +114,21 @@ services:
       MANAGEMENT_ENABLED: ${MANAGEMENT_ENABLED:-false}
       MANAGEMENT_ADMIN_EMAIL: ${MANAGEMENT_ADMIN_EMAIL:-}
       MANAGEMENT_ADMIN_PASSWORD: ${MANAGEMENT_ADMIN_PASSWORD:-}
-      # MCP server (optional) - lets members connect Claude or ChatGPT.
+      # OAuth authorization server - issues the tokens a connected app carries.
+      # No switch of its own: MCP_ENABLED below turns both halves on and off, because
+      # MCP is the only resource these tokens open.
       # The URLs are derived here rather than asked for, because they have to agree:
-      # the issuer is the API origin that serves /.well-known, the resource is exactly
-      # what a member pastes into their client, and the consent screen is on the app.
+      # the issuer is the API origin that serves /.well-known, and the consent screen
+      # is on the app.
+      OAUTH_ISSUER_URL: ${EXTERNAL_SCHEME:-https}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX:-}
+      OAUTH_CONSENT_URL: ${EXTERNAL_SCHEME:-https}://${DOMAIN}${PUBLIC_PORT_SUFFIX:-}/oauth/consent?request_id={requestId}
+      OAUTH_JWT_SECRET: ${OAUTH_JWT_SECRET:-}
+      OAUTH_DCR_ENABLED: ${OAUTH_DCR_ENABLED:-true}
+      OAUTH_CIMD_ALLOWED_HOSTS: ${OAUTH_CIMD_ALLOWED_HOSTS:-}
+      # MCP server (optional) - lets members connect Claude or ChatGPT.
+      # MCP_RESOURCE_URL is exactly what a member pastes into their client.
       MCP_ENABLED: ${MCP_ENABLED:-false}
-      MCP_ISSUER_URL: ${EXTERNAL_SCHEME:-https}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX:-}
       MCP_RESOURCE_URL: ${EXTERNAL_SCHEME:-https}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX:-}/mcp
-      MCP_CONSENT_URL: ${EXTERNAL_SCHEME:-https}://${DOMAIN}${PUBLIC_PORT_SUFFIX:-}/oauth/consent?request_id={requestId}
-      MCP_JWT_SECRET: ${MCP_JWT_SECRET:-}
-      MCP_DCR_ENABLED: ${MCP_DCR_ENABLED:-true}
-      MCP_CIMD_ALLOWED_HOSTS: ${MCP_CIMD_ALLOWED_HOSTS:-}
       MCP_LOG_RETENTION_DAYS: ${MCP_LOG_RETENTION_DAYS:-30}
       # Apple Sign In (optional) - leave APPLE_ENABLED=false to boot without an AuthKey.p8
       APPLE_ENABLED: ${APPLE_ENABLED:-false}

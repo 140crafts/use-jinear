@@ -1,6 +1,6 @@
 package co.jinear.core.service.mcp.tool;
 
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolAnnotations;
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.model.mcp.McpToolDefinition;
@@ -46,7 +46,7 @@ public final class SimpleMcpTool implements McpTool {
     public static final class Builder {
 
         private final String name;
-        private final Set<McpScope> scopes = new LinkedHashSet<>();
+        private final Set<OauthScope> scopes = new LinkedHashSet<>();
         private String title;
         private String description;
         private ObjectNode inputSchema;
@@ -106,8 +106,8 @@ public final class SimpleMcpTool implements McpTool {
             return this;
         }
 
-        public Builder scopes(McpScope... required) {
-            for (McpScope scope : required) {
+        public Builder scopes(OauthScope... required) {
+            for (OauthScope scope : required) {
                 scopes.add(scope);
             }
             return this;

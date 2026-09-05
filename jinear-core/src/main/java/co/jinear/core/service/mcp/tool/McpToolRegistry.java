@@ -1,6 +1,6 @@
 package co.jinear.core.service.mcp.tool;
 
-import co.jinear.core.model.enumtype.mcp.McpScope;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolAnnotations;
 import co.jinear.core.model.mcp.McpToolDefinition;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -109,7 +109,7 @@ public class McpToolRegistry {
 
     private boolean declaresWriteScope(McpToolDefinition definition) {
         return definition.getRequiredScopes().stream()
-                .map(McpScope::getValue)
+                .map(OauthScope::getValue)
                 .anyMatch(scope -> scope.endsWith(":write"));
     }
 

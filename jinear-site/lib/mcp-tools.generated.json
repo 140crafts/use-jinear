@@ -85,123 +85,6 @@
       "openWorldHint" : false
     }
   }, {
-    "name" : "create_project",
-    "title" : "Create a project",
-    "description" : "Creates a project in a workspace and attaches it to one or more teams. A project needs at least one team, because its tasks live in team backlogs.",
-    "inputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "workspaceId" : {
-          "type" : "string",
-          "description" : "Workspace id, from list_workspaces."
-        },
-        "title" : {
-          "type" : "string",
-          "description" : "Project name."
-        },
-        "teamIds" : {
-          "type" : "array",
-          "description" : "Team ids this project spans, from list_teams. At least one is required.",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "description" : {
-          "type" : "string",
-          "description" : "Project description. Plain text or simple HTML."
-        },
-        "state" : {
-          "type" : "string",
-          "description" : "Starting state. Defaults to BACKLOG.",
-          "enum" : [ "BACKLOG", "PLANNED", "IN_PROGRESS", "COMPLETED", "CANCELLED" ]
-        },
-        "priority" : {
-          "type" : "string",
-          "description" : "Priority band. Defaults to NONE.",
-          "enum" : [ "NONE", "URGENT", "HIGH", "MEDIUM", "LOW" ]
-        },
-        "startDate" : {
-          "type" : "string",
-          "description" : "ISO 8601 instant the project starts."
-        },
-        "targetDate" : {
-          "type" : "string",
-          "description" : "ISO 8601 instant the project is due."
-        }
-      },
-      "required" : [ "workspaceId", "title", "teamIds" ],
-      "additionalProperties" : false
-    },
-    "outputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "workspaceId" : {
-          "type" : "string",
-          "description" : "The workspace the project was created in."
-        },
-        "ok" : {
-          "type" : "boolean",
-          "description" : "True when the operation completed."
-        }
-      },
-      "additionalProperties" : false
-    },
-    "annotations" : {
-      "title" : "Create a project",
-      "readOnlyHint" : false,
-      "destructiveHint" : false,
-      "idempotentHint" : false,
-      "openWorldHint" : false
-    }
-  }, {
-    "name" : "create_project_milestone",
-    "title" : "Create a milestone",
-    "description" : "Adds a milestone to a project. Tasks can then be filed against it with create_task or update_task.",
-    "inputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "projectId" : {
-          "type" : "string",
-          "description" : "Project id, from list_projects."
-        },
-        "title" : {
-          "type" : "string",
-          "description" : "Milestone name."
-        },
-        "description" : {
-          "type" : "string",
-          "description" : "Milestone description. Plain text or simple HTML."
-        },
-        "targetDate" : {
-          "type" : "string",
-          "description" : "ISO 8601 instant the milestone is due."
-        }
-      },
-      "required" : [ "projectId", "title" ],
-      "additionalProperties" : false
-    },
-    "outputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "projectId" : {
-          "type" : "string",
-          "description" : "The project the milestone was added to."
-        },
-        "ok" : {
-          "type" : "boolean",
-          "description" : "True when the operation completed."
-        }
-      },
-      "additionalProperties" : false
-    },
-    "annotations" : {
-      "title" : "Create a milestone",
-      "readOnlyHint" : false,
-      "destructiveHint" : false,
-      "idempotentHint" : false,
-      "openWorldHint" : false
-    }
-  }, {
     "name" : "create_task",
     "title" : "Create a task",
     "description" : "Creates a task in a team. Only workspaceId, teamId and title are required. Give it a due date to put it on the calendar, and an assignee account id to hand it to someone. Returns the created task, including its reference such as ENG-42.",
@@ -235,14 +118,6 @@
         "dueDate" : {
           "type" : "string",
           "description" : "ISO 8601 instant the work is due."
-        },
-        "projectId" : {
-          "type" : "string",
-          "description" : "Project to file this task under."
-        },
-        "milestoneId" : {
-          "type" : "string",
-          "description" : "Milestone within that project."
         },
         "topicId" : {
           "type" : "string",
@@ -309,14 +184,6 @@
             "dueDate" : {
               "type" : "string",
               "description" : "ISO 8601 due date, or null."
-            },
-            "projectId" : {
-              "type" : "string",
-              "description" : "Project this task belongs to, or null."
-            },
-            "milestoneId" : {
-              "type" : "string",
-              "description" : "Milestone this task belongs to, or null."
             },
             "topicId" : {
               "type" : "string",
@@ -554,78 +421,6 @@
       "openWorldHint" : false
     }
   }, {
-    "name" : "get_project",
-    "title" : "Get one project",
-    "description" : "Reads a single project by id, including its state, priority, dates and lead.",
-    "inputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "projectId" : {
-          "type" : "string",
-          "description" : "Project id, from list_projects."
-        }
-      },
-      "required" : [ "projectId" ],
-      "additionalProperties" : false
-    },
-    "outputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "project" : {
-          "type" : "object",
-          "properties" : {
-            "projectId" : {
-              "type" : "string",
-              "description" : "Project id."
-            },
-            "workspaceId" : {
-              "type" : "string",
-              "description" : "Workspace this project belongs to."
-            },
-            "title" : {
-              "type" : "string",
-              "description" : "Project name."
-            },
-            "state" : {
-              "type" : "string",
-              "description" : "Lifecycle state, for example IN_PROGRESS."
-            },
-            "priority" : {
-              "type" : "string",
-              "description" : "Priority band, for example HIGH."
-            },
-            "startDate" : {
-              "type" : "string",
-              "description" : "ISO 8601 start date, or null."
-            },
-            "targetDate" : {
-              "type" : "string",
-              "description" : "ISO 8601 target date, or null."
-            },
-            "archived" : {
-              "type" : "boolean",
-              "description" : "True when the project is archived."
-            },
-            "leadWorkspaceMemberId" : {
-              "type" : "string",
-              "description" : "Membership id of the project lead, or null."
-            }
-          },
-          "additionalProperties" : false,
-          "description" : "The project."
-        }
-      },
-      "required" : [ "project" ],
-      "additionalProperties" : false
-    },
-    "annotations" : {
-      "title" : "Get one project",
-      "readOnlyHint" : true,
-      "destructiveHint" : false,
-      "idempotentHint" : true,
-      "openWorldHint" : false
-    }
-  }, {
     "name" : "get_task",
     "title" : "Get one task",
     "description" : "Reads a single task in full, including its body, by its human readable reference such as ENG-42. Use it after search_tasks or list_tasks when the body of a specific task is needed.",
@@ -701,14 +496,6 @@
             "dueDate" : {
               "type" : "string",
               "description" : "ISO 8601 due date, or null."
-            },
-            "projectId" : {
-              "type" : "string",
-              "description" : "Project this task belongs to, or null."
-            },
-            "milestoneId" : {
-              "type" : "string",
-              "description" : "Milestone this task belongs to, or null."
             },
             "topicId" : {
               "type" : "string",
@@ -1073,177 +860,6 @@
       "openWorldHint" : false
     }
   }, {
-    "name" : "list_project_milestones",
-    "title" : "List a project's milestones",
-    "description" : "Lists the milestones of one project, in project order. Milestone ids from here are what create_task and update_task take as milestoneId.",
-    "inputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "projectId" : {
-          "type" : "string",
-          "description" : "Project id, from list_projects."
-        }
-      },
-      "required" : [ "projectId" ],
-      "additionalProperties" : false
-    },
-    "outputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "items" : {
-          "type" : "array",
-          "description" : "Milestones in this project.",
-          "items" : {
-            "type" : "object",
-            "properties" : {
-              "milestoneId" : {
-                "type" : "string",
-                "description" : "Milestone id."
-              },
-              "projectId" : {
-                "type" : "string",
-                "description" : "Project this milestone belongs to."
-              },
-              "title" : {
-                "type" : "string",
-                "description" : "Milestone name."
-              },
-              "state" : {
-                "type" : "string",
-                "description" : "Milestone state."
-              },
-              "targetDate" : {
-                "type" : "string",
-                "description" : "ISO 8601 target date, or null."
-              },
-              "order" : {
-                "type" : "integer",
-                "description" : "Position within the project."
-              }
-            },
-            "additionalProperties" : false
-          }
-        },
-        "count" : {
-          "type" : "integer",
-          "description" : "Number of items returned."
-        }
-      },
-      "required" : [ "items" ],
-      "additionalProperties" : false
-    },
-    "annotations" : {
-      "title" : "List a project's milestones",
-      "readOnlyHint" : true,
-      "destructiveHint" : false,
-      "idempotentHint" : true,
-      "openWorldHint" : false
-    }
-  }, {
-    "name" : "list_projects",
-    "title" : "List projects",
-    "description" : "Lists the projects in a workspace. By default only active projects are returned; set scope to ARCHIVED for archived ones, or ASSIGNED for the projects the signed in account leads or belongs to.",
-    "inputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "workspaceId" : {
-          "type" : "string",
-          "description" : "Workspace id, from list_workspaces."
-        },
-        "scope" : {
-          "type" : "string",
-          "description" : "Which projects to return. Defaults to ALL.",
-          "enum" : [ "ALL", "ASSIGNED", "ARCHIVED" ]
-        },
-        "page" : {
-          "type" : "integer",
-          "description" : "Zero based page number. Defaults to 0."
-        }
-      },
-      "required" : [ "workspaceId" ],
-      "additionalProperties" : false
-    },
-    "outputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "items" : {
-          "type" : "array",
-          "description" : "Projects in this workspace.",
-          "items" : {
-            "type" : "object",
-            "properties" : {
-              "projectId" : {
-                "type" : "string",
-                "description" : "Project id."
-              },
-              "workspaceId" : {
-                "type" : "string",
-                "description" : "Workspace this project belongs to."
-              },
-              "title" : {
-                "type" : "string",
-                "description" : "Project name."
-              },
-              "state" : {
-                "type" : "string",
-                "description" : "Lifecycle state, for example IN_PROGRESS."
-              },
-              "priority" : {
-                "type" : "string",
-                "description" : "Priority band, for example HIGH."
-              },
-              "startDate" : {
-                "type" : "string",
-                "description" : "ISO 8601 start date, or null."
-              },
-              "targetDate" : {
-                "type" : "string",
-                "description" : "ISO 8601 target date, or null."
-              },
-              "archived" : {
-                "type" : "boolean",
-                "description" : "True when the project is archived."
-              },
-              "leadWorkspaceMemberId" : {
-                "type" : "string",
-                "description" : "Membership id of the project lead, or null."
-              }
-            },
-            "additionalProperties" : false
-          }
-        },
-        "page" : {
-          "type" : "integer",
-          "description" : "Zero based page number of this result."
-        },
-        "pageSize" : {
-          "type" : "integer",
-          "description" : "Items per page."
-        },
-        "totalElements" : {
-          "type" : "integer",
-          "description" : "Total matching items across all pages."
-        },
-        "totalPages" : {
-          "type" : "integer",
-          "description" : "Total number of pages."
-        },
-        "hasNext" : {
-          "type" : "boolean",
-          "description" : "True when another page is available."
-        }
-      },
-      "required" : [ "items" ],
-      "additionalProperties" : false
-    },
-    "annotations" : {
-      "title" : "List projects",
-      "readOnlyHint" : true,
-      "destructiveHint" : false,
-      "idempotentHint" : true,
-      "openWorldHint" : false
-    }
-  }, {
     "name" : "list_task_boards",
     "title" : "List a team's boards",
     "description" : "Lists the boards belonging to a team, newest first. A board groups tasks for a sprint, a release or any other batch of work.",
@@ -1424,7 +1040,7 @@
   }, {
     "name" : "list_tasks",
     "title" : "List tasks with filters",
-    "description" : "Lists tasks in a workspace, optionally narrowed by team, assignee, workflow status, state group, project, milestone or a date range. This is the tool for questions like what is in progress, what is assigned to someone, or what is due this week.",
+    "description" : "Lists tasks in a workspace, optionally narrowed by team, assignee, workflow status, state group or a date range. This is the tool for questions like what is in progress, what is assigned to someone, or what is due this week.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -1456,20 +1072,6 @@
         "stateGroups" : {
           "type" : "array",
           "description" : "Restrict by state group. Any of BACKLOG, NOT_STARTED, STARTED, COMPLETED, CANCELLED.",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "projectIds" : {
-          "type" : "array",
-          "description" : "Restrict to tasks in these projects.",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "milestoneIds" : {
-          "type" : "array",
-          "description" : "Restrict to tasks on these milestones.",
           "items" : {
             "type" : "string"
           }
@@ -1553,14 +1155,6 @@
               "dueDate" : {
                 "type" : "string",
                 "description" : "ISO 8601 due date, or null."
-              },
-              "projectId" : {
-                "type" : "string",
-                "description" : "Project this task belongs to, or null."
-              },
-              "milestoneId" : {
-                "type" : "string",
-                "description" : "Milestone this task belongs to, or null."
               },
               "topicId" : {
                 "type" : "string",
@@ -2202,14 +1796,6 @@
                 "type" : "string",
                 "description" : "ISO 8601 due date, or null."
               },
-              "projectId" : {
-                "type" : "string",
-                "description" : "Project this task belongs to, or null."
-              },
-              "milestoneId" : {
-                "type" : "string",
-                "description" : "Milestone this task belongs to, or null."
-              },
               "topicId" : {
                 "type" : "string",
                 "description" : "Label applied to this task, or null."
@@ -2322,14 +1908,6 @@
               "type" : "string",
               "description" : "ISO 8601 due date, or null."
             },
-            "projectId" : {
-              "type" : "string",
-              "description" : "Project this task belongs to, or null."
-            },
-            "milestoneId" : {
-              "type" : "string",
-              "description" : "Milestone this task belongs to, or null."
-            },
             "topicId" : {
               "type" : "string",
               "description" : "Label applied to this task, or null."
@@ -2350,75 +1928,9 @@
       "openWorldHint" : false
     }
   }, {
-    "name" : "update_project",
-    "title" : "Update a project",
-    "description" : "Changes a project's title, description, state, priority, dates or archived flag. Supply only the fields to change; anything omitted is left alone.",
-    "inputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "projectId" : {
-          "type" : "string",
-          "description" : "Project id, from list_projects."
-        },
-        "title" : {
-          "type" : "string",
-          "description" : "New project name."
-        },
-        "description" : {
-          "type" : "string",
-          "description" : "New description. Plain text or simple HTML."
-        },
-        "state" : {
-          "type" : "string",
-          "description" : "New state.",
-          "enum" : [ "BACKLOG", "PLANNED", "IN_PROGRESS", "COMPLETED", "CANCELLED" ]
-        },
-        "priority" : {
-          "type" : "string",
-          "description" : "New priority band.",
-          "enum" : [ "NONE", "URGENT", "HIGH", "MEDIUM", "LOW" ]
-        },
-        "startDate" : {
-          "type" : "string",
-          "description" : "New ISO 8601 start date."
-        },
-        "targetDate" : {
-          "type" : "string",
-          "description" : "New ISO 8601 target date."
-        },
-        "archived" : {
-          "type" : "boolean",
-          "description" : "True to archive the project, false to restore it."
-        }
-      },
-      "required" : [ "projectId" ],
-      "additionalProperties" : false
-    },
-    "outputSchema" : {
-      "type" : "object",
-      "properties" : {
-        "projectId" : {
-          "type" : "string",
-          "description" : "The project that was updated."
-        },
-        "ok" : {
-          "type" : "boolean",
-          "description" : "True when the operation completed."
-        }
-      },
-      "additionalProperties" : false
-    },
-    "annotations" : {
-      "title" : "Update a project",
-      "readOnlyHint" : false,
-      "destructiveHint" : false,
-      "idempotentHint" : false,
-      "openWorldHint" : false
-    }
-  }, {
     "name" : "update_task",
     "title" : "Update a task",
-    "description" : "Changes a task's title, body, dates, assignee, project or milestone. Supply only the fields to change; anything omitted is left alone. Use set_task_status to move a task between workflow statuses.",
+    "description" : "Changes a task's title, body, dates or assignee. Supply only the fields to change; anything omitted is left alone. Use set_task_status to move a task between workflow statuses.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -2445,14 +1957,6 @@
         "dueDate" : {
           "type" : "string",
           "description" : "New ISO 8601 due date. Pass an empty string to clear it."
-        },
-        "projectId" : {
-          "type" : "string",
-          "description" : "Move the task into this project."
-        },
-        "milestoneId" : {
-          "type" : "string",
-          "description" : "Move the task onto this milestone."
         }
       },
       "required" : [ "taskId" ],
@@ -2483,21 +1987,16 @@
   "scopes" : {
     "add_task_comment" : [ "tasks:write" ],
     "add_task_to_board" : [ "tasks:write" ],
-    "create_project" : [ "projects:write" ],
-    "create_project_milestone" : [ "projects:write" ],
     "create_task" : [ "tasks:write" ],
     "create_task_board" : [ "tasks:write" ],
     "fetch" : [ "notes:read", "tasks:read", "workspace:read" ],
     "get_file_link" : [ "files:read" ],
     "get_note" : [ "notes:read" ],
-    "get_project" : [ "projects:read" ],
     "get_task" : [ "tasks:read" ],
     "get_workspace" : [ "workspace:read" ],
     "list_calendar_events" : [ "calendar:read" ],
     "list_files" : [ "files:read" ],
     "list_notebooks" : [ "notes:read" ],
-    "list_project_milestones" : [ "projects:read" ],
-    "list_projects" : [ "projects:read" ],
     "list_task_boards" : [ "tasks:read" ],
     "list_task_comments" : [ "tasks:read" ],
     "list_tasks" : [ "tasks:read" ],
@@ -2510,7 +2009,6 @@
     "search_notes" : [ "notes:read" ],
     "search_tasks" : [ "tasks:read" ],
     "set_task_status" : [ "tasks:write" ],
-    "update_project" : [ "projects:write" ],
     "update_task" : [ "tasks:write" ]
   }
 }

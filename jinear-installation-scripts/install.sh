@@ -582,9 +582,10 @@ generate_secrets() {
     print_success "Internal auth token generated"
 
     # Generated whether or not MCP is on, so turning it on later needs no new secret.
-    # It is deliberately not JWT_SECRET: an MCP token must never open a browser session.
-    MCP_JWT_SECRET=$(generate_secret)
-    print_success "MCP token secret generated"
+    # It is deliberately not JWT_SECRET: a connected app's token must never open a
+    # browser session.
+    OAUTH_JWT_SECRET=$(generate_secret)
+    print_success "OAuth token secret generated"
 }
 
 # =============================================================================
@@ -687,23 +688,27 @@ MANAGEMENT_ADMIN_EMAIL=${MANAGEMENT_ADMIN_EMAIL}
 MANAGEMENT_ADMIN_PASSWORD=${MANAGEMENT_ADMIN_PASSWORD}
 
 # AI Assistant Connections (MCP): lets members connect Claude or ChatGPT.
-# The four URLs behind this are derived in docker-compose.yaml from DOMAIN and
-# API_DOMAIN, because a mismatch between them is what breaks a connection: the
-# issuer must be the API origin that serves /.well-known, the resource must be
-# exactly the address a member pastes into their client, and the consent screen
-# lives on the app. Change DOMAIN or API_DOMAIN and all four follow.
-# MCP_JWT_SECRET signs MCP access tokens. It is deliberately not JWT_SECRET, so
-# an assistant's token can never open a browser session.
+# Two layers sit behind this. The OAuth authorization server issues the tokens and
+# runs the consent screen; the MCP server is the resource those tokens open. MCP is
+# the only resource today, so MCP_ENABLED turns both halves on and off together.
+# The three URLs are derived in docker-compose.yaml from DOMAIN and API_DOMAIN,
+# because a mismatch between them is what breaks a connection: the issuer must be
+# the API origin that serves /.well-known, the resource must be exactly the address
+# a member pastes into their client, and the consent screen lives on the app.
+# Change DOMAIN or API_DOMAIN and all three follow.
 # Turning this off stops new connections; assistants already connected keep
 # working until a member disconnects them.
 MCP_ENABLED=${MCP_ENABLED}
-MCP_JWT_SECRET=${MCP_JWT_SECRET}
+MCP_LOG_RETENTION_DAYS=30
+# OAUTH_JWT_SECRET signs the access tokens the OAuth server issues. It is
+# deliberately not JWT_SECRET, so a connected app's token can never open a browser
+# session.
+OAUTH_JWT_SECRET=${OAUTH_JWT_SECRET}
 # Dynamic client registration. Leave on unless you pin specific clients.
-MCP_DCR_ENABLED=true
+OAUTH_DCR_ENABLED=true
 # Comma separated hosts allowed to describe a client. Empty accepts any public
 # https host, which is the open policy the specification describes.
-MCP_CIMD_ALLOWED_HOSTS=
-MCP_LOG_RETENTION_DAYS=30
+OAUTH_CIMD_ALLOWED_HOSTS=
 
 # Backup
 BACKUP_ENABLED=${BACKUP_ENABLED}
