@@ -170,8 +170,8 @@ public class OauthTokenManager {
     }
 
     private void assertEnabled() {
-        if (!Boolean.TRUE.equals(mcpProperties.getEnabled())) {
-            throw new BusinessException("mcp.error.disabled");
+        if (!Boolean.TRUE.equals(oauthProperties.getEnabled())) {
+            throw new BusinessException("oauth.error.disabled");
         }
     }
 }

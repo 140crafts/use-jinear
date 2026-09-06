@@ -34,7 +34,7 @@ To turn it on afterwards:
 
 ```bash
 cd ~/jinear
-nano .env          # set MCP_ENABLED=true
+nano .env          # set MCP_ENABLED=true and OAUTH_ENABLED=true
 docker compose up -d
 ```
 
@@ -60,8 +60,8 @@ question. For a domain of `jinear.example.com` with an API domain of
 | `OAUTH_JWT_SECRET` | generated | Signs the access tokens the OAuth server issues. Deliberately not `JWT_SECRET` |
 
 The `OAUTH_` half configures the authorization server that issues tokens; the `MCP_` half
-configures the resource those tokens open. There is one enabled flag, `MCP_ENABLED`,
-because MCP is the only resource today.
+configures the resource those tokens open. Each half has its own enabled flag,
+`OAUTH_ENABLED` and `MCP_ENABLED`, and a member needs both on to connect an assistant.
 
 If you run your own reverse proxy, two paths must reach `jinear-core` on the API domain:
 

@@ -115,11 +115,12 @@ services:
       MANAGEMENT_ADMIN_EMAIL: ${MANAGEMENT_ADMIN_EMAIL:-}
       MANAGEMENT_ADMIN_PASSWORD: ${MANAGEMENT_ADMIN_PASSWORD:-}
       # OAuth authorization server - issues the tokens a connected app carries.
-      # No switch of its own: MCP_ENABLED below turns both halves on and off, because
-      # MCP is the only resource these tokens open.
+      # Switched independently of MCP_ENABLED below, but a member needs both on to
+      # connect an assistant: this half authorizes, that half serves the tools.
       # The URLs are derived here rather than asked for, because they have to agree:
       # the issuer is the API origin that serves /.well-known, and the consent screen
       # is on the app.
+      OAUTH_ENABLED: ${OAUTH_ENABLED:-false}
       OAUTH_ISSUER_URL: ${EXTERNAL_SCHEME:-https}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX:-}
       OAUTH_CONSENT_URL: ${EXTERNAL_SCHEME:-https}://${DOMAIN}${PUBLIC_PORT_SUFFIX:-}/oauth/consent?request_id={requestId}
       OAUTH_JWT_SECRET: ${OAUTH_JWT_SECRET:-}

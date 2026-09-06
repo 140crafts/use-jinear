@@ -214,9 +214,9 @@ these and nothing else.
    the audience per request.
 2. **The resource server filter is path bound.** `OauthBearerAuthenticationFilter` skips
    every path except `McpPaths.MCP_ENDPOINT`, so a bearer authenticates nothing else.
-3. **The kill switch belongs to MCP.** `assertEnabled` reads `jinear.mcp.enabled` and the
-   `MCP_SERVER` instance flag, which is why that refusal keeps the `mcp.error.disabled`
-   message key while every other OAuth failure moved to `oauth.error.*`.
+3. **The admin flag is MCP's.** `assertEnabled` now reads `jinear.oauth.enabled`, but the
+   authorization path also checks the `MCP_SERVER` instance flag, because MCP is the only
+   resource a new grant can be for. That check becomes per resource on the same day.
 
 `scopes_supported` in both discovery documents follows from the same fact: it is one flat
 `OauthScope` set today, and becomes per resource on the same day.
@@ -689,11 +689,11 @@ being deleted, except in the retention job which really does delete.
 
 Split in two, the same way the code is.
 
-`OauthProperties`, prefix `jinear.oauth`. No `enabled` flag: MCP is the only resource
-these tokens open, so `jinear.mcp.enabled` turns both halves on and off together.
+`OauthProperties`, prefix `jinear.oauth`.
 
 | Property | Default | Notes |
 |----------|---------|-------|
+| `enabled` | `false` | With it off, every `/v1/oauth/*` endpoint refuses with `temporarily_unavailable` |
 | `issuer-url` | none, **required** | Must be the origin that serves `/.well-known/*`, that is the API origin |
 | `documentation-url` | `https://jinear.co/mcp/` | Advertised as `service_documentation` |
 | `access-token-validity-minutes` | 60 | |
@@ -708,7 +708,7 @@ these tokens open, so `jinear.mcp.enabled` turns both halves on and off together
 
 | Property | Default | Notes |
 |----------|---------|-------|
-| `enabled` | `false` | Hard switch for both halves. With it off, `/mcp` returns 404 and every OAuth endpoint refuses |
+| `enabled` | `false` | With it off, `/mcp` returns 404. Does not gate the OAuth endpoints |
 | `resource-url` | none, **required** | The RFC 8707 audience **and** the string a user types into their client. RFC 9728 requires the two to match exactly, so it is configured rather than derived |
 | `documentation-url` | `https://jinear.co/mcp/` | Advertised in the protected resource metadata |
 | `log-retention-days` | 30 | |
@@ -717,9 +717,13 @@ these tokens open, so `jinear.mcp.enabled` turns both halves on and off together
 Plus `jwt.oauth.secret` (no default, required) and `fe.oauth-consent-url` (no default,
 required, must contain `{requestId}`).
 
-**Two switches gate the feature**, and the split is deliberate:
+**Three switches gate the feature**, and the split is deliberate:
 
-- `jinear.mcp.enabled` is the property. With it off nothing MCP answers at all.
+- `jinear.oauth.enabled` runs the authorization server. With it off, `/v1/oauth/*` refuses
+  with `oauth.error.disabled`, mapped to `temporarily_unavailable`, so nobody can authorize
+  a new connection and no existing connection can refresh.
+- `jinear.mcp.enabled` runs the resource server. With it off, `/mcp` answers 404. A member
+  needs both properties on; the installer writes both from one question.
 - `InstanceFlagType.MCP_SERVER` is the administrator's switch, checked **only on the
   authorization path** (`OauthAuthorizationManager.assertEnabled`). Turning it off stops
   anybody granting fresh access while the connections people already made keep working

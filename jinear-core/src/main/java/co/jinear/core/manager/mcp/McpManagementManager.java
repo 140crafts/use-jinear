@@ -1,6 +1,7 @@
 package co.jinear.core.manager.mcp;
 
 import co.jinear.core.config.properties.McpProperties;
+import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.converter.mcp.McpDtoConverter;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.PageDto;
@@ -35,9 +36,11 @@ public class McpManagementManager {
     private final WorkspaceValidator workspaceValidator;
     private final InstanceFlagService instanceFlagService;
     private final McpProperties mcpProperties;
+    private final OauthProperties oauthProperties;
 
     public McpServerInfoResponse retrieveServerInfo() {
         boolean enabled = Boolean.TRUE.equals(mcpProperties.getEnabled())
+                && Boolean.TRUE.equals(oauthProperties.getEnabled())
                 && instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER);
         McpServerInfoDto dto = new McpServerInfoDto();
         dto.setEnabled(enabled);

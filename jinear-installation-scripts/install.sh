@@ -535,11 +535,13 @@ prompt_configuration() {
 
     if [[ $configure_mcp =~ ^[Yy]$ ]]; then
         MCP_ENABLED="true"
+        OAUTH_ENABLED="true"
         if [ "$EXTERNAL_SCHEME" != "https" ]; then
             print_warning "This install serves plain HTTP. Claude and ChatGPT refuse to connect over http, so the MCP server will only be reachable through a TLS proxy in front of it."
         fi
     else
         MCP_ENABLED="false"
+        OAUTH_ENABLED="false"
     fi
 
     # Backup configuration
@@ -689,8 +691,8 @@ MANAGEMENT_ADMIN_PASSWORD=${MANAGEMENT_ADMIN_PASSWORD}
 
 # AI Assistant Connections (MCP): lets members connect Claude or ChatGPT.
 # Two layers sit behind this. The OAuth authorization server issues the tokens and
-# runs the consent screen; the MCP server is the resource those tokens open. MCP is
-# the only resource today, so MCP_ENABLED turns both halves on and off together.
+# runs the consent screen; the MCP server is the resource those tokens open. They
+# switch separately, and a member needs both on to connect an assistant.
 # The three URLs are derived in docker-compose.yaml from DOMAIN and API_DOMAIN,
 # because a mismatch between them is what breaks a connection: the issuer must be
 # the API origin that serves /.well-known, the resource must be exactly the address
@@ -700,6 +702,7 @@ MANAGEMENT_ADMIN_PASSWORD=${MANAGEMENT_ADMIN_PASSWORD}
 # working until a member disconnects them.
 MCP_ENABLED=${MCP_ENABLED}
 MCP_LOG_RETENTION_DAYS=30
+OAUTH_ENABLED=${OAUTH_ENABLED}
 # OAUTH_JWT_SECRET signs the access tokens the OAuth server issues. It is
 # deliberately not JWT_SECRET, so a connected app's token can never open a browser
 # session.

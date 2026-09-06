@@ -2,6 +2,7 @@ package co.jinear.core.oauth;
 
 import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.config.properties.McpProperties;
+import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.manager.oauth.provider.OauthAuthorizationManager;
 import co.jinear.core.model.enumtype.management.InstanceFlagType;
@@ -21,15 +22,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class OauthAuthorizationGateTest {
 
-    private McpProperties properties;
+    private OauthProperties oauthProperties;
     private InstanceFlagService instanceFlagService;
     private OauthAuthorizationRequestService requestService;
     private OauthAuthorizationManager manager;
 
     @BeforeEach
     void setUp() {
-        properties = new McpProperties();
-        properties.setResourceUrl("https://api.jinear.test/mcp");
+        oauthProperties = new OauthProperties();
+        McpProperties mcpProperties = new McpProperties();
+        mcpProperties.setResourceUrl("https://api.jinear.test/mcp");
 
         instanceFlagService = Mockito.mock(InstanceFlagService.class);
         requestService = Mockito.mock(OauthAuthorizationRequestService.class);
@@ -55,7 +57,8 @@ class OauthAuthorizationGateTest {
                 Mockito.mock(OauthAuthorizationCodeService.class),
                 Mockito.mock(OauthConnectionService.class),
                 Mockito.mock(SessionInfoService.class),
-                properties,
+                oauthProperties,
+                mcpProperties,
                 feProperties,
                 instanceFlagService);
     }
@@ -75,29 +78,29 @@ class OauthAuthorizationGateTest {
 
     @Test
     void refusesWhenTheAdministratorHasTurnedTheFlagOff() {
-        properties.setEnabled(Boolean.TRUE);
+        oauthProperties.setEnabled(Boolean.TRUE);
         Mockito.when(instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER)).thenReturn(false);
 
         assertThatThrownBy(() -> manager.authorize(request()))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("mcp.error.disabled");
+                .hasMessage("oauth.error.disabled");
         Mockito.verifyNoInteractions(requestService);
     }
 
     @Test
     void refusesWhenTheServerIsNotConfigured() {
-        properties.setEnabled(Boolean.FALSE);
+        oauthProperties.setEnabled(Boolean.FALSE);
         Mockito.lenient().when(instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER)).thenReturn(true);
 
         assertThatThrownBy(() -> manager.authorize(request()))
                 .isInstanceOf(BusinessException.class)
-                .hasMessage("mcp.error.disabled");
+                .hasMessage("oauth.error.disabled");
         Mockito.verifyNoInteractions(requestService);
     }
 
     @Test
     void sendsTheUserToTheConsentScreenWhenBothSwitchesAgree() {
-        properties.setEnabled(Boolean.TRUE);
+        oauthProperties.setEnabled(Boolean.TRUE);
         Mockito.when(instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER)).thenReturn(true);
         Mockito.when(requestService.initialize(Mockito.any(), Mockito.any(), Mockito.any(),
                         Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))

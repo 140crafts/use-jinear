@@ -17,6 +17,9 @@ import java.util.Objects;
 @PropertySource("classpath:application.properties")
 public class OauthProperties {
 
+    @Value("${jinear.oauth.enabled:false}")
+    private Boolean enabled = Boolean.FALSE;
+
     @Value("${jinear.oauth.issuer-url}")
     private String issuerUrl;
 

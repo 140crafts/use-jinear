@@ -2,6 +2,7 @@ package co.jinear.core.manager.oauth.provider;
 
 import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.config.properties.McpProperties;
+import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.oauth.OauthConsentInfoDto;
 import co.jinear.core.model.entity.oauth.OauthAuthorizationRequest;
@@ -44,6 +45,7 @@ public class OauthAuthorizationManager {
     private final OauthAuthorizationCodeService oauthAuthorizationCodeService;
     private final OauthConnectionService oauthConnectionService;
     private final SessionInfoService sessionInfoService;
+    private final OauthProperties oauthProperties;
     private final McpProperties mcpProperties;
     private final FeProperties feProperties;
     private final InstanceFlagService instanceFlagService;
@@ -141,9 +143,9 @@ public class OauthAuthorizationManager {
     }
 
     private void assertEnabled() {
-        if (!Boolean.TRUE.equals(mcpProperties.getEnabled())
+        if (!Boolean.TRUE.equals(oauthProperties.getEnabled())
                 || !instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER)) {
-            throw new BusinessException("mcp.error.disabled");
+            throw new BusinessException("oauth.error.disabled");
         }
     }
 

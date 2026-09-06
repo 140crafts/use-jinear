@@ -151,10 +151,11 @@ fe.oauth-consent-url=${OAUTH_CONSENT_URL:not-configured}
 # ===============================
 # = OAUTH AUTHORIZATION SERVER
 # ===============================
-# Issues the tokens a connected app carries. It has no enabled flag of its own:
-# MCP is the only resource it protects, so jinear.mcp.enabled below turns both
-# halves on and off together.
+# Issues the tokens a connected app carries, and runs the consent screen. Switched
+# independently of the MCP server below, but a member needs both on to connect an
+# assistant: this half authorizes, that half serves the tools.
 # jinear.oauth.issuer-url must be the API origin that serves /.well-known/*.
+jinear.oauth.enabled=${OAUTH_ENABLED:false}
 jinear.oauth.issuer-url=${OAUTH_ISSUER_URL:not-configured}
 jinear.oauth.documentation-url=${MCP_DOCUMENTATION_URL:https://jinear.co/mcp/}
 jinear.oauth.access-token-validity-minutes=60

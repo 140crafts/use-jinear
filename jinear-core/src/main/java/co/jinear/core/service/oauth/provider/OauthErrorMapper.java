@@ -18,7 +18,7 @@ public class OauthErrorMapper {
             case "oauth.error.invalid-client" -> "invalid_client";
             case "oauth.error.invalid-grant" -> "invalid_grant";
             case "oauth.error.registration-disabled" -> "invalid_client_metadata";
-            case "mcp.error.disabled" -> "temporarily_unavailable";
+            case "oauth.error.disabled" -> "temporarily_unavailable";
             default -> "invalid_request";
         };
     }

@@ -57,7 +57,7 @@ public class OauthAuthorizeController {
         String detail = switch (messageKey) {
             case "oauth.error.invalid-client" -> "The application requesting access could not be verified.";
             case "oauth.error.invalid-redirect-uri" -> "The application sent a return address it has not registered.";
-            case "mcp.error.disabled" -> "The MCP server is turned off on this instance.";
+            case "oauth.error.disabled" -> "Connecting applications is turned off on this instance.";
             default -> "This connection request could not be started.";
         };
         return """
