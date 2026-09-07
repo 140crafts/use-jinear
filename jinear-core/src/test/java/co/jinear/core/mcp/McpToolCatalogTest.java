@@ -14,6 +14,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Set;
+import co.jinear.core.model.mcp.McpToolAnnotations;
 
 class McpToolCatalogTest {
 
@@ -89,7 +91,7 @@ class McpToolCatalogTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("catalog")
     void aToolIsNeverBothReadOnlyAndDestructive(McpTool tool) {
-        var annotations = tool.definition().getAnnotations();
+        McpToolAnnotations annotations = tool.definition().getAnnotations();
         assertThat(annotations.isReadOnlyHint() && annotations.isDestructiveHint())
                 .as("tool %s cannot be both", tool.name())
                 .isFalse();
@@ -124,7 +126,7 @@ class McpToolCatalogTest {
     @Test
     void readAndWriteAreSeparateTools() {
         McpRealCatalog.tools().forEach(tool -> {
-            var scopes = tool.definition().getRequiredScopes();
+            Set<OauthScope> scopes = tool.definition().getRequiredScopes();
             boolean reads = scopes.stream().anyMatch(scope -> scope.getValue().endsWith(":read"));
             boolean writes = scopes.stream().anyMatch(scope -> scope.getValue().endsWith(":write"));
             if (reads && writes) {
@@ -137,7 +139,7 @@ class McpToolCatalogTest {
 
     @Test
     void everyScopeThisServerAdvertisesIsActuallyUsed() {
-        var used = McpRealCatalog.tools().stream()
+        List<OauthScope> used = McpRealCatalog.tools().stream()
                 .flatMap(tool -> tool.definition().getRequiredScopes().stream())
                 .distinct()
                 .toList();

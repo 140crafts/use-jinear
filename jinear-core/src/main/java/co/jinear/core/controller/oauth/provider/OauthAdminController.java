@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 @Slf4j
 @RestController
@@ -20,11 +22,13 @@ public class OauthAdminController {
     private final OauthAdminManager oauthAdminManager;
 
     @GetMapping("/client/list")
-    public OauthClientListingResponse listClients(@RequestParam(defaultValue = "0") Integer page) {
+    @ResponseStatus(HttpStatus.OK)
+    public OauthClientListingResponse listClients(@RequestParam(required = false, defaultValue = "0") Integer page) {
         return oauthAdminManager.listClients(page);
     }
 
     @DeleteMapping("/client")
+    @ResponseStatus(HttpStatus.OK)
     public BaseResponse revokeClient(@RequestParam String clientId) {
         return oauthAdminManager.revokeClient(clientId);
     }

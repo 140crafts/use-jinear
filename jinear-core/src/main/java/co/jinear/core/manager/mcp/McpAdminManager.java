@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
 
 @Slf4j
 @Service
@@ -31,7 +32,7 @@ public class McpAdminManager {
     }
 
     public McpToolCallLogListingResponse listLogs(int page) {
-        var logs = mcpToolCallLogRepository
+        Page<McpToolCallLogDto> logs = mcpToolCallLogRepository
                 .findAllByPassiveIdIsNullOrderByCreatedDateDesc(PageRequest.of(page, PAGE_SIZE))
                 .map(mcpDtoConverter::convert);
         McpToolCallLogListingResponse response = new McpToolCallLogListingResponse();

@@ -43,12 +43,14 @@ public class OauthAuthorizeController {
     }
 
     @GetMapping("/authorize/info/{requestId}")
+    @ResponseStatus(HttpStatus.OK)
     public OauthConsentInfoResponse retrieveConsentInfo(@PathVariable String requestId) {
         //TODO: check fe, use redirect instead of session storage !
         return oauthAuthorizationManager.retrieveConsentInfo(requestId);
     }
 
     @PostMapping("/authorize/consent")
+    @ResponseStatus(HttpStatus.OK)
     public OauthConsentResponse submitConsent(@Valid @RequestBody OauthConsentRequest oauthConsentRequest) {
         return oauthAuthorizationManager.submitConsent(oauthConsentRequest);
     }

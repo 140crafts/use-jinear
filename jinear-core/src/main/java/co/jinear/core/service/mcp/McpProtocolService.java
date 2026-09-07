@@ -16,6 +16,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.NoAccessException;
+import co.jinear.core.exception.NotFoundException;
 
 @Slf4j
 @Service
@@ -135,7 +139,7 @@ public class McpProtocolService {
 
     private ObjectNode wrap(McpToolResult result) {
         ObjectNode node = FACTORY.objectNode();
-        var content = node.putArray("content");
+        ArrayNode content = node.putArray("content");
         if (result.isError()) {
             content.addObject().put("type", "text").put("text", result.getText());
             node.put("isError", true);
@@ -157,13 +161,13 @@ public class McpProtocolService {
     }
 
     private String describe(RuntimeException exception) {
-        if (exception instanceof co.jinear.core.exception.NoAccessException) {
+        if (exception instanceof NoAccessException) {
             return "You do not have access to that resource in this workspace.";
         }
-        if (exception instanceof co.jinear.core.exception.NotFoundException) {
+        if (exception instanceof NotFoundException) {
             return "No such record. Check the id and try again.";
         }
-        if (exception instanceof co.jinear.core.exception.BusinessException businessException) {
+        if (exception instanceof BusinessException businessException) {
             return "The request was refused: " + businessException.getMessage();
         }
         return "The request could not be completed. Try again, or narrow the arguments.";

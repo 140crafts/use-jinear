@@ -125,18 +125,6 @@ public final class McpJsonSchema {
         return this;
     }
 
-    public McpJsonSchema constrain(String name, String key, Object value) {
-        ObjectNode node = (ObjectNode) properties.get(name);
-        if (value instanceof Integer intValue) {
-            node.put(key, intValue);
-        } else if (value instanceof String stringValue) {
-            node.put(key, stringValue);
-        } else if (value instanceof Boolean booleanValue) {
-            node.put(key, booleanValue);
-        }
-        return this;
-    }
-
     public McpJsonSchema allowAdditional() {
         schema.put("additionalProperties", true);
         return this;

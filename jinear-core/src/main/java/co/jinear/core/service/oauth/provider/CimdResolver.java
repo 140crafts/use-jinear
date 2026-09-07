@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.net.UnknownHostException;
 
 @Slf4j
 @Service
@@ -135,7 +136,7 @@ public class CimdResolver {
                     throw new BusinessException("oauth.error.invalid-client");
                 }
             }
-        } catch (java.net.UnknownHostException exception) {
+        } catch (UnknownHostException exception) {
             throw new BusinessException("oauth.error.invalid-client");
         }
     }

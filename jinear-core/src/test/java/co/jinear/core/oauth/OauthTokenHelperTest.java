@@ -16,6 +16,8 @@ import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Optional;
+import co.jinear.core.model.vo.oauth.OauthAccessTokenVo;
 
 class OauthTokenHelperTest {
 
@@ -40,7 +42,7 @@ class OauthTokenHelperTest {
         String token = helper.generateAccessToken("account-1", "connection-1", "https://claude.ai/client.json",
                 Set.of("tasks:read", "tasks:write"), inOneHour());
 
-        var parsed = helper.parseAccessToken(token);
+        Optional<OauthAccessTokenVo> parsed = helper.parseAccessToken(token);
 
         assertThat(parsed).isPresent();
         assertThat(parsed.get().getAccountId()).isEqualTo("account-1");

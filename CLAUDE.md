@@ -130,6 +130,10 @@ on them; use them as reference when building their replacements.
 - Prefer adding to existing services over creating new ones; avoid adding new infrastructure dependencies; don't introduce new libraries for problems already solved by the current stack.
 - Any new property, docker compose change etc. should also be added to installation-scripts, docs and if necessary README.md.
 
+## Coding Style
+
+CODING_STYLE.md holds the house coding rules. Read it before writing code, and follow it.
+
 ## How To Use This Context
 
 Pair this file with a task-specific prompt structured like PROMPT_TEMPLATE.md

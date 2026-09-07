@@ -6,6 +6,7 @@ import co.jinear.core.model.response.mcp.McpToolCallLogListingResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
 
 @Slf4j
 @RestController
@@ -16,12 +17,14 @@ public class McpAdminController {
     private final McpAdminManager mcpAdminManager;
 
     @GetMapping("/analytics")
+    @ResponseStatus(HttpStatus.OK)
     public McpAnalyticsResponse analytics() {
         return mcpAdminManager.analytics();
     }
 
     @GetMapping("/log/list")
-    public McpToolCallLogListingResponse listLogs(@RequestParam(defaultValue = "0") Integer page) {
+    @ResponseStatus(HttpStatus.OK)
+    public McpToolCallLogListingResponse listLogs(@RequestParam(required = false, defaultValue = "0") Integer page) {
         return mcpAdminManager.listLogs(page);
     }
 }

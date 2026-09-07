@@ -19,6 +19,8 @@ import org.springframework.context.annotation.Configuration;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import co.jinear.core.model.dto.material.MaterialHierarchyDto;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 @Configuration
 @RequiredArgsConstructor
@@ -55,7 +57,7 @@ public class FileMcpTools {
                         request.setMaterialType(parseType(type));
                     }
                     context.setWorkspaceId(request.getWorkspaceId());
-                    var hierarchy = materialListingManager.search(request).getMaterialHierarchyDto();
+                    MaterialHierarchyDto hierarchy = materialListingManager.search(request).getMaterialHierarchyDto();
                     return McpToolResult.of(McpShapes.page(hierarchy.getContent(), McpShapes::file));
                 })
                 .build();
@@ -80,7 +82,7 @@ public class FileMcpTools {
                 .scopes(OauthScope.FILES_READ)
                 .handler((context, arguments) -> {
                     String materialId = McpToolArguments.of(arguments).requiredString("materialId");
-                    var node = McpShapes.object();
+                    ObjectNode node = McpShapes.object();
                     node.put("materialId", materialId);
                     node.put("url", oauthProperties.getIssuerUrl() + "/v1/material/media/" + materialId);
                     return McpToolResult.of(node);

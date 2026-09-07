@@ -16,6 +16,11 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Locale;
 import java.util.Objects;
+import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.note.NoteDto;
+import co.jinear.core.model.dto.notebook.NotebookDto;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -41,7 +46,7 @@ public class NoteMcpTools {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     String workspaceId = args.requiredString("workspaceId");
                     context.setWorkspaceId(workspaceId);
-                    var page = notebookListingManager.listWorkspaceNotebooks(workspaceId, args.page())
+                    PageDto<NotebookDto> page = notebookListingManager.listWorkspaceNotebooks(workspaceId, args.page())
                             .getNotebookDtoPageDto();
                     return McpToolResult.of(McpShapes.page(page, McpShapes::notebook));
                 })
@@ -74,17 +79,17 @@ public class NoteMcpTools {
                     request.setPage(args.page());
                     context.setWorkspaceId(request.getWorkspaceId());
 
-                    var page = noteFilterManager.filter(request).getNoteDtoPageDto();
+                    PageDto<NoteDto> page = noteFilterManager.filter(request).getNoteDtoPageDto();
                     String titleContains = args.optionalString("titleContains", null);
                     if (Objects.isNull(titleContains) || titleContains.isBlank()) {
                         return McpToolResult.of(McpShapes.page(page, McpShapes::note));
                     }
                     String needle = titleContains.toLowerCase(Locale.ROOT);
-                    var matched = page.getContent().stream()
+                    List<NoteDto> matched = page.getContent().stream()
                             .filter(note -> Objects.nonNull(note.getTitle())
                                     && note.getTitle().toLowerCase(Locale.ROOT).contains(needle))
                             .toList();
-                    var result = McpShapes.list(matched, McpShapes::note);
+                    ObjectNode result = McpShapes.list(matched, McpShapes::note);
                     result.put("page", page.getNumber());
                     result.put("hasNext", page.isHasNext());
                     return McpToolResult.of(result);
@@ -111,7 +116,7 @@ public class NoteMcpTools {
                     request.setWorkspaceId(args.requiredString("workspaceId"));
                     request.setNoteId(args.requiredString("noteId"));
                     context.setWorkspaceId(request.getWorkspaceId());
-                    var page = noteFilterManager.filter(request).getNoteDtoPageDto();
+                    PageDto<NoteDto> page = noteFilterManager.filter(request).getNoteDtoPageDto();
                     if (page.getContent().isEmpty()) {
                         return McpToolResult.error("No note with that id is visible to you in this workspace. "
                                 + "Check noteId against search_notes.");

@@ -18,6 +18,14 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
+import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
+import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
+import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
+import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
+import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
+import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor
@@ -40,7 +48,7 @@ public class WorkspaceMcpTools {
                 .readOnly()
                 .scopes(OauthScope.WORKSPACE_READ)
                 .handler((context, arguments) -> {
-                    var workspaces = workspaceManager.retrieveAccountWorkspacesInternal(context.getAccountId()).getWorkspaces();
+                    List<DetailedWorkspaceMemberDto> workspaces = workspaceManager.retrieveAccountWorkspacesInternal(context.getAccountId()).getWorkspaces();
                     return McpToolResult.of(McpShapes.list(workspaces, McpShapes::workspaceMembership));
                 })
                 .build();
@@ -66,7 +74,7 @@ public class WorkspaceMcpTools {
                     if (workspaceId == null && username == null) {
                         return McpToolResult.error("Supply either workspaceId or username. Call list_workspaces to see both.");
                     }
-                    var response = workspaceId != null
+                    WorkspaceBaseResponse response = workspaceId != null
                             ? workspaceManager.retrieveWorkspaceWithId(workspaceId)
                             : workspaceManager.retrieveWorkspaceWithUsername(username);
                     context.setWorkspaceId(response.getWorkspace().getWorkspaceId());
@@ -90,7 +98,7 @@ public class WorkspaceMcpTools {
                 .handler((context, arguments) -> {
                     String workspaceId = McpToolArguments.of(arguments).requiredString("workspaceId");
                     context.setWorkspaceId(workspaceId);
-                    var teams = teamRetrieveManager.retrieveWorkspaceTeams(workspaceId).getTeamDtoList();
+                    List<TeamDto> teams = teamRetrieveManager.retrieveWorkspaceTeams(workspaceId).getTeamDtoList();
                     return McpToolResult.of(McpShapes.list(teams, McpShapes::team));
                 })
                 .build();
@@ -111,10 +119,10 @@ public class WorkspaceMcpTools {
                 .scopes(OauthScope.WORKSPACE_READ)
                 .handler((context, arguments) -> {
                     String teamId = McpToolArguments.of(arguments).requiredString("teamId");
-                    var grouped = teamWorkflowStatusManager.retrieveAllFromTeam(teamId)
+                    Map<TeamWorkflowStateGroup, List<TeamWorkflowStatusDto>> grouped = teamWorkflowStatusManager.retrieveAllFromTeam(teamId)
                             .getGroupedTeamWorkflowStatusListDto()
                             .getGroupedTeamWorkflowStatuses();
-                    var statuses = new ArrayList<>(grouped.values().stream().flatMap(List::stream).toList());
+                    List<TeamWorkflowStatusDto> statuses = new ArrayList<>(grouped.values().stream().flatMap(List::stream).toList());
                     statuses.sort((first, second) -> {
                         int firstOrder = first.getOrder() == null ? Integer.MAX_VALUE : first.getOrder();
                         int secondOrder = second.getOrder() == null ? Integer.MAX_VALUE : second.getOrder();
@@ -142,7 +150,7 @@ public class WorkspaceMcpTools {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     String workspaceId = args.requiredString("workspaceId");
                     context.setWorkspaceId(workspaceId);
-                    var page = workspaceMemberRetrieveManager
+                    PageDto<WorkspaceMemberDto> page = workspaceMemberRetrieveManager
                             .retrieveWorkspaceMembers(workspaceId, args.page())
                             .getWorkspaceMemberDtoPage();
                     return McpToolResult.of(McpShapes.page(page, McpShapes::member));

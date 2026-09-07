@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
+import co.jinear.core.model.dto.calendar.CalendarEventDto;
 
 @Configuration
 @RequiredArgsConstructor
@@ -51,7 +52,7 @@ public class CalendarMcpTools {
                                 + args.requiredString("from") + " and to " + args.requiredString("to") + ".");
                     }
                     context.setWorkspaceId(request.getWorkspaceId());
-                    var events = calendarEventManager.filterCalendarEvents(request).getCalendarEventDtoList();
+                    List<CalendarEventDto> events = calendarEventManager.filterCalendarEvents(request).getCalendarEventDtoList();
                     return McpToolResult.of(McpShapes.list(events, McpShapes::calendarEvent));
                 })
                 .build();

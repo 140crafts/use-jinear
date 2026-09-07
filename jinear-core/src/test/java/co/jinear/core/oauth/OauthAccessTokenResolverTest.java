@@ -47,7 +47,7 @@ class OauthAccessTokenResolverTest {
         connection.setSessionInfoId("session-1");
         Mockito.when(connectionService.retrieveOptional("connection-1")).thenReturn(Optional.of(connection));
 
-        var resolved = resolver.resolve("token");
+        Optional<OauthAccessTokenVo> resolved = resolver.resolve("token");
 
         assertThat(resolved).isPresent();
         assertThat(resolved.get().getAccountId()).isEqualTo("account-1");

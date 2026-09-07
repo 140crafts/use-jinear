@@ -13,7 +13,11 @@ import co.jinear.core.model.vo.oauth.OauthAuthorizeRequestVo;
 import co.jinear.core.model.vo.oauth.OauthClientMetadataVo;
 import co.jinear.core.model.vo.oauth.OauthErrorVo;
 import co.jinear.core.service.SessionInfoService;
-import co.jinear.core.service.oauth.provider.*;
+import co.jinear.core.service.oauth.provider.OauthAuthorizationCodeService;
+import co.jinear.core.service.oauth.provider.OauthAuthorizationRequestService;
+import co.jinear.core.service.oauth.provider.OauthClientService;
+import co.jinear.core.service.oauth.provider.OauthConnectionService;
+import co.jinear.core.service.oauth.provider.OauthScopeService;
 import co.jinear.core.validator.oauth.OauthAuthorizeRequestValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +25,12 @@ import org.springframework.stereotype.Service;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service

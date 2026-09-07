@@ -1,13 +1,25 @@
 package co.jinear.core.service.mcp.tool.config;
 
 import co.jinear.core.config.properties.McpProperties;
-import co.jinear.core.manager.task.*;
+import co.jinear.core.manager.task.TaskCommentManager;
+import co.jinear.core.manager.task.TaskInitializeManager;
+import co.jinear.core.manager.task.TaskListingManager;
+import co.jinear.core.manager.task.TaskRetrieveManager;
+import co.jinear.core.manager.task.TaskSearchManager;
+import co.jinear.core.manager.task.TaskUpdateManager;
 import co.jinear.core.model.dto.task.CommentDto;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
-import co.jinear.core.model.request.task.*;
+import co.jinear.core.model.request.task.InitializeTaskCommentRequest;
+import co.jinear.core.model.request.task.TaskAssigneeUpdateRequest;
+import co.jinear.core.model.request.task.TaskDateUpdateRequest;
+import co.jinear.core.model.request.task.TaskFilterRequest;
+import co.jinear.core.model.request.task.TaskInitializeRequest;
+import co.jinear.core.model.request.task.TaskSearchRequest;
+import co.jinear.core.model.request.task.TaskUpdateDescriptionRequest;
+import co.jinear.core.model.request.task.TaskUpdateTitleRequest;
 import co.jinear.core.service.mcp.tool.McpShapes;
 import co.jinear.core.service.mcp.tool.McpTool;
 import co.jinear.core.service.mcp.tool.McpToolArguments;
@@ -21,6 +33,11 @@ import org.springframework.context.annotation.Configuration;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.task.TaskDto;
+import co.jinear.core.model.response.task.TaskResponse;
+import co.jinear.core.model.mcp.McpToolException;
+import java.util.Locale;
 
 @Configuration
 @RequiredArgsConstructor
@@ -60,7 +77,7 @@ public class TaskMcpTools {
                     List<String> teamIds = args.optionalStringList("teamIds");
                     request.setTeamIdList(teamIds.isEmpty() ? null : teamIds);
                     context.setWorkspaceId(request.getWorkspaceId());
-                    var page = taskSearchManager.searchTask(request, args.page()).getResult();
+                    PageDto<TaskDto> page = taskSearchManager.searchTask(request, args.page()).getResult();
                     return McpToolResult.of(McpShapes.page(page, McpShapes::task));
                 })
                 .build();
@@ -100,7 +117,7 @@ public class TaskMcpTools {
                     request.setTimespanStart(args.optionalZonedDateTime("from"));
                     request.setTimespanEnd(args.optionalZonedDateTime("to"));
                     context.setWorkspaceId(request.getWorkspaceId());
-                    var page = taskListingManager.filterTasks(request).getTaskDtoPage();
+                    PageDto<TaskDto> page = taskListingManager.filterTasks(request).getTaskDtoPage();
                     return McpToolResult.of(McpShapes.page(page, McpShapes::task));
                 })
                 .build();
@@ -122,7 +139,7 @@ public class TaskMcpTools {
                 .scopes(OauthScope.TASKS_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
-                    var response = taskRetrieveManager.retrieveWithWorkspaceNameAndTeamTagNo(
+                    TaskResponse response = taskRetrieveManager.retrieveWithWorkspaceNameAndTeamTagNo(
                             args.requiredString("workspaceUsername"),
                             args.requiredString("teamTag"),
                             requiredTaskNumber(args));
@@ -168,7 +185,7 @@ public class TaskMcpTools {
                     request.setTopicId(args.optionalString("topicId", null));
                     request.setBoardId(args.optionalString("boardId", null));
                     context.setWorkspaceId(request.getWorkspaceId());
-                    var response = taskInitializeManager.initializeTask(request);
+                    TaskResponse response = taskInitializeManager.initializeTask(request);
                     return McpToolResult.of(McpShapes.single("task", McpShapes.task(response.getTaskDto())));
                 })
                 .build();
@@ -251,7 +268,7 @@ public class TaskMcpTools {
                 .scopes(OauthScope.TASKS_WRITE)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
-                    var response = taskUpdateManager.updateTaskWorkflowStatus(
+                    TaskResponse response = taskUpdateManager.updateTaskWorkflowStatus(
                             args.requiredString("taskId"),
                             args.requiredString("workflowStatusId"));
                     context.setWorkspaceId(response.getTaskDto().getWorkspaceId());
@@ -275,7 +292,7 @@ public class TaskMcpTools {
                 .scopes(OauthScope.TASKS_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
-                    var page = taskCommentManager.retrieveTaskComments(args.requiredString("taskId"), args.page())
+                    PageDto<CommentDto> page = taskCommentManager.retrieveTaskComments(args.requiredString("taskId"), args.page())
                             .getCommentsPage();
                     return McpToolResult.of(McpShapes.page(page, TaskMcpTools::comment));
                 })
@@ -335,7 +352,7 @@ public class TaskMcpTools {
     private int requiredTaskNumber(McpToolArguments args) {
         Integer number = args.optionalInteger("taskNumber", null);
         if (Objects.isNull(number)) {
-            throw new co.jinear.core.model.mcp.McpToolException("missing_argument",
+            throw new McpToolException("missing_argument",
                     "taskNumber is required. In the reference ENG-42 it is 42.");
         }
         return number;
@@ -352,9 +369,9 @@ public class TaskMcpTools {
         return values.stream()
                 .map(value -> {
                     try {
-                        return TeamWorkflowStateGroup.valueOf(value.toUpperCase(java.util.Locale.ROOT));
+                        return TeamWorkflowStateGroup.valueOf(value.toUpperCase(Locale.ROOT));
                     } catch (IllegalArgumentException exception) {
-                        throw new co.jinear.core.model.mcp.McpToolException("invalid_argument",
+                        throw new McpToolException("invalid_argument",
                                 "stateGroups must contain only BACKLOG, NOT_STARTED, STARTED, COMPLETED or CANCELLED. Received: " + value);
                     }
                 })

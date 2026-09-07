@@ -380,9 +380,6 @@ public class McpShapes {
         return FACTORY.objectNode();
     }
 
-    public static List<String> none() {
-        return List.of();
-    }
 
     private static String richText(RichTextDto dto) {
         return Objects.isNull(dto) ? null : dto.getValue();

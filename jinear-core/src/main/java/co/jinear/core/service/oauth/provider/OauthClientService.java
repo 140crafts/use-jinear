@@ -17,7 +17,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
+import java.util.Optional;
+import co.jinear.core.system.RandomHelper;
 
 @Slf4j
 @Service
@@ -75,7 +81,7 @@ public class OauthClientService {
         request.getRedirectUris().forEach(this::assertRedirectUriIsUsable);
 
         OauthClient client = new OauthClient();
-        client.setClientId(co.jinear.core.system.RandomHelper.generateULID());
+        client.setClientId(RandomHelper.generateULID());
         client.setClientName(request.getClientName());
         client.setClientUri(request.getClientUri());
         client.setLogoUri(request.getLogoUri());
@@ -124,7 +130,7 @@ public class OauthClientService {
         }
         boolean https = "https".equalsIgnoreCase(parsed.getScheme());
         boolean loopback = Objects.nonNull(parsed.getHost())
-                           && List.of("127.0.0.1", "::1", "localhost").contains(parsed.getHost().toLowerCase(java.util.Locale.ROOT));
+                           && List.of("127.0.0.1", "::1", "localhost").contains(parsed.getHost().toLowerCase(Locale.ROOT));
         if (!https && !loopback) {
             throw new BusinessException("oauth.error.invalid-redirect-uri");
         }

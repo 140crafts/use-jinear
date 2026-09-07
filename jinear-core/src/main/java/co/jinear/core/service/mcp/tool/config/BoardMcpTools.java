@@ -16,6 +16,10 @@ import co.jinear.core.service.mcp.tool.SimpleMcpTool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.task.TaskBoardDto;
+import co.jinear.core.model.dto.topic.TopicDto;
+import co.jinear.core.model.response.task.TaskBoardResponse;
 
 @Configuration
 @RequiredArgsConstructor
@@ -44,7 +48,7 @@ public class BoardMcpTools {
                     McpToolArguments args = McpToolArguments.of(arguments);
                     String workspaceId = args.requiredString("workspaceId");
                     context.setWorkspaceId(workspaceId);
-                    var page = taskBoardListingManager
+                    PageDto<TaskBoardDto> page = taskBoardListingManager
                             .retrieveAllByTeam(workspaceId, args.requiredString("teamId"), args.page())
                             .getTaskListDetailedDtoPageDto();
                     return McpToolResult.of(McpShapes.page(page, McpShapes::board));
@@ -74,7 +78,7 @@ public class BoardMcpTools {
                     request.setTitle(args.requiredString("title"));
                     request.setDueDate(args.optionalZonedDateTime("dueDate"));
                     context.setWorkspaceId(request.getWorkspaceId());
-                    var response = taskBoardManager.initializeTaskBoard(request);
+                    TaskBoardResponse response = taskBoardManager.initializeTaskBoard(request);
                     return McpToolResult.of(McpShapes.single("board", McpShapes.board(response.getTaskBoardDto())));
                 })
                 .build();
@@ -126,7 +130,7 @@ public class BoardMcpTools {
                 .scopes(OauthScope.WORKSPACE_READ)
                 .handler((context, arguments) -> {
                     McpToolArguments args = McpToolArguments.of(arguments);
-                    var page = topicListingManager
+                    PageDto<TopicDto> page = topicListingManager
                             .retrieveTeamTopics(args.requiredString("teamId"), args.page())
                             .getTopicDtoPage();
                     return McpToolResult.of(McpShapes.page(page, McpShapes::topic));

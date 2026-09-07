@@ -24,6 +24,10 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Locale;
 import java.util.Objects;
+import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
+import java.util.List;
+import co.jinear.core.model.mcp.McpToolContext;
 
 @Slf4j
 @Configuration
@@ -64,8 +68,8 @@ public class CompatibilityMcpTools {
                     ObjectNode result = McpShapes.object();
                     ArrayNode results = result.putArray("results");
 
-                    var memberships = workspaceManager.retrieveAccountWorkspacesInternal(context.getAccountId()).getWorkspaces();
-                    for (var membership : memberships) {
+                    List<DetailedWorkspaceMemberDto> memberships = workspaceManager.retrieveAccountWorkspacesInternal(context.getAccountId()).getWorkspaces();
+                    for (DetailedWorkspaceMemberDto membership : memberships) {
                         if (results.size() >= MAX_RESULTS || Objects.isNull(membership.getWorkspace())) {
                             break;
                         }
@@ -115,7 +119,7 @@ public class CompatibilityMcpTools {
             TaskSearchRequest request = new TaskSearchRequest();
             request.setWorkspaceId(workspaceId);
             request.setQuery(query);
-            var page = taskSearchManager.searchTask(request, 0).getResult();
+            PageDto<TaskDto> page = taskSearchManager.searchTask(request, 0).getResult();
             for (TaskDto task : page.getContent()) {
                 if (results.size() >= MAX_RESULTS) {
                     return;
@@ -134,7 +138,7 @@ public class CompatibilityMcpTools {
         try {
             NoteFilterRequest request = new NoteFilterRequest();
             request.setWorkspaceId(workspaceId);
-            var page = noteFilterManager.filter(request).getNoteDtoPageDto();
+            PageDto<NoteDto> page = noteFilterManager.filter(request).getNoteDtoPageDto();
             String needle = query.toLowerCase(Locale.ROOT);
             for (NoteDto note : page.getContent()) {
                 if (results.size() >= MAX_RESULTS) {
@@ -153,7 +157,7 @@ public class CompatibilityMcpTools {
         }
     }
 
-    private McpToolResult fetchNote(co.jinear.core.model.mcp.McpToolContext context, String id) {
+    private McpToolResult fetchNote(McpToolContext context, String id) {
         String[] parts = id.substring(NOTE_PREFIX.length()).split(":", 2);
         if (parts.length != 2) {
             return McpToolResult.error("Malformed note id. Pass an id exactly as search returned it.");
@@ -162,7 +166,7 @@ public class CompatibilityMcpTools {
         request.setWorkspaceId(parts[0]);
         request.setNoteId(parts[1]);
         context.setWorkspaceId(parts[0]);
-        var page = noteFilterManager.filter(request).getNoteDtoPageDto();
+        PageDto<NoteDto> page = noteFilterManager.filter(request).getNoteDtoPageDto();
         if (page.getContent().isEmpty()) {
             return McpToolResult.error("That note is no longer visible to you.");
         }
