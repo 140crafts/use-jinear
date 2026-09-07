@@ -11,12 +11,8 @@ import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.request.note.NoteFilterRequest;
 import co.jinear.core.model.request.task.TaskSearchRequest;
-import co.jinear.core.service.mcp.tool.McpShapes;
 import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.McpToolArguments;
 import co.jinear.core.service.mcp.tool.SimpleMcpTool;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -28,6 +24,10 @@ import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
 import java.util.List;
 import co.jinear.core.model.mcp.McpToolContext;
+import co.jinear.core.model.mcp.view.McpFetchedRecordView;
+import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
+import co.jinear.core.model.mcp.view.McpSearchHitView;
+import co.jinear.core.model.mcp.view.McpSearchResultsView;
 
 @Slf4j
 @Configuration
@@ -54,19 +54,13 @@ public class CompatibilityMcpTools {
                 .input(McpJsonSchema.object()
                         .requiredString("query", "What to look for, in plain language.")
                         .build())
-                .output(McpJsonSchema.object()
-                        .objectArray("results", "Matching records, tasks first.", McpJsonSchema.object()
-                                .string("id", "Opaque id to pass to fetch.")
-                                .string("title", "Record title.")
-                                .string("url", "Absolute Jinear URL a person can open.")
-                                .build(), true)
-                        .build())
+                .output(McpSchemaGenerator.arrayField("results", McpSearchHitView.class, "Matching records, tasks first."))
                 .readOnly()
                 .scopes(OauthScope.TASKS_READ, OauthScope.NOTES_READ, OauthScope.WORKSPACE_READ)
-                .handler((context, arguments) -> {
-                    String query = McpToolArguments.of(arguments).requiredString("query");
-                    ObjectNode result = McpShapes.object();
-                    ArrayNode results = result.putArray("results");
+                .handler((context, args) -> {
+                    String query = args.requiredString("query");
+                    McpSearchResultsView result = new McpSearchResultsView();
+                    List<McpSearchHitView> results = result.getResults();
 
                     List<DetailedWorkspaceMemberDto> memberships = workspaceManager.retrieveAccountWorkspacesInternal(context.getAccountId()).getWorkspaces();
                     for (DetailedWorkspaceMemberDto membership : memberships) {
@@ -92,16 +86,11 @@ public class CompatibilityMcpTools {
                 .input(McpJsonSchema.object()
                         .requiredString("id", "An id returned by search.")
                         .build())
-                .output(McpJsonSchema.object()
-                        .string("id", "The id that was fetched.")
-                        .string("title", "Record title.")
-                        .string("text", "Record body.")
-                        .string("url", "Absolute Jinear URL a person can open.")
-                        .build())
+                .output(McpSchemaGenerator.forType(McpFetchedRecordView.class))
                 .readOnly()
                 .scopes(OauthScope.TASKS_READ, OauthScope.NOTES_READ, OauthScope.WORKSPACE_READ)
-                .handler((context, arguments) -> {
-                    String id = McpToolArguments.of(arguments).requiredString("id");
+                .handler((context, args) -> {
+                    String id = args.requiredString("id");
                     if (id.startsWith(NOTE_PREFIX)) {
                         return fetchNote(context, id);
                     }
@@ -114,7 +103,7 @@ public class CompatibilityMcpTools {
                 .build();
     }
 
-    private void addTaskMatches(ArrayNode results, String workspaceId, String workspaceUsername, String query) {
+    private void addTaskMatches(List<McpSearchHitView> results, String workspaceId, String workspaceUsername, String query) {
         try {
             TaskSearchRequest request = new TaskSearchRequest();
             request.setWorkspaceId(workspaceId);
@@ -124,17 +113,15 @@ public class CompatibilityMcpTools {
                 if (results.size() >= MAX_RESULTS) {
                     return;
                 }
-                ObjectNode node = results.addObject();
-                node.put("id", TASK_PREFIX + task.getTaskId());
-                node.put("title", task.getTitle());
-                node.put("url", taskUrl(workspaceUsername, task));
+                results.add(searchHit(TASK_PREFIX + task.getTaskId(), task.getTitle(),
+                        taskUrl(workspaceUsername, task)));
             }
         } catch (RuntimeException exception) {
             log.debug("[MCP] search skipped workspace {}: {}", workspaceId, exception.getMessage());
         }
     }
 
-    private void addNoteMatches(ArrayNode results, String workspaceId, String query) {
+    private void addNoteMatches(List<McpSearchHitView> results, String workspaceId, String query) {
         try {
             NoteFilterRequest request = new NoteFilterRequest();
             request.setWorkspaceId(workspaceId);
@@ -147,10 +134,8 @@ public class CompatibilityMcpTools {
                 if (Objects.isNull(note.getTitle()) || !note.getTitle().toLowerCase(Locale.ROOT).contains(needle)) {
                     continue;
                 }
-                ObjectNode node = results.addObject();
-                node.put("id", NOTE_PREFIX + workspaceId + ":" + note.getNoteId());
-                node.put("title", note.getTitle());
-                node.put("url", feProperties.getHomeUrl());
+                results.add(searchHit(NOTE_PREFIX + workspaceId + ":" + note.getNoteId(),
+                        note.getTitle(), feProperties.getHomeUrl()));
             }
         } catch (RuntimeException exception) {
             log.debug("[MCP] search skipped notes in workspace {}: {}", workspaceId, exception.getMessage());
@@ -171,12 +156,20 @@ public class CompatibilityMcpTools {
             return McpToolResult.error("That note is no longer visible to you.");
         }
         NoteDto note = page.getContent().get(0);
-        ObjectNode node = McpShapes.object();
-        node.put("id", id);
-        node.put("title", note.getTitle());
-        node.put("text", Objects.isNull(note.getRichText()) ? "" : note.getRichText().getValue());
-        node.put("url", feProperties.getHomeUrl());
-        return McpToolResult.of(node);
+        McpFetchedRecordView view = new McpFetchedRecordView();
+        view.setId(id);
+        view.setTitle(note.getTitle());
+        view.setText(Objects.isNull(note.getRichText()) ? "" : note.getRichText().getValue());
+        view.setUrl(feProperties.getHomeUrl());
+        return McpToolResult.of(view);
+    }
+
+    private McpSearchHitView searchHit(String id, String title, String url) {
+        McpSearchHitView hit = new McpSearchHitView();
+        hit.setId(id);
+        hit.setTitle(title);
+        hit.setUrl(url);
+        return hit;
     }
 
     private String taskUrl(String workspaceUsername, TaskDto task) {

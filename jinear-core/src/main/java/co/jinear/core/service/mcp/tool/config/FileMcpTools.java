@@ -5,22 +5,21 @@ import co.jinear.core.manager.material.MaterialListingManager;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.enumtype.material.MaterialType;
 import co.jinear.core.model.mcp.McpJsonSchema;
-import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.request.material.MaterialSearchRequest;
-import co.jinear.core.service.mcp.tool.McpShapes;
 import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.McpToolArguments;
 import co.jinear.core.service.mcp.tool.SimpleMcpTool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
-import java.util.Locale;
-import java.util.Objects;
 import co.jinear.core.model.dto.material.MaterialHierarchyDto;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import co.jinear.core.model.mcp.view.McpFileLinkView;
+import co.jinear.core.model.mcp.view.McpFileView;
+import co.jinear.core.model.mcp.view.McpPageView;
+import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
+import co.jinear.core.converter.mcp.McpViewConverter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -28,6 +27,7 @@ public class FileMcpTools {
 
     private final MaterialListingManager materialListingManager;
     private final OauthProperties oauthProperties;
+    private final McpViewConverter mcpViewConverter;
 
     @Bean
     public McpTool listFilesTool() {
@@ -43,22 +43,19 @@ public class FileMcpTools {
                                 List.of("FOLDER", "FILE"), false)
                         .integer("page", "Zero based page number. Defaults to 0.")
                         .build())
-                .output(McpShapes.pageSchema("Files and folders in this location.", McpShapes.fileSchema()))
+                .output(McpSchemaGenerator.page(McpFileView.class, "Files and folders in this location."))
                 .readOnly()
                 .scopes(OauthScope.FILES_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     MaterialSearchRequest request = new MaterialSearchRequest();
                     request.setWorkspaceId(args.requiredString("workspaceId"));
                     request.setParentMaterialId(args.optionalString("parentFolderId", null));
                     request.setPage(args.page());
-                    String type = args.optionalString("type", null);
-                    if (Objects.nonNull(type)) {
-                        request.setMaterialType(parseType(type));
-                    }
+                    request.setMaterialType(args.optionalEnum("type", MaterialType.class,
+                            "must be FOLDER or FILE."));
                     context.setWorkspaceId(request.getWorkspaceId());
                     MaterialHierarchyDto hierarchy = materialListingManager.search(request).getMaterialHierarchyDto();
-                    return McpToolResult.of(McpShapes.page(hierarchy.getContent(), McpShapes::file));
+                    return McpToolResult.of(McpPageView.of(hierarchy.getContent(), mcpViewConverter::file));
                 })
                 .build();
     }
@@ -74,27 +71,17 @@ public class FileMcpTools {
                 .input(McpJsonSchema.object()
                         .requiredString("materialId", "File id, from list_files. Must be a FILE, not a FOLDER.")
                         .build())
-                .output(McpJsonSchema.object()
-                        .string("materialId", "The file this link points at.")
-                        .string("url", "Absolute Jinear URL that downloads the file.")
-                        .build())
+                .output(McpSchemaGenerator.forType(McpFileLinkView.class))
                 .readOnly()
                 .scopes(OauthScope.FILES_READ)
-                .handler((context, arguments) -> {
-                    String materialId = McpToolArguments.of(arguments).requiredString("materialId");
-                    ObjectNode node = McpShapes.object();
-                    node.put("materialId", materialId);
-                    node.put("url", oauthProperties.getIssuerUrl() + "/v1/material/media/" + materialId);
-                    return McpToolResult.of(node);
+                .handler((context, args) -> {
+                    String materialId = args.requiredString("materialId");
+                    McpFileLinkView view = new McpFileLinkView();
+                    view.setMaterialId(materialId);
+                    view.setUrl(oauthProperties.getIssuerUrl() + "/v1/material/media/" + materialId);
+                    return McpToolResult.of(view);
                 })
                 .build();
     }
 
-    private MaterialType parseType(String value) {
-        try {
-            return MaterialType.valueOf(value.toUpperCase(Locale.ROOT));
-        } catch (IllegalArgumentException exception) {
-            throw new McpToolException("invalid_argument", "type must be FOLDER or FILE. Received: " + value);
-        }
-    }
 }

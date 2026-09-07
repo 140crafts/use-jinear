@@ -20,24 +20,27 @@ import co.jinear.core.model.request.task.TaskInitializeRequest;
 import co.jinear.core.model.request.task.TaskSearchRequest;
 import co.jinear.core.model.request.task.TaskUpdateDescriptionRequest;
 import co.jinear.core.model.request.task.TaskUpdateTitleRequest;
-import co.jinear.core.service.mcp.tool.McpShapes;
 import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.McpToolArguments;
 import co.jinear.core.service.mcp.tool.SimpleMcpTool;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.response.task.TaskResponse;
-import co.jinear.core.model.mcp.McpToolException;
-import java.util.Locale;
+import co.jinear.core.model.mcp.view.McpCommentView;
+import co.jinear.core.model.mcp.view.McpPageView;
+import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
+import co.jinear.core.model.mcp.view.McpTaskAcknowledgementView;
+import co.jinear.core.model.mcp.view.McpTaskDetailEnvelopeView;
+import co.jinear.core.model.mcp.view.McpTaskDetailView;
+import co.jinear.core.model.mcp.view.McpTaskEnvelopeView;
+import co.jinear.core.model.mcp.view.McpTaskView;
+import co.jinear.core.converter.mcp.McpViewConverter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -52,6 +55,7 @@ public class TaskMcpTools {
     private final TaskUpdateManager taskUpdateManager;
     private final TaskCommentManager taskCommentManager;
     private final McpProperties mcpProperties;
+    private final McpViewConverter mcpViewConverter;
 
     @Bean
     public McpTool searchTasksTool() {
@@ -66,11 +70,10 @@ public class TaskMcpTools {
                         .stringArray("teamIds", "Restrict the search to these teams. Omit to search the whole workspace.", false)
                         .integer("page", "Zero based page number. Defaults to 0.")
                         .build())
-                .output(McpShapes.pageSchema("Matching tasks, best match first.", McpShapes.taskSchema()))
+                .output(McpSchemaGenerator.page(McpTaskView.class, "Matching tasks, best match first."))
                 .readOnly()
                 .scopes(OauthScope.TASKS_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     TaskSearchRequest request = new TaskSearchRequest();
                     request.setWorkspaceId(args.requiredString("workspaceId"));
                     request.setQuery(args.requiredString("query"));
@@ -78,7 +81,7 @@ public class TaskMcpTools {
                     request.setTeamIdList(teamIds.isEmpty() ? null : teamIds);
                     context.setWorkspaceId(request.getWorkspaceId());
                     PageDto<TaskDto> page = taskSearchManager.searchTask(request, args.page()).getResult();
-                    return McpToolResult.of(McpShapes.page(page, McpShapes::task));
+                    return McpToolResult.of(McpPageView.of(page, mcpViewConverter::task));
                 })
                 .build();
     }
@@ -101,11 +104,10 @@ public class TaskMcpTools {
                         .string("to", "Only tasks whose dates fall on or before this ISO 8601 instant.")
                         .withPaging(50)
                         .build())
-                .output(McpShapes.pageSchema("Matching tasks, newest first.", McpShapes.taskSchema()))
+                .output(McpSchemaGenerator.page(McpTaskView.class, "Matching tasks, newest first."))
                 .readOnly()
                 .scopes(OauthScope.TASKS_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     TaskFilterRequest request = new TaskFilterRequest();
                     request.setWorkspaceId(args.requiredString("workspaceId"));
                     request.setPage(args.page());
@@ -113,12 +115,13 @@ public class TaskMcpTools {
                     request.setTeamIdList(nullIfEmpty(args.optionalStringList("teamIds")));
                     request.setAssigneeIds(nullIfEmpty(args.optionalStringList("assigneeIds")));
                     request.setWorkflowStatusIdList(nullIfEmpty(args.optionalStringList("workflowStatusIds")));
-                    request.setWorkflowStateGroups(parseStateGroups(args.optionalStringList("stateGroups")));
+                    request.setWorkflowStateGroups(nullIfEmpty(args.optionalEnumList("stateGroups", TeamWorkflowStateGroup.class,
+                            "must contain only BACKLOG, NOT_STARTED, STARTED, COMPLETED or CANCELLED.")));
                     request.setTimespanStart(args.optionalZonedDateTime("from"));
                     request.setTimespanEnd(args.optionalZonedDateTime("to"));
                     context.setWorkspaceId(request.getWorkspaceId());
                     PageDto<TaskDto> page = taskListingManager.filterTasks(request).getTaskDtoPage();
-                    return McpToolResult.of(McpShapes.page(page, McpShapes::task));
+                    return McpToolResult.of(McpPageView.of(page, mcpViewConverter::task));
                 })
                 .build();
     }
@@ -134,17 +137,16 @@ public class TaskMcpTools {
                         .requiredString("teamTag", "Team tag, the part before the dash in a reference such as ENG-42.")
                         .requiredInteger("taskNumber", "Task number, the part after the dash in a reference such as ENG-42.")
                         .build())
-                .output(McpShapes.singleSchema("task", "The task, with its body.", McpShapes.taskSchema()))
+                .output(McpSchemaGenerator.single("task", "The task, with its body.", McpTaskDetailView.class))
                 .readOnly()
                 .scopes(OauthScope.TASKS_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     TaskResponse response = taskRetrieveManager.retrieveWithWorkspaceNameAndTeamTagNo(
                             args.requiredString("workspaceUsername"),
                             args.requiredString("teamTag"),
-                            requiredTaskNumber(args));
+                            args.requiredInteger("taskNumber", "In the reference ENG-42 it is 42."));
                     context.setWorkspaceId(response.getTaskDto().getWorkspaceId());
-                    return McpToolResult.of(McpShapes.single("task", McpShapes.taskDetail(response.getTaskDto())));
+                    return McpToolResult.of(McpTaskDetailEnvelopeView.of(mcpViewConverter.taskDetail(response.getTaskDto())));
                 })
                 .build();
     }
@@ -167,11 +169,10 @@ public class TaskMcpTools {
                         .string("topicId", "Label to apply, from list_topics on the team.")
                         .string("boardId", "Board to add the task to on creation.")
                         .build())
-                .output(McpShapes.singleSchema("task", "The created task.", McpShapes.taskSchema()))
+                .output(McpSchemaGenerator.single("task", "The created task.", McpTaskView.class))
                 .write()
                 .scopes(OauthScope.TASKS_WRITE)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     TaskInitializeRequest request = new TaskInitializeRequest();
                     request.setWorkspaceId(args.requiredString("workspaceId"));
                     request.setTeamId(args.requiredString("teamId"));
@@ -186,7 +187,7 @@ public class TaskMcpTools {
                     request.setBoardId(args.optionalString("boardId", null));
                     context.setWorkspaceId(request.getWorkspaceId());
                     TaskResponse response = taskInitializeManager.initializeTask(request);
-                    return McpToolResult.of(McpShapes.single("task", McpShapes.task(response.getTaskDto())));
+                    return McpToolResult.of(McpTaskEnvelopeView.of(mcpViewConverter.task(response.getTaskDto())));
                 })
                 .build();
     }
@@ -206,11 +207,10 @@ public class TaskMcpTools {
                         .string("startDate", "New ISO 8601 start. Pass an empty string to clear it.")
                         .string("dueDate", "New ISO 8601 due date. Pass an empty string to clear it.")
                         .build())
-                .output(McpShapes.acknowledgementSchema("taskId", "The task that was updated."))
+                .output(McpSchemaGenerator.acknowledgement("taskId", "The task that was updated."))
                 .write()
                 .scopes(OauthScope.TASKS_WRITE)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     String taskId = args.requiredString("taskId");
                     boolean changed = false;
 
@@ -246,7 +246,7 @@ public class TaskMcpTools {
                         return McpToolResult.error("Nothing to update. Supply at least one of title, description, "
                                 + "assignedTo, startDate or dueDate.");
                     }
-                    return McpToolResult.of(McpShapes.acknowledgement("taskId", taskId));
+                    return McpToolResult.of(McpTaskAcknowledgementView.of(taskId));
                 })
                 .build();
     }
@@ -262,17 +262,16 @@ public class TaskMcpTools {
                         .requiredString("taskId", "Task id.")
                         .requiredString("workflowStatusId", "Status id, from list_workflow_statuses for the task's team.")
                         .build())
-                .output(McpShapes.singleSchema("task", "The task in its new status.", McpShapes.taskSchema()))
+                .output(McpSchemaGenerator.single("task", "The task in its new status.", McpTaskView.class))
                 .write()
                 .idempotent()
                 .scopes(OauthScope.TASKS_WRITE)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     TaskResponse response = taskUpdateManager.updateTaskWorkflowStatus(
                             args.requiredString("taskId"),
                             args.requiredString("workflowStatusId"));
                     context.setWorkspaceId(response.getTaskDto().getWorkspaceId());
-                    return McpToolResult.of(McpShapes.single("task", McpShapes.task(response.getTaskDto())));
+                    return McpToolResult.of(McpTaskEnvelopeView.of(mcpViewConverter.task(response.getTaskDto())));
                 })
                 .build();
     }
@@ -287,14 +286,13 @@ public class TaskMcpTools {
                         .requiredString("taskId", "Task id.")
                         .integer("page", "Zero based page number. Defaults to 0.")
                         .build())
-                .output(McpShapes.pageSchema("Comments on this task.", commentSchema()))
+                .output(McpSchemaGenerator.page(McpCommentView.class, "Comments on this task."))
                 .readOnly()
                 .scopes(OauthScope.TASKS_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     PageDto<CommentDto> page = taskCommentManager.retrieveTaskComments(args.requiredString("taskId"), args.page())
                             .getCommentsPage();
-                    return McpToolResult.of(McpShapes.page(page, TaskMcpTools::comment));
+                    return McpToolResult.of(McpPageView.of(page, mcpViewConverter::comment));
                 })
                 .build();
     }
@@ -310,71 +308,23 @@ public class TaskMcpTools {
                         .requiredString("comment", "Comment body. Plain text or simple HTML.")
                         .string("quoteCommentId", "Comment id being replied to, if this is a reply.")
                         .build())
-                .output(McpShapes.acknowledgementSchema("taskId", "The task the comment was added to."))
+                .output(McpSchemaGenerator.acknowledgement("taskId", "The task the comment was added to."))
                 .write()
                 .scopes(OauthScope.TASKS_WRITE)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     InitializeTaskCommentRequest request = new InitializeTaskCommentRequest();
                     request.setTaskId(args.requiredString("taskId"));
                     request.setComment(args.requiredString("comment"));
                     request.setQuoteCommentId(args.optionalString("quoteCommentId", null));
                     taskCommentManager.initializeComment(request);
-                    return McpToolResult.of(McpShapes.acknowledgement("taskId", request.getTaskId()));
+                    return McpToolResult.of(McpTaskAcknowledgementView.of(request.getTaskId()));
                 })
                 .build();
     }
 
-    private static ObjectNode comment(CommentDto dto) {
-        ObjectNode node = FACTORY.objectNode();
-        node.put("commentId", dto.getCommentId());
-        node.put("taskId", dto.getTaskId());
-        node.put("authorAccountId", dto.getOwnerId());
-        node.put("authorUsername", Objects.isNull(dto.getOwner()) ? null : dto.getOwner().getUsername());
-        node.put("body", Objects.isNull(dto.getRichText()) ? null : dto.getRichText().getValue());
-        node.put("createdAt", Objects.isNull(dto.getCreatedDate())
-                ? null
-                : DateTimeFormatter.ISO_INSTANT.format(dto.getCreatedDate().toInstant()));
-        return node;
-    }
 
-    private static ObjectNode commentSchema() {
-        return McpJsonSchema.object()
-                .string("commentId", "Comment id.")
-                .string("taskId", "Task this comment belongs to.")
-                .string("authorAccountId", "Account id of the author.")
-                .string("authorUsername", "Author handle.")
-                .string("body", "Comment body as HTML.")
-                .string("createdAt", "ISO 8601 instant the comment was posted.")
-                .build();
-    }
-
-    private int requiredTaskNumber(McpToolArguments args) {
-        Integer number = args.optionalInteger("taskNumber", null);
-        if (Objects.isNull(number)) {
-            throw new McpToolException("missing_argument",
-                    "taskNumber is required. In the reference ENG-42 it is 42.");
-        }
-        return number;
-    }
-
-    private List<String> nullIfEmpty(List<String> values) {
+    private <T> List<T> nullIfEmpty(List<T> values) {
         return values.isEmpty() ? null : values;
     }
 
-    private List<TeamWorkflowStateGroup> parseStateGroups(List<String> values) {
-        if (values.isEmpty()) {
-            return null;
-        }
-        return values.stream()
-                .map(value -> {
-                    try {
-                        return TeamWorkflowStateGroup.valueOf(value.toUpperCase(Locale.ROOT));
-                    } catch (IllegalArgumentException exception) {
-                        throw new McpToolException("invalid_argument",
-                                "stateGroups must contain only BACKLOG, NOT_STARTED, STARTED, COMPLETED or CANCELLED. Received: " + value);
-                    }
-                })
-                .toList();
-    }
 }

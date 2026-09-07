@@ -8,9 +8,7 @@ import co.jinear.core.manager.workspace.WorkspaceMemberRetrieveManager;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
-import co.jinear.core.service.mcp.tool.McpShapes;
 import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.McpToolArguments;
 import co.jinear.core.service.mcp.tool.SimpleMcpTool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -26,6 +24,16 @@ import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.response.workspace.WorkspaceBaseResponse;
 import java.util.Map;
+import co.jinear.core.model.mcp.view.McpListView;
+import co.jinear.core.model.mcp.view.McpMemberView;
+import co.jinear.core.model.mcp.view.McpPageView;
+import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
+import co.jinear.core.model.mcp.view.McpTeamView;
+import co.jinear.core.converter.mcp.McpViewConverter;
+import co.jinear.core.model.mcp.view.McpWorkflowStatusView;
+import co.jinear.core.model.mcp.view.McpWorkspaceEnvelopeView;
+import co.jinear.core.model.mcp.view.McpWorkspaceMembershipView;
+import co.jinear.core.model.mcp.view.McpWorkspaceView;
 
 @Configuration
 @RequiredArgsConstructor
@@ -36,6 +44,7 @@ public class WorkspaceMcpTools {
     private final TeamRetrieveManager teamRetrieveManager;
     private final TeamWorkflowStatusManager teamWorkflowStatusManager;
     private final McpProperties mcpProperties;
+    private final McpViewConverter mcpViewConverter;
 
     @Bean
     public McpTool listWorkspacesTool() {
@@ -44,12 +53,12 @@ public class WorkspaceMcpTools {
                 .description("Lists every Jinear workspace the signed in account belongs to, with the account's role in each. "
                         + "Call this first: workspaceId is required by almost every other Jinear tool.")
                 .input(McpJsonSchema.noArguments())
-                .output(McpShapes.listSchema("The workspaces this account belongs to.", McpShapes.workspaceSchema()))
+                .output(McpSchemaGenerator.list(McpWorkspaceMembershipView.class, "The workspaces this account belongs to."))
                 .readOnly()
                 .scopes(OauthScope.WORKSPACE_READ)
-                .handler((context, arguments) -> {
+                .handler((context, args) -> {
                     List<DetailedWorkspaceMemberDto> workspaces = workspaceManager.retrieveAccountWorkspacesInternal(context.getAccountId()).getWorkspaces();
-                    return McpToolResult.of(McpShapes.list(workspaces, McpShapes::workspaceMembership));
+                    return McpToolResult.of(McpListView.of(workspaces, mcpViewConverter::workspaceMembership));
                 })
                 .build();
     }
@@ -64,11 +73,10 @@ public class WorkspaceMcpTools {
                         .string("workspaceId", "Workspace id. Supply this or username.")
                         .string("username", "Short workspace handle, as it appears in a Jinear URL. Supply this or workspaceId.")
                         .build())
-                .output(McpShapes.singleSchema("workspace", "The workspace.", McpShapes.workspaceSchema()))
+                .output(McpSchemaGenerator.single("workspace", "The workspace.", McpWorkspaceView.class))
                 .readOnly()
                 .scopes(OauthScope.WORKSPACE_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     String workspaceId = args.optionalString("workspaceId", null);
                     String username = args.optionalString("username", null);
                     if (workspaceId == null && username == null) {
@@ -78,7 +86,7 @@ public class WorkspaceMcpTools {
                             ? workspaceManager.retrieveWorkspaceWithId(workspaceId)
                             : workspaceManager.retrieveWorkspaceWithUsername(username);
                     context.setWorkspaceId(response.getWorkspace().getWorkspaceId());
-                    return McpToolResult.of(McpShapes.single("workspace", McpShapes.workspace(response.getWorkspace())));
+                    return McpToolResult.of(McpWorkspaceEnvelopeView.of(mcpViewConverter.workspace(response.getWorkspace())));
                 })
                 .build();
     }
@@ -92,14 +100,14 @@ public class WorkspaceMcpTools {
                 .input(McpJsonSchema.object()
                         .requiredString("workspaceId", "Workspace id, from list_workspaces.")
                         .build())
-                .output(McpShapes.listSchema("Teams in this workspace.", McpShapes.teamSchema()))
+                .output(McpSchemaGenerator.list(McpTeamView.class, "Teams in this workspace."))
                 .readOnly()
                 .scopes(OauthScope.WORKSPACE_READ)
-                .handler((context, arguments) -> {
-                    String workspaceId = McpToolArguments.of(arguments).requiredString("workspaceId");
+                .handler((context, args) -> {
+                    String workspaceId = args.requiredString("workspaceId");
                     context.setWorkspaceId(workspaceId);
                     List<TeamDto> teams = teamRetrieveManager.retrieveWorkspaceTeams(workspaceId).getTeamDtoList();
-                    return McpToolResult.of(McpShapes.list(teams, McpShapes::team));
+                    return McpToolResult.of(McpListView.of(teams, mcpViewConverter::team));
                 })
                 .build();
     }
@@ -113,12 +121,11 @@ public class WorkspaceMcpTools {
                 .input(McpJsonSchema.object()
                         .requiredString("teamId", "Team id, from list_teams.")
                         .build())
-                .output(McpShapes.listSchema("Statuses this team's tasks can be in, in board order.",
-                        McpShapes.workflowStatusSchema()))
+                .output(McpSchemaGenerator.list(McpWorkflowStatusView.class, "Statuses this team's tasks can be in, in board order."))
                 .readOnly()
                 .scopes(OauthScope.WORKSPACE_READ)
-                .handler((context, arguments) -> {
-                    String teamId = McpToolArguments.of(arguments).requiredString("teamId");
+                .handler((context, args) -> {
+                    String teamId = args.requiredString("teamId");
                     Map<TeamWorkflowStateGroup, List<TeamWorkflowStatusDto>> grouped = teamWorkflowStatusManager.retrieveAllFromTeam(teamId)
                             .getGroupedTeamWorkflowStatusListDto()
                             .getGroupedTeamWorkflowStatuses();
@@ -128,7 +135,7 @@ public class WorkspaceMcpTools {
                         int secondOrder = second.getOrder() == null ? Integer.MAX_VALUE : second.getOrder();
                         return Integer.compare(firstOrder, secondOrder);
                     });
-                    return McpToolResult.of(McpShapes.list(statuses, McpShapes::workflowStatus));
+                    return McpToolResult.of(McpListView.of(statuses, mcpViewConverter::workflowStatus));
                 })
                 .build();
     }
@@ -143,17 +150,16 @@ public class WorkspaceMcpTools {
                         .requiredString("workspaceId", "Workspace id, from list_workspaces.")
                         .withPaging(50)
                         .build())
-                .output(McpShapes.pageSchema("People in this workspace.", McpShapes.memberSchema()))
+                .output(McpSchemaGenerator.page(McpMemberView.class, "People in this workspace."))
                 .readOnly()
                 .scopes(OauthScope.WORKSPACE_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     String workspaceId = args.requiredString("workspaceId");
                     context.setWorkspaceId(workspaceId);
                     PageDto<WorkspaceMemberDto> page = workspaceMemberRetrieveManager
                             .retrieveWorkspaceMembers(workspaceId, args.page())
                             .getWorkspaceMemberDtoPage();
-                    return McpToolResult.of(McpShapes.page(page, McpShapes::member));
+                    return McpToolResult.of(McpPageView.of(page, mcpViewConverter::member));
                 })
                 .build();
     }

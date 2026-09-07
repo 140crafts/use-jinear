@@ -1,139 +1,102 @@
 package co.jinear.core.model.mcp;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import co.jinear.core.model.mcp.schema.McpSchemaNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Declarative builder for a tool's input schema. Output schemas are generated from the
+ * payload class instead, see {@code McpSchemaGenerator}.
+ */
 public final class McpJsonSchema {
 
-    private static final JsonNodeFactory FACTORY = JsonNodeFactory.instance;
-
-    private final ObjectNode schema;
-    private final ObjectNode properties;
-    private final ArrayNode required;
+    private final McpSchemaNode schema;
+    private final List<String> required = new ArrayList<>();
 
     private McpJsonSchema() {
-        this.schema = FACTORY.objectNode();
-        this.schema.put("type", "object");
-        this.properties = this.schema.putObject("properties");
-        this.required = this.schema.putArray("required");
-        this.schema.put("additionalProperties", false);
+        this.schema = McpSchemaNode.objectNode();
     }
 
     public static McpJsonSchema object() {
         return new McpJsonSchema();
     }
 
-    public static ObjectNode noArguments() {
-        ObjectNode node = FACTORY.objectNode();
-        node.put("type", "object");
-        node.putObject("properties");
-        node.put("additionalProperties", false);
+    public static McpSchemaNode noArguments() {
+        McpSchemaNode node = McpSchemaNode.objectNode();
+        node.setRequired(null);
         return node;
     }
 
     public McpJsonSchema string(String name, String description) {
-        return property(name, "string", description, false);
+        return property(name, McpSchemaNode.TYPE_STRING, description, false);
     }
 
     public McpJsonSchema requiredString(String name, String description) {
-        return property(name, "string", description, true);
+        return property(name, McpSchemaNode.TYPE_STRING, description, true);
     }
 
     public McpJsonSchema integer(String name, String description) {
-        return property(name, "integer", description, false);
+        return property(name, McpSchemaNode.TYPE_INTEGER, description, false);
     }
 
     public McpJsonSchema requiredInteger(String name, String description) {
-        return property(name, "integer", description, true);
+        return property(name, McpSchemaNode.TYPE_INTEGER, description, true);
     }
 
     public McpJsonSchema bool(String name, String description) {
-        return property(name, "boolean", description, false);
+        return property(name, McpSchemaNode.TYPE_BOOLEAN, description, false);
     }
 
     public McpJsonSchema requiredBool(String name, String description) {
-        return property(name, "boolean", description, true);
-    }
-
-    private McpJsonSchema property(String name, String type, String description, boolean isRequired) {
-        ObjectNode node = properties.putObject(name);
-        node.put("type", type);
-        node.put("description", description);
-        if (isRequired) {
-            required.add(name);
-        }
-        return this;
+        return property(name, McpSchemaNode.TYPE_BOOLEAN, description, true);
     }
 
     public McpJsonSchema enumeration(String name, String description, List<String> values, boolean isRequired) {
-        ObjectNode node = properties.putObject(name);
-        node.put("type", "string");
-        node.put("description", description);
-        ArrayNode allowed = node.putArray("enum");
-        values.forEach(allowed::add);
-        if (isRequired) {
-            required.add(name);
-        }
-        return this;
+        McpSchemaNode node = McpSchemaNode.of(McpSchemaNode.TYPE_STRING, description);
+        node.setEnumValues(List.copyOf(values));
+        return put(name, node, isRequired);
     }
 
     public McpJsonSchema stringArray(String name, String description, boolean isRequired) {
-        ObjectNode node = properties.putObject(name);
-        node.put("type", "array");
-        node.put("description", description);
-        node.putObject("items").put("type", "string");
-        if (isRequired) {
-            required.add(name);
-        }
-        return this;
-    }
-
-    public McpJsonSchema objectArray(String name, String description, ObjectNode itemSchema, boolean isRequired) {
-        ObjectNode node = properties.putObject(name);
-        node.put("type", "array");
-        node.put("description", description);
-        node.set("items", itemSchema);
-        if (isRequired) {
-            required.add(name);
-        }
-        return this;
-    }
-
-    public McpJsonSchema nested(String name, String description, ObjectNode nestedSchema, boolean isRequired) {
-        ObjectNode node = nestedSchema.deepCopy();
-        node.put("description", description);
-        properties.set(name, node);
-        if (isRequired) {
-            required.add(name);
-        }
-        return this;
+        McpSchemaNode node = McpSchemaNode.of(McpSchemaNode.TYPE_ARRAY, description);
+        node.setItems(McpSchemaNode.of(McpSchemaNode.TYPE_STRING, null));
+        return put(name, node, isRequired);
     }
 
     public McpJsonSchema withPaging(int maxPageSize) {
-        ObjectNode page = properties.putObject("page");
-        page.put("type", "integer");
-        page.put("description", "Zero based page number. Defaults to 0.");
-        page.put("minimum", 0);
-        ObjectNode pageSize = properties.putObject("pageSize");
-        pageSize.put("type", "integer");
-        pageSize.put("description", "Items per page, from 1 to " + maxPageSize + ". Defaults to 20.");
-        pageSize.put("minimum", 1);
-        pageSize.put("maximum", maxPageSize);
+        McpSchemaNode page = McpSchemaNode.of(McpSchemaNode.TYPE_INTEGER, "Zero based page number. Defaults to 0.");
+        page.setMinimum(0);
+        McpSchemaNode pageSize = McpSchemaNode.of(McpSchemaNode.TYPE_INTEGER,
+                "Items per page, from 1 to " + maxPageSize + ". Defaults to 20.");
+        pageSize.setMinimum(1);
+        pageSize.setMaximum(maxPageSize);
+        schema.putProperty("page", page);
+        schema.putProperty("pageSize", pageSize);
         return this;
     }
 
     public McpJsonSchema allowAdditional() {
-        schema.put("additionalProperties", true);
+        schema.setAdditionalProperties(Boolean.TRUE);
         return this;
     }
 
-    public ObjectNode build() {
-        if (required.isEmpty()) {
-            schema.remove("required");
+    public McpSchemaNode build() {
+        if (!required.isEmpty()) {
+            schema.setRequired(List.copyOf(required));
         }
         return schema;
+    }
+
+    private McpJsonSchema property(String name, String type, String description, boolean isRequired) {
+        return put(name, McpSchemaNode.of(type, description), isRequired);
+    }
+
+    private McpJsonSchema put(String name, McpSchemaNode node, boolean isRequired) {
+        schema.putProperty(name, node);
+        if (isRequired) {
+            required.add(name);
+        }
+        return this;
     }
 }

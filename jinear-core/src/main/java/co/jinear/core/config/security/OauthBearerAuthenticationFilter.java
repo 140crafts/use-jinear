@@ -57,10 +57,4 @@ public class OauthBearerAuthenticationFilter extends OncePerRequestFilter {
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
-    public static Optional<OauthAccessTokenVo> currentAccessToken() {
-        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
-                .map(authentication -> authentication.getDetails())
-                .filter(OauthAccessTokenVo.class::isInstance)
-                .map(OauthAccessTokenVo.class::cast);
-    }
 }

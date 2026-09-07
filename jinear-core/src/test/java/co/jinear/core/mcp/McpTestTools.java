@@ -4,7 +4,6 @@ import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
-import co.jinear.core.service.mcp.tool.McpShapes;
 import co.jinear.core.service.mcp.tool.McpTool;
 import co.jinear.core.service.mcp.tool.SimpleMcpTool;
 
@@ -19,7 +18,7 @@ final class McpTestTools {
                 .description("Answers without any credential. Used to prove the catalog is readable before sign in.")
                 .input(McpJsonSchema.noArguments())
                 .readOnly()
-                .handler((context, arguments) -> McpToolResult.of(McpShapes.acknowledgement("pong", "yes")))
+                .handler((context, arguments) -> McpToolResult.of(McpTestPayload.result("pong")))
                 .build();
     }
 
@@ -30,7 +29,7 @@ final class McpTestTools {
                 .input(McpJsonSchema.noArguments())
                 .readOnly()
                 .scopes(OauthScope.TASKS_READ)
-                .handler((context, arguments) -> McpToolResult.of(McpShapes.acknowledgement("accountId", context.getAccountId())))
+                .handler((context, arguments) -> McpToolResult.of(McpTestPayload.forAccount(context.getAccountId())))
                 .build();
     }
 
@@ -41,7 +40,7 @@ final class McpTestTools {
                 .input(McpJsonSchema.object().requiredString("title", "What to write.").build())
                 .write()
                 .scopes(OauthScope.TASKS_WRITE)
-                .handler((context, arguments) -> McpToolResult.of(McpShapes.acknowledgement("ok", "written")))
+                .handler((context, arguments) -> McpToolResult.of(McpTestPayload.result("written")))
                 .build();
     }
 

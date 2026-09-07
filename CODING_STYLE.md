@@ -153,7 +153,12 @@ MCP, and RFC 6749 / 7591 / 8414 / 9728 for OAuth. These are the one carve out:
 - They do not extend `BaseResponse`, because the specification defines the envelope.
 - They keep the specification's `snake_case` field names through `@JsonProperty`.
 - `@RestControllerAdvice` error mapping does not apply; the specification defines the error
-  body, so a dedicated error response type carries it.
+  body, so a dedicated error response type and its own advice carry it, as
+  `controller/advice/McpApiAdvice.java` does for RFC 6750 challenges.
+- `ResponseEntity` is allowed here, and only here, when the status code or a response header
+  is part of the contract and therefore cannot travel in the body. `controller/mcp/McpController.java`
+  needs it for JSON-RPC's 202 Accepted. It still holds no logic: the manager decides, the
+  controller maps.
 
 The carve out is about the envelope, not about types. A spec mandated body is still a typed
 class. `Map<String, Object>` is not more standards compliant than

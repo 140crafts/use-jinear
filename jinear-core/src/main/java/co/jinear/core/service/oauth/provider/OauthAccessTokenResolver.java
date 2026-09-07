@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @Slf4j
 @Service
@@ -22,6 +24,17 @@ public class OauthAccessTokenResolver {
 
     private final OauthTokenHelper oauthTokenHelper;
     private final OauthConnectionService oauthConnectionService;
+
+    /**
+     * The access token behind the current request, when the caller authenticated with an
+     * OAuth bearer token rather than a session cookie.
+     */
+    public Optional<OauthAccessTokenVo> currentAccessToken() {
+        return Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication())
+                .map(Authentication::getDetails)
+                .filter(OauthAccessTokenVo.class::isInstance)
+                .map(OauthAccessTokenVo.class::cast);
+    }
 
     public Optional<String> extractBearer(String authorizationHeader) {
         if (Objects.isNull(authorizationHeader) || !authorizationHeader.startsWith(BEARER_PREFIX)) {

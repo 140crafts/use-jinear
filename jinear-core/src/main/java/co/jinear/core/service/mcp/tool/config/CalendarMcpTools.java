@@ -5,9 +5,7 @@ import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.request.calendar.CalendarEventFilterRequest;
-import co.jinear.core.service.mcp.tool.McpShapes;
 import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.McpToolArguments;
 import co.jinear.core.service.mcp.tool.SimpleMcpTool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -15,12 +13,17 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 import co.jinear.core.model.dto.calendar.CalendarEventDto;
+import co.jinear.core.model.mcp.view.McpCalendarEventView;
+import co.jinear.core.model.mcp.view.McpListView;
+import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
+import co.jinear.core.converter.mcp.McpViewConverter;
 
 @Configuration
 @RequiredArgsConstructor
 public class CalendarMcpTools {
 
     private final CalendarEventManager calendarEventManager;
+    private final McpViewConverter mcpViewConverter;
 
     @Bean
     public McpTool listCalendarEventsTool() {
@@ -36,11 +39,10 @@ public class CalendarMcpTools {
                         .stringArray("teamIds", "Restrict to the calendars of these teams.", false)
                         .stringArray("calendarIds", "Restrict to these calendars.", false)
                         .build())
-                .output(McpShapes.listSchema("Events and dated tasks in the window.", McpShapes.calendarEventSchema()))
+                .output(McpSchemaGenerator.list(McpCalendarEventView.class, "Events and dated tasks in the window."))
                 .readOnly()
                 .scopes(OauthScope.CALENDAR_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     CalendarEventFilterRequest request = new CalendarEventFilterRequest();
                     request.setWorkspaceId(args.requiredString("workspaceId"));
                     request.setTimespanStart(args.requiredZonedDateTime("from"));
@@ -53,7 +55,7 @@ public class CalendarMcpTools {
                     }
                     context.setWorkspaceId(request.getWorkspaceId());
                     List<CalendarEventDto> events = calendarEventManager.filterCalendarEvents(request).getCalendarEventDtoList();
-                    return McpToolResult.of(McpShapes.list(events, McpShapes::calendarEvent));
+                    return McpToolResult.of(McpListView.of(events, mcpViewConverter::calendarEvent));
                 })
                 .build();
     }

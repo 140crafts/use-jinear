@@ -28,6 +28,13 @@ import java.util.Set;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import co.jinear.core.controller.advice.McpApiAdvice;
+import co.jinear.core.manager.mcp.McpManager;
+import co.jinear.core.model.mcp.jsonrpc.McpJsonRpcError;
+import co.jinear.core.service.oauth.provider.OauthAccessTokenResolver;
+import co.jinear.core.service.oauth.provider.OauthConnectionService;
+import co.jinear.core.system.oauth.OauthTokenHelper;
+import co.jinear.core.validator.mcp.McpToolScopeValidator;
 
 class McpControllerTest {
 
@@ -57,9 +64,17 @@ class McpControllerTest {
         OauthProperties oauthProperties = new OauthProperties();
         oauthProperties.setIssuerUrl("https://api.jinear.test");
         McpDiscoveryService discoveryService = new McpDiscoveryService(properties, oauthProperties);
-        McpController controller = new McpController(protocolService, registry, logService, properties, discoveryService);
+        OauthAccessTokenResolver accessTokenResolver = new OauthAccessTokenResolver(
+                Mockito.mock(OauthTokenHelper.class),
+                Mockito.mock(OauthConnectionService.class));
+        McpToolScopeValidator scopeValidator = new McpToolScopeValidator(
+                protocolService, registry, logService, discoveryService);
+        McpManager manager = new McpManager(protocolService, scopeValidator, accessTokenResolver, properties);
+        McpController controller = new McpController(manager);
 
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setControllerAdvice(new McpApiAdvice())
+                .build();
     }
 
     @AfterEach
@@ -170,7 +185,7 @@ class McpControllerTest {
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"jsonrpc\":\"2.0\",\"id\":8,\"method\":\"resources/list\"}"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.error.code").value(McpProtocolService.ERROR_METHOD_NOT_FOUND));
+                .andExpect(jsonPath("$.error.code").value(McpJsonRpcError.METHOD_NOT_FOUND));
     }
 
     @Test
@@ -181,7 +196,7 @@ class McpControllerTest {
                         {"jsonrpc":"2.0","id":9,"method":"tools/call","params":{"name":"no_such_tool","arguments":{}}}
                         """))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.error.code").value(McpProtocolService.ERROR_INVALID_PARAMS));
+                .andExpect(jsonPath("$.error.code").value(McpJsonRpcError.INVALID_PARAMS));
     }
 
     @Test

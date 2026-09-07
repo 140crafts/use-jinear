@@ -136,6 +136,7 @@
       "properties" : {
         "task" : {
           "type" : "object",
+          "description" : "The created task.",
           "properties" : {
             "taskId" : {
               "type" : "string",
@@ -190,8 +191,7 @@
               "description" : "Label applied to this task, or null."
             }
           },
-          "additionalProperties" : false,
-          "description" : "The created task."
+          "additionalProperties" : false
         }
       },
       "required" : [ "task" ],
@@ -236,6 +236,7 @@
       "properties" : {
         "board" : {
           "type" : "object",
+          "description" : "The created board.",
           "properties" : {
             "taskBoardId" : {
               "type" : "string",
@@ -262,8 +263,7 @@
               "description" : "ISO 8601 due date, or null."
             }
           },
-          "additionalProperties" : false,
-          "description" : "The created board."
+          "additionalProperties" : false
         }
       },
       "required" : [ "board" ],
@@ -380,6 +380,7 @@
       "properties" : {
         "note" : {
           "type" : "object",
+          "description" : "The note, with its body.",
           "properties" : {
             "noteId" : {
               "type" : "string",
@@ -404,10 +405,13 @@
             "ownerId" : {
               "type" : "string",
               "description" : "Account id of the author."
+            },
+            "body" : {
+              "type" : "string",
+              "description" : "Note body as HTML, or null when the note has no body."
             }
           },
-          "additionalProperties" : false,
-          "description" : "The note, with its body."
+          "additionalProperties" : false
         }
       },
       "required" : [ "note" ],
@@ -448,6 +452,7 @@
       "properties" : {
         "task" : {
           "type" : "object",
+          "description" : "The task, with its body.",
           "properties" : {
             "taskId" : {
               "type" : "string",
@@ -500,10 +505,13 @@
             "topicId" : {
               "type" : "string",
               "description" : "Label applied to this task, or null."
+            },
+            "description" : {
+              "type" : "string",
+              "description" : "Task body as HTML, or null when the task has no body."
             }
           },
-          "additionalProperties" : false,
-          "description" : "The task, with its body."
+          "additionalProperties" : false
         }
       },
       "required" : [ "task" ],
@@ -539,6 +547,7 @@
       "properties" : {
         "workspace" : {
           "type" : "object",
+          "description" : "The workspace.",
           "properties" : {
             "workspaceId" : {
               "type" : "string",
@@ -555,14 +564,9 @@
             "tier" : {
               "type" : "string",
               "description" : "Billing tier, BASIC or PRO."
-            },
-            "role" : {
-              "type" : "string",
-              "description" : "The caller's role in this workspace."
             }
           },
-          "additionalProperties" : false,
-          "description" : "The workspace."
+          "additionalProperties" : false
         }
       },
       "required" : [ "workspace" ],
@@ -1859,6 +1863,7 @@
       "properties" : {
         "task" : {
           "type" : "object",
+          "description" : "The task in its new status.",
           "properties" : {
             "taskId" : {
               "type" : "string",
@@ -1913,8 +1918,7 @@
               "description" : "Label applied to this task, or null."
             }
           },
-          "additionalProperties" : false,
-          "description" : "The task in its new status."
+          "additionalProperties" : false
         }
       },
       "required" : [ "task" ],

@@ -5,8 +5,7 @@ import co.jinear.core.model.mcp.McpToolAnnotations;
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.model.mcp.McpToolDefinition;
 import co.jinear.core.model.mcp.McpToolResult;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import co.jinear.core.model.mcp.schema.McpSchemaNode;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -15,9 +14,9 @@ import java.util.function.BiFunction;
 public final class SimpleMcpTool implements McpTool {
 
     private final McpToolDefinition definition;
-    private final BiFunction<McpToolContext, JsonNode, McpToolResult> handler;
+    private final BiFunction<McpToolContext, McpToolArguments, McpToolResult> handler;
 
-    private SimpleMcpTool(McpToolDefinition definition, BiFunction<McpToolContext, JsonNode, McpToolResult> handler) {
+    private SimpleMcpTool(McpToolDefinition definition, BiFunction<McpToolContext, McpToolArguments, McpToolResult> handler) {
         this.definition = definition;
         this.handler = handler;
     }
@@ -32,7 +31,7 @@ public final class SimpleMcpTool implements McpTool {
     }
 
     @Override
-    public McpToolResult call(McpToolContext context, JsonNode arguments) {
+    public McpToolResult call(McpToolContext context, McpToolArguments arguments) {
         return handler.apply(context, arguments);
     }
 
@@ -42,12 +41,12 @@ public final class SimpleMcpTool implements McpTool {
         private final Set<OauthScope> scopes = new LinkedHashSet<>();
         private String title;
         private String description;
-        private ObjectNode inputSchema;
-        private ObjectNode outputSchema;
+        private McpSchemaNode inputSchema;
+        private McpSchemaNode outputSchema;
         private boolean readOnly;
         private boolean destructive;
         private boolean idempotent;
-        private BiFunction<McpToolContext, JsonNode, McpToolResult> handler;
+        private BiFunction<McpToolContext, McpToolArguments, McpToolResult> handler;
 
         private Builder(String name) {
             this.name = name;
@@ -63,12 +62,12 @@ public final class SimpleMcpTool implements McpTool {
             return this;
         }
 
-        public Builder input(ObjectNode inputSchema) {
+        public Builder input(McpSchemaNode inputSchema) {
             this.inputSchema = inputSchema;
             return this;
         }
 
-        public Builder output(ObjectNode outputSchema) {
+        public Builder output(McpSchemaNode outputSchema) {
             this.outputSchema = outputSchema;
             return this;
         }
@@ -103,7 +102,7 @@ public final class SimpleMcpTool implements McpTool {
             return this;
         }
 
-        public Builder handler(BiFunction<McpToolContext, JsonNode, McpToolResult> handler) {
+        public Builder handler(BiFunction<McpToolContext, McpToolArguments, McpToolResult> handler) {
             this.handler = handler;
             return this;
         }

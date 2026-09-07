@@ -9,9 +9,7 @@ import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.request.task.TaskBoardEntryInitializeRequest;
 import co.jinear.core.model.request.task.TaskBoardInitializeRequest;
-import co.jinear.core.service.mcp.tool.McpShapes;
 import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.McpToolArguments;
 import co.jinear.core.service.mcp.tool.SimpleMcpTool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +18,13 @@ import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.task.TaskBoardDto;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.response.task.TaskBoardResponse;
+import co.jinear.core.model.mcp.view.McpBoardEnvelopeView;
+import co.jinear.core.model.mcp.view.McpBoardView;
+import co.jinear.core.model.mcp.view.McpPageView;
+import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
+import co.jinear.core.model.mcp.view.McpTaskBoardAcknowledgementView;
+import co.jinear.core.model.mcp.view.McpTopicView;
+import co.jinear.core.converter.mcp.McpViewConverter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -29,6 +34,7 @@ public class BoardMcpTools {
     private final TaskBoardListingManager taskBoardListingManager;
     private final TaskBoardEntryManager taskBoardEntryManager;
     private final TopicListingManager topicListingManager;
+    private final McpViewConverter mcpViewConverter;
 
     @Bean
     public McpTool listTaskBoardsTool() {
@@ -41,17 +47,16 @@ public class BoardMcpTools {
                         .requiredString("teamId", "Team id, from list_teams.")
                         .integer("page", "Zero based page number. Defaults to 0.")
                         .build())
-                .output(McpShapes.pageSchema("Boards in this team.", McpShapes.boardSchema()))
+                .output(McpSchemaGenerator.page(McpBoardView.class, "Boards in this team."))
                 .readOnly()
                 .scopes(OauthScope.TASKS_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     String workspaceId = args.requiredString("workspaceId");
                     context.setWorkspaceId(workspaceId);
                     PageDto<TaskBoardDto> page = taskBoardListingManager
                             .retrieveAllByTeam(workspaceId, args.requiredString("teamId"), args.page())
                             .getTaskListDetailedDtoPageDto();
-                    return McpToolResult.of(McpShapes.page(page, McpShapes::board));
+                    return McpToolResult.of(McpPageView.of(page, mcpViewConverter::board));
                 })
                 .build();
     }
@@ -67,11 +72,10 @@ public class BoardMcpTools {
                         .requiredString("title", "Board name, for example Sprint 14.")
                         .string("dueDate", "ISO 8601 instant the board's work is due.")
                         .build())
-                .output(McpShapes.singleSchema("board", "The created board.", McpShapes.boardSchema()))
+                .output(McpSchemaGenerator.single("board", "The created board.", McpBoardView.class))
                 .write()
                 .scopes(OauthScope.TASKS_WRITE)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     TaskBoardInitializeRequest request = new TaskBoardInitializeRequest();
                     request.setWorkspaceId(args.requiredString("workspaceId"));
                     request.setTeamId(args.requiredString("teamId"));
@@ -79,7 +83,7 @@ public class BoardMcpTools {
                     request.setDueDate(args.optionalZonedDateTime("dueDate"));
                     context.setWorkspaceId(request.getWorkspaceId());
                     TaskBoardResponse response = taskBoardManager.initializeTaskBoard(request);
-                    return McpToolResult.of(McpShapes.single("board", McpShapes.board(response.getTaskBoardDto())));
+                    return McpToolResult.of(McpBoardEnvelopeView.of(mcpViewConverter.board(response.getTaskBoardDto())));
                 })
                 .build();
     }
@@ -94,17 +98,16 @@ public class BoardMcpTools {
                         .requiredString("taskBoardId", "Board id, from list_task_boards.")
                         .requiredString("taskId", "Task id, from search_tasks or list_tasks.")
                         .build())
-                .output(McpShapes.acknowledgementSchema("taskBoardId", "The board the task was added to."))
+                .output(McpSchemaGenerator.acknowledgement("taskBoardId", "The board the task was added to."))
                 .write()
                 .idempotent()
                 .scopes(OauthScope.TASKS_WRITE)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     TaskBoardEntryInitializeRequest request = new TaskBoardEntryInitializeRequest();
                     request.setTaskBoardId(args.requiredString("taskBoardId"));
                     request.setTaskId(args.requiredString("taskId"));
                     taskBoardEntryManager.initializeTaskBoardEntry(request);
-                    return McpToolResult.of(McpShapes.acknowledgement("taskBoardId", request.getTaskBoardId()));
+                    return McpToolResult.of(McpTaskBoardAcknowledgementView.of(request.getTaskBoardId()));
                 })
                 .build();
     }
@@ -119,21 +122,14 @@ public class BoardMcpTools {
                         .requiredString("teamId", "Team id, from list_teams.")
                         .integer("page", "Zero based page number. Defaults to 0.")
                         .build())
-                .output(McpShapes.pageSchema("Topics in this team.", McpJsonSchema.object()
-                        .string("topicId", "Topic id, the value create_task takes as topicId.")
-                        .string("teamId", "Team this topic belongs to.")
-                        .string("name", "Display name.")
-                        .string("tag", "Short prefix used in task references.")
-                        .string("color", "Display colour.")
-                        .build()))
+                .output(McpSchemaGenerator.page(McpTopicView.class, "Topics in this team."))
                 .readOnly()
                 .scopes(OauthScope.WORKSPACE_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     PageDto<TopicDto> page = topicListingManager
                             .retrieveTeamTopics(args.requiredString("teamId"), args.page())
                             .getTopicDtoPage();
-                    return McpToolResult.of(McpShapes.page(page, McpShapes::topic));
+                    return McpToolResult.of(McpPageView.of(page, mcpViewConverter::topic));
                 })
                 .build();
     }

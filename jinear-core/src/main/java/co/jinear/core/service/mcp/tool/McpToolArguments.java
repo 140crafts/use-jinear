@@ -11,6 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TimeZone;
 
@@ -22,6 +23,10 @@ public class McpToolArguments {
 
     private final JsonNode node;
 
+    /**
+     * The parse boundary. Only the MCP protocol layer hands in a raw tree; tools receive this
+     * class and read typed values from it.
+     */
     public static McpToolArguments of(JsonNode node) {
         return new McpToolArguments(Objects.isNull(node) || node.isNull() ? null : node);
     }
@@ -55,6 +60,39 @@ public class McpToolArguments {
             throw new McpToolException("invalid_argument", field + " must be a whole number.");
         }
         return value.asInt();
+    }
+
+    public int requiredInteger(String field, String hint) {
+        Integer value = optionalInteger(field, null);
+        if (Objects.isNull(value)) {
+            throw new McpToolException("missing_argument", field + " is required. " + hint);
+        }
+        return value;
+    }
+
+    public <E extends Enum<E>> E requiredEnum(String field, Class<E> type, String hint) {
+        return parseEnum(field, requiredString(field), type, hint);
+    }
+
+    public <E extends Enum<E>> E optionalEnum(String field, Class<E> type, String hint) {
+        String raw = optionalString(field, null);
+        return Objects.isNull(raw) ? null : parseEnum(field, raw, type, hint);
+    }
+
+    public <E extends Enum<E>> List<E> optionalEnumList(String field, Class<E> type, String hint) {
+        List<E> values = new ArrayList<>();
+        for (String raw : optionalStringList(field)) {
+            values.add(parseEnum(field, raw, type, hint));
+        }
+        return values;
+    }
+
+    private <E extends Enum<E>> E parseEnum(String field, String raw, Class<E> type, String hint) {
+        try {
+            return Enum.valueOf(type, raw.toUpperCase(Locale.ROOT));
+        } catch (IllegalArgumentException exception) {
+            throw new McpToolException("invalid_argument", field + " " + hint + " Received: " + raw);
+        }
     }
 
     public Boolean optionalBoolean(String field, Boolean fallback) {

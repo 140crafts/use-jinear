@@ -1,14 +1,29 @@
 package co.jinear.core.service.mcp;
 
+import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.NoAccessException;
+import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
+import co.jinear.core.model.mcp.jsonrpc.McpContentBlock;
+import co.jinear.core.model.mcp.jsonrpc.McpEmptyResult;
+import co.jinear.core.model.mcp.jsonrpc.McpInitializeResult;
+import co.jinear.core.model.mcp.jsonrpc.McpJsonRpcError;
+import co.jinear.core.model.mcp.jsonrpc.McpJsonRpcRequest;
+import co.jinear.core.model.mcp.jsonrpc.McpJsonRpcResponse;
+import co.jinear.core.model.mcp.jsonrpc.McpServerCapabilities;
+import co.jinear.core.model.mcp.jsonrpc.McpServerInfo;
+import co.jinear.core.model.mcp.jsonrpc.McpToolCallResult;
+import co.jinear.core.model.mcp.jsonrpc.McpToolsCapability;
+import co.jinear.core.model.mcp.jsonrpc.McpToolsListResult;
+import co.jinear.core.model.mcp.view.McpToolPayload;
 import co.jinear.core.service.mcp.tool.McpTool;
+import co.jinear.core.service.mcp.tool.McpToolArguments;
 import co.jinear.core.service.mcp.tool.McpToolRegistry;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,10 +31,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import co.jinear.core.exception.BusinessException;
-import co.jinear.core.exception.NoAccessException;
-import co.jinear.core.exception.NotFoundException;
 
 @Slf4j
 @Service
@@ -34,12 +45,10 @@ public class McpProtocolService {
     public static final String SERVER_TITLE = "Jinear";
     public static final String SERVER_VERSION = "1.0.0";
 
-    public static final int ERROR_INVALID_REQUEST = -32600;
-    public static final int ERROR_METHOD_NOT_FOUND = -32601;
-    public static final int ERROR_INVALID_PARAMS = -32602;
-    public static final int ERROR_INTERNAL = -32603;
-
-    private static final JsonNodeFactory FACTORY = JsonNodeFactory.instance;
+    private static final String METHOD_INITIALIZE = "initialize";
+    private static final String METHOD_PING = "ping";
+    private static final String METHOD_TOOLS_LIST = "tools/list";
+    private static final String METHOD_TOOLS_CALL = "tools/call";
 
     private static final String INSTRUCTIONS = """
             Jinear holds a person's tasks, boards, calendar, notes and files. \
@@ -52,111 +61,98 @@ public class McpProtocolService {
     private final McpToolCallLogService mcpToolCallLogService;
     private final ObjectMapper objectMapper;
 
-    public Optional<ObjectNode> handle(JsonNode message, McpToolContext context) {
-        if (!message.isObject()) {
-            return Optional.of(error(null, ERROR_INVALID_REQUEST, "A JSON-RPC request must be an object."));
+    public Optional<McpJsonRpcResponse> handle(McpJsonRpcRequest request, McpToolContext context) {
+        if (Objects.isNull(request.getMethod())) {
+            return Optional.of(McpJsonRpcResponse.failure(request.getId(),
+                    McpJsonRpcError.INVALID_REQUEST, "Missing method."));
         }
-        JsonNode id = message.get("id");
-        String method = message.path("method").asText(null);
-        if (Objects.isNull(method)) {
-            return Optional.of(error(id, ERROR_INVALID_REQUEST, "Missing method."));
-        }
-
-        boolean isNotification = Objects.isNull(id) || id.isNull();
-        if (isNotification) {
-            log.debug("[MCP] Notification received: {}", method);
+        if (request.isNotification()) {
+            log.debug("[MCP] Notification received: {}", request.getMethod());
             return Optional.empty();
         }
 
-        return Optional.of(switch (method) {
-            case "initialize" -> success(id, initialize(message.path("params")));
-            case "ping" -> success(id, FACTORY.objectNode());
-            case "tools/list" -> success(id, toolsList());
-            case "tools/call" -> toolsCall(id, message.path("params"), context);
-            default -> error(id, ERROR_METHOD_NOT_FOUND, "Unknown method: " + method);
+        return Optional.of(switch (request.getMethod()) {
+            case METHOD_INITIALIZE -> McpJsonRpcResponse.success(request.getId(), initialize(request.getParams()));
+            case METHOD_PING -> McpJsonRpcResponse.success(request.getId(), new McpEmptyResult());
+            case METHOD_TOOLS_LIST -> McpJsonRpcResponse.success(request.getId(),
+                    new McpToolsListResult(mcpToolRegistry.descriptors()));
+            case METHOD_TOOLS_CALL -> toolsCall(request, context);
+            default -> McpJsonRpcResponse.failure(request.getId(),
+                    McpJsonRpcError.METHOD_NOT_FOUND, "Unknown method: " + request.getMethod());
         });
     }
 
-    public boolean isToolCall(JsonNode message) {
-        return message.isObject() && "tools/call".equals(message.path("method").asText(null));
+    public boolean isToolCall(McpJsonRpcRequest request) {
+        return METHOD_TOOLS_CALL.equals(request.getMethod());
     }
 
-    public String toolNameOf(JsonNode message) {
-        return message.path("params").path("name").asText(null);
+    public String toolNameOf(McpJsonRpcRequest request) {
+        return Objects.isNull(request.getParams()) ? null : request.getParams().path("name").asText(null);
     }
 
-    private ObjectNode initialize(JsonNode params) {
-        String requested = params.path("protocolVersion").asText(null);
+    private McpInitializeResult initialize(JsonNode params) {
+        String requested = Objects.isNull(params) ? null : params.path("protocolVersion").asText(null);
         String negotiated = SUPPORTED_PROTOCOL_VERSIONS.contains(requested) ? requested : PREFERRED_PROTOCOL_VERSION;
-
-        ObjectNode result = FACTORY.objectNode();
-        result.put("protocolVersion", negotiated);
-        ObjectNode capabilities = result.putObject("capabilities");
-        capabilities.putObject("tools").put("listChanged", false);
-        ObjectNode serverInfo = result.putObject("serverInfo");
-        serverInfo.put("name", SERVER_NAME);
-        serverInfo.put("title", SERVER_TITLE);
-        serverInfo.put("version", SERVER_VERSION);
-        result.put("instructions", INSTRUCTIONS);
-        return result;
+        return new McpInitializeResult(
+                negotiated,
+                new McpServerCapabilities(new McpToolsCapability(false)),
+                new McpServerInfo(SERVER_NAME, SERVER_TITLE, SERVER_VERSION),
+                INSTRUCTIONS);
     }
 
-    private ObjectNode toolsList() {
-        ObjectNode result = FACTORY.objectNode();
-        result.set("tools", mcpToolRegistry.toolsArray());
-        return result;
-    }
-
-    private ObjectNode toolsCall(JsonNode id, JsonNode params, McpToolContext context) {
-        String name = params.path("name").asText(null);
+    private McpJsonRpcResponse toolsCall(McpJsonRpcRequest request, McpToolContext context) {
+        String name = toolNameOf(request);
         if (Objects.isNull(name)) {
-            return error(id, ERROR_INVALID_PARAMS, "tools/call requires a tool name.");
+            return McpJsonRpcResponse.failure(request.getId(),
+                    McpJsonRpcError.INVALID_PARAMS, "tools/call requires a tool name.");
         }
         Optional<McpTool> tool = mcpToolRegistry.find(name);
         if (tool.isEmpty()) {
-            return error(id, ERROR_INVALID_PARAMS, "Unknown tool: " + name);
+            return McpJsonRpcResponse.failure(request.getId(),
+                    McpJsonRpcError.INVALID_PARAMS, "Unknown tool: " + name);
         }
 
-        JsonNode arguments = params.path("arguments");
+        McpToolArguments arguments = McpToolArguments.of(
+                Objects.isNull(request.getParams()) ? null : request.getParams().get("arguments"));
         long startedAt = System.currentTimeMillis();
         try {
-            McpToolResult result = tool.get().call(context, arguments.isMissingNode() ? FACTORY.objectNode() : arguments);
-            ObjectNode wrapped = wrap(result);
+            McpToolResult result = tool.get().call(context, arguments);
+            McpToolCallResult callResult = wrap(result);
             mcpToolCallLogService.recordOutcome(context, name, result.isError(), null,
-                    System.currentTimeMillis() - startedAt, wrapped.toString().length());
-            return success(id, wrapped);
+                    System.currentTimeMillis() - startedAt, serialize(callResult).length());
+            return McpJsonRpcResponse.success(request.getId(), callResult);
         } catch (McpToolException toolException) {
             mcpToolCallLogService.recordOutcome(context, name, true, toolException.getErrorCode(),
                     System.currentTimeMillis() - startedAt, 0);
-            return success(id, wrap(McpToolResult.error(toolException.getMessage())));
+            return McpJsonRpcResponse.success(request.getId(), wrap(McpToolResult.error(toolException.getMessage())));
         } catch (RuntimeException exception) {
             log.error("[MCP] Tool {} failed.", name, exception);
             mcpToolCallLogService.recordFailure(context, name, exception,
                     System.currentTimeMillis() - startedAt);
-            return success(id, wrap(McpToolResult.error(describe(exception))));
+            return McpJsonRpcResponse.success(request.getId(), wrap(McpToolResult.error(describe(exception))));
         }
     }
 
-    private ObjectNode wrap(McpToolResult result) {
-        ObjectNode node = FACTORY.objectNode();
-        ArrayNode content = node.putArray("content");
+    private McpToolCallResult wrap(McpToolResult result) {
+        McpToolCallResult callResult = new McpToolCallResult();
         if (result.isError()) {
-            content.addObject().put("type", "text").put("text", result.getText());
-            node.put("isError", true);
-            return node;
+            callResult.setContent(List.of(McpContentBlock.text(result.getText())));
+            callResult.setError(true);
+            return callResult;
         }
-        JsonNode structured = result.getStructuredContent();
-        content.addObject().put("type", "text").put("text", serialize(structured));
-        node.set("structuredContent", structured);
-        node.put("isError", false);
-        return node;
+        McpToolPayload structured = result.getStructuredContent();
+        callResult.setContent(List.of(McpContentBlock.text(serialize(structured))));
+        callResult.setStructuredContent(structured);
+        callResult.setError(false);
+        return callResult;
     }
 
-    private String serialize(JsonNode node) {
+    private String serialize(Object value) {
         try {
-            return objectMapper.writeValueAsString(node);
-        } catch (Exception exception) {
-            return String.valueOf(node);
+            return objectMapper.writeValueAsString(value);
+        } catch (JsonProcessingException exception) {
+            log.warn("[MCP] Could not serialize a tool payload.", exception);
+            return String.valueOf(value);
         }
     }
 
@@ -171,23 +167,5 @@ public class McpProtocolService {
             return "The request was refused: " + businessException.getMessage();
         }
         return "The request could not be completed. Try again, or narrow the arguments.";
-    }
-
-    public ObjectNode success(JsonNode id, ObjectNode result) {
-        ObjectNode response = FACTORY.objectNode();
-        response.put("jsonrpc", "2.0");
-        response.set("id", Objects.isNull(id) ? FACTORY.nullNode() : id);
-        response.set("result", result);
-        return response;
-    }
-
-    public ObjectNode error(JsonNode id, int code, String message) {
-        ObjectNode response = FACTORY.objectNode();
-        response.put("jsonrpc", "2.0");
-        response.set("id", Objects.isNull(id) ? FACTORY.nullNode() : id);
-        ObjectNode error = response.putObject("error");
-        error.put("code", code);
-        error.put("message", message);
-        return response;
     }
 }

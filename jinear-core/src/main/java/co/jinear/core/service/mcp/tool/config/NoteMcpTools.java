@@ -6,9 +6,7 @@ import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.request.note.NoteFilterRequest;
-import co.jinear.core.service.mcp.tool.McpShapes;
 import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.McpToolArguments;
 import co.jinear.core.service.mcp.tool.SimpleMcpTool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,8 +17,14 @@ import java.util.Objects;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.List;
+import co.jinear.core.model.mcp.view.McpNoteDetailView;
+import co.jinear.core.model.mcp.view.McpNoteEnvelopeView;
+import co.jinear.core.model.mcp.view.McpNoteView;
+import co.jinear.core.model.mcp.view.McpNotebookView;
+import co.jinear.core.model.mcp.view.McpPageView;
+import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
+import co.jinear.core.converter.mcp.McpViewConverter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -28,6 +32,7 @@ public class NoteMcpTools {
 
     private final NotebookListingManager notebookListingManager;
     private final NoteFilterManager noteFilterManager;
+    private final McpViewConverter mcpViewConverter;
 
     @Bean
     public McpTool listNotebooksTool() {
@@ -39,16 +44,15 @@ public class NoteMcpTools {
                         .requiredString("workspaceId", "Workspace id, from list_workspaces.")
                         .integer("page", "Zero based page number. Defaults to 0.")
                         .build())
-                .output(McpShapes.pageSchema("Notebooks in this workspace.", McpShapes.notebookSchema()))
+                .output(McpSchemaGenerator.page(McpNotebookView.class, "Notebooks in this workspace."))
                 .readOnly()
                 .scopes(OauthScope.NOTES_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     String workspaceId = args.requiredString("workspaceId");
                     context.setWorkspaceId(workspaceId);
                     PageDto<NotebookDto> page = notebookListingManager.listWorkspaceNotebooks(workspaceId, args.page())
                             .getNotebookDtoPageDto();
-                    return McpToolResult.of(McpShapes.page(page, McpShapes::notebook));
+                    return McpToolResult.of(McpPageView.of(page, mcpViewConverter::notebook));
                 })
                 .build();
     }
@@ -67,11 +71,10 @@ public class NoteMcpTools {
                         .string("titleContains", "Case insensitive phrase to match against note titles.")
                         .integer("page", "Zero based page number. Defaults to 0.")
                         .build())
-                .output(McpShapes.pageSchema("Matching notes.", McpShapes.noteSchema()))
+                .output(McpSchemaGenerator.page(McpNoteView.class, "Matching notes."))
                 .readOnly()
                 .scopes(OauthScope.NOTES_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     NoteFilterRequest request = new NoteFilterRequest();
                     request.setWorkspaceId(args.requiredString("workspaceId"));
                     request.setNotebookId(args.optionalString("notebookId", null));
@@ -82,17 +85,15 @@ public class NoteMcpTools {
                     PageDto<NoteDto> page = noteFilterManager.filter(request).getNoteDtoPageDto();
                     String titleContains = args.optionalString("titleContains", null);
                     if (Objects.isNull(titleContains) || titleContains.isBlank()) {
-                        return McpToolResult.of(McpShapes.page(page, McpShapes::note));
+                        return McpToolResult.of(McpPageView.of(page, mcpViewConverter::note));
                     }
                     String needle = titleContains.toLowerCase(Locale.ROOT);
-                    List<NoteDto> matched = page.getContent().stream()
+                    List<McpNoteView> matched = page.getContent().stream()
                             .filter(note -> Objects.nonNull(note.getTitle())
                                     && note.getTitle().toLowerCase(Locale.ROOT).contains(needle))
+                            .map(mcpViewConverter::note)
                             .toList();
-                    ObjectNode result = McpShapes.list(matched, McpShapes::note);
-                    result.put("page", page.getNumber());
-                    result.put("hasNext", page.isHasNext());
-                    return McpToolResult.of(result);
+                    return McpToolResult.of(McpPageView.of(page, matched));
                 })
                 .build();
     }
@@ -107,11 +108,10 @@ public class NoteMcpTools {
                         .requiredString("workspaceId", "Workspace id, from list_workspaces.")
                         .requiredString("noteId", "Note id, from search_notes.")
                         .build())
-                .output(McpShapes.singleSchema("note", "The note, with its body.", McpShapes.noteSchema()))
+                .output(McpSchemaGenerator.single("note", "The note, with its body.", McpNoteDetailView.class))
                 .readOnly()
                 .scopes(OauthScope.NOTES_READ)
-                .handler((context, arguments) -> {
-                    McpToolArguments args = McpToolArguments.of(arguments);
+                .handler((context, args) -> {
                     NoteFilterRequest request = new NoteFilterRequest();
                     request.setWorkspaceId(args.requiredString("workspaceId"));
                     request.setNoteId(args.requiredString("noteId"));
@@ -121,7 +121,7 @@ public class NoteMcpTools {
                         return McpToolResult.error("No note with that id is visible to you in this workspace. "
                                 + "Check noteId against search_notes.");
                     }
-                    return McpToolResult.of(McpShapes.single("note", McpShapes.noteDetail(page.getContent().get(0))));
+                    return McpToolResult.of(McpNoteEnvelopeView.of(mcpViewConverter.noteDetail(page.getContent().get(0))));
                 })
                 .build();
     }

@@ -13,6 +13,7 @@ import co.jinear.core.manager.team.TeamWorkflowStatusManager;
 import co.jinear.core.manager.topic.TopicListingManager;
 import co.jinear.core.manager.workspace.WorkspaceManager;
 import co.jinear.core.manager.workspace.WorkspaceMemberRetrieveManager;
+import co.jinear.core.converter.mcp.McpViewConverter;
 import co.jinear.core.service.mcp.tool.McpTool;
 import co.jinear.core.service.mcp.tool.McpToolRegistry;
 import co.jinear.core.service.mcp.tool.config.*;
@@ -45,13 +46,15 @@ final class McpRealCatalog {
     static List<McpTool> tools() {
         McpProperties properties = properties();
         FeProperties feProperties = new FeProperties();
+        McpViewConverter viewConverter = new McpViewConverter();
 
         WorkspaceMcpTools workspaceTools = new WorkspaceMcpTools(
                 Mockito.mock(WorkspaceManager.class),
                 Mockito.mock(WorkspaceMemberRetrieveManager.class),
                 Mockito.mock(TeamRetrieveManager.class),
                 Mockito.mock(TeamWorkflowStatusManager.class),
-                properties);
+                properties,
+                viewConverter);
 
         TaskMcpTools taskTools = new TaskMcpTools(
                 Mockito.mock(TaskInitializeManager.class),
@@ -60,21 +63,24 @@ final class McpRealCatalog {
                 Mockito.mock(TaskSearchManager.class),
                 Mockito.mock(TaskUpdateManager.class),
                 Mockito.mock(TaskCommentManager.class),
-                properties);
+                properties,
+                viewConverter);
 
         BoardMcpTools boardTools = new BoardMcpTools(
                 Mockito.mock(TaskBoardManager.class),
                 Mockito.mock(TaskBoardListingManager.class),
                 Mockito.mock(TaskBoardEntryManager.class),
-                Mockito.mock(TopicListingManager.class));
+                Mockito.mock(TopicListingManager.class),
+                viewConverter);
 
-        CalendarMcpTools calendarTools = new CalendarMcpTools(Mockito.mock(CalendarEventManager.class));
+        CalendarMcpTools calendarTools = new CalendarMcpTools(Mockito.mock(CalendarEventManager.class), viewConverter);
 
         NoteMcpTools noteTools = new NoteMcpTools(
                 Mockito.mock(NotebookListingManager.class),
-                Mockito.mock(NoteFilterManager.class));
+                Mockito.mock(NoteFilterManager.class),
+                viewConverter);
 
-        FileMcpTools fileTools = new FileMcpTools(Mockito.mock(MaterialListingManager.class), oauthProperties());
+        FileMcpTools fileTools = new FileMcpTools(Mockito.mock(MaterialListingManager.class), oauthProperties(), viewConverter);
 
         CompatibilityMcpTools compatibilityTools = new CompatibilityMcpTools(
                 Mockito.mock(WorkspaceManager.class),

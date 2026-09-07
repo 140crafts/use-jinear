@@ -3,12 +3,13 @@ package co.jinear.core.mcp;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolDefinition;
 import co.jinear.core.service.mcp.tool.McpTool;
-import com.fasterxml.jackson.databind.JsonNode;
+import co.jinear.core.model.mcp.schema.McpSchemaNode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Locale;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
@@ -73,17 +74,17 @@ class McpToolCatalogTest {
     @ParameterizedTest(name = "{0}")
     @MethodSource("catalog")
     void everyToolDeclaresAnObjectInputSchema(McpTool tool) {
-        JsonNode schema = tool.definition().getInputSchema();
+        McpSchemaNode schema = tool.definition().getInputSchema();
         assertThat(schema).as("tool %s must declare an inputSchema", tool.name()).isNotNull();
-        assertThat(schema.path("type").asText()).isEqualTo("object");
+        assertThat(schema.getType()).isEqualTo(McpSchemaNode.TYPE_OBJECT);
     }
 
     @ParameterizedTest(name = "{0}")
     @MethodSource("catalog")
     void everySchemaPropertyIsDescribed(McpTool tool) {
-        JsonNode properties = tool.definition().getInputSchema().path("properties");
-        properties.fieldNames().forEachRemaining(field ->
-                assertThat(properties.path(field).path("description").asText())
+        Map<String, McpSchemaNode> properties = tool.definition().getInputSchema().getProperties();
+        properties.forEach((field, property) ->
+                assertThat(property.getDescription())
                         .as("tool %s, argument %s needs a description", tool.name(), field)
                         .isNotBlank());
     }
