@@ -2,8 +2,14 @@ package co.jinear.core.converter.oauth;
 
 import co.jinear.core.model.dto.oauth.OauthClientDto;
 import co.jinear.core.model.dto.oauth.OauthConnectionDto;
+import co.jinear.core.model.dto.oauth.OauthConsentInfoDto;
+import co.jinear.core.model.entity.oauth.OauthAuthorizationRequest;
 import co.jinear.core.model.entity.oauth.OauthClient;
 import co.jinear.core.model.entity.oauth.OauthConnection;
+import co.jinear.core.model.vo.oauth.OauthClientMetadataVo;
+import co.jinear.core.service.oauth.provider.OauthScopeService;
+import co.jinear.core.service.oauth.provider.RedirectUriMatcher;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.net.URI;
@@ -12,7 +18,28 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
+@RequiredArgsConstructor
 public class OauthDtoConverter {
+
+    private final RedirectUriMatcher redirectUriMatcher;
+    private final OauthScopeService oauthScopeService;
+
+    public OauthConsentInfoDto convert(OauthAuthorizationRequest request,
+                                       OauthClientMetadataVo client,
+                                       List<String> registeredRedirects) {
+        OauthConsentInfoDto dto = new OauthConsentInfoDto();
+        dto.setRequestId(request.getOauthAuthorizationRequestId());
+        dto.setClientDisplayHost(hostOf(request.getClientId()));
+        dto.setClientName(client.getClientName());
+        dto.setClientUri(client.getClientUri());
+        dto.setLogoUri(client.getLogoUri());
+        dto.setPolicyUri(client.getPolicyUri());
+        dto.setTosUri(client.getTosUri());
+        dto.setRedirectHost(hostOfRedirect(request.getRedirectUri()));
+        dto.setLoopbackOnly(redirectUriMatcher.allLoopback(registeredRedirects));
+        dto.setRequestedScopes(List.copyOf(oauthScopeService.parse(request.getScope())));
+        return dto;
+    }
 
     public OauthConnectionDto convert(OauthConnection entity, Long callCountLast30Days) {
         OauthConnectionDto dto = new OauthConnectionDto();
@@ -49,6 +76,15 @@ public class OauthDtoConverter {
             return Objects.isNull(host) ? clientId : host;
         } catch (IllegalArgumentException exception) {
             return clientId;
+        }
+    }
+
+    private String hostOfRedirect(String redirectUri) {
+        try {
+            String host = URI.create(redirectUri).getHost();
+            return Objects.isNull(host) ? redirectUri : host;
+        } catch (IllegalArgumentException exception) {
+            return redirectUri;
         }
     }
 

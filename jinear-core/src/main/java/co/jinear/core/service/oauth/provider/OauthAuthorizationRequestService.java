@@ -3,6 +3,7 @@ package co.jinear.core.service.oauth.provider;
 import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.entity.oauth.OauthAuthorizationRequest;
+import co.jinear.core.model.vo.oauth.OauthAuthorizeRequestVo;
 import co.jinear.core.repository.oauth.OauthAuthorizationRequestRepository;
 import co.jinear.core.system.util.DateHelper;
 import lombok.RequiredArgsConstructor;
@@ -22,21 +23,15 @@ public class OauthAuthorizationRequestService {
     private final OauthProperties oauthProperties;
     private final OauthScopeService oauthScopeService;
 
-    public OauthAuthorizationRequest initialize(String clientId,
-                                              String redirectUri,
-                                              Set<String> scopes,
-                                              String state,
-                                              String codeChallenge,
-                                              String codeChallengeMethod,
-                                              String resource) {
+    public OauthAuthorizationRequest initialize(OauthAuthorizeRequestVo vo, Set<String> scopes) {
         OauthAuthorizationRequest request = new OauthAuthorizationRequest();
-        request.setClientId(clientId);
-        request.setRedirectUri(redirectUri);
+        request.setClientId(vo.getClientId());
+        request.setRedirectUri(vo.getRedirectUri());
         request.setScope(oauthScopeService.format(scopes));
-        request.setState(state);
-        request.setCodeChallenge(codeChallenge);
-        request.setCodeChallengeMethod(codeChallengeMethod);
-        request.setResource(resource);
+        request.setState(vo.getState());
+        request.setCodeChallenge(vo.getCodeChallenge());
+        request.setCodeChallengeMethod(vo.getCodeChallengeMethod());
+        request.setResource(vo.getResource());
         request.setExpiresAt(DateHelper.addMinutes(DateHelper.now(), oauthProperties.getAuthorizationRequestValidityMinutes()));
         return oauthAuthorizationRequestRepository.save(request);
     }

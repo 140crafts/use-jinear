@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "v1/oauth")
+@RequestMapping(value = "v1/oauth/connection")
 @RequiredArgsConstructor
 public class OauthConnectionController {
 
     private final OauthConnectionManager oauthConnectionManager;
 
-    @GetMapping("/connection/list")
+    @GetMapping("/list")
     public OauthConnectionListingResponse listMyConnections() {
         return oauthConnectionManager.listMyConnections();
     }
 
-    @DeleteMapping("/connection/{oauthConnectionId}")
+    @DeleteMapping("/{oauthConnectionId}")
     public BaseResponse revokeConnection(@PathVariable String oauthConnectionId) {
         return oauthConnectionManager.revokeConnection(oauthConnectionId);
     }

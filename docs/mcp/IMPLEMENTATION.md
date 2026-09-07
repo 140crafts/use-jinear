@@ -641,15 +641,31 @@ management screens. Per-tool totals come from the raw log, which only reaches ba
 as the retention window; the daily series comes from the rollup table, which survives
 pruning, so a chart keeps its history after the rows behind it are gone.
 
-`McpRetentionService`, driven by a 6-hourly `@Scheduled` job in `ScheduledJobManager`:
+Two 6-hourly `@Scheduled` jobs in `ScheduledJobManager`, one per layer, each with its own
+try/catch so a failure in one does not skip the other.
+
+`rollUpAndPruneMcpUsage()` drives `McpRetentionService`:
 
 1. `rollUpYesterday()` writes yesterday's per-tool totals into `mcp_usage_daily`, guarded by
    an existence check so a second run is a no-op.
-2. `pruneExpired()` deletes call logs older than `jinear.mcp.log-retention-days`, plus
-   authorization codes and pending authorization requests older than one day.
+2. `pruneExpired()` deletes call logs older than `jinear.mcp.log-retention-days`.
 
 **The order matters**: the rollup is written before the rows it summarizes are deleted, or
 a chart loses the day it was about to gain.
+
+`pruneExpiredOauthRecords()` drives `OauthRetentionService.pruneExpired()`, which deletes:
+
+1. Authorization codes and pending authorization requests older than one day.
+2. **Dynamic clients that never connected**, `DCR` only, issued more than seven days ago,
+   with no `oauth_connection` row ever pointing at them. `/v1/oauth/register` is public by
+   design, so without this an unauthenticated caller could grow `oauth_client` without
+   bound. A client that connected and was later disconnected keeps its row, because clients
+   reuse a stored `client_id`; only registrations that never got past the registration call
+   are treated as garbage. `CIMD` and `STATIC` rows are never touched.
+
+Both cutoffs are constants in `OauthRetentionService`, not properties. `OauthClientRetentionTest`
+covers the client rule against H2, since a bulk JPQL delete is otherwise only validated at
+application startup.
 
 ### 3.10 Session integration
 

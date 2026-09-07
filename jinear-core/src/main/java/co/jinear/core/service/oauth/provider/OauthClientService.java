@@ -1,7 +1,9 @@
 package co.jinear.core.service.oauth.provider;
 
 import co.jinear.core.config.properties.OauthProperties;
+import co.jinear.core.converter.oauth.OauthDtoConverter;
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.model.dto.oauth.OauthClientDto;
 import co.jinear.core.model.entity.oauth.OauthClient;
 import co.jinear.core.model.enumtype.oauth.OauthClientRegistrationType;
 import co.jinear.core.model.vo.oauth.OauthClientMetadataVo;
@@ -15,10 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -31,6 +30,7 @@ public class OauthClientService {
     private final CimdResolver cimdResolver;
     private final OauthProperties oauthProperties;
     private final PassiveService passiveService;
+    private final OauthDtoConverter oauthDtoConverter;
 
     public OauthClientMetadataVo resolveForAuthorization(String clientId) {
         if (cimdResolver.looksLikeCimdClientId(clientId)) {
@@ -94,8 +94,13 @@ public class OauthClientService {
         return toMetadata(saved);
     }
 
-    public Page<OauthClient> listClients(Pageable pageable) {
-        return oauthClientRepository.findAllByPassiveIdIsNullOrderByCreatedDateDesc(pageable);
+    public Page<OauthClientDto> listClients(Pageable pageable) {
+        return oauthClientRepository.findAllByPassiveIdIsNullOrderByCreatedDateDesc(pageable)
+                .map(oauthDtoConverter::convert);
+    }
+
+    public int purgeUnusedDynamicClientsBefore(Date before) {
+        return oauthClientRepository.deleteUnusedRegisteredBefore(OauthClientRegistrationType.DCR, before);
     }
 
     public void revokeClient(String clientId) {
@@ -119,7 +124,7 @@ public class OauthClientService {
         }
         boolean https = "https".equalsIgnoreCase(parsed.getScheme());
         boolean loopback = Objects.nonNull(parsed.getHost())
-                && List.of("127.0.0.1", "::1", "localhost").contains(parsed.getHost().toLowerCase(java.util.Locale.ROOT));
+                           && List.of("127.0.0.1", "::1", "localhost").contains(parsed.getHost().toLowerCase(java.util.Locale.ROOT));
         if (!https && !loopback) {
             throw new BusinessException("oauth.error.invalid-redirect-uri");
         }

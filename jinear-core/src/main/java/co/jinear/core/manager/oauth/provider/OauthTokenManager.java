@@ -42,7 +42,7 @@ public class OauthTokenManager {
     private final McpProperties mcpProperties;
 
     public Map<String, Object> token(Map<String, String> form) {
-        assertEnabled();
+        validateOauthIsEnabled();
         String grantType = form.get("grant_type");
         if (GRANT_AUTHORIZATION_CODE.equals(grantType)) {
             return exchangeAuthorizationCode(form);
@@ -54,7 +54,7 @@ public class OauthTokenManager {
     }
 
     public Map<String, Object> register(OauthClientMetadataVo request) {
-        assertEnabled();
+        validateOauthIsEnabled();
         OauthClientMetadataVo registered = oauthClientService.registerDynamicClient(request);
 
         Map<String, Object> body = new LinkedHashMap<>();
@@ -69,7 +69,7 @@ public class OauthTokenManager {
     }
 
     public void revoke(String token) {
-        assertEnabled();
+        validateOauthIsEnabled();
         if (Objects.isNull(token) || token.isBlank()) {
             return;
         }
@@ -169,7 +169,7 @@ public class OauthTokenManager {
         return trimmed.toLowerCase(Locale.ROOT);
     }
 
-    private void assertEnabled() {
+    private void validateOauthIsEnabled() {
         if (!Boolean.TRUE.equals(oauthProperties.getEnabled())) {
             throw new BusinessException("oauth.error.disabled");
         }

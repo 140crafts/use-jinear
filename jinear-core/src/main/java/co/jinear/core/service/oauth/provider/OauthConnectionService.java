@@ -27,9 +27,7 @@ public class OauthConnectionService {
     private final PassiveService passiveService;
 
     public OauthConnection grant(String accountId, String clientId, String clientName, Set<String> scopes) {
-        OauthConnection connection = oauthConnectionRepository
-                .findFirstByAccountIdAndClientIdAndPassiveIdIsNull(accountId, clientId)
-                .orElseGet(OauthConnection::new);
+        OauthConnection connection = retrieve(accountId, clientId);
         connection.setAccountId(accountId);
         connection.setClientId(clientId);
         connection.setClientName(clientName);
@@ -70,5 +68,11 @@ public class OauthConnectionService {
         oauthConnectionRepository.save(connection);
         log.info("[OAUTH] Revoked connection. oauthConnectionId: {}", oauthConnectionId);
         return passiveId;
+    }
+
+    private OauthConnection retrieve(String accountId, String clientId) {
+        return oauthConnectionRepository
+                .findFirstByAccountIdAndClientIdAndPassiveIdIsNull(accountId, clientId)
+                .orElseGet(OauthConnection::new);
     }
 }

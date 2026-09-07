@@ -138,6 +138,16 @@ Since Traefik handles TLS termination, Caddy must listen on HTTP only.
 **Key changes:**
 - Add `auto_https off` to disable Caddy's automatic HTTPS
 - Change all `https://` site blocks to `http://`
+- Declare `trusted_proxies` and rewrite `X-Forwarded-For` on the API host
+
+The last one is not cosmetic. jinear-core rate limits unauthenticated callers by the
+leftmost value of `X-Forwarded-For`. With two proxies in front and no `trusted_proxies`
+setting, that leftmost value is whatever the caller sent, so anyone can defeat the public
+rate limit by varying the header. Declaring the proxies as trusted lets `{client_ip}`
+resolve to the real caller, and rewriting the header hands jinear-core that value alone.
+
+Do not use `{remote_host}` here. In this topology that is Traefik's address, which would
+put every visitor in one shared rate limit bucket.
 
 Example `Caddyfile`:
 
@@ -145,6 +155,9 @@ Example `Caddyfile`:
 {
     debug
     auto_https off
+    servers {
+        trusted_proxies static private_ranges
+    }
 }
 
 http://jinear.example.com {
@@ -152,13 +165,23 @@ http://jinear.example.com {
 }
 
 http://api.jinear.example.com {
-    reverse_proxy http://jinear-core:8008
+    reverse_proxy http://jinear-core:8008 {
+        header_up X-Real-IP {client_ip}
+        header_up X-Forwarded-For {client_ip}
+        header_up X-Forwarded-Proto {scheme}
+    }
 }
 
 http://files.jinear.example.com {
     reverse_proxy http://jinear-minio:9000
 }
 ```
+
+`private_ranges` covers the Docker network Traefik sits on. If your clients also reach
+Jinear from a private range, replace it with the explicit subnet Traefik uses, otherwise
+`{client_ip}` can skip past a real caller. Confirm it by watching the `[OAUTH]` and rate
+limit lines in `docker compose logs jinear-core`: they should show visitor addresses, not
+a single gateway address.
 
 ### Step 5: Start Services
 
