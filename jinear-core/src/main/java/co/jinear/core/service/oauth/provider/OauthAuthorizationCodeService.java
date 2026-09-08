@@ -2,8 +2,10 @@ package co.jinear.core.service.oauth.provider;
 
 import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.converter.oauth.OauthDtoConverter;
+import co.jinear.core.model.dto.oauth.OauthAuthorizationCodeDto;
+import co.jinear.core.model.dto.oauth.OauthAuthorizationRequestDto;
 import co.jinear.core.model.entity.oauth.OauthAuthorizationCode;
-import co.jinear.core.model.entity.oauth.OauthAuthorizationRequest;
 import co.jinear.core.repository.oauth.OauthAuthorizationCodeRepository;
 import co.jinear.core.system.RandomHelper;
 import co.jinear.core.system.util.DateHelper;
@@ -25,8 +27,9 @@ public class OauthAuthorizationCodeService {
     private final OauthAuthorizationCodeRepository oauthAuthorizationCodeRepository;
     private final OauthProperties oauthProperties;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final OauthDtoConverter oauthDtoConverter;
 
-    public String issue(OauthAuthorizationRequest request, String accountId, String connectionId) {
+    public String issue(OauthAuthorizationRequestDto request, String accountId, String connectionId) {
         OauthAuthorizationCode code = new OauthAuthorizationCode();
         code.setAccountId(accountId);
         code.setClientId(request.getClientId());
@@ -44,7 +47,7 @@ public class OauthAuthorizationCodeService {
         return saved.getOauthAuthorizationCodeId() + SEPARATOR + secret;
     }
 
-    public OauthAuthorizationCode redeem(String presentedCode) {
+    public OauthAuthorizationCodeDto redeem(String presentedCode) {
         if (Objects.isNull(presentedCode) || !presentedCode.contains(SEPARATOR)) {
             throw new BusinessException("oauth.error.invalid-grant");
         }
@@ -69,7 +72,7 @@ public class OauthAuthorizationCodeService {
 
         code.setConsumedAt(DateHelper.now());
         oauthAuthorizationCodeRepository.save(code);
-        return code;
+        return oauthDtoConverter.convert(code);
     }
 
     public int purgeExpiredBefore(Date before) {

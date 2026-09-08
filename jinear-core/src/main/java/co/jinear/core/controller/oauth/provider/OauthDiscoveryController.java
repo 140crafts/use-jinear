@@ -1,45 +1,42 @@
 package co.jinear.core.controller.oauth.provider;
 
-import co.jinear.core.service.mcp.McpDiscoveryService;
-import co.jinear.core.service.oauth.provider.OauthDiscoveryService;
+import co.jinear.core.manager.oauth.provider.OauthDiscoveryManager;
+import co.jinear.core.model.response.oauth.OauthProtectedResourceMetadataResponse;
+import co.jinear.core.model.response.oauth.OauthServerMetadataResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.CacheControl;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
+/**
+ * The RFC 8414 and RFC 9728 discovery documents. Their paths are well known URIs fixed by the
+ * specifications, so this controller has no {@code v1} base path.
+ */
 @Slf4j
 @RestController
 @RequiredArgsConstructor
 public class OauthDiscoveryController {
 
-    private final OauthDiscoveryService oauthDiscoveryService;
-    private final McpDiscoveryService mcpDiscoveryService;
+    private final OauthDiscoveryManager oauthDiscoveryManager;
 
     @GetMapping(value = {
             "/.well-known/oauth-protected-resource",
             "/.well-known/oauth-protected-resource/mcp"
     }, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Object>> protectedResourceMetadata() {
-        return cached(mcpDiscoveryService.protectedResourceMetadata());
+    @ResponseStatus(HttpStatus.OK)
+    public OauthProtectedResourceMetadataResponse protectedResourceMetadata() {
+        return oauthDiscoveryManager.retrieveProtectedResourceMetadata();
     }
 
     @GetMapping(value = {
             "/.well-known/oauth-authorization-server",
             "/.well-known/openid-configuration"
     }, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Map<String, Object>> authorizationServerMetadata() {
-        return cached(oauthDiscoveryService.authorizationServerMetadata());
-    }
-
-    private ResponseEntity<Map<String, Object>> cached(Map<String, Object> document) {
-        return ResponseEntity.ok()
-                .cacheControl(CacheControl.maxAge(5, TimeUnit.MINUTES).cachePublic())
-                .body(document);
+    @ResponseStatus(HttpStatus.OK)
+    public OauthServerMetadataResponse authorizationServerMetadata() {
+        return oauthDiscoveryManager.retrieveAuthorizationServerMetadata();
     }
 }

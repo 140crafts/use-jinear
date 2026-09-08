@@ -7,14 +7,6 @@ import lombok.Setter;
 
 import java.util.Objects;
 
-/**
- * One inbound JSON-RPC message.
- * <p>
- * {@code id} stays a raw node because JSON-RPC lets a client send a string, a number or null,
- * and the response must echo back exactly what arrived. {@code params} stays a raw node
- * because its shape is chosen by {@code method}; the protocol layer hands it to the matching
- * typed reader.
- */
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)

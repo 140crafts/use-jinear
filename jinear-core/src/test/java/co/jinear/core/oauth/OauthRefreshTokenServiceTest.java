@@ -2,7 +2,10 @@ package co.jinear.core.oauth;
 
 import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.converter.oauth.OauthDtoConverter;
 import co.jinear.core.model.entity.oauth.OauthRefreshToken;
+import co.jinear.core.service.oauth.provider.OauthScopeService;
+import co.jinear.core.service.oauth.provider.RedirectUriMatcher;
 import co.jinear.core.repository.oauth.OauthRefreshTokenRepository;
 import co.jinear.core.service.oauth.provider.OauthConnectionService;
 import co.jinear.core.service.oauth.provider.OauthRefreshTokenService;
@@ -36,7 +39,8 @@ class OauthRefreshTokenServiceTest {
 
         OauthProperties properties = new OauthProperties();
         properties.setRefreshTokenValidityDays(30);
-        service = new OauthRefreshTokenService(repository, connectionService, properties, encoder, passiveService);
+        service = new OauthRefreshTokenService(repository, connectionService, properties, encoder, passiveService,
+                new OauthDtoConverter(new RedirectUriMatcher(), new OauthScopeService()));
     }
 
     @Test
@@ -57,7 +61,8 @@ class OauthRefreshTokenServiceTest {
         OauthRefreshToken stored = storedToken(encoder.encode("secret"), null);
         Mockito.when(repository.findByOauthRefreshTokenIdAndPassiveIdIsNull("row-1")).thenReturn(Optional.of(stored));
 
-        assertThat(service.redeem("row-1.secret")).isSameAs(stored);
+        assertThat(service.redeem("row-1.secret").getOauthRefreshTokenId())
+                .isEqualTo(stored.getOauthRefreshTokenId());
     }
 
     @Test
@@ -71,7 +76,9 @@ class OauthRefreshTokenServiceTest {
             return saved;
         });
 
-        String replacement = service.rotate(current);
+        Mockito.when(repository.findByOauthRefreshTokenIdAndPassiveIdIsNull("row-1")).thenReturn(Optional.of(current));
+
+        String replacement = service.rotate("row-1");
 
         assertThat(replacement).startsWith("row-2.");
         assertThat(current.getConsumedAt()).isNotNull();

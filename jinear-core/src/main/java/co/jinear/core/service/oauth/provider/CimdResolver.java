@@ -3,7 +3,9 @@ package co.jinear.core.service.oauth.provider;
 import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.vo.oauth.OauthClientMetadataVo;
-import com.fasterxml.jackson.databind.JsonNode;
+import co.jinear.core.converter.oauth.OauthClientMetadataVoConverter;
+import co.jinear.core.model.request.oauth.OauthClientRegistrationRequest;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,38 +32,30 @@ public class CimdResolver {
 
     private final OauthProperties oauthProperties;
     private final ObjectMapper objectMapper;
+    private final OauthClientMetadataVoConverter oauthClientMetadataVoConverter;
 
     public OauthClientMetadataVo resolve(String clientId) {
         URI uri = validateClientIdUrl(clientId);
         assertHostIsFetchable(uri.getHost());
 
-        String body = fetch(uri);
-        JsonNode document = readJson(body);
+        OauthClientRegistrationRequest document = readDocument(fetch(uri));
 
-        String declaredClientId = text(document, "client_id");
-        if (!clientId.equals(declaredClientId)) {
-            log.warn("[OAUTH] CIMD document is not self referential. url: {}, declared: {}", clientId, declaredClientId);
+        if (!clientId.equals(document.getClientId())) {
+            log.warn("[OAUTH] CIMD document is not self referential. url: {}, declared: {}", clientId, document.getClientId());
             throw new BusinessException("oauth.error.invalid-client");
         }
 
-        List<String> redirectUris = textList(document, "redirect_uris");
+        List<String> redirectUris = Objects.isNull(document.getRedirectUris())
+                ? List.of()
+                : document.getRedirectUris();
         if (redirectUris.isEmpty()) {
             throw new BusinessException("oauth.error.invalid-client");
         }
         assertRedirectUrisAreAcceptable(uri, redirectUris);
 
-        OauthClientMetadataVo vo = new OauthClientMetadataVo();
+        OauthClientMetadataVo vo = oauthClientMetadataVoConverter.map(document);
         vo.setClientId(clientId);
-        vo.setClientName(text(document, "client_name"));
-        vo.setClientUri(text(document, "client_uri"));
-        vo.setLogoUri(text(document, "logo_uri"));
-        vo.setPolicyUri(text(document, "policy_uri"));
-        vo.setTosUri(text(document, "tos_uri"));
         vo.setRedirectUris(redirectUris);
-        vo.setGrantTypes(textList(document, "grant_types"));
-        vo.setTokenEndpointAuthMethod(text(document, "token_endpoint_auth_method"));
-        vo.setSoftwareId(text(document, "software_id"));
-        vo.setSoftwareVersion(text(document, "software_version"));
         return vo;
     }
 
@@ -178,35 +172,12 @@ public class CimdResolver {
         }
     }
 
-    private JsonNode readJson(String body) {
+    private OauthClientRegistrationRequest readDocument(String body) {
         try {
-            JsonNode node = objectMapper.readTree(body);
-            if (Objects.isNull(node) || !node.isObject()) {
-                throw new BusinessException("oauth.error.invalid-client");
-            }
-            return node;
-        } catch (BusinessException businessException) {
-            throw businessException;
-        } catch (Exception exception) {
+            return objectMapper.readValue(body, OauthClientRegistrationRequest.class);
+        } catch (JsonProcessingException exception) {
+            log.warn("[OAUTH] CIMD document could not be read: {}", exception.getMessage());
             throw new BusinessException("oauth.error.invalid-client");
         }
-    }
-
-    private String text(JsonNode node, String field) {
-        JsonNode value = node.get(field);
-        return Objects.nonNull(value) && value.isTextual() ? value.asText() : null;
-    }
-
-    private List<String> textList(JsonNode node, String field) {
-        JsonNode value = node.get(field);
-        List<String> values = new ArrayList<>();
-        if (Objects.nonNull(value) && value.isArray()) {
-            value.forEach(item -> {
-                if (item.isTextual()) {
-                    values.add(item.asText());
-                }
-            });
-        }
-        return values;
     }
 }

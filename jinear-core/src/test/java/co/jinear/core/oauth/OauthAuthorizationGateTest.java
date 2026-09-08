@@ -5,12 +5,14 @@ import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.converter.oauth.OauthDtoConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.manager.oauth.provider.OauthAuthorizationManager;
-import co.jinear.core.model.entity.oauth.OauthAuthorizationRequest;
-import co.jinear.core.model.vo.oauth.OauthAuthorizeRequestVo;
+import co.jinear.core.converter.oauth.OauthAuthorizeRequestVoConverterImpl;
+import co.jinear.core.model.dto.oauth.OauthAuthorizationRequestDto;
+import co.jinear.core.model.request.oauth.OauthAuthorizeRequest;
 import co.jinear.core.model.vo.oauth.OauthErrorVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.oauth.provider.*;
 import co.jinear.core.validator.oauth.OauthAuthorizeRequestValidator;
+import co.jinear.core.validator.oauth.OauthEnabledValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -38,28 +40,28 @@ class OauthAuthorizationGateTest {
 
         manager = new OauthAuthorizationManager(
                 validator,
+                new OauthEnabledValidator(oauthProperties),
                 Mockito.mock(OauthClientService.class),
                 new OauthScopeService(),
                 requestService,
-                Mockito.mock(OauthAuthorizationCodeService.class),
-                Mockito.mock(OauthConnectionService.class),
+                Mockito.mock(OauthConsentService.class),
                 Mockito.mock(OauthDtoConverter.class),
+                new OauthAuthorizeRequestVoConverterImpl(),
                 Mockito.mock(SessionInfoService.class),
-                oauthProperties,
                 feProperties);
     }
 
-    private OauthAuthorizeRequestVo request() {
-        return OauthAuthorizeRequestVo.builder()
-                .responseType("code")
-                .clientId("https://claude.test/client")
-                .redirectUri("https://claude.test/callback")
-                .scope("tasks:read")
-                .state("state-1")
-                .codeChallenge("a-challenge")
-                .codeChallengeMethod("S256")
-                .resource("https://api.jinear.test/mcp")
-                .build();
+    private OauthAuthorizeRequest request() {
+        OauthAuthorizeRequest request = new OauthAuthorizeRequest();
+        request.setResponseType("code");
+        request.setClientId("https://claude.test/client");
+        request.setRedirectUri("https://claude.test/callback");
+        request.setScope("tasks:read");
+        request.setState("state-1");
+        request.setCodeChallenge("a-challenge");
+        request.setCodeChallengeMethod("S256");
+        request.setResource("https://api.jinear.test/mcp");
+        return request;
     }
 
     @Test
@@ -88,7 +90,7 @@ class OauthAuthorizationGateTest {
         oauthProperties.setEnabled(Boolean.TRUE);
         Mockito.when(requestService.initialize(Mockito.any(), Mockito.any()))
                 .thenAnswer(invocation -> {
-                    OauthAuthorizationRequest parked = new OauthAuthorizationRequest();
+                    OauthAuthorizationRequestDto parked = new OauthAuthorizationRequestDto();
                     parked.setOauthAuthorizationRequestId("req-1");
                     return parked;
                 });

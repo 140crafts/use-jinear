@@ -9,14 +9,19 @@ import lombok.ToString;
 import java.util.List;
 
 /**
- * The RFC 7591 dynamic client registration body. Unknown members are ignored, as the
- * specification requires of a registration endpoint.
+ * An RFC 7591 client metadata document. It reaches us two ways: as the body a client POSTs
+ * to the dynamic registration endpoint, and as the document fetched from an https client id
+ * (CIMD), where it also declares its own {@code client_id}. Unknown members are ignored, as
+ * the specification requires.
  */
 @Getter
 @Setter
 @ToString
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class OauthClientRegistrationRequest {
+
+    @JsonProperty("client_id")
+    private String clientId;
 
     @JsonProperty("client_name")
     private String clientName;

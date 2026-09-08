@@ -2,7 +2,12 @@ package co.jinear.core.oauth;
 
 import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.converter.oauth.OauthDtoConverter;
+import co.jinear.core.model.dto.oauth.OauthAuthorizationCodeDto;
+import co.jinear.core.model.dto.oauth.OauthAuthorizationRequestDto;
 import co.jinear.core.model.entity.oauth.OauthAuthorizationCode;
+import co.jinear.core.service.oauth.provider.OauthScopeService;
+import co.jinear.core.service.oauth.provider.RedirectUriMatcher;
 import co.jinear.core.model.entity.oauth.OauthAuthorizationRequest;
 import co.jinear.core.repository.oauth.OauthAuthorizationCodeRepository;
 import co.jinear.core.service.oauth.provider.OauthAuthorizationCodeService;
@@ -28,7 +33,7 @@ class OauthAuthorizationCodeServiceTest {
         repository = Mockito.mock(OauthAuthorizationCodeRepository.class);
         OauthProperties properties = new OauthProperties();
         properties.setAuthorizationCodeValiditySeconds(60);
-        service = new OauthAuthorizationCodeService(repository, properties, new BCryptPasswordEncoder(4));
+        service = new OauthAuthorizationCodeService(repository, properties, new BCryptPasswordEncoder(4), dtoConverter());
     }
 
     @Test
@@ -54,11 +59,12 @@ class OauthAuthorizationCodeServiceTest {
         OauthAuthorizationCode stored = storedCode(encoder.encode("secret"), null);
         Mockito.when(repository.findByOauthAuthorizationCodeIdAndPassiveIdIsNull("row-1"))
                 .thenReturn(Optional.of(stored));
-        service = new OauthAuthorizationCodeService(repository, propertiesWithSixtySeconds(), encoder);
+        service = new OauthAuthorizationCodeService(repository, propertiesWithSixtySeconds(), encoder, dtoConverter());
 
-        OauthAuthorizationCode redeemed = service.redeem("row-1.secret");
+        OauthAuthorizationCodeDto redeemed = service.redeem("row-1.secret");
 
-        assertThat(redeemed.getConsumedAt()).isNotNull();
+        assertThat(redeemed.getOauthAuthorizationCodeId()).isEqualTo("row-1");
+        assertThat(stored.getConsumedAt()).isNotNull();
         Mockito.verify(repository).save(stored);
     }
 
@@ -68,7 +74,7 @@ class OauthAuthorizationCodeServiceTest {
         OauthAuthorizationCode stored = storedCode(encoder.encode("secret"), DateHelper.now());
         Mockito.when(repository.findByOauthAuthorizationCodeIdAndPassiveIdIsNull("row-1"))
                 .thenReturn(Optional.of(stored));
-        service = new OauthAuthorizationCodeService(repository, propertiesWithSixtySeconds(), encoder);
+        service = new OauthAuthorizationCodeService(repository, propertiesWithSixtySeconds(), encoder, dtoConverter());
 
         assertThatThrownBy(() -> service.redeem("row-1.secret"))
                 .isInstanceOf(BusinessException.class)
@@ -81,7 +87,7 @@ class OauthAuthorizationCodeServiceTest {
         OauthAuthorizationCode stored = storedCode(encoder.encode("secret"), null);
         Mockito.when(repository.findByOauthAuthorizationCodeIdAndPassiveIdIsNull("row-1"))
                 .thenReturn(Optional.of(stored));
-        service = new OauthAuthorizationCodeService(repository, propertiesWithSixtySeconds(), encoder);
+        service = new OauthAuthorizationCodeService(repository, propertiesWithSixtySeconds(), encoder, dtoConverter());
 
         assertThatThrownBy(() -> service.redeem("row-1.wrong"))
                 .isInstanceOf(BusinessException.class)
@@ -95,7 +101,7 @@ class OauthAuthorizationCodeServiceTest {
         stored.setExpiresAt(DateHelper.substractSeconds(DateHelper.now(), 5));
         Mockito.when(repository.findByOauthAuthorizationCodeIdAndPassiveIdIsNull("row-1"))
                 .thenReturn(Optional.of(stored));
-        service = new OauthAuthorizationCodeService(repository, propertiesWithSixtySeconds(), encoder);
+        service = new OauthAuthorizationCodeService(repository, propertiesWithSixtySeconds(), encoder, dtoConverter());
 
         assertThatThrownBy(() -> service.redeem("row-1.secret"))
                 .isInstanceOf(BusinessException.class)
@@ -117,8 +123,8 @@ class OauthAuthorizationCodeServiceTest {
         return properties;
     }
 
-    private OauthAuthorizationRequest pendingRequest() {
-        OauthAuthorizationRequest request = new OauthAuthorizationRequest();
+    private OauthAuthorizationRequestDto pendingRequest() {
+        OauthAuthorizationRequestDto request = new OauthAuthorizationRequestDto();
         request.setClientId("https://claude.ai/client.json");
         request.setRedirectUri("https://claude.ai/api/mcp/auth_callback");
         request.setScope("tasks:read tasks:write");
@@ -142,5 +148,9 @@ class OauthAuthorizationCodeServiceTest {
         code.setExpiresAt(DateHelper.addSeconds(DateHelper.now(), 60));
         code.setConsumedAt(consumedAt);
         return code;
+    }
+
+    private OauthDtoConverter dtoConverter() {
+        return new OauthDtoConverter(new RedirectUriMatcher(), new OauthScopeService());
     }
 }

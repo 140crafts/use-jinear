@@ -22,7 +22,6 @@ import co.jinear.core.model.request.task.TaskUpdateDescriptionRequest;
 import co.jinear.core.model.request.task.TaskUpdateTitleRequest;
 import co.jinear.core.service.mcp.tool.McpTool;
 import co.jinear.core.service.mcp.tool.SimpleMcpTool;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,7 +45,6 @@ import co.jinear.core.converter.mcp.McpViewConverter;
 @RequiredArgsConstructor
 public class TaskMcpTools {
 
-    private static final JsonNodeFactory FACTORY = JsonNodeFactory.instance;
 
     private final TaskInitializeManager taskInitializeManager;
     private final TaskListingManager taskListingManager;

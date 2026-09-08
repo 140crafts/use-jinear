@@ -2,6 +2,8 @@ package co.jinear.core.service.oauth.provider;
 
 import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.converter.oauth.OauthDtoConverter;
+import co.jinear.core.model.dto.oauth.OauthRefreshTokenDto;
 import co.jinear.core.model.entity.oauth.OauthRefreshToken;
 import co.jinear.core.repository.oauth.OauthRefreshTokenRepository;
 import co.jinear.core.service.passive.PassiveService;
@@ -27,6 +29,7 @@ public class OauthRefreshTokenService {
     private final OauthProperties oauthProperties;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final PassiveService passiveService;
+    private final OauthDtoConverter oauthDtoConverter;
 
     public String issue(String connectionId) {
         OauthRefreshToken token = new OauthRefreshToken();
@@ -38,7 +41,7 @@ public class OauthRefreshTokenService {
         return saved.getOauthRefreshTokenId() + SEPARATOR + secret;
     }
 
-    public OauthRefreshToken redeem(String presentedToken) {
+    public OauthRefreshTokenDto redeem(String presentedToken) {
         if (Objects.isNull(presentedToken) || !presentedToken.contains(SEPARATOR)) {
             throw new BusinessException("oauth.error.invalid-grant");
         }
@@ -63,16 +66,40 @@ public class OauthRefreshTokenService {
         if (token.getExpiresAt().before(DateHelper.now())) {
             throw new BusinessException("oauth.error.invalid-grant");
         }
-        return token;
+        return oauthDtoConverter.convert(token);
     }
 
-    public String rotate(OauthRefreshToken current) {
+    public String rotate(String oauthRefreshTokenId) {
+        OauthRefreshToken current = retrieveEntity(oauthRefreshTokenId);
         String replacement = issue(current.getOauthConnectionId());
         String replacementId = replacement.substring(0, replacement.indexOf(SEPARATOR));
         current.setConsumedAt(DateHelper.now());
         current.setRotatedTo(replacementId);
         oauthRefreshTokenRepository.save(current);
         return replacement;
+    }
+
+    OauthRefreshToken retrieveEntity(String oauthRefreshTokenId) {
+        return oauthRefreshTokenRepository
+                .findByOauthRefreshTokenIdAndPassiveIdIsNull(oauthRefreshTokenId)
+                .orElseThrow(() -> new BusinessException("oauth.error.invalid-grant"));
+    }
+
+    /**
+     * Revokes the connection behind a refresh token. An unusable token is not an error: RFC
+     * 7009 asks the endpoint to answer success either way.
+     */
+    public void revokeConnectionByToken(String presentedToken) {
+        if (Objects.isNull(presentedToken) || presentedToken.isBlank()) {
+            return;
+        }
+        try {
+            OauthRefreshTokenDto refreshToken = redeem(presentedToken);
+            revokeAllForConnection(refreshToken.getOauthConnectionId());
+            oauthConnectionService.revoke(refreshToken.getOauthConnectionId());
+        } catch (RuntimeException exception) {
+            log.info("[OAUTH] Revocation presented an unusable token, answering success anyway.");
+        }
     }
 
     public void revokeAllForConnection(String connectionId) {

@@ -47,6 +47,12 @@ public class OauthProperties {
     @Value("${jinear.oauth.cimd-fetch-timeout-millis:4000}")
     private Integer cimdFetchTimeoutMillis = 4000;
 
+    /**
+     * How long a client may cache the discovery documents.
+     */
+    @Value("${jinear.oauth.discovery-cache-minutes:5}")
+    private Integer discoveryCacheMinutes = 5;
+
     public List<String> cimdAllowedHostList() {
         if (Objects.isNull(cimdAllowedHosts) || cimdAllowedHosts.isBlank()) {
             return List.of();

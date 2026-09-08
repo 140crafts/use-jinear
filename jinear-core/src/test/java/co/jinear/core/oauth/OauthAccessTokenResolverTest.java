@@ -1,6 +1,6 @@
 package co.jinear.core.oauth;
 
-import co.jinear.core.model.entity.oauth.OauthConnection;
+import co.jinear.core.model.dto.oauth.OauthConnectionDto;
 import co.jinear.core.model.vo.oauth.OauthAccessTokenVo;
 import co.jinear.core.service.oauth.provider.OauthAccessTokenResolver;
 import co.jinear.core.service.oauth.provider.OauthConnectionService;
@@ -42,7 +42,7 @@ class OauthAccessTokenResolverTest {
     @Test
     void resolvesALiveConnectionAndCarriesItsSessionId() {
         Mockito.when(tokenHelper.parseAccessToken("token")).thenReturn(Optional.of(parsedToken()));
-        OauthConnection connection = new OauthConnection();
+        OauthConnectionDto connection = new OauthConnectionDto();
         connection.setOauthConnectionId("connection-1");
         connection.setSessionInfoId("session-1");
         Mockito.when(connectionService.retrieveOptional("connection-1")).thenReturn(Optional.of(connection));
@@ -73,7 +73,7 @@ class OauthAccessTokenResolverTest {
     @Test
     void refreshesLastUsedOnlyWhenItIsStale() {
         Mockito.when(tokenHelper.parseAccessToken("token")).thenReturn(Optional.of(parsedToken()));
-        OauthConnection connection = new OauthConnection();
+        OauthConnectionDto connection = new OauthConnectionDto();
         connection.setOauthConnectionId("connection-1");
         connection.setLastUsedAt(new java.util.Date());
         Mockito.when(connectionService.retrieveOptional("connection-1")).thenReturn(Optional.of(connection));

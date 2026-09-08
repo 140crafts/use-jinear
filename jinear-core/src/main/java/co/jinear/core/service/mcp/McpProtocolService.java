@@ -8,12 +8,14 @@ import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.mcp.jsonrpc.McpContentBlock;
 import co.jinear.core.model.mcp.jsonrpc.McpEmptyResult;
+import co.jinear.core.model.mcp.jsonrpc.McpInitializeParams;
 import co.jinear.core.model.mcp.jsonrpc.McpInitializeResult;
 import co.jinear.core.model.mcp.jsonrpc.McpJsonRpcError;
 import co.jinear.core.model.mcp.jsonrpc.McpJsonRpcRequest;
 import co.jinear.core.model.mcp.jsonrpc.McpJsonRpcResponse;
 import co.jinear.core.model.mcp.jsonrpc.McpServerCapabilities;
 import co.jinear.core.model.mcp.jsonrpc.McpServerInfo;
+import co.jinear.core.model.mcp.jsonrpc.McpToolCallParams;
 import co.jinear.core.model.mcp.jsonrpc.McpToolCallResult;
 import co.jinear.core.model.mcp.jsonrpc.McpToolsCapability;
 import co.jinear.core.model.mcp.jsonrpc.McpToolsListResult;
@@ -87,11 +89,11 @@ public class McpProtocolService {
     }
 
     public String toolNameOf(McpJsonRpcRequest request) {
-        return Objects.isNull(request.getParams()) ? null : request.getParams().path("name").asText(null);
+        return toolCallParams(request).getName();
     }
 
     private McpInitializeResult initialize(JsonNode params) {
-        String requested = Objects.isNull(params) ? null : params.path("protocolVersion").asText(null);
+        String requested = readParams(params, McpInitializeParams.class).getProtocolVersion();
         String negotiated = SUPPORTED_PROTOCOL_VERSIONS.contains(requested) ? requested : PREFERRED_PROTOCOL_VERSION;
         return new McpInitializeResult(
                 negotiated,
@@ -101,7 +103,8 @@ public class McpProtocolService {
     }
 
     private McpJsonRpcResponse toolsCall(McpJsonRpcRequest request, McpToolContext context) {
-        String name = toolNameOf(request);
+        McpToolCallParams params = toolCallParams(request);
+        String name = params.getName();
         if (Objects.isNull(name)) {
             return McpJsonRpcResponse.failure(request.getId(),
                     McpJsonRpcError.INVALID_PARAMS, "tools/call requires a tool name.");
@@ -112,8 +115,7 @@ public class McpProtocolService {
                     McpJsonRpcError.INVALID_PARAMS, "Unknown tool: " + name);
         }
 
-        McpToolArguments arguments = McpToolArguments.of(
-                Objects.isNull(request.getParams()) ? null : request.getParams().get("arguments"));
+        McpToolArguments arguments = McpToolArguments.of(params.getArguments());
         long startedAt = System.currentTimeMillis();
         try {
             McpToolResult result = tool.get().call(context, arguments);
@@ -130,6 +132,25 @@ public class McpProtocolService {
             mcpToolCallLogService.recordFailure(context, name, exception,
                     System.currentTimeMillis() - startedAt);
             return McpJsonRpcResponse.success(request.getId(), wrap(McpToolResult.error(describe(exception))));
+        }
+    }
+
+    private McpToolCallParams toolCallParams(McpJsonRpcRequest request) {
+        return readParams(request.getParams(), McpToolCallParams.class);
+    }
+
+    /**
+     * Reads the {@code params} member into the shape the called method defines. An absent or
+     * malformed params object reads as an empty one, so a missing field is reported by the
+     * method's own check rather than as a parse failure.
+     */
+    private <T> T readParams(JsonNode params, Class<T> type) {
+        try {
+            return Objects.isNull(params) || !params.isObject()
+                    ? type.getDeclaredConstructor().newInstance()
+                    : objectMapper.treeToValue(params, type);
+        } catch (ReflectiveOperationException | JsonProcessingException exception) {
+            throw new McpToolException("invalid_params", "The params object could not be read.");
         }
     }
 

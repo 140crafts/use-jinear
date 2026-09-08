@@ -29,7 +29,7 @@ public class OauthDtoConverter {
     private final RedirectUriMatcher redirectUriMatcher;
     private final OauthScopeService oauthScopeService;
 
-    public OauthConsentInfoDto convert(OauthAuthorizationRequest request,
+    public OauthConsentInfoDto convert(OauthAuthorizationRequestDto request,
                                        OauthClientMetadataVo client,
                                        List<String> registeredRedirects) {
         OauthConsentInfoDto dto = new OauthConsentInfoDto();

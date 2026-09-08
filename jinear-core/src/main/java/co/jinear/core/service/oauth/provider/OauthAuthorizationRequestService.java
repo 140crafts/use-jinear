@@ -2,6 +2,8 @@ package co.jinear.core.service.oauth.provider;
 
 import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.converter.oauth.OauthDtoConverter;
+import co.jinear.core.model.dto.oauth.OauthAuthorizationRequestDto;
 import co.jinear.core.model.entity.oauth.OauthAuthorizationRequest;
 import co.jinear.core.model.vo.oauth.OauthAuthorizeRequestVo;
 import co.jinear.core.repository.oauth.OauthAuthorizationRequestRepository;
@@ -22,8 +24,9 @@ public class OauthAuthorizationRequestService {
     private final OauthAuthorizationRequestRepository oauthAuthorizationRequestRepository;
     private final OauthProperties oauthProperties;
     private final OauthScopeService oauthScopeService;
+    private final OauthDtoConverter oauthDtoConverter;
 
-    public OauthAuthorizationRequest initialize(OauthAuthorizeRequestVo vo, Set<String> scopes) {
+    public OauthAuthorizationRequestDto initialize(OauthAuthorizeRequestVo vo, Set<String> scopes) {
         OauthAuthorizationRequest request = new OauthAuthorizationRequest();
         request.setClientId(vo.getClientId());
         request.setRedirectUri(vo.getRedirectUri());
@@ -33,10 +36,10 @@ public class OauthAuthorizationRequestService {
         request.setCodeChallengeMethod(vo.getCodeChallengeMethod());
         request.setResource(vo.getResource());
         request.setExpiresAt(DateHelper.addMinutes(DateHelper.now(), oauthProperties.getAuthorizationRequestValidityMinutes()));
-        return oauthAuthorizationRequestRepository.save(request);
+        return oauthDtoConverter.convertRequest(oauthAuthorizationRequestRepository.save(request));
     }
 
-    public OauthAuthorizationRequest retrievePending(String requestId) {
+    public OauthAuthorizationRequestDto retrievePending(String requestId) {
         OauthAuthorizationRequest request = oauthAuthorizationRequestRepository
                 .findByOauthAuthorizationRequestIdAndPassiveIdIsNull(requestId)
                 .orElseThrow(() -> new BusinessException("oauth.error.unknown-authorization-request"));
@@ -46,12 +49,19 @@ public class OauthAuthorizationRequestService {
         if (request.getExpiresAt().before(DateHelper.now())) {
             throw new BusinessException("oauth.error.authorization-request-expired");
         }
-        return request;
+        return oauthDtoConverter.convertRequest(request);
     }
 
-    public void complete(OauthAuthorizationRequest request) {
+    public void complete(String oauthAuthorizationRequestId) {
+        OauthAuthorizationRequest request = retrieveEntity(oauthAuthorizationRequestId);
         request.setCompletedAt(DateHelper.now());
         oauthAuthorizationRequestRepository.save(request);
+    }
+
+    OauthAuthorizationRequest retrieveEntity(String oauthAuthorizationRequestId) {
+        return oauthAuthorizationRequestRepository
+                .findByOauthAuthorizationRequestIdAndPassiveIdIsNull(oauthAuthorizationRequestId)
+                .orElseThrow(() -> new BusinessException("oauth.error.unknown-authorization-request"));
     }
 
     public int purgeExpiredBefore(Date before) {

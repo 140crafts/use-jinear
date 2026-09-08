@@ -1,6 +1,8 @@
 package co.jinear.core.service.oauth.provider;
 
 import co.jinear.core.exception.NotFoundException;
+import co.jinear.core.converter.oauth.OauthDtoConverter;
+import co.jinear.core.model.dto.oauth.OauthConnectionDto;
 import co.jinear.core.model.entity.oauth.OauthConnection;
 import co.jinear.core.model.enumtype.auth.ProviderType;
 import co.jinear.core.repository.oauth.OauthConnectionRepository;
@@ -25,8 +27,9 @@ public class OauthConnectionService {
     private final OauthScopeService oauthScopeService;
     private final SessionInfoService sessionInfoService;
     private final PassiveService passiveService;
+    private final OauthDtoConverter oauthDtoConverter;
 
-    public OauthConnection grant(String accountId, String clientId, String clientName, Set<String> scopes) {
+    public OauthConnectionDto grant(String accountId, String clientId, String clientName, Set<String> scopes) {
         OauthConnection connection = retrieve(accountId, clientId);
         connection.setAccountId(accountId);
         connection.setClientId(clientId);
@@ -37,32 +40,43 @@ public class OauthConnectionService {
         }
         OauthConnection saved = oauthConnectionRepository.save(connection);
         log.info("[OAUTH] Granted connection. accountId: {}, clientId: {}, scopes: {}", accountId, clientId, scopes);
-        return saved;
+        return oauthDtoConverter.convert(saved, null);
     }
 
-    public Optional<OauthConnection> retrieveOptional(String oauthConnectionId) {
-        return oauthConnectionRepository.findByOauthConnectionIdAndPassiveIdIsNull(oauthConnectionId);
+    public Optional<OauthConnectionDto> retrieveOptional(String oauthConnectionId) {
+        return oauthConnectionRepository.findByOauthConnectionIdAndPassiveIdIsNull(oauthConnectionId)
+                .map(connection -> oauthDtoConverter.convert(connection, null));
     }
 
-    public OauthConnection retrieve(String oauthConnectionId) {
+    public OauthConnectionDto retrieve(String oauthConnectionId) {
         return retrieveOptional(oauthConnectionId).orElseThrow(NotFoundException::new);
     }
 
-    public List<OauthConnection> listForAccount(String accountId) {
-        return oauthConnectionRepository.findAllByAccountIdAndPassiveIdIsNullOrderByCreatedDateDesc(accountId);
+    public List<OauthConnectionDto> listForAccount(String accountId) {
+        return oauthConnectionRepository.findAllByAccountIdAndPassiveIdIsNullOrderByCreatedDateDesc(accountId)
+                .stream()
+                .map(connection -> oauthDtoConverter.convert(connection, null))
+                .toList();
     }
 
     public long countActive() {
         return oauthConnectionRepository.countByPassiveIdIsNull();
     }
 
-    public void touch(OauthConnection connection) {
+    public void touch(String oauthConnectionId) {
+        OauthConnection connection = retrieveEntity(oauthConnectionId);
         connection.setLastUsedAt(DateHelper.now());
         oauthConnectionRepository.save(connection);
     }
 
+
+    OauthConnection retrieveEntity(String oauthConnectionId) {
+        return oauthConnectionRepository.findByOauthConnectionIdAndPassiveIdIsNull(oauthConnectionId)
+                .orElseThrow(NotFoundException::new);
+    }
+
     public String revoke(String oauthConnectionId) {
-        OauthConnection connection = retrieve(oauthConnectionId);
+        OauthConnection connection = retrieveEntity(oauthConnectionId);
         String passiveId = passiveService.createUserActionPassive(connection.getAccountId());
         connection.setPassiveId(passiveId);
         oauthConnectionRepository.save(connection);

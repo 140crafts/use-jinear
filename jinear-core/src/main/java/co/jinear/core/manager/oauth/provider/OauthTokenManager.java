@@ -1,31 +1,29 @@
 package co.jinear.core.manager.oauth.provider;
 
-import co.jinear.core.config.properties.McpProperties;
-import co.jinear.core.config.properties.OauthProperties;
+import co.jinear.core.converter.oauth.OauthClientMetadataVoConverter;
 import co.jinear.core.exception.BusinessException;
-import co.jinear.core.model.entity.oauth.OauthAuthorizationCode;
-import co.jinear.core.model.entity.oauth.OauthConnection;
-import co.jinear.core.model.entity.oauth.OauthRefreshToken;
-import co.jinear.core.model.enumtype.oauth.OauthScope;
+import co.jinear.core.model.dto.oauth.OauthAuthorizationCodeDto;
+import co.jinear.core.model.dto.oauth.OauthConnectionDto;
+import co.jinear.core.model.dto.oauth.OauthRefreshTokenDto;
+import co.jinear.core.model.request.oauth.OauthClientRegistrationRequest;
+import co.jinear.core.model.request.oauth.OauthRevokeRequest;
+import co.jinear.core.model.request.oauth.OauthTokenRequest;
+import co.jinear.core.model.response.oauth.OauthClientRegistrationResponse;
+import co.jinear.core.model.response.oauth.OauthTokenResponse;
 import co.jinear.core.model.vo.oauth.OauthClientMetadataVo;
 import co.jinear.core.service.oauth.provider.OauthAuthorizationCodeService;
 import co.jinear.core.service.oauth.provider.OauthClientService;
 import co.jinear.core.service.oauth.provider.OauthConnectionService;
 import co.jinear.core.service.oauth.provider.OauthRefreshTokenService;
 import co.jinear.core.service.oauth.provider.OauthScopeService;
-import co.jinear.core.service.oauth.provider.PkceValidator;
-import co.jinear.core.system.oauth.OauthTokenHelper;
-import co.jinear.core.system.util.DateHelper;
+import co.jinear.core.service.oauth.provider.OauthTokenIssueService;
+import co.jinear.core.validator.oauth.OauthEnabledValidator;
+import co.jinear.core.validator.oauth.OauthTokenRequestValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 @Slf4j
@@ -40,14 +38,14 @@ public class OauthTokenManager {
     private final OauthRefreshTokenService oauthRefreshTokenService;
     private final OauthConnectionService oauthConnectionService;
     private final OauthClientService oauthClientService;
-    private final PkceValidator pkceValidator;
+    private final OauthTokenIssueService oauthTokenIssueService;
     private final OauthScopeService oauthScopeService;
-    private final OauthTokenHelper oauthTokenHelper;
-    private final OauthProperties oauthProperties;
-    private final McpProperties mcpProperties;
+    private final OauthTokenRequestValidator oauthTokenRequestValidator;
+    private final OauthEnabledValidator oauthEnabledValidator;
+    private final OauthClientMetadataVoConverter oauthClientMetadataVoConverter;
 
     public OauthTokenResponse token(OauthTokenRequest oauthTokenRequest) {
-        validateOauthIsEnabled();
+        oauthEnabledValidator.validateOauthIsEnabled();
         String grantType = oauthTokenRequest.getGrantType();
         if (GRANT_AUTHORIZATION_CODE.equals(grantType)) {
             return exchangeAuthorizationCode(oauthTokenRequest);
@@ -59,7 +57,7 @@ public class OauthTokenManager {
     }
 
     public OauthClientRegistrationResponse register(OauthClientRegistrationRequest oauthClientRegistrationRequest) {
-        validateOauthIsEnabled();
+        oauthEnabledValidator.validateOauthIsEnabled();
         OauthClientMetadataVo registered = oauthClientService.registerDynamicClient(
                 oauthClientMetadataVoConverter.map(oauthClientRegistrationRequest));
 
@@ -75,8 +73,8 @@ public class OauthTokenManager {
     }
 
     public void revoke(OauthRevokeRequest oauthRevokeRequest) {
-        validateOauthIsEnabled();
-        oauthConnectionService.revokeByRefreshToken(oauthRevokeRequest.getToken());
+        oauthEnabledValidator.validateOauthIsEnabled();
+        oauthRefreshTokenService.revokeConnectionByToken(oauthRevokeRequest.getToken());
     }
 
     private OauthTokenResponse exchangeAuthorizationCode(OauthTokenRequest oauthTokenRequest) {
@@ -102,13 +100,4 @@ public class OauthTokenManager {
         return oauthTokenIssueService.issue(connection, effective, rotated);
     }
 
-
-
-
-
-    private void validateOauthIsEnabled() {
-        if (!Boolean.TRUE.equals(oauthProperties.getEnabled())) {
-            throw new BusinessException("oauth.error.disabled");
-        }
-    }
 }

@@ -1,16 +1,15 @@
 package co.jinear.core.oauth;
 
 import co.jinear.core.config.properties.OauthProperties;
+import co.jinear.core.model.response.oauth.OauthServerMetadataResponse;
 import co.jinear.core.service.oauth.provider.OauthDiscoveryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SuppressWarnings("unchecked")
 class OauthDiscoveryServiceTest {
 
     private OauthProperties properties;
@@ -27,41 +26,41 @@ class OauthDiscoveryServiceTest {
 
     @Test
     void authorizationServerMetadataAdvertisesS256() {
-        assertThat(service.authorizationServerMetadata().get("code_challenge_methods_supported"))
+        assertThat(service.authorizationServerMetadata().getCodeChallengeMethodsSupported())
                 .isEqualTo(List.of("S256"));
     }
 
     @Test
     void authorizationServerMetadataEnablesClientIdMetadataDocuments() {
-        Map<String, Object> document = service.authorizationServerMetadata();
+        OauthServerMetadataResponse document = service.authorizationServerMetadata();
 
-        assertThat(document.get("client_id_metadata_document_supported")).isEqualTo(Boolean.TRUE);
-        assertThat(document.get("token_endpoint_auth_methods_supported")).isEqualTo(List.of("none"));
+        assertThat(document.getClientIdMetadataDocumentSupported()).isEqualTo(Boolean.TRUE);
+        assertThat(document.getTokenEndpointAuthMethodsSupported()).isEqualTo(List.of("none"));
     }
 
     @Test
     void authorizationServerMetadataNamesEveryEndpoint() {
-        Map<String, Object> document = service.authorizationServerMetadata();
+        OauthServerMetadataResponse document = service.authorizationServerMetadata();
 
-        assertThat(document.get("issuer")).isEqualTo("https://api.jinear.test");
-        assertThat(document.get("authorization_endpoint")).isEqualTo("https://api.jinear.test/v1/oauth/authorize");
-        assertThat(document.get("token_endpoint")).isEqualTo("https://api.jinear.test/v1/oauth/token");
-        assertThat(document.get("registration_endpoint")).isEqualTo("https://api.jinear.test/v1/oauth/register");
-        assertThat(document.get("revocation_endpoint")).isEqualTo("https://api.jinear.test/v1/oauth/revoke");
-        assertThat(document.get("grant_types_supported")).isEqualTo(List.of("authorization_code", "refresh_token"));
-        assertThat(document.get("response_types_supported")).isEqualTo(List.of("code"));
+        assertThat(document.getIssuer()).isEqualTo("https://api.jinear.test");
+        assertThat(document.getAuthorizationEndpoint()).isEqualTo("https://api.jinear.test/v1/oauth/authorize");
+        assertThat(document.getTokenEndpoint()).isEqualTo("https://api.jinear.test/v1/oauth/token");
+        assertThat(document.getRegistrationEndpoint()).isEqualTo("https://api.jinear.test/v1/oauth/register");
+        assertThat(document.getRevocationEndpoint()).isEqualTo("https://api.jinear.test/v1/oauth/revoke");
+        assertThat(document.getGrantTypesSupported()).isEqualTo(List.of("authorization_code", "refresh_token"));
+        assertThat(document.getResponseTypesSupported()).isEqualTo(List.of("code"));
     }
 
     @Test
     void omitsTheRegistrationEndpointWhenDynamicRegistrationIsTurnedOff() {
         properties.setDcrEnabled(Boolean.FALSE);
 
-        assertThat(service.authorizationServerMetadata()).doesNotContainKey("registration_endpoint");
+        assertThat(service.authorizationServerMetadata().getRegistrationEndpoint()).isNull();
     }
 
     @Test
     void advertisesEveryScopeTheEnumDefines() {
-        assertThat((List<String>) service.authorizationServerMetadata().get("scopes_supported"))
+        assertThat(service.authorizationServerMetadata().getScopesSupported())
                 .contains("workspace:read", "tasks:read", "tasks:write", "offline_access");
     }
 }

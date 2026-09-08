@@ -17,11 +17,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * The MCP streamable HTTP endpoint. Its path and status codes are fixed by the MCP
- * specification, so this controller returns {@code ResponseEntity} rather than a
- * {@code BaseResponse}. It holds no logic: {@code McpManager} decides everything.
- */
 @Slf4j
 @RestController
 @RequiredArgsConstructor

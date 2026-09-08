@@ -2,16 +2,15 @@ package co.jinear.core.mcp;
 
 import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.config.properties.OauthProperties;
+import co.jinear.core.model.response.oauth.OauthProtectedResourceMetadataResponse;
 import co.jinear.core.service.mcp.McpDiscoveryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SuppressWarnings("unchecked")
 class McpDiscoveryServiceTest {
 
     private McpDiscoveryService service;
@@ -28,12 +27,12 @@ class McpDiscoveryServiceTest {
 
     @Test
     void protectedResourceMetadataNamesTheResourceAndItsAuthorizationServer() {
-        Map<String, Object> document = service.protectedResourceMetadata();
+        OauthProtectedResourceMetadataResponse document = service.protectedResourceMetadata();
 
-        assertThat(document.get("resource")).isEqualTo("https://api.jinear.test/mcp");
-        assertThat(document.get("authorization_servers")).isEqualTo(List.of("https://api.jinear.test"));
-        assertThat(document.get("bearer_methods_supported")).isEqualTo(List.of("header"));
-        assertThat((List<String>) document.get("scopes_supported"))
+        assertThat(document.getResource()).isEqualTo("https://api.jinear.test/mcp");
+        assertThat(document.getAuthorizationServers()).isEqualTo(List.of("https://api.jinear.test"));
+        assertThat(document.getBearerMethodsSupported()).isEqualTo(List.of("header"));
+        assertThat(document.getScopesSupported())
                 .contains("tasks:read", "tasks:write", "offline_access");
     }
 
