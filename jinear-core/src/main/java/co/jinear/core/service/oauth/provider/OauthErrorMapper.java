@@ -1,10 +1,9 @@
 package co.jinear.core.service.oauth.provider;
 
+import co.jinear.core.model.response.oauth.OauthErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Objects;
 
 @Component
@@ -27,12 +26,7 @@ public class OauthErrorMapper {
         return "invalid_client".equals(errorCode) ? HttpStatus.UNAUTHORIZED : HttpStatus.BAD_REQUEST;
     }
 
-    public Map<String, Object> body(String errorCode, String description) {
-        Map<String, Object> body = new LinkedHashMap<>();
-        body.put("error", errorCode);
-        if (Objects.nonNull(description)) {
-            body.put("error_description", description);
-        }
-        return body;
+    public OauthErrorResponse body(String errorCode, String description) {
+        return new OauthErrorResponse(errorCode, description);
     }
 }

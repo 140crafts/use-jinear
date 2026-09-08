@@ -16,6 +16,11 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import co.jinear.core.model.dto.oauth.OauthAuthorizationCodeDto;
+import co.jinear.core.model.dto.oauth.OauthAuthorizationRequestDto;
+import co.jinear.core.model.dto.oauth.OauthRefreshTokenDto;
+import co.jinear.core.model.entity.oauth.OauthAuthorizationCode;
+import co.jinear.core.model.entity.oauth.OauthRefreshToken;
 
 @Component
 @RequiredArgsConstructor
@@ -48,10 +53,48 @@ public class OauthDtoConverter {
         dto.setClientId(entity.getClientId());
         dto.setClientName(entity.getClientName());
         dto.setClientDisplayHost(hostOf(entity.getClientId()));
+        dto.setSessionInfoId(entity.getSessionInfoId());
         dto.setGrantedScopes(splitScopes(entity.getGrantedScopes()));
         dto.setCreatedDate(entity.getCreatedDate());
         dto.setLastUsedAt(entity.getLastUsedAt());
         dto.setCallCountLast30Days(callCountLast30Days);
+        return dto;
+    }
+
+    public OauthAuthorizationCodeDto convert(OauthAuthorizationCode entity) {
+        OauthAuthorizationCodeDto dto = new OauthAuthorizationCodeDto();
+        dto.setOauthAuthorizationCodeId(entity.getOauthAuthorizationCodeId());
+        dto.setAccountId(entity.getAccountId());
+        dto.setClientId(entity.getClientId());
+        dto.setOauthConnectionId(entity.getOauthConnectionId());
+        dto.setRedirectUri(entity.getRedirectUri());
+        dto.setScope(entity.getScope());
+        dto.setCodeChallenge(entity.getCodeChallenge());
+        dto.setCodeChallengeMethod(entity.getCodeChallengeMethod());
+        dto.setResource(entity.getResource());
+        dto.setExpiresAt(entity.getExpiresAt());
+        return dto;
+    }
+
+    public OauthRefreshTokenDto convert(OauthRefreshToken entity) {
+        OauthRefreshTokenDto dto = new OauthRefreshTokenDto();
+        dto.setOauthRefreshTokenId(entity.getOauthRefreshTokenId());
+        dto.setOauthConnectionId(entity.getOauthConnectionId());
+        dto.setExpiresAt(entity.getExpiresAt());
+        return dto;
+    }
+
+    public OauthAuthorizationRequestDto convertRequest(OauthAuthorizationRequest entity) {
+        OauthAuthorizationRequestDto dto = new OauthAuthorizationRequestDto();
+        dto.setOauthAuthorizationRequestId(entity.getOauthAuthorizationRequestId());
+        dto.setClientId(entity.getClientId());
+        dto.setRedirectUri(entity.getRedirectUri());
+        dto.setScope(entity.getScope());
+        dto.setState(entity.getState());
+        dto.setCodeChallenge(entity.getCodeChallenge());
+        dto.setCodeChallengeMethod(entity.getCodeChallengeMethod());
+        dto.setResource(entity.getResource());
+        dto.setExpiresAt(entity.getExpiresAt());
         return dto;
     }
 

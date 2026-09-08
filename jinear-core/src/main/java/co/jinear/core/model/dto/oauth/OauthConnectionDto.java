@@ -17,6 +17,7 @@ public class OauthConnectionDto {
     private String clientId;
     private String clientName;
     private String clientDisplayHost;
+    private String sessionInfoId;
     private List<String> grantedScopes;
     private Date createdDate;
     private Date lastUsedAt;
