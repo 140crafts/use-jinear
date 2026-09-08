@@ -1,4 +1,4 @@
-package co.jinear.core.service.mcp.tool.config;
+package co.jinear.core.manager.mcp.tool.config;
 
 import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.manager.task.TaskCommentManager;
@@ -20,8 +20,8 @@ import co.jinear.core.model.request.task.TaskInitializeRequest;
 import co.jinear.core.model.request.task.TaskSearchRequest;
 import co.jinear.core.model.request.task.TaskUpdateDescriptionRequest;
 import co.jinear.core.model.request.task.TaskUpdateTitleRequest;
-import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.SimpleMcpTool;
+import co.jinear.core.manager.mcp.tool.McpTool;
+import co.jinear.core.manager.mcp.tool.SimpleMcpTool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

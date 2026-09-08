@@ -719,6 +719,7 @@ Split in two, the same way the code is.
 | `dcr-enabled` | `true` | When false, `registration_endpoint` is omitted from the metadata too |
 | `cimd-allowed-hosts` | empty | Empty means any public https host. The SSRF guard applies either way |
 | `cimd-fetch-timeout-millis` | 4000 | |
+| `discovery-cache-minutes` | 5 | How long a client may cache the two discovery documents |
 
 `McpProperties`, prefix `jinear.mcp`.
 

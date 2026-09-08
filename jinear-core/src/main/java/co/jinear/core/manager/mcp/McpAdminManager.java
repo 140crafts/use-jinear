@@ -1,17 +1,12 @@
 package co.jinear.core.manager.mcp;
 
-import co.jinear.core.converter.mcp.McpDtoConverter;
-import co.jinear.core.model.dto.PageDto;
-import co.jinear.core.model.dto.mcp.McpToolCallLogDto;
 import co.jinear.core.model.response.mcp.McpAnalyticsResponse;
 import co.jinear.core.model.response.mcp.McpToolCallLogListingResponse;
-import co.jinear.core.repository.mcp.McpToolCallLogRepository;
+import co.jinear.core.service.mcp.McpToolCallLogListingService;
 import co.jinear.core.service.mcp.analytics.McpAnalyticsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
 
 @Slf4j
 @Service
@@ -19,11 +14,9 @@ import org.springframework.data.domain.Page;
 public class McpAdminManager {
 
     private static final int DEFAULT_WINDOW_DAYS = 30;
-    private static final int PAGE_SIZE = 25;
 
     private final McpAnalyticsService mcpAnalyticsService;
-    private final McpToolCallLogRepository mcpToolCallLogRepository;
-    private final McpDtoConverter mcpDtoConverter;
+    private final McpToolCallLogListingService mcpToolCallLogListingService;
 
     public McpAnalyticsResponse analytics() {
         McpAnalyticsResponse response = new McpAnalyticsResponse();
@@ -32,11 +25,8 @@ public class McpAdminManager {
     }
 
     public McpToolCallLogListingResponse listLogs(int page) {
-        Page<McpToolCallLogDto> logs = mcpToolCallLogRepository
-                .findAllByPassiveIdIsNullOrderByCreatedDateDesc(PageRequest.of(page, PAGE_SIZE))
-                .map(mcpDtoConverter::convert);
         McpToolCallLogListingResponse response = new McpToolCallLogListingResponse();
-        response.setMcpToolCallLogDtoPage(new PageDto<McpToolCallLogDto>(logs));
+        response.setMcpToolCallLogDtoPage(mcpToolCallLogListingService.listAll(page));
         return response;
     }
 }

@@ -1,26 +1,16 @@
 package co.jinear.core.manager.mcp;
 
-import co.jinear.core.config.properties.McpProperties;
-import co.jinear.core.config.properties.OauthProperties;
-import co.jinear.core.converter.mcp.McpDtoConverter;
-import co.jinear.core.exception.NoAccessException;
-import co.jinear.core.model.dto.PageDto;
-import co.jinear.core.model.dto.mcp.McpServerInfoDto;
-import co.jinear.core.model.dto.mcp.McpToolCallLogDto;
-import co.jinear.core.model.enumtype.management.InstanceFlagType;
 import co.jinear.core.model.response.mcp.McpAnalyticsResponse;
 import co.jinear.core.model.response.mcp.McpServerInfoResponse;
 import co.jinear.core.model.response.mcp.McpToolCallLogListingResponse;
-import co.jinear.core.repository.mcp.McpToolCallLogRepository;
 import co.jinear.core.service.SessionInfoService;
-import co.jinear.core.service.management.InstanceFlagService;
+import co.jinear.core.service.mcp.McpServerInfoService;
+import co.jinear.core.service.mcp.McpToolCallLogListingService;
 import co.jinear.core.service.mcp.analytics.McpAnalyticsService;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.data.domain.Page;
 
 @Slf4j
 @Service
@@ -28,52 +18,34 @@ import org.springframework.data.domain.Page;
 public class McpManagementManager {
 
     private static final int DEFAULT_WINDOW_DAYS = 30;
-    private static final int PAGE_SIZE = 25;
 
-    private final McpToolCallLogRepository mcpToolCallLogRepository;
     private final McpAnalyticsService mcpAnalyticsService;
-    private final McpDtoConverter mcpDtoConverter;
+    private final McpServerInfoService mcpServerInfoService;
+    private final McpToolCallLogListingService mcpToolCallLogListingService;
     private final SessionInfoService sessionInfoService;
     private final WorkspaceValidator workspaceValidator;
-    private final InstanceFlagService instanceFlagService;
-    private final McpProperties mcpProperties;
-    private final OauthProperties oauthProperties;
 
     public McpServerInfoResponse retrieveServerInfo() {
-        boolean enabled = Boolean.TRUE.equals(mcpProperties.getEnabled())
-                && Boolean.TRUE.equals(oauthProperties.getEnabled())
-                && instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER);
-        McpServerInfoDto dto = new McpServerInfoDto();
-        dto.setEnabled(enabled);
-        dto.setServerUrl(enabled ? mcpProperties.getResourceUrl() : null);
-        dto.setDocumentationUrl(mcpProperties.getDocumentationUrl());
         McpServerInfoResponse response = new McpServerInfoResponse();
-        response.setMcpServerInfoDto(dto);
+        response.setMcpServerInfoDto(mcpServerInfoService.retrieveServerInfo());
         return response;
     }
 
     public McpToolCallLogListingResponse listWorkspaceLogs(String workspaceId, int page) {
-        assertWorkspaceAdmin(workspaceId);
-        Page<McpToolCallLogDto> logs = mcpToolCallLogRepository
-                .findAllByWorkspaceIdAndPassiveIdIsNullOrderByCreatedDateDesc(workspaceId, PageRequest.of(page, PAGE_SIZE))
-                .map(mcpDtoConverter::convert);
+        validateWorkspaceAdmin(workspaceId);
         McpToolCallLogListingResponse response = new McpToolCallLogListingResponse();
-        response.setMcpToolCallLogDtoPage(new PageDto<McpToolCallLogDto>(logs));
+        response.setMcpToolCallLogDtoPage(mcpToolCallLogListingService.listForWorkspace(workspaceId, page));
         return response;
     }
 
     public McpAnalyticsResponse workspaceAnalytics(String workspaceId) {
-        assertWorkspaceAdmin(workspaceId);
+        validateWorkspaceAdmin(workspaceId);
         McpAnalyticsResponse response = new McpAnalyticsResponse();
         response.setMcpAnalyticsDto(mcpAnalyticsService.summarize(workspaceId, DEFAULT_WINDOW_DAYS));
         return response;
     }
 
-    private void assertWorkspaceAdmin(String workspaceId) {
-        String accountId = sessionInfoService.currentAccountId();
-        workspaceValidator.validateHasAccess(accountId, workspaceId);
-        if (!workspaceValidator.isWorkspaceAdminOrOwner(accountId, workspaceId)) {
-            throw new NoAccessException();
-        }
+    private void validateWorkspaceAdmin(String workspaceId) {
+        workspaceValidator.validateHasAdminAccess(sessionInfoService.currentAccountId(), workspaceId);
     }
 }

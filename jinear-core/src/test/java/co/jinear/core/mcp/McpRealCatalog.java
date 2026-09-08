@@ -14,9 +14,9 @@ import co.jinear.core.manager.topic.TopicListingManager;
 import co.jinear.core.manager.workspace.WorkspaceManager;
 import co.jinear.core.manager.workspace.WorkspaceMemberRetrieveManager;
 import co.jinear.core.converter.mcp.McpViewConverter;
-import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.McpToolRegistry;
-import co.jinear.core.service.mcp.tool.config.*;
+import co.jinear.core.manager.mcp.tool.McpTool;
+import co.jinear.core.manager.mcp.tool.McpToolRegistry;
+import co.jinear.core.manager.mcp.tool.config.*;
 import org.mockito.Mockito;
 import org.springframework.test.util.ReflectionTestUtils;
 

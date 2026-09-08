@@ -165,6 +165,7 @@ jinear.oauth.authorization-request-validity-minutes=10
 jinear.oauth.dcr-enabled=${OAUTH_DCR_ENABLED:true}
 jinear.oauth.cimd-allowed-hosts=${OAUTH_CIMD_ALLOWED_HOSTS:}
 jinear.oauth.cimd-fetch-timeout-millis=4000
+jinear.oauth.discovery-cache-minutes=5
 # Signs the access tokens. Deliberately a different key from jwt.secret, so a
 # connected app's token can never authenticate a browser session.
 jwt.oauth.secret=${OAUTH_JWT_SECRET:}

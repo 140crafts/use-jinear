@@ -1,4 +1,4 @@
-package co.jinear.core.service.mcp.tool;
+package co.jinear.core.manager.mcp.tool;
 
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolAnnotations;

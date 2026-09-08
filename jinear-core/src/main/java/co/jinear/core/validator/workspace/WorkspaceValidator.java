@@ -42,6 +42,16 @@ public class WorkspaceValidator {
         workspaceMemberService.validateAccountHasRoleInWorkspace(accountId, workspaceId, roleTypes);
     }
 
+    /**
+     * The caller must be in the workspace and hold an admin or owner role.
+     */
+    public void validateHasAdminAccess(String accountId, String workspaceId) {
+        validateHasAccess(accountId, workspaceId);
+        if (!isWorkspaceAdminOrOwner(accountId, workspaceId)) {
+            throw new NoAccessException();
+        }
+    }
+
     public boolean isWorkspaceAdminOrOwner(String accountId, String workspaceId) {
         return workspaceMemberService.doesAccountHaveWorkspaceAdminAccess(accountId, workspaceId);
     }

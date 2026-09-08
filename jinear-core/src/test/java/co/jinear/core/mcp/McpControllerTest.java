@@ -6,10 +6,10 @@ import co.jinear.core.service.mcp.McpDiscoveryService;
 import co.jinear.core.controller.mcp.McpController;
 import co.jinear.core.model.enumtype.account.RoleType;
 import co.jinear.core.model.vo.oauth.OauthAccessTokenVo;
-import co.jinear.core.service.mcp.McpProtocolService;
+import co.jinear.core.manager.mcp.McpProtocolManager;
 import co.jinear.core.service.mcp.McpToolCallLogService;
-import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.McpToolRegistry;
+import co.jinear.core.manager.mcp.tool.McpTool;
+import co.jinear.core.manager.mcp.tool.McpToolRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -60,16 +60,15 @@ class McpControllerTest {
         ReflectionTestUtils.invokeMethod(registry, "index");
 
         McpToolCallLogService logService = Mockito.mock(McpToolCallLogService.class);
-        McpProtocolService protocolService = new McpProtocolService(registry, logService, new ObjectMapper());
+        McpProtocolManager protocolManager = new McpProtocolManager(registry, logService, new ObjectMapper());
         OauthProperties oauthProperties = new OauthProperties();
         oauthProperties.setIssuerUrl("https://api.jinear.test");
         McpDiscoveryService discoveryService = new McpDiscoveryService(properties, oauthProperties);
         OauthAccessTokenResolver accessTokenResolver = new OauthAccessTokenResolver(
                 Mockito.mock(OauthTokenHelper.class),
                 Mockito.mock(OauthConnectionService.class));
-        McpToolScopeValidator scopeValidator = new McpToolScopeValidator(
-                protocolService, registry, logService, discoveryService);
-        McpManager manager = new McpManager(protocolService, scopeValidator, accessTokenResolver, properties);
+        McpToolScopeValidator scopeValidator = new McpToolScopeValidator(logService, discoveryService);
+        McpManager manager = new McpManager(protocolManager, scopeValidator, registry, accessTokenResolver, properties);
         McpController controller = new McpController(manager);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
@@ -100,12 +99,12 @@ class McpControllerTest {
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON).content("""
                         {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"1999-01-01"}}
                         """))
-                .andExpect(jsonPath("$.result.protocolVersion").value(McpProtocolService.PREFERRED_PROTOCOL_VERSION));
+                .andExpect(jsonPath("$.result.protocolVersion").value(McpProtocolManager.PREFERRED_PROTOCOL_VERSION));
     }
 
     @Test
     void serverInstructionsStayInsideTheFiveHundredAndTwelveCharacterLimit() throws Exception {
-        String instructions = (String) ReflectionTestUtils.getField(McpProtocolService.class, "INSTRUCTIONS");
+        String instructions = (String) ReflectionTestUtils.getField(McpProtocolManager.class, "INSTRUCTIONS");
         org.assertj.core.api.Assertions.assertThat(instructions).isNotNull();
         org.assertj.core.api.Assertions.assertThat(instructions.length()).isLessThanOrEqualTo(512);
     }

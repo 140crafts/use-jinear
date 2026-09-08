@@ -4,8 +4,8 @@ import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
-import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.SimpleMcpTool;
+import co.jinear.core.manager.mcp.tool.McpTool;
+import co.jinear.core.manager.mcp.tool.SimpleMcpTool;
 
 final class McpTestTools {
 

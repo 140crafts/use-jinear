@@ -1,9 +1,10 @@
-package co.jinear.core.service.mcp;
+package co.jinear.core.manager.mcp;
 
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.mcp.McpToolContext;
+import co.jinear.core.service.mcp.McpToolCallLogService;
 import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.mcp.jsonrpc.McpContentBlock;
@@ -20,9 +21,9 @@ import co.jinear.core.model.mcp.jsonrpc.McpToolCallResult;
 import co.jinear.core.model.mcp.jsonrpc.McpToolsCapability;
 import co.jinear.core.model.mcp.jsonrpc.McpToolsListResult;
 import co.jinear.core.model.mcp.view.McpToolPayload;
-import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.McpToolArguments;
-import co.jinear.core.service.mcp.tool.McpToolRegistry;
+import co.jinear.core.manager.mcp.tool.McpTool;
+import co.jinear.core.manager.mcp.tool.McpToolArguments;
+import co.jinear.core.manager.mcp.tool.McpToolRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,7 +38,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class McpProtocolService {
+public class McpProtocolManager {
 
     public static final String PREFERRED_PROTOCOL_VERSION = "2025-11-25";
     public static final List<String> SUPPORTED_PROTOCOL_VERSIONS =

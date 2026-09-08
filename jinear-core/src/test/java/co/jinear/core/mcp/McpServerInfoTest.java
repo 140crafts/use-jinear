@@ -2,15 +2,10 @@ package co.jinear.core.mcp;
 
 import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.config.properties.OauthProperties;
-import co.jinear.core.converter.mcp.McpDtoConverter;
-import co.jinear.core.manager.mcp.McpManagementManager;
 import co.jinear.core.model.dto.mcp.McpServerInfoDto;
 import co.jinear.core.model.enumtype.management.InstanceFlagType;
-import co.jinear.core.repository.mcp.McpToolCallLogRepository;
-import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.management.InstanceFlagService;
-import co.jinear.core.service.mcp.analytics.McpAnalyticsService;
-import co.jinear.core.validator.workspace.WorkspaceValidator;
+import co.jinear.core.service.mcp.McpServerInfoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -22,7 +17,7 @@ class McpServerInfoTest {
     private InstanceFlagService instanceFlagService;
     private McpProperties properties;
     private OauthProperties oauthProperties;
-    private McpManagementManager manager;
+    private McpServerInfoService service;
 
     @BeforeEach
     void setUp() {
@@ -33,21 +28,13 @@ class McpServerInfoTest {
         oauthProperties = new OauthProperties();
         oauthProperties.setEnabled(Boolean.TRUE);
 
-        manager = new McpManagementManager(
-                Mockito.mock(McpToolCallLogRepository.class),
-                Mockito.mock(McpAnalyticsService.class),
-                Mockito.mock(McpDtoConverter.class),
-                Mockito.mock(SessionInfoService.class),
-                Mockito.mock(WorkspaceValidator.class),
-                instanceFlagService,
-                properties,
-                oauthProperties);
+        service = new McpServerInfoService(properties, oauthProperties, instanceFlagService);
     }
 
     private McpServerInfoDto infoWith(boolean propertyEnabled, boolean flagEnabled) {
         properties.setEnabled(propertyEnabled);
         Mockito.when(instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER)).thenReturn(flagEnabled);
-        return manager.retrieveServerInfo().getMcpServerInfoDto();
+        return service.retrieveServerInfo();
     }
 
     @Test

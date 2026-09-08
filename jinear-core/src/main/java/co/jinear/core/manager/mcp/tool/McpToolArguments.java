@@ -1,4 +1,4 @@
-package co.jinear.core.service.mcp.tool;
+package co.jinear.core.manager.mcp.tool;
 
 import co.jinear.core.model.mcp.McpToolException;
 import com.fasterxml.jackson.databind.JsonNode;

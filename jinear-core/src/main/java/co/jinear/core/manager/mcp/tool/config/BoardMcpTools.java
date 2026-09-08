@@ -1,4 +1,4 @@
-package co.jinear.core.service.mcp.tool.config;
+package co.jinear.core.manager.mcp.tool.config;
 
 import co.jinear.core.manager.task.TaskBoardEntryManager;
 import co.jinear.core.manager.task.TaskBoardListingManager;
@@ -9,8 +9,8 @@ import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.request.task.TaskBoardEntryInitializeRequest;
 import co.jinear.core.model.request.task.TaskBoardInitializeRequest;
-import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.SimpleMcpTool;
+import co.jinear.core.manager.mcp.tool.McpTool;
+import co.jinear.core.manager.mcp.tool.SimpleMcpTool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

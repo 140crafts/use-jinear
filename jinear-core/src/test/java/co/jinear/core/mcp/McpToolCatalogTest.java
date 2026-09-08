@@ -2,7 +2,7 @@ package co.jinear.core.mcp;
 
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolDefinition;
-import co.jinear.core.service.mcp.tool.McpTool;
+import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.model.mcp.schema.McpSchemaNode;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

@@ -3,7 +3,7 @@ package co.jinear.core.mcp;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
-import co.jinear.core.service.mcp.tool.McpTool;
+import co.jinear.core.manager.mcp.tool.McpTool;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.jupiter.api.Test;

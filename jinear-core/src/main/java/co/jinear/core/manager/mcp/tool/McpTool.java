@@ -1,4 +1,4 @@
-package co.jinear.core.service.mcp.tool;
+package co.jinear.core.manager.mcp.tool;
 
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.model.mcp.McpToolDefinition;

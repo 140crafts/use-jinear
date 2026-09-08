@@ -1,4 +1,4 @@
-package co.jinear.core.service.mcp.tool.config;
+package co.jinear.core.manager.mcp.tool.config;
 
 import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.manager.team.TeamRetrieveManager;
@@ -8,8 +8,8 @@ import co.jinear.core.manager.workspace.WorkspaceMemberRetrieveManager;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpJsonSchema;
 import co.jinear.core.model.mcp.McpToolResult;
-import co.jinear.core.service.mcp.tool.McpTool;
-import co.jinear.core.service.mcp.tool.SimpleMcpTool;
+import co.jinear.core.manager.mcp.tool.McpTool;
+import co.jinear.core.manager.mcp.tool.SimpleMcpTool;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
