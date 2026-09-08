@@ -129,10 +129,14 @@ it is a class in disguise.
 - Legitimate: a `Map<TeamWorkflowStateGroup, List<TeamWorkflowStatusDto>>` grouping, where
   the key is data.
 - Not legitimate: a method that creates a `LinkedHashMap` and puts eleven literal keys into
-  it before returning it. That is a response class.
+  it before returning it. That is a response class. `OauthDiscoveryService` used to do exactly
+  that and now returns `OauthServerMetadataResponse`.
 
-The same applies to `JsonNode` and `ObjectNode`. Raw Jackson trees belong at a parse
-boundary and must not travel past it.
+The same applies to `JsonNode` and `ObjectNode`. Raw Jackson trees belong at a parse boundary
+and must not travel past it. The MCP tool layer shows the shape: `McpToolArguments` holds the
+one raw tree and hands out typed values, and every tool payload is a class in
+`model/mcp/view/` whose JSON Schema is generated from it, rather than a tree built by hand
+next to a schema written by hand.
 
 ### Naming and imports
 
