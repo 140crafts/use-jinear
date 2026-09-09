@@ -11,6 +11,7 @@ import co.jinear.core.service.mcp.McpToolCallLogService;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolRegistry;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Validation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,10 +58,10 @@ class McpControllerTest {
                 McpTestTools.throwingTool(),
                 McpTestTools.explodingTool());
         McpToolRegistry registry = new McpToolRegistry(tools);
-        ReflectionTestUtils.invokeMethod(registry, "index");
 
         McpToolCallLogService logService = Mockito.mock(McpToolCallLogService.class);
-        McpProtocolManager protocolManager = new McpProtocolManager(registry, logService, new ObjectMapper());
+        McpProtocolManager protocolManager = new McpProtocolManager(registry, logService, new ObjectMapper(),
+                Validation.buildDefaultValidatorFactory().getValidator());
         OauthProperties oauthProperties = new OauthProperties();
         oauthProperties.setIssuerUrl("https://api.jinear.test");
         McpDiscoveryService discoveryService = new McpDiscoveryService(properties, oauthProperties);

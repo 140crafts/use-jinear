@@ -113,11 +113,13 @@
         },
         "startDate" : {
           "type" : "string",
-          "description" : "ISO 8601 instant the work should start."
+          "format" : "date-time",
+          "description" : "Instant the work should start."
         },
         "dueDate" : {
           "type" : "string",
-          "description" : "ISO 8601 instant the work is due."
+          "format" : "date-time",
+          "description" : "Instant the work is due."
         },
         "topicId" : {
           "type" : "string",
@@ -225,7 +227,8 @@
         },
         "dueDate" : {
           "type" : "string",
-          "description" : "ISO 8601 instant the board's work is due."
+          "format" : "date-time",
+          "description" : "Instant the board's work is due."
         }
       },
       "required" : [ "workspaceId", "teamId", "title" ],
@@ -592,11 +595,13 @@
         },
         "from" : {
           "type" : "string",
-          "description" : "Start of the window, as an ISO 8601 instant."
+          "format" : "date-time",
+          "description" : "Start of the window."
         },
         "to" : {
           "type" : "string",
-          "description" : "End of the window, as an ISO 8601 instant."
+          "format" : "date-time",
+          "description" : "End of the window."
         },
         "teamIds" : {
           "type" : "array",
@@ -698,11 +703,12 @@
         "type" : {
           "type" : "string",
           "description" : "Return only FOLDER entries or only FILE entries. Omit for both.",
-          "enum" : [ "FOLDER", "FILE" ]
+          "enum" : [ "FILE", "FOLDER" ]
         },
         "page" : {
           "type" : "integer",
-          "description" : "Zero based page number. Defaults to 0."
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
         }
       },
       "required" : [ "workspaceId" ],
@@ -793,7 +799,8 @@
         },
         "page" : {
           "type" : "integer",
-          "description" : "Zero based page number. Defaults to 0."
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
         }
       },
       "required" : [ "workspaceId" ],
@@ -880,7 +887,8 @@
         },
         "page" : {
           "type" : "integer",
-          "description" : "Zero based page number. Defaults to 0."
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
         }
       },
       "required" : [ "workspaceId", "teamId" ],
@@ -967,7 +975,8 @@
         },
         "page" : {
           "type" : "integer",
-          "description" : "Zero based page number. Defaults to 0."
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
         }
       },
       "required" : [ "taskId" ],
@@ -1075,18 +1084,21 @@
         },
         "stateGroups" : {
           "type" : "array",
-          "description" : "Restrict by state group. Any of BACKLOG, NOT_STARTED, STARTED, COMPLETED, CANCELLED.",
+          "description" : "Restrict by state group.",
           "items" : {
-            "type" : "string"
+            "type" : "string",
+            "enum" : [ "BACKLOG", "NOT_STARTED", "STARTED", "COMPLETED", "CANCELLED" ]
           }
         },
         "from" : {
           "type" : "string",
-          "description" : "Only tasks whose dates fall on or after this ISO 8601 instant."
+          "format" : "date-time",
+          "description" : "Only tasks whose dates fall on or after this instant."
         },
         "to" : {
           "type" : "string",
-          "description" : "Only tasks whose dates fall on or before this ISO 8601 instant."
+          "format" : "date-time",
+          "description" : "Only tasks whose dates fall on or before this instant."
         },
         "page" : {
           "type" : "integer",
@@ -1095,7 +1107,7 @@
         },
         "pageSize" : {
           "type" : "integer",
-          "description" : "Items per page, from 1 to 50. Defaults to 20.",
+          "description" : "Items per page. Defaults to 20. Up to 50.",
           "minimum" : 1,
           "maximum" : 50
         }
@@ -1283,7 +1295,8 @@
         },
         "page" : {
           "type" : "integer",
-          "description" : "Zero based page number. Defaults to 0."
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
         }
       },
       "required" : [ "teamId" ],
@@ -1431,12 +1444,6 @@
           "type" : "integer",
           "description" : "Zero based page number. Defaults to 0.",
           "minimum" : 0
-        },
-        "pageSize" : {
-          "type" : "integer",
-          "description" : "Items per page, from 1 to 50. Defaults to 20.",
-          "minimum" : 1,
-          "maximum" : 50
         }
       },
       "required" : [ "workspaceId" ],
@@ -1639,7 +1646,8 @@
         },
         "page" : {
           "type" : "integer",
-          "description" : "Zero based page number. Defaults to 0."
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
         }
       },
       "required" : [ "workspaceId" ],
@@ -1737,7 +1745,8 @@
         },
         "page" : {
           "type" : "integer",
-          "description" : "Zero based page number. Defaults to 0."
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
         }
       },
       "required" : [ "workspaceId", "query" ],
@@ -1934,7 +1943,7 @@
   }, {
     "name" : "update_task",
     "title" : "Update a task",
-    "description" : "Changes a task's title, body, dates or assignee. Supply only the fields to change; anything omitted is left alone. Use set_task_status to move a task between workflow statuses.",
+    "description" : "Changes a task's title, body, dates or assignee. Supply only the fields to change; anything omitted is left alone. Dates are the one exception: Jinear stores start and due as a pair, so supply both together. Use set_task_status to move a task between workflow statuses.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -1956,11 +1965,13 @@
         },
         "startDate" : {
           "type" : "string",
-          "description" : "New ISO 8601 start. Pass an empty string to clear it."
+          "format" : "date-time",
+          "description" : "New start. Supply together with dueDate, since Jinear stores the pair."
         },
         "dueDate" : {
           "type" : "string",
-          "description" : "New ISO 8601 due date. Pass an empty string to clear it."
+          "format" : "date-time",
+          "description" : "New due date. Supply together with startDate, since Jinear stores the pair."
         }
       },
       "required" : [ "taskId" ],

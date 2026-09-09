@@ -1,11 +1,11 @@
 package co.jinear.core.mcp;
 
+import co.jinear.core.manager.mcp.tool.McpTool;
+import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
-import co.jinear.core.model.mcp.McpJsonSchema;
+import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
 import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
-import co.jinear.core.manager.mcp.tool.McpTool;
-import co.jinear.core.manager.mcp.tool.SimpleMcpTool;
 
 final class McpTestTools {
 
@@ -13,60 +13,70 @@ final class McpTestTools {
     }
 
     static McpTool publicTool() {
-        return SimpleMcpTool.named("public_ping")
-                .title("Public ping")
-                .description("Answers without any credential. Used to prove the catalog is readable before sign in.")
-                .input(McpJsonSchema.noArguments())
-                .readOnly()
-                .handler((context, arguments) -> McpToolResult.of(McpTestPayload.result("pong")))
-                .build();
+        return new McpStubTool(
+                McpToolDefinitionBuilder
+                        .named("public_ping")
+                        .title("Public ping")
+                        .description("Answers without any credential. Used to prove the catalog is readable before sign in.")
+                        .input(McpSchemaGenerator.forInput(McpStubInputs.NoArguments.class))
+                        .readOnly()
+                        .build(),
+                (context, args) -> McpToolResult.of(McpTestPayload.result("pong")));
     }
 
     static McpTool readTool() {
-        return SimpleMcpTool.named("read_something")
-                .title("Read something")
-                .description("Reads a record. Requires the task read scope.")
-                .input(McpJsonSchema.noArguments())
-                .readOnly()
-                .scopes(OauthScope.TASKS_READ)
-                .handler((context, arguments) -> McpToolResult.of(McpTestPayload.forAccount(context.getAccountId())))
-                .build();
+        return new McpStubTool(
+                McpToolDefinitionBuilder
+                        .named("read_something")
+                        .title("Read something")
+                        .description("Reads a record. Requires the task read scope.")
+                        .input(McpSchemaGenerator.forInput(McpStubInputs.NoArguments.class))
+                        .readOnly()
+                        .scopes(OauthScope.TASKS_READ)
+                        .build(),
+                (context, args) -> McpToolResult.of(McpTestPayload.forAccount(context.getAccountId())));
     }
 
     static McpTool writeTool() {
-        return SimpleMcpTool.named("write_something")
-                .title("Write something")
-                .description("Writes a record. Requires the task write scope.")
-                .input(McpJsonSchema.object().requiredString("title", "What to write.").build())
-                .write()
-                .scopes(OauthScope.TASKS_WRITE)
-                .handler((context, arguments) -> McpToolResult.of(McpTestPayload.result("written")))
-                .build();
+        return new McpStubTool(
+                McpToolDefinitionBuilder
+                        .named("write_something")
+                        .title("Write something")
+                        .description("Writes a record. Requires the task write scope.")
+                        .input(McpSchemaGenerator.forInput(McpStubInputs.TitleOnly.class))
+                        .write()
+                        .scopes(OauthScope.TASKS_WRITE)
+                        .build(),
+                (context, args) -> McpToolResult.of(McpTestPayload.result("written")));
     }
 
     static McpTool throwingTool() {
-        return SimpleMcpTool.named("bad_arguments")
-                .title("Bad arguments")
-                .description("Always reports an argument problem. Used to prove a tool error is not a protocol error.")
-                .input(McpJsonSchema.noArguments())
-                .readOnly()
-                .scopes(OauthScope.TASKS_READ)
-                .handler((context, arguments) -> {
+        return new McpStubTool(
+                McpToolDefinitionBuilder
+                        .named("bad_arguments")
+                        .title("Bad arguments")
+                        .description("Always reports an argument problem. Used to prove a tool error is not a protocol error.")
+                        .input(McpSchemaGenerator.forInput(McpStubInputs.NoArguments.class))
+                        .readOnly()
+                        .scopes(OauthScope.TASKS_READ)
+                        .build(),
+                (context, args) -> {
                     throw new McpToolException("invalid_argument", "taskId must look like a ULID. Received: banana");
-                })
-                .build();
+                });
     }
 
     static McpTool explodingTool() {
-        return SimpleMcpTool.named("explodes")
-                .title("Explodes")
-                .description("Throws an unexpected failure. Used to prove the caller still gets an actionable message.")
-                .input(McpJsonSchema.noArguments())
-                .readOnly()
-                .scopes(OauthScope.TASKS_READ)
-                .handler((context, arguments) -> {
+        return new McpStubTool(
+                McpToolDefinitionBuilder
+                        .named("explodes")
+                        .title("Explodes")
+                        .description("Throws an unexpected failure. Used to prove the caller still gets an actionable message.")
+                        .input(McpSchemaGenerator.forInput(McpStubInputs.NoArguments.class))
+                        .readOnly()
+                        .scopes(OauthScope.TASKS_READ)
+                        .build(),
+                (context, args) -> {
                     throw new IllegalStateException("database is on fire");
-                })
-                .build();
+                });
     }
 }

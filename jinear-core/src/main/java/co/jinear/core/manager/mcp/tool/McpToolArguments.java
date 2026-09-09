@@ -1,9 +1,15 @@
 package co.jinear.core.manager.mcp.tool;
 
 import co.jinear.core.model.mcp.McpToolException;
+import co.jinear.core.model.mcp.schema.McpField;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -13,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Set;
 import java.util.TimeZone;
 
 @RequiredArgsConstructor
@@ -22,13 +29,63 @@ public class McpToolArguments {
     private static final String ISO_DATE = "yyyy-MM-dd";
 
     private final JsonNode node;
+    private final ObjectMapper objectMapper;
+    private final Validator validator;
 
-    /**
-     * The parse boundary. Only the MCP protocol layer hands in a raw tree; tools receive this
-     * class and read typed values from it.
-     */
-    public static McpToolArguments of(JsonNode node) {
-        return new McpToolArguments(Objects.isNull(node) || node.isNull() ? null : node);
+    public static McpToolArguments of(JsonNode node, ObjectMapper objectMapper, Validator validator) {
+        return new McpToolArguments(Objects.isNull(node) || node.isNull() ? null : node, objectMapper, validator);
+    }
+
+    public <T> T bind(Class<T> inputType) {
+        T bound = read(inputType);
+        validate(bound, inputType);
+        return bound;
+    }
+
+    private <T> T read(Class<T> inputType) {
+        try {
+            return objectMapper.readerFor(inputType)
+                    .without(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                    .readValue(Objects.isNull(node) ? objectMapper.createObjectNode() : node);
+        } catch (IOException | IllegalArgumentException exception) {
+            throw unwrapToolException(exception);
+        }
+    }
+
+    private <T> void validate(T bound, Class<T> inputType) {
+        Set<ConstraintViolation<T>> violations = validator.validate(bound);
+        if (violations.isEmpty()) {
+            return;
+        }
+        ConstraintViolation<T> first = violations.iterator().next();
+        String field = first.getPropertyPath().toString();
+        throw new McpToolException("missing_argument", field + " " + first.getMessage() + hintFor(inputType, field));
+    }
+
+    private String hintFor(Class<?> inputType, String fieldName) {
+        for (Class<?> current = inputType; current != null; current = current.getSuperclass()) {
+            try {
+                McpField declaration = current.getDeclaredField(fieldName).getAnnotation(McpField.class);
+                if (Objects.nonNull(declaration) && !declaration.hint().isBlank()) {
+                    return " " + declaration.hint();
+                }
+                return "";
+            } catch (NoSuchFieldException exception) {
+                continue;
+            }
+        }
+        return "";
+    }
+
+    private McpToolException unwrapToolException(Exception exception) {
+        Throwable cause = exception.getCause();
+        while (Objects.nonNull(cause)) {
+            if (cause instanceof McpToolException toolException) {
+                return toolException;
+            }
+            cause = cause.getCause();
+        }
+        return new McpToolException("invalid_argument", "An argument could not be read: " + exception.getMessage());
     }
 
     public String requiredString(String field) {

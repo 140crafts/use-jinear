@@ -27,6 +27,7 @@ import co.jinear.core.manager.mcp.tool.McpToolRegistry;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Validator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -63,6 +64,7 @@ public class McpProtocolManager {
     private final McpToolRegistry mcpToolRegistry;
     private final McpToolCallLogService mcpToolCallLogService;
     private final ObjectMapper objectMapper;
+    private final Validator validator;
 
     public Optional<McpJsonRpcResponse> handle(McpJsonRpcRequest request, McpToolContext context) {
         if (Objects.isNull(request.getMethod())) {
@@ -116,7 +118,7 @@ public class McpProtocolManager {
                     McpJsonRpcError.INVALID_PARAMS, "Unknown tool: " + name);
         }
 
-        McpToolArguments arguments = McpToolArguments.of(params.getArguments());
+        McpToolArguments arguments = McpToolArguments.of(params.getArguments(), objectMapper, validator);
         long startedAt = System.currentTimeMillis();
         try {
             McpToolResult result = tool.get().call(context, arguments);

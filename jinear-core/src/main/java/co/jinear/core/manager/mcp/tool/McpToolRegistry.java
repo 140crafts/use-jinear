@@ -5,8 +5,6 @@ import co.jinear.core.model.mcp.McpToolAnnotations;
 import co.jinear.core.model.mcp.McpToolDefinition;
 import co.jinear.core.model.mcp.McpToolDescriptor;
 import co.jinear.core.model.mcp.schema.McpSchemaNode;
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -19,16 +17,13 @@ import java.util.regex.Pattern;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class McpToolRegistry {
 
     private static final Pattern NAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_.-]{1,64}$");
 
-    private final List<McpTool> tools;
     private final Map<String, McpTool> byName = new LinkedHashMap<>();
 
-    @PostConstruct
-    void index() {
+    public McpToolRegistry(List<McpTool> tools) {
         tools.stream()
                 .sorted(Comparator.comparing(McpTool::name))
                 .forEach(tool -> {

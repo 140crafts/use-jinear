@@ -19,7 +19,7 @@ import java.util.Map;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_NULL)
-@JsonPropertyOrder({"type", "description", "properties", "required", "additionalProperties",
+@JsonPropertyOrder({"type", "format", "description", "properties", "required", "additionalProperties",
         "items", "enum", "minimum", "maximum"})
 public class McpSchemaNode {
 
@@ -29,7 +29,10 @@ public class McpSchemaNode {
     public static final String TYPE_BOOLEAN = "boolean";
     public static final String TYPE_ARRAY = "array";
 
+    public static final String FORMAT_DATE_TIME = "date-time";
+
     private String type;
+    private String format;
     private String description;
     private Map<String, McpSchemaNode> properties;
     private List<String> required;
@@ -65,6 +68,7 @@ public class McpSchemaNode {
     public McpSchemaNode copyWithDescription(String newDescription) {
         McpSchemaNode copy = new McpSchemaNode();
         copy.setType(type);
+        copy.setFormat(format);
         copy.setDescription(newDescription);
         copy.setProperties(properties);
         copy.setRequired(required);

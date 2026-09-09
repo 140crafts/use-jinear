@@ -3,7 +3,15 @@ package co.jinear.core.model.mcp.schema;
 import co.jinear.core.exception.BusinessException;
 import lombok.experimental.UtilityClass;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
 import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -21,11 +29,35 @@ import java.util.List;
 public class McpSchemaGenerator {
 
     private static final String ITEMS = "items";
+    private static final String PAGE_SIZE = "pageSize";
 
     public static McpSchemaNode forType(Class<?> payloadType) {
         McpSchemaNode schema = McpSchemaNode.objectNode();
         for (Field field : publishedFields(payloadType)) {
             schema.putProperty(field.getName(), scalar(field));
+        }
+        return schema;
+    }
+
+    public static McpSchemaNode forInput(Class<?> inputType) {
+        return forInput(inputType, McpField.UNSET);
+    }
+
+    /**
+     * The page size ceiling is configured at runtime, so it is applied here rather than
+     * declared on the field.
+     */
+    public static McpSchemaNode forInput(Class<?> inputType, int maxPageSize) {
+        McpSchemaNode schema = McpSchemaNode.objectNode();
+        List<String> required = new ArrayList<>();
+        for (Field field : publishedFields(inputType)) {
+            schema.putProperty(field.getName(), argument(field, maxPageSize));
+            if (isRequired(field)) {
+                required.add(field.getName());
+            }
+        }
+        if (!required.isEmpty()) {
+            schema.setRequired(List.copyOf(required));
         }
         return schema;
     }
@@ -81,17 +113,70 @@ public class McpSchemaGenerator {
         return array;
     }
 
-    private static McpSchemaNode scalar(Field field) {
-        return McpSchemaNode.of(jsonTypeOf(field), field.getAnnotation(McpField.class).value());
+    private static McpSchemaNode argument(Field field, int maxPageSize) {
+        McpField declaration = field.getAnnotation(McpField.class);
+        McpSchemaNode node = typed(field.getType(), field.getGenericType(), declaration.value());
+        if (declaration.minimum() != McpField.UNSET) {
+            node.setMinimum(declaration.minimum());
+        }
+        if (declaration.maximum() != McpField.UNSET) {
+            node.setMaximum(declaration.maximum());
+        }
+        if (PAGE_SIZE.equals(field.getName()) && maxPageSize != McpField.UNSET) {
+            node.setMaximum(maxPageSize);
+            node.setDescription(declaration.value() + " Up to " + maxPageSize + ".");
+        }
+        return node;
     }
 
-    private static String jsonTypeOf(Field field) {
-        Class<?> type = field.getType();
+    private static McpSchemaNode typed(Class<?> type, Type genericType, String description) {
+        if (ZonedDateTime.class.equals(type)) {
+            McpSchemaNode node = McpSchemaNode.of(McpSchemaNode.TYPE_STRING, description);
+            node.setFormat(McpSchemaNode.FORMAT_DATE_TIME);
+            return node;
+        }
+        if (type.isEnum()) {
+            McpSchemaNode node = McpSchemaNode.of(McpSchemaNode.TYPE_STRING, description);
+            node.setEnumValues(constantsOf(type));
+            return node;
+        }
+        if (List.class.equals(type)) {
+            McpSchemaNode node = McpSchemaNode.of(McpSchemaNode.TYPE_ARRAY, description);
+            node.setItems(typed(elementTypeOf(genericType), null, null));
+            return node;
+        }
+        return McpSchemaNode.of(jsonTypeOf(type), description);
+    }
+
+    private static Class<?> elementTypeOf(Type genericType) {
+        if (genericType instanceof ParameterizedType parameterized) {
+            return (Class<?>) parameterized.getActualTypeArguments()[0];
+        }
+        return String.class;
+    }
+
+    private static List<String> constantsOf(Class<?> enumType) {
+        return Arrays.stream(enumType.getEnumConstants())
+                .map(constant -> ((Enum<?>) constant).name())
+                .toList();
+    }
+
+    private static boolean isRequired(Field field) {
+        return field.isAnnotationPresent(NotNull.class)
+               || field.isAnnotationPresent(NotBlank.class)
+               || field.isAnnotationPresent(NotEmpty.class);
+    }
+
+    private static McpSchemaNode scalar(Field field) {
+        return McpSchemaNode.of(jsonTypeOf(field.getType()), field.getAnnotation(McpField.class).value());
+    }
+
+    private static String jsonTypeOf(Class<?> type) {
         if (String.class.equals(type)) {
             return McpSchemaNode.TYPE_STRING;
         }
         if (Integer.class.equals(type) || Long.class.equals(type)
-                || int.class.equals(type) || long.class.equals(type)) {
+            || int.class.equals(type) || long.class.equals(type)) {
             return McpSchemaNode.TYPE_INTEGER;
         }
         if (Boolean.class.equals(type) || boolean.class.equals(type)) {
