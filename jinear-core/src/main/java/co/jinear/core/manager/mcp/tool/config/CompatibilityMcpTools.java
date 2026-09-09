@@ -45,7 +45,8 @@ public class CompatibilityMcpTools {
 
     @Bean
     public McpTool searchTool() {
-        return SimpleMcpTool.named("search")
+        return SimpleMcpTool
+                .named("search")
                 .title("Search Jinear")
                 .description("Searches tasks and note titles across every Jinear workspace the signed in account belongs to, "
                         + "and returns ids and links suitable for citation. "

@@ -57,7 +57,8 @@ public class TaskMcpTools {
 
     @Bean
     public McpTool searchTasksTool() {
-        return SimpleMcpTool.named("search_tasks")
+        return SimpleMcpTool
+                .named("search_tasks")
                 .title("Search tasks by text")
                 .description("Finds tasks in a workspace whose title or body matches a plain language query. "
                         + "Use this when the person names a task by what it is about rather than by its reference. "
