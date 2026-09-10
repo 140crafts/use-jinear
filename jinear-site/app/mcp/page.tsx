@@ -67,7 +67,7 @@ export default function McpPage() {
           <p>
             You need a server address. On the hosted version it is{" "}
             <code>https://api.jinear.co/mcp</code>. On your own server it is your API domain with{" "}
-            <code>/mcp</code> on the end, and every member finds it on their profile page with a copy
+            <code>/mcp</code> on the end, and every member finds it in their profile with a copy
             button.
           </p>
 
@@ -114,7 +114,7 @@ export default function McpPage() {
               every call.
             </li>
             <li>
-              <strong>You can disconnect at any time</strong>, from your profile page. It takes effect on
+              <strong>You can disconnect at any time</strong>, from your profile. It takes effect on
               the next call, not when a token expires.
             </li>
           </ul>

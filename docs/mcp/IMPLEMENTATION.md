@@ -829,8 +829,10 @@ private mode and blocked site data make it throw.
 
 ### 7.2 Profile: AI Assistants
 
-**New**: `src/components/profile-screen/mcpConnectionsSection/`.
-**Mounted in**: `src/pages/profile/page.tsx`.
+**New**: `src/components/profile-screen/mcpConnectionsSection/`,
+`src/components/profile-screen/mcpSettingsButton/` and `src/components/modal/mcpSettingsModal/`.
+**Mounted in**: `McpSettingsModal`, opened by the **Manage assistants** button in the AI
+Assistants section of the profile modal. That section is hidden when MCP is off.
 
 Two jobs in one section:
 

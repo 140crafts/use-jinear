@@ -89,8 +89,8 @@ working until a member disconnects them.
 
 ## Step 3: Find your server address
 
-Every member finds it on their own profile page, under **AI Assistants**, with a copy
-button. It is:
+Every member finds it in their profile (the avatar at the bottom of the side menu), under
+**AI Assistants** > **Manage assistants**, with a copy button. It is:
 
 ```
 https://api.your-domain.com/mcp
@@ -176,7 +176,7 @@ Some deliberate limits:
 | To stop | Do this |
 |---------|---------|
 | New connections, keeping existing ones | Turn off the instance flag in the admin panel |
-| One assistant, for one member | That member disconnects it on their profile page |
+| One assistant, for one member | That member disconnects it in their profile, under **AI Assistants** |
 | One client application, for everybody | Revoke it under **Admin > AI Assistants** |
 | Everything | Set `MCP_ENABLED=false` in `.env` and run `docker compose up -d` |
 

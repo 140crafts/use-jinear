@@ -6616,6 +6616,14 @@ const translations = {
         en: "Disconnect",
         tr: "Bağlantıyı kes"
     },
+    mcpSettingsSectionText: {
+        en: "Connect Claude or ChatGPT to Jinear.",
+        tr: "Claude veya ChatGPT'yi Jinear'a bağlayın."
+    },
+    mcpSettingsButtonLabel: {
+        en: "Manage assistants",
+        tr: "Asistanları yönet"
+    },
     oauthConsentTitle: {
         en: "Connect an AI assistant",
         tr: "Bir yapay zeka asistanı bağlayın"

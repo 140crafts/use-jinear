@@ -170,6 +170,9 @@ const initialState = {
     accountProfileModal: {
         visible: false
     },
+    mcpSettingsModal: {
+        visible: false
+    },
     workspaceSwitchModal: {
         visible: false
     },
@@ -322,6 +325,7 @@ const initialState = {
     taskBoardPickerModal: null | TaskBoardPickerModalState;
     upgradeWorkspacePlanModal: null | UpgradeWorkspacePlanModalState;
     accountProfileModal: null | ModalState;
+    mcpSettingsModal: null | ModalState;
     workspaceSwitchModal: null | ModalState;
     menuMoreActionModal: null | ModalState;
     deviceOfflineModal: null | ModalState;
@@ -586,6 +590,13 @@ const slice = createSlice({
         },
         closeAccountProfileModal: (state, action: PayloadAction<void>) => {
             state.accountProfileModal = initialState.accountProfileModal;
+        },
+
+        popMcpSettingsModal: (state, action: PayloadAction<void>) => {
+            state.mcpSettingsModal = {visible: true};
+        },
+        closeMcpSettingsModal: (state, action: PayloadAction<void>) => {
+            state.mcpSettingsModal = initialState.mcpSettingsModal;
         },
 
         popWorkspaceSwitchModal: (state, action: PayloadAction<void>) => {
@@ -976,6 +987,8 @@ export const {
     closeUpgradeWorkspacePlanModal,
     popAccountProfileModal,
     closeAccountProfileModal,
+    popMcpSettingsModal,
+    closeMcpSettingsModal,
     popWorkspaceSwitchModal,
     closeWorkspaceSwitchModal,
     popMenuMoreActionModal,
@@ -1252,6 +1265,8 @@ export const selectUpgradeWorkspacePlanModalWorkspaceId = (state: RootState) =>
     state.modal.upgradeWorkspacePlanModal?.workspaceId;
 
 export const selectAccountProfileModalVisible = (state: RootState) => state.modal.accountProfileModal?.visible;
+
+export const selectMcpSettingsModalVisible = (state: RootState) => state.modal.mcpSettingsModal?.visible;
 
 export const selectWorkspaceSwitchModalVisible = (state: RootState) => state.modal.workspaceSwitchModal?.visible;
 

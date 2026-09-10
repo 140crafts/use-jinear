@@ -14,7 +14,6 @@ import PostHogPageView from "@/components/postHogPageView/PostHogPageView.tsx";
 import ToasterProvider from "@/components/toasterProvider/ToasterProvider.tsx";
 import BodyFixer from "@/components/bodyFixer/BodyFixer.tsx";
 import RegisterPage from "@/pages/register/page.tsx";
-import ProfileScreen from "@/pages/profile/page.tsx";
 import ForgotPasswordPage from "@/pages/forgot-password/page.tsx";
 import NewWorkspaceScreen from "@/pages/new-workspace/page.tsx";
 import ConfirmEmailPage from "@/pages/engage/confirm-email/page.tsx";
@@ -91,7 +90,6 @@ export default function App() {
 
                 <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
-                <Route path="/profile" element={<ProfileScreen/>}/>
                 <Route path="/register" element={<RegisterPage/>}/>
                 <Route path="/new-workspace" element={<NewWorkspaceScreen/>}/>
                 <Route path="/oauth/consent" element={<OauthConsentPage/>}/>

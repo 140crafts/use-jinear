@@ -12,12 +12,11 @@ import {LuCheck, LuCopy} from "react-icons/lu";
 import styles from "./McpConnectionsSection.module.css";
 
 interface McpConnectionsSectionProps {
-    title?: string;
 }
 
 const logger = Logger("McpConnectionsSection");
 
-const McpConnectionsSection: React.FC<McpConnectionsSectionProps> = ({title}) => {
+const McpConnectionsSection: React.FC<McpConnectionsSectionProps> = ({}) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
     const [copied, setCopied] = useState<boolean>(false);
@@ -64,7 +63,6 @@ const McpConnectionsSection: React.FC<McpConnectionsSectionProps> = ({title}) =>
 
     return (
         <div className={styles.container}>
-            {title && <h2>{title}</h2>}
             <span className={styles.text}>{t("mcpConnectionsIntro")}</span>
 
             <div className={styles.urlBlock}>
