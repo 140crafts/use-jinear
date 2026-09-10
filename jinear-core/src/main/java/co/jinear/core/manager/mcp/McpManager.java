@@ -1,13 +1,12 @@
 package co.jinear.core.manager.mcp;
 
-import co.jinear.core.config.properties.McpProperties;
-import co.jinear.core.exception.mcp.McpDisabledException;
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.model.mcp.jsonrpc.*;
 import co.jinear.core.manager.mcp.tool.McpToolRegistry;
 import co.jinear.core.model.vo.oauth.OauthAccessTokenVo;
 import co.jinear.core.manager.mcp.McpProtocolManager;
 import co.jinear.core.service.oauth.provider.OauthAccessTokenResolver;
+import co.jinear.core.validator.mcp.McpEnabledValidator;
 import co.jinear.core.validator.mcp.McpToolScopeValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,10 +27,10 @@ public class McpManager {
     private final McpToolScopeValidator mcpToolScopeValidator;
     private final McpToolRegistry mcpToolRegistry;
     private final OauthAccessTokenResolver oauthAccessTokenResolver;
-    private final McpProperties mcpProperties;
+    private final McpEnabledValidator mcpEnabledValidator;
 
     public McpExchange handle(McpJsonRpcRequestBatch batch) {
-        validateMcpIsEnabled();
+        mcpEnabledValidator.validateMcpIsEnabled();
 
         Optional<OauthAccessTokenVo> token = oauthAccessTokenResolver.currentAccessToken();
         validateScopes(batch, token);
@@ -75,11 +74,4 @@ public class McpManager {
                         .scopes(vo.getScopes())
                         .build())
                 .orElseGet(() -> McpToolContext.builder().scopes(Set.of()).build());
-    }
-
-    private void validateMcpIsEnabled() {
-        if (!Boolean.TRUE.equals(mcpProperties.getEnabled())) {
-            throw new McpDisabledException();
-        }
-    }
-}
+    }}

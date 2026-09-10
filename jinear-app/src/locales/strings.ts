@@ -3767,6 +3767,10 @@ const translations = {
         en: "Copy Link",
         tr: "Linki Kopyala"
     },
+    accountDeleteButtonTitle: {
+        en: "Delete Your Account",
+        tr: "Hesabınızı Silin"
+    },
     accountDeleteButtonLabel: {
         en: "Delete Account",
         tr: "Hesabı Sil"

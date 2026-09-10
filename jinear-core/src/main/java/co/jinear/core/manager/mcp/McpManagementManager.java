@@ -1,12 +1,15 @@
 package co.jinear.core.manager.mcp;
 
+import co.jinear.core.manager.mcp.tool.McpToolRegistry;
 import co.jinear.core.model.response.mcp.McpAnalyticsResponse;
 import co.jinear.core.model.response.mcp.McpServerInfoResponse;
 import co.jinear.core.model.response.mcp.McpToolCallLogListingResponse;
+import co.jinear.core.model.response.mcp.McpToolManifestResponse;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.mcp.McpServerInfoService;
 import co.jinear.core.service.mcp.McpToolCallLogListingService;
 import co.jinear.core.service.mcp.analytics.McpAnalyticsService;
+import co.jinear.core.validator.mcp.McpEnabledValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,12 +25,22 @@ public class McpManagementManager {
     private final McpAnalyticsService mcpAnalyticsService;
     private final McpServerInfoService mcpServerInfoService;
     private final McpToolCallLogListingService mcpToolCallLogListingService;
+    private final McpToolRegistry mcpToolRegistry;
+    private final McpEnabledValidator mcpEnabledValidator;
     private final SessionInfoService sessionInfoService;
     private final WorkspaceValidator workspaceValidator;
 
     public McpServerInfoResponse retrieveServerInfo() {
         McpServerInfoResponse response = new McpServerInfoResponse();
         response.setMcpServerInfoDto(mcpServerInfoService.retrieveServerInfo());
+        return response;
+    }
+
+    public McpToolManifestResponse retrieveToolManifest() {
+        mcpEnabledValidator.validateMcpIsEnabled();
+        McpToolManifestResponse response = new McpToolManifestResponse();
+        response.setTools(mcpToolRegistry.descriptors());
+        response.setScopes(mcpToolRegistry.requiredScopes());
         return response;
     }
 

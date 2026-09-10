@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-09-05 00:13:30.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-10 22:58:34.
 
 export interface BaseDto {
     createdDate: Date;
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gthreadId: string;
-    ginternalDate: string;
-    ghistoryId: string;
     gid: string;
+    gthreadId: string;
+    ghistoryId: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -642,6 +642,31 @@ export interface NotificationTargetDto extends BaseDto {
     providerType: NotificationProviderType;
 }
 
+export interface OauthAuthorizationCodeDto {
+    oauthAuthorizationCodeId: string;
+    accountId: string;
+    clientId: string;
+    oauthConnectionId: string;
+    redirectUri: string;
+    scope: string;
+    codeChallenge: string;
+    codeChallengeMethod: string;
+    resource: string;
+    expiresAt: Date;
+}
+
+export interface OauthAuthorizationRequestDto {
+    oauthAuthorizationRequestId: string;
+    clientId: string;
+    redirectUri: string;
+    scope: string;
+    state: string;
+    codeChallenge: string;
+    codeChallengeMethod: string;
+    resource: string;
+    expiresAt: Date;
+}
+
 export interface OauthClientDto {
     clientId: string;
     clientName: string;
@@ -658,6 +683,7 @@ export interface OauthConnectionDto {
     clientId: string;
     clientName: string;
     clientDisplayHost: string;
+    sessionInfoId: string;
     grantedScopes: string[];
     createdDate: Date;
     lastUsedAt: Date;
@@ -675,6 +701,12 @@ export interface OauthConsentInfoDto {
     redirectHost: string;
     loopbackOnly: boolean;
     requestedScopes: string[];
+}
+
+export interface OauthRefreshTokenDto {
+    oauthRefreshTokenId: string;
+    oauthConnectionId: string;
+    expiresAt: Date;
 }
 
 export interface SubscriptionDto extends BaseDto {
@@ -1589,9 +1621,61 @@ export interface NotificationTargetInitializeRequest extends BaseRequest {
     providerType: NotificationProviderType;
 }
 
+export interface OauthAuthorizeRequest {
+    responseType: string;
+    clientId: string;
+    redirectUri: string;
+    scope: string;
+    state: string;
+    codeChallenge: string;
+    codeChallengeMethod: string;
+    resource: string;
+    response_type: string;
+    client_id: string;
+    redirect_uri: string;
+    code_challenge: string;
+    code_challenge_method: string;
+}
+
+export interface OauthClientRegistrationRequest {
+    client_id: string;
+    client_name: string;
+    client_uri: string;
+    logo_uri: string;
+    policy_uri: string;
+    tos_uri: string;
+    redirect_uris: string[];
+    grant_types: string[];
+    token_endpoint_auth_method: string;
+    software_id: string;
+    software_version: string;
+}
+
 export interface OauthConsentRequest {
     requestId: string;
     approved: boolean;
+}
+
+export interface OauthRevokeRequest {
+    token: string;
+    tokenTypeHint: string;
+    token_type_hint: string;
+}
+
+export interface OauthTokenRequest {
+    grantType: string;
+    code: string;
+    redirectUri: string;
+    clientId: string;
+    codeVerifier: string;
+    refreshToken: string;
+    scope: string;
+    resource: string;
+    client_id: string;
+    redirect_uri: string;
+    grant_type: string;
+    code_verifier: string;
+    refresh_token: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2058,12 +2142,22 @@ export interface McpAnalyticsResponse extends BaseResponse {
     data: McpAnalyticsDto;
 }
 
+export interface McpProtocolErrorResponse {
+    error: string;
+    error_description: string;
+}
+
 export interface McpServerInfoResponse extends BaseResponse {
     data: McpServerInfoDto;
 }
 
 export interface McpToolCallLogListingResponse extends BaseResponse {
     data: PageDto<McpToolCallLogDto>;
+}
+
+export interface McpToolManifestResponse {
+    tools: McpToolDescriptor[];
+    scopes: { [index: string]: string[] };
 }
 
 export interface InternalBatchMediaRetrieveResponse extends BaseResponse {
@@ -2166,6 +2260,16 @@ export interface OauthClientListingResponse extends BaseResponse {
     data: PageDto<OauthClientDto>;
 }
 
+export interface OauthClientRegistrationResponse {
+    client_id: string;
+    client_id_issued_at: number;
+    client_name: string;
+    redirect_uris: string[];
+    grant_types: string[];
+    response_types: string[];
+    token_endpoint_auth_method: string;
+}
+
 export interface OauthConnectionListingResponse extends BaseResponse {
     data: OauthConnectionDto[];
 }
@@ -2176,6 +2280,42 @@ export interface OauthConsentInfoResponse extends BaseResponse {
 
 export interface OauthConsentResponse extends BaseResponse {
     data: string;
+}
+
+export interface OauthErrorResponse {
+    error: string;
+    error_description: string;
+}
+
+export interface OauthProtectedResourceMetadataResponse {
+    resource: string;
+    authorization_servers: string[];
+    scopes_supported: string[];
+    bearer_methods_supported: string[];
+    resource_documentation: string;
+}
+
+export interface OauthServerMetadataResponse {
+    issuer: string;
+    authorization_endpoint: string;
+    token_endpoint: string;
+    revocation_endpoint: string;
+    registration_endpoint: string;
+    scopes_supported: string[];
+    response_types_supported: string[];
+    grant_types_supported: string[];
+    token_endpoint_auth_methods_supported: string[];
+    code_challenge_methods_supported: string[];
+    client_id_metadata_document_supported: boolean;
+    service_documentation: string;
+}
+
+export interface OauthTokenResponse {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    scope: string;
+    refresh_token: string;
 }
 
 export interface RetrieveSubscriptionInfoResponse extends BaseResponse {
@@ -2459,6 +2599,15 @@ export interface MultipartFile extends InputStreamSource {
     originalFilename: string;
 }
 
+export interface McpToolDescriptor {
+    name: string;
+    title: string;
+    description: string;
+    inputSchema: McpSchemaNode;
+    outputSchema: McpSchemaNode;
+    annotations: McpToolAnnotations;
+}
+
 export interface GoogleCalendarEventAttendee {
     id: string;
     email: string;
@@ -2572,13 +2721,34 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    description: string;
     uri: URI;
+    description: string;
     filename: string;
 }
 
 export interface InputStreamSource {
     inputStream: any;
+}
+
+export interface McpSchemaNode {
+    type: string;
+    format: string;
+    description: string;
+    properties: { [index: string]: McpSchemaNode };
+    required: string[];
+    additionalProperties: boolean;
+    items: McpSchemaNode;
+    enum: string[];
+    minimum: number;
+    maximum: number;
+}
+
+export interface McpToolAnnotations {
+    title: string;
+    readOnlyHint: boolean;
+    destructiveHint: boolean;
+    idempotentHint: boolean;
+    openWorldHint: boolean;
 }
 
 export interface GoogleCalendarConferenceDataRequest {

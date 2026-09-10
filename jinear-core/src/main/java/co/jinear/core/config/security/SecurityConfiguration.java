@@ -57,6 +57,7 @@ public class SecurityConfiguration {
             "/v1/instance-flag/list",
             "/v1/debug/**",
             "/mcp",
+            "/v1/mcp/manifest",
             "/.well-known/**",
             "/v1/oauth/authorize",
             "/v1/oauth/authorize/info/{requestId}",

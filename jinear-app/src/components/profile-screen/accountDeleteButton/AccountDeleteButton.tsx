@@ -1,81 +1,88 @@
 import Button from "@/components/button";
 import {
-  useDeleteWithoutConfirmationMutation,
-  useLazyCheckEligibilityQuery,
-  useSendAccountDeleteEmailMutation,
+    useDeleteWithoutConfirmationMutation,
+    useLazyCheckEligibilityQuery,
+    useSendAccountDeleteEmailMutation,
 } from "@/store/api/accountDeleteApi";
-import { closeDialogModal, popDialogModal, resetModals } from "@/store/slice/modalSlice";
-import { performLogoutCleanup, useAppDispatch } from "@/store";
+import {closeDialogModal, popDialogModal, resetModals} from "@/store/slice/modalSlice";
+import {performLogoutCleanup, useAppDispatch} from "@/store";
 import useTranslation from "@/locales/useTranslation";
-import React, { useEffect } from "react";
+import React, {useEffect} from "react";
 import toast from "react-hot-toast";
 import styles from "./AccountDeleteButton.module.css";
 
-interface AccountDeleteButtonProps {}
+interface AccountDeleteButtonProps {
+}
 
 const AccountDeleteButton: React.FC<AccountDeleteButtonProps> = ({}) => {
-  const { t } = useTranslation();
-  const dispatch = useAppDispatch();
-  const [checkEligibility, { isFetching: isCheckEligibilityFetching }] = useLazyCheckEligibilityQuery();
-  const [sendAccountDeleteEmail, { isLoading: isSendAccountDeleteEmailFetching, isSuccess: isSendAccountDeleteEmailSuccess }] =
-    useSendAccountDeleteEmailMutation();
-  const [
-    deleteWithoutConfirmation,
-    { isLoading: isDeleteWithoutConfirmationLoading },
-  ] = useDeleteWithoutConfirmationMutation();
+    const {t} = useTranslation();
+    const dispatch = useAppDispatch();
+    const [checkEligibility, {isFetching: isCheckEligibilityFetching}] = useLazyCheckEligibilityQuery();
+    const [sendAccountDeleteEmail, {
+        isLoading: isSendAccountDeleteEmailFetching,
+        isSuccess: isSendAccountDeleteEmailSuccess
+    }] =
+        useSendAccountDeleteEmailMutation();
+    const [
+        deleteWithoutConfirmation,
+        {isLoading: isDeleteWithoutConfirmationLoading},
+    ] = useDeleteWithoutConfirmationMutation();
 
-  useEffect(() => {
-    if (isSendAccountDeleteEmailSuccess) {
-      toast(t("accountDeletionMailSendSuccessfully"));
-    }
-  }, [isSendAccountDeleteEmailSuccess]);
+    useEffect(() => {
+        if (isSendAccountDeleteEmailSuccess) {
+            toast(t("accountDeletionMailSendSuccessfully"));
+        }
+    }, [isSendAccountDeleteEmailSuccess]);
 
-  const popAreYouSureModalForDeleteAccount = () => {
-    dispatch(
-      popDialogModal({
-        visible: true,
-        title: t("accountDeleteAreYouSureTitle"),
-        content: t("accountDeleteAreYouSureTextWithoutEmailConfirm"),
-        confirmButtonLabel: t("accountDeleteAreYouSureConfirmLabel"),
-        onConfirm: deleteAccount,
-      })
+    const popAreYouSureModalForDeleteAccount = () => {
+        dispatch(
+            popDialogModal({
+                visible: true,
+                title: t("accountDeleteAreYouSureTitle"),
+                content: t("accountDeleteAreYouSureTextWithoutEmailConfirm"),
+                confirmButtonLabel: t("accountDeleteAreYouSureConfirmLabel"),
+                onConfirm: deleteAccount,
+            })
+        );
+    };
+
+    const deleteAccount = async () => {
+        dispatch(resetModals());
+        try {
+            await deleteWithoutConfirmation().unwrap();
+            toast(t("accountDeletedSuccessfully"));
+        } catch {
+            // The account may already be gone server-side; local data goes either way.
+        }
+        await performLogoutCleanup(dispatch);
+    };
+
+    const sendEmail = () => {
+        sendAccountDeleteEmail();
+        dispatch(closeDialogModal());
+    };
+
+    const onDeleteClick = async () => {
+        const eligibility = await checkEligibility();
+        if (eligibility.data?.data.eligible) {
+            popAreYouSureModalForDeleteAccount();
+        }
+    };
+
+    return (
+        <div className={styles.container}>
+            <h2>{t('accountDeleteButtonTitle')}</h2>
+            <div className={styles.contentContainer}>
+                <Button
+                    loading={isCheckEligibilityFetching || isSendAccountDeleteEmailFetching}
+                    disabled={isCheckEligibilityFetching || isSendAccountDeleteEmailFetching}
+                    onClick={onDeleteClick}
+                >
+                    {t("accountDeleteButtonLabel")}
+                </Button>
+            </div>
+        </div>
     );
-  };
-
-  const deleteAccount = async () => {
-    dispatch(resetModals());
-    try {
-      await deleteWithoutConfirmation().unwrap();
-      toast(t("accountDeletedSuccessfully"));
-    } catch {
-      // The account may already be gone server-side; local data goes either way.
-    }
-    await performLogoutCleanup(dispatch);
-  };
-
-  const sendEmail = () => {
-    sendAccountDeleteEmail();
-    dispatch(closeDialogModal());
-  };
-
-  const onDeleteClick = async () => {
-    const eligibility = await checkEligibility();
-    if (eligibility.data?.data.eligible) {
-      popAreYouSureModalForDeleteAccount();
-    }
-  };
-
-  return (
-    <div className={styles.container}>
-      <Button
-        loading={isCheckEligibilityFetching || isSendAccountDeleteEmailFetching}
-        disabled={isCheckEligibilityFetching || isSendAccountDeleteEmailFetching}
-        onClick={onDeleteClick}
-      >
-        {t("accountDeleteButtonLabel")}
-      </Button>
-    </div>
-  );
 };
 
 export default AccountDeleteButton;

@@ -35,6 +35,7 @@ import co.jinear.core.model.mcp.jsonrpc.McpJsonRpcError;
 import co.jinear.core.service.oauth.provider.OauthAccessTokenResolver;
 import co.jinear.core.service.oauth.provider.OauthConnectionService;
 import co.jinear.core.system.oauth.OauthTokenHelper;
+import co.jinear.core.validator.mcp.McpEnabledValidator;
 import co.jinear.core.validator.mcp.McpToolScopeValidator;
 
 class McpControllerTest {
@@ -69,7 +70,8 @@ class McpControllerTest {
                 Mockito.mock(OauthTokenHelper.class),
                 Mockito.mock(OauthConnectionService.class));
         McpToolScopeValidator scopeValidator = new McpToolScopeValidator(logService, discoveryService);
-        McpManager manager = new McpManager(protocolManager, scopeValidator, registry, accessTokenResolver, properties);
+        McpManager manager = new McpManager(protocolManager, scopeValidator, registry, accessTokenResolver,
+                new McpEnabledValidator(properties));
         McpController controller = new McpController(manager);
 
         mockMvc = MockMvcBuilders.standaloneSetup(controller)

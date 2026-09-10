@@ -50,6 +50,15 @@ public class McpToolRegistry {
                 .toList();
     }
 
+    public Map<String, List<String>> requiredScopes() {
+        Map<String, List<String>> scopes = new LinkedHashMap<>();
+        byName.forEach((name, tool) -> scopes.put(name, tool.definition().getRequiredScopes().stream()
+                .map(OauthScope::getValue)
+                .sorted()
+                .toList()));
+        return scopes;
+    }
+
     private void validate(McpToolDefinition definition) {
         String name = definition.getName();
         if (name == null || !NAME_PATTERN.matcher(name).matches()) {

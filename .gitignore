@@ -102,8 +102,3 @@ HELP.md
 jinear-core/src/main/resources/application-dev.properties
 jinear-core/src/main/resources/application-prod.properties
 jinear-core/src/main/resources/application-stg.properties
-
-### MCP tool manifest working copy ###
-# McpToolManifestExporter.generate() writes here; publish() copies it into
-# jinear-site/lib, which is the copy that gets committed.
-/jinear-core/mcp-tools.generated.json

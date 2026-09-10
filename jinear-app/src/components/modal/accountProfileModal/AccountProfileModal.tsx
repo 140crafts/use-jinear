@@ -7,6 +7,8 @@ import { useAppDispatch, useTypedSelector } from "@/store";
 import useTranslation from "@/locales/useTranslation";
 import React from "react";
 import Modal from "../modal/Modal";
+import McpConnectionsSection from "@/components/profile-screen/mcpConnectionsSection/McpConnectionsSection.tsx";
+import HorizontalLine from "@/components/line/horizontalLine/HorizontalLine.tsx";
 
 interface AccountProfileModalProps {}
 
@@ -30,9 +32,17 @@ const AccountProfileModal: React.FC<AccountProfileModalProps> = ({}) => {
     >
       <PersonalInfoTab />
       <CommunicationPreferences title={t("communicationPrefrencesTitle")} />
-      <div className="spacer-h-4" />
-      <AccountDeleteButton />
-      <div className="spacer-h-2" />
+      <div>
+        <div className="spacer-h-1" />
+        <HorizontalLine />
+        <div className="spacer-h-1" />
+        <AccountDeleteButton />
+        <div className="spacer-h-1" />
+        <HorizontalLine />
+        <div className="spacer-h-1" />
+        <McpConnectionsSection title={t("mcpConnectionsTitle")}/>
+        <div className="spacer-h-2" />
+      </div>
 
     </Modal>
   );

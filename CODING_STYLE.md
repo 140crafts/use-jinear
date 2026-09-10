@@ -167,3 +167,15 @@ MCP, and RFC 6749 / 7591 / 8414 / 9728 for OAuth. These are the one carve out:
 The carve out is about the envelope, not about types. A spec mandated body is still a typed
 class. `Map<String, Object>` is not more standards compliant than
 `OauthTokenResponse`, it is only less checked.
+
+### Published documents
+
+A public endpoint whose body is copied whole into another project is a published document.
+`GET /v1/mcp/manifest` is one: its body is pasted into `jinear-site/lib/mcp-tools.generated.json`.
+
+- It does not extend `BaseResponse`, so the body can be copied without stripping an envelope.
+- It is still a typed class (`model/response/mcp/McpToolManifestResponse.java`), and the
+  controller returns it directly, without `ResponseEntity`.
+- It is pretty printed, so the copied file stays readable in a diff. Add the type to
+  `config/jackson/PublishedDocumentJsonConfiguration.java`; never turn on indentation on the
+  shared `ObjectMapper`.

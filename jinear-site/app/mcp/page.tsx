@@ -121,8 +121,9 @@ export default function McpPage() {
 
           <h2>Every tool</h2>
           <p>
-            Grouped by the permission it asks for. This list is generated from the running server, so it
-            cannot drift from what the assistant actually receives.
+            Grouped by the permission it asks for. This list shows the hosted version. A self-hosted
+            server can run a different version; it lists its exact tools at your API domain with{" "}
+            <code>/v1/mcp/manifest</code> on the end.
           </p>
 
           {SCOPE_COPY.map((entry) => {

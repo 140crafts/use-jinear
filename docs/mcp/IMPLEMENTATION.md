@@ -233,6 +233,7 @@ Three paths sit outside the usual `/v1` API surface, and each is handled differe
 | `/v1/oauth/authorize/info/{requestId}` | `permitAll` (layer 2) | runs | skipped |
 | `/v1/oauth/authorize/consent` | `ROLE_USER` | runs | skipped |
 | `/v1/oauth/connection/**` | `ROLE_USER` | runs | skipped |
+| `/v1/mcp/manifest` | `permitAll`, 404 when MCP is off | runs | skipped |
 | `/v1/mcp/**` | `ROLE_USER` | runs | skipped |
 | `/v1/admin/oauth/**` | `ROLE_ADMIN` | runs | skipped |
 | `/v1/admin/mcp/**` | `ROLE_ADMIN` | runs | skipped |
@@ -893,17 +894,19 @@ existing convention, so a refetch never blanks a screen the user is part way thr
 the marketing page for the feature and the target of `jinear.mcp.documentation-url`, for
 the hosted instance and every self-hosted one.
 
-It renders the **generated manifest**, `lib/mcp-tools.generated.json`, grouped by the scope
-each tool requires, so the published tool list cannot drift from what the server actually
-offers.
+It renders the **manifest**, `lib/mcp-tools.generated.json`, grouped by the scope each tool
+requires. The file is the response body of `GET /v1/mcp/manifest` from a running instance, copied by
+hand into the commit that changes a tool. It is pretty printed, so the copy stays readable in
+a diff. That endpoint is public, answers 404 when MCP is
+off, and is built from the live `McpToolRegistry`, so every instance can show its own exact
+catalog.
 
-**`McpToolManifestExportTest` was extended** to emit a `scopes` map alongside `tools`. The
-`tools` array stays exactly what `tools/list` returns, so it cannot drift from the protocol
-shape; scopes are not part of that shape, so they ride alongside rather than inside.
+**The manifest carries a `scopes` map alongside `tools`.** The `tools` array stays exactly
+what `tools/list` returns, so it cannot drift from the protocol shape; scopes are not part of
+that shape, so they ride alongside rather than inside.
 
-**A latent bug in that test was fixed.** Tool scopes came from `Set.of`, whose iteration
-order changes per JVM run, so the committed manifest and the regenerated one would differ
-on a second run and the comparison would flap. Scope values are now sorted.
+**Scope values are sorted.** Tool scopes come from `Set.of`, whose iteration order changes
+per JVM run, so an unsorted manifest would differ between two runs of the same code.
 
 Also: `/mcp` added to `app/sitemap.ts`, to `app/llms.txt/route.ts` (both the feature list
 and the key pages index), and a footer link in `BareFooter.tsx`. `MCP_DOCS_URL` added to
@@ -1018,7 +1021,7 @@ If you read the code in this order it should make sense without jumping around.
 | `OauthTokenControllerTest` (5) | OAuth error bodies and status codes |
 | `McpServerInfoTest` (4) | **Layer 2.** Both switches, and that the URL is withheld when off |
 | `McpAuthorizationGateTest` (3) | **Layer 2.** The instance flag refusal happens before a request is parked |
-| `McpToolManifestExportTest` (1) | The published manifest matches the live catalog |
+| `McpToolManifestTest` (4) | Manifest scopes are keyed by tool in catalog order and sorted; the manifest is refused when MCP is off; it is pretty printed while other responses stay compact |
 
 Frontend: `yarn tsc -b` and `yarn build` are clean in both `jinear-app` and `jinear-site`.
 `yarn lint` produces only the same `react-hooks/exhaustive-deps` warning the sibling
