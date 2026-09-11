@@ -310,6 +310,29 @@ cd <install-dir>
 docker compose up -d jinear-minio
 ```
 
+### `docker compose pull` fails on `jinear-minio` (older installs)
+
+Older installs use `minio/minio:RELEASE.2025-03-12T18-04-18Z`. That image was removed
+from Docker Hub, so pulling it fails with an error like
+`requested access to the resource is denied`. Because of this,
+`docker compose pull && docker compose up -d` stops at the pull and no service is
+updated. A new server, or a server where the image was pruned, cannot start MinIO.
+
+The current template uses a copy of the same MinIO release, hosted by Jinear. `docker
+compose pull` does not rewrite your `docker-compose.yaml`, so change the `image:` line
+of the `jinear-minio` service yourself:
+
+```yaml
+    image: registry.gitlab.com/140crafts/use-jinear/minio:RELEASE.2025-03-12T18-04-18Z
+```
+
+Then apply it. The release is the same, so your files in `.data/minio/` are kept:
+
+```bash
+cd <install-dir>
+docker compose pull && docker compose up -d
+```
+
 ### File uploads fail with 403 (progress bar stuck)
 
 If picking a file starts an upload that never completes and the browser's network
