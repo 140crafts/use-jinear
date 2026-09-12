@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import co.jinear.core.model.mcp.input.McpListCalendarEventsInput;
 
 @Service
@@ -61,6 +62,6 @@ public class ListCalendarEventsTool implements McpTool {
     }
 
     private List<String> nullIfEmpty(List<String> values) {
-        return values.isEmpty() ? null : values;
+        return Objects.isNull(values) || values.isEmpty() ? null : values;
     }
 }

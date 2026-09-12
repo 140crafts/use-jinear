@@ -66,6 +66,6 @@ public class ListTasksTool implements McpTool {
     }
 
     private <T> List<T> nullIfEmpty(List<T> values) {
-        return values.isEmpty() ? null : values;
+        return Objects.isNull(values) || values.isEmpty() ? null : values;
     }
 }
