@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-09-10 22:58:34.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-12 15:59:06.
 
 export interface BaseDto {
     createdDate: Date;
@@ -1671,11 +1671,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
-    client_id: string;
-    redirect_uri: string;
     grant_type: string;
     code_verifier: string;
     refresh_token: string;
+    client_id: string;
+    redirect_uri: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2410,6 +2410,10 @@ export interface TaskBoardRetrieveResponse extends BaseResponse {
     data: TaskBoardDto;
 }
 
+export interface TaskCommentResponse extends BaseResponse {
+    data: CommentDto;
+}
+
 export interface TaskFeedItemResponse extends BaseResponse {
     data: TaskFeedItemListDto;
 }
@@ -2722,8 +2726,8 @@ export interface Resource extends InputStreamSource {
     readable: boolean;
     url: URL;
     uri: URI;
-    description: string;
     filename: string;
+    description: string;
 }
 
 export interface InputStreamSource {

@@ -36,6 +36,7 @@ public class SearchTasksTool implements McpTool {
                 .title("Search tasks by text")
                 .description("Finds tasks in a workspace whose title or body matches a plain language query. "
                              + "Use this when the person names a task by what it is about rather than by its reference. "
+                             + "Tasks created or edited in the last minute may not appear yet; use list_tasks to see them. "
                              + "Use list_tasks instead when filtering by status, assignee or dates.")
                 .input(McpSchemaGenerator.forInput(McpSearchTasksInput.class))
                 .output(McpSchemaGenerator.page(McpTaskView.class, "Matching tasks, best match first."))

@@ -4,6 +4,7 @@ import co.jinear.core.manager.task.TaskCommentManager;
 import co.jinear.core.model.request.task.InitializeTaskCommentRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.PaginatedTaskCommentResponse;
+import co.jinear.core.model.response.task.TaskCommentResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class TaskCommentController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse initializeTaskComment(@Valid @RequestBody InitializeTaskCommentRequest initializeTaskCommentRequest) {
+    public TaskCommentResponse initializeTaskComment(@Valid @RequestBody InitializeTaskCommentRequest initializeTaskCommentRequest) {
         return taskCommentManager.initializeComment(initializeTaskCommentRequest);
     }
 

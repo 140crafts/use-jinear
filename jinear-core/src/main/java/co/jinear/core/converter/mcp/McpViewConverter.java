@@ -181,6 +181,7 @@ public class McpViewConverter {
         view.setAuthorAccountId(dto.getOwnerId());
         view.setAuthorUsername(Objects.isNull(dto.getOwner()) ? null : dto.getOwner().getUsername());
         view.setBody(richText(dto.getRichText()));
+        view.setQuoteCommentId(Objects.isNull(dto.getQuote()) ? null : dto.getQuote().getCommentId());
         view.setCreatedAt(instant(dto.getCreatedDate()));
         return view;
     }
@@ -208,7 +209,7 @@ public class McpViewConverter {
         }
         view.setAssignedTo(dto.getAssignedTo());
         view.setOwnerId(dto.getOwnerId());
-        view.setAssignedDate(instant(dto.getAssignedDate()));
+        view.setStartDate(instant(dto.getAssignedDate()));
         view.setDueDate(instant(dto.getDueDate()));
         view.setTopicId(dto.getTopicId());
     }

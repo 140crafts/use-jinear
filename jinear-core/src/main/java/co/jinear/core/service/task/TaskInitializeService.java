@@ -55,9 +55,10 @@ public class TaskInitializeService {
             Task task = mapVoToEntity(taskInitializeVo);
             assignTeamTaskNo(task);
             assignTopicTaskNo(task);
-            assignInitialWorkflowStatus(task);
+            TeamWorkflowStatusDto initialWorkflowStatus = assignInitialWorkflowStatus(task);
             Task saved = taskRepository.saveAndFlush(task);
             TaskDto taskDto = taskDtoConverter.map(saved);
+            taskDto.setWorkflowStatus(initialWorkflowStatus);
             initializeAndAssignRichText(taskInitializeVo, taskDto);
             initializeSubtaskRelation(taskInitializeVo, saved);
             initializeTaskSubscription(taskInitializeVo, saved);
@@ -97,9 +98,10 @@ public class TaskInitializeService {
         task.setTeamTagNo(count.intValue() + 1);
     }
 
-    private void assignInitialWorkflowStatus(Task task) {
+    private TeamWorkflowStatusDto assignInitialWorkflowStatus(Task task) {
         TeamWorkflowStatusDto teamWorkflowStatusDto = teamWorkflowStatusRetrieveService.retrieveFirstFromGroup(task.getTeamId(), TeamWorkflowStateGroup.BACKLOG);
         task.setWorkflowStatusId(teamWorkflowStatusDto.getTeamWorkflowStatusId());
+        return teamWorkflowStatusDto;
     }
 
     private void initializeAndAssignRichText(TaskInitializeVo taskInitializeVo, TaskDto taskDto) {

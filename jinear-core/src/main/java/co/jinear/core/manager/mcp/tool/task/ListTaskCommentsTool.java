@@ -30,7 +30,8 @@ public class ListTaskCommentsTool implements McpTool {
         return McpToolDefinitionBuilder
                 .named("list_task_comments")
                 .title("List a task's comments")
-                .description("Reads the discussion on a task, newest first. "
+                .description("Reads the discussion on a task, oldest first, 25 comments per page. "
+                             + "On a long thread, read the last page (totalPages - 1) for the latest comments. "
                              + "Use it to catch up on what has already been said before answering or adding a comment.")
                 .input(McpSchemaGenerator.forInput(McpListTaskCommentsInput.class))
                 .output(McpSchemaGenerator.page(McpCommentView.class, "Comments on this task."))

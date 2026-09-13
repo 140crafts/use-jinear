@@ -1,12 +1,15 @@
 package co.jinear.core.manager.mcp.tool.compatibility;
 
 import co.jinear.core.config.properties.FeProperties;
+import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
 import co.jinear.core.manager.note.NoteFilterManager;
+import co.jinear.core.manager.task.TaskRetrieveManager;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.note.NoteDto;
+import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.model.mcp.McpToolDefinition;
@@ -27,7 +30,9 @@ import co.jinear.core.model.mcp.input.McpFetchInput;
 public class FetchTool implements McpTool {
 
     private final NoteFilterManager noteFilterManager;
+    private final TaskRetrieveManager taskRetrieveManager;
     private final FeProperties feProperties;
+    private final McpLinkConverter mcpLinkConverter;
 
     @Override
     public McpToolDefinition definition() {
@@ -50,10 +55,21 @@ public class FetchTool implements McpTool {
             return fetchNote(context, id);
         }
         if (id.startsWith(McpSearchIds.TASK_PREFIX)) {
-            return McpToolResult.error("Task ids from search cannot be fetched directly. "
-                                       + "Use get_task with the workspace username, team tag and task number shown in the url.");
+            return fetchTask(context, id);
         }
         return McpToolResult.error("Unrecognised id. Pass an id exactly as search returned it.");
+    }
+
+    private McpToolResult fetchTask(McpToolContext context, String id) {
+        TaskDto task = taskRetrieveManager.retrieve(id.substring(McpSearchIds.TASK_PREFIX.length())).getTaskDto();
+        context.setWorkspaceId(task.getWorkspaceId());
+        String workspaceUsername = Objects.isNull(task.getWorkspace()) ? null : task.getWorkspace().getUsername();
+        McpFetchedRecordView view = new McpFetchedRecordView();
+        view.setId(id);
+        view.setTitle(task.getTitle());
+        view.setText(Objects.isNull(task.getDescription()) ? "" : task.getDescription().getValue());
+        view.setUrl(mcpLinkConverter.taskUrl(workspaceUsername, task));
+        return McpToolResult.of(view);
     }
 
     private McpToolResult fetchNote(McpToolContext context, String id) {

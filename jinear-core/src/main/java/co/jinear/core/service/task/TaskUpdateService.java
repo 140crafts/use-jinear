@@ -89,12 +89,14 @@ public class TaskUpdateService {
     @Transactional
     public UpdateTaskWorkflowDto updateTaskWorkflow(String taskId, String workflowStatusId) {
         log.info("Update task workflow status has started for taskId: {}, workflowStatusId: {}", taskId, workflowStatusId);
-        String remindersPassiveId = validateWorkflowStatusAndCancelReminders(workflowStatusId, taskId);
+        TeamWorkflowStatusDto workflowStatus = workflowStatusRetrieveService.retrieve(workflowStatusId);
+        String remindersPassiveId = cancelRemindersIfStatusRemovesThem(workflowStatus, taskId);
         Task task = taskRetrieveService.retrieveEntity(taskId);
         task.setWorkflowStatusId(workflowStatusId);
         Task saved = taskRepository.save(task);
         log.info("Update task workflow status has finished. taskId: {}", saved.getTaskId());
         TaskDto taskDto = taskDtoConverter.map(saved);
+        taskDto.setWorkflowStatus(workflowStatus);
         return taskDtoConverter.map(taskDto, remindersPassiveId);
     }
 
@@ -160,9 +162,8 @@ public class TaskUpdateService {
         }
     }
 
-    private String validateWorkflowStatusAndCancelReminders(String workflowStatusId, String taskId) {
-        TeamWorkflowStatusDto teamWorkflowStatusDto = workflowStatusRetrieveService.retrieve(workflowStatusId);
-        if (REMOVES_REMINDERS_ON_THESE_STATUSES.contains(teamWorkflowStatusDto.getWorkflowStateGroup())) {
+    private String cancelRemindersIfStatusRemovesThem(TeamWorkflowStatusDto workflowStatus, String taskId) {
+        if (REMOVES_REMINDERS_ON_THESE_STATUSES.contains(workflowStatus.getWorkflowStateGroup())) {
             return taskReminderOperationService.passivizeAllWithRelatedTask(taskId);
         }
         return null;

@@ -1,9 +1,12 @@
 package co.jinear.core.manager.mcp.tool.file;
 
 import co.jinear.core.config.properties.OauthProperties;
+import co.jinear.core.manager.material.MaterialManager;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
+import co.jinear.core.model.dto.material.MaterialDto;
+import co.jinear.core.model.enumtype.material.MaterialType;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.model.mcp.McpToolDefinition;
@@ -18,6 +21,7 @@ import co.jinear.core.model.mcp.input.McpGetFileLinkInput;
 @RequiredArgsConstructor
 public class GetFileLinkTool implements McpTool {
 
+    private final MaterialManager materialManager;
     private final OauthProperties oauthProperties;
 
     @Override
@@ -28,7 +32,8 @@ public class GetFileLinkTool implements McpTool {
                 .description("Returns the Jinear download link for a stored file, suitable for citing back to the person "
                              + "or for them to click. Opening the link uses the reader's own Jinear permissions, so it works "
                              + "for anyone who can already see the file, and for files shared with anyone who has the link. "
-                             + "It does not return the file's contents.")
+                             + "It does not return the file's contents, and it fails for folders and for files "
+                             + "the signed in account cannot see.")
                 .input(McpSchemaGenerator.forInput(McpGetFileLinkInput.class))
                 .output(McpSchemaGenerator.forType(McpFileLinkView.class))
                 .readOnly()
@@ -39,9 +44,14 @@ public class GetFileLinkTool implements McpTool {
     @Override
     public McpToolResult call(McpToolContext context, McpToolArguments args) {
         McpGetFileLinkInput input = args.bind(McpGetFileLinkInput.class);
+        MaterialDto material = materialManager.retrieve(input.getMaterialId()).getMaterialDto();
+        context.setWorkspaceId(material.getWorkspaceId());
+        if (!MaterialType.FILE.equals(material.getMaterialType())) {
+            return McpToolResult.error("That id is a folder. Pass the materialId of a FILE from list_files.");
+        }
         McpFileLinkView view = new McpFileLinkView();
-        view.setMaterialId(input.getMaterialId());
-        view.setUrl(oauthProperties.getIssuerUrl() + "/v1/material/media/" + input.getMaterialId());
+        view.setMaterialId(material.getMaterialId());
+        view.setUrl(oauthProperties.getIssuerUrl() + "/v1/material/media/" + material.getMaterialId());
         return McpToolResult.of(view);
     }
 }

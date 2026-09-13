@@ -3,9 +3,11 @@ package co.jinear.core.mcp;
 import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.config.properties.OauthProperties;
+import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.converter.mcp.McpViewConverter;
 import co.jinear.core.manager.calendar.CalendarEventManager;
 import co.jinear.core.manager.material.MaterialListingManager;
+import co.jinear.core.manager.material.MaterialManager;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolRegistry;
 import co.jinear.core.manager.mcp.tool.board.AddTaskToBoardTool;
@@ -76,6 +78,7 @@ final class McpRealCatalog {
     static List<McpTool> tools() {
         McpViewConverter viewConverter = new McpViewConverter();
         FeProperties feProperties = new FeProperties();
+        McpLinkConverter linkConverter = new McpLinkConverter(feProperties);
 
         return List.of(
                 new ListWorkspacesTool(mock(WorkspaceManager.class), viewConverter),
@@ -105,11 +108,12 @@ final class McpRealCatalog {
                 new GetNoteTool(mock(NoteFilterManager.class), viewConverter),
 
                 new ListFilesTool(mock(MaterialListingManager.class), viewConverter),
-                new GetFileLinkTool(oauthProperties()),
+                new GetFileLinkTool(mock(MaterialManager.class), oauthProperties()),
 
                 new SearchTool(mock(WorkspaceManager.class), mock(TaskSearchManager.class),
-                        mock(NoteFilterManager.class), feProperties),
-                new FetchTool(mock(NoteFilterManager.class), feProperties));
+                        mock(NoteFilterManager.class), feProperties, linkConverter),
+                new FetchTool(mock(NoteFilterManager.class), mock(TaskRetrieveManager.class),
+                        feProperties, linkConverter));
     }
 
     static McpToolRegistry registry() {

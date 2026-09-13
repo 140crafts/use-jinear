@@ -1,6 +1,7 @@
 package co.jinear.core.manager.mcp.tool.compatibility;
 
 import co.jinear.core.config.properties.FeProperties;
+import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
@@ -40,6 +41,7 @@ public class SearchTool implements McpTool {
     private final TaskSearchManager taskSearchManager;
     private final NoteFilterManager noteFilterManager;
     private final FeProperties feProperties;
+    private final McpLinkConverter mcpLinkConverter;
 
     @Override
     public McpToolDefinition definition() {
@@ -49,6 +51,7 @@ public class SearchTool implements McpTool {
                 .description("Searches tasks and note titles across every Jinear workspace the signed in account belongs to, "
                              + "and returns ids and links suitable for citation. "
                              + "Pass an id from here to fetch to read the full record. "
+                             + "Tasks created or edited in the last minute may not appear yet; use list_tasks to see them. "
                              + "For filtering by status, assignee or dates, use list_tasks instead.")
                 .input(McpSchemaGenerator.forInput(McpSearchInput.class))
                 .output(McpSchemaGenerator.arrayField("results", McpSearchHitView.class, "Matching records, tasks first."))
@@ -89,7 +92,7 @@ public class SearchTool implements McpTool {
                     return;
                 }
                 results.add(searchHit(McpSearchIds.TASK_PREFIX + task.getTaskId(), task.getTitle(),
-                        taskUrl(workspaceUsername, task)));
+                        mcpLinkConverter.taskUrl(workspaceUsername, task)));
             }
         } catch (RuntimeException exception) {
             log.debug("[MCP] search skipped workspace {}: {}", workspaceId, exception.getMessage());
@@ -123,14 +126,5 @@ public class SearchTool implements McpTool {
         hit.setTitle(title);
         hit.setUrl(url);
         return hit;
-    }
-
-    private String taskUrl(String workspaceUsername, TaskDto task) {
-        String reference = Objects.isNull(task.getTeam()) || Objects.isNull(task.getTeamTagNo())
-                ? task.getTaskId()
-                : task.getTeam().getTag() + "-" + task.getTeamTagNo();
-        return feProperties.getTaskUrl()
-                .replace("{workspaceName}", Objects.isNull(workspaceUsername) ? "" : workspaceUsername)
-                .replace("{taskTag}", reference);
     }
 }

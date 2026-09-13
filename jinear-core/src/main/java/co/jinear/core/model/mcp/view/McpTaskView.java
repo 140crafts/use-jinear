@@ -40,8 +40,8 @@ public class McpTaskView implements McpToolPayload {
     @McpField("Account id of whoever created the task.")
     private String ownerId;
 
-    @McpField("ISO 8601 start date, or null.")
-    private String assignedDate;
+    @McpField("ISO 8601 start date, or null. Set with startDate on create_task and update_task.")
+    private String startDate;
 
     @McpField("ISO 8601 due date, or null.")
     private String dueDate;

@@ -35,6 +35,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -131,10 +132,12 @@ public class McpProtocolManager {
                     System.currentTimeMillis() - startedAt, 0);
             return McpJsonRpcResponse.success(request.getId(), wrap(McpToolResult.error(toolException.getMessage())));
         } catch (RuntimeException exception) {
-            log.error("[MCP] Tool {} failed.", name, exception);
+            String errorReference = UUID.randomUUID().toString();
+            log.error("[MCP] Tool {} failed. errorReference: {}", name, errorReference, exception);
             mcpToolCallLogService.recordFailure(context, name, exception,
                     System.currentTimeMillis() - startedAt);
-            return McpJsonRpcResponse.success(request.getId(), wrap(McpToolResult.error(describe(exception))));
+            return McpJsonRpcResponse.success(request.getId(),
+                    wrap(McpToolResult.error(describe(exception, errorReference))));
         }
     }
 
@@ -180,7 +183,7 @@ public class McpProtocolManager {
         }
     }
 
-    private String describe(RuntimeException exception) {
+    private String describe(RuntimeException exception, String errorReference) {
         if (exception instanceof NoAccessException) {
             return "You do not have access to that resource in this workspace.";
         }
@@ -190,6 +193,7 @@ public class McpProtocolManager {
         if (exception instanceof BusinessException businessException) {
             return "The request was refused: " + businessException.getMessage();
         }
-        return "The request could not be completed. Try again, or narrow the arguments.";
+        return "The request could not be completed. Try again, or narrow the arguments. "
+               + "Error reference: " + errorReference + ".";
     }
 }

@@ -116,7 +116,7 @@ public class ScheduledJobManager {
     }
 
     @Async
-    @Scheduled(fixedRate = 2, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
     public void refreshTaskFtsMaterializedView() {
         taskFtsRefreshService.refreshIfDirty();
     }

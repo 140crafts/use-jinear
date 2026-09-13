@@ -8,6 +8,7 @@ import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.request.task.InitializeTaskCommentRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.task.PaginatedTaskCommentResponse;
+import co.jinear.core.model.response.task.TaskCommentResponse;
 import co.jinear.core.model.vo.task.InitializeTaskCommentVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.passive.PassiveService;
@@ -41,7 +42,7 @@ public class TaskCommentManager {
     private final InitializeTaskCommentVoConverter initializeTaskCommentVoConverter;
     private final PassiveService passiveService;
 
-    public BaseResponse initializeComment(InitializeTaskCommentRequest initializeTaskCommentRequest) {
+    public TaskCommentResponse initializeComment(InitializeTaskCommentRequest initializeTaskCommentRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDto = validateAccess(initializeTaskCommentRequest.getTaskId(), currentAccountId);
@@ -50,7 +51,7 @@ public class TaskCommentManager {
         InitializeTaskCommentVo initializeTaskCommentVo = initializeTaskCommentVoConverter.convert(initializeTaskCommentRequest, currentAccountId);
         CommentDto commentDto = commentOperationService.initializeTaskComment(initializeTaskCommentVo);
         taskActivityService.initializeNewCommentActivity(currentAccountId, currentAccountSessionId, commentDto.getCommentId(), taskDto);
-        return new BaseResponse();
+        return mapResponse(commentDto);
     }
 
     public BaseResponse deleteComment(String commentId) {
@@ -68,6 +69,12 @@ public class TaskCommentManager {
         log.info("Retrieve task comments has started. currentAccountId: {}, page: {}", currentAccountId, page);
         Page<CommentDto> commentDtoPage = commentListingService.retrieveTaskComments(taskId, page);
         return mapResponse(commentDtoPage);
+    }
+
+    private TaskCommentResponse mapResponse(CommentDto commentDto) {
+        TaskCommentResponse taskCommentResponse = new TaskCommentResponse();
+        taskCommentResponse.setCommentDto(commentDto);
+        return taskCommentResponse;
     }
 
     private PaginatedTaskCommentResponse mapResponse(Page<CommentDto> commentDtoPage) {

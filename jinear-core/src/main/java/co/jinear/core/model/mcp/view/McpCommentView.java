@@ -25,6 +25,9 @@ public class McpCommentView implements McpToolPayload {
     @McpField("Comment body as HTML.")
     private String body;
 
+    @McpField("Id of the comment this one replies to, or null.")
+    private String quoteCommentId;
+
     @McpField("ISO 8601 instant the comment was posted.")
     private String createdAt;
 }
