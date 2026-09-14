@@ -57,7 +57,7 @@ class McpRecordToolsTest {
         FeProperties feProperties = new FeProperties();
         feProperties.setTaskUrl("https://jinear.co/{workspaceName}/task/{taskTag}");
         return new FetchTool(Mockito.mock(NoteFilterManager.class), taskRetrieveManager, feProperties,
-                new McpLinkConverter(feProperties));
+                new McpLinkConverter(feProperties, McpRealCatalog.oauthProperties()));
     }
 
     private GetFileLinkTool fileLinkTool() {

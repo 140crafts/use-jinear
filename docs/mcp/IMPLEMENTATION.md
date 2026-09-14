@@ -583,13 +583,13 @@ cheaper to fail the boot than to find out during review.
 | Scope | Tools |
 |-------|-------|
 | `workspace:read` | `get_workspace`, `list_workspaces`, `list_teams`, `list_topics`, `list_workflow_statuses`, `list_workspace_members`, `search`, `fetch` |
-| `tasks:read` | `get_task`, `list_tasks`, `search_tasks`, `list_task_boards`, `list_task_comments`, `search`, `fetch` |
-| `tasks:write` | `create_task`, `update_task`, `set_task_status`, `add_task_comment`, `create_task_board`, `add_task_to_board` |
+| `tasks:read` | `get_task`, `list_tasks`, `search_tasks`, `list_task_boards`, `list_task_comments`, `list_task_attachments`, `search`, `fetch` |
+| `tasks:write` | `create_task`, `update_task`, `set_task_status`, `add_task_comment`, `add_task_attachment`, `create_task_board`, `add_task_to_board` |
 | `calendar:read` | `list_calendar_events` |
 | `notes:read` | `get_note`, `list_notebooks`, `search_notes`, `search`, `fetch` |
 | `files:read` | `list_files`, `get_file_link` |
 
-25 tools, 19 of them read only, **0 destructive**.
+27 tools, 20 of them read only, **0 destructive**.
 
 There is no projects scope and there are no project tools. Projects are a deprecated
 feature, so the connector leaves them out entirely, down to the `projectId` and

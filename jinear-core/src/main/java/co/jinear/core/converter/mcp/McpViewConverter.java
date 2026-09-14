@@ -2,6 +2,7 @@ package co.jinear.core.converter.mcp;
 
 import co.jinear.core.model.dto.calendar.CalendarEventDto;
 import co.jinear.core.model.dto.material.MaterialDto;
+import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
@@ -22,6 +23,7 @@ import co.jinear.core.model.mcp.view.McpMemberView;
 import co.jinear.core.model.mcp.view.McpNoteDetailView;
 import co.jinear.core.model.mcp.view.McpNoteView;
 import co.jinear.core.model.mcp.view.McpNotebookView;
+import co.jinear.core.model.mcp.view.McpTaskAttachmentView;
 import co.jinear.core.model.mcp.view.McpTaskDetailView;
 import co.jinear.core.model.mcp.view.McpTaskView;
 import co.jinear.core.model.mcp.view.McpTeamView;
@@ -171,6 +173,19 @@ public class McpViewConverter {
         view.setParentMaterialId(dto.getParentMaterialId());
         view.setMediaId(dto.getMediaId());
         view.setAccessType(name(dto.getMaterialAccessType()));
+        return view;
+    }
+
+    public McpTaskAttachmentView taskAttachment(MediaDto dto, String downloadUrl) {
+        McpTaskAttachmentView view = new McpTaskAttachmentView();
+        view.setMediaId(dto.getMediaId());
+        view.setTaskId(dto.getRelatedObjectId());
+        view.setName(dto.getOriginalName());
+        view.setContentType(dto.getContentType());
+        view.setSize(dto.getSize());
+        view.setVisibility(name(dto.getVisibility()));
+        view.setCreatedAt(instant(dto.getCreatedDate()));
+        view.setDownloadUrl(downloadUrl);
         return view;
     }
 

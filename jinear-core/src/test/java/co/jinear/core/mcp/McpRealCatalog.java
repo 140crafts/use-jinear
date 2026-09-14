@@ -22,9 +22,11 @@ import co.jinear.core.manager.mcp.tool.file.ListFilesTool;
 import co.jinear.core.manager.mcp.tool.note.GetNoteTool;
 import co.jinear.core.manager.mcp.tool.note.ListNotebooksTool;
 import co.jinear.core.manager.mcp.tool.note.SearchNotesTool;
+import co.jinear.core.manager.mcp.tool.task.AddTaskAttachmentTool;
 import co.jinear.core.manager.mcp.tool.task.AddTaskCommentTool;
 import co.jinear.core.manager.mcp.tool.task.CreateTaskTool;
 import co.jinear.core.manager.mcp.tool.task.GetTaskTool;
+import co.jinear.core.manager.mcp.tool.task.ListTaskAttachmentsTool;
 import co.jinear.core.manager.mcp.tool.task.ListTaskCommentsTool;
 import co.jinear.core.manager.mcp.tool.task.ListTasksTool;
 import co.jinear.core.manager.mcp.tool.task.SearchTasksTool;
@@ -43,6 +45,7 @@ import co.jinear.core.manager.task.TaskBoardManager;
 import co.jinear.core.manager.task.TaskCommentManager;
 import co.jinear.core.manager.task.TaskInitializeManager;
 import co.jinear.core.manager.task.TaskListingManager;
+import co.jinear.core.manager.task.TaskMediaManager;
 import co.jinear.core.manager.task.TaskRetrieveManager;
 import co.jinear.core.manager.task.TaskSearchManager;
 import co.jinear.core.manager.task.TaskUpdateManager;
@@ -78,7 +81,7 @@ final class McpRealCatalog {
     static List<McpTool> tools() {
         McpViewConverter viewConverter = new McpViewConverter();
         FeProperties feProperties = new FeProperties();
-        McpLinkConverter linkConverter = new McpLinkConverter(feProperties);
+        McpLinkConverter linkConverter = new McpLinkConverter(feProperties, oauthProperties());
 
         return List.of(
                 new ListWorkspacesTool(mock(WorkspaceManager.class), viewConverter),
@@ -95,6 +98,8 @@ final class McpRealCatalog {
                 new SetTaskStatusTool(mock(TaskUpdateManager.class), viewConverter),
                 new ListTaskCommentsTool(mock(TaskCommentManager.class), viewConverter),
                 new AddTaskCommentTool(mock(TaskCommentManager.class)),
+                new ListTaskAttachmentsTool(mock(TaskMediaManager.class), viewConverter, linkConverter),
+                new AddTaskAttachmentTool(mock(TaskMediaManager.class), linkConverter),
 
                 new ListTaskBoardsTool(mock(TaskBoardListingManager.class), viewConverter),
                 new CreateTaskBoardTool(mock(TaskBoardManager.class), viewConverter),

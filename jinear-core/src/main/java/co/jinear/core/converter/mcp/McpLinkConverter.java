@@ -1,6 +1,7 @@
 package co.jinear.core.converter.mcp;
 
 import co.jinear.core.config.properties.FeProperties;
+import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.model.dto.task.TaskDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,6 +13,11 @@ import java.util.Objects;
 public class McpLinkConverter {
 
     private final FeProperties feProperties;
+    private final OauthProperties oauthProperties;
+
+    public String taskAttachmentDownloadUrl(String taskId, String mediaId) {
+        return oauthProperties.getIssuerUrl() + "/v1/task/media/" + taskId + "/download/" + mediaId;
+    }
 
     public String taskUrl(String workspaceUsername, TaskDto task) {
         String reference = Objects.isNull(task.getTeam()) || Objects.isNull(task.getTeamTagNo())

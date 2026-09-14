@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-09-12 15:59:06.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-13 13:43:50.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -166,8 +166,8 @@ export interface GmailMessageDto extends BaseDto {
     subject: string;
     body: string;
     gid: string;
-    gthreadId: string;
     ghistoryId: string;
+    gthreadId: string;
     ginternalDate: string;
 }
 
@@ -750,9 +750,9 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
+    accountIsProjectTeamsAdmin: boolean;
     accountWorkspaceAdminOrOwner: boolean;
     accountIsProjectTeamsMember: boolean;
-    accountIsProjectTeamsAdmin: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -1671,11 +1671,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
+    client_id: string;
+    redirect_uri: string;
     grant_type: string;
     code_verifier: string;
     refresh_token: string;
-    client_id: string;
-    redirect_uri: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2430,6 +2430,10 @@ export interface TaskMediaResponse extends BaseResponse {
     data: MediaDto[];
 }
 
+export interface TaskMediaUploadResponse extends BaseResponse {
+    data: string;
+}
+
 export interface TaskNumbersResponse {
     data: TaskAnalyticNumbersDto;
 }
@@ -2725,9 +2729,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
+    description: string;
     uri: URI;
     filename: string;
-    description: string;
 }
 
 export interface InputStreamSource {

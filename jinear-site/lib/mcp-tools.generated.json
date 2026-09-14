@@ -1,5 +1,73 @@
 {
   "tools" : [ {
+    "name" : "add_task_attachment",
+    "title" : "Attach a file to a task",
+    "description" : "Attaches a new file to a task, attributed to the signed in account. Pass the content as text for text files such as Markdown, CSV or JSON, or as contentBase64 for binary files such as images or PDFs. Needs a PRO workspace with free storage. Returns the new attachment's id and a downloadUrl for the person.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "description" : "Task id."
+        },
+        "fileName" : {
+          "type" : "string",
+          "description" : "File name with its extension, for example notes.md or chart.png."
+        },
+        "contentType" : {
+          "type" : "string",
+          "description" : "MIME type, for example text/markdown or image/png. Guessed from fileName when omitted."
+        },
+        "text" : {
+          "type" : "string",
+          "description" : "File content as plain text, stored as UTF-8. For text files. Pass either text or contentBase64, not both."
+        },
+        "contentBase64" : {
+          "type" : "string",
+          "description" : "File content encoded as base64. For binary files such as images or PDFs. Pass either text or contentBase64, not both."
+        }
+      },
+      "required" : [ "taskId", "fileName" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "description" : "The task the file was attached to."
+        },
+        "mediaId" : {
+          "type" : "string",
+          "description" : "Id of the new attachment."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "File name as stored."
+        },
+        "size" : {
+          "type" : "integer",
+          "description" : "File size in bytes."
+        },
+        "downloadUrl" : {
+          "type" : "string",
+          "description" : "Absolute Jinear URL that downloads the file for a signed in reader who can see the task."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Attach a file to a task",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "add_task_comment",
     "title" : "Comment on a task",
     "description" : "Adds a comment to a task, attributed to the signed in account. Use it to record a decision, an update or an answer where the work lives. Returns the new comment's id.",
@@ -868,6 +936,81 @@
     },
     "annotations" : {
       "title" : "List notebooks",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "list_task_attachments",
+    "title" : "List a task's attachments",
+    "description" : "Lists the files attached to a task, oldest first. Each item carries a downloadUrl for the person to click. Opening it uses the reader's own Jinear session, so it works in a browser signed in to an account that can see the task. It does not return the files' contents.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "description" : "Task id."
+        }
+      },
+      "required" : [ "taskId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "description" : "Files attached to this task.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "mediaId" : {
+                "type" : "string",
+                "description" : "Attachment id."
+              },
+              "taskId" : {
+                "type" : "string",
+                "description" : "Task this file is attached to."
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "File name as uploaded."
+              },
+              "contentType" : {
+                "type" : "string",
+                "description" : "MIME type, or null when unknown."
+              },
+              "size" : {
+                "type" : "integer",
+                "description" : "File size in bytes."
+              },
+              "visibility" : {
+                "type" : "string",
+                "description" : "Visibility of the stored file."
+              },
+              "createdAt" : {
+                "type" : "string",
+                "description" : "ISO 8601 instant the file was attached."
+              },
+              "downloadUrl" : {
+                "type" : "string",
+                "description" : "Absolute Jinear URL that downloads the file for a signed in reader who can see the task."
+              }
+            },
+            "additionalProperties" : false
+          }
+        },
+        "count" : {
+          "type" : "integer",
+          "description" : "Number of items returned."
+        }
+      },
+      "required" : [ "items" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "List a task's attachments",
       "readOnlyHint" : true,
       "destructiveHint" : false,
       "idempotentHint" : true,
@@ -2007,6 +2150,7 @@
     }
   } ],
   "scopes" : {
+    "add_task_attachment" : [ "tasks:write" ],
     "add_task_comment" : [ "tasks:write" ],
     "add_task_to_board" : [ "tasks:write" ],
     "create_task" : [ "tasks:write" ],
@@ -2019,6 +2163,7 @@
     "list_calendar_events" : [ "calendar:read" ],
     "list_files" : [ "files:read" ],
     "list_notebooks" : [ "notes:read" ],
+    "list_task_attachments" : [ "tasks:read" ],
     "list_task_boards" : [ "tasks:read" ],
     "list_task_comments" : [ "tasks:read" ],
     "list_tasks" : [ "tasks:read" ],
