@@ -2,6 +2,7 @@ import Line from "@/components/line/Line";
 import TeamStateSettings from "@/components/teamSettingsScreen/teamStateSettings/TeamStateSettings";
 import TeamTaskVisibilityTypeSettings
     from "@/components/teamSettingsScreen/teamTaskVisibilityTypeSettings/TeamTaskVisibilityTypeSettings";
+import TeamTopicSettings from "@/components/teamSettingsScreen/teamTopicSettings/TeamTopicSettings";
 import TeamWorkflowSettings from "@/components/teamSettingsScreen/teamWorkflowSettings/TeamWorkflowSettings";
 import {useTeamRole} from "@/hooks/useTeamRole";
 import {useRetrieveWorkspaceTeamsQuery} from "@/store/api/teamApi";
@@ -48,6 +49,13 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({}) => {
             {team && (
                 <>
                     <TeamWorkflowSettings teamId={team.teamId} teamRole={teamRole}/>
+                    <Line/>
+                </>
+            )}
+
+            {team && workspace && (
+                <>
+                    <TeamTopicSettings workspace={workspace} team={team}/>
                     <Line/>
                 </>
             )}

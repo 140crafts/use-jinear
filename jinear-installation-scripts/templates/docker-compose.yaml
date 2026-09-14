@@ -53,7 +53,7 @@ services:
 
   jinear-minio:
     container_name: jinear-minio
-    image: minio/minio:RELEASE.2025-03-12T18-04-18Z
+    image: registry.gitlab.com/140crafts/use-jinear/minio:RELEASE.2025-03-12T18-04-18Z
     restart: always
     volumes:
       - ".data/minio:/data"

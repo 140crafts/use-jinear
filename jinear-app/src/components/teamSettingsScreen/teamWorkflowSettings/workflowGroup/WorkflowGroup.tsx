@@ -23,7 +23,6 @@ const WorkflowGroup: React.FC<WorkflowGroupProps> = ({ teamId, groupType, status
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
   const statusCount = statuses?.length ?? 0;
-  // Backend keeps at least one status per group, so a group's last status cannot be removed.
   const deletable = editable && statusCount > 1;
   const orderChangable = editable && statusCount > 1;
 
@@ -58,8 +57,6 @@ const WorkflowGroup: React.FC<WorkflowGroupProps> = ({ teamId, groupType, status
   };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-    // A drag started in another group leaves this group's draggedIndex null,
-    // so cross group drops are never accepted.
     if (draggedIndex === null) {
       return;
     }

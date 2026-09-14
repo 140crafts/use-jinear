@@ -12,7 +12,6 @@ interface TeamWorkflowSettingsProps {
     teamRole?: TeamMemberRoleType;
 }
 
-// Backend groups statuses into a map, so the display order is pinned here.
 const WORKFLOW_GROUPS: TeamWorkflowStateGroup[] = ["BACKLOG", "NOT_STARTED", "STARTED", "COMPLETED", "CANCELLED"];
 
 const TeamWorkflowSettings: React.FC<TeamWorkflowSettingsProps> = ({teamId, teamRole}) => {

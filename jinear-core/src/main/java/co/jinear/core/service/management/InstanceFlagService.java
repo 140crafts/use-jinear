@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,6 +25,7 @@ public class InstanceFlagService {
         log.info("List flags has started.");
         return instanceFlagRepository.findAllByPassiveIdIsNullOrderByInstanceFlagId()
                 .stream()
+                .filter(instanceFlag -> Objects.nonNull(instanceFlag.getFlagType()))
                 .collect(Collectors.toMap(InstanceFlag::getFlagType, instanceFlag -> instanceFlag.getFlagType().parse(instanceFlag.getFlagValue())));
     }
 

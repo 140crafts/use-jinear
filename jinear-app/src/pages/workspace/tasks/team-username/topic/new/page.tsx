@@ -1,4 +1,5 @@
 import TopicForm from "@/components/form/topicForm/TopicForm";
+import SectionTitle from "@/components/sectionTitle/SectionTitle";
 import {useRetrieveWorkspaceTeamsQuery} from "@/store/api/teamApi";
 import {selectWorkspaceFromWorkspaceUsername} from "@/store/slice/accountSlice";
 import {useTypedSelector} from "@/store";
@@ -27,7 +28,10 @@ const NewTopicPage: React.FC<NewTopicPageProps> = ({}) => {
 
     return (
         <div className={styles.container}>
-            <h1>{t("newTopicScreenTitle")}</h1>
+            <SectionTitle
+                title={t("newTopicScreenTitle")}
+                description={t("newTopicScreenDescription")}
+            />
             <div className={styles.formContainer}>{workspace && team &&
                 <TopicForm workspace={workspace} team={team}/>}</div>
         </div>

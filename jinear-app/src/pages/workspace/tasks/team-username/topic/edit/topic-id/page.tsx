@@ -1,4 +1,5 @@
 import TopicForm from "@/components/form/topicForm/TopicForm";
+import SectionTitle from "@/components/sectionTitle/SectionTitle";
 import {useRetrieveWorkspaceTeamsQuery} from "@/store/api/teamApi";
 import {useRetrieveTopicQuery} from "@/store/api/topicApi";
 import {selectWorkspaceFromWorkspaceUsername} from "@/store/slice/accountSlice";
@@ -32,7 +33,10 @@ const EditTopicScreen: React.FC<EditTopicScreenProps> = ({}) => {
     return (
         <div className={styles.container}>
             <div className="spacer-h-4"/>
-            <h1>{t("topicEditScreenTitle")}</h1>
+            <SectionTitle
+                title={t("topicEditScreenTitle")}
+                description={t("topicEditScreenDescription")}
+            />
             {isTopicResponseLoading && (
                 <div className={styles.loadingContainer}>
                     <CircularLoading size={21}/>

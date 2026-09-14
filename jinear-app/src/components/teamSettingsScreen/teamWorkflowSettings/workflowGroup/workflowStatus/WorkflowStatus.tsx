@@ -122,7 +122,6 @@ const WorkflowStatus: React.FC<WorkflowStatusProps> = ({
         );
     };
 
-    // Dragging the row while its name is being edited would fight with text selection.
     const draggable = orderChangable && !isEditing;
 
     return (

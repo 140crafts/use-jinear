@@ -1,4 +1,5 @@
 import Button, {ButtonVariants} from "@/components/button";
+import SectionTitle from "@/components/sectionTitle/SectionTitle";
 import TopicCard from "@/components/topicScreen/topicListScreen/topicCard/TopicCard";
 import {useRetrieveWorkspaceTeamsQuery} from "@/store/api/teamApi";
 import {useRetrieveTeamTopicsQuery} from "@/store/api/topicListingApi";
@@ -37,7 +38,10 @@ const TeamTopicListScreen: React.FC<TeamTopicListScreenProps> = ({}) => {
 
     return (
         <div className={styles.container}>
-            <h1>{t("topicListScreenTitle")}</h1>
+            <SectionTitle
+                title={t("topicListScreenTitle")}
+                description={t("topicListScreenDescription")}
+            />
             <div className="spacer-h-4"/>
 
             {isFetching && teamTopicListingResponse == null && (

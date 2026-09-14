@@ -97,8 +97,6 @@ export const teamWorkflowStatusApi = api.injectEndpoints({
         body: request.teamWorkflowStatusReorderRequest,
       }),
       invalidatesTags: (_result, _err, req) => [{ type: "v1/team/workflow-status/{teamId}/list", id: req.teamId }],
-      // Reorder the cached group up front so the dragged row settles into its new
-      // position instead of snapping back until the refetch lands.
       async onQueryStarted({ teamId, teamWorkflowStatusReorderRequest }, { dispatch, queryFulfilled }) {
         const { workflowStateGroup, orderedTeamWorkflowStatusIds } = teamWorkflowStatusReorderRequest;
         const patchResult = dispatch(
