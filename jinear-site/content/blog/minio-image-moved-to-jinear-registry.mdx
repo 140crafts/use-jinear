@@ -1,0 +1,47 @@
+---
+title: "Release v0.1.1681. MinIO Image Moved to the Jinear Registry."
+description: "The MinIO image Jinear used was removed from Docker Hub, so docker compose pull failed and new installs could not start file storage. Jinear now uses a hosted copy of the same release. Existing installs need a one-line change."
+pubDate: "2026-09-14"
+tags: ["changelog", "self-hosting"]
+author: "Çağdaş Tunca"
+---
+
+This release is a single fix, but if you self-host Jinear, you need to act on it.
+
+## What broke
+
+The image `minio/minio:RELEASE.2025-03-12T18-04-18Z` was removed from Docker Hub.
+Because of this, `docker compose pull` failed with an error like
+`requested access to the resource is denied`, and no service was updated. New installs,
+and servers where the image was pruned, could not start MinIO at all.
+
+## What changed
+
+- `jinear-minio` now uses a copy of the same release, hosted by Jinear:
+  `registry.gitlab.com/140crafts/use-jinear/minio:RELEASE.2025-03-12T18-04-18Z`
+- The installer template and the compose files in `docs/manual-setup` and
+  `docs/behind-traefik` use the new image.
+
+## Upgrading an existing install
+
+`docker compose pull` does not change your `docker-compose.yaml`. In the `jinear-minio`
+service, change the `image:` line yourself:
+
+```yaml
+    image: registry.gitlab.com/140crafts/use-jinear/minio:RELEASE.2025-03-12T18-04-18Z
+```
+
+Then run:
+
+```bash
+cd ~/jinear
+docker compose pull && docker compose up -d
+```
+
+The MinIO release is the same, so the data in `.data/minio/` stays. For more information,
+see the troubleshooting section in `jinear-installation-scripts/README.md`.
+
+---
+
+The whole thing is on [GitLab](https://gitlab.com/140crafts/use-jinear) and
+[GitHub](https://github.com/140crafts/use-jinear).
