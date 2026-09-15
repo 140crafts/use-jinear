@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-09-13 13:43:50.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-15 10:08:57.
 
 export interface BaseDto {
     createdDate: Date;
@@ -750,9 +750,9 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
-    accountIsProjectTeamsAdmin: boolean;
     accountWorkspaceAdminOrOwner: boolean;
     accountIsProjectTeamsMember: boolean;
+    accountIsProjectTeamsAdmin: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -1630,10 +1630,10 @@ export interface OauthAuthorizeRequest {
     codeChallenge: string;
     codeChallengeMethod: string;
     resource: string;
+    code_challenge: string;
     response_type: string;
     client_id: string;
     redirect_uri: string;
-    code_challenge: string;
     code_challenge_method: string;
 }
 
@@ -1671,11 +1671,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
+    refresh_token: string;
+    code_verifier: string;
+    grant_type: string;
     client_id: string;
     redirect_uri: string;
-    grant_type: string;
-    code_verifier: string;
-    refresh_token: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2729,9 +2729,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    description: string;
-    uri: URI;
     filename: string;
+    uri: URI;
+    description: string;
 }
 
 export interface InputStreamSource {

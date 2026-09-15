@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 @Slf4j
 @Service
@@ -32,7 +31,9 @@ public class McpManager {
     public McpExchange handle(McpJsonRpcRequestBatch batch) {
         mcpEnabledValidator.validateMcpIsEnabled();
 
-        Optional<OauthAccessTokenVo> token = oauthAccessTokenResolver.currentAccessToken();
+        Optional<OauthAccessTokenVo> currentToken = oauthAccessTokenResolver.currentAccessToken();
+        mcpToolScopeValidator.validateAuthenticated(currentToken);
+        OauthAccessTokenVo token = currentToken.orElseThrow();
         validateScopes(batch, token);
 
         List<McpJsonRpcResponse> responses = new ArrayList<>();
@@ -52,7 +53,7 @@ public class McpManager {
      * A batch is refused as a whole if any tool call in it is short of a scope, so nothing is
      * half executed.
      */
-    private void validateScopes(McpJsonRpcRequestBatch batch, Optional<OauthAccessTokenVo> token) {
+    private void validateScopes(McpJsonRpcRequestBatch batch, OauthAccessTokenVo token) {
         for (McpJsonRpcRequest message : batch.getMessages()) {
             if (!mcpProtocolManager.isToolCall(message)) {
                 continue;
@@ -66,12 +67,12 @@ public class McpManager {
         }
     }
 
-    private McpToolContext contextFor(Optional<OauthAccessTokenVo> token) {
-        return token.map(vo -> McpToolContext.builder()
-                        .accountId(vo.getAccountId())
-                        .connectionId(vo.getConnectionId())
-                        .clientId(vo.getClientId())
-                        .scopes(vo.getScopes())
-                        .build())
-                .orElseGet(() -> McpToolContext.builder().scopes(Set.of()).build());
-    }}
+    private McpToolContext contextFor(OauthAccessTokenVo token) {
+        return McpToolContext.builder()
+                .accountId(token.getAccountId())
+                .connectionId(token.getConnectionId())
+                .clientId(token.getClientId())
+                .scopes(token.getScopes())
+                .build();
+    }
+}

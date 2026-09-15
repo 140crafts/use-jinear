@@ -115,8 +115,9 @@ The specifications involved, and what each one does for us:
 ### 1.6 The whole handshake, once, in words
 
 1. The user pastes `https://api.jinear.co/mcp` into Claude.
-2. Claude calls `POST /mcp` with `tools/call` (or gets there some other way) and receives
-   **401** with a `WWW-Authenticate` header naming a `resource_metadata` URL.
+2. Claude calls `POST /mcp` with `initialize` and no token, and receives **401** with a
+   `WWW-Authenticate` header naming a `resource_metadata` URL. This 401 is how Claude's
+   connector setup detects that the server uses OAuth.
 3. Claude fetches that metadata, learns the authorization server, and fetches the
    authorization server metadata.
 4. Claude identifies itself, either by CIMD or by registering dynamically.
@@ -515,19 +516,22 @@ This is the hot path.
      in front of every read.
 
 3. **`McpController.handle`** parses the body, which may be a single message or a batch
-   array. Before dispatching anything it walks the batch looking for the first tool call
-   the caller may not make:
-   - `initialize`, `ping`, notifications and `tools/list` are **deliberately open**, so a
-     client can connect and read the whole catalog before anyone signs in.
+   array. Before dispatching anything it checks the caller, then walks the batch looking
+   for the first tool call the caller may not make:
+   - **Every message needs a valid token**, `initialize`, `ping`, notifications and
+     `tools/list` included. No token (or an expired or revoked one): **401** with
+     `WWW-Authenticate: Bearer error="invalid_token", resource_metadata="...", scope="..."`,
+     where `scope` names every scope. Claude's connector setup sends an unauthenticated
+     `initialize` and reads this 401 as "this server uses OAuth"; a 200 there shows as
+     "No sign in". The public catalog is `GET /v1/mcp/manifest`, not `tools/list`.
    - An unknown tool name is left to the dispatcher, so the model learns the name was wrong
      rather than being told it is unauthorized.
-   - No token and the tool requires scopes: **401** with
-     `WWW-Authenticate: Bearer error="invalid_token", resource_metadata="...", scope="..."`.
    - Token present but missing a scope: **403** with `error="insufficient_scope"`. The
      challenge names **granted plus missing** scopes together, because naming only the
      missing ones would have the user re-consent to a narrower set than they already had,
      silently dropping permissions they were relying on.
-   - Both cases are written to the call log as `UNAUTHORIZED` or `FORBIDDEN`.
+   - The 403 case is written to the call log as `FORBIDDEN`. The 401 is not, because it
+     is not a tool call and every connection probe would add a row.
 
 4. **`McpProtocolService.handle`** dispatches per message. `initialize` echoes the client's
    protocol version when we speak it (`2025-11-25`, `2025-06-18`, `2025-03-26`) and answers

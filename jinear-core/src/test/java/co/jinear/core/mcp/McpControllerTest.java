@@ -2,6 +2,7 @@ package co.jinear.core.mcp;
 
 import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.config.properties.OauthProperties;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.service.mcp.McpDiscoveryService;
 import co.jinear.core.controller.mcp.McpController;
 import co.jinear.core.model.enumtype.account.RoleType;
@@ -24,8 +25,10 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -42,6 +45,9 @@ class McpControllerTest {
 
     private static final String RESOURCE_METADATA =
             "https://api.jinear.test/.well-known/oauth-protected-resource/mcp";
+    private static final String EVERY_SCOPE = Arrays.stream(OauthScope.values())
+            .map(OauthScope::getValue)
+            .collect(Collectors.joining(" "));
 
     private MockMvc mockMvc;
     private McpProperties properties;
@@ -85,7 +91,24 @@ class McpControllerTest {
     }
 
     @Test
+    void anUnauthenticatedInitializeIsChallengedSoClientsCanDiscoverOauth() throws Exception {
+        mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON).content("""
+                        {"jsonrpc":"2.0","id":1,"method":"initialize",
+                         "params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"test","version":"1"}}}
+                        """))
+                .andExpect(status().isUnauthorized())
+                .andExpect(header().string("WWW-Authenticate",
+                        org.hamcrest.Matchers.containsString("error=\"invalid_token\"")))
+                .andExpect(header().string("WWW-Authenticate",
+                        org.hamcrest.Matchers.containsString("resource_metadata=\"" + RESOURCE_METADATA + "\"")))
+                .andExpect(header().string("WWW-Authenticate",
+                        org.hamcrest.Matchers.containsString("scope=\"" + EVERY_SCOPE + "\"")));
+    }
+
+    @Test
     void initializeEchoesTheClientsProtocolVersionWhenWeSpeakIt() throws Exception {
+        authenticateWith(Set.of("tasks:read"));
+
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON).content("""
                         {"jsonrpc":"2.0","id":1,"method":"initialize",
                          "params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"test","version":"1"}}}
@@ -99,6 +122,8 @@ class McpControllerTest {
 
     @Test
     void initializeFallsBackToOurPreferredVersionForAnUnknownOne() throws Exception {
+        authenticateWith(Set.of("tasks:read"));
+
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON).content("""
                         {"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"1999-01-01"}}
                         """))
@@ -114,6 +139,8 @@ class McpControllerTest {
 
     @Test
     void pingAnswersEmptily() throws Exception {
+        authenticateWith(Set.of("tasks:read"));
+
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"jsonrpc\":\"2.0\",\"id\":7,\"method\":\"ping\"}"))
                 .andExpect(status().isOk())
@@ -122,7 +149,18 @@ class McpControllerTest {
     }
 
     @Test
-    void toolsListWorksWithoutAnyCredential() throws Exception {
+    void toolsListNeedsACredential() throws Exception {
+        mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\"}"))
+                .andExpect(status().isUnauthorized())
+                .andExpect(header().string("WWW-Authenticate",
+                        org.hamcrest.Matchers.containsString("resource_metadata=\"" + RESOURCE_METADATA + "\"")));
+    }
+
+    @Test
+    void toolsListAnswersAnAuthenticatedCaller() throws Exception {
+        authenticateWith(Set.of("tasks:read"));
+
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/list\"}"))
                 .andExpect(status().isOk())
@@ -132,7 +170,9 @@ class McpControllerTest {
     }
 
     @Test
-    void aToolWithNoScopesRunsWithoutACredential() throws Exception {
+    void aToolWithNoScopesRunsForAnyToken() throws Exception {
+        authenticateWith(Set.of());
+
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON).content("""
                         {"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"public_ping","arguments":{}}}
                         """))
@@ -151,7 +191,7 @@ class McpControllerTest {
                 .andExpect(header().string("WWW-Authenticate",
                         org.hamcrest.Matchers.containsString("resource_metadata=\"" + RESOURCE_METADATA + "\"")))
                 .andExpect(header().string("WWW-Authenticate",
-                        org.hamcrest.Matchers.containsString("scope=\"tasks:read\"")));
+                        org.hamcrest.Matchers.containsString("tasks:read")));
     }
 
     @Test
@@ -184,6 +224,8 @@ class McpControllerTest {
 
     @Test
     void anUnknownMethodIsAProtocolError() throws Exception {
+        authenticateWith(Set.of("tasks:read"));
+
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"jsonrpc\":\"2.0\",\"id\":8,\"method\":\"resources/list\"}"))
                 .andExpect(status().isOk())
@@ -232,6 +274,8 @@ class McpControllerTest {
 
     @Test
     void aBatchAnswersWithAnArray() throws Exception {
+        authenticateWith(Set.of("tasks:read"));
+
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON).content("""
                         [{"jsonrpc":"2.0","id":1,"method":"ping"},
                          {"jsonrpc":"2.0","id":2,"method":"tools/list"}]
@@ -244,10 +288,19 @@ class McpControllerTest {
 
     @Test
     void aNotificationGetsNoResponseBody() throws Exception {
+        authenticateWith(Set.of("tasks:read"));
+
         mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"))
                 .andExpect(status().isAccepted())
                 .andExpect(content().string(""));
+    }
+
+    @Test
+    void anUnauthenticatedNotificationIsChallenged() throws Exception {
+        mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}"))
+                .andExpect(status().isUnauthorized());
     }
 
     @Test

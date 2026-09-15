@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.util.EnumSet;
 import java.util.LinkedHashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -25,27 +26,27 @@ public class McpToolScopeValidator {
 
     private static final String ERROR_INVALID_TOKEN = "invalid_token";
     private static final String ERROR_INSUFFICIENT_SCOPE = "insufficient_scope";
-    private static final String UNAUTHORIZED_DESCRIPTION = "Authentication is required for this tool.";
+    private static final String UNAUTHORIZED_DESCRIPTION = "Authentication is required.";
     private static final String FORBIDDEN_DESCRIPTION = "This tool needs a permission that was not granted.";
 
     private final McpToolCallLogService mcpToolCallLogService;
     private final McpDiscoveryService mcpDiscoveryService;
 
-    public void validateScopes(String toolName, Set<OauthScope> requiredScopes, Optional<OauthAccessTokenVo> token) {
-        if (requiredScopes.isEmpty()) {
+    public void validateAuthenticated(Optional<OauthAccessTokenVo> token) {
+        if (token.isPresent()) {
             return;
         }
-        if (token.isEmpty()) {
-            mcpToolCallLogService.recordRejection(null, null, null, toolName, McpToolCallStatus.UNAUTHORIZED);
-            throw new McpAuthChallengeException(ERROR_INVALID_TOKEN, UNAUTHORIZED_DESCRIPTION,
-                    unauthorizedChallenge(requiredScopes), false);
-        }
-        Set<String> granted = token.get().getScopes();
+        throw new McpAuthChallengeException(ERROR_INVALID_TOKEN, UNAUTHORIZED_DESCRIPTION,
+                unauthorizedChallenge(EnumSet.allOf(OauthScope.class)), false);
+    }
+
+    public void validateScopes(String toolName, Set<OauthScope> requiredScopes, OauthAccessTokenVo token) {
+        Set<String> granted = token.getScopes();
         if (grantsAll(granted, requiredScopes)) {
             return;
         }
-        mcpToolCallLogService.recordRejection(token.get().getAccountId(), token.get().getConnectionId(),
-                token.get().getClientId(), toolName, McpToolCallStatus.FORBIDDEN);
+        mcpToolCallLogService.recordRejection(token.getAccountId(), token.getConnectionId(),
+                token.getClientId(), toolName, McpToolCallStatus.FORBIDDEN);
         throw new McpAuthChallengeException(ERROR_INSUFFICIENT_SCOPE, FORBIDDEN_DESCRIPTION,
                 insufficientScopeChallenge(granted, requiredScopes), true);
     }

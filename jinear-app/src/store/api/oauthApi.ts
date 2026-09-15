@@ -45,11 +45,7 @@ export const oauthApi = api.injectEndpoints({
                 method: "POST",
                 body: req,
             }),
-            invalidatesTags: (_result, _err, req) => [
-                {
-                    type: "v1/oauth/authorize/info/{requestId}",
-                    id: req.requestId,
-                },
+            invalidatesTags: () => [
                 {
                     type: "v1/oauth/connection/list",
                 },
