@@ -6475,6 +6475,46 @@ const translations = {
         en: "Workspace",
         tr: "Çalışma Alanı"
     },
+    adminTableHeaderTool: {
+        en: "Tool",
+        tr: "Araç"
+    },
+    adminTableHeaderCalls: {
+        en: "Calls",
+        tr: "Çağrı"
+    },
+    adminTableHeaderErrors: {
+        en: "Errors",
+        tr: "Hata"
+    },
+    adminTableHeaderAverageDuration: {
+        en: "Avg. duration",
+        tr: "Ort. süre"
+    },
+    adminTableHeaderClientId: {
+        en: "Client ID",
+        tr: "İstemci Kimliği"
+    },
+    adminTableHeaderType: {
+        en: "Type",
+        tr: "Tür"
+    },
+    adminTableHeaderRegistered: {
+        en: "Registered",
+        tr: "Kayıt"
+    },
+    adminTableHeaderStatus: {
+        en: "Status",
+        tr: "Durum"
+    },
+    adminTableHeaderDuration: {
+        en: "Duration",
+        tr: "Süre"
+    },
+    adminTableHeaderTime: {
+        en: "Time",
+        tr: "Zaman"
+    },
     adminAccountPickerModalTitle: {
         en: "Pick Account",
         tr: "Hesap Seç"
@@ -6520,18 +6560,6 @@ const translations = {
         en: "No tool has been called yet.",
         tr: "Henüz hiçbir araç çağrılmadı."
     },
-    adminMcpToolCallsLabel: {
-        en: "calls:",
-        tr: "çağrı:"
-    },
-    adminMcpToolErrorsLabel: {
-        en: "errors:",
-        tr: "hata:"
-    },
-    adminMcpToolAverageLabel: {
-        en: "average:",
-        tr: "ortalama:"
-    },
     adminMcpClientsTitle: {
         en: "Registered client applications",
         tr: "Kayıtlı istemci uygulamaları"
@@ -6543,10 +6571,6 @@ const translations = {
     adminMcpClientsEmpty: {
         en: "No client application has registered yet.",
         tr: "Henüz hiçbir istemci uygulaması kaydolmadı."
-    },
-    adminMcpClientRegisteredLabel: {
-        en: "registered",
-        tr: "kaydoldu"
     },
     adminMcpClientRevokeButton: {
         en: "Revoke",

@@ -2,6 +2,8 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  min-width: 0;
+  max-width: 100%;
   gap: 1rem;
 }
 
@@ -47,59 +49,63 @@
   color: var(--c-secondary-shade-0);
 }
 
-.pagination {
-  width: 100%;
-}
-
-.rowList {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.row {
+.header {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.75rem;
-  border: 1px solid var(--c-primary-shade-1);
-  border-radius: var(--border-radius);
+  justify-content: flex-end;
 }
 
-.rowText {
+.content {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
-  min-width: 0;
 }
 
-.rowTitle {
+.tableWrapper {
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+  background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-0-op05));
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 40rem;
+}
+
+.table th {
+  text-align: left;
+  font-size: 0.7rem;
   font-weight: 600;
-  overflow-wrap: anywhere;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--c-secondary-shade-0);
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--c-primary-shade-1);
+  white-space: nowrap;
 }
 
-.rowMeta {
+.primaryHeader {
+  width: 100%;
+}
+
+.actionsHeader {
+  text-align: right;
+}
+
+.emptyStateContainer {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  font-size: 0.8125rem;
-  color: var(--c-secondary-shade-0);
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 6rem;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+  background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-0-op05));
 }
 
-.mono {
-  font-family: "SF Mono", ui-monospace, monospace;
-  font-size: 0.875rem;
-  overflow-wrap: anywhere;
-}
-
-.statusOk {
-  color: var(--c-secondary-shade-0);
-}
-
-.statusBad {
-  color: var(--c-JINEAR_ORANGE);
-  font-weight: 600;
+.emptyLabel {
+  opacity: 0.8;
 }

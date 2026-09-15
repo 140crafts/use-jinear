@@ -1,18 +1,16 @@
-import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
 import Pagination from "@/components/pagination/Pagination";
 import useTranslation from "@/locales/useTranslation";
 import {useAdminRetrieveMcpAnalyticsQuery, useAdminRetrieveMcpLogsQuery} from "@/store/api/adminMcpApi";
-import {useAdminRetrieveOauthClientsQuery, useAdminRevokeOauthClientMutation} from "@/store/api/adminOauthApi";
-import {changeLoadingModalVisibility} from "@/store/slice/modalSlice";
-import {useAppDispatch} from "@/store";
-import {calculateDateDiff} from "@/util/DateHelper";
-import React, {useEffect, useState} from "react";
+import {useAdminRetrieveOauthClientsQuery} from "@/store/api/adminOauthApi";
+import React, {useState} from "react";
+import AdminMcpClientRow from "./clientRow/AdminMcpClientRow";
+import AdminMcpLogRow from "./logRow/AdminMcpLogRow";
+import AdminMcpToolRow from "./toolRow/AdminMcpToolRow";
 import styles from "./AdminMcpScreen.module.css";
 
 const AdminMcpScreen: React.FC = () => {
     const {t} = useTranslation();
-    const dispatch = useAppDispatch();
     const [clientPage, setClientPage] = useState<number>(0);
     const [logPage, setLogPage] = useState<number>(0);
 
@@ -25,17 +23,9 @@ const AdminMcpScreen: React.FC = () => {
         currentData: logsResponse,
         isFetching: isLogsFetching,
     } = useAdminRetrieveMcpLogsQuery({page: logPage});
-    const [revokeClient, {isLoading: isRevokeLoading}] = useAdminRevokeOauthClientMutation();
-
-    useEffect(() => {
-        dispatch(changeLoadingModalVisibility({visible: isRevokeLoading}));
-    }, [isRevokeLoading]);
 
     const analytics = analyticsResponse?.data;
-
-    const revoke = (clientId: string) => () => {
-        revokeClient({clientId});
-    };
+    const topTools = analytics?.topTools ?? [];
 
     return (
         <div className={styles.container}>
@@ -64,101 +54,123 @@ const AdminMcpScreen: React.FC = () => {
             </div>
 
             <h3>{t("adminMcpTopToolsTitle")}</h3>
-            {(analytics?.topTools?.length ?? 0) == 0 && (
-                <span className={styles.text}>{t("adminMcpTopToolsEmpty")}</span>
-            )}
-            <div className={styles.rowList}>
-                {analytics?.topTools?.map((tool) => (
-                    <div key={tool.toolName} className={styles.row}>
-                        <code className={styles.mono}>{tool.toolName}</code>
-                        <div className={styles.rowMeta}>
-                            <span>{`${t("adminMcpToolCallsLabel")} ${tool.callCount}`}</span>
-                            <span>{`${t("adminMcpToolErrorsLabel")} ${tool.errorCount}`}</span>
-                            <span>{`${t("adminMcpToolAverageLabel")} ${tool.averageDurationMs} ms`}</span>
-                        </div>
+            <div className={styles.content}>
+                {topTools.length != 0 && (
+                    <div className={styles.tableWrapper}>
+                        <table className={styles.table}>
+                            <thead>
+                            <tr>
+                                <th className={styles.primaryHeader}>{t("adminTableHeaderTool")}</th>
+                                <th>{t("adminTableHeaderCalls")}</th>
+                                <th>{t("adminTableHeaderErrors")}</th>
+                                <th>{t("adminTableHeaderAverageDuration")}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {topTools.map((tool) => (
+                                <AdminMcpToolRow key={`admin-mcp-tool-row-${tool.toolName}`} tool={tool}/>
+                            ))}
+                            </tbody>
+                        </table>
                     </div>
-                ))}
+                )}
+                {topTools.length == 0 && (
+                    <div className={styles.emptyStateContainer}>
+                        <div className={styles.emptyLabel}>{t("adminMcpTopToolsEmpty")}</div>
+                    </div>
+                )}
             </div>
 
             <h3>{t("adminMcpClientsTitle")}</h3>
             <span className={styles.text}>{t("adminMcpClientsText")}</span>
             {clientsResponse && (
-                <Pagination
-                    id={"admin-mcp-client-paginator"}
-                    className={styles.pagination}
-                    pageNumber={clientsResponse.data.number}
-                    pageSize={clientsResponse.data.size}
-                    totalPages={clientsResponse.data.totalPages}
-                    totalElements={clientsResponse.data.totalElements}
-                    hasPrevious={clientsResponse.data.hasPrevious}
-                    hasNext={clientsResponse.data.hasNext}
-                    isLoading={isClientsFetching}
-                    page={clientPage}
-                    setPage={setClientPage}
-                />
+                <div className={styles.header}>
+                    <Pagination
+                        id={"admin-mcp-client-paginator"}
+                        className={styles.pagination}
+                        pageNumber={clientsResponse.data.number}
+                        pageSize={clientsResponse.data.size}
+                        totalPages={clientsResponse.data.totalPages}
+                        totalElements={clientsResponse.data.totalElements}
+                        hasPrevious={clientsResponse.data.hasPrevious}
+                        hasNext={clientsResponse.data.hasNext}
+                        isLoading={isClientsFetching}
+                        page={clientPage}
+                        setPage={setClientPage}
+                    />
+                </div>
             )}
-            <div className={styles.rowList}>
-                {clientsResponse?.data.content.map((client) => (
-                    <div key={client.clientId} className={styles.row}>
-                        <div className={styles.rowText}>
-                            <div className={styles.rowTitle}>{client.clientName || client.clientId}</div>
-                            <code className={styles.mono}>{client.clientId}</code>
-                            <div className={styles.rowMeta}>
-                                <span>{client.registrationType}</span>
-                                {client.clientIdIssuedAt && (
-                                    <span>{`${t("adminMcpClientRegisteredLabel")} ${calculateDateDiff(client.clientIdIssuedAt)}`}</span>
-                                )}
-                            </div>
-                        </div>
-                        <Button
-                            heightVariant={ButtonHeight.short}
-                            variant={ButtonVariants.outline}
-                            disabled={isRevokeLoading}
-                            onClick={revoke(client.clientId)}
-                        >
-                            {t("adminMcpClientRevokeButton")}
-                        </Button>
+            <div className={styles.content}>
+                {clientsResponse?.data.hasContent && (
+                    <div className={styles.tableWrapper}>
+                        <table className={styles.table}>
+                            <thead>
+                            <tr>
+                                <th className={styles.primaryHeader}>{t("adminTableHeaderName")}</th>
+                                <th>{t("adminTableHeaderClientId")}</th>
+                                <th>{t("adminTableHeaderType")}</th>
+                                <th>{t("adminTableHeaderRegistered")}</th>
+                                <th className={styles.actionsHeader}>{t("adminTableHeaderActions")}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {clientsResponse.data.content.map((client) => (
+                                <AdminMcpClientRow key={`admin-mcp-client-row-${client.clientId}`} client={client}/>
+                            ))}
+                            </tbody>
+                        </table>
                     </div>
-                ))}
+                )}
                 {clientsResponse && !clientsResponse.data.hasContent && !isClientsFetching && (
-                    <span className={styles.text}>{t("adminMcpClientsEmpty")}</span>
+                    <div className={styles.emptyStateContainer}>
+                        <div className={styles.emptyLabel}>{t("adminMcpClientsEmpty")}</div>
+                    </div>
                 )}
                 {isClientsFetching && !clientsResponse && <CircularLoading/>}
             </div>
 
             <h3>{t("adminMcpLogTitle")}</h3>
             {logsResponse && (
-                <Pagination
-                    id={"admin-mcp-log-paginator"}
-                    className={styles.pagination}
-                    pageNumber={logsResponse.data.number}
-                    pageSize={logsResponse.data.size}
-                    totalPages={logsResponse.data.totalPages}
-                    totalElements={logsResponse.data.totalElements}
-                    hasPrevious={logsResponse.data.hasPrevious}
-                    hasNext={logsResponse.data.hasNext}
-                    isLoading={isLogsFetching}
-                    page={logPage}
-                    setPage={setLogPage}
-                />
+                <div className={styles.header}>
+                    <Pagination
+                        id={"admin-mcp-log-paginator"}
+                        className={styles.pagination}
+                        pageNumber={logsResponse.data.number}
+                        pageSize={logsResponse.data.size}
+                        totalPages={logsResponse.data.totalPages}
+                        totalElements={logsResponse.data.totalElements}
+                        hasPrevious={logsResponse.data.hasPrevious}
+                        hasNext={logsResponse.data.hasNext}
+                        isLoading={isLogsFetching}
+                        page={logPage}
+                        setPage={setLogPage}
+                    />
+                </div>
             )}
-            <div className={styles.rowList}>
-                {logsResponse?.data.content.map((entry) => (
-                    <div key={entry.mcpToolCallLogId} className={styles.row}>
-                        <div className={styles.rowText}>
-                            <code className={styles.mono}>{entry.toolName}</code>
-                            <div className={styles.rowMeta}>
-                                <span className={entry.callStatus == "OK" ? styles.statusOk : styles.statusBad}>
-                                    {entry.callStatus}
-                                </span>
-                                {entry.durationMs != null && <span>{`${entry.durationMs} ms`}</span>}
-                                {entry.createdDate && <span>{calculateDateDiff(entry.createdDate)}</span>}
-                            </div>
-                        </div>
+            <div className={styles.content}>
+                {logsResponse?.data.hasContent && (
+                    <div className={styles.tableWrapper}>
+                        <table className={styles.table}>
+                            <thead>
+                            <tr>
+                                <th className={styles.primaryHeader}>{t("adminTableHeaderTool")}</th>
+                                <th>{t("adminTableHeaderStatus")}</th>
+                                <th>{t("adminTableHeaderDuration")}</th>
+                                <th>{t("adminTableHeaderTime")}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {logsResponse.data.content.map((entry) => (
+                                <AdminMcpLogRow key={`admin-mcp-log-row-${entry.mcpToolCallLogId}`} entry={entry}/>
+                            ))}
+                            </tbody>
+                        </table>
                     </div>
-                ))}
+                )}
                 {logsResponse && !logsResponse.data.hasContent && !isLogsFetching && (
-                    <span className={styles.text}>{t("adminMcpLogEmpty")}</span>
+                    <div className={styles.emptyStateContainer}>
+                        <div className={styles.emptyLabel}>{t("adminMcpLogEmpty")}</div>
+                    </div>
                 )}
                 {isLogsFetching && !logsResponse && <CircularLoading/>}
             </div>
