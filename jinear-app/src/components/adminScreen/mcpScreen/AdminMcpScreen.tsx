@@ -106,7 +106,8 @@ const AdminMcpScreen: React.FC = () => {
                         <table className={styles.table}>
                             <thead>
                             <tr>
-                                <th className={styles.primaryHeader}>{t("adminTableHeaderName")}</th>
+                                {/*className={styles.primaryHeader}*/}
+                                <th>{t("adminTableHeaderName")}</th>
                                 <th>{t("adminTableHeaderClientId")}</th>
                                 <th>{t("adminTableHeaderType")}</th>
                                 <th>{t("adminTableHeaderRegistered")}</th>
