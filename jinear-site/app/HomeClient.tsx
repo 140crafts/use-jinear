@@ -7,8 +7,20 @@ import styles from "./index.module.scss";
 
 const IMG_BASE = "https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v3";
 
-/** A screenshot inside Design A's browser-chrome frame, with a caption. */
-function Shot({ src, alt, url, caption }: { src: string; alt: string; url: string; caption: string }) {
+/** A screenshot inside Design A's browser-chrome frame, with a title and caption. */
+function Shot({
+  src,
+  alt,
+  url,
+  title,
+  caption,
+}: {
+  src: string;
+  alt: string;
+  url: string;
+  title: string;
+  caption: string;
+}) {
   return (
     <figure className={styles.look}>
       <div className={styles.appwin}>
@@ -20,7 +32,10 @@ function Shot({ src, alt, url, caption }: { src: string; alt: string; url: strin
         </div>
         <img className={styles.lookMedia} src={src} alt={alt} loading="lazy" decoding="async" />
       </div>
-      <figcaption>{caption}</figcaption>
+      <figcaption>
+        <strong className={styles.lookTitle}>{title}</strong>
+        {caption}
+      </figcaption>
     </figure>
   );
 }
@@ -83,42 +98,37 @@ export default function HomeClient() {
 
         <section className={styles.blk}>
           <h2>A quick look</h2>
-          <Shot
-            src={`${IMG_BASE}/v2.1-tasks.png`}
-            alt="Tasks and boards in Jinear"
-            url="jinear.co / cagdas / tasks / jinear"
-            caption="Tasks, lists and boards, all in one place."
-          />
-        </section>
-
-        <section className={styles.blk}>
-          <h2>Your month at a glance</h2>
-          <Shot
-            src={`${IMG_BASE}/v2.1-calendar.png`}
-            alt="The calendar in Jinear"
-            url="jinear.co / cagdas / calendar"
-            caption="A built-in calendar with Google Calendar sync."
-          />
-        </section>
-
-        <section className={styles.blk}>
-          <h2>Notes, next to the work</h2>
-          <Shot
-            src={`${IMG_BASE}/v2.1-notes.png`}
-            alt="Notes and notebooks in Jinear"
-            url="jinear.co / cagdas / notes"
-            caption="Rich-text notes in shared notebooks, with tags and offline drafts."
-          />
-        </section>
-
-        <section className={styles.blk}>
-          <h2>Your files, your storage</h2>
-          <Shot
-            src={`${IMG_BASE}/v2.1-files.png`}
-            alt="File storage in Jinear"
-            url="jinear.co / cagdas / files"
-            caption="Attach files to tasks, kept on your own storage."
-          />
+          <div className={styles.shots} role="region" aria-label="Screenshots of Jinear" tabIndex={0}>
+            <Shot
+              src={`${IMG_BASE}/v2.1-tasks.png`}
+              alt="Tasks and boards in Jinear"
+              url="jinear.co / cagdas / tasks / jinear"
+              title="Tasks and boards"
+              caption="Tasks, lists and boards, all in one place."
+            />
+            <Shot
+              src={`${IMG_BASE}/v2.1-calendar.png`}
+              alt="The calendar in Jinear"
+              url="jinear.co / cagdas / calendar"
+              title="Your month at a glance"
+              caption="A built-in calendar with Google Calendar sync."
+            />
+            <Shot
+              src={`${IMG_BASE}/v2.1-notes.png`}
+              alt="Notes and notebooks in Jinear"
+              url="jinear.co / cagdas / notes"
+              title="Notes, next to the work"
+              caption="Rich-text notes in shared notebooks, with tags and offline drafts."
+            />
+            <Shot
+              src={`${IMG_BASE}/v2.1-files.png`}
+              alt="File storage in Jinear"
+              url="jinear.co / cagdas / files"
+              title="Your files, your storage"
+              caption="Attach files to tasks, kept on your own storage."
+            />
+          </div>
+          <p className={styles.shotsHint}>Scroll sideways for the rest →</p>
           <div className={styles.note}>
             A self hosted Jinear instance runs as a single Docker Compose stack on your own server.{" "}
             <b>No per-user tax, no lock-in, no vendor reading your tasks.</b> The source is on{" "}

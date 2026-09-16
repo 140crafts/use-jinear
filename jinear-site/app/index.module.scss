@@ -193,9 +193,44 @@
   }
 }
 
-/* a quick look */
+/* a quick look: one horizontal rail of screenshots */
+.shots {
+  display: flex;
+  gap: 16px;
+  // Bleed past the 24px column padding so a card can sit at the viewport edge.
+  margin: 4px -24px 0;
+  padding: 0 24px 10px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-2) transparent;
+
+  &::-webkit-scrollbar {
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--border-2);
+    border-radius: 999px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+.shotsHint {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 10px;
+}
+
 .look {
-  margin: 4px 0 0;
+  margin: 0;
+  flex: 0 0 min(88%, 480px);
+  scroll-snap-align: start;
 
   .appwin {
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02), 0 18px 44px -30px rgba(40, 30, 10, 0.32);
@@ -208,6 +243,15 @@
     margin-top: 12px;
     text-align: center;
   }
+}
+
+.lookTitle {
+  display: block;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
 }
 
 .appwin {
