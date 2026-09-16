@@ -45,12 +45,23 @@ body {
   color: var(--acc-deep);
 }
 
-div::-webkit-scrollbar {
-  display: none;
-  /* IE and Edge */
+// No scrollbars anywhere on this site, the page's own bar included. Windows
+// draws classic bars that take up space, unlike the overlay bars on macOS.
+// These two must sit on the element: inside ::-webkit-scrollbar they are
+// ignored, which is what left Firefox showing bars.
+html,
+body,
+* {
+  /* IE and old Edge */
   -ms-overflow-style: none;
   /* Firefox */
   scrollbar-width: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+*::-webkit-scrollbar {
+  display: none;
 }
 
 a {

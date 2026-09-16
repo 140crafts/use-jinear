@@ -3,12 +3,13 @@
        Design A: Bare & Minimal (marketing site)
        Warm off-white, soft orange accent, friendly + tidy.
        =========================================================== */
-    /* surfaces */
-    --bg: #fbfaf7;
-    --bg-sunk: #f5f3ee;
+    /* surfaces: near-neutral off-white, only a trace of warmth so the orange
+       accent still sits naturally on it */
+    --bg: #fbfbfa;
+    --bg-sunk: #f4f4f2;
     --surface: #ffffff;
-    --border: #e8e4db;
-    --border-2: #ddd8cd;
+    --border: #e7e6e2;
+    --border-2: #dcdad5;
     /* ink */
     --ink: #1c1a16;
     --ink-2: #4f4b43;
@@ -18,6 +19,13 @@
     --acc-deep: #b8550e;
     --acc-soft: #fbe7cf;
     --acc-tint: #fff4e7;
+    /* layout: the reading column every marketing page renders inside. Mirrored
+       as $page-width in breakpoints.scss, which media queries use. */
+    --page-width: 660px;
+    /* the floating Ask-AI card. Both are mirrored in breakpoints.scss, which
+       derives the width at which the card clears the reading column. */
+    --ask-ai-card-width: 244px;
+    --ask-ai-card-gutter: 20px;
     /* misc */
     --radius: 12px;
     --radius-sm: 8px;

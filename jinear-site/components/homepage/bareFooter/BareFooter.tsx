@@ -6,8 +6,9 @@ import styles from "./BareFooter.module.scss";
 const TELEGRAM_URL = "https://t.me/usejinear";
 
 const BareFooter: React.FC = () => {
+    // data-site-footer: the Ask-AI card docks above this instead of covering it.
     return (
-        <footer className={styles.mini}>
+        <footer className={styles.mini} data-site-footer="">
             <span className={styles.wordmark}>JINEAR</span>
             <span className={styles.sep}>·</span>
             <Link href="/pricing">Pricing</Link>

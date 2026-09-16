@@ -5,6 +5,7 @@ import {OG_IMAGE} from "@/utils/seo";
 import "../styles/app.scss";
 import "../styles/fonts.css";
 import Root from "@/components/root/Root";
+import AskAiCard from "@/components/askAi/AskAiCard";
 import {CSPostHogProvider} from "@/components/postHogProvider/CSPostHogProvider";
 
 export const viewport: Viewport = {
@@ -83,6 +84,7 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
             <Root>
                 {children}
             </Root>
+            <AskAiCard/>
         </CSPostHogProvider>
         </body>
         </html>

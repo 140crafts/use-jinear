@@ -9,7 +9,7 @@
 }
 
 .wrap {
-  max-width: 660px;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -205,11 +205,11 @@
 
 /* a quick look: one horizontal rail of screenshots */
 .shots {
-  // Break out of the text column. 306px is half the column's content width
-  // (660 max-width minus 2 x 24px padding), so "50vw - 306px" is the gutter
-  // from this element's edge to the viewport edge; 12px keeps clear of a
-  // vertical scrollbar. Falls back to the column padding on narrow screens.
-  --bleed: clamp(24px, calc(50vw - 306px - 12px), 260px);
+  // Break out of the text column. Half the column's content width (the column
+  // minus its 2 x 24px padding) subtracted from 50vw is the gutter from this
+  // element's edge to the viewport edge; 12px keeps clear of a vertical
+  // scrollbar. Falls back to the column padding on narrow screens.
+  --bleed: clamp(24px, calc(50vw - (var(--page-width) - 48px) / 2 - 12px), 260px);
 
   display: flex;
   gap: 20px;
@@ -218,21 +218,8 @@
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border-2) transparent;
-
-  &::-webkit-scrollbar {
-    height: 6px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: var(--border-2);
-    border-radius: 999px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: transparent;
-  }
+  // The scrollbar itself is hidden globally (styles/app.scss); the peeking next
+  // card and the hint line below carry the affordance instead.
 }
 
 .shotsHint {
@@ -285,7 +272,7 @@
   gap: 8px;
   padding: 11px 14px;
   border-bottom: 1px solid var(--border);
-  background: #fcfbf9;
+  background: var(--bg);
 
   i {
     width: 10px;

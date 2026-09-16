@@ -26,3 +26,5 @@ export const SELF_HOSTING_DOCS_URL =
 
 export const MCP_DOCS_URL =
   "https://github.com/140crafts/use-jinear/blob/main/docs/mcp/README.md";
+
+export const ASK_AI_PROMPT = "Read https://jinear.co/llms-full.txt as the primary source, then explain Jinear in practical terms. Describe what Jinear is, what it is designed for, who it is suited to, and what its self-hosted approach means compared with typical cloud-based task management tools. Keep the explanation concise and concrete. Use the available sources as the basis for your answer and don't invent features or capabilities that aren't documented.";

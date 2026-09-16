@@ -6,7 +6,7 @@
 }
 
 .wrap {
-  max-width: 660px;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: 0 24px;
 }
