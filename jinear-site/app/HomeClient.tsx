@@ -71,9 +71,7 @@ export default function HomeClient() {
               <span>A built-in calendar, plus Google Calendar sync.</span>
             </li>
             <li>
-              <span className={styles.k}>
-                notes<em className={styles.newBadge}>new</em>
-              </span>
+              <span className={styles.k}>notes</span>
               <span>Rich-text notes in shared notebooks, with tags and offline drafts.</span>
             </li>
             <li>
@@ -168,9 +166,9 @@ export default function HomeClient() {
             and reply to everything myself. I don&apos;t use your email for marketing or auto reply using AI. I&apos;d love to hear from you.
           </p>
           <p className={styles.letterP}>
-            And if you&apos;ve already got Jinear running somewhere, say hello. Self-hosted instances phone nothing home, not
-            even install counts, so there&apos;s no dashboard on my end lighting up when you spin one up. Hearing that
-            someone found it useful makes my day.
+            And if you&apos;ve already got Jinear running somewhere, say hello. A self-hosted instance tells me nothing
+            about you: at most a random id, a version number, and which features are on if you said yes to that during
+            setup. Nothing on my end says who you are, so hearing that someone found it useful makes my day.
           </p>
           <div className={styles.letterEmailLine}>
             <img className={styles.letterAvatar} src={`${IMG_BASE}/ben.jpg`} alt="Çağdaş, maker of Jinear" />

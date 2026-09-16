@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Link from "next/link";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { buildMetadata } from "@/utils/seo";
@@ -48,12 +47,7 @@ export default function McpPage() {
       <div className={styles.wrap}>
         <BareNav />
 
-        <Link className={styles.back} href="/">
-          ← Home
-        </Link>
-
         <header className={styles.ahead}>
-          <p className={styles.eyebrow}>MCP</p>
           <h1 className={styles.title}>Connect Claude or ChatGPT to Jinear</h1>
           <p className={styles.lede}>
             Jinear speaks MCP, so an AI assistant can read and change your work directly. Ask Claude what

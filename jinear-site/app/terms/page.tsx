@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Link from "next/link";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { buildMetadata } from "@/utils/seo";
@@ -20,10 +19,6 @@ export default function TermsPage() {
     <div className={styles.page}>
       <div className={styles.wrap}>
         <BareNav />
-
-        <Link className={styles.back} href="/">
-          ← Home
-        </Link>
 
         <header className={styles.ahead}>
           <h1 className={styles.title}>Privacy Policy, Terms &amp; Conditions</h1>

@@ -55,8 +55,11 @@ The Team price is flat rather than per seat: a team of 4 and a team of 40 pay ex
 ## Self-hosting
 
 Jinear runs as a single Docker Compose stack on your own server. You keep your own
-storage and backups, and self-hosted instances phone nothing home, not even install
-counts.
+storage and backups. A self-hosted instance sends nothing unless the administrator agrees
+during setup: a daily update check (a random instance id and the version number) and an
+anonymous usage report (which features are on, plus size ranges instead of counts). It
+never sends account data, content, domains or IP addresses, and both can be turned off at
+any time.
 
 - Install guide: ${SELF_HOSTING_DOCS_URL}
 - Source (GitHub): ${GITHUB_URL}

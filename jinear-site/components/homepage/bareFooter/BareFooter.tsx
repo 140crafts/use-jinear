@@ -20,7 +20,9 @@ const BareFooter: React.FC = () => {
             <span className={styles.sep}>·</span>
             <a href={GITLAB_URL} target="_blank" rel="noreferrer">GitLab</a>
             <span className={styles.sep}>·</span>
-            <Link href="/mcp">Claude &amp; ChatGPT</Link>
+            <Link className={styles.mcpLink} href="/mcp">
+                MCP<em className={styles.newTag}>new</em>
+            </Link>
             <span className={styles.sep}>·</span>
             <Link href="/blog">Blog</Link>
             <span className={styles.sep}>·</span>
