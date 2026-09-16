@@ -6071,6 +6071,58 @@ const translations = {
         en: "Most of the following features require additional config (Social sign in methods, email server configuration etc.). Check out docs for details.",
         tr: "Aşağıdaki özelliklerin çoğu ek yapılandırma gerektirir (Sosyal giriş yöntemleri, e-posta sunucusu yapılandırması vb.). Ayrıntılar için kurulum dökümanlarına göz atın."
     },
+    instanceVersionSectionTitle: {
+        en: "Version and Updates",
+        tr: "Sürüm ve Güncellemeler"
+    },
+    instanceVersionCurrent: {
+        en: "Running version",
+        tr: "Çalışan sürüm"
+    },
+    instanceVersionUpToDate: {
+        en: "This instance is up to date.",
+        tr: "Bu kurulum güncel."
+    },
+    instanceVersionUnknown: {
+        en: "No release information yet. It appears after the first update check.",
+        tr: "Henüz sürüm bilgisi yok. İlk güncelleme kontrolünden sonra görünür."
+    },
+    instanceVersionUpdateAvailable: {
+        en: "New version available",
+        tr: "Yeni sürüm mevcut"
+    },
+    instanceVersionUpdateCommand: {
+        en: "To update, run this in your install folder:",
+        tr: "Güncellemek için kurulum klasörünüzde şunu çalıştırın:"
+    },
+    instanceVersionUpdateCheck: {
+        en: "Daily update check",
+        tr: "Günlük güncelleme kontrolü"
+    },
+    instanceVersionUsageReport: {
+        en: "Anonymous usage report",
+        tr: "Anonim kullanım raporu"
+    },
+    instanceVersionLastCheck: {
+        en: "Last check",
+        tr: "Son kontrol"
+    },
+    instanceVersionStatusOn: {
+        en: "On",
+        tr: "Açık"
+    },
+    instanceVersionStatusOff: {
+        en: "Off",
+        tr: "Kapalı"
+    },
+    instanceVersionTelemetryInfo: {
+        en: "Both settings live in .env (TELEMETRY_UPDATE_CHECK, TELEMETRY_USAGE_REPORT). DO_NOT_TRACK=1 turns both off.",
+        tr: "İki ayar da .env dosyasındadır (TELEMETRY_UPDATE_CHECK, TELEMETRY_USAGE_REPORT). DO_NOT_TRACK=1 ikisini de kapatır."
+    },
+    instanceVersionDocsLink: {
+        en: "See every field that is sent",
+        tr: "Gönderilen tüm alanları görün"
+    },
     instanceFlagRegisterWithMail: {
         en: "Register with Email",
         tr: "Email ile Kayıt"

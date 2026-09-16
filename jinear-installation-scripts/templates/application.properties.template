@@ -103,6 +103,10 @@ jinear.storage.limit.pro=204800
 jinear.management.enabled=${MANAGEMENT_ENABLED:false}
 jinear.management.admin.email=${MANAGEMENT_ADMIN_EMAIL:}
 jinear.management.admin.password=${MANAGEMENT_ADMIN_PASSWORD:}
+# Updates and anonymous statistics (see docs/telemetry.md). Both are off unless
+# .env turns them on. DO_NOT_TRACK=1 in the environment turns both off.
+jinear.telemetry.update-check.enabled=${TELEMETRY_UPDATE_CHECK:false}
+jinear.telemetry.usage-report.enabled=${TELEMETRY_USAGE_REPORT:false}
 
 # ==============================================================
 # = GCloud (Optional - leave as-is if not using Google services)

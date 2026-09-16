@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-09-15 10:08:57.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-16 16:57:22.
 
 export interface BaseDto {
     createdDate: Date;
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
-    ghistoryId: string;
     gthreadId: string;
+    ghistoryId: string;
     ginternalDate: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -262,6 +262,22 @@ export interface IntegrationScopeDto extends BaseDto {
     integrationInfoId: string;
     scope: IntegrationScopeType;
     integrationInfo: IntegrationInfoDto;
+}
+
+export interface InstanceInfoDto extends BaseDto {
+    instanceInfoId: string;
+    telemetryInstanceId: string;
+    latestKnownVersion?: string | null;
+    lastCheckDate?: Date | null;
+}
+
+export interface InstanceStatusDto {
+    version: string;
+    latestVersion?: string | null;
+    updateAvailable: boolean;
+    updateCheckEnabled: boolean;
+    usageReportEnabled: boolean;
+    lastCheckDate?: Date | null;
 }
 
 export interface MaterialAccessDto extends BaseDto {
@@ -1169,6 +1185,10 @@ export interface TeamWorkflowStatusDto {
     removable: boolean;
 }
 
+export interface InstanceReportResultDto {
+    latestVersion?: string | null;
+}
+
 export interface TokenDto extends BaseDto {
     tokenId: string;
     relatedObject: string;
@@ -1630,10 +1650,10 @@ export interface OauthAuthorizeRequest {
     codeChallenge: string;
     codeChallengeMethod: string;
     resource: string;
-    code_challenge: string;
     response_type: string;
     client_id: string;
     redirect_uri: string;
+    code_challenge: string;
     code_challenge_method: string;
 }
 
@@ -1671,11 +1691,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
-    refresh_token: string;
-    code_verifier: string;
-    grant_type: string;
     client_id: string;
     redirect_uri: string;
+    grant_type: string;
+    code_verifier: string;
+    refresh_token: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -1991,6 +2011,29 @@ export interface TeamWorkflowStatusReorderRequest extends BaseRequest {
     orderedTeamWorkflowStatusIds: string[];
 }
 
+export interface InstanceReportRequest {
+    instanceId: string;
+    version: string;
+    usage?: InstanceUsageReportRequest | null;
+}
+
+export interface InstanceUsageReportRequest {
+    storageProvider: MediaFileProviderType;
+    enabledInstanceFlags: InstanceFlagType[];
+    mcpEnabled: boolean;
+    oauthEnabled: boolean;
+    pushNotificationsEnabled: boolean;
+    mailConfigured: boolean;
+    managementEnabled: boolean;
+    accounts: SizeBucket;
+    workspaces: SizeBucket;
+    teams: SizeBucket;
+    tasksCreatedLast30Days: SizeBucket;
+    javaVersion?: string | null;
+    postgresVersion?: string | null;
+    osArch?: string | null;
+}
+
 export interface RetrieveTopicListRequest extends BaseRequest {
     topicIds: string[];
 }
@@ -2120,6 +2163,10 @@ export interface AdminWorkspaceListingResponse extends BaseResponse {
 
 export interface InstanceFlagListingResponse extends BaseResponse {
     data: { [P in InstanceFlagType]?: any };
+}
+
+export interface InstanceInfoResponse extends BaseResponse {
+    data: InstanceStatusDto;
 }
 
 export interface MaterialAccessPaginatedResponse extends BaseResponse {
@@ -2486,6 +2533,10 @@ export interface TeamWorkflowStatusListingResponse extends BaseResponse {
     data: GroupedTeamWorkflowStatusListDto;
 }
 
+export interface InstanceReportResponse extends BaseResponse {
+    data: InstanceReportResultDto;
+}
+
 export interface TopicListingResponse extends BaseResponse {
     data: PageDto<TopicDto>;
 }
@@ -2730,8 +2781,8 @@ export interface Resource extends InputStreamSource {
     readable: boolean;
     url: URL;
     filename: string;
-    uri: URI;
     description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -3158,6 +3209,8 @@ export type TeamTaskVisibilityType = "VISIBLE_TO_ALL_TEAM_MEMBERS" | "OWNER_ASSI
 export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
 
 export type TeamWorkflowStateGroup = "BACKLOG" | "NOT_STARTED" | "STARTED" | "COMPLETED" | "CANCELLED";
+
+export type SizeBucket = "ZERO" | "ONE" | "TWO_TO_FIVE" | "SIX_TO_TWENTY_FIVE" | "TWENTY_SIX_TO_HUNDRED" | "HUNDRED_ONE_TO_FIVE_HUNDRED" | "OVER_FIVE_HUNDRED";
 
 export type TokenType = "SMS_LOGIN" | "EMAIL_LOGIN" | "WEB_USERNAME_LOGIN" | "BOOKING_EMAIL_VALIDATION" | "CONTINUE_AS_LOGIN_TOKEN" | "CONFIRM_EMAIL" | "RESET_PASSWORD" | "WORKSPACE_INVITATION" | "ACCOUNT_DELETION" | "SINGLE_USE_LOGIN_TOKEN";
 

@@ -22,6 +22,8 @@ public interface AccountRepository extends JpaRepository<Account, String> {
 
     Page<Account> findAllByGhostFalseAndPassiveIdIsNullOrderByCreatedDateDesc(Pageable pageable);
 
+    Long countAllByGhostFalseAndPassiveIdIsNull();
+
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
             update Account account

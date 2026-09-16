@@ -2038,6 +2038,19 @@ export interface InstanceFlagListingResponse extends BaseResponse {
     data: { [P in InstanceFlagType]?: any };
 }
 
+export interface InstanceStatusDto {
+    version: string;
+    latestVersion?: string | null;
+    updateAvailable: boolean;
+    updateCheckEnabled: boolean;
+    usageReportEnabled: boolean;
+    lastCheckDate?: Date | null;
+}
+
+export interface InstanceInfoResponse extends BaseResponse {
+    data: InstanceStatusDto;
+}
+
 export interface MaterialAccessPaginatedResponse extends BaseResponse {
     data: PageDto<MaterialAccessDto>;
 }

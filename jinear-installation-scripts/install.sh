@@ -544,6 +544,33 @@ prompt_configuration() {
         OAUTH_ENABLED="false"
     fi
 
+    # Updates and anonymous statistics (docs/telemetry.md)
+    echo ""
+    echo -e "  ${BOLD}Updates and Anonymous Statistics (Optional)${NC}"
+    echo -e "  ${INFO} Update check: once a day this instance sends a random instance id and"
+    echo -e "  ${INFO} its version number to api.jinear.co. The admin panel then shows when a"
+    echo -e "  ${INFO} new version is available."
+    local enable_update_check=$(prompt_input "  Enable the daily update check? [Y/n]" "")
+    if [[ $enable_update_check =~ ^[Nn]$ ]]; then
+        TELEMETRY_UPDATE_CHECK="false"
+    else
+        TELEMETRY_UPDATE_CHECK="true"
+    fi
+
+    echo ""
+    echo -e "  ${INFO} Usage report: also sends which features are on (storage type, sign-in"
+    echo -e "  ${INFO} methods, MCP, mail, push), rough size ranges (for example 6-25 accounts),"
+    echo -e "  ${INFO} and the Java, Postgres and CPU type. It never sends names, emails,"
+    echo -e "  ${INFO} domains, IP addresses or content. Full field list: docs/telemetry.md"
+    echo -e "  ${INFO} It is how I learn which features people use most, so saying yes helps"
+    echo -e "  ${INFO} me improve the parts you rely on. You can turn it off at any time."
+    local enable_usage_report=$(prompt_input "  Share the anonymous usage report? [Y/n]" "")
+    if [[ $enable_usage_report =~ ^[Nn]$ ]]; then
+        TELEMETRY_USAGE_REPORT="false"
+    else
+        TELEMETRY_USAGE_REPORT="true"
+    fi
+
     # Backup configuration
     echo ""
     echo -e "  ${BOLD}Backup Configuration${NC}"
@@ -720,6 +747,15 @@ BACKUP_RETENTION_DAYS=${BACKUP_RETENTION_DAYS}
 # Analytics (Optional)
 POSTHOG_KEY=
 POSTHOG_HOST=https://us.i.posthog.com
+
+# Updates and anonymous statistics (Optional, see docs/telemetry.md)
+# TELEMETRY_UPDATE_CHECK: once a day, send a random instance id and the version
+# number to api.jinear.co; the admin panel then shows when a new version is out.
+# TELEMETRY_USAGE_REPORT: also send which features are on and rough size ranges.
+# DO_NOT_TRACK=1 turns both off, whatever the two values say.
+TELEMETRY_UPDATE_CHECK=${TELEMETRY_UPDATE_CHECK}
+TELEMETRY_USAGE_REPORT=${TELEMETRY_USAGE_REPORT}
+DO_NOT_TRACK=
 
 # Sign In with Apple (backend): Optional, disabled by default.
 # Set APPLE_ENABLED=true (and fill the APPLE_* values + mount AuthKey.p8 into

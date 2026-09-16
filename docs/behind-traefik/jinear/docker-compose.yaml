@@ -111,6 +111,11 @@ services:
       MANAGEMENT_ENABLED: ${MANAGEMENT_ENABLED:-false}
       MANAGEMENT_ADMIN_EMAIL: ${MANAGEMENT_ADMIN_EMAIL:-}
       MANAGEMENT_ADMIN_PASSWORD: ${MANAGEMENT_ADMIN_PASSWORD:-}
+      # Updates and anonymous statistics (optional, see docs/telemetry.md).
+      # Both are off unless set; DO_NOT_TRACK=1 turns both off.
+      TELEMETRY_UPDATE_CHECK: ${TELEMETRY_UPDATE_CHECK:-false}
+      TELEMETRY_USAGE_REPORT: ${TELEMETRY_USAGE_REPORT:-false}
+      DO_NOT_TRACK: ${DO_NOT_TRACK:-}
       # Apple Sign In (optional) - keep false to boot without an AuthKey.p8
       APPLE_ENABLED: ${APPLE_ENABLED:-false}
       APPLE_TEAM_ID: ${APPLE_TEAM_ID:-not-configured}

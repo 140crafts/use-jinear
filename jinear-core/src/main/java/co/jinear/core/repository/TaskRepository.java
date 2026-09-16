@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +24,8 @@ public interface TaskRepository extends JpaRepository<Task, String> {
     boolean existsByTeamIdIsInAndProjectIdAndPassiveIdIsNull(List<String> teamIds, String projectId);
 
     boolean existsByMilestoneIdAndPassiveIdIsNull(String milestoneId);
+
+    Long countAllByCreatedDateAfterAndPassiveIdIsNull(Date createdDate);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""

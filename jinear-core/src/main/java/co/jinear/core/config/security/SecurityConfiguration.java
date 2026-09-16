@@ -55,6 +55,7 @@ public class SecurityConfiguration {
             "/v1/captcha/generate",
             "/v1/material/media/{materialId}",
             "/v1/instance-flag/list",
+            "/v1/instance-report",
             "/v1/debug/**",
             "/mcp",
             "/v1/mcp/manifest",

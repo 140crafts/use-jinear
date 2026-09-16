@@ -107,7 +107,8 @@ export const tagTypes = [
     "v1/mcp/info",
     "v1/admin/mcp/analytics",
     "v1/admin/oauth/client/list",
-    "v1/admin/mcp/log/list"
+    "v1/admin/mcp/log/list",
+    "v1/admin/instance-info"
 ];
 
 export const tagTypesToInvalidateOnNewBackgroundActivity = () => {

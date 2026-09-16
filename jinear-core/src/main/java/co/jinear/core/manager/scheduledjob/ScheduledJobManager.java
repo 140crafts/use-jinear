@@ -1,6 +1,7 @@
 package co.jinear.core.manager.scheduledjob;
 
 import co.jinear.core.manager.reminder.ReminderProcessManager;
+import co.jinear.core.manager.telemetry.InstanceReportSendManager;
 import co.jinear.core.model.entity.material.Material;
 import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.model.vo.media.RemoveMediaVo;
@@ -34,6 +35,18 @@ public class ScheduledJobManager {
     private final TaskFtsRefreshService taskFtsRefreshService;
     private final McpRetentionService mcpRetentionService;
     private final OauthRetentionService oauthRetentionService;
+    private final InstanceReportSendManager instanceReportSendManager;
+
+    @Async
+    @Scheduled(fixedRate = 1440, initialDelay = 10, timeUnit = TimeUnit.MINUTES)
+    public void sendInstanceReport() {
+        log.info("Send instance report has started.");
+        try {
+            instanceReportSendManager.sendReport();
+        } catch (Exception exception) {
+            log.warn("Send instance report has failed. reason: {}", exception.getMessage());
+        }
+    }
 
     @Async
     @Scheduled(fixedRate = 6, timeUnit = TimeUnit.HOURS)

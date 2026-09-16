@@ -142,6 +142,24 @@ Things worth knowing:
   resource and split between reading and writing. Notes, files and the calendar are read
   only, and there are no delete tools.
 
+## Updates and Anonymous Statistics
+
+An instance can send one small report a day to `https://api.jinear.co`. There are two
+tiers. Both are off in the software default, and the installer asks about each one during
+setup. Both questions default to yes, because the usage report is how I learn which
+features people use most. Answer `n` to either question to keep it off. The full field
+list, an example body and the steps for existing installs are in
+[docs/telemetry.md](../docs/telemetry.md).
+
+| Variable | Purpose |
+|----------|---------|
+| `TELEMETRY_UPDATE_CHECK` | `true` sends a random instance id and the version number once a day. The admin panel then shows when a new version is available |
+| `TELEMETRY_USAGE_REPORT` | `true` also sends which features are on and rough size ranges. It never sends names, emails, domains, IP addresses or content |
+| `DO_NOT_TRACK` | `1` turns both off, whatever the two values above say |
+
+An install that you update with `docker compose pull` keeps sending nothing until you add
+these values, because its `.env` and `.config/application.properties` do not have them yet.
+
 ## Running Behind Your Own Reverse Proxy
 
 By default the installer lets Caddy bind ports **80/443** and issue Let's Encrypt

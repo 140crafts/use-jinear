@@ -131,6 +131,11 @@ services:
       MCP_ENABLED: ${MCP_ENABLED:-false}
       MCP_RESOURCE_URL: ${EXTERNAL_SCHEME:-https}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX:-}/mcp
       MCP_LOG_RETENTION_DAYS: ${MCP_LOG_RETENTION_DAYS:-30}
+      # Updates and anonymous statistics (optional, see docs/telemetry.md).
+      # Both are off unless set; DO_NOT_TRACK=1 turns both off.
+      TELEMETRY_UPDATE_CHECK: ${TELEMETRY_UPDATE_CHECK:-false}
+      TELEMETRY_USAGE_REPORT: ${TELEMETRY_USAGE_REPORT:-false}
+      DO_NOT_TRACK: ${DO_NOT_TRACK:-}
       # Apple Sign In (optional) - leave APPLE_ENABLED=false to boot without an AuthKey.p8
       APPLE_ENABLED: ${APPLE_ENABLED:-false}
       APPLE_TEAM_ID: ${APPLE_TEAM_ID:-not-configured}

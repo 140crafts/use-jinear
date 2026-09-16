@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="instance-report-initialize-instance_info">
+        <createTable tableName="instance_info">
+            <column name="instance_info_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="telemetry_instance_id" type="varchar(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="latest_known_version" type="varchar(64)"/>
+            <column name="last_check_date" type="datetime"/>
+        </createTable>
+        <rollback>
+            <dropTable tableName="instance_info"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="cagdas.tunca" id="instance-report-initialize-instance_report">
+        <createTable tableName="instance_report">
+            <column name="instance_report_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="instance_id" type="varchar(36)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="version" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_report_date" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+            <column name="usage_shared" type="boolean" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="storage_provider" type="varchar(16)"/>
+            <column name="enabled_instance_flags" type="text"/>
+            <column name="mcp_enabled" type="boolean"/>
+            <column name="oauth_enabled" type="boolean"/>
+            <column name="push_notifications_enabled" type="boolean"/>
+            <column name="mail_configured" type="boolean"/>
+            <column name="management_enabled" type="boolean"/>
+            <column name="accounts_bucket" type="varchar(32)"/>
+            <column name="workspaces_bucket" type="varchar(32)"/>
+            <column name="teams_bucket" type="varchar(32)"/>
+            <column name="tasks_created_last_30_days_bucket" type="varchar(32)"/>
+            <column name="java_version" type="varchar(32)"/>
+            <column name="postgres_version" type="varchar(32)"/>
+            <column name="os_arch" type="varchar(32)"/>
+        </createTable>
+        <createIndex tableName="instance_report" indexName="idx_instance_report_last_report_date">
+            <column name="last_report_date"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="instance_report"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

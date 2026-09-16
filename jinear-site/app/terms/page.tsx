@@ -91,6 +91,22 @@ export default function TermsPage() {
             </li>
           </ul>
 
+          <h2>Self-Hosted Installs</h2>
+          <p>
+            A self-hosted Jinear instance keeps all of its data on your own server. It can send one
+            optional report a day to api.jinear.co: a random instance id and the version number and,
+            only if the administrator also opts in, which features are on and rough size ranges. It
+            never sends account data, content, domains or IP addresses. The full field list is in{" "}
+            <a
+              href="https://github.com/140crafts/use-jinear/blob/main/docs/telemetry.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              docs/telemetry.md
+            </a>
+            .
+          </p>
+
           <h2>Log Data</h2>
           <p>
             We want to inform you that whenever you use our Services, in a case of an error in the app we

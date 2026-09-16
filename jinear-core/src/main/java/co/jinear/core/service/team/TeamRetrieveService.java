@@ -7,6 +7,7 @@ import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.member.TeamMemberDto;
 import co.jinear.core.model.entity.team.Team;
 import co.jinear.core.model.enumtype.team.TeamStateType;
+import co.jinear.core.model.enumtype.telemetry.SizeBucket;
 import co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType;
 import co.jinear.core.repository.TeamRepository;
 import co.jinear.core.service.team.member.TeamMemberRetrieveService;
@@ -109,5 +110,10 @@ public class TeamRetrieveService {
     public boolean checkAllExistsAndActiveWithinSameWorkspace(String workspaceId, List<String> teamIds) {
         Long count = teamRepository.countAllByWorkspaceIdAndTeamIdIsInAndTeamStateAndPassiveIdIsNull(workspaceId, teamIds, TeamStateType.ACTIVE);
         return NumberCompareHelper.isEquals(Long.valueOf(teamIds.size()), count);
+    }
+
+    public SizeBucket approximateActiveTeams() {
+        log.info("Approximate active teams has started.");
+        return SizeBucket.from(teamRepository.countAllByPassiveIdIsNull());
     }
 }

@@ -5,6 +5,7 @@ import co.jinear.core.converter.account.PlainAccountProfileDtoConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.enumtype.telemetry.SizeBucket;
 import co.jinear.core.repository.AccountRepository;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.workspace.WorkspaceDisplayPreferenceService;
@@ -94,6 +95,11 @@ public class AccountRetrieveService {
         log.info("Retrieve all accounts has started. page: {}", page);
         return accountRepository.findAllByGhostFalseAndPassiveIdIsNullOrderByCreatedDateDesc(PageRequest.of(page, ALL_ACCOUNTS_PAGE_SIZE))
                 .map(accountDtoConverter::map);
+    }
+
+    public SizeBucket approximateActiveAccounts() {
+        log.info("Approximate active accounts has started.");
+        return SizeBucket.from(accountRepository.countAllByGhostFalseAndPassiveIdIsNull());
     }
 
     private void setProfilePicture(String accountId, AccountDto accountDto) {

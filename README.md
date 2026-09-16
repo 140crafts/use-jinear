@@ -136,6 +136,11 @@ edit the `MANAGEMENT_*` values in `.env` and restart. See
 To turn the MCP server on or off after installation, edit `MCP_ENABLED` in `.env`, restart,
 and turn on **AI Assistant Connections** in the admin panel. See [docs/mcp](docs/mcp/).
 
+**Privacy:** a self-hosted instance sends nothing unless you opt in. The installer asks
+about a daily update check (a random instance id and the version number) and an anonymous
+usage report. See [docs/telemetry.md](docs/telemetry.md) for every field that can leave
+your server, and for how to turn each one on or off.
+
 ### Troubleshooting
 
 **SSL Certificate Issues:**
