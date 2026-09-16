@@ -3,6 +3,9 @@
 .page {
   width: 100%;
   padding: 38px 0 80px;
+  // The screenshot rail bleeds past the column; clip (not hidden) keeps that
+  // from ever giving the page its own horizontal scrollbar.
+  overflow-x: clip;
 }
 
 .wrap {
@@ -133,6 +136,13 @@
   margin-top: 14px;
 }
 
+/* latest writing: the cards style themselves, see components/blog/postCard */
+.posts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
 /* personal letter: a subtle paper panel */
 .letter {
   margin-top: 64px;
@@ -195,11 +205,16 @@
 
 /* a quick look: one horizontal rail of screenshots */
 .shots {
+  // Break out of the text column. 306px is half the column's content width
+  // (660 max-width minus 2 x 24px padding), so "50vw - 306px" is the gutter
+  // from this element's edge to the viewport edge; 12px keeps clear of a
+  // vertical scrollbar. Falls back to the column padding on narrow screens.
+  --bleed: clamp(24px, calc(50vw - 306px - 12px), 260px);
+
   display: flex;
-  gap: 16px;
-  // Bleed past the 24px column padding so a card can sit at the viewport edge.
-  margin: 4px -24px 0;
-  padding: 0 24px 10px;
+  gap: 20px;
+  margin: 4px calc(-1 * var(--bleed)) 0;
+  padding: 0 var(--bleed) 10px;
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
@@ -229,8 +244,11 @@
 
 .look {
   margin: 0;
-  flex: 0 0 min(88%, 480px);
-  scroll-snap-align: start;
+  flex: 0 0 min(92%, 620px);
+  // Center, not start: with start alignment the browser aligns the first card
+  // to the scrollport edge, which swallows the left padding and opens the rail
+  // already nudged sideways. Centering parks each card in the middle instead.
+  scroll-snap-align: center;
 
   .appwin {
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02), 0 18px 44px -30px rgba(40, 30, 10, 0.32);

@@ -3,9 +3,12 @@ import Link from "next/link";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { APP_URL, GITHUB_URL, GITLAB_URL, SELF_HOSTING_DOCS_URL } from "@/utils/constants";
+import PostCard from "@/components/blog/postCard/PostCard";
+import { getAllPosts } from "@/lib/posts";
 import styles from "./index.module.scss";
 
 const IMG_BASE = "https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v3";
+const LATEST_POST_COUNT = 3;
 
 /** A screenshot inside Design A's browser-chrome frame, with a title and caption. */
 function Shot({
@@ -41,6 +44,8 @@ function Shot({
 }
 
 export default function HomeClient() {
+  const latestPosts = getAllPosts().slice(0, LATEST_POST_COUNT);
+
   return (
     <div className={styles.page}>
       <div className={styles.wrap}>
@@ -164,6 +169,22 @@ export default function HomeClient() {
             </Link>
           </p>
         </section>
+
+        {latestPosts.length > 0 && (
+          <section className={styles.blk}>
+            <h2>Latest writing</h2>
+            <ul className={styles.posts}>
+              {latestPosts.map((post) => (
+                <PostCard key={post.slug} post={post} />
+              ))}
+            </ul>
+            <p className={styles.priceMore}>
+              <Link className={styles.linkU} href="/blog">
+                Read the blog →
+              </Link>
+            </p>
+          </section>
+        )}
 
         <section className={styles.letter} aria-label="A note from the maker">
           <p className={styles.letterHi}>Hey, I&apos;m Çağdaş.</p>
