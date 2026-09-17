@@ -77,6 +77,23 @@ own servers rather than from your browser. The switch is in the admin panel, und
 Assistants. There is a page with the full setup and the complete list of what an
 assistant can touch at [jinear.co/mcp](/mcp/).
 
+## Updating to this version
+
+If you already self-host, update the way you always do:
+
+```bash
+cd ~/jinear
+docker compose pull && docker compose up -d
+```
+
+That is the whole job. Nothing in this release breaks an instance that ignores it.
+Every new setting carries a default, your own config files are left exactly as they
+were, and the new tables apply themselves when the server starts. If you never switch
+assistants on, the only thing that changed is the version number.
+
+When you do want them on, the switches and the exact blocks to paste are in the
+[upgrade guide](https://gitlab.com/140crafts/use-jinear/-/blob/main/docs/upgrading.md).
+
 ## What is not in it yet
 
 It cannot create a note or a calendar event, which is the request I expect first. I

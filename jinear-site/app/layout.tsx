@@ -64,8 +64,8 @@ const organizationJsonLd = {
     url: SITE_URL,
     logo: `${SITE_URL}/images/icon/icon-512x512.png`,
     sameAs: [
-        "https://github.com/140crafts/use-jinear",
         "https://gitlab.com/140crafts/use-jinear",
+        "https://github.com/140crafts/use-jinear",
         "https://twitter.com/usejinear",
     ],
 };
