@@ -27,6 +27,7 @@ class McpServerInfoTest {
         properties.setDocumentationUrl("https://jinear.test/mcp/");
         oauthProperties = new OauthProperties();
         oauthProperties.setEnabled(Boolean.TRUE);
+        oauthProperties.setIssuerUrl("https://api.jinear.test");
 
         service = new McpServerInfoService(properties, oauthProperties, instanceFlagService);
     }

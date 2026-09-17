@@ -32,6 +32,7 @@ class OauthAuthorizationGateTest {
     @BeforeEach
     void setUp() {
         oauthProperties = new OauthProperties();
+        oauthProperties.setIssuerUrl("https://api.jinear.test");
         validator = Mockito.mock(OauthAuthorizeRequestValidator.class);
         requestService = Mockito.mock(OauthAuthorizationRequestService.class);
 

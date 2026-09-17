@@ -20,8 +20,8 @@ public class OauthProperties {
     @Value("${jinear.oauth.enabled:false}")
     private Boolean enabled = Boolean.FALSE;
 
-    @Value("${jinear.oauth.issuer-url}")
-    private String issuerUrl;
+    @Value("${jinear.oauth.issuer-url:}")
+    private String issuerUrl = "";
 
     @Value("${jinear.oauth.documentation-url:https://jinear.co/mcp/}")
     private String documentationUrl;
@@ -47,9 +47,6 @@ public class OauthProperties {
     @Value("${jinear.oauth.cimd-fetch-timeout-millis:4000}")
     private Integer cimdFetchTimeoutMillis = 4000;
 
-    /**
-     * How long a client may cache the discovery documents.
-     */
     @Value("${jinear.oauth.discovery-cache-minutes:5}")
     private Integer discoveryCacheMinutes = 5;
 
@@ -62,5 +59,9 @@ public class OauthProperties {
                 .filter(host -> !host.isEmpty())
                 .map(host -> host.toLowerCase(Locale.ROOT))
                 .toList();
+    }
+
+    public boolean isUsable() {
+        return Boolean.TRUE.equals(enabled) && Objects.nonNull(issuerUrl) && !issuerUrl.isBlank();
     }
 }

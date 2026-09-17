@@ -5,9 +5,6 @@ import co.jinear.core.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-/**
- * Checks that connecting applications is switched on for this instance.
- */
 @Component
 @RequiredArgsConstructor
 public class OauthEnabledValidator {
@@ -15,7 +12,7 @@ public class OauthEnabledValidator {
     private final OauthProperties oauthProperties;
 
     public void validateOauthIsEnabled() {
-        if (!Boolean.TRUE.equals(oauthProperties.getEnabled())) {
+        if (!oauthProperties.isUsable()) {
             throw new BusinessException("oauth.error.disabled");
         }
     }

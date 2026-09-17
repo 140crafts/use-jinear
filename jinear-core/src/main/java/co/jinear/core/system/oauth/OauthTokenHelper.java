@@ -7,12 +7,15 @@ import co.jinear.core.system.util.DateHelper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,11 +34,37 @@ public class OauthTokenHelper {
     public static final String CLAIM_CLIENT_ID = "client_id";
     public static final String CLAIM_CONNECTION_ID = "oauth_connection_id";
 
+    private static final String DERIVATION_LABEL = "jinear-oauth-signing-key-v1:";
+
     private final OauthProperties oauthProperties;
     private final McpProperties mcpProperties;
 
-    @Value("${jwt.oauth.secret}")
-    private String secret;
+    @Value("${jwt.oauth.secret:}")
+    private String configuredSecret;
+
+    @Value("${jwt.secret:}")
+    private String sessionSecret;
+
+    private byte[] signingKey;
+
+    @PostConstruct
+    void resolveSigningKey() {
+        if (Objects.nonNull(configuredSecret) && !configuredSecret.isBlank()) {
+            signingKey = configuredSecret.getBytes(StandardCharsets.UTF_8);
+            return;
+        }
+        log.warn("[OAUTH] jwt.oauth.secret is not set. Deriving the OAuth signing key from jwt.secret. Set jwt.oauth.secret to control it yourself.");
+        signingKey = derive(sessionSecret);
+    }
+
+    private byte[] derive(String base) {
+        try {
+            return MessageDigest.getInstance("SHA-512")
+                    .digest((DERIVATION_LABEL + Objects.toString(base, "")).getBytes(StandardCharsets.UTF_8));
+        } catch (NoSuchAlgorithmException exception) {
+            throw new IllegalStateException("SHA-512 is unavailable", exception);
+        }
+    }
 
     public String generateAccessToken(String accountId, String connectionId, String clientId, Set<String> scopes, Date expiresAt) {
         Map<String, Object> claims = new HashMap<>();
@@ -49,7 +78,7 @@ public class OauthTokenHelper {
                 .setAudience(mcpProperties.getResourceUrl())
                 .setIssuedAt(DateHelper.now())
                 .setExpiration(expiresAt)
-                .signWith(SignatureAlgorithm.HS512, secret.getBytes(StandardCharsets.UTF_8))
+                .signWith(SignatureAlgorithm.HS512, signingKey)
                 .compact();
     }
 
@@ -59,7 +88,7 @@ public class OauthTokenHelper {
         }
         try {
             Claims claims = Jwts.parser()
-                    .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
+                    .setSigningKey(signingKey)
                     .parseClaimsJws(token)
                     .getBody();
 

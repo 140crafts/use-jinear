@@ -12,7 +12,7 @@ public class McpEnabledValidator {
     private final McpProperties mcpProperties;
 
     public void validateMcpIsEnabled() {
-        if (!Boolean.TRUE.equals(mcpProperties.getEnabled())) {
+        if (!mcpProperties.isUsable()) {
             throw new McpDisabledException();
         }
     }

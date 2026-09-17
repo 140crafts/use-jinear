@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @Configuration
@@ -15,8 +17,8 @@ public class McpProperties {
     @Value("${jinear.mcp.enabled:false}")
     private Boolean enabled = Boolean.FALSE;
 
-    @Value("${jinear.mcp.resource-url}")
-    private String resourceUrl;
+    @Value("${jinear.mcp.resource-url:}")
+    private String resourceUrl = "";
 
     @Value("${jinear.mcp.documentation-url:https://jinear.co/mcp/}")
     private String documentationUrl;
@@ -26,4 +28,8 @@ public class McpProperties {
 
     @Value("${jinear.mcp.max-page-size:50}")
     private Integer maxPageSize = 50;
+
+    public boolean isUsable() {
+        return Boolean.TRUE.equals(enabled) && Objects.nonNull(resourceUrl) && !resourceUrl.isBlank();
+    }
 }

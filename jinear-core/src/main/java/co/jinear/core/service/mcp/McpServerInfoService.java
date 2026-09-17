@@ -9,10 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/**
- * Answers whether this instance is serving MCP. All three switches have to agree: the MCP
- * feature, the OAuth provider it depends on, and the instance flag an admin controls.
- */
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -23,8 +19,8 @@ public class McpServerInfoService {
     private final InstanceFlagService instanceFlagService;
 
     public McpServerInfoDto retrieveServerInfo() {
-        boolean enabled = Boolean.TRUE.equals(mcpProperties.getEnabled())
-                && Boolean.TRUE.equals(oauthProperties.getEnabled())
+        boolean enabled = mcpProperties.isUsable()
+                && oauthProperties.isUsable()
                 && instanceFlagService.isEnabled(InstanceFlagType.MCP_SERVER);
 
         McpServerInfoDto dto = new McpServerInfoDto();

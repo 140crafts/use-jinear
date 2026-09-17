@@ -22,6 +22,7 @@ import co.jinear.core.model.vo.oauth.OauthAccessTokenVo;
 class OauthTokenHelperTest {
 
     private static final String SECRET = "oauth-secret-used-only-in-tests-0123456789";
+    private static final String SESSION_SECRET = "session-secret-used-only-in-tests-9876543210";
     private static final String RESOURCE = "https://api.jinear.test/mcp";
     private static final String ISSUER = "https://api.jinear.test";
 
@@ -34,7 +35,8 @@ class OauthTokenHelperTest {
         McpProperties mcpProperties = new McpProperties();
         mcpProperties.setResourceUrl(RESOURCE);
         helper = new OauthTokenHelper(oauthProperties, mcpProperties);
-        ReflectionTestUtils.setField(helper, "secret", SECRET);
+        ReflectionTestUtils.setField(helper, "configuredSecret", SECRET);
+        ReflectionTestUtils.invokeMethod(helper, "resolveSigningKey");
     }
 
     @Test
@@ -104,6 +106,32 @@ class OauthTokenHelperTest {
         assertThat(helper.parseAccessToken(null)).isEmpty();
         assertThat(helper.parseAccessToken("")).isEmpty();
         assertThat(helper.parseAccessToken("not-a-jwt")).isEmpty();
+    }
+
+    @Test
+    void derivesASigningKeyFromTheSessionSecretWhenNoOauthSecretIsSet() {
+        OauthProperties oauthProperties = new OauthProperties();
+        oauthProperties.setIssuerUrl(ISSUER);
+        McpProperties mcpProperties = new McpProperties();
+        mcpProperties.setResourceUrl(RESOURCE);
+        OauthTokenHelper derived = new OauthTokenHelper(oauthProperties, mcpProperties);
+        ReflectionTestUtils.setField(derived, "configuredSecret", "");
+        ReflectionTestUtils.setField(derived, "sessionSecret", SESSION_SECRET);
+        ReflectionTestUtils.invokeMethod(derived, "resolveSigningKey");
+
+        String token = derived.generateAccessToken("account-1", "connection-1", "client",
+                Set.of("tasks:read"), inOneHour());
+        assertThat(derived.parseAccessToken(token)).isPresent();
+
+        String signedWithTheSessionSecret = Jwts.builder()
+                .setClaims(new HashMap<>(Map.of("scope", "tasks:read")))
+                .setIssuer(ISSUER)
+                .setSubject("account-1")
+                .setAudience(RESOURCE)
+                .setExpiration(inOneHour())
+                .signWith(SignatureAlgorithm.HS512, SESSION_SECRET.getBytes(StandardCharsets.UTF_8))
+                .compact();
+        assertThat(derived.parseAccessToken(signedWithTheSessionSecret)).isEmpty();
     }
 
     private Date inOneHour() {

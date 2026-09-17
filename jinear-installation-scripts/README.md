@@ -160,6 +160,19 @@ list, an example body and the steps for existing installs are in
 An install that you update with `docker compose pull` keeps sending nothing until you add
 these values, because its `.env` and `.config/application.properties` do not have them yet.
 
+## Upgrading an Existing Install
+
+An upgrade is `docker compose pull && docker compose up -d`. It replaces the images and
+never rewrites `docker-compose.yaml` or `.config/application.properties`. The container
+reads configuration only from the file you mount, so every new setting carries a default
+and your instance starts on the files it already has.
+
+Adding configuration by hand turns a new feature on. It is never needed just to keep the
+server running, so an upgrade is usually safe to run unattended.
+
+The blocks to paste, the `.env` values and how to roll back are in
+[docs/upgrading.md](../docs/upgrading.md).
+
 ## Running Behind Your Own Reverse Proxy
 
 By default the installer lets Caddy bind ports **80/443** and issue Let's Encrypt

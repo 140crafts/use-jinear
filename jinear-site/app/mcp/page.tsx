@@ -3,6 +3,7 @@ import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { buildMetadata } from "@/utils/seo";
 import { MCP_DOCS_URL } from "@/utils/constants";
+import VideoEmbed from "@/components/videoEmbed/VideoEmbed";
 import manifest from "@/lib/mcp-tools.generated.json";
 import styles from "./index.module.scss";
 
@@ -71,6 +72,7 @@ export default function McpPage() {
             <li>Choose Add custom connector and paste the address.</li>
             <li>Sign in to Jinear when it asks, then allow the permissions you want to give.</li>
           </ol>
+          <VideoEmbed id="0VYQehxs-ps" title="Connecting Claude to Jinear" />
 
           <h3>In ChatGPT</h3>
           <ol>
@@ -78,6 +80,7 @@ export default function McpPage() {
             <li>Add a connector and paste the same address.</li>
             <li>Sign in and allow, exactly as above.</li>
           </ol>
+          <VideoEmbed id="EIe6UpnrBWQ" title="Connecting ChatGPT to Jinear" />
 
           <p>
             Self-hosting? Your instance has to be reachable from the internet over HTTPS, because those

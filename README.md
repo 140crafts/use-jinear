@@ -141,6 +141,15 @@ about a daily update check (a random instance id and the version number) and an 
 usage report. See [docs/telemetry.md](docs/telemetry.md) for every field that can leave
 your server, and for how to turn each one on or off.
 
+### Upgrading
+
+An upgrade is `docker compose pull && docker compose up -d`. That replaces the images and
+leaves your `docker-compose.yaml` and `.config/application.properties` exactly as they
+were, so every new setting usually ships with a default and the server starts on your current
+files.
+
+See [docs/upgrading.md](docs/upgrading.md).
+
 ### Troubleshooting
 
 **SSL Certificate Issues:**

@@ -101,6 +101,16 @@ services:
       TELEMETRY_UPDATE_CHECK: "false"
       TELEMETRY_USAGE_REPORT: "false"
       DO_NOT_TRACK: ""
+      # AI assistant connections (optional, see docs/mcp/). Both halves must be on.
+      OAUTH_ENABLED: "false"
+      OAUTH_ISSUER_URL: https://api.your-instance.company.com
+      OAUTH_CONSENT_URL: https://your-instance.company.com/oauth/consent?request_id={requestId}
+      OAUTH_JWT_SECRET: ""
+      OAUTH_DCR_ENABLED: "true"
+      OAUTH_CIMD_ALLOWED_HOSTS: ""
+      MCP_ENABLED: "false"
+      MCP_RESOURCE_URL: https://api.your-instance.company.com/mcp
+      MCP_LOG_RETENTION_DAYS: "30"
       # Apple Sign In (optional) - keep false to boot without an AuthKey.p8
       APPLE_ENABLED: "false"
       APPLE_TEAM_ID: not-configured
