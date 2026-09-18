@@ -1,0 +1,52 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+}
+
+.label {
+  color: var(--c-secondary-shade-0);
+}
+
+.value {
+  font-family: "SF Mono", ui-monospace, monospace;
+}
+
+.notice {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1rem;
+  border: 1px solid var(--c-JINEAR_ORANGE);
+  border-radius: var(--border-radius);
+}
+
+.noticeTitle {
+  font-weight: 600;
+}
+
+.command {
+  font-family: "SF Mono", ui-monospace, monospace;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--border-radius);
+  background-color: var(--c-primary-shade-0);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.muted {
+  color: var(--c-secondary-shade-0);
+}

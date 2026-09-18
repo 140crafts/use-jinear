@@ -23,6 +23,7 @@ public class SecurityConfiguration {
     private final JwtRequestFilter jwtRequestFilter;
     private final DynamicCorsConfigurationSource dynamicCorsConfigurationSource;
     private final RateLimitingFilter rateLimitingFilter;
+    private final OauthBearerAuthenticationFilter oauthBearerAuthenticationFilter;
 
     private static final String[] SWAGGER_ENDPOINTS = new String[]{
             "/swagger-ui/**",
@@ -54,7 +55,16 @@ public class SecurityConfiguration {
             "/v1/captcha/generate",
             "/v1/material/media/{materialId}",
             "/v1/instance-flag/list",
-            "/v1/debug/**"
+            "/v1/instance-report",
+            "/v1/debug/**",
+            "/mcp",
+            "/v1/mcp/manifest",
+            "/.well-known/**",
+            "/v1/oauth/authorize",
+            "/v1/oauth/authorize/info/{requestId}",
+            "/v1/oauth/token",
+            "/v1/oauth/register",
+            "/v1/oauth/revoke"
     };
 
     @Bean
@@ -80,7 +90,8 @@ public class SecurityConfiguration {
                         .deleteCookies("JWT", "JSESSIONID", "SESSION", "SESSIONID")
                 );
 
-        httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(oauthBearerAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterAfter(jwtRequestFilter, OauthBearerAuthenticationFilter.class);
         httpSecurity.addFilterAfter(rateLimitingFilter, JwtRequestFilter.class);
         return httpSecurity.build();
     }

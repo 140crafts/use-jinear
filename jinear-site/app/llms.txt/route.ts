@@ -42,6 +42,7 @@ export function GET() {
 - Calendar: a built-in calendar, plus Google Calendar sync.
 - Notes: rich-text notes in shared notebooks, with tags and offline drafts.
 - Files: attach files to tasks, create folders, upload data, and define fine-grained access controls.
+- AI assistants: connect Claude or ChatGPT over MCP and work with all of the above from inside the assistant.
 
 ## Pricing
 
@@ -54,8 +55,11 @@ The Team price is flat rather than per seat: a team of 4 and a team of 40 pay ex
 ## Self-hosting
 
 Jinear runs as a single Docker Compose stack on your own server. You keep your own
-storage and backups, and self-hosted instances phone nothing home, not even install
-counts.
+storage and backups. A self-hosted instance sends nothing unless the administrator agrees
+during setup: a daily update check (a random instance id and the version number) and an
+anonymous usage report (which features are on, plus size ranges instead of counts). It
+never sends account data, content, domains or IP addresses, and both can be turned off at
+any time.
 
 - Install guide: ${SELF_HOSTING_DOCS_URL}
 - Source (GitHub): ${GITHUB_URL}
@@ -65,6 +69,7 @@ counts.
 
 - [Home](${SITE_URL}/): Overview of Jinear: task management, calendar, file storage and notes.
 - [Pricing](${SITE_URL}/pricing/): Free self-hosting vs. hosted plans. No per-user pricing.
+- [MCP](${SITE_URL}/mcp/): Connect Claude or ChatGPT to Jinear. Setup steps and the full tool list.
 - [Blog](${SITE_URL}/blog/): Guides and updates.
 - [Terms](${SITE_URL}/terms/): Terms of service and privacy.
 

@@ -6,8 +6,10 @@ import co.jinear.core.model.entity.SessionInfo;
 import co.jinear.core.model.enumtype.account.RoleType;
 import co.jinear.core.model.enumtype.auth.ProviderType;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
+import co.jinear.core.model.vo.auth.SessionCarrier;
 import co.jinear.core.repository.SessionInfoRepository;
 import co.jinear.core.system.JwtHelper;
+import org.apache.commons.lang3.EnumUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -106,6 +108,10 @@ public class SessionInfoService {
 
     public Optional<LocaleType> currentAccountLocale() {
         AbstractAuthenticationToken auth = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        Optional<String> carried = sessionCarrier(auth).map(SessionCarrier::localeName);
+        if (carried.isPresent()) {
+            return carried.map(locale -> EnumUtils.getEnum(LocaleType.class, locale));
+        }
         return Optional.of(auth)
                 .map(Authentication::getCredentials)
                 .filter(String.class::isInstance)
@@ -115,12 +121,23 @@ public class SessionInfoService {
 
     public String currentAccountSessionId() {
         AbstractAuthenticationToken auth = (AbstractAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        Optional<String> carried = sessionCarrier(auth).map(SessionCarrier::sessionInfoId);
+        if (carried.isPresent()) {
+            return carried.get();
+        }
         return Optional.of(auth)
                 .map(Authentication::getCredentials)
                 .filter(String.class::isInstance)
                 .map(String.class::cast)
                 .map(jwtHelper::getSessionIdFromToken)
                 .orElseThrow(BusinessException::new);
+    }
+
+    private Optional<SessionCarrier> sessionCarrier(AbstractAuthenticationToken auth) {
+        return Optional.ofNullable(auth)
+                .map(AbstractAuthenticationToken::getDetails)
+                .filter(SessionCarrier.class::isInstance)
+                .map(SessionCarrier.class::cast);
     }
 
     private String saveSessionInfo(ProviderType provider, String accountId) {

@@ -1,0 +1,128 @@
+@import "/styles/breakpoints.scss";
+
+.card {
+  position: fixed;
+  right: var(--ask-ai-card-gutter);
+  bottom: var(--ask-ai-card-gutter);
+  z-index: 40;
+  width: var(--ask-ai-card-width);
+  padding: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02), 0 18px 44px -28px rgba(40, 30, 10, 0.35);
+}
+
+// The whole header toggles the card on phones. It is a plain block elsewhere,
+// so it carries no button chrome.
+.head {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  width: 100%;
+  padding: 0;
+  font-family: var(--sans);
+  text-align: left;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.headText {
+  display: block;
+  flex: 1;
+}
+
+.title {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.text {
+  display: block;
+  margin-top: 6px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink-3);
+}
+
+.chevron {
+  width: 15px;
+  height: 15px;
+  flex: none;
+  margin-top: 2px;
+  color: var(--ink-3);
+}
+
+.actions {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.card[data-expanded="true"] .actions {
+  display: flex;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 10px;
+  font-family: var(--sans);
+  font-size: 13.5px;
+  font-weight: 600;
+  text-align: left;
+  // The global "a" rule sets a link color and break-all; both are wrong here.
+  color: var(--ink);
+  word-break: normal;
+  background: var(--bg);
+  border: 1px solid var(--border-2);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    color: var(--acc-deep);
+    border-color: var(--ink);
+    background: var(--surface);
+  }
+}
+
+.icon {
+  width: 15px;
+  height: 15px;
+  flex: none;
+}
+
+// Once the card clears the column entirely there is room beside the content, so
+// it is always open and the toggle disappears. No JS decides this, which keeps
+// the first paint right on both sizes.
+@media (min-width: $ask-ai-card-clearance + 1px) {
+  .actions {
+    display: flex;
+  }
+
+  .head {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .chevron {
+    display: none;
+  }
+}
+
+// Below that the card would touch the column, so it starts collapsed and hugs
+// the corner.
+@media (max-width: $ask-ai-card-clearance) {
+  .card {
+    right: 12px;
+    bottom: 12px;
+    width: min(var(--ask-ai-card-width), calc(100vw - 24px));
+  }
+}

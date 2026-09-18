@@ -14,7 +14,6 @@ import PostHogPageView from "@/components/postHogPageView/PostHogPageView.tsx";
 import ToasterProvider from "@/components/toasterProvider/ToasterProvider.tsx";
 import BodyFixer from "@/components/bodyFixer/BodyFixer.tsx";
 import RegisterPage from "@/pages/register/page.tsx";
-import ProfileScreen from "@/pages/profile/page.tsx";
 import ForgotPasswordPage from "@/pages/forgot-password/page.tsx";
 import NewWorkspaceScreen from "@/pages/new-workspace/page.tsx";
 import ConfirmEmailPage from "@/pages/engage/confirm-email/page.tsx";
@@ -61,6 +60,9 @@ import InstanceGeneralSettingsPage from "@/pages/admin/instance-settings/general
 import AdminWorkspacesPage from "@/pages/admin/workspaces/page.tsx";
 import AdminTeamsPage from "@/pages/admin/teams/page.tsx";
 import AdminAccountsPage from "@/pages/admin/accounts/page.tsx";
+import AdminMcpPage from "@/pages/admin/mcp/page.tsx";
+import OauthConsentPage from "@/pages/oauth/consent/page.tsx";
+import OauthConsentReturnListener from "@/components/oauthConsentReturnListener/OauthConsentReturnListener.tsx";
 
 export default function App() {
     return (
@@ -80,6 +82,7 @@ export default function App() {
             <ReloadQueryRefetchHandler/>
             <OfflinePrefetchManager/>
             <PendingDraftSubmitter/>
+            <OauthConsentReturnListener/>
             <Routes>
 
                 <Route path="*" element={<Navigate to="/" replace/>}/>
@@ -87,9 +90,9 @@ export default function App() {
 
                 <Route path="/forgot-password" element={<ForgotPasswordPage/>}/>
                 <Route path="/login" element={<LoginPage/>}/>
-                <Route path="/profile" element={<ProfileScreen/>}/>
                 <Route path="/register" element={<RegisterPage/>}/>
                 <Route path="/new-workspace" element={<NewWorkspaceScreen/>}/>
+                <Route path="/oauth/consent" element={<OauthConsentPage/>}/>
 
                 <Route path={'/engage'}>
                     <Route path={'confirm-email'} element={<ConfirmEmailPage/>}/>
@@ -107,6 +110,7 @@ export default function App() {
                     <Route path="workspaces" element={<AdminWorkspacesPage/>}/>
                     <Route path="teams" element={<AdminTeamsPage/>}/>
                     <Route path="accounts" element={<AdminAccountsPage/>}/>
+                    <Route path="mcp" element={<AdminMcpPage/>}/>
                 </Route>
 
                 <Route path="/:workspaceName"

@@ -6,7 +6,7 @@
 }
 
 .wrap {
-  max-width: 660px;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -49,20 +49,11 @@
   }
 }
 
-/* post list */
+/* post list: the cards style themselves, see components/blog/postCard */
 .posts {
   list-style: none;
   margin: 8px 0 0;
   padding: 0;
-
-  li {
-    padding: 22px 0;
-    border-bottom: 1px dashed var(--border);
-  }
-
-  li:first-child {
-    padding-top: 14px;
-  }
 }
 
 .postMeta {
@@ -90,29 +81,6 @@
   font-family: var(--mono);
   font-size: 11.5px;
   color: var(--ink-3);
-}
-
-.postTitle {
-  font-size: 19px;
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-
-  a {
-    color: var(--ink);
-    transition: color 0.15s ease;
-  }
-
-  a:hover {
-    color: var(--acc-deep);
-  }
-}
-
-.excerpt {
-  color: var(--ink-2);
-  font-size: 15px;
-  margin-top: 7px;
-  max-width: 58ch;
 }
 
 /* ---- post page --------------------------------------------- */

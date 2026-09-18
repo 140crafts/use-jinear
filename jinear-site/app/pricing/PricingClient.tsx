@@ -138,7 +138,9 @@ const PricingClient: React.FC = () => {
             <h3>What happens if I self-host?</h3>
             <p>
               You get the full app for free under the AGPL-3.0 license. Bring it up with a single
-              Docker Compose file and point it at your domain. Your data never touches my servers.
+              Docker Compose file and point it at your domain. Your data never touches my servers. The
+              installer asks whether the instance may send a daily update check and an anonymous usage
+              report, and you can say no to both.
             </p>
           </div>
           <div className={styles.qa}>

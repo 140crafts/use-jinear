@@ -9,6 +9,7 @@ import CalendarExternalEventViewModal
 import NewMailIntegrationModal from "@/components/modal/newMailIntegrationModal/NewMailIntegrationModal.tsx";
 import WorkspaceSwitchModal from "@/components/modal/workspaceSwitchModal/WorkspaceSwitchModal.tsx";
 import AccountProfileModal from "@/components/modal/accountProfileModal/AccountProfileModal.tsx";
+import McpSettingsModal from "@/components/modal/mcpSettingsModal/McpSettingsModal.tsx";
 import TaskOverviewModal from "@/components/modal/taskOverviewModal/TaskOverviewModal.tsx";
 import NotificationPermissionModal
     from "@/components/modal/notificationPermissionModal/NotificationPermissionModal.tsx";
@@ -62,6 +63,7 @@ const workspaceModals: any = (
         <NewMailIntegrationModal/>
         <WorkspaceSwitchModal/>
         <AccountProfileModal/>
+        <McpSettingsModal/>
         <TaskOverviewModal/>
         <NotificationPermissionModal/>
         <AddMemberToTeamModal/>

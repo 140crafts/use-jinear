@@ -1,7 +1,7 @@
 import { Metadata } from "next";
-import Link from "next/link";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
+import PostCard from "@/components/blog/postCard/PostCard";
 import { SITE_URL } from "@/utils/constants";
 import { buildMetadata } from "@/utils/seo";
 import { getAllPosts } from "@/lib/posts";
@@ -16,14 +16,6 @@ export const metadata: Metadata = buildMetadata({
   ogDescription:
     "Changelogs, build notes and the occasional opinion on self-hosted task management, open source, and building Jinear.",
 });
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
 
 export default function BlogIndexPage() {
   const posts = getAllPosts();
@@ -61,17 +53,7 @@ export default function BlogIndexPage() {
             <h2>Writing</h2>
             <ul className={styles.posts}>
               {posts.map((post) => (
-                <li key={post.slug}>
-                  <div className={styles.postMeta}>
-                    {post.tags?.length ? <span className={styles.k}>{post.tags[0]}</span> : null}
-                    <span className={styles.dotS}></span>
-                    <time dateTime={post.pubDate}>{formatDate(post.pubDate)}</time>
-                  </div>
-                  <h3 className={styles.postTitle}>
-                    <Link href={`/blog/${post.slug}`}>{post.title}</Link>
-                  </h3>
-                  <p className={styles.excerpt}>{post.description}</p>
-                </li>
+                <PostCard key={post.slug} post={post} />
               ))}
             </ul>
           </section>

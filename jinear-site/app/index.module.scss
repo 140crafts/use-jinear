@@ -3,10 +3,13 @@
 .page {
   width: 100%;
   padding: 38px 0 80px;
+  // The screenshot rail bleeds past the column; clip (not hidden) keeps that
+  // from ever giving the page its own horizontal scrollbar.
+  overflow-x: clip;
 }
 
 .wrap {
-  max-width: 660px;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -95,18 +98,6 @@
   min-width: 96px;
 }
 
-.newBadge {
-  font-style: normal;
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: var(--surface);
-  background: var(--acc-deep);
-  border-radius: 999px;
-  padding: 2px 6px;
-  margin-left: 6px;
-}
-
 .note {
   background: var(--acc-tint);
   border: 1px solid var(--acc-soft);
@@ -143,6 +134,13 @@
 
 .priceMore {
   margin-top: 14px;
+}
+
+/* latest writing: the cards style themselves, see components/blog/postCard */
+.posts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 /* personal letter: a subtle paper panel */
@@ -205,9 +203,39 @@
   }
 }
 
-/* a quick look */
+/* a quick look: one horizontal rail of screenshots */
+.shots {
+  // Break out of the text column. Half the column's content width (the column
+  // minus its 2 x 24px padding) subtracted from 50vw is the gutter from this
+  // element's edge to the viewport edge; 12px keeps clear of a vertical
+  // scrollbar. Falls back to the column padding on narrow screens.
+  --bleed: clamp(24px, calc(50vw - (var(--page-width) - 48px) / 2 - 12px), 260px);
+
+  display: flex;
+  gap: 20px;
+  margin: 4px calc(-1 * var(--bleed)) 0;
+  padding: 0 var(--bleed) 10px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  // The scrollbar itself is hidden globally (styles/app.scss); the peeking next
+  // card and the hint line below carry the affordance instead.
+}
+
+.shotsHint {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-3);
+  margin-top: 10px;
+}
+
 .look {
-  margin: 4px 0 0;
+  margin: 0;
+  flex: 0 0 min(92%, 620px);
+  // Center, not start: with start alignment the browser aligns the first card
+  // to the scrollport edge, which swallows the left padding and opens the rail
+  // already nudged sideways. Centering parks each card in the middle instead.
+  scroll-snap-align: center;
 
   .appwin {
     box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02), 0 18px 44px -30px rgba(40, 30, 10, 0.32);
@@ -220,6 +248,15 @@
     margin-top: 12px;
     text-align: center;
   }
+}
+
+.lookTitle {
+  display: block;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 4px;
 }
 
 .appwin {
@@ -235,7 +272,7 @@
   gap: 8px;
   padding: 11px 14px;
   border-bottom: 1px solid var(--border);
-  background: #fcfbf9;
+  background: var(--bg);
 
   i {
     width: 10px;

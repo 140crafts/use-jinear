@@ -1,3 +1,17 @@
+// The reading column every marketing page renders inside. Media queries cannot
+// read a CSS variable, so the same value lives twice: here for breakpoints, and
+// as --page-width in variables.css for properties. Keep them in step.
+$page-width: 660px;
+
+// The floating Ask-AI card, mirrored as --ask-ai-card-* in variables.css. The
+// column is centred, so the free space on each side is (viewport - column) / 2.
+// The card clears the column only while that space fits the card plus its
+// gutter, which is where $ask-ai-card-clearance comes from. Narrower than that
+// the card starts collapsed instead of covering the content.
+$ask-ai-card-width: 244px;
+$ask-ai-card-gutter: 20px;
+$ask-ai-card-clearance: $page-width + 2 * ($ask-ai-card-width + $ask-ai-card-gutter);
+
 $mobile-s: 320px;
 $mobile-m: 375px;
 $mobile-l: 425px;

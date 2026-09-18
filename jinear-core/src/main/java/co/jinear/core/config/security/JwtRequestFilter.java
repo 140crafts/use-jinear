@@ -2,8 +2,12 @@ package co.jinear.core.config.security;
 
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.service.robot.RobotTokenValidator;
+import co.jinear.core.system.mcp.McpPaths;
 import co.jinear.core.system.JwtHelper;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -35,6 +39,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private static final String BEARER_PREFIX = "Bearer ";
     private final JwtHelper jwtHelper;
     private final RobotTokenValidator robotTokenValidator;
+
+    @Override
+    protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
+        String path = request.getServletPath();
+        return McpPaths.MCP_ENDPOINT.equals(path) || path.startsWith(McpPaths.WELL_KNOWN_PREFIX);
+    }
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain) throws ServletException, IOException {
@@ -75,10 +85,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     private void validateAndSetAuthentication(String token) {
-        if (Objects.nonNull(token)) {
+        if (Objects.isNull(token)) {
+            return;
+        }
+        try {
             jwtHelper.validateToken(token);
             checkAndValidateRobotToken(token);
             setAuthentication(token);
+        } catch (SignatureException | MalformedJwtException | UnsupportedJwtException exception) {
+            log.warn("[JWT] Ignoring an unreadable token: {}", exception.getClass().getSimpleName());
         }
     }
 

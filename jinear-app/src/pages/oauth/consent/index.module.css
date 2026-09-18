@@ -1,0 +1,130 @@
+.container {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: var(--content);
+  padding: 4rem 1rem;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 30rem;
+}
+
+.title {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.text {
+  color: var(--c-secondary-shade-0);
+  line-height: 1.6;
+}
+
+.clientRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+  background-color: var(--c-primary-shade-0);
+}
+
+.clientIcon {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.clientText {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.clientHost {
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.clientName {
+  font-size: 0.875rem;
+  color: var(--c-secondary-shade-0);
+  overflow-wrap: anywhere;
+}
+
+.scopeTitle {
+  font-weight: 600;
+}
+
+.scopeList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.scopeItem {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.5rem;
+  line-height: 1.5;
+}
+
+.scopeIcon {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.25rem;
+}
+
+.noteRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--c-secondary-shade-0);
+  line-height: 1.5;
+}
+
+.noteIcon {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.15rem;
+}
+
+.linkRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.linkRow a {
+  text-decoration: underline;
+}
+
+.actionRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.signInNote {
+  color: var(--c-secondary-shade-0);
+  line-height: 1.6;
+  border-top: 1px solid var(--c-primary-shade-1);
+  padding-top: 1rem;
+}

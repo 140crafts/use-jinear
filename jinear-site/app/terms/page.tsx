@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import Link from "next/link";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { buildMetadata } from "@/utils/seo";
@@ -20,10 +19,6 @@ export default function TermsPage() {
     <div className={styles.page}>
       <div className={styles.wrap}>
         <BareNav />
-
-        <Link className={styles.back} href="/">
-          ← Home
-        </Link>
 
         <header className={styles.ahead}>
           <h1 className={styles.title}>Privacy Policy, Terms &amp; Conditions</h1>
@@ -90,6 +85,22 @@ export default function TermsPage() {
               </a>
             </li>
           </ul>
+
+          <h2>Self-Hosted Installs</h2>
+          <p>
+            A self-hosted Jinear instance keeps all of its data on your own server. It can send one
+            optional report a day to api.jinear.co: a random instance id and the version number and,
+            only if the administrator also opts in, which features are on and rough size ranges. It
+            never sends account data, content, domains or IP addresses. The full field list is in{" "}
+            <a
+              href="https://github.com/140crafts/use-jinear/blob/main/docs/telemetry.md"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              docs/telemetry.md
+            </a>
+            .
+          </p>
 
           <h2>Log Data</h2>
           <p>

@@ -12,6 +12,9 @@ import org.springframework.stereotype.Component;
 @PropertySource("classpath:application.properties")
 public class MailProperties {
 
+    @Value("${spring.mail.host:}")
+    private String mailHost;
+
     @Value("${spring.mail.username}")
     private String mailUserName;
 

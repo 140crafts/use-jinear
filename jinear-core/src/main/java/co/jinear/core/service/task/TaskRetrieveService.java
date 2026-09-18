@@ -4,10 +4,13 @@ import co.jinear.core.converter.task.TaskDtoDetailedConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.entity.task.Task;
+import co.jinear.core.model.enumtype.telemetry.SizeBucket;
 import co.jinear.core.repository.TaskRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Date;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -38,5 +41,9 @@ public class TaskRetrieveService {
         return taskRepository.findByWorkspaceIdAndTeamIdAndTeamTagNoAndPassiveIdIsNull(workspaceId, teamId, teamTagNo)
                 .map(taskDtoDetailedConverter::mapAndRetrieveProfilePicturesAndTaskDetail)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public SizeBucket approximateTasksCreatedAfter(Date createdAfter) {
+        return SizeBucket.from(taskRepository.countAllByCreatedDateAfterAndPassiveIdIsNull(createdAfter));
     }
 }

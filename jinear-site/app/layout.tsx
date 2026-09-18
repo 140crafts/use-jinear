@@ -5,6 +5,7 @@ import {OG_IMAGE} from "@/utils/seo";
 import "../styles/app.scss";
 import "../styles/fonts.css";
 import Root from "@/components/root/Root";
+import AskAiCard from "@/components/askAi/AskAiCard";
 import {CSPostHogProvider} from "@/components/postHogProvider/CSPostHogProvider";
 
 export const viewport: Viewport = {
@@ -63,8 +64,8 @@ const organizationJsonLd = {
     url: SITE_URL,
     logo: `${SITE_URL}/images/icon/icon-512x512.png`,
     sameAs: [
-        "https://github.com/140crafts/use-jinear",
         "https://gitlab.com/140crafts/use-jinear",
+        "https://github.com/140crafts/use-jinear",
         "https://twitter.com/usejinear",
     ],
 };
@@ -83,6 +84,7 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
             <Root>
                 {children}
             </Root>
+            <AskAiCard/>
         </CSPostHogProvider>
         </body>
         </html>
