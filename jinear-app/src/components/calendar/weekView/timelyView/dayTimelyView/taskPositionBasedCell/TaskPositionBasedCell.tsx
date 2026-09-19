@@ -1,5 +1,9 @@
 import type {ICalendarDayRowCell} from "@/components/calendar/calendarUtils";
-import {useHighlightedEventId, useSetHighlightedEventId} from "@/components/calendar/context/CalendarContext";
+import {
+    useHighlightedEventId,
+    useSetDayTimelyViewDraggingEvent,
+    useSetHighlightedEventId
+} from "@/components/calendar/context/CalendarContext";
 import {useDebouncedEffect} from "@/hooks/useDebouncedEffect";
 import useWindowSize from "@/hooks/useWindowSize";
 import {popCalendarExternalEventViewModal, popTaskOverviewModal} from "@/store/slice/modalSlice";
@@ -23,6 +27,7 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({cell}) => 
 
     const highlightedEventId = useHighlightedEventId();
     const setHighlightedEventId = useSetHighlightedEventId();
+    const setDayTimelyViewDraggingEvent = useSetDayTimelyViewDraggingEvent();
 
     const highlighted = calendarEvent && highlightedEventId == calendarEvent.calendarEventId;
     const [highlightedZIndex, setHighlightedZIndex] = useState<boolean>(false);
@@ -110,8 +115,19 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({cell}) => 
         }
     };
 
+    const _onDragStart = (event: React.DragEvent) => {
+        if (cell) {
+            setDayTimelyViewDraggingEvent?.(cell);
+        }
+    };
+
+    const _onDragEnd = (event: React.DragEvent) => {
+        setDayTimelyViewDraggingEvent?.(undefined);
+    };
+
     return (
         <Link
+            draggable={true}
             tabIndex={calendarEvent ? undefined : -1}
             to={`/${calendarEvent?.relatedTask?.workspace?.username}/task/${calendarEvent?.relatedTask?.team?.tag}-${calendarEvent?.relatedTask?.teamTagNo}`}
             onClick={onLinkClick}
@@ -120,6 +136,8 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({cell}) => 
             style={{...cellStyle, ...topicCellStyle, ...zIndexStyle}}
             onMouseEnter={_hoverStart}
             onMouseOut={_hoverEnd}
+            onDragStart={_onDragStart}
+            onDragEnd={_onDragEnd}
         >
             <div className={styles.colorLineContainer}>
                 {cellColorTags.map((color, i) =>
