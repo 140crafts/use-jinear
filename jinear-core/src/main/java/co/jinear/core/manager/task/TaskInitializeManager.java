@@ -25,10 +25,12 @@ import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.internal.util.StringHelper;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Objects;
 
 @Slf4j
@@ -62,6 +64,8 @@ public class TaskInitializeManager {
         validateSubtaskAndNewTaskIsInSameTeamAndWorkspace(taskInitializeRequest);
         validateTopicAndNewTaskIsInSameTeamAndWorkspace(taskInitializeRequest);
         validateProjectAndMilestoneId(taskInitializeRequest, currentAccount);
+        validateAssigneeHasTeamAndWorkflowAccess(taskInitializeRequest);
+        validateAllCollaboratorsHasTeamAndWorkspaceAccess(taskInitializeRequest);
 
         log.info("Initialize task has started. currentAccount: {}", currentAccount);
         TaskInitializeVo taskInitializeVo = taskInitializeVoConverter.map(taskInitializeRequest);
@@ -72,6 +76,25 @@ public class TaskInitializeManager {
         taskActivityService.initializeNewTaskActivity(currentAccount, currentAccountSessionId, initializedTask);
         initializeTaskBoardActivity(taskInitializeRequest, currentAccount, currentAccountSessionId, initializedTask);
         return mapResponse(initializedTask);
+    }
+
+    private void validateAllCollaboratorsHasTeamAndWorkspaceAccess(TaskInitializeRequest taskInitializeRequest) {
+        String workspaceId = taskInitializeRequest.getWorkspaceId();
+        List<String> collaborators = taskInitializeRequest.getCollaborators();
+        if (Objects.nonNull(collaborators) && !collaborators.isEmpty()) {
+            workspaceValidator.validateAllHasAccess(collaborators, workspaceId);
+            teamAccessValidator.validateAllHasTeamAccess(collaborators, workspaceId);
+        }
+    }
+
+    private void validateAssigneeHasTeamAndWorkflowAccess(TaskInitializeRequest taskInitializeRequest) {
+        String workspaceId = taskInitializeRequest.getWorkspaceId();
+        String teamId = taskInitializeRequest.getTeamId();
+        String assignedTo = taskInitializeRequest.getAssignedTo();
+        if (StringUtils.isNotBlank(assignedTo)) {
+            workspaceValidator.validateHasAccess(assignedTo, workspaceId);
+            teamAccessValidator.validateTeamAccess(assignedTo, teamId);
+        }
     }
 
     private void validateProjectAndMilestoneId(TaskInitializeRequest taskInitializeRequest, String currentAccount) {

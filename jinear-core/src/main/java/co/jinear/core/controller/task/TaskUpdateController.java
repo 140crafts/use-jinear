@@ -44,6 +44,13 @@ public class TaskUpdateController {
         return taskUpdateManager.updateTaskAssignee(taskId, taskAssigneeUpdateRequest);
     }
 
+    @PutMapping("/{taskId}/collaborators")
+    @ResponseStatus(HttpStatus.OK)
+    public TaskResponse updateTaskCollaborators(@PathVariable("taskId") String taskId,
+                                                @Valid @RequestBody TaskCollaboratorUpdateRequest taskCollaboratorUpdateRequest) {
+        return taskUpdateManager.updateTaskCollaborators(taskId, taskCollaboratorUpdateRequest);
+    }
+
     @PutMapping("/{taskId}/project-milestone")
     @ResponseStatus(HttpStatus.OK)
     public TaskResponse updateTaskProjectAndMilestone(@PathVariable("taskId") String taskId,

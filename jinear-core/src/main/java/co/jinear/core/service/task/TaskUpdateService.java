@@ -155,7 +155,7 @@ public class TaskUpdateService {
         taskRepository.updateAllMilestoneIdsAndProjectIdsAsNullWithMilestoneId(milestoneId);
     }
 
-    private static void validateEitherOneIsBlankOrBothFilled(String projectId, String milestoneId) {
+    private void validateEitherOneIsBlankOrBothFilled(String projectId, String milestoneId) {
         if ((StringUtils.isBlank(projectId) && StringUtils.isNotBlank(milestoneId)) ||
             (StringUtils.isNotBlank(projectId) && StringUtils.isBlank(milestoneId))) {
             throw new BusinessException();

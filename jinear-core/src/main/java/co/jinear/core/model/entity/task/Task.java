@@ -145,4 +145,9 @@ public class Task extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "milestone_id", insertable = false, updatable = false)
     private Milestone milestone;
+
+    @OneToMany(mappedBy = "task")
+    @Where(clause = "passive_id is null")
+    @OrderBy("createdDate ASC")
+    private Set<TaskCollaborator> taskCollaborators;
 }

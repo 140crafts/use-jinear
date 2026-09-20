@@ -9,7 +9,7 @@ import type {CalendarEventDto, WorkspaceDto} from "@/model/be/jinear-core";
 import Logger from "@/util/logger";
 import cn from "classnames";
 import {startOfDay} from "date-fns";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import styles from "./Calendar.module.scss";
 import CalendarContext from "./context/CalendarContext";
 import DayView from "./dayView/DayView";
@@ -46,6 +46,7 @@ const Calendar: React.FC<CalendarProps> = ({workspace, className}) => {
 
     const [dayTimelyViewDraggingEvent, setDayTimelyViewDraggingEvent] = useState<ICalendarDayRowCell>()
     const [draggingOnHourTile, setDraggingOnHourTile] = useState<Date>();
+    const [dayTimelyViewDragGrabOffsetMinutes, setDayTimelyViewDragGrabOffsetMinutes] = useState<number>();
 
     const workspacesFirstTeam = useWorkspaceFirstTeam(workspace.workspaceId);
 
@@ -63,29 +64,43 @@ const Calendar: React.FC<CalendarProps> = ({workspace, className}) => {
         setQueryStateMultiple(nextQueryState);
     }, [JSON.stringify(viewType), JSON.stringify(viewingDate), defaultCalendarViewType]);
 
-    logger.log({dayTimelyViewDraggingEvent, draggingOnHourTile});
+    const contextValue = useMemo(
+        () => ({
+            highlightedEventId,
+            setHighlightedEventId,
+            squeezedView,
+            setSqueezedView,
+            workspace,
+            newTasksFromTeam: workspacesFirstTeam,
+            draggingEvent,
+            setDraggingEvent,
+            ghostEvent,
+            setGhostEvent,
+            calenderLoading,
+            setCalenderLoading,
+            dayTimelyViewDraggingEvent,
+            setDayTimelyViewDraggingEvent,
+            draggingOnHourTile,
+            setDraggingOnHourTile,
+            dayTimelyViewDragGrabOffsetMinutes,
+            setDayTimelyViewDragGrabOffsetMinutes
+        }),
+        [
+            highlightedEventId,
+            squeezedView,
+            workspace,
+            workspacesFirstTeam,
+            draggingEvent,
+            ghostEvent,
+            calenderLoading,
+            dayTimelyViewDraggingEvent,
+            draggingOnHourTile,
+            dayTimelyViewDragGrabOffsetMinutes
+        ]
+    );
 
     return (
-        <CalendarContext.Provider
-            value={{
-                highlightedEventId,
-                setHighlightedEventId,
-                squeezedView,
-                setSqueezedView,
-                workspace,
-                newTasksFromTeam: workspacesFirstTeam,
-                draggingEvent,
-                setDraggingEvent,
-                ghostEvent,
-                setGhostEvent,
-                calenderLoading,
-                setCalenderLoading,
-                dayTimelyViewDraggingEvent,
-                setDayTimelyViewDraggingEvent,
-                draggingOnHourTile,
-                setDraggingOnHourTile
-            }}
-        >
+        <CalendarContext.Provider value={contextValue}>
             <div className={cn(styles.container, className)}>
                 <CalendarHeader/>
                 {workspace && viewType == "m" && <MonthView workspace={workspace}/>}

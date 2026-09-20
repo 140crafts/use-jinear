@@ -74,6 +74,11 @@ public class TeamMemberRetrieveService {
         return teamMemberRepository.countAllByAccountIdAndTeamIdAndPassiveIdIsNull(accountId, teamId) > 0L;
     }
 
+    public boolean isAllTeamMember(List<String> accountIds, String teamId) {
+        log.info("Is all team member has started. accountId: {}, teamId: {}", accountIds, teamId);
+        return teamMemberRepository.countAllByAccountIdIsInAndTeamIdAndPassiveIdIsNull(accountIds, teamId) == accountIds.size();
+    }
+
     public boolean isAccountHasRoleInTeam(String accountId, String teamId, TeamMemberRoleType role) {
         log.info("Is account has role in team has started.. accountId: {}, teamId: {}, role: {}", accountId, teamId, role);
         return teamMemberRepository.countAllByAccountIdAndTeamIdAndRoleAndPassiveIdIsNull(accountId, teamId, role) > 0L;

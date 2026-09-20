@@ -76,3 +76,16 @@
     min-width: .25rem;
     height: 100%;
 }
+
+.ghost {
+    background-color: var(--c-secondary-shade-1);
+    color: var(--c-primary);
+    pointer-events: none;
+    /* .container animates top, which would make the ghost lag the cursor between slots. */
+    transition: none;
+    z-index: 3;
+}
+
+.dragging {
+    opacity: 0.4;
+}

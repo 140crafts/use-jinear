@@ -25,6 +25,8 @@ interface ICalendarContext {
     setDayTimelyViewDraggingEvent?: React.Dispatch<React.SetStateAction<ICalendarDayRowCell | undefined>>;
     draggingOnHourTile?: Date
     setDraggingOnHourTile?: React.Dispatch<React.SetStateAction<Date | undefined>>;
+    dayTimelyViewDragGrabOffsetMinutes?: number;
+    setDayTimelyViewDragGrabOffsetMinutes?: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
 
 const CalendarContext = createContext<ICalendarContext>({
@@ -40,6 +42,8 @@ const CalendarContext = createContext<ICalendarContext>({
     setDayTimelyViewDraggingEvent: undefined,
     draggingOnHourTile: undefined,
     setDraggingOnHourTile: undefined,
+    dayTimelyViewDragGrabOffsetMinutes: undefined,
+    setDayTimelyViewDragGrabOffsetMinutes: undefined,
 });
 
 export default CalendarContext;
@@ -122,5 +126,15 @@ export function useDraggingOnHourTile() {
 export function useSetDraggingOnHourTile() {
     const ctx = useContext(CalendarContext);
     return ctx.setDraggingOnHourTile;
+}
+
+export function useDayTimelyViewDragGrabOffsetMinutes() {
+    const ctx = useContext(CalendarContext);
+    return ctx.dayTimelyViewDragGrabOffsetMinutes;
+}
+
+export function useSetDayTimelyViewDragGrabOffsetMinutes() {
+    const ctx = useContext(CalendarContext);
+    return ctx.setDayTimelyViewDragGrabOffsetMinutes;
 }
 

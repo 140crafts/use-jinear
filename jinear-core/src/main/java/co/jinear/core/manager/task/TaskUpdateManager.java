@@ -24,6 +24,7 @@ import co.jinear.core.service.project.ProjectRetrieveService;
 import co.jinear.core.service.task.TaskActivityService;
 import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.TaskUpdateService;
+import co.jinear.core.service.task.collaborator.TaskCollaboratorService;
 import co.jinear.core.service.topic.TopicRetrieveService;
 import co.jinear.core.system.util.ZonedDateHelper;
 import co.jinear.core.validator.team.TeamAccessValidator;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -56,6 +58,7 @@ public class TaskUpdateManager {
     private final PassiveService passiveService;
     private final ProjectRetrieveService projectRetrieveService;
     private final MilestoneRetrieveService milestoneRetrieveService;
+    private final TaskCollaboratorService taskCollaboratorService;
 
     public BaseResponse updateTaskTitle(String taskId, TaskUpdateTitleRequest taskUpdateTitleRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -131,6 +134,18 @@ public class TaskUpdateManager {
         return mapResponse(taskDto);
     }
 
+    public TaskResponse updateTaskCollaborators(String taskId, TaskCollaboratorUpdateRequest taskCollaboratorUpdateRequest) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
+        validateAccess(taskId, currentAccountId);
+        TaskDto taskDtoBeforeUpdate = validateAllHasAccess(taskId, taskCollaboratorUpdateRequest.getCollaborators());
+        log.info("Update task collaborators has started. currentAccountId: {}, taskId: {}, taskCollaboratorUpdateRequest: {}", currentAccountId, taskId, taskCollaboratorUpdateRequest);
+        taskCollaboratorService.upsertTaskCollaborators(taskId, taskCollaboratorUpdateRequest.getCollaborators());
+        TaskDto taskDto = taskRetrieveService.retrieve(taskId);
+        taskActivityService.initializeCollaboratorUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
+        return mapResponse(taskDto);
+    }
+
     public TaskResponse updateTaskProjectAndMilestone(String taskId, TaskProjectAndMilestoneUpdateRequest taskProjectAndMilestoneUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
@@ -162,6 +177,15 @@ public class TaskUpdateManager {
         TaskDto taskDto = taskRetrieveService.retrieve(taskId);
         workspaceValidator.validateHasAccess(currentAccountId, taskDto.getWorkspaceId());
         teamAccessValidator.validateTeamAccess(currentAccountId, taskDto.getTeamId());
+        return taskDto;
+    }
+
+    private TaskDto validateAllHasAccess(String taskId, List<String> accountIds) {
+        TaskDto taskDto = taskRetrieveService.retrieve(taskId);
+        if (Objects.nonNull(accountIds) && !accountIds.isEmpty()) {
+            workspaceValidator.validateAllHasAccess(accountIds, taskDto.getWorkspaceId());
+            teamAccessValidator.validateAllHasTeamAccess(accountIds, taskDto.getTeamId());
+        }
         return taskDto;
     }
 

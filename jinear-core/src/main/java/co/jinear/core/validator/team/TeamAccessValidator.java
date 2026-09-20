@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.ADMIN;
 import static co.jinear.core.model.enumtype.workspace.WorkspaceAccountRoleType.OWNER;
@@ -28,6 +29,12 @@ public class TeamAccessValidator {
         TeamDto teamDto = teamRetrieveService.retrieveTeam(teamId);
         String workspaceId = teamDto.getWorkspaceId();
         validateTeamAccess(accountId, workspaceId, teamId);
+    }
+
+    public void validateAllHasTeamAccess(List<String> accountIds, String teamId){
+        if (!isAllTeamMember(accountIds, teamId)){
+            throw new NoAccessException();
+        }
     }
 
     public void validateTeamAccess(String accountId, TeamDto teamDto) {
@@ -69,6 +76,10 @@ public class TeamAccessValidator {
 
     public boolean isAccountTeamMember(String accountId, String teamId) {
         return teamMemberRetrieveService.isAccountTeamMember(accountId, teamId);
+    }
+
+    public boolean isAllTeamMember(List<String> accountIds, String teamId) {
+        return teamMemberRetrieveService.isAllTeamMember(accountIds, teamId);
     }
 
     public boolean isAccountTeamAdmin(String accountId, String teamId) {

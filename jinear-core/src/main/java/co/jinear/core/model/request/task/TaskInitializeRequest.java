@@ -9,6 +9,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -64,4 +65,7 @@ public class TaskInitializeRequest extends BaseRequest {
 
     @Nullable
     private String milestoneId;
+
+    @Nullable
+    private List<String> collaborators;
 }

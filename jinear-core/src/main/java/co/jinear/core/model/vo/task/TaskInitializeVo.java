@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,4 +29,5 @@ public class TaskInitializeVo {
     private String feedItemId;
     private String projectId;
     private String milestoneId;
+    private List<String> collaborators;
 }

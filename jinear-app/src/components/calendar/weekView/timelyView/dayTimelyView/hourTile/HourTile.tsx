@@ -2,8 +2,6 @@ import React from "react";
 import styles from "./HourTile.module.css";
 import Logger from "@/util/logger";
 import cn from "classnames";
-import {useSetDraggingOnHourTile} from "@/components/calendar/context/CalendarContext.ts";
-import {setHours, setMinutes} from "date-fns";
 
 interface HourTileProps {
     topLabel?: string;
@@ -16,27 +14,12 @@ interface HourTileProps {
 
 const logger = Logger("HourTile");
 export const HOUR_TILE_RESOLUTION = 4;
+export const HOUR_TILE_SLOT_IN_MINUTES = 60 / HOUR_TILE_RESOLUTION;
 
 const HourTile: React.FC<HourTileProps> = ({day, hour, topLabel, bottomLabel, onClick, topClassName}) => {
-    const setDraggingOnHourTile = useSetDraggingOnHourTile();
-
     const _onClick = () => {
         logger.log({msg: "HourTile click", onClick});
         onClick?.();
-    };
-
-    const _onDragEnter = (event: React.DragEvent, i: number) => {
-        if (day && hour && setDraggingOnHourTile) {
-            const minute = i * (60 / HOUR_TILE_RESOLUTION);
-            const nextHour = setMinutes(setHours(new Date(day), hour), minute);
-            setDraggingOnHourTile(nextHour);
-        }
-    };
-
-    const _onDragLeave = (event: React.DragEvent) => {
-        if (setDraggingOnHourTile) {
-            setDraggingOnHourTile(undefined);
-        }
     };
 
     return (
@@ -51,8 +34,6 @@ const HourTile: React.FC<HourTileProps> = ({day, hour, topLabel, bottomLabel, on
                     <div
                         key={`${day}-${hour}-${i}-resolution`}
                         className={styles.hourResolution}
-                        onDragEnter={event => _onDragEnter(event, i)}
-                        onDragLeave={_onDragLeave}
                     >
                     </div>))}
             </div>
