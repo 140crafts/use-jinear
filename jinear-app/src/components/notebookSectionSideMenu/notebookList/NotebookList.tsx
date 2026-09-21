@@ -36,7 +36,7 @@ const NotebookList: React.FC<NotebookListProps> = ({workspace}) => {
                 hasAddButton={true}
                 onAddButtonClick={openNewNotebookModal}
             />
-            {isLoading && <InfiniteLineLoading/>}
+            {isLoading && <InfiniteLineLoading className={styles.lineLoading}/>}
             <div className="spacer-h-1"/>
             <div className={styles.notebookListContainer}>
 

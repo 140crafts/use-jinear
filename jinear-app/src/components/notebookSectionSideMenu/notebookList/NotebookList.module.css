@@ -14,3 +14,7 @@
     flex-direction: column;
     gap: .5rem;
 }
+
+.lineLoading{
+    background-color: var(--c-primary-shade-0);
+}
