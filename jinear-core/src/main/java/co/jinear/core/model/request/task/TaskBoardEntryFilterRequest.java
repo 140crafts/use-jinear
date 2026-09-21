@@ -22,6 +22,8 @@ public class TaskBoardEntryFilterRequest extends BaseRequest {
     @Nullable
     private List<String> assigneeIds;
     @Nullable
+    private List<String> collaboratorIds;
+    @Nullable
     private List<String> workflowStatusIdList;
     @Nullable
     private List<TeamWorkflowStateGroup> workflowStateGroups;

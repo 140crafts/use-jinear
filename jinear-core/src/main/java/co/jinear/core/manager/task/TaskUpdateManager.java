@@ -138,9 +138,9 @@ public class TaskUpdateManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         validateAccess(taskId, currentAccountId);
-        TaskDto taskDtoBeforeUpdate = validateAllHasAccess(taskId, taskCollaboratorUpdateRequest.getCollaborators());
+        TaskDto taskDtoBeforeUpdate = validateAllHasAccess(taskId, taskCollaboratorUpdateRequest.getCollaboratorIds());
         log.info("Update task collaborators has started. currentAccountId: {}, taskId: {}, taskCollaboratorUpdateRequest: {}", currentAccountId, taskId, taskCollaboratorUpdateRequest);
-        taskCollaboratorService.upsertTaskCollaborators(taskId, taskCollaboratorUpdateRequest.getCollaborators());
+        taskCollaboratorService.upsertTaskCollaborators(taskId, taskCollaboratorUpdateRequest.getCollaboratorIds());
         TaskDto taskDto = taskRetrieveService.retrieve(taskId);
         taskActivityService.initializeCollaboratorUpdateActivity(currentAccountId, currentAccountSessionId, taskDtoBeforeUpdate, taskDto);
         return mapResponse(taskDto);

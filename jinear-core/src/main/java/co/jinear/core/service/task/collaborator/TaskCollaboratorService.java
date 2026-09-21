@@ -3,6 +3,7 @@ package co.jinear.core.service.task.collaborator;
 import co.jinear.core.model.entity.task.TaskCollaborator;
 import co.jinear.core.repository.task.TaskCollaboratorRepository;
 import co.jinear.core.service.passive.PassiveService;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +17,9 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class TaskCollaboratorService {
 
-    private TaskCollaboratorRepository taskCollaboratorRepository;
-    private PassiveService passiveService;
+    private final TaskCollaboratorRepository taskCollaboratorRepository;
+    private final PassiveService passiveService;
+    private final EntityManager entityManager;
 
     @Transactional
     public void upsertTaskCollaborators(String taskId, List<String> collaboratorAccountIds) {
@@ -25,8 +27,10 @@ public class TaskCollaboratorService {
         removeAllCollaborators(taskId);
         if (Objects.nonNull(collaboratorAccountIds) && !collaboratorAccountIds.isEmpty()) {
             List<TaskCollaborator> collaborators = collaboratorAccountIds.stream().map(accId -> toEntity(taskId, accId)).toList();
-            taskCollaboratorRepository.saveAll(collaborators);
+            taskCollaboratorRepository.saveAllAndFlush(collaborators);
         }
+        entityManager.flush();
+        entityManager.clear();
     }
 
     private void removeAllCollaborators(String taskId) {

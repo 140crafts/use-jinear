@@ -3,13 +3,16 @@ package co.jinear.core.repository.criteriabuilder;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.entity.task.Task;
 import co.jinear.core.model.entity.task.TaskBoardEntry;
+import co.jinear.core.model.entity.task.TaskCollaborator;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
+import jakarta.persistence.criteria.AbstractQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -114,6 +117,26 @@ public class TaskSearchCriteriaBuilder {
             return in;
         }
         return null;
+    }
+
+    public void addCollaboratorIdList(List<String> collaboratorIdList, CriteriaBuilder criteriaBuilder, AbstractQuery<?> abstractQuery, Root<Task> root, List<Predicate> predicateList) {
+        if (Objects.nonNull(collaboratorIdList) && !collaboratorIdList.isEmpty()) {
+            collaboratorIdList.stream()
+                    .distinct()
+                    .forEach(collaboratorId -> predicateList.add(getCollaboratorExistsPredicate(collaboratorId, criteriaBuilder, abstractQuery, root)));
+        }
+    }
+
+    private Predicate getCollaboratorExistsPredicate(String collaboratorId, CriteriaBuilder criteriaBuilder, AbstractQuery<?> abstractQuery, Root<Task> root) {
+        Subquery<String> subquery = abstractQuery.subquery(String.class);
+        Root<TaskCollaborator> collaboratorRoot = subquery.from(TaskCollaborator.class);
+        subquery.select(collaboratorRoot.get("taskCollaboratorId"))
+                .where(
+                        criteriaBuilder.equal(collaboratorRoot.get("taskId"), root.get("taskId")),
+                        criteriaBuilder.equal(collaboratorRoot.get("accountId"), collaboratorId),
+                        criteriaBuilder.isNull(collaboratorRoot.get("passiveId"))
+                );
+        return criteriaBuilder.exists(subquery);
     }
 
     public void addDatePredicates(ZonedDateTime start, ZonedDateTime end, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {

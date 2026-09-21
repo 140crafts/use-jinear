@@ -656,7 +656,7 @@
   }, {
     "name" : "list_calendar_events",
     "title" : "List calendar events in a date range",
-    "description" : "Lists everything on a workspace's calendar between two instants: tasks that carry dates and events synced from an attached Google Calendar. Use it to answer what is happening this week or when someone is busy.",
+    "description" : "Lists everything on a workspace's calendar between two instants: tasks that carry dates and events synced from an attached Google Calendar. Use it to answer what is happening this week or when someone is busy. A collaborator filter narrows the dated tasks only.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -684,6 +684,13 @@
         "calendarIds" : {
           "type" : "array",
           "description" : "Restrict to these calendars.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "collaboratorIds" : {
+          "type" : "array",
+          "description" : "Restrict dated tasks to those that carry every one of these account ids as a collaborator, from list_workspace_members. Events synced from Google Calendar are not affected.",
           "items" : {
             "type" : "string"
           }
@@ -1203,7 +1210,7 @@
   }, {
     "name" : "list_tasks",
     "title" : "List tasks with filters",
-    "description" : "Lists tasks in a workspace, optionally narrowed by team, assignee, workflow status, state group or a date range. This is the tool for questions like what is in progress, what is assigned to someone, or what is due this week.",
+    "description" : "Lists tasks in a workspace, optionally narrowed by team, assignee, collaborator, workflow status, state group or a date range. This is the tool for questions like what is in progress, what is assigned to someone, or what is due this week.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -1221,6 +1228,13 @@
         "assigneeIds" : {
           "type" : "array",
           "description" : "Restrict to tasks assigned to these account ids, from list_workspace_members.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "collaboratorIds" : {
+          "type" : "array",
+          "description" : "Restrict to tasks that carry every one of these account ids as a collaborator, from list_workspace_members.",
           "items" : {
             "type" : "string"
           }

@@ -17,6 +17,7 @@ import co.jinear.core.service.task.TaskLockService;
 import co.jinear.core.service.task.TaskRetrieveService;
 import co.jinear.core.service.task.TaskUpdateService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryOperationService;
+import co.jinear.core.service.task.collaborator.TaskCollaboratorService;
 import co.jinear.core.service.task.feed.TaskFeedItemOperationService;
 import co.jinear.core.service.task.relation.TaskRelationInitializeService;
 import co.jinear.core.service.task.reminder.TaskReminderDateUpdateService;
@@ -77,7 +78,8 @@ class TaskWorkflowStatusResponseTest {
                 Mockito.mock(TaskBoardEntryOperationService.class),
                 Mockito.mock(TaskFeedItemOperationService.class),
                 taskAnalyticsService,
-                Mockito.mock(TaskFtsRefreshService.class));
+                Mockito.mock(TaskFtsRefreshService.class),
+                Mockito.mock(TaskCollaboratorService.class));
     }
 
     @Test

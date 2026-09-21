@@ -20,6 +20,9 @@ public class McpListTasksInput extends McpWorkspaceScopedInput {
     @McpField("Restrict to tasks assigned to these account ids, from list_workspace_members.")
     private List<String> assigneeIds;
 
+    @McpField("Restrict to tasks that carry every one of these account ids as a collaborator, from list_workspace_members.")
+    private List<String> collaboratorIds;
+
     @McpField("Restrict to these status ids, from list_workflow_statuses.")
     private List<String> workflowStatusIds;
 

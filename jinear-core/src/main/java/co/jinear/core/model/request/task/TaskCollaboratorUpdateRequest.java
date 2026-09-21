@@ -14,5 +14,5 @@ import java.util.List;
 public class TaskCollaboratorUpdateRequest extends BaseRequest {
 
     @Nullable
-    private List<String> collaborators;
+    private List<String> collaboratorIds;
 }

@@ -67,5 +67,5 @@ public class TaskInitializeRequest extends BaseRequest {
     private String milestoneId;
 
     @Nullable
-    private List<String> collaborators;
+    private List<String> collaboratorIds;
 }

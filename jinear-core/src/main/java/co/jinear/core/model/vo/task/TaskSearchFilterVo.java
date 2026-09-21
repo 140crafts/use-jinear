@@ -28,6 +28,7 @@ public class TaskSearchFilterVo {
     private List<String> topicIds;
     private List<String> ownerIds;
     private List<String> assigneeIds;
+    private List<String> collaboratorIds;
     private List<String> workflowStatusIdList;
     private List<TeamWorkflowStateGroup> workflowStateGroups;
     private ZonedDateTime timespanStart;

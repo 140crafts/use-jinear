@@ -180,9 +180,9 @@ public class TaskInitializeService {
     }
 
     private void initializeCollaborators(TaskInitializeVo taskInitializeVo, Task task) {
-        List<String> collaborators = taskInitializeVo.getCollaborators();
-        if (Objects.nonNull(collaborators) && !collaborators.isEmpty()) {
-            taskCollaboratorService.upsertTaskCollaborators(task.getTaskId(), collaborators);
+        List<String> collaboratorIds = taskInitializeVo.getCollaboratorIds();
+        if (Objects.nonNull(collaboratorIds) && !collaboratorIds.isEmpty()) {
+            taskCollaboratorService.upsertTaskCollaborators(task.getTaskId(), collaboratorIds);
         }
     }
 }
