@@ -23,6 +23,8 @@ const MonthView: React.FC<MonthViewProps> = ({workspace}) => {
     const hiddenCalendars = useQueryState<string[]>("hiddenCalendars", queryStateArrayParser) || EMPTY_ARRAY;
     const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || EMPTY_ARRAY;
     const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || EMPTY_ARRAY;
+    const assigneeIds = useQueryState<string[]>("assigneeIds", queryStateArrayParser) || EMPTY_ARRAY;
+    const collaboratorIds = useQueryState<string[]>("collaboratorIds", queryStateArrayParser) || EMPTY_ARRAY;
 
     const defaultDate = useMemo(() => startOfDay(new Date()), []);
     const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || defaultDate;
@@ -35,6 +37,8 @@ const MonthView: React.FC<MonthViewProps> = ({workspace}) => {
     const {data: filterResponse, isFetching} = useFilterCalendarEventsQuery({
         workspaceId: workspace?.workspaceId || "",
         taskboardIds: taskBoards,
+        assigneeIds,
+        collaboratorIds,
         timespanStart: periodStart,
         timespanEnd: periodEnd
     });

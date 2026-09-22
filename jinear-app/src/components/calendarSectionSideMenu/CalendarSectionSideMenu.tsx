@@ -13,7 +13,8 @@ import OrLine from "../or-line/or-line";
 import styles from "./CalendarSectionSideMenu.module.css";
 import CalendarTeamsList from "./calendarTeamsList/CalendarTeamsList";
 import ExternalCalendarsList from "./externalCalendarsList/ExternalCalendarsList";
-import CalendarBoardsList from "@/components/calendarSectionSideMenu/calendarBoardsList/CalendarBoardsList";
+import CalendarGenericTaskFilters
+    from "@/components/calendarSectionSideMenu/calendarGenericTaskFilters/CalendarGenericTaskFilters";
 import {useParams} from "react-router-dom";
 import {useInstanceFlag} from "@/hooks/useInstanceFlag";
 import {useHasExternalCalendars} from "@/hooks/calendar/useHasExternalCalendars";
@@ -50,7 +51,7 @@ const CalendarSectionSideMenu: React.FC<CalendarSectionSideMenuProps> = ({}) => 
                         headerContainerClassName={styles.miniMonthCalendarHeader}
                     />
                     <CalendarTeamsList workspace={workspace}/>
-                    <CalendarBoardsList workspace={workspace}/>
+                    <CalendarGenericTaskFilters workspace={workspace}/>
                     {!_isWebView && showExternalCalendars && (
                         <>
                             <OrLine omitText={true}/>

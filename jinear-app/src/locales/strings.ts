@@ -3679,6 +3679,14 @@ const translations = {
         en: "Related Board(s)",
         tr: "İlgili Pano"
     },
+    calendarFilterByAssigneeButton: {
+        en: "Assignee(s)",
+        tr: "Atanan"
+    },
+    calendarFilterByCollaboratorButton: {
+        en: "Collaborator(s)",
+        tr: "Ortak çalışan"
+    },
     deleteCalendarMemberAreYouSureTitle: {
         en: "Kick Member",
         tr: "Üyeyi Takvim Üyelerinden At"

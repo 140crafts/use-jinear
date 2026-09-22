@@ -61,6 +61,8 @@ const calendarEntries = (workspaceId: string, tier: DeviceTier): PrefetchEntry[]
         entry(calendarEventApi.endpoints.filterCalendarEvents, {
             workspaceId,
             taskboardIds: [],
+            assigneeIds: [],
+            collaboratorIds: [],
             timespanStart: periodStart,
             timespanEnd: periodEnd
         })
