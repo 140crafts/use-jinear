@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-09-21 22:32:56.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-22 00:06:59.
 
 export interface BaseDto {
     createdDate: Date;
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
     gthreadId: string;
     ghistoryId: string;
     gid: string;
+    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1268,6 +1268,8 @@ export interface WorkspaceActivityDto extends BaseDto {
     newProject?: ProjectDto | null;
     oldMilestoneDto?: MilestoneDto | null;
     newMilestoneDto?: MilestoneDto | null;
+    oldCollaborators?: PlainAccountProfileDto[] | null;
+    newCollaborators?: PlainAccountProfileDto[] | null;
 }
 
 export interface WorkspaceDisplayPreferenceDto {
@@ -1660,11 +1662,11 @@ export interface OauthAuthorizeRequest {
     codeChallenge: string;
     codeChallengeMethod: string;
     resource: string;
+    client_id: string;
+    code_challenge_method: string;
     response_type: string;
     redirect_uri: string;
     code_challenge: string;
-    code_challenge_method: string;
-    client_id: string;
 }
 
 export interface OauthClientRegistrationRequest {
@@ -1701,11 +1703,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
+    client_id: string;
+    grant_type: string;
     redirect_uri: string;
     code_verifier: string;
     refresh_token: string;
-    client_id: string;
-    grant_type: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2666,13 +2668,13 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    originalFilename: string;
-    contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
+    contentType: string;
+    originalFilename: string;
 }
 
 export interface McpToolDescriptor {
@@ -2793,13 +2795,13 @@ export interface BaseEntity {
 }
 
 export interface Resource extends InputStreamSource {
-    uri: URI;
-    description: string;
-    filename: string;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
+    filename: string;
+    uri: URI;
+    description: string;
 }
 
 export interface InputStreamSource {
@@ -2904,10 +2906,10 @@ export interface Account extends BaseEntity {
     accountProfileMedia: AccountProfileMedia;
 }
 
-export interface URI extends Comparable<URI>, Serializable {
+export interface URL extends Serializable {
 }
 
-export interface URL extends Serializable {
+export interface URI extends Comparable<URI>, Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {

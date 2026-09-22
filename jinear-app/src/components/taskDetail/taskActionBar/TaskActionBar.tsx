@@ -3,6 +3,7 @@ import styles from "./TaskActionBar.module.css";
 
 import AddSubtaskButton from "./addSubtaskButton/AddSubtaskButton";
 import ChangeAssigneeButton from "./changeAssigneeButton/ChangeAssigneeButton";
+import ChangeCollaboratorsButton from "./changeCollaboratorsButton/ChangeCollaboratorsButton";
 import ChangeTopicButton from "./changeTopicButton/ChangeTopicButton";
 import ChangeWorkflowStatusButton from "./changeWorkflowStatusButton/ChangeWorkflowStatusButton";
 import RemindersButton from "./remindersButton/RemindersButton";
@@ -19,7 +20,6 @@ interface TaskActionBarProps {
 }
 
 const TaskActionBar: React.FC<TaskActionBarProps> = ({className}) => {
-    const task = useTask();
 
     return (
         <div className={styles.container}>
@@ -28,6 +28,7 @@ const TaskActionBar: React.FC<TaskActionBarProps> = ({className}) => {
             <TaskAssignedDateButton/>
             <TaskDueDateButton/>
             <ChangeAssigneeButton className={styles.button}/>
+            <ChangeCollaboratorsButton className={styles.button}/>
             <RemindersButton className={styles.button}/>
             <AddSubtaskButton className={styles.button}/>
             <TaskAddChecklistButton className={styles.button}/>

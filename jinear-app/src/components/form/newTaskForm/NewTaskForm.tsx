@@ -14,6 +14,7 @@ import {IoInformationCircleOutline} from "react-icons/io5";
 import WorkspaceAndTeamInfo from "../common/workspaceAndTeamInfo/WorkspaceAndTeamInfo";
 import styles from "./NewTaskForm.module.scss";
 import BoardPickerButton, {type IBoardPickerButtonRef} from "./boardPickerButton/BoardPickerButton";
+import CollaboratorPickerButton, {type ICollaboratorPickerButtonRef} from "./collaboratorPickerButton/CollaboratorPickerButton";
 import DatePickerButton from "./datePickerButton/DatePickerButton";
 import RelatedFeedItemButton from "./relatedFeedItemButton/RelatedFeedItemButton";
 import TeamMemberPickerButton, {type ITeamMemberPickerButtonRef} from "./teamMemberPickerButton/TeamMemberPickerButton";
@@ -75,6 +76,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
     const topicPickerButtonRef = useRef<ITopicPickerButtonRef>(null);
     const teamMemberPickerButtonRef = useRef<ITeamMemberPickerButtonRef>(null);
     const boardPickerButtonRef = useRef<IBoardPickerButtonRef>(null);
+    const collaboratorPickerButtonRef = useRef<ICollaboratorPickerButtonRef>(null);
 
     const [
         initializeTask,
@@ -107,6 +109,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             topicPickerButtonRef?.current && topicPickerButtonRef?.current.reset?.();
             teamMemberPickerButtonRef?.current && teamMemberPickerButtonRef?.current.reset?.();
             boardPickerButtonRef?.current && boardPickerButtonRef?.current.reset?.();
+            collaboratorPickerButtonRef?.current && collaboratorPickerButtonRef?.current.reset?.();
         }
     }, [selectedTeam, setValue]);
 
@@ -223,6 +226,11 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
                         setValue={setValue}
                         teamId={selectedTeam.teamId}
                         ref={teamMemberPickerButtonRef}
+                    />
+                    <CollaboratorPickerButton
+                        setValue={setValue}
+                        teamId={selectedTeam.teamId}
+                        ref={collaboratorPickerButtonRef}
                     />
 
                     <BoardPickerButton

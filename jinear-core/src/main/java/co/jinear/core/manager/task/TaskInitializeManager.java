@@ -80,10 +80,11 @@ public class TaskInitializeManager {
 
     private void validateAllCollaboratorsHasTeamAndWorkspaceAccess(TaskInitializeRequest taskInitializeRequest) {
         String workspaceId = taskInitializeRequest.getWorkspaceId();
+        String teamId = taskInitializeRequest.getTeamId();
         List<String> collaboratorIds = taskInitializeRequest.getCollaboratorIds();
         if (Objects.nonNull(collaboratorIds) && !collaboratorIds.isEmpty()) {
             workspaceValidator.validateAllHasAccess(collaboratorIds, workspaceId);
-            teamAccessValidator.validateAllHasTeamAccess(collaboratorIds, workspaceId);
+            teamAccessValidator.validateAllHasTeamAccess(collaboratorIds, teamId);
         }
     }
 

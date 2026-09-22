@@ -862,6 +862,14 @@ const translations = {
         en: "Copy Link",
         tr: "Linki Kopyala"
     },
+    taskDetailCollaborators: {
+        en: "Collaborators",
+        tr: "Ortak çalışanlar"
+    },
+    taskDetailAddCollaborators: {
+        en: "Add collaborators",
+        tr: "Ortak çalışan ekle"
+    },
     taskDetailAssignToAccount: {
         en: "Unassigned",
         tr: "Kimseye Atanmadı"
@@ -1037,6 +1045,10 @@ const translations = {
     taskWorkflowActivityInfoLabel_TASK_CHANGE_ASSIGNEE: {
         en: "has changed assignee.",
         tr: "atanan kişiyi değiştirdi."
+    },
+    taskWorkflowActivityInfoLabel_TASK_CHANGE_COLLABORATOR_LIST: {
+        en: "has changed collaborators.",
+        tr: "ortak çalışanları değiştirdi."
     },
     taskWorkflowActivityInfoLabel_TASK_CHANGE_ASSIGNED_DATE: {
         en: "has changed assigned date.",
@@ -2322,6 +2334,14 @@ const translations = {
     newTaskFormPickAssigneeButtonLabel: {
         en: "Assign to someone",
         tr: "Birine ata"
+    },
+    newTaskFormPickCollaboratorsButtonLabel: {
+        en: "Pick collaborators",
+        tr: "Ortak çalışanlar"
+    },
+    newTaskFormPickedCollaboratorsLabel: {
+        en: "${count} collaborators",
+        tr: "${count} ortak çalışan"
     },
     newTaskFormPickAssignedDateButtonLabel: {
         en: "Pick assigned date",

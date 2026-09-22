@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -85,6 +86,14 @@ public class AccountRetrieveService {
             return plainAccountProfileDtoConverter.map(accountDto);
         }
         return null;
+    }
+
+    public List<PlainAccountProfileDto> retrieveAllPlainAccountProfiles(List<String> accountIds){
+        log.info("Retrieve all plain account profiles has started. accountIds: {}", accountIds);
+        return accountRepository.findAllByAccountIdIsInAndPassiveIdIsNull(accountIds)
+                .stream()
+                .map(plainAccountProfileDtoConverter::map)
+                .toList();
     }
 
     public Boolean exist(String accountId) {

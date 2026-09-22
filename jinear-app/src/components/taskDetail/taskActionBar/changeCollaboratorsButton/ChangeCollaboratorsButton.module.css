@@ -1,0 +1,13 @@
+.profilePicContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.profilePicContainer > *:not(:first-child) {
+  margin-left: -0.4rem;
+}
+
+.profilePic {
+  height: 20px !important;
+  width: 20px !important;
+}
