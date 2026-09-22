@@ -7,6 +7,8 @@ import CalendarBoardsList from "@/components/calendarSectionSideMenu/calendarBoa
 import CalendarAssigneesList from "@/components/calendarSectionSideMenu/calendarAssigneesList/CalendarAssigneesList";
 import CalendarCollaboratorsList
     from "@/components/calendarSectionSideMenu/calendarCollaboratorsList/CalendarCollaboratorsList";
+import CalendarWorkflowStatusesList
+    from "@/components/calendarSectionSideMenu/calendarWorkflowStatusesList/CalendarWorkflowStatusesList";
 
 interface CalendarGenericTaskFiltersProps {
     workspace: WorkspaceDto;
@@ -21,11 +23,12 @@ const CalendarGenericTaskFilters: React.FC<CalendarGenericTaskFiltersProps> = ({
             <div className={styles.titleContainer}>
                 <MenuGroupTitle label={t("calendarFilterByPropertyLabel")} hasAddButton={false}/>
             </div>
-
+            <div className="spacer-h-1" />
             <div className={styles.filterListContainer}>
                 <CalendarBoardsList workspace={workspace}/>
                 <CalendarAssigneesList workspace={workspace}/>
                 <CalendarCollaboratorsList workspace={workspace}/>
+                <CalendarWorkflowStatusesList workspace={workspace}/>
             </div>
         </div>
     );

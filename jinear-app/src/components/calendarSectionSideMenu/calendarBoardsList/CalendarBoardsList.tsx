@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import styles from './CalendarBoardsList.module.css';
 import useTranslation from "@/locals/useTranslation";
 import {useAppDispatch} from "@/store";
-import Button from "@/components/button";
+import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import cn from "classnames";
 import type {TaskBoardDto, WorkspaceDto} from "@/be/jinear-core";
 import {popBoardPickerModal} from "@/slice/modalSlice";
@@ -45,6 +45,8 @@ const CalendarBoardsList: React.FC<CalendarBoardsListProps> = ({workspace}) => {
         <Button
             onClick={popBoardFilterModal}
             className={cn(styles.filterButton, hasSelection && styles.filterButtonSelected)}
+            variant={ButtonVariants.hoverFilled2}
+            heightVariant={ButtonHeight.short}
         >
             <span>
                 {t('calendarFilterByBoardButton')}

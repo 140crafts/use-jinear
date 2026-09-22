@@ -39,12 +39,14 @@ const DayspanTimelyView: React.FC<DayspanTimelyViewProps> = ({
     const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || EMPTY_ARRAY;
     const assigneeIds = useQueryState<string[]>("assigneeIds", queryStateArrayParser) || EMPTY_ARRAY;
     const collaboratorIds = useQueryState<string[]>("collaboratorIds", queryStateArrayParser) || EMPTY_ARRAY;
+    const workflowStatusIdList = useQueryState<string[]>("workflowStatusIdList", queryStateArrayParser) || EMPTY_ARRAY;
 
     const {data: filterResponse, isFetching} = useFilterCalendarEventsQuery({
         workspaceId: workspace?.workspaceId || "",
         taskboardIds: taskBoards,
         assigneeIds,
         collaboratorIds,
+        workflowStatusIdList,
         timespanStart: periodStart,
         timespanEnd: periodEnd
     });

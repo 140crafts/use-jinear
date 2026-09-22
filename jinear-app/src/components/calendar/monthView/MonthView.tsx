@@ -25,6 +25,7 @@ const MonthView: React.FC<MonthViewProps> = ({workspace}) => {
     const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || EMPTY_ARRAY;
     const assigneeIds = useQueryState<string[]>("assigneeIds", queryStateArrayParser) || EMPTY_ARRAY;
     const collaboratorIds = useQueryState<string[]>("collaboratorIds", queryStateArrayParser) || EMPTY_ARRAY;
+    const workflowStatusIdList = useQueryState<string[]>("workflowStatusIdList", queryStateArrayParser) || EMPTY_ARRAY;
 
     const defaultDate = useMemo(() => startOfDay(new Date()), []);
     const viewingDate = useQueryState<Date>("viewingDate", queryStateShortDateParser) || defaultDate;
@@ -39,6 +40,7 @@ const MonthView: React.FC<MonthViewProps> = ({workspace}) => {
         taskboardIds: taskBoards,
         assigneeIds,
         collaboratorIds,
+        workflowStatusIdList,
         timespanStart: periodStart,
         timespanEnd: periodEnd
     });

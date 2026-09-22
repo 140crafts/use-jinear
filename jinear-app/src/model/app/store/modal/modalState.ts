@@ -189,6 +189,16 @@ export interface TeamWorkflowStatusPickerModalState extends ModalState {
     onPick?: (pickedList: TeamWorkflowStatusDto[]) => void;
 }
 
+export interface WorkspaceWideWorkflowStatusPickerModalState extends ModalState {
+    workspaceId?: string;
+    // Empty or omitted lists every team the account belongs to.
+    onlyForTeamIds?: string[];
+    // Ids rather than dtos, because a caller holding only ids cannot resolve them without
+    // loading every team's statuses, which is what this modal already does.
+    initialSelectionIds?: string[];
+    onPick?: (pickedList: TeamWorkflowStatusDto[]) => void;
+}
+
 export interface TaskBoardPickerModalState extends ModalState {
     workspaceId?: string;
     teamId?: string;

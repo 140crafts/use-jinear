@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./CalendarCollaboratorsList.module.css";
 import useTranslation from "@/locales/useTranslation";
 import {useAppDispatch} from "@/store";
-import Button from "@/components/button";
+import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import cn from "classnames";
 import type {WorkspaceDto, WorkspaceMemberDto} from "@/model/be/jinear-core";
 import {popWorkspaceMemberPickerModal} from "@/store/slice/modalSlice";
@@ -51,6 +51,8 @@ const CalendarCollaboratorsList: React.FC<CalendarCollaboratorsListProps> = ({wo
         <Button
             onClick={popMemberFilterModal}
             className={cn(styles.filterButton, hasSelection && styles.filterButtonSelected)}
+            variant={ButtonVariants.hoverFilled2}
+            heightVariant={ButtonHeight.short}
         >
             <span>
                 {t("calendarFilterByCollaboratorButton")}

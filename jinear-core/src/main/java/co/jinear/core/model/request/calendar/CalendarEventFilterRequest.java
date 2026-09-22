@@ -34,4 +34,6 @@ public class CalendarEventFilterRequest extends BaseRequest {
     private List<String> assigneeIds;
     @Nullable
     private List<String> collaboratorIds;
+    @Nullable
+    private List<String> workflowStatusIdList;
 }

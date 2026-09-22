@@ -1,0 +1,8 @@
+.filterButton {
+    justify-content: flex-start;
+    gap: .25rem;
+}
+
+.filterButtonSelected {
+    font-weight: 700;
+}

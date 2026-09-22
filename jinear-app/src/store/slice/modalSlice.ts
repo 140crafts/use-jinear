@@ -58,7 +58,8 @@ import type {
     UploadStatusModalState,
     WorkspaceMemberInviteModalState,
     WorkspaceMemberPickerModalState,
-    WorkspacePickerModalState
+    WorkspacePickerModalState,
+    WorkspaceWideWorkflowStatusPickerModalState
 } from "@/model/app/store/modal/modalState";
 import {accountApi} from "@/api/accountApi";
 import type {RootState} from "@/store";
@@ -159,6 +160,9 @@ const initialState = {
         visible: false
     },
     teamWorkflowStatusPickerModal: {
+        visible: false
+    },
+    workspaceWideWorkflowStatusPickerModal: {
         visible: false
     },
     taskBoardPickerModal: {
@@ -322,6 +326,7 @@ const initialState = {
     topicPickerModal: null | TopicPickerModalState;
     teamMemberPickerModal: null | TeamMemberPickerModalState;
     teamWorkflowStatusPickerModal: null | TeamWorkflowStatusPickerModalState;
+    workspaceWideWorkflowStatusPickerModal: null | WorkspaceWideWorkflowStatusPickerModalState;
     taskBoardPickerModal: null | TaskBoardPickerModalState;
     upgradeWorkspacePlanModal: null | UpgradeWorkspacePlanModalState;
     accountProfileModal: null | ModalState;
@@ -569,6 +574,13 @@ const slice = createSlice({
         },
         closeTeamWorkflowStatusPickerModal: (state, action: PayloadAction<void>) => {
             state.teamWorkflowStatusPickerModal = initialState.teamWorkflowStatusPickerModal;
+        },
+
+        popWorkspaceWideWorkflowStatusPickerModal: (state, action: PayloadAction<WorkspaceWideWorkflowStatusPickerModalState>) => {
+            state.workspaceWideWorkflowStatusPickerModal = {...action.payload, visible: true};
+        },
+        closeWorkspaceWideWorkflowStatusPickerModal: (state, action: PayloadAction<void>) => {
+            state.workspaceWideWorkflowStatusPickerModal = initialState.workspaceWideWorkflowStatusPickerModal;
         },
 
         popBoardPickerModal: (state, action: PayloadAction<TaskBoardPickerModalState>) => {
@@ -981,6 +993,8 @@ export const {
     closeTeamMemberPickerModal,
     popTeamWorkflowStatusPickerModal,
     closeTeamWorkflowStatusPickerModal,
+    popWorkspaceWideWorkflowStatusPickerModal,
+    closeWorkspaceWideWorkflowStatusPickerModal,
     popBoardPickerModal,
     closeBoardPickerModal,
     popUpgradeWorkspacePlanModal,
@@ -1251,6 +1265,17 @@ export const selectTeamWorkflowStatusPickerModalMultiple = (state: RootState) =>
 export const selectTeamWorkflowStatusPickerModalInitialSelectionOnMultiple = (state: RootState) =>
     state.modal.teamWorkflowStatusPickerModal?.initialSelectionOnMultiple;
 export const selectTeamWorkflowStatusPickerModalOnPick = (state: RootState) => state.modal.teamWorkflowStatusPickerModal?.onPick;
+
+export const selectWorkspaceWideWorkflowStatusPickerModalVisible = (state: RootState) =>
+    state.modal.workspaceWideWorkflowStatusPickerModal?.visible;
+export const selectWorkspaceWideWorkflowStatusPickerModalWorkspaceId = (state: RootState) =>
+    state.modal.workspaceWideWorkflowStatusPickerModal?.workspaceId;
+export const selectWorkspaceWideWorkflowStatusPickerModalOnlyForTeamIds = (state: RootState) =>
+    state.modal.workspaceWideWorkflowStatusPickerModal?.onlyForTeamIds;
+export const selectWorkspaceWideWorkflowStatusPickerModalInitialSelectionIds = (state: RootState) =>
+    state.modal.workspaceWideWorkflowStatusPickerModal?.initialSelectionIds;
+export const selectWorkspaceWideWorkflowStatusPickerModalOnPick = (state: RootState) =>
+    state.modal.workspaceWideWorkflowStatusPickerModal?.onPick;
 
 export const selectTaskBoardPickerModalVisible = (state: RootState) => state.modal.taskBoardPickerModal?.visible;
 export const selectTaskBoardPickerModalTeamId = (state: RootState) => state.modal.taskBoardPickerModal?.teamId;

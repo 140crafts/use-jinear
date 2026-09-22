@@ -38,6 +38,8 @@ import WorkspacePickerModal from "@/components/modal/workspacePickerModal/Worksp
 import TeamMemberPickerModal from "@/components/modal/teamMemberPickerModal/TeamMemberPickerModal.tsx";
 import TopicPickerModal from "@/components/modal/topicPickerModal/TopicPickerModal.tsx";
 import TeamWorkflowStatusModal from "@/components/modal/teamWorkflowStatusModal/TeamWorkflowStatusModal.tsx";
+import WorkspaceWideWorkflowStatusPickerModal
+    from "@/components/modal/workspaceWideWorkflowStatusPickerModal/WorkspaceWideWorkflowStatusPickerModal.tsx";
 import BoardPickerModal from "@/components/modal/boardPickerModal/BoardPickerModal.tsx";
 import NewTopicModal from "@/components/modal/newTopicModal/NewTopicModal.tsx";
 import UpgradeWorkspaceModal from "@/components/modal/upgradeWorkspaceModal/UpgradeWorkspaceModal.tsx";
@@ -90,6 +92,7 @@ const workspaceModals: any = (
         <TeamMemberPickerModal/>
         <TopicPickerModal/>
         <TeamWorkflowStatusModal/>
+        <WorkspaceWideWorkflowStatusPickerModal/>
         <BoardPickerModal/>
         <NewTopicModal/>
         <UpgradeWorkspaceModal/>

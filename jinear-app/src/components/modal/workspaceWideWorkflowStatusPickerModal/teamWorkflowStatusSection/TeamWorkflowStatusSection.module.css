@@ -1,0 +1,42 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.teamTitle {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.55;
+  padding: 0.5rem 0.5rem 0.25rem 0.5rem;
+}
+
+.listItemButton {
+  text-align: left !important;
+  justify-content: left !important;
+  gap: 0.5rem !important;
+}
+
+.listItemButtonSelected {
+  background-color: var(--c-primary-shade-0);
+  font-weight: 700;
+}
+
+.checkContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22.5px;
+}
+
+.messageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.messageContainer:empty {
+  display: none;
+}

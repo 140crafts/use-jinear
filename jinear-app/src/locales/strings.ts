@@ -3687,6 +3687,26 @@ const translations = {
         en: "Collaborator(s)",
         tr: "Ortak çalışan"
     },
+    calendarFilterByWorkflowStatusButton: {
+        en: "Workflow Status(es)",
+        tr: "İş akışı durumu"
+    },
+    workspaceWideWorkflowStatusPickerModalTitle: {
+        en: "Pick workflow statuses",
+        tr: "İş akışı durumu seç"
+    },
+    workspaceWideWorkflowStatusPickerModalEmptyState: {
+        en: "No teams found",
+        tr: "Takım bulunamadı"
+    },
+    workspaceWideWorkflowStatusPickerModalSelectButton: {
+        en: "Select",
+        tr: "Seç"
+    },
+    workspaceWideWorkflowStatusPickerModalCancelButton: {
+        en: "Cancel",
+        tr: "Vazgeç"
+    },
     deleteCalendarMemberAreYouSureTitle: {
         en: "Kick Member",
         tr: "Üyeyi Takvim Üyelerinden At"

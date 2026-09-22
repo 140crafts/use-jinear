@@ -63,6 +63,7 @@ const calendarEntries = (workspaceId: string, tier: DeviceTier): PrefetchEntry[]
             taskboardIds: [],
             assigneeIds: [],
             collaboratorIds: [],
+            workflowStatusIdList: [],
             timespanStart: periodStart,
             timespanEnd: periodEnd
         })
