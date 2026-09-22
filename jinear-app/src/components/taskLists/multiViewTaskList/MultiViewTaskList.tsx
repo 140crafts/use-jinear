@@ -60,6 +60,7 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
     const topicIds = useQueryState<string[]>("topicIds", queryStateArrayParser);
     const ownerIds = useQueryState<string[]>("ownerIds", queryStateArrayParser);
     const assigneeIds = useQueryState<string[]>("assigneeIds", queryStateArrayParser);
+    const collaboratorIds = useQueryState<string[]>("collaboratorIds", queryStateArrayParser);
     const workflowStatusIdList = useQueryState<string[]>("workflowStatusIdList", queryStateArrayParser);
     const workflowStateGroups = useQueryState<TeamWorkflowStateGroup[]>("workflowStateGroups", queryStateArrayParser);
     const timespanStart = useQueryState<Date>("timespanStart", queryStateIsoDateParser);
@@ -75,6 +76,7 @@ const MultiViewTaskList: React.FC<MultiViewTaskListProps> = ({
         topicIds,
         ownerIds,
         assigneeIds,
+        collaboratorIds,
         workflowStatusIdList,
         workflowStateGroups,
         timespanStart,

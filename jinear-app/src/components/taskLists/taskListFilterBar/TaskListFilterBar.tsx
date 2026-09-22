@@ -4,6 +4,7 @@ import Logger from "@/util/logger";
 import React from "react";
 import styles from "./TaskListFilterBar.module.scss";
 import AssigneeFilterButton from "./assigneeFilterButton/AssigneeFilterButton";
+import CollaboratorFilterButton from "./collaboratorFilterButton/CollaboratorFilterButton";
 import TaskListFilterBarContext from "./context/TaskListFilterBarContext";
 import FromDatePickerButton from "./fromDatePickerButton/FromDatePickerButton";
 import OwnerFilterButton from "./ownerFilterButton/OwnerFilterButton";
@@ -47,6 +48,7 @@ const TaskListFilterBar: React.FC<TaskListFilterBarProps> = ({workspace, team}) 
                         <ToDatePickerButton/>
                         <WorkflowStatusFilterButton/>
                         <AssigneeFilterButton/>
+                        <CollaboratorFilterButton/>
                         <OwnerFilterButton/>
                         <TopicFilterButton/>
                     </div>

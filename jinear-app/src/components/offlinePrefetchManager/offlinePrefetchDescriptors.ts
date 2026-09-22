@@ -131,6 +131,7 @@ export const buildTeamEntries = ({workspaceId, teams, tier = "high"}: {
             topicIds: null,
             ownerIds: null,
             assigneeIds: null,
+            collaboratorIds: null,
             workflowStatusIdList: null,
             workflowStateGroups: null,
             timespanStart: null,

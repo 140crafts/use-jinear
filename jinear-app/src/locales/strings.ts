@@ -2383,6 +2383,18 @@ const translations = {
         en: "${count} Assignees",
         tr: "${count} Atanan"
     },
+    taskFilterCollaboratorFilterButtonEmpty: {
+        en: "Collaborator",
+        tr: "Ortak çalışan"
+    },
+    taskFilterCollaboratorFilterButtonSingleSelection: {
+        en: "Collaborator: ",
+        tr: "Ortak çalışan: "
+    },
+    taskFilterCollaboratorFilterButtonSelected: {
+        en: "${count} Collaborators",
+        tr: "${count} Ortak çalışan"
+    },
     teamWorkflowStatusPickerModalTitle: {
         en: "Pick Workflow Status",
         tr: "İş Akış Durumu Seç"
