@@ -45,6 +45,43 @@ I picked the config file over an in-app setting on purpose. If someone gets into
 app, I don't want them to be one click away from making themselves an admin. Getting
 that role means getting shell access to the machine first.
 
+## Updating from an older version
+
+If your instance came up before this release, the installer never asked you about an
+admin, so the three keys are missing everywhere. Add them yourself, in three places.
+
+Add these to the `application.properties` you mount at `/config`:
+
+```properties
+jinear.management.enabled=${MANAGEMENT_ENABLED:false}
+jinear.management.admin.email=${MANAGEMENT_ADMIN_EMAIL:}
+jinear.management.admin.password=${MANAGEMENT_ADMIN_PASSWORD:}
+```
+
+Pass the variables through to the `jinear-core` service in your compose file:
+
+```yaml
+MANAGEMENT_ENABLED: ${MANAGEMENT_ENABLED:-false}
+MANAGEMENT_ADMIN_EMAIL: ${MANAGEMENT_ADMIN_EMAIL:-}
+MANAGEMENT_ADMIN_PASSWORD: ${MANAGEMENT_ADMIN_PASSWORD:-}
+```
+
+Set the actual values in your `.env`:
+
+```bash
+MANAGEMENT_ENABLED=true
+MANAGEMENT_ADMIN_EMAIL=admin@your-domain.com
+MANAGEMENT_ADMIN_PASSWORD=changeme
+```
+
+Restart, log in with that email and password, and the Instance Settings tab is on the
+right.
+
+Two things worth knowing. The password cannot contain spaces or special characters.
+And on every startup the account is created or promoted and its password is reset to
+whatever the env var says, so that variable is the source of truth. Changing the
+password in the app will not survive a restart.
+
 ## Instance flags
 
 The first screen in the panel is a list of switches for features that not every
