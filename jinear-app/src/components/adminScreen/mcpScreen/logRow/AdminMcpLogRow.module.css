@@ -1,0 +1,38 @@
+.row td {
+  padding: 0.42rem 0.75rem;
+  border-bottom: 1px solid var(--c-primary-shade-1);
+  vertical-align: middle;
+}
+
+.row:last-child td {
+  border-bottom: none;
+}
+
+.row:hover td {
+  background-color: var(--c-primary-shade-0);
+}
+
+.mono {
+  font-family: "SF Mono", ui-monospace, monospace;
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+
+.metaCell {
+  opacity: 0.7;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.statusOk {
+  color: var(--c-secondary-shade-0);
+  font-size: 0.8125rem;
+  white-space: nowrap;
+}
+
+.statusBad {
+  color: var(--c-JINEAR_ORANGE);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  white-space: nowrap;
+}

@@ -39,16 +39,27 @@ public class TaskRetrieveManager {
         log.info("Retrieve task with workspace name and team tag no has started. workspaceName: {}, teamTag: {}, tagNo: {}, currentAccountId:{}", workspaceName, teamTag, tagNo, currentAccountId);
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithUsername(workspaceName);
         TeamDto teamDto = teamRetrieveService.retrieveTeamByTag(teamTag, workspaceDto.getWorkspaceId());
-        TeamMemberDto teamMemberDto = validateAccess(currentAccountId, workspaceDto, teamDto);
+        TeamMemberDto teamMemberDto = validateAccess(currentAccountId, workspaceDto, teamDto.getTeamId());
         TaskDto taskDto = taskRetrieveService.retrieve(workspaceDto.getWorkspaceId(), teamDto.getTeamId(), tagNo);
         teamVisibilityTypeAccessValidator.validateTaskAccess(currentAccountId, teamMemberDto, taskDto.getOwnerId(), taskDto.getAssignedTo());
         taskDto = taskTeamVisibilityMaskService.maskRelations(currentAccountId, teamMemberDto, taskDto);
         return mapResponse(taskDto);
     }
 
-    private TeamMemberDto validateAccess(String currentAccountId, WorkspaceDto workspaceDto, TeamDto teamDto) {
+    public TaskResponse retrieve(String taskId) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        log.info("Retrieve task has started. taskId: {}, currentAccountId: {}", taskId, currentAccountId);
+        TaskDto taskDto = taskRetrieveService.retrieve(taskId);
+        WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(taskDto.getWorkspaceId());
+        TeamMemberDto teamMemberDto = validateAccess(currentAccountId, workspaceDto, taskDto.getTeamId());
+        teamVisibilityTypeAccessValidator.validateTaskAccess(currentAccountId, teamMemberDto, taskDto.getOwnerId(), taskDto.getAssignedTo());
+        taskDto = taskTeamVisibilityMaskService.maskRelations(currentAccountId, teamMemberDto, taskDto);
+        return mapResponse(taskDto);
+    }
+
+    private TeamMemberDto validateAccess(String currentAccountId, WorkspaceDto workspaceDto, String teamId) {
         workspaceValidator.validateHasAccess(currentAccountId, workspaceDto);
-        return teamMemberRetrieveService.retrieveMembership(workspaceDto.getWorkspaceId(), teamDto.getTeamId(), currentAccountId)
+        return teamMemberRetrieveService.retrieveMembership(workspaceDto.getWorkspaceId(), teamId, currentAccountId)
                 .orElseThrow(NoAccessException::new);
     }
 

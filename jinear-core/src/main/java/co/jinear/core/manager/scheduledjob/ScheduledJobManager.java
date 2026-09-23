@@ -1,6 +1,7 @@
 package co.jinear.core.manager.scheduledjob;
 
 import co.jinear.core.manager.reminder.ReminderProcessManager;
+import co.jinear.core.manager.telemetry.InstanceReportSendManager;
 import co.jinear.core.model.entity.material.Material;
 import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.model.vo.media.RemoveMediaVo;
@@ -8,6 +9,8 @@ import co.jinear.core.service.material.MaterialRetrieveService;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.project.domain.ProjectDomainCnameOperatorService;
+import co.jinear.core.service.mcp.analytics.McpRetentionService;
+import co.jinear.core.service.oauth.provider.OauthRetentionService;
 import co.jinear.core.service.task.TaskFtsRefreshService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +33,43 @@ public class ScheduledJobManager {
     private final MaterialRetrieveService materialRetrieveService;
     private final ReminderProcessManager reminderProcessManager;
     private final TaskFtsRefreshService taskFtsRefreshService;
+    private final McpRetentionService mcpRetentionService;
+    private final OauthRetentionService oauthRetentionService;
+    private final InstanceReportSendManager instanceReportSendManager;
+
+    @Async
+    @Scheduled(fixedRate = 1440, initialDelay = 10, timeUnit = TimeUnit.MINUTES)
+    public void sendInstanceReport() {
+        log.info("Send instance report has started.");
+        try {
+            instanceReportSendManager.sendReport();
+        } catch (Exception exception) {
+            log.warn("Send instance report has failed. reason: {}", exception.getMessage());
+        }
+    }
+
+    @Async
+    @Scheduled(fixedRate = 6, timeUnit = TimeUnit.HOURS)
+    public void rollUpAndPruneMcpUsage() {
+        log.info("Roll up and prune mcp usage has started.");
+        try {
+            mcpRetentionService.rollUpYesterday();
+            mcpRetentionService.pruneExpired();
+        } catch (Exception exception) {
+            log.error("Roll up and prune mcp usage has failed.", exception);
+        }
+    }
+
+    @Async
+    @Scheduled(fixedRate = 6, timeUnit = TimeUnit.HOURS)
+    public void pruneExpiredOauthRecords() {
+        log.info("Prune expired oauth records has started.");
+        try {
+            oauthRetentionService.pruneExpired();
+        } catch (Exception exception) {
+            log.error("Prune expired oauth records has failed.", exception);
+        }
+    }
 
     @Async
     @Scheduled(fixedRate = 10, timeUnit = TimeUnit.MINUTES)
@@ -89,7 +129,7 @@ public class ScheduledJobManager {
     }
 
     @Async
-    @Scheduled(fixedRate = 2, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
     public void refreshTaskFtsMaterializedView() {
         taskFtsRefreshService.refreshIfDirty();
     }

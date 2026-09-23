@@ -6,7 +6,7 @@
 }
 
 .wrap {
-  max-width: 660px;
+  max-width: var(--page-width);
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -49,20 +49,11 @@
   }
 }
 
-/* post list */
+/* post list: the cards style themselves, see components/blog/postCard */
 .posts {
   list-style: none;
   margin: 8px 0 0;
   padding: 0;
-
-  li {
-    padding: 22px 0;
-    border-bottom: 1px dashed var(--border);
-  }
-
-  li:first-child {
-    padding-top: 14px;
-  }
 }
 
 .postMeta {

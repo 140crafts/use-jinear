@@ -16,6 +16,16 @@
   a:hover {
     color: var(--acc-deep);
   }
+
+  // The one link in this row that should catch the eye.
+  a.mcpLink {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  a.mcpLink:hover {
+    color: var(--acc-deep);
+  }
 }
 
 .wordmark {
@@ -30,6 +40,23 @@
 
 .sep {
   color: var(--border-2);
+}
+
+// Square mono tag, deliberately unlike the rounded pill the homepage used.
+.newTag {
+  font-family: var(--mono);
+  font-style: normal;
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--surface);
+  background: var(--acc-deep);
+  border: 1px solid var(--acc-deep);
+  border-radius: 3px;
+  padding: 1px 4px;
+  margin-left: 5px;
+  vertical-align: 1px;
 }
 
 // Don't let an individual link's separator detach awkwardly; links wrap as

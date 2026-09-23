@@ -6,6 +6,7 @@ import co.jinear.core.model.request.media.MediaUploadUrlRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.media.MediaUploadUrlResponse;
 import co.jinear.core.model.response.task.TaskMediaResponse;
+import co.jinear.core.model.response.task.TaskMediaUploadResponse;
 import co.jinear.core.model.response.task.TaskPaginatedMediaResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -38,8 +39,8 @@ public class TaskMediaController {
 
     @PostMapping(value = "/{taskId}/upload", consumes = "multipart/form-data")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse uploadTaskMedia(@PathVariable String taskId,
-                                        @RequestParam("file") MultipartFile file) {
+    public TaskMediaUploadResponse uploadTaskMedia(@PathVariable String taskId,
+                                                   @RequestParam("file") MultipartFile file) {
         return taskMediaManager.uploadTaskMedia(taskId, file);
     }
 

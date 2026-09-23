@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
+import VideoEmbed from "@/components/videoEmbed/VideoEmbed";
 import { SITE_URL } from "@/utils/constants";
 import { buildMetadata } from "@/utils/seo";
 import { getAllPosts, getPost, getPublishedSlugs } from "@/lib/posts";
@@ -33,6 +34,8 @@ const mdxComponents = {
         {children}
       </a>
     ),
+  // Lets a post drop in a video with <VideoEmbed id="..." title="..." />.
+  VideoEmbed,
 };
 
 // Fully enumerate posts at build time; reject anything not generated.

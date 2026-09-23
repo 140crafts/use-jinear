@@ -1,0 +1,83 @@
+.wrap {
+  margin: 0;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: #0d0d0d;
+}
+
+.player,
+.poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.poster {
+  padding: 0;
+  cursor: pointer;
+  background: #0d0d0d;
+  display: block;
+
+  &:hover .play,
+  &:focus-visible .play {
+    transform: translate(-50%, -50%) scale(1.06);
+    background: var(--acc-deep, #c2410c);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--acc);
+    outline-offset: 2px;
+  }
+}
+
+.thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.play {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--acc, #ea580c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease, background 0.15s ease;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, 0.35);
+}
+
+/* Play triangle, drawn with borders so it needs no asset. */
+.triangle {
+  width: 0;
+  height: 0;
+  margin-left: 4px;
+  border-top: 11px solid transparent;
+  border-bottom: 11px solid transparent;
+  border-left: 18px solid #fff;
+}
+
+.caption {
+  margin-top: 8px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink-3);
+
+  a {
+    color: inherit;
+  }
+}

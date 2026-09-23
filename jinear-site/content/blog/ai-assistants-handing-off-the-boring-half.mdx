@@ -1,0 +1,121 @@
+---
+title: "AI Assistants. Handing Off the Boring Half."
+description: "You can now connect Claude or ChatGPT to Jinear and let it do the typing: turning a conversation into tasks, telling you what is actually due this week, catching you up after a week off. It works with your account, and only on what you allow."
+pubDate: "2026-09-16"
+tags: ["changelog", "mcp"]
+author: "Çağdaş Tunca"
+---
+
+Most of the time I spend in a task manager is not thinking. It is typing. Copying a
+decision out of a conversation into four tasks. Opening three boards to remember what
+I said I would finish this week. Coming back from a few days away and scrolling to
+work out what moved.
+
+None of that is hard. It is just work about work, and it adds up.
+
+So you can now connect Claude or ChatGPT to Jinear and hand that part over. You ask in
+plain language, and the assistant reads and writes in your Jinear, as you, with your
+permission.
+
+## What I actually use it for
+
+- **Turning a conversation into tasks.** I paste the thread or the notes, say "make
+  tasks for my team from this", and it writes them with real titles instead of the
+  three words I would have typed myself.
+- **The Monday question.** "What is assigned to me this week, and what is overdue?"
+  One answer, instead of opening every board.
+- **Catching up.** After a week off: "what changed in this workspace while I was
+  away?" It reads the tasks, the comments and the calendar and tells me.
+- **Filing.** "Put this on the right board and set it to in progress." Sorting is the
+  chore I put off most, and it is the one I now never do by hand.
+- **Writing it up.** "Summarise what we finished this month." It reads the notes and
+  the closed tasks and drafts the update I was going to write anyway.
+- **Finding the thing.** "Where is the file with the invoice from March?" It looks
+  through the files and the notes and hands me a link.
+
+The pattern, once you get used to it, is that you stop opening the app to look things
+up. You ask, and you open the app to work.
+
+## What it will not do
+
+This is the part I thought about most, because handing an assistant the keys to your
+work only feels fine if the keys are small.
+
+- **It cannot delete anything.** Not a task, not a note, not a file. There is no
+  delete, so the worst case is a mess to tidy up rather than something gone.
+- **It can only write to tasks.** Creating and updating tasks, moving them between
+  boards, setting a status, leaving a comment, attaching a file. That is the whole
+  list of things it can change.
+- **Notes, calendar and files are read only.** It can read your notes to answer a
+  question and it can find a file for you, but it cannot rewrite the note or touch
+  your calendar.
+- **You choose what it sees.** When you connect it, you approve each area on its own,
+  and reading and writing are separate. Letting it write tasks does not hand over your
+  calendar.
+- **It works inside one workspace**, checked against your account on every request.
+- **You can disconnect it at any time**, from your profile. That takes effect on the
+  next request, not whenever some token happens to expire.
+
+In numbers: twenty-seven things it can do, twenty of which are only reading.
+
+## Turning it on
+
+On the hosted version it is ready now. Open your profile, copy the address Jinear
+shows you, and paste it into Claude or ChatGPT where they ask for a custom connector.
+You sign in to Jinear once, tick what you are willing to allow, and that is the setup.
+
+It is quicker to watch than to describe. Here it is in each of them, start to finish.
+No narration, just the clicks.
+
+<VideoEmbed id="0VYQehxs-ps" title="Connecting Claude to Jinear" />
+
+<VideoEmbed id="EIe6UpnrBWQ" title="Connecting ChatGPT to Jinear" />
+
+If you self-host, it is off until you turn it on, and your instance has to be
+reachable from the internet over HTTPS, because Claude and ChatGPT connect from their
+own servers rather than from your browser. The switch is in the admin panel, under AI
+Assistants. There is a page with the full setup and the complete list of what an
+assistant can touch at [jinear.co/mcp](/mcp/).
+
+## Updating to this version
+
+If you already self-host, update the way you always do:
+
+```bash
+cd ~/jinear
+docker compose pull && docker compose up -d
+```
+
+That is the whole job. Nothing in this release breaks an instance that ignores it.
+Every new setting carries a default, your own config files are left exactly as they
+were, and the new tables apply themselves when the server starts. If you never switch
+assistants on, the only thing that changed is the version number.
+
+When you do want them on, the switches and the exact blocks to paste are in the
+[upgrade guide](https://gitlab.com/140crafts/use-jinear/-/blob/main/docs/upgrading.md).
+
+## What is not in it yet
+
+It cannot create a note or a calendar event, which is the request I expect first. I
+left writing out of both on purpose for now: a note is a document several people can
+be editing at once, and a calendar write can mean writing into someone's Google
+calendar. Both deserve more care than task writing needed.
+
+Jinear also schedules nothing of its own. It answers when something asks, and I am in
+no hurry to change that.
+
+Scheduling it is your side of the line, though, and that is where this gets
+interesting. Assistants you can run from a command line take the same connection, so
+anything you can put on a timer can use it. Mine goes off and searches for a few
+things I care about personally, on a schedule, the kind of looking up I would
+otherwise keep forgetting to do, and files whatever it finds into Jinear as tasks on a
+board I keep for exactly that. I never go and check. The findings turn up where the
+rest of my work already is, and I deal with them when I am there anyway.
+
+---
+
+If you connect it and it does something silly, or there is an obvious chore it should
+be able to take and cannot, email me. That is how this list gets shorter.
+
+The whole thing is on [GitLab](https://gitlab.com/140crafts/use-jinear) and
+[GitHub](https://github.com/140crafts/use-jinear).

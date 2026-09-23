@@ -35,4 +35,7 @@ public class FeProperties {
 
     @Value("${fe.mobile-login-redirect}")
     private String mobileLoginRedirect;
+
+    @Value("${fe.oauth-consent-url:}")
+    private String oauthConsentUrl = "";
 }

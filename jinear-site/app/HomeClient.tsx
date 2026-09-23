@@ -3,12 +3,27 @@ import Link from "next/link";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { APP_URL, GITHUB_URL, GITLAB_URL, SELF_HOSTING_DOCS_URL } from "@/utils/constants";
+import PostCard from "@/components/blog/postCard/PostCard";
+import { getAllPosts } from "@/lib/posts";
 import styles from "./index.module.scss";
 
 const IMG_BASE = "https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v3";
+const LATEST_POST_COUNT = 3;
 
-/** A screenshot inside Design A's browser-chrome frame, with a caption. */
-function Shot({ src, alt, url, caption }: { src: string; alt: string; url: string; caption: string }) {
+/** A screenshot inside Design A's browser-chrome frame, with a title and caption. */
+function Shot({
+  src,
+  alt,
+  url,
+  title,
+  caption,
+}: {
+  src: string;
+  alt: string;
+  url: string;
+  title: string;
+  caption: string;
+}) {
   return (
     <figure className={styles.look}>
       <div className={styles.appwin}>
@@ -20,12 +35,17 @@ function Shot({ src, alt, url, caption }: { src: string; alt: string; url: strin
         </div>
         <img className={styles.lookMedia} src={src} alt={alt} loading="lazy" decoding="async" />
       </div>
-      <figcaption>{caption}</figcaption>
+      <figcaption>
+        <strong className={styles.lookTitle}>{title}</strong>
+        {caption}
+      </figcaption>
     </figure>
   );
 }
 
 export default function HomeClient() {
+  const latestPosts = getAllPosts().slice(0, LATEST_POST_COUNT);
+
   return (
     <div className={styles.page}>
       <div className={styles.wrap}>
@@ -71,9 +91,7 @@ export default function HomeClient() {
               <span>A built-in calendar, plus Google Calendar sync.</span>
             </li>
             <li>
-              <span className={styles.k}>
-                notes<em className={styles.newBadge}>new</em>
-              </span>
+              <span className={styles.k}>notes</span>
               <span>Rich-text notes in shared notebooks, with tags and offline drafts.</span>
             </li>
             <li>
@@ -85,42 +103,37 @@ export default function HomeClient() {
 
         <section className={styles.blk}>
           <h2>A quick look</h2>
-          <Shot
-            src={`${IMG_BASE}/v2.1-tasks.png`}
-            alt="Tasks and boards in Jinear"
-            url="jinear.co / cagdas / tasks / jinear"
-            caption="Tasks, lists and boards, all in one place."
-          />
-        </section>
-
-        <section className={styles.blk}>
-          <h2>Your month at a glance</h2>
-          <Shot
-            src={`${IMG_BASE}/v2.1-calendar.png`}
-            alt="The calendar in Jinear"
-            url="jinear.co / cagdas / calendar"
-            caption="A built-in calendar with Google Calendar sync."
-          />
-        </section>
-
-        <section className={styles.blk}>
-          <h2>Notes, next to the work</h2>
-          <Shot
-            src={`${IMG_BASE}/v2.1-notes.png`}
-            alt="Notes and notebooks in Jinear"
-            url="jinear.co / cagdas / notes"
-            caption="Rich-text notes in shared notebooks, with tags and offline drafts."
-          />
-        </section>
-
-        <section className={styles.blk}>
-          <h2>Your files, your storage</h2>
-          <Shot
-            src={`${IMG_BASE}/v2.1-files.png`}
-            alt="File storage in Jinear"
-            url="jinear.co / cagdas / files"
-            caption="Attach files to tasks, kept on your own storage."
-          />
+          <div className={styles.shots} role="region" aria-label="Screenshots of Jinear" tabIndex={0}>
+            <Shot
+              src={`${IMG_BASE}/v2.1-tasks.png`}
+              alt="Tasks and boards in Jinear"
+              url="jinear.co / cagdas / tasks / jinear"
+              title="Tasks and boards"
+              caption="Tasks, lists and boards, all in one place."
+            />
+            <Shot
+              src={`${IMG_BASE}/v2.1-calendar.png`}
+              alt="The calendar in Jinear"
+              url="jinear.co / cagdas / calendar"
+              title="Your month at a glance"
+              caption="A built-in calendar with Google Calendar sync."
+            />
+            <Shot
+              src={`${IMG_BASE}/v2.1-notes.png`}
+              alt="Notes and notebooks in Jinear"
+              url="jinear.co / cagdas / notes"
+              title="Notes, next to the work"
+              caption="Rich-text notes in shared notebooks, with tags and offline drafts."
+            />
+            <Shot
+              src={`${IMG_BASE}/v2.1-files.png`}
+              alt="File storage in Jinear"
+              url="jinear.co / cagdas / files"
+              title="Your files, your storage"
+              caption="Attach files to tasks, kept on your own storage."
+            />
+          </div>
+          <p className={styles.shotsHint}>Scroll sideways for the rest →</p>
           <div className={styles.note}>
             A self hosted Jinear instance runs as a single Docker Compose stack on your own server.{" "}
             <b>No per-user tax, no lock-in, no vendor reading your tasks.</b> The source is on{" "}
@@ -157,6 +170,22 @@ export default function HomeClient() {
           </p>
         </section>
 
+        {latestPosts.length > 0 && (
+          <section className={styles.blk}>
+            <h2>Latest writing</h2>
+            <ul className={styles.posts}>
+              {latestPosts.map((post) => (
+                <PostCard key={post.slug} post={post} />
+              ))}
+            </ul>
+            <p className={styles.priceMore}>
+              <Link className={styles.linkU} href="/blog">
+                Read the blog →
+              </Link>
+            </p>
+          </section>
+        )}
+
         <section className={styles.letter} aria-label="A note from the maker">
           <p className={styles.letterHi}>Hey, I&apos;m Çağdaş.</p>
           <p className={styles.letterP}>
@@ -168,9 +197,9 @@ export default function HomeClient() {
             and reply to everything myself. I don&apos;t use your email for marketing or auto reply using AI. I&apos;d love to hear from you.
           </p>
           <p className={styles.letterP}>
-            And if you&apos;ve already got Jinear running somewhere, say hello. Self-hosted instances phone nothing home, not
-            even install counts, so there&apos;s no dashboard on my end lighting up when you spin one up. Hearing that
-            someone found it useful makes my day.
+            And if you&apos;ve already got Jinear running somewhere, say hello. A self-hosted instance tells me nothing
+            about you: at most a random id, a version number, and which features are on if you said yes to that during
+            setup. Nothing on my end says who you are, so hearing that someone found it useful makes my day.
           </p>
           <div className={styles.letterEmailLine}>
             <img className={styles.letterAvatar} src={`${IMG_BASE}/ben.jpg`} alt="Çağdaş, maker of Jinear" />

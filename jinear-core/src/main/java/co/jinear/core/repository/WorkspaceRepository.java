@@ -17,4 +17,6 @@ public interface WorkspaceRepository extends JpaRepository<Workspace, String> {
     Optional<Workspace> findByUsername_UsernameAndUsername_PassiveIdIsNullAndPassiveIdIsNull(String username);
 
     Optional<Workspace> findByWorkspaceIdAndPassiveIdIsNull(String workspaceId);
+
+    Long countAllByPassiveIdIsNull();
 }

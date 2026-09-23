@@ -17,6 +17,7 @@ const PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS = [
     ["/engage/reset-password-complete"],
     ["/engage/forgot-password"],
     ["/engage/workspace-invitation"],
+    ["/oauth/consent"],
     ["/pricing"],
     ["/terms"],
     ["/debug"],

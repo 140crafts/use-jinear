@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Slf4j
 @Service
@@ -22,7 +24,16 @@ public class TaskFtsRefreshService {
     private final JdbcTemplate jdbcTemplate;
 
     public void markDirty() {
-        taskFtsDirtyStateRepository.markDirty();
+        if (!TransactionSynchronizationManager.isSynchronizationActive()) {
+            taskFtsDirtyStateRepository.markDirty();
+            return;
+        }
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                taskFtsDirtyStateRepository.markDirty();
+            }
+        });
     }
 
     public void refreshIfDirty() {

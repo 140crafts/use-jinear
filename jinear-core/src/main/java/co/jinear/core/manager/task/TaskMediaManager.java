@@ -16,6 +16,7 @@ import co.jinear.core.model.request.media.MediaUploadUrlRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.media.MediaUploadUrlResponse;
 import co.jinear.core.model.response.task.TaskMediaResponse;
+import co.jinear.core.model.response.task.TaskMediaUploadResponse;
 import co.jinear.core.model.response.task.TaskPaginatedMediaResponse;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.media.MediaRetrieveService;
@@ -78,7 +79,7 @@ public class TaskMediaManager {
         return mapResponse(data);
     }
 
-    public BaseResponse uploadTaskMedia(String taskId, MultipartFile file) {
+    public TaskMediaUploadResponse uploadTaskMedia(String taskId, MultipartFile file) {
         String currentAccountId = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDto = taskRetrieveService.retrievePlain(taskId);
@@ -89,7 +90,7 @@ public class TaskMediaManager {
         AccessibleMediaDto accessibleMediaDto = taskMediaOperationService.upload(currentAccountId, taskDto, file);
         taskActivityService.initializeTaskAttachmentAddedActivity(currentAccountId, currentAccountSessionId, taskDto, accessibleMediaDto.getMediaId());
         taskFtsRefreshService.markDirty();
-        return new BaseResponse();
+        return new TaskMediaUploadResponse(accessibleMediaDto.getMediaId());
     }
 
     public BaseResponse deleteTaskMedia(String taskId, String mediaId) {

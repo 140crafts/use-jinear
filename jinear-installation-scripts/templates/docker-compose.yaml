@@ -53,7 +53,7 @@ services:
 
   jinear-minio:
     container_name: jinear-minio
-    image: minio/minio:RELEASE.2025-03-12T18-04-18Z
+    image: registry.gitlab.com/140crafts/use-jinear/minio:RELEASE.2025-03-12T18-04-18Z
     restart: always
     volumes:
       - ".data/minio:/data"
@@ -114,6 +114,28 @@ services:
       MANAGEMENT_ENABLED: ${MANAGEMENT_ENABLED:-false}
       MANAGEMENT_ADMIN_EMAIL: ${MANAGEMENT_ADMIN_EMAIL:-}
       MANAGEMENT_ADMIN_PASSWORD: ${MANAGEMENT_ADMIN_PASSWORD:-}
+      # OAuth authorization server - issues the tokens a connected app carries.
+      # Switched independently of MCP_ENABLED below, but a member needs both on to
+      # connect an assistant: this half authorizes, that half serves the tools.
+      # The URLs are derived here rather than asked for, because they have to agree:
+      # the issuer is the API origin that serves /.well-known, and the consent screen
+      # is on the app.
+      OAUTH_ENABLED: ${OAUTH_ENABLED:-false}
+      OAUTH_ISSUER_URL: ${EXTERNAL_SCHEME:-https}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX:-}
+      OAUTH_CONSENT_URL: ${EXTERNAL_SCHEME:-https}://${DOMAIN}${PUBLIC_PORT_SUFFIX:-}/oauth/consent?request_id={requestId}
+      OAUTH_JWT_SECRET: ${OAUTH_JWT_SECRET:-}
+      OAUTH_DCR_ENABLED: ${OAUTH_DCR_ENABLED:-true}
+      OAUTH_CIMD_ALLOWED_HOSTS: ${OAUTH_CIMD_ALLOWED_HOSTS:-}
+      # MCP server (optional) - lets members connect Claude or ChatGPT.
+      # MCP_RESOURCE_URL is exactly what a member pastes into their client.
+      MCP_ENABLED: ${MCP_ENABLED:-false}
+      MCP_RESOURCE_URL: ${EXTERNAL_SCHEME:-https}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX:-}/mcp
+      MCP_LOG_RETENTION_DAYS: ${MCP_LOG_RETENTION_DAYS:-30}
+      # Updates and anonymous statistics (optional, see docs/telemetry.md).
+      # Both are off unless set; DO_NOT_TRACK=1 turns both off.
+      TELEMETRY_UPDATE_CHECK: ${TELEMETRY_UPDATE_CHECK:-false}
+      TELEMETRY_USAGE_REPORT: ${TELEMETRY_USAGE_REPORT:-false}
+      DO_NOT_TRACK: ${DO_NOT_TRACK:-}
       # Apple Sign In (optional) - leave APPLE_ENABLED=false to boot without an AuthKey.p8
       APPLE_ENABLED: ${APPLE_ENABLED:-false}
       APPLE_TEAM_ID: ${APPLE_TEAM_ID:-not-configured}

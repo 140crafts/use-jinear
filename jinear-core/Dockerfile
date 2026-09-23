@@ -14,6 +14,10 @@ RUN --mount=type=cache,target=/root/.m2 mvn clean package -B
 
 FROM ${RUNTIME_IMAGE}
 
+# Release tag from CI (v0.1.NNNN); branch builds pass a short SHA, local builds keep "dev"
+ARG JINEAR_VERSION=dev
+ENV JINEAR_VERSION=${JINEAR_VERSION}
+
 WORKDIR /app
 
 COPY --from=maven_build /build/target/core-0.0.1-SNAPSHOT.jar /app/core.jar

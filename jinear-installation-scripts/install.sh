@@ -525,6 +525,52 @@ prompt_configuration() {
         MANAGEMENT_ADMIN_PASSWORD=""
     fi
 
+    # MCP server (AI assistant connections)
+    echo ""
+    echo -e "  ${BOLD}AI Assistant Connections (Optional)${NC}"
+    echo -e "  ${INFO} Lets members connect Claude or ChatGPT to this instance."
+    echo -e "  ${INFO} Claude and ChatGPT connect from their own servers, so this needs"
+    echo -e "  ${INFO} your instance to be reachable from the internet over HTTPS."
+    local configure_mcp=$(prompt_input "  Enable the MCP server now? [y/N]" "")
+
+    if [[ $configure_mcp =~ ^[Yy]$ ]]; then
+        MCP_ENABLED="true"
+        OAUTH_ENABLED="true"
+        if [ "$EXTERNAL_SCHEME" != "https" ]; then
+            print_warning "This install serves plain HTTP. Claude and ChatGPT refuse to connect over http, so the MCP server will only be reachable through a TLS proxy in front of it."
+        fi
+    else
+        MCP_ENABLED="false"
+        OAUTH_ENABLED="false"
+    fi
+
+    # Updates and anonymous statistics (docs/telemetry.md)
+    echo ""
+    echo -e "  ${BOLD}Updates and Anonymous Statistics (Optional)${NC}"
+    echo -e "  ${INFO} Update check: once a day this instance sends a random instance id and"
+    echo -e "  ${INFO} its version number to api.jinear.co. The admin panel then shows when a"
+    echo -e "  ${INFO} new version is available."
+    local enable_update_check=$(prompt_input "  Enable the daily update check? [Y/n]" "")
+    if [[ $enable_update_check =~ ^[Nn]$ ]]; then
+        TELEMETRY_UPDATE_CHECK="false"
+    else
+        TELEMETRY_UPDATE_CHECK="true"
+    fi
+
+    echo ""
+    echo -e "  ${INFO} Usage report: also sends which features are on (storage type, sign-in"
+    echo -e "  ${INFO} methods, MCP, mail, push), rough size ranges (for example 6-25 accounts),"
+    echo -e "  ${INFO} and the Java, Postgres and CPU type. It never sends names, emails,"
+    echo -e "  ${INFO} domains, IP addresses or content. Full field list: docs/telemetry.md"
+    echo -e "  ${INFO} It is how I learn which features people use most, so saying yes helps"
+    echo -e "  ${INFO} me improve the parts you rely on. You can turn it off at any time."
+    local enable_usage_report=$(prompt_input "  Share the anonymous usage report? [Y/n]" "")
+    if [[ $enable_usage_report =~ ^[Nn]$ ]]; then
+        TELEMETRY_USAGE_REPORT="false"
+    else
+        TELEMETRY_USAGE_REPORT="true"
+    fi
+
     # Backup configuration
     echo ""
     echo -e "  ${BOLD}Backup Configuration${NC}"
@@ -563,6 +609,12 @@ generate_secrets() {
 
     INTERNAL_AUTH_TOKEN=$(generate_password 32)
     print_success "Internal auth token generated"
+
+    # Generated whether or not MCP is on, so turning it on later needs no new secret.
+    # It is deliberately not JWT_SECRET: a connected app's token must never open a
+    # browser session.
+    OAUTH_JWT_SECRET=$(generate_secret)
+    print_success "OAuth token secret generated"
 }
 
 # =============================================================================
@@ -664,6 +716,30 @@ MANAGEMENT_ENABLED=${MANAGEMENT_ENABLED}
 MANAGEMENT_ADMIN_EMAIL=${MANAGEMENT_ADMIN_EMAIL}
 MANAGEMENT_ADMIN_PASSWORD=${MANAGEMENT_ADMIN_PASSWORD}
 
+# AI Assistant Connections (MCP): lets members connect Claude or ChatGPT.
+# Two layers sit behind this. The OAuth authorization server issues the tokens and
+# runs the consent screen; the MCP server is the resource those tokens open. They
+# switch separately, and a member needs both on to connect an assistant.
+# The three URLs are derived in docker-compose.yaml from DOMAIN and API_DOMAIN,
+# because a mismatch between them is what breaks a connection: the issuer must be
+# the API origin that serves /.well-known, the resource must be exactly the address
+# a member pastes into their client, and the consent screen lives on the app.
+# Change DOMAIN or API_DOMAIN and all three follow.
+# Turning this off stops new connections; assistants already connected keep
+# working until a member disconnects them.
+MCP_ENABLED=${MCP_ENABLED}
+MCP_LOG_RETENTION_DAYS=30
+OAUTH_ENABLED=${OAUTH_ENABLED}
+# OAUTH_JWT_SECRET signs the access tokens the OAuth server issues. It is
+# deliberately not JWT_SECRET, so a connected app's token can never open a browser
+# session.
+OAUTH_JWT_SECRET=${OAUTH_JWT_SECRET}
+# Dynamic client registration. Leave on unless you pin specific clients.
+OAUTH_DCR_ENABLED=true
+# Comma separated hosts allowed to describe a client. Empty accepts any public
+# https host, which is the open policy the specification describes.
+OAUTH_CIMD_ALLOWED_HOSTS=
+
 # Backup
 BACKUP_ENABLED=${BACKUP_ENABLED}
 BACKUP_RETENTION_DAYS=${BACKUP_RETENTION_DAYS}
@@ -671,6 +747,15 @@ BACKUP_RETENTION_DAYS=${BACKUP_RETENTION_DAYS}
 # Analytics (Optional)
 POSTHOG_KEY=
 POSTHOG_HOST=https://us.i.posthog.com
+
+# Updates and anonymous statistics (Optional, see docs/telemetry.md)
+# TELEMETRY_UPDATE_CHECK: once a day, send a random instance id and the version
+# number to api.jinear.co; the admin panel then shows when a new version is out.
+# TELEMETRY_USAGE_REPORT: also send which features are on and rough size ranges.
+# DO_NOT_TRACK=1 turns both off, whatever the two values say.
+TELEMETRY_UPDATE_CHECK=${TELEMETRY_UPDATE_CHECK}
+TELEMETRY_USAGE_REPORT=${TELEMETRY_USAGE_REPORT}
+DO_NOT_TRACK=
 
 # Sign In with Apple (backend): Optional, disabled by default.
 # Set APPLE_ENABLED=true (and fill the APPLE_* values + mount AuthKey.p8 into
@@ -893,6 +978,16 @@ print_summary() {
         echo -e "     Sign in as ${BOLD}${MANAGEMENT_ADMIN_EMAIL}${NC} (password in ${INSTALL_DIR}/.secrets)"
     fi
     echo ""
+
+    if [ "$MCP_ENABLED" = "true" ]; then
+        echo -e "  ${BOLD}AI Assistant Connections${NC}"
+        echo -e "  ${CYAN}─────────────────────────────────────────────────────────────${NC}"
+        echo -e "  🤖 Server address: ${BOLD}${EXTERNAL_SCHEME}://${API_DOMAIN}${PUBLIC_PORT_SUFFIX}/mcp${NC}"
+        echo -e "     Turn on ${BOLD}AI Assistants${NC} in the admin panel, then members paste"
+        echo -e "     that address into Claude or ChatGPT as a custom connector."
+        echo -e "     Each member finds it again on their profile page."
+        echo ""
+    fi
 
     echo -e "  ${BOLD}Important Files${NC}"
     echo -e "  ${CYAN}─────────────────────────────────────────────────────────────${NC}"

@@ -1,0 +1,111 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  gap: 1rem;
+}
+
+.titleBar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.text {
+  color: var(--c-secondary-shade-0);
+  line-height: 1.6;
+}
+
+.statRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1px;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+  overflow: hidden;
+  background-color: var(--c-primary-shade-1);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1 1 8rem;
+  padding: 0.85rem;
+  background-color: var(--c-primary-shade-0);
+}
+
+.statValue {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.statLabel {
+  font-size: 0.8125rem;
+  color: var(--c-secondary-shade-0);
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+  max-width: 100%;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+  background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-0-op05));
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 40rem;
+}
+
+.table th {
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--c-secondary-shade-0);
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--c-primary-shade-1);
+  white-space: nowrap;
+}
+
+.primaryHeader {
+  width: 100%;
+}
+
+.actionsHeader {
+  text-align: right;
+}
+
+.emptyStateContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 6rem;
+  border: 1px solid var(--c-primary-shade-1);
+  border-radius: var(--border-radius);
+  background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-0-op05));
+}
+
+.emptyLabel {
+  opacity: 0.8;
+}

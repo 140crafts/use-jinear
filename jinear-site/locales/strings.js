@@ -5427,12 +5427,12 @@ const translations = {
         tr: "Kendi günlüklerinize, veritabanınıza ve yedeklerinize tam erişim. Kara kutu yok."
     },
     landingPageCompliance3Title: {
-        en: "Zero telemetry",
-        tr: "Sıfır telemetri"
+        en: "No telemetry without consent",
+        tr: "Onayınız olmadan telemetri yok"
     },
     landingPageCompliance3Text: {
-        en: "No usage analytics, no error reporting, no data sent back to us. What happens on your server stays on your server.",
-        tr: "Kullanım analitiği yok, hata takibi yok, bize gönderilen hiçbir veri yok. Sunucunuzda ne olursa sizde kalır."
+        en: "No usage analytics and no error reporting unless you opt in. The optional daily update check sends a random instance id and the version number. What happens on your server stays on your server.",
+        tr: "İzin vermediğiniz sürece kullanım analitiği ve hata takibi yok. İsteğe bağlı günlük güncelleme kontrolü yalnızca rastgele bir kurulum kimliği ve sürüm numarasını gönderir. Sunucunuzda ne olursa sizde kalır."
     },
     landingPageComplianceNote: {
         en: "* These apply to self-hosted installs. The cloud version is a standard hosted service, your data lives on our servers, like any SaaS.",

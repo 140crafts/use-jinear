@@ -6,8 +6,9 @@ import styles from "./BareFooter.module.scss";
 const TELEGRAM_URL = "https://t.me/usejinear";
 
 const BareFooter: React.FC = () => {
+    // data-site-footer: the Ask-AI card docks above this instead of covering it.
     return (
-        <footer className={styles.mini}>
+        <footer className={styles.mini} data-site-footer="">
             <span className={styles.wordmark}>JINEAR</span>
             <span className={styles.sep}>·</span>
             <Link href="/pricing">Pricing</Link>
@@ -19,6 +20,10 @@ const BareFooter: React.FC = () => {
             <a href={GITHUB_URL} target="_blank" rel="noreferrer">GitHub</a>
             <span className={styles.sep}>·</span>
             <a href={GITLAB_URL} target="_blank" rel="noreferrer">GitLab</a>
+            <span className={styles.sep}>·</span>
+            <Link className={styles.mcpLink} href="/mcp">
+                MCP<em className={styles.newTag}>new</em>
+            </Link>
             <span className={styles.sep}>·</span>
             <Link href="/blog">Blog</Link>
             <span className={styles.sep}>·</span>

@@ -53,7 +53,7 @@ services:
 
   jinear-minio:
     container_name: jinear-minio
-    image: minio/minio:RELEASE.2025-03-12T18-04-18Z
+    image: registry.gitlab.com/140crafts/use-jinear/minio:RELEASE.2025-03-12T18-04-18Z
     restart: always
     volumes:
       - ".data/minio:/data"
@@ -111,6 +111,21 @@ services:
       MANAGEMENT_ENABLED: ${MANAGEMENT_ENABLED:-false}
       MANAGEMENT_ADMIN_EMAIL: ${MANAGEMENT_ADMIN_EMAIL:-}
       MANAGEMENT_ADMIN_PASSWORD: ${MANAGEMENT_ADMIN_PASSWORD:-}
+      # Updates and anonymous statistics (optional, see docs/telemetry.md).
+      # Both are off unless set; DO_NOT_TRACK=1 turns both off.
+      TELEMETRY_UPDATE_CHECK: ${TELEMETRY_UPDATE_CHECK:-false}
+      TELEMETRY_USAGE_REPORT: ${TELEMETRY_USAGE_REPORT:-false}
+      DO_NOT_TRACK: ${DO_NOT_TRACK:-}
+      # AI assistant connections (optional, see docs/mcp/). Both halves must be on.
+      OAUTH_ENABLED: ${OAUTH_ENABLED:-false}
+      OAUTH_ISSUER_URL: https://${API_DOMAIN}
+      OAUTH_CONSENT_URL: https://${DOMAIN}/oauth/consent?request_id={requestId}
+      OAUTH_JWT_SECRET: ${OAUTH_JWT_SECRET:-}
+      OAUTH_DCR_ENABLED: ${OAUTH_DCR_ENABLED:-true}
+      OAUTH_CIMD_ALLOWED_HOSTS: ${OAUTH_CIMD_ALLOWED_HOSTS:-}
+      MCP_ENABLED: ${MCP_ENABLED:-false}
+      MCP_RESOURCE_URL: https://${API_DOMAIN}/mcp
+      MCP_LOG_RETENTION_DAYS: ${MCP_LOG_RETENTION_DAYS:-30}
       # Apple Sign In (optional) - keep false to boot without an AuthKey.p8
       APPLE_ENABLED: ${APPLE_ENABLED:-false}
       APPLE_TEAM_ID: ${APPLE_TEAM_ID:-not-configured}

@@ -22,4 +22,6 @@ public interface TeamRepository extends JpaRepository<Team, String> {
     boolean existsByWorkspaceIdAndTeamIdAndTeamStateAndPassiveIdIsNull(String workspaceId, String teamId, TeamStateType teamStateType);
 
     Long countAllByWorkspaceIdAndTeamIdIsInAndTeamStateAndPassiveIdIsNull(String workspaceId, List<String> teamId, TeamStateType teamStateType);
+
+    Long countAllByPassiveIdIsNull();
 }

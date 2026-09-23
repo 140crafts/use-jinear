@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-08-29 16:43:23.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-16 16:57:22.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
-    gid: string;
     gthreadId: string;
     ghistoryId: string;
+    ginternalDate: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -264,6 +264,22 @@ export interface IntegrationScopeDto extends BaseDto {
     integrationInfo: IntegrationInfoDto;
 }
 
+export interface InstanceInfoDto extends BaseDto {
+    instanceInfoId: string;
+    telemetryInstanceId: string;
+    latestKnownVersion?: string | null;
+    lastCheckDate?: Date | null;
+}
+
+export interface InstanceStatusDto {
+    version: string;
+    latestVersion?: string | null;
+    updateAvailable: boolean;
+    updateCheckEnabled: boolean;
+    usageReportEnabled: boolean;
+    lastCheckDate?: Date | null;
+}
+
 export interface MaterialAccessDto extends BaseDto {
     materialAccessId: string;
     materialId: string;
@@ -317,6 +333,48 @@ export interface PathAwareMaterialDto extends MaterialDto {
 
 export interface WaitingForUploadMaterialResultDto extends WaitingMediaResultDto {
     materialId: string;
+}
+
+export interface McpAnalyticsDto {
+    windowDays: number;
+    totalCalls: number;
+    errorCalls: number;
+    activeConnections: number;
+    topTools: McpToolUsageDto[];
+    daily: McpDailyUsageDto[];
+}
+
+export interface McpDailyUsageDto {
+    date: string;
+    callCount: number;
+    errorCount: number;
+}
+
+export interface McpServerInfoDto {
+    enabled: boolean;
+    serverUrl: string;
+    documentationUrl: string;
+}
+
+export interface McpToolCallLogDto {
+    mcpToolCallLogId: string;
+    oauthConnectionId: string;
+    accountId: string;
+    workspaceId: string;
+    clientId: string;
+    toolName: string;
+    callStatus: McpToolCallStatus;
+    errorCode: string;
+    durationMs: number;
+    responseBytes: number;
+    createdDate: Date;
+}
+
+export interface McpToolUsageDto {
+    toolName: string;
+    callCount: number;
+    errorCount: number;
+    averageDurationMs: number;
 }
 
 export interface AccessibleMediaDto extends MediaDto {
@@ -598,6 +656,73 @@ export interface NotificationTargetDto extends BaseDto {
     sessionInfoId: string;
     targetType: NotificationTargetType;
     providerType: NotificationProviderType;
+}
+
+export interface OauthAuthorizationCodeDto {
+    oauthAuthorizationCodeId: string;
+    accountId: string;
+    clientId: string;
+    oauthConnectionId: string;
+    redirectUri: string;
+    scope: string;
+    codeChallenge: string;
+    codeChallengeMethod: string;
+    resource: string;
+    expiresAt: Date;
+}
+
+export interface OauthAuthorizationRequestDto {
+    oauthAuthorizationRequestId: string;
+    clientId: string;
+    redirectUri: string;
+    scope: string;
+    state: string;
+    codeChallenge: string;
+    codeChallengeMethod: string;
+    resource: string;
+    expiresAt: Date;
+}
+
+export interface OauthClientDto {
+    clientId: string;
+    clientName: string;
+    clientUri: string;
+    logoUri: string;
+    redirectUris: string[];
+    registrationType: OauthClientRegistrationType;
+    clientIdIssuedAt: Date;
+}
+
+export interface OauthConnectionDto {
+    oauthConnectionId: string;
+    accountId: string;
+    clientId: string;
+    clientName: string;
+    clientDisplayHost: string;
+    sessionInfoId: string;
+    grantedScopes: string[];
+    createdDate: Date;
+    lastUsedAt: Date;
+    callCountLast30Days: number;
+}
+
+export interface OauthConsentInfoDto {
+    requestId: string;
+    clientDisplayHost: string;
+    clientName: string;
+    clientUri: string;
+    logoUri: string;
+    policyUri: string;
+    tosUri: string;
+    redirectHost: string;
+    loopbackOnly: boolean;
+    requestedScopes: string[];
+}
+
+export interface OauthRefreshTokenDto {
+    oauthRefreshTokenId: string;
+    oauthConnectionId: string;
+    expiresAt: Date;
 }
 
 export interface SubscriptionDto extends BaseDto {
@@ -1060,6 +1185,10 @@ export interface TeamWorkflowStatusDto {
     removable: boolean;
 }
 
+export interface InstanceReportResultDto {
+    latestVersion?: string | null;
+}
+
 export interface TokenDto extends BaseDto {
     tokenId: string;
     relatedObject: string;
@@ -1512,6 +1641,63 @@ export interface NotificationTargetInitializeRequest extends BaseRequest {
     providerType: NotificationProviderType;
 }
 
+export interface OauthAuthorizeRequest {
+    responseType: string;
+    clientId: string;
+    redirectUri: string;
+    scope: string;
+    state: string;
+    codeChallenge: string;
+    codeChallengeMethod: string;
+    resource: string;
+    response_type: string;
+    client_id: string;
+    redirect_uri: string;
+    code_challenge: string;
+    code_challenge_method: string;
+}
+
+export interface OauthClientRegistrationRequest {
+    client_id: string;
+    client_name: string;
+    client_uri: string;
+    logo_uri: string;
+    policy_uri: string;
+    tos_uri: string;
+    redirect_uris: string[];
+    grant_types: string[];
+    token_endpoint_auth_method: string;
+    software_id: string;
+    software_version: string;
+}
+
+export interface OauthConsentRequest {
+    requestId: string;
+    approved: boolean;
+}
+
+export interface OauthRevokeRequest {
+    token: string;
+    tokenTypeHint: string;
+    token_type_hint: string;
+}
+
+export interface OauthTokenRequest {
+    grantType: string;
+    code: string;
+    redirectUri: string;
+    clientId: string;
+    codeVerifier: string;
+    refreshToken: string;
+    scope: string;
+    resource: string;
+    client_id: string;
+    redirect_uri: string;
+    grant_type: string;
+    code_verifier: string;
+    refresh_token: string;
+}
+
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
     csrf: string;
 }
@@ -1825,6 +2011,29 @@ export interface TeamWorkflowStatusReorderRequest extends BaseRequest {
     orderedTeamWorkflowStatusIds: string[];
 }
 
+export interface InstanceReportRequest {
+    instanceId: string;
+    version: string;
+    usage?: InstanceUsageReportRequest | null;
+}
+
+export interface InstanceUsageReportRequest {
+    storageProvider: MediaFileProviderType;
+    enabledInstanceFlags: InstanceFlagType[];
+    mcpEnabled: boolean;
+    oauthEnabled: boolean;
+    pushNotificationsEnabled: boolean;
+    mailConfigured: boolean;
+    managementEnabled: boolean;
+    accounts: SizeBucket;
+    workspaces: SizeBucket;
+    teams: SizeBucket;
+    tasksCreatedLast30Days: SizeBucket;
+    javaVersion?: string | null;
+    postgresVersion?: string | null;
+    osArch?: string | null;
+}
+
 export interface RetrieveTopicListRequest extends BaseRequest {
     topicIds: string[];
 }
@@ -1956,6 +2165,10 @@ export interface InstanceFlagListingResponse extends BaseResponse {
     data: { [P in InstanceFlagType]?: any };
 }
 
+export interface InstanceInfoResponse extends BaseResponse {
+    data: InstanceStatusDto;
+}
+
 export interface MaterialAccessPaginatedResponse extends BaseResponse {
     data: PageDto<MaterialAccessDto>;
 }
@@ -1970,6 +2183,28 @@ export interface MaterialRetrieveResponse extends BaseResponse {
 
 export interface ParentMaterialDtoResponse extends BaseResponse {
     data: MaterialHierarchyDto;
+}
+
+export interface McpAnalyticsResponse extends BaseResponse {
+    data: McpAnalyticsDto;
+}
+
+export interface McpProtocolErrorResponse {
+    error: string;
+    error_description: string;
+}
+
+export interface McpServerInfoResponse extends BaseResponse {
+    data: McpServerInfoDto;
+}
+
+export interface McpToolCallLogListingResponse extends BaseResponse {
+    data: PageDto<McpToolCallLogDto>;
+}
+
+export interface McpToolManifestResponse {
+    tools: McpToolDescriptor[];
+    scopes: { [index: string]: string[] };
 }
 
 export interface InternalBatchMediaRetrieveResponse extends BaseResponse {
@@ -2068,6 +2303,68 @@ export interface RetrieveUnreadNotificationEventCountResponse extends BaseRespon
     unreadNotificationCount: number;
 }
 
+export interface OauthClientListingResponse extends BaseResponse {
+    data: PageDto<OauthClientDto>;
+}
+
+export interface OauthClientRegistrationResponse {
+    client_id: string;
+    client_id_issued_at: number;
+    client_name: string;
+    redirect_uris: string[];
+    grant_types: string[];
+    response_types: string[];
+    token_endpoint_auth_method: string;
+}
+
+export interface OauthConnectionListingResponse extends BaseResponse {
+    data: OauthConnectionDto[];
+}
+
+export interface OauthConsentInfoResponse extends BaseResponse {
+    data: OauthConsentInfoDto;
+}
+
+export interface OauthConsentResponse extends BaseResponse {
+    data: string;
+}
+
+export interface OauthErrorResponse {
+    error: string;
+    error_description: string;
+}
+
+export interface OauthProtectedResourceMetadataResponse {
+    resource: string;
+    authorization_servers: string[];
+    scopes_supported: string[];
+    bearer_methods_supported: string[];
+    resource_documentation: string;
+}
+
+export interface OauthServerMetadataResponse {
+    issuer: string;
+    authorization_endpoint: string;
+    token_endpoint: string;
+    revocation_endpoint: string;
+    registration_endpoint: string;
+    scopes_supported: string[];
+    response_types_supported: string[];
+    grant_types_supported: string[];
+    token_endpoint_auth_methods_supported: string[];
+    code_challenge_methods_supported: string[];
+    client_id_metadata_document_supported: boolean;
+    service_documentation: string;
+}
+
+export interface OauthTokenResponse {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    scope: string;
+    refresh_token: string;
+}
+
 export interface RetrieveSubscriptionInfoResponse extends BaseResponse {
     data: SubscriptionInfoDto;
 }
@@ -2160,6 +2457,10 @@ export interface TaskBoardRetrieveResponse extends BaseResponse {
     data: TaskBoardDto;
 }
 
+export interface TaskCommentResponse extends BaseResponse {
+    data: CommentDto;
+}
+
 export interface TaskFeedItemResponse extends BaseResponse {
     data: TaskFeedItemListDto;
 }
@@ -2174,6 +2475,10 @@ export interface TaskListingPaginatedResponse extends BaseResponse {
 
 export interface TaskMediaResponse extends BaseResponse {
     data: MediaDto[];
+}
+
+export interface TaskMediaUploadResponse extends BaseResponse {
+    data: string;
 }
 
 export interface TaskNumbersResponse {
@@ -2226,6 +2531,10 @@ export interface TeamResponse extends BaseResponse {
 
 export interface TeamWorkflowStatusListingResponse extends BaseResponse {
     data: GroupedTeamWorkflowStatusListDto;
+}
+
+export interface InstanceReportResponse extends BaseResponse {
+    data: InstanceReportResultDto;
 }
 
 export interface TopicListingResponse extends BaseResponse {
@@ -2340,13 +2649,22 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    originalFilename: string;
     contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
+    originalFilename: string;
+}
+
+export interface McpToolDescriptor {
+    name: string;
+    title: string;
+    description: string;
+    inputSchema: McpSchemaNode;
+    outputSchema: McpSchemaNode;
+    annotations: McpToolAnnotations;
 }
 
 export interface GoogleCalendarEventAttendee {
@@ -2458,17 +2776,38 @@ export interface BaseEntity {
 }
 
 export interface Resource extends InputStreamSource {
-    filename: string;
-    uri: URI;
-    description: string;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
+    filename: string;
+    description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {
     inputStream: any;
+}
+
+export interface McpSchemaNode {
+    type: string;
+    format: string;
+    description: string;
+    properties: { [index: string]: McpSchemaNode };
+    required: string[];
+    additionalProperties: boolean;
+    items: McpSchemaNode;
+    enum: string[];
+    minimum: number;
+    maximum: number;
+}
+
+export interface McpToolAnnotations {
+    title: string;
+    readOnlyHint: boolean;
+    destructiveHint: boolean;
+    idempotentHint: boolean;
+    openWorldHint: boolean;
 }
 
 export interface GoogleCalendarConferenceDataRequest {
@@ -2548,10 +2887,10 @@ export interface Account extends BaseEntity {
     accountProfileMedia: AccountProfileMedia;
 }
 
-export interface URI extends Comparable<URI>, Serializable {
+export interface URL extends Serializable {
 }
 
-export interface URL extends Serializable {
+export interface URI extends Comparable<URI>, Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {
@@ -2745,7 +3084,7 @@ export type PermissionType = "ACCOUNT_ROLE_EDIT" | "PROCESS_REMINDER_JOB" | "EXP
 
 export type RoleType = "ADMIN" | "SERVICE" | "USER" | "ROBOT";
 
-export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL" | "SIGN_IN_WITH_APPLE" | "SINGLE_USE_LOGIN_TOKEN";
+export type ProviderType = "OAUTH_MAIL" | "OTP_MAIL" | "PASSWORD_MAIL" | "SIGN_IN_WITH_APPLE" | "SINGLE_USE_LOGIN_TOKEN" | "OAUTH_CONNECTION";
 
 export type CalendarEventSourceType = "TASK" | "GOOGLE_CALENDAR";
 
@@ -2763,7 +3102,7 @@ export type LocaleType = "TR" | "EN";
 
 export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE" | "MANAGEMENT_ADMIN_ACCOUNT_SYNC";
 
-export type InstanceFlagType = "REGISTER_WITH_MAIL" | "FORGOT_PASSWORD" | "SIGN_IN_WITH_APPLE" | "SIGN_IN_WITH_GOOGLE" | "SIGN_IN_WITH_EMAIL_CODE" | "WORKSPACE_INIT" | "ATTACH_GOOGLE_CALENDAR";
+export type InstanceFlagType = "REGISTER_WITH_MAIL" | "FORGOT_PASSWORD" | "SIGN_IN_WITH_APPLE" | "SIGN_IN_WITH_GOOGLE" | "SIGN_IN_WITH_EMAIL_CODE" | "WORKSPACE_INIT" | "ATTACH_GOOGLE_CALENDAR" | "MCP_SERVER";
 
 export type MaterialAccessType = "OWNER_ONLY" | "WORKSPACE_MEMBERS" | "GRAINED" | "ANYONE_WITH_LINK";
 
@@ -2772,6 +3111,8 @@ export type MaterialSearchContentFilterType = "IMAGE" | "DOC" | "SHARED" | "RECE
 export type MaterialSearchSortType = "IDATE_DESC" | "IDATE_ASC" | "UDATE_DESC" | "UDATE_ASC" | "NAME_ASC" | "NAME_DESC" | "SIZE_ASC" | "SIZE_DESC";
 
 export type MaterialType = "FILE" | "FOLDER";
+
+export type McpToolCallStatus = "OK" | "TOOL_ERROR" | "PROTOCOL_ERROR" | "UNAUTHORIZED" | "FORBIDDEN" | "RATE_LIMITED" | "SERVER_ERROR";
 
 export type FileType = "PROFILE_PIC" | "TASK_FILE" | "PROJECT_POST_FILE" | "PROJECT_LOGO" | "RICH_TEXT_IMAGE" | "MATERIAL_MEDIA" | "MEME_MEDIA" | "MEME_THUMB";
 
@@ -2810,6 +3151,10 @@ export type NotificationProviderType = "ONE_SIGNAL" | "FIREBASE" | "EXPO";
 export type NotificationTargetType = "WEB" | "WEBVIEW";
 
 export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "TASK_NEW_COMMENT" | "TASK_ATTACHMENT_ADDED" | "TASK_ATTACHMENT_DELETED" | "MESSAGING_NEW_MESSAGE_THREAD" | "MESSAGING_NEW_MESSAGE_CONVERSATION";
+
+export type OauthClientRegistrationType = "DCR" | "CIMD" | "STATIC";
+
+export type OauthScope = "WORKSPACE_READ" | "TASKS_READ" | "TASKS_WRITE" | "CALENDAR_READ" | "NOTES_READ" | "FILES_READ" | "OFFLINE_ACCESS";
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "UNFOLLOW" | "SINGLE_LOGIN_TOKEN_USED" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "PAYMENT_ISSUE";
 
@@ -2864,6 +3209,8 @@ export type TeamTaskVisibilityType = "VISIBLE_TO_ALL_TEAM_MEMBERS" | "OWNER_ASSI
 export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
 
 export type TeamWorkflowStateGroup = "BACKLOG" | "NOT_STARTED" | "STARTED" | "COMPLETED" | "CANCELLED";
+
+export type SizeBucket = "ZERO" | "ONE" | "TWO_TO_FIVE" | "SIX_TO_TWENTY_FIVE" | "TWENTY_SIX_TO_HUNDRED" | "HUNDRED_ONE_TO_FIVE_HUNDRED" | "OVER_FIVE_HUNDRED";
 
 export type TokenType = "SMS_LOGIN" | "EMAIL_LOGIN" | "WEB_USERNAME_LOGIN" | "BOOKING_EMAIL_VALIDATION" | "CONTINUE_AS_LOGIN_TOKEN" | "CONFIRM_EMAIL" | "RESET_PASSWORD" | "WORKSPACE_INVITATION" | "ACCOUNT_DELETION" | "SINGLE_USE_LOGIN_TOKEN";
 

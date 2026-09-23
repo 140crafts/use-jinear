@@ -5,6 +5,7 @@ import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.entity.workspace.Workspace;
+import co.jinear.core.model.enumtype.telemetry.SizeBucket;
 import co.jinear.core.repository.WorkspaceRepository;
 import co.jinear.core.service.workspace.member.WorkspaceMemberListingService;
 import lombok.RequiredArgsConstructor;
@@ -44,5 +45,10 @@ public class WorkspaceRetrieveService {
 
     public List<DetailedWorkspaceMemberDto> retrieveAccountWorkspaces(String accountId) {
         return workspaceMemberListingService.retrieveAccountsWorkspaceMemberships(accountId);
+    }
+
+    public SizeBucket approximateActiveWorkspaces() {
+        log.info("Approximate active workspaces has started.");
+        return SizeBucket.from(workspaceRepository.countAllByPassiveIdIsNull());
     }
 }
