@@ -71,6 +71,7 @@ const QuickFilterBar: React.FC<QuickFilterBarProps> = ({className}) => {
                 ["topicIds", undefined],
                 ["ownerIds", undefined],
                 ["assigneeIds", undefined],
+                ["collaboratorIds", undefined],
                 ["workflowStatusIdList", undefined],
                 ["workflowStateGroups", undefined],
                 ["timespanStart", undefined],

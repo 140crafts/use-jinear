@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-09-16 16:57:22.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-22 12:18:56.
 
 export interface BaseDto {
     createdDate: Date;
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gthreadId: string;
-    ghistoryId: string;
     ginternalDate: string;
     gid: string;
+    gthreadId: string;
+    ghistoryId: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1034,6 +1034,13 @@ export interface TaskBoardEntryDto extends BaseDto {
     task: TaskDto;
 }
 
+export interface TaskCollaboratorDto extends BaseDto {
+    taskCollaboratorId: string;
+    taskId: string;
+    accountId: string;
+    collaborator: PlainAccountProfileDto;
+}
+
 export interface TaskDto extends BaseDto {
     taskId: string;
     topicId: string;
@@ -1065,6 +1072,7 @@ export interface TaskDto extends BaseDto {
     taskBoardEntries?: PlainTaskBoardEntryDto[] | null;
     project?: ProjectDto | null;
     milestone?: MilestoneDto | null;
+    taskCollaborators?: TaskCollaboratorDto[] | null;
 }
 
 export interface TaskFeedItemDto extends BaseDto {
@@ -1260,6 +1268,8 @@ export interface WorkspaceActivityDto extends BaseDto {
     newProject?: ProjectDto | null;
     oldMilestoneDto?: MilestoneDto | null;
     newMilestoneDto?: MilestoneDto | null;
+    oldCollaborators?: PlainAccountProfileDto[] | null;
+    newCollaborators?: PlainAccountProfileDto[] | null;
 }
 
 export interface WorkspaceDisplayPreferenceDto {
@@ -1406,6 +1416,9 @@ export interface CalendarEventFilterRequest extends BaseRequest {
     taskboardIds?: string[] | null;
     timespanStart: Date;
     timespanEnd: Date;
+    assigneeIds?: string[] | null;
+    collaboratorIds?: string[] | null;
+    workflowStatusIdList?: string[] | null;
 }
 
 export interface CalendarEventInitializeRequest {
@@ -1651,10 +1664,10 @@ export interface OauthAuthorizeRequest {
     codeChallengeMethod: string;
     resource: string;
     response_type: string;
-    client_id: string;
     redirect_uri: string;
     code_challenge: string;
     code_challenge_method: string;
+    client_id: string;
 }
 
 export interface OauthClientRegistrationRequest {
@@ -1691,11 +1704,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
-    client_id: string;
     redirect_uri: string;
-    grant_type: string;
     code_verifier: string;
     refresh_token: string;
+    client_id: string;
+    grant_type: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -1851,6 +1864,7 @@ export interface TaskBoardEntryFilterRequest extends BaseRequest {
     topicIds?: string[] | null;
     ownerIds?: string[] | null;
     assigneeIds?: string[] | null;
+    collaboratorIds?: string[] | null;
     workflowStatusIdList?: string[] | null;
     workflowStateGroups?: TeamWorkflowStateGroup[] | null;
     timespanStart?: Date | null;
@@ -1890,6 +1904,10 @@ export interface TaskBoardUpdateTitleRequest extends TaskBoardUpdateRequest {
     title: string;
 }
 
+export interface TaskCollaboratorUpdateRequest extends BaseRequest {
+    collaboratorIds?: string[] | null;
+}
+
 export interface TaskDateUpdateRequest extends BaseRequest {
     assignedDate?: Date | null;
     dueDate?: Date | null;
@@ -1906,6 +1924,7 @@ export interface TaskFilterRequest extends BaseRequest {
     topicIds?: string[] | null;
     ownerIds?: string[] | null;
     assigneeIds?: string[] | null;
+    collaboratorIds?: string[] | null;
     workflowStatusIdList?: string[] | null;
     workflowStateGroups?: TeamWorkflowStateGroup[] | null;
     timespanStart?: Date | null;
@@ -1934,6 +1953,7 @@ export interface TaskInitializeRequest extends BaseRequest {
     feedItemId?: string | null;
     projectId?: string | null;
     milestoneId?: string | null;
+    collaboratorIds?: string[] | null;
 }
 
 export interface TaskProjectAndMilestoneUpdateRequest {
@@ -2649,13 +2669,13 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
     originalFilename: string;
+    contentType: string;
 }
 
 export interface McpToolDescriptor {
@@ -2780,9 +2800,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    filename: string;
-    description: string;
     uri: URI;
+    description: string;
+    filename: string;
 }
 
 export interface InputStreamSource {
@@ -3220,7 +3240,7 @@ export type UsernameRelatedObjectType = "ACCOUNT" | "WORKSPACE";
 
 export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER" | "GUEST";
 
-export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "TASK_NEW_COMMENT" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "ATTACHMENT_ADDED" | "ATTACHMENT_DELETED" | "TASK_PROJECT_ASSIGNMENT_UPDATE" | "TASK_MILESTONE_ASSIGNMENT_UPDATE" | "TASK_BOARD_ENTRY_INIT" | "TASK_BOARD_ENTRY_REMOVED" | "TASK_BOARD_ENTRY_ORDER_CHANGE";
+export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "TASK_CHANGE_COLLABORATOR_LIST" | "TASK_NEW_COMMENT" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "ATTACHMENT_ADDED" | "ATTACHMENT_DELETED" | "TASK_PROJECT_ASSIGNMENT_UPDATE" | "TASK_MILESTONE_ASSIGNMENT_UPDATE" | "TASK_BOARD_ENTRY_INIT" | "TASK_BOARD_ENTRY_REMOVED" | "TASK_BOARD_ENTRY_ORDER_CHANGE";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 

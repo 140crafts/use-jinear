@@ -1,5 +1,6 @@
 import type {
     TaskAssigneeUpdateRequest,
+    TaskCollaboratorUpdateRequest,
     TaskDateUpdateRequest,
     TaskProjectAndMilestoneUpdateRequest,
     TaskResponse,
@@ -119,6 +120,21 @@ export const taskUpdateApi = api.injectEndpoints({
             ]
         }),
         //
+        updateTaskCollaborators: build.mutation<TaskResponse, { taskId: string; body: TaskCollaboratorUpdateRequest }>({
+            query: (req: { taskId: string; body: TaskCollaboratorUpdateRequest }) => ({
+                url: `v1/task/update/${req.taskId}/collaborators`,
+                method: "PUT",
+                body: req.body
+            }),
+            invalidatesTags: (_result, _err, req) => [
+                {type: "v1/task/from-workspace/{workspaceName}/{taskTag}"},
+                {type: "v1/workspace/activity/filter"},
+                {type: "v1/task/list/filter"},
+                {type: "v1/calendar/event/filter"},
+                {type: "v1/task-analytics/{workspaceId}/team/{teamId}"}
+            ]
+        }),
+        //
         updateTaskProjectAnMilestone: build.mutation<TaskResponse, {
             taskId: string;
             body: TaskProjectAndMilestoneUpdateRequest
@@ -145,6 +161,7 @@ export const {
     useUpdateTaskTitleMutation,
     useUpdateTaskDatesMutation,
     useUpdateTaskAssigneeMutation,
+    useUpdateTaskCollaboratorsMutation,
     useUpdateTaskProjectAnMilestoneMutation
 } = taskUpdateApi;
 

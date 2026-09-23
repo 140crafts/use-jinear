@@ -862,6 +862,14 @@ const translations = {
         en: "Copy Link",
         tr: "Linki Kopyala"
     },
+    taskDetailCollaborators: {
+        en: "Collaborators",
+        tr: "Ortak çalışanlar"
+    },
+    taskDetailAddCollaborators: {
+        en: "Add collaborators",
+        tr: "Ortak çalışan ekle"
+    },
     taskDetailAssignToAccount: {
         en: "Unassigned",
         tr: "Kimseye Atanmadı"
@@ -1037,6 +1045,10 @@ const translations = {
     taskWorkflowActivityInfoLabel_TASK_CHANGE_ASSIGNEE: {
         en: "has changed assignee.",
         tr: "atanan kişiyi değiştirdi."
+    },
+    taskWorkflowActivityInfoLabel_TASK_CHANGE_COLLABORATOR_LIST: {
+        en: "has changed collaborators.",
+        tr: "ortak çalışanları değiştirdi."
     },
     taskWorkflowActivityInfoLabel_TASK_CHANGE_ASSIGNED_DATE: {
         en: "has changed assigned date.",
@@ -2323,6 +2335,14 @@ const translations = {
         en: "Assign to someone",
         tr: "Birine ata"
     },
+    newTaskFormPickCollaboratorsButtonLabel: {
+        en: "Pick collaborators",
+        tr: "Ortak çalışanlar"
+    },
+    newTaskFormPickedCollaboratorsLabel: {
+        en: "${count} collaborators",
+        tr: "${count} ortak çalışan"
+    },
     newTaskFormPickAssignedDateButtonLabel: {
         en: "Pick assigned date",
         tr: "Planlanan tarih seç"
@@ -2362,6 +2382,18 @@ const translations = {
     taskFilterAssigneeFilterButtonSelected: {
         en: "${count} Assignees",
         tr: "${count} Atanan"
+    },
+    taskFilterCollaboratorFilterButtonEmpty: {
+        en: "Collaborator",
+        tr: "Ortak çalışan"
+    },
+    taskFilterCollaboratorFilterButtonSingleSelection: {
+        en: "Collaborator: ",
+        tr: "Ortak çalışan: "
+    },
+    taskFilterCollaboratorFilterButtonSelected: {
+        en: "${count} Collaborators",
+        tr: "${count} Ortak çalışan"
     },
     teamWorkflowStatusPickerModalTitle: {
         en: "Pick Workflow Status",
@@ -3646,6 +3678,34 @@ const translations = {
     calendarFilterByBoardButton: {
         en: "Related Board(s)",
         tr: "İlgili Pano"
+    },
+    calendarFilterByAssigneeButton: {
+        en: "Assignee(s)",
+        tr: "Atanan"
+    },
+    calendarFilterByCollaboratorButton: {
+        en: "Collaborator(s)",
+        tr: "Ortak çalışan"
+    },
+    calendarFilterByWorkflowStatusButton: {
+        en: "Workflow Status(es)",
+        tr: "İş akışı durumu"
+    },
+    workspaceWideWorkflowStatusPickerModalTitle: {
+        en: "Pick workflow statuses",
+        tr: "İş akışı durumu seç"
+    },
+    workspaceWideWorkflowStatusPickerModalEmptyState: {
+        en: "No teams found",
+        tr: "Takım bulunamadı"
+    },
+    workspaceWideWorkflowStatusPickerModalSelectButton: {
+        en: "Select",
+        tr: "Seç"
+    },
+    workspaceWideWorkflowStatusPickerModalCancelButton: {
+        en: "Cancel",
+        tr: "Vazgeç"
     },
     deleteCalendarMemberAreYouSureTitle: {
         en: "Kick Member",

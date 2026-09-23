@@ -13,6 +13,7 @@ import co.jinear.core.model.vo.task.*;
 import co.jinear.core.repository.TaskRepository;
 import co.jinear.core.service.richtext.RichTextInitializeService;
 import co.jinear.core.service.task.board.entry.TaskBoardEntryOperationService;
+import co.jinear.core.service.task.collaborator.TaskCollaboratorService;
 import co.jinear.core.service.task.feed.TaskFeedItemOperationService;
 import co.jinear.core.service.task.relation.TaskRelationInitializeService;
 import co.jinear.core.service.task.subscription.TaskSubscriptionOperationService;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -46,6 +48,7 @@ public class TaskInitializeService {
     private final TaskFeedItemOperationService taskFeedItemOperationService;
     private final TaskAnalyticsService taskAnalyticsService;
     private final TaskFtsRefreshService taskFtsRefreshService;
+    private final TaskCollaboratorService taskCollaboratorService;
 
     @Transactional
     public TaskDto initializeTask(TaskInitializeVo taskInitializeVo) {
@@ -64,6 +67,7 @@ public class TaskInitializeService {
             initializeTaskSubscription(taskInitializeVo, saved);
             initializeTaskBoardEntry(taskInitializeVo, task);
             initializeTaskFeedItem(taskInitializeVo, task);
+            initializeCollaborators(taskInitializeVo, task);
             taskFtsRefreshService.markDirty();
             return taskDto;
         } finally {
@@ -172,6 +176,13 @@ public class TaskInitializeService {
         if (Objects.nonNull(taskInitializeVo.getFeedId()) && Objects.nonNull(taskInitializeVo.getFeedItemId())) {
             InitializeTaskFeedItemVo initializeTaskFeedItemVo = new InitializeTaskFeedItemVo(task.getTaskId(), taskInitializeVo.getFeedId(), taskInitializeVo.getFeedItemId());
             taskFeedItemOperationService.initializeTaskFeedItemRelation(initializeTaskFeedItemVo);
+        }
+    }
+
+    private void initializeCollaborators(TaskInitializeVo taskInitializeVo, Task task) {
+        List<String> collaboratorIds = taskInitializeVo.getCollaboratorIds();
+        if (Objects.nonNull(collaboratorIds) && !collaboratorIds.isEmpty()) {
+            taskCollaboratorService.upsertTaskCollaborators(task.getTaskId(), collaboratorIds);
         }
     }
 }

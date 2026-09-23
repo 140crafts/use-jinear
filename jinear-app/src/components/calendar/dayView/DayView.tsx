@@ -28,6 +28,9 @@ const DayView: React.FC<DayViewProps> = ({workspace}) => {
     const hiddenCalendars = useQueryState<string[]>("hiddenCalendars", queryStateArrayParser) || EMPTY_ARRAY;
     const hiddenTeams = useQueryState<string[]>("hiddenTeams", queryStateArrayParser) || EMPTY_ARRAY;
     const taskBoards = useQueryState<string[]>("taskBoards", queryStateArrayParser) || EMPTY_ARRAY;
+    const assigneeIds = useQueryState<string[]>("assigneeIds", queryStateArrayParser) || EMPTY_ARRAY;
+    const collaboratorIds = useQueryState<string[]>("collaboratorIds", queryStateArrayParser) || EMPTY_ARRAY;
+    const workflowStatusIdList = useQueryState<string[]>("workflowStatusIdList", queryStateArrayParser) || EMPTY_ARRAY;
 
     const {periodStart, periodEnd, days} = useMemo(() => computeWeekViewPeriod(viewingDate), [viewingDate]);
 
@@ -37,6 +40,9 @@ const DayView: React.FC<DayViewProps> = ({workspace}) => {
         {
             workspaceId: workspace?.workspaceId || "",
             taskboardIds: taskBoards,
+            assigneeIds,
+            collaboratorIds,
+            workflowStatusIdList,
             timespanStart: periodStart,
             timespanEnd: periodEnd,
         }

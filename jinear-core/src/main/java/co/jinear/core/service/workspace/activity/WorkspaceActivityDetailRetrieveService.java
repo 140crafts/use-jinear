@@ -30,10 +30,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import static co.jinear.core.model.enumtype.workspace.WorkspaceActivityType.*;
 import static co.jinear.core.system.NormalizeHelper.EMPTY_STRING;
@@ -42,6 +44,8 @@ import static co.jinear.core.system.NormalizeHelper.EMPTY_STRING;
 @Service
 @RequiredArgsConstructor
 public class WorkspaceActivityDetailRetrieveService {
+
+    private static final String COMMA = ",";
 
     private static final List<WorkspaceActivityType> CHECKLIST_RELATED_TYPES = List.of(
             CHECKLIST_INITIALIZED,
@@ -68,6 +72,7 @@ public class WorkspaceActivityDetailRetrieveService {
             TASK_CHANGE_ASSIGNEE,
             TASK_CHANGE_ASSIGNED_DATE,
             TASK_CHANGE_DUE_DATE,
+            TASK_CHANGE_COLLABORATOR_LIST,
             RELATION_INITIALIZED,
             RELATION_REMOVED,
             CHECKLIST_INITIALIZED,
@@ -119,6 +124,7 @@ public class WorkspaceActivityDetailRetrieveService {
                 .map(this::retrieveRelatedTaskMedia)
                 .map(this::retrieveProjectInfo)
                 .map(this::retrieveMilestoneInfo)
+                .map(this::retrieveCollaborators)
                 .map(this::decideGroupAttributes)
                 .orElse(null);
     }
@@ -255,6 +261,27 @@ public class WorkspaceActivityDetailRetrieveService {
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .ifPresent(workspaceActivityDto::setNewMilestoneDto);
+        }
+        return workspaceActivityDto;
+    }
+
+    private WorkspaceActivityDto retrieveCollaborators(WorkspaceActivityDto workspaceActivityDto) {
+        if (TASK_CHANGE_COLLABORATOR_LIST.equals(workspaceActivityDto.getType())) {
+            Optional.of(workspaceActivityDto)
+                    .map(WorkspaceActivityDto::getOldState)
+                    .map(mergedCollaborators -> mergedCollaborators.split(COMMA))
+                    .map(Arrays::stream)
+                    .map(Stream::toList)
+                    .map(accountRetrieveService::retrieveAllPlainAccountProfiles)
+                    .ifPresent(workspaceActivityDto::setOldCollaborators);
+
+            Optional.of(workspaceActivityDto)
+                    .map(WorkspaceActivityDto::getNewState)
+                    .map(mergedCollaborators -> mergedCollaborators.split(COMMA))
+                    .map(Arrays::stream)
+                    .map(Stream::toList)
+                    .map(accountRetrieveService::retrieveAllPlainAccountProfiles)
+                    .ifPresent(workspaceActivityDto::setNewCollaborators);
         }
         return workspaceActivityDto;
     }

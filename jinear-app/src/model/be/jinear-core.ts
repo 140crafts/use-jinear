@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-09-04 23:36:20.
+// Generated using typescript-generator version 3.0.1157 on 2026-09-22 12:18:56.
 
 export interface BaseDto {
     createdDate: Date;
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
+    ginternalDate: string;
     gid: string;
     gthreadId: string;
     ghistoryId: string;
-    ginternalDate: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -262,6 +262,22 @@ export interface IntegrationScopeDto extends BaseDto {
     integrationInfoId: string;
     scope: IntegrationScopeType;
     integrationInfo: IntegrationInfoDto;
+}
+
+export interface InstanceInfoDto extends BaseDto {
+    instanceInfoId: string;
+    telemetryInstanceId: string;
+    latestKnownVersion?: string | null;
+    lastCheckDate?: Date | null;
+}
+
+export interface InstanceStatusDto {
+    version: string;
+    latestVersion?: string | null;
+    updateAvailable: boolean;
+    updateCheckEnabled: boolean;
+    usageReportEnabled: boolean;
+    lastCheckDate?: Date | null;
 }
 
 export interface MaterialAccessDto extends BaseDto {
@@ -642,6 +658,31 @@ export interface NotificationTargetDto extends BaseDto {
     providerType: NotificationProviderType;
 }
 
+export interface OauthAuthorizationCodeDto {
+    oauthAuthorizationCodeId: string;
+    accountId: string;
+    clientId: string;
+    oauthConnectionId: string;
+    redirectUri: string;
+    scope: string;
+    codeChallenge: string;
+    codeChallengeMethod: string;
+    resource: string;
+    expiresAt: Date;
+}
+
+export interface OauthAuthorizationRequestDto {
+    oauthAuthorizationRequestId: string;
+    clientId: string;
+    redirectUri: string;
+    scope: string;
+    state: string;
+    codeChallenge: string;
+    codeChallengeMethod: string;
+    resource: string;
+    expiresAt: Date;
+}
+
 export interface OauthClientDto {
     clientId: string;
     clientName: string;
@@ -658,6 +699,7 @@ export interface OauthConnectionDto {
     clientId: string;
     clientName: string;
     clientDisplayHost: string;
+    sessionInfoId: string;
     grantedScopes: string[];
     createdDate: Date;
     lastUsedAt: Date;
@@ -675,6 +717,12 @@ export interface OauthConsentInfoDto {
     redirectHost: string;
     loopbackOnly: boolean;
     requestedScopes: string[];
+}
+
+export interface OauthRefreshTokenDto {
+    oauthRefreshTokenId: string;
+    oauthConnectionId: string;
+    expiresAt: Date;
 }
 
 export interface SubscriptionDto extends BaseDto {
@@ -986,6 +1034,13 @@ export interface TaskBoardEntryDto extends BaseDto {
     task: TaskDto;
 }
 
+export interface TaskCollaboratorDto extends BaseDto {
+    taskCollaboratorId: string;
+    taskId: string;
+    accountId: string;
+    collaborator: PlainAccountProfileDto;
+}
+
 export interface TaskDto extends BaseDto {
     taskId: string;
     topicId: string;
@@ -1017,6 +1072,7 @@ export interface TaskDto extends BaseDto {
     taskBoardEntries?: PlainTaskBoardEntryDto[] | null;
     project?: ProjectDto | null;
     milestone?: MilestoneDto | null;
+    taskCollaborators?: TaskCollaboratorDto[] | null;
 }
 
 export interface TaskFeedItemDto extends BaseDto {
@@ -1137,6 +1193,10 @@ export interface TeamWorkflowStatusDto {
     removable: boolean;
 }
 
+export interface InstanceReportResultDto {
+    latestVersion?: string | null;
+}
+
 export interface TokenDto extends BaseDto {
     tokenId: string;
     relatedObject: string;
@@ -1208,6 +1268,8 @@ export interface WorkspaceActivityDto extends BaseDto {
     newProject?: ProjectDto | null;
     oldMilestoneDto?: MilestoneDto | null;
     newMilestoneDto?: MilestoneDto | null;
+    oldCollaborators?: PlainAccountProfileDto[] | null;
+    newCollaborators?: PlainAccountProfileDto[] | null;
 }
 
 export interface WorkspaceDisplayPreferenceDto {
@@ -1354,6 +1416,9 @@ export interface CalendarEventFilterRequest extends BaseRequest {
     taskboardIds?: string[] | null;
     timespanStart: Date;
     timespanEnd: Date;
+    assigneeIds?: string[] | null;
+    collaboratorIds?: string[] | null;
+    workflowStatusIdList?: string[] | null;
 }
 
 export interface CalendarEventInitializeRequest {
@@ -1589,9 +1654,61 @@ export interface NotificationTargetInitializeRequest extends BaseRequest {
     providerType: NotificationProviderType;
 }
 
+export interface OauthAuthorizeRequest {
+    responseType: string;
+    clientId: string;
+    redirectUri: string;
+    scope: string;
+    state: string;
+    codeChallenge: string;
+    codeChallengeMethod: string;
+    resource: string;
+    response_type: string;
+    redirect_uri: string;
+    code_challenge: string;
+    code_challenge_method: string;
+    client_id: string;
+}
+
+export interface OauthClientRegistrationRequest {
+    client_id: string;
+    client_name: string;
+    client_uri: string;
+    logo_uri: string;
+    policy_uri: string;
+    tos_uri: string;
+    redirect_uris: string[];
+    grant_types: string[];
+    token_endpoint_auth_method: string;
+    software_id: string;
+    software_version: string;
+}
+
 export interface OauthConsentRequest {
     requestId: string;
     approved: boolean;
+}
+
+export interface OauthRevokeRequest {
+    token: string;
+    tokenTypeHint: string;
+    token_type_hint: string;
+}
+
+export interface OauthTokenRequest {
+    grantType: string;
+    code: string;
+    redirectUri: string;
+    clientId: string;
+    codeVerifier: string;
+    refreshToken: string;
+    scope: string;
+    resource: string;
+    redirect_uri: string;
+    code_verifier: string;
+    refresh_token: string;
+    client_id: string;
+    grant_type: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -1747,6 +1864,7 @@ export interface TaskBoardEntryFilterRequest extends BaseRequest {
     topicIds?: string[] | null;
     ownerIds?: string[] | null;
     assigneeIds?: string[] | null;
+    collaboratorIds?: string[] | null;
     workflowStatusIdList?: string[] | null;
     workflowStateGroups?: TeamWorkflowStateGroup[] | null;
     timespanStart?: Date | null;
@@ -1786,6 +1904,10 @@ export interface TaskBoardUpdateTitleRequest extends TaskBoardUpdateRequest {
     title: string;
 }
 
+export interface TaskCollaboratorUpdateRequest extends BaseRequest {
+    collaboratorIds?: string[] | null;
+}
+
 export interface TaskDateUpdateRequest extends BaseRequest {
     assignedDate?: Date | null;
     dueDate?: Date | null;
@@ -1802,6 +1924,7 @@ export interface TaskFilterRequest extends BaseRequest {
     topicIds?: string[] | null;
     ownerIds?: string[] | null;
     assigneeIds?: string[] | null;
+    collaboratorIds?: string[] | null;
     workflowStatusIdList?: string[] | null;
     workflowStateGroups?: TeamWorkflowStateGroup[] | null;
     timespanStart?: Date | null;
@@ -1830,6 +1953,7 @@ export interface TaskInitializeRequest extends BaseRequest {
     feedItemId?: string | null;
     projectId?: string | null;
     milestoneId?: string | null;
+    collaboratorIds?: string[] | null;
 }
 
 export interface TaskProjectAndMilestoneUpdateRequest {
@@ -1905,6 +2029,29 @@ export interface TeamWorkflowStatusNameChangeRequest extends BaseRequest {
 export interface TeamWorkflowStatusReorderRequest extends BaseRequest {
     workflowStateGroup: TeamWorkflowStateGroup;
     orderedTeamWorkflowStatusIds: string[];
+}
+
+export interface InstanceReportRequest {
+    instanceId: string;
+    version: string;
+    usage?: InstanceUsageReportRequest | null;
+}
+
+export interface InstanceUsageReportRequest {
+    storageProvider: MediaFileProviderType;
+    enabledInstanceFlags: InstanceFlagType[];
+    mcpEnabled: boolean;
+    oauthEnabled: boolean;
+    pushNotificationsEnabled: boolean;
+    mailConfigured: boolean;
+    managementEnabled: boolean;
+    accounts: SizeBucket;
+    workspaces: SizeBucket;
+    teams: SizeBucket;
+    tasksCreatedLast30Days: SizeBucket;
+    javaVersion?: string | null;
+    postgresVersion?: string | null;
+    osArch?: string | null;
 }
 
 export interface RetrieveTopicListRequest extends BaseRequest {
@@ -2038,15 +2185,6 @@ export interface InstanceFlagListingResponse extends BaseResponse {
     data: { [P in InstanceFlagType]?: any };
 }
 
-export interface InstanceStatusDto {
-    version: string;
-    latestVersion?: string | null;
-    updateAvailable: boolean;
-    updateCheckEnabled: boolean;
-    usageReportEnabled: boolean;
-    lastCheckDate?: Date | null;
-}
-
 export interface InstanceInfoResponse extends BaseResponse {
     data: InstanceStatusDto;
 }
@@ -2071,12 +2209,22 @@ export interface McpAnalyticsResponse extends BaseResponse {
     data: McpAnalyticsDto;
 }
 
+export interface McpProtocolErrorResponse {
+    error: string;
+    error_description: string;
+}
+
 export interface McpServerInfoResponse extends BaseResponse {
     data: McpServerInfoDto;
 }
 
 export interface McpToolCallLogListingResponse extends BaseResponse {
     data: PageDto<McpToolCallLogDto>;
+}
+
+export interface McpToolManifestResponse {
+    tools: McpToolDescriptor[];
+    scopes: { [index: string]: string[] };
 }
 
 export interface InternalBatchMediaRetrieveResponse extends BaseResponse {
@@ -2179,6 +2327,16 @@ export interface OauthClientListingResponse extends BaseResponse {
     data: PageDto<OauthClientDto>;
 }
 
+export interface OauthClientRegistrationResponse {
+    client_id: string;
+    client_id_issued_at: number;
+    client_name: string;
+    redirect_uris: string[];
+    grant_types: string[];
+    response_types: string[];
+    token_endpoint_auth_method: string;
+}
+
 export interface OauthConnectionListingResponse extends BaseResponse {
     data: OauthConnectionDto[];
 }
@@ -2189,6 +2347,42 @@ export interface OauthConsentInfoResponse extends BaseResponse {
 
 export interface OauthConsentResponse extends BaseResponse {
     data: string;
+}
+
+export interface OauthErrorResponse {
+    error: string;
+    error_description: string;
+}
+
+export interface OauthProtectedResourceMetadataResponse {
+    resource: string;
+    authorization_servers: string[];
+    scopes_supported: string[];
+    bearer_methods_supported: string[];
+    resource_documentation: string;
+}
+
+export interface OauthServerMetadataResponse {
+    issuer: string;
+    authorization_endpoint: string;
+    token_endpoint: string;
+    revocation_endpoint: string;
+    registration_endpoint: string;
+    scopes_supported: string[];
+    response_types_supported: string[];
+    grant_types_supported: string[];
+    token_endpoint_auth_methods_supported: string[];
+    code_challenge_methods_supported: string[];
+    client_id_metadata_document_supported: boolean;
+    service_documentation: string;
+}
+
+export interface OauthTokenResponse {
+    access_token: string;
+    token_type: string;
+    expires_in: number;
+    scope: string;
+    refresh_token: string;
 }
 
 export interface RetrieveSubscriptionInfoResponse extends BaseResponse {
@@ -2283,6 +2477,10 @@ export interface TaskBoardRetrieveResponse extends BaseResponse {
     data: TaskBoardDto;
 }
 
+export interface TaskCommentResponse extends BaseResponse {
+    data: CommentDto;
+}
+
 export interface TaskFeedItemResponse extends BaseResponse {
     data: TaskFeedItemListDto;
 }
@@ -2297,6 +2495,10 @@ export interface TaskListingPaginatedResponse extends BaseResponse {
 
 export interface TaskMediaResponse extends BaseResponse {
     data: MediaDto[];
+}
+
+export interface TaskMediaUploadResponse extends BaseResponse {
+    data: string;
 }
 
 export interface TaskNumbersResponse {
@@ -2349,6 +2551,10 @@ export interface TeamResponse extends BaseResponse {
 
 export interface TeamWorkflowStatusListingResponse extends BaseResponse {
     data: GroupedTeamWorkflowStatusListDto;
+}
+
+export interface InstanceReportResponse extends BaseResponse {
+    data: InstanceReportResultDto;
 }
 
 export interface TopicListingResponse extends BaseResponse {
@@ -2463,13 +2669,22 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
-    contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
     originalFilename: string;
+    contentType: string;
+}
+
+export interface McpToolDescriptor {
+    name: string;
+    title: string;
+    description: string;
+    inputSchema: McpSchemaNode;
+    outputSchema: McpSchemaNode;
+    annotations: McpToolAnnotations;
 }
 
 export interface GoogleCalendarEventAttendee {
@@ -2592,6 +2807,27 @@ export interface Resource extends InputStreamSource {
 
 export interface InputStreamSource {
     inputStream: any;
+}
+
+export interface McpSchemaNode {
+    type: string;
+    format: string;
+    description: string;
+    properties: { [index: string]: McpSchemaNode };
+    required: string[];
+    additionalProperties: boolean;
+    items: McpSchemaNode;
+    enum: string[];
+    minimum: number;
+    maximum: number;
+}
+
+export interface McpToolAnnotations {
+    title: string;
+    readOnlyHint: boolean;
+    destructiveHint: boolean;
+    idempotentHint: boolean;
+    openWorldHint: boolean;
 }
 
 export interface GoogleCalendarConferenceDataRequest {
@@ -2994,6 +3230,8 @@ export type TeamVisibilityType = "VISIBLE" | "HIDDEN";
 
 export type TeamWorkflowStateGroup = "BACKLOG" | "NOT_STARTED" | "STARTED" | "COMPLETED" | "CANCELLED";
 
+export type SizeBucket = "ZERO" | "ONE" | "TWO_TO_FIVE" | "SIX_TO_TWENTY_FIVE" | "TWENTY_SIX_TO_HUNDRED" | "HUNDRED_ONE_TO_FIVE_HUNDRED" | "OVER_FIVE_HUNDRED";
+
 export type TokenType = "SMS_LOGIN" | "EMAIL_LOGIN" | "WEB_USERNAME_LOGIN" | "BOOKING_EMAIL_VALIDATION" | "CONTINUE_AS_LOGIN_TOKEN" | "CONFIRM_EMAIL" | "RESET_PASSWORD" | "WORKSPACE_INVITATION" | "ACCOUNT_DELETION" | "SINGLE_USE_LOGIN_TOKEN";
 
 export type TopicVisibility = "SHARED" | "PRIVATE";
@@ -3002,7 +3240,7 @@ export type UsernameRelatedObjectType = "ACCOUNT" | "WORKSPACE";
 
 export type WorkspaceAccountRoleType = "OWNER" | "ADMIN" | "MEMBER" | "GUEST";
 
-export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "TASK_NEW_COMMENT" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "ATTACHMENT_ADDED" | "ATTACHMENT_DELETED" | "TASK_PROJECT_ASSIGNMENT_UPDATE" | "TASK_MILESTONE_ASSIGNMENT_UPDATE" | "TASK_BOARD_ENTRY_INIT" | "TASK_BOARD_ENTRY_REMOVED" | "TASK_BOARD_ENTRY_ORDER_CHANGE";
+export type WorkspaceActivityType = "MEMBER_JOIN" | "MEMBER_LEFT" | "MEMBER_REMOVED" | "MEMBER_REQUESTED_ACCESS" | "TASK_INITIALIZED" | "TASK_CLOSED" | "EDIT_TASK_TITLE" | "EDIT_TASK_DESC" | "TASK_UPDATE_TOPIC" | "TASK_UPDATE_WORKFLOW_STATUS" | "TASK_CHANGE_ASSIGNEE" | "TASK_CHANGE_ASSIGNED_DATE" | "TASK_CHANGE_DUE_DATE" | "TASK_CHANGE_COLLABORATOR_LIST" | "TASK_NEW_COMMENT" | "RELATION_INITIALIZED" | "RELATION_REMOVED" | "CHECKLIST_INITIALIZED" | "CHECKLIST_REMOVED" | "CHECKLIST_TITLE_CHANGED" | "CHECKLIST_ITEM_CHECKED_STATUS_CHANGED" | "CHECKLIST_ITEM_LABEL_CHANGED" | "CHECKLIST_ITEM_REMOVED" | "CHECKLIST_ITEM_INITIALIZED" | "ATTACHMENT_ADDED" | "ATTACHMENT_DELETED" | "TASK_PROJECT_ASSIGNMENT_UPDATE" | "TASK_MILESTONE_ASSIGNMENT_UPDATE" | "TASK_BOARD_ENTRY_INIT" | "TASK_BOARD_ENTRY_REMOVED" | "TASK_BOARD_ENTRY_ORDER_CHANGE";
 
 export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 

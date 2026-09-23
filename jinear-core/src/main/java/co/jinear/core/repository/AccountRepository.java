@@ -9,11 +9,14 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AccountRepository extends JpaRepository<Account, String> {
 
     Optional<Account> findByAccountIdAndPassiveIdIsNull(String accountId);
+
+    List<Account> findAllByAccountIdIsInAndPassiveIdIsNull(List<String> accountIds);
 
     @Query("from Account acc where acc.email = :email and acc.ghost= false and acc.passiveId is null")
     Optional<Account> findByEmailAndPassiveIdIsNull(@Param("email") String email);

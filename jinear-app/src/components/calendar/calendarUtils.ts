@@ -5,7 +5,9 @@ import {tryCatch} from "@/util/tryCatch";
 
 import {
     addDays,
+    addMilliseconds,
     addMinutes,
+    differenceInMilliseconds,
     differenceInMinutes,
     eachDayOfInterval,
     endOfDay,
@@ -17,7 +19,8 @@ import {
     isSameDay,
     parse,
     startOfDay,
-    startOfWeek
+    startOfWeek,
+    subMinutes
 } from "date-fns";
 
 const logger = Logger("calendar-utils");
@@ -473,6 +476,27 @@ export const convertTaskToCell = (event: CalendarEventDto, day: Date, minuteInPx
     const left = 0; //10
     logger.log({minuteInPx});
     return {event, startTime, endTime, top, height, width, left};
+};
+
+export interface IDraggedCellDates {
+    assignedDate?: Date;
+    dueDate?: Date;
+}
+
+export const calculateDraggedCellDates = (
+    cell: ICalendarDayRowCell,
+    dropSlot: Date,
+    grabOffsetMinutes: number,
+    slotSizeInMinutes: number
+): IDraggedCellDates => {
+    const snappedGrabOffsetMinutes = Math.floor(grabOffsetMinutes / slotSizeInMinutes) * slotSizeInMinutes;
+    const nextVisibleStartTime = subMinutes(dropSlot, snappedGrabOffsetMinutes);
+    const shiftInMs = differenceInMilliseconds(nextVisibleStartTime, cell.startTime);
+    const event = cell.event;
+    return {
+        assignedDate: event?.assignedDate ? addMilliseconds(new Date(event.assignedDate), shiftInMs) : undefined,
+        dueDate: event?.dueDate ? addMilliseconds(new Date(event.dueDate), shiftInMs) : undefined
+    };
 };
 
 export const calculateIntersectionsAndModifyLeft = (dayCells: ICalendarDayRowCell[], STEP_SIZE = 30) => {

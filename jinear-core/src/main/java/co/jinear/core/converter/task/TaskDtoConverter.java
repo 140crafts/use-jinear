@@ -18,7 +18,8 @@ import org.mapstruct.Mapping;
                 TeamDtoConverter.class,
                 AccessibleMediaDtoConverter.class,
                 ProjectDtoConverter.class,
-                PlainTaskBoardEntryDtoConverter.class
+                PlainTaskBoardEntryDtoConverter.class,
+                TaskCollaboratorDtoConverter.class
         })
 public interface TaskDtoConverter {
 

@@ -29,4 +29,7 @@ public class McpListCalendarEventsInput extends McpWorkspaceScopedInput {
 
     @McpField("Restrict to these calendars.")
     private List<String> calendarIds;
+
+    @McpField("Restrict dated tasks to those that carry every one of these account ids as a collaborator, from list_workspace_members. Events synced from Google Calendar are not affected.")
+    private List<String> collaboratorIds;
 }

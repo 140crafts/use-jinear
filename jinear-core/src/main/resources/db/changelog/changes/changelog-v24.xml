@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="jin-571-create-task-collaborator">
+        <createTable tableName="task_collaborator">
+            <column name="task_collaborator_id" type="char(26)">
+                <constraints nullable="false" primaryKey="true" unique="true"/>
+            </column>
+            <column name="idate" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="udate" type="datetime"/>
+            <column name="passive_id" type="char(26)"/>
+            <column name="task_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="char(26)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="task_collaborator" indexName="idx_task_collaborator_task_id">
+            <column name="task_id"/>
+        </createIndex>
+        <createIndex tableName="task_collaborator" indexName="idx_task_collaborator_account_id">
+            <column name="account_id"/>
+        </createIndex>
+        <rollback>
+            <dropTable tableName="task_collaborator"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

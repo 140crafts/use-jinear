@@ -67,4 +67,6 @@ public class TaskDto extends BaseDto {
     private ProjectDto project;
     @Nullable
     private MilestoneDto milestone;
+    @Nullable
+    private Set<TaskCollaboratorDto> taskCollaborators;
 }

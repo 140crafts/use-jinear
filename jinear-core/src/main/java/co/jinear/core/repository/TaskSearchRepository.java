@@ -20,7 +20,6 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -39,13 +38,13 @@ public class TaskSearchRepository {
         CriteriaQuery<Task> taskCriteriaQuery = criteriaBuilder.createQuery(Task.class);
         Root<Task> taskRoot = taskCriteriaQuery.from(Task.class);
 
-        Predicate searchPredicate = createSearchPredicate(taskSearchFilterVo, criteriaBuilder, taskRoot);
+        Predicate searchPredicate = createSearchPredicate(taskSearchFilterVo, criteriaBuilder, taskCriteriaQuery, taskRoot);
 
         CriteriaQuery<Long> countQuery = criteriaBuilder.createQuery(Long.class);
         Root<Task> countRoot = countQuery.from(Task.class);
         countQuery.select(criteriaBuilder.countDistinct(countRoot));
 
-        Predicate countPredicate = createSearchPredicate(taskSearchFilterVo, criteriaBuilder, countRoot);
+        Predicate countPredicate = createSearchPredicate(taskSearchFilterVo, criteriaBuilder, countQuery, countRoot);
 
         return executeAndRetrievePageableResults(
                 criteriaBuilder,
@@ -58,9 +57,9 @@ public class TaskSearchRepository {
                 PageRequest.of(taskSearchFilterVo.getPage(), taskSearchFilterVo.getSize()));
     }
 
-    private Predicate createSearchPredicate(TaskSearchFilterVo taskSearchFilterVo, CriteriaBuilder criteriaBuilder, Root<Task> taskRoot) {
-        Predicate predicateForAllTeamMembers = retrieveFilterPredicateListForTeamsWithTaskVisibilityVisibleToAllTeamMembers(taskSearchFilterVo, criteriaBuilder, taskRoot);
-        Predicate predicateForOwnerAssigneeAndAdmins = retrieveFilterPredicateListForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins(taskSearchFilterVo, criteriaBuilder, taskRoot);
+    private Predicate createSearchPredicate(TaskSearchFilterVo taskSearchFilterVo, CriteriaBuilder criteriaBuilder, AbstractQuery<?> abstractQuery, Root<Task> taskRoot) {
+        Predicate predicateForAllTeamMembers = retrieveFilterPredicateListForTeamsWithTaskVisibilityVisibleToAllTeamMembers(taskSearchFilterVo, criteriaBuilder, abstractQuery, taskRoot);
+        Predicate predicateForOwnerAssigneeAndAdmins = retrieveFilterPredicateListForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins(taskSearchFilterVo, criteriaBuilder, abstractQuery, taskRoot);
 
         if (Objects.nonNull(predicateForAllTeamMembers) && Objects.nonNull(predicateForOwnerAssigneeAndAdmins)) {
             return criteriaBuilder.or(predicateForAllTeamMembers, predicateForOwnerAssigneeAndAdmins);
@@ -71,7 +70,7 @@ public class TaskSearchRepository {
         }
     }
 
-    private Predicate retrieveFilterPredicateListForTeamsWithTaskVisibilityVisibleToAllTeamMembers(TaskSearchFilterVo taskSearchFilterVo, CriteriaBuilder criteriaBuilder, Root<Task> taskRoot) {
+    private Predicate retrieveFilterPredicateListForTeamsWithTaskVisibilityVisibleToAllTeamMembers(TaskSearchFilterVo taskSearchFilterVo, CriteriaBuilder criteriaBuilder, AbstractQuery<?> abstractQuery, Root<Task> taskRoot) {
         List<Predicate> predicateList = Lists.newArrayList();
         Map<TeamTaskVisibilityType, List<TeamMemberDto>> teamMemberMap = taskSearchFilterVo.getTeamMemberMap();
         List<TeamMemberDto> teamMemberDtos = teamMemberMap.get(TeamTaskVisibilityType.VISIBLE_TO_ALL_TEAM_MEMBERS);
@@ -84,6 +83,7 @@ public class TaskSearchRepository {
             taskSearchCriteriaBuilder.addTopicIdList(taskSearchFilterVo.getTopicIds(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addOwnerIdList(taskSearchFilterVo.getOwnerIds(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addAssignedToList(taskSearchFilterVo.getAssigneeIds(), criteriaBuilder, taskRoot, predicateList);
+            taskSearchCriteriaBuilder.addCollaboratorIdList(taskSearchFilterVo.getCollaboratorIds(), criteriaBuilder, abstractQuery, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addWorkflowStatusIdList(taskSearchFilterVo.getWorkflowStatusIdList(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addWorkflowStateGroupList(taskSearchFilterVo.getWorkflowStateGroups(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addDatePredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, predicateList);
@@ -95,7 +95,7 @@ public class TaskSearchRepository {
         return null;
     }
 
-    private Predicate retrieveFilterPredicateListForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins(TaskSearchFilterVo taskSearchFilterVo, CriteriaBuilder criteriaBuilder, Root<Task> taskRoot) {
+    private Predicate retrieveFilterPredicateListForTeamsWithTaskVisibilityOwnerAssigneeAndAdmins(TaskSearchFilterVo taskSearchFilterVo, CriteriaBuilder criteriaBuilder, AbstractQuery<?> abstractQuery, Root<Task> taskRoot) {
         List<Predicate> mainPredicateList = Lists.newArrayList();
 
         Map<TeamTaskVisibilityType, List<TeamMemberDto>> teamMemberMap = taskSearchFilterVo.getTeamMemberMap();
@@ -148,6 +148,7 @@ public class TaskSearchRepository {
                 taskSearchCriteriaBuilder.addTeamIdList(List.of(teamId), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addTeamIdNotInList(taskSearchFilterVo.getExcludingTeamIdList(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addTopicIdList(taskSearchFilterVo.getTopicIds(), criteriaBuilder, taskRoot, teamPredicateList);
+                taskSearchCriteriaBuilder.addCollaboratorIdList(taskSearchFilterVo.getCollaboratorIds(), criteriaBuilder, abstractQuery, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addWorkflowStatusIdList(taskSearchFilterVo.getWorkflowStatusIdList(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addWorkflowStateGroupList(taskSearchFilterVo.getWorkflowStateGroups(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addDatePredicates(taskSearchFilterVo.getTimespanStart(), taskSearchFilterVo.getTimespanEnd(), criteriaBuilder, taskRoot, teamPredicateList);
@@ -185,7 +186,7 @@ public class TaskSearchRepository {
             Root<Task> tupleRoot = tupleQuery.from(Task.class);
 
             // Re-create the predicate for the new root and set distinct
-            Predicate tupleSearchPredicate = createSearchPredicate(taskSearchFilterVo, criteriaBuilder, tupleRoot);
+            Predicate tupleSearchPredicate = createSearchPredicate(taskSearchFilterVo, criteriaBuilder, tupleQuery, tupleRoot);
             Assert.notNull(tupleSearchPredicate, "Search predicate cannot be null for tuple query");
             tupleQuery.where(tupleSearchPredicate).distinct(true);
 

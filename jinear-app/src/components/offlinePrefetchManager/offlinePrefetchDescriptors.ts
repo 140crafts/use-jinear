@@ -61,6 +61,9 @@ const calendarEntries = (workspaceId: string, tier: DeviceTier): PrefetchEntry[]
         entry(calendarEventApi.endpoints.filterCalendarEvents, {
             workspaceId,
             taskboardIds: [],
+            assigneeIds: [],
+            collaboratorIds: [],
+            workflowStatusIdList: [],
             timespanStart: periodStart,
             timespanEnd: periodEnd
         })
@@ -131,6 +134,7 @@ export const buildTeamEntries = ({workspaceId, teams, tier = "high"}: {
             topicIds: null,
             ownerIds: null,
             assigneeIds: null,
+            collaboratorIds: null,
             workflowStatusIdList: null,
             workflowStateGroups: null,
             timespanStart: null,

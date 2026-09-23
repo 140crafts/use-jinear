@@ -36,8 +36,8 @@ public class ListTasksTool implements McpTool {
         return McpToolDefinitionBuilder
                 .named("list_tasks")
                 .title("List tasks with filters")
-                .description("Lists tasks in a workspace, optionally narrowed by team, assignee, workflow status, "
-                             + "state group or a date range. "
+                .description("Lists tasks in a workspace, optionally narrowed by team, assignee, collaborator, "
+                             + "workflow status, state group or a date range. "
                              + "This is the tool for questions like what is in progress, what is assigned to someone, "
                              + "or what is due this week.")
                 .input(McpSchemaGenerator.forInput(McpListTasksInput.class, mcpProperties.getMaxPageSize()))
@@ -56,6 +56,7 @@ public class ListTasksTool implements McpTool {
         request.setSize(args.pageSize(mcpProperties.getMaxPageSize()));
         request.setTeamIdList(nullIfEmpty(input.getTeamIds()));
         request.setAssigneeIds(nullIfEmpty(input.getAssigneeIds()));
+        request.setCollaboratorIds(nullIfEmpty(input.getCollaboratorIds()));
         request.setWorkflowStatusIdList(nullIfEmpty(input.getWorkflowStatusIds()));
         request.setWorkflowStateGroups(nullIfEmpty(input.getStateGroups()));
         request.setTimespanStart(input.getFrom());

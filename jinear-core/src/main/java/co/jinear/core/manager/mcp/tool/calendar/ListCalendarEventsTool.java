@@ -35,7 +35,8 @@ public class ListCalendarEventsTool implements McpTool {
                 .title("List calendar events in a date range")
                 .description("Lists everything on a workspace's calendar between two instants: tasks that carry dates "
                              + "and events synced from an attached Google Calendar. "
-                             + "Use it to answer what is happening this week or when someone is busy.")
+                             + "Use it to answer what is happening this week or when someone is busy. "
+                             + "A collaborator filter narrows the dated tasks only.")
                 .input(McpSchemaGenerator.forInput(McpListCalendarEventsInput.class))
                 .output(McpSchemaGenerator.list(McpCalendarEventView.class, "Events and dated tasks in the window."))
                 .readOnly()
@@ -56,6 +57,7 @@ public class ListCalendarEventsTool implements McpTool {
         request.setTimespanEnd(input.getTo());
         request.setTeamIdList(nullIfEmpty(input.getTeamIds()));
         request.setCalendarIdList(nullIfEmpty(input.getCalendarIds()));
+        request.setCollaboratorIds(nullIfEmpty(input.getCollaboratorIds()));
         context.setWorkspaceId(input.getWorkspaceId());
         List<CalendarEventDto> events = calendarEventManager.filterCalendarEvents(request).getCalendarEventDtoList();
         return McpToolResult.of(McpListView.of(events, mcpViewConverter::calendarEvent));

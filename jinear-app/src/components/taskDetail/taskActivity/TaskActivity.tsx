@@ -11,6 +11,7 @@ import styles from "./TaskActivity.module.scss";
 import AssignedDateChangeDiffInfo from "./assignedDateChangeDiffInfo/AssignedDateChangeDiffInfo";
 import AssigneeChangeDiffInfo from "./assigneeChangeDiffInfo/AssigneeChangeDiffInfo";
 import BasicTextDiff from "./basicTextDiff/BasicTextDiff";
+import CollaboratorsChangeDiffInfo from "./collaboratorsChangeDiffInfo/CollaboratorsChangeDiffInfo";
 import DescDiffInfo from "./descDiffInfo/DescDiffInfo";
 import DueDateChangeDiffInfo from "./dueDateChangeDiffInfo/DueDateChangeDiffInfo";
 import TaskRelationChangedDiffInfo from "./taskRelationChangedDiffInfo/TaskRelationChangedDiffInfo";
@@ -31,6 +32,7 @@ const TASK_RELATED_ACTIONS_WITH_DIFF = [
     "TASK_CHANGE_ASSIGNEE",
     "TASK_CHANGE_ASSIGNED_DATE",
     "TASK_CHANGE_DUE_DATE",
+    "TASK_CHANGE_COLLABORATOR_LIST",
     "RELATION_INITIALIZED",
     "RELATION_REMOVED",
     "CHECKLIST_TITLE_CHANGED",
@@ -108,6 +110,8 @@ const TaskActivity: React.FC<TaskActivityProps> = ({activity}) => {
                         {activity.type == "TASK_CHANGE_ASSIGNED_DATE" &&
                             <AssignedDateChangeDiffInfo activity={activity}/>}
                         {activity.type == "TASK_CHANGE_DUE_DATE" && <DueDateChangeDiffInfo activity={activity}/>}
+                        {activity.type == "TASK_CHANGE_COLLABORATOR_LIST" &&
+                            <CollaboratorsChangeDiffInfo activity={activity}/>}
                         {(activity.type == "RELATION_INITIALIZED" || activity.type == "RELATION_REMOVED") && (
                             <TaskRelationChangedDiffInfo activity={activity}/>
                         )}

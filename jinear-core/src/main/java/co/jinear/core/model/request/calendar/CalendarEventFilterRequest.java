@@ -30,4 +30,10 @@ public class CalendarEventFilterRequest extends BaseRequest {
     private ZonedDateTime timespanStart;
     @NotNull
     private ZonedDateTime timespanEnd;
+    @Nullable
+    private List<String> assigneeIds;
+    @Nullable
+    private List<String> collaboratorIds;
+    @Nullable
+    private List<String> workflowStatusIdList;
 }

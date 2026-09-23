@@ -4,6 +4,7 @@ import co.jinear.core.model.dto.media.AccessibleMediaDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.ChecklistDto;
 import co.jinear.core.model.dto.task.TaskBoardEntryDto;
+import co.jinear.core.model.dto.task.TaskCollaboratorDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.enumtype.workspace.WorkspaceActivityType;
 import co.jinear.core.model.vo.task.NotifyTaskSubscribersVo;
@@ -13,15 +14,17 @@ import co.jinear.core.service.workspace.activity.WorkspaceActivityService;
 import co.jinear.core.system.util.ZonedDateHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TaskActivityService {
+
+    private static final String COMMA = ",";
 
     private final WorkspaceActivityService workspaceActivityService;
     private final TaskReachOutService taskReachOutService;
@@ -85,6 +88,31 @@ public class TaskActivityService {
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
         Optional.of(before).map(TaskDto::getAssignedTo).ifPresent(vo::setOldState);
         Optional.of(after).map(TaskDto::getAssignedTo).ifPresent(vo::setNewState);
+        vo.setType(type);
+        workspaceActivityService.createWorkspaceActivity(vo);
+        notifyTaskSubscribers(after, type, performingAccountSessionId);
+    }
+
+    public void initializeCollaboratorUpdateActivity(String performedBy, String performingAccountSessionId, TaskDto before, TaskDto after) {
+        WorkspaceActivityType type = WorkspaceActivityType.TASK_CHANGE_COLLABORATOR_LIST;
+        WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, after);
+        List<String> taskCollaboratorsBefore = Optional.of(before)
+                .map(TaskDto::getTaskCollaborators)
+                .orElseGet(Collections::emptySet)
+                .stream()
+                .map(TaskCollaboratorDto::getAccountId)
+                .toList();
+        List<String> taskCollaboratorsAfter = Optional.of(after)
+                .map(TaskDto::getTaskCollaborators)
+                .orElseGet(Collections::emptySet)
+                .stream()
+                .map(TaskCollaboratorDto::getAccountId)
+                .toList();
+
+        String joinedCollaboratorsBefore = StringUtils.join(taskCollaboratorsBefore, COMMA);
+        String joinedCollaboratorsAfter = StringUtils.join(taskCollaboratorsAfter, COMMA);
+        vo.setOldState(joinedCollaboratorsBefore);
+        vo.setNewState(joinedCollaboratorsAfter);
         vo.setType(type);
         workspaceActivityService.createWorkspaceActivity(vo);
         notifyTaskSubscribers(after, type, performingAccountSessionId);
@@ -197,7 +225,7 @@ public class TaskActivityService {
         notifyTaskSubscribers(taskDto, type, performingAccountSessionId);
     }
 
-    public void initializeNewCommentActivity(String performedBy, String performingAccountSessionId,String commentId, TaskDto before) {
+    public void initializeNewCommentActivity(String performedBy, String performingAccountSessionId, String commentId, TaskDto before) {
         WorkspaceActivityType type = WorkspaceActivityType.TASK_NEW_COMMENT;
         WorkspaceActivityCreateVo vo = buildWithCommonValues(performedBy, before);
         vo.setNewState(commentId);

@@ -15,6 +15,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import java.util.List;
+
 @Getter
 @Setter
 public class WorkspaceActivityDto extends BaseDto {
@@ -81,4 +83,8 @@ public class WorkspaceActivityDto extends BaseDto {
     private MilestoneDto oldMilestoneDto;
     @Nullable
     private MilestoneDto newMilestoneDto;
+    @Nullable
+    private List<PlainAccountProfileDto> oldCollaborators;
+    @Nullable
+    private List<PlainAccountProfileDto> newCollaborators;
 }
