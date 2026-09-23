@@ -180,9 +180,9 @@ const WorkspaceMemberPickerModal: React.FC<WorkspaceMemberPickerModalProps> = ({
                     <Button heightVariant={ButtonHeight.short} onClick={close}>
                         {t("workspaceMemberPickerModalCancelButton")}
                     </Button>
-                    <Button heightVariant={ButtonHeight.short} onClick={deselectAndClose}>
-                        {t("workspaceMemberPickerModalDeselectButton")}
-                    </Button>
+                    {/*<Button heightVariant={ButtonHeight.short} onClick={deselectAndClose}>*/}
+                    {/*    {t("workspaceMemberPickerModalDeselectButton")}*/}
+                    {/*</Button>*/}
                     {multiple && <Button
                         heightVariant={ButtonHeight.short}
                         variant={ButtonVariants.contrast}
