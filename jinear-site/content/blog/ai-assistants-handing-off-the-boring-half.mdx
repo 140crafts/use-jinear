@@ -2,6 +2,7 @@
 title: "AI Assistants. Handing Off the Boring Half."
 description: "You can now connect Claude or ChatGPT to Jinear and let it do the typing: turning a conversation into tasks, telling you what is actually due this week, catching you up after a week off. It works with your account, and only on what you allow."
 pubDate: "2026-09-16"
+updatedDate: "2026-09-18"
 tags: ["changelog", "mcp"]
 author: "Çağdaş Tunca"
 ---
@@ -111,6 +112,72 @@ things I care about personally, on a schedule, the kind of looking up I would
 otherwise keep forgetting to do, and files whatever it finds into Jinear as tasks on a
 board I keep for exactly that. I never go and check. The findings turn up where the
 rest of my work already is, and I deal with them when I am there anyway.
+
+## A scheduled job, written out
+
+That one is personal, so here is a work example in full, because "put it on a timer"
+is easy to say and everything useful is in the details.
+
+I submitted Jinear to awesome-selfhosted, which means waiting on a pull request I do
+not control. The task sat on my board collecting pushed dates, and I kept opening
+GitHub to see whether anything had happened. Now it runs every morning without me.
+
+```text
+Daily job: has the awesome-selfhosted PR been merged yet?
+
+Fixed values (do not search, use these):
+- workspaceUsername: <my workspace handle>
+- Task jin-559 "Add Jinear to awesome-selfhosted"
+  taskId: <task id>
+- Workflow status ids, from list_workflow_statuses for the jin team:
+  Completed: <status id>
+  Cancelled: <status id>
+- PR state sources, in order:
+  1. https://img.shields.io/github/pulls/detail/state/awesome-selfhosted/awesome-selfhosted-data/2868.json
+  2. https://github.com/awesome-selfhosted/awesome-selfhosted-data/pull/2868
+- Time zone: Europe/Istanbul
+
+Steps:
+1. Read the task with get_task (workspaceUsername above, teamTag: jin,
+   taskNumber: 559). If it is already Completed or Cancelled, do nothing,
+   say "already closed" and stop.
+2. If it is open, then before checking the PR and whatever that check
+   returns, use update_task to set startDate and dueDate both to today at
+   00:00 Europe/Istanbul. Jinear stores the two as a pair, so send both.
+3. Work out the PR state. Fetch source 1; its "message" field is "open",
+   "merged" or "closed". If that fails, try source 2. If neither answers,
+   leave the status alone and go to step 4.
+   - merged: set_task_status to Completed, then add_task_comment with a
+     dated "PR merged".
+   - closed: set_task_status to Cancelled, then add_task_comment with a
+     dated "PR closed without merging".
+   - open: do nothing else.
+4. Report one line: whether the dates moved, what the PR state was (or why
+   it could not be determined), and what changed in the status.
+```
+
+Four details in there do the real work, and none of them are about pull requests:
+
+- **The ids are pinned and searching is banned.** A run that starts by looking things
+  up is slower, costs more and can settle on the wrong task. Look the ids up once by
+  hand, paste them in, and every run after that is three calls.
+- **It reads before it writes.** If the task is already closed it stops there. That
+  makes the job safe to leave running forever: on a finished task it does nothing,
+  every morning, quietly.
+- **The unconditional half is separate from the conditional half.** The dates move
+  whatever the pull request is doing. Only the status waits on an answer.
+- **It is told what to do when it learns nothing.** If neither source responds, leave
+  the status alone. Without that line an assistant eventually guesses, and guessing is
+  how a scheduled job makes a mess while nobody is watching.
+
+Two notes on the Jinear side. `startDate` and `dueDate` have to be sent together,
+because Jinear stores them as a pair, which is why the prompt always sets both. And
+the fetch in step 3 is the assistant's own web tool rather than one of Jinear's:
+Jinear's tools only ever touch Jinear.
+
+That shape works for anything you currently check by hand on a schedule. Something
+outside decides, Jinear records the decision, and you find the result where the rest
+of your work already is.
 
 ---
 
