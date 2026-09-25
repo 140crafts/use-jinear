@@ -30,7 +30,8 @@
   margin-top: 18px;
   max-width: 54ch;
 
-  a {
+  a,
+  strong {
     color: var(--ink);
   }
 }
@@ -347,9 +348,4 @@
     border-color: var(--ink);
     background: #fff;
   }
-}
-
-.btnSm {
-  padding: 8px 14px;
-  font-size: 14px;
 }

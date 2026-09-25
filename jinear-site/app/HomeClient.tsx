@@ -3,12 +3,14 @@ import Link from "next/link";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { APP_URL, GITHUB_URL, GITLAB_URL, SELF_HOSTING_DOCS_URL } from "@/utils/constants";
+import RotatingWord from "@/components/homepage/rotatingWord/RotatingWord";
 import PostCard from "@/components/blog/postCard/PostCard";
 import { getAllPosts } from "@/lib/posts";
 import styles from "./index.module.scss";
 
 const IMG_BASE = "https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v3";
 const LATEST_POST_COUNT = 3;
+const HERO_WORDS = ["task manager", "calendar", "notes app", "file storage"];
 
 /** A screenshot inside Design A's browser-chrome frame, with a title and caption. */
 function Shot({
@@ -51,9 +53,16 @@ export default function HomeClient() {
       <div className={styles.wrap}>
         <BareNav />
 
-        <h1 className={styles.hero}>An open-source project manager you can actually own.</h1>
+        <h1 className={styles.hero}>
+          Open-source <RotatingWord words={HERO_WORDS} /> you can actually own.
+        </h1>
         <p className={styles.lede}>
-          Jinear keeps tasks, boards, a calendar, notes and files in one place. Use the hosted version, or{" "}
+          Jinear keeps tasks, boards, a calendar, notes and files in one place, for{" "}
+          <strong>you and your AI agents</strong> through{" "}
+          <Link className={styles.linkU} href="/mcp">
+            MCP
+          </Link>
+          . Use the hosted version, or{" "}
           <a className={styles.linkU} href={SELF_HOSTING_DOCS_URL} target="_blank" rel="noreferrer">
             run it yourself
           </a>{" "}
@@ -65,7 +74,7 @@ export default function HomeClient() {
             Start for free
           </a>
           <a
-            className={`${styles.btn} ${styles.btnGhost} ${styles.btnSm}`}
+            className={`${styles.btn} ${styles.btnGhost}`}
             href={SELF_HOSTING_DOCS_URL}
             target="_blank"
             rel="noreferrer"
