@@ -1,0 +1,29 @@
+// Own line, so a longer or shorter word never reflows the rest of the headline.
+.slot {
+  display: block;
+  overflow: hidden;
+  color: var(--acc);
+}
+
+// Remounted on every word change (keyed), which replays the slide-in.
+.word {
+  display: inline-block;
+  animation: slideIn 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(60%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .word {
+    animation: none;
+  }
+}
