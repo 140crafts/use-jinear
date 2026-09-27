@@ -1,6 +1,6 @@
 import Button, { ButtonHeight, ButtonVariants } from "@/components/button";
 import ProfilePhoto from "@/components/profilePhoto";
-import ThemeToggle from "@/components/themeToggle/ThemeToggle";
+import ThemePickerButton from "@/components/themePickerButton/ThemePickerButton";
 import { selectCurrentAccount } from "@/store/slice/accountSlice";
 import { popAccountProfileModal, popFeedbackModal } from "@/store/slice/modalSlice";
 import { useAppDispatch, useTypedSelector } from "@/store";
@@ -39,7 +39,7 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
       {/*    </Button>*/}
       {/*  </PureClientOnly>}*/}
 
-      <ThemeToggle
+      <ThemePickerButton
         variant={ButtonVariants.hoverFilled}
         buttonStyle={styles.iconButton}
       />

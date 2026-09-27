@@ -3,19 +3,30 @@
     --c-background: #fdfffc;
     --c-text-color: #16171a;
     --c-primary: #fdfffc;
-    --c-primary-op05: #fdfffc80;
     --c-primary-shade-0: #f5f5f5;
-    --c-primary-shade-0-op05: #f5f5f580;
     --c-primary-shade-1: #e5e5e5;
-    --c-primary-shade-1-op05: #e5e5e580;
-    --c-primary-shade-1-op025: #e5e5e540;
     --c-secondary: #16171a;
-    --c-secondary-shade-0-op05: #1f212480;
-    --c-secondary-shade-0-op025: #1f212440;
     --c-secondary-shade-0: #1f2124;
     --c-secondary-shade-1: #393e41;
     --c-link-color: #122cc2;
     --c-link-color-inverted: #5fc9f8;
+    /* derived from the base colors above, so a theme only sets the base colors */
+    --c-primary-op05: rgb(from var(--c-primary) r g b / 50%);
+    --c-primary-shade-0-op05: rgb(from var(--c-primary-shade-0) r g b / 50%);
+    --c-primary-shade-1-op05: rgb(from var(--c-primary-shade-1) r g b / 50%);
+    --c-primary-shade-1-op025: rgb(from var(--c-primary-shade-1) r g b / 25%);
+    --c-secondary-shade-0-op05: rgb(from var(--c-secondary-shade-0) r g b / 50%);
+    --c-secondary-shade-0-op025: rgb(from var(--c-secondary-shade-0) r g b / 25%);
+    --c-secondary-shade-1-op05: rgb(from var(--c-secondary-shade-1) r g b / 50%);
+    /* theme accent: brand orange in the classic themes */
+    --c-accent: var(--c-JINEAR_ORANGE);
+    --c-accent-light: hsl(from var(--c-accent) h s calc(l + 7));
+    --c-accent-light-x2: hsl(from var(--c-accent) h s calc(l + 17));
+    --c-on-accent: var(--c-BABY_POWDER);
+    --c-on-row-selection: var(--c-BABY_POWDER);
+    --c-caret: var(--c-text-color);
+    --caret-shape: auto;
+    --font-ui: "Inter", sans-serif;
     /*  */
     --c-nav-logo-color: #16171a;
     --c-nav-logo-shadow: #e5e5e5;
@@ -143,18 +154,11 @@
     --c-background: #16171a;
     --c-text-color: #fdfffc;
     --c-primary: #16171a;
-    --c-primary-op05: #16171a80;
     --c-primary-shade-0: #1f2124;
-    --c-primary-shade-0-op05: #1f212480;
     --c-primary-shade-1: #393e41;
-    --c-primary-shade-1-op05: #393e4180;
-    --c-primary-shade-1-op025: #393e4140;
     --c-secondary: #fdfffc;
     --c-secondary-shade-0: #f5f5f5;
-    --c-secondary-shade-0-op05: #f5f5f580;
-    --c-secondary-shade-0-op025: #f5f5f540;
     --c-secondary-shade-1: #e5e5e5;
-    --c-secondary-shade-1-op05: #e5e5e580;
     --c-link-color: #5fc9f8;
     --c-link-color-inverted: #122cc2;
     --c-nav-logo-color: #ffffff;

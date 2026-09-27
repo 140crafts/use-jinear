@@ -1,0 +1,100 @@
+.body {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+.searchInput {
+    flex: 1;
+    min-width: 0;
+}
+
+.themeList {
+    display: flex;
+    flex-direction: column;
+    height: min(55vh, 26rem);
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    overflow-y: scroll;
+}
+
+.originTitle {
+    padding: 0.75rem 0.5rem 0.25rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-secondary-shade-1);
+}
+
+.themeRow {
+    justify-content: flex-start !important;
+    gap: 0.75rem;
+    text-align: left;
+}
+
+.activeThemeRow {
+    background-color: var(--c-primary-shade-1) !important;
+}
+
+.themeName {
+    flex: 1;
+}
+
+.currentIcon {
+    color: var(--c-accent);
+}
+
+.emptyState {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4rem;
+    color: var(--c-secondary-shade-1);
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem 1rem 1rem;
+    border-top: 1px solid var(--c-primary-shade-1);
+}
+
+.selectRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    font-weight: 600;
+}
+
+.hint {
+    color: var(--c-secondary-shade-1);
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .searchBar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .themeList {
+        flex: 1;
+        height: unset;
+    }
+}

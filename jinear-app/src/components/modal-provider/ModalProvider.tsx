@@ -10,6 +10,7 @@ import DeviceOfflineModal from "../modal/deviceOfflineModal/DeviceOfflineModal";
 
 
 import InstallPwaInstructionsModal from "@/components/modal/installPwaInstructionsModal/InstallPwaInstructionsModal";
+import ThemePickerModal from "@/components/modal/themePickerModal/ThemePickerModal";
 
 interface ModalProviderProps {
 }
@@ -24,6 +25,7 @@ const globalModals: any = (
         <NotFoundModal/>
         <DeviceOfflineModal/>
         <LoadingModal/>
+        <ThemePickerModal/>
     </>
 );
 

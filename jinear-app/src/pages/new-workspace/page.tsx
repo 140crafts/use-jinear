@@ -1,5 +1,5 @@
 import NewWorkspaceForm from "@/components/form/newWorkspaceForm/NewWorkspaceForm";
-import ThemeToggle from "@/components/themeToggle/ThemeToggle";
+import ThemePickerButton from "@/components/themePickerButton/ThemePickerButton";
 import {ROUTE_IF_LOGGED_IN} from "@/util/constants";
 import useTranslation from "@/locales/useTranslation";
 import React from "react";
@@ -21,7 +21,7 @@ const NewWorkspaceScreen: React.FC<NewWorkspaceScreenProps> = ({}) => {
             <div className={styles.headerContainer}>
                 <div className={styles.header}>{t("newWorkspaceScreenTitle")}</div>
                 <div className="flex-1"/>
-                <ThemeToggle/>
+                <ThemePickerButton/>
             </div>
             <div className={styles.text}>{t("newWorkspaceScreenText")}</div>
             <div className={styles.subText}>{t("newWorkspaceScreenSubtext")}</div>

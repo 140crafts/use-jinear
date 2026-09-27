@@ -1,4 +1,9 @@
-import ThemeContext, {getTheme} from "@/store/context/themeContext";
+import ThemeContext from "@/store/context/themeContext";
+import {applyThemeSnapshot, buildThemeSnapshot, saveBootSnapshot} from "@/theme/applyTheme";
+import {findFont} from "@/theme/themeFonts";
+import {loadThemePreferences, saveThemePreferences} from "@/theme/themePreferences";
+import {findTheme, resolveTheme} from "@/theme/themeRegistry";
+import type {CaretShape, ThemePreferences} from "@/theme/themeTypes";
 import {submitThemeChangeWebviewEvent} from "@/util/webviewUtils";
 import React, {useContext, useEffect, useState} from "react";
 
@@ -6,34 +11,48 @@ interface ThemeProviderProps {
     children: React.ReactNode;
 }
 
-export function useTheme() {
-    const theme = useContext(ThemeContext);
-    return theme.theme;
-}
-
-export function useThemeToggle() {
-    const theme = useContext(ThemeContext);
-    return theme.toggleTheme;
+export function useThemeSettings() {
+    return useContext(ThemeContext);
 }
 
 const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
-    const [theme, setTheme] = useState(getTheme());
+    const [preferences, setPreferences] = useState<ThemePreferences>(loadThemePreferences);
+    const [previewThemeId, setPreviewThemeId] = useState<string | null>(null);
 
-    const toggleTheme = () => {
-        const next = theme == "dark" ? "light" : "dark";
-        setTheme(next);
-    };
+    const savedTheme = resolveTheme(preferences.themeId);
+    const theme = findTheme(previewThemeId) ?? savedTheme;
 
     useEffect(() => {
-        const $html = document.querySelector("html");
-        $html?.classList.remove("light");
-        $html?.classList.remove("dark");
-        $html?.classList.add(theme);
-        localStorage.setItem("THEME", theme);
-        submitThemeChangeWebviewEvent(theme as "dark" | "light");
-    }, [theme]);
+        applyThemeSnapshot(buildThemeSnapshot(theme, findFont(preferences.fontId), preferences.caretShape));
+    }, [theme, preferences.fontId, preferences.caretShape]);
 
-    return <ThemeContext.Provider value={{theme, toggleTheme}}>{children}</ThemeContext.Provider>;
+    useEffect(() => {
+        saveThemePreferences(preferences);
+        saveBootSnapshot(buildThemeSnapshot(savedTheme, findFont(preferences.fontId), preferences.caretShape));
+        submitThemeChangeWebviewEvent(savedTheme.appearance);
+    }, [preferences, savedTheme]);
+
+    const selectTheme = (themeId: string) => {
+        setPreviewThemeId(null);
+        setPreferences(current => ({...current, themeId}));
+    };
+
+    const setFontId = (fontId: string) => setPreferences(current => ({...current, fontId}));
+    const setCaretShape = (caretShape: CaretShape) => setPreferences(current => ({...current, caretShape}));
+
+    return (
+        <ThemeContext.Provider
+            value={{
+                theme,
+                preferences,
+                selectTheme,
+                previewTheme: setPreviewThemeId,
+                setFontId,
+                setCaretShape,
+            }}>
+            {children}
+        </ThemeContext.Provider>
+    );
 };
 
 export default ThemeProvider;

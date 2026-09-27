@@ -26,10 +26,16 @@ body {
   padding: 0;
   border: 0;
   font-size: 0.75rem;
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-ui);
   background-color: var(--c-background);
   color: var(--c-text-color);
+  caret-color: var(--c-caret);
+  caret-shape: var(--caret-shape);
   overscroll-behavior: none;
+}
+
+:root[data-theme-selection] ::selection {
+  background-color: var(--c-selection);
 }
 
 div::-webkit-scrollbar {
@@ -197,7 +203,7 @@ input,
 textarea {
   background: var(--c-primary-shade-0) !important;
   color: var(--c-text-color) !important;
-  caret-color: var(--c-text-color) !important;
+  caret-color: var(--c-caret) !important;
   border-color: transparent;
   border-width: 1px;
   border-radius: var(--border-radius);
@@ -243,7 +249,7 @@ textarea:not([resize="true"]) {
 select {
   background: var(--c-primary-shade-0) !important;
   color: var(--c-text-color) !important;
-  caret-color: var(--c-text-color) !important;
+  caret-color: var(--c-caret) !important;
   border-color: transparent;
   border-width: 1px;
   border-radius: var(--border-radius);
@@ -574,7 +580,7 @@ pre {
 /* .tiptap {
   background: var(--c-primary-shade-0) !important;
   color: var(--c-text-color) !important;
-  caret-color: var(--c-text-color) !important;
+  caret-color: var(--c-caret) !important;
   border-color: transparent;
   border-width: 1px;
   border-radius: var(--border-radius);

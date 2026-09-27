@@ -28,7 +28,7 @@
 
 .selected {
     background-color: var(--material-row-view-row-selection-color) !important;
-    color: var(--c-BABY_POWDER) !important;
+    color: var(--c-on-row-selection) !important;
 }
 
 .selected:hover {
@@ -37,7 +37,7 @@
 
 .dragOver {
     background-color: hsl(from var(--material-row-view-row-selection-color) h s calc(l * 1.5)) !important;
-    color: var(--c-BABY_POWDER) !important;
+    color: var(--c-on-row-selection) !important;
 }
 
 .name {
@@ -47,7 +47,7 @@
 
 .nameSelected {
     word-break: break-all;
-    color: var(--c-BABY_POWDER) !important;
+    color: var(--c-on-row-selection) !important;
 }
 
 .icon {
@@ -77,7 +77,7 @@
 }
 
 .moreButtonSelected {
-    color: var(--c-BABY_POWDER) !important;
+    color: var(--c-on-row-selection) !important;
 }
 
 .moreButtonSelected:hover {

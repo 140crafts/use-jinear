@@ -83,7 +83,7 @@
   right: -2px;
   bottom: -2px;
   width: 4px;
-  background-color: var(--c-JINEAR_ORANGE);
+  background-color: var(--c-accent);
   pointer-events: none;
 }
 
@@ -155,8 +155,8 @@
 }
 
 .tiptap ul[data-type="taskList"] > li > label input[type="checkbox"]:checked + span {
-  border-color: var(--c-JINEAR_ORANGE);
-  background-color: var(--c-JINEAR_ORANGE);
+  border-color: var(--c-accent);
+  background-color: var(--c-accent);
   background-image: var(--checkbox-tick-svg);
   background-repeat: no-repeat;
   background-position: center;
@@ -165,7 +165,7 @@
 
 /* The real control is invisible now, so focus has to be drawn on the span instead. */
 .tiptap ul[data-type="taskList"] > li > label input[type="checkbox"]:focus-visible + span {
-  outline: 2px solid var(--c-JINEAR_ORANGE);
+  outline: 2px solid var(--c-accent);
   outline-offset: 2px;
 }
 

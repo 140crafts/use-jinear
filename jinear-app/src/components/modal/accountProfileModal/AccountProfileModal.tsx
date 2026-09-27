@@ -1,4 +1,5 @@
 import AccountDeleteButton from "@/components/profile-screen/accountDeleteButton/AccountDeleteButton";
+import AppearanceSettingsButton from "@/components/profile-screen/appearanceSettingsButton/AppearanceSettingsButton";
 import CommunicationPreferences from "@/components/profile-screen/communicationPreferences/CommunicationPreferences";
 import McpSettingsButton from "@/components/profile-screen/mcpSettingsButton/McpSettingsButton";
 import PersonalInfoTab from "@/components/profile-screen/personalInfoTab/PersonalInfoTab";
@@ -33,6 +34,7 @@ const AccountProfileModal: React.FC<AccountProfileModalProps> = ({}) => {
       <div className={styles.content}>
         <PersonalInfoTab />
         <CommunicationPreferences title={t("communicationPrefrencesTitle")} />
+        <AppearanceSettingsButton />
         <McpSettingsButton />
         <AccountDeleteButton />
       </div>

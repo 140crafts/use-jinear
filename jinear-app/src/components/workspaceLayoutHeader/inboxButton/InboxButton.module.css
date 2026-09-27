@@ -12,8 +12,8 @@
     /*background-color: var(--c-primary-shade-1);*/
     /* color: var(--c-primary); */
     /*background-color: var(--c-ERROR_RED);*/
-    background: linear-gradient(315deg, var(--c-JINEAR_ORANGE_LIGHT_X2) 0%, var(--c-JINEAR_ORANGE) 35%) !important;
-    color: var(--c-BABY_POWDER);
+    background: linear-gradient(315deg, var(--c-accent-light-x2) 0%, var(--c-accent) 35%) !important;
+    color: var(--c-on-accent);
     font-weight: 700;
     font-size: 0.6rem;
     right: -2rem;

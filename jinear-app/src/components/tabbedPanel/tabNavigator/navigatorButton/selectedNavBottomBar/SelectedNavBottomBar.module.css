@@ -2,7 +2,7 @@
   position: absolute;
   bottom: 0;
   /*background-color: var(--c-secondary-shade-1);*/
-  background-color: var(--c-JINEAR_ORANGE);
+  background-color: var(--c-accent);
   width: 100%;
   height: 2px;
   border-radius: var(--border-radius);
