@@ -1,7 +1,14 @@
+/* The modal box and body do not scroll here; each tab panel owns exactly one scroll area. */
+.modalContent {
+    overflow: hidden !important;
+}
+
 .body {
     display: flex !important;
     flex-direction: column !important;
+    min-height: 0;
     padding: 0 !important;
+    overflow: hidden !important;
 }
 
 .container {
@@ -9,6 +16,28 @@
     flex-direction: column;
     flex: 1;
     min-height: 0;
+}
+
+.tabBar {
+    padding: 0.5rem 0.5rem 0 0.5rem;
+}
+
+/* A fixed height on desktop keeps the modal from jumping when the tab changes. */
+.panel {
+    display: flex;
+    flex-direction: column;
+    height: min(60vh, 30rem);
+    min-height: 0;
+}
+
+.scrollArea {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .searchBar {
@@ -21,14 +50,6 @@
 .searchInput {
     flex: 1;
     min-width: 0;
-}
-
-.themeList {
-    display: flex;
-    flex-direction: column;
-    height: min(55vh, 26rem);
-    padding: 0 0.5rem 0.5rem 0.5rem;
-    overflow-y: scroll;
 }
 
 .originTitle {
@@ -67,11 +88,8 @@
 }
 
 .options {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    padding: 0.75rem 1rem 1rem 1rem;
-    border-top: 1px solid var(--c-primary-shade-1);
+    gap: 1rem;
+    padding: 1rem;
 }
 
 .selectRow {
@@ -82,19 +100,35 @@
     font-weight: 600;
 }
 
+.selectRow select {
+    width: min(16rem, 60%);
+}
+
 .hint {
+    padding: 0.5rem 1rem 0.75rem 1rem;
+    border-top: 1px solid var(--c-primary-shade-1);
     color: var(--c-secondary-shade-1);
     line-height: 1.5;
 }
 
 @media (max-width: 768px) {
+    .modalContent {
+        height: 100%;
+        max-height: 100% !important;
+    }
+
+    .body {
+        flex: 1;
+        max-height: unset !important;
+    }
+
+    .panel {
+        flex: 1;
+        height: unset;
+    }
+
     .searchBar {
         flex-direction: column;
         align-items: stretch;
-    }
-
-    .themeList {
-        flex: 1;
-        height: unset;
     }
 }

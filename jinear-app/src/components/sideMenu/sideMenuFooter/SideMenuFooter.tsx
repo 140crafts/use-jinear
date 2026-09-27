@@ -40,7 +40,7 @@ const SideMenuFooter: React.FC<SideMenuFooterProps> = ({ className }) => {
       {/*  </PureClientOnly>}*/}
 
       <ThemePickerButton
-        variant={ButtonVariants.hoverFilled}
+        variant={ButtonVariants.outline}
         buttonStyle={styles.iconButton}
       />
 

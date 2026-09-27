@@ -7,6 +7,7 @@ import useTranslation from "@/locales/useTranslation";
 import { useAppDispatch } from "@/store";
 import { popThemePickerModal } from "@/store/slice/modalSlice";
 import styles from "./ThemePickerButton.module.css";
+import {RiBrushAiFill} from "react-icons/ri";
 
 interface ThemePickerButtonProps {
   variant?: keyof typeof ButtonVariants | string;
@@ -31,7 +32,7 @@ const ThemePickerButton: React.FC<ThemePickerButtonProps> = ({ variant = ButtonV
         title={t("themePickerOpenButtonTitle")}
         className={cn(styles.iconButton, buttonStyle)}
       >
-        <LuPalette size={iconSize} />
+        <RiBrushAiFill size={iconSize} />
       </Button>
     </div>
   );

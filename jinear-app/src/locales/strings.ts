@@ -6868,9 +6868,13 @@ const translations = {
         en: "It expired, it was already answered, or the link is incomplete. Start the connection again from your application.",
         tr: "Süresi doldu, zaten yanıtlandı veya bağlantı eksik. Bağlantıyı uygulamanızdan yeniden başlatın."
     },
-    themePickerModalTitle: {
+    themePickerTabThemes: {
         en: "Themes",
         tr: "Temalar"
+    },
+    themePickerTabOptions: {
+        en: "Font & cursor",
+        tr: "Yazı tipi ve imleç"
     },
     themePickerSearchPlaceholder: {
         en: "Search themes",

@@ -20,6 +20,7 @@ interface ThemePickerModalProps {
 }
 
 type AppearanceFilter = "all" | ThemeAppearance;
+type PickerTab = "themes" | "options";
 
 const CARET_SHAPES: CaretShape[] = ["auto", "bar", "block", "underscore"];
 
@@ -61,6 +62,7 @@ const ThemePickerModal: React.FC<ThemePickerModalProps> = ({}) => {
     const [query, setQuery] = useState<string>("");
     const [filter, setFilter] = useState<AppearanceFilter>("all");
     const [activeThemeId, setActiveThemeId] = useState<string>(preferences.themeId);
+    const [tab, setTab] = useState<PickerTab>("themes");
 
     const themes = filterThemes(query, filter);
     const activeTheme: ThemeDefinition | undefined = themes.find(item => item.id == activeThemeId) ?? themes[0];
@@ -73,6 +75,7 @@ const ThemePickerModal: React.FC<ThemePickerModalProps> = ({}) => {
             setQuery("");
             setFilter("all");
             setActiveThemeId(preferences.themeId);
+            setTab("themes");
         }
     }, [visible]);
 
@@ -104,7 +107,7 @@ const ThemePickerModal: React.FC<ThemePickerModalProps> = ({}) => {
             close();
             return;
         }
-        if ((event.target as HTMLElement).tagName == "SELECT" || !activeTheme) {
+        if (tab != "themes" || !activeTheme) {
             return;
         }
         if (event.key == "ArrowDown" || event.key == "ArrowUp") {
@@ -127,85 +130,112 @@ const ThemePickerModal: React.FC<ThemePickerModalProps> = ({}) => {
         setFilter(value as AppearanceFilter);
     };
 
+    const onTabChange = (value: string) => {
+        previewTheme(null);
+        setTab(value as PickerTab);
+    };
+
+    // Each tab has exactly one scroll area; a list that scrolls inside a scrolling modal traps touch scrolling on mobile.
     return (
         <Modal
             visible={visible}
-            title={t("themePickerModalTitle")}
+            title={t("appearanceSettingsTitle")}
+            contentContainerClass={styles.modalContent}
             bodyClass={styles.body}
             requestClose={close}
             width={isMobile ? "fullscreen" : "large"}
             hasTitleCloseButton={true}
         >
             <div className={styles.container} onKeyDown={onKeyDown}>
-                <div className={styles.searchBar}>
-                    <input
-                        autoFocus={true}
-                        type={"text"}
-                        className={styles.searchInput}
-                        placeholder={t("themePickerSearchPlaceholder")}
-                        value={query}
-                        onChange={onQueryChange}
-                    />
+                <div className={styles.tabBar}>
                     <SegmentedControl
-                        id={"theme-picker-appearance-filter"}
-                        name={"theme-picker-appearance-filter"}
+                        id={"theme-picker-tabs"}
+                        name={"theme-picker-tabs"}
                         defaultIndex={0}
-                        callback={onFilterChange}
+                        callback={onTabChange}
                         segments={[
-                            {label: t("themePickerFilterAll"), value: "all"},
-                            {label: t("themePickerFilterLight"), value: "light"},
-                            {label: t("themePickerFilterDark"), value: "dark"},
+                            {label: t("themePickerTabThemes"), value: "themes"},
+                            {label: t("themePickerTabOptions"), value: "options"},
                         ]}
                     />
                 </div>
 
-                <div className={styles.themeList} ref={attachList} onMouseLeave={() => previewTheme(null)}>
-                    {themes.map((item, index) => (
-                        <React.Fragment key={item.id}>
-                            {(index == 0 || themes[index - 1].origin != item.origin) &&
-                                <div className={styles.originTitle}>{t(ORIGIN_LABEL_KEYS[item.origin])}</div>}
-                            <Button
-                                className={cn(styles.themeRow, item.id == activeTheme?.id && styles.activeThemeRow)}
-                                data-theme-id={item.id}
-                                data-current-theme={item.id == preferences.themeId || undefined}
-                                onMouseOver={() => item.id != activeTheme?.id && highlight(item.id)}
-                                onClick={() => apply(item.id)}
-                            >
-                                <ThemeSwatch theme={item}/>
-                                <span className={styles.themeName}>{item.name}</span>
-                                {item.id == preferences.themeId && <IoCheckmark size={15} className={styles.currentIcon}/>}
-                            </Button>
-                        </React.Fragment>
-                    ))}
-                    {themes.length == 0 && <div className={styles.emptyState}>{t("themePickerEmptyState")}</div>}
-                </div>
+                {tab == "themes" &&
+                    <div className={styles.panel}>
+                        <div className={styles.searchBar}>
+                            <input
+                                autoFocus={!isMobile}
+                                type={"text"}
+                                className={styles.searchInput}
+                                placeholder={t("themePickerSearchPlaceholder")}
+                                value={query}
+                                onChange={onQueryChange}
+                            />
+                            <SegmentedControl
+                                id={"theme-picker-appearance-filter"}
+                                name={"theme-picker-appearance-filter"}
+                                defaultIndex={["all", "light", "dark"].indexOf(filter)}
+                                callback={onFilterChange}
+                                segments={[
+                                    {label: t("themePickerFilterAll"), value: "all"},
+                                    {label: t("themePickerFilterLight"), value: "light"},
+                                    {label: t("themePickerFilterDark"), value: "dark"},
+                                ]}
+                            />
+                        </div>
 
-                <div className={styles.options}>
-                    <div className={styles.selectRow}>
-                        <label htmlFor={"theme-picker-font"}>{t("themePickerFontLabel")}</label>
-                        <select id={"theme-picker-font"} value={preferences.fontId}
-                                onChange={event => setFontId(event.target.value)}>
-                            {THEME_FONTS.map(font => <option key={font.id} value={font.id}>{font.name}</option>)}
-                        </select>
-                    </div>
-                    {caretShapeSupported() &&
-                        <div className={styles.selectRow}>
-                            <label htmlFor={"theme-picker-caret"}>{t("themePickerCaretLabel")}</label>
-                            <select id={"theme-picker-caret"} value={preferences.caretShape}
-                                    onChange={event => setCaretShape(event.target.value as CaretShape)}>
-                                {CARET_SHAPES.map(shape => <option key={shape} value={shape}>{t(CARET_LABEL_KEYS[shape])}</option>)}
-                            </select>
-                        </div>}
-                    {hasMouseCursor() &&
-                        <div className={styles.selectRow}>
-                            <label htmlFor={"theme-picker-cursor"}>{t("themePickerCursorLabel")}</label>
-                            <select id={"theme-picker-cursor"} value={preferences.cursorId}
-                                    onChange={event => setCursorId(event.target.value)}>
-                                {THEME_CURSORS.map(cursor => <option key={cursor.id} value={cursor.id}>{t(cursor.labelKey)}</option>)}
-                            </select>
-                        </div>}
-                    {!isMobile && <span className={styles.hint}>{t("themePickerKeyboardHint")}</span>}
-                </div>
+                        <div className={styles.scrollArea} ref={attachList} onMouseLeave={() => previewTheme(null)}>
+                            {themes.map((item, index) => (
+                                <React.Fragment key={item.id}>
+                                    {(index == 0 || themes[index - 1].origin != item.origin) &&
+                                        <div className={styles.originTitle}>{t(ORIGIN_LABEL_KEYS[item.origin])}</div>}
+                                    <Button
+                                        className={cn(styles.themeRow, item.id == activeTheme?.id && styles.activeThemeRow)}
+                                        data-theme-id={item.id}
+                                        data-current-theme={item.id == preferences.themeId || undefined}
+                                        onMouseOver={() => item.id != activeTheme?.id && highlight(item.id)}
+                                        onClick={() => apply(item.id)}
+                                    >
+                                        <ThemeSwatch theme={item}/>
+                                        <span className={styles.themeName}>{item.name}</span>
+                                        {item.id == preferences.themeId && <IoCheckmark size={15} className={styles.currentIcon}/>}
+                                    </Button>
+                                </React.Fragment>
+                            ))}
+                            {themes.length == 0 && <div className={styles.emptyState}>{t("themePickerEmptyState")}</div>}
+                        </div>
+
+                        {!isMobile && <span className={styles.hint}>{t("themePickerKeyboardHint")}</span>}
+                    </div>}
+
+                {tab == "options" &&
+                    <div className={styles.panel}>
+                        <div className={cn(styles.scrollArea, styles.options)}>
+                            <div className={styles.selectRow}>
+                                <label htmlFor={"theme-picker-font"}>{t("themePickerFontLabel")}</label>
+                                <select id={"theme-picker-font"} value={preferences.fontId}
+                                        onChange={event => setFontId(event.target.value)}>
+                                    {THEME_FONTS.map(font => <option key={font.id} value={font.id}>{font.name}</option>)}
+                                </select>
+                            </div>
+                            {caretShapeSupported() &&
+                                <div className={styles.selectRow}>
+                                    <label htmlFor={"theme-picker-caret"}>{t("themePickerCaretLabel")}</label>
+                                    <select id={"theme-picker-caret"} value={preferences.caretShape}
+                                            onChange={event => setCaretShape(event.target.value as CaretShape)}>
+                                        {CARET_SHAPES.map(shape => <option key={shape} value={shape}>{t(CARET_LABEL_KEYS[shape])}</option>)}
+                                    </select>
+                                </div>}
+                            {hasMouseCursor() &&
+                                <div className={styles.selectRow}>
+                                    <label htmlFor={"theme-picker-cursor"}>{t("themePickerCursorLabel")}</label>
+                                    <select id={"theme-picker-cursor"} value={preferences.cursorId}
+                                            onChange={event => setCursorId(event.target.value)}>
+                                        {THEME_CURSORS.map(cursor => <option key={cursor.id} value={cursor.id}>{t(cursor.labelKey)}</option>)}
+                                    </select>
+                                </div>}
+                        </div>
+                    </div>}
             </div>
         </Modal>
     );
