@@ -8,7 +8,7 @@
 
 .clickable:hover {
     background: var(--c-primary-shade-0);
-    cursor: pointer;
+    cursor: var(--cursor-pointer);
 }
 
 .label {

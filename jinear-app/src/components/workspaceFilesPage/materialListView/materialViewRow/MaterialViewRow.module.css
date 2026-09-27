@@ -19,7 +19,7 @@
 
 .container {
     position: relative;
-    cursor: pointer;
+    cursor: var(--cursor-pointer);
 }
 
 .container:hover {

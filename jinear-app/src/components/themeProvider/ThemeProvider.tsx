@@ -23,12 +23,12 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
     const theme = findTheme(previewThemeId) ?? savedTheme;
 
     useEffect(() => {
-        applyThemeSnapshot(buildThemeSnapshot(theme, findFont(preferences.fontId), preferences.caretShape));
-    }, [theme, preferences.fontId, preferences.caretShape]);
+        applyThemeSnapshot(buildThemeSnapshot(theme, findFont(preferences.fontId), preferences));
+    }, [theme, preferences]);
 
     useEffect(() => {
         saveThemePreferences(preferences);
-        saveBootSnapshot(buildThemeSnapshot(savedTheme, findFont(preferences.fontId), preferences.caretShape));
+        saveBootSnapshot(buildThemeSnapshot(savedTheme, findFont(preferences.fontId), preferences));
         submitThemeChangeWebviewEvent(savedTheme.appearance);
     }, [preferences, savedTheme]);
 
@@ -39,6 +39,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
 
     const setFontId = (fontId: string) => setPreferences(current => ({...current, fontId}));
     const setCaretShape = (caretShape: CaretShape) => setPreferences(current => ({...current, caretShape}));
+    const setCursorId = (cursorId: string) => setPreferences(current => ({...current, cursorId}));
 
     return (
         <ThemeContext.Provider
@@ -49,6 +50,7 @@ const ThemeProvider: React.FC<ThemeProviderProps> = ({children}) => {
                 previewTheme: setPreviewThemeId,
                 setFontId,
                 setCaretShape,
+                setCursorId,
             }}>
             {children}
         </ThemeContext.Provider>

@@ -15,7 +15,7 @@
 }
 
 .toggleLabel {
-    cursor: pointer;
+    cursor: var(--cursor-pointer);
     color: var(--c-text-color);
     text-decoration: none;
     border-style: solid;

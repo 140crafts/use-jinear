@@ -5,6 +5,7 @@ import useWindowSize from "@/hooks/useWindowSize";
 import useTranslation, {type StringKeys} from "@/locales/useTranslation";
 import {useAppDispatch, useTypedSelector} from "@/store";
 import {closeThemePickerModal, selectThemePickerModalVisible} from "@/store/slice/modalSlice";
+import {THEME_CURSORS} from "@/theme/themeCursors";
 import {THEME_FONTS} from "@/theme/themeFonts";
 import {ALL_THEMES} from "@/theme/themeRegistry";
 import type {CaretShape, ThemeAppearance, ThemeDefinition, ThemeOrigin} from "@/theme/themeTypes";
@@ -38,6 +39,9 @@ const CARET_LABEL_KEYS: Record<CaretShape, StringKeys> = {
 
 const caretShapeSupported = () => typeof CSS != "undefined" && CSS.supports("caret-shape", "block");
 
+// Touch screens have no mouse cursor, so the option would do nothing there.
+const hasMouseCursor = () => window.matchMedia?.("(pointer: fine)").matches ?? true;
+
 const filterThemes = (query: string, filter: AppearanceFilter): ThemeDefinition[] => {
     const normalizedQuery = query.trim().toLowerCase();
     return ALL_THEMES.filter(theme =>
@@ -51,7 +55,7 @@ const ThemePickerModal: React.FC<ThemePickerModalProps> = ({}) => {
     const dispatch = useAppDispatch();
     const visible = useTypedSelector(selectThemePickerModalVisible);
     const {isMobile} = useWindowSize();
-    const {preferences, selectTheme, previewTheme, setFontId, setCaretShape} = useThemeSettings();
+    const {preferences, selectTheme, previewTheme, setFontId, setCaretShape, setCursorId} = useThemeSettings();
 
     const listRef = useRef<HTMLDivElement | null>(null);
     const [query, setQuery] = useState<string>("");
@@ -190,6 +194,14 @@ const ThemePickerModal: React.FC<ThemePickerModalProps> = ({}) => {
                             <select id={"theme-picker-caret"} value={preferences.caretShape}
                                     onChange={event => setCaretShape(event.target.value as CaretShape)}>
                                 {CARET_SHAPES.map(shape => <option key={shape} value={shape}>{t(CARET_LABEL_KEYS[shape])}</option>)}
+                            </select>
+                        </div>}
+                    {hasMouseCursor() &&
+                        <div className={styles.selectRow}>
+                            <label htmlFor={"theme-picker-cursor"}>{t("themePickerCursorLabel")}</label>
+                            <select id={"theme-picker-cursor"} value={preferences.cursorId}
+                                    onChange={event => setCursorId(event.target.value)}>
+                                {THEME_CURSORS.map(cursor => <option key={cursor.id} value={cursor.id}>{t(cursor.labelKey)}</option>)}
                             </select>
                         </div>}
                     {!isMobile && <span className={styles.hint}>{t("themePickerKeyboardHint")}</span>}

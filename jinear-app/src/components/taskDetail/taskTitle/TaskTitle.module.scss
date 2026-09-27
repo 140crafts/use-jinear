@@ -13,7 +13,7 @@
 }
 
 .savingLabel {
-  cursor: default;
+  cursor: var(--cursor-default);
   position: absolute;
   top: 0;
   right: 0;

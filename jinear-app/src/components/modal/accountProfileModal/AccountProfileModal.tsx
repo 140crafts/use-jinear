@@ -26,7 +26,7 @@ const AccountProfileModal: React.FC<AccountProfileModalProps> = ({}) => {
   return (
     <Modal
       visible={visible}
-      width={isMobile ? "fullscreen" : "medium-fixed"}
+      width={isMobile ? "fullscreen" : "xlarge"}
       title={t("accountProfileModalTitle")}
       hasTitleCloseButton={true}
       requestClose={close}

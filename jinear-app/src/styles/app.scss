@@ -2,6 +2,7 @@
 @use "reset.css" as *;
 @use "breakpoints.scss" as *;
 @use "fonts.css" as *;
+@use "cursors.css" as *;
 
 * {
   transition: background-color var(--fade) linear;
@@ -149,7 +150,7 @@ select {
   color: var(--c-text-color);
   background-color: unset;
   background-image: none;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
 }
 
 select:hover {

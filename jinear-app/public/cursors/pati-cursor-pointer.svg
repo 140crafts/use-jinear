@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+  <defs><clipPath id="c"><rect width="32" height="32"/></clipPath></defs>
+  <g clip-path="url(#c)"><g data-fit="1" transform="translate(0 1) translate(11 4) scale(0.9412) translate(-11 -4)">
+<g transform="translate(-0.12 -3.32) rotate(-28 16 16)"><defs><g id="s-pointer"><path d="M9.4 19 L7.6 22.2 L9.6 22.6 L8.4 25.4 L10.4 25.2 L10.2 29.4 Q10.8 32.2 12.6 30.6 Q14.2 32.8 16 30.9 Q17.8 32.8 19.4 30.6 Q21.2 32.2 21.8 29.4 L21.6 25.2 L23.6 25.4 L22.4 22.6 L24.4 22.2 L22.6 19 Z"/><ellipse cx="16" cy="16.6" rx="7.4" ry="6.1"/><circle cx="9.9" cy="12.6" r="2.9"/><circle cx="13.6" cy="8.7" r="3.1"/><circle cx="18.4" cy="8.7" r="3.1"/><circle cx="22.1" cy="12.6" r="2.9"/></g></defs>
+  <use href="#s-pointer" xlink:href="#s-pointer" fill="#fff" stroke="#fff" stroke-width="5.5" stroke-linejoin="round"/>
+  <use href="#s-pointer" xlink:href="#s-pointer" fill="#2b2b2b" stroke="#2b2b2b" stroke-width="2.6" stroke-linejoin="round"/>
+  <use href="#s-pointer" xlink:href="#s-pointer" fill="#f7b267"/><g stroke="#dd7a32" stroke-width="1.4" stroke-linecap="round" fill="none">
+  <path d="M10.8 26.4q2 .9 3.6.2M21.2 28.2q-2 .9-3.6.2"/></g><path fill="#ff8fab" d="M16 13.4c-2.6 0-4.4 1.9-4.4 3.5 0 1.4 1.1 1.9 2.2 1.9.9 0 1.4-.5 2.2-.5s1.3.5 2.2.5c1.1 0 2.2-.5 2.2-1.9 0-1.6-1.8-3.5-4.4-3.5z"/><g fill="#ff8fab"><ellipse cx="9.9" cy="12.9" rx="1.45" ry="1.74"/><ellipse cx="13.6" cy="9.0" rx="1.55" ry="1.86"/><ellipse cx="18.4" cy="9.0" rx="1.55" ry="1.86"/><ellipse cx="22.1" cy="12.9" rx="1.45" ry="1.74"/></g></g>
+  </g></g>
+</svg>

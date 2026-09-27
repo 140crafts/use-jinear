@@ -33,7 +33,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
+    cursor: var(--cursor-pointer);
     position: relative;
     transition: color 0.5s ease;
     height: 100%;
@@ -58,7 +58,7 @@
     align-items: center;
     justify-content: center;
     opacity: 1 !important;
-    cursor: default !important;
+    cursor: var(--cursor-default) !important;
     background-color: unset !important;
 }
 

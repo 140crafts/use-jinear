@@ -13,5 +13,5 @@
 }
 
 .cell:hover {
-  cursor: default;
+  cursor: var(--cursor-default);
 }

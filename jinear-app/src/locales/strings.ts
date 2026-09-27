@@ -6936,6 +6936,38 @@ const translations = {
         en: "Underscore",
         tr: "Alt çizgi"
     },
+    themePickerCursorLabel: {
+        en: "Mouse cursor",
+        tr: "Fare imleci"
+    },
+    themePickerCursorSystem: {
+        en: "System",
+        tr: "Sistem"
+    },
+    themePickerCursorPati: {
+        en: "Cat paw",
+        tr: "Kedi patisi"
+    },
+    themePickerCursorDog: {
+        en: "Dog paw",
+        tr: "Köpek patisi"
+    },
+    themePickerCursorDuck: {
+        en: "Duck",
+        tr: "Ördek"
+    },
+    themePickerCursorWand: {
+        en: "Magic wand",
+        tr: "Sihirli değnek"
+    },
+    themePickerCursorPixel: {
+        en: "Pixel",
+        tr: "Piksel"
+    },
+    themePickerCursorMitten: {
+        en: "Mitten",
+        tr: "Eldiven"
+    },
     themePickerOpenButtonTitle: {
         en: "Change theme",
         tr: "Temayı değiştir"

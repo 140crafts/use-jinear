@@ -59,11 +59,11 @@
 }
 
 .container.draggable {
-  cursor: grab;
+  cursor: var(--cursor-grab);
 }
 
 .container.draggable:active {
-  cursor: grabbing;
+  cursor: var(--cursor-grabbing);
 }
 
 .dragHandle {

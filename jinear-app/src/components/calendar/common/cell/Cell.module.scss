@@ -6,7 +6,7 @@
   height: var(--calendar-event-height);
   width: 0px;
   color: var(--c-text-color);
-  cursor: default;
+  cursor: var(--cursor-default);
   pointer-events: none;
   transition: background-color var(--fade);
   z-index: 1;
@@ -16,13 +16,13 @@
 
 .fill {
   background-color: var(--c-primary-shade-0);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   pointer-events: all;
 }
 
 .iconContainer {
   min-width: 23px;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   pointer-events: none;
   align-items: center;
   justify-content: center;
@@ -30,7 +30,7 @@
 }
 
 .title {
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   pointer-events: none;
 }
 

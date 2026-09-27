@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32" height="32" viewBox="0 0 32 32">
+<defs><clipPath id="c"><rect width="32" height="32"/></clipPath></defs>
+<g clip-path="url(#c)"><g data-fit="1" transform="translate(0 0) translate(9 9) scale(0.8108) translate(-9 -9)">
+<g transform="translate(2.2 2.2)"><circle cx="7" cy="7" r="8.4" fill="none" stroke="#fff" stroke-width="3.2"/><circle cx="7" cy="7" r="8.4" fill="none" stroke="#8b5cf6" stroke-width="1.6" stroke-dasharray="2.6 2.2" stroke-linecap="round"/><defs><g id="w"><polygon points="10.1,7.9 31.1,28.9 28.9,31.1 7.9,10.1"/><polygon points="7.00,1.00 8.53,4.90 12.71,5.15 9.47,7.80 10.53,11.85 7.00,9.60 3.47,11.85 4.53,7.80 1.29,5.15 5.47,4.90"/></g></defs><use href="#w" xlink:href="#w" fill="#fff" stroke="#fff" stroke-width="5.5" stroke-linejoin="round"/><use href="#w" xlink:href="#w" fill="#2b2b2b" stroke="#2b2b2b" stroke-width="2.6" stroke-linejoin="round"/><use href="#w" xlink:href="#w" fill="#ffd23f"/><g fill="#3b2f5c"><polygon points="10.1,7.9 31.1,28.9 28.9,31.1 7.9,10.1"/></g><polygon points="10.1,7.9 13.6,11.4 11.4,13.6 7.9,10.1" fill="#fff"/><g fill="#ffd23f"><polygon points="7.00,1.00 8.53,4.90 12.71,5.15 9.47,7.80 10.53,11.85 7.00,9.60 3.47,11.85 4.53,7.80 1.29,5.15 5.47,4.90"/></g></g>
+</g></g>
+</svg>

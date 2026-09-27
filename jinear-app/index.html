@@ -25,6 +25,9 @@
           if (snapshot.variables["--c-selection"]) {
             root.setAttribute("data-theme-selection", "");
           }
+          if (snapshot.cursor) {
+            root.setAttribute("data-cursor", snapshot.cursor);
+          }
           if (snapshot.fontHref) {
             var link = document.createElement("link");
             link.id = "theme-font";

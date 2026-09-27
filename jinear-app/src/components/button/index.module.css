@@ -1,5 +1,5 @@
 .button {
-    cursor: pointer;
+    cursor: var(--cursor-pointer);
     background: transparent;
     color: var(--c-text-color);
     transition: background-color var(--fade) linear;

@@ -140,7 +140,7 @@
   height: 100%;
   margin: 0;
   opacity: 0;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
 }
 
 /* The node view already emits this span beside the input purely as a styling hook. */

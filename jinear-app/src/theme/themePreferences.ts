@@ -1,3 +1,4 @@
+import {isKnownCursor, SYSTEM_CURSOR_ID} from "@/theme/themeCursors";
 import {DEFAULT_FONT_ID} from "@/theme/themeFonts";
 import {DEFAULT_THEME_IDS, findTheme} from "@/theme/themeRegistry";
 import type {ThemePreferences} from "@/theme/themeTypes";
@@ -13,6 +14,7 @@ const defaultPreferences = (): ThemePreferences => ({
     themeId: defaultThemeId(),
     fontId: DEFAULT_FONT_ID,
     caretShape: "auto",
+    cursorId: SYSTEM_CURSOR_ID,
 });
 
 // Before themes, the app stored only "light" or "dark".
@@ -37,6 +39,7 @@ export const loadThemePreferences = (): ThemePreferences => {
             themeId: findTheme(parsed.themeId) ? parsed.themeId! : defaults.themeId,
             fontId: parsed.fontId ?? defaults.fontId,
             caretShape: parsed.caretShape ?? defaults.caretShape,
+            cursorId: isKnownCursor(parsed.cursorId) ? parsed.cursorId! : defaults.cursorId,
         };
     } catch {
         return defaultPreferences();

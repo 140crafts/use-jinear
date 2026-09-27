@@ -45,4 +45,5 @@ export interface ThemePreferences {
     themeId: string;
     fontId: string;
     caretShape: CaretShape;
+    cursorId: string;
 }
