@@ -1,0 +1,130 @@
+/* The modal box and body do not scroll here; each tab panel owns exactly one scroll area. */
+.modalContent {
+    overflow: hidden !important;
+}
+
+.body {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 0;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+}
+
+.tabBar {
+    padding: 0.5rem 0.5rem 0 0.5rem;
+}
+
+/* A fixed height on desktop keeps the modal from jumping when the tab changes. */
+.panel {
+    display: flex;
+    flex-direction: column;
+    height: min(60vh, 30rem);
+    min-height: 0;
+}
+
+.scrollArea {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+    padding: 0 0.5rem 0.5rem 0.5rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.searchBar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+}
+
+.searchInput {
+    flex: 1;
+    min-width: 0;
+}
+
+.originTitle {
+    padding: 0.75rem 0.5rem 0.25rem 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-secondary-shade-1);
+}
+
+.themeRow {
+    justify-content: flex-start !important;
+    gap: 0.75rem;
+    text-align: left;
+}
+
+.activeThemeRow {
+    background-color: var(--c-primary-shade-1) !important;
+}
+
+.themeName {
+    flex: 1;
+}
+
+.currentIcon {
+    color: var(--c-accent);
+}
+
+.emptyState {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 4rem;
+    color: var(--c-secondary-shade-1);
+}
+
+.options {
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.selectRow {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    font-weight: 600;
+}
+
+.hint {
+    padding: 0.5rem 1rem 0.75rem 1rem;
+    border-top: 1px solid var(--c-primary-shade-1);
+    color: var(--c-secondary-shade-1);
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .modalContent {
+        height: 100%;
+        max-height: 100% !important;
+    }
+
+    .body {
+        flex: 1;
+        max-height: unset !important;
+    }
+
+    .panel {
+        flex: 1;
+        height: unset;
+    }
+
+    .searchBar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}

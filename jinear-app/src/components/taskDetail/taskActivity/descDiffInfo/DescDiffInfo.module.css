@@ -56,8 +56,8 @@
 
 /* No input survives sanitising here, so the tick is painted straight onto the box itself. */
 .cell ul[data-type="taskList"] > li[data-checked="true"]::before {
-  border-color: var(--c-JINEAR_ORANGE);
-  background-color: var(--c-JINEAR_ORANGE);
+  border-color: var(--c-accent);
+  background-color: var(--c-accent);
   background-image: var(--checkbox-tick-svg);
   background-repeat: no-repeat;
   background-position: center;

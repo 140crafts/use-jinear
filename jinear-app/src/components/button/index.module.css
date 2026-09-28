@@ -1,5 +1,5 @@
 .button {
-    cursor: pointer;
+    cursor: var(--cursor-pointer);
     background: transparent;
     color: var(--c-text-color);
     transition: background-color var(--fade) linear;
@@ -91,19 +91,19 @@
 }
 
 .brandColor {
-    background-color: var(--c-JINEAR_ORANGE);
-    color: var(--c-BABY_POWDER) !important;
+    background-color: var(--c-accent);
+    color: var(--c-on-accent) !important;
 }
 
 .brandColor:disabled {
     /*opacity: .75;*/
-    background-color: var(--c-JINEAR_ORANGE_LIGHT) !important;
-    color: var(--c-BABY_POWDER) !important;
+    background-color: var(--c-accent-light) !important;
+    color: var(--c-on-accent) !important;
 }
 
 .brandColor:hover {
-    background-color: var(--c-JINEAR_ORANGE_LIGHT) !important;
-    color: var(--c-BABY_POWDER) !important;
+    background-color: var(--c-accent-light) !important;
+    color: var(--c-on-accent) !important;
 }
 
 .link {

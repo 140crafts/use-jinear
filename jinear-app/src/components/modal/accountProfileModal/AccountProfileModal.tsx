@@ -1,4 +1,5 @@
 import AccountDeleteButton from "@/components/profile-screen/accountDeleteButton/AccountDeleteButton";
+import AppearanceSettingsButton from "@/components/profile-screen/appearanceSettingsButton/AppearanceSettingsButton";
 import CommunicationPreferences from "@/components/profile-screen/communicationPreferences/CommunicationPreferences";
 import McpSettingsButton from "@/components/profile-screen/mcpSettingsButton/McpSettingsButton";
 import PersonalInfoTab from "@/components/profile-screen/personalInfoTab/PersonalInfoTab";
@@ -25,7 +26,7 @@ const AccountProfileModal: React.FC<AccountProfileModalProps> = ({}) => {
   return (
     <Modal
       visible={visible}
-      width={isMobile ? "fullscreen" : "medium-fixed"}
+      width={isMobile ? "fullscreen" : "xlarge"}
       title={t("accountProfileModalTitle")}
       hasTitleCloseButton={true}
       requestClose={close}
@@ -33,6 +34,7 @@ const AccountProfileModal: React.FC<AccountProfileModalProps> = ({}) => {
       <div className={styles.content}>
         <PersonalInfoTab />
         <CommunicationPreferences title={t("communicationPrefrencesTitle")} />
+        <AppearanceSettingsButton />
         <McpSettingsButton />
         <AccountDeleteButton />
       </div>

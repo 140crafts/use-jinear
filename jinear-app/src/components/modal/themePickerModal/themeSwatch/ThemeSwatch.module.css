@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    flex-shrink: 0;
+    width: 44px;
+    height: 28px;
+    overflow: hidden;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: var(--border-radius-s);
+}
+
+.sidebar {
+    width: 12px;
+    height: 100%;
+}
+
+.content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    gap: 3px;
+    padding: 0 4px;
+}
+
+.line {
+    height: 2px;
+    width: 100%;
+    border-radius: 1px;
+}
+
+.shortLine {
+    height: 2px;
+    width: 60%;
+    border-radius: 1px;
+}
+
+.accent {
+    height: 5px;
+    width: 12px;
+    border-radius: 1px;
+}

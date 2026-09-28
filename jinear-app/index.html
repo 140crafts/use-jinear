@@ -9,6 +9,39 @@
       `import.meta.env.VITE_*` in the app reads from this global.
     -->
     <script>globalThis.import_meta_env = JSON.parse('"import_meta_env_placeholder"');</script>
+    <!--
+      Paints the saved theme before the bundle loads, so a reload does not flash the default theme.
+      Mirrors applyThemeSnapshot in src/theme/applyTheme.ts; keep the two in sync.
+    -->
+    <script>
+      try {
+        var snapshot = JSON.parse(localStorage.getItem("THEME_BOOT"));
+        if (snapshot && snapshot.variables) {
+          var root = document.documentElement;
+          root.classList.add(snapshot.appearance);
+          for (var name in snapshot.variables) {
+            root.style.setProperty(name, snapshot.variables[name]);
+          }
+          if (snapshot.variables["--c-selection"]) {
+            root.setAttribute("data-theme-selection", "");
+          }
+          if (snapshot.cursor) {
+            root.setAttribute("data-cursor", snapshot.cursor);
+          }
+          if (snapshot.fontHref) {
+            var link = document.createElement("link");
+            link.id = "theme-font";
+            link.rel = "stylesheet";
+            link.href = snapshot.fontHref;
+            document.head.appendChild(link);
+          }
+        } else if ((localStorage.getItem("THEME") || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light")) == "dark") {
+          document.documentElement.classList.add("dark");
+        }
+      } catch (e) {
+        // a broken snapshot only costs a flash of the default theme; React applies the real one on mount
+      }
+    </script>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="any" />
     <link rel="apple-touch-icon" href="/images/icon/icon-192x192.png" />

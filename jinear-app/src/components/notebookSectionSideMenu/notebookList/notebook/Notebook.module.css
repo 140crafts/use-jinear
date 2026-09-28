@@ -33,7 +33,7 @@
 .iconOnlyButton {
     padding: 0.42rem 0.25rem;
     opacity: 1 !important;
-    cursor: default !important;
+    cursor: var(--cursor-default) !important;
 }
 
 .notebookName {

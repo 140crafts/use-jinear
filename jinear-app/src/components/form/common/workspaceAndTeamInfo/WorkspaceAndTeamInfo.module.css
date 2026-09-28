@@ -22,7 +22,7 @@
 
 .button:disabled {
   opacity: 1;
-  cursor: default;
+  cursor: var(--cursor-default);
   background-color: unset !important;
 }
 

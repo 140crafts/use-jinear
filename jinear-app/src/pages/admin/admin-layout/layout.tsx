@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./layout.module.scss";
 import cn from "classnames";
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
-import ThemeToggle from "@/components/themeToggle/ThemeToggle";
+import ThemePickerButton from "@/components/themePickerButton/ThemePickerButton";
 import SecondLevelSideMenuV2 from "@/components/secondLevelSideMenuV2/SecondLevelSideMenuV2";
 import InstanceSettingsSideMenu from "@/components/instanceSettingsSideMenu/InstanceSettingsSideMenu";
 import AdminModalProvider from "@/components/modal-provider/AdminModalProvider.tsx";
@@ -48,7 +48,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({}) => {
                 <b className={styles.title}>{t("instanceSettingsSideMenuTitle")}</b>
 
                 <div className={styles.headerRightContent}>
-                    <ThemeToggle variant={ButtonVariants.hoverFilled}/>
+                    <ThemePickerButton variant={ButtonVariants.hoverFilled}/>
                 </div>
             </div>
 

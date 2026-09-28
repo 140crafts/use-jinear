@@ -1,6 +1,6 @@
 .titleContainer {
   flex: 1;
-  cursor: default;
+  cursor: var(--cursor-default);
   padding: 0.25rem 0.5rem;
   font-weight: 700;
   font-size: 0.9rem;

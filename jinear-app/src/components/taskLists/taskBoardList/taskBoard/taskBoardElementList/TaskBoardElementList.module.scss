@@ -10,11 +10,11 @@
 }
 
 .draggableBoardElementContainer {
-  cursor: grab;
+  cursor: var(--cursor-grab);
   transition: opacity 0.2s, transform 0.2s;
 
   &:active {
-    cursor: grabbing;
+    cursor: var(--cursor-grabbing);
   }
 }
 

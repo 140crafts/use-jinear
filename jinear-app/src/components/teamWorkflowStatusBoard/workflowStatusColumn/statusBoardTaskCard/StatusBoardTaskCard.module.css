@@ -9,7 +9,7 @@
 }
 
 .container:hover {
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   background-color: var(--c-primary-shade-1);
 }
 

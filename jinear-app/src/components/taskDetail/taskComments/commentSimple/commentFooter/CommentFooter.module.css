@@ -5,5 +5,5 @@
   justify-content: flex-end;
   font-size: 0.6rem;
   color: var(--c-secondary-shade-1-op05);
-  cursor: default;
+  cursor: var(--cursor-default);
 }

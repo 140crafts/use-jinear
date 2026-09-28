@@ -27,6 +27,20 @@ export function getTextColor(bgColor: string): "#ffffff" | "#000000" {
     return whiteContrast > blackContrast ? "#ffffff" : "#000000";
 }
 
+export function getContrastRatio(foreground: string, background: string): number {
+    return getContrast(foreground, background);
+}
+
+// weight is how much of `to` ends up in the result: 0 returns `from`, 1 returns `to`.
+export function mixHexColors(from: string, to: string, weight: number): string {
+    const channel = (hex: string, index: number) => parseInt(hex.substr(1 + index * 2, 2), 16);
+    const mixed = [0, 1, 2].map(index => {
+        const value = Math.round(channel(from, index) * (1 - weight) + channel(to, index) * weight);
+        return value.toString(16).padStart(2, "0");
+    });
+    return `#${mixed.join("")}`;
+}
+
 export const getHashedColor = ({text}: { text: string }) => {
     const BADGE_COLORS = [
         '#E5484D', // red

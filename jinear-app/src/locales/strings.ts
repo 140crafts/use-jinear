@@ -6868,6 +6868,126 @@ const translations = {
         en: "It expired, it was already answered, or the link is incomplete. Start the connection again from your application.",
         tr: "Süresi doldu, zaten yanıtlandı veya bağlantı eksik. Bağlantıyı uygulamanızdan yeniden başlatın."
     },
+    themePickerTabThemes: {
+        en: "Themes",
+        tr: "Temalar"
+    },
+    themePickerTabOptions: {
+        en: "Font & cursor",
+        tr: "Yazı tipi ve imleç"
+    },
+    themePickerSearchPlaceholder: {
+        en: "Search themes",
+        tr: "Tema ara"
+    },
+    themePickerEmptyState: {
+        en: "No theme matches your search.",
+        tr: "Aramanızla eşleşen tema yok."
+    },
+    themePickerFilterAll: {
+        en: "All",
+        tr: "Tümü"
+    },
+    themePickerFilterLight: {
+        en: "Light",
+        tr: "Açık"
+    },
+    themePickerFilterDark: {
+        en: "Dark",
+        tr: "Koyu"
+    },
+    themePickerOriginJinear: {
+        en: "Jinear",
+        tr: "Jinear"
+    },
+    themePickerOriginVscode: {
+        en: "VS Code",
+        tr: "VS Code"
+    },
+    themePickerOriginJetbrains: {
+        en: "JetBrains",
+        tr: "JetBrains"
+    },
+    themePickerOriginPopular: {
+        en: "Popular",
+        tr: "Popüler"
+    },
+    themePickerKeyboardHint: {
+        en: "Use the arrow keys to preview, Enter to apply and Esc to close.",
+        tr: "Önizlemek için ok tuşlarını, uygulamak için Enter, kapatmak için Esc tuşunu kullanın."
+    },
+    themePickerFontLabel: {
+        en: "Font",
+        tr: "Yazı tipi"
+    },
+    themePickerCaretLabel: {
+        en: "Text cursor",
+        tr: "Metin imleci"
+    },
+    themePickerCaretAuto: {
+        en: "Default",
+        tr: "Varsayılan"
+    },
+    themePickerCaretBar: {
+        en: "Bar",
+        tr: "Çubuk"
+    },
+    themePickerCaretBlock: {
+        en: "Block",
+        tr: "Blok"
+    },
+    themePickerCaretUnderscore: {
+        en: "Underscore",
+        tr: "Alt çizgi"
+    },
+    themePickerCursorLabel: {
+        en: "Mouse cursor",
+        tr: "Fare imleci"
+    },
+    themePickerCursorSystem: {
+        en: "System",
+        tr: "Sistem"
+    },
+    themePickerCursorPati: {
+        en: "Cat paw",
+        tr: "Kedi patisi"
+    },
+    themePickerCursorDog: {
+        en: "Dog paw",
+        tr: "Köpek patisi"
+    },
+    themePickerCursorDuck: {
+        en: "Duck",
+        tr: "Ördek"
+    },
+    themePickerCursorWand: {
+        en: "Magic wand",
+        tr: "Sihirli değnek"
+    },
+    themePickerCursorPixel: {
+        en: "Pixel",
+        tr: "Piksel"
+    },
+    themePickerCursorMitten: {
+        en: "Mitten",
+        tr: "Eldiven"
+    },
+    themePickerOpenButtonTitle: {
+        en: "Change theme",
+        tr: "Temayı değiştir"
+    },
+    appearanceSettingsTitle: {
+        en: "Appearance",
+        tr: "Görünüm"
+    },
+    appearanceSettingsText: {
+        en: "Choose a theme, a font and a text cursor. Your choice applies to this device.",
+        tr: "Bir tema, yazı tipi ve metin imleci seçin. Seçiminiz bu cihazda geçerli olur."
+    },
+    appearanceSettingsButtonLabel: {
+        en: "Change theme",
+        tr: "Temayı değiştir"
+    },
 
 };
 

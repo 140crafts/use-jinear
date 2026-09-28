@@ -30,7 +30,7 @@
   color: var(--c-secondary-shade-0);
   opacity: 0.8;
   user-select: none;
-  cursor: default;
+  cursor: var(--cursor-default);
 }
 
 .syncStatusIcon {

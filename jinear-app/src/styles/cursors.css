@@ -1,0 +1,73 @@
+/*
+ * Mouse cursor sets, chosen in the theme picker: <html data-cursor="pati|dog|duck|wand|pixel|mitten">.
+ * Without the attribute the variables fall back to the OS cursors, so the app looks as before.
+ * Files live in public/cursors/. The two numbers after url() are the hotspot (x y).
+ */
+:root {
+    --cursor-default: default;
+    --cursor-pointer: pointer;
+    --cursor-grab: grab;
+    --cursor-grabbing: grabbing;
+}
+
+:root[data-cursor="pati"] {
+    --cursor-default: url("/cursors/pati-cursor-default.svg") 6 6, default;
+    --cursor-pointer: url("/cursors/pati-cursor-pointer.svg") 11 5, pointer;
+    --cursor-grab: url("/cursors/pati-cursor-grab.svg") 11 6, grab;
+    --cursor-grabbing: url("/cursors/pati-cursor-grabbing.svg") 11 5, grabbing;
+}
+
+:root[data-cursor="dog"] {
+    --cursor-default: url("/cursors/dog-cursor-default.svg") 6 6, default;
+    --cursor-pointer: url("/cursors/dog-cursor-pointer.svg") 11 5, pointer;
+    --cursor-grab: url("/cursors/dog-cursor-grab.svg") 11 5, grab;
+    --cursor-grabbing: url("/cursors/dog-cursor-grabbing.svg") 11 5, grabbing;
+}
+
+:root[data-cursor="duck"] {
+    --cursor-default: url("/cursors/duck-cursor-default.svg") 3 3, default;
+    --cursor-pointer: url("/cursors/duck-cursor-pointer.svg") 3 15, pointer;
+    --cursor-grab: url("/cursors/duck-cursor-grab.svg") 3 15, grab;
+    --cursor-grabbing: url("/cursors/duck-cursor-grabbing.svg") 4 14, grabbing;
+}
+
+:root[data-cursor="wand"] {
+    --cursor-default: url("/cursors/wand-cursor-default.svg") 8 8, default;
+    --cursor-pointer: url("/cursors/wand-cursor-pointer.svg") 8 8, pointer;
+    --cursor-grab: url("/cursors/wand-cursor-grab.svg") 9 9, grab;
+    --cursor-grabbing: url("/cursors/wand-cursor-grabbing.svg") 9 9, grabbing;
+}
+
+:root[data-cursor="pixel"] {
+    --cursor-default: url("/cursors/pixel-cursor-default.svg") 1 1, default;
+    --cursor-pointer: url("/cursors/pixel-cursor-pointer.svg") 10 1, pointer;
+    --cursor-grab: url("/cursors/pixel-cursor-grab.svg") 15 8, grab;
+    --cursor-grabbing: url("/cursors/pixel-cursor-grabbing.svg") 16 12, grabbing;
+}
+
+:root[data-cursor="mitten"] {
+    --cursor-default: url("/cursors/mitten-cursor-default.svg") 5 5, default;
+    --cursor-pointer: url("/cursors/mitten-cursor-pointer.svg") 11 4, pointer;
+    --cursor-grab: url("/cursors/mitten-cursor-grab.svg") 12 4, grab;
+    --cursor-grabbing: url("/cursors/mitten-cursor-grabbing.svg") 8 5, grabbing;
+}
+
+/* :where() gives these rules zero specificity, so any component rule that sets a cursor still wins. */
+:where(:root[data-cursor] body) {
+    cursor: var(--cursor-default);
+}
+
+:where(:root[data-cursor]) :where(a, button, [role="button"], summary, label[for], select,
+input[type="checkbox"], input[type="radio"], input[type="submit"]) {
+    cursor: var(--cursor-pointer);
+}
+
+/* Keep the native I-beam for text entry. */
+:where(:root[data-cursor]) :where(input:not([type="checkbox"], [type="radio"], [type="submit"]), textarea, [contenteditable="true"]) {
+    cursor: text;
+}
+
+/* @hello-pangea/dnd injects `cursor: grab` on drag handles; this selector is more specific. */
+:root[data-cursor] [data-rfd-drag-handle-context-id] {
+    cursor: var(--cursor-grab);
+}
