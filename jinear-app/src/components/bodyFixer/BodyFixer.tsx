@@ -9,8 +9,6 @@ import {
 import {useTypedSelector} from "@/store";
 import Logger from "@/util/logger";
 import React, {useEffect} from "react";
-import isPwa from "@/util/pwaHelper";
-import {isWebView} from "@/util/webviewUtils";
 
 interface BodyFixerProps {
 }
@@ -23,8 +21,6 @@ const BodyFixer: React.FC<BodyFixerProps> = ({}) => {
     const isAnyModalVisible = useTypedSelector(selectAnyModalVisible);
     const isAnyMenuVisible = useTypedSelector(selectAnyMenuVisible);
     const isMobile = useWidthLimit({limit: MOBILE_LAYOUT_BREAKPOINT});
-    const pwa = isPwa();
-    const _isWebView = isWebView();
     const uploadStatusModalVisible = useTypedSelector(selectUploadStatusModalVisible);
     const uploadStatusModalMinimized = useTypedSelector(selectUploadStatusModalMinimized) ?? false;
     const uploadStatusModalMouseOver = useTypedSelector(selectUploadStatusModalMouseOver) ?? false;
@@ -57,13 +53,6 @@ const BodyFixer: React.FC<BodyFixerProps> = ({}) => {
             }
         }
     }, [isAnyModalVisible, isAnyMenuVisible, isMobile, shouldFixBodyDueUploadModalOnMobile, shouldFixBodyDueUploadModalOnWebAndNotMinimized]);
-
-    useEffect(() => {
-        if (document && window && (pwa || _isWebView)) {
-            const $html = document.querySelector("html");
-            $html?.classList.add("noselect");
-        }
-    }, [pwa, _isWebView]);
 
     return null;
 };
