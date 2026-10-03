@@ -35,6 +35,16 @@ export const shortcuts = {
     pickerNew: "n",
     pickerConfirm: "enter",
     pickerClear: "x",
+
+    taskMenuOpen: "o",
+    taskMenuOpenInNewTab: "n",
+    taskMenuCopyLink: "l",
+    taskMenuStatus: "s",
+    taskMenuTopic: "t",
+    taskMenuDates: "d",
+    taskMenuAssignee: "a",
+    taskMenuCollaborators: "c",
+    taskMenuBoards: "b",
 } as const;
 
 export type ShortcutId = keyof typeof shortcuts;

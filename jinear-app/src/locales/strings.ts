@@ -6989,6 +6989,47 @@ const translations = {
         tr: "Temayı değiştir"
     },
 
+    taskContextMenuOpen: {
+        en: "Open task",
+        tr: "Görevi aç"
+    },
+    taskContextMenuOpenInNewTab: {
+        en: "Open in new tab",
+        tr: "Yeni sekmede aç"
+    },
+    taskContextMenuCopyLink: {
+        en: "Copy link",
+        tr: "Linki kopyala"
+    },
+    taskContextMenuStatus: {
+        en: "Status",
+        tr: "Durum"
+    },
+    taskContextMenuTopic: {
+        en: "Topic",
+        tr: "Konu"
+    },
+    taskContextMenuDates: {
+        en: "Dates",
+        tr: "Tarihler"
+    },
+    taskContextMenuAssignee: {
+        en: "Assignee",
+        tr: "Atanan kişi"
+    },
+    taskContextMenuCollaborators: {
+        en: "Collaborators",
+        tr: "Ortak çalışanlar"
+    },
+    taskContextMenuBoards: {
+        en: "Boards",
+        tr: "Panolar"
+    },
+    taskContextMenuNone: {
+        en: "None",
+        tr: "Yok"
+    },
+
 };
 
 export default translations;

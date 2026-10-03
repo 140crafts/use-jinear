@@ -1,10 +1,6 @@
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import ProfilePhoto from "@/components/profilePhoto";
-import type {TeamMemberDto} from "@/model/be/jinear-core";
-import {useRetrieveTeamMembersQuery} from "@/store/api/teamMemberApi";
-import {useUpdateTaskCollaboratorsMutation} from "@/store/api/taskUpdateApi";
-import {popTeamMemberPickerModal} from "@/store/slice/modalSlice";
-import {useAppDispatch} from "@/store";
+import {useTaskCollaboratorPicker} from "@/hooks/useTaskCollaboratorPicker";
 import useTranslation from "@/locales/useTranslation";
 import React from "react";
 import {useTask} from "../../context/TaskDetailContext";
@@ -19,36 +15,10 @@ const VISIBLE_PROFILE_PHOTO_COUNT = 3;
 const ChangeCollaboratorsButton: React.FC<ChangeCollaboratorsButtonProps> = ({className}) => {
     const task = useTask();
     const {t} = useTranslation();
-    const dispatch = useAppDispatch();
-
-    const [updateTaskCollaborators, {isLoading}] = useUpdateTaskCollaboratorsMutation();
+    const {popCollaboratorPicker, isLoading} = useTaskCollaboratorPicker(task);
 
     const collaborators = task.taskCollaborators ?? [];
     const hasCollaborators = collaborators.length != 0;
-
-    const {data: teamMemberListResponse} = useRetrieveTeamMembersQuery({teamId: task.teamId});
-    const selectedTeamMembers = teamMemberListResponse?.data.content.filter(
-        (teamMemberDto) => collaborators.findIndex((collaborator) => collaborator.accountId == teamMemberDto.accountId) != -1
-    );
-
-    const onPick = (pickedList: TeamMemberDto[]) => {
-        updateTaskCollaborators({
-            taskId: task.taskId,
-            body: {collaboratorIds: pickedList.map((teamMemberDto) => teamMemberDto.accountId)}
-        });
-    };
-
-    const popCollaboratorPicker = () => {
-        dispatch(
-            popTeamMemberPickerModal({
-                visible: true,
-                multiple: true,
-                teamId: task.teamId,
-                initialSelectionOnMultiple: selectedTeamMembers,
-                onPick
-            })
-        );
-    };
 
     return (
         <Button
