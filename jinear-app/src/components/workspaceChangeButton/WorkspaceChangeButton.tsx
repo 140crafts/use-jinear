@@ -23,6 +23,7 @@ const WorkspaceChangeButton: React.FC<WorkspaceChangeButtonProps> = ({currentWor
             variant={ButtonVariants.outline}
             heightVariant={ButtonHeight.short}
             onClick={popWorkspacePicker}
+            shortcut="switchWorkspace"
         >
             <div className={cn(styles.label, "single-line")}>{currentWorkspace.title}</div>
             <div className={styles.iconContainer}>

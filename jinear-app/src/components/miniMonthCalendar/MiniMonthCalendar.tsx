@@ -17,6 +17,7 @@ interface MiniMonthCalendarProps {
   disabledAfter?: Date;
   showYearPicker?: boolean;
   showLabel?: boolean;
+  withShortcuts?: boolean;
 }
 
 const logger = Logger("MiniMonthCalendar");
@@ -32,6 +33,7 @@ const MiniMonthCalendar: React.FC<MiniMonthCalendarProps> = ({
   disabledAfter,
   showYearPicker,
   showLabel,
+  withShortcuts,
 }) => {
   const [viewingDate, setViewingDate] = useState(value);
   const [hoveringDate, setHoveringDate] = useState<Date | undefined>(value);
@@ -54,6 +56,7 @@ const MiniMonthCalendar: React.FC<MiniMonthCalendarProps> = ({
         setViewingDate={setViewingDate}
         showYearPicker={showYearPicker}
         showLabel={showLabel}
+        withShortcuts={withShortcuts}
       />
       <WeekDays days={days} />
       <div className={styles.days}>

@@ -1,0 +1,35 @@
+.container {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 100000;
+}
+
+.hint {
+    position: fixed;
+    transform: translate(-85%, -85%);
+    min-width: 1.1rem;
+    height: 1.1rem;
+    padding: 0 0.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--border-radius-s);
+    background-color: var(--c-accent);
+    color: var(--c-on-accent);
+    font-family: "SF Mono", ui-monospace, monospace;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    line-height: 1;
+    text-transform: uppercase;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+}
+
+.typed {
+    opacity: 0.5;
+}
+
+:global([data-kb-active]) {
+    outline: 2px solid var(--c-accent) !important;
+    outline-offset: -2px;
+}

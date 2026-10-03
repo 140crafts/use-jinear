@@ -25,6 +25,7 @@ const NotesActionButtons: React.FC<NotesActionButtonsProps> = ({workspace}) => {
                     variant={ButtonVariants.brandColor}
                     className={styles.newTaskButton}
                     onClick={onNewNote}
+                    shortcut="newNote"
                 >
                     <LuFilePen className={'icon'}/>
                     <b>{t("sideMenuNewNote")}</b>

@@ -24,6 +24,7 @@ const InboxButton: React.FC<InboxButtonProps> = ({isActive, workspace}) => {
     return (
         <Button
             href={`/${workspace?.username}/inbox`}
+            shortcut="inbox"
             data-tooltip={t("mainFeaturesMenuLabelNotifications")}
             variant={ButtonVariants.outline}
             heightVariant={ButtonHeight.short}

@@ -161,6 +161,7 @@ const BoardPickerModal: React.FC<BoardPickerModalProps> = ({}) => {
                         variant={ButtonVariants.contrast}
                         className={styles.contButton}
                         onClick={submitPickedAndClose}
+                        shortcut="pickerConfirm"
                         disabled={selectedBoards?.length == 0 && !multiple}
                     >
                         {t("teamMemberPickerModalSelectButton")}

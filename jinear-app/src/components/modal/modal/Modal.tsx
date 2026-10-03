@@ -4,6 +4,7 @@ import React from "react";
 import {IoClose} from "react-icons/io5";
 import BaseModal, {type BaseModalProps, type ModalHeight, type ModalWidth} from "../baseModal/BaseModal";
 import styles from "./Modal.module.css";
+import {NAV_SKIP_ATTRIBUTE} from "@/keyboard/keymap";
 
 interface ModalProps extends BaseModalProps {
     visible?: boolean;
@@ -68,7 +69,7 @@ const Modal: React.FC<ModalProps> = ({
                     {(hasTitleCloseButton || rightButton) && (
                         <div className={styles.titleBarIconButtonContainer}>
                             {hasTitleCloseButton &&
-                                <Button onClick={titleCloseClick}>
+                                <Button onClick={titleCloseClick} {...{[NAV_SKIP_ATTRIBUTE]: true}}>
                                     {closeButtonIcon ?? <IoClose size={18}/>}
                                 </Button>
                             }

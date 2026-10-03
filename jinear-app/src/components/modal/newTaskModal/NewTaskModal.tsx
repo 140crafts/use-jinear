@@ -138,6 +138,7 @@ const NewTaskModal: React.FC<NewTaskModalProps> = ({}) => {
                 heightVariant={ButtonHeight.short}
                 variant={ButtonVariants.default}
                 onClick={close}
+                dismiss
               >
                 {t("newTaskModalCalendarEventCancel")}
               </Button>

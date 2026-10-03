@@ -176,6 +176,7 @@ const TeamMemberPickerModal: React.FC<TeamMemberPickerModalProps> = ({}) => {
             variant={ButtonVariants.contrast}
             className={styles.contButton}
             onClick={submitPickedAndClose}
+            shortcut="pickerConfirm"
             disabled={selectedTeamMembers?.length == 0 && !multiple}
           >
             {t("teamMemberPickerModalSelectButton")}

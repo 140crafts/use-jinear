@@ -176,6 +176,7 @@ const NewCalendarEventForm: React.FC<NewCalendarEventFormProps> = ({
           <Button
             disabled={isInsertEventLoading}
             onClick={onCloseRequested}
+            dismiss
             className={styles.footerButton}
             heightVariant={ButtonHeight.short}
           >

@@ -10,6 +10,7 @@ import React, { useEffect, useState } from "react";
 import type { UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { IoAdd, IoClose, IoPlaySkipBackOutline, IoPlaySkipForwardOutline, IoTimeOutline } from "react-icons/io5";
 import styles from "./DatePickerButton.module.css";
+import { CLEAR_ATTRIBUTE } from "@/keyboard/keymap";
 
 interface DatePickerButtonProps {
   fieldName: "assignedDate" | "dueDate";
@@ -143,6 +144,7 @@ const DatePickerButton: React.FC<DatePickerButtonProps> = ({
           variant={ButtonVariants.filled2}
           className={styles.deselectButton}
           onClick={onUnpickClick}
+          {...{ [CLEAR_ATTRIBUTE]: true }}
         >
           <IoClose />
         </Button>
