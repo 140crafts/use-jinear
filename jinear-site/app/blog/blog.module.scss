@@ -295,6 +295,13 @@
     border: 0;
     margin: 38px 0;
   }
+
+  img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
 }
 
 /* tags */

@@ -9,6 +9,7 @@ import {popNoteTagPickerModal} from "@/store/slice/modalSlice";
 import {useUpdateNoteTagAssignmentsMutation} from "@/store/api/noteTagApi";
 import type {NoteTagDto} from "@/model/be/jinear-core";
 import getCssVariable from "@/util/cssHelper.ts";
+import toast from "react-hot-toast";
 
 interface NoteTagsProps {
 
@@ -23,6 +24,10 @@ const NoteTags: React.FC<NoteTagsProps> = ({}) => {
 
     const openNoteTagPickerModal = () => {
         if (note == null) {
+            return;
+        }
+        if (note.notebookId == null) {
+            toast(t("addNoteTagRequiresNotebook"));
             return;
         }
         const noteId = note.noteId;
