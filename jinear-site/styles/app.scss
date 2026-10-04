@@ -65,7 +65,7 @@ body::-webkit-scrollbar,
 }
 
 a {
-  word-break: break-all;
+  overflow-wrap: anywhere;
   color: var(--c-link-color);
   text-decoration: none;
 }

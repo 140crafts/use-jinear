@@ -6040,6 +6040,10 @@ const translations = {
         en: "Add Tag",
         tr: "Etiket Ekle"
     },
+    addNoteTagRequiresNotebook: {
+        en: "Tags belong to a notebook. Move this note to a notebook to add tags.",
+        tr: "Etiketler bir deftere aittir. Etiket eklemek için bu notu bir deftere taşıyın."
+    },
     noteTagPickerModalTitle: {
         en: "Select Tags",
         tr: "Etiket Seç"
