@@ -17,6 +17,7 @@ import styles from "./TaskPositionBasedCell.module.css";
 import useTranslation from "@/locals/useTranslation";
 import {Link} from "react-router-dom";
 import {useAppDispatch} from "@/store";
+import {useTaskContextMenu} from "@/components/taskContextMenu/useTaskContextMenu";
 
 interface TaskPositionBasedCellProps {
     cell: ICalendarDayRowCell;
@@ -28,6 +29,7 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({cell, isGh
     const calendarEvent = cell.event;
     const dispatch = useAppDispatch();
     const {isMobile} = useWindowSize();
+    const onContextMenu = useTaskContextMenu(isGhost ? null : calendarEvent?.relatedTask);
 
     const highlightedEventId = useHighlightedEventId();
     const setHighlightedEventId = useSetHighlightedEventId();
@@ -169,6 +171,7 @@ const TaskPositionBasedCell: React.FC<TaskPositionBasedCellProps> = ({cell, isGh
             onMouseOut={isGhost ? undefined : _hoverEnd}
             onDragStart={isGhost ? undefined : _onDragStart}
             onDragEnd={isGhost ? undefined : _onDragEnd}
+            onContextMenu={onContextMenu}
         >
             <div className={styles.colorLineContainer}>
                 {cellColorTags.map((color, i) =>

@@ -58,6 +58,7 @@ const DatePickerModal: React.FC<DatePickerModalProps> = ({}) => {
         <Modal visible={visible} bodyClass={styles.container} requestClose={close} hasTitleCloseButton={true}
                title={title}>
             <MiniMonthCalendar
+                withShortcuts
                 value={initialDate ?? undefined}
                 setValue={setValue}
                 dateSpanStart={dateSpanStart ?? undefined}
@@ -66,7 +67,7 @@ const DatePickerModal: React.FC<DatePickerModalProps> = ({}) => {
                 disabledAfter={disabledAfter ?? undefined}
             />
             <div className={styles.footerContainer}>
-                {initialDate && unpickable && <Button onClick={unpick}>{t("datePickerModalUnpickButtonLabel")}</Button>}
+                {initialDate && unpickable && <Button onClick={unpick} shortcut="pickerClear">{t("datePickerModalUnpickButtonLabel")}</Button>}
             </div>
         </Modal>
     );

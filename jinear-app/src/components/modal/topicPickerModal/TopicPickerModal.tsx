@@ -116,7 +116,7 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
 
             <div className={styles.list}>
                 <Button variant={ButtonVariants.outline} heightVariant={ButtonHeight.short}
-                        onClick={popCreateNewTopicModal}>
+                        onClick={popCreateNewTopicModal} shortcut="pickerNew">
                     {t("newTaskModalNewTopicButton")}
                 </Button>
 
@@ -165,6 +165,7 @@ const TopicPickerModal: React.FC<TopicPickerModalProps> = ({}) => {
                         variant={ButtonVariants.contrast}
                         className={styles.contButton}
                         onClick={submitPickedAndClose}
+                        shortcut="pickerConfirm"
                         disabled={selectedTopics?.length == 0 && !multiple}
                     >
                         {t("topicPickerModalSelectButton")}

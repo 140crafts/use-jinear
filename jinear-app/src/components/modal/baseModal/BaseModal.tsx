@@ -1,6 +1,7 @@
 import cn from "classnames";
 import React from "react";
 import styles from "./style.module.css";
+import {DISMISS_ATTRIBUTE, SCOPE_ATTRIBUTE} from "@/keyboard/keymap";
 
 export type ModalWidth = "small" | "medium-fixed" | "default" | "large" | "xlarge" | "xxlarge" | "fullscreen";
 export type ModalHeight = "default" | "height-medium-or-full" | "height-full";
@@ -58,7 +59,10 @@ const BaseModal: React.FC<BaseModalProps> = ({
 
   return (
     rendered ? (
-      <div className={cn(styles.container, styles[`${width}-container`], containerClassName)}>
+      <div
+        {...{[SCOPE_ATTRIBUTE]: true}}
+        className={cn(styles.container, styles[`${width}-container`], containerClassName)}
+      >
         <div
           className={cn([styles.content, styles[`${width}-content`], styles[`${height}-content`], bottomSheet && (closing ? styles.bottomSheetClosing : styles.bottomSheet), contentClassName])}
           onClick={avoid}
@@ -71,6 +75,7 @@ const BaseModal: React.FC<BaseModalProps> = ({
           </div>
         </div>
         <div
+          {...(requestClose && {[DISMISS_ATTRIBUTE]: true})}
           onClick={requestClose}
           className={cn([styles.closepad, closing && styles.closepadClosing, closepadClassName])}
         />

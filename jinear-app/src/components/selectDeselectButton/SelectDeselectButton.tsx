@@ -2,6 +2,7 @@ import React from "react";
 import {IoClose} from "react-icons/io5";
 import Button, {ButtonHeight, ButtonVariants} from "../button";
 import styles from "./SelectDeselectButton.module.css";
+import {CLEAR_ATTRIBUTE} from "@/keyboard/keymap";
 import Logger from "@/util/logger";
 
 interface SelectDeselectButtonProps {
@@ -52,6 +53,7 @@ const SelectDeselectButton: React.FC<SelectDeselectButtonProps> = ({
                     variant={ButtonVariants.filled2}
                     className={styles.deselectButton}
                     onClick={onUnpickClick}
+                    {...{[CLEAR_ATTRIBUTE]: true}}
                 >
                     <IoClose className={styles.icon}/>
                 </Button>

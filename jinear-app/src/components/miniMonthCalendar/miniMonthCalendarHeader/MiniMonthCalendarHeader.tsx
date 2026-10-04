@@ -11,6 +11,7 @@ interface MiniMonthCalendarHeaderProps {
     setViewingDate: Dispatch<SetStateAction<Date>>;
     showYearPicker?: boolean;
     showLabel?: boolean;
+    withShortcuts?: boolean;
 }
 
 const START_YEAR = 1900;
@@ -22,6 +23,7 @@ const MiniMonthCalendarHeader: React.FC<MiniMonthCalendarHeaderProps> = ({
                                                                              setViewingDate,
                                                                              showYearPicker = true,
                                                                              showLabel = true,
+                                                                             withShortcuts = false,
                                                                          }) => {
     const viewingDateYear = format(viewingDate, "yyyy");
 
@@ -66,13 +68,13 @@ const MiniMonthCalendarHeader: React.FC<MiniMonthCalendarHeaderProps> = ({
             </div>
             {/* <div className="flex-1" /> */}
             <div className={styles.calendarNavigation}>
-                <Button onClick={prevMonth} className={styles.iconButton}>
+                <Button onClick={prevMonth} className={styles.iconButton} shortcut={withShortcuts ? "calendarPrevious" : undefined}>
                     <IoCaretBack/>
                 </Button>
-                <Button onClick={thisMonth} className={styles.iconButton}>
+                <Button onClick={thisMonth} className={styles.iconButton} shortcut={withShortcuts ? "calendarToday" : undefined}>
                     <IoEllipse size={7}/>
                 </Button>
-                <Button onClick={nextMonth} className={styles.iconButton}>
+                <Button onClick={nextMonth} className={styles.iconButton} shortcut={withShortcuts ? "calendarNext" : undefined}>
                     <IoCaretForward/>
                 </Button>
             </div>

@@ -57,6 +57,7 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({workspac
                     variant={ButtonVariants.brandColor}
                     className={styles.newTaskButton}
                     onClick={_popNewTaskModal}
+                    shortcut="newTask"
                     disabled={!workspace || !team}
                 >
                     <LuSquarePen/>
@@ -67,6 +68,7 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({workspac
                     className={styles.button}
                     variant={ButtonVariants.hoverFilled2}
                     onClick={searchTask}
+                    shortcut="searchTask"
                 >
                     <LuSearch className={styles.icon}/>
                     {t("mainFeaturesMenuLabelSearch")}
@@ -75,6 +77,7 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({workspac
                 <Button
                     className={styles.button}
                     href={lastActivitiesPath}
+                    shortcut="lastActivities"
                     variant={pathname?.indexOf(lastActivitiesPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
                 >
                     <LuSparkles className={styles.icon}/>
@@ -84,6 +87,7 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({workspac
                 <Button
                     className={styles.button}
                     href={assignedToMePath}
+                    shortcut="assignedToMe"
                     variant={pathname?.indexOf(assignedToMePath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
                 >
                     <LuClipboardPen className={styles.icon}/>

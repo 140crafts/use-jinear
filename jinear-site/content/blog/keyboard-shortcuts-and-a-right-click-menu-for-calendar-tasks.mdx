@@ -1,0 +1,107 @@
+---
+title: "Keyboard Shortcuts, and a Right-Click Menu for Calendar Tasks. Release v0.1.1685"
+description: "Hold Option (Alt on Windows and Linux) and Jinear shows you a key for the things you use most. Press Option+J and every button on the screen gets a label you can type. Tasks on the calendar also have a right-click menu now, so you can change a task without opening it."
+pubDate: "2026-10-04"
+tags: ["changelog", "calendar", "tasks"]
+author: "Çağdaş Tunca"
+---
+
+I like working in IntelliJ, where I can do almost everything without touching the mouse.
+Jinear never let me work that way. Every move meant reaching for the mouse. This release
+changes that, and gives calendar tasks a right-click menu while I was at it.
+
+<VideoEmbed id="jLbOaOMvclA" title="Keyboard shortcuts in Jinear" />
+
+## Hold Option to see the shortcuts
+
+I didn't want a long list of shortcuts that you have to learn before they're any use. So
+Jinear shows them to you instead. Hold **Option** (that's **Alt** on Windows and Linux) for
+a moment, and small badges appear on the buttons that have a shortcut. Press the key on the
+badge while you still hold Option, and that button gets clicked.
+
+![Holding Option shows a key on the buttons you use most](https://storage.googleapis.com/jinear-b0/web-assets/blog-posts/jin-575-keyboard-shortcuts/with-option.png)
+
+A few to start with:
+
+- **Option+1, 2, 3, 4** go to Calendar, Tasks, Notes, and Files.
+- **Option+N** creates a new task, or a new note when you're in Notes.
+- **Option+K** opens task search.
+- **Option+I** opens your inbox.
+- **Option+B, T, F** move the calendar back, to today, and forward.
+
+You don't have to memorize any of these. If you forget one, hold Option and look.
+
+Why Option and not Cmd? Browsers keep Cmd+1, Cmd+T, Cmd+W and most of the others for
+themselves, and a web page can't take them back. Option is free. And if you use IntelliJ on
+Windows or Linux, Alt+1 opening a part of the app will feel familiar.
+
+## Option+J: a label on everything
+
+Only the buttons you use most get a fixed key. For everything else there's **Option+J**.
+Press it and every button, link, and field on the screen gets a short label. Type the label
+and Jinear clicks it for you. If it's a text field, the cursor goes there.
+
+![Option+J puts a label on everything you can click](https://storage.googleapis.com/jinear-b0/web-assets/blog-posts/jin-575-keyboard-shortcuts/with-option%2BJ.png)
+
+The labels change from screen to screen, so this isn't something you learn by heart. You
+look, you type, you're there. Escape gets you out if you change your mind.
+
+## Creating a task without the mouse
+
+The new task window got the most attention, because that's where I add tasks all day.
+
+- The title field is ready to type into as soon as the window opens, and the shortcuts
+  still work while you're in it.
+- **Option** plus a letter picks the team, topic, assignee, collaborators, board, or dates.
+  Hold Option and you'll see which letter does what.
+- **Option+Shift** plus the same letter removes what you picked. Picked the wrong topic?
+  Option+Shift+T clears it.
+- **Option+Enter** creates the task, and **Escape** cancels.
+
+The pickers that open from there work with the keyboard too. Type to search, use the arrow
+keys to move through the results, and press Enter to pick one. In the date picker the arrow
+keys move between days.
+
+A couple of small things that help everywhere: Escape closes the window on top, and if
+you're in a text field with nothing to close, Escape takes you out of it so the shortcuts
+work again.
+
+## Right-click a task on the calendar
+
+Changing one thing on a task used to mean opening the task. Now you can right-click it on
+the calendar, in both the month view and the week view.
+
+![Right-click a task on the calendar to change it in place](https://storage.googleapis.com/jinear-b0/web-assets/blog-posts/jin-575-keyboard-shortcuts/righ-click-calendar-task.png)
+
+The menu shows where the task stands right now, and lets you change it:
+
+- **Status, topic, dates, assignee, collaborators, and boards.** Each one opens the same
+  window you know from the task page.
+- **Open task, open in a new tab, or copy its link.**
+
+The calendar updates as soon as you make a change. The menu works from the keyboard too:
+arrow keys to move, Enter to pick, Escape to close.
+
+## Where to find what's new
+
+There's a new newspaper icon at the top right of the app, next to the theme button. It
+opens this blog, so you can see what changed without looking for it. On a phone, it's in
+the More menu, behind the sliders icon at the top left.
+
+## What's not in it yet
+
+- Shortcuts need a keyboard, so on a phone nothing changes.
+- When you're writing a note, the shortcuts take a break. On some keyboards Option is how
+  you type characters like @ and #, and I didn't want Jinear getting in the way of that.
+  Press Escape to leave the note, and they're back.
+- The right-click menu is only on the calendar for now.
+- Events from your Google Calendar don't have the menu, since they belong to Google, not
+  Jinear.
+
+---
+
+If a shortcut is missing for something you do every day, or something is broken, write to
+me. That's where most of this comes from.
+
+The whole thing is on [GitLab](https://gitlab.com/140crafts/use-jinear) and
+[GitHub](https://github.com/140crafts/use-jinear).

@@ -128,13 +128,13 @@ const CalendarHeader: React.FC<CalendarHeaderProps> = ({}) => {
 
                     <div className="spacer-w-1"/>
 
-                    <Button onClick={prevPeriod}>
+                    <Button onClick={prevPeriod} shortcut="calendarPrevious">
                         <IoCaretBack/>
                     </Button>
-                    <Button onClick={today}>
+                    <Button onClick={today} shortcut="calendarToday">
                         <IoEllipse size={7}/>
                     </Button>
-                    <Button onClick={nextPeriod}>
+                    <Button onClick={nextPeriod} shortcut="calendarNext">
                         <IoCaretForward/>
                     </Button>
                 </div>

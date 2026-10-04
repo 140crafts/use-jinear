@@ -48,6 +48,7 @@ import type {
     SearchTaskModalState,
     TaskBoardPickerModalState,
     TaskOverviewModalState,
+    TaskContextMenuState,
     TaskTaskBoardAssignModalState,
     TeamMemberPickerModalState,
     TeamPickerModalState,
@@ -136,6 +137,9 @@ const initialState = {
         platform: "web"
     },
     taskOverviewModal: {
+        visible: false
+    },
+    taskContextMenu: {
         visible: false
     },
     teamPickerModal: {
@@ -321,6 +325,7 @@ const initialState = {
     addMemberToTeamModal: null | AddMemberToTeamModalState;
     notificationPermissionModal: null | NotificationPermissionModalState;
     taskOverviewModal: null | TaskOverviewModalState;
+    taskContextMenu: null | TaskContextMenuState;
     teamPickerModal: null | TeamPickerModalState;
     workspacePickerModal: null | WorkspacePickerModalState;
     newTaskBoardModal: null | NewTaskBoardModalState;
@@ -522,6 +527,13 @@ const slice = createSlice({
         },
         closeTaskOverviewModal: (state, action: PayloadAction<void>) => {
             state.taskOverviewModal = initialState.taskOverviewModal;
+        },
+
+        popTaskContextMenu: (state, action: PayloadAction<TaskContextMenuState>) => {
+            state.taskContextMenu = {...action.payload, visible: true};
+        },
+        closeTaskContextMenu: (state, action: PayloadAction<void>) => {
+            state.taskContextMenu = initialState.taskContextMenu;
         },
 
         popTeamPickerModal: (state, action: PayloadAction<TeamPickerModalState>) => {
@@ -988,6 +1000,8 @@ export const {
     closeNotificationPermissionModal,
     popTaskOverviewModal,
     closeTaskOverviewModal,
+    popTaskContextMenu,
+    closeTaskContextMenu,
     popTeamPickerModal,
     closeTeamPickerModal,
     popWorkspacePickerModal,
@@ -1227,6 +1241,8 @@ export const selectTaskOverviewModalVisible = (state: RootState) => state.modal.
 export const selectTaskOverviewModalTaskTag = (state: RootState) => state.modal.taskOverviewModal?.taskTag;
 export const selectTaskOverviewModalWorkspaceName = (state: RootState) => state.modal.taskOverviewModal?.workspaceName;
 export const selectTaskOverviewModalTask = (state: RootState) => state.modal.taskOverviewModal?.task;
+
+export const selectTaskContextMenu = (state: RootState) => state.modal.taskContextMenu;
 
 export const selectTeamPickerModalVisible = (state: RootState) => state.modal.teamPickerModal?.visible;
 export const selectTeamPickerModalWorkspaceId = (state: RootState) => state.modal.teamPickerModal?.workspaceId;

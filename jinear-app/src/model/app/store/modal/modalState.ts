@@ -124,6 +124,12 @@ export interface TaskOverviewModalState extends ModalState {
     task?: TaskDto
 }
 
+export interface TaskContextMenuState extends ModalState {
+    task?: TaskDto;
+    x?: number;
+    y?: number;
+}
+
 export interface NewTaskModalState extends ModalState {
     workspace?: WorkspaceDto;
     team?: TeamDto;

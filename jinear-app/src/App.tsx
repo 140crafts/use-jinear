@@ -63,6 +63,7 @@ import AdminAccountsPage from "@/pages/admin/accounts/page.tsx";
 import AdminMcpPage from "@/pages/admin/mcp/page.tsx";
 import OauthConsentPage from "@/pages/oauth/consent/page.tsx";
 import OauthConsentReturnListener from "@/components/oauthConsentReturnListener/OauthConsentReturnListener.tsx";
+import KeyboardShortcuts from "@/components/keyboardShortcuts/KeyboardShortcuts.tsx";
 
 export default function App() {
     return (
@@ -78,6 +79,7 @@ export default function App() {
             <PostHogPageView/>
             <ToasterProvider/>
             <BodyFixer/>
+            <KeyboardShortcuts/>
 
             <ReloadQueryRefetchHandler/>
             <OfflinePrefetchManager/>

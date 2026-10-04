@@ -20,6 +20,7 @@ import RelatedFeedItemButton from "./relatedFeedItemButton/RelatedFeedItemButton
 import TeamMemberPickerButton, {type ITeamMemberPickerButtonRef} from "./teamMemberPickerButton/TeamMemberPickerButton";
 import TitleInput from "./titleInput/TitleInput";
 import TopicPickerButton, {type ITopicPickerButtonRef} from "./topicPickerButton/TopicPickerButton";
+import Shortcut from "@/components/keyboardShortcuts/shortcut/Shortcut";
 
 interface NewTaskFormProps {
     workspace: WorkspaceDto;
@@ -173,14 +174,16 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
             <div className={styles.formContent}>
 
                 <div className={styles.workspaceAndTeamInfoContainer}>
-                    <WorkspaceAndTeamInfo
-                        readOnly={subTaskOf != null}
-                        workspace={workspace}
-                        team={selectedTeam}
-                        onTeamChange={setSelectedTeam}
-                        buttonContainerClassName={styles.workspaceAndTeamInfoButtonContainer}
-                        heightVariant={ButtonHeight.short}
-                    />
+                    <Shortcut id="taskTeam">
+                        <WorkspaceAndTeamInfo
+                            readOnly={subTaskOf != null}
+                            workspace={workspace}
+                            team={selectedTeam}
+                            onTeamChange={setSelectedTeam}
+                            buttonContainerClassName={styles.workspaceAndTeamInfoButtonContainer}
+                            heightVariant={ButtonHeight.short}
+                        />
+                    </Shortcut>
                 </div>
 
                 <input type="hidden" value={workspaceId} {...register("workspaceId")} />
@@ -214,57 +217,66 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
                 <div className="flex-1"/>
 
                 <div className={styles.actionBar}>
-                    <TopicPickerButton
-                        register={register}
-                        setValue={setValue}
-                        workspace={workspace}
-                        team={selectedTeam}
-                        ref={topicPickerButtonRef}
-                    />
-                    <TeamMemberPickerButton
-                        register={register}
-                        setValue={setValue}
-                        teamId={selectedTeam.teamId}
-                        ref={teamMemberPickerButtonRef}
-                    />
-                    <CollaboratorPickerButton
-                        setValue={setValue}
-                        teamId={selectedTeam.teamId}
-                        ref={collaboratorPickerButtonRef}
-                    />
-
-                    <BoardPickerButton
-                        register={register}
-                        setValue={setValue}
-                        workspace={workspace}
-                        team={selectedTeam}
-                        ref={boardPickerButtonRef}
-                        initialBoard={initialBoard}
-                    />
-
-                    <DatePickerButton
-                        register={register}
-                        setValue={setValue}
-                        fieldName="assignedDate"
-                        isPreciseFieldName="hasPreciseAssignedDate"
-                        initialDate={initialAssignedDate}
-                        initialDateIsPrecise={initialAssignedDateIsPrecise}
-                        dateSpanStart={assignedDate && dueDate ? new Date(assignedDate) : undefined}
-                        dateSpanEnd={dueDate ? new Date(dueDate) : undefined}
-                        disabledAfter={dueDate ? new Date(dueDate) : undefined}
-                    />
-                    <DatePickerButton
-                        register={register}
-                        setValue={setValue}
-                        fieldName="dueDate"
-                        isPreciseFieldName="hasPreciseDueDate"
-                        initialDate={initialDueDate}
-                        initialDateIsPrecise={initialDueDateIsPrecise}
-                        dateSpanStart={assignedDate ? new Date(assignedDate) : undefined}
-                        dateSpanEnd={dueDate ? new Date(dueDate) : undefined}
-                        disabledBefore={assignedDate ? new Date(assignedDate) : undefined}
-                    />
-
+                    <Shortcut id="taskTopic">
+                        <TopicPickerButton
+                            register={register}
+                            setValue={setValue}
+                            workspace={workspace}
+                            team={selectedTeam}
+                            ref={topicPickerButtonRef}
+                        />
+                    </Shortcut>
+                    <Shortcut id="taskAssignee">
+                        <TeamMemberPickerButton
+                            register={register}
+                            setValue={setValue}
+                            teamId={selectedTeam.teamId}
+                            ref={teamMemberPickerButtonRef}
+                        />
+                    </Shortcut>
+                    <Shortcut id="taskCollaborators">
+                        <CollaboratorPickerButton
+                            setValue={setValue}
+                            teamId={selectedTeam.teamId}
+                            ref={collaboratorPickerButtonRef}
+                        />
+                    </Shortcut>
+                    <Shortcut id="taskBoard">
+                        <BoardPickerButton
+                            register={register}
+                            setValue={setValue}
+                            workspace={workspace}
+                            team={selectedTeam}
+                            ref={boardPickerButtonRef}
+                            initialBoard={initialBoard}
+                        />
+                    </Shortcut>
+                    <Shortcut id="taskAssignedDate">
+                        <DatePickerButton
+                            register={register}
+                            setValue={setValue}
+                            fieldName="assignedDate"
+                            isPreciseFieldName="hasPreciseAssignedDate"
+                            initialDate={initialAssignedDate}
+                            initialDateIsPrecise={initialAssignedDateIsPrecise}
+                            dateSpanStart={assignedDate && dueDate ? new Date(assignedDate) : undefined}
+                            dateSpanEnd={dueDate ? new Date(dueDate) : undefined}
+                            disabledAfter={dueDate ? new Date(dueDate) : undefined}
+                        />
+                    </Shortcut>
+                    <Shortcut id="taskDueDate">
+                        <DatePickerButton
+                            register={register}
+                            setValue={setValue}
+                            fieldName="dueDate"
+                            isPreciseFieldName="hasPreciseDueDate"
+                            initialDate={initialDueDate}
+                            initialDateIsPrecise={initialDueDateIsPrecise}
+                            dateSpanStart={assignedDate ? new Date(assignedDate) : undefined}
+                            dateSpanEnd={dueDate ? new Date(dueDate) : undefined}
+                            disabledBefore={assignedDate ? new Date(assignedDate) : undefined}
+                        />
+                    </Shortcut>
                 </div>
 
                 {/* <DescriptionInput labelClass={styles.label} inputClass={styles.textAreaInput} register={register} setValue={setValue} /> */}
@@ -276,6 +288,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
                     <Button
                         disabled={isInitializeTaskLoading}
                         onClick={onClose}
+                        dismiss
                         className={styles.footerButton}
                         heightVariant={ButtonHeight.short}
                     >
@@ -283,6 +296,7 @@ const NewTaskForm: React.FC<NewTaskFormProps> = ({
                     </Button>
                     <Button
                         type="submit"
+                        shortcut="taskCreate"
                         disabled={isInitializeTaskLoading}
                         loading={isInitializeTaskLoading}
                         className={styles.footerButton}

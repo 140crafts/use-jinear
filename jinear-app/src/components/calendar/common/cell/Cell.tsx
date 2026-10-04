@@ -23,6 +23,7 @@ import {
 import styles from "./Cell.module.scss";
 import useTranslation from "@/locals/useTranslation";
 import {Link} from "react-router-dom";
+import {useTaskContextMenu} from "@/components/taskContextMenu/useTaskContextMenu";
 
 interface CellProps {
     weight: number;
@@ -49,6 +50,7 @@ const Cell: React.FC<CellProps> = ({id, weight, calendarEvent, weekStart, weekEn
     const setGhostEvent = useSetGhostEvent();
     const isGhostEvent = calendarEvent && calendarEvent.calendarEventId.indexOf("dragging") != -1;
     const isDraggingEvent = calendarEvent && draggingEvent && calendarEvent.calendarEventId == draggingEvent.calendarEventId;
+    const onContextMenu = useTaskContextMenu(isGhostEvent ? null : calendarEvent?.relatedTask);
 
     const _assignedDate = calendarEvent?.assignedDate && new Date(calendarEvent.assignedDate);
     const _dueDate = calendarEvent?.dueDate && new Date(calendarEvent.dueDate);
@@ -168,6 +170,7 @@ const Cell: React.FC<CellProps> = ({id, weight, calendarEvent, weekStart, weekEn
             onMouseOut={_hoverEnd}
             onDragStart={_onDragStart}
             onDragEnd={_onDragEnd}
+            onContextMenu={onContextMenu}
             draggable={true}
         >
             {isStartDateNotInViewingPeriodAndTodayIsFirstDayOfViewingPeriod && (

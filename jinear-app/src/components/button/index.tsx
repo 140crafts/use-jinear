@@ -3,6 +3,7 @@ import React, {type FC} from "react";
 import styles from "./index.module.css";
 import {LuLoaderCircle} from "react-icons/lu";
 import {Link} from "react-router-dom";
+import {DISMISS_ATTRIBUTE, SHORTCUT_ATTRIBUTE, type ShortcutId} from "@/keyboard/keymap";
 
 export const ButtonVariants = {
     default: "default",
@@ -91,6 +92,8 @@ interface ButtonProps {
     draggable?: boolean;
     onDragOver?: (event: React.DragEvent<HTMLButtonElement>) => void;
     onDrop?: (event: React.DragEvent<any>) => void;
+    shortcut?: ShortcutId;
+    dismiss?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -104,12 +107,16 @@ const Button: React.FC<ButtonProps> = ({
                                            progessSize = 15,
                                            className,
                                            children,
+                                           shortcut,
+                                           dismiss,
                                            ...props
                                        }) => {
     const Comp = href ? LinkButton : BaseButton;
     return (
         <Comp
             {...props}
+            {...(shortcut && {[SHORTCUT_ATTRIBUTE]: shortcut})}
+            {...(dismiss && {[DISMISS_ATTRIBUTE]: true})}
             disabled={disabled}
             href={href as string}
             target={target as string}

@@ -31,6 +31,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
             <Button
                 className={styles.iconButton}
                 href={calendarPath}
+                shortcut="navCalendar"
                 variant={pathname?.indexOf(calendarPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             >
                 <LuCalendarDays className={styles.icon}/>
@@ -40,6 +41,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
             <Button
                 className={styles.iconButton}
                 href={tasksPath}
+                shortcut="navTasks"
                 variant={pathname?.indexOf(tasksPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             >
                 <LuSquareCheckBig className={styles.icon}/>
@@ -49,6 +51,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
             <Button
                 className={styles.iconButton}
                 href={notesPath}
+                shortcut="navNotes"
                 variant={pathname?.indexOf(notesPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             >
                 <LuNotebook className={styles.icon}/>
@@ -58,6 +61,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
             <Button
                 className={styles.iconButton}
                 href={filesPath}
+                shortcut="navFiles"
                 variant={pathname?.indexOf(filesPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
             >
                 <LuFolder className={styles.icon}/>
@@ -68,6 +72,7 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
                 <Button
                     className={styles.iconButton}
                     href={instanceSettingsPath}
+                    shortcut="navInstanceSettings"
                     variant={pathname?.indexOf(instanceSettingsPath) != -1 ? ButtonVariants.filled2 : ButtonVariants.hoverFilled2}
                 >
                     <LuShieldCheck className={styles.icon}/>

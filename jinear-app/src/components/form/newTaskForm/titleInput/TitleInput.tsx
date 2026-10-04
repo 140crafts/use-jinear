@@ -5,6 +5,7 @@ import useTranslation from "@/locales/useTranslation";
 import React, { useEffect } from "react";
 import type { UseFormRegister } from "react-hook-form";
 import styles from "./TitleInput.module.css";
+import { SHORTCUT_ATTRIBUTE, type ShortcutId } from "@/keyboard/keymap";
 
 interface TitleInputProps {
   register: UseFormRegister<TaskInitializeRequest>;
@@ -33,6 +34,7 @@ const TitleInput: React.FC<TitleInputProps> = ({ register, labelClass }) => {
       placeholder={t("newTaskModalTaskTitle")}
       className={cn(styles.input, labelClass)}
       onKeyDown={isEnter}
+      {...{ [SHORTCUT_ATTRIBUTE]: "taskTitle" satisfies ShortcutId }}
       {...register("title", { required: t("newTaskFormTitleRequiredField") })}
     />
   );

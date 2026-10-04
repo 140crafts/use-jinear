@@ -58,6 +58,7 @@ const DayButton: React.FC<DayButtonProps> = ({
     <Button
       key={`mini-calendar-day-${day.getTime()}`}
       disabled={isDisabled}
+      aria-current={isSameDay(selectedDate, day) ? "date" : undefined}
       variant={isSameDay(selectedDate, day) ? ButtonVariants.filled : ButtonVariants.default}
       className={cn(
         styles.buttonBase,
