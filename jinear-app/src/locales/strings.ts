@@ -7029,6 +7029,10 @@ const translations = {
         en: "None",
         tr: "Yok"
     },
+    whatsNewButtonLabel: {
+        en: "What's new",
+        tr: "Yenilikler"
+    },
 
 };
 

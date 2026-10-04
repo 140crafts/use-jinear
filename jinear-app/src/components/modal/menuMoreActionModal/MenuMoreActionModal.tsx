@@ -10,6 +10,8 @@ import Modal from "../modal/Modal";
 import styles from "./MenuMoreActionModal.module.css";
 import WorkspaceMembersButton from "./workspaceMembersButton/WorkspaceMembersButton";
 import WorkspaceSettingsButton from "./workspaceSettingsButton/WorkspaceSettingsButton";
+import WhatsNewMoreMenuButton from "./whatsNewMoreMenuButton/WhatsNewMoreMenuButton";
+import useWidthLimit, {MOBILE_LAYOUT_BREAKPOINT} from "@/hooks/useWidthLimit";
 import InstallPwaAppButton from "@/components/installPwaAppButton/InstallPwaAppButton";
 import isPwa from "@/util/pwaHelper";
 import Logger from "@/util/logger.ts";
@@ -25,6 +27,7 @@ const MenuMoreActionModal: React.FC<MenuMoreActionModalProps> = ({}) => {
     const visible = useTypedSelector(selectMenuMoreActionModalVisible);
     const {isMobile} = useWindowSize();
     const _isPwa = isPwa();
+    const isMobileLayout = useWidthLimit({limit: MOBILE_LAYOUT_BREAKPOINT});
 
     const {workspaceName} = useParams();
     const workspace = useTypedSelector(selectWorkspaceFromWorkspaceUsername(workspaceName || ""));
@@ -49,6 +52,7 @@ const MenuMoreActionModal: React.FC<MenuMoreActionModalProps> = ({}) => {
             </div>
             <WorkspaceSettingsButton workspaceName={workspaceName} requestClose={close}/>
             <WorkspaceMembersButton workspaceName={workspaceName} requestClose={close}/>
+            {isMobileLayout && <WhatsNewMoreMenuButton requestClose={close}/>}
         </Modal>
     );
 };

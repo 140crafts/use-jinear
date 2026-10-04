@@ -3,6 +3,7 @@ export const __DEV__ = !import.meta.env.MODE || import.meta.env.MODE === "develo
 export const ROUTE_IF_LOGGED_IN = '/';
 
 export const TERMS = "https://jinear.co/terms";
+export const CHANGELOG = "https://jinear.co/blog";
 // Runtime-configurable via env. The unplugin replaces this at build time with
 // a placeholder; `import-meta-env -x .env.production` substitutes the real value
 // at container start. Trailing slash is normalized so callers don't have to.

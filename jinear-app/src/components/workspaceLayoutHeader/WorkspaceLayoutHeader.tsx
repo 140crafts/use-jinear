@@ -13,6 +13,7 @@ import {useLocation, useParams} from "react-router-dom";
 import Button from "@/components/button";
 import {LuRss} from "react-icons/lu";
 import InboxButton from "@/components/workspaceLayoutHeader/inboxButton/InboxButton.tsx";
+import WhatsNewButton from "@/components/whatsNewButton/WhatsNewButton";
 
 interface WorkspaceLayoutHeaderProps {
 }
@@ -44,7 +45,14 @@ const WorkspaceLayoutHeader: React.FC<WorkspaceLayoutHeaderProps> = ({}) => {
                 )}
             </div>
             <div className={styles.headerRightContent}>
-                {!_isPwa && <InstallPwaAppButton className={styles.pwiButton} withLabel={pwiButtonWithLabel}/>}
+                {!isMobile && <WhatsNewButton/>}
+                {!_isPwa &&
+                    <InstallPwaAppButton
+                        className={styles.pwiButton}
+                        // withLabel={pwiButtonWithLabel}
+                        withLabel={false}
+                    />
+                }
                 <SideMenuFooter/>
             </div>
         </div>

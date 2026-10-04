@@ -39,7 +39,7 @@ const InstallPwaAppButton: React.FC<InstallPwaAppButtonProps> = ({className, wit
             className={cn(styles.pwaInstallButton, className)}
             heightVariant={ButtonHeight.short}
             variant={ButtonVariants.outline}
-            data-tooltip-right={onInstallPromptEvent == null ? t("headerInstallPwaButtonTooltip") : undefined}
+            data-tooltip-right={(onInstallPromptEvent == null) && (!withLabel) ? t("headerInstallPwaButtonTooltip") : undefined}
         >
             <LuDownload/>
             {withLabel &&

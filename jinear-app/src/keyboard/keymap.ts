@@ -9,6 +9,7 @@ export const shortcuts = {
     navInstanceSettings: "5",
     inbox: "i",
     switchWorkspace: "w",
+    whatsNew: "u",
 
     newTask: "n",
     searchTask: "k",
