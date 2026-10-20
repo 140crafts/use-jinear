@@ -29,6 +29,16 @@
     # that don't execute JS and non-HTML responses.
     header X-Robots-Tag "noindex, nofollow"
 
+    # HSTS is not set here: this container serves plain HTTP and cannot know whether
+    # the upstream terminates TLS. The TLS terminator (gateway Caddy, Cloudflare) sets it.
+    header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Content-Security-Policy "frame-ancestors 'self'; object-src 'none'; base-uri 'self'"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=(), usb=(), serial=(), bluetooth=()"
+    }
+
     # SPA fallback, any unknown path serves index.html so the React router can handle it.
     try_files {path} /index.html
     file_server

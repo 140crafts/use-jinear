@@ -197,16 +197,21 @@ services:
       - "traefik.http.routers.jinear-main.entrypoints=websecure"
       - "traefik.http.routers.jinear-main.tls.certresolver=letsencrypt"
       - "traefik.http.routers.jinear-main.service=jinear-caddy"
+      - "traefik.http.routers.jinear-main.middlewares=jinear-hsts"
       # API domain
       - "traefik.http.routers.jinear-api.rule=Host(`api.jinear.cagdastunca.com`)"
       - "traefik.http.routers.jinear-api.entrypoints=websecure"
       - "traefik.http.routers.jinear-api.tls.certresolver=letsencrypt"
       - "traefik.http.routers.jinear-api.service=jinear-caddy"
+      - "traefik.http.routers.jinear-api.middlewares=jinear-hsts"
       # Files domain
       - "traefik.http.routers.jinear-files.rule=Host(`files.jinear.cagdastunca.com`)"
       - "traefik.http.routers.jinear-files.entrypoints=websecure"
       - "traefik.http.routers.jinear-files.tls.certresolver=letsencrypt"
       - "traefik.http.routers.jinear-files.service=jinear-caddy"
+      - "traefik.http.routers.jinear-files.middlewares=jinear-hsts"
+      # HSTS: Traefik terminates TLS, so it sets this header
+      - "traefik.http.middlewares.jinear-hsts.headers.stsSeconds=31536000"
       # Service definition
       - "traefik.http.services.jinear-caddy.loadbalancer.server.port=80"
 

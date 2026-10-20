@@ -19,5 +19,12 @@ http://api.jinear.example.com {
 }
 
 http://files.jinear.example.com {
+    # User uploads are served from this origin. Block scripts so an uploaded HTML or
+    # SVG file cannot run code. `sandbox` is not used: it can break the browser PDF viewer.
+    header {
+        X-Content-Type-Options "nosniff"
+        Content-Security-Policy "script-src 'none'"
+    }
+
     reverse_proxy http://jinear-minio:9000
 }

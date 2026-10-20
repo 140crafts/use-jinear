@@ -5,6 +5,9 @@
 }
 
 https://__DOMAIN__ {
+    # No includeSubDomains: __DOMAIN__ may be an apex with unrelated HTTP-only subdomains.
+    header Strict-Transport-Security "max-age=31536000"
+
     reverse_proxy {
         to http://jinear-app:80
         header_up Host {http.reverse_proxy.upstream.host}
@@ -13,6 +16,8 @@ https://__DOMAIN__ {
 }
 
 https://__API_DOMAIN__ {
+    header Strict-Transport-Security "max-age=31536000"
+
     reverse_proxy {
         to http://jinear-core:8008
         header_up Host {http.reverse_proxy.upstream.host}
@@ -21,6 +26,15 @@ https://__API_DOMAIN__ {
 }
 
 https://__FILES_DOMAIN__ {
+    header Strict-Transport-Security "max-age=31536000"
+
+    # User uploads are served from this origin. Block scripts so an uploaded HTML or
+    # SVG file cannot run code. `sandbox` is not used: it can break the browser PDF viewer.
+    header {
+        X-Content-Type-Options "nosniff"
+        Content-Security-Policy "script-src 'none'"
+    }
+
     @all {
         method GET POST PUT DELETE HEAD OPTIONS
     }

@@ -9,6 +9,15 @@
     root * /srv
     encode zstd gzip
 
+    # HSTS is not set here: this container serves plain HTTP. The TLS terminator sets it.
+    header {
+        X-Content-Type-Options "nosniff"
+        X-Frame-Options "SAMEORIGIN"
+        Content-Security-Policy "frame-ancestors 'self'; object-src 'none'; base-uri 'self'"
+        Referrer-Policy "strict-origin-when-cross-origin"
+        Permissions-Policy "camera=(), microphone=(), geolocation=(), usb=(), serial=(), bluetooth=(), payment=()"
+    }
+
     # Next emits content-hashed assets under /_next/static, so cache forever.
     @assets path /_next/static/*
     header @assets Cache-Control "public, max-age=31536000, immutable"

@@ -6,6 +6,8 @@ acme_ca https://acme-v02.api.letsencrypt.org/directory
 }
 
 https://jinear.cagdastunca.com {
+    header Strict-Transport-Security "max-age=31536000"
+
     reverse_proxy {
         to http://jinear-app:80
         header_up Host {http.reverse_proxy.upstream.host}
@@ -14,6 +16,8 @@ https://jinear.cagdastunca.com {
 }
 
 https://api.jinear.cagdastunca.com {
+    header Strict-Transport-Security "max-age=31536000"
+
     reverse_proxy {
         to http://jinear-core:8008
         header_up Host {http.reverse_proxy.upstream.host}
@@ -22,6 +26,15 @@ https://api.jinear.cagdastunca.com {
 }
 
 https://files.jinear.cagdastunca.com {
+    header Strict-Transport-Security "max-age=31536000"
+
+    # User uploads are served from this origin. Block scripts so an uploaded HTML or
+    # SVG file cannot run code. `sandbox` is not used: it can break the browser PDF viewer.
+    header {
+        X-Content-Type-Options "nosniff"
+        Content-Security-Policy "script-src 'none'"
+    }
+
     # Handle all methods
     @all {
         method GET POST PUT DELETE HEAD OPTIONS
