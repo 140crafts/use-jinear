@@ -174,6 +174,20 @@ The image builds the static export and serves `out/` via Caddy (see
 [`Dockerfile`](./Dockerfile) and [`Caddyfile`](./Caddyfile)). TLS is expected to
 be terminated by an upstream reverse proxy.
 
+### Analytics proxy (`/relay`)
+
+The Caddyfile proxies `/relay/*` to PostHog US, so ad blockers that drop
+`*.posthog.com` requests do not hide visits. The site sends its events to `/relay`
+(see `components/postHogProvider/CSPostHogProvider.js`). The hosted app uses the
+same proxy: set `VITE_POSTHOG_HOST=https://jinear.co/relay` on the hosted
+`jinear-app` only. Self-hosted app images do not include this route, so they never
+send data to Jinear's PostHog. `next dev` has no Caddy, so local events are
+dropped.
+
+For correct GeoIP, Caddy trusts `X-Forwarded-For` from private-range addresses
+(`trusted_proxies static private_ranges`). If the upstream TLS terminator uses a
+public address (for example Cloudflare), change that list.
+
 ## Optional: self-hosting the site
 
 The default self-host setup routes your apex domain to `jinear-app`. If you also

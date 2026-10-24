@@ -5,6 +5,14 @@
 # every route has its own pre-rendered HTML, so there is NO SPA fallback to
 # index.html; unknown paths return the real 404 page.
 
+{
+    # The /relay proxy below forwards X-Forwarded-For to PostHog for GeoIP. Trust
+    # the upstream TLS terminator's header, or every event gets its address.
+    servers {
+        trusted_proxies static private_ranges
+    }
+}
+
 :80 {
     root * /srv
     encode zstd gzip
@@ -40,6 +48,36 @@
         file {path}/index.html
     }
     redir @needs_slash {path}/ 301
+
+    # First-party PostHog proxy, so ad blockers that drop *.posthog.com requests
+    # still let analytics through. Lives here, not in jinear-app's Caddyfile,
+    # because this site only runs on the hosted service: self-hosted app images
+    # never proxy to Jinear's PostHog. The hosted app (app.jinear.co) reaches it
+    # cross-origin through VITE_POSTHOG_HOST, so PostHog's own CORS headers are
+    # kept. The asset routes must come before the catch-all.
+    handle_path /relay/static/* {
+        rewrite * /static{path}
+        reverse_proxy https://us-assets.i.posthog.com:443 {
+            header_up Host us-assets.i.posthog.com
+            header_up -Cookie
+            header_up -Authorization
+        }
+    }
+    handle_path /relay/array/* {
+        rewrite * /array{path}
+        reverse_proxy https://us-assets.i.posthog.com:443 {
+            header_up Host us-assets.i.posthog.com
+            header_up -Cookie
+            header_up -Authorization
+        }
+    }
+    handle_path /relay/* {
+        reverse_proxy https://us.i.posthog.com:443 {
+            header_up Host us.i.posthog.com
+            header_up -Cookie
+            header_up -Authorization
+        }
+    }
 
     # `trailingSlash: true` means routes are exported as <path>/index.html.
     try_files {path} {path}/index.html {path}.html
