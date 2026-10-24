@@ -1,0 +1,38 @@
+/* The about page reuses the blog's layout (app/blog/blog.module.scss); this is the facts list. */
+
+.facts {
+  margin: 0;
+  border-top: 1px solid var(--border);
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+
+  dt {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--ink-3);
+    padding-top: 4px;
+  }
+
+  dd {
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .fact {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
+
+.body h2 {
+  text-align: left;
+}

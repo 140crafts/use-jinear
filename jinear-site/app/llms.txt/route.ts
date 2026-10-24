@@ -7,6 +7,7 @@ import {
   SITE_URL,
 } from "@/utils/constants";
 import { getAllPosts } from "@/lib/posts";
+import { getAllComparisons } from "@/lib/comparisons";
 
 // Emitted at /llms.txt during `next build`. Follows the llms.txt convention:
 // a concise, link-rich index that helps AI agents understand and cite the site.
@@ -25,6 +26,13 @@ export function GET() {
     .map(
       (post) =>
         `- [${oneLine(post.title)}](${SITE_URL}/blog/${post.slug}/) (${post.pubDate}): ${oneLine(post.description)}`
+    )
+    .join("\n");
+
+  const comparisonLines = getAllComparisons()
+    .map(
+      (comparison) =>
+        `- [${oneLine(comparison.title)}](${SITE_URL}/compare/${comparison.slug}/): ${oneLine(comparison.description)}`
     )
     .join("\n");
 
@@ -71,15 +79,23 @@ any time.
 - [Pricing](${SITE_URL}/pricing/): Free self-hosting vs. hosted plans. No per-user pricing.
 - [MCP](${SITE_URL}/mcp/): Connect Claude or ChatGPT to Jinear. Setup steps and the full tool list.
 - [Blog](${SITE_URL}/blog/): Guides and updates.
+- [About](${SITE_URL}/about/): Key facts (license, plans, stack), privacy, and what Jinear does not have.
+- [Compare](${SITE_URL}/compare/): Jinear compared with Trello, Asana, Notion, Jira and other tools, including where they are the better pick.
 - [Terms](${SITE_URL}/terms/): Terms of service and privacy.
 
 ## Blog posts
 
 ${blogLines}
 
+## Comparisons
+
+Written by Jinear's maintainer. Each page lists where the other tool is the better choice.
+
+${comparisonLines}
+
 ## Optional
 
-- [Full text](${SITE_URL}/llms-full.txt): This index plus every blog post in full.
+- [Full text](${SITE_URL}/llms-full.txt): This index plus every blog post and comparison in full.
 - [RSS feed](${SITE_URL}/blog/rss.xml): New posts.
 - [Sitemap](${SITE_URL}/sitemap.xml): Every page on this site.
 - [Hosted app](${APP_URL}): Sign in or create an account.

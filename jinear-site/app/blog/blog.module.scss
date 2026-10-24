@@ -24,7 +24,7 @@
   font-size: 18px;
   color: var(--ink-2);
   margin-top: 18px;
-  max-width: 52ch;
+  text-align: justify;
 }
 
 .blk {
@@ -164,6 +164,15 @@
 
     b {
       font-weight: 600;
+    }
+
+    b a {
+      color: inherit;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: var(--acc-deep);
+      }
     }
 
     span {

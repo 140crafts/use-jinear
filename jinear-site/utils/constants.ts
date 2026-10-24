@@ -24,6 +24,13 @@ export const GITLAB_URL = "https://gitlab.com/140crafts/use-jinear";
 export const SELF_HOSTING_DOCS_URL =
   "https://github.com/140crafts/use-jinear/blob/main/jinear-installation-scripts/README.md";
 
+export const TELEGRAM_URL = "https://t.me/usejinear";
+
+export const MAINTAINER_NAME = "Çağdaş Tunca";
+export const MAINTAINER_EMAIL = "cagdas@jinear.co";
+export const MAINTAINER_AVATAR =
+  "https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v3/ben.jpg";
+
 export const MCP_DOCS_URL =
   "https://gitlab.com/140crafts/use-jinear/-/tree/main/docs/mcp";
 

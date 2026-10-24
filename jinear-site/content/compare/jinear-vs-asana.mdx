@@ -1,0 +1,90 @@
+---
+title: "Jinear vs Asana: Pricing, Features and Self-Hosting"
+description: "Asana adds timelines, goals, reporting and automation. Jinear is a smaller open-source tool you can self-host. Where each one is the better pick."
+pubDate: "2026-10-20"
+checkedDate: "2026-10-20"
+competitor: "Asana"
+competitorUrl: "https://asana.com/pricing"
+tags: ["comparison", "asana", "project management", "self-hosting", "asana alternative"]
+author: "Çağdaş Tunca"
+---
+
+Short answer: Asana is the stronger product for structured project management in a company that
+needs timelines, portfolios, reporting and automation. Jinear is the better fit if you are a small
+team that wants to self-host, or that wants tasks, a calendar, notes and files without paying per
+seat. I build Jinear, so read this with that in mind.
+
+## The short version
+
+Asana is built for organizations that plan and report on work: Gantt-style timelines, goals,
+portfolios, workload, forms, rules and a large integration list. It is a mature product with a
+large team behind it.
+
+Jinear is a much smaller tool. It covers the day-to-day part (tasks, boards, a calendar, notes,
+files) and leaves out the planning and reporting layer. It is an open-source (AGPL-3.0) Asana
+alternative that you can run on your own server, and the hosted Team plan is one flat price.
+
+<CompareTable
+  competitor="Asana"
+  rows={[
+    ["Hosting", "Hosted, or self-hosted with Docker Compose", "Cloud only. Asana says it does not plan to offer a self-hosted version"],
+    ["Source code", "Open source, AGPL-3.0", "Closed source"],
+    ["Free plan", "Up to 3 people", "Personal: up to 2 users, list, board and calendar views, 100 MB per file"],
+    ["Paid plans", "Team: $24.90/mo flat, unlimited people", "Starter $10.99, Advanced $24.99 per user/mo (billed yearly); Enterprise by quote"],
+    ["Views", "List, status board (kanban), calendar", "List, board, calendar; timeline and Gantt from Starter"],
+    ["Goals, portfolios, reporting", "None", "Yes, on paid plans"],
+    ["Custom fields and forms", "None", "From Starter"],
+    ["Automation", "None", "Rules from Starter"],
+    ["Docs and notes", "Notebooks with nested rich-text notes", "Task descriptions and project briefs"],
+    ["File storage", "Folders with access control, on your own storage if self-hosted", "Attachments on tasks"],
+    ["Integrations", "Google Calendar (two-way), iCal feed, MCP", "100+ integrations, including on the free plan"],
+    ["SSO and two-factor login", "Neither yet", "Two-factor login for everyone; SAML SSO on Enterprise"],
+    ["Mobile", "Installable web app (PWA)", "Native iOS and Android apps"],
+  ]}
+/>
+
+## Where Asana is better
+
+- **Planning and reporting.** Timelines, Gantt, goals, portfolios, workload and dashboards. Jinear
+  has none of these. If your manager wants a status report out of the tool, Asana does it and
+  Jinear does not.
+- **Custom fields, forms and rules.** Asana lets you shape a project around your process and
+  automate the boring parts. Jinear has custom workflow statuses and labels, and that is it.
+- **Integrations.** Asana connects to most tools a company already uses. Jinear connects to Google
+  Calendar and to AI assistants over MCP.
+- **Security checkboxes.** Asana has two-factor login, and SAML SSO and admin controls on its
+  Enterprise plans. Jinear has no SSO and no two-factor login today. If your procurement process asks for SAML, Jinear will not pass.
+- **Support.** Asana has a support team and help for large rollouts. Jinear has one maintainer,
+  so you email the person who writes the code. That is quick for a bug, and limited for training a
+  large organization.
+
+## Where Jinear is better
+
+- **Self-hosting.** Asana is cloud only. Jinear runs on your own server with every feature
+  included, which matters if your data cannot leave your infrastructure.
+- **Price at team size.** Asana charges per seat, and many useful features start at Advanced
+  ($24.99 per user per month). Jinear's Team plan is $24.90 a month for the whole team.
+- **Calendar, notes and files in the same tool.** Jinear has a real calendar with two-way Google
+  Calendar sync, notebooks for documentation, and file storage with folders and permissions.
+- **Simplicity.** Jinear has less to set up. For a small team that only needs to track who does
+  what and when, Asana can be more tool than the job needs.
+
+## What it costs a team of 10
+
+- **Asana Starter** (billed yearly): 10 x $10.99 = $109.90 a month
+- **Asana Advanced** (billed yearly): 10 x $24.99 = $249.90 a month
+- **Jinear Team** (billed monthly): $24.90 a month
+- **Jinear self-hosted**: $0, plus the cost of your server
+
+These two are not the same product, so the price gap reflects a real feature gap too. Compare the
+price only after you are sure Jinear covers what you need.
+
+## Which one should you pick?
+
+Pick **Asana** if you run projects with deadlines that someone reports on, you need timelines,
+custom fields or automation, or your company requires SSO.
+
+Pick **Jinear** if you are a small team or a solo developer, you want to self-host, and your work
+fits in tasks, a calendar, notes and files.
+
+Jinear has no Asana importer. Moving over is manual, or done through an AI assistant over MCP.

@@ -1,0 +1,94 @@
+---
+title: "Jinear vs Basecamp: Two Flat-Priced Tools Compared"
+description: "Basecamp and Jinear both skip per-user pricing. Basecamp is a mature cloud project hub; Jinear is smaller, open source and self-hostable."
+pubDate: "2026-10-20"
+checkedDate: "2026-10-20"
+competitor: "Basecamp"
+competitorUrl: "https://basecamp.com/pricing"
+tags: ["comparison", "basecamp", "flat pricing", "self-hosting", "basecamp alternative"]
+author: "Çağdaş Tunca"
+---
+
+Short answer: Basecamp is the better choice if you want one calm place for a team's projects,
+announcements, chat and client work, from a company that has run it for decades. Jinear is the
+better choice if you need to self-host, or if you want a task-first tool with a real calendar
+and no limit on projects. I build Jinear, so read this with that in mind.
+
+## The short version
+
+Of all the tools on this list, Basecamp is the closest to Jinear in spirit. Both charge a flat
+price with unlimited users, and both try to stay simple. Basecamp has been doing this much longer.
+
+Basecamp is organized around projects. Each project gets a set of tools: message board, to-dos,
+card table (kanban), schedule, docs and files, a Campfire chat, and automatic check-ins. It is
+cloud only and closed source. 37signals does release some of its other apps as self-hostable open
+source (Campfire, Writebook and Fizzy, which run on its ONCE server), but Basecamp is not one of
+them.
+
+Jinear is organized around teams and tasks. It has tasks, boards, a calendar, notes and files. If
+you want a Basecamp alternative that you can self-host, it is one option: open source (AGPL-3.0),
+and you can run all of it on your own server.
+
+<CompareTable
+  competitor="Basecamp"
+  rows={[
+    ["Hosting", "Hosted, or self-hosted with Docker Compose", "Cloud only"],
+    ["Source code", "Open source, AGPL-3.0", "Closed source"],
+    ["Pricing model", "Flat, unlimited users", "Flat, unlimited users, priced by number of active projects and storage"],
+    ["Free plan", "Up to 3 people, no project limit", "1 project, 1 GB of storage"],
+    ["Paid plans", "Team: $24.90/mo, no project limit", "Freelancer $25/mo (3 projects, 5 GB), Studio $59/mo (10 projects, 25 GB), Pro $99/mo (25 projects, 100 GB), Unlimited $299/mo billed yearly (1 TB)"],
+    ["Tasks", "Assignee, collaborators, subtasks, repeating reminders, custom statuses, file attachments, comments", "To-do lists with assignees and due dates; card tables for kanban"],
+    ["Calendar", "Built in, two-way Google Calendar sync, iCal feed", "Schedule per project, with calendar feeds"],
+    ["Team communication", "Task comments only", "Message boards, Campfire chat, Pings, automatic check-ins"],
+    ["Client access", "None", "Built-in client access to projects"],
+    ["Docs and files", "Notebooks with nested notes; folders with access control", "Docs and files in each project"],
+    ["AI assistants", "MCP server for Claude and ChatGPT", "Official Claude and ChatGPT connectors with MCP, and CLI access"],
+    ["Mobile", "Installable web app (PWA)", "Native iOS, Android, Mac and Windows apps"],
+  ]}
+/>
+
+## Where Basecamp is better
+
+- **Communication.** Message boards, Campfire chat, Pings and automatic check-ins replace a lot of
+  email and Slack. Jinear has task comments and nothing more. I removed chat from Jinear on
+  purpose, so this gap will stay.
+- **Client work.** Basecamp has client access built into each project. If you are an agency that
+  shares progress with clients, Basecamp fits that job well.
+- **Maturity and trust.** Basecamp is a stable, profitable company with about three decades in
+  business, a support team, and native apps on every platform. Jinear has been in development
+  since November 2022 and has one maintainer: fewer hands than a company, but you talk directly
+  to the person who writes the code.
+- **Reports and progress.** Basecamp has reports, check-ins and hill charts for seeing how work is
+  going. Jinear has no reporting.
+
+## Where Jinear is better
+
+- **Self-hosting.** Basecamp is cloud only. Jinear runs on your own server with every feature
+  included, which matters if your data cannot leave your infrastructure.
+- **No project limit.** Basecamp prices by active projects: 3 on Freelancer, 10 on Studio, 25 on
+  Pro. Jinear's Team plan has no limit on teams, boards or tasks.
+- **Task depth.** Subtasks, collaborators next to the assignee, repeating reminders and workflow statuses you define per team.
+- **One calendar for everything.** Jinear's calendar shows all your tasks across teams, with
+  filters, drag to reschedule, and two-way Google Calendar sync. Basecamp's schedules live inside
+  each project.
+
+## What it costs
+
+Both are flat, so team size does not change the price. What changes it is how much you use:
+
+- **Basecamp Freelancer**: $25 a month, up to 3 active projects and 5 GB
+- **Basecamp Studio**: $59 a month, up to 10 active projects and 25 GB
+- **Basecamp Pro**: $99 a month, up to 25 active projects and 100 GB
+- **Jinear Team** (billed monthly): $24.90 a month, no project limit
+- **Jinear self-hosted**: $0, plus the cost of your server
+
+## Which one should you pick?
+
+Pick **Basecamp** if your team needs to talk as much as it needs to track tasks, you work with
+clients, you want native apps, and you value a long track record.
+
+Pick **Jinear** if you need to self-host, you run many projects at once, or you want deeper task
+management and one calendar across all your work.
+
+There is no Basecamp importer in Jinear. If you move, you move your to-dos by hand or through an
+AI assistant connected over MCP.

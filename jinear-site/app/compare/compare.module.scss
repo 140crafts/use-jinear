@@ -1,0 +1,66 @@
+/* Comparison pages reuse the blog's layout (app/blog/blog.module.scss); these are the extras. */
+
+.list {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+}
+
+.item {
+  padding: 20px 0;
+  border-bottom: 1px solid var(--border);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.excerpt {
+  color: var(--ink-2);
+  font-size: 15px;
+  margin-top: 7px;
+}
+
+.checked {
+  margin-top: 22px;
+  padding: 12px 16px;
+  border-left: 2px solid var(--acc);
+  background: var(--acc-tint);
+  font-size: 14px;
+  color: var(--ink-2);
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+.others {
+  margin-top: 40px;
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  a {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-2);
+    padding: 5px 11px;
+    border-radius: 999px;
+    border: 1px solid var(--border-2);
+    transition: color 0.15s ease, border-color 0.15s ease;
+
+    &:hover {
+      color: var(--acc-deep);
+      border-color: var(--acc);
+    }
+  }
+}

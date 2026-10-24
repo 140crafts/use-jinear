@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { SITE_URL } from "@/utils/constants";
 import { getAllPosts } from "@/lib/posts";
+import { getAllComparisons } from "@/lib/comparisons";
 
 // Emitted as /sitemap.xml at `next build` (static export).
 export const dynamic = "force-static";
@@ -10,7 +11,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${SITE_URL}/`, changeFrequency: "weekly", priority: 1 },
     { url: `${SITE_URL}/pricing/`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${SITE_URL}/blog/`, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${SITE_URL}/compare/`, changeFrequency: "monthly", priority: 0.7 },
     { url: `${SITE_URL}/mcp/`, changeFrequency: "monthly", priority: 0.7 },
+    { url: `${SITE_URL}/about/`, changeFrequency: "monthly", priority: 0.5 },
     { url: `${SITE_URL}/terms/`, changeFrequency: "yearly", priority: 0.3 },
   ];
 
@@ -21,5 +24,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...postRoutes];
+  const comparisonRoutes: MetadataRoute.Sitemap = getAllComparisons().map((comparison) => ({
+    url: `${SITE_URL}/compare/${comparison.slug}/`,
+    lastModified: new Date(comparison.updatedDate || comparison.pubDate),
+    changeFrequency: "monthly",
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...postRoutes, ...comparisonRoutes];
 }

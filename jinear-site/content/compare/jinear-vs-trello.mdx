@@ -1,0 +1,92 @@
+---
+title: "Jinear vs Trello: Pricing, Features and Self-Hosting"
+description: "Trello is a polished, cloud-only kanban board with a huge ecosystem. Jinear is open source and self-hostable, with a calendar, notes and files."
+pubDate: "2026-10-20"
+checkedDate: "2026-10-20"
+competitor: "Trello"
+competitorUrl: "https://trello.com/pricing"
+tags: ["comparison", "trello", "kanban", "self-hosting", "trello alternative"]
+author: "Çağdaş Tunca"
+---
+
+Short answer: if you want a mature kanban board with Power-Ups for everything and you are
+happy in Atlassian's cloud, Trello is the safer pick. If you want to run the tool on your own
+server, or you want tasks, a calendar, notes and files in one place for a flat price, Jinear is
+worth a look. I build Jinear, so weigh my opinion with that in mind.
+
+## The short version
+
+Trello does one thing and does it very well: boards with cards you drag between columns. It has
+been doing that since 2011, it has native apps on every platform, and its Power-Up ecosystem
+covers most integrations you can think of.
+
+Jinear is a smaller product, built by one person since November 2022. A board of tasks is one
+part of it, next to a calendar, notes and file storage. It is an open-source (AGPL-3.0) Trello
+alternative, and you can run all of it on your own server with Docker Compose.
+
+<CompareTable
+  competitor="Trello"
+  rows={[
+    ["Hosting", "Hosted, or self-hosted with Docker Compose", "Cloud only. Trello calls itself a cloud-only product"],
+    ["Source code", "Open source, AGPL-3.0", "Closed source"],
+    ["Free plan", "Up to 3 people per workspace", "Up to 10 collaborators and 10 boards per workspace, 10 MB per file"],
+    ["Paid plans", "Team: $24.90/mo flat, unlimited people", "Standard $5, Premium $10, Enterprise $17.50 per user/mo (billed yearly)"],
+    ["Board views", "List and status board (kanban)", "Board, plus Table, Calendar, Timeline, Dashboard and Map on Premium"],
+    ["Calendar", "Built in, two-way Google Calendar sync, iCal feed", "Calendar view on Premium"],
+    ["Docs and notes", "Notebooks with nested rich-text notes", "Card descriptions only"],
+    ["Automation", "None", "Butler automations on every plan"],
+    ["Integrations", "Google Calendar, MCP for Claude and ChatGPT", "Hundreds of Power-Ups"],
+    ["Mobile", "Installable web app (PWA), no native apps", "Native iOS, Android and desktop apps"],
+    ["Import", "No importer", "Not applicable"],
+  ]}
+/>
+
+## Where Trello is better
+
+- **Scale and polish.** Trello has a large team, millions of users and more than a decade of
+  polish. Jinear has been in development for almost four years, with one maintainer and a small
+  community.
+- **Integrations and automation.** Power-Ups and Butler cover Slack, GitHub, Jira, forms and
+  custom rules. Jinear has no automation engine and very few integrations.
+- **Native apps.** Trello has proper mobile and desktop apps. Jinear is an installable web app.
+  It sends push notifications and keeps note drafts offline, but it is not a native app.
+- **Free plan size.** Trello's free plan allows up to 10 collaborators per workspace. Jinear's
+  hosted free plan stops at 3 people.
+- **Extra views.** Timeline, table and map views exist on Trello Premium. Jinear has no timeline
+  or Gantt view.
+
+## Where Jinear is better
+
+- **Self-hosting.** Trello has no self-hosted option. Jinear runs on your own server, with every
+  feature included and no license key. Your data never leaves your machine.
+- **More than a board.** Jinear has a full calendar (month, week and two-day views, drag to
+  reschedule), notes in shared notebooks, and file storage with folders and access control. In
+  Trello you usually add other tools for those.
+- **Flat price.** Jinear's Team plan is $24.90 a month for any number of people. Trello charges
+  per user.
+- **Task structure.** Jinear has subtasks, assignees plus collaborators, and custom workflow statuses per team.
+- **AI assistants.** Jinear has an MCP server, so Claude or ChatGPT can read and create tasks,
+  notes and calendar items for you.
+
+## What it costs a team of 10
+
+- **Trello Standard** (billed yearly): 10 x $5 = $50 a month
+- **Trello Premium** (billed yearly): 10 x $10 = $100 a month
+- **Jinear Team** (billed monthly): $24.90 a month
+- **Jinear self-hosted**: $0, plus the cost of your server
+
+For a team of 3, Trello Standard is $15 a month and Jinear's free plan costs nothing. For a team
+of 5 on Trello Standard ($25 a month), the prices are about the same, so the decision should come
+down to features, not price.
+
+## Which one should you pick?
+
+Pick **Trello** if a kanban board is all you need, you rely on integrations or automations, you
+want native mobile apps, or you want a product with a long track record.
+
+Pick **Jinear** if you need to self-host (for privacy, compliance, or because you simply want to
+own your data), or if you want tasks, a calendar, notes and files in one tool without paying per
+seat.
+
+There is no Trello importer in Jinear today. If you move, you move your cards by hand or through
+an AI assistant connected over MCP.
