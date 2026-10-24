@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { SITE_URL } from "@/utils/constants";
+import { MAINTAINER_AVATAR, MAINTAINER_NAME, SITE_URL } from "@/utils/constants";
 
 // Next's metadata resolution REPLACES an object wholesale rather than deep-merging
 // it: a page that declares its own `openGraph` loses the root layout's og:image,
@@ -16,6 +16,16 @@ export const OG_IMAGE = {
 
 const TWITTER_HANDLE = "@usejinear";
 
+/** The maintainer as a schema.org Person. Every post and comparison is written by
+ *  them, and /about is the page that describes them. */
+export const MAINTAINER_JSON_LD = {
+  "@type": "Person",
+  name: MAINTAINER_NAME,
+  url: `${SITE_URL}/about/`,
+  image: MAINTAINER_AVATAR,
+  jobTitle: "Maintainer of Jinear",
+};
+
 interface BuildMetadataInput {
   /** Raw title. `title.template` in app/layout.tsx appends ", Jinear" everywhere
    *  except app/page.tsx (Next skips the segment declaring the template), so aim
@@ -31,6 +41,8 @@ interface BuildMetadataInput {
   ogDescription?: string;
   /** Extra Open Graph fields (article dates, authors, tags, ...). */
   openGraph?: Metadata["openGraph"];
+  /** Page-specific social card; defaults to the site-wide OG_IMAGE. */
+  image?: typeof OG_IMAGE;
 }
 
 export function buildMetadata({
@@ -40,6 +52,7 @@ export function buildMetadata({
   ogTitle,
   ogDescription,
   openGraph,
+  image = OG_IMAGE,
 }: BuildMetadataInput): Metadata {
   // `title.template` appends ", Jinear", which would read as "Some Title., Jinear"
   // for the blog posts whose titles end in a period. Strip that period from the
@@ -61,7 +74,7 @@ export function buildMetadata({
       url: `${SITE_URL}${path}`,
       title: socialTitle,
       description: socialDescription,
-      images: [OG_IMAGE],
+      images: [image],
       ...openGraph,
     },
     twitter: {
@@ -70,7 +83,7 @@ export function buildMetadata({
       creator: TWITTER_HANDLE,
       title: socialTitle,
       description: socialDescription,
-      images: [OG_IMAGE.url],
+      images: [image.url],
     },
   };
 }

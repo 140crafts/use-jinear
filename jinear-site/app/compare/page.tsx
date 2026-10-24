@@ -11,7 +11,7 @@ import styles from "./compare.module.scss";
 export const metadata: Metadata = buildMetadata({
   title: "Jinear vs Trello, Asana, Notion, Jira and More",
   description:
-    "Honest comparisons of Jinear with Trello, Asana, Notion, Jira, Basecamp and others: pricing, self-hosting, and where each tool is the better pick.",
+    "Comparisons of Jinear, an open-source alternative to Trello, Asana, Notion, Jira and Basecamp: pricing, self-hosting, and when the other tool is better.",
   path: "/compare/",
   ogTitle: "Jinear compared",
 });

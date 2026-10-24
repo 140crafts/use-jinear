@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { SITE_URL } from "@/utils/constants";
 import { buildMetadata } from "@/utils/seo";
 import PricingClient from "./PricingClient";
+import { PRICING_FAQ } from "./faq";
 
 export const metadata: Metadata = buildMetadata({
   title: "Pricing: Free Self-Hosting or Flat Hosted Plans",
@@ -23,21 +24,39 @@ const productJsonLd = {
   offers: [
     {
       "@type": "Offer",
+      name: "Starter",
+      price: "0",
+      priceCurrency: "USD",
+      description: "Free hosted plan for workspaces of up to 3 people. No card required.",
+      url: `${SITE_URL}/pricing/`,
+    },
+    {
+      "@type": "Offer",
       name: "Self-Hosted",
       price: "0",
       priceCurrency: "USD",
       description: "Run the full suite on your own server, AGPL-3.0 licensed.",
-      url: `${SITE_URL}/pricing`,
+      url: `${SITE_URL}/pricing/`,
     },
     {
       "@type": "Offer",
-      name: "Smarter (Hosted)",
+      name: "Team",
       price: "24.90",
       priceCurrency: "USD",
-      description: "Hosted plan with flat monthly pricing and no per-user fees.",
-      url: `${SITE_URL}/pricing`,
+      description: "Hosted plan with flat monthly pricing for unlimited people.",
+      url: `${SITE_URL}/pricing/`,
     },
   ],
+};
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: PRICING_FAQ.map(({ question, answer }) => ({
+    "@type": "Question",
+    name: question,
+    acceptedAnswer: { "@type": "Answer", text: answer },
+  })),
 };
 
 export default function PricingPage() {
@@ -46,6 +65,10 @@ export default function PricingPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
       />
       <PricingClient />
     </>

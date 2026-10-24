@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { Mdx, mdxComponents } from "@/components/mdx/mdxComponents";
-import { SITE_URL } from "@/utils/constants";
-import { buildMetadata } from "@/utils/seo";
+import { MAINTAINER_NAME, SITE_URL } from "@/utils/constants";
+import { buildMetadata, MAINTAINER_JSON_LD } from "@/utils/seo";
 import { getAllPosts, getPost, getPublishedSlugs } from "@/lib/posts";
 import styles from "../blog.module.scss";
 
@@ -67,7 +67,7 @@ export default function BlogPostPage({ params }: Params) {
     description: post.description,
     datePublished: post.pubDate,
     dateModified: post.updatedDate || post.pubDate,
-    author: { "@type": "Person", name: post.author || "Jinear" },
+    author: post.author === MAINTAINER_NAME ? MAINTAINER_JSON_LD : { "@type": "Person", name: post.author || "Jinear" },
     publisher: {
       "@type": "Organization",
       name: "Jinear",
@@ -115,7 +115,7 @@ export default function BlogPostPage({ params }: Params) {
             <div className={styles.by}>
               <img className={styles.av} src={AVATAR} alt={author} />
               <span className={styles.who}>
-                <b>{author}</b> <span></span>
+                <b>{author === MAINTAINER_NAME ? <Link href="/about">{author}</Link> : author}</b> <span></span>
               </span>
             </div>
           </header>

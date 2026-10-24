@@ -1,7 +1,7 @@
 import type {Metadata, Viewport} from "next";
 import React from "react";
 import {SITE_URL} from "@/utils/constants";
-import {OG_IMAGE} from "@/utils/seo";
+import {MAINTAINER_JSON_LD, OG_IMAGE} from "@/utils/seo";
 import "../styles/app.scss";
 import "../styles/fonts.css";
 import Root from "@/components/root/Root";
@@ -63,6 +63,7 @@ const organizationJsonLd = {
     name: "Jinear",
     url: SITE_URL,
     logo: `${SITE_URL}/images/icon/icon-512x512.png`,
+    founder: MAINTAINER_JSON_LD,
     sameAs: [
         "https://gitlab.com/140crafts/use-jinear",
         "https://github.com/140crafts/use-jinear",

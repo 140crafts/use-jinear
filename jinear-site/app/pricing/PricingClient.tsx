@@ -3,6 +3,7 @@ import Link from "next/link";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { APP_URL, GITHUB_URL, GITLAB_URL, PADDLE_CATALOG } from "@/utils/constants";
+import { PRICING_FAQ } from "./faq";
 import styles from "./index.module.scss";
 
 const PRO_PRICE = PADDLE_CATALOG.business_monthly.price; // "$24.90"
@@ -127,29 +128,12 @@ const PricingClient: React.FC = () => {
         {/* FAQ */}
         <section className={styles.blk}>
           <h2>A few honest answers</h2>
-          <div className={styles.qa}>
-            <h3>Is it really one developer?</h3>
-            <p>
-              Yes. Jinear is built and maintained by one person, in the open. That&apos;s also why the
-              pricing is this simple. There&apos;s no sales team to feed.
-            </p>
-          </div>
-          <div className={styles.qa}>
-            <h3>What happens if I self-host?</h3>
-            <p>
-              You get the full app for free under the AGPL-3.0 license. Bring it up with a single
-              Docker Compose file and point it at your domain. Your data never touches my servers. The
-              installer asks whether the instance may send a daily update check and an anonymous usage
-              report, and you can say no to both.
-            </p>
-          </div>
-          <div className={styles.qa}>
-            <h3>Does the flat price change with team size?</h3>
-            <p>
-              No. {PRO_PRICE}/mo covers unlimited people. A team of 4 and a team of 40 pay exactly the
-              same.
-            </p>
-          </div>
+          {PRICING_FAQ.map(({ question, answer }) => (
+            <div key={question} className={styles.qa}>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </div>
+          ))}
         </section>
 
         <div className={styles.signoff}>

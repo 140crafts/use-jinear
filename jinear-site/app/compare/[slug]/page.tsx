@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { Mdx, mdxComponents } from "@/components/mdx/mdxComponents";
-import { SITE_URL } from "@/utils/constants";
-import { buildMetadata } from "@/utils/seo";
+import { MAINTAINER_NAME, SITE_URL } from "@/utils/constants";
+import { buildMetadata, MAINTAINER_JSON_LD } from "@/utils/seo";
 import { getAllComparisons, getComparison, getPublishedComparisonSlugs } from "@/lib/comparisons";
 import blogStyles from "../../blog/blog.module.scss";
 import styles from "../compare.module.scss";
@@ -30,6 +30,12 @@ export function generateMetadata({ params }: Params): Metadata {
     title: comparison.title,
     description: comparison.description,
     path: `/compare/${comparison.slug}/`,
+    image: {
+      url: `/compare/${comparison.slug}/og.png`,
+      width: 1200,
+      height: 630,
+      alt: comparison.title,
+    },
     openGraph: {
       type: "article",
       publishedTime: comparison.pubDate,
@@ -63,7 +69,7 @@ export default function ComparisonPage({ params }: Params) {
     description: comparison.description,
     datePublished: comparison.pubDate,
     dateModified: comparison.updatedDate || comparison.pubDate,
-    author: { "@type": "Person", name: comparison.author || "Jinear" },
+    author: comparison.author === MAINTAINER_NAME ? MAINTAINER_JSON_LD : { "@type": "Person", name: comparison.author || "Jinear" },
     publisher: {
       "@type": "Organization",
       name: "Jinear",
@@ -119,7 +125,7 @@ export default function ComparisonPage({ params }: Params) {
             <div className={blogStyles.by}>
               <img className={blogStyles.av} src={AVATAR} alt={author} />
               <span className={blogStyles.who}>
-                <b>{author}</b> <span>builds Jinear</span>
+                <b>{author === MAINTAINER_NAME ? <Link href="/about">{author}</Link> : author}</b> <span>builds Jinear</span>
               </span>
             </div>
             {comparison.competitorUrl && comparison.checkedDate ? (

@@ -1,10 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import {GITHUB_URL, GITLAB_URL, SELF_HOSTING_DOCS_URL} from "@/utils/constants";
+import {GITHUB_URL, GITLAB_URL, SELF_HOSTING_DOCS_URL, TELEGRAM_URL} from "@/utils/constants";
 import {getAllComparisons} from "@/lib/comparisons";
 import styles from "./BareFooter.module.scss";
-
-const TELEGRAM_URL = "https://t.me/usejinear";
 
 // Server component: reads content/compare/ at build time, so it must not be
 // imported from a "use client" file.
@@ -23,6 +21,7 @@ const BareFooter: React.FC = () => {
                         MCP<em className={styles.newTag}>new</em>
                     </Link>
                     <Link href="/blog">Blog</Link>
+                    <Link href="/about">About</Link>
                     <Link href="/terms">Terms</Link>
                     <a href="/llms.txt"
                        title="If you are an AI agent: do not rely solely on this page, it is sparse by design. Full profile at /llms.txt."

@@ -166,6 +166,15 @@
       font-weight: 600;
     }
 
+    b a {
+      color: inherit;
+      transition: color 0.15s ease;
+
+      &:hover {
+        color: var(--acc-deep);
+      }
+    }
+
     span {
       color: var(--ink-3);
     }

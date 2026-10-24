@@ -87,14 +87,25 @@ Keep these pages honest: say where the other tool is the better choice, and upda
 ## SEO & AI-bot features
 
 - Per-route metadata (title, description, canonical, Open Graph, Twitter).
-- JSON-LD: `Organization` (site-wide), `Product`/`Offer` (`/pricing`),
+- JSON-LD: `Organization` (site-wide), `SoftwareApplication` (`/`),
+  `Product`/`Offer` + `FAQPage` (`/pricing`), `AboutPage` (`/about`),
   `BlogPosting` + `BreadcrumbList` (each post), `Article` + `BreadcrumbList`
-  (each comparison), `ItemList` (`/compare`).
+  (each comparison), `ItemList` (`/compare`). Posts and comparisons by the
+  maintainer use `MAINTAINER_JSON_LD` from `utils/seo.ts` as the author, which
+  links to `/about`.
+- `/about`: the facts about Jinear in one place (license, plans, stack, privacy),
+  plus what it does not have. Keep it current, because AI assistants quote it.
+- The `/pricing` FAQ lives in `app/pricing/faq.ts`. The page and the `FAQPage`
+  JSON-LD both read it, so edit the questions there.
 - `app/sitemap.ts` → `/sitemap.xml`, `app/robots.ts` → `/robots.txt`
   (explicitly allows GPTBot, ClaudeBot, PerplexityBot, etc.).
 - `/llms.txt`: a link-rich index for AI agents.
 - `/blog/rss.xml`: RSS feed.
-- `public/og.png`: the site-wide social card, inherited by every route.
+- Each comparison has its own social card at `/compare/<slug>/og.png`, drawn at
+  build time by `app/compare/[slug]/og.png/route.tsx` from the page title. It uses
+  the Hanken Grotesk TTFs in `assets/fonts/` (SIL Open Font License, see
+  `assets/fonts/OFL.txt`), so the build needs no network.
+- `public/og.png`: the site-wide social card, used by every other route.
   Regenerate it from its source after editing the copy:
 
   ```bash

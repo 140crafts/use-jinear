@@ -79,6 +79,7 @@ any time.
 - [Pricing](${SITE_URL}/pricing/): Free self-hosting vs. hosted plans. No per-user pricing.
 - [MCP](${SITE_URL}/mcp/): Connect Claude or ChatGPT to Jinear. Setup steps and the full tool list.
 - [Blog](${SITE_URL}/blog/): Guides and updates.
+- [About](${SITE_URL}/about/): Key facts (license, plans, stack), privacy, and what Jinear does not have.
 - [Compare](${SITE_URL}/compare/): Jinear compared with Trello, Asana, Notion, Jira and other tools, including where they are the better pick.
 - [Terms](${SITE_URL}/terms/): Terms of service and privacy.
 

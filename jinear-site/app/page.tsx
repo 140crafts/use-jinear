@@ -1,6 +1,6 @@
 import { Metadata } from "next";
-import { SITE_URL } from "@/utils/constants";
-import { buildMetadata } from "@/utils/seo";
+import { GITHUB_URL, GITLAB_URL, SITE_URL } from "@/utils/constants";
+import { buildMetadata, MAINTAINER_JSON_LD } from "@/utils/seo";
 import HomeClient from "./HomeClient";
 
 export const metadata: Metadata = buildMetadata({
@@ -18,9 +18,16 @@ const softwareApplicationJsonLd = {
   "@context": "https://schema.org",
   "@type": "SoftwareApplication",
   name: "Jinear",
+  description:
+    "Open-source, self-hostable tasks, boards, calendar, notes and file storage, with an MCP server for AI assistants. AGPL-3.0, installs with Docker Compose.",
   operatingSystem: "Web, Self-hosted",
   applicationCategory: "BusinessApplication",
   url: SITE_URL,
+  license: "https://www.gnu.org/licenses/agpl-3.0.html",
+  isAccessibleForFree: true,
+  dateCreated: "2022-11",
+  author: MAINTAINER_JSON_LD,
+  sameAs: [GITHUB_URL, GITLAB_URL],
   image: [
     `${IMG_BASE}/v2.1-tasks.png`,
     `${IMG_BASE}/v2.1-calendar.png`,
@@ -28,8 +35,8 @@ const softwareApplicationJsonLd = {
     `${IMG_BASE}/v2.1-files.png`,
   ],
   offers: [
-    { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Self Hosted" },
-    { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Free" },
+    { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Self-Hosted" },
+    { "@type": "Offer", price: "0", priceCurrency: "USD", name: "Starter" },
     { "@type": "Offer", price: "24.90", priceCurrency: "USD", name: "Team" },
   ],
 };
