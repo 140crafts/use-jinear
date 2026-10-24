@@ -1,0 +1,77 @@
+---
+title: "Jinear vs Plane: Two Open-Source, Self-Hosted Tools"
+description: "Plane and Jinear are both AGPL-3.0 and self-hostable. Plane is an engineering issue tracker; Jinear covers tasks, calendar, notes and files."
+pubDate: "2026-10-20"
+checkedDate: "2026-10-20"
+competitor: "Plane"
+competitorUrl: "https://plane.so/pricing"
+tags: ["comparison", "plane", "open source", "self-hosting"]
+author: "Çağdaş Tunca"
+---
+
+Short answer: if you want an open-source, self-hosted issue tracker with cycles, modules and
+estimates for a software team, Plane is the more capable choice. If you want a smaller self-hosted
+tool for tasks, a calendar, notes and files, with no paid tier inside the self-hosted install,
+Jinear is worth a look. I build Jinear, so keep that in mind.
+
+## The short version
+
+Plane and Jinear share a lot on paper: both are open source under AGPL-3.0, both run with Docker,
+and both have a hosted cloud. They aim at different jobs.
+
+Plane is a project and issue tracker for engineering teams: work items, cycles, modules,
+estimates, intake and pages. It has a company and a large community behind it (more than 60,000
+GitHub stars). It also runs an open-core model: the self-hosted Community Edition matches the
+cloud Free tier, and paid features need the closed-source Commercial Edition.
+
+Jinear is smaller and broader: tasks, boards, a calendar with Google sync, notes and file storage.
+The self-hosted version has every feature, with no paid edition and no license key.
+
+<CompareTable
+  competitor="Plane"
+  rows={[
+    ["License", "AGPL-3.0, one edition", "Community Edition AGPL-3.0; Commercial Edition closed source"],
+    ["Self-hosting", "Docker Compose, every feature included", "Docker or Kubernetes; Community matches cloud Free, paid features need Commercial"],
+    ["Hosted free plan", "Up to 3 people", "Free plan, 12 user seats per workspace"],
+    ["Paid plans", "Team: $24.90/mo flat, unlimited people", "Pro $6, Business $13 per seat/mo (billed yearly; $8 and $15 monthly)"],
+    ["Cycles, modules, estimates", "None", "Yes"],
+    ["Views", "List, status board (kanban), calendar", "List, board, calendar, spreadsheet, Gantt"],
+    ["Calendar", "Built in, two-way Google Calendar sync, iCal feed", "Calendar layout of work items"],
+    ["Docs", "Notebooks with nested rich-text notes", "Pages; wiki and nested pages on paid plans"],
+    ["File storage", "Folders with access control", "Attachments on work items"],
+    ["Time tracking", "None", "On Pro"],
+    ["SSO", "None yet", "SAML and OIDC on paid plans"],
+    ["Team behind it", "One maintainer, since November 2022", "A funded company"],
+  ]}
+/>
+
+## Where Plane is better
+
+- **Engineering features.** Cycles, modules, estimates, intake and a Gantt layout. Jinear has none
+  of these.
+- **SSO.** Plane offers SAML and OIDC on its paid plans, including self-hosted. Jinear has no SSO
+  yet.
+- **Size of the project.** A company, a large contributor community and a fast release pace. Jinear
+  has been built since November 2022 by one person. Both are AGPL-3.0, so the code stays
+  available either way. One maintainer means fewer hands, and also a short path: a bug report
+  goes straight to the person who fixes it.
+- **More views.** Spreadsheet and Gantt layouts.
+- **Import.** Plane offers importers from other trackers. Jinear has no importer.
+
+## Where Jinear is better
+
+- **No paid edition when self-hosted.** Everything Jinear has is in the free self-hosted install.
+  There is no feature you unlock with a license.
+- **Calendar and files.** Jinear has a real calendar (two-way Google Calendar sync, drag to
+  reschedule, an iCal feed) and file storage with folders and permissions.
+- **Flat hosted price.** One price for any team size, where Plane charges per seat.
+- **Smaller footprint for small teams.** Fewer concepts to learn if you do not need cycles and
+  modules.
+
+## Which one should you pick?
+
+Pick **Plane** if you are a software team that wants an open-source Jira or Linear alternative,
+with sprints and estimates, on your own servers.
+
+Pick **Jinear** if your team needs tasks, a calendar, notes and files, you want every feature in
+the free self-hosted install.

@@ -1,0 +1,145 @@
+---
+title: "Jinear vs Building Your Own Task Manager with AI"
+description: "Claude or ChatGPT can build you a task app in a weekend. What that covers, what it leaves out, and two options in between: extend Jinear or fork it."
+pubDate: "2026-10-20"
+competitor: "DIY with AI"
+tags: ["comparison", "ai", "vibe coding", "open source", "self-hosting"]
+author: "Çağdaş Tunca"
+---
+
+Short answer: if the tool is only for you, building your own with Claude or ChatGPT is a perfectly
+good idea, and you will probably enjoy it. If other people will depend on it, the first version is
+the easy part, and most of the work comes after it. There are also two options in between that this
+page covers: extend Jinear through an AI assistant, or fork Jinear and change what you need. I build
+Jinear, so weigh my view with that in mind.
+
+## Building your own is a real option now
+
+A few years ago, "just build your own task manager" was a joke. Today an AI coding assistant can
+give you a list of tasks with due dates, a board and a login screen in an afternoon or a weekend.
+It will do exactly what you want, look how you like, and cost nothing per seat.
+
+Building your own is the right call when:
+
+- **It is only for you.** One user, one device, no permissions, no one waiting on a fix.
+- **Your workflow is unusual.** If no tool fits how you work, your own tool will.
+- **You want to learn.** Building it is the point, and that is a good reason.
+- **You need one narrow thing.** A tracker for a specific process can be simpler than any product.
+
+If that describes you, you probably do not need Jinear or any of the other tools on this site.
+
+## What a weekend build usually leaves out
+
+The first version shows you the happy path. The rest of a task manager is the part you only notice
+when it breaks. This is the list of things Jinear had to build beyond "tasks with due dates":
+
+- **Accounts.** Sign-up, login, password reset, email confirmation, and the email delivery behind
+  all of them.
+- **Permissions.** Workspaces, teams, roles (owner, admin, member, guest), private notebooks, file
+  access rules.
+- **Time.** Due dates across time zones, reminders that repeat hourly to yearly, and jobs that
+  actually send them on time.
+- **Notifications.** Email, plus push notifications to an installed app.
+- **Calendar sync.** Two-way Google Calendar sync means OAuth, token refresh and Google's own API
+  rules.
+- **Files.** Uploads, storage, folders and who may see what.
+- **Offline and install.** A PWA that installs on a phone and keeps note drafts when the network is
+  gone.
+- **AI access.** An MCP server with OAuth, so Claude or ChatGPT can work with your data only where
+  you allow it.
+- **Running it.** Backups, database migrations, upgrades, and a way to close registration on a
+  public server.
+
+None of these is hard alone, and an AI assistant can help with each one. Together they are most of
+the product.
+
+## The cost is mostly maintenance
+
+Jinear has been in development since November 2022: almost four years and about 2,000 commits.
+Most of those commits are not new features.
+Some recent examples from this site's own changelog:
+
+- [File uploads that never finished behind a reverse proxy](/blog/self-hosting-fixes-uploads-ports-and-proxies/),
+  plus an installer that insisted on owning the standard web ports.
+- [The MinIO image Jinear depended on was removed from Docker Hub](/blog/minio-image-moved-to-jinear-registry/),
+  so new installs could not start file storage until it was fixed.
+- [An admin panel](/blog/instance-settings-an-admin-panel-for-self-hosters/), because self-hosters
+  had no way to close registration or reset a password without a mail server.
+
+AI makes writing code much cheaper. It does not make owning code free. When you build your own
+tool, every upstream change, security update and 2 a.m. "it stopped working" is yours. For a
+personal tool that is fine. For a tool your team depends on, it is a real cost, and it is easy to
+leave out of the plan.
+
+<CompareTable
+  competitor="DIY with AI"
+  rows={[
+    ["Fits your workflow", "Close enough for many teams, not exact", "Exactly, by definition"],
+    ["Time to first version", "Minutes (hosted) or one Docker Compose install", "A weekend for a basic version"],
+    ["Accounts, roles, email", "Built in", "You build them"],
+    ["Calendar sync, files, push", "Built in", "You build them"],
+    ["Security fixes and upgrades", "Done upstream; you pull new versions", "Yours"],
+    ["Cost", "Free self-hosted, or $24.90/mo flat hosted", "Your time, AI usage, and hosting"],
+    ["Who fixes it when it breaks", "Hosted: me, the one maintainer. Self-hosted: you, with fixes from upstream", "You"],
+    ["If the maintainer stops", "One maintainer, but AGPL-3.0: the code stays, and you can keep running or fork it", "You are the maintainer"],
+  ]}
+/>
+
+## Option in between 1: extend Jinear with your AI assistant
+
+Often the thing people want to build is not a whole task manager. It is a custom view, a weekly
+report, a script that turns meeting notes into tasks. You can do much of that without writing an
+app.
+
+Jinear has an [MCP server](/mcp/). Connect Claude or ChatGPT to it, and the assistant can search
+your tasks, create and update them, read your calendar, and work with notes and files, within the
+access you give it. "Turn this conversation into tasks for the team" or "what is overdue this
+week?" works without any code. The [post about it](/blog/ai-assistants-handing-off-the-boring-half/)
+has examples.
+
+This will not give you a new screen in the app. It covers a surprising amount of "I wish my tool
+could just do X".
+
+## Option in between 2: fork Jinear and let AI change it
+
+If you want your own tool but not the long list above, start from one that already has it. Jinear
+is open source under AGPL-3.0, on [GitHub](https://github.com/140crafts/use-jinear) and
+[GitLab](https://gitlab.com/140crafts/use-jinear). You can fork it and change anything.
+
+The repository is set up for AI coding assistants, because I use them to build Jinear too:
+
+- **`CLAUDE.md`** describes every project in the monorepo, the tech stack, the constraints and the
+  writing style. Claude Code loads it automatically, and other assistants can be pointed at it.
+- **`CODING_STYLE.md`** holds the house rules for the Java backend, with a real file named for each
+  rule, so an assistant can check its work against the codebase.
+- **`PROMPT_TEMPLATE.md`** is the task format I use: goal, scope, requirements, reference files,
+  and an instruction to plan before writing code.
+
+So a fork is not a cold start: an assistant can read the project's context before it touches
+anything.
+
+Be clear about what a fork costs:
+
+- **The AGPL applies.** You can use and change Jinear freely. If people use your changed version
+  over a network, the license requires you to offer them the source of your changes.
+- **You merge upstream yourself.** The further your fork drifts, the harder it is to take in new
+  Jinear versions and fixes.
+- **It is a real codebase.** Java and Spring Boot on the backend, React on the frontend,
+  PostgreSQL, Redis and MinIO in the stack. That is more to learn than a weekend app, and the AI
+  files help with that, but they do not remove it.
+- **The AI files are written for this project.** They are not a framework, and the coding style
+  guide only covers the backend so far.
+
+## Which one should you pick?
+
+Build **your own with AI** if the tool is for you alone, your workflow is unusual, or building it is
+the fun part.
+
+Use **Jinear as it is** (hosted or self-hosted) if a team depends on the tool and its shape is close
+enough to how you work.
+
+**Extend Jinear over MCP** if what you want is automation or reports, not a different app.
+
+**Fork Jinear** if you need real changes to the product but do not want to build accounts,
+permissions, calendar sync and file storage again. If your change would help other people too,
+consider sending it upstream instead of keeping a fork.

@@ -1,0 +1,77 @@
+---
+title: "Jinear vs Linear: Pricing, Features and Self-Hosting"
+description: "Linear is a fast issue tracker for product and engineering teams. Jinear is a self-hostable tool for tasks, calendar, notes and files. Who fits which."
+pubDate: "2026-10-20"
+checkedDate: "2026-10-20"
+competitor: "Linear"
+competitorUrl: "https://linear.app/pricing"
+tags: ["comparison", "linear", "issue tracking", "self-hosting"]
+author: "Çağdaş Tunca"
+---
+
+Short answer: for a software team that ships in cycles and lives in GitHub, Linear is one of the
+best tools available, and Jinear does not compete with it on that. Jinear is for teams that want to
+self-host, or that need a calendar, notes and files next to their tasks. I build Jinear, so keep
+that in mind.
+
+## The short version
+
+Linear is an issue tracker built for speed: keyboard-first, very fast, with cycles, projects,
+roadmaps, triage and tight GitHub and Slack integration. It has strong opinions about how product
+teams should work, and many teams love it for that.
+
+Jinear is a general task tool, not an engineering tracker. It has tasks, boards, a calendar,
+notes and files. It is open source (AGPL-3.0) and runs on your own server if you want. Like
+Linear, it leans on the keyboard: hold Option (Alt) to see shortcuts, or press Option+J to get a
+key for every button on the screen.
+
+<CompareTable
+  competitor="Linear"
+  rows={[
+    ["Hosting", "Hosted, or self-hosted with Docker Compose", "Cloud only"],
+    ["Source code", "Open source, AGPL-3.0", "Closed source"],
+    ["Free plan", "Up to 3 people, no task limit", "Unlimited members, 2 teams, 250 issues"],
+    ["Paid plans", "Team: $24.90/mo flat, unlimited people", "Basic $10, Business $16 per user/mo (billed yearly); Enterprise by quote"],
+    ["Cycles, roadmaps, triage", "None", "Yes"],
+    ["Git integration", "None", "GitHub and GitLab: link PRs, auto-close issues"],
+    ["Views", "List, status board (kanban), calendar", "List, board, timeline, custom views"],
+    ["Calendar", "Built in, two-way Google Calendar sync, iCal feed", "No calendar of tasks"],
+    ["Docs and notes", "Notebooks with nested rich-text notes", "Project documents"],
+    ["File storage", "Folders with access control", "Attachments on issues"],
+    ["AI", "MCP server for Claude and ChatGPT", "Built-in AI features and an MCP server"],
+    ["Keyboard", "Shortcut hints and a key for every button", "Keyboard-first throughout"],
+  ]}
+/>
+
+## Where Linear is better
+
+- **Engineering workflow.** Cycles, triage, roadmaps, project updates and Git integration that
+  moves issues when a pull request merges. Jinear has none of this.
+- **Speed and polish.** Linear is famous for its speed and its finish. Jinear is fast too, and
+  Linear has more polish in places.
+- **Integrations.** GitHub, GitLab, Slack, Figma, Sentry, Zendesk and more.
+- **Native apps.** Desktop and mobile apps. Jinear is an installable web app.
+
+## Where Jinear is better
+
+- **Self-hosting.** Linear has no self-hosted option. Jinear does, with every feature included.
+- **Non-engineering work.** Jinear's calendar, notes and files make it usable for a whole small
+  team, not only for the developers in it.
+- **Free plan shape.** Linear's free plan has unlimited members but stops at 250 issues. Jinear's
+  free plan stops at 3 people but has no task limit, and self-hosting has no limits at all.
+- **Flat price.** Jinear's Team plan does not grow with your headcount.
+
+## What it costs a team of 10
+
+- **Linear Basic** (billed yearly): 10 x $10 = $100 a month
+- **Linear Business** (billed yearly): 10 x $16 = $160 a month
+- **Jinear Team** (billed monthly): $24.90 a month
+- **Jinear self-hosted**: $0, plus the cost of your server
+
+## Which one should you pick?
+
+Pick **Linear** if you are a product and engineering team that works in cycles and wants issues
+linked to your code. It is very good at that.
+
+Pick **Jinear** if you need to self-host, if your team's work is more than code, or if you want a
+calendar, notes and files in the same place as your tasks.

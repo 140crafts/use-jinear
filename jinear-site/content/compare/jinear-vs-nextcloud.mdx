@@ -1,0 +1,72 @@
+---
+title: "Jinear vs Nextcloud: Self-Hosted Tasks and Files"
+description: "Nextcloud is a self-hosted suite for files, calendar, office and chat. Jinear is a smaller, task-first tool. Which one to run, or why to run both."
+pubDate: "2026-10-20"
+checkedDate: "2026-10-20"
+competitor: "Nextcloud"
+competitorUrl: "https://nextcloud.com/pricing/"
+tags: ["comparison", "nextcloud", "open source", "self-hosting"]
+author: "Çağdaş Tunca"
+---
+
+Short answer: Nextcloud is the right choice if you want a full self-hosted replacement for Google
+Workspace or Microsoft 365: files, sync clients, office documents, mail, contacts and video calls.
+Jinear is the better choice if task management is the main job and you want tasks, calendar, notes
+and files designed to work together. I build Jinear, so factor that in.
+
+## The short version
+
+Nextcloud is a platform. Its core is file sync and share with desktop and mobile clients, and its
+app store adds Calendar (CalDAV), Contacts, Talk, Office, Mail, and Deck, a kanban board. It is
+open source (AGPL) and has a very large community and a company that sells enterprise support.
+
+Jinear is a single product built around tasks. The calendar shows tasks next to events, notes live
+in notebooks next to the work, and files can be attached to tasks. It is also AGPL-3.0 and
+self-hostable.
+
+<CompareTable
+  competitor="Nextcloud"
+  rows={[
+    ["License", "AGPL-3.0", "AGPL"],
+    ["Self-hosting", "Docker Compose, every feature included", "Many options: Docker, AIO, packages, appliances"],
+    ["Paid options", "Hosted Team plan, $24.90/mo flat", "Enterprise support from 100 users, priced per user per year"],
+    ["Task management", "Core of the product: assignee, collaborators, subtasks, reminders, custom statuses", "Deck (kanban boards) and the Tasks app (CalDAV to-dos)"],
+    ["Calendar", "Tasks and events together, two-way Google Calendar sync, iCal feed", "Full CalDAV calendar server and web app"],
+    ["Files", "Folders with access control, attach to tasks", "Nextcloud's core: sync clients, sharing, versions, office editing"],
+    ["Notes and docs", "Notebooks with nested rich-text notes", "Notes app, Collectives wiki, Nextcloud Office"],
+    ["Chat and video", "None", "Nextcloud Talk"],
+    ["Mobile", "Installable web app (PWA)", "Native Files, Talk and other apps; any CalDAV client for calendar"],
+    ["AI", "MCP server for Claude and ChatGPT", "Nextcloud Assistant, with local or remote models"],
+  ]}
+/>
+
+## Where Nextcloud is better
+
+- **Breadth.** Files, calendar, contacts, mail, office documents, chat and video in one install.
+  Jinear does not try to replace any of that except calendar and basic file storage.
+- **Files.** Desktop sync clients, versions, sharing links and online editing. Jinear's file
+  storage is a place to keep and share files, not a Dropbox replacement.
+- **Standards.** CalDAV and CardDAV mean your phone's built-in calendar and contacts apps just
+  work. Jinear offers an iCal feed and Google Calendar sync, not a CalDAV server.
+- **Community and support.** A huge community, years of history, and paid enterprise support if
+  your organization needs it.
+
+## Where Jinear is better
+
+- **Task management.** Deck is a simple kanban board. Jinear's tasks have assignees and
+  collaborators, subtasks, repeating reminders, checklists and per-team
+  workflow statuses, and they show up on the calendar.
+- **One product, not a set of apps.** Tasks, calendar, notes and files are designed together, with
+  one UI and one permission model. In Nextcloud they are separate apps with separate release
+  cycles.
+- **Less to maintain.** Nextcloud's app system is powerful, but upgrades across many apps take
+  care. Jinear is one stack with one version.
+
+## Which one should you pick?
+
+Pick **Nextcloud** if you want to move your whole office suite off big cloud vendors, or if file
+sync is the main need.
+
+Pick **Jinear** if you want a self-hosted tool where tasks are the center and the calendar, notes
+and files support them. Running both is also reasonable: Nextcloud for files and mail, Jinear for
+planning the work.

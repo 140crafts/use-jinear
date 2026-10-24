@@ -1,11 +1,9 @@
 import { Metadata } from "next";
-import type { FC, AnchorHTMLAttributes } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { MDXRemote, type MDXRemoteProps } from "next-mdx-remote/rsc";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
-import VideoEmbed from "@/components/videoEmbed/VideoEmbed";
+import { Mdx, mdxComponents } from "@/components/mdx/mdxComponents";
 import { SITE_URL } from "@/utils/constants";
 import { buildMetadata } from "@/utils/seo";
 import { getAllPosts, getPost, getPublishedSlugs } from "@/lib/posts";
@@ -16,27 +14,6 @@ const AVATAR = "https://storage.googleapis.com/jinear-b0/web-assets/jinear-homes
 interface Params {
   params: { slug: string };
 }
-
-// `next-mdx-remote/rsc`'s MDXRemote is an async Server Component (returns a
-// Promise), which React 18's JSX types reject (TS2786). It renders correctly at
-// runtime (RSC awaits it), so alias it to a plain component type for the editor.
-const Mdx = MDXRemote as unknown as FC<MDXRemoteProps>;
-
-// Render external links (http/https) in a new tab; keep in-site links in-tab.
-const mdxComponents = {
-  a: ({ href, children, ...props }: AnchorHTMLAttributes<HTMLAnchorElement>) =>
-    href?.startsWith("http") ? (
-      <a href={href} target="_blank" rel="noopener noreferrer" {...props}>
-        {children}
-      </a>
-    ) : (
-      <a href={href} {...props}>
-        {children}
-      </a>
-    ),
-  // Lets a post drop in a video with <VideoEmbed id="..." title="..." />.
-  VideoEmbed,
-};
 
 // Fully enumerate posts at build time; reject anything not generated.
 export const dynamicParams = false;

@@ -1,5 +1,6 @@
 import { GITHUB_URL, GITLAB_URL, SELF_HOSTING_DOCS_URL, SITE_URL } from "@/utils/constants";
 import { getAllPostsWithContent } from "@/lib/posts";
+import { getAllComparisonsWithContent, toPlainMarkdown } from "@/lib/comparisons";
 
 // Emitted at /llms-full.txt during `next build`. The expanded companion to
 // /llms.txt: same summary, then every published blog post inlined in full, so an
@@ -27,6 +28,19 @@ ${post.content.trim()}`;
     // is the boundary.
     .join("\n\n\n");
 
+  const comparisons = getAllComparisonsWithContent()
+    .map(
+      (comparison) => `# ${comparison.title}
+URL: ${SITE_URL}/compare/${comparison.slug}/${
+        comparison.checkedDate
+          ? `\n${comparison.competitor} pricing and features checked: ${comparison.checkedDate}`
+          : ""
+      }
+
+${toPlainMarkdown(comparison.content).trim()}`
+    )
+    .join("\n\n\n");
+
   const body = `# Jinear
 
 > Jinear is an open-source (AGPL-3.0), self-hostable task management and
@@ -35,7 +49,8 @@ ${post.content.trim()}`;
 > your own server. A hosted version is also available.
 
 This file is the full-text companion to ${SITE_URL}/llms.txt, which carries the
-product summary, pricing and site index. Below is every published blog post in full.
+product summary, pricing and site index. Below is every published blog post in full,
+then every comparison page (Jinear vs other tools) in full.
 
 - Install guide: ${SELF_HOSTING_DOCS_URL}
 - Source (GitHub): ${GITHUB_URL}
@@ -43,6 +58,9 @@ product summary, pricing and site index. Below is every published blog post in f
 
 
 ${articles}
+
+
+${comparisons}
 `;
 
   return new Response(body, {

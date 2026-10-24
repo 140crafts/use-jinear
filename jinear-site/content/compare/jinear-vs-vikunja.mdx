@@ -1,0 +1,73 @@
+---
+title: "Jinear vs Vikunja: Open-Source Task Managers"
+description: "Vikunja and Jinear are AGPL-3.0 task managers you can self-host. Vikunja is a lighter to-do app; Jinear adds a team calendar, notes and files."
+pubDate: "2026-10-20"
+checkedDate: "2026-10-20"
+competitor: "Vikunja"
+competitorUrl: "https://vikunja.io/pricing"
+tags: ["comparison", "vikunja", "open source", "self-hosting"]
+author: "Çağdaş Tunca"
+---
+
+Short answer: Vikunja is a lighter, focused to-do app with more task views and real importers, and
+it is a great choice for personal use or a household. Jinear is heavier, but it also includes a
+team calendar, notes and file storage. I build Jinear, so read with that in mind.
+
+## The short version
+
+Both are open source under AGPL-3.0, both self-host with Docker, and both have a paid hosted
+option. They are closer to each other than to anything else on this site's comparison list.
+
+Vikunja is a to-do app first. It has list, kanban, Gantt and table views, labels, filters, task
+relations, and importers from Todoist, Trello and Microsoft To Do. It also has a CalDAV endpoint
+for tasks, which its own docs call experimental.
+
+Jinear is built for a small team's shared work: tasks with assignees and collaborators, a calendar
+with two-way Google Calendar sync, notebooks for documentation, and file storage with access
+control.
+
+<CompareTable
+  competitor="Vikunja"
+  rows={[
+    ["License", "AGPL-3.0", "AGPL-3.0"],
+    ["Self-hosting", "Docker Compose (several services)", "Docker or a single native binary"],
+    ["Hosted plans", "Free up to 3 people; Team $24.90/mo flat", "Personal 4 EUR/mo, Family 10 EUR/mo, Organization 5 EUR per user/mo"],
+    ["Views", "List, status board (kanban), calendar", "List, kanban, Gantt, table"],
+    ["Calendar", "Full calendar: month, week, two-day, Google sync both ways, iCal feed", "Gantt view; tasks over CalDAV (experimental)"],
+    ["Notes and docs", "Notebooks with nested rich-text notes", "None"],
+    ["File storage", "Folders with access control", "Attachments on tasks"],
+    ["Import", "None", "Todoist, Trello, Microsoft To Do and more"],
+    ["Teams and roles", "Workspaces, teams, owner/admin/member/guest", "Teams and project sharing, link shares"],
+    ["AI", "MCP server for Claude and ChatGPT", "Not built in"],
+    ["Mobile", "Installable web app (PWA)", "Web app; mobile apps are community projects"],
+  ]}
+/>
+
+## Where Vikunja is better
+
+- **Lighter to run.** Vikunja can run as a single binary with SQLite. Jinear's stack has several
+  services (PostgreSQL, Redis, MinIO storage, backend, frontend, gateway), so it needs more memory
+  and more care.
+- **More task views.** Gantt and table views. Jinear has no Gantt view.
+- **Importers.** Moving from Todoist or Trello is a few clicks in Vikunja. Jinear has no importer.
+- **Personal use.** Vikunja is a better fit for one person or a family. Its Family plan is priced
+  for exactly that.
+- **CalDAV.** You can sync tasks with CalDAV clients, though the feature is marked experimental.
+
+## Where Jinear is better
+
+- **A real calendar.** Month, week and two-day views, drag to reschedule, filters by assignee and
+  status, and two-way Google Calendar sync.
+- **Notes and files.** Jinear has notebooks for documentation and file storage with folders and
+  permissions. Vikunja does not try to do either.
+- **Team features.** Assignees plus collaborators, workflow statuses you define per team, and roles
+  at the workspace level.
+- **AI assistants.** An MCP server lets Claude or ChatGPT work with your tasks, notes and calendar.
+
+## Which one should you pick?
+
+Pick **Vikunja** if you want a light, focused to-do app for yourself or a household, you want a
+Gantt view, or you are moving from Todoist or Trello and want an importer.
+
+Pick **Jinear** if you are a small team that wants tasks, a shared calendar, notes and files in one
+self-hosted tool, and you have a server with some memory to spare.

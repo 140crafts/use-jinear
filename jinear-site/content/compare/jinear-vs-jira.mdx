@@ -1,0 +1,85 @@
+---
+title: "Jinear vs Jira: Pricing, Features and Self-Hosting"
+description: "Jira leads for agile software teams, and its self-managed Data Center edition is being retired. How Jinear compares, and who should not switch."
+pubDate: "2026-10-20"
+checkedDate: "2026-10-20"
+competitor: "Jira"
+competitorUrl: "https://www.atlassian.com/software/jira/pricing"
+tags: ["comparison", "jira", "self-hosting", "data center"]
+author: "Çağdaş Tunca"
+---
+
+Short answer: if your team runs Scrum or Kanban with sprints, backlogs, epics, releases and
+reports, Jira does that and Jinear does not. Jinear is a fit for small teams that want a simple,
+self-hosted tool for tasks, calendar, notes and files. I build Jinear, so read with that in mind.
+
+## The short version
+
+Jira is built for software development at scale: backlogs, sprints, epics, custom workflows,
+JQL search, reports, and deep links to Bitbucket, GitHub and Confluence. It is powerful and
+configurable, and many teams find it heavy.
+
+One thing changed this year. Atlassian stopped selling new Jira Data Center licenses on March 30,
+2026, and most Data Center products reach end of life on March 28, 2029. For a team that wants to
+keep its issue tracker on its own servers, Jira is no longer a long-term option. That is the main
+reason people who self-host are looking at alternatives.
+
+Jinear is not a Jira replacement for a large engineering organization. It is a small, open-source
+(AGPL-3.0) tool for tasks, a calendar, notes and files that you can run with Docker Compose.
+
+<CompareTable
+  competitor="Jira"
+  rows={[
+    ["Hosting", "Hosted, or self-hosted with Docker Compose", "Cloud. Data Center: no new customers since March 30, 2026, end of life March 28, 2029"],
+    ["Source code", "Open source, AGPL-3.0", "Closed source"],
+    ["Free plan", "Up to 3 people", "Up to 10 users, 2 GB of storage"],
+    ["Paid plans", "Team: $24.90/mo flat, unlimited people", "Standard about $8.48, Premium about $15.56 per user/mo (monthly billing; varies with team size)"],
+    ["Scrum and sprints", "None", "Backlogs, sprints, story points, burndown"],
+    ["Views", "List, status board (kanban), calendar", "Board, backlog, list, timeline, calendar, summary"],
+    ["Workflows", "Custom statuses per team", "Fully custom workflows with transitions and conditions"],
+    ["Search", "Task search", "JQL"],
+    ["Dev integrations", "None", "Bitbucket, GitHub, GitLab, CI/CD, Confluence"],
+    ["Calendar, notes, files", "All built in", "Calendar view; docs live in Confluence"],
+    ["SSO", "None yet", "Enterprise-grade identity on higher plans"],
+  ]}
+/>
+
+## Where Jira is better
+
+- **Agile software development.** Sprints, backlogs, epics, versions, story points, burndown and
+  velocity reports. Jinear has none of them.
+- **Workflow control.** Jira workflows can enforce transitions, required fields and approvals.
+  Jinear has custom statuses and nothing more.
+- **Search and reporting.** JQL and dashboards answer almost any question about your issues.
+- **Ecosystem.** Code integrations, Confluence and thousands of Marketplace apps.
+- **Scale.** Jira handles thousands of users and projects. Jinear is built for small teams and has
+  never been tested at that scale.
+
+## Where Jinear is better
+
+- **Self-hosting with a future.** Jinear's self-hosted edition is the same code as the hosted one,
+  free under AGPL-3.0, with no end-of-life date and no license server.
+- **Simplicity.** No schemes, no screens, no permission matrices. Tasks, statuses, a calendar.
+- **Built-in calendar, notes and files.** In the Atlassian world, documentation means adding
+  Confluence and paying per user again.
+- **Flat price.** One price for the whole team on the hosted plan, and free when self-hosted.
+
+## What it costs a team of 25
+
+- **Jira Standard**: about 25 x $8.48 = $212 a month
+- **Jira Premium**: about 25 x $15.56 = $389 a month
+- **Jinear Team** (billed monthly): $24.90 a month
+- **Jinear self-hosted**: $0, plus the cost of your server
+
+For a team of up to 10, Jira's free plan costs nothing, and that is a strong offer. Jira prices per
+user change with team size and billing period, so use Atlassian's calculator for your own number.
+
+## Which one should you pick?
+
+Pick **Jira** if you are a software team that works in sprints, depends on code integrations, or
+needs reports for management. Jira Cloud is still a good product even if Data Center is going away.
+
+Pick **Jinear** if you are a small team, you need to keep your data on your own servers after Data
+Center ends, and a simpler tool for tasks, a calendar, notes and files is enough for you. If you
+need sprints on your own servers, also look at open-source issue trackers such as Plane or
+OpenProject.

@@ -2,9 +2,6 @@
   margin-top: 60px;
   padding-top: 22px;
   border-top: 1px solid var(--border);
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 18px;
   font-size: 13px;
   color: var(--ink-3);
 
@@ -17,7 +14,7 @@
     color: var(--acc-deep);
   }
 
-  // The one link in this row that should catch the eye.
+  // The one link in the footer that should catch the eye.
   a.mcpLink {
     color: var(--ink);
     font-weight: 700;
@@ -38,8 +35,51 @@
   display: inline-block;
 }
 
-.sep {
-  color: var(--border-2);
+.columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin-top: 18px;
+}
+
+.col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 7px;
+
+  h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+    margin-bottom: 3px;
+
+    a {
+      color: inherit;
+    }
+  }
+}
+
+// Phones: the two short columns sit side by side, and the long Compare list
+// takes the full width below them, split into two columns of its own.
+@media (max-width: 560px) {
+  .columns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .col:last-child {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 7px 24px;
+
+    h3 {
+      grid-column: 1 / -1;
+    }
+  }
 }
 
 // Square mono tag, deliberately unlike the rounded pill the homepage used.
@@ -59,8 +99,7 @@
   vertical-align: 1px;
 }
 
-// Don't let an individual link's separator detach awkwardly; links wrap as
-// whole units while the dot-separated row stays readable down to mobile-s.
+// Links wrap as whole units, never mid-name.
 .mini a {
   white-space: nowrap;
 }

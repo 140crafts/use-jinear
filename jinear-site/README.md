@@ -44,11 +44,52 @@ Blog posts are plain Markdown/MDX files; there is no database or admin UI.
 The file name (without extension) becomes the URL slug: `my-post.mdx` →
 `/blog/my-post`.
 
+## Add or edit a comparison page
+
+Comparison pages ("Jinear vs X") work like blog posts but live in
+[`content/compare/`](./content/compare) and are served at `/compare/<slug>`.
+They are not listed on `/blog` or in the RSS feed; they appear on `/compare`, in
+the sitemap, in `/llms.txt`, and in full in `/llms-full.txt`.
+
+Frontmatter adds three fields to the blog ones. `competitorUrl` and `checkedDate` are
+optional: leave both out when the alternative is not a product (for example "DIY with
+AI"), and the page drops the "pricing checked on" note and the competitor's JSON-LD entry.
+
+```mdx
+---
+title: "Jinear vs Trello: An Honest Comparison"
+description: "One-sentence summary used for SEO and the /compare index."
+pubDate: "2026-10-20"
+checkedDate: "2026-10-20"   # when the competitor's pricing and features were last checked
+competitor: "Trello"
+competitorUrl: "https://trello.com/pricing"
+tags: ["comparison", "trello"]
+author: "Çağdaş Tunca"
+---
+```
+
+MDX here has no GFM, so Markdown pipe tables do not render. Use the table component,
+with rows written as JSON (double quotes), so `/llms-full.txt` can turn it into a
+Markdown table:
+
+```mdx
+<CompareTable
+  competitor="Trello"
+  rows={[
+    ["Hosting", "Hosted or self-hosted", "Cloud only"],
+  ]}
+/>
+```
+
+Keep these pages honest: say where the other tool is the better choice, and update
+`checkedDate` when you re-check prices.
+
 ## SEO & AI-bot features
 
 - Per-route metadata (title, description, canonical, Open Graph, Twitter).
 - JSON-LD: `Organization` (site-wide), `Product`/`Offer` (`/pricing`),
-  `BlogPosting` + `BreadcrumbList` (each post).
+  `BlogPosting` + `BreadcrumbList` (each post), `Article` + `BreadcrumbList`
+  (each comparison), `ItemList` (`/compare`).
 - `app/sitemap.ts` → `/sitemap.xml`, `app/robots.ts` → `/robots.txt`
   (explicitly allows GPTBot, ClaudeBot, PerplexityBot, etc.).
 - `/llms.txt`: a link-rich index for AI agents.
