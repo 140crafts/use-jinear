@@ -3,14 +3,12 @@ import Link from "next/link";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { APP_URL, GITHUB_URL, GITLAB_URL, SELF_HOSTING_DOCS_URL } from "@/utils/constants";
-import RotatingWord from "@/components/homepage/rotatingWord/RotatingWord";
 import PostCard from "@/components/blog/postCard/PostCard";
 import { getAllPosts } from "@/lib/posts";
 import styles from "./index.module.scss";
 
 const IMG_BASE = "https://storage.googleapis.com/jinear-b0/web-assets/jinear-homescreen-images/v3";
 const LATEST_POST_COUNT = 3;
-const HERO_WORDS = ["task manager", "calendar", "notes app", "file storage"];
 
 /** A screenshot inside Design A's browser-chrome frame, with a title and caption. */
 function Shot({
@@ -54,7 +52,7 @@ export default function HomeClient() {
         <BareNav />
 
         <h1 className={styles.hero}>
-          Open-source <RotatingWord words={HERO_WORDS} /> you can actually own.
+          Open-source tasks, calendar, notes and files you can actually own.
         </h1>
         <p className={styles.lede}>
           Jinear keeps tasks, boards, a calendar, notes and files in one place, for{" "}
