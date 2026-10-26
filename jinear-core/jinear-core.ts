@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-09-22 12:18:56.
+// Generated using typescript-generator version 3.0.1157 on 2026-10-26 20:10:58.
 
 export interface BaseDto {
     createdDate: Date;
@@ -69,8 +69,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -165,10 +165,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
-    gid: string;
     gthreadId: string;
     ghistoryId: string;
+    ginternalDate: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1322,6 +1322,37 @@ export interface WorkspaceMemberDto extends BaseDto {
     account: AccountDto;
 }
 
+export interface WorkspacePrefetchDto {
+    workspaceTeams: TeamListingResponse;
+    teamMemberships: TeamMembershipsResponse;
+    workspaceActivities: WorkspaceActivityListResponse;
+    assignedTasks: TaskListingPaginatedResponse;
+    notifications: NotificationEventListingResponse;
+    unreadNotificationCount: RetrieveUnreadNotificationEventCountResponse;
+    calendarMemberships: CalendarMemberListingResponse;
+    workspaceMediaLimits: WorkspaceMediaLimitResponse;
+    notebooks: NotebookListingResponse;
+    draftNotes: NotePaginatedResponse;
+    calendarEvents: CalendarEventListingResponse[];
+    materials: ParentMaterialDtoResponse[];
+    teams: WorkspacePrefetchTeamDto[];
+    notebookNotes: WorkspacePrefetchNotebookDto[];
+}
+
+export interface WorkspacePrefetchNotebookDto {
+    notebookId: string;
+    notes: NotePaginatedResponse;
+}
+
+export interface WorkspacePrefetchTeamDto {
+    teamId: string;
+    tasks: TaskListingPaginatedResponse;
+    workflowStatuses: TeamWorkflowStatusListingResponse;
+    taskMedia?: TaskPaginatedMediaResponse | null;
+    members: TeamMemberListingResponse;
+    topics: TopicSearchResponse;
+}
+
 export interface WorkspaceSettingDto extends BaseDto {
     visibility: WorkspaceVisibilityType;
     contentVisibility: WorkspaceContentVisibilityType;
@@ -1664,10 +1695,10 @@ export interface OauthAuthorizeRequest {
     codeChallengeMethod: string;
     resource: string;
     response_type: string;
+    client_id: string;
     redirect_uri: string;
     code_challenge: string;
     code_challenge_method: string;
-    client_id: string;
 }
 
 export interface OauthClientRegistrationRequest {
@@ -1704,11 +1735,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
+    client_id: string;
     redirect_uri: string;
+    grant_type: string;
     code_verifier: string;
     refresh_token: string;
-    client_id: string;
-    grant_type: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2099,6 +2130,24 @@ export interface WorkspaceMemberInviteRequest extends BaseRequest {
     workspaceId: string;
     initialTeamId: string;
     forRole: WorkspaceAccountRoleType;
+}
+
+export interface WorkspacePrefetchMaterialFilterRequest {
+    materialSearchSortType?: MaterialSearchSortType | null;
+    materialSearchContentFilterType?: MaterialSearchContentFilterType | null;
+}
+
+export interface WorkspacePrefetchRequest extends BaseRequest {
+    workspaceId: string;
+    calendarTimespans: WorkspacePrefetchTimespanRequest[];
+    materialFilters: WorkspacePrefetchMaterialFilterRequest[];
+    teamLimit?: number | null;
+    includeTeamTaskMedia: boolean;
+}
+
+export interface WorkspacePrefetchTimespanRequest {
+    timespanStart: Date;
+    timespanEnd: Date;
 }
 
 export interface WorkspaceTitleUpdateRequest extends BaseRequest {
@@ -2605,6 +2654,10 @@ export interface WorkspaceMemberListingBaseResponse extends BaseResponse {
     data: PageDto<WorkspaceMemberDto>;
 }
 
+export interface WorkspacePrefetchResponse extends BaseResponse {
+    data: WorkspacePrefetchDto;
+}
+
 export interface GoogleCalendarEventInfo {
     kind: string;
     etag: string;
@@ -2669,13 +2722,13 @@ export interface CaptchaResolveVo {
 }
 
 export interface MultipartFile extends InputStreamSource {
+    contentType: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
     originalFilename: string;
-    contentType: string;
 }
 
 export interface McpToolDescriptor {
@@ -2800,9 +2853,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
+    filename: string;
     uri: URI;
     description: string;
-    filename: string;
 }
 
 export interface InputStreamSource {

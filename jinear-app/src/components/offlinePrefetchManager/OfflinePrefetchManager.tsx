@@ -2,22 +2,20 @@ import {useOnlineStatus} from "@/hooks/useOnlineStatus";
 import {useAccountsPreferredWorkspaceIfLoggedIn} from "@/hooks/useAccountsPreferredWorkspaceIfLoggedIn";
 import {selectCurrentAccountId, selectWorkspaceFromWorkspaceUsername} from "@/store/slice/accountSlice";
 import {useAppDispatch, useTypedSelector} from "@/store";
-import {teamApi} from "@/store/api/teamApi";
 import {getDeviceProfile, type DeviceTier} from "@/util/deviceProfile";
 import Logger from "@/util/logger";
 import React, {useEffect} from "react";
 import {useLocation} from "react-router-dom";
 import {
-    buildTeamEntries,
-    buildWorkspaceEntries,
-    type PrefetchEntry,
+    buildPrefetchRequest,
+    buildPrefetchSeeds,
+    seedPrefetchCache,
     type PrefetchSubscription
 } from "./offlinePrefetchDescriptors";
-import {teamMemberApi} from "@/api/teamMemberApi.ts";
+import {workspacePrefetchApi} from "@/store/api/workspacePrefetchApi";
 
 const logger = Logger("OfflinePrefetchManager");
 
-const STAGGER_MS: Record<DeviceTier, number> = {high: 150, low: 600};
 // Keeps the prefetch burst clear of first paint and the initial route's own queries.
 const START_DELAY_MS: Record<DeviceTier, number> = {high: 500, low: 4_000};
 
@@ -52,43 +50,33 @@ const OfflinePrefetchManager: React.FC = () => {
         }
         let cancelled = false;
         const subscriptions: PrefetchSubscription[] = [];
-        const cancelFns: (() => void)[] = [];
+        let cancelIdle: (() => void) | undefined;
 
-        const subscribeStaggered = (entries: PrefetchEntry[]) => {
-            entries.forEach((prefetchEntry, index) => {
-                const timeoutId = setTimeout(() => {
-                    cancelFns.push(
-                        scheduleIdle(() => {
-                            if (!cancelled) {
-                                subscriptions.push(prefetchEntry(dispatch));
-                            }
-                        })
-                    );
-                }, index * STAGGER_MS[tier]);
-                cancelFns.push(() => clearTimeout(timeoutId));
-            });
+        const seedCache = async () => {
+            const request = buildPrefetchRequest({workspaceId, tier});
+            const response = await dispatch(
+                workspacePrefetchApi.endpoints.prefetchWorkspace.initiate(request, {track: false})
+            ).unwrap();
+            if (cancelled) {
+                return;
+            }
+            const seeds = buildPrefetchSeeds({request, prefetch: response.data, accountId});
+            subscriptions.push(...seedPrefetchCache(dispatch, seeds));
         };
 
         const start = () => {
             if (cancelled) {
                 return;
             }
-            logger.log({message: "Prefetching offline query set", workspaceId, tier});
-            subscribeStaggered(buildWorkspaceEntries({workspaceId, accountId, tier}));
-
-            const teamMembershipSubscription = dispatch(teamMemberApi.endpoints.retrieveMemberships.initiate({workspaceId}));
-            subscriptions.push(teamMembershipSubscription);
-            teamMembershipSubscription
-                .unwrap()
-                .then((teamMembershipResponse) => {
-                    const teams = teamMembershipResponse.data.map(membership => membership.team) ?? [];
-                    if (!cancelled) {
-                        subscribeStaggered(buildTeamEntries({workspaceId, teams, tier}));
-                    }
-                })
-                .catch(() => {
+            cancelIdle = scheduleIdle(() => {
+                if (cancelled) {
+                    return;
+                }
+                logger.log({message: "Prefetching offline query set", workspaceId, tier});
+                seedCache().catch(() => {
                     // Failed or went offline mid-flight; page hooks and refetchOnReconnect recover.
                 });
+            });
         };
 
         const startTimeoutId = setTimeout(start, START_DELAY_MS[tier]);
@@ -96,7 +84,7 @@ const OfflinePrefetchManager: React.FC = () => {
         return () => {
             cancelled = true;
             clearTimeout(startTimeoutId);
-            cancelFns.forEach((cancel) => cancel());
+            cancelIdle?.();
             subscriptions.forEach((subscription) => subscription.unsubscribe());
         };
     }, [accountId, workspaceId, online, dispatch]);
