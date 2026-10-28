@@ -3,8 +3,10 @@ package co.jinear.core.mcp;
 import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.config.properties.OauthProperties;
+import co.jinear.core.converter.mcp.McpContextViewConverter;
 import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.converter.mcp.McpViewConverter;
+import co.jinear.core.manager.account.AccountContextManager;
 import co.jinear.core.manager.calendar.CalendarEventManager;
 import co.jinear.core.manager.material.MaterialListingManager;
 import co.jinear.core.manager.material.MaterialManager;
@@ -32,6 +34,7 @@ import co.jinear.core.manager.mcp.tool.task.ListTasksTool;
 import co.jinear.core.manager.mcp.tool.task.SearchTasksTool;
 import co.jinear.core.manager.mcp.tool.task.SetTaskStatusTool;
 import co.jinear.core.manager.mcp.tool.task.UpdateTaskTool;
+import co.jinear.core.manager.mcp.tool.workspace.GetContextTool;
 import co.jinear.core.manager.mcp.tool.workspace.GetWorkspaceTool;
 import co.jinear.core.manager.mcp.tool.workspace.ListTeamsTool;
 import co.jinear.core.manager.mcp.tool.workspace.ListWorkflowStatusesTool;
@@ -84,6 +87,7 @@ final class McpRealCatalog {
         McpLinkConverter linkConverter = new McpLinkConverter(feProperties, oauthProperties());
 
         return List.of(
+                new GetContextTool(mock(AccountContextManager.class), new McpContextViewConverter()),
                 new ListWorkspacesTool(mock(WorkspaceManager.class), viewConverter),
                 new GetWorkspaceTool(mock(WorkspaceManager.class), viewConverter),
                 new ListTeamsTool(mock(TeamRetrieveManager.class), viewConverter),

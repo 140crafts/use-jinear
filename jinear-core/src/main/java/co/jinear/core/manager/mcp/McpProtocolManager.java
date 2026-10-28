@@ -57,10 +57,10 @@ public class McpProtocolManager {
 
     private static final String INSTRUCTIONS = """
             Jinear holds a person's tasks, boards, calendar, notes and files. \
-            Call list_workspaces first: nearly every other tool needs a workspaceId, and \
-            task tools also need a teamId from list_teams. Before changing a task's status, \
-            read list_workflow_statuses for that team, since statuses are per team and are \
-            referenced by id. Search tools accept plain language. Dates are ISO 8601 in UTC.""";
+            Call get_context first: it returns the workspaces, teams, workflow statuses and \
+            topics with their ids, plus the account's default workspace and team, so other tools \
+            can be called directly. Statuses are per team and are referenced by id. Search tools \
+            accept plain language. Dates are ISO 8601 in UTC.""";
 
     private final McpToolRegistry mcpToolRegistry;
     private final McpToolCallLogService mcpToolCallLogService;

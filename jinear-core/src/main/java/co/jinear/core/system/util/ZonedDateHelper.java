@@ -3,11 +3,17 @@ package co.jinear.core.system.util;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.DateTimeException;
+import java.time.Instant;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.zone.ZoneRules;
 import java.util.Date;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @UtilityClass
@@ -19,11 +25,52 @@ public class ZonedDateHelper {
     public static final String DATE_TIME_FORMAT_4 = "yyyy-MM-dd";
     public static final String DATE_TIME_FORMAT_5 = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
+    private static final String UTC_ZONE_ID = "UTC";
+    private static final String ETC_GMT_ZONE_PREFIX = "Etc/GMT";
+    private static final int SECONDS_IN_HOUR = 3600;
+
     public static ZonedDateTime atTimeZone(ZonedDateTime zonedDateTime, String timeZone) {
         return Optional.ofNullable(timeZone)
                 .map(ZoneId::of)
                 .map(zonedDateTime::withZoneSameInstant)
                 .orElseGet(() -> zonedDateTime.withZoneSameInstant(ZoneId.systemDefault()));
+    }
+
+    public static ZoneId zoneIdOrUtc(String timeZone) {
+        if (Objects.isNull(timeZone) || timeZone.isBlank()) {
+            return ZoneOffset.UTC;
+        }
+        try {
+            return ZoneId.of(timeZone);
+        } catch (DateTimeException exception) {
+            log.warn("Unreadable time zone, falling back to UTC. timeZone: {}", timeZone);
+            return ZoneOffset.UTC;
+        }
+    }
+
+    public static String ianaZoneIdOf(ZoneId zoneId) {
+        ZoneRules rules = zoneId.getRules();
+        if (!rules.isFixedOffset()) {
+            return zoneId.getId();
+        }
+        ZoneOffset offset = rules.getOffset(Instant.EPOCH);
+        String etcZoneId = etcZoneIdOf(offset);
+        Set<String> availableZoneIds = ZoneId.getAvailableZoneIds();
+        if (availableZoneIds.contains(etcZoneId)) {
+            return etcZoneId;
+        }
+        return UTC_ZONE_ID;
+    }
+
+    private static String etcZoneIdOf(ZoneOffset offset) {
+        int totalSeconds = offset.getTotalSeconds();
+        if (totalSeconds == 0 || totalSeconds % SECONDS_IN_HOUR != 0) {
+            return UTC_ZONE_ID;
+        }
+        int hours = totalSeconds / SECONDS_IN_HOUR;
+        // Etc/GMT zones use the POSIX sign, so UTC+3 is Etc/GMT-3.
+        String posixSign = hours > 0 ? "-" : "+";
+        return ETC_GMT_ZONE_PREFIX + posixSign + Math.abs(hours);
     }
 
     public static String format(ZonedDateTime zonedDateTime, String pattern) {

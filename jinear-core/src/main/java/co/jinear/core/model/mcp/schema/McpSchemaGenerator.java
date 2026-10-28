@@ -34,7 +34,7 @@ public class McpSchemaGenerator {
     public static McpSchemaNode forType(Class<?> payloadType) {
         McpSchemaNode schema = McpSchemaNode.objectNode();
         for (Field field : publishedFields(payloadType)) {
-            schema.putProperty(field.getName(), scalar(field));
+            schema.putProperty(field.getName(), property(field));
         }
         return schema;
     }
@@ -167,8 +167,42 @@ public class McpSchemaGenerator {
                || field.isAnnotationPresent(NotEmpty.class);
     }
 
-    private static McpSchemaNode scalar(Field field) {
-        return McpSchemaNode.of(jsonTypeOf(field.getType()), field.getAnnotation(McpField.class).value());
+    private static McpSchemaNode property(Field field) {
+        String description = field.getAnnotation(McpField.class).value();
+        Class<?> type = field.getType();
+        if (List.class.equals(type)) {
+            Class<?> itemType = elementTypeOf(field.getGenericType());
+            McpSchemaNode array = McpSchemaNode.of(McpSchemaNode.TYPE_ARRAY, description);
+            array.setItems(item(itemType));
+            return array;
+        }
+        if (isScalar(type)) {
+            return McpSchemaNode.of(jsonTypeOf(type), description);
+        }
+        McpSchemaNode nested = nestedObject(type);
+        return nested.copyWithDescription(description);
+    }
+
+    private static McpSchemaNode item(Class<?> itemType) {
+        if (isScalar(itemType)) {
+            return McpSchemaNode.of(jsonTypeOf(itemType), null);
+        }
+        return nestedObject(itemType);
+    }
+
+    private static McpSchemaNode nestedObject(Class<?> type) {
+        McpSchemaNode nested = forType(type);
+        if (nested.getProperties().isEmpty()) {
+            throw new BusinessException("mcp.error.unsupported-payload-field-type");
+        }
+        return nested;
+    }
+
+    private static boolean isScalar(Class<?> type) {
+        return String.class.equals(type)
+               || Integer.class.equals(type) || Long.class.equals(type)
+               || int.class.equals(type) || long.class.equals(type)
+               || Boolean.class.equals(type) || boolean.class.equals(type);
     }
 
     private static String jsonTypeOf(Class<?> type) {

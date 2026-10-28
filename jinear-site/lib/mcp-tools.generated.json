@@ -395,6 +395,204 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "get_context",
+    "title" : "Get the account's working context",
+    "description" : "Returns the signed in account, its default workspace and team, every workspace it belongs to with teams, workflow statuses and topics, and the scopes this connection was granted. Call this first, before any other Jinear tool. Use the ids from here directly instead of calling list_workspaces, list_teams, list_workflow_statuses or list_topics.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Narrow the result to this one workspace. Leave it out to get every workspace."
+        },
+        "includeMembers" : {
+          "type" : "boolean",
+          "description" : "Include the members of each workspace, with their account ids. Defaults to false."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "account" : {
+          "type" : "object",
+          "description" : "The signed in account.",
+          "properties" : {
+            "accountId" : {
+              "type" : "string",
+              "description" : "Account id. This is the value assignee fields take."
+            },
+            "username" : {
+              "type" : "string",
+              "description" : "Account handle."
+            },
+            "locale" : {
+              "type" : "string",
+              "description" : "Preferred language, EN or TR."
+            },
+            "timeZone" : {
+              "type" : "string",
+              "description" : "IANA time zone id, for example Europe/Istanbul or Etc/GMT-3."
+            },
+            "now" : {
+              "type" : "string",
+              "description" : "Current time in the account's time zone, ISO 8601 with offset."
+            }
+          },
+          "additionalProperties" : false
+        },
+        "defaults" : {
+          "type" : "object",
+          "description" : "The workspace and team this account last worked in. Use them when the person does not name one.",
+          "properties" : {
+            "workspaceId" : {
+              "type" : "string",
+              "description" : "Default workspace id, or null when none is set."
+            },
+            "teamId" : {
+              "type" : "string",
+              "description" : "Default team id, or null when none is set."
+            }
+          },
+          "additionalProperties" : false
+        },
+        "grantedScopes" : {
+          "type" : "array",
+          "description" : "OAuth scopes this connection was granted.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "workspaces" : {
+          "type" : "array",
+          "description" : "Workspaces this account belongs to.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "workspaceId" : {
+                "type" : "string",
+                "description" : "Workspace id. Pass this to any tool that takes workspaceId."
+              },
+              "username" : {
+                "type" : "string",
+                "description" : "Short workspace handle used in Jinear URLs."
+              },
+              "title" : {
+                "type" : "string",
+                "description" : "Display name."
+              },
+              "role" : {
+                "type" : "string",
+                "description" : "The caller's role in this workspace: OWNER, ADMIN or MEMBER."
+              },
+              "tier" : {
+                "type" : "string",
+                "description" : "Billing tier, BASIC or PRO."
+              },
+              "memberCount" : {
+                "type" : "integer",
+                "description" : "Number of people in this workspace."
+              },
+              "members" : {
+                "type" : "array",
+                "description" : "People in this workspace. Present only when includeMembers is true.",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "accountId" : {
+                      "type" : "string",
+                      "description" : "Account id. This is the value assignee fields take."
+                    },
+                    "username" : {
+                      "type" : "string",
+                      "description" : "Account handle."
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              },
+              "teams" : {
+                "type" : "array",
+                "description" : "Teams in this workspace the caller is a member of. Archived teams are left out.",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "teamId" : {
+                      "type" : "string",
+                      "description" : "Team id. Required by every task tool."
+                    },
+                    "name" : {
+                      "type" : "string",
+                      "description" : "Display name."
+                    },
+                    "tag" : {
+                      "type" : "string",
+                      "description" : "Short prefix used in task references, as in ENG-42."
+                    },
+                    "role" : {
+                      "type" : "string",
+                      "description" : "The caller's role in this team."
+                    },
+                    "statuses" : {
+                      "type" : "array",
+                      "description" : "Statuses this team's tasks can be in, in board order: BACKLOG, NOT_STARTED, STARTED, COMPLETED, CANCELLED.",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "workflowStatusId" : {
+                            "type" : "string",
+                            "description" : "Status id. This is what set_task_status takes."
+                          },
+                          "name" : {
+                            "type" : "string",
+                            "description" : "Display name, for example In Progress."
+                          },
+                          "stateGroup" : {
+                            "type" : "string",
+                            "description" : "BACKLOG, NOT_STARTED, STARTED, COMPLETED or CANCELLED."
+                          }
+                        },
+                        "additionalProperties" : false
+                      }
+                    },
+                    "topics" : {
+                      "type" : "array",
+                      "description" : "Topics this team uses to label its tasks.",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "topicId" : {
+                            "type" : "string",
+                            "description" : "Topic id, the value create_task takes as topicId."
+                          },
+                          "name" : {
+                            "type" : "string",
+                            "description" : "Display name."
+                          }
+                        },
+                        "additionalProperties" : false
+                      }
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          }
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Get the account's working context",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "get_file_link",
     "title" : "Get a link to a file",
     "description" : "Returns the Jinear download link for a stored file, suitable for citing back to the person or for them to click. Opening the link uses the reader's own Jinear permissions, so it works for anyone who can already see the file, and for files shared with anyone who has the link. It does not return the file's contents, and it fails for folders and for files the signed in account cannot see.",
@@ -1680,7 +1878,7 @@
   }, {
     "name" : "list_workspaces",
     "title" : "List workspaces",
-    "description" : "Lists every Jinear workspace the signed in account belongs to, with the account's role in each. Call this first: workspaceId is required by almost every other Jinear tool.",
+    "description" : "Lists every Jinear workspace the signed in account belongs to, with the account's role in each. get_context returns the same workspaces together with their teams, statuses and topics.",
     "inputSchema" : {
       "type" : "object",
       "properties" : { },
@@ -2170,6 +2368,7 @@
     "create_task" : [ "tasks:write" ],
     "create_task_board" : [ "tasks:write" ],
     "fetch" : [ "notes:read", "tasks:read", "workspace:read" ],
+    "get_context" : [ "workspace:read" ],
     "get_file_link" : [ "files:read" ],
     "get_note" : [ "notes:read" ],
     "get_task" : [ "tasks:read" ],

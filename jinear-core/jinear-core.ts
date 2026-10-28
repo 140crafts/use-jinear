@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-10-26 20:10:58.
+// Generated using typescript-generator version 3.0.1157 on 2026-10-29 00:03:39.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,14 +18,38 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
     accountId: string;
     email: boolean;
     pushNotification: boolean;
+}
+
+export interface AccountContextDto {
+    accountId: string;
+    username?: string | null;
+    localeType: LocaleType;
+    timeZone: string;
+    now: Date;
+    preferredWorkspaceId?: string | null;
+    preferredTeamId?: string | null;
+    workspaces: AccountContextWorkspaceDto[];
+}
+
+export interface AccountContextTeamDto {
+    membership: TeamMemberDto;
+    workflowStatuses: TeamWorkflowStatusDto[];
+    topics: TopicDto[];
+}
+
+export interface AccountContextWorkspaceDto {
+    membership: DetailedWorkspaceMemberDto;
+    memberCount: number;
+    members?: WorkspaceMemberDto[] | null;
+    teams: AccountContextTeamDto[];
 }
 
 export interface AccountDeleteEligibilityDto {
@@ -766,8 +790,8 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
-    accountWorkspaceAdminOrOwner: boolean;
     accountIsProjectTeamsMember: boolean;
+    accountWorkspaceAdminOrOwner: boolean;
     accountIsProjectTeamsAdmin: boolean;
 }
 
@@ -2853,9 +2877,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
+    description: string;
     filename: string;
     uri: URI;
-    description: string;
 }
 
 export interface InputStreamSource {
