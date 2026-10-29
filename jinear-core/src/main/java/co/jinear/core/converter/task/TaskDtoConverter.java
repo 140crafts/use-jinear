@@ -41,5 +41,7 @@ public interface TaskDtoConverter {
     @Mapping(source = "relatedTask.owner.username.username", target = "relatedTask.owner.username")
     @Mapping(source = "relatedTask.assignedToAccount.username.username", target = "relatedTask.assignedToAccount.username")
     @Mapping(source = "relatedTask.workspace.username.username", target = "relatedTask.workspace.username")
+    @Mapping(target = "task.url", ignore = true)
+    @Mapping(target = "relatedTask.url", ignore = true)
     TaskRelationDto map(TaskRelation taskRelation);
 }
