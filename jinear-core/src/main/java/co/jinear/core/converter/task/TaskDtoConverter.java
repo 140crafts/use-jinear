@@ -19,7 +19,8 @@ import org.mapstruct.Mapping;
                 AccessibleMediaDtoConverter.class,
                 ProjectDtoConverter.class,
                 PlainTaskBoardEntryDtoConverter.class,
-                TaskCollaboratorDtoConverter.class
+                TaskCollaboratorDtoConverter.class,
+                TaskUrlConverter.class
         })
 public interface TaskDtoConverter {
 
@@ -31,6 +32,7 @@ public interface TaskDtoConverter {
     @Mapping(source = "team.workspace.username.username", target = "team.workspaceUsername")
     @Mapping(source = "owner.accountProfileMedia.media", target = "owner.profilePicture")
     @Mapping(source = "assignedToAccount.accountProfileMedia.media", target = "assignedToAccount.profilePicture")
+    @Mapping(target = "url", ignore = true)
     TaskDto map(Task task);
 
     @Mapping(source = "task.owner.username.username", target = "task.owner.username")

@@ -88,7 +88,7 @@ final class McpRealCatalog {
     static List<McpTool> tools() {
         McpViewConverter viewConverter = new McpViewConverter();
         FeProperties feProperties = new FeProperties();
-        McpLinkConverter linkConverter = new McpLinkConverter(feProperties, oauthProperties());
+        McpLinkConverter linkConverter = new McpLinkConverter(oauthProperties());
 
         return List.of(
                 new GetContextTool(mock(AccountContextManager.class), new McpContextViewConverter()),
@@ -127,9 +127,9 @@ final class McpRealCatalog {
                 new GetFileLinkTool(mock(MaterialManager.class), oauthProperties()),
 
                 new SearchTool(mock(WorkspaceManager.class), mock(TaskSearchManager.class),
-                        mock(NoteFilterManager.class), feProperties, linkConverter),
+                        mock(NoteFilterManager.class), feProperties),
                 new FetchTool(mock(NoteFilterManager.class), mock(TaskRetrieveManager.class),
-                        feProperties, linkConverter));
+                        feProperties));
     }
 
     static McpToolRegistry registry() {

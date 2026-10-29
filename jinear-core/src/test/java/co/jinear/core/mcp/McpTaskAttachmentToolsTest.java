@@ -1,6 +1,5 @@
 package co.jinear.core.mcp;
 
-import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.converter.mcp.McpViewConverter;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
@@ -38,7 +37,7 @@ class McpTaskAttachmentToolsTest {
     private static final String DOWNLOAD_URL = "https://api.jinear.co/v1/task/media/task-1/download/media-1";
 
     private final TaskMediaManager taskMediaManager = Mockito.mock(TaskMediaManager.class);
-    private final McpLinkConverter linkConverter = new McpLinkConverter(new FeProperties(), McpRealCatalog.oauthProperties());
+    private final McpLinkConverter linkConverter = new McpLinkConverter(McpRealCatalog.oauthProperties());
 
     @BeforeEach
     void uploadSucceeds() {

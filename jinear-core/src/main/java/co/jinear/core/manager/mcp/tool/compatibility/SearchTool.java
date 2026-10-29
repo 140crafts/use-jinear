@@ -1,7 +1,6 @@
 package co.jinear.core.manager.mcp.tool.compatibility;
 
 import co.jinear.core.config.properties.FeProperties;
-import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
@@ -41,7 +40,6 @@ public class SearchTool implements McpTool {
     private final TaskSearchManager taskSearchManager;
     private final NoteFilterManager noteFilterManager;
     private final FeProperties feProperties;
-    private final McpLinkConverter mcpLinkConverter;
 
     @Override
     public McpToolDefinition definition() {
@@ -74,14 +72,13 @@ public class SearchTool implements McpTool {
                 break;
             }
             String workspaceId = membership.getWorkspace().getWorkspaceId();
-            String workspaceUsername = membership.getWorkspace().getUsername();
-            addTaskMatches(results, workspaceId, workspaceUsername, query);
+            addTaskMatches(results, workspaceId, query);
             addNoteMatches(results, workspaceId, query);
         }
         return McpToolResult.of(result);
     }
 
-    private void addTaskMatches(List<McpSearchHitView> results, String workspaceId, String workspaceUsername, String query) {
+    private void addTaskMatches(List<McpSearchHitView> results, String workspaceId, String query) {
         try {
             TaskSearchRequest request = new TaskSearchRequest();
             request.setWorkspaceId(workspaceId);
@@ -92,7 +89,7 @@ public class SearchTool implements McpTool {
                     return;
                 }
                 results.add(searchHit(McpSearchIds.TASK_PREFIX + task.getTaskId(), task.getTitle(),
-                        mcpLinkConverter.taskUrl(workspaceUsername, task)));
+                        task.getUrl()));
             }
         } catch (RuntimeException exception) {
             log.debug("[MCP] search skipped workspace {}: {}", workspaceId, exception.getMessage());

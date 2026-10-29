@@ -1,8 +1,8 @@
 package co.jinear.core.mcp;
 
 import co.jinear.core.config.properties.FeProperties;
-import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.converter.mcp.McpViewConverter;
+import co.jinear.core.converter.task.TaskUrlConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.manager.material.MaterialManager;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
@@ -54,10 +54,7 @@ class McpRecordToolsTest {
     }
 
     private FetchTool fetchTool() {
-        FeProperties feProperties = new FeProperties();
-        feProperties.setTaskUrl("https://jinear.co/{workspaceName}/task/{taskTag}");
-        return new FetchTool(Mockito.mock(NoteFilterManager.class), taskRetrieveManager, feProperties,
-                new McpLinkConverter(feProperties, McpRealCatalog.oauthProperties()));
+        return new FetchTool(Mockito.mock(NoteFilterManager.class), taskRetrieveManager, new FeProperties());
     }
 
     private GetFileLinkTool fileLinkTool() {
@@ -79,6 +76,9 @@ class McpRecordToolsTest {
         task.setTeamTagNo(42);
         task.setWorkspace(workspace);
         task.setDescription(description);
+        FeProperties feProperties = new FeProperties();
+        feProperties.setTaskUrl("https://jinear.co/{workspaceName}/task/{taskTag}");
+        new TaskUrlConverter(feProperties).fillUrl(task);
         TaskResponse response = new TaskResponse();
         response.setTaskDto(task);
         return response;

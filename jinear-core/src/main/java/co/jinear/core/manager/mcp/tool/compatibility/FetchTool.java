@@ -1,7 +1,6 @@
 package co.jinear.core.manager.mcp.tool.compatibility;
 
 import co.jinear.core.config.properties.FeProperties;
-import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
@@ -32,7 +31,6 @@ public class FetchTool implements McpTool {
     private final NoteFilterManager noteFilterManager;
     private final TaskRetrieveManager taskRetrieveManager;
     private final FeProperties feProperties;
-    private final McpLinkConverter mcpLinkConverter;
 
     @Override
     public McpToolDefinition definition() {
@@ -63,12 +61,11 @@ public class FetchTool implements McpTool {
     private McpToolResult fetchTask(McpToolContext context, String id) {
         TaskDto task = taskRetrieveManager.retrieve(id.substring(McpSearchIds.TASK_PREFIX.length())).getTaskDto();
         context.setWorkspaceId(task.getWorkspaceId());
-        String workspaceUsername = Objects.isNull(task.getWorkspace()) ? null : task.getWorkspace().getUsername();
         McpFetchedRecordView view = new McpFetchedRecordView();
         view.setId(id);
         view.setTitle(task.getTitle());
         view.setText(Objects.isNull(task.getDescription()) ? "" : task.getDescription().getValue());
-        view.setUrl(mcpLinkConverter.taskUrl(workspaceUsername, task));
+        view.setUrl(task.getUrl());
         return McpToolResult.of(view);
     }
 
