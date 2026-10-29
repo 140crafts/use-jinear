@@ -245,6 +245,7 @@ public class McpViewConverter {
         view.setTeamId(dto.getTeamId());
         view.setTitle(dto.getTitle());
         view.setReference(reference(dto));
+        view.setUrl(dto.getUrl());
         view.setWorkflowStatusId(dto.getWorkflowStatusId());
         if (Objects.nonNull(dto.getWorkflowStatus())) {
             view.setWorkflowStatusName(dto.getWorkflowStatus().getName());

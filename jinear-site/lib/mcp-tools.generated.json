@@ -325,6 +325,10 @@
               "type" : "string",
               "description" : "Human readable reference, for example ENG-42."
             },
+            "url" : {
+              "type" : "string",
+              "description" : "Link that opens the task in the Jinear app."
+            },
             "workflowStatusId" : {
               "type" : "string",
               "description" : "Current status id."
@@ -839,6 +843,10 @@
             "reference" : {
               "type" : "string",
               "description" : "Human readable reference, for example ENG-42."
+            },
+            "url" : {
+              "type" : "string",
+              "description" : "Link that opens the task in the Jinear app."
             },
             "workflowStatusId" : {
               "type" : "string",
@@ -1671,6 +1679,10 @@
                 "type" : "string",
                 "description" : "Human readable reference, for example ENG-42."
               },
+              "url" : {
+                "type" : "string",
+                "description" : "Link that opens the task in the Jinear app."
+              },
               "workflowStatusId" : {
                 "type" : "string",
                 "description" : "Current status id."
@@ -2344,6 +2356,10 @@
                 "type" : "string",
                 "description" : "Human readable reference, for example ENG-42."
               },
+              "url" : {
+                "type" : "string",
+                "description" : "Link that opens the task in the Jinear app."
+              },
               "workflowStatusId" : {
                 "type" : "string",
                 "description" : "Current status id."
@@ -2456,6 +2472,10 @@
             "reference" : {
               "type" : "string",
               "description" : "Human readable reference, for example ENG-42."
+            },
+            "url" : {
+              "type" : "string",
+              "description" : "Link that opens the task in the Jinear app."
             },
             "workflowStatusId" : {
               "type" : "string",

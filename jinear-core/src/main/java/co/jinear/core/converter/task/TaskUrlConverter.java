@@ -1,7 +1,10 @@
 package co.jinear.core.converter.task;
 
 import co.jinear.core.config.properties.FeProperties;
+import co.jinear.core.model.dto.task.RelatedTaskDto;
 import co.jinear.core.model.dto.task.TaskDto;
+import co.jinear.core.model.dto.team.TeamDto;
+import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.MappingTarget;
@@ -21,11 +24,21 @@ public class TaskUrlConverter {
         taskDto.setUrl(url);
     }
 
+    @AfterMapping
+    public void fillUrl(@MappingTarget RelatedTaskDto relatedTaskDto) {
+        String url = taskUrl(relatedTaskDto.getWorkspace(), relatedTaskDto.getTeam(), relatedTaskDto.getTeamTagNo(), relatedTaskDto.getTaskId());
+        relatedTaskDto.setUrl(url);
+    }
+
     public String taskUrl(TaskDto task) {
-        String workspaceUsername = Objects.isNull(task.getWorkspace()) ? null : task.getWorkspace().getUsername();
-        String reference = Objects.isNull(task.getTeam()) || Objects.isNull(task.getTeamTagNo())
-                ? task.getTaskId()
-                : task.getTeam().getTag() + "-" + task.getTeamTagNo();
+        return taskUrl(task.getWorkspace(), task.getTeam(), task.getTeamTagNo(), task.getTaskId());
+    }
+
+    private String taskUrl(WorkspaceDto workspace, TeamDto team, Integer teamTagNo, String taskId) {
+        String workspaceUsername = Objects.isNull(workspace) ? null : workspace.getUsername();
+        String reference = Objects.isNull(team) || Objects.isNull(teamTagNo)
+                ? taskId
+                : team.getTag() + "-" + teamTagNo;
         return feProperties.getTaskUrl()
                 .replace("{workspaceName}", Objects.isNull(workspaceUsername) ? "" : workspaceUsername)
                 .replace("{taskTag}", reference);
