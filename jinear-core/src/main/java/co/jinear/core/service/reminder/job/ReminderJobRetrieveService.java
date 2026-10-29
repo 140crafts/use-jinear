@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -38,6 +39,12 @@ public class ReminderJobRetrieveService {
         return reminderJobRepository.findFirstByReminderIdAndReminderJobStatusAndPassiveIdIsNullOrderByDateAsc(reminderId, reminderJobStatus)
                 .map(reminderJobConverter::map)
                 .orElseThrow(NotFoundException::new);
+    }
+
+    public Optional<ReminderJobDto> findFirstReminderJobOptional(String reminderId, ReminderJobStatus reminderJobStatus) {
+        log.info("Find first reminder job optional by reminder id and status has started. reminderId: {}, reminderJobStatus: {}", reminderId, reminderJobStatus);
+        return reminderJobRepository.findFirstByReminderIdAndReminderJobStatusAndPassiveIdIsNullOrderByDateAsc(reminderId, reminderJobStatus)
+                .map(reminderJobConverter::map);
     }
 
     public boolean checkIfAnyReminderJobExistsForReminderAtDate(String reminderId, ZonedDateTime nextDate) {

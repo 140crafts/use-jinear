@@ -6,9 +6,13 @@ import co.jinear.core.model.dto.media.MediaDto;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
+import co.jinear.core.model.dto.reminder.ReminderDto;
 import co.jinear.core.model.dto.task.CommentDto;
 import co.jinear.core.model.dto.task.TaskBoardDto;
 import co.jinear.core.model.dto.task.TaskDto;
+import co.jinear.core.model.dto.task.TaskReminderDto;
+import co.jinear.core.model.dto.task.TaskReminderScheduleDto;
+import co.jinear.core.model.enumtype.task.TaskReminderType;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.team.workflow.TeamWorkflowStatusDto;
 import co.jinear.core.model.dto.topic.TopicDto;
@@ -24,6 +28,7 @@ import co.jinear.core.model.mcp.view.McpNoteDetailView;
 import co.jinear.core.model.mcp.view.McpNoteView;
 import co.jinear.core.model.mcp.view.McpNotebookView;
 import co.jinear.core.model.mcp.view.McpTaskAttachmentView;
+import co.jinear.core.model.mcp.view.McpTaskReminderView;
 import co.jinear.core.model.mcp.view.McpTaskDetailView;
 import co.jinear.core.model.mcp.view.McpTaskView;
 import co.jinear.core.model.mcp.view.McpTeamView;
@@ -199,6 +204,29 @@ public class McpViewConverter {
         view.setQuoteCommentId(Objects.isNull(dto.getQuote()) ? null : dto.getQuote().getCommentId());
         view.setCreatedAt(instant(dto.getCreatedDate()));
         return view;
+    }
+
+    public McpTaskReminderView taskReminder(TaskReminderScheduleDto dto) {
+        TaskReminderDto taskReminder = dto.getTaskReminder();
+        ReminderDto reminder = taskReminder.getReminder();
+        McpTaskReminderView view = new McpTaskReminderView();
+        view.setTaskReminderId(taskReminder.getTaskReminderId());
+        view.setTaskId(taskReminder.getTaskId());
+        view.setType(taskReminderType(taskReminder.getTaskReminderType()));
+        view.setNextRemindAt(instant(dto.getNextRemindDate()));
+        if (Objects.nonNull(reminder)) {
+            view.setRepeat(name(reminder.getRepeatType()));
+            view.setRepeatUntil(instant(reminder.getRepeatEnd()));
+            view.setCreatedByAccountId(reminder.getOwnerId());
+        }
+        return view;
+    }
+
+    private String taskReminderType(TaskReminderType taskReminderType) {
+        if (TaskReminderType.ASSIGNED_DATE.equals(taskReminderType)) {
+            return "START_DATE";
+        }
+        return name(taskReminderType);
     }
 
     private void fillWorkspace(McpWorkspaceView view, WorkspaceDto dto) {

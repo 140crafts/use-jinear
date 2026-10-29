@@ -15,5 +15,7 @@ public interface TaskReminderRepository extends JpaRepository<TaskReminder, Stri
 
     List<TaskReminder> findAllByTaskIdAndPassiveIdIsNull(String taskId);
 
+    List<TaskReminder> findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateAsc(String taskId);
+
     Optional<TaskReminder> findByTaskIdAndReminderIdAndPassiveIdIsNull(String taskId, String reminderId);
 }

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-10-29 00:03:39.
+// Generated using typescript-generator version 3.0.1157 on 2026-10-29 00:17:23.
 
 export interface BaseDto {
     createdDate: Date;
@@ -790,8 +790,8 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
-    accountIsProjectTeamsMember: boolean;
     accountWorkspaceAdminOrOwner: boolean;
+    accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
 }
 
@@ -1132,6 +1132,11 @@ export interface TaskReminderDto extends BaseDto {
     reminderId: string;
     taskReminderType: TaskReminderType;
     reminder: ReminderDto;
+}
+
+export interface TaskReminderScheduleDto {
+    taskReminder: TaskReminderDto;
+    nextRemindDate?: Date | null;
 }
 
 export interface TaskSearchResultDto extends BaseDto {
@@ -2877,8 +2882,8 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    description: string;
     filename: string;
+    description: string;
     uri: URI;
 }
 

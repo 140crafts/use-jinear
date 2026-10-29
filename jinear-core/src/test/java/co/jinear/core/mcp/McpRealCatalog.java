@@ -26,11 +26,14 @@ import co.jinear.core.manager.mcp.tool.note.ListNotebooksTool;
 import co.jinear.core.manager.mcp.tool.note.SearchNotesTool;
 import co.jinear.core.manager.mcp.tool.task.AddTaskAttachmentTool;
 import co.jinear.core.manager.mcp.tool.task.AddTaskCommentTool;
+import co.jinear.core.manager.mcp.tool.task.AddTaskReminderTool;
 import co.jinear.core.manager.mcp.tool.task.CreateTaskTool;
 import co.jinear.core.manager.mcp.tool.task.GetTaskTool;
 import co.jinear.core.manager.mcp.tool.task.ListTaskAttachmentsTool;
 import co.jinear.core.manager.mcp.tool.task.ListTaskCommentsTool;
+import co.jinear.core.manager.mcp.tool.task.ListTaskRemindersTool;
 import co.jinear.core.manager.mcp.tool.task.ListTasksTool;
+import co.jinear.core.manager.mcp.tool.task.RemoveTaskReminderTool;
 import co.jinear.core.manager.mcp.tool.task.SearchTasksTool;
 import co.jinear.core.manager.mcp.tool.task.SetTaskStatusTool;
 import co.jinear.core.manager.mcp.tool.task.UpdateTaskTool;
@@ -42,6 +45,7 @@ import co.jinear.core.manager.mcp.tool.workspace.ListWorkspaceMembersTool;
 import co.jinear.core.manager.mcp.tool.workspace.ListWorkspacesTool;
 import co.jinear.core.manager.note.NoteFilterManager;
 import co.jinear.core.manager.notebook.NotebookListingManager;
+import co.jinear.core.manager.reminder.TaskReminderManager;
 import co.jinear.core.manager.task.TaskBoardEntryManager;
 import co.jinear.core.manager.task.TaskBoardListingManager;
 import co.jinear.core.manager.task.TaskBoardManager;
@@ -104,6 +108,9 @@ final class McpRealCatalog {
                 new AddTaskCommentTool(mock(TaskCommentManager.class)),
                 new ListTaskAttachmentsTool(mock(TaskMediaManager.class), viewConverter, linkConverter),
                 new AddTaskAttachmentTool(mock(TaskMediaManager.class), linkConverter),
+                new ListTaskRemindersTool(mock(TaskReminderManager.class), viewConverter),
+                new AddTaskReminderTool(mock(TaskReminderManager.class), viewConverter),
+                new RemoveTaskReminderTool(mock(TaskReminderManager.class)),
 
                 new ListTaskBoardsTool(mock(TaskBoardListingManager.class), viewConverter),
                 new CreateTaskBoardTool(mock(TaskBoardManager.class), viewConverter),
