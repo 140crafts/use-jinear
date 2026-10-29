@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-10-29 17:21:55.
+// Generated using typescript-generator version 3.0.1157 on 2026-10-30 00:00:40.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -93,8 +93,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -1725,11 +1725,11 @@ export interface OauthAuthorizeRequest {
     codeChallenge: string;
     codeChallengeMethod: string;
     resource: string;
-    code_challenge_method: string;
-    client_id: string;
     response_type: string;
+    client_id: string;
     redirect_uri: string;
     code_challenge: string;
+    code_challenge_method: string;
 }
 
 export interface OauthClientRegistrationRequest {
@@ -1766,11 +1766,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
-    client_id: string;
     grant_type: string;
-    redirect_uri: string;
     code_verifier: string;
     refresh_token: string;
+    client_id: string;
+    redirect_uri: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2754,12 +2754,12 @@ export interface CaptchaResolveVo {
 
 export interface MultipartFile extends InputStreamSource {
     contentType: string;
-    originalFilename: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
+    originalFilename: string;
 }
 
 export interface McpToolDescriptor {
@@ -2880,13 +2880,13 @@ export interface BaseEntity {
 }
 
 export interface Resource extends InputStreamSource {
-    filename: string;
-    uri: URI;
-    description: string;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
+    uri: URI;
+    description: string;
+    filename: string;
 }
 
 export interface InputStreamSource {
@@ -2991,10 +2991,10 @@ export interface Account extends BaseEntity {
     accountProfileMedia: AccountProfileMedia;
 }
 
-export interface URI extends Comparable<URI>, Serializable {
+export interface URL extends Serializable {
 }
 
-export interface URL extends Serializable {
+export interface URI extends Comparable<URI>, Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {

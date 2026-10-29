@@ -10,7 +10,6 @@ import co.jinear.core.manager.mcp.tool.task.ListTaskRemindersTool;
 import co.jinear.core.manager.mcp.tool.task.RemoveTaskReminderTool;
 import co.jinear.core.manager.reminder.TaskReminderManager;
 import co.jinear.core.model.dto.reminder.ReminderDto;
-import co.jinear.core.model.dto.reminder.ReminderJobDto;
 import co.jinear.core.model.dto.task.TaskReminderDto;
 import co.jinear.core.model.dto.task.TaskReminderScheduleDto;
 import co.jinear.core.model.enumtype.reminder.ReminderJobStatus;
@@ -41,7 +40,7 @@ import org.mockito.Mockito;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -172,6 +171,24 @@ class McpTaskReminderToolsTest {
     }
 
     @Test
+    void addTakesTheReminderFieldsFromTheCreatedRemindersWhenTheReReadLacksThem() throws Exception {
+        TaskReminderDto weekly = taskReminder("tr-weekly", "r-weekly", TaskReminderType.SPECIFIC_DATE, RepeatType.WEEKLY, WEEKLY_END);
+        ReminderDto createdReminder = weekly.getReminder();
+        weekly.setReminder(null);
+        ReminderResponse response = new ReminderResponse();
+        response.setReminders(List.of(createdReminder));
+        Mockito.when(taskReminderManager.initializeTaskReminder(Mockito.any())).thenReturn(response);
+        Mockito.when(taskReminderManager.retrieveTaskReminderSchedules("task-1")).thenReturn(List.of(schedule(weekly, WEEKLY_NEXT)));
+
+        McpToolResult result = add("{\"taskId\":\"task-1\",\"remindAt\":\"2099-01-05T09:00:00Z\",\"repeat\":\"WEEKLY\"}");
+
+        McpTaskReminderView view = items(result).get(0);
+        assertThat(view.getCreatedByAccountId()).isEqualTo("account-1");
+        assertThat(view.getRepeat()).isEqualTo("WEEKLY");
+        assertThat(view.getRepeatUntil()).isEqualTo("2099-03-01T09:00:00Z");
+    }
+
+    @Test
     void addDefaultsTheRepeatOfASpecificReminderToNone() throws Exception {
         Mockito.when(taskReminderManager.initializeTaskReminder(Mockito.any())).thenReturn(created("r-weekly"));
         Mockito.when(taskReminderManager.retrieveTaskReminderSchedules("task-1")).thenReturn(schedules());
@@ -245,7 +262,7 @@ class McpTaskReminderToolsTest {
     }
 
     @Test
-    void managerReadsTheNextPendingJobOfEachReminder() {
+    void managerReadsTheNextPendingDatesOfAllRemindersInOneCall() {
         SessionInfoService sessionInfoService = Mockito.mock(SessionInfoService.class);
         TaskAccessValidator taskAccessValidator = Mockito.mock(TaskAccessValidator.class);
         TaskReminderRetrieveService taskReminderRetrieveService = Mockito.mock(TaskReminderRetrieveService.class);
@@ -254,12 +271,10 @@ class McpTaskReminderToolsTest {
                 taskAccessValidator, Mockito.mock(TaskReminderOperationService.class), taskReminderRetrieveService, reminderJobRetrieveService);
         TaskReminderDto start = taskReminder("tr-start", "r-start", TaskReminderType.ASSIGNED_DATE, RepeatType.NONE, null);
         TaskReminderDto fired = taskReminder("tr-fired", "r-fired", TaskReminderType.SPECIFIC_DATE, RepeatType.NONE, null);
-        ReminderJobDto pendingJob = new ReminderJobDto();
-        pendingJob.setDate(START_DATE);
         Mockito.when(sessionInfoService.currentAccountId()).thenReturn("account-1");
         Mockito.when(taskReminderRetrieveService.retrieveAllWithRelatedTask("task-1")).thenReturn(List.of(start, fired));
-        Mockito.when(reminderJobRetrieveService.findFirstReminderJobOptional("r-start", ReminderJobStatus.PENDING)).thenReturn(Optional.of(pendingJob));
-        Mockito.when(reminderJobRetrieveService.findFirstReminderJobOptional("r-fired", ReminderJobStatus.PENDING)).thenReturn(Optional.empty());
+        Mockito.when(reminderJobRetrieveService.retrieveEarliestDates(List.of("r-start", "r-fired"), ReminderJobStatus.PENDING))
+                .thenReturn(Map.of("r-start", START_DATE));
 
         List<TaskReminderScheduleDto> schedules = manager.retrieveTaskReminderSchedules("task-1");
 

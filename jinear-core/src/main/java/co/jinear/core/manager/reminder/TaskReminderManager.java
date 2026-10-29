@@ -20,9 +20,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -69,21 +69,19 @@ public class TaskReminderManager {
         taskAccessValidator.validateTaskAccess(currentAccountId, taskId);
         log.info("Retrieve task reminder schedules has started. currentAccountId: {}, taskId: {}", currentAccountId, taskId);
         List<TaskReminderDto> taskReminders = taskReminderRetrieveService.retrieveAllWithRelatedTask(taskId);
-        List<TaskReminderScheduleDto> schedules = new ArrayList<>();
-        for (TaskReminderDto taskReminderDto : taskReminders) {
-            TaskReminderScheduleDto schedule = mapSchedule(taskReminderDto);
-            schedules.add(schedule);
-        }
-        return schedules;
+        List<String> reminderIds = taskReminders.stream()
+                .map(TaskReminderDto::getReminderId)
+                .toList();
+        Map<String, ZonedDateTime> nextRemindDates = reminderJobRetrieveService.retrieveEarliestDates(reminderIds, ReminderJobStatus.PENDING);
+        return taskReminders.stream()
+                .map(taskReminderDto -> mapSchedule(taskReminderDto, nextRemindDates))
+                .toList();
     }
 
-    private TaskReminderScheduleDto mapSchedule(TaskReminderDto taskReminderDto) {
-        Optional<ReminderJobDto> nextReminderJob = reminderJobRetrieveService.findFirstReminderJobOptional(taskReminderDto.getReminderId(), ReminderJobStatus.PENDING);
+    private TaskReminderScheduleDto mapSchedule(TaskReminderDto taskReminderDto, Map<String, ZonedDateTime> nextRemindDates) {
         TaskReminderScheduleDto schedule = new TaskReminderScheduleDto();
         schedule.setTaskReminder(taskReminderDto);
-        if (nextReminderJob.isPresent()) {
-            schedule.setNextRemindDate(nextReminderJob.get().getDate());
-        }
+        schedule.setNextRemindDate(nextRemindDates.get(taskReminderDto.getReminderId()));
         return schedule;
     }
 
