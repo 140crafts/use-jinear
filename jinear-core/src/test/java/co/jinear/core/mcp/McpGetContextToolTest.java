@@ -406,7 +406,7 @@ class McpGetContextToolTest {
 
         McpToolRegistry registry = new McpToolRegistry(List.of(getContextTool));
         McpToolCallLogService logService = Mockito.mock(McpToolCallLogService.class);
-        McpProtocolManager protocolManager = new McpProtocolManager(registry, logService, OBJECT_MAPPER, VALIDATOR);
+        McpProtocolManager protocolManager = new McpProtocolManager(registry, logService, OBJECT_MAPPER, VALIDATOR, McpTestTools.messageSourceLocalizer());
         McpDiscoveryService discoveryService = new McpDiscoveryService(properties, oauthProperties);
         OauthAccessTokenResolver accessTokenResolver = new OauthAccessTokenResolver(
                 Mockito.mock(OauthTokenHelper.class),

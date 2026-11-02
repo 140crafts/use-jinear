@@ -235,8 +235,10 @@ class McpTaskReminderToolsTest {
     @Test
     void addRefusesAPastInstant() {
         assertThatThrownBy(() -> add("{\"taskId\":\"task-1\",\"remindAt\":\"2001-01-05T09:00:00Z\"}"))
-                .isInstanceOf(McpToolException.class)
-                .hasMessageContaining("remindAt");
+                .isInstanceOfSatisfying(McpToolException.class, exception -> {
+                    assertThat(exception.getMessage()).isEqualTo("mcp.error.argument.constraint");
+                    assertThat(exception.getArguments()[0]).isEqualTo("remindAt");
+                });
         Mockito.verifyNoInteractions(taskReminderManager);
     }
 
@@ -247,7 +249,7 @@ class McpTaskReminderToolsTest {
         McpToolResult result = add("{\"taskId\":\"task-1\",\"atStartDate\":true}");
 
         assertThat(result.isError()).isTrue();
-        assertThat(result.getText()).contains("No reminder was added");
+        assertThat(result.getText()).isEqualTo("mcp.error.reminder.not-added");
         Mockito.verify(taskReminderManager, Mockito.never()).retrieveTaskReminderSchedules(Mockito.any());
     }
 

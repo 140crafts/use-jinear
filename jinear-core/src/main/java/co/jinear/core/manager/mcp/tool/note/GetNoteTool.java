@@ -4,8 +4,10 @@ import co.jinear.core.converter.mcp.McpViewConverter;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
+import co.jinear.core.manager.note.NoteContentManager;
 import co.jinear.core.manager.note.NoteFilterManager;
 import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.dto.note.NoteContentDto;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolContext;
@@ -24,6 +26,7 @@ import co.jinear.core.model.mcp.input.McpGetNoteInput;
 public class GetNoteTool implements McpTool {
 
     private final NoteFilterManager noteFilterManager;
+    private final NoteContentManager noteContentManager;
     private final McpViewConverter mcpViewConverter;
 
     @Override
@@ -49,9 +52,11 @@ public class GetNoteTool implements McpTool {
         context.setWorkspaceId(input.getWorkspaceId());
         PageDto<NoteDto> page = noteFilterManager.filter(request).getNoteDtoPageDto();
         if (page.getContent().isEmpty()) {
-            return McpToolResult.error("No note with that id is visible to you in this workspace. "
-                                       + "Check noteId against search_notes.");
+            return McpToolResult.error("mcp.error.note.not-visible");
         }
-        return McpToolResult.of(McpNoteEnvelopeView.of(mcpViewConverter.noteDetail(page.getContent().get(0))));
+        NoteDto note = page.getContent().get(0);
+        NoteContentDto content = noteContentManager.retrieve(note);
+        McpNoteDetailView view = mcpViewConverter.noteDetail(note, content);
+        return McpToolResult.of(McpNoteEnvelopeView.of(view));
     }
 }

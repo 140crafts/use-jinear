@@ -129,6 +129,7 @@ on them; use them as reference when building their replacements.
 
 - Prefer adding to existing services over creating new ones; avoid adding new infrastructure dependencies; don't introduce new libraries for problems already solved by the current stack.
 - Any new property, docker compose change etc. should also be added to installation-scripts, docs and if necessary README.md.
+- After a change to the TipTap editor extensions in jinear-app, run `yarn build:note-crdt` and commit `note-crdt.bundle.js`. An old bundle deletes nodes it does not know when an agent edits a note.
 
 ## Coding Style
 

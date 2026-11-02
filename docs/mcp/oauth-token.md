@@ -240,6 +240,7 @@ the `sed` line to see the error.
 | `tasks:write` | Creating and updating tasks, boards and comments |
 | `calendar:read` | Calendar events |
 | `notes:read` | Notebooks and notes |
+| `notes:write` | Creating, editing, moving and deleting notes |
 | `files:read` | Files, folders and links |
 | `offline_access` | A refresh token, so the connection lasts |
 

@@ -154,7 +154,7 @@ class McpToolCatalogTest {
 
     @Test
     void theCatalogStaysSmallEnoughForRealClients() {
-        assertThat(McpRealCatalog.tools()).hasSizeLessThanOrEqualTo(36);
+        assertThat(McpRealCatalog.tools()).hasSizeLessThanOrEqualTo(37);
     }
 
     @Test

@@ -250,6 +250,123 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "append_to_note",
+    "title" : "Add to a note",
+    "description" : "Adds HTML at the start or end of a note. Existing content stays as it is, so it fits adding a section, a log line or a list.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from search_notes."
+        },
+        "body" : {
+          "type" : "string",
+          "description" : "Body as HTML. Allowed: headings, paragraphs, marks, links, lists, task lists, code blocks, tables, images."
+        },
+        "position" : {
+          "type" : "string",
+          "description" : "Where to add the body. Defaults to END.",
+          "enum" : [ "START", "END" ]
+        }
+      },
+      "required" : [ "workspaceId", "noteId", "body" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "edit" : {
+          "type" : "object",
+          "description" : "The result of this write.",
+          "properties" : {
+            "noteId" : {
+              "type" : "string",
+              "description" : "Note id."
+            },
+            "changed" : {
+              "type" : "boolean",
+              "description" : "False when the note already had this content."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "edit" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Add to a note",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "create_note",
+    "title" : "Create a note",
+    "description" : "Creates a note with a title and an optional HTML body. Returns the note id.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "Note title."
+        },
+        "body" : {
+          "type" : "string",
+          "description" : "Body as HTML. Allowed: headings, paragraphs, marks, links, lists, task lists, code blocks, tables, images."
+        },
+        "notebookId" : {
+          "type" : "string",
+          "description" : "Notebook id, from list_notebooks. Leave it out to make a note with no notebook."
+        },
+        "parentNoteId" : {
+          "type" : "string",
+          "description" : "Parent note id. It must be in the same notebook."
+        }
+      },
+      "required" : [ "workspaceId", "title" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "edit" : {
+          "type" : "object",
+          "description" : "The result of this write.",
+          "properties" : {
+            "noteId" : {
+              "type" : "string",
+              "description" : "Note id."
+            },
+            "changed" : {
+              "type" : "boolean",
+              "description" : "False when the note already had this content."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "edit" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Create a note",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "create_task",
     "title" : "Create a task",
     "description" : "Creates a task in a team. Only workspaceId, teamId and title are required. Give it a due date to put it on the calendar, and an assignee account id to hand it to someone. Returns the created task, including its reference such as ENG-42.",
@@ -445,6 +562,46 @@
       "title" : "Create a board",
       "readOnlyHint" : false,
       "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "delete_note",
+    "title" : "Delete a note",
+    "description" : "Deletes a note and all of its child notes.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from search_notes."
+        }
+      },
+      "required" : [ "workspaceId", "noteId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "noteId" : {
+          "type" : "string",
+          "description" : "The note that was deleted."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Delete a note",
+      "readOnlyHint" : false,
+      "destructiveHint" : true,
       "idempotentHint" : false,
       "openWorldHint" : false
     }
@@ -2110,6 +2267,54 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "move_note",
+    "title" : "Move a note",
+    "description" : "Moves a note to another notebook, under another note, or to the top level. Child notes move with it.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from search_notes."
+        },
+        "notebookId" : {
+          "type" : "string",
+          "description" : "Target notebook id, from list_notebooks. Leave it out to stay in the current notebook."
+        },
+        "parentNoteId" : {
+          "type" : "string",
+          "description" : "New parent note id. Leave it out to put the note at the top level."
+        }
+      },
+      "required" : [ "workspaceId", "noteId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "noteId" : {
+          "type" : "string",
+          "description" : "The note that moved."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Move a note",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "remove_task_reminder",
     "title" : "Remove a task reminder",
     "description" : "Removes a reminder from a task, so it does not fire again for anyone. A repeating reminder stops for all its future instants. Get the id from list_task_reminders.",
@@ -2142,6 +2347,62 @@
       "title" : "Remove a task reminder",
       "readOnlyHint" : false,
       "destructiveHint" : true,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "replace_in_note",
+    "title" : "Replace text in a note",
+    "description" : "Replaces one exact piece of the note HTML, as returned by get_note. It is the safest way to change a long note: text that others typed elsewhere stays as it is, and a change made during the call is handled by computing the edit again.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from search_notes."
+        },
+        "oldText" : {
+          "type" : "string",
+          "description" : "Exact HTML to replace, from get_note. It must match exactly once."
+        },
+        "newText" : {
+          "type" : "string",
+          "description" : "HTML to put in its place. Empty removes oldText."
+        }
+      },
+      "required" : [ "workspaceId", "noteId", "oldText", "newText" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "edit" : {
+          "type" : "object",
+          "description" : "The result of this write.",
+          "properties" : {
+            "noteId" : {
+              "type" : "string",
+              "description" : "Note id."
+            },
+            "changed" : {
+              "type" : "boolean",
+              "description" : "False when the note already had this content."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "edit" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Replace text in a note",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
       "idempotentHint" : false,
       "openWorldHint" : false
     }
@@ -2524,6 +2785,58 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "update_note_title",
+    "title" : "Update a note title",
+    "description" : "Sets a new title on a note. The body stays as it is.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from search_notes."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "New title."
+        }
+      },
+      "required" : [ "workspaceId", "noteId", "title" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "edit" : {
+          "type" : "object",
+          "description" : "The result of this write.",
+          "properties" : {
+            "noteId" : {
+              "type" : "string",
+              "description" : "Note id."
+            },
+            "changed" : {
+              "type" : "boolean",
+              "description" : "False when the note already had this content."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "edit" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Update a note title",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "update_task",
     "title" : "Update a task",
     "description" : "Changes a task's title, body, dates or assignee. Supply only the fields to change; anything omitted is left alone. Dates are the one exception: Jinear stores start and due as a pair, so supply both together. Use set_task_status to move a task between workflow statuses.",
@@ -2587,8 +2900,11 @@
     "add_task_comment" : [ "tasks:write" ],
     "add_task_reminder" : [ "tasks:write" ],
     "add_task_to_board" : [ "tasks:write" ],
+    "append_to_note" : [ "notes:write" ],
+    "create_note" : [ "notes:write" ],
     "create_task" : [ "tasks:write" ],
     "create_task_board" : [ "tasks:write" ],
+    "delete_note" : [ "notes:write" ],
     "fetch" : [ "notes:read", "tasks:read", "workspace:read" ],
     "get_context" : [ "workspace:read" ],
     "get_file_link" : [ "files:read" ],
@@ -2608,11 +2924,14 @@
     "list_workflow_statuses" : [ "workspace:read" ],
     "list_workspace_members" : [ "workspace:read" ],
     "list_workspaces" : [ "workspace:read" ],
+    "move_note" : [ "notes:write" ],
     "remove_task_reminder" : [ "tasks:write" ],
+    "replace_in_note" : [ "notes:write" ],
     "search" : [ "notes:read", "tasks:read", "workspace:read" ],
     "search_notes" : [ "notes:read" ],
     "search_tasks" : [ "tasks:read" ],
     "set_task_status" : [ "tasks:write" ],
+    "update_note_title" : [ "notes:write" ],
     "update_task" : [ "tasks:write" ]
   }
 }

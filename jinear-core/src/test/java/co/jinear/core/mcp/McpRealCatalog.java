@@ -5,6 +5,7 @@ import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.config.properties.OauthProperties;
 import co.jinear.core.converter.mcp.McpContextViewConverter;
 import co.jinear.core.converter.mcp.McpLinkConverter;
+import co.jinear.core.converter.mcp.McpNoteEditConverter;
 import co.jinear.core.converter.mcp.McpViewConverter;
 import co.jinear.core.manager.account.AccountContextManager;
 import co.jinear.core.manager.calendar.CalendarEventManager;
@@ -21,9 +22,15 @@ import co.jinear.core.manager.mcp.tool.compatibility.FetchTool;
 import co.jinear.core.manager.mcp.tool.compatibility.SearchTool;
 import co.jinear.core.manager.mcp.tool.file.GetFileLinkTool;
 import co.jinear.core.manager.mcp.tool.file.ListFilesTool;
+import co.jinear.core.manager.mcp.tool.note.AppendToNoteTool;
+import co.jinear.core.manager.mcp.tool.note.CreateNoteTool;
+import co.jinear.core.manager.mcp.tool.note.DeleteNoteTool;
 import co.jinear.core.manager.mcp.tool.note.GetNoteTool;
 import co.jinear.core.manager.mcp.tool.note.ListNotebooksTool;
+import co.jinear.core.manager.mcp.tool.note.MoveNoteTool;
+import co.jinear.core.manager.mcp.tool.note.ReplaceInNoteTool;
 import co.jinear.core.manager.mcp.tool.note.SearchNotesTool;
+import co.jinear.core.manager.mcp.tool.note.UpdateNoteTitleTool;
 import co.jinear.core.manager.mcp.tool.task.AddTaskAttachmentTool;
 import co.jinear.core.manager.mcp.tool.task.AddTaskCommentTool;
 import co.jinear.core.manager.mcp.tool.task.AddTaskReminderTool;
@@ -43,7 +50,9 @@ import co.jinear.core.manager.mcp.tool.workspace.ListTeamsTool;
 import co.jinear.core.manager.mcp.tool.workspace.ListWorkflowStatusesTool;
 import co.jinear.core.manager.mcp.tool.workspace.ListWorkspaceMembersTool;
 import co.jinear.core.manager.mcp.tool.workspace.ListWorkspacesTool;
+import co.jinear.core.manager.note.NoteContentManager;
 import co.jinear.core.manager.note.NoteFilterManager;
+import co.jinear.core.manager.note.NoteOperationManager;
 import co.jinear.core.manager.notebook.NotebookListingManager;
 import co.jinear.core.manager.reminder.TaskReminderManager;
 import co.jinear.core.manager.task.TaskBoardEntryManager;
@@ -87,6 +96,7 @@ final class McpRealCatalog {
 
     static List<McpTool> tools() {
         McpViewConverter viewConverter = new McpViewConverter();
+        McpNoteEditConverter noteEditConverter = new McpNoteEditConverter();
         FeProperties feProperties = new FeProperties();
         McpLinkConverter linkConverter = new McpLinkConverter(oauthProperties());
 
@@ -121,7 +131,13 @@ final class McpRealCatalog {
 
                 new ListNotebooksTool(mock(NotebookListingManager.class), viewConverter),
                 new SearchNotesTool(mock(NoteFilterManager.class), viewConverter),
-                new GetNoteTool(mock(NoteFilterManager.class), viewConverter),
+                new GetNoteTool(mock(NoteFilterManager.class), mock(NoteContentManager.class), viewConverter),
+                new CreateNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
+                new ReplaceInNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
+                new AppendToNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
+                new UpdateNoteTitleTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
+                new MoveNoteTool(mock(NoteOperationManager.class), noteEditConverter),
+                new DeleteNoteTool(mock(NoteOperationManager.class)),
 
                 new ListFilesTool(mock(MaterialListingManager.class), viewConverter),
                 new GetFileLinkTool(mock(MaterialManager.class), oauthProperties()),

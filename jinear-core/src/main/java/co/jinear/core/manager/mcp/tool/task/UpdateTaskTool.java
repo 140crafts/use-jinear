@@ -46,9 +46,7 @@ public class UpdateTaskTool implements McpTool {
     public McpToolResult call(McpToolContext context, McpToolArguments args) {
         McpUpdateTaskInput input = args.bind(McpUpdateTaskInput.class);
         if (mentionsOneDateOnly(args)) {
-            return McpToolResult.error("Supply startDate and dueDate together. Jinear stores them as a pair, "
-                                       + "so sending one on its own would clear the other. "
-                                       + "Call get_task to read the current values first.");
+            return McpToolResult.error("mcp.error.task.dates-pair");
         }
 
         boolean changed = applyTitle(input)
@@ -57,8 +55,7 @@ public class UpdateTaskTool implements McpTool {
                           | applyDates(input, args);
 
         if (!changed) {
-            return McpToolResult.error("Nothing to update. Supply at least one of title, description, "
-                                       + "assignedTo, startDate or dueDate.");
+            return McpToolResult.error("mcp.error.task.nothing-to-update");
         }
         return McpToolResult.of(McpTaskAcknowledgementView.of(input.getTaskId()));
     }

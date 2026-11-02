@@ -29,8 +29,7 @@ public class McpZonedDateTimeDeserializer extends JsonDeserializer<ZonedDateTime
         if (Objects.nonNull(date)) {
             return date;
         }
-        throw new McpToolException("invalid_argument", parser.currentName()
-                + " must be an ISO 8601 date or instant, for example 2026-08-29 or 2026-08-29T14:00:00Z. Received: " + raw);
+        throw new McpToolException("invalid_argument", "mcp.error.argument.zoned-date-format", parser.currentName(), raw);
     }
 
     private ZonedDateTime tryInstant(String raw) {

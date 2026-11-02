@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-10-30 00:00:40.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-02 22:29:36.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -93,8 +93,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -189,10 +189,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
+    ginternalDate: string;
     gthreadId: string;
     ghistoryId: string;
-    ginternalDate: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -579,6 +579,18 @@ export interface MessagingTokenDto {
     token: string;
 }
 
+export interface NoteContentDto {
+    title: string;
+    html: string;
+}
+
+export interface NoteCrdtResultDto {
+    update: string;
+    html: string;
+    title: string;
+    changed: boolean;
+}
+
 export interface NoteDto extends BaseDto {
     noteId: string;
     notebookId: string;
@@ -592,6 +604,11 @@ export interface NoteDto extends BaseDto {
     owner?: PlainAccountProfileDto | null;
     path?: NotePathDto | null;
     notebook?: NotebookDto | null;
+}
+
+export interface NoteEditResultDto {
+    noteId: string;
+    changed: boolean;
 }
 
 export interface NotePathDto {
@@ -915,6 +932,13 @@ export interface ReminderJobDto extends BaseDto {
 
 export interface RichTextAppendDto {
     seq: number;
+}
+
+export interface RichTextDocumentDto {
+    format: RichTextFormat;
+    headSeq: number;
+    states: string[];
+    value: string;
 }
 
 export interface RichTextDto {
@@ -1766,11 +1790,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
+    client_id: string;
+    redirect_uri: string;
     grant_type: string;
     code_verifier: string;
     refresh_token: string;
-    client_id: string;
-    redirect_uri: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2884,9 +2908,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    uri: URI;
-    description: string;
     filename: string;
+    description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -3246,6 +3270,8 @@ export type MessageType = "USER_MESSAGE" | "CONVERSATION_INIT";
 
 export type ThreadType = "CLASSIC" | "CHANNEL_INITIAL" | "INITIALIZED_BY_ROBOT";
 
+export type NoteAppendPosition = "START" | "END";
+
 export type NotebookVisibilityType = "PRIVATE" | "SHARED" | "PUBLIC_WITHIN_WORKSPACE";
 
 export type NotificationEventState = "INITIALIZED" | "SENT";
@@ -3258,7 +3284,7 @@ export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_IN
 
 export type OauthClientRegistrationType = "DCR" | "CIMD" | "STATIC";
 
-export type OauthScope = "WORKSPACE_READ" | "TASKS_READ" | "TASKS_WRITE" | "CALENDAR_READ" | "NOTES_READ" | "FILES_READ" | "OFFLINE_ACCESS";
+export type OauthScope = "WORKSPACE_READ" | "TASKS_READ" | "TASKS_WRITE" | "CALENDAR_READ" | "NOTES_READ" | "NOTES_WRITE" | "FILES_READ" | "OFFLINE_ACCESS";
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "UNFOLLOW" | "SINGLE_LOGIN_TOKEN_USED" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "PAYMENT_ISSUE";
 

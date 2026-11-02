@@ -115,7 +115,7 @@ class McpRecordToolsTest {
         McpToolResult result = fetchTool().call(context(), args("{\"id\":\"board:1\"}"));
 
         assertThat(result.isError()).isTrue();
-        assertThat(result.getText()).contains("Unrecognised id");
+        assertThat(result.getText()).isEqualTo("mcp.error.fetch.unrecognised-id");
     }
 
     @Test
@@ -125,7 +125,7 @@ class McpRecordToolsTest {
         McpToolResult result = fileLinkTool().call(context(), args("{\"materialId\":\"folder-1\"}"));
 
         assertThat(result.isError()).isTrue();
-        assertThat(result.getText()).contains("folder");
+        assertThat(result.getText()).isEqualTo("mcp.error.file.is-folder");
     }
 
     @Test

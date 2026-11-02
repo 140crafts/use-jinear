@@ -61,9 +61,11 @@ class McpToolInputTest {
     void aMissingRequiredArgumentReportsTheFieldsOwnHint() {
         assertThatThrownBy(() -> args("{\"workspaceUsername\":\"w\",\"teamTag\":\"ENG\"}")
                 .bind(McpGetTaskInput.class))
-                .isInstanceOf(McpToolException.class)
-                .hasMessageContaining("taskNumber")
-                .hasMessageContaining("In the reference ENG-42 it is 42.");
+                .isInstanceOfSatisfying(McpToolException.class, exception -> {
+                    assertThat(exception.getMessage()).isEqualTo("mcp.error.argument.constraint");
+                    assertThat(exception.getArguments()[0]).isEqualTo("taskNumber");
+                    assertThat((String) exception.getArguments()[2]).contains("In the reference ENG-42 it is 42.");
+                });
     }
 
     @Test
@@ -99,7 +101,7 @@ class McpToolInputTest {
                 """));
 
         assertThat(result.isError()).isTrue();
-        assertThat(result.getText()).contains("Supply startDate and dueDate together");
+        assertThat(result.getText()).isEqualTo("mcp.error.task.dates-pair");
         Mockito.verifyNoInteractions(manager);
     }
 

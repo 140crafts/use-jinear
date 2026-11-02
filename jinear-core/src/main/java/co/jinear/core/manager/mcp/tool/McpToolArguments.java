@@ -59,7 +59,8 @@ public class McpToolArguments {
         }
         ConstraintViolation<T> first = violations.iterator().next();
         String field = first.getPropertyPath().toString();
-        throw new McpToolException("missing_argument", field + " " + first.getMessage() + hintFor(inputType, field));
+        String hint = hintFor(inputType, field);
+        throw new McpToolException("missing_argument", "mcp.error.argument.constraint", field, first.getMessage(), hint);
     }
 
     private String hintFor(Class<?> inputType, String fieldName) {
@@ -85,13 +86,13 @@ public class McpToolArguments {
             }
             cause = cause.getCause();
         }
-        return new McpToolException("invalid_argument", "An argument could not be read: " + exception.getMessage());
+        return new McpToolException("invalid_argument", "mcp.error.argument.unreadable", exception.getMessage());
     }
 
     public String requiredString(String field) {
         String value = optionalString(field, null);
         if (Objects.isNull(value) || value.isBlank()) {
-            throw new McpToolException("missing_argument", field + " is required and must be a non empty string.");
+            throw new McpToolException("missing_argument", "mcp.error.argument.string-required", field);
         }
         return value;
     }
@@ -102,8 +103,8 @@ public class McpToolArguments {
             return fallback;
         }
         if (!value.isTextual()) {
-            throw new McpToolException("invalid_argument",
-                    field + " must be a string, received " + value.getNodeType().name().toLowerCase() + ".");
+            String receivedType = value.getNodeType().name().toLowerCase();
+            throw new McpToolException("invalid_argument", "mcp.error.argument.string-type", field, receivedType);
         }
         return value.asText();
     }
@@ -114,7 +115,7 @@ public class McpToolArguments {
             return fallback;
         }
         if (!value.isIntegralNumber()) {
-            throw new McpToolException("invalid_argument", field + " must be a whole number.");
+            throw new McpToolException("invalid_argument", "mcp.error.argument.integer-type", field);
         }
         return value.asInt();
     }
@@ -122,7 +123,7 @@ public class McpToolArguments {
     public int requiredInteger(String field, String hint) {
         Integer value = optionalInteger(field, null);
         if (Objects.isNull(value)) {
-            throw new McpToolException("missing_argument", field + " is required. " + hint);
+            throw new McpToolException("missing_argument", "mcp.error.argument.integer-required", field, hint);
         }
         return value;
     }
@@ -148,7 +149,7 @@ public class McpToolArguments {
         try {
             return Enum.valueOf(type, raw.toUpperCase(Locale.ROOT));
         } catch (IllegalArgumentException exception) {
-            throw new McpToolException("invalid_argument", field + " " + hint + " Received: " + raw);
+            throw new McpToolException("invalid_argument", "mcp.error.argument.enum-value", field, hint, raw);
         }
     }
 
@@ -158,7 +159,7 @@ public class McpToolArguments {
             return fallback;
         }
         if (!value.isBoolean()) {
-            throw new McpToolException("invalid_argument", field + " must be true or false.");
+            throw new McpToolException("invalid_argument", "mcp.error.argument.boolean-type", field);
         }
         return value.asBoolean();
     }
@@ -166,7 +167,7 @@ public class McpToolArguments {
     public boolean requiredBoolean(String field) {
         Boolean value = optionalBoolean(field, null);
         if (Objects.isNull(value)) {
-            throw new McpToolException("missing_argument", field + " is required and must be true or false.");
+            throw new McpToolException("missing_argument", "mcp.error.argument.boolean-required", field);
         }
         return value;
     }
@@ -178,11 +179,11 @@ public class McpToolArguments {
             return values;
         }
         if (!value.isArray()) {
-            throw new McpToolException("invalid_argument", field + " must be an array of strings.");
+            throw new McpToolException("invalid_argument", "mcp.error.argument.string-list-type", field);
         }
         value.forEach(item -> {
             if (!item.isTextual()) {
-                throw new McpToolException("invalid_argument", field + " must contain only strings.");
+                throw new McpToolException("invalid_argument", "mcp.error.argument.string-list-item", field);
             }
             values.add(item.asText());
         });
@@ -199,8 +200,7 @@ public class McpToolArguments {
             parsed = tryParse(raw, ISO_DATE);
         }
         if (Objects.isNull(parsed)) {
-            throw new McpToolException("invalid_argument",
-                    field + " must be an ISO 8601 date, either 2026-08-29 or 2026-08-29T14:00:00Z. Received: " + raw);
+            throw new McpToolException("invalid_argument", "mcp.error.argument.date-format", field, raw);
         }
         return parsed;
     }
@@ -208,8 +208,7 @@ public class McpToolArguments {
     public Date requiredDate(String field) {
         Date value = optionalDate(field);
         if (Objects.isNull(value)) {
-            throw new McpToolException("missing_argument",
-                    field + " is required and must be an ISO 8601 date, for example 2026-08-29T14:00:00Z.");
+            throw new McpToolException("missing_argument", "mcp.error.argument.date-required", field);
         }
         return value;
     }
@@ -231,7 +230,7 @@ public class McpToolArguments {
     public int page() {
         Integer page = optionalInteger("page", 0);
         if (page < 0) {
-            throw new McpToolException("invalid_argument", "page must be zero or greater.");
+            throw new McpToolException("invalid_argument", "mcp.error.argument.page");
         }
         return page;
     }
@@ -239,7 +238,7 @@ public class McpToolArguments {
     public int pageSize(int max) {
         Integer pageSize = optionalInteger("pageSize", 20);
         if (pageSize < 1 || pageSize > max) {
-            throw new McpToolException("invalid_argument", "pageSize must be between 1 and " + max + ".");
+            throw new McpToolException("invalid_argument", "mcp.error.argument.page-size", String.valueOf(max));
         }
         return pageSize;
     }

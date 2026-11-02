@@ -47,7 +47,7 @@ public class GetFileLinkTool implements McpTool {
         MaterialDto material = materialManager.retrieve(input.getMaterialId()).getMaterialDto();
         context.setWorkspaceId(material.getWorkspaceId());
         if (!MaterialType.FILE.equals(material.getMaterialType())) {
-            return McpToolResult.error("That id is a folder. Pass the materialId of a FILE from list_files.");
+            return McpToolResult.error("mcp.error.file.is-folder");
         }
         McpFileLinkView view = new McpFileLinkView();
         view.setMaterialId(material.getMaterialId());

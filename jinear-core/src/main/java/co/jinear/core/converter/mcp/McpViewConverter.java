@@ -3,7 +3,9 @@ package co.jinear.core.converter.mcp;
 import co.jinear.core.model.dto.calendar.CalendarEventDto;
 import co.jinear.core.model.dto.material.MaterialDto;
 import co.jinear.core.model.dto.media.MediaDto;
+import co.jinear.core.model.dto.note.NoteContentDto;
 import co.jinear.core.model.dto.note.NoteDto;
+import co.jinear.core.model.dto.note.NoteEditResultDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.reminder.ReminderDto;
@@ -29,6 +31,7 @@ import co.jinear.core.model.mcp.view.McpNoteView;
 import co.jinear.core.model.mcp.view.McpNotebookView;
 import co.jinear.core.model.mcp.view.McpTaskAttachmentView;
 import co.jinear.core.model.mcp.view.McpTaskReminderView;
+import co.jinear.core.model.mcp.view.McpNoteEditView;
 import co.jinear.core.model.mcp.view.McpTaskDetailView;
 import co.jinear.core.model.mcp.view.McpTaskView;
 import co.jinear.core.model.mcp.view.McpTeamView;
@@ -138,10 +141,17 @@ public class McpViewConverter {
         return view;
     }
 
-    public McpNoteDetailView noteDetail(NoteDto dto) {
+    public McpNoteDetailView noteDetail(NoteDto dto, NoteContentDto content) {
         McpNoteDetailView view = new McpNoteDetailView();
         fillNote(view, dto);
-        view.setBody(richText(dto.getRichText()));
+        view.setBody(content.getHtml());
+        return view;
+    }
+
+    public McpNoteEditView noteEdit(NoteEditResultDto dto) {
+        McpNoteEditView view = new McpNoteEditView();
+        view.setNoteId(dto.getNoteId());
+        view.setChanged(dto.isChanged());
         return view;
     }
 

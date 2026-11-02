@@ -55,7 +55,7 @@ public class FetchTool implements McpTool {
         if (id.startsWith(McpSearchIds.TASK_PREFIX)) {
             return fetchTask(context, id);
         }
-        return McpToolResult.error("Unrecognised id. Pass an id exactly as search returned it.");
+        return McpToolResult.error("mcp.error.fetch.unrecognised-id");
     }
 
     private McpToolResult fetchTask(McpToolContext context, String id) {
@@ -72,7 +72,7 @@ public class FetchTool implements McpTool {
     private McpToolResult fetchNote(McpToolContext context, String id) {
         String[] parts = id.substring(McpSearchIds.NOTE_PREFIX.length()).split(":", 2);
         if (parts.length != 2) {
-            return McpToolResult.error("Malformed note id. Pass an id exactly as search returned it.");
+            return McpToolResult.error("mcp.error.fetch.malformed-note-id");
         }
         NoteFilterRequest request = new NoteFilterRequest();
         request.setWorkspaceId(parts[0]);
@@ -80,7 +80,7 @@ public class FetchTool implements McpTool {
         context.setWorkspaceId(parts[0]);
         PageDto<NoteDto> page = noteFilterManager.filter(request).getNoteDtoPageDto();
         if (page.getContent().isEmpty()) {
-            return McpToolResult.error("That note is no longer visible to you.");
+            return McpToolResult.error("mcp.error.fetch.note-not-visible");
         }
         NoteDto note = page.getContent().get(0);
         McpFetchedRecordView view = new McpFetchedRecordView();
