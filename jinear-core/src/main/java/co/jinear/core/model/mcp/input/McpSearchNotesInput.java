@@ -14,8 +14,9 @@ public class McpSearchNotesInput extends McpWorkspaceScopedInput {
     @McpField("Restrict to the children of one note.")
     private String parentNoteId;
 
-    @McpField("Case insensitive phrase to match against note titles.")
-    private String titleContains;
+    @McpField("Words to find in note titles and bodies. Every word must match as a word prefix. "
+              + "Omit it to list the notes instead.")
+    private String query;
 
     @McpField(value = McpInputDescriptions.PAGE, minimum = 0)
     private Integer page;

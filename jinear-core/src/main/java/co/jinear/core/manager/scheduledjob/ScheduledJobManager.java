@@ -10,6 +10,7 @@ import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.project.domain.ProjectDomainCnameOperatorService;
 import co.jinear.core.service.mcp.analytics.McpRetentionService;
+import co.jinear.core.service.note.NoteFtsRefreshService;
 import co.jinear.core.service.oauth.provider.OauthRetentionService;
 import co.jinear.core.service.task.TaskFtsRefreshService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class ScheduledJobManager {
     private final MaterialRetrieveService materialRetrieveService;
     private final ReminderProcessManager reminderProcessManager;
     private final TaskFtsRefreshService taskFtsRefreshService;
+    private final NoteFtsRefreshService noteFtsRefreshService;
     private final McpRetentionService mcpRetentionService;
     private final OauthRetentionService oauthRetentionService;
     private final InstanceReportSendManager instanceReportSendManager;
@@ -132,6 +134,12 @@ public class ScheduledJobManager {
     @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
     public void refreshTaskFtsMaterializedView() {
         taskFtsRefreshService.refreshIfDirty();
+    }
+
+    @Async
+    @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
+    public void refreshNoteFtsMaterializedView() {
+        noteFtsRefreshService.refreshIfDirty();
     }
 
     private void updateMediaAsPrivate(String mediaId) {

@@ -4,7 +4,7 @@ import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
-import co.jinear.core.manager.note.NoteFilterManager;
+import co.jinear.core.manager.note.NoteSearchManager;
 import co.jinear.core.manager.task.TaskSearchManager;
 import co.jinear.core.manager.workspace.WorkspaceManager;
 import co.jinear.core.model.dto.PageDto;
@@ -18,15 +18,15 @@ import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
 import co.jinear.core.model.mcp.view.McpSearchHitView;
 import co.jinear.core.model.mcp.view.McpSearchResultsView;
-import co.jinear.core.model.request.note.NoteFilterRequest;
+import co.jinear.core.model.request.note.NoteSearchRequest;
 import co.jinear.core.model.request.task.TaskSearchRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import co.jinear.core.model.mcp.input.McpSearchInput;
 
 @Slf4j
@@ -38,7 +38,7 @@ public class SearchTool implements McpTool {
 
     private final WorkspaceManager workspaceManager;
     private final TaskSearchManager taskSearchManager;
-    private final NoteFilterManager noteFilterManager;
+    private final NoteSearchManager noteSearchManager;
     private final FeProperties feProperties;
 
     @Override
@@ -46,10 +46,10 @@ public class SearchTool implements McpTool {
         return McpToolDefinitionBuilder
                 .named("search")
                 .title("Search Jinear")
-                .description("Searches tasks and note titles across every Jinear workspace the signed in account belongs to, "
+                .description("Searches tasks, and the titles and bodies of notes, across every Jinear workspace the signed in account belongs to, "
                              + "and returns ids and links suitable for citation. "
                              + "Pass an id from here to fetch to read the full record. "
-                             + "Tasks created or edited in the last minute may not appear yet; use list_tasks to see them. "
+                             + "Tasks and notes created or edited in the last minute may not appear yet; use list_tasks or search_notes to see them. "
                              + "For filtering by status, assignee or dates, use list_tasks instead.")
                 .input(McpSchemaGenerator.forInput(McpSearchInput.class))
                 .output(McpSchemaGenerator.arrayField("results", McpSearchHitView.class, "Matching records, tasks first."))
@@ -98,19 +98,16 @@ public class SearchTool implements McpTool {
 
     private void addNoteMatches(List<McpSearchHitView> results, String workspaceId, String query) {
         try {
-            NoteFilterRequest request = new NoteFilterRequest();
-            request.setWorkspaceId(workspaceId);
-            PageDto<NoteDto> page = noteFilterManager.filter(request).getNoteDtoPageDto();
-            String needle = query.toLowerCase(Locale.ROOT);
+            NoteSearchRequest request = new NoteSearchRequest();
+            request.setQuery(query);
+            PageDto<NoteDto> page = noteSearchManager.searchNotes(workspaceId, request, 0).getNoteDtoPageDto();
             for (NoteDto note : page.getContent()) {
                 if (results.size() >= MAX_RESULTS) {
                     return;
                 }
-                if (Objects.isNull(note.getTitle()) || !note.getTitle().toLowerCase(Locale.ROOT).contains(needle)) {
-                    continue;
-                }
+                String url = Optional.ofNullable(note.getUrl()).orElseGet(feProperties::getHomeUrl);
                 results.add(searchHit(McpSearchIds.NOTE_PREFIX + workspaceId + ":" + note.getNoteId(),
-                        note.getTitle(), feProperties.getHomeUrl()));
+                        note.getTitle(), url));
             }
         } catch (RuntimeException exception) {
             log.debug("[MCP] search skipped notes in workspace {}: {}", workspaceId, exception.getMessage());

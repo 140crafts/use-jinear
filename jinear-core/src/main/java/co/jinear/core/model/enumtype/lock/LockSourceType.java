@@ -21,6 +21,7 @@ public enum LockSourceType {
     PROJECT_DOMAIN("project:domain", 10, TimeUnit.SECONDS),
     MATERIAL_ACCESS_UPDATE("material:access-update", 30, TimeUnit.SECONDS),
     TASK_FTS_REFRESH("task-fts:refresh", 10, TimeUnit.MINUTES),
+    NOTE_FTS_REFRESH("note-fts:refresh", 10, TimeUnit.MINUTES),
     RICH_TEXT_SYNC("rich-text:sync", 30, TimeUnit.SECONDS),
     NOTE_INIT("note:init", 30, TimeUnit.SECONDS),
     NOTE_UPDATE("note:update", 30, TimeUnit.SECONDS),

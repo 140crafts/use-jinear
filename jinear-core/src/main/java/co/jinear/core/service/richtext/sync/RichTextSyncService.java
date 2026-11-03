@@ -11,8 +11,10 @@ import co.jinear.core.model.dto.richtext.RichTextUpdatesDto;
 import co.jinear.core.model.entity.richtext.RichText;
 import co.jinear.core.model.entity.richtext.RichTextUpdate;
 import co.jinear.core.model.enumtype.richtext.RichTextFormat;
+import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.repository.RichTextRepository;
 import co.jinear.core.repository.richtext.RichTextUpdateRepository;
+import co.jinear.core.service.note.NoteFtsRefreshService;
 import co.jinear.core.service.richtext.HtmlSanitizeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class RichTextSyncService {
     private final RichTextUpdateRepository richTextUpdateRepository;
     private final HtmlSanitizeService htmlSanitizeService;
     private final RichTextDocumentConverter richTextDocumentConverter;
+    private final NoteFtsRefreshService noteFtsRefreshService;
 
     @Transactional(readOnly = true)
     public RichTextDocumentDto retrieveDocument(String richTextId) {
@@ -137,6 +140,9 @@ public class RichTextSyncService {
             return;
         }
         richText.setValue(htmlSanitizeService.sanitizeHTML(renderedHtml));
+        if (RichTextType.NOTE.equals(richText.getType())) {
+            noteFtsRefreshService.markDirty();
+        }
     }
 
     private RichTextStateDto toStateDto(RichText richText) {

@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Optional;
 import co.jinear.core.model.mcp.input.McpFetchInput;
 
 @Slf4j
@@ -87,7 +88,8 @@ public class FetchTool implements McpTool {
         view.setId(id);
         view.setTitle(note.getTitle());
         view.setText(Objects.isNull(note.getRichText()) ? "" : note.getRichText().getValue());
-        view.setUrl(feProperties.getHomeUrl());
+        String url = Optional.ofNullable(note.getUrl()).orElseGet(feProperties::getHomeUrl);
+        view.setUrl(url);
         return McpToolResult.of(view);
     }
 }

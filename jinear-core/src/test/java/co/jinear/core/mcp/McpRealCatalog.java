@@ -53,6 +53,7 @@ import co.jinear.core.manager.mcp.tool.workspace.ListWorkspacesTool;
 import co.jinear.core.manager.note.NoteContentManager;
 import co.jinear.core.manager.note.NoteFilterManager;
 import co.jinear.core.manager.note.NoteOperationManager;
+import co.jinear.core.manager.note.NoteSearchManager;
 import co.jinear.core.manager.notebook.NotebookListingManager;
 import co.jinear.core.manager.reminder.TaskReminderManager;
 import co.jinear.core.manager.task.TaskBoardEntryManager;
@@ -130,7 +131,7 @@ final class McpRealCatalog {
                 new ListCalendarEventsTool(mock(CalendarEventManager.class), viewConverter),
 
                 new ListNotebooksTool(mock(NotebookListingManager.class), viewConverter),
-                new SearchNotesTool(mock(NoteFilterManager.class), viewConverter),
+                new SearchNotesTool(mock(NoteFilterManager.class), mock(NoteSearchManager.class), viewConverter),
                 new GetNoteTool(mock(NoteFilterManager.class), mock(NoteContentManager.class), viewConverter),
                 new CreateNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
                 new ReplaceInNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
@@ -143,7 +144,7 @@ final class McpRealCatalog {
                 new GetFileLinkTool(mock(MaterialManager.class), oauthProperties()),
 
                 new SearchTool(mock(WorkspaceManager.class), mock(TaskSearchManager.class),
-                        mock(NoteFilterManager.class), feProperties),
+                        mock(NoteSearchManager.class), feProperties),
                 new FetchTool(mock(NoteFilterManager.class), mock(TaskRetrieveManager.class),
                         feProperties));
     }

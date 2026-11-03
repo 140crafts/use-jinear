@@ -2,9 +2,11 @@ package co.jinear.core.service.note;
 
 import co.jinear.core.converter.note.NoteDtoConverter;
 import co.jinear.core.converter.note.NoteEntityConverter;
+import co.jinear.core.converter.note.NoteUrlConverter;
 import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
+import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.entity.note.Note;
 import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.model.vo.note.NoteInitializeVo;
@@ -13,6 +15,7 @@ import co.jinear.core.model.vo.richtext.InitializeRichTextVo;
 import co.jinear.core.repository.note.NoteRepository;
 import co.jinear.core.service.note.notetag.NoteTagAssignmentOperationService;
 import co.jinear.core.service.richtext.RichTextInitializeService;
+import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +35,9 @@ public class NoteOperationService {
     private final NoteTagAssignmentOperationService noteTagAssignmentOperationService;
     private final NoteDtoConverter noteDtoConverter;
     private final NoteLockService noteLockService;
+    private final NoteFtsRefreshService noteFtsRefreshService;
+    private final WorkspaceRetrieveService workspaceRetrieveService;
+    private final NoteUrlConverter noteUrlConverter;
 
     @Transactional
     public NoteDto initialize(NoteInitializeVo noteInitializeVo) {
@@ -42,7 +48,10 @@ public class NoteOperationService {
         String richTextId = initializeRichTextBody(initialized.getNoteId(), noteInitializeVo.getBodyState());
         initialized.setRichTextId(richTextId);
         Note saved = noteRepository.save(initialized);
-        return noteDtoConverter.convert(saved);
+        noteFtsRefreshService.markDirty();
+        NoteDto noteDto = noteDtoConverter.convert(saved);
+        fillCreatedNoteUrl(noteDto);
+        return noteDto;
     }
 
     public void update(NoteUpdateVo noteUpdateVo) {
@@ -52,6 +61,7 @@ public class NoteOperationService {
             Note note = noteRetrieveService.retrieveEntity(noteUpdateVo.getNoteId());
             Optional.of(noteUpdateVo).map(NoteUpdateVo::getTitle).ifPresent(note::setTitle);
             noteRepository.save(note);
+            noteFtsRefreshService.markDirty();
         } finally {
             noteLockService.unLockForUpdate(noteUpdateVo.getNoteId());
         }
@@ -111,6 +121,7 @@ public class NoteOperationService {
                                 .forEach(child -> queue.add(child.getNoteId()));
                     });
         }
+        noteFtsRefreshService.markDirty();
     }
 
     @Transactional
@@ -118,6 +129,14 @@ public class NoteOperationService {
         log.info("Delete all notes by notebook has started. notebookId: {}, passiveId: {}", notebookId, passiveId);
         noteTagAssignmentOperationService.removeAllByNotebook(notebookId, passiveId);
         noteRepository.passivizeAllByNotebookId(notebookId, passiveId);
+        noteFtsRefreshService.markDirty();
+    }
+
+    private void fillCreatedNoteUrl(NoteDto noteDto) {
+        // The saved Note is the instance this request created, so its workspace relation is still null.
+        WorkspaceDto workspace = workspaceRetrieveService.retrieveWorkspaceWithId(noteDto.getWorkspaceId());
+        String url = noteUrlConverter.noteUrl(workspace.getUsername(), noteDto.getNotebookId(), noteDto.getNoteId());
+        noteDto.setUrl(url);
     }
 
     private String initializeRichTextBody(String noteId, String bodyState) {

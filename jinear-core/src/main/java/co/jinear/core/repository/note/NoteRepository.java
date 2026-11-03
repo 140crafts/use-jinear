@@ -3,6 +3,7 @@ package co.jinear.core.repository.note;
 import co.jinear.core.model.entity.note.Note;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,9 @@ public interface NoteRepository extends JpaRepository<Note, String> {
     boolean existsByNoteIdAndNotebookIdAndPassiveIdIsNull(String noteId, String notebookId);
 
     List<Note> findAllByParentNoteIdAndPassiveIdIsNull(String parentNoteId);
+
+    @EntityGraph(attributePaths = {"notebook", "owner", "richText", "workspace", "noteTagAssignments", "noteTagAssignments.noteTag"})
+    List<Note> findAllByNoteIdInAndPassiveIdIsNull(List<String> noteIds);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""

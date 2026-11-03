@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="jin-580-create-mv-note-fts">
+        <!-- @formatter:off -->
+        <sql>
+            create materialized view mv_note_fts
+as
+            select n.note_id,
+                   n.workspace_id,
+                   setweight(to_tsvector('simple', coalesce(n.title, ''::text)), 'A')
+                       || setweight(to_tsvector('simple', coalesce(rt.value, ''::text)), 'B') as fts
+            from note n
+                     left join rich_text rt on rt.rich_text_id = n.rich_text_id and rt.passive_id is null
+            where n.passive_id is null;
+
+            create index idx_mv_note_fts_fts_search on mv_note_fts using gin (fts);
+            create unique index idx_mv_note_fts_note_id on mv_note_fts (note_id);
+        </sql>
+        <!-- @formatter:on-->
+        <rollback>
+            <sql>drop materialized view mv_note_fts;</sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

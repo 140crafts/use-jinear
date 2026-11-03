@@ -22,6 +22,9 @@ public class McpNoteView implements McpToolPayload {
     @McpField("Note title.")
     private String title;
 
+    @McpField("Link that opens the note in the Jinear app.")
+    private String url;
+
     @McpField("Parent note when the note is nested, otherwise null.")
     private String parentNoteId;
 

@@ -273,6 +273,7 @@ public class McpViewConverter {
         view.setNotebookId(dto.getNotebookId());
         view.setWorkspaceId(dto.getWorkspaceId());
         view.setTitle(dto.getTitle());
+        view.setUrl(dto.getUrl());
         view.setParentNoteId(dto.getParentNoteId());
         view.setOwnerId(dto.getOwnerId());
     }
