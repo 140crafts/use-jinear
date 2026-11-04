@@ -3,6 +3,7 @@ package co.jinear.core.controller.task;
 import co.jinear.core.manager.task.TaskChecklistItemManager;
 import co.jinear.core.model.request.task.ChecklistItemLabelRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.task.ChecklistItemResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ public class TaskChecklistItemController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse initializeChecklistItem(@RequestBody ChecklistItemLabelRequest checklistItemLabelRequest) {
+    public ChecklistItemResponse initializeChecklistItem(@RequestBody ChecklistItemLabelRequest checklistItemLabelRequest) {
         return taskChecklistItemManager.initializeChecklistItem(checklistItemLabelRequest);
     }
 

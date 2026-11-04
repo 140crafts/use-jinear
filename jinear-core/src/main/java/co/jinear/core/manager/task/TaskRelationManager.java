@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskRelationDto;
 import co.jinear.core.model.request.task.TaskRelationInitializeRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.task.TaskRelationResponse;
 import co.jinear.core.model.vo.task.TaskRelationInitializeVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.TaskRetrieveService;
@@ -32,7 +33,7 @@ public class TaskRelationManager {
     private final TaskRelationRetrieveService taskRelationRetrieveService;
     private final TaskRelationRemovalService taskRelationRemovalService;
 
-    public BaseResponse initializeTaskRelation(TaskRelationInitializeRequest taskRelationInitializeRequest) {
+    public TaskRelationResponse initializeTaskRelation(TaskRelationInitializeRequest taskRelationInitializeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateRequest(taskRelationInitializeRequest);
         validateTaskAccess.validateTaskAccess(currentAccountId, taskRelationInitializeRequest.getTaskId());
@@ -41,8 +42,8 @@ public class TaskRelationManager {
         validateTasksSameTeamAndWorkspace(relatedTaskDto, taskDto);
 
         TaskRelationInitializeVo taskRelationInitializeVo = taskRelationInitializeVoConverter.map(taskRelationInitializeRequest, currentAccountId, taskDto);
-        taskRelationInitializeService.initializeTaskRelation(taskRelationInitializeVo);
-        return new BaseResponse();
+        TaskRelationDto taskRelationDto = taskRelationInitializeService.initializeTaskRelation(taskRelationInitializeVo);
+        return mapResponse(taskRelationDto);
     }
 
     public BaseResponse deleteTaskRelation(String relationId) {
@@ -64,5 +65,11 @@ public class TaskRelationManager {
         if (taskRelationInitializeRequest.getTaskId().equals(taskRelationInitializeRequest.getRelatedTaskId())) {
             throw new BusinessException("task.init-relation.cannot-relate-self");
         }
+    }
+
+    private TaskRelationResponse mapResponse(TaskRelationDto taskRelationDto) {
+        TaskRelationResponse taskRelationResponse = new TaskRelationResponse();
+        taskRelationResponse.setTaskRelationDto(taskRelationDto);
+        return taskRelationResponse;
     }
 }

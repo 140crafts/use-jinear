@@ -12,6 +12,7 @@ import co.jinear.core.model.mcp.input.McpUpdateTaskInput;
 import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
 import co.jinear.core.model.mcp.view.McpTaskAcknowledgementView;
 import co.jinear.core.model.request.task.TaskAssigneeUpdateRequest;
+import co.jinear.core.model.request.task.TaskCollaboratorUpdateRequest;
 import co.jinear.core.model.request.task.TaskDateUpdateRequest;
 import co.jinear.core.model.request.task.TaskUpdateDescriptionRequest;
 import co.jinear.core.model.request.task.TaskUpdateTitleRequest;
@@ -31,7 +32,7 @@ public class UpdateTaskTool implements McpTool {
         return McpToolDefinitionBuilder
                 .named("update_task")
                 .title("Update a task")
-                .description("Changes a task's title, body, dates or assignee. "
+                .description("Changes a task's title, body, dates, assignee, topic or collaborators. "
                              + "Supply only the fields to change; anything omitted is left alone. "
                              + "Dates are the one exception: Jinear stores start and due as a pair, so supply "
                              + "both together. Use set_task_status to move a task between workflow statuses.")
@@ -49,12 +50,14 @@ public class UpdateTaskTool implements McpTool {
             return McpToolResult.error("mcp.error.task.dates-pair");
         }
 
-        boolean changed = applyTitle(input)
-                          | applyDescription(input)
-                          | applyAssignee(input)
-                          | applyDates(input, args);
+        boolean titleChanged = applyTitle(input);
+        boolean descriptionChanged = applyDescription(input);
+        boolean assigneeChanged = applyAssignee(input);
+        boolean datesChanged = applyDates(input, args);
+        boolean topicChanged = applyTopic(input);
+        boolean collaboratorsChanged = applyCollaborators(input, args);
 
-        if (!changed) {
+        if (!(titleChanged || descriptionChanged || assigneeChanged || datesChanged || topicChanged || collaboratorsChanged)) {
             return McpToolResult.error("mcp.error.task.nothing-to-update");
         }
         return McpToolResult.of(McpTaskAcknowledgementView.of(input.getTaskId()));
@@ -104,6 +107,28 @@ public class UpdateTaskTool implements McpTool {
         request.setHasPreciseAssignedDate(Objects.nonNull(input.getStartDate()));
         request.setHasPreciseDueDate(Objects.nonNull(input.getDueDate()));
         taskUpdateManager.updateTaskDates(input.getTaskId(), request);
+        return true;
+    }
+
+    private boolean applyTopic(McpUpdateTaskInput input) {
+        if (Objects.isNull(input.getTopicId())) {
+            return false;
+        }
+        if (input.getTopicId().isBlank()) {
+            taskUpdateManager.removeTaskTopic(input.getTaskId());
+            return true;
+        }
+        taskUpdateManager.updateTaskTopic(input.getTaskId(), input.getTopicId());
+        return true;
+    }
+
+    private boolean applyCollaborators(McpUpdateTaskInput input, McpToolArguments args) {
+        if (!args.has("collaboratorIds")) {
+            return false;
+        }
+        TaskCollaboratorUpdateRequest request = new TaskCollaboratorUpdateRequest();
+        request.setCollaboratorIds(input.getCollaboratorIds());
+        taskUpdateManager.updateTaskCollaborators(input.getTaskId(), request);
         return true;
     }
 }

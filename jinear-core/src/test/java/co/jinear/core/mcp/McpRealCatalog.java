@@ -73,6 +73,30 @@ import co.jinear.core.manager.team.TeamWorkflowStatusManager;
 import co.jinear.core.manager.topic.TopicListingManager;
 import co.jinear.core.manager.workspace.WorkspaceManager;
 import co.jinear.core.manager.workspace.WorkspaceMemberRetrieveManager;
+import co.jinear.core.converter.mcp.McpActivityViewConverter;
+import co.jinear.core.manager.mcp.tool.board.CreateTopicTool;
+import co.jinear.core.manager.mcp.tool.board.MoveTaskOnBoardTool;
+import co.jinear.core.manager.mcp.tool.board.RemoveTaskFromBoardTool;
+import co.jinear.core.manager.mcp.tool.board.UpdateTaskBoardTool;
+import co.jinear.core.manager.mcp.tool.checklist.AddChecklistItemTool;
+import co.jinear.core.manager.mcp.tool.checklist.CreateTaskChecklistTool;
+import co.jinear.core.manager.mcp.tool.checklist.DeleteChecklistItemTool;
+import co.jinear.core.manager.mcp.tool.checklist.DeleteTaskChecklistTool;
+import co.jinear.core.manager.mcp.tool.checklist.RenameTaskChecklistTool;
+import co.jinear.core.manager.mcp.tool.checklist.UpdateChecklistItemTool;
+import co.jinear.core.manager.mcp.tool.note.CreateNotebookTool;
+import co.jinear.core.manager.mcp.tool.notification.GetUnreadNotificationCountTool;
+import co.jinear.core.manager.mcp.tool.notification.ListNotificationsTool;
+import co.jinear.core.manager.mcp.tool.task.AddTaskRelationTool;
+import co.jinear.core.manager.mcp.tool.task.ListActivityTool;
+import co.jinear.core.manager.mcp.tool.task.RemoveTaskRelationTool;
+import co.jinear.core.manager.notebook.NotebookOperationManager;
+import co.jinear.core.manager.notification.NotificationEventListingManager;
+import co.jinear.core.manager.task.TaskChecklistItemManager;
+import co.jinear.core.manager.task.TaskChecklistManager;
+import co.jinear.core.manager.task.TaskRelationManager;
+import co.jinear.core.manager.topic.TopicManager;
+import co.jinear.core.manager.workspace.WorkspaceActivityFilterManager;
 import org.mockito.Mockito;
 
 import java.util.List;
@@ -124,15 +148,30 @@ final class McpRealCatalog {
                 new ListTaskRemindersTool(mock(TaskReminderManager.class), viewConverter),
                 new AddTaskReminderTool(mock(TaskReminderManager.class), viewConverter),
                 new RemoveTaskReminderTool(mock(TaskReminderManager.class)),
+                new AddTaskRelationTool(mock(TaskRelationManager.class), viewConverter),
+                new RemoveTaskRelationTool(mock(TaskRelationManager.class)),
+                new ListActivityTool(mock(WorkspaceActivityFilterManager.class), new McpActivityViewConverter()),
+
+                new CreateTaskChecklistTool(mock(TaskChecklistManager.class), viewConverter),
+                new RenameTaskChecklistTool(mock(TaskChecklistManager.class)),
+                new DeleteTaskChecklistTool(mock(TaskChecklistManager.class)),
+                new AddChecklistItemTool(mock(TaskChecklistItemManager.class), viewConverter),
+                new UpdateChecklistItemTool(mock(TaskChecklistItemManager.class)),
+                new DeleteChecklistItemTool(mock(TaskChecklistItemManager.class)),
 
                 new ListTaskBoardsTool(mock(TaskBoardListingManager.class), viewConverter),
                 new CreateTaskBoardTool(mock(TaskBoardManager.class), viewConverter),
                 new AddTaskToBoardTool(mock(TaskBoardEntryManager.class)),
+                new UpdateTaskBoardTool(mock(TaskBoardManager.class)),
+                new RemoveTaskFromBoardTool(mock(TaskBoardEntryManager.class)),
+                new MoveTaskOnBoardTool(mock(TaskBoardEntryManager.class)),
                 new ListTopicsTool(mock(TopicListingManager.class), viewConverter),
+                new CreateTopicTool(mock(TopicManager.class), viewConverter),
 
                 new ListCalendarEventsTool(mock(CalendarEventManager.class), viewConverter),
 
                 new ListNotebooksTool(mock(NotebookListingManager.class), viewConverter),
+                new CreateNotebookTool(mock(NotebookOperationManager.class)),
                 new SearchNotesTool(mock(NoteSearchManager.class), viewConverter),
                 new ListNotesTool(mock(NoteSearchManager.class), viewConverter),
                 new GetNoteTool(mock(NoteFilterManager.class), mock(NoteContentManager.class), viewConverter),
@@ -145,6 +184,9 @@ final class McpRealCatalog {
 
                 new ListFilesTool(mock(MaterialListingManager.class), viewConverter),
                 new GetFileLinkTool(mock(MaterialManager.class), oauthProperties()),
+
+                new ListNotificationsTool(mock(NotificationEventListingManager.class), viewConverter),
+                new GetUnreadNotificationCountTool(mock(NotificationEventListingManager.class)),
 
                 new SearchTool(mock(WorkspaceManager.class), mock(TaskSearchManager.class),
                         mock(NoteSearchManager.class), feProperties),

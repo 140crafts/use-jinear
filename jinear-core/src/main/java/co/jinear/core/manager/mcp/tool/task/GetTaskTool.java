@@ -29,10 +29,12 @@ public class GetTaskTool implements McpTool {
         return McpToolDefinitionBuilder
                 .named("get_task")
                 .title("Get one task")
-                .description("Reads a single task in full, including its body, by its human readable reference such as ENG-42. "
-                             + "Use it after search_tasks or list_tasks when the body of a specific task is needed.")
+                .description("Reads a single task in full by its human readable reference such as ENG-42: its body, collaborators, "
+                             + "relations such as subtasks and blockers, checklists with their items, and the boards it is on. "
+                             + "Use it after search_tasks or list_tasks when the details of a specific task are needed. "
+                             + "Comments, attachments, reminders and activity have their own list tools.")
                 .input(McpSchemaGenerator.forInput(McpGetTaskInput.class))
-                .output(McpSchemaGenerator.single("task", "The task, with its body.", McpTaskDetailView.class))
+                .output(McpSchemaGenerator.single("task", "The task, with its details.", McpTaskDetailView.class))
                 .readOnly()
                 .scopes(OauthScope.TASKS_READ)
                 .build();

@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -40,4 +41,10 @@ public class McpCreateTaskInput extends McpWorkspaceScopedInput {
 
     @McpField("Board to add the task to on creation.")
     private String boardId;
+
+    @McpField("Task id of the parent task. The new task becomes its subtask. The parent must be in the same team.")
+    private String parentTaskId;
+
+    @McpField("Account ids of the collaborators, from list_workspace_members.")
+    private List<String> collaboratorIds;
 }

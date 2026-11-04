@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,4 +34,10 @@ public class McpUpdateTaskInput {
     @JsonDeserialize(using = McpZonedDateTimeDeserializer.class)
     @McpField("New due date. Supply together with startDate, since Jinear stores the pair.")
     private ZonedDateTime dueDate;
+
+    @McpField("New topic id, from list_topics on the task's team. Pass an empty string to remove the topic.")
+    private String topicId;
+
+    @McpField("Account ids of the collaborators, from list_workspace_members. Replaces the whole list; pass an empty list to remove every collaborator.")
+    private List<String> collaboratorIds;
 }

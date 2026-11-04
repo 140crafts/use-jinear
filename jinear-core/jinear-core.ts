@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-11-04 21:22:54.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-04 22:13:10.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -93,8 +93,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -189,10 +189,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
-    ghistoryId: string;
     ginternalDate: string;
+    ghistoryId: string;
     gthreadId: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1762,10 +1762,10 @@ export interface OauthAuthorizeRequest {
     codeChallenge: string;
     codeChallengeMethod: string;
     resource: string;
-    client_id: string;
     response_type: string;
     redirect_uri: string;
     code_challenge: string;
+    client_id: string;
     code_challenge_method: string;
 }
 
@@ -1803,11 +1803,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
-    client_id: string;
     redirect_uri: string;
-    grant_type: string;
-    code_verifier: string;
     refresh_token: string;
+    code_verifier: string;
+    grant_type: string;
+    client_id: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2568,6 +2568,10 @@ export interface RobotSecretResponse extends BaseResponse {
     data: RobotSecretDto;
 }
 
+export interface ChecklistItemResponse extends BaseResponse {
+    data: ChecklistItemDto;
+}
+
 export interface PaginatedTaskCommentResponse extends BaseResponse {
     data: PageDto<CommentDto>;
 }
@@ -2630,6 +2634,10 @@ export interface TaskNumbersResponse {
 
 export interface TaskPaginatedMediaResponse extends BaseResponse {
     data: PageDto<TaskMediaDto>;
+}
+
+export interface TaskRelationResponse extends BaseResponse {
+    data: TaskRelationDto;
 }
 
 export interface TaskResponse extends BaseResponse {
@@ -2928,9 +2936,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
+    filename: string;
     description: string;
     uri: URI;
-    filename: string;
 }
 
 export interface InputStreamSource {
