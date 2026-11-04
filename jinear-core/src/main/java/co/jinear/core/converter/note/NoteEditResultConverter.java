@@ -10,6 +10,7 @@ public class NoteEditResultConverter {
     public NoteEditResultDto convert(NoteDto note, boolean changed) {
         NoteEditResultDto dto = new NoteEditResultDto();
         dto.setNoteId(note.getNoteId());
+        dto.setUrl(note.getUrl());
         dto.setChanged(changed);
         return dto;
     }

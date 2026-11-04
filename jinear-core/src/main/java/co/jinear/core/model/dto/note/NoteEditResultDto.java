@@ -10,5 +10,6 @@ import lombok.ToString;
 public class NoteEditResultDto {
 
     private String noteId;
+    private String url;
     private boolean changed;
 }

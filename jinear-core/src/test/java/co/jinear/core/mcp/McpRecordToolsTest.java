@@ -2,6 +2,7 @@ package co.jinear.core.mcp;
 
 import co.jinear.core.config.properties.FeProperties;
 import co.jinear.core.converter.mcp.McpViewConverter;
+import co.jinear.core.converter.richtext.RichTextPlainTextConverter;
 import co.jinear.core.converter.task.TaskUrlConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.manager.material.MaterialManager;
@@ -54,7 +55,7 @@ class McpRecordToolsTest {
     }
 
     private FetchTool fetchTool() {
-        return new FetchTool(Mockito.mock(NoteFilterManager.class), taskRetrieveManager, new FeProperties());
+        return new FetchTool(Mockito.mock(NoteFilterManager.class), taskRetrieveManager, new FeProperties(), new RichTextPlainTextConverter());
     }
 
     private GetFileLinkTool fileLinkTool() {
@@ -105,7 +106,7 @@ class McpRecordToolsTest {
         assertThat(result.isError()).isFalse();
         assertThat(view.getId()).isEqualTo("task:task-1");
         assertThat(view.getTitle()).isEqualTo("Ship the release");
-        assertThat(view.getText()).isEqualTo("<p>Body</p>");
+        assertThat(view.getText()).isEqualTo("Body");
         assertThat(view.getUrl()).isEqualTo("https://jinear.co/acme/task/ENG-42");
         assertThat(context.getWorkspaceId()).isEqualTo("workspace-1");
     }

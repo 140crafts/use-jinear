@@ -3,7 +3,9 @@ package co.jinear.core.service.note;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.entity.note.NoteFts;
 import co.jinear.core.model.vo.note.NoteFtsSearchVo;
+import co.jinear.core.model.vo.note.NoteListVo;
 import co.jinear.core.repository.note.NoteFtsSearchRepository;
+import co.jinear.core.repository.note.NoteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +29,7 @@ public class NoteSearchService {
     private static final int PAGE_SIZE = 50;
 
     private final NoteFtsSearchRepository noteFtsSearchRepository;
+    private final NoteRepository noteRepository;
     private final NoteRetrieveService noteRetrieveService;
 
     public Page<NoteDto> search(NoteFtsSearchVo noteFtsSearchVo) {
@@ -42,12 +45,28 @@ public class NoteSearchService {
                 noteFtsSearchVo.getAccountId(),
                 noteFtsSearchVo.isWorkspaceAdmin(),
                 pageable);
-        List<NoteDto> notes = retrieveInRankOrder(ranked);
-        return new PageImpl<>(notes, pageable, ranked.getTotalElements());
+        Page<String> noteIds = ranked.map(NoteFts::getNoteId);
+        return retrievePage(noteIds, pageable);
     }
 
-    private List<NoteDto> retrieveInRankOrder(Page<NoteFts> ranked) {
-        List<String> noteIds = ranked.map(NoteFts::getNoteId).getContent();
+    public Page<NoteDto> listAccessible(NoteListVo noteListVo) {
+        Pageable pageable = PageRequest.of(noteListVo.getPage(), PAGE_SIZE);
+        Page<String> noteIds = noteRepository.findAccessibleNoteIds(
+                noteListVo.getWorkspaceId(),
+                noteListVo.getNotebookId(),
+                noteListVo.getParentNoteId(),
+                noteListVo.getAccountId(),
+                noteListVo.isWorkspaceAdmin(),
+                pageable);
+        return retrievePage(noteIds, pageable);
+    }
+
+    private Page<NoteDto> retrievePage(Page<String> noteIds, Pageable pageable) {
+        List<NoteDto> notes = retrieveInOrder(noteIds.getContent());
+        return new PageImpl<>(notes, pageable, noteIds.getTotalElements());
+    }
+
+    private List<NoteDto> retrieveInOrder(List<String> noteIds) {
         List<NoteDto> notes = noteRetrieveService.retrieveAll(noteIds);
         Map<String, NoteDto> notesById = notes.stream()
                 .collect(Collectors.toMap(NoteDto::getNoteId, Function.identity()));

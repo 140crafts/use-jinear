@@ -32,7 +32,7 @@ public class CreateNoteTool implements McpTool {
         return McpToolDefinitionBuilder
                 .named("create_note")
                 .title("Create a note")
-                .description("Creates a note with a title and an optional HTML body. Returns the note id.")
+                .description("Creates a note with a title and an optional HTML body. Returns the note id and a link that opens the note.")
                 .input(McpSchemaGenerator.forInput(McpCreateNoteInput.class))
                 .output(McpSchemaGenerator.single("edit", "The result of this write.", McpNoteEditView.class))
                 .write()

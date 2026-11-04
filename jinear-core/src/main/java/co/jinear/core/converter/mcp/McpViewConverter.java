@@ -151,6 +151,7 @@ public class McpViewConverter {
     public McpNoteEditView noteEdit(NoteEditResultDto dto) {
         McpNoteEditView view = new McpNoteEditView();
         view.setNoteId(dto.getNoteId());
+        view.setUrl(dto.getUrl());
         view.setChanged(dto.isChanged());
         return view;
     }

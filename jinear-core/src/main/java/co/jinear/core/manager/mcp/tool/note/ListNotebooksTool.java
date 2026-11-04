@@ -31,7 +31,7 @@ public class ListNotebooksTool implements McpTool {
                 .named("list_notebooks")
                 .title("List notebooks")
                 .description("Lists the notebooks in a workspace. A notebook groups related notes, "
-                             + "and its id is what narrows search_notes to one place.")
+                             + "and its id is what narrows list_notes and search_notes to one place.")
                 .input(McpSchemaGenerator.forInput(McpListNotebooksInput.class))
                 .output(McpSchemaGenerator.page(McpNotebookView.class, "Notebooks in this workspace."))
                 .readOnly()

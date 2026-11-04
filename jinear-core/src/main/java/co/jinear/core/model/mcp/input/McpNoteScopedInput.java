@@ -10,6 +10,6 @@ import lombok.Setter;
 public class McpNoteScopedInput extends McpWorkspaceScopedInput {
 
     @NotBlank
-    @McpField(value = "Note id, from search_notes.", hint = "Call search_notes to find it.")
+    @McpField(value = "Note id, from list_notes or search_notes.", hint = "Call list_notes or search_notes to find it.")
     private String noteId;
 }

@@ -1,12 +1,16 @@
 package co.jinear.core.note;
 
+import co.jinear.core.converter.note.NoteListRequestToVoConverterImpl;
 import co.jinear.core.converter.note.NoteSearchRequestToVoConverterImpl;
 import co.jinear.core.manager.note.NoteSearchManager;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.entity.note.NoteFts;
+import co.jinear.core.model.request.note.NoteListRequest;
 import co.jinear.core.model.request.note.NoteSearchRequest;
 import co.jinear.core.model.vo.note.NoteFtsSearchVo;
+import co.jinear.core.model.vo.note.NoteListVo;
 import co.jinear.core.repository.note.NoteFtsSearchRepository;
+import co.jinear.core.repository.note.NoteRepository;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.note.NoteRetrieveService;
 import co.jinear.core.service.note.NoteSearchService;
@@ -30,8 +34,9 @@ import static org.mockito.ArgumentMatchers.isNull;
 class NoteSearchTest {
 
     private final NoteFtsSearchRepository noteFtsSearchRepository = Mockito.mock(NoteFtsSearchRepository.class);
+    private final NoteRepository noteRepository = Mockito.mock(NoteRepository.class);
     private final NoteRetrieveService noteRetrieveService = Mockito.mock(NoteRetrieveService.class);
-    private final NoteSearchService noteSearchService = new NoteSearchService(noteFtsSearchRepository, noteRetrieveService);
+    private final NoteSearchService noteSearchService = new NoteSearchService(noteFtsSearchRepository, noteRepository, noteRetrieveService);
 
     @Test
     void aBlankQueryReturnsAnEmptyPageWithoutAQuery() {
@@ -40,7 +45,23 @@ class NoteSearchTest {
         Page<NoteDto> result = noteSearchService.search(vo);
 
         assertThat(result.getContent()).isEmpty();
-        Mockito.verifyNoInteractions(noteFtsSearchRepository, noteRetrieveService);
+        Mockito.verifyNoInteractions(noteFtsSearchRepository, noteRepository, noteRetrieveService);
+    }
+
+    @Test
+    void theListComesFromTheLiveTablesNewestFirst() {
+        Pageable pageable = PageRequest.of(0, 50);
+        Page<String> newestFirst = new PageImpl<>(List.of("n2", "n1"), pageable, 2);
+        Mockito.when(noteRepository.findAccessibleNoteIds(anyString(), isNull(), isNull(), anyString(), anyBoolean(), any(Pageable.class)))
+                .thenReturn(newestFirst);
+        Mockito.when(noteRetrieveService.retrieveAll(List.of("n2", "n1")))
+                .thenReturn(List.of(note("n1"), note("n2")));
+
+        Page<NoteDto> result = noteSearchService.listAccessible(listVo());
+
+        assertThat(result.getContent()).extracting(NoteDto::getNoteId).containsExactly("n2", "n1");
+        assertThat(result.getTotalElements()).isEqualTo(2);
+        Mockito.verifyNoInteractions(noteFtsSearchRepository);
     }
 
     @Test
@@ -78,7 +99,7 @@ class NoteSearchTest {
         SessionInfoService sessionInfoService = Mockito.mock(SessionInfoService.class);
         WorkspaceValidator workspaceValidator = Mockito.mock(WorkspaceValidator.class);
         NoteSearchService searchService = Mockito.mock(NoteSearchService.class);
-        NoteSearchManager manager = new NoteSearchManager(sessionInfoService, workspaceValidator, searchService, new NoteSearchRequestToVoConverterImpl());
+        NoteSearchManager manager = new NoteSearchManager(sessionInfoService, workspaceValidator, searchService, new NoteSearchRequestToVoConverterImpl(), new NoteListRequestToVoConverterImpl());
         Mockito.when(sessionInfoService.currentAccountId()).thenReturn("acc");
         Mockito.when(workspaceValidator.isWorkspaceAdminOrOwner("acc", "ws")).thenReturn(true);
         Mockito.when(searchService.search(any(NoteFtsSearchVo.class))).thenReturn(Page.empty());
@@ -102,9 +123,43 @@ class NoteSearchTest {
         assertThat(vo.getParentNoteId()).isEqualTo("parent");
     }
 
+    @Test
+    void managerListsWithTheCallerTheWorkspaceAdminFlagAndTheFilters() {
+        SessionInfoService sessionInfoService = Mockito.mock(SessionInfoService.class);
+        WorkspaceValidator workspaceValidator = Mockito.mock(WorkspaceValidator.class);
+        NoteSearchService searchService = Mockito.mock(NoteSearchService.class);
+        NoteSearchManager manager = new NoteSearchManager(sessionInfoService, workspaceValidator, searchService, new NoteSearchRequestToVoConverterImpl(), new NoteListRequestToVoConverterImpl());
+        Mockito.when(sessionInfoService.currentAccountId()).thenReturn("acc");
+        Mockito.when(workspaceValidator.isWorkspaceAdminOrOwner("acc", "ws")).thenReturn(true);
+        Mockito.when(searchService.listAccessible(any(NoteListVo.class))).thenReturn(Page.empty());
+        NoteListRequest request = new NoteListRequest();
+        request.setNotebookId("nb");
+        request.setParentNoteId("parent");
+
+        manager.listNotes("ws", request, 1);
+
+        Mockito.verify(workspaceValidator).validateHasAccess("acc", "ws");
+        ArgumentCaptor<NoteListVo> captor = ArgumentCaptor.forClass(NoteListVo.class);
+        Mockito.verify(searchService).listAccessible(captor.capture());
+        NoteListVo vo = captor.getValue();
+        assertThat(vo.getWorkspaceId()).isEqualTo("ws");
+        assertThat(vo.getAccountId()).isEqualTo("acc");
+        assertThat(vo.isWorkspaceAdmin()).isTrue();
+        assertThat(vo.getPage()).isEqualTo(1);
+        assertThat(vo.getNotebookId()).isEqualTo("nb");
+        assertThat(vo.getParentNoteId()).isEqualTo("parent");
+    }
+
     private NoteFtsSearchVo searchVo(String query) {
         NoteFtsSearchVo vo = new NoteFtsSearchVo();
         vo.setQuery(query);
+        vo.setWorkspaceId("ws");
+        vo.setAccountId("acc");
+        return vo;
+    }
+
+    private NoteListVo listVo() {
+        NoteListVo vo = new NoteListVo();
         vo.setWorkspaceId("ws");
         vo.setAccountId("acc");
         return vo;

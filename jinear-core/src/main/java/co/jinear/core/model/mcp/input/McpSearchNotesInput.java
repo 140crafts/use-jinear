@@ -1,6 +1,7 @@
 package co.jinear.core.model.mcp.input;
 
 import co.jinear.core.model.mcp.schema.McpField;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -8,14 +9,14 @@ import lombok.Setter;
 @Setter
 public class McpSearchNotesInput extends McpWorkspaceScopedInput {
 
-    @McpField("Restrict to one notebook, from list_notebooks.")
+    @McpField("Restrict to one notebook, from list_notebooks. Omit it to cover every notebook and your drafts.")
     private String notebookId;
 
-    @McpField("Restrict to the children of one note.")
+    @McpField("Restrict to the children of one note. Omit it to include notes at every level.")
     private String parentNoteId;
 
-    @McpField("Words to find in note titles and bodies. Every word must match as a word prefix. "
-              + "Omit it to list the notes instead.")
+    @NotBlank
+    @McpField("Words to find in note titles and bodies. Every word must appear as a whole word or as the start of a word.")
     private String query;
 
     @McpField(value = McpInputDescriptions.PAGE, minimum = 0)

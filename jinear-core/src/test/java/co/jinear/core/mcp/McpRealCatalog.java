@@ -7,6 +7,7 @@ import co.jinear.core.converter.mcp.McpContextViewConverter;
 import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.converter.mcp.McpNoteEditConverter;
 import co.jinear.core.converter.mcp.McpViewConverter;
+import co.jinear.core.converter.richtext.RichTextPlainTextConverter;
 import co.jinear.core.manager.account.AccountContextManager;
 import co.jinear.core.manager.calendar.CalendarEventManager;
 import co.jinear.core.manager.material.MaterialListingManager;
@@ -27,6 +28,7 @@ import co.jinear.core.manager.mcp.tool.note.CreateNoteTool;
 import co.jinear.core.manager.mcp.tool.note.DeleteNoteTool;
 import co.jinear.core.manager.mcp.tool.note.GetNoteTool;
 import co.jinear.core.manager.mcp.tool.note.ListNotebooksTool;
+import co.jinear.core.manager.mcp.tool.note.ListNotesTool;
 import co.jinear.core.manager.mcp.tool.note.MoveNoteTool;
 import co.jinear.core.manager.mcp.tool.note.ReplaceInNoteTool;
 import co.jinear.core.manager.mcp.tool.note.SearchNotesTool;
@@ -131,7 +133,8 @@ final class McpRealCatalog {
                 new ListCalendarEventsTool(mock(CalendarEventManager.class), viewConverter),
 
                 new ListNotebooksTool(mock(NotebookListingManager.class), viewConverter),
-                new SearchNotesTool(mock(NoteFilterManager.class), mock(NoteSearchManager.class), viewConverter),
+                new SearchNotesTool(mock(NoteSearchManager.class), viewConverter),
+                new ListNotesTool(mock(NoteSearchManager.class), viewConverter),
                 new GetNoteTool(mock(NoteFilterManager.class), mock(NoteContentManager.class), viewConverter),
                 new CreateNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
                 new ReplaceInNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
@@ -146,7 +149,7 @@ final class McpRealCatalog {
                 new SearchTool(mock(WorkspaceManager.class), mock(TaskSearchManager.class),
                         mock(NoteSearchManager.class), feProperties),
                 new FetchTool(mock(NoteFilterManager.class), mock(TaskRetrieveManager.class),
-                        feProperties));
+                        feProperties, new RichTextPlainTextConverter()));
     }
 
     static McpToolRegistry registry() {

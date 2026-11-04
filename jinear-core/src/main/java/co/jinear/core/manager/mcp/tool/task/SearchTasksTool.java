@@ -34,7 +34,7 @@ public class SearchTasksTool implements McpTool {
         return McpToolDefinitionBuilder
                 .named("search_tasks")
                 .title("Search tasks by text")
-                .description("Finds tasks in a workspace whose title or body matches a plain language query. "
+                .description("Finds tasks in a workspace whose title or body contains every keyword of the query. "
                              + "Use this when the person names a task by what it is about rather than by its reference. "
                              + "Tasks created or edited in the last minute may not appear yet; use list_tasks to see them. "
                              + "Use list_tasks instead when filtering by status, assignee or dates.")

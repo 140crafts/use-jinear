@@ -3,15 +3,14 @@ package co.jinear.core.mcp;
 import co.jinear.core.converter.mcp.McpViewConverter;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.note.SearchNotesTool;
-import co.jinear.core.manager.note.NoteFilterManager;
 import co.jinear.core.manager.note.NoteSearchManager;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.mcp.McpToolContext;
+import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.mcp.view.McpNoteView;
 import co.jinear.core.model.mcp.view.McpPageView;
-import co.jinear.core.model.request.note.NoteFilterRequest;
 import co.jinear.core.model.request.note.NoteSearchRequest;
 import co.jinear.core.model.response.note.NotePaginatedResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -27,6 +26,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -36,9 +36,8 @@ class McpSearchNotesToolTest {
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private static final Validator VALIDATOR = Validation.buildDefaultValidatorFactory().getValidator();
 
-    private final NoteFilterManager noteFilterManager = Mockito.mock(NoteFilterManager.class);
     private final NoteSearchManager noteSearchManager = Mockito.mock(NoteSearchManager.class);
-    private final SearchNotesTool tool = new SearchNotesTool(noteFilterManager, noteSearchManager, new McpViewConverter());
+    private final SearchNotesTool tool = new SearchNotesTool(noteSearchManager, new McpViewConverter());
 
     @Test
     void aQueryGoesToTheFullTextSearchWithItsFilters() throws Exception {
@@ -55,27 +54,17 @@ class McpSearchNotesToolTest {
         assertThat(request.getQuery()).isEqualTo("release pla");
         assertThat(request.getNotebookId()).isEqualTo("nb-1");
         assertThat(request.getParentNoteId()).isEqualTo("parent-1");
-        Mockito.verifyNoInteractions(noteFilterManager);
         assertThat(titles(result)).containsExactly("Release plan");
     }
 
     @Test
-    void withoutAQueryTheNotesAreListed() throws Exception {
-        Mockito.when(noteFilterManager.filter(any(NoteFilterRequest.class)))
-                .thenReturn(response("note-2", "Draft"));
+    void aQueryIsRequired() throws Exception {
+        assertThatThrownBy(() -> tool.call(context(), args("""
+                {"workspaceId": "ws-1", "query": "  "}
+                """)))
+                .isInstanceOf(McpToolException.class);
 
-        McpToolResult result = tool.call(context(), args("""
-                {"workspaceId": "ws-1", "query": "  ", "notebookId": "nb-1"}
-                """));
-
-        ArgumentCaptor<NoteFilterRequest> captor = ArgumentCaptor.forClass(NoteFilterRequest.class);
-        Mockito.verify(noteFilterManager).filter(captor.capture());
-        NoteFilterRequest request = captor.getValue();
-        assertThat(request.getWorkspaceId()).isEqualTo("ws-1");
-        assertThat(request.getNotebookId()).isEqualTo("nb-1");
-        assertThat(request.getPage()).isZero();
         Mockito.verifyNoInteractions(noteSearchManager);
-        assertThat(titles(result)).containsExactly("Draft");
     }
 
     private McpToolArguments args(String json) throws Exception {

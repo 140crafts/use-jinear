@@ -35,7 +35,7 @@ public class GetNoteTool implements McpTool {
                 .named("get_note")
                 .title("Get one note")
                 .description("Reads a single note in full, including its body. "
-                             + "Use it after search_notes when the contents of a specific note are needed.")
+                             + "Use it after list_notes or search_notes when the contents of a specific note are needed.")
                 .input(McpSchemaGenerator.forInput(McpGetNoteInput.class))
                 .output(McpSchemaGenerator.single("note", "The note, with its body.", McpNoteDetailView.class))
                 .readOnly()

@@ -4,7 +4,6 @@ import co.jinear.core.converter.mcp.McpViewConverter;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
-import co.jinear.core.manager.note.NoteFilterManager;
 import co.jinear.core.manager.note.NoteSearchManager;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.note.NoteDto;
@@ -16,17 +15,14 @@ import co.jinear.core.model.mcp.input.McpSearchNotesInput;
 import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
 import co.jinear.core.model.mcp.view.McpNoteView;
 import co.jinear.core.model.mcp.view.McpPageView;
-import co.jinear.core.model.request.note.NoteFilterRequest;
 import co.jinear.core.model.request.note.NoteSearchRequest;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class SearchNotesTool implements McpTool {
 
-    private final NoteFilterManager noteFilterManager;
     private final NoteSearchManager noteSearchManager;
     private final McpViewConverter mcpViewConverter;
 
@@ -36,9 +32,8 @@ public class SearchNotesTool implements McpTool {
                 .named("search_notes")
                 .title("Search notes")
                 .description("Searches the notes of a workspace by the words in their titles and bodies, best matches first. "
-                             + "Narrow it to one notebook or to the children of one note. "
-                             + "Without a query it lists the notes instead, newest first. "
-                             + "Notes created or edited in the last minute may not appear in a search yet. "
+                             + "Covers every notebook and every level of nesting unless it is narrowed to one notebook or to the children of one note. "
+                             + "Notes created or edited in the last minute may not appear yet; use list_notes to see them. "
                              + "Returns titles and ids; call get_note for a note's body.")
                 .input(McpSchemaGenerator.forInput(McpSearchNotesInput.class))
                 .output(McpSchemaGenerator.page(McpNoteView.class, "Matching notes."))
@@ -52,27 +47,12 @@ public class SearchNotesTool implements McpTool {
         McpSearchNotesInput input = args.bind(McpSearchNotesInput.class);
         int page = args.page();
         context.setWorkspaceId(input.getWorkspaceId());
-        PageDto<NoteDto> notes = StringUtils.isBlank(input.getQuery())
-                ? listNotes(input, page)
-                : searchNotes(input, page);
-        McpPageView<McpNoteView> view = McpPageView.of(notes, mcpViewConverter::note);
-        return McpToolResult.of(view);
-    }
-
-    private PageDto<NoteDto> searchNotes(McpSearchNotesInput input, int page) {
         NoteSearchRequest request = new NoteSearchRequest();
         request.setQuery(input.getQuery());
         request.setNotebookId(input.getNotebookId());
         request.setParentNoteId(input.getParentNoteId());
-        return noteSearchManager.searchNotes(input.getWorkspaceId(), request, page).getNoteDtoPageDto();
-    }
-
-    private PageDto<NoteDto> listNotes(McpSearchNotesInput input, int page) {
-        NoteFilterRequest request = new NoteFilterRequest();
-        request.setWorkspaceId(input.getWorkspaceId());
-        request.setNotebookId(input.getNotebookId());
-        request.setParentNoteId(input.getParentNoteId());
-        request.setPage(page);
-        return noteFilterManager.filter(request).getNoteDtoPageDto();
+        PageDto<NoteDto> notes = noteSearchManager.searchNotes(input.getWorkspaceId(), request, page).getNoteDtoPageDto();
+        McpPageView<McpNoteView> view = McpPageView.of(notes, mcpViewConverter::note);
+        return McpToolResult.of(view);
     }
 }

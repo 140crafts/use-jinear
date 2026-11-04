@@ -13,6 +13,9 @@ public class McpNoteEditView implements McpToolPayload {
     @McpField("Note id.")
     private String noteId;
 
+    @McpField("Link that opens the note in the Jinear app.")
+    private String url;
+
     @McpField("False when the note already had this content.")
     private Boolean changed;
 }

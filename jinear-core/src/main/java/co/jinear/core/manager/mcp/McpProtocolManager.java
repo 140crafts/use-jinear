@@ -61,7 +61,8 @@ public class McpProtocolManager {
             Call get_context first: it returns the workspaces, teams, workflow statuses and \
             topics with their ids, plus the account's default workspace and team, so other tools \
             can be called directly. Statuses are per team and are referenced by id. Search tools \
-            accept plain language. Dates are ISO 8601 in UTC.""";
+            match keywords, not meaning: every word must appear as a whole word or as the start \
+            of a word, so use the words the record would contain. Dates are ISO 8601 in UTC.""";
 
     private final McpToolRegistry mcpToolRegistry;
     private final McpToolCallLogService mcpToolCallLogService;

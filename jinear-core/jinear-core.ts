@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-11-03 22:45:26.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-04 10:24:38.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -93,8 +93,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -189,10 +189,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
+    gid: string;
+    gthreadId: string;
     ghistoryId: string;
     ginternalDate: string;
-    gthreadId: string;
-    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -609,6 +609,7 @@ export interface NoteDto extends BaseDto {
 
 export interface NoteEditResultDto {
     noteId: string;
+    url: string;
     changed: boolean;
 }
 
@@ -1688,6 +1689,11 @@ export interface NoteInitializeRequest extends BaseRequest {
     parentNoteId?: string | null;
     title?: string | null;
     bodyState: string;
+}
+
+export interface NoteListRequest extends BaseRequest {
+    notebookId?: string | null;
+    parentNoteId?: string | null;
 }
 
 export interface NoteMoveRequest extends BaseRequest {
@@ -2916,9 +2922,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
+    uri: URI;
     filename: string;
     description: string;
-    uri: URI;
 }
 
 export interface InputStreamSource {

@@ -1,6 +1,7 @@
 package co.jinear.core.manager.mcp.tool.compatibility;
 
 import co.jinear.core.config.properties.FeProperties;
+import co.jinear.core.converter.richtext.RichTextPlainTextConverter;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
@@ -8,6 +9,7 @@ import co.jinear.core.manager.note.NoteFilterManager;
 import co.jinear.core.manager.task.TaskRetrieveManager;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.note.NoteDto;
+import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolContext;
@@ -20,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
 import java.util.Optional;
 import co.jinear.core.model.mcp.input.McpFetchInput;
 
@@ -32,6 +33,7 @@ public class FetchTool implements McpTool {
     private final NoteFilterManager noteFilterManager;
     private final TaskRetrieveManager taskRetrieveManager;
     private final FeProperties feProperties;
+    private final RichTextPlainTextConverter richTextPlainTextConverter;
 
     @Override
     public McpToolDefinition definition() {
@@ -65,7 +67,7 @@ public class FetchTool implements McpTool {
         McpFetchedRecordView view = new McpFetchedRecordView();
         view.setId(id);
         view.setTitle(task.getTitle());
-        view.setText(Objects.isNull(task.getDescription()) ? "" : task.getDescription().getValue());
+        view.setText(plainText(task.getDescription()));
         view.setUrl(task.getUrl());
         return McpToolResult.of(view);
     }
@@ -87,9 +89,14 @@ public class FetchTool implements McpTool {
         McpFetchedRecordView view = new McpFetchedRecordView();
         view.setId(id);
         view.setTitle(note.getTitle());
-        view.setText(Objects.isNull(note.getRichText()) ? "" : note.getRichText().getValue());
+        view.setText(plainText(note.getRichText()));
         String url = Optional.ofNullable(note.getUrl()).orElseGet(feProperties::getHomeUrl);
         view.setUrl(url);
         return McpToolResult.of(view);
+    }
+
+    private String plainText(RichTextDto richText) {
+        String html = Optional.ofNullable(richText).map(RichTextDto::getValue).orElse(null);
+        return richTextPlainTextConverter.toPlainText(html);
     }
 }
