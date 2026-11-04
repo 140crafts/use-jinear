@@ -50,7 +50,7 @@ public class SearchTool implements McpTool {
                              + "by keyword: every word must appear, as a whole word or as the start of a word. "
                              + "Returns ids and links suitable for citation. "
                              + "Pass an id from here to fetch to read the full record. "
-                             + "Tasks and notes created or edited in the last minute may not appear yet; use list_tasks or list_notes to see them. "
+                             + "Tasks and notes created or edited in the last few seconds may not appear yet; use list_tasks or list_notes to see them. "
                              + "For filtering by status, assignee or dates, use list_tasks instead.")
                 .input(McpSchemaGenerator.forInput(McpSearchInput.class))
                 .output(McpSchemaGenerator.arrayField("results", McpSearchHitView.class, "Matching records, tasks first."))

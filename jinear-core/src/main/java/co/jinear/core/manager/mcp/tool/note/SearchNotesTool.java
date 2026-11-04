@@ -33,7 +33,7 @@ public class SearchNotesTool implements McpTool {
                 .title("Search notes")
                 .description("Searches the notes of a workspace by the words in their titles and bodies, best matches first. "
                              + "Covers every notebook and every level of nesting unless it is narrowed to one notebook or to the children of one note. "
-                             + "Notes created or edited in the last minute may not appear yet; use list_notes to see them. "
+                             + "Notes created or edited in the last few seconds may not appear yet; use list_notes to see them. "
                              + "Returns titles and ids; call get_note for a note's body.")
                 .input(McpSchemaGenerator.forInput(McpSearchNotesInput.class))
                 .output(McpSchemaGenerator.page(McpNoteView.class, "Matching notes."))

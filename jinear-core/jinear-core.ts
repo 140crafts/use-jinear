@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-11-04 12:23:12.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-04 21:22:54.
 
 export interface BaseDto {
     createdDate: Date;
@@ -93,8 +93,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -189,10 +189,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gthreadId: string;
+    gid: string;
     ghistoryId: string;
     ginternalDate: string;
-    gid: string;
+    gthreadId: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1762,8 +1762,8 @@ export interface OauthAuthorizeRequest {
     codeChallenge: string;
     codeChallengeMethod: string;
     resource: string;
-    response_type: string;
     client_id: string;
+    response_type: string;
     redirect_uri: string;
     code_challenge: string;
     code_challenge_method: string;
@@ -2030,7 +2030,13 @@ export interface TaskFilterRequest extends BaseRequest {
     timespanEnd?: Date | null;
     sort?: FilterSort | null;
     externalCalendarList?: TaskExternalCalendarFilterDto[] | null;
+    /**
+     * @deprecated
+     */
     projectIds?: string[] | null;
+    /**
+     * @deprecated
+     */
     milestoneIds?: string[] | null;
     taskboardIds?: string[] | null;
 }
@@ -2922,9 +2928,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    filename: string;
-    uri: URI;
     description: string;
+    uri: URI;
+    filename: string;
 }
 
 export interface InputStreamSource {

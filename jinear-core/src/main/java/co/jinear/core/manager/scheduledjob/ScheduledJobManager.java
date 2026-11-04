@@ -81,7 +81,7 @@ public class ScheduledJobManager {
         expiredMedias.forEach(this::updateMediaAsPrivate);
     }
 
-//    @Async
+    //    @Async
 //    @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
     public void checkAndSyncCustomDomains() {
         log.info("Check and sync custom domains has started.");
@@ -131,13 +131,13 @@ public class ScheduledJobManager {
     }
 
     @Async
-    @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedRate = 8, timeUnit = TimeUnit.SECONDS)
     public void refreshTaskFtsMaterializedView() {
         taskFtsRefreshService.refreshIfDirty();
     }
 
     @Async
-    @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedRate = 8, initialDelay = 4, timeUnit = TimeUnit.SECONDS)
     public void refreshNoteFtsMaterializedView() {
         noteFtsRefreshService.refreshIfDirty();
     }
