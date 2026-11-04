@@ -15,12 +15,12 @@ public interface TaskFtsSearchRepository extends JpaRepository<TaskFts, String> 
             select *
                  , ts_rank_cd(fts, to_tsquery('simple',
                        (select string_agg(tok || ':*', ' & ')
-                        from unnest(regexp_split_to_array(trim(regexp_replace(:q, '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
+                        from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
                         where tok <> ''))) as search_ranking
             from mv_task_fts ft
             where fts @@ to_tsquery('simple',
                       (select string_agg(tok || ':*', ' & ')
-                       from unnest(regexp_split_to_array(trim(regexp_replace(:q, '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
+                       from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
                        where tok <> ''))
               and ft.workspace_id = :workspaceId
               and (
@@ -35,7 +35,7 @@ public interface TaskFtsSearchRepository extends JpaRepository<TaskFts, String> 
                     from mv_task_fts ft
                     where fts @@ to_tsquery('simple',
                               (select string_agg(tok || ':*', ' & ')
-                               from unnest(regexp_split_to_array(trim(regexp_replace(:q, '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
+                               from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
                                where tok <> ''))
                       and ft.workspace_id = :workspaceId
                       and (

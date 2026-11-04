@@ -140,7 +140,7 @@ final class McpRealCatalog {
                 new ReplaceInNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
                 new AppendToNoteTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
                 new UpdateNoteTitleTool(mock(NoteContentManager.class), noteEditConverter, viewConverter),
-                new MoveNoteTool(mock(NoteOperationManager.class), noteEditConverter),
+                new MoveNoteTool(mock(NoteOperationManager.class), mock(NoteFilterManager.class), noteEditConverter),
                 new DeleteNoteTool(mock(NoteOperationManager.class)),
 
                 new ListFilesTool(mock(MaterialListingManager.class), viewConverter),

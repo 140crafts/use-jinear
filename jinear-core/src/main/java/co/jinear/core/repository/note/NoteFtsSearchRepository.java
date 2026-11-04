@@ -16,7 +16,7 @@ public interface NoteFtsSearchRepository extends JpaRepository<NoteFts, String> 
                      left join notebook nb on nb.notebook_id = n.notebook_id and nb.passive_id is null
             where nf.fts @@ to_tsquery('simple',
                       (select string_agg(tok || ':*', ' & ')
-                       from unnest(regexp_split_to_array(trim(regexp_replace(:q, '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
+                       from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
                        where tok <> ''))
               and nf.workspace_id = :workspaceId
               and (cast(:notebookId as varchar) is null or n.notebook_id = cast(:notebookId as varchar))
@@ -36,7 +36,7 @@ public interface NoteFtsSearchRepository extends JpaRepository<NoteFts, String> 
                   )
             order by ts_rank_cd(nf.fts, to_tsquery('simple',
                          (select string_agg(tok || ':*', ' & ')
-                          from unnest(regexp_split_to_array(trim(regexp_replace(:q, '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
+                          from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
                           where tok <> ''))) desc,
                      nf.note_id desc
             """,
@@ -47,7 +47,7 @@ public interface NoteFtsSearchRepository extends JpaRepository<NoteFts, String> 
                              left join notebook nb on nb.notebook_id = n.notebook_id and nb.passive_id is null
                     where nf.fts @@ to_tsquery('simple',
                               (select string_agg(tok || ':*', ' & ')
-                               from unnest(regexp_split_to_array(trim(regexp_replace(:q, '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
+                               from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
                                where tok <> ''))
                       and nf.workspace_id = :workspaceId
                       and (cast(:notebookId as varchar) is null or n.notebook_id = cast(:notebookId as varchar))
