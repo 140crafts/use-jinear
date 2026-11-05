@@ -1,5 +1,61 @@
 {
   "tools" : [ {
+    "name" : "add_checklist_item",
+    "title" : "Add an item to a checklist",
+    "description" : "Adds an unchecked item to the end of a checklist. Returns the item with its id.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistId" : {
+          "type" : "string",
+          "description" : "Checklist id, from get_task or create_task_checklist."
+        },
+        "label" : {
+          "type" : "string",
+          "description" : "Item text."
+        }
+      },
+      "required" : [ "checklistId", "label" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistItem" : {
+          "type" : "object",
+          "description" : "The created item.",
+          "properties" : {
+            "checklistItemId" : {
+              "type" : "string",
+              "description" : "Checklist item id."
+            },
+            "checklistId" : {
+              "type" : "string",
+              "description" : "Checklist this item belongs to."
+            },
+            "label" : {
+              "type" : "string",
+              "description" : "Item text."
+            },
+            "checked" : {
+              "type" : "boolean",
+              "description" : "True when the item is checked."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "checklistItem" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Add an item to a checklist",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "add_task_attachment",
     "title" : "Attach a file to a task",
     "description" : "Attaches a new file to a task, attributed to the signed in account. Pass the content as text for text files such as Markdown, CSV or JSON, or as contentBase64 for binary files such as images or PDFs. Needs a PRO workspace with free storage. Returns the new attachment's id and a downloadUrl for the person.",
@@ -110,6 +166,75 @@
     },
     "annotations" : {
       "title" : "Comment on a task",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "add_task_relation",
+    "title" : "Relate two tasks",
+    "description" : "Links two tasks of the same team. SUBTASK makes taskId a subtask of relatedTaskId; BLOCKS and IS_BLOCKED_BY mark a dependency. Returns the relation with its id.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "description" : "Task id of the left side of the relation, from search_tasks, list_tasks or get_task."
+        },
+        "relatedTaskId" : {
+          "type" : "string",
+          "description" : "Task id of the right side of the relation. It must be in the same team as taskId."
+        },
+        "relationType" : {
+          "type" : "string",
+          "description" : "Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, or taskId IS_BLOCKED_BY relatedTaskId.",
+          "enum" : [ "BLOCKS", "IS_BLOCKED_BY", "SUBTASK" ]
+        }
+      },
+      "required" : [ "taskId", "relatedTaskId", "relationType" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "relation" : {
+          "type" : "object",
+          "description" : "The created relation.",
+          "properties" : {
+            "taskRelationId" : {
+              "type" : "string",
+              "description" : "Relation id. Pass it to remove_task_relation."
+            },
+            "relationType" : {
+              "type" : "string",
+              "description" : "SUBTASK, BLOCKS or IS_BLOCKED_BY. Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, taskId IS_BLOCKED_BY relatedTaskId."
+            },
+            "taskId" : {
+              "type" : "string",
+              "description" : "The task on the left of the relation."
+            },
+            "taskTitle" : {
+              "type" : "string",
+              "description" : "Title of taskId."
+            },
+            "relatedTaskId" : {
+              "type" : "string",
+              "description" : "The task on the right of the relation."
+            },
+            "relatedTaskTitle" : {
+              "type" : "string",
+              "description" : "Title of relatedTaskId."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "relation" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Relate two tasks",
       "readOnlyHint" : false,
       "destructiveHint" : false,
       "idempotentHint" : false,
@@ -375,9 +500,58 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "create_notebook",
+    "title" : "Create a notebook",
+    "description" : "Creates a notebook in a workspace. Add notes to it with create_note. Returns the notebook id.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "Notebook title."
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Short description of the notebook."
+        },
+        "visibility" : {
+          "type" : "string",
+          "description" : "Who can see it. PRIVATE: only the creator. SHARED: the creator and the members added in the Jinear app. PUBLIC_WITHIN_WORKSPACE: every workspace member. Defaults to PUBLIC_WITHIN_WORKSPACE.",
+          "enum" : [ "PRIVATE", "SHARED", "PUBLIC_WITHIN_WORKSPACE" ]
+        }
+      },
+      "required" : [ "workspaceId", "title" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "notebookId" : {
+          "type" : "string",
+          "description" : "Id of the created notebook."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Create a notebook",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "create_task",
     "title" : "Create a task",
-    "description" : "Creates a task in a team. Only workspaceId, teamId and title are required. Give it a due date to put it on the calendar, and an assignee account id to hand it to someone. Returns the created task, including its reference such as ENG-42.",
+    "description" : "Creates a task in a team. Only workspaceId, teamId and title are required. Give it a due date to put it on the calendar, and an assignee account id to hand it to someone. Give it a parentTaskId to make it a subtask. Returns the created task, including its reference such as ENG-42.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -418,6 +592,17 @@
         "boardId" : {
           "type" : "string",
           "description" : "Board to add the task to on creation."
+        },
+        "parentTaskId" : {
+          "type" : "string",
+          "description" : "Task id of the parent task. The new task becomes its subtask. The parent must be in the same team."
+        },
+        "collaboratorIds" : {
+          "type" : "array",
+          "description" : "Account ids of the collaborators, from list_workspace_members.",
+          "items" : {
+            "type" : "string"
+          }
         }
       },
       "required" : [ "workspaceId", "teamId", "title" ],
@@ -574,6 +759,196 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "create_task_checklist",
+    "title" : "Add a checklist to a task",
+    "description" : "Adds a checklist to a task, optionally with its first item. A task can hold more than one checklist. Add more items with add_checklist_item. Returns the checklist with its id.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "description" : "Task id, from search_tasks, list_tasks or get_task."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "Checklist title."
+        },
+        "firstItemLabel" : {
+          "type" : "string",
+          "description" : "Text of the first item."
+        }
+      },
+      "required" : [ "taskId", "title" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklist" : {
+          "type" : "object",
+          "description" : "The created checklist.",
+          "properties" : {
+            "checklistId" : {
+              "type" : "string",
+              "description" : "Checklist id."
+            },
+            "taskId" : {
+              "type" : "string",
+              "description" : "Task this checklist belongs to."
+            },
+            "title" : {
+              "type" : "string",
+              "description" : "Checklist title."
+            },
+            "items" : {
+              "type" : "array",
+              "description" : "Items, oldest first.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "checklistItemId" : {
+                    "type" : "string",
+                    "description" : "Checklist item id."
+                  },
+                  "checklistId" : {
+                    "type" : "string",
+                    "description" : "Checklist this item belongs to."
+                  },
+                  "label" : {
+                    "type" : "string",
+                    "description" : "Item text."
+                  },
+                  "checked" : {
+                    "type" : "boolean",
+                    "description" : "True when the item is checked."
+                  }
+                },
+                "additionalProperties" : false
+              }
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "checklist" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Add a checklist to a task",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "create_topic",
+    "title" : "Create a topic",
+    "description" : "Creates a topic in a team, the label create_task and update_task take as topicId. Returns the topic with its id.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "teamId" : {
+          "type" : "string",
+          "description" : "Team id, from list_teams."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "Topic name, for example Bug or Marketing."
+        },
+        "tag" : {
+          "type" : "string",
+          "description" : "Short tag that prefixes the topic's task numbers, for example BUG. Letters and digits only; it must be unique in the workspace."
+        },
+        "color" : {
+          "type" : "string",
+          "description" : "Color as a hex value without #, for example FF6600."
+        }
+      },
+      "required" : [ "workspaceId", "teamId", "name", "tag" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "topic" : {
+          "type" : "object",
+          "description" : "The created topic.",
+          "properties" : {
+            "topicId" : {
+              "type" : "string",
+              "description" : "Topic id, the value create_task takes as topicId."
+            },
+            "teamId" : {
+              "type" : "string",
+              "description" : "Team this topic belongs to."
+            },
+            "name" : {
+              "type" : "string",
+              "description" : "Display name."
+            },
+            "tag" : {
+              "type" : "string",
+              "description" : "Short prefix used in task references."
+            },
+            "color" : {
+              "type" : "string",
+              "description" : "Display colour."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "topic" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Create a topic",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "delete_checklist_item",
+    "title" : "Delete a checklist item",
+    "description" : "Deletes one item from a checklist. The other items and the checklist stay as they are.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistItemId" : {
+          "type" : "string",
+          "description" : "Checklist item id, from get_task."
+        }
+      },
+      "required" : [ "checklistItemId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistItemId" : {
+          "type" : "string",
+          "description" : "The item that was deleted."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Delete a checklist item",
+      "readOnlyHint" : false,
+      "destructiveHint" : true,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "delete_note",
     "title" : "Delete a note",
     "description" : "Deletes a note and all of its child notes.",
@@ -608,6 +983,42 @@
     },
     "annotations" : {
       "title" : "Delete a note",
+      "readOnlyHint" : false,
+      "destructiveHint" : true,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "delete_task_checklist",
+    "title" : "Delete a checklist",
+    "description" : "Deletes a checklist and all of its items from a task.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistId" : {
+          "type" : "string",
+          "description" : "Checklist id, from get_task."
+        }
+      },
+      "required" : [ "checklistId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistId" : {
+          "type" : "string",
+          "description" : "The checklist that was deleted."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Delete a checklist",
       "readOnlyHint" : false,
       "destructiveHint" : true,
       "idempotentHint" : false,
@@ -966,7 +1377,7 @@
   }, {
     "name" : "get_task",
     "title" : "Get one task",
-    "description" : "Reads a single task in full, including its body, by its human readable reference such as ENG-42. Use it after search_tasks or list_tasks when the body of a specific task is needed.",
+    "description" : "Reads a single task in full by its human readable reference such as ENG-42: its body, collaborators, relations such as subtasks and blockers, checklists with their items, and the boards it is on. Use it after search_tasks or list_tasks when the details of a specific task are needed. Comments, attachments, reminders and activity have their own list tools.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -991,7 +1402,7 @@
       "properties" : {
         "task" : {
           "type" : "object",
-          "description" : "The task, with its body.",
+          "description" : "The task, with its details.",
           "properties" : {
             "taskId" : {
               "type" : "string",
@@ -1052,6 +1463,166 @@
             "description" : {
               "type" : "string",
               "description" : "Task body as HTML, or null when the task has no body."
+            },
+            "collaborators" : {
+              "type" : "array",
+              "description" : "Accounts that collaborate on the task.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "accountId" : {
+                    "type" : "string",
+                    "description" : "Account id of the collaborator."
+                  },
+                  "username" : {
+                    "type" : "string",
+                    "description" : "Collaborator handle."
+                  }
+                },
+                "additionalProperties" : false
+              }
+            },
+            "relations" : {
+              "type" : "array",
+              "description" : "Relations where this task is taskId, for example the parent of a subtask or a task this one blocks.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "taskRelationId" : {
+                    "type" : "string",
+                    "description" : "Relation id. Pass it to remove_task_relation."
+                  },
+                  "relationType" : {
+                    "type" : "string",
+                    "description" : "SUBTASK, BLOCKS or IS_BLOCKED_BY. Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, taskId IS_BLOCKED_BY relatedTaskId."
+                  },
+                  "taskId" : {
+                    "type" : "string",
+                    "description" : "The task on the left of the relation."
+                  },
+                  "taskTitle" : {
+                    "type" : "string",
+                    "description" : "Title of taskId."
+                  },
+                  "relatedTaskId" : {
+                    "type" : "string",
+                    "description" : "The task on the right of the relation."
+                  },
+                  "relatedTaskTitle" : {
+                    "type" : "string",
+                    "description" : "Title of relatedTaskId."
+                  }
+                },
+                "additionalProperties" : false
+              }
+            },
+            "relatedIn" : {
+              "type" : "array",
+              "description" : "Relations where this task is relatedTaskId, for example its subtasks.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "taskRelationId" : {
+                    "type" : "string",
+                    "description" : "Relation id. Pass it to remove_task_relation."
+                  },
+                  "relationType" : {
+                    "type" : "string",
+                    "description" : "SUBTASK, BLOCKS or IS_BLOCKED_BY. Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, taskId IS_BLOCKED_BY relatedTaskId."
+                  },
+                  "taskId" : {
+                    "type" : "string",
+                    "description" : "The task on the left of the relation."
+                  },
+                  "taskTitle" : {
+                    "type" : "string",
+                    "description" : "Title of taskId."
+                  },
+                  "relatedTaskId" : {
+                    "type" : "string",
+                    "description" : "The task on the right of the relation."
+                  },
+                  "relatedTaskTitle" : {
+                    "type" : "string",
+                    "description" : "Title of relatedTaskId."
+                  }
+                },
+                "additionalProperties" : false
+              }
+            },
+            "checklists" : {
+              "type" : "array",
+              "description" : "Checklists of the task with their items.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "checklistId" : {
+                    "type" : "string",
+                    "description" : "Checklist id."
+                  },
+                  "taskId" : {
+                    "type" : "string",
+                    "description" : "Task this checklist belongs to."
+                  },
+                  "title" : {
+                    "type" : "string",
+                    "description" : "Checklist title."
+                  },
+                  "items" : {
+                    "type" : "array",
+                    "description" : "Items, oldest first.",
+                    "items" : {
+                      "type" : "object",
+                      "properties" : {
+                        "checklistItemId" : {
+                          "type" : "string",
+                          "description" : "Checklist item id."
+                        },
+                        "checklistId" : {
+                          "type" : "string",
+                          "description" : "Checklist this item belongs to."
+                        },
+                        "label" : {
+                          "type" : "string",
+                          "description" : "Item text."
+                        },
+                        "checked" : {
+                          "type" : "boolean",
+                          "description" : "True when the item is checked."
+                        }
+                      },
+                      "additionalProperties" : false
+                    }
+                  }
+                },
+                "additionalProperties" : false
+              }
+            },
+            "boards" : {
+              "type" : "array",
+              "description" : "Boards the task is on.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "taskBoardEntryId" : {
+                    "type" : "string",
+                    "description" : "Board entry id. Pass it to remove_task_from_board or move_task_on_board."
+                  },
+                  "taskBoardId" : {
+                    "type" : "string",
+                    "description" : "Board id."
+                  },
+                  "title" : {
+                    "type" : "string",
+                    "description" : "Board title."
+                  },
+                  "order" : {
+                    "type" : "integer",
+                    "description" : "Position of the task on the board. A lower order comes first."
+                  }
+                },
+                "additionalProperties" : false
+              }
             }
           },
           "additionalProperties" : false
@@ -1062,6 +1633,42 @@
     },
     "annotations" : {
       "title" : "Get one task",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "get_unread_notification_count",
+    "title" : "Count unread notifications",
+    "description" : "Returns how many notifications of the signed in account are unread in a workspace. It does not mark them as read.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        }
+      },
+      "required" : [ "workspaceId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace the count is for."
+        },
+        "unreadCount" : {
+          "type" : "integer",
+          "description" : "Number of unread notifications of the signed in account."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Count unread notifications",
       "readOnlyHint" : true,
       "destructiveHint" : false,
       "idempotentHint" : true,
@@ -1117,6 +1724,142 @@
     },
     "annotations" : {
       "title" : "Get a workspace",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "list_activity",
+    "title" : "List activity",
+    "description" : "Lists what happened in a workspace, newest first: tasks created, renamed, moved between statuses, reassigned, commented on, checklist and board changes, attachments and members joining. Narrow it to teams or to tasks. This is the tool for questions like what changed this week or what someone did yesterday.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "teamIds" : {
+          "type" : "array",
+          "description" : "Restrict to these teams, from list_teams. Leave out for every team the account can see.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "taskIds" : {
+          "type" : "array",
+          "description" : "Restrict to these tasks.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "description" : "Items per page. Defaults to 20. Up to 25.",
+          "minimum" : 1,
+          "maximum" : 25
+        }
+      },
+      "required" : [ "workspaceId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "description" : "Activity, newest first.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "activityId" : {
+                "type" : "string",
+                "description" : "Activity id."
+              },
+              "type" : {
+                "type" : "string",
+                "description" : "What happened, for example TASK_INITIALIZED, TASK_UPDATE_WORKFLOW_STATUS, TASK_CHANGE_ASSIGNEE, TASK_NEW_COMMENT or CHECKLIST_ITEM_CHECKED_STATUS_CHANGED."
+              },
+              "createdAt" : {
+                "type" : "string",
+                "description" : "ISO 8601 instant it happened."
+              },
+              "performedBy" : {
+                "type" : "string",
+                "description" : "Account id of whoever did it."
+              },
+              "performedByUsername" : {
+                "type" : "string",
+                "description" : "Handle of whoever did it."
+              },
+              "workspaceId" : {
+                "type" : "string",
+                "description" : "Workspace it happened in."
+              },
+              "teamId" : {
+                "type" : "string",
+                "description" : "Team it happened in."
+              },
+              "taskId" : {
+                "type" : "string",
+                "description" : "Task it happened on, or null."
+              },
+              "taskTitle" : {
+                "type" : "string",
+                "description" : "Task reference and title, for example [ENG-42] Ship the release."
+              },
+              "taskUrl" : {
+                "type" : "string",
+                "description" : "Link that opens the task in the Jinear app."
+              },
+              "oldValue" : {
+                "type" : "string",
+                "description" : "Value before the change, for example the old status name or the old assignee handle. Null when there is no short text, such as a body edit."
+              },
+              "newValue" : {
+                "type" : "string",
+                "description" : "Value after the change."
+              },
+              "subject" : {
+                "type" : "string",
+                "description" : "What the change was about when it is not the task itself: a checklist, checklist item, board, attachment, related task or member."
+              }
+            },
+            "additionalProperties" : false
+          }
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number of this result."
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "description" : "Items per page."
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "description" : "Total matching items across all pages."
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "description" : "Total number of pages."
+        },
+        "hasNext" : {
+          "type" : "boolean",
+          "description" : "True when another page is available."
+        }
+      },
+      "required" : [ "items" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "List activity",
       "readOnlyHint" : true,
       "destructiveHint" : false,
       "idempotentHint" : true,
@@ -1513,6 +2256,102 @@
     "annotations" : {
       "title" : "List notes",
       "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "list_notifications",
+    "title" : "List notifications",
+    "description" : "Lists the signed in account's notifications in a workspace, newest first: assignments, comments, status changes and reminders on tasks the account follows. Like opening the inbox in the Jinear app, this marks the listed workspace's or team's notifications as read. Use get_unread_notification_count to check for new ones without reading them.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "teamId" : {
+          "type" : "string",
+          "description" : "Restrict to one team, from list_teams. Leave out for the whole workspace."
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
+        }
+      },
+      "required" : [ "workspaceId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "description" : "Notifications, newest first.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "notificationId" : {
+                "type" : "string",
+                "description" : "Notification id."
+              },
+              "type" : {
+                "type" : "string",
+                "description" : "What the notification is about, for example TASK_CHANGE_ASSIGNEE, TASK_NEW_COMMENT or TASK_REMINDER."
+              },
+              "title" : {
+                "type" : "string",
+                "description" : "Notification title."
+              },
+              "text" : {
+                "type" : "string",
+                "description" : "Notification text."
+              },
+              "url" : {
+                "type" : "string",
+                "description" : "Link that opens the related record in the Jinear app."
+              },
+              "read" : {
+                "type" : "boolean",
+                "description" : "True when it was already read before this call."
+              },
+              "createdAt" : {
+                "type" : "string",
+                "description" : "ISO 8601 instant it was created."
+              }
+            },
+            "additionalProperties" : false
+          }
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number of this result."
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "description" : "Items per page."
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "description" : "Total matching items across all pages."
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "description" : "Total number of pages."
+        },
+        "hasNext" : {
+          "type" : "boolean",
+          "description" : "True when another page is available."
+        }
+      },
+      "required" : [ "items" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "List notifications",
+      "readOnlyHint" : false,
       "destructiveHint" : false,
       "idempotentHint" : true,
       "openWorldHint" : false
@@ -2464,6 +3303,118 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "move_task_on_board",
+    "title" : "Move a task on a board",
+    "description" : "Moves a task to a new position on a board. The tasks between the old and the new position shift by one. The board must be OPEN.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardEntryId" : {
+          "type" : "string",
+          "description" : "Board entry id, from the boards of get_task."
+        },
+        "newOrder" : {
+          "type" : "integer",
+          "description" : "New position on the board. Read the current positions with get_task, or list the board with list_tasks and sort TASK_BOARD_ORDER."
+        }
+      },
+      "required" : [ "taskBoardEntryId", "newOrder" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardEntryId" : {
+          "type" : "string",
+          "description" : "The board entry that was moved."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Move a task on a board",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "remove_task_from_board",
+    "title" : "Remove a task from a board",
+    "description" : "Takes a task off a board. The task itself is not deleted and keeps its team, status and assignee.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardEntryId" : {
+          "type" : "string",
+          "description" : "Board entry id, from the boards of get_task."
+        }
+      },
+      "required" : [ "taskBoardEntryId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardEntryId" : {
+          "type" : "string",
+          "description" : "The board entry that was removed."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Remove a task from a board",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "remove_task_relation",
+    "title" : "Remove a task relation",
+    "description" : "Removes a relation between two tasks. Both tasks stay as they are.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskRelationId" : {
+          "type" : "string",
+          "description" : "Relation id, from the relations or relatedIn of get_task."
+        }
+      },
+      "required" : [ "taskRelationId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskRelationId" : {
+          "type" : "string",
+          "description" : "The relation that was removed."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Remove a task relation",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "remove_task_reminder",
     "title" : "Remove a task reminder",
     "description" : "Removes a reminder from a task, so it does not fire again for anyone. A repeating reminder stops for all its future instants. Get the id from list_task_reminders.",
@@ -2497,6 +3448,46 @@
       "readOnlyHint" : false,
       "destructiveHint" : true,
       "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "rename_task_checklist",
+    "title" : "Rename a checklist",
+    "description" : "Changes the title of a checklist on a task.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistId" : {
+          "type" : "string",
+          "description" : "Checklist id, from get_task."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "New checklist title."
+        }
+      },
+      "required" : [ "checklistId", "title" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistId" : {
+          "type" : "string",
+          "description" : "The checklist that was renamed."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Rename a checklist",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
       "openWorldHint" : false
     }
   }, {
@@ -2942,6 +3933,50 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "update_checklist_item",
+    "title" : "Update a checklist item",
+    "description" : "Checks or unchecks a checklist item, changes its text, or both. Supply only the fields to change.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistItemId" : {
+          "type" : "string",
+          "description" : "Checklist item id, from get_task."
+        },
+        "label" : {
+          "type" : "string",
+          "description" : "New item text."
+        },
+        "checked" : {
+          "type" : "boolean",
+          "description" : "True to check the item, false to uncheck it."
+        }
+      },
+      "required" : [ "checklistItemId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistItemId" : {
+          "type" : "string",
+          "description" : "The item that was updated."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Update a checklist item",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "update_note_title",
     "title" : "Update a note title",
     "description" : "Sets a new title on a note. The body stays as it is.",
@@ -3000,7 +4035,7 @@
   }, {
     "name" : "update_task",
     "title" : "Update a task",
-    "description" : "Changes a task's title, body, dates or assignee. Supply only the fields to change; anything omitted is left alone. Dates are the one exception: Jinear stores start and due as a pair, so supply both together. Use set_task_status to move a task between workflow statuses.",
+    "description" : "Changes a task's title, body, dates, assignee, topic or collaborators. Supply only the fields to change; anything omitted is left alone. Dates are the one exception: Jinear stores start and due as a pair, so supply both together. Use set_task_status to move a task between workflow statuses.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -3029,6 +4064,17 @@
           "type" : "string",
           "format" : "date-time",
           "description" : "New due date. Supply together with startDate, since Jinear stores the pair."
+        },
+        "topicId" : {
+          "type" : "string",
+          "description" : "New topic id, from list_topics on the task's team. Pass an empty string to remove the topic."
+        },
+        "collaboratorIds" : {
+          "type" : "array",
+          "description" : "Account ids of the collaborators, from list_workspace_members. Replaces the whole list; pass an empty list to remove every collaborator.",
+          "items" : {
+            "type" : "string"
+          }
         }
       },
       "required" : [ "taskId" ],
@@ -3055,27 +4101,95 @@
       "idempotentHint" : false,
       "openWorldHint" : false
     }
+  }, {
+    "name" : "update_task_board",
+    "title" : "Update a board",
+    "description" : "Changes a board's title, due date, state or color, or removes its due date with clearDueDate. Set state to CLOSED when the work on the board is done. Supply only the fields to change.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardId" : {
+          "type" : "string",
+          "description" : "Board id, from list_task_boards."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "New board title."
+        },
+        "dueDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "New due date of the board."
+        },
+        "clearDueDate" : {
+          "type" : "boolean",
+          "description" : "True to remove the due date. Do not pass it together with dueDate."
+        },
+        "state" : {
+          "type" : "string",
+          "description" : "OPEN, or CLOSED when the work on the board is done.",
+          "enum" : [ "OPEN", "CLOSED" ]
+        },
+        "color" : {
+          "type" : "string",
+          "description" : "New color as a hex value without #, for example FF6600."
+        }
+      },
+      "required" : [ "taskBoardId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardId" : {
+          "type" : "string",
+          "description" : "The board that was updated."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Update a board",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
   } ],
   "scopes" : {
+    "add_checklist_item" : [ "tasks:write" ],
     "add_task_attachment" : [ "tasks:write" ],
     "add_task_comment" : [ "tasks:write" ],
+    "add_task_relation" : [ "tasks:write" ],
     "add_task_reminder" : [ "tasks:write" ],
     "add_task_to_board" : [ "tasks:write" ],
     "append_to_note" : [ "notes:write" ],
     "create_note" : [ "notes:write" ],
+    "create_notebook" : [ "notes:write" ],
     "create_task" : [ "tasks:write" ],
     "create_task_board" : [ "tasks:write" ],
+    "create_task_checklist" : [ "tasks:write" ],
+    "create_topic" : [ "tasks:write" ],
+    "delete_checklist_item" : [ "tasks:write" ],
     "delete_note" : [ "notes:write" ],
+    "delete_task_checklist" : [ "tasks:write" ],
     "fetch" : [ "notes:read", "tasks:read", "workspace:read" ],
     "get_context" : [ "workspace:read" ],
     "get_file_link" : [ "files:read" ],
     "get_note" : [ "notes:read" ],
     "get_task" : [ "tasks:read" ],
+    "get_unread_notification_count" : [ "tasks:read" ],
     "get_workspace" : [ "workspace:read" ],
+    "list_activity" : [ "tasks:read" ],
     "list_calendar_events" : [ "calendar:read" ],
     "list_files" : [ "files:read" ],
     "list_notebooks" : [ "notes:read" ],
     "list_notes" : [ "notes:read" ],
+    "list_notifications" : [ "tasks:read" ],
     "list_task_attachments" : [ "tasks:read" ],
     "list_task_boards" : [ "tasks:read" ],
     "list_task_comments" : [ "tasks:read" ],
@@ -3087,13 +4201,19 @@
     "list_workspace_members" : [ "workspace:read" ],
     "list_workspaces" : [ "workspace:read" ],
     "move_note" : [ "notes:write" ],
+    "move_task_on_board" : [ "tasks:write" ],
+    "remove_task_from_board" : [ "tasks:write" ],
+    "remove_task_relation" : [ "tasks:write" ],
     "remove_task_reminder" : [ "tasks:write" ],
+    "rename_task_checklist" : [ "tasks:write" ],
     "replace_in_note" : [ "notes:write" ],
     "search" : [ "notes:read", "tasks:read", "workspace:read" ],
     "search_notes" : [ "notes:read" ],
     "search_tasks" : [ "tasks:read" ],
     "set_task_status" : [ "tasks:write" ],
+    "update_checklist_item" : [ "tasks:write" ],
     "update_note_title" : [ "notes:write" ],
-    "update_task" : [ "tasks:write" ]
+    "update_task" : [ "tasks:write" ],
+    "update_task_board" : [ "tasks:write" ]
   }
 }

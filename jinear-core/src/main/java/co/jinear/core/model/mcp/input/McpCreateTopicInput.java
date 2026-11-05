@@ -19,7 +19,7 @@ public class McpCreateTopicInput extends McpWorkspaceScopedInput {
     private String name;
 
     @NotBlank
-    @McpField("Short tag that prefixes the topic's task numbers, for example BUG. Letters and digits only; it must be unique in the workspace.")
+    @McpField("Short tag that prefixes the topic's task numbers, for example BUG. ASCII letters and digits only, at most 16 characters; it must be unique in the workspace. Any other character is refused.")
     private String tag;
 
     @Size(max = 6)
