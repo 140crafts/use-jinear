@@ -19,6 +19,8 @@ public class RichTextPlainTextConverter {
     private static final String LINE_BREAK_MARKER = "\\n";
     private static final String BLOCK_ELEMENTS = "p, h1, h2, h3, h4, h5, h6, blockquote, pre, tr, div";
     private static final String TASK_ITEM = "li[data-type=taskItem]";
+    private static final String TABLE_CELL = "th, td";
+    private static final String CELL_SEPARATOR = " | ";
 
     public String toPlainText(String html) {
         if (StringUtils.isBlank(html)) {
@@ -26,6 +28,7 @@ public class RichTextPlainTextConverter {
         }
         Document document = Jsoup.parse(html);
         document.select("a[href]").forEach(this::appendHref);
+        document.select("tr").forEach(this::flattenRow);
         document.select("br").after(LINE_BREAK_MARKER);
         document.select(BLOCK_ELEMENTS).stream()
                 .filter(this::startsALine)
@@ -43,6 +46,14 @@ public class RichTextPlainTextConverter {
         if (!href.equals(link.text())) {
             link.after(new TextNode(" (" + href + ")"));
         }
+    }
+
+    private void flattenRow(Element row) {
+        String line = row.children().stream()
+                .filter(child -> child.is(TABLE_CELL))
+                .map(Element::text)
+                .collect(Collectors.joining(CELL_SEPARATOR));
+        row.empty().appendText(line);
     }
 
     private boolean startsALine(Element element) {

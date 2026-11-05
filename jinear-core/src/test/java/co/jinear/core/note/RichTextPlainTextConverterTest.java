@@ -49,6 +49,32 @@ class RichTextPlainTextConverterTest {
     }
 
     @Test
+    void eachTableRowBecomesOneLineWithItsCellsSeparated() {
+        String html = "<p>Before</p><table><colgroup><col><col></colgroup><tbody>"
+                      + "<tr><th colspan=\"1\" rowspan=\"1\"><p>Col A</p></th><th colspan=\"1\" rowspan=\"1\"><p>Col B</p></th></tr>"
+                      + "<tr><td><p>a1</p></td><td><p>b1</p></td></tr>"
+                      + "<tr><td><p>a2</p></td><td><p>b2</p></td></tr>"
+                      + "</tbody></table><p>After</p>";
+
+        String text = converter.toPlainText(html);
+
+        assertThat(text).isEqualTo("Before\nCol A | Col B\na1 | b1\na2 | b2\nAfter");
+    }
+
+    @Test
+    void aCellWithSeveralParagraphsOrALinkStaysInItsRow() {
+        String html = "<table><tbody><tr>"
+                      + "<td><p>first</p><p>second<br>third</p></td>"
+                      + "<td><p><a href=\"https://jinear.co/docs\">docs</a></p></td>"
+                      + "<td><p></p></td>"
+                      + "</tr></tbody></table>";
+
+        String text = converter.toPlainText(html);
+
+        assertThat(text).isEqualTo("first second third | docs (https://jinear.co/docs) |");
+    }
+
+    @Test
     void anEmptyBodyGivesAnEmptyString() {
         assertThat(converter.toPlainText(null)).isEmpty();
         assertThat(converter.toPlainText("  ")).isEmpty();

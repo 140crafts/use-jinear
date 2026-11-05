@@ -861,11 +861,11 @@
         },
         "tag" : {
           "type" : "string",
-          "description" : "Short tag that prefixes the topic's task numbers, for example BUG. Letters and digits only; it must be unique in the workspace."
+          "description" : "Short tag that prefixes the topic's task numbers, for example BUG. ASCII letters and digits only, at most 16 characters; it must be unique in the workspace. Any other character is refused."
         },
         "color" : {
           "type" : "string",
-          "description" : "Color as a hex value without #, for example FF6600."
+          "description" : "Color as six hex digits without #, for example FF6600."
         }
       },
       "required" : [ "workspaceId", "teamId", "name", "tag" ],
@@ -3315,7 +3315,7 @@
         },
         "newOrder" : {
           "type" : "integer",
-          "description" : "New position on the board. Read the current positions with get_task, or list the board with list_tasks and sort TASK_BOARD_ORDER."
+          "description" : "New position on the board, from 0 to the highest order on the board. Read the current positions with get_task, or list the board with list_tasks and sort TASK_BOARD_ORDER."
         }
       },
       "required" : [ "taskBoardEntryId", "newOrder" ],
@@ -4132,7 +4132,7 @@
         },
         "color" : {
           "type" : "string",
-          "description" : "New color as a hex value without #, for example FF6600."
+          "description" : "New color as six hex digits without #, for example FF6600."
         }
       },
       "required" : [ "taskBoardId" ],
