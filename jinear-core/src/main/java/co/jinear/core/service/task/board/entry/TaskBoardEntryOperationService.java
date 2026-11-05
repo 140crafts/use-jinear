@@ -15,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.function.Supplier;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,8 +32,8 @@ public class TaskBoardEntryOperationService {
 
     public TaskBoardEntryDto initialize(InitializeTaskBoardEntryVo initializeTaskBoardEntryVo) {
         log.info("Initialize task board entry has started. initializeTaskBoardEntryVo: {}", initializeTaskBoardEntryVo);
+        taskBoardLockService.lockTaskBoardForUpdate(initializeTaskBoardEntryVo.getTaskBoardId());
         try {
-            taskBoardLockService.lockTaskBoardForUpdate(initializeTaskBoardEntryVo.getTaskBoardId());
             validateNotInBoardAlready(initializeTaskBoardEntryVo);
             return initializeEntry(initializeTaskBoardEntryVo);
         } catch (BusinessException e) {
@@ -43,13 +46,39 @@ public class TaskBoardEntryOperationService {
         }
     }
 
+    @Transactional
+    public TaskBoardEntryDto deleteEntry(String taskBoardEntryId) {
+        log.info("Delete task board entry has started. taskBoardEntryId: {}", taskBoardEntryId);
+        return withBoardLock(taskBoardEntryId, () -> moveToLastAndPassivate(taskBoardEntryId));
+    }
+
+    @Transactional
+    public TaskBoardEntryDto changeOrder(String taskBoardEntryId, Integer newOrder) {
+        return withBoardLock(taskBoardEntryId, () -> applyOrder(taskBoardEntryId, newOrder));
+    }
+
+    @Transactional
+    public TaskBoardEntryDto changeFilteredOrder(String taskBoardEntryId, String taskBoardEntryIdBefore, String taskBoardEntryIdAfter) {
+        return withBoardLock(taskBoardEntryId, () -> applyFilteredOrder(taskBoardEntryId, taskBoardEntryIdBefore, taskBoardEntryIdAfter));
+    }
+
     private void validateNotInBoardAlready(InitializeTaskBoardEntryVo initializeTaskBoardEntryVo) {
         log.info("Validate task is not already in task board has started.");
         taskBoardEntryRetrieveService.validateNotExists(initializeTaskBoardEntryVo.getTaskId(), initializeTaskBoardEntryVo.getTaskBoardId());
     }
 
-    public TaskBoardEntryDto deleteEntry(String taskBoardEntryId) {
-        log.info("Delete task board entry has started. taskBoardEntryId: {}", taskBoardEntryId);
+    private TaskBoardEntryDto withBoardLock(String taskBoardEntryId, Supplier<TaskBoardEntryDto> operation) {
+        String taskBoardId = taskBoardEntryRetrieveService.retrieveEntity(taskBoardEntryId).getTaskBoardId();
+        taskBoardLockService.lockTaskBoardForUpdate(taskBoardId);
+        try {
+            return operation.get();
+        } finally {
+            taskBoardLockService.unlockTaskBoardForUpdate(taskBoardId);
+        }
+    }
+
+    private TaskBoardEntryDto moveToLastAndPassivate(String taskBoardEntryId) {
+        moveToLast(taskBoardEntryId);
         TaskBoardEntry taskBoardEntry = taskBoardEntryRetrieveService.retrieveEntity(taskBoardEntryId);
         String passiveId = passiveService.createUserActionPassive();
         taskBoardEntry.setPassiveId(passiveId);
@@ -57,8 +86,7 @@ public class TaskBoardEntryOperationService {
         return taskBoardEntryDtoConverter.map(saved);
     }
 
-    @Transactional
-    public TaskBoardEntryDto changeOrder(String taskBoardEntryId, Integer newOrder) {
+    private TaskBoardEntryDto applyOrder(String taskBoardEntryId, Integer newOrder) {
         TaskBoardEntry taskBoardEntry = taskBoardEntryRetrieveService.retrieveEntity(taskBoardEntryId);
         Integer currentOrder = taskBoardEntry.getOrder();
         log.info("Change task board entry order has started. taskBoardEntryId: {}, currentOrder: {}, newOrder: {}", taskBoardEntryId, currentOrder, newOrder);
@@ -75,23 +103,32 @@ public class TaskBoardEntryOperationService {
         return taskBoardEntryDtoConverter.map(saved);
     }
 
-    @Transactional
-    public TaskBoardEntryDto changeFilteredOrder(String taskBoardEntryId, String taskBoardEntryIdBefore, String taskBoardEntryIdAfter) {
-        if (StringUtils.isNotBlank(taskBoardEntryIdBefore)) {
-            TaskBoardEntry taskBoardEntryOneBefore = taskBoardEntryRetrieveService.retrieveEntity(taskBoardEntryIdBefore);
-            Integer desiredNextOrder = taskBoardEntryOneBefore.getOrder() + 1;
-            return changeOrder(taskBoardEntryId, desiredNextOrder);
-        } else if (StringUtils.isNotBlank(taskBoardEntryIdAfter)) {
-            TaskBoardEntry taskBoardEntryOneAfter = taskBoardEntryRetrieveService.retrieveEntity(taskBoardEntryIdAfter);
-            Integer desiredNextOrder = taskBoardEntryOneAfter.getOrder() - 1;
-            return changeOrder(taskBoardEntryId, desiredNextOrder);
-        }
-        throw new IllegalArgumentException("TaskBoardEntryIdBefore or TaskBoardEntryIdAfter is null.");
+    private TaskBoardEntryDto applyFilteredOrder(String taskBoardEntryId, String taskBoardEntryIdBefore, String taskBoardEntryIdAfter) {
+        TaskBoardEntry taskBoardEntry = taskBoardEntryRetrieveService.retrieveEntity(taskBoardEntryId);
+        Integer currentOrder = taskBoardEntry.getOrder();
+        Integer newOrder = retrieveOrder(taskBoardEntryIdBefore)
+                .filter(beforeOrder -> beforeOrder > currentOrder)
+                .or(() -> retrieveOrder(taskBoardEntryIdAfter).filter(afterOrder -> afterOrder < currentOrder))
+                .orElse(currentOrder);
+        return applyOrder(taskBoardEntryId, newOrder);
+    }
+
+    private Optional<Integer> retrieveOrder(String taskBoardEntryId) {
+        return Optional.ofNullable(taskBoardEntryId)
+                .filter(StringUtils::isNotBlank)
+                .map(taskBoardEntryRetrieveService::retrieveEntity)
+                .map(TaskBoardEntry::getOrder);
+    }
+
+    private void moveToLast(String taskBoardEntryId) {
+        TaskBoardEntry taskBoardEntry = taskBoardEntryRetrieveService.retrieveEntity(taskBoardEntryId);
+        Integer lastOrder = taskBoardEntryRetrieveService.retrieveLastOrder(taskBoardEntry.getTaskBoardId());
+        applyOrder(taskBoardEntryId, lastOrder);
     }
 
     private TaskBoardEntryDto initializeEntry(InitializeTaskBoardEntryVo initializeTaskBoardEntryVo) {
-        Long taskBoardSize = taskBoardEntryRepository.countAllByTaskBoardIdAndPassiveIdIsNull(initializeTaskBoardEntryVo.getTaskBoardId());
-        TaskBoardEntry taskBoardEntry = initializeTaskBoardEntryVoToEntityConverter.map(initializeTaskBoardEntryVo, taskBoardSize.intValue());
+        Integer nextOrder = taskBoardEntryRetrieveService.retrieveNextOrder(initializeTaskBoardEntryVo.getTaskBoardId());
+        TaskBoardEntry taskBoardEntry = initializeTaskBoardEntryVoToEntityConverter.map(initializeTaskBoardEntryVo, nextOrder);
         TaskBoardEntry saved = taskBoardEntryRepository.save(taskBoardEntry);
         return taskBoardEntryDtoConverter.map(saved);
     }

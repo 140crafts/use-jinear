@@ -48,6 +48,14 @@ public class TaskBoardEntryRetrieveService {
                 .orElse(0);
     }
 
+    public Integer retrieveNextOrder(String taskBoardId) {
+        log.info("Retrieve next task board entry order has started. taskBoardId: {}", taskBoardId);
+        return taskBoardEntryRepository.findFirstByTaskBoardIdAndPassiveIdIsNullOrderByOrderDesc(taskBoardId)
+                .map(TaskBoardEntry::getOrder)
+                .map(Math::incrementExact)
+                .orElse(0);
+    }
+
     public void validateNotExists(String taskId, String taskBoardId) {
         taskBoardEntryRepository.findByTaskIdAndTaskBoardIdAndPassiveIdIsNull(taskId, taskBoardId)
                 .ifPresent(taskBoardEntry -> {
