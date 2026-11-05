@@ -64,6 +64,7 @@ class McpControllerTest {
                 McpTestTools.writeTool(),
                 McpTestTools.throwingTool(),
                 McpTestTools.refusingTool(),
+                McpTestTools.invalidRequestTool(),
                 McpTestTools.explodingTool());
         McpToolRegistry registry = new McpToolRegistry(tools);
 
@@ -269,6 +270,19 @@ class McpControllerTest {
                 .andExpect(jsonPath("$.result.isError").value(true))
                 .andExpect(jsonPath("$.result.content[0].text").value(
                         "The request was refused: oldText must match the HTML from get_note exactly once, but it matched 2 times."));
+    }
+
+    @Test
+    void anInvalidRequestReturnsTheResolvedMessageNotTheGenericError() throws Exception {
+        authenticateWith(Set.of("tasks:read"));
+
+        mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON).content("""
+                        {"jsonrpc":"2.0","id":13,"method":"tools/call","params":{"name":"rejects_as_invalid","arguments":{}}}
+                        """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.isError").value(true))
+                .andExpect(jsonPath("$.result.content[0].text").value(
+                        "The request was refused: Sorting by board order needs exactly one task board."));
     }
 
     @Test

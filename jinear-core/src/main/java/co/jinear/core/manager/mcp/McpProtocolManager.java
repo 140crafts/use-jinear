@@ -4,6 +4,7 @@ import co.jinear.core.config.locale.MessageSourceLocalizer;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
+import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.service.mcp.McpToolCallLogService;
 import co.jinear.core.model.mcp.McpToolException;
@@ -197,6 +198,10 @@ public class McpProtocolManager {
         }
         if (exception instanceof BusinessException businessException) {
             String message = messageSourceLocalizer.getMessageText(businessException.getMessage(), businessException.getArguments());
+            return McpToolResult.error("mcp.error.refused", message);
+        }
+        if (exception instanceof NotValidException notValidException) {
+            String message = messageSourceLocalizer.getMessageText(notValidException.getMessage(), notValidException.getArguments());
             return McpToolResult.error("mcp.error.refused", message);
         }
         return McpToolResult.error("mcp.error.unexpected", errorReference);

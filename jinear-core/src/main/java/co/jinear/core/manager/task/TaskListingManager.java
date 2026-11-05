@@ -65,7 +65,7 @@ public class TaskListingManager {
 
     private void validateTaskBoardOrder(TaskFilterRequest taskFilterRequest) {
         if (FilterSort.TASK_BOARD_ORDER.equals(taskFilterRequest.getSort()) && (CollectionUtils.isEmpty(taskFilterRequest.getTaskboardIds()) || taskFilterRequest.getTaskboardIds().size() != 1)) {
-            throw new NotValidException();
+            throw new NotValidException("task.filter.task-board-order-single-board");
         }
     }
 

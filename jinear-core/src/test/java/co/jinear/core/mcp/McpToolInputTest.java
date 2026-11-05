@@ -2,6 +2,8 @@ package co.jinear.core.mcp;
 
 import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.converter.mcp.McpViewConverter;
+import co.jinear.core.converter.task.TaskFilterRequestConverter;
+import co.jinear.core.exception.NotValidException;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.task.ListTasksTool;
 import co.jinear.core.manager.mcp.tool.task.UpdateTaskTool;
@@ -18,15 +20,24 @@ import co.jinear.core.model.mcp.input.McpListTasksInput;
 import co.jinear.core.model.mcp.schema.McpSchemaNode;
 import co.jinear.core.model.request.task.TaskFilterRequest;
 import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
+import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.project.MilestoneRetrieveService;
+import co.jinear.core.service.project.ProjectTeamListingService;
+import co.jinear.core.service.task.TaskListingService;
+import co.jinear.core.service.team.member.TeamMemberRetrieveService;
+import co.jinear.core.validator.workspace.WorkspaceValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.data.domain.Page;
 
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -182,5 +193,26 @@ class McpToolInputTest {
         UpdateTaskTool tool = new UpdateTaskTool(Mockito.mock(TaskUpdateManager.class));
 
         assertThat(tool.name()).isEqualTo("update_task");
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 2})
+    void boardOrderWithoutExactlyOneBoardIsRefusedWithItsOwnMessage(int boardCount) {
+        TaskListingManager manager = new TaskListingManager(
+                Mockito.mock(SessionInfoService.class),
+                Mockito.mock(WorkspaceValidator.class),
+                Mockito.mock(TaskListingService.class),
+                Mockito.mock(TeamMemberRetrieveService.class),
+                Mockito.mock(TaskFilterRequestConverter.class),
+                Mockito.mock(ProjectTeamListingService.class),
+                Mockito.mock(MilestoneRetrieveService.class));
+        TaskFilterRequest request = new TaskFilterRequest();
+        request.setWorkspaceId("w");
+        request.setSort(FilterSort.TASK_BOARD_ORDER);
+        request.setTaskboardIds(boardCount == 0 ? null : List.of("b1", "b2"));
+
+        assertThatThrownBy(() -> manager.filterTasks(request))
+                .isInstanceOf(NotValidException.class)
+                .hasMessage("task.filter.task-board-order-single-board");
     }
 }

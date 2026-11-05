@@ -1,6 +1,7 @@
 package co.jinear.core.mcp;
 
 import co.jinear.core.config.locale.MessageSourceLocalizer;
+import co.jinear.core.exception.NotValidException;
 import co.jinear.core.exception.note.NoteEditRejectedException;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
@@ -80,6 +81,21 @@ final class McpTestTools {
                         .build(),
                 (context, args) -> {
                     throw new NoteEditRejectedException("note.error.edit.text-match-count", 2);
+                });
+    }
+
+    static McpTool invalidRequestTool() {
+        return new McpStubTool(
+                McpToolDefinitionBuilder
+                        .named("rejects_as_invalid")
+                        .title("Rejects as invalid")
+                        .description("Throws a request validation failure. Used to prove the caller gets the resolved message, not the generic error.")
+                        .input(McpSchemaGenerator.forInput(McpStubInputs.NoArguments.class))
+                        .readOnly()
+                        .scopes(OauthScope.TASKS_READ)
+                        .build(),
+                (context, args) -> {
+                    throw new NotValidException("task.filter.task-board-order-single-board");
                 });
     }
 
