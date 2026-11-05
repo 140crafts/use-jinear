@@ -5,7 +5,6 @@ import co.jinear.core.model.mcp.schema.McpField;
 import co.jinear.core.model.mcp.schema.McpZonedDateTimeDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -32,7 +31,6 @@ public class McpUpdateTaskBoardInput {
     @McpField("OPEN, or CLOSED when the work on the board is done.")
     private TaskBoardStateType state;
 
-    @Size(max = 6)
-    @McpField("New color as a hex value without #, for example FF6600.")
+    @McpField("New color as six hex digits without #, for example FF6600.")
     private String color;
 }

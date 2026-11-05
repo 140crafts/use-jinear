@@ -15,6 +15,7 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.topic.TopicInitializeService;
 import co.jinear.core.service.topic.TopicRetrieveService;
 import co.jinear.core.service.topic.TopicUpdateService;
+import co.jinear.core.validator.common.ColorValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,7 @@ public class TopicManager {
     private final SessionInfoService sessionInfoService;
     private final WorkspaceValidator workspaceValidator;
     private final TeamAccessValidator teamAccessValidator;
+    private final ColorValidator colorValidator;
     private final TopicInitializeVoConverter topicInitializeVoConverter;
     private final TopicUpdateVoConverter topicUpdateVoConverter;
 
@@ -60,6 +62,7 @@ public class TopicManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateAccess(topicInitializeRequest, currentAccountId);
         validateTag(topicInitializeRequest.getTag());
+        colorValidator.validateHexColorIfPresent(topicInitializeRequest.getColor());
         log.info("Initialize topic has started. currentAccountId: {}", currentAccountId);
         TopicInitializeVo topicInitializeVo = topicInitializeVoConverter.map(topicInitializeRequest, currentAccountId);
         TopicDto topicDto = topicInitializeService.initializeTopic(topicInitializeVo);
@@ -70,6 +73,7 @@ public class TopicManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateAccess(topicUpdateRequest.getTopicId(), currentAccountId);
         Optional.of(topicUpdateRequest).map(TopicUpdateRequest::getTag).ifPresent(this::validateTag);
+        colorValidator.validateHexColorIfPresent(topicUpdateRequest.getColor());
         log.info("Update topic has started. currentAccountId: {}, topicUpdateRequest: {}", currentAccountId, topicUpdateRequest);
         TopicUpdateVo topicUpdateVo = topicUpdateVoConverter.map(topicUpdateRequest);
         TopicDto topicDto = topicUpdateService.updateTopic(topicUpdateVo);

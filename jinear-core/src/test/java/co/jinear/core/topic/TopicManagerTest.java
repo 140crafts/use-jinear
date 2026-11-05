@@ -12,6 +12,7 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.topic.TopicInitializeService;
 import co.jinear.core.service.topic.TopicRetrieveService;
 import co.jinear.core.service.topic.TopicUpdateService;
+import co.jinear.core.validator.common.ColorValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ class TopicManagerTest {
             sessionInfoService,
             Mockito.mock(WorkspaceValidator.class),
             Mockito.mock(TeamAccessValidator.class),
+            new ColorValidator(),
             topicInitializeVoConverter,
             new TopicUpdateVoConverterImpl());
 
@@ -94,6 +96,29 @@ class TopicManagerTest {
         ArgumentCaptor<TopicUpdateVo> captor = ArgumentCaptor.forClass(TopicUpdateVo.class);
         Mockito.verify(topicUpdateService).updateTopic(captor.capture());
         assertThat(captor.getValue().getTag()).isEqualTo("qa1");
+    }
+
+    @Test
+    void initializeRefusesAColorThatIsNotHex() {
+        TopicInitializeRequest request = initializeRequest("QATWO");
+        request.setColor("ZZZZZZ");
+
+        assertThatThrownBy(() -> topicManager.initializeTopic(request))
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("common.error.invalid-color");
+        Mockito.verifyNoInteractions(topicInitializeService);
+    }
+
+    @Test
+    void updateRefusesAColorThatIsNotHex() {
+        Mockito.when(topicRetrieveService.retrieve("topic-1")).thenReturn(new TopicDto());
+        TopicUpdateRequest request = updateRequest(null);
+        request.setColor("#FF6600");
+
+        assertThatThrownBy(() -> topicManager.updateTopic(request))
+                .isInstanceOf(BusinessException.class)
+                .hasMessage("common.error.invalid-color");
+        Mockito.verifyNoInteractions(topicUpdateService);
     }
 
     private TopicInitializeRequest initializeRequest(String tag) {

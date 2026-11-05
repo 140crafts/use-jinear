@@ -2,7 +2,6 @@ package co.jinear.core.model.mcp.input;
 
 import co.jinear.core.model.mcp.schema.McpField;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,7 +21,6 @@ public class McpCreateTopicInput extends McpWorkspaceScopedInput {
     @McpField("Short tag that prefixes the topic's task numbers, for example BUG. ASCII letters and digits only, at most 16 characters; it must be unique in the workspace. Any other character is refused.")
     private String tag;
 
-    @Size(max = 6)
-    @McpField("Color as a hex value without #, for example FF6600.")
+    @McpField("Color as six hex digits without #, for example FF6600.")
     private String color;
 }
