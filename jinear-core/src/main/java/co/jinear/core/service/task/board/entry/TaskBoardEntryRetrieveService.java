@@ -41,6 +41,13 @@ public class TaskBoardEntryRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    public Integer retrieveLastOrder(String taskBoardId) {
+        log.info("Retrieve last task board entry order has started. taskBoardId: {}", taskBoardId);
+        return taskBoardEntryRepository.findFirstByTaskBoardIdAndPassiveIdIsNullOrderByOrderDesc(taskBoardId)
+                .map(TaskBoardEntry::getOrder)
+                .orElse(0);
+    }
+
     public void validateNotExists(String taskId, String taskBoardId) {
         taskBoardEntryRepository.findByTaskIdAndTaskBoardIdAndPassiveIdIsNull(taskId, taskBoardId)
                 .ifPresent(taskBoardEntry -> {

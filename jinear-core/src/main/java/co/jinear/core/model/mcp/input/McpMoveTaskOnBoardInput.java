@@ -15,6 +15,6 @@ public class McpMoveTaskOnBoardInput {
     private String taskBoardEntryId;
 
     @NotNull
-    @McpField("New position on the board. Read the current positions with get_task, or list the board with list_tasks and sort TASK_BOARD_ORDER.")
+    @McpField("New position on the board, from 0 to the highest order on the board. Read the current positions with get_task, or list the board with list_tasks and sort TASK_BOARD_ORDER.")
     private Integer newOrder;
 }

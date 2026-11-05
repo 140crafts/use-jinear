@@ -23,6 +23,8 @@ public interface TaskBoardEntryRepository extends JpaRepository<TaskBoardEntry, 
 
     Long countAllByTaskBoardIdAndPassiveIdIsNull(String taskListId);
 
+    Optional<TaskBoardEntry> findFirstByTaskBoardIdAndPassiveIdIsNullOrderByOrderDesc(String taskBoardId);
+
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""
             update TaskBoardEntry taskBoardEntry
