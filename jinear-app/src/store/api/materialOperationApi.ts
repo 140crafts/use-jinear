@@ -17,7 +17,7 @@ export const materialOperationApi = api.injectEndpoints({
                 method: "POST",
                 body: body
             }),
-            invalidatesTags: ["v1/material/list/search"]
+            invalidatesTags: ["v1/material/list/search", "v1/material/workspace/{workspaceId}/search"]
         }),
         //
         moveToFolder: build.mutation<BaseResponse, {
@@ -36,7 +36,7 @@ export const materialOperationApi = api.injectEndpoints({
                 }
                 props?.onFulfilled?.();
             },
-            invalidatesTags: ["v1/material/list/search"]
+            invalidatesTags: ["v1/material/list/search", "v1/material/workspace/{workspaceId}/search"]
         }),
         //
         renameMaterial: build.mutation<BaseResponse, {
@@ -52,7 +52,7 @@ export const materialOperationApi = api.injectEndpoints({
                 await queryFulfilled;
                 props?.onFulfilled?.();
             },
-            invalidatesTags: ["v1/material/list/search"]
+            invalidatesTags: ["v1/material/list/search", "v1/material/workspace/{workspaceId}/search"]
         }),
         //
         initializeMaterialFileUpload: build.mutation<MaterialInitializeFileUploadResponse, {
@@ -72,7 +72,7 @@ export const materialOperationApi = api.injectEndpoints({
                 url: `v1/material/operation/workspace/${workspaceId}/file/upload-url/notify/${materialId}`,
                 method: "POST"
             }),
-            invalidatesTags: ["v1/material/list/search", `v1/workspace/media/{workspaceId}/limits`]
+            invalidatesTags: ["v1/material/list/search", "v1/material/workspace/{workspaceId}/search", `v1/workspace/media/{workspaceId}/limits`]
         }),
         //
         deleteMaterialPermanently: build.mutation<BaseResponse, { materialId: string }>({
@@ -80,7 +80,7 @@ export const materialOperationApi = api.injectEndpoints({
                 url: `v1/material/operation/${materialId}/permanent`,
                 method: "DELETE"
             }),
-            invalidatesTags: ["v1/material/list/search", `v1/material/{materialId}`, `v1/workspace/media/{workspaceId}/limits`]
+            invalidatesTags: ["v1/material/list/search", "v1/material/workspace/{workspaceId}/search", `v1/material/{materialId}`, `v1/workspace/media/{workspaceId}/limits`]
         }),
         //
         updateMaterialAccessType: build.mutation<BaseResponse, { materialId: string, accessType: MaterialAccessType }>({
@@ -88,7 +88,7 @@ export const materialOperationApi = api.injectEndpoints({
                 url: `v1/material/operation/${materialId}/access-type/${accessType}`,
                 method: "PUT"
             }),
-            invalidatesTags: ["v1/material/list/search", `v1/material/{materialId}`]
+            invalidatesTags: ["v1/material/list/search", "v1/material/workspace/{workspaceId}/search", `v1/material/{materialId}`]
         })
         //
     })
