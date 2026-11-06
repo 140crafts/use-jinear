@@ -3602,6 +3602,107 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "search_files",
+    "title" : "Search files and folders",
+    "description" : "Searches the file storage of a workspace by name, original file name, file type and owner username, best matches first. Covers every folder at every level. Task attachments are not included; search_tasks covers them. Files added or renamed in the last few seconds may not appear yet; use list_files to see them. Returns files and folders with their ids; call get_file_link for a file's download link.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "query" : {
+          "type" : "string",
+          "description" : "Words to find in file and folder names, original file names, file types and the owner's username. Every word must appear as a whole word or as the start of a word."
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "Return only FOLDER entries or only FILE entries. Omit for both.",
+          "enum" : [ "FILE", "FOLDER" ]
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
+        }
+      },
+      "required" : [ "workspaceId", "query" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "description" : "Matching files and folders.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "materialId" : {
+                "type" : "string",
+                "description" : "File or folder id."
+              },
+              "workspaceId" : {
+                "type" : "string",
+                "description" : "Workspace this item belongs to."
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "File or folder name."
+              },
+              "materialType" : {
+                "type" : "string",
+                "description" : "FOLDER or FILE."
+              },
+              "parentMaterialId" : {
+                "type" : "string",
+                "description" : "Containing folder, or null at the root."
+              },
+              "mediaId" : {
+                "type" : "string",
+                "description" : "Stored media id for a file, null for a folder."
+              },
+              "accessType" : {
+                "type" : "string",
+                "description" : "Who can reach this item."
+              }
+            },
+            "additionalProperties" : false
+          }
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number of this result."
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "description" : "Items per page."
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "description" : "Total matching items across all pages."
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "description" : "Total number of pages."
+        },
+        "hasNext" : {
+          "type" : "boolean",
+          "description" : "True when another page is available."
+        }
+      },
+      "required" : [ "items" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Search files and folders",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "search_notes",
     "title" : "Search notes",
     "description" : "Searches the notes of a workspace by the words in their titles and bodies, best matches first. Covers every notebook and every level of nesting unless it is narrowed to one notebook or to the children of one note. Notes created or edited in the last few seconds may not appear yet; use list_notes to see them. Returns titles and ids; call get_note for a note's body.",
@@ -4208,6 +4309,7 @@
     "rename_task_checklist" : [ "tasks:write" ],
     "replace_in_note" : [ "notes:write" ],
     "search" : [ "notes:read", "tasks:read", "workspace:read" ],
+    "search_files" : [ "files:read" ],
     "search_notes" : [ "notes:read" ],
     "search_tasks" : [ "tasks:read" ],
     "set_task_status" : [ "tasks:write" ],
