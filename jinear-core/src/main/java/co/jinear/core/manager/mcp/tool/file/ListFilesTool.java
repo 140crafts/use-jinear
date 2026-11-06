@@ -5,11 +5,14 @@ import co.jinear.core.manager.material.MaterialListingManager;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
+import co.jinear.core.model.dto.material.MaterialDto;
 import co.jinear.core.model.dto.material.MaterialHierarchyDto;
+import co.jinear.core.model.enumtype.material.MaterialType;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.model.mcp.McpToolDefinition;
 import co.jinear.core.model.mcp.McpToolResult;
+import co.jinear.core.model.mcp.input.McpListFilesInput;
 import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
 import co.jinear.core.model.mcp.view.McpFileView;
 import co.jinear.core.model.mcp.view.McpPageView;
@@ -18,8 +21,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
-import co.jinear.core.model.mcp.input.McpListFilesInput;
 
 @Service
 @RequiredArgsConstructor
@@ -55,6 +56,16 @@ public class ListFilesTool implements McpTool {
         Optional.ofNullable(input.getSort()).ifPresent(request::setMaterialSearchSortType);
         context.setWorkspaceId(input.getWorkspaceId());
         MaterialHierarchyDto hierarchy = materialListingManager.search(request).getMaterialHierarchyDto();
+        if (listsAFile(hierarchy)) {
+            return McpToolResult.error("mcp.error.file.is-file");
+        }
         return McpToolResult.of(McpPageView.of(hierarchy.getContent(), mcpViewConverter::file));
+    }
+
+    private boolean listsAFile(MaterialHierarchyDto hierarchy) {
+        return Optional.ofNullable(hierarchy.getContainer())
+                .map(MaterialDto::getMaterialType)
+                .filter(MaterialType.FILE::equals)
+                .isPresent();
     }
 }

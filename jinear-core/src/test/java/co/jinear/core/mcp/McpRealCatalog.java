@@ -185,15 +185,15 @@ final class McpRealCatalog {
 
                 new ListFilesTool(mock(MaterialListingManager.class), viewConverter),
                 new SearchFilesTool(mock(MaterialListingManager.class), viewConverter),
-                new GetFileLinkTool(mock(MaterialManager.class), oauthProperties()),
+                new GetFileLinkTool(mock(MaterialManager.class), linkConverter),
 
                 new ListNotificationsTool(mock(NotificationEventListingManager.class), viewConverter),
                 new GetUnreadNotificationCountTool(mock(NotificationEventListingManager.class)),
 
                 new SearchTool(mock(WorkspaceManager.class), mock(TaskSearchManager.class),
-                        mock(NoteSearchManager.class), feProperties),
-                new FetchTool(mock(NoteFilterManager.class), mock(TaskRetrieveManager.class),
-                        feProperties, new RichTextPlainTextConverter()));
+                        mock(NoteSearchManager.class), mock(MaterialListingManager.class), feProperties, linkConverter),
+                new FetchTool(mock(NoteFilterManager.class), mock(TaskRetrieveManager.class), mock(MaterialManager.class),
+                        feProperties, new RichTextPlainTextConverter(), linkConverter));
     }
 
     static McpToolRegistry registry() {

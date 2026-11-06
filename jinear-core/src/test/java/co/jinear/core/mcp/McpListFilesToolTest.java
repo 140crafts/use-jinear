@@ -6,8 +6,11 @@ import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.file.ListFilesTool;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.material.MaterialHierarchyDto;
+import co.jinear.core.model.dto.material.PathAwareMaterialDto;
 import co.jinear.core.model.enumtype.material.MaterialSearchSortType;
+import co.jinear.core.model.enumtype.material.MaterialType;
 import co.jinear.core.model.mcp.McpToolContext;
+import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.mcp.schema.McpSchemaNode;
 import co.jinear.core.model.request.material.MaterialSearchRequest;
 import co.jinear.core.model.response.material.ParentMaterialDtoResponse;
@@ -59,6 +62,39 @@ class McpListFilesToolTest {
 
         assertThat(sort.getEnumValues()).containsExactly(
                 "IDATE_DESC", "IDATE_ASC", "UDATE_DESC", "UDATE_ASC", "NAME_ASC", "NAME_DESC", "SIZE_ASC", "SIZE_DESC");
+    }
+
+    @Test
+    void aFileIdAsTheFolderIsRefusedInsteadOfAnEmptyList() throws Exception {
+        PathAwareMaterialDto container = new PathAwareMaterialDto();
+        container.setMaterialType(MaterialType.FILE);
+        MaterialHierarchyDto hierarchy = new MaterialHierarchyDto();
+        hierarchy.setContainer(container);
+        hierarchy.setContent(new PageDto<>(Page.empty()));
+        ParentMaterialDtoResponse response = new ParentMaterialDtoResponse();
+        response.setMaterialHierarchyDto(hierarchy);
+        Mockito.when(materialListingManager.search(Mockito.any(MaterialSearchRequest.class))).thenReturn(response);
+
+        McpToolResult result = tool.call(context(), args("{\"workspaceId\":\"ws\",\"parentFolderId\":\"file-1\"}"));
+
+        assertThat(result.isError()).isTrue();
+        assertThat(result.getText()).isEqualTo("mcp.error.file.is-file");
+    }
+
+    @Test
+    void aFolderIdListsItsContents() throws Exception {
+        PathAwareMaterialDto container = new PathAwareMaterialDto();
+        container.setMaterialType(MaterialType.FOLDER);
+        MaterialHierarchyDto hierarchy = new MaterialHierarchyDto();
+        hierarchy.setContainer(container);
+        hierarchy.setContent(new PageDto<>(Page.empty()));
+        ParentMaterialDtoResponse response = new ParentMaterialDtoResponse();
+        response.setMaterialHierarchyDto(hierarchy);
+        Mockito.when(materialListingManager.search(Mockito.any(MaterialSearchRequest.class))).thenReturn(response);
+
+        McpToolResult result = tool.call(context(), args("{\"workspaceId\":\"ws\",\"parentFolderId\":\"folder-1\"}"));
+
+        assertThat(result.isError()).isFalse();
     }
 
     private MaterialSearchRequest capturedRequest() {

@@ -1,6 +1,6 @@
 package co.jinear.core.manager.mcp.tool.file;
 
-import co.jinear.core.config.properties.OauthProperties;
+import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.manager.material.MaterialManager;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
@@ -22,7 +22,7 @@ import co.jinear.core.model.mcp.input.McpGetFileLinkInput;
 public class GetFileLinkTool implements McpTool {
 
     private final MaterialManager materialManager;
-    private final OauthProperties oauthProperties;
+    private final McpLinkConverter mcpLinkConverter;
 
     @Override
     public McpToolDefinition definition() {
@@ -51,7 +51,7 @@ public class GetFileLinkTool implements McpTool {
         }
         McpFileLinkView view = new McpFileLinkView();
         view.setMaterialId(material.getMaterialId());
-        view.setUrl(oauthProperties.getIssuerUrl() + "/v1/material/media/" + material.getMaterialId());
+        view.setUrl(mcpLinkConverter.fileDownloadUrl(material.getMaterialId()));
         return McpToolResult.of(view);
     }
 }

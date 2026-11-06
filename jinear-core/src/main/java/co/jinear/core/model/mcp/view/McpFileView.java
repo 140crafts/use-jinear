@@ -25,9 +25,6 @@ public class McpFileView implements McpToolPayload {
     @McpField("Containing folder, or null at the root.")
     private String parentMaterialId;
 
-    @McpField("Stored media id for a file, null for a folder.")
-    private String mediaId;
-
     @McpField("Who can reach this item.")
     private String accessType;
 

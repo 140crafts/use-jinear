@@ -246,7 +246,6 @@ public class McpViewConverter {
         view.setName(dto.getName());
         view.setMaterialType(name(dto.getMaterialType()));
         view.setParentMaterialId(dto.getParentMaterialId());
-        view.setMediaId(dto.getMediaId());
         view.setAccessType(name(dto.getMaterialAccessType()));
         view.setContentType(Optional.ofNullable(dto.getMedia()).map(MediaDto::getContentType).orElse(null));
         view.setSize(Optional.ofNullable(dto.getMedia()).map(MediaDto::getSize).orElse(null));
