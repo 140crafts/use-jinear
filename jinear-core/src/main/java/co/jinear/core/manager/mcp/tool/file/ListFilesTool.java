@@ -17,6 +17,8 @@ import co.jinear.core.model.request.material.MaterialSearchRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 import co.jinear.core.model.mcp.input.McpListFilesInput;
 
 @Service
@@ -33,7 +35,8 @@ public class ListFilesTool implements McpTool {
                 .title("List files and folders")
                 .description("Lists the contents of a workspace's file storage, one folder at a time. "
                              + "Omit parentFolderId to list the root. Returns both folders and files; "
-                             + "pass a folder's materialId back as parentFolderId to descend into it.")
+                             + "pass a folder's materialId back as parentFolderId to descend into it. "
+                             + "Folders come first, then files newest first unless sort says otherwise.")
                 .input(McpSchemaGenerator.forInput(McpListFilesInput.class))
                 .output(McpSchemaGenerator.page(McpFileView.class, "Files and folders in this location."))
                 .readOnly()
@@ -49,6 +52,7 @@ public class ListFilesTool implements McpTool {
         request.setParentMaterialId(input.getParentFolderId());
         request.setPage(args.page());
         request.setMaterialType(input.getType());
+        Optional.ofNullable(input.getSort()).ifPresent(request::setMaterialSearchSortType);
         context.setWorkspaceId(input.getWorkspaceId());
         MaterialHierarchyDto hierarchy = materialListingManager.search(request).getMaterialHierarchyDto();
         return McpToolResult.of(McpPageView.of(hierarchy.getContent(), mcpViewConverter::file));

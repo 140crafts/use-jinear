@@ -2,6 +2,7 @@ package co.jinear.core.repository.material;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.material.Material;
+import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.model.enumtype.material.MaterialSearchContentFilterType;
 import co.jinear.core.model.enumtype.material.MaterialSearchSortType;
 import co.jinear.core.model.enumtype.media.MediaVisibilityType;
@@ -107,23 +108,27 @@ public class MaterialSearchRepository {
     private void setOrder(CriteriaBuilder criteriaBuilder, CriteriaQuery<Material> criteriaQuery, Root<Material> root, MaterialSearchSortType searchSortType) {
         Order materialTypeOrder = criteriaBuilder.desc(root.get(Material.Fields.materialType));
         if (searchSortType != null) {
-            Order secondaryOrder = switch (searchSortType) {
-                case IDATE_ASC -> criteriaBuilder.asc(root.get(BaseEntity.Fields.createdDate));
-                case IDATE_DESC -> criteriaBuilder.desc(root.get(BaseEntity.Fields.createdDate));
-                case UDATE_ASC -> criteriaBuilder.asc(root.get(BaseEntity.Fields.lastUpdatedDate));
-                case UDATE_DESC -> criteriaBuilder.desc(root.get(BaseEntity.Fields.lastUpdatedDate));
-                case NAME_ASC -> criteriaBuilder.asc(root.get(Material.Fields.name));
-                case NAME_DESC -> criteriaBuilder.desc(root.get(Material.Fields.name));
-                case SIZE_ASC, SIZE_DESC -> null;
-            };
-
-            if (secondaryOrder != null) {
-                criteriaQuery.orderBy(materialTypeOrder, secondaryOrder);
-            } else {
-                criteriaQuery.orderBy(materialTypeOrder);
-            }
+            criteriaQuery.orderBy(materialTypeOrder, secondaryOrder(criteriaBuilder, root, searchSortType));
         } else {
             criteriaQuery.orderBy(materialTypeOrder);
         }
+    }
+
+    private Order secondaryOrder(CriteriaBuilder criteriaBuilder, Root<Material> root, MaterialSearchSortType searchSortType) {
+        return switch (searchSortType) {
+            case IDATE_ASC -> criteriaBuilder.asc(root.get(BaseEntity.Fields.createdDate));
+            case IDATE_DESC -> criteriaBuilder.desc(root.get(BaseEntity.Fields.createdDate));
+            case UDATE_ASC -> criteriaBuilder.asc(root.get(BaseEntity.Fields.lastUpdatedDate));
+            case UDATE_DESC -> criteriaBuilder.desc(root.get(BaseEntity.Fields.lastUpdatedDate));
+            case NAME_ASC -> criteriaBuilder.asc(root.get(Material.Fields.name));
+            case NAME_DESC -> criteriaBuilder.desc(root.get(Material.Fields.name));
+            case SIZE_ASC -> criteriaBuilder.asc(mediaSize(root));
+            case SIZE_DESC -> criteriaBuilder.desc(mediaSize(root));
+        };
+    }
+
+    private Path<Long> mediaSize(Root<Material> root) {
+        Join<Material, Media> mediaJoin = root.join(Material.Fields.media, JoinType.LEFT);
+        return mediaJoin.get(Media.Fields.size);
     }
 }

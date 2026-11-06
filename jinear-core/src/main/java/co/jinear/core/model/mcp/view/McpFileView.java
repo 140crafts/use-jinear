@@ -30,4 +30,13 @@ public class McpFileView implements McpToolPayload {
 
     @McpField("Who can reach this item.")
     private String accessType;
+
+    @McpField("MIME type for a file, null for a folder or when unknown.")
+    private String contentType;
+
+    @McpField("File size in bytes, null for a folder.")
+    private Long size;
+
+    @McpField("ISO 8601 instant the item was created.")
+    private String createdAt;
 }
