@@ -20,6 +20,6 @@ public class McpAddTaskRelationInput {
     private String relatedTaskId;
 
     @NotNull
-    @McpField("Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, or taskId IS_BLOCKED_BY relatedTaskId.")
+    @McpField("Read it as: taskId SUBTASK of relatedTaskId.")
     private TaskRelationType relationType;
 }

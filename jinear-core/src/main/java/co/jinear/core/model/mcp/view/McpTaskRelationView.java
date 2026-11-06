@@ -13,7 +13,7 @@ public class McpTaskRelationView implements McpToolPayload {
     @McpField("Relation id. Pass it to remove_task_relation.")
     private String taskRelationId;
 
-    @McpField("SUBTASK, BLOCKS or IS_BLOCKED_BY. Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, taskId IS_BLOCKED_BY relatedTaskId.")
+    @McpField("SUBTASK. Read it as: taskId SUBTASK of relatedTaskId.")
     private String relationType;
 
     @McpField("The task on the left of the relation.")

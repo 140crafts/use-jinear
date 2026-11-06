@@ -3294,7 +3294,7 @@ export type RobotType = "MESSAGE";
 
 export type TaskBoardStateType = "OPEN" | "CLOSED";
 
-export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
+export type TaskRelationType = "SUBTASK";
 
 export type TaskReminderType = "ASSIGNED_DATE" | "DUE_DATE" | "SPECIFIC_DATE";
 

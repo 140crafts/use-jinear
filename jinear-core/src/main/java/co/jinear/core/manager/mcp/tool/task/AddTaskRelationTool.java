@@ -30,8 +30,8 @@ public class AddTaskRelationTool implements McpTool {
         return McpToolDefinitionBuilder
                 .named("add_task_relation")
                 .title("Relate two tasks")
-                .description("Links two tasks of the same team. SUBTASK makes taskId a subtask of relatedTaskId; "
-                             + "BLOCKS and IS_BLOCKED_BY mark a dependency. Returns the relation with its id.")
+                .description("Links two tasks of the same team. SUBTASK makes taskId a subtask of relatedTaskId. "
+                             + "Returns the relation with its id.")
                 .input(McpSchemaGenerator.forInput(McpAddTaskRelationInput.class))
                 .output(McpSchemaGenerator.single("relation", "The created relation.", McpTaskRelationView.class))
                 .write()

@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-11-06 21:41:00.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-06 22:21:49.
 
 export interface BaseDto {
     createdDate: Date;
@@ -189,8 +189,8 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ghistoryId: string;
     ginternalDate: string;
+    ghistoryId: string;
     gthreadId: string;
     gid: string;
 }
@@ -1767,11 +1767,11 @@ export interface OauthAuthorizeRequest {
     codeChallenge: string;
     codeChallengeMethod: string;
     resource: string;
+    code_challenge: string;
     response_type: string;
+    code_challenge_method: string;
     client_id: string;
     redirect_uri: string;
-    code_challenge: string;
-    code_challenge_method: string;
 }
 
 export interface OauthClientRegistrationRequest {
@@ -1811,8 +1811,8 @@ export interface OauthTokenRequest {
     client_id: string;
     redirect_uri: string;
     grant_type: string;
-    code_verifier: string;
     refresh_token: string;
+    code_verifier: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2945,9 +2945,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
+    filename: string;
     description: string;
     uri: URI;
-    filename: string;
 }
 
 export interface InputStreamSource {
@@ -3357,7 +3357,7 @@ export type RobotType = "MESSAGE";
 
 export type TaskBoardStateType = "OPEN" | "CLOSED";
 
-export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
+export type TaskRelationType = "SUBTASK";
 
 export type TaskReminderType = "ASSIGNED_DATE" | "DUE_DATE" | "SPECIFIC_DATE";
 

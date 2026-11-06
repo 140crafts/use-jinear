@@ -256,14 +256,14 @@ class McpTaskWorkToolsTest {
         AddTaskRelationTool tool = new AddTaskRelationTool(manager, viewConverter);
 
         McpToolResult result = tool.call(context(), args("""
-                {"taskId":"task-1","relatedTaskId":"task-2","relationType":"BLOCKS"}
+                {"taskId":"task-1","relatedTaskId":"task-2","relationType":"SUBTASK"}
                 """));
 
         McpTaskRelationEnvelopeView view = (McpTaskRelationEnvelopeView) result.getStructuredContent();
         assertThat(view.getRelation().getTaskRelationId()).isEqualTo("rel-9");
         ArgumentCaptor<TaskRelationInitializeRequest> captor = ArgumentCaptor.forClass(TaskRelationInitializeRequest.class);
         Mockito.verify(manager).initializeTaskRelation(captor.capture());
-        assertThat(captor.getValue().getRelation()).isEqualTo(TaskRelationType.BLOCKS);
+        assertThat(captor.getValue().getRelation()).isEqualTo(TaskRelationType.SUBTASK);
     }
 
     @Test
