@@ -14,7 +14,7 @@ export const metadata: Metadata = buildMetadata({
   path: "/mcp/",
   ogTitle: "Jinear for Claude and ChatGPT",
   ogDescription:
-    `Connect an AI assistant to Jinear over MCP. ${manifest.tools.length} tools, per-resource permissions, no delete tools.`,
+    `Connect an AI assistant to Jinear over MCP. ${manifest.tools.length} tools, per-resource permissions, and no way to delete a task, a board or a file.`,
 });
 
 interface Tool {
@@ -27,7 +27,7 @@ interface Tool {
 const SCOPE_COPY: { scope: string; label: string; text: string }[] = [
   { scope: "workspace:read", label: "Workspaces", text: "Workspaces, teams, members, topics and workflow statuses." },
   { scope: "tasks:read", label: "Read tasks", text: "Tasks, boards and comments." },
-  { scope: "tasks:write", label: "Write tasks", text: "Creating and updating tasks, boards and comments." },
+  { scope: "tasks:write", label: "Write tasks", text: "Creating and updating tasks, boards, comments, checklists, reminders and topics, and removing checklists and reminders." },
   { scope: "calendar:read", label: "Read calendar", text: "Calendar events, including any synced from Google Calendar." },
   { scope: "notes:read", label: "Read notes", text: "Notebooks and notes." },
   { scope: "notes:write", label: "Write notes", text: "Creating, editing, moving and deleting notes." },
@@ -99,13 +99,17 @@ export default function McpPage() {
           </p>
           <ul>
             <li>
-              <strong>There are no delete tools.</strong> An assistant cannot remove a task, a note or a
-              file.
+              <strong>Deleting is limited.</strong> An assistant can delete a note, a checklist, a
+              checklist item or a reminder. It cannot delete a task, a board or a file.
             </li>
             <li>
-              <strong>Notes and the calendar are read only.</strong> A note body is a collaborative
-              document owned by the editor, and a calendar write would mean writing to Google on your
-              behalf.
+              <strong>Note edits merge.</strong> An assistant edits a note the same way a second person
+              would, so its changes and the changes of anyone who has the note open come together.
+            </li>
+            <li>
+              <strong>The calendar and file storage are read only.</strong> A calendar write would mean
+              writing to Google on your behalf. An assistant can attach a file to a task, but it cannot
+              upload into your files or change them.
             </li>
             <li>
               <strong>Every tool works inside one workspace</strong>, checked against your account on

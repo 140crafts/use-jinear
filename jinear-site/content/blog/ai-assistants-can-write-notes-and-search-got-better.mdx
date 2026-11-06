@@ -1,0 +1,132 @@
+---
+title: "AI Assistants Can Write Notes Now, and Search Got Better."
+description: "Assistants connected to Jinear can now create and edit notes, manage checklists, reminders and boards, and search your files. Search also finds Turkish words typed without Turkish letters. And a handful of fixes, including task order on boards and dates in the task activity."
+pubDate: "2026-11-06"
+tags: ["changelog", "mcp", "notes", "search"]
+author: "Çağdaş Tunca"
+---
+
+When I wrote about AI assistants in September, I said two things that are no longer
+true: that an assistant cannot delete anything, and that notes are read only. This
+release changes both, so this post is mostly about what changed and where the lines
+are now.
+
+The short version: an assistant connected to Jinear could do 27 things before. Now it
+can do 55, and 26 of them only read.
+
+## Notes
+
+The request I expected first was writing notes, and it was. An assistant can now:
+
+- **Create a notebook and notes in it**, with a title and a body.
+- **Add to a note** at the start or the end, so a meeting log or a running list grows
+  without anyone retyping it.
+- **Change one part of a note**, rename it, or move it to another notebook or under
+  another note.
+- **Delete a note.** Child notes go with it, the same as when you delete one yourself.
+
+I kept notes read only at first because a note is a document several people can have
+open at the same time. Edits from an assistant now arrive the same way edits from
+another person do, so if you have the note open while it writes, you see the change
+come in, and nothing you typed is lost.
+
+Writing notes is a new permission, separate from reading them. A connection you made
+before this release does not have it. If you want your assistant to write notes,
+disconnect it from your profile, connect it again, and tick the notes permission when
+Jinear asks.
+
+## More of the task side
+
+Most of the new tools are the small things I kept doing by hand after the assistant
+had done the big part:
+
+- **Checklists.** Add a checklist to a task, add items, tick them off, rename or remove
+  them.
+- **Reminders.** Add a reminder at the start date, the due date or a time you pick,
+  list them, and remove one.
+- **Subtasks.** Make one task a subtask of another, and undo it.
+- **Boards.** Move a task up or down a board, take it off a board, and rename, close
+  or recolor a board.
+- **Topics.** Create a topic in a team.
+- **Notifications and activity.** "What happened in this workspace since Monday?" and
+  "do I have anything unread?" both have a direct answer now.
+
+## What it can delete, and what it cannot
+
+Deleting is still rare, and it is limited to things that live inside something else:
+a note, a checklist, a checklist item, a reminder. An assistant still cannot delete a
+task, a board, a file, or anything on your calendar. The calendar is still read only,
+for the same reason as before: a change there can end up in someone's Google
+calendar.
+
+Everything else from the first post still holds. You choose what it can see and what
+it can change when you connect it, it works as you and only where you have access,
+and you can disconnect it from your profile at any time.
+
+## Search
+
+- **Files are searchable.** An assistant can find a file by its name, its type or the
+  person who uploaded it. "The newest PDF in our files" is now a question it can
+  answer. It finds the file and gives you a link. It does not read what is inside.
+- **Notes are searchable**, by title and by what is written in them.
+- **Turkish letters no longer get in the way.** Type "sirket" and you find "şirket".
+  Type "gorev" and you find "görev". This works for ç, ğ, ı, İ, ö, ş and ü, and it
+  works in the task search in the app too, not only for assistants.
+
+New and changed things show up in search within about ten seconds.
+
+## Fixes
+
+Most of these came from testing the assistant tools, but they were bugs in Jinear
+itself, so they are fixed for the app as well.
+
+- **Task order on boards.** Moving a task to the very top of a board could put it in
+  the wrong place, and taking a task off a board could leave the order with gaps. Two
+  people moving tasks on the same board at the same moment could also mix it up. All
+  of that is fixed for new moves. A board that is already out of order is not
+  repaired by itself.
+- **Dates in the task activity.** When you changed a task's start or due date, the
+  activity showed the old date three hours off. The new date was right. New activity
+  entries are correct now. Entries from before this release still show the old,
+  wrong time.
+- **Topic tags.** A tag like "QA-1" used to have its symbols quietly removed. Now
+  Jinear tells you that a tag can only have letters and numbers.
+- **Colors.** A topic or board color that is not a real color is refused now, instead
+  of being saved.
+- **Replies.** A comment could quote a comment from a different task. It cannot
+  anymore.
+- **Tables in notes.** Assistants used to read a table as a long column of cells. They
+  now read it row by row, the way it looks on screen.
+
+## Updating to this version
+
+If you self-host, update the way you always do:
+
+```bash
+cd ~/jinear
+docker compose pull && docker compose up -d
+```
+
+The search changes rebuild themselves when the server starts. Nothing needs to be
+done by hand.
+
+There is one new, optional setting: the address of a note in your app, so that an
+assistant can give you a link that opens the note directly. Without it, the link goes
+to the home page of your app instead. The installer adds it for new installs.
+
+The line to add, and what changes in the database, are in the
+[upgrade guide](https://gitlab.com/140crafts/use-jinear/-/blob/main/docs/upgrading.md).
+
+## What is not in it yet
+
+- An assistant still cannot create or change calendar events.
+- It cannot upload into your file storage. It can attach a file to a task, as before.
+- It cannot read what is inside a file, only its name, type, size and date.
+
+---
+
+If an assistant does something silly with your notes, or there is a chore it should
+be able to take and cannot, write to me.
+
+The whole thing is on [GitLab](https://gitlab.com/140crafts/use-jinear) and
+[GitHub](https://github.com/140crafts/use-jinear).

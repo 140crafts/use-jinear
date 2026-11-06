@@ -237,7 +237,7 @@ the `sed` line to see the error.
 |---|---|
 | `workspace:read` | Workspaces, teams, members, topics, workflow statuses |
 | `tasks:read` | Tasks, boards, comments, attachments |
-| `tasks:write` | Creating and updating tasks, boards and comments |
+| `tasks:write` | Creating and updating tasks, boards, comments, checklists, reminders and topics, and removing checklists and reminders |
 | `calendar:read` | Calendar events |
 | `notes:read` | Notebooks and notes |
 | `notes:write` | Creating, editing, moving and deleting notes |
