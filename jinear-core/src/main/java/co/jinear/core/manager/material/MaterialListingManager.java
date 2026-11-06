@@ -1,12 +1,16 @@
 package co.jinear.core.manager.material;
 
 import co.jinear.core.converter.material.MaterialSearchRequestToVoConverter;
+import co.jinear.core.converter.material.MaterialTextSearchRequestToVoConverter;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.material.MaterialDto;
 import co.jinear.core.model.dto.material.MaterialHierarchyDto;
 import co.jinear.core.model.dto.material.PathAwareMaterialDto;
 import co.jinear.core.model.request.material.MaterialSearchRequest;
+import co.jinear.core.model.request.material.MaterialTextSearchRequest;
+import co.jinear.core.model.response.material.MaterialPaginatedResponse;
 import co.jinear.core.model.response.material.ParentMaterialDtoResponse;
+import co.jinear.core.model.vo.material.MaterialFtsSearchVo;
 import co.jinear.core.model.vo.material.MaterialSearchVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.material.MaterialAccessValidationService;
@@ -32,6 +36,7 @@ public class MaterialListingManager {
     private final WorkspaceValidator workspaceValidator;
     private final MaterialSearchRequestToVoConverter materialSearchRequestToVoConverter;
     private final MaterialRetrieveService materialRetrieveService;
+    private final MaterialTextSearchRequestToVoConverter materialTextSearchRequestToVoConverter;
 
     public ParentMaterialDtoResponse search(MaterialSearchRequest request) {
         String currentAccountId = sessionInfoService.currentAccountId();
@@ -46,6 +51,23 @@ public class MaterialListingManager {
                 .map(MaterialSearchVo::getParentMaterialId)
                 .map(materialRetrieveService::retrievePathAware);
         return mapResponse(pathAwareMaterialDto, searchResult);
+    }
+
+    public MaterialPaginatedResponse searchText(String workspaceId, MaterialTextSearchRequest materialTextSearchRequest, int page) {
+        String currentAccountId = sessionInfoService.currentAccountId();
+        workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
+        boolean workspaceAdmin = workspaceValidator.isWorkspaceAdminOrOwner(currentAccountId, workspaceId);
+        log.info("Search material text has begun. accountId: {}", currentAccountId);
+        MaterialFtsSearchVo materialFtsSearchVo = materialTextSearchRequestToVoConverter.map(materialTextSearchRequest, workspaceId, currentAccountId, workspaceAdmin, page);
+        Page<MaterialDto> materialDtoPage = materialSearchService.searchText(materialFtsSearchVo);
+        return mapPaginatedResponse(materialDtoPage);
+    }
+
+    private MaterialPaginatedResponse mapPaginatedResponse(Page<MaterialDto> materialDtoPage) {
+        PageDto<MaterialDto> data = new PageDto<>(materialDtoPage);
+        MaterialPaginatedResponse response = new MaterialPaginatedResponse();
+        response.setMaterialDtoPageDto(data);
+        return response;
     }
 
     private void validateParentMaterialIsInGivenWorkspace(MaterialSearchRequest request) {

@@ -67,16 +67,16 @@ public class AddTaskReminderTool implements McpTool {
         boolean hasRepeatUntil = Objects.nonNull(input.getRepeatUntil());
         boolean repeats = !RepeatType.NONE.equals(repeatOf(input));
         if (!Boolean.TRUE.equals(input.getAtStartDate()) && !Boolean.TRUE.equals(input.getAtDueDate()) && !hasRemindAt) {
-            return Optional.of("Nothing to add. Supply at least one of atStartDate, atDueDate or remindAt.");
+            return Optional.of("mcp.error.reminder.nothing-to-add");
         }
         if (!hasRemindAt && (repeats || hasRepeatUntil)) {
-            return Optional.of("repeat and repeatUntil apply only to a remindAt reminder. Supply remindAt too.");
+            return Optional.of("mcp.error.reminder.repeat-needs-remind-at");
         }
         if (hasRepeatUntil && !repeats) {
-            return Optional.of("repeatUntil needs a repeat other than NONE.");
+            return Optional.of("mcp.error.reminder.repeat-until-needs-repeat");
         }
         if (hasRepeatUntil && !input.getRepeatUntil().isAfter(input.getRemindAt())) {
-            return Optional.of("repeatUntil must be after remindAt.");
+            return Optional.of("mcp.error.reminder.repeat-until-order");
         }
         return Optional.empty();
     }
@@ -87,8 +87,7 @@ public class AddTaskReminderTool implements McpTool {
         try {
             created = taskReminderManager.initializeTaskReminder(request).getReminders();
         } catch (BusinessException exception) {
-            return McpToolResult.error("No reminder was added. A start or due date reminder needs that date on the task, "
-                                       + "and a task holds at most one of each. Check them with get_task and list_task_reminders.");
+            return McpToolResult.error("mcp.error.reminder.not-added");
         }
         List<TaskReminderScheduleDto> createdSchedules = retrieveCreatedSchedules(input.getTaskId(), created);
         McpListView<McpTaskReminderView> view = McpListView.of(createdSchedules, mcpViewConverter::taskReminder);
@@ -125,6 +124,7 @@ public class AddTaskReminderTool implements McpTool {
     private TaskReminderScheduleDto attachCreatedReminder(TaskReminderScheduleDto schedule, Map<String, ReminderDto> createdById) {
         TaskReminderDto taskReminder = schedule.getTaskReminder();
         ReminderDto reminder = createdById.get(taskReminder.getReminderId());
+        // The re-read returns the TaskReminder cached by the create in this session, whose reminder relation is still null.
         taskReminder.setReminder(reminder);
         return schedule;
     }

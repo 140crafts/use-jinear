@@ -3,11 +3,21 @@ package co.jinear.core.converter.mcp;
 import co.jinear.core.model.dto.calendar.CalendarEventDto;
 import co.jinear.core.model.dto.material.MaterialDto;
 import co.jinear.core.model.dto.media.MediaDto;
+import co.jinear.core.model.dto.note.NoteContentDto;
 import co.jinear.core.model.dto.note.NoteDto;
+import co.jinear.core.model.dto.note.NoteEditResultDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
+import co.jinear.core.model.dto.notification.NotificationEventDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.reminder.ReminderDto;
+import co.jinear.core.model.dto.account.PlainAccountProfileDto;
+import co.jinear.core.model.dto.task.ChecklistDto;
+import co.jinear.core.model.dto.task.ChecklistItemDto;
 import co.jinear.core.model.dto.task.CommentDto;
+import co.jinear.core.model.dto.task.PlainTaskBoardEntryDto;
+import co.jinear.core.model.dto.task.RelatedTaskDto;
+import co.jinear.core.model.dto.task.TaskCollaboratorDto;
+import co.jinear.core.model.dto.task.TaskRelationDto;
 import co.jinear.core.model.dto.task.TaskBoardDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.task.TaskReminderDto;
@@ -21,14 +31,21 @@ import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.dto.workspace.WorkspaceMemberDto;
 import co.jinear.core.model.mcp.view.McpBoardView;
 import co.jinear.core.model.mcp.view.McpCalendarEventView;
+import co.jinear.core.model.mcp.view.McpChecklistItemView;
+import co.jinear.core.model.mcp.view.McpChecklistView;
 import co.jinear.core.model.mcp.view.McpCommentView;
 import co.jinear.core.model.mcp.view.McpFileView;
 import co.jinear.core.model.mcp.view.McpMemberView;
 import co.jinear.core.model.mcp.view.McpNoteDetailView;
 import co.jinear.core.model.mcp.view.McpNoteView;
+import co.jinear.core.model.mcp.view.McpNotificationView;
 import co.jinear.core.model.mcp.view.McpNotebookView;
 import co.jinear.core.model.mcp.view.McpTaskAttachmentView;
+import co.jinear.core.model.mcp.view.McpTaskBoardEntryView;
+import co.jinear.core.model.mcp.view.McpTaskCollaboratorView;
+import co.jinear.core.model.mcp.view.McpTaskRelationView;
 import co.jinear.core.model.mcp.view.McpTaskReminderView;
+import co.jinear.core.model.mcp.view.McpNoteEditView;
 import co.jinear.core.model.mcp.view.McpTaskDetailView;
 import co.jinear.core.model.mcp.view.McpTaskView;
 import co.jinear.core.model.mcp.view.McpTeamView;
@@ -40,8 +57,13 @@ import org.springframework.stereotype.Component;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 
 /**
  * Maps Jinear DTOs onto the payload views MCP tools return. Every published field lives on a
@@ -118,6 +140,46 @@ public class McpViewConverter {
         McpTaskDetailView view = new McpTaskDetailView();
         fillTask(view, dto);
         view.setDescription(richText(dto.getDescription()));
+        view.setCollaborators(mapAll(dto.getTaskCollaborators(), this::taskCollaborator));
+        view.setRelations(mapAll(dto.getRelations(), this::taskRelation));
+        view.setRelatedIn(mapAll(dto.getRelatedIn(), this::taskRelation));
+        view.setChecklists(mapAll(dto.getChecklists(), this::checklist));
+        view.setBoards(mapAll(dto.getTaskBoardEntries(), this::taskBoardEntry));
+        return view;
+    }
+
+    public McpTaskRelationView taskRelation(TaskRelationDto dto) {
+        McpTaskRelationView view = new McpTaskRelationView();
+        view.setTaskRelationId(dto.getTaskRelationId());
+        view.setRelationType(name(dto.getRelationType()));
+        view.setTaskId(dto.getTaskId());
+        view.setTaskTitle(relatedTaskTitle(dto.getTask()));
+        view.setRelatedTaskId(dto.getRelatedTaskId());
+        view.setRelatedTaskTitle(relatedTaskTitle(dto.getRelatedTask()));
+        return view;
+    }
+
+    public McpChecklistView checklist(ChecklistDto dto) {
+        List<ChecklistItemDto> items = Optional.ofNullable(dto.getChecklistItems())
+                .map(List::copyOf)
+                .orElseGet(List::of);
+        McpChecklistView view = new McpChecklistView();
+        view.setChecklistId(dto.getChecklistId());
+        view.setTaskId(dto.getTaskId());
+        view.setTitle(dto.getTitle());
+        view.setItems(items.stream()
+                .sorted(Comparator.comparing(ChecklistItemDto::getCreatedDate, Comparator.nullsLast(Comparator.naturalOrder())))
+                .map(this::checklistItem)
+                .toList());
+        return view;
+    }
+
+    public McpChecklistItemView checklistItem(ChecklistItemDto dto) {
+        McpChecklistItemView view = new McpChecklistItemView();
+        view.setChecklistItemId(dto.getChecklistItemId());
+        view.setChecklistId(dto.getChecklistId());
+        view.setLabel(dto.getLabel());
+        view.setChecked(dto.getIsChecked());
         return view;
     }
 
@@ -138,10 +200,18 @@ public class McpViewConverter {
         return view;
     }
 
-    public McpNoteDetailView noteDetail(NoteDto dto) {
+    public McpNoteDetailView noteDetail(NoteDto dto, NoteContentDto content) {
         McpNoteDetailView view = new McpNoteDetailView();
         fillNote(view, dto);
-        view.setBody(richText(dto.getRichText()));
+        view.setBody(content.getHtml());
+        return view;
+    }
+
+    public McpNoteEditView noteEdit(NoteEditResultDto dto) {
+        McpNoteEditView view = new McpNoteEditView();
+        view.setNoteId(dto.getNoteId());
+        view.setUrl(dto.getUrl());
+        view.setChanged(dto.isChanged());
         return view;
     }
 
@@ -176,8 +246,10 @@ public class McpViewConverter {
         view.setName(dto.getName());
         view.setMaterialType(name(dto.getMaterialType()));
         view.setParentMaterialId(dto.getParentMaterialId());
-        view.setMediaId(dto.getMediaId());
         view.setAccessType(name(dto.getMaterialAccessType()));
+        view.setContentType(Optional.ofNullable(dto.getMedia()).map(MediaDto::getContentType).orElse(null));
+        view.setSize(Optional.ofNullable(dto.getMedia()).map(MediaDto::getSize).orElse(null));
+        view.setCreatedAt(instant(dto.getCreatedDate()));
         return view;
     }
 
@@ -229,6 +301,44 @@ public class McpViewConverter {
         return name(taskReminderType);
     }
 
+    public McpNotificationView notification(NotificationEventDto dto) {
+        McpNotificationView view = new McpNotificationView();
+        view.setNotificationId(dto.getNotificationEventId());
+        view.setType(name(dto.getNotificationType()));
+        view.setTitle(dto.getTitle());
+        view.setText(dto.getText());
+        view.setUrl(dto.getLaunchUrl());
+        view.setRead(dto.getIsRead());
+        view.setCreatedAt(instant(dto.getCreatedDate()));
+        return view;
+    }
+
+    private McpTaskCollaboratorView taskCollaborator(TaskCollaboratorDto dto) {
+        McpTaskCollaboratorView view = new McpTaskCollaboratorView();
+        view.setAccountId(dto.getAccountId());
+        view.setUsername(Optional.ofNullable(dto.getCollaborator()).map(PlainAccountProfileDto::getUsername).orElse(null));
+        return view;
+    }
+
+    private McpTaskBoardEntryView taskBoardEntry(PlainTaskBoardEntryDto dto) {
+        McpTaskBoardEntryView view = new McpTaskBoardEntryView();
+        view.setTaskBoardEntryId(dto.getTaskBoardEntryId());
+        view.setTaskBoardId(dto.getTaskBoardId());
+        view.setTitle(Optional.ofNullable(dto.getTaskBoard()).map(TaskBoardDto::getTitle).orElse(null));
+        view.setOrder(dto.getOrder());
+        return view;
+    }
+
+    private String relatedTaskTitle(RelatedTaskDto dto) {
+        return Optional.ofNullable(dto).map(RelatedTaskDto::getTitle).orElse(null);
+    }
+
+    private <S, T> List<T> mapAll(Collection<S> source, Function<S, T> mapper) {
+        return Optional.ofNullable(source)
+                .map(values -> values.stream().map(mapper).toList())
+                .orElseGet(List::of);
+    }
+
     private void fillWorkspace(McpWorkspaceView view, WorkspaceDto dto) {
         if (Objects.isNull(dto)) {
             return;
@@ -263,6 +373,7 @@ public class McpViewConverter {
         view.setNotebookId(dto.getNotebookId());
         view.setWorkspaceId(dto.getWorkspaceId());
         view.setTitle(dto.getTitle());
+        view.setUrl(dto.getUrl());
         view.setParentNoteId(dto.getParentNoteId());
         view.setOwnerId(dto.getOwnerId());
     }

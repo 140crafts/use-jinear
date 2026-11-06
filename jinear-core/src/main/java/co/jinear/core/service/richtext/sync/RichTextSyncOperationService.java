@@ -1,6 +1,7 @@
 package co.jinear.core.service.richtext.sync;
 
 import co.jinear.core.model.dto.richtext.RichTextAppendDto;
+import co.jinear.core.model.dto.richtext.RichTextDocumentDto;
 import co.jinear.core.model.dto.richtext.RichTextStateDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,10 +24,28 @@ public class RichTextSyncOperationService {
     private final RichTextSyncLockService richTextSyncLockService;
     private final RichTextSyncService richTextSyncService;
 
+    public RichTextDocumentDto retrieveDocument(String richTextId) {
+        richTextSyncLockService.lock(richTextId);
+        try {
+            return richTextSyncService.retrieveDocument(richTextId);
+        } finally {
+            richTextSyncLockService.unlock(richTextId);
+        }
+    }
+
     public RichTextAppendDto appendUpdate(String richTextId, String updateBase64, String renderedHtml) {
         richTextSyncLockService.lock(richTextId);
         try {
             return richTextSyncService.appendUpdate(richTextId, updateBase64, renderedHtml);
+        } finally {
+            richTextSyncLockService.unlock(richTextId);
+        }
+    }
+
+    public RichTextAppendDto appendUpdateAtHead(String richTextId, String updateBase64, String renderedHtml, long expectedHeadSeq) {
+        richTextSyncLockService.lock(richTextId);
+        try {
+            return richTextSyncService.appendUpdateAtHead(richTextId, updateBase64, renderedHtml, expectedHeadSeq);
         } finally {
             richTextSyncLockService.unlock(richTextId);
         }

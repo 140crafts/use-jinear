@@ -1,7 +1,9 @@
 package co.jinear.core.mcp;
 
 import co.jinear.core.config.properties.FeProperties;
+import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.converter.mcp.McpViewConverter;
+import co.jinear.core.converter.richtext.RichTextPlainTextConverter;
 import co.jinear.core.converter.task.TaskUrlConverter;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.manager.material.MaterialManager;
@@ -11,12 +13,14 @@ import co.jinear.core.manager.mcp.tool.file.GetFileLinkTool;
 import co.jinear.core.manager.note.NoteFilterManager;
 import co.jinear.core.manager.task.TaskRetrieveManager;
 import co.jinear.core.model.dto.material.MaterialDto;
+import co.jinear.core.model.dto.media.AccessibleMediaDto;
 import co.jinear.core.model.dto.richtext.RichTextDto;
 import co.jinear.core.model.dto.task.CommentDto;
 import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.dto.team.TeamDto;
 import co.jinear.core.model.dto.workspace.WorkspaceDto;
 import co.jinear.core.model.enumtype.material.MaterialType;
+import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.model.mcp.McpToolResult;
 import co.jinear.core.model.mcp.view.McpCommentView;
@@ -31,7 +35,9 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
+import java.util.Date;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,12 +59,17 @@ class McpRecordToolsTest {
         return McpToolContext.builder().accountId("account-1").scopes(Set.of()).build();
     }
 
+    private McpToolContext filesContext() {
+        return McpToolContext.builder().accountId("account-1").scopes(Set.of(OauthScope.FILES_READ.getValue())).build();
+    }
+
     private FetchTool fetchTool() {
-        return new FetchTool(Mockito.mock(NoteFilterManager.class), taskRetrieveManager, new FeProperties());
+        return new FetchTool(Mockito.mock(NoteFilterManager.class), taskRetrieveManager, materialManager, new FeProperties(),
+                new RichTextPlainTextConverter(), new McpLinkConverter(McpRealCatalog.oauthProperties()));
     }
 
     private GetFileLinkTool fileLinkTool() {
-        return new GetFileLinkTool(materialManager, McpRealCatalog.oauthProperties());
+        return new GetFileLinkTool(materialManager, new McpLinkConverter(McpRealCatalog.oauthProperties()));
     }
 
     private TaskResponse taskResponse() {
@@ -105,7 +116,7 @@ class McpRecordToolsTest {
         assertThat(result.isError()).isFalse();
         assertThat(view.getId()).isEqualTo("task:task-1");
         assertThat(view.getTitle()).isEqualTo("Ship the release");
-        assertThat(view.getText()).isEqualTo("<p>Body</p>");
+        assertThat(view.getText()).isEqualTo("Body");
         assertThat(view.getUrl()).isEqualTo("https://jinear.co/acme/task/ENG-42");
         assertThat(context.getWorkspaceId()).isEqualTo("workspace-1");
     }
@@ -115,7 +126,49 @@ class McpRecordToolsTest {
         McpToolResult result = fetchTool().call(context(), args("{\"id\":\"board:1\"}"));
 
         assertThat(result.isError()).isTrue();
-        assertThat(result.getText()).contains("Unrecognised id");
+        assertThat(result.getText()).isEqualTo("mcp.error.fetch.unrecognised-id");
+    }
+
+    @Test
+    void fetchDescribesAFileIdReturnedBySearch() throws Exception {
+        MaterialRetrieveResponse response = material("file-1", MaterialType.FILE);
+        AccessibleMediaDto media = new AccessibleMediaDto();
+        media.setContentType("application/pdf");
+        media.setSize(20480L);
+        response.getMaterialDto().setMedia(media);
+        response.getMaterialDto().setName("hamzy.pdf");
+        response.getMaterialDto().setCreatedDate(Date.from(Instant.parse("2026-11-01T09:30:00Z")));
+        Mockito.when(materialManager.retrieve("file-1")).thenReturn(response);
+        McpToolContext context = filesContext();
+
+        McpToolResult result = fetchTool().call(context, args("{\"id\":\"file:file-1\"}"));
+
+        McpFetchedRecordView view = (McpFetchedRecordView) result.getStructuredContent();
+        assertThat(result.isError()).isFalse();
+        assertThat(view.getId()).isEqualTo("file:file-1");
+        assertThat(view.getTitle()).isEqualTo("hamzy.pdf");
+        assertThat(view.getText()).isEqualTo("Type: application/pdf\nSize: 20480 bytes\nCreated: 2026-11-01T09:30:00Z");
+        assertThat(view.getUrl()).isEqualTo("https://api.jinear.co/v1/material/media/file-1");
+        assertThat(context.getWorkspaceId()).isEqualTo("workspace-1");
+    }
+
+    @Test
+    void fetchRefusesAFileWithoutTheFilesPermission() throws Exception {
+        McpToolResult result = fetchTool().call(context(), args("{\"id\":\"file:file-1\"}"));
+
+        assertThat(result.isError()).isTrue();
+        assertThat(result.getText()).isEqualTo("mcp.error.fetch.files-not-granted");
+        Mockito.verifyNoInteractions(materialManager);
+    }
+
+    @Test
+    void fetchRefusesAFolderId() throws Exception {
+        Mockito.when(materialManager.retrieve("folder-1")).thenReturn(material("folder-1", MaterialType.FOLDER));
+
+        McpToolResult result = fetchTool().call(filesContext(), args("{\"id\":\"file:folder-1\"}"));
+
+        assertThat(result.isError()).isTrue();
+        assertThat(result.getText()).isEqualTo("mcp.error.file.is-folder");
     }
 
     @Test
@@ -125,7 +178,7 @@ class McpRecordToolsTest {
         McpToolResult result = fileLinkTool().call(context(), args("{\"materialId\":\"folder-1\"}"));
 
         assertThat(result.isError()).isTrue();
-        assertThat(result.getText()).contains("folder");
+        assertThat(result.getText()).isEqualTo("mcp.error.file.is-folder");
     }
 
     @Test

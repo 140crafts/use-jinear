@@ -23,6 +23,7 @@ const SCOPE_LABEL_KEYS: Record<string, StringKeys> = {
     "tasks:write": "oauthConsentScopeTasksWrite",
     "calendar:read": "oauthConsentScopeCalendarRead",
     "notes:read": "oauthConsentScopeNotesRead",
+    "notes:write": "oauthConsentScopeNotesWrite",
     "files:read": "oauthConsentScopeFilesRead",
     "offline_access": "oauthConsentScopeOfflineAccess",
 };

@@ -17,6 +17,7 @@ public enum OauthScope {
     TASKS_WRITE("tasks:write"),
     CALENDAR_READ("calendar:read"),
     NOTES_READ("notes:read"),
+    NOTES_WRITE("notes:write"),
     FILES_READ("files:read"),
     OFFLINE_ACCESS("offline_access");
 

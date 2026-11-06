@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-10-30 00:00:40.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-06 22:21:49.
 
 export interface BaseDto {
     createdDate: Date;
@@ -93,8 +93,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -189,10 +189,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
-    gthreadId: string;
-    ghistoryId: string;
     ginternalDate: string;
+    ghistoryId: string;
+    gthreadId: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -579,6 +579,18 @@ export interface MessagingTokenDto {
     token: string;
 }
 
+export interface NoteContentDto {
+    title: string;
+    html: string;
+}
+
+export interface NoteCrdtResultDto {
+    update: string;
+    html: string;
+    title: string;
+    changed: boolean;
+}
+
 export interface NoteDto extends BaseDto {
     noteId: string;
     notebookId: string;
@@ -586,12 +598,19 @@ export interface NoteDto extends BaseDto {
     ownerId: string;
     parentNoteId: string;
     title: string;
+    url?: string | null;
     richTextId: string;
     richText: RichTextDto;
     noteTagAssignments?: NoteTagAssignmentDto[] | null;
     owner?: PlainAccountProfileDto | null;
     path?: NotePathDto | null;
     notebook?: NotebookDto | null;
+}
+
+export interface NoteEditResultDto {
+    noteId: string;
+    url: string;
+    changed: boolean;
 }
 
 export interface NotePathDto {
@@ -915,6 +934,13 @@ export interface ReminderJobDto extends BaseDto {
 
 export interface RichTextAppendDto {
     seq: number;
+}
+
+export interface RichTextDocumentDto {
+    format: RichTextFormat;
+    headSeq: number;
+    states: string[];
+    value: string;
 }
 
 export interface RichTextDto {
@@ -1583,6 +1609,11 @@ export interface MaterialSearchRequest extends BaseRequest {
     materialType?: MaterialType | null;
 }
 
+export interface MaterialTextSearchRequest extends BaseRequest {
+    query: string;
+    materialType?: MaterialType | null;
+}
+
 export interface InternalBatchMediaRetrieveRequest {
     relatedObjectIds: string[];
     fileTypes: FileType[];
@@ -1665,8 +1696,19 @@ export interface NoteInitializeRequest extends BaseRequest {
     bodyState: string;
 }
 
+export interface NoteListRequest extends BaseRequest {
+    notebookId?: string | null;
+    parentNoteId?: string | null;
+}
+
 export interface NoteMoveRequest extends BaseRequest {
     noteId: string;
+    parentNoteId?: string | null;
+}
+
+export interface NoteSearchRequest extends BaseRequest {
+    query: string;
+    notebookId?: string | null;
     parentNoteId?: string | null;
 }
 
@@ -1725,11 +1767,11 @@ export interface OauthAuthorizeRequest {
     codeChallenge: string;
     codeChallengeMethod: string;
     resource: string;
+    code_challenge: string;
     response_type: string;
+    code_challenge_method: string;
     client_id: string;
     redirect_uri: string;
-    code_challenge: string;
-    code_challenge_method: string;
 }
 
 export interface OauthClientRegistrationRequest {
@@ -1766,11 +1808,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
-    grant_type: string;
-    code_verifier: string;
-    refresh_token: string;
     client_id: string;
     redirect_uri: string;
+    grant_type: string;
+    refresh_token: string;
+    code_verifier: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -1993,7 +2035,13 @@ export interface TaskFilterRequest extends BaseRequest {
     timespanEnd?: Date | null;
     sort?: FilterSort | null;
     externalCalendarList?: TaskExternalCalendarFilterDto[] | null;
+    /**
+     * @deprecated
+     */
     projectIds?: string[] | null;
+    /**
+     * @deprecated
+     */
     milestoneIds?: string[] | null;
     taskboardIds?: string[] | null;
 }
@@ -2277,6 +2325,10 @@ export interface MaterialInitializeFileUploadResponse extends BaseResponse {
     data: WaitingForUploadMaterialResultDto;
 }
 
+export interface MaterialPaginatedResponse extends BaseResponse {
+    data: PageDto<MaterialDto>;
+}
+
 export interface MaterialRetrieveResponse extends BaseResponse {
     data: MaterialDto;
 }
@@ -2525,6 +2577,10 @@ export interface RobotSecretResponse extends BaseResponse {
     data: RobotSecretDto;
 }
 
+export interface ChecklistItemResponse extends BaseResponse {
+    data: ChecklistItemDto;
+}
+
 export interface PaginatedTaskCommentResponse extends BaseResponse {
     data: PageDto<CommentDto>;
 }
@@ -2587,6 +2643,10 @@ export interface TaskNumbersResponse {
 
 export interface TaskPaginatedMediaResponse extends BaseResponse {
     data: PageDto<TaskMediaDto>;
+}
+
+export interface TaskRelationResponse extends BaseResponse {
+    data: TaskRelationDto;
 }
 
 export interface TaskResponse extends BaseResponse {
@@ -2869,6 +2929,7 @@ export interface Note extends BaseEntity {
     parent: Note;
     notebook: Notebook;
     richText: RichText;
+    workspace: Workspace;
     noteTagAssignments: NoteTagAssignment[];
     owner: Account;
 }
@@ -2884,9 +2945,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    uri: URI;
-    description: string;
     filename: string;
+    description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -2978,6 +3039,18 @@ export interface RichText extends BaseEntity {
     headSeq: number;
 }
 
+export interface Workspace extends BaseEntity {
+    workspaceId: string;
+    title: string;
+    description: string;
+    tier: WorkspaceTier;
+    username: Username;
+    settings: WorkspaceSetting;
+    teams: Team[];
+    feeds: Feed[];
+    workspaceMembers: WorkspaceMember[];
+}
+
 export interface Account extends BaseEntity {
     accountId: string;
     email: string;
@@ -3005,24 +3078,6 @@ export interface GoogleCalendarConferenceDataStatus {
     statusCode: string;
 }
 
-export interface Workspace extends BaseEntity {
-    workspaceId: string;
-    title: string;
-    description: string;
-    tier: WorkspaceTier;
-    username: Username;
-    settings: WorkspaceSetting;
-    teams: Team[];
-    feeds: Feed[];
-    workspaceMembers: WorkspaceMember[];
-}
-
-export interface AccountRole extends BaseEntity {
-    accountRoleId: number;
-    accountId: string;
-    role: RoleType;
-}
-
 export interface Username extends BaseEntity {
     usernameId: string;
     relatedObjectId: string;
@@ -3030,23 +3085,6 @@ export interface Username extends BaseEntity {
     username: string;
     account: Account;
     workspace: Workspace;
-}
-
-export interface AccountPassword extends BaseEntity {
-    accountPasswordId: string;
-    accountId: string;
-    password: string;
-    autoGenerated: boolean;
-}
-
-export interface AccountProfileMedia {
-    accountId: string;
-    mediaId: string;
-    account: Account;
-    media: Media;
-}
-
-export interface Serializable {
 }
 
 export interface WorkspaceSetting extends BaseEntity {
@@ -3094,29 +3132,27 @@ export interface WorkspaceMember extends BaseEntity {
     account: Account;
 }
 
-export interface Media extends BaseEntity {
-    mediaId: string;
-    mediaKey: string;
-    ownerId: string;
-    relatedObjectId: string;
-    mediaOwnerType: MediaOwnerType;
-    fileType: FileType;
-    bucketName: string;
-    storagePath: string;
-    originalName: string;
-    size: number;
-    contentType: string;
-    lateOwnerId: string;
-    visibility: MediaVisibilityType;
-    publicUntil: Date;
-    providerType: MediaFileProviderType;
-    ownershipStatus: MediaFileOwnershipStatusType;
-    uploadMethod: MediaFileUploadMethodType;
-    uploadStatus: MediaFileUploadStatusType;
-    uploadWindowExpiresAt: Date;
+export interface AccountRole extends BaseEntity {
+    accountRoleId: number;
+    accountId: string;
+    role: RoleType;
 }
 
-export interface Comparable<T> {
+export interface AccountPassword extends BaseEntity {
+    accountPasswordId: string;
+    accountId: string;
+    password: string;
+    autoGenerated: boolean;
+}
+
+export interface AccountProfileMedia {
+    accountId: string;
+    mediaId: string;
+    account: Account;
+    media: Media;
+}
+
+export interface Serializable {
 }
 
 export interface TeamMember extends BaseEntity {
@@ -3157,6 +3193,31 @@ export interface FeedMember extends BaseEntity {
     account: Account;
     workspace: Workspace;
     feed: Feed;
+}
+
+export interface Media extends BaseEntity {
+    mediaId: string;
+    mediaKey: string;
+    ownerId: string;
+    relatedObjectId: string;
+    mediaOwnerType: MediaOwnerType;
+    fileType: FileType;
+    bucketName: string;
+    storagePath: string;
+    originalName: string;
+    size: number;
+    contentType: string;
+    lateOwnerId: string;
+    visibility: MediaVisibilityType;
+    publicUntil: Date;
+    providerType: MediaFileProviderType;
+    ownershipStatus: MediaFileOwnershipStatusType;
+    uploadMethod: MediaFileUploadMethodType;
+    uploadStatus: MediaFileUploadStatusType;
+    uploadWindowExpiresAt: Date;
+}
+
+export interface Comparable<T> {
 }
 
 export interface IntegrationScope extends BaseEntity {
@@ -3204,7 +3265,7 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE" | "MANAGEMENT_ADMIN_ACCOUNT_SYNC";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "NOTE_FTS_REFRESH" | "MATERIAL_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE" | "MANAGEMENT_ADMIN_ACCOUNT_SYNC";
 
 export type InstanceFlagType = "REGISTER_WITH_MAIL" | "FORGOT_PASSWORD" | "SIGN_IN_WITH_APPLE" | "SIGN_IN_WITH_GOOGLE" | "SIGN_IN_WITH_EMAIL_CODE" | "WORKSPACE_INIT" | "ATTACH_GOOGLE_CALENDAR" | "MCP_SERVER";
 
@@ -3246,6 +3307,8 @@ export type MessageType = "USER_MESSAGE" | "CONVERSATION_INIT";
 
 export type ThreadType = "CLASSIC" | "CHANNEL_INITIAL" | "INITIALIZED_BY_ROBOT";
 
+export type NoteAppendPosition = "START" | "END";
+
 export type NotebookVisibilityType = "PRIVATE" | "SHARED" | "PUBLIC_WITHIN_WORKSPACE";
 
 export type NotificationEventState = "INITIALIZED" | "SENT";
@@ -3258,7 +3321,7 @@ export type NotificationType = "TASK_REMINDER" | "WORKSPACE_ACTIVITY" | "TASK_IN
 
 export type OauthClientRegistrationType = "DCR" | "CIMD" | "STATIC";
 
-export type OauthScope = "WORKSPACE_READ" | "TASKS_READ" | "TASKS_WRITE" | "CALENDAR_READ" | "NOTES_READ" | "FILES_READ" | "OFFLINE_ACCESS";
+export type OauthScope = "WORKSPACE_READ" | "TASKS_READ" | "TASKS_WRITE" | "CALENDAR_READ" | "NOTES_READ" | "NOTES_WRITE" | "FILES_READ" | "OFFLINE_ACCESS";
 
 export type PassiveReason = "SYSTEM" | "USER_ACTION" | "FREEZE_ACCOUNT" | "DELETE_ACCOUNT" | "BANNED_ACCOUNT" | "SUSPENDED_ACCOUNT" | "REQUEST_RESPONSE" | "SMS_LOGIN_TOKEN_USED" | "PHONE_CHANGED" | "EMAIL_LOGIN_TOKEN_EXPIRED" | "EMAIL_LOGIN_TOKEN_USED" | "EMAIL_ATTACH_TOKEN_USED" | "REMOVE_FEATURE" | "REPORT_RESOLVE_GUILTY" | "REPORT_RESOLVE_NOT_GUILTY" | "UNFOLLOW" | "SINGLE_LOGIN_TOKEN_USED" | "TICKET_RESOLVE" | "WAIT_LIST_PASSCODE_USED" | "PROFILE_PIC_UPDATE" | "PAYMENT_ISSUE";
 
@@ -3294,7 +3357,7 @@ export type RobotType = "MESSAGE";
 
 export type TaskBoardStateType = "OPEN" | "CLOSED";
 
-export type TaskRelationType = "BLOCKS" | "IS_BLOCKED_BY" | "SUBTASK";
+export type TaskRelationType = "SUBTASK";
 
 export type TaskReminderType = "ASSIGNED_DATE" | "DUE_DATE" | "SPECIFIC_DATE";
 

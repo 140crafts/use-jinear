@@ -1,6 +1,7 @@
 package co.jinear.core.manager.task;
 
 import co.jinear.core.converter.task.TaskInitializeVoConverter;
+import co.jinear.core.converter.task.TaskUrlConverter;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.task.TaskDto;
@@ -45,6 +46,7 @@ public class TaskInitializeManager {
     private final WorkspaceValidator workspaceValidator;
     private final TeamAccessValidator teamAccessValidator;
     private final TaskInitializeVoConverter taskInitializeVoConverter;
+    private final TaskUrlConverter taskUrlConverter;
     private final TaskActivityService taskActivityService;
     private final TaskBoardAccessValidator taskBoardAccessValidator;
     private final TaskRetrieveService taskRetrieveService;
@@ -73,6 +75,7 @@ public class TaskInitializeManager {
         TaskDto initializedTask = taskInitializeService.initializeTask(taskInitializeVo);
         retrieveAndSetTeamDto(initializedTask);
         retrieveAndSetWorkspaceDto(initializedTask);
+        fillTaskUrl(initializedTask);
         taskActivityService.initializeNewTaskActivity(currentAccount, currentAccountSessionId, initializedTask);
         initializeTaskBoardActivity(taskInitializeRequest, currentAccount, currentAccountSessionId, initializedTask);
         return mapResponse(initializedTask);
@@ -163,6 +166,12 @@ public class TaskInitializeManager {
     private void retrieveAndSetWorkspaceDto(TaskDto initializedTask) {
         WorkspaceDto workspaceDto = workspaceRetrieveService.retrieveWorkspaceWithId(initializedTask.getWorkspaceId());
         initializedTask.setWorkspace(workspaceDto);
+    }
+
+    // The url was built when the new task had no team or workspace loaded, so it is built again from them.
+    private void fillTaskUrl(TaskDto initializedTask) {
+        String url = taskUrlConverter.taskUrl(initializedTask);
+        initializedTask.setUrl(url);
     }
 
     private void initializeTaskBoardActivity(TaskInitializeRequest taskInitializeRequest, String currentAccount, String currentAccountSessionId, TaskDto initializedTask) {

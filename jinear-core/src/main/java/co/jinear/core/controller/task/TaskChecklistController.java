@@ -19,7 +19,7 @@ public class TaskChecklistController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse initializeChecklist(@Valid @RequestBody InitializeChecklistRequest initializeChecklistRequest) {
+    public RetrieveChecklistResponse initializeChecklist(@Valid @RequestBody InitializeChecklistRequest initializeChecklistRequest) {
         return taskChecklistManager.initializeChecklist(initializeChecklistRequest);
     }
 

@@ -128,7 +128,7 @@ class McpTaskAttachmentToolsTest {
         McpToolResult result = add("{\"taskId\":\"task-1\",\"fileName\":\"a.png\",\"contentBase64\":\"not base64!\"}");
 
         assertThat(result.isError()).isTrue();
-        assertThat(result.getText()).contains("contentBase64");
+        assertThat(result.getText()).isEqualTo("mcp.error.attachment.invalid-base64");
         assertNothingUploaded();
     }
 

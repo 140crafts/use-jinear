@@ -3,6 +3,7 @@ package co.jinear.core.model.entity.note;
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.account.Account;
 import co.jinear.core.model.entity.richtext.RichText;
+import co.jinear.core.model.entity.workspace.Workspace;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -60,6 +61,11 @@ public class Note extends BaseEntity {
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "rich_text_id", insertable = false, updatable = false)
     private RichText richText;
+
+    @ManyToOne
+    @NotFound(action = NotFoundAction.IGNORE)
+    @JoinColumn(name = "workspace_id", insertable = false, updatable = false)
+    private Workspace workspace;
 
     @OneToMany(mappedBy = "note", fetch = FetchType.EAGER)
     @Where(clause = "passive_id is null")

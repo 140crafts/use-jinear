@@ -30,6 +30,7 @@ const SCOPE_COPY: { scope: string; label: string; text: string }[] = [
   { scope: "tasks:write", label: "Write tasks", text: "Creating and updating tasks, boards and comments." },
   { scope: "calendar:read", label: "Read calendar", text: "Calendar events, including any synced from Google Calendar." },
   { scope: "notes:read", label: "Read notes", text: "Notebooks and notes." },
+  { scope: "notes:write", label: "Write notes", text: "Creating, editing, moving and deleting notes." },
   { scope: "files:read", label: "Read files", text: "Files, folders and links to them." },
   { scope: "offline_access", label: "Stay connected", text: "Keeps the connection alive until you disconnect it." },
 ];

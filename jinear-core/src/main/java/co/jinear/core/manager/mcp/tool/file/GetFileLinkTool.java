@@ -1,6 +1,6 @@
 package co.jinear.core.manager.mcp.tool.file;
 
-import co.jinear.core.config.properties.OauthProperties;
+import co.jinear.core.converter.mcp.McpLinkConverter;
 import co.jinear.core.manager.material.MaterialManager;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
@@ -22,7 +22,7 @@ import co.jinear.core.model.mcp.input.McpGetFileLinkInput;
 public class GetFileLinkTool implements McpTool {
 
     private final MaterialManager materialManager;
-    private final OauthProperties oauthProperties;
+    private final McpLinkConverter mcpLinkConverter;
 
     @Override
     public McpToolDefinition definition() {
@@ -47,11 +47,11 @@ public class GetFileLinkTool implements McpTool {
         MaterialDto material = materialManager.retrieve(input.getMaterialId()).getMaterialDto();
         context.setWorkspaceId(material.getWorkspaceId());
         if (!MaterialType.FILE.equals(material.getMaterialType())) {
-            return McpToolResult.error("That id is a folder. Pass the materialId of a FILE from list_files.");
+            return McpToolResult.error("mcp.error.file.is-folder");
         }
         McpFileLinkView view = new McpFileLinkView();
         view.setMaterialId(material.getMaterialId());
-        view.setUrl(oauthProperties.getIssuerUrl() + "/v1/material/media/" + material.getMaterialId());
+        view.setUrl(mcpLinkConverter.fileDownloadUrl(material.getMaterialId()));
         return McpToolResult.of(view);
     }
 }

@@ -10,6 +10,6 @@ import lombok.Setter;
 public class McpSearchInput {
 
     @NotBlank
-    @McpField("What to look for, in plain language.")
+    @McpField("Keywords to find. Every word must appear in the record as a whole word or as the start of a word.")
     private String query;
 }

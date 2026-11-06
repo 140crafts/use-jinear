@@ -5,11 +5,13 @@ import co.jinear.core.manager.telemetry.InstanceReportSendManager;
 import co.jinear.core.model.entity.material.Material;
 import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.model.vo.media.RemoveMediaVo;
+import co.jinear.core.service.material.MaterialFtsRefreshService;
 import co.jinear.core.service.material.MaterialRetrieveService;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaRetrieveService;
 import co.jinear.core.service.project.domain.ProjectDomainCnameOperatorService;
 import co.jinear.core.service.mcp.analytics.McpRetentionService;
+import co.jinear.core.service.note.NoteFtsRefreshService;
 import co.jinear.core.service.oauth.provider.OauthRetentionService;
 import co.jinear.core.service.task.TaskFtsRefreshService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +35,8 @@ public class ScheduledJobManager {
     private final MaterialRetrieveService materialRetrieveService;
     private final ReminderProcessManager reminderProcessManager;
     private final TaskFtsRefreshService taskFtsRefreshService;
+    private final NoteFtsRefreshService noteFtsRefreshService;
+    private final MaterialFtsRefreshService materialFtsRefreshService;
     private final McpRetentionService mcpRetentionService;
     private final OauthRetentionService oauthRetentionService;
     private final InstanceReportSendManager instanceReportSendManager;
@@ -79,7 +83,7 @@ public class ScheduledJobManager {
         expiredMedias.forEach(this::updateMediaAsPrivate);
     }
 
-//    @Async
+    //    @Async
 //    @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
     public void checkAndSyncCustomDomains() {
         log.info("Check and sync custom domains has started.");
@@ -129,9 +133,21 @@ public class ScheduledJobManager {
     }
 
     @Async
-    @Scheduled(fixedRate = 30, timeUnit = TimeUnit.SECONDS)
+    @Scheduled(fixedRate = 8, timeUnit = TimeUnit.SECONDS)
     public void refreshTaskFtsMaterializedView() {
         taskFtsRefreshService.refreshIfDirty();
+    }
+
+    @Async
+    @Scheduled(fixedRate = 8, initialDelay = 4, timeUnit = TimeUnit.SECONDS)
+    public void refreshNoteFtsMaterializedView() {
+        noteFtsRefreshService.refreshIfDirty();
+    }
+
+    @Async
+    @Scheduled(fixedRate = 8, initialDelay = 2, timeUnit = TimeUnit.SECONDS)
+    public void refreshMaterialFtsMaterializedView() {
+        materialFtsRefreshService.refreshIfDirty();
     }
 
     private void updateMediaAsPrivate(String mediaId) {

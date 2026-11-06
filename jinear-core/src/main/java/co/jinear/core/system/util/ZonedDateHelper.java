@@ -96,7 +96,8 @@ public class ZonedDateHelper {
     }
 
     public static String formatWithDateTimeFormat5(ZonedDateTime zonedDateTime) {
-        return format(zonedDateTime, DATE_TIME_FORMAT_5);
+        ZonedDateTime utc = zonedDateTime.withZoneSameInstant(ZoneOffset.UTC);
+        return format(utc, DATE_TIME_FORMAT_5);
     }
 
     public static ZonedDateTime parseIsoDateTime(String dateStr) {

@@ -54,16 +54,16 @@ public class AddTaskAttachmentTool implements McpTool {
         McpAddTaskAttachmentInput input = args.bind(McpAddTaskAttachmentInput.class);
         boolean isText = Objects.nonNull(input.getText());
         if (isText == Objects.nonNull(input.getContentBase64())) {
-            return McpToolResult.error("Pass exactly one of text or contentBase64.");
+            return McpToolResult.error("mcp.error.attachment.one-content");
         }
         byte[] content;
         try {
             content = isText ? input.getText().getBytes(StandardCharsets.UTF_8) : decode(input.getContentBase64());
         } catch (IllegalArgumentException exception) {
-            return McpToolResult.error("contentBase64 is not valid base64: " + exception.getMessage());
+            return McpToolResult.error("mcp.error.attachment.invalid-base64", exception.getMessage());
         }
         if (content.length == 0) {
-            return McpToolResult.error("The file content is empty.");
+            return McpToolResult.error("mcp.error.attachment.empty");
         }
         MultipartFile file = new ByteArrayMultipartFile(MULTIPART_FIELD, input.getFileName(), contentType(input, isText), content);
         String mediaId = taskMediaManager.uploadTaskMedia(input.getTaskId(), file).getMediaId();

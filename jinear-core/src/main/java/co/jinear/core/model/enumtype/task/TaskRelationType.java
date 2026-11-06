@@ -4,7 +4,5 @@ import lombok.Getter;
 
 @Getter
 public enum TaskRelationType {
-    BLOCKS,
-    IS_BLOCKED_BY,
     SUBTASK
 }

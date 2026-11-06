@@ -35,7 +35,7 @@ public class TaskChecklistManager {
     private final TaskActivityService taskActivityService;
     private final TaskRetrieveService taskRetrieveService;
 
-    public BaseResponse initializeChecklist(InitializeChecklistRequest initializeChecklistRequest) {
+    public RetrieveChecklistResponse initializeChecklist(InitializeChecklistRequest initializeChecklistRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDto = taskRetrieveService.retrievePlain(initializeChecklistRequest.getTaskId());
@@ -44,7 +44,7 @@ public class TaskChecklistManager {
         InitializeChecklistVo initializeChecklistVo = initializeChecklistVoConverter.convert(currentAccountId, initializeChecklistRequest);
         ChecklistDto checklistDto = checklistService.initializeChecklist(initializeChecklistVo);
         taskActivityService.initializeChecklistCreateActivity(currentAccountId, currentAccountSessionId, taskDto, checklistDto);
-        return new BaseResponse();
+        return mapResponse(checklistDto);
     }
 
     public RetrieveChecklistResponse retrieve(String checklistId) {

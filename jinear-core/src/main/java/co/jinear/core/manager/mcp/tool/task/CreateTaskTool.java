@@ -33,6 +33,7 @@ public class CreateTaskTool implements McpTool {
                 .title("Create a task")
                 .description("Creates a task in a team. Only workspaceId, teamId and title are required. "
                              + "Give it a due date to put it on the calendar, and an assignee account id to hand it to someone. "
+                             + "Give it a parentTaskId to make it a subtask. "
                              + "Returns the created task, including its reference such as ENG-42.")
                 .input(McpSchemaGenerator.forInput(McpCreateTaskInput.class))
                 .output(McpSchemaGenerator.single("task", "The created task.", McpTaskView.class))
@@ -56,6 +57,8 @@ public class CreateTaskTool implements McpTool {
         request.setHasPreciseDueDate(Objects.nonNull(input.getDueDate()));
         request.setTopicId(input.getTopicId());
         request.setBoardId(input.getBoardId());
+        request.setSubTaskOf(input.getParentTaskId());
+        request.setCollaboratorIds(input.getCollaboratorIds());
         context.setWorkspaceId(input.getWorkspaceId());
         TaskResponse response = taskInitializeManager.initializeTask(request);
         return McpToolResult.of(McpTaskEnvelopeView.of(mcpViewConverter.task(response.getTaskDto())));

@@ -21,6 +21,9 @@ public class FeProperties {
     @Value("${fe.task-url}")
     private String taskUrl;
 
+    @Value("${fe.note-url:}")
+    private String noteUrl = "";
+
     @Value("${fe.workspace-invitation-url}")
     private String workspaceInvitationUrl;
 

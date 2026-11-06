@@ -13,4 +13,8 @@ public class McpLinkConverter {
     public String taskAttachmentDownloadUrl(String taskId, String mediaId) {
         return oauthProperties.getIssuerUrl() + "/v1/task/media/" + taskId + "/download/" + mediaId;
     }
+
+    public String fileDownloadUrl(String materialId) {
+        return oauthProperties.getIssuerUrl() + "/v1/material/media/" + materialId;
+    }
 }

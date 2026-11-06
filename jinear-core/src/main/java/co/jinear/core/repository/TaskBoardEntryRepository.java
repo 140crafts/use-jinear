@@ -21,7 +21,7 @@ public interface TaskBoardEntryRepository extends JpaRepository<TaskBoardEntry, 
 
     List<TaskBoardEntry> findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateDesc(String taskId,Pageable pageable);
 
-    Long countAllByTaskBoardIdAndPassiveIdIsNull(String taskListId);
+    Optional<TaskBoardEntry> findFirstByTaskBoardIdAndPassiveIdIsNullOrderByOrderDesc(String taskBoardId);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""

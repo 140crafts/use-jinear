@@ -6,6 +6,7 @@ import co.jinear.core.model.dto.task.TaskDto;
 import co.jinear.core.model.entity.task.ChecklistItem;
 import co.jinear.core.model.request.task.ChecklistItemLabelRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.task.ChecklistItemResponse;
 import co.jinear.core.model.vo.task.InitializeChecklistItemVo;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.passive.PassiveService;
@@ -33,7 +34,7 @@ public class TaskChecklistItemManager {
     private final TaskRetrieveService taskRetrieveService;
     private final TaskAccessValidator taskAccessValidator;
 
-    public BaseResponse initializeChecklistItem(ChecklistItemLabelRequest checklistItemLabelRequest) {
+    public ChecklistItemResponse initializeChecklistItem(ChecklistItemLabelRequest checklistItemLabelRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         log.info("Initialize checklist item has started. currentAccountId: {}", currentAccountId);
@@ -43,7 +44,7 @@ public class TaskChecklistItemManager {
         InitializeChecklistItemVo initializeChecklistItemVo = mapInitializeVo(checklistItemLabelRequest.getLabel(), checklistDto);
         ChecklistItemDto checklistItemDto = checklistItemService.initialize(initializeChecklistItemVo);
         taskActivityService.initializeChecklistItemInitializedActivity(currentAccountId, currentAccountSessionId, taskDto, checklistItemDto.getChecklistItemId());
-        return new BaseResponse();
+        return mapResponse(checklistItemDto);
     }
 
     public BaseResponse updateCheckedStatus(String checklistItemId, boolean checked) {
@@ -91,5 +92,11 @@ public class TaskChecklistItemManager {
         initializeChecklistItemVo.setChecklistId(checklistDto.getChecklistId());
         initializeChecklistItemVo.setLabel(label);
         return initializeChecklistItemVo;
+    }
+
+    private ChecklistItemResponse mapResponse(ChecklistItemDto checklistItemDto) {
+        ChecklistItemResponse checklistItemResponse = new ChecklistItemResponse();
+        checklistItemResponse.setChecklistItemDto(checklistItemDto);
+        return checklistItemResponse;
     }
 }

@@ -8,15 +8,18 @@ import co.jinear.core.converter.richtext.RichTextConverter;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.entity.note.Note;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {
         PlainAccountProfileDtoConverter.class,
         NoteTagDtoConverter.class,
         RichTextConverter.class,
         NotebookDtoConverter.class,
-        NoteTagAssignmentDtoConverter.class
+        NoteTagAssignmentDtoConverter.class,
+        NoteUrlConverter.class
 })
 public interface NoteDtoConverter {
 
+    @Mapping(target = "url", ignore = true)
     NoteDto convert(Note note);
 }

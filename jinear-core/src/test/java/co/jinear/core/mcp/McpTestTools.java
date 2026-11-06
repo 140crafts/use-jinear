@@ -1,11 +1,15 @@
 package co.jinear.core.mcp;
 
+import co.jinear.core.config.locale.MessageSourceLocalizer;
+import co.jinear.core.exception.NotValidException;
+import co.jinear.core.exception.note.NoteEditRejectedException;
 import co.jinear.core.manager.mcp.tool.McpTool;
 import co.jinear.core.manager.mcp.tool.McpToolDefinitionBuilder;
 import co.jinear.core.model.enumtype.oauth.OauthScope;
 import co.jinear.core.model.mcp.schema.McpSchemaGenerator;
 import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
+import org.springframework.context.support.ResourceBundleMessageSource;
 
 final class McpTestTools {
 
@@ -63,6 +67,44 @@ final class McpTestTools {
                 (context, args) -> {
                     throw new McpToolException("invalid_argument", "taskId must look like a ULID. Received: banana");
                 });
+    }
+
+    static McpTool refusingTool() {
+        return new McpStubTool(
+                McpToolDefinitionBuilder
+                        .named("refuses")
+                        .title("Refuses")
+                        .description("Throws a business rule refusal. Used to prove the caller gets the resolved message, not its key.")
+                        .input(McpSchemaGenerator.forInput(McpStubInputs.NoArguments.class))
+                        .readOnly()
+                        .scopes(OauthScope.TASKS_READ)
+                        .build(),
+                (context, args) -> {
+                    throw new NoteEditRejectedException("note.error.edit.text-match-count", 2);
+                });
+    }
+
+    static McpTool invalidRequestTool() {
+        return new McpStubTool(
+                McpToolDefinitionBuilder
+                        .named("rejects_as_invalid")
+                        .title("Rejects as invalid")
+                        .description("Throws a request validation failure. Used to prove the caller gets the resolved message, not the generic error.")
+                        .input(McpSchemaGenerator.forInput(McpStubInputs.NoArguments.class))
+                        .readOnly()
+                        .scopes(OauthScope.TASKS_READ)
+                        .build(),
+                (context, args) -> {
+                    throw new NotValidException("task.filter.task-board-order-single-board");
+                });
+    }
+
+    static MessageSourceLocalizer messageSourceLocalizer() {
+        ResourceBundleMessageSource source = new ResourceBundleMessageSource();
+        source.setBasenames("i18n/messages");
+        source.setUseCodeAsDefaultMessage(true);
+        source.setDefaultEncoding("UTF-8");
+        return new MessageSourceLocalizer(source);
     }
 
     static McpTool explodingTool() {

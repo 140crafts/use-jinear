@@ -3,6 +3,7 @@ package co.jinear.core.repository.note;
 import co.jinear.core.model.entity.note.Note;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,6 +19,63 @@ public interface NoteRepository extends JpaRepository<Note, String> {
     boolean existsByNoteIdAndNotebookIdAndPassiveIdIsNull(String noteId, String notebookId);
 
     List<Note> findAllByParentNoteIdAndPassiveIdIsNull(String parentNoteId);
+
+    @EntityGraph(attributePaths = {"notebook", "owner", "richText", "workspace", "noteTagAssignments", "noteTagAssignments.noteTag"})
+    List<Note> findAllByNoteIdInAndPassiveIdIsNull(List<String> noteIds);
+
+    // note_id is char(26); the varchar cast makes the native scalar come back as a String.
+    @Query(value = """
+            select cast(n.note_id as varchar) as note_id
+            from note n
+                     left join notebook nb on nb.notebook_id = n.notebook_id and nb.passive_id is null
+            where n.passive_id is null
+              and n.workspace_id = :workspaceId
+              and (cast(:notebookId as varchar) is null or n.notebook_id = cast(:notebookId as varchar))
+              and (cast(:parentNoteId as varchar) is null or n.parent_note_id = cast(:parentNoteId as varchar))
+              and (
+                    n.owner_id = :accountId or
+                    (nb.notebook_id is not null and (
+                        :workspaceAdmin = true or
+                        nb.owner_id = :accountId or
+                        nb.visibility = 2 or
+                        (nb.visibility = 1 and exists (select 1
+                                                       from notebook_member nm
+                                                       where nm.notebook_id = nb.notebook_id
+                                                         and nm.account_id = :accountId
+                                                         and nm.passive_id is null))
+                    ))
+                  )
+            order by n.idate desc, n.note_id desc
+            """,
+            countQuery = """
+                    select count(*)
+                    from note n
+                             left join notebook nb on nb.notebook_id = n.notebook_id and nb.passive_id is null
+                    where n.passive_id is null
+                      and n.workspace_id = :workspaceId
+                      and (cast(:notebookId as varchar) is null or n.notebook_id = cast(:notebookId as varchar))
+                      and (cast(:parentNoteId as varchar) is null or n.parent_note_id = cast(:parentNoteId as varchar))
+                      and (
+                            n.owner_id = :accountId or
+                            (nb.notebook_id is not null and (
+                                :workspaceAdmin = true or
+                                nb.owner_id = :accountId or
+                                nb.visibility = 2 or
+                                (nb.visibility = 1 and exists (select 1
+                                                               from notebook_member nm
+                                                               where nm.notebook_id = nb.notebook_id
+                                                                 and nm.account_id = :accountId
+                                                                 and nm.passive_id is null))
+                            ))
+                          )
+                    """,
+            nativeQuery = true)
+    Page<String> findAccessibleNoteIds(@Param("workspaceId") String workspaceId,
+                                       @Param("notebookId") String notebookId,
+                                       @Param("parentNoteId") String parentNoteId,
+                                       @Param("accountId") String accountId,
+                                       @Param("workspaceAdmin") boolean workspaceAdmin,
+                                       Pageable pageable);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("""

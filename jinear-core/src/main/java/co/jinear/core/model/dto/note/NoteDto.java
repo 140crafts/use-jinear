@@ -24,6 +24,8 @@ public class NoteDto extends BaseDto {
     private String ownerId;
     private String parentNoteId;
     private String title;
+    @Nullable
+    private String url;
     private String richTextId;
     private RichTextDto richText;
     @Nullable

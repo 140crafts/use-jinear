@@ -6824,6 +6824,10 @@ const translations = {
         en: "Read your notebooks and notes",
         tr: "Not defterlerinizi ve notlarınızı görüntüleyebilir"
     },
+    oauthConsentScopeNotesWrite: {
+        en: "Create, edit, move and delete your notes",
+        tr: "Notlarınızı oluşturabilir, düzenleyebilir, taşıyabilir ve silebilir"
+    },
     oauthConsentScopeFilesRead: {
         en: "Read your files and get links to them",
         tr: "Dosyalarınızı görüntüleyebilir ve bağlantılarını alabilir"
