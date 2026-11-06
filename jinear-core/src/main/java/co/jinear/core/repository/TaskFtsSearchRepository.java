@@ -13,15 +13,9 @@ public interface TaskFtsSearchRepository extends JpaRepository<TaskFts, String> 
 
     @Query(value = """
             select *
-                 , ts_rank_cd(fts, to_tsquery('simple',
-                       (select string_agg(tok || ':*', ' & ')
-                        from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
-                        where tok <> ''))) as search_ranking
+                 , ts_rank_cd(fts, jinear_fts_prefix_query(:q)) as search_ranking
             from mv_task_fts ft
-            where fts @@ to_tsquery('simple',
-                      (select string_agg(tok || ':*', ' & ')
-                       from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
-                       where tok <> ''))
+            where fts @@ jinear_fts_prefix_query(:q)
               and ft.workspace_id = :workspaceId
               and (
                     ft.team_id in :visibleToAllTeamIds or
@@ -33,10 +27,7 @@ public interface TaskFtsSearchRepository extends JpaRepository<TaskFts, String> 
             countQuery = """
                     select count(*)
                     from mv_task_fts ft
-                    where fts @@ to_tsquery('simple',
-                              (select string_agg(tok || ':*', ' & ')
-                               from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
-                               where tok <> ''))
+                    where fts @@ jinear_fts_prefix_query(:q)
                       and ft.workspace_id = :workspaceId
                       and (
                             ft.team_id in :visibleToAllTeamIds or

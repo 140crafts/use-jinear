@@ -23,6 +23,7 @@ import co.jinear.core.manager.mcp.tool.compatibility.FetchTool;
 import co.jinear.core.manager.mcp.tool.compatibility.SearchTool;
 import co.jinear.core.manager.mcp.tool.file.GetFileLinkTool;
 import co.jinear.core.manager.mcp.tool.file.ListFilesTool;
+import co.jinear.core.manager.mcp.tool.file.SearchFilesTool;
 import co.jinear.core.manager.mcp.tool.note.AppendToNoteTool;
 import co.jinear.core.manager.mcp.tool.note.CreateNoteTool;
 import co.jinear.core.manager.mcp.tool.note.DeleteNoteTool;
@@ -183,6 +184,7 @@ final class McpRealCatalog {
                 new DeleteNoteTool(mock(NoteOperationManager.class)),
 
                 new ListFilesTool(mock(MaterialListingManager.class), viewConverter),
+                new SearchFilesTool(mock(MaterialListingManager.class), viewConverter),
                 new GetFileLinkTool(mock(MaterialManager.class), oauthProperties()),
 
                 new ListNotificationsTool(mock(NotificationEventListingManager.class), viewConverter),

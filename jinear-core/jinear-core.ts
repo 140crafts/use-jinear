@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-11-04 22:13:10.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-05 22:45:41.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -93,8 +93,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -809,9 +809,9 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
-    accountWorkspaceAdminOrOwner: boolean;
     accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
+    accountWorkspaceAdminOrOwner: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -1609,6 +1609,11 @@ export interface MaterialSearchRequest extends BaseRequest {
     materialType?: MaterialType | null;
 }
 
+export interface MaterialTextSearchRequest extends BaseRequest {
+    query: string;
+    materialType?: MaterialType | null;
+}
+
 export interface InternalBatchMediaRetrieveRequest {
     relatedObjectIds: string[];
     fileTypes: FileType[];
@@ -1763,9 +1768,9 @@ export interface OauthAuthorizeRequest {
     codeChallengeMethod: string;
     resource: string;
     response_type: string;
+    client_id: string;
     redirect_uri: string;
     code_challenge: string;
-    client_id: string;
     code_challenge_method: string;
 }
 
@@ -1803,11 +1808,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
-    redirect_uri: string;
-    refresh_token: string;
-    code_verifier: string;
     grant_type: string;
+    code_verifier: string;
+    refresh_token: string;
     client_id: string;
+    redirect_uri: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2318,6 +2323,10 @@ export interface MaterialAccessPaginatedResponse extends BaseResponse {
 
 export interface MaterialInitializeFileUploadResponse extends BaseResponse {
     data: WaitingForUploadMaterialResultDto;
+}
+
+export interface MaterialPaginatedResponse extends BaseResponse {
+    data: PageDto<MaterialDto>;
 }
 
 export interface MaterialRetrieveResponse extends BaseResponse {
@@ -2936,9 +2945,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    filename: string;
     description: string;
     uri: URI;
+    filename: string;
 }
 
 export interface InputStreamSource {
@@ -3256,7 +3265,7 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "NOTE_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE" | "MANAGEMENT_ADMIN_ACCOUNT_SYNC";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "NOTE_FTS_REFRESH" | "MATERIAL_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE" | "MANAGEMENT_ADMIN_ACCOUNT_SYNC";
 
 export type InstanceFlagType = "REGISTER_WITH_MAIL" | "FORGOT_PASSWORD" | "SIGN_IN_WITH_APPLE" | "SIGN_IN_WITH_GOOGLE" | "SIGN_IN_WITH_EMAIL_CODE" | "WORKSPACE_INIT" | "ATTACH_GOOGLE_CALENDAR" | "MCP_SERVER";
 

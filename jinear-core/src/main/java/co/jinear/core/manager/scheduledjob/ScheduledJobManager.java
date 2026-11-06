@@ -5,6 +5,7 @@ import co.jinear.core.manager.telemetry.InstanceReportSendManager;
 import co.jinear.core.model.entity.material.Material;
 import co.jinear.core.model.entity.media.Media;
 import co.jinear.core.model.vo.media.RemoveMediaVo;
+import co.jinear.core.service.material.MaterialFtsRefreshService;
 import co.jinear.core.service.material.MaterialRetrieveService;
 import co.jinear.core.service.media.MediaOperationService;
 import co.jinear.core.service.media.MediaRetrieveService;
@@ -35,6 +36,7 @@ public class ScheduledJobManager {
     private final ReminderProcessManager reminderProcessManager;
     private final TaskFtsRefreshService taskFtsRefreshService;
     private final NoteFtsRefreshService noteFtsRefreshService;
+    private final MaterialFtsRefreshService materialFtsRefreshService;
     private final McpRetentionService mcpRetentionService;
     private final OauthRetentionService oauthRetentionService;
     private final InstanceReportSendManager instanceReportSendManager;
@@ -140,6 +142,12 @@ public class ScheduledJobManager {
     @Scheduled(fixedRate = 8, initialDelay = 4, timeUnit = TimeUnit.SECONDS)
     public void refreshNoteFtsMaterializedView() {
         noteFtsRefreshService.refreshIfDirty();
+    }
+
+    @Async
+    @Scheduled(fixedRate = 8, initialDelay = 2, timeUnit = TimeUnit.SECONDS)
+    public void refreshMaterialFtsMaterializedView() {
+        materialFtsRefreshService.refreshIfDirty();
     }
 
     private void updateMediaAsPrivate(String mediaId) {

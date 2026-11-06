@@ -14,10 +14,7 @@ public interface NoteFtsSearchRepository extends JpaRepository<NoteFts, String> 
             from mv_note_fts nf
                      inner join note n on n.note_id = nf.note_id and n.passive_id is null
                      left join notebook nb on nb.notebook_id = n.notebook_id and nb.passive_id is null
-            where nf.fts @@ to_tsquery('simple',
-                      (select string_agg(tok || ':*', ' & ')
-                       from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
-                       where tok <> ''))
+            where nf.fts @@ jinear_fts_prefix_query(:q)
               and nf.workspace_id = :workspaceId
               and (cast(:notebookId as varchar) is null or n.notebook_id = cast(:notebookId as varchar))
               and (cast(:parentNoteId as varchar) is null or n.parent_note_id = cast(:parentNoteId as varchar))
@@ -34,10 +31,7 @@ public interface NoteFtsSearchRepository extends JpaRepository<NoteFts, String> 
                                                          and nm.passive_id is null))
                     ))
                   )
-            order by ts_rank_cd(nf.fts, to_tsquery('simple',
-                         (select string_agg(tok || ':*', ' & ')
-                          from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
-                          where tok <> ''))) desc,
+            order by ts_rank_cd(nf.fts, jinear_fts_prefix_query(:q)) desc,
                      nf.note_id desc
             """,
             countQuery = """
@@ -45,10 +39,7 @@ public interface NoteFtsSearchRepository extends JpaRepository<NoteFts, String> 
                     from mv_note_fts nf
                              inner join note n on n.note_id = nf.note_id and n.passive_id is null
                              left join notebook nb on nb.notebook_id = n.notebook_id and nb.passive_id is null
-                    where nf.fts @@ to_tsquery('simple',
-                              (select string_agg(tok || ':*', ' & ')
-                               from unnest(regexp_split_to_array(trim(regexp_replace(translate(:q, 'ıIİ', 'iii'), '[^\\w\\s]', ' ', 'g')), '\\s+')) tok
-                               where tok <> ''))
+                    where nf.fts @@ jinear_fts_prefix_query(:q)
                       and nf.workspace_id = :workspaceId
                       and (cast(:notebookId as varchar) is null or n.notebook_id = cast(:notebookId as varchar))
                       and (cast(:parentNoteId as varchar) is null or n.parent_note_id = cast(:parentNoteId as varchar))
