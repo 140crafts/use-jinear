@@ -17,6 +17,6 @@ public class McpAddTaskCommentInput {
     @McpField("Comment body. Plain text or simple HTML.")
     private String comment;
 
-    @McpField("Comment id being replied to, if this is a reply.")
+    @McpField("Id of a comment on the same task, if this is a reply.")
     private String quoteCommentId;
 }

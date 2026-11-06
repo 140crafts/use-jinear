@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-11-05 22:45:41.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-06 12:51:57.
 
 export interface BaseDto {
     createdDate: Date;
@@ -93,8 +93,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -189,9 +189,9 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    ginternalDate: string;
-    ghistoryId: string;
     gthreadId: string;
+    ghistoryId: string;
+    ginternalDate: string;
     gid: string;
 }
 
@@ -809,9 +809,9 @@ export interface SubscriptionPaymentInfoDto extends BaseDto {
 export interface AccountProjectPermissionFlags {
     canInitializePost: boolean;
     canComment: boolean;
+    accountWorkspaceAdminOrOwner: boolean;
     accountIsProjectTeamsMember: boolean;
     accountIsProjectTeamsAdmin: boolean;
-    accountWorkspaceAdminOrOwner: boolean;
 }
 
 export interface AccountProjectPermissionFlagsBuilder {
@@ -1808,11 +1808,11 @@ export interface OauthTokenRequest {
     refreshToken: string;
     scope: string;
     resource: string;
+    client_id: string;
+    redirect_uri: string;
     grant_type: string;
     code_verifier: string;
     refresh_token: string;
-    client_id: string;
-    redirect_uri: string;
 }
 
 export interface RetrieveMobileLoginRedirectInfoRequest extends BaseRequest {
@@ -2945,9 +2945,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
+    filename: string;
     description: string;
     uri: URI;
-    filename: string;
 }
 
 export interface InputStreamSource {
