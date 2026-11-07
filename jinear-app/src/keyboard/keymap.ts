@@ -12,6 +12,7 @@ export const shortcuts = {
     whatsNew: "u",
 
     newTask: "n",
+    search: "k",
     lastActivities: "l",
     assignedToMe: "a",
 

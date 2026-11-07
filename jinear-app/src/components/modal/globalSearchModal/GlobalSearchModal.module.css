@@ -1,0 +1,166 @@
+.modalContent {
+    overflow: hidden !important;
+}
+
+.container {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    max-height: min(640px, 80vh) !important;
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 0.75rem;
+    border-bottom: 1px solid var(--c-primary-shade-0);
+}
+
+.inputContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+}
+
+.searchInput {
+    flex: 1;
+    min-width: 0;
+    padding: 0.35rem 0 !important;
+    padding-left: 0.5rem !important;
+    border: none !important;
+    outline: none !important;
+    background-color: transparent !important;
+}
+
+.clearButton {
+    flex-shrink: 0;
+    width: 1.4rem;
+    height: 1.4rem;
+    min-height: unset !important;
+    padding: 0 !important;
+    border-radius: 999px !important;
+    background-color: var(--c-primary-shade-1) !important;
+}
+
+.escButton {
+    flex-shrink: 0;
+    min-height: unset !important;
+    padding: 0.1rem 0.4rem !important;
+    border: 1px solid var(--c-primary-shade-1) !important;
+    border-radius: 4px !important;
+    color: var(--c-secondary-shade-1);
+}
+
+.cancelButton {
+    flex-shrink: 0;
+    padding: 0 0.25rem !important;
+}
+
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    padding: 0.5rem 0.75rem;
+}
+
+.tab {
+    gap: 0.35rem !important;
+    min-height: unset !important;
+    padding: 0.25rem 0.6rem !important;
+}
+
+.activeTab {
+    font-weight: 600;
+}
+
+.tabCount {
+    opacity: 0.7;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 6rem;
+    padding: 0 0.4rem 0.5rem 0.4rem;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.25rem;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0.6rem 0.25rem 0.6rem;
+}
+
+.sectionTitle {
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--c-secondary-shade-1);
+}
+
+.seeAll {
+    min-height: unset !important;
+    padding: 0 !important;
+}
+
+.messageContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 5rem;
+    padding: 1rem;
+    text-align: center;
+    color: var(--c-secondary-shade-1);
+}
+
+.container.mobile {
+    height: 100% !important;
+    max-height: 100% !important;
+}
+
+.mobile .header {
+    padding: 0.75rem;
+    padding-top: max(0.75rem, env(safe-area-inset-top));
+    border-bottom: none;
+}
+
+.mobile .inputContainer {
+    padding: 0.3rem 0.6rem;
+    border-radius: 999px;
+    background-color: var(--c-primary-shade-0);
+}
+
+.mobile .tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-top: 0;
+    border-bottom: 1px solid var(--c-primary-shade-0);
+}
+
+.mobile .tab {
+    flex-shrink: 0;
+    border: 1px solid var(--c-primary-shade-1) !important;
+    border-radius: 999px !important;
+    padding: 0.3rem 0.8rem !important;
+}
+
+.mobile .activeTab {
+    border-color: var(--c-secondary) !important;
+}
+
+.mobile .list {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+}

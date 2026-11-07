@@ -70,6 +70,11 @@ export interface NotebookInitializeModalState extends ModalState {
     workspace?: WorkspaceDto;
 }
 
+export interface GlobalSearchModalState extends ModalState {
+    workspaceId?: string;
+    workspaceUsername?: string;
+}
+
 export interface SearchTaskModalState extends ModalState {
     workspaceId?: string;
     teamIds?: string[];

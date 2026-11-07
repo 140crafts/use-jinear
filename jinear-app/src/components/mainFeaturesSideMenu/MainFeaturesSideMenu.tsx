@@ -1,12 +1,14 @@
 import type {AccountsWorkspacePerspectiveDto} from "@/model/be/jinear-core";
 import useTranslation from "@/locales/useTranslation";
 import React from "react";
-import {LuCalendarDays, LuFolder, LuNotebook, LuShieldCheck, LuSquareCheckBig} from "react-icons/lu";
+import {LuCalendarDays, LuFolder, LuNotebook, LuSearch, LuShieldCheck, LuSquareCheckBig} from "react-icons/lu";
 import Button, {ButtonVariants} from "../button";
 import styles from "./MainFeaturesSideMenu.module.scss";
 import Logger from "@/util/logger";
 import {useLocation} from "react-router-dom";
 import useIsInstanceAdmin from "@/hooks/useIsInstanceAdmin";
+import {useAppDispatch} from "@/store";
+import {popGlobalSearchModal} from "@/slice/modalSlice";
 
 interface MainFeaturesSideMenuProps {
     workspace: AccountsWorkspacePerspectiveDto;
@@ -17,6 +19,7 @@ const logger = Logger("MainFeaturesSideMenu");
 const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) => {
     const {t} = useTranslation();
     const {pathname} = useLocation();
+    const dispatch = useAppDispatch();
     const calendarPath = `/${workspace?.username}/calendar`;
     const tasksPath = `/${workspace?.username}/tasks`;
     const filesPath = `/${workspace?.username}/files`;
@@ -24,6 +27,10 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
     const instanceSettingsPath = `/admin/instance-settings`;
 
     const isInstanceAdmin = useIsInstanceAdmin();
+
+    const popSearch = () => {
+        dispatch(popGlobalSearchModal({visible: true, workspaceId: workspace.workspaceId, workspaceUsername: workspace.username}));
+    };
 
     return (
         <div className={styles.container}>
@@ -66,6 +73,16 @@ const MainFeaturesSideMenu: React.FC<MainFeaturesSideMenuProps> = ({workspace}) 
             >
                 <LuFolder className={styles.icon}/>
                 {t("mainFeaturesMenuLabelFiles")}
+            </Button>
+
+            <Button
+                className={styles.iconButton}
+                onClick={popSearch}
+                shortcut="search"
+                variant={ButtonVariants.hoverFilled2}
+            >
+                <LuSearch className={styles.icon}/>
+                {t("mainFeaturesMenuLabelSearch")}
             </Button>
 
             {isInstanceAdmin && (
