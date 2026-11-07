@@ -1,6 +1,6 @@
 ---
 title: "AI Assistants Can Write Notes Now, and Search Got Better."
-description: "Assistants connected to Jinear can now create and edit notes, manage checklists, reminders and boards, and search your files. Search also finds Turkish words typed without Turkish letters. And a handful of fixes, including task order on boards and dates in the task activity."
+description: "Assistants connected to Jinear can now create and edit notes, manage checklists, reminders and boards, and search your files. The app has one search for tasks, notes and files, and it finds Turkish words typed without Turkish letters. And a handful of fixes, including task order on boards and dates in the task activity."
 pubDate: "2026-11-06"
 tags: ["changelog", "mcp", "notes", "search"]
 author: "Çağdaş Tunca"
@@ -65,13 +65,27 @@ and you can disconnect it from your profile at any time.
 
 ## Search
 
+The app has a new search. Press **Option+K** (**Alt+K** on Windows and Linux), or
+click **Search** in the main menu (at the bottom of the screen on a phone), and type.
+Tasks, notes and files come back together, the first few of each, with the words you
+typed highlighted. The tabs at the top show only the tasks, only the notes or only
+the files, and **Load more** goes further down the list. The arrow keys and Enter
+work, and on a phone the search opens full screen.
+
+The Search button in the workspace part of the side menu is gone, because the new one
+in the main menu replaces it. Option+K opens the new search instead of the old task
+search.
+
+The rest of this section is about what search can find, in the app and for
+assistants:
+
 - **Files are searchable.** An assistant can find a file by its name, its type or the
   person who uploaded it. "The newest PDF in our files" is now a question it can
   answer. It finds the file and gives you a link. It does not read what is inside.
 - **Notes are searchable**, by title and by what is written in them.
 - **Turkish letters no longer get in the way.** Type "sirket" and you find "şirket".
   Type "gorev" and you find "görev". This works for ç, ğ, ı, İ, ö, ş and ü, and it
-  works in the task search in the app too, not only for assistants.
+  works in the search in the app too, not only for assistants.
 
 New and changed things show up in search within about ten seconds.
 
@@ -109,6 +123,11 @@ docker compose pull && docker compose up -d
 
 The search changes rebuild themselves when the server starts. Nothing needs to be
 done by hand.
+
+If you have your own scripts that call the Jinear API: the separate note search and
+file search endpoints are gone. One endpoint, `POST /v1/workspace/search`, now
+returns tasks, notes and files, and it can be limited to one of them. The task search
+endpoint is still there.
 
 There is one new, optional setting: the address of a note in your app, so that an
 assistant can give you a link that opens the note directly. Without it, the link goes

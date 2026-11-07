@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useState} from "react";
 import {createPortal} from "react-dom";
 import {
     CLEAR_ATTRIBUTE,
+    COMMAND_SHORTCUTS,
     DISMISS_ATTRIBUTE,
     JUMP_MODE_KEY,
     SCOPE_ATTRIBUTE,
@@ -51,6 +52,16 @@ const findTargets = (scope: ParentNode, clear: boolean) => {
         }
     });
     return targets;
+};
+
+const findCommandTarget = (key: string) => {
+    const shortcutId = COMMAND_SHORTCUTS.find(id => shortcuts[id] == key);
+    if (!shortcutId) {
+        return null;
+    }
+    const tagged = document.querySelector<HTMLElement>(`[${SHORTCUT_ATTRIBUTE}="${shortcutId}"]`);
+    const element = tagged ? resolveClickable(tagged) : null;
+    return element && isReachable(element) ? element : null;
 };
 
 const KEY_LABELS: Record<string, string> = {enter: "↵"};
@@ -152,6 +163,15 @@ const KeyboardShortcuts: React.FC = () => {
                     showTimer = window.setTimeout(show, HINT_DELAY_MS);
                 }
                 return;
+            }
+            if ((event.metaKey || event.ctrlKey) && !event.altKey && !event.shiftKey) {
+                const commandTarget = findCommandTarget(normalizeKey(event));
+                if (commandTarget) {
+                    event.preventDefault();
+                    hide();
+                    activate(commandTarget);
+                    return;
+                }
             }
             // ctrlKey + altKey is AltGr on Windows, used to type characters like @.
             const scope = activeScope();

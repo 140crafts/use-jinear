@@ -50,6 +50,9 @@ export const shortcuts = {
 
 export type ShortcutId = keyof typeof shortcuts;
 
+// Also reachable with Cmd/Ctrl, the common key for these. Only keys a page can take from the browser.
+export const COMMAND_SHORTCUTS: ShortcutId[] = ["search"];
+
 export const JUMP_MODE_KEY = "j";
 
 export const JUMP_LABEL_CHARACTERS = "asdfghjklqwertyuiopzxcvbnm";

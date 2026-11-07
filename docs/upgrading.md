@@ -57,6 +57,19 @@ does not have it, so an assistant on that connection can still read notes but ca
 them. To give it, a member disconnects the assistant from their profile and connects it
 again, then allows notes writing on the consent screen.
 
+### Search endpoints
+
+The app now has one search for tasks, notes and files. If you have your own scripts that
+call the API, check them for these changes:
+
+- `POST /v1/workspace/search` is new. Its body is `{workspaceId, query, teamIdList?, types?}`,
+  where `types` takes `TASK`, `NOTE` and `MATERIAL`, and the page is given as `?page=`. It
+  returns one page of each type that was asked for, or of all three when `types` is empty.
+- `POST /v1/note/workspace/{workspaceId}/search` and
+  `POST /v1/material/workspace/{workspaceId}/search` are removed. Use the new endpoint with
+  `types: ["NOTE"]` or `types: ["MATERIAL"]`.
+- `POST /v1/task/search/{workspaceId}` is unchanged.
+
 ---
 
 ## v0.1.1682

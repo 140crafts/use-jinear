@@ -105,6 +105,17 @@ export default function HomeClient() {
               <span className={styles.k}>files</span>
               <span>Attach files to tasks, create folders, upload data, and define fine-grained access controls.</span>
             </li>
+            <li>
+              <span className={styles.k}>ai agents</span>
+              <span>
+                Connect Claude or ChatGPT over MCP. They find and update tasks, write notes, set reminders and
+                search your files, only with the permissions you give.{" "}
+                <Link className={styles.linkU} href="/mcp">
+                  See what they can do
+                </Link>
+                .
+              </span>
+            </li>
           </ul>
         </section>
 
