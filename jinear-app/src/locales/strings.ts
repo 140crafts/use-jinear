@@ -3163,10 +3163,6 @@ const translations = {
         en: "This Week",
         tr: "Bu Hafta"
     },
-    mainFeaturesMenuLabelSearch: {
-        en: "Search",
-        tr: "Ara"
-    },
     mainFeaturesMenuLabelAssignedToMe: {
         en: "Assignments",
         tr: "Bana Atananlar"

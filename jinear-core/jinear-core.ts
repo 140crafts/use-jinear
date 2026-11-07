@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-11-06 23:18:08.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-07 12:42:51.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    first: boolean;
     last: boolean;
+    first: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -190,8 +190,8 @@ export interface GmailMessageDto extends BaseDto {
     subject: string;
     body: string;
     gthreadId: string;
-    ghistoryId: string;
     ginternalDate: string;
+    ghistoryId: string;
     gid: string;
 }
 
@@ -1410,6 +1410,12 @@ export interface WorkspacePrefetchTeamDto {
     topics: TopicSearchResponse;
 }
 
+export interface WorkspaceSearchDto {
+    tasks?: PageDto<TaskDto> | null;
+    notes?: PageDto<NoteDto> | null;
+    materials?: PageDto<MaterialDto> | null;
+}
+
 export interface WorkspaceSettingDto extends BaseDto {
     visibility: WorkspaceVisibilityType;
     contentVisibility: WorkspaceContentVisibilityType;
@@ -1767,8 +1773,8 @@ export interface OauthAuthorizeRequest {
     codeChallenge: string;
     codeChallengeMethod: string;
     resource: string;
-    client_id: string;
     response_type: string;
+    client_id: string;
     redirect_uri: string;
     code_challenge: string;
     code_challenge_method: string;
@@ -1809,8 +1815,8 @@ export interface OauthTokenRequest {
     scope: string;
     resource: string;
     client_id: string;
-    grant_type: string;
     redirect_uri: string;
+    grant_type: string;
     code_verifier: string;
     refresh_token: string;
 }
@@ -2227,6 +2233,13 @@ export interface WorkspacePrefetchRequest extends BaseRequest {
 export interface WorkspacePrefetchTimespanRequest {
     timespanStart: Date;
     timespanEnd: Date;
+}
+
+export interface WorkspaceSearchRequest extends BaseRequest {
+    workspaceId: string;
+    query: string;
+    teamIdList?: string[] | null;
+    types?: WorkspaceSearchType[] | null;
 }
 
 export interface WorkspaceTitleUpdateRequest extends BaseRequest {
@@ -2749,6 +2762,10 @@ export interface WorkspacePrefetchResponse extends BaseResponse {
     data: WorkspacePrefetchDto;
 }
 
+export interface WorkspaceSearchResponse extends BaseResponse {
+    data: WorkspaceSearchDto;
+}
+
 export interface GoogleCalendarEventInfo {
     kind: string;
     etag: string;
@@ -2814,12 +2831,12 @@ export interface CaptchaResolveVo {
 
 export interface MultipartFile extends InputStreamSource {
     contentType: string;
-    originalFilename: string;
     name: string;
     bytes: any;
     empty: boolean;
     resource: Resource;
     size: number;
+    originalFilename: string;
 }
 
 export interface McpToolDescriptor {
@@ -2941,13 +2958,13 @@ export interface BaseEntity {
 }
 
 export interface Resource extends InputStreamSource {
-    filename: string;
-    description: string;
-    uri: URI;
     open: boolean;
     file: any;
     readable: boolean;
     url: URL;
+    filename: string;
+    description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {
@@ -3064,10 +3081,10 @@ export interface Account extends BaseEntity {
     accountProfileMedia: AccountProfileMedia;
 }
 
-export interface URI extends Comparable<URI>, Serializable {
+export interface URL extends Serializable {
 }
 
-export interface URL extends Serializable {
+export interface URI extends Comparable<URI>, Serializable {
 }
 
 export interface GoogleCalendarConferenceSolutionKey {
@@ -3394,6 +3411,8 @@ export type WorkspaceContentVisibilityType = "VISIBLE" | "HIDDEN";
 export type WorkspaceInvitationStatusType = "WAITING_FOR_ANSWER" | "ACCEPTED" | "DECLINED" | "TIMED_OUT";
 
 export type WorkspaceJoinType = "NEVER" | "PUBLIC" | "WITH_REQUEST" | "WITH_PASSWORD";
+
+export type WorkspaceSearchType = "TASK" | "NOTE" | "MATERIAL";
 
 export type WorkspaceTier = "BASIC" | "PRO";
 

@@ -11,6 +11,7 @@ export const taskTopicApi = api.injectEndpoints({
             invalidatesTags: (_result, _err, req) => [
                 {type: "v1/task/from-workspace/{workspaceName}/{taskTag}"},
                 "v1/task/list/filter",
+                "v1/workspace/search",
                 "v1/calendar/event/filter",
                 "v1/workspace/activity/filter",
                 "v1/task-analytics/{workspaceId}/team/{teamId}",
@@ -25,6 +26,7 @@ export const taskTopicApi = api.injectEndpoints({
             invalidatesTags: (_result, _err, req) => [
                 {type: "v1/task/from-workspace/{workspaceName}/{taskTag}"},
                 "v1/task/list/filter",
+                "v1/workspace/search",
                 "v1/calendar/event/filter",
                 "v1/workspace/activity/filter",
                 "v1/task-analytics/{workspaceId}/team/{teamId}",

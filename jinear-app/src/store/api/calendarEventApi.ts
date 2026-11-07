@@ -24,7 +24,7 @@ export const calendarEventApi = api.injectEndpoints({
         //
         insertEvent: build.mutation<BaseResponse, CalendarEventInitializeRequest>({
             query: (req) => ({url: `v1/calendar/event/update/from-external`, method: "POST", body: req}),
-            invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
+            invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter", "v1/workspace/search"]
         }),
         //
         moveEvent: build.mutation<BaseResponse, CalendarEventMoveRequest>({
@@ -56,7 +56,7 @@ export const calendarEventApi = api.injectEndpoints({
                     });
                 queryFulfilled.catch(() => patches.forEach((patch) => patch.undo()));
             },
-            invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
+            invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter", "v1/workspace/search"]
         }),
         //
         updateCalendarEventDates: build.mutation<BaseResponse, CalendarEventDateUpdateRequest>({
@@ -99,7 +99,7 @@ export const calendarEventApi = api.injectEndpoints({
                 // Without this a failed move leaves the event sitting on the day it was dropped on.
                 queryFulfilled.catch(() => patches.forEach((patch) => patch.undo()));
             },
-            invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
+            invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter", "v1/workspace/search"]
         }),
         //
         updateTitleAndDescription: build.mutation<BaseResponse, CalendarEventTitleDescriptionUpdateRequest>({
@@ -108,7 +108,7 @@ export const calendarEventApi = api.injectEndpoints({
                 method: "PUT",
                 body: req
             }),
-            invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
+            invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter", "v1/workspace/search"]
         }),
         //
         deleteCalendarEvent: build.mutation<BaseResponse, { calendarId: string; sourceId: string, eventId: string, }>({
@@ -116,7 +116,7 @@ export const calendarEventApi = api.injectEndpoints({
                 url: `v1/calendar/event/update/from-external/calendar/${calendarId}/source/${sourceId}/event/${eventId}`,
                 method: "DELETE"
             }),
-            invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter"]
+            invalidatesTags: ["v1/calendar/event/filter", "v1/task/list/filter", "v1/workspace/search"]
         }),
         //
         retrieveShareableKey: build.query<CalendarShareableKeyResponse, { workspaceId: string }>({
