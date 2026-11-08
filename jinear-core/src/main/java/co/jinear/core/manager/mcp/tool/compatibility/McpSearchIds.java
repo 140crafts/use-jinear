@@ -7,4 +7,5 @@ public class McpSearchIds {
 
     public static final String TASK_PREFIX = "task:";
     public static final String NOTE_PREFIX = "note:";
+    public static final String FILE_PREFIX = "file:";
 }

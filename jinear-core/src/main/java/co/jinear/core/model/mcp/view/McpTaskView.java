@@ -25,6 +25,9 @@ public class McpTaskView implements McpToolPayload {
     @McpField("Human readable reference, for example ENG-42.")
     private String reference;
 
+    @McpField("Link that opens the task in the Jinear app.")
+    private String url;
+
     @McpField("Current status id.")
     private String workflowStatusId;
 

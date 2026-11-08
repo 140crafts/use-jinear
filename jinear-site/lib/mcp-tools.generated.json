@@ -1,5 +1,61 @@
 {
   "tools" : [ {
+    "name" : "add_checklist_item",
+    "title" : "Add an item to a checklist",
+    "description" : "Adds an unchecked item to the end of a checklist. Returns the item with its id.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistId" : {
+          "type" : "string",
+          "description" : "Checklist id, from get_task or create_task_checklist."
+        },
+        "label" : {
+          "type" : "string",
+          "description" : "Item text."
+        }
+      },
+      "required" : [ "checklistId", "label" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistItem" : {
+          "type" : "object",
+          "description" : "The created item.",
+          "properties" : {
+            "checklistItemId" : {
+              "type" : "string",
+              "description" : "Checklist item id."
+            },
+            "checklistId" : {
+              "type" : "string",
+              "description" : "Checklist this item belongs to."
+            },
+            "label" : {
+              "type" : "string",
+              "description" : "Item text."
+            },
+            "checked" : {
+              "type" : "boolean",
+              "description" : "True when the item is checked."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "checklistItem" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Add an item to a checklist",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "add_task_attachment",
     "title" : "Attach a file to a task",
     "description" : "Attaches a new file to a task, attributed to the signed in account. Pass the content as text for text files such as Markdown, CSV or JSON, or as contentBase64 for binary files such as images or PDFs. Needs a PRO workspace with free storage. Returns the new attachment's id and a downloadUrl for the person.",
@@ -84,7 +140,7 @@
         },
         "quoteCommentId" : {
           "type" : "string",
-          "description" : "Comment id being replied to, if this is a reply."
+          "description" : "Id of a comment on the same task, if this is a reply."
         }
       },
       "required" : [ "taskId", "comment" ],
@@ -110,6 +166,169 @@
     },
     "annotations" : {
       "title" : "Comment on a task",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "add_task_relation",
+    "title" : "Relate two tasks",
+    "description" : "Links two tasks of the same team. SUBTASK makes taskId a subtask of relatedTaskId; BLOCKS and IS_BLOCKED_BY mark a dependency. Returns the relation with its id.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "description" : "Task id of the left side of the relation, from search_tasks, list_tasks or get_task."
+        },
+        "relatedTaskId" : {
+          "type" : "string",
+          "description" : "Task id of the right side of the relation. It must be in the same team as taskId."
+        },
+        "relationType" : {
+          "type" : "string",
+          "description" : "Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, or taskId IS_BLOCKED_BY relatedTaskId.",
+          "enum" : [ "BLOCKS", "IS_BLOCKED_BY", "SUBTASK" ]
+        }
+      },
+      "required" : [ "taskId", "relatedTaskId", "relationType" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "relation" : {
+          "type" : "object",
+          "description" : "The created relation.",
+          "properties" : {
+            "taskRelationId" : {
+              "type" : "string",
+              "description" : "Relation id. Pass it to remove_task_relation."
+            },
+            "relationType" : {
+              "type" : "string",
+              "description" : "SUBTASK, BLOCKS or IS_BLOCKED_BY. Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, taskId IS_BLOCKED_BY relatedTaskId."
+            },
+            "taskId" : {
+              "type" : "string",
+              "description" : "The task on the left of the relation."
+            },
+            "taskTitle" : {
+              "type" : "string",
+              "description" : "Title of taskId."
+            },
+            "relatedTaskId" : {
+              "type" : "string",
+              "description" : "The task on the right of the relation."
+            },
+            "relatedTaskTitle" : {
+              "type" : "string",
+              "description" : "Title of relatedTaskId."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "relation" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Relate two tasks",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "add_task_reminder",
+    "title" : "Add reminders to a task",
+    "description" : "Adds one or more reminders to a task: at its start date, at its due date, and at a specific instant that can repeat. Supply at least one of atStartDate, atDueDate or remindAt. When a reminder fires, Jinear notifies every subscriber of the task. Reminders cannot be edited: to change one, remove it and add a new one. Returns the reminders this call created.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "description" : "Task id."
+        },
+        "atStartDate" : {
+          "type" : "boolean",
+          "description" : "Remind at the task's start date. The reminder moves when the start date changes. Skipped when the task has no start date or already has a start date reminder."
+        },
+        "atDueDate" : {
+          "type" : "boolean",
+          "description" : "Remind at the task's due date. The reminder moves when the due date changes. Skipped when the task has no due date or already has a due date reminder."
+        },
+        "remindAt" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Instant for a reminder at a specific time. Must be in the future."
+        },
+        "repeat" : {
+          "type" : "string",
+          "description" : "How the remindAt reminder repeats. Defaults to NONE.",
+          "enum" : [ "NONE", "HOURLY", "DAILY", "WEEKLY", "BIWEEKLY", "MONTHLY", "EVERY_3_MONTHS", "EVERY_6_MONTHS", "YEARLY" ]
+        },
+        "repeatUntil" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "Last instant a repeating remindAt reminder may fire. Leave out for no end."
+        }
+      },
+      "required" : [ "taskId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "description" : "Reminders this call created.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "taskReminderId" : {
+                "type" : "string",
+                "description" : "Reminder id. Pass it to remove_task_reminder."
+              },
+              "taskId" : {
+                "type" : "string",
+                "description" : "Task this reminder belongs to."
+              },
+              "type" : {
+                "type" : "string",
+                "description" : "START_DATE and DUE_DATE follow the task's dates. SPECIFIC_DATE fires at a fixed instant."
+              },
+              "repeat" : {
+                "type" : "string",
+                "description" : "How the reminder repeats. NONE for a one time reminder."
+              },
+              "repeatUntil" : {
+                "type" : "string",
+                "description" : "Last instant a repeating reminder may fire, or null for no end."
+              },
+              "nextRemindAt" : {
+                "type" : "string",
+                "description" : "Next instant the reminder fires, or null when it will not fire again."
+              },
+              "createdByAccountId" : {
+                "type" : "string",
+                "description" : "Account id of the person who added the reminder."
+              }
+            },
+            "additionalProperties" : false
+          }
+        },
+        "count" : {
+          "type" : "integer",
+          "description" : "Number of items returned."
+        }
+      },
+      "required" : [ "items" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Add reminders to a task",
       "readOnlyHint" : false,
       "destructiveHint" : false,
       "idempotentHint" : false,
@@ -156,9 +375,183 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "append_to_note",
+    "title" : "Add to a note",
+    "description" : "Adds HTML at the start or end of a note. Existing content stays as it is, so it fits adding a section, a log line or a list.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from list_notes or search_notes."
+        },
+        "body" : {
+          "type" : "string",
+          "description" : "Body as HTML. Allowed: headings, paragraphs, marks, links, lists, task lists, code blocks, tables, images."
+        },
+        "position" : {
+          "type" : "string",
+          "description" : "Where to add the body. Defaults to END.",
+          "enum" : [ "START", "END" ]
+        }
+      },
+      "required" : [ "workspaceId", "noteId", "body" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "edit" : {
+          "type" : "object",
+          "description" : "The result of this write.",
+          "properties" : {
+            "noteId" : {
+              "type" : "string",
+              "description" : "Note id."
+            },
+            "url" : {
+              "type" : "string",
+              "description" : "Link that opens the note in the Jinear app."
+            },
+            "changed" : {
+              "type" : "boolean",
+              "description" : "False when the note already had this content."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "edit" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Add to a note",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "create_note",
+    "title" : "Create a note",
+    "description" : "Creates a note with a title and an optional HTML body. Returns the note id and a link that opens the note.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "Note title."
+        },
+        "body" : {
+          "type" : "string",
+          "description" : "Body as HTML. Allowed: headings, paragraphs, marks, links, lists, task lists, code blocks, tables, images."
+        },
+        "notebookId" : {
+          "type" : "string",
+          "description" : "Notebook id, from list_notebooks. Leave it out to make a note with no notebook."
+        },
+        "parentNoteId" : {
+          "type" : "string",
+          "description" : "Parent note id. It must be in the same notebook."
+        }
+      },
+      "required" : [ "workspaceId", "title" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "edit" : {
+          "type" : "object",
+          "description" : "The result of this write.",
+          "properties" : {
+            "noteId" : {
+              "type" : "string",
+              "description" : "Note id."
+            },
+            "url" : {
+              "type" : "string",
+              "description" : "Link that opens the note in the Jinear app."
+            },
+            "changed" : {
+              "type" : "boolean",
+              "description" : "False when the note already had this content."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "edit" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Create a note",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "create_notebook",
+    "title" : "Create a notebook",
+    "description" : "Creates a notebook in a workspace. Add notes to it with create_note. Returns the notebook id.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "Notebook title."
+        },
+        "description" : {
+          "type" : "string",
+          "description" : "Short description of the notebook."
+        },
+        "visibility" : {
+          "type" : "string",
+          "description" : "Who can see it. PRIVATE: only the creator. SHARED: the creator and the members added in the Jinear app. PUBLIC_WITHIN_WORKSPACE: every workspace member. Defaults to PUBLIC_WITHIN_WORKSPACE.",
+          "enum" : [ "PRIVATE", "SHARED", "PUBLIC_WITHIN_WORKSPACE" ]
+        }
+      },
+      "required" : [ "workspaceId", "title" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "notebookId" : {
+          "type" : "string",
+          "description" : "Id of the created notebook."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Create a notebook",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "create_task",
     "title" : "Create a task",
-    "description" : "Creates a task in a team. Only workspaceId, teamId and title are required. Give it a due date to put it on the calendar, and an assignee account id to hand it to someone. Returns the created task, including its reference such as ENG-42.",
+    "description" : "Creates a task in a team. Only workspaceId, teamId and title are required. Give it a due date to put it on the calendar, and an assignee account id to hand it to someone. Give it a parentTaskId to make it a subtask. Returns the created task, including its reference such as ENG-42.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -199,6 +592,17 @@
         "boardId" : {
           "type" : "string",
           "description" : "Board to add the task to on creation."
+        },
+        "parentTaskId" : {
+          "type" : "string",
+          "description" : "Task id of the parent task. The new task becomes its subtask. The parent must be in the same team."
+        },
+        "collaboratorIds" : {
+          "type" : "array",
+          "description" : "Account ids of the collaborators, from list_workspace_members.",
+          "items" : {
+            "type" : "string"
+          }
         }
       },
       "required" : [ "workspaceId", "teamId", "title" ],
@@ -230,6 +634,10 @@
             "reference" : {
               "type" : "string",
               "description" : "Human readable reference, for example ENG-42."
+            },
+            "url" : {
+              "type" : "string",
+              "description" : "Link that opens the task in the Jinear app."
             },
             "workflowStatusId" : {
               "type" : "string",
@@ -351,9 +759,275 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "create_task_checklist",
+    "title" : "Add a checklist to a task",
+    "description" : "Adds a checklist to a task, optionally with its first item. A task can hold more than one checklist. Add more items with add_checklist_item. Returns the checklist with its id.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "description" : "Task id, from search_tasks, list_tasks or get_task."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "Checklist title."
+        },
+        "firstItemLabel" : {
+          "type" : "string",
+          "description" : "Text of the first item."
+        }
+      },
+      "required" : [ "taskId", "title" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklist" : {
+          "type" : "object",
+          "description" : "The created checklist.",
+          "properties" : {
+            "checklistId" : {
+              "type" : "string",
+              "description" : "Checklist id."
+            },
+            "taskId" : {
+              "type" : "string",
+              "description" : "Task this checklist belongs to."
+            },
+            "title" : {
+              "type" : "string",
+              "description" : "Checklist title."
+            },
+            "items" : {
+              "type" : "array",
+              "description" : "Items, oldest first.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "checklistItemId" : {
+                    "type" : "string",
+                    "description" : "Checklist item id."
+                  },
+                  "checklistId" : {
+                    "type" : "string",
+                    "description" : "Checklist this item belongs to."
+                  },
+                  "label" : {
+                    "type" : "string",
+                    "description" : "Item text."
+                  },
+                  "checked" : {
+                    "type" : "boolean",
+                    "description" : "True when the item is checked."
+                  }
+                },
+                "additionalProperties" : false
+              }
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "checklist" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Add a checklist to a task",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "create_topic",
+    "title" : "Create a topic",
+    "description" : "Creates a topic in a team, the label create_task and update_task take as topicId. Returns the topic with its id.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "teamId" : {
+          "type" : "string",
+          "description" : "Team id, from list_teams."
+        },
+        "name" : {
+          "type" : "string",
+          "description" : "Topic name, for example Bug or Marketing."
+        },
+        "tag" : {
+          "type" : "string",
+          "description" : "Short tag that prefixes the topic's task numbers, for example BUG. ASCII letters and digits only, at most 16 characters; it must be unique in the workspace. Any other character is refused."
+        },
+        "color" : {
+          "type" : "string",
+          "description" : "Color as six hex digits without #, for example FF6600."
+        }
+      },
+      "required" : [ "workspaceId", "teamId", "name", "tag" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "topic" : {
+          "type" : "object",
+          "description" : "The created topic.",
+          "properties" : {
+            "topicId" : {
+              "type" : "string",
+              "description" : "Topic id, the value create_task takes as topicId."
+            },
+            "teamId" : {
+              "type" : "string",
+              "description" : "Team this topic belongs to."
+            },
+            "name" : {
+              "type" : "string",
+              "description" : "Display name."
+            },
+            "tag" : {
+              "type" : "string",
+              "description" : "Short prefix used in task references."
+            },
+            "color" : {
+              "type" : "string",
+              "description" : "Display colour."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "topic" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Create a topic",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "delete_checklist_item",
+    "title" : "Delete a checklist item",
+    "description" : "Deletes one item from a checklist. The other items and the checklist stay as they are.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistItemId" : {
+          "type" : "string",
+          "description" : "Checklist item id, from get_task."
+        }
+      },
+      "required" : [ "checklistItemId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistItemId" : {
+          "type" : "string",
+          "description" : "The item that was deleted."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Delete a checklist item",
+      "readOnlyHint" : false,
+      "destructiveHint" : true,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "delete_note",
+    "title" : "Delete a note",
+    "description" : "Deletes a note and all of its child notes.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from list_notes or search_notes."
+        }
+      },
+      "required" : [ "workspaceId", "noteId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "noteId" : {
+          "type" : "string",
+          "description" : "The note that was deleted."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Delete a note",
+      "readOnlyHint" : false,
+      "destructiveHint" : true,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "delete_task_checklist",
+    "title" : "Delete a checklist",
+    "description" : "Deletes a checklist and all of its items from a task.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistId" : {
+          "type" : "string",
+          "description" : "Checklist id, from get_task."
+        }
+      },
+      "required" : [ "checklistId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistId" : {
+          "type" : "string",
+          "description" : "The checklist that was deleted."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Delete a checklist",
+      "readOnlyHint" : false,
+      "destructiveHint" : true,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "fetch",
     "title" : "Fetch a Jinear record",
-    "description" : "Reads the full text of one record previously returned by search, given its id. Returns the title, the body as text, and a link a person can open.",
+    "description" : "Reads the full text of one record previously returned by search, given its id. Returns the title, the body as text, and a link a person can open. For a file, the text gives its type, size and creation date and the link downloads it; the contents of the file are not returned.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -389,6 +1063,204 @@
     },
     "annotations" : {
       "title" : "Fetch a Jinear record",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "get_context",
+    "title" : "Get the account's working context",
+    "description" : "Returns the signed in account, its default workspace and team, every workspace it belongs to with teams, workflow statuses and topics, and the scopes this connection was granted. Call this first, before any other Jinear tool. Use the ids from here directly instead of calling list_workspaces, list_teams, list_workflow_statuses or list_topics.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Narrow the result to this one workspace. Leave it out to get every workspace."
+        },
+        "includeMembers" : {
+          "type" : "boolean",
+          "description" : "Include the members of each workspace, with their account ids. Defaults to false."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "account" : {
+          "type" : "object",
+          "description" : "The signed in account.",
+          "properties" : {
+            "accountId" : {
+              "type" : "string",
+              "description" : "Account id. This is the value assignee fields take."
+            },
+            "username" : {
+              "type" : "string",
+              "description" : "Account handle."
+            },
+            "locale" : {
+              "type" : "string",
+              "description" : "Preferred language, EN or TR."
+            },
+            "timeZone" : {
+              "type" : "string",
+              "description" : "IANA time zone id, for example Europe/Istanbul or Etc/GMT-3."
+            },
+            "now" : {
+              "type" : "string",
+              "description" : "Current time in the account's time zone, ISO 8601 with offset."
+            }
+          },
+          "additionalProperties" : false
+        },
+        "defaults" : {
+          "type" : "object",
+          "description" : "The workspace and team this account last worked in. Use them when the person does not name one.",
+          "properties" : {
+            "workspaceId" : {
+              "type" : "string",
+              "description" : "Default workspace id, or null when none is set."
+            },
+            "teamId" : {
+              "type" : "string",
+              "description" : "Default team id, or null when none is set."
+            }
+          },
+          "additionalProperties" : false
+        },
+        "grantedScopes" : {
+          "type" : "array",
+          "description" : "OAuth scopes this connection was granted.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "workspaces" : {
+          "type" : "array",
+          "description" : "Workspaces this account belongs to.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "workspaceId" : {
+                "type" : "string",
+                "description" : "Workspace id. Pass this to any tool that takes workspaceId."
+              },
+              "username" : {
+                "type" : "string",
+                "description" : "Short workspace handle used in Jinear URLs."
+              },
+              "title" : {
+                "type" : "string",
+                "description" : "Display name."
+              },
+              "role" : {
+                "type" : "string",
+                "description" : "The caller's role in this workspace: OWNER, ADMIN or MEMBER."
+              },
+              "tier" : {
+                "type" : "string",
+                "description" : "Billing tier, BASIC or PRO."
+              },
+              "memberCount" : {
+                "type" : "integer",
+                "description" : "Number of people in this workspace."
+              },
+              "members" : {
+                "type" : "array",
+                "description" : "People in this workspace. Present only when includeMembers is true.",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "accountId" : {
+                      "type" : "string",
+                      "description" : "Account id. This is the value assignee fields take."
+                    },
+                    "username" : {
+                      "type" : "string",
+                      "description" : "Account handle."
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              },
+              "teams" : {
+                "type" : "array",
+                "description" : "Teams in this workspace the caller is a member of. Archived teams are left out.",
+                "items" : {
+                  "type" : "object",
+                  "properties" : {
+                    "teamId" : {
+                      "type" : "string",
+                      "description" : "Team id. Required by every task tool."
+                    },
+                    "name" : {
+                      "type" : "string",
+                      "description" : "Display name."
+                    },
+                    "tag" : {
+                      "type" : "string",
+                      "description" : "Short prefix used in task references, as in ENG-42."
+                    },
+                    "role" : {
+                      "type" : "string",
+                      "description" : "The caller's role in this team."
+                    },
+                    "statuses" : {
+                      "type" : "array",
+                      "description" : "Statuses this team's tasks can be in, in board order: BACKLOG, NOT_STARTED, STARTED, COMPLETED, CANCELLED.",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "workflowStatusId" : {
+                            "type" : "string",
+                            "description" : "Status id. This is what set_task_status takes."
+                          },
+                          "name" : {
+                            "type" : "string",
+                            "description" : "Display name, for example In Progress."
+                          },
+                          "stateGroup" : {
+                            "type" : "string",
+                            "description" : "BACKLOG, NOT_STARTED, STARTED, COMPLETED or CANCELLED."
+                          }
+                        },
+                        "additionalProperties" : false
+                      }
+                    },
+                    "topics" : {
+                      "type" : "array",
+                      "description" : "Topics this team uses to label its tasks.",
+                      "items" : {
+                        "type" : "object",
+                        "properties" : {
+                          "topicId" : {
+                            "type" : "string",
+                            "description" : "Topic id, the value create_task takes as topicId."
+                          },
+                          "name" : {
+                            "type" : "string",
+                            "description" : "Display name."
+                          }
+                        },
+                        "additionalProperties" : false
+                      }
+                    }
+                  },
+                  "additionalProperties" : false
+                }
+              }
+            },
+            "additionalProperties" : false
+          }
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Get the account's working context",
       "readOnlyHint" : true,
       "destructiveHint" : false,
       "idempotentHint" : true,
@@ -433,7 +1305,7 @@
   }, {
     "name" : "get_note",
     "title" : "Get one note",
-    "description" : "Reads a single note in full, including its body. Use it after search_notes when the contents of a specific note are needed.",
+    "description" : "Reads a single note in full, including its body. Use it after list_notes or search_notes when the contents of a specific note are needed.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -443,7 +1315,7 @@
         },
         "noteId" : {
           "type" : "string",
-          "description" : "Note id, from search_notes."
+          "description" : "Note id, from list_notes or search_notes."
         }
       },
       "required" : [ "workspaceId", "noteId" ],
@@ -471,6 +1343,10 @@
             "title" : {
               "type" : "string",
               "description" : "Note title."
+            },
+            "url" : {
+              "type" : "string",
+              "description" : "Link that opens the note in the Jinear app."
             },
             "parentNoteId" : {
               "type" : "string",
@@ -501,7 +1377,7 @@
   }, {
     "name" : "get_task",
     "title" : "Get one task",
-    "description" : "Reads a single task in full, including its body, by its human readable reference such as ENG-42. Use it after search_tasks or list_tasks when the body of a specific task is needed.",
+    "description" : "Reads a single task in full by its human readable reference such as ENG-42: its body, collaborators, relations such as subtasks and blockers, checklists with their items, and the boards it is on. Use it after search_tasks or list_tasks when the details of a specific task are needed. Comments, attachments, reminders and activity have their own list tools.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -526,7 +1402,7 @@
       "properties" : {
         "task" : {
           "type" : "object",
-          "description" : "The task, with its body.",
+          "description" : "The task, with its details.",
           "properties" : {
             "taskId" : {
               "type" : "string",
@@ -547,6 +1423,10 @@
             "reference" : {
               "type" : "string",
               "description" : "Human readable reference, for example ENG-42."
+            },
+            "url" : {
+              "type" : "string",
+              "description" : "Link that opens the task in the Jinear app."
             },
             "workflowStatusId" : {
               "type" : "string",
@@ -583,6 +1463,166 @@
             "description" : {
               "type" : "string",
               "description" : "Task body as HTML, or null when the task has no body."
+            },
+            "collaborators" : {
+              "type" : "array",
+              "description" : "Accounts that collaborate on the task.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "accountId" : {
+                    "type" : "string",
+                    "description" : "Account id of the collaborator."
+                  },
+                  "username" : {
+                    "type" : "string",
+                    "description" : "Collaborator handle."
+                  }
+                },
+                "additionalProperties" : false
+              }
+            },
+            "relations" : {
+              "type" : "array",
+              "description" : "Relations where this task is taskId, for example the parent of a subtask or a task this one blocks.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "taskRelationId" : {
+                    "type" : "string",
+                    "description" : "Relation id. Pass it to remove_task_relation."
+                  },
+                  "relationType" : {
+                    "type" : "string",
+                    "description" : "SUBTASK, BLOCKS or IS_BLOCKED_BY. Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, taskId IS_BLOCKED_BY relatedTaskId."
+                  },
+                  "taskId" : {
+                    "type" : "string",
+                    "description" : "The task on the left of the relation."
+                  },
+                  "taskTitle" : {
+                    "type" : "string",
+                    "description" : "Title of taskId."
+                  },
+                  "relatedTaskId" : {
+                    "type" : "string",
+                    "description" : "The task on the right of the relation."
+                  },
+                  "relatedTaskTitle" : {
+                    "type" : "string",
+                    "description" : "Title of relatedTaskId."
+                  }
+                },
+                "additionalProperties" : false
+              }
+            },
+            "relatedIn" : {
+              "type" : "array",
+              "description" : "Relations where this task is relatedTaskId, for example its subtasks.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "taskRelationId" : {
+                    "type" : "string",
+                    "description" : "Relation id. Pass it to remove_task_relation."
+                  },
+                  "relationType" : {
+                    "type" : "string",
+                    "description" : "SUBTASK, BLOCKS or IS_BLOCKED_BY. Read it as: taskId SUBTASK of relatedTaskId, taskId BLOCKS relatedTaskId, taskId IS_BLOCKED_BY relatedTaskId."
+                  },
+                  "taskId" : {
+                    "type" : "string",
+                    "description" : "The task on the left of the relation."
+                  },
+                  "taskTitle" : {
+                    "type" : "string",
+                    "description" : "Title of taskId."
+                  },
+                  "relatedTaskId" : {
+                    "type" : "string",
+                    "description" : "The task on the right of the relation."
+                  },
+                  "relatedTaskTitle" : {
+                    "type" : "string",
+                    "description" : "Title of relatedTaskId."
+                  }
+                },
+                "additionalProperties" : false
+              }
+            },
+            "checklists" : {
+              "type" : "array",
+              "description" : "Checklists of the task with their items.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "checklistId" : {
+                    "type" : "string",
+                    "description" : "Checklist id."
+                  },
+                  "taskId" : {
+                    "type" : "string",
+                    "description" : "Task this checklist belongs to."
+                  },
+                  "title" : {
+                    "type" : "string",
+                    "description" : "Checklist title."
+                  },
+                  "items" : {
+                    "type" : "array",
+                    "description" : "Items, oldest first.",
+                    "items" : {
+                      "type" : "object",
+                      "properties" : {
+                        "checklistItemId" : {
+                          "type" : "string",
+                          "description" : "Checklist item id."
+                        },
+                        "checklistId" : {
+                          "type" : "string",
+                          "description" : "Checklist this item belongs to."
+                        },
+                        "label" : {
+                          "type" : "string",
+                          "description" : "Item text."
+                        },
+                        "checked" : {
+                          "type" : "boolean",
+                          "description" : "True when the item is checked."
+                        }
+                      },
+                      "additionalProperties" : false
+                    }
+                  }
+                },
+                "additionalProperties" : false
+              }
+            },
+            "boards" : {
+              "type" : "array",
+              "description" : "Boards the task is on.",
+              "items" : {
+                "type" : "object",
+                "properties" : {
+                  "taskBoardEntryId" : {
+                    "type" : "string",
+                    "description" : "Board entry id. Pass it to remove_task_from_board or move_task_on_board."
+                  },
+                  "taskBoardId" : {
+                    "type" : "string",
+                    "description" : "Board id."
+                  },
+                  "title" : {
+                    "type" : "string",
+                    "description" : "Board title."
+                  },
+                  "order" : {
+                    "type" : "integer",
+                    "description" : "Position of the task on the board. A lower order comes first."
+                  }
+                },
+                "additionalProperties" : false
+              }
             }
           },
           "additionalProperties" : false
@@ -593,6 +1633,42 @@
     },
     "annotations" : {
       "title" : "Get one task",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "get_unread_notification_count",
+    "title" : "Count unread notifications",
+    "description" : "Returns how many notifications of the signed in account are unread in a workspace. It does not mark them as read.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        }
+      },
+      "required" : [ "workspaceId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace the count is for."
+        },
+        "unreadCount" : {
+          "type" : "integer",
+          "description" : "Number of unread notifications of the signed in account."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Count unread notifications",
       "readOnlyHint" : true,
       "destructiveHint" : false,
       "idempotentHint" : true,
@@ -648,6 +1724,142 @@
     },
     "annotations" : {
       "title" : "Get a workspace",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "list_activity",
+    "title" : "List activity",
+    "description" : "Lists what happened in a workspace, newest first: tasks created, renamed, moved between statuses, reassigned, commented on, checklist and board changes, attachments and members joining. Narrow it to teams or to tasks. This is the tool for questions like what changed this week or what someone did yesterday.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "teamIds" : {
+          "type" : "array",
+          "description" : "Restrict to these teams, from list_teams. Leave out for every team the account can see.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "taskIds" : {
+          "type" : "array",
+          "description" : "Restrict to these tasks.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "description" : "Items per page. Defaults to 20. Up to 25.",
+          "minimum" : 1,
+          "maximum" : 25
+        }
+      },
+      "required" : [ "workspaceId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "description" : "Activity, newest first.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "activityId" : {
+                "type" : "string",
+                "description" : "Activity id."
+              },
+              "type" : {
+                "type" : "string",
+                "description" : "What happened, for example TASK_INITIALIZED, TASK_UPDATE_WORKFLOW_STATUS, TASK_CHANGE_ASSIGNEE, TASK_NEW_COMMENT or CHECKLIST_ITEM_CHECKED_STATUS_CHANGED."
+              },
+              "createdAt" : {
+                "type" : "string",
+                "description" : "ISO 8601 instant it happened."
+              },
+              "performedBy" : {
+                "type" : "string",
+                "description" : "Account id of whoever did it."
+              },
+              "performedByUsername" : {
+                "type" : "string",
+                "description" : "Handle of whoever did it."
+              },
+              "workspaceId" : {
+                "type" : "string",
+                "description" : "Workspace it happened in."
+              },
+              "teamId" : {
+                "type" : "string",
+                "description" : "Team it happened in."
+              },
+              "taskId" : {
+                "type" : "string",
+                "description" : "Task it happened on, or null."
+              },
+              "taskTitle" : {
+                "type" : "string",
+                "description" : "Task reference and title, for example [ENG-42] Ship the release."
+              },
+              "taskUrl" : {
+                "type" : "string",
+                "description" : "Link that opens the task in the Jinear app."
+              },
+              "oldValue" : {
+                "type" : "string",
+                "description" : "Value before the change, for example the old status name or the old assignee handle. Null when there is no short text, such as a body edit."
+              },
+              "newValue" : {
+                "type" : "string",
+                "description" : "Value after the change."
+              },
+              "subject" : {
+                "type" : "string",
+                "description" : "What the change was about when it is not the task itself: a checklist, checklist item, board, attachment, related task or member."
+              }
+            },
+            "additionalProperties" : false
+          }
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number of this result."
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "description" : "Items per page."
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "description" : "Total matching items across all pages."
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "description" : "Total number of pages."
+        },
+        "hasNext" : {
+          "type" : "boolean",
+          "description" : "True when another page is available."
+        }
+      },
+      "required" : [ "items" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "List activity",
       "readOnlyHint" : true,
       "destructiveHint" : false,
       "idempotentHint" : true,
@@ -766,7 +1978,7 @@
   }, {
     "name" : "list_files",
     "title" : "List files and folders",
-    "description" : "Lists the contents of a workspace's file storage, one folder at a time. Omit parentFolderId to list the root. Returns both folders and files; pass a folder's materialId back as parentFolderId to descend into it.",
+    "description" : "Lists the contents of a workspace's file storage, one folder at a time. Omit parentFolderId to list the root. Returns both folders and files; pass a folder's materialId back as parentFolderId to descend into it. Folders come first, then files newest first unless sort says otherwise.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -782,6 +1994,11 @@
           "type" : "string",
           "description" : "Return only FOLDER entries or only FILE entries. Omit for both.",
           "enum" : [ "FILE", "FOLDER" ]
+        },
+        "sort" : {
+          "type" : "string",
+          "description" : "Order of the entries. Folders always come first. IDATE_DESC (newest first) when left out. IDATE is the creation date, UDATE the last change, NAME the name and SIZE the file size.",
+          "enum" : [ "IDATE_DESC", "IDATE_ASC", "UDATE_DESC", "UDATE_ASC", "NAME_ASC", "NAME_DESC", "SIZE_ASC", "SIZE_DESC" ]
         },
         "page" : {
           "type" : "integer",
@@ -821,13 +2038,21 @@
                 "type" : "string",
                 "description" : "Containing folder, or null at the root."
               },
-              "mediaId" : {
-                "type" : "string",
-                "description" : "Stored media id for a file, null for a folder."
-              },
               "accessType" : {
                 "type" : "string",
                 "description" : "Who can reach this item."
+              },
+              "contentType" : {
+                "type" : "string",
+                "description" : "MIME type for a file, null for a folder or when unknown."
+              },
+              "size" : {
+                "type" : "integer",
+                "description" : "File size in bytes, null for a folder."
+              },
+              "createdAt" : {
+                "type" : "string",
+                "description" : "ISO 8601 instant the item was created."
               }
             },
             "additionalProperties" : false
@@ -867,7 +2092,7 @@
   }, {
     "name" : "list_notebooks",
     "title" : "List notebooks",
-    "description" : "Lists the notebooks in a workspace. A notebook groups related notes, and its id is what narrows search_notes to one place.",
+    "description" : "Lists the notebooks in a workspace. A notebook groups related notes, and its id is what narrows list_notes and search_notes to one place.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -944,6 +2169,202 @@
     "annotations" : {
       "title" : "List notebooks",
       "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "list_notes",
+    "title" : "List notes",
+    "description" : "Lists the notes of a workspace that the signed in account can see, newest first, including notes created a moment ago. Covers every notebook, the account's drafts and every level of nesting unless it is narrowed to one notebook or to the children of one note. Use search_notes to find notes by the words in them. Returns titles and ids; call get_note for a note's body.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "notebookId" : {
+          "type" : "string",
+          "description" : "Restrict to one notebook, from list_notebooks. Omit it to cover every notebook and your drafts."
+        },
+        "parentNoteId" : {
+          "type" : "string",
+          "description" : "Restrict to the children of one note. Omit it to include notes at every level."
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
+        }
+      },
+      "required" : [ "workspaceId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "description" : "Notes in this workspace, newest first.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "noteId" : {
+                "type" : "string",
+                "description" : "Note id."
+              },
+              "notebookId" : {
+                "type" : "string",
+                "description" : "Notebook this note lives in."
+              },
+              "workspaceId" : {
+                "type" : "string",
+                "description" : "Workspace this note belongs to."
+              },
+              "title" : {
+                "type" : "string",
+                "description" : "Note title."
+              },
+              "url" : {
+                "type" : "string",
+                "description" : "Link that opens the note in the Jinear app."
+              },
+              "parentNoteId" : {
+                "type" : "string",
+                "description" : "Parent note when the note is nested, otherwise null."
+              },
+              "ownerId" : {
+                "type" : "string",
+                "description" : "Account id of the author."
+              }
+            },
+            "additionalProperties" : false
+          }
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number of this result."
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "description" : "Items per page."
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "description" : "Total matching items across all pages."
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "description" : "Total number of pages."
+        },
+        "hasNext" : {
+          "type" : "boolean",
+          "description" : "True when another page is available."
+        }
+      },
+      "required" : [ "items" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "List notes",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "list_notifications",
+    "title" : "List notifications",
+    "description" : "Lists the signed in account's notifications in a workspace, newest first: assignments, comments, status changes and reminders on tasks the account follows. Like opening the inbox in the Jinear app, this marks the listed workspace's or team's notifications as read. Use get_unread_notification_count to check for new ones without reading them.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "teamId" : {
+          "type" : "string",
+          "description" : "Restrict to one team, from list_teams. Leave out for the whole workspace."
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
+        }
+      },
+      "required" : [ "workspaceId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "description" : "Notifications, newest first.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "notificationId" : {
+                "type" : "string",
+                "description" : "Notification id."
+              },
+              "type" : {
+                "type" : "string",
+                "description" : "What the notification is about, for example TASK_CHANGE_ASSIGNEE, TASK_NEW_COMMENT or TASK_REMINDER."
+              },
+              "title" : {
+                "type" : "string",
+                "description" : "Notification title."
+              },
+              "text" : {
+                "type" : "string",
+                "description" : "Notification text."
+              },
+              "url" : {
+                "type" : "string",
+                "description" : "Link that opens the related record in the Jinear app."
+              },
+              "read" : {
+                "type" : "boolean",
+                "description" : "True when it was already read before this call."
+              },
+              "createdAt" : {
+                "type" : "string",
+                "description" : "ISO 8601 instant it was created."
+              }
+            },
+            "additionalProperties" : false
+          }
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number of this result."
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "description" : "Items per page."
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "description" : "Total matching items across all pages."
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "description" : "Total number of pages."
+        },
+        "hasNext" : {
+          "type" : "boolean",
+          "description" : "True when another page is available."
+        }
+      },
+      "required" : [ "items" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "List notifications",
+      "readOnlyHint" : false,
       "destructiveHint" : false,
       "idempotentHint" : true,
       "openWorldHint" : false
@@ -1208,9 +2629,80 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "list_task_reminders",
+    "title" : "List a task's reminders",
+    "description" : "Lists the reminders on a task, oldest first, with the next instant each one fires. Reminders belong to the task: when one fires, Jinear notifies every subscriber of the task by push notification and email. Use it before add_task_reminder to avoid duplicates, and to find the id for remove_task_reminder.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskId" : {
+          "type" : "string",
+          "description" : "Task id."
+        }
+      },
+      "required" : [ "taskId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "description" : "Reminders on this task.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "taskReminderId" : {
+                "type" : "string",
+                "description" : "Reminder id. Pass it to remove_task_reminder."
+              },
+              "taskId" : {
+                "type" : "string",
+                "description" : "Task this reminder belongs to."
+              },
+              "type" : {
+                "type" : "string",
+                "description" : "START_DATE and DUE_DATE follow the task's dates. SPECIFIC_DATE fires at a fixed instant."
+              },
+              "repeat" : {
+                "type" : "string",
+                "description" : "How the reminder repeats. NONE for a one time reminder."
+              },
+              "repeatUntil" : {
+                "type" : "string",
+                "description" : "Last instant a repeating reminder may fire, or null for no end."
+              },
+              "nextRemindAt" : {
+                "type" : "string",
+                "description" : "Next instant the reminder fires, or null when it will not fire again."
+              },
+              "createdByAccountId" : {
+                "type" : "string",
+                "description" : "Account id of the person who added the reminder."
+              }
+            },
+            "additionalProperties" : false
+          }
+        },
+        "count" : {
+          "type" : "integer",
+          "description" : "Number of items returned."
+        }
+      },
+      "required" : [ "items" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "List a task's reminders",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "list_tasks",
     "title" : "List tasks with filters",
-    "description" : "Lists tasks in a workspace, optionally narrowed by team, assignee, collaborator, workflow status, state group or a date range. This is the tool for questions like what is in progress, what is assigned to someone, or what is due this week.",
+    "description" : "Lists tasks in a workspace, optionally narrowed by team, board, topic, creator, assignee, collaborator, workflow status, state group or a date range. This is the tool for questions like what is in progress, what is assigned to someone, what is due this week, or what is on a board.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -1221,6 +2713,34 @@
         "teamIds" : {
           "type" : "array",
           "description" : "Restrict to these teams.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "excludingTeamIds" : {
+          "type" : "array",
+          "description" : "Leave out the tasks of these teams.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "taskBoardIds" : {
+          "type" : "array",
+          "description" : "Restrict to tasks on these boards, from list_task_boards.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "topicIds" : {
+          "type" : "array",
+          "description" : "Restrict to tasks labelled with these topics, from list_topics.",
+          "items" : {
+            "type" : "string"
+          }
+        },
+        "ownerIds" : {
+          "type" : "array",
+          "description" : "Restrict to tasks created by these account ids, from list_workspace_members.",
           "items" : {
             "type" : "string"
           }
@@ -1264,6 +2784,11 @@
           "format" : "date-time",
           "description" : "Only tasks whose dates fall on or before this instant."
         },
+        "sort" : {
+          "type" : "string",
+          "description" : "Order of the results. IDATE_DESC (newest first) when left out. ASSIGNED_DATE sorts by the assigned date. TASK_BOARD_ORDER is the order on the board and needs exactly one id in taskBoardIds.",
+          "enum" : [ "IDATE_DESC", "IDATE_ASC", "ASSIGNED_DATE_DESC", "ASSIGNED_DATE_ASC", "TASK_BOARD_ORDER" ]
+        },
         "page" : {
           "type" : "integer",
           "description" : "Zero based page number. Defaults to 0.",
@@ -1284,7 +2809,7 @@
       "properties" : {
         "items" : {
           "type" : "array",
-          "description" : "Matching tasks, newest first.",
+          "description" : "Matching tasks, in the requested order.",
           "items" : {
             "type" : "object",
             "properties" : {
@@ -1307,6 +2832,10 @@
               "reference" : {
                 "type" : "string",
                 "description" : "Human readable reference, for example ENG-42."
+              },
+              "url" : {
+                "type" : "string",
+                "description" : "Link that opens the task in the Jinear app."
               },
               "workflowStatusId" : {
                 "type" : "string",
@@ -1680,7 +3209,7 @@
   }, {
     "name" : "list_workspaces",
     "title" : "List workspaces",
-    "description" : "Lists every Jinear workspace the signed in account belongs to, with the account's role in each. Call this first: workspaceId is required by almost every other Jinear tool.",
+    "description" : "Lists every Jinear workspace the signed in account belongs to, with the account's role in each. get_context returns the same workspaces together with their teams, statuses and topics.",
     "inputSchema" : {
       "type" : "object",
       "properties" : { },
@@ -1735,15 +3264,315 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "move_note",
+    "title" : "Move a note",
+    "description" : "Moves a note to another notebook, under another note, or to the top level. Child notes move with it. Returns the link to the note at its new place.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from list_notes or search_notes."
+        },
+        "notebookId" : {
+          "type" : "string",
+          "description" : "Target notebook id, from list_notebooks. Leave it out to stay in the current notebook."
+        },
+        "parentNoteId" : {
+          "type" : "string",
+          "description" : "New parent note id. Leave it out to put the note at the top level."
+        }
+      },
+      "required" : [ "workspaceId", "noteId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "noteId" : {
+          "type" : "string",
+          "description" : "Id of the note that moved."
+        },
+        "url" : {
+          "type" : "string",
+          "description" : "Link that opens the note at its new place in the Jinear app."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the move completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Move a note",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "move_task_on_board",
+    "title" : "Move a task on a board",
+    "description" : "Moves a task to a new position on a board. The tasks between the old and the new position shift by one. The board must be OPEN.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardEntryId" : {
+          "type" : "string",
+          "description" : "Board entry id, from the boards of get_task."
+        },
+        "newOrder" : {
+          "type" : "integer",
+          "description" : "New position on the board, from 0 to the highest order on the board. Read the current positions with get_task, or list the board with list_tasks and sort TASK_BOARD_ORDER."
+        }
+      },
+      "required" : [ "taskBoardEntryId", "newOrder" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardEntryId" : {
+          "type" : "string",
+          "description" : "The board entry that was moved."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Move a task on a board",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "remove_task_from_board",
+    "title" : "Remove a task from a board",
+    "description" : "Takes a task off a board. The task itself is not deleted and keeps its team, status and assignee.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardEntryId" : {
+          "type" : "string",
+          "description" : "Board entry id, from the boards of get_task."
+        }
+      },
+      "required" : [ "taskBoardEntryId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardEntryId" : {
+          "type" : "string",
+          "description" : "The board entry that was removed."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Remove a task from a board",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "remove_task_relation",
+    "title" : "Remove a task relation",
+    "description" : "Removes a relation between two tasks. Both tasks stay as they are.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskRelationId" : {
+          "type" : "string",
+          "description" : "Relation id, from the relations or relatedIn of get_task."
+        }
+      },
+      "required" : [ "taskRelationId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskRelationId" : {
+          "type" : "string",
+          "description" : "The relation that was removed."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Remove a task relation",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "remove_task_reminder",
+    "title" : "Remove a task reminder",
+    "description" : "Removes a reminder from a task, so it does not fire again for anyone. A repeating reminder stops for all its future instants. Get the id from list_task_reminders.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskReminderId" : {
+          "type" : "string",
+          "description" : "Reminder id, from list_task_reminders."
+        }
+      },
+      "required" : [ "taskReminderId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskReminderId" : {
+          "type" : "string",
+          "description" : "Id of the removed reminder."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Remove a task reminder",
+      "readOnlyHint" : false,
+      "destructiveHint" : true,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "rename_task_checklist",
+    "title" : "Rename a checklist",
+    "description" : "Changes the title of a checklist on a task.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistId" : {
+          "type" : "string",
+          "description" : "Checklist id, from get_task."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "New checklist title."
+        }
+      },
+      "required" : [ "checklistId", "title" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistId" : {
+          "type" : "string",
+          "description" : "The checklist that was renamed."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Rename a checklist",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "replace_in_note",
+    "title" : "Replace text in a note",
+    "description" : "Replaces one exact piece of the note HTML, as returned by get_note. It is the safest way to change a long note: text that others typed elsewhere stays as it is, and a change made during the call is handled by computing the edit again.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from list_notes or search_notes."
+        },
+        "oldText" : {
+          "type" : "string",
+          "description" : "Exact HTML to replace, from get_note. It must match exactly once."
+        },
+        "newText" : {
+          "type" : "string",
+          "description" : "HTML to put in its place. Empty removes oldText."
+        }
+      },
+      "required" : [ "workspaceId", "noteId", "oldText", "newText" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "edit" : {
+          "type" : "object",
+          "description" : "The result of this write.",
+          "properties" : {
+            "noteId" : {
+              "type" : "string",
+              "description" : "Note id."
+            },
+            "url" : {
+              "type" : "string",
+              "description" : "Link that opens the note in the Jinear app."
+            },
+            "changed" : {
+              "type" : "boolean",
+              "description" : "False when the note already had this content."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "edit" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Replace text in a note",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "search",
     "title" : "Search Jinear",
-    "description" : "Searches tasks and note titles across every Jinear workspace the signed in account belongs to, and returns ids and links suitable for citation. Pass an id from here to fetch to read the full record. Tasks created or edited in the last minute may not appear yet; use list_tasks to see them. For filtering by status, assignee or dates, use list_tasks instead.",
+    "description" : "Searches tasks, the titles and bodies of notes, and file names, across every Jinear workspace the signed in account belongs to, by keyword: every word must appear, as a whole word or as the start of a word. Returns ids and links suitable for citation. Pass an id from here to fetch to read the full record. Records created or edited in the last few seconds may not appear yet; use list_tasks, list_notes or list_files to see them. Files appear only when the files:read permission was granted; folders never appear, use search_files for them. For filtering by status, assignee or dates, use list_tasks instead.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
         "query" : {
           "type" : "string",
-          "description" : "What to look for, in plain language."
+          "description" : "Keywords to find. Every word must appear in the record as a whole word or as the start of a word."
         }
       },
       "required" : [ "query" ],
@@ -1754,7 +3583,7 @@
       "properties" : {
         "results" : {
           "type" : "array",
-          "description" : "Matching records, tasks first.",
+          "description" : "Matching records: tasks, then notes, then files, for each workspace in turn.",
           "items" : {
             "type" : "object",
             "properties" : {
@@ -1786,9 +3615,118 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "search_files",
+    "title" : "Search files and folders",
+    "description" : "Searches the file storage of a workspace by name, original file name, file type and owner username, best matches first. Covers every folder at every level. Task attachments are not included; search_tasks covers them. Files added or renamed in the last few seconds may not appear yet; use list_files to see them. Returns files and folders with their ids; call get_file_link for a file's download link.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "query" : {
+          "type" : "string",
+          "description" : "Words to find in file and folder names, original file names, file types and the owner's username. Every word must appear as a whole word or as the start of a word."
+        },
+        "type" : {
+          "type" : "string",
+          "description" : "Return only FOLDER entries or only FILE entries. Omit for both.",
+          "enum" : [ "FILE", "FOLDER" ]
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number. Defaults to 0.",
+          "minimum" : 0
+        }
+      },
+      "required" : [ "workspaceId", "query" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "items" : {
+          "type" : "array",
+          "description" : "Matching files and folders.",
+          "items" : {
+            "type" : "object",
+            "properties" : {
+              "materialId" : {
+                "type" : "string",
+                "description" : "File or folder id."
+              },
+              "workspaceId" : {
+                "type" : "string",
+                "description" : "Workspace this item belongs to."
+              },
+              "name" : {
+                "type" : "string",
+                "description" : "File or folder name."
+              },
+              "materialType" : {
+                "type" : "string",
+                "description" : "FOLDER or FILE."
+              },
+              "parentMaterialId" : {
+                "type" : "string",
+                "description" : "Containing folder, or null at the root."
+              },
+              "accessType" : {
+                "type" : "string",
+                "description" : "Who can reach this item."
+              },
+              "contentType" : {
+                "type" : "string",
+                "description" : "MIME type for a file, null for a folder or when unknown."
+              },
+              "size" : {
+                "type" : "integer",
+                "description" : "File size in bytes, null for a folder."
+              },
+              "createdAt" : {
+                "type" : "string",
+                "description" : "ISO 8601 instant the item was created."
+              }
+            },
+            "additionalProperties" : false
+          }
+        },
+        "page" : {
+          "type" : "integer",
+          "description" : "Zero based page number of this result."
+        },
+        "pageSize" : {
+          "type" : "integer",
+          "description" : "Items per page."
+        },
+        "totalElements" : {
+          "type" : "integer",
+          "description" : "Total matching items across all pages."
+        },
+        "totalPages" : {
+          "type" : "integer",
+          "description" : "Total number of pages."
+        },
+        "hasNext" : {
+          "type" : "boolean",
+          "description" : "True when another page is available."
+        }
+      },
+      "required" : [ "items" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Search files and folders",
+      "readOnlyHint" : true,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "search_notes",
-    "title" : "Search notes by title",
-    "description" : "Lists notes in a workspace, optionally inside one notebook or under one parent note, and optionally narrowed to titles containing a phrase. Returns titles and ids; call get_note for a note's body.",
+    "title" : "Search notes",
+    "description" : "Searches the notes of a workspace by the words in their titles and bodies, best matches first. Covers every notebook and every level of nesting unless it is narrowed to one notebook or to the children of one note. Notes created or edited in the last few seconds may not appear yet; use list_notes to see them. Returns titles and ids; call get_note for a note's body.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -1798,15 +3736,15 @@
         },
         "notebookId" : {
           "type" : "string",
-          "description" : "Restrict to one notebook, from list_notebooks."
+          "description" : "Restrict to one notebook, from list_notebooks. Omit it to cover every notebook and your drafts."
         },
         "parentNoteId" : {
           "type" : "string",
-          "description" : "Restrict to the children of one note."
+          "description" : "Restrict to the children of one note. Omit it to include notes at every level."
         },
-        "titleContains" : {
+        "query" : {
           "type" : "string",
-          "description" : "Case insensitive phrase to match against note titles."
+          "description" : "Words to find in note titles and bodies. Every word must appear as a whole word or as the start of a word."
         },
         "page" : {
           "type" : "integer",
@@ -1814,7 +3752,7 @@
           "minimum" : 0
         }
       },
-      "required" : [ "workspaceId" ],
+      "required" : [ "workspaceId", "query" ],
       "additionalProperties" : false
     },
     "outputSchema" : {
@@ -1841,6 +3779,10 @@
               "title" : {
                 "type" : "string",
                 "description" : "Note title."
+              },
+              "url" : {
+                "type" : "string",
+                "description" : "Link that opens the note in the Jinear app."
               },
               "parentNoteId" : {
                 "type" : "string",
@@ -1879,7 +3821,7 @@
       "additionalProperties" : false
     },
     "annotations" : {
-      "title" : "Search notes by title",
+      "title" : "Search notes",
       "readOnlyHint" : true,
       "destructiveHint" : false,
       "idempotentHint" : true,
@@ -1888,7 +3830,7 @@
   }, {
     "name" : "search_tasks",
     "title" : "Search tasks by text",
-    "description" : "Finds tasks in a workspace whose title or body matches a plain language query. Use this when the person names a task by what it is about rather than by its reference. Tasks created or edited in the last minute may not appear yet; use list_tasks to see them. Use list_tasks instead when filtering by status, assignee or dates.",
+    "description" : "Finds tasks in a workspace whose title or body contains every keyword of the query. Use this when the person names a task by what it is about rather than by its reference. Tasks created or edited in the last few seconds may not appear yet; use list_tasks to see them. Use list_tasks instead when filtering by status, assignee or dates.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -1898,7 +3840,7 @@
         },
         "query" : {
           "type" : "string",
-          "description" : "Free text to match against task titles and bodies."
+          "description" : "Keywords to find in task titles and bodies. Every word must appear as a whole word or as the start of a word."
         },
         "teamIds" : {
           "type" : "array",
@@ -1944,6 +3886,10 @@
               "reference" : {
                 "type" : "string",
                 "description" : "Human readable reference, for example ENG-42."
+              },
+              "url" : {
+                "type" : "string",
+                "description" : "Link that opens the task in the Jinear app."
               },
               "workflowStatusId" : {
                 "type" : "string",
@@ -2058,6 +4004,10 @@
               "type" : "string",
               "description" : "Human readable reference, for example ENG-42."
             },
+            "url" : {
+              "type" : "string",
+              "description" : "Link that opens the task in the Jinear app."
+            },
             "workflowStatusId" : {
               "type" : "string",
               "description" : "Current status id."
@@ -2105,9 +4055,109 @@
       "openWorldHint" : false
     }
   }, {
+    "name" : "update_checklist_item",
+    "title" : "Update a checklist item",
+    "description" : "Checks or unchecks a checklist item, changes its text, or both. Supply only the fields to change.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistItemId" : {
+          "type" : "string",
+          "description" : "Checklist item id, from get_task."
+        },
+        "label" : {
+          "type" : "string",
+          "description" : "New item text."
+        },
+        "checked" : {
+          "type" : "boolean",
+          "description" : "True to check the item, false to uncheck it."
+        }
+      },
+      "required" : [ "checklistItemId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "checklistItemId" : {
+          "type" : "string",
+          "description" : "The item that was updated."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Update a checklist item",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
+  }, {
+    "name" : "update_note_title",
+    "title" : "Update a note title",
+    "description" : "Sets a new title on a note. The body stays as it is.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "workspaceId" : {
+          "type" : "string",
+          "description" : "Workspace id, from list_workspaces."
+        },
+        "noteId" : {
+          "type" : "string",
+          "description" : "Note id, from list_notes or search_notes."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "New title."
+        }
+      },
+      "required" : [ "workspaceId", "noteId", "title" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "edit" : {
+          "type" : "object",
+          "description" : "The result of this write.",
+          "properties" : {
+            "noteId" : {
+              "type" : "string",
+              "description" : "Note id."
+            },
+            "url" : {
+              "type" : "string",
+              "description" : "Link that opens the note in the Jinear app."
+            },
+            "changed" : {
+              "type" : "boolean",
+              "description" : "False when the note already had this content."
+            }
+          },
+          "additionalProperties" : false
+        }
+      },
+      "required" : [ "edit" ],
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Update a note title",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : false,
+      "openWorldHint" : false
+    }
+  }, {
     "name" : "update_task",
     "title" : "Update a task",
-    "description" : "Changes a task's title, body, dates or assignee. Supply only the fields to change; anything omitted is left alone. Dates are the one exception: Jinear stores start and due as a pair, so supply both together. Use set_task_status to move a task between workflow statuses.",
+    "description" : "Changes a task's title, body, dates, assignee, topic or collaborators. Supply only the fields to change; anything omitted is left alone. Dates are the one exception: Jinear stores start and due as a pair, so supply both together. Use set_task_status to move a task between workflow statuses.",
     "inputSchema" : {
       "type" : "object",
       "properties" : {
@@ -2136,6 +4186,17 @@
           "type" : "string",
           "format" : "date-time",
           "description" : "New due date. Supply together with startDate, since Jinear stores the pair."
+        },
+        "topicId" : {
+          "type" : "string",
+          "description" : "New topic id, from list_topics on the task's team. Pass an empty string to remove the topic."
+        },
+        "collaboratorIds" : {
+          "type" : "array",
+          "description" : "Account ids of the collaborators, from list_workspace_members. Replaces the whole list; pass an empty list to remove every collaborator.",
+          "items" : {
+            "type" : "string"
+          }
         }
       },
       "required" : [ "taskId" ],
@@ -2162,34 +4223,120 @@
       "idempotentHint" : false,
       "openWorldHint" : false
     }
+  }, {
+    "name" : "update_task_board",
+    "title" : "Update a board",
+    "description" : "Changes a board's title, due date, state or color, or removes its due date with clearDueDate. Set state to CLOSED when the work on the board is done. Supply only the fields to change.",
+    "inputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardId" : {
+          "type" : "string",
+          "description" : "Board id, from list_task_boards."
+        },
+        "title" : {
+          "type" : "string",
+          "description" : "New board title."
+        },
+        "dueDate" : {
+          "type" : "string",
+          "format" : "date-time",
+          "description" : "New due date of the board."
+        },
+        "clearDueDate" : {
+          "type" : "boolean",
+          "description" : "True to remove the due date. Do not pass it together with dueDate."
+        },
+        "state" : {
+          "type" : "string",
+          "description" : "OPEN, or CLOSED when the work on the board is done.",
+          "enum" : [ "OPEN", "CLOSED" ]
+        },
+        "color" : {
+          "type" : "string",
+          "description" : "New color as six hex digits without #, for example FF6600."
+        }
+      },
+      "required" : [ "taskBoardId" ],
+      "additionalProperties" : false
+    },
+    "outputSchema" : {
+      "type" : "object",
+      "properties" : {
+        "taskBoardId" : {
+          "type" : "string",
+          "description" : "The board that was updated."
+        },
+        "ok" : {
+          "type" : "boolean",
+          "description" : "True when the operation completed."
+        }
+      },
+      "additionalProperties" : false
+    },
+    "annotations" : {
+      "title" : "Update a board",
+      "readOnlyHint" : false,
+      "destructiveHint" : false,
+      "idempotentHint" : true,
+      "openWorldHint" : false
+    }
   } ],
   "scopes" : {
+    "add_checklist_item" : [ "tasks:write" ],
     "add_task_attachment" : [ "tasks:write" ],
     "add_task_comment" : [ "tasks:write" ],
+    "add_task_relation" : [ "tasks:write" ],
+    "add_task_reminder" : [ "tasks:write" ],
     "add_task_to_board" : [ "tasks:write" ],
+    "append_to_note" : [ "notes:write" ],
+    "create_note" : [ "notes:write" ],
+    "create_notebook" : [ "notes:write" ],
     "create_task" : [ "tasks:write" ],
     "create_task_board" : [ "tasks:write" ],
+    "create_task_checklist" : [ "tasks:write" ],
+    "create_topic" : [ "tasks:write" ],
+    "delete_checklist_item" : [ "tasks:write" ],
+    "delete_note" : [ "notes:write" ],
+    "delete_task_checklist" : [ "tasks:write" ],
     "fetch" : [ "notes:read", "tasks:read", "workspace:read" ],
+    "get_context" : [ "workspace:read" ],
     "get_file_link" : [ "files:read" ],
     "get_note" : [ "notes:read" ],
     "get_task" : [ "tasks:read" ],
+    "get_unread_notification_count" : [ "tasks:read" ],
     "get_workspace" : [ "workspace:read" ],
+    "list_activity" : [ "tasks:read" ],
     "list_calendar_events" : [ "calendar:read" ],
     "list_files" : [ "files:read" ],
     "list_notebooks" : [ "notes:read" ],
+    "list_notes" : [ "notes:read" ],
+    "list_notifications" : [ "tasks:read" ],
     "list_task_attachments" : [ "tasks:read" ],
     "list_task_boards" : [ "tasks:read" ],
     "list_task_comments" : [ "tasks:read" ],
+    "list_task_reminders" : [ "tasks:read" ],
     "list_tasks" : [ "tasks:read" ],
     "list_teams" : [ "workspace:read" ],
     "list_topics" : [ "workspace:read" ],
     "list_workflow_statuses" : [ "workspace:read" ],
     "list_workspace_members" : [ "workspace:read" ],
     "list_workspaces" : [ "workspace:read" ],
+    "move_note" : [ "notes:write" ],
+    "move_task_on_board" : [ "tasks:write" ],
+    "remove_task_from_board" : [ "tasks:write" ],
+    "remove_task_relation" : [ "tasks:write" ],
+    "remove_task_reminder" : [ "tasks:write" ],
+    "rename_task_checklist" : [ "tasks:write" ],
+    "replace_in_note" : [ "notes:write" ],
     "search" : [ "notes:read", "tasks:read", "workspace:read" ],
+    "search_files" : [ "files:read" ],
     "search_notes" : [ "notes:read" ],
     "search_tasks" : [ "tasks:read" ],
     "set_task_status" : [ "tasks:write" ],
-    "update_task" : [ "tasks:write" ]
+    "update_checklist_item" : [ "tasks:write" ],
+    "update_note_title" : [ "notes:write" ],
+    "update_task" : [ "tasks:write" ],
+    "update_task_board" : [ "tasks:write" ]
   }
 }

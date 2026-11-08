@@ -45,6 +45,7 @@ import type {
     ProjectPrioritySelectModalState,
     ProjectStateSelectModalState,
     ReminderListModalState,
+    GlobalSearchModalState,
     SearchTaskModalState,
     TaskBoardPickerModalState,
     TaskOverviewModalState,
@@ -112,6 +113,9 @@ const initialState = {
         workspace: undefined
     },
     searchTaskModal: {
+        visible: false
+    },
+    globalSearchModal: {
         visible: false
     },
     dialogModal: {
@@ -317,6 +321,7 @@ const initialState = {
     newTeamModal: null | NewTeamModalState;
     notebookInitializeModal: null | NotebookInitializeModalState;
     searchTaskModal: null | SearchTaskModalState;
+    globalSearchModal: null | GlobalSearchModalState;
     dialogModal: null | DialogModalState;
     reminderListModal: null | ReminderListModalState;
     newReminderModal: null | NewReminderModalState;
@@ -479,6 +484,13 @@ const slice = createSlice({
         },
         closeSearchTaskModal: (state, action: PayloadAction<void>) => {
             state.searchTaskModal = initialState.searchTaskModal;
+        },
+
+        popGlobalSearchModal: (state, action: PayloadAction<GlobalSearchModalState>) => {
+            state.globalSearchModal = {...action.payload, visible: true};
+        },
+        closeGlobalSearchModal: (state, action: PayloadAction<void>) => {
+            state.globalSearchModal = initialState.globalSearchModal;
         },
 
         popReminderListModal: (state, action: PayloadAction<ReminderListModalState>) => {
@@ -984,6 +996,8 @@ export const {
     closeNotebookInitializeModal,
     popSearchTaskModal,
     closeSearchTaskModal,
+    popGlobalSearchModal,
+    closeGlobalSearchModal,
     popDialogModal,
     closeDialogModal,
     popReminderListModal,
@@ -1200,6 +1214,10 @@ export const selectSearchTaskModalVisible = (state: RootState) => state.modal.se
 export const selectSearchTaskModalWorkspaceId = (state: RootState) => state.modal.searchTaskModal?.workspaceId;
 export const selectSearchTaskModalTeamIds = (state: RootState) => state.modal.searchTaskModal?.teamIds;
 export const selectSearchTaskModalOnSelect = (state: RootState) => state.modal.searchTaskModal?.onSelect;
+
+export const selectGlobalSearchModalVisible = (state: RootState) => state.modal.globalSearchModal?.visible;
+export const selectGlobalSearchModalWorkspaceId = (state: RootState) => state.modal.globalSearchModal?.workspaceId;
+export const selectGlobalSearchModalWorkspaceUsername = (state: RootState) => state.modal.globalSearchModal?.workspaceUsername;
 
 export const selectDialogModalVisible = (state: RootState) => state.modal.dialogModal?.visible;
 export const selectDialogModalTitle = (state: RootState) => state.modal.dialogModal?.title;

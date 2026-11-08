@@ -2,14 +2,19 @@ package co.jinear.core.service.richtext.sync;
 
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.exception.NotValidException;
+import co.jinear.core.exception.note.RichTextHeadMovedException;
+import co.jinear.core.converter.richtext.RichTextDocumentConverter;
 import co.jinear.core.model.dto.richtext.RichTextAppendDto;
+import co.jinear.core.model.dto.richtext.RichTextDocumentDto;
 import co.jinear.core.model.dto.richtext.RichTextStateDto;
 import co.jinear.core.model.dto.richtext.RichTextUpdatesDto;
 import co.jinear.core.model.entity.richtext.RichText;
 import co.jinear.core.model.entity.richtext.RichTextUpdate;
 import co.jinear.core.model.enumtype.richtext.RichTextFormat;
+import co.jinear.core.model.enumtype.richtext.RichTextType;
 import co.jinear.core.repository.RichTextRepository;
 import co.jinear.core.repository.richtext.RichTextUpdateRepository;
+import co.jinear.core.service.note.NoteFtsRefreshService;
 import co.jinear.core.service.richtext.HtmlSanitizeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +34,15 @@ public class RichTextSyncService {
     private final RichTextRepository richTextRepository;
     private final RichTextUpdateRepository richTextUpdateRepository;
     private final HtmlSanitizeService htmlSanitizeService;
+    private final RichTextDocumentConverter richTextDocumentConverter;
+    private final NoteFtsRefreshService noteFtsRefreshService;
+
+    @Transactional(readOnly = true)
+    public RichTextDocumentDto retrieveDocument(String richTextId) {
+        RichText richText = retrieve(richTextId);
+        List<RichTextUpdate> updates = richTextUpdateRepository.findByRichTextIdAndSeqGreaterThanOrderBySeqAsc(richTextId, richText.getYjsStateSeq());
+        return richTextDocumentConverter.convert(richText, updates);
+    }
 
     @Transactional(readOnly = true)
     public RichTextStateDto retrieveState(String richTextId) {
@@ -76,6 +90,16 @@ public class RichTextSyncService {
     }
 
     @Transactional
+    public RichTextAppendDto appendUpdateAtHead(String richTextId, String updateBase64, String renderedHtml, long expectedHeadSeq) {
+        RichText richText = retrieve(richTextId);
+        if (richText.getHeadSeq() != expectedHeadSeq) {
+            log.info("Append update at head rejected. richTextId: {}, expected: {}, head: {}", richTextId, expectedHeadSeq, richText.getHeadSeq());
+            throw new RichTextHeadMovedException();
+        }
+        return appendUpdate(richTextId, updateBase64, renderedHtml);
+    }
+
+    @Transactional
     public RichTextStateDto seed(String richTextId, String seedBase64) {
         RichText richText = retrieve(richTextId);
         if (RichTextFormat.CRDT.equals(richText.getFormat())) {
@@ -116,6 +140,9 @@ public class RichTextSyncService {
             return;
         }
         richText.setValue(htmlSanitizeService.sanitizeHTML(renderedHtml));
+        if (RichTextType.NOTE.equals(richText.getType())) {
+            noteFtsRefreshService.markDirty();
+        }
     }
 
     private RichTextStateDto toStateDto(RichText richText) {

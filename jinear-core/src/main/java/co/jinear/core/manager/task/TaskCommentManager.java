@@ -1,6 +1,7 @@
 package co.jinear.core.manager.task;
 
 import co.jinear.core.converter.task.InitializeTaskCommentVoConverter;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.model.dto.PageDto;
 import co.jinear.core.model.dto.task.CommentDto;
@@ -24,7 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Predicate;
 
 @Slf4j
 @Service
@@ -46,7 +48,7 @@ public class TaskCommentManager {
         String currentAccountId = sessionInfoService.currentAccountId();
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         TaskDto taskDto = validateAccess(initializeTaskCommentRequest.getTaskId(), currentAccountId);
-        validateQuotedCommentAccessIfPresent(initializeTaskCommentRequest, currentAccountId);
+        validateQuotedCommentInSameTaskIfPresent(initializeTaskCommentRequest);
         log.info("Initialize comment has started. currentAccountId: {}", currentAccountId);
         InitializeTaskCommentVo initializeTaskCommentVo = initializeTaskCommentVoConverter.convert(initializeTaskCommentRequest, currentAccountId);
         CommentDto commentDto = commentOperationService.initializeTaskComment(initializeTaskCommentVo);
@@ -89,10 +91,15 @@ public class TaskCommentManager {
         }
     }
 
-    private void validateQuotedCommentAccessIfPresent(InitializeTaskCommentRequest initializeTaskCommentRequest, String currentAccountId) {
-        if(Objects.nonNull(initializeTaskCommentRequest.getQuoteCommentId())){
-            CommentDto commentDto = commentRetrieveService.retrieveComment(initializeTaskCommentRequest.getQuoteCommentId());
-            validateAccess(commentDto.getTaskId(), currentAccountId);
+    private void validateQuotedCommentInSameTaskIfPresent(InitializeTaskCommentRequest initializeTaskCommentRequest) {
+        String taskId = initializeTaskCommentRequest.getTaskId();
+        boolean quotesAnotherTask = Optional.ofNullable(initializeTaskCommentRequest.getQuoteCommentId())
+                .map(commentRetrieveService::retrieveComment)
+                .map(CommentDto::getTaskId)
+                .filter(Predicate.not(taskId::equals))
+                .isPresent();
+        if (quotesAnotherTask) {
+            throw new BusinessException("task.comment.quote-comment-different-task");
         }
     }
 

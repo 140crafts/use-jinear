@@ -43,6 +43,16 @@ public class MaterialRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    public List<MaterialDto> retrieveAll(List<String> materialIds) {
+        if (materialIds.isEmpty()) {
+            return List.of();
+        }
+        return materialRepository.findAllByMaterialIdInAndPassiveIdIsNull(materialIds)
+                .stream()
+                .map(materialDtoConverter::convert)
+                .toList();
+    }
+
     public Material retrieveEntity(String materialId) {
         return materialRepository.findByMaterialIdAndPassiveIdIsNull(materialId)
                 .orElseThrow(NotFoundException::new);

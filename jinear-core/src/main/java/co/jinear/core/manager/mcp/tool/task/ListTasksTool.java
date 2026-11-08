@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import co.jinear.core.model.mcp.input.McpListTasksInput;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,12 +37,12 @@ public class ListTasksTool implements McpTool {
         return McpToolDefinitionBuilder
                 .named("list_tasks")
                 .title("List tasks with filters")
-                .description("Lists tasks in a workspace, optionally narrowed by team, assignee, collaborator, "
-                             + "workflow status, state group or a date range. "
+                .description("Lists tasks in a workspace, optionally narrowed by team, board, topic, creator, assignee, "
+                             + "collaborator, workflow status, state group or a date range. "
                              + "This is the tool for questions like what is in progress, what is assigned to someone, "
-                             + "or what is due this week.")
+                             + "what is due this week, or what is on a board.")
                 .input(McpSchemaGenerator.forInput(McpListTasksInput.class, mcpProperties.getMaxPageSize()))
-                .output(McpSchemaGenerator.page(McpTaskView.class, "Matching tasks, newest first."))
+                .output(McpSchemaGenerator.page(McpTaskView.class, "Matching tasks, in the requested order."))
                 .readOnly()
                 .scopes(OauthScope.TASKS_READ)
                 .build();
@@ -55,12 +56,17 @@ public class ListTasksTool implements McpTool {
         request.setPage(args.page());
         request.setSize(args.pageSize(mcpProperties.getMaxPageSize()));
         request.setTeamIdList(nullIfEmpty(input.getTeamIds()));
+        request.setExcludingTeamIdList(nullIfEmpty(input.getExcludingTeamIds()));
+        request.setTaskboardIds(nullIfEmpty(input.getTaskBoardIds()));
+        request.setTopicIds(nullIfEmpty(input.getTopicIds()));
+        request.setOwnerIds(nullIfEmpty(input.getOwnerIds()));
         request.setAssigneeIds(nullIfEmpty(input.getAssigneeIds()));
         request.setCollaboratorIds(nullIfEmpty(input.getCollaboratorIds()));
         request.setWorkflowStatusIdList(nullIfEmpty(input.getWorkflowStatusIds()));
         request.setWorkflowStateGroups(nullIfEmpty(input.getStateGroups()));
         request.setTimespanStart(input.getFrom());
         request.setTimespanEnd(input.getTo());
+        Optional.ofNullable(input.getSort()).ifPresent(request::setSort);
         context.setWorkspaceId(input.getWorkspaceId());
         PageDto<TaskDto> page = taskListingManager.filterTasks(request).getTaskDtoPage();
         return McpToolResult.of(McpPageView.of(page, mcpViewConverter::task));

@@ -48,8 +48,7 @@ public class ListCalendarEventsTool implements McpTool {
     public McpToolResult call(McpToolContext context, McpToolArguments args) {
         McpListCalendarEventsInput input = args.bind(McpListCalendarEventsInput.class);
         if (input.getTo().isBefore(input.getFrom())) {
-            return McpToolResult.error("to must be at or after from. Received from "
-                                       + input.getFrom() + " and to " + input.getTo() + ".");
+            return McpToolResult.error("mcp.error.calendar.range", input.getFrom(), input.getTo());
         }
         CalendarEventFilterRequest request = new CalendarEventFilterRequest();
         request.setWorkspaceId(input.getWorkspaceId());

@@ -2,11 +2,15 @@ package co.jinear.core.mcp;
 
 import co.jinear.core.config.properties.McpProperties;
 import co.jinear.core.converter.mcp.McpViewConverter;
+import co.jinear.core.converter.task.TaskFilterRequestConverter;
+import co.jinear.core.exception.NotValidException;
 import co.jinear.core.manager.mcp.tool.McpToolArguments;
 import co.jinear.core.manager.mcp.tool.task.ListTasksTool;
 import co.jinear.core.manager.mcp.tool.task.UpdateTaskTool;
 import co.jinear.core.manager.task.TaskListingManager;
 import co.jinear.core.manager.task.TaskUpdateManager;
+import co.jinear.core.model.dto.PageDto;
+import co.jinear.core.model.enumtype.FilterSort;
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.model.mcp.McpToolException;
 import co.jinear.core.model.mcp.McpToolResult;
@@ -14,13 +18,26 @@ import co.jinear.core.model.mcp.input.McpCreateTaskInput;
 import co.jinear.core.model.mcp.input.McpGetTaskInput;
 import co.jinear.core.model.mcp.input.McpListTasksInput;
 import co.jinear.core.model.mcp.schema.McpSchemaNode;
+import co.jinear.core.model.request.task.TaskFilterRequest;
+import co.jinear.core.model.response.task.TaskListingPaginatedResponse;
+import co.jinear.core.service.SessionInfoService;
+import co.jinear.core.service.project.MilestoneRetrieveService;
+import co.jinear.core.service.project.ProjectTeamListingService;
+import co.jinear.core.service.task.TaskListingService;
+import co.jinear.core.service.team.member.TeamMemberRetrieveService;
+import co.jinear.core.validator.workspace.WorkspaceValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
+import org.springframework.data.domain.Page;
 
 import java.time.ZoneOffset;
+import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -61,9 +78,11 @@ class McpToolInputTest {
     void aMissingRequiredArgumentReportsTheFieldsOwnHint() {
         assertThatThrownBy(() -> args("{\"workspaceUsername\":\"w\",\"teamTag\":\"ENG\"}")
                 .bind(McpGetTaskInput.class))
-                .isInstanceOf(McpToolException.class)
-                .hasMessageContaining("taskNumber")
-                .hasMessageContaining("In the reference ENG-42 it is 42.");
+                .isInstanceOfSatisfying(McpToolException.class, exception -> {
+                    assertThat(exception.getMessage()).isEqualTo("mcp.error.argument.constraint");
+                    assertThat(exception.getArguments()[0]).isEqualTo("taskNumber");
+                    assertThat((String) exception.getArguments()[2]).contains("In the reference ENG-42 it is 42.");
+                });
     }
 
     @Test
@@ -90,6 +109,48 @@ class McpToolInputTest {
     }
 
     @Test
+    void listTasksPassesTheBoardTopicOwnerAndSortFilters() throws Exception {
+        McpProperties properties = new McpProperties();
+        properties.setMaxPageSize(50);
+        TaskListingManager manager = Mockito.mock(TaskListingManager.class);
+        TaskListingPaginatedResponse response = new TaskListingPaginatedResponse();
+        response.setTaskDtoPage(new PageDto<>(Page.empty()));
+        Mockito.when(manager.filterTasks(Mockito.any(TaskFilterRequest.class))).thenReturn(response);
+        ListTasksTool tool = new ListTasksTool(manager, properties, new McpViewConverter());
+
+        tool.call(context(), args("""
+                {"workspaceId":"w","taskBoardIds":["b"],"topicIds":["t"],"ownerIds":["o"],"excludingTeamIds":["x"],"sort":"TASK_BOARD_ORDER"}
+                """));
+
+        ArgumentCaptor<TaskFilterRequest> captor = ArgumentCaptor.forClass(TaskFilterRequest.class);
+        Mockito.verify(manager).filterTasks(captor.capture());
+        TaskFilterRequest request = captor.getValue();
+        assertThat(request.getTaskboardIds()).containsExactly("b");
+        assertThat(request.getTopicIds()).containsExactly("t");
+        assertThat(request.getOwnerIds()).containsExactly("o");
+        assertThat(request.getExcludingTeamIdList()).containsExactly("x");
+        assertThat(request.getSort()).isEqualTo(FilterSort.TASK_BOARD_ORDER);
+    }
+
+    @Test
+    void listTasksKeepsNewestFirstWhenNoSortIsGiven() throws Exception {
+        McpProperties properties = new McpProperties();
+        properties.setMaxPageSize(50);
+        TaskListingManager manager = Mockito.mock(TaskListingManager.class);
+        TaskListingPaginatedResponse response = new TaskListingPaginatedResponse();
+        response.setTaskDtoPage(new PageDto<>(Page.empty()));
+        Mockito.when(manager.filterTasks(Mockito.any(TaskFilterRequest.class))).thenReturn(response);
+        ListTasksTool tool = new ListTasksTool(manager, properties, new McpViewConverter());
+
+        tool.call(context(), args("{\"workspaceId\":\"w\"}"));
+
+        ArgumentCaptor<TaskFilterRequest> captor = ArgumentCaptor.forClass(TaskFilterRequest.class);
+        Mockito.verify(manager).filterTasks(captor.capture());
+        assertThat(captor.getValue().getSort()).isEqualTo(FilterSort.IDATE_DESC);
+        assertThat(captor.getValue().getTaskboardIds()).isNull();
+    }
+
+    @Test
     void updateTaskRefusesOneDateOnRatherThanClearingTheOther() throws Exception {
         TaskUpdateManager manager = Mockito.mock(TaskUpdateManager.class);
         UpdateTaskTool tool = new UpdateTaskTool(manager);
@@ -99,7 +160,7 @@ class McpToolInputTest {
                 """));
 
         assertThat(result.isError()).isTrue();
-        assertThat(result.getText()).contains("Supply startDate and dueDate together");
+        assertThat(result.getText()).isEqualTo("mcp.error.task.dates-pair");
         Mockito.verifyNoInteractions(manager);
     }
 
@@ -132,5 +193,26 @@ class McpToolInputTest {
         UpdateTaskTool tool = new UpdateTaskTool(Mockito.mock(TaskUpdateManager.class));
 
         assertThat(tool.name()).isEqualTo("update_task");
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0, 2})
+    void boardOrderWithoutExactlyOneBoardIsRefusedWithItsOwnMessage(int boardCount) {
+        TaskListingManager manager = new TaskListingManager(
+                Mockito.mock(SessionInfoService.class),
+                Mockito.mock(WorkspaceValidator.class),
+                Mockito.mock(TaskListingService.class),
+                Mockito.mock(TeamMemberRetrieveService.class),
+                Mockito.mock(TaskFilterRequestConverter.class),
+                Mockito.mock(ProjectTeamListingService.class),
+                Mockito.mock(MilestoneRetrieveService.class));
+        TaskFilterRequest request = new TaskFilterRequest();
+        request.setWorkspaceId("w");
+        request.setSort(FilterSort.TASK_BOARD_ORDER);
+        request.setTaskboardIds(boardCount == 0 ? null : List.of("b1", "b2"));
+
+        assertThatThrownBy(() -> manager.filterTasks(request))
+                .isInstanceOf(NotValidException.class)
+                .hasMessage("task.filter.task-board-order-single-board");
     }
 }

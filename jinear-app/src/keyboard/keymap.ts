@@ -12,7 +12,7 @@ export const shortcuts = {
     whatsNew: "u",
 
     newTask: "n",
-    searchTask: "k",
+    search: "k",
     lastActivities: "l",
     assignedToMe: "a",
 
@@ -49,6 +49,9 @@ export const shortcuts = {
 } as const;
 
 export type ShortcutId = keyof typeof shortcuts;
+
+// Also reachable with Cmd/Ctrl, the common key for these. Only keys a page can take from the browser.
+export const COMMAND_SHORTCUTS: ShortcutId[] = ["search"];
 
 export const JUMP_MODE_KEY = "j";
 

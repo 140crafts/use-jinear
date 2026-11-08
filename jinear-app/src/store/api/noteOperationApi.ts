@@ -9,7 +9,7 @@ import {api} from "./api";
 import {noteFilterApi} from "./noteFilterApi";
 import type {RootState} from "@/store";
 
-const OPERATION_TAG = ["v1/note/notebook/{notebookId}/{noteId}", "v1/note/filter"];
+const OPERATION_TAG = ["v1/note/notebook/{notebookId}/{noteId}", "v1/note/filter", "v1/workspace/search"];
 
 export const noteOperationApi = api.injectEndpoints({
     endpoints: (build) => ({

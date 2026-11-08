@@ -3,6 +3,7 @@ package co.jinear.core.controller.task;
 import co.jinear.core.manager.task.TaskRelationManager;
 import co.jinear.core.model.request.task.TaskRelationInitializeRequest;
 import co.jinear.core.model.response.BaseResponse;
+import co.jinear.core.model.response.task.TaskRelationResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ public class TaskRelationController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public BaseResponse initializeTaskRelation(@Valid @RequestBody TaskRelationInitializeRequest taskRelationInitializeRequest) {
+    public TaskRelationResponse initializeTaskRelation(@Valid @RequestBody TaskRelationInitializeRequest taskRelationInitializeRequest) {
         return taskRelationManager.initializeTaskRelation(taskRelationInitializeRequest);
     }
 

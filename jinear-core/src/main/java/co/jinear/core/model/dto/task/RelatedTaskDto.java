@@ -30,6 +30,7 @@ public class RelatedTaskDto extends BaseDto {
     private Integer teamTagNo;
     private Integer topicTagNo;
     private String title;
+    private String url;
     @Nullable
     private String projectId;
     @Nullable

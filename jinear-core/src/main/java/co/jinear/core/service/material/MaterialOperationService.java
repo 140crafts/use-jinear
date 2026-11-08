@@ -44,12 +44,14 @@ public class MaterialOperationService {
     private final MaterialSearchService materialSearchService;
     private final MaterialAccessService materialAccessService;
     private final PassiveService passiveService;
+    private final MaterialFtsRefreshService materialFtsRefreshService;
 
     public void initialize(MaterialFolderInitializeVo materialFolderInitializeVo) {
         log.info("Initialize folder has started. materialFolderInitializeVo: {}", materialFolderInitializeVo);
         validateParentMaterialIsFolderAndWithinSameWorkspace(materialFolderInitializeVo);
         Material material = materialEntityConverter.convert(materialFolderInitializeVo);
         materialRepository.save(material);
+        materialFtsRefreshService.markDirty();
     }
 
     public WaitingForUploadMaterialResultDto initialize(MaterialFileInitializeVo materialFileInitializeVo) {
@@ -60,6 +62,7 @@ public class MaterialOperationService {
         InitializeWaitingMediaVo initializeWaitingMediaVo = mapInitializeWaitingMediaVo(saved, materialFileInitializeVo);
         WaitingMediaResultDto waitingMediaResultDto = mediaOperationService.initializeWaitingMediaAndGetPresignedUploadUrl(initializeWaitingMediaVo);
         updateMediaId(saved, waitingMediaResultDto, material);
+        materialFtsRefreshService.markDirty();
         return new WaitingForUploadMaterialResultDto(saved.getMaterialId(), waitingMediaResultDto);
     }
 
@@ -84,6 +87,7 @@ public class MaterialOperationService {
         Material material = materialRetrieveService.retrieveEntity(materialId);
         material.setName(newName);
         materialRepository.save(material);
+        materialFtsRefreshService.markDirty();
     }
 
     @Transactional
@@ -102,6 +106,7 @@ public class MaterialOperationService {
                         }
                     });
         }
+        materialFtsRefreshService.markDirty();
     }
 
     @Transactional

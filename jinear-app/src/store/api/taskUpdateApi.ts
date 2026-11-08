@@ -22,6 +22,7 @@ export const taskUpdateApi = api.injectEndpoints({
                 {type: "v1/task/from-workspace/{workspaceName}/{taskTag}"},
                 {type: "v1/workspace/activity/filter"},
                 {type: "v1/task/list/filter"},
+                {type: "v1/workspace/search"},
                 {type: "v1/calendar/event/filter"},
                 {type: "v1/task-analytics/{workspaceId}/team/{teamId}"}
             ]
@@ -37,6 +38,7 @@ export const taskUpdateApi = api.injectEndpoints({
                 {type: "v1/task/from-workspace/{workspaceName}/{taskTag}"},
                 {type: "v1/workspace/activity/filter"},
                 {type: "v1/task/list/filter"},
+                {type: "v1/workspace/search"},
                 {type: "v1/calendar/event/filter"},
                 {type: "v1/task-analytics/{workspaceId}/team/{teamId}"}
             ]
@@ -99,6 +101,7 @@ export const taskUpdateApi = api.injectEndpoints({
                 {type: "v1/workspace/activity/filter"},
                 {type: "v1/task/reminder/job/{taskReminderId}/next"},
                 {type: "v1/task/list/filter"},
+                {type: "v1/workspace/search"},
                 {type: "v1/calendar/event/filter"},
                 {type: "v1/task-analytics/{workspaceId}/team/{teamId}"}
             ]
@@ -115,6 +118,7 @@ export const taskUpdateApi = api.injectEndpoints({
                 {type: "v1/task/from-workspace/{workspaceName}/{taskTag}"},
                 {type: "v1/workspace/activity/filter"},
                 {type: "v1/task/list/filter"},
+                {type: "v1/workspace/search"},
                 {type: "v1/calendar/event/filter"},
                 {type: "v1/task-analytics/{workspaceId}/team/{teamId}"}
             ]
@@ -130,6 +134,7 @@ export const taskUpdateApi = api.injectEndpoints({
                 {type: "v1/task/from-workspace/{workspaceName}/{taskTag}"},
                 {type: "v1/workspace/activity/filter"},
                 {type: "v1/task/list/filter"},
+                {type: "v1/workspace/search"},
                 {type: "v1/calendar/event/filter"},
                 {type: "v1/task-analytics/{workspaceId}/team/{teamId}"}
             ]
@@ -148,6 +153,7 @@ export const taskUpdateApi = api.injectEndpoints({
                 {type: "v1/task/from-workspace/{workspaceName}/{taskTag}"},
                 {type: "v1/workspace/activity/filter"},
                 {type: "v1/task/list/filter"},
+                {type: "v1/workspace/search"},
                 {type: "v1/calendar/event/filter"},
                 {type: "v1/task-analytics/{workspaceId}/team/{teamId}"}
             ]

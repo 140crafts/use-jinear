@@ -49,6 +49,14 @@ public class TaskReminderRetrieveService {
         return taskReminderRepository.findAllByTaskIdAndPassiveIdIsNull(taskId);
     }
 
+    public List<TaskReminderDto> retrieveAllWithRelatedTask(String taskId) {
+        log.info("Retrieve all task reminders with related task has started. taskId: {}", taskId);
+        return taskReminderRepository.findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateAsc(taskId)
+                .stream()
+                .map(taskReminderConverter::map)
+                .toList();
+    }
+
     public boolean hasAnyRelated(String taskId, TaskReminderType taskReminderType) {
         log.info("Check any related task reminder exists has started. taskId: {}, taskReminderType:{}", taskId, taskReminderType);
         boolean relatedTaskReminderExists = retrieveRelated(taskId, taskReminderType).isPresent();

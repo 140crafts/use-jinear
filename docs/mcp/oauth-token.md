@@ -186,12 +186,13 @@ curl -s -X POST "$ROOT/mcp" \
         "jsonrpc": "2.0",
         "id": 2,
         "method": "tools/call",
-        "params": { "name": "list_workspaces", "arguments": {} }
+        "params": { "name": "get_context", "arguments": {} }
       }'
 ```
 
-Call `list_workspaces` first. Nearly every other tool needs a `workspaceId` from it, and the
-task tools also need a `teamId` from `list_teams`.
+Call `get_context` first. It returns every workspace with its teams, workflow statuses and
+topics, plus the account's default workspace and team, so the ids that other tools need come
+from one call.
 
 ### Refreshing
 
@@ -236,9 +237,10 @@ the `sed` line to see the error.
 |---|---|
 | `workspace:read` | Workspaces, teams, members, topics, workflow statuses |
 | `tasks:read` | Tasks, boards, comments, attachments |
-| `tasks:write` | Creating and updating tasks, boards and comments |
+| `tasks:write` | Creating and updating tasks, boards, comments, checklists, reminders and topics, and removing checklists and reminders |
 | `calendar:read` | Calendar events |
 | `notes:read` | Notebooks and notes |
+| `notes:write` | Creating, editing, moving and deleting notes |
 | `files:read` | Files, folders and links |
 | `offline_access` | A refresh token, so the connection lasts |
 

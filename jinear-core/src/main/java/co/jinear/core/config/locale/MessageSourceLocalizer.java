@@ -16,6 +16,8 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class MessageSourceLocalizer {
 
+    private static final String MESSAGE_SPLITTER = ";";
+
     private final ResourceBundleMessageSource messageSource;
 
     public LocaleMessage getLocaleMessage(String key) {
@@ -34,6 +36,15 @@ public class MessageSourceLocalizer {
             log.error(key + " not found in messages file", e);
             return new LocaleMessage(StringUtils.EMPTY, StringUtils.EMPTY);
         }
+    }
+
+    public String getMessageText(String key, Object... args) {
+        Locale locale = LocaleContextHolder.getLocale();
+        String message = messageSource.getMessage(key, args, locale);
+        if (key.equals(message)) {
+            return message;
+        }
+        return StringUtils.substringAfter(message, MESSAGE_SPLITTER).trim();
     }
 
     private String getConsumerErrorMessage(String errorMessage, String consumerErrorMessage) {

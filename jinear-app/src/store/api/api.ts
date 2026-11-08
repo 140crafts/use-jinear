@@ -58,6 +58,7 @@ export const tagTypes = [
     "v1/notification/event/{workspaceId}",
     "v1/notification/event/{workspaceId}/team/{teamId}",
     "v1/task/search/${workspaceId}",
+    "v1/workspace/search",
     "v1/calendar/member/memberships/{workspaceId}",
     "v1/calendar/member/list/{calendarId}",
     "v1/calendar/event/filter",

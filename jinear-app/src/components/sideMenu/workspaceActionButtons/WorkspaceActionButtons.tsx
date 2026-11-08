@@ -1,15 +1,15 @@
 import React from "react";
 import styles from "./WorkspaceActionButtons.module.css";
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
-import {LuClipboardPen, LuSearch, LuSparkles, LuSquarePen} from "react-icons/lu";
+import {LuClipboardPen, LuSparkles, LuSquarePen} from "react-icons/lu";
 import useTranslation from "@/locals/useTranslation";
-import {closeSearchTaskModal, popNewTaskModal, popSearchTaskModal} from "@/slice/modalSlice";
+import {popNewTaskModal} from "@/slice/modalSlice";
 import {useAppDispatch} from "@/store";
-import type {TaskDto, WorkspaceDto} from "@/be/jinear-core";
+import type {WorkspaceDto} from "@/be/jinear-core";
 import {useWorkspaceFirstTeam} from "@/hooks/useWorkspaceFirstTeam";
 import MenuGroupTitle from "@/components/sideMenu/menuGroupTitle/MenuGroupTitle";
 import Logger from "@/util/logger";
-import {useLocation, useNavigate} from "react-router-dom";
+import {useLocation} from "react-router-dom";
 
 interface WorkspaceActionButtonsProps {
     workspace: WorkspaceDto;
@@ -23,29 +23,12 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({workspac
     const {pathname} = useLocation();
     const assignedToMePath = `/${workspace?.username}/tasks/assigned-to-me`;
     const lastActivitiesPath = `/${workspace?.username}/tasks/last-activities`;
-    const navigate = useNavigate();
 
     const _popNewTaskModal = () => {
         if (workspace && team) {
             dispatch(popNewTaskModal({visible: true, workspace, team}));
         }
     };
-
-    const navigateToTask = (task: TaskDto) => {
-        if (task) {
-            navigate(`/${workspace.username}/task/${task?.team?.tag}-${task.teamTagNo}`);
-            dispatch(closeSearchTaskModal());
-        }
-    }
-
-    const searchTask = () => {
-        dispatch(popSearchTaskModal({
-            workspaceId: workspace.workspaceId,
-            teamIds: [],
-            onSelect: navigateToTask,
-            visible: true
-        }))
-    }
 
     return (
         <div className={styles.container}>
@@ -62,16 +45,6 @@ const WorkspaceActionButtons: React.FC<WorkspaceActionButtonsProps> = ({workspac
                 >
                     <LuSquarePen/>
                     <b>{t("sideMenuNewTask")}</b>
-                </Button>
-
-                <Button
-                    className={styles.button}
-                    variant={ButtonVariants.hoverFilled2}
-                    onClick={searchTask}
-                    shortcut="searchTask"
-                >
-                    <LuSearch className={styles.icon}/>
-                    {t("mainFeaturesMenuLabelSearch")}
                 </Button>
 
                 <Button

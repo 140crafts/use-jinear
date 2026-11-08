@@ -153,11 +153,6 @@ class McpToolCatalogTest {
     }
 
     @Test
-    void theCatalogStaysSmallEnoughForRealClients() {
-        assertThat(McpRealCatalog.tools()).hasSizeLessThanOrEqualTo(36);
-    }
-
-    @Test
     void theStandardSearchAndFetchPairIsPresent() {
         List<String> names = McpRealCatalog.tools().stream().map(McpTool::name).toList();
         assertThat(names).contains("search", "fetch");

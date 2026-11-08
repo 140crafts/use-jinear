@@ -2,6 +2,7 @@ package co.jinear.core.manager.topic;
 
 import co.jinear.core.converter.topic.TopicInitializeVoConverter;
 import co.jinear.core.converter.topic.TopicUpdateVoConverter;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.model.dto.topic.TopicDto;
 import co.jinear.core.model.request.topic.TopicInitializeRequest;
 import co.jinear.core.model.request.topic.TopicUpdateRequest;
@@ -14,16 +15,22 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.topic.TopicInitializeService;
 import co.jinear.core.service.topic.TopicRetrieveService;
 import co.jinear.core.service.topic.TopicUpdateService;
+import co.jinear.core.validator.common.ColorValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.regex.Pattern;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TopicManager {
+
+    private static final Pattern TAG_PATTERN = Pattern.compile("^[A-Za-z0-9]{1,16}$");
 
     private final TopicInitializeService topicInitializeService;
     private final TopicRetrieveService topicRetrieveService;
@@ -31,6 +38,7 @@ public class TopicManager {
     private final SessionInfoService sessionInfoService;
     private final WorkspaceValidator workspaceValidator;
     private final TeamAccessValidator teamAccessValidator;
+    private final ColorValidator colorValidator;
     private final TopicInitializeVoConverter topicInitializeVoConverter;
     private final TopicUpdateVoConverter topicUpdateVoConverter;
 
@@ -53,6 +61,8 @@ public class TopicManager {
     public TopicResponse initializeTopic(TopicInitializeRequest topicInitializeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateAccess(topicInitializeRequest, currentAccountId);
+        validateTag(topicInitializeRequest.getTag());
+        colorValidator.validateHexColorIfPresent(topicInitializeRequest.getColor());
         log.info("Initialize topic has started. currentAccountId: {}", currentAccountId);
         TopicInitializeVo topicInitializeVo = topicInitializeVoConverter.map(topicInitializeRequest, currentAccountId);
         TopicDto topicDto = topicInitializeService.initializeTopic(topicInitializeVo);
@@ -62,6 +72,8 @@ public class TopicManager {
     public TopicResponse updateTopic(TopicUpdateRequest topicUpdateRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateAccess(topicUpdateRequest.getTopicId(), currentAccountId);
+        Optional.of(topicUpdateRequest).map(TopicUpdateRequest::getTag).ifPresent(this::validateTag);
+        colorValidator.validateHexColorIfPresent(topicUpdateRequest.getColor());
         log.info("Update topic has started. currentAccountId: {}, topicUpdateRequest: {}", currentAccountId, topicUpdateRequest);
         TopicUpdateVo topicUpdateVo = topicUpdateVoConverter.map(topicUpdateRequest);
         TopicDto topicDto = topicUpdateService.updateTopic(topicUpdateVo);
@@ -84,6 +96,13 @@ public class TopicManager {
         TopicResponse topicResponse = new TopicResponse();
         topicResponse.setTopicDto(topicDto);
         return topicResponse;
+    }
+
+    private void validateTag(String tag) {
+        boolean lettersAndDigitsOnly = TAG_PATTERN.matcher(tag).matches();
+        if (!lettersAndDigitsOnly) {
+            throw new BusinessException("topic.tag-invalid");
+        }
     }
 
     private void validateAccess(TopicInitializeRequest topicInitializeRequest, String currentAccountId) {

@@ -63,12 +63,14 @@ class McpControllerTest {
                 McpTestTools.readTool(),
                 McpTestTools.writeTool(),
                 McpTestTools.throwingTool(),
+                McpTestTools.refusingTool(),
+                McpTestTools.invalidRequestTool(),
                 McpTestTools.explodingTool());
         McpToolRegistry registry = new McpToolRegistry(tools);
 
         McpToolCallLogService logService = Mockito.mock(McpToolCallLogService.class);
         McpProtocolManager protocolManager = new McpProtocolManager(registry, logService, new ObjectMapper(),
-                Validation.buildDefaultValidatorFactory().getValidator());
+                Validation.buildDefaultValidatorFactory().getValidator(), McpTestTools.messageSourceLocalizer());
         OauthProperties oauthProperties = new OauthProperties();
         oauthProperties.setIssuerUrl("https://api.jinear.test");
         McpDiscoveryService discoveryService = new McpDiscoveryService(properties, oauthProperties);
@@ -255,6 +257,32 @@ class McpControllerTest {
                 .andExpect(jsonPath("$.result.isError").value(true))
                 .andExpect(jsonPath("$.result.content[0].text",
                         org.hamcrest.Matchers.containsString("must look like a ULID")));
+    }
+
+    @Test
+    void aBusinessRefusalReturnsTheResolvedMessageNotItsKey() throws Exception {
+        authenticateWith(Set.of("tasks:read"));
+
+        mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON).content("""
+                        {"jsonrpc":"2.0","id":12,"method":"tools/call","params":{"name":"refuses","arguments":{}}}
+                        """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.isError").value(true))
+                .andExpect(jsonPath("$.result.content[0].text").value(
+                        "The request was refused: oldText must match the HTML from get_note exactly once, but it matched 2 times."));
+    }
+
+    @Test
+    void anInvalidRequestReturnsTheResolvedMessageNotTheGenericError() throws Exception {
+        authenticateWith(Set.of("tasks:read"));
+
+        mockMvc.perform(post("/mcp").contentType(MediaType.APPLICATION_JSON).content("""
+                        {"jsonrpc":"2.0","id":13,"method":"tools/call","params":{"name":"rejects_as_invalid","arguments":{}}}
+                        """))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.result.isError").value(true))
+                .andExpect(jsonPath("$.result.content[0].text").value(
+                        "The request was refused: Sorting by board order needs exactly one task board."));
     }
 
     @Test

@@ -58,7 +58,7 @@ container start (empty string is allowed) or the container won't boot**.
 | `VITE_FIREBASE_MEASUREMENT_ID` | optional | Firebase web app config |
 | `VITE_FIREBASE_VAPID_KEY` | optional | Web Push certificate key pair (Firebase Console → Cloud Messaging) |
 | `VITE_POSTHOG_KEY` | optional | PostHog project API key (blank disables analytics) |
-| `VITE_POSTHOG_HOST` | optional | PostHog API host, e.g. `https://us.i.posthog.com` |
+| `VITE_POSTHOG_HOST` | optional | PostHog API host, e.g. `https://us.i.posthog.com` (the hosted service uses `https://jinear.co/relay`, see jinear-site's README) |
 
 "Optional" means push / Apple Sign In / analytics are disabled when left blank, but the
 **key must still be present** in the environment (compose uses `${VAR:-}` to pass

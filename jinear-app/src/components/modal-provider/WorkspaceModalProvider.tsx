@@ -18,6 +18,7 @@ import WorkspaceInviteMemberModal from "@/components/modal/workspaceInviteMember
 import ReminderListModal from "@/components/modal/reminder/reminderListModal/ReminderListModal.tsx";
 import NewReminderModal from "@/components/modal/reminder/NewReminderModal/NewReminderModal.tsx";
 import SearchTaskModal from "@/components/modal/searchTaskModal/SearchTaskModal.tsx";
+import GlobalSearchModal from "@/components/modal/globalSearchModal/GlobalSearchModal.tsx";
 import NewTeamModal from "@/components/modal/newTeamModal/NewTeamModal.tsx";
 import NewWorkspaceModal from "@/components/modal/newWorkspaceModal/NewWorkspaceModal.tsx";
 import TaskAssigneeChangeModal
@@ -74,6 +75,7 @@ const workspaceModals: any = (
         <ReminderListModal/>
         <NewReminderModal/>
         <SearchTaskModal/>
+        <GlobalSearchModal/>
         <NewTeamModal/>
         <NewWorkspaceModal/>
         <TaskAssigneeChangeModal/>

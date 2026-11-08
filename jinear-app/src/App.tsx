@@ -10,7 +10,6 @@ import WorkspaceAndTeamChangeListener
     from "@/components/workspaceAndTeamChangeListener/WorkspaceAndTeamChangeListener.tsx";
 import OnboardListener from "@/components/onboardListener/OnboardListener.tsx";
 import WebViewEventListener from "@/components/webViewEventListener/WebViewEventListener.tsx";
-import PostHogPageView from "@/components/postHogPageView/PostHogPageView.tsx";
 import ToasterProvider from "@/components/toasterProvider/ToasterProvider.tsx";
 import BodyFixer from "@/components/bodyFixer/BodyFixer.tsx";
 import RegisterPage from "@/pages/register/page.tsx";
@@ -76,7 +75,6 @@ export default function App() {
             <WorkspaceAndTeamChangeListener/>
             <OnboardListener/>
             <WebViewEventListener/>
-            <PostHogPageView/>
             <ToasterProvider/>
             <BodyFixer/>
             <KeyboardShortcuts/>

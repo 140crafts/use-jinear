@@ -86,6 +86,7 @@ public class TaskBoardEntryManager {
         String currentAccountSessionId = sessionInfoService.currentAccountSessionId();
         validateAccess(taskBoardEntryId, currentAccountId);
         validateBoardStatus(taskBoardEntryId);
+        validateOrderInRange(taskBoardEntryId, newOrder);
         log.info("Change task board entry order has started. currentAccountId: {}", currentAccountId);
         TaskBoardEntryDto boardEntryDto = taskBoardEntryOperationService.changeOrder(taskBoardEntryId, newOrder);
         taskActivityService.initializeTaskOrderChangedOnTaskBoardActivity(currentAccountId, currentAccountSessionId, boardEntryDto);
@@ -137,6 +138,15 @@ public class TaskBoardEntryManager {
     private void validateBoardStatus(TaskBoardStateType state) {
         if (TaskBoardStateType.CLOSED.equals(state)) {
             throw new BusinessException("task-board.entry.board-closed");
+        }
+    }
+
+    private void validateOrderInRange(String taskBoardEntryId, Integer newOrder) {
+        TaskBoardEntryDto taskBoardEntryDto = taskBoardEntryRetrieveService.retrieve(taskBoardEntryId);
+        Integer lastOrder = taskBoardEntryRetrieveService.retrieveLastOrder(taskBoardEntryDto.getTaskBoardId());
+        boolean inRange = newOrder >= 0 && newOrder <= lastOrder;
+        if (!inRange) {
+            throw new BusinessException("task-board.entry.order-out-of-range", lastOrder, newOrder);
         }
     }
 

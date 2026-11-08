@@ -21,6 +21,7 @@ export const materialAccessApi = api.injectEndpoints({
             }),
             invalidatesTags: [
                 "v1/material/list/search",
+                "v1/workspace/search",
                 "v1/material/access/{materialId}"
             ]
         }),
@@ -32,6 +33,7 @@ export const materialAccessApi = api.injectEndpoints({
             }),
             invalidatesTags: [
                 "v1/material/list/search",
+                "v1/workspace/search",
                 "v1/material/access/{materialId}"
             ]
         })

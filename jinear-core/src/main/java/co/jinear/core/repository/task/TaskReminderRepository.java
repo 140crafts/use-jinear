@@ -2,6 +2,7 @@ package co.jinear.core.repository.task;
 
 import co.jinear.core.model.entity.task.TaskReminder;
 import co.jinear.core.model.enumtype.task.TaskReminderType;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -14,6 +15,9 @@ public interface TaskReminderRepository extends JpaRepository<TaskReminder, Stri
     Optional<TaskReminder> findFirstByTaskIdAndTaskReminderTypeAndPassiveIdIsNull(String taskId, TaskReminderType taskReminderType);
 
     List<TaskReminder> findAllByTaskIdAndPassiveIdIsNull(String taskId);
+
+    @EntityGraph(attributePaths = "reminder")
+    List<TaskReminder> findAllByTaskIdAndPassiveIdIsNullOrderByCreatedDateAsc(String taskId);
 
     Optional<TaskReminder> findByTaskIdAndReminderIdAndPassiveIdIsNull(String taskId, String reminderId);
 }

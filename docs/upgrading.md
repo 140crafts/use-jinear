@@ -16,6 +16,62 @@ turning a new feature on, not for keeping the server running.
 
 ---
 
+## v0.1.1686
+
+AI assistants can now write notes, and search covers notes and files. Nothing has to
+change before you pull.
+
+```bash
+cd ~/jinear
+docker exec jinear-db-backup /backup.sh
+docker compose pull && docker compose up -d
+```
+
+**The database updates itself.** Liquibase runs on boot and:
+
+- adds two functions, `jinear_fts_fold` and `jinear_fts_prefix_query`, that every search
+  uses to match Turkish letters with their plain forms (`şirket` and `sirket`);
+- rebuilds the task search view with those functions;
+- adds search views for notes and for files.
+
+Existing data is not changed. Each view is built from your data when it is created, so on
+a large instance the first boot after this upgrade takes a little longer than usual.
+
+### Note links (optional)
+
+Assistants return a link with every note. Without this setting, that link opens the home
+page of your app instead of the note. To link to the note itself, add this line to
+`.config/application.properties`, next to `fe.task-url`:
+
+```properties
+fe.note-url=${FE_PATH}/{workspaceName}/notebook/{notebookId}/note/{noteId}
+```
+
+`FE_PATH` is already set in your `docker-compose.yaml` by the installer. New installs get
+this line from the installer.
+
+### A new permission for assistants
+
+Writing notes is a new permission, `notes:write`. A connection made before this release
+does not have it, so an assistant on that connection can still read notes but cannot change
+them. To give it, a member disconnects the assistant from their profile and connects it
+again, then allows notes writing on the consent screen.
+
+### Search endpoints
+
+The app now has one search for tasks, notes and files. If you have your own scripts that
+call the API, check them for these changes:
+
+- `POST /v1/workspace/search` is new. Its body is `{workspaceId, query, teamIdList?, types?}`,
+  where `types` takes `TASK`, `NOTE` and `MATERIAL`, and the page is given as `?page=`. It
+  returns one page of each type that was asked for, or of all three when `types` is empty.
+- `POST /v1/note/workspace/{workspaceId}/search` and
+  `POST /v1/material/workspace/{workspaceId}/search` are removed. Use the new endpoint with
+  `types: ["NOTE"]` or `types: ["MATERIAL"]`.
+- `POST /v1/task/search/{workspaceId}` is unchanged.
+
+---
+
 ## v0.1.1682
 
 Two features land in this release, both optional and both off by default:

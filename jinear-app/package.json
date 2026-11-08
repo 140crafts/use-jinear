@@ -7,12 +7,13 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:note-crdt": "rolldown --config scripts/note-crdt/rolldown.config.ts"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
     "@paddle/paddle-js": "^1.6.4",
-    "@posthog/react": "^1.10.0",
+    "@posthog/react": "^1.11.3",
     "@reduxjs/toolkit": "^2.12.0",
     "@tiptap/extension-collaboration": "^3.23.6",
     "@tiptap/extension-image": "^3.23.6",
@@ -29,7 +30,7 @@
     "date-fns": "^4.3.0",
     "firebase": "^12.14.0",
     "localforage": "^1.10.0",
-    "posthog-js": "^1.376.4",
+    "posthog-js": "^1.438.21",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-hook-form": "^7.76.1",
@@ -57,6 +58,8 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.6.0",
+    "linkedom": "0.18.14",
+    "rolldown": "1.0.2",
     "sass-embedded": "^1.100.0",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",

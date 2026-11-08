@@ -59,7 +59,7 @@ export const noteTagApi = api.injectEndpoints({
                 method: "POST",
                 body
             }),
-            invalidatesTags: ["v1/note/notebook/{notebookId}/{noteId}", "v1/note/filter"]
+            invalidatesTags: ["v1/note/notebook/{notebookId}/{noteId}", "v1/note/filter", "v1/workspace/search"]
         }),
         //
         unassignNoteTag: build.mutation<BaseResponse, AssignNoteTagRequest>({

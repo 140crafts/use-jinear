@@ -12,7 +12,7 @@ import java.util.List;
 public class McpSearchTasksInput extends McpWorkspaceScopedInput {
 
     @NotBlank
-    @McpField("Free text to match against task titles and bodies.")
+    @McpField("Keywords to find in task titles and bodies. Every word must appear as a whole word or as the start of a word.")
     private String query;
 
     @McpField("Restrict the search to these teams. Omit to search the whole workspace.")

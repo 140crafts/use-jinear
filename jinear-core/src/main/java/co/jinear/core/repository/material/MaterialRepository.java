@@ -15,6 +15,8 @@ public interface MaterialRepository extends JpaRepository<Material, String> {
 
     Optional<Material> findByMaterialIdAndPassiveIdIsNull(String materialId);
 
+    List<Material> findAllByMaterialIdInAndPassiveIdIsNull(List<String> materialIds);
+
     boolean existsByMaterialIdAndWorkspaceIdAndPassiveIdIsNull(String materialId, String workspaceId);
 
     Optional<Material> findByMaterialIdAndMaterialTypeAndPassiveIdIsNull(String materialId, MaterialType materialType);

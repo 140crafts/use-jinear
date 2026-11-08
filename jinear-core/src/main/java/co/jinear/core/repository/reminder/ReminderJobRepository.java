@@ -17,6 +17,8 @@ public interface ReminderJobRepository extends JpaRepository<ReminderJob, String
 
     Optional<ReminderJob> findFirstByReminderIdAndReminderJobStatusAndPassiveIdIsNullOrderByDateAsc(String reminderJobId, ReminderJobStatus reminderJobStatus);
 
+    List<ReminderJob> findAllByReminderIdInAndReminderJobStatusAndPassiveIdIsNull(List<String> reminderIds, ReminderJobStatus reminderJobStatus);
+
     List<ReminderJob> findAllByReminderJobStatusAndDateLessThanAndPassiveIdIsNull(ReminderJobStatus reminderJobStatus, ZonedDateTime date);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)

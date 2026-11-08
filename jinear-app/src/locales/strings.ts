@@ -1274,6 +1274,62 @@ const translations = {
         en: "No task found",
         tr: "Görev bulunamadı"
     },
+    globalSearchModalPlaceholder: {
+        en: "Search tasks, notes and files",
+        tr: "Görev, not ve dosyalarda ara"
+    },
+    globalSearchModalTabAll: {
+        en: "All",
+        tr: "Tümü"
+    },
+    globalSearchModalTabTasks: {
+        en: "Tasks",
+        tr: "Görevler"
+    },
+    globalSearchModalTabNotes: {
+        en: "Notes",
+        tr: "Notlar"
+    },
+    globalSearchModalTabFiles: {
+        en: "Files",
+        tr: "Dosyalar"
+    },
+    globalSearchModalSeeAll: {
+        en: "See all",
+        tr: "Tümünü gör"
+    },
+    globalSearchModalCancel: {
+        en: "Cancel",
+        tr: "Vazgeç"
+    },
+    globalSearchModalClear: {
+        en: "Clear",
+        tr: "Temizle"
+    },
+    globalSearchModalTopic: {
+        en: "Topic",
+        tr: "Konu"
+    },
+    globalSearchModalFolder: {
+        en: "Folder",
+        tr: "Klasör"
+    },
+    globalSearchModalRootFolder: {
+        en: "Root folder",
+        tr: "Ana Dizin"
+    },
+    globalSearchModalInitialState: {
+        en: "Type to search tasks, notes and files",
+        tr: "Görev, not ve dosyaları aramak için yazın"
+    },
+    globalSearchModalEmptyState: {
+        en: "No results",
+        tr: "Sonuç bulunamadı"
+    },
+    globalSearchModalLoadMore: {
+        en: "Load more",
+        tr: "Daha fazla göster"
+    },
     taskRelationUnlink_dialogModalTitle: {
         en: "Remove Relation",
         tr: "İlişiği Kes"
@@ -6823,6 +6879,10 @@ const translations = {
     oauthConsentScopeNotesRead: {
         en: "Read your notebooks and notes",
         tr: "Not defterlerinizi ve notlarınızı görüntüleyebilir"
+    },
+    oauthConsentScopeNotesWrite: {
+        en: "Create, edit, move and delete your notes",
+        tr: "Notlarınızı oluşturabilir, düzenleyebilir, taşıyabilir ve silebilir"
     },
     oauthConsentScopeFilesRead: {
         en: "Read your files and get links to them",

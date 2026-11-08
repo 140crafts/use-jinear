@@ -1,8 +1,10 @@
 package co.jinear.core.manager.mcp;
 
+import co.jinear.core.config.locale.MessageSourceLocalizer;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
+import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.mcp.McpToolContext;
 import co.jinear.core.service.mcp.McpToolCallLogService;
 import co.jinear.core.model.mcp.McpToolException;
@@ -57,15 +59,17 @@ public class McpProtocolManager {
 
     private static final String INSTRUCTIONS = """
             Jinear holds a person's tasks, boards, calendar, notes and files. \
-            Call list_workspaces first: nearly every other tool needs a workspaceId, and \
-            task tools also need a teamId from list_teams. Before changing a task's status, \
-            read list_workflow_statuses for that team, since statuses are per team and are \
-            referenced by id. Search tools accept plain language. Dates are ISO 8601 in UTC.""";
+            Call get_context first: it returns the workspaces, teams, workflow statuses and \
+            topics with their ids, plus the account's default workspace and team, so other tools \
+            can be called directly. Statuses are per team and are referenced by id. Search tools \
+            match keywords, not meaning: every word must appear as a whole word or as the start \
+            of a word, so use the words the record would contain. Dates are ISO 8601 in UTC.""";
 
     private final McpToolRegistry mcpToolRegistry;
     private final McpToolCallLogService mcpToolCallLogService;
     private final ObjectMapper objectMapper;
     private final Validator validator;
+    private final MessageSourceLocalizer messageSourceLocalizer;
 
     public Optional<McpJsonRpcResponse> handle(McpJsonRpcRequest request, McpToolContext context) {
         if (Objects.isNull(request.getMethod())) {
@@ -130,14 +134,15 @@ public class McpProtocolManager {
         } catch (McpToolException toolException) {
             mcpToolCallLogService.recordOutcome(context, name, true, toolException.getErrorCode(),
                     System.currentTimeMillis() - startedAt, 0);
-            return McpJsonRpcResponse.success(request.getId(), wrap(McpToolResult.error(toolException.getMessage())));
+            McpToolResult result = McpToolResult.error(toolException.getMessage(), toolException.getArguments());
+            return McpJsonRpcResponse.success(request.getId(), wrap(result));
         } catch (RuntimeException exception) {
             String errorReference = UUID.randomUUID().toString();
             log.error("[MCP] Tool {} failed. errorReference: {}", name, errorReference, exception);
             mcpToolCallLogService.recordFailure(context, name, exception,
                     System.currentTimeMillis() - startedAt);
-            return McpJsonRpcResponse.success(request.getId(),
-                    wrap(McpToolResult.error(describe(exception, errorReference))));
+            McpToolResult result = describe(exception, errorReference);
+            return McpJsonRpcResponse.success(request.getId(), wrap(result));
         }
     }
 
@@ -156,14 +161,15 @@ public class McpProtocolManager {
                     ? type.getDeclaredConstructor().newInstance()
                     : objectMapper.treeToValue(params, type);
         } catch (ReflectiveOperationException | JsonProcessingException exception) {
-            throw new McpToolException("invalid_params", "The params object could not be read.");
+            throw new McpToolException("invalid_params", "mcp.error.params.unreadable");
         }
     }
 
     private McpToolCallResult wrap(McpToolResult result) {
         McpToolCallResult callResult = new McpToolCallResult();
         if (result.isError()) {
-            callResult.setContent(List.of(McpContentBlock.text(result.getText())));
+            String text = messageSourceLocalizer.getMessageText(result.getText(), result.getArguments());
+            callResult.setContent(List.of(McpContentBlock.text(text)));
             callResult.setError(true);
             return callResult;
         }
@@ -183,17 +189,21 @@ public class McpProtocolManager {
         }
     }
 
-    private String describe(RuntimeException exception, String errorReference) {
+    private McpToolResult describe(RuntimeException exception, String errorReference) {
         if (exception instanceof NoAccessException) {
-            return "You do not have access to that resource in this workspace.";
+            return McpToolResult.error("mcp.error.no-access");
         }
         if (exception instanceof NotFoundException) {
-            return "No such record. Check the id and try again.";
+            return McpToolResult.error("mcp.error.not-found");
         }
         if (exception instanceof BusinessException businessException) {
-            return "The request was refused: " + businessException.getMessage();
+            String message = messageSourceLocalizer.getMessageText(businessException.getMessage(), businessException.getArguments());
+            return McpToolResult.error("mcp.error.refused", message);
         }
-        return "The request could not be completed. Try again, or narrow the arguments. "
-               + "Error reference: " + errorReference + ".";
+        if (exception instanceof NotValidException notValidException) {
+            String message = messageSourceLocalizer.getMessageText(notValidException.getMessage(), notValidException.getArguments());
+            return McpToolResult.error("mcp.error.refused", message);
+        }
+        return McpToolResult.error("mcp.error.unexpected", errorReference);
     }
 }

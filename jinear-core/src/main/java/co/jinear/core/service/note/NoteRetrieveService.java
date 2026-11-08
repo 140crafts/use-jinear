@@ -34,6 +34,16 @@ public class NoteRetrieveService {
                 .orElseThrow(NotFoundException::new);
     }
 
+    public List<NoteDto> retrieveAll(List<String> noteIds) {
+        if (noteIds.isEmpty()) {
+            return List.of();
+        }
+        return noteRepository.findAllByNoteIdInAndPassiveIdIsNull(noteIds)
+                .stream()
+                .map(noteDtoConverter::convert)
+                .toList();
+    }
+
     public boolean existsByNoteIdAndNotebookId(String noteId, String notebookId) {
         return noteRepository.existsByNoteIdAndNotebookIdAndPassiveIdIsNull(noteId, notebookId);
     }

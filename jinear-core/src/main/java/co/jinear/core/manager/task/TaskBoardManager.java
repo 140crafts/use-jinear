@@ -9,6 +9,7 @@ import co.jinear.core.model.response.task.TaskBoardResponse;
 import co.jinear.core.model.vo.task.*;
 import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.task.board.TaskBoardOperationService;
+import co.jinear.core.validator.common.ColorValidator;
 import co.jinear.core.validator.task.TaskBoardAccessValidator;
 import co.jinear.core.validator.team.TeamAccessValidator;
 import jakarta.validation.Valid;
@@ -25,12 +26,14 @@ public class TaskBoardManager {
     private final TaskBoardAccessValidator taskBoardAccessValidator;
     private final SessionInfoService sessionInfoService;
     private final TeamAccessValidator teamAccessValidator;
+    private final ColorValidator colorValidator;
     private final TaskBoardInitializeRequestConverter taskBoardInitializeRequestConverter;
     private final TaskBoardUpdateRequestConverter taskBoardUpdateRequestConverter;
 
     public TaskBoardResponse initializeTaskBoard(TaskBoardInitializeRequest taskBoardInitializeRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         teamAccessValidator.validateTeamAccess(currentAccountId, taskBoardInitializeRequest.getTeamId());
+        colorValidator.validateHexColorIfPresent(taskBoardInitializeRequest.getColor());
         log.info("Initialize task board has started. currentAccountId: {}", currentAccountId);
         InitializeTaskBoardVo initializeTaskBoardVo = taskBoardInitializeRequestConverter.convert(taskBoardInitializeRequest, currentAccountId);
         TaskBoardDto taskBoardDto = taskBoardOperationService.initializeTaskBoard(initializeTaskBoardVo);
@@ -67,6 +70,7 @@ public class TaskBoardManager {
     public BaseResponse updateColor(TaskBoardUpdateColorRequest taskBoardUpdateColorRequest) {
         String currentAccountId = sessionInfoService.currentAccountId();
         validateHasTaskBoardStateChangeAccess(taskBoardUpdateColorRequest, currentAccountId);
+        colorValidator.validateHexColorIfPresent(taskBoardUpdateColorRequest.getColor());
         log.info("Update task board color has started. currentAccountId: {}", currentAccountId);
         UpdateTaskBoardColorVo updateTaskBoardColorVo = taskBoardUpdateRequestConverter.convert(taskBoardUpdateColorRequest);
         taskBoardOperationService.updateColor(updateTaskBoardColorVo);

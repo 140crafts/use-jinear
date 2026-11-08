@@ -54,6 +54,14 @@ public class TopicRetrieveService {
                 .map(topicDtoConverter::map);
     }
 
+    public List<TopicDto> retrieveAllTeamTopics(String teamId) {
+        log.info("Retrieve all team topics has started. teamId: {}", teamId);
+        return topicRepository.findAllByTeamIdAndPassiveIdIsNullOrderByCreatedDateAsc(teamId)
+                .stream()
+                .map(topicDtoConverter::map)
+                .toList();
+    }
+
     public List<TopicDto> retrieveTeamTopics(String teamId, List<String> topicIds) {
         log.info("Retrieve team topics has started. teamId: {}, topicIds: {}", teamId, NormalizeHelper.listToString(topicIds));
         return topicRepository.findAllByTeamIdAndTopicIdIsInAndPassiveIdIsNullOrderByCreatedDateDesc(teamId, topicIds)

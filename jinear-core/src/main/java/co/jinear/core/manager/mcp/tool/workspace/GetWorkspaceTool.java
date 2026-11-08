@@ -43,7 +43,7 @@ public class GetWorkspaceTool implements McpTool {
     public McpToolResult call(McpToolContext context, McpToolArguments args) {
         McpGetWorkspaceInput input = args.bind(McpGetWorkspaceInput.class);
         if (Objects.isNull(input.getWorkspaceId()) && Objects.isNull(input.getUsername())) {
-            return McpToolResult.error("Supply either workspaceId or username. Call list_workspaces to see both.");
+            return McpToolResult.error("mcp.error.workspace.identifier-required");
         }
         WorkspaceBaseResponse response = Objects.nonNull(input.getWorkspaceId())
                 ? workspaceManager.retrieveWorkspaceWithId(input.getWorkspaceId())
