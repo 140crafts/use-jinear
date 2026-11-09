@@ -30,6 +30,23 @@
     @home path /home /home/
     redir @home https://app.jinear.co 301
 
+    @login path /login /login/
+    redir @login https://app.jinear.co/login{?query} 301
+
+    # 302, not 301: a docs section on this site may replace the GitHub repo later,
+    # and browsers cache a 301 indefinitely.
+    @docs path /docs /docs/*
+    redir @docs https://github.com/140crafts/use-jinear 302
+
+    # Project Pages feeds were removed with their content. 410 tells crawlers the
+    # URLs are gone for good, so they drop out of the index faster than a 404.
+    @removed_pages path /project-feed/* /shared/*
+    error @removed_pages "Gone" 410
+
+    # The MCP tool manifest is served by jinear-core on the API domain.
+    @mcp_manifest path /v1/mcp/manifest /v1/mcp/manifest/
+    redir @mcp_manifest https://api.jinear.co/v1/mcp/manifest 301
+
     # www → apex. Both hosts served identical HTML with 200s, which inflates the
     # "pages with identical titles" count in search consoles even though every page
     # already declares a canonical pointing at the apex.
