@@ -3,7 +3,6 @@ package co.jinear.core.service.lock;
 import co.jinear.core.exception.lock.LockedException;
 import co.jinear.core.model.enumtype.lock.LockSourceType;
 import co.jinear.core.repository.lock.LockRepository;
-import co.jinear.core.system.NumberCompareHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +14,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class LockService {
 
-    private static final int SUCCESS = 1;
     private final LockRepository lockRepository;
     private final RedisKeyGenerator redisKeyGenerator;
 
@@ -39,10 +37,8 @@ public class LockService {
     private void lock(String key, LockSourceType lockSourceType, Integer ttl) {
         Optional.ofNullable(key)
                 .map(k -> redisKeyGenerator.generateLockKey(lockSourceType, k))
-                .map(k -> lockRepository.increment(k, ttl, lockSourceType.getTimeUnit()))
-                .filter(val -> NumberCompareHelper.isEquals(val, SUCCESS))
-                .orElseThrow(() -> {
-                    throw new LockedException(lockSourceType, key);
-                });
+                .map(k -> lockRepository.acquire(k, ttl, lockSourceType.getTimeUnit()))
+                .filter(Boolean.TRUE::equals)
+                .orElseThrow(() -> new LockedException(lockSourceType, key));
     }
 }

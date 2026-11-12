@@ -4,7 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 public interface LockRepository {
 
-    Integer increment(String key, Integer ttl, TimeUnit timeUnit);
+    Boolean acquire(String key, Integer ttl, TimeUnit timeUnit);
 
     Boolean exist(String key);
 

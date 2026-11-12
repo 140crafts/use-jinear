@@ -4,10 +4,8 @@ import co.jinear.core.repository.lock.LockRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.support.atomic.RedisAtomicInteger;
 import org.springframework.stereotype.Repository;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Repository
@@ -15,13 +13,13 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class RedisLockRepository implements LockRepository {
 
+    private static final String LOCKED = "1";
+
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public Integer increment(String key, Integer ttl, TimeUnit timeUnit) {
-        RedisAtomicInteger redisAtomicInteger = new RedisAtomicInteger(key, Objects.requireNonNull(redisTemplate.getConnectionFactory()));
-        redisAtomicInteger.expire(ttl, timeUnit);
-        return redisAtomicInteger.incrementAndGet();
+    public Boolean acquire(String key, Integer ttl, TimeUnit timeUnit) {
+        return redisTemplate.opsForValue().setIfAbsent(key, LOCKED, ttl, timeUnit);
     }
 
     @Override
@@ -29,6 +27,7 @@ public class RedisLockRepository implements LockRepository {
         return redisTemplate.hasKey(key);
     }
 
+    @Override
     public void remove(String key) {
         redisTemplate.delete(key);
     }

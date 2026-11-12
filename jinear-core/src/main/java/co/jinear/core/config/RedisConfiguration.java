@@ -115,8 +115,4 @@ public class RedisConfiguration {
         RedisCodec<String, byte[]> codec = RedisCodec.of(StringCodec.UTF8, ByteArrayCodec.INSTANCE);
         return redisClient.connect(codec);
     }
-
-    public String getKeyPrefix() {
-        return keyPrefix;
-    }
 }
