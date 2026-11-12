@@ -49,10 +49,11 @@ public class AccountPasswordResetService {
     public void validateAndResetAccountPassword(String uniqueToken, LocaleType preferredLocale) {
         log.info("Validate and reset account password has started for uniqueToken: {}", uniqueToken);
 
-        TokenDto tokenDto = tokenService.retrieveValidToken(uniqueToken, RESET_PASSWORD);
-        String accountId = tokenDto.getRelatedObject();
+        TokenDto requestedTokenDto = tokenService.retrieveValidToken(uniqueToken, RESET_PASSWORD);
+        String accountId = requestedTokenDto.getRelatedObject();
+        accountLockService.lockAccountForPasswordReset(accountId);
         try {
-            accountLockService.lockAccountForPasswordReset(accountId);
+            TokenDto tokenDto = tokenService.retrieveValidToken(uniqueToken, RESET_PASSWORD);
             AccountDto accountDto = accountRetrieveService.retrieve(accountId);
             String newPassword = NormalizeHelper.normalizeStrictly(RandomHelper.generateRandomString());
             AccountPasswordVo accountPasswordVo = AccountPasswordVo.builder()
