@@ -1,6 +1,7 @@
 package co.jinear.core.service.token;
 
 import co.jinear.core.converter.token.TokenConverter;
+import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.token.TokenDto;
 import co.jinear.core.model.entity.token.Token;
@@ -11,6 +12,7 @@ import co.jinear.core.model.vo.token.GenerateTokenVo;
 import co.jinear.core.repository.TokenRepository;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.system.util.DateHelper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -67,6 +69,16 @@ public class TokenService {
         Token token = tokenRepository.findById(tokenId).orElseThrow(NotFoundException::new);
         token.setPassiveId(existingPassiveId);
         tokenRepository.save(token);
+    }
+
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void chargeAttempt(String tokenId, Long penaltyMillis) {
+        log.info("Charge token attempt has started. tokenId: {}, penaltyMillis: {}", tokenId, penaltyMillis);
+        Long now = DateHelper.now().getTime();
+        int chargedTokenCount = tokenRepository.chargeAttempt(tokenId, penaltyMillis, now);
+        if (chargedTokenCount == 0) {
+            throw new NoAccessException();
+        }
     }
 
     public void shortenTokenLifespan(TokenDto tokenDto) {

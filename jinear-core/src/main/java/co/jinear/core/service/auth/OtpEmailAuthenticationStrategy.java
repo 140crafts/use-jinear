@@ -28,6 +28,8 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OtpEmailAuthenticationStrategy implements AuthenticationStrategy {
 
+    private static final Long ATTEMPT_PENALTY_MILLIS = 10L * 60 * 1000;
+
     private final TokenService tokenService;
     private final AccountRetrieveService accountRetrieveService;
     private final AccountInitializeService accountInitializeService;
@@ -37,6 +39,7 @@ public class OtpEmailAuthenticationStrategy implements AuthenticationStrategy {
     @Override
     public AuthResponseVo auth(AuthVo authVo) {
         TokenDto token = retrieveToken(authVo);
+        tokenService.chargeAttempt(token.getTokenId(), ATTEMPT_PENALTY_MILLIS);
         validateTokensMatch(token, authVo);
         String accountId = Optional.of(token)
                 .map(TokenDto::getRelatedObject)
@@ -64,7 +67,6 @@ public class OtpEmailAuthenticationStrategy implements AuthenticationStrategy {
 
     private void validateTokensMatch(TokenDto token, AuthVo emailAuthVo) {
         if (!checkTokensMatch(token, emailAuthVo)) {
-            tokenService.shortenTokenLifespan(token);
             throw new NoAccessException();
         }
     }
