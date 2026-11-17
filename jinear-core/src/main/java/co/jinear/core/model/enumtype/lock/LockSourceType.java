@@ -13,6 +13,7 @@ public enum LockSourceType {
     TEAM_TASK_INIT("team-task-init", 10, TimeUnit.SECONDS),
     TEAM_WORKFLOW_STATUS("team-workflow-status", 10, TimeUnit.SECONDS),
     ACCOUNT_PASSWORD_RESET("account:password-reset", 10, TimeUnit.SECONDS),
+    ACCOUNT_CONFIRM_EMAIL_MAIL("account:confirm-email-mail", 5, TimeUnit.MINUTES),
     TASK_BOARD_EDIT("task-board:edit", 5, TimeUnit.SECONDS),
     REMINDER_JOB_PROCESS("reminder-job:process", 15, TimeUnit.MINUTES),
     CONVERSATION_INIT("conversation-init", 20, TimeUnit.SECONDS),

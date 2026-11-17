@@ -16,7 +16,6 @@ import co.jinear.core.system.util.DateHelper;
 import co.jinear.core.system.util.ReleaseVersionHelper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,7 +27,6 @@ import java.util.Map;
 public class InstanceReportSendManager {
 
     private static final int ACTIVITY_WINDOW_DAYS = 30;
-    private static final String LOCAL_MAIL_HOST = "localhost";
 
     private final TelemetryProperties telemetryProperties;
     private final McpProperties mcpProperties;
@@ -86,7 +84,7 @@ public class InstanceReportSendManager {
         usage.setMcpEnabled(Boolean.TRUE.equals(mcpProperties.getEnabled()));
         usage.setOauthEnabled(Boolean.TRUE.equals(oauthProperties.getEnabled()));
         usage.setPushNotificationsEnabled(Boolean.TRUE.equals(notificationProperties.getFirebaseEnabled()));
-        usage.setMailConfigured(isMailConfigured());
+        usage.setMailConfigured(mailProperties.isMailConfigured());
         usage.setManagementEnabled(Boolean.TRUE.equals(genericJinearProperties.getManagementEnabled()));
         usage.setAccounts(accountRetrieveService.approximateActiveAccounts());
         usage.setWorkspaces(workspaceRetrieveService.approximateActiveWorkspaces());
@@ -104,10 +102,5 @@ public class InstanceReportSendManager {
                 .map(Map.Entry::getKey)
                 .sorted()
                 .toList();
-    }
-
-    private boolean isMailConfigured() {
-        String mailHost = mailProperties.getMailHost();
-        return StringUtils.isNotBlank(mailHost) && !LOCAL_MAIL_HOST.equalsIgnoreCase(mailHost);
     }
 }

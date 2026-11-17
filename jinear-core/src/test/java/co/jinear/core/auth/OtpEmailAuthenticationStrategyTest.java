@@ -6,10 +6,10 @@ import co.jinear.core.model.dto.token.TokenDto;
 import co.jinear.core.model.enumtype.passive.PassiveReason;
 import co.jinear.core.model.enumtype.token.TokenType;
 import co.jinear.core.model.vo.auth.AuthVo;
+import co.jinear.core.service.account.AccountEmailOwnershipService;
 import co.jinear.core.service.account.AccountInitializeService;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.account.AccountRoleService;
-import co.jinear.core.service.account.AccountUpdateService;
 import co.jinear.core.service.auth.OtpEmailAuthenticationStrategy;
 import co.jinear.core.service.token.TokenService;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +37,7 @@ class OtpEmailAuthenticationStrategyTest {
             tokenService,
             accountRetrieveService,
             Mockito.mock(AccountInitializeService.class),
-            Mockito.mock(AccountUpdateService.class),
+            Mockito.mock(AccountEmailOwnershipService.class),
             Mockito.mock(AccountRoleService.class));
 
     @BeforeEach

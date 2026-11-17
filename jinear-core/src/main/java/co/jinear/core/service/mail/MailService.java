@@ -76,18 +76,14 @@ public class MailService {
     }
 
     @Async
-    public void sendMailConfirmationMail(AccountEngageMailVo accountEngageMailVo) throws Exception {
-        LocaleType preferredLocale = Optional.ofNullable(accountEngageMailVo.getPreferredLocale()).orElse(LocaleType.EN);
-        String title = localeStringService.retrieveLocalString(LocaleStringType.MAIL_CONFIRMATION_TITLE, preferredLocale);
+    public void sendMailConfirmationMail(LoginMailVo loginMailVo) throws Exception {
+        LocaleType preferredLocale = Optional.ofNullable(loginMailVo.getPreferredLocale()).orElse(LocaleType.EN);
+        String title = localeStringService.retrieveLocalString(LocaleStringType.MAIL_CONFIRMATION_TITLE, preferredLocale)
+                .replaceAll(Pattern.quote("${code}"), loginMailVo.getEmailCode());
         String text = localeStringService.retrieveLocalString(LocaleStringType.MAIL_CONFIRMATION_TEXT, preferredLocale);
-        String ctaLabel = localeStringService.retrieveLocalString(LocaleStringType.MAIL_CONFIRMATION_CTA_LABEL, preferredLocale);
-        String mailBody = retrieveMailTemplate("email-confirm-mail.html");
-        String href = feProperties.getEmailConfirmationUrl().replaceAll(Pattern.quote("{token}"), accountEngageMailVo.getToken());
-        mailBody = mailBody.replaceAll(Pattern.quote("${title}"), title)
-                .replaceAll(Pattern.quote("${text}"), text)
-                .replaceAll(Pattern.quote("${confirm}"), ctaLabel)
-                .replaceAll(Pattern.quote("${href}"), href);
-        sendMail(new SendMailVo(accountEngageMailVo.getEmail(), title, mailBody));
+        String mailBody = retrieveMailTemplate("email-login-token-mail.html");
+        mailBody = fillLoginMailTemplate(loginMailVo, title, text, mailBody);
+        sendMail(new SendMailVo(loginMailVo.getEmail(), title, mailBody));
     }
 
     @Async

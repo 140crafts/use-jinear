@@ -2,15 +2,20 @@ package co.jinear.core.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Getter
 @Setter
 @Component
 @PropertySource("classpath:application.properties")
 public class MailProperties {
+
+    private static final List<String> PLACEHOLDER_MAIL_HOSTS = List.of("localhost", "smtp.example.com");
 
     @Value("${spring.mail.host:}")
     private String mailHost;
@@ -32,4 +37,8 @@ public class MailProperties {
 
     @Value("${jinear.mail.footer-text:jinear.co}")
     private String footerText;
+
+    public boolean isMailConfigured() {
+        return StringUtils.isNotBlank(mailHost) && !PLACEHOLDER_MAIL_HOSTS.contains(mailHost.toLowerCase());
+    }
 }

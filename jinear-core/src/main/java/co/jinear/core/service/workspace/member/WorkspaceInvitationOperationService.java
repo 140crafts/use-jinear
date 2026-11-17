@@ -17,6 +17,7 @@ import co.jinear.core.model.vo.workspace.InitializeWorkspaceMemberVo;
 import co.jinear.core.model.vo.workspace.WorkspaceInvitationInitializeVo;
 import co.jinear.core.model.vo.workspace.WorkspaceInvitationRespondVo;
 import co.jinear.core.repository.WorkspaceInvitationRepository;
+import co.jinear.core.service.account.AccountEmailOwnershipService;
 import co.jinear.core.service.account.AccountInitializeService;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.mail.MailService;
@@ -52,6 +53,7 @@ public class WorkspaceInvitationOperationService {
     private final WorkspaceMemberService workspaceMemberService;
     private final TeamMemberService teamMemberService;
     private final AccountInitializeService accountInitializeService;
+    private final AccountEmailOwnershipService accountEmailOwnershipService;
     private final InitializeWorkspaceMemberVoConverter initializeWorkspaceMemberVoConverter;
     private final WorkspaceInvitationInfoDtoConverter workspaceInvitationInfoDtoConverter;
     private final WorkspaceDisplayPreferenceService workspaceDisplayPreferenceService;
@@ -102,6 +104,7 @@ public class WorkspaceInvitationOperationService {
     private void acceptInvitation(WorkspaceInvitationRespondVo workspaceInvitationRespondVo, WorkspaceInvitation invitation) {
         updateWorkspaceInvitationStatus(invitation, ACCEPTED);
         String accountId = retrieveUpToDateAccountId(invitation, workspaceInvitationRespondVo.getPreferredLocale());
+        accountEmailOwnershipService.confirmEmailOwnership(accountId);
         InitializeWorkspaceMemberVo initializeWorkspaceMemberVo = initializeWorkspaceMemberVoConverter.convert(invitation, accountId);
         workspaceMemberService.initializeWorkspaceMember(initializeWorkspaceMemberVo);
         assignTeam(invitation, accountId);

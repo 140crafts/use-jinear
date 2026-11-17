@@ -1,5 +1,7 @@
 package co.jinear.core.service.auth;
 
+import co.jinear.core.config.properties.MailProperties;
+import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.enumtype.auth.ProviderType;
@@ -24,11 +26,13 @@ public class EmailPasswordAuthenticationStrategy implements AuthenticationStrate
     private final AccountRetrieveService accountRetrieveService;
     private final AccountPasswordService accountPasswordService;
     private final AccountRoleService accountRoleService;
+    private final MailProperties mailProperties;
 
     @Override
     public AuthResponseVo auth(AuthVo authVo) {
         AccountDto accountDto = retrieveAccount(authVo);
         validatePassword(authVo, accountDto);
+        validateEmailConfirmed(accountDto);
         Collection<GrantedAuthority> grantedAuthorities = retrieveAuthorities(accountDto.getAccountId());
         return new AuthResponseVo(accountDto.getAccountId(), authVo.getLocale(), grantedAuthorities);
     }
@@ -48,6 +52,13 @@ public class EmailPasswordAuthenticationStrategy implements AuthenticationStrate
         validatePasswordVo.setAccountId(accountDto.getAccountId());
         validatePasswordVo.setPassword(authVo.getCode());
         accountPasswordService.validatePassword(validatePasswordVo);
+    }
+
+    private void validateEmailConfirmed(AccountDto accountDto) {
+        boolean emailConfirmed = Boolean.TRUE.equals(accountDto.getEmailConfirmed());
+        if (mailProperties.isMailConfigured() && !emailConfirmed) {
+            throw new BusinessException("account.email-not-confirmed");
+        }
     }
 
     private Collection<GrantedAuthority> retrieveAuthorities(String accountId) {

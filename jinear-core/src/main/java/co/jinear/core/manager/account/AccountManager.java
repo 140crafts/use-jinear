@@ -2,10 +2,8 @@ package co.jinear.core.manager.account;
 
 import co.jinear.core.converter.workspace.AccountsWorkspacePerspectiveDtoConverter;
 import co.jinear.core.model.dto.account.AccountDto;
-import co.jinear.core.model.dto.token.TokenDto;
 import co.jinear.core.model.dto.workspace.AccountsWorkspacePerspectiveDto;
 import co.jinear.core.model.dto.workspace.DetailedWorkspaceMemberDto;
-import co.jinear.core.model.enumtype.token.TokenType;
 import co.jinear.core.model.request.account.ConfirmEmailRequest;
 import co.jinear.core.model.request.account.ResendConfirmEmailRequest;
 import co.jinear.core.model.response.BaseResponse;
@@ -14,7 +12,6 @@ import co.jinear.core.service.SessionInfoService;
 import co.jinear.core.service.account.AccountMailConfirmationService;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.media.MediaRetrieveService;
-import co.jinear.core.service.token.TokenService;
 import co.jinear.core.service.workspace.WorkspaceRetrieveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,13 +25,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AccountManager {
 
-    private static final String ANONYMOUS_USER = "anonymousUser";
 
     private final AccountRetrieveService accountRetrieveService;
     private final AccountMailConfirmationService accountMailConfirmationService;
     private final WorkspaceRetrieveService workspaceRetrieveService;
     private final SessionInfoService sessionInfoService;
-    private final TokenService tokenService;
     private final AccountsWorkspacePerspectiveDtoConverter accountsWorkspacePerspectiveDtoConverter;
     private final MediaRetrieveService mediaRetrieveService;
 
@@ -55,14 +50,13 @@ public class AccountManager {
     }
 
     public BaseResponse confirmEmail(ConfirmEmailRequest confirmEmailRequest) {
-        accountMailConfirmationService.confirmEmail(confirmEmailRequest.getUniqueToken());
+        accountMailConfirmationService.confirmEmail(confirmEmailRequest.getEmail(), confirmEmailRequest.getCode());
         return new BaseResponse();
     }
 
     public BaseResponse resendConfirmEmail(ResendConfirmEmailRequest resendConfirmEmailRequest) {
-        String accountId = sessionInfoService.currentAccountIdInclAnonymous();
-        log.info("Resend confirm email has started from accountId: {}", accountId);
-        decideAndResendEmail(resendConfirmEmailRequest, accountId);
+        log.info("Resend confirm email has started. email: {}", resendConfirmEmailRequest.getEmail());
+        accountMailConfirmationService.resendConfirmEmailMail(resendConfirmEmailRequest.getEmail(), resendConfirmEmailRequest.getLocale());
         return new BaseResponse();
     }
 
@@ -80,15 +74,6 @@ public class AccountManager {
                 .map(this::setProfilePicture)
                 .toList();
         accountDto.setWorkspaces(accountsWorkspacePerspectiveDtos);
-    }
-
-    private void decideAndResendEmail(ResendConfirmEmailRequest resendConfirmEmailRequest, String accountId) {
-        if (ANONYMOUS_USER.equalsIgnoreCase(accountId)) {
-            TokenDto tokenDto = tokenService.retrieveToken(resendConfirmEmailRequest.getToken(), TokenType.CONFIRM_EMAIL);
-            accountMailConfirmationService.sendConfirmEmailMail(tokenDto.getRelatedObject(), resendConfirmEmailRequest.getLocale());
-        } else {
-            accountMailConfirmationService.sendConfirmEmailMail(accountId, resendConfirmEmailRequest.getLocale());
-        }
     }
 
     private AccountsWorkspacePerspectiveDto setProfilePicture(AccountsWorkspacePerspectiveDto workspaceDto) {

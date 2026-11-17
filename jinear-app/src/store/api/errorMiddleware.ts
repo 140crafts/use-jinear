@@ -3,6 +3,7 @@ import type {Middleware, MiddlewareAPI} from "@reduxjs/toolkit";
 import {isRejectedWithValue} from "@reduxjs/toolkit";
 import {toast} from "react-hot-toast";
 import {getTranslatedMessage} from "@/locals/useTranslation.ts";
+import {EMAIL_NOT_CONFIRMED_ERROR_CODE} from "@/util/constants.ts";
 
 const logger = Logger("rtkQueryErrorLogger");
 
@@ -17,6 +18,10 @@ export const rtkQueryErrorLogger: Middleware = (api: MiddlewareAPI) => (next) =>
             return next(action);
         }
         if (endpointName == "retrieveInstanceFlags") {
+            return next(action);
+        }
+        //@ts-expect-error ignore
+        if (action?.payload?.data?.errorCode == EMAIL_NOT_CONFIRMED_ERROR_CODE) {
             return next(action);
         }
         if (status === "FETCH_ERROR" || !navigator.onLine) {

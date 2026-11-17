@@ -25,6 +25,9 @@ const slice = createSlice({
         setAuthStateAsNotDecided: (state, action: PayloadAction<void>) => {
             state.authState = "NOT_DECIDED";
         },
+        setAuthStateAsNotLoggedIn: (state, action: PayloadAction<void>) => {
+            state.authState = "NOT_LOGGED_IN";
+        },
         logout: () => initialState
     },
     extraReducers: (builder) => {
@@ -53,7 +56,7 @@ const slice = createSlice({
     }
 });
 
-export const {logout, setAuthStateAsNotDecided} = slice.actions;
+export const {logout, setAuthStateAsNotDecided, setAuthStateAsNotLoggedIn} = slice.actions;
 export default slice.reducer;
 
 export const selectAuthState = (state: RootState) => state.account.authState;

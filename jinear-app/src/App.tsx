@@ -15,7 +15,6 @@ import BodyFixer from "@/components/bodyFixer/BodyFixer.tsx";
 import RegisterPage from "@/pages/register/page.tsx";
 import ForgotPasswordPage from "@/pages/forgot-password/page.tsx";
 import NewWorkspaceScreen from "@/pages/new-workspace/page.tsx";
-import ConfirmEmailPage from "@/pages/engage/confirm-email/page.tsx";
 import DeleteAccountCompletePage from "@/pages/engage/delete-account-complete/page.tsx";
 import ResetPasswordCompletePage from "@/pages/engage/reset-password-complete/page.tsx";
 import WorkspaceInvitationResponseScreen from "@/pages/engage/workspace-invitation/page.tsx";
@@ -95,7 +94,6 @@ export default function App() {
                 <Route path="/oauth/consent" element={<OauthConsentPage/>}/>
 
                 <Route path={'/engage'}>
-                    <Route path={'confirm-email'} element={<ConfirmEmailPage/>}/>
                     <Route path={'delete-account-complete'} element={<DeleteAccountCompletePage/>}/>
                     <Route path={'reset-password-complete'} element={<ResetPasswordCompletePage/>}/>
                     <Route path={'workspace-invitation'} element={<WorkspaceInvitationResponseScreen/>}/>

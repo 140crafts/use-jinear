@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet author="cagdas.tunca" id="jin-583-confirm-email-code-locale-strings">
+        <!-- @formatter:off -->
+        <sql>
+            UPDATE locale_string SET value = '${code} - E-posta doğrulama kodun' WHERE string_type = 'MAIL_CONFIRMATION_TITLE' AND locale = 'TR';
+            UPDATE locale_string SET value = '${code} - Your email confirmation code' WHERE string_type = 'MAIL_CONFIRMATION_TITLE' AND locale = 'EN';
+            UPDATE locale_string SET value = 'E-postanı doğrulamak için aşağıdaki kodu kullan.' WHERE string_type = 'MAIL_CONFIRMATION_TEXT' AND locale = 'TR';
+            UPDATE locale_string SET value = 'Use the code below to confirm your email.' WHERE string_type = 'MAIL_CONFIRMATION_TEXT' AND locale = 'EN';
+            DELETE FROM locale_string WHERE string_type = 'MAIL_CONFIRMATION_CTA_LABEL';
+        </sql>
+        <!-- @formatter:on -->
+    </changeSet>
+
+</databaseChangeLog>

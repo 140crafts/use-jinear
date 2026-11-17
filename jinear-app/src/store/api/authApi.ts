@@ -7,6 +7,8 @@ import type {
 } from "@/model/be/jinear-core";
 import {api, tagTypes} from "./api";
 
+const invalidateAllOnSuccess = (_result: unknown, error: unknown) => error ? [] : tagTypes;
+
 export const authApi = api.injectEndpoints({
     endpoints: (build) => ({
         logout: build.mutation<void, void>({
@@ -21,8 +23,7 @@ export const authApi = api.injectEndpoints({
                 url: "v1/auth/otp/email/initialize",
                 method: "POST",
                 body
-            }),
-            invalidatesTags: tagTypes
+            })
         }),
         emailOtpLoginComplete: build.mutation<AuthResponse, AuthCompleteRequest>({
             query: (body: AuthCompleteRequest) => ({
@@ -30,7 +31,7 @@ export const authApi = api.injectEndpoints({
                 method: "POST",
                 body
             }),
-            invalidatesTags: tagTypes
+            invalidatesTags: invalidateAllOnSuccess
         }),
         loginWithPassword: build.mutation<AuthResponse, LoginWithPasswordRequest>({
             query: (body: LoginWithPasswordRequest) => ({
@@ -38,7 +39,7 @@ export const authApi = api.injectEndpoints({
                 method: "POST",
                 body
             }),
-            invalidatesTags: tagTypes
+            invalidatesTags: invalidateAllOnSuccess
         }),
         //
         loginWithApple: build.mutation<AuthResponse, LoginWithAppleRequest>({
@@ -47,7 +48,7 @@ export const authApi = api.injectEndpoints({
                 method: "POST",
                 body
             }),
-            invalidatesTags: tagTypes
+            invalidatesTags: invalidateAllOnSuccess
         })
         //
     })

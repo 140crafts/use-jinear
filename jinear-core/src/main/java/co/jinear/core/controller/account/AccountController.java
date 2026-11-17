@@ -6,6 +6,7 @@ import co.jinear.core.model.request.account.ConfirmEmailRequest;
 import co.jinear.core.model.request.account.ResendConfirmEmailRequest;
 import co.jinear.core.model.response.BaseResponse;
 import co.jinear.core.model.response.account.AccountRetrieveResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,13 +28,13 @@ public class AccountController {
 
     @PostMapping("/confirm-email")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse confirmEmail(@RequestBody ConfirmEmailRequest confirmEmailRequest) {
+    public BaseResponse confirmEmail(@Valid @RequestBody ConfirmEmailRequest confirmEmailRequest) {
         return accountManager.confirmEmail(confirmEmailRequest);
     }
 
     @PostMapping("/resend-confirm-email")
     @ResponseStatus(HttpStatus.OK)
-    public BaseResponse resendConfirmEmail(@RequestBody ResendConfirmEmailRequest resendConfirmEmailRequest) {
+    public BaseResponse resendConfirmEmail(@Valid @RequestBody ResendConfirmEmailRequest resendConfirmEmailRequest) {
         return accountManager.resendConfirmEmail(resendConfirmEmailRequest);
     }
 }

@@ -172,6 +172,11 @@ export interface BasicTextInputModalState extends ModalState {
     onSubmit?: (text: string) => void;
 }
 
+export interface ConfirmEmailCodeModalState extends ModalState {
+    email?: string;
+    onConfirmed?: () => void;
+}
+
 export interface TaskTaskBoardAssignModalState extends ModalState {
     taskId?: string;
 }

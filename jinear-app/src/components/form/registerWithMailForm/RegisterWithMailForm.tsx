@@ -5,7 +5,7 @@ import Logger from "@/util/logger";
 import cn from "classnames";
 import useTranslation from "@/locales/useTranslation";
 
-import React, {useEffect} from "react";
+import React from "react";
 import {type SubmitHandler, useForm} from "react-hook-form";
 import toast from "react-hot-toast";
 import FormTitle from "../form-title/FormTitle";
@@ -15,7 +15,7 @@ import {IoLogoGoogle} from "react-icons/io5";
 import {isWebView} from "@/util/webviewUtils";
 import {useRetrieveLoginRedirectInfoQuery} from "@/api/googleOAuthApi";
 import SignInWithAppleButton from "@/components/sign-in-with-apple-button/SignInWithAppleButton";
-import {Link, useNavigate} from "react-router-dom";
+import {usePasswordLogin} from "@/hooks/usePasswordLogin.ts";
 import {TERMS} from "@/util/constants.ts";
 import {useInstanceFlag} from "@/hooks/useInstanceFlag";
 
@@ -35,8 +35,9 @@ const logger = Logger("RegisterWithMailForm");
 
 const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({className}) => {
     const {t} = useTranslation();
-    const navigate = useNavigate();
-    const [registerViaMail, {isSuccess, isError, isLoading}] = useRegisterViaMailMutation();
+    const [registerViaMail, {isLoading: isRegisterLoading}] = useRegisterViaMailMutation();
+    const {login, isLoading: isLoginLoading} = usePasswordLogin();
+    const isLoading = isRegisterLoading || isLoginLoading;
     const _isWebView = isWebView();
     const googleEnabled = useInstanceFlag("SIGN_IN_WITH_GOOGLE") && !_isWebView;
     const appleEnabled = useInstanceFlag("SIGN_IN_WITH_APPLE") && !_isWebView;
@@ -49,22 +50,10 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({className}) 
     const {
         register,
         handleSubmit,
-        watch,
         formState: {errors}
     } = useForm<IRegisterWithMailForm>();
-    const email = watch("email");
 
-    useEffect(() => {
-        if (isSuccess && !isError) {
-            toast(t("registerWithEmailIsSuccessfull"));
-            setTimeout(() => {
-                const params = email ? `?email=${encodeURIComponent(email)}` : "";
-                navigate(`/login${params}`, {replace: true});
-            }, 2500);
-        }
-    }, [isSuccess, isError]);
-
-    const submit: SubmitHandler<IRegisterWithMailForm> = (data) => {
+    const submit: SubmitHandler<IRegisterWithMailForm> = async (data) => {
         if (data.password != data.passwordControl) {
             toast(t("registerWithEmailPasswordsNotMatch"));
             return;
@@ -72,11 +61,18 @@ const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({className}) 
         if (isLoading) {
             return;
         }
-        registerViaMail({
-            email: data.email,
-            password: data.password,
-            locale: t("localeType") as LocaleType
-        });
+        try {
+            await registerViaMail({
+                email: data.email,
+                password: data.password,
+                locale: t("localeType") as LocaleType
+            }).unwrap();
+        } catch (error) {
+            logger.log({registerViaMailError: error});
+            return;
+        }
+        toast(t("registerWithEmailIsSuccessfull"));
+        login(data.email, data.password);
     };
 
     return (

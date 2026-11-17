@@ -6,10 +6,10 @@ import co.jinear.core.model.enumtype.auth.ProviderType;
 import co.jinear.core.model.vo.account.AccountInitializeVo;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
+import co.jinear.core.service.account.AccountEmailOwnershipService;
 import co.jinear.core.service.account.AccountInitializeService;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.account.AccountRoleService;
-import co.jinear.core.service.account.AccountUpdateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,7 +25,7 @@ public class OAuthEmailAuthenticationStrategy implements AuthenticationStrategy 
 
     private final AccountRetrieveService accountRetrieveService;
     private final AccountInitializeService accountInitializeService;
-    private final AccountUpdateService accountUpdateService;
+    private final AccountEmailOwnershipService accountEmailOwnershipService;
     private final AccountRoleService accountRoleService;
 
     @Override
@@ -34,7 +34,7 @@ public class OAuthEmailAuthenticationStrategy implements AuthenticationStrategy 
                 .map(AuthVo::getEmail)
                 .map(this::retrieveAccountId)
                 .orElseThrow(BusinessException::new);
-        updateEmailAsConfirmed(accountId);
+        confirmEmailOwnership(accountId);
         Collection<GrantedAuthority> grantedAuthorities = retrieveAuthorities(accountId);
         return new AuthResponseVo(accountId, authVo.getLocale(), grantedAuthorities);
     }
@@ -62,7 +62,7 @@ public class OAuthEmailAuthenticationStrategy implements AuthenticationStrategy 
         return newAccount.getAccountId();
     }
 
-    private void updateEmailAsConfirmed(String accountId) {
-        accountUpdateService.updateEmailConfirmed(accountId, Boolean.TRUE);
+    private void confirmEmailOwnership(String accountId) {
+        accountEmailOwnershipService.confirmEmailOwnership(accountId);
     }
 }

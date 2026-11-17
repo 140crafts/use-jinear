@@ -58,7 +58,7 @@ When only the update check is on, `usage` is `null`.
 | `enabledInstanceFlags` | The instance flags that are on in the admin panel (sign-in methods, workspace creation, Google Calendar, MCP). |
 | `mcpEnabled`, `oauthEnabled` | Whether the MCP server and its OAuth server run. |
 | `pushNotificationsEnabled` | Whether Firebase push is configured. |
-| `mailConfigured` | Whether an SMTP host other than `localhost` is set. The host itself is not sent. |
+| `mailConfigured` | Whether an SMTP host is set. `localhost` and the installer placeholder `smtp.example.com` count as not set. The host itself is not sent. |
 | `managementEnabled` | Whether the admin panel is on. |
 | `accounts`, `workspaces`, `teams` | A size range, never an exact count: `ZERO`, `ONE`, `TWO_TO_FIVE`, `SIX_TO_TWENTY_FIVE`, `TWENTY_SIX_TO_HUNDRED`, `HUNDRED_ONE_TO_FIVE_HUNDRED`, `OVER_FIVE_HUNDRED`. |
 | `tasksCreatedLast30Days` | The same kind of range, for tasks created in the last 30 days. It shows whether an instance is in use. |

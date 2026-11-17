@@ -13,7 +13,6 @@ interface AuthCheckProps {
 const logger = Logger("AuthCheck");
 
 const PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS = [
-    ["/engage/confirm-email"],
     ["/engage/reset-password-complete"],
     ["/engage/forgot-password"],
     ["/engage/workspace-invitation"],

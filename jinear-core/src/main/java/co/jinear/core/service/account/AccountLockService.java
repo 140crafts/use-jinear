@@ -1,5 +1,7 @@
 package co.jinear.core.service.account;
 
+import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.lock.LockedException;
 import co.jinear.core.model.enumtype.lock.LockSourceType;
 import co.jinear.core.service.lock.LockService;
 import lombok.RequiredArgsConstructor;
@@ -22,5 +24,15 @@ public class AccountLockService {
         log.info("Unlock account for password reset has started for accountId: {}", accountId);
         lockService.unlock(accountId, LockSourceType.ACCOUNT_PASSWORD_RESET);
         log.info("Unlock account for password reset has completed for accountId: {}", accountId);
+    }
+
+    public void startConfirmEmailMailCooldown(String accountId) {
+        log.info("Confirm email mail cooldown check has started for accountId: {}", accountId);
+        try {
+            lockService.lock(accountId, LockSourceType.ACCOUNT_CONFIRM_EMAIL_MAIL);
+        } catch (LockedException lockedException) {
+            throw new BusinessException("account.confirm-email-mail-cooldown");
+        }
+        log.info("Confirm email mail cooldown has started for accountId: {}", accountId);
     }
 }

@@ -1,6 +1,7 @@
 import ErrorBoundary from "@/components/error-boundary/ErrorBoundary";
 import React from "react";
 import BasicTextInputModal from "@/components/modal/basicTextInputModal/BasicTextInputModal";
+import ConfirmEmailCodeModal from "@/components/modal/confirmEmailCodeModal/ConfirmEmailCodeModal";
 import DatePickerModal from "@/components/modal/datePicker/DatePickerModal";
 import DialogModal from "@/components/modal/dialogModal/DialogModal";
 import LoadingModal from "@/components/modal/loadingModal/LoadingModal";
@@ -21,6 +22,7 @@ const globalModals: any = (
         <InstallPwaInstructionsModal/>
         <DatePickerModal/>
         <BasicTextInputModal/>
+        <ConfirmEmailCodeModal/>
         <DialogModal/>
         <NotFoundModal/>
         <DeviceOfflineModal/>

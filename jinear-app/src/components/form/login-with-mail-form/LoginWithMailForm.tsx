@@ -1,23 +1,17 @@
 import Button, {ButtonVariants} from "@/components/button";
 import OrLine from "@/components/or-line/or-line.tsx";
-import type {LocaleType} from "@/model/be/jinear-core";
-import Logger from "@/util/logger";
 import cn from "classnames";
-import {format} from "date-fns";
 import useTranslation from "@/locales/useTranslation.ts";
 import React, {useEffect} from "react";
 import {type SubmitHandler, useForm} from "react-hook-form";
-import toast from "react-hot-toast";
 
 import {IoLogoGoogle, IoMail} from "react-icons/io5";
 import {useDispatch} from "react-redux";
 import styles from "./LoginWithMailForm.module.css";
-import {setAuthStateAsNotDecided} from "@/slice/accountSlice";
 import SignInWithAppleButton from "@/components/sign-in-with-apple-button/SignInWithAppleButton";
 import FormTitle from "@/components/form/form-title/FormTitle.tsx";
-import {Link, useNavigate} from "react-router-dom";
-import {ROUTE_IF_LOGGED_IN} from "@/util/constants.ts";
-import {useLoginWithPasswordMutation} from "@/store/api/authApi.ts";
+import {Link} from "react-router-dom";
+import {usePasswordLogin} from "@/hooks/usePasswordLogin.ts";
 import {useRetrieveLoginRedirectInfoQuery} from "@/store/api/googleOAuthApi.ts";
 import {changeLoginWith2FaMailModalVisibility} from "@/slice/modalSlice.ts";
 import {useInstanceFlag} from "@/hooks/useInstanceFlag.ts";
@@ -33,11 +27,8 @@ export interface ILoginWithMailForm {
     password: string;
 }
 
-const logger = Logger("LoginWithMailForm");
-
 const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({className, initialEmail}) => {
     const {t} = useTranslation();
-    const navigate = useNavigate();
     const dispatch = useDispatch();
 
     const registerEnabled = useInstanceFlag("REGISTER_WITH_MAIL");
@@ -47,19 +38,11 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({className, initial
     const emailCodeEnabled = useInstanceFlag("SIGN_IN_WITH_EMAIL_CODE");
     const hasOtherMethods = googleEnabled || appleEnabled || emailCodeEnabled;
 
-    const [loginWithPassword, {isSuccess, isError, isLoading}] = useLoginWithPasswordMutation();
+    const {login, isLoading} = usePasswordLogin();
     const {
         data: authRedirectInfoResponse,
     } = useRetrieveLoginRedirectInfoQuery(undefined, {skip: !googleEnabled});
     const {register, setValue, handleSubmit, setFocus} = useForm<ILoginWithMailForm>();
-
-    useEffect(() => {
-        if (isSuccess && !isError) {
-            logger.log("Login with password success");
-            toast(t("loginSuccessToast"));
-            navigate(ROUTE_IF_LOGGED_IN, { replace: true })
-        }
-    }, [isSuccess, isError, t, navigate]);
 
     useEffect(() => {
         if (initialEmail) {
@@ -69,15 +52,10 @@ const LoginWithMailForm: React.FC<LoginWithMailFormProps> = ({className, initial
     }, [initialEmail, setFocus, setValue]);
 
     const submit: SubmitHandler<ILoginWithMailForm> = (data) => {
-        dispatch(setAuthStateAsNotDecided());
         if (isLoading) {
             return;
         }
-        loginWithPassword({
-            ...data,
-            locale: t("localeType") as LocaleType,
-            timeZone: format(new Date(), "OOOO")
-        });
+        login(data.email, data.password);
     };
 
     const pop2FaMailModal = () => {

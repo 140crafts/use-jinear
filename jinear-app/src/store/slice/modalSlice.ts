@@ -10,6 +10,7 @@ import type {
     AdminWorkspacePickerModalState,
     AdminWorkspaceTierModalState,
     BasicTextInputModalState,
+    ConfirmEmailCodeModalState,
     CalendarExternalEventViewModalState,
     CalendarShareEventsModalState,
     ChangeTaskAssigneeModalState,
@@ -156,6 +157,9 @@ const initialState = {
         visible: false
     },
     basicTextInputModal: {
+        visible: false
+    },
+    confirmEmailCodeModal: {
         visible: false
     },
     taskTaskBoardAssignModal: {
@@ -335,6 +339,7 @@ const initialState = {
     workspacePickerModal: null | WorkspacePickerModalState;
     newTaskBoardModal: null | NewTaskBoardModalState;
     basicTextInputModal: null | BasicTextInputModalState;
+    confirmEmailCodeModal: null | ConfirmEmailCodeModalState;
     taskTaskBoardAssignModal: null | TaskTaskBoardAssignModalState;
     topicPickerModal: null | TopicPickerModalState;
     teamMemberPickerModal: null | TeamMemberPickerModalState;
@@ -574,6 +579,13 @@ const slice = createSlice({
         },
         closeBasicTextInputModal: (state, action: PayloadAction<void>) => {
             state.basicTextInputModal = initialState.basicTextInputModal;
+        },
+
+        popConfirmEmailCodeModal: (state, action: PayloadAction<ConfirmEmailCodeModalState>) => {
+            state.confirmEmailCodeModal = {...action.payload, visible: true};
+        },
+        closeConfirmEmailCodeModal: (state, action: PayloadAction<void>) => {
+            state.confirmEmailCodeModal = initialState.confirmEmailCodeModal;
         },
 
         popTaskTaskBoardAssignModal: (state, action: PayloadAction<TaskTaskBoardAssignModalState>) => {
@@ -1024,6 +1036,8 @@ export const {
     closeNewTaskBoardModal,
     popBasicTextInputModal,
     closeBasicTextInputModal,
+    popConfirmEmailCodeModal,
+    closeConfirmEmailCodeModal,
     popTaskTaskBoardAssignModal,
     closeTaskTaskBoardAssignModal,
     popTopicPickerModal,
@@ -1275,6 +1289,10 @@ export const selectWorkspacePickerModalOnPick = (state: RootState) => state.moda
 export const selectNewTaskBoardModalVisible = (state: RootState) => state.modal.newTaskBoardModal?.visible;
 export const selectNewTaskBoardModalWorkspace = (state: RootState) => state.modal.newTaskBoardModal?.workspace;
 export const selectNewTaskBoardModalTeam = (state: RootState) => state.modal.newTaskBoardModal?.team;
+
+export const selectConfirmEmailCodeModalVisible = (state: RootState) => state.modal.confirmEmailCodeModal?.visible;
+export const selectConfirmEmailCodeModalEmail = (state: RootState) => state.modal.confirmEmailCodeModal?.email;
+export const selectConfirmEmailCodeModalOnConfirmed = (state: RootState) => state.modal.confirmEmailCodeModal?.onConfirmed;
 
 export const selectBasicTextInputModalVisible = (state: RootState) => state.modal.basicTextInputModal?.visible;
 export const selectBasicTextInputModalTitle = (state: RootState) => state.modal.basicTextInputModal?.title;

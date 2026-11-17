@@ -219,8 +219,28 @@ const translations = {
         tr: "Girilen şifreler birbiri ile aynı değil!"
     },
     registerWithEmailIsSuccessfull: {
-        en: "Successfully registered. Please login to your account",
-        tr: "Başarıyla kayıt oldunuz. Lütfen giriş yapın"
+        en: "Successfully registered.",
+        tr: "Başarıyla kayıt oldunuz."
+    },
+    confirmEmailCodeModalTitle: {
+        en: "Confirm your email",
+        tr: "Emailinizi doğrulayın"
+    },
+    confirmEmailCodeModalText: {
+        en: "Type the 6-digit code from the confirmation mail we sent to ${email}. Look in your spam folder too. If you have no code, send a new one.",
+        tr: "${email} adresine gönderdiğimiz doğrulama mailindeki 6 haneli kodu girin. Spam klasörünüze de bakın. Kodunuz yoksa yeni bir tane gönderin."
+    },
+    confirmEmailCodeModalResendButton: {
+        en: "Send a new code",
+        tr: "Yeni kod gönder"
+    },
+    confirmEmailCodeModalResendSuccess: {
+        en: "We sent a new code.",
+        tr: "Yeni bir kod gönderdik."
+    },
+    confirmEmailCodeModalSuccess: {
+        en: "Email confirmed.",
+        tr: "Email doğrulandı."
     },
     forgotPasswordFormTitle: {
         en: "Reset your password",
@@ -261,26 +281,6 @@ const translations = {
     engageCompletePasswordResetForgotPasswordPage: {
         en: "Re-send Forgot Password Mail",
         tr: "Şifremi Unuttum Mailimi Tekrar Gönder "
-    },
-    engageConfirmEmailTitleSuccess: {
-        en: "Email successfully confirmed",
-        tr: "Email başarı ile doğrulandı"
-    },
-    engageConfirmEmailTitleError: {
-        en: "Email confirmation failed!",
-        tr: "Email doğrulaması başarısız!"
-    },
-    engageConfirmEmailTextError: {
-        en: "Your confirmation mail might be timed out. Please request another confirmation mail.",
-        tr: "Doğrulama mailiniz zaman aşımına uğramış olabilir. Lütfen yeni bir doğrumala maili isteyin"
-    },
-    engageConfirmEmailContinueHomeButton: {
-        en: "Continue",
-        tr: "Devam Et"
-    },
-    engageConfirmEmailRequestNewMail: {
-        en: "Send New Confirmation Mail",
-        tr: "Yeni Doğrulama Maili Gönder"
     },
     floatingMenuBarHome: {
         en: "Home",
