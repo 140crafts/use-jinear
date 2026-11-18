@@ -349,11 +349,16 @@ export interface IPresignedUploadData {
     onComplete: () => void
 }
 
+export type UploadStatus = "QUEUED" | "DONE" | "FAILED";
+
+export interface IUploadQueueItem extends IPresignedUploadData {
+    status: UploadStatus
+}
+
 export interface UploadStatusModalState extends ModalState {
-    workspaceId?: string,
     minimized?: boolean,
     mouseOver?: boolean,
-    presignedUploadData?: IPresignedUploadData[]
+    presignedUploadData?: IUploadQueueItem[]
 }
 
 export interface MaterialAccessModalState extends ModalState {

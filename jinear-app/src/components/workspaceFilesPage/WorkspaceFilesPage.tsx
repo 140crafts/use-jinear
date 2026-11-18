@@ -160,11 +160,7 @@ const WorkspaceFilesPage: React.FC<WorkspaceFilesPageProps> = ({workspace, filte
                 presignedUploadData.push(uploadData);
             }
 
-            dispatch(pushDataToUploadStatusModalQueue({
-                workspaceId: workspace.workspaceId,
-                presignedUploadData,
-                visible: true
-            }));
+            dispatch(pushDataToUploadStatusModalQueue(presignedUploadData));
         } catch (e) {
             console.log(e);
         }

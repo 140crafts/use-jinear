@@ -58,6 +58,10 @@
   background-color: var(--c-APPLE_LIGHT_BLUE);
 }
 
+.progressFailed {
+  background-color: var(--c-ERROR_RED);
+}
+
 .minimizedBodyClass {
   padding: unset !important;
 }

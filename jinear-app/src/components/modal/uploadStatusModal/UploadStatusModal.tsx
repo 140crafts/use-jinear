@@ -5,176 +5,119 @@ import Button, {ButtonVariants} from "@/components/button";
 import {
     closeUploadStatusModal,
     removeFromUploadStatusModalQueue,
-    resetUploadStatusModalQueue,
     selectUploadStatusModalMinimized,
     selectUploadStatusModalPresignedUploadData,
     selectUploadStatusModalVisible,
-    selectUploadStatusModalWorkspaceId,
+    setUploadStatusModalItemStatus,
     setUploadStatusModalMouseOver,
     toggleUploadStatusModalMinimized
 } from "@/slice/modalSlice";
+import type {IUploadQueueItem, UploadStatus} from "@/model/app/store/modal/modalState";
 import {useAppDispatch, useTypedSelector} from "@/store";
 import {LuChevronDown, LuFolder, LuX} from "react-icons/lu";
 import {getMaterialIcon} from "@/components/workspaceFilesPage/materialListView/materialViewRow/MaterialViewRow";
 import useTranslation from "@/locals/useTranslation";
 import cn from "classnames";
-import Logger from "@/util/logger";
 
-interface UploadStatusModalProps {
-
+interface ActiveUpload {
+    uploadId: string;
+    xhr: XMLHttpRequest;
 }
 
-const logger = Logger("UploadStatusModal");
+const EMPTY_UPLOAD_QUEUE: IUploadQueueItem[] = [];
+const FULL_PERCENT = 100;
 
-const UploadStatusModal: React.FC<UploadStatusModalProps> = ({}) => {
+const isSuccessStatus = (httpStatus: number) => httpStatus >= 200 && httpStatus < 300;
+
+const sendFile = (
+    uploadData: IUploadQueueItem,
+    onProgress: (percent: number) => void,
+    onFinish: (status: UploadStatus) => void
+): XMLHttpRequest => {
+    const xhr = new XMLHttpRequest();
+    xhr.upload.onprogress = (event) => {
+        if (event.lengthComputable) {
+            onProgress(Math.round((event.loaded / event.total) * FULL_PERCENT));
+        }
+    };
+    xhr.onload = () => onFinish(isSuccessStatus(xhr.status) ? "DONE" : "FAILED");
+    xhr.onerror = () => onFinish("FAILED");
+    xhr.open("PUT", uploadData.presignedUrl);
+    xhr.setRequestHeader("Content-Type", uploadData.file.type);
+    xhr.send(uploadData.file);
+    return xhr;
+};
+
+const UploadStatusModal: React.FC = () => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
     const visible = useTypedSelector(selectUploadStatusModalVisible);
-    const presignedUploadData = useTypedSelector(selectUploadStatusModalPresignedUploadData) ?? [];
-    const workspaceId = useTypedSelector(selectUploadStatusModalWorkspaceId);
-    const [uploadProgresses, setUploadProgresses] = useState<{ [key: string]: number }>({});
-    const [currentUploadId, setCurrentUploadId] = useState<string | null>(null);
+    const uploadQueue = useTypedSelector(selectUploadStatusModalPresignedUploadData) ?? EMPTY_UPLOAD_QUEUE;
     const minimized = useTypedSelector(selectUploadStatusModalMinimized);
-    const isProcessingRef = useRef(false);
-    const abortControllerRef = useRef<AbortController | null>(null);
-    const xhrRef = useRef<XMLHttpRequest | null>(null);
-    const anyOngoingUploadExists = Object.values(uploadProgresses).some(value => [100, -1].indexOf(value) == -1);
+    const activeUploadRef = useRef<ActiveUpload | null>(null);
+    const [activeUploadId, setActiveUploadId] = useState<string | null>(null);
+    const [activeUploadPercent, setActiveUploadPercent] = useState<number>(0);
+    const anyWaitingUploadExists = uploadQueue.some((item) => item.status == "QUEUED");
 
-    logger.log({uploadProgresses});
+    useEffect(() => {
+        if (activeUploadRef.current) {
+            return;
+        }
+        const nextUpload = uploadQueue.find((item) => item.status == "QUEUED");
+        if (!nextUpload) {
+            return;
+        }
+        const uploadId = nextUpload.relatedObjectId;
+        const finishUpload = (status: UploadStatus) => {
+            dispatch(setUploadStatusModalItemStatus({relatedObjectId: uploadId, status}));
+            activeUploadRef.current = null;
+            setActiveUploadId(null);
+            if (status == "DONE") {
+                nextUpload.onComplete?.();
+            }
+        };
+        const xhr = sendFile(nextUpload, setActiveUploadPercent, finishUpload);
+        activeUploadRef.current = {uploadId, xhr};
+        setActiveUploadId(uploadId);
+        setActiveUploadPercent(0);
+    }, [uploadQueue, activeUploadId, dispatch]);
 
-    const uploadWithProgress = (
-        url: string,
-        file: File,
-        onProgress: (percent: number) => void,
-        abortSignal: AbortSignal
-    ): Promise<void> => {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhrRef.current = xhr;
+    useEffect(() => {
+        return () => {
+            activeUploadRef.current?.xhr.abort();
+            activeUploadRef.current = null;
+        };
+    }, []);
 
-            abortSignal.addEventListener("abort", () => {
-                xhr.abort();
-                reject(new Error("Upload cancelled"));
-            });
-
-            xhr.upload.onprogress = (event) => {
-                if (event.lengthComputable) {
-                    const percent = Math.round((event.loaded / event.total) * 100);
-                    onProgress(percent);
-                }
-            };
-            xhr.onload = () => {
-                if (xhr.status >= 200 && xhr.status < 300) {
-                    resolve();
-                } else {
-                    reject(new Error("File upload failed."));
-                }
-            };
-            xhr.onerror = () => reject(new Error("File upload failed."));
-            xhr.onabort = () => reject(new Error("Upload cancelled"));
-            xhr.open("PUT", url);
-            xhr.setRequestHeader("Content-Type", file.type);
-            xhr.send(file);
-        });
+    const abortActiveUpload = () => {
+        activeUploadRef.current?.xhr.abort();
+        activeUploadRef.current = null;
+        setActiveUploadId(null);
     };
 
     const cancelAllUploads = () => {
-        if (abortControllerRef.current) {
-            abortControllerRef.current.abort();
-            abortControllerRef.current = null;
-        }
-        isProcessingRef.current = false;
-        setCurrentUploadId(null);
-        setUploadProgresses({});
-
-        dispatch(resetUploadStatusModalQueue());
         dispatch(closeUploadStatusModal());
-        dispatch(toggleUploadStatusModalMinimized());
+        abortActiveUpload();
     };
 
     const cancelSingleUpload = (uploadId: string) => {
-        if (currentUploadId === uploadId && xhrRef.current) {
-            xhrRef.current.abort();
-        }
-        setUploadProgresses((prev) => {
-            const updated = {...prev};
-            delete updated[uploadId];
-            return updated;
-        });
+        const isActiveUpload = activeUploadRef.current?.uploadId == uploadId;
         dispatch(removeFromUploadStatusModalQueue(uploadId));
+        if (isActiveUpload) {
+            abortActiveUpload();
+        }
+    };
+
+    const retrieveItemPercent = (item: IUploadQueueItem) => {
+        if (item.status != "QUEUED") {
+            return FULL_PERCENT;
+        }
+        return item.relatedObjectId == activeUploadId ? activeUploadPercent : 0;
     };
 
     const toggleMinimized = () => {
         dispatch(toggleUploadStatusModalMinimized());
     };
-
-    useEffect(() => {
-        if (visible && presignedUploadData?.length === 0 && !currentUploadId && !isProcessingRef.current) {
-            dispatch(closeUploadStatusModal());
-        }
-    }, [visible, presignedUploadData, currentUploadId, dispatch]);
-
-    useEffect(() => {
-        return () => {
-            if (abortControllerRef.current) {
-                abortControllerRef.current.abort();
-            }
-        };
-    }, []);
-
-    useEffect(() => {
-        const processQueue = async () => {
-            if (!visible || !presignedUploadData || presignedUploadData.length === 0) {
-                return;
-            }
-            if (isProcessingRef.current) {
-                return;
-            }
-
-            isProcessingRef.current = true;
-            abortControllerRef.current = new AbortController();
-
-            for (const uploadData of presignedUploadData) {
-                if (abortControllerRef.current?.signal.aborted) {
-                    break;
-                }
-
-                const uploadId = uploadData.relatedObjectId;
-                setCurrentUploadId(uploadId);
-
-                try {
-                    await uploadWithProgress(
-                        uploadData.presignedUrl,
-                        uploadData.file,
-                        (percent) => {
-                            setUploadProgresses((prev) => ({
-                                ...prev,
-                                [uploadId]: percent
-                            }));
-                        },
-                        abortControllerRef.current.signal
-                    );
-
-                    setUploadProgresses((prev) => ({
-                        ...prev,
-                        [uploadId]: 100
-                    }));
-
-                    uploadData?.onComplete?.();
-
-                } catch (error) {
-                    console.error(`Upload failed for ${uploadId}:`, error);
-                    setUploadProgresses((prev) => ({
-                        ...prev,
-                        [uploadId]: -1
-                    }));
-                }
-            }
-            setCurrentUploadId(null);
-            isProcessingRef.current = false;
-        };
-        processQueue();
-    }, [visible, presignedUploadData, dispatch]);
 
     const onMouseEnter = () => {
         dispatch(setUploadStatusModalMouseOver(true));
@@ -204,8 +147,10 @@ const UploadStatusModal: React.FC<UploadStatusModalProps> = ({}) => {
                         onMouseEnter={onMouseEnter}
                         onMouseLeave={onMouseLeave}
                     >
-                        {presignedUploadData?.map((item) => {
+                        {uploadQueue.map((item) => {
                             const Icon = getMaterialIcon(item.file.type) ?? LuFolder;
+                            const percent = retrieveItemPercent(item);
+                            const isFailed = item.status == "FAILED";
                             return (
                                 <div key={item.relatedObjectId} className={styles.uploadItemContainer}>
                                     <div className={styles.uploadItemNameContainer}>
@@ -217,18 +162,16 @@ const UploadStatusModal: React.FC<UploadStatusModalProps> = ({}) => {
                                     </div>
                                     <div className={styles.progressContainer}>
                                         <div
-                                            style={{flex: uploadProgresses[item.relatedObjectId] ?? 0}}
-                                            className={styles.progressFilled}/>
-                                        <div
-                                            style={{flex: 100 - (uploadProgresses[item.relatedObjectId] ?? 0)}}
-                                        />
+                                            style={{flex: percent}}
+                                            className={cn(styles.progressFilled, isFailed && styles.progressFailed)}/>
+                                        <div style={{flex: FULL_PERCENT - percent}}/>
                                     </div>
                                 </div>
                             );
                         })}
                     </div>
                     <Button onClick={cancelAllUploads} variant={ButtonVariants.outline}>
-                        {anyOngoingUploadExists ? t("uploadStatusModalCancelAll") : t("uploadStatusModalClose")}
+                        {anyWaitingUploadExists ? t("uploadStatusModalCancelAll") : t("uploadStatusModalClose")}
                     </Button>
                 </>}
         </Modal>
@@ -236,5 +179,3 @@ const UploadStatusModal: React.FC<UploadStatusModalProps> = ({}) => {
 };
 
 export default UploadStatusModal;
-
-
