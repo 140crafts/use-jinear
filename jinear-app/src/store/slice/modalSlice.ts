@@ -1292,7 +1292,8 @@ export const selectNewTaskBoardModalTeam = (state: RootState) => state.modal.new
 
 export const selectConfirmEmailCodeModalVisible = (state: RootState) => state.modal.confirmEmailCodeModal?.visible;
 export const selectConfirmEmailCodeModalEmail = (state: RootState) => state.modal.confirmEmailCodeModal?.email;
-export const selectConfirmEmailCodeModalOnConfirmed = (state: RootState) => state.modal.confirmEmailCodeModal?.onConfirmed;
+export const selectConfirmEmailCodeModalOnSubmitCode = (state: RootState) => state.modal.confirmEmailCodeModal?.onSubmitCode;
+export const selectConfirmEmailCodeModalOnCancel = (state: RootState) => state.modal.confirmEmailCodeModal?.onCancel;
 
 export const selectBasicTextInputModalVisible = (state: RootState) => state.modal.basicTextInputModal?.visible;
 export const selectBasicTextInputModalTitle = (state: RootState) => state.modal.basicTextInputModal?.title;

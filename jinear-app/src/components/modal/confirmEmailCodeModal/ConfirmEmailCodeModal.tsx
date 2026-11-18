@@ -1,10 +1,11 @@
 import Button, {ButtonVariants} from "@/components/button";
 import type {LocaleType} from "@/model/be/jinear-core";
-import {useConfirmEmailMutation, useResendConfirmEmailMutation} from "@/store/api/accountApi";
+import {useResendConfirmEmailMutation} from "@/store/api/accountApi";
 import {
     closeConfirmEmailCodeModal,
     selectConfirmEmailCodeModalEmail,
-    selectConfirmEmailCodeModalOnConfirmed,
+    selectConfirmEmailCodeModalOnCancel,
+    selectConfirmEmailCodeModalOnSubmitCode,
     selectConfirmEmailCodeModalVisible
 } from "@/store/slice/modalSlice";
 import {useAppDispatch, useTypedSelector} from "@/store";
@@ -16,6 +17,7 @@ import Modal from "../modal/Modal";
 import styles from "./ConfirmEmailCodeModal.module.css";
 
 const CODE_LENGTH = 6;
+const NON_DIGITS = /\D/g;
 
 const logger = Logger("ConfirmEmailCodeModal");
 
@@ -24,11 +26,13 @@ const ConfirmEmailCodeModal: React.FC = () => {
     const dispatch = useAppDispatch();
     const visible = useTypedSelector(selectConfirmEmailCodeModalVisible);
     const email = useTypedSelector(selectConfirmEmailCodeModalEmail);
-    const onConfirmed = useTypedSelector(selectConfirmEmailCodeModalOnConfirmed);
-    const [confirmEmail, {isLoading: isConfirmLoading}] = useConfirmEmailMutation();
+    const onSubmitCode = useTypedSelector(selectConfirmEmailCodeModalOnSubmitCode);
+    const onCancel = useTypedSelector(selectConfirmEmailCodeModalOnCancel);
     const [resendConfirmEmail, {isLoading: isResendLoading}] = useResendConfirmEmailMutation();
     const inputRef = useRef<HTMLInputElement>(null);
     const [code, setCode] = useState<string>("");
+    const [isConfirmLoading, setIsConfirmLoading] = useState<boolean>(false);
+    const isCodeComplete = code.length == CODE_LENGTH;
     const infoText = t("confirmEmailCodeModalText").split("${email}").join(email || "");
 
     useEffect(() => {
@@ -40,7 +44,8 @@ const ConfirmEmailCodeModal: React.FC = () => {
     }, [visible]);
 
     const onCodeChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setCode(e.target.value.trim());
+        const digits = e.target.value.replace(NON_DIGITS, "");
+        setCode(digits.slice(0, CODE_LENGTH));
     };
 
     const close = () => {
@@ -48,18 +53,24 @@ const ConfirmEmailCodeModal: React.FC = () => {
         dispatch(closeConfirmEmailCodeModal());
     };
 
+    const cancel = () => {
+        close();
+        onCancel?.();
+    };
+
     const confirm = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if (!email || code.length != CODE_LENGTH || isConfirmLoading) {
+        if (!onSubmitCode || !isCodeComplete || isConfirmLoading) {
             return;
         }
+        setIsConfirmLoading(true);
         try {
-            await confirmEmail({email, code}).unwrap();
+            await onSubmitCode(code);
             close();
-            toast(t("confirmEmailCodeModalSuccess"));
-            onConfirmed?.();
         } catch (error) {
             logger.log({confirmEmailError: error});
+        } finally {
+            setIsConfirmLoading(false);
         }
     };
 
@@ -76,15 +87,14 @@ const ConfirmEmailCodeModal: React.FC = () => {
     };
 
     return (
-        <Modal visible={visible} title={t("confirmEmailCodeModalTitle")} requestClose={close} width={"default"}>
+        <Modal visible={visible} title={t("confirmEmailCodeModalTitle")} requestClose={cancel} width={"default"}>
             <form className={styles.form} onSubmit={confirm}>
-                <div>{infoText}</div>
+                <div className={styles.infoText}>{infoText}</div>
                 <input
                     ref={inputRef}
                     type={"text"}
                     inputMode={"numeric"}
                     autoComplete={"one-time-code"}
-                    maxLength={CODE_LENGTH}
                     placeholder={t("loginScreenCodePlaceholder")}
                     onChange={onCodeChange}
                     value={code}
@@ -97,7 +107,7 @@ const ConfirmEmailCodeModal: React.FC = () => {
                         type={"submit"}
                         variant={ButtonVariants.contrast}
                         loading={isConfirmLoading}
-                        disabled={isConfirmLoading}
+                        disabled={isConfirmLoading || !isCodeComplete}
                     >
                         {t("continue")}
                     </Button>

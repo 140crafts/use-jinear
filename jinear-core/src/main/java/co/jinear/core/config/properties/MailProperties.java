@@ -16,6 +16,7 @@ import java.util.List;
 public class MailProperties {
 
     private static final List<String> PLACEHOLDER_MAIL_HOSTS = List.of("localhost", "smtp.example.com");
+    private static final String PLACEHOLDER_MAIL_USERNAME = "change-me";
 
     @Value("${spring.mail.host:}")
     private String mailHost;
@@ -39,6 +40,8 @@ public class MailProperties {
     private String footerText;
 
     public boolean isMailConfigured() {
-        return StringUtils.isNotBlank(mailHost) && !PLACEHOLDER_MAIL_HOSTS.contains(mailHost.toLowerCase());
+        boolean hostConfigured = StringUtils.isNotBlank(mailHost) && !PLACEHOLDER_MAIL_HOSTS.contains(mailHost.toLowerCase());
+        boolean usernameIsPlaceholder = PLACEHOLDER_MAIL_USERNAME.equalsIgnoreCase(mailUserName);
+        return hostConfigured && !usernameIsPlaceholder;
     }
 }

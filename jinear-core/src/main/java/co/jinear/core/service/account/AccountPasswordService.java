@@ -4,7 +4,6 @@ import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.auth.BadCredentialsException;
 import co.jinear.core.model.entity.account.AccountPassword;
 import co.jinear.core.model.vo.account.password.AccountPasswordVo;
-import co.jinear.core.model.vo.account.password.ValidatePasswordVo;
 import co.jinear.core.repository.AccountPasswordRepository;
 import co.jinear.core.system.RandomHelper;
 import lombok.RequiredArgsConstructor;
@@ -44,11 +43,10 @@ public class AccountPasswordService {
                 .ifPresent(this::setRandomPassword);
     }
 
-    public void validatePassword(ValidatePasswordVo validatePasswordVo) {
-        String accountId = validatePasswordVo.getAccountId();
+    public void validatePassword(String accountId, String password) {
         log.info("Validate password has started for accountId: {}", accountId);
         AccountPassword accountPassword = retrieveAccountPassword(accountId);
-        if (!bCryptPasswordEncoder.matches(validatePasswordVo.getPassword(), accountPassword.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(password, accountPassword.getPassword())) {
             throw new BadCredentialsException();
         }
     }

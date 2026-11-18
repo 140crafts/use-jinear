@@ -50,7 +50,7 @@ public class AccountManager {
     }
 
     public BaseResponse confirmEmail(ConfirmEmailRequest confirmEmailRequest) {
-        accountMailConfirmationService.confirmEmail(confirmEmailRequest.getEmail(), confirmEmailRequest.getCode());
+        accountMailConfirmationService.confirmEmail(confirmEmailRequest.getEmail(), confirmEmailRequest.getPassword(), confirmEmailRequest.getCode());
         return new BaseResponse();
     }
 

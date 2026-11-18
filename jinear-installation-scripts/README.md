@@ -55,7 +55,8 @@ After installation, you can modify the configuration:
 ### Email and account confirmation
 
 Email is optional. While `MAIL_HOST` in `.env` is empty, `localhost` or the placeholder
-`smtp.example.com`, mail counts as not configured:
+`smtp.example.com`, or while `MAIL_USERNAME` is the placeholder `change-me`, mail counts
+as not configured:
 
 - A new account that registers with a password is confirmed at once and can log in.
 - Password reset, email code login and invitation mails cannot be delivered.

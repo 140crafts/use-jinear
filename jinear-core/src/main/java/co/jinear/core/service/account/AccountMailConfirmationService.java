@@ -2,6 +2,7 @@ package co.jinear.core.service.account;
 
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
+import co.jinear.core.exception.auth.BadCredentialsException;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.token.TokenDto;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
@@ -26,13 +27,13 @@ import static co.jinear.core.model.enumtype.token.TokenType.CONFIRM_EMAIL;
 public class AccountMailConfirmationService {
 
     private static final Long EMAIL_CONFIRM_TTL = 30L * 60 * 1000;
-    private static final Long ATTEMPT_PENALTY_MILLIS = 10L * 60 * 1000;
 
     private final AccountRetrieveService accountRetrieveService;
     private final AccountUpdateService accountUpdateService;
     private final TokenService tokenService;
     private final MailService mailService;
     private final AccountLockService accountLockService;
+    private final AccountPasswordService accountPasswordService;
 
     public void resendConfirmEmailMail(String email, LocaleType preferredLocale) {
         log.info("Resend confirm email mail. email: {}, preferredLocale: {}", email, preferredLocale);
@@ -45,23 +46,33 @@ public class AccountMailConfirmationService {
         AccountDto accountDto = accountRetrieveService.retrieve(accountId);
         validateAccountMailNotConfirmed(accountDto);
         accountLockService.startConfirmEmailMailCooldown(accountId);
-        retrieveActiveConfirmEmailToken(accountId).ifPresent(this::passivizeToken);
-        TokenDto tokenDto = generateConfirmEmailToken(accountDto);
+        TokenDto tokenDto = retrieveActiveConfirmEmailToken(accountId)
+                .orElseGet(() -> generateConfirmEmailToken(accountDto));
         sendConfirmationMail(preferredLocale, accountDto, tokenDto);
         log.info("Send confirm email mail has finished for accountId: {}", accountId);
     }
 
-    public void confirmEmail(String email, String code) {
+    public void confirmEmail(String email, String password, String code) {
         log.info("Confirm email has started for email: {}", email);
-        TokenDto tokenDto = accountRetrieveService.retrieveByEmailOptional(email)
+        String accountId = accountRetrieveService.retrieveByEmailOptional(email)
                 .map(AccountDto::getAccountId)
-                .flatMap(this::retrieveActiveConfirmEmailToken)
                 .orElseThrow(this::invalidCodeException);
-        tokenService.chargeAttempt(tokenDto.getTokenId(), ATTEMPT_PENALTY_MILLIS);
+        validatePassword(accountId, password);
+        TokenDto tokenDto = retrieveActiveConfirmEmailToken(accountId)
+                .orElseThrow(this::invalidCodeException);
+        tokenService.chargeAttempt(tokenDto.getTokenId());
         validateCodesMatch(tokenDto, code);
-        accountUpdateService.updateEmailConfirmed(tokenDto.getRelatedObject(), Boolean.TRUE);
+        accountUpdateService.updateEmailConfirmed(accountId, Boolean.TRUE);
         passivizeToken(tokenDto);
-        log.info("Confirm email has finished for accountId: {}", tokenDto.getRelatedObject());
+        log.info("Confirm email has finished for accountId: {}", accountId);
+    }
+
+    private void validatePassword(String accountId, String password) {
+        try {
+            accountPasswordService.validatePassword(accountId, password);
+        } catch (BadCredentialsException e) {
+            throw invalidCodeException();
+        }
     }
 
     private Optional<TokenDto> retrieveActiveConfirmEmailToken(String accountId) {

@@ -1,6 +1,7 @@
 package co.jinear.core.account;
 
 import co.jinear.core.exception.BusinessException;
+import co.jinear.core.exception.auth.BadCredentialsException;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.dto.token.TokenDto;
 import co.jinear.core.model.enumtype.localestring.LocaleType;
@@ -10,6 +11,7 @@ import co.jinear.core.model.vo.mail.LoginMailVo;
 import co.jinear.core.model.vo.token.GenerateTokenVo;
 import co.jinear.core.service.account.AccountLockService;
 import co.jinear.core.service.account.AccountMailConfirmationService;
+import co.jinear.core.service.account.AccountPasswordService;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.account.AccountUpdateService;
 import co.jinear.core.service.mail.MailService;
@@ -31,9 +33,8 @@ class AccountMailConfirmationServiceTest {
     private static final String EMAIL = "user@example.com";
     private static final String ACCOUNT_ID = "account-1";
     private static final String TOKEN_ID = "token-1";
-    private static final String OLD_TOKEN_ID = "token-0";
     private static final String CODE = "123456";
-    private static final Long ATTEMPT_PENALTY_MILLIS = 10L * 60 * 1000;
+    private static final String PASSWORD = "password-1";
     private static final String INVALID_CODE_KEY = "account.confirm-email-code-invalid";
 
     private final AccountRetrieveService accountRetrieveService = Mockito.mock(AccountRetrieveService.class);
@@ -41,24 +42,40 @@ class AccountMailConfirmationServiceTest {
     private final TokenService tokenService = Mockito.mock(TokenService.class);
     private final MailService mailService = Mockito.mock(MailService.class);
     private final AccountLockService accountLockService = Mockito.mock(AccountLockService.class);
+    private final AccountPasswordService accountPasswordService = Mockito.mock(AccountPasswordService.class);
     private final AccountMailConfirmationService service = new AccountMailConfirmationService(
             accountRetrieveService,
             accountUpdateService,
             tokenService,
             mailService,
-            accountLockService);
+            accountLockService,
+            accountPasswordService);
 
     @Test
-    void newMailReplacesTheOldCodeWithANewSixDigitCode() throws Exception {
+    void mailWithALiveCodeSendsTheSameCodeAgain() throws Exception {
         givenUnconfirmedAccount();
-        givenActiveToken(OLD_TOKEN_ID);
+        givenActiveToken(TOKEN_ID);
+
+        service.sendConfirmEmailMail(ACCOUNT_ID, LocaleType.EN);
+
+        Mockito.verify(accountLockService).startConfirmEmailMailCooldown(ACCOUNT_ID);
+        Mockito.verify(tokenService, Mockito.never()).generateToken(ArgumentMatchers.any(GenerateTokenVo.class));
+        Mockito.verify(tokenService, Mockito.never()).passivizeToken(ArgumentMatchers.anyString(), ArgumentMatchers.anyString(), ArgumentMatchers.any(PassiveReason.class));
+        ArgumentCaptor<LoginMailVo> mailCaptor = ArgumentCaptor.forClass(LoginMailVo.class);
+        Mockito.verify(mailService).sendMailConfirmationMail(mailCaptor.capture());
+        assertEquals(CODE, mailCaptor.getValue().getEmailCode());
+    }
+
+    @Test
+    void mailWithoutALiveCodeMakesANewSixDigitCode() throws Exception {
+        givenUnconfirmedAccount();
+        Mockito.when(tokenService.retrieveValidTokenWithRelatedObject(ACCOUNT_ID, TokenType.CONFIRM_EMAIL)).thenReturn(Optional.empty());
         Mockito.when(tokenService.generateToken(ArgumentMatchers.any(GenerateTokenVo.class))).thenReturn(tokenDto(TOKEN_ID));
 
         service.sendConfirmEmailMail(ACCOUNT_ID, LocaleType.EN);
 
         InOrder inOrder = Mockito.inOrder(accountLockService, tokenService);
         inOrder.verify(accountLockService).startConfirmEmailMailCooldown(ACCOUNT_ID);
-        inOrder.verify(tokenService).passivizeToken(OLD_TOKEN_ID, ACCOUNT_ID, PassiveReason.USER_ACTION);
         ArgumentCaptor<GenerateTokenVo> tokenCaptor = ArgumentCaptor.forClass(GenerateTokenVo.class);
         inOrder.verify(tokenService).generateToken(tokenCaptor.capture());
         assertEquals(ACCOUNT_ID, tokenCaptor.getValue().getRelatedObject());
@@ -86,10 +103,10 @@ class AccountMailConfirmationServiceTest {
         givenAccountFoundByEmail();
         givenActiveToken(TOKEN_ID);
 
-        service.confirmEmail(EMAIL, CODE);
+        service.confirmEmail(EMAIL, PASSWORD, CODE);
 
         InOrder inOrder = Mockito.inOrder(tokenService, accountUpdateService);
-        inOrder.verify(tokenService).chargeAttempt(TOKEN_ID, ATTEMPT_PENALTY_MILLIS);
+        inOrder.verify(tokenService).chargeAttempt(TOKEN_ID);
         inOrder.verify(accountUpdateService).updateEmailConfirmed(ACCOUNT_ID, Boolean.TRUE);
         inOrder.verify(tokenService).passivizeToken(TOKEN_ID, ACCOUNT_ID, PassiveReason.USER_ACTION);
     }
@@ -99,18 +116,29 @@ class AccountMailConfirmationServiceTest {
         givenAccountFoundByEmail();
         givenActiveToken(TOKEN_ID);
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> service.confirmEmail(EMAIL, "000000"));
+        BusinessException exception = assertThrows(BusinessException.class, () -> service.confirmEmail(EMAIL, PASSWORD, "000000"));
 
         assertEquals(INVALID_CODE_KEY, exception.getMessage());
-        Mockito.verify(tokenService).chargeAttempt(TOKEN_ID, ATTEMPT_PENALTY_MILLIS);
+        Mockito.verify(tokenService).chargeAttempt(TOKEN_ID);
         Mockito.verifyNoInteractions(accountUpdateService);
+    }
+
+    @Test
+    void wrongPasswordGetsTheSameErrorAsAWrongCodeBeforeAnAttemptIsCharged() {
+        givenAccountFoundByEmail();
+        Mockito.doThrow(new BadCredentialsException()).when(accountPasswordService).validatePassword(ACCOUNT_ID, PASSWORD);
+
+        BusinessException exception = assertThrows(BusinessException.class, () -> service.confirmEmail(EMAIL, PASSWORD, CODE));
+
+        assertEquals(INVALID_CODE_KEY, exception.getMessage());
+        Mockito.verifyNoInteractions(tokenService, accountUpdateService);
     }
 
     @Test
     void unknownEmailGetsTheSameErrorAsAWrongCode() {
         Mockito.when(accountRetrieveService.retrieveByEmailOptional(EMAIL)).thenReturn(Optional.empty());
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> service.confirmEmail(EMAIL, CODE));
+        BusinessException exception = assertThrows(BusinessException.class, () -> service.confirmEmail(EMAIL, PASSWORD, CODE));
 
         assertEquals(INVALID_CODE_KEY, exception.getMessage());
         Mockito.verifyNoInteractions(tokenService, accountUpdateService);
@@ -121,7 +149,7 @@ class AccountMailConfirmationServiceTest {
         givenAccountFoundByEmail();
         Mockito.when(tokenService.retrieveValidTokenWithRelatedObject(ACCOUNT_ID, TokenType.CONFIRM_EMAIL)).thenReturn(Optional.empty());
 
-        BusinessException exception = assertThrows(BusinessException.class, () -> service.confirmEmail(EMAIL, CODE));
+        BusinessException exception = assertThrows(BusinessException.class, () -> service.confirmEmail(EMAIL, PASSWORD, CODE));
 
         assertEquals(INVALID_CODE_KEY, exception.getMessage());
         Mockito.verifyNoInteractions(accountUpdateService);

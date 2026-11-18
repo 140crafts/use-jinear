@@ -16,6 +16,10 @@ public class ConfirmEmailRequest extends BaseRequest {
     private String email;
     @NotBlank
     @ToString.Exclude
+    @Size(max = 255)
+    private String password;
+    @NotBlank
+    @ToString.Exclude
     @Size(max = 16)
     private String code;
 }

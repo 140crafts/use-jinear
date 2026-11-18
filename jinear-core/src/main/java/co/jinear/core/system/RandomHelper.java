@@ -1,31 +1,18 @@
 package co.jinear.core.system;
 
-import co.jinear.core.exception.BusinessException;
 import de.huxhorn.sulky.ulid.ULID;
 import lombok.experimental.UtilityClass;
-import lombok.extern.slf4j.Slf4j;
 
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Locale;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-@Slf4j
 @UtilityClass
 public class RandomHelper {
     private static final String PASSWORD_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static final int PASSWORD_LENGTH = 16;
-    private static final Random random;
-
-    static {
-        try {
-            random = SecureRandom.getInstanceStrong();
-        } catch (NoSuchAlgorithmException e) {
-            log.error("Cannot initialize secure random instance.", e);
-            throw new BusinessException();
-        }
-    }
+    private static final Random random = new SecureRandom();
 
     public static String generateULID(){
         return new ULID().nextULID().toLowerCase(Locale.ROOT);

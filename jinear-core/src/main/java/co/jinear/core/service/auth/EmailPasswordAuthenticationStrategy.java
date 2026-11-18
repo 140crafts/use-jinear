@@ -5,7 +5,6 @@ import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.account.AccountDto;
 import co.jinear.core.model.enumtype.auth.ProviderType;
-import co.jinear.core.model.vo.account.password.ValidatePasswordVo;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
 import co.jinear.core.service.account.AccountPasswordService;
@@ -48,10 +47,7 @@ public class EmailPasswordAuthenticationStrategy implements AuthenticationStrate
     }
 
     private void validatePassword(AuthVo authVo, AccountDto accountDto) {
-        ValidatePasswordVo validatePasswordVo = new ValidatePasswordVo();
-        validatePasswordVo.setAccountId(accountDto.getAccountId());
-        validatePasswordVo.setPassword(authVo.getCode());
-        accountPasswordService.validatePassword(validatePasswordVo);
+        accountPasswordService.validatePassword(accountDto.getAccountId(), authVo.getCode());
     }
 
     private void validateEmailConfirmed(AccountDto accountDto) {

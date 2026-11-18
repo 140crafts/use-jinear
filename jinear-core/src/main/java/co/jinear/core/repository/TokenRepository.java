@@ -30,6 +30,4 @@ public interface TokenRepository extends JpaRepository<Token, String> {
     Optional<Token> findFirstByRelatedObjectAndTokenTypeAndExpiresAtGreaterThanAndPassiveIdIsNullOrderByCreatedDateDesc(String relatedObject, TokenType tokenType, Long expiresAtGreaterThan);
 
     Optional<Token> findByUniqueTokenAndTokenTypeAndExpiresAtGreaterThanAndPassiveIdIsNull(String uniqueToken, TokenType tokenType, Long expiresAtGreaterThan);
-
-    Optional<Token> findByUniqueTokenAndTokenType(String uniqueToken, TokenType tokenType);
 }

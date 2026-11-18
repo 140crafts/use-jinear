@@ -39,6 +39,14 @@ class AccountRegisterManagerTest {
     }
 
     @Test
+    void accountIsConfirmedWhenMailUsernameIsTheManualSetupPlaceholder() {
+        mailProperties.setMailHost("smtp.real-host.com");
+        mailProperties.setMailUserName("change-me");
+
+        assertEquals(Boolean.TRUE, registerAndCaptureEmailConfirmed());
+    }
+
+    @Test
     void accountIsConfirmedWhenMailHostIsBlank() {
         mailProperties.setMailHost("");
 

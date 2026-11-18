@@ -1434,6 +1434,7 @@ export interface CompleteResetPasswordRequest extends BaseRequest {
 
 export interface ConfirmEmailRequest extends BaseRequest {
     email: string;
+    password: string;
     code: string;
 }
 

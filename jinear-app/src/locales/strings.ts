@@ -227,16 +227,16 @@ const translations = {
         tr: "Emailinizi doğrulayın"
     },
     confirmEmailCodeModalText: {
-        en: "Type the 6-digit code from the confirmation mail we sent to ${email}. Look in your spam folder too. If you have no code, send a new one.",
-        tr: "${email} adresine gönderdiğimiz doğrulama mailindeki 6 haneli kodu girin. Spam klasörünüze de bakın. Kodunuz yoksa yeni bir tane gönderin."
+        en: "Type the 6-digit code from the confirmation mail we sent to ${email}. Look in your spam folder too. If you have no code, send it again.",
+        tr: "${email} adresine gönderdiğimiz doğrulama mailindeki 6 haneli kodu girin. Spam klasörünüze de bakın. Kodunuz yoksa tekrar gönderin."
     },
     confirmEmailCodeModalResendButton: {
-        en: "Send a new code",
-        tr: "Yeni kod gönder"
+        en: "Send the code again",
+        tr: "Kodu tekrar gönder"
     },
     confirmEmailCodeModalResendSuccess: {
-        en: "We sent a new code.",
-        tr: "Yeni bir kod gönderdik."
+        en: "We sent the code.",
+        tr: "Kodu gönderdik."
     },
     confirmEmailCodeModalSuccess: {
         en: "Email confirmed.",

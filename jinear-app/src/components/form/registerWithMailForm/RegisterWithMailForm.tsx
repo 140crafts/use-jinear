@@ -15,6 +15,7 @@ import {IoLogoGoogle} from "react-icons/io5";
 import {isWebView} from "@/util/webviewUtils";
 import {useRetrieveLoginRedirectInfoQuery} from "@/api/googleOAuthApi";
 import SignInWithAppleButton from "@/components/sign-in-with-apple-button/SignInWithAppleButton";
+import {useNavigate} from "react-router-dom";
 import {usePasswordLogin} from "@/hooks/usePasswordLogin.ts";
 import {TERMS} from "@/util/constants.ts";
 import {useInstanceFlag} from "@/hooks/useInstanceFlag";
@@ -36,7 +37,9 @@ const logger = Logger("RegisterWithMailForm");
 const RegisterWithMailForm: React.FC<RegisterWithMailFormProps> = ({className}) => {
     const {t} = useTranslation();
     const [registerViaMail, {isLoading: isRegisterLoading}] = useRegisterViaMailMutation();
-    const {login, isLoading: isLoginLoading} = usePasswordLogin();
+    const navigate = useNavigate();
+    const moveToLogin = (email: string) => navigate(`/login?email=${encodeURIComponent(email)}`, {replace: true});
+    const {login, isLoading: isLoginLoading} = usePasswordLogin(moveToLogin);
     const isLoading = isRegisterLoading || isLoginLoading;
     const _isWebView = isWebView();
     const googleEnabled = useInstanceFlag("SIGN_IN_WITH_GOOGLE") && !_isWebView;

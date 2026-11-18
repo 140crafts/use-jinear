@@ -29,7 +29,6 @@ class OtpEmailAuthenticationStrategyTest {
     private static final String EMAIL = "user@example.com";
     private static final String ACCOUNT_ID = "account-1";
     private static final String REAL_CODE = "123456";
-    private static final Long ATTEMPT_PENALTY_MILLIS = 10L * 60 * 1000;
 
     private final TokenService tokenService = Mockito.mock(TokenService.class);
     private final AccountRetrieveService accountRetrieveService = Mockito.mock(AccountRetrieveService.class);
@@ -53,13 +52,13 @@ class OtpEmailAuthenticationStrategyTest {
     void wrongCodeIsChargedAndRejected() {
         assertThrows(NoAccessException.class, () -> strategy.auth(authVo("000000")));
 
-        Mockito.verify(tokenService).chargeAttempt(TOKEN_ID, ATTEMPT_PENALTY_MILLIS);
+        Mockito.verify(tokenService).chargeAttempt(TOKEN_ID);
         Mockito.verify(tokenService, Mockito.never()).passivizeToken(ArgumentMatchers.anyString(), ArgumentMatchers.anyString(), ArgumentMatchers.any(PassiveReason.class));
     }
 
     @Test
     void attemptOverTheLimitIsRejectedBeforeTheCodeIsChecked() {
-        Mockito.doThrow(new NoAccessException()).when(tokenService).chargeAttempt(TOKEN_ID, ATTEMPT_PENALTY_MILLIS);
+        Mockito.doThrow(new NoAccessException()).when(tokenService).chargeAttempt(TOKEN_ID);
 
         assertThrows(NoAccessException.class, () -> strategy.auth(authVo(REAL_CODE)));
 
@@ -76,7 +75,7 @@ class OtpEmailAuthenticationStrategyTest {
         strategy.auth(authVo(REAL_CODE));
 
         InOrder inOrder = Mockito.inOrder(tokenService);
-        inOrder.verify(tokenService).chargeAttempt(TOKEN_ID, ATTEMPT_PENALTY_MILLIS);
+        inOrder.verify(tokenService).chargeAttempt(TOKEN_ID);
         inOrder.verify(tokenService).passivizeToken(TOKEN_ID, ACCOUNT_ID, PassiveReason.EMAIL_LOGIN_TOKEN_USED);
     }
 

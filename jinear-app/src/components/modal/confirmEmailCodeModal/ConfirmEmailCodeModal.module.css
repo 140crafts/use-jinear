@@ -4,6 +4,10 @@
   gap: 0.5rem;
 }
 
+.infoText {
+  text-align: justify;
+}
+
 .actionBarContainer {
   display: flex;
   flex-direction: row;

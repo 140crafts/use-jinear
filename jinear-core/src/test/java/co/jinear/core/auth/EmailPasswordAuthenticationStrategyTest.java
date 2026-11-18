@@ -4,7 +4,6 @@ import co.jinear.core.config.properties.MailProperties;
 import co.jinear.core.exception.BusinessException;
 import co.jinear.core.exception.auth.BadCredentialsException;
 import co.jinear.core.model.dto.account.AccountDto;
-import co.jinear.core.model.vo.account.password.ValidatePasswordVo;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
 import co.jinear.core.service.account.AccountPasswordService;
@@ -13,7 +12,6 @@ import co.jinear.core.service.account.AccountRoleService;
 import co.jinear.core.service.auth.EmailPasswordAuthenticationStrategy;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 
 import java.util.Optional;
@@ -74,7 +72,7 @@ class EmailPasswordAuthenticationStrategyTest {
     @Test
     void wrongPasswordIsRejectedBeforeTheConfirmationIsChecked() {
         givenAccount(Boolean.FALSE);
-        Mockito.doThrow(new BadCredentialsException()).when(accountPasswordService).validatePassword(ArgumentMatchers.any(ValidatePasswordVo.class));
+        Mockito.doThrow(new BadCredentialsException()).when(accountPasswordService).validatePassword(ACCOUNT_ID, PASSWORD);
 
         assertThrows(BadCredentialsException.class, () -> strategy.auth(authVo()));
     }
