@@ -1,16 +1,44 @@
-import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import {
+    type BaseQueryFn,
+    createApi,
+    type FetchArgs,
+    fetchBaseQuery,
+    type FetchBaseQueryError,
+    type FetchBaseQueryMeta
+} from "@reduxjs/toolkit/query/react";
 import type {Action} from "@reduxjs/toolkit";
 import {REHYDRATE} from "redux-persist";
 import {API_ROOT} from "@/util/constants.ts";
+import {
+    completePendingLogout,
+    isLogoutPending,
+    LOGOUT_ENDPOINT_NAME,
+    recordLogoutResult
+} from "@/api/pendingLogout.ts";
 
 
-const baseQuery = fetchBaseQuery({
+const rawBaseQuery = fetchBaseQuery({
     baseUrl: API_ROOT,
     prepareHeaders: (headers, {}) => {
         return headers;
     },
     credentials: "include",
 });
+
+const baseQuery: BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError, object, FetchBaseQueryMeta> = async (args, baseQueryApi, extraOptions) => {
+    const isLogoutRequest = baseQueryApi.endpoint == LOGOUT_ENDPOINT_NAME;
+    if (!isLogoutRequest && isLogoutPending()) {
+        const pendingLogoutError = await completePendingLogout();
+        if (pendingLogoutError) {
+            return {error: pendingLogoutError};
+        }
+    }
+    const result = await rawBaseQuery(args, baseQueryApi, extraOptions);
+    if (isLogoutRequest) {
+        recordLogoutResult(result.error);
+    }
+    return result;
+};
 
 export const tagTypes = [
     "v1/account",

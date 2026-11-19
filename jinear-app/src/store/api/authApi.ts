@@ -6,14 +6,15 @@ import type {
     LoginWithPasswordRequest
 } from "@/model/be/jinear-core";
 import {api, tagTypes} from "./api";
+import {LOGOUT_ENDPOINT_NAME, LOGOUT_PATH} from "./pendingLogout";
 
 const invalidateAllOnSuccess = (_result: unknown, error: unknown) => error ? [] : tagTypes;
 
 export const authApi = api.injectEndpoints({
     endpoints: (build) => ({
-        logout: build.mutation<void, void>({
+        [LOGOUT_ENDPOINT_NAME]: build.mutation<void, void>({
             query: () => ({
-                url: "v1/auth/logout",
+                url: LOGOUT_PATH,
                 method: "POST"
             }),
             invalidatesTags: tagTypes
