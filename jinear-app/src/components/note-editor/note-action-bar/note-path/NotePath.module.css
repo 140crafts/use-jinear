@@ -19,6 +19,12 @@
     opacity: 0.5;
 }
 
+.breadcrumbLabel {
+    padding: 0.25rem 0.15rem;
+    border: 1px solid transparent;
+    opacity: 0.5;
+}
+
 .bold {
     opacity: 1;
     font-weight: bold;

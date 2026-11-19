@@ -424,6 +424,25 @@ mark {
   z-index: 99;
 }
 
+*[data-tooltip-left] {
+  position: relative;
+}
+
+*[data-tooltip-left]:hover:after {
+  content: attr(data-tooltip-left);
+  background-color: var(--c-secondary);
+  color: var(--c-primary);
+  right: calc(100% + 0.35rem);
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.5em;
+  border-radius: var(--border-radius);
+  position: absolute;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 99;
+}
+
 *[data-tooltip-multiline] {
   position: relative;
   height: auto;

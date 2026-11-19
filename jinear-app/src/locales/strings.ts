@@ -1318,6 +1318,10 @@ const translations = {
         en: "Root folder",
         tr: "Ana Dizin"
     },
+    globalSearchModalOpenContainingFolder: {
+        en: "Open containing folder",
+        tr: "Bulunduğu klasörü aç"
+    },
     globalSearchModalInitialState: {
         en: "Type to search tasks, notes and files",
         tr: "Görev, not ve dosyaları aramak için yazın"

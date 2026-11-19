@@ -11,6 +11,24 @@
     text-decoration: none;
 }
 
+.rowContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 0.25rem;
+}
+
+.rowContainer > .row {
+    flex: 1;
+    min-width: 0;
+}
+
+.rowAction {
+    flex-shrink: 0;
+    padding: 0.45rem 0.6rem !important;
+    color: var(--c-secondary-shade-1);
+}
+
 .icon {
     flex-shrink: 0;
     margin-top: 0.15rem;
