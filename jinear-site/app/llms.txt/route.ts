@@ -8,6 +8,7 @@ import {
 } from "@/utils/constants";
 import { getAllPosts } from "@/lib/posts";
 import { getAllComparisons } from "@/lib/comparisons";
+import { mcpSummaryMarkdown } from "@/lib/mcp";
 
 // Emitted at /llms.txt during `next build`. Follows the llms.txt convention:
 // a concise, link-rich index that helps AI agents understand and cite the site.
@@ -73,6 +74,10 @@ any time.
 - Source (GitHub): ${GITHUB_URL}
 - Source (GitLab): ${GITLAB_URL}
 
+## AI assistants (MCP)
+
+${mcpSummaryMarkdown()}
+
 ## Key pages
 
 - [Home](${SITE_URL}/): Overview of Jinear: task management, calendar, file storage and notes.
@@ -95,7 +100,7 @@ ${comparisonLines}
 
 ## Optional
 
-- [Full text](${SITE_URL}/llms-full.txt): This index plus every blog post and comparison in full.
+- [Full text](${SITE_URL}/llms-full.txt): This index plus the MCP page with its tool list, every blog post and every comparison in full.
 - [RSS feed](${SITE_URL}/blog/rss.xml): New posts.
 - [Sitemap](${SITE_URL}/sitemap.xml): Every page on this site.
 - [Hosted app](${APP_URL}): Sign in or create an account.

@@ -1,10 +1,12 @@
 import { GITHUB_URL, GITLAB_URL, SELF_HOSTING_DOCS_URL, SITE_URL } from "@/utils/constants";
 import { getAllPostsWithContent } from "@/lib/posts";
 import { getAllComparisonsWithContent, toPlainMarkdown } from "@/lib/comparisons";
+import { mcpFullMarkdown } from "@/lib/mcp";
 
 // Emitted at /llms-full.txt during `next build`. The expanded companion to
-// /llms.txt: same summary, then every published blog post inlined in full, so an
-// agent can answer from a single fetch instead of crawling each post.
+// /llms.txt: same summary, then the MCP page, every published blog post and every
+// comparison inlined in full, so an agent can answer from a single fetch instead
+// of crawling each page.
 export const dynamic = "force-static";
 
 export function GET() {
@@ -49,12 +51,16 @@ ${toPlainMarkdown(comparison.content).trim()}`
 > your own server. A hosted version is also available.
 
 This file is the full-text companion to ${SITE_URL}/llms.txt, which carries the
-product summary, pricing and site index. Below is every published blog post in full,
-then every comparison page (Jinear vs other tools) in full.
+product summary, pricing and site index. Below is the MCP page (how to connect Claude or
+ChatGPT, and every tool) in full, then every published blog post in full, then every
+comparison page (Jinear vs other tools) in full.
 
 - Install guide: ${SELF_HOSTING_DOCS_URL}
 - Source (GitHub): ${GITHUB_URL}
 - Source (GitLab): ${GITLAB_URL}
+
+
+${mcpFullMarkdown()}
 
 
 ${articles}

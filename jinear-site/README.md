@@ -99,7 +99,9 @@ Keep these pages honest: say where the other tool is the better choice, and upda
   JSON-LD both read it, so edit the questions there.
 - `app/sitemap.ts` → `/sitemap.xml`, `app/robots.ts` → `/robots.txt`
   (explicitly allows GPTBot, ClaudeBot, PerplexityBot, etc.).
-- `/llms.txt`: a link-rich index for AI agents.
+- `/llms.txt`: a link-rich index for AI agents. `/llms-full.txt` adds the MCP page,
+  every blog post and every comparison in full. The MCP copy that the `/mcp` page
+  and both files share is in `lib/mcp.ts`.
 - `/blog/rss.xml`: RSS feed.
 - Each comparison has its own social card at `/compare/<slug>/og.png`, drawn at
   build time by `app/compare/[slug]/og.png/route.tsx` from the page title. It uses
