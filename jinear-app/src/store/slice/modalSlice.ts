@@ -10,6 +10,7 @@ import type {
     AdminWorkspacePickerModalState,
     AdminWorkspaceTierModalState,
     BasicTextInputModalState,
+    ConfirmEmailCodeModalState,
     CalendarExternalEventViewModalState,
     CalendarShareEventsModalState,
     ChangeTaskAssigneeModalState,
@@ -21,7 +22,7 @@ import type {
     ConversationSettingsModalState,
     DatePickerModalState,
     DialogModalState,
-    IntegrationFeedItemDetailModalState, IPresignedUploadData,
+    IntegrationFeedItemDetailModalState, IPresignedUploadData, IUploadQueueItem,
     LoginWith2FaMailModalState, MaterialAccessModalState, MaterialFolderPickerModalState,
     NewCalendarIntegrationModalState,
     NewChannelModalState,
@@ -57,6 +58,7 @@ import type {
     TeamWorkflowStatusPickerModalState,
     TopicPickerModalState,
     UpgradeWorkspacePlanModalState,
+    UploadStatus,
     UploadStatusModalState,
     WorkspaceMemberInviteModalState,
     WorkspaceMemberPickerModalState,
@@ -156,6 +158,9 @@ const initialState = {
         visible: false
     },
     basicTextInputModal: {
+        visible: false
+    },
+    confirmEmailCodeModal: {
         visible: false
     },
     taskTaskBoardAssignModal: {
@@ -335,6 +340,7 @@ const initialState = {
     workspacePickerModal: null | WorkspacePickerModalState;
     newTaskBoardModal: null | NewTaskBoardModalState;
     basicTextInputModal: null | BasicTextInputModalState;
+    confirmEmailCodeModal: null | ConfirmEmailCodeModalState;
     taskTaskBoardAssignModal: null | TaskTaskBoardAssignModalState;
     topicPickerModal: null | TopicPickerModalState;
     teamMemberPickerModal: null | TeamMemberPickerModalState;
@@ -385,6 +391,8 @@ const initialState = {
     adminAccountWorkspacesModal: null | AdminAccountWorkspacesModalState;
     adminAccountTeamsModal: null | AdminAccountTeamsModalState;
 };
+
+const toQueuedUploadItem = (uploadData: IPresignedUploadData): IUploadQueueItem => ({...uploadData, status: "QUEUED"});
 
 const slice = createSlice({
     name: "modal",
@@ -574,6 +582,13 @@ const slice = createSlice({
         },
         closeBasicTextInputModal: (state, action: PayloadAction<void>) => {
             state.basicTextInputModal = initialState.basicTextInputModal;
+        },
+
+        popConfirmEmailCodeModal: (state, action: PayloadAction<ConfirmEmailCodeModalState>) => {
+            state.confirmEmailCodeModal = {...action.payload, visible: true};
+        },
+        closeConfirmEmailCodeModal: (state, action: PayloadAction<void>) => {
+            state.confirmEmailCodeModal = initialState.confirmEmailCodeModal;
         },
 
         popTaskTaskBoardAssignModal: (state, action: PayloadAction<TaskTaskBoardAssignModalState>) => {
@@ -834,22 +849,22 @@ const slice = createSlice({
             state.noteTagPickerModal = initialState.noteTagPickerModal;
         },
 
-        pushDataToUploadStatusModalQueue: (state, action: PayloadAction<UploadStatusModalState>) => {
-            state.uploadStatusModal ??= {
+        pushDataToUploadStatusModalQueue: (state, action: PayloadAction<IPresignedUploadData[]>) => {
+            const queuedItems = action.payload.map(toQueuedUploadItem);
+            const existingItems = state.uploadStatusModal?.presignedUploadData ?? [];
+            state.uploadStatusModal = {
+                ...state.uploadStatusModal,
+                presignedUploadData: [...existingItems, ...queuedItems],
                 visible: true,
-                presignedUploadData: [],
-                workspaceId: action.payload.workspaceId
+                minimized: false
             };
-            const existingData = state.uploadStatusModal.presignedUploadData ?? [];
-            existingData.push(...(action.payload.presignedUploadData ?? []));
-            state.uploadStatusModal.presignedUploadData = existingData;
-            state.uploadStatusModal.workspaceId = action.payload.workspaceId;
-            state.uploadStatusModal.visible = true;
-            state.uploadStatusModal.minimized = false;
         },
-        resetUploadStatusModalQueue: (state, action: PayloadAction<void>) => {
-            if (state.uploadStatusModal) {
-                state.uploadStatusModal.presignedUploadData = [];
+        setUploadStatusModalItemStatus: (state, action: PayloadAction<{ relatedObjectId: string, status: UploadStatus }>) => {
+            const item = state.uploadStatusModal?.presignedUploadData?.find(
+                (item) => item.relatedObjectId === action.payload.relatedObjectId
+            );
+            if (item) {
+                item.status = action.payload.status;
             }
         },
         toggleUploadStatusModalMinimized: (state, action: PayloadAction<void>) => {
@@ -863,16 +878,16 @@ const slice = createSlice({
             }
         },
         removeFromUploadStatusModalQueue: (state, action: PayloadAction<string>) => {
-            if (state.uploadStatusModal?.presignedUploadData) {
-                state.uploadStatusModal.presignedUploadData = state.uploadStatusModal.presignedUploadData.filter(
-                    (item) => item.relatedObjectId !== action.payload
-                );
+            const remainingItems = (state.uploadStatusModal?.presignedUploadData ?? []).filter(
+                (item) => item.relatedObjectId !== action.payload
+            );
+            if (remainingItems.length == 0) {
+                state.uploadStatusModal = initialState.uploadStatusModal;
+                return;
             }
+            state.uploadStatusModal = {...state.uploadStatusModal, visible: true, presignedUploadData: remainingItems};
         },
 
-        popUploadStatusModal: (state, action: PayloadAction<void>) => {
-            state.uploadStatusModal = {...state.uploadStatusModal, visible: true};
-        },
         closeUploadStatusModal: (state, action: PayloadAction<void>) => {
             state.uploadStatusModal = initialState.uploadStatusModal;
         },
@@ -1024,6 +1039,8 @@ export const {
     closeNewTaskBoardModal,
     popBasicTextInputModal,
     closeBasicTextInputModal,
+    popConfirmEmailCodeModal,
+    closeConfirmEmailCodeModal,
     popTaskTaskBoardAssignModal,
     closeTaskTaskBoardAssignModal,
     popTopicPickerModal,
@@ -1098,10 +1115,9 @@ export const {
     closeNotebookPickerModal,
     popNoteTagPickerModal,
     closeNoteTagPickerModal,
-    popUploadStatusModal,
     closeUploadStatusModal,
     pushDataToUploadStatusModalQueue,
-    resetUploadStatusModalQueue,
+    setUploadStatusModalItemStatus,
     toggleUploadStatusModalMinimized,
     setUploadStatusModalMouseOver,
     removeFromUploadStatusModalQueue,
@@ -1275,6 +1291,11 @@ export const selectWorkspacePickerModalOnPick = (state: RootState) => state.moda
 export const selectNewTaskBoardModalVisible = (state: RootState) => state.modal.newTaskBoardModal?.visible;
 export const selectNewTaskBoardModalWorkspace = (state: RootState) => state.modal.newTaskBoardModal?.workspace;
 export const selectNewTaskBoardModalTeam = (state: RootState) => state.modal.newTaskBoardModal?.team;
+
+export const selectConfirmEmailCodeModalVisible = (state: RootState) => state.modal.confirmEmailCodeModal?.visible;
+export const selectConfirmEmailCodeModalEmail = (state: RootState) => state.modal.confirmEmailCodeModal?.email;
+export const selectConfirmEmailCodeModalOnSubmitCode = (state: RootState) => state.modal.confirmEmailCodeModal?.onSubmitCode;
+export const selectConfirmEmailCodeModalOnCancel = (state: RootState) => state.modal.confirmEmailCodeModal?.onCancel;
 
 export const selectBasicTextInputModalVisible = (state: RootState) => state.modal.basicTextInputModal?.visible;
 export const selectBasicTextInputModalTitle = (state: RootState) => state.modal.basicTextInputModal?.title;
@@ -1453,7 +1474,6 @@ export const selectNoteTagPickerModalInitialSelection = (state: RootState) => st
 export const selectNoteTagPickerModalOnPick = (state: RootState) => state.modal.noteTagPickerModal?.onPick;
 
 export const selectUploadStatusModalVisible = (state: RootState) => state.modal.uploadStatusModal?.visible;
-export const selectUploadStatusModalWorkspaceId = (state: RootState) => state.modal.uploadStatusModal?.workspaceId;
 export const selectUploadStatusModalPresignedUploadData = (state: RootState) => state.modal.uploadStatusModal?.presignedUploadData;
 export const selectUploadStatusModalMinimized = (state: RootState) => state.modal.uploadStatusModal?.minimized;
 export const selectUploadStatusModalMouseOver = (state: RootState) => state.modal.uploadStatusModal?.mouseOver;

@@ -59,10 +59,10 @@ public class TeamWorkflowStatusService {
     public void removeTeamWorkflowStatus(String teamWorkflowStatusId, String performingAccountId) {
         log.info("Remove team workflow status has started. teamWorkflowStatusId: {}", teamWorkflowStatusId);
         TeamWorkflowStatus teamWorkflowStatus = teamWorkflowStatusRetrieveService.retrieveEntity(teamWorkflowStatusId);
-        validateStateGroupHasMoreThanOneElement(teamWorkflowStatus.getWorkspaceId(), teamWorkflowStatus.getTeamId(), teamWorkflowStatus.getWorkflowStateGroup());
         //todo add validation for does any active task in this status?
         teamWorkflowStatusLockService.lockTeamWorkflow(teamWorkflowStatus.getTeamId());
         try {
+            validateStateGroupHasMoreThanOneElement(teamWorkflowStatus.getWorkspaceId(), teamWorkflowStatus.getTeamId(), teamWorkflowStatus.getWorkflowStateGroup());
             String passiveId = passiveService.createUserActionPassive(performingAccountId);
             teamWorkflowStatus.setPassiveId(passiveId);
             teamWorkflowStatusRepository.save(teamWorkflowStatus);

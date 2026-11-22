@@ -25,7 +25,10 @@ const slice = createSlice({
         setAuthStateAsNotDecided: (state, action: PayloadAction<void>) => {
             state.authState = "NOT_DECIDED";
         },
-        logout: () => initialState
+        setAuthStateAsNotLoggedIn: (state, action: PayloadAction<void>) => {
+            state.authState = "NOT_LOGGED_IN";
+        },
+        logout: () => ({...initialState, authState: "NOT_LOGGED_IN" as NavigationStatus})
     },
     extraReducers: (builder) => {
         builder
@@ -53,8 +56,11 @@ const slice = createSlice({
     }
 });
 
-export const {logout, setAuthStateAsNotDecided} = slice.actions;
+export const {logout, setAuthStateAsNotDecided, setAuthStateAsNotLoggedIn} = slice.actions;
 export default slice.reducer;
+
+export const isSessionEndedAction = (action: unknown) =>
+    accountApi.endpoints.me.matchRejected(action) && !action.meta.condition && action.payload?.status === 401;
 
 export const selectAuthState = (state: RootState) => state.account.authState;
 export const selectIsLoggedIn = (state: RootState) => state.account.authState == "LOGGED_IN";

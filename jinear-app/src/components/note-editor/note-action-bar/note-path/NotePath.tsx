@@ -25,20 +25,26 @@ const NotePath: React.FC<NotePathProps> = ({}) => {
     const notebookTitle = notebook?.title
         ?? (isDraftsNotebook ? t('notebookDraftsTitle') : t('notePathNotebookFallback'));
 
+    const notebookLabel = (
+        <div className={styles.buttonContent}>
+            <LuNotebook className={'icon'}/>
+            {shortenStringIfMoreThanMaxLength({text: notebookTitle, maxLength: 12})}
+        </div>
+    );
+
     return (
         <div className={styles.container}>
 
-            <Button
-                href={`/${workspace?.username}/notebook/${notebookId}`}
-                heightVariant={ButtonHeight.short}
-                className={cn(styles.breadcrumbButton, 'line-clamp')}
-                data-tooltip-multiline={notebookTitle?.length > 12 ? notebookTitle : undefined}
-            >
-                <div className={styles.buttonContent}>
-                    <LuNotebook className={'icon'}/>
-                    {shortenStringIfMoreThanMaxLength({text: notebookTitle, maxLength: 12})}
-                </div>
-            </Button>
+            {isDraftsNotebook
+                ? <div className={styles.breadcrumbLabel}>{notebookLabel}</div>
+                : <Button
+                    href={`/${workspace?.username}/notebook/${notebookId}`}
+                    heightVariant={ButtonHeight.short}
+                    className={cn(styles.breadcrumbButton, 'line-clamp')}
+                    data-tooltip-multiline={notebookTitle?.length > 12 ? notebookTitle : undefined}
+                >
+                    {notebookLabel}
+                </Button>}
             <span className={styles.separator}>{"/"}</span>
 
             {path?.path?.map((notePath, index) =>

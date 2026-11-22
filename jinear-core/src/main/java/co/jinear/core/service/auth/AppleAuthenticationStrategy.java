@@ -6,6 +6,7 @@ import co.jinear.core.model.enumtype.localestring.LocaleType;
 import co.jinear.core.model.vo.account.AccountInitializeVo;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
+import co.jinear.core.service.account.AccountEmailOwnershipService;
 import co.jinear.core.service.account.AccountInitializeService;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.account.AccountRoleService;
@@ -31,6 +32,7 @@ public class AppleAuthenticationStrategy implements AuthenticationStrategy {
     private final AccountRetrieveService accountRetrieveService;
     private final SignInWithAppleCallerService signInWithAppleCallerService;
     private final AccountInitializeService accountInitializeService;
+    private final AccountEmailOwnershipService accountEmailOwnershipService;
     private final AccountRoleService accountRoleService;
 
     @Override
@@ -53,7 +55,13 @@ public class AppleAuthenticationStrategy implements AuthenticationStrategy {
     private AccountDto retrieveAccount(IdTokenPayload idTokenPayload, LocaleType locale) {
         log.info("Retrieve account has started. idTokenPayload: {}", idTokenPayload);
         return accountRetrieveService.retrieveByEmailOptional(idTokenPayload.getEmail())
+                .map(this::confirmEmailOwnership)
                 .orElseGet(() -> retrieveAccountBySub(idTokenPayload, locale));
+    }
+
+    private AccountDto confirmEmailOwnership(AccountDto accountDto) {
+        accountEmailOwnershipService.confirmEmailOwnership(accountDto.getAccountId());
+        return accountDto;
     }
 
     private AccountDto retrieveAccountBySub(IdTokenPayload idTokenPayload, LocaleType locale) {

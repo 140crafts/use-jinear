@@ -1,10 +1,10 @@
-import {combineReducers, configureStore, type ConfigureStoreOptions} from '@reduxjs/toolkit'
+import {combineReducers, configureStore, type ConfigureStoreOptions, type Middleware} from '@reduxjs/toolkit'
 import {setupListeners} from '@reduxjs/toolkit/query'
 import {persistReducer, persistStore,} from 'redux-persist'
 import localforage from 'localforage'
 
 import {api} from './api/api.ts'
-import account, {logout} from "@/slice/accountSlice";
+import account, {isSessionEndedAction, logout} from "@/slice/accountSlice";
 import displayPreference, {resetDisplayPreferences} from "@/slice/displayPreferenceSlice";
 import firebase, {resetFirebaseSlice} from "@/slice/firebaseSlice";
 import modal, {resetModals} from "@/slice/modalSlice";
@@ -14,6 +14,7 @@ import taskAdditionalData, {resetTaskAdditionalData} from "@/slice/taskAdditiona
 import {type TypedUseSelectorHook, useDispatch, useSelector} from "react-redux";
 import {makeStoreAccessibleFromWindow} from "@/util/webviewUtils.ts";
 import {rtkQueryErrorLogger} from "@/api/errorMiddleware.ts";
+import {isLogoutPending, markLogoutPending} from "@/api/pendingLogout.ts";
 import {deleteAllLocalDocs} from "@/components/tiptap/crdt/deleteAllLocalDocs.ts";
 import Logger from "@/util/logger";
 
@@ -49,7 +50,12 @@ export const clearLocalforageStorage = () =>
 export const resetLocalStorage = () => {
     try {
         if (typeof window === "object") {
+            // The pending logout flag must survive the clear, or the old session comes back online.
+            const logoutPending = isLogoutPending();
             window.localStorage.clear();
+            if (logoutPending) {
+                markLogoutPending();
+            }
         }
     } catch (error) {
         logger.error({message: "Error on logout clear. local storage", error});
@@ -84,6 +90,15 @@ const persistConfig = {
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)
 
+const sessionEndMiddleware: Middleware = (middlewareApi) => (next) => (action) => {
+    const hadAccount = (middlewareApi.getState() as RootState).account.current != null;
+    const result = next(action);
+    if (hadAccount && isSessionEndedAction(action)) {
+        void performLogoutCleanup(store.dispatch);
+    }
+    return result;
+};
+
 export const createStore = (options?: ConfigureStoreOptions["preloadedState"] | undefined) =>
     configureStore({
         reducer: persistedReducer,
@@ -92,7 +107,8 @@ export const createStore = (options?: ConfigureStoreOptions["preloadedState"] | 
                 serializableCheck: false
             })
                 .concat(api.middleware)
-                .concat(rtkQueryErrorLogger),
+                .concat(rtkQueryErrorLogger)
+                .concat(sessionEndMiddleware),
         ...options
     });
 
@@ -127,7 +143,7 @@ export const resetAllStates = (dispatch: typeof store.dispatch) => {
 };
 
 /**
- * The one local-cleanup path for leaving an account, explicit logout and account deletion alike.
+ * The one local-cleanup path for leaving an account: explicit logout, account deletion and a session that ends with a 401.
  * Every entry point must call this, otherwise the previous user's notes stay readable on disk.
  *
  * Order is deliberate: doc keys are read before the reset wipes them, and the reset itself runs

@@ -16,6 +16,62 @@ turning a new feature on, not for keeping the server running.
 
 ---
 
+## v0.1.1687
+
+Nothing has to change before you pull.
+
+```bash
+cd ~/jinear
+docker exec jinear-db-backup /backup.sh
+docker compose pull && docker compose up -d
+```
+
+**The database updates itself.** Liquibase changes the texts of the confirmation mail. No
+table is changed.
+
+### If your instance sends mail
+
+A member whose email is not confirmed now types a 6-digit code from a mail to complete a
+password login. Before you pull, make sure that mail arrives: ask for a password reset mail
+for your own account.
+
+To run without mail, set this in `.env` and run `docker compose up -d`. The server then
+asks no member for a code.
+
+```bash
+MAIL_HOST=smtp.example.com
+```
+
+### A setting you can delete (optional)
+
+`fe.email-confirmation-url` in `.config/application.properties` is no longer read. The
+server starts with or without the line.
+
+### Account endpoints
+
+If you have your own scripts that call the API, check them for these changes:
+
+- `POST /v1/account/confirm-email` now takes `{email, password, code}`.
+- `POST /v1/account/resend-confirm-email` now takes `{email, locale?}`.
+- A password login for an email that is not confirmed fails with error code `16003`.
+
+### Rolling back
+
+Pin the previous images of `jinear-core` and `jinear-app`, then restart:
+
+```yaml
+image: registry.gitlab.com/140crafts/use-jinear/jinear-core:v0.1.1686
+```
+
+```yaml
+image: registry.gitlab.com/140crafts/use-jinear/jinear-app:v0.1.1686
+```
+
+There is no need to restore the database. The confirmation mail of the older version then
+shows the new title and text.
+
+---
+
 ## v0.1.1686
 
 AI assistants can now write notes, and search covers notes and files. Nothing has to

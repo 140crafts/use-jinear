@@ -219,8 +219,28 @@ const translations = {
         tr: "Girilen şifreler birbiri ile aynı değil!"
     },
     registerWithEmailIsSuccessfull: {
-        en: "Successfully registered. Please login to your account",
-        tr: "Başarıyla kayıt oldunuz. Lütfen giriş yapın"
+        en: "Successfully registered.",
+        tr: "Başarıyla kayıt oldunuz."
+    },
+    confirmEmailCodeModalTitle: {
+        en: "Confirm your email",
+        tr: "Emailinizi doğrulayın"
+    },
+    confirmEmailCodeModalText: {
+        en: "Type the 6-digit code from the confirmation mail we sent to ${email}. Look in your spam folder too. If you have no code, send it again.",
+        tr: "${email} adresine gönderdiğimiz doğrulama mailindeki 6 haneli kodu girin. Spam klasörünüze de bakın. Kodunuz yoksa tekrar gönderin."
+    },
+    confirmEmailCodeModalResendButton: {
+        en: "Send the code again",
+        tr: "Kodu tekrar gönder"
+    },
+    confirmEmailCodeModalResendSuccess: {
+        en: "We sent the code.",
+        tr: "Kodu gönderdik."
+    },
+    confirmEmailCodeModalSuccess: {
+        en: "Email confirmed.",
+        tr: "Email doğrulandı."
     },
     forgotPasswordFormTitle: {
         en: "Reset your password",
@@ -261,26 +281,6 @@ const translations = {
     engageCompletePasswordResetForgotPasswordPage: {
         en: "Re-send Forgot Password Mail",
         tr: "Şifremi Unuttum Mailimi Tekrar Gönder "
-    },
-    engageConfirmEmailTitleSuccess: {
-        en: "Email successfully confirmed",
-        tr: "Email başarı ile doğrulandı"
-    },
-    engageConfirmEmailTitleError: {
-        en: "Email confirmation failed!",
-        tr: "Email doğrulaması başarısız!"
-    },
-    engageConfirmEmailTextError: {
-        en: "Your confirmation mail might be timed out. Please request another confirmation mail.",
-        tr: "Doğrulama mailiniz zaman aşımına uğramış olabilir. Lütfen yeni bir doğrumala maili isteyin"
-    },
-    engageConfirmEmailContinueHomeButton: {
-        en: "Continue",
-        tr: "Devam Et"
-    },
-    engageConfirmEmailRequestNewMail: {
-        en: "Send New Confirmation Mail",
-        tr: "Yeni Doğrulama Maili Gönder"
     },
     floatingMenuBarHome: {
         en: "Home",
@@ -1317,6 +1317,10 @@ const translations = {
     globalSearchModalRootFolder: {
         en: "Root folder",
         tr: "Ana Dizin"
+    },
+    globalSearchModalOpenContainingFolder: {
+        en: "Open containing folder",
+        tr: "Bulunduğu klasörü aç"
     },
     globalSearchModalInitialState: {
         en: "Type to search tasks, notes and files",

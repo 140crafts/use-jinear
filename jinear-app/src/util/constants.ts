@@ -2,6 +2,8 @@ export const __DEV__ = !import.meta.env.MODE || import.meta.env.MODE === "develo
 
 export const ROUTE_IF_LOGGED_IN = '/';
 
+export const EMAIL_NOT_CONFIRMED_ERROR_CODE = "16003";
+
 export const TERMS = "https://jinear.co/terms";
 export const CHANGELOG = "https://jinear.co/blog";
 // Runtime-configurable via env. The unplugin replaces this at build time with

@@ -8,10 +8,10 @@ import co.jinear.core.model.enumtype.passive.PassiveReason;
 import co.jinear.core.model.enumtype.token.TokenType;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
+import co.jinear.core.service.account.AccountEmailOwnershipService;
 import co.jinear.core.service.account.AccountInitializeService;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.account.AccountRoleService;
-import co.jinear.core.service.account.AccountUpdateService;
 import co.jinear.core.service.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class SingleUseLoginTokenAuthenticationStrategy implements Authentication
     private final TokenService tokenService;
     private final AccountRetrieveService accountRetrieveService;
     private final AccountInitializeService accountInitializeService;
-    private final AccountUpdateService accountUpdateService;
+    private final AccountEmailOwnershipService accountEmailOwnershipService;
     private final AccountRoleService accountRoleService;
 
     @Override
@@ -40,7 +40,7 @@ public class SingleUseLoginTokenAuthenticationStrategy implements Authentication
                 .map(TokenDto::getRelatedObject)
                 .orElseThrow(BusinessException::new);
         invalidateToken(token.getTokenId(), accountId);
-        updateEmailAsConfirmed(accountId);
+        confirmEmailOwnership(accountId);
         Collection<GrantedAuthority> grantedAuthorities = retrieveAuthorities(accountId);
         return new AuthResponseVo(accountId, authVo.getLocale(), grantedAuthorities);
     }
@@ -72,8 +72,8 @@ public class SingleUseLoginTokenAuthenticationStrategy implements Authentication
         tokenService.passivizeToken(tokenId, accountId, PassiveReason.SINGLE_LOGIN_TOKEN_USED);
     }
 
-    private void updateEmailAsConfirmed(String accountId) {
-        accountUpdateService.updateEmailConfirmed(accountId, Boolean.TRUE);
+    private void confirmEmailOwnership(String accountId) {
+        accountEmailOwnershipService.confirmEmailOwnership(accountId);
     }
 
     private Collection<GrantedAuthority> retrieveAuthorities(String accountId) {

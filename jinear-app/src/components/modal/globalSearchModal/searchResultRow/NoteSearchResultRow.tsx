@@ -4,6 +4,7 @@ import Button, {ButtonVariants} from "@/components/button";
 import {LuFileText, LuLock} from "react-icons/lu";
 import SearchHighlight from "../searchHighlight/SearchHighlight";
 import styles from "./SearchResultRow.module.css";
+import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 
 interface NoteSearchResultRowProps {
     note: NoteDto;
@@ -14,12 +15,13 @@ interface NoteSearchResultRowProps {
 
 const NoteSearchResultRow: React.FC<NoteSearchResultRowProps> = ({note, query, workspaceUsername, onSelect}) => {
     const isPrivateNotebook = note.notebook?.visibility == "PRIVATE";
+    const notebookId = note.notebookId ?? DRAFTS_NOTEBOOK_ID;
 
     return (
         <Button
             className={styles.row}
             variant={ButtonVariants.hoverFilled2}
-            href={`/${workspaceUsername}/notebook/${note.notebookId}/note/${note.noteId}`}
+            href={`/${workspaceUsername}/notebook/${notebookId}/note/${note.noteId}`}
             onClick={onSelect}
         >
             <LuFileText className={styles.icon}/>

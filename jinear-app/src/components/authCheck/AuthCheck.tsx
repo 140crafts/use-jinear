@@ -1,6 +1,6 @@
 import {useMeQuery} from "@/store/api/accountApi";
 import {selectAuthState} from "@/store/slice/accountSlice";
-import {useAppDispatch, useTypedSelector} from "@/store";
+import {useTypedSelector} from "@/store";
 import Logger from "@/util/logger";
 import {askAppTrackingPermission} from "@/util/webviewUtils";
 import React, {useEffect} from "react";
@@ -13,7 +13,6 @@ interface AuthCheckProps {
 const logger = Logger("AuthCheck");
 
 const PATHS_EVERYONE_CAN_VISIT_INREGARD_OF_THEIR_LOGIN_STATUS = [
-    ["/engage/confirm-email"],
     ["/engage/reset-password-complete"],
     ["/engage/forgot-password"],
     ["/engage/workspace-invitation"],
@@ -41,7 +40,6 @@ const checkPathIsIn = (pathname: string, allowed: string[][]) => {
 };
 
 const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
-    const dispatch = useAppDispatch();
     const {data, error, isLoading} = useMeQuery();
     const navigate = useNavigate();
     const {pathname} = useLocation();
@@ -76,10 +74,7 @@ const AuthCheck: React.FC<AuthCheckProps> = ({}) => {
         if (authState == "LOGGED_IN") {
             askAppTrackingPermission();
         }
-        if (authState === "NOT_LOGGED_IN") {
-            // resetAllStates(dispatch);
-        }
-    }, [navigate, dispatch, authState, pathname]);
+    }, [navigate, authState, pathname]);
 
     return null;
 };

@@ -1,5 +1,5 @@
 import type {BaseResponse, RegisterViaMailRequest} from "@/model/be/jinear-core";
-import {api, tagTypes} from "./api";
+import {api} from "./api";
 
 export const accountRegisterApi = api.injectEndpoints({
     endpoints: (build) => ({
@@ -9,7 +9,6 @@ export const accountRegisterApi = api.injectEndpoints({
                 method: "POST",
                 body,
             }),
-            invalidatesTags: tagTypes,
         }),
     }),
 });

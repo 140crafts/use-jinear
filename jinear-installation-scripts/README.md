@@ -52,6 +52,18 @@ After installation, you can modify the configuration:
 | `.data/caddy/conf/Caddyfile` | Reverse proxy and SSL configuration |
 | `.secrets` | Generated credentials (keep secure!) |
 
+### Email and account confirmation
+
+Email is optional. While `MAIL_HOST` in `.env` is empty, `localhost` or the placeholder
+`smtp.example.com`, or while `MAIL_USERNAME` is the placeholder `change-me`, mail counts
+as not configured:
+
+- A new account that registers with a password is confirmed at once and can log in.
+- Password reset, email code login and invitation mails cannot be delivered.
+
+When you set a real SMTP host, a new account must type the 6-digit code from the
+confirmation mail before it can log in with a password.
+
 ## Instance Management (Admin Panel)
 
 Jinear can expose an instance admin panel at `https://your-domain.com/admin`, where a

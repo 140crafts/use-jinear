@@ -4,7 +4,7 @@ import type {
     ConfirmEmailRequest,
     ResendConfirmEmailRequest
 } from "@/model/be/jinear-core";
-import {api, tagTypes} from "./api";
+import {api} from "./api";
 
 export const accountApi = api.injectEndpoints({
     endpoints: (build) => ({
@@ -18,7 +18,6 @@ export const accountApi = api.injectEndpoints({
                 method: "POST",
                 body,
             }),
-            invalidatesTags: tagTypes,
         }),
         //
         resendConfirmEmail: build.mutation<BaseResponse, ResendConfirmEmailRequest>({
@@ -27,7 +26,6 @@ export const accountApi = api.injectEndpoints({
                 method: "POST",
                 body,
             }),
-            invalidatesTags: tagTypes,
         }),
         //
     }),

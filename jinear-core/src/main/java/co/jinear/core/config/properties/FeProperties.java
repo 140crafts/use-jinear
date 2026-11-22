@@ -12,9 +12,6 @@ import org.springframework.context.annotation.PropertySource;
 @PropertySource("classpath:application.properties")
 public class FeProperties {
 
-    @Value("${fe.email-confirmation-url}")
-    private String emailConfirmationUrl;
-
     @Value("${fe.password-reset-url}")
     private String passwordResetUrl;
 

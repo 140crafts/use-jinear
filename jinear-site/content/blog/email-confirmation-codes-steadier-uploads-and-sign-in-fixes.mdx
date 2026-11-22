@@ -1,0 +1,98 @@
+---
+title: "Release v0.1.1687. Email Confirmation Codes, Steadier Uploads, and Sign-In Fixes."
+description: "You now confirm your email with a 6-digit code that you type in the app. Uploads take new files while others are still going, logging out works without a connection, and search has a few fixes. If you self-host, this is a good one to pull soon."
+pubDate: "2026-11-22"
+tags: ["changelog", "self-hosting"]
+author: "Çağdaş Tunca"
+---
+
+There is no big new feature in this release. It is about the parts of Jinear you pass
+through without thinking about them: signing up, logging in, logging out, uploading a
+file. Those should be boring, and this release makes them a bit more boring.
+
+## Confirm your email with a code
+
+When you register with an email and a password, Jinear sends a 6-digit code to that
+address. Type it in the app and you are in. There is no link to click and no second tab
+to close.
+
+- **The code is good for up to 30 minutes.**
+- **If the mail does not arrive**, look in your spam folder, then press **Send the code
+  again**. You can ask for another mail every 5 minutes.
+- **If you close the window**, nothing is lost. Log in with your email and password and
+  Jinear asks for the code again.
+
+If you have a password but never confirmed your email, Jinear asks for the code the next
+time you log in with that password. Press **Send the code again** to get one. Signing in
+with Google or with an email code works as before.
+
+If you have an older confirmation mail with a link in it, the link no longer does
+anything. Ignore it and log in.
+
+If you self-host without a mail server, there is nothing to confirm with, so Jinear does
+not ask. New accounts can log in right away.
+
+## Uploads
+
+The upload window got a rewrite of how it keeps track of files.
+
+- **You can add files while others are uploading.** The new ones join the list and start
+  when it is their turn.
+- **A file that has finished is not sent again.**
+- **Cancel stops everything**, including the files that have not started yet.
+- **A file that fails is marked as failed**, and the rest of the list carries on.
+
+## Logging out
+
+- **Logging out works without a connection.** If you log out while your device is
+  offline, the app logs you out on that device at once and finishes the job with the
+  server when the connection is back.
+- **When a session ends, the app clears what it keeps on that device.** That is true
+  whether you log out yourself or the session ends in another way.
+
+## Password reset
+
+Two small things: the page that the reset link opens is steadier, and the mail that
+carries your new password shows it in full.
+
+## Search
+
+- **Draft notes open from search.** A note that is not in a notebook yet now opens when
+  you pick it from the results.
+- **Open containing folder.** A file in the results has a small folder button next to
+  it. It takes you to the folder the file is in, in case the file you found is not the
+  one you wanted but its neighbor is.
+- **"Drafts" is a label.** At the top of a draft note, "Drafts" used to look like a link.
+  There is no drafts page to go to, so it is plain text now.
+
+## Updating to this version
+
+If you self-host, update the way you always do:
+
+```bash
+cd ~/jinear
+docker compose pull && docker compose up -d
+```
+
+Nothing has to change before you pull. Two things to know:
+
+- **If your instance sends mail, make sure the mail really arrives.** Members who never
+  confirmed their email now need a code to log in with a password, and the code comes by
+  mail.
+- **If you have your own scripts that call the Jinear API**, the two email confirmation
+  endpoints take different fields now.
+
+Both are in the
+[upgrade guide](https://gitlab.com/140crafts/use-jinear/-/blob/main/docs/upgrading.md),
+and it is short.
+
+This release also makes sign-in stricter in a few places. If you run your own instance, I
+would pull this one soon.
+
+---
+
+If the code mail never reaches you, or logging in got harder in a way I did not intend,
+write to me.
+
+The whole thing is on [GitLab](https://gitlab.com/140crafts/use-jinear) and
+[GitHub](https://github.com/140crafts/use-jinear).

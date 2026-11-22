@@ -10,10 +10,10 @@ import co.jinear.core.model.enumtype.token.TokenType;
 import co.jinear.core.model.vo.account.AccountInitializeVo;
 import co.jinear.core.model.vo.auth.AuthResponseVo;
 import co.jinear.core.model.vo.auth.AuthVo;
+import co.jinear.core.service.account.AccountEmailOwnershipService;
 import co.jinear.core.service.account.AccountInitializeService;
 import co.jinear.core.service.account.AccountRetrieveService;
 import co.jinear.core.service.account.AccountRoleService;
-import co.jinear.core.service.account.AccountUpdateService;
 import co.jinear.core.service.token.TokenService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,19 +31,20 @@ public class OtpEmailAuthenticationStrategy implements AuthenticationStrategy {
     private final TokenService tokenService;
     private final AccountRetrieveService accountRetrieveService;
     private final AccountInitializeService accountInitializeService;
-    private final AccountUpdateService accountUpdateService;
+    private final AccountEmailOwnershipService accountEmailOwnershipService;
     private final AccountRoleService accountRoleService;
 
     @Override
     public AuthResponseVo auth(AuthVo authVo) {
         TokenDto token = retrieveToken(authVo);
+        tokenService.chargeAttempt(token.getTokenId());
         validateTokensMatch(token, authVo);
         String accountId = Optional.of(token)
                 .map(TokenDto::getRelatedObject)
                 .map(this::retrieveAccountId)
                 .orElseThrow(BusinessException::new);
         invalidateToken(token.getTokenId(), accountId);
-        updateEmailAsConfirmed(accountId);
+        confirmEmailOwnership(accountId);
         Collection<GrantedAuthority> grantedAuthorities = retrieveAuthorities(accountId);
         return new AuthResponseVo(accountId, authVo.getLocale(), grantedAuthorities);
     }
@@ -64,7 +65,6 @@ public class OtpEmailAuthenticationStrategy implements AuthenticationStrategy {
 
     private void validateTokensMatch(TokenDto token, AuthVo emailAuthVo) {
         if (!checkTokensMatch(token, emailAuthVo)) {
-            tokenService.shortenTokenLifespan(token);
             throw new NoAccessException();
         }
     }
@@ -93,7 +93,7 @@ public class OtpEmailAuthenticationStrategy implements AuthenticationStrategy {
         tokenService.passivizeToken(tokenId, accountId, PassiveReason.EMAIL_LOGIN_TOKEN_USED);
     }
 
-    private void updateEmailAsConfirmed(String accountId) {
-        accountUpdateService.updateEmailConfirmed(accountId, Boolean.TRUE);
+    private void confirmEmailOwnership(String accountId) {
+        accountEmailOwnershipService.confirmEmailOwnership(accountId);
     }
 }

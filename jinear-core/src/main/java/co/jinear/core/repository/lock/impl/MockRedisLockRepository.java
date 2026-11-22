@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 public class MockRedisLockRepository implements LockRepository {
 
     @Override
-    public Integer increment(String key, Integer ttl, TimeUnit timeUnit) {
-        return 1;
+    public Boolean acquire(String key, Integer ttl, TimeUnit timeUnit) {
+        return Boolean.TRUE;
     }
 
     @Override

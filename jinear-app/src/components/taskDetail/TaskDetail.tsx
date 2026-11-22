@@ -70,11 +70,7 @@ const TaskDetail: React.FC<TaskDetailProps> = ({
             presignedUploadData.push(uploadData);
         }
 
-        dispatch(pushDataToUploadStatusModalQueue({
-            workspaceId: task.workspaceId,
-            presignedUploadData,
-            visible: true
-        }));
+        dispatch(pushDataToUploadStatusModalQueue(presignedUploadData));
     };
 
     return (

@@ -9,6 +9,7 @@ public enum LocaleStringType {
     LOGIN_MAIL_TEXT,
     MAIL_CONFIRMATION_TITLE,
     MAIL_CONFIRMATION_TEXT,
+    // Not read any more. The constant and its rows stay for one release, so that the previous version can send its mail after a rollback.
     MAIL_CONFIRMATION_CTA_LABEL,
     PASSWORD_RESET_TITLE,
     PASSWORD_RESET_TEXT,

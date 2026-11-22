@@ -14,7 +14,6 @@ export const accountPasswordApi = api.injectEndpoints({
                 method: "POST",
                 body,
             }),
-            invalidatesTags: tagTypes,
         }),
         completeResetPassword: build.mutation<BaseResponse, CompleteResetPasswordRequest>({
             query: (body: CompleteResetPasswordRequest) => ({
@@ -22,7 +21,6 @@ export const accountPasswordApi = api.injectEndpoints({
                 method: "POST",
                 body,
             }),
-            invalidatesTags: tagTypes,
         }),
         updatePassword: build.mutation<BaseResponse, UpdatePasswordRequest>({
             query: (body: UpdatePasswordRequest) => ({

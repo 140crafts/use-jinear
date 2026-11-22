@@ -1,6 +1,7 @@
 package co.jinear.core.service.token;
 
 import co.jinear.core.converter.token.TokenConverter;
+import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotFoundException;
 import co.jinear.core.model.dto.token.TokenDto;
 import co.jinear.core.model.entity.token.Token;
@@ -11,6 +12,7 @@ import co.jinear.core.model.vo.token.GenerateTokenVo;
 import co.jinear.core.repository.TokenRepository;
 import co.jinear.core.service.passive.PassiveService;
 import co.jinear.core.system.util.DateHelper;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class TokenService {
+
+    private static final Long ATTEMPT_PENALTY_MILLIS = 10L * 60 * 1000;
 
     private final TokenRepository tokenRepository;
     private final PassiveService passiveService;
@@ -47,14 +51,6 @@ public class TokenService {
                 .map(tokenConverter::map);
     }
 
-    public TokenDto retrieveToken(String uniqueToken, TokenType tokenType) {
-        log.info("Retrieve token has started. uniqueToken: {}, tokenType: {}", uniqueToken, tokenType);
-        return tokenRepository.findByUniqueTokenAndTokenType(uniqueToken, tokenType)
-                .map(tokenConverter::map)
-                .orElseThrow(NotFoundException::new);
-
-    }
-
     public void passivizeToken(String tokenId, String accountId, PassiveReason passiveReason) {
         log.info("Passive token has started for tokenId: {}, accountId: {}, passiveReason: {}", tokenId, accountId, passiveReason);
         Token token = tokenRepository.findById(tokenId).orElseThrow(NotFoundException::new);
@@ -69,9 +65,19 @@ public class TokenService {
         tokenRepository.save(token);
     }
 
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void chargeAttempt(String tokenId) {
+        log.info("Charge token attempt has started. tokenId: {}, penaltyMillis: {}", tokenId, ATTEMPT_PENALTY_MILLIS);
+        Long now = DateHelper.now().getTime();
+        int chargedTokenCount = tokenRepository.chargeAttempt(tokenId, ATTEMPT_PENALTY_MILLIS, now);
+        if (chargedTokenCount == 0) {
+            throw new NoAccessException();
+        }
+    }
+
     public void shortenTokenLifespan(TokenDto tokenDto) {
         log.info("Shortening token lifespan tokenId: {}", tokenDto.getTokenId());
-        shortenTokenLifespan(tokenDto, (long) (10 * 60 * 1000));
+        shortenTokenLifespan(tokenDto, ATTEMPT_PENALTY_MILLIS);
     }
 
     public void shortenTokenLifespan(TokenDto tokenDto, Long subtractMillis) {

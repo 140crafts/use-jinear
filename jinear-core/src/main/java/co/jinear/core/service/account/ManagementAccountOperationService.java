@@ -26,6 +26,7 @@ public class ManagementAccountOperationService {
     private final AccountRetrieveService accountRetrieveService;
     private final AccountInitializeService accountInitializeService;
     private final AccountPasswordService accountPasswordService;
+    private final AccountUpdateService accountUpdateService;
     private final ManagementAccountLockService managementAccountLockService;
 
     @Transactional
@@ -52,6 +53,7 @@ public class ManagementAccountOperationService {
 
             String adminAccountId = resolveAdminAccountId(currentAdminRoles, adminEmail, adminPassword);
             updatePassword(adminAccountId, adminPassword);
+            accountUpdateService.updateEmailConfirmed(adminAccountId, Boolean.TRUE);
 
             log.info("Admin account is ready. accountId: {}, adminEmail: {}", adminAccountId, adminEmail);
         } finally {
@@ -98,6 +100,7 @@ public class ManagementAccountOperationService {
         AccountInitializeVo accountInitializeVo = new AccountInitializeVo();
         accountInitializeVo.setEmail(adminEmail);
         accountInitializeVo.setPassword(adminPassword);
+        accountInitializeVo.setEmailConfirmed(Boolean.TRUE);
         AccountDto accountDto = accountInitializeService.initializeAccount(accountInitializeVo);
         accountRoleService.assignRoleToAccount(accountDto.getAccountId(), RoleType.ADMIN);
         return accountDto.getAccountId();

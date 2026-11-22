@@ -172,6 +172,12 @@ export interface BasicTextInputModalState extends ModalState {
     onSubmit?: (text: string) => void;
 }
 
+export interface ConfirmEmailCodeModalState extends ModalState {
+    email?: string;
+    onSubmitCode?: (code: string) => Promise<void>;
+    onCancel?: () => void;
+}
+
 export interface TaskTaskBoardAssignModalState extends ModalState {
     taskId?: string;
 }
@@ -343,11 +349,16 @@ export interface IPresignedUploadData {
     onComplete: () => void
 }
 
+export type UploadStatus = "QUEUED" | "DONE" | "FAILED";
+
+export interface IUploadQueueItem extends IPresignedUploadData {
+    status: UploadStatus
+}
+
 export interface UploadStatusModalState extends ModalState {
-    workspaceId?: string,
     minimized?: boolean,
     mouseOver?: boolean,
-    presignedUploadData?: IPresignedUploadData[]
+    presignedUploadData?: IUploadQueueItem[]
 }
 
 export interface MaterialAccessModalState extends ModalState {

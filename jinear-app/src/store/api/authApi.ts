@@ -6,12 +6,15 @@ import type {
     LoginWithPasswordRequest
 } from "@/model/be/jinear-core";
 import {api, tagTypes} from "./api";
+import {LOGOUT_ENDPOINT_NAME, LOGOUT_PATH} from "./pendingLogout";
+
+const invalidateAllOnSuccess = (_result: unknown, error: unknown) => error ? [] : tagTypes;
 
 export const authApi = api.injectEndpoints({
     endpoints: (build) => ({
-        logout: build.mutation<void, void>({
+        [LOGOUT_ENDPOINT_NAME]: build.mutation<void, void>({
             query: () => ({
-                url: "v1/auth/logout",
+                url: LOGOUT_PATH,
                 method: "POST"
             }),
             invalidatesTags: tagTypes
@@ -21,8 +24,7 @@ export const authApi = api.injectEndpoints({
                 url: "v1/auth/otp/email/initialize",
                 method: "POST",
                 body
-            }),
-            invalidatesTags: tagTypes
+            })
         }),
         emailOtpLoginComplete: build.mutation<AuthResponse, AuthCompleteRequest>({
             query: (body: AuthCompleteRequest) => ({
@@ -30,7 +32,7 @@ export const authApi = api.injectEndpoints({
                 method: "POST",
                 body
             }),
-            invalidatesTags: tagTypes
+            invalidatesTags: invalidateAllOnSuccess
         }),
         loginWithPassword: build.mutation<AuthResponse, LoginWithPasswordRequest>({
             query: (body: LoginWithPasswordRequest) => ({
@@ -38,7 +40,7 @@ export const authApi = api.injectEndpoints({
                 method: "POST",
                 body
             }),
-            invalidatesTags: tagTypes
+            invalidatesTags: invalidateAllOnSuccess
         }),
         //
         loginWithApple: build.mutation<AuthResponse, LoginWithAppleRequest>({
@@ -47,7 +49,7 @@ export const authApi = api.injectEndpoints({
                 method: "POST",
                 body
             }),
-            invalidatesTags: tagTypes
+            invalidatesTags: invalidateAllOnSuccess
         })
         //
     })

@@ -1,10 +1,22 @@
+import { Fragment } from "react";
 import { Metadata } from "next";
 import BareNav from "@/components/homepage/bareNav/BareNav";
 import BareFooter from "@/components/homepage/bareFooter/BareFooter";
 import { buildMetadata } from "@/utils/seo";
 import { MCP_DOCS_URL } from "@/utils/constants";
 import VideoEmbed from "@/components/videoEmbed/VideoEmbed";
-import manifest from "@/lib/mcp-tools.generated.json";
+import {
+  MCP_CLIENTS,
+  MCP_LEDE,
+  MCP_MANIFEST_PATH,
+  MCP_NOTES,
+  MCP_PAGE_TITLE,
+  MCP_SCOPES,
+  MCP_SERVER_URL,
+  mcpToolSummary,
+  mcpTools,
+  mcpToolsForScope,
+} from "@/lib/mcp";
 import styles from "./index.module.scss";
 
 export const metadata: Metadata = buildMetadata({
@@ -14,74 +26,40 @@ export const metadata: Metadata = buildMetadata({
   path: "/mcp/",
   ogTitle: "Jinear for Claude and ChatGPT",
   ogDescription:
-    `Connect an AI assistant to Jinear over MCP. ${manifest.tools.length} tools, per-resource permissions, and no way to delete a task, a board or a file.`,
+    `Connect an AI assistant to Jinear over MCP. ${mcpTools.length} tools, per-resource permissions, and no way to delete a task, a board or a file.`,
 });
 
-interface Tool {
-  name: string;
-  title: string;
-  description: string;
-  annotations: { readOnlyHint: boolean };
-}
-
-const SCOPE_COPY: { scope: string; label: string; text: string }[] = [
-  { scope: "workspace:read", label: "Workspaces", text: "Workspaces, teams, members, topics and workflow statuses." },
-  { scope: "tasks:read", label: "Read tasks", text: "Tasks, boards and comments." },
-  { scope: "tasks:write", label: "Write tasks", text: "Creating and updating tasks, boards, comments, checklists, reminders and topics, and removing checklists and reminders." },
-  { scope: "calendar:read", label: "Read calendar", text: "Calendar events, including any synced from Google Calendar." },
-  { scope: "notes:read", label: "Read notes", text: "Notebooks and notes." },
-  { scope: "notes:write", label: "Write notes", text: "Creating, editing, moving and deleting notes." },
-  { scope: "files:read", label: "Read files", text: "Files, folders and links to them." },
-  { scope: "offline_access", label: "Stay connected", text: "Keeps the connection alive until you disconnect it." },
-];
-
-const tools = manifest.tools as Tool[];
-const scopes = manifest.scopes as Record<string, string[]>;
-
-const toolsForScope = (scope: string) =>
-  tools.filter((tool) => (scopes[tool.name] ?? []).includes(scope));
-
 export default function McpPage() {
-  const readOnlyCount = tools.filter((tool) => tool.annotations.readOnlyHint).length;
-
   return (
     <div className={styles.page}>
       <div className={styles.wrap}>
         <BareNav />
 
         <header className={styles.ahead}>
-          <h1 className={styles.title}>Connect Claude or ChatGPT to Jinear</h1>
-          <p className={styles.lede}>
-            Jinear speaks MCP, so an AI assistant can read and change your work directly. Ask Claude what
-            is assigned to you this week, have it write up a task from a conversation, or let ChatGPT cite
-            a note while it drafts. It uses your account, and it can only do what you allow.
-          </p>
+          <h1 className={styles.title}>{MCP_PAGE_TITLE}</h1>
+          <p className={styles.lede}>{MCP_LEDE}</p>
         </header>
 
         <article className={styles.body}>
           <h2>Connect it</h2>
           <p>
             You need a server address. On the hosted version it is{" "}
-            <code>https://api.jinear.co/mcp</code>. On your own server it is your API domain with{" "}
+            <code>{MCP_SERVER_URL}</code>. On your own server it is your API domain with{" "}
             <code>/mcp</code> on the end, and every member finds it in their profile with a copy
             button.
           </p>
 
-          <h3>In Claude</h3>
-          <ol>
-            <li>Open Settings, then Connectors.</li>
-            <li>Choose Add custom connector and paste the address.</li>
-            <li>Sign in to Jinear when it asks, then allow the permissions you want to give.</li>
-          </ol>
-          <VideoEmbed id="0VYQehxs-ps" title="Connecting Claude to Jinear" />
-
-          <h3>In ChatGPT</h3>
-          <ol>
-            <li>Turn on Developer Mode in Settings.</li>
-            <li>Add a connector and paste the same address.</li>
-            <li>Sign in and allow, exactly as above.</li>
-          </ol>
-          <VideoEmbed id="EIe6UpnrBWQ" title="Connecting ChatGPT to Jinear" />
+          {MCP_CLIENTS.map((client) => (
+            <Fragment key={client.name}>
+              <h3>In {client.name}</h3>
+              <ol>
+                {client.steps.map((step) => (
+                  <li key={step}>{step}</li>
+                ))}
+              </ol>
+              <VideoEmbed id={client.videoId} title={client.videoTitle} />
+            </Fragment>
+          ))}
 
           <p>
             Self-hosting? Your instance has to be reachable from the internet over HTTPS, because those
@@ -93,43 +71,25 @@ export default function McpPage() {
           </p>
 
           <h2>What it can do</h2>
-          <p>
-            {tools.length} tools, {readOnlyCount} of them read only. Permissions are per resource and
-            split between reading and writing, so allowing task writes does not hand over your calendar.
-          </p>
+          <p>{mcpToolSummary()}</p>
           <ul>
-            <li>
-              <strong>Deleting is limited.</strong> An assistant can delete a note, a checklist, a
-              checklist item or a reminder. It cannot delete a task, a board or a file.
-            </li>
-            <li>
-              <strong>Note edits merge.</strong> An assistant edits a note the same way a second person
-              would, so its changes and the changes of anyone who has the note open come together.
-            </li>
-            <li>
-              <strong>The calendar and file storage are read only.</strong> A calendar write would mean
-              writing to Google on your behalf. An assistant can attach a file to a task, but it cannot
-              upload into your files or change them.
-            </li>
-            <li>
-              <strong>Every tool works inside one workspace</strong>, checked against your account on
-              every call.
-            </li>
-            <li>
-              <strong>You can disconnect at any time</strong>, from your profile. It takes effect on
-              the next call, not when a token expires.
-            </li>
+            {MCP_NOTES.map((note) => (
+              <li key={note.lead}>
+                <strong>{note.lead}</strong>
+                {note.rest}
+              </li>
+            ))}
           </ul>
 
           <h2>Every tool</h2>
           <p>
             Grouped by the permission it asks for. This list shows the hosted version. A self-hosted
             server can run a different version; it lists its exact tools at your API domain with{" "}
-            <code>/v1/mcp/manifest</code> on the end.
+            <code>{MCP_MANIFEST_PATH}</code> on the end.
           </p>
 
-          {SCOPE_COPY.map((entry) => {
-            const scopeTools = toolsForScope(entry.scope);
+          {MCP_SCOPES.map((entry) => {
+            const scopeTools = mcpToolsForScope(entry.scope);
             return (
               <section key={entry.scope} className={styles.scope}>
                 <h3>

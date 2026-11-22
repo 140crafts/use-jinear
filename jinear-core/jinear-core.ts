@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-11-07 12:42:51.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-22 12:30:33.
 
 export interface BaseDto {
     createdDate: Date;
@@ -18,8 +18,8 @@ export interface PageDto<T> {
     hasContent: boolean;
     hasNext: boolean;
     hasPrevious: boolean;
-    last: boolean;
     first: boolean;
+    last: boolean;
 }
 
 export interface AccountCommunicationPermissionDto extends BaseDto {
@@ -93,8 +93,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    notExpired: boolean;
     expired: boolean;
+    notExpired: boolean;
 }
 
 export interface CalendarDto {
@@ -189,10 +189,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gthreadId: string;
-    ginternalDate: string;
-    ghistoryId: string;
     gid: string;
+    ginternalDate: string;
+    gthreadId: string;
+    ghistoryId: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -1433,7 +1433,9 @@ export interface CompleteResetPasswordRequest extends BaseRequest {
 }
 
 export interface ConfirmEmailRequest extends BaseRequest {
-    uniqueToken: string;
+    email: string;
+    password: string;
+    code: string;
 }
 
 export interface InitializeResetPasswordRequest extends BaseRequest {
@@ -1443,7 +1445,7 @@ export interface InitializeResetPasswordRequest extends BaseRequest {
 
 export interface ResendConfirmEmailRequest extends BaseRequest {
     locale: LocaleType;
-    token: string;
+    email: string;
 }
 
 export interface SetCommunicationPermissionsRequest extends BaseRequest {
@@ -2962,9 +2964,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    filename: string;
-    description: string;
     uri: URI;
+    description: string;
+    filename: string;
 }
 
 export interface InputStreamSource {
@@ -3282,7 +3284,7 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "NOTE_FTS_REFRESH" | "MATERIAL_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE" | "MANAGEMENT_ADMIN_ACCOUNT_SYNC";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "ACCOUNT_CONFIRM_EMAIL_MAIL" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "NOTE_FTS_REFRESH" | "MATERIAL_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE" | "MANAGEMENT_ADMIN_ACCOUNT_SYNC";
 
 export type InstanceFlagType = "REGISTER_WITH_MAIL" | "FORGOT_PASSWORD" | "SIGN_IN_WITH_APPLE" | "SIGN_IN_WITH_GOOGLE" | "SIGN_IN_WITH_EMAIL_CODE" | "WORKSPACE_INIT" | "ATTACH_GOOGLE_CALENDAR" | "MCP_SERVER";
 

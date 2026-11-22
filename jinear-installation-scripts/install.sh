@@ -470,6 +470,7 @@ prompt_configuration() {
     echo ""
     echo -e "  ${BOLD}Email Configuration (Optional)${NC}"
     echo -e "  ${INFO} Configure SMTP to enable email notifications"
+    echo -e "  ${INFO} Without SMTP, new accounts are not asked to confirm their email"
     local configure_email=$(prompt_input "  Configure email now? [y/N]" "")
 
     if [[ $configure_email =~ ^[Yy]$ ]]; then

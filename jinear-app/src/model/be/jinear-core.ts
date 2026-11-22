@@ -1433,7 +1433,9 @@ export interface CompleteResetPasswordRequest extends BaseRequest {
 }
 
 export interface ConfirmEmailRequest extends BaseRequest {
-    uniqueToken: string;
+    email: string;
+    password: string;
+    code: string;
 }
 
 export interface InitializeResetPasswordRequest extends BaseRequest {
@@ -1443,7 +1445,7 @@ export interface InitializeResetPasswordRequest extends BaseRequest {
 
 export interface ResendConfirmEmailRequest extends BaseRequest {
     locale: LocaleType;
-    token: string;
+    email: string;
 }
 
 export interface SetCommunicationPermissionsRequest extends BaseRequest {
@@ -3282,7 +3284,7 @@ export type LocaleStringType = "LOGIN_SMS_TEXT" | "LOGIN_MAIL_TITLE" | "LOGIN_MA
 
 export type LocaleType = "TR" | "EN";
 
-export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "NOTE_FTS_REFRESH" | "MATERIAL_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE" | "MANAGEMENT_ADMIN_ACCOUNT_SYNC";
+export type LockSourceType = "BALANCE" | "TOPIC_TASK_INIT" | "TEAM_TASK_INIT" | "TEAM_WORKFLOW_STATUS" | "ACCOUNT_PASSWORD_RESET" | "ACCOUNT_CONFIRM_EMAIL_MAIL" | "TASK_BOARD_EDIT" | "REMINDER_JOB_PROCESS" | "CONVERSATION_INIT" | "CONVERSATION" | "PROJECT_MILESTONE" | "PROJECT_DOMAIN" | "MATERIAL_ACCESS_UPDATE" | "TASK_FTS_REFRESH" | "NOTE_FTS_REFRESH" | "MATERIAL_FTS_REFRESH" | "RICH_TEXT_SYNC" | "NOTE_INIT" | "NOTE_UPDATE" | "MANAGEMENT_ADMIN_ACCOUNT_SYNC";
 
 export type InstanceFlagType = "REGISTER_WITH_MAIL" | "FORGOT_PASSWORD" | "SIGN_IN_WITH_APPLE" | "SIGN_IN_WITH_GOOGLE" | "SIGN_IN_WITH_EMAIL_CODE" | "WORKSPACE_INIT" | "ATTACH_GOOGLE_CALENDAR" | "MCP_SERVER";
 
