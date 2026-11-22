@@ -6059,6 +6059,10 @@ const translations = {
         en: 'You can not move notes under drafts.',
         tr: 'Notları taslakların altına atamazsınız.'
     },
+    dropNoteOnNotebookToMoveIt: {
+        en: 'Drop the note on the notebook to move it there.',
+        tr: 'Notu oraya taşımak için not defterinin üzerine bırakın.'
+    },
     untitledNote: {
         en: 'Untitled',
         tr: 'Başlıksız'

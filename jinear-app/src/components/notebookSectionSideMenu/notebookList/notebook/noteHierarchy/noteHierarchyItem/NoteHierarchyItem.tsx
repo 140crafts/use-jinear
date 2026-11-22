@@ -73,6 +73,10 @@ const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
 
             if (!draggedNoteId || !currentNoteId || !workspace) return;
             if (draggedNoteId === currentNoteId) return;
+            if (dragged?.notebookId != note?.notebookId) {
+                toast(t("dropNoteOnNotebookToMoveIt"));
+                return;
+            }
 
             moveNote({
                 workspaceId: workspace.workspaceId,
@@ -87,7 +91,7 @@ const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
     return (
         <div className={styles.noteButtonGroup}>
             <div className={cn(styles.noteRow, atPath && styles.noteAtPath)}
-                 draggable={!isNoteDraft}
+                 draggable={true}
                  onDragStart={_onDragStart}
                  onDragOver={_onDragOver}
                  onDrop={handleDrop}

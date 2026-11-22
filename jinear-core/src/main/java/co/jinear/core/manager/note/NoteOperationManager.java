@@ -2,7 +2,6 @@ package co.jinear.core.manager.note;
 
 import co.jinear.core.converter.note.NoteInitializeRequestToVoConverter;
 import co.jinear.core.converter.note.NoteUpdateRequestToVoConverter;
-import co.jinear.core.exception.NoAccessException;
 import co.jinear.core.exception.NotValidException;
 import co.jinear.core.model.dto.note.NoteDto;
 import co.jinear.core.model.dto.notebook.NotebookDto;
@@ -19,6 +18,7 @@ import co.jinear.core.service.note.NoteOperationService;
 import co.jinear.core.service.note.NoteRetrieveService;
 import co.jinear.core.service.note.notebook.NotebookRetrieveService;
 import co.jinear.core.service.passive.PassiveService;
+import co.jinear.core.validator.note.NoteAccessValidator;
 import co.jinear.core.validator.notebook.NotebookAccessValidator;
 import co.jinear.core.validator.workspace.WorkspaceValidator;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +35,7 @@ public class NoteOperationManager {
     private final SessionInfoService sessionInfoService;
     private final WorkspaceValidator workspaceValidator;
     private final NotebookAccessValidator notebookAccessValidator;
+    private final NoteAccessValidator noteAccessValidator;
     private final NotebookRetrieveService notebookRetrieveService;
     private final NoteRetrieveService noteRetrieveService;
     private final NoteOperationService noteOperationService;
@@ -56,11 +57,9 @@ public class NoteOperationManager {
     public BaseResponse changeNotebook(String workspaceId, String noteId, String notebookId) {
         String currentAccountId = sessionInfoService.currentAccountId();
         NoteDto note = noteRetrieveService.retrieve(noteId);
-        String noteWorkspaceId = note.getWorkspaceId();
-        validateWorkspaceAccessAndMatchPath(workspaceId, currentAccountId, noteWorkspaceId);
-        validateNotebookAccess(currentAccountId, note.getNotebookId());
+        noteAccessValidator.validateCanEdit(currentAccountId, workspaceId, note);
         NotebookDto targetNotebook = validateNotebookAccess(currentAccountId, notebookId);
-        validateNotebookIsWithinWorkspace(targetNotebook, noteWorkspaceId);
+        validateNotebookIsWithinWorkspace(targetNotebook, note.getWorkspaceId());
         log.info("Change note notebook has started. currentAccountId: {}", currentAccountId);
         noteOperationService.changeNotebook(noteId, notebookId);
         return new BaseResponse();
@@ -68,8 +67,7 @@ public class NoteOperationManager {
 
     public BaseResponse update(String workspaceId, NoteUpdateRequest request) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
-        validateNoteAccess(currentAccountId, request.getNoteId());
+        validateCanEdit(currentAccountId, workspaceId, request.getNoteId());
         log.info("Update note has started. currentAccountId: {}", currentAccountId);
         NoteUpdateVo noteUpdateVo = noteUpdateRequestToVoConverter.convert(request);
         noteOperationService.update(noteUpdateVo);
@@ -78,8 +76,7 @@ public class NoteOperationManager {
 
     public BaseResponse move(String workspaceId, NoteMoveRequest request) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
-        validateNoteAccess(currentAccountId, request.getNoteId());
+        validateCanEdit(currentAccountId, workspaceId, request.getNoteId());
         log.info("Move note has started. currentAccountId: {}", currentAccountId);
         noteOperationService.moveTo(request.getNoteId(), request.getParentNoteId());
         return new BaseResponse();
@@ -87,20 +84,16 @@ public class NoteOperationManager {
 
     public BaseResponse delete(String workspaceId, String noteId) {
         String currentAccountId = sessionInfoService.currentAccountId();
-        workspaceValidator.validateHasAccess(currentAccountId, workspaceId);
-        validateNoteAccess(currentAccountId, noteId);
+        validateCanEdit(currentAccountId, workspaceId, noteId);
         log.info("Delete note has started. currentAccountId: {}", currentAccountId);
         String passiveId = passiveService.createUserActionPassive(currentAccountId);
         noteOperationService.delete(noteId, passiveId);
         return new BaseResponse();
     }
 
-    private void validateNoteAccess(String currentAccountId, String noteId) {
-        NoteDto noteDto = noteRetrieveService.retrieve(noteId);
-        boolean isOwner = noteDto.getOwnerId().equalsIgnoreCase(currentAccountId);
-        if (!isOwner) {
-            validateNotebookAccess(currentAccountId, noteDto.getNotebookId());
-        }
+    private void validateCanEdit(String currentAccountId, String workspaceId, String noteId) {
+        NoteDto note = noteRetrieveService.retrieve(noteId);
+        noteAccessValidator.validateCanEdit(currentAccountId, workspaceId, note);
     }
 
     private NotebookDto validateNotebookAccess(String currentAccountId, String notebookId) {
@@ -116,13 +109,6 @@ public class NoteOperationManager {
         if (Objects.isNull(notebookDto) || !workspaceId.equalsIgnoreCase(notebookDto.getWorkspaceId())) {
             throw new NotValidException();
         }
-    }
-
-    private void validateWorkspaceAccessAndMatchPath(String workspaceIdFromPath, String currentAccountId, String noteWorkspaceId) {
-        if (!workspaceIdFromPath.equalsIgnoreCase(noteWorkspaceId)) {
-            throw new NoAccessException();
-        }
-        workspaceValidator.validateHasAccess(currentAccountId, noteWorkspaceId);
     }
 
     private NoteInitializeResponse mapResponse(NoteDto noteDto) {
