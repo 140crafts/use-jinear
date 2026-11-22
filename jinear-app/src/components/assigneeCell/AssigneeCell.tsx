@@ -14,13 +14,15 @@ interface AssigneeCellProps {
     tooltipPosition?: "left" | "right";
     className?: string;
     buttonVariant?: string;
+    readOnly?: boolean;
 }
 
 const AssigneeCell: React.FC<AssigneeCellProps> = ({
                                                        task,
                                                        tooltipPosition = "right",
                                                        className,
-                                                       buttonVariant = ButtonVariants.filled
+                                                       buttonVariant = ButtonVariants.filled,
+                                                       readOnly = false
                                                    }) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
@@ -33,6 +35,14 @@ const AssigneeCell: React.FC<AssigneeCellProps> = ({
         event?.preventDefault?.();
         dispatch(popChangeTaskAssigneeModal({visible: true, task}));
     };
+
+    if (readOnly) {
+        return task?.assignedToAccount ? (
+            <div className={cn(styles.container, styles.readOnly, className)}>
+                <CurrentAccountInfo assignedToAccount={task.assignedToAccount}/>
+            </div>
+        ) : null;
+    }
 
     return task ? (
         <Button

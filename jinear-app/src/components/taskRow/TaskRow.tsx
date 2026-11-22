@@ -17,9 +17,10 @@ interface TaskRowProps {
     className?: string;
     withBottomBorderLine?: boolean;
     task: TaskDto;
+    readOnly?: boolean;
 }
 
-const TaskRow: React.FC<TaskRowProps> = ({className, task, withBottomBorderLine = true}) => {
+const TaskRow: React.FC<TaskRowProps> = ({className, task, withBottomBorderLine = true, readOnly = false}) => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
     const tag = `${task.team?.tag}-${task.teamTagNo}`;
@@ -55,7 +56,7 @@ const TaskRow: React.FC<TaskRowProps> = ({className, task, withBottomBorderLine 
     return task.workspace && task.team ? (
         <div className={cn(styles.container, withBottomBorderLine ? styles.bottomBorderLine : null, className)}>
             <div className={styles.mainInfoContainer}>
-                <WorkflowStatus task={task} buttonVariant={ButtonVariants.default}/>
+                <WorkflowStatus task={task} buttonVariant={ButtonVariants.default} readOnly={readOnly}/>
                 <Button
                     href={`/${task.workspace?.username}/task/${tag}`}
                     className={cn(styles.button, isArchived ? styles.archivedButton : null)}
@@ -68,27 +69,31 @@ const TaskRow: React.FC<TaskRowProps> = ({className, task, withBottomBorderLine 
             <div className={styles.rightInfoContainer}>
                 {task.topic && <TopicInfo topic={task.topic}/>}
                 <TeamTagCell task={task}/>
-                <AssigneeCell task={task}/>
-                <Button
-                    variant={ButtonVariants.filled}
-                    className={styles.iconButton}
-                    onClick={popChangeDatesModal}
-                    data-tooltip-right={t("taskRowChangeTaskDates")}
-                >
-                    <div className={styles.iconContainer}>
-                        <IoTimeOutline size={14}/>
-                    </div>
-                </Button>
-                <Button
-                    variant={ButtonVariants.filled}
-                    className={styles.iconButton}
-                    onClick={popBoardsModal}
-                    data-tooltip-right={t("taskRowBoardsTooltip")}
-                >
-                    <div className={styles.iconContainer}>
-                        <IoReaderOutline size={14}/>
-                    </div>
-                </Button>
+                <AssigneeCell task={task} readOnly={readOnly}/>
+                {!readOnly && (
+                    <>
+                        <Button
+                            variant={ButtonVariants.filled}
+                            className={styles.iconButton}
+                            onClick={popChangeDatesModal}
+                            data-tooltip-right={t("taskRowChangeTaskDates")}
+                        >
+                            <div className={styles.iconContainer}>
+                                <IoTimeOutline size={14}/>
+                            </div>
+                        </Button>
+                        <Button
+                            variant={ButtonVariants.filled}
+                            className={styles.iconButton}
+                            onClick={popBoardsModal}
+                            data-tooltip-right={t("taskRowBoardsTooltip")}
+                        >
+                            <div className={styles.iconContainer}>
+                                <IoReaderOutline size={14}/>
+                            </div>
+                        </Button>
+                    </>
+                )}
             </div>
         </div>
     ) : null;

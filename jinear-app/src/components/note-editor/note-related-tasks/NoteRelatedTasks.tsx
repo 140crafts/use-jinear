@@ -40,7 +40,7 @@ const NoteRelatedTasks: React.FC = () => {
             <div className={styles.title}>{t("noteRelatedTasksTitle")}</div>
             <div className={styles.list}>
                 {tasks.map((task, index) => (
-                    <TaskRow key={task.taskId} task={task} withBottomBorderLine={index != tasks.length - 1}/>
+                    <TaskRow key={task.taskId} task={task} withBottomBorderLine={index != tasks.length - 1} readOnly/>
                 ))}
             </div>
         </div>
