@@ -9,6 +9,7 @@ import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 import {useLiveText} from "@/components/tiptap/crdt/useLiveText.ts";
 import {useDraftNoteAck} from "@/components/note-editor/useDraftNoteAck.ts";
 import {useNoteTitleMirror} from "@/components/note-editor/useNoteTitleMirror.ts";
+import {useRefreshNoteListsAfterFirstEdit} from "@/components/note-editor/useRefreshNoteListsAfterFirstEdit.ts";
 import type {ICollaborativeRichTextRef} from "@/components/tiptap/CollaborativeRichText.tsx";
 import {useFilterNotesQuery} from "@/api/noteFilterApi.ts";
 import {useNotebookById} from "@/hooks/useNotebookById.ts";
@@ -68,6 +69,8 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
         workspaceId: workspace.workspaceId,
         pendingDraftId: isPendingCreate ? noteId : undefined
     });
+
+    useRefreshNoteListsAfterFirstEdit(status);
 
     const registerEditor = useCallback((editor: ICollaborativeRichTextRef | null) => {
         editorRef.current = editor;

@@ -2,12 +2,16 @@ package co.jinear.core.repository.note;
 
 import co.jinear.core.model.entity.BaseEntity;
 import co.jinear.core.model.entity.note.Note;
+import co.jinear.core.model.entity.richtext.RichText;
 import co.jinear.core.model.vo.note.NoteFilterVo;
 import co.jinear.core.repository.criteriabuilder.NoteFilterCriteriaBuilder;
 import com.google.common.collect.Lists;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Expression;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -70,8 +75,10 @@ public class NoteFilterRepository {
                                                          Pageable pageable) {
 
         criteriaQuery.where(searchPredicate.toArray(new Predicate[searchPredicate.size()]));
-        criteriaBuilder.asc(root.get(BaseEntity.Fields.createdDate));
-        criteriaQuery.orderBy(criteriaBuilder.desc(root.get(BaseEntity.Fields.createdDate)));
+        Expression<Date> lastEditedDate = lastEditedDate(criteriaBuilder, root);
+        criteriaQuery.orderBy(
+                criteriaBuilder.desc(lastEditedDate),
+                criteriaBuilder.desc(root.get(BaseEntity.Fields.createdDate)));
 
         List<Note> result = entityManager.createQuery(criteriaQuery)
                 .setFirstResult((int) pageable.getOffset())
@@ -82,5 +89,13 @@ public class NoteFilterRepository {
         countQuery.where(countPredicate.toArray(new Predicate[countPredicate.size()]));
         Long count = entityManager.createQuery(countQuery).getSingleResult();
         return new PageImpl<>(result, pageable, count);
+    }
+
+    private Expression<Date> lastEditedDate(CriteriaBuilder criteriaBuilder, Root<Note> root) {
+        Join<Note, RichText> richTextJoin = root.join(Note.Fields.richText, JoinType.LEFT);
+        return criteriaBuilder.<Date>coalesce()
+                .value(richTextJoin.get(BaseEntity.Fields.lastUpdatedDate))
+                .value(richTextJoin.get(BaseEntity.Fields.createdDate))
+                .value(root.get(BaseEntity.Fields.createdDate));
     }
 }
