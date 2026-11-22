@@ -23,3 +23,15 @@
     top: calc(var(--nav-bar-height) - .5rem);
     z-index: 1;
 }
+
+.taskLinkChip {
+    padding: 0 .375rem;
+    border: thin solid var(--c-link-color);
+    border-radius: var(--border-radius);
+    color: var(--c-link-color);
+    font-size: .875em;
+    font-weight: 500;
+    white-space: nowrap;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+}

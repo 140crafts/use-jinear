@@ -1,0 +1,17 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+}
+
+.title {
+    color: var(--c-secondary-shade-0-op025);
+    padding: 0 7.5px;
+}
+
+.list {
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(0, var(--c-primary), var(--c-primary-shade-0-op05));
+    border-radius: var(--border-radius);
+}

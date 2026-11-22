@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styles from './NoteEditor.module.css';
 import NoteHeader from "@/components/note-editor/note-header/NoteHeader.tsx";
 import NoteActionBar from "@/components/note-editor/note-action-bar/NoteActionBar.tsx";
@@ -17,6 +17,7 @@ import {selectDocKey} from "@/slice/noteDraftsSlice.ts";
 import useTranslation from "@/locals/useTranslation.ts";
 import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
 import NotePropertyBar from "@/components/note-editor/note-property-bar/NotePropertyBar.tsx";
+import NoteRelatedTasks from "@/components/note-editor/note-related-tasks/NoteRelatedTasks.tsx";
 
 interface NoteEditorProps {
     workspace: WorkspaceDto;
@@ -27,6 +28,7 @@ interface NoteEditorProps {
 const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) => {
     const {t} = useTranslation();
     const editorRef = useRef<ICollaborativeRichTextRef | null>(null);
+    const [taskTags, setTaskTags] = useState<string[]>([]);
 
     // The doc's local identity never changes: for draft-born notes it stays the original draft id
     // (aliased from the real noteId after creation), so IndexedDB content survives URL canonicalization.
@@ -85,7 +87,9 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
             doc,
             status,
             flushNow,
-            registerEditor
+            registerEditor,
+            taskTags,
+            setTaskTags
         }}>
             <div className={styles.container} key={noteId}>
                 <NoteActionBar/>
@@ -94,6 +98,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
                     : <>
                         <NoteHeader/>
                         <NotePropertyBar/>
+                        <NoteRelatedTasks/>
                         {doc ? <NoteEditorBody/> : <CircularLoading/>}
                     </>}
             </div>

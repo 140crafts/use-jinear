@@ -2052,6 +2052,7 @@ export interface TaskFilterRequest extends BaseRequest {
      */
     milestoneIds?: string[] | null;
     taskboardIds?: string[] | null;
+    taskTags?: string[] | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {

@@ -7101,6 +7101,14 @@ const translations = {
         en: "What's new",
         tr: "Yenilikler"
     },
+    textEditorInsertTaskLink: {
+        en: "Link a task",
+        tr: "Görev bağla"
+    },
+    noteRelatedTasksTitle: {
+        en: "Tasks mentioned in this note",
+        tr: "Bu notta bahsedilen görevler"
+    },
 
 };
 

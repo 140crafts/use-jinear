@@ -1,8 +1,10 @@
+import type {Extension} from "@tiptap/core";
 import Collaboration from "@tiptap/extension-collaboration";
 import {EditorContent, useEditor} from "@tiptap/react";
 import cn from "classnames";
 import {forwardRef, useImperativeHandle} from "react";
 import type * as Y from "yjs";
+import type {WorkspaceDto} from "@/be/jinear-core";
 import ActionBar, {type TipTapActionBarMode} from "./actionBar/ActionBar";
 import {CRDT_FIELD} from "./crdt/constants";
 import {buildEditorExtensions} from "./editorExtensions";
@@ -23,6 +25,8 @@ interface CollaborativeRichTextProps {
     editorWrapperClassName?: string;
     actionBarMode?: TipTapActionBarMode;
     workspaceIdForImages?: string;
+    workspaceForTaskLinks?: WorkspaceDto;
+    extensions?: Extension[];
     /** Called on every change with the rendered HTML ("" when empty), to feed the CRDT projection. */
     onHtml?: (html: string) => void;
     /** Called on blur so the transport can force a settle flush (HTML included). */
@@ -41,6 +45,8 @@ const CollaborativeRichText = (
         editorWrapperClassName,
         actionBarMode = "full",
         workspaceIdForImages,
+        workspaceForTaskLinks,
+        extensions = [],
         onHtml,
         onSettle,
         actionBarClassName,
@@ -65,7 +71,8 @@ const CollaborativeRichText = (
                 Collaboration.configure({
                     document: doc,
                     field: CRDT_FIELD
-                })
+                }),
+                ...extensions
             ],
             editable,
             onUpdate({editor}) {
@@ -90,6 +97,7 @@ const CollaborativeRichText = (
                     editor={editor}
                     mode={actionBarMode}
                     workspaceIdForImages={workspaceIdForImages}
+                    workspaceForTaskLinks={workspaceForTaskLinks}
                     className={actionBarClassName}
                 />
             )}

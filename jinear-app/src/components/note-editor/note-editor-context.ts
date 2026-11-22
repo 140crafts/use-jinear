@@ -22,6 +22,8 @@ export interface INoteEditorContext {
     status?: LiveTextStatus;
     flushNow?: () => void;
     registerEditor?: (editor: ICollaborativeRichTextRef | null) => void;
+    taskTags?: string[];
+    setTaskTags?: (taskTags: string[]) => void;
 }
 
 export const NoteEditorContext = createContext<INoteEditorContext>({});
