@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styles from './Notebook.module.css';
 import type {NotebookDto, NotebookVisibilityType, NoteDto, WorkspaceDto} from "@/be/jinear-core.ts";
 import Button, {ButtonVariants} from "@/components/button";
@@ -54,6 +54,7 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
     const Icon = ACCESS_TYPE_ICON_MAP[notebook.visibility];
     const tooltipKey = ACCESS_TYPE_TOOLTIP_MAP[notebook.visibility];
 
+    const [isDropTarget, setIsDropTarget] = useState(false);
     const [moveNote] = useMoveNoteMutation();
     const [changeNotebook] = useChangeNotebookMutation();
     const createNoteInNotebook = useCreateNoteDraft(workspace, notebook.notebookId);
@@ -79,8 +80,21 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
         );
     }
 
+    const onDragEnter = (e: React.DragEvent<HTMLElement>) => {
+        if (e.dataTransfer.types.includes(NOTE_DRAG_TYPE)) {
+            setIsDropTarget(true);
+        }
+    }
+
+    const onDragLeave = (e: React.DragEvent<HTMLElement>) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node | null)) {
+            setIsDropTarget(false);
+        }
+    }
+
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
+        setIsDropTarget(false);
         const raw = e.dataTransfer.getData(NOTE_DRAG_TYPE);
         if (!raw) return;
 
@@ -108,10 +122,12 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
 
             <div className={cn(styles.notebookButtonContainer, atPath && styles.atPath)}>
                 <Button
-                    className={styles.notebookButton}
+                    className={cn(styles.notebookButton, isDropTarget && styles.dropTarget)}
                     variant={ButtonVariants.hoverFilled2}
                     onClick={toggle}
+                    onDragEnter={onDragEnter}
                     onDragOver={e => e.preventDefault()}
+                    onDragLeave={onDragLeave}
                     onDrop={handleDrop}
                 >
                     {open ? <LuFolderOpen className={'icon'}/> : <LuFolder className={'icon'}/>}

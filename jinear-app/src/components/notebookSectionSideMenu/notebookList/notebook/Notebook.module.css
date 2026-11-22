@@ -26,6 +26,11 @@
     padding-right: .25rem;
 }
 
+.notebookButton.dropTarget {
+    color: var(--c-secondary-shade-1);
+    background-color: var(--c-primary-shade-1);
+}
+
 .notebookDetailsButton {
     padding: 0.42rem 0.25rem;
 }
