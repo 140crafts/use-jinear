@@ -55,7 +55,7 @@ const Tiptap = (
     }: TiptapProps,
     ref: any
 ) => {
-    const [html, setHtml] = useState<string>("");
+    const [html, setHtml] = useState<string>(content ?? "");
     const editor = useEditor({
         editorProps: {
             attributes: {
@@ -85,6 +85,13 @@ const Tiptap = (
     useEffect(() => {
         editor?.setEditable(editable);
     }, [editable, editor]);
+
+    useEffect(() => {
+        if (!editor || editable || content === undefined || content === editor.getHTML()) {
+            return;
+        }
+        editor.commands.setContent(content, {emitUpdate: true});
+    }, [content, editable, editor]);
 
     return (
         <div className={cn(styles.container, className)} onFocus={onFocus}>
