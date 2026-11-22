@@ -1,6 +1,6 @@
 /* tslint:disable */
 /* eslint-disable */
-// Generated using typescript-generator version 3.0.1157 on 2026-11-22 12:30:33.
+// Generated using typescript-generator version 3.0.1157 on 2026-11-22 14:55:23.
 
 export interface BaseDto {
     createdDate: Date;
@@ -93,8 +93,8 @@ export interface PlainAccountProfileDto extends BaseDto {
 export interface InMemoryCacheItem {
     item: any;
     expiresAt: Date;
-    expired: boolean;
     notExpired: boolean;
+    expired: boolean;
 }
 
 export interface CalendarDto {
@@ -189,10 +189,10 @@ export interface GmailMessageDto extends BaseDto {
     to: string;
     subject: string;
     body: string;
-    gid: string;
     ginternalDate: string;
-    gthreadId: string;
     ghistoryId: string;
+    gthreadId: string;
+    gid: string;
 }
 
 export interface GoogleHandleTokenDto {
@@ -2052,6 +2052,7 @@ export interface TaskFilterRequest extends BaseRequest {
      */
     milestoneIds?: string[] | null;
     taskboardIds?: string[] | null;
+    taskTags?: string[] | null;
 }
 
 export interface TaskInitializeRequest extends BaseRequest {
@@ -2964,9 +2965,9 @@ export interface Resource extends InputStreamSource {
     file: any;
     readable: boolean;
     url: URL;
-    uri: URI;
-    description: string;
     filename: string;
+    description: string;
+    uri: URI;
 }
 
 export interface InputStreamSource {

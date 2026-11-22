@@ -80,6 +80,7 @@ public class TaskSearchRepository {
             taskSearchCriteriaBuilder.addWorkspaceId(taskSearchFilterVo.getWorkspaceId(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addTeamIdList(teamIdList, criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addTeamIdNotInList(taskSearchFilterVo.getExcludingTeamIdList(), criteriaBuilder, taskRoot, predicateList);
+            taskSearchCriteriaBuilder.addTaskTagList(taskSearchFilterVo.getTaskTags(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addTopicIdList(taskSearchFilterVo.getTopicIds(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addOwnerIdList(taskSearchFilterVo.getOwnerIds(), criteriaBuilder, taskRoot, predicateList);
             taskSearchCriteriaBuilder.addAssignedToList(taskSearchFilterVo.getAssigneeIds(), criteriaBuilder, taskRoot, predicateList);
@@ -147,6 +148,7 @@ public class TaskSearchRepository {
                 taskSearchCriteriaBuilder.addWorkspaceId(taskSearchFilterVo.getWorkspaceId(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addTeamIdList(List.of(teamId), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addTeamIdNotInList(taskSearchFilterVo.getExcludingTeamIdList(), criteriaBuilder, taskRoot, teamPredicateList);
+                taskSearchCriteriaBuilder.addTaskTagList(taskSearchFilterVo.getTaskTags(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addTopicIdList(taskSearchFilterVo.getTopicIds(), criteriaBuilder, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addCollaboratorIdList(taskSearchFilterVo.getCollaboratorIds(), criteriaBuilder, abstractQuery, taskRoot, teamPredicateList);
                 taskSearchCriteriaBuilder.addWorkflowStatusIdList(taskSearchFilterVo.getWorkflowStatusIdList(), criteriaBuilder, taskRoot, teamPredicateList);

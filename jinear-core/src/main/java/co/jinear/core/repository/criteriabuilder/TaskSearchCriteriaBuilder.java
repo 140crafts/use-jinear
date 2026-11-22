@@ -6,6 +6,7 @@ import co.jinear.core.model.entity.task.TaskBoardEntry;
 import co.jinear.core.model.entity.task.TaskCollaborator;
 import co.jinear.core.model.enumtype.team.TeamWorkflowStateGroup;
 import co.jinear.core.model.vo.task.TaskSearchFilterVo;
+import co.jinear.core.model.vo.task.TaskTagVo;
 import jakarta.persistence.criteria.AbstractQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -59,6 +60,22 @@ public class TaskSearchCriteriaBuilder {
             Predicate notIn = criteriaBuilder.not(in);
             predicateList.add(notIn);
         }
+    }
+
+    public void addTaskTagList(List<TaskTagVo> taskTags, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
+        if (Objects.nonNull(taskTags)) {
+            Predicate[] taskTagPredicates = taskTags.stream()
+                    .map(taskTag -> getTaskTagPredicate(taskTag, criteriaBuilder, root))
+                    .toArray(Predicate[]::new);
+            Predicate predicate = criteriaBuilder.or(taskTagPredicates);
+            predicateList.add(predicate);
+        }
+    }
+
+    private Predicate getTaskTagPredicate(TaskTagVo taskTag, CriteriaBuilder criteriaBuilder, Root<Task> root) {
+        Predicate teamIdPredicate = criteriaBuilder.equal(root.<String>get("teamId"), taskTag.getTeamId());
+        Predicate teamTagNoPredicate = criteriaBuilder.equal(root.<Integer>get("teamTagNo"), taskTag.getTeamTagNo());
+        return criteriaBuilder.and(teamIdPredicate, teamTagNoPredicate);
     }
 
     public void addTopicIdList(List<String> topicIdList, CriteriaBuilder criteriaBuilder, Root<Task> root, List<Predicate> predicateList) {
