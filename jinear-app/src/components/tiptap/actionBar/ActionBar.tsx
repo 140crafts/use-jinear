@@ -1,7 +1,7 @@
 import Button, { ButtonVariants } from "@/components/button";
 import useTranslation from "@/locals/useTranslation";
 import { Editor, useEditorState } from "@tiptap/react";
-import React, {type ChangeEvent, useEffect, useRef } from "react";
+import React, {type ChangeEvent, type ReactNode, useEffect, useRef } from "react";
 import {
   LuBold,
    LuCodeXml,
@@ -40,10 +40,11 @@ interface ActionBarProps {
   mode?: TipTapActionBarMode;
   workspaceIdForImages?: string;
   workspaceForTaskLinks?: WorkspaceDto;
+  endContent?: ReactNode;
   className?: string;
 }
 
-const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceIdForImages, workspaceForTaskLinks, className }) => {
+const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceIdForImages, workspaceForTaskLinks, endContent, className }) => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const imagePickerButtonRef = useRef<HTMLInputElement>(null);
@@ -283,6 +284,12 @@ const ActionBar: React.FC<ActionBarProps> = ({ editor, mode = "full", workspaceI
       )}
       {mode != "simple" && <TableControls editor={editor} />}
       {mode != "simple" && workspaceForTaskLinks && <TaskLinkButton editor={editor} workspace={workspaceForTaskLinks} />}
+      {mode != "simple" && endContent && (
+        <>
+          <span className={styles.divider} />
+          {endContent}
+        </>
+      )}
     </div>
   ) : null;
 };

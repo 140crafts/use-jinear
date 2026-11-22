@@ -3,6 +3,12 @@
     background-color: var(--c-primary) !important;
 }
 
+.pageWidth {
+    width: 100%;
+    max-width: 120ch;
+    align-self: center;
+}
+
 .editorWrapperClassName {
     flex: 1;
 }

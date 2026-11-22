@@ -7105,6 +7105,14 @@ const translations = {
         en: "Link a task",
         tr: "Görev bağla"
     },
+    noteTextWidthFull: {
+        en: "Full width",
+        tr: "Tam genişlik"
+    },
+    noteTextWidthPage: {
+        en: "Page width",
+        tr: "Sayfa genişliği"
+    },
     noteRelatedTasksTitle: {
         en: "Tasks mentioned in this note",
         tr: "Bu notta bahsedilen görevler"
