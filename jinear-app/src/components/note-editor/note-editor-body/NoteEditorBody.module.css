@@ -25,13 +25,35 @@
 }
 
 .taskLinkChip {
+    --task-chip-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 10.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h12.5'/%3E%3Cpath d='m9 11 3 3L22 4'/%3E%3C/svg%3E");
     padding: 0 .375rem;
-    border: thin solid var(--c-link-color);
+    border: thin solid var(--c-secondary);
     border-radius: var(--border-radius);
-    color: var(--c-link-color);
+    color: var(--c-primary);
+    background-color: var(--c-secondary);
+    cursor: var(--cursor-pointer);
+    transition: background-color var(--fade) linear;
     font-size: .875em;
     font-weight: 500;
     white-space: nowrap;
     box-decoration-break: clone;
     -webkit-box-decoration-break: clone;
+}
+
+.taskLinkChip::before {
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    margin-right: .25em;
+    vertical-align: -.125em;
+    background-color: currentColor;
+    -webkit-mask: var(--task-chip-icon) center / contain no-repeat;
+    mask: var(--task-chip-icon) center / contain no-repeat;
+}
+
+.taskLinkChip:hover {
+    color: var(--c-primary-shade-1);
+    border-color: var(--c-secondary-shade-1);
+    background-color: var(--c-secondary-shade-1);
 }

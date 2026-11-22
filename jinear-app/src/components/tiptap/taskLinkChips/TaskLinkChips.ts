@@ -5,6 +5,7 @@ import {Decoration, DecorationSet} from "@tiptap/pm/view";
 import type {EditorView} from "@tiptap/pm/view";
 import {parseTaskLinkTag} from "@/util/taskLinkUtils";
 import {insertTaskLink} from "./insertTaskLink";
+import {type TaskLinkRange, uniformTaskLinkMarks} from "./uniformTaskLinkMarks";
 
 const LINK_MARK = "link";
 
@@ -18,15 +19,10 @@ interface TaskLinkChipsStorage {
     reportedTaskTags: string[];
 }
 
-interface TaskLinkRange {
-    from: number;
-    to: number;
-    href: string;
-}
-
 interface TaskLinkChipsState {
     decorations: DecorationSet;
     taskTags: string[];
+    ranges: TaskLinkRange[];
 }
 
 const taskLinkChipsKey = new PluginKey<TaskLinkChipsState>("taskLinkChips");
@@ -59,7 +55,7 @@ const scanTaskLinks = (doc: ProseMirrorNode, options: TaskLinkChipsOptions): Tas
         return false;
     });
     const decorations = ranges.map(({from, to}) => Decoration.inline(from, to, {class: options.chipClassName}));
-    return {decorations: DecorationSet.create(doc, decorations), taskTags: [...taskTags]};
+    return {decorations: DecorationSet.create(doc, decorations), taskTags: [...taskTags], ranges};
 };
 
 const sameTaskTags = (first: string[], second: string[]) =>
@@ -112,6 +108,8 @@ export const TaskLinkChips = Extension.create<TaskLinkChipsOptions, TaskLinkChip
                     init: (_config, state) => scanTaskLinks(state.doc, options),
                     apply: (transaction, value) => transaction.docChanged ? scanTaskLinks(transaction.doc, options) : value
                 },
+                appendTransaction: (transactions, oldState, newState) =>
+                    uniformTaskLinkMarks(transactions, oldState, newState, taskLinkChipsKey.getState(newState)?.ranges ?? []),
                 props: {
                     decorations: (state) => taskLinkChipsKey.getState(state)?.decorations,
                     handlePaste: (view, event) => {
