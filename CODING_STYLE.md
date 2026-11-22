@@ -3,7 +3,60 @@
 House rules for writing code in this monorepo. Each rule names a real file you can open, so
 the standard stays checkable instead of aspirational.
 
-This is the first version. It covers the Java backend only. Frontend sections come later.
+This is the first version. It covers release compatibility for the whole repo, and the Java
+backend. Frontend sections come later.
+
+## Release compatibility
+
+Applies to every change that ships in a release: database changesets, properties, compose
+files, mail templates and the API between `jinear-app` and `jinear-core`.
+
+A self-hosted instance upgrades with `docker compose pull && docker compose up -d` and
+rolls back by pinning the previous image tag. Nobody rewrites the files of an install, and
+most people do not read the notes. The rules below keep those two commands safe.
+
+### An upgrade must start with no manual change
+
+- An existing install must start on the new version with its current
+  `docker-compose.yaml`, `.env` and `.config/application.properties`.
+- A new property carries a default in code: `@Value("${some.property:default}")`. A new
+  environment variable carries a default in the compose template.
+- A feature that needs configuration stays off until it is configured. It never stops the
+  server from starting.
+
+Reference: `config/properties/MailProperties.java` gives `spring.mail.host` an empty
+default and treats an unset host as "mail is not configured".
+
+### A release must roll back to the previous release
+
+The previous version must run correctly on the database that the new version migrated,
+with no database restore. A changeset is therefore additive. In the release that stops
+using something, do not:
+
+- drop or rename a table or a column;
+- delete rows that the previous version reads;
+- change the format or the meaning of data that the previous version reads;
+- add a constraint that the writes of the previous version break.
+
+Remove the unused thing one release later, when the version that needed it is no longer
+the rollback target. The same applies to an API field or a property that the previous
+version of another service in this repo still uses.
+
+Reference: the "Rolling back" section of `v0.1.1682` in `docs/upgrading.md`. That release
+added seven tables, and the older image ignores them.
+
+### A one-way change needs explicit approval
+
+A change that cannot meet the two rules above is a one-way change: after it, an instance
+cannot start without manual work, or cannot go back to the previous version without a
+database restore.
+
+- Do not write a one-way change on your own judgment. Stop, say what becomes irreversible
+  and why an additive change cannot do the job, and wait for the explicit approval of the
+  maintainer.
+- Approval is for one change. It does not carry to the next one.
+- An approved one-way change is the first thing in its `docs/upgrading.md` entry and in
+  its release post, together with the backup step.
 
 ## Backend - Java
 

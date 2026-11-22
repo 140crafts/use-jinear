@@ -12,7 +12,6 @@
             UPDATE locale_string SET value = '${code} - Your email confirmation code' WHERE string_type = 'MAIL_CONFIRMATION_TITLE' AND locale = 'EN';
             UPDATE locale_string SET value = 'E-postanı doğrulamak için aşağıdaki kodu kullan.' WHERE string_type = 'MAIL_CONFIRMATION_TEXT' AND locale = 'TR';
             UPDATE locale_string SET value = 'Use the code below to confirm your email.' WHERE string_type = 'MAIL_CONFIRMATION_TEXT' AND locale = 'EN';
-            DELETE FROM locale_string WHERE string_type = 'MAIL_CONFIRMATION_CTA_LABEL';
         </sql>
         <!-- @formatter:on -->
     </changeSet>
