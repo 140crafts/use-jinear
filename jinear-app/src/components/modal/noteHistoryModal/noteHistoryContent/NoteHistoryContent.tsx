@@ -12,6 +12,7 @@ import {
     selectNoteHistoryModalOnRestore,
     selectNoteHistoryModalWorkspace
 } from "@/slice/modalSlice.ts";
+import type {RichTextVersionDetailDto} from "@/model/be/jinear-core";
 import {useRetrieveRichTextVersionQuery, useRetrieveRichTextVersionsInfiniteQuery} from "@/api/richTextVersionApi.ts";
 import NoteHistoryVersionStrip, {versionDateOf} from "../noteHistoryVersionStrip/NoteHistoryVersionStrip.tsx";
 import NoteHistoryPreview from "../noteHistoryPreview/NoteHistoryPreview.tsx";
@@ -50,8 +51,8 @@ const NoteHistoryContent: React.FC<NoteHistoryContentProps> = ({richTextId, clos
     const isLatestActive = !!activeVersionId && activeVersionId === latestVersionId;
     const canRestore = online && !!onRestore && !!activeVersion && !isLatestActive;
 
-    const restore = (html: string) => {
-        onRestore?.(html);
+    const restore = (version: RichTextVersionDetailDto) => {
+        onRestore?.(version);
         dispatch(closeDialogModal());
         close();
     };
@@ -60,13 +61,13 @@ const NoteHistoryContent: React.FC<NoteHistoryContentProps> = ({richTextId, clos
         if (!activeVersion) {
             return;
         }
-        const html = activeVersion.html;
+        const version = activeVersion;
         dispatch(popDialogModal({
             visible: true,
             title: t("noteHistoryRestoreAreYouSureTitle"),
             content: t("noteHistoryRestoreAreYouSureText"),
             confirmButtonLabel: t("noteHistoryRestoreAreYouSureConfirmLabel"),
-            onConfirm: () => restore(html)
+            onConfirm: () => restore(version)
         }));
     };
 

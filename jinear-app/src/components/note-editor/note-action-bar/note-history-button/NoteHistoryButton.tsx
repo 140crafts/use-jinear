@@ -9,7 +9,7 @@ import {useNoteEditorContext} from "@/components/note-editor/note-editor-context
 const NoteHistoryButton: React.FC = () => {
     const {t} = useTranslation();
     const dispatch = useAppDispatch();
-    const {workspace, note, isPendingCreate, restoreBody} = useNoteEditorContext();
+    const {workspace, note, isPendingCreate, restoreVersion} = useNoteEditorContext();
     const richTextId = note?.richText?.richTextId;
 
     if (isPendingCreate || !richTextId) {
@@ -22,7 +22,7 @@ const NoteHistoryButton: React.FC = () => {
             workspace,
             richTextId,
             noteTitle: note?.title,
-            onRestore: restoreBody
+            onRestore: restoreVersion
         }));
     };
 

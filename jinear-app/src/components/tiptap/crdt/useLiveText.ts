@@ -26,6 +26,7 @@ interface IUseLiveTextProps {
     /** Server baseline snapshot for richTextId. Applied idempotently to both docs when syncing starts. */
     initialRichText?: RichTextDto;
     getHtml?: () => string | null;
+    getTitle?: (doc: Y.Doc) => string | null;
 }
 
 const logger = Logger('useLiveText');
@@ -35,7 +36,7 @@ const hasUnsyncedChanges = (liveDoc: Y.Doc, serverDoc: Y.Doc) => {
     return !Y.snapshotContainsUpdate(Y.snapshot(serverDoc), delta);
 };
 
-export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHtml}: IUseLiveTextProps) => {
+export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHtml, getTitle}: IUseLiveTextProps) => {
     const dispatch = useAppDispatch();
     const [doc, setDoc] = useState<Y.Doc | null>(null);
     const [status, setStatus] = useState<LiveTextStatus>("booting");
@@ -48,9 +49,11 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
 
     // Mirrored each render so async work always reads the latest values without re-running effects.
     const getHtmlRef = useRef(getHtml);
+    const getTitleRef = useRef(getTitle);
     const initialRichTextRef = useRef(initialRichText);
     useEffect(() => {
         getHtmlRef.current = getHtml;
+        getTitleRef.current = getTitle;
         initialRichTextRef.current = initialRichText;
     });
 
@@ -188,6 +191,7 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
             inFlightRef.current = true;
             const update = Y.encodeStateAsUpdate(liveDoc, Y.encodeStateVector(serverDoc));
             const html = getHtmlRef.current?.() ?? null;   // capture BEFORE await, matches `update`
+            const title = getTitleRef.current?.(liveDoc) ?? null;
             isDirtyRef.current = false;
             // Manually dispatched mutations keep their result in the store until reset().
             const mutation = dispatch(
@@ -195,7 +199,8 @@ export const useLiveText = ({docKey, enabled, richTextId, initialRichText, getHt
                     {
                         richTextId,
                         update: toBase64(update),
-                        html
+                        html,
+                        title
                     }
                 )
             );

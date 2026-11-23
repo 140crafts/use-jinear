@@ -4,8 +4,9 @@ import NoteHeader from "@/components/note-editor/note-header/NoteHeader.tsx";
 import NoteActionBar from "@/components/note-editor/note-action-bar/NoteActionBar.tsx";
 import NoteEditorBody from "@/components/note-editor/note-editor-body/NoteEditorBody.tsx";
 import {NoteEditorContext} from "@/components/note-editor/note-editor-context.ts";
-import type {WorkspaceDto} from "@/be/jinear-core.ts";
-import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
+import type {RichTextVersionDetailDto, WorkspaceDto} from "@/be/jinear-core.ts";
+import {DRAFTS_NOTEBOOK_ID, TITLE_FIELD} from "@/components/tiptap/crdt/constants.ts";
+import {writeYText} from "@/components/tiptap/crdt/useYText.ts";
 import {useLiveText} from "@/components/tiptap/crdt/useLiveText.ts";
 import {useDraftNoteAck} from "@/components/note-editor/useDraftNoteAck.ts";
 import {useNoteTitleMirror} from "@/components/note-editor/useNoteTitleMirror.ts";
@@ -60,7 +61,8 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
         enabled: shouldEdit,
         richTextId: note?.richText?.richTextId,
         initialRichText: note?.richText,
-        getHtml: () => editorRef.current?.getHTML() ?? null
+        getHtml: () => editorRef.current?.getHTML() ?? null,
+        getTitle: (liveDoc) => liveDoc.getText(TITLE_FIELD).toString()
     });
 
     useNoteTitleMirror({
@@ -85,10 +87,13 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
         editorRef.current = editor;
     }, []);
 
-    const restoreBody = useCallback((html: string) => {
-        editorRef.current?.setContent(html);
+    const restoreVersion = useCallback((version: RichTextVersionDetailDto) => {
+        editorRef.current?.setContent(version.html);
+        if (doc && version.title) {
+            writeYText(doc, TITLE_FIELD, version.title);
+        }
         flushNow();
-    }, [flushNow]);
+    }, [doc, flushNow]);
 
     const notFound = !isPendingCreate && !ackedNoteId && !isLoading && !note;
 
@@ -105,7 +110,7 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
             status,
             flushNow,
             registerEditor,
-            restoreBody,
+            restoreVersion,
             taskTags,
             setTaskTags
         }}>

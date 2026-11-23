@@ -1,4 +1,5 @@
 import React, {useMemo} from 'react';
+import cn from "classnames";
 import styles from './NoteHistoryPreview.module.css';
 import Tiptap from "@/components/tiptap/Tiptap.tsx";
 import {TaskLinkChips} from "@/components/tiptap/taskLinkChips/TaskLinkChips.ts";
@@ -20,9 +21,12 @@ const NoteHistoryPreview: React.FC<NoteHistoryPreviewProps> = ({version, noteTit
         })
     ], [workspaceUsername]);
 
+    const versionTitle = version?.title;
+    const title = versionTitle || noteTitle;
+
     return (
         <div className={styles.container}>
-            {noteTitle && <h1 className={styles.title}>{noteTitle}</h1>}
+            {title && <h1 className={cn(styles.title, !versionTitle && styles.currentTitle)}>{title}</h1>}
             {version
                 ? <Tiptap
                     key={version.richTextVersionId}

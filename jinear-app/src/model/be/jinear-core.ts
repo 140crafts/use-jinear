@@ -976,6 +976,7 @@ export interface RichTextVersionDto extends BaseDto {
 
 export interface RichTextVersionDetailDto extends RichTextVersionDto {
     html: string;
+    title: string;
 }
 
 export interface RobotDto extends BaseDto {
@@ -1945,6 +1946,7 @@ export interface TaskReminderInitializeRequest extends BaseRequest {
 export interface AppendRichTextUpdateRequest extends BaseRequest {
     update: string;
     html?: string | null;
+    title?: string | null;
 }
 
 export interface SeedRichTextRequest extends BaseRequest {

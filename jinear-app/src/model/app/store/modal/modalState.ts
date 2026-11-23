@@ -13,6 +13,7 @@ import type {
     TeamDto,
     TeamMemberDto,
     TeamWorkflowStatusDto,
+    RichTextVersionDetailDto,
     TopicDto,
     WorkspaceDto,
     WorkspaceMemberDto
@@ -340,7 +341,7 @@ export interface NoteHistoryModalState extends ModalState {
     workspace?: WorkspaceDto,
     richTextId?: string,
     noteTitle?: string,
-    onRestore?: (html: string) => void
+    onRestore?: (version: RichTextVersionDetailDto) => void
 }
 
 export interface MaterialFolderPickerModalState extends ModalState {

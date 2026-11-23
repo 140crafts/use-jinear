@@ -7166,8 +7166,8 @@ const translations = {
         tr: "Bu sürüm geri yüklensin mi?"
     },
     noteHistoryRestoreAreYouSureText: {
-        en: "The note body changes to this version for all members. The title does not change. You can undo this from the history.",
-        tr: "Not içeriği tüm üyeler için bu sürüme döner. Başlık değişmez. Bunu geçmişten geri alabilirsin."
+        en: "The note changes to this version for all members. You can undo this from the history.",
+        tr: "Not tüm üyeler için bu sürüme döner. Bunu geçmişten geri alabilirsin."
     },
     noteHistoryRestoreAreYouSureConfirmLabel: {
         en: "Restore",
