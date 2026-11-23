@@ -2,7 +2,8 @@ import React from 'react';
 import styles from './NoteHierarchyItem.module.css';
 import type {NoteDto, WorkspaceDto} from "@/be/jinear-core.ts";
 import useTranslation from "@/locals/useTranslation.ts";
-import {useToggle} from "@/hooks/useToggle.ts";
+import {useAppDispatch, useTypedSelector} from "@/store";
+import {selectNoteOpen, setNoteOpen} from "@/slice/noteNavigationSlice.ts";
 import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 import Button, {ButtonHeight, ButtonVariants} from "@/components/button";
 import {LuChevronDown, LuChevronRight, LuFileText} from "react-icons/lu";
@@ -34,7 +35,14 @@ const NoteHierarchyItem: React.FC<NoteHierarchyItemProps> = ({
                                                                  pathname
                                                              }) => {
     const {t} = useTranslation();
-    const [open, toggle, setToggle] = useToggle(false);
+    const dispatch = useAppDispatch();
+    const open = useTypedSelector(selectNoteOpen(workspace.workspaceId, note?.noteId)) ?? false;
+    const setToggle = (value: boolean) => dispatch(setNoteOpen({
+        workspaceId: workspace.workspaceId,
+        noteId: note.noteId,
+        open: value
+    }));
+    const toggle = () => setToggle(!open);
 
     const [moveNote] = useMoveNoteMutation();
     const isNoteDraft = note?.notebookId == null;

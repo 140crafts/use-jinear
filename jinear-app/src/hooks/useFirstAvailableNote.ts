@@ -4,6 +4,7 @@ import { useFilterNotesQuery } from "@/store/api/noteFilterApi";
 import { useAllWorkspaceNotebooks } from "@/hooks/useAllWorkspaceNotebooks";
 import { useAppSelector } from "@/store/hooks";
 import { selectPendingDraftsOrdered } from "@/store/slice/noteDraftsSlice";
+import { selectLastOpenNote } from "@/store/slice/noteNavigationSlice";
 import { DRAFTS_NOTEBOOK_ID } from "@/components/tiptap/crdt/constants";
 import type { WorkspaceDto } from "@/model/be/jinear-core";
 
@@ -25,8 +26,9 @@ export interface FirstAvailableNote {
 
 /**
  * Picks the note to land on when the notebook section is opened without one, in priority order:
- * a local pending draft, then a server-side draft, then the first note of the first notebook that
- * has any (empty notebooks are skipped, one request per notebook until a note is found).
+ * the note last opened on this device while it still exists, then a local pending draft, then a
+ * server-side draft, then the first note of the first notebook that has any (empty notebooks are
+ * skipped, one request per notebook until a note is found).
  */
 export const useFirstAvailableNote = (workspace?: WorkspaceDto): FirstAvailableNote => {
   const workspaceId = workspace?.workspaceId;
@@ -36,6 +38,21 @@ export const useFirstAvailableNote = (workspace?: WorkspaceDto): FirstAvailableN
   const pendingDraft = useAppSelector(state =>
     workspaceId ? selectPendingDraftsOrdered(workspaceId)(state)[0] : undefined
   );
+
+  const lastOpenNote = useAppSelector(selectLastOpenNote(workspaceId));
+  const lastOpenIsPendingDraft = useAppSelector(state =>
+    lastOpenNote ? state.noteDrafts.pending[lastOpenNote.noteId] != null : false
+  );
+  const lastOpenNotebookId = lastOpenNote?.notebookId === DRAFTS_NOTEBOOK_ID ? undefined : lastOpenNote?.notebookId;
+  const lastOpenQuery = useFilterNotesQuery(
+    workspaceId && lastOpenNote && !lastOpenIsPendingDraft
+      ? { workspaceId, notebookId: lastOpenNotebookId, noteId: lastOpenNote.noteId, page: 0 }
+      : skipToken
+  );
+  const lastOpenServerNote = lastOpenQuery.currentData?.data?.content?.[0];
+  const lastOpenFound = !!lastOpenNote && (lastOpenIsPendingDraft || !!lastOpenServerNote);
+  const lastOpenChecking = !!lastOpenNote && !lastOpenIsPendingDraft
+    && lastOpenQuery.currentData == null && !lastOpenQuery.isError;
 
   // Omitting notebookId (and noteId) is what the backend reads as "list my drafts".
   const drafts = useFilterNotesQuery(workspaceId ? { workspaceId, page: 0 } : skipToken);
@@ -71,7 +88,11 @@ export const useFirstAvailableNote = (workspace?: WorkspaceDto): FirstAvailableN
       // settled but empty, with notebooks left to walk; the effect above is about to advance
       (!!scannedNotebook && notebookNotesSettled && !notebookNote && notebookIndex < notebooks.length - 1));
 
-  const resolved: Pick<FirstAvailableNote, "notebookId" | "noteId" | "isDraft"> = pendingDraft
+  const resolved: Pick<FirstAvailableNote, "notebookId" | "noteId" | "isDraft"> = lastOpenFound && lastOpenNote
+    ? { notebookId: lastOpenNote.notebookId, noteId: lastOpenNote.noteId, isDraft: lastOpenNote.notebookId === DRAFTS_NOTEBOOK_ID || lastOpenIsPendingDraft }
+    : lastOpenChecking
+    ? { isDraft: false }
+    : pendingDraft
     ? {
         // A draft started inside a notebook belongs to it already; only workspace-level ones
         // resolve to the drafts sentinel.
@@ -90,8 +111,8 @@ export const useFirstAvailableNote = (workspace?: WorkspaceDto): FirstAvailableN
   return {
     ...resolved,
     path: hasNote ? `/${workspace?.username}/notebook/${resolved.notebookId}/note/${resolved.noteId}` : undefined,
-    isLoading: !hasNote && !!workspaceId && (!draftsSettled || scanning),
-    isFetching: drafts.isFetching || notebooksFetching || notebookNotes.isFetching,
+    isLoading: !hasNote && !!workspaceId && (lastOpenChecking || !draftsSettled || scanning),
+    isFetching: lastOpenQuery.isFetching || drafts.isFetching || notebooksFetching || notebookNotes.isFetching,
     hasNote
   };
 };

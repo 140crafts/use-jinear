@@ -4,7 +4,6 @@ import type {NotebookDto, NotebookVisibilityType, NoteDto, WorkspaceDto} from "@
 import Button, {ButtonVariants} from "@/components/button";
 import cn from "classnames";
 import {useLocation, useNavigate} from "react-router-dom";
-import {useToggle} from "@/hooks/useToggle.ts";
 import {LuEllipsisVertical, LuFilePen, LuFolder, LuFolderOpen, LuLock, LuUserCheck, LuUsers} from "react-icons/lu";
 import NoteHierarchyList
     from "@/components/notebookSectionSideMenu/notebookList/notebook/noteHierarchy/NoteHierarchyList.tsx";
@@ -14,7 +13,8 @@ import {DRAFTS_NOTEBOOK_ID} from "@/components/tiptap/crdt/constants.ts";
 import Logger from "@/util/logger.ts";
 import {useChangeNotebookMutation, useMoveNoteMutation} from "@/api/noteOperationApi.ts";
 import {closeDialogModal, popDialogModal} from "@/slice/modalSlice.ts";
-import {useAppDispatch} from "@/store";
+import {useAppDispatch, useTypedSelector} from "@/store";
+import {selectNotebookOpen, setNotebookOpen} from "@/slice/noteNavigationSlice.ts";
 import useTranslation, {type StringKeys} from "@/locals/useTranslation.ts";
 import {
     NOTE_DRAG_TYPE
@@ -50,7 +50,13 @@ const Notebook: React.FC<NotebookProps> = ({workspace, notebook, initiallyOpen =
     const notebookIdForPath = notebook?.notebookId ?? DRAFTS_NOTEBOOK_ID;
     const notebookPath = `/${workspace?.username}/notebook/${notebookIdForPath}`;
     const atPath = pathname == notebookPath;
-    const [open, toggle, setOpen] = useToggle(initiallyOpen);
+    const open = useTypedSelector(selectNotebookOpen(workspace.workspaceId, notebook.notebookId)) ?? initiallyOpen;
+    const setOpen = (value: boolean) => dispatch(setNotebookOpen({
+        workspaceId: workspace.workspaceId,
+        notebookId: notebook.notebookId,
+        open: value
+    }));
+    const toggle = () => setOpen(!open);
     const Icon = ACCESS_TYPE_ICON_MAP[notebook.visibility];
     const tooltipKey = ACCESS_TYPE_TOOLTIP_MAP[notebook.visibility];
 

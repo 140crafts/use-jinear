@@ -13,7 +13,8 @@ import {useRefreshNoteListsAfterFirstEdit} from "@/components/note-editor/useRef
 import type {ICollaborativeRichTextRef} from "@/components/tiptap/CollaborativeRichText.tsx";
 import {useFilterNotesQuery} from "@/api/noteFilterApi.ts";
 import {useNotebookById} from "@/hooks/useNotebookById.ts";
-import {useTypedSelector} from "@/store";
+import {useAppDispatch, useTypedSelector} from "@/store";
+import {setLastOpenNote} from "@/slice/noteNavigationSlice.ts";
 import {selectDocKey} from "@/slice/noteDraftsSlice.ts";
 import useTranslation from "@/locals/useTranslation.ts";
 import CircularLoading from "@/components/circularLoading/CircularLoading.tsx";
@@ -71,6 +72,14 @@ const NoteEditor: React.FC<NoteEditorProps> = ({workspace, notebookId, noteId}) 
     });
 
     useRefreshNoteListsAfterFirstEdit(status);
+
+    const dispatch = useAppDispatch();
+    const isOpenable = isPendingCreate || !!note;
+    useEffect(() => {
+        if (isOpenable) {
+            dispatch(setLastOpenNote({workspaceId: workspace.workspaceId, notebookId, noteId}));
+        }
+    }, [dispatch, isOpenable, workspace.workspaceId, notebookId, noteId]);
 
     const registerEditor = useCallback((editor: ICollaborativeRichTextRef | null) => {
         editorRef.current = editor;
